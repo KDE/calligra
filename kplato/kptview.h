@@ -34,7 +34,7 @@ class KPTGanttView;
 class KPTPertView;
 class KPTPart;
 class KPTNode;
-class KPTNodeItem;
+class KPTProject;
 
 class KDGanttView;
 
@@ -51,6 +51,8 @@ public:
 
     KPTPart *getPart()const;
 
+	KPTProject& getProject() const;
+
     QPopupMenu *popupMenu( const QString& name );
 
 public slots:
@@ -62,15 +64,19 @@ protected slots:
     void slotViewGantt();
     void slotViewPert();
     void slotViewResources();
-    void slotAddSubProject();
     void slotAddTask();
+    void slotAddSubTask();
     void slotAddMilestone();
     void slotProjectEdit();
     void slotProjectCalculate();
     void slotConfigure();
 
     void slotOpenNode();
-	void slotDeleteNode();
+	void slotDeleteTask();
+	void slotIndentTask();
+	void slotUnindentTask();
+	void slotMoveTaskUp();
+	void slotMoveTaskDown();
 
     void slotConnectNode();
 	void slotChanged(QWidget *);
@@ -83,7 +89,7 @@ protected slots:
 
 protected:
     virtual void updateReadWrite(bool readwrite);
-	KPTNode *currentNode();
+	KPTNode *currentTask();
 
 private:
     KPTGanttView *m_ganttview;

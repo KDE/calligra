@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
- 
+
 #ifndef KPTGANTTVIEW_H
 #define KPTGANTTVIEW_H
 
@@ -24,6 +24,7 @@
 
 class KPTView;
 class KPTNode;
+class KPTProject;
 class QLayout;
 class QListViewItem;
 class QPoint;
@@ -34,37 +35,38 @@ class KDGanttViewItem;
  class KPTGanttView : public KDGanttView
 {
     Q_OBJECT
-    
+
  public:
- 
+
     KPTGanttView( KPTView *view, QWidget *parent );
 
     //~KPTGanttView();
-    
+
 	void zoom(double zoom);
-    
-    void draw(KPTNode &node);
+
+    void draw(KPTProject &project);
     KPTView *mainView();
 
 	KPTNode *currentNode();
 
 	void clear();
-		
+
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 
 private slots:
     void currentItemChanged(KDGanttViewItem *);
 	void slotItemDoubleClicked(KDGanttViewItem*);
-		
+
 private:
     void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
     void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+    void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
     void drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node);
 	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node);
     void drawRelations(KPTNode &node);
 
-private:    
+private:
 	KPTView *m_mainview;
     int m_defaultFontSize;
 	KDGanttViewItem *m_currentItem;

@@ -25,9 +25,9 @@
 #include "kptduration.h"
 
 #include <qrect.h>
-#include <qptrlist.h> 
-#include <qstring.h> 
-#include <qcanvas.h> 
+#include <qptrlist.h>
+#include <qstring.h>
+#include <qcanvas.h>
 
 #include <vector>
 
@@ -62,43 +62,46 @@ class KPTNode {
 
 public:
     enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn };
-    
+
     KPTNode(KPTNode *parent = 0);
 
     // Declare the class abstract
     virtual ~KPTNode() = 0;
 
     enum NodeTypes {
-        Type_Node = 0,
-        Type_Project = 1,
-        Type_Task = 2,
-        Type_Milestone = 3,
-        Type_Periodic = 4
+	  Type_Node = 0,
+	  Type_Project = 1,
+	  Type_Subproject = 2,
+	  Type_Task = 3,
+	  Type_Milestone = 4,
+	  Type_Periodic = 5,
+	  Type_TerminalNode = 6 // what do we need this for?
     };
 
-    virtual int type() const;
-    static int TYPE;
-	
+    virtual int type() = 0;
+
     // The load and save methods
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element) const = 0;
     virtual void completeLoad(KPTNode *node); // clean up relations etc.
-    
+
     virtual bool openDialog() {return false;}
-    
+
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of
     // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
     // 2) cutting 3) building 4) painting.
     KPTNode *getParent() const { return m_parent; }
+	void setParent( KPTNode* newParent ) { m_parent = newParent;}
     const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(KPTNode *node);
     virtual void insertChildNode(unsigned int index, KPTNode *node);
     void delChildNode(KPTNode *node, bool remove=true);
     void delChildNode(int number, bool remove=true);
-    KPTNode &getChildNode(int number) { return *m_nodes.at(number); }
-    const KPTNode &getChildNode(int number) const;
+    KPTNode* getChildNode(int number) { return m_nodes.at(number); }
+    const KPTNode* getChildNode(int number) const;
+	int findChildNode( KPTNode* node );
 
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
@@ -120,7 +123,7 @@ public:
     void delDependChildNode( int number, bool remove=false);
     KPTRelation *getDependChildNode( int number) {
 	return m_dependChildNodes.at(number);
-    } 
+    }
 
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
@@ -137,14 +140,14 @@ public:
     KPTRelation *getDependParentNode( int number) {
 	return m_dependParentNodes.at(number);
     }
-    
+
 	bool isParentOf(KPTNode *node);
     bool isDependChildOf(KPTNode *node);
-	
+
     KPTRelation *findRelation(KPTNode *node);
 	int getRow(KPTNode *parent = 0);
 	int getColumn(KPTNode *parent = 0);
-	
+
     // These are calculated, or set manually if node is MustStartOn
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
     const KPTDuration &startTime() const { return m_startTime; }
@@ -165,7 +168,7 @@ public:
      * Reimplement in project nodes.
      */
     virtual void calculate() {;}
-    
+
      /**
      * The expected Duration is the expected time to complete a Task, Project,
      * etc. For an individual Task, this will calculate the expected duration
@@ -173,7 +176,7 @@ public:
      * simple RiskNone, the value will equal the mode Duration, but for other
      * Distributions like RiskHigh, the value will have to be calculated. For
      * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM. 
+     * PERT/CPM.
      */
     virtual KPTDuration *getExpectedDuration() = 0;
 
@@ -215,25 +218,25 @@ public:
 
     void setConstraint(KPTNode::ConstraintType type) { m_constraint = type; }
     int constraint() { return m_constraint; }
-    
+
     const KPTDuration& optimisticDuration(const KPTDuration &start);
     const KPTDuration& pessimisticDuration(const KPTDuration &start);
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
-    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
-    virtual void drawPertRelations(KPTPertCanvas* view);
-    
+//    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
+//    virtual void drawPertRelations(KPTPertCanvas* view);
+
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
     virtual KPTDuration &startNotEarlier() { return sneTime; }
     virtual void setFinishNotLater(KPTDuration time) { fnlTime = time; }
     virtual KPTDuration &finishNotLater() { return fnlTime; }
     virtual void setMustStartOn(KPTDuration time) { msoTime = time; }
     virtual KPTDuration &mustStartOn() { return msoTime; }
-    
+
     virtual void showPopup();
-    
+
 	void setDrawn(bool drawn, bool children = false);
-	bool isDrawn() { return m_drawn; }  
+	bool isDrawn() { return m_drawn; }
 
 	// For Gantt
     KDGanttViewItem *ganttItem() { return m_ganttItem; }
@@ -244,7 +247,7 @@ public:
     int x();
     int width();
 	bool allParentsDrawn();
-	
+
 protected:
     /**
      * For pert/cpm it is useful to have a hidden start node for each
@@ -306,8 +309,8 @@ protected:
     QPtrList<KPTRelation> m_dependChildNodes;
     QPtrList<KPTRelation> m_dependParentNodes;
     KPTNode *m_parent;
-    
-    // Used by load()    
+
+    // Used by load()
     virtual void addPredesessorNode( KPTRelation *relation );
     void delPredesessorNode();
     QPtrList<KPTRelation> m_predesessorNodes;
@@ -318,12 +321,12 @@ protected:
 
     // Calculated start time, or set if MustStartOn
     KPTDuration m_startTime, m_endTime;
-    
+
     // Both of these are entered during the project, not at the initial
     // calculation.
     KPTDuration m_actualStartTime, m_actualEndTime;
 
-    KPTEffort* m_effort; 
+    KPTEffort* m_effort;
 
     struct dependencies {
 	/**
@@ -346,7 +349,7 @@ protected:
 
     KPTDuration earliestStart;
     KPTDuration latestFinish;
-    
+
     ConstraintType m_constraint;
 
     void calcDuration(const KPTDuration &start, const KPTDuration &effort);
@@ -360,10 +363,10 @@ protected:
 	// For Pert
 	bool m_drawn;
 	KPTPertNodeItem *m_pertItem;
-    
+
  private:
     KPTDuration m_duration;
-    
+
 #ifndef NDEBUG
 public:
     virtual void printDebug(bool children, QCString indent);
@@ -372,7 +375,7 @@ public:
 };
 
 ////////////////////////////////////////////   KPTEffort   //////////////////////////////////////////////////
-/** 
+/**
   * Any @ref KPTNode will store how much time it takes to complete the node
   * (typically a @ref KPTTask) in the traditional scheduling software the
   * effort which is needed to complete the node is not simply a timespan but
@@ -382,7 +385,7 @@ class KPTEffort {
 public:
     KPTEffort ( KPTDuration e = KPTDuration(), KPTDuration p = KPTDuration(),
 		KPTDuration o = KPTDuration() );
-    
+
     KPTEffort ( double e, double p = 0, double o = 0);
     ~KPTEffort();
 
@@ -391,17 +394,17 @@ public:
     const KPTDuration& expected() {return m_expectedEffort;}
 
     void set( KPTDuration e, KPTDuration p = 0, KPTDuration o = 0 );
-        
+
     void set( int e, int p = -1, int o = -1 );
-  
+
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
-    
+
     /**
      * No effort.
      */
     static const KPTEffort zeroEffort;
-    
+
 private:
     KPTDuration m_optimisticEffort;
     KPTDuration m_pessimisticEffort;

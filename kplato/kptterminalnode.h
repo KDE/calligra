@@ -36,6 +36,9 @@ public:
      */
     KPTTerminalNode(KPTNode* owner) { m_parent = owner; }
 
+    virtual int type() { return KPTNode::Type_TerminalNode; }
+
+
     /* make concrete versions of abstract functions */
     /**
      * The expected Duration is the expected time to complete a Task,
@@ -44,14 +47,14 @@ public:
      * Distribution is a simple RiskNone, the value  will equal the mode
      * Duration, but for other Distributions like RiskHigh, the value will
      * have to be calculated. For a Project or Subproject, the expected
-     * Duration is calculated by PERT/CPM. 
+     * Duration is calculated by PERT/CPM.
      */
     virtual KPTDuration *getExpectedDuration()
 	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
-  
+
     virtual uint getExpectedDuration(int)
 	{ return 0; }
-  
+
     /**
      * Instead of using the expected duration, generate a random value
      * using the Distribution of each Task. This can be used for Monte-Carlo
@@ -59,13 +62,13 @@ public:
      */
     virtual KPTDuration *getRandomDuration()
 	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
-  
+
     /**
      * Calculate the start time, use startTime() for the actually started time.
      */
     virtual KPTDuration *getStartTime()
 	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
-  
+
     /**
      * Retrieve the calculated float of this node
      */
@@ -75,12 +78,12 @@ public:
     /**
      * Load and save
      */
-    virtual bool load(QDomElement &e) { 
+    virtual bool load(QDomElement &e) {
         earliestStart = KPTDuration(QDateTime::fromString(e.attribute("earlieststart")));
         latestFinish = KPTDuration(QDateTime::fromString(e.attribute("latestfinish")));
-        return true; 
+        return true;
     }
-    
+
     virtual void save(QDomElement &e) const {
         e.setAttribute("earlieststart", earliestStart.dateTime().toString());
         e.setAttribute("latestfinish", latestFinish.dateTime().toString());
@@ -103,8 +106,8 @@ protected:
 
 #ifndef NDEBUG
 public:
-    void printDebug(bool /*children*/, QCString indent) 
-        {   
+    void printDebug(bool /*children*/, QCString indent)
+        {
             indent += "  ";
             kdDebug()<<indent<<" Earliest start: "<<earliestStart.dateTime().toString()<<endl;
             kdDebug()<<indent<<" Latest finish: "<<earliestStart.dateTime().toString()<<endl;

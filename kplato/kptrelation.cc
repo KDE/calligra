@@ -66,9 +66,9 @@ bool KPTRelation::load(QDomElement &element) {
         m_timingRelation = START_START;
     else
         m_timingRelation = FINISH_START;
-        
+
     m_lag = KPTDuration(); //m_lag.set( KPTDuration(QDateTime::fromString(element.attribute("lag"))) );
-    
+
     kdDebug()<<k_funcinfo<<"Child="<<m_child->name()<<" parent id="<<m_parentId<<endl;
     return true;
 }
@@ -99,7 +99,7 @@ void KPTRelation::save(QDomElement &element) const {
 bool KPTRelation::completeLoad(KPTNode *top) {
     kdDebug()<<k_funcinfo<<endl;
     if ( !m_parent ) {
-        QPtrListIterator<KPTNode> nit(top->childNodeIterator()); 
+        QPtrListIterator<KPTNode> nit(top->childNodeIterator());
         for ( ; nit.current(); ++nit ) {
             //kdDebug()<<k_funcinfo<<"Check node="<<nit.current()->name()<<" parentId="<<m_parentId<<endl;
             if (nit.current()->name() == m_parentId) {
@@ -115,7 +115,7 @@ bool KPTRelation::completeLoad(KPTNode *top) {
 
 void KPTRelation::draw(KPTPertCanvas* view) {
     kdDebug()<<k_funcinfo<<endl;
-    
+
 	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(view, this);
 	item->show();
 }

@@ -3,19 +3,19 @@ SUBDIRS = templates pics
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I../kdgantt \
                    $(all_includes)
 
-libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
+libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptrelation.cc kptresource.cc kpttask.cc \
     kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
-    kptprojectdialog.cc kpttaskdialog.cc kptmilestonedialog.cc \
+    kptprojectdialog.cc kpttaskdialog.cc  \
     kptganttview.cc kptresourcespanel.cc \
     kptpertview.cc kptpertcanvas.cc kptrelationdialog.cc \
     kptcanvasitem.cc kptprojectdialogbase.ui resourcespanelbase.ui \
     durationpanelbase.ui kptdurationdialog.cc
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
-    kptmilestone.h kptnode.h kptpart.h kptproject.h kptrelation.h \
+    kptnode.h kptpart.h kptproject.h kptrelation.h \
     kptresource.h kpttask.h kptterminalnode.h kptview.h \
-    kptprojectdialog.h kpttaskdialog.h kptmilestonedialog.h \
+    kptprojectdialog.h kpttaskdialog.h  \
     kptganttview.h kptcanvasitem.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
     kptresourcespanel.h kptdurationdialog.h

@@ -19,7 +19,7 @@
 
 #include "kptproject.h"
 #include "kpttask.h"
-#include "kptmilestone.h"
+//#include "kptmilestone.h"
 #include "kptprojectdialog.h"
 #include "kptduration.h"
 #include "kptpertcanvas.h"
@@ -57,8 +57,7 @@ KPTProject::~KPTProject() {
     m_resourceGroups.clear();
 }
 
-int KPTProject::type() const { return TYPE; }
-int KPTProject::TYPE = KPTNode::Type_Project;
+int KPTProject::type() { return KPTNode::Type_Project; }
 
 void KPTProject::calculate() {
     kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;
@@ -299,14 +298,14 @@ bool KPTProject::load(QDomElement &element) {
 		else
 		    // TODO: Complain about this
 		    delete child;
-	    } else if (e.tagName() == "milestone") {
-		    // Load the milestone
-		    KPTMilestone *child = new KPTMilestone(this);
-		    if (child->load(e))
-		        addChildNode(child);
-		    else
-		        // TODO: Complain about this
-		        delete child;
+//	    } else if (e.tagName() == "milestone") {
+//		    // Load the milestone
+//		    KPTMilestone *child = new KPTMilestone(this);
+//		    if (child->load(e))
+//		        addChildNode(child);
+//		    else
+//		        // TODO: Complain about this
+//		        delete child;
 	    } else if (e.tagName() == "startnode") {
             start_node()->load(e);
 	    } else if (e.tagName() == "endnode") {
@@ -354,7 +353,7 @@ void KPTProject::save(QDomElement &element) const {
 
     for (int i=0; i<numChildren(); i++)
 	// Save all children
-	getChildNode(i).save(me);
+	getChildNode(i)->save(me);
 }
 
 
@@ -392,7 +391,8 @@ void KPTProject::setStartTime(KPTDuration startTime) {
         earliestStart = startTime;
 }
 
-void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
+
+/*void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
     kdDebug()<<k_funcinfo<<endl;
 	if (!m_drawn) {
 	    if (numDependChildNodes() == 0 &&
@@ -420,7 +420,7 @@ void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 		cit.current()->child()->drawPert(view);
 	}
 }
-
+*/
 void KPTProject::addResourceGroup(KPTResourceGroup * group) {
     m_resourceGroups.append(group);
 }
@@ -443,6 +443,188 @@ void KPTProject::insertResourceGroup( unsigned int /* index */,
 QPtrList<KPTResourceGroup> &KPTProject::resourceGroups() {
      return m_resourceGroups;
 }
+
+void KPTProject::addTask( KPTNode* task, KPTNode* position )
+{
+	// we want to add a task at the given position. => the new node will
+	// become next sibling right after position.
+	if ( 0 == position ) {
+	  return;
+	}
+	// in case we want to add to the main project, we make it child element
+	// of the root element.
+	if ( KPTNode::Type_Project == position->type() ) {
+		this->addChildNode(task);
+		task->setParent( this ); // tell the node about it
+		return;
+	}
+	// find the position
+	// we have to tell the parent that we want to delete one of its children
+	KPTNode* parentNode = position->getParent();
+	if ( !parentNode ) {
+		kdDebug()<<k_funcinfo<<"parent node not found???"<<endl;
+		return;
+	}
+	int index = parentNode->findChildNode( position );
+	if ( -1 == index ) {
+		// ok, it does not exist
+		kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+		return;
+	}
+	parentNode->insertChildNode( index+1, task );
+	task->setParent( parentNode ); // tell the node about it
+}
+
+void KPTProject::addSubTask( KPTNode* task, KPTNode* position )
+{
+	// we want to add a subtask to the node "position". It will become
+	// position's last child.
+	if ( 0 == position ) {
+	  return;
+	}
+	position->addChildNode(task);
+	task->setParent( position ); // tell the node about it
+}
+
+void KPTProject::deleteTask( KPTNode* task )
+{
+	if ( 0 == task ) {
+		// is always != 0. At least we would get the KPTProject, but you
+		// never know who might change that, so better be careful
+		return;
+	}
+
+	if ( KPTNode::Type_Project == task->type() ) {
+		kdDebug()<<k_funcinfo<<"The root node cannot be deleted"<<endl;
+		return;
+	}
+
+	// we have to tell the parent that we want to delete one of its children
+	KPTNode* parentNode = task->getParent();
+	if ( parentNode ) {
+		parentNode->delChildNode( task, true );
+	}
+	else {
+		// the only nodes that do not have a parent are those that are
+		// directly owned by the project
+		delChildNode( task, true );
+	}
+}
+
+void KPTProject::indentTask( KPTNode* task )
+{
+	if ( 0 == task ) {
+		// should always be != 0. At least we would get the KPTProject,
+		// but you never know who might change that, so better be careful
+		return;
+	}
+
+	if ( KPTNode::Type_Project == task->type() ) {
+		kdDebug()<<k_funcinfo<<"The root node cannot be indented"<<endl;
+		return;
+	}
+
+	// we have to find the parent of task to manipulate its list of children
+	KPTNode* parentNode = task->getParent();
+	if ( parentNode ) {
+		int index = parentNode->findChildNode( task );
+		if ( -1 == index ) {
+			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+			return;
+		}
+		if ( 0 == index ) {
+			kdDebug()<<k_funcinfo<<"Task already is first child and cannot be indented"<<endl;
+			return;
+		}
+		KPTNode* newParent = parentNode->getChildNode( index -1);
+		if ( 0 == newParent) {
+			kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
+			return;
+		}
+		parentNode->delChildNode( task, false ); // false: do not delete objekt
+		newParent->addChildNode( task );
+		task->setParent( newParent ); // tell the node about it
+	}
+}
+
+void KPTProject::unindentTask( KPTNode* task )
+{
+	if ( 0 == task ) {
+		// is always != 0. At least we would get the KPTProject, but you
+		// never know who might change that, so better be careful
+		return;
+	}
+
+	if ( KPTNode::Type_Project == task->type() ) {
+		kdDebug()<<k_funcinfo<<"The root node cannot be unindented"<<endl;
+		return;
+	}
+
+	// we have to find the parent of task to manipulate its list of children
+	// and we need the parent's parent too
+	KPTNode* parentNode = task->getParent();
+	if ( !parentNode ) {
+		return;
+	}
+	KPTNode* grandParentNode = parentNode->getParent();
+	if ( !grandParentNode ) {
+		kdDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
+		return;
+	}
+	int index = parentNode->findChildNode( task );
+	if ( -1 == index ) {
+		kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+		return;
+	}
+	parentNode->delChildNode( task, false ); // false: do not delete objekt
+	grandParentNode->addChildNode( task );
+	task->setParent( grandParentNode ); // tell the node about it
+}
+
+
+void KPTProject::moveTaskUp( KPTNode* task )
+{
+	// we have to find the parent of task to manipulate its list of children
+	KPTNode* parentNode = task->getParent();
+	if ( parentNode ) {
+		int index = parentNode->findChildNode( task );
+		if ( -1 == index ) {
+			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+			return;
+		}
+		if ( 0 == index ) {
+			kdDebug()<<k_funcinfo<<"Task already is at top position"<<endl;
+			return;
+		}
+		parentNode->delChildNode( task, false ); // false: do not delete objekt
+		parentNode->insertChildNode( index-1, task );
+	}
+}
+
+
+void KPTProject::moveTaskDown( KPTNode* task )
+{
+	// we have to find the parent of task to manipulate its list of children
+	KPTNode* parentNode = task->getParent();
+	if ( parentNode ) {
+		int index = parentNode->findChildNode( task );
+		if ( -1 == index ) {
+			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+			return;
+		}
+		// let parent have 2 children: child 0 and child 1 (zero-based index)
+		// then 0 is the last child that can be moved down.
+		kdDebug()<<k_funcinfo<<"Current number of children: " << parentNode->numChildren() <<endl;
+		if ( index + 1 >= parentNode->numChildren() ) {
+			kdDebug()<<k_funcinfo<<"Task already is at bottom position"<<endl;
+			return;
+		}
+		parentNode->delChildNode( task, false ); // false: do not delete objekt
+		parentNode->insertChildNode( index+1, task );
+	}
+}
+
+
 
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {

@@ -43,11 +43,11 @@ public:
     void draw(KPTProject& project);
     void clear();
     QSize canvasSize();
-	
+
 	int row(int minrow, int col);
 	int summaryColumn() { return m_summaryColumn++; }
 	KPTPertNodeItem *selectedItem();
-	
+
 	int verticalGap() { return m_verticalGap; }
 	int horizontalGap() { return m_horizontalGap; }
 	QSize itemSize() { return m_itemSize; }
@@ -55,15 +55,21 @@ public:
 	bool legalToLink(KPTNode &par, KPTNode &child);
 	bool legalParents(KPTNode *par, KPTNode *child);
 	bool legalChildren(KPTNode *par, KPTNode *child);
-	
+
 protected:
     void contentsMouseReleaseEvent ( QMouseEvent * e );
     void drawChildren(KPTNode *node);
 
+	void drawProject( KPTNode *node);
+	void drawSubproject( KPTNode *node);
+	void drawMilestone( KPTNode *node);
+	void drawTask( KPTNode *node);
+	void drawRelation( KPTRelation* relation);
+
 signals:
     void rightButtonPressed(KPTNode *node, const QPoint & point);
     void updateView(bool claculate);
-    
+
 private:
     QCanvas *m_canvas;
 
@@ -71,7 +77,7 @@ private:
     bool m_mousePressed;
     bool m_printing;
 	int m_summaryColumn;
-    
+
 	int m_verticalGap;
 	int m_horizontalGap;
 	QSize m_itemSize;

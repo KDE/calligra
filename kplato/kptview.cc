@@ -22,7 +22,7 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
-#include "kptmilestone.h"
+//#include "kptmilestone.h"
 #include "kptganttview.h"
 #include "kptpertview.h"
 
@@ -92,9 +92,19 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
 	// The menu items
     // ------ Edit
-    actionEditCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-    actionEditCut = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-    actionEditCut = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+    KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
+    KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
+    KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+
+	new KAction(i18n("Indent Task"), "indent_task", 0, this,
+		SLOT(slotIndentTask()), actionCollection(), "indent_task");
+    new KAction(i18n("Unindent Task"), "unindent_task", 0, this,
+		SLOT(slotUnindentTask()), actionCollection(), "unindent_task");
+    new KAction(i18n("Move Up"), "move_task_up", 0, this,
+		SLOT(slotMoveTaskUp()), actionCollection(), "move_task_up");
+    new KAction(i18n("Move Down"), "move_task_down", 0, this,
+		SLOT(slotMoveTaskDown()), actionCollection(), "move_task_down");
+
     // ------ View
     new KAction(i18n("Gantt"), "gantt_chart", 0, this,
 		SLOT(slotViewGantt()), actionCollection(), "view_gantt");
@@ -104,10 +114,10 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotViewResources()), actionCollection(), "view_resources");
 
     // ------ Insert
-    new KAction(i18n("Sub-Project..."), "add_sub_project", 0, this,
-		SLOT(slotAddSubProject()), actionCollection(), "add_sub_project");
     new KAction(i18n("Task..."), "add_task", 0, this,
 		SLOT(slotAddTask()), actionCollection(), "add_task");
+    new KAction(i18n("Sub-Task..."), "add_sub_task", 0, this,
+		SLOT(slotAddSubTask()), actionCollection(), "add_sub_task");
     new KAction(i18n("Milestone..."), "add_milestone", 0, this,
 		SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
 
@@ -128,8 +138,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Popup
     new KAction(i18n("Node Properties"), "node_properties", 0, this,
 		SLOT(slotOpenNode()), actionCollection(), "node_properties");
-    new KAction(i18n("Delete Node"), "node_delete", 0, this,
-		SLOT(slotDeleteNode()), actionCollection(), "node_delete");
+    new KAction(i18n("Delete Task"), "delete_task", 0, this,
+		SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
 
     // ------------------- Actions with a key binding and no GUI item
@@ -152,6 +162,11 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 #endif
 #endif
 
+}
+
+KPTProject& KPTView::getProject() const
+{
+	return getPart()->getProject();
 }
 
 void KPTView::setZoom(double zoom) {
@@ -200,13 +215,17 @@ void KPTView::slotProjectCalculate() {
 }
 
 
-void KPTView::slotAddSubProject() {
-    KPTProject *node = new KPTProject(currentNode());
+void KPTView::slotAddSubTask() {
+	// If we are positionend on the root project, then what we really want to
+	// do is to add a first project. We will silently accept the challenge
+	// and will not complain.
+    KPTTask* node = new KPTTask(currentTask());
     if (node->openDialog()) {
-		KPTNode *currNode = currentNode();
+		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-			currNode->addChildNode(node);
+			// currNode->addChildNode(node); let the project handle this
+			getProject().addSubTask( node, currNode );
     		slotUpdate(true);
 			return;
 	    }
@@ -218,12 +237,13 @@ void KPTView::slotAddSubProject() {
 
 
 void KPTView::slotAddTask() {
-    KPTTask *node = new KPTTask(currentNode());
+    KPTTask *node = new KPTTask(currentTask());
     if (node->openDialog()) {
-		KPTNode *currNode = currentNode();
+		KPTNode* currNode = currentTask();
 		if (currNode)
         {
-			currNode->addChildNode(node);
+			// currNode->addChildNode(node); let the project handle this
+			getProject().addTask( node, currNode );
     		slotUpdate(true);
 			return;
 	    }
@@ -234,11 +254,15 @@ void KPTView::slotAddTask() {
 }
 
 void KPTView::slotAddMilestone() {
-    KPTMilestone *node = new KPTMilestone(currentNode());
+	KPTDuration zeroDuration(0);
+    KPTTask* node = new KPTTask(currentTask());
+	node->effort()->set( zeroDuration );
+
+    //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
     if (node->openDialog()) {
-		KPTNode *currNode = currentNode();
+		KPTNode *currNode = currentTask();
 		if (currNode)
         {
 			currNode->addChildNode(node);
@@ -255,17 +279,19 @@ void KPTView::slotAddMilestone() {
 
 }
 
-KPTNode *KPTView::currentNode()
+KPTNode *KPTView::currentTask()
 {
-    KPTNode *n = 0;
-	if (m_tab->visibleWidget() == m_ganttview)
-	    n = m_ganttview->currentNode();
-	else if (m_tab->visibleWidget() == m_pertview)
-	    n = m_pertview->currentNode();
-
-	if (!n)
-	    n = &(getPart()->getProject());
-	return n;
+	KPTNode* task = 0;
+	if (m_tab->visibleWidget() == m_ganttview) {
+	    task = m_ganttview->currentNode();
+	}
+	else if (m_tab->visibleWidget() == m_pertview) {
+		task = m_pertview->currentNode();
+	}
+	if ( 0 != task ) {
+		return task;
+	}
+	return &(getProject());
 }
 
 void KPTView::slotOpenNode() {
@@ -289,38 +315,86 @@ void KPTView::slotOpenNode() {
 	}
 }
 
-void KPTView::slotDeleteNode()
+void KPTView::slotDeleteTask()
 {
     kdDebug()<<k_funcinfo<<endl;
 
-	KPTNode* node = 0;
+	KPTNode* task = currentTask();
 
-	if (m_tab->visibleWidget() == m_ganttview)
-	{
-        node = m_ganttview->currentNode();
-	}
-	else if (m_tab->visibleWidget() == m_pertview)
-	{
-	    node = m_pertview->currentNode();
-	}
-	if ( !node ) {
-		kdDebug()<<k_funcinfo<<"No node was selected?"<<endl;
+	// tell the model to do the work for us
+	getProject().deleteTask( task );
 
+	// display the changes
+	slotUpdate(true);
+}
+
+void KPTView::slotIndentTask()
+{
+    kdDebug()<<k_funcinfo<<endl;
+
+	KPTNode* task = currentTask();
+
+	// tell the model to do the work for us
+	getProject().indentTask( task );
+
+	// display the changes
+	slotUpdate(true);
+}
+
+void KPTView::slotUnindentTask()
+{
+    kdDebug()<<k_funcinfo<<endl;
+
+	KPTNode* task = currentTask();
+
+	// tell the model to do the work for us
+	getProject().unindentTask( task );
+
+	// display the changes
+	slotUpdate(true);
+}
+
+void KPTView::slotMoveTaskUp()
+{
+    kdDebug()<<k_funcinfo<<endl;
+
+	KPTNode* task = currentTask();
+	if ( 0 == task ) {
+		// is always != 0. At least we would get the KPTProject, but you never know who might change that
+		// so better be careful
 		return;
 	}
-	// we cannot directly delete this node. We have to find the parent node and tell it to delete this child.
 
-	// todo: maybe we should ask the user whethere he knows what he is doing, especially if the node in
-	// question has a lot of children.slotAddMilestone()
-	KPTNode* parentNode = node->getParent();
-	// the root node does not have a parent, so be careful!
-	if ( parentNode ) {
-		parentNode->delChildNode( node, true );
+	if ( KPTNode::Type_Project == task->type() ) {
+		kdDebug()<<k_funcinfo<<"The root node cannot be moved up"<<endl;
+		return;
 	}
-	else {
-		kdDebug()<<k_funcinfo<<"No parent node found"<<endl;
+	// tell the model to do the work for us
+	getProject().moveTaskUp( task );
+
+	// display the changes
+	slotUpdate(true);
+}
+
+void KPTView::slotMoveTaskDown()
+{
+    kdDebug()<<k_funcinfo<<endl;
+
+	KPTNode* task = currentTask();
+	if ( 0 == task ) {
+		// is always != 0. At least we would get the KPTProject, but you never know who might change that
+		// so better be careful
+		return;
 	}
 
+	if ( KPTNode::Type_Project == task->type() ) {
+		kdDebug()<<k_funcinfo<<"The root node cannot be moved down"<<endl;
+		return;
+	}
+	// tell the model to do the work for us
+	getProject().moveTaskDown( task );
+
+	// display the changes
 	slotUpdate(true);
 }
 

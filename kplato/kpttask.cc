@@ -19,7 +19,6 @@
 
 #include "kpttask.h"
 #include "kptproject.h"
-#include "kptmilestone.h"
 #include "kpttaskdialog.h"
 #include "kptduration.h"
 #include "kptpertcanvas.h"
@@ -34,7 +33,7 @@
 
 KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_resource.setAutoDelete(true);
-    
+
     KPTDuration d(24, 0);
     m_effort = new KPTEffort(d) ;
 }
@@ -44,9 +43,17 @@ KPTTask::~KPTTask() {
     delete m_effort;
 }
 
-int KPTTask::type() const { return TYPE; }
-int KPTTask::TYPE = KPTNode::Type_Task;
-
+int KPTTask::type() {
+	if ( numChildren() > 0) {
+	  return KPTNode::Type_Subproject;
+	}
+	else if ( 0 == effort()->expected().duration() ) {
+		return KPTNode::Type_Milestone;
+	}
+	else {
+		return KPTNode::Type_Task;
+	}
+}
 
 KPTDuration *KPTTask::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
@@ -67,7 +74,7 @@ KPTDuration *KPTTask::getExpectedDuration() {
             kdDebug()<<k_funcinfo<<"   Nodes duration: "<<dur->dateTime().toString()<<":"<<endl;
             kdDebug()<<k_funcinfo<<"   Current finish: "<<ed->dateTime().toString()<<":"<<endl;
             time->add(*dur);
-            if ( *ed < *time ) { 
+            if ( *ed < *time ) {
                 ed->set(*time);
                 kdDebug()<<k_funcinfo<<"   New finish: "<<ed->dateTime().toString()<<":"<<endl;
             }
@@ -88,7 +95,7 @@ KPTDuration *KPTTask::getRandomDuration() {
 }
 
 KPTDuration *KPTTask::getStartTime() {
-    KPTDuration *time = new KPTDuration();    
+    KPTDuration *time = new KPTDuration();
     if(numChildren() == 0) {
         switch (m_constraint)
         {
@@ -116,7 +123,7 @@ KPTDuration *KPTTask::getStartTime() {
             break;
         }
     } else {
-        // summary task    
+        // summary task
         KPTDuration *start;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
@@ -163,10 +170,10 @@ bool KPTTask::load(QDomElement &element) {
 
     earliestStart = KPTDuration(QDateTime::fromString(element.attribute("earlieststart")));
     latestFinish = KPTDuration(QDateTime::fromString(element.attribute("latestfinish")));
-    
+
     bool ok;
     m_constraint = (KPTNode::ConstraintType)QString(element.attribute("scheduling","0")).toInt(&ok);
-    
+
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -189,14 +196,14 @@ bool KPTTask::load(QDomElement &element) {
 		else
 		    // TODO: Complain about this
 		    delete child;
-	    } else if (e.tagName() == "milestone") {
-		    // Load the milestone
-		    KPTMilestone *child = new KPTMilestone(this);
-		    if (child->load(e))
-		        addChildNode(child);
-		    else
-		        // TODO: Complain about this
-		        delete child;
+//	    } else if (e.tagName() == "milestone") {
+//		    // Load the milestone
+//		    KPTMilestone *child = new KPTMilestone(this);
+//		    if (child->load(e))
+//		        addChildNode(child);
+//		    else
+//		        // TODO: Complain about this
+//		        delete child;
 	    } else if (e.tagName() == "terminalnode") {
 		// TODO: Load the terminalnode
 	    } else if (e.tagName() == "predesessor") {
@@ -233,12 +240,12 @@ void KPTTask::save(QDomElement &element) const {
 
     me.setAttribute("earlieststart",earliestStart.dateTime().toString());
     me.setAttribute("latestfinish",latestFinish.dateTime().toString());
-    
+
     me.setAttribute("scheduling",m_constraint);
-    
+
     m_effort->save(me);
-    
-    // Only save parent relations    
+
+    // Only save parent relations
     QPtrListIterator<KPTRelation> it(m_dependParentNodes);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
@@ -246,7 +253,7 @@ void KPTTask::save(QDomElement &element) const {
 
     for (int i=0; i<numChildren(); i++)
     	// First add the child
-	    getChildNode(i).save(me);
+	    getChildNode(i)->save(me);
 }
 
 bool KPTTask::openDialog() {
@@ -257,11 +264,11 @@ bool KPTTask::openDialog() {
     return ret;
 }
 
-void KPTTask::drawPert(KPTPertCanvas *view, KPTNode *parent) {
+/*void KPTTask::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 	if (!m_drawn) {
 		if ( numChildren() > 0  &&
 	         numDependChildNodes() == 0 &&
-		     numDependParentNodes() == 0) 
+		     numDependParentNodes() == 0)
 		{
 			int col = view->summaryColumn();
 			m_pertItem = new KPTPertTaskItem(view, *this, 0, col);
@@ -269,7 +276,7 @@ void KPTTask::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 			m_drawn = true;
 			kdDebug()<<k_funcinfo<<" drawn summary task("<<0<<","<<col<<"): "<<m_name<<endl;
 			return;
-		} 
+		}
 		if (!allParentsDrawn()) {
 			return;
 		}
@@ -285,7 +292,7 @@ void KPTTask::drawPert(KPTPertCanvas *view, KPTNode *parent) {
 		cit.current()->child()->drawPert(view);
 	}
 }
-
+*/
 #ifndef NDEBUG
 void KPTTask::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"+ Task node: "<<name()<<endl;
@@ -297,6 +304,6 @@ void KPTTask::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"Calculated duration: "<<time->dateTime().toString()<<endl;
     kdDebug()<<indent<<endl;
     KPTNode::printDebug(children, indent);
-        
+
 }
 #endif

@@ -5,6 +5,12 @@
             <Action name="edit_cut"/>
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
+            <Separator/>
+            <Action name="delete_task"/>
+            <Action name="indent_task"/>
+            <Action name="unindent_task"/>
+            <Action name="move_task_up"/>
+            <Action name="move_task_down"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_gantt"/>
@@ -12,8 +18,8 @@
             <Action name="view_resources"/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
-            <Action name="add_sub_project"/>
             <Action name="add_task"/>
+            <Action name="add_sub_task"/>
             <Action name="add_milestone"/>
         </Menu>
         <Menu name="project"><text>&amp;Project</text>
@@ -30,11 +36,17 @@
         <Action name="view_resources"/>
     </ToolBar>
     <ToolBar name="project" position="top"><Text>Project</Text>
-        <Action name="add_sub_project"/>
         <Action name="add_task"/>
+        <Action name="add_sub_task"/>
         <Action name="add_milestone"/>
         <Separator/>
         <Action name="project_edit"/>
+        <Separator/>
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
     </ToolBar>
     <Menu name="node_popup">
         <Action name="edit_cut"/>
@@ -42,6 +54,10 @@
         <Action name="edit_paste"/>
         <Action name="node_properties"/>
         <Separator/>
-        <Action name="node_delete"/>
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
     </Menu>
 </kpartgui>

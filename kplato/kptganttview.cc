@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
- 
+
 #include "kptganttview.h"
 
 #include "kptview.h"
@@ -25,7 +25,7 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
-#include "kptmilestone.h"
+//#include "kptmilestone.h"
 
 #include "KDGanttViewItem.h"
 #include "KDGanttViewTaskItem.h"
@@ -48,14 +48,14 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
 {
     setScale(KDGanttView::Day);
 	//draw(view->getPart()->getProject());
-    
+
 	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
-	
+
 	connect(this, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
-	
+
 	connect(this, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
-	
+
 }
 
 void KPTGanttView::zoom(double zoom)
@@ -72,7 +72,7 @@ void KPTGanttView::clear()
 	KDGanttView::clear();
 }
 
-void KPTGanttView::draw(KPTNode &node)
+void KPTGanttView::draw(KPTProject &project)
 {
     kdDebug()<<k_funcinfo<<endl;
 	setUpdateEnabled(false);
@@ -80,26 +80,22 @@ void KPTGanttView::draw(KPTNode &node)
 	KPTDuration *time;
 	KPTDuration *dur;
 
-	if (node.type() == KPTProject::TYPE)
-    {
-	    KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(this, node);
-		time = node.getStartTime();
-		dur = node.getExpectedDuration();
-	    item->setStartTime(time->dateTime());
-		time->add(dur);
-	    item->setEndTime(time->dateTime());
-		item->setOpen(true);
-		node.setGanttItem(item);
-		delete time;
-		delete dur;
-
-	    drawChildren(item, node);
-    }
-	else
-		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
+	/* The root node is supposed to be hidden.
+	KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(this, project);
+	time = project.getStartTime();
+	dur = project.getExpectedDuration();
+	item->setStartTime(time->dateTime());
+	time->add(dur);
+	item->setEndTime(time->dateTime());
+	item->setOpen(true);
+	project.setGanttItem(item);
+	delete time;
+	delete dur;
+*/
+	drawChildren(NULL, project);
 
 	// Relations
-	drawRelations(node);
+	drawRelations(project);
 
 	setUpdateEnabled(true);
 }
@@ -111,11 +107,13 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	for ( nit.toLast(); nit.current(); --nit )
 	{
 		KPTNode *n = nit.current();
-		if (n->type() == KPTProject::TYPE)
+		if (n->type() == KPTNode::Type_Project)
 	        drawProject(parentItem, *n);
-		else if (n->type() == KPTTask::TYPE)
+		else if (n->type() == KPTNode::Type_Subproject)
+		    drawSubProject(parentItem, *n);
+		else if (n->type() == KPTNode::Type_Task)
 		    drawTask(parentItem, *n);
-		else if (n->type() == KPTMilestone::TYPE)
+		else if (n->type() == KPTNode::Type_Milestone)
 			drawMilestone(parentItem, *n);
 		else
 		    kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
@@ -127,7 +125,15 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 {
 	KPTDuration *time = node.getStartTime();
 	KPTDuration *dur = node.getExpectedDuration();
-	KPTGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(parentItem, node);
+	KPTGanttViewSummaryItem *item;
+	if ( parentItem) {
+	  item = new KPTGanttViewSummaryItem(parentItem, node);
+	}
+	else {
+		// we are on the top level
+		item = new KPTGanttViewSummaryItem(this, node);
+	}
+
 	item->setStartTime(time->dateTime());
 	time->add(dur);
 	item->setEndTime(time->dateTime());
@@ -139,30 +145,50 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 	drawChildren(item, node);
 }
 
+void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &node)
+{
+	KPTDuration *time = node.getStartTime();
+	KPTDuration *dur = node.getExpectedDuration();
+	// display summary item
+	KPTGanttViewSummaryItem *item;
+	if ( parentItem) {
+		item = new KPTGanttViewSummaryItem(parentItem, node);
+	}
+	else {
+		// we are on the top level
+		item = new KPTGanttViewSummaryItem(this, node);
+	}
+	item->setStartTime(time->dateTime());
+	time->add(dur);
+	item->setEndTime(time->dateTime());
+	item->setOpen(true);
+	node.setGanttItem(item);
+
+	drawChildren(item, node);
+
+	delete time;
+	delete dur;
+}
+
 void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 {
 	KPTDuration *time = node.getStartTime();
 	KPTDuration *dur = node.getExpectedDuration();
-	if (node.numChildren() > 0)
-    {
-		KPTGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(parentItem, node);
-		item->setStartTime(time->dateTime());
-		time->add(dur);
-		item->setEndTime(time->dateTime());
-		item->setOpen(true);
-		node.setGanttItem(item);
+	// display task item
+	KPTGanttViewTaskItem *item;
+	if ( parentItem ) {
+		item = new KPTGanttViewTaskItem(parentItem, node);
+	}
+	else {
+		// we are on the top level
+		item = new KPTGanttViewTaskItem(this, node);
+	}
+	item->setStartTime(time->dateTime());
+	time->add(dur);
+	item->setEndTime(time->dateTime());
+	item->setOpen(true);
+	node.setGanttItem(item);
 
-		drawChildren(item, node);
-	}
-	else
-	{
-		KPTGanttViewTaskItem *item = new KPTGanttViewTaskItem(parentItem, node);
-		item->setStartTime(time->dateTime());
-		time->add(dur);
-		item->setEndTime(time->dateTime());
-		item->setOpen(true);
-		node.setGanttItem(item);
-	}
 	delete time;
 	delete dur;
 }
@@ -170,7 +196,14 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 {
 	KPTDuration *time = node.getStartTime();
-	KPTGanttViewEventItem *item = new KPTGanttViewEventItem(parentItem, node);
+	KPTGanttViewEventItem *item;
+	if ( parentItem ) {
+		item = new KPTGanttViewEventItem(parentItem, node);
+	}
+	else {
+		// we are on the top level
+		item = new KPTGanttViewEventItem(this, node);
+	}
 	item->setStartTime(time->dateTime());
 	item->setLeadTime(time->dateTime().addDays(1));
 	item->setOpen(true);
@@ -207,8 +240,12 @@ void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 KPTNode *KPTGanttView::currentNode()
 {
     KDGanttViewItem *curr = m_currentItem;
-	if (!curr)
-		curr = firstChild();
+	if (!curr) {
+		// if we do not have a current item here we return 0.
+		// The caller may then decide to use the KPTProject
+		// root node, but that decision is up to the caller
+		return 0;
+	}
 	if (curr->type() == KDGanttViewItem::Summary)
 	{
 	    KPTGanttViewSummaryItem *item = (KPTGanttViewSummaryItem *)curr;

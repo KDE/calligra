@@ -35,7 +35,7 @@ class QCanvas;
 
 
 #define DEBUGPERT
-/** 
+/**
  * KPTProject is the main node in a project, it contains child nodes and
  * possibly sub-projects. A sub-project is just another instantion of this
  * node however.
@@ -45,9 +45,8 @@ public:
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
-    virtual int type() const;
-    static int TYPE;
-	
+    virtual int type();
+
     /**
      * Calculate the whole project
      */
@@ -59,10 +58,10 @@ public:
      * simple RiskNone, the value will equal the mode Duration, but for other
      * Distributions like RiskHigh, the value will have to be calculated. For
      * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM. 
+     * PERT/CPM.
      */
     KPTDuration *getExpectedDuration();
-    
+
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
@@ -97,19 +96,26 @@ public:
     virtual void save(QDomElement &element) const;
 
     virtual bool openDialog();
-    
-    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent=0);
+
+//    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent=0);
 
     KPTDuration getEarliestStart() const { return startNode.earliestStart; }
     KPTDuration getLatestFinish() const { return endNode.latestFinish; }
-    
+
     QPtrList<KPTResourceGroup> &resourceGroups();
     virtual void addResourceGroup(KPTResourceGroup *resource);
     virtual void insertResourceGroup(unsigned int index, KPTResourceGroup *resource);
     void removeResourceGroup(KPTResourceGroup *resource);
     void removeResourceGroup(int number);
 
-  
+	void addTask( KPTNode* task, KPTNode* position );
+	void addSubTask( KPTNode* task, KPTNode* position );
+	void deleteTask( KPTNode* task );
+	void indentTask( KPTNode* task );
+	void unindentTask( KPTNode* task );
+	void moveTaskUp( KPTNode* task );
+	void moveTaskDown( KPTNode* task );
+
 protected:
     /**
      * @return The start node.
@@ -154,7 +160,7 @@ protected:
     KPTTerminalNode endNode;
 
     QPtrList<KPTResourceGroup> m_resourceGroups;
-   
+
 #ifndef NDEBUG
 public:
     void printDebug(bool children, QCString indent);

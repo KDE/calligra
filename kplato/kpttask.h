@@ -20,7 +20,7 @@
 #ifndef kpttask_h
 #define kpttask_h
 
-#include "kptduration.h" 
+#include "kptduration.h"
 #include "kptnode.h"
 #include "kptresource.h"
 #include "defs.h"
@@ -29,7 +29,7 @@ class KPTResource;
 class KPTPertCanvas;
 class QCanvas;
 
-/** 
+/**
   * A task in the scheduling software is represented by this class. A task
   * can be anything from 'build house' to 'drill hole' It will always mean
   * an activity.
@@ -39,9 +39,8 @@ public:
     KPTTask(KPTNode *parent = 0);
     ~KPTTask();
 
-    virtual int type() const;
-    static int TYPE;
-	
+    virtual int type();
+
     /**
      * The expected Duration is the expected time to complete a Task, Project,
      * etc. For an individual Task, this will calculate the expected duration
@@ -49,7 +48,7 @@ public:
      * simple RiskNone, the value will equal the mode Duration, but for other
      * Distributions like RiskHigh, the value will have to be calculated. For
      * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM. 
+     * PERT/CPM.
      */
     KPTDuration *getExpectedDuration();
 
@@ -91,12 +90,12 @@ public:
     virtual void save(QDomElement &element) const;
 
     virtual bool openDialog();
- 
-    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent = 0);
-   
+
+//    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent = 0);
+
 private:
     QPtrList<KPTResourceGroup> m_resource;
-    
+
 #ifndef NDEBUG
 public:
     void printDebug(bool children, QCString indent);
