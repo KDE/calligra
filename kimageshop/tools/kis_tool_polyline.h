@@ -41,17 +41,29 @@ public:
     virtual void mousePress( QMouseEvent* event );
     virtual void mouseMove( QMouseEvent* event );
     virtual void mouseRelease( QMouseEvent* event );
-
+    
+    virtual void optionsDialog();
+    
+    void start(QPoint p);
+    void finish(QPoint p); 
+    
 protected:
 
     void drawLine( const QPoint&, const QPoint& );
 
 protected:
 
+    int         lineThickness;
+    int         lineOpacity;
+    
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
+    QPoint      mStart;
+    QPoint      mFinish;
+    
     bool        m_dragging;
     bool        m_done;
+    
     KisCanvas   *pCanvas;
 };
 

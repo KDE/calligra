@@ -2,7 +2,8 @@
  *  kis_pattern.cc - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
- *
+ *                2001 John Califf
+ *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -22,8 +23,7 @@
 #include <qsize.h>
 #include <qimage.h>
 #include <qpixmap.h>
-
-#include <kimageeffect.h>
+#include <kdebug.h>
 
 #include "kis_pattern.h"
 
@@ -34,7 +34,7 @@ KisPattern::KisPattern(QString file)
   : KisKrayon()
 {
     m_valid    = false;
-    m_spacing  = 10;
+    m_spacing  = 3;
     loadViaQImage(file);
 }
 
@@ -43,7 +43,7 @@ KisPattern::KisPattern(int formula)
 {
     m_valid = false;
     validThumb = false;
-    m_spacing  = 10;    
+    m_spacing  = 3;    
     loadViaFormula(formula);
 }
 
@@ -57,7 +57,8 @@ void KisPattern::loadViaQImage(QString file)
 {
     // load via QImage
     m_pImage = new QImage(file);
-
+    m_pImage->setAlphaBuffer(true);
+    
     if (m_pImage->isNull())
     {
         m_valid = false;
@@ -65,33 +66,53 @@ void KisPattern::loadViaQImage(QString file)
     }
 
     *m_pImage = m_pImage->convertDepth(32);
-
+    
     // create pixmap for preview dialog
     m_pPixmap = new QPixmap;
     QImage img = *m_pImage;
     m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
 
-     // scale a pixmap for iconview cell to size of cell
-    m_pThumbPixmap = new QPixmap;
-    
-    int xsize = THUMB_SIZE;
-    int ysize = THUMB_SIZE;
-    
-    if(img.width() > img.height())
+    // scale a pixmap for iconview cell to size of cell
+    if(img.width() > THUMB_SIZE || img.height() > THUMB_SIZE)
     {
-        float yFactor = (float)(img.height()/img.width());
-        ysize = (int)(yFactor * THUMB_SIZE);
-    }
-    else if(img.width() < img.height())
-    {
-        float xFactor = (float)(img.width()/img.height());
-        xsize = (int)(xFactor * THUMB_SIZE);
-    }
+        QPixmap filePixmap;
+        filePixmap.load(file);
+        QImage fileImage = filePixmap.convertToImage();
+        
+        m_pThumbPixmap = new QPixmap;
     
-    QImage thumbImg = img.smoothScale(xsize, ysize);
-    m_pThumbPixmap->convertFromImage(thumbImg, QPixmap::AutoColor);    
-    validThumb = true;
-
+        int xsize = THUMB_SIZE;
+        int ysize = THUMB_SIZE;
+        int picW  = fileImage.width();
+        int picH  = fileImage.height(); 
+        
+        if(picW > picH)
+        {
+            float yFactor = (float)((float)THUMB_SIZE/(float)picH);
+            ysize = (int)(yFactor * (float)picH);
+            kdDebug() << "ysize is " << ysize << endl;
+            if(ysize > 30) ysize = 30;
+        }
+        else if(picW < picH)
+        {
+            float xFactor = (float)((float)THUMB_SIZE/(float)picW);
+            xsize = (int)(xFactor * (float)picW);
+            kdDebug() << "xsize is " << xsize << endl;            
+            if(xsize > 30) xsize = 30;            
+        }
+        
+        QImage thumbImg = fileImage.smoothScale(xsize, ysize);
+        
+        if(!thumbImg.isNull())
+        {
+            m_pThumbPixmap->convertFromImage(thumbImg);
+            if(!m_pThumbPixmap->isNull())
+            {
+                validThumb = true;
+            }    
+        }
+    } 
+       
     m_w = m_pImage->width();
     m_h = m_pImage->height();
  
@@ -104,6 +125,11 @@ void KisPattern::loadViaQImage(QString file)
     algorithms and/or predefined Qt patterns 
 */
 
+/*
+    Formulas for patterns should come from plugins which
+    could be written in almost any language to generate
+    patterns in a given area or region
+*/
 void KisPattern::loadViaFormula(int formula)
 {
     // load via QImage

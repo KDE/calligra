@@ -68,6 +68,7 @@ class StampTool : public KisTool
     QPoint 	    m_dragStart;
     bool        m_dragging;
     float       m_dragdist;
+    int         spacing;
 };
 
 #endif //__stamptool_h__

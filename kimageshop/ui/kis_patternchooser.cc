@@ -57,9 +57,6 @@ KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     chooser = new IconChooser( frame, QSize(30,30), "pattern chooser" );  
 
-    //container = new QWidget(frame);  
-    //chooser = new IconChooser( container, QSize(30,30), "icon chooser" );
-
     QList<KisPattern> bList = KisFactory::rServer()->patterns();
   
     for (KisPattern *pattern = bList.first(); pattern != 0; pattern = bList.next())
@@ -76,7 +73,7 @@ KisPatternChooser::KisPatternChooser( QWidget *parent, const char *name )
     const KisPattern *pattern = currentPattern();
   
     if ( pattern )
-        slSpacing->setValue( /* pattern->spacing()*/ 5 );
+        slSpacing->setValue(pattern->spacing());
 }
 
 
@@ -124,7 +121,7 @@ void KisPatternChooser::initGUI()
 void KisPatternChooser::slotItemSelected( IconItem *item )
 {
     const KisPattern *pattern = (KisPattern *) item;
-    slSpacing->setValue( /* pattern->spacing() */ 5 );
+    slSpacing->setValue( pattern->spacing());
     emit selected( pattern );
 }
 
@@ -133,7 +130,7 @@ void KisPatternChooser::slotItemSelected( IconItem *item )
 void KisPatternChooser::slotSetPatternSpacing( int spacing )
 {
     KisPattern *pattern = (KisPattern *) currentPattern();
-    // if ( pattern ) pattern->setSpacing( spacing );
+        if ( pattern ) pattern->setSpacing( spacing );
 }
 
 #include "kis_patternchooser.moc"

@@ -1,5 +1,5 @@
 /*
- *  kis_tool_eraser.cc - part of KImageShop
+ *  kis_tool_eraser.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *
@@ -18,21 +18,23 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "qbitmap.h"
 #include "kis_tool_eraser.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
+#include "kis_canvas.h"
 #include "kis_vec.h"
 #include "kis_cursor.h"
 #include "kis_util.h"
+
 
 EraserTool::EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
-    m_Cursor = KisCursor::brushCursor();
-    m_pBrush = _brush;
     m_dragdist = 0;
+    setBrush(_brush);
 }
 
 EraserTool::~EraserTool() {}
@@ -40,6 +42,25 @@ EraserTool::~EraserTool() {}
 void EraserTool::setBrush(const KisBrush *_brush)
 {
     m_pBrush = _brush;
+    
+    int w = m_pBrush->pixmap().width();
+    int h = m_pBrush->pixmap().height();
+    
+    // cursor cannot be larger than 32x32
+    if((w < 33 && h < 33) && (w > 9 && h > 9))
+    {
+        QBitmap mask(w, h);
+        QPixmap pix(m_pBrush->pixmap());
+        mask = pix.createHeuristicMask();
+        pix.setMask(mask);
+        m_pView->kisCanvas()->setCursor(QCursor(pix));
+        m_Cursor = QCursor(pix);
+    }
+    else 
+    {
+        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor()); 
+        m_Cursor = KisCursor::brushCursor();
+    }    
 }
 
 void EraserTool::mousePress(QMouseEvent *e)

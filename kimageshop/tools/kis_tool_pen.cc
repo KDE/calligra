@@ -2,6 +2,7 @@
  *  kis_tool_pen.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *                2001 John Califf 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +20,8 @@
  */
 
 #include <qpainter.h>
+#include <qbitmap.h>
+
 #include "kis_tool_pen.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
@@ -26,14 +29,14 @@
 #include "kis_vec.h"
 #include "kis_cursor.h"
 
+
 PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush)
   : KisTool(doc, view)
 {
-    m_Cursor = KisCursor::penCursor();
     m_dragging = false;
-    m_pBrush = _brush;
     m_pView  = view;
     m_pCanvas = canvas;
+    setBrush(_brush);
 }
 
 
@@ -45,11 +48,34 @@ PenTool::~PenTool()
 void PenTool::setBrush(const KisBrush *_brush)
 {
     m_pBrush = _brush;
+    
+    int w = m_pBrush->pixmap().width();
+    int h = m_pBrush->pixmap().height();
+    
+    if((w < 33 && h < 33) && (w > 9 && h > 9))
+    {
+        QBitmap mask(w, h);
+        QPixmap pix(m_pBrush->pixmap());
+        mask = pix.createHeuristicMask();
+        pix.setMask(mask);
+        m_pView->kisCanvas()->setCursor(QCursor(pix));
+        m_Cursor = QCursor(pix);   
+    }    
+    else 
+    {
+        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor()); 
+        m_Cursor = KisCursor::brushCursor();
+    }    
 }
 
 
 void PenTool::mousePress(QMouseEvent *e)
 {
+    /* do all status checking on mouse press only!
+    Not needed elsewhere and slows things down if
+    done in mouseMove and Paint routines.  Nothing
+    happens unless mouse is first pressed anyway */
+
     KisImage * img = m_pDoc->current();
     if (!img) return;
 
@@ -58,6 +84,9 @@ void PenTool::mousePress(QMouseEvent *e)
 
     if( !img->getCurrentLayer()->visible() )
         return;
+
+    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+	    return;
 
     m_dragging = true;
 
@@ -74,19 +103,10 @@ void PenTool::mousePress(QMouseEvent *e)
 }
 
 
-
 bool PenTool::paint(QPoint pos)
 {  
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
-
-    if (!img)	        return false;
-    if (!lay)           return false;
-    if (!m_pBrush)      return false;
-
-    // FIXME: Implement this for non-RGB modes.
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return false;
 
     int startx = (pos - m_pBrush->hotSpot()).x();
     int starty = (pos - m_pBrush->hotSpot()).y();
@@ -104,8 +124,9 @@ bool PenTool::paint(QPoint pos)
     int ey = clipRect.bottom() - starty;
 
     uchar *sl;
-    uchar bv, invbv;
-    uchar r, g, b, a;
+    uchar bv;
+    // uchar invbv;
+    uchar a;
     int   v;
 
     int red = m_pView->fgColor().R();
@@ -120,22 +141,17 @@ bool PenTool::paint(QPoint pos)
 
         for (int x = sx; x <= ex; x++)
 	    {
-	        r = lay->pixel(0, startx + x, starty + y);
-	        g = lay->pixel(1, startx + x, starty + y);
-	        b = lay->pixel(2, startx + x, starty + y);
-		  
+            // no color blending with pen tool (only with brush)
+	        // alpha blending only (maybe)
+            
 	        bv = *(sl + x);
 	        if (bv == 0) continue;
 		  
-	        invbv = 255 - bv;
+	        //invbv = 255 - bv;
 		  
-            b = ((blue * bv) + (b * invbv))/255;
-	        g = ((green * bv) + (g * invbv))/255;
-	        r = ((red * bv) + (r * invbv))/255;
-            		  
-	        lay->setPixel(0, startx + x, starty + y, r);
-	        lay->setPixel(1, startx + x, starty + y, g);
-	        lay->setPixel(2, startx + x, starty + y, b);
+	        lay->setPixel(0, startx + x, starty + y, red);
+	        lay->setPixel(1, startx + x, starty + y, green);
+	        lay->setPixel(2, startx + x, starty + y, blue);
                        	  
             if (alpha)
 	        {
@@ -157,16 +173,12 @@ bool PenTool::paint(QPoint pos)
 void PenTool::mouseMove(QMouseEvent *e)
 {
     KisImage * img = m_pDoc->current();
-    if (!img) return;
 
     int spacing = m_pBrush->spacing();
     if (spacing <= 0) spacing = 1;
 
     if(m_dragging)
     {
-        if( !img->getCurrentLayer()->visible() )
-        	return;
-
         QPoint pos = e->pos();      
         int mouseX = e->x();
         int mouseY = e->y();

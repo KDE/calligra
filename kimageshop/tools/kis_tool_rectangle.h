@@ -33,25 +33,32 @@ class RectangleTool : public KisTool
 {
 public:
 
-  RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
-  ~RectangleTool();
+    RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
+    ~RectangleTool();
 
-  virtual QString toolName() { return QString( "Rectangle Tool" ); }
+    virtual QString toolName() { return QString( "Rectangle Tool" ); }
 
-  virtual void mousePress( QMouseEvent* event );
-  virtual void mouseMove( QMouseEvent* event );
-  virtual void mouseRelease( QMouseEvent* event );
+    virtual void mousePress( QMouseEvent* event );
+    virtual void mouseMove( QMouseEvent* event );
+    virtual void mouseRelease( QMouseEvent* event );
+
+    virtual void optionsDialog();
+    
+protected:
+
+    void drawRectangle( const QPoint&, const QPoint& );
 
 protected:
 
-  void drawRectangle( const QPoint&, const QPoint& );
+    int         lineThickness;
+    int         lineOpacity;
+    
+    QPoint      m_dragStart;
+    QPoint      m_dragEnd;
+ 
+    bool        m_dragging;
 
-protected:
-
-  QPoint       m_dragStart;
-  QPoint       m_dragEnd;
-  bool         m_dragging;
-  KisCanvas   *pCanvas;
+    KisCanvas   *pCanvas;
 };
 
 #endif //__linetool_h__

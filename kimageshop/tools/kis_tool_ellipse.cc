@@ -27,12 +27,15 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_ellipse.h"
+#include "opts_line_dlg.h"
 
 EllipseTool::EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
   , m_dragging( false )
   , pCanvas( _canvas )
 {
+    lineThickness = 4;
+    lineOpacity = 255;
 }
 
 EllipseTool::~EllipseTool()
@@ -90,7 +93,11 @@ void EllipseTool::mouseRelease( QMouseEvent* event )
 void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
 {
     QPainter p;
+    QPen pen;
+    pen.setWidth(lineThickness);
+    
     p.begin( pCanvas );
+    p.setPen(pen);
     p.setRasterOp( Qt::NotROP );
     float zF = m_pView->zoomFactor();
 
@@ -104,5 +111,19 @@ void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
     p.end();
 }
 
+void EllipseTool::optionsDialog()
+{
+    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    pOptsDialog->exec();
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    lineThickness = pOptsDialog->thickness();
+    lineOpacity   = pOptsDialog->opacity();
+    
+    KisPainter *p = m_pView->kisPainter();
+    p->setLineThickness(lineThickness);
+    p->setLineOpacity(lineOpacity);
+}
 
 

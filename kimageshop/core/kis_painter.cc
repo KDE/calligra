@@ -49,6 +49,10 @@ KisPainter::KisPainter(KisDoc *doc, KisView *view)
 {
   	pDoc  = doc;
     pView = view;
+
+    lineThickness = 4;
+    lineOpacity = 255;
+    
     painterPixmap.resize(512, 512);
     clearAll();  
 }
@@ -198,10 +202,12 @@ bool KisPainter::toLayer(QRect paintRect)
 void KisPainter::drawLine(int x1, int y1, int x2, int y2)
 {
     /* use black for pen color - it will be set
-    to actual foreground color when drawn into layer */
+    to actual foreground color and mapped to gradient 
+    and pattern when drawn into layer */
 
     QPainter p(&painterPixmap);
-    p.setPen(Qt::black);
+    QPen pen(Qt::black, lineThickness);
+    p.setPen(pen);
     p.drawLine(x1, y1, x2, y2);
     
     /* establish rectangle with values ascending from
@@ -211,47 +217,98 @@ void KisPainter::drawLine(int x1, int y1, int x2, int y2)
     swap(&x1, &x2);
     swap(&y1, &y2);
         
-    QRect ur = QRect( QPoint(x1, y1), QPoint(x2, y2) );
-    if(!toLayer(ur)) kdDebug() << "error drawing line" << endl; 
+    QRect rect = QRect( QPoint(x1, y1), QPoint(x2, y2) );
+
+    // account for line thickness in update rectangle
+    QRect ur(rect);
+    ur.setLeft(rect.left() - lineThickness);
+    ur.setTop(rect.top() - lineThickness);    
+    ur.setRight(rect.right() + lineThickness);
+    ur.setBottom(rect.bottom() + lineThickness);
+
+    if(!toLayer(ur)) 
+        kdDebug() << "error drawing line" << endl; 
 }
 
 
 void KisPainter::drawRectangle(QRect & rect)
 {
     QPainter p(&painterPixmap);
-    p.setPen(Qt::black);
+    QPen pen(Qt::black, lineThickness);
+    p.setPen(pen);
     p.drawRect(rect);
+    
+    // account for line thickness in update rectangle
+    QRect ur(rect);
+    ur.setLeft(rect.left() - lineThickness);
+    ur.setTop(rect.top() - lineThickness);    
+    ur.setRight(rect.right() + lineThickness);
+    ur.setBottom(rect.bottom() + lineThickness);
 
-    if(!toLayer(rect)) kdDebug() << "error drawing rectangle" << endl;     
+    if(!toLayer(ur)) 
+        kdDebug() << "error drawing rectangle" << endl;     
 }
 
 
 void KisPainter::drawRectangle(int x, int y, int w, int h)
 {
     QPainter p(&painterPixmap);
-    p.setPen(Qt::black);
+    QPen pen(Qt::black, lineThickness);
+    p.setPen(pen);
     p.drawRect(x, y, w, h);
+   
+    QRect rect(x, y, w, h);
+    
+    // account for line thickness in update rectangle
+    QRect ur(rect);
+    ur.setLeft(rect.left() - lineThickness);
+    ur.setTop(rect.top() - lineThickness);    
+    ur.setRight(rect.right() + lineThickness);
+    ur.setBottom(rect.bottom() + lineThickness);
 
-    if(!toLayer(QRect(x, y, w, h))) 
+    if(!toLayer(ur)) 
         kdDebug() << "error drawing rectangle" << endl;     
 }
 
-
+/*
+    draw ellipse inside given rectangle
+*/
 void KisPainter::drawEllipse(QRect & rect)
 {
     QPainter p(&painterPixmap);
-    p.setPen(Qt::black);
+    QPen pen(Qt::black, lineThickness);
+    p.setPen(pen);
     p.drawEllipse(rect);
 
-    if(!toLayer(rect)) kdDebug() << "error drawing ellipse" << endl;          
+    // account for line thickness in update rectangle
+    QRect ur(rect);
+    ur.setLeft(rect.left() - lineThickness);
+    ur.setTop(rect.top() - lineThickness);    
+    ur.setRight(rect.right() + lineThickness);
+    ur.setBottom(rect.bottom() + lineThickness);
+
+    if(!toLayer(ur)) 
+        kdDebug() << "error drawing ellipse" << endl;          
 }
 
-
+/*
+    draw ellipse with center at (x,y) with given width and height
+*/
 void KisPainter::drawEllipse(int x, int y, int w, int h)
 {
     QPainter p(&painterPixmap);
-    p.setPen(Qt::black);
+    QPen pen(Qt::black, lineThickness);
+    p.setPen(pen);
     p.drawEllipse(x, y, w, h);
+
+    QRect rect(x - w/2, y - h/2, w, h);
+    
+    // account for line thickness in update rectangle
+    QRect ur(rect);
+    ur.setLeft(rect.left() - lineThickness);
+    ur.setTop(rect.top() - lineThickness);    
+    ur.setRight(rect.right() + lineThickness);
+    ur.setBottom(rect.bottom() + lineThickness);
 
     if(!toLayer(QRect(x, y, w, h)))
          kdDebug() << "error drawing ellipse" << endl;          

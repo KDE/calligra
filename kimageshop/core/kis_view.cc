@@ -311,10 +311,10 @@ void KisView::setupTools()
     m_pFillTool = new FillTool( m_pDoc, this );
     m_pStampTool = new StampTool(m_pDoc, this, m_pCanvas, m_pPattern);
     
-    // start with pen as active tool
-    m_tool_pen->setChecked( true );
+    // start with brush as active tool
+    m_tool_brush->setChecked( true );
     slotSetBrush(m_pBrush);
-    activateTool(m_pPenTool);
+    activateTool(m_pBrushTool);
 }
 
 

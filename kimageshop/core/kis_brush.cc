@@ -2,6 +2,7 @@
  *  kis_brush.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
+ *                2001 John Califf 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +33,7 @@
 #include "kis_util.h"
 
 #define THUMB_SIZE 30
+
 
 KisBrush::KisBrush(QString file, bool monochrome, bool special)
   : KisKrayon()
@@ -107,55 +109,48 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
     }
 
     // scale a pixmap for iconview cell to size of cell
-    // rough scale - no smoothing or depth conversion or 
-    // format conversion for thumbnails
-    
     if(img.width() > THUMB_SIZE || img.height() > THUMB_SIZE)
-    { 
-        QImage thumbimg(img);
-
+    {
+        QPixmap filePixmap;
+        filePixmap.load(file);
+        QImage fileImage = filePixmap.convertToImage();
+        
         m_pThumbPixmap = new QPixmap;
     
         int xsize = THUMB_SIZE;
         int ysize = THUMB_SIZE;
-    
-        if(thumbimg.width() > thumbimg.height())
+        int picW  = fileImage.width();
+        int picH  = fileImage.height(); 
+        
+        if(picW > picH)
         {
-            float yFactor = (float)(thumbimg.height()/thumbimg.width());
-            ysize = (int)(yFactor * THUMB_SIZE);
+            float yFactor = (float)((float)THUMB_SIZE/(float)picH);
+            ysize = (int)(yFactor * (float)picH);
+            kdDebug() << "ysize is " << ysize << endl;
+            if(ysize > 30) ysize = 30;
         }
-        else if(thumbimg.width() < thumbimg.height())
+        else if(picW < picH)
         {
-            float xFactor = (float)(thumbimg.width()/thumbimg.height());
-            xsize = (int)(xFactor * THUMB_SIZE);
+            float xFactor = (float)((float)THUMB_SIZE/(float)picW);
+            xsize = (int)(xFactor * (float)picW);
+            kdDebug() << "xsize is " << xsize << endl;            
+            if(xsize > 30) xsize = 30;            
         }
 
-        thumbimg = KisUtil::roughScaleQImage(thumbimg, xsize, ysize); 
-        if (!thumbimg.isNull())
+        QImage thumbImg = fileImage.smoothScale(xsize, ysize);
+        
+        if(!thumbImg.isNull())
         {
-            kdDebug() << "thumb image is not null" << endl;                    
-            m_pThumbPixmap->convertFromImage(thumbimg, QPixmap::AutoColor);    
+            m_pThumbPixmap->convertFromImage(thumbImg);
             if(!m_pThumbPixmap->isNull())
             {
-                kdDebug() << "thumb pixmap is not null" << endl;                        
                 validThumb = true;
             }    
-            else
-            {
-                kdDebug() << "thumb pixmap is null" << endl;            
-                delete m_pThumbPixmap;
-            }    
         }
-        else
-        {
-            kdDebug() << "thumb image is null" << endl;
-        }    
-    }
-    
+    } 
+   
     img = img.convertDepth(32);
-    
-    if(monochrome)
-        img = KImageEffect::toGray(img, true); 
+    if(monochrome) img = KImageEffect::toGray(img, true); 
         
     // create pixmap for preview
     m_pPixmap = new QPixmap;

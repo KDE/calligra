@@ -36,7 +36,7 @@ class KisTool : public QObject
   ~KisTool();
 
   QString toolName();
-  void optionsDialog();
+  virtual void optionsDialog();
 
   void setCursor( const QCursor& );
   QCursor cursor();

@@ -25,6 +25,7 @@
 #include <qframe.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
+#include <kdebug.h>
 
 #include "iconchooser.h"
 #include "iconitem.h"
@@ -191,7 +192,6 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
     if ( item ) 
     {
         const QPixmap& pix   = item->pixmap();
-        const QPixmap& thumbpix = item->thumbPixmap();
         
         int x  = margin; 		int y  = margin;
         int pw = pix.width(); 	int ph = pix.height();
@@ -203,11 +203,32 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
         if ( ph < itemHeight )
             y = (cw - ph) / 2;
         
-        if( (!item->hasValidThumb()) || (pw <= itemWidth && ph <= itemHeight) )
+        if((!item->hasValidThumb()) || (pw <= itemWidth && ph <= itemHeight))
             p->drawPixmap( x, y, pix, 0, 0, itemWidth, itemHeight );
         else
-            p->drawPixmap( x, y, thumbpix, 0, 0, itemWidth, itemHeight );        
+        {
+            const QPixmap& thumbpix = item->thumbPixmap();
+            kdDebug()   << "itemWidth "  << itemWidth  
+                        << "itemHeight " << itemHeight 
+                        << endl;
+                        
+            kdDebug()   << "thumbpix.width() "  << thumbpix.width()  
+                        << "thumbpix.height() " << thumbpix.height() 
+                        << endl;
+                                                
+            x  = margin;            y  = margin;
+            pw = thumbpix.width(); 	ph = thumbpix.height();
+            cw = cellWidth();       ch = cellHeight();
 
+            // center small pixmaps
+            if ( pw < itemWidth )
+                x = (cw - pw) / 2;
+            if ( ph < itemHeight )
+                y = (cw - ph) / 2;
+        
+            p->drawPixmap( x, y, thumbpix, 0, 0, itemWidth, itemHeight);        
+        }
+        
         // highlight current item
         if ( row == curRow && col == curCol )  
         {

@@ -1,7 +1,7 @@
 /*
- *  linetool.cc - part of KImageShop
+ *  linetool.cc - part of Krayon
  *
- *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2000 John Califf 
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,14 +27,17 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_line.h"
-
+#include "opts_line_dlg.h"
 
 LineTool::LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
   , m_dragging( false )
   , pCanvas( _canvas )
 {
+    lineThickness = 4;
+    lineOpacity = 255;
 }
+
 
 LineTool::~LineTool()
 {
@@ -91,8 +94,11 @@ void LineTool::mouseRelease( QMouseEvent* event )
 void LineTool::drawLine( const QPoint& start, const QPoint& end )
 {
     QPainter p;
+    QPen pen;
+    pen.setWidth(lineThickness);
 
     p.begin( pCanvas );
+    p.setPen(pen);    
     p.setRasterOp( Qt::NotROP );
     float zF = m_pView->zoomFactor();
 
@@ -108,4 +114,18 @@ void LineTool::drawLine( const QPoint& start, const QPoint& end )
     p.end();
 }
 
+void LineTool::optionsDialog()
+{
+    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    pOptsDialog->exec();
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    lineThickness = pOptsDialog->thickness();
+    lineOpacity   = pOptsDialog->opacity();
+    
+    KisPainter *p = m_pView->kisPainter();
+    p->setLineThickness(lineThickness);
+    p->setLineOpacity(lineOpacity);
+}
 

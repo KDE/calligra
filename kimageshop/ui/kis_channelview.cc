@@ -77,10 +77,10 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
         channeltable, SLOT( slotAddChannel() ) );
     connect( pbRemoveChannel, SIGNAL( clicked() ), 
         channeltable, SLOT( slotRemoveChannel() ) );
-    connect( pbUp, SIGNAL( clicked() ), 
-        channeltable, SLOT( slotRaiseChannel() ) );
-    connect( pbDown, SIGNAL( clicked() ), 
-        channeltable, SLOT( slotLowerChannel() ) );
+    //connect( pbUp, SIGNAL( clicked() ), 
+    //    channeltable, SLOT( slotRaiseChannel() ) );
+    //connect( pbDown, SIGNAL( clicked() ), 
+    //    channeltable, SLOT( slotLowerChannel() ) );
     
     initGUI();
 }

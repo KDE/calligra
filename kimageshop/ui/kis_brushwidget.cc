@@ -46,13 +46,30 @@ void KisBrushWidget::drawContents ( QPainter *p )
     int x = 0;
     int y = 0;
 
-    if (m_pBrush->pixmap().width() < ITEMSIZE)
-        x = (ITEMSIZE - m_pBrush->pixmap().width()) / 2;
+    IconItem *item = (IconItem *)m_pBrush;
+    
+    if ((m_pBrush->width() < ITEMSIZE && m_pBrush->height() < ITEMSIZE)
+    || (!item->hasValidThumb()))
+    {
+        if (m_pBrush->width() < ITEMSIZE)
+            x = (ITEMSIZE - m_pBrush->width()) / 2;
 
-    if (m_pBrush->pixmap().height() < ITEMSIZE)
-        y = (ITEMSIZE - m_pBrush->pixmap().height()) / 2;
+        if (m_pBrush->height() < ITEMSIZE)
+            y = (ITEMSIZE - m_pBrush->height()) / 2;
 
-    p->drawPixmap(x, y, m_pBrush->pixmap()); 
+        p->drawPixmap(x, y, m_pBrush->pixmap()); 
+    }    
+    else if (item->hasValidThumb())
+    {    
+        if (m_pBrush->thumbPixmap().width() < ITEMSIZE)
+            x = (ITEMSIZE - m_pBrush->thumbPixmap().width()) / 2;
+
+        if (m_pBrush->thumbPixmap().height() < ITEMSIZE)
+            y = (ITEMSIZE - m_pBrush->thumbPixmap().height()) / 2;
+
+        p->drawPixmap(x, y, m_pBrush->thumbPixmap()); 
+    }    
+    
 }
 
 void KisBrushWidget::mousePressEvent ( QMouseEvent * )

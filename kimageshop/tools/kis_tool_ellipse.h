@@ -33,25 +33,32 @@ class EllipseTool : public KisTool
 {
 public:
 
-  EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-  ~EllipseTool();
+    EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+    ~EllipseTool();
 
-  virtual QString toolName() { return QString( "LineTool" ); }
+    virtual QString toolName() { return QString( "LineTool" ); }
 
-  virtual void mousePress( QMouseEvent* event );
-  virtual void mouseMove( QMouseEvent* event );
-  virtual void mouseRelease( QMouseEvent* event );
+    virtual void mousePress( QMouseEvent* event );
+    virtual void mouseMove( QMouseEvent* event );
+    virtual void mouseRelease( QMouseEvent* event );
+
+    virtual void optionsDialog();
+    
+protected:
+
+    void drawEllipse( const QPoint&, const QPoint& );
 
 protected:
 
-  void drawEllipse( const QPoint&, const QPoint& );
+    int     lineThickness;
+    int     lineOpacity;
+    
+    QPoint       m_dragStart;
+    QPoint       m_dragEnd;
 
-protected:
-
-  QPoint       m_dragStart;
-  QPoint       m_dragEnd;
-  bool         m_dragging;
-  KisCanvas   *pCanvas;
+    bool         m_dragging;
+    
+    KisCanvas   *pCanvas;
 };
 
 #endif //__linetool_h__

@@ -27,13 +27,15 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_rectangle.h"
-
+#include "opts_line_dlg.h"
 
 RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
   , m_dragging( false )
   , pCanvas( _canvas )
 {
+    lineThickness = 4;
+    lineOpacity = 255;
 }
 
 RectangleTool::~RectangleTool()
@@ -91,7 +93,11 @@ void RectangleTool::mouseRelease( QMouseEvent* event )
 void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 {
     QPainter p;
+    QPen pen;
+    pen.setWidth(lineThickness);
+    
     p.begin( pCanvas );
+    p.setPen(pen);
     p.setRasterOp( Qt::NotROP );
     float zF = m_pView->zoomFactor();
     p.drawRect( QRect(start.x() + m_pView->xPaintOffset() 
@@ -101,4 +107,19 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();
+}
+
+void RectangleTool::optionsDialog()
+{
+    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    pOptsDialog->exec();
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    lineThickness = pOptsDialog->thickness();
+    lineOpacity   = pOptsDialog->opacity();
+    
+    KisPainter *p = m_pView->kisPainter();
+    p->setLineThickness(lineThickness);
+    p->setLineOpacity(lineOpacity);
 }

@@ -113,9 +113,6 @@ const KisBrush * KisBrushChooser::currentBrush() const
     return (const KisBrush *) chooser->currentItem();
 }
 
-
-
-
 // called when an item is selected in the chooser
 // set the slider to the correct position
 void KisBrushChooser::slotItemSelected( IconItem *item )
@@ -124,7 +121,6 @@ void KisBrushChooser::slotItemSelected( IconItem *item )
     slSpacing->setValue( brush->spacing() );
     emit selected( brush );
 }
-
 
 // sliderposition (spacing) changed, apply that to the current brush
 void KisBrushChooser::slotSetBrushSpacing( int spacing )
