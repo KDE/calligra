@@ -161,6 +161,7 @@ public:
 
 protected:
     void applyGrid( KoPoint &p );
+    void applyAspectRatio( double ratio, KoRect& insRect );
 
     /**
      * Reimplemented from QScrollView, to draw the contents of the canvas

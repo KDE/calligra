@@ -410,7 +410,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
         // Apply grid for the first corner only
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
         applyGrid( docPoint );
-        m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
+        m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
         if ( !m_isClipart && !m_pixmapSize.isEmpty() )
@@ -418,11 +418,20 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
             uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
             uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            m_insRect.setWidth( m_doc->unzoomItX( width ) );
+            m_insRect.setHeight( m_doc->unzoomItY( height ) );
             // Apply reasonable limits
             width = QMIN( width, m_doc->paperWidth() - normalPoint.x() - 5 );
             height = QMIN( height, m_doc->paperHeight()- normalPoint.y() - 5 );
+            // And apply aspect-ratio if set
+            if ( m_keepRatio )
+            {
+                double ratio = m_pixmapSize.width() / m_pixmapSize.height();
+                applyAspectRatio( ratio, m_insRect );
+            }
 
-            QPoint nPoint( normalPoint.x() + width, normalPoint.y() + height );
+            QPoint nPoint( normalPoint.x() + m_doc->zoomItX( width ),
+                           normalPoint.y() + m_doc->zoomItY( height ) );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
             vPoint = contentsToViewport( vPoint );
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
@@ -718,6 +727,19 @@ void KWCanvas::applyGrid( KoPoint &p )
     p.setY( static_cast<int>( p.y() / m_doc->gridY() ) * m_doc->gridY() );
 }
 
+void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
+{
+    double width = insRect.width();
+    double height = insRect.height();
+    if ( width < height ) // the biggest border is the one in control
+        width = height * ratio;
+    else
+        height = width / ratio;
+    //kdDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << endl;
+    insRect.setRight( insRect.left() + width );
+    insRect.setBottom( insRect.top() + height );
+}
+
 void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
 {
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
@@ -905,15 +927,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool shiftPressed ) // Mouse
     if ( m_mouseMode == MM_CREATE_PIX && m_keepRatio )
     {
         double ratio = m_pixmapSize.width() / m_pixmapSize.height();
-        double width = m_insRect.width();
-        double height = m_insRect.height();
-        if ( width < height )
-            width = height * ratio;
-        else
-            height = width / ratio;
-        //kdDebug() << "KWCanvas::mmCreate after aspect ratio: width=" << width << " height=" << height << endl;
-        m_insRect.setRight( m_insRect.left() + width );
-        m_insRect.setBottom( m_insRect.top() + height );
+        applyAspectRatio( ratio, m_insRect );
     }
 
     drawMovingRect( p );
@@ -1096,7 +1110,7 @@ void KWCanvas::mrCreatePixmap()
         {
             KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
             frameset->loadImage( m_pictureFilename, m_doc->zoomRect( m_insRect ).size() );
-            frameset->setKeepAspectRatio( m_keepRatio);
+            frameset->setKeepAspectRatio( m_keepRatio );
             fs = frameset;
         }
         m_insRect = m_insRect.normalize();
