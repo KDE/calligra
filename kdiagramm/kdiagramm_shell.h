@@ -46,7 +46,7 @@ public:
   // C++
   virtual bool newDocument();
   virtual bool openDocument( const char *_filename, const char* _format );
-  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool saveDocument();
   virtual bool closeDocument();
   virtual bool closeAllDocuments();
 

@@ -65,7 +65,7 @@ bool KDiagrammShell::requestClose()
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
 
   if ( res == 0 )
-    return saveDocument( "", "" );
+    return saveDocument();
 
   if ( res == 1 )
     return true;
@@ -191,31 +191,9 @@ bool KDiagrammShell::openDocument( const char *_url, const char *_format )
   return true;
 }
 
-bool KDiagrammShell::saveDocument( const char *_url, const char *_format )
+bool KDiagrammShell::saveDocument()
 {
-  assert( m_pDoc != 0L );
-
-  CORBA::String_var url;
-  if ( _url == 0L || *_url == 0 )
-  {
-    url = m_pDoc->url();
-    _url = url.in();
-  }
-
-  QString file;
-  if ( _url == 0L || *_url == 0 )
-  {
-    file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
-
-    if ( file.isNull() )
-      return false;
-    _url = file.data();
-  }
-
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kdiagramm";
-
-  return m_pDoc->saveToURL( _url, _format );
+  return KoMainWindow::saveDocument( "application/x-kdiagramm", "*.kdg" );
 }
 
 bool KDiagrammShell::printDlg()
@@ -323,29 +301,16 @@ void KDiagrammShell::slotFileSave()
 {
   assert( m_pDoc != 0L );
 
-  CORBA::String_var url = m_pDoc->url();
-  if ( strlen( url.in() ) == 0 )
-  {
-    slotFileSaveAs();
-    return;
-  }
-
-  if ( !saveDocument( url.in(), "" ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
-    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-  }
+  (void) saveDocument();
 }
 
 void KDiagrammShell::slotFileSaveAs()
 {
-  if ( !saveDocument( "", "" ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not save file" ) );
-    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-  }
+  QString _url = m_pDoc->url();
+  m_pDoc->setURL( "" );
+
+  if ( !saveDocument() )
+    m_pDoc->setURL( _url );
 }
 
 void KDiagrammShell::slotFileClose()
