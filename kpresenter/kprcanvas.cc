@@ -397,7 +397,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     oldMx = contentsPoint.x();
     oldMy = contentsPoint.y();
-    QPoint rasterPoint( ( oldMx / rastX() ) * rastX(), ( oldMy / rastY() ) * rastY() );
+    QPoint rasterPoint( ( oldMx / rastX() ) * rastX() - diffx(), ( oldMy / rastY() ) * rastY() - diffy() );
 
     resizeObjNum = -1;
 
@@ -443,7 +443,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.save();
                     double _angle = getAngle( _oldEndPoint, m_dragStartPoint );
                     //FIXME
-                    drawFigure( L_SQUARE, &p, _oldEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler()  ); // erase old figure
+                    drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( _oldEndPoint ),
+                                _pen.color(), _pen.width(), _angle,m_view->zoomHandler()  ); // erase old figure
                     p.restore();
 
                     p.drawLine( m_dragStartPoint, _oldEndPoint ); // erase old line
@@ -454,7 +455,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     p.save();
                     _angle = getAngle( _oldSymmetricEndPoint, m_dragStartPoint );
-                    drawFigure( L_SQUARE, &p, _oldSymmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
+                    drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( _oldSymmetricEndPoint ),
+                                _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
                     p.restore();
 
                     p.drawLine( m_dragStartPoint, _oldSymmetricEndPoint );  // erase old line
@@ -4819,7 +4821,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         p.save();
         double _angle = getAngle( oldEndPoint, m_dragStartPoint );
-        drawFigure( L_SQUARE, &p, oldEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // erase old figure
+        drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( oldEndPoint ), _pen.color(),
+                    _pen.width(), _angle,m_view->zoomHandler() ); // erase old figure
         p.restore();
 
         p.drawLine( m_dragStartPoint, oldEndPoint ); // erase old line
@@ -4830,7 +4833,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         p.save();
         _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
-        drawFigure( L_SQUARE, &p, m_dragSymmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
+        drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragSymmetricEndPoint ),
+                    _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
         p.restore();
 
         p.drawLine( m_dragStartPoint, m_dragSymmetricEndPoint );  // erase old line
@@ -4838,7 +4842,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         p.save();
         _angle = getAngle( m_dragEndPoint, m_dragStartPoint );
-        drawFigure( L_SQUARE, &p, m_dragEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
+        drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ),
+                    _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
         p.restore();
 
         p.drawLine( m_dragStartPoint, m_dragEndPoint );  // draw new line
@@ -4849,7 +4854,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         p.save();
         _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
-        drawFigure( L_SQUARE, &p, m_dragSymmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
+        drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragSymmetricEndPoint ),
+                    _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
         p.restore();
 
         p.drawLine( m_dragStartPoint, m_dragSymmetricEndPoint );  // draw new line
@@ -4859,8 +4865,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         p.setBrush( Qt::NoBrush );
         p.setRasterOp( Qt::NotROP );
 
-        QPoint startPoint( m_view->zoomHandler()->zoomItX( m_pointArray.at( m_indexPointArray - 1 ).x()),
-                           m_view->zoomHandler()->zoomItY(m_pointArray.at( m_indexPointArray - 1 ).y() ));
+        QPoint startPoint( m_view->zoomHandler()->zoomItX( m_pointArray.at( m_indexPointArray - 1 ).x() ),
+                           m_view->zoomHandler()->zoomItY( m_pointArray.at( m_indexPointArray - 1 ).y() ) );
 
         p.drawLine( startPoint, oldEndPoint );  // erase old line
 
@@ -4876,11 +4882,11 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         // erase old cubic bezier curve
         p.drawCubicBezier( m_oldCubicBezierPointArray.zoomPointArray( m_view->zoomHandler() ) );
 
-        double _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
-        double _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
+        double _firstX = m_view->zoomHandler()->zoomItX( m_pointArray.at( m_indexPointArray - 2 ).x() );
+        double _firstY = m_view->zoomHandler()->zoomItY( m_pointArray.at( m_indexPointArray - 2 ).y() );
 
-        double _fourthX = m_pointArray.at( m_indexPointArray - 1 ).x();
-        double _fourthY = m_pointArray.at( m_indexPointArray - 1 ).y();
+        double _fourthX = m_view->zoomHandler()->zoomItX( m_pointArray.at( m_indexPointArray - 1 ).x() );
+        double _fourthY = m_view->zoomHandler()->zoomItY( m_pointArray.at( m_indexPointArray - 1 ).y() );
 
         double _midpointX = (_firstX + _fourthX ) / 2;
         double _midpointY = (_firstY + _fourthY ) / 2;
@@ -4889,16 +4895,19 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         double _secondX = m_dragEndPoint.x() - _diffX;
         double _secondY = m_dragEndPoint.y() - _diffY;
-        m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+        m_CubicBezierSecondPoint = KoPoint( m_view->zoomHandler()->unzoomItX( (int)_secondX ),
+                                            m_view->zoomHandler()->unzoomItY( (int)_secondY ) );
 
         double _thirdX = m_dragSymmetricEndPoint.x() - _diffX;
         double _thirdY = m_dragSymmetricEndPoint.y() - _diffY;
-        m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
+        m_CubicBezierThirdPoint = KoPoint( m_view->zoomHandler()->unzoomItX( (int)_thirdX ),
+                                           m_view->zoomHandler()->unzoomItY( (int)_thirdY ) );
 
         if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
             _secondX = _thirdX;
             _secondY = _thirdY;
-            m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+            m_CubicBezierSecondPoint = KoPoint( m_view->zoomHandler()->unzoomItX( (int)_secondX ),
+                                                m_view->zoomHandler()->unzoomItY( (int)_secondY ) );
         }
 
         KoPointArray points;
@@ -4963,13 +4972,17 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
     double angle = 2 * M_PI / cornersValue;
     double dx = ::fabs( startPoint.x () - endPoint.x () );
     double dy =  ::fabs( startPoint.y () - endPoint.y () );
-    double radius = (dx > dy ? dx / 2.0 : dy / 2.0);
+    double radius = ( dx > dy ? dx / 2.0 : dy / 2.0 );
 
     double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
     double yoff = startPoint.y() + ( startPoint.y() < endPoint.y() ? radius : -radius );
 
     KoPointArray points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
     points.setPoint( 0, xoff, ( -radius + yoff ) );
+
+    KoPointArray unzoomPoints( checkConcavePolygon ? cornersValue * 2 : cornersValue );
+    unzoomPoints.setPoint( 0, m_view->zoomHandler()->unzoomItX( (int)xoff ),
+                              m_view->zoomHandler()->unzoomItY( (int)( -radius + yoff ) ) );
 
     if ( checkConcavePolygon ) {
         angle = angle / 2.0;
@@ -4986,7 +4999,9 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
                 yp = -radius * cos( a );
             }
             a += angle;
-            points.setPoint( i, (int)( xp + xoff ), (int)( yp + yoff ) );
+            points.setPoint( i, xp + xoff, yp + yoff );
+            unzoomPoints.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
+                                      m_view->zoomHandler()->unzoomItY( (int)( yp + yoff ) ) );
         }
     }
     else {
@@ -4995,13 +5010,15 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
             double xp = radius * sin( a );
             double yp = -radius * cos( a );
             a += angle;
-            points.setPoint( i, (int)( xp + xoff ), (int)( yp + yoff ) );
+            points.setPoint( i, xp + xoff, yp + yoff );
+            unzoomPoints.setPoint( i, m_view->zoomHandler()->unzoomItX( (int)( xp + xoff ) ),
+                                      m_view->zoomHandler()->unzoomItY( (int)( yp + yoff ) ) );
         }
     }
     p.drawPolygon( points.zoomPointArray( m_view->zoomHandler() ) );
     p.end();
 
-    m_pointArray = points;
+    m_pointArray = unzoomPoints;
 }
 
 
