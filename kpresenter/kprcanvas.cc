@@ -2285,7 +2285,7 @@ bool KPrCanvas::pNext( bool )
                 tmpObjs.append( objectList().at( j ) );
         }
 #endif
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
@@ -2325,7 +2325,7 @@ bool KPrCanvas::pNext( bool )
     // No more slides. Redisplay last one, then
     kdDebug(33001) << "Page::pNext last slide -> again" << endl;
     emit stopPres();
-    presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+    presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
     currPresStep = *presStepList.begin();
     doObjEffects();
     return false;
@@ -2344,7 +2344,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         return false;
     } else {
         if ( slideListIterator == slideList.begin() ) {
-            presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+            presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
             currPresStep = *presStepList.begin();
             repaint( false );
             return false;
@@ -2364,7 +2364,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
                 tmpObjs.append( objectList().at( j ) );
         }
 #endif
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *( --presStepList.end() );
         return true;
     }
@@ -4234,7 +4234,7 @@ void KPrCanvas::gotoPage( int pg )
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *presStepList.begin();
         subPresStep = 0;
         //change active page
@@ -4258,7 +4258,7 @@ void KPrCanvas::gotoPage( int pg )
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage, _presFakt );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *presStepList.begin();
         subPresStep = 0;
 

@@ -1421,40 +1421,9 @@ void KPresenterDoc::repaint( KPObject *kpobject )
     }
 }
 
-/*==================== reorder page =============================*/
-QValueList<int> KPresenterDoc::reorderPage( unsigned int num, float fakt )
+QValueList<int> KPresenterDoc::reorderPage( unsigned int num )
 {
-    QValueList<int> orderList;
-
-    orderList.append( 0 );
-
-    KPObject *kpobject = 0;
-#if 0
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	if ( getPageOfObj( i, diffx, diffy, fakt ) == static_cast<int>( num ) ) {
-	    if ( orderList.find( kpobject->getPresNum() ) == orderList.end() ) {
-		if ( orderList.isEmpty() )
-		    orderList.append( kpobject->getPresNum() );
-		else {
-		    QValueList<int>::Iterator it = orderList.begin();
-		    for ( ; *it < kpobject->getPresNum() && it != orderList.end(); ++it );
-		    orderList.insert( it, kpobject->getPresNum() );
-		}
-	    }
-	    if ( kpobject->getDisappear() && orderList.find( kpobject->getDisappearNum() ) == orderList.end() ) {
-		if ( orderList.isEmpty() )
-		    orderList.append( kpobject->getDisappearNum() );
-		else {
-		    QValueList<int>::Iterator it = orderList.begin();
-		    for ( ; *it < kpobject->getDisappearNum() && it != orderList.end(); ++it );
-		    orderList.insert( it, kpobject->getDisappearNum() );
-		}
-	    }
-	}
-    }
-#endif
-    return orderList;
+    return m_pageList.at(num)->reorderPage();
 }
 
 /*================== get size of page ===========================*/

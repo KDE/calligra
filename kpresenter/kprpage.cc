@@ -2604,3 +2604,37 @@ void KPrPage::makeUsedPixmapList()
    else if( kpbackground->getBackType()==BT_CLIPART)
        m_doc->appendClipartKey(kpbackground->getBackClipKey());
 }
+
+
+QValueList<int> KPrPage::reorderPage()
+{
+    QValueList<int> orderList;
+    orderList.append( 0 );
+    QPtrListIterator<KPObject> oIt( m_objectList );
+    for ( ; oIt.current() ; ++oIt )
+    {
+        if ( orderList.find( oIt.current()->getPresNum() ) == orderList.end() )
+        {
+            if ( orderList.isEmpty() )
+                orderList.append( oIt.current()->getPresNum() );
+            else
+            {
+                QValueList<int>::Iterator it = orderList.begin();
+                for ( ; *it < oIt.current()->getPresNum() && it != orderList.end(); ++it );
+		    orderList.insert( it, oIt.current()->getPresNum() );
+		}
+	    }
+	    if ( oIt.current()->getDisappear() && orderList.find( oIt.current()->getDisappearNum() ) == orderList.end() )
+            {
+		if ( orderList.isEmpty() )
+		    orderList.append( oIt.current()->getDisappearNum() );
+		else
+                {
+		    QValueList<int>::Iterator it = orderList.begin();
+		    for ( ; *it < oIt.current()->getDisappearNum() && it != orderList.end(); ++it );
+		    orderList.insert( it, oIt.current()->getDisappearNum() );
+		}
+	    }
+    }
+    return orderList;
+}

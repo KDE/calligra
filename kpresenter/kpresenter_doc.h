@@ -170,7 +170,7 @@ public:
     void repaint( KPObject* );
 
     // stuff for screen-presentations
-    QValueList<int> reorderPage( unsigned int, float fakt = 1.0 );
+    QValueList<int> reorderPage( unsigned int );
 
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }

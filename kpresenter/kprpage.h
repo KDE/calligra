@@ -186,6 +186,8 @@ public:
     bool getPageSoundEffect( );
     QString getPageSoundFileName();
 
+    QValueList<int> reorderPage();
+
 protected:
 
 private:
