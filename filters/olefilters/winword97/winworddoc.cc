@@ -729,7 +729,7 @@ void WinWordDoc::gotTableBegin(
     m_cellEdges.resize(tableNumber);
     m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
     m_body.append("<PARAGRAPH>\n<TEXT>@</TEXT>\n");
-    m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
+    m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
     m_body.append("<ANCHOR type=\"frameset\" instance=\"floattable_");
     m_body.append(QString::number(tableNumber));
     m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n");
