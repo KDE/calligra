@@ -1,562 +1,123 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DOC author="Reginald Stadlbauer and Torben Weis" email="reggie@kde.org and weis@kde.org" editor="KWord" mime="application/x-kword">
- <PAPER format="1" ptWidth="595" ptHeight="841" mmWidth ="210" mmHeight="297" inchWidth ="8.26772" inchHeight="11.6929" orientation="0" columns="1" ptColumnspc="3" mmColumnspc="1.05833" inchColumnspc="0.0416667" hType="0" fType="0" ptHeadBody="9" ptFootBody="9" mmHeadBody="3.5" mmFootBody="3.5" inchHeadBody="0.137795" inchFootBody="0.137795">
-  <PAPERBORDERS mmLeft="0" mmTop="0" mmRight="0" mmBottom="0" ptLeft="0" ptTop="0" ptRight="0" ptBottom="0" inchLeft="0" inchTop="0" inchRight="0" inchBottom="0"/>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC ><DOC mime="application/x-kword" syntaxVersion="1" editor="KWord" >
+ <PAPER width="595" zoom="100" spHeadBody="9" format="1" height="841" fType="0" orientation="0" hType="0" columnspacing="3" spFootBody="9" columns="1" >
+  <PAPERBORDERS right="0" left="0" bottom="0" top="0" />
  </PAPER>
- <ATTRIBUTES processing="1" standardpage="1" hasHeader="0" hasFooter="0" unit="mm"/>
- <FOOTNOTEMGR>
-  <START value="1"/>
-  <FORMAT superscript="1" type="1"/>
-  <FIRSTPARAG ref="(null)"/>
- </FOOTNOTEMGR>
+ <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="1" />
  <FRAMESETS>
-  <FRAMESET frameType="1" autoCreateNewFrame="1" frameInfo="0" removeable="0">
-   <FRAME left="28" top="42" right="293" bottom="416" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+   <FRAME right="293" left="28" bottom="416" runaroundGap="2" top="42" />
    <PARAGRAPH>
     <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
     <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="45" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="45" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
      </FORMAT>
-     <TABULATOR mmpos="47.2721" ptpos="134" inchpos="1.86111" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="1" frameInfo="0" removeable="0">
-   <FRAME left="28" top="423" right="293" bottom="797" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <FRAME left="300" top="42" right="565" bottom="797" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 2" visible="1" >
+   <FRAME right="293" left="28" bottom="797" runaroundGap="2" top="423" />
+   <FRAME right="565" left="300" bottom="797" runaroundGap="2" top="42" />
    <PARAGRAPH>
     <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
     <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
      </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60895e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="1" removeable="0">
-   <FRAME left="0" top="0" right="594" bottom="19" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="3" removeable="0">
-   <FRAME left="0" top="0" right="594" bottom="19" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="2" removeable="0">
-   <FRAME left="0" top="0" right="594" bottom="19" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="4" removeable="0">
-   <FRAME left="0" top="821" right="594" bottom="840" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="6" removeable="0">
-   <FRAME left="0" top="821" right="594" bottom="840" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-    </LAYOUT>
-   </PARAGRAPH>
-  </FRAMESET>
-  <FRAMESET frameType="1" autoCreateNewFrame="0" frameInfo="5" removeable="0">
-   <FRAME left="0" top="821" right="594" bottom="840" runaround="0" runaGapPT="2" runaGapMM="1" runaGapINCH="0.0393701"  lWidth="1" lRed="255" lGreen="255" lBlue="255" lStyle="0"  rWidth="1" rRed="255" rGreen="255" rBlue="255" rStyle="0"  tWidth="1" tRed="255" tGreen="255" tBlue="255" tStyle="0"  bWidth="1" bRed="255" bGreen="255" bBlue="255" bStyle="0" bkRed="255" bkGreen="255" bkBlue="255" bleftpt="0" bleftmm="0" bleftinch="0" brightpt="0" brightmm="0" brightinch="0" btoppt="0" btopmm="0" btopinch="0" bbottompt="0" bbottommm="0" bbottominch="0"/>
-   <PARAGRAPH>
-    <TEXT></TEXT>
-    <INFO info="0"/>
-    <HARDBRK frame="0"/>
-    <FORMATS>
-    </FORMATS>
-    <LAYOUT>
-     <NAME value="Standard"/>
-     <FOLLOWING name="Standard"/>
-     <FLOW value="0"/>
-     <OHEAD pt="0" mm="0" inch="0"/>
-     <OFOOT pt="0" mm="0" inch="0"/>
-     <IFIRST pt="0" mm="0" inch="0"/>
-     <ILEFT pt="0" mm="0" inch="0"/>
-     <LINESPACE pt="0" mm="0" inch="0"/>
-     <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-     <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-     <FORMAT>
-      <COLOR red="0" green="0" blue="0"/>
-      <FONT name="times"/>
-      <SIZE value="12"/>
-      <WEIGHT value="50"/>
-      <ITALIC value="0"/>
-      <UNDERLINE value="0"/>
-      <VERTALIGN value="0"/>
-     </FORMAT>
-     <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
  </FRAMESETS>
  <STYLES>
   <STYLE>
-   <NAME value="Standard"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="176" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="times"/>
-    <SIZE value="12"/>
-    <WEIGHT value="50"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
-   </FORMAT>
-   <TABULATOR mmpos="46" ptpos="133" inchpos="1.60697e-19" type="0"/>
-  </STYLE>
-  <STYLE>
-   <NAME value="Head 1"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="0" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="24"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Standard" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="0" righttext="" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Head 2"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="1" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="16"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Head 1" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="24" />
+    <WEIGHT value="75" />
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Head 3"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="2" bullet="176" start="1" numberingtype="1" lefttext="" righttext="." bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="12"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Head 2" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="1" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="16" />
+    <WEIGHT value="75" />
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Enumerated List"/>
-   <FOLLOWING name="Enumerated List"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="1" depth="0" bullet="176" start="1" numberingtype="0" lefttext="" righttext="." bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="times"/>
-    <SIZE value="12"/>
-    <WEIGHT value="50"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Head 3" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="2" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="12" />
+    <WEIGHT value="75" />
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Alphabetical List"/>
-   <FOLLOWING name="Alphabetical List"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="2" depth="0" bullet="176" start="a" numberingtype="0" lefttext="" righttext=")" bulletfont="times"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="times"/>
-    <SIZE value="12"/>
-    <WEIGHT value="50"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Enumerated List" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="0" righttext="." type="1" start="1" depth="0" />
+   <FOLLOWING name="Enumerated List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Bullet List"/>
-   <FOLLOWING name="Bullet List"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="10" depth="0" start="1" numberingtype="0"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="times"/>
-    <SIZE value="12"/>
-    <WEIGHT value="50"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Alphabetical List" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="0" righttext=")" type="2" start="1" depth="0" />
+   <FOLLOWING name="Alphabetical List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
    </FORMAT>
   </STYLE>
   <STYLE>
-   <NAME value="Contents Title"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="2"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="183" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
-   <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="20"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
-   </FORMAT>
-  </STYLE>
-  <STYLE>
-   <NAME value="Contents Head 1"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="183" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="16"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
-   </FORMAT>
-  </STYLE>
-  <STYLE>
-   <NAME value="Contents Head 2"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="183" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="12"/>
-    <WEIGHT value="75"/>
-    <ITALIC value="0"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
-   </FORMAT>
-  </STYLE>
-  <STYLE>
-   <NAME value="Contents Head 3"/>
-   <FOLLOWING name="Standard"/>
-   <FLOW value="0"/>
-   <OHEAD pt="0" mm="0" inch="0"/>
-   <OFOOT pt="0" mm="0" inch="0"/>
-   <IFIRST pt="0" mm="0" inch="0"/>
-   <ILEFT pt="0" mm="0" inch="0"/>
-   <LINESPACE pt="0" mm="0" inch="0"/>
-   <COUNTER type="0" depth="0" bullet="183" start="0" numberingtype="0" lefttext="" righttext="" bulletfont="symbol"/>
-   <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
-   <FORMAT>
-    <COLOR red="0" green="0" blue="0"/>
-    <FONT name="helvetica"/>
-    <SIZE value="12"/>
-    <WEIGHT value="50"/>
-    <ITALIC value="1"/>
-    <UNDERLINE value="0"/>
-    <VERTALIGN value="0"/>
+   <NAME value="Bullet List" />
+   <FLOW align="left" />
+   <COUNTER numberingtype="0" type="10" start="1" depth="0" />
+   <FOLLOWING name="Bullet List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
    </FORMAT>
   </STYLE>
  </STYLES>
+</DOC>
 </DOC>
