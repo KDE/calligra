@@ -14,7 +14,7 @@ Description: Core libraries for KOffice (Development files)
 
 Package: koffice-libs
 Architecture: any
-Section: x11
+Section: libs
 Replaces: koffice, koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
 Depends: ${shlibs:Depends}, kdebase-libs
 Suggests: kdebase
@@ -47,7 +47,7 @@ Description: KDE Office Suite - KFormula
 
 Package: kivio
 Architecture: any
-Section: x11
+Section: graphics
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - Kivio
@@ -71,7 +71,7 @@ Description: KDE Office Suite - KSpread
 
 Package: killustrator
 Architecture: any
-Section: x11
+Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
@@ -104,7 +104,7 @@ Description: KDE Office Suite - KWord
 
 Package: krayon
 Architecture: any
-Section: x11
+Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
