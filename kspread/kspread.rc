@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="22">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="23">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -74,11 +74,11 @@
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
-  <Action name="paperLayout"/>
-  <Menu name="Comment"><text>&amp;Print Range</text>
-    <Action name="definePrintRange"/>
-    <Action name="resetPrintRange"/>
-  </Menu>
+  <Action name="changeangle"/>
+  <Action name="decreaseindent"/>
+  <Action name="increaseindent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
@@ -106,12 +106,11 @@
   <Action name="stylemenu"/>
   <Action name="createStyle"/>        
   <Separator/>
-  <Action name="decreaseindent"/>
-  <Action name="increaseindent"/>
-  <Action name="precplus"/>
-  <Action name="precminus"/>
-  <Separator/>
-  <Action name="changeangle"/>
+  <Action name="paperLayout"/>
+  <Menu name="Comment"><text>&amp;Print Range</text>
+    <Action name="definePrintRange"/>
+    <Action name="resetPrintRange"/>
+  </Menu>
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
