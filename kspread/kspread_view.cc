@@ -982,7 +982,7 @@ void KSpreadView::initializeTableActions()
   m_firstTable = new KAction( i18n("First Sheet"), 0, this,
                               SLOT( firstTable() ), actionCollection(),
                               "firstTable");
-  m_firstTable->setToolTip(i18n("Move to the first dsheet."));
+  m_firstTable->setToolTip(i18n("Move to the first sheet."));
 
   m_lastTable = new KAction( i18n("Last Sheet"), 0, this,
                              SLOT( lastTable() ), actionCollection(),
@@ -3400,7 +3400,7 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !m_popupChildObject || !m_popupChildObject->table() )
 	return;
-    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"));
+    int ret = KMessageBox::warningYesNo(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"));
     if ( ret == KMessageBox::Yes )
         {
             m_popupChildObject->table()->deleteChild( m_popupChildObject );
@@ -4117,7 +4117,7 @@ void KSpreadView::removeTable()
         return;
     }
     KNotifyClient::beep();
-    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active sheet.\nDo you want to continue?"),i18n("Remove Sheet"));
+    int ret = KMessageBox::warningYesNo(this,i18n("You are about to remove the active sheet.\nDo you want to continue?"),i18n("Remove Sheet"));
 
     if ( ret == KMessageBox::Yes )
     {

@@ -360,7 +360,7 @@
       </Parameter>
       <Help>
 	<Text>The JOIN() function returns a string which is the concatenation of the strings passed as parameters.</Text>
-        <Text>This function is obsolete and will be removed in future version of KSpread. It is provided only for compatibility. Please use function CONCATENATE instead.</Text>
+        <Text>This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use the CONCATENATE function instead.</Text>
 	<Syntax>JOIN(value;value;...)</Syntax>
 	<Example>JOIN("KSpread";"KOffice";"KDE") returns "KSpreadKOfficeKDE"</Example>
       </Help>

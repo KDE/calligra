@@ -432,7 +432,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-        <Text>The ARABIC() function converts roman numeral into number.</Text>
+        <Text>The ARABIC() function converts a roman numeral into a number.</Text>
         <Syntax>ARABIC(Numeral)</Syntax>
         <Example>ARABIC("IV") returns 4</Example>
         <Example>ARABIC("XCIX") returns 99</Example>
