@@ -29,6 +29,7 @@
 #include <qdrawutil.h>
 #include <qsize.h>
 #include <qstringlist.h>
+#include <qevent.h>
 
 namespace KPlato
 {
@@ -55,16 +56,18 @@ void KPTChartCanvasView::canvasUpdate() {
 }
 
 void KPTChartCanvasView::clear() {
+    m_xGridLines.clear();
+    m_yGridLines.clear();
+    if (m_description) {
+        delete m_description;
+        m_description = 0;
+    }
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::iterator it;
     for ( it = list.begin(); it != list.end(); ++it ) {
-        if ((*it) == m_description) {
-            (*it)->hide();
-        } else {
-            delete (*it);
-        }
+        delete (*it);
     }
-    canvas()->update();
+    //canvas()->update();
 }
 
 KPTChartCanvasView::Canvas *KPTChartCanvasView::chartCanvas() {
@@ -72,18 +75,25 @@ KPTChartCanvasView::Canvas *KPTChartCanvasView::chartCanvas() {
 }
 
 void KPTChartCanvasView::drawYZeroLine(KPTNumberScale *scale, double zero) {
+    //kdDebug()<<k_funcinfo<<"zero="<<zero<<" at "<<scale->posY(zero)<<endl;
     QCanvasLine *l = new QCanvasLine(canvas());
-    l->setPoints(0, scale->posY(zero), canvas()->width(), scale->posY(zero));
+    l->setPoints(0, (int)scale->posY(zero), canvas()->width(), (int)scale->posY(zero));
+    l->setZ(100.0);
     l->show();
 }
 
 void KPTChartCanvasView::drawYGrid(KPTNumberScale *scale, const QValueList<double> &list) {
+    m_yGridLines.setAutoDelete(true);
+    m_yGridLines.clear();
+    m_yGridLines.setAutoDelete(false);
     QValueList<double>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         QCanvasLine *l = new QCanvasLine(canvas());
-        l->setPen(QPen(gray, 1, DashLine));
-        l->setPoints(0, scale->posY(*it), canvas()->width(), scale->posY(*it));
+        l->setPen(QPen(gray, 1, DotLine));
+        l->setPoints(0, (int)scale->posY(*it), canvas()->width(), (int)scale->posY(*it));
+        l->setZ(-100.0);
         l->show();
+        m_yGridLines.append(l);
     }
 }
 
@@ -99,11 +109,21 @@ void KPTChartCanvasView::drawYGrid(KPTNumberScale *scale, double step) {
     }
 }
 
-void KPTChartCanvasView::drawXMajorGrid(KPTTimeScale *scale) {
-/*    QCanvasLine *l = new QCanvasLine(canvas());
-    l->setPoints(0, 0, x, canvas()->height());
-    l->show();
-    canvas()->update();*/
+void KPTChartCanvasView::drawXMajorGrid(KPTTimeScale *x, KPTNumberScale *y) {
+    m_xGridLines.setAutoDelete(true);
+    m_xGridLines.clear();
+    m_xGridLines.setAutoDelete(false);
+    int top = (int)y->posY(y->rangeMax());
+    int bottom = (int)y->posY(y->rangeMin());
+    QValueList<int> list = x->majorGridValues();
+    QValueList<int>::iterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        QCanvasLine *l = new QCanvasLine(canvas());
+        l->setPen(QPen(gray, 1, DotLine));
+        l->setPoints((int)(*it), top, (int)(*it), bottom);
+        l->show();
+        m_xGridLines.append(l);
+    }
 }
 
 void KPTChartCanvasView::drawXMinorGrid(KPTTimeScale *scale) {
@@ -114,10 +134,10 @@ void KPTChartCanvasView::drawXMinorGrid(KPTTimeScale *scale) {
 }
 
 void KPTChartCanvasView::drawBar(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y) {
-    double x1 = x->posX(data->x1());
-    double y1 = y->posY(data->y1());
-    double x2 = x->posX(data->x2());
-    double y2 = y->posY(data->y2());
+    int x1 = (int)x->posX(data->x1());
+    int y1 = (int)y->posY(data->y1());
+    int x2 = (int)x->posX(data->x2());
+    int y2 = (int)y->posY(data->y2());
     QPen *pen = data->pen();
     QBrush *brush = data->brush();
     //kdDebug()<<k_funcinfo<<"x1="<<x1<<" y1="<<y1<<" x2="<<x2<<" y2="<<y2<<endl;
@@ -129,18 +149,29 @@ void KPTChartCanvasView::drawBar(KPTChartDataSetItem *data, KPTTimeScale *x, KPT
     r->show();
 }
 
-void KPTChartCanvasView::drawLine(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y) {
-    double x1 = x->posX(data->x1());
-    double y1 = y->posY(data->y1());
-    double x2 = x->posX(data->x2());
-    double y2 = y->posY(data->y2());
+void KPTChartCanvasView::drawHorisontalLine(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y) {
+    int y1 = (int)y->posY(data->y1());
     QPen *pen = data->pen();
-    
+    QCanvasLine *l = new QCanvasLine(canvas());
+    l->setZ(data->prio());
+    l->setPen(pen ? QPen(*pen) : QPen(QColor(black)));
+    l->setPoints(0, y1, canvas()->width(), y1);
+    l->show();
+}
+
+void KPTChartCanvasView::drawLine(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y) {
+    int x1 = (int)x->posX(data->x1());
+    int y1 = (int)y->posY(data->y1());
+    int x2 = (int)x->posX(data->x2());
+    int y2 = (int)y->posY(data->y2());
+    QPen *pen = data->pen();
     QCanvasLine *l = new QCanvasLine(canvas());
     l->setZ(data->prio());
     l->setPen(pen ? QPen(*pen) : QPen(QColor(black)));
     l->setPoints(x1, y1, x2, y2);
     l->show();
+    
+    //kdDebug()<<k_funcinfo<<" at "<<data->x1().toString()<<","<<data->y1()<<" to "<<data->x2().toString()<<","<<data->y2()<<endl;
 }
 
 void KPTChartCanvasView::canvasMoved() {
@@ -160,12 +191,16 @@ void KPTChartCanvasView::drawDescription() {
 void KPTChartCanvasView::drawDescription(const QString &desc) {
     if (!m_description) {
         m_description = new QCanvasText(canvas());
+        m_description->setZ(1000.0);
     }
     m_description->setText(desc);
-    m_description->setZ(1000.0);
     drawDescription();
 }
 
+void KPTChartCanvasView::contentsContextMenuEvent(QContextMenuEvent *e) {
+    kdDebug()<<k_funcinfo<<endl;
+    emit contextMenuRequest(e->pos());
+}
 
 /********************************************/
 KPTChartCanvasView::Canvas::Canvas(QObject *parent, const char *name)

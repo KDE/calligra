@@ -22,17 +22,23 @@
 
 #include <qsplitter.h>
 
+#include "chart/kpttimescale.h"
+
 class KListView;
 class QPaintEvent;
 class QListViewItem;
+class QPoint;
 
 namespace KPlato
 {
 
 class KPTChartView;
+class KPTChartDataSet;
 class KPTView;
 class KPTProject;
 class KPTResource;
+class KPTResourceGroup;
+class KPTProject;
 
 class ResourceGroupItemPrivate;
 
@@ -49,17 +55,29 @@ public slots:
 protected:
     void drawResources(ResourceGroupItemPrivate *parent);
     void drawChart();
-    void drawLoadPrDay(KPTResource *resource);
-    void drawPeek(KPTResource *resource);
+    void drawBarLoad(KPTResource *resource);
+    KPTChartDataSet *drawBarLoadPrMinute(KPTResource *resource);
+    KPTChartDataSet *drawBarLoadPrHour(KPTResource *resource);
+    KPTChartDataSet *drawBarLoadPrDay(KPTResource *resource);
+    KPTChartDataSet *drawBarLoadPrWeek(KPTResource *resource);
+    KPTChartDataSet *drawBarLoadPrMonth(KPTResource *resource);
+    void drawBarPeekLoad(KPTResource *resource);
+    void drawLineAccumulated(KPTResource *resource);
+    void drawLineAccumulated(KPTResourceGroup *resource);
+    void drawLineAccumulated();
     
 protected slots:
     void executed(QListViewItem *item);
+    void slotTimeScaleUnitChanged(int unit);
+    void slotChartMenuRequested(const QPoint &pos);
     
 private:
     KPTView *m_mainview;
     KListView *m_resourcelist;
     KPTChartView *m_chartview;
     QListViewItem *m_selectedItem;
+    KPTTimeHeaderWidget::Scale m_timeScaleUnit;
+    KPTProject *m_project;
 
 };
 

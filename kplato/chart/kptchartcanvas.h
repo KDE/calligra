@@ -30,6 +30,7 @@
 class QCanvasRectangle;
 class QCanvasText;
 class QStringList;
+class QPoint;
 
 namespace KPlato
 {
@@ -49,11 +50,12 @@ public:
     void clear();
     void drawYZeroLine(KPTNumberScale *scale, double zero);
     void drawYGrid(KPTNumberScale *scale, double step=0.0);
-    void drawXMajorGrid(KPTTimeScale *scale);
+    void drawXMajorGrid(KPTTimeScale *x, KPTNumberScale *y);
     void drawXMinorGrid(KPTTimeScale *scale);
     void drawDescription(const QString &desc);
     
     void drawBar(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y);
+    void drawHorisontalLine(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y);
     void drawLine(KPTChartDataSetItem *data, KPTTimeScale *x, KPTNumberScale *y);
     
     class Canvas : public QCanvas
@@ -66,6 +68,9 @@ public:
         
     };
 
+signals:
+    void contextMenuRequest(const QPoint &pos);
+    
 protected slots:
     void drawDescription();
     void canvasMoved();
@@ -73,9 +78,12 @@ protected slots:
 protected:
     KPTChartCanvasView::Canvas *chartCanvas();
     void drawYGrid(KPTNumberScale *scale, const QValueList<double> &list);
+    virtual void contentsContextMenuEvent(QContextMenuEvent *e);
 
 private:
     QCanvasText *m_description;
+    QPtrList<QCanvasLine> m_xGridLines;
+    QPtrList<QCanvasLine> m_yGridLines;
 };
 
 } // KPlato namespace

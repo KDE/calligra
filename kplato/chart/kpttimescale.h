@@ -36,37 +36,8 @@ class QSize;
 namespace KPlato
 {
 
-class KPTTimeHeaderWidget;
+class KPTTimeScale;
 class KPTTimeHeaderToolTip;
-
-class KPTTimeScale : public QScrollView
-{
-   Q_OBJECT
-public:
-    KPTTimeScale(QWidget *parent, bool bottom=true, bool enableScrollbar=true);
-    ~KPTTimeScale();
-    
-    int posX(const QDateTime &dt);
-    
-    int fullHeight();
-    
-    void setRange(const QDateTime& start, const QDateTime& end);
-    void setHorizonStart(const QDateTime& start);
-    QDateTime horizonStart() const;
-    void setHorizonEnd(const QDateTime& start);
-    QDateTime horizonEnd() const;
-    
-    int canvasWidth() { return m_canvasWidth; }
-    
-private:
-    bool m_bottom;
-    KPTTimeHeaderWidget* m_header;
-    int m_canvasWidth;
-    QDateTime m_startTime;
-    QDateTime m_endTime;
-
-    
-};
 
 /* ***************************************************************************
    KPTTimeHeaderWidget:: KPTTimeHeaderWidget
@@ -187,12 +158,20 @@ public slots:
     void preparePopupMenu();
 signals:
     void sizeChanged( int );
+    void scaleChanged(int);
+    void timeFormatChanged(int);
 
+protected slots:
+    void slotScaleChanged(int);
+    void slotTimeFormatChanged(int);
+    
 protected:
     void repaintMajor(int left, int offsetLeft, int offsetHeight, int hei, int paintwid, QPainter* p);
     void repaintMinor(int left, int offsetLeft, int offsetHeight, int hei, int paintwid, QPainter* p);
 
 private:
+    friend class KPTTimeScale;
+    
     virtual void mousePressEvent ( QMouseEvent * e );
     virtual void mouseReleaseEvent ( QMouseEvent * e );
     virtual void mouseDoubleClickEvent ( QMouseEvent * e );
@@ -276,6 +255,52 @@ protected:
 private:
   QWidget* _wid;
   KPTTimeHeaderWidget * _header;
+};
+
+
+class KPTTimeScale : public QScrollView
+{
+   Q_OBJECT
+public:
+    KPTTimeScale(QWidget *parent, bool bottom=true, bool enableScrollbar=true);
+    ~KPTTimeScale();
+    
+    int posX(const QDateTime &dt);
+    
+    int fullHeight();
+    
+    void setScale(KPTTimeHeaderWidget::Scale unit);
+    void setRange(const QDateTime& start, const QDateTime& end);
+    void setHorizonStart(const QDateTime& start);
+    QDateTime horizonStart() const;
+    void setHorizonEnd(const QDateTime& start);
+    QDateTime horizonEnd() const;
+    void setHourFormat(KPTTimeHeaderWidget::HourFormat format);
+    
+    int canvasWidth() { return m_canvasWidth; }
+    
+    void setShowPopupMenu(bool show, bool showZoom=false, bool showScale=true, bool showTime=true, bool showYear=true,bool showGrid=false, bool showPrint=false);
+
+    const QValueList<int> &majorGridValues() const;
+    
+signals:
+    void unitChanged(int unit);
+    void timeFormatChanged(int format);
+    void headerWidthChanged(int w);
+    
+protected slots:
+    void slotHeaderWidthChanged(int w);
+    void slotUnitChanged(int unit);
+    void slotTimeFormatChanged(int format);
+    
+private:
+    bool m_bottom;
+    KPTTimeHeaderWidget* m_header;
+    int m_canvasWidth;
+    QDateTime m_startTime;
+    QDateTime m_endTime;
+
+    
 };
 
 

@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 
+#include "kpttimescale.h"
 #include "kptchartdataset.h"
 
 #include <qdatetime.h>
@@ -38,38 +39,69 @@ class KPTNumberScale;
 class KPTTimeScale;
 class KPTChartCanvasView;
 
+/**
+ * KPTChartView can draw bar- and linecharts.
+ * The x-axis is a timescale and the y-axis is a numberscale.
+ * The x-axis can be scrolled when the whole x-axis cannot be 
+ * displayed in the given window width.
+ * The y-axis is scaled to fit the window height.
+ */
 class KPLATOCHART_EXPORT KPTChartView : public QWidget
 {
     Q_OBJECT
-public:
-    enum Mode { Mode_Bar };
-    
+public:    
     KPTChartView(QWidget* parent = 0, const char* name = 0);
     ~KPTChartView();
 
-    void setDrawMode(int mode);
+    /// Clears the datasets and the chart (but not the scales)
     void clear();
+    /// Clears the datasets
     void clearData();
-    void addData(KPTChartDataSet *data);
-    int canvasWidth();    
-    
-    void addYMarkerLine(KPTChartDataSetItem *item);
+    /// Adds the dataset to the list of data to be drawn on the chart
+    void addData(KPTChartDataSet *data);    
+    /// Adds a horisontal line to the chart
+    void addHorisontalLine(KPTChartDataSetItem *item);
+    /// Sets for which value the zero line shall be drawn
     void setYZero(double zero) { m_yZero = zero; }
+    /// Enable/disable horisontal zero line
     void enableYZeroLine(bool on) { m_yZeroEnabled = on; }
+    /// Enable/disable horisontal grid lines
     void enableYGrid(bool on) { m_yGridEnabled = on; }
-    
+    /// Enable/disable vertical grid lines for major timescale
     void enableXMajorGrid(bool on) { m_xMajorGrid = on; }
+    /// Enable/disable vertical grid lines for minor timescale
     void enableXMinorGrid(bool on) { m_xMinorGrid = on; }
-    
+    /// Set the chart description
     void setDescription(const QString &desc) { m_description = desc; }
+    /// Set the minor timescale unit
+    void setTimeScaleUnit(KPTTimeHeaderWidget::Scale unit) { m_timeScaleUnit = unit; }
+    /// Set the numberscale unit description
     void setYScaleUnit(const QString &unit) { m_yScaleUnit = unit; }
-
+    /// Set the timescale range
+    void setTimeScaleRange(const QDateTime &start, const QDateTime &end);
+    /// Set the numberscale range
+    void setYScaleRange(double min, double max, double step=0.0);
+    
 public slots:
+    /// Draw the scales and chart
     void draw();
+
+    /// Activate layout'ing of the widgets
     void activateLayout();
 
-    void setTimeScaleRange(const QDateTime &start, const QDateTime &end);
-    void setYScaleRange(double min, double max, double step=0.0);
+signals:
+    /// The timescale unit has been changed, so the data should be redrawn
+    void timeScaleUnitChanged(int unit);
+    /// Context menu requested by the chart
+    void chartMenuRequest(const QPoint &pos);
+    /// Context menu requested by the numberscale
+    void contextMenuRequested(KPTNumberScale *yScale, const QPoint & pos);
+    
+protected slots:
+    void slotTimeScaleWidthChanged(int w);
+    void slotTimeScaleUnitChanged(int unit);
+    void slotTimeFormatChanged(int format);
+    void slotChartMenuRequested(const QPoint &pos);
     
 protected:    
     virtual void resizeEvent(QResizeEvent *);
@@ -79,13 +111,13 @@ protected:
     void addYLineAt(double value);
 
 private:
-    Mode m_drawMode;
     double m_yZero;
     bool m_yZeroEnabled;
     bool m_yGridEnabled;
     QString m_yScaleUnit;
     bool m_xMajorGrid;
     bool m_xMinorGrid;
+    KPTTimeHeaderWidget::Scale m_timeScaleUnit;
     
     KPTNumberScale *m_yScale;
     double m_yRangeMin;

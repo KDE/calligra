@@ -19,7 +19,6 @@
 
 #include "kptchartview.h"
 
-#include "kpttimescale.h"
 #include "kptnumberscale.h"
 #include "kptchartcanvas.h"
 
@@ -39,13 +38,13 @@ namespace KPlato
 
 KPTChartView::KPTChartView(QWidget* parent, const char* name )
     : QWidget(parent, name),
-      m_drawMode(KPTChartView::Mode_Bar),
       m_yZero(0.0),
       m_yZeroEnabled(true),
-      m_yGridEnabled(false),
+      m_yGridEnabled(true),
       m_yScaleUnit("%"),
       m_xMajorGrid(true),
-      m_xMinorGrid(false)
+      m_xMinorGrid(false),
+      m_timeScaleUnit(KPTTimeHeaderWidget::Day)
 {
     lh = new QHBoxLayout(this, 0, 0);
     
@@ -74,9 +73,16 @@ KPTChartView::KPTChartView(QWidget* parent, const char* name )
     m_yRangeMax = 100.0;
     m_yStep = 10.0;
     
-    connect(m_timeScale->horizontalScrollBar(), SIGNAL(valueChanged(int)), m_chart->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(m_timeScale->horizontalScrollBar(), SIGNAL(valueChanged(int)), m_chart->horizontalScrollBar(), SLOT(setValue(int)));    
+    connect(m_timeScale, SIGNAL(unitChanged(int)), SLOT(slotTimeScaleUnitChanged(int)));
+    connect(m_timeScale, SIGNAL(timeFormatChanged(int)), SLOT(slotTimeFormatChanged(int)));
+    connect(m_timeScale, SIGNAL(headerWidthChanged(int)), SLOT(slotTimeScaleWidthChanged(int)));
+    
+    connect(m_chart, SIGNAL(contextMenuRequest(const QPoint&)), SLOT(slotChartMenuRequested(const QPoint&)));
     
     m_data.setAutoDelete(true);
+    
+    m_timeScale->setShowPopupMenu(true);
     
     //kdDebug()<<k_funcinfo<<"Size: "<<width()<<"x"<<height()<<endl;
     //kdDebug()<<k_funcinfo<<"Y scale size: "<<m_yScale->width()<<"x"<<m_yScale->height()<<endl;
@@ -100,11 +106,7 @@ void KPTChartView::setYScaleRange(double min, double max, double step) {
     m_yStep = step;
 }
 
-int KPTChartView::canvasWidth() { 
-    return m_chart->width(); 
-}
-
-void KPTChartView::addYMarkerLine(KPTChartDataSetItem *item) { 
+void KPTChartView::addHorisontalLine(KPTChartDataSetItem *item) {
     m_yLines.append(item); 
 }
  
@@ -122,15 +124,11 @@ void KPTChartView::activateLayout() {
     lh->activate();
 }
 
-void KPTChartView::setDrawMode(int mode) {
-    m_drawMode = static_cast<Mode>(mode);
-    drawData();
-}
-
 void KPTChartView::clear() {
     clearData();
+    m_yLines.clear();
     m_chart->clear();
-    //draw();
+    m_chart->canvasUpdate();
 }
 
 void KPTChartView::clearData() {
@@ -150,10 +148,14 @@ void KPTChartView::drawChart() {
         m_chart->drawYGrid(m_yScale);
     }
     if (m_xMajorGrid) {
-        m_chart->drawXMajorGrid(m_timeScale);
+        m_chart->drawXMajorGrid(m_timeScale, m_yScale);
     }
     if (m_xMinorGrid) {
         m_chart->drawXMinorGrid(m_timeScale);    
+    }
+    QPtrListIterator<KPTChartDataSetItem> it = m_yLines.dataItems();
+    for (; it.current(); ++it) {
+        m_chart->drawHorisontalLine(it.current(), m_timeScale, m_yScale);
     }
     m_chart->drawDescription(m_description);
     drawData();
@@ -184,29 +186,35 @@ void KPTChartView::drawData() {
 void KPTChartView::draw() {
     //kdDebug()<<k_funcinfo<<endl;
     m_yScale->setUnit(m_yScaleUnit);
+    m_timeScale->setScale(m_timeScaleUnit);
     m_timeScale->setRange(m_startTime, m_endTime);
     m_yScale->setRange(m_yRangeMin, m_yRangeMax, m_yStep);
     m_yScale->draw();
     lh->activate();
     
     drawChart();
-    
-/*    int startDay = KGlobal::locale()->weekStartDay();
-    if (m_startTime.daysTo(m_endTime) < 7) {
-        int x = m_startTime.date().dayOfWeek();
-        x = (x > startDay ? x - startDay : startDay - x);
-        m_startTime = m_startTime.addDays(-x);
-    }
-    if (m_startTime.daysTo(m_endTime) < 7) {
-        m_endTime = m_startTime.addDays(7);
-    }
-    m_timeScale->setHorizonStart(m_startTime);
-    m_timeScale->setHorizonEnd(m_endTime);*/
-    //drawYScale();
-    //m_yScale->height() - 
-/*    repaintContents(true);
-    QPainter p(viewport());
-    KDChart::paint(&p, m_mainview->params(), m_mainview->data());*/
+}
+
+void KPTChartView::slotTimeScaleUnitChanged(int unit) {
+    //kdDebug()<<k_funcinfo<<endl;
+    emit timeScaleUnitChanged(unit);
+}
+
+void KPTChartView::slotTimeFormatChanged(int format) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_timeScale->setHourFormat((KPTTimeHeaderWidget::HourFormat)format);
+    drawChart();
+}
+
+void KPTChartView::slotChartMenuRequested(const QPoint &pos) {
+    //kdDebug()<<k_funcinfo<<endl;
+    emit chartMenuRequest(pos);
+}
+
+void KPTChartView::slotTimeScaleWidthChanged(int w) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_chart->canvas()->resize(QMAX(w, width()), m_chart->canvas()->height());
+    drawChart();
 }
 
 }  //KPlato namespace

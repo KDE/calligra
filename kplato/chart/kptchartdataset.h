@@ -48,9 +48,13 @@ public:
     QBrush *brush() const;
     void setBrush(QBrush *brush);
     
+    void setX1(QDateTime dt) { m_x1 = dt; }
     QDateTime x1() const { return m_x1; }
+    void setX2(QDateTime dt) { m_x2 = dt; }
     QDateTime x2() const { return m_x2; }
+    void setY1(double y) { m_y1 = y; }
     double y1() const { return m_y1; }
+    void setY2(double y) { m_y2 = y; }
     double y2() const { return m_y2; }
     
 private:
@@ -81,7 +85,8 @@ public:
     
     void append(KPTChartDataSetItem *item);
     const QPtrList<KPTChartDataSetItem> &dataItems() const { return m_dataItems; }
-
+    void clear();
+    
 private:
     DrawMode m_mode;
     QPen *m_pen;

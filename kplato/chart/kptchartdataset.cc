@@ -87,4 +87,8 @@ void KPTChartDataSet::append(KPTChartDataSetItem *item) {
     item->setParent(this); m_dataItems.append(item);
 }
 
+void KPTChartDataSet::clear() {
+    m_dataItems.clear();
+}
+
 }  //KPlato namespace
