@@ -69,7 +69,7 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
     kdDebug()<<"KSpreadCellProxy::process: cellID="<<cellID<<endl;
 
     KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
-    if ( !p.isValid() ) {
+    if ( !p.pos.x()<0 ) {
 	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
         return FALSE; 
     }
