@@ -259,5 +259,9 @@ KAction* KexiViewBase::sharedAction( const char *name ) const
 	return part()->actionCollectionForMode( viewMode() )->action( name );
 }
 
+void KexiViewBase::updateActions()
+{
+}
+
 #include "kexiviewbase.moc"
 

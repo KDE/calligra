@@ -178,6 +178,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
 		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
 
+		void activate();
 	public slots:
 		virtual void setFocus();
 

@@ -71,7 +71,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		 \a Receiver is usually a child of _this_ widget. */
 		void plugSharedAction(const char *action_name, QObject* receiver, const char *slot);
 
-		void KexiActionProxy::unplugSharedAction(const char *action_name);
+		void unplugSharedAction(const char *action_name);
 
 		/*! Typical version of plugAction() method -- plugs action named \a action_name
 		 to slot \a slot in _this_ widget. */

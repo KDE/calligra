@@ -320,9 +320,32 @@ CCPASTEUR:
 	-backgroundOrigin property should have 'ParentOrigin' as default 
 	 (not it's as in QtDesigner, and it's not intuitive)
 
+TODO:
+1. there 's just a problem with the dirty() flag
+ if you switch to dataview then back to design, dirty() is restted
+2. add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
+
+2004-06-30
+SQL View
+- fully implemented history/status mode switching
+- both modes work with "check SQL" action
+Core
+- KexiViewBase::updateActions() virt. method added for convenience
+
 2004-06-28
 KexiCore
 - KexiViewBase now knows own view mode
+SQL Parser, SQL View
+- fixed error handling (syntax error is only set when no detailed error is known)
+- on error: fixed jumping to proper character (even where are more lines and tabulators)
+- status label's height is properly increased, when needed
+- jumping to proper character impelmented also for QT_ONLY_SQL_EDITOR
+- fixed crash for parsing empty SQL string
+Main Window
+- removed redundant MDI Mode option from View menu
+Core
+- some docs added
+- KexiSharedActionHost::createSharedAction() : subclassName arg added
 
 2004-06-25
 KexiCore

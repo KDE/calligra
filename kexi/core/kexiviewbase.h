@@ -198,6 +198,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		void setViewWidget(QWidget* w);
 
+		/*! Updates actions (e.g. availability). Reimplement it, if needed.
+		 called by KexiDialogBase on dialog's activation. */
+		virtual void updateActions();
+
 		QString m_defaultIconName;
 
 		KexiMainWindow *m_mainWin;

@@ -454,5 +454,14 @@ bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
 		+ " and " + KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID), dataString );
 }
 
+void KexiDialogBase::activate()
+{
+	KMdiChildView::activate();
+	KexiViewBase *v = selectedView();
+	if (v) {
+		v->updateActions();
+	}
+}
+
 #include "kexidialogbase.moc"
 
