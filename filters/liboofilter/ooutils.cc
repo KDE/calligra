@@ -175,7 +175,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
     if ( !styleStack.hasChildNode( "style:tab-stops" ) ) // 3.11.10
         return;
     QDomElement tabStops = styleStack.childNode( "style:tab-stops" ).toElement();
-    //kdDebug() << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
+    //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
     for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         QDomElement tabStop = it.toElement();
