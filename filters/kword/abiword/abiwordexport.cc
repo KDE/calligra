@@ -86,7 +86,7 @@ private:
 QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 {
     // Escape quotes (needed in attributes)
-    // Escape apostrophs
+    // Escape apostrophs (allowed by XML)
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
@@ -111,7 +111,11 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
-        // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
+        // Compressed with bzip2
+
+        // It seems that bzip2-compressed AbiWord files were planned
+        //   but AbiWord CVS 2001-12-15 does not have import and export filters for them anymore.
+        //   We leave this code but leave the .desktop file without bzip2 files
         strMimeType="application/x-bzip2";
     }
     else
@@ -144,7 +148,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         return false;
     }
 
-    // TODO: ask the user for the encoding!
+    // We only export in UTF-8 (are there AbiWord ports that cannot read UTF-8?)
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
     return true;
 }
@@ -170,8 +174,10 @@ bool AbiWordWorker::doOpenDocument(void)
     *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
 
     // First magic: "<abiword"
+    // TODO/FIXME: newest AbiWord versions have a name space.
     *m_streamOut << "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
+    // TODO/FIXME: write as much space as AbiWord does for the following line.
     *m_streamOut << "<!-- This file is an AbiWord document. -->\n";
     // We have chosen NOT to have the full comment header that AbiWord files normally have.
     *m_streamOut << "\n";
@@ -619,6 +625,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 bool AbiWordWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
+    // TODO: do common code with HTML export
     QString outputText = "<pagesize ";
 
     switch (format)
