@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexihandler_script.la
 
 kexihandler_script_la_SOURCES = kexiscripthandler.cpp kexiscripthandlerproxy.cpp \
@@ -14,4 +16,3 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global

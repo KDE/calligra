@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 bin_PROGRAMS = kexistartuptest
 
 noinst_PROGRAMS = kexistartuptest
@@ -15,4 +17,3 @@ kexistartuptest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/lib
 
 kexistartuptest_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
 
-include $(top_srcdir)/kexi/Makefile.global

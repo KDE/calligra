@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 bin_PROGRAMS = kexidbtest kexidbmysqlcursor #kexidbfirebirdcursor
 
 noinst_PROGRAMS = kexidbtest kexidbmysqlcursor
@@ -20,4 +22,3 @@ kexidbmysqlcursor_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 #kexidbfirebirdcursor_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la
 #kexidbfirebirdcursor_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-include $(top_srcdir)/kexi/Makefile.global

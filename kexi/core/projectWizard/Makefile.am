@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexiprojectwizard.la
 kexiprojectwizard_la_SOURCES = kexicreateproject.cpp kexicreateprojectpageauth.cpp  kexicreateprojectpageengine.cpp \
 	kexicreateprojectpagelocation.cpp kexicreateprojectpage.cpp  kexicreateprojectpagedb.cpp \
@@ -33,4 +35,3 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/pro
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global

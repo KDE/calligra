@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexihandler_form.la
 
 kexihandler_form_la_SOURCES = kexiformhandler.cpp kexiformhandleritem.cpp kexiformhandlerproxy.cpp kexidbwidgetcontainer.cpp kexidbwidgetfactory.cpp
@@ -11,4 +13,3 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global

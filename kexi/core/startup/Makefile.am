@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = kexicorestartup.la
 
 kexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
@@ -36,4 +38,3 @@ SUBDIRS = .
 # set the include path for X, qt and KDE
 INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/startup -I$(top_srcdir)/kexi/core $(all_includes)
 
-include $(top_srcdir)/kexi/Makefile.global

@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexikspreadimport.la
 
 kexikspreadimport_la_SOURCES = kexikspreadsourcebase.ui kexikspreadsource.cpp kexikspreadimport.cpp
@@ -14,4 +16,3 @@ METASOURCES = AUTO
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA = kexikspreadimport.desktop
 
-include $(top_srcdir)/kexi/Makefile.global

@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 lib_LTLIBRARIES = libkexidatatable.la
 libkexidatatable_la_SOURCES = kexitableedit.cpp kexitableheader.cpp kexitableitem.cpp kexitableviewdata.cpp \
 		kexitablerm.cpp kexitableview.cpp kexitableview_p.cpp kexidatetableedit.cpp  \
@@ -35,4 +37,3 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi $(all_includes)
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global

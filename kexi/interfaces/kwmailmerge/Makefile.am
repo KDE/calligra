@@ -1,3 +1,4 @@
+include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kwmailmerge_kexi.la
 
@@ -12,4 +13,3 @@ METASOURCES = AUTO
 servicesdir=$(kde_servicesdir)
 services_DATA = kwserialletter_kexi.desktop
 
-include $(top_srcdir)/kexi/Makefile.global

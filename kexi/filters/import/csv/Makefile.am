@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexicsvimport.la
 
 kexicsvimport_la_SOURCES = kexicsvsourcebase.ui kexicsvsource.cpp kexicsvimport.cpp
@@ -14,4 +16,3 @@ METASOURCES = AUTO
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA = kexicsvimport.desktop
 
-include $(top_srcdir)/kexi/Makefile.global

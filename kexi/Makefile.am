@@ -1,10 +1,12 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 bin_PROGRAMS = kexi
 kexi_SOURCES = main.cpp
 kexi_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -no-undefined
 kexi_LDADD = $(LIB_KDEUI) core/libkexicore.la
 
 #SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
-SUBDIRS= 3rdparty kexidb core tableview widget plugins .
+SUBDIRS= 3rdparty kexidb core tableview widget plugins data . 
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
@@ -36,7 +38,7 @@ install-data-local:
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
 
@@ -50,4 +52,3 @@ messages: rc.cpp
 #uncomment this if you like doxygen docs for Kexi
 #include $(top_srcdir)/../admin/Doxyfile.am
 
-include $(top_srcdir)/kexi/Makefile.global

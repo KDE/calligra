@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexihandler_kugar.la
 
 kexihandler_kugar_la_SOURCES = kexikugarlicense.ui kexikugarhandler.cpp kexikugarhandlerproxy.cpp \
@@ -38,4 +40,3 @@ METASOURCES = AUTO
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexikugarhandler.desktop
 
-include $(top_srcdir)/kexi/Makefile.global

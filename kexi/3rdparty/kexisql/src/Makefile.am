@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 lib_LTLIBRARIES = libkexisql.la
 
 INCLUDES = $(all_includes)
@@ -8,4 +10,3 @@ table.c tokenize.c trigger.c update.c util.c vacuum.c vdbe.c where.c opcodes.c m
 libkexisql_la_LIBADD =
 libkexisql_la_LDFLAGS = $(all_libraries) --no-undefined
 
-include $(top_srcdir)/kexi/Makefile.global

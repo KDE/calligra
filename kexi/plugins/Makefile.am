@@ -1,3 +1,4 @@
+
 if compile_plugin_KUGAR
 KUGARDIR = kugar
 endif

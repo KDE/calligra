@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 kde_module_LTLIBRARIES = kexidb_mysqldriver.la
 
 INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(MYSQL_INC)
@@ -13,7 +15,6 @@ kexidb_mysqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(MYSQL
 
 kde_services_DATA = kexidb_mysqldriver.desktop
 
-include $(top_srcdir)/kexi/Makefile.global
 
 KDE_CXXFLAGS += -DKEXIDB_MYSQL_DRIVER_EXPORT= -D__KEXIDB__= \
 	-include $(top_srcdir)/kexi/kexidb/global.h

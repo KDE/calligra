@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 if compile_qsa_plugin
 scripthandler = kexiscripthandler.desktop
 scriptrc = kexiscriptpartui.rc
@@ -46,5 +48,4 @@ mimetype_DATA = x-kexiproject-sqlite.desktop x-kexiproject-shortcut.desktop
 #TODO: add x-sqlite.desktop x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
 
 
-include $(top_srcdir)/kexi/Makefile.global
 

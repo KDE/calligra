@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 lib_LTLIBRARIES = libkexiextendedwidgets.la
 libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp #kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
@@ -24,9 +26,9 @@ libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ../tableview/libkexidatatable.la
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE - all_includes must remain last!
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
-			-I$(top_srcdir)/kexi/core $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
+	$(LIB_KEXI_KMDI_INCLUDES) \
+	-I$(top_srcdir)/kexi/core $(all_includes)
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global

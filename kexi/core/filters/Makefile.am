@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = libkexifilter.la
 
 INCLUDES = -I$(top_srcdir)/kexi $(KOFFICE_INCLUDES) $(all_includes)
@@ -12,4 +14,3 @@ libkexifilter_la_SOURCES = kexifiltermanager.cpp kexifilter.cpp kexifilterwizard
 libkexifilter_la_LIBADD =
 
 
-include $(top_srcdir)/kexi/Makefile.global

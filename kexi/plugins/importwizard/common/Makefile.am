@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 lib_LTLIBRARIES = libkexiimportwizard.la
 
 libkexiimportwizard_la_SOURCES =  kexiimportwizard.cpp kexiimportwizardformbase.ui\
@@ -12,4 +14,3 @@ INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global
