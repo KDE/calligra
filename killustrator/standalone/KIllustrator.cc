@@ -82,7 +82,11 @@
 #include <kapp.h>
 //#include <kmessagebox.h>
 #include <kurl.h>
+#ifdef USE_QFD
+#include <qfiledialog.h>
+#else
 #include <kfiledialog.h>
+#endif
 #include <qlayout.h>
 #include <unistd.h>
 #include <kimgio.h>
@@ -176,6 +180,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   if (! previewHandlerRegistered) {
     kimgioRegister ();
 
+#ifndef USE_QFD
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,
@@ -190,6 +195,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
 					       PreviewPixmap);
     KFilePreviewDialog::registerPreviewModule ("png", pixmapPreviewHandler,
 					       PreviewPixmap);
+#endif
     previewHandlerRegistered = true;
   }
 
@@ -798,9 +804,15 @@ void KIllustrator::menuCallback (int item) {
     {
       if (askForSave ()) {
 	QString fname =
+#ifdef USE_QFD
+          QFileDialog::getOpenFileName((const char *) lastOpenDir,
+					     i18n("*.kil | KIllustrator File"),
+					     this);
+#else
 	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir,
 					     i18n("*.kil | KIllustrator File"),
 					     this);
+#endif
 	if (! fname.isEmpty ()) {
           KURL u (fname);
 #ifdef NEWKDE
@@ -879,13 +891,23 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_INSERT_BITMAP:
     {
-      QString fname = KFilePreviewDialog::getOpenFileName
+#ifdef USE_QFD
+     QString fname = QFileDialog::getOpenFileName
 	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 	         "*.png | PNG Images\n"
 	         "*.xbm | X11 Bitmaps\n"
 	         "*.xpm | X11 Pixmaps"),
 	     this);
+#else
+     QString fname = KFilePreviewDialog::getOpenFileName
+	     ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+	         "*.png | PNG Images\n"
+	         "*.xbm | X11 Bitmaps\n"
+	         "*.xpm | X11 Pixmaps"),
+	     this);
+#endif
        if (! fname.isEmpty ()) {
          QFileInfo finfo (fname);
          lastBitmapDir = finfo.dirPath ();
@@ -897,9 +919,15 @@ void KIllustrator::menuCallback (int item) {
     }
   case ID_INSERT_CLIPART:
     {
+#ifdef USE_QFD
+      QString fname = QFileDialog::getOpenFileName
+	      ((const char *) lastClipartDir,
+	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
+#else
       QString fname = KFilePreviewDialog::getOpenFileName
 	      ((const char *) lastClipartDir,
 	       i18n("*.wmf *.WMF | Windows Metafiles"), this);
+#endif
       if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastClipartDir = finfo.dirPath ();
@@ -1235,8 +1263,13 @@ void KIllustrator::saveFile () {
 }
 
 void KIllustrator::saveAsFile () {
+#ifdef USE_QFD
+  QString fname = QFileDialog::getSaveFileName ((const char *)
+						lastSaveDir, "*.kil", this);
+#else
   QString fname = KFileDialog::getSaveFileName ((const char *)
 						lastSaveDir, "*.kil", this);
+#endif
   if (fname.right (4) != ".kil")
     fname += ".kil";
   QFileInfo finfo (fname);
@@ -1422,6 +1455,9 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     }
     QString filter = filterMgr->exportFilters (defaultExt);
 
+#ifdef USE_QFD
+    QString filename = QFileDialog::getSaveFileName( QString::null, filter, this );
+#else
     KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir,
 					(const char *) filter, this,
 					0L, true, false);
@@ -1438,6 +1474,7 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     }
 
     delete dlg;
+#endif
 
     return filename;
 }
@@ -1475,8 +1512,13 @@ void KIllustrator::importFromFile () {
   QString filter = filterMgr->importFilters ();
 
   QString fname =
+#ifdef USE_QFD
+    QFileDialog::getOpenFileName ((const char *) lastImportDir,
+					 (const char *) filter, this);
+#else
     KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
+#endif
   if (! fname.isEmpty ()) {
     QFileInfo finfo ((const char *) fname);
     if (!finfo.isFile () || !finfo.isReadable ())
