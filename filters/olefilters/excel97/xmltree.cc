@@ -744,6 +744,10 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                         *stringPtr += ")";
                         (*stringPtr).prepend("ceil(");
                         break;
+		    case 221:  // today
+        		parsedFormula.append("currentDate()");
+			parsedFormula.append("");
+			break;
                     case 229:  // sinh
                         (*stringPtr).prepend("sinh(");
                         break;
@@ -814,7 +818,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                         ++stringPtr;
                         *stringPtr = "";
                         break;
-                    default:
+		    default:
                         kdDebug(s_area) << "Formula contains unhandled function " << integer << endl;
                         break;
                 }
