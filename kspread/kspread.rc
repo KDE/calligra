@@ -67,7 +67,8 @@
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
-  <Action name="hideGrid"/>
+  <Separator/>
+  <Action name="showArea"/>
   <Separator/>
   <Action name="preference"/>
  </Menu>

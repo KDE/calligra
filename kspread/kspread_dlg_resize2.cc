@@ -113,10 +113,20 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   lay1->addWidget( bb );
   lay1->activate();
   m_pSize2->setFocus();
+  connect( m_pDefault, SIGNAL(clicked() ),this, SLOT(slotChangeState()));
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
 
 }
+
+void KSpreadresize2::slotChangeState()
+{
+if(m_pDefault->isChecked())
+	m_pSize2->setEnabled(false);
+else
+	m_pSize2->setEnabled(true);
+}
+
 
 void KSpreadresize2::slotOk()
 {

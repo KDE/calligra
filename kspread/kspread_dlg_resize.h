@@ -42,7 +42,7 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-
+  void slotChangeState();
 protected:
   KSpreadView* m_pView;
   QPushButton* m_pOk;

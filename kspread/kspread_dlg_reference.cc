@@ -66,6 +66,11 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
     	text=(*it).ref_name;
     	list->insertItem(text);
     	}
+  if(!list->count())
+  	{
+  	m_pOk->setEnabled(false);
+  	m_pRemove->setEnabled(false);
+  	}
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
