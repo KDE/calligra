@@ -30,6 +30,7 @@ KoFilterManager* KoFilterManager::self()
     {
         s_pSelf = new KoFilterManager;
         s_pSelf->prepare=false;
+	s_pSelf->qdoc=0L;
     }
     return s_pSelf;
 }
@@ -279,9 +280,11 @@ const int KoFilterManager::findWidget(const QString &ext) const {
 }
 #endif
 
-const QString KoFilterManager::import( const QString & file, const char *_native_format )
+const QString KoFilterManager::import( const QString & file, const char *_native_format,
+				       KoDocument *document )
 {
     KURL url( file );
+    qdoc=0L;
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
@@ -314,44 +317,57 @@ const QString KoFilterManager::import( const QString & file, const char *_native
         return "";
     }
 
-    KTempFile tempFile; // create with default file prefix, extension and mode
-    if (tempFile.status() != 0)
-        return "";
-    QString tempfname = tempFile.name();
-
     unsigned int i=0;
     bool ok=false;
+    QString tempfname;
+
     while(i<vec.count() && !ok) {
-        KoFilter* filter = vec[i].createFilter();
+	KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
+
+	if(vec[i].implemented.lower()=="file") {
+	    kdDebug(30003) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
+	    KTempFile tempFile; // create with default file prefix, extension and mode
+	    if (tempFile.status() != 0)
+		return "";
+	    tempfname = tempFile.name();
 #ifndef USE_QFD
-        ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
+	    ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
 #else
-        ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
+	    ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
 #endif
+	}
+	else if(vec[i].implemented.lower()=="qdom" &&            // As long as some parts use KOML we have to make
+		(document->className()=="KSpreadDoc" ||              // sure that we only allow parts which implement
+		 document->className()=="KChartPart" ||              // the right loadXML :)
+		 document->className()=="KisDoc" ||
+		 document->className()=="KImageDocument")) {
+	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
+	    qdoc=filter->I_filter(QCString(file), QCString(mimeType), QCString(_native_format), config);
+	    if(qdoc!=0L && (ok=document->loadXML(*qdoc)))
+		document->changedByFilter();
+	}
+	else if(vec[i].implemented.lower()=="kodocument") {
+	    kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
+	    ok=filter->I_filter(QCString(file), document, QCString(mimeType), QCString(_native_format), config);
+	    if(ok)
+		document->changedByFilter();
+	}
+		
         delete filter;
         ++i;
     }
-    return ok ? tempfname : QString("");
+
+    if(vec[i].implemented.lower()=="file")
+	return ok ? tempfname : QString("");
+    return "";
 }
 
-const QString KoFilterManager::prepareExport( const QString & file, const char *_native_format )
+const QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
+					      const KoDocument *document )
 {
-    exportFile=file;
+    exportFile=file;    
     native_format=_native_format;
-
-    KTempFile tempFile; // create with default file prefix, extension and mode
-    if (tempFile.status() != 0)
-        return file;
-    tmpFile = tempFile.name();
-    prepare=true;
-    return tmpFile;
-}
-
-const bool KoFilterManager::export_() {
-
-    prepare=false;
-
     KURL url( exportFile );
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
@@ -365,16 +381,18 @@ const bool KoFilterManager::export_() {
         mimeType = "text/plain";
     }
 
-    if ( mimeType == native_format )
+    if ( mimeType == _native_format )
     {
         kDebugInfo( 30003, "Native format, returning without conversion. " );
-        return false;
+        return file;
     }
+    
+    mime_type=mimeType;   // needed for export_ :)
 
     QString constr = "Export == '";
     constr += mimeType;
     constr += "' and Import == '";
-    constr += native_format;
+    constr += _native_format;
     constr += "'";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
@@ -383,18 +401,57 @@ const bool KoFilterManager::export_() {
         QString tmp = i18n("Could not export file of type\n%1").arg( t->mimeType() );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
-        return false;
+        return file;
     }
-
+    
+    m_vec.clear();
+    
     unsigned int i=0;
     bool ok=false;
+    bool tmpFileNeeded=false;
+    
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
+	
+	if(vec[i].implemented.lower()=="file") {
+	    tmpFileNeeded=true;
+	    m_vec[i]=vec[i];
+	}
+	else if(vec[i].implemented.lower()=="kodocument") {
+	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), config);
+	    if(ok)
+		document->changedByFilter();
+	}
+	
+        delete filter;
+        ++i;
+    }
+    
+    if(!ok && tmpFileNeeded) {
+	KTempFile tempFile; // create with default file prefix, extension and mode
+	if (tempFile.status() != 0)
+	    return file;
+	tmpFile = tempFile.name();
+	prepare=true;	
+	return tmpFile;
+    }
+    return file;    
+}
+
+const bool KoFilterManager::export_() {
+
+    prepare=false;
+
+    unsigned int i=0;
+    bool ok=false;
+    while(i<m_vec.count() && !ok) {
+        KoFilter* filter = m_vec[i].createFilter();
+        ASSERT( filter );
 #ifndef USE_QFD
-        ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mimeType), config );
+        ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mime_type), config );
 #else
-        ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mimeType) );
+        ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mime_type) );
 #endif
         delete filter;
         ++i;

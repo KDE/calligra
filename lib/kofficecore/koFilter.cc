@@ -10,19 +10,12 @@ const bool KoFilter::filter(const QCString &, const QCString &,
     return false;
 }
 
-const bool KoFilter::filter(const QCString &, const QDomDocument *,
-			    const QCString &, const QCString &,
-			    const QString &) {
-    return false;
+const QDomDocument *KoFilter::I_filter(const QCString &, const QCString &,
+				       const QCString &, const QString &) {
+    return 0L;
 }
 
-const bool KoFilter::filter(const QCString &, const KoStore *,
-			    const QCString &, const QCString &,
-			    const QString &) {
-    return false;
-}
-
-const bool KoFilter::I_filter(const QCString &, KoDocument * const,
+const bool KoFilter::I_filter(const QCString &, KoDocument *,
 			      const QCString &, const QCString &,
 			      const QString &) {
     return false;

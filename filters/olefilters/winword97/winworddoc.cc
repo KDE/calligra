@@ -24,7 +24,7 @@ static QString m_body;
 
 WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
                        const myFile &table0Stream, const myFile &table1Stream,
-                       const myFile &dataStream) : 
+                       const myFile &dataStream) :
 	MsWord(mainStream.data, table0Stream.data, table1Stream.data, dataStream.data),
 	m_part(part), m_main(mainStream), m_data(dataStream) {
 
@@ -34,11 +34,17 @@ WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
     m_atrdCount=0;
     m_bkfCount=0;
     m_bklCount=0;
+    
+    kDebugInfo(30003, "XXXXXXXXXXXXXXXXXXXXXXXXX");
+    kDebugInfo(30003, (const char*)QString::number((int)m_fib.fWhichTblStm));
+    kDebugInfo(30003, (const char*)QString::number((int)m_fib.nFib)); 
 
-    if(m_fib.fWhichTblStm==0)
+    if(m_fib.fWhichTblStm==0 && m_fib.nFib>104)
         m_table=table0Stream;
-    else
+    else if(m_fib.fWhichTblStm!=0 && m_fib.nFib>104)
         m_table=table1Stream;
+    else
+	m_table=mainStream;
 
     //m_styleSheet=new StyleSheet(m_table, &m_fib);
     m_body = QString("");
@@ -294,7 +300,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                 sttbf.stringList.append(str);
                 kDebugInfo(31000, str);
                 base+=j;
-                
+
                 if(sttbf.extraDataLen!=0) {
                     kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];

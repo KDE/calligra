@@ -44,10 +44,12 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <ktempfile.h>
+#include <koDocument.h>
 
 #include <assert.h>
 #include <unistd.h>
 
+class QDomDocument;
 #ifndef USE_QFD
 class PreviewStack;
 #endif
@@ -59,6 +61,7 @@ class PreviewStack;
  *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>
+ *  @author Werner Trobin <wtrobin@carinthia.com>
  *  @version $Id$
  */
 class KoFilterManager
@@ -131,9 +134,10 @@ public:
 
     /**
      * Import a file by applying a filter
-     * @return the file name, either "" (error), _url (no conversion) or a /tmp file (conversion)
+     * @return the file name, either "" (error, QDomDocument, or KoDocument),
+     * _url (no conversion) or a /tmp file (conversion)
      */
-    const QString import( const QString &_url, const char *_native_format );
+    const QString import( const QString &_url, const char *_native_format, KoDocument *document );
     /**
      * Export a file using a filter - don't call this one it's automatically
      * called by KoMainWindow::saveDocument()
@@ -141,7 +145,8 @@ public:
      * be saved. The export_() function fetches this file and saves it to the _url
      * @param _url the location where the converted file will be stored
      */
-    const QString prepareExport( const QString &_url, const char *_native_format );
+    const QString prepareExport( const QString &_url, const char *_native_format,
+				 const KoDocument *document );
     /**
      * Performs the "real" exporting - don't call this function directly! It will
      * be called from KoMainWindow::saveDocument()
@@ -161,8 +166,10 @@ private:
     static KoFilterManager* s_pSelf;
     QString tmpFile;
     QString exportFile;
-    QCString native_format;
+    QString native_format, mime_type;
     bool prepare;
+    const QDomDocument *qdoc;
+    QValueList<KoFilterEntry> m_vec;
 #ifndef USE_QFD
     PreviewStack *ps;
     mutable QMap<QString, int> dialogMap;

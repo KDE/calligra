@@ -274,9 +274,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 #endif
 	KURL newURL;
 
-        //kDebugInfo( 31000, "koMainWindow, nach prepareDialog, vor exec");
-
-	bool bOk = true;
+        bool bOk = true;
 	do {
 #ifdef USE_QFD
 	    QString file = QFileDialog::getSaveFileName( QString::null, filter );
@@ -289,8 +287,6 @@ bool KoMainWindow::saveDocument( bool saveas )
                 newURL=dialog->selectedURL();
             else
                 return false;
-
-            kDebugInfo( 31000, "koMainWindow, nach exec");
 
             KoFilterManager::self()->cleanUp();
             delete dialog;

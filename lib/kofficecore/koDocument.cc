@@ -79,6 +79,7 @@ public:
   QList<KoMainWindow> m_shells;
 
   bool m_bSingleViewMode;
+  mutable bool m_changed;
 
   QWidget *m_wrapperWidget;
 
@@ -109,6 +110,7 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
 {
     d = new KoDocumentPrivate;
     m_bEmpty = TRUE;
+    d->m_changed=false;
 
     d->m_bSingleViewMode = singleViewMode;
 
@@ -163,19 +165,23 @@ bool KoDocument::saveFile()
         //system( cmd.local8Bit() );
         //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
         //system( cmd.local8Bit() );
-    }
+  }
   QCString _native_format = nativeFormatMimeType();
   bool ret;
   if ( outputMimeType != _native_format ) {
     kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
-    QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format);
+    d->m_changed=false;
+    QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format, this);
     kdDebug(30003) << "Temp native file " << nativeFile << endl;
-    ret = saveNativeFormat( nativeFile );
-    if ( !ret )
-        kdError(30003) << "Couldn't save in native format!" << endl;
-    else
-        ret = KoFilterManager::self()->export_();
+    
+    if(d->m_changed==false && nativeFile!=m_file) {    
+	ret = saveNativeFormat( nativeFile );
+	if ( !ret )
+	    kdError(30003) << "Couldn't save in native format!" << endl;
+	else
+	    ret = KoFilterManager::self()->export_();
+    }
   } else {
     // Native format => normal save
     ret = saveNativeFormat( m_file );
@@ -340,9 +346,9 @@ void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteA
 {
   if ( d->m_views.find( view ) == -1 )
     return;
-  
+
   uint viewIdx = d->m_views.at();
-  
+
   if ( d->m_viewContainerStates.count() == viewIdx )
     d->m_viewContainerStates.append( states );
   else if ( d->m_viewContainerStates.count() > viewIdx )
@@ -352,18 +358,18 @@ void KoDocument::setViewContainerStates( KoView *view, const QMap<QString,QByteA
 QMap<QString,QByteArray> KoDocument::viewContainerStates( KoView *view )
 {
   QMap<QString,QByteArray> res;
-  
+
   if ( d->m_views.find( view ) == -1 )
     return res;
-  
+
   uint viewIdx = d->m_views.at();
-  
+
   if ( viewIdx >= d->m_viewContainerStates.count() )
     return res;
- 
+
   res = d->m_viewContainerStates[ viewIdx ];
   return res;
-} 
+}
 
 void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool transparent, KoView *view )
 {
@@ -538,21 +544,27 @@ bool KoDocument::openFile()
 
   QApplication::setOverrideCursor( waitCursor );
 
+  d->m_changed=false;
+  
   // Launch a filter if we need one for this url ?
-  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType() );
+  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType(), this );
 
   QApplication::restoreOverrideCursor();
 
   // The filter, if any, has been applied. It's all native format now.
-  bool loadOk = !importedFile.isEmpty(); // Empty = an error occured in the filter
+  bool loadFile = !importedFile.isEmpty(); // Empty = an error occured in the filter
 
-  if (loadOk)
+  if (loadFile)
   {
     if ( !loadNativeFormat( importedFile ) )
     {
-      loadOk = false;
+      loadFile = false;
       KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
     }
+  }
+  else {
+      if(d->m_changed)
+	  loadFile=true;
   }
 
   if ( importedFile != m_file )
@@ -561,17 +573,17 @@ bool KoDocument::openFile()
     // Set document URL to empty - we don't want to save in /tmp !
     m_url = KURL();
     // and remove temp file
-    unlink( importedFile.ascii() );
+    if(!d->m_changed)
+	unlink( importedFile.ascii() );
   }
 
-  if ( loadOk && d->m_bSingleViewMode )
+  if ( loadFile && d->m_bSingleViewMode )
   {
     QWidget *view = createView( d->m_wrapperWidget );
     view->show();
   }
 
-
-  return loadOk;
+  return loadFile;
 }
 
 bool KoDocument::loadNativeFormat( const QString & file )
@@ -713,6 +725,11 @@ void KoDocument::setModified( bool _mod )
 
     if ( _mod )
 	m_bEmpty = FALSE;
+}
+
+void KoDocument::changedByFilter( bool changed ) const
+{
+    d->m_changed=changed;
 }
 
 bool KoDocument::loadBinary( istream& , bool, KoStore* )
