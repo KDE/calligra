@@ -1923,7 +1923,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
     m_pasteFramesetsMap = new QMap<QString, QString>();
     QPtrList<KWFrameSet> frameSetsToFinalize;
     int ref=0;
-
+    int nb = 0;
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
@@ -2009,7 +2009,10 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
-                frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 ); // make sure it's on top
+                kdDebug()<<" maxZOrder( frame->pageNum(this) ) :"<<maxZOrder( frame->pageNum(this) )<<endl;
+                frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 +nb ); // make sure it's on top
+                kdDebug()<<" apres maxZOrder( frame->pageNum(this) ) :"<<maxZOrder( frame->pageNum(this) )<<endl;
+                nb++;
                 fs->addFrame( frame, false );
                 if ( macroCmd )
                 {
