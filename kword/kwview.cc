@@ -2171,6 +2171,14 @@ void KWView::formatParagraph()
 
 }
 
+void KWView::slotHRulerDoubleClicked()
+{
+    if ( m_gui->getHorzRuler()->flags() & KoRuler::F_TABS )
+        formatParagraph();
+    else
+        formatPage();
+}
+
 void KWView::formatPage()
 {
     if( !m_doc->isReadWrite())
@@ -3677,10 +3685,10 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
     connect( r_horz, SIGNAL( newRightIndent( double ) ), view, SLOT( newRightIndent( double ) ) );
 
-    connect( r_horz, SIGNAL( openPageLayoutDia() ), view, SLOT( formatPage() ) );
+    connect( r_horz, SIGNAL( doubleClicked() ), view, SLOT( slotHRulerDoubleClicked() ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
     connect( r_vert, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
-    connect( r_vert, SIGNAL( openPageLayoutDia() ), view, SLOT( formatPage() ) );
+    connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
     r_horz->setUnit( doc->getUnitName() );

@@ -261,6 +261,7 @@ public slots:
     void setTool( int /*KWCanvas::MouseMode*/ _mouseMode );
     void frameSelectedChanged();
     void docStructChanged(int _type);
+    void slotHRulerDoubleClicked();
 
     void pageNumChanged();
 

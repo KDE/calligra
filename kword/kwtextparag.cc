@@ -693,17 +693,12 @@ void KWTextParag::printRTDebug( int info )
 //////////
 
 // Create a KoParagLayout from XML.
-//
-// If a document is supplied, default values are taken from the style in the
-// document named by the layout. This allows for simplified import filters,
-// and also looks to the day that redundant data can be eliminated from the
-// saved XML.
-KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle )
+KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool findStyle )
 {
     KoParagLayout layout;
 
     // Only when loading paragraphs, not when loading styles
-    if ( useRefStyle )
+    if ( findStyle )
     {
         KoStyle *style;
         // Name of the style. If there is no style, then we do not supply
@@ -712,22 +707,17 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
         if ( !element.isNull() )
         {
             QString styleName = element.attribute( "value" );
-            // Default all the layout stuff from the style.
             style = doc->findStyle( styleName );
-            if (style)
+            if (!style)
             {
-                //kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
-                layout = style->paragLayout();
-            }
-            else
-            {
-                kdError(32001) << "Cannot find style \"" << styleName << "\"" << endl;
+                kdError(32001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
                 style = doc->findStyle( "Standard" );
             }
+            //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
-            kdError(32001) << "Missing NAME tag in LAYOUT ( for a paragraph ) -> no style !" << endl;
+            kdError(32001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
             style = doc->findStyle( "Standard" );
         }
         ASSERT(style);
@@ -887,40 +877,32 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
     int a = layout.alignment;
     element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt3::AlignJustify ? "justify" : "left" );
 
-    // Disabled the tests, because when loading the default is the style,
-    // not 0. So if someone puts e.g. a margin in a style and removes it
-    // for a given paragraph, the margin of the style would be applied when
-    // re-loading the document.
-    // The other option, omitting when saving if it matches the style's layout,
-    // would be consistent with the loading code, but would make writing filters
-    // more difficult (e.g. plain text and html filters don't care about styles)
-
-    /*if ( margins[QStyleSheetItem::MarginFirstLine] != 0 ||
-         margins[QStyleSheetItem::MarginLeft] != 0 ||
-         margins[QStyleSheetItem::MarginRight] != 0 )*/
+    if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
+         layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
+         layout.margins[QStyleSheetItem::MarginRight] != 0 )
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
-        //if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
+        if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
             element.setAttribute( "first", layout.margins[QStyleSheetItem::MarginFirstLine] );
-        //if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
+        if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
             element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
-        //if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
+        if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
             element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
     }
 
-    /*if ( margins[QStyleSheetItem::MarginTop] != 0 ||
-         margins[QStyleSheetItem::MarginBottom] != 0 )*/
+    if ( layout.margins[QStyleSheetItem::MarginTop] != 0 ||
+         layout.margins[QStyleSheetItem::MarginBottom] != 0 )
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
-        //if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
+        if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
             element.setAttribute( "before", layout.margins[QStyleSheetItem::MarginTop] );
-        //if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+        if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
             element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
     }
 
-    /*if ( lineSpacing != 0 )*/
+    if ( layout.lineSpacing != 0 )
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
@@ -932,7 +914,7 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
             element.setAttribute( "value", layout.lineSpacing );
     }
 
-    /*if ( pageBreaking != 0 )*/
+    if ( layout.pageBreaking != 0 )
     {
         element = doc.createElement( "PAGEBREAKING" );
         parentElem.appendChild( element );
@@ -944,31 +926,31 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
             element.setAttribute( "hardFrameBreakAfter", "true" );
     }
 
-    /*if ( leftBorder.ptWidth > 0 )*/
+    if ( layout.leftBorder.ptWidth > 0 )
     {
         element = doc.createElement( "LEFTBORDER" );
         parentElem.appendChild( element );
         layout.leftBorder.save( element );
     }
-    /*if ( rightBorder.ptWidth > 0 )*/
+    if ( layout.rightBorder.ptWidth > 0 )
     {
         element = doc.createElement( "RIGHTBORDER" );
         parentElem.appendChild( element );
         layout.rightBorder.save( element );
     }
-    /*if ( topBorder.ptWidth > 0 )*/
+    if ( layout.topBorder.ptWidth > 0 )
     {
         element = doc.createElement( "TOPBORDER" );
         parentElem.appendChild( element );
         layout.topBorder.save( element );
     }
-    /*if ( bottomBorder.ptWidth > 0 )*/
+    if ( layout.bottomBorder.ptWidth > 0 )
     {
         element = doc.createElement( "BOTTOMBORDER" );
         parentElem.appendChild( element );
         layout.bottomBorder.save( element );
     }
-    /*if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )*/
+    if ( layout.counter && layout.counter->numbering() != KoParagCounter::NUM_NONE )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
