@@ -258,6 +258,8 @@ KSpread::Book_ptr KSpreadDoc::book()
 void KSpreadDoc::removeView( KSpreadView* _view )
 {
   m_lstViews.removeRef( _view );
+
+  EMIT_EVENT( this, KSpread::Document::eventRemovedView, _view );
 }
 
 KSpreadView* KSpreadDoc::createSpreadView()
@@ -265,6 +267,8 @@ KSpreadView* KSpreadDoc::createSpreadView()
   KSpreadView *p = new KSpreadView( 0L, 0L, this );
   p->QWidget::show();
   m_lstViews.append( p );
+  
+  EMIT_EVENT( this, KSpread::Document::eventNewView, p );
   
   return p;
 }
@@ -763,7 +767,8 @@ void KSpreadDoc::initPython()
     t2.sprintf( "xclModule%i", ++moduleCount );
     m_pPython = new KSpreadPythonModule( t2, docId() );
     m_pPython->registerMethods( xcl_methods );
-
+    m_pPython->setContext( this );
+    
     DIR *dp = 0L;
     struct dirent *ep;
 

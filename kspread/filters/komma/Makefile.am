@@ -8,9 +8,9 @@ LDADD = $(LIBPYTHON) ../../../lib/kofficecore/libkofficecore.la \
 
 ####### Files
 
-bin_PROGRAMS = kspread_filter
+bin_PROGRAMS = kspread_filter.bin
 
-kspread_filter_SOURCES = main.cc
+kspread_filter_bin_SOURCES = main.cc
 
 noinst_HEADERS = main.h
 

@@ -105,6 +105,24 @@ KSpreadPythonModule::KSpreadPythonModule( const char *_name, int _doc_id ) : KPy
   Py_DECREF( o );
 }
 
+bool KSpreadPythonModule::setContext( KSpreadDoc* _doc )
+{
+  PyObject* obj = Py_BuildValue( "s", "" );
+  PyObject_SetAttrString( m_pModule, "tableIOR", obj );
+  Py_DECREF( obj );
+
+  obj = Py_BuildValue( "s", "" );
+  PyObject_SetAttrString( m_pModule, "bookIOR", obj );
+  Py_DECREF( obj );
+
+  CORBA::String_var str = opapp_orb->object_to_string( _doc );
+  obj = Py_BuildValue( "s", str.in() );
+  PyObject_SetAttrString( m_pModule, "docIOR", obj );
+  Py_DECREF( obj );
+
+  return true;
+}
+
 bool KSpreadPythonModule::setContext( KSpreadTable* _table )
 {
   CORBA::String_var str = opapp_orb->object_to_string( _table );

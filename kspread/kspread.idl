@@ -131,6 +131,12 @@ module KSpread
 	interface Document : KOffice::Document, KOffice::Print
 	{
 		Book book();
+
+		const string eventNewView = "KSpread/Document/NewView";
+		typedef KSpread::View typeNewView;
+
+		const string eventRemovedView = "KSpread/Document/RemovedView";
+		typedef KSpread::View typeRemovedView;
 	};
 
 	interface DocumentFactory : KOffice::DocumentFactory

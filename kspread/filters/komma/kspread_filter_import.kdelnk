@@ -3,7 +3,7 @@
 Name=KSpreadFilter
 Name[da]=Regnearksfilter
 Name[sv]=Kalkyl-filter
-Exec=kspread_filter --server
+Exec=kspread_filter.bin --server
 Comment=Torben's KSpread Filter
 Comment[da]=Torbens regneark filter
 Comment[pt_BR]=Filtro do KSpread

@@ -7,10 +7,11 @@
 #include <qstring.h>
 
 class KSpreadTable;
+class KSpreadDoc;
 
-void pythonInit( int argc, char** argv );
+// void pythonInit( int argc, char** argv );
 
-bool pythonEval( const char* _cmd, QString & _result );
+// bool pythonEval( const char* _cmd, QString & _result );
 
 class KPythonModule
 {
@@ -39,10 +40,12 @@ class KSpreadPythonModule : public KPythonModule
 public:
   KSpreadPythonModule( const char *_name, int _doc_id );
 
+  // Has to die ....
   bool setContext( int _map_id, int _table_id );
   PyObject* eval( const char* _cmd );
 
   bool setContext( KSpreadTable* _table );
+  bool setContext( KSpreadDoc* _doc );
 };
 
 #endif

@@ -70,7 +70,7 @@ install-exec-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
 
-kspread.h: kspread.idl
+kspread.h: kspread.idl ../lib/kofficecore/koffice.idl
 	$(IDL) $(IDL_FLAGS) kspread.idl
 
 chart.h: ../lib/interfaces/chart.idl
@@ -102,5 +102,5 @@ KOStore.py: KSpread.py
 KOffice.py: KSpread.py
 OpenParts.py: KSpread.py
 OpenPartsUI.py: KSpread.py
-KSpread.py: kspread.idl $(kde_bindir)/pyidl
-	$(kde_bindir)/pyidl "-I$(idldir) kspread.idl"
+KSpread.py: kspread.idl $(kde_bindir)/pyidl ../lib/kofficecore/koffice.idl
+	$(kde_bindir)/pyidl "-I$(idldir) koffice.idl"
