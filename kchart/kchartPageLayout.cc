@@ -27,7 +27,7 @@
 #include <qlabel.h>
 
 KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, TRUE,i18n("Page Layout"),Ok|Cancel )
+	: KDialogBase( parent, name, TRUE,i18n("Page Layout") )
 {
     params=_params;
     QWidget *page = new QWidget( this );
@@ -65,6 +65,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 
     init();
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
 }
 
 void KChartPageLayout::init()
@@ -77,7 +78,12 @@ void KChartPageLayout::init()
 
 void KChartPageLayout::slotOk()
 {
-    params->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
+    slotApply();
     accept();
 }
 
+void KChartPageLayout::slotApply()
+{
+    params->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
+    emit dataChanged();
+}

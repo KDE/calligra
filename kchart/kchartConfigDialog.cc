@@ -221,8 +221,6 @@ void KChartConfigDialog::apply()
     if(_backgroundpixpage)
         _backgroundpixpage->apply();
 
-    // data in the params struct has changed; notify application
-    emit dataChanged();
 
     //     for( uint i = 0; i < NUMDATACOLORS; i++ )
     // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
@@ -233,6 +231,13 @@ void KChartConfigDialog::apply()
         _headerfooterpage->apply();
     if( _polarpage)
         _polarpage->apply();
+
+
+
+
+    // data in the params struct has changed; notify application
+    emit dataChanged();
+
 }
 
 void KChartConfigDialog::defaults()

@@ -32,7 +32,7 @@ public:
   KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name);
 public slots:
   void slotOk();
-
+ void slotApply();
 protected:
  void init(); 
 private:
@@ -41,6 +41,8 @@ private:
  QLineEdit *topBorder;
  QLineEdit *bottomBorder;
  KChartParams* params;	
+signals:
+ void dataChanged();
 };
 
 #endif
