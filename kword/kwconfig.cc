@@ -47,9 +47,11 @@ KWConfig::KWConfig( KWView* parent )
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
                           BarIcon("spellcheck", KIcon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page);
+
   page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                           BarIcon("misc", KIcon::SizeMedium) );
   _interfacePage=new configureInterfacePage(parent,page);
+
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
 
@@ -84,6 +86,7 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
   box->setSpacing( 10 );
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Spelling"));
+
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);

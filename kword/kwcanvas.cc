@@ -1628,6 +1628,8 @@ void KWCanvas::pasteFrames()
     KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
     m_doc->addCommand( macroCmd );
 
+    int ref=0;
+
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
@@ -1670,20 +1672,32 @@ void KWCanvas::pasteFrames()
             macroCmd->addCommand(cmd);
 
             fs->finalize();
+            int type=0;
+            switch(fs->type())
+            {
+                case FT_TEXT:
+                    type=(int)TextFrames;
+                    break;
+                case FT_PICTURE:
+                    type=(int)Pictures;
+                    break;
+                case FT_PART:
+                    type=(int)Embedded;
+                    break;
+                case FT_FORMULA:
+                    type=(int)FormulaFrames;
+                    break;
+                case FT_TABLE:
+                    type=(int)Tables;
+                    break;
+                default:
+                    type=(int)TextFrames;
+            }
+            ref|=type;
         }
     }
     m_doc->processImageRequests();
     m_doc->repaintAllViews();
-    //we can't know what type of frame is pasted
-    //so refresh all type in docstruct
-    int ref=0;
-    ref|=Arrangement;
-    ref|=Tables;
-    ref|=Pictures;
-    ref|=Cliparts;
-    ref|=TextFrames;
-    ref|=Embedded;
-    ref|=FormulaFrames;
     m_doc->refreshDocStructure(ref);
 }
 
