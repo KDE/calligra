@@ -40,15 +40,18 @@ class internetAnchor : public QWidget
   Q_OBJECT
 public:
   internetAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
-  QString apply();
+  QString text() const;
+  QString link() const;
+  bool bold() const;
+  bool italic() const;
 private:
     QString createLink() const;
     KSpreadView* m_pView;
 
-    QLineEdit* text;
+    QLineEdit* textEdit;
     QLineEdit* l_internet;
-    QCheckBox *bold;
-    QCheckBox *italic;
+    QCheckBox *boldCheck;
+    QCheckBox *italicCheck;
 };
 
 class mailAnchor : public QWidget
@@ -56,15 +59,17 @@ class mailAnchor : public QWidget
   Q_OBJECT
 public:
   mailAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
-  QString apply();
+  QString text() const;
+  QString link() const;
+  bool bold() const;
+  bool italic() const;
 private:
-    QString createLink() const;
     KSpreadView* m_pView;
 
-    QLineEdit* text;
+    QLineEdit* textEdit;
     QLineEdit* l_mail;
-    QCheckBox *bold;
-    QCheckBox *italic;
+    QCheckBox *boldCheck;
+    QCheckBox *italicCheck;
 };
 
 class fileAnchor : public QWidget
@@ -72,19 +77,19 @@ class fileAnchor : public QWidget
   Q_OBJECT
 public:
   fileAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
-  QString apply();
-
+  QString text() const;
+  QString link() const;
+  bool bold() const;
+  bool italic() const;
 private slots:
     void slotSelectRecentFile( const QString &_file );
 private:
-    QString createLink() const;
     KSpreadView* m_pView;
 
-    QLineEdit* text;
+    QLineEdit* textEdit;
     KURLRequester* l_file;
-    //QLineEdit* l_file;
-    QCheckBox *bold;
-    QCheckBox *italic;
+    QCheckBox *boldCheck;
+    QCheckBox *italicCheck;
 };
 
 class cellAnchor : public QWidget
@@ -92,15 +97,17 @@ class cellAnchor : public QWidget
   Q_OBJECT
 public:
   cellAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
-  QString apply();
+  QString text() const;
+  QString link() const;
+  bool bold() const;
+  bool italic() const;
 private:
-    QString createLink() const;
     KSpreadView* m_pView;
 
-    QLineEdit* text;
+    QLineEdit* textEdit;
     QLineEdit* l_cell;
-    QCheckBox *bold;
-    QCheckBox *italic;
+    QCheckBox *boldCheck;
+    QCheckBox *italicCheck;
 };
 
 class KSpreadLinkDlg : public KDialogBase

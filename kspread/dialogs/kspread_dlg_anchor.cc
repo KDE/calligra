@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Norbert Andres <nandres@web.de>
+   Copyright (C) 2005 Ariya Hidayat <ariya@kde.org>
+             (C) 2003 Norbert Andres <nandres@web.de>
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 1999-2002 Laurent Montel <montel@kde.org>
              (C) 1999 Stephan Kulow <coolo@kde.org>
@@ -68,26 +69,60 @@ KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 
 void KSpreadLinkDlg::slotOk()
 {
-  QString result;
+  QString text, link, str;
+  bool bold, italic;
+  
   switch( activePageIndex() )
   {
     case 0:
-      result=_internetAnchor->apply();
+      text = _internetAnchor->text();
+      link = _internetAnchor->link();
+      bold = _internetAnchor->bold();
+      italic = _internetAnchor->italic();
+      str = i18n( "Internet address is empty" );
       break;
     case 1:
-      result=_mailAnchor->apply();
+      text = _mailAnchor->text();
+      link = _mailAnchor->link();
+      bold = _mailAnchor->bold();
+      italic = _mailAnchor->italic();
+      str = i18n( "Mail address is empty" );
       break;
     case 2:
-      result=_fileAnchor->apply();
+      text = _fileAnchor->text();
+      link = _fileAnchor->link();
+      bold = _fileAnchor->bold();
+      italic = _fileAnchor->italic();
+      str = i18n( "File name is empty" );
       break;
     case 3:
-      result=_cellAnchor->apply();
+      text = _cellAnchor->text();
+      link = _cellAnchor->link();
+      bold = _cellAnchor->bold();
+      italic = _cellAnchor->italic();
+      str = i18n( "Destination cell is empty" );
       break;
     default:
       kdDebug(36001)<<"Error in KSpreadLinkDlg\n";
     }
-  if (  !result.isEmpty() )
-    setCellText( result );
+    
+  if( link.isEmpty() )
+  {
+    KMessageBox::error( this, str );
+    return;
+  } 
+  
+  if( text.isEmpty() )
+    text = link;
+    
+  str = "<a href=\"" + link + "\">" + text + "</a>";
+  if( italic ) 
+    str.prepend( "<i>" ).append( "</i>" );  
+  if( bold ) 
+    str.prepend( "<b>" ).append( "</b>" );  
+  str.prepend( '!' );
+  
+  setCellText( str );
 }
 
 void KSpreadLinkDlg::setCellText( const QString &_text )
@@ -136,8 +171,8 @@ internetAnchor::internetAnchor( KSpreadView* _view, QWidget *parent , char *name
   lay2->addWidget(tmpQLabel );
   tmpQLabel->setText( i18n( "Comment:" ) );
 
-  text = new QLineEdit( this );
-  lay2->addWidget( text );
+  textEdit = new QLineEdit( this );
+  lay2->addWidget( textEdit );
 
   tmpQLabel = new QLabel( this );
   lay2->addWidget( tmpQLabel );
@@ -146,13 +181,13 @@ internetAnchor::internetAnchor( KSpreadView* _view, QWidget *parent , char *name
 
   lay2->addWidget( l_internet );
 
-  bold=new QCheckBox( i18n( "Bold" ),this );
+  boldCheck=new QCheckBox( i18n( "Bold" ),this );
 
-  lay2->addWidget( bold );
+  lay2->addWidget( boldCheck );
 
-  italic=new QCheckBox( i18n( "Italic" ),this );
+  italicCheck=new QCheckBox( i18n( "Italic" ),this );
 
-  lay2->addWidget( italic );
+  lay2->addWidget( italicCheck );
   
   lay2->addStretch( 1 );
 
@@ -160,46 +195,32 @@ internetAnchor::internetAnchor( KSpreadView* _view, QWidget *parent , char *name
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
-  text->setFocus();
+  textEdit->setFocus();
 }
 
-QString internetAnchor::apply()
+QString internetAnchor::text() const
 {
-  if ( l_internet->text().isEmpty() || text->text().isEmpty() )
-    {
-	KMessageBox::error( this, i18n( "Area text or cell is empty." ) );
-	return QString();
-    }
-  return createLink();
+  return textEdit->text();
 }
 
-QString internetAnchor::createLink() const
+QString internetAnchor::link() const
 {
-   QString end_link;
-  QString link;
-  if ( l_internet->text().find( "http://" )!=-1 )
-    link = "!<a href=\""+l_internet->text()+"\""+">";
-  else
-    link = "!<a href=\"http://"+l_internet->text()+"\""+">";
+  QString str = l_internet->text();
+  
+  if( str.find( "http://" )==-1 )
+    str.prepend( "http://" );
+    
+  return str;  
+}
 
-  if ( bold->isChecked()&&!italic->isChecked() )
-    {
-      link+="<b>"+text->text()+"</b></a>";
-    }
-  else if ( !bold->isChecked()&&italic->isChecked() )
-    {
-      link+="<i>"+text->text()+"</i></a>";
-    }
-  else if ( bold->isChecked()&&italic->isChecked() )
-    {
-      link+="<i><b>"+text->text()+"</b></i></a>";
-    }
-  else
-    {
-      link+=text->text()+"</a>";
-    }
+bool internetAnchor::bold() const
+{
+  return boldCheck->isChecked();
+}
 
-    return link;
+bool internetAnchor::italic() const
+{
+  return italicCheck->isChecked();
 }
 
 mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
@@ -218,8 +239,8 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
   lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n( "Comment:" ) );
 
-  text = new QLineEdit( this );
-  lay2->addWidget( text );
+  textEdit = new QLineEdit( this );
+  lay2->addWidget( textEdit );
 
   tmpQLabel = new QLabel( this );
   lay2->addWidget( tmpQLabel );
@@ -228,13 +249,13 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
   lay2->addWidget( l_mail );
 
-  bold=new QCheckBox( i18n( "Bold" ),this );
+  boldCheck=new QCheckBox( i18n( "Bold" ),this );
 
-  lay2->addWidget( bold );
+  lay2->addWidget( boldCheck );
 
-  italic=new QCheckBox( i18n( "Italic" ),this );
+  italicCheck=new QCheckBox( i18n( "Italic" ),this );
 
-  lay2->addWidget( italic );
+  lay2->addWidget( italicCheck );
 
   lay2->addStretch( 1 );
   
@@ -242,46 +263,32 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
-  text->setFocus();
+  textEdit->setFocus();
 }
 
-QString mailAnchor::apply()
+QString mailAnchor::text() const
 {
- if ( l_mail->text().isEmpty() || text->text().isEmpty() )
-    {
-	KMessageBox::error( this, i18n( "Area text or mail is empty.") );
-	return QString();
-    }
-  return createLink();
+  return textEdit->text();
 }
 
-QString mailAnchor::createLink() const
+QString mailAnchor::link() const
 {
-  QString end_link;
-  QString link;
-  if (l_mail->text().find( "mailto:" )!=-1 )
-    link = "!<a href=\"" + l_mail->text()+"\""+">";
-  else
-    link = "!<a href=\"mailto:"+l_mail->text()+"\""+">";
+  QString str = l_mail->text();
+  
+  if( str.find( "mailto:" )==-1 )
+    str.prepend( "mailto:" );
+    
+  return str;  
+}
 
-  if ( bold->isChecked() && !italic->isChecked() )
-    {
-      link+="<b>"+text->text()+"</b></a>";
-    }
-  else if ( !bold->isChecked() && italic->isChecked() )
-    {
-      link+="<i>"+text->text()+"</i></a>";
-    }
-  else if ( bold->isChecked() && italic->isChecked() )
-    {
-      link+="<i><b>"+text->text()+"</b></i></a>";
-    }
-  else
-    {
-      link+=text->text()+"</a>";
-    }
+bool mailAnchor::bold() const
+{
+  return boldCheck->isChecked();
+}
 
-    return link;
+bool mailAnchor::italic() const
+{
+  return italicCheck->isChecked();
 }
 
 
@@ -301,8 +308,8 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
   lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Comment:"));
 
-  text = new QLineEdit( this );
-  lay2->addWidget(text);
+  textEdit = new QLineEdit( this );
+  lay2->addWidget(textEdit);
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
@@ -321,13 +328,13 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
   lay2->addWidget(l_file);
 
-  bold=new QCheckBox(i18n("Bold"),this);
+  boldCheck=new QCheckBox(i18n("Bold"),this);
 
-  lay2->addWidget(bold);
+  lay2->addWidget(boldCheck);
 
-  italic=new QCheckBox(i18n("Italic"),this);
+  italicCheck=new QCheckBox(i18n("Italic"),this);
 
-  lay2->addWidget(italic);
+  lay2->addWidget(italicCheck);
 
   QStringList fileList = KRecentDocument::recentDocuments();
   QStringList lst;
@@ -357,57 +364,38 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
-  text->setFocus();
+  textEdit->setFocus();
 }
 
-QString fileAnchor::apply()
+QString fileAnchor::text() const
 {
- if ( l_file->lineEdit()->text().isEmpty() || text->text().isEmpty() )
-    {
-	KMessageBox::error( this, i18n("Area text or mail is empty.") );
-	return QString();
-    }
-  return createLink();
+  return textEdit->text();
+}
+
+QString fileAnchor::link() const
+{
+  QString str = l_file->lineEdit()->text();
+  
+  if( str.find( "file:/" )==-1 )
+    str.prepend( "file:/" );
+    
+  return str;  
+}
+
+bool fileAnchor::bold() const
+{
+  return boldCheck->isChecked();
+}
+
+bool fileAnchor::italic() const
+{
+  return italicCheck->isChecked();
 }
 
 void fileAnchor::slotSelectRecentFile( const QString &_file )
 {
     l_file->lineEdit()->setText(_file );
 }
-
-
-QString fileAnchor::createLink() const
-{
-  QString end_link;
-  QString link;
-  QString tmpText=l_file->lineEdit()->text();
-  if (tmpText.find("file:/")!=-1)
-    link = "!<a href=\""+tmpText+"\""+">";
-  else if (tmpText.at(0)=='/')
-    link = "!<a href=\"file:"+tmpText+"\""+">";
-  else
-    link = "!<a href=\"file:"+tmpText+"\""+">";
-
-  if (bold->isChecked()&&!italic->isChecked())
-    {
-      link+="<b>"+text->text()+"</b></a>";
-    }
-  else if (!bold->isChecked()&&italic->isChecked())
-    {
-      link+="<i>"+text->text()+"</i></a>";
-    }
-  else if (bold->isChecked()&&italic->isChecked())
-    {
-      link+="<i><b>"+text->text()+"</b></i></a>";
-    }
-  else
-    {
-      link+=text->text()+"</a>";
-    }
-
-    return link;
-}
-
 
 cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
  :QWidget ( parent,name)
@@ -425,8 +413,8 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
   lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Comment:"));
 
-  text = new QLineEdit( this );
-  lay2->addWidget(text);
+  textEdit = new QLineEdit( this );
+  lay2->addWidget(textEdit);
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
@@ -436,13 +424,13 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
   lay2->addWidget(l_cell);
   l_cell->setText( "A1" );
 
-  bold=new QCheckBox(i18n("Bold"),this);
+  boldCheck=new QCheckBox(i18n("Bold"),this);
 
-  lay2->addWidget(bold);
+  lay2->addWidget(boldCheck);
 
-  italic=new QCheckBox(i18n("Italic"),this);
+  italicCheck=new QCheckBox(i18n("Italic"),this);
 
-  lay2->addWidget(italic);
+  lay2->addWidget(italicCheck);
 
   lay2->addStretch( 1 );
   
@@ -450,46 +438,30 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
-  text->setFocus();
+  textEdit->setFocus();
 }
 
-QString cellAnchor::apply()
+QString cellAnchor::text() const
 {
-  if ( l_cell->text().isEmpty() || text->text().isEmpty() )
-  {
-    KMessageBox::error( this, i18n("Area text or cell is empty.") );
-    return QString();
-  }
-  return createLink();
-
+  return textEdit->text();
 }
 
-QString cellAnchor::createLink() const
+QString cellAnchor::link() const
 {
-    QString end_link;
-    QString link;
-    link = "!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
-
-    if (bold->isChecked()&&!italic->isChecked())
-    {
-	link+="<b>"+text->text()+"</b></a>";
-    }
-    else if (!bold->isChecked()&&italic->isChecked())
-    {
-	link+="<i>"+text->text()+"</i></a>";
-    }
-    else if (bold->isChecked()&&italic->isChecked())
-    {
-	link+="<i><b>"+text->text()+"</b></i></a>";
-    }
-    else
-    {
-	link+=text->text()+"</a>";
-    }
-
-    return link;
+  QString str = m_pView->activeTable()->tableName() + "!" + 
+    l_cell->text().upper();
+   
+  return str;  
 }
 
+bool cellAnchor::bold() const
+{
+  return boldCheck->isChecked();
+}
 
+bool cellAnchor::italic() const
+{
+  return italicCheck->isChecked();
+}
 
 #include "kspread_dlg_anchor.moc"
