@@ -3387,7 +3387,7 @@ void KPrPage::setUseMasterBackground( bool useMasterBackground )
     m_useMasterBackground = useMasterBackground;
 }
 
-bool KPrPage::getUseMasterBackground() const
+bool KPrPage::useMasterBackground() const
 {
     return m_useMasterBackground;
 }

@@ -294,7 +294,7 @@ public:
 
 #if MASTERPAGE 
     void setUseMasterBackground( bool useMasterBackground );
-    bool getUseMasterBackground() const;
+    bool useMasterBackground() const;
 #endif
 
     /**

@@ -3322,7 +3322,7 @@ void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
                                              backDia->getBackGround(),
                                              page->background()->getBackGround(),
 #if MASTERPAGE
-                                             backDia->getUseMasterBackground(),
+                                             backDia->useMasterBackground(),
 #endif
                                              takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();

@@ -164,7 +164,7 @@ SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &setti
 , m_oldSettings( oldSettings )
 #if MASTERPAGE
 , m_useMasterBackground( useMasterBackground )
-, m_oldUseMasterBackground( page->getUseMasterBackground() )    
+, m_oldUseMasterBackground( page->useMasterBackground() )    
 #endif
 , m_takeGlobal( takeGlobal )
 , m_doc( doc )

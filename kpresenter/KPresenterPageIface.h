@@ -26,6 +26,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include "global.h"
 class KPrPage;
 
 class KPresenterPageIface :public DCOPObject
@@ -132,6 +133,10 @@ k_dcop:
     bool hasFooter()const;
     void setHeader( bool b );
     void setFooter( bool b );
+#if MASTERPAGE
+    void setUseMasterBackground( bool useMasterBackground );
+    bool KPresenterPageIface::useMasterBackground() const;
+#endif
 
 private:
     KPrPage *m_page;

@@ -368,7 +368,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
         if ( rect.intersects( pageRect ) )
         {
 #if MASTERPAGE            
-            if ( page->masterPage() && page->getUseMasterBackground() )
+            if ( page->masterPage() && page->useMasterBackground() )
                 page->masterPage()->background()->drawBackground( painter, m_view->zoomHandler(), rect, true );
             else    
                 page->background()->drawBackground( painter, m_view->zoomHandler(), rect, true );
@@ -402,7 +402,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
             return;
 
 #if MASTERPAGE
-        if ( page->masterPage() && page->getUseMasterBackground() )
+        if ( page->masterPage() && page->useMasterBackground() )
             page->masterPage()->background()->drawBackground( painter, desk.size(), crect, false );
         else    
             page->background()->drawBackground( painter, desk.size(), crect, false );

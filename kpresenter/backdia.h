@@ -76,7 +76,7 @@ public:
 
     KPBackGround::Settings getBackGround() const;
 #if MASTERPAGE
-    bool getUseMasterBackground() const;
+    bool useMasterBackground() const;
 #endif
 
 protected:
@@ -103,7 +103,7 @@ private:
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
 #if MASTERPAGE
-    QCheckBox *useMasterBackground;
+    QCheckBox *m_useMasterBackground;
 
     bool oldUseMasterBackground;
 #endif
