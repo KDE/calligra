@@ -3420,18 +3420,22 @@ void KWView::toolsPart()
 void KWView::tableProperties()
 {
     KWCanvas * canvas = m_gui->canvasWidget();
-    canvas->setMouseMode( KWCanvas::MM_EDIT );
-    KWTableDia *tableDia = new KWTableDia( this, 0, KWTableDia::EDIT, canvas, m_doc,
-                                           canvas->tableRows(),
-                                           canvas->tableCols(),
-                                           canvas->tableWidthMode(),
-                                           canvas->tableHeightMode(),
-                                           canvas->tableIsFloating(),
-                                           canvas->tableTemplateName());
-    tableDia->setCaption( i18n( "Adjust Table" ) );
-    if ( tableDia->exec() == QDialog::Rejected )
+    KWTableFrameSet *table = canvas->getCurrentTable();
+    if (table)
+    {
         canvas->setMouseMode( KWCanvas::MM_EDIT );
-    delete tableDia;
+        KWTableDia *tableDia = new KWTableDia( this, 0, KWTableDia::EDIT, canvas, m_doc,
+                                               table->getRows(),
+                                               table->getCols(),
+                                               canvas->tableWidthMode(),
+                                               canvas->tableHeightMode(),
+                                               canvas->tableIsFloating(),
+                                               canvas->tableTemplateName());
+        tableDia->setCaption( i18n( "Adjust Table" ) );
+        if ( tableDia->exec() == QDialog::Rejected )
+            canvas->setMouseMode( KWCanvas::MM_EDIT );
+        delete tableDia;
+    }
 }
 
 void KWView::tableInsertRow()
