@@ -545,8 +545,12 @@ void OOWriterWorker::writeMetaXml(void)
     zipWriteData( "\"" );
 
     // ### TODO: any reasons not to generate it?
-    zipWriteData( " meta:image-count=\"" );
+    zipWriteData( " meta:image-count=\"" ); // Why is this not specified in the OO specification section 2.1.19 (### TODO)
     zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
+    zipWriteData( "\"" );
+
+    zipWriteData( " meta:table-count=\"" );
+    zipWriteData( escapeOOText( QString::number ( m_tableNumber ) ) );
     zipWriteData( "\"" );
 
     zipWriteData( "/>\n" ); // meta:document-statistic
