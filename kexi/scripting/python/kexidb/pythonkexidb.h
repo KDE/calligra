@@ -12,7 +12,6 @@
 #define KROSS_PYTHONKEXIDB_H
 
 #include <Python.h>
-
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
@@ -60,7 +59,10 @@ namespace Kross
             Py::Object driverNames(const Py::Tuple&);
             Py::Object driver(const Py::Tuple&);
             Py::Object lookupByMime(const Py::Tuple&);
-            Py::Object createConnectionData(const Py::Tuple&);
+
+            Py::Object getConnectionData(const Py::Tuple&);
+            Py::Object getField(const Py::Tuple&);
+            Py::Object getTableSchema(const Py::Tuple&);
 
             /**
              * Return the shared KexiDB::DriverManager instance

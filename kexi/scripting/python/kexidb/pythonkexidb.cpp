@@ -16,6 +16,7 @@
 #include "pythonkexidbcursor.h"
 #include "pythonkexidbfield.h"
 #include "pythonkexidbfieldlist.h"
+#include "pythonkexidbschema.h"
 
 #include <string>
 
@@ -30,6 +31,8 @@ PythonKexiDB::PythonKexiDB()
     PythonKexiDBCursor::init_type();
     PythonKexiDBField::init_type();
     PythonKexiDBFieldList::init_type();
+    PythonKexiDBIndexSchema::init_type();
+    PythonKexiDBTableSchema::init_type();
 
     add_varargs_method("driverNames", &PythonKexiDB::driverNames,
         "list KexiDB.driverNames()\n"
@@ -48,9 +51,17 @@ PythonKexiDB::PythonKexiDB()
         "The lookup is case insensitive."
     );
 
-    add_varargs_method("createConnectionData", &PythonKexiDB::createConnectionData,
-        "KexiDBConnectionData KexiDB.createConnectionData()\n"
+    add_varargs_method("getConnectionData", &PythonKexiDB::getConnectionData,
+        "KexiDBConnectionData KexiDB.getConnectionData()\n"
         "Returns a new KexiDBConnectionData object."
+    );
+    add_varargs_method("getField", &PythonKexiDB::getField,
+        "KexiDBField KexiDB.getField()\n"
+        "Returns a new KexiDBField object."
+    );
+    add_varargs_method("getTableSchema", &PythonKexiDB::getTableSchema,
+        "KexiDBTableSchema KexiDB.getTableSchema()\n"
+        "Returns a new KexiDBTableSchema object."
     );
 
     initialize(
@@ -106,10 +117,32 @@ Py::Object PythonKexiDB::lookupByMime(const Py::Tuple& args)
     return PythonUtils::toPyObject(driverManager().lookupByMime(mimetype));
 }
 
-Py::Object PythonKexiDB::createConnectionData(const Py::Tuple& args)
+Py::Object PythonKexiDB::getConnectionData(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 0, 0);
     return Py::asObject( new PythonKexiDBConnectionData() );
     //FIXME: does the Python API garbage collect those objects or do we need it???
 }
+
+Py::Object PythonKexiDB::getField(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    QString name = args[0].as_string().c_str();
+    KexiDB::Field* field = new KexiDB::Field(name, KexiDB::Field::Text);
+    return Py::asObject( new PythonKexiDBField(field) );
+    /*TODO
+    Field(TableSchema *tableSchema);
+    Field(QuerySchema *querySchema, BaseExpr* expr = 0);
+    Field();
+    */
+}
+
+Py::Object PythonKexiDB::getTableSchema(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    QString name = args[0].as_string().c_str();
+    KexiDB::TableSchema* tableschema = new KexiDB::TableSchema(name);
+    return Py::asObject( new PythonKexiDBTableSchema(tableschema) );
+}
+
 

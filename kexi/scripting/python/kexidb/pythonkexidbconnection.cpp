@@ -15,6 +15,7 @@
 #include "pythonkexidbdriver.h"
 #include "pythonkexidbcursor.h"
 #include "pythonkexidbfieldlist.h"
+#include "pythonkexidbschema.h"
 
 using namespace Kross;
 
@@ -111,6 +112,16 @@ void PythonKexiDBConnection::init_type(void)
     add_varargs_method("executeSQL", &PythonKexiDBConnection::executeSQL,
         "boolean KexiDBConnection.executeSQL(sqlstatement)\n"
     );
+
+    add_varargs_method("createTable", &PythonKexiDBConnection::createTable,
+        "boolean KexiDBConnection.createTable(KexiDBTableSchema)\n"
+    );
+    add_varargs_method("dropTable", &PythonKexiDBConnection::dropTable,
+        "boolean KexiDBConnection.dropTable(KexiDBTableSchema or tablename)\n"
+    );
+
+    Py::Object createTable(const Py::Tuple&);
+            Py::Object dropTable(const Py::Tuple&);
 }
 
 bool PythonKexiDBConnection::accepts(PyObject* pyobj) const
@@ -306,7 +317,29 @@ Py::Object PythonKexiDBConnection::executeSQL(const Py::Tuple& args)
     PythonKexiDB::checkObject(d->connection);
     QString sql = args[0].as_string().c_str();
     if(sql.isEmpty() || ! args[0].isString())
-        throw Py::TypeError("KexiDBConnection.executeSQL(sqlstatement) Invalid SQL string.");
+        throw Py::TypeError("boolean KexiDBConnection.executeSQL(sqlstatement) Invalid argument.");
     return Py::Int( d->connection->executeSQL(sql) );
+}
+
+Py::Object PythonKexiDBConnection::createTable(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
+    PythonKexiDBTableSchema* tableschema = obj.extensionObject();
+    if(! tableschema)
+        throw Py::TypeError("boolean KexiDBConnection.createTable(KexiDBTableSchema) Invalid argument.");
+    return Py::Int( d->connection->createTable((KexiDB::TableSchema*)tableschema->getSchema(), false) );
+}
+
+Py::Object PythonKexiDBConnection::dropTable(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    if(args[0].isString())
+        return Py::Int( d->connection->dropTable(args[0].as_string().c_str()) );
+    Py::ExtensionObject<PythonKexiDBTableSchema> obj(args[0]);
+    PythonKexiDBTableSchema* tableschema = obj.extensionObject();
+    if(! tableschema)
+        throw Py::TypeError("boolean KexiDBConnection.dropTable(KexiDBTableSchema or string) Invalid argument.");
+    return Py::Int( d->connection->dropTable((KexiDB::TableSchema*)tableschema->getSchema()) );
 }
 

@@ -12,12 +12,10 @@
 #define KROSS_PYTHONKEXIDBCONNECTION_H
 
 #include <Python.h>
-
-#include <iostream>
-
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
+//#include <iostream>
 #include <kexidb/drivermanager.h>
 #include <kexidb/cursor.h>
 
@@ -69,6 +67,9 @@ namespace Kross
             Py::Object insertRecord(const Py::Tuple&);
             Py::Object createDatabase(const Py::Tuple&);
             Py::Object dropDatabase(const Py::Tuple&);
+
+            Py::Object createTable(const Py::Tuple&);
+            Py::Object dropTable(const Py::Tuple&);
 
             //bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
             //tristate dropTable( TableSchema* tableSchema );

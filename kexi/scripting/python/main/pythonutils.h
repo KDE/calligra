@@ -12,14 +12,13 @@
 #define KROSS_PYTHONUTILS_H
 
 #include <Python.h>
+#include "../CXX/Objects.hxx"
+#include "../CXX/Extensions.hxx"
 
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qvariant.h>
-
-#include "../CXX/Objects.hxx"
-#include "../CXX/Extensions.hxx"
 
 //#include <kdebug.h>
 //#include <qguardedptr.h>

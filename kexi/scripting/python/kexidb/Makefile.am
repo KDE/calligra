@@ -5,7 +5,8 @@ libkrosspythonkexidb_la_SOURCES = \
     pythonkexidbdriver.cpp \
     pythonkexidbconnectiondata.cpp pythonkexidbconnection.cpp \
     pythonkexidbcursor.cpp \
-    pythonkexidbfield.cpp pythonkexidbfieldlist.cpp
+    pythonkexidbfield.cpp pythonkexidbfieldlist.cpp \
+    pythonkexidbschema.cpp
 
 libkrosspythonkexidb_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved
 libkrosspythonkexidb_la_LIBADD = \

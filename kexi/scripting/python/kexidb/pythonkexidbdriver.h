@@ -12,7 +12,6 @@
 #define KROSS_PYTHONKEXIDBDRIVER_H
 
 #include <Python.h>
-
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
@@ -66,7 +65,7 @@ namespace Kross
         private:
             PythonKexiDBDriverPrivate* d;
 
-            Py::Object createConnection(const Py::Tuple&);
+            Py::Object getConnection(const Py::Tuple&);
             Py::Object connectionList(const Py::Tuple&);
     };
 

@@ -2,7 +2,7 @@ PYTHON_INCLUDE=""
 PYTHON_LIB=""
 PYTHON_FLAGS=""
 
-for pyver in python python2.4 python2.3 python2.2
+for pyver in python python2.4 python2.3 python2.2 python2.1 python2.0
 do
     for incdir in "/usr/include/$pyver" \
                   "/usr/local/include/$pyver" \
@@ -14,8 +14,8 @@ do
         if test -f "$incdir/Python.h"
         then
             PYTHON_LIB="-l$pyver"
-            #PYTHON_LIB="-l$pylib"
             PYTHON_INCLUDE="-I$incdir"
+            #PYTHON_LIB="-l$pylib"
             #PYTHON_FLAGS="-L$pylibdir"
             break
         fi

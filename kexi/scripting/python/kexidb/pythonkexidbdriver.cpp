@@ -49,9 +49,9 @@ void PythonKexiDBDriver::init_type(void)
     //behaviors().supportSetattr();
 
     add_varargs_method(
-        "createConnection",
-        &PythonKexiDBDriver::createConnection,
-        "KexiDBConnection KexiDBDriver.createConnection(connectiondata)\n"
+        "getConnection",
+        &PythonKexiDBDriver::getConnection,
+        "KexiDBConnection KexiDBDriver.getConnection(connectiondata)\n"
         "Create a new KexiDBConnection object. "
     );
     add_varargs_method(
@@ -68,22 +68,22 @@ bool PythonKexiDBDriver::accepts(PyObject* pyobj) const
     return pyobj && Py::PythonExtension<PythonKexiDBDriver>::check(pyobj);
 }
 
-Py::Object PythonKexiDBDriver::createConnection(const Py::Tuple& args)
+Py::Object PythonKexiDBDriver::getConnection(const Py::Tuple& args)
 {
     PythonUtils::checkArgs(args, 1, 1);
     if(! PythonKexiDBConnectionData::check(args[0]))
-        throw Py::TypeError("KexiDBDriver.createConnection(KexiDBConnectionData) expects a KexiDBConnectionData object as single parameter.");
+        throw Py::TypeError("KexiDBDriver.getConnection(KexiDBConnectionData) expects a KexiDBConnectionData object as single parameter.");
 
     Py::ExtensionObject<PythonKexiDBConnectionData> obj(args[0]);
     PythonKexiDBConnectionData* connectiondata = obj.extensionObject();
     if(! connectiondata)
-        throw Py::RuntimeError("KexiDBDriver.createConnection(KexiDBConnectionData) Failed to determinate the defined KexiDBConnectionData object.");
+        throw Py::RuntimeError("KexiDBDriver.getConnection(KexiDBConnectionData) Failed to determinate the defined KexiDBConnectionData object.");
 
     QGuardedPtr<KexiDB::Connection> connection = d->driver->createConnection(*connectiondata->getConnectionData());
     if(! connection)
-        throw Py::RuntimeError("KexiDBDriver.createConnection(connectiondict) Failed to create connection.");
+        throw Py::RuntimeError("KexiDBDriver.getConnection(connectiondict) Failed to create connection.");
     if(connection->error())
-        throw Py::RuntimeError(QString("KexiDBDriver.createConnection(connectiondict) KexiDB::Connection error: " + connection->errorMsg()).latin1());
+        throw Py::RuntimeError(QString("KexiDBDriver.getConnection(connectiondict) KexiDB::Connection error: " + connection->errorMsg()).latin1());
 
     return Py::asObject( new PythonKexiDBConnection(this, connectiondata, connection) );
 }

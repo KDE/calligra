@@ -12,7 +12,6 @@
 #define KROSS_PYTHONKEXIDBCURSOR_H
 
 #include <Python.h>
-
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
