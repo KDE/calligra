@@ -110,6 +110,21 @@ protected:
     ParserNode* m_rhs;
 };
 
+class AssignNode : public OperatorNode {
+public:
+    AssignNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
+    virtual void buildXML( QDomDocument doc, QDomElement element );
+};
+
+void AssignNode::buildXML( QDomDocument doc, QDomElement element )
+{
+    m_lhs->buildXML( doc, element );
+    QDomElement de = doc.createElement( "TEXT" );
+    de.setAttribute( "CHAR", QString( m_type ) );
+    element.appendChild( de );
+    m_rhs->buildXML( doc, element );
+}
+
 class ExprNode : public OperatorNode {
 public:
     ExprNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
@@ -218,9 +233,38 @@ public:
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument doc, QDomElement element );
 private:
+    void buildSymbolXML( QDomDocument doc, QDomElement element, KFormula::SymbolType type );
     PrimaryNode* m_name;
     QPtrList<ParserNode> m_args;
 };
+
+void FunctionNode::buildSymbolXML( QDomDocument doc, QDomElement element, KFormula::SymbolType type )
+{
+    QDomElement symbol = doc.createElement( "SYMBOL" );
+    symbol.setAttribute( "TYPE", type );
+    QDomElement content = doc.createElement( "CONTENT" );
+    QDomElement sequence = doc.createElement( "SEQUENCE" );
+    m_args.at( 0 )->buildXML( doc, sequence );
+    content.appendChild( sequence );
+    symbol.appendChild( content );
+    if ( m_args.count() > 2 ) {
+        ParserNode* lowerLimit = m_args.at( m_args.count()-2 );
+        ParserNode* upperLimit = m_args.at( m_args.count()-1 );
+
+        QDomElement lower = doc.createElement( "LOWER" );
+        sequence = doc.createElement( "SEQUENCE" );
+        lowerLimit->buildXML( doc, sequence );
+        lower.appendChild( sequence );
+        symbol.appendChild( lower );
+
+        QDomElement upper = doc.createElement( "UPPER" );
+        sequence = doc.createElement( "SEQUENCE" );
+        upperLimit->buildXML( doc, sequence );
+        upper.appendChild( sequence );
+        symbol.appendChild( upper );
+    }
+    element.appendChild( symbol );
+}
 
 void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
 {
@@ -247,35 +291,15 @@ void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
         index.appendChild( upperRight );
         element.appendChild( index );
     }
-    else if ( ( m_name->primary() == "sum" ) && ( m_args.count() == 1 ) ) {
-        QDomElement symbol = doc.createElement( "SYMBOL" );
-        symbol.setAttribute( "TYPE", KFormula::Sum );
-        QDomElement content = doc.createElement( "CONTENT" );
-        QDomElement sequence = doc.createElement( "SEQUENCE" );
-        m_args.at( 0 )->buildXML( doc, sequence );
-        content.appendChild( sequence );
-        symbol.appendChild( content );
-        element.appendChild( symbol );
+    else if ( ( m_name->primary() == "sum" ) && ( m_args.count() > 0 ) ) {
+        buildSymbolXML( doc, element, KFormula::Sum );
     }
-    else if ( ( m_name->primary() == "prod" ) && ( m_args.count() == 1 ) ) {
-        QDomElement symbol = doc.createElement( "SYMBOL" );
-        symbol.setAttribute( "TYPE", KFormula::Product );
-        QDomElement content = doc.createElement( "CONTENT" );
-        QDomElement sequence = doc.createElement( "SEQUENCE" );
-        m_args.at( 0 )->buildXML( doc, sequence );
-        content.appendChild( sequence );
-        symbol.appendChild( content );
-        element.appendChild( symbol );
+    else if ( ( m_name->primary() == "prod" ) && ( m_args.count() > 0 ) ) {
+        buildSymbolXML( doc, element, KFormula::Product );
     }
-    else if ( ( m_name->primary() == "int" ) && ( m_args.count() == 1 ) ) {
-        QDomElement symbol = doc.createElement( "SYMBOL" );
-        symbol.setAttribute( "TYPE", KFormula::Integral );
-        QDomElement content = doc.createElement( "CONTENT" );
-        QDomElement sequence = doc.createElement( "SEQUENCE" );
-        m_args.at( 0 )->buildXML( doc, sequence );
-        content.appendChild( sequence );
-        symbol.appendChild( content );
-        element.appendChild( symbol );
+    else if ( ( ( m_name->primary() == "int" ) || ( m_name->primary() == "integrate" ) )
+              && ( m_args.count() > 0 ) ) {
+        buildSymbolXML( doc, element, KFormula::Integral );
     }
     else {
         m_name->buildXML( doc, element );
@@ -410,7 +434,7 @@ FormulaStringParser::~FormulaStringParser()
 QDomDocument FormulaStringParser::parse()
 {
     nextToken();
-    head = parseExpr();
+    head = parseAssign();
     //head->output( cout );
     if ( !eol() ) {
         error( QString( i18n( "abouted parsing at %1" ) ).arg( pos ) );
@@ -425,6 +449,23 @@ QDomDocument FormulaStringParser::parse()
 
     kdDebug( KFormula::DEBUGID ) << doc.toString() << endl;
     return doc;
+}
+
+ParserNode* FormulaStringParser::parseAssign()
+{
+    ParserNode* lhs = parseExpr();
+    for ( ;; ) {
+        switch ( currentType ) {
+        case ASSIGN: {
+            QString c = current;
+            nextToken();
+            lhs = new AssignNode( c, lhs, parseExpr() );
+            break;
+        }
+        default:
+            return lhs;
+        }
+    }
 }
 
 ParserNode* FormulaStringParser::parseExpr()
@@ -489,13 +530,6 @@ ParserNode* FormulaStringParser::parsePrimary()
         return node;
     }
     case NAME: {
-//         if ( current == "sqrt" ) {
-//             nextToken();
-//             expect( LP, "'(' expected" );
-//             ParserNode* node = parseExpr();
-//             expect( RP, "')' expected" );
-//             return new SqrtNode( node );
-//         }
         PrimaryNode* node = new PrimaryNode( current );
         node->setUnicode( m_symbolTable.unicode( current ) );
         nextToken();
@@ -557,6 +591,11 @@ ParserNode* FormulaStringParser::parsePrimary()
         }
         return node;
     }
+    case OTHER: {
+        ParserNode* node = new PrimaryNode( current );
+        nextToken();
+        return node;
+    }
     default:
         error( QString( i18n( "Unexpected token at %1" ) ).arg( pos ) );
         return new PrimaryNode( current );
@@ -575,7 +614,10 @@ void FormulaStringParser::expect( TokenType type, QString msg )
 
 QString FormulaStringParser::nextToken()
 {
-    while ( !eol() && m_formula[pos].isSpace() ) {
+    // We skip any ' or " so that we can parse string literals.
+    while ( !eol() && ( m_formula[pos].isSpace() ||
+                        ( m_formula[pos] == '"' ) ||
+                        ( m_formula[pos] == '\'' ) ) ) {
         pos++;
     }
     if ( eol() ) {
@@ -644,6 +686,10 @@ QString FormulaStringParser::nextToken()
             pos++;
             currentType = COMMA;
             return current = ",";
+        case '=':
+            pos++;
+            currentType = ASSIGN;
+            return current = "=";
         default:
             pos++;
             currentType = OTHER;

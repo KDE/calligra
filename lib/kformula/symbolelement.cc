@@ -765,7 +765,14 @@ QString SymbolElement::formulaString()
     default:
         sym="(";
     }
-    return sym + content->formulaString() + ")";
+    sym += content->formulaString();
+    if ( hasLower() ) {
+        sym += ", " + lower->formulaString();
+    }
+    if ( hasUpper() ) {
+        sym += ", " + upper->formulaString();
+    }
+    return sym + ")";
 }
 
 KFORMULA_NAMESPACE_END
