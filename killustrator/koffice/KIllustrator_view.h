@@ -60,6 +60,12 @@
 #define ID_EDIT_DELETE        2006
 #define ID_EDIT_ZOOM          2007
 
+#define ID_TOOL_EP_MOVE       1101
+#define ID_TOOL_EP_INSERT     1102
+#define ID_TOOL_EP_DELETE     1103
+#define ID_TOOL_EP_SPLIT      1104
+#define ID_TOOL_EP_JOIN       1105
+
 class KIlustratorView;
 class KIllustratorDocument;
 class Canvas;

@@ -95,7 +95,9 @@ OpenParts::View_ptr KIllustratorDocument::createView () {
 }
 
 void KIllustratorDocument::removeView (KIllustratorView* view) {
+  m_lstViews.setAutoDelete (false);
   m_lstViews.removeRef (view);
+  m_lstViews.setAutoDelete (true);
 }
 
 int KIllustratorDocument::viewCount () {

@@ -284,7 +284,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
 				  "transformMirror", 0);
 
   // Menu: Extras  
-  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
+  //  menubar->insertMenu (i18n ("&Extras"), m_vMenuExtras, -1, -1);
 
   // Menu: Help
   m_vMenuHelp = menubar->helpMenu ();
@@ -521,29 +521,34 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
     factory->create (OpenPartsUI::ToolBarFactory::Transient);
 
   tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/pointtool.xpm";
+  tmp += "/killustrator/pics/moveNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
   m_idMovePoint = 
-    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+    m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_MOVE, 
 					SIGNAL (clicked ()), 
 					this, "toolMovePoint", true, 
 					i18n ("Move Point"), -1);
+  m_vToolBarEditPoint->setToggle (ID_TOOL_EP_MOVE, true);
+
   tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/pointtool.xpm";
+  tmp += "/killustrator/pics/newNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
-  m_idMovePoint = 
-    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+  m_idInsertPoint = 
+    m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_INSERT, 
 					SIGNAL (clicked ()), 
 					this, "toolInsertPoint", true, 
 					i18n ("Insert Point"), -1);
+  m_vToolBarEditPoint->setToggle (ID_TOOL_EP_INSERT, true);
+
   tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/pointtool.xpm";
+  tmp += "/killustrator/pics/deleteNode.xpm";
   pix = OPUIUtils::loadPixmap (tmp);
-  m_idMovePoint = 
-    m_vToolBarEditPoint->insertButton2 (pix, 1, 
+  m_idRemovePoint = 
+    m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_DELETE, 
 					SIGNAL (clicked ()), 
 					this, "toolRemovePoint", true, 
 					i18n ("Remove Point"), -1);
+  m_vToolBarEditPoint->setToggle (ID_TOOL_EP_DELETE, true);
 
   m_vToolBarEditPoint->setBarPos (OpenPartsUI::Floating);
   m_vToolBarEditPoint->enable (OpenPartsUI::Hide);
@@ -963,6 +968,8 @@ void KIllustratorView::toolSelection () {
 
 void KIllustratorView::toolEditPoint () {
   m_vToolBarTools->setButton (m_idActiveTool, false);
+  toolMovePoint ();
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, true);
   m_vToolBarEditPoint->enable (OpenPartsUI::Show);
   tcontroller->toolSelected (m_idActiveTool = ID_TOOL_EDITPOINT);
 }
@@ -1057,18 +1064,18 @@ void KIllustratorView::popupForSelection (int x, int y) {
 
 void KIllustratorView::toolMovePoint () {
   editPointTool->setMode (EditPointTool::MovePoint);
-  m_vToolBarEditPoint->setButton (m_idInsertPoint, false);
-  m_vToolBarEditPoint->setButton (m_idRemovePoint, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_INSERT, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_DELETE, false);
 }
 
 void KIllustratorView::toolInsertPoint () {
   editPointTool->setMode (EditPointTool::InsertPoint);
-  m_vToolBarEditPoint->setButton (m_idMovePoint, false);
-  m_vToolBarEditPoint->setButton (m_idRemovePoint, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_DELETE, false);
 }
 
 void KIllustratorView::toolRemovePoint () {
   editPointTool->setMode (EditPointTool::RemovePoint);
-  m_vToolBarEditPoint->setButton (m_idMovePoint, false);
-  m_vToolBarEditPoint->setButton (m_idInsertPoint, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_MOVE, false);
+  m_vToolBarEditPoint->setButton (ID_TOOL_EP_INSERT, false);
 }

@@ -37,7 +37,12 @@ deletelayer.xpm \
 lowerlayer.xpm \
 newlayer.xpm \
 raiselayer.xpm \
-eye.xpm
+eye.xpm \
+deleteNode.xpm \
+joinNodes.xpm \
+moveNode.xpm \
+newNode.xpm \
+split.xpm
 
 EXTRA_DIST = $(data_DATA) 
 

@@ -406,23 +406,23 @@ void KIllustrator::initToolBars () {
   /* the "edit point" toolbar */
   editPointToolbar = new KToolBar (this);
   KRadioGroup* toolGroup2 = new KRadioGroup (editPointToolbar);
-  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("moveNode.xpm"), 
 			     ID_TOOL_EP_MOVE, true, i18n ("Move Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_MOVE);
   toolGroup2->addButton (ID_TOOL_EP_MOVE);
-  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("newNode.xpm"), 
 			     ID_TOOL_EP_ADD, true, i18n ("Insert Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_ADD);
   toolGroup2->addButton (ID_TOOL_EP_ADD);
-  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("deleteNode.xpm"), 
 			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_DEL);
   toolGroup2->addButton (ID_TOOL_EP_DEL);
-  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("split.xpm"), 
 			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
   editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
   toolGroup2->addButton (ID_TOOL_EP_SPLIT);
-  editPointToolbar->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("joinNodes.xpm"), 
 			     ID_TOOL_EP_JOIN, true, i18n ("Join Lines"));
   editPointToolbar->setToggle (ID_TOOL_EP_JOIN);
   toolGroup2->addButton (ID_TOOL_EP_JOIN);
