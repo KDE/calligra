@@ -19,8 +19,14 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <qstring.h>
+#include <qdict.h>
+
+#include <kdebug.h>
+
 #include <koStore.h>
 
+#include "kword13picture.h"
 #include "kword13document.h"
 #include "kword13postparsing.h"
 
@@ -33,12 +39,31 @@ KWord13PostParsing::~KWord13PostParsing(void)
     delete m_kwordDocument;
 }
 
+bool KWord13PostParsing::postParsePictures( KoStore* store )
+{
+    if ( ! m_kwordDocument )
+        return false;
+        
+    for ( QDictIterator<KWord13Picture> it( m_kwordDocument->m_pictureDict ) ; it.current(); ++it )
+    {
+        kdDebug(30520) << "Loading... " << it.currentKey() << endl;
+        if ( ! it.current()->loadPicture( store ) )
+        {
+            kdWarning(30520) << "Could not load picture!" << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
 
 bool KWord13PostParsing::postParse( KoStore* store, KWord13Document& doc )
 {
-    // Do check if it is the same document if clled twice
+    // ### TODO: check if it is the same document if called twice
     m_kwordDocument = &doc;
     
+    // ### TODO: return value
+    postParsePictures( store );
     // ### TODO
     
     return 1;

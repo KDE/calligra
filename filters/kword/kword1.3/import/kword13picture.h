@@ -22,12 +22,22 @@
 #ifndef KWORD_1_3_PICTURE
 #define KWORD_1_3_PICTURE
 
+class KTempFile;
+class KoStore;
+
 #include <qstring.h>
 
 class KWord13Picture
 {
 public:
+    KWord13Picture( void );
+    ~KWord13Picture( void );
+public:
+    bool loadPicture( KoStore* store );
+public:
     QString m_storeName; ///< Name of the file in store
+    KTempFile* m_tempFile; ///< Temporary file
+    bool m_valid; ///< Is the picture valid?
 };
 
 #endif // KWORD_1_3_PICTURE
