@@ -1,3 +1,30 @@
+since 1.2 relase ( 'til 1.3 beta 1 :-)
+======================================
+
+- real more than one currency support
+- new date and time formats
+- enhanced the import dlg to support "ignore double delimiters"
+- enhanced the export dialog so that you can choose
+   - table to export
+   - delimiters between tables
+   - delimiter between cells
+   - character for quotes
+- Goal Seek message fixes + you can select the cells with the mouse now
+- enhanced Gnumeric import filter to support 
+    - background ()color + patterns), borders (colors + style)
+    - font formating, text alignment
+    - format parsing (date, time, numbers,...), cell height, width
+    - print range, page setup, hidden columns/row, comments
+
+
+
+
+    
+=====================================================    
+After 1.2 above
+=====================================================
+
+
 Changes from 1.1 to 1.2
 =======================
 
