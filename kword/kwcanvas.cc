@@ -601,18 +601,18 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     p = m_boundingRect.topLeft();
     p.setY( cy - m_hotSpot.y() );
     m_boundingRect.moveTopLeft( p );
-    /* -- Don't limit to the current page. Let the user move a frame between pages --
-    if ( m_boundingRect.top() < page * doc->ptPaperHeight() )
+    // -- Don't limit to the current page. Let the user move a frame between pages --
+    // But we still want to limit to 0 - lastPage
+    if ( m_boundingRect.top() < 0 )
     {
-        m_boundingRect.moveBy( 0, page * doc->ptPaperHeight() - m_boundingRect.top() );
+        m_boundingRect.moveBy( 0, 0 - m_boundingRect.top() );
         adjustPosNeeded = true;
     }
-    else if ( m_boundingRect.bottom() > ( page+1 ) * doc->ptPaperHeight() )
+    else if ( m_boundingRect.bottom() > ( doc->getPages()+1 ) * doc->ptPaperHeight() )
     {
-        m_boundingRect.moveBy( 0, ( page+1 ) * doc->ptPaperHeight() - m_boundingRect.bottom() );
+        m_boundingRect.moveBy( 0, ( doc->getPages()+1 ) * doc->ptPaperHeight() - m_boundingRect.bottom() );
         adjustPosNeeded = true;
     }
-    */
 
     /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
               << m_boundingRect.top() - oldBoundingRect.top() << endl;

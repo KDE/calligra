@@ -986,10 +986,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         QListIterator<KWFrame> fIt( m_framesOnTop );
         for ( ; fIt.current() ; ++fIt )
         {
-            QRect r = painter->xForm( kWordDocument()->zoomRect( *fIt.current() ) );
-            // ### plan for a one-pixel border. Maybe we should use the real border width
-            r = QRect( r.x() - 1, r.y() - 1,
-                       r.width() + 2, r.height() + 2 );
+            QRect r = painter->xForm( fIt.current()->outerRect() );
             //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }

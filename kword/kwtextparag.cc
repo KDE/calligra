@@ -314,40 +314,39 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         int rightX = rect().width() - rightMargin() /*documentWidth()-1*/;
         int topY = lineY( 0 ); // Maybe lineY( 0 ) is always 0. Not sure.
         int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing );
+
+        int topBorderWidth = ( m_layout.topBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) /* + 0.5*/) ) : 0;
+        // reason for 0.5 commented out: the rounding would need to be done in topMargin() etc. as well
+        int bottomBorderWidth = ( m_layout.bottomBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) /*+ 0.5*/) ) : 0;
+        int leftBorderWidth = ( m_layout.leftBorder.ptWidth > 0 ) ? QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) /*+ 0.5*/) ) : 0;
+        int rightBorderWidth = ( m_layout.rightBorder.ptWidth > 0 ) ?  QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) /*+ 0.5*/) ) : 0;
+
+        //kdDebug() << "KWTextParag::paint top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+        //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
-        if ( m_layout.topBorder.ptWidth > 0 )
+        if ( topBorderWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) /* + 0.5*/) );
-            // the rounding would need to be done in topMargin() etc. as well
-            // And the / 2 issue is due to the drawLine thing... so rounding doesn't matter much ?
-            //kdDebug() << "KWTextParag::paint topBorder " << width << endl;
-            painter.setPen( Border::borderPen( m_layout.topBorder, width ) );
-            width /= 2;
-            painter.drawLine( leftX-width*2, topY-width, rightX+width*2, topY-width );
+            painter.setPen( Border::borderPen( m_layout.topBorder, topBorderWidth ) );
+            int y = topY - topBorderWidth + topBorderWidth/2;
+            painter.drawLine( leftX-leftBorderWidth, y, rightX+rightBorderWidth, y );
         }
-        if ( m_layout.bottomBorder.ptWidth > 0 )
+        if ( bottomBorderWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) /*+ 0.5*/) );
-            //kdDebug() << "KWTextParag::paint bottomBorder " << width << endl;
-            painter.setPen( Border::borderPen( m_layout.bottomBorder, width ) );
-            width /= 2;
-            painter.drawLine( leftX-width*2, bottomY+width, rightX+width*2, bottomY+width );
+            painter.setPen( Border::borderPen( m_layout.bottomBorder, bottomBorderWidth ) );
+            int y = bottomY + bottomBorderWidth/2;
+            painter.drawLine( leftX-leftBorderWidth, y, rightX+rightBorderWidth, y );
         }
-        if ( m_layout.leftBorder.ptWidth > 0 )
+        if ( leftBorderWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) /*+ 0.5*/) );
-            //kdDebug() << "KWTextParag::paint leftBorder " << width << endl;
-            painter.setPen( Border::borderPen( m_layout.leftBorder, width ) );
-            width /= 2;
-            painter.drawLine( leftX-width, topY-width*2, leftX-width, bottomY+width*2 );
+            painter.setPen( Border::borderPen( m_layout.leftBorder, leftBorderWidth ) );
+            int x = leftX - leftBorderWidth + leftBorderWidth/2;
+            painter.drawLine( x, topY-topBorderWidth, x, bottomY+bottomBorderWidth );
         }
-        if ( m_layout.rightBorder.ptWidth > 0 )
+        if ( rightBorderWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) /*+ 0.5*/) );
-            //kdDebug() << "KWTextParag::paint rightBorder " << width << endl;
-            painter.setPen( Border::borderPen( m_layout.rightBorder, width ) );
-            width /= 2;
-            painter.drawLine( rightX+width, topY-width*2, rightX+width, bottomY+width*2 );
+            painter.setPen( Border::borderPen( m_layout.rightBorder, rightBorderWidth ) );
+            int x = rightX + leftBorderWidth/2;
+            painter.drawLine( x, topY-topBorderWidth, x, bottomY+bottomBorderWidth );
         }
     }
 }
