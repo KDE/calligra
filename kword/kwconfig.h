@@ -28,6 +28,7 @@ class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
 class KConfig;
+class QComboBox;
 
 class configureSpellPage : public QObject
 {
@@ -64,6 +65,20 @@ private:
     KIntNumInput *m_nbPagePerRow;
 };
 
+class configureMiscPage : public QObject
+{
+    Q_OBJECT
+public:
+    configureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
+    void apply();
+    void slotDefault();
+private:
+    KWView* m_pView;
+    KConfig* config;
+    QComboBox *m_unit;
+    int m_oldUnit;
+};
+
 class KWConfig : public KDialogBase
 {
     Q_OBJECT
@@ -75,6 +90,7 @@ public slots:
 private:
     configureSpellPage *_spellPage;
     configureInterfacePage *_interfacePage;
+    configureMiscPage *_miscPage;
 };
 
 

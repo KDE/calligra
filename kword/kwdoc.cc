@@ -330,6 +330,7 @@ bool KWDocument::initDoc()
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
         resetURL();
         ok = loadNativeFormat( fileName );
+        initUnit();
         setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
         KURL url( _template);
@@ -339,10 +340,23 @@ bool KWDocument::initDoc()
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
         resetURL();
         ok = loadNativeFormat( fileName );
+        initUnit();
         setEmpty();
     }
     setModified( FALSE );
     return ok;
+}
+
+void KWDocument::initUnit()
+{
+    //load unit config after we load file.
+    //load it for new file or empty file
+    KConfig *config = KWFactory::global()->config();
+    if(config->hasGroup("Misc") )
+    {
+        config->setGroup( "Misc" );
+        setUnit(KWUnit::unit( config->readEntry("Units",KWUnit::unitName(KWUnit::U_MM  ))));
+    }
 }
 
 void KWDocument::initEmpty()

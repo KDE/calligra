@@ -32,6 +32,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qcombobox.h>
+#include <qlabel.h>
 
 #include "kwconfig.h"
 #include "kwview.h"
@@ -54,6 +56,10 @@ KWConfig::KWConfig( KWView* parent )
                               BarIcon("misc", KIcon::SizeMedium) );
   _interfacePage=new configureInterfacePage(parent, page2);
 
+   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc"),
+                              BarIcon("misc", KIcon::SizeMedium) );
+  _miscPage=new configureMiscPage(parent, page3);
+
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
 
@@ -61,6 +67,7 @@ void KWConfig::slotApply()
 {
     _spellPage->apply();
     _interfacePage->apply();
+    _miscPage->apply();
 }
 
 void KWConfig::slotDefault()
@@ -72,6 +79,9 @@ void KWConfig::slotDefault()
             break;
         case 1:
             _interfacePage->slotDefault();
+            break;
+        case 2:
+            _miscPage->slotDefault();
             break;
         default:
             break;
@@ -105,7 +115,6 @@ configureSpellPage::configureSpellPage( KWView *_view, QVBox *box, char *name )
         _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
 #endif
-  //box->addWidget( tmpQGroupBox );
 }
 
 void configureSpellPage::apply()
@@ -309,6 +318,82 @@ void configureInterfacePage::slotDefault()
     recentFiles->setValue(10);
     showRuler->setChecked(true);
     autoSave->setValue(KoDocument::defaultAutoSave()/60);
+}
+
+
+configureMiscPage::configureMiscPage( KWView *_view, QVBox *box, char *name )
+ : QObject( box->parent(), name )
+{
+    m_pView=_view;
+    config = KWFactory::global()->config();
+    KWUnit::Unit unit = m_pView->kWordDocument()->getUnit();
+    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+    tmpQGroupBox->setTitle(i18n("Misc"));
+
+    QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+
+    QString unitType=KWUnit::unitName(unit);
+    if( config->hasGroup("Misc") )
+    {
+        config->setGroup( "Misc" );
+        unitType=config->readEntry("Units",unitType);
+    }
+
+    QLabel *unitLabel= new QLabel(i18n("Unit:"),tmpQGroupBox);
+    grid->addWidget(unitLabel,0,0);
+
+    QStringList listUnit;
+    listUnit<<i18n("Millimeters (mm)");
+    listUnit<<i18n("Inches (inch)");
+    listUnit<<i18n("points (pt)" );
+    m_unit = new QComboBox( tmpQGroupBox );
+    m_unit->insertStringList(listUnit);
+    m_oldUnit=0;
+    switch (KWUnit::unit( unitType ) )
+    {
+        case KWUnit::U_MM:
+            m_oldUnit=0;
+            break;
+        case KWUnit::U_INCH:
+            m_oldUnit=1;
+            break;
+        case KWUnit::U_PT:
+        default:
+            m_oldUnit=2;
+    }
+    m_unit->setCurrentItem(m_oldUnit);
+
+    grid->addWidget(m_unit,1,0);
+
+}
+
+void configureMiscPage::apply()
+{
+    KWDocument * doc = m_pView->kWordDocument();
+    config->setGroup( "Misc" );
+    if(m_oldUnit!=m_unit->currentItem())
+    {
+        QString unitName;
+        switch (m_unit->currentItem())
+        {
+            case 0:
+                unitName=KWUnit::unitName(KWUnit::U_MM  );
+                break;
+            case 1:
+                unitName=KWUnit::unitName(KWUnit::U_INCH  );
+                break;
+            case 2:
+            default:
+                unitName=KWUnit::unitName(KWUnit::U_PT );
+        }
+
+        config->writeEntry("Units",unitName);
+    }
+}
+
+void configureMiscPage::slotDefault()
+{
+    //todo
 }
 
 #include "kwconfig.moc"

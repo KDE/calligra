@@ -529,6 +529,7 @@ protected:
 
     void initConfig();
     void saveConfig();
+    void initUnit();
 
 private:
     QList<KWView> m_lstViews;
