@@ -651,6 +651,8 @@ public:
     void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
     void changeFootNoteConfig();
+    void displayFootNoteFiedCode();
+
 
     double tabStopValue() const { return m_tabStop; }
     void setTabStopValue ( double _tabStop );

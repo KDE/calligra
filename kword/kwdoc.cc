@@ -3959,6 +3959,26 @@ void KWDocument::updateTextFrameSetEdit()
 
 }
 
+void KWDocument::displayFootNoteFiedCode()
+{
+    QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->type() == VT_FOOTNOTE )
+        {
+            static_cast<KWFootNoteVariable *>(it.current())->resize();
+            static_cast<KWFootNoteVariable *>(it.current())->frameSet()->setCounterText( static_cast<KWFootNoteVariable *>(it.current())->text() );
+
+            KoTextParag * parag = it.current()->paragraph();
+            if ( parag )
+            {
+                parag->invalidate( 0 );
+                parag->setChanged( true );
+            }
+        }
+    }
+}
+
 void KWDocument::changeFootNoteConfig()
 {
     QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
