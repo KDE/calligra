@@ -12,29 +12,35 @@
 |  ODBC (universality reasons ), Mysql (historical reasons), PostgreSQL
 |
 
+-----------------------------------------------------------------
+
 1. EXTENSION: Option for setting user-defined error messages on selected error types.
 
-	Since new KexiDB has fully i18n'd user-visible messages, it outperforms other products as MSA 
-	(that often shows confusing message coming directly from the engine). There is possibility 
-	to provide users with table of error messages that they can personalize. These settings can 
-	be properties of table (query, form, etc.) and thus can be inherited (eg. by form from a table).
-	By default, i18n'd messages from KexiDB can be presented.
-	<EXAMPLE>
-		Before we set our message for UNIQUE KEY conflict for table Cars (name varchar UNIQUE, price integer),
-		we have got this message when try to violate 'unique' restionction: 
-		"There is already added one record with field 'name' set to 'Dodge' in table 'Cars'. 
-		This field must be unique."
-		Now, we want more descriptive message: "There should be only one car named 'Dodge'!".
-		We write this not as above, but rather: "There should be only one car named %field%!", 
-		since %field% is automatically substituted by given field value. After this we get message 
-		that is easier to understand for everyday user. Of course Kexi (and competitors too) never will 
-		be so clever as a human in building such messages automatically.
-	</EXAMPLE>
-	<NOTE>Inheriting messages: it will be more conventient to set up custom messages (if required)
-	for table definition rather than just in form. If we set up given message in for a table, every 
-	form that uses this table as data source (end every query that do so) can use this message when needed.
-	This note is also useful for other types of properties that can be inherited by extended objects from.
-	</NOTE>
+Since new KexiDB has fully i18n'd user-visible messages, it outperforms other products as MSA 
+(that often shows confusing message coming directly from the engine). There is possibility 
+to provide users with table of error messages that they can personalize. These settings can 
+be properties of table (query, form, etc.) and thus can be inherited (eg. by form from a table).
+By default, i18n'd messages from KexiDB can be presented.
+
+<EXAMPLE>
+Before we set our message for UNIQUE KEY conflict for table Cars (name varchar UNIQUE, price integer),
+we have got this message when try to violate 'unique' restionction: 
+"There is already added one record with field 'name' set to 'Dodge' in table 'Cars'. 
+This field must be unique."
+Now, we want more descriptive message: "There should be only one car named 'Dodge'!".
+We write this not as above, but rather: "There should be only one car named %field%!", 
+since %field% is automatically substituted by given field value. After this we get message 
+that is easier to understand for everyday user. Of course Kexi (and competitors too) never will 
+be so clever as a human in building such messages automatically.
+</EXAMPLE>
+
+<NOTE>Inheriting messages: it will be more conventient to set up custom messages (if required)
+for table definition rather than just in form. If we set up given message in for a table, every 
+form that uses this table as data source (end every query that do so) can use this message when needed.
+This note is also useful for other types of properties that can be inherited by extended objects from.
+</NOTE>
+
+-----------------------------------------------------------------
 
 2. KexiDB classes inheritance diagram
 
@@ -48,21 +54,45 @@ Object
 	Connection
 		[DRIVER]Connection
 
-[DRIVER] should be substituted by SQLite, MySQL, etc. These are classess to reimplement in the drivers.
+[DRIVER] should be substituted by SQLite, MySQL, etc. 
+These are classess to reimplement in the drivers.
 
+ConnectionData
+Field
 Cursor
+	[DRIVER]Cursor
+FieldList
+	TableSchema
+	QuerySchema
+	Index
+Transaction
 
-3. Table definitions storage
-Table definitions are extended with additional properties usually not available from most db engines 
-or even related to gui.
+-----------------------------------------------------------------
 
-kexi__tables
-	t_id integer unsigned primary key auto_increment,
-	t_name varchar(200),
+3. Table schema, query schema, etc. storage
 
+Table or query schemas are extended with additional properties, 
+usually not available from most db engines or even related to gui.
 
+//This table contains list of kexi object stored within project (tables, queries, etc.)
+kexi__objects
+	o_id integer unsigned primary key auto_increment,
+	o_type byte, //type id taken from KexiDB::ObjectTypes
+	o_name varchar(200),
+	o_caption varchar(200), //optional, enriched name that is not 
+	f_help varchar
+
+//This table contains additional data for query schemas
+kexi_querydata
+	q_id integer REFERENCES kexi__objects(o_id),
+	q_sql varchar //raw sql text - stored in the unchanged form entered by a user (or generated)
+	q_valid boolean //query schema may be invalid (syntactically or logically, 
+	                //but still can be stored)
+
+//This table contains fields that are members of given kexi object.
+//Not all object types should be allowed, now allowed are tables and queries
 kexi__fields
-	t_id integer REFERENCES kexi__tables(id),
+	o_id integer REFERENCES kexi__objects(o_id),
 	f_type byte,
 	f_name varchar(200),
 	f_length integer,
@@ -75,7 +105,21 @@ kexi__fields
 	f_caption varchar(200),
 	f_help varchar,
 
+//This table contains global (predefined or not) properties for this database
+kexi__db
+	property varchar(32),
+	value varchar
+	
+//Predefined properties stored in kexi__db:
+property="version", value=<version>
+	Where: <version> is a string containing integer in textual form that denotes 
+	KexiDB implementation version used to create or update this database.
+	This property is useful for KexiDB library and applications to denote 
+	what KexiDB features could be available. This ensures backward compatibility
+	and (at least in some cases) -- forward compatibility.
 
+		
+-----------------------------------------------------------------
 
 
 JOWENN:: plan to implement KexiStorage that abstracts storage using:
