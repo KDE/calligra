@@ -95,10 +95,7 @@ QCString KChartPart::mimeType() const
 
 KoView* KChartPart::createView( QWidget* parent, const char* name )
 {
-    KChartView* view = new KChartView( this, parent, name );
-    addView( view );
-
-    return view;
+    return new KChartView( this, parent, name );
 }
 
 KoMainWindow* KChartPart::createShell()
@@ -938,6 +935,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.35  2000/06/14 19:44:02  wtrobin
+ * even more QDom
+ *
  * Revision 1.34  2000/06/14 18:37:24  wtrobin
  * QDom fun
  *

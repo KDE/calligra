@@ -184,15 +184,10 @@ public:
    *
    * This calls @ref KoView::updateReadWrite to tell the new view
    * whether the document is readonly or not.
-   *
-   * You may want to call this method after you created a new view.
-   * Usually this is done by @ref #createView for you, so you dont need to
-   * call this method anyway.
-   *
-   * The document detects automatically when a view is destroyed since this
-   * triggers the @ref #slotViewDestroyed slot.
    */
   virtual void addView( KoView *view );
+
+  virtual void removeView( KoView *view );
 
   /**
    *  Retrieves the first view of the document.
@@ -420,9 +415,6 @@ signals:
    * passed by the signal.
    */
   void childChanged( KoDocumentChild *child );
-
-protected slots:
-  virtual void slotViewDestroyed();
 
 protected:
 

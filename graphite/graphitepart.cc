@@ -105,10 +105,7 @@ void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
 }
 
 KoView *GraphitePart::createView(QWidget *parent, const char *name) {
-
-    GraphiteView *view = new GraphiteView(this, parent, name);
-    addView(view);
-    return view;
+    return new GraphiteView(this, parent, name);
 }
 
 KoMainWindow *GraphitePart::createShell() {

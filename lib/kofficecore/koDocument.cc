@@ -260,11 +260,12 @@ void KoDocument::addView( KoView *view )
     return;
 
   d->m_views.append( view );
-
-  connect( view, SIGNAL( destroyed() ),
-	   this, SLOT( slotViewDestroyed() ) );
-
   view->updateReadWrite( isReadWrite() );
+}
+
+void KoDocument::removeView( KoView *view )
+{
+    d->m_views.removeRef( view );
 }
 
 KoView *KoDocument::firstView()
@@ -280,11 +281,6 @@ KoView *KoDocument::nextView()
 unsigned int KoDocument::viewCount()
 {
   return d->m_views.count();
-}
-
-void KoDocument::slotViewDestroyed()
-{
-  d->m_views.removeRef( (KoView *)sender() );
 }
 
 void KoDocument::insertChild( KoDocumentChild *child )
