@@ -8,6 +8,7 @@
   <item find="Août" replace="août" />
   <item find="Au moment ou" replace="Au moment où" />
   <item find="Avril" replace="avril" />
+  <item find="Ayant suivit" replace="Ayant suivi" />
   <item find="Basses Pyrénées" replace="Basses-Pyrénées" />
   <item find="Bien sur" replace="Bien sûr" />
   <item find="Bonne après-midi" replace="Bon après-midi" />
@@ -21,7 +22,7 @@
   <item find="Des lors" replace="Dès lors" />
   <item find="Décembre" replace="décembre" />
   <item find="Esquimeau" replace="Esquimau" />
-  <item find="Et bien" replace="Eh bien" />
+  <item find="Et bien," replace="Eh bien," />
   <item find="Et oui" replace="Eh oui" />
   <item find="Etant" replace="Étant" />
   <item find="Février" replace="février" />
@@ -33,6 +34,7 @@
   <item find="Irelande" replace="Irlande" />
   <item find="Irladne" replace="Irlande" />
   <item find="Janvier" replace="janvier" />
+  <item find="Le publique" replace="Le public" />
   <item find="Magreb" replace="Maghreb" />
   <item find="Magrébin" replace="Maghrébin" />
   <item find="Mai" replace="mai" />
@@ -66,6 +68,7 @@
   <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
   <item find="a subit" replace="a subi" />
+  <item find="a suivit" replace="a suivi" />
   <item find="a t'on" replace="a-t-on" />
   <item find="a-t'il" replace="a-t-il" />
   <item find="abimés" replace="abîmés" />
@@ -195,6 +198,8 @@
   <item find="avrli" replace="avril" />
   <item find="avsi" replace="avis" />
   <item find="axu" replace="aux" />
+  <item find="ayant conçut" replace="ayant conçu" />
+  <item find="ayant suivit" replace="ayant suivi" />
   <item find="babord" replace="bâbord" />
   <item find="bache" replace="bâche" />
   <item find="baches" replace="bâches" />
@@ -205,6 +210,11 @@
   <item find="baffouillé" replace="bafouillé" />
   <item find="baggage" replace="bagage" />
   <item find="baggages" replace="bagages" />
+  <item find="ban d'essais" replace="banc d'essais" />
+  <item find="ban de poissons" replace="banc de poissons" />
+  <item find="ban de sable" replace="banc de sable" />
+  <item find="ban des accusés" replace="banc des accusés" />
+  <item find="banc d'essai" replace="ban d'essai" />
   <item find="baptème" replace="baptême" />
   <item find="baptèmes" replace="baptêmes" />
   <item find="bas flanc" replace="bat-flanc" />
@@ -575,8 +585,10 @@
   <item find="il fourni" replace="il fournit" />
   <item find="il investi" replace="il investit" />
   <item find="il sans va" replace="il s'en va" />
+  <item find="il suis" replace="il suit" />
   <item find="il survie" replace="il survit" />
   <item find="il transfert" replace="il transfère" />
+  <item find="ils son" replace="ils sont" />
   <item find="ils sons" replace="ils sont" />
   <item find="imge" replace="image" />
   <item find="imobile" replace="immobile" />
@@ -612,6 +624,8 @@
   <item find="jamias" replace="jamais" />
   <item find="japon" replace="Japon" />
   <item find="je ne sais quoi" replace="je-ne-sais-quoi" />
+  <item find="je suie" replace="je suis" />
+  <item find="je suit" replace="je suis" />
   <item find="jetéé" replace="jetée" />
   <item find="joailler" replace="joaillier" />
   <item find="joaillers" replace="joailliers" />
@@ -629,6 +643,7 @@
   <item find="la notre" replace="la nôtre" />
   <item find="la planisphère" replace="le planisphère" />
   <item find="la sourie" replace="la souris" />
+  <item find="la suis" replace="la suie" />
   <item find="la votre" replace="la vôtre" />
   <item find="la-bas" replace="là-bas" />
   <item find="laisser-passer" replace="laissez-passer" />
@@ -639,12 +654,14 @@
   <item find="laors" replace="alors" />
   <item find="le champs" replace="le champ" />
   <item find="le notre" replace="le nôtre" />
+  <item find="le publique" replace="le public" />
   <item find="le résidant" replace="le résident" />
   <item find="le souffre" replace="le soufre" />
   <item find="le votre" replace="le vôtre" />
   <item find="leru" replace="leur" />
   <item find="lerus" replace="leurs" />
   <item find="les adhérants" replace="les adhérents" />
+  <item find="les anales" replace="les annales" />
   <item find="les notres" replace="les nôtres" />
   <item find="les résidants" replace="les résidents" />
   <item find="les un" replace="les uns" />
@@ -708,6 +725,7 @@
   <item find="mittes" replace="mites" />
   <item find="modme" replace="modem" />
   <item find="moi même" replace="moi-même" />
+  <item find="moi qui suit" replace="moi qui suis" />
   <item find="monaco" replace="Monaco" />
   <item find="monoindustrie" replace="mono-industrie" />
   <item find="monoiodé" replace="mono-iodé" />
@@ -807,6 +825,7 @@
   <item find="participassion" replace="participation" />
   <item find="partisant" replace="partisan" />
   <item find="partouts" replace="partout" />
+  <item find="pas tord" replace="pas tort" />
   <item find="passes-partout" replace="passe-partout" />
   <item find="passport" replace="passeport" />
   <item find="passports" replace="passeports" />
@@ -882,6 +901,7 @@
   <item find="près salés" replace="prés salés" />
   <item find="précosse" replace="précoce" />
   <item find="précosses" replace="précoces" />
+  <item find="publier les bancs" replace="publier les bans" />
   <item find="pylone" replace="pylône" />
   <item find="pâques" replace="Pâques" />
   <item find="pèriode" replace="période" />
@@ -979,6 +999,7 @@
   <item find="soleil" replace="Soleil" />
   <item find="sori" replace="soir" />
   <item find="sorite" replace="sortie" />
+  <item find="sorte à ce que" replace="sorte que" />
   <item find="sosu" replace="sous" />
   <item find="sotire" replace="sortie" />
   <item find="sotn" replace="sont" />
@@ -1122,10 +1143,12 @@
   <item find="vénus" replace="Vénus" />
   <item find="wallis" replace="Wallis" />
   <item find="À pirori" replace="A priori" />
+  <item find="À posteriori" replace="A posteriori" />
   <item find="À priori" replace="A priori" />
   <item find="à peu pré" replace="à peu près" />
   <item find="à peu prés" replace="à peu près" />
   <item find="à peu prêt" replace="à peu près" />
+  <item find="à posteriori" replace="a posteriori" />
   <item find="à priori" replace="a priori" />
   <item find="àla" replace="à la" />
   <item find="ça dépends" replace="ça dépend" />
