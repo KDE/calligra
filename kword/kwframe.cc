@@ -523,7 +523,11 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    frame->moveTopLeft( position );
+    if ( frame->topLeft() != position )
+    {
+        frame->moveTopLeft( position );
+        kWordDocument()->updateAllFrames();
+    }
 }
 
 KoPoint KWFrameSet::floatingFrameSize( int frameNum )
@@ -582,11 +586,12 @@ void KWFrameSet::updateFrames()
             continue;
         }
 
-        if ( !foundThis || !frameSet->isVisible() || frameSet->isFloating() )
+        if ( !foundThis || !frameSet->isVisible() )
             continue;
 
         //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        QList<KWFrame> allFrames = frameSet->allFrames();
+        QListIterator<KWFrame> frameIt( allFrames );
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
@@ -602,8 +607,8 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
-    //               << m_framesOnTop.count() << endl;
+    kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
+                   << m_framesOnTop.count() << endl;
 
     if ( isFloating() )
     { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights

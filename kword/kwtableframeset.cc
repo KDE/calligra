@@ -2,6 +2,8 @@
     Copyright (C) 2001, S.R.Haque (srhaque@iee.org).
     This file is part of the KDE project
 
+#include "kwtableframeset.h"
+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
@@ -97,9 +99,17 @@ void KWTableFrameSet::updateFrames()
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
     KoPoint currentPos = getCell( 0, 0 )->getFrame( 0 )->topLeft();
-    KoPoint offset = position - currentPos;
-    moveBy( offset.x(), offset.y() );
-    // ## TODO apply page breaking
+    if ( currentPos != position )
+    {
+        KoPoint offset = position - currentPos;
+        moveBy( offset.x(), offset.y() );
+        // ## TODO apply page breaking
+
+        // Recalc all "frames on top" everywhere
+        kWordDocument()->updateAllFrames();
+        // Draw the table in the new position
+        kWordDocument()->slotRepaintChanged( this );
+    }
 }
 
 KoPoint KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
@@ -186,6 +196,18 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
         }
     }
     return 0L;
+}
+
+QList<KWFrame> KWTableFrameSet::allFrames()
+{
+    QList<KWFrame> lst;
+    for ( unsigned int i = 0; i < m_cells.count(); i++ )
+    {
+        Cell *cell = m_cells.at( i );
+        lst.append( cell->getFrame( 0 ) );
+    }
+    kdDebug() << "KWTableFrameSet::allFrames returning " << lst.count() << " frames" << endl;
+    return lst;
 }
 
 /*================================================================*/
@@ -789,7 +811,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
             tmpWidth-=tableCellSpacing;
         else
             tmpWidth+=1;
-        KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height);
+        KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, RA_NO);
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
@@ -853,7 +875,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
             height = cell->getFrame(0)->height();
         }
         Cell *newCell = new Cell( this, i, col );
-        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height );
+        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, RA_NO );
         frame->setFrameBehaviour(AutoExtendFrame);
         newCell->addFrame( frame );
         if(cell->m_rows >1) {
@@ -1128,7 +1150,7 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
             KWFrame *frame = new KWFrame(lastFrameSet,
                     firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                     firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
-                    width, height);
+                    width, height, RA_NO);
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
             lastFrameSet->addFrame( frame );
@@ -1240,7 +1262,7 @@ void KWTableFrameSet::validate()
                 if(width== -1) width=minFrameWidth;
                 if(height== -1) height=minFrameHeight;
                 kdWarning() << " x: " << x << ", y:" << y << ", width: " << width << ", height: " << height << endl;
-                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height );
+                KWFrame *frame = new KWFrame(_frameSet, x, y, width, height, RA_NO );
                 frame->setFrameBehaviour(AutoExtendFrame);
                 frame->setNewFrameBehaviour(NoFollowup);
                 _frameSet->addFrame( frame );

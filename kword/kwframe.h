@@ -327,9 +327,20 @@ public:
     /** retrieve frame from x and y coords (absolute coords) */
     KWFrame *getFrame( double _x, double _y );
     KWFrame *getFrame( unsigned int _num );
+
+    /* Iterator over the child frames */
     virtual const QList<KWFrame> &frameIterator() const { return frames; }
+    /* Get frame number */
     int getFrameFromPtr( KWFrame *frame );
+    /* Get number of child frames */
     unsigned int getNumFrames() { return frames.count(); }
+
+    /* Returns the list of ALL the child frames, recursively.
+       This is usually the same as frameIterator [which you should
+       prefer using when possible] but for tables this returns the
+       frames of the cells as well.
+       Usage note: make a copy of the returned value, it's a temporary ! */
+    virtual QList<KWFrame> allFrames() { return frames; }
 
     /** Create a framesetedit object to edit this frameset in @p canvas */
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }

@@ -962,7 +962,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
-            KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+            KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(), RA_NO );
             cell->addFrame( frame, false );
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);

@@ -125,3 +125,9 @@ void KWAnchor::save( QDomElement &formatElem )
     anchorElem.setAttribute( "instance", num );
     return;
 }
+
+bool KWAnchor::ownLine() const
+{
+    // hack ? :)
+    return m_frameset->getFrameType() == FT_TABLE;
+}

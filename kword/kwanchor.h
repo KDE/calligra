@@ -50,6 +50,7 @@ public:
     virtual void resize();
 
     virtual Placement placement() const { return PlaceInline; }
+    virtual bool ownLine() const;
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
 

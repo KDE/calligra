@@ -98,6 +98,8 @@ public:
     Cell *getCell( unsigned int row, unsigned int col );
     Cell *getCellByPos( int mx, int my ); // bad naming
 
+    virtual QList<KWFrame> allFrames();
+
     /** first row and auto-added rows are the table headers.
     * @returns if this frameset is either one.
     */
@@ -249,7 +251,7 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit();
 
-    virtual QString getPopupName() { return "text_popup";} 
+    virtual QString getPopupName() { return "text_popup";}
 
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged )
