@@ -88,6 +88,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
+    noSignal=false;
     frame = _frame;
     if(frame==0) {
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
@@ -106,6 +107,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameSetType _ft )
     : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
+    noSignal=false;
     frameType=_ft;
     doc = _doc;
     frame= _frame;
@@ -118,6 +120,8 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
 }
 
 KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frame Settings"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
+    noSignal=false;
+
     frame=0L;
     tab1 = tab2 = tab3 = tab4 = tab5 = 0;
 
@@ -704,7 +708,8 @@ void KWFrameDia::textNameFrameChanged ( const QString &text )
 }
 
 void KWFrameDia::setupTab4(){ // TAB Geometry
-    //kdDebug() << "setup tab 4 geometry"<<endl;
+    kdDebug() << "setup tab 4 geometry"<<endl;
+    noSignal = true;
 
     tab4 = addPage( i18n( "Geometry" ) );
     grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
@@ -783,7 +788,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
 
     grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
-    mGrid = new QGridLayout( grp2, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lml = new QLabel( i18n( "Left:" ), grp2 );
     lml->resize( lml->sizeHint() );
@@ -826,7 +831,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->addWidget( smb, 4, 1 );
 
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
-
+    synchronize=new QCheckBox( i18n("Synchronize"), grp2 );
+    mGrid->addMultiCellWidget( synchronize, 5, 5, 0, 0);
     grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
 
     if ( frame )
@@ -835,6 +841,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         smr->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bRight()), doc->getUnit() ) );
         smt->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bTop()), doc->getUnit() ) );
         smb->setValue( KoUnit::ptToUnit( QMAX(0.00, frame->bBottom()), doc->getUnit() ) );
+        connect( smb, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( sml, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( smr, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+        connect( smt, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
+
         oldMarginLeft=sml->value();
 
         oldMarginRight=smr->value();
@@ -876,12 +887,6 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
     else
         disable = true;
-#if 0
-    sml->setEnabled(false);
-    smr->setEnabled(false);
-    smt->setEnabled(false);
-    smb->setEnabled(false);
-#endif
     if ( disable )
     {
         grp2->hide( );
@@ -891,8 +896,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setEnabled( false );
         floating->setEnabled( false );
     }
-
-    //kdDebug() << "setup tab 4 exit"<<endl;
+    noSignal=false;
+    kdDebug() << "setup tab 4 exit"<<endl;
 }
 
 void KWFrameDia::setupTab5()
@@ -1159,6 +1164,19 @@ void KWFrameDia::slotFloatingToggled(bool b)
     }
 
     enableRunAround();
+}
+
+void KWFrameDia::slotMarginsChanged( double val)
+{
+    if ( synchronize->isChecked() && !noSignal)
+    {
+        noSignal = true;
+        sml->setValue( val );
+        smb->setValue( val );
+        smr->setValue( val );
+        smt->setValue( val );
+        noSignal = false;
+    }
 }
 
 // Enable or disable the "on new page" options

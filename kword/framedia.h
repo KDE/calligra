@@ -119,6 +119,7 @@ protected:
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
     KDoubleNumInput *sx, *sy, *sw, *sh;
     KDoubleNumInput *sml, *smr, *smt, *smb;
+    QCheckBox *synchronize;
     QCheckBox *floating;
 
     // TAB 5:
@@ -142,7 +143,7 @@ protected:
     KoUnit::Unit frameUnits;
     QString oldFrameSetName;
     QBrush newBrushStyle;
-
+    bool noSignal;
 protected slots:
     virtual void slotOk();
     void connectListSelected( QListViewItem * );
@@ -151,6 +152,7 @@ protected slots:
     void slotFloatingToggled(bool);
     void textNameFrameChanged ( const QString & );
     void updateBrushConfiguration();
+    void slotMarginsChanged( double );
 };
 
 #endif
