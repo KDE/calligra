@@ -69,15 +69,16 @@ namespace KexiMigration
 			virtual bool drv_connect() = 0;
 			virtual bool drv_disconnect() = 0;
 			
+			//Generic helper functions
+			KexiDB::Field::Type userType();
+			
 			//Protected data members
 			//Connextiondata for external (non kexi) db
 			KexiDB::ConnectionData* m_externalData;
 			
 			QString m_dbName;
-			
 			KexiDB::TableSchema* m_table;
-			KexiDB::Field *m_f;
-			
+			KexiDB::Field* m_f;
 		private:		
 			//Get the list of tables
 			bool tableNames(QStringList& tablenames);
@@ -85,7 +86,7 @@ namespace KexiMigration
 			//Get a table schema object for a table
 			//Perform general functionality and rely on drv_ReadTableSchema()
 			//to do the real work
-			bool readTableSchema(const QString& table);
+			bool readTableSchema(const QString& tabl, int i);
 			
 			//Copies data from original table to new table if required
 			bool copyData(const QString table);

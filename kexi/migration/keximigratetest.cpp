@@ -22,16 +22,9 @@
 #include <config.h>
 #endif
 
-#include <iostream>
-#include <cstdlib>
-#include "keximigrate.h"
-#include "pqxxmigrate.h"
-#include "./kexidb/connectiondata.h"
-#include "./kexidb/connection.h"
-#include "./kexidb/drivermanager.h"
-#include "./kexidb/driver.h"
-#include <kdebug.h>
-#include <kinstance.h>
+#include "importwizard.h"
+#include "migratecontrol.h"
+#include <kapplication.h>
 
 /*
 This is in no way meant to compile let alone work
@@ -41,47 +34,21 @@ This will be an example program to demonstrate how to import an exisiting db int
 a new kexi based db
 */
 
-using namespace std;
-using namespace KexiDB;
 using namespace KexiMigration;
 
 int main(int argc, char *argv[])
 {
-	KexiDB::ConnectionData conn_data_from;
-	KexiDB::ConnectionData conn_data_to;
-	QGuardedPtr<KexiDB::Connection> kexi_conn;
-	KexiMigrate::KexiMigrate* import;
-	KInstance *instance;
-
-	cout << "===Kexi Import Test Program===" << endl;
-
-	instance = new KInstance("kexiimporttest" );
-
-	//Start with a driver manager
-	KexiDB::DriverManager manager;
+	KApplication a(argc, argv, "Kexi Migrate Test");
+	/*
+	MigrateControl *mc = new MigrateControl();	
+	mc->setGeometry(100,100,100,100);
+	a.setMainWidget(mc);	
+	mc->show();
+	*/
+	importWizard* iw = new importWizard();
+	iw->setGeometry(300,300,300,250);
+	a.setMainWidget(iw);
+	iw->show();
 	
-	//get a pqxx driver
-	KexiDB::Driver *driver = manager.driver("PostgreSQL");
-
-	//Check for errors
-	if (!driver || manager.error())
-	{
-		manager.debugError();
-		return(1);
-	}
-	
-	//Create connections to the kexi database
-	kexi_conn = driver->createConnection(conn_data_to);
-
-	import = new pqxxMigrate(&conn_data_from, "from_db", kexi_conn, false);
-	if (import->performImport())
-	{
-		kdDebug() << "Import Succeeded" << endl;
-	}
-	else
-	{
-		kdDebug() << "Import failed!" << endl;
-	}
-
-	return EXIT_SUCCESS;
+	return a.exec();
 }

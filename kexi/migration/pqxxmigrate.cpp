@@ -137,8 +137,8 @@ KexiDB::Field::Type pqxxMigrate::type(int t)
 		//TODO: Binary Types (BLOB)
 	}
 
-	//TODO: Ask the user what to do with this field
-	return KexiDB::Field::InvalidType;
+	//Ask the user what to do with this field
+	return userType();
 }
 
 //==================================================================================

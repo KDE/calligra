@@ -20,6 +20,8 @@
 
 #include "keximigrate.h"
 #include <kdebug.h>
+#include <kinputdialog.h>
+#include <kapplication.h>
 
 using namespace KexiDB;
 using namespace KexiMigration;
@@ -51,7 +53,7 @@ bool KexiMigrate::performImport()
 {
 	QStringList tables;
 	bool failure = false;
-
+	
 	//Step 1 - connect
 	if (drv_connect())
 	{
@@ -64,7 +66,7 @@ bool KexiMigrate::performImport()
 				for (uint i = 0; i < tables.size(); i++)
 				{
 					//Step 3 - Read table schemas
-					if(readTableSchema(tables[i]))
+					if(readTableSchema(tables[i], i))
 					{
 						//yeah, got a table
 						//Add it to list of tables which we will create if all goes well
@@ -161,8 +163,63 @@ bool KexiMigrate::tableNames(QStringList & tn)
 
 //==================================================================================
 //Get the table names
-bool KexiMigrate::readTableSchema(const QString& t)
+bool KexiMigrate::readTableSchema(const QString& t, int i)
 {
 	kdDebug() << "Reading table schema for [" << t << "]" << endl;
 	return drv_readTableSchema(t);
+}
+
+//==================================================================================
+//Prompt the user to choose a field type
+KexiDB::Field::Type KexiMigrate::userType()
+{
+KInputDialog *dlg;
+QStringList  types;
+QString res;
+
+types << "Byte";
+types << "Short Integer";
+types << "Integer";
+types << "Big Integer";
+types << "Boolean";
+types << "Date";
+types << "Date Time";
+types << "Time";
+types << "Float";
+types << "Double";
+types << "Text";
+types << "Long Text";
+types << "Binary Large Object";
+
+res = dlg->getItem("Choose Field Type", "Field Type", types, 0, false);
+
+if (res == types[0])
+	return KexiDB::Field::Byte;
+else if (res == types[1])
+	return KexiDB::Field::ShortInteger;
+else if (res == types[2])
+	return KexiDB::Field::Integer;
+else if (res == types[3])
+	return KexiDB::Field::BigInteger;
+else if (res == types[4])
+	return KexiDB::Field::Boolean;
+else if (res == types[5])
+	return KexiDB::Field::Date;
+else if (res == types[6])
+	return KexiDB::Field::DateTime;
+else if (res == types[7])
+	return KexiDB::Field::Time;
+else if (res == types[8])
+	return KexiDB::Field::Float;
+else if (res == types[9])
+	return KexiDB::Field::Double;
+else if (res == types[10])
+	return KexiDB::Field::Text;
+else if (res == types[11])
+	return KexiDB::Field::LongText;
+else if (res == types[12])
+	return KexiDB::Field::BLOB;
+else
+	return KexiDB::Field::Text;
+
 }
