@@ -1,76 +1,200 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&krayon;">
-  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
-  <!ENTITY % addindex "IGNORE">
-  
-  
+ <!ENTITY kappname "&krayon;">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % English "INCLUDE">
+ <!ENTITY krayonusing SYSTEM "krayon-using.docbook">
+ <!ENTITY krayoncommands SYSTEM "krayon-commands.docbook">
+ <!ENTITY krayonfaq SYSTEM "krayon-faq.docbook">
 ]>
 
 <book lang="&language;">
 
-<bookinfo>
-<title>The &krayon; Handbook</title>
+<!-- Document Information................................................. -->
 
+<bookinfo>
+<title>The Krayon Handbook</title>
 <authorgroup>
 <author>
-<firstname></firstname>
-<othername></othername>
-<surname></surname>
-<affiliation>
-<address><email></email></address>
-</affiliation>
+<firstname>David</firstname><surname>Johnson</surname>
+<affiliation><address><email>david@usermode.org</email></address></affiliation>
+<contrib>First draft</contrib>
 </author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
+
 </authorgroup>
 
+<copyright>
+<year>2001</year>
+<holder>David Johnson</holder>
+</copyright>
 
+<!-- insert copyright notices for the translations here -->
 
-<legalnotice>&FDLNotice;</legalnotice>
+<legalnotice>
+&FDLNotice;
+</legalnotice>
 
-<!-- Date and version information of the documentation
-Don't forget to include this last date and this last revision number, we
-need them for translation coordination !
-Please respect the format of the date (DD/MM/YYYY) and of the version
-(Major.minor.lesser), it could be used by automation scripts -->
+<!-- Date and version information of the documentation  -->
 
-<date>2001-01-20</date>
-<releaseinfo>0.00.00</releaseinfo>
-
-<!-- Abstract about this handbook -->
+<date>2001-06-02</date>
+<releaseinfo>1.00.00</releaseinfo>
 
 <abstract>
-<para>
-&krayon; is part of the &koffice; package.
-</para>
+<para>&krayon; is an image manipulation and processing program, suitable
+for photo retouching or image creation. It is a part of the &koffice;
+suite of applications.</para>
 </abstract>
-
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>Kapp</keyword>
+<keyword>Krayon</keyword>
+<keyword>KOffice</keyword>
+<keyword>image processing</keyword>
+<keyword>image manipulation</keyword>
 </keywordset>
 
 </bookinfo>
 
 <chapter id="introduction">
 <title>Introduction</title>
-<para>Sorry, but the documentation for &krayon; was not finished when KDE was installed on this computer.</para> 
-<para>If you need help, please check <ulink url="http://www.kde.org">The KDE Website</ulink> for updates, or by submitting your question to <ulink url="mailto:kde-user@kde.org">The KDE User Mailing list</ulink>.</para>
-<para><emphasis>The KDE Team</emphasis></para>
 
-&underFDL;
-&underGPL;
+<para>&krayon; is a full featured image manipulation program. You can
+use &krayon; for all your image creation and editing needs, such as
+making web images, touching up scanned photographs, creating original
+art, or anything else you might need to do with bitmapped images.</para>
+
+<para>What makes &krayon; different, and special, is ease of use
+compared with other high-end applications, and full integration with
+&koffice; and &kde;. Because of this, &krayon; supports drag and drop,
+themes, embedding, and many other advanced features you expect from a
+modern desktop environment. Ease of use is important to amateur users,
+but even more important to professional artists who must spend many
+hours a day using such applications to work with images.</para>
+
+<para>&krayon; is primarily a painting program with some image
+processing capabilities. More capabilities can be added with
+plugins. Using native and foreign plugins, and parts which can reuse
+other &kde; components, additional tools and utilities can be added as
+needed.</para>
+
+<para>&krayon; uses &XML; as its native file format. This allows import
+filters for almost every type of image file format to be easily
+created. It also allows other programs to more easily import &krayon;
+files.</para>
 
 </chapter>
 
-&documentation.index; 
+<!-- include our big chapters ............................................ -->
+
+&krayonusing;
+
+&krayoncommands;
+
+&krayonfaq;
+
+<!-- credits ............................................................. -->
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+&krayon;
+</para>
+
+<!-- TODO get the credits right -->
+
+<para>
+Program copyright 1999 - 2000 Matthias Elter <email>me@kde.org</email>
+</para>
+
+<para>
+Authors:
+<itemizedlist>
+<listitem><para>Matthias Elter <email>me@kde.org</email></para></listitem>
+<listitem><para>Michael Koch <email>koch@kde.org</email></para></listitem>
+<listitem><para>Andrew Richards <email>physajr@phys.canterbury.ac.nz</email></para></listitem>
+<listitem><para>Carsten Pfeiffer <email>carpdjih@sp.zrz.tu-berlin.de</email></para></listitem>
+<listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Current Maintainer:
+<itemizedlist>
+<listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
+</itemizedlist>
+</para>
+
+&underGPL;              <!-- GPL License -->
+
+<para>
+Documentation copyright 1999 David Johnson <email>david@usermode.org</email>
+</para>
+
+<para>Permission to use, copy, modify and distribute this document for 
+any purpose and without fee is hereby granted in perpetuity, provided
+that the above copyright notice and this paragraph appear in all
+copies.</para>
+
+</chapter>
+
+<!-- Installation ........................................................ -->
+
+<appendix id="installation">
+<title>Installation</title>
+
+<para>&krayon; is included as part of the &koffice; package of
+&kde;. Source code or prebuilt binary distributions of the &koffice;
+package can be found at the main &kde; &FTP; site, <ulink
+url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, or
+from one of many mirror sites. A current list of mirror sites can be
+found at <ulink url="http://www.kde.org/mirrors.html">
+http://www.kde.org/mirrors.html</ulink>.</para>
+
+<para>In order to install and use &krayon; you must have:</para>
+
+<itemizedlist>
+<listitem>
+<para>A functioning &UNIX; or &UNIX; like system with the X Windowing
+System configured.</para>
+</listitem>
+<listitem>
+<para>The K Desktop Environment 2.x (KDE 2.x). You will need at
+least the &Qt; 2.2.3 &GUI; toolkit, the kdesupport, the kdelibs, and
+the kdebase packages. Information on obtaining and installing &kde;
+2.x can be found at: <ulink
+url="http://www.kde.org/">http://www.kde.org/</ulink>.</para>
+</listitem>
+<listitem>
+<para>Permission to install software on your computer. If you are
+on a stand alone system, this will not be a problem. If you are
+using a networked computer, check with your administrator.</para>
+</listitem>
+</itemizedlist>
+
+<para>Instructions for installing &koffice; from either a source code or
+binary package can be found at <ulink
+url="http://www.koffice.org/">http://www.koffice.org/</ulink>.</para>
+
+</appendix>
+
 </book>
+
 <!--
 Local Variables:
-mode: sgml
-sgml-minimize-attributes: nil
+sgml-minimize-attributes:nil
 sgml-general-insert-case: lower
+sgml-omittag:t
+sgml-shorttag:t
+sgml-always-quote-attributes:t
+sgml-indent-step:0
+sgml-indent-data:nil
+sgml-parent-document:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+sgml-default-dtd-file:($KDEDIR/share/apps/ksgmltools2/customization/dtd/kdex.dtd)
 End:
 -->
-
