@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,7 +122,6 @@ int main(int argc, char** argv)
 			"submit@bugs.kde.org"
 		)
 	);
-//	KCmdLineArgs::init(argc, argv, (const char*)prgname, "KexiDBTest", "", "");
 	KCmdLineArgs::addCmdLineOptions( options );
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -165,7 +164,7 @@ int main(int argc, char** argv)
 
 	drv_name = args->arg(0);
 			 
-	KexiDB::DriverManager manager;// = new KexiDB::DriverManager;
+	KexiDB::DriverManager manager;
 	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
 	for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
@@ -183,11 +182,7 @@ int main(int argc, char** argv)
 	}
 	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMimeType() << endl;
 
-//connection data
-//	conn_data.host = "myhost";
-//	conn_data.password = "mypwd";
-
-//open connection
+	//open connection
 	if (args->count() >= 2)
 		db_name = args->arg(1);
 	if (db_name_required && db_name.isEmpty()) {
@@ -199,15 +194,7 @@ int main(int argc, char** argv)
 		if (args->isSet("buffered-cursors")) {
 			cursor_options |= KexiDB::Cursor::Buffered;
 		}
-	/*		else {
-				kdWarning() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
-				usage();
-				RETURN(1);
-			}
-		}*/
-		
 		conn_data.setFileName( db_name );
-
 		conn = driver->createConnection(conn_data);
 
 		if (!conn || driver->error()) {
@@ -220,7 +207,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-//start test:
+	//start test:
 	int r=0;
 	if (test_name == "cursors")
 		r=cursorsTest();
@@ -254,7 +241,6 @@ int main(int argc, char** argv)
 //	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
 //	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
 
-//	delete manager;
 	delete app;
 
 	RETURN(r);
