@@ -121,11 +121,11 @@
   <Action name="table_stylemenu"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
-  <Menu name="SpellCheck"><text>SpellCheck</text>
+  <Menu name="SpellCheck"><text>Spellcheck</text>
 	  <Action name="tool_auto_spellcheck"/>
 	  <Action name="extra_spellcheck"/>
   </Menu>  
-  <Menu name="AutoFormat"><text>AutoFormat</text>
+  <Menu name="AutoFormat"><text>Autoformat</text>
 	<Action name="enable_autocorrection"/>
   	<Action name="apply_autoformat"/>
   </Menu>  

@@ -156,14 +156,14 @@ BackDia::BackDia( QWidget* parent, const char* name,
              this, SLOT( updateConfiguration() ) );
     unbalanced->setChecked( _unbalanced );
 
-    labXFactor =new QLabel( i18n( "X-Factor:" ), colorTab );
+    labXFactor =new QLabel( i18n( "X-factor:" ), colorTab );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( updateConfiguration() ) );
     xfactor->setValue( _xfactor );
 
-    labYFactor=new QLabel( i18n( "Y-Factor:" ), colorTab );
+    labYFactor=new QLabel( i18n( "Y-factor:" ), colorTab );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
@@ -255,7 +255,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( this, SIGNAL( okClicked() ),
              this, SLOT( accept() ) );
     setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
-    setButtonText(KDialogBase::User2,i18n( "Reset" ));
+    setButtonText(KDialogBase::User2,i18n( "&Reset" ));
     picChanged = clipChanged = true;
     lockUpdate = false;
     updateConfiguration();

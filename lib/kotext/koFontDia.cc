@@ -117,7 +117,7 @@ void KoFontChooser::setupTab2()
     QStringList lst;
     lst <<i18n("Without");
     lst <<i18n("Single");
-    lst <<i18n("Simple bold");
+    lst <<i18n("Simple Bold");
     lst <<i18n("Double");
     m_underlining->insertStringList( lst );
 
@@ -127,8 +127,8 @@ void KoFontChooser::setupTab2()
     lstType <<i18n("Solid Line");
     lstType <<i18n("Dash Line");
     lstType <<i18n("Dot Line");
-    lstType <<i18n("Dash Dot line");
-    lstType <<i18n("Dash Dot Dot line");
+    lstType <<i18n("Dash Dot Line");
+    lstType <<i18n("Dash Dot Dot Line");
     m_underlineType->insertStringList( lstType );
 
 
@@ -495,7 +495,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_strikeOutLineStyle( _strikeOutLine ),
       m_strikeOutType( _strikeOutType)
 {
-    setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialogBase::User1, i18n("&Reset") );
 
     m_chooser = new KoFontChooser( this, "kofontchooser", _withSubSuperScript );
     setMainWidget( m_chooser );

@@ -569,7 +569,7 @@ void KSpreadView::initializeAreaOperationActions()
                         actionCollection(), "sort" );
   m_sort->setToolTip(i18n("Sort a group of cells."));
 
-  m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this,
+  m_autoSum = new KAction( i18n("Autosum"), "black_sum", 0, this,
                            SLOT( autoSum() ), actionCollection(), "autoSum" );
   m_autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
@@ -711,7 +711,7 @@ void KSpreadView::initializeCellOperationActions()
                                   actionCollection(), "dissociatecell" );
   m_dissociateCell->setToolTip(i18n("Unmerge the current cell."));
 
-  m_removeCell = new KAction( i18n("Remove Cell(s)..."), "removecell", 0, this,
+  m_removeCell = new KAction( i18n("Remove Cells..."), "removecell", 0, this,
                               SLOT( slotRemove() ), actionCollection(),
                               "removeCell" );
   m_removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
@@ -722,7 +722,7 @@ void KSpreadView::initializeCellOperationActions()
                                   actionCollection(), "insertCellCopy" );
   m_insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
 
-  m_insertCell = new KAction( i18n("Insert Cell(s)..."), "insertcell", 0, this,
+  m_insertCell = new KAction( i18n("Insert Cells..."), "insertcell", 0, this,
                               SLOT( slotInsert() ), actionCollection(),
                               "insertCell" );
   m_insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet."));
@@ -1054,51 +1054,51 @@ void KSpreadView::initializeRowColumnActions()
                                   "equalizeCol" );
   m_equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size."));
 
-  m_deleteColumn = new KAction( i18n("Delete Column(s)"), "delete_table_col", 0,
+  m_deleteColumn = new KAction( i18n("Delete Columns"), "delete_table_col", 0,
                                 this, SLOT( deleteColumn() ),
                                 actionCollection(), "deleteColumn" );
   m_deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet."));
 
-  m_deleteRow = new KAction( i18n("Delete Row(s)"), "delete_table_row", 0, this,
+  m_deleteRow = new KAction( i18n("Delete Rows"), "delete_table_row", 0, this,
                              SLOT( deleteRow() ), actionCollection(),
                              "deleteRow" );
   m_deleteRow->setToolTip(i18n("Removes a row from the spreadsheet."));
 
-  m_insertColumn = new KAction( i18n("Insert Column(s)"), "insert_table_col" ,
+  m_insertColumn = new KAction( i18n("Insert Columns"), "insert_table_col" ,
                                 0, this, SLOT( insertColumn() ),
                                 actionCollection(), "insertColumn" );
   m_insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet."));
 
-  m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this,
+  m_insertRow = new KAction( i18n("Insert Rows"), "insert_table_row", 0, this,
                              SLOT( insertRow() ), actionCollection(),
                              "insertRow" );
   m_insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet."));
 
-  m_hideRow = new KAction( i18n("Hide Row(s)"), "hide_table_row", 0, this,
+  m_hideRow = new KAction( i18n("Hide Rows"), "hide_table_row", 0, this,
                            SLOT( hideRow() ), actionCollection(), "hideRow" );
   m_hideRow->setToolTip(i18n("Hide a row from view."));
 
-  m_showRow = new KAction( i18n("Show Row(s)..."), "show_table_row", 0, this,
+  m_showRow = new KAction( i18n("Show Rows..."), "show_table_row", 0, this,
                            SLOT( showRow() ), actionCollection(), "showRow" );
   m_showRow->setToolTip(i18n("Show hidden rows."));
 
-  m_showSelRows = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this,
+  m_showSelRows = new KAction( i18n("Show Rows"), "show_table_row", 0, this,
                                SLOT( showSelRows() ), actionCollection(),
                                "showSelRows" );
   m_showSelRows->setEnabled(false);
   m_showSelRows->setToolTip(i18n("Show hidden rows in the selection."));
 
-  m_hideColumn = new KAction( i18n("Hide Column(s)"), "hide_table_column", 0,
+  m_hideColumn = new KAction( i18n("Hide Columns"), "hide_table_column", 0,
                               this, SLOT( hideColumn() ), actionCollection(),
                               "hideColumn" );
   m_hideColumn->setToolTip(i18n("Hide the column from view."));
 
-  m_showColumn = new KAction( i18n("Show Column(s)..."), "show_table_column", 0,
+  m_showColumn = new KAction( i18n("Show Columns..."), "show_table_column", 0,
                               this, SLOT( showColumn() ), actionCollection(),
                               "showColumn" );
   m_showColumn->setToolTip(i18n("Show hidden columns."));
 
-  m_showSelColumns = new KAction( i18n("Show Column(s)"), "show_table_column",
+  m_showSelColumns = new KAction( i18n("Show Columns"), "show_table_column",
                                   0, this, SLOT( showSelColumns() ),
                                   actionCollection(), "showSelColumns" );
   m_showSelColumns->setToolTip(i18n("Show hidden columns in the selection."));

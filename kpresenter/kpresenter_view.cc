@@ -2895,7 +2895,7 @@ void KPresenterView::setupActions()
 					       this, SLOT( textContentsToHeight() ),
 					       actionCollection(), "text_con2hei" );
 
-    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to fit the Contents" ), 0,
+    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to fit Contents" ), 0,
 					    this, SLOT( textObjectToContents() ),
 					    actionCollection(), "text_obj2cont" );
 
@@ -2909,15 +2909,15 @@ void KPresenterView::setupActions()
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "extra_properties" );
 
-    actionExtraArrangePopup = new KAction( i18n( "Arra&nge Object(s)" ), "arrange", 0,
+    actionExtraArrangePopup = new KAction( i18n( "Arra&nge Objects" ), "arrange", 0,
                                            this, SLOT(extraArrangePopup()),
                                            actionCollection(), "extra_arrangepopup" );
 
-    actionExtraRaise = new KAction( i18n( "Ra&ise Object(s)" ), "raise",
+    actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower Object(s)" ), "lower", CTRL +SHIFT+ Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", CTRL +SHIFT+ Key_L,
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
@@ -2931,11 +2931,11 @@ void KPresenterView::setupActions()
 
 
 
-    actionExtraRotate = new KAction( i18n( "R&otate Object(s)..." ), "rotate", 0,
+    actionExtraRotate = new KAction( i18n( "R&otate Objects..." ), "rotate", 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
 
-    actionExtraShadow = new KAction( i18n( "&Shadow Object(s)..." ), "shadow", 0,
+    actionExtraShadow = new KAction( i18n( "&Shadow Objects..." ), "shadow", 0,
 				     this, SLOT( extraShadow() ),
 				     actionCollection(), "extra_shadow" );
 
@@ -3098,7 +3098,7 @@ void KPresenterView::setupActions()
      actionPenColor->setDefaultColor(QColor());
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
 
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 // 				       this, SLOT( extraPenBrush() ),
@@ -3348,7 +3348,7 @@ void KPresenterView::setupActions()
                                        this, SLOT( duplicateObj() ),
                                        actionCollection(), "duplicate_obj" );
 
-    actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply Autoformat..." ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 
@@ -3386,11 +3386,11 @@ void KPresenterView::setupActions()
     actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
                                     this, SLOT( saveClipart() ),
                                     actionCollection(), "save_clipart");
-    actionAllowBgSpellCheck = new KToggleAction( i18n( "AutoSpellCheck" ), 0,
+    actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                                  this, SLOT( autoSpellCheck() ),
                                                  actionCollection(), "tool_auto_spellcheck" );
 
-    actionInsertFile= new KAction( i18n( "Insert File..." ), 0,
+    actionInsertFile= new KAction( i18n( "File..." ), 0,
                                    this, SLOT( insertFile() ),
                                    actionCollection(), "insert_file" );
 }
@@ -6839,7 +6839,7 @@ void KPresenterView::extraBringForward()
 void KPresenterView::applyAutoFormat()
 {
     m_pKPresenterDoc->getAutoFormat()->readConfig();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
     bool createmacro = false;
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
@@ -6896,7 +6896,7 @@ bool KPresenterView::switchInOtherPage( const QString & text )
 
 KCommand * KPresenterView::applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst)
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
     bool createcmd=false;
     QPtrList<KoTextObject> list(lst);
     QPtrListIterator<KoTextObject> fit(list);

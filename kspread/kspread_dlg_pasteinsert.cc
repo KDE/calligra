@@ -31,7 +31,7 @@
 #include <qcheckbox.h>
 
 KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,const QRect &_rect)
-	: KDialogBase( parent, name, TRUE,i18n("Paste Inserting Cell(s)"),Ok|Cancel )
+	: KDialogBase( parent, name, TRUE,i18n("Paste Inserting Cells"),Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;

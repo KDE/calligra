@@ -50,18 +50,18 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect 
   {
     rb1 = new QRadioButton( i18n("Move towards right"), grp );
     rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-    rb3 = new QRadioButton( i18n("Insert row(s)"), grp );
-    rb4 = new QRadioButton( i18n("Insert column(s)"), grp );
-    setCaption( i18n("Insert Cell(s)") );
+    rb3 = new QRadioButton( i18n("Insert rows"), grp );
+    rb4 = new QRadioButton( i18n("Insert columns"), grp );
+    setCaption( i18n("Insert Cells") );
   }
   else if(insRem==Remove)
   {
     grp->setTitle(i18n("Remove"));
     rb1 = new QRadioButton( i18n("Move towards left"), grp );
     rb2 = new QRadioButton( i18n("Move towards top"), grp );
-    rb3 = new QRadioButton( i18n("Remove row(s)"), grp );
-    rb4 = new QRadioButton( i18n("Remove column(s)"), grp );
-    setCaption( i18n("Remove Cell(s)") );
+    rb3 = new QRadioButton( i18n("Remove rows"), grp );
+    rb4 = new QRadioButton( i18n("Remove columns"), grp );
+    setCaption( i18n("Remove Cells") );
   }
   else
     kdDebug(36001) << "Error in kspread_dlg_insert" << endl;

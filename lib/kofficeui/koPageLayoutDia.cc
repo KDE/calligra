@@ -505,7 +505,7 @@ void KoPageLayoutDia::setupTab2()
     QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
-    QLabel *lHead = new QLabel( i18n( "Head line:" ), tab2 );
+    QLabel *lHead = new QLabel( i18n( "Head Line" ), tab2 );
     grid2->addWidget( lHead, 0, 0 );
 
     QLabel *lHeadLeft = new QLabel( i18n( "Left:" ), tab2 );
@@ -530,7 +530,7 @@ void KoPageLayoutDia::setupTab2()
     eHeadRight->setText( hf.headRight );
 
     // ------------- footer ---------------
-    QLabel *lFoot = new QLabel( i18n( "\nFoot line:" ), tab2 );
+    QLabel *lFoot = new QLabel( i18n( "Foot Line" ), tab2 );
     grid2->addWidget( lFoot, 3, 0 );
 
     QLabel *lFootLeft = new QLabel( i18n( "Left:" ), tab2 );
@@ -582,7 +582,7 @@ void KoPageLayoutDia::setupTab3()
     nColumns->setValue( cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
 
-    QString str = KoUnit::unitDescription( m_unit );
+    QString str = KoUnit::unitName( m_unit );
 
     QLabel *lCSpacing = new QLabel( i18n("Column spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
@@ -619,7 +619,7 @@ void KoPageLayoutDia::setupTab3()
 /*================================================================*/
 void KoPageLayoutDia::setupTab4()
 {
-    QString str = KoUnit::unitDescription(m_unit);
+    QString str = KoUnit::unitName(m_unit);
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );

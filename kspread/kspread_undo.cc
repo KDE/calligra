@@ -167,7 +167,7 @@ void KSpreadMacroUndoAction::redo()
 KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Remove Column(s)");
+    name=i18n("Remove Columns");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -238,7 +238,7 @@ void KSpreadUndoRemoveColumn::redo()
 KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Insert Column(s)");
+    name=i18n("Insert Columns");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
@@ -279,7 +279,7 @@ void KSpreadUndoInsertColumn::redo()
 KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Remove Row(s)");
+    name=i18n("Remove Rows");
 
     m_tableName = _table->tableName();
     m_iRow = _row;
@@ -359,7 +359,7 @@ void KSpreadUndoRemoveRow::redo()
 KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Insert Row(s)");
+    name=i18n("Insert Rows");
     m_tableName = _table->tableName();
     m_iRow = _row;
     m_iNbRow=_nbRow;
@@ -401,7 +401,7 @@ void KSpreadUndoInsertRow::redo()
 KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow , QValueList<int>_listRow) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Hide Row(s)");
+    name=i18n("Hide Rows");
     m_tableName = _table->tableName();
     m_iRow= _row;
     m_iNbRow=_nbRow;
@@ -457,7 +457,7 @@ void KSpreadUndoHideRow::redo()
 KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol, QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Hide Column(s)");
+    name=i18n("Hide Columns");
 
     m_tableName = _table->tableName();
     m_iColumn= _column;
@@ -514,7 +514,7 @@ void KSpreadUndoHideColumn::redo()
 KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow, QValueList<int>_listRow ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Show Row(s)");
+    name=i18n("Show Rows");
 
     m_tableName = _table->tableName();
     m_iRow= _row;
@@ -571,7 +571,7 @@ void KSpreadUndoShowRow::redo()
 KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol,QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
-    name=i18n("Show Column(s)");
+    name=i18n("Show Columns");
 
     m_tableName = _table->tableName();
     m_iColumn= _column;

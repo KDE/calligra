@@ -55,7 +55,7 @@ void KWDeleteDia::setupTab1()
 {
     tab1 = plainPage();
     grid1 = new QGridLayout( tab1, 4, 1, 0, spacingHint() );
-    QString message =type == ROW ? i18n( "Delete Row(s):" ) : i18n( "Delete Column(s):" );
+    QString message =type == ROW ? i18n( "Delete Rows:" ) : i18n( "Delete Columns:" );
     bool firstSelectedCell = true; // used to know whether to add a ", " to the message string.
 
     uint max = (type == ROW) ? table->getRows() : table->getCols(); // max row/col to loop up to

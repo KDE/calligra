@@ -290,8 +290,8 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
-  autoSaveDelay->setLabel(i18n("Au&to save (min):"));
-  autoSaveDelay->setSpecialValueText(i18n("No auto save"));
+  autoSaveDelay->setLabel(i18n("Au&tosave (min):"));
+  autoSaveDelay->setSpecialValueText(i18n("No autosave"));
   autoSaveDelay->setSuffix(i18n("min"));
 
   showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);

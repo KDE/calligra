@@ -89,7 +89,7 @@
       <Name>ASCIITOCHAR</Name>
       <Type>String</Type>
       <Parameter>
-        <Comment>The ASCII value(s) to convert</Comment>
+        <Comment>The ASCII values to convert</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>

@@ -469,7 +469,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     cbAllFrames = new QCheckBox (i18n("Changes will be applied to all frames in frameset"),tab1);
     cbAllFrames->setChecked(frame!=0L);
     grid1->addMultiCellWidget(cbAllFrames,++row,row+1, 0, 1);
-    cbProtectContent = new QCheckBox( i18n("Protect Content"), tab1);
+    cbProtectContent = new QCheckBox( i18n("Protect content"), tab1);
     connect( cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     grid1->addMultiCellWidget(cbProtectContent,++row,row+1, 0, 1);
     if( frameType != FT_TEXT || frame!=0 && frame->frameSet()==0) {
@@ -695,7 +695,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     lFrameSList = new QListView( tab3, "lFrameSList" );
     lFrameSList->addColumn( i18n("No.") );
-    lFrameSList->addColumn( i18n("Frameset name") );
+    lFrameSList->addColumn( i18n("Frameset Name") );
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
     connect( lFrameSList, SIGNAL(selectionChanged ()),this,SLOT(selectExistingFrameset ()) );
@@ -716,7 +716,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     QHBoxLayout *layout1 = new QHBoxLayout( 0, 0, 6 );
     QLabel *textLabel1 = new QLabel( tab3 );
-    textLabel1->setText( i18n( "Name of frameset" ) );
+    textLabel1->setText( i18n( "Name of frameset:" ) );
     layout1->addWidget( textLabel1 );
 
     eFrameSetName = new QLineEdit( tab3 );

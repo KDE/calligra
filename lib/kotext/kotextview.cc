@@ -125,7 +125,7 @@ void KoTextView::deleteWordForward()
     } while ( !m_cursor->atParagEnd()
               && !m_cursor->parag()->at( m_cursor->index() )->c.isSpace() );
     textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
-    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove word") );
+    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove Word") );
 }
 
 void KoTextView::deleteWordBack()
@@ -141,7 +141,7 @@ void KoTextView::deleteWordBack()
     } while ( !m_cursor->atParagStart()
               && !m_cursor->parag()->at( m_cursor->index()-1 )->c.isSpace() );
     textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
-    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove word") );
+    textObject()->removeSelectedText( m_cursor, KoTextDocument::Standard, i18n("Remove Word") );
 }
 
 void KoTextView::handleKeyPressEvent( QKeyEvent * e )
@@ -963,7 +963,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
             }
             // replace selection with 'text'
             textObject()->emitNewCommand( textObject()->replaceSelectionCommand(
-                cursor(), text, KoTextDocument::Standard, i18n("Replace word") ));
+                cursor(), text, KoTextDocument::Standard, i18n("Replace Word") ));
         }
     }
 
@@ -996,7 +996,7 @@ void KoTextView::insertLineBreak()
 void KoTextView::insertNonbreakingSpace()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0xa0) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert non-breaking space") );
+                          false /* no newline */, true, i18n("Insert non-breaking Space") );
 }
 
 void KoTextView::insertSpecialChar(QChar _c, const QString& font)

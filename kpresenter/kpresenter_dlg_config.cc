@@ -208,7 +208,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, tmpQGroupBox );
     recentFiles->setRange(1, 20, 1);
-    recentFiles->setLabel(i18n("Number of recent file:"));
+    recentFiles->setLabel(i18n("Number of recent files:"));
 
     lay1->addWidget(recentFiles);
 
@@ -379,7 +379,7 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
   cbBackgroundSpellCheck->setChecked( oldSpellCheck );
   grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
-  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox);
+  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox);
   grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
   connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
@@ -487,7 +487,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     KoRect rect = doc->stickyPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X: (%1)").arg(doc->getUnitName()),  tmpQGroupBox);
+    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()),  tmpQGroupBox);
     grid->addWidget(lab ,0,0);
 
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
@@ -496,7 +496,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
     grid->addWidget(resolutionX ,1,0);
 
-    lab=new QLabel(i18n("Resolution Y: (%1)").arg(doc->getUnitName()), tmpQGroupBox);
+    lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab ,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
@@ -630,8 +630,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
     autoSave->setRange( 0, 60, 1 );
-    autoSave->setLabel( i18n("Auto save (min):") );
-    autoSave->setSpecialValueText( i18n("No auto save") );
+    autoSave->setLabel( i18n("Autosave (min):") );
+    autoSave->setSpecialValueText( i18n("No autosave") );
     autoSave->setSuffix( i18n("min") );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
@@ -641,7 +641,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
 
-    new QLabel(i18n("Tab Stop: (%1)").arg(doc->getUnitName()), gbDocumentSettings);
+    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));

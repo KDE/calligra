@@ -99,7 +99,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 
     pbRemoveException->setEnabled( exceptionList->currentItem()!=-1);
 
-    cbAutoInclude = new QCheckBox( i18n("Auto includes"), this );
+    cbAutoInclude = new QCheckBox( i18n("Autoinclude"), this );
     grid->addWidget(cbAutoInclude,3,0);
     cbAutoInclude->setChecked( _autoInclude );
 }
@@ -229,7 +229,7 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper = new QCheckBox( tab1 );
     cbUpperUpper->setText( i18n(
             "Convert &two uppercase characters to one uppercase and one"
-            " lowercase character.\n (e.g. PErfect to Perfect)" ) );
+            " lowercase character\n (e.g. PErfect to Perfect)" ) );
     QWhatsThis::add( cbUpperUpper, i18n(
             "All words are checked for the common mistake of holding the "
             "shift key down a bit too long. If some words must have two "
@@ -287,7 +287,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbUseNumberStyle=new QCheckBox( tab1 );
     cbUseNumberStyle->setText( i18n(
-            "Use &auto-numbering for numbered paragraphs" ) );
+            "Use &autonumbering for numbered paragraphs" ) );
     QWhatsThis::add( cbUseNumberStyle, i18n(
             "When typing '1)' or similar in front of a paragraph, "
             "automatically convert the paragraph to use that numbering style. "
@@ -477,7 +477,7 @@ void KoAutoFormatDia::setupTab3()
     grid->addMultiCellWidget( cbAdvancedAutoCorrection, 0, 0, 0, 6 );
 
     cbAutoCorrectionWithFormat = new QCheckBox( tab3 );
-    cbAutoCorrectionWithFormat->setText( i18n("Replace Text With Format") );
+    cbAutoCorrectionWithFormat->setText( i18n("Replace text with format") );
     grid->addMultiCellWidget( cbAutoCorrectionWithFormat, 1, 1, 0, 6 );
 
     lblFind = new QLabel( i18n( "&Find:" ), tab3 );
@@ -901,7 +901,7 @@ void KoCompletionDia::setup()
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
-    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry"), page);
+    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry.."), page);
     connect( pbAddCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotAddCompletionEntry()));
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "R&emove Completion Entry"), page  );
@@ -954,7 +954,7 @@ void KoCompletionDia::slotSaveCompletionEntry()
 void KoCompletionDia::slotAddCompletionEntry()
 {
     bool ok;
-    QString newWord = KLineEditDlg::getText( i18n("Add Completion Entry:"),QString::null, &ok, this );
+    QString newWord = KLineEditDlg::getText( i18n("Add Completion Entry"),i18n("Enter entry:"),QString::null, &ok, this );
     if ( ok )
     {
         m_listCompletion.append( newWord );

@@ -191,7 +191,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   Frame5_2Layout->addWidget( m_tableStatus, 3, 0 );
 
   m_SelectTableLabel = new QLabel( Frame5_2, "m_SelectTableLabel" );
-  m_SelectTableLabel->setText( i18n( "Select table(s):" ) );
+  m_SelectTableLabel->setText( i18n( "Select tables:" ) );
   Frame5_2Layout->addWidget( m_SelectTableLabel, 1, 0 );
 
   m_tableView = new KListView( Frame5_2, "m_tableView" );
@@ -220,7 +220,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout"); 
 
   QLabel * TextLabel11_2 = new QLabel( Frame5_2_2, "TextLabel11_2" );
-  TextLabel11_2->setText( i18n( "Select columns(s):" ) );
+  TextLabel11_2->setText( i18n( "Select columns:" ) );
 
   Frame5_2_2Layout->addWidget( TextLabel11_2, 0, 0 );
 

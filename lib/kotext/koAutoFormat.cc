@@ -1667,7 +1667,7 @@ void KoAutoFormat::configCorrectionWithFormat( bool b)
 KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
 {
     KoTextParag * parag = obj->textDocument()->firstParag();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
     bool createCmd = false;
     while ( parag )
     {
@@ -1689,7 +1689,7 @@ KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
 
 KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
 {
-    KMacroCommand * macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KMacroCommand * macro = new KMacroCommand( i18n("Apply Autoformat"));
     KoTextCursor *cursor = new KoTextCursor( obj->textDocument() );
 
     bool createMacro = false;

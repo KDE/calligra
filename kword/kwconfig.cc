@@ -176,7 +176,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     cbBackgroundSpellCheck->setChecked( m_pView->kWordDocument()->backgroundSpellCheckEnabled() );
     grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
-    clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox);
+    clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox);
     grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
     connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
@@ -484,16 +484,16 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_oldFormattingTabs = doc->viewFormattingTabs();
     m_oldFormattingBreak = doc->viewFormattingBreak();
 
-    m_cbViewFormattingEndParag = new QCheckBox( i18n("View Formatting End Parag"), gbViewFormatting);
+    m_cbViewFormattingEndParag = new QCheckBox( i18n("View formatting end parag"), gbViewFormatting);
     m_cbViewFormattingEndParag->setChecked(m_oldFormattingEndParag);
 
-    m_cbViewFormattingSpace = new QCheckBox( i18n("View Formatting Space"), gbViewFormatting);
+    m_cbViewFormattingSpace = new QCheckBox( i18n("View formatting space"), gbViewFormatting);
     m_cbViewFormattingSpace->setChecked(m_oldFormattingSpace);
 
-    m_cbViewFormattingTabs = new QCheckBox( i18n("View Formatting Tabs"), gbViewFormatting);
+    m_cbViewFormattingTabs = new QCheckBox( i18n("View formatting tabs"), gbViewFormatting);
     m_cbViewFormattingTabs->setChecked(m_oldFormattingTabs);
 
-    m_cbViewFormattingBreak = new QCheckBox( i18n("View Formatting Break"), gbViewFormatting);
+    m_cbViewFormattingBreak = new QCheckBox( i18n("View formatting break"), gbViewFormatting);
     m_cbViewFormattingBreak->setChecked(m_oldFormattingBreak);
 
 }
@@ -686,10 +686,10 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     }
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
     autoSave->setRange(0, 60, 1);
-    autoSave->setLabel(i18n("Auto save every (min):"));
+    autoSave->setLabel(i18n("Autosave every (min):"));
     QWhatsThis::add( autoSave, i18n("A backup copy of the current document is created when a change "
                     "has been made. The interval used to create backup documents is set here.") );
-    autoSave->setSpecialValueText(i18n("No auto save"));
+    autoSave->setSpecialValueText(i18n("No autosave"));
     autoSave->setSuffix(i18n(" min"));
 
 
@@ -702,7 +702,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_variableNumberOffset->setValue(m_oldStartingPage);
 
 
-    new QLabel(i18n("Tab Stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
+    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
     m_oldTabStopWidth = doc->tabStopValue();
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));

@@ -998,7 +998,7 @@ void KWView::setupActions()
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
                                         this, SLOT( editCustomVariable() ),
                                         actionCollection(), "edit_customvars" );
-    actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply Autoformat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
     actionApplyAutoFormat->setToolTip( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
@@ -1037,7 +1037,7 @@ void KWView::setupActions()
                                     this, SLOT( saveClipart() ),
                                     actionCollection(), "save_clipart");
 
-    actionAllowBgSpellCheck = new KToggleAction( i18n( "AutoSpellCheck" ), 0,
+    actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                             this, SLOT( autoSpellCheck() ),
                                             actionCollection(), "tool_auto_spellcheck" );
 
@@ -5452,7 +5452,7 @@ void KWView::configureCompletion()
 void KWView::applyAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
     bool createcmd=false;
     QPtrList<KoTextObject> list(m_doc->frameTextObject());
     QPtrListIterator<KoTextObject> fit(list);

@@ -46,8 +46,8 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
 
     QButtonGroup *grp = new QButtonGroup(  page );
     QGridLayout *grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
-    m_rbAuto = new QRadioButton( i18n("Automatic"), grp );
-    m_rbManual= new QRadioButton( i18n("Manual"), grp );
+    m_rbAuto = new QRadioButton( i18n("&Automatic"), grp );
+    m_rbManual= new QRadioButton( i18n("&Manual"), grp );
 
     grp->setExclusive( true );
     grid->addWidget( m_rbAuto, 0, 0);
@@ -64,8 +64,8 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
 
 
     grp = new QButtonGroup( 2, Qt::Vertical, page );
-    m_rbFootNote = new QRadioButton( i18n("Footnote"), grp );
-    m_rbEndNote = new QRadioButton( i18n("Endnote"), grp );
+    m_rbFootNote = new QRadioButton( i18n("&Footnote"), grp );
+    m_rbEndNote = new QRadioButton( i18n("&Endnote"), grp );
 
     m_rbEndNote->setEnabled( false ); // ### not implemented yet
 
@@ -77,7 +77,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     else
         m_rbEndNote->setChecked( true );
     footNoteTypeChanged();
-    setButtonText( KDialogBase::User1, i18n("Configure") );
+    setButtonText( KDialogBase::User1, i18n("C&onfigure") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotConfigurate()));
 }
 

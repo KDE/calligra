@@ -143,7 +143,7 @@ KCommand * KPrPage::deleteObjs( bool _add )
         }
     }
     if ( _add &&_objects.count() > 0 ) {
-        deleteCmd = new DeleteCmd( i18n( "Delete Object(s)" ), _objects, m_doc,this );
+        deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), _objects, m_doc,this );
         deleteCmd->execute();
     }
     else
@@ -1084,7 +1084,7 @@ void KPrPage::lowerObjs(bool backward)
     }
     if ( createCmd )
     {
-        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), m_objectList, _new, m_doc,this );
+        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Objects" ), m_objectList, _new, m_doc,this );
         lrCmd->execute();
         m_doc->addCommand( lrCmd );
     }
@@ -1121,7 +1121,7 @@ void KPrPage::raiseObjs(bool forward)
     }
     if ( createCmd )
     {
-        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), m_objectList, _new, m_doc,this );
+        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Objects" ), m_objectList, _new, m_doc,this );
         lrCmd->execute();
         m_doc->addCommand( lrCmd );
     }
@@ -1371,7 +1371,7 @@ KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Left" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Left" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1417,7 +1417,7 @@ KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Centered (horizontal)" ),
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Centered (horizontal)" ),
                                                  _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
@@ -1460,7 +1460,7 @@ KCommand * KPrPage::alignObjsRight(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Right" ), _diffs, _objects, m_doc);
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Right" ), _diffs, _objects, m_doc);
         moveByCmd2->execute();
     }
     else
@@ -1505,7 +1505,7 @@ KCommand *KPrPage::alignObjsTop(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Top" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Top" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1551,7 +1551,7 @@ KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Center/Vertical" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Center/Vertical" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1593,7 +1593,7 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Bottom" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Objects Bottom" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -3234,7 +3234,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
         }
     }
     if(createCommand)
-        moveByCmd = new MoveByCmd( i18n( "Move Object(s)" ),
+        moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
                                    _objects, m_doc,this );
     return moveByCmd;
@@ -3271,7 +3271,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
     }
 
     if ( key && !_objects.isEmpty()) {
-        moveByCmd = new MoveByCmd( i18n( "Move Object(s)" ),
+        moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _move ),
                                    _objects, m_doc,this );
     }

@@ -141,7 +141,7 @@
   <Separator/>
   <Action name="change_case"/>
   <Separator/>
-  <Menu name="SpellCheck"><text>SpellCheck</text>
+  <Menu name="SpellCheck"><text>Spellcheck</text>
 	  <Action name="tool_auto_spellcheck"/>
 	  <Action name="extra_spellcheck"/>
   </Menu>  

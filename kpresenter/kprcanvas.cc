@@ -1230,7 +1230,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         } break;
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
-                KMacroCommand *macro=new KMacroCommand(i18n("Move Object(s)"));
+                KMacroCommand *macro=new KMacroCommand(i18n("Move Objects"));
                 bool cmdCreate=false;
                 int x=(mx - firstX);
                 int y=(my - firstY);
@@ -2299,7 +2299,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
             {
                 if ( !e->isAutoRepeat() )
                 {
-                    KMacroCommand *macro=new KMacroCommand(i18n("Move Object(s)"));
+                    KMacroCommand *macro=new KMacroCommand(i18n("Move Objects"));
                     bool cmdCreate=false;
                     int x=(m_view->zoomHandler()->zoomItX(m_boundingRect.x()) - firstX);
                     int y=(m_view->zoomHandler()->zoomItY(m_boundingRect.y()) - firstY);
@@ -4810,7 +4810,7 @@ void KPrCanvas::copyObjs()
 /*================================================================*/
 void KPrCanvas::deleteObjs()
 {
-    KMacroCommand *macro=new KMacroCommand(i18n( "Delete Object(s)" ));
+    KMacroCommand *macro=new KMacroCommand(i18n( "Delete Objects" ));
     bool macroCreate=false;
     KCommand *cmd=m_activePage->deleteObjs();
     if( cmd)
@@ -5226,14 +5226,14 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     if( cmd && key)
     {
         if ( !macro)
-            macro=new KMacroCommand(i18n( "Move Object(s)" ));
+            macro=new KMacroCommand(i18n( "Move Objects" ));
         macro->addCommand(cmd);
     }
     cmd=stickyPage()->moveObject(m_view,_move,key);
     if( cmd && key)
     {
         if ( !macro)
-            macro=new KMacroCommand(i18n( "Move Object(s)" ));
+            macro=new KMacroCommand(i18n( "Move Objects" ));
         macro->addCommand(cmd);
     }
     if(macro)
@@ -6173,7 +6173,7 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
 
 void KPrCanvas::alignObjLeft()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Left" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Left" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -6198,7 +6198,7 @@ void KPrCanvas::alignObjLeft()
 
 void KPrCanvas::alignObjCenterH()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Centered (horizontal)"));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Centered (horizontal)"));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -6223,7 +6223,7 @@ void KPrCanvas::alignObjCenterH()
 
 void KPrCanvas::alignObjRight()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Right" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Right" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -6249,7 +6249,7 @@ void KPrCanvas::alignObjRight()
 
 void KPrCanvas::alignObjTop()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Top" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Top" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -6275,7 +6275,7 @@ void KPrCanvas::alignObjTop()
 
 void KPrCanvas::alignObjCenterV()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Center/Vertical" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Center/Vertical" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -6301,7 +6301,7 @@ void KPrCanvas::alignObjCenterV()
 
 void KPrCanvas::alignObjBottom()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Bottom" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Bottom" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();

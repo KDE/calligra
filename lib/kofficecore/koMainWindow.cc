@@ -610,9 +610,9 @@ bool KoMainWindow::saveDocument( bool saveas )
                 QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ).arg( outputFormat )
                                   : mime->comment();
                 int res = KMessageBox::warningContinueCancel(
-                    0, i18n( "<qt>You are about to save the document using the format %1. "
+                    0, i18n( "<qt>You are about to save the document using the format %1.<p>"
                              "This might lose parts of the formatting of the document. Proceed?</qt>" )
-                    .arg( QString( "<b>%1</b><p>" ).arg( comment ) ), // in case we want to remove the bold later
+                    .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                     i18n( "File Export: Confirmation Required" ),
                     i18n( "Continue" ),
                     "FileExportConfirmation",

@@ -432,14 +432,14 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    xfactorLabel = new QLabel( i18n( "X-Factor:" ), gradientConfig );
+    xfactorLabel = new QLabel( i18n( "X-factor:" ), gradientConfig );
     xfactorLabel->setFixedHeight( xfactorLabel->sizeHint().height() );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    yfactorLabel = new QLabel( i18n( "Y-Factor:" ), gradientConfig );
+    yfactorLabel = new QLabel( i18n( "Y-factor" ), gradientConfig );
     yfactorLabel->setFixedHeight( yfactorLabel->sizeHint().height() );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, gradientConfig );
@@ -699,7 +699,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool
     setCancelButton( i18n( "&Close" ) );
     setOkButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
-    setDefaultButton ( i18n("Reset") );
+    setDefaultButton ( i18n("&Reset") );
     slotReset();
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
     connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( reject() ) );
