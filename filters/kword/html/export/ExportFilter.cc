@@ -56,14 +56,18 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
-        // TODO: rowspan, colspan
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent=(*itCell).row;
             *m_streamOut << "</tr>\n<tr>\n";
         }
 
-        *m_streamOut << "<td>\n";
+        *m_streamOut << "<td";
+        if ( (*itCell).m_rows > 1 )
+            *m_streamOut << " rowspan=\"" << (*itCell).m_rows << "\"";
+        if ( (*itCell).m_cols > 1 )
+            *m_streamOut << " colspan=\"" << (*itCell).m_cols << "\"";
+        *m_streamOut << ">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
