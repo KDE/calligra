@@ -1388,6 +1388,7 @@ FontRecord& FontRecord::operator=( const FontRecord& ef )
   d->strikeout    = ef.strikeout();
   d->script       = ef.script();
   d->underline    = ef.underline();
+  d->colorIndex   = ef.colorIndex();
   return *this;
 }
 
@@ -2204,6 +2205,11 @@ void PaletteRecord::setData( unsigned size, const unsigned char* data )
 void PaletteRecord::dump( std::ostream& out ) const
 {
   out << "PALETTE" << std::endl;
+  for( unsigned i = 0; i < count(); i++ )
+  {
+    Color c = color( i );
+    out << "RGB: " << c.red << " " << c.green << " " << c.blue << std::endl;
+  }
 }
 
 // ========== RIGHTMARGIN ========== 
@@ -3678,7 +3684,8 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
 Color ExcelReader::convertColor( unsigned colorIndex )
 {  
   if( ( colorIndex >= 8 ) && ( colorIndex < 0x40 ) )
-    return d->colorTable[ colorIndex-8 ];
+    if( colorIndex-8 < d->colorTable.size() )
+      return d->colorTable[ colorIndex-8 ];
   
   // FIXME the following colors depend on system color settings
   // 0x0040  system window text colour for border lines    
