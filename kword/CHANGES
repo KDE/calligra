@@ -589,3 +589,8 @@ Reggie, 30.12.1998:
 Reggie, 1.1.1999:
 -----------------
 - More work on searching and replacing text (internals seems to work now - only the dialog is missing :-)
+
+Reggie, 3.1.1998:
+-----------------
+- Started with search & replace dialog
+- Simple searching (without formats) with the dialog works

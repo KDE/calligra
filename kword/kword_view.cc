@@ -68,8 +68,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   m_lstFrames.setAutoDelete(true);  
   gui = 0;
   flow = KWParagLayout::LEFT;
-  paragDia = 0;
-  styleManager = 0;
+  paragDia = 0L;
+  styleManager = 0L;
   vertAlign = KWFormat::VA_NORMAL;
   left.color = white;
   left.style = KWParagLayout::SOLID;
@@ -88,6 +88,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   tmpBrd.ptWidth = 0;
   _viewFormattingChars = false;
   _viewFrameBorders = true;
+  searchEntry = 0L;
+  searchDia = 0L;
 
   m_pKWordDoc = _doc;
 
@@ -614,12 +616,12 @@ void KWordView::editSelectAll()
 /*===============================================================*/
 void KWordView::editFind()
 {
-  gui->getPaperWidget()->find("Hallo",0L,true,false);
-}
+  if (searchDia) return;
 
-/*===============================================================*/
-void KWordView::editFindReplace()
-{
+  searchDia = new KWSearchDia(0L,"",m_pKWordDoc,gui->getPaperWidget(),searchEntry,fontList);
+  searchDia->setCaption(i18n("KWord - Search & Replace"));
+  QObject::connect(searchDia,SIGNAL(cancelButtonPressed()),this,SLOT(searchDiaClosed()));
+  searchDia->show();
 }
 
 /*================================================================*/
@@ -1202,8 +1204,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "editPaste", CTRL + Key_V, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
-  m_idMenuEdit_Find = m_vMenuEdit->insertItem4( i18n("&Find..."), this, "editFind", CTRL + Key_F, -1, -1 );
-  m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem4( i18n("&Replace..."), this, "editFindReplace", CTRL + Key_R, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("kwsearch.xpm"));
+  m_idMenuEdit_Find = m_vMenuEdit->insertItem6(pix,i18n("&Find and Replace..."), this, "editFind", CTRL + Key_F, -1, -1 );
   
   // View
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
@@ -1358,6 +1360,13 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
   m_idButtonEdit_Spelling = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraSpelling", 
 							   true, i18n("Spell Checking"), -1);
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  // find
+  pix = OPUIUtils::convertPixmap(ICON("kwsearch.xpm"));
+  m_idButtonEdit_Find = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editFind", 
+						       true, i18n("Find & Replace"), -1);
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
@@ -1943,6 +1952,15 @@ void KWordView::spellCheckerCorrected(char* orig,char* correct,unsigned pos)
 void KWordView::spellCheckerDone(char*)
 {
   spellCheckerReady(); 
+}
+
+/*================================================================*/
+void KWordView::searchDiaClosed()
+{
+  QObject::disconnect(searchDia,SIGNAL(cancelButtonPressed()),this,SLOT(searchDiaClosed()));
+  searchDia->close();
+  delete searchDia;
+  searchDia = 0L;
 }
 
 /*================================================================*/

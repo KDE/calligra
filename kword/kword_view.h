@@ -51,6 +51,7 @@ class KWPaintWindow;
 #include "parag.h"
 #include "frame.h"
 #include "stylist.h"
+#include "searchdia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -108,7 +109,6 @@ public:
   virtual void editPaste();
   virtual void editSelectAll();
   virtual void editFind();
-  virtual void editFindReplace();
 
   virtual void newView();
   virtual void viewFormattingChars();
@@ -191,6 +191,8 @@ public:
   void setFramesToParts();
   void hideAllFrames();
 
+  void setSearchEntry(KWSearchDia::KWSearchEntry *e) { searchEntry = e; }
+
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);
@@ -205,6 +207,7 @@ public slots:
   void spellCheckerMisspelling(char*,QStrList*,unsigned);
   void spellCheckerCorrected(char*,char*,unsigned);
   void spellCheckerDone(char*);
+  void searchDiaClosed();
 
 protected:
   // C++
@@ -240,7 +243,6 @@ protected:
   CORBA::Long m_idMenuEdit_Paste;
   CORBA::Long m_idMenuEdit_SelectAll;
   CORBA::Long m_idMenuEdit_Find;
-  CORBA::Long m_idMenuEdit_FindReplace;
 
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
@@ -294,6 +296,7 @@ protected:
   CORBA::Long m_idButtonEdit_Copy;
   CORBA::Long m_idButtonEdit_Paste;
   CORBA::Long m_idButtonEdit_Spelling;
+  CORBA::Long m_idButtonEdit_Find;
 
   // insert toolbar
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
@@ -352,10 +355,12 @@ protected:
   KWParagLayout::Flow flow;
   KWFormat::VertAlign vertAlign;
   KWParagLayout::Border left,right,top,bottom,tmpBrd;
+  KWSearchDia::KWSearchEntry *searchEntry;
 
   KWParagDia *paragDia;
   KWStyleManager *styleManager;
   KSpell *kspell;
+  KWSearchDia *searchDia;
 
   KWParag *currParag;
   int currFrameSetNum;

@@ -2923,6 +2923,7 @@ bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = 
 	  debug("  => `%s' found at %d",_expr.data(),currFindPos);
 	  debug("  => select text - pos: %d, len: %d, frameset: %d",currFindPos,_expr.length(),currFindFS);
 	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  currFindPos += _expr.length();
 	  debug("find end (true)");
 	  return true;
 	}
@@ -3005,6 +3006,21 @@ void KWPage::selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_fram
   p.begin(this);
 
   doc->drawMarker(*fc,&p,xOffset,yOffset);
+
+  p.end();
+}
+
+/*================================================================*/
+void KWPage::removeSelection()
+{
+  QPainter p;
+  p.begin(this);
+
+  if (doc->has_selection())
+    {
+      doc->drawSelection(p,xOffset,yOffset);
+      doc->setSelection(false);
+    }
 
   p.end();
 }

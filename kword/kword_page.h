@@ -172,6 +172,8 @@ public:
   bool find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
   bool findRev(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
   
+  void removeSelection();
+
 public slots:
   void newLeftIndent(int _left); 
   void newFirstIndent(int _first);
