@@ -21,6 +21,7 @@
  </Menu>
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
+  <ActionList name="view_split"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_page"/>

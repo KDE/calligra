@@ -1712,7 +1712,7 @@ void KPresenterView::setupActions()
     // ---------------- view actions
 
 
-    actionViewNewView = new KAction( i18n( "New View..." ), 0,
+    actionViewNewView = new KAction( i18n( "New View" ), 0,
 				     this, SLOT( newView() ),
 				     actionCollection(), "view_newview" );
 
