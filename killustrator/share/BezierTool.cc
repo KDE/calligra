@@ -24,7 +24,7 @@
 
 #include <iostream.h>
 #ifdef __FreeBSD__
-#include <float.h>
+#include <math.h>
 #else
 #include <values.h>
 #endif
