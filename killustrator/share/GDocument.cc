@@ -887,12 +887,12 @@ bool GDocument::readFromXml (istream& is) {
 	if (v != KILLUSTRATOR_MIMETYPE)
 	  return false;
       }
-      if ((*first).name () == "comment") {
-	strComment =  (*first).stringValue().data();
+      if ((*first).name () == "comment") {//TB: Note This is not unicode!
+	strComment =  (*first).stringValue().c_str();
 	debug(":"+strComment+":");
       }
-      if ((*first).name () == "keywords") {
-        strKeywords = (*first).stringValue().data();
+      if ((*first).name () == "keywords") { //TB: Note this isn't unicode!
+        strKeywords = (*first).stringValue().c_str();
 	debug(":"+strKeywords+":");
       }
       first++;
