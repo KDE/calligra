@@ -1,3 +1,10 @@
+koffice (1:1.2-rc1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Package koffice-libs suggests wordnet.
+
+ -- Ben Burton <benb@acm.org>  Thu, 15 Aug 2002 15:29:27 +1000
+
 koffice (1:1.2-beta2-1) unstable; urgency=low
 
   * New upstream release.
