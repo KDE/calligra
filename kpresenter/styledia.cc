@@ -962,7 +962,7 @@ void StyleDia::setupTabGeometry()
 
     if ( allTextObj )
     {
-        protectContent = new QCheckBox( i18n("Protect Content"), tab);
+        protectContent = new QCheckBox( i18n("Protect content"), tab);
         connect( protectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
         layout->addWidget(protectContent);
     }

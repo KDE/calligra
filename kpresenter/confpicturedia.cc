@@ -322,30 +322,30 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name)
     m_normalPicture = new QRadioButton( i18n( "Normal" ), mirrorGroup );
     connect( m_normalPicture, SIGNAL( clicked() ), this, SLOT( slotNormalPicture() ) );
 
-    m_horizontalMirrorPicture = new QRadioButton( i18n( "Horizontal Mirror" ), mirrorGroup );
+    m_horizontalMirrorPicture = new QRadioButton( i18n( "Horizontal mirror" ), mirrorGroup );
     connect( m_horizontalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotHorizontalMirrorPicture() ) );
 
-    m_verticalMirrorPicture = new QRadioButton( i18n( "Vertical Mirror" ), mirrorGroup );
+    m_verticalMirrorPicture = new QRadioButton( i18n( "Vertical mirror" ), mirrorGroup );
     connect( m_verticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotVerticalMirrorPicture() ) );
 
-    m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal and Vertical Mirror" ), mirrorGroup );
+    m_horizontalAndVerticalMirrorPicture = new QRadioButton( i18n( "Horizontal and vertical mirror" ), mirrorGroup );
     connect( m_horizontalAndVerticalMirrorPicture, SIGNAL( clicked() ), this, SLOT( slotHorizontalAndVerticalMirrorPicture() ) );
 
     QButtonGroup *depthGroup = new QVButtonGroup( i18n( "Depth" ), gSettings );
 
-    m_depth0 = new QRadioButton( i18n( "Default Color Mode" ), depthGroup );
+    m_depth0 = new QRadioButton( i18n( "Default color mode" ), depthGroup );
     connect( m_depth0, SIGNAL( clicked() ), this, SLOT( slotPictureDepth0() ) );
 
-    m_depth1 = new QRadioButton( i18n( "1 Bit Color Mode" ), depthGroup );
+    m_depth1 = new QRadioButton( i18n( "1 bit color mode" ), depthGroup );
     connect( m_depth1, SIGNAL( clicked() ), this, SLOT( slotPictureDepth1() ) );
 
-    m_depth8 = new QRadioButton( i18n( "8 Bit Color Mode" ), depthGroup );
+    m_depth8 = new QRadioButton( i18n( "8 bit color mode" ), depthGroup );
     connect( m_depth8, SIGNAL( clicked() ), this, SLOT( slotPictureDepth8() ) );
 
-    m_depth16 = new QRadioButton( i18n( "16 Bit Color Mode" ), depthGroup );
+    m_depth16 = new QRadioButton( i18n( "16 bit color mode" ), depthGroup );
     connect( m_depth16, SIGNAL( clicked() ), this, SLOT( slotPictureDepth16() ) );
 
-    m_depth32 = new QRadioButton( i18n( "32 Bit Color Mode" ), depthGroup );
+    m_depth32 = new QRadioButton( i18n( "32 bit color mode" ), depthGroup );
     connect( m_depth32, SIGNAL( clicked() ), this, SLOT( slotPictureDepth32() ) );
 
     m_swapRGBCheck = new QCheckBox( i18n( "Convert from RGB image to BGR image" ), gSettings );

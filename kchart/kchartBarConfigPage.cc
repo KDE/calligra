@@ -31,11 +31,11 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     _sidebysideRB->resize( _sidebysideRB->sizeHint() );
     grid2->addWidget( _sidebysideRB,1,0);
 
-    _ontopRB = new QRadioButton( i18n( "On &Top" ), gb );
+    _ontopRB = new QRadioButton( i18n( "On &top" ), gb );
     _ontopRB->resize( _ontopRB->sizeHint() );
     grid2->addWidget( _ontopRB,2,0 );
 
-    _infrontRB = new QRadioButton( i18n( "In &Front" ), gb );
+    _infrontRB = new QRadioButton( i18n( "In &front" ), gb );
     _infrontRB->resize( _infrontRB->sizeHint() );
     grid2->addWidget( _infrontRB,3,0 );
 

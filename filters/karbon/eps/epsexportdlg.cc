@@ -37,9 +37,9 @@ EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 		i18n( "Options" ), page );
 
 	QRadioButton* radio;
-	radio = new QRadioButton( i18n( "PostScript Level 1" ), m_psLevelButtons );
-	radio = new QRadioButton( i18n( "PostScript Level 2" ), m_psLevelButtons );
-	radio = new QRadioButton( i18n( "PostScript Level 3" ), m_psLevelButtons );
+	radio = new QRadioButton( i18n( "PostScript level 1" ), m_psLevelButtons );
+	radio = new QRadioButton( i18n( "PostScript level 2" ), m_psLevelButtons );
+	radio = new QRadioButton( i18n( "PostScript level 3" ), m_psLevelButtons );
 
 	m_psLevelButtons->setRadioButtonExclusive( true );
 	m_psLevelButtons->setButton( 2 );

@@ -39,7 +39,7 @@ VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
 	mVSpinBox->setLineStep(1.00);
 	mainLayout->addWidget( groupBox );
 	
-	mRelative = new QCheckBox( i18n( "Relative Position" ), this );
+	mRelative = new QCheckBox( i18n( "Relative position" ), this );
 	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
 	mainLayout->addWidget( mRelative );
 	
@@ -81,7 +81,7 @@ VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
 	mVSpinBox->setLineStep(1.00);
 	mainLayout->addWidget( groupBox );
 	
-	mRelative = new QCheckBox( i18n( "Relative Center" ), this );
+	mRelative = new QCheckBox( i18n( "Relative center" ), this );
 	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
 	mainLayout->addWidget( mRelative );
 	

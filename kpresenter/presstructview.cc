@@ -281,7 +281,7 @@ void KPPresStructView::setupPagePreview()
     box->setMargin( 5 );
     box->setSpacing( 5 );
 
-    showPreview = new QCheckBox( i18n( "&Show Preview" ), box );
+    showPreview = new QCheckBox( i18n( "&Show preview" ), box );
     showPreview->setChecked( true );
     // #### for now
     // lukas: what was it meant to do?

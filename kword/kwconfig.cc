@@ -479,7 +479,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
 
-    m_displayFieldCode=new QCheckBox(i18n("Display Field Code"),gbMiscGroup);
+    m_displayFieldCode=new QCheckBox(i18n("Display field code"),gbMiscGroup);
     m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFiedCode());
 
 

@@ -483,7 +483,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
     grid->addWidget(m_displayComment,5,0);
 
-    m_displayFieldCode=new QCheckBox(i18n("Display Field Code"),tmpQGroupBox);
+    m_displayFieldCode=new QCheckBox(i18n("Display field code"),tmpQGroupBox);
     m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFiedCode());
     grid->addWidget(m_displayFieldCode,6,0);
 
