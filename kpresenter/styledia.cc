@@ -1039,7 +1039,6 @@ void StyleDia::setupTabGeometry()
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
     synchronize=new QCheckBox( i18n("Synchronize"), grp2 );
     mGrid->addMultiCellWidget( synchronize, 5, 5, 0, 1 );
-    layout->addWidget( synchronize );
 
     QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     layout->addItem(spacer);
