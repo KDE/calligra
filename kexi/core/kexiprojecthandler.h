@@ -23,7 +23,7 @@
 
 #include <qobject.h>
 #include <qpopupmenu.h>
-#include <qptrlist.h>
+#include <qdict.h>
 
 #include "kexiproject.h"
 #include "kexidialogbase.h"
@@ -48,9 +48,9 @@ class KexiProjectHandler : public QObject
 	Q_OBJECT
 
 	public:
-		typedef QPtrList<KexiProjectHandlerItem> ItemList;
-
-
+		typedef QDict<KexiProjectHandlerItem> ItemList;
+		typedef QDictIterator<KexiProjectHandlerItem> ItemIterator;
+		
 		KexiProjectHandler(KexiProject *project);
 		virtual ~KexiProjectHandler() {};
 

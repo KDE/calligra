@@ -20,6 +20,7 @@ class KexiWorkspace
 		virtual KexiDialogBase * activeDocumentView()=0;
 		
 	protected:
+		friend class KexiDialogBase;
 		virtual void takeItem(KexiDialogBase *delItem)=0;
 		virtual void slotWindowActivated(QWidget*)=0;
 	private:

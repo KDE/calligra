@@ -21,6 +21,7 @@
 #include "kexidialogbase.h"
 #include "kexiview.h"
 #include "kexiproject.h"
+#include "kexiworkspace.h"
 
 #include <kdockwidget.h>
 #include <kiconloader.h>
@@ -33,8 +34,9 @@ KexiDialogBase *KexiDialogBase::s_activeToolWindow=0;
 QPtrList<KexiDialogBase> *KexiDialogBase::s_DocumentWindows=0;
 QPtrList<KexiDialogBase> *KexiDialogBase::s_ToolWindows=0;
 
-KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name) : QWidget(parent, name)
+KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name) : QWidget(parent, name, WDestructiveClose)
 {
+	m_registered=false;
 	m_view=view;
 	m_project=view->project();
 #if 0
@@ -62,6 +64,8 @@ KexiView *KexiDialogBase::kexiView()const
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
+	m_wt=wt;
+	m_registered=true;
 	if (wt==ToolWindow)
 	{
 		QDockWindow *w=new QDockWindow(m_view->mainWindow());
@@ -128,6 +132,11 @@ void KexiDialogBase::focusInEvent ( QFocusEvent *)
 }
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
 {
+	if ((m_wt!=ToolWindow) && (m_registered==true))
+	{
+//		m_view->workspace()->slotWindowActivated(0);
+	}
+	finishUpForClosing();
 	emit closing(this);
 //	close();
 	ev->accept();

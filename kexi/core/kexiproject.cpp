@@ -74,12 +74,16 @@ DCOPObject* KexiProject::dcopObject()
 bool KexiProject::completeSaving( KoStore* store )
 {
 	m_relationManager->storeRelations(store);
+	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
+		hand->store(store);
 	return true;
 }
 
 bool KexiProject::completeLoading( KoStore* store )
 {
 	m_relationManager->loadRelations(store);
+	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
+		hand->load(store);	
 	return true;
 }
 

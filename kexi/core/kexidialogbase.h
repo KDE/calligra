@@ -53,7 +53,7 @@ class KexiDialogBase : public QWidget
 		enum WindowType {ToolWindow, DocumentWindow};
 		void registerAs(KexiDialogBase::WindowType wt);
 		void closeEvent(QCloseEvent *ev);
-
+		virtual void finishUpForClosing(){;}
 		static KexiDialogBase *s_activeDocumentWindow;
 		static KexiDialogBase *s_activeToolWindow;
 		static QPtrList<KexiDialogBase> *s_DocumentWindows;
@@ -64,6 +64,8 @@ class KexiDialogBase : public QWidget
 		class KexiView *m_mainWindow;
 		class KexiProject *m_project;
 		class KexiView *m_view;
+		bool m_registered;
+		enum WindowType m_wt;
 };
 
 #endif

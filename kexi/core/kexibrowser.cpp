@@ -107,9 +107,8 @@ KexiBrowser::addItem(KexiProjectHandlerItem *item)
 void
 KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 {
-	KexiProjectHandler::ItemList *plist = parent->items();
 
-	kdDebug() << "KexiBrowser::slotItemListChanged() " << plist->count() << " items" << endl;
+	kdDebug() << "KexiBrowser::slotItemListChanged() " << parent->items()->count() << " items" << endl;
 	
 	if(m_mime == "kexi/db")
 	{
@@ -122,10 +121,11 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 	}
 
 	
-	for(KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
+	for(KexiProjectHandler::ItemIterator it(*(parent->items()));it.current();++it)
+	//KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
 	{
-		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << item->mime() << endl;
-		addItem(item);
+		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << it.current()->mime() << endl;
+		addItem(it.current());
 	}
 }
 
