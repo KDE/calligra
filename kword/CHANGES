@@ -1468,3 +1468,7 @@ Reggie, 1.9.1999:
 - More redraw improvements
 - More optimations of Return/Enter to make it even more flickerfree
 
+Reggie, 2.9.1999:
+-----------------
+- Small speed improvement
+

@@ -2958,6 +2958,11 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 	    continue;
 	for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
 	    tmp = frameset->getFrame( j );
+	    frame = QRect( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->width() + 2,
+			   tmp->height() + 2 );
+	    if ( !v_area.intersects( frame ) )
+		continue;
+	    
 	    _painter.setBrush( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) ?
 			       frameset->getFrame( 0 )->getBackgroundColor() : tmp->getBackgroundColor() );
 	    _painter.setPen( lightGray );
@@ -2971,8 +2976,6 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 	    if ( FALSE )//static_cast<int>( i ) == hiliteFrameSet )
 		_painter.setPen( blue );
 	    else if ( !gui->getView()->getViewFrameBorders() ) should_draw = FALSE;
-	    frame = QRect( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->width() + 2,
-			   tmp->height() + 2 );
 
 	    if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() ) {
 		if ( region )
