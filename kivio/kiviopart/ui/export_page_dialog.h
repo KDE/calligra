@@ -17,6 +17,9 @@ class ExportPageDialog : public KDialogBase
     bool crop();
     bool fullPage();
     bool selectedStencils();
+  
+  protected slots:
+    void slotOk();
 
   private:
     ExportPageDialogBase* m_view;

@@ -81,4 +81,26 @@
       <default code="true">KoGlobal::defaultFont()</default>
     </entry>
   </group>
+  <group name="PageExport">
+    <entry name="LastFormat" type="String">
+      <label>Last used format.</label>
+      <default></default>
+    </entry>
+    <entry name="Crop" type="Bool">
+      <label>Crop image to the edges of the stencils.</label>
+      <default>false</default>
+    </entry>
+    <entry name="SelectedStencils" type="Bool">
+      <label>Export only the selected stencils.</label>
+      <default>false</default>
+    </entry>
+    <entry name="Border" type="Int">
+      <label>Border around the exported page.</label>
+      <default>0</default>
+    </entry>
+    <entry name="Quality" type="Int">
+      <label>Quality of the exported page in percent.</label>
+      <default>100</default>
+    </entry>
+  </group>
 </kcfg>
