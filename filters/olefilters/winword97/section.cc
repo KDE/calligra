@@ -20,11 +20,11 @@
 #include <section.h>
 
 Section::Section(const WinWordDoc * const parent, const unsigned char * const mainData,
-                 const FIB * const fib, const QArray<long> &sectionMarks,
-                 const QArray<long> &paragMarks, const QArray<long> &cellMarks,
-                 const QArray<long> &rowMarks) : m_parent(parent), m_mainData(mainData),
-                 m_fib(fib), m_sectionMarks(sectionMarks), m_paragMarks(paragMarks),
-                 m_cellMarks(cellMarks), m_rowMarks(rowMarks) {
+                 const FIB * const fib, const QArray<long> &paragMarks,
+                 const QArray<long> &cellMarks, const QArray<long> &rowMarks) :
+                 m_parent(parent), m_mainData(mainData), m_fib(fib),
+                 m_paragMarks(paragMarks), m_cellMarks(cellMarks),
+                 m_rowMarks(rowMarks) {
 
     m_section=QString::null;
     m_success=true;

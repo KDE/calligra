@@ -21,17 +21,36 @@
 #define PARAGRAPH_H
 
 #include <qobject.h>
+#include <qarray.h>
+#include <qstring.h>
+
+#include <fib.h>
+
+class Section;
 
 class Paragraph : public QObject {
 
     Q_OBJECT
 
 public:
-    Paragraph();
+    Paragraph(const Section * const parent, const unsigned char * const mainData,
+              const FIB * const fib, const QArray<long> &rowMarks,
+              const QArray<long> &cellMarks);
     ~Paragraph();
+
+    const bool isOk() const { return m_success; }
+    const bool convert();
+    const QString paragraph() const { return m_paragraph; }
 
 private:
     Paragraph(const Paragraph &);
     const Paragraph &operator=(const Paragraph &);
+
+    QString m_paragraph;
+    bool m_success;
+    const Section * const m_parent;
+    const unsigned char * const m_mainData;
+    const FIB * const m_fib;
+    QArray<long> m_rowMarks, m_cellMarks;
 };
 #endif // PARAGRAPH_H
