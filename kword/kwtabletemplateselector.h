@@ -114,6 +114,7 @@ protected:
 
     int selectedTableTemplate;
     void initFormat( int _format);
+    void initPreview();
 protected slots:
     void changeTableTemplate();
 };

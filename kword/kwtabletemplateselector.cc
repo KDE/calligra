@@ -593,6 +593,7 @@ void KWTableTemplateSelector::changeTableTemplate()
 {
     preview->setTableTemplate( m_doc->tableTemplateCollection()->tableTemplateAt( lbTemplates->currentItem() ) );
     selectedTableTemplate = lbTemplates->currentItem();
+    initPreview();
 }
 
 KWTableTemplate* KWTableTemplateSelector::getTableTemplate() const
@@ -603,25 +604,30 @@ KWTableTemplate* KWTableTemplateSelector::getTableTemplate() const
 void KWTableTemplateSelector::initFormat( int _format)
 {
     if ( _format & firstRow)
-    {
         cbFirstRow->setChecked( true );
-    }
+
     if ( _format & firstColumn)
-    {
         cbFirstCol->setChecked( true );
-    }
+
     if ( _format & lastRow)
-    {
         cbLastRow->setChecked( true );
-    }
+
     if ( _format & lastCol)
-    {
         cbLastCol->setChecked( true );
-    }
+
     if ( _format & body)
-    {
         cbBody->setChecked( true );
-    }
+    initPreview();
+}
+
+void KWTableTemplateSelector::initPreview()
+{
+    preview->cbFirstRowChanged( cbFirstRow->isChecked() );
+    preview->cbFirstColChanged( cbFirstCol->isChecked(  ) );
+    preview->cbLastRowChanged(cbLastRow->isChecked() );
+    preview->cbLastColChanged( cbLastCol->isChecked() );
+    preview->cbBodyChanged( cbBody->isChecked() );
+
 }
 
 int KWTableTemplateSelector::getFormatType() const
@@ -649,6 +655,5 @@ int KWTableTemplateSelector::getFormatType() const
     {
         type = type | body;
     }
-    kdDebug()<<" type :"<<type<<endl;
     return type;
 }
