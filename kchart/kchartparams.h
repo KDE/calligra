@@ -147,6 +147,7 @@ struct KChartParameters
     bool xaxis;
     bool yaxis;
     bool yaxis2;
+    bool cross;
     int yval_style;
     KChartStackType stack_type;
     double _3d_depth;

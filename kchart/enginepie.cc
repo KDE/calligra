@@ -91,7 +91,7 @@ pie_gif( short imagewidth,
     /* ~ 1% for a size of 100 pixs */
     /* label sizes will more dictate this */
     float min_grphable = ( params->other_threshold < 0?
-			   100.0/(float)MIN(imagewidth,imageheight):
+			   100.0/(float)QMIN(imagewidth,imageheight):
 			   (float)params->other_threshold )/100.0;
     // short num_slices1 = 0;
     // short num_slices2 = 0;
@@ -137,7 +137,7 @@ pie_gif( short imagewidth,
 
         // maximum: no labels, explosions
         // gotta start somewhere
-        rad = (float)MIN( imagewidth/2-(1+ABS(xdepth_3D)), imageheight/2-(1+ABS(ydepth_3D))-title_hgt );
+        rad = (float)QMIN( imagewidth/2-(1+ABS(xdepth_3D)), imageheight/2-(1+ABS(ydepth_3D))-title_hgt );
 
         /* ok fix center, i.e., no floating re labels, explosion, etc. */
         cx = imagewidth/2 /* - xdepth_3D */ ;
@@ -192,7 +192,7 @@ pie_gif( short imagewidth,
                         pct_len = params->percent_labels == KCHARTPCTTYPE_NONE? 0: strlen(foo);
                         lbl_wdth = ( params->percent_labels == KCHARTPCTTYPE_RIGHT ||
                                      params->percent_labels == KCHARTPCTTYPE_LEFT? lbl_len+1+pct_len:
-                                     MAX(lbl_len,pct_len) )
+                                     QMAX(lbl_len,pct_len) )
 			  * params->labelFontWidth();
                     } else
                         lbl_wdth = lbl_hgt = 0;
@@ -221,8 +221,8 @@ pie_gif( short imagewidth,
 							(float)( this_explode + (params->legend[i]? params->label_dist: 0) ) -
 							(float)( lbl_wdth ) / (float)ABS(this_sin)	);
 
-                    rad = MIN( rad, this_y_explode_limit );
-                    rad = MIN( rad, this_x_explode_limit );
+                    rad = QMIN( rad, this_y_explode_limit );
+                    rad = QMIN( rad, this_x_explode_limit );
 
                     // ok at this radius (which is most likely larger than final)
                     // adjust for inter-label spacing

@@ -37,6 +37,7 @@ private:
     QCheckBox *yaxis2;
     QCheckBox *shelf;
     QCheckBox *xlabel;
+    QCheckBox *cross;
     QLineEdit *title;
     QLineEdit *xtitle;
     QLineEdit *ytitle;

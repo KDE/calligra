@@ -23,10 +23,10 @@ void draw_3d_bar( QPainter* p,
 			 QColor clr,
 			 QColor clrshd )
 {
-	//	debug( "draw 3d bar with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
+//debug( "draw 3d bar with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
 
     QPointArray poly( 4 );
-    int	usd = MIN( y0, yhigh ); // up-side-down bars
+    int	usd = QMIN( y0, yhigh ); // up-side-down bars
 
     if( xdepth || ydepth ) {
 	if( y0 != yhigh ) { // 0 height?
@@ -46,10 +46,11 @@ void draw_3d_bar( QPainter* p,
     p->setPen( clr );
     p->drawPolygon( poly );
 
-    if( xdepth || ydepth ) {
+    if( xdepth || ydepth )
+        {
 	p->setPen( clrshd );
 	p->drawLine( x1, usd, x2, usd );
-    }
+        }
 }
 
 void draw_3d_line( QPainter*	p,

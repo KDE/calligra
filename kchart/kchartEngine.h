@@ -7,17 +7,17 @@ public:
   KChartData const * data;
   QPainter *p;
   int imagewidth;
-  int imageheight;  
+  int imageheight;
   int doLabels();
-  int minmaxValues( int num_points,
+  /*int minmaxValues( int num_points,
 		  int num_sets,
 		  float *uvol,
-		  float &highest, 
+		  float &highest,
 		  float &lowest,
 		  float &vhighest,
-		  float &vlowest);
+		  float &vlowest);*/
   int out_graph();
-  
+
   int compute_yintervals();
   void titleText();
   void drawBorder();
@@ -43,12 +43,13 @@ public:
   void drawVolumeGrids();
   void draw3DAnnotation();
   void draw3DShelf();
-  
+
   // data plotting functions
   // implementation in kchartEngine_DataDraw.cc
   void drawData();
   void drawBars();
   void drawLines();
+  void drawCross();
   void draw3DLines();
   void drawArea();
   void drawCombo();
@@ -89,11 +90,11 @@ private:
   int hlf_hlccapwdth;		// half cap widths for HLC_I_CAP and DIAMOND
   int annote_len, annote_hgt;
   bool do_ylbl_fractions;
-  
+
   /* args */
-  int			setno;				// affects PX() and PY()
+  int setno;// affects PX() and PY()
   // PENDING(kalle) Get rid of this
-  float		*uvol;
+  //float *uvol;
 #define MAXNUMPOINTS 100
   QColor BGColor, LineColor, PlotColor, GridColor, VolColor;
   QColor ExtVolColor[100];

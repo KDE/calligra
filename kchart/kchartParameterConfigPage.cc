@@ -23,7 +23,7 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
     toplevel->addLayout( layout );
 
     QButtonGroup* gb1 = new QButtonGroup( i18n("Parameters"), this );
-    QGridLayout *grid1 = new QGridLayout(gb1,7,1,15,7);
+    QGridLayout *grid1 = new QGridLayout(gb1,8,1,15,7);
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     grid1->addWidget(grid,0,0);
@@ -45,6 +45,9 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
 
     yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), gb1 );
     grid1->addWidget(yaxis2,6,0);
+
+    cross = new QCheckBox( i18n( "Cross" ), gb1 );
+    grid1->addWidget(cross,7,0);
 
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
     QGridLayout *grid2 = new QGridLayout(gb2,7,2,15,7);
@@ -175,6 +178,16 @@ void KChartParameterConfigPage::init()
     yaxis->setChecked(_params->yaxis);
     xlabel->setChecked(_params->hasxlabel);
     shelf->setChecked(_params->shelf);
+    if(_params->type==KCHARTTYPE_LINE)
+        {
+         cross->setEnabled(true);
+         cross->setChecked(_params->cross);
+        }
+    else
+        {
+         cross->setEnabled(false);
+         cross->setChecked(false);
+        }
     if(_params->has_yaxis2())
     	{
     	yaxis2->setChecked(_params->yaxis2);
@@ -261,5 +274,8 @@ void KChartParameterConfigPage::apply()
         _params->annotation->point=element->value()-1;
         _params->setAnnotationFont( annotationFont );
         }
-
+   if(_params->type==KCHARTTYPE_LINE)
+        {
+         _params->cross=cross->isChecked();
+        }
 }

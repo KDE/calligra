@@ -19,8 +19,8 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
 
   QFrame* buttonframe = new QFrame( this );
   buttonframe->setGeometry( 10+pos1*xstep,
-			    10+pos2*ystep, 
-			    xsize, 
+			    10+pos2*ystep,
+			    xsize,
 			    ysize );
   buttonframe->setLineWidth( 2 );
   QPushButton *pushbutton = new QPushButton( buttonframe );
@@ -31,9 +31,9 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
   pushbutton->setPixmap( BarIcon( icon_name ) );
 
   QLabel* label = new QLabel( i18n( name ), this );
-  label->setGeometry( 10+pos1*xstep, 
-		      10+ysize+pos2*ystep, 
-		      xsize, 
+  label->setGeometry( 10+pos1*xstep,
+		      10+ysize+pos2*ystep,
+		      xsize,
 		      ylabelsize );
   label->setAlignment( AlignCenter );
   // next position
@@ -64,15 +64,15 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
   addButton("Area",  "chart_area", KCHARTTYPE_AREA);
   addButton("Bar", "chart_bar", KCHARTTYPE_BAR);
 
-  addButton("Hi-lo-close", "chart_hiloclose", KCHARTTYPE_LINE);
-  addButton("Combo line bar", "chart_combo_line_bar", 
+  addButton("Hi-lo-close", "chart_hiloclose", KCHARTTYPE_HILOCLOSE);
+  addButton("Combo line bar", "chart_combo_line_bar",
 	    KCHARTTYPE_COMBO_LINE_BAR);
   addButton("Combo HLC bar", "chart_combo_hlc_bar",
 	    KCHARTTYPE_COMBO_HLC_BAR);
 
-  addButton("Combo line area","chart_combo_line_area", 
+  addButton("Combo line area","chart_combo_line_area",
 	    KCHARTTYPE_COMBO_LINE_AREA);
-  addButton("Combo hlc area","chart_combo_hlc_area", 
+  addButton("Combo hlc area","chart_combo_hlc_area",
 	    KCHARTTYPE_COMBO_HLC_AREA);
   addButton("3D Combo HiLo Close", "chart_3dhiloclose",
 	    KCHARTTYPE_3DHILOCLOSE);

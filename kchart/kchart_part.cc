@@ -233,6 +233,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   chart.appendChild(params);
   params.setAttribute("type",(int)_params->type);
   params.setAttribute("subtype",(int)_params->stack_type);
+  params.setAttribute("hlc_style",(int)_params->hlc_style);
 
   if(!_params->title.isEmpty())
         {
@@ -320,7 +321,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graph.setAttribute("xlabel",(int)_params->hasxlabel);
   graph.setAttribute("line",(int)_params->label_line);
   graph.setAttribute("percent",(int)_params->percent_labels);
-
+  graph.setAttribute("cross",(int)_params->cross);
   params.appendChild(graph);
   //graph params
   QDomElement graphparams = doc.createElement("graphparams");
@@ -501,8 +502,13 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	 if ( !ok )
 	        return false;
          }
+  if ( params.hasAttribute( "hlc_style" ) )
+        {
+	 _params->hlc_style = (KChartHLCStyle)params.attribute("hlc_style").toInt( &ok );
+	 if ( !ok )
+	        return false;
+         }
 
-  params.setAttribute("subtype",(int)_params->stack_type);
   QDomElement title = params.namedItem( "title" ).toElement();
     if ( !title.isNull())
         {
@@ -666,6 +672,11 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
           if(graph.hasAttribute( "percent"))
                 {
                 _params->percent_labels=(KChartPercentType) graph.attribute("percent").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute("cross"))
+                {
+                _params->cross=(bool) graph.attribute("cross").toInt( &ok );
                 if(!ok) return false;
                 }
         }
@@ -889,6 +900,11 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.30  2000/04/02 16:41:46  mlaurent
+ * Now you can add an annotation
+ * Bug fix
+ * Improved "Config Dialog"
+ *
  * Revision 1.29  2000/02/23 05:50:06  mlaurent
  * Bug fix
  *

@@ -46,7 +46,6 @@ KChartParameters::KChartParameters() :
 	xlabel_spacing = 5;
 	ylabel_density = 80;
 	requested_ymin = MAXDOUBLE;
-	//	requested_ymax = -MAXDOUBLE;
 	requested_ymax = -MAXDOUBLE;
 	requested_yinterval = -MAXDOUBLE;
 	shelf = true;
@@ -56,7 +55,8 @@ KChartParameters::KChartParameters() :
 	yaxis2 = true;
 	yval_style = true;
 	hasxlabel=true;
-	stack_type = KCHARTSTACKTYPE_DEPTH;
+        cross=false;
+        stack_type = KCHARTSTACKTYPE_DEPTH;
 	_3d_depth = 5.0;
 	_3d_angle = 45;
 	bar_width = 75;
@@ -132,7 +132,11 @@ bool KChartParameters::has_yaxis2()
 		  type == KCHARTTYPE_3DCOMBO_HLC_BAR ||
 		  type == KCHARTTYPE_3DCOMBO_HLC_AREA||
 		  type == KCHARTTYPE_3DHILOCLOSE     ||
-		  type == KCHARTTYPE_HILOCLOSE );
+		  type == KCHARTTYPE_HILOCLOSE ||
+                  type == KCHARTTYPE_COMBO_LINE_BAR ||
+                  type == KCHARTTYPE_COMBO_LINE_AREA ||
+                  type == KCHARTTYPE_3DCOMBO_LINE_BAR ||
+                  type == KCHARTTYPE_3DCOMBO_LINE_AREA);
  return val;
 }
 

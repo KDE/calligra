@@ -22,16 +22,16 @@ void kchartEngine::computeSize() {
     + cnt_nl(params->title.latin1(),(int*)NULL)*params->titleFontHeight()
     + 2:
     2;
-  int	xlabel_hgt = 0;
-  int	xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0;
-  int	ytitle_hgt = !params->ytitle.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
-  int	vtitle_hgt = params->do_vol() && !params->ytitle2.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
-  int	ylabel_wth = 0;
-  int	vlabel_wth = 0;
+  int xlabel_hgt = 0;
+  int xtitle_hgt = !params->xtitle.isEmpty()? 1+params->xTitleFontHeight()+1: 0;
+  int ytitle_hgt = !params->ytitle.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
+  int vtitle_hgt = params->do_vol() && !params->ytitle2.isEmpty()? 1+params->yTitleFontHeight()+1: 0;
+  int ylabel_wth = 0;
+  int vlabel_wth = 0;
 
-  int	xtics       = params->grid||params->xaxis? 1+2: 0;
-  int	ytics       = params->grid||params->yaxis? 1+3: 0;
-  int	vtics       = params->yaxis&& params->do_vol() ? 3+1: 0;
+  int xtics = params->grid||params->xaxis? 1+2: 0;
+  int ytics = params->grid||params->yaxis? 1+3: 0;
+  int vtics = params->yaxis&& params->do_vol() ? 3+1: 0;
 
   qDebug( "done width, height, tics computation" );
 
@@ -56,14 +56,14 @@ void kchartEngine::computeSize() {
 
   // for the time being: no x labels
   //hasxlabels = 0;
- 
-	if( params->xaxis && params->hasxlabel ) 
+
+	if( params->xaxis && params->hasxlabel )
 	{
 	int biggest     = -MAXINT;
 	int len = 0;
-	for( int i=0; i<num_points; ++i ) 
+	for( int i=0; i<num_points; ++i )
 		{
-		biggest = MAX( len, params->xlbl[i].length() );
+		biggest = QMAX( len, params->xlbl[i].length() );
 		len=biggest;
 		}
 	xlabel_hgt = 1+ biggest*params->xAxisFontWidth() +1;
@@ -92,12 +92,12 @@ void kchartEngine::computeSize() {
 				50.0,     100.0,    250.0,    500.0,   1000.0,  2500,    5000.0,
 				10000.0,  25000.0,  50000.0,  100000.0,500000.0,1000000, 5000000,
 				10000000 };
-    int		max_num_ylbls;
-    int		longest_ylblen = 0;
+    int max_num_ylbls;
+    int longest_ylblen = 0;
     /* maximum y lables that'll fit... */
     max_num_ylbls = grapheight / (3+params->yAxisFontHeight());
     if( max_num_ylbls < 3 ) {
-				/* gdImageDestroy(im);		haven't yet created it */
+	/* gdImageDestroy(im);		haven't yet created it */
       debug( "Insufficient Height" );
       //      return 2;
       return;
@@ -141,24 +141,27 @@ void kchartEngine::computeSize() {
     /* find smallest interval-point > highest */
     tmp_highest = lowest;
     int maxcount = 0;
-    do {	// while( (tmp_highest += ylbl_interval) <= highest )
-      int		nmrtr, dmntr, whole;
-      char	*price_to_str( float, int*, int*, int*, const char* );
-      int		lbl_len;
-      char	foo[32];
+    do
+    {	// while( (tmp_highest += ylbl_interval) <= highest )
+      int nmrtr=0;
+      int dmntr=0;
+      int whole=0;
+      char *price_to_str( float, int*, int*, int*, const char* );
+      int lbl_len=0;
+      char foo[32];
 
       if( params->yaxis )	{ /* XPG2 compatibility */
 	//cerr << "At least I am doing something\n";
-	
+
 		sprintf( foo, do_ylbl_fractions ? QString( "%.0f" ): params->ylabel_fmt, tmp_highest );
-		
+
 	lbl_len = ylbl_interval<1.0? strlen( price_to_str(tmp_highest,
 							  &nmrtr,
 							  &dmntr,
 							  &whole,
 							  do_ylbl_fractions? QString::null: params->ylabel_fmt) ):
 	  strlen( foo );
-	longest_ylblen = MAX( longest_ylblen, lbl_len );
+	longest_ylblen = QMAX( longest_ylblen, lbl_len );
       }
 
       tmp_highest += ylbl_interval;
@@ -167,7 +170,7 @@ void kchartEngine::computeSize() {
 
     ylabel_wth = longest_ylblen * params->yAxisFontWidth();
     highest = params->requested_ymax==-MAXDOUBLE? tmp_highest:
-      MAX( params->requested_ymax, highest );
+      QMAX( params->requested_ymax, highest );
 
     if( params->do_vol() ) {
       float	num_yintrvls = (highest-lowest) / ylbl_interval;
@@ -182,7 +185,7 @@ void kchartEngine::computeSize() {
 	int		lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vlowest );
 	int		lbl_len_high = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ), vhighest );
 	vlabel_wth = 1
-	  + MAX( lbl_len_low,lbl_len_high ) * params->yAxisFontWidth();
+	  + QMAX( lbl_len_low,lbl_len_high ) * params->yAxisFontWidth();
       }
     }
   }
@@ -210,7 +213,7 @@ void kchartEngine::computeSize() {
     
     vyscl = -((float)grapheight) / hilow_diff;
     vyorig = (float)grapheight
-      + ABS(vyscl) * MIN(vlowest,vhighest)
+      + ABS(vyscl) * QMIN(vlowest,vhighest)
       + ydepth_3Dtotal
       + title_hgt
       + annote_hgt;
@@ -224,7 +227,7 @@ void kchartEngine::computeSize() {
   params->hard_xorig = (int)xorig;
   //	yorig = (float)grapheight + ABS(yscl * lowest) + ydepth_3Dtotal + title_hgt;
   yorig = (float)grapheight
-    + ABS(yscl) * MIN(lowest,highest)
+    + ABS(yscl) * QMIN(lowest,highest)
     + ydepth_3Dtotal
     + title_hgt
     + annote_hgt;
@@ -252,8 +255,8 @@ void kchartEngine::computeMinMaxValues() {
 	if( CELLEXISTS( i, j ) ) {
 	  //debug( "nach dem crash" );
 	  set_sum += CELLVALUE( i, j );
-	  highest = MAX( highest, set_sum );
-	  lowest  = MIN( lowest,  set_sum );
+	  highest = QMAX( highest, set_sum );
+	  lowest  = QMIN( lowest,  set_sum );
 	}
       }
     }
@@ -268,21 +271,21 @@ void kchartEngine::computeMinMaxValues() {
 	    neg_set_sum += CELLVALUE( i, j );
 	  else
 	    pos_set_sum += CELLVALUE( i, j );
-      lowest  = MIN( lowest,  MIN(neg_set_sum,pos_set_sum) );
-      highest = MAX( highest, MAX(neg_set_sum,pos_set_sum) );
+      lowest  = QMIN( lowest,  QMIN(neg_set_sum,pos_set_sum) );
+      highest = QMAX( highest, QMAX(neg_set_sum,pos_set_sum) );
     }
     break;
   case  KCHARTSTACKTYPE_PERCENT: // need to walk sideways
     qDebug("Percent stacktype");
     //bool set_neg=false;
-    for(int j=0; j<num_points; ++j ) 
+    for(int j=0; j<num_points; ++j )
     {
-      
+
       for(int i=0; i<num_sets; ++i )
 	if( CELLEXISTS( i, j ) )
 	  if( CELLVALUE( i, j ) < 0.0 )
 	    set_neg=true;
-	    
+
     }
      if(set_neg)
      	lowest  = -100;
@@ -290,7 +293,7 @@ void kchartEngine::computeMinMaxValues() {
      	lowest = 0;
       highest = 100; //100%
     break;
-    
+
   default:
     qDebug("Other stacktype");
     for(int i=0; i<num_sets; ++i ) {
@@ -298,9 +301,8 @@ void kchartEngine::computeMinMaxValues() {
 	//debug( "Vor dem crash" );
 	if( CELLEXISTS( i, j ) ) {
 	  //debug( "nach dem crash" );
-	  //cerr << "cellvalue " << i << "," << j << "=" << CELLVALUE(i,j) << "\n";
-	  highest = MAX( CELLVALUE( i, j ), highest );
-	  lowest  = MIN( CELLVALUE( i, j ), lowest );
+	  highest = QMAX( CELLVALUE( i, j ), highest );
+	  lowest  = QMIN( CELLVALUE( i, j ), lowest );
 	}
       }
     }
@@ -311,32 +313,34 @@ void kchartEngine::computeMinMaxValues() {
   if( params->scatter )
     cerr << "doing scattering?\n";
     for(int i=0; i<params->num_scatter_pts; ++i ) {
-      highest = MAX( ((params->scatter)+i)->val, highest );
-      lowest  = MIN( ((params->scatter)+i)->val, lowest  );
+      highest = QMAX( ((params->scatter)+i)->val, highest );
+      lowest  = QMIN( ((params->scatter)+i)->val, lowest  );
     }
 
   cerr << "Highest:" << highest << " lowest " << lowest << "\n";
 
-  if( params->do_vol() ) { // for now only one combo set allowed
+  if( params->do_vol() )
+  { // for now only one combo set allowed
     // vhighest = 1.0;
     // vlowest  = 0.0;
 
-    uvol=new float[num_points];
-    cout <<"Uvol doesn't work !!!!!!!!!!!!!!!!!!!!\n";
+    //uvol=new float[num_points];
+    //cout <<"Uvol doesn't work !!!!!!!!!!!!!!!!!!!!\n";
     for(int j=0; j<num_points; ++j )
-      if( uvol[j] != GDC_NOVALUE ) {
+      if( CELLEXISTS( 1, j ) )
+        {
 	/*vhighest = MAX( uvol[j], vhighest );
 	vlowest  = MIN( uvol[j], vlowest );*/
-        vhighest = MAX( CELLVALUE( 1, j ), vhighest );
-	  vlowest  = MIN( CELLVALUE( 1, j ), vlowest );
-        cout <<" j: "<<j <<"vhight : "<<vhighest<<"vlowest : " <<vlowest<<endl;
-      }
-    if( vhighest == -MAXFLOAT )		  	// no values
-      vhighest = 1.0;						// for scaling, need a range
+        vhighest = QMAX( CELLVALUE( 1, j ), vhighest );
+	vlowest  = QMIN( CELLVALUE( 1, j ), vlowest );
+        //cout <<" j: "<<j <<"vhight : "<<vhighest<<"vlowest : " <<vlowest<<endl;
+        }
+    if( vhighest == -MAXFLOAT )// no values
+      vhighest = 1.0;// for scaling, need a range
     else if( vhighest < 0.0 )
       vhighest = 0.0;
     if( vlowest > 0.0 || vlowest == MAXFLOAT )
-      vlowest = 0.0;						// vol should always start at 0
+      vlowest = 0.0;// vol should always start at 0
   }
 
   debug( "done vlowest computation" );
@@ -344,14 +348,14 @@ void kchartEngine::computeMinMaxValues() {
   if( lowest == MAXFLOAT )
     lowest = 0.0;
   if( highest == -MAXFLOAT )
-    highest = 1.0;							// need a range
-  if( params->type == KCHARTTYPE_AREA  ||					// bars and area should always start at 0
+    highest = 1.0;// need a range
+  if( params->type == KCHARTTYPE_AREA  ||// bars and area should always start at 0
       params->type == KCHARTTYPE_BAR   ||
       params->type == KCHARTTYPE_3DBAR ||
       params->type == KCHARTTYPE_3DAREA )
     if( highest < 0.0 )
       highest = 0.0;
-    else if( lowest > 0.0 )						// negs should be drawn from 0
+    else if( lowest > 0.0 )// negs should be drawn from 0
       lowest = 0.0;
 
   if( params->requested_ymin != -MAXDOUBLE && params->requested_ymin < lowest )

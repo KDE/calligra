@@ -30,10 +30,10 @@ int kchartEngine::init() {
   num_lf_xlbls   = 0;
   xdepth_3Dtotal = 0;
   ydepth_3Dtotal = 0;
-  xdepth_3D      = 0;	
-  ydepth_3D      = 0;	
-  hlf_barwdth	   = 0;		
-  hlf_hlccapwdth = 0;	
+  xdepth_3D      = 0;
+  ydepth_3D      = 0;
+  hlf_barwdth	   = 0;
+  hlf_hlccapwdth = 0;
   annote_len     = 0;
   annote_hgt     = 0;
   setno = 0;
@@ -45,10 +45,12 @@ int kchartEngine::init() {
   num_sets = data->rows();
 
   // No data sets left -> bail out
-  if( num_sets < 1 ) {
-    debug( "No data" );
-    return -1;
-  }
+  if( num_sets < 1 )
+        {
+        debug( "No data" );
+        return -1;
+        }
+
   num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
 
   // And num_points is the number of columns
@@ -78,47 +80,49 @@ void kchartEngine::drawScatter() {
   QColor *scatter_clr = new QColor[params->num_scatter_pts];
   QPointArray ct( 3 );
 
-  for(int i=0; i<params->num_scatter_pts; ++i ) {
-    int		hlf_scatterwdth = (int)( (float)(PX(2)-PX(1))
-					 * (((float)(((params->scatter)+i)->width)/100.0)/2.0) );
-    int	scat_x = PX( ((params->scatter)+i)->point + (params->do_bar()?1:0) ),
-      scat_y = PY( ((params->scatter)+i)->val );
+  for(int i=0; i<params->num_scatter_pts; ++i )
+        {
+        int hlf_scatterwdth = (int)( (float)(PX(2)-PX(1))
+                * (((float)(((params->scatter)+i)->width)/100.0)/2.0) );
+        int scat_x = PX( ((params->scatter)+i)->point + (params->do_bar()?1:0) ),
+                scat_y = PY( ((params->scatter)+i)->val );
 
-    if( ((params->scatter)+i)->point >= num_points ||				// invalid point
-	((params->scatter)+i)->point <  0 )
-      continue;
-    scatter_clr[i] = ((params->scatter)+i)->color;
+        if( ((params->scatter)+i)->point >= num_points ||// invalid point
+                ((params->scatter)+i)->point <  0 )
+                continue;
+        scatter_clr[i] = ((params->scatter)+i)->color;
 
-    switch( ((params->scatter)+i)->ind ) {
-    case KCHARTSCATTER_TRIANGLE_UP:
-      ct.setPoint( 0, scat_x, scat_y );
-      ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y + hlf_scatterwdth );
-      ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y + hlf_scatterwdth );
-      if( !params->do_bar() )
-	if( ((params->scatter)+i)->point == 0 )
-	  ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
-	else
-	  if( ((params->scatter)+i)->point == num_points-1 )
-	    ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
-      p->setBrush( QBrush( scatter_clr[i] ) );
-      p->setPen( scatter_clr[i] );
-      p->drawPolygon( ct );
-      break;
-    case KCHARTSCATTER_TRIANGLE_DOWN:
-      ct.setPoint( 0, scat_x, scat_y );
-      ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y - hlf_scatterwdth );
-      ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y - hlf_scatterwdth );
-      if( !params->do_bar() )
-	if( ((params->scatter)+i)->point == 0 )
-	  ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
-	else
-	  if( ((params->scatter)+i)->point == num_points-1 )
-	    ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
-      p->setBrush( QBrush( scatter_clr[i] ) );
-      p->setPen( scatter_clr[i] );
-      p->drawPolygon( ct );
-      break;
-    }
-  }
+        switch( ((params->scatter)+i)->ind )
+                {
+                case KCHARTSCATTER_TRIANGLE_UP:
+                        ct.setPoint( 0, scat_x, scat_y );
+                        ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y + hlf_scatterwdth );
+                        ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y + hlf_scatterwdth );
+                        if( !params->do_bar() )
+	                        if( ((params->scatter)+i)->point == 0 )
+	                                ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
+	                        else
+	                                if( ((params->scatter)+i)->point == num_points-1 )
+	                                        ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
+                         p->setBrush( QBrush( scatter_clr[i] ) );
+                         p->setPen( scatter_clr[i] );
+                         p->drawPolygon( ct );
+                        break;
+                case KCHARTSCATTER_TRIANGLE_DOWN:
+                        ct.setPoint( 0, scat_x, scat_y );
+                        ct.setPoint( 1, scat_x - hlf_scatterwdth, scat_y - hlf_scatterwdth );
+                        ct.setPoint( 2, scat_x + hlf_scatterwdth, scat_y - hlf_scatterwdth );
+                        if( !params->do_bar() )
+	                        if( ((params->scatter)+i)->point == 0 )
+	                                ct.setPoint( 1, scat_x, ct.point( 1 ).y() );
+	                        else
+	                                if( ((params->scatter)+i)->point == num_points-1 )
+	                                        ct.setPoint( 2, scat_x, ct.point( 2 ).y() );
+                        p->setBrush( QBrush( scatter_clr[i] ) );
+                        p->setPen( scatter_clr[i] );
+                        p->drawPolygon( ct );
+                        break;
+                }
+        }
   delete [] scatter_clr;
 }

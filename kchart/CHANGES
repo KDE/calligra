@@ -87,3 +87,9 @@ But Pb for writing % in label for the moment it's not good
 -Now you can put an annotation on chart
 -Improved "Config Dialog"
 -Bug fix
+
+2000-04-08 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now you can put a cross in "Line chart". Also you can see data
+-Now "Combo* Chart" works
+-Bug fix.

@@ -89,21 +89,16 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
   // to get rid of this
 
   /* ----- backmost first - grid & labels ----- */
-  if (!( params->grid || params->yaxis )) {
-    // there is nothing to draw in this case
-    return;
-  }
+  if (!( params->grid || params->yaxis ))
+        {
+        // there is nothing to draw in this case
+        return;
+        }
 
   /* draw grid lines & y label(s) */
   int i,j;
   float	tmp_y = lowest;
-  //Montel : You can choose YLabelColor and LineColor
-  //=>I use labelColor.
-  /*QColor labelcolor = params->YLabelColor== Qt::black ?
-    LineColor: params->YLabelColor;
-  QColor label2color = params->YLabel2Color== Qt::black ?
-    VolColor: params->YLabel2Color;
-    */
+
    QColor labelcolor = params->YLabelColor;
    QColor label2color = params->YLabel2Color;
     /* step from lowest to highest puting in labels and grid at interval points */
@@ -114,13 +109,13 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	if( lowest >= 0.0 ) //	all pos plotting
 	  continue;
 	else
-	  tmp_y = MIN( 0, highest ); // step down to lowest
+	  tmp_y = QMIN( 0, highest ); // step down to lowest
 
       if( i == 1 )
 	if( highest <= 0.0 ) //	all neg plotting
 	  continue;
 	else
-	  tmp_y = MAX( 0, lowest ); // step up to highest
+	  tmp_y = QMAX( 0, lowest ); // step up to highest
 
 
       //			if( !(highest > 0 && lowest < 0) )
@@ -347,11 +342,11 @@ void kchartEngine::drawShelfGrids() {
   p->setPen( LineColor );
   p->drawLine( x1-2, y1, x1, y1 );
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
- num_sets:1;				// backmost
+ num_sets:1;// backmost
   x2 = PX(0);
-  y2 = PY(0);								// w/ new setno
+  y2 = PY(0);// w/ new setno
   p->setPen( LineColor );
-  p->drawLine( x1, y1, x2, y2 );			// depth for 3Ds
+  p->drawLine( x1, y1, x2, y2 );// depth for 3Ds
   p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
   setno = 0;										       	// set back to foremost
 }
@@ -364,9 +359,6 @@ void kchartEngine::drawXTicks()
     graphwidth /
     ( (params->xlabel_spacing==MAXSHORT?0:params->xlabel_spacing)+params->xAxisFontHeight() +
       (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
-
-  /*QColor labelcolor = params->XLabelColor== Qt::black ?
-    LineColor: params->XLabelColor;*/
 
   QColor labelcolor = params->XLabelColor;
 
@@ -441,8 +433,7 @@ void kchartEngine::drawXTicks()
 
 void kchartEngine::drawVolumeGrids()
 {
-  int i;
-  //int setno;
+  int i=0;
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
  num_sets:
   1; // backmost
@@ -450,23 +441,41 @@ void kchartEngine::drawVolumeGrids()
       params->type == KCHARTTYPE_COMBO_LINE_BAR   ||
       params->type == KCHARTTYPE_3DCOMBO_LINE_BAR ||
       params->type == KCHARTTYPE_3DCOMBO_HLC_BAR ) {
-    if( uvol[0] != GDC_NOVALUE )
-      draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
-		   PV(0), PV(uvol[0]),
-							 0, 0,
+    //if( uvol[0] != GDC_NOVALUE )
+      if(CELLEXISTS( 1, 0 ) )
+      /*draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
+		   PV(0), PV(uvol[0]), 0, 0,
+		   ExtVolColor[0],
+		   ExtVolColor[0] );*/
+       draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
+		   PV(0), PV(CELLVALUE( 1, 0 )), 0, 0,
 		   ExtVolColor[0],
 		   ExtVolColor[0] );
-    for(i=1; i<num_points-1; ++i ) {
-      if( uvol[i] != GDC_NOVALUE )
+     for(i=1; i<num_points-1; ++i )
+     {
+     /* if( uvol[i] != GDC_NOVALUE )
 	draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
 		     PV(0), PV(uvol[i]),
 		     0, 0,
 		     ExtVolColor[i],
+		     ExtVolColor[i] );*/
+         if( CELLEXISTS( 1, i ) )
+	draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
+		     PV(0), PV(CELLVALUE( 1, i )),
+		     0, 0,
+		     ExtVolColor[i],
 		     ExtVolColor[i] );
     }
-    if (uvol[i] != GDC_NOVALUE) {
+    /*if (uvol[i] != GDC_NOVALUE) {
       draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
 		   PV(0), PV(uvol[i]),
+		   0, 0,
+		   ExtVolColor[i],
+		   ExtVolColor[i] );
+    }*/
+     if (CELLEXISTS( 1, i )) {
+      draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
+		   PV(0), PV(CELLVALUE( 1, i )),
 		   0, 0,
 		   ExtVolColor[i],
 		   ExtVolColor[i] );
@@ -475,14 +484,21 @@ void kchartEngine::drawVolumeGrids()
 	     params->type == KCHARTTYPE_COMBO_LINE_AREA  ||
 	     params->type == KCHARTTYPE_3DCOMBO_LINE_AREA||
 	     params->type == KCHARTTYPE_3DCOMBO_HLC_AREA )
-    for(int i=1; i<num_points; ++i ) {
-      if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
+    for(int i=1; i<num_points; ++i )
+        {
+      /*if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
 	draw_3d_area( p, PX(i-1), PX(i),
 		      PV(0), PV(uvol[i-1]), PV(uvol[i]),
 		      0, 0,
 		      ExtVolColor[i],
+		      ExtVolColor[i] );*/
+        if( CELLEXISTS( 1, i-1 ) && CELLEXISTS( 1, i ) )
+	draw_3d_area( p, PX(i-1), PX(i),
+		      PV(0), PV(CELLVALUE( 1, i-1 )), PV(CELLVALUE(1,i)),
+		      0, 0,
+		      ExtVolColor[i],
 		      ExtVolColor[i] );
-    }
+        }
   setno = 0;
 }
 

@@ -30,7 +30,7 @@ short cnt_nl( const char *nstr,int *len )/* strlen - max seg */
 		if( *nstr == '\n' )
 		        {
 		        ++c;
-		        max_seg_len = MAX( tmplen, max_seg_len );
+		        max_seg_len = QMAX( tmplen, max_seg_len );
 		        tmplen = 0;
 		        }
 		else
@@ -39,7 +39,7 @@ short cnt_nl( const char *nstr,int *len )/* strlen - max seg */
 		}
 
 	if( len )
-		*len = MAX( tmplen, max_seg_len );/* don't forget last seg */
+		*len = QMAX( tmplen, max_seg_len );/* don't forget last seg */
 	return c;
 }
 

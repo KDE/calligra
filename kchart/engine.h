@@ -15,15 +15,13 @@
 #include <qcolor.h>
 #include <values.h>
 #include <kchart_part.h>
-         
+
 class KChartParameters;
 
 #define GDC_NOVALUE			-MAXFLOAT
 #define GDC_NULL			GDC_NOVALUE
 
 #define ABS( x )			( (x)<0.0? -(x): (x) )
-#define MAX( x, y )			( (x)>(y)?(x):(y) )
-#define MIN( x, y )			( (x)<(y)?(x):(y) )
 
 #define PVRED               0x00FF0000
 #define PVGRN               0x0000FF00

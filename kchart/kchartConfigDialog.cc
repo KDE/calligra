@@ -55,6 +55,12 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
                 _subTypePage = new KChartSubTypeChartPage(_params, this );
     	        addTab( _subTypePage, i18n( "Sub Type Chart" ) );
                 }
+    if(_params->has_hlc_sets())
+        {
+        _hlcChart=new KChartComboPage(_params,this);
+        addTab( _hlcChart, i18n( "HLC Chart" ) );
+        }
+
     //init
     defaults();
 
@@ -106,6 +112,10 @@ void KChartConfigDialog::apply()
         {
         _subTypePage->apply();
         }
+    if(_params->has_hlc_sets())
+        {
+        _hlcChart->apply();
+        }
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -148,6 +158,10 @@ void KChartConfigDialog::defaults()
         ||(_params->type==KCHARTTYPE_3DLINE)))
         {
         _subTypePage->init();
+        }
+    if(_params->has_hlc_sets())
+        {
+        _hlcChart->init();
         }
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
