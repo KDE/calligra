@@ -211,6 +211,8 @@ void KoStyle::saveStyle( const KoParagLayout& layout,KoStyle *sty, QDomElement &
         parentElem.appendChild( element );
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
+        element.setAttribute( "filling", (*it).filling );
+        element.setAttribute( "width", (*it).ptWidth );
     }
     if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
     {
@@ -254,6 +256,8 @@ KoParagLayout KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
             KoTabulator tab;
             tab.type = static_cast<KoTabulators>( KoStyle::getAttribute( element, "type", T_LEFT ) );
             tab.ptPos = KoStyle::getAttribute( element, "ptpos", 0.0 );
+            tab.filling = static_cast<KoTabulatorFilling>( KoStyle::getAttribute( element, "filling", TF_BLANK ) );
+            tab.ptWidth = KoStyle::getAttribute( element, "width", 0.5 );
             tabList.append( tab );
         }
     }

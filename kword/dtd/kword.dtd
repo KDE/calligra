@@ -707,12 +707,20 @@ don't put a </?xml...> at the end of the file!).
                                 3 .. alignment of decimal point
 
             ptpos:              Position of the tabulation, in pt
+
+            filling:            0 .. blank
+                                1 .. dots
+                                2 .. line
+
+            width:              Width of the filling, in pt
 -->
 <!ELEMENT TABULATOR
     EMPTY>
 <!ATTLIST TABULATOR
     type CDATA #REQUIRED
-    ptpos CDATA #REQUIRED>
+    ptpos CDATA #REQUIRED
+    filling CDATA #IMPLIED
+    width CDATA #IMPLIED>
 
 <!--    Defines the position of a tabulation
         Attributes:
@@ -797,7 +805,7 @@ don't put a </?xml...> at the end of the file!).
             NUMB = a number
             STRI = a string
             The rest (after the 4 letters) is quite internal, and depends on the type of variable.
-            
+
         text the text shown by the variable in the document when it was saved.
             This is redundant information, unused by KWord upon loading, but useful
             for export filters.

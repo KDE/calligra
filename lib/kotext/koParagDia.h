@@ -303,6 +303,8 @@ protected slots:
     void deleteClicked();
     void setActiveItem(int selected);
     void updateAlign(int selected);
+    void updateFilling(int selected);
+    void updateWidth();
 
 protected:
 
@@ -322,6 +324,7 @@ protected:
     QLineEdit* sAlignChar;
     QGroupBox* gTabLeader;
     QComboBox* cFilling;
+    QLineEdit* eWidth;
     QPushButton* bNew;
     QPushButton* bDelete;
 

@@ -464,6 +464,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             if( e->x()-left < 0 || right-e->x() < 0 )
                 return;
             KoTabulator tab;
+            tab.filling = TF_BLANK;
+            tab.ptWidth = 0.5;
             switch ( d->tabChooser->getCurrTabType() ) {
             case KoTabChooser::TAB_LEFT:
                 tab.type = T_LEFT;

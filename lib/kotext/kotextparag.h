@@ -132,6 +132,9 @@ public:
      * Returns the index in the paragraph */
     int findCustomItem( const KoTextCustomItem * custom ) const;
 
+    /** Cache to find a tab by char index, QMap<char index, tab index> */
+    QMap<int, int> tabCache() { return m_tabCache; }
+
     /** Reimplemented from QTextParag to implement non-left-aligned tabs */
     virtual int nextTab( int chnum, int x );
 
@@ -183,6 +186,7 @@ protected:
 protected:
     QStyleSheetItem * m_item;
     KoParagLayout m_layout;
+    QMap<int, int> m_tabCache;
 };
 
 #endif

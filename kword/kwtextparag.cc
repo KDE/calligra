@@ -687,6 +687,8 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
             KoTabulator tab;
             tab.type = static_cast<KoTabulators>( KWDocument::getAttribute( element, "type", T_LEFT ) );
             tab.ptPos = KWDocument::getAttribute( element, "ptpos", 0.0 );
+            tab.filling = static_cast<KoTabulatorFilling>( KWDocument::getAttribute( element, "filling", TF_BLANK ) );
+            tab.ptWidth = KWDocument::getAttribute( element, "width", 0.5 );
             tabList.append( tab );
         }
     }
@@ -929,6 +931,8 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
         parentElem.appendChild( element );
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
+        element.setAttribute( "filling", (*it).filling );
+        element.setAttribute( "width", (*it).ptWidth );
     }
     if(layout.shadowDistance!=0 || layout.shadowDirection!=KoParagLayout::SD_RIGHT_BOTTOM)
     {

@@ -35,6 +35,7 @@
 class QPainter;
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
+enum KoTabulatorFilling { TF_BLANK = 0, TF_DOTS = 1, TF_LINE = 2 };
 
 /**
  * Struct: KoTabulator
@@ -49,9 +50,18 @@ struct KoTabulator {
      * Type of tab (left/center/right/decimalpoint)
      */
     KoTabulators type;
+    /**
+     * Type of tab filling.
+     */
+    KoTabulatorFilling filling;
+    /**
+     * Width of the tab filling line.
+     */
+    double ptWidth;
 
     bool operator==( const KoTabulator & t ) const {
-        return ptPos == t.ptPos && type == t.type;
+        return ptPos == t.ptPos && type == t.type && 
+               filling == t.filling && ptWidth == t.ptWidth;
     }
     // Operators used for sorting
     bool operator < ( const KoTabulator & t ) const {

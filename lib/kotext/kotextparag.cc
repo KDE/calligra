@@ -573,6 +573,23 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str, start, len, dir );
 	}
     }
+    if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
+	painter.save();
+	KoZoomHandler * zh = textDocument()->paintingZoomHandler();
+	KoTabulator tab = m_layout.tabList()[ m_tabCache[ start ] ];
+	int lineWidth = zh->zoomItY( tab.ptWidth );
+	switch ( tab.filling ) {
+	    case TF_DOTS:
+		painter.setPen( QPen( textColor, lineWidth, Qt::DotLine ) );
+		painter.drawLine( startX, lastY + baseLine, startX + bw, lastY + baseLine );
+		break;
+	    case TF_LINE:
+		painter.setPen( QPen( textColor, lineWidth, Qt::SolidLine ) );
+		painter.drawLine( startX, lastY + baseLine, startX + bw, lastY + baseLine );
+		break;
+	}
+	painter.restore();
+    }
     if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
 	painter.drawText( startX + bw, lastY + baseLine, "\xad" );
     }
@@ -721,6 +738,9 @@ int KoTextParag::nextTab( int chnum, int x )
                         }
                         ++c;
                     }
+                    
+                    m_tabCache[chnum] = i;
+
                     if ( type == T_RIGHT )
                         return tab - w;
                     else // T_CENTER
@@ -770,9 +790,11 @@ int KoTextParag::nextTab( int chnum, int x )
 
                         ++c;
                     }
+                    m_tabCache[chnum] = i;
                     return tab - w;
                 }
                 default: // case T_LEFT:
+                    m_tabCache[chnum] = i;
                     return tab;
                 }
             }

@@ -20,6 +20,7 @@
 #include "kotextformatter.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
+#include "kotextparag.h"
 #include "kozoomhandler.h"
 
 #include <kdebug.h>
@@ -84,6 +85,8 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
     KoZoomHandler *zh = textdoc->formattingZoomHandler();
     int pixelww = 0; // width in pixels
     int pixelx = zh->layoutUnitToPixelX( x );
+
+    static_cast<KoTextParag *>(parag)->tabCache().clear();
 
     QChar lastChr;
     for ( ; i < len; ++i, ++col ) {

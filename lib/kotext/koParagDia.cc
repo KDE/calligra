@@ -1494,23 +1494,33 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     TextLabel1_2->setText( i18n( "The space a tab uses can be filled with a pattern." ) );
     GroupBox5Layout->addWidget( TextLabel1_2 );
 
-    QHBoxLayout* layout11 = new QHBoxLayout;
-    layout11->setSpacing( 6 );
-    layout11->setMargin( 0 );
+    QGridLayout *fillingGrid = new QGridLayout( gTabLeader, 2, 2, 0, KDialog::spacingHint() );
 
     QLabel* TextLabel2 = new QLabel( gTabLeader);
     TextLabel2->setText( i18n( "Filling:" ) );
-    layout11->addWidget( TextLabel2 );
+    TextLabel2->setAlignment( AlignRight );
+    fillingGrid->addWidget( TextLabel2, 0, 0 );
 
     cFilling = new QComboBox( FALSE, gTabLeader);
     cFilling->insertItem( i18n( "Blank" ) );
     cFilling->insertItem( i18n( "Dots" ) );
     cFilling->insertItem( i18n( "Line" ) );
-    layout11->addWidget( cFilling );
-    QSpacerItem* spacer_3 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout11->addItem( spacer_3 );
-    GroupBox5Layout->addLayout( layout11 );
-    layout11->setEnabled(false);         // The world is not ready for this yet...
+    fillingGrid->addWidget( cFilling, 0, 1 );
+
+    QString unitName = KoUnit::unitName( m_unit );
+    QLabel * TextLabel3 = new QLabel( i18n("Width (%1):").arg( unitName ), gTabLeader );
+    TextLabel3->setAlignment( AlignRight );
+    fillingGrid->addWidget( TextLabel3, 1, 0 );
+
+    eWidth = new QLineEdit( gTabLeader );
+    eWidth->setValidator( new KFloatValidator( 0, 9999, true, eWidth ) );
+    eWidth->setText( i18n("0.00") );
+    eWidth->setMaxLength( 5 );
+    eWidth->setEchoMode( QLineEdit::Normal );
+    eWidth->setFrame( true );
+    fillingGrid->addWidget( eWidth, 1, 1 );
+
+    GroupBox5Layout->addLayout( fillingGrid );
     editLayout->addWidget( gTabLeader );
     QSpacerItem* spacer_4 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     editLayout->addItem( spacer_4 );
@@ -1538,6 +1548,8 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     connect(bNew,SIGNAL(clicked ()),this,SLOT(newClicked()));
     connect(bDelete,SIGNAL(clicked ()),this,SLOT(deleteClicked()));
     connect(bgAlign,SIGNAL(clicked (int)),this,SLOT(updateAlign(int)));
+    connect(cFilling,SIGNAL(activated (int)),this,SLOT(updateFilling(int)));
+    connect(eWidth,SIGNAL(textChanged ( const QString & ) ),this,SLOT(updateWidth()));
     connect(lstTabs,SIGNAL(highlighted (int)),this,SLOT(setActiveItem(int)));
     noSignals=false;
 }
@@ -1564,6 +1576,8 @@ void KoParagTabulatorsWidget::newClicked() {
     if(selected < 0) {
         newTab->ptPos=0;
         newTab->type=T_LEFT;
+        newTab->filling=TF_BLANK;
+        newTab->ptWidth=0.5;
         m_tabList.append(*newTab);
         lstTabs->insertItem(tabToString(newTab));
         lstTabs->setCurrentItem(0);
@@ -1578,6 +1592,8 @@ void KoParagTabulatorsWidget::newClicked() {
         {
             newTab->ptPos=pos + KoUnit::ptFromUnit( add, m_unit );
             newTab->type=m_tabList[selected].type;
+            newTab->filling=m_tabList[selected].filling;
+            newTab->ptWidth=m_tabList[selected].ptWidth;
             m_tabList.insert(m_tabList.at(selected), *newTab);
             lstTabs->insertItem( tabToString(newTab), selected);
             lstTabs->setCurrentItem(lstTabs->findItem(tabToString(newTab)));
@@ -1620,11 +1636,21 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
         default:
             bgAlign->setButton(0);
     }
+    switch( selectedTab->filling) {
+        case TF_DOTS:
+            cFilling->setCurrentItem(1); break;
+        case TF_LINE:
+            cFilling->setCurrentItem(2); break;
+        case TF_BLANK:
+        default:
+            cFilling->setCurrentItem(0);
+    }
+    eWidth->setText( KoUnit::userValue( selectedTab->ptWidth, m_unit ) );
     sTabPos->setText( tabToString(selectedTab));
     bDelete->setEnabled(true);
     gPosition->setEnabled(true);;
     bgAlign->setEnabled(true);;
-    //gTabLeader->setEnabled(false);;
+    gTabLeader->setEnabled(true);;
     noSignals=false;
 }
 
@@ -1657,6 +1683,25 @@ void KoParagTabulatorsWidget::updateAlign(int selected) {
         default:
             selectedTab->type=T_LEFT;
     }
+}
+
+void KoParagTabulatorsWidget::updateFilling(int selected) {
+    KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
+
+    switch( selected) {
+        case 1:
+            selectedTab->filling=TF_DOTS; break;
+        case 2:
+            selectedTab->filling=TF_LINE; break;
+        case 0:
+        default:
+            selectedTab->filling=TF_BLANK;
+    }
+}
+
+void KoParagTabulatorsWidget::updateWidth() {
+    KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
+    selectedTab->ptWidth = QMAX( 0, KoUnit::fromUserValue( eWidth->text(), m_unit ) );
 }
 
 void KoParagTabulatorsWidget::sortLists() {
