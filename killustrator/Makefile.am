@@ -35,7 +35,7 @@ lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
         KIllustrator_view.cc \
         InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
-        tooldockmanager.cc tooldockbase.cc stencilbarmovemanager.cc \
+        tooldockmanager.cc \
  	Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 	PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 	GText.cc GGroup.cc Tool.cc PolylineTool.cc \
@@ -70,8 +70,8 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
        	Gradient.cc GradientShape.cc \
        	BrushCells.cc EllipseConfigDialog.cc \
        	HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
-       	BlendDialog.cc BlendCmd.cc \
-       	filter_utils.cc LayerPanel.cc TabBar.cc
+       	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
+       	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
 
 libkillustratorpart_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined
 libkillustratorpart_la_LIBADD = $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la

@@ -28,13 +28,11 @@
 #include <qintdict.h>
 #include <qvaluelist.h>
 #include <ImportFilter.h>
+#include <iostream.h>
 
 class GDocument;
 class GObject;
 class QColor;
-#ifndef __DECCXX
-class istream;
-#endif
 
 class XfigImport : public ImportFilter {
 public:

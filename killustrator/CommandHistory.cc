@@ -30,6 +30,8 @@
 
 #include <typeinfo>
 
+using namespace std;
+
 #define MAX_HISTSIZE 1000
 
 CommandHistory::CommandHistory ()
