@@ -2584,12 +2584,14 @@ void KisView::insert_layer_image(bool newImage, const QString &filename)
 
     if( !url.isEmpty() )
     {
-        QImage *fileImage = new QImage(url.path());
-        if(!fileImage)
-        {
-            kdDebug() << "Can't create QImage from file" << endl;
-            return;
-        }
+	QImage *fileImage = new QImage();
+
+	if (!fileImage -> load(url.path())) {
+		kdDebug() << "Can't create QImage from file" << endl;
+		KMessageBox::sorry(this, i18n("Could not convert file: %1\n").arg(url.path()));
+		delete fileImage;
+		return;
+	}
 
         /* convert indexed images, all gifs and some pngs of 8 bits
         or less, to 16 bit by creating a QPixmap from the file and
