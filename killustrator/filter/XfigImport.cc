@@ -547,6 +547,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
       oinfo.startArrowId = 4;
     fin.ignore (INT_MAX, '\n');
   }
+  
   // points line
   for (int i = 0; i < npoints; i++) {
     int x, y;
@@ -564,7 +565,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
     float fac;
     fin >> fac;
     // ignore it now
-    fin.ignore (INT_MAX, '\n');
+    // fin.ignore (INT_MAX, '\n');
   }
 
   if (oinfo.startArrowId || oinfo.endArrowId)
