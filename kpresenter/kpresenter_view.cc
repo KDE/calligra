@@ -3104,7 +3104,7 @@ void KPresenterView::setupActions()
                                      actionCollection(), "add_helpline");
 
 
-    actionRemoveHelpPoint = new KAction( i18n( "Remove HelpPoint" ), 0,
+    actionRemoveHelpPoint = new KAction( i18n( "Remove Help Point" ), 0,
                                     this, SLOT( removeHelpPoint() ),
                                     actionCollection(), "remove_helppoint" );
 
@@ -3126,10 +3126,10 @@ void KPresenterView::setupActions()
                                              this, SLOT( configureCompletion() ),
                                              actionCollection(), "configure_completion" );
 
-    actionZoomMinus = new KAction( i18n( "Zoom Minus" ), "viewmag-",0,
+    actionZoomMinus = new KAction( i18n( "Zoom Out" ), "viewmag-",0,
                                    this, SLOT( zoomMinus() ),
                                    actionCollection(), "zoom_minus" );
-    actionZoomPlus = new KAction( i18n( "Zoom Plus" ), "viewmag+",0,
+    actionZoomPlus = new KAction( i18n( "Zoom In" ), "viewmag+",0,
                                    this, SLOT( zoomPlus() ),
                                    actionCollection(), "zoom_plus" );
     actionZoomEntirePage = new KAction( i18n( "Zoom Entire Page" ), 0,
@@ -3139,7 +3139,7 @@ void KPresenterView::setupActions()
     actionZoomMinus = new KAction( i18n( "Zoom Page Width" ), 0,
                                    this, SLOT( zoomPageWidth() ),
                                    actionCollection(), "zoom_page_width" );
-    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected object" ), "viewmagfit",0,
+    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected Object" ), "viewmagfit",0,
                                    this, SLOT( zoomSelectedObject() ),
                                    actionCollection(), "zoom_selected_object" );
     actionZoomPageHeight= new KAction( i18n( "Zoom Page Height" ), 0,

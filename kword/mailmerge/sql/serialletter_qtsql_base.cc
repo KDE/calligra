@@ -98,6 +98,6 @@ bool  KWQTSQLSerialDataSourceBase::openDatabase()
 		QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
 		return false;
         }
-	QMessageBox::critical(0,i18n("Error"),i18n("Couldn't create database object"),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
+	QMessageBox::critical(0,i18n("Error"),i18n("Unable to create database object"),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
 
 }
