@@ -2231,6 +2231,10 @@ void KSpreadView::slotItemSelected( int id)
 {
   QString tmp=m_popupListChoose->text(id);
   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );  
+
+  if(tmp==cell->text())
+    return;
+
   if ( cell->isDefault() )
     {
       cell = new KSpreadCell(m_pTable , m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -2246,6 +2250,31 @@ void KSpreadView::slotItemSelected( int id)
   
   cell->setCellText( tmp, true );
   editWidget()->setText( tmp );
+}
+bool KSpreadView::testListChoose()
+{
+   QRect selection( m_pTable->selectionRect() );
+   if(selection.left()==0)
+     selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
+		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+
+   KSpreadCell* c = m_pTable->firstCell();
+   for( ;c  ; c = c->nextCell() )
+     {
+       int col = c->column();
+       if ( selection.left() <= col && selection.right() >= col
+	    &&!c->isObscuringForced())
+	 {
+	   if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+	      && !c->isTime() &&!c->isDate()
+	      && c->content() != KSpreadCell::VisualFormula)
+	     {
+	       return true;
+	     }
+	   
+	 }
+     }
+   return false;
 }
 
 void KSpreadView::openPopupMenu( const QPoint & _point )
@@ -2291,9 +2320,13 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     {
         m_removeComment->plug( m_pPopupMenu );
     }
+
     
-   m_pPopupMenu->insertSeparator();
-    m_pPopupMenu->insertItem( i18n("Selection list..."), this, SLOT( slotListChoosePopupMenu() ) );
+    if(testListChoose())
+      {
+	m_pPopupMenu->insertSeparator();
+	m_pPopupMenu->insertItem( i18n("Selection list..."), this, SLOT( slotListChoosePopupMenu() ) );
+      }
 
     // Remove informations about the last tools we offered
     m_lstTools.clear();
