@@ -25,7 +25,9 @@ class KoTextFormatPrivate
 {
 public:
     KoTextFormatPrivate() : m_screenFont( 0L ), m_screenFontMetrics( 0L ),
-                            m_refFont( 0L ), m_refFontMetrics( 0L )
+                            m_refFont( 0L ), m_refFontMetrics( 0L ),
+                            m_refAscent( -1 ), m_refDescent( -1 ), m_refHeight( -1 )
+
     {}
     ~KoTextFormatPrivate()
     {
@@ -37,12 +39,18 @@ public:
         delete m_screenFont; m_screenFont = 0L;
         delete m_refFontMetrics; m_refFontMetrics = 0L;
         delete m_refFont; m_refFont = 0L;
+        m_refAscent = -1;
+        m_refDescent = -1;
+        m_refHeight = -1;
     }
     // caching for speedup when formatting
     QFont* m_screenFont; // font to be used when painting (zoom-dependent)
     QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
     QFont* m_refFont; // font to be used when formatting text for layout units
     QFontMetrics* m_refFontMetrics; // font metrics for m_refFontMetrics
+    int m_refAscent;
+    int m_refDescent;
+    int m_refHeight;
 };
 
 
@@ -115,14 +123,14 @@ public:
      * Get metrics for the reference font (in layout units).
      * This method takes care of superscript and subscript (smaller font).
      */
-    QFontMetrics refFontMetrics() const;
+    const QFontMetrics& refFontMetrics() const;
 
     /**
      * Returns the font metrics for the font used at the zoom & resolution
      * given by 'zh'. Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
      */
-    QFontMetrics screenFontMetrics( const KoZoomHandler* zh ) const;
+    const QFontMetrics& screenFontMetrics( const KoZoomHandler* zh ) const;
 
     /**
      * Returns the reference font, i.e. the one in layout units.

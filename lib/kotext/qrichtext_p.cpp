@@ -118,8 +118,8 @@ KoTextParag *KoTextDocument::paragAt( int i ) const
 }
 
 KoTextFormat::KoTextFormat()
-    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() ),
-      painter( 0 ), different( NoFlags )
+    : fm( QFontMetrics( fn ) ), linkColor( TRUE ), logicalFontSize( 3 ), stdPointSize( qApp->font().pointSize() )
+      /*painter( 0 ), different( NoFlags )*/
 {
     ref = 0;
     missp = FALSE;
@@ -162,11 +162,11 @@ KoTextFormat::KoTextFormat( const QStyleSheetItem *style )
     fn.setStyleStrategy( QFont::ForceOutline );
     col = style->color();
     fm = QFontMetrics( fn );
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
+    //leftBearing = fm.minLeftBearing();
+    //rightBearing = fm.minRightBearing();
+    //hei = fm.height();
+    //asc = fm.ascent();
+    //dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
     //memset( widths, 0, 256 * sizeof( ushort ) );
@@ -178,8 +178,8 @@ KoTextFormat::KoTextFormat( const QStyleSheetItem *style )
 
 KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollection *parent )
     : fn( f ), col( c ), fm( QFontMetrics( f ) ), linkColor( TRUE ),
-      logicalFontSize( 3 ), stdPointSize( f.pointSize() ), painter( 0 ),
-      different( NoFlags )
+      logicalFontSize( 3 ), stdPointSize( f.pointSize() ) /*, painter( 0 ),
+      different( NoFlags )*/
 {
 #ifdef DEBUG_COLLECTION
     qDebug("KoTextFormat with font & color & parent (%p), addRef. %p", parent, this);
@@ -190,11 +190,11 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     fn.setStyleStrategy( QFont::ForceOutline );
     ref = 0;
     collection = parent;
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
+    //leftBearing = fm.minLeftBearing();
+    //rightBearing = fm.minRightBearing();
+    //hei = fm.height();
+    //asc = fm.ascent();
+    //dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
     //memset( widths, 0, 256 * sizeof( ushort ) );
@@ -208,7 +208,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     ////
     generateKey();
     addRef();
-    updateStyleFlags();
+    //updateStyleFlags();
 }
 
 KoTextFormat::KoTextFormat( const KoTextFormat &f )
@@ -221,21 +221,21 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     collection = 0; // f might be in the collection, but we are not
     fn = f.fn;
     col = f.col;
-    painter = f.painter;
-    leftBearing = f.leftBearing;
-    rightBearing = f.rightBearing;
+    //painter = f.painter;
+    //leftBearing = f.leftBearing;
+    //rightBearing = f.rightBearing;
     //memset( widths, 0, 256 * sizeof( ushort ) );
-    hei = f.hei;
-    asc = f.asc;
-    dsc = f.dsc;
+    //hei = f.hei;
+    //asc = f.asc;
+    //dsc = f.dsc;
+    //different = f.different;
     stdPointSize = f.stdPointSize;
     logicalFontSize = f.logicalFontSize;
     missp = f.missp;
     ha = f.ha;
     k = f.k;
     linkColor = f.linkColor;
-    style = f.style;
-    different = f.different;
+    //style = f.style;
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
@@ -272,20 +272,20 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     fn = f.fn;
     col = f.col;
     fm = f.fm;
-    leftBearing = f.leftBearing;
-    rightBearing = f.rightBearing;
+    //leftBearing = f.leftBearing;
+    //rightBearing = f.rightBearing;
     //memset( widths, 0, 256 * sizeof( ushort ) );
-    hei = f.hei;
-    asc = f.asc;
-    dsc = f.dsc;
+    //hei = f.hei;
+    //asc = f.asc;
+    //dsc = f.dsc;
     stdPointSize = f.stdPointSize;
     logicalFontSize = f.logicalFontSize;
     missp = f.missp;
     ha = f.ha;
     k = f.k;
     linkColor = f.linkColor;
-    style = f.style;
-    different = f.different;
+    //style = f.style;
+    //different = f.different;
     //// kotext addition
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
@@ -304,20 +304,21 @@ void KoTextFormat::update()
     //qDebug("%p KoTextFormat::update %s %d",this, fn.family().latin1(),fn.pointSize());
     fn.setStyleStrategy( QFont::ForceOutline );
     fm = QFontMetrics( fn );
-    leftBearing = fm.minLeftBearing();
-    rightBearing = fm.minRightBearing();
-    hei = fm.height();
-    asc = fm.ascent();
-    dsc = fm.descent();
+    //leftBearing = fm.minLeftBearing();
+    //rightBearing = fm.minRightBearing();
+    //hei = fm.height();
+    //asc = fm.ascent();
+    //dsc = fm.descent();
     //memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
-    updateStyleFlags();
+    //updateStyleFlags();
     //// kotext
     assert( d );
     d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
     ////
 }
 
+#if 0
 int KoTextFormat::minLeftBearing() const
 {
     if ( !painter || !painter->isActive() )
@@ -333,6 +334,7 @@ int KoTextFormat::minRightBearing() const
     painter->setFont( fn );
     return painter->fontMetrics().minRightBearing();
 }
+#endif
 
 #if 0 // see kotextformat.cc
 int KoTextFormat::height() const
@@ -437,6 +439,7 @@ void KoTextFormat::removeRef()
         collection->remove( this );
 }
 
+#if 0
 void KoTextFormat::updateStyle()
 {
     if ( !collection || !collection->styleSheet() )
@@ -482,6 +485,7 @@ void KoTextFormat::updateStyleFlags()
     if ( item->fontWeight() != fn.weight() )
 	different |= Bold;
 }
+#endif
 
 QString KoTextString::toString( const QMemArray<KoTextStringChar> &data )
 {
@@ -734,16 +738,20 @@ int KoTextParag::numberOfSubParagraph() const
 
 void KoTextParag::setFormat( KoTextFormat *fm )
 {
+#if 0
     bool doUpdate = FALSE;
     if (defFormat && (defFormat != formatCollection()->defaultFormat()))
        doUpdate = TRUE;
+#endif
     defFormat = formatCollection()->format( fm );
+#if 0
     if ( !doUpdate )
 	return;
     for ( int i = 0; i < length(); ++i ) {
 	if ( at( i )->format()->styleName() == defFormat->styleName() )
 	    at( i )->format()->updateStyle();
     }
+#endif
 }
 
 KoTextFormatterBase *KoTextParag::formatter() const

@@ -386,6 +386,7 @@ KoTextCursor *KoTextAlignmentCommand::unexecute( KoTextCursor *c )
     return c;
 }
 
+#if 0
 KoTextParagTypeCommand::KoTextParagTypeCommand( KoTextDocument *d, int fParag, int lParag, bool l,
 					      QStyleSheetItem::ListStyle s, const QValueList< QPtrVector<QStyleSheetItem> > &os,
 					      const QValueList<QStyleSheetItem::ListStyle> &ols )
@@ -427,6 +428,7 @@ KoTextCursor *KoTextParagTypeCommand::unexecute( KoTextCursor *c )
     }
     return c;
 }
+#endif
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1342,10 +1344,12 @@ void KoTextDocument::init()
     nSelections = 1;
     addMargs = FALSE;
 
+#if 0
     sheet_ = QStyleSheet::defaultSheet();
     factory_ = QMimeSourceFactory::defaultFactory();
     contxt = QString::null;
     fCollection->setStyleSheet( sheet_ );
+#endif
 
     underlLinks = TRUE;
     backBrush = 0;
@@ -1561,7 +1565,7 @@ struct Q_EXPORT KoTextDocumentTag {
 		    vec.insert( i, curtag.style ); \
 		    curpar->setStyleSheetItems( vec ); }while(FALSE)
 
-
+#if 0
 void KoTextDocument::setRichText( const QString &text, const QString &context )
 {
     setTextFormat( Qt::RichText );
@@ -1911,15 +1915,18 @@ void KoTextDocument::setRichTextInternal( const QString &text )
 	}
     }
 }
+#endif
 
-void KoTextDocument::setText( const QString &text, const QString &context )
+void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
 {
     focusIndicator.parag = 0;
     selections.clear();
+#if 0
     if ( txtFormat == Qt::AutoText && QStyleSheet::mightBeRichText( text ) ||
 	 txtFormat == Qt::RichText )
 	setRichText( text, context );
     else
+#endif
 	setPlainText( text );
 }
 
@@ -2725,6 +2732,7 @@ bool KoTextDocument::inSelection( int selId, const QPoint &pos ) const
     return FALSE;
 }
 
+#if 0
 void KoTextDocument::doLayout( QPainter *p, int w )
 {
     if ( !is_printer( p ) )
@@ -2749,6 +2757,7 @@ void KoTextDocument::doLayout( QPainter *p, int w )
 	parag = parag->next();
     }
 }
+#endif
 
 QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
 {
@@ -3015,10 +3024,12 @@ KoTextParag *KoTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, 
 }
 #endif
 
+#if 0
 void KoTextDocument::setDefaultFont( const QFont &f )
 {
     updateFontSizes( f.pointSize() );
 }
+#endif
 
 void KoTextDocument::registerCustomItem( KoTextCustomItem *i, KoTextParag *p )
 {
@@ -3268,7 +3279,7 @@ int KoTextFormat::width( const QString &str, int pos ) const
     int w = 0;
     if ( str[ pos ].unicode() == 0xad )
 	return w;
-    if ( !painter || !painter->isActive() ) {
+    //if ( !painter || !painter->isActive() ) {
 	if ( ha == AlignNormal ) {
 	    w = fm.charWidth( str, pos );
 	} else {
@@ -3277,13 +3288,13 @@ int KoTextFormat::width( const QString &str, int pos ) const
 	    QFontMetrics fm_( f );
 	    w = fm_.charWidth( str, pos );
 	}
-    } else {
+    /*} else {
 	QFont f( fn );
 	if ( ha != AlignNormal )
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
 	painter->setFont( f );
 	w = painter->fontMetrics().charWidth( str, pos );
-    }
+    }*/
     return w;
 }
 
@@ -3483,6 +3494,7 @@ void KoTextString::checkBidi() const
     ((KoTextString *)this)->bidiDirty = FALSE;
 }
 
+#if 0
 void KoTextDocument::setStyleSheet( QStyleSheet *s )
 {
     if ( !s )
@@ -3515,6 +3527,7 @@ void KoTextDocument::updateFontAttributes( const QFont &f, const QFont &old )
     invalidate();
     fCollection->updateFontAttributes( f, old );
 }
+#endif
 
 void KoTextStringChar::setFormat( KoTextFormat *f )
 {
@@ -4432,6 +4445,7 @@ void KoTextParag::setStyleSheetItems( const QPtrVector<QStyleSheetItem> &vec )
     numSubParag = -1;
 }
 
+#if 0
 void KoTextParag::setList( bool b, int listStyle )
 {
     if ( !doc )
@@ -4550,6 +4564,7 @@ int KoTextParag::listDepth() const
     }
     return numLists - 1;
 }
+#endif
 
 int *KoTextParag::tabArray() const
 {
@@ -5837,6 +5852,7 @@ void KoTextFormatCollection::remove( KoTextFormat *f )
     cKey.remove( f->key() );
 }
 
+#if 0
 void KoTextFormatCollection::setPainter( QPainter *p )
 {
     QDictIterator<KoTextFormat> it( cKey );
@@ -5846,6 +5862,7 @@ void KoTextFormatCollection::setPainter( QPainter *p )
 	f->setPainter( p );
     }
 }
+#endif
 
 #ifndef NDEBUG
 void KoTextFormatCollection::debug()
@@ -5863,6 +5880,7 @@ void KoTextFormatCollection::debug()
 }
 #endif
 
+#if 0
 void KoTextFormatCollection::updateStyles()
 {
     QDictIterator<KoTextFormat> it( cKey );
@@ -5920,6 +5938,7 @@ void KoTextFormatCollection::updateFontAttributes( const QFont &f, const QFont &
 	fm->update();
     }
 }
+#endif
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -6038,11 +6057,13 @@ void KoTextFormat::setColor( const QColor &c )
     update();
 }
 
+#if 0
 void KoTextFormat::setPainter( QPainter *p )
 {
     painter = p;
     update();
 }
+#endif
 
 static int makeLogicFontSize( int s )
 {
@@ -6137,6 +6158,7 @@ QString KoTextFormat::makeFormatEndTags( const QString& anchorHref ) const
     return tag;
 }
 
+#if 0
 KoTextFormat KoTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const
 {
     KoTextFormat format(*this);
@@ -6211,10 +6233,10 @@ KoTextFormat KoTextFormat::makeTextFormat( const QStyleSheetItem *style, const Q
                 format.fn.setUnderline( style->fontUnderline() );
         }
     }
-
     format.update();
     return format;
 }
+#endif
 
 KoTextCustomItem::KoTextCustomItem( KoTextDocument *p )
       :  width(-1), height(0), parent(p), xpos(0), ypos(-1), parag(0)

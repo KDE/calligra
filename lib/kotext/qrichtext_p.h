@@ -735,8 +735,8 @@ public:
     KoTextParag *parentParag() const { return parParag; }
 
     void setText( const QString &text, const QString &context );
-    QMap<QString, QString> attributes() const { return attribs; }
-    void setAttributes( const QMap<QString, QString> &attr ) { attribs = attr; }
+    //QMap<QString, QString> attributes() const { return attribs; }
+    //void setAttributes( const QMap<QString, QString> &attr ) { attribs = attr; }
 
     QString text() const;
     QString text( int parag ) const;
@@ -815,16 +815,16 @@ public:
 
     bool inSelection( int selId, const QPoint &pos ) const;
 
-    QStyleSheet *styleSheet() const { return sheet_; }
-    QMimeSourceFactory *mimeSourceFactory() const { return factory_; }
-    QString context() const { return contxt; }
+    //QStyleSheet *styleSheet() const { return sheet_; }
+    //QMimeSourceFactory *mimeSourceFactory() const { return factory_; }
+    //QString context() const { return contxt; }
 
-    void setStyleSheet( QStyleSheet *s );
-    void updateStyles();
-    void updateFontSizes( int base );
-    void updateFontAttributes( const QFont &f, const QFont &old );
-    void setMimeSourceFactory( QMimeSourceFactory *f ) { if ( f ) factory_ = f; }
-    void setContext( const QString &c ) { if ( !c.isEmpty() ) contxt = c; }
+    //void setStyleSheet( QStyleSheet *s );
+    //void updateStyles();
+    //void updateFontSizes( int base );
+    //void updateFontAttributes( const QFont &f, const QFont &old );
+    //void setMimeSourceFactory( QMimeSourceFactory *f ) { if ( f ) factory_ = f; }
+    //void setContext( const QString &c ) { if ( !c.isEmpty() ) contxt = c; }
 
     void setUnderlineLinks( bool b ) { underlLinks = b; }
     bool underlineLinks() const { return underlLinks; }
@@ -832,7 +832,7 @@ public:
     void setPaper( QBrush *brush ) { if ( backBrush ) delete backBrush; backBrush = brush; }
     QBrush *paper() const { return backBrush; }
 
-    void doLayout( QPainter *p, int w );
+    //void doLayout( QPainter *p, int w );
 #if 0 // see KoTextDocument
     void draw( QPainter *p, const QRect& rect, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
@@ -843,7 +843,7 @@ public:
 		      bool resetChanged = TRUE );
 #endif
 
-    void setDefaultFont( const QFont &f );
+    //void setDefaultFont( const QFont &f );
 
     void registerCustomItem( KoTextCustomItem *i, KoTextParag *p );
     void unregisterCustomItem( KoTextCustomItem *i, KoTextParag *p );
@@ -867,7 +867,7 @@ public:
 #endif
 
     void setPlainText( const QString &text );
-    void setRichText( const QString &text, const QString &context );
+    //void setRichText( const QString &text, const QString &context );
     QString richText( KoTextParag *p = 0 ) const;
     QString plainText( KoTextParag *p = 0 ) const;
 
@@ -923,7 +923,7 @@ private:
     QChar parseHTMLSpecialChar(const QString& doc, int& pos);
     QString parseWord(const QString& doc, int& pos, bool lower = TRUE);
     QChar parseChar(const QString& doc, int& pos, QStyleSheetItem::WhiteSpaceMode wsm );
-    void setRichTextInternal( const QString &text );
+    //void setRichTextInternal( const QString &text );
 
 #include "kotextdocument.h"
 
@@ -969,10 +969,10 @@ private:
     int leftmargin;
     int rightmargin;
     KoTextParag *minwParag;
-    QStyleSheet* sheet_;
-    QMimeSourceFactory* factory_;
-    QString contxt;
-    QMap<QString, QString> attribs;
+    //QStyleSheet* sheet_;
+    //QMimeSourceFactory* factory_;
+    //QString contxt;
+    //QMap<QString, QString> attribs;
     int align;
     int *tArray;
     int tStopWidth;
@@ -1063,6 +1063,7 @@ private:
 
 };
 
+#if 0
 class Q_EXPORT KoTextParagTypeCommand : public KoTextDocCommand
 {
 public:
@@ -1083,6 +1084,7 @@ private:
     QValueList<QStyleSheetItem::ListStyle> oldListStyles;
 
 };
+#endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1179,10 +1181,12 @@ public:
     void setListValue( int v ) { list_val = v; }
     int listValue() const { return list_val; }
 
+#if 0
     void setList( bool b, int listStyle );
     void incDepth();
     void decDepth();
     int listDepth() const;
+#endif
 
     void setFormat( KoTextFormat *fm );
     KoTextFormat *paragFormat() const;
@@ -1528,15 +1532,15 @@ public:
     //KoTextFormat( const QStyleSheetItem *s );
     KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollection *parent = 0 );
     KoTextFormat( const KoTextFormat &fm );
-    KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
+    //KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     KoTextFormat& operator=( const KoTextFormat &fm );
     void copyFormat( const KoTextFormat &fm, int flags );
     QColor color() const;
     QFont font() const;
     bool isMisspelled() const;
     VerticalAlignment vAlign() const;
-    int minLeftBearing() const;
-    int minRightBearing() const;
+    //int minLeftBearing() const;
+    //int minRightBearing() const;
     int width( const QChar &c ) const;
     int width( const QString &str, int pos ) const;
     int height() const;
@@ -1567,13 +1571,13 @@ public:
     QString makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref ) const;
     QString makeFormatEndTags( const QString& anchorHref ) const;
 
-    void setPainter( QPainter *p );
-    void updateStyle();
-    void updateStyleFlags();
-    void setStyle( const QString &s );
-    QString styleName() const { return style; }
+    //void setPainter( QPainter *p );
+    //void updateStyle();
+    //void updateStyleFlags();
+    //void setStyle( const QString &s );
+    //QString styleName() const { return style; }
 
-    int changed() const { return different; }
+    //int changed() const { return different; }
 
 protected:
     void generateKey();
@@ -1590,18 +1594,18 @@ private:
     uint missp : 1;
     uint linkColor : 1;
     uint usePixelSizes : 1;
-    int leftBearing, rightBearing;
+    //int leftBearing, rightBearing;
     VerticalAlignment ha;
     //uchar widths[ 256 ]; //// unused in kotext
-    int hei, asc, dsc;
+    //int hei, asc, dsc;
     KoTextFormatCollection *collection;
     int ref;
     QString k;
     int logicalFontSize;
     int stdPointSize;
-    QPainter *painter;
-    QString style;
-    int different;
+    //QPainter *painter;
+    //QString style;
+    //int different;
 
 };
 
@@ -1633,12 +1637,12 @@ public:
     virtual KoTextFormat *createFormat( const QFont &f, const QColor &c ) { return new KoTextFormat( f, c, this ); }
     void debug();
 
-    void setPainter( QPainter *p );
-    QStyleSheet *styleSheet() const { return sheet; }
-    void setStyleSheet( QStyleSheet *s ) { sheet = s; }
-    void updateStyles();
-    void updateFontSizes( int base );
-    void updateFontAttributes( const QFont &f, const QFont &old );
+    //void setPainter( QPainter *p );
+    //QStyleSheet *styleSheet() const { return sheet; }
+    //void setStyleSheet( QStyleSheet *s ) { sheet = s; }
+    //void updateStyles();
+    //void updateFontSizes( int base );
+    //void updateFontAttributes( const QFont &f, const QFont &old );
 
     QDict<KoTextFormat> & dict() { return cKey; }
 
@@ -1942,11 +1946,13 @@ inline bool KoTextFormat::useLinkColor() const
     return linkColor;
 }
 
+#if 0
 inline void KoTextFormat::setStyle( const QString &s )
 {
     style = s;
     updateStyleFlags();
 }
+#endif
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

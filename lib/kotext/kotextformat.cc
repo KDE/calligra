@@ -162,7 +162,7 @@ QFont KoTextFormat::screenFont( const KoZoomHandler* zh ) const
     return *d->m_screenFont;
 }
 
-QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) const
+const QFontMetrics& KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) const
 {
     float pointSize = screenPointSize( zh );
     if ( !d->m_screenFont )
@@ -183,7 +183,7 @@ QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh ) const
     return *d->m_screenFontMetrics;
 }
 
-QFontMetrics KoTextFormat::refFontMetrics() const
+const QFontMetrics& KoTextFormat::refFontMetrics() const
 {
     float pointSize = refPointSize();
     if ( !d->m_refFont )
@@ -255,27 +255,39 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
 
 int KoTextFormat::height() const
 {
-    // Calculate height using 100%-zoom font
-    int h = refFontMetrics().height();
-    //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
-    // Then scale to LU
-    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    if ( d->m_refHeight < 0 )
+    {
+        // Calculate height using 100%-zoom font
+        int h = refFontMetrics().height();
+        //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
+        // Then scale to LU
+        d->m_refHeight = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    }
+    return d->m_refHeight;
 }
 
 int KoTextFormat::ascent() const
 {
-    // Calculate ascent using 100%-zoom font
-    int h = refFontMetrics().ascent();
-    // Then scale to LU
-    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    if ( d->m_refAscent < 0 )
+    {
+        // Calculate ascent using 100%-zoom font
+        int h = refFontMetrics().ascent();
+        // Then scale to LU
+        d->m_refAscent = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    }
+    return d->m_refAscent;
 }
 
 int KoTextFormat::descent() const
 {
-    // Calculate descent using 100%-zoom font
-    int h = refFontMetrics().descent();
-    // Then scale to LU
-    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    if ( d->m_refDescent < 0 )
+    {
+        // Calculate descent using 100%-zoom font
+        int h = refFontMetrics().descent();
+        // Then scale to LU
+        d->m_refDescent = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+    }
+    return d->m_refDescent;
 }
 
 int KoTextFormat::charWidthLU( const KoTextStringChar* c, const KoTextParag* parag, int i ) const
