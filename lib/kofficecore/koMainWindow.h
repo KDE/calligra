@@ -54,6 +54,9 @@ public:
   virtual KOffice::View_ptr view() = 0L;
 
   KoFrame *getFrame() { return m_pFrame; }
+
+  virtual bool newDocument() { return false; };
+  virtual bool openDocument( const char* _filename, const char* _format ) { return false; };
   
 protected slots:
   virtual void slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_opart_id );

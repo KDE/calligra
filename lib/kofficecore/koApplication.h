@@ -22,6 +22,9 @@
 
 #include <opApplication.h>
 #include <kded_instance.h>
+#include <kstartparams.h>
+
+class KoMainWindow;
 
 class KoApplication : public OPApplication
 {
@@ -32,8 +35,13 @@ public:
     KoApplication( int &argc, char **argv, const QString& rAppName = 0);
     virtual ~KoApplication();
 
+	virtual KoMainWindow* createNewShell() { return 0; };
+	virtual void start();
+	
 private:
     KdedInstance kded;
+    KStartParams m_params;
+    bool m_bWithGUI;
 };
 
 #endif
