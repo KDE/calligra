@@ -486,8 +486,8 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
 
 bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
 {
-#if 0
     *m_streamOut << "</p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+#if 0
     *m_streamOut << "<table>\n";
 #endif
 
@@ -516,8 +516,8 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
     }
 #if 0
     *m_streamOut << "</table>\n";
-    *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
+    *m_streamOut << "<p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
     return true;
 }
 
