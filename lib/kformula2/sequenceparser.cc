@@ -39,7 +39,7 @@ ElementType* SequenceParser::parse(QList<BasicElement>& elements)
 {
     list = elements;
     nextToken();
-    return new Assignment(this);
+    return new AssignmentSep(this);
 }
 
 
@@ -63,6 +63,9 @@ void SequenceParser::nextToken()
         case '<':
         case '>':
         case '\\':
+        case ',':
+        case ';':
+        case ':':
             type = TokenType(latin1);
             break;
         case '\0':

@@ -66,6 +66,7 @@ public:
     QFont getSymbolFont()     const { return symbolFont; }
 
     int getDistance() const { return distance; }
+    int getOperatorSpace(int /*size*/) const { return operatorSpace; }
     int getBaseSize() const { return baseSize; }
     int getMinimumSize() const { return minimumSize; }
     int getSizeReduction() const { return sizeReduction; }
@@ -92,6 +93,11 @@ private:
      */
     int distance;
 
+    /**
+     * The space to be left before and after a normal operator.
+     */
+    int operatorSpace;
+    
     /**
      * The cursors movement style. You need to notify each cursor
      * if you change this.

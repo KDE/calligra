@@ -58,10 +58,16 @@ public:
     uint end() { return to; }
     
     /**
-     * @returns the space to be left before and behind each char
+     * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpace(const ContextStyle& context, int size);
+    virtual int getSpaceBefore(const ContextStyle& context, int size);
+    
+    /**
+     * @returns the space to be left after each char
+     * for the given style and font size.
+     */
+    virtual int getSpaceAfter(const ContextStyle& context, int size);
     
     /**
      * @returns the font to be used for this kind of element
@@ -209,10 +215,16 @@ public:
     ~OperatorType();
 
     /**
-     * @returns the space to be left before and behind each char
+     * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual int getSpace(const ContextStyle& context, int size);
+    virtual int getSpaceBefore(const ContextStyle& context, int size);
+    
+    /**
+     * @returns the space to be left after each char
+     * for the given style and font size.
+     */
+    virtual int getSpaceAfter(const ContextStyle& context, int size);
     
     /**
      * @returns the font to be used for this kind of element
@@ -252,6 +264,10 @@ class Term : public OperatorType {
 public:
     Term(SequenceParser* parser);
 
+    virtual int getSpaceBefore(const ContextStyle& context, int size);
+    
+    virtual int getSpaceAfter(const ContextStyle& context, int size);
+
     // debug
     virtual void output();
 };
@@ -263,6 +279,22 @@ public:
 class Assignment : public OperatorType {
 public:
     Assignment(SequenceParser* parser);
+};
+
+
+/**
+ * The separator of assignments.
+ *
+ * A list of separate assignments. That's what each sequence
+ * consists of.
+ */
+class AssignmentSep : public OperatorType {
+public:
+    AssignmentSep(SequenceParser* parser);
+
+    virtual int getSpaceBefore(const ContextStyle& context, int size);
+    
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 };
 
 

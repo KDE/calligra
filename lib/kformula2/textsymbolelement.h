@@ -65,9 +65,14 @@ protected:
     virtual QFont getFont(const ContextStyle& context);
 
     /**
-     * @returns the space to be left before and behind the character.
+     * @returns the space to be left before the character.
      */
-    virtual int getSpaceWidth(const ContextStyle& context, int size);
+    virtual int getSpaceBefore(const ContextStyle& context, int size);
+
+    /**
+     * @returns the space to be left after the character.
+     */
+    virtual int getSpaceAfter(const ContextStyle& context, int size);
 
     /**
      * Sets up the painter to be used for drawing.

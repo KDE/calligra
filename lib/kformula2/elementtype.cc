@@ -57,6 +57,29 @@ OperatorType::~OperatorType()
 }
 
 
+AssignmentSep::AssignmentSep(SequenceParser* parser)
+        : OperatorType(parser)
+{
+    lhs = new Assignment(parser);
+
+    switch (parser->getTokenType()) {
+        case SequenceParser::Comma:
+        case SequenceParser::Colon:
+        case SequenceParser::Semicolon:
+            setStart(parser->getStart());
+            setEnd(parser->getEnd());
+            parser->setElementType(parser->getStart(), this);
+            parser->nextToken();
+            rhs = new AssignmentSep(parser);
+            break;
+        case SequenceParser::End:
+            break;
+        default:
+            rhs = new ErrorType(parser);
+    }
+}
+
+
 Assignment::Assignment(SequenceParser* parser)
         : OperatorType(parser)
 {
@@ -75,7 +98,8 @@ Assignment::Assignment(SequenceParser* parser)
         case SequenceParser::End:
             break;
         default:
-            rhs = new ErrorType(parser);
+            //rhs = new ErrorType(parser);
+            break;
     }
 }
 
@@ -180,7 +204,12 @@ ComplexElementType::ComplexElementType(SequenceParser* parser)
 }
 
 
-int ElementType::getSpace(const ContextStyle&, int)
+int ElementType::getSpaceBefore(const ContextStyle&, int)
+{
+    return 0;
+}
+
+int ElementType::getSpaceAfter(const ContextStyle&, int)
 {
     return 0;
 }
@@ -196,13 +225,14 @@ void ElementType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-
-int OperatorType::getSpace(const ContextStyle& context, int size)
+int OperatorType::getSpaceBefore(const ContextStyle& context, int size)
 {
-    QFont font = context.getOperatorFont();
-    font.setPointSize(size);
-    QFontMetrics fm(font);
-    return fm.width('0')/2;
+    return context.getOperatorSpace(size);
+}
+
+int OperatorType::getSpaceAfter(const ContextStyle& context, int size)
+{
+    return context.getOperatorSpace(size);
 }
 
 QFont OperatorType::getFont(const ContextStyle& context)
@@ -215,6 +245,27 @@ void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
     painter.setPen(context.getOperatorColor());
 }
 
+
+int Term::getSpaceBefore(const ContextStyle& context, int size)
+{
+    return OperatorType::getSpaceBefore(context, size) / 2;
+}
+    
+int Term::getSpaceAfter(const ContextStyle& context, int size)
+{
+    return OperatorType::getSpaceAfter(context, size) / 2;
+}
+
+
+int AssignmentSep::getSpaceBefore(const ContextStyle&, int)
+{
+    return 0;
+}
+    
+void AssignmentSep::setUpPainter(const ContextStyle& context, QPainter& painter)
+{
+    painter.setPen(context.getDefaultColor());
+}
 
 void ErrorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 {

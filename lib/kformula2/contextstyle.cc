@@ -30,6 +30,7 @@ ContextStyle::ContextStyle()
 {
     nameFont.setItalic(true);
     distance = 5;
+    operatorSpace = 4;
     linearMovement = false;
     baseSize = 18;
     minimumSize = 8;

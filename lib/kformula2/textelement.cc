@@ -46,12 +46,13 @@ void TextElement::calcSizes(const ContextStyle& context, int parentSize)
 
     QFont font = getFont(context);
     font.setPointSize(mySize);
-    spaceWidth = getSpaceWidth(context, mySize);
+    int spaceBefore = getSpaceBefore(context, mySize);
+    int spaceAfter = getSpaceAfter(context, mySize);
 
     QFontMetrics fm(font);
     QRect bound = fm.boundingRect(character);
 
-    setWidth(fm.width(character) + spaceWidth*2);
+    setWidth(fm.width(character) + spaceBefore + spaceAfter);
     setHeight(bound.height());
     setBaseline(-bound.top());
     setMidline(getBaseline() - fm.strikeOutPos());
@@ -70,9 +71,11 @@ void TextElement::draw(QPainter& painter, const ContextStyle& context,
     QFont font = getFont(context);
     font.setPointSize(mySize);
     setUpPainter(context, painter);
+    int spaceBefore = getSpaceBefore(context, mySize);
+    //int spaceAfter = getSpaceAfter(context, mySize);
     
     painter.setFont(font);
-    painter.drawText(parentOrigin.x()+getX()+spaceWidth,
+    painter.drawText(parentOrigin.x()+getX()+spaceBefore,
                      parentOrigin.y()+getY()+getBaseline(), character);
 }
 
@@ -87,10 +90,20 @@ QFont TextElement::getFont(const ContextStyle& context)
     }
 }
 
-int TextElement::getSpaceWidth(const ContextStyle& context, int size)
+int TextElement::getSpaceBefore(const ContextStyle& context, int size)
 {
     if (getElementType() != 0) {
-        return getElementType()->getSpace(context, size);
+        return getElementType()->getSpaceBefore(context, size);
+    }
+    else {
+        return 0;
+    }
+}
+
+int TextElement::getSpaceAfter(const ContextStyle& context, int size)
+{
+    if (getElementType() != 0) {
+        return getElementType()->getSpaceAfter(context, size);
     }
     else {
         return 0;

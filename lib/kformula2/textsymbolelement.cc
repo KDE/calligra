@@ -39,9 +39,17 @@ QFont TextSymbolElement::getFont(const ContextStyle& context)
 }
 
 /**
- * @returns the space to be left before and behind the character.
+ * @returns the space to be left before the character.
  */
-int TextSymbolElement::getSpaceWidth(const ContextStyle&, int)
+int TextSymbolElement::getSpaceBefore(const ContextStyle&, int)
+{
+    return 0;
+}
+
+/**
+ * @returns the space to be left after the character.
+ */
+int TextSymbolElement::getSpaceAfter(const ContextStyle&, int)
 {
     return 0;
 }
