@@ -1063,7 +1063,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "name" )
-			    contents->addParagName( ( *it ).m_strValue.c_str() ); 
+			    contents->addParagName( ( *it ).m_strValue.c_str() );
 		    }
 		} else
 		    cerr << "Unknown tag '" << tag << "' in CPARAGS" << endl;
@@ -1214,7 +1214,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	}
 	contents->setEnd( end );
     }
-    
+
     KWAutoFormatEntry *entry;
 
     entry = new KWAutoFormatEntry;
@@ -1531,7 +1531,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	out << etag << "</CPARAGS>" << endl;
     }
 	
-    
+
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
@@ -1819,7 +1819,7 @@ KWParagLayout* KWordDocument::findParagLayout( QString _name )
 	}
     }
 
-    qWarning( "Parag Layout: '%s` is unknown, using default parag layout", _name.latin1() ); 
+    qWarning( "Parag Layout: '%s` is unknown, using default parag layout", _name.latin1() );
     return defaultParagLayout;
 }
 
@@ -1858,7 +1858,7 @@ KWParag* KWordDocument::findFirstParagOfRect( unsigned int _ypos, unsigned int _
 	if ( p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || ( p->getPTYEnd() >= _ypos &&
 								       p->getPTYStart() <= _ypos )
 	     || ( p->getPTYEnd() <= _ypos && p->getPTYStart() <= _ypos && p->getPTYStart() > p->getPTYEnd() &&
-		  ( p->getEndPage() == _page || 
+		  ( p->getEndPage() == _page ||
 		    p->getStartPage() == _page || ( p->getEndPage() >
 						    _page && p->getStartPage() < _page ) ) ) )
 	    return p;
@@ -2082,8 +2082,8 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 		QPen _pen = QPen( _painter.pen() );
 		_painter.setPen( QPen( blue, 1, DotLine ) );
 		if ( _viewFormattingChars )
-		    _painter.drawLine( lastPTPos, _fc.getPTY() + _fc.getPTMaxAscender(),
-				       _fc.getPTPos(), _fc.getPTY() + _fc.getPTMaxAscender() );
+		    _painter.drawLine( lastPTPos - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset,
+				       _fc.getPTPos() - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset );
 		_painter.setPen( _pen );
 	    } break;
 	    }
@@ -2114,8 +2114,8 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 
 	    // Test next character.
 	    if ( _fc.cursorGotoNextChar() != 1 || ( text[ _fc.getTextPos() ].c == ' ' &&
-						    _fc.getParag()->getParagLayout()->getFlow() ==
-						    KWParagLayout::BLOCK ) ) {
+						    ( _fc.getParag()->getParagLayout()->getFlow() ==
+						      KWParagLayout::BLOCK || _viewFormattingChars ) ) ) {
 		// there was a blank _or_ there will be a font switch _or_ a special object next, so print
 		// what we have so far
 		_painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
@@ -2143,6 +2143,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 					 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus +
 					 fm.underlinePos() + fm.lineWidth() / 2;
 				int lx1 = _fc.getPTPos();
+				lastPTPos = _fc.getPTPos();
 				_fc.cursorGotoNextChar();
 				goneForward = TRUE;
 				int lx2 = _fc.getPTPos();
@@ -2151,18 +2152,23 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			}
 
 		    }
-		    lastPTPos = _fc.getPTPos();
-		    if ( !goneForward ) _fc.cursorGotoNextChar();
-		    if ( _viewFormattingChars )
-			_painter.fillRect( lastPTPos + ( _fc.getPTPos() - lastPTPos ) / 2,
-					   _fc.getPTY() + _fc.getPTMaxAscender() / 2, 1, 1, blue );
+		    if ( !goneForward ) {
+			lastPTPos = _fc.getPTPos();
+			_fc.cursorGotoNextChar();
+		    }
+		    if ( _viewFormattingChars ) {
+			_painter.fillRect( lastPTPos + ( _fc.getPTPos() - lastPTPos ) / 2 - xOffset,
+					   _fc.getPTY() + _fc.getPTMaxAscender() / 2 - yOffset, 2, 2, blue );
+		    }
 		}
 	    }
 	}
     }
 
     if ( _viewFormattingChars && _fc.isCursorAtParagEnd() )
-	_painter.drawPixmap( _fc.getPTPos() + 3, _fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(), ret_pix );
+	_painter.drawPixmap( _fc.getPTPos() + 3 - xOffset, 
+			     _fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height() - yOffset,
+			     ret_pix );
 
     _painter.restore();
 

@@ -778,42 +778,42 @@ bool KWPage::vmpEdit( int mx, int my )
 /*================================================================*/
 void KWPage::vmpEditFrame( QMouseEvent *e, int mx, int my )
 {
-    // only simulate selection - we do real selection below
-    int r = doc->selectFrame( mx, my, TRUE );
+    if ( e ) {
+	// only simulate selection - we do real selection below
+	int r = doc->selectFrame( mx, my, TRUE );
 
-    bool goon = TRUE;
+	bool goon = TRUE;
 
-    if ( r != 0 && ( e->state() & ShiftButton ) &&
-	 doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager() ) {
-	doc->selectFrame( mx, my );
-	doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager()->
-	    selectUntil( doc->getFrameSet( doc->getFrameSet( mx, my ) ) );
-	curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-	goon = FALSE;
-	repaintScreen( FALSE );
-    }
-
-    if ( goon ) {
-	if ( r == 0 )
-	    selectAllFrames( FALSE );
-
-	if ( r == 1 ) {
-	    if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
-		selectAllFrames( FALSE );
+	KWFrameSet *fs = doc->getFrameSet( doc->getFrameSet( mx, my ) );
+	if ( r != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) {
 	    selectFrame( mx, my, TRUE );
+	    fs->getGroupManager()->selectUntil( fs, this );
 	    curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-	} else if ( r == 2 ) {
-	    if ( e->state() & ControlButton || e->state() & ShiftButton ) {
-		selectFrame( mx, my, FALSE );
-		curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-	    } else if ( viewport()->cursor().shape() != SizeAllCursor ) {
+	    goon = FALSE;
+	}
+
+	if ( goon ) {
+	    if ( r == 0 )
 		selectAllFrames( FALSE );
+
+	    if ( r == 1 ) {
+		if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
+		    selectAllFrames( FALSE );
 		selectFrame( mx, my, TRUE );
 		curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
+	    } else if ( r == 2 ) {
+		if ( e->state() & ControlButton || e->state() & ShiftButton ) {
+		    selectFrame( mx, my, FALSE );
+		    curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
+		} else if ( viewport()->cursor().shape() != SizeAllCursor ) {
+		    selectAllFrames( FALSE );
+		    selectFrame( mx, my, TRUE );
+		    curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
+		}
 	    }
 	}
     }
-
+    
     mousePressed = FALSE;
     mouseMoveEvent( e );
     mousePressed = TRUE;
@@ -843,8 +843,7 @@ void KWPage::vmpCreatePixmap( int mx, int my )
 {
     mx -= contentsX();
     my -= contentsY();
-    if ( !pixmap_name.isEmpty() )
-    {
+    if ( !pixmap_name.isEmpty() ) {
 	QPixmap _pix( pixmap_name );
 	mx = ( mx / doc->getRastX() ) * doc->getRastX();
 	oldMx = mx;
@@ -1023,9 +1022,9 @@ void KWPage::vmrEdit()
 /*================================================================*/
 void KWPage::vmrEditFrame( int mx, int my )
 {
-    for ( unsigned int i = 0; i < doc->getNumGroupManagers(); i++ )
-    {
-	if ( !doc->getGroupManager( i )->isActive() ) continue;
+    for ( unsigned int i = 0; i < doc->getNumGroupManagers(); i++ ) {
+	if ( !doc->getGroupManager( i )->isActive() ) 
+	    continue;
 
 	doc->getGroupManager( i )->recalcCols();
 	doc->getGroupManager( i )->recalcRows();
@@ -1033,11 +1032,9 @@ void KWPage::vmrEditFrame( int mx, int my )
 
     selectedFrameSet = selectedFrame = -1;
     int frameset = doc->getFrameSet( mx, my ), frame;
-    if ( frameset != -1 )
-    {
+    if ( frameset != -1 ) {
 	frame = doc->getFrameSet( frameset )->getFrame( mx, my );
-	if ( frame != -1 )
-	{
+	if ( frame != -1 ) {
 	    if ( doc->getProcessingType() == KWordDocument::DTP )
 		setRuler2Frame( frameset, frame );
 	    gui->getHorzRuler()->setFrameStart( doc->getFrameSet( frameset )->getFrame( frame )->x() );
@@ -1045,8 +1042,16 @@ void KWPage::vmrEditFrame( int mx, int my )
     }
     selectedFrame = frame;
     selectedFrameSet = frameset;
-    if ( mouseMoved )
-    {
+    if ( mouseMoved ) {
+	for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+	    for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
+		if ( doc->getFrameSet( i )->getFrame( j )->isSelected() ) {
+		    for ( unsigned int k = 0; k < 8; ++k )
+			doc->getFrameSet( i )->getFrame( j )->handles[ k ]->updateGeometry();
+		}
+	    }
+	}
+		    
 	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = TRUE;
@@ -1054,8 +1059,7 @@ void KWPage::vmrEditFrame( int mx, int my )
 	recalcCursor();
 	repaintScreen( TRUE );
 	recalcAll = FALSE;
-    }
-    else
+    }  else
 	doc->updateAllViews( gui->getView() );
 }
 
@@ -1815,8 +1819,6 @@ void KWPage::paintPicture( QPainter &painter, int i )
 	picFS->setSize( _size );
 
     painter.drawImage( frame->x() - contentsX(), frame->y() - contentsY(), *picFS->getImage() );
-    if ( frame->isSelected() && mouseMode == MM_EDIT_FRAME )
-	drawFrameSelection( painter, frame );
 }
 
 /*================================================================*/
@@ -3105,30 +3107,30 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 		continue;
 
 	    if ( mouseMode == MM_EDIT_FRAME && tmp->isSelected() ) {
-		_painter.save();
-		_painter.setRasterOp( NotROP );
-		if ( !frameset->getGroupManager() ) {
-		    _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
-		    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, colorGroup().highlight() );
-		    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6,
-				       colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6,
-				       colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6,
-				       colorGroup().highlight() );
-		    _painter.restore();
-		} else {
-		    _painter.restore();
-		    _painter.fillRect( frame.x(), frame.y(), frame.width() - 1, frame.height() - 1,
-				       colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6,
-				       colorGroup().highlight() );
-		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6,
-				       colorGroup().highlight() );
-		}
+// 		_painter.save();
+// 		_painter.setRasterOp( NotROP );
+// 		if ( !frameset->getGroupManager() ) {
+// 		    _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6,
+// 				       colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6,
+// 				       colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6,
+// 				       colorGroup().highlight() );
+// 		    _painter.restore();
+// 		} else {
+// 		    _painter.restore();
+// 		    _painter.fillRect( frame.x(), frame.y(), frame.width() - 1, frame.height() - 1,
+// 				       colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6,
+// 				       colorGroup().highlight() );
+// 		    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6,
+// 				       colorGroup().highlight() );
+// 		}
 	    }
 
 	    if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
@@ -3196,27 +3198,36 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 }
 
 /*================================================================*/
-void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
+void KWPage::createResizeHandles( KWFrame *frame )
 {
-    _painter.save();
-    _painter.setRasterOp( NotROP );
+    if ( frame->handles.size() < 8 ) {
+	frame->handles.resize( 8 );
+	for ( unsigned int i = 0; i < 8; ++i )
+	    frame->handles[ i ] = 0;
+    }
 
-    QRect frame( _frame->x() - contentsX() - 1, _frame->y() - contentsY() - 1,
-		 _frame->width() + 2, _frame->height() + 2 );
+    for ( unsigned int i = 0; i < 8; ++i ) {
+	if ( frame->handles[ i ] )
+	    delete frame->handles[ i ];
+	frame->handles[ i ] = new KWResizeHandle( this, (KWResizeHandle::Direction)i,
+						  frame );
+    }
+}
 
-    _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6,
-		       colorGroup().highlight() );
-    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6,
-		       colorGroup().highlight() );
-    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6,
-		       colorGroup().highlight() );
+/*================================================================*/
+void KWPage::removeResizeHandles( KWFrame *frame )
+{
+    if ( frame->handles.size() < 8 ) {
+	frame->handles.resize( 8 );
+	for ( unsigned int i = 0; i < 8; ++i )
+	    frame->handles[ i ] = 0;
+    }
 
-    _painter.restore();
+    for ( unsigned int i = 0; i < 8; ++i ) {
+	if ( frame->handles[ i ] )
+	    delete frame->handles[ i ];
+	frame->handles[ i ] = 0;
+    }
 }
 
 /*================================================================*/
@@ -4848,39 +4859,23 @@ void KWPage::doAutoScroll()
 /*================================================================*/
 void KWPage::selectAllFrames( bool select )
 {
-    KWFrameSet *fs = 0L;
-    KWFrame *frame = 0L;
-
-    QRect v_rect( contentsX(), contentsY(),
-		  viewport()->width(), viewport()->height() );
-
-    bool dirty = FALSE;
-
-    QPainter p;
-    p.begin( viewport() );
+    KWFrameSet *fs = 0;
+    KWFrame *frame = 0;
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-	bool careAboutDirty = FALSE;
 	fs = doc->getFrameSet( i );
-	if ( fs->getGroupManager() )
-	    careAboutDirty = TRUE;
-
 	for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
 	    frame = fs->getFrame( j );
 	    if ( frame->isSelected() != select ) {
+		bool s = frame->isSelected();
 		frame->setSelected( select );
-		if ( frame->intersects( v_rect ) )
-		    drawFrameSelection( p, frame );
-		if ( !dirty && careAboutDirty )
-		    dirty = TRUE;
+		if ( select )
+		    createResizeHandles( frame );
+		else if ( s )
+		    removeResizeHandles( frame );
 	    }
 	}
     }
-
-    p.end();
-
-    if ( dirty )
-	repaintScreen( TRUE );
 }
 
 /*================================================================*/
@@ -4893,10 +4888,12 @@ void KWPage::selectFrame( int mx, int my, bool select )
 	if ( frm != -1 ) {
 	    KWFrame *frame = frameset->getFrame( frm );
 	    if ( frame->isSelected() != select ) {
+		bool s = frame->isSelected();
 		frame->setSelected( select );
-		QPainter p;
-		p.begin( viewport() );
-		drawFrameSelection( p, frame );
+		if ( select )
+		    createResizeHandles( frame );
+		else if ( s )
+		    removeResizeHandles( frame );
 	    }
 	}
     }
@@ -4967,4 +4964,158 @@ bool KWPage::formulaIsActive() const
 {
     return ( editNum != -1 &&
 	     doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA );
+}
+
+/******************************************************************/
+/* Class: KWResizeHandle                                          */
+/******************************************************************/
+
+/*================================================================*/
+KWResizeHandle::KWResizeHandle( KWPage *p, Direction d, KWFrame *frm )
+    : QWidget( p->viewport() ), page( p ), direction( d ), frame( frm )
+{
+    mousePressed = FALSE;
+    setMouseTracking( TRUE );
+    setBackgroundMode( PaletteHighlight );
+
+    switch ( direction ) {
+    case LeftUp:
+	setCursor( Qt::sizeFDiagCursor );
+	break;
+    case Up:
+	setCursor( Qt::sizeVerCursor );
+	break;
+    case RightUp:
+	setCursor( Qt::sizeBDiagCursor );
+	break;
+    case Right:
+	setCursor( Qt::sizeHorCursor );
+	break;
+    case RightDown:
+	setCursor( Qt::sizeFDiagCursor );
+	break;
+    case Down:
+	setCursor( Qt::sizeVerCursor );
+	break;
+    case LeftDown:
+	setCursor( Qt::sizeBDiagCursor );
+	break;
+    case Left:
+	setCursor( Qt::sizeHorCursor );
+	break;
+    }
+    
+    updateGeometry();
+    show();
+}
+
+/*================================================================*/
+void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
+{
+    if ( !mousePressed )
+	return;
+    page->mouseMoved = TRUE;
+    
+    int my = y() + e->y();
+    int mx = x() + e->x();
+    mx = ( mx / page->doc->getRastX() ) * page->doc->getRastX();
+    my = ( my / page->doc->getRastY() ) * page->doc->getRastY();
+    switch ( direction ) {
+    case LeftUp:
+	page->vmmEditFrameFDiag( mx, my );
+	break;
+    case Up:
+	page->vmmEditFrameSizeVert( mx, my );
+	break;
+    case RightUp:
+	page->vmmEditFrameBDiag( mx, my );
+	break;
+    case Right:
+	page->vmmEditFrameSizeHorz( mx, my );
+	break;
+    case RightDown:
+	page->vmmEditFrameFDiag( mx, my );
+	break;
+    case Down:
+	page->vmmEditFrameSizeVert( mx, my );
+	break;
+    case LeftDown:
+	page->vmmEditFrameBDiag( mx, my );
+	break;
+    case Left:
+	page->vmmEditFrameSizeHorz( mx, my );
+	break;
+    }
+    page->oldMy = my;
+    page->oldMx = mx;
+    page->deleteMovingRect = TRUE;
+    page->doRaster = TRUE;
+}
+
+/*================================================================*/
+void KWResizeHandle::mousePressEvent( QMouseEvent *e )
+{
+    KWFrameSet *fs = 0;
+    KWFrame *frm = 0;
+
+    for ( unsigned int i = 0; i < page->doc->getNumFrameSets(); ++i ) {
+	fs = page->doc->getFrameSet( i );
+	for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
+	    frm = fs->getFrame( j );
+	    if ( frame->isSelected() && frm != frame ) {
+		frm->setSelected( FALSE );
+		page->removeResizeHandles( frm );
+	    }
+	}
+    }
+
+    mousePressed = TRUE;
+    oldX = e->x();
+    oldY = e->y();
+    page->mouseMoved = FALSE;
+    page->mousePressed = TRUE;
+    page->vmpEditFrame( 0, x() + e->x(), y() + e->y() );
+}
+
+/*================================================================*/
+void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
+{
+    mousePressed = FALSE;
+    page->vmrEditFrame( x() + e->x(), y() + e->y() );
+    page->mousePressed = FALSE;
+}
+
+/*================================================================*/
+void KWResizeHandle::updateGeometry()
+{
+    switch ( direction ) {
+    case LeftUp:
+	page->moveChild( this, frame->x(), frame->y() );
+	break;
+    case Up:
+	page->moveChild( this, frame->x() + frame->width() / 2 - 3, frame->y() );
+	break;
+    case RightUp:
+	page->moveChild( this, frame->x() + frame->width() - 6, frame->y() );
+	break;
+    case Right:
+	page->moveChild( this, frame->x() + frame->width() - 6, 
+		     frame->y() + frame->height() / 2 - 3 );
+	break;
+    case RightDown:
+	page->moveChild( this, frame->x() + frame->width() - 6, 
+		     frame->y() + frame->height() - 6 );
+	break;
+    case Down:
+	page->moveChild( this, frame->x() + frame->width() / 2 - 3, 
+		     frame->y() + frame->height() - 5 );
+	break;
+    case LeftDown:
+	page->moveChild( this, frame->x(), frame->y() + frame->height() - 6 );
+	break;
+    case Left:
+	page->moveChild( this, frame->x(), frame->y() + frame->height() / 2 - 3 );
+	break;
+    }
+    resize( 6, 6 );
 }

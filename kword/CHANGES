@@ -1552,3 +1552,12 @@ Reggie, 1.10.1999
 ------------------
 - Implemented automatic generation of Table of Contents
 - Some fixes
+
+Reggie, 2.10.1999:
+------------------
+- Showing formatting chars works now really
+- Rewrote frame moving/resizing:
+  Until now all handles were drawn using raster op NOT. The
+  result were lots of redraw errors and lots of unnecesarry redraws.
+  Now the handles are widgets => no redraw problems and
+  much less redraws necesarry :-)

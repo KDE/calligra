@@ -15,6 +15,7 @@
 
 #include "kword_doc.h"
 #include "kword_view.h"
+#include "kword_page.h"
 #include "frame.h"
 #include "image.h"
 #include "parag.h"
@@ -185,6 +186,17 @@ KWFrame::KWFrame( const QRect &_rect )
     brd_bottom.color = getBackgroundColor().color();
     brd_bottom.style = KWParagLayout::SOLID;
     brd_bottom.ptWidth = 1;
+}
+
+/*================================================================*/
+KWFrame::~KWFrame()
+{
+    if ( handles.size() >= 8 ) {
+	for ( unsigned int i = 0; i < 8; ++i ) {
+	    if ( handles[ i ] )
+		delete handles[ i ];
+	}
+    }
 }
 
 /*================================================================*/
@@ -2119,7 +2131,7 @@ void KWGroupManager::deselectAll()
 }
 
 /*================================================================*/
-void KWGroupManager::selectUntil( KWFrameSet *fs )
+void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
 {
     unsigned int row = 0, col = 0;
     getFrameSet( fs, row, col );
@@ -2141,11 +2153,18 @@ void KWGroupManager::selectUntil( KWFrameSet *fs )
     }
 
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
+	bool s = cells.at( i )->frameSet->getFrame( 0 )->isSelected();
 	if ( cells.at( i )->row <= row && cells.at( i )->col <= col &&
 	     cells.at( i )->row >= srow && cells.at( i )->col >= scol )
-	    cells.at( i )->frameSet->getFrame( 0 )->setSelected( true );
+	    cells.at( i )->frameSet->getFrame( 0 )->setSelected( TRUE );
 	else
-	    cells.at( i )->frameSet->getFrame( 0 )->setSelected( false );
+	    cells.at( i )->frameSet->getFrame( 0 )->setSelected( FALSE );
+	if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() != s ) {
+	    if ( cells.at( i )->frameSet->getFrame( 0 )->isSelected() )
+		page->createResizeHandles( cells.at( i )->frameSet->getFrame( 0 ) );
+	    else
+		page->removeResizeHandles( cells.at( i )->frameSet->getFrame( 0 ) );
+	}
     }
 }
 

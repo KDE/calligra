@@ -19,7 +19,7 @@
 #include <qrect.h>
 #include <qpoint.h>
 #include <qsize.h>
-
+#include <qarray.h>
 #include <qlist.h>
 #include <qcursor.h>
 #include <qregion.h>
@@ -40,9 +40,11 @@ class KWordFrame;
 class KWGroupManager;
 class KFormulaEdit;
 class KWFormat;
+class KWResizeHandle;
+class KWPage;
 
 enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
-enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, 
+enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
 		 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
 		 FI_FOOTNOTE = 7 };
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2 };
@@ -53,6 +55,8 @@ enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2 };
 
 class KWFrame : public QRect
 {
+    friend class KWPage;
+    
 public:
     KWFrame();
     KWFrame( const QPoint &topleft, const QPoint &bottomright );
@@ -60,7 +64,8 @@ public:
     KWFrame( int left, int top, int width, int height );
     KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap );
     KWFrame( const QRect &_rect );
-
+    virtual ~KWFrame();
+    
     void setRunAround( RunAround _ra ) { runAround = _ra; }
     RunAround getRunAround() { return runAround; }
 
@@ -140,6 +145,7 @@ protected:
     QBrush backgroundColor;
 
     KWUnit bleft, bright, btop, bbottom;
+    QArray<KWResizeHandle*> handles;
 
 private:
     KWFrame &operator=( const KWFrame &_frame );
@@ -376,7 +382,7 @@ public:
     virtual ~KWFormulaFrameSet();
 
     void create( QWidget *parent );
-    
+
     virtual FrameType getFrameType()
     { return FT_FORMULA; }
 
@@ -394,14 +400,14 @@ public:
     void setFormat( const QFont &f, const QColor &c );
 
     KWFormat *getFormat();
-    
+
 protected:
     KFormulaEdit *formulaEdit;
     QPicture *pic;
     QString text;
     QFont font;
     QColor color;
-    
+
 };
 
 /******************************************************************/
@@ -451,7 +457,7 @@ public:
     void setName( QString _name ) { name = _name; }
     QString getName() { return name; }
 
-    void selectUntil( KWFrameSet *fs );
+    void selectUntil( KWFrameSet *fs, KWPage *page );
     bool isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col );
 
     void insertRow( unsigned int _idx, bool _recalc = true, bool _removeable = false );

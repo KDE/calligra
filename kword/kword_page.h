@@ -38,6 +38,44 @@ class QKeyEvent;
 class QPopupMenu;
 class QRegion;
 class KWFrameDia;
+class KWPage;
+class KWFrame;
+
+/******************************************************************/
+/* Class: KWResizeHandle                                          */
+/******************************************************************/
+
+class KWResizeHandle : public QWidget
+{
+    Q_OBJECT
+
+public:
+    enum Direction {
+	LeftUp = 0,
+	Up,
+	RightUp,
+	Right,
+	RightDown,
+	Down,
+	LeftDown,
+	Left
+    };
+    
+    KWResizeHandle( KWPage *p, Direction d, KWFrame *frm );
+    void updateGeometry();    
+    
+protected:
+    void mouseMoveEvent( QMouseEvent *e );
+    void mousePressEvent( QMouseEvent *e );
+    void mouseReleaseEvent( QMouseEvent *e );
+    
+    bool mousePressed;
+    int oldX, oldY;
+    KWPage *page;
+    Direction direction;
+    KWFrame *frame;
+
+};
 
 /******************************************************************/
 /* Class: KWPage						  */
@@ -45,6 +83,7 @@ class KWFrameDia;
 
 class KWPage : public QScrollView
 {
+    friend class KWResizeHandle;
     Q_OBJECT
 
 public:
@@ -133,7 +172,8 @@ public:
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
     void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true, QRegion *region = 0 );
-    void drawFrameSelection( QPainter &_painter, KWFrame *_frame );
+    void createResizeHandles( KWFrame *frame );
+    void removeResizeHandles( KWFrame *frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
     void setMouseMode( MouseMode _mm );
     int getPageOfRect( QRect _rect );
@@ -182,7 +222,7 @@ public:
     void selectAll();
     void insertFormulaChar( int c );
     bool formulaIsActive() const;
-    
+
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
@@ -379,7 +419,7 @@ protected:
     QByteArray pasteLaterData;
     QString pasteLaterMimeType;
     QRect scrollClipRect;
-
+    
 };
 
 #endif

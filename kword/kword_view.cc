@@ -832,7 +832,8 @@ void KWordView::viewFormattingChars()
 /*===============================================================*/
 void KWordView::viewFrameBorders()
 {
-    m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
+    m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, 
+				 !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
     _viewFrameBorders = m_vMenuView->isItemChecked( m_idMenuView_FrameBorders );
     gui->getPaperWidget()->repaintScreen( FALSE );
 }
@@ -987,7 +988,7 @@ void KWordView::formatParagraph()
 	delete paragDia;
 	paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW | 
+    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW |
 			       KWParagDia::PD_BORDERS |
 			       KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
     paragDia->setCaption( i18n( "KWord - Paragraph settings" ) );
