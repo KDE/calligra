@@ -22,7 +22,7 @@
 
 #include <koMainWindow.h>
 
-class QAction;
+class KAction;
 
 /******************************************************************/
 /* Class: KWordShell                                              */

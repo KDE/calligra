@@ -29,7 +29,7 @@
 #include <qprintdialog.h>
 #include <qcollection.h>
 #include <qkeycode.h>
-#include <qaction.h>
+#include <kaction.h>
 #include <qmime.h>
 #include <qtoolbutton.h>
 
@@ -679,9 +679,9 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_pOkButton->setEnabled( readwrite );
   m_pEditWidget->setEnabled( readwrite );
 
-  QValueList<QAction*> actions = actionCollection()->actions();
-  QValueList<QAction*>::ConstIterator aIt = actions.begin();
-  QValueList<QAction*>::ConstIterator aEnd = actions.end();
+  QValueList<KAction*> actions = actionCollection()->actions();
+  QValueList<KAction*>::ConstIterator aIt = actions.begin();
+  QValueList<KAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 

@@ -50,7 +50,7 @@ class KFontAction;
 class KFontSizeAction;
 class KToggleAction;
 
-class QActionMenu;
+class KActionMenu;
 
 class DCOPObject;
 
@@ -419,7 +419,7 @@ private:
     KAction* m_oszi;
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
-    QActionMenu* m_scripts;
+    KActionMenu* m_scripts;
     KAction* m_default;
 
     /**

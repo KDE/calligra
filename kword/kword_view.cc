@@ -28,7 +28,7 @@
 #include <qdropsite.h>
 #include <qscrollview.h>
 #include <qsplitter.h>
-#include <qaction.h>
+#include <kaction.h>
 #include <qfiledialog.h>
 
 #include "kword_view.h"
@@ -936,9 +936,9 @@ void KWordView::updateReadWrite( bool readwrite )
 #ifdef __GNUC__
 #warning TODO
 #endif
-  QValueList<QAction*> actions = actionCollection()->actions();
-  QValueList<QAction*>::ConstIterator aIt = actions.begin();
-  QValueList<QAction*>::ConstIterator aEnd = actions.end();
+  QValueList<KAction*> actions = actionCollection()->actions();
+  QValueList<KAction*>::ConstIterator aIt = actions.begin();
+  QValueList<KAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 }
