@@ -56,3 +56,17 @@ VLayer::unselectObjects()
 			itr.current()->setState( VObject::normal );
     }
 }
+
+void
+VLayer::deleteObjects( QPtrList<VObject> &list )
+{
+	QPtrListIterator<VObject> itr = m_objects;
+    for ( ; itr.current() ; ++itr )
+    {
+		if( itr.current()->state() == VObject::selected )
+		{
+			itr.current()->setState( VObject::deleted );
+			list.append( itr.current() );
+		}
+	}
+}

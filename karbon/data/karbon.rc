@@ -10,6 +10,7 @@
 		<Action name="edit_copy"/>
 		<Action name="edit_paste"/>
 		<Action name="edit_selectall"/>
+		<Action name="delete"/>
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Modify</text>

@@ -23,6 +23,7 @@ public:
 
 	void selectObjects( const QRect &rect );
 	void unselectObjects();
+	void deleteObjects( QPtrList<VObject> &list );
 
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }

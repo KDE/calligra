@@ -41,6 +41,7 @@ protected slots:
 	void editCopy();
 	void editPaste();
 	void editSelectAll();
+	void editDeleteSelection();
 
 	// shape-tools:
 	void ellipseTool();

@@ -35,8 +35,11 @@ public:
 	// select vobjects within the rect:
 	void selectObjects( const QRect &rect );
 
-	// unselect all vobjects froma all vlayers:
+	// unselect all vobjects from all vlayers:
 	void unselectObjects();
+
+	// delete selected vobjects from all vlayers:
+	void deleteObjects( QPtrList<VObject> &list );
 
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd );

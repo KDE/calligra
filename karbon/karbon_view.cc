@@ -20,6 +20,8 @@
 #include "vctool_star.h"
 #include "vctool_select.h"
 
+#include "vmcmd_delete.h"
+
 #include <kdebug.h>
 
 VTool* KarbonView::s_currentTool = 0L;
@@ -79,6 +81,12 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
+}
+
+void
+KarbonView::editDeleteSelection()
+{
+	m_part->addCommand( new VMCmdDelete( m_part ) );
 }
 
 void
@@ -149,6 +157,8 @@ KarbonView::initActions()
 		"edit_paste" );
   	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(),
 		"edit_selectall" );
+  	new KAction( i18n("&Delete"), "editdelete", 0, this, SLOT( editDeleteSelection() ), actionCollection(),
+		"delete" );
 
 	// tools:
 	m_ellipseToolAction = new KToggleAction(

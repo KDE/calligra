@@ -130,6 +130,15 @@ KarbonPart::unselectObjects()
 }
 
 void
+KarbonPart::deleteObjects( QPtrList<VObject> &list )
+{
+	// delete selected objects from all layers
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current() ; ++itr )
+		activeLayer()->deleteObjects( list );
+}
+
+void
 KarbonPart::addCommand( VCommand* cmd )
 {
 	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;

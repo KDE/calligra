@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkarbontools.la
 noinst_HEADERS = \
 	vccommand.h \
 	vmcmd_select.h \
+	vmcmd_delete.h \
 	vccmd_ellipse.h \
 	vccmd_polygon.h \
 	vccmd_rectangle.h \
@@ -22,6 +23,7 @@ noinst_HEADERS = \
 libkarbontools_la_SOURCES = \
 	vccommand.cc \
 	vmcmd_select.cc \
+	vmcmd_delete.cc \
 	vccmd_ellipse.cc \
 	vccmd_polygon.cc \
 	vccmd_rectangle.cc \
