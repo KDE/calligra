@@ -469,6 +469,31 @@ KoTextFormat::StrikeOutLineStyle KoTextFormat::stringToStrikeOutStyle( const QSt
         return KoTextFormat::S_SOLID;
 }
 
+QString KoTextFormat::attributeFontToString( KoTextFormat::AttributeStyle _attr )
+{
+    if (_attr == KoTextFormat::ATT_NONE )
+        return QString("none");
+    else if ( _attr == KoTextFormat::ATT_MAJ )
+        return QString("upper");
+    else if ( _attr == KoTextFormat::ATT_MIN )
+        return QString("lower");
+    else
+        return QString("none");
+}
+
+KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString & _str )
+{
+    if ( _str == "none" )
+        return KoTextFormat::ATT_NONE;
+    else if ( _str == "upper")
+        return KoTextFormat::ATT_MAJ;
+    else if ( _str == "lower")
+        return KoTextFormat::ATT_MIN;
+    else
+        return KoTextFormat::ATT_NONE;
+}
+
+
 void KoTextFormat::setSpellCheckingLanguage( const QString & _lang)
 {
     if ( m_spellCheckLanguage == _lang )

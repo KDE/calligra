@@ -286,3 +286,5 @@ Changes after KWord-1.2
 - Fix #24242 add variable : created/modified/printed document date
 - Now we can copy text of comment.
 - Add support for convert table to text
+- Add support for font attribute
+

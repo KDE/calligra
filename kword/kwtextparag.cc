@@ -382,6 +382,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->wordByWord()));
     }
+
+    if( !refFormat || curFormat->attributeFont() != refFormat->attributeFont())
+    {
+        elem = doc.createElement( "FONTATTRIBUTE" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", KoTextFormat::attributeFontToString(curFormat->attributeFont() ));
+    }
     return formatElem;
 }
 
@@ -627,6 +634,10 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "WORDBYWORD" ).toElement();
     if ( !elem.isNull() )
         format.setWordByWord( elem.attribute("value").toInt() == 1);
+
+    elem = formatElem.namedItem( "FONTATTRIBUTE" ).toElement();
+    if ( !elem.isNull() )
+        format.setAttributeFont( KoTextFormat::stringToAttributeFont(elem.attribute("value")));
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;

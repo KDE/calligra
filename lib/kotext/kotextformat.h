@@ -192,6 +192,10 @@ public:
     static UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
     static StrikeOutLineStyle stringToStrikeOutStyle( const QString & _str );
 
+    static QString attributeFontToString( KoTextFormat::AttributeStyle _attr );
+    static AttributeStyle stringToAttributeFont( const QString & _str );
+
+
 #ifndef NDEBUG
     void printDebug();
 #endif

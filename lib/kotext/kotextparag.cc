@@ -575,6 +575,11 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
                 posY -=shadowY( zh );
+            if ( lastFormat->attributeFont() == KoTextFormat::ATT_MAJ)
+                str = str.upper();
+            else if ( lastFormat->attributeFont() == KoTextFormat::ATT_MIN)
+                str = str.lower();
+
 	    painter.drawText( startX, posY, str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
