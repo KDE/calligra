@@ -65,6 +65,17 @@ VDocument::append( VObject* object )
 }
 
 void
+VDocument::saveXML( QDomDocument& doc ) const
+{
+	QDomElement me = doc.createElement( "DOC" );
+	doc.appendChild( me );
+
+	// TODO : add paper size/orientation storing code here
+	// maybe we need to provide it as param or member var? (Rob)
+	save( me );
+}
+
+void
 VDocument::save( QDomElement& me ) const
 {
 	QDomAttr attr;
