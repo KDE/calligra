@@ -44,6 +44,16 @@ class KWFormat
 {
 public:
     enum VertAlign { VA_NORMAL, VA_SUB, VA_SUPER };
+    enum Attributes {
+	FontFamily = 1,
+	FontSize = 2,
+	Color = 4,
+	Weight = 8,
+	Italic = 16,
+	Underline = 32,
+	Vertalign = 64,
+	All = FontFamily | FontSize | Color | Weight | Italic | Underline | Vertalign
+    };
     /**
      * Creates a new KWFormat instance.
      *

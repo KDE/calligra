@@ -250,7 +250,7 @@ public:
 
     void deleteSelectedText( KWFormatContext *_fc );
     void copySelectedText();
-    void setFormat( KWFormat &_format );
+    void setFormat( KWFormat &_format, int flags = KWFormat::All );
 
     void paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		KWFormat *_format = 0L, const QString &_mime = "text/plain" );

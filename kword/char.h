@@ -36,8 +36,8 @@
 class KWordDocument;
 class KWTextFrameSet;
 
-enum ClassIDs {ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3, ID_KWCharVariable = 4,
-               ID_KWCharFootNote = 5};
+enum ClassIDs { ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3,
+		ID_KWCharVariable = 4, ID_KWCharFootNote = 5};
 
 /******************************************************************/
 /* Class: KWCharAttribute                                         */

@@ -1604,3 +1604,11 @@ Reggie, 30.10.1999:
 -----------------
 - KRestrictedLine -> QLineEdit + QValidator
 - Improved cursor navigation inside tables
+
+Reggie, 8.11.1999:
+-----------------
+- When setting text attributes of a selected text only the chaged attribute(s)
+  is changed, not the whole current format. So, if you have e.g. some bold and
+  some italic text selected and change the color, only the color is changed
+  and _not_ the attributes too (this was the case until now...).
+

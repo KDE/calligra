@@ -164,7 +164,7 @@ public:
     void insertTab( unsigned int _pos );
     void appendText( KWChar *_text, unsigned int _len );
     bool deleteText( unsigned int _pos, unsigned int _len = 1 );
-    void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
+    void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format, int flags = KWFormat::All );
 
     void save( ostream &out );
     void load( KOMLParser&, vector<KOMLAttrib>& );

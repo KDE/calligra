@@ -112,7 +112,7 @@ public:
     void scrollToParag( KWParag *_parag );
     void scrollToOffset( int _x, int _y, KWFormatContext &_fc );
 
-    void formatChanged( KWFormat &_format, bool _redraw = true );
+    void formatChanged( KWFormat &_format, bool _redraw = TRUE, int flags = KWFormat::All );
     void setFlow( KWParagLayout::Flow _flow );
     void setLeftIndent( KWUnit _left );
     void setFirstLineIndent( KWUnit _first );
@@ -379,7 +379,7 @@ protected:
 
     void cursorGotoNextTableCell();
     void cursorGotoPrevTableCell();
-    
+
     KWordDocument *doc;
     bool markerIsVisible;
 

@@ -1720,7 +1720,7 @@ void KWordView::textSizeSelected( const QString &_size)
     tbFont.setPointSize( size.toInt() );
     format.setPTFontSize( size.toInt() );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontSize );
 }
 
 /*======================= text font selected  ===================*/
@@ -1730,7 +1730,7 @@ void KWordView::textFontSelected( const QString &_font )
     tbFont.setFamily( font );
     format.setUserFont( m_pKWordDoc->findUserFont( font ) );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontFamily );
 }
 
 /*========================= text bold ===========================*/
@@ -1739,7 +1739,7 @@ void KWordView::textBold()
     tbFont.setBold( !tbFont.bold() );
     format.setWeight( tbFont.bold() ? QFont::Bold : QFont::Normal );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Weight );
 }
 
 /*========================== text italic ========================*/
@@ -1748,7 +1748,7 @@ void KWordView::textItalic()
     tbFont.setItalic( !tbFont.italic() );
     format.setItalic( tbFont.italic() ? 1 : 0 );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Italic );
 }
 
 /*======================== text underline =======================*/
@@ -1757,7 +1757,7 @@ void KWordView::textUnderline()
     tbFont.setUnderline( !tbFont.underline() );
     format.setUnderline( tbFont.underline() ? 1 : 0 );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Underline );
 }
 
 /*=========================== text color ========================*/
@@ -1769,7 +1769,7 @@ void KWordView::textColor()
 	( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
 	format.setColor( tbColor );
 	if ( gui )
-	    gui->getPaperWidget()->formatChanged( format );
+	    gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Color );
     }
 }
 
@@ -1858,7 +1858,7 @@ void KWordView::textSuperScript()
 	vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
 }
 
 /*===============================================================*/
@@ -1871,7 +1871,7 @@ void KWordView::textSubScript()
 	vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
 }
 
 /*===============================================================*/

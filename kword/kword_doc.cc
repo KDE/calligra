@@ -2695,39 +2695,32 @@ void KWordDocument::copySelectedText()
 }
 
 /*================================================================*/
-void KWordDocument::setFormat( KWFormat &_format )
+void KWordDocument::setFormat( KWFormat &_format, int flags )
 {
     KWFormatContext tmpFC2( this, selStart.getFrameSet() - 1 );
     KWFormatContext tmpFC1( this, selStart.getFrameSet() - 1 );
 
-    if ( selStart.getParag() == selEnd.getParag() )
-    {
-	if ( selStart.getTextPos() < selEnd.getTextPos() )
-	{
+    if ( selStart.getParag() == selEnd.getParag() ) {
+	if ( selStart.getTextPos() < selEnd.getTextPos() ) {
 	    tmpFC1 = selStart;
 	    tmpFC2 = selEnd;
-	}
-	else
-	{
+	} else {
 	    tmpFC1 = selEnd;
 	    tmpFC2 = selStart;
 	}
 
-	tmpFC1.getParag()->setFormat( tmpFC1.getTextPos(), tmpFC2.getTextPos() - tmpFC1.getTextPos(), _format );
-    }
-    else
-    {
+	tmpFC1.getParag()->setFormat( tmpFC1.getTextPos(), 
+				      tmpFC2.getTextPos() - tmpFC1.getTextPos(), 
+				      _format, flags );
+    } else {
 	KWParag *parag = getFirstParag( selStart.getFrameSet() - 1 );
-	while ( parag )
-	{
-	    if ( parag == selStart.getParag() )
-	    {
+	while ( parag ) {
+	    if ( parag == selStart.getParag() ) {
 		tmpFC1 = selStart;
 		tmpFC2 = selEnd;
 		break;
 	    }
-	    if ( parag == selEnd.getParag() )
-	    {
+	    if ( parag == selEnd.getParag() ) {
 		tmpFC2 = selStart;
 		tmpFC1 = selEnd;
 		break;
@@ -2735,15 +2728,16 @@ void KWordDocument::setFormat( KWFormat &_format )
 	    parag = parag->getNext();
 	}
 
-	tmpFC1.getParag()->setFormat( tmpFC1.getTextPos(), tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos(), _format );
+	tmpFC1.getParag()->setFormat( tmpFC1.getTextPos(), 
+				      tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos(), 
+				      _format, flags );
 	parag = tmpFC1.getParag()->getNext();
-	while ( parag && parag != tmpFC2.getParag() )
-	{
+	while ( parag && parag != tmpFC2.getParag() ) {
 	    if ( parag->getTextLen() > 0 )
-		parag->setFormat( 0, parag->getTextLen(), _format );
+		parag->setFormat( 0, parag->getTextLen(), _format, flags );
 	    parag = parag->getNext();
 	}
-	tmpFC2.getParag()->setFormat( 0, tmpFC2.getTextPos(), _format );
+	tmpFC2.getParag()->setFormat( 0, tmpFC2.getTextPos(), _format, flags );
     }
 }
 

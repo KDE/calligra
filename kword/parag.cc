@@ -276,7 +276,7 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len )
 }
 
 /*================================================================*/
-void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
+void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format, int flags )
 {
     if ( text.size() == 0 )
 	return;
@@ -286,19 +286,14 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	return;
     }
 
-    for ( unsigned int i = 0; i < _len; i++ )
-    {
-	if ( text.data()[ _pos + i ].c == KWSpecialChar )
-	{
-	    switch ( text.data()[ _pos + i ].attrib->getClassId() )
-	    {
-	    case ID_KWCharVariable:
-	    {
+    for ( unsigned int i = 0; i < _len; i++ ) {
+	if ( text.data()[ _pos + i ].c == KWSpecialChar ) {
+	    switch ( text.data()[ _pos + i ].attrib->getClassId() ) {
+	    case ID_KWCharVariable: {
 		KWFormat *format = document->getFormatCollection()->getFormat( _format );
 		dynamic_cast<KWCharVariable*>( text.data()[ _pos + i ].attrib )->setFormat( format );
 	    } break;
-	    case ID_KWCharFootNote:
-	    {
+	    case ID_KWCharFootNote: {
 		KWFormat *format = document->getFormatCollection()->getFormat( _format );
 		KWFormat f( document, _format );
 		if ( document->getFootNoteManager().showFootNotesSuperscript() )
@@ -312,8 +307,30 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	    }
 	    continue;
 	}
+	
+	KWFormat *format = 0;
+	if ( flags == KWFormat::All )
+	    format = document->getFormatCollection()->getFormat( _format );
+	else {
+	    KWFormat fmt( document, 
+			  *( (KWCharFormat*)text.data()[ _pos + i ].attrib )->getFormat() );
+	    if ( flags & KWFormat::FontFamily )
+		fmt.setUserFont( document->findUserFont( _format.getUserFont()->getFontName() ) );
+	    if ( flags & KWFormat::FontSize )
+		fmt.setPTFontSize( _format.getPTFontSize() );
+	    if ( flags & KWFormat::Color )
+		fmt.setColor( _format.getColor() );
+	    if ( flags & KWFormat::Weight )
+		fmt.setWeight( _format.getWeight() );
+	    if ( flags & KWFormat::Italic )
+		fmt.setItalic( _format.getItalic() );
+	    if ( flags & KWFormat::Underline )
+		fmt.setUnderline( _format.getUnderline() );
+	    if ( flags & KWFormat::Vertalign )
+		fmt.setVertAlign( _format.getVertAlign() );
+	    format = document->getFormatCollection()->getFormat( fmt );
+	}
 	freeChar( text.data()[ _pos + i ], document );
-	KWFormat *format = document->getFormatCollection()->getFormat( _format );
 	KWCharFormat *f = new KWCharFormat( format );
 	text.data()[ _pos + i ].attrib = f;
     }

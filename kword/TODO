@@ -25,9 +25,5 @@ Bugs to fix:
 - When a frame grows there are sometimes redraw errors
 - When removing text in a table cell shrink table cells
 - Make loading/saving embedded objects working
-- When some text is selected an an attribute is changed, not only that attribute is
-  changed on the selected text, but the whole format, e.g there is some text selected,
-  a part of it si bold aand another part italic. Now the user changes the color, and this
-  changes not only the color but also the font, etc. to the current format.
 
 Reginald Stadlbauer <reggie@kde.org>
