@@ -52,9 +52,9 @@ VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget*
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
-	m_importPatternButton->setIconSet( QPixmap( il.iconPath( "14_pattern_import.png", KIcon::Small ) ) );
+	m_importPatternButton->setIconSet( QPixmap( il.iconPath( "14_layer_newlayer.png", KIcon::Small ) ) );
 	m_importPatternButton->setTextLabel( i18n( "Import" ) );
-	m_deletePatternButton->setIconSet( QPixmap( il.iconPath( "14_pattern_delete.png", KIcon::Small ) ) );
+	m_deletePatternButton->setIconSet( QPixmap( il.iconPath( "14_layer_deletelayer.png", KIcon::Small ) ) );
 	m_deletePatternButton->setTextLabel( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
