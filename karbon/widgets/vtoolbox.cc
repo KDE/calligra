@@ -95,6 +95,7 @@ VToolBox::slotPressButton( int id )
 void
 VToolBox::slotButtonPressed( int id )
 {
+	if( id != buttonGroup->selectedId() && buttonGroup->selected() ) buttonGroup->selected()->setDown( false );
 	int shapestart = m_manipulationtools.count();
 	int miscstart = m_manipulationtools.count() + m_shapetools.count();
 	int miscend = miscstart + m_misctools.count();
