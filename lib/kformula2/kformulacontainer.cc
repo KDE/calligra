@@ -23,7 +23,7 @@
 #include <qevent.h>
 #include <qfile.h>
 #include <qpainter.h>
-#include <kprinter.h>
+#include <koprinter.h>
 #include <qstring.h>
 #include <qtextstream.h>
 
