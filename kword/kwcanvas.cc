@@ -1420,18 +1420,23 @@ void KWCanvas::deleteFrame( KWFrame * frame )
 {
     KWFrameSet * fs = frame->getFrameSet();
     QString cmdName;
+    TypeStructDocItem docItem;
     switch (fs->getFrameType() ) {
     case FT_TEXT:
         cmdName=i18n("Delete text frame");
+        docItem=TextFrames;
         break;
     case FT_FORMULA:
         cmdName=i18n("Delete formula frame");
+        docItem=FormulaFrames;
         break;
     case FT_PICTURE:
         cmdName=i18n("Delete picture frame");
+        docItem=Pictures;
         break;
     case FT_PART:
         cmdName=i18n("Delete object frame");
+        docItem=Embedded;
         break;
     case FT_TABLE:
     case FT_BASE:
@@ -1441,6 +1446,8 @@ void KWCanvas::deleteFrame( KWFrame * frame )
     KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, doc, frame );
     doc->addCommand( cmd );
     cmd->execute();
+
+    emit docStructChanged(docItem);
 }
 
 void KWCanvas::deleteTable( KWTableFrameSet *table )
@@ -1450,9 +1457,12 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
     deleteFrameSetEditTable( table );
     // ## TODO undo/redo support
     doc->delFrameSet( table );
+
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
+
+    emit docStructChanged(Tables);
 }
 
 void KWCanvas::deleteFrameSetEditTable( KWTableFrameSet *table )
@@ -1715,6 +1725,18 @@ void KWCanvas::updateCurrentFormat()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if ( edit )
         edit->updateUI();
+}
+
+void KWCanvas::ungroupTable(KWTableFrameSet *table)
+{
+    table->ungroup();
+    doc->delFrameSet(table);
+    //when you ungroup a table
+    // you must remove table item in docstruct
+    // create items in text item in docstruct
+    emit docStructChanged(TextFrames);
+    emit docStructChanged(Tables);
+    repaintAll();
 }
 
 #ifndef NDEBUG

@@ -135,6 +135,9 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
+    //ungroup table
+    void ungroupTable(KWTableFrameSet *table);
+
     //delete currentFrameSetEdit when you remove table
     //column, row. Otherwise kword crashs.
     void deleteFrameSetEditTable( KWTableFrameSet *table );

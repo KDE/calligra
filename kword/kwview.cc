@@ -1942,20 +1942,16 @@ void KWView::tableUngroupTable()
                             i18n( "You have to put the cursor into a table\n"
                                   "before ungrouping a table." ),
                             i18n( "Ungroup Table" ) );
-    } else {
+    }
+    else
+    {
         int result;
         result = KMessageBox::warningContinueCancel(this,
-                        i18n("Ungrouping a table can not be undone.\n"
-                             "Are you sure you want to ungroup the table?"),
-                        i18n("Ungroup Table"), i18n("&Ungroup"));
+                                                    i18n("Ungrouping a table can not be undone.\n"
+                                                         "Are you sure you want to ungroup the table?"),
+                                                    i18n("Ungroup Table"), i18n("&Ungroup"));
         if (result == KMessageBox::Continue)
-        {
-            //KoRect r = doc->zoomRect( table->boundingRect() );
-            table->ungroup();
-            //gui->canvasWidget()->repaintScreen( r, TRUE );
-            doc->delFrameSet(table);
-        }
-        gui->canvasWidget()->repaintAll();
+            gui->canvasWidget()->ungroupTable(table);
     }
 }
 
