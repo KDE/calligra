@@ -37,7 +37,7 @@ class MySqlConnectionInternal;
  * all other members are done by the
  * base class.
  */
-class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
+class KDE_EXPORT MySqlConnection : public Connection
 {
 	Q_OBJECT
 

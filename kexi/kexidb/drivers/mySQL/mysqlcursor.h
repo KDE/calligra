@@ -27,7 +27,7 @@ namespace KexiDB {
 
 class MySqlCursorData;
 
-class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
+class KDE_EXPORT MySqlCursor: public Cursor {
 public:
 	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
 	MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
