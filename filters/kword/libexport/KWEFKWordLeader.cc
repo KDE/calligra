@@ -93,6 +93,17 @@ static ParaData createTableMgr( const QString& grpMgr )
     return pData;
 }
 
+static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader* )
+{
+    // <HARDBRK>
+    bool* flag = (bool*) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "frame", *flag );
+    ProcessAttributes (myNode, attrProcessingList);
+    if (*flag)
+        kdDebug(30508) << "<HARDBRK frame=\"1\"> found" << endl;
+}
+
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
                                   KWEFKWordLeader *leader )
@@ -111,6 +122,11 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,     &paraData.text           )
                       << TagProcessing ( "FORMATS", ProcessFormatsTag,  &paraData.formattingList )
                       << TagProcessing ( "LAYOUT",  ProcessLayoutTag,   &paraData.layout         );
+    
+    if ( leader->m_oldSyntax )
+    {
+        tagProcessingList.append( TagProcessing( "HARDBRK", ProcessHardBrkTag, &paraData.layout.pageBreakBefore ) );
+    }
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     CreateMissingFormatData (paraData.text, paraData.formattingList);
