@@ -36,19 +36,21 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditor(QWidget *parent=0, bool returnToAccept = false, const char *name=0);
+		KexiPropertyEditor(QWidget *parent=0, bool returnToAccept = false, bool AutoSync=false, const char *name=0);
 		~KexiPropertyEditor();
 
 		void	reset(bool editorOnly = false);
-		void	setBuffer(KexiPropertyBuffer *b) { m_buffer = b; fill(); }
+		void	setBuffer(KexiPropertyBuffer *b);
 		virtual QSize sizeHint() const;
 		
-		void	fill();
+	signals:
+		void	valueChanged(const QString &propname, QVariant value);
 
 	public slots:
 		void	slotClicked(QListViewItem *i);
 		void    resetItem();
 		void    moveEditor();
+		void	fill();
 
 	protected slots:
 		void	slotEditorAccept(KexiPropertySubEditor *editor);
@@ -69,6 +71,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		bool 			m_returnToAccept;
 		KexiPropertyBuffer	*m_buffer;
 		KPushButton		*m_defaults; // "Revert to defaults" button
+		bool			m_sync;
 };
 
 #endif

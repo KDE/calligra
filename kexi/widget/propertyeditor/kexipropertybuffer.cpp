@@ -39,7 +39,7 @@ KexiPropertyBuffer::changeProperty(const char *property, const QVariant &value)
 }
 
 void
-KexiPropertyBuffer::add(KexiProperty &property)
+KexiPropertyBuffer::add(const KexiProperty &property)
 {
 	insert(property.name(), property);
 }

@@ -23,6 +23,8 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qcursor.h>
+
 #include <qpoint.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -30,6 +32,86 @@
 #include <klocale.h>
 
 #include "kexipropertyeditoritem.h"
+
+// Helper class for QSizePolicy Editor
+
+class KEXIPROPERTYEDITOR_EXPORT spHelper
+{
+	public:
+	spHelper() {;}
+	~spHelper() {;}
+	
+	static QStringList	list();
+	static QString		valueToKey(int key);
+	static QSizePolicy::SizeType		keyToValue(const QString &key);
+};
+
+QString
+spHelper::valueToKey(int key)
+{
+	switch(key)
+	{
+		case QSizePolicy::Fixed: return QString("Fixed");
+		case QSizePolicy::Minimum: return QString("Minimum");
+		case QSizePolicy::Maximum: return QString("Maximum");
+		case QSizePolicy::Preferred: return QString("Preferred");
+		case QSizePolicy::MinimumExpanding: return QString("MinimumExpanding");
+		case QSizePolicy::Expanding: return QString("Expanding");
+		case QSizePolicy::Ignored: return QString("Ignored");
+		default: return QString();
+	}
+}
+
+QStringList
+spHelper::list()
+{
+	QStringList list;
+	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
+		<< "MinimumExpanding" << "Ignored";
+	return list;
+}
+
+QSizePolicy::SizeType
+spHelper::keyToValue(const QString &key)
+{
+	if(key == "Fixed") return QSizePolicy::Fixed;
+	if(key == "Minimum") return QSizePolicy::Minimum;
+	if(key == "Maximum") return QSizePolicy::Maximum;
+	if(key == "Preferred") return QSizePolicy::Preferred;
+	if(key == "MinimumExpanding") return QSizePolicy::MinimumExpanding;
+	if(key == "Expanding") return QSizePolicy::Expanding;
+	if(key == "Ignored") return QSizePolicy::Ignored;
+	
+	return QSizePolicy::Expanding;
+}
+
+// Helper method for cursor
+QString
+valueToCursorName(int shape)
+{
+	switch(shape)
+	{
+	case Qt::ArrowCursor: return i18n("Arrow");
+	case Qt::UpArrowCursor: return i18n("Up Arrow");
+	case Qt::CrossCursor: return i18n("Cross");
+	case Qt::WaitCursor: return i18n("Waiting");
+	case Qt::IbeamCursor: return i18n("iBeam");
+	case Qt::SizeVerCursor: return i18n("Size Vertical");
+	case Qt::SizeHorCursor: return i18n("Size Horizontal");
+	case Qt::SizeFDiagCursor: return i18n("Size Slash");
+	case Qt::SizeBDiagCursor: return i18n("Size Backslash");
+	case Qt::SizeAllCursor: return i18n("Size All");
+	case Qt::BlankCursor: return i18n("Blank");
+	case Qt::SplitVCursor: return i18n("Split Vertical");
+	case Qt::SplitHCursor: return i18n("Split Horizontal");
+	case Qt::PointingHandCursor: return i18n("Pointing Hand");
+	case Qt::ForbiddenCursor: return i18n("Forbidden");
+	case Qt::WhatsThisCursor: return i18n("Whats This");
+	default: return QString();
+	}
+}
+
+// KexiPropertyEditorItem
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
  : KListViewItem(parent, property->desc(), format(property->value()))
@@ -90,7 +172,29 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 			m_children->insert("height", new KexiPropertyEditorItem(this, hei));
 			break;
 		}
-		
+		case QVariant::SizePolicy:
+		{
+			m_childprop = new QPtrList<KexiProperty>();
+			QSizePolicy p = m_value.toSizePolicy();
+
+			KexiProperty *hSize = new KexiProperty(i18n("horSizeType"), 
+			   spHelper::valueToKey(p.horData()), spHelper::list());
+			m_childprop->append(hSize);
+			KexiProperty *vSize = new KexiProperty(i18n("verSizeType"), 
+			   spHelper::valueToKey(p.verData()), spHelper::list());
+			m_childprop->append(vSize);
+			KexiProperty *hStr = new KexiProperty(i18n("hStretch"), (int)p.horStretch() );
+			m_childprop->append(hStr);
+			KexiProperty *vStr = new KexiProperty(i18n("vStretch"), (int)p.verStretch() );
+			m_childprop->append(vStr);
+			
+			m_children = new ChildDict();
+			m_children->insert("hSize", new KexiPropertyEditorItem(this, hSize));
+			m_children->insert("vSize", new KexiPropertyEditorItem(this, vSize));
+			m_children->insert("hStretch", new KexiPropertyEditorItem(this, hStr));
+			m_children->insert("vStretch", new KexiPropertyEditorItem(this, vStr));
+			break;
+		}
 	/*	case QVariant::Color:
 		{
 			QColor c = m_value.toColor();
@@ -292,8 +396,21 @@ KexiPropertyEditorItem::format(const QVariant &v)
 		}
 		case QVariant::Double:
 		{
-			QString s = KGlobal::locale()->formatNumber(v.toDouble());
-			return s;
+			return QString(KGlobal::locale()->formatNumber(v.toDouble()));
+		}
+		case QVariant::StringList:
+		{
+			return v.toStringList().join("|");
+		}
+		case QVariant::SizePolicy:
+		{
+			QSizePolicy p = v.toSizePolicy(); 
+			return QString(spHelper::valueToKey(p.horData()) + "/" + spHelper::valueToKey(p.verData()));
+		}
+		case QVariant::Cursor:
+		{
+			QCursor c = v.toCursor();
+			return valueToCursorName(c.shape());
 		}
 		default:
 		{
@@ -360,7 +477,30 @@ KexiPropertyEditorItem::getComposedValue()
 			setValue(r);
 			return r;
 		}
-		
+		case QVariant::SizePolicy:
+		{
+			QSizePolicy p;
+			QVariant v;
+			v = (*m_children)["hSize"]->value();
+			p.setHorData(spHelper::keyToValue(v.toString()));
+			(*m_children)["hSize"]->property()->setValue(v.toString());
+			
+			v = (*m_children)["vSize"]->value();
+			p.setVerData(spHelper::keyToValue(v.toString()));
+			(*m_children)["vSize"]->property()->setValue(v.toString());
+			
+			v = (*m_children)["hStretch"]->value();
+			p.setHorStretch(v.toInt());
+			(*m_children)["hStretch"]->property()->setValue(v.toInt());
+			
+			v = (*m_children)["vStretch"]->value();
+			p.setVerStretch(v.toInt());
+			(*m_children)["vStretch"]->property()->setValue(v.toInt());
+			
+			setValue(p);
+			return p;
+		}
+
 		default:
 		{
 			return 0;
@@ -376,6 +516,7 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 		case QVariant::Point:
 		case QVariant::Rect:
 		case QVariant::Size:
+		case QVariant::SizePolicy:
 		{
 			delete m_childprop;
 			delete m_children;

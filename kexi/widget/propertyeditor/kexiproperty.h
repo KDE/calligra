@@ -40,11 +40,11 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 		
 		const KexiProperty& operator=(const KexiProperty &property);
 
-		QString		name() { return m_name; }
-		QVariant	value() { return m_value; }
-		QString		desc() { return m_desc; }
-		QVariant::Type  type();
-		QStringList*	list() { return m_list;}
+		QString		name() const { return m_name; }
+		QVariant	value() const { return m_value; }
+		QString		desc() const { return m_desc; }
+		QVariant::Type  type() const;
+		QStringList*	list() const{ return m_list;}
 
 		void setValue(const QVariant &v) { m_value = v; }
 

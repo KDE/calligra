@@ -32,9 +32,9 @@ test::test()
 	m_buffer->insert("font", KexiProperty("font", this->font()) );
 	
 	QStringList list;
-	list.append("Item 1");
-	list.append("Item 2");
-	list.append("Item 3");
+	list.append("MyItem");
+	list.append("OtherItem");
+	list.append("Item");
 	m_buffer->insert("list", KexiProperty("list","Item 1" , list));
 	
 	bool boolean=false;

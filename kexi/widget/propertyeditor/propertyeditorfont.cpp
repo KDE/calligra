@@ -25,6 +25,7 @@
 #include <kfontdialog.h>
 #include <kpushbutton.h>
 #include <kcolorbutton.h>
+#include <kdebug.h>
 
 #include "propertyeditorfont.h"
 #include "kexiproperty.h"
@@ -49,7 +50,6 @@ PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, 
 	m_button->show();
 	
 	setWidget(m_label);
-	m_label->installEventFilter(this);
 	
 	connect(m_button, SIGNAL(clicked()), this, SLOT(selectFont()));
 }
@@ -87,6 +87,20 @@ PropertyEditorFont::resizeEvent(QResizeEvent *ev)
 	m_button->move(ev->size().width() - m_button->width(), 0);
 }
 
+bool
+PropertyEditorFont::eventFilter(QObject* watched, QEvent* e)
+{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if((ev->key() == Key_Enter) | (ev->key()== Key_Space) || (ev->key() == Key_Return))
+		{
+			m_button->animateClick();
+			return true;
+		}
+	}
+	return KexiPropertySubEditor::eventFilter(watched, e);
+}
 
 //COLOR CHOOSER
 
@@ -118,6 +132,21 @@ void
 PropertyEditorColor::valueChanged(const QColor &color)
 {
 	emit changed(this);
+}
+
+bool
+PropertyEditorColor::eventFilter(QObject* watched, QEvent* e)
+{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if((ev->key() == Key_Enter) | (ev->key()== Key_Space) || (ev->key() == Key_Return))
+		{
+			m_button->animateClick();
+			return true;
+		}
+	}
+	return KexiPropertySubEditor::eventFilter(watched, e);
 }
 
 #include "propertyeditorfont.moc"

@@ -42,6 +42,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEdito
 		
 		void setFilter(QString filter, bool add);
 		void resizeEvent(QResizeEvent *ev);
+		bool eventFilter(QObject* watched, QEvent* e);
 
 	protected slots:
 		void selectFile();

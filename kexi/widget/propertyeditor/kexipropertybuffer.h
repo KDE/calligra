@@ -35,9 +35,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public Prop
 		KexiPropertyBuffer(QObject *parent, const char *name=0);
 		~KexiPropertyBuffer();
 		
-		void add(KexiProperty &property);
+		void add(const KexiProperty &property);
 
-		void	changeProperty(const char *property, const QVariant &value);
+		virtual void	changeProperty(const char *property, const QVariant &value);
 
 	signals:
 		void	propertyChanged(const char *property, const QVariant &value);

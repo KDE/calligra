@@ -91,7 +91,20 @@ PropertyEditorFile::resizeEvent(QResizeEvent *ev)
 	m_button->move(ev->size().width() - m_button->width()-1, 1);
 }
 
-
+bool
+PropertyEditorFile::eventFilter(QObject* watched, QEvent* e)
+{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if((ev->key() == Key_Enter) || (ev->key()== Key_Space) || (ev->key() == Key_Return))
+		{
+			m_button->animateClick();
+			return true;
+		}
+	}
+	return KexiPropertySubEditor::eventFilter(watched, e);
+}
 
 //PIXMAP
 
@@ -103,7 +116,6 @@ PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *proper
 	m_label->setAlignment(Qt::AlignTop);
 	m_label->resize(width(), height()-1);
 	m_label->setBackgroundMode(Qt::PaletteBase);
-	m_label->installEventFilter(this);
 	m_label->show();
 	setWidget(m_label);
 	
@@ -145,6 +157,15 @@ PropertyEditorPixmap::eventFilter(QObject *o, QEvent *ev)
 			if(m_popup->isVisible())
 				m_popup->hide();
 		}
+		if(ev->type() == QEvent::KeyPress)
+		{
+		QKeyEvent* e = static_cast<QKeyEvent*>(ev);
+		if((e->key() == Key_Enter) || (e->key()== Key_Space) || (e->key() == Key_Return))
+		{
+			m_button->animateClick();
+			return true;
+		}
+	}
 	}
 	return KexiPropertySubEditor::eventFilter(o, ev);
 }

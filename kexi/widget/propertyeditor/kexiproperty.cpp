@@ -90,7 +90,7 @@ KexiProperty::operator=(const KexiProperty &property)
 	return *this;
 }
 
-QVariant::Type  KexiProperty::type()
+QVariant::Type  KexiProperty::type() const
 {
 	if(m_list)
 		return QVariant::StringList;

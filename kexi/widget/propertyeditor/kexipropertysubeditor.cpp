@@ -49,11 +49,13 @@ KexiPropertySubEditor::eventFilter(QObject* watched, QEvent* e)
 		
 		if(ev->key()==Key_Up && ev->state()!=ControlButton)
 		{
+			if(item->itemAbove())
 			list->setCurrentItem(item->itemAbove());
 			return true;
 		}
 		else if(ev->key()==Key_Down && ev->state()!=ControlButton)
 		{
+			if(item->itemBelow())
 			list->setCurrentItem(item->itemBelow());
 			return true;
 		}

@@ -37,7 +37,7 @@
 #include "kexipropertyeditor.h"
 
 
-KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, const char *name)
+KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, bool AutoSync, const char *name)
  : KListView(parent, name)
 {
 	addColumn(i18n("Property"), 145);
@@ -47,6 +47,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 	m_buffer = 0;
 	m_topItem = 0;
 	m_returnToAccept = returnToAccept;
+	m_sync = AutoSync;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
@@ -83,10 +84,11 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 	kdDebug() << "KexiPropertyEditor::createEditor: Create editor for type " << i->type() << endl;
 	if(m_currentEditor)
 	{
-		m_editItem->setValue(m_currentEditor->getValue());
+		slotEditorAccept(m_currentEditor);
 		delete m_currentEditor;
-		m_defaults->hide();
 	}
+	
+	m_defaults->hide();
 
 	KexiPropertySubEditor *editor=0;
 	switch(i->type())
@@ -109,7 +111,10 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 			break;
 
 		case QVariant::StringList:
-			editor = new PropertyEditorList(viewport(), i->property());
+			if(i->property()->value().type() == QVariant::StringList)
+				editor = new PropertyEditorMultiList(viewport(), i->property());
+			else
+				editor = new PropertyEditorList(viewport(), i->property());
 			break;
 
 		case QVariant::BitArray:
@@ -138,6 +143,10 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 		case QVariant::DateTime:
 			editor = new PropertyEditorDateTime(viewport(), i->property());
+			break;
+	
+		case QVariant::Cursor:
+			editor = new PropertyEditorCursor(viewport(), i->property());
 			break;
 
 		default:
@@ -184,10 +193,11 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 void
 KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 {
-	if(m_currentEditor) {
+	if(m_currentEditor)
+	{
 		QVariant value = m_currentEditor->getValue();
 		m_editItem->setValue(value);
-		if(m_buffer)
+		if(m_buffer && m_sync)
 		{
 		if(m_editItem->depth()==1)
 			m_buffer->changeProperty(m_editItem->name().latin1(), value);
@@ -197,6 +207,13 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 			m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
 		}
 		}
+		else
+		if(m_editItem->depth()==2)
+		{
+			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+			parent->getComposedValue();
+		}
+		emit valueChanged(m_editItem->text(0), value);
 	}
 
 	if(!m_returnToAccept)
@@ -208,19 +225,44 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 void
 KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 {
-	emit itemRenamed(m_editItem);
 	if(m_currentEditor)
 	{
-		m_currentEditor->hide();
-		m_currentEditor->clearFocus();
+		QVariant value = m_currentEditor->getValue();
+		m_editItem->setValue(value);
+		if(m_buffer)
+		{
+			if(m_editItem->depth()==1)
+				m_buffer->changeProperty(m_editItem->name().latin1(), value);
+			else if(m_editItem->depth()==2)
+			{
+				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+				m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
+			}
+		}
+//		m_currentEditor->hide();
+//		m_currentEditor->clearFocus();
+		emit valueChanged(m_editItem->text(0), value);
 	}
 }
 
 void
 KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 {
-	editor->hide();
-	editor->setFocusPolicy(QWidget::NoFocus);
+	if(m_currentEditor)
+	{
+		if(!m_sync)
+		{
+			m_editItem->setValue(m_editItem->property()->value());
+			m_currentEditor->setValue(m_editItem->property()->value());
+		}
+		else
+		{
+			m_editItem->setValue(m_editItem->oldValue());
+			m_currentEditor->setValue(m_editItem->oldValue());
+		}
+	}
+//	editor->hide();
+//	editor->setFocusPolicy(QWidget::NoFocus);
 }
 
 void
@@ -278,6 +320,12 @@ QSize KexiPropertyEditor::sizeHint() const
 	return KListView::sizeHint();
 }
 
+void
+KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
+{
+	m_buffer = b; 
+	fill(); 
+}
 
 void
 KexiPropertyEditor::fill()
