@@ -215,6 +215,8 @@ k_dcop:
     void setDisplayFiedCode( bool b);
     QString configAutoFormatLanguage( )const;
 
+    QStringList personalExpressionPath()const;
+
 private:
     KWDocument *doc;
 

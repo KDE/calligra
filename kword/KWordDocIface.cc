@@ -762,3 +762,9 @@ QString KWordDocIface::configAutoFormatLanguage( )const
 {
     return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
 }
+
+QStringList KWordDocIface::personalExpressionPath()const
+{
+    //return all list
+    return doc->personalExpresssionPath();
+}
