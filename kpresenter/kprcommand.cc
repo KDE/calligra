@@ -19,6 +19,7 @@
 */
 
 #include "kpresenter_doc.h"
+#include "kprpage.h"
 #include "kprcommand.h"
 #include "kpbackground.h"
 #include "kpgroupobject.h"
@@ -834,18 +835,15 @@ void MoveByCmd2::unexecute()
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
-PenCmd::PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
-               QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags)
-    : KNamedCommand(_name), doc(_doc), m_page( _page ), oldPen(_oldPen), objects(_objects),
-      newPen(_newPen), flags(_flags)
+PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
+                KPresenterDoc *_doc, KPrPage *_page, int _flags )
+: KNamedCommand(_name), doc(_doc), m_page( _page ), newPen(_newPen), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldPen.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
-}
+    addObjects( _objects );
+}  
 
 PenCmd::~PenCmd()
 {
@@ -859,168 +857,69 @@ PenCmd::~PenCmd()
 
 void PenCmd::execute()
 {
-    Pen tmpPen = newPen;
-
     for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
     {
-        if (!(flags & LineBegin))
-            newPen.lineBegin = oldPen.at( i )->lineBegin;
+        Pen tmpPen = *oldPen.at( i );
 
-        if (!(flags & LineEnd))
-            newPen.lineEnd = oldPen.at( i )->lineEnd;
+        if ( flags & LineBegin )
+            tmpPen.lineBegin = newPen.lineBegin;
 
-        if (!(flags & Color))
-            if (newPen.pen != Qt::NoPen)
-                newPen.pen = QPen(oldPen.at( i )->pen.color(), newPen.pen.width(), newPen.pen.style());
-            else
-                newPen.pen = QPen(oldPen.at( i )->pen.color(), oldPen.at( i )->pen.width(), Qt::NoPen);
+        if ( flags & LineEnd )
+            tmpPen.lineEnd = newPen.lineEnd;
 
-        if (!(flags & Width))
-            if (newPen.pen != Qt::NoPen)
-                newPen.pen = QPen(newPen.pen.color(), oldPen.at( i )->pen.width(), newPen.pen.style());
-            else
-                newPen.pen = QPen(oldPen.at( i )->pen.color(), oldPen.at( i )->pen.width(), Qt::NoPen);
+        if ( flags & Color )
+            tmpPen.pen.setColor( newPen.pen.color() );
 
-        if (!(flags & Style))
-            if (newPen.pen != Qt::NoPen)
-                newPen.pen = QPen(newPen.pen.color(), newPen.pen.width(), oldPen.at( i )->pen.style());
-            else
-                newPen.pen = QPen(oldPen.at( i )->pen.color(), oldPen.at( i )->pen.width(), Qt::NoPen);
+        if ( flags & Width )
+            tmpPen.pen.setWidth( newPen.pen.width() );
 
-        applyPen(objects.at( i ), &newPen);
+        if ( flags & Style )
+            tmpPen.pen.setStyle( newPen.pen.style() );
+
+        applyPen( objects.at( i ), &tmpPen );
     }
-    newPen = tmpPen;
 
     int pos = doc->pageList().findRef( m_page );
     doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
 }
 
-void PenCmd::applyPen(KPObject *kpobject, Pen *tmpPen)
+void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
 {
-    switch (kpobject->getType()) {
-    case OT_LINE: {
-        KPLineObject* obj=dynamic_cast<KPLineObject*>( kpobject );
-        if(obj)
+    switch (object->getType()) {
+        case OT_LINE: 
         {
-            obj->setPen( tmpPen->pen );
-            obj->setLineBegin( tmpPen->lineBegin );
-            obj->setLineEnd( tmpPen->lineEnd );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_RECT: {
-        KPRectObject* obj=dynamic_cast<KPRectObject*>( kpobject );
-        if(obj)
+            KPLineObject* obj=dynamic_cast<KPLineObject*>( object );
+            if( obj )
+            {
+                //obj->setPen( tmpPen->pen );
+                obj->setLineBegin( tmpPen->lineBegin );
+                obj->setLineEnd( tmpPen->lineEnd );
+                //doc->repaint( obj );
+            }
+        } break;
+        case OT_FREEHAND:
+        case OT_POLYLINE:
+        case OT_QUADRICBEZIERCURVE:
+        case OT_CUBICBEZIERCURVE:
         {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_ELLIPSE: {
-        KPEllipseObject* obj=dynamic_cast<KPEllipseObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_AUTOFORM: {
-        KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_PIE: {
-        KPPieObject* obj=dynamic_cast<KPPieObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_PART: {
-        KPPartObject* obj=dynamic_cast<KPPartObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_TEXT: {
-        KPTextObject* obj=dynamic_cast<KPTextObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_CLIPART:
-    case OT_PICTURE: {
-        KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_FREEHAND: {
-        KPFreehandObject *obj=dynamic_cast<KPFreehandObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            obj->setLineBegin( tmpPen->lineBegin );
-            obj->setLineEnd( tmpPen->lineEnd );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_POLYLINE: {
-        KPPolylineObject *obj=dynamic_cast<KPPolylineObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            obj->setLineBegin( tmpPen->lineBegin );
-            obj->setLineEnd( tmpPen->lineEnd );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_QUADRICBEZIERCURVE: {
-        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            obj->setLineBegin( tmpPen->lineBegin );
-            obj->setLineEnd( tmpPen->lineEnd );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_CUBICBEZIERCURVE: {
-        KPCubicBezierCurveObject* obj=dynamic_cast<KPCubicBezierCurveObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            obj->setLineBegin( tmpPen->lineBegin );
-            obj->setLineEnd( tmpPen->lineEnd );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_POLYGON: {
-        KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
-        if(obj)
-        {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_CLOSED_LINE: {
-        KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
-        if( obj ) {
-            obj->setPen( tmpPen->pen );
-            doc->repaint( obj );
-        }
-    } break;
-    default: break;
+            KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+            if ( obj )
+            {
+                //obj->setPen( tmpPen->pen );
+                obj->setLineBegin( tmpPen->lineBegin );
+                obj->setLineEnd( tmpPen->lineEnd );
+                //doc->repaint( obj );
+            } 
+        } break;
+        default:
+            break;
+    }
+    
+    KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+    if ( obj )
+    {
+        obj->setPen( tmpPen->pen );
+        doc->repaint( obj );
     }
 }
 
@@ -1035,11 +934,72 @@ void PenCmd::unexecute()
     doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
 }
 
+void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
+{
+    QPtrListIterator<KPObject> it( _objects );
+    for ( ; it.current(); ++it )
+    {
+        KPObject * object( it.current() );
+        if ( object->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj=dynamic_cast<KPGroupObject*>( object );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            // tz TODO fix name
+            ::LineEnd lineBegin = L_NORMAL;
+            ::LineEnd lineEnd = L_NORMAL;
+            switch ( it.current()->getType() ) {
+                case OT_LINE:
+                {
+                    KPLineObject *obj=dynamic_cast<KPLineObject*>( object );
+                    if ( obj )
+                    {
+                        lineBegin = obj->getLineBegin();
+                        lineEnd = obj->getLineEnd();
+                    }
+                } break;
+                case OT_FREEHAND:
+                case OT_POLYLINE:
+                case OT_QUADRICBEZIERCURVE:
+                case OT_CUBICBEZIERCURVE:
+                {
+                    KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+                    if ( obj )
+                    {
+                        lineBegin = obj->getLineBegin();
+                        lineEnd = obj->getLineEnd();
+                    }
+                } break;
+                default:
+                   break;
+            }
+            
+            KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+            if ( obj )
+            {
+                objects.append( obj );
+                obj->incCmdRef();
+
+                Pen * pen = new PenCmd::Pen;
+                pen->pen = obj->getPen();
+                pen->lineBegin = lineBegin;
+                pen->lineEnd = lineEnd;
+
+                oldPen.append( pen );
+            }
+        }
+    }
+}
+
 
 BrushCmd::BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
                     KPresenterDoc *_doc, KPrPage *_page, int _flags )
-:KNamedCommand(_name), doc(_doc), newBrush(_newBrush)
-,m_page(_page), flags(_flags)
+: KNamedCommand(_name), doc(_doc), newBrush(_newBrush), m_page(_page), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldBrush.setAutoDelete( false );

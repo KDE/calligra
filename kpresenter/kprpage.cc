@@ -24,6 +24,7 @@
 #include "kpresenter_view.h"
 #include "KPresenterPageIface.h"
 
+#include "kpbackground.h"
 #include "kplineobject.h"
 #include "kprectobject.h"
 #include "kpellipseobject.h"
@@ -1475,197 +1476,33 @@ KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     return kppartobject;
 }
 
-KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> list )
+KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> /* list */)
 {
-    KPObject *kpobject = 0;
-    PenCmd *penCmd=0L;
-    bool cmdCreate=false;
-    KMacroCommand *cmd=new KMacroCommand(i18n("Apply Styles"));
+    PenCmd * cmd = NULL;
 
-    QPtrList<KPObject> _objects;
-    QPtrList<PenCmd::Pen> _oldPen;
-    PenCmd::Pen _newPen, *ptmp;
+    PenCmd::Pen _newPen;
 
     _newPen.pen = pen;
     _newPen.lineBegin = lb;
     _newPen.lineEnd = le;
 
+    QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
-    _oldPen.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( list );
+    QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+        if( it.current()->isSelected() )
         {
-            kpobject=it.current();
-            ptmp = new PenCmd::Pen;
-            switch ( kpobject->getType() ) {
-            case OT_LINE:
-            {
-                KPLineObject *obj=dynamic_cast<KPLineObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_RECT:
-            {
-                KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_ELLIPSE:
-            {
-                KPEllipseObject *obj=dynamic_cast<KPEllipseObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_AUTOFORM:
-            {
-                KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_PIE:
-            {
-                KPPieObject *obj=dynamic_cast<KPPieObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_PART:
-            {
-                KPPartObject *obj=dynamic_cast<KPPartObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_TEXT:
-            {
-                KPTextObject *obj=dynamic_cast<KPTextObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_CLIPART:
-            case OT_PICTURE:
-            {
-                KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_FREEHAND:
-            {
-                KPFreehandObject *obj=dynamic_cast<KPFreehandObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_POLYLINE:
-            {
-                KPPolylineObject *obj=dynamic_cast<KPPolylineObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_QUADRICBEZIERCURVE:
-            {
-                KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_CUBICBEZIERCURVE:
-            {
-                KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject*>( kpobject );
-                if(obj)
-                {
-                    ptmp->pen = obj->getPen();
-                    ptmp->lineBegin = obj->getLineBegin();
-                    ptmp->lineEnd = obj->getLineEnd();
-                }
-            }
-            break;
-            case OT_POLYGON:
-            {
-                KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
-                if(obj)
-                    ptmp->pen = obj->getPen();
-            }
-            break;
-            case OT_CLOSED_LINE: {
-                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
-                if ( obj )
-                    ptmp->pen = obj->getPen();
-            } break;
-
-            case OT_GROUP:
-            {
-                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
-                if(obj)
-                {
-                    obj->selectAllObj();
-                    KCommand *cmd2=setPen(pen, lb, le, flags, obj->objectList());
-                    obj->deSelectAllObj();
-                    if(cmd2)
-                    {
-                        cmd->addCommand(cmd2);
-                        cmdCreate=true;
-                    }
-                }
-            }
-            break;
-            default: break;
-            }
-            _oldPen.append( ptmp );
-            _objects.append( kpobject );
+            _objects.append( it.current() );
         }
     }
 
-    if ( !_objects.isEmpty() ) {
-        penCmd = new PenCmd( i18n( "Apply Styles" ), _oldPen, _newPen, _objects, m_doc, this, flags );
-        penCmd->execute();
-        cmd->addCommand(penCmd);
-        cmdCreate=true;
-    } else {
-        _oldPen.setAutoDelete( true );
-        _oldPen.clear();
+    if ( !_objects.isEmpty() && flags ) {
+        cmd = new PenCmd( i18n( "Apply Styles" ), _objects, _newPen, m_doc, this, flags );
+        cmd->execute();
     }
-    if(cmdCreate)
-        return cmd;
-    else
-    {
-        delete cmd;
-        cmd=0L;
-    }
+    
     return cmd;
 }
 

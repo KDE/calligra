@@ -383,15 +383,17 @@ public:
         All = LineBegin | LineEnd | Color | Width | Style
     };
 
-    PenCmd(const QString &_name, QPtrList<Pen> &_oldPen, Pen _newPen,
-           QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
+    PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
+            KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
     ~PenCmd();
-    void applyPen(KPObject *kpobject, Pen *tmpPen);
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
+    void addObjects( const QPtrList<KPObject> &_objects );
+    void applyPen( KPObject *object, Pen *tmpPen );
+
     KPresenterDoc *doc;
     KPrPage *m_page;
     QPtrList<Pen> oldPen;
