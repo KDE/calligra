@@ -443,6 +443,18 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendPoints(doc, e, o);
                 appendPen(doc, e);
                 appendBrush(doc, e);
+                appendLineEnds(doc, e);
+                //appendShadow(doc, e);
+            }
+            else if (name=="draw:polygon") { // polygon
+                storeObjectStyles(o);
+                e = doc.createElement("OBJECT");
+                e.setAttribute("type", 16);
+                appendPolylineGeometry(doc, e, o, (int)offset);
+                appendPoints(doc, e, o);
+                appendPen(doc, e);
+                appendBrush(doc, e);
+                //appendLineEnds(doc, e);
                 //appendShadow(doc, e);
             }
             else if ( name == "draw:image" ) // image
@@ -1762,20 +1774,15 @@ QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &do
 
 void OoImpressImport::appendPolylineGeometry(QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset)
 {
-    double x = toPoint( object.attribute( "svg:x" ) );
-    double y = toPoint( object.attribute( "svg:y" ) );
-    double width = toPoint( object.attribute( "svg:width" ) );
-    double height = toPoint( object.attribute( "svg:height" ) );
+    QDomElement orig = doc.createElement("ORIG" );
+    orig.setAttribute("x", toPoint(object.attribute("svg:x")));
+    orig.setAttribute("y", toPoint(object.attribute("svg:y")) + offset);
+    e.appendChild(orig);
 
-    QDomElement orig = doc.createElement( "ORIG" );
-    orig.setAttribute( "x", x );
-    orig.setAttribute( "y", y + offset );
-    e.appendChild( orig );
-
-    QDomElement size = doc.createElement( "SIZE" );
-    size.setAttribute( "width", width );
-    size.setAttribute( "height", height );
-    e.appendChild( size );
+    QDomElement size = doc.createElement("SIZE");
+    size.setAttribute("width",  toPoint(object.attribute("svg:width")));
+    size.setAttribute("height", toPoint(object.attribute("svg:height")));
+    e.appendChild(size);
 }
 
 void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object)
@@ -1786,7 +1793,8 @@ void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDom
 
     QString pt_x, pt_y;
     double tmp_x, tmp_y;
-    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it) {
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+    {
         QDomElement point = doc.createElement("Point");
 
         tmp_x = (*it).section(',',0,0).toInt() / 100;
