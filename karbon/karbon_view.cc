@@ -122,9 +122,20 @@ void
 KarbonView::editPaste()
 {
 	VObjectListIterator itr( m_part->selection() );
+	VObjectList selection;
 	for ( ; itr.current() ; ++itr )
 	{
-		m_part->insertObject( itr.current()->clone() );
+		VObject *temp = itr.current()->clone();
+		temp->transform( QWMatrix().translate( Karbon::m_copyOffset, Karbon::m_copyOffset ) );
+		selection.append( temp );
+	}
+	m_part->deselectAllObjects();
+	// calc new selection
+	VObjectListIterator itr2( selection );
+	for ( ; itr2.current() ; ++itr2 )
+	{
+		m_part->insertObject( itr2.current() );
+		m_part->selectObject( *( itr2.current() ) );
 	}
 	m_part->repaintAllViews();
 }

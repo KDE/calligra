@@ -17,6 +17,11 @@ class QRect;
 class VCommand;
 class VCommandHistory;
 
+namespace Karbon
+{
+	const short m_copyOffset = 10;
+}
+
 class KarbonPart : public KoDocument
 {
 	Q_OBJECT

@@ -14,7 +14,6 @@
 
 #include <kdebug.h>
 
-
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
