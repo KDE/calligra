@@ -3,6 +3,8 @@
 Name=KSpreadFilter
 Exec=kspread_filter --server
 Comment=Torben's KSpread Filter
+Comment[pt_BR]=Filtro do KSpread
+Comment[sk]=Torbenov KSpread Filter
 Import=application/x-kspread,
 Export=text/plain
 Patterns=*.txt,
