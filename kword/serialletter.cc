@@ -301,21 +301,25 @@ KWSerialLetterChoosePluginDialog::KWSerialLetterChoosePluginDialog(KTrader::Offe
 {
 	QWidget *back = plainPage();
 	QVBoxLayout *layout=new QVBoxLayout(back);
-	layout->setSpacing( 5 );
-	layout->setMargin( 5 );
+	layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
 	layout->setAutoAdd(true);
-	QLabel *l = new QLabel( i18n( "Available sources:" ),back );
-    	l->setMaximumHeight( l->sizeHint().height() );
+	QLabel *l = new QLabel( i18n( "&Available sources:" ),back );
+   //l->setMaximumHeight( l->sizeHint().height() );
 	chooser=new QComboBox(back);
+	l->setBuddy(chooser);
 	chooser->setEditable(false);
 	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
 	{
 		chooser->insertItem((*it)->name());
 	}
 	l=new QLabel((*pluginOffers.at(0))->comment(),back);
-	l->setAlignment(WordBreak);
+	l->setAlignment( WordBreak );
 	l->setFrameShape( QFrame::Box );
 	l->setFrameShadow( QFrame::Sunken );
+	l->setMinimumSize(l->sizeHint());
+   layout->addStretch();
+
 }
 
 KWSerialLetterChoosePluginDialog::~KWSerialLetterChoosePluginDialog()
@@ -335,30 +339,35 @@ KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialL
     QWidget *back = plainPage();
     QVBoxLayout *layout=new QVBoxLayout(back);
 //    QVBox *back = new QVBox( page );
-    layout->setSpacing( 5 );
-    layout->setMargin( 5 );
-    layout->setAutoAdd(true);
+    layout->setSpacing( KDialog::spacingHint() );
+    layout->setMargin( KDialog::spacingHint() );
 
 //    QVBox *row1 = new QVBox( back );
 //    row1->setSpacing( 5 );
 
     QLabel *l = new QLabel( i18n( "Datasource:" ),back );
-    l->setMaximumHeight( l->sizeHint().height() );
+//    l->setMaximumHeight( l->sizeHint().height() );
+    layout->addWidget(l); 
 
     QHBox *row1=new QHBox(back);
-    row1->setSpacing( 5 );
+    layout->addWidget(row1);
+    row1->setSpacing( KDialog::spacingHint() );
     edit=new QPushButton(i18n("Edit current"),row1);
     create=new QPushButton(i18n("Create new"),row1);
     open=new QPushButton(i18n("Open existent"),row1);
     QFrame *Line1 = new QFrame( back, "Line1" );
+    layout->addWidget(Line1);
     Line1->setFrameShape( QFrame::HLine );
     Line1->setFrameShadow( QFrame::Sunken );
     l = new QLabel( i18n( "Merging:" ),back );
-    l->setMaximumHeight( l->sizeHint().height() );
+	 layout->addWidget(l);
+//  l->setMaximumHeight( l->sizeHint().height() );
     QHBox *row2=new QHBox(back);
-    row2->setSpacing( 5 );
+    layout->addWidget(row2);
+    row2->setSpacing( KDialog::spacingHint() );
     preview=new QPushButton(i18n("Print preview"),row2);
     document=new QPushButton(i18n("Create new document"),row2);
+    layout->addStretch();
 
     enableDisableEdit();
 
@@ -447,11 +456,11 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     QWidget *page = plainPage();
 
     back = new QVBox( page );
-    back->setSpacing( 5 );
-    back->setMargin( 5 );
+    back->setSpacing( KDialog::spacingHint() );
+    back->setMargin( KDialog::marginHint() );
 
     QVBox *row1 = new QVBox( back );
-    row1->setSpacing( 5 );
+    row1->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
     l->setMaximumHeight( l->sizeHint().height() );

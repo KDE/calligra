@@ -20,7 +20,7 @@
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>11</number>
+            <number>0</number>
         </property>
         <property name="spacing">
             <number>6</number>
@@ -44,7 +44,10 @@
                         <cstring>TextLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Table:</string>
+                        <string>&amp;Table:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>tableCombo</cstring>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -57,7 +60,7 @@
                         <cstring>filterCheckBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Filter output</string>
+                        <string>&amp;Filter output</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -65,7 +68,7 @@
                         <cstring>editFilter</cstring>
                     </property>
                     <property name="text">
-                        <string>View/Edit filterrules</string>
+                        <string>View or edit filter &amp;rules</string>
                     </property>
                 </widget>
                 <spacer>
@@ -120,7 +123,10 @@
                         <cstring>TextLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Used database records:</string>
+                        <string>&amp;Used database records:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>DataTable</cstring>
                     </property>
                 </widget>
                 <spacer>
@@ -161,7 +167,7 @@
     <include location="local" impldecl="in implementation">qtsqldatasourceeditor.ui.h</include>
 </includes>
 <slots>
-    <slot>filterCheckBox_toggled( bool fcb_state )</slot>
+    <slot>filterCheckBox_toggled(bool fcb_state)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
