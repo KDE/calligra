@@ -3206,11 +3206,12 @@ void KPresenterView::styleOk()
         createMacro=true;
         if ( styleDia->isAllTextObject() )
         {
-            cmd = m_canvas->setProtectContent( styleDia->isProtectContent() );
+            bool state = styleDia->isProtectContent();
+            cmd = m_canvas->setProtectContent( state );
             if (cmd )
                 macro->addCommand(cmd);
             KPTextObject *obj=dynamic_cast<KPTextObject *>(m_canvas->getSelectedObj());
-            if (obj )
+            if (obj && !state )
             {
                 MarginsStruct _MarginsBegin(obj);
 

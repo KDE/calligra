@@ -271,6 +271,7 @@ private slots:
     void styleDone();
     void protectChanged();
     void slotMarginsChanged( double );
+    void slotProtectContentChanged( bool );
 signals:
     void styleOk();
 };

@@ -786,8 +786,11 @@ void StyleDia::setupTabGeometry()
     if ( allTextObj )
     {
         protectContent = new QCheckBox( i18n("Protect Content"), tab);
+        connect( protectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
         layout->addWidget(protectContent);
     }
+    else
+        protectContent = 0L;
 
     QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
     layout->addWidget( grp1 );
@@ -888,7 +891,15 @@ void StyleDia::setupTabGeometry()
         grp2->hide();
         synchronize->hide();
     }
-
+    if (protectContent)
+    {
+        bool state = protectContent->isChecked();
+        smb->setEnabled( !state );
+        smt->setEnabled( !state );
+        smr->setEnabled( !state );
+        sml->setEnabled( !state );
+        synchronize->setEnabled( !state );
+    }
     addTab( tab, i18n( "&Geometry" ) );
 }
 
@@ -1153,5 +1164,13 @@ bool StyleDia::isProtectContent()const
     return false;
 }
 
+void StyleDia::slotProtectContentChanged( bool b)
+{
+    sml->setEnabled( !b );
+    smt->setEnabled( !b );
+    smb->setEnabled( !b );
+    smr->setEnabled( !b );
+    synchronize->setEnabled( !b );
+}
 
 #include <styledia.moc>
