@@ -94,8 +94,6 @@ private:
     QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink, *m_displayFieldCode;
     KDoubleNumInput * resolutionY, * resolutionX;
     KDoubleNumInput *m_rotation;
-    QCheckBox *cbSideBarRefresh;
-    bool m_oldRefreshSideBar;
 };
 
 class ConfigureDefaultDocPage : public QObject

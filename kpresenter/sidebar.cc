@@ -347,33 +347,31 @@ void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
     QIconViewItem *it = firstItem();
     do
     {
-        if ( sticky ) {
-            if ( it == findFirstVisibleItem( vRect ) ) {
-                do
-                {
+        if ( it == findFirstVisibleItem( vRect ) ) {
+            do
+            {
+                if ( sticky || it->text().toInt() == pagenr + 1 ) {
                     it->setPixmap(getSlideThumb( pagecnt ));
                     static_cast<ThumbItem *>(it)->setUptodate( true );
-                    if ( it == findLastVisibleItem( vRect ) )
-                        break;
-                    pagecnt++;
-                    it = it->nextItem();
-                } while ( true );
-            }
-            else {
-                static_cast<ThumbItem *>(it)->setUptodate( false );
-            }
-            pagecnt++;
+
+                    if ( !sticky )
+                        return;
+                }
+                if ( it == findLastVisibleItem( vRect ) )
+                    break;
+                pagecnt++;
+                it = it->nextItem();
+            } while ( true );
         }
-        else {
-            if ( it->text().toInt() == pagenr + 1 )
-            {
-                it->setPixmap(getSlideThumb( pagenr ));
-                static_cast<ThumbItem *>(it)->setUptodate( true );
+        else if ( sticky || it->text().toInt() == pagenr + 1 ) {
+            static_cast<ThumbItem *>(it)->setUptodate( false );
+            if ( !sticky )
                 return;
-            }
         }
+        pagecnt++;
         it = it->nextItem();
     } while ( it );
+    
     if ( ! sticky )
         kdWarning(33001) << "Item for page " << pagenr << " not found" << endl;
 }

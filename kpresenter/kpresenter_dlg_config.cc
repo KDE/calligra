@@ -436,12 +436,10 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     m_oldNbRedo=30;
-    m_oldRefreshSideBar = true;
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
-        m_oldRefreshSideBar = config->readBoolEntry("RefreshSideBar",true);
     }
 
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -492,16 +490,6 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     resolutionY->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit( 1,unit ), false);
 
     grid->addWidget(resolutionY, 3, 0);
-
-
-    tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle(i18n("Sidebar"));
-
-    grid = new QGridLayout( tmpQGroupBox, 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
-
-    cbSideBarRefresh = new QCheckBox( i18n("Refresh sidebar item"), tmpQGroupBox);
-    cbSideBarRefresh->setChecked(m_oldRefreshSideBar);
-    grid->addWidget(cbSideBarRefresh, 0, 0);
 }
 
 KCommand * ConfigureMiscPage::apply()
@@ -514,13 +502,6 @@ KCommand * ConfigureMiscPage::apply()
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
-    }
-    bool res = cbSideBarRefresh->isChecked();
-    if(res!=m_oldRefreshSideBar)
-    {
-        config->writeEntry("RefreshSideBar",res);
-        doc->setRefreshSideBar(res);
-        m_oldRefreshSideBar=res;
     }
 
     KMacroCommand * macroCmd=0L;
@@ -590,8 +571,6 @@ void ConfigureMiscPage::slotDefault()
     m_underlineLink->setChecked(true);
     m_displayFieldCode->setChecked( false );
     KPresenterDoc* doc = m_pView->kPresenterDoc();
-    cbSideBarRefresh->setChecked(true);
-
 
     resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
     resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );

@@ -110,7 +110,6 @@ class KPresenterDoc : public KoDocument
         Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
         Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
         Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
-        Q_PROPERTY( bool refreshSideBar READ refreshSideBar WRITE setRefreshSideBar )
         Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
         Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
         Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
@@ -450,9 +449,6 @@ class KPresenterDoc : public KoDocument
 
     void insertFile(const QString & file );
 
-    void setRefreshSideBar( bool _b ) { m_refreshSideBar = _b;}
-    bool refreshSideBar()const  { return m_refreshSideBar;}
-
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
     void configureSpellChecker();
 
@@ -614,7 +610,6 @@ protected:
     KoVariableFormatCollection *m_varFormatCollection;
     KPrVariableCollection *m_varColl;
     QColor m_gridColor;
-    bool m_refreshSideBar;
     bool _duplicatePage;
 private:
     QValueList<double> m_horizHelplines;

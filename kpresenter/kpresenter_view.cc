@@ -6167,11 +6167,9 @@ void KPresenterView::viewFooter()
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header") : i18n("Hide Header"),
                                                                 m_pKPresenterDoc, state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
-    if ( m_pKPresenterDoc->refreshSideBar())
-    {
-        int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
-        m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
-    }
+    
+    int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
+    m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
 }
 
 void KPresenterView::viewHeader()
@@ -6181,11 +6179,9 @@ void KPresenterView::viewHeader()
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer") : i18n("Hide Footer"),
                                                                 m_pKPresenterDoc, state, m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
-    if ( m_pKPresenterDoc->refreshSideBar())
-    {
-        int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
-        m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
-    }
+
+    int pos=m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->stickyPage());
+    m_pKPresenterDoc->updateSideBarItem(pos, true/*sticky page*/ );
 }
 
 void KPresenterView::showStyle( const QString & styleName )

@@ -278,7 +278,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
     if (macro)
         m_doc->addCommand(macro);
     //update sidebar
-    if ( m_doc->refreshSideBar()&& ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0)))
+    if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0) )
     {
         int pos=m_doc->pageList().findRef(this);
         m_doc->updateSideBarItem(pos);
@@ -3025,10 +3025,9 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
         moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
                                    _objects, m_doc,this );
-        if ( m_doc->refreshSideBar()) {  //because it's a macro command
-            int pos=m_doc->pageList().findRef(this);
-            m_doc->updateSideBarItem(pos, ( this == m_doc->stickyPage()) ? true: false );
-        }
+        
+        int pos=m_doc->pageList().findRef(this);
+        m_doc->updateSideBarItem(pos, ( this == m_doc->stickyPage()) ? true: false );
     }
     return moveByCmd;
 }

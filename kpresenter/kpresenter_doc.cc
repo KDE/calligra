@@ -138,7 +138,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
     m_insertFilePage = 0;
-    m_refreshSideBar = true;
     m_picturePath= KGlobalSettings::documentPath();
     m_globalLanguage = KGlobal::locale()->language();
     m_bGlobalHyphenation = false;
@@ -401,7 +400,6 @@ void KPresenterDoc::initConfig()
     {
         config->setGroup( "Misc" );
         undo=config->readNumEntry("UndoRedo",-1);
-        setRefreshSideBar( config->readBoolEntry("RefreshSideBar",true));
     }
     if(undo!=-1)
         setUndoRedoLimit(undo);
