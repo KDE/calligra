@@ -1071,12 +1071,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         //Not enough space
         if( end == -1 )
         {
-          setFlag( Flag_CellTooShort );
+//          setFlag( Flag_CellTooShort );
         }
       }
       else
       {
-        setFlag( Flag_CellTooShort );
+//        setFlag( Flag_CellTooShort );
       }
     }
 
