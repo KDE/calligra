@@ -7,6 +7,9 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Separator/>
+  <Action name="editPageLayout"/>
+  <Action name="editPreferences"/>
  </Menu>
  <Menu name="View"><text>View</text>
   <Action name="viewZoomFactor"/>
