@@ -75,6 +75,7 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 	m_index = 0;
 	resize( m_width, m_height );
 	clear();
+	m_clipPaths.setAutoDelete( false );
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -98,6 +99,7 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, b
 	m_path = 0L;
 	m_index = 0;
 	clear();
+	m_clipPaths.setAutoDelete( false );
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -336,6 +338,22 @@ VKoPainter::strokePath()
 
 	drawVPath( path );
 	//art_free( path );
+}
+
+void
+VKoPainter::setClipPath()
+{
+	ArtVpath *path;
+	path = art_bez_path_to_vec( m_path , 0.25 );
+	m_clipPaths.append( art_svp_from_vpath( path ) );
+	art_free( path );
+}
+
+void
+VKoPainter::resetClipPath()
+{
+	art_svp_free( m_clipPaths.current() );
+	m_clipPaths.remove();
 }
 
 void

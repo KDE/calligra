@@ -128,9 +128,19 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( false );
 
+		// set up clippath
+		p->newPath();
+		p->moveTo( KoPoint( rect.x(), rect.y() ) );
+		p->lineTo( KoPoint( rect.right(), rect.y() ) );
+		p->lineTo( KoPoint( rect.right(), rect.bottom() ) );
+		p->lineTo( KoPoint( rect.x(), rect.bottom() ) );
+		p->lineTo( KoPoint( rect.x(), rect.y() ) );
+		p->setClipPath();
+
 		m_part->document().drawPage( p );
 		m_part->document().draw( p, &r );
 
+		p->resetClipPath();
 		m_bScrolling = false;
 
 	}

@@ -25,6 +25,7 @@
 
 #include "vpainter.h"
 #include <qwmatrix.h>
+#include <qptrlist.h>
 
 class QPainter;
 struct _ArtVpath;
@@ -63,6 +64,8 @@ public:
     virtual void newPath();
     virtual void fillPath();
     virtual void strokePath();
+	virtual void setClipPath();
+	virtual void resetClipPath();
 	// helper
 	virtual void drawNode( const KoPoint& p, int width);
 
@@ -111,6 +114,7 @@ private:
 	VFill *m_fill;
 	double m_zoomFactor;
 	KoRect m_bbox;
+	QPtrList<_ArtSVP> m_clipPaths;
 
 	bool m_bDrawNodes;
 

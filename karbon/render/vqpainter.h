@@ -54,6 +54,8 @@ public:
     virtual void newPath();
     virtual void strokePath();
     virtual void fillPath();
+	virtual void setClipPath() {}
+	virtual void resetClipPath() {}
 
 	// pen + brush
 	virtual void setPen( const VStroke & );
