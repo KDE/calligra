@@ -35,14 +35,20 @@ enum DataType
 		t_boolen
 	};
 
-typedef struct TableStructureRow
+class TableStructureRow
 {
-	bool	primary_key;
-	QString	name;
-	DataType	type;
-	int	size;
-	QString	Default;
-	bool	allow_null;
+   public:
+	 bool	primary_key;
+	 QString	name;
+	 DataType	type;
+	 int	size;
+ 	 QString	Default;
+	 bool	allow_null;
+
+   TableStructureRow(void);
+   TableStructureRow(bool pri_key, QString myname, DataType mytype, int mySize, QString myDefault,bool allowNull);
+   ~TableStructureRow(void);
+
 };	
 
 
@@ -52,7 +58,7 @@ class KDBTable {
 //KDBTableData is for accessing and modifying data.
 public:
 
-      QPtrList<TableStructureRow> getColumns(QString *tableName, QString *returnMessage);
+      QPtrList<TableStructureRow> *getColumns(QString *tableName, QString *returnMessage);
       bool insertColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool modifyColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool deleteColumn(QString *tableName, QString *columnInfo, QString *returnMessage);

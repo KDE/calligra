@@ -67,28 +67,21 @@ bool KDBTableDesigner::populateTblDesigner(QString tblName){
     QString *msg=NULL;
 	kdDebug() << "kdbTblDesigner::populateTblDesigner: at top, looking for " << tblName << endl;
 
-    QPtrList<TableStructureRow> columnList = myTableInfo->getColumns(&tblName, msg);
+    QPtrList<TableStructureRow> *columnList = myTableInfo->getColumns(&tblName, msg);
 	kdDebug() << "kdbTblDesigner::populateTblDesigner: after getColumns" << endl;
     unsigned int rowCounter=1;
 
     tblName.append(" - Table Designer");
     setCaption(tblName);
 
-   TableStructureRow *aColumn = columnList.first();
+   TableStructureRow *aColumn = columnList->first();
 	kdDebug() << "kdbTblDesigner::populateTblDesigner: after columnList.first" << endl;
 
 	this->addRow(aColumn->primary_key, aColumn->name, aColumn->type, aColumn->size, aColumn->Default,aColumn->allow_null);
-	kdDebug() << "kdbTblDesigner::populateTblDesigner: after addRow" << endl;
-	kdDebug() << "clsTblDesigner2::populateTblDesigner: columnList.count = " << columnList.count() << endl;
-   aColumn = columnList.next();
-   kdDebug() << "clsTblDesigner2::populateTblDesigner: after next" << endl;
-//    while(rowCounter < columnList.count()) {
-    while(rowCounter < 0) {
-		kdDebug() << "clsTblDesigner2::populateTblDesigner: adding row while loop " << rowCounter << endl;
-       kdDebug() << "Values are: "  << aColumn->primary_key << "," << aColumn->name << "," << aColumn->type << "," << aColumn->size << "," << aColumn->Default << "," << aColumn->allow_null << endl;
+   aColumn = columnList->next();
+    while(rowCounter < columnList->count()) {
   	    this->addRow(aColumn->primary_key, aColumn->name, aColumn->type, aColumn->size, aColumn->Default,aColumn->allow_null);
-		kdDebug() << "clsTblDesigner2::populateTblDesigner: adding row while loop after addRow" << rowCounter << endl;
-       aColumn = columnList.next();
+       aColumn = columnList->next();
        rowCounter++;
        }
     return(true);
@@ -96,17 +89,11 @@ bool KDBTableDesigner::populateTblDesigner(QString tblName){
 
 void KDBTableDesigner::addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null)
 {
-	kdDebug() << "clsTblDesigner2::addRow: top - adding row " << m_rows << endl;
 	QComboTableItem *dataTypeView = new QComboTableItem(m_table, m_comboEntries, false);
-	kdDebug() << "clsTblDesigner2::addRow: after new dataTypeView " << m_rows << endl;
 	QCheckTableItem *primary_keyView = new QCheckTableItem(m_table, "");
-	kdDebug() << "clsTblDesigner2::addRow: after new primarykeyView " << m_rows << endl;
 	QCheckTableItem *allow_nullView = new QCheckTableItem(m_table, "");
-	kdDebug() << "clsTblDesigner2::addRow: after new allownullView " << m_rows << endl;
 	QString sizestr;
-	kdDebug() << "clsTblDesigner2::addRow: before sizestr.setNum - adding row " << m_rows << endl;
 	sizestr = sizestr.setNum(size);
-	kdDebug() << "clsTblDesigner2::addRow: after sizestr.setNum - adding row " << m_rows << endl;
 	
 	m_table->setNumRows(m_rows + 1);
 	
@@ -123,12 +110,10 @@ void KDBTableDesigner::addRow(bool primary_key, QString name, DataType type, int
 	{
 	
 		case t_int:
-			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is int" << endl;
 			dataTypeView->setCurrentItem(0);
 			break;
 	
 		case t_char:
-			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is char" << endl;
 			dataTypeView->setCurrentItem(1);
 			break;
 			
@@ -144,13 +129,7 @@ void KDBTableDesigner::addRow(bool primary_key, QString name, DataType type, int
 			dataTypeView->setCurrentItem(4);
 			break;
 		
-/*		default:
-			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " isn't char or int" << endl;
-			break;
-*/
-	
 	}
-	kdDebug() << "clsTblDesigner2::addRow: End adding row " << m_rows << endl;
 	m_rows++;
 }
 

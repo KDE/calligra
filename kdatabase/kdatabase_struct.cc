@@ -49,7 +49,6 @@ bool KDBStruct::createReport(QString* reportName, QString reportSQL){
 QPtrList<QString> KDBStruct::getTables(){
 
     QPtrList<QString> *tableList = new QPtrList <QString>;
-//    kdDebug() << "myKDBNode.toString=" << myKDBNode->toString() << endl;
     if(myKDBNode->isNull()) {
        kdDebug() << "KDBNode is already null" << endl;
       }
@@ -67,11 +66,9 @@ QPtrList<QString> KDBStruct::getTables(){
         const QString* tableDescript = new QString(myElement.attribute("description"));
         tableList->append(tableName);
         tableList->append(tableDescript);
-        kdDebug() << "In while loop...last table was " << *tableName << endl;
         myTableWalker = myTableWalker.nextSibling();
         }
 
-    kdDebug() << "tableList contains " << tableList->count() << " items." << endl;
     return(*tableList);
 }
 
@@ -87,10 +84,10 @@ QPtrList<QString> KDBStruct::getForms(){
     return(formList);
 }
 
-QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *returnMessage)
+QPtrList<TableStructureRow>* KDBTable::getColumns(QString *tableName, QString *returnMessage)
 {
 
-    QPtrList<TableStructureRow> columnList;
+    QPtrList<TableStructureRow> *columnList = new QPtrList<TableStructureRow>;
     //const TableStructureRow* myRow;
     int mySize;
     bool myKey;
@@ -111,12 +108,9 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
     while(!tableFound) {
         myElement = myTableWalker.toElement();
         QString myTableName = myElement.attribute("name");
-        kdDebug() << "getColumns::In while loop...checking table name :" << *tableName << endl;
         if (QString::localeAwareCompare(tableName->latin1(),myTableName.latin1())==0) {
-          kdDebug() << "getColumns::In while loop...found table " << *tableName << endl;
           tableFound=TRUE; }
         else {
-          kdDebug() << "getColumns::In while loop...not yet found table " << *tableName << endl;
           myTableWalker = myTableWalker.nextSibling(); }
         }
 
@@ -161,19 +155,9 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
         myAllowNull = true;
         }
 
-//     TableStructureRow* myRow1 = (TableStructureRow*)malloc(sizeof(TableStructureRow));
-     TableStructureRow myRow1 = {myKey, myName, myType, mySize, myDefault, myAllowNull};
-
-//     myRow1->primary_key =  myKey;
-//     myRow1->name =  myName;
-//     myRow1->type =  myType;
-//     myRow1->size =  mySize;
-//     myRow1->Default =  myDefault;
-//     myRow1->allow_null =  myAllowNull;
-//     const TableStructureRow* myRow = myRow1;
-     const TableStructureRow *myRow = &myRow1;
-     columnList.append(myRow);
-     myTableWalker.nextSibling();
+     const TableStructureRow* myRow1 = new TableStructureRow(myKey, myName, myType, mySize, myDefault, myAllowNull);
+     columnList->append(myRow1);
+     myTableWalker = myTableWalker.nextSibling();
 
     while(!myTableWalker.isNull()) {
       myElement = myTableWalker.toElement();
@@ -214,14 +198,13 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
      else {
         myAllowNull = true;
         }
-     TableStructureRow myRow1 = { myKey, myName, myType, mySize, myDefault, myAllowNull };
-     const TableStructureRow *myRow = &myRow1;
-     columnList.append(myRow);
+     const TableStructureRow* myRow1 = new TableStructureRow(myKey, myName, myType, mySize, myDefault, myAllowNull);
+     columnList->append(myRow1);
 
       myTableWalker = myTableWalker.nextSibling();
        }
 
-    kdDebug() << "columnList contains " << columnList.count() << " items." << endl;
+    kdDebug() << "columnList contains " << columnList->count() << " items." << endl;
 
     return(columnList);
 }
@@ -246,5 +229,27 @@ KDBTable::KDBTable(QDomDocument* KDBFile){
 }
 
 KDBTable::~KDBTable(void){
+
+}
+
+TableStructureRow::TableStructureRow(bool pri_key, QString myname, DataType mytype, int mySize, QString myDefault,bool allowNull) {
+	 primary_key = pri_key;
+	 name = myname;
+	 type = mytype;
+	 size=mySize;
+ 	 Default = myDefault;
+	 allow_null = allowNull;
+}
+
+TableStructureRow::TableStructureRow( ) {
+	 primary_key = false;
+	 name = "";
+	 type = t_int;
+	 size=0;
+ 	 Default = "";
+	 allow_null = false;
+}
+
+TableStructureRow::~TableStructureRow( ) {
 
 }
