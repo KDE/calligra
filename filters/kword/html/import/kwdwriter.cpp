@@ -27,7 +27,7 @@ KWDWriter::KWDWriter(KoStore *store){
 	_doc->appendChild( _doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 	tableNo=1;
 	QDomElement kwdoc = _doc->createElement( "DOC" );
-	kwdoc.setAttribute( "editor", "RTF Import Filter" );
+	kwdoc.setAttribute( "editor", "HTML Import Filter" );
 	kwdoc.setAttribute( "mime", "application/x-kword" );
 	_doc->appendChild( kwdoc );
 

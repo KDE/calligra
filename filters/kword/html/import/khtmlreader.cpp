@@ -106,6 +106,7 @@ void KHTMLReader::completed() {
         qApp->exit_loop();
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::Node docbody=doc.getElementsByTagName("BODY").item(0);
+	if (docbody.isNull()) { qWarning("no body"); _it_worked=false; return; }
 	parseNode(docbody);
 	_writer->cleanUpParagraph(state()->paragraph);
 
@@ -150,6 +151,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
 #define _PL(x,a,b,c) {if (e.tagName() == #x) { _writer->layoutAttribute(state()->paragraph, #a,#b,#c); return true;}}
 
 bool KHTMLReader::parseTag(DOM::Element e) {
+	qWarning(e.tagName().string().latin1());
 	_PP(P);
 	_PP(BR);
 	_PP(TABLE);
