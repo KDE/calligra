@@ -747,7 +747,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /*
      * Attributes
-    */
+     */
     QDomElement attributes = gnumeric_doc.createElement("gmr:Attributes");
     workbook.appendChild(attributes);
 
@@ -762,7 +762,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /*
      * Doccument summary
-    */
+     */
     QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
     workbook.appendChild(summary);
 
@@ -775,7 +775,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /*
      * Sheet name index (necessary for the gnumeric xml_sax importer)
-    */
+     */
     QDomElement sheetNameIndex = gnumeric_doc.createElement("gmr:SheetNameIndex");
     workbook.appendChild(sheetNameIndex);
 
@@ -788,7 +788,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /*
      * Sheets
-    */
+     */
     sheets = gnumeric_doc.createElement("gmr:Sheets");
     workbook.appendChild(sheets);
 
@@ -803,7 +803,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable())
     {
         sheet = gnumeric_doc.createElement("gmr:Sheet");
-	    sheets.appendChild(sheet);
+        sheets.appendChild(sheet);
 
         sheet.setAttribute("DisplayFormulas", table->getShowFormula());
         sheet.setAttribute("HideZero", table->getHideZero());
@@ -816,145 +816,145 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
          * sheet.setAttribute("OutlineSymbolsRight", "true");
          * sheet.setAttribute("TabColor", "");
          * sheet.setAttribute("TabTextColor", "");
-        */
+         */
 
-	    tmp = gnumeric_doc.createElement("gmr:Name");
-	    tmp.appendChild(gnumeric_doc.createTextNode(table->tableName()));
+        tmp = gnumeric_doc.createElement("gmr:Name");
+        tmp.appendChild(gnumeric_doc.createTextNode(table->tableName()));
 
-	    sheet.appendChild(tmp);
+        sheet.appendChild(tmp);
 
-	    tmp = gnumeric_doc.createElement("gmr:MaxCol");
-	    tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxColumn())));
-	    sheet.appendChild(tmp);
+        tmp = gnumeric_doc.createElement("gmr:MaxCol");
+        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxColumn())));
+        sheet.appendChild(tmp);
 
-	    tmp = gnumeric_doc.createElement("gmr:MaxRow");
+        tmp = gnumeric_doc.createElement("gmr:MaxRow");
 
-	    tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxRow())));
-	    sheet.appendChild(tmp);
+        tmp.appendChild(gnumeric_doc.createTextNode(QString::number(table->maxRow())));
+        sheet.appendChild(tmp);
 
-	    // Zoom value doesn't appear to be correct
+        // Zoom value doesn't appear to be correct
         // KSpread 200% gives zoom() = 2.5, this in GNumeric = 250%
         tmp = gnumeric_doc.createElement("gmr:Zoom");
         if (view)
-           tmp.appendChild(gnumeric_doc.createTextNode(QString::number(canvas->zoom())));
+            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(canvas->zoom())));
         else
-	       tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
-	    sheet.appendChild(tmp);
+            tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
+        sheet.appendChild(tmp);
 
-	    styles = gnumeric_doc.createElement("gmr:Styles");
-	    sheet.appendChild(styles);
+        styles = gnumeric_doc.createElement("gmr:Styles");
+        sheet.appendChild(styles);
 
-	    cells = gnumeric_doc.createElement("gmr:Cells");
-	    sheet.appendChild(cells);
+        cells = gnumeric_doc.createElement("gmr:Cells");
+        sheet.appendChild(cells);
 
         merged = gnumeric_doc.createElement("gmr:MergedRegions");
         bool mergedCells = false; // if there are no merged cells in this sheet, don't write an
-                                  // empty mergedRegions to the file.
-                                  // So, depending on the value of mergedCells,
-                                  // the merged dom element is added or not.
+        // empty mergedRegions to the file.
+        // So, depending on the value of mergedCells,
+        // the merged dom element is added or not.
 
         cols = gnumeric_doc.createElement("gmr:Cols");
-	    sheet.appendChild(cols);
+        sheet.appendChild(cols);
 
         rows = gnumeric_doc.createElement("gmr:Rows");
-	    sheet.appendChild(rows);
+        sheet.appendChild(rows);
 
         /*
-	       selections = gnumeric_doc.createElement("gmr:Selections");
-	       sheet.appendChild(selections);
+          selections = gnumeric_doc.createElement("gmr:Selections");
+          sheet.appendChild(selections);
         */
-	    // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
-	    // Either we get hold of KSpreadSheet::m_dctCells and apply the old method below
+        // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
+        // Either we get hold of KSpreadSheet::m_dctCells and apply the old method below
         // (for sorting) or, cleaner and already sorted, we use KSpreadSheet's API
         // (slower probably, though)
-	    int iMaxColumn = table->maxColumn();
-	    int iMaxRow = table->maxRow();
+        int iMaxColumn = table->maxColumn();
+        int iMaxRow = table->maxRow();
 
-	    // this is just a bad approximation which fails for documents with less than 50 rows, but
-	    // we don't need any progress stuff there anyway :) (Werner)
-	    int value=0;
-	    int step=iMaxRow > 50 ? iMaxRow/50 : 1;
-	    int i=1;
+        // this is just a bad approximation which fails for documents with less than 50 rows, but
+        // we don't need any progress stuff there anyway :) (Werner)
+        int value=0;
+        int step=iMaxRow > 50 ? iMaxRow/50 : 1;
+        int i=1;
 
-	    QString emptyLines;
+        QString emptyLines;
 
-	    /* Save selection info. */
+        /* Save selection info. */
 
         /* can't save selection anymore -- part of the view, not table */
         /*
-	       QDomElement selection = gnumeric_doc.createElement("gmr:Selection");
-	       QRect table_selection(table->selection());
+          QDomElement selection = gnumeric_doc.createElement("gmr:Selection");
+          QRect table_selection(table->selection());
 
-	       selections.appendChild(selection);
+          selections.appendChild(selection);
         */
-	    /*  <gmr:Selection startCol="3" startRow="2" endCol="3" endRow="2"/>*/
+        /*  <gmr:Selection startCol="3" startRow="2" endCol="3" endRow="2"/>*/
         /*
-	       selection.setAttribute("startCol", QString::number(table_selection.left()-1));
-	       selection.setAttribute("startRow", QString::number(table_selection.top()-1));
+          selection.setAttribute("startCol", QString::number(table_selection.left()-1));
+          selection.setAttribute("startRow", QString::number(table_selection.top()-1));
 
-	       selection.setAttribute("endCol", QString::number(table_selection.right()-1));
-	       selection.setAttribute("endRow", QString::number(table_selection.bottom()-1));
+          selection.setAttribute("endCol", QString::number(table_selection.right()-1));
+          selection.setAttribute("endRow", QString::number(table_selection.bottom()-1));
         */
-	    /* End selection info. */
+        /* End selection info. */
 
 
-	    /* Start COLS */
-	    ColumnFormat *cl=table->firstCol();
-	    while (cl)
-	    {
+        /* Start COLS */
+        ColumnFormat *cl=table->firstCol();
+        while (cl)
+        {
             QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
-	        cols.appendChild(colinfo);
-	        colinfo.setAttribute("No", QString::number(cl->column()-1));
-	        colinfo.setAttribute("Hidden", QString::number(cl->isHide()));
-	        colinfo.setAttribute("Unit", QString::number(cl->width()));
+            cols.appendChild(colinfo);
+            colinfo.setAttribute("No", QString::number(cl->column()-1));
+            colinfo.setAttribute("Hidden", QString::number(cl->isHide()));
+            colinfo.setAttribute("Unit", QString::number(cl->width()));
 
-	        cl=cl->next();
-	    }
+            cl=cl->next();
+        }
 
-	    /* End COLS */
+        /* End COLS */
 
-	    //	 RowFormat *rl=table->m_cells.firstCell;
-	    //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
+        //	 RowFormat *rl=table->m_cells.firstCell;
+        //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
 
-	    /* Start ROWS */
-	    RowFormat *rl=table->firstRow();
-	    while (rl)
-	    {
+        /* Start ROWS */
+        RowFormat *rl=table->firstRow();
+        while (rl)
+        {
             QDomElement rowinfo = gnumeric_doc.createElement("gmr:RowInfo");
-	        rows.appendChild(rowinfo);
-	        rowinfo.setAttribute("No", QString::number(rl->row()-1));
-	        rowinfo.setAttribute("Hidden", QString::number(rl->isHide()));
-	        rowinfo.setAttribute("Unit", QString::number(rl->height()));
+            rows.appendChild(rowinfo);
+            rowinfo.setAttribute("No", QString::number(rl->row()-1));
+            rowinfo.setAttribute("Hidden", QString::number(rl->isHide()));
+            rowinfo.setAttribute("Unit", QString::number(rl->height()));
 
-	        rl=rl->next();
-	    }
+            rl=rl->next();
+        }
 
-	    /* End ROWS */
+        /* End ROWS */
 
-	    //rl->setHeight
-	    //	 colinfo.info();
-	    /*
-	      <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
+        //rl->setHeight
+        //	 colinfo.info();
+        /*
+          <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
           <gmr:ColInfo No="3" Unit="113.25" MarginA="2" MarginB="2" HardSize="-1"
-           Hidden="0"/>
-	    */
+          Hidden="0"/>
+        */
 
-	    /* End COLS */
+        /* End COLS */
 
         for (int currentrow = 1; currentrow <= iMaxRow; ++currentrow, ++i)
-	    {
+        {
             if(i>step)
             {
                 value+=2;
-	            emit sigProgress(value);
-	            i=0;
-	        }
+                emit sigProgress(value);
+                i=0;
+            }
 
-	        QString line;
-	        for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++)
-	        {
+            QString line;
+            for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++)
+            {
                 QDomElement cell_contents;
-		        KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
+                KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
 
                 QString text, style;
                 QDomDocument domLink;
@@ -963,58 +963,58 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                 QDomNodeList childNodes;
 
                 if (!cell->isDefault() && !cell->isEmpty())
-		        {
+                {
                     switch (cell->content())
                     {
-                        case KSpreadCell::Text:
-                            text = cell->text();
-                            isLink = false;
-                            break;
-                        case KSpreadCell::RichText:
-                            // hyperlinks
-                            // Extract the cell text
-                            isLink = true;
-                            isLinkBold = false;
-                            isLinkItalic = false;
-                            domLink.setContent(cell->text().section("!",1,1));
+                    case KSpreadCell::Text:
+                        text = cell->text();
+                        isLink = false;
+                        break;
+                    case KSpreadCell::RichText:
+                        // hyperlinks
+                        // Extract the cell text
+                        isLink = true;
+                        isLinkBold = false;
+                        isLinkItalic = false;
+                        domLink.setContent(cell->text().section("!",1,1));
 
-                            domNode = domLink.firstChild();
-                            domRoot = domNode.toElement();
-                            text = domNode.toElement().text();
+                        domNode = domLink.firstChild();
+                        domRoot = domNode.toElement();
+                        text = domNode.toElement().text();
 
-                            while (!domNode.isNull())
-                            {
-                                style = domNode.toElement().tagName();
+                        while (!domNode.isNull())
+                        {
+                            style = domNode.toElement().tagName();
 
-                                if (style == "b")
-                                    isLinkBold = true;
+                            if (style == "b")
+                                isLinkBold = true;
 
-                                if (style == "i")
-                                    isLinkItalic = true;
+                            if (style == "i")
+                                isLinkItalic = true;
 
-                                domNode = domNode.firstChild();
-                            }
+                            domNode = domNode.firstChild();
+                        }
 
-                            //kdDebug(30521) << "---> link, text = " << text << endl;
+                        //kdDebug(30521) << "---> link, text = " << text << endl;
 
-                            linkUrl = domRoot.attribute("href");
-                            linkText = text;
+                        linkUrl = domRoot.attribute("href");
+                        linkText = text;
 
-                            break;
-		                case KSpreadCell::VisualFormula:
-                            isLink = false;
-		                    text = cell->text(); // untested
-		                    break;
-		                case KSpreadCell::Formula:
-                            isLink = false;
-		                    /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
-                            text = cell->text();
-                            break;
+                        break;
+                    case KSpreadCell::VisualFormula:
+                        isLink = false;
+                        text = cell->text(); // untested
+                        break;
+                    case KSpreadCell::Formula:
+                        isLink = false;
+                        /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
+                        text = cell->text();
+                        break;
                     }
                 }
 
                 if (!cell->isDefault())
-		        {
+                {
 
                     // Check if the cell is merged
                     // Only cells with content are interesting?
@@ -1038,44 +1038,44 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                     }
                     // ---
 
-		            QDomElement gnumeric_cell = gnumeric_doc.createElement("gmr:Cell");
-		            QDomElement cell_style;
+                    QDomElement gnumeric_cell = gnumeric_doc.createElement("gmr:Cell");
+                    QDomElement cell_style;
 
-		            QDomElement style_region = gnumeric_doc.createElement("gmr:StyleRegion");
+                    QDomElement style_region = gnumeric_doc.createElement("gmr:StyleRegion");
 
-		            cells.appendChild(gnumeric_cell);
+                    cells.appendChild(gnumeric_cell);
 
-		            gnumeric_cell.setAttribute("Col", QString::number(currentcolumn-1));
-		            gnumeric_cell.setAttribute("Row", QString::number(currentrow-1));
+                    gnumeric_cell.setAttribute("Col", QString::number(currentcolumn-1));
+                    gnumeric_cell.setAttribute("Row", QString::number(currentrow-1));
 
-		            /* Right now, we create a single region for each cell.. This is inefficient,
+                    /* Right now, we create a single region for each cell.. This is inefficient,
                      * but the implementation is quicker.. Probably later we will have to
                      * consolidate styles into style regions.
-		             */
+                     */
 
-		            style_region.setAttribute("startCol", QString::number(currentcolumn-1));
-		            style_region.setAttribute("startRow", QString::number(currentrow-1));
-		            style_region.setAttribute("endCol", QString::number(currentcolumn-1));
-		            style_region.setAttribute("endRow", QString::number(currentrow-1));
+                    style_region.setAttribute("startCol", QString::number(currentcolumn-1));
+                    style_region.setAttribute("startRow", QString::number(currentrow-1));
+                    style_region.setAttribute("endCol", QString::number(currentcolumn-1));
+                    style_region.setAttribute("endRow", QString::number(currentrow-1));
 
-	                cell_style = GetCellStyle(gnumeric_doc,cell,currentcolumn,currentrow);
+                    cell_style = GetCellStyle(gnumeric_doc,cell,currentcolumn,currentrow);
 
-		            style_region.appendChild(cell_style);
+                    style_region.appendChild(cell_style);
 
-		            styles.appendChild(style_region);
+                    styles.appendChild(style_region);
 
-		            //cell_contents = gnumeric_doc.createElement("gmr:Content");
-		            gnumeric_cell.appendChild(gnumeric_doc.createTextNode(text));
-		            //gnumeric_cell.appendChild(cell_contents);
+                    //cell_contents = gnumeric_doc.createElement("gmr:Content");
+                    gnumeric_cell.appendChild(gnumeric_doc.createTextNode(text));
+                    //gnumeric_cell.appendChild(cell_contents);
                 }
 
-		        // Append a delimiter, but in a temp string -> if no other real cell in this line,
-		        // then those will be dropped
+                // Append a delimiter, but in a temp string -> if no other real cell in this line,
+                // then those will be dropped
             }
         }
 
         if (mergedCells)
-        sheet.appendChild(merged);
+            sheet.appendChild(merged);
     }
 
     str = gnumeric_doc.toString ();
