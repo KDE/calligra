@@ -475,35 +475,35 @@ void KSpreadConditions::loadOasisConditionValue( const QString &styleCondition, 
 void KSpreadConditions::loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition )
 {
     QString value;
-    if (valExpression.contains( "<=" ) )
+    if (valExpression.find( "<=" )==0 )
     {
-        value = valExpression.remove( "<=" );
+        value = valExpression.remove( 0,2 );
         newCondition.cond = InferiorEqual;
     }
-    else if (valExpression.contains( ">=" ) )
+    else if (valExpression.find( ">=" )==0 )
     {
-        value = valExpression.remove( ">=" );
+        value = valExpression.remove( 0,2 );
         newCondition.cond = SuperiorEqual;
     }
-    else if (valExpression.contains( "!=" ) )
+    else if (valExpression.find( "!=" )==0 )
     {
         //add Differentto attribute
-        value = valExpression.remove( "!=" );
+        value = valExpression.remove( 0,2 );
         newCondition.cond = DifferentTo;
     }
-    else if ( valExpression.contains( "<" ) )
+    else if ( valExpression.find( "<" )==0 )
     {
-        value = valExpression.remove( "<" );
+        value = valExpression.remove( 0,1 );
         newCondition.cond = Inferior;
     }
-    else if(valExpression.contains( ">" ) )
+    else if(valExpression.find( ">" )==0 )
     {
-        value = valExpression.remove( ">" );
+        value = valExpression.remove( 0,1 );
         newCondition.cond = Superior;
     }
-    else if (valExpression.contains( "=" ) )
+    else if (valExpression.find( "=" )==0 )
     {
-        value = valExpression.remove( "=" );
+        value = valExpression.remove( 0,1 );
         newCondition.cond = Equal;
     }
     else
