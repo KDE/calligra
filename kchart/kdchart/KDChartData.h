@@ -19,13 +19,21 @@
 #define MINDOUBLE DBL_MIN
 #endif
 
+// Please leave all methods in this class inline!
+// It's necessary since it's part of the interface provided by KDChart
 class KDChartData
 {
 public:
     enum ValueType { NoValue, String, Double, DateTime };
-    KDChartData( double value );
-    KDChartData( const QString& value );
-    KDChartData();
+    KDChartData( double value ) :
+        _valueType( Double ), dValue( value )
+    {}
+    KDChartData( const QString& value ) :
+        _valueType( String ), sValue( value )
+    {}
+    KDChartData() :
+            _valueType( NoValue )
+    {}
 
     ValueType valueType() const
     {

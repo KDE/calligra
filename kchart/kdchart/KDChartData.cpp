@@ -22,11 +22,6 @@
 
    \param value the double value which this object should represent
 */
-KDChartData::KDChartData( double value )
-{
-    dValue = value;
-    _valueType = Double;
-}
 
 
 /**
@@ -34,19 +29,11 @@ KDChartData::KDChartData( double value )
 
    \param value the QString value which this object should represent
 */
-KDChartData::KDChartData( const QString& value ) :
-    _valueType( String ),
-    sValue( value )
-{}
 
 
 /**
    Constructor. Creates a KDChartData object that represents no value.
 */
-KDChartData::KDChartData()
-{
-    _valueType = NoValue;
-}
 
 
 /**
