@@ -41,5 +41,7 @@
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
         <Action name="node_properties"/>
+        <Separator/>
+        <Action name="node_delete"/>
     </Menu>
 </kpartgui>

@@ -128,6 +128,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Popup
     new KAction(i18n("Node Properties"), "node_properties", 0, this,
 		SLOT(slotOpenNode()), actionCollection(), "node_properties");
+    new KAction(i18n("Delete Node"), "node_delete", 0, this,
+		SLOT(slotDeleteNode()), actionCollection(), "node_delete");
 
 
     // ------------------- Actions with a key binding and no GUI item
@@ -286,6 +288,43 @@ void KPTView::slotOpenNode() {
 		return;
 	}
 }
+
+void KPTView::slotDeleteNode()
+{
+    kdDebug()<<k_funcinfo<<endl;
+
+	KPTNode* node = 0;
+
+	if (m_tab->visibleWidget() == m_ganttview)
+	{
+        node = m_ganttview->currentNode();
+	}
+	else if (m_tab->visibleWidget() == m_pertview)
+	{
+	    node = m_pertview->currentNode();
+	}
+	if ( !node ) {
+		kdDebug()<<k_funcinfo<<"No node was selected?"<<endl;
+
+		return;
+	}
+	// we cannot directly delete this node. We have to find the parent node and tell it to delete this child.
+
+	// todo: maybe we should ask the user whethere he knows what he is doing, especially if the node in
+	// question has a lot of children.slotAddMilestone()
+	KPTNode* parentNode = node->getParent();
+	// the root node does not have a parent, so be careful!
+	if ( parentNode ) {
+		parentNode->delChildNode( node, true );
+	}
+	else {
+		kdDebug()<<k_funcinfo<<"No parent node found"<<endl;
+	}
+
+	slotUpdate(true);
+}
+
+
 
 void KPTView::updateReadWrite(bool /*readwrite*/) {
 }

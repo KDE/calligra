@@ -70,6 +70,7 @@ protected slots:
     void slotConfigure();
 
     void slotOpenNode();
+	void slotDeleteNode();
 
     void slotConnectNode();
 	void slotChanged(QWidget *);
