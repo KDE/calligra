@@ -22,7 +22,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
 							   "in which your chart is displayed. Each "
 							   "part of the chart can be assigned a "
 							   "different color." ) );
-  
+
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
     QButtonGroup* gb = new QButtonGroup( i18n("Colors"), this );
     toplevel->addWidget( gb);
@@ -166,6 +166,20 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
 				  "configured to have two vertical axes" );
 	QWhatsThis::add( ylabel2LA, wtstr );
 	QWhatsThis::add( _ylabel2CB, wtstr );
+
+        //Laurent 2001-11-09 desactivate this kcolorbutton because there is not equivalents in kdchart for the moment
+        _plotCB->setEnabled(false);
+        _volCB->setEnabled(false);
+
+        _backgroundCB->setEnabled(false);
+
+
+    //     _params->BGColor = _colorpage->backgroundColor();
+    //     _params->PlotColor = _colorpage->plotColor();
+    //_params->EdgeColor = _colorpage->edgeColor();
+    //     _params->VolColor = _colorpage->volColor();
+
+
 
     /*QLabel* edgeLA = new QLabel( i18n( "Edge color (pies only)" ), this );
     edgeLA->setAlignment( AlignRight | AlignVCenter );
