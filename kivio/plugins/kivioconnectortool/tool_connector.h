@@ -25,7 +25,9 @@
 class QMouseEvent;
 class QCursor;
 
-class KToggleAction;
+namespace Kivio {
+  class MouseToolAction;
+}
 
 class KivioView;
 class KivioPage;
@@ -49,6 +51,8 @@ class ConnectorTool : public Kivio::MouseTool
   protected slots:
     void activateStraight();
     void activatePolyline();
+    
+    void makePermanent();
   
   signals:
     void operationDone();
@@ -87,8 +91,10 @@ class ConnectorTool : public Kivio::MouseTool
     KoPoint startPoint;
     KivioCustomDragData* m_pDragData;
     
-    KToggleAction* m_connectorAction;
-    KToggleAction* m_polyLineAction;
+    Kivio::MouseToolAction* m_connectorAction;
+    Kivio::MouseToolAction* m_polyLineAction;
+    
+    bool m_permanent;
 };
 
 #endif

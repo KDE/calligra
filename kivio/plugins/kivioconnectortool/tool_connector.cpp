@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
  * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2003-2005 Peter Simonsson <psn@linux.se>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,6 @@
 #include <kstandarddirs.h>
 #include <koPoint.h>
 #include <kozoomhandler.h>
-#include <kactionclasses.h>
 #include <klocale.h>
 
 #include "kivio_view.h"
@@ -44,20 +44,26 @@
 #include "kivio_1d_stencil.h"
 #include "kiviopolylineconnector.h"
 #include "polylineconnectorspawner.h"
+#include "mousetoolaction.h"
 
 ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
-  m_connectorAction = new KToggleAction(i18n("Straight Connector"), "kivio_connector", 0, actionCollection(), "connector");
+  m_connectorAction = new Kivio::MouseToolAction(i18n("Straight Connector"), "kivio_connector", 0,
+    actionCollection(), "connector");
   connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_connectorAction, SIGNAL(activated()), this, SLOT(activateStraight()));
+  connect(m_connectorAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
   m_connectorAction->setExclusiveGroup("ConnectorTool");
 
-  m_polyLineAction = new KToggleAction(i18n("Polyline Connector"), "kivio_connector", 0,
+  m_polyLineAction = new Kivio::MouseToolAction(i18n("Polyline Connector"), "kivio_connector", 0,
     actionCollection(), "polyLineConnector");
   connect(m_polyLineAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_polyLineAction, SIGNAL(activated()), this, SLOT(activatePolyline()));
+  connect(m_connectorAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
   m_polyLineAction->setExclusiveGroup("ConnectorTool");
-  
+
+  m_permanent = false;
+
   m_type = StraightConnector;
   m_mode = stmNone;
   m_pDragData = 0;
@@ -124,6 +130,7 @@ void ConnectorTool::setActivated(bool a)
     m_type = StraightConnector;
     m_connectorAction->setChecked(false);
     m_polyLineAction->setChecked(false);
+    m_permanent = false;
   }
 }
 
@@ -313,6 +320,10 @@ void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
   connector(view()->canvasWidget()->rect());
   m_pStencil = 0;
+  
+  if(!m_permanent) {
+    view()->pluginManager()->activateDefaultTool();
+  }
 }
 
 void ConnectorTool::activateStraight()
@@ -327,6 +338,11 @@ void ConnectorTool::activatePolyline()
   m_type = PolyLineConnector;
   m_connectorAction->setChecked(false);
   m_polyLineAction->setChecked(true);
+}
+
+void ConnectorTool::makePermanent()
+{
+  m_permanent = true;
 }
 
 #include "tool_connector.moc"

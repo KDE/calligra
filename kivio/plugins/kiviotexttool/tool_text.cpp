@@ -25,7 +25,6 @@
 #include <kdebug.h>
 #include <koPoint.h>
 #include <klocale.h>
-#include <kactionclasses.h>
 #include <kozoomhandler.h>
 
 #include "kivio_view.h"
@@ -43,13 +42,16 @@
 #include "kivio_factory.h"
 #include "kivio_command.h"
 #include "kivio_pluginmanager.h"
+#include "mousetoolaction.h"
 
 
 TextTool::TextTool( KivioView* parent ) : Kivio::MouseTool(parent, "Text Mouse Tool")
 {
-  m_textAction = new KToggleAction( i18n("Text Tool"), "text", Key_F2, actionCollection(), "text" );
+  m_textAction = new Kivio::MouseToolAction( i18n("Text Tool"), "text", Key_F2, actionCollection(), "text" );
   connect(m_textAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
+  connect(m_textAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
 
+  m_permanent = false;
   m_mode = stmNone;
 
   QPixmap pix = BarIcon("kivio_text_cursor",KivioFactory::global());
@@ -103,6 +105,7 @@ void TextTool::setActivated(bool a)
     m_mode = stmNone;
   } else {
     m_textAction->setChecked(false);
+    m_permanent = false;
   }
 }
 
@@ -230,6 +233,10 @@ void TextTool::endRubberBanding(QMouseEvent */*e*/)
   {
     text(view()->canvasWidget()->rect());
   }
+  
+  if(!m_permanent) {
+    view()->pluginManager()->activateDefaultTool();
+  }
 }
 
 void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
@@ -301,6 +308,11 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   }
 
   doc->updateView(page);
+}
+
+void TextTool::makePermanent()
+{
+  m_permanent = true;
 }
 
 #include "tool_text.moc"

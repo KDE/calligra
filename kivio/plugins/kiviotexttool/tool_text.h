@@ -25,7 +25,9 @@
 class QMouseEvent;
 class QCursor;
 
-class KToggleAction;
+namespace Kivio {
+  class MouseToolAction;
+}
 
 class KivioView;
 class KivioPage;
@@ -46,6 +48,9 @@ class TextTool : public Kivio::MouseTool
     virtual void setActivated(bool a);
     virtual void applyToolAction(QPtrList<KivioStencil>* stencils);
     virtual void applyToolAction(KivioStencil* stencil, const KoPoint& pos);
+  
+  protected slots:
+    void makePermanent();
   
   signals:
     void operationDone();
@@ -74,7 +79,8 @@ class TextTool : public Kivio::MouseTool
     // Flag to indicate that we are drawing a rubber band
     int m_mode;
     QCursor* m_pTextCursor;
-    KToggleAction* m_textAction;
+    Kivio::MouseToolAction* m_textAction;
+    bool m_permanent;
 };
 
 #endif
