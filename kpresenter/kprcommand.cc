@@ -600,8 +600,8 @@ void UnGroupObjCmd::execute()
 
     m_doc->repaint( false );
 
-    //int pos=m_doc->pageList().findRef(m_page);
-    //m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 void UnGroupObjCmd::unexecute()
@@ -628,8 +628,8 @@ void UnGroupObjCmd::unexecute()
 
     m_doc->repaint( false );
 
-    //int pos=m_doc->pageList().findRef(m_page);
-    //m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
