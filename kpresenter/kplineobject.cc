@@ -33,6 +33,8 @@
 #include <koUnit.h>
 #include <kozoomhandler.h>
 #include <math.h>
+#include <kodom.h>
+#include <koxmlns.h>
 
 using namespace std;
 
@@ -129,10 +131,11 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     KPShadowObject::loadOasis(element, context, info);
-    double x1 = KoUnit::parseValue( element.attribute( "svg:x1" ) );
-    double y1 = KoUnit::parseValue( element.attribute( "svg:y1" ) );
-    double x2 = KoUnit::parseValue( element.attribute( "svg:x2" ) );
-    double y2 = KoUnit::parseValue( element.attribute( "svg:y2" ) );
+
+    double x1 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) );
+    double y1 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) );
+    double x2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) );
+    double y2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) );
 
     kdDebug()<<" KPLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
     double x = QMIN( x1, x2 );
