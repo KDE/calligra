@@ -145,6 +145,7 @@ public:
      */
     void updateCaption( const QString caption, bool mod ); // BCI: make virtual
     void updateReloadFileAction(KoDocument *doc);
+    void updateVersionsFileAction(KoDocument *doc);
 
 signals:
     /**
@@ -260,6 +261,11 @@ public slots:
      * Reload file
      */
     void slotReloadFile();
+
+    /**
+     * This will call a dialogbox to add version to list of files
+     */
+    void slotVersionsFile();
 
     /**
      * File --> Import

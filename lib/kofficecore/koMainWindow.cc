@@ -28,6 +28,7 @@
 #include "KoMainWindowIface.h"
 #include "koFrame.h"
 #include "kofiledialog.h"
+#include "koversiondialog.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -99,6 +100,7 @@ public:
     m_sendfile = 0;
     m_paCloseFile = 0L;
     m_reloadfile = 0L;
+    m_versionsfile = 0L;
     m_importFile = 0;
     m_exportFile = 0;
     m_isImporting = false;
@@ -146,6 +148,7 @@ public:
   KAction *m_sendfile;
   KAction *m_paCloseFile;
   KAction *m_reloadfile;
+  KAction *m_versionsfile;
   KAction *m_importFile;
   KAction *m_exportFile;
 
@@ -199,6 +202,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
                     this, SLOT( slotReloadFile() ),
                     actionCollection(), "file_reload_file");
 
+    d->m_versionsfile = new KAction( i18n( "Versions..."), 0,
+                    this, SLOT( slotVersionsFile() ),
+                    actionCollection(), "file_versions_file");
+
     d->m_importFile = new KAction( i18n( "I&mport..." ), 0, // clashing accel key :(
                     this, SLOT( slotImportFile() ),
                     actionCollection(), "file_import_file");
@@ -216,6 +223,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );
     d->m_reloadfile->setEnabled( false );
+    d->m_versionsfile->setEnabled( false );
     d->m_importFile->setEnabled( true );  // always enabled like File --> Open
     d->m_exportFile->setEnabled( false );
     d->m_paSave->setEnabled( false );
@@ -370,6 +378,13 @@ void KoMainWindow::updateReloadFileAction(KoDocument *doc)
 {
     d->m_reloadfile->setEnabled( doc && !doc->url().isEmpty()&&doc->isModified());
 }
+
+void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
+{
+    //TODO activate it just when we save it in oasis file format
+    d->m_versionsfile->setEnabled( doc && !doc->url().isEmpty()&&doc->isModified());
+}
+
 
 void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views )
 {
@@ -547,6 +562,7 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
         return false;
     }
     updateReloadFileAction(newdoc);
+    updateVersionsFileAction( newdoc );
     return true;
 }
 
@@ -1573,6 +1589,13 @@ void KoMainWindow::slotEmailFile()
                             QString::null,
                             urls); // attachments
     }
+}
+
+void KoMainWindow::slotVersionsFile()
+{
+    KoVersionDialog *dlg = new KoVersionDialog(  this );
+    dlg->exec();
+    delete dlg;
 }
 
 void KoMainWindow::slotReloadFile()

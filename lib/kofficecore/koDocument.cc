@@ -1974,6 +1974,7 @@ void KoDocument::setTitleModified( const QString caption, bool mod )
     {
         it.current()->updateCaption();
         it.current()->updateReloadFileAction(this);
+        it.current()->updateVersionsFileAction(this);
     }
 }
 
