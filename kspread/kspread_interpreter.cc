@@ -282,7 +282,9 @@ bool kspreadfunc_sumxmy2( KSContext& context );
 class KSParseNodeExtraPoint : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadTable* t ) : m_point( s, m, t ) { }
+  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadTable* t ) : m_point( s, m, t ) 
+  { 
+  }
 
   KSpreadPoint* point() { return &m_point; }
 
@@ -297,7 +299,9 @@ class KSParseNodeExtraRange : public KSParseNodeExtra
 {
 public:
   KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t )
-    : m_range( s, m, t ) { }
+    : m_range( s, m, t ) 
+  { 
+  }
 
   KSpreadRange* range() { return &m_range; }
 

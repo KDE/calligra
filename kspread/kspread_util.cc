@@ -493,10 +493,19 @@ KSpreadPoint::KSpreadPoint(const QString & _str, KSpreadMap * _map,
 			   KSpreadTable * _table)
 {
     uint p = 0;
-    int p2 = _str.find("!");
+    int p2 = _str.find('!');
     if (p2 != -1) {
 	tableName = _str.left(p2++);
-	table = _map->findTable(tableName);
+        while ( true )
+        {
+          table = _map->findTable(tableName);
+          if ( !table && tableName[0] == ' ' )
+          {
+            tableName = tableName.right( tableName.length() - 1 );
+            continue;
+          }
+          break;
+        }
 	p = p2;
     } else
 	table = _table;
@@ -514,7 +523,7 @@ KSpreadRange::KSpreadRange(const QString & _str)
     range.setLeft(-1);
     table = 0;
 
-    int p = _str.find(":");
+    int p = _str.find(':');
     if (p == -1)
 	return;
 
@@ -556,15 +565,26 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     table = 0;
 
     int p = 0;
-    int p2 = _str.find("!");
-    if (p2 != -1) {
-	tableName = _str.left(p2++);
+    int p2 = _str.find('!');
+    if (p2 != -1) 
+    {
+      tableName = _str.left(p2++);
+      while ( true )
+      {
 	table = _map->findTable(tableName);
-	p = p2;
+        if ( !table && tableName[0] == ' ' )
+        {
+          tableName = tableName.right( tableName.length() - 1 );
+          continue;
+        }
+        break;
+      }
+      p = p2;
     } else
-	table = _table;
+      table = _table;
 
-    int p3 = _str.find(":", p);
+
+    int p3 = _str.find(':', p);
     if (p3 == -1)
 	return;
 
