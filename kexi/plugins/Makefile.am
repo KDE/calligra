@@ -28,8 +28,8 @@ kexihandler_relation_la_LIBADD = ../core/libkexicore.la
 #kexihandler_form_la_LIBADD = ../core/libkexicore.la ../formeditor/libkformeditor.la \
 #		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
-SUBDIRS = . $(scripting_dir) kugar
-#SUBDIRS = . forms
+SUBDIRS = . kugar
+#SUBDIRS = . $(scripting_dir) kugar
 
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
