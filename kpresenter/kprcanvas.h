@@ -595,8 +595,6 @@ protected:
     void printRTDebug( int info );
 #endif
 
-    KPrPage *stickyPage() const;
-
     void moveHelpLine(const QPoint & pos);
     void tmpMoveHelpLine( const QPoint & newPos);
 

@@ -501,7 +501,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
     //objects in current page
     drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
     //draw sticky object
-    drawObjectsEdit( painter, rect, stickyPage()->objectList(), selectionMode, pageNum );
+    drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
 }
 
 
@@ -509,10 +509,11 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
 {
     KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
 
+    KPrPage * page = m_view->kPresenterDoc()->pageList().at(step.m_pageNumber);
     //objects in current page
-    drawObjectsPres( painter, m_view->kPresenterDoc()->pageList().at(step.m_pageNumber)->objectList(), step );
+    drawObjectsPres( painter, page->objectList(), step );
     //draw sticky object
-    drawObjectsPres( painter, stickyPage()->objectList(), step );
+    drawObjectsPres( painter, page->masterPage()->objectList(), step );
 }
 
 
@@ -1167,7 +1168,7 @@ void KPrCanvas::calcBoundingRect()
     m_boundingRect = KoRect();
 
     m_boundingRect=m_activePage->getBoundingRect(m_boundingRect);
-    m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect);
+    m_boundingRect = m_activePage->masterPage()->getBoundingRect( m_boundingRect );
     m_origBRect = m_boundingRect;
 }
 
@@ -1176,7 +1177,7 @@ KoRect KPrCanvas::objectSelectedBoundingRect() const
     KoRect objBoundingRect=KoRect();
 
     objBoundingRect = m_activePage->getBoundingRect( objBoundingRect);
-    objBoundingRect = stickyPage()->getBoundingRect( objBoundingRect);
+    objBoundingRect = m_activePage->masterPage()->getBoundingRect( objBoundingRect );
     return objBoundingRect;
 }
 
@@ -1186,7 +1187,7 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
     for ( int i = 0; i < 2; ++i )
     {
-        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : stickyPage()->objectList() );
+        QPtrListIterator<KPObject> it( i == 0 ? m_activePage->objectList() : m_activePage->masterPage()->objectList() );
         for ( ; it.current() ; ++it )
         {
             if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -1263,7 +1264,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         it.current()->setSelected( true );
                 }
 
-                it = stickyPage()->objectList();
+                it = m_activePage->masterPage()->objectList();
                 for ( ; it.current() ; ++it )
                 {
                     if ( it.current()->intersects( selectedRect ) )
@@ -1296,7 +1297,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         macro=new KMacroCommand(i18n("Move Objects"));
                     macro->addCommand(cmd);
                 }
-                cmd=stickyPage()->moveObject(m_view, move.x(), move.y());
+                cmd = m_activePage->masterPage()->moveObject( m_view, move.x(), move.y() );
                 if(cmd)
                 {
                     if ( !macro )
@@ -1308,7 +1309,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     m_view->kPresenterDoc()->addCommand(macro );
             } else
             {
-                stickyPage()->repaintObj();
+                m_activePage->masterPage()->repaintObj();
                 m_activePage->repaintObj();
             }
         }
@@ -1521,7 +1522,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
              ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
              toolEditMode == TEM_MOUSE  ) {
             bool cursorAlreadySet = false;
-            if ( (int)objectList().count() - 1 >= 0 || (int)stickyPage()->objectList().count() -1>=0 )
+            if ( (int)objectList().count() - 1 >= 0 || (int)m_activePage->masterPage()->objectList().count() -1>=0 )
             {
                 kpobject=m_activePage->getCursor(docPoint);
                 if( kpobject)
@@ -1532,7 +1533,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 }
                 else
                 {
-                    kpobject=stickyPage()->getCursor(docPoint );
+                    kpobject = m_activePage->masterPage()->getCursor( docPoint );
                     if( kpobject)
                     {
                         setCursor( kpobject->getCursor( docPoint, modType,m_view->kPresenterDoc() ) );
@@ -2309,7 +2310,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
                             macro=new KMacroCommand(i18n("Move Objects"));
                         macro->addCommand(cmd);
                     }
-                    cmd=stickyPage()->moveObject(m_view, move.x(), move.y());
+                    cmd = m_activePage->masterPage()->moveObject( m_view, move.x(), move.y() );
                     if(cmd)
                     {
                         if ( ! macro )
@@ -2348,7 +2349,7 @@ KPObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
     
     if ( !object )
     {
-        object = stickyPage()->getObjectAt( pos, withoutProtected );
+        object = m_activePage->masterPage()->getObjectAt( pos, withoutProtected );
     
         if ( objectIsAHeaderFooterHidden( object ) )
            object = 0;
@@ -2379,7 +2380,7 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 
 void KPrCanvas::selectAllObj()
 {
-    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
+    QPtrListIterator<KPObject> it( m_activePage->masterPage()->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( !objectIsAHeaderFooterHidden(it.current()) )
@@ -2402,7 +2403,7 @@ void KPrCanvas::selectAllObj()
 
 void KPrCanvas::deSelectAllObj()
 {
-    if( m_activePage->numSelected()==0 && stickyPage()->numSelected() == 0 )
+    if( m_activePage->numSelected()==0 && m_activePage->masterPage()->numSelected() == 0 )
         return;
 
     if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
@@ -2413,7 +2414,7 @@ void KPrCanvas::deSelectAllObj()
         m_view->kPresenterDoc()->raiseAndLowerObject = false;
 
     m_activePage->deSelectAllObj();
-    stickyPage()->deSelectAllObj();
+    m_activePage->masterPage()->deSelectAllObj();
 
     // set current default pen color and brush color in tool bar
     m_view->penColorChanged( m_view->getPen() );
@@ -2480,7 +2481,7 @@ void KPrCanvas::chPic()
     bool state=m_activePage->chPic( m_view);
     if( state)
         return;
-    stickyPage()->chPic(m_view);
+    m_activePage->masterPage()->chPic(m_view);
 }
 
 bool KPrCanvas::exportPage( int nPage,
@@ -2542,7 +2543,7 @@ void KPrCanvas::savePicture()
     bool state=m_activePage->savePicture( m_view);
     if( state)
         return;
-    stickyPage()->savePicture(m_view);
+    m_activePage->masterPage()->savePicture(m_view);
 }
 
 void KPrCanvas::setTextFormat(const KoTextFormat &format, int flags)
@@ -2995,19 +2996,19 @@ void KPrCanvas::printRTDebug( int info )
 bool KPrCanvas::haveASelectedPartObj() const
 {
     return m_activePage->haveASelectedPartObj() ||
-        stickyPage()->haveASelectedPartObj();
+        m_activePage->masterPage()->haveASelectedPartObj();
 }
 
 bool KPrCanvas::haveASelectedGroupObj() const
 {
     return m_activePage->haveASelectedGroupObj() ||
-        stickyPage()->haveASelectedGroupObj();
+        m_activePage->masterPage()->haveASelectedGroupObj();
 }
 
 bool KPrCanvas::haveASelectedPixmapObj() const
 {
     return m_activePage->haveASelectedPixmapObj() ||
-        stickyPage()->haveASelectedPixmapObj();
+        m_activePage->masterPage()->haveASelectedPixmapObj();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
@@ -3045,7 +3046,7 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
         }
         //get sticky obj
         lstObj.clear();
-        stickyPage()->getAllObjectSelectedList(lstObj);
+        m_activePage->masterPage()->getAllObjectSelectedList( lstObj );
         it=QPtrListIterator<KPObject>( lstObj );
         for ( ; it.current(); ++it ) {
             if ( it.current()->getType() == OT_TEXT )
@@ -3068,7 +3069,7 @@ QPtrList<KPTextObject> KPrCanvas::selectedTextObjs() const
             lst.append( static_cast<KPTextObject*>( it.current() ) );
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
             lst.append( static_cast<KPTextObject*>( it.current() ));
@@ -3393,7 +3394,7 @@ bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
     for (; oIt.current(); ++oIt )
         if ( oIt.current()->isSelected() )
             objs.append( oIt.current() );
-    oIt = stickyPage()->objectList();
+    oIt = m_activePage->masterPage()->objectList();
     for (; oIt.current(); ++oIt )
     {
         //can't assign a effect to header/footer
@@ -3410,7 +3411,7 @@ bool KPrCanvas::isOneObjectSelected() const
     bool state=m_activePage->isOneObjectSelected();
     if( state)
         return true;
-    return stickyPage()->isOneObjectSelected();
+    return m_activePage->masterPage()->isOneObjectSelected();
 }
 
 // This one is used to generate the pixmaps for the HTML presentation,
@@ -3493,7 +3494,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     drawAllObjectsInPage( &p, _list, pgnum );
 
     //draw sticky object
-    drawAllObjectsInPage( &p, stickyPage()->objectList(), pgnum );
+    drawAllObjectsInPage( &p, m_activePage->masterPage()->objectList(), pgnum );
 
     editMode = _editMode;
     p.end();
@@ -3574,7 +3575,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
 
     QPtrList<KPObject> allObjects( page->objectList() );
 
-    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
+    QPtrListIterator<KPObject> it( m_activePage->masterPage()->objectList() );
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
@@ -4120,7 +4121,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
             setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
         else
         {
-            obj=stickyPage()->getCursor( pos );
+            obj = m_activePage->masterPage()->getCursor( pos );
             if(obj)
                 setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
         }
@@ -4428,7 +4429,7 @@ void KPrCanvas::copyObjs()
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
 
     m_activePage->getAllEmbeddedObjectSelected(embeddedObjectsActivePage );
-    stickyPage()->getAllEmbeddedObjectSelected(embeddedObjectsStickyPage );
+    m_activePage->masterPage()->getAllEmbeddedObjectSelected( embeddedObjectsStickyPage );
 
     // Save internal embedded objects first, since it might change their URL
     int i = 0;
@@ -4447,12 +4448,12 @@ void KPrCanvas::copyObjs()
     }
 
     m_activePage->copyObjs(doc, presenter, savePictures);
-    stickyPage()->copyObjs(doc, presenter, savePictures);
+    m_activePage->masterPage()->copyObjs( doc, presenter, savePictures );
 
     KPresenterDoc* kprdoc = m_view->kPresenterDoc();
     if ( !embeddedObjectsStickyPage.isEmpty() )
     {
-        kprdoc->saveEmbeddedObject(stickyPage(), embeddedObjectsStickyPage, doc, presenter );
+        kprdoc->saveEmbeddedObject( m_activePage->masterPage(), embeddedObjectsStickyPage, doc, presenter );
     }
     if ( !embeddedObjectsActivePage.isEmpty())
     {
@@ -4501,7 +4502,7 @@ void KPrCanvas::deleteObjs()
             macro=new KMacroCommand(i18n( "Delete Objects" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->deleteSelectedObjects();
+    cmd = m_activePage->masterPage()->deleteSelectedObjects();
     if( cmd)
     {
         if ( !macro )
@@ -4717,7 +4718,7 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
 
     obj=m_activePage->picViewOrigHelper();
     if (!obj)
-        obj=stickyPage()->picViewOrigHelper();
+        obj = m_activePage->masterPage()->picViewOrigHelper();
 
     if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
         return;
@@ -4830,7 +4831,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             macro=new KMacroCommand(i18n( "Move Objects" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->moveObject(m_view,_move,key);
+    cmd = m_activePage->masterPage()->moveObject( m_view, _move, key );
     if( cmd && key)
     {
         if ( !macro)
@@ -5253,13 +5254,13 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
 bool KPrCanvas::oneObjectTextSelected() const
 {
     return m_activePage->oneObjectTextSelected() ||
-        stickyPage()->oneObjectTextSelected();
+        m_activePage->masterPage()->oneObjectTextSelected();
 }
 
 bool KPrCanvas::oneObjectTextExist() const
 {
     return m_activePage->oneObjectTextExist() ||
-        stickyPage()->oneObjectTextExist();
+        m_activePage->masterPage()->oneObjectTextExist();
 }
 
 KPrPage* KPrCanvas::activePage() const
@@ -5285,7 +5286,7 @@ bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
 int KPrCanvas::numberOfObjectSelected() const
 {
     int nb=activePage()->numSelected();
-    nb+=stickyPage()->numSelected();
+    nb += m_activePage->masterPage()->numSelected();
     return nb;
 }
 
@@ -5294,7 +5295,7 @@ KPObject *KPrCanvas::getSelectedObj() const
     KPObject *obj=activePage()->getSelectedObj();
     if(obj)
         return obj;
-    obj=stickyPage()->getSelectedObj();
+    obj = m_activePage->masterPage()->getSelectedObj();
     return obj;
 }
 
@@ -5302,7 +5303,7 @@ int KPrCanvas::getPenBrushFlags() const
 {
     int flags=0;
     flags=activePage()->getPenBrushFlags(activePage()->objectList());
-    flags=flags |stickyPage()->getPenBrushFlags(stickyPage()->objectList());
+    flags = flags | m_activePage->masterPage()->getPenBrushFlags( m_activePage->masterPage()->objectList() );
     if(flags==0)
         flags = StyleDia::SdAll;
     return flags;
@@ -5312,7 +5313,7 @@ void KPrCanvas::ungroupObjects()
 {
     KMacroCommand *macro = 0;
     m_activePage->ungroupObjects( &macro );
-    stickyPage()->ungroupObjects( &macro );
+    m_activePage->masterPage()->ungroupObjects( &macro );
     if ( macro )
         m_view->kPresenterDoc()->addCommand( macro );
 }
@@ -5320,12 +5321,7 @@ void KPrCanvas::ungroupObjects()
 void KPrCanvas::groupObjects()
 {
     m_activePage->groupObjects();
-    stickyPage()->groupObjects();
-}
-
-KPrPage *KPrCanvas::stickyPage() const
-{
-    return m_view->kPresenterDoc()->stickyPage();
+    m_activePage->masterPage()->groupObjects();
 }
 
 void KPrCanvas::scrollTopLeftPoint( const QPoint & pos )
@@ -5375,12 +5371,12 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
 void KPrCanvas::changePicture( const KURL & url, QWidget *window )
 {
     m_activePage->changePicture( url, window );
-    stickyPage()->changePicture( url, window );
+    m_activePage->masterPage()->changePicture( url, window );
 }
 
 unsigned int KPrCanvas::objNums() const
 {
-    return (m_activePage->objNums() + stickyPage()->objNums());
+    return ( m_activePage->objNums() + m_activePage->masterPage()->objNums() );
 }
 
 void KPrCanvas::moveHelpLine( const QPoint & pos)
@@ -5650,7 +5646,7 @@ void KPrCanvas::flipObject( bool _horizontal )
         }
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() &&
              it.current()->getType() != OT_AUTOFORM &&
@@ -5682,7 +5678,7 @@ KCommand *KPrCanvas::setKeepRatioObj( bool p )
         }
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() )
         {
@@ -5711,7 +5707,7 @@ KCommand *KPrCanvas::setProtectSizeObj(bool protect)
         }
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() )
         {
@@ -5733,7 +5729,7 @@ KoRect KPrCanvas::zoomAllObject()
     KoRect objBoundingRect=KoRect();
 
     objBoundingRect = m_activePage->getBoundingAllObjectRect( objBoundingRect);
-    objBoundingRect = stickyPage()->getBoundingAllObjectRect( objBoundingRect);
+    objBoundingRect = m_activePage->masterPage()->getBoundingAllObjectRect( objBoundingRect);
     return objBoundingRect;
 }
 
@@ -5746,7 +5742,7 @@ QPtrList<KPTextObject> KPrCanvas::listOfTextObjs() const
             lst.append( static_cast<KPTextObject*>( it.current() ) );
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
         {
@@ -5846,7 +5842,7 @@ void KPrCanvas::alignObjects( AlignType at )
     QPtrList<KPObject> objects;
     for ( int i = 0; i < 2; ++i )
     {
-        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : stickyPage()->objectList() );
+        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : m_activePage->masterPage()->objectList() );
         for ( ; it.current() ; ++it )
         {
             if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -5869,7 +5865,7 @@ void KPrCanvas::alignObjects( AlignType at )
 
 bool KPrCanvas::canMoveOneObject() const
 {
-    return (m_activePage->canMoveOneObject() || stickyPage()->canMoveOneObject());
+    return ( m_activePage->canMoveOneObject() || m_activePage->masterPage()->canMoveOneObject() );
 }
 
 void KPrCanvas::rectSymetricalObjet()
@@ -5887,7 +5883,7 @@ bool KPrCanvas::getSticky( bool sticky ) const
     bool result =m_activePage->getSticky( sticky );
     if ( result != sticky)
         return result;
-    return stickyPage()->getSticky( sticky );
+    return m_activePage->masterPage()->getSticky( sticky );
 }
 
 bool KPrCanvas::getProtect( bool prot ) const
@@ -5895,7 +5891,7 @@ bool KPrCanvas::getProtect( bool prot ) const
     bool result =m_activePage->getProtect( prot );
     if ( result != prot)
         return result;
-    return stickyPage()->getProtect( prot );
+    return m_activePage->masterPage()->getProtect( prot );
 }
 
 bool KPrCanvas::differentProtect( bool p )const
@@ -5903,7 +5899,7 @@ bool KPrCanvas::differentProtect( bool p )const
     bool result = m_activePage->differentProtect( p );
     if ( result )
         return true;
-    return stickyPage()->differentProtect( p );
+    return m_activePage->masterPage()->differentProtect( p );
 }
 
 bool KPrCanvas::getKeepRatio( bool _ratio ) const
@@ -5911,7 +5907,7 @@ bool KPrCanvas::getKeepRatio( bool _ratio ) const
     bool result =m_activePage->getKeepRatio( _ratio );
     if ( result != _ratio)
         return result;
-    return stickyPage()->getKeepRatio( _ratio );
+    return m_activePage->masterPage()->getKeepRatio( _ratio );
 }
 
 bool KPrCanvas::differentKeepRatio( bool p )const
@@ -5919,7 +5915,7 @@ bool KPrCanvas::differentKeepRatio( bool p )const
     bool result = m_activePage->differentKeepRatio( p );
     if ( result )
         return true;
-    return stickyPage()->differentKeepRatio( p );
+    return m_activePage->masterPage()->differentKeepRatio( p );
 }
 
 QPen KPrCanvas::getPen( const QPen & _pen )const
@@ -5927,7 +5923,7 @@ QPen KPrCanvas::getPen( const QPen & _pen )const
     QPen pen = m_activePage->getPen( _pen );
     if ( pen != _pen )
         return pen;
-    return stickyPage()->getPen( _pen);
+    return m_activePage->masterPage()->getPen( _pen );
 }
 
 QBrush KPrCanvas::getBrush( const QBrush & _brush )const
@@ -5935,7 +5931,7 @@ QBrush KPrCanvas::getBrush( const QBrush & _brush )const
     QBrush brush = m_activePage->getBrush( _brush );
     if ( brush != _brush )
         return brush;
-    return stickyPage()->getBrush( _brush);
+    return m_activePage->masterPage()->getBrush( _brush );
 }
 
 LineEnd KPrCanvas::getLineBegin( LineEnd  _end )const
@@ -5943,7 +5939,7 @@ LineEnd KPrCanvas::getLineBegin( LineEnd  _end )const
     LineEnd end = m_activePage->getLineBegin( _end );
     if ( end != _end )
         return end;
-    return stickyPage()->getLineBegin( _end);
+    return m_activePage->masterPage()->getLineBegin( _end );
 }
 
 LineEnd KPrCanvas::getLineEnd( LineEnd  _end )const
@@ -5951,7 +5947,7 @@ LineEnd KPrCanvas::getLineEnd( LineEnd  _end )const
     LineEnd end = m_activePage->getLineEnd( _end );
     if ( end != _end )
         return end;
-    return stickyPage()->getLineEnd( _end);
+    return m_activePage->masterPage()->getLineEnd( _end );
 }
 
 FillType KPrCanvas::getFillType( FillType _fillType ) const
@@ -5959,7 +5955,7 @@ FillType KPrCanvas::getFillType( FillType _fillType ) const
     FillType fill = m_activePage->getFillType( _fillType );
     if ( fill != _fillType )
         return fill;
-    return stickyPage()->getFillType( _fillType);
+    return m_activePage->masterPage()->getFillType( _fillType );
 
 }
 
@@ -5968,7 +5964,7 @@ QColor KPrCanvas::getGColor1( const QColor & _col )const
     QColor col = m_activePage->getGColor1( _col );
     if ( col != _col )
         return col;
-    return stickyPage()->getGColor1( _col);
+    return m_activePage->masterPage()->getGColor1( _col );
 }
 
 QColor KPrCanvas::getGColor2( const QColor & _col )const
@@ -5976,7 +5972,7 @@ QColor KPrCanvas::getGColor2( const QColor & _col )const
     QColor col = m_activePage->getGColor2( _col );
     if ( col != _col )
         return col;
-    return stickyPage()->getGColor2( _col);
+    return m_activePage->masterPage()->getGColor2( _col );
 }
 
 BCType KPrCanvas::getGType( BCType _gt )const
@@ -5984,7 +5980,7 @@ BCType KPrCanvas::getGType( BCType _gt )const
     BCType type = m_activePage->getGType( _gt );
     if ( type != _gt )
         return type;
-    return stickyPage()->getGType( _gt);
+    return m_activePage->masterPage()->getGType( _gt );
 }
 
 bool KPrCanvas::getGUnbalanced( bool _g )const
@@ -5992,7 +5988,7 @@ bool KPrCanvas::getGUnbalanced( bool _g )const
     bool type= m_activePage->getGUnbalanced( _g );
     if ( type != _g )
         return type;
-    return stickyPage()->getGUnbalanced( _g);
+    return m_activePage->masterPage()->getGUnbalanced( _g );
 }
 
 int KPrCanvas::getGXFactor( int _g )const
@@ -6000,7 +5996,7 @@ int KPrCanvas::getGXFactor( int _g )const
     int type= m_activePage->getGXFactor( _g );
     if ( type != _g )
         return type;
-    return stickyPage()->getGXFactor( _g);
+    return m_activePage->masterPage()->getGXFactor( _g );
 }
 
 int KPrCanvas::getGYFactor( int _g )const
@@ -6008,7 +6004,7 @@ int KPrCanvas::getGYFactor( int _g )const
     int type= m_activePage->getGYFactor( _g );
     if ( type != _g )
         return type;
-    return stickyPage()->getGYFactor( _g);
+    return m_activePage->masterPage()->getGYFactor( _g );
 }
 
 int KPrCanvas::getRndY( int _ry )const
@@ -6016,7 +6012,7 @@ int KPrCanvas::getRndY( int _ry )const
     int value = m_activePage->getRndY(_ry);
     if (value != _ry)
         return value;
-    return stickyPage()->getRndY(_ry);
+    return m_activePage->masterPage()->getRndY( _ry );
 }
 
 int KPrCanvas::getRndX( int _rx )const
@@ -6024,7 +6020,7 @@ int KPrCanvas::getRndX( int _rx )const
     int value = m_activePage->getRndX(_rx);
     if (value != _rx)
         return value;
-    return stickyPage()->getRndX(_rx);
+    return m_activePage->masterPage()->getRndX( _rx );
 }
 
 int KPrCanvas::getPieAngle( int pieAngle )const
@@ -6032,7 +6028,7 @@ int KPrCanvas::getPieAngle( int pieAngle )const
     int value = m_activePage->getPieAngle(pieAngle);
     if (value != pieAngle)
         return value;
-    return stickyPage()->getPieAngle(pieAngle);
+    return m_activePage->masterPage()->getPieAngle( pieAngle );
 }
 
 int KPrCanvas::getPieLength( int pieLength )const
@@ -6040,7 +6036,7 @@ int KPrCanvas::getPieLength( int pieLength )const
     int value = m_activePage->getPieLength(pieLength);
     if (value != pieLength)
         return value;
-    return stickyPage()->getPieLength(pieLength);
+    return m_activePage->masterPage()->getPieLength( pieLength );
 }
 
 PieType KPrCanvas::getPieType( PieType pieType )const
@@ -6048,7 +6044,7 @@ PieType KPrCanvas::getPieType( PieType pieType )const
     PieType type = m_activePage->getPieType(pieType);
     if (type != pieType)
         return type;
-    return stickyPage()->getPieType(pieType);
+    return m_activePage->masterPage()->getPieType( pieType );
 }
 
 bool KPrCanvas::getCheckConcavePolygon( bool check ) const
@@ -6056,7 +6052,7 @@ bool KPrCanvas::getCheckConcavePolygon( bool check ) const
     bool value = m_activePage->getCheckConcavePolygon(check);
     if (value != check)
         return value;
-    return stickyPage()->getCheckConcavePolygon(check);
+    return m_activePage->masterPage()->getCheckConcavePolygon( check );
 }
 
 int KPrCanvas::getCornersValue( int corners ) const
@@ -6064,7 +6060,7 @@ int KPrCanvas::getCornersValue( int corners ) const
     int value = m_activePage->getCornersValue(corners);
     if (value != corners)
         return value;
-    return stickyPage()->getCornersValue(corners);
+    return m_activePage->masterPage()->getCornersValue( corners );
 }
 
 int KPrCanvas::getSharpnessValue( int sharpness ) const
@@ -6072,7 +6068,7 @@ int KPrCanvas::getSharpnessValue( int sharpness ) const
     int value = m_activePage->getSharpnessValue(sharpness);
     if (value != sharpness)
         return value;
-    return stickyPage()->getSharpnessValue(sharpness);
+    return m_activePage->masterPage()->getSharpnessValue( sharpness );
 }
 
 PictureMirrorType KPrCanvas::getPictureMirrorType( PictureMirrorType type ) const
@@ -6080,7 +6076,7 @@ PictureMirrorType KPrCanvas::getPictureMirrorType( PictureMirrorType type ) cons
     PictureMirrorType value = m_activePage->getPictureMirrorType(type);
     if (value != type)
         return value;
-    return stickyPage()->getPictureMirrorType(type);
+    return m_activePage->masterPage()->getPictureMirrorType( type );
 }
 
 int KPrCanvas::getPictureDepth( int depth ) const
@@ -6088,7 +6084,7 @@ int KPrCanvas::getPictureDepth( int depth ) const
     int value = m_activePage->getPictureDepth(depth);
     if (value != depth)
         return value;
-    return stickyPage()->getPictureDepth(depth);
+    return m_activePage->masterPage()->getPictureDepth( depth );
 }
 
 bool KPrCanvas::getPictureSwapRGB( bool swapRGB ) const
@@ -6096,7 +6092,7 @@ bool KPrCanvas::getPictureSwapRGB( bool swapRGB ) const
     bool value = m_activePage->getPictureSwapRGB(swapRGB);
     if (value != swapRGB)
         return value;
-    return stickyPage()->getPictureSwapRGB(swapRGB);
+    return m_activePage->masterPage()->getPictureSwapRGB( swapRGB );
 }
 
 bool KPrCanvas::getPictureGrayscal( bool grayscal ) const
@@ -6104,7 +6100,7 @@ bool KPrCanvas::getPictureGrayscal( bool grayscal ) const
     bool value = m_activePage->getPictureGrayscal(grayscal);
     if (value != grayscal)
         return value;
-    return stickyPage()->getPictureGrayscal(grayscal);
+    return m_activePage->masterPage()->getPictureGrayscal( grayscal );
 }
 
 int KPrCanvas::getPictureBright( int bright ) const
@@ -6112,7 +6108,7 @@ int KPrCanvas::getPictureBright( int bright ) const
     int value = m_activePage->getPictureBright(bright);
     if (value != bright)
         return value;
-    return stickyPage()->getPictureBright(bright);
+    return m_activePage->masterPage()->getPictureBright( bright );
 }
 
 QPixmap KPrCanvas::getPicturePixmap() const
@@ -6120,7 +6116,7 @@ QPixmap KPrCanvas::getPicturePixmap() const
     QPixmap pixmap = m_activePage->getPicturePixmap();
     if (!pixmap.isNull())
         return pixmap;
-    return stickyPage()->getPicturePixmap();
+    return m_activePage->masterPage()->getPicturePixmap();
 }
 
 KCommand *KPrCanvas::setProtectContent( bool b )
@@ -6141,7 +6137,7 @@ KCommand *KPrCanvas::setProtectContent( bool b )
         }
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType()==OT_TEXT)
         {
@@ -6162,7 +6158,7 @@ bool KPrCanvas::getProtectContent(bool prot) const
     bool result =m_activePage->getProtectContent(prot);
     if ( result != prot)
         return result;
-    return stickyPage()->getProtectContent( prot );
+    return m_activePage->masterPage()->getProtectContent( prot );
 }
 
 void KPrCanvas::closeObject(bool /*close*/)
@@ -6177,7 +6173,7 @@ void KPrCanvas::closeObject(bool /*close*/)
             lst.append( it.current()  );
     }
     //get sticky obj
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected()
              && (it.current()->getType() == OT_POLYLINE ||it.current()->getType() == OT_FREEHAND
@@ -6205,7 +6201,7 @@ void KPrCanvas::layout()
         if ( it.current()->getType() == OT_TEXT )
             static_cast<KPTextObject *>( it.current() )->layout();
     }
-    it=stickyPage()->objectList();
+    it = m_activePage->masterPage()->objectList();
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
             static_cast<KPTextObject *>( it.current() )->layout();
@@ -6264,7 +6260,7 @@ void KPrCanvas::alignVertical( VerticalAlignmentType _type )
             macro = new KMacroCommand( i18n("Change Vertical Alignment"));
         macro->addCommand(cmd );
     }
-    cmd = stickyPage()->alignVertical( _type );
+    cmd = m_activePage->masterPage()->alignVertical( _type );
     if ( cmd )
     {
         if ( !macro )
@@ -6282,7 +6278,7 @@ ImageEffect KPrCanvas::getImageEffect(ImageEffect eff) const
     ImageEffect value = m_activePage->getImageEffect(eff);
     if (value != eff)
         return value;
-    return stickyPage()->getImageEffect(eff);
+    return m_activePage->masterPage()->getImageEffect(eff);
 }
 
 KPPixmapObject * KPrCanvas::getSelectedImage() const
@@ -6290,7 +6286,7 @@ KPPixmapObject * KPrCanvas::getSelectedImage() const
     KPPixmapObject *obj=activePage()->getSelectedImage();
     if(obj)
         return obj;
-    obj=stickyPage()->getSelectedImage();
+    obj = m_activePage->masterPage()->getSelectedImage();
     return obj;
 }
 
