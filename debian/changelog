@@ -1,3 +1,10 @@
+koffice (1:1.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added conflicts for koffice-doc-html.
+
+ -- Ben Burton <benb@acm.org>  Wed, 28 Nov 2001 21:06:41 -0600
+
 koffice (1:1.1.0-final-7) unstable; urgency=low
 
   * Uses automake again to solve new alpha problems.

@@ -21,7 +21,7 @@ Package: koffice-doc-html
 Architecture: all
 Section: doc
 Suggests: www-browser, koffice
-Conflicts: kugar (<< 1:1.1.0-0)
+Conflicts: koffice-libs (<< 1:1.1.0-0), kontour (<< 1:1.1.0-0), koshell (<< 1:1.1.0-0), kpresenter (<< 1:1.1.0-0), kspread (<< 1:1.1.0-0), kugar (<< 1:1.1.0-0), kword (<< 1:1.1.0-0)
 Description: KDE Office Suite documentation in HTML format
  KOffice is an integrated office suite for KDE, the K Desktop
  Environment.  It offers a word processor, spreadsheet, presentation
