@@ -197,9 +197,8 @@ void TabBar::scrollLast()
 
 void TabBar::setActiveTab( int a )
 {
-// GPage *page = doc->getPages().take(a-1);
+ doc->setActivePage(a-1);
  
- activeTab = a;
  update();
  /* int i = tabsList.findIndex( _text );
   if ( i == -1 )
@@ -437,6 +436,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     if ( activeTab != old_active )
     {
+    setActiveTab(activeTab);
         repaint( false );
         emit tabChanged( activeTab );
     }

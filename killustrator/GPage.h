@@ -145,6 +145,8 @@ public:
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
 
+   void emitHandleChanged();
+
 protected:
   void updateHandle ();
   bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);

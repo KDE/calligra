@@ -128,6 +128,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     setXMLFile( "KIllustrator.rc" );
     kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl;
     canvas->docSizeChanged();
+    connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
 }
 
 KIllustratorView::~KIllustratorView()

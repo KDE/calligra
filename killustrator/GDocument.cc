@@ -61,7 +61,7 @@
 #define LAYER_PRINTABLE 4
 
 GDocument::GDocument (KIllustratorDocument *_doc)
-:doc(_doc),selHandle(this)
+:doc(_doc)
 {
   initialize ();
 }
@@ -83,7 +83,8 @@ void GDocument::initialize ()
   pages.clear ();
 
   active_page = addPage();
-  active_page->setName("list1");
+  active_page->setName(i18n("Page %1").arg(1));
+  curPageNum = 2;
   
   autoUpdate = true;
   emit changed ();
@@ -113,10 +114,18 @@ void GDocument::setActivePage (GPage *page)
   }
 }
 
+void GDocument::setActivePage (int i)
+{
+  active_page = pages.at(i);
+  emit pageChanged();
+}
+
 GPage *GDocument::addPage ()
 {
   GPage *aPage = new GPage (this);
   pages.append(aPage);
+  aPage->setName(i18n("Page %1").arg(curPageNum));
+  curPageNum++;
   return aPage;
 }
 
@@ -145,15 +154,9 @@ void GDocument::setAutoUpdate (bool flag) {
   autoUpdate = flag;
   if (autoUpdate) {
     selBoxIsValid = false;
-//    updateHandle ();
     emit changed ();
   }
 }
-
-void GDocument::emitHandleChanged()
-{
-   emit handleChanged();
-};
 
 void GDocument::setModified (bool flag)
 {
@@ -206,17 +209,6 @@ QDomDocument GDocument::saveToXml ()
     }
     setModified (false);
     return document;
-}
-
-bool GDocument::insertFromXml (const QDomDocument& /*document*/, QList<GObject>& /*newObjs*/)
-{
-/*    if ( document.doctype().name() != "killustrator" )
-        return false;
-    QDomElement doc = document.documentElement();
-
-    if ( doc.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
-        return false;*/
-    return false;// parseBody (doc, newObjs, true);
 }
 
 bool GDocument::readFromXml (const  QDomDocument &document)

@@ -4,6 +4,7 @@
 
   This file is part of KIllustrator.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -30,7 +31,7 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
-#include <Handle.h>
+#include "Coord.h"
 
 #define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
 
@@ -70,6 +71,7 @@ public:
 
   // set the active page
   void setActivePage (GPage *page);
+  void setActivePage (int i);
 
   // add a new page
   GPage *addPage ();
@@ -82,9 +84,6 @@ public:
 
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
-  bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
-
-  Handle& handle () { return selHandle; }
 
 //  Grid, Helplines
   void setGrid (float dx, float dy, bool snap);
@@ -96,19 +95,11 @@ public:
   void getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
                      bool& snap);
 
-
-
-  void emitHandleChanged();
-
-protected:
-  void updateHandle ();
-  bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
-
 public slots:
   void helplineStatusChanged ();
 
 signals:
-  void handleChanged();
+  void pageChanged();
   void changed ();
   void changed (const Rect& r);
   void selectionChanged ();
@@ -119,14 +110,14 @@ signals:
 
 protected:
   KIllustratorDocument *doc;
-  
+
+  int curPageNum;
   bool autoUpdate;
   bool modifyFlag; 
   QString filename;
   int paperWidth, paperHeight; // pt
   QList<GPage> pages; // the array of all pages
   GPage *active_page;     // the current page
-  Handle selHandle;
   Rect selBox;
   bool selBoxIsValid;
   bool snapToGrid, snapToHelplines;

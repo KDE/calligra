@@ -177,7 +177,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   ctype = C_Arrow;
   Handle::Mode mode = Handle::HMode_Default;
 
-  doc->handle ().show (true);
+  doc->activePage()->handle ().show (true);
   float xpos = me->x (), ypos = me->y ();
 
   /**********
@@ -276,7 +276,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
    */
   else if (state == S_MoveRotCenter) {
     state = S_RotateSelect;
-    rotCenter = doc->handle().rotCenter ();
+    rotCenter = doc->activePage()->handle().rotCenter ();
     return;
   }
   /**********
@@ -289,7 +289,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     }
     else
       state = S_Pick;
-    //    doc->handle ().setMode (Handle::HMode_Default);
+    //    doc->activePage()->handle ().setMode (Handle::HMode_Default);
   }
   doc->activePage()->handle ().setMode (mode, true);
   if (doc->activePage()->selectionIsEmpty ())
@@ -376,7 +376,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      */
     if (state == S_Pick)
     {
-      hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
+      hmask = doc->activePage()->handle ().contains (Coord (me->x (), me->y ()));
       if (hmask && hmask != Handle::HPos_Center)
       {
          if (ctype != C_Size)
@@ -428,7 +428,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      */
     else if (state == S_Intermediate1) {
        if (me->state () & Qt::LeftButton) {
-        //      hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
+        //      hmask = doc->activePage()->handle ().contains (Coord (me->x (), me->y ()));
         if (ctype == C_Size)
           state = S_Scale;
         else
@@ -439,14 +439,14 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      * S_MoveRotCenter
      */
     else if (state == S_MoveRotCenter) {
-      doc->handle ().setRotCenter (Coord (me->x (), me->y ()));
+      doc->activePage()->handle ().setRotCenter (Coord (me->x (), me->y ()));
       return;
     }
     /**********
      * S_Rotate
      */
     else if (state == S_RotateSelect || state == S_Rotate) {
-      hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
+      hmask = doc->activePage()->handle ().contains (Coord (me->x (), me->y ()));
       if (hmask)
       {
          if (ctype != C_Size)
@@ -495,7 +495,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       float xoff = xpos - firstpos.x ();
       float yoff = ypos - firstpos.y ();
 
-      doc->handle ().show (false);
+      doc->activePage()->handle ().show (false);
 
       switch (state) {
       case S_Scale:
@@ -567,7 +567,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   firstpos.x (xpos);
   firstpos.y (ypos);
 
-  hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
+  hmask = doc->activePage()->handle ().contains (Coord (me->x (), me->y ()));
   bool shiftFlag = me->state () & Qt::ShiftButton;
 
   if (state == S_Inactive)

@@ -282,7 +282,7 @@ void EditPointTool::activate (GDocument* doc, Canvas* canvas)
    m_toolController->emitModeSelected (m_id,i18n ("Edit Point"));
    if (! doc->activePage()->selectionIsEmpty ())
    {
-      doc->handle().show (false);
+      doc->activePage()->handle().show (false);
       // redraw with highlighted points
       canvas->showBasePoints (true);
    }
@@ -291,7 +291,7 @@ void EditPointTool::activate (GDocument* doc, Canvas* canvas)
 
 void EditPointTool::deactivate (GDocument* doc, Canvas* canvas) {
   if (!doc->activePage()->selectionIsEmpty ()) {
-    doc->handle ().show (true);
+    doc->activePage()->handle ().show (true);
     // redraw with unhighlighted points
     canvas->showBasePoints (false);
   }

@@ -27,6 +27,7 @@
 #include <qpainter.h>
 #include <qnamespace.h>
 #include "GDocument.h"
+#include "GPage.h"
 
 Handle::Handle (GDocument* parent)
 :m_parentDoc(parent)
@@ -59,7 +60,7 @@ void Handle::setBox (const Rect& r) {
 
 void Handle::setRotCenter (const Coord& p) {
   rcenter = p;
-  m_parentDoc->emitHandleChanged();
+  m_parentDoc->activePage()->emitHandleChanged();
 }
 
 void Handle::draw (QPainter& p) {
@@ -162,7 +163,7 @@ void Handle::setMode (Handle::Mode m, bool propagate)
    if (mode != m || propagate)
    {
       mode = m;
-      m_parentDoc->emitHandleChanged();
+      m_parentDoc->activePage()->emitHandleChanged();
    }
 }
 

@@ -139,6 +139,11 @@ void GPage::setName(QString aName)
  mName = aName;
 }
 
+void GPage::emitHandleChanged()
+{
+  emit handleChanged();
+}
+
 void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
@@ -534,6 +539,8 @@ QDomElement GPage::saveToXml (QDomDocument &document)
     "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"};
   static const char* orientations[] = {"portrait", "landscape"};
 
+  kdDebug(0) << "Page saving...\n";
+
   QDomElement page = document.createElement("page");;
 
   QDomElement layout = document.createElement("layout");
@@ -658,6 +665,8 @@ bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, 
 bool GPage::readFromXml (const QDomElement &page)
 {
   setAutoUpdate (false);
+
+  kdDebug(0) << "Page reading...\n";
 
   QDomElement layout=page.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
