@@ -31,6 +31,10 @@ template <class type> class QPtrList;
 
 class KAction;
 
+namespace KFormEditor {
+	class WidgetContainer;
+}
+
 class KexiFormBase : public KexiDialogBase
 {
 
@@ -52,10 +56,12 @@ class KexiFormBase : public KexiDialogBase
 		class ViewGUIClient;
 		friend class ViewGUIClient;
 		static ViewGUIClient *m_viewGUIClient;
+		KFormEditor::WidgetContainer *topLevelEditor;
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
 		void slotWidgetURLRequester();
+		void slotWidgetFrame();
 		
 };
 

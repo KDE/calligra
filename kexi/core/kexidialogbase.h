@@ -40,6 +40,8 @@ class KexiDialogBase : public QWidget
 		virtual void activateActions();
 		virtual void deactivateActions();
 		KexiMainWindow *mainWindow(){return m_mainWindow;};
+		
+		static KexiDialogBase *activeDocumentView() { return s_activeDocumentWindow;};
 	signals:
 		void closing(KexiDialogBase *);
 	

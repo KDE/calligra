@@ -21,7 +21,7 @@ class KexiWorkspaceSDI : public KStatusBar, public KexiWorkspace
 		
 		virtual unsigned int count() { return no; };
 
-                virtual KexiDialogBase * activeDocumentView(){return 0;}
+                virtual KexiDialogBase * activeDocumentView(){KexiDialogBase::activeDocumentView();}
 
 	protected:
 		unsigned int no;

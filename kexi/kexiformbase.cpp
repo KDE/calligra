@@ -43,6 +43,7 @@
 #include "kexiformbase.h"
 #include "keximainwindow.h"
 #include "formeditor/widgetcontainer.h"
+#include "formeditor/container_frame.h"
 
 class KexiFormBase::EditGUIClient: public KXMLGUIClient
 {
@@ -60,6 +61,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 
 		        m_urlreq = new KAction(i18n("URL Request"), "button",
 		                Key_F7, actionCollection(), "widget_url_requester");
+
+		        m_frame = new KAction(i18n("Frame"), "lineedit",
+		                Key_F8, actionCollection(), "widget_frame");
 			setXMLFile("kexiformeditorui.rc");
 		}
 		virtual ~EditGUIClient(){;}
@@ -69,12 +73,14 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			connect(m_lineedit,SIGNAL(activated()),o,SLOT(slotWidgetLineEdit()));
 			connect(m_button,SIGNAL(activated()),o,SLOT(slotWidgetPushButton()));
 			connect(m_urlreq,SIGNAL(activated()),o,SLOT(slotWidgetURLRequester()));
+			connect(m_frame,SIGNAL(activated()),o,SLOT(slotWidgetFrame()));
 		}
 		void deactivate(QObject* o)
 		{
 			m_lineedit->disconnect(o);
 			m_button->disconnect(o);
 			m_urlreq->disconnect(o);
+			m_frame->disconnect(o);
 		}
 	private:
 	KToggleAction *m_formMode;
@@ -82,6 +88,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	KAction *m_lineedit;
 	KAction *m_button;
 	KAction *m_urlreq;
+	KAction *m_frame;
 };
 
 class KexiFormBase::ViewGUIClient: public KXMLGUIClient
@@ -132,11 +139,11 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
-	new KFormEditor::WidgetContainer(this,"foo","bar");
+	topLevelEditor=new KFormEditor::WidgetContainer(this,"foo","bar");
 
 
-	mainWindow()->guiFactory()->addClient(guiClient());
-	activateActions();
+//	mainWindow()->guiFactory()->addClient(guiClient());
+//	activateActions();
 	registerAs(DocumentWindow);
 }
 
@@ -161,27 +168,23 @@ void KexiFormBase::deactivateActions()
 
 void KexiFormBase::slotWidgetLineEdit()
 {
-#if 0
 	kdDebug() << "add line edit widget at " << this << endl;
-	m_pendingWidget = new KLineEdit(this);
-	m_widgetRectRequested = true;
-#endif
+	topLevelEditor->addInteractive(new KLineEdit(topLevelEditor));
 }
 
 void KexiFormBase::slotWidgetPushButton()
 {
-#if 0
-	m_pendingWidget = new QPushButton("push button", this);
-	m_widgetRectRequested = true;
-#endif
+	topLevelEditor->addInteractive(new QPushButton("push button",topLevelEditor));
+}
+
+void KexiFormBase::slotWidgetFrame()
+{
+	topLevelEditor->addInteractive(new KFormEditor::container_Frame(topLevelEditor,"frame"));
 }
 
 void KexiFormBase::slotWidgetURLRequester()
 {
-#if 0
-	m_pendingWidget = new KURLRequester("urlrequest", this);
-	m_widgetRectRequested = true;
-#endif
+	topLevelEditor->addInteractive(new KURLRequester("urlrequest",topLevelEditor));
 }
 
 KexiFormBase::~KexiFormBase(){

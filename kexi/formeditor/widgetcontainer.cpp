@@ -33,6 +33,7 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qpushbutton.h>
+#include <qapplication.h>
 #include <qtimer.h>
 #include <kurlrequester.h>
 
@@ -40,21 +41,17 @@
 
 #include "widgetcontainer.h"
 #include "resizehandle.h"
+#include "containerIface.h"
 
 namespace KFormEditor {
 
 	WidgetContainer::WidgetContainer(QWidget *parent, const char *name, QString identifier)
 	: QWidget(parent,name)
 	{
+		m_topLevelContainer=0;
 		setMinimumWidth(50);
 		setMinimumHeight(50);
 
-	
-		setCaption(i18n("%1 [Edit Mode]").arg(identifier));
-
-		KIconLoader *iloader = KGlobal::iconLoader();
-		setIcon(iloader->loadIcon("form", KIcon::Small));
-	
 		m_dotSpacing = dotSpacing();
 
 		resize( 250, 250 );
@@ -69,31 +66,34 @@ namespace KFormEditor {
 
 	}
 
+        void WidgetContainer::setTopLevelContainer(WidgetContainer *tpc)
+	{
+		if (!m_topLevelContainer) {
+			m_topLevelContainer=tpc;
+		}
+	}
+                        
+	WidgetContainer *WidgetContainer::topLevelContainer()
+	{
+		return m_topLevelContainer;
+	}
+
 	int WidgetContainer::dotSpacing()
 	{ 
 		return 10;
 	}
 
-	void WidgetContainer::slotWidgetLineEdit()
+	void WidgetContainer::addInteractive(QWidget *widget)
 	{
-		kdDebug() << "add line edit widget at " << this << endl;
-		m_pendingWidget = new KLineEdit(this);
-		m_widgetRectRequested = true;
+		m_pendingWidget=widget;
+		m_widgetRectRequested=true;
 	}
 
-	void WidgetContainer::slotWidgetPushButton()
-	{
-		m_pendingWidget = new QPushButton("push button", this);
-		m_widgetRectRequested = true;
+        void WidgetContainer::registerSubContainer(WidgetContainer *cont) {
+		cont->setTopLevelContainer((m_topLevelContainer==0)?this:m_topLevelContainer);
 	}
 
-	void WidgetContainer::slotWidgetURLRequester()
-	{
-		m_pendingWidget = new KURLRequester("urlrequest", this);
-		m_widgetRectRequested = true;
-	}
-
-	void WidgetContainer::mouseMoveEvent(QMouseEvent *ev)
+	void WidgetContainer::mousePressEvent(QMouseEvent *ev)
 	{
 		if(m_widgetRectRequested)
 		{
@@ -105,8 +105,12 @@ namespace KFormEditor {
 			m_widgetRectEX = m_widgetRectBX;
 			m_widgetRectEY = m_widgetRectBY;
 			m_widgetRectRequested = false;
-		}
+		} else
+		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
+	}
 
+	void WidgetContainer::mouseMoveEvent(QMouseEvent *ev)
+	{
 		if(m_widgetRect)
 		{
         	        m_widgetRectEX = (((float)ev->x())/((float)m_dotSpacing)+0.5);
@@ -114,7 +118,8 @@ namespace KFormEditor {
 	                m_widgetRectEY = (((float)ev->y())/((float)m_dotSpacing)+0.5);
 			m_widgetRectEY*=m_dotSpacing;
 			repaint();
-		}
+		} else
+		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
 	}
 
 	void WidgetContainer::resizeEvent(QResizeEvent *ev)
@@ -170,7 +175,10 @@ namespace KFormEditor {
 			{
 				++it;
 				if (obj1->isWidgetType())
-			    	installEventFilterRecursive(obj1);
+				{
+					if (obj1->qt_cast("KFormEditor::WidgetContainer")) continue;
+				    	installEventFilterRecursive(obj1);
+				}
 	            	}
 	        }
 
@@ -178,22 +186,40 @@ namespace KFormEditor {
 
 	void WidgetContainer::mouseReleaseEvent(QMouseEvent *ev)
 	{
-		if(m_widgetRect)
-		{
+		if(m_widgetRect) {
+
+			int widgetwidth=m_widgetRectEX-m_widgetRectBX;
+			if (widgetwidth<0) {
+				m_widgetRectBX += widgetwidth;
+				widgetwidth=-widgetwidth;
+			}
+
+			int widgetheight=m_widgetRectEY-m_widgetRectBY;
+			if (widgetheight<0) {
+				m_widgetRectBY += widgetheight;
+				widgetheight=-widgetheight;
+			}
+
 			insertWidget(m_pendingWidget, m_widgetRectBX, m_widgetRectBY,
-				m_widgetRectEX-m_widgetRectBX, m_widgetRectEY-m_widgetRectBY);
+				widgetwidth,widgetheight);
 			m_widgetRectBX = 0;
 			m_widgetRectBY = 0;
 			m_widgetRectEX = 0;
 			m_widgetRectEY = 0;
 
 			installEventFilterRecursive(m_pendingWidget);
+			if (m_pendingWidget->qt_cast("KFormEditor::containerIface")) {
+				static_cast<containerIface*>(m_pendingWidget->qt_cast("KFormEditor::containerIface"))
+					->registerContainers(this);
+			}
 
 			m_widgetRect = false;
 
 
 			repaint();
-		}
+		} else
+		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
+
 	}
 
 	void WidgetContainer::insertWidget(QWidget *widget, int x, int y, int w, int h)

@@ -44,9 +44,16 @@ namespace KFormEditor
 			~WidgetContainer();
 		
 			static int dotSpacing();
+
+			void addInteractive(QWidget *widget);
+			void registerSubContainer(WidgetContainer *cont);
+			
 		protected:
+			void setTopLevelContainer(WidgetContainer *tpc);
+			WidgetContainer *topLevelContainer();
 			void paintEvent(QPaintEvent *ev);
 			void mouseMoveEvent(QMouseEvent *ev);
+			void mousePressEvent(QMouseEvent *ev);
 			void mouseReleaseEvent(QMouseEvent *ev);
 			void resizeEvent(QResizeEvent *ev);
 			
@@ -76,13 +83,13 @@ namespace KFormEditor
 			QWidget *m_activeWidget;
 			QWidget *m_activeMoveWidget;
 			ResizeHandleSet *m_resizeHandleSet;
+			WidgetContainer *m_topLevelContainer;
 
 		protected slots:
-			void slotWidgetLineEdit();
-			void slotWidgetPushButton();
-			void slotWidgetURLRequester();
-		
 			bool eventFilter(QObject *obj, QEvent *ev);
+
+		public:
+			QPtrList<WidgetContainer> m_subWidgets;
 
 	};
 

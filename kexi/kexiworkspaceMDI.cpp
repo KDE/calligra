@@ -10,7 +10,7 @@ KexiWorkspaceMDI::KexiWorkspaceMDI(QWidget *parent, const char *name,KexiMainWin
 	m_mainwindow=mw;
 	no = 0;
 	m_activeDialog=0;
-//	connect(this,SIGNAL(windowActivated(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
+	connect(this,SIGNAL(windowActivated(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
 }
 
 void KexiWorkspaceMDI::addItem(KexiDialogBase *newItem)
