@@ -515,6 +515,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
+    virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
     virtual void wheelEvent( QWheelEvent* );
     void paintSizeIndicator( int mouseY, bool firstTime );
 

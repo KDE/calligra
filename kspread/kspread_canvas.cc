@@ -2733,6 +2733,16 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
+{
+  KSpreadTable *table = m_pCanvas->activeTable();
+  assert( table );
+  if(!m_pView->koDocument()->isReadWrite())
+    return;
+  adjustRow();
+}
+
+
 void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
 {
   if ( m_pCanvas->vertScrollBar() )
@@ -3108,35 +3118,13 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
   m_pView->koDocument()->setModified(true);
 }
 
-void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * _ev )
+void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
   if(!m_pView->koDocument()->isReadWrite())
     return;
-
-  int x = 1;
-  int col = table->leftColumn( 1, x, m_pCanvas );
-
-  while ( x < width() )
-  {
-    int w = table->columnLayout( col )->width( m_pCanvas );
-    col++;
-    if ( _ev->pos().x() >= x + w - 1 && _ev->pos().x() <= x + w + 1 )
-    {
-      m_bSelection = TRUE;
-      table->unselect();
-      m_iSelectionAnchor = --col;
-      QRect r;
-      r.setCoords( col, 1, col, 0x7FFF );
-      table->setSelection( r, m_pCanvas );
-      m_bSelection = FALSE;
-      adjustColumn();
-      m_pView->koDocument()->setModified(true);
-      return;
-    }
-    x += w;
-  }
+  adjustColumn();
 }
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
