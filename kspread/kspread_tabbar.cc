@@ -361,6 +361,7 @@ void KSpreadTabBar::slotRename()
         while (!util_validateTableName(newName))
         {
             KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."), i18n("Change Sheet Name") );
 
             newName = newName.simplifyWhiteSpace();
 
