@@ -74,8 +74,8 @@ public:
     QColor m_backGroungColor;
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
-    KoTextFormat::NbLine m_underline;
-    KoTextFormat::NbLine m_strikeOut;
+    KoTextFormat::UnderlineLineType m_underline;
+    KoTextFormat::StrikeOutLineType m_strikeOut;
 
     QStringList m_strings; // history
     long m_optionsMask;

@@ -386,7 +386,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext->m_optionsMask & KoSearchContext::Underline)
     {
         flags |= KoTextFormat::ExtendUnderLine;
-        newFormat->setUnderlineNbLineType( m_replaceContext->m_underline );
+        newFormat->setUnderlineLineType( m_replaceContext->m_underline );
 
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::VertAlign)
@@ -397,7 +397,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext->m_optionsMask & KoSearchContext::StrikeOut)
     {
         flags |= KoTextFormat::StrikeOut;
-        newFormat->setStrikeOutNbLineType( m_replaceContext->m_strikeOut);
+        newFormat->setStrikeOutLineType( m_replaceContext->m_strikeOut);
     }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
@@ -488,12 +488,12 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( format->underlineNbLineType()!= m_searchContext->m_underline)
+            if ( format->underlineLineType()!= m_searchContext->m_underline)
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            if ( format->strikeOutNbLineType()!= m_searchContext->m_strikeOut )
+            if ( format->strikeOutLineType()!= m_searchContext->m_strikeOut )
                 return false;
         }
 
@@ -562,12 +562,12 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( format->underlineNbLineType() != m_searchContext->m_underline )
+            if ( format->underlineLineType() != m_searchContext->m_underline )
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            if ( format->strikeOutNbLineType() != m_searchContext->m_strikeOut )
+            if ( format->strikeOutLineType() != m_searchContext->m_strikeOut )
                 return false;
         }
 
@@ -786,8 +786,8 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_color = m_colorItem->color();
     m_ctx->m_backGroungColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
-    m_ctx->m_underline = (KoTextFormat::NbLine)m_underlineItem->currentItem();
-    m_ctx->m_strikeOut = (KoTextFormat::NbLine)m_strikeOutItem->currentItem();
+    m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
+    m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
     m_ctx->m_options = options;
 }
 

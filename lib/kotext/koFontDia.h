@@ -58,24 +58,19 @@ public:
     void setUnderlineColor( const QColor & col );
 
 
-    KoTextFormat::NbLine getUnderlineNbLineType();
-    KoTextFormat::LineStyle getUnderlineLineStyle();
-    KoTextFormat::NbLine getStrikeOutNbLineType();
-    KoTextFormat::LineStyle getStrikeOutLineStyle();
+    KoTextFormat::UnderlineLineType getUnderlineLineType();
+    KoTextFormat::UnderlineLineStyle getUnderlineLineStyle();
+    KoTextFormat::StrikeOutLineType getStrikeOutLineType();
+    KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle();
 
-    void setUnderlineNbLineType(KoTextFormat::NbLine nb);
-    void setStrikeOutNblineType(KoTextFormat::NbLine nb);
-    void setUnderlineLineStyle(KoTextFormat::LineStyle _t);
-    void setStrikeOutLineStyle(KoTextFormat::LineStyle _t);
+    void setUnderlineLineType(KoTextFormat::UnderlineLineType nb);
+    void setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb);
+    void setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t);
+    void setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t);
 
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
-protected:
-    KoTextFormat::LineStyle getTypeOfLine( int val);
-    void changeNbLineType( KoTextFormat::NbLine _nb, QComboBox * combo);
-    void changeLineStyle( KoTextFormat::LineStyle _t, QComboBox *combo );
-    KoTextFormat::NbLine getNbLineType( QComboBox * combo );
 protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
@@ -118,10 +113,10 @@ public:
                bool _subscript, bool _superscript, const QColor & color,
 	       const QColor & backGroundColor,
                const QColor & underlineColor,
-               KoTextFormat::NbLine _nbLine,
-               KoTextFormat::LineStyle _underlineType,
-               KoTextFormat::LineStyle _strikeOutType,
-               KoTextFormat::NbLine _strikeOutNbLine,
+               KoTextFormat::UnderlineLineStyle _nbLine,
+               KoTextFormat::UnderlineLineType _underlineType,
+               KoTextFormat::StrikeOutLineType _strikeOutType,
+               KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
@@ -130,11 +125,11 @@ public:
     QColor color() const { return m_chooser->color(); }
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
     QColor underlineColor() const { return m_chooser->underlineColor() ; }
-    KoTextFormat::NbLine getUnderlineNbLineType() const { return m_chooser->getUnderlineNbLineType();}
-    KoTextFormat::NbLine getStrikeOutNbLineType() const { return m_chooser->getStrikeOutNbLineType();}
+    KoTextFormat::UnderlineLineType getUnderlineLineType() const { return m_chooser->getUnderlineLineType();}
+    KoTextFormat::StrikeOutLineType getStrikeOutLineType() const { return m_chooser->getStrikeOutLineType();}
 
-    KoTextFormat::LineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
-    KoTextFormat::LineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
+    KoTextFormat::UnderlineLineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
+    KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -154,10 +149,10 @@ private:
     QColor m_color;
     QColor m_backGroundColor;
     QColor m_underlineColor;
-    KoTextFormat::NbLine m_underlineNbLine;
-    KoTextFormat::LineStyle m_underlineLineStyle;
-    KoTextFormat::LineStyle m_strikeOutLineStyle;
-    KoTextFormat::NbLine m_strikeOutNbLine;
+    KoTextFormat::UnderlineLineType m_underlineType;
+    KoTextFormat::UnderlineLineStyle m_underlineLineStyle;
+    KoTextFormat::StrikeOutLineStyle m_strikeOutLineStyle;
+    KoTextFormat::StrikeOutLineType m_strikeOutType;
 };
 
 #endif

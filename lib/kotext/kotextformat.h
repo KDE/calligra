@@ -58,8 +58,10 @@ public:
     /** Extending the base KoTextFormat enum */
     enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 };
 
-    enum NbLine { NONE = 0, SIMPLE = 1, DOUBLE = 2};
-    enum LineStyle { SOLID = 0 , DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
+    enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2};
+    enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2};
+    enum UnderlineLineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};
+    enum StrikeOutLineStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */
@@ -70,12 +72,12 @@ public:
      * default for the color scheme is' */
     static QColor defaultTextColor( QPainter * painter );
 
-    void setStrikeOutNbLineType (NbLine _type);
-    NbLine strikeOutNbLineType()const {return m_strikeOutNbLine;}
+    void setStrikeOutLineType (StrikeOutLineType _type);
+    StrikeOutLineType strikeOutLineType()const {return m_strikeOutLine;}
 
 
-    void setStrikeOutLineStyle( LineStyle _type );
-    LineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
+    void setStrikeOutLineStyle( StrikeOutLineStyle _type );
+    StrikeOutLineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
 
 
     void setTextBackgroundColor(const QColor &);
@@ -84,16 +86,16 @@ public:
     void setTextUnderlineColor(const QColor &);
     QColor textUnderlineColor()const {return m_textUnderlineColor;}
 
-    void setUnderlineNbLineType (NbLine _type);
-    NbLine underlineNbLineType()const {return m_underlineNbLine;}
+    void setUnderlineLineType (UnderlineLineType _type);
+    UnderlineLineType underlineLineType()const {return m_underlineLine;}
 
-    void setUnderlineLineStyle (LineStyle _type);
-    LineStyle underlineLineStyle()const {return m_underlineLineStyle;}
+    void setUnderlineLineStyle (UnderlineLineStyle _type);
+    UnderlineLineStyle underlineLineStyle()const {return m_underlineLineStyle;}
 
-    bool doubleUnderline() const { return (m_underlineNbLine==DOUBLE ); }
-    bool underline() const { return (m_underlineNbLine==SIMPLE ); }
-    bool strikeOut() const { return (m_strikeOutNbLine==SIMPLE ); }
-    bool doubleStrikeOut() const { return (m_strikeOutNbLine==DOUBLE ); }
+    bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
+    bool underline() const { return (m_underlineLine==U_SIMPLE ); }
+    bool strikeOut() const { return (m_strikeOutLine==S_SIMPLE ); }
+    bool doubleStrikeOut() const { return (m_strikeOutLine==S_DOUBLE ); }
     /**
      * @return the point size to use on screen, given @p zh
      * This method takes care of superscript and subscript (smaller font).
@@ -142,9 +144,9 @@ public:
 protected:
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
-    NbLine m_underlineNbLine;
-    NbLine m_strikeOutNbLine;
-    LineStyle m_underlineLineStyle;
-    LineStyle m_strikeOutLineStyle;
+    UnderlineLineType m_underlineLine;
+    StrikeOutLineType m_strikeOutLine;
+    UnderlineLineStyle m_underlineLineStyle;
+    StrikeOutLineStyle m_strikeOutLineStyle;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

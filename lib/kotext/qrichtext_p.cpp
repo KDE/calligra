@@ -129,10 +129,10 @@ KoTextFormat::KoTextFormat()
     fn.setStyleStrategy( QFont::ForceOutline );
     d = new KoTextFormatPrivate;
     m_textUnderlineColor=QColor();
-    m_underlineNbLine = NONE;
-    m_strikeOutNbLine = NONE;
-    m_underlineLineStyle = SOLID;
-    m_strikeOutLineStyle = SOLID;
+    m_underlineLine = U_NONE;
+    m_strikeOutLine = S_NONE;
+    m_underlineLineStyle = U_SOLID;
+    m_strikeOutLineStyle = S_SOLID;
 
     ////
 //#ifdef DEBUG_COLLECTION
@@ -201,10 +201,10 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     //// kotext
     d = new KoTextFormatPrivate;
     m_textUnderlineColor = QColor();
-    m_underlineNbLine = NONE;
-    m_strikeOutNbLine = NONE;
-    m_underlineLineStyle = SOLID;
-    m_strikeOutLineStyle = SOLID;
+    m_underlineLine = U_NONE;
+    m_strikeOutLine = S_NONE;
+    m_underlineLineStyle = U_SOLID;
+    m_strikeOutLineStyle = S_SOLID;
     ////
     generateKey();
     addRef();
@@ -240,8 +240,8 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
     m_textUnderlineColor=f.m_textUnderlineColor;
-    m_underlineNbLine = f.m_underlineNbLine;
-    m_strikeOutNbLine = f.m_strikeOutNbLine;
+    m_underlineLine = f.m_underlineLine;
+    m_strikeOutLine = f.m_strikeOutLine;
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     ////
@@ -290,8 +290,8 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
     m_textUnderlineColor=f.m_textUnderlineColor;
-    m_underlineNbLine = f.m_underlineNbLine;
-    m_strikeOutNbLine = f.m_strikeOutNbLine;
+    m_underlineLine = f.m_underlineLine;
+    m_strikeOutLine = f.m_strikeOutLine;
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     ////
@@ -382,7 +382,7 @@ void KoTextFormat::generateKey()
     k += QString::number( (int)vAlign() );
     //// kotext addition
     k += '/';
-    k += QString::number( (int)m_strikeOutNbLine );
+    k += QString::number( (int)m_strikeOutLine );
     //k += '/';
     //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
@@ -392,7 +392,7 @@ void KoTextFormat::generateKey()
     if ( m_textUnderlineColor.isValid())
         k += QString::number( (uint)m_textUnderlineColor.rgb() );
     k += '/';
-    k += QString::number( (int)m_underlineNbLine );
+    k += QString::number( (int)m_underlineLine );
     k += '/';
     k += QString::number( (int)m_underlineLineStyle );
     k += QString::number( (int)m_strikeOutLineStyle);
@@ -423,9 +423,9 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += QString::number( (int)a );
     //// kotext addition
     k += '/';
-    k += QString::number( (int)NONE );
+    k += QString::number( (int)U_NONE );
     k += '/';
-    k += QString::number( (int)NONE ); // no double-underline in a "simple format"
+    k += QString::number( (int)S_NONE ); // no double-underline in a "simple format"
     //k += '/';
     //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';

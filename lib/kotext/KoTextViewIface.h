@@ -154,7 +154,7 @@ k_dcop:
 private:
     KoTextView *m_textView;
 protected:
-    QString lineStyleToString( KoTextFormat::LineStyle _style ) const;
+    //QString lineStyleToString( KoTextFormat::LineStyle _style ) const;
 };
 
 #endif

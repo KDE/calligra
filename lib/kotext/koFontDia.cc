@@ -267,141 +267,183 @@ void KoFontChooser::slotUnderlineColor()
     }
 }
 
-KoTextFormat::NbLine KoFontChooser::getUnderlineNbLineType()
+KoTextFormat::UnderlineLineType KoFontChooser::getUnderlineLineType()
 {
-    return getNbLineType( m_underlining );
-}
-
-KoTextFormat::NbLine KoFontChooser::getNbLineType( QComboBox * combo )
-{
-    switch (combo->currentItem () )
+    switch (m_underlining->currentItem () )
     {
     case 0:
-        return KoTextFormat::NONE;
+        return KoTextFormat::U_NONE;
         break;
     case 1:
-        return KoTextFormat::SIMPLE;
+        return KoTextFormat::U_SIMPLE;
         break;
     case 2:
-        return KoTextFormat::DOUBLE;
+        return KoTextFormat::U_DOUBLE;
         break;
     default:
-        return KoTextFormat::NONE;
+        return KoTextFormat::U_NONE;
     }
+
 }
 
-KoTextFormat::NbLine KoFontChooser::getStrikeOutNbLineType()
+KoTextFormat::StrikeOutLineType KoFontChooser::getStrikeOutLineType()
 {
-    return getNbLineType( d->m_strikeOut );
-}
-
-
-KoTextFormat::LineStyle KoFontChooser::getTypeOfLine( int val)
-{
-    switch ( val )
+    switch (d->m_strikeOut->currentItem () )
     {
     case 0:
-        return KoTextFormat::SOLID;
+        return KoTextFormat::S_NONE;
         break;
     case 1:
-        return KoTextFormat::DASH;
+        return KoTextFormat::S_SIMPLE;
         break;
     case 2:
-        return KoTextFormat::DOT;
-        break;
-    case 3:
-        return KoTextFormat::DASH_DOT;
-        break;
-    case 4:
-        return KoTextFormat::DASH_DOT_DOT;
+        return KoTextFormat::S_DOUBLE;
         break;
     default:
-        return KoTextFormat::SOLID;
+        return KoTextFormat::S_NONE;
     }
 }
 
-void KoFontChooser::changeNbLineType( KoTextFormat::NbLine _nb, QComboBox * combo)
+
+void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
 {
-    switch ( _nb )
+    switch ( nb )
     {
-    case KoTextFormat::NONE:
-        combo->setCurrentItem( 0 );
+    case KoTextFormat::S_SOLID:
+        d->m_strikeOut->setCurrentItem( 0 );
         break;
-    case KoTextFormat::SIMPLE:
-        combo->setCurrentItem( 1 );
+    case KoTextFormat::S_DASH:
+        d->m_strikeOut->setCurrentItem( 1 );
         break;
-    case KoTextFormat::DOUBLE:
-        combo->setCurrentItem( 2 );
+    case KoTextFormat::S_DOT:
+        d->m_strikeOut->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::S_DASH_DOT:
+        d->m_strikeOut->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::S_DASH_DOT_DOT:
+        d->m_strikeOut->setCurrentItem( 4 );
         break;
     default:
-        combo->setCurrentItem( 0 );
+        d->m_strikeOut->setCurrentItem( 0 );
         break;
     }
-}
-
-void KoFontChooser::setStrikeOutNblineType(KoTextFormat::NbLine nb)
-{
-    changeNbLineType( nb, d->m_strikeOut );
     m_changedFlags = 0;
 }
 
 
-void KoFontChooser::setUnderlineNbLineType(KoTextFormat::NbLine nb)
+void KoFontChooser::setUnderlineLineType(KoTextFormat::UnderlineLineType nb)
 {
-    changeNbLineType( nb, m_underlining);
+    switch ( nb )
+    {
+    case KoTextFormat::U_SOLID:
+        m_underlining->setCurrentItem( 0 );
+        break;
+    case KoTextFormat::U_DASH:
+        m_underlining->setCurrentItem( 1 );
+        break;
+    case KoTextFormat::U_DOT:
+        m_underlining->setCurrentItem( 2 );
+        break;
+    case KoTextFormat::U_DASH_DOT:
+        m_underlining->setCurrentItem( 3 );
+        break;
+    case KoTextFormat::U_DASH_DOT_DOT:
+        m_underlining->setCurrentItem( 4 );
+        break;
+    default:
+        m_underlining->setCurrentItem( 0 );
+        break;
+    }
+
     m_changedFlags = 0;
 }
 
-void KoFontChooser::changeLineStyle( KoTextFormat::LineStyle _t, QComboBox *combo )
+void KoFontChooser::setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t)
 {
     switch ( _t )
     {
-    case KoTextFormat::SOLID:
-        combo->setCurrentItem( 0 );
+    case KoTextFormat::U_NONE:
+        m_underlining->setCurrentItem(0);
         break;
-    case KoTextFormat::DASH:
-        combo->setCurrentItem( 1 );
+    case KoTextFormat::U_SIMPLE:
+        m_underlining->setCurrentItem(1);
         break;
-    case KoTextFormat::DOT:
-        combo->setCurrentItem( 2 );
-        break;
-    case KoTextFormat::DASH_DOT:
-        combo->setCurrentItem( 3 );
-        break;
-    case KoTextFormat::DASH_DOT_DOT:
-        combo->setCurrentItem( 4 );
-        break;
-    default:
-        combo->setCurrentItem( 0 );
+    case KoTextFormat::U_DOUBLE:
+        m_underlining->setCurrentItem(2);
         break;
     }
-
-}
-
-void KoFontChooser::setUnderlineLineStyle(KoTextFormat::LineStyle _t)
-{
-    changeLineStyle(  _t, m_underlineType );
     m_underlineType->setEnabled( m_underlining->currentItem()!= 0);
     m_underlineColorButton->setEnabled( m_underlining->currentItem()!=0);
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::LineStyle _t)
+void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t)
 {
-    changeLineStyle(  _t, m_strikeOutType );
+    switch ( _t )
+    {
+    case KoTextFormat::S_NONE:
+        d->m_strikeOut->setCurrentItem(0);
+        break;
+    case KoTextFormat::S_SIMPLE:
+        d->m_strikeOut->setCurrentItem(1);
+        break;
+    case KoTextFormat::S_DOUBLE:
+        d->m_strikeOut->setCurrentItem(2);
+        break;
+    }
+
     m_strikeOutType->setEnabled( d->m_strikeOut->currentItem()!= 0);
 
     m_changedFlags = 0;
 }
 
-KoTextFormat::LineStyle KoFontChooser::getUnderlineLineStyle()
+KoTextFormat::UnderlineLineStyle KoFontChooser::getUnderlineLineStyle()
 {
-    return getTypeOfLine( m_underlineType->currentItem());
+    switch ( m_underlineType->currentItem() )
+    {
+    case 0:
+        return KoTextFormat::U_SOLID;
+        break;
+    case 1:
+        return KoTextFormat::U_DASH;
+        break;
+    case 2:
+        return KoTextFormat::U_DOT;
+        break;
+    case 3:
+        return KoTextFormat::U_DASH_DOT;
+        break;
+    case 4:
+        return KoTextFormat::U_DASH_DOT_DOT;
+        break;
+    default:
+        return KoTextFormat::U_SOLID;
+    }
 }
 
-KoTextFormat::LineStyle KoFontChooser::getStrikeOutLineStyle()
+KoTextFormat::StrikeOutLineStyle KoFontChooser::getStrikeOutLineStyle()
 {
-    return getTypeOfLine( m_strikeOutType->currentItem());
+    switch ( m_strikeOutType->currentItem() )
+    {
+    case 0:
+        return KoTextFormat::S_SOLID;
+        break;
+    case 1:
+        return KoTextFormat::S_DASH;
+        break;
+    case 2:
+        return KoTextFormat::S_DOT;
+        break;
+    case 3:
+        return KoTextFormat::S_DASH_DOT;
+        break;
+    case 4:
+        return KoTextFormat::S_DASH_DOT_DOT;
+        break;
+    default:
+        return KoTextFormat::S_SOLID;
+    }
 }
 
 
@@ -422,10 +464,10 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       bool _subscript, bool _superscript, const QColor & color,
                       const QColor & backGroundColor ,
                       const QColor & underlineColor,
-                      KoTextFormat::NbLine _underlineNbLine,
-                      KoTextFormat::LineStyle _underlineType,
-                      KoTextFormat::LineStyle _strikeOutType,
-                      KoTextFormat::NbLine _strikeOutNbLine,
+                      KoTextFormat::UnderlineLineStyle _underlineLine,
+                      KoTextFormat::UnderlineLineType _underlineType,
+                      KoTextFormat::StrikeOutLineType _strikeOutType,
+                      KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                       bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
@@ -435,10 +477,10 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_color( color),
       m_backGroundColor( backGroundColor),
       m_underlineColor( underlineColor ),
-      m_underlineNbLine( _underlineNbLine ),
-      m_underlineLineStyle( _underlineType ),
-      m_strikeOutLineStyle( _strikeOutType ),
-      m_strikeOutNbLine( _strikeOutNbLine)
+      m_underlineType( _underlineType ),
+      m_underlineLineStyle( _underlineLine ),
+      m_strikeOutLineStyle( _strikeOutLine ),
+      m_strikeOutType( _strikeOutType)
 {
     setButtonText( KDialogBase::User1, i18n("Reset") );
 
@@ -466,11 +508,9 @@ void KoFontDia::slotReset()
     m_chooser->setColor( m_color );
     m_chooser->setBackGroundColor(m_backGroundColor);
     m_chooser->setUnderlineColor( m_underlineColor );
-
-    m_chooser->setUnderlineNbLineType(m_underlineNbLine);
+    m_chooser->setUnderlineLineType(m_underlineType);
     m_chooser->setUnderlineLineStyle(m_underlineLineStyle);
-    m_chooser->setStrikeOutNblineType( m_strikeOutNbLine);
-
+    m_chooser->setStrikeOutlineType( m_strikeOutType);
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
 }
 

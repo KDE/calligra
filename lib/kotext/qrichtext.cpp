@@ -6091,14 +6091,14 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     if ( flags & KoTextFormat::StrikeOut )
     {
         setStrikeOutLineStyle( nf.strikeOutLineStyle() );
-        setStrikeOutNbLineType (nf.strikeOutNbLineType());
+        setStrikeOutLineType (nf.strikeOutLineType());
     }
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
     if( flags & KoTextFormat::ExtendUnderLine)
     {
         setTextUnderlineColor(nf.textUnderlineColor());
-        setUnderlineNbLineType (nf.underlineNbLineType());
+        setUnderlineLineType (nf.underlineLineType());
         setUnderlineLineStyle (nf.underlineLineStyle());
     }
 

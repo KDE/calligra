@@ -30,23 +30,23 @@ void KoTextFormat::setPointSizeFloat( float size )
     update();
 }
 
-void KoTextFormat::setStrikeOutNbLineType (NbLine _type)
+void KoTextFormat::setStrikeOutLineType (StrikeOutLineType _type)
 {
-    if ( m_strikeOutNbLine == _type )
+    if ( m_strikeOutLine == _type )
         return;
-    m_strikeOutNbLine = _type;
+    m_strikeOutLine = _type;
     update();
 }
 
-void KoTextFormat::setUnderlineNbLineType (NbLine _type)
+void KoTextFormat::setUnderlineLineType (UnderlineLineType _type)
 {
-    if ( m_underlineNbLine == _type )
+    if ( m_underlineLine == _type )
         return;
-    m_underlineNbLine = _type;
+    m_underlineLine = _type;
     update();
 }
 
-void KoTextFormat::setUnderlineLineStyle (LineStyle _type)
+void KoTextFormat::setUnderlineLineStyle (UnderlineLineStyle _type)
 {
     if ( m_underlineLineStyle == _type )
         return;
@@ -54,7 +54,7 @@ void KoTextFormat::setUnderlineLineStyle (LineStyle _type)
     update();
 }
 
-void KoTextFormat::setStrikeOutLineStyle( LineStyle _type )
+void KoTextFormat::setStrikeOutLineStyle( StrikeOutLineStyle _type )
 {
     if ( m_strikeOutLineStyle == _type )
         return;
@@ -85,7 +85,7 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
     if ( fn.italic() != format.fn.italic() )
         flags |= KoTextFormat::Italic;
     if ( textUnderlineColor()!=format.textUnderlineColor() ||
-         underlineNbLineType()!= format.underlineNbLineType() ||
+         underlineLineType()!= format.underlineLineType() ||
          underlineLineStyle() != format.underlineLineStyle())
         flags |= KoTextFormat::ExtendUnderLine;
     if ( fn.family() != format.fn.family() )
@@ -96,7 +96,7 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::Color;
     if ( vAlign() != format.vAlign() )
         flags |= KoTextFormat::VAlign;
-    if ( strikeOutNbLineType() != format.strikeOutNbLineType()
+    if ( strikeOutLineType() != format.strikeOutLineType()
         || underlineLineStyle() != format.underlineLineStyle())
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )

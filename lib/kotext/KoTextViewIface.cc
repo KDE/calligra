@@ -578,14 +578,15 @@ void KoTextViewIface::removeComment()
 
 QString KoTextViewIface::underlineLineStyle() const
 {
-    return lineStyleToString(m_textView->underlineLineStyle());
+    //FIXME
+    //return lineStyleToString(m_textView->underlineLineStyle());
 }
 
 QString KoTextViewIface::strikeOutLineStyle()const
 {
-    return lineStyleToString(m_textView->strikeOutLineStyle());
+    //return lineStyleToString(m_textView->strikeOutLineStyle());
 }
-
+#if 0
 QString KoTextViewIface::lineStyleToString( KoTextFormat::LineStyle _style ) const
 {
     QString strLineType;
@@ -609,3 +610,4 @@ QString KoTextViewIface::lineStyleToString( KoTextFormat::LineStyle _style ) con
     }
     return strLineType;
 }
+#endif
