@@ -799,7 +799,6 @@ void KWord13OasisGenerator::writeMetaXml(void)
     m_store->close();
 }
 
-
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
 #if 1
@@ -818,7 +817,16 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     m_store->disallowNameExpansion();
     
+    writeMetaXml();
     
+# if 1 // DEBUG
+    m_store->open("debug.xml"); // ### TODO: check error!
+    KoStoreDevice io ( m_store );
+    io.open( IO_WriteOnly );  // ### TODO: check error!
+    kwordDocument.xmldump( &io );
+    io.close();
+    m_store->close();
+# endif
     
     
     delete m_store;
