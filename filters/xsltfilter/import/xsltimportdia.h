@@ -20,6 +20,7 @@
 #ifndef __XSLTIMPORTDIA_H__
 #define __XSLTIMPORTDIA_H__
 
+#include "kapplication.h"
 #include <kfiledialog.h>
 #include <koStore.h>
 #include "xsltdialog.h"
@@ -31,9 +32,15 @@ class XSLTImportDia : public XSLTDialog
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
-	KoStore* _out;
+	/** xslt file current */
 	KURL _currentFile;
+	/** Path of the directory which containts common xslt files. */
+	QString _commonDir;
+	KoStore* _out;
 	QCString _format;
+	KConfig* _config;
+	/** List of the most recent xslt file used. */
+	QStringList _recentList;
 
 public:
     XSLTImportDia(KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
@@ -45,6 +52,8 @@ public:
 public slots:
     virtual void cancelSlot();
     virtual void chooseSlot();
+	virtual void chooseRecentSlot();
+	virtual void chooseCommonSlot();
     virtual void okSlot();
 
 };

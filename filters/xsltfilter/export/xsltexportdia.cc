@@ -22,6 +22,7 @@
 #include "xsltexportdia.moc"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <qcombobox.h>
 #include <kapplication.h>
@@ -43,18 +44,31 @@
 XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* parent,  const char* name, bool modal, WFlags fl )
     : XSLTDialog( parent, name, modal, fl )
 {
+	int i = 0;
 	_in = in;
 	_format = format;
 	setCaption(i18n("Export XSLT Configuration"));
+
+	/* Recent files */
 	_config = new KConfig("xsltdialog");
-	_config->setGroup( "XSLT filter" );
+	_config->setGroup( "XSLT export filter" );
 	QString value;
-	for(int i = 0; i < 10; i++)
+	while(i < 10)
 	{
 		value = _config->readEntry( QString("Recent%1").arg(i) );
-		_recentList.append( value );
-		recentBox->insertItem(value);
+		kdDebug() << "recent : " << value << endl;
+		if(!value.isEmpty())
+		{
+			_recentList.append( value );
+			recentBox->insertItem(value);
+		}
+		else
+			i = 10;
+		i = i + 1;
 	}
+
+	/* Common xslt files box */
+	
 }
 
 /*
@@ -129,6 +143,7 @@ void XSLTExportDia::chooseSlot()
  */
 void XSLTExportDia::chooseRecentSlot()
 {
+	kdDebug() << "recent slot : " << recentBox->currentText() << endl;
 	_currentFile = recentBox->currentText();
 }
 
@@ -138,7 +153,8 @@ void XSLTExportDia::chooseRecentSlot()
  */
 void XSLTExportDia::chooseCommonSlot()
 {
-	_currentFile = xsltList->currentText();
+	kdDebug() << "common slot : " << _commonDir << "/" << xsltList->currentText() << endl;
+	_currentFile = _commonDir + "/" + xsltList->currentText();
 }
 
 /**
@@ -155,19 +171,35 @@ void XSLTExportDia::okSlot()
 	/* Add the current file in the recent list if is not and save the list. */
 	if(_recentList.contains(stylesheet) == 0)
 	{
+		kdDebug() << "Style sheet add to recent list" << endl;
 		/* Remove the older stylesheet used */
-		_recentList.pop_back();
+		if(_recentList.size() >= 10)
+			_recentList.pop_back();
 
 		/* Add the new */
 		_recentList.prepend(stylesheet);
 
 		/* Save the new list */
-
+		kdDebug() << "Recent list save " << _recentList.size() << " entrie(s)" << endl;
+		int i = 0;
+		while(_recentList.size() > 0)
+		{
+			kdDebug() << "save : " << _recentList.first() << endl;
+			_config->writeEntry( QString("Recent%1").arg(i), _recentList.first());
+			_recentList.pop_front();
+			i = i + 1;
+		}
+		/* Write config on disk */
+		_config->sync();
 	}
 
 	/* Save the input file in a temp file */
 	QByteArray array = _in->read(_in->size());
-	QString tempFileName = tempnam(NULL, "xslt");
+	// use mkstemp, not tempname
+	char* temp = strdup("xsltXXXXXX");
+	QString tempFileName = QString(temp);
+	//QString tempFileName = tempnam(NULL, "xslt");
+	
 	QFile* tempFile = new QFile(tempFileName);
 	tempFile->open(IO_WriteOnly);
 	tempFile->writeBlock(array);

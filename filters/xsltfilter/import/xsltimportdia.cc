@@ -20,6 +20,11 @@
 #include "xsltimportdia.moc"
 
 #include <stdio.h>
+#include <stdlib.h>
+
+#include <qcombobox.h>
+#include <kapplication.h>
+#include <qstringlist.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
@@ -37,10 +42,30 @@
 XSLTImportDia::XSLTImportDia(KoStore* out, const QCString &format, QWidget* parent,  const char* name, bool modal, WFlags fl )
     : XSLTDialog( parent, name, modal, fl )
 {
+	int i = 0;
 	_out = out;
 	_format = format;
-	kdDebug() << "creation" << endl;
 	setCaption(i18n("Import XSLT Configuration"));
+	
+	/* Recent files */
+	_config = new KConfig("xsltdialog");
+	_config->setGroup( "XSLT import filter" );
+	QString value;
+	while(i < 10)
+	{
+		value = _config->readEntry( QString("Recent%1").arg(i) );
+		kdDebug() << "recent : " << value << endl;
+		if(!value.isEmpty())
+		{
+			_recentList.append( value );
+			recentBox->insertItem(value);
+		}
+		else
+			i = 10;
+		i = i + 1;
+	}
+
+	/* Common xslt files box */
 }
 
 /*
@@ -49,6 +74,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QCString &format, QWidget* pare
 XSLTImportDia::~XSLTImportDia()
 {
     // no need to delete child widgets, Qt does it all for us
+	delete _config;
 }
 
 void XSLTImportDia::cancelSlot()
@@ -100,6 +126,30 @@ void XSLTImportDia::chooseSlot()
     }
 }
 
+/**
+ * Called when the user clic on an element in the recent list.
+ * Change the value of the current file.
+ */
+void XSLTImportDia::chooseRecentSlot()
+{
+	kdDebug() << "recent slot : " << recentBox->currentText() << endl;
+	_currentFile = recentBox->currentText();
+}
+
+/**
+ * Called when teh user clic on an element in the common list of xslt sheet.
+ * Change the value of the current file.
+ */
+void XSLTImportDia::chooseCommonSlot()
+{
+	kdDebug() << "common slot : " << _commonDir << "/" << xsltList->currentText() << endl;
+	_currentFile = _commonDir + "/" + xsltList->currentText();
+}
+
+/**
+ * Called when the user clic on the ok button. The xslt sheet is put on the recent list which is
+ * saved, then the xslt processor is called to export the document.
+ */
 void XSLTImportDia::okSlot()
 {
 	hide();
@@ -107,8 +157,36 @@ void XSLTImportDia::okSlot()
 	_out->open("root");
 	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
 
+	/* Add the current file in the recent list if is not and save the list. */
+	if(_recentList.contains(stylesheet) == 0)
+	{
+		kdDebug() << "Style sheet add to recent list" << endl;
+		/* Remove the older stylesheet used */
+		if(_recentList.size() >= 10)
+			_recentList.pop_back();
+
+		/* Add the new */
+		_recentList.prepend(stylesheet);
+
+		/* Save the new list */
+		kdDebug() << "Recent list save " << _recentList.size() << " entrie(s)" << endl;
+		int i = 0;
+		while(_recentList.size() > 0)
+		{
+			kdDebug() << "save : " << _recentList.first() << endl;
+			_config->writeEntry( QString("Recent%1").arg(i), _recentList.first());
+			_recentList.pop_front();
+			i = i + 1;
+		}
+		/* Write config on disk */
+		_config->sync();
+	}
+	
 	/* Create a temp file */
-	QString tempFileName = tempnam(NULL, "xslt");
+	//QString tempFileName = tempnam(NULL, "xslt");
+	char* temp = strdup("xsltXXXXXX");
+	QString tempFileName = QString(temp);
+
 	QFile* tempFile = new QFile(tempFileName);
 	tempFile->open(IO_WriteOnly);
 	tempFile->close();

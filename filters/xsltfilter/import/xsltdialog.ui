@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>410</width>
-            <height>357</height>
+            <width>373</width>
+            <height>389</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Export XSLT Configuration</string>
+        <string>Import XSLT Configuration</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -28,23 +28,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <spacer>
-            <property name="name" stdset="0">
-                <cstring>Spacer56</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>GroupBox1</cstring>
@@ -65,7 +48,7 @@
                 <widget class="QListBox">
                     <item>
                         <property name="text">
-                            <string>Export XSL:FO</string>
+                            <string>Import XSL:FO</string>
                         </property>
                     </item>
                     <property name="name">
@@ -76,6 +59,12 @@
                             <width>0</width>
                             <height>200</height>
                         </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
                     </property>
                 </widget>
             </vbox>
@@ -101,7 +90,32 @@
                     <property name="name">
                         <cstring>recentBox</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                 </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>chooseBtn</cstring>
@@ -114,7 +128,7 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout36</cstring>
+                <cstring>Layout37</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -128,7 +142,7 @@
                 </property>
                 <spacer>
                     <property name="name" stdset="0">
-                        <cstring>Spacer53</cstring>
+                        <cstring>Spacer57</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -161,6 +175,9 @@
                     <property name="text">
                         <string>Cancel</string>
                     </property>
+                    <property name="accel">
+                        <number>0</number>
+                    </property>
                 </widget>
             </hbox>
         </widget>
@@ -185,10 +202,24 @@
         <receiver>XSLTDialog</receiver>
         <slot>chooseSlot()</slot>
     </connection>
+    <connection>
+        <sender>recentBox</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>chooseRecentSlot()</slot>
+    </connection>
+    <connection>
+        <sender>xsltList</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>chooseCommonSlot()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>cancelSlot()</slot>
+    <slot>chooseRecentSlot()</slot>
     <slot>chooseSlot()</slot>
+    <slot>chooseCommonSlot()</slot>
     <slot>okSlot()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

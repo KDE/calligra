@@ -60,6 +60,12 @@
                             <height>200</height>
                         </size>
                     </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
                 </widget>
             </vbox>
         </widget>
@@ -198,13 +204,13 @@
     </connection>
     <connection>
         <sender>recentBox</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <signal>activated(const QString&amp;)</signal>
         <receiver>XSLTDialog</receiver>
         <slot>chooseRecentSlot()</slot>
     </connection>
     <connection>
         <sender>xsltList</sender>
-        <signal>selected(const QString&amp;)</signal>
+        <signal>selectionChanged()</signal>
         <receiver>XSLTDialog</receiver>
         <slot>chooseCommonSlot()</slot>
     </connection>
