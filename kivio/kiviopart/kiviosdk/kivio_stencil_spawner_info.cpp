@@ -19,6 +19,9 @@
 #include "kivio_stencil_spawner_info.h"
 #include <qdom.h>
 
+#include <kglobal.h>
+#include <klocale.h>
+
 KivioStencilSpawnerInfo::KivioStencilSpawnerInfo()
 {
     m_author = "Joe Bob";
@@ -50,55 +53,76 @@ KivioStencilSpawnerInfo::KivioStencilSpawnerInfo( const QString &auth, const QSt
 
 bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
 {
-    QDomNode node;
-    QDomElement nodeElement;
-    QString nodeName;
+  QDomNode node;
+  QDomElement nodeElement;
+  QString nodeName, origTitle, origDesc;
+  bool foundTitleTranslation = false;
+  bool foundDescTranslation = false;
 
-    node = e.firstChild();
-    while( !node.isNull() )
+  node = e.firstChild();
+  while(!node.isNull())
+  {
+    nodeName = node.nodeName();
+
+    nodeElement = node.toElement();
+
+    if( nodeName.compare("Author")==0 )
     {
-        nodeName = node.nodeName();
-
-        nodeElement = node.toElement();
-
-        if( nodeName.compare("Author")==0 )
-        {
-            m_author = nodeElement.attribute("data");
-        }
-        else if( nodeName.compare("Title")==0 )
-        {
-            m_title = nodeElement.attribute("data");
-        }
-	else if( nodeName.compare("Id")==0 )
-	{
-	   m_id = nodeElement.attribute("data");
-	}
-        else if( nodeName.compare("Description")==0 )
-        {
-            m_desc = nodeElement.attribute("data");
-        }
-        else if( nodeName.compare("Version")==0 )
-        {
-            m_version = nodeElement.attribute("data");
-        }
-        else if( nodeName.compare("Web")==0 )
-        {
-            m_web = nodeElement.attribute("data");
-        }
-        else if( nodeName.compare("Email")==0 )
-        {
-            m_email = nodeElement.attribute("data");
-        }
-        else if( nodeName.compare("AutoUpdate")==0 )
-        {
-            m_autoUpdate = nodeElement.attribute("data");
-        }
-        else
-        {
-        }
-
-        node = node.nextSibling();
+      m_author = nodeElement.attribute("data");
+    }
+    else if((nodeName.compare("Title")==0) && nodeElement.hasAttribute("lang"))
+    {
+      if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+        m_title = nodeElement.attribute("data");
+        foundTitleTranslation = true;
+      }
+    }
+    else if((nodeName.compare("Title")==0) && !nodeElement.hasAttribute("lang"))
+    {
+      origTitle = nodeElement.attribute("data");
+    }
+    else if( nodeName.compare("Id")==0 )
+    {
+      m_id = nodeElement.attribute("data");
+    }
+    else if((nodeName.compare("Description")==0) && nodeElement.hasAttribute("lang"))
+    {
+      if(nodeElement.attribute("lang") == KGlobal::locale()->language()) {
+        m_desc = nodeElement.attribute("data");
+        foundDescTranslation = true;
+      }
+    }
+    else if((nodeName.compare("Description")==0) && !nodeElement.hasAttribute("lang"))
+    {
+      origDesc = nodeElement.attribute("data");
+    }
+    else if( nodeName.compare("Version")==0 )
+    {
+      m_version = nodeElement.attribute("data");
+    }
+    else if( nodeName.compare("Web")==0 )
+    {
+      m_web = nodeElement.attribute("data");
+    }
+    else if( nodeName.compare("Email")==0 )
+    {
+      m_email = nodeElement.attribute("data");
+    }
+    else if( nodeName.compare("AutoUpdate")==0 )
+    {
+      m_autoUpdate = nodeElement.attribute("data");
+    }
+    
+    if(!foundTitleTranslation) {
+      m_title = origTitle;
+    }
+    
+    if(!foundDescTranslation) {
+      m_desc = origDesc;
     }
 
-    return true;
+    node = node.nextSibling();
+  }
+
+  return true;
 }
