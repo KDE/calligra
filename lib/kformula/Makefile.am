@@ -31,5 +31,5 @@ kformulatest_SOURCES = main.cc kformulawidget.cc
 kformulatest_LDADD = libkformula.la
 
 # needs the CppUnit from http://www.xProgramming.com/software.htm
-unittest_SOURCES = testcommands.cc testformulacursor.cc testindexelement.cc testmain.cc
+unittest_SOURCES = testcommands.cc testformulacursor.cc testformulaelement.cc testindexelement.cc testmain.cc
 unittest_LDADD = libkformula.la libCppUnit.so libCppUnitRunner.so

@@ -41,51 +41,43 @@ TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
 
 TokenType TextElement::getTokenType() const
 {
-    if (isSymbol()) {
-        // Hack
-        switch ( getSymbolTable().charClass(character) ) {
-        case ORDINARY:
-            return TEXT;
-        case BINOP:
-            return MUL;
-        case RELATION:
-            return ASSIGN;
-        case PUNCTUATION:
-            return COMMA;
-        }
+    if ( isSymbol() ) {
+        return getSymbolTable().charClass( character );
     }
 
-    char latin1 = character.latin1();
-    switch (latin1) {
-        case '+':
-        case '-':
-        case '*':
-        case '/':
-        case '=':
-        case '<':
-        case '>':
-        case '\\':
-        case ',':
-        case ';':
-        case ':':
-            return TokenType(latin1);
-        case '\0':
-            return ELEMENT;
-        default:
-            if (character.isNumber()) {
-                return NUMBER;
-            }
-            else {
-                return TEXT;
-            }
+    switch ( character.latin1() ) {
+    case '+':
+    case '-':
+    case '*':
+        //case '/':  because it counts as text -- no extra spaces
+        return BINOP;
+    case '=':
+    case '<':
+    case '>':
+        return RELATION;
+    case ',':
+    case ';':
+    case ':':
+        return PUNCTUATION;
+    case '\\':
+        return SEPARATOR;
+    case '\0':
+        return ELEMENT;
+    default:
+        if ( character.isNumber() ) {
+            return NUMBER;
+        }
+        else {
+            return ORDINARY;
+        }
     }
 }
 
 
-bool TextElement::isPhantom() const
+bool TextElement::isInvisible() const
 {
     if (getElementType() != 0) {
-        return getElementType()->isPhantom(*this);
+        return getElementType()->isVisible(*this);
     }
     return false;
 }
@@ -101,18 +93,16 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
 
     QFont font = getFont( context );
     font.setPointSizeFloat( mySize );
-    double spaceBefore = getSpaceBefore( context, tstyle );
-    double spaceAfter = getSpaceAfter( context, tstyle );
 
-    QFontMetrics fm(font);
+    QFontMetrics fm( font );
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {
-        QRect bound = fm.boundingRect(ch);
+        QRect bound = fm.boundingRect( ch );
 
-        setWidth(fm.width(ch) + spaceBefore + spaceAfter);
-        setHeight(bound.height());
-        setBaseline(-bound.top());
-        setMidline(getBaseline() - fm.strikeOutPos());
+        setWidth( fm.width( ch ) );
+        setHeight( bound.height() );
+        setBaseline( -bound.top() );
+        setMidline( getBaseline() - fm.strikeOutPos() );
     }
     else {
         setWidth( context.getEmptyRectWidth() * 2./3. );
@@ -144,15 +134,12 @@ void TextElement::draw(QPainter& painter, const QRect& r,
     QFont font = getFont(context);
     font.setPointSizeFloat(mySize);
     setUpPainter(context, painter);
-    int spaceBefore = static_cast<int>( getSpaceBefore(context, tstyle) );
-    //int spaceAfter = getSpaceAfter(context, tstyle);
 
     painter.setFont(font);
 
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {
-        painter.drawText(myPos.x()+spaceBefore,
-                         myPos.y()+getBaseline(), ch);
+        painter.drawText(myPos.x(), myPos.y()+getBaseline(), ch);
     }
     else {
         painter.setPen( QPen( context.getErrorColor(), context.getLineWidth() ) );
@@ -193,25 +180,6 @@ QFont TextElement::getFont(const ContextStyle& context)
     return getSymbolTable().font(character);
 }
 
-double TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
-{
-    if (getElementType() != 0) {
-        return getElementType()->getSpaceBefore(context, tstyle);
-    }
-    else {
-        return 0;
-    }
-}
-
-double TextElement::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
-{
-    if (getElementType() != 0) {
-        return getElementType()->getSpaceAfter(context, tstyle);
-    }
-    else {
-        return 0;
-    }
-}
 
 void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 {

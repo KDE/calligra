@@ -179,7 +179,7 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
 void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     //int distX = contextStyle.getDistanceX(tstyle);
-    double distY = contextStyle.getDistanceY(tstyle);
+    double distY = contextStyle.getThinSpace( tstyle );
 
     // get the indexes size
     double ulWidth = 0, ulHeight = 0, ulMidline = 0;

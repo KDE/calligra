@@ -100,8 +100,8 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
 void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
 {
     double mySize = style.getAdjustedSize( tstyle );
-    double distX = style.getDistanceX( tstyle );
-    double distY = style.getDistanceY( tstyle );
+    double distX = style.getThinSpace( tstyle );
+    double distY = style.getThinSpace( tstyle );
 
     symbol.calcSizes(style, qRound(mySize*1.5));
     content->calcSizes(style, tstyle, istyle);

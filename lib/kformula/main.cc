@@ -16,6 +16,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcommand.h>
+#include <kdebug.h>
 
 #include "elementtype.h"
 #include "kformulacommand.h"

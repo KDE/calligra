@@ -24,202 +24,116 @@
 #include <qfontmetrics.h>
 #include <qpainter.h>
 
+#include <kdebug.h>
+
 #include "basicelement.h"
 #include "contextstyle.h"
 #include "elementtype.h"
+#include "sequenceelement.h"
 #include "sequenceparser.h"
 #include "textelement.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
 int ElementType::evilDestructionCount = 0;
 
 
-ElementType::ElementType(SequenceParser* parser)
-        : from(parser->getStart()), to(parser->getEnd())
+ElementType::ElementType( SequenceParser* parser )
+        : from( parser->getStart() ), to( parser->getEnd() ), prev( 0 )
 {
     evilDestructionCount++;
 }
 
 ElementType::~ElementType()
 {
+    delete prev;
     evilDestructionCount--;
 }
 
 
-OperatorType::OperatorType(SequenceParser* parser)
-        : ElementType(parser), lhs(0), rhs(0)
-{
-}
-
-OperatorType::~OperatorType()
-{
-    delete rhs;
-    delete lhs;
-}
-
-
-AssignmentSep::AssignmentSep(SequenceParser* parser)
-        : OperatorType(parser)
-{
-    lhs = new Assignment(parser);
-
-    switch (parser->getTokenType()) {
-        case COMMA:
-        case COLON:
-        case SEMICOLON:
-            setStart(parser->getStart());
-            setEnd(parser->getEnd());
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new AssignmentSep(parser);
-            break;
-        case END:
-            break;
-        default:
-            rhs = new ErrorType(parser);
-    }
-}
-
-
-Assignment::Assignment(SequenceParser* parser)
-        : OperatorType(parser)
-{
-    lhs = new Expression(parser);
-
-    switch (parser->getTokenType()) {
-        case ASSIGN:
-        case LESS:
-        case GREATER:
-            setStart(parser->getStart());
-            setEnd(parser->getEnd());
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Assignment(parser);
-            break;
-        case END:
-            break;
-        default:
-            //rhs = new ErrorType(parser);
-            break;
-    }
-}
-
-
-Expression::Expression(SequenceParser* parser)
-        : OperatorType(parser)
-{
-    lhs = new Term(parser);
-
-    switch (parser->getTokenType()) {
-        case PLUS:
-        case MINUS:
-            setStart(parser->getStart());
-            setEnd(parser->getEnd());
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Expression(parser);
-            break;
-        case END:
-            break;
-        default:
-            //rhs = new ErrorType(parser);
-            break;
-    }
-}
-
-
-Term::Term(SequenceParser* parser)
-        : OperatorType(parser)
-{
-    lhs = parser->getPrimitive();
-
-    //if (parser->getTokenType() == SEPARATOR) {
-        // A separator doesn't have a type
-    //    parser->nextToken();
-    //}
-
-    switch (parser->getTokenType()) {
-        case MUL:
-        case DIV:
-            setStart(parser->getStart());
-            setEnd(parser->getEnd());
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Term(parser);
-            break;
-        case TEXT:
-        case NUMBER:
-        case ELEMENT:
-            // assume mul if no operator
-            rhs = new Term(parser);
-            break;
-        case END:
-            break;
-        default:
-            break;
-    }
-}
-
-
-ErrorType::ErrorType(SequenceParser* parser)
-        : ElementType(parser)
-{
-    parser->setElementType(start(), this);
-    parser->nextToken();
-}
-
-
-MultiElementType::MultiElementType(SequenceParser* parser)
-        : ElementType(parser)
-{
-    for (uint i = start(); i < end(); i++) {
-        parser->setElementType(i, this);
-    }
-    parser->nextToken();
-}
-
-
-TextType::TextType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
-
-NameType::NameType(SequenceParser* parser, QString n)
-        : MultiElementType(parser), name(n)
-{
-}
-
-bool NameType::isPhantom(const TextElement& element) const
-{
-    // Only this first char of a name might be a backslash.
-    return element.getCharacter() == QChar('\\');
-}
-
-NumberType::NumberType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
-
-ComplexElementType::ComplexElementType(SequenceParser* parser)
-        : ElementType(parser)
-{
-    parser->setElementType(start(), this);
-    parser->nextToken();
-}
-
-
-double ElementType::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
+double ElementType::getSpaceBefore( const ContextStyle&,
+                                    ContextStyle::TextStyle )
 {
     return 0;
 }
 
-double ElementType::getSpaceAfter(const ContextStyle&, ContextStyle::TextStyle /*tstyle */)
+double ElementType::getSpaceAfter( MultiElementType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
 {
     return 0;
 }
+
+double ElementType::getSpaceAfter( OperatorType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::getSpaceAfter( RelationType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::getSpaceAfter( PunctuationType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::getSpaceAfter( BracketType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::getSpaceAfter( ComplexElementType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::getSpaceAfter( InnerElementType*,
+                                   const ContextStyle&,
+                                   ContextStyle::TextStyle )
+{
+    return 0;
+}
+
+double ElementType::thinSpaceIfNotScript( const ContextStyle& context,
+                                          ContextStyle::TextStyle tstyle )
+{
+    if ( !context.isScript( tstyle ) ) {
+        return context.getThinSpace( tstyle );
+    }
+    return 0;
+}
+
+double ElementType::mediumSpaceIfNotScript( const ContextStyle& context,
+                                            ContextStyle::TextStyle tstyle )
+{
+    if ( !context.isScript( tstyle ) ) {
+        return context.getMediumSpace( tstyle );
+    }
+    return 0;
+}
+
+double ElementType::thickSpaceIfNotScript( const ContextStyle& context,
+                                           ContextStyle::TextStyle tstyle )
+{
+    if ( !context.isScript( tstyle ) ) {
+        return context.getThickSpace( tstyle );
+    }
+    return 0;
+}
+
 
 QFont ElementType::getFont(const ContextStyle& context)
 {
@@ -231,57 +145,115 @@ void ElementType::setUpPainter(const ContextStyle& context, QPainter& painter)
     painter.setPen(context.getDefaultColor());
 }
 
-
-double OperatorType::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+void ElementType::append( ElementType* element )
 {
-    return context.getOperatorSpace(tstyle);
+    element->prev = this;
 }
 
-double OperatorType::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+void ElementType::output()
 {
-    return context.getOperatorSpace(tstyle);
-}
-
-QFont OperatorType::getFont(const ContextStyle& context)
-{
-    return context.getOperatorFont();
-}
-
-void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
-{
-    painter.setPen(context.getOperatorColor());
+    cerr << start() << " - " << end() << endl;
 }
 
 
-double Term::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+SequenceType::SequenceType( SequenceParser* parser )
+    : ElementType( parser ), last( 0 )
 {
-    return OperatorType::getSpaceBefore(context, tstyle) / 2;
+    while ( true ) {
+        parser->nextToken();
+        //cerr << "SequenceType::SequenceType(): " << parser->getTokenType() << " "
+        //     << parser->getStart() << " " << parser->getEnd() << endl;
+        if ( parser->getTokenType() == END ) {
+            break;
+        }
+        ElementType* nextType = parser->getPrimitive();
+        if ( nextType == 0 ) {
+            break;
+        }
+        if ( last != 0 ) {
+            last->append( nextType );
+        }
+        last = nextType;
+    }
 }
 
-double Term::getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle)
+SequenceType::~SequenceType()
 {
-    return OperatorType::getSpaceAfter(context, tstyle) / 2;
+    delete last;
 }
 
 
-double AssignmentSep::getSpaceBefore(const ContextStyle&, ContextStyle::TextStyle /*tstyle*/)
+void SequenceType::output()
 {
+}
+
+
+MultiElementType::MultiElementType( SequenceParser* parser )
+    : ElementType( parser )
+{
+    for ( uint i = start(); i < end(); i++ ) {
+        parser->setElementType( i, this );
+    }
+}
+
+double MultiElementType::getSpaceBefore( const ContextStyle& context,
+                                         ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
+    }
     return 0;
 }
 
-void AssignmentSep::setUpPainter(const ContextStyle& context, QPainter& painter)
+double MultiElementType::getSpaceAfter( OperatorType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
 {
-    painter.setPen(context.getDefaultColor());
+    return mediumSpaceIfNotScript( context, tstyle );
 }
 
-void ErrorType::setUpPainter(const ContextStyle& context, QPainter& painter)
+double MultiElementType::getSpaceAfter( RelationType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
 {
-    painter.setPen(context.getErrorColor());
+    return thickSpaceIfNotScript( context, tstyle );
 }
+
+double MultiElementType::getSpaceAfter( InnerElementType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+
+TextType::TextType( SequenceParser* parser )
+    : MultiElementType( parser )
+{
+}
+
+
+NameType::NameType( SequenceParser* parser, QString n )
+    : MultiElementType( parser ), name( n )
+{
+}
+
+
+bool NameType::isVisible( const TextElement& element ) const
+{
+    // Only this first char of a name might be a backslash.
+    return element.getCharacter() == QChar( '\\' );
+}
+
 
 QFont NameType::getFont(const ContextStyle& context)
 {
     return context.getNameFont();
+}
+
+NumberType::NumberType( SequenceParser* parser )
+        : MultiElementType( parser )
+{
 }
 
 QFont NumberType::getFont(const ContextStyle& context)
@@ -295,63 +267,321 @@ void NumberType::setUpPainter(const ContextStyle& context, QPainter& painter)
 }
 
 
-void MultiElementType::output()
+SingleElementType::SingleElementType( SequenceParser* parser )
+    : ElementType( parser )
 {
-    cout << "from = " << start() << "\tto = " << end() << endl;
+    parser->setElementType( start(), this );
 }
 
-void TextType::output()
+OperatorType::OperatorType( SequenceParser* parser )
+    : SingleElementType( parser )
 {
-    cout << "TextType: ";
-    MultiElementType::output();
 }
 
-
-void ErrorType::output()
+double OperatorType::getSpaceBefore( const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle )
 {
-    cout << "ErrorType: pos = " << start() << endl;
-}
-
-void NumberType::output()
-{
-    cout << "NumberType: ";
-    MultiElementType::output();
-}
-
-
-void OperatorType::output()
-{
-    cout << "{\n";
-    if (lhs != 0) {
-        cout << "{\n";
-        lhs->output();
-        cout << "}\n";
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
     }
-    if (rhs != 0) {
-        cout << "{\n";
-        rhs->output();
-        cout << "}\n";
+    return 0;
+}
+
+double OperatorType::getSpaceAfter( MultiElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double OperatorType::getSpaceAfter( BracketType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double OperatorType::getSpaceAfter( ComplexElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double OperatorType::getSpaceAfter( InnerElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+
+QFont OperatorType::getFont(const ContextStyle& context)
+{
+    return context.getOperatorFont();
+}
+
+void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
+{
+    painter.setPen(context.getOperatorColor());
+}
+
+
+RelationType::RelationType( SequenceParser* parser )
+    : SingleElementType( parser )
+{
+}
+
+double RelationType::getSpaceBefore( const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
     }
-    cout << "}" << endl;
+    return 0;
 }
 
-void Expression::output()
+double RelationType::getSpaceAfter( MultiElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
 {
-    cout << "Expression: ";
-    OperatorType::output();
+    return thickSpaceIfNotScript( context, tstyle );
 }
 
-
-void Term::output()
+double RelationType::getSpaceAfter( BracketType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
 {
-    cout << "Term: ";
-    OperatorType::output();
+    return thickSpaceIfNotScript( context, tstyle );
 }
 
-
-void ComplexElementType::output()
+double RelationType::getSpaceAfter( ComplexElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
 {
-    cout << "ElementType" << endl;
+    return thickSpaceIfNotScript( context, tstyle );
 }
+
+double RelationType::getSpaceAfter( InnerElementType*,
+                                    const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    return thickSpaceIfNotScript( context, tstyle );
+}
+
+QFont RelationType::getFont( const ContextStyle& context )
+{
+    return context.getOperatorFont();
+}
+
+void RelationType::setUpPainter( const ContextStyle& context, QPainter& painter )
+{
+    painter.setPen(context.getOperatorColor());
+}
+
+
+
+PunctuationType::PunctuationType( SequenceParser* parser )
+    : SingleElementType( parser )
+{
+}
+
+double PunctuationType::getSpaceBefore( const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
+    }
+    return 0;
+}
+
+double PunctuationType::getSpaceAfter( MultiElementType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double PunctuationType::getSpaceAfter( RelationType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thickSpaceIfNotScript( context, tstyle );
+}
+
+double PunctuationType::getSpaceAfter( PunctuationType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double PunctuationType::getSpaceAfter( BracketType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double PunctuationType::getSpaceAfter( ComplexElementType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double PunctuationType::getSpaceAfter( InnerElementType*,
+                                       const ContextStyle& context,
+                                       ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+QFont PunctuationType::getFont( const ContextStyle& context )
+{
+    return context.getOperatorFont();
+}
+
+void PunctuationType::setUpPainter( const ContextStyle& context, QPainter& painter )
+{
+    painter.setPen( context.getDefaultColor() );
+}
+
+
+BracketType::BracketType( SequenceParser* parser )
+    : SingleElementType( parser )
+{
+}
+
+double BracketType::getSpaceBefore( const ContextStyle& context,
+                                    ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
+    }
+    return 0;
+}
+
+double BracketType::getSpaceAfter( OperatorType*,
+                                   const ContextStyle& context,
+                                   ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double BracketType::getSpaceAfter( RelationType*,
+                                   const ContextStyle& context,
+                                   ContextStyle::TextStyle tstyle )
+{
+    return thickSpaceIfNotScript( context, tstyle );
+}
+
+double BracketType::getSpaceAfter( InnerElementType*,
+                                   const ContextStyle& context,
+                                   ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+
+ComplexElementType::ComplexElementType( SequenceParser* parser )
+    : SingleElementType( parser )
+{
+}
+
+double ComplexElementType::getSpaceBefore( const ContextStyle& context,
+                                           ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
+    }
+    return 0;
+}
+
+double ComplexElementType::getSpaceAfter( OperatorType*,
+                                          const ContextStyle& context,
+                                          ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double ComplexElementType::getSpaceAfter( RelationType*,
+                                          const ContextStyle& context,
+                                          ContextStyle::TextStyle tstyle )
+{
+    return thickSpaceIfNotScript( context, tstyle );
+}
+
+double ComplexElementType::getSpaceAfter( InnerElementType*,
+                                          const ContextStyle& context,
+                                          ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+
+InnerElementType::InnerElementType( SequenceParser* parser )
+    : SingleElementType( parser )
+{
+}
+
+double InnerElementType::getSpaceBefore( const ContextStyle& context,
+                                         ContextStyle::TextStyle tstyle )
+{
+    if ( getPrev() != 0 ) {
+        return getPrev()->getSpaceAfter( this, context, tstyle );
+    }
+    return 0;
+}
+
+double InnerElementType::getSpaceAfter( MultiElementType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( OperatorType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return mediumSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( RelationType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thickSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( PunctuationType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( BracketType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( ComplexElementType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
+double InnerElementType::getSpaceAfter( InnerElementType*,
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle )
+{
+    return thinSpaceIfNotScript( context, tstyle );
+}
+
 
 KFORMULA_NAMESPACE_END

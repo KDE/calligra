@@ -23,6 +23,8 @@
 
 #include <qpainter.h>
 
+#include <kdebug.h>
+
 #include "bracketelement.h"
 #include "elementtype.h"
 #include "formulacursor.h"
@@ -36,8 +38,10 @@
 #include "symbolelement.h"
 #include "textelement.h"
 
+
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;
+
 
 SequenceElement::SequenceElement(BasicElement* parent)
         : BasicElement(parent), parseTree(0), textSequence(true)
@@ -111,7 +115,7 @@ bool SequenceElement::isEmpty()
     uint count = children.count();
     for (uint i = 0; i < count; i++) {
         BasicElement* child = children.at(i);
-        if (!child->isPhantom()) {
+        if (!child->isInvisible()) {
             return false;
         }
     }
@@ -136,32 +140,43 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         QFontMetrics fm(font);
         double fromMidline = fm.strikeOutPos();
 
-        uint count = children.count();
+        //uint count = children.count();
 
         // Let's do all normal elements that have a base line.
-        for (uint i = 0; i < count; i++) {
-            BasicElement* child = children.at(i);
-            if (!child->isPhantom()) {
-                child->calcSizes(context, tstyle, istyle);
-                child->setX(width);
-                width += child->getWidth();
+        QListIterator<BasicElement> it( children );
+        for ( ; it.current(); ++it ) {
+            BasicElement* child = it.current();
 
-                if (child->getBaseline() > -1) {
-                    toBaseline = QMAX(toBaseline, child->getBaseline());
-                    fromBaseline = QMAX(fromBaseline, child->getHeight()-child->getBaseline());
+            double spaceBefore = 0;
+            if ( child->getElementType() != 0 ) {
+                if ( isChildNumber( child->getElementType()->start(), child ) ) {
+                    spaceBefore = child->getElementType()->getSpaceBefore( context, tstyle );
+                }
+            }
+
+            if ( !child->isInvisible() ) {
+                child->calcSizes( context, tstyle, istyle );
+                child->setX( width + spaceBefore );
+                width += child->getWidth() + spaceBefore;
+
+                if ( child->getBaseline() > -1 ) {
+                    toBaseline = QMAX( toBaseline, child->getBaseline() );
+                    fromBaseline = QMAX( fromBaseline, child->getHeight()-child->getBaseline() );
                 }
             }
             else {
-                child->setX(width);
+                width += spaceBefore;
+                child->setX( width );
             }
         }
 
         bool noBaseline = toBaseline == 0;
 
         // Now all normal elements without a base line.
-        for (uint i = 0; i < count; i++) {
-            BasicElement* child = children.at(i);
-            if (!child->isPhantom()) {
+        it.toFirst();
+        for ( ; it.current(); ++it ) {
+            BasicElement* child = it.current();
+            if (!child->isInvisible()) {
                 if (child->getBaseline() == -1) {
                     toBaseline = QMAX(toBaseline, child->getMidline()+fromMidline);
                     fromBaseline = QMAX(fromBaseline, child->getHeight()-(child->getMidline()+fromMidline));
@@ -189,9 +204,9 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
 
 void SequenceElement::setChildrenPositions()
 {
-    uint count = children.count();
-    for (uint i = 0; i < count; i++) {
-        BasicElement* child = children.at(i);
+    QListIterator<BasicElement> it( children );
+    for ( ; it.current(); ++it ) {
+        BasicElement* child = it.current();
         if (child->getBaseline() > -1) {
             child->setY(getBaseline() - child->getBaseline());
         }
@@ -219,11 +234,12 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
         return;
 
     if (!isEmpty()) {
-	BasicElement* child;
-	for ( child=children.first(); child!=0; child=children.next() ){
-	    if (!child->isPhantom()) {
-		child->draw(painter, r, context, tstyle, istyle, myPos);
-	    }
+        QListIterator<BasicElement> it( children );
+        for ( ; it.current(); ++it ) {
+            BasicElement* child = it.current();
+	    if (!child->isInvisible()) {
+                child->draw(painter, r, context, tstyle, istyle, myPos);
+            }
 	    // Debug
             //painter.setPen(Qt::green);
             //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
@@ -234,6 +250,10 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
         painter.setBrush(Qt::NoBrush);
         painter.setPen(QPen(context.getEmptyColor(), context.getLineWidth()));
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
+//         kdDebug() << "SequenceElement::calcCursorSize: "
+//                   << myPos.x() << " " << myPos.y() << " "
+//                   << getWidth() << " " << getHeight()
+//                   << endl;
     }
 }
 
@@ -346,8 +366,8 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             if (cursor->isSelectionMode()) {
                 cursor->setTo(this, cursor->getPos()-1);
 
-                // phantom elements are not visible so we move on.
-                if (children.at(cursor->getPos())->isPhantom()) {
+                // invisible elements are not visible so we move on.
+                if (children.at(cursor->getPos())->isInvisible()) {
                     moveLeft(cursor, this);
                 }
             }
@@ -372,8 +392,8 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             cursor->setMark(fromPos+1);
         }
 
-        // phantom elements are not visible so we move on.
-        if (from->isPhantom()) {
+        // invisible elements are not visible so we move on.
+        if (from->isInvisible()) {
             moveLeft(cursor, this);
         }
     }
@@ -398,8 +418,8 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             if (cursor->isSelectionMode()) {
                 cursor->setTo(this, pos+1);
 
-                // phantom elements are not visible so we move on.
-                if (children.at(pos)->isPhantom()) {
+                // invisible elements are not visible so we move on.
+                if (children.at(pos)->isInvisible()) {
                     moveRight(cursor, this);
                 }
             }
@@ -424,8 +444,8 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             cursor->setMark(fromPos);
         }
 
-        // phantom elements are not visible so we move on.
-        if (from->isPhantom()) {
+        // invisible elements are not visible so we move on.
+        if (from->isInvisible()) {
             moveRight(cursor, this);
         }
     }
@@ -631,7 +651,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
                     formula()->elementRemoval(child);
                     children.take(pos);
                     removedChildren.prepend(child);
-                    if (!child->isPhantom()) {
+                    if (!child->isInvisible()) {
                         break;
                     }
                     pos--;
@@ -648,7 +668,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
                     formula()->elementRemoval(child);
                     children.take(pos);
                     removedChildren.append(child);
-                    if (!child->isPhantom()) {
+                    if (!child->isInvisible()) {
                         break;
                     }
                 }
@@ -906,21 +926,7 @@ QString SequenceElement::toLatex()
 	if(count > 1) content+="{";
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-
-            // Our idea of a phantom element currently isn't the
-            // TeX one. phantom means invisible for us. Maybe
-            // we need to change the name.
-//             if (child->isPhantom())
-// 	    {
-// 		content+="\\phantom{";
-//                 content+=child->toLatex();
-// 		content+="}";
-//     	    }
-// 	    else
-		content+=child->toLatex();
-
-//     	if(count>1)
-// 	    content+=" ";
+            content+=child->toLatex();
 	}
     	if(count > 1) content+="}";
 

@@ -110,7 +110,7 @@ public:
     /**
      * @returns true if we don't want to see the element.
      */
-    virtual bool isPhantom() const { return false; }
+    virtual bool isInvisible() const { return false; }
 
     /**
      * Sets the cursor and returns the element the point is in.

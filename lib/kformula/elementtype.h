@@ -30,10 +30,16 @@ class QPainter;
 
 KFORMULA_NAMESPACE_BEGIN
 
-class OperatorToken;
+class BasicElement;
+class BracketType;
+class ComplexElementType;
+class InnerElementType;
+class MultiElementType;
+class OperatorType;
+class PunctuationType;
+class RelationType;
 class SequenceElement;
 class SequenceParser;
-class SymbolTableEntry;
 class TextElement;
 
 
@@ -55,7 +61,7 @@ public:
     /**
      * @returns whether we want to see this element.
      */
-    virtual bool isPhantom(const TextElement&) const { return false; }
+    virtual bool isVisible(const TextElement&) const { return false; }
 
     /**
      * @returns the position of the first character
@@ -71,34 +77,45 @@ public:
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
-
-    /**
-     * @returns the space to be left after each char
-     * for the given style and font size.
-     */
-    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(const ContextStyle& context);
+    virtual QFont getFont( const ContextStyle& context );
 
     /**
      * sets the painters pen to a appropiate value
      */
-    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
-
-    // debug
-    virtual void output() = 0;
+    virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
 
+    virtual void output();
+
+    /**
+     * Adds a type at the end of the list.
+     */
+    void append( ElementType* );
+
+    ElementType* getPrev() const { return prev; }
+
 protected:
 
-    void setStart(uint start) { from = start; }
-    void setEnd(uint end) { to = end; }
+    void setStart( uint start ) { from = start; }
+    void setEnd( uint end ) { to = end; }
+
+    double thinSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    double mediumSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    double thickSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
 private:
 
@@ -114,8 +131,33 @@ private:
      */
     uint to;
 
+    /**
+     * We implement this list ourselves because we need to know
+     * our neighbours.
+     */
+    ElementType* prev;
+
     // debug
     static int evilDestructionCount;
+};
+
+
+/**
+ * The token that belongs to a sequence. Contains all the
+ * other tokens.
+ */
+class SequenceType : public ElementType {
+public:
+    SequenceType( SequenceParser* parser );
+    ~SequenceType();
+
+    virtual void output();
+private:
+
+    /**
+     * The last token type of this sequences chain.
+     */
+    ElementType* last;
 };
 
 
@@ -124,10 +166,12 @@ private:
  */
 class MultiElementType : public ElementType {
 public:
-    MultiElementType(SequenceParser* parser);
+    MultiElementType( SequenceParser* parser );
 
-    // debug
-    virtual void output();
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
@@ -137,10 +181,7 @@ public:
  */
 class TextType : public MultiElementType {
 public:
-    TextType(SequenceParser* parser);
-
-    // debug
-    virtual void output();
+    TextType( SequenceParser* parser );
 };
 
 
@@ -149,7 +190,7 @@ public:
  */
 class NameType : public MultiElementType {
 public:
-    NameType(SequenceParser* parser, QString name);
+    NameType( SequenceParser* parser, QString name );
 
     /**
      * @returns the name of the type. Only name types are allowed
@@ -160,12 +201,12 @@ public:
     /**
      * @returns whether we want to see this element.
      */
-    virtual bool isPhantom(const TextElement& element) const;
+    virtual bool isVisible( const TextElement& element ) const;
 
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(const ContextStyle& context);
+    virtual QFont getFont( const ContextStyle& context );
 
 private:
 
@@ -178,23 +219,6 @@ private:
      * Our name.
      */
     QString name;
-};
-
-
-/**
- * A element that doesn't fit into the syntax.
- */
-class ErrorType : public ElementType {
-public:
-    ErrorType(SequenceParser* parser);
-
-    /**
-     * sets the painters pen to a appropiate value
-     */
-    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
-
-    // debug
-    virtual void output();
 };
 
 
@@ -214,32 +238,27 @@ public:
      * sets the painters pen to a appropiate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
-
-    // debug
-    virtual void output();
 };
 
 
 /**
- * Basis of all tokens that contain two other tokens
- * which are a left hand side and a right hand side.
+ * Basis for all tokens that consist of one element only.
  */
-class OperatorType : public ElementType {
+class SingleElementType : public ElementType {
 public:
-    OperatorType(SequenceParser* parser);
-    ~OperatorType();
+    SingleElementType( SequenceParser* parser );
+};
 
-    /**
-     * @returns the space to be left before each char
-     * for the given style and font size.
-     */
-    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
-    /**
-     * @returns the space to be left after each char
-     * for the given style and font size.
-     */
-    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+class OperatorType : public SingleElementType {
+public:
+    OperatorType( SequenceParser* parser );
+
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
@@ -250,79 +269,92 @@ public:
      * sets the painters pen to a appropiate value
      */
     virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
-
-    // debug
-    virtual void output();
-protected:
-
-    ElementType* lhs;
-    ElementType* rhs;
 };
 
 
-/**
- * The addition operator. The parsing starts with it.
- */
-class Expression : public OperatorType {
+class RelationType : public SingleElementType {
 public:
-    Expression(SequenceParser* parser);
+    RelationType( SequenceParser* parser );
 
-    // debug
-    virtual void output();
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+
+    /**
+     * @returns the font to be used for this kind of element
+     */
+    virtual QFont getFont( const ContextStyle& context );
+
+    /**
+     * sets the painters pen to a appropiate value
+     */
+    virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 };
 
 
-/**
- * The multiplication operator.
- */
-class Term : public OperatorType {
+class PunctuationType : public SingleElementType {
 public:
-    Term(SequenceParser* parser);
+    PunctuationType( SequenceParser* parser );
 
-    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
-    virtual double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
+    /**
+     * @returns the font to be used for this kind of element
+     */
+    virtual QFont getFont( const ContextStyle& context );
 
-    // debug
-    virtual void output();
+    /**
+     * sets the painters pen to a appropiate value
+     */
+    virtual void setUpPainter( const ContextStyle& context, QPainter& painter );
 };
 
 
-/**
- * The assignment operator.
- */
-class Assignment : public OperatorType {
+class BracketType : public SingleElementType {
 public:
-    Assignment(SequenceParser* parser);
+    BracketType( SequenceParser* parser );
+
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
-/**
- * The separator of assignments.
- *
- * A list of separate assignments. That's what each sequence
- * consists of.
- */
-class AssignmentSep : public OperatorType {
+class ComplexElementType : public SingleElementType {
 public:
-    AssignmentSep(SequenceParser* parser);
+    ComplexElementType( SequenceParser* parser );
 
-    virtual double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
-
-    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
+    // these spacings are equal to the ones from MultiElementType
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
-/**
- * An element that has no textual representation.
- */
-class ComplexElementType : public ElementType {
+class InnerElementType : public SingleElementType {
 public:
-    ComplexElementType(SequenceParser* parser);
+    InnerElementType( SequenceParser* parser );
 
-    // debug
-    virtual void output();
+    virtual double getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual double getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
+
 
 KFORMULA_NAMESPACE_END
 

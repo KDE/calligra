@@ -67,11 +67,6 @@ public:
      */
     ElementType* getPrimitive();
 
-    /**
-     * The character that makes a text symbol.
-     */
-    static const QChar textSymbol;
-
 private:
 
     /**
@@ -120,6 +115,11 @@ private:
      * The type of the current token.
      */
     TokenType type;
+
+    /**
+     * Whether the next token might be a binary operator.
+     */
+    bool binOpAllowed;
 
     /**
      * The table that contains all known symbols.

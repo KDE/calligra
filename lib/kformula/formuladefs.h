@@ -59,25 +59,18 @@ enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
 
 
 /**
- * The token types the sequence parser knows.
- */
-enum TokenType {
-    TEXT, NUMBER, ELEMENT, ERROR, END,
-    PLUS='+', MINUS='-', MUL='*', DIV='/',
-    ASSIGN='=', LESS='<', GREATER='>', SEPARATOR='\\',
-    COMMA=',', COLON=':', SEMICOLON=';'
-};
-
-
-/**
  * TeX like char classes
  */
 enum CharClass {
     ORDINARY = 0,
     BINOP = 1,
     RELATION = 2,
-    PUNCTUATION = 3
+    PUNCTUATION = 3,
+
+    NUMBER, ELEMENT, INNER, BRACKET, SEQUENCE, SEPARATOR, END
 };
+
+typedef CharClass TokenType;
 
 
 KFORMULA_NAMESPACE_END

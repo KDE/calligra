@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef CONTEXTSTYLE_H
-#define CONTEXTSTYLE_H
+#ifndef CONORDINARYSTYLE_H
+#define CONORDINARYSTYLE_H
 
 //KDE Include
 //#include <kconfig.h>
@@ -45,7 +45,8 @@ KFORMULA_NAMESPACE_BEGIN
 class ContextStyle
 {
 public:
-    enum Alignment {left, center, right};
+
+    enum Alignment { left, center, right };
 
     /**
      * Textstyles like in TeX. In the remaining documentation, the
@@ -59,7 +60,12 @@ public:
      *
      * scriptScriptStyle: SS
      **/
-    enum TextStyle {displayStyle, textStyle, scriptStyle, scriptScriptStyle};
+    enum TextStyle {
+        displayStyle = 0,
+        textStyle = 1,
+        scriptStyle = 2,
+        scriptScriptStyle = 3
+    };
 
     enum IndexStyle {normal, cramped};
 
@@ -72,6 +78,7 @@ public:
      * Build a context style reading settings from config
      */
     //ContextStyle(KConfig *config);
+
 
     double getXResolution() const { return m_zoomedResolutionX; }
     double getYResolution() const { return m_zoomedResolutionY; }
@@ -95,12 +102,19 @@ public:
 
 
     double getReductionFactor(TextStyle tstyle) const;
-    double getDistanceX(TextStyle tstyle) const;
-    double getDistanceY(TextStyle tstyle) const;
-    double getOperatorSpace(TextStyle tstyle) const;
+    //double getDistanceX(TextStyle tstyle) const;
+    //double getDistanceY(TextStyle tstyle) const;
     double getBaseSize() const;
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
-    double getMinimumSize() const;
+    bool isScript( TextStyle tstyle ) const { return ( tstyle == scriptStyle ) ||
+                                                     ( tstyle == scriptScriptStyle ); }
+
+    /**
+     * TeX like spacings. Zoomed.
+     */
+    double getThinSpace( TextStyle tstyle ) const;
+    double getMediumSpace( TextStyle tstyle ) const;
+    double getThickSpace( TextStyle tstyle ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
@@ -187,6 +201,22 @@ public:
 
 private:
 
+    void setup();
+
+    struct TextStyleValues {
+
+        void setup( QFont font, double baseSize, double reduction );
+
+        double thinSpace() const   { return static_cast<double>( quad )/6.; }
+        double mediumSpace() const { return static_cast<double>( quad )*2./9.; }
+        double thickSpace() const  { return static_cast<double>( quad )*5./18.; }
+
+        double reductionFactor;
+        int quad;
+    };
+
+    TextStyleValues textStyleValues[ 4 ];
+
     /**
      * The resolution in pixel/point*zoom.
      */
@@ -209,12 +239,12 @@ private:
      * The basic distance. Used everywhere a non specific
      * distance is needed. (Maybe we should think about this.)
      */
-    double distance;
+    //double distance;
 
     /**
      * The space to be left before and after a normal operator.
      */
-    double operatorSpace;
+    //double operatorSpace;
 
     /**
      * The cursors movement style. You need to notify each cursor
@@ -231,22 +261,6 @@ private:
      * The base text style of the formula.
      **/
     TextStyle m_baseTextStyle;
-
-    /**
-     * The font size reduction for script style.
-     **/
-    double m_scriptStyleReduction;
-
-    /**
-     * The font size reduction for script script style.
-     **/
-    double m_scriptScriptStyleReduction;
-
-
-    /**
-     * The smallest font size we use. Sometimes things have to be readable...
-     */
-    double minimumSize;
 
     /**
      * The thickness of our lines.
@@ -270,17 +284,8 @@ private:
      * Whether we want coloured formulae.
      */
     bool syntaxHighlighting;
-
-    /**
-     * All characters that are valid as exponent chars inside a number.
-     * This used to be "Ee" but the symbol font has no "e" and some
-     * fortran numbers know the "D", too.
-     */
-    // Unfortunately this is not the right place to store this
-    // information. There is no ContextStyle while parsing.
-    //QString exponentChars;
 };
 
 KFORMULA_NAMESPACE_END
 
-#endif // CONTEXTSTYLE_H
+#endif // CONORDINARYSTYLE_H

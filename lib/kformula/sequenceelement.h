@@ -212,9 +212,14 @@ public:
     QString getCurrentName(FormulaCursor* cursor);
 
     /**
-     * Returns the number of children we have.
+     * @returns the number of children we have.
      */
     int countChildren() const { return children.count(); }
+
+    /**
+     * @returns whether the child has the given number.
+     */
+    bool isChildNumber( uint pos, BasicElement* child ) { return children.at( pos ) == child; }
 
     /**
      * Selects all children. The cursor is put behind, the mark before them.
@@ -232,15 +237,6 @@ public:
      * Returns false if an error occures.
      */
     bool buildChildrenFromDom(QList<BasicElement>& list, QDomNode n);
-
-    /**
-     * Parses the sequence and generates a new syntax tree.
-     * Has to be called after each modification.
-     *
-     * This is done internally in most cases. Only children that
-     * change their TokenType need to call this.
-     */
-    void parse();
 
     /**
      * @returns the latex representation of the element and
@@ -304,6 +300,12 @@ protected:
 
 
 private:
+
+    /**
+     * Parses the sequence and generates a new syntax tree.
+     * Has to be called after each modification.
+     */
+    void parse();
 
     /**
      * Removes the children at pos and appends it to the list.

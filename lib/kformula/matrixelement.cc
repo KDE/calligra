@@ -169,8 +169,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         }
     }
 
-    double distX = style.getDistanceX(tstyle);
-    double distY = style.getDistanceY(tstyle);
+    double distX = style.getThinSpace( tstyle );
+    double distY = style.getThinSpace( tstyle );
 
     double yPos = 0;
     for (uint r = 0; r < rows; r++) {

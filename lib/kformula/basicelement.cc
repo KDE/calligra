@@ -32,11 +32,13 @@ using namespace std;
 
 int BasicElement::evilDestructionCount = 0;
 
-BasicElement::BasicElement(BasicElement* p)
-        : parent(p), m_baseline(0), m_axis(0), elementType(0)
+BasicElement::BasicElement( BasicElement* p )
+        : parent( p ), m_baseline( 0 ), m_axis( 0 ), elementType( 0 )
 {
-    setWidth(0);
-    setHeight(0);
+    setX( 0 );
+    setY( 0 );
+    setWidth( 0 );
+    setHeight( 0 );
     evilDestructionCount++;
 }
 

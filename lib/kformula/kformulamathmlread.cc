@@ -68,7 +68,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	    text = text.stripWhiteSpace();
 	    type = 2;
 	    for (unsigned int i = 0; i < text.length(); i++) {
-		QDomElement textelement = doc->createElement("TEXT");
+		QDomElement textelement = doc->createElement("ORDINARY");
 		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
 	    }
@@ -79,7 +79,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 
 	    type = 2;
 	    for (unsigned int i = 0; i < text.length(); i++) {
-		QDomElement textelement = doc->createElement("TEXT");	//OPERATOR
+		QDomElement textelement = doc->createElement("ORDINARY");	//OPERATOR
 		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
 	    }
@@ -88,7 +88,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	    text = text.stripWhiteSpace();
 	    type = 2;
 	    for (unsigned int i = 0; i < text.length(); i++) {
-		QDomElement textelement = doc->createElement("TEXT");	//NUMBER
+		QDomElement textelement = doc->createElement("ORDINARY");	//NUMBER
 		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
 	    }
@@ -96,7 +96,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	else if (tag == "mtext") {
 	    type = 2;
 	    for (unsigned int i = 0; i < text.length(); i++) {
-		QDomElement textelement = doc->createElement("TEXT");
+		QDomElement textelement = doc->createElement("ORDINARY");
 		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
 	    }
@@ -104,7 +104,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	else if (tag == "ms") {
 	    type = 2;
 	    for (unsigned int i = 0; i < text.length(); i++) {
-		QDomElement textelement = doc->createElement("TEXT");
+		QDomElement textelement = doc->createElement("ORDINARY");
 		textelement.setAttribute("CHAR",QString(text.at(i)));
 		docnode->appendChild(textelement);
 	    }

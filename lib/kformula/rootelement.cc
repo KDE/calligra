@@ -100,8 +100,8 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
         indexHeight = index->getHeight();
     }
 
-    double distX = style.getDistanceX(tstyle);
-    double distY = style.getDistanceY(tstyle);
+    double distX = style.getThinSpace( tstyle );
+    double distY = style.getThinSpace( tstyle );
     double unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
@@ -162,7 +162,7 @@ void RootElement::draw(QPainter& painter, const QRect& r,
     double x = myPos.x() + rootOffset.x();
     double y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
-    double distY = style.getDistanceY(tstyle);
+    double distY = style.getThinSpace( tstyle );
     double unit = (content->getHeight() + distY)/ 3;
 
     painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));

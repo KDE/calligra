@@ -382,6 +382,7 @@ private:
 
     // debug
     friend class TestFormulaCursor;
+    friend class TestFormulaElement;
     friend class TestIndexElement;
     friend class TestCommands;
 };

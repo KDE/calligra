@@ -18,12 +18,29 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qfontmetrics.h>
 #include <qstring.h>
+
 #include <koGlobal.h>
 
 #include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
+
+
+void ContextStyle::TextStyleValues::setup( QFont font,
+                                           double baseSize,
+                                           double reduction )
+{
+    reductionFactor = reduction;
+
+    font.setPointSizeFloat( baseSize );
+    QFontMetrics fm( font );
+
+    // Or better the real space required? ( boundingRect )
+    quad = fm.width( 'M' );
+}
+
 
 ContextStyle::ContextStyle()
         : m_zoomedResolutionX(1.0), m_zoomedResolutionY(1.0),
@@ -36,21 +53,20 @@ ContextStyle::ContextStyle()
     defaultFont.setItalic(true);
 
     m_baseTextStyle = displayStyle;
-    m_scriptStyleReduction = .7;
-    m_scriptScriptStyleReduction = .49;
 
-    minimumSize = 8;
     lineWidth = 1;
     emptyRectWidth = 10;
     emptyRectHeight = 10;
-    distance = 4;
-    operatorSpace = 4;
+    //distance = 4;
+    //operatorSpace = 4;
     baseSize = 18;
 
     linearMovement = false;
 
     centerSymbol = false;
     syntaxHighlighting = true;
+
+    setup();
 }
 
 
@@ -94,71 +110,50 @@ void ContextStyle::setResolution(double zX, double zY)
     m_zoomedResolutionY = zY;
 }
 
-double ContextStyle::getReductionFactor(TextStyle tstyle) const
+double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 {
-    switch (tstyle){
-    case scriptStyle:
-	return m_scriptStyleReduction;
-    case scriptScriptStyle:
-	return m_scriptScriptStyleReduction;
-    default:
-	return 1.;
-    }
+    return textStyleValues[ tstyle ].reductionFactor;
 }
 
-double ContextStyle::getDistanceX(TextStyle tstyle) const
+double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return zoomItX( distance*getReductionFactor( tstyle ))+.5;
+    return zoomItY( baseSize*getReductionFactor( tstyle ) );
 }
 
-double ContextStyle::getDistanceY(TextStyle tstyle) const
+double ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
-    return zoomItY( distance*getReductionFactor( tstyle ))+.5;
+    return zoomItX( textStyleValues[ tstyle ].thinSpace() );
 }
 
-double ContextStyle::getOperatorSpace(TextStyle tstyle) const
+double ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
-    return zoomItX( operatorSpace*getReductionFactor( tstyle ))+.5;
+    return zoomItX( textStyleValues[ tstyle ].mediumSpace() );
 }
+
+double ContextStyle::getThickSpace( TextStyle tstyle ) const
+{
+    return zoomItX( textStyleValues[ tstyle ].thickSpace() );
+}
+
+// double ContextStyle::getDistanceX(TextStyle tstyle) const
+// {
+//     return zoomItX( distance*getReductionFactor( tstyle ))+.5;
+// }
+
+// double ContextStyle::getDistanceY(TextStyle tstyle) const
+// {
+//     return zoomItY( distance*getReductionFactor( tstyle ))+.5;
+// }
 
 double ContextStyle::getBaseSize() const
 {
     return zoomItY( baseSize );
 }
 
-double ContextStyle::getMinimumSize() const
-{
-    return zoomItY( minimumSize );
-}
-
-double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
-{
-    double unzoomed;
-
-    switch ( tstyle ){
-    case displayStyle:
-	unzoomed = baseSize;
-	break;
-    case textStyle:
-	unzoomed = baseSize;
-	break;
-    case scriptStyle:
-	unzoomed = m_scriptStyleReduction*baseSize;
-	break;
-    case scriptScriptStyle:
-	unzoomed = m_scriptScriptStyleReduction*baseSize;
-	break;
-    }
-
-    return zoomItY( unzoomed );
-}
-
-
 double ContextStyle::getLineWidth() const
 {
     return zoomItY( lineWidth );
 }
-
 
 double ContextStyle::getEmptyRectWidth() const
 {
@@ -208,6 +203,15 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
     }
 
     return result;
+}
+
+
+void ContextStyle::setup()
+{
+    textStyleValues[ displayStyle      ].setup( getSymbolFont(), baseSize, 1. );
+    textStyleValues[ textStyle         ].setup( getSymbolFont(), baseSize, 1. );
+    textStyleValues[ scriptStyle       ].setup( getSymbolFont(), baseSize, .7 );
+    textStyleValues[ scriptScriptStyle ].setup( getSymbolFont(), baseSize, .49 );
 }
 
 KFORMULA_NAMESPACE_END

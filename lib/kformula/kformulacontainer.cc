@@ -629,7 +629,7 @@ void KFormulaContainer::save(QString file)
         return;
     }
     QCString data=domData().toCString();
-    cerr << (const char *)data << endl;
+    //cerr << (const char *)data << endl;
 
     QTextStream stream(&f);
     stream.setEncoding(QTextStream::Unicode);

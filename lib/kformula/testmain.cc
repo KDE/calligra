@@ -13,6 +13,7 @@
 #include "kformulacommand.h"
 #include "testcommands.h"
 #include "testformulacursor.h"
+#include "testformulaelement.h"
 #include "testindexelement.h"
 
 
@@ -24,6 +25,7 @@ int main (int argc, char **argv)
     TestRunner runner;
 
     runner.addTest("TestFormulaCursor", TestFormulaCursor::suite());
+    runner.addTest("TestFormulaElement", TestFormulaElement::suite());
     runner.addTest("TestIndexElement", TestIndexElement::suite());
     runner.addTest("TestCommands", TestCommands::suite());
     runner.run(argc, argv);

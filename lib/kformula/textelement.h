@@ -47,15 +47,15 @@ public:
     virtual TokenType getTokenType() const;
 
     /**
+     * @returns true if we don't want to see the element.
+     */
+    virtual bool isInvisible() const;
+
+    /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
      */
     virtual QChar getCharacter() const { return character; }
-
-    /**
-     * @returns true if we don't want to see the element.
-     */
-    virtual bool isPhantom() const;
 
     // drawing
     //
@@ -134,16 +134,6 @@ protected:
      * @returns the font to be used for the element.
      */
     QFont getFont(const ContextStyle& context);
-
-    /**
-     * @returns the space to be left before the character.
-     */
-    double getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle);
-
-    /**
-     * @returns the space to be left after the character.
-     */
-    double getSpaceAfter(const ContextStyle& context, ContextStyle::TextStyle tstyle);
 
     /**
      * Sets up the painter to be used for drawing.

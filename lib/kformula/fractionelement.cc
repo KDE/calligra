@@ -93,19 +93,19 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     denominator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
 			   style.convertIndexStyleLower( istyle ));
 
-    double distX = style.getDistanceX(tstyle);
-    double distY = style.getDistanceY(tstyle);
+    double distY = style.getThinSpace( tstyle );
 
-    setWidth(QMAX(numerator->getWidth(), denominator->getWidth()) + distX);
-    setHeight(numerator->getHeight() + distY + denominator->getHeight());
-    setMidline(numerator->getHeight() + .5*distY);
-    setBaseline(-1);
+    setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
+    setHeight( numerator->getHeight() + denominator->getHeight() +
+               2*distY + style.getLineWidth() );
+    setMidline( numerator->getHeight() + distY + .5*style.getLineWidth() );
+    setBaseline( -1 );
 
-    numerator->setX((getWidth() - numerator->getWidth()) / 2);
-    denominator->setX((getWidth() - denominator->getWidth()) / 2);
+    numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
+    denominator->setX( ( getWidth() - denominator->getWidth() ) / 2 );
 
-    numerator->setY(0);
-    denominator->setY(getHeight() - denominator->getHeight());
+    numerator->setY( 0 );
+    denominator->setY( getHeight() - denominator->getHeight() );
 }
 
 
@@ -133,11 +133,9 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
 		      style.convertIndexStyleLower( istyle ), myPos);
 
     if (withLine) {
-        int distX = static_cast<int>( style.getDistanceX(tstyle) );
-        int halfDistX = static_cast<int>( .5*style.getDistanceX(tstyle) );
-        painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
-        painter.drawLine(myPos.x() + halfDistX, myPos.y() + getMidline(),
-                         myPos.x() + getWidth() - (distX - halfDistX), myPos.y() + getMidline());
+        painter.setPen( QPen( style.getDefaultColor(), style.getLineWidth() ) );
+        painter.drawLine( myPos.x(), myPos.y() + getMidline(),
+                          myPos.x() + getWidth(), myPos.y() + getMidline() );
     }
 }
 

@@ -44,6 +44,12 @@ public:
     ~BracketElement();
 
     /**
+     * @returns the type of this element. Used for
+     * parsing a sequence.
+     */
+    virtual TokenType getTokenType() const { return BRACKET; }
+
+    /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
      * This is needed because only the innermost matching element
