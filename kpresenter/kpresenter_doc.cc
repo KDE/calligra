@@ -3461,7 +3461,8 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
+QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy,
+				  float fakt, bool decBorders ) const
 {
     int pw, ph, bl = static_cast<int>(_pageLayout.ptLeft);
     int br = static_cast<int>(_pageLayout.ptRight);
@@ -4080,7 +4081,8 @@ int KPresenterDoc::getPenBrushFlags()
 }
 
 /*================================================================*/
-QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, float fakt )
+QString KPresenterDoc::pageTitle( unsigned int pgNum, const QString &_title,
+				  float fakt ) const
 {
     // If a user sets a title with manual, return it.
     if ( !manualTitleList[pgNum].isEmpty() )

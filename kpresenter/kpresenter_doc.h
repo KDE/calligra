@@ -227,7 +227,8 @@ public:
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
 
     // size of page
-    QRect getPageRect( unsigned int num, int diffx, int diffy, float fakt=1.0, bool decBorders = true );
+    QRect getPageRect( unsigned int num, int diffx, int diffy,
+		       float fakt = 1.0, bool decBorders = true ) const;
 
     // delete/reorder objects
     void deleteObjs( bool _add = true );
@@ -300,7 +301,8 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    QString getPageTitle( unsigned int pgNum, const QString &_title, float fakt = 1.0 );
+    QString pageTitle( unsigned int pgNum, const QString &_title,
+		       float fakt = 1.0 ) const;
 
     KPTextObject *header() { return _header; }
     KPTextObject *footer() { return _footer; }

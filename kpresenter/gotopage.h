@@ -26,8 +26,7 @@
 class QWidget;
 class QObject;
 class QResizeEvent;
-class QComboBox;
-class QLabel;
+class QListBox;
 class KPresenterDoc;
 
 /******************************************************************/
@@ -37,19 +36,20 @@ class KPresenterDoc;
 class KPGotoPage : public QDialog {
 
 public:
-    KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start,
+    KPGotoPage( const KPresenterDoc *doc, float fakt,
+		const QValueList<int> &slides, int start,
 		QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
 
-    static int gotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start, QWidget *parent = 0L );
+    static int gotoPage( const KPresenterDoc *doc, float fakt,
+			 const QValueList<int> &slides, int start,
+			 QWidget *parent = 0L );
 
-    int getPage();
+    int page() const;
 
 private:
     void resetCursor();
 
-    QComboBox *spinbox;
-    QLabel *label;
-    QWidget *p;
+    QListBox *spinbox;
     int oldPage;
 };
 

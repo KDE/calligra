@@ -20,11 +20,12 @@
 #include <gotopage.h>
 
 #include <qlabel.h>
-#include <qcombobox.h>
+#include <qlistbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 
 #include <klocale.h>
+#include <kdialog.h>
 
 #include <kpresenter_doc.h>
 
@@ -33,17 +34,23 @@
 /******************************************************************/
 
 /*================================================================*/
-KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start,
+KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
+			const QValueList<int> &slides, int start,
 			QWidget *parent, const char *name, WFlags f )
-    : QDialog( parent, name, f ), p(parent), oldPage(start)
+    : QDialog( parent, name, true, f ), oldPage(start)
 {
     setCaption(i18n("Goto Page..."));
 
-    QGridLayout *ml=new QGridLayout(this, 2, 2, 5, 5);
-    label = new QLabel( i18n( "Goto Page:" ), this );
-    ml->addWidget(label, 0,0);
-    spinbox = new QComboBox( false, this );
-    ml->addWidget(spinbox, 0,1);
+    QVBoxLayout *ml = new QVBoxLayout( this, KDialog::marginHint(),
+				       KDialog::spacingHint() );
+    QLabel *label = new QLabel( i18n( "Goto Page:" ), this );
+    ml->addWidget( label );
+    spinbox = new QListBox( this );
+    connect( spinbox, SIGNAL(doubleClicked( QListBoxItem* )),
+	     this, SLOT(accept()) );
+    connect( spinbox, SIGNAL(returnPressed( QListBoxItem* )),
+	     this, SLOT(accept()) );
+    ml->addWidget( spinbox );
 
     QHBoxLayout *box=new QHBoxLayout(ml);
     QPushButton *button=new QPushButton(i18n("OK"), this);
@@ -52,12 +59,11 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
     button=new QPushButton(i18n("Cancel"), this);
     connect(button, SIGNAL(clicked()), this, SLOT(reject()));
     box->addWidget(button);
-    ml->addMultiCellLayout(box, 1, 1, 0, 1);
 
     QValueList<int>::ConstIterator it = slides.begin();
-    unsigned int i = 0;
-    for ( unsigned int j = 0; it != slides.end(); ++it, ++j ) {
-        QString t(doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt ));
+    for ( ; it != slides.end(); ++it ) {
+        QString t(doc->pageTitle( *it - 1,
+				  i18n( "Slide %1" ).arg( *it ), fakt ));
         // cut ultra long titles...
         if(t.length() > 30) {
             t.truncate(30);
@@ -65,35 +71,32 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
         }
         spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
         if ( *it == start )
-            i = j;
+            spinbox->setCurrentItem( spinbox->count()-1 );
     }
-    spinbox->setCurrentItem( i );
 
-    setFocusProxy( spinbox );
-    setFocusPolicy( QWidget::StrongFocus );
-    spinbox->setFocus();
-
-    if(p)
-        p->setCursor(Qt::forbiddenCursor);
+    if ( parent )
+        parent->setCursor( Qt::forbiddenCursor );
 }
 
 /*================================================================*/
-int KPGotoPage::gotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &slides, int start, QWidget *parent)
+int KPGotoPage::gotoPage( const KPresenterDoc *doc, float fakt,
+			  const QValueList<int> &slides, int start,
+			  QWidget *parent)
 {
     KPGotoPage dia( doc, fakt, slides, start,parent, 0L,
-                    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
+                    0 /*Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup*/ );
     dia.exec();
     dia.resetCursor();
-    return dia.getPage();
+    return dia.page();
 }
 
-int KPGotoPage::getPage() {
+int KPGotoPage::page() const {
     if(result()==QDialog::Accepted)
         return spinbox->currentText().left( spinbox->currentText().find( "-" ) - 1 ).toInt();
     return oldPage;
 }
 
 void KPGotoPage::resetCursor() {
-    if(p)
-        p->setCursor(Qt::blankCursor);
+    if ( parentWidget() )
+        parentWidget()->setCursor( Qt::blankCursor );
 }

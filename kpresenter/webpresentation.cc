@@ -400,7 +400,7 @@ void KPWebPresentation::init()
         {
             SlideInfo info;
             info.pageNumber = i;
-            info.slideTitle = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i+1 ) );
+            info.slideTitle = doc->pageTitle( i, i18n( "Slide %1" ).arg( i+1 ) );
             slideInfos.append( info );
         }
     }
