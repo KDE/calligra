@@ -163,6 +163,8 @@ public slots:
     /**
      * Actions
      */
+    void RecalcWorkBook();
+    void RecalcWorkSheet();
     void transformPart();
     void copySelection();
     void cutSelection();
@@ -488,6 +490,8 @@ private:
     KAction* m_removeCell;
     KAction* m_changeAngle;
     KAction* m_mergeCell;
+    KAction* m_recalc_workbook;
+    KAction* m_recalc_worksheet;
     KAction* m_dissociateCell;
     KAction* m_gotoCell;
     /**

@@ -1300,6 +1300,17 @@
       </Help>
     </Function>
 
+
+    <Function>
+      <Name>rand</Name>
+      <Type>Float</Type>
+      <Help>
+	<Text>Random Number within [0,1)</Text>
+	<Syntax>rand()</Syntax>
+	<Example>rand(12;5;7) = 0.23453...</Example>
+      </Help>
+    </Function>
+
     <Function>
       <Name>stddev</Name>
       <Type>Float</Type>
