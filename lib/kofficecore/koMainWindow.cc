@@ -783,7 +783,7 @@ void KoMainWindow::slotFilePrint()
         return;
     }
 
-    KPrinter printer( true, QPrinter::HighResolution );
+    KPrinter printer( true /*, QPrinter::HighResolution*/ );
     QString title = rootView()->koDocument()->documentInfo()->title();
     if ( title.isNull() )
         title = rootView()->koDocument()->url().fileName();
