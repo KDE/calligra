@@ -47,6 +47,9 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 //js	m_partManager = new KexiPart::Manager(this);
 
 //TODO: partmanager is outside project, so can be initialised just once:
+
+	m_itemListsCache = QIntDict<KexiPart::ItemList>(199);
+	m_itemListsCache.setAutoDelete(true);
 	Kexi::partManager().lookup();
 	
 	m_connection = 0;
@@ -176,19 +179,25 @@ KexiProject::isConnected()
 	return false;
 }
 
-ItemList
+KexiPart::ItemList
 KexiProject::items(KexiPart::Info *i)
 {
 	kdDebug() << "KexiProject::items()" << endl;
-	ItemList list;
-	if(!isConnected())
-		return list;
+	if(!i || !isConnected())
+		return KexiPart::ItemList();
 
+	//trying in cache...
+	KexiPart::ItemList *list = m_itemListsCache[ i->projectPartID() ];
+	if (list)
+		return *list;
+	//retrieve:
 	KexiDB::Cursor *cursor = m_connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
 	if(!cursor)
-		return list;
+		return KexiPart::ItemList();
+
+	list = new KexiPart::ItemList();
 
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
@@ -198,13 +207,45 @@ KexiProject::items(KexiPart::Info *i)
 		it.setName(cursor->value(1).toString());
 		it.setCaption(cursor->value(2).toString());
 
-		list.append(it);
+		list->append(it);
 		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<cursor->value(1).toString()<<endl;
 	}
 
 	m_connection->deleteCursor(cursor);
-	kdDebug() << "KexiProject::items(): end with count " << list.count() << endl;
-	return list;
+	kdDebug() << "KexiProject::items(): end with count " << list->count() << endl;
+	m_itemListsCache.insert( i->projectPartID(), list );
+	return *list;
+}
+
+KexiPart::ItemList
+KexiProject::items(const QString &mime)
+{
+	KexiPart::Info *info = Kexi::partManager().info(mime);
+	return items(info);
+}
+
+KexiPart::Item
+KexiProject::item(const QString &mime, const QString &name)
+{
+	KexiPart::ItemList &list = items(mime);
+	const QString &l_name = name.lower();
+	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
+		if ((*it).name().lower()==l_name)
+			return *it;
+	}
+	return KexiPart::Item();
+}
+
+KexiPart::Item
+KexiProject::item(KexiPart::Info *i, const QString &name)
+{
+	KexiPart::ItemList &list = items(i);
+	const QString &l_name = name.lower();
+	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
+		if ((*it).name().lower()==l_name)
+			return *it;
+	}
+	return KexiPart::Item();
 }
 
 void KexiProject::setError(int code, const QString &msg )

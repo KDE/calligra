@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,7 +55,9 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *p
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
-	connect(this, SIGNAL(doubleClicked(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+	connect(this, SIGNAL(executed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+//js todo: ADD OPTION for enable this:
+//connect(this, SIGNAL(doubleClicked(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 	connect(this, SIGNAL(returnPressed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 
 	if(part)
@@ -68,26 +71,27 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *p
 void
 KexiBrowser::addGroup(KexiPart::Info *info)
 {
-	KexiBrowserItem *item = new KexiBrowserItem(this, info->mime(), info->groupName(), 0, info);
-
-	item->setPixmap(0, SmallIcon(info->groupIcon()));
-	item->setOpen(true);
-	item->setSelectable(false);
+//	KexiBrowserItem *item = new KexiBrowserItem(this, info->mime(), info->groupName(), 0, info);
+	KexiBrowserItem *item = new KexiBrowserItem(this, info);
+//	item->setPixmap(0, SmallIcon(info->groupIcon()));
+//	item->setOpen(true);
+//	item->setSelectable(false);
 	m_baseItems.insert(info->mime().lower(), item);
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
-	slotItemListChanged(info);
+//js: now it's executed by hand from keximainwindow:	slotItemListChanged(info);
 }
 
 void
 KexiBrowser::addItem(KexiPart::Item item)
 {
-	//part object
+	//part object for this item
 	KexiBrowserItem *parent = m_baseItems.find(item.mime().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
-	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
-	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
+//	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
+	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
+//	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 
 #if 0 //nonsense since we have no multi tab bar now
 	if(m_mime == "kexi/db" && m_baseItems.find(item.mime()))
@@ -108,6 +112,8 @@ KexiBrowser::addItem(KexiPart::Item item)
 #endif
 }
 
+#if 0
+//js: moved to keximainwindow
 void
 KexiBrowser::slotItemListChanged(KexiPart::Info *parent)
 {
@@ -123,14 +129,15 @@ KexiBrowser::slotItemListChanged(KexiPart::Info *parent)
 		clear();
 	}
 
-	ItemList list = m_parent->project()->items(parent);
+	KexiPart::ItemList list = m_parent->project()->items(parent);
 	kdDebug() << "KexiBrowser::slotItemListChanged(): list count:" << list.count() << endl;
-	for(ItemList::Iterator it = list.begin(); it != list.end(); ++it)
+	for(KexiPart::ItemList::Iterator it = list.begin(); it != list.end(); ++it)
 	{
 		kdDebug() << "KexiBrowser::slotItemListChanged() adding item" << (*it).mime() << endl;
 		addItem(*it);
 	}
 }
+#endif
 
 void
 KexiBrowser::slotContextMenu(KListView *, QListViewItem *, const QPoint &)
@@ -170,7 +177,11 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 
-	if(m_parent->activateWindow(it->identifier()))
+	if (it->item().identifier()==0)
+		return;
+	emit executeItem( it->item() );
+
+/*	if(m_parent->activateWindow(it->item().identifier()))
 		return;
 
 	if(!it || it->info())
@@ -195,6 +206,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 
 //	info->instance()->execute(m_parent, it->name());
 	part->execute(m_parent, item);
+	*/
 }
 
 #include "kexibrowser.moc"

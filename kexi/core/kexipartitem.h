@@ -40,9 +40,11 @@ namespace KexiPart
 
 class Info;
 
+//! Data that identifies a single part object (not necessary instantiated)
 class KEXICORE_EXPORT Item
 {
 	public:
+
 		Item();
 		~Item();
 
@@ -51,6 +53,7 @@ class KEXICORE_EXPORT Item
 		QString	name() const { return m_name; }
 		QString	caption() const { return m_caption; }
 
+		bool isNull() const { return m_id==0; }
 
 
 		void		setIdentifier(int id) { m_id = id; }
@@ -64,6 +67,8 @@ class KEXICORE_EXPORT Item
 		QString		m_name;
 		int		m_id;
 };
+
+typedef QValueList<Item> ItemList;
 
 }
 

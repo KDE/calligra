@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,9 +55,13 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 		void		addGroup(KexiPart::Info *info);
 		void		addItem(KexiPart::Item item);
 
+	signals: 
+		//! item execution requested
+		void executeItem( KexiPart::Item& );
+
 	protected slots:
 		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
-		void		slotItemListChanged(KexiPart::Info *);
+//		void		slotItemListChanged(KexiPart::Info *);
 		void		slotExecuteItem(QListViewItem *item);
 
 	private:

@@ -24,9 +24,6 @@
 #include <kmdimainfrm.h>
 #include <qintdict.h>
 
-
-//#include <kmdidefines.h>
-
 class KexiProject;
 class KexiProjectData;
 class KexiBrowser;
@@ -36,6 +33,9 @@ class KToggleAction;
 namespace KexiDB {
 	class Object;
 	class ConnectionData;
+}
+namespace KexiPart {
+	class Item;
 }
 
 /**
@@ -130,7 +130,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 //js		void		parseCmdLineOptions();
 
 		/**
-		 * creates browser and fills it with empty items
+		 * Creates navigator, lookups items for current project and fills the nav. with not-opened items
 		 */
 		void		initNavigator();
 
@@ -145,9 +145,15 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		childClosed(KMdiChildView *dlg);
 
+		bool executeObject(KexiPart::Item &item);
+
+		//! for convenience
+		bool executeObject(const QString& mime, const QString& name);
+
 
 		//! Shows an error message signaled by project's objects, connections, etc.
-		void slotShowErrorMessageFor(const QString&,KexiDB::Object *obj);
+		void showErrorMessage(const QString&,KexiDB::Object *obj);
+		void showErrorMessage(const QString &title, const QString &details = QString::null);
 
 		void slotViewNavigator();
 		void slotShowSettings();

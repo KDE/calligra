@@ -65,7 +65,10 @@ class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
 		void setDatabaseName(const QString& dbName);
 
 		QDateTime lastOpened;
-		
+
+		//! objects to open on startup (come from command line "-open" option)
+		QValueList< QPair<QString,QString> > autoopenObjects;
+
 /*		static const QString &generateTmpName();
 
 		static KexiProjectConnectionData* loadInfo(QDomElement &e);

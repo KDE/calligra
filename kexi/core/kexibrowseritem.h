@@ -23,6 +23,8 @@
 #include <klistview.h>
 #include <qstring.h>
 
+#include "kexipartitem.h"
+
 class KexiProjectHandlerProxy;
 class KexiProjectHandlerItem;
 
@@ -38,21 +40,26 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 /*		KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy  *proxy);
 		KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item);*/
 		/*constructor for main db listing */
-		KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *i);
-		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier);
+
+//		KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *i);
+//		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier);
+
+		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
+		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item item);
 //		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
 
 		~KexiBrowserItem() {};
 
-//		KexiProjectHandlerItem	*item();
-//		KexiProjectHandlerProxy	*proxy();
-		QString			mime();
-		QString			name();
-		int			identifier() { return m_identifier; }
+//js		QString			mime();
+//js		QString			name();
+//js		int			identifier() { return m_identifier; }
 
 		void			clearChildren();
 
-		KexiPart::Info		*info() { return m_info; }
+		KexiPart::Info	*info() { return m_info; }
+
+		//! can be null
+		KexiPart::Item	item() { return m_item; }
 
 	protected:
 		void initItem();
@@ -60,10 +67,11 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 		
 //		KexiProjectHandlerItem	*m_item;
 //		KexiProjectHandlerProxy	*m_proxy;
-		QString			m_mime;
-		QString			m_name;
-		int			m_identifier;
-		KexiPart::Info		*m_info;
+//js		QString			m_mime;
+//js		QString			m_name;
+//js		int			m_identifier;
+		KexiPart::Info *m_info;
+		KexiPart::Item m_item;
 
 		QString m_sortKey;
 		bool m_fifoSorting : 1;

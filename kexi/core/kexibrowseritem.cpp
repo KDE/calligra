@@ -19,8 +19,46 @@
 
 #include "kexibrowseritem.h"
 
-#include <kdebug.h>
+#include "kexipartinfo.h"
 
+#include <kdebug.h>
+#include <kiconloader.h>
+
+KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
+ : KListViewItem(parent, " "+ i->groupName())
+{
+	m_info = i;
+	setPixmap(0, SmallIcon(i->groupIcon()));
+	setOpen(true);
+	setSelectable(false);
+	initItem();
+	m_fifoSorting = 1; //because this is top level item
+}
+
+KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item item)
+ : KListViewItem(parent, " "+ item.name())
+{
+	m_item = item;
+	m_info = i;
+	setPixmap(0, SmallIcon(i->itemIcon()));
+	initItem();
+}
+
+void KexiBrowserItem::initItem()
+{
+	m_fifoSorting = 0;
+	int sortKey = 0;
+	// set sorting key with FIFO order
+	if (parent()) {
+		sortKey = parent()->childCount();
+	} else if (listView()) {
+		sortKey = listView()->childCount();
+	}
+	m_sortKey.sprintf("%2.2d",sortKey);
+	kdDebug() << "m_sortKey=" << m_sortKey << endl;
+}
+
+#if 0
 KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *info)
  : KListViewItem(parent, " "+ name)
 {
@@ -36,7 +74,6 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 	m_fifoSorting = 1; //because this is top level item
 }
 
-#if 0
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *proxy)
  : KListViewItem(parent, " "+ proxy->part()->groupName())
 {
@@ -63,8 +100,6 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item
 	initItem();
 	m_fifoSorting = 1; //because this is top level item
 }
-#endif
-
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier)
  : KListViewItem(parent, " "+ name)
@@ -79,7 +114,6 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 	initItem();
 }
 
-#if 0
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
  : KListViewItem(parent, " "+ item->title())
 {
@@ -93,19 +127,6 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *
 }
 #endif
 
-void KexiBrowserItem::initItem()
-{
-	m_fifoSorting = 0;
-	int sortKey = 0;
-	// set sorting key with FIFO order
-	if (parent()) {
-		sortKey = parent()->childCount();
-	} else if (listView()) {
-		sortKey = listView()->childCount();
-	}
-	m_sortKey.sprintf("%2.2d",sortKey);
-//	kdDebug() << "m_sortKey=" << m_sortKey << endl;
-}
 
 /*KexiProjectHandlerProxy*
 KexiBrowserItem::proxy()
@@ -119,7 +140,7 @@ KexiBrowserItem::item()
 	return m_item;
 }*/
 
-QString
+/*QString
 KexiBrowserItem::mime()
 {
 	return m_mime;
@@ -129,7 +150,7 @@ QString
 KexiBrowserItem::name()
 {
 	return m_name;
-}
+}*/
 
 void
 KexiBrowserItem::clearChildren()

@@ -22,6 +22,7 @@
 using namespace KexiPart;
 
 Item::Item()
+ : m_id(0) //- null
 {
 }
 

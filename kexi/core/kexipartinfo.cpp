@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +27,22 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 {
 	m_ptr = ptr;
 //	m_manager = manager;
-	m_instance = 0;
+//	m_instance = 0;
+
+	m_groupName = m_ptr->name();
+	m_mime = m_ptr->property("X-Kexi-TypeMime").toString();
+	m_groupIcon = m_ptr->property("X-Kexi-GroupIcon").toString();
+	m_itemIcon = m_ptr->property("X-Kexi-ItemIcon").toString();
+	m_objectName = m_ptr->property("X-Kexi-TypeName").toString();
+
+	//! @todo (js)..... now it's hardcoded!
+	if(objectName() == "table")
+		m_projectPartID = KexiDB::TableObjectType;
+	else if(objectName() == "query")
+		m_projectPartID = KexiDB::QueryObjectType;
+	else
+		m_projectPartID = -1; //TODO!!
+
 	m_broken = false;
 }
 
@@ -34,6 +50,7 @@ Info::~Info()
 {
 }
 
+/*
 QString
 Info::groupName()
 {
@@ -75,7 +92,7 @@ Info::projectPartID()
 	else
 		return m_projectPartID;
 }
-
+*/
 #if 0//js
 Part *
 Info::instance()

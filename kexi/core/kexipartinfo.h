@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,42 +42,42 @@ class KEXICORE_EXPORT Info
 		/**
 		 * @return a i18n'ed group name e.g. "Tables"
 		 */
-		QString 		groupName();
+		inline QString groupName() const { return m_groupName; }
 
 		/**
 		 * @return the internal mime of this part
 		 */
-		QString		mime();
+		inline QString mime() const { return m_mime; }
 
 		/**
 		 * @return the icon for groups
 		 */
-		QString 		groupIcon();
+		inline QString groupIcon() const { return m_groupIcon; }
 
 		/**
 		 * @return the icon for a item
 		 */
-		QString 		itemIcon();
+		inline QString itemIcon() const { return m_itemIcon; }
 
 		/**
 		 * @return the object name associated with this part (e.g. "table")
 		 */
-		QString 		objectName();
+		inline QString objectName() const { return m_objectName; }
 
 		/**
 		 * @return the project-part-id
 		 */
-		int 			projectPartID();
+		inline int projectPartID() const { return m_projectPartID; }
 
 		/**
 		 * @return the KService::Ptr associated with this part
 		 */
-		KService::Ptr 		ptr() { return m_ptr; }
+		KService::Ptr ptr() const { return m_ptr; }
 
 		/**
 		 * @return true if loading was tried but failed
 		 */
-		bool 			broken() { return m_broken; }
+		bool broken() const { return m_broken; }
 
 #if 0
 		/**
@@ -103,7 +104,13 @@ class KEXICORE_EXPORT Info
 	private:
 		KService::Ptr 		m_ptr;
 		bool 			m_broken;
-		Part 			*m_instance;
+//		Part 			*m_instance;
+
+		QString m_groupName;
+		QString m_mime;
+		QString m_groupIcon;
+		QString m_itemIcon;
+		QString m_objectName;
 		int 			m_projectPartID;
 //		Manager 		*m_manager;
 };

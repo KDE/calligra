@@ -297,8 +297,10 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 
 bool KexiMainWindow::openProject(KexiProjectData *projectData)
 {
+	if (!projectData)
+		return false;
 	d->prj = new KexiProject( projectData );
-	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(slotShowErrorMessageFor(const QString&,KexiDB::Object*)));
+	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 	if (!d->prj->open()) {
 		delete d->prj;
 		d->prj = 0;
@@ -307,7 +309,45 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 	initNavigator();
 	Kexi::recentProjects().addProjectData( projectData );
 	invalidateActions();
-	
+
+	QString not_found_msg;
+	//ok, now open "autoopen: objects
+	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
+		executeObject(QString("kexi/")+(*it).first,(*it).second);
+		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+(*it).first );
+		if (!i) {
+			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
+			continue;
+		}
+		KexiPart::Item &item = d->prj->item(i, (*it).second);
+		if (item.isNull()) {
+			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
+			continue;
+		}
+		if (!executeObject(item)) {
+			not_found_msg += ( (*it).second + " - " + i18n("cannot open object").arg((*it).first) +"<br>" );
+			continue;
+		}
+	}
+	if (!not_found_msg.isEmpty())
+		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
+			not_found_msg );
+
+/*
+		QString obj_mime = QString("kexi/") + (*it).first;
+		QString obj_identifier = obj_mime + "/" + obj_name;
+		KexiProjectHandler *hd = handlerForMime(obj_mime);
+		KexiProjectHandlerProxy *pr = hd ? hd->proxy(view) : 0;
+		if (!pr || !pr->executeItem(obj_identifier)) {
+			if (!not_found_msg.isEmpty())
+				not_found_msg += ",<br>";
+			not_found_msg += (pr ? pr->part()->name() : I18N_NOOP("Unknown object")) + " \"" + obj_name + "\"";
+		}
+	}
+	if (!not_found_msg.isEmpty())
+		KMessageBox::sorry(0, "<p><b>" + I18N_NOOP("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
+*/
+
 	return true;
 }
 
@@ -320,7 +360,7 @@ KexiMainWindow::selectProject(KexiDB::ConnectionData *cdata)
 	//dialog for selecting a project
 	KexiProjectSelectorDialog prjdlg( this, "prjdlg", cdata, true, false );
 	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
-		slotShowErrorMessageFor(i18n("Could not load list of available projects for connection \"%1\"")
+		showErrorMessage(i18n("Could not load list of available projects for connection \"%1\"")
 		.arg(cdata->serverInfoString()), prjdlg.projectSet());
 		return 0;
 	}
@@ -354,8 +394,9 @@ KexiMainWindow::initNavigator()
 		d->nav = new KexiBrowser(this, "kexi/db", 0);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-	}
+		connect(d->nav,SIGNAL(executeItem(KexiPart::Item&)),this,SLOT(executeObject(KexiPart::Item&)));
 
+	}
 	if(d->prj->isConnected())
 	{
 		d->nav->clear();
@@ -366,8 +407,17 @@ KexiMainWindow::initNavigator()
 			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
 			d->nav->addGroup(it);
 			KexiPart::Part *p=Kexi::partManager().part(it);
-			if (p)
-				p->createGUIClient(this);
+			if (!p) {
+				//TODO: js - OPTIONALLY: show error
+				continue;
+			}
+			p->createGUIClient(this);
+			//lookup project's objects (part items)
+			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
+			KexiPart::ItemList item_list = d->prj->items(p->info());
+			for (KexiPart::ItemList::Iterator item_it = item_list.begin(); item_it != item_list.end(); ++item_it) {
+				d->nav->addItem(*item_it);
+			}
 		}
 	}
 	d->nav->setFocus();
@@ -579,7 +629,7 @@ KexiMainWindow::createBlankDatabase()
 		return false;
 
 	d->prj = new KexiProject( new_data );
-	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(slotShowErrorMessageFor(const QString&,KexiDB::Object*)));
+	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 	if (!d->prj->create()) {
 		delete d->prj;
 		d->prj = 0;
@@ -707,33 +757,40 @@ void KexiMainWindow::slotViewNavigator()
 }
 
 void
-KexiMainWindow::slotShowErrorMessageFor(const QString &title, KexiDB::Object *obj)
+KexiMainWindow::showErrorMessage(const QString &title, const QString &details)
 {
-	if (!obj)
-		return;
-	QString msg;
-	if (!title.isEmpty())
-		msg = "<qt><p><b>"+title+"</b><p>";
-	else
-		msg = "<qt><p>";
-	if (!obj) {
-		KMessageBox::error(this, msg);
-		return;
-	}
-	msg += obj->errorMsg();
-	QString details;
-	if (!obj->serverErrorMsg().isEmpty())
-		details += "<qt><p><b>" +i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
-	QString resname = obj->serverResultName();
-	if (!resname.isEmpty())
-		details += (QString("<p><b>")+i18n("Server result name:")+"</b> "+resname);
+	QString msg = title;
+	if (title.isEmpty())
+		msg = i18n("Unknown error");
+	msg = "<qt><p>"+msg+"</p>";
 	if (!details.isEmpty()) {
-		details += (QString("<p><b>")+i18n("Result number:")+"</b> "+QString::number(obj->serverResult()));
 		KMessageBox::detailedError(this, msg, details);
 	}
 	else {
 		KMessageBox::error(this, msg);
 	}
+}
+
+void
+KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
+{
+	QString msg = title;
+	if (!obj) {
+		showErrorMessage(msg);
+		return;
+	}
+	msg += ("<p>"+obj->errorMsg());
+	QString details;
+	if (!obj->serverErrorMsg().isEmpty())
+		details += "<p><b>" +i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
+	QString resname = obj->serverResultName();
+	if (!resname.isEmpty())
+		details += (QString("<p><b>")+i18n("Server result name:")+"</b> "+resname);
+	if (!details.isEmpty()) {
+		details += (QString("<p><b>")+i18n("Result number:")+"</b> "+QString::number(obj->serverResult()));
+//		KMessageBox::detailedError(this, msg, details);
+	}
+	showErrorMessage(msg, details);
 }
 
 void
@@ -767,6 +824,29 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	if (d->block_KMdiMainFrm_eventFilter)//we don't want KMDI to eat our event!
 		return false;
 	return KMdiMainFrm::eventFilter(obj,e);//let KMDI do its work
+}
+
+bool
+KexiMainWindow::executeObject(const QString& mime, const QString& name)
+{
+	KexiPart::Item &item = d->prj->item(mime,name);
+	if (item.isNull())
+		return false;
+	return executeObject(item);
+}
+
+bool
+KexiMainWindow::executeObject(KexiPart::Item &item)
+{
+	if (activateWindow(item.identifier()))
+		return true;
+
+	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	if (!part) {
+		//TOOD js: error msg
+		return false;
+	}
+	return part->execute(this, item) != 0;
 }
 
 #include "keximainwindow.moc"
