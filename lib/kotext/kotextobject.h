@@ -318,6 +318,14 @@ public:
     void typingStarted();
     void typingDone();
 
+    /**
+     * Abort the current formatMore() loop, or prevent the next one from starting.
+     * Use with care. This is e.g. for KWFootNoteVariable, so that it can do
+     * a frame layout before formatting the main text again.
+     * It is important to make sure that formatMore will be called again ;)
+     */
+    void abortFormatting();
+
     void selectionChangedNotify( bool enableActions = true );
 
     void emitNewCommand(KCommand *cmd);

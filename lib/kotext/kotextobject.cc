@@ -37,8 +37,10 @@ struct KoTextObject::KoTextObjectPrivate
 public:
     KoTextObjectPrivate() {
         afterFormattingEmitted = false;
+        abortFormatting = false;
     }
     bool afterFormattingEmitted;
+    bool abortFormatting;
 };
 
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle* defaultStyle,
@@ -1435,8 +1437,10 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
 {
     while ( !parag->isValid() )
     {
-        if ( !m_lastFormatted || m_availableHeight == -1 )
+        if ( !m_lastFormatted || m_availableHeight == -1 || d->abortFormatting ) {
+            d->abortFormatting = false;
             return; // formatMore will do nothing -> give up
+        }
         formatMore( emitAfterFormatting );
     }
 }
@@ -1449,6 +1453,11 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 
     if ( !textDocument()->lastParag() )
         return; // safety test
+
+    if ( d->abortFormatting ) {
+        d->abortFormatting = false;
+        return;
+    }
 
     int bottom = 0;
     if ( m_lastFormatted )
@@ -1508,6 +1517,14 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
             else if (!parag->isValid())
                 kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
             m_lastFormatted = parag->next();
+
+            if ( d->abortFormatting ) {
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug(32002) << "formatMore formatting aborted. " << endl;
+#endif
+                d->abortFormatting = false;
+                return;
+            }
         }
     }
     else // formatting was done previously, but not emit afterFormatting
@@ -1555,6 +1572,11 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
                        << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
 #endif
     }
+}
+
+void KoTextObject::abortFormatting()
+{
+    d->abortFormatting = true;
 }
 
 void KoTextObject::doChangeInterval()
