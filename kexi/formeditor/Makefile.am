@@ -16,8 +16,10 @@ libkformdesigner_la_LIBADD = $(top_builddir)/kexi/widget/propertyeditor/libkexip
 servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=widgetfactory.desktop
 
-messages:
-	$(XGETTEXT) *.cpp -D ./ -D ./factories -D ./test -o $(podir)/kformdesigner.pot
-
 SUBDIRS = . factories test
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
+	$(XGETTEXT) `find . -name "*.cpp" -o -name ".h"` rc.cpp -o $(podir)/kformdesigner.pot
+        rm -f rc.cpp
 
