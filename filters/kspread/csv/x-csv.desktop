@@ -1,15 +1,22 @@
 [Desktop Entry]
-Icon=mimetypes/txt
+Icon=txt
 Type=MimeType
 MimeType=text/x-csv
 Patterns=*.csv;*.CSV;
 Comment=Text file with comma separated values
 Comment[ca]=Fitxer de text amb valors separats per comes
+Comment[cs]=Text s hodnotami oddělenými čárkami
 Comment[de]=Textdatei mit Werten, die durch Komma getrennt sind
+Comment[eo]=Tekstdosiero (Komo-apartigitaj valoroj)
 Comment[fi]=Pilkuilla erotettu tekstitiedosto
-Comment[hu]=Sz�veg f�jl, vessz�vel elv�lasztott �rt�kekkel
-Comment[ja]=�ͤ�����ޤǶ��ڤ�줿�ƥ����ȥե�����
-Comment[mi]=Sz�veg f�jl, vessz�vel elv�lasztott �rt�kekkel
+Comment[he]=םיקיספ י"ע םידרפומ םיכרע םע טסקט ץבוק
+Comment[hu]=Szöveg fájl, vesszővel elválasztott értékekkel
+Comment[it]=File di testo Con valori Separati dalla Virgola
+Comment[ja]=値がコンマで区切られたテキストファイル
 Comment[no]=Tekstfil med kommaseparerte verdier
 Comment[no_NY]=Tekstfil med kommadelte verdiar
-Comment[sv]=Textfil med kommaseparerade v�rden
+Comment[pt]=Ficheiro de texto com valores separados por vírgulas
+Comment[ro]=Fişier text cu valori separate prin virgule
+Comment[sl]=Besedilna datoteka z vrednostmi, lo�enimi z vejicami
+Comment[sv]=Textfil med kommaseparerade värden
+Comment[ta]=¸Á¡ (,) Å¢É¡ø À¢Ã¢ì¸Àð¼ Á¾¢ôÒ¸Ù¨¼Â ¯¨Ã §¸¡ôÒ
