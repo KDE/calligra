@@ -376,7 +376,7 @@ void KoShellWindow::slotFileNew()
 }
 //void KoShellWindow::slotFileOpen()
 //{
-  /* QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
     return;

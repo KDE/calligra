@@ -50,9 +50,9 @@ public:
 */  
   virtual QString configFile() const;
 
-  virtual QString nativeFormatMimeType() const {}
-  virtual QString nativeFormatPattern() const {}
-  virtual QString nativeFormatName() const {}
+  virtual QString nativeFormatMimeType() const { return QString::null; }
+  virtual QString nativeFormatPattern() const { return QString::null; }
+  virtual QString nativeFormatName() const { return QString::null; }
   
 protected slots:
 /*
@@ -68,7 +68,7 @@ protected slots:
   
 protected:
 
-  virtual KoDocument* createDoc() {}
+  virtual KoDocument* createDoc() { return 0L; }
 
   struct Page
   {
