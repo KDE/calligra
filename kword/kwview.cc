@@ -147,10 +147,17 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     // Cut and copy are directly connected to the selectionChanged signal
     if ( m_doc->isReadWrite() )
+    {
         connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
                  actionEditCut, SLOT(setEnabled(bool)) );
+        connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+                 actionFormatDefault , SLOT(setEnabled(bool)) );
+    }
     else
+    {
         actionEditCut->setEnabled( false );
+        actionFormatDefault->setEnabled(false);
+    }
 
     connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
@@ -2765,6 +2772,7 @@ void KWView::slotFrameSetEditChanged()
     bool hasSelection = edit && edit->textFrameSet()->hasSelection();
     actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
+    actionFormatDefault->setEnabled( hasSelection && rw);
     clipboardDataChanged(); // for paste
 
     bool state = (edit != 0L) && rw;
