@@ -78,6 +78,7 @@
 #include "kspread_dlg_reference.h"
 #include "kspread_dlg_area.h"
 #include "kspread_dlg_resize2.h"
+#include "kspread_dlg_preference.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -265,14 +266,15 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
-    m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
-    connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
-    m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
-    connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
-    m_LcMode = new KToggleAction( i18n("LC mode"), 0, actionCollection(), "LcMode");
-    connect( m_LcMode, SIGNAL( toggled( bool ) ), this, SLOT( toggleLcMode( bool ) ) );
-    m_showColumnNumber = new KToggleAction( i18n("Show column number"), 0, actionCollection(), "columnNumber");
-    connect( m_showColumnNumber, SIGNAL( toggled( bool ) ), this, SLOT( toggleColumnNumber( bool ) ) );
+    m_removeTable = new KAction( i18n("Preference..."), 0, this, SLOT( preference() ), actionCollection(), "preference" );
+    //m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
+    //connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
+    //m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
+    //connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
+    //m_LcMode = new KToggleAction( i18n("LC mode"), 0, actionCollection(), "LcMode");
+    //connect( m_LcMode, SIGNAL( toggled( bool ) ), this, SLOT( toggleLcMode( bool ) ) );
+    //m_showColumnNumber = new KToggleAction( i18n("Show column number"), 0, actionCollection(), "columnNumber");
+    //connect( m_showColumnNumber, SIGNAL( toggled( bool ) ), this, SLOT( toggleColumnNumber( bool ) ) );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -399,11 +401,11 @@ void KSpreadView::initialPosition()
     m_pCanvas->gotoLocation( col, row );
 
     //init toggle button
-    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+//    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-    m_showFormular->setChecked(m_pTable->getShowFormular());
-    m_LcMode->setChecked(m_pTable->getLcMode());
-    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
+//    m_showFormular->setChecked(m_pTable->getShowFormular());
+//    m_LcMode->setChecked(m_pTable->getLcMode());
+//    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
     /*recalc all dependent after loading*/
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
@@ -1457,11 +1459,11 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      this, SLOT( repaintPolygon( const QPointArray& ) ) );
     if(m_bLoading)
     	{
-    	m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+    	//m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     	m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-    	m_showFormular->setChecked(m_pTable->getShowFormular());
-    	m_LcMode->setChecked(m_pTable->getLcMode());
-	m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
+    	//m_showFormular->setChecked(m_pTable->getShowFormular());
+    	//m_LcMode->setChecked(m_pTable->getLcMode());
+	//m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
     	}
 }
 
@@ -1532,11 +1534,11 @@ void KSpreadView::changeTable( const QString& _name )
 
     updateEditWidget();
     //refresh toggle button
-    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+    //m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-    m_showFormular->setChecked(m_pTable->getShowFormular());
-    m_LcMode->setChecked(m_pTable->getLcMode());
-    m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
+    //m_showFormular->setChecked(m_pTable->getShowFormular());
+    //m_LcMode->setChecked(m_pTable->getLcMode());
+    //m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
 
 }
 
@@ -1792,15 +1794,15 @@ void KSpreadView::togglePageBorders( bool mode )
    m_pTable->setShowPageBorders( mode );
 }
 
-void KSpreadView::toggleGrid( bool mode)
+/*void KSpreadView::toggleGrid( bool mode)
 {
   if ( !m_pTable )
        return;
   m_pTable->setShowGrid(!mode);
   m_pCanvas->repaint();
-}
+}*/
 
-void KSpreadView::toggleFormular( bool mode)
+/*void KSpreadView::toggleFormular( bool mode)
 {
   if ( !m_pTable )
        return;
@@ -1808,22 +1810,33 @@ void KSpreadView::toggleFormular( bool mode)
   m_pTable->recalc();
   m_pCanvas->repaint();
 
-}
+}*/
 
-void KSpreadView::toggleLcMode( bool mode)
+/*void KSpreadView::toggleLcMode( bool mode)
 {
   if ( !m_pTable )
        return;
   m_pTable->setLcMode(mode);
   m_pCanvas->repaint();
   slotUpdateHBorder(activeTable());
-}
+}*/
 
-void KSpreadView::toggleColumnNumber(bool mode)
+/*void KSpreadView::toggleColumnNumber(bool mode)
 {
  if ( !m_pTable )
        return;
   m_pTable->setShowColumnNumber(mode);
+  slotUpdateHBorder(activeTable());
+}*/
+
+void KSpreadView::preference()
+{
+  if ( !m_pTable )
+       return;
+  KSpreadpreference* dlg = new KSpreadpreference( this, "Preference"); 
+  dlg->show();
+  m_pTable->recalc();
+  m_pCanvas->repaint();
   slotUpdateHBorder(activeTable());
 }
 

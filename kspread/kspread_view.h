@@ -175,10 +175,10 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void togglePageBorders( bool );
-    void toggleGrid( bool );
-    void toggleFormular( bool);
-    void toggleLcMode( bool);
-    void toggleColumnNumber(bool);
+//    void toggleGrid( bool );
+//    void toggleFormular( bool);
+//    void toggleLcMode( bool);
+//    void toggleColumnNumber(bool);
     void gotoCell();
     void replace();
     void conditional();
@@ -256,6 +256,7 @@ public slots:
     void lower();
     void equalizeColumn();
     void equalizeRow();
+    void preference();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -430,7 +431,7 @@ private:
     KAction* m_cellLayout;
     KAction* m_hideTable;
     KAction* m_showTable;
-    KToggleAction* m_hideGrid;
+//    KToggleAction* m_hideGrid;
     KAction* m_borderLeft;
     KAction* m_borderRight;
     KAction* m_borderTop;
@@ -447,8 +448,8 @@ private:
     KAction* m_default;
     KAction* m_areaName;
     KAction* m_showArea;
-    KToggleAction* m_showFormular;
-    KToggleAction* m_LcMode;
+//    KToggleAction* m_showFormular;
+//    KToggleAction* m_LcMode;
     KAction* m_resizeRow;
     KAction* m_resizeColumn;
     KAction* m_fontSizeUp;
@@ -457,7 +458,8 @@ private:
     KAction* m_lower;
     KAction* m_equalizeRow;
     KAction* m_equalizeColumn;
-    KToggleAction* m_showColumnNumber;
+    KAction* m_preference;
+//    KToggleAction* m_showColumnNumber;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

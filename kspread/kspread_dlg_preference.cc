@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,82 +18,69 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qprinter.h>
 
-
-#include "kspread_dlg_show.h"
+#include "kspread_dlg_preference.h"
 #include "kspread_view.h"
-#include "kspread_canvas.h"
-#include "kspread_tabbar.h"
 #include "kspread_table.h"
+#include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <qstringlist.h>
-#include <qlayout.h>
 #include <kbuttonbox.h>
-#include <qstrlist.h>
-#include <qlist.h>
 
 
-KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
+KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
 	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
-
   
+  setCaption( i18n("Preference") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  list=new QListBox(this);
-  lay1->addWidget( list );
 
-  setCaption( i18n("Table hidden") );
-
+  m_pFormula= new QCheckBox(i18n("Show formular"),this);
+  lay1->addWidget(m_pFormula);
+  m_pFormula->setChecked(m_pView->activeTable()->getShowFormular());
+  
+  m_pGrid=new QCheckBox(i18n("Show Grid"),this);
+  lay1->addWidget(m_pGrid);
+  m_pGrid->setChecked(m_pView->activeTable()->getShowGrid());
+    
+  m_pColumn=new QCheckBox(i18n("Show column number"),this);
+  lay1->addWidget(m_pColumn);
+  m_pColumn->setChecked(m_pView->activeTable()->getShowColumnNumber());
+  
+  m_pLcMode=new QCheckBox(i18n("LC mode"),this);
+  lay1->addWidget(m_pLcMode);
+  m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
+  
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("Ok") );
   m_pOk->setDefault( TRUE );
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
-  lay1->addWidget( bb );
-  QString text;
-  QStringList::Iterator it;
-  QStringList tabsList=m_pView->tabBar()->listhide();
-  for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-    	{
-    	text=*it;
-    	list->insertItem(text);
-    	}
-  if(!list->count())
-  	m_pOk->setEnabled(false);
+  lay1->addWidget( bb);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
-  resize( 200, 150 );
-  
-}
 
-void KSpreadshow::slotDoubleClicked(QListBoxItem *)
-{
-    slotOk();
 }
 
 
-
-void KSpreadshow::slotOk()
+void KSpreadpreference::slotOk()
 {
-  QString text;
-  if(list->currentItem()!=-1)
-	{
-	text=list->text(list->currentItem());
-        m_pView->tabBar()->showTable(text);
-        }
+  m_pView->activeTable()->setLcMode(m_pLcMode->isChecked());
+  m_pView->activeTable()->setShowColumnNumber(m_pColumn->isChecked());
+  m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
+  m_pView->activeTable()->setShowFormular(m_pFormula->isChecked());
   accept();
 }
 
-void KSpreadshow::slotClose()
+
+void KSpreadpreference::slotClose()
 {
-  reject();
+reject();
 }
 
-
-#include "kspread_dlg_show.moc"
+#include "kspread_dlg_preference.moc"

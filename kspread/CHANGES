@@ -494,3 +494,10 @@ Replace all QMessageBox by KMessageBox
 -----------------------------------------------------
 -Now when you resize row or column you can show its size.
 -Add new help formula in kspread_dlg_formula.
+
+2000-05-12 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now I created a new dialog box "Preference" 
+move "show grid","show formular","LC mode","Column number" into
+this dialog box
+-Bug fix
