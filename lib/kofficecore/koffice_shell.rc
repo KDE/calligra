@@ -14,8 +14,8 @@
  </Menu>
  <Merge />
  <Menu name="help"><text>&amp;Help</text>
-  <Action name="about" />
   <Merge />
+  <Action name="about" />
  </Menu>
 </MenuBar>
 <ToolBar name="kofficeshelltoolbar" fullWidth="false">

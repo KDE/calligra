@@ -119,7 +119,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 			  actionCollection(), "fileclose" );
     /*KAction* quit =*/ new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::key(KStdAccel::Quit), this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
-    /*KAction* helpAbout =*/ new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
+    /*KAction* helpAbout =*/ new KAction( i18n("About KOffice..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
     if ( instance )
