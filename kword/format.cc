@@ -75,7 +75,8 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     math = -1;
     direct = -1;
     ref = 0;
-    if ( !doc ) doc = const_cast<KWFormat>( _format ).getDocument();
+    if ( !doc ) 
+        doc =  _format.doc;
 
     return *this;
 }
