@@ -63,7 +63,7 @@ QString Document::getFont(unsigned fc)
     static const unsigned ENTRIES = 6;
     static QString fuzzyLookup[ENTRIES][2] =
     {
-        // MS contains      X11 font family
+        // MS contains      X11 font family
         // substring.       non-AA name.
         { "times",          "times" },
         { "courier",        "courier" },
@@ -88,6 +88,10 @@ QString Document::getFont(unsigned fc)
             break;
         }
     }
+
+#ifdef FONT_DEBUG
+    kdDebug() << "FUZZY-FONT: " << font << endl;
+#endif
 
     // Use Qt to look up our canonical equivalent of the font name.
     QFont xFont( font );
