@@ -681,7 +681,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_bCellTooShort=false;
 
     freeAllObscuredCells();
-
     ColumnLayout *cl1 = m_pTable->columnLayout( column() );
     RowLayout *rl1 = m_pTable->rowLayout( row() );
     if( cl1->isHide() || (rl1->height()<=2))
@@ -690,7 +689,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
      * RichText
      */
     if ( m_pQML )
-    {
+      {
         // Calculate how many cells we could use in addition right hand
         // Never use more then 10 cells.
         int right = 0;
@@ -777,7 +776,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         }
         m_iExtraYCells = r - _row - 1;
         m_iExtraHeight = ( m_iExtraYCells == 0 ? 0 : max_height );
-
         m_bLayoutDirtyFlag = false;
         return;
     }
@@ -2640,7 +2638,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      * QML ?
      */
     if ( m_pQML && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
-    {
+      {
         _painter.save();
         m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
         _painter.restore();
@@ -4959,13 +4957,12 @@ void KSpreadCell::setStyle( Style _s )
       update();
 }
 
-QString KSpreadCell::testAnchor( int _x, int _y, QWidget* _w )
+QString KSpreadCell::testAnchor( int _x, int _y )
 {
   if ( !m_pQML )
     return QString::null;
 
-  QPainter p( _w );
-  return m_pQML->anchor( &p, QPoint( _x, _y ) );
+  return m_pQML->anchorAt( QPoint( _x, _y ) );
 }
 
 void KSpreadCell::tableDies()

@@ -762,7 +762,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     {
         KSpreadCell *cell = table->visibleCellAt( col, row );
         QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
-                                           _ev->pos().y() - ypos, this );
+                                           _ev->pos().y() - ypos );
         if ( !anchor.isEmpty() && anchor != m_strAnchor )
             setCursor( KCursor::handCursor() );
         m_strAnchor = anchor;

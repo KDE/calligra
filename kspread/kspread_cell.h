@@ -423,7 +423,7 @@ public:
     */
     bool updateChart(bool refresh=true);
 
-    QString testAnchor( int _x, int _y, QWidget* _canvas );
+    QString testAnchor( int _x, int _y );
 
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
