@@ -80,7 +80,7 @@ void load( KFormula::Document* document, QString filename )
 }
 
 
-void saveMathML( KFormula::Container* formula, QString filename )
+void saveMathML( KFormula::Container* formula, const QString &filename )
 {
     QFile f( filename );
     if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
@@ -95,7 +95,7 @@ void saveMathML( KFormula::Container* formula, QString filename )
 }
 
 
-void loadMathML( KFormula::Container* formula, QString filename )
+void loadMathML( KFormula::Container* formula, const QString &filename )
 {
     QFile f( filename );
     if ( !f.open( IO_ReadOnly ) ) {
