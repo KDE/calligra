@@ -42,7 +42,7 @@
 
 #include <koGlobal.h>
 
-#include "processors.h"
+#include "ExportTagProcessing.h"
 #include "kqiodevicegzip.h"
 
 ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
@@ -72,6 +72,16 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 //            NAME value=
 //            FLOW align=
 //            FORMAT id=1
+
+
+// In KWord's AbiWord export filter, the class ClassExportFilterBase is more
+//  a dummy for the compatibility with KWord's HTML export filter.
+class ClassExportFilterBase
+{
+public:
+    ClassExportFilterBase(void) {}
+    virtual ~ClassExportFilterBase(void) {}
+};
 
 // Counter structure, for LayoutData
 class CounterData
@@ -123,7 +133,7 @@ public:
     bool pageBreakBefore, pageBreakAfter;
 };
 
-static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &)
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -141,7 +151,7 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &)
     AllowNoSubtags (myNode);
 }
 
-static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString & )
+static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -153,7 +163,7 @@ static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString & )
     AllowNoSubtags (myNode);
 }
 
-static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString & )
+static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -171,7 +181,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString & )
     AllowNoSubtags (myNode);
 }
 
-static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &)
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     CounterData *counter = (CounterData *) tagData;
     QValueList<AttrProcessing> attrProcessingList;
@@ -190,7 +200,7 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &)
 
 // FORMAT's subtags
 
-static void ProcessItalicTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessItalicTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int value=0;
 
@@ -204,7 +214,7 @@ static void ProcessItalicTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
-static void ProcessUnderlineTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessUnderlineTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int value=0;
 
@@ -218,7 +228,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
-static void ProcessStrikeOutTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessStrikeOutTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int value=0;
 
@@ -232,7 +242,7 @@ static void ProcessStrikeOutTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
-static void ProcessWeightTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessWeightTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int weight=50;
 
@@ -252,7 +262,7 @@ static void ProcessWeightTag (QDomNode myNode, void* , QString& abiprops)
     */
 }
 
-static void ProcessSizeTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessSizeTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int size=-1;
 
@@ -269,7 +279,7 @@ static void ProcessSizeTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
-static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     QString fontName;
 
@@ -285,7 +295,7 @@ static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops)
     }
 }
 
-static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int red,green,blue;
 
@@ -310,7 +320,7 @@ static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops)
     abiprops += "; "; // Note: Trailing space is important!
 }
 
-static void ProcessVertAlignTag (QDomNode myNode, void* , QString& abiprops)
+static void ProcessVertAlignTag (QDomNode myNode, void* , QString& abiprops, ClassExportFilterBase*)
 {
     int value=-1;
 
@@ -357,7 +367,7 @@ public:
     virtual ~ValueListFormatData (void) { }
 };
 
-static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &)
+static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
 {
     // To use in <LAYOUT> or <STYLE> elements
     // And is base for ProcessFormatTag
@@ -406,11 +416,11 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &)
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,NULL ) );
 
     //Now let's the sub tags fill in the AbiWord's "props" attribute
-    ProcessSubtags (myNode, tagProcessingList, formatData->abiprops);
+    ProcessSubtags (myNode, tagProcessingList, formatData->abiprops,exportFilter);
 
 }
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy, ClassExportFilterBase* exportFilter)
 {
     // To use in <FORMATS> elements
 
@@ -418,12 +428,12 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy
 
     FormatData formatData (-1,-1);
 
-    ProcessSingleFormatTag(myNode,(void*) &formatData, strDummy);
+    ProcessSingleFormatTag(myNode,(void*) &formatData, strDummy,exportFilter);
 
     formatDataList->append (formatData);
 }
 
-static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&)
+static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, ClassExportFilterBase*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -434,7 +444,7 @@ static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&)
     ProcessAttributes (myNode, attrProcessingList);
 }
 
-static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     LayoutData *layout = (LayoutData *) tagData;
     FormatData formatData(-1,-1);
@@ -451,12 +461,12 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ("PAGEBREAKING",ProcessLineBreakingTag,(void *) layout ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 
     layout->abiprops += formatData.abiprops;
 }
 
-static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText )
+static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -465,11 +475,10 @@ static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputT
     (*formatDataList).clear ();
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
-
-static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
+static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     QString *tagText = (QString *) tagData;
 
@@ -564,7 +573,9 @@ static QString EscapeText(const QString& strIn)
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText )
+static void ProcessParagraphData ( QString &paraText,
+    ValueListFormatData &paraFormatDataList, QString &outputText,
+    ClassExportFilterBase* )
 {
     if ( paraText.length () > 0 )
     {
@@ -613,7 +624,7 @@ static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraF
 
 }
 
-static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText )
+static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
@@ -626,7 +637,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
     tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
     tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 
     QString style; // Style attribute for <p> element
     QString props; // Props attribute for <p> element
@@ -706,7 +717,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         outputText += "<pbr/>";
     }
 
-    ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+    ProcessParagraphData ( paraText, paraFormatDataList, outputText, exportFilter );
 
     // Before closing the paragraph, test if we have a page break
     if (paraLayout.pageBreakAfter)
@@ -719,7 +730,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 }
 
 
-static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText )
+static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
 {
     int frameType=-1;
     int frameInfo=-1;
@@ -739,7 +750,7 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText 
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
         tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-        ProcessSubtags (myNode, tagProcessingList, outputText);
+        ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 
         outputText+="</section>\n";
     }
@@ -747,16 +758,16 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText 
 }
 
 
-static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText )
+static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString   &outputText )
+static void ProcessStyleTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
@@ -772,19 +783,19 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString   &outputText )
     tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",        NULL, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputText )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
+static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase*)
 {
     int format=-1;
     int orientation=-1;
@@ -942,7 +953,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
     outputText += "page-scale=\"1.0\"/>\n"; // KWord has no page scale, so assume 100%
 }
 
-static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
+static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassExportFilterBase* exportFilter)
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
@@ -958,7 +969,7 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
 bool ABIWORDExport::filter(const QString  &filenameIn,
@@ -1034,6 +1045,14 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
 
     QDomNode docNodeIn = qDomDocumentIn.documentElement ();
 
+    // Create export filter (more a dummy for now!)
+    ClassExportFilterBase* exportFilter=new ClassExportFilterBase;
+    if (!exportFilter)
+    {
+        kdError(30506) << "No AbiWord filter created! Aborting! (Memory problem?)" << endl;
+        return false;
+    }
+
     // Make the file header
 
     // First the XML header in UTF-8 version
@@ -1069,7 +1088,7 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
 
     QString stringBufOut;
     // Now that we have the header, we can do the real work!
-    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+    ProcessDocTag (docNodeIn, NULL, stringBufOut, exportFilter);
     streamOut << stringBufOut;
 
     // Add the tail of the file
@@ -1079,6 +1098,7 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
 
     ioDevice->close();
 
+    delete exportFilter;
     delete ioDevice;
 
     return true;

@@ -34,7 +34,6 @@
 
 #include <koGlobal.h>
 
-#include "processors.h"
 #include "kqiodevicegzip.h"
 #include <abiwordimport.h>
 #include <abiwordimport.moc>

@@ -1,9 +1,7 @@
 // $Header$
 
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                      Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+/*
+   This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
@@ -22,17 +20,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-/* 
-   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-        Extracting the code from file:
-           /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-        and breaking the code into two new files:
-           /home/kde/koffice/filters/kword/abiword/processors.cc 
-	   /home/kde/koffice/filters/kword/abiword/processors.h
+/*
+   This file is based on the old file:
+    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
 
-   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-        New functions ending with Dom
+   The old file was copyrighted by
+    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
+                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+
+   The old file was licensed under the terms of the GNU Library General Public
+   License version 2.
 */
+
+#ifndef EXPORTTAGPROCESSING_H
+#define EXPORTTAGPROCESSING_H
+
+#include <kdebug.h>
+#include <qdom.h>
+
+class ClassExportFilterBase;
 
 // The class TagProcessing and the two functions ProcessSubtags () and
 // AllowNoSubtags () allow for easing parsing of subtags in the
@@ -42,10 +49,6 @@
 // call the corresponding processing function, and do all the
 // necessary error handling.
 
-
-#ifndef PROCESSORS_H
-#define PROCESSORS_H
-
 class TagProcessing
 {
     public:
@@ -53,38 +56,19 @@ class TagProcessing
         {}
 
         TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, QString &),
+                       void     (*p)(QDomNode, void *, QString &, ClassExportFilterBase*),
                        void    *d) : name (n), processor (p), data (d)
         {}
 
         QString  name;
-        void     (*processor)(QDomNode, void *, QString &);
-        void    *data;
-};
-
-class TagProcessingDom
-{
-    public:
-        TagProcessingDom ()
-        {}
-
-        TagProcessingDom (QString  n,
-                         void     (*p)(QDomNode, void *, QDomNode&),
-                         void    *d) : name (n), processor (p), data (d)
-        {}
-
-        QString  name;
-        void     (*processor)(QDomNode, void *, QDomNode&);
+        void     (*processor)(QDomNode, void *, QString &, ClassExportFilterBase*);
         void    *data;
 };
 
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
-                          QString                    &outputText         );
-
-void ProcessSubtagsDom  ( QDomNode                      parentNode,
-                          QValueList<TagProcessingDom>  &tagProcessingList,
-                          QDomNode                      &outputQDomNode );
+                          QString                    &outputText,
+                          ClassExportFilterBase      *exportFilter);
 
 void AllowNoSubtags ( QDomNode  myNode );
 
@@ -119,4 +103,4 @@ void ProcessAttributes ( QDomNode                     myNode,
 
 void AllowNoAttributes ( QDomNode  myNode );
 
-#endif // PROCESSORS_H
+#endif

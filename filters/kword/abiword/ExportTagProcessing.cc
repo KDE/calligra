@@ -1,10 +1,7 @@
 // $Header$
 
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
-                      Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
-   Copyright (C) 2001 Michael Johnson <mikej@xnet.com>
+/*
+   This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
@@ -23,21 +20,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-/* 
-   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-        Extracting the code from file:
-           /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-        and breaking the code into two new files:
-           /home/kde/koffice/filters/kword/abiword/processors.cc 
-          /home/kde/koffice/filters/kword/abiword/processors.h
+/*
+   This file is based on the old file:
+    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
 
-   19 Jan 2001  Nicolas GOUTTE <nicog@snafu.de>
-        New functions ending with Dom
+   The old file was copyrighted by
+    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
+                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
+
+   The old file was licensed under the terms of the GNU Library General Public
+   License version 2.
 */
 
 #include <kdebug.h>
 #include <qdom.h>
-#include "processors.h"
+
+#include <ExportTagProcessing.h>
+
+#undef DEBUG_KWORD_TAGS // Debugging KWord's tags and attributes
 
 // The class TagProcessing and the two functions ProcessSubtags () and
 // AllowNoSubtags () allow for easing parsing of subtags in the
@@ -49,7 +50,8 @@
 
 void ProcessSubtags ( QDomNode                    parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
-                      QString                    &outputText         )
+                      QString                    &outputText,
+                      ClassExportFilterBase      *exportFilter)
 {
     QDomNode childNode;
 
@@ -72,7 +74,7 @@ void ProcessSubtags ( QDomNode                    parentNode,
 
                     if ( (*tagProcessingIt).processor != NULL )
                     {
-                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText );
+                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText, exportFilter );
                     }
                     else
                     {
@@ -84,64 +86,27 @@ void ProcessSubtags ( QDomNode                    parentNode,
 
             if ( !found )
             {
-                kdError(30506) << "Unexpected tag " << childNode.nodeName ()
+                kdError(30503) << "Unexpected tag " << childNode.nodeName ()
                                << " in " << parentNode.nodeName () << "!" << endl;
             }
         }
     }
 }
 
-void ProcessSubtagsDom ( QDomNode                       parentNode,
-                      	 QValueList<TagProcessingDom>   &tagProcessingList,
-                         QDomNode                       &outputQDomNote )
-{
-    QDomNode childNode;
-
-    for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
-    {
-//      if ( childNode.isElement () )   // doesn't work!!!
-        if ( childNode.nodeType () == QDomNode::ElementNode )
-        {
-            bool found = false;
-
-            QValueList<TagProcessingDom>::Iterator  tagProcessingIt;
-
-            for ( tagProcessingIt = tagProcessingList.begin ();
-                  !found && tagProcessingIt != tagProcessingList.end ();
-                  tagProcessingIt++ )
-            {
-                if ( childNode.nodeName () == (*tagProcessingIt).name )
-                {
-                    found = true;
-
-                    if ( (*tagProcessingIt).processor != NULL )
-                    {
-                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputQDomNote );
-                    }
-                    else
-                    {
-//                      kdError () << "<para>ignoring " << childNode.nodeName ()
-//                                      << " tag in " << parentNode.nodeName () << "!</para>" << endl;
-                    }
-                }
-            }
-
-            if ( !found )
-            {
-                kdError(30506) << "Unexpected tag " << childNode.nodeName ()
-                               << " in " << parentNode.nodeName () << "!" << endl;
-            }
-        }
-    }
-}
-
+#ifdef DEBUG_KWORD_TAGS
+// Version for debugging (process all sub tags)
 void AllowNoSubtags ( QDomNode  myNode )
 {
     QString outputText;
     QValueList<TagProcessing> tagProcessingList;
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, NULL);
 }
-
+#else
+// Normal version: no subtags expected, so do not search any!
+void AllowNoSubtags ( QDomNode )
+{
+}
+#endif
 
 // The class AttrProcessing and the two functions ProcessAttributes ()
 // and AllowNoSubtags () allow for easing parsing of the current tag's
@@ -189,18 +154,18 @@ void ProcessAttributes ( QDomNode                     myNode,
                         }
                         else if ( (*attrProcessingIt).type == "double" )
                         {
-                            *((double *) (*attrProcessingIt).data) =  myAttrib.value ().toDouble ();
+                            *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
                         }
                         else
                         {
-                            kdError(30506) << "Unexpected data type " << (*attrProcessingIt).type << " in " <<
+                            kdError(30503) << "Unexpected data type " << (*attrProcessingIt).type << " in " <<
                                            myNode.nodeName () << " attribute " << (*attrProcessingIt).name
                                            << "!" << endl;
                         }
                     }
                     else
                     {
-//                      kdError(30506) << "<para>ignoring " << myNode.tagName << " attribute "
+//                      kdError(30503) << "<para>ignoring " << myNode.tagName << " attribute "
 //                                     << (*attrProcessingIt).name << "!</para>" << endl;
                     }
                 }
@@ -208,16 +173,23 @@ void ProcessAttributes ( QDomNode                     myNode,
 
             if ( !found )
             {
-                kdError(30506) << "Unexpected attribute " << myAttrib.name () << " in " <<
+                kdError(30503) << "Unexpected attribute " << myAttrib.name () << " in " <<
                                   myNode.nodeName () << "!" << endl;
             }
         }
     }
 }
 
-
+#ifdef DEBUG_KWORD_TAGS
+// Version for debugging (process all attributes)
 void AllowNoAttributes ( QDomNode  myNode )
 {
     QValueList<AttrProcessing> attrProcessingList;
     ProcessAttributes (myNode, attrProcessingList);
 }
+#else
+// Normal version: no attributes expected, so do not process any!
+void AllowNoAttributes ( QDomNode )
+{
+}
+#endif
