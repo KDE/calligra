@@ -54,6 +54,12 @@ KexiProjectHandlerItem::fullIdentifier()
 	return m_mime+"/"+m_ident;
 }
 
+QString
+KexiProjectHandlerItem::title()
+{
+	return m_title;
+}
+
 KexiProjectHandlerItem::~KexiProjectHandlerItem()
 {
 }
