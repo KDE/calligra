@@ -2777,5 +2777,12 @@ void KPresenterDoc::addVertHelpline(double pos)
     m_vertHelplines.append(pos);
 }
 
+void KPresenterDoc::updateHelpLineButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->updateHelpLineButton();
+
+}
 
 #include <kpresenter_doc.moc>

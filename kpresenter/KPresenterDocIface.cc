@@ -531,3 +531,14 @@ void KPresenterDocIface::setDisplayComment( bool b)
     doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
     doc->recalcVariables(VT_NOTE);
 }
+
+bool KPresenterDocIface::showHelplines() const
+{
+    return doc->showHelplines();
+}
+
+void KPresenterDocIface::setShowHelplines(bool b)
+{
+    doc->setShowHelplines(b);
+    doc->updateHelpLineButton();
+}

@@ -158,6 +158,10 @@ k_dcop:
     bool displayComment()const;
     void setDisplayComment( bool b);
 
+    bool showHelplines() const;
+    void setShowHelplines(bool b);
+
+
 private:
     KPresenterDoc *doc;
 

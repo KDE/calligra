@@ -127,6 +127,7 @@ public:
     //refresh footer/header button when we make undo/redo show/hide header/footer
     void updateHeaderFooterButton();
 
+    void updateHelpLineButton();
 
 signals:
     void currentPageChanged( int );

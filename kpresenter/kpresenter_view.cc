@@ -2361,7 +2361,7 @@ void KPresenterView::initGui()
 
     actionAllowAutoFormat->setChecked( m_pKPresenterDoc->allowAutoFormat() );
 
-    actionViewShowHelpLine->setChecked( m_pKPresenterDoc->showHelplines() );
+    updateHelpLineButton();
 
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
@@ -5709,6 +5709,11 @@ void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
 {
     //todo
+}
+
+void KPresenterView::updateHelpLineButton()
+{
+    actionViewShowHelpLine->setChecked( m_pKPresenterDoc->showHelplines() );
 }
 
 #include <kpresenter_view.moc>

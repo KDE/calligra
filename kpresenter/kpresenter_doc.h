@@ -361,6 +361,8 @@ public:
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
 
+    void updateHelpLineButton();
+
 
 public slots:
     void movePage( int from, int to );
