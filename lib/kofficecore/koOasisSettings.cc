@@ -25,13 +25,13 @@ KoOasisSettings::KoOasisSettings( const QDomDocument &doc )
 {
 }
 
-bool KoOasisSettings::configItem( const QString &configItemName)
+bool KoOasisSettings::selectItemSet( const QString &itemSetName )
 {
-     QDomElement contents = m_doc.documentElement();
-     QDomNode tmp = contents.namedItem("office:settings").toElement();
-    if (tmp.isNull() )
+    QDomElement contents = m_doc.documentElement();
+    QDomNode tmp = contents.namedItem("office:settings").toElement();
+    if ( tmp.isNull() )
     {
-        m_element =QDomElement();
+        m_element = QDomElement();
         kdDebug()<<" document doesn't have tag 'office:settings' \n";
         return false;
     }
@@ -39,7 +39,7 @@ bool KoOasisSettings::configItem( const QString &configItemName)
     {
         QDomElement e = n.toElement();
         //kdDebug()<<"e.tagName() :"<<e.tagName()<<endl;
-        if ( e.hasAttribute( "config:name" ) && ( e.attribute( "config:name" )==configItemName ) )
+        if ( e.tagName() == "config:config-item-set" && e.attribute( "config:name" ) == itemSetName )
         {
             m_element = e;
             return true;
@@ -48,13 +48,13 @@ bool KoOasisSettings::configItem( const QString &configItemName)
     return false;
 }
 
-bool KoOasisSettings::mapItem( const QString &mapItemName)
+bool KoOasisSettings::selectItemMap( const QString &itemMapName )
 {
     for ( QDomNode viewSetting = m_element.firstChild(); !viewSetting.isNull();
           viewSetting = viewSetting.nextSibling() )
     {
         QDomElement configItem = viewSetting.toElement();
-        if ( configItem.tagName()== "config:config-item-map-indexed" && ( configItem.attribute( "config:name" )== mapItemName ) )
+        if ( configItem.tagName()== "config:config-item-map-indexed" && configItem.attribute( "config:name" ) == itemMapName )
         {
             m_element = configItem;
             return true;

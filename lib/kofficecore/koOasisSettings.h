@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2004 Laurent Montel \<montel@kde.org\>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,40 +27,47 @@
  * Class used to parse settings.xml file.
  */
 
-/*
- * By default settings.xml is defineds as :
- *   <office:settings>
- *      <config:config-item-set config:name="view-settings">
- *         <config:config-item-map-indexed config:name="Views">
- *           <config:config-item config:name="SnapLinesDrawing" config:type="string">value</config:config-item>
+/**
+ * This class helps parsing the settings.xml file of an OASIS document.
+ *
+ * For reference, the structure of settings.xml looks like:
+ * <code>
+ *   \<office:settings\>
+ *      \<config:config-item-set config:name="view-settings"\>
+ *         \<config:config-item-map-indexed config:name="Views"\>
+ *           \<config:config-item config:name="SnapLinesDrawing" config:type="string"\>value\</config:config-item\>
  *           .....
- *         </config:config-item-map-indexed>
- *         <config:config-item-map-indexed config:name="Interface">
+ *         \</config:config-item-map-indexed\>
+ *         \<config:config-item-map-indexed config:name="Interface"\>
  *         .......
- *         </config:config-item-map-indexed>
- *       </config:config-item-set>
- *       <config:config-item-set config:name="configure-settings">
+ *         \</config:config-item-map-indexed\>
+ *       \</config:config-item-set\>
+ *       \<config:config-item-set config:name="configure-settings"\>
  *       ....
- *       </config:config-item-set>
- *   </office:settings>
+ *       \</config:config-item-set\>
+ *   \</office:settings\>
+ * </code>
+ * Basically, config-items are either part of an item-set, or part of an item-map which is inside an item-set.
+ *
+ * The API of KoOasisSettings allows the caller to look for a given item-set or item-map once,
+ * and then lookup multiple items inside it.
  */
-
-
 class KoOasisSettings
 {
 public:
     KoOasisSettings( const QDomDocument &doc );
 
-    /*
-     * return true if config item set "configItemName" exist
+    /**
+     * Select the config-item-set named @p configItemName
+     * @return false if no such item set was found
      */
-    bool configItem( const QString &configItemName);
+    bool selectItemSet( const QString &itemSetName );
 
-    /*
-     * return true if mapItemName exist
+    /**
+     * Select the config-item-map named @p mapItemName, inside the item-set previously selected by selectItemSet.
+     * @return false if no such item map was found
      */
-    bool mapItem( const QString &mapItemName);
-
+    bool selectItemMap( const QString &itemMapName );
 
     int parseConfigItemInt( const QString & configName ) const;
     double parseConfigItemDouble( const QString & configName ) const;
@@ -69,13 +76,11 @@ public:
     short parseConfigItemShort( const QString & configName ) const;
     long parseConfigItemLong( const QString & configName ) const;
 
-
 private:
-    // internal
+    /// internal
     QString parseConfigItem( const QString &item ) const;
 
-    //store it to change config item
-    QDomDocument m_doc;
+    const QDomDocument m_doc;
     QDomElement m_element;
 };
 
