@@ -884,26 +884,27 @@ KarbonView::initActions()
 	// tools <-----
 
 	// text ----->
-	m_setFontFamily = new KFontAction(
+	// Disable the text, hopefully it will make a comback soon (Rob)
+	/*m_setFontFamily = new KFontAction(
 		i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
-	m_setFontFamily->setCurrentItem( 0 );
+	m_setFontFamily->setCurrentItem( 0 );*/
 
 	//connect( m_setFontFamily,
 	//	SIGNAL( activated( const QString& ) ),
 	//	SLOT( setFontFamily( const QString& ) ) );
 
-	m_setFontSize = new KFontSizeAction(
+	/*m_setFontSize = new KFontSizeAction(
 		i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
-	m_setFontSize->setCurrentItem( 0 );
+	m_setFontSize->setCurrentItem( 0 );*/
 
 	//connect( m_setFontSize,
 	//	SIGNAL( activated( const QString& ) ),
 	//	SLOT( setFontSize( const QString& ) ) );
 
-	m_setFontItalic = new KToggleAction(
+	/*m_setFontItalic = new KToggleAction(
 		i18n( "&Italic" ), "text_italic", 0, actionCollection(), "setFontItalic" );
 	m_setFontBold = new KToggleAction(
-		i18n( "&Bold" ), "text_bold", 0, actionCollection(), "setFontBold" );
+		i18n( "&Bold" ), "text_bold", 0, actionCollection(), "setFontBold" );*/
 
 	//m_setTextColor = new TKSelectColorAction(
 	//	i18n("Set Text Color"), TKSelectColorAction::TextColor,

@@ -121,12 +121,12 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( spiralToolActivated() ) );
 	btngroup->insert( button, Spiral );
 
-	button = new QToolButton( btngroup );
+	/*button = new QToolButton( btngroup );
 	pixmap = BarIcon( "14_text", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
-	btngroup->insert( button, Text );
+	btngroup->insert( button, Text );*/
 
 	button = new QToolButton( btngroup );
 	pixmap = BarIcon( "14_gradtool", KarbonFactory::instance() );

@@ -75,15 +75,9 @@
 		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
 	</ToolBar>
-	<ToolBar name="font_toolbar" fullWidth="false">
-		<Text>Font</Text>
-		<Action name="setFontFamily"/>
-		<Action name="setFontSize"/>
-		<Action name="setFontBold"/>
-		<Action name="setFontItalic"/>
-	</ToolBar>
-	<ToolBar name="PenProp" fullWidth="false"><text>Stroke Properties</text>
-	<Action name="setLineWidth"/>
-	<Action name="setJoinStyle"/>
+	<ToolBar name="PenProp" fullWidth="false">
+		<Text>Stroke Properties</Text>
+		<Action name="setLineWidth"/>
+		<Action name="setJoinStyle"/>
 	</ToolBar>
 </kpartgui>
