@@ -25,6 +25,7 @@
 #include <koApplication.h>
 #include <kimgio.h>
 #include <kstddirs.h>
+#include <kglobal.h>
 
 KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory, KWord::DocumentFactory_skel )
 typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
@@ -54,7 +55,7 @@ int main( int argc, char **argv )
     KWordApp app( argc, argv );
     kimgioRegister();
 
-    KGlobal::dirs()->addResourceType("kword_template", 
+    KGlobal::dirs()->addResourceType("kword_template",
 		     KStandardDirs::kde_default("data") + "kword/templates/");
     app.exec();
 
