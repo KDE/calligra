@@ -71,7 +71,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 
 	QRect rect =  part()->selection().boundingBox( 1 / view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_LM )
+	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 					//( rect.contains( fp ) ) )
 	{
 		setCursor( view );

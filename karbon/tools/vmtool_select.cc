@@ -10,6 +10,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vmtool_select.h"
+#include "vmtool_handle.h"
 #include "vmcmd_transform.h"
 
 #include <kdebug.h>
@@ -49,10 +50,10 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	QRect rect = part()->selection().boundingBox( view->zoomFactor() );
+	QRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( !part()->selection().isEmpty()
-		&& ( m_state != normal || rect.contains( fp ) ) )
+		&& ( m_state != normal || rect.contains( fp /* view->zoomFactor() */ ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_state != moving )
@@ -150,7 +151,7 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				QRect(
 					qRound( fp.x() ), qRound( fp.y() ), qRound( ( lp.x() - fp.x() ) ),
 					qRound( ( lp.y() - fp.y() ) ) ).normalize(),
-				view->zoomFactor(),
+				1 / view->zoomFactor(),
 				true );
 
 			//if( part()->selection().count() > 0  )

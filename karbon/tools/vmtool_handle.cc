@@ -12,6 +12,8 @@
 
 #include <kdebug.h>
 
+#define HANDLE_SIZE 3
+
 VMToolHandle* VMToolHandle::s_instance = 0L;
 
 VMToolHandle::VMToolHandle( KarbonPart* part )
@@ -46,8 +48,8 @@ VMToolHandle::drawBox( QPainter& painter, short index )
 QRect
 computeRect( int cx, int cy, const double zoomFactor )
 {
-	return QRect( QPoint( cx - 2 /* zoomFactor */, cy - 2 /* zoomFactor */ ),
-				  QPoint( cx + 2 /* zoomFactor */, cy + 2 /* zoomFactor */ ) );
+	return QRect( QPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
+				  QPoint( cx + HANDLE_SIZE /* zoomFactor */, cy + HANDLE_SIZE /* zoomFactor */ ) );
 }
 
 void
