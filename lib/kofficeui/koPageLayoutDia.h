@@ -22,61 +22,19 @@
 #ifndef __KOPGLAYOUTDIA_H__
 #define __KOPGLAYOUTDIA_H__
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <qtabdialog.h>
-#include <qcombobox.h>
-#include <qlabel.h>
 #include <qgroupbox.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpixmap.h>
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 
-#include <kapp.h>
-#include <qspinbox.h>
+#include <koGlobal.h>
 
-// paper formats ( mm )
-#define PG_A3_WIDTH		297.0
-#define PG_A3_HEIGHT		420.0
-#define PG_A4_WIDTH		210.0
-#define PG_A4_HEIGHT		297.0
-#define PG_A5_WIDTH		148.0
-#define PG_A5_HEIGHT		210.0
-#define PG_B5_WIDTH		182.0
-#define PG_B5_HEIGHT		257.0
-#define PG_US_LETTER_WIDTH	216.0
-#define PG_US_LETTER_HEIGHT	279.0
-#define PG_US_LEGAL_WIDTH	216.0
-#define PG_US_LEGAL_HEIGHT	356.0
-#define PG_US_EXECUTIVE_WIDTH	191.0
-#define PG_US_EXECUTIVE_HEIGHT	254.0
-#define PG_SCREEN_WIDTH		240.0
-#define PG_SCREEN_HEIGHT	180.0
-
-// paper formats ( inch )
-#define PG_A3_WIDTH_I		  11.69
-#define PG_A3_HEIGHT_I		  16.54
-#define PG_A4_WIDTH_I		  8.26
-#define PG_A4_HEIGHT_I		  11.7
-#define PG_A5_WIDTH_I		  5.83
-#define PG_A5_HEIGHT_I		  8.27
-#define PG_B5_WIDTH_I		  7.17
-#define PG_B5_HEIGHT_I		  10.13
-#define PG_US_LETTER_WIDTH_I	  8.5
-#define PG_US_LETTER_HEIGHT_I	  11.0
-#define PG_US_LEGAL_WIDTH_I	  8.5
-#define PG_US_LEGAL_HEIGHT_I	  14.0
-#define PG_US_EXECUTIVE_WIDTH_I	  7.5
-#define PG_US_EXECUTIVE_HEIGHT_I  10.0
-#define PG_SCREEN_WIDTH_I	  9.45
-#define PG_SCREEN_HEIGHT_I	  7.09
+class QButtonGroup;
+class QWidget;
+class QGridLayout;
+class QLabel;
+class QComboBox;
+class QLineEdit;
+class QSpinBox;
+class QRadioButton;
 
 // enums
 const int FORMAT_AND_BORDERS = 1;
@@ -85,145 +43,6 @@ const int COLUMNS = 4;
 const int DISABLE_BORDERS = 8;
 const int KW_HEADER_AND_FOOTER = 16;
 const int DISABLE_UNIT = 32;
-const int USE_NEW_STUFF = 64;
-
-/**
- *  Represents the paper format a document shall be printed on.
- */
-enum KoFormat {
-    PG_DIN_A3 = 0,
-    PG_DIN_A4 = 1,
-    PG_DIN_A5 = 2,
-    PG_US_LETTER = 3,
-    PG_US_LEGAL = 4,
-    PG_SCREEN = 5,
-    PG_CUSTOM = 6,
-    PG_DIN_B5 = 7,
-    PG_US_EXECUTIVE = 8
-};
-
-/**
- *  Represents the orientation of a printed document.
- */
-enum KoOrientation {
-    PG_PORTRAIT = 0,
-    PG_LANDSCAPE = 1
-};
-
-/**
- *  Represents the length unit that is used by an app.
- *  Possible values are for millimeter, points and inches.
- */
-enum KoUnit {
-    PG_MM = 0,
-    PG_PT = 1,
-    PG_INCH = 2
-};
-
-/**
- * Header/Footer type.
- * 0 ... Header/Footer is the same on all pages
- * 2 ... Header/Footer for the first page differs
- * 3 ... Header/Footer for even - odd pages are different
- */
-enum KoHFType {
-    HF_SAME = 0,
-    HF_FIRST_DIFF = 2,
-    HF_EO_DIFF = 3
-};
-
-// structure for page layout
-struct KoPageLayout
-{
-    KoFormat format;
-    KoOrientation orientation;
-
-    KoUnit unit;
-
-    double ptWidth;
-    double ptHeight;
-    double ptLeft;
-    double ptRight;
-    double ptTop;
-    double ptBottom;
-    double mmWidth;
-    double mmHeight;
-    double mmLeft;
-    double mmTop;
-    double mmRight;
-    double mmBottom;
-    double inchWidth;
-    double inchHeight;
-    double inchLeft;
-    double inchTop;
-    double inchRight;
-    double inchBottom;
-
-    bool operator==( const KoPageLayout& l ) const {
-	if ( unit != l.unit )
-	    return false;
-	switch( unit ) {
-	case PG_PT: {
-	    return ( ptWidth == l.ptWidth &&
-		     ptHeight == l.ptHeight &&
-		     ptLeft == l.ptLeft &&
-		     ptRight == l.ptHeight &&
-		     ptTop == l.ptTop &&
-		     ptBottom == l.ptBottom );
-	}
-	case PG_MM: {
-	    return ( mmWidth == l.mmWidth &&
-		     mmHeight == l.mmHeight &&
-		     mmLeft == l.mmLeft &&
-		     mmRight == l.mmHeight &&
-		     mmTop == l.mmTop &&
-		     mmBottom == l.mmBottom );
-	}
-	case PG_INCH: {
-	    return ( inchWidth == l.inchWidth &&
-		     inchHeight == l.inchHeight &&
-		     inchLeft == l.inchLeft &&
-		     inchRight == l.inchHeight &&
-		     inchTop == l.inchTop &&
-		     inchBottom == l.inchBottom );
-	}
-	}
-	return false;
-    }
-};
-
-// structure for header-footer
-struct KoHeadFoot
-{
-    QString headLeft;
-    QString headMid;
-    QString headRight;
-    QString footLeft;
-    QString footMid;
-    QString footRight;
-};
-
-// structure for columns
-struct KoColumns
-{
-    int columns;
-    double ptColumnSpacing;
-    double mmColumnSpacing;
-    double inchColumnSpacing;
-};
-
-// structure for KWord header-Footer
-struct KoKWHeaderFooter
-{
-    KoHFType header;
-    KoHFType footer;
-    double ptHeaderBodySpacing;
-    double ptFooterBodySpacing;
-    double mmHeaderBodySpacing;
-    double mmFooterBodySpacing;
-    double inchHeaderBodySpacing;
-    double inchFooterBodySpacing;
-};
 
 /**
  *  KoPagePreview
@@ -247,15 +66,14 @@ public:
     /**
      *  set page layout
      */
-    void setPageLayout( KoPageLayout );
-    void setPageColumns( KoColumns );
+    void setPageLayout( const KoPageLayout& );
+    void setPageColumns( const KoColumns& );
 
 protected:
 
     // paint page
     void drawContents( QPainter* );
 
-    // vars
     double pgWidth;
     double pgHeight;
     double pgX;
@@ -263,7 +81,6 @@ protected:
     double pgW;
     double pgH;
     int columns;
-
 };
 
 /**

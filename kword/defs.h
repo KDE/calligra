@@ -24,18 +24,13 @@
 
 #include <iostream.h>
 #include <qstring.h>
+#include <koGlobal.h>
 #include "kword_factory.h"
 
 #define MIME_TYPE "application/x-kword"
 #define KWordRepoID "IDL:KWord/KWordDocument:1.0"
 
-#define POINT_TO_MM( px ) ( ( float )px/2.83465 )
-#define MM_TO_POINT( mm ) ( int( ( float )mm*2.83465 ) )
-#define POINT_TO_INCH( px ) ( ( float )px/72.0 )
-#define INCH_TO_POINT( inch ) ( int( ( float )inch*72.0 ) )
-#define MM_TO_INCH( mm ) ( mm/25.4 )
-#define INCH_TO_MM( inch ) ( inch*25.4 )
-
+// FIXME(Werner)
 #define A4_WIDTH 210.0
 #define A4_HEIGHT 297.0
 
@@ -102,6 +97,7 @@ const QChar KWSpecialChar( static_cast<char>( 0 ) );
 
 #define KWBarIcon( x ) BarIcon( x, KWordFactory::global() )
 
+// FIXME (Werner)
 class KWUnit
 {
 public:

@@ -50,9 +50,6 @@ class DCOPObject;
 #include <qrect.h>
 #include <qpalette.h>
 
-#define MM_TO_POINT 2.83465
-#define POINT_TO_MM 0.3527772388
-
 #define BORDER_SPACE 1
 
 #include "kspread_autofill.h"

@@ -24,6 +24,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qlayout.h>
 
 #include <kapp.h>
 #include <qspinbox.h>

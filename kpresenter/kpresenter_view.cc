@@ -830,7 +830,7 @@ void KPresenterView::extraLayout()
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
     KoHeadFoot hf;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS | USE_NEW_STUFF ) ) {
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS ) ) {
 	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Pagelayout" ),
 						    pgLayout, oldLayout, this );
 	pgLayoutCmd->execute();

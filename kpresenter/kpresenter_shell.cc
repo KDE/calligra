@@ -24,6 +24,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kaboutdialog.h>
+#include <kapp.h>
 
 KPresenterShell::KPresenterShell( const char* name )
     : KoMainWindow( KPresenterFactory::global(), name )

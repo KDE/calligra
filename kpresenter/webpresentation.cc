@@ -61,6 +61,7 @@
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
 #include <kimageio.h>
+#include <kapp.h>
 
 #include <kstddirs.h>
 #include <kglobal.h>
@@ -890,7 +891,7 @@ void KPWebPresentationCreateDialog::saveConfig()
 
     filename = url.path();
 #endif
-    
+
     if ( !filename.isEmpty() ) {
 	webPres.setConfig( filename );
 	webPres.saveConfig();

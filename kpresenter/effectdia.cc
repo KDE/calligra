@@ -34,6 +34,7 @@
 #include <qlineedit.h>
 #include <qvaluelist.h>
 #include <qlayout.h>
+#include <qspinbox.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -89,7 +90,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     cEffect->insertItem( i18n( "Wipe from bottom" ) );
     cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
     upperRow->addWidget(cEffect, 1, 1);
-    
+
     lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
     upperRow->addWidget(lEffect2, 2, 0);
@@ -153,7 +154,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
-    
+
     KButtonBox *bb = new KButtonBox(this);
     bb->addStretch();
     topLayout->addWidget(bb);

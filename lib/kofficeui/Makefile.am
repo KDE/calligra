@@ -21,7 +21,8 @@ include_HEADERS = koPageLayoutDia.h \
 	koPartSelectDia.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
-	kcoloractions.h toolbox.h koTemplates.h
+	kcoloractions.h toolbox.h koTemplates.h \
+	koGlobal.h
 
 METASOURCES = AUTO
 

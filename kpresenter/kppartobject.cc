@@ -25,6 +25,7 @@
 
 #include <qpicture.h>
 #include <qwidget.h>
+#include <qpainter.h>
 #include <koDocument.h>
 
 /******************************************************************/

@@ -1477,7 +1477,7 @@ void KWordView::formatPage()
     m_pKWordDoc->getPageLayout( pgLayout, cl, kwhf );
 
     KoHeadFoot hf;
-    int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | USE_NEW_STUFF | DISABLE_UNIT;
+    int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
     if ( m_pKWordDoc->getProcessingType() == KWordDocument::WP )
 	flags = flags | COLUMNS;
     else
@@ -2849,7 +2849,7 @@ void KWordView::printDebug() {
     kdDebug() << "  newFrameBh  0=Reconnect, 1=NoFollowup, 2=Copy" <<endl;
     kdDebug() << "# Framesets: " << doc->getNumFrameSets() <<endl;
     for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-        kdDebug() << "Frameset " << iFrameset << ": '" << 
+        kdDebug() << "Frameset " << iFrameset << ": '" <<
             doc->getFrameSet(iFrameset)->getName() << "' (" << doc->getFrameSet(iFrameset) << ")" <<endl;
         kdDebug() << " |  Type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
         kdDebug() << " |  Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
@@ -2861,7 +2861,7 @@ void KWordView::printDebug() {
             kdDebug() << "     SheetSide "<< doc->getFrameSet(iFrameset)->getFrame(j)->getSheetSide() << endl;
             if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected())
                 kdDebug() << " *   Page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
-            else 
+            else
                 kdDebug() << "     Page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
         }
     }

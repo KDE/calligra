@@ -13,6 +13,7 @@
 
 #include <math.h>
 #include <klocale.h>
+#include <kapp.h>
 #include <qdatetime.h>
 
 #include <dcopobject.h>

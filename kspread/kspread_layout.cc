@@ -24,8 +24,8 @@
 #include <stdlib.h>
 
 #include <qdom.h>
-//#include <iostream>
 #include <kdebug.h>
+#include <koGlobal.h>
 
 using namespace std;
 
@@ -180,7 +180,7 @@ const QColor & KSpreadLayout::textColor() const
 RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fHeight = 20 * POINT_TO_MM;
+  m_fHeight = POINT_TO_MM(20.0);
   m_iRow = _row;
   m_bDefault=false;
 }
@@ -198,9 +198,9 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
   UPDATE_BEGIN;
 
   if ( _canvas )
-    m_fHeight = ( float)_h / _canvas->zoom() * POINT_TO_MM;
+    m_fHeight = POINT_TO_MM( _h / _canvas->zoom() );
   else
-    m_fHeight = ( float)_h / POINT_TO_MM;
+    m_fHeight = POINT_TO_MM( _h  );
 
   UPDATE_END;
 }
@@ -208,9 +208,9 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 int RowLayout::height( KSpreadCanvas *_canvas )
 {
   if ( _canvas )
-    return (int)( _canvas->zoom() * m_fHeight * MM_TO_POINT );
+    return (int)( MM_TO_POINT(_canvas->zoom() * m_fHeight));
   else
-    return (int)(m_fHeight * MM_TO_POINT);
+    return (int)(MM_TO_POINT(m_fHeight));
 }
 
 QDomElement RowLayout::save( QDomDocument& doc )
@@ -264,7 +264,7 @@ bool RowLayout::load( const QDomElement& row )
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = 60.0 * POINT_TO_MM;
+  m_fWidth = POINT_TO_MM(60.0);
   m_iColumn = _column;
   m_bDefault=false;
 }
@@ -283,9 +283,9 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
   UPDATE_BEGIN;
 
   if ( _canvas )
-    m_fWidth = ( float)_w / _canvas->zoom() * POINT_TO_MM;
+      m_fWidth = POINT_TO_MM(_w / _canvas->zoom());
   else
-    m_fWidth = ( float)_w / POINT_TO_MM;
+      m_fWidth = POINT_TO_MM(_w);
 
   UPDATE_END;
 }
@@ -293,9 +293,9 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
   if ( _canvas )
-    return (int)( _canvas->zoom() * m_fWidth * MM_TO_POINT );
+    return (int)(MM_TO_POINT( _canvas->zoom() * m_fWidth));
   else
-    return (int)( m_fWidth * MM_TO_POINT );
+    return (int)(MM_TO_POINT( m_fWidth ));
 }
 
 QDomElement ColumnLayout::save( QDomDocument& doc )

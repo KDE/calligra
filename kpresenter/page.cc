@@ -56,6 +56,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <kapp.h>
 
 #include <stdlib.h>
 

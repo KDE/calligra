@@ -23,19 +23,23 @@
 
 #include <koPageLayoutDia.h>
 
-#include <klocale.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qpen.h>
+#include <qbrush.h>
+#include <qcolor.h>
+#include <qpixmap.h>
+#include <qlineedit.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <qvalidator.h>
+#include <qspinbox.h>
 
-// 1 inch ^= 72 pt
-// 1 inch ^= 25.399956 mm (-pedantic ;p)
-// Note: I don't use division but multiplication with the inverse value
-// because it's faster ;p (Werner)
-#define POINT_TO_MM(px) (px*0.352777167)
-#define MM_TO_POINT(mm) (mm*2.83465058)
-#define POINT_TO_INCH(px) (px*0.01388888888889)
-#define INCH_TO_POINT(inch) (inch*72.0)
-#define MM_TO_INCH(mm) (mm*0.039370147)
-#define INCH_TO_MM(inch) (inch*25.399956)
+#include <klocale.h>
+
 
 /******************************************************************/
 /* class KoPagePreview						  */
@@ -55,29 +59,21 @@ KoPagePreview::~KoPagePreview()
 }
 
 /*=================== set layout =================================*/
-void KoPagePreview::setPageLayout( KoPageLayout _layout )
+void KoPagePreview::setPageLayout( const KoPageLayout &_layout )
 {
-    double fact = 1;
-//   if ( _layout.unit == PG_CM ) fact = 10;
-//   if ( _layout.unit == PG_INCH ) fact = 25.399956;
+    pgWidth = _layout.mmWidth * 0.5;
+    pgHeight = _layout.mmHeight * 0.5;
 
-    double bl = _layout.mmLeft * fact, br = _layout.mmRight * fact;
-    double bt = _layout.mmTop * fact, bb = _layout.mmBottom * fact;
-    double wid = _layout.mmWidth * fact, hei = _layout.mmHeight * fact;
-
-    pgWidth = wid * 0.5;
-    pgHeight = hei * 0.5;
-
-    pgX =  bl * 0.5;
-    pgY = bt * 0.5;
-    pgW = pgWidth - ( bl + br ) * 0.5;
-    pgH = pgHeight - ( bt + bb ) * 0.5;
+    pgX =  _layout.mmLeft * 0.5;
+    pgY = _layout.mmTop * 0.5;
+    pgW = pgWidth - ( _layout.mmLeft + _layout.mmRight ) * 0.5;
+    pgH = pgHeight - ( _layout.mmTop + _layout.mmBottom ) * 0.5;
 
     repaint( true );
 }
 
 /*=================== set layout =================================*/
-void KoPagePreview::setPageColumns( KoColumns _columns )
+void KoPagePreview::setPageColumns( const KoColumns &_columns )
 {
     columns = _columns.columns;
     repaint( true );
@@ -86,7 +82,9 @@ void KoPagePreview::setPageColumns( KoColumns _columns )
 /*======================== draw contents =========================*/
 void KoPagePreview::drawContents( QPainter *painter )
 {
-    double cw = pgW / static_cast<double>(columns);
+    double cw = pgW;
+    if(columns!=1)
+	cw/=static_cast<double>(columns);
 
     painter->setBrush( white );
     painter->setPen( QPen( black ) );
@@ -104,7 +102,7 @@ void KoPagePreview::drawContents( QPainter *painter )
     else
 	painter->setPen( lightGray );
 
-    for ( int i = 0; i < columns; i++ )
+    for ( int i = 0; i < columns; ++i )
 	painter->drawRect( x + static_cast<int>(pgX) + static_cast<int>(i * cw),
 			   y + static_cast<int>(pgY), static_cast<int>(cw),
 			   static_cast<int>(pgH) );
@@ -362,7 +360,7 @@ void KoPageLayoutDia::setupTab1()
 	cpgUnit->resize( cpgUnit->sizeHint() );
 	grid1->addWidget( cpgUnit, 1, 0 );
 	connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
-	if ( !( flags & USE_NEW_STUFF ) ) cpgUnit->setEnabled( false );
+	//if ( !( flags & USE_NEW_STUFF ) ) cpgUnit->setEnabled( false );
     } else {
 	QString str;
 	switch ( layout.unit ) {
@@ -476,8 +474,8 @@ void KoPageLayoutDia::setupTab1()
     formatGrid->addRowSpacing( 3, epgHeight->height() );
 
     // activate grid
-    formatGrid->activate();
-    formatFrame->resize( 0, 0 );
+    //formatGrid->activate();
+    //formatFrame->resize( 0, 0 );
     grid1->addWidget( formatFrame, 2, 0 );
 
     // --------------- page borders ---------------
@@ -581,8 +579,8 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addRowSpacing( 3, ebrBottom->height() );
 
     // activate grid
-    borderGrid->activate();
-    borderFrame->resize( 0, 0 );
+    //borderGrid->activate();
+    //borderFrame->resize( 0, 0 );
     grid1->addWidget( borderFrame, 3, 0 );
 
     // ------------- preview -----------
@@ -605,7 +603,7 @@ void KoPageLayoutDia::setupTab1()
     grid1->addRowSpacing( 3, 120 );
     grid1->setRowStretch( 4, 1 );
 
-    grid1->activate();
+    //grid1->activate();
 
     addTab( tab1, i18n( "Format and Borders" ) );
 
@@ -802,7 +800,7 @@ void KoPageLayoutDia::setupTab3()
     grid3->addRowSpacing( 3, nCSpacing->height() );
     grid3->setRowStretch( 4, 1 );
 
-    grid3->activate();
+    //grid3->activate();
 
     addTab( tab3, i18n( "Columns" ) );
     if ( pgPreview ) pgPreview->setPageColumns( cl );
@@ -889,7 +887,7 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->setRowStretch( 3, 0 );
     headerGrid->setRowStretch( 4, 0 );
 
-    headerGrid->activate();
+    //headerGrid->activate();
     grid4->addWidget( gHeader, 0, 0 );
 
     gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
@@ -959,7 +957,7 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->setRowStretch( 3, 0 );
     footerGrid->setRowStretch( 4, 0 );
 
-    footerGrid->activate();
+    //footerGrid->activate();
     grid4->addWidget( gFooter, 1, 0 );
 
     grid4->addColSpacing( 0, gHeader->width() );
@@ -971,7 +969,7 @@ void KoPageLayoutDia::setupTab4()
     grid4->setRowStretch( 2, 0 );
     grid4->setRowStretch( 2, 1 );
 
-    grid4->activate();
+    //grid4->activate();
 
     addTab( tab4, i18n( "Header and Footer" ) );
 }
