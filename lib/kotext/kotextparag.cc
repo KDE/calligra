@@ -841,7 +841,7 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
     for ( int i = 0; i < len; ++i )
     {
         KoTextStringChar & ch = string()->at(i);
-        if ( ch.isCustom() && ch.customItem() == custom )
+        if ( ch.isCustom() && static_cast<KoTextCustomItem *>(ch.customItem()) == custom )
             return i;
     }
     kdWarning() << "KoTextParag::findCustomItem custom item " << (void*)custom
