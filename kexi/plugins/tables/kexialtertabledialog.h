@@ -93,7 +93,7 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		//! Called before cell change in tableview.
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
-			QVariant newValue, KexiDB::ResultInfo* result);
+			QVariant& newValue, KexiDB::ResultInfo* result);
 
 		//! Called on row change in a tableview.
 		void slotRowUpdated(KexiTableItem *item);

@@ -79,24 +79,24 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! \return true if the column is read-only
 		 For db-aware column this can depend on whether the column 
 		 is in parent table of this query. \sa setReadOnly() */
-		bool readOnly() const { return m_readOnly; }
+		inline bool readOnly() const { return m_readOnly; }
 
 //TODO: syncroize this with table view:
 		//! forces readOnly flag to be set to \a ro
-		void setReadOnly(bool ro) { m_readOnly=ro; }
+		inline void setReadOnly(bool ro) { m_readOnly=ro; }
 
 		//! Column visibility. By default column is visible.
-		bool visible() const { return fieldinfo ? fieldinfo->visible : m_visible; }
+		inline bool visible() const { return fieldinfo ? fieldinfo->visible : m_visible; }
 
 		//! Changes column visibility.
-		void setVisible(bool v) { if (fieldinfo) fieldinfo->visible=v;
+		inline void setVisible(bool v) { if (fieldinfo) fieldinfo->visible=v;
 			m_visible=v; }
 
 		/*! \return whatever is available: 
 		 - field's caption
 		 - or field's alias (from query)
 		 - or finally - field's name */
-		QString captionAliasOrName() const { return m_captionAliasOrName; }
+		inline QString captionAliasOrName() const { return m_captionAliasOrName; }
 
 		/*! Assigns validator \a v for this column. 
 		 If the validator has no parent obejct, it will be owned by the column, 
@@ -104,7 +104,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		void setValidator( KexiValidator* v );
 
 		//! \return validator assigned for this column of 0 if there is no validator assigned.
-		KexiValidator* validator() const { return m_validator; }
+		inline KexiValidator* validator() const { return m_validator; }
 
 		/*! For not-db-aware data only:
 		 Sets related data \a data for this column, what defines simple one-field, 
@@ -118,12 +118,22 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! For not-db-aware data only:
 		 Related data \a data for this column, what defines simple one-field. 
 		 NULL by default. \sa setRelatedData() */
-		KexiTableViewData *relatedData() const { return m_relatedData; }
+		inline KexiTableViewData *relatedData() const { return m_relatedData; }
 
 		/*! \return field for this column. 
 		 For db-aware information is taken from \a fieldinfo member. */
-		KexiDB::Field* field() const { return m_field; }
-		
+		inline KexiDB::Field* field() const { return m_field; }
+
+		/*! Only usable if related data is set (ie. this is for combo boxes).
+		 Sets 'editable' flag for this column, what means a new value can be entered
+		 by hand. This is similar to QComboBox::setEditable(). */
+		inline void setRelatedDataEditable(bool set);
+
+		/*! Only usable if related data is set (ie. this is for combo boxes).
+		 \return 'editable' flag for this column. 
+		 False by default. @see setRelatedDataEditable(bool). */
+		inline bool relatedDataEditable() const { return m_relatedDataEditable; }
+
 		/*! A rich field information for db-aware data. 
 		 For not-db-aware data it is always 0 (use field() instead. */
 		KexiDB::QueryColumnInfo* fieldinfo;
@@ -160,6 +170,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		bool m_readOnly : 1;
 		bool m_fieldOwned : 1;
 		bool m_visible : 1;
+		bool m_relatedDataEditable : 1;
 		
 	friend class KexiTableViewData;
 };
@@ -277,7 +288,7 @@ public:
 	 (then fields are addressed with KexiDB::Field, instead of caption strings).
 	 If \a allowSignals is true (the default), aboutToChangeCell() signal is emitted.
 	 \sa KexiDB::RowEditBuffer */
-	bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant newval, 
+	bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant& newval, 
 		bool allowSignals = true);
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
@@ -346,20 +357,21 @@ signals:
 	void destroying();
 
 	/*! Emitted before change of the single, currently edited cell.
-	 Connect this signal to your slot and set \a allow value to false 
-	 to disallow the change. */
-	void aboutToChangeCell(KexiTableItem *, int colnum, QVariant newValue,
+	 Connect this signal to your slot and set \a result->success to false
+	 to disallow this change. You can also change \a newValue to other value,
+	 or change other columns in \a item row. */
+	void aboutToChangeCell(KexiTableItem *item, int colnum, QVariant& newValue,
 		KexiDB::ResultInfo* result);
 
 	/*! Emited before inserting of a new, current row.
 	 Connect this signal to your slot and set \a result->success to false 
-	 to disallow this inserting. */
-	void aboutToInsertRow(KexiTableItem *, KexiDB::ResultInfo* result, bool repaint);
+	 to disallow this inserting. You can also change columns in \a item row. */
+	void aboutToInsertRow(KexiTableItem *item, KexiDB::ResultInfo* result, bool repaint);
 
 	/*! Emited before changing of an edited, current row.
 	 Connect this signal to your slot and set \a result->success to false 
-	 to disallow this change. */
-	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer,
+	 to disallow this change. You can also change columns in \a item row. */
+	void aboutToUpdateRow(KexiTableItem *item, KexiDB::RowEditBuffer* buffer,
 		KexiDB::ResultInfo* result);
 
 	void rowUpdated(KexiTableItem*); //!< Current row has been updated

@@ -131,7 +131,7 @@ ConnectionDialog::initTable()
 	m_table->maximizeColumnsWidth(c);
 	m_table->setColumnStretchEnabled( true, 4 );
 
-	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)),
+	connect(m_data, SIGNAL(aboutToChangeCell(KexiTableItem*, int, QVariant&, KexiDB::ResultInfo*)),
 	      this,SLOT(slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)));
 	connect(m_data, SIGNAL(rowUpdated(KexiTableItem*)), this, SLOT(checkConnection(KexiTableItem *)));
 	connect(m_table, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(checkConnection(KexiTableItem *)));
@@ -254,7 +254,7 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 }
 
 void
-ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant, KexiDB::ResultInfo*)
+ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant&, KexiDB::ResultInfo*)
 {
 	switch(col)
 	{

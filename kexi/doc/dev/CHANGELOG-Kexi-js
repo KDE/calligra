@@ -398,6 +398,25 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+
+2004-11-19
+Query Designer
+- clearing "PK" flag is not needed in few cases
+- it's now possible to enter "alias_name: simple_expression" 
+   in the column #1 
+Table View
+- fixed repainting visible rows below a deleted row 
+  (required if no confirmation box is displayed)
+- record navigator's rec # indicator field:
+-- fixed value validation on number entering
+-- fixed focus out
+- added support for editable comboboxes
+Main
+- always ask for removing objects
+Property Editor
+- do not steal Key_Home and Key_End key presses from editor item
+- Key_Tab and Key_BackTab work like down/up keys
+
 2004-11-17
 Startup dialogs
 - win32: fixed problem with changing directory for a new db file

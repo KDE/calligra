@@ -125,6 +125,7 @@ void KexiTableViewColumn::init()
 	m_visible = true;
 	m_data = 0;
 	m_validator = 0;
+	m_relatedDataEditable = false;
 }
 
 void KexiTableViewColumn::setValidator( KexiValidator* v )
@@ -155,6 +156,11 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
 			return;
 		}
 	}
+}
+
+void KexiTableViewColumn::setRelatedDataEditable(bool set)
+{
+	m_relatedDataEditable = set;
 }
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
@@ -431,7 +437,7 @@ void KexiTableViewData::clearRowEditBuffer()
 }*/
 
 bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item, 
-	int colnum, QVariant newval, bool allowSignals)
+	int colnum, QVariant& newval, bool allowSignals)
 {
 	m_result.clear();
 	if (allowSignals)

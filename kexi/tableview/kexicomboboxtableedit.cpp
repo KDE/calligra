@@ -217,25 +217,29 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 QString KexiComboBoxTableEdit::valueForString(const QString& str, 
 	uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
-		KexiTableViewData *relData = column()->relatedData();
-		if (!column()->relatedData())
-			return QString::null; //safety
-		//use 'related table data' model
+	KexiTableViewData *relData = column()->relatedData();
+	if (!relData)
+		return QString::null; //safety
+	//use 'related table data' model
 //-not effective for large sets: please cache it!
 //.stripWhiteSpace() is not generic!
-		const QString txt = str.stripWhiteSpace();
-		KexiTableViewData::Iterator it(relData->iterator());
-		for (;it.current();++it) {
-			if (it.current()->at(lookInColumn).toString().stripWhiteSpace()==txt)
-				break;
-		}
-		if (it.current())
-			return it.current()->at(returnFromColumn).toString().stripWhiteSpace();
 
-		kexiwarn << "KexiComboBoxTableEdit::valueForString(): no related row found, ID will be painted!" << endl;
-		if (allowNulls)
-			return QString::null;
-		return str; //for sanity but it's veird to show id to the user
+	const QString txt = str.stripWhiteSpace();
+	KexiTableViewData::Iterator it(relData->iterator());
+	for (;it.current();++it) {
+		if (it.current()->at(lookInColumn).toString().stripWhiteSpace()==txt)
+			break;
+	}
+	if (it.current())
+		return it.current()->at(returnFromColumn).toString().stripWhiteSpace();
+
+	if (column()->relatedDataEditable())
+		return str; //new value entered and that's allowed
+
+	kexiwarn << "KexiComboBoxTableEdit::valueForString(): no related row found, ID will be painted!" << endl;
+	if (allowNulls)
+		return QString::null;
+	return str; //for sanity but it's veird to show id to the user
 }
 
 void KexiComboBoxTableEdit::showFocus( const QRect& r )

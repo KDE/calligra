@@ -131,8 +131,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	m_view->setSpreadSheetMode();
 //	setFocusProxy(m_view);
 
-	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)),
-		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
+	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
+		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
 	connect(d->data, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
 	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
@@ -504,7 +504,7 @@ void KexiAlterTableDialog::removeCurrentPropertyBuffer()
 */
 
 void KexiAlterTableDialog::slotBeforeCellChanged(
-	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* /*result*/)
+	KexiTableItem *item, int colnum, QVariant& newValue, KexiDB::ResultInfo* /*result*/)
 {
 	if (colnum==COLUMN_ID_NAME) {//'name'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {

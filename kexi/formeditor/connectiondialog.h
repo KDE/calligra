@@ -71,7 +71,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 
 	protected slots:
 		/*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
-		void slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*);
+		void slotCellChanged(KexiTableItem*, int, QVariant&, KexiDB::ResultInfo*);
 		/*! This function checks if the connection represented by KexiTableItem \a item is valid. It checks if all args (sender, receiver, signal and slot)
 		 are given, and then if signal/slot args are compatible (should be always true, as we don't show non-compatible slots). It calls \ref setStatusOk()
 		 or \ref setStatusError() following the result of checks. */

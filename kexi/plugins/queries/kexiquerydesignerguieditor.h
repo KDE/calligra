@@ -103,8 +103,10 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
 
-		KexiDB::BaseExpr* parseCriteriaString(
-			const QString& columnName, const QString& fullString);
+		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token, 
+			bool allowRelationalOperator);
+
+		QCString generateUniqueAlias() const;
 
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
@@ -115,7 +117,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		//! Called before cell change in tableview.
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
-			QVariant newValue, KexiDB::ResultInfo* result);
+			QVariant& newValue, KexiDB::ResultInfo* result);
 
 		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
 		void slotTablePositionChanged(KexiRelationViewTableContainer*);
