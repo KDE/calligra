@@ -156,10 +156,10 @@ KexiProject::loadProject(const QString& url)
 	parsedCred.database = nameElement.text();
 	parsedCred.user     = userElement.text();
 	parsedCred.password = passElement.text();
-	m_modified = false;
 	
 	initDbConnection(parsedCred);
 	
+	m_modified = false;
 	return true;
 }
 
