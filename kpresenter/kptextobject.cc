@@ -780,8 +780,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     }
     if ( m_paragLayout.counter->style() != cstyle || force )
     {
-        //todo
-        //m_canvas->gui()->getView()->showCounter( * m_paragLayout.counter );
+        m_page->getView()->showCounter( * m_paragLayout.counter );
     }
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||

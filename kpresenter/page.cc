@@ -3647,11 +3647,11 @@ void Page::exitEditMode()
             if(m_currentTextObjectView)
             {
                 m_currentTextObjectView->clearSelection();
+                //hide cursor when we desactivate textObjectView
+                m_currentTextObjectView->drawCursor( false );
                 delete m_currentTextObjectView;
                 m_currentTextObjectView=0L;
             }
-            //kptextobject->textObjectView()->clearFocus();
-
             // Title of slide may have changed
             emit updateSideBarItem( currPgNum()-1 );
 

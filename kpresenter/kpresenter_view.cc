@@ -3885,7 +3885,8 @@ void KPresenterView::spellCheckerFinished()
 
 void KPresenterView::showCounter( KoParagCounter &c )
 {
-    actionTextTypeUnsortList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
+    actionTextTypeUnsortList->setChecked( c.numbering() == KoParagCounter::NUM_LIST && c.style()==KoParagCounter::STYLE_DISCBULLET  );
+    actionTextTypeEnumList->setChecked( c.numbering() == KoParagCounter::NUM_LIST &&c.style()== KoParagCounter::STYLE_NUM );
 }
 
 void KPresenterView::formatParagraph()
