@@ -45,7 +45,7 @@ ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name
 		SLOT( slotShadowEffect() ), actionCollection(), "object_shadow" );
 
 	m_shadowEffectDlg = new VShadowEffectDlg();
-	m_shadowEffectDlg->setDistance( 2.0 );
+	m_shadowEffectDlg->setDistance( 2 );
 	m_shadowEffectDlg->setAngle( 0 );
 }
 

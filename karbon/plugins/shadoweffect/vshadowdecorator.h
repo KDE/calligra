@@ -48,8 +48,8 @@ public:
 
 protected:
 	VObject *m_object;
-	int		m_angle;
 	int		m_distance;
+	int		m_angle;
 	float	m_opacity;
 };
 
