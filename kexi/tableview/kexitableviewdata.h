@@ -318,7 +318,7 @@ signals:
 	//! Rows have been deleted
 	void rowsDeleted( const QValueList<int> &rowsToDelete );
 
-	//! Data needs to be refreshed in all presenters.
+	//! Displayed data needs to be refreshed in all presenters.
 	void refreshRequested();
 
 protected:

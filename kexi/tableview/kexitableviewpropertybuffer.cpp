@@ -58,6 +58,8 @@ void KexiTableViewPropertyBuffer::slotDataSet( KexiTableViewData *data )
 			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
 		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint)), 
 			this, SLOT(slotRowInserted(KexiTableItem*,uint)));
+		connect(m_currentTVData, SIGNAL(refreshRequested()), 
+			this, SLOT(slotRefreshRequested()));
 	}
 }
 
@@ -104,7 +106,14 @@ uint KexiTableViewPropertyBuffer::size() const
 void KexiTableViewPropertyBuffer::clear(uint minimumSize)
 {
 	m_buffers.clear();
-	m_buffers.resize((minimumSize > MAX_FIELDS) ? MAX_FIELDS*2 : MAX_FIELDS);
+	m_buffers.resize(QMAX(minimumSize, MAX_FIELDS));
+	m_view->setDirty(true);
+	m_view->propertyBufferSwitched();
+}
+
+void KexiTableViewPropertyBuffer::slotRefreshRequested()
+{
+	clear();
 }
 
 void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool newOne)

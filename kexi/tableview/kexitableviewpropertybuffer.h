@@ -40,6 +40,7 @@ class KexiTableViewData;
  - auto-initializing after resetting of table view's data
  - destroying single buffer that is associated with deleted row
  - inserting single buffer that and associating it with new row
+ - all buffers are cleared when view's data is cleared (using clear())
  - setting view's 'dirty' flag when needed
  - signalling via KexiVieBase::propertyBufferSwitched() that current property 
    buffer has changed (e.g. on moving to other row)
@@ -89,6 +90,9 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 
 		//! Called on selecting another cell in a tableview.
 		void slotCellSelected(int, int row);
+
+		//! Called on clearing tableview's data: just clears all buffers.
+		void slotRefreshRequested();
 
 	protected:
 		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
