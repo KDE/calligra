@@ -19,6 +19,8 @@
 
 // This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
+
+#include <gobject.h>
 #include <graphiteglobal.h>
 
 
@@ -49,4 +51,14 @@ GraphiteGlobal *GraphiteGlobal::self() {
     if(m_self==0L)
 	m_self=new GraphiteGlobal();
     return m_self;	
+}
+
+void GraphiteGlobal::setHandleSize(const int &handleSize) {
+    m_handleSize=handleSize;
+    m_offset=Graphite::double2Int(static_cast<double>(handleSize)*0.5);
+}
+
+void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
+    m_rotHandleSize=rotHandleSize;
+    m_offset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
 }

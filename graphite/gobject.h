@@ -310,6 +310,10 @@ protected:
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
 
+    // This method manipulates the painter (rotate, pen,...)
+    // helper method!
+    virtual void initPainter(QPainter &/*p*/) {}
+
     // zoomIt zooms a value according to the current zoom setting and returns
     // the zoomed value. The original value is not changed
     const double zoomIt(const double &value) const;
@@ -335,14 +339,14 @@ protected:
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
 		    const QPoint &center) const;
 
-    QString m_name;                              // name of the object
-    State m_state;                               // are there handles to draw or not?
+    QString m_name;                    // name of the object
+    State m_state;                     // are there handles to draw or not?
     mutable GObject *m_parent;
-    int m_zoom;                                  // zoom value 100 -> 100% -> 1
-    mutable double m_angle;                      // angle (radians!)
+    int m_zoom;                        // zoom value 100 -> 100% -> 1
+    mutable double m_angle;            // angle (radians!)
 
-    mutable bool m_boundingRectDirty;            // is the cached bounding rect still correct?
-    mutable QRect m_boundingRect;           // bounding rect (cache) - don't use directly!
+    mutable bool m_boundingRectDirty;  // is the cached bounding rect still correct?
+    mutable QRect m_boundingRect;      // bounding rect (cache) - don't use directly!
 
     FillStyle m_fillStyle;
     QBrush m_brush;
@@ -397,7 +401,7 @@ inline const double normalizeDeg(const double &deg) {
     return nDeg;
 }
 
-}; // Graphite::
+}; // namespace Graphite
 
 inline const double GObject::zoomIt(const double &value) const {
     if(m_zoom==100)

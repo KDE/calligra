@@ -51,14 +51,16 @@ public:
 
     // size of the "handles"
     const int &handleSize() const { return m_handleSize; }
-    void setHandleSize(const int &handleSize) { m_handleSize=handleSize; }
+    void setHandleSize(const int &handleSize);
 
     // size (diameter) of the "rot-handles"
     const int &rotHandleSize() const { return m_rotHandleSize; }
-    void setRotHandleSize(const int &rotHandleSize) { m_rotHandleSize=rotHandleSize; }
+    void setRotHandleSize(const int &rotHandleSize);
 
     const int &thirdHandleTrigger() const { return m_thirdHandleTrigger; }
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
+
+    const int offset() const { return m_offset; }
 
     // more to come...
     // maybe I'll add a init(...) method which takes a KConfig file
@@ -66,7 +68,7 @@ public:
 
 private:
     GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4), m_rotHandleSize(4),
-		       m_thirdHandleTrigger(20) {}
+		       m_thirdHandleTrigger(20), m_offset(2) {}
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
 
@@ -77,5 +79,6 @@ private:
     int m_handleSize;
     int m_rotHandleSize;
     int m_thirdHandleTrigger;
+    int m_offset;
 };
 #endif // GRAPHITE_GLOBAL_H

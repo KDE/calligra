@@ -401,7 +401,7 @@ void G2DObjectM9r::createPropertyDialog() {
 	    << i18n("Pyramid")
 	    << i18n("Rectangle")
 	    << i18n("PipeCross")
-	    << i18n("Elliptic");
+	    << i18n("Elliptical");
     m_gradientStyle->insertStringList(content);
     m_gradientStyle->setCurrentItem(static_cast<int>(m_object->gradient().type));
     connect(m_gradientStyle, SIGNAL(activated(int)),

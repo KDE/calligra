@@ -143,7 +143,7 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
     else
 	return; // no need to draw handles - shouldn't happen
 
-    int offset=Graphite::double2Int(static_cast<double>(size)*0.5);
+    int offset=GraphiteGlobal::self()->offset();
 
     QRect *r1=new QRect(m_a.x()-offset, m_a.y()-offset, size, size);
     QRect *r2=new QRect(m_b.x()-offset, m_b.y()-offset, size, size);
