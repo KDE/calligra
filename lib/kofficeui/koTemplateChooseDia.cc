@@ -99,6 +99,10 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
 
     d=new KoTemplateChooseDiaPrivate(templateType, global, format, nativePattern,
                                      nativeName, dialogType);
+    QPushButton* ok = actionButton( KDialogBase::Ok );
+    QPushButton* cancel = actionButton( KDialogBase::Cancel );
+    cancel->setAutoDefault(false);
+    ok->setDefault(true);
     enableButtonOK(false);
 
     if(!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
