@@ -550,12 +550,12 @@ void KPresenterView::editPaste()
             emit objectSelectedChanged();
         }
 #if COPYOASISFORMAT
-        else if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.openoffice.presentation" ) ))
+        else if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.opendocument.presentation" ) ))
         {
             //TODO : fix me !!
             // TODO: it would be nice to have no offset when pasting onto a different page...
             //m_canvas->activePage()->pasteObjs(
-            //data->encodedData(KoStoreDrag::mimeType("application/vnd.oasis.openoffice.presentation")),
+            //data->encodedData(KoStoreDrag::mimeType("application/vnd.oasis.opendocument.presentation")),
             //1, 0.0, 0.0, 0.0, 20.0, 20.0);
 
             m_canvas->setMouseSelectedObject(true);
@@ -6762,7 +6762,7 @@ void KPresenterView::insertFile(  )
     QStringList filter;
     filter<<"application/x-kpresenter";
 #if COPYOASISFORMAT
-    filter<<"application/vnd.oasis.openoffice.presentation";
+    filter<<"application/vnd.oasis.opendocument.presentation";
 #endif
     fd.setMimeFilter( filter );
     fd.setCaption(i18n("Insert File"));

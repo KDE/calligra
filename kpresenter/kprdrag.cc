@@ -79,7 +79,7 @@ const char* KPrTextDrag::format( int i ) const
 
 const char * KPrTextDrag::selectionMimeType()
 {
-    return "application/vnd.oasis.openoffice.presentation";
+    return "application/vnd.oasis.opendocument.presentation";
 }
 
 void KPrTextDrag::setTextObjectNumber( int number )

@@ -23,7 +23,7 @@ test -f $origfile || exit 1
 
 # Save to OOT
 tmpoasisfile=/tmp/oasisregtest.oot
-dcop $appid Document-0 setOutputMimeType "application/vnd.oasis.openoffice.text" || exit 1
+dcop $appid Document-0 setOutputMimeType "application/vnd.oasis.opendocument.text" || exit 1
 dcop $appid Document-0 saveAs $tmpoasisfile || exit 1
 sleep 1
 test -f $tmpoasisfile || exit 1
