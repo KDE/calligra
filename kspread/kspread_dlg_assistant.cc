@@ -43,6 +43,7 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
   table = m_pView->activeTable();
   dx = m_pView->canvasWidget()->markerColumn();
   dy = m_pView->canvasWidget()->markerRow();
+  m_pView->canvasWidget()->setEditorActivate(false);
 
   setCaption( i18n("Function") );
   QVBoxLayout *lay1 = new QVBoxLayout( this );

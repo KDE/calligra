@@ -100,10 +100,29 @@ public:
     void focusEditor();
     void setPosEditor(int pos);
     KSpreadCellEditor * pointeur() {return m_pEditor ;}
-
+    void choose_cell( QMouseEvent * _ev );
     bool EditorisActivate() {return E_activate;}
-    void setEditorActivate(bool _E_activate) { E_activate= _E_activate;}
+    void setEditorActivate(bool _E_activate) { E_activate= _E_activate;
+    						length_namecell=0;}
 
+    						
+    int choose_markerColumn() { return m_i_chooseMarkerColumn; }
+    int choose_markerRow() { return m_i_chooseMarkerRow; }
+    void set_chooseMarkerColumn( int _c ) {  m_i_chooseMarkerColumn = _c; }
+    void set_chooseMarkerRow( int _r ) {  m_i_chooseMarkerRow = _r;  }
+
+
+    void show_choose_cell(){if(choose_visible==true) {return;}
+    			choose_drawMarker();choose_visible=true;}
+    void hide_choose_cell(){if(choose_visible==false) {return;}
+    			choose_drawMarker();choose_visible=false;}			
+
+    void choose_drawMarker( );
+
+    bool choose_visible;
+    int  length_namecell;
+    int  length_text;
+    QString name_tab;
 
     QPoint marker() { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
@@ -301,6 +320,8 @@ private:
 
     //laurent
     bool E_activate;
+    int m_i_chooseMarkerRow;
+    int m_i_chooseMarkerColumn;
 };
 
 /**

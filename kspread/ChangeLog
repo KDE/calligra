@@ -1,3 +1,9 @@
+1999-08-31 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+Now when you write "=" in cell and you click on the table
+you create link between cells.
+
+
 1999-03-01  David Faure  <faure@kde.org>
 
 	* kspread_view.cc (runLocalScript):

@@ -1330,7 +1330,7 @@ void CellLayoutPageFont::size_chosen_slot(const QString & size)
 void CellLayoutPageFont::weight_chosen_slot(const QString & weight)
 {
   QString weight_string = weight;
-  cout <<"bold\n";
+
   if ( weight_string == QString(i18n("normal")))
     selFont.setBold(false);
   if ( weight_string == QString(i18n("bold")))
