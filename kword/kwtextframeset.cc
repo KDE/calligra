@@ -466,7 +466,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                         }
 
                         QRect flatRect = viewMode->normalToView( m_doc->zoomRect( rect ) );
-                        //kdDebug() << " KWTextFrameSet::drawFrame rect=" << rect << " zoomed:" << flatRect << endl;
+                        //kdDebug() << " KWTextFrameSet::drawContents rect=" << rect << " zoomed:" << flatRect << endl;
                         flatRect.setBottom( flatRect.top() + 1 ); // #!@!@!& QRect....
                         if ( flatRect.intersects( crect ) ) {
                             p->save();
@@ -504,7 +504,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 
 void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &r,
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                KWFrameSetEdit *edit )
+                                KWFrameSetEdit *edit, KWViewMode *viewMode, bool /*TODO*/ )
 {
     //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
@@ -577,7 +577,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
         //QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
 
-        QSize availSize = m_currentViewMode->availableSizeForText( this );
+        QSize availSize = viewMode->availableSizeForText( this );
         QRect blank( 0, docHeight, availSize.width(), availSize.height() /*+ frameRect.height() ?? */ - docHeight );
         //kdDebug(32002) << this << " Blank area: " << blank << endl;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );

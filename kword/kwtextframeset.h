@@ -152,7 +152,8 @@ public:
                                KWFrameSetEdit* edit, KWViewMode *viewMode );
 
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
-                            QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );
+                            QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                            KWFrameSetEdit * edit, KWViewMode *viewMode, bool );
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
 

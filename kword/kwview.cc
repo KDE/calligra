@@ -348,7 +348,7 @@ void KWView::initGUIButton()
     actionViewFrameBorders->setChecked( viewFrameBorders() );
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
     actionShowDocStruct->setChecked(m_doc->showdocStruct());
-	actionShowRuler->setChecked(m_doc->showRuler());
+    actionShowRuler->setChecked(m_doc->showRuler());
 
     updateHeaderFooterButton();
     actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );

@@ -122,7 +122,7 @@ public:
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, QColorGroup &,
-        bool, bool, KWFrameSetEdit *) {}
+                           bool, bool, KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }

@@ -540,12 +540,17 @@ public:
     /**
      * This one is called by drawContents for each frame.
      * It sets up clip rect and painter translation, and calls drawFrame, drawFrameBorder and drawMargins
+     *
+     * @param drawUnderlyingFrames if the frame implements it, then it should draw underlying frames.
+     * This is set to false by the default drawFrame implementation, so that the frames under a
+     * transparent frame are simply drawn, without transparency handling (nor their own
+     * double-buffering).
      */
     void drawFrameAndBorders( KWFrame *frame,
                               QPainter *painter, const QRect &crect,
                               QColorGroup &cg, bool, bool,
                               KWFrameSetEdit *edit, KWViewMode *viewMode,
-                              KWFrame *settingsFrame );
+                              KWFrame *settingsFrame, bool drawUnderlyingFrames );
 
     /**
      * Paint the borders for one frame of this frameset.
@@ -565,16 +570,15 @@ public:
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                            KWFrameSetEdit *edit );
+                            KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames );
 
     /**
      * Implement this one instead of drawFrame to benefit from double-buffering
      * AND transparency handling (painting frames below this one) automatically.
+     * You MUST reimplement one or the other, or you'll get infinite recursion ;)
      */
     virtual void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
-                                    QColorGroup &cg, KWFrameSetEdit* edit ) {
-        drawFrame( frame, painter, crect, cg, false, false, edit );
-    }
+                                    QColorGroup &cg, KWFrameSetEdit* edit, KWViewMode *viewMode );
 
     /**
      * Draw a margin of a specific frame of this frameSet
@@ -809,7 +813,7 @@ public:
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect & crect,
-                                    QColorGroup &, KWFrameSetEdit *edit );
+                                    QColorGroup &, KWFrameSetEdit *edit, KWViewMode *viewMode );
 
     // Pixmaps can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
@@ -854,9 +858,9 @@ public:
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
-    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
-                            QColorGroup &, bool onlyChanged, bool resetChanged,
-                            KWFrameSetEdit *edit = 0L );
+    virtual void drawFrameContents( KWFrame * frame, QPainter * p, const QRect & crect,
+                                    QColorGroup &, // bool onlyChanged, bool resetChanged,
+                                    KWFrameSetEdit *edit, KWViewMode *viewMode );
 
     // Cliparts can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
@@ -893,9 +897,9 @@ public:
     void updateChildGeometry();
     virtual void updateFrames();
 
-    virtual void drawFrame( KWFrame * frame, QPainter * p, const QRect & crect,
-                            QColorGroup &, bool onlyChanged, bool resetChanged,
-                            KWFrameSetEdit *edit = 0L );
+    virtual void drawFrameContents( KWFrame * frame, QPainter * p, const QRect & crect,
+                                    QColorGroup &, // bool onlyChanged, bool resetChanged,
+                                    KWFrameSetEdit *edit, KWViewMode *viewMode );
 
     // Embedded parts can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
@@ -961,7 +965,7 @@ public:
      */
     virtual void drawFrame(KWFrame *, QPainter*, const QRect&,
                            QColorGroup&, bool onlyChanged, bool resetChanged,
-                           KWFrameSetEdit *edit = 0L);
+                           KWFrameSetEdit *edit, KWViewMode *viewMode, bool);
 
     virtual void updateFrames();
 
