@@ -263,6 +263,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e = mainDocument.createElement( "column" );
         e.setAttribute( "column", i+1 );
         e.setAttribute( "width", column->width() );
+        e.setAttribute( "hide", column->visible() ? 0 : 1 );
         table.appendChild( e );
         e.appendChild( convertFormat( mainDocument, column->format() ) );
       }
@@ -277,6 +278,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
         e = mainDocument.createElement( "row" );
         e.setAttribute( "row", i+1 );
         e.setAttribute( "height", POINT_TO_MM ( row->height() ) );
+        e.setAttribute( "hide", row->visible() ? 0 : 1 );
         table.appendChild( e );
         e.appendChild( convertFormat( mainDocument, row->format() ) );
       }
