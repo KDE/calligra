@@ -10,6 +10,7 @@
 
 #include "vcolor.h"
 #include "vdashpattern.h"
+#include "vgradient.h"
 
 
 enum VStrokeType
@@ -70,6 +71,8 @@ public:
 	float miterLimit() const { return m_miterLimit; }
 	void setMiterLimit( float limit ) { m_miterLimit = limit; }
 
+	VGradient& gradient() { return m_gradient; }
+
 	VDashPattern& dashPattern() { return m_dashPattern; }
 
 	void save( QDomElement& element ) const;
@@ -79,6 +82,7 @@ private:
 	VStrokeType m_type;
 
 	VColor m_color;
+	VGradient m_gradient;
 	float m_lineWidth;
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;

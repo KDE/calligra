@@ -427,26 +427,31 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	// render the svp to the buffer
 	if( strokeSvp )
 	{
-		// get SVP bbox
-		ArtDRect bbox;
-		art_drect_svp( &bbox, strokeSvp );
+		if( m_stroke && m_stroke->type() == stroke_gradient )
+			applyGradient( strokeSvp, false );
+		else
+		{
+			// get SVP bbox
+			ArtDRect bbox;
+			art_drect_svp( &bbox, strokeSvp );
 
-		// clamp to viewport
-		int x0 = int( bbox.x0 );
-		x0 = QMAX( x0, 0 );
-		x0 = QMIN( x0, m_width );
-		int y0 = int( bbox.y0 );
-		y0 = QMAX( y0, 0 );
-		y0 = QMIN( y0, m_height );
-		int x1 = int( bbox.x1 ) + 1;
-		x1 = QMAX( x1, 0 );
-		x1 = QMIN( x1, m_width );
-		int y1 = int( bbox.y1 ) + 1;
-		y1 = QMAX( y1, 0 );
-		y1 = QMIN( y1, m_height );
+			// clamp to viewport
+			int x0 = int( bbox.x0 );
+			x0 = QMAX( x0, 0 );
+			x0 = QMIN( x0, m_width );
+			int y0 = int( bbox.y0 );
+			y0 = QMAX( y0, 0 );
+			y0 = QMIN( y0, m_height );
+			int x1 = int( bbox.x1 ) + 1;
+			x1 = QMAX( x1, 0 );
+			x1 = QMIN( x1, m_width );
+			int y1 = int( bbox.y1 ) + 1;
+			y1 = QMAX( y1, 0 );
+			y1 = QMIN( y1, m_height );
 
-		art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
-		art_svp_free( strokeSvp );
+			art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+			art_svp_free( strokeSvp );
+		}
 	}
 
 	if( fillSvp )
@@ -489,80 +494,66 @@ VKoPainter::drawVPath( ArtVpath *vec )
 void
 VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 {
+	ArtDRect bbox;
+	art_drect_svp( &bbox, svp );
+
+	// clamp to viewport
+	double x0 = int( bbox.x0 );
+	x0 = QMAX( x0, 0 );
+	x0 = QMIN( x0, m_width );
+	double y0 = int( bbox.y0 );
+	y0 = QMAX( y0, 0 );
+	y0 = QMIN( y0, m_height );
+	double x1 = int( bbox.x1 ) + 1;
+	x1 = QMAX( x1, 0 );
+	x1 = QMIN( x1, m_width );
+	double y1 = int( bbox.y1 ) + 1;
+	y1 = QMAX( y1, 0 );
+	y1 = QMIN( y1, m_height );
+
+	ArtRender *render = 0L;
+
+	VGradient gradient = fill ? m_fill->gradient() : m_stroke->gradient();
+
 	// TODO : for radials as well
-	if( m_fill->gradient().type() == gradient_linear )
+	if( gradient.type() == gradient_linear )
 	{
 		ArtGradientLinear *linear = new ArtGradientLinear();
 
 		// TODO : make variable
-		if( m_fill->gradient().spreadMethod() == gradient_spread_pad )
+		if( gradient.spreadMethod() == gradient_spread_pad )
 			linear->spread = ART_GRADIENT_PAD;
-		else if( m_fill->gradient().spreadMethod() == gradient_spread_repeat )
+		else if( gradient.spreadMethod() == gradient_spread_repeat )
 			linear->spread = ART_GRADIENT_REPEAT;
-		else if( m_fill->gradient().spreadMethod() == gradient_spread_reflect )
+		else if( gradient.spreadMethod() == gradient_spread_reflect )
 			linear->spread = ART_GRADIENT_REFLECT;
-
-		ArtDRect bbox;
-		art_drect_svp( &bbox, svp );
-
-		// clamp to viewport
-		double x0 = int( bbox.x0 );
-		x0 = QMAX( x0, 0 );
-		x0 = QMIN( x0, m_width );
-		double y0 = int( bbox.y0 );
-		y0 = QMAX( y0, 0 );
-		y0 = QMIN( y0, m_height );
-		double x1 = int( bbox.x1 ) + 1;
-		x1 = QMAX( x1, 0 );
-		x1 = QMIN( x1, m_width );
-		double y1 = int( bbox.y1 ) + 1;
-		y1 = QMAX( y1, 0 );
-		y1 = QMIN( y1, m_height );
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
-		double dx = m_fill->gradient().vector().x() - m_fill->gradient().origin().x();
-		double dy = m_fill->gradient().vector().y() - m_fill->gradient().origin().y();
+		double dx = gradient.vector().x() - m_fill->gradient().origin().x();
+		double dy = gradient.vector().y() - m_fill->gradient().origin().y();
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
 		linear->b = dy * scale;
-		linear->c = -( ( x0 + m_fill->gradient().origin().x() ) * linear->a +
-					   ( y0 + m_fill->gradient().origin().y() ) * linear->b );
+		linear->c = -( ( x0 + gradient.origin().x() ) * linear->a +
+					   ( y0 + gradient.origin().y() ) * linear->b );
 		//kdDebug() << "linear->a" << linear->a << endl;
 		//kdDebug() << "linear->b" << linear->b << endl;
 		//kdDebug() << "linear->c" << linear->c << endl;
 
 		// get stop array
 		int offsets = -1;
-		linear->stops = buildStopArray( offsets );
+		linear->stops = buildStopArray( gradient, offsets );
 		linear->n_stops = offsets;
 
-		ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+		render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
 		art_render_svp( render, svp );
 		art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
-		art_render_invoke( render );
 	}
-	else if( m_fill->gradient().type() == gradient_radial )
+	else if( gradient.type() == gradient_radial )
 	{
 		ArtGradientRadial *radial = new ArtGradientRadial();
-
-		ArtDRect bbox;
-		art_drect_svp( &bbox, svp );
-
-		// clamp to viewport
-		double x0 = int( bbox.x0 );
-		x0 = QMAX( x0, 0 );
-		x0 = QMIN( x0, m_width );
-		double y0 = int( bbox.y0 );
-		y0 = QMAX( y0, 0 );
-		y0 = QMIN( y0, m_height );
-		double x1 = int( bbox.x1 ) + 1;
-		x1 = QMAX( x1, 0 );
-		x1 = QMIN( x1, m_width );
-		double y1 = int( bbox.y1 ) + 1;
-		y1 = QMAX( y1, 0 );
-		y1 = QMIN( y1, m_height );
 
 		radial->affine[0] = m_matrix.m11();
 		radial->affine[1] = m_matrix.m12();
@@ -571,12 +562,12 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		radial->affine[4] = m_matrix.dx();
 		radial->affine[5] = m_matrix.dy();
 
-		double cx = m_fill->gradient().origin().x() + x0;
-		double cy = m_fill->gradient().origin().y() + y0;
+		double cx = gradient.origin().x() + x0;
+		double cy = gradient.origin().y() + y0;
 		double fx = cx; // TODO : fx, fy should be able to be different
 		double fy = cy;
-		double r = sqrt( pow( m_fill->gradient().vector().x() - m_fill->gradient().origin().x(), 2 ) +
-						 pow( m_fill->gradient().vector().y() - m_fill->gradient().origin().y(), 2 ) ) / sqrt( 2 );
+		double r = sqrt( pow( gradient.vector().x() - gradient.origin().x(), 2 ) +
+						 pow( gradient.vector().y() - gradient.origin().y(), 2 ) ) / sqrt( 2 );
 
 		radial->fx = (fx - cx) / r;
 		radial->fy = (fy - cy) / r;
@@ -590,21 +581,22 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		// get stop array
 		int offsets = -1;
-		radial->stops = buildStopArray( offsets );
+		radial->stops = buildStopArray( gradient, offsets );
 		radial->n_stops = offsets;
 
-		ArtRender *render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+		render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
 		art_render_svp( render, svp );
 		art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
-		art_render_invoke( render );
 	}
+	if( render )
+		art_render_invoke( render );
 }
 
 ArtGradientStop *
-VKoPainter::buildStopArray( int &offsets )
+VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 {
 	// TODO : make this generic
-	QValueList<VGradient::VColorStop> colorStops = m_fill->gradient().colorStops();
+	QValueList<VGradient::VColorStop> colorStops = gradient.colorStops();
 	offsets = colorStops.size();
 
 	QMemArray<ArtGradientStop> *stopArray = new QMemArray<ArtGradientStop>();

@@ -26,8 +26,16 @@ VStroke::save( QDomElement& element ) const
 	me.setAttribute( "lineJoin", m_lineJoin );
 	me.setAttribute( "miterLimit", m_miterLimit );
 
-	// save color:
-	m_color.save( me );
+	if( m_type == stroke_stroke )
+	{
+		// save color:
+		m_color.save( me );
+	}
+	else if( m_type == stroke_gradient )
+	{
+		// save gradient:
+		m_gradient.save( me );
+	}
 
 	// save dashpattern:
 	m_dashPattern.save( me );
@@ -80,6 +88,11 @@ VStroke::load( const QDomElement& element )
 			else if( e.tagName() == "DASHPATTERN" )
 			{
 				m_dashPattern.load( e );
+			}
+			else if( e.tagName() == "GRADIENT" )
+			{
+				m_type = stroke_gradient;
+				m_gradient.load( e );
 			}
 		}
 	}

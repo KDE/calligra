@@ -16,6 +16,7 @@ struct _ArtVpath;
 struct _ArtBpath;
 struct _ArtSVP;
 struct _ArtGradientStop;
+class VGradient;
 
 class VKoPainter : public VPainter
 {
@@ -66,7 +67,7 @@ private:
 	void clear( unsigned int color );
 	void drawVPath( struct _ArtVpath * );
 	void applyGradient( _ArtSVP *, bool );
-	_ArtGradientStop *buildStopArray( int & );
+	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );
 
 private:
 	struct _ArtBpath *m_path;
