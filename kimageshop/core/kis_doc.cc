@@ -43,9 +43,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <koStream.h>
-#include <komlParser.h>
-#include <komlWriter.h>
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
