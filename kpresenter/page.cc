@@ -640,6 +640,11 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  _assign_page_obj_ = false;
 		  _page_obj_ = new PageObjects;
 		  *_page_obj_ = *getObject(objNum);
+		  if (getObject(objNum)->graphObj)
+		    {
+		      _page_obj_->graphObj = new GraphObj(0,"graphObj");
+		      *_page_obj_->graphObj = *getObject(objNum)->graphObj;
+		    }
 		}
 
 	      mx = (mx / rastX()) * rastX();
@@ -2424,6 +2429,11 @@ void Page::appendUndoList(PageObjects *o)
     {
       PageObjects *p = new PageObjects;
       *p = *o;
+      if (o->graphObj)
+	{
+	  p->graphObj = new GraphObj(0,"graphObj");
+	  *p->graphObj = *o->graphObj;
+	}
       _page_obj_list_->append(p);
     }
 }

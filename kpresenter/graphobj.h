@@ -85,10 +85,13 @@ public:
   LineEnd getLineBegin() {return lineBegin;}
   void setLineEnd(LineEnd le) {lineEnd = le;}
   LineEnd getLineEnd() {return lineEnd;}
-
+  ObjType getObjType() {return objType;}
+  
   // save - load
   void save(ostream&);
   void load(KOMLParser&,vector<KOMLAttrib>&);
+
+  GraphObj& operator=(GraphObj&);
 
 protected:
 

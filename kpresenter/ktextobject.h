@@ -1545,6 +1545,21 @@ public:
    */
   bool isModified() {return _modified;}
 
+  /**
+   * Assign <i>txtObj</i> to <i>this</i> and return a reference to <i>this</i>.
+   */
+  KTextObject& operator=(KTextObject &txtObj);
+
+  /**
+   * Returns the linebreak width.
+   */
+  int getLineBreakWidth() {return linebreak_width;}
+
+  /**
+   * Return parent widget.
+   */
+  QWidget* getParent() {return _parent;}
+
 signals:
 
   /**
@@ -1719,6 +1734,7 @@ protected:
   bool _modified;
 
   QPopupMenu *rbMenu;
+  QWidget *_parent;
 
   int CB_CUT,CB_COPY,CB_PASTE;
 

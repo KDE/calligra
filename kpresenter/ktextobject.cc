@@ -1185,6 +1185,7 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   : QTableView(parent,name)
 {
   // init the objects
+  _parent = parent;
   doRepaints = true;
 
   composerMode = false;
@@ -3453,6 +3454,42 @@ void KTextObject::getPara(int &pos,int &line,int &para)
 {
   getLine(pos,line);
   getPara(line,para);
+}
+
+/*========================= operator = ==========================*/
+KTextObject& KTextObject::operator=(KTextObject &txtObj)
+{
+  clear(false);
+
+  setObjType(txtObj.objType());
+  setLineBreak(txtObj.getLineBreakWidth());
+  resize(size());
+
+  for (int i = 0;i < (int)txtObj.paragraphs();i++)
+    {
+      para1 = txtObj.paragraphAt(i);
+      para2 = addParagraph();
+      para2->setHorzAlign(para1->horzAlign());
+
+      for (int j = 0;j < (int)para1->lines();j++)
+	{
+	  lin = para1->lineAt(j);
+	  linePtr = new TxtLine();
+	  
+	  for (int k = 0;k < (int)lin->items();k++)
+	    {
+	      obj = lin->itemAt(k);
+	      objPtr = new TxtObj(obj->text(),obj->font(),obj->color(),obj->vertAlign(),obj->type());
+	      objPtr->setOrigSize(obj->origSize());
+
+	      linePtr->append(objPtr);
+	    }
+	  
+	  para2->append(linePtr);
+	}
+    }
+
+  return *this;
 }
 
 /*====================== paint cell ==============================*/

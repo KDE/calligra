@@ -333,6 +333,30 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 }
 
+/*======================== operator= =============================*/
+GraphObj& GraphObj::operator=(GraphObj& go)
+{
+  objType = go.getObjType();
+  setLineType((LineType)go.getLineType());
+  setRectType((RectType)go.getRectType());
+  setObjPen(go.getObjPen());
+  setObjBrush(go.getObjBrush());
+  setFileName(go.getFileName());
+  setRnds(go.getRndX(),go.getRndY());
+  setLineBegin(go.getLineBegin());
+  setLineEnd(go.getLineEnd());
+
+  resize(go.size());
+
+  if (objType == OT_PICTURE)
+    loadPixmap();
+  
+  if (objType == OT_CLIPART)
+    loadClipart();
+
+  return *this;
+}
+
 /*======================= paint event ============================*/
 void GraphObj::paintEvent(QPaintEvent* paintEvent)
 {

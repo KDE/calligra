@@ -20,6 +20,7 @@
 #include <qobject.h>
 
 #include "global.h"
+#include "graphobj.h"
 
 /******************************************************************/
 /* Class: UndoRedoBaseClass                                       */
@@ -130,7 +131,8 @@ public:
 
 protected:
   QList<PageObjects> *ptr_old,*ptr_new;
-  PageObjects tmp;
+  PageObjects tmp_obj;
+  GraphObj tmp_graph;
 
 };
 

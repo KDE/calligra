@@ -264,9 +264,18 @@ void UndoRedoPageObjectsList::revert()
   for (objPtr_new = ptr_new->first(),objPtr_old = ptr_old->first();objPtr_new != 0 && objPtr_old != 0;
        objPtr_new = ptr_new->next(),objPtr_old = ptr_old->next())
     {
-      tmp = *objPtr_new;
+      tmp_obj = *objPtr_new;
+      if (objPtr_new->graphObj)
+	tmp_graph = *objPtr_new->graphObj;
+
       *objPtr_new = *objPtr_old;
-      *objPtr_old = tmp;
+      if (objPtr_old->graphObj)
+	*objPtr_new->graphObj = *objPtr_old->graphObj;
+      
+      *objPtr_old = tmp_obj;
+      if (objPtr_new->graphObj)
+	*objPtr_old->graphObj = tmp_graph;
+
     }
 
   UndoRedoBaseClass::revert();
