@@ -3,10 +3,9 @@
 
 #include <koApplication.h>
 
-#include "kformula_doc.h"
 #include "kformula_shell.h"
 
-class KFormulaShell;
+class KoMainWindow;
 
 class KFormulaApp : public KoApplication
 {
@@ -14,11 +13,8 @@ class KFormulaApp : public KoApplication
 public:
   KFormulaApp( int &argc, char** argv );
   ~KFormulaApp();
-  
-  virtual void start();
-  
-protected:
-  KFormulaShell *m_pShell;
+
+  KoMainWindow* createNewShell() { return new KFormulaShell; }
 };
 
 #endif
