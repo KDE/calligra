@@ -201,16 +201,9 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
         return KoFilter::NotImplemented;
 
     AsciiImportDialog* dialog = new AsciiImportDialog();
-
-    if (!dialog)
-    {
-        kdError(30502) << "Dialog has not been created! Aborting!" << endl;
-        return KoFilter::StupidError;
-    }
-
     if (!dialog->exec())
     {
-        kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+        kdDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
         return KoFilter::StupidError;
     }
 
