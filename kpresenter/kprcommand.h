@@ -656,7 +656,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: DeletePageCmd                                           */
+/* Class: KPrInsertPageCmd                                        */
 /******************************************************************/
 
 class KPrInsertPageCmd : public KCommand
@@ -671,6 +671,21 @@ protected:
     KPresenterDoc *doc;
     KPrPage *m_page;
     int position;
+};
+
+class KPrMovePageCmd : public KCommand
+{
+public:
+    KPrMovePageCmd( const QString &_name,int _oldpos,int newPos, KPrPage *page, KPresenterDoc *_doc );
+    ~KPrMovePageCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KPresenterDoc *doc;
+    KPrPage *m_page;
+    int oldPosition;
+    int newPosition;
 };
 
 /******************************************************************/

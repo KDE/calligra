@@ -1794,13 +1794,9 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
 void KPresenterDoc::movePage( int from, int to )
 {
     kdDebug(33001) << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
-    bool wasSelected = isSlideSelected( from );
-    KTempFile tempFile( QString::null, ".kpr" );
-    tempFile.setAutoDelete( true );
-    savePage( tempFile.name(), from );
-    deletePage( from );
-    insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
-    selectPage( to, wasSelected );
+    KPrMovePageCmd *cmd=new KPrMovePageCmd( i18n("Move page"),from,to, m_pageList.at(from) ,this );
+    cmd->execute();
+    addCommand(cmd);
 }
 
 void KPresenterDoc::copyPage( int from, int to )
