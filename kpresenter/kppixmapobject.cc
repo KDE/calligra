@@ -135,6 +135,13 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+{
+    KP2DObject::loadOasis( element, context, animation );
+    //todo load file picture
+}
+
+
 double KPPixmapObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);

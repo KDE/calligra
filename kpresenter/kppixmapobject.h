@@ -67,6 +67,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );

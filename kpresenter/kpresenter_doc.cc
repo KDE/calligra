@@ -1090,6 +1090,10 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             else if ( name == "draw:image" ) // image
             {
+                fillStyleStack( o, context );
+                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+                kppixmapobject->loadOasis( o, context, animationShow);
+                newpage->appendObject(kppixmapobject);
             }
             else if ( name == "presentation:notes" ) // notes
             {
