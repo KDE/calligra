@@ -1951,21 +1951,19 @@ void KPresenterView::slotCounterStyleSelected()
 
         QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change List Type") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setCounterCommand( c );
             if ( cmd )
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change List Type") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro)
+        if( macroCmd)
             m_pKPresenterDoc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
 
 }
@@ -2404,28 +2402,29 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
     QPen e_pen = QPen(page->getPen(pen).color(), width, page->getPen(pen).style());
 
     bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n("Change Pen Width"));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                                 PenCmd::Width, page->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Pen Width"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                               PenCmd::Width, stickyPage()->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Pen Width"));
+
         macro->addCommand(cmd);
         createMacro=true;
     }
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
-    else
-        delete macro;
-
-    if ( !createMacro )
+    if ( !macro )
         pen = e_pen;
 }
 
@@ -3532,7 +3531,7 @@ void KPresenterView::styleOk()
 
     bool createMacro=false;
     KCommand *cmd;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Apply Properties" ) );
+    KMacroCommand *macro=0L;
 
     if ((confPenDia = styleDia->getConfPenDia()))
     {
@@ -3541,8 +3540,9 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         cmd=stickyPage()->setPen(confPenDia->getPen(), confPenDia->getLineBegin(), confPenDia->getLineEnd(),
@@ -3550,8 +3550,9 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
             macro->addCommand(cmd);
-            createMacro=true;
         }
     }
 
@@ -3565,8 +3566,10 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         cmd=stickyPage()->setBrush(confBrushDia->getBrush(), confBrushDia->getFillType(),
@@ -3577,8 +3580,10 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
     }
 
@@ -3587,7 +3592,9 @@ void KPresenterView::styleOk()
         cmd= m_canvas->setProtectSizeObj(styleDia->isProtected());
         if (cmd)
         {
-            createMacro=true;
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand( cmd );
         }
     }
@@ -3596,7 +3603,9 @@ void KPresenterView::styleOk()
         cmd= m_canvas->setKeepRatioObj(styleDia->isKeepRatio());
         if (cmd)
         {
-            createMacro=true;
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand( cmd );
         }
     }
@@ -3613,6 +3622,9 @@ void KPresenterView::styleOk()
         {
             bool state = styleDia->isProtectContent();
             cmd = m_canvas->setProtectContent( state );
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             if (cmd )
                 macro->addCommand(cmd);
             KPTextObject *obj=dynamic_cast<KPTextObject *>(m_canvas->getSelectedObj());
@@ -3640,8 +3652,10 @@ void KPresenterView::styleOk()
             cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
     }
 
@@ -3652,8 +3666,10 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         cmd=stickyPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
@@ -3661,8 +3677,10 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         updateObjectStatusBarItem();  //the type might have changed
@@ -3676,8 +3694,10 @@ void KPresenterView::styleOk()
                                                         confPolygonDia->getPolygonConfigChange() );
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
@@ -3686,8 +3706,10 @@ void KPresenterView::styleOk()
                                               confPolygonDia->getPolygonConfigChange() );
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
     }
 
@@ -3700,8 +3722,10 @@ void KPresenterView::styleOk()
                                                           confPictureDia->getPictureBright() );
         if (cmd )
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand( cmd );
-            createMacro = true;
         }
 
         cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
@@ -3711,8 +3735,10 @@ void KPresenterView::styleOk()
                                                 confPictureDia->getPictureBright() );
         if (cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand( cmd );
-            createMacro = true;
         }
     }
 
@@ -3723,8 +3749,10 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
 
         cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
@@ -3732,16 +3760,17 @@ void KPresenterView::styleOk()
 
         if(cmd)
         {
+            if ( !macro)
+                macro=new KMacroCommand(i18n( "Apply Properties" ) );
+
             macro->addCommand(cmd);
-            createMacro=true;
         }
     }
 
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
     else
     {
-        delete macro;
 
         if (confPieDia)
         {
@@ -3821,27 +3850,26 @@ void KPresenterView::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView::rotateOk()
 {
-    bool createMacro=false;
     float _newAngle=rotateDia->angle();
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Rotation" ));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=m_canvas->activePage()->rotateObj(_newAngle);
     if( cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n( "Change Rotation" ));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->rotateObj(_newAngle);
     if( cmd)
     {
-        macro->addCommand(cmd);
-        createMacro=true;
-    }
-    if(createMacro)
-        kPresenterDoc()->addCommand(macro);
-    else
-        delete macro;
+                if ( !macro )
+            macro=new KMacroCommand(i18n( "Change Rotation" ));
 
+        macro->addCommand(cmd);
+    }
+    if(macro)
+        kPresenterDoc()->addCommand(macro);
 }
 
 /*=================== shadow dialog ok ==========================*/
