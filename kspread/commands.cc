@@ -123,7 +123,7 @@ void DissociateCellCommand::unexecute()
 
 // ----- RenameSheetCommand -----
 
-RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, QString name )
+RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, const QString &name )
 {
   sheet = s;
   if( s ) oldName = s->tableName();
@@ -277,7 +277,7 @@ SheetPropertiesCommand::SheetPropertiesCommand( KSpreadDoc* d, KSpreadSheet* s )
     oldShowFormulaIndicator = newShowFormulaIndicator = sheet->getShowFormulaIndicator();
     oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
     oldLcMode = newLcMode = sheet->getLcMode();
-    oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();  
+    oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();
 }
 
 QString SheetPropertiesCommand::name() const
@@ -535,7 +535,7 @@ LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, const QString& li
   oldLink = cell->link();
   newText = text;
   newLink = link;
-  
+
   KSpreadSheet* s = cell->sheet();
   if( s ) doc = s->doc();
 }
@@ -543,21 +543,21 @@ LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, const QString& li
 void LinkCommand::execute()
 {
   if( !cell ) return;
-  
+
   if( !newText.isEmpty() )
     cell->setCellText( newText );
   cell->setLink( newLink  );
-  
+
   doc->addDamage( new CellDamage( cell ) );
 }
 
 void LinkCommand::unexecute()
 {
   if( !cell ) return;
-  
+
   cell->setCellText( oldText );
   cell->setLink( oldLink );
-  
+
   doc->addDamage( new CellDamage( cell ) );
 }
 

@@ -456,9 +456,9 @@ public:
     KSpreadBrushSelect( QWidget *parent, const char *_name );
 
     void setBrushStyle( BrushStyle _pat ) { brushStyle = _pat; repaint(); }
-    BrushStyle getBrushStyle() { return brushStyle; }
-    QColor getBrushColor() { return brushColor; }
-    void setBrushColor(QColor _c) { brushColor=_c;}
+    BrushStyle getBrushStyle() const { return brushStyle; }
+    QColor getBrushColor() const { return brushColor; }
+    void setBrushColor(const QColor &_c) { brushColor=_c;}
     void setPattern( const QColor &_color, BrushStyle _style );
 
 signals:
@@ -532,7 +532,7 @@ class CellFormatPageProtection : public QWidget
  public:
   CellFormatPageProtection( QWidget * parent, CellFormatDlg * _dlg );
   ~CellFormatPageProtection();
-  
+
   void apply( KSpreadCustomStyle * style );
   void apply( KSpreadCell  * _cell );
   void apply( ColumnFormat * _col );
@@ -669,7 +669,7 @@ public:
     bool bFormatType;
 
     KSpreadValue value;
-    
+
     bool isMerged;
     bool oneCell;
 

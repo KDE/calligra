@@ -148,7 +148,7 @@ protected:
 class RenameSheetCommand : public KCommand
 {
 public:
-  RenameSheetCommand( KSpreadSheet* sheet, QString name );
+  RenameSheetCommand( KSpreadSheet* sheet, const QString &name );
 
   virtual void execute();
   virtual void unexecute();
@@ -335,7 +335,7 @@ class LinkCommand : public KCommand
 {
 public:
   LinkCommand( KSpreadCell* cell, const QString& text, const QString& link );
-    
+
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
@@ -344,7 +344,7 @@ protected:
   KSpreadCell* cell;
   KSpreadDoc* doc;
   QString oldText;
-  QString oldLink;  
+  QString oldLink;
   QString newText;
   QString newLink;
 };
