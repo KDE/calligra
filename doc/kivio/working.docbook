@@ -10,7 +10,7 @@
 <sect1 id="saving">
 <title>Saving a Document</title>
 <para>To save the current document select <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu><guimenuitem>Save As</guimenuitem></menuchoice> to give an existing file a different name.</para>
-<note><para>It is possible to save the document in a form that can be opened by earlier versions of &kivio;. Select the version of you require from the <guilabel>Filter</guilabel> combo box in the Save file dialog.</para></note>
+<note><para>It is possible to save the document in a format that can be opened by earlier versions of &kivio;. Select the version you require from the <guilabel>Filter</guilabel> combo box in the Save file dialog.</para></note>
 </sect1>
 
 <sect1 id="printing">
@@ -25,7 +25,7 @@
 
 <sect1 id="multiple-pages">
 <title>Documents with Multiple Pages</title>
-<para>A &kivio; document can contain multiple pages of diagrams.</para>
+<para>A &kivio; document can contain several pages of diagrams.</para>
 
 <sect2>
 <title>Adding Pages</title>
@@ -64,8 +64,8 @@
 <listitem><para>.krl</para></listitem>
 <listitem><para>.pmb</para></listitem>
 <listitem><para>PCX (.pcx)</para></listitem>
-<listitem><para>.pgm</para></listitem>
-<listitem><para>.ppm</para></listitem>
+<listitem><para>Portable Grayscale Map .pgm</para></listitem>
+<listitem><para>Portable Pixmap File .ppm</para></listitem>
 <listitem><para>Targa (.tga)</para></listitem>
 <listitem><para>.xbm</para></listitem>
 <listitem><para>.xpm</para></listitem>
@@ -114,11 +114,6 @@
 <para>By default stencil edges are snapped to the nearest guide, to toggle this behaviour select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Guides</guimenuitem></menuchoice>.</para>
 </sect2>
 
-<sect2>
-<title>Customising Guide Settings</title>
-<para>TODO</para>
-</sect2>
-
 </sect1>
 
 <sect1 id="layers">
@@ -142,7 +137,6 @@ Each page of the document has its own set of layers.</para>
 <para>Layers are drawn in the order they are listed. The drawing occurs from the top down so objects in the layer at the bottom of the list are drawn on top of objects in all the other layers. The order of the list can be changed by selecting a layer and using the <guibutton>Move Layer Up</guibutton> and <guibutton>Move Layer Down</guibutton> buttons to change its position.</para>
 <para>Each layer is listed with four small icons next to its name. From left to right they represent:
 	Visibility - shown as a small eye. Clicking on the icon will toggle the layer's visibility.
-	Connectors -
 </para>
 </sect2>
 </sect1>
@@ -152,8 +146,7 @@ Each page of the document has its own set of layers.</para>
 
 <sect2>
 <title>The Align Tool</title>
-<para>The Align tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you have a choose of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
-<important><para>The <guilabel>Center of page</guilabel> checkbox will place the stencils in the center of the page. However, if multiple stencils are selected they will be placed on top of each other.</para></important>
+<para>The Align tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
 </sect2>
 
 <sect2>

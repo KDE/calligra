@@ -4,14 +4,14 @@
 <sect1 id="starting">
 <title>Starting &kivio;</title>
 <para>Like other &koffice; applications on startup &kivio; presents a Create Document dialog. The three tabs offer a choice of creating a new document, opening a saved document or choosing a document from a list of recently saved files.</para>
-<para>If you're new to &kivio; begin by creating an empty document by double-clicking on the <quote>Empty Document</quote> template.</para>
-<para>&kivio;'s main window contains a view of the current document. The page outline and margins are shown, as is a grid. Surrounding this view are horizontal and vertical rules. A tools toolbar is by default placed on the left-hand side and beneath the document view is a page selector, beneath that the status bar which shows the current position of the mouse pointer as a location on the page.</para>
+<para>If you're new to &kivio; begin by creating an empty document by double-clicking on the <guilabel>Empty Document</guilabel> template.</para>
+<para>&kivio;'s main window contains a view of the current document. The page outline and margins are shown, as is a grid. Surrounding this view are horizontal and vertical rules. By default a tools toolbar is placed on the left-hand side and beneath the document view is a page selector, beneath that the status bar which shows the current position of the mouse pointer as a location on the page.</para>
 <para>At the top of the window are the two main toolbars. These contain buttons for the most commonly used features of &kivio;.</para>
 </sect1>
 
 <sect1 id="stencils">
 <title>Using Stencils</title>
-<para>Diagrams are created by placing different pre-drawn shapes called stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>File</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into three groups, a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
+<para>Diagrams are created by placing different pre-drawn shapes called stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>File</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups, a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
 <para>Stencils are grouped into stencil sets for organizational purposes only, it is perfectly okay to add several stencil sets to a document and &kivio; allows you to mix and match stencils from different sets freely.</para>
 <para>To place a stencil onto the document simply drag it from the stencil area to the page.</para>
 
@@ -77,7 +77,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Adjusting the Line Thickness</title>
-<para>The width of a stencils's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice> by using the <guibutton>Line Thickness</guibutton> spinbox on the Format toolbar. The line width can be entered in millimetres or increased/decreased using the arrows next to the text box.</para>
+<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice> or by using the <guibutton>Line Thickness</guibutton> spinbox on the Format toolbar. The line width can be entered in millimetres or increased/decreased using the arrows next to the text box.</para>
 </sect2>
 
 <sect2>
@@ -109,14 +109,14 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Locking Stencils</title>
-<para>A stencil's properties may be "locked" to prevent accidental changes. To alter a stencil's protection using the Protection docker. This can be displayed by selecting <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Protection</guimenuitem></menuchoice>. Select the stencil or stencils you wish to protect and then tick the properties you want to protect on the protection docker.</para>
+<para>A stencil's properties may be <quote>locked</quote> to prevent accidental changes. To alter a stencil's protection using the Protection docker. This can be displayed by selecting <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Protection</guimenuitem></menuchoice>. Select the stencil or stencils you wish to protect and then tick the properties you want to protect on the protection docker.</para>
 <para>The protections available are: width, height, aspect ratio, X position, Y position and deletion. Deletion prevents a stencil from being deleted from the document.</para>
 </sect2>
 
 <sect2>
 <title>Stencil Geometry</title>
-<para>For accurately specifying the dimensions of a stencil use the stencil geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horziontal and vertical position of the stencil and the width and height.</para>
-<tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be converted. Millimeters (mm) and inches (in) are also accepted.</para></tip>
+<para>For accurately specifying the dimensions of a stencil use the Geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horziontal and vertical position of the stencil and the width and height.</para>
+<tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be convertedinto points. Millimeters (mm) and inches (in) are also accepted.</para></tip>
 </sect2>
 
 </sect1>
@@ -154,7 +154,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <title>Multiple Views</title>
 <para>It is possible to have multiple views of the same document displayed simultaneously.</para>
 <para>Select New View from the View menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor set-ups.</para>
-<para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertained to a particular document can be closed simultaneous by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice></para>
+<para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertaining to a particular document can be closed simultaneously by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice></para>
 </sect2>
 
 <sect2>
@@ -165,9 +165,9 @@ To split a window select <menuchoice><guimenu>View</guimenu><guimenuitem>Split V
 
 <sect2>
 <title>The View Manager</title>
-<para>The view manager allows you to store the current display settings, including zoom level and position. You can then adjust the view but revert back to the previous settings with a single mouse click. A number of different settings can be stored and given names for ease of reference.</para>
+<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view but revert back to the previous settings with a single mouse click. A number of different settings can be stored and given names for ease of reference.</para>
 <para>To display the View Manager choose <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>View Manager</guimenuitem></menuchoice>. The docker contains five buttons and a list of stored views.</para>
-<para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to only of the stored settings click on its name in the list.</para>
+<para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to any of the stored settings click on its name in the list.</para>
 <para>By default &kivio; labels the settings with the page number and the magnification level, to enter a more descriptive name click on the middle button, <guibutton>Rename Item</guibutton>, this lets you enter your own text.</para>
 <para>The second button, <guibutton>Remove Item</guibutton>, removes the currently selected set of stored settings.</para>
 <para>The final two buttons, <guibutton>Move Item Up</guibutton> and <guibutton>Move Item Down</guibutton>, allow the order of the settings in list to be adjusted.</para>
