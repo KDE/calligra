@@ -29,7 +29,6 @@ module KImage
 	interface View : KOffice::View
 	{
 		// Edit
-		slot void editEditImage();
 		slot void editImportImage();
 		slot void editExportImage();
 		slot void editPageLayout();
@@ -57,15 +56,6 @@ module KImage
 		slot void transformZoomHalf();
 		slot void transformZoomMax();
 		slot void transformZoomMaxAspect();
-
-		// Filter
-
-		// Plug-Ins
-
-		// Extras
-		slot void extrasRunGimp();
-		slot void extrasRunXV();
-		slot void extrasRunCommand();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

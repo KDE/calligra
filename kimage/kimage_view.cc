@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+
+   Copyright (C) 1999 Michael Koch <koch@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,24 +44,6 @@
 #include "kimage_doc.h"
 #include "kimage_view.h"
 #include "kimage_shell.h"
-
-#define CHECK_DOCUMENT \
-	if( m_pDoc->isEmpty() ) \
-	{ \
-	  kdebug( KDEBUG_INFO, 0, "Document is empty. Action won't be executed." ); \
-	  return; \
-	}
-
-#define CHECK_RUNNING \
-	if( m_pDoc->m_executeCommand ) \
-	{ \
-	  kdebug( KDEBUG_INFO, 0, "Document is empty. External command won't be executed." ); \
-	  return; \
-	}
-	
-#define CHECK_ALL \
-	CHECK_DOCUMENT \
-	CHECK_RUNNING
 
 /*****************************************************************************
  *
@@ -195,38 +178,6 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   pix = OPICON( "undo.xpm" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
 
-  m_vToolBarEdit->insertSeparator( -1 );
-
-  text=  i18n( "Undo" ) ;
-  pix = OPICON( "undo.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "editUndo", true, text, -1 );
-
-  text=  i18n( "Redo" ) ;
-  pix = OPICON( "redo.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "editRedo", true, text, -1 );
-
-  m_vToolBarEdit->insertSeparator( -1 );
-
-  text=  i18n( "Edit image" ) ;
-  pix = OPICON( "editpaste.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
-
-  text=  i18n( "Select Area" ) ;
-  pix = OPICON( "areaselect.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 8, SIGNAL( clicked() ), this, "selectArea", true, text, -1 );
-
-  text=  i18n( "Airbrush" ) ;
-  pix = OPICON( "airbrush.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 9, SIGNAL( clicked() ), this, "airbrush", true, text, -1 );
-
-  text=  i18n( "Circle" ) ;
-  pix = OPICON( "circle.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 10, SIGNAL( clicked() ), this, "circle", true, text, -1 );
-
-  text=  i18n( "Eraser" ) ;
-  pix = OPICON( "eraser.xpm" );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 11, SIGNAL( clicked() ), this, "eraser", true, text, -1 );
-
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
   // Folgendes muss mit der zuletzt eingefuegten ToolBar gemacht werden.
@@ -250,7 +201,6 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuEdit = 0L;
     m_vMenuView = 0L;
     m_vMenuTransform = 0L;
-    m_vMenuExtras = 0L;
     return true;
   }
 
@@ -260,16 +210,6 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // Edit
   text =  i18n( "&Edit" ) ;
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
-
-  text =  i18n( "no Undo possible" ) ;
-  pix = OPICON( "undo.xpm" );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", 0, -1, -1 );
-
-  text =  i18n( "no Redo possible" ) ;
-  pix = OPICON( "redo.xpm" );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, text, this, "editRedo", 0, -1, -1 );
-
-  m_vMenuEdit->insertSeparator( -1 );
 
   text =  i18n( "&Import image" ) ;
   m_vMenuEdit->insertItem4( text, this, "editImportImage", CTRL + Key_I, -1, -1 );
@@ -363,19 +303,6 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text =  i18n( "Max/&aspect") ;
   m_idMenuTransform_ZoomMaxAspect = m_vMenuTransform->insertItem( text, this, "transformZoomMaxAspect", 0 );
 
-  // Extras
-  text =  i18n( "&Extras" ) ;
-  _menubar->insertMenu( text, m_vMenuExtras, -1, -1 );
-
-  text =  i18n( "Run &Gimp" ) ;
-  m_idMenuExtras_RunGimp = m_vMenuExtras->insertItem( text, this, "extrasRunGimp", 0 );
-
-  text =  i18n( "Run &xv" ) ;
-  m_idMenuExtras_RunXV = m_vMenuExtras->insertItem( text, this, "extrasRunXV", 0 );
-
-  text =  i18n( "Run &Command..." ) ;
-  m_idMenuExtras_RunCommand = m_vMenuExtras->insertItem( text, this, "extrasRunCommand", 0 );
-
   return true;
 }
 
@@ -402,15 +329,6 @@ void KImageView::newView()
   KImageShell* shell = new KImageShell;
   shell->show();
   shell->setDocument( m_pDoc );
-}
-
-void KImageView::editEditImage()
-{
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
-  QWidget::update();
 }
 
 void KImageView::editImportImage()
@@ -563,8 +481,6 @@ void KImageView::viewBackgroundColor()
  */
 void KImageView::transformRotateRight()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Rotate Right" );
 
   QWMatrix matrix;
@@ -578,8 +494,6 @@ void KImageView::transformRotateRight()
  */
 void KImageView::transformRotateLeft()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Rotate Left" );
 
   QWMatrix matrix;
@@ -593,8 +507,6 @@ void KImageView::transformRotateLeft()
  */
 void KImageView::transformRotateAngle()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Rotate Angle" );
 
   int angle = 0;
@@ -616,8 +528,6 @@ void KImageView::transformRotateAngle()
  */
 void KImageView::transformFlipVertical()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "flipVertical" );
 
   QWMatrix matrix;
@@ -632,8 +542,6 @@ void KImageView::transformFlipVertical()
  */
 void KImageView::transformFlipHorizontal()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "flipHorizontal" );
 
   QWMatrix matrix;
@@ -646,8 +554,6 @@ void KImageView::transformFlipHorizontal()
 
 void KImageView::transformZoomFactor()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Factor" );
 
   QWMatrix matrix;
@@ -665,8 +571,6 @@ void KImageView::transformZoomFactor()
 
 void KImageView::transformZoomIn10()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom In 10" );
 
   QWMatrix matrix;
@@ -677,8 +581,6 @@ void KImageView::transformZoomIn10()
 
 void KImageView::transformZoomOut10()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Out 10" );
 
   QWMatrix matrix;
@@ -689,8 +591,6 @@ void KImageView::transformZoomOut10()
 
 void KImageView::transformZoomDouble()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Double" );
 
   QWMatrix matrix;
@@ -701,8 +601,6 @@ void KImageView::transformZoomDouble()
 
 void KImageView::transformZoomHalf()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Half" );
 
   QWMatrix matrix;
@@ -713,8 +611,6 @@ void KImageView::transformZoomHalf()
 
 void KImageView::transformZoomMax()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Max" );
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -724,8 +620,6 @@ void KImageView::transformZoomMax()
 
 void KImageView::transformZoomMaxAspect()
 {
-  CHECK_ALL;
-
   kdebug( KDEBUG_INFO, 0, "Zoom Max Aspect" );
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -740,83 +634,6 @@ QString KImageView::tmpFilename()
   file.sprintf( "/tmp/kimage_%i.image", getpid() );
   kdebug( KDEBUG_INFO, 0, file );
   return file;
-}
-
-void KImageView::slotCommandExecuted( KProcess* )
-{
-  if( !m_pDoc->openDocument( m_tmpFile, 0L ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not open\n%s" ), m_tmpFile.data() );
-    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-    return;
-  }
-  // TODO
-  // Funktionsaufruf: es wird kein Prozess mehr ausgeführt.
-  m_pDoc->m_executeCommand = false;
-
-  kdebug( KDEBUG_INFO, 0, "ending process" );
-}
-
-void KImageView::executeCommand( KProcess& proc )
-{
-  // TODO
-  // Funktionsaufruf: es wird Prozeß ausgeführt
-  m_pDoc->m_executeCommand = true;
-
-  kdebug( KDEBUG_INFO, 0, "starting process" );
-
-  m_tmpFile = tmpFilename();
-
-  if( !m_pDoc->saveDocument( m_tmpFile, 0L ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n( "Could not save\n%s" ), m_tmpFile.data() );
-    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-    return;
-  }
-  QApplication::connect( &proc, SIGNAL( processExited( KProcess* ) ), this, SLOT( slotCommandExecuted( KProcess* ) ) );
-  proc << m_tmpFile;
-
-  // TODO
-  // make process NotifyOnExit
-  // I think there is a bug in KProcess, the Process don't starts if NotifyOnExit
-  proc.start( KProcess::Block );
-  //proc.start();
-}
-
-void KImageView::extrasRunGimp()
-{
-  CHECK_ALL;
-
-  KProcess proc;
-  proc << "gimp";
-  executeCommand( proc );
-}
-
-void KImageView::extrasRunXV()
-{
-  CHECK_ALL;
-
-  KProcess proc;
-  proc << "xv";
-  executeCommand( proc );
-}
-
-void KImageView::extrasRunCommand()
-{
-  CHECK_ALL;
-
-  QString tmp;
-  KLineEditDlg dlg( i18n( "Execute Command" ), i18n( "test" ), 0 );
-  if( dlg.exec() != KDialog::Accepted )
-  {
-    tmp = dlg.text();
-    return;
-  }
-  KProcess proc;
-  proc << "display";
-  executeCommand( proc );
 }
 
 void KImageView::resizeEvent( QResizeEvent* )

@@ -74,18 +74,12 @@ public:
   void transformZoomMax();
   void transformZoomMaxAspect();
 
-  void extrasRunGimp();
-  void extrasRunXV();
-  void extrasRunCommand();
-
   virtual void cleanUp();
   bool printDlg();
 
 public slots:
   // Document signals
   void slotUpdateView();
-
-  void slotCommandExecuted( KProcess* );
 
 protected:
   enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
@@ -143,12 +137,6 @@ protected:
   long int m_idMenuTransform_ZoomMax;
   long int m_idMenuTransform_ZoomMaxAspect;
 
-  // extras menu
-  OpenPartsUI::Menu_var m_vMenuExtras;
-  long int m_idMenuExtras_RunGimp;
-  long int m_idMenuExtras_RunXV;
-  long int m_idMenuExtras_RunCommand;
-
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
   long int m_idMenuHelp_About;
@@ -156,7 +144,6 @@ protected:
 
 private:
   QPoint m_zoomFactor;
-  QString m_tmpFile;
   KImageDoc* m_pDoc;
   QPixmap m_pixmap;
   DrawMode m_drawMode;
