@@ -3227,9 +3227,7 @@ void KPresenterView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
-#if KDE_VERSION >= 305
     actionFormatStyle->setRemoveAmpersandsInCombo( true );
-#endif
     updateStyleList();
 
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
@@ -3993,11 +3991,8 @@ void KPresenterView::screenPenWidth( const QString &item )
 void KPresenterView::screenPenColor()
 {
     QColor c = kPresenterDoc()->presPen().color();
-    if ( KColorDialog::getColor( c
-#if KDE_VERSION >= 305
-                                 , Qt::red
-#endif
-             ) ) {
+    if ( KColorDialog::getColor( c, Qt::red) )
+    {
 	QPen p = kPresenterDoc()->presPen();
 	p.setColor( c );
 	kPresenterDoc()->setPresPen( p );
@@ -5134,9 +5129,7 @@ void KPresenterView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
     m_spell.macroCmdSpellCheck=0L;
-#if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
-#endif
     m_spell.bSpellSelection = false;
     m_spell.selectionStartPos=0;
 
@@ -5213,9 +5206,7 @@ void KPresenterView::startKSpell()
     if(m_pKPresenterDoc->getKSpellConfig())
     {
         m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_pKPresenterDoc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
         m_pKPresenterDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
-#endif
 
     }
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
@@ -5234,10 +5225,7 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
-#if KDE_VERSION >= 305
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
-#endif
-
 }
 
 void KPresenterView::spellCheckerIgnoreAll( const QString & word)
@@ -5252,23 +5240,6 @@ void KPresenterView::spellCheckerReady()
         KPTextObject *textobj = m_spell.textObject.at( i );
         m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug(33001) << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
-#if 0 //synchronize code with kword.
-        KoTextParag * p = textobj->textDocument()->firstParag();
-        QString text;
-        bool textIsEmpty=true;
-        while ( p ) {
-            QString str = p->string()->toString();
-            str.truncate( str.length() - 1 ); // damn trailing space
-            if(textIsEmpty)
-                textIsEmpty=str.isEmpty();
-            text += str + '\n';
-            p = p->next();
-        }
-        if(textIsEmpty)
-            continue;
-        text += '\n';
-        m_spell.kspell->check( text );
-#endif
         QString text = textobj->textDocument()->plainText();
         if ( m_spell.bSpellSelection)
         {
@@ -5403,9 +5374,7 @@ void KPresenterView::spellCheckerDone( const QString & )
     {
         m_pKPresenterDoc->setReadWrite(true);
         m_spell.textObject.clear();
-#if KDE_VERSION >= 305
         m_spell.replaceAll.clear();
-#endif
 
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
@@ -5442,9 +5411,7 @@ void KPresenterView::spellCheckerFinished()
     m_spell.macroCmdSpellCheck=0L;
 
     m_pKPresenterDoc->setReadWrite(true);
-#if KDE_VERSION >= 305
     m_spell.replaceAll.clear();
-#endif
 
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
@@ -6353,11 +6320,7 @@ void KPresenterView::updateStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
-#else
-    lstWithAccels = lst;
-#endif
     QMap<QString, KShortcut> shortCut;
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");

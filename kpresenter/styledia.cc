@@ -161,9 +161,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     l->setFixedHeight( l->sizeHint().height() );
 
     choosePCol = new KColorButton( Qt::black,
-#if KDE_VERSION >= 305
                                    Qt::black,
-#endif
                                    left );
     connect( choosePCol, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotColorChanged() ) );
@@ -427,9 +425,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBCol = new KColorButton( Qt::white,
-#if KDE_VERSION >= 305
                                    Qt::white,
-#endif
                                    brushConfig );
     connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
 	     this, SLOT( slotBrushColorChanged() ) );
@@ -474,16 +470,12 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     l->setFixedHeight( l->sizeHint().height() );
 
     gradient1 = new KColorButton( red,
-#if KDE_VERSION >= 305
                                    red,
-#endif
                                   gradientConfig );
     connect( gradient1, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotGColor1Changed() ) );
     gradient2 = new KColorButton( green,
-#if KDE_VERSION >= 305
                                    green,
-#endif
                                   gradientConfig );
     connect( gradient2, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotGColor2Changed() ) );

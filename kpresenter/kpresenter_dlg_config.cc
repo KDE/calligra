@@ -233,12 +233,6 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
 
-    //laurent kdoublenumvalidator changed !!!!
-    //setPrecision doen't work it return a value display * 10^precision !!!!
-    //perhaps it's normal in new API ....
-#if KDE_VERSION < 307
-    indent->setPrecision(1);
-#endif
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
@@ -321,9 +315,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     grid1->addWidget( lab, 0, 0 );
 
     bgColor = new KColorButton( oldBgColor,
-#if KDE_VERSION >= 305
                                 oldBgColor,
-#endif
                                 tmpQGroupBox );
     bgColor->setColor( oldBgColor );
     grid1->addWidget( bgColor, 1, 0 );
@@ -334,9 +326,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     grid1->addWidget( lab, 2, 0 );
 
     gridColor = new KColorButton( oldGridColor,
-#if KDE_VERSION >= 305
                                   oldGridColor,
-#endif
                                   tmpQGroupBox );
     grid1->addWidget( gridColor, 3, 0 );
 
