@@ -32,9 +32,6 @@ class KToggleAction;
 class KHelpMenu;
 class QPaintEvent;
 
-class GradientDialog;
-class GradientEditorDialog;
-
 class KisDoc;
 class KisImage;
 class KisCanvas;
@@ -69,7 +66,6 @@ class EraserTool;
 class PenTool;
 class ZoomTool;
 class KisGradient;
-class GradientTool;
 class LineTool;
 class PolyLineTool;
 class RectangleTool;
@@ -93,15 +89,34 @@ class KisView : public KoView
     KisColor& fgColor() { return m_fg; }
     KisColor& bgColor() { return m_bg; }
 
-    KisCanvas*  kisCanvas() { return m_pCanvas; }
-    KisPainter* kisPainter() { return m_pPainter; }
-    KisPattern *currentPattern() { return m_pPattern; }
-    KisBrush *currentBrush() { return m_pBrush; }
+    KisCanvas   *kisCanvas()        { return m_pCanvas; }
+    KisPainter  *kisPainter()       { return m_pPainter; }
+    KisPattern  *currentPattern()   { return m_pPattern; }
+    KisBrush    *currentBrush()     { return m_pBrush; }
 
     void updateCanvas(QRect & ur);
     void showScrollBars();
     void layerScale(bool smooth);
         
+    int 	docWidth();
+    int 	docHeight();
+
+    int 	xPaintOffset();
+    int 	yPaintOffset();
+     
+    int     xScrollOffset() { return m_pHorz->value(); }
+    int     yScrollOffset() { return m_pVert->value(); }
+    void    scrollTo( QPoint p );
+
+    void    insert_layer_image(bool newLayer);
+    void    save_layer_image(bool mergeLayers);
+
+    void 	zoom( int x, int y, float zf );
+    void    zoom_in( int x, int y );
+    void	zoom_out( int x, int y );
+    float   zoomFactor();
+    void    setZoomFactor( float zf );
+    
  signals:
  
     void canvasMousePressEvent( QMouseEvent * );
@@ -150,16 +165,12 @@ class KisView : public KoView
     
     // dialog action slots
     void dialog_gradient();
-    void dialog_gradienteditor();
-
     void dialog_colors();
     void dialog_krayons();
     void dialog_brushes();
     void dialog_patterns();
     void dialog_layers();
     void dialog_channels();
-
-    void updateToolbarButtons();
 
     // layer action slots
     void insert_layer();
@@ -205,7 +216,6 @@ class KisView : public KoView
     void tool_airbrush();
     void tool_pen();
     void tool_eraser();
-    void tool_gradient();
     void tool_line();
     void tool_polyline();
     void tool_rectangle();
@@ -256,29 +266,6 @@ class KisView : public KoView
     void setupTabBar();
 
     void activateTool(KisTool*);
-
- public:
-
-    int 	docWidth();
-    int 	docHeight();
-
-    int 	xPaintOffset();
-    int 	yPaintOffset();
-     
-    int     xScrollOffset() { return m_pHorz->value(); }
-    int     yScrollOffset() { return m_pVert->value(); }
-    void    scrollTo( QPoint p );
-
-    void    insert_layer_image(bool newLayer);
-    void    save_layer_image(bool mergeLayers);
-
-    void 	zoom( int x, int y, float zf );
-    void    zoom_in( int x, int y );
-    void	zoom_out( int x, int y );
-    float   zoomFactor();
-    void    setZoomFactor( float zf );
-    
-    QPixmap *pixmap() { return m_pPixmap; };
              
  private:
 
@@ -291,7 +278,7 @@ class KisView : public KoView
         *m_select_all, *m_unselect_all;
 
     // tool settings dialog actions
-    KToggleAction *m_dialog_gradient, *m_dialog_gradienteditor;
+    KAction *m_dialog_gradient;
 
 	// krayon box floating dialog actions
 	KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
@@ -307,7 +294,7 @@ class KisView : public KoView
     KToggleAction *m_tool_select_rectangular, *m_tool_select_polygonal,
     *m_tool_select_elliptical, *m_tool_select_contiguous,
     *m_tool_move, *m_tool_zoom, 
-    *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
+    *m_tool_brush, *m_tool_draw, *m_tool_pen, 
     *m_tool_colorpicker, *m_tool_colorchanger, 
     *m_tool_fill, *m_tool_stamp, *m_tool_paste,
     *m_tool_airbrush, *m_tool_eraser,
@@ -329,8 +316,7 @@ class KisView : public KoView
     AirBrushTool        *m_pAirBrushTool;
     PenTool             *m_pPenTool;
     ZoomTool            *m_pZoomTool;
-    KisGradient         *m_pGradient;
-    GradientTool        *m_pGradientTool;
+
     LineTool            *m_pLineTool;
     PolyLineTool        *m_pPolyLineTool;
     RectangleTool       *m_pRectangleTool;
@@ -340,9 +326,11 @@ class KisView : public KoView
     FillTool            *m_pFillTool;
     StampTool           *m_pStampTool;
     
+    // krayon objects - all can be krayons
     KisKrayon     *m_pKrayon;   // current krayon for this view   
     KisBrush      *m_pBrush;    // current brush for this view
-    KisPattern    *m_pPattern;  // current for this view pattern
+    KisPattern    *m_pPattern;  // current pattern for this view 
+    KisGradient   *m_pGradient; // current gradient   
     KisImage      *m_pImage;    // current image for this view
 
     // sidebar dock widgets
@@ -355,12 +343,8 @@ class KisView : public KoView
     KisLayerView         *m_pLayerView;
     KisChannelView       *m_pChannelView;
 
-    GradientDialog       *m_pGradientDialog;
-    GradientEditorDialog *m_pGradientEditorDialog;
-
     // krayon and kde objects
     KisCanvas           *m_pCanvas;
-    QPixmap             *m_pPixmap;
     KisPainter          *m_pPainter;
     KisSideBar          *m_pSideBar;
     QScrollBar          *m_pHorz, *m_pVert;

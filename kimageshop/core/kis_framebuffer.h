@@ -70,6 +70,8 @@ public:
     
     void setGradientPaint(bool _gradientPaint, 
         KisColor startColor, KisColor endColor);
+    void setGradientEffect(KImageEffect::GradientType effect)
+        { mGradient.setEffect(effect); }     
     void setGradientToPixel(KisLayer *lay, int x, int y);
     KisGradient & gradient( ) { return mGradient; }   
     

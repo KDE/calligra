@@ -41,6 +41,7 @@
 #include <kstdaction.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
+#include <kimageeffect.h>
 #include <kapp.h>
 
 // core classes
@@ -71,7 +72,6 @@
 
 // dialogs
 #include "kis_dlg_gradient.h"
-#include "kis_dlg_gradienteditor.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_new.h"
 #include "kis_dlg_new_layer.h"
@@ -88,7 +88,6 @@
 #include "kis_tool_brush.h"
 #include "kis_tool_airbrush.h"
 #include "kis_tool_pen.h"
-#include "kis_tool_gradient.h"
 #include "kis_tool_line.h"
 #include "kis_tool_polyline.h"
 #include "kis_tool_rectangle.h"
@@ -113,11 +112,11 @@
     does it differently but krayon's is the exemplary view which sets 
     the standard.   A document can have more than one view.  
     
-    In my opinion it is a great design flaw to have a view limited to
-    a single document.  A view should be able to contain multiple documents,
-    switching them in and out as needed. This is somewhat overcome in 
-    Krayon by allowing multiple images per document, but each view always
-    shows the same image and even the same layer within each image, although
+    In my opinion it is a flaw to have a view limited to a single document.  
+    A view should be able to contain multiple documents, switching them 
+    in and out as needed. This is somewhat overcome in  Krayon by allowing 
+    multiple images per document, but each view always shows the same 
+    image and even the same layer within each image, although
     with varying magnificaitons, etc. This is bad. Especially with split 
     views one should be able to have a different image in each pane, and
     cut and paste, make comparisons, etc., between them.
@@ -148,7 +147,7 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_pTool     = 0L;
     m_pBrush    = 0L;
     m_pPattern  = 0L;
-    m_pPixmap   = 0L;
+    m_pGradient = 0L;
                  
     setupPainter();
     setupCanvas();
@@ -156,7 +155,6 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     setupRulers();
     setupTabBar();
     setupActions();
-    setupDialogs();
     setupSideBar();
     setupTools();
 }
@@ -167,7 +165,6 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 */
 KisView::~KisView()
 {
-    if(m_pPixmap) delete m_pPixmap;
 }
 
 /*
@@ -177,9 +174,10 @@ KisView::~KisView()
     The reason for this is that the painter paints on the image,
     and has nothing to do with the canvas or the view. If there
     are multiple views then the same painter paints images which 
-    are shown in each view.  Unless the current image is set by
-    the view and not the document, which is how it should be, I 
-    feel.  In other words each view could show a different current
+    are shown in each view.  
+    
+    Even better, the current image should be set by the view and not 
+    by the document.  Each view could show a different current
     image.  Curently each view shows the same image, which is very
     limiting, although it's more compliant with koffice standards.
     The best solution is to have a painter for each image, which would
@@ -221,19 +219,6 @@ void KisView::setupCanvas()
 
     QObject::connect( m_pCanvas, SIGNAL( gotLeaveEvent (QEvent* ) ),
 		this, SLOT( canvasGotLeaveEvent ( QEvent* ) ) );
-}
-
-
-/*
-    Canvas pixmap for offscreen paint device - experimental way
-    to speed up rendering of zoomed views.  Not used and not needed 
-    anymore because a better method was discovered! But, there may
-    be a use for it with guidelines and grids, so keep it.  It uses
-    very little memory until the pixmap is given a size.
-*/
-void KisView::setupPixmap()
-{
-    // m_pPixmap = new QPixmap();
 }
 
 
@@ -282,6 +267,8 @@ void KisView::setupSideBar()
 
    // gradient chooser
     m_pGradientChooser = new QWidget(this);
+    m_pGradient = new KisGradient;
+    
     /*
     m_pGradient = m_pGradientChooser->currentGradient();
     QObject::connect(m_pGradientChooser, 
@@ -393,9 +380,9 @@ void KisView::setupRulers()
 
 /*
     setupTabBar - for the image(s) - one tab per image. 
-    This Nonstandard(tm) sidebar with custom tabbed widgets violates 
-    koffice style guidelines, but toolbars and sdi just won't do with
-    this kind of app! Who sets these standards anyway?  
+    This Nonstandard(tm) tabbar violates koffice style guidelines, 
+    but many koffice apps now use these tabbars!  Who sets these standards 
+    that nobody follows because they are impractical, anyway?  
 */
 void KisView::setupTabBar()
 {
@@ -469,8 +456,6 @@ void KisView::setupTools()
         = new ColorPicker(m_pDoc, this);
     m_pColorChangerTool 
         = new ColorChangerTool(m_pDoc, this);
-    m_pGradientTool 
-        = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient);
     m_pFillTool 
         = new FillTool( m_pDoc, this );
     m_pStampTool 
@@ -495,34 +480,6 @@ void KisView::setupTools()
     activateTool(m_pBrushTool);
 }
 
-/*
-    setupDialogs -jwc- todo: gradient dialog should be a tool 
-    options dialog setupDialogs should be used for docking and 
-    undocking tabbed widgets, which can also be dialogs, in the
-    sidebar. 
-*/
-void KisView::setupDialogs()
-{
-#if 0
-    // gradient dialog
-    m_pGradientDialog = new GradientDialog( m_pDoc, this );
-    m_pGradientDialog->resize( 206, 185 );
-    m_pGradientDialog->move( 200, 290 );
-    m_pGradientDialog->hide();
-    connect( m_pGradientDialog, SIGNAL( sigClosed() ), 
-        SLOT( updateToolbarButtons() ) );
-
-    // gradient editor dialog
-    m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
-    m_pGradientEditorDialog->resize( 400, 200 );
-    m_pGradientEditorDialog->move( 100, 190 );
-    m_pGradientEditorDialog->hide();
-    connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), 
-        SLOT( updateToolbarButtons() ) );
-
-    updateToolbarButtons();
-#endif    
-}
 
 /*
     Actions - these seem to be menu actions, toolbar actions
@@ -552,6 +509,7 @@ void KisView::setupActions()
     new KAction( i18n("Panic Button"),
         "stop", 0, this, SLOT( slotHalt() ),
         actionCollection(), "panic_button" );
+
     /*    
     new KAction( i18n("Gimp"),
         "wilbur", 0, this, SLOT( slotGimp() ),
@@ -604,15 +562,10 @@ void KisView::setupActions()
     // tool settings actions
     
     m_dialog_gradient 
-        = new KToggleAction( i18n("&Gradient Dialog"),
-        "gradient_dialog", 0, this, SLOT( dialog_gradient() ),
+        = new KAction( i18n("&Gradient Dialog"),
+        "blend", 0, this, SLOT( dialog_gradient() ),
         actionCollection(), "dialog_gradient");
 
-    m_dialog_gradienteditor 
-        = new KToggleAction( i18n("Gradient &Editor"),
-        "gradienteditor_dialog", 0, this, SLOT(dialog_gradienteditor()),
-        actionCollection(), "dialog_gradienteditor");
-    
     // tool actions - lots of them
 
     m_tool_select_rectangular 
@@ -702,12 +655,6 @@ void KisView::setupActions()
         actionCollection(), "tool_colorchanger");
 
     m_tool_colorchanger->setExclusiveGroup( "tools" );
-
-    m_tool_gradient = new KToggleAction( i18n("&Gradient tool"),
-        "blend", 0, this, SLOT( tool_gradient() ),
-        actionCollection(), "tool_gradient");
-
-    m_tool_gradient->setExclusiveGroup( "tools" );
 
     m_tool_line = new KToggleAction( i18n("&Line tool"),
         "line", 0, this, SLOT( tool_line() ),
@@ -838,7 +785,7 @@ void KisView::setupActions()
 
     m_toggle_paint_offset 
         = new KToggleAction( i18n("Toggle Paint Offset"),
-        "border_outline", 0, this, SLOT( slotSetPaintOffset() ),
+        "remove_view", 0, this, SLOT( slotSetPaintOffset() ),
         actionCollection(), "toggle_paint_offset" );
  
     m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
@@ -1777,17 +1724,6 @@ void KisView::tool_colorchanger()
     activateTool(m_pColorChangerTool);
 }
 
-/*
-    tool_gradient - note:  This should not be a tool in itself
-    but rather a kind of fill that can be applied to a selection,
-    a painting or drawing tool, or at an entire layer. Tentatively
-    left as a tool as proof of concept of KisGradients - shows a
-    simple horizontal layer.
-*/
-void KisView::tool_gradient()
-{
-    activateTool( m_pGradientTool );
-}
 
 /*
     tool_line - draw a line usig KisPainter
@@ -2069,7 +2005,7 @@ void KisView::unSelectAll()
        Zooming
 ---------------------------*/
 
-void KisView::zoom( int /*_x */, int /*_y */, float zf )
+void KisView::zoom( int _x, int _y, float zf )
 {
     /* Avoid divide by zero errors by disallowing a zoom
     factor of zero, which is impossible anyway, as it would
@@ -2158,7 +2094,6 @@ void KisView::zoom( int /*_x */, int /*_y */, float zf )
     does have the same offset as the prior view so it 
     approximately works */
 
-#if 0
     int x = static_cast<int> (_x * zf - docWidth() / 2);
     int y = static_cast<int> (_y * zf - docHeight() / 2);
 
@@ -2166,7 +2101,6 @@ void KisView::zoom( int /*_x */, int /*_y */, float zf )
     if (y < 0) y = 0;
 
     scrollTo( QPoint( x, y ) );
-#endif
 
     m_pCanvas->update();
     
@@ -2207,36 +2141,37 @@ void KisView::zoom_in()
     zoom_in( 0, 0 );
 }
 
+
 void KisView::zoom_out()
 {
     zoom_out( 0, 0 );
 }
 
+
+/*
+    dialog_gradient - invokes a GradientDialog which is
+    now an options dialog.  Gradients can be used by many tools 
+    and are not a tool in themselves.
+*/
 void KisView::dialog_gradient()
 {
-#if 0
-    if (m_dialog_gradient->isChecked())
-    {
-        m_pGradientDialog->show();
-        m_pGradientDialog->setFocus();
-    }
-    else
-        m_pGradientDialog->hide();
-#endif        
-}
+    GradientDialog *pGradientDialog = new GradientDialog(m_pGradient);
+    pGradientDialog->exec();
 
-
-void KisView::dialog_gradienteditor()
-{
-#if 0
-    if (m_dialog_gradienteditor->isChecked())
-    {
-        m_pGradientEditorDialog->show();
-        m_pGradientEditorDialog->setFocus();
+    if(pGradientDialog->result() == QDialog::Accepted)
+    {   
+        /* set m_pGradient here and update gradientwidget in sidebar 
+        to show sample of gradient selected. Also update effect for 
+        the framebuffer's gradient, which is used in painting */
+   
+        int type = pGradientDialog->gradientTab()->gradientType();
+        m_pGradient->setEffect(static_cast<KImageEffect::GradientType>(type));
+        
+        KisFrameBuffer *fb = m_pDoc->frameBuffer();
+        fb->setGradientEffect(static_cast<KImageEffect::GradientType>(type));
+        
+        kdDebug() << "gradient type is " << type << endl;
     }
-    else
-        m_pGradientEditorDialog->hide();
-#endif        
 }
 
 
@@ -2254,7 +2189,7 @@ void KisView::dialog_krayons()
 
 void KisView::dialog_brushes()
 {
-    KFloatingDialog *f = (KFloatingDialog *)m_pBrushChooser;
+    KFloatingDialog *f = static_cast<KFloatingDialog *>(m_pBrushChooser);
 
     if(m_dialog_brushes->isChecked())
         f->setDocked(true);
@@ -2290,17 +2225,6 @@ void KisView::dialog_channels()
 }
 
 
-void KisView::updateToolbarButtons()
-{
-#if 0
-    kdDebug() << "KisView::updateToolbarButtons" << endl;
-
-    m_dialog_gradient->setChecked(m_pGradientDialog->isVisible() );
-    m_dialog_gradienteditor->setChecked(m_pGradientEditorDialog->isVisible());
-#endif    
-}
-
-
 /*-------------------------------
     layer action slots
 --------------------------------*/
@@ -2326,10 +2250,9 @@ void KisView::layer_properties()
 }
 
 /*
-    insert new layer into the current image - using 
-    "new layer" dialog for layer size (should also
-    have fields for name and opacity) This new layer
-    will also be made uppermost so it is visble
+    insert new layer into the current image - using "new layer" dialog 
+    for layer size (should also have fields for name and opacity). 
+    This new layer will also be made uppermost so it is visble
 */
 void KisView::insert_layer()
 {
@@ -2935,8 +2858,8 @@ int KisView::docWidth()
 
 
 /*
-    docHeight - simply returns the width of the document which is
-    exactly the same as the width of the current image
+    docHeight - simply returns the height of the document which is
+    exactly the same as the height of the current image
 */
 int KisView::docHeight()
 {
@@ -2975,8 +2898,10 @@ int KisView::yPaintOffset()
 }
 
 
-void KisView::scrollTo( QPoint )
+void KisView::scrollTo( QPoint pt )
 {
+    kdDebug() << "scroll to " << pt.x() << "," << pt.y() << endl;
+
     // this needs to update the scrollbar values and
     // let resizeEvent() handle the repositioning
     // with showScollBars()

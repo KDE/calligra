@@ -53,8 +53,9 @@ KisPainter::KisPainter(KisDoc *doc, KisView *view)
     lineThickness = 1;
     lineOpacity = 255;
     
-    patternFill = false;    
-    filledEllipse = false;
+    gradientFill    = false;
+    patternFill     = false;    
+    filledEllipse   = false;
     filledRectangle = false;
         
     painterPixmap.resize(512, 512);
@@ -147,9 +148,15 @@ bool KisPainter::toLayer(QRect paintRect)
     int fgRed     = pView->fgColor().R();
     int fgGreen   = pView->fgColor().G();
     int fgBlue    = pView->fgColor().B();
-
+    
+    // prepare framebuffer for painting with gradient
+    if(gradientFill)
+    {
+        pDoc->frameBuffer()->setGradientPaint(true, 
+            pView->fgColor(), pView->bgColor());    
+    }
     // prepare framebuffer for painting with pattern
-    if(patternFill) 
+    else if(patternFill) 
     {
         pDoc->frameBuffer()->setPattern(pView->currentPattern());
     }
@@ -181,8 +188,13 @@ bool KisPainter::toLayer(QRect paintRect)
             which can be combined to meet the user's exact specs.
             This will be handled by the KisFrameBuffer class */
             
+            // paint with gradient
+            if(gradientFill)
+            {
+                pDoc->frameBuffer()->setGradientToPixel(lay, x, y);
+            }    
             // paint with pattern
-            if(patternFill)
+            else if(patternFill)
             {
                 pDoc->frameBuffer()->setPatternToPixel(lay, x, y, 0);
             }                         

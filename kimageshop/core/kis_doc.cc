@@ -832,9 +832,8 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
     
     if(qimg->depth() < 16)
     {
-        QImage Converted 
-            = qimg->smoothScale(qimg->width(), qimg->height());
-        qimg = &Converted;
+        QImage cI = qimg->smoothScale(qimg->width(), qimg->height());
+        qimg = &cI;
     }
     
     if(qimg->depth() < 32)

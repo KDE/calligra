@@ -21,13 +21,12 @@
 #ifndef __kis_gradient_h__
 #define __kis_gradient_h__
 
+#include <qimage.h>
 #include <kimageeffect.h>
 #include "kis_color.h"
 
-
 class KisGradient 
 {
-
 public:
 
     KisGradient();
@@ -35,20 +34,49 @@ public:
     
     void setNull();
     
-    void mapVertGradient(QRect gradR, KisColor startColor, KisColor endColor);
-    void mapHorGradient(QRect gradR, KisColor startColor, KisColor endColor);
+    void setEffect(KImageEffect::GradientType _effect)
+        { mEffect = _effect; }
+        
+    /* using kde's native kimageeffect gradients for 2 color
+    gradients may be preferred - how to handle gimp gradients
+    is another matter and requires a translation method - this
+    will be done with plugins for a later release - not a high
+    priority at all for the Krayon release 1.0 and Gimp gradients will
+    be redone for Gimp 2.0 anyway */
+    
+    void mapKdeGradient(QRect gradR, 
+        KisColor startColor, KisColor endColor);
+        	
+    /*  these probably won't be used without copying kimageffect code
+    and modifying for use with krayon - use what's above.  Eventually
+    all kimageeffect gradients will need to be relplaced with native
+    gradients for better flexibility and 32 bit (or 64 bit) rendering */
+    
+    void mapVertGradient(QRect gradR, 
+        KisColor startColor, KisColor endColor);
+    void mapHorGradient(QRect gradR, 
+        KisColor startColor, KisColor endColor);
      
     const int width()  { return mGradientWidth; }
     const int height() { return mGradientHeight; }
     
-    uint pixelValue(int x, int y) { return gradArray[y * mGradientWidth + x]; }
+    uint arrayPixelValue(int x, int y) 
+        { return gradArray[y * mGradientWidth + x]; }
+
+    uint imagePixelValue(int x, int y)
+        { return *((uint *)gradImage.scanLine(y)  + x); }    
     
+    KImageEffect::GradientType gradientType() { return mEffect; }
+        
 private:
     
     QArray <uint> gradArray;
-    
+    QImage gradImage;
+        
     int mGradientWidth;
     int mGradientHeight;
+
+    KImageEffect::GradientType mEffect;
     
 };
 

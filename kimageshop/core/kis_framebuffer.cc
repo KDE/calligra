@@ -42,6 +42,7 @@
 
 #include <qcolor.h>
 #include <qclipboard.h>
+
 #include <kapp.h>
 #include <kdebug.h>
 
@@ -622,12 +623,7 @@ void KisFrameBuffer::setGradientPaint(bool _gradientPaint,
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return;
      
-    // only a vertical gradient for now using 2 colors
-    // we will need to pass in a gradient type structure
-    // from gradient settings for better selection of gradients
-    // switch statement, etc. -  later
-    
-    mGradient.mapVertGradient(QRect(0, 0, 
+    mGradient.mapKdeGradient(QRect(0, 0, 
         lay->imageExtents().width(), lay->imageExtents().height()),
         _startColor, _endColor);
     
@@ -641,15 +637,19 @@ void KisFrameBuffer::setGradientToPixel(KisLayer *lay,
 {
     if(mGradient.width() == 0 || mGradient.height() == 0)
         return;
-
+    
+    uint u32Color = 0;
+    
     // pixel value in gradient array
-    uint u32Color = mGradient.pixelValue(x, y);
+    if(false)
+        u32Color = mGradient.arrayPixelValue(x, y);
+    else    
+        u32Color = mGradient.imagePixelValue(x, y);
     
     lay->setPixel(0, x, y, qRed(u32Color));
     lay->setPixel(1, x, y, qGreen(u32Color));
     lay->setPixel(2, x, y, qBlue(u32Color));    
 }
-
 
 #include "kis_framebuffer.moc"
 
