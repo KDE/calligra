@@ -24,7 +24,6 @@
 #include <kimageeffect.h>
 #include <float.h>
 
-class QColor;
 class QPoint;
 class QPen;
 class QDomDocument;
@@ -380,8 +379,8 @@ public:
     bool intersects(const QRect &r) const;
 
     void recalculate() const { m_tl.recalculate(); m_br.recalculate(); }
-    QRect pxRect() const { return QRect(m_tl.pxX(), m_tl.pxY(), m_br.pxX()-m_tl.pxX(),
-                                 m_br.pxY()-m_tl.pxY()); }
+    QRect pxRect() const { return QRect(m_tl.pxX(), m_tl.pxY(), m_br.pxX()-m_tl.pxX()+1,
+                                 m_br.pxY()-m_tl.pxY()+1); }
 private:
     FxPoint m_tl, m_br;
 };
