@@ -53,6 +53,8 @@ lib_LTLIBRARIES = kword.la libkwmailmerge_interface.la
 libkwmailmerge_interface_la_SOURCES = mailmerge_interface.cc mailmerge_interface.skel
 libkwmailmerge_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 libkwmailmerge_interface_la_LIBADD = $(LIB_QT) -lDCOP
+kwincludedir = $(includedir)/kword
+kwinclude_HEADERS = mailmerge_interface.h
 
 kwmailmerge_servicetype_DATA=kwmailmerge.desktop
 kwmailmerge_servicetypedir=$(kde_servicetypesdir)
