@@ -351,27 +351,44 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
   }
 }
 
-void KivioPage::printContent( KivioPainter& painter )
+void KivioPage::printContent( KivioPainter& painter, int xdpi, int ydpi )
 {
-    KivioLayer *pLayer = m_lstLayers.first();
-    while( pLayer )
-    {
-        if( pLayer->visible() )
-        {
-            pLayer->printContent( painter );
-        }
+  if(!xdpi) {
+    xdpi = QPaintDevice::x11AppDpiX();
+  }
 
-        pLayer = m_lstLayers.next();
-    }
+  if(!ydpi) {
+    ydpi = QPaintDevice::x11AppDpiY();
+  }
+
+  KivioLayer *pLayer = m_lstLayers.first();
+
+  while( pLayer )
+  {
+      if( pLayer->visible() )
+      {
+          pLayer->printContent( painter, xdpi, ydpi );
+      }
+
+      pLayer = m_lstLayers.next();
+  }
 }
 
-void KivioPage::printSelected( KivioPainter& painter )
+void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
 {
+  if(!xdpi) {
+    xdpi = QPaintDevice::x11AppDpiX();
+  }
+
+  if(!ydpi) {
+    ydpi = QPaintDevice::x11AppDpiY();
+  }
+
   KivioStencil *pStencil;
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
   // FIXME: Hmmm... resolution sucks ;)
-  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  zoomHandler.setZoomAndResolution(100, xdpi, ydpi);
 
   data.painter = &painter;
   data.zoomHandler = &zoomHandler;

@@ -20,6 +20,7 @@
 #include <qtextstream.h>
 #include <qbuffer.h>
 #include <qtabwidget.h>
+#include <qpaintdevicemetrics.h>
 
 #include "kivio_doc.h"
 #include "kivio_page.h"
@@ -478,20 +479,31 @@ void KivioDoc::printContent( KPrinter &prn )
     int from = prn.fromPage();
     int to = prn.toPage();
     int i;
-
     KivioPage *pPage;
 
-    kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
+    // ### HACK: disable zooming-when-printing if embedded parts are used.
+    // No koffice app supports zooming in paintContent currently.
+    // Disable in ALL cases now
+    bool doZoom = false;
+    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
 
+    kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
     p.start(&prn);
+
+    QPaintDeviceMetrics metrics( &prn );
+    p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
+      (double)metrics.logicalDpiY() / (double)dpiY );
+
     for( i=from; i<=to; i++ )
     {
         pPage = m_pMap->pageList().at(i-1);
-        pPage->printContent(p);
+        pPage->printContent(p, dpiX, dpiY);
 
         if( i<to )
             prn.newPage();
     }
+
     p.stop();
 }
 

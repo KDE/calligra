@@ -301,13 +301,21 @@ void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoin
     }
 }
 
-void KivioLayer::printContent( KivioPainter& painter )
+void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
 {
+  if(!xdpi) {
+    xdpi = QPaintDevice::x11AppDpiX();
+  }
+
+  if(!ydpi) {
+    ydpi = QPaintDevice::x11AppDpiY();
+  }
+
   KivioStencil *pStencil = m_pStencilList->first();
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
   // FIXME: Hmmm... resolution sucks ;)
-  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  zoomHandler.setZoomAndResolution(100, xdpi, ydpi);
 
   painter.setFGColor( QColor(0,0,0) );
 

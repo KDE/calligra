@@ -109,8 +109,8 @@ class KivioPage : public QObject
     void setPaperLayout(const KoPageLayout&);
 
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
-    void printContent( KivioPainter& painter );
-    void printSelected( KivioPainter& painter );
+    void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void printSelected( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
 
     bool isStencilSelected( KivioStencil * );
     void selectAllStencils();
