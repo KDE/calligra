@@ -2905,10 +2905,11 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
 
 void KSpreadTable::refreshPreference()
 {
-  if(getAutoCalc()) recalc();
-  
-        emit sig_updateHBorder( this );
-        emit sig_updateView( this );
+  if(getAutoCalc())
+        recalc();
+
+  emit sig_updateHBorder( this );
+  emit sig_updateView( this );
 }
 
 bool KSpreadTable::areaIsEmpty()

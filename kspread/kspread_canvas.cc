@@ -1353,7 +1353,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
-  bool make_select = m_pView->koDocument()->isReadWrite() && 
+  bool make_select = m_pView->koDocument()->isReadWrite() &&
       ((  _ev->state() & ( Qt::ControlButton ) &&_ev->state() & ( Qt::ShiftButton ) ) )
        && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
 
@@ -1367,7 +1367,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
 	  else
@@ -1386,20 +1386,20 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			  else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
 			      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
 		      }
-	      }
+                        }
 	  return;
       case Key_Down:
-	  
+
 	  if ( !m_bChoose && markerRow() == 0xFFFF )
 	      return;
 	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
 	  else
 	      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
-	  
+
 	  return;
 	  
       case Key_Up:
@@ -1410,45 +1410,45 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  
 	  if ( m_bChoose )
-        chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
+                        chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
 	  else
 	      gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,false,true );
-	  
+
 	  return;
-	  
+
       case Key_Right:
-	  
+
 	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
 	  else
 	      gotoLocation( QMIN( /*26*26*/0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select,false,true );
-	  
+
 	  return;
-	  
+
       case Key_Left:
-	  
+
 	  if ( !m_bChoose && markerColumn() == 1 )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() == 1 )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
 	  else
 	      gotoLocation( QMAX( 1, markerColumn() - 1 ), markerRow(), 0, make_select,false,true );
-	  
+
 	  return;
-	  
+
       case Key_Escape:
-	  
+
 	  if ( m_pEditor )
 	      deleteEditor( false );
-	  
+
 	  _ev->accept(); // ?
 	  return;
 	  
@@ -1524,7 +1524,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  _ev->accept();
 		  return;
 	      }
-	  
+
 	  if ( !m_pEditor && !m_bChoose )
 	      {
 		  if ( _ev->text() == QString::fromLatin1("*") )
@@ -1538,12 +1538,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      }
 	  else if ( m_pEditor )
 	      m_pEditor->handleKeyPressEvent( _ev );
-	  
+
 	  return;
 
       } // control  button not pressed
   }
-  else{ //control button pressed
+  else
+  { //control button pressed
 
       int x, x0, y, y0 ;
       bool emptycell;
@@ -1554,7 +1555,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerRow() == 1 )
 		  return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
 	  else{
@@ -1578,7 +1579,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      gotoLocation( markerColumn(), QMAX( 1, y  ), 0, make_select,true,true );
 	      repaint();
 	  }
-	  
+
 	  return;
 
       case Key_Down:
@@ -1597,7 +1598,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      
               // HELP! This is by far to slow and inefficent!
 	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty()){
-		  
+
 		  gotoLocation( markerColumn(), QMIN(0x7FFF,y+1  ), 0, make_select,true,true  );
 	      }
 	      else{
@@ -1666,9 +1667,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			  gotoLocation( x, markerRow(), 0, make_select,true,true  );
 		      }else{
 			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty())){
-			      
+
 			      while (( activeTable()->cellAt( x +1,y ))->isEmpty() && y <= 26*26 ){
-				  x ++;		
+				  x ++;
 			      }
 			      gotoLocation( x, markerRow(), 0, make_select,true,true  );
 			      
@@ -1681,7 +1682,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Left:
-	  
+
 	  if ( !m_bChoose && markerColumn() == 1 )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() == 1 )

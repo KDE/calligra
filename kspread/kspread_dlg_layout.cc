@@ -766,7 +766,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addWidget(time,6,0);
 
     QGroupBox *box2 = new QGroupBox( grp, "Box");
-    box2->setTitle(i18n("Example"));
+    box2->setTitle(i18n("Preview"));
     QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
 
     exampleLabel=new QLabel(box2);
@@ -944,37 +944,36 @@ else if(listFormat->currentItem()==1)
         tmp=KGlobal::locale()->formatDate(dlg->m_date,false);
 else if(listFormat->currentItem()==2)/*18-Feb-99*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-
         }
 else if(listFormat->currentItem()==3) /*18-Feb-1999*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
 else if(listFormat->currentItem()==4) /*18-Feb*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true);
         }
-else if(listFormat->currentItem()==5) /*18-5*/
+else if(listFormat->currentItem()==5) /*18-05*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
-        tmp=tmp+"-"+tmp2.setNum(dlg->m_date.month());
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
+        tmp=tmp+"-"+QString().sprintf("%02d", dlg->m_date.month());
         }
-else if(listFormat->currentItem()==6) /*18/5/00*/
+else if(listFormat->currentItem()==6) /*18/05/00*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
-        tmp=tmp+"/"+tmp2.setNum(dlg->m_date.month())+"/";
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
+        tmp=tmp+"/"+QString().sprintf("%02d", dlg->m_date.month())+"/";
         tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
         }
-else if(listFormat->currentItem()==7) /*18/5/1999*/
+else if(listFormat->currentItem()==7) /*18/05/1999*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
-        tmp=tmp+"/"+tmp2.setNum(dlg->m_date.month())+"/";
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
+        tmp=tmp+"/"+QString().sprintf("%02d", dlg->m_date.month())+"/";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
 else if(listFormat->currentItem()==8) /*Feb-99*/
@@ -999,17 +998,17 @@ else if(listFormat->currentItem()==11) /*F-99*/
         }
 else if(listFormat->currentItem()==12) /*18/Feb*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day())+"/";
+        tmp=QString().sprintf("%02d", dlg->m_date.day())+"/";
         tmp+=KGlobal::locale()->monthName(dlg->m_date.month(),true);
         }
-else if(listFormat->currentItem()==13) /*18/2*/
+else if(listFormat->currentItem()==13) /*18/02*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day())+"/";
-        tmp+=tmp2.setNum(dlg->m_date.month());
+        tmp=QString().sprintf("%02d", dlg->m_date.day())+"/";
+        tmp+=QString().sprintf("%02d", dlg->m_date.month());
         }
 else if(listFormat->currentItem()==14) /*18/Feb/1999*/
         {
-        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=QString().sprintf("%02d", dlg->m_date.day());
         tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(dlg->m_date.year());
         }
@@ -1017,19 +1016,19 @@ else if(listFormat->currentItem()==15) /*2000/Feb/18*/
         {
         tmp=tmp2.setNum(dlg->m_date.year());
         tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
-        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
 else if(listFormat->currentItem()==16) /*2000-Feb-18*/
         {
         tmp=tmp2.setNum(dlg->m_date.year());
         tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
-else if(listFormat->currentItem()==17) /*2000-2-18*/
+else if(listFormat->currentItem()==17) /*2000-02-18*/
         {
         tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"-"+tmp.setNum(dlg->m_date.month(),true)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"-"+QString().sprintf("%02d", dlg->m_date.month())+"-";
+        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
         }
 exampleLabel->setText(tmp);
 }
@@ -1058,16 +1057,16 @@ tmp=tmp+"-"+KGlobal::locale()->monthName(2, true);
 list+=tmp;
 /*18-2*/
 tmp=tmp2.setNum(18);
-tmp=tmp+"-"+tmp2.setNum(2);
+tmp=tmp+"-"+QString().sprintf("%02d", 2);
 list+=tmp;
 /*18/2/00*/
 tmp=tmp2.setNum(18);
-tmp=tmp+"/"+tmp2.setNum(2)+"/";
+tmp=tmp+"/"+QString().sprintf("%02d", 2)+"/";
 tmp=tmp+tmp2.setNum(2000).right(2);
 list+=tmp;
 /*18/5/1999*/
 tmp=tmp2.setNum(18);
-tmp=tmp+"/"+tmp2.setNum(2)+"/";
+tmp=tmp+"/"+QString().sprintf("%02d", 2)+"/";
 tmp=tmp+tmp2.setNum(2000);
 list+=tmp;
 /*Feb-99*/
@@ -1092,7 +1091,7 @@ tmp+=KGlobal::locale()->monthName(2,true);
 list+=tmp;
 /*18/2*/
 tmp=tmp2.setNum(18)+"/";
-tmp+=tmp2.setNum(2);
+tmp+=QString().sprintf("%02d", 2);
 list+=tmp;
 /*18/Feb/1999*/
 tmp=tmp2.setNum(18);
@@ -1111,7 +1110,7 @@ tmp=tmp+tmp2.setNum(18);
 list+=tmp;
 /*2000-2-18*/
 tmp=tmp.setNum(2000);
-tmp=tmp+"-"+tmp2.setNum(2)+"-";
+tmp=tmp+"-"+QString().sprintf("%02d", 2)+"-";
 tmp=tmp+tmp2.setNum(18);
 list+=tmp;
 listFormat->insertStringList(list);
