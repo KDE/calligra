@@ -321,7 +321,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 
     int angle = xfs[xf]->align >> 8;
     if(angle!=255 && angle !=0)
-      format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
+      format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);      
     else if(angle==255)
       format.setAttribute("verticaltext", "yes");
     int indent = xfs[xf]->indent & 0x0f;
@@ -1579,7 +1579,8 @@ bool XMLTree::_row(Q_UINT16, QDataStream& body)
   row.setAttribute("height", (int) height / 40);
   if (flags & 0x30)
     row.setAttribute("hide",true);
-  
+  if (flags & 0x80) 
+    row.appendChild(getFormat(xf));
   table->appendChild(row);
 
   return true;
@@ -1590,8 +1591,18 @@ bool XMLTree::_scl(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_setup(Q_UINT16, QDataStream&)
+bool XMLTree::_setup(Q_UINT16, QDataStream& body)
 {
+  Q_UINT16 nOpt;
+  body >> nOpt;
+  //kdDebug() <<"!( nOpt & 0x0004 ) :"<<(!( nOpt & 0x0004 ))<<endl;
+  
+  if( !( nOpt & 0x0004 ) )
+    {
+      kdDebug()<<"Landscpe-------------------\n";
+    }
+
+  kdDebug()<<"Setup\n";
   return true;
 }
 
