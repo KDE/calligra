@@ -1374,7 +1374,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
                     ul = "\\uldashd";
                 else if( underlineStyle == "dashdotdot" )
                     ul = "\\uldashdd";
-                else if( ( underlineStyle == "single" ) && underlineWord )
+                else if( underlineWord )
                     ul = "\\ulw";
             };
 
