@@ -721,7 +721,7 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 {
     if(!d->m_bReadWrite)
         return;
-    if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() ) {
+    if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() && !d->tabList.isEmpty()) {
         d->tabList.remove( d->removeTab );
         d->removeTab=d->tabList.end();
         emit tabListChanged( d->tabList );
