@@ -87,6 +87,7 @@
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <koNoteDia.h>
+#include <koDocumentInfo.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -2428,7 +2429,15 @@ void KWView::insertNote()
     KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
         return;
-    KoNoteDia *noteDia = new KoNoteDia( this );
+    QString authorName;
+    KoDocumentInfo * info = m_doc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    else
+        authorName = authorPage->fullName();
+
+    KoNoteDia *noteDia = new KoNoteDia( this, QString::null,authorName );
     if( noteDia->exec() )
     {
         edit->insertNote(noteDia->noteText());
@@ -4879,7 +4888,14 @@ void KWView::editNote()
         KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(tmpVar);
         if(var)
         {
-            KoNoteDia *noteDia = new KoNoteDia( this, var->note() );
+            QString authorName;
+            KoDocumentInfo * info = m_doc->documentInfo();
+            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+            if ( !authorPage )
+                kdWarning() << "Author information not found in documentInfo !" << endl;
+            else
+                authorName = authorPage->fullName();
+            KoNoteDia *noteDia = new KoNoteDia( this, var->note(), authorName);
             if( noteDia->exec() )
             {
                 var->setNote( noteDia->noteText());
