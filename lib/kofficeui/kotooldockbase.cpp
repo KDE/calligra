@@ -556,7 +556,7 @@ void KoToolDockButton::setPixmap( const QPixmap& p )
 
 KoToolDockBase::KoToolDockBase( QWidget* parent, const char* name )
     : QWidget(parent,name,
-              WStyle_Customize | WStyle_NoBorder | WResizeNoErase | WRepaintNoErase)
+              WStyle_Tool | WStyle_StaysOnTop | WStyle_Customize | WResizeNoErase | WRepaintNoErase)
 {
     QFont f;
     f.setPointSize(8);
@@ -638,13 +638,36 @@ void KoToolDockBase::restore()
 
     cfg -> setGroup( QString( "ToolDock-" ) + name() );
 
-    QPoint p = QPoint( cfg -> readNumEntry( "x", 0 ),
-                       cfg -> readNumEntry( "y", 0 ) );
+    int x, y, w, h;
+    x = cfg -> readNumEntry( "x", 0 );
+    y = cfg -> readNumEntry( "y", 0 );
+    w = cfg -> readNumEntry( "w", 10 );
+    h = cfg -> readNumEntry( "h",  10 );
 
-    QSize s = QSize( cfg -> readNumEntry( "w",  250 ),
-                     cfg -> readNumEntry( "h",  150 ) );
-    resize( s );
+
+//     kdDebug() << "Before fix dims for docker " << name() << " to x,y " 
+// 	      << x << ", " << y
+// 	      << " and w,h " << w << ", " << h 
+// 	      << "\n";
+
+
+//     fixPosition( x, y, w, h );
+//    fixSize( x, y, w, h );
+
+    QPoint p = QPoint(x, y);
+    QSize s = QSize(w ,h);
+
+//     kdDebug() << " After fix dims for docker " << name() << " to x,y " 
+// 	      << p.x() << ", " << p.y() 
+// 	      << " and w,h " << s.width() << ", " << s.height()
+// 	      << " inside parent " << m_pView -> name()
+// 	      << " with dimensions " << m_pView -> x() << ","
+// 	      << m_pView -> y() << " : " 
+// 	      << m_pView -> width() << ", " << m_pView -> height()
+// 	      << "\n";
+	    
     move( p );
+    resize( s );
 
     makeVisible( cfg -> readBoolEntry( "visible", false ) );
 
@@ -669,7 +692,7 @@ KoToolDockBase::~KoToolDockBase()
     cfg -> writeEntry( "stick", isStick() );
 
     // XXX: write current snap? Or does the docker
-    // resnap based on position.
+    // resnap based on position?
 
 
 }
@@ -688,13 +711,13 @@ KoToolDockPosition KoToolDockBase::getCaptionPos(bool* f)
     if (f)
         *f = true;
 
-    if (l&&r&&t&&b)
+    if (l && r && t && b)
         return KoToolDockTop;
 
-    if (l&&r&&t)
+    if (l && r && t)
         return KoToolDockBottom;
 
-    if (l&&r&&b)
+    if (l && r && b)
         return KoToolDockTop;
 
     if (l)
@@ -1128,7 +1151,7 @@ void KoToolDockBase::showProcessStop()
 /*********************************************************************************************/
 
 KoTabbedToolDock::KoTabbedToolDock( QWidget* parent, const char* name )
-    : KoToolDockBase( parent, name )
+    : KoToolDockBase ( parent, name )
 {
     QFont f;
     f.setPointSize(8);
