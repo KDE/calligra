@@ -972,7 +972,12 @@ void KWPage::paintEvent(QPaintEvent* e)
 	  } break;
 	case FT_TEXT:
 	  {
-	    KWParag *p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
+	    KWParag *p = 0L;
+	    if (firstVisiblePage != lastVisiblePage)
+	      p = doc->findFirstParagOfRect(yOffset,firstVisiblePage,i);
+	    else
+	      p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
+
 	    if (p)
 	      {
 		paintfc->setFrameSet(i + 1);
@@ -981,8 +986,6 @@ void KWPage::paintEvent(QPaintEvent* e)
 		bool bend = false;
 		while (!bend)
 		  {
-		    if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
-			static_cast<int>(paintfc->getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
 			doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
 			doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
@@ -1387,8 +1390,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
 		fc->getParag()->getPTYEnd() == ptYEnd && exitASAP) break;
-	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
-		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
 		frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
@@ -1528,8 +1529,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
 		fc->getParag()->getPTYEnd() == ptYEnd && exitASAP) break;
-	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
-		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
 		frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
@@ -1642,13 +1641,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      {
 		if (paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() && 
 		    fc->getParag()->getPTYEnd() == ptYEnd) break;
-		if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
-		    static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
 		if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
 		    frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
 		    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
 		    static_cast<int>(paintfc.getPTY() - yOffset) > height())
-		  break;
+ 		  break;
 		if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		  break;

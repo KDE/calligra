@@ -195,7 +195,7 @@ protected:
   virtual void init();
 
   // pointer to the first parag of the list of parags
-  KWParag *parags;
+  KWParag *parags,*last_parag;
   bool autoCreateNewFrame;
 
 };

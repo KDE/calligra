@@ -942,7 +942,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		static_cast<int>(page) * static_cast<int>(document->getPTPaperHeight()))
 	      page++;
 	    parag->setEndPage(page);
-	    parag->setEndFrame(page);
+	    parag->setEndFrame(frame);
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
 	    return makeLineLayout(_painter);
 	}
@@ -958,7 +958,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    page++;
 	    frame++;
 	    parag->setEndPage(page);
-	    parag->setEndFrame(page);
+	    parag->setEndFrame(frame);
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
 	    return makeLineLayout(_painter);
 	}
