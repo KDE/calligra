@@ -22,7 +22,7 @@ Cursor position
 
 === KWord 0.8 ===
 Make OOWriter load correctly the converted file (page size?)
-Some files are not even as syntax version
+Some files have not even a syntax version
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
 <FORMAT id="3"> (tabulator)
