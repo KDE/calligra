@@ -1923,6 +1923,8 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_viewZoom->setEnabled( true );
   m_showPageBorders->setEnabled( true );
   m_find->setEnabled( true);
+  if ( !m_pDoc->isReadWrite())
+      m_copy->setEnabled( true );
   //  m_newView->setEnabled( true );
   //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
   // m_oszi->setEnabled( true );
