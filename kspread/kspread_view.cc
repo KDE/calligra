@@ -128,6 +128,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_popupListChoose=0;
 
     m_dcop = 0;
+    dcopObject(); // build it
     m_bLoading =false;
 
     // Vert. Scroll Bar
@@ -483,6 +484,7 @@ KSpreadView::~KSpreadView()
     delete m_popupChild;
     delete m_popupListChoose;
     delete m_sbCalcLabel;
+    delete m_dcop;
 }
 
 

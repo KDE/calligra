@@ -49,3 +49,74 @@ void KSpreadViewIface::show()
 {
     m_view->show();
 }
+
+void KSpreadViewIface::find()
+{
+    m_view->find();
+}
+
+void KSpreadViewIface::replace()
+{
+    m_view->replace();
+}
+
+void KSpreadViewIface::conditional()
+{
+    m_view->conditional();
+}
+
+void KSpreadViewIface::validity()
+{
+    m_view->validity();
+}
+
+void KSpreadViewIface::insertSeries()
+{
+    m_view->insertSeries();
+}
+
+void KSpreadViewIface::insertHyperlink()
+{
+    m_view->insertHyperlink();
+}
+
+void KSpreadViewIface::gotoCell()
+{
+    m_view->gotoCell();
+}
+
+void KSpreadViewIface::changeAngle()
+{
+    m_view->changeAngle();
+}
+
+void KSpreadViewIface::preference()
+{
+    m_view->preference();
+}
+
+void KSpreadViewIface::nextTable()
+{
+    m_view->nextTable();
+}
+
+void KSpreadViewIface::previousTable()
+{
+    m_view->previousTable();
+}
+
+void KSpreadViewIface::sortList()
+{
+    m_view->sortList();
+}
+
+void KSpreadViewIface::setAreaName()
+{
+    m_view->setAreaName();
+}
+
+void KSpreadViewIface::showAreaName()
+{
+    m_view->showAreaName();
+}
+

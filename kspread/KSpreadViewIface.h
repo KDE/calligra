@@ -23,6 +23,21 @@ k_dcop:
     virtual void hide();
     virtual void show();
 
+    virtual void find();
+    virtual void replace();
+    virtual void conditional();
+    virtual void validity();
+    virtual void insertSeries();
+    virtual void insertHyperlink();
+    virtual void gotoCell();
+    virtual void changeAngle();
+    virtual void preference();
+    virtual void nextTable();
+    virtual void previousTable();
+    virtual void sortList();
+    virtual void setAreaName();
+    virtual void showAreaName();
+
 private:
     KSpreadView* m_view;
     KSpreadCellProxy* m_proxy;
