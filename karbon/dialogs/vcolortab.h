@@ -24,8 +24,8 @@
 #include <qtabwidget.h>
 
 class QColor;
-class QSpinBox;
 class KHSSelector;
+class KIntSpinBox;
 class KGradientSelector;
 class KColorPatch;
 class KIntNumInput;
@@ -43,12 +43,12 @@ public:
 private:
 	QWidget* mRGBWidget;
 	KHSSelector* mColorSelector;
-	QSpinBox* mRed;
-	QSpinBox* mGreen;
-	QSpinBox* mBlue;
-	QSpinBox* mHue;
-	QSpinBox* mSaturation;
-	QSpinBox* mValue;
+	KIntSpinBox* mRed;
+	KIntSpinBox* mGreen;
+	KIntSpinBox* mBlue;
+	KIntSpinBox* mHue;
+	KIntSpinBox* mSaturation;
+	KIntSpinBox* mValue;
 	KIntNumInput* mOpacity;
 	KGradientSelector* mSelector;
 	KColorPatch* mOldColor;
@@ -58,7 +58,7 @@ private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();
 	void slotUpdate( QColor *color = 0L );
-    void slotVChanged( int );
+	void slotVChanged( int );
 	void slotHSChanged( int, int );
 };
 

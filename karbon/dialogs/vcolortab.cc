@@ -76,9 +76,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n("R:"), cgroupbox );
 	new QLabel( i18n("G:"), cgroupbox );
 	new QLabel( i18n("B:"), cgroupbox );
-	mRed = new QSpinBox( 0, 255, 1, cgroupbox );
-	mGreen = new QSpinBox( 0, 255, 1, cgroupbox );
-	mBlue = new QSpinBox( 0, 255, 1, cgroupbox );
+	mRed = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
+	mGreen = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
+	mBlue = new KIntSpinBox( 0, 255, 1, 0, 0,cgroupbox );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
@@ -87,9 +87,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n("Hue:", "H:"), cgroupbox );
 	new QLabel( i18n("Saturation:", "S:"), cgroupbox );
 	new QLabel( i18n("Value:", "V:"), cgroupbox );
-	mHue = new QSpinBox( 0, 359, 1, cgroupbox );
-	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox );
-	mValue = new QSpinBox( 0, 255, 1, cgroupbox );
+	mHue = new KIntSpinBox( 0, 359, 1, 0, 0, cgroupbox );
+	mSaturation = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
+	mValue = new KIntSpinBox( 0, 255, 1, 0, 0, cgroupbox );
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
@@ -117,7 +117,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 void VColorTab::slotUpdateFromRGBSpinBoxes()
 {
 	QColor color( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb );
-    mColorPreview->setColor( color );
+	mColorPreview->setColor( color );
 	mColorPreview->update();
 
 	// set HSV
@@ -168,8 +168,7 @@ void VColorTab::slotUpdateFromHSVSpinBoxes()
 	mBlue->blockSignals( false );
 }
 
-VColor
-VColorTab::getColor()
+VColor VColorTab::getColor()
 {
 	kdDebug() << "VColorTab::slotApplyButtonPressed" << endl;
 	VColor color;
