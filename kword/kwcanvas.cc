@@ -569,6 +569,7 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
         edit->insertFloatingFrameSet( table, i18n("Insert Inline Table") );
         table->finalize();
         m_doc->updateAllFrames();
+        m_doc->refreshDocStructure(Tables);
     }
     else
         setMouseMode( MM_CREATE_TABLE );

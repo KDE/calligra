@@ -1803,6 +1803,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
             frameset->setKeepAspectRatio( _keepRatio);
             fs = frameset;
         }
+
         m_doc->addFrameSet( fs, false ); // done first since the frame number is stored in the undo/redo
         KWFrame *frame = new KWFrame( fs, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
         fs->addFrame( frame, false );
@@ -1810,6 +1811,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         fs->finalize(); // done last since it triggers a redraw
         // Reset the 'tool'
         setTool( KWCanvas::MM_EDIT );
+        m_doc->refreshDocStructure(Pictures);
     }
     else
     {
