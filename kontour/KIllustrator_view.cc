@@ -144,6 +144,9 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 KIllustratorView::~KIllustratorView()
 {
    writeConfig();
+   //change tool, necessary when kontour is embedded into
+   //an other programm, we remove bezier mode => blue line
+   slotSelectTool(true);
    delete mZoomTool;
    if (objMenu!=0)
       delete objMenu;
