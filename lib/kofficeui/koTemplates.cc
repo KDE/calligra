@@ -33,6 +33,7 @@
 #include <kstddirs.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kio/netaccess.h>
 
 #include <stdlib.h>
 
@@ -160,10 +161,8 @@ void KoTemplateTree::writeTemplateTree() {
                 //kdDebug() << "hidden" << endl;
                 if(group->dirs().count()==1 && !group->dirs().grep(localDir).isEmpty()) {
                     //kdDebug() << "local only" << endl;
-                    QString command="rm -rf ";
-                    command+=group->dirs().first();
-                    //kdDebug() << "command: " << command << endl;
-                    system(command.local8Bit());
+                    KIO::NetAccess::del(group->dirs().first());
+                    //kdDebug() << "removing: " << group->dirs().first() << endl;
                 }
                 else {
                     //kdDebug() << "global" << endl;
@@ -172,11 +171,12 @@ void KoTemplateTree::writeTemplateTree() {
             }
         }
         for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
-            //kdDebug() << "template: " << t->name() << endl;
-            if(t->touched())
+            if(t->touched()) {
+                //kdDebug() << "++template: " << t->name() << endl;
                 writeTemplate(t, group, localDir);
+            }
             if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
-                //kdDebug() << "delete local template (rm -rf)" << endl;
+                //kdDebug() << "+++ delete local template (rm -rf)##############" << endl;
                 writeTemplate(t, group, localDir);
                 QString command="rm -rf ";
                 command+=t->file();
