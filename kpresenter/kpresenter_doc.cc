@@ -265,12 +265,12 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     saveOnlyPage = -1;
     m_maxRecentFiles = 10;
 
-    initConfig();
-
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
     m_commandHistory = new KCommandHistory( actionCollection(),  false ) ;
+    initConfig();
+
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
