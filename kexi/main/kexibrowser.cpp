@@ -132,9 +132,11 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_toolbar->insertSeparator();
 	m_newObjectToolbarAction->plug(m_toolbar);
 	m_itemPopup->insertSeparator();
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
+#endif
 	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
 //	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
 //		SLOT(slotRename()), this, "rename_object");
