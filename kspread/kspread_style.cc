@@ -131,6 +131,62 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attribute( "style:data-style-name" )<<endl;
         kdDebug()<<" oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attribute( "style:data-style-name" )]<<endl;
     }
+    if ( styleStack.hasAttribute( "style:font-name" ) )
+    {
+        kdDebug()<<"styleStack.hasAttribute( style:font-name ) :"<<styleStack.hasAttribute( "style:font-name" )<<endl;
+    }
+//fo:font-size="13pt" fo:font-style="italic" style:text-underline="double" style:text-underline-color="font-color" fo:font-weight="bold"
+    if ( styleStack.hasAttribute( "fo:font-size" ) )
+    {
+        m_fontSize = KoUnit::parseValue( styleStack.attribute( "fo:font-size" ),10.0 );
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontSize;
+    }
+    if ( styleStack.hasAttribute( "fo:font-style" ) )
+    {
+#if 0
+            QDomElement font = format.namedItem( "font" ).toElement();
+    if ( !font.isNull() )
+    {
+        QFont f( util_toFont( font ) );
+        m_fontFamily = f.family();
+        m_fontSize = f.pointSize();
+        if ( f.italic() )
+            m_fontFlags |= FItalic;
+        if ( f.bold() )
+            m_fontFlags |= FBold;
+        if ( f.underline() )
+            m_fontFlags |= FUnderline;
+        if ( f.strikeOut() )
+            m_fontFlags |= FStrike;
+
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFamily;
+        m_featuresSet |= SFontFlag;
+        m_featuresSet |= SFontSize;
+    }
+
+    if ( format.hasAttribute( "font-family" ) )
+    {
+        m_fontFamily = format.attribute( "font-family" );
+        m_featuresSet |= SFont;
+        m_featuresSet |= SFontFamily;
+    }
+#endif
+        if ( styleStack.attribute( "fo:font-style" ) =="italic" )
+            m_fontFlags |= FItalic;
+
+    }
+    if ( styleStack.hasAttribute( "fo:font-weight" ) )
+    {
+    }
+    if ( styleStack.hasAttribute( "style:text-underline" ) )
+    {
+    }
+    if ( styleStack.hasAttribute( "style:text-underline-color" ) )
+    {
+    }
+
     if ( styleStack.hasAttribute( "fo:text-align" ) )
     {
 
@@ -378,14 +434,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         m_featuresSet |= SFont;
         m_featuresSet |= SFontFamily;
     }
-    if ( format.hasAttribute( "font-size" ) )
-    {
-        m_fontSize = format.attribute( "font-size" ).toInt( &ok );
-        if ( !ok )
-            return false;
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontSize;
-    }
+
 
     if ( format.hasAttribute( "font-flags" ) )
     {
