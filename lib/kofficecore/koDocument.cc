@@ -164,6 +164,12 @@ KoDocument::~KoDocument()
     disconnect( childIt.current(), SIGNAL( destroyed() ),
                 this, SLOT( slotChildDestroyed() ) );
 
+  // Tell our views that the document is already destroyed and
+  // that they shouldn't try to access it.
+  QListIterator<KoView> vIt( d->m_views );
+  for (; vIt.current(); ++vIt )
+      vIt.current()->setDocumentDeleted();
+
   d->m_children.setAutoDelete( true );
   d->m_children.clear();
 

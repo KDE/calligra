@@ -41,6 +41,7 @@ public:
     m_tempActiveWidget = 0L;
     m_dcopObject = 0;
     m_registered=false;  // are we registered at the part manager?
+    m_documentDeleted=false;
   }
   ~KoViewPrivate()
   {
@@ -53,6 +54,7 @@ public:
   QWidget *m_tempActiveWidget;
   KoViewIface *m_dcopObject;
   bool m_registered;
+  bool m_documentDeleted;
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
@@ -96,6 +98,16 @@ KoView::~KoView()
 KoDocument *KoView::koDocument() const
 {
   return d->m_doc;
+}
+
+void KoView::setDocumentDeleted()
+{
+    d->m_documentDeleted = true;
+}
+
+bool KoView::documentDeleted() const
+{
+    return d->m_documentDeleted;
 }
 
 bool KoView::hasDocumentInWindow( KoDocument *doc )

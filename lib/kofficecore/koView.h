@@ -83,6 +83,17 @@ public:
    */
   KoDocument *koDocument() const;
 
+  /**
+   * Tells this view that its document has got deleted (called internally)
+   */
+  void setDocumentDeleted();
+  /**
+   * @return true if the document has already got deleted.
+   * This can be useful for the view destructor, to know if it can
+   * access the document or not.
+   */
+  bool documentDeleted() const;
+
   virtual void setPartManager( KParts::PartManager *manager );
   virtual KParts::PartManager *partManager() const;
 
