@@ -646,8 +646,13 @@ void KWParagDia::setupTab3()
     connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
 
-    prev3 = new KWBorderPreview( tab );
-    grid->addMultiCellWidget( prev3, 0, 7, 1, 1 );
+    QGroupBox *grp=new QGroupBox( i18n( "Preview" ), tab );
+    grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
+    prev3 = new KWBorderPreview( grp );
+    QVBoxLayout *lay1 = new QVBoxLayout( grp );
+    lay1->setMargin( 15 );
+    lay1->setSpacing( 1 );
+    lay1->addWidget(prev3);
 
     connect( prev3 ,SIGNAL( choosearea(QMouseEvent * )),
            this,SLOT( slotPressEvent(QMouseEvent *)));
