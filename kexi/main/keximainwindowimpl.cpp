@@ -151,6 +151,10 @@ class KexiMainWindowImpl::Private
 		//! user can cancel dialog closing. If true user even doesn't see any messages
 		//! before closing a dialog. This is for extremely sanity... and shouldn't be even needed.
 		bool forceDialogClosing : 1;
+
+		//! Indicates that we're inside closeDialog() method - to avoid inf. recursion
+		//! on dialog removing
+		bool insideCloseDialog : 1;
 	Private()
 		: dialogs(401)
 //		, actionProxies(401)
@@ -169,6 +173,7 @@ class KexiMainWindowImpl::Private
 		action_view_nav=0;
 		action_view_propeditor=0;
 		forceDialogClosing=false;
+		insideCloseDialog=false;
 		createMenu=0;
 	}
 };
@@ -1608,6 +1613,7 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 {
 	cancelled=false;
 	if (dlg->neverSaved()) {
+		//data was never saved in the past -we need to create a new object at the backend
 		if (!d->nameDialog) {
 			d->nameDialog = new KexiNameDialog(QString::null,
 				this, "nameDialog");
@@ -1634,6 +1640,7 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 		}
 		while (found);
 
+		const int oldItemID = dlg->partItem()->identifier();
 		//update name and caption
 		dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
 		dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
@@ -1643,8 +1650,12 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 
 		//update navigator
 		d->nav->addItem(dlg->partItem());
+		//item id changed to final one: update association in dialogs' dictionary
+		d->dialogs.take(oldItemID);
+		d->dialogs.insert(dlg->partItem()->identifier(), dlg);
 		return true;
 	}
+	//data was saved in the past -just save again
 	return dlg->storeData();
 }
 
@@ -1653,6 +1664,9 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 	cancelled = false;
 	if (!dlg)
 		return true;
+	if (d->insideCloseDialog)
+		return true;
+	d->insideCloseDialog = true;
 	bool remove_on_closing = dlg->partItem()->neverSaved();
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
@@ -1664,6 +1678,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 			KStdGuiItem::discard());
 		if (res==KMessageBox::Cancel) {
 			cancelled=true;
+			d->insideCloseDialog = false;
 			return true;
 		}
 		if (res==KMessageBox::Yes) {
@@ -1671,10 +1686,13 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 //			if (!dlg->storeData())
 			if (!saveObject( dlg, cancelled )) {
 //js:TODO show error info; (retry/ignore/cancel)
+				d->insideCloseDialog = false;
 				return false;
 			}
-			if (cancelled)
+			if (cancelled) {
+				d->insideCloseDialog = false;
 				return true;
+			}
 			remove_on_closing = false;
 		}
 	}
@@ -1684,6 +1702,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		if (!removeObject( dlg->partItem(), false )) {
 			//msg?
 			//TODO: ask if we'd continue and return true/false
+			d->insideCloseDialog = false;
 			return false;
 		}
 	}
@@ -1719,6 +1738,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		d->nav->setFocus();
 
 	invalidateActions();
+	d->insideCloseDialog = false;
 	return true;
 }
 
@@ -2046,12 +2066,26 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			return true;//cancelled
 	}
 
-	/*KexiDialogBase *dlg = d->dialogs[item->identifier()];
+	KexiDialogBase *dlg = d->dialogs[item->identifier()];
 	if (dlg) {//close existing window
 //		if (!dlg->tryClose(true))
-		if (!dlg->close(true))
-			return true; //ok - close cancelled
-	}*/
+		const bool tmp = d->forceDialogClosing;
+		const bool remove_on_closing = dlg->partItem()->neverSaved();
+		bool cancelled;
+		d->forceDialogClosing = true;
+		if (!closeDialog(dlg, cancelled)) {
+			d->forceDialogClosing = tmp; //restore
+			return false;
+		}
+		d->forceDialogClosing = tmp; //restore
+		if (cancelled)
+			return true;
+//		if (remove_on_closing) //already removed
+	//		return true; 
+//		if (!dlg->close(true))
+//			return true; //ok - close cancelled
+	}
+
 
 	if (!d->prj->removeObject(this, *item)) {
 		//TODO(js) some msg
