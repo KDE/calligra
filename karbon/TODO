@@ -1,5 +1,4 @@
 REAL BUGS:
--	mirror coordinate-system so origin is bottom-left
 -	dont always fill shapes especially when no fillShape() is called
 -	select first/last segment's knot if one of each other's knot is selected
 -	if selecting many shapes, the fill/stroke state should be "unknown",

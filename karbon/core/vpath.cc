@@ -422,7 +422,7 @@ VPath::combineSegmentList( const VSegmentList& segmentList )
 	}
 	else
 	{
-		if( !list->counterClockwise() )
+		if( !( list->counterClockwise() ) )
 		{
 			list->revert();
 		}

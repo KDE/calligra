@@ -512,13 +512,7 @@ VSegmentList::load( const QDomElement& element )
 	}
 
 	if( element.attribute( "isClosed" ) == 0 ? false : true )
-	{
 		close();
-
-		// Make sure we are counter clockwise:
-		if( !counterClockwise() )
-			revert();
-	}
 }
 
 void

@@ -10,14 +10,13 @@
 #include "vroundrect.h"
 #include "vroundrectdlg.h"
 #include "vroundrecttool.h"
-#include "karbon_part.h"
 
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
-	// create config dialog:
-	m_dialog = new VRoundRectDlg(view->part());
+	// Create config dialog:
+	m_dialog = new VRoundRectDlg( view->part() );
 	m_dialog->setWidth( 100.0 );
 	m_dialog->setHeight( 100.0 );
 	m_dialog->setRound( 20.0 );
@@ -38,7 +37,7 @@ VRoundRectTool::shape( bool interactive ) const
 {
 	if( interactive && m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
-		if ( m_dialog->exec() )
+		if( m_dialog->exec() )
 			return
 				new VRoundRect(
 					0L,

@@ -19,7 +19,10 @@ public:
 	virtual ~VRectangleTool();
 
 	virtual VPath* shape( bool interactive = false ) const;
+
+	virtual void showDialog() const;
     void refreshUnit();
+
 private:
 	VRectangleDlg* m_dialog;
 };
