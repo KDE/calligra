@@ -41,6 +41,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qvalidator.h>
+#include <qvbox.h>
 #include <qwhatsthis.h>
 #include <qwidget.h>
 
@@ -354,10 +355,10 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
         : KWParagLayoutWidget( KWParagDia::PD_SPACING, parent, name ), m_unit( unit )
 {
     QString unitName = KWUnit::unitName( m_unit );
-    QGridLayout *grid = new QGridLayout( parent, 5, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( this, 5, 2, 15, 7 );
 
     // --------------- indent ---------------
-    QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), parent );
+    QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), this );
     QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
 
     QLabel * lLeft = new QLabel( i18n("Left ( %1 ):").arg(unitName), indentFrame );
@@ -404,7 +405,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     grid->addWidget( indentFrame, 0, 0 );
 
     // --------------- line spacing ---------------
-    QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), parent );
+    QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this );
     QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 3, 1, 15, 7 );
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
@@ -435,7 +436,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
 
     //
     // --------------- End of page /frame ---------------
-    QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), parent );
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), this );
     QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 3, 2, 15, 7 );
 
     cEndOfFramePage = new QCheckBox( i18n("Keep lines together"),endFramePage);
@@ -444,7 +445,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     grid->addWidget( endFramePage, 1, 0 );
 
     // --------------- paragraph spacing ---------------
-    QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), parent );
+    QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), this );
     QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
 
     QLabel * lBefore = new QLabel( i18n("Before ( %1 ):").arg(unitName), pSpaceFrame );
@@ -478,7 +479,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     grid->addWidget( pSpaceFrame, 3, 0 );
 
     // --------------- preview --------------------
-    prev1 = new KWPagePreview( parent );
+    prev1 = new KWPagePreview( this );
     grid->addMultiCellWidget( prev1, 0, 4, 1, 1 );
 
     grid->setColStretch( 1, 1 );
@@ -566,6 +567,11 @@ void KWIndentSpacingWidget::save( KWParagLayout & lay )
     lay.linesTogether = linesTogether();
 }
 
+QString KWIndentSpacingWidget::tabName()
+{
+    return i18n( "Indent and Spacing" );
+}
+
 void KWIndentSpacingWidget::leftChanged( const QString & _text )
 {
     prev1->setLeft( _text.toDouble() );
@@ -632,8 +638,8 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name,
     doc = _doc;
     if ( _flags & PD_SPACING )
     {
-        QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
-        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), tab, "indent-spacing" );
+        QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
+        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), page, "indent-spacing" );
     }
     if ( _flags & PD_ALIGN )
         setupTab2();

@@ -58,6 +58,7 @@ class QWidget;
  */
 class KWParagLayoutWidget : public QWidget
 {
+    Q_OBJECT
 public:
     // Constructor: parent widget, flag (PD_SOMETHING) and name
     KWParagLayoutWidget( int flag, QWidget * parent, const char * name = 0 )
@@ -76,6 +77,9 @@ public:
     // Return true if the settings where modified
     // ## maybe too global, but how to do it differently? We'll see if we need this.
     //virtual bool isModified() = 0;
+
+    /**  return the (i18n-ed) name of the tab */
+    virtual QString tabName() = 0;
 
     // Return the part of the paraglayout that this widget cares about
     int flag() const { return m_flag; }
@@ -97,6 +101,7 @@ public:
     virtual void display( const KWParagLayout & lay );
     virtual void save( KWParagLayout & lay );
     //virtual bool isModified();
+    virtual QString tabName();
 
     double leftIndent() const;
     double rightIndent() const;

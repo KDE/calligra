@@ -69,17 +69,24 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     noSignals=true;
     m_origStyles.setAutoDelete(false);
     m_changedStyles.setAutoDelete(false);
+    KWUnit::Unit unit = m_doc->getUnit();
 
     setupWidget(); // build the widget with the buttons and the list selector.
     addGeneralTab();
 
-    // basicTab *newTab = new blaat();
-    // m_tabsList.add(newTab);
-    // tabs->insertTab( newTab, newTab->getName() );
+    KWStyleParagTab *newTab = new KWStyleParagTab( m_tabs );
+    newTab->setWidget( new KWIndentSpacingWidget( unit, newTab ) );
+    addTab( newTab );
 
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
     switchStyle();
+}
+
+void KWStyleManager::addTab( KWStyleManagerTab * tab )
+{
+    m_tabsList.append( tab );
+    m_tabs->insertTab( tab, tab->tabName() );
 }
 
 void KWStyleManager::setupWidget() {
@@ -216,9 +223,13 @@ kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << 
 }
 
 void KWStyleManager::updateGUI() {
-    for (unsigned int i =0; m_tabsList.count(); i++) {
-        m_tabsList.at(i)->update();
+    QListIterator<KWStyleManagerTab> it( m_tabsList );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setStyle( m_currentStyle );
+        it.current()->update();
     }
+
     m_nameString->setText(m_currentStyle->name());
 
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
@@ -238,9 +249,9 @@ void KWStyleManager::updateGUI() {
 void KWStyleManager::save() {
     if(m_currentStyle) {
         // save changes from UI to object.
-        for (unsigned int i =0; m_tabsList.count(); i++) {
-            m_tabsList.at(i)->save();
-        }
+        QListIterator<KWStyleManagerTab> it( m_tabsList );
+        for ( ; it.current() ; ++it )
+            it.current()->save();
         m_currentStyle->setName( m_nameString->text() );
 kdDebug() << "following style1: " << m_styleCombo->currentText() << endl;
 kdDebug() << "following style2: " << getStyleByName(m_styleCombo->currentText()) << endl;
@@ -553,3 +564,14 @@ void KWStyleEditor::slotOk() {
    }
 }
 #endif
+
+void KWStyleParagTab::setWidget( KWParagLayoutWidget * widget )
+{
+    m_widget = widget;
+}
+
+void KWStyleParagTab::resizeEvent( QResizeEvent *e )
+{
+    QWidget::resizeEvent( e );
+    if ( m_widget ) m_widget->resize( size() );
+}

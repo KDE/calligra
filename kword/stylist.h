@@ -38,7 +38,7 @@ class QLabel;
 class QCheckBox;
 class KWStyle;
 class QTabWidget;
-
+class KWStyleManagerTab;
 class KWStylePreview;
 
 /******************************************************************/
@@ -51,22 +51,6 @@ class KWStyleManager : public QDialog
 
 public:
     KWStyleManager( QWidget *_parent, KWDocument *_doc );
-
-    class basicTab : public QWidget {
-        public:
-            basicTab(QWidget *parent) :QWidget(parent) {};
-
-            /** the new style which is to be displayed */
-            void setStyle(KWStyle *style) { m_style = style; }
-            /**  update the GUI from the current Style*/
-            virtual void update() = 0;
-            /**  return the (i18n-ed) name of the tab */
-            virtual QString getName() = 0;
-            /** save the GUI to the style */
-            virtual void save() = 0;
-        private:
-            KWStyle *m_style;
-    };
 
 protected:
     KWDocument *m_doc;
@@ -90,7 +74,7 @@ protected:
     KWStyle *m_currentStyle;
     QList<KWStyle> m_origStyles;      // internal list of orig styles we have modified
     QList<KWStyle> m_changedStyles;   // internal list of changed styles.
-    QList<basicTab> m_tabsList;
+    QList<KWStyleManagerTab> m_tabsList;
     int numStyles;
     bool noSignals;
 
@@ -101,6 +85,7 @@ protected slots:
     void addStyle();
     void deleteStyle();
     void renameStyle(const QString &);
+    void addTab( KWStyleManagerTab * tab );
 };
 
 /******************************************************************/
@@ -121,13 +106,50 @@ protected:
     void drawContents( QPainter *painter );
 
     KWStyle *style;
+};
 
+class KWStyleManagerTab : public QWidget {
+    Q_OBJECT
+public:
+    KWStyleManagerTab(QWidget *parent) : QWidget(parent) {};
+
+    /** the new style which is to be displayed */
+    void setStyle(KWStyle *style) { m_style = style; }
+    /**  update the GUI from the current Style*/
+    virtual void update() = 0;
+    /**  return the (i18n-ed) name of the tab */
+    virtual QString tabName() = 0;
+    /** save the GUI to the style */
+    virtual void save() = 0;
+protected:
+    KWStyle *m_style;
+};
+
+// A tab to edit parts of the parag-layout of the style
+// Acts as a wrapper around KWParagLayoutWidget [which doesn't know about styles].
+class KWStyleParagTab : public KWStyleManagerTab
+{
+    Q_OBJECT
+public:
+    KWStyleParagTab( QWidget * parent )
+        : KWStyleManagerTab( parent ) { m_widget = 0L; }
+
+    // not a constructor parameter since 'this' is the parent of the widget
+    void setWidget( KWParagLayoutWidget * widget );
+
+    virtual void update() { m_widget->display( m_style->paragLayout() ); }
+    virtual void save() { m_widget->save( m_style->paragLayout() ); }
+    virtual QString tabName() { return m_widget->tabName(); }
+protected:
+    virtual void resizeEvent( QResizeEvent *e );
+private:
+    KWParagLayoutWidget * m_widget;
 };
 
 /*
-class KWStyleFontTab : public KWStyleManager::basicTab {
+class KWStyleFontTab : public KWStyleManagerTab {
     virtual void update();
-    virtual QString getName() { return i18n("Font"); }
+    virtual QString tabName(); }
     virtual void save();
 }*/
 
