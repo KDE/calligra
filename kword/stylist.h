@@ -77,7 +77,6 @@ protected:
     void apply();
     void updateGUI();
     void save();
-    KWStyle * copyStyle(KWStyle *orig);
     int getStyleByName(const QString name);
 
     QTabWidget *m_tabs;
@@ -126,7 +125,7 @@ protected:
 
 };
 
-/* 
+/*
 class KWStyleFontTab : public KWStyleManager::basicTab {
     virtual void update();
     virtual QString getName() { return i18n("Font"); }
