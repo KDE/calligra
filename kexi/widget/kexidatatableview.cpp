@@ -36,17 +36,17 @@ KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
 	init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *rec)
+KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor)
  : KexiTableView(parent, name)
 {
 	init();
-	setDataSet(rec);
+	setData(cursor);
 }
 
 void
 KexiDataTableView::init()
 {
-	m_record = 0;
+	m_cursor = 0;
 	m_maxRecord = 0;
 	m_records = 0;
 	m_first = false;
@@ -55,14 +55,17 @@ KexiDataTableView::init()
 	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
-void KexiDataTableView::setDataSet(KexiDB::Cursor *rec)
+void KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
-	if(!m_first)
+	if (!m_first || !cursor)
 		clearAll();
 
-	m_record = rec;
+	m_cursor = cursor;
 
-	for(uint i = 0; i < m_record->fieldCount(); i++)
+	if (!m_cursor)
+		return;
+
+	for(uint i = 0; i < m_cursor->fieldCount(); i++)
 	{
 //		QVariant defaultval = QVariant("");
 //		addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),

@@ -61,7 +61,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 
 //		bool executeQuery(const QString &query);
-		void setDataSet(KexiDB::Cursor *rec);
+		void setData(KexiDB::Cursor *cursor);
 
 		bool readOnly();
 

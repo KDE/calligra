@@ -33,7 +33,7 @@ namespace KexiDB {
 /**
  * database aware table widget
  */
-class KexiDataTableView : public KexiTableView
+class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 {
 	Q_OBJECT
 
@@ -45,15 +45,15 @@ class KexiDataTableView : public KexiTableView
 		/**
 		 * creates a table widget and fills it (partly ;) with recordset rec
 		 */
-		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *rec);
+		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor);
 		~KexiDataTableView();
 
 		/**
 		 * fills a table with recordset rec and clears it before, if there already
 		 * was data.
 		 */
-		void		setDataSet(KexiDB::Cursor *rec);
-		KexiDB::Cursor *recordSet() { return m_record; }
+		void		setData(KexiDB::Cursor *cursor);
+		KexiDB::Cursor *cursor() { return m_cursor; }
 
 		/**
 		 * @returns the number of records in the recordset
@@ -81,7 +81,7 @@ class KexiDataTableView : public KexiTableView
 
 	private:
 		//db stuff
-		KexiDB::Cursor	*m_record;
+		KexiDB::Cursor	*m_cursor;
 		bool		m_first;
 //use m_record->database() instead:		KexiDB		*m_db;
 		int		m_maxRecord;

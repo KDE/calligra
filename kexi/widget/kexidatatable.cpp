@@ -126,9 +126,9 @@ KexiDataTable::init(/*QString caption, QString identifier, bool embedd*/)
 
 }
 
-void KexiDataTable::setDataSet(KexiDB::Cursor *rec)
+void KexiDataTable::setData(KexiDB::Cursor *cursor)
 {
-	m_tableView->setDataSet(rec);
+	m_tableView->setData(cursor);
 // Not yet please. Later special navigating widget will 
 // be added in place of status bar:
 //	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
