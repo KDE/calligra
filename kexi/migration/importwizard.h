@@ -51,7 +51,8 @@ private:
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
     QLabel *lblfinishTxt;
-    
+    bool fileBasedSrc, fileBasedDst;
+
     void setupintro();
     void setupsrcType();
     void setupsrcconn();
@@ -61,6 +62,15 @@ private:
     void setupdst();
     void setupfinish();
     bool checkUserInput();
+
+    void checkIfSrcTypeFileBased(const QString& srcType);
+    void checkIfDstTypeFileBased(const QString& dstType);
+
+    void arriveSrcConnPage();
+    void arriveSrcDBPage();
+    void arriveDstTitlePage();
+    void arriveDstPage();
+    void arriveFinishPage();
 private slots:
     void nextClicked(const QString &);
     virtual void accept();

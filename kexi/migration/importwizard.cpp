@@ -35,6 +35,7 @@
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
+#include <kexidb/connectiondata.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <KexiConnSelector.h>
@@ -187,8 +188,9 @@ void importWizard::setupdst()
     QVBox *dstControls = new QVBox(dstPage);
 
     dstConn = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "DstConnSelector");
-	connect(dstConn->m_fileDlg,SIGNAL(accepted()),this,SLOT(next()));
-	dstConn->showAdvancedConn();
+    //me: Can't connect dstconn->m_fileDlg here, it doesn't exist yet
+    //connect(this, SLOT(next()), dstConn->m_fileDlg, SIGNAL(accepted()));
+
 	connect(dstConn,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));
 
@@ -233,12 +235,6 @@ bool importWizard::checkUserInput()
     bool problem;
 
     problem = false;
-    
-    if ((srcTypeCombo->currentText() != "PostgreSQL") & srcTypeCombo->currentText() != "MySQL")
-    {
-        problem = true;
-        finishtxt = i18n("Source type was not PostgreSQL Database.");
-    }
 //    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text().isEmpty()))
     if (dstNewDBName->text().isEmpty())
     {
@@ -258,6 +254,97 @@ bool importWizard::checkUserInput()
     lblfinishTxt->setText(finishtxt);
     
     return !problem;
+}
+
+void importWizard::arriveSrcConnPage()
+{
+  srcConnPage->hide();
+  
+  checkIfSrcTypeFileBased(srcTypeCombo->currentText());
+  if (fileBasedSrc) {
+    srcConn->showSimpleConn();
+    /*! @todo: KexiStartupFileDialog needs "open file" and "open server" modes
+    in addition to just "open" */
+    srcConn->m_file->label->hide();
+    srcConn->m_file->btn_advanced->hide();
+    srcConn->m_file->label->parentWidget()->hide();
+  } else {
+    srcConn->showAdvancedConn();
+  }
+  /*! @todo: Support different file extensions based on MigrationDriver */
+  /*! @todo: Hide the 'Advanced' button on the connection selector here. */
+  srcConnPage->show();
+}
+
+void importWizard::arriveSrcDBPage()
+{
+  if (fileBasedSrc) {
+    //! @todo: Back button doesn't work after selecting a file to import
+    showPage(dstTypePage);
+  }
+  else {
+    if (!srcdbname)
+    {
+      srcdbControls->hide();
+      kdDebug() << "Looks like we need a project selector widget!" << endl;
+      KexiProjectSet *prj_set = 
+          new KexiProjectSet(*(srcConn->selectedConnectionData()));
+      srcdbname = new KexiProjectSelectorWidget(srcdbControls,
+          "KexiMigrationProjectSelector", prj_set);
+      srcdbControls->show();
+    }
+  }
+}
+
+void importWizard::arriveDstTitlePage()
+{
+  if(fileBasedSrc) {
+    // Might want to show the filename here instead
+    dstNewDBName->setText("Imported Database");
+  } else {
+    dstNewDBName->setText( srcdbname->selectedProjectData()->databaseName() );
+  }
+}
+
+void importWizard::arriveDstPage()
+{
+  dstPage->hide();
+
+  checkIfDstTypeFileBased(dstTypeCombo->currentText());
+  if(fileBasedDst) {
+    dstConn->showSimpleConn();
+    dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
+  } else {
+    dstConn->showAdvancedConn();
+  }
+  dstPage->show();
+}
+
+void importWizard::arriveFinishPage() {
+  if (checkUserInput()) {
+    setFinishEnabled(finishPage, true);
+  }
+  else {
+    setFinishEnabled(finishPage, false);
+  }
+}
+
+void importWizard::checkIfSrcTypeFileBased(const QString& srcType) {
+  //! @todo: Use MigrateManager to get src type property
+  if ((srcType == "PostgreSQL") || (srcType == "MySQL")) {
+    fileBasedSrc = false;
+  } else {
+    fileBasedSrc = true;
+  }
+}
+
+void importWizard::checkIfDstTypeFileBased(const QString& dstType) {
+  //! @todo: Use DriverManager to get dst type property
+  if ((dstType == "PostgreSQL") || (dstType == "MySQL")) {
+    fileBasedDst = false;
+  } else {
+    fileBasedDst = true;
+  }
 }
 
 //===========================================================
@@ -292,7 +379,6 @@ void importWizard::accept()
       	kdDebug() << "Server destination..." << endl;
         cdata = dstConn->selectedConnectionData();
         dbname = dstNewDBName->text();
-        
     }
     else if (dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
     {
@@ -323,8 +409,22 @@ void importWizard::accept()
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
     
     kdDebug() << "Setting import data.." << endl;
-    import->setData(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, true);
-
+    if(fileBasedSrc) {
+      KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+      conn_data->setFileName(srcConn->selectedFileName());
+      import->setData(conn_data,
+                      "",
+                      kexi_conn,
+                      dbname,
+                      false);
+    }
+    else {
+      import->setData(srcConn->selectedConnectionData(),
+                      srcdbname->selectedProjectData()->databaseName(),
+                      kexi_conn,
+                      dbname,
+                      false);
+    }
     kdDebug() << "Performing import..." << endl;
     if (import->performImport())
     {
@@ -336,80 +436,34 @@ void importWizard::accept()
     }
 }
 
+
 //===========================================================
 //
 void importWizard::nextClicked(const QString & p)
 {
-    if (currentPage() == introPage)
-    {
+    if (currentPage() == introPage) {
     }
-    else if (currentPage() == srcTypePage)
-    {
+    else if (currentPage() == srcTypePage) {
     }
-    else if (currentPage() == srcConnPage)
-    {
-        srcConnPage->hide();
-        if (srcTypeCombo->currentText() == "PostgreSQL")
-        {
-            srcConn->showAdvancedConn();
-        }
-        else if (srcTypeCombo->currentText() == "MySQL") {
-            srcConn->showAdvancedConn();
-        }
-/*        else
-        {
-            KMessageBox::information(this, "Sorry, only data migration form postgresql is possible at the moment.  Please go back and change the option, or press cancel to quit", "Sorry, featuree not available");
-        }
-*/
-        srcConnPage->show();
+    else if (currentPage() == srcConnPage) {
+      arriveSrcConnPage();
     }
-    else if (currentPage() == srcdbPage)
-    {
-        if ((srcTypeCombo->currentText() == "PostgreSQL") || (srcTypeCombo->currentText() == "MySQL"))
-        {
-            if (!srcdbname)
-            {
-                srcdbControls->hide();
-                kdDebug() << "Looks like we need a project selector widget!" << endl;
-                KexiProjectSet *prj_set = new KexiProjectSet( *srcConn->selectedConnectionData() );
-                srcdbname = new KexiProjectSelectorWidget(srcdbControls, "KexiMigrationProjectSelector", prj_set);
-                srcdbControls->show();
-            }
-        }
+    else if (currentPage() == srcdbPage) {
+      arriveSrcDBPage();
     }
-    else if (currentPage() == dstTypePage)
-    {
+    else if (currentPage() == dstTypePage) {
     }
     else if (currentPage() == dstTitlePage) {
-         dstNewDBName->setText( srcdbname->selectedProjectData()->databaseName() );
+      arriveDstTitlePage();
     }
-    else if (currentPage() == dstPage)
-    {
-        dstPage->hide();
-        if (dstTypeCombo->currentText() == "PostgreSQL" || dstTypeCombo->currentText() == "MySQL")
-        {
-            dstConn->showAdvancedConn();
-        }
-        else
-        {
-            dstConn->showSimpleConn();
-            dstConn->m_fileDlg->setMode( KexiStartupFileDialog::SavingFileBasedDB );
-        }
-        dstPage->show();
+    else if (currentPage() == dstPage) {
+      arriveDstPage();
     }
-    else if (currentPage() == finishPage)
-    {
-        
-        if (checkUserInput())
-        {
-            setFinishEnabled(finishPage, true);
-        }
-        else
-        {
-            setFinishEnabled(finishPage, false);
-        }
+    else if (currentPage() == finishPage) {
+      arriveFinishPage();
     }
 }
+
 void importWizard::helpClicked()
 {
     if (currentPage() == introPage)
