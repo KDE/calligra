@@ -784,3 +784,13 @@ Reggie, 2.2.1999:
   embedded objs, etc. in a structured tree view. It will also be possible to rearrange the document
   there and if you click on a item you will get to this part of the text in the canvas.
   Currently you will not see much :-)
+
+Reggie, 3.2.1999:
+-----------------
+- Small fix with setting page borders on rulers
+- Showing the paragraph arrangement (Gliederung) of the text framesets
+  in the document structure viewer works
+- The document structure viewer isn't updated automatically at the moment - just
+  close and open the "Arrangement" branch to update it
+- Added a demo document with some chapters and different depths to demonstrate
+  the document structure viewer

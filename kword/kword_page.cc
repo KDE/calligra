@@ -2747,6 +2747,8 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
 /*================================================================*/
 void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
 {
+  if (doc->getProcessingType() != KWordDocument::DTP) return;
+
   KoPageLayout _layout;
   KoColumns _cl;
   KoKWHeaderFooter hf;

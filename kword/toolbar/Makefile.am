@@ -3,7 +3,9 @@ toolbar_DATA =  unsortedList.xpm enumList.xpm table.xpm sub.xpm super.xpm \
 	run_bounding.xpm run_contur.xpm run_not.xpm \
 	editframetool.xpm edittool.xpm picframetool.xpm textframetool.xpm \
 	formula.xpm char.xpm return.xpm kwsearch.xpm \
-	colin.xpm colout.xpm rowin.xpm rowout.xpm
+	colin.xpm colout.xpm rowin.xpm rowout.xpm tree_arrange.xpm \
+	tree_picture.xpm tree_textframes.xpm tree_embedded.xpm tree_table.xpm \
+	tree_clipart.xpm
 
 toolbardir = $(kde_datadir)/kword/toolbar
 

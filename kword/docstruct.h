@@ -21,6 +21,10 @@
 #include <qlayout.h>
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qintdict.h>
+
+#include "parag.h"
+#include "frame.h"
 
 class KWordDocument;
 class KWordGUI;
@@ -35,6 +39,15 @@ public:
   enum Type {Arrangement,Tables,Pictures,Cliparts,TextFrames,Embedded};
 
   KWDocStructRootItem(QListView *_parent,KWordDocument *_doc,Type _type);
+
+  void setupArrangement();
+  void setupTextFrames();
+  void setupTables();
+  void setupPictures();
+  void setupCliparts();
+  void setupEmbedded();
+
+  virtual void setOpen(bool o);
 
 protected:
   KWordDocument *doc;

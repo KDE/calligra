@@ -1,0 +1,23 @@
+/* XPM */
+static char*textframes[]={
+"16 16 4 1",
+"b c #808080",
+"# c #000000",
+". c None",
+"a c #ffffff",
+"................",
+"................",
+"..###aa##aa###..",
+"..#aaaaaaaaaa#b.",
+"..#aaaaaaaaaa#b.",
+"..aaaaaaaaaaaab.",
+"..aaaaaaaaaaaab.",
+"..#aaaaaaaaaa#b.",
+"..#aaaaaaaaaa#b.",
+"..aaaaaaaaaaaab.",
+"..aaaaaaaaaaaab.",
+"..#aaaaaaaaaa#b.",
+"..#aaaaaaaaaa#b.",
+"..###aa##aa###b.",
+"...bbbbbbbbbbbb.",
+"................"};
