@@ -47,19 +47,19 @@ void KoTextFormat::setNbLineType (NbLine _type)
     update();
 }
 
-void KoTextFormat::setLineType (LineType _type)
+void KoTextFormat::setUnderlineLineStyle (LineStyle _type)
 {
-    if ( m_lineType == _type )
+    if ( m_underlineLineStyle == _type )
         return;
-    m_lineType = _type;
+    m_underlineLineStyle = _type;
     update();
 }
 
-void KoTextFormat::setStrikeOutType( LineType _type )
+void KoTextFormat::setStrikeOutLineStyle( LineStyle _type )
 {
-    if ( m_strikeOutType == _type )
+    if ( m_strikeOutLineStyle == _type )
         return;
-    m_strikeOutType = _type;
+    m_strikeOutLineStyle = _type;
     update();
 }
 
@@ -87,7 +87,7 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::Italic;
     if ( textUnderlineColor()!=format.textUnderlineColor() ||
          nbLineType()!= format.nbLineType() ||
-         lineType() != format.lineType())
+         underlineLineStyle() != format.underlineLineStyle())
         flags |= KoTextFormat::ExtendUnderLine;
     if ( fn.family() != format.fn.family() )
         flags |= KoTextFormat::Family;
@@ -98,7 +98,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
     if ( vAlign() != format.vAlign() )
         flags |= KoTextFormat::VAlign;
 
-    if ( fn.strikeOut() != format.fn.strikeOut() )
+    if ( fn.strikeOut() != format.fn.strikeOut()
+        || underlineLineStyle() != format.underlineLineStyle())
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;

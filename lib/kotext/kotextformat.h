@@ -56,10 +56,10 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2056 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 };
 
     enum NbLine { NONE = 0, SIMPLE = 1, DOUBLE = 2};
-    enum LineType { SOLID = 0 , DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
+    enum LineStyle { SOLID = 0 , DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */
@@ -81,11 +81,11 @@ public:
     void setNbLineType (NbLine _type);
     NbLine nbLineType()const {return m_nbLine;}
 
-    void setLineType (LineType _type);
-    LineType lineType()const {return m_lineType;}
+    void setUnderlineLineStyle (LineStyle _type);
+    LineStyle underlineLineStyle()const {return m_underlineLineStyle;}
 
-    void setStrikeOutType( LineType _type );
-    LineType strikeOutType()const {return m_strikeOutType;}
+    void setStrikeOutLineStyle( LineStyle _type );
+    LineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
 
     bool doubleUnderline() const { return (m_nbLine==DOUBLE ); }
     bool underline() const { return (m_nbLine==SIMPLE ); }
@@ -139,7 +139,7 @@ protected:
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
     NbLine m_nbLine;
-    LineType m_lineType;
-    LineType m_strikeOutType;
+    LineStyle m_underlineLineStyle;
+    LineStyle m_strikeOutLineStyle;
     class KoTextFormatPrivate;
     KoTextFormatPrivate *d;

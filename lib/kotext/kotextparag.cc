@@ -1068,7 +1068,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 
 	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
         p->save();
-        switch( format->lineType() )
+        switch( format->underlineLineStyle() )
         {
         case KoTextFormat::SOLID:
             p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
@@ -1107,7 +1107,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
 
-        switch( format->lineType() )
+        switch( format->underlineLineStyle() )
         {
         case KoTextFormat::SOLID:
             p->setPen( QPen( col, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
@@ -1139,7 +1139,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     {
 
         p->save();
-        switch( format->strikeOutType() )
+        switch( format->strikeOutLineStyle() )
         {
         case KoTextFormat::SOLID:
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );

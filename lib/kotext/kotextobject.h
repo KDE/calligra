@@ -81,7 +81,7 @@ public:
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
     //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineType _underlineType, KoTextFormat::LineType _strikeOutType,  int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineStyle _underlineType, KoTextFormat::LineStyle _strikeOutType,  int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);
@@ -113,8 +113,8 @@ public:
     QColor textUnderlineColor()const;
 
     KoTextFormat::NbLine nbLineType()const;
-    KoTextFormat::LineType lineType()const;
-    KoTextFormat::LineType strikeOutType()const;
+    KoTextFormat::LineStyle underlineLineStyle()const;
+    KoTextFormat::LineStyle strikeOutLineStyle()const;
 
 
 

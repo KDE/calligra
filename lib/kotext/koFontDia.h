@@ -56,18 +56,18 @@ public:
 
 
     KoTextFormat::NbLine getNblineType();
-    KoTextFormat::LineType getUnderlineType();
-    KoTextFormat::LineType getStrikeOutType();
+    KoTextFormat::LineStyle getUnderlineLineStyle();
+    KoTextFormat::LineStyle getStrikeOutLineStyle();
 
     void setNblineType(KoTextFormat::NbLine nb);
-    void setUnderlineType(KoTextFormat::LineType _t);
-    void setStrikeOutType(KoTextFormat::LineType _t);
+    void setUnderlineLineStyle(KoTextFormat::LineStyle _t);
+    void setStrikeOutLineStyle(KoTextFormat::LineStyle _t);
 
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
 protected:
-    KoTextFormat::LineType getTypeOfLine( int val);
+    KoTextFormat::LineStyle getTypeOfLine( int val);
 
 protected slots:
     void slotSuperScriptClicked();
@@ -111,8 +111,8 @@ public:
 	       const QColor & backGroundColor,
                const QColor & underlineColor,
                KoTextFormat::NbLine _nbLine,
-               KoTextFormat::LineType _underlineType,
-               KoTextFormat::LineType _strikeOutType,
+               KoTextFormat::LineStyle _underlineType,
+               KoTextFormat::LineStyle _strikeOutType,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
@@ -122,8 +122,8 @@ public:
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
     QColor underlineColor() const { return m_chooser->underlineColor() ; }
     KoTextFormat::NbLine getNblineType() const { return m_chooser->getNblineType();}
-    KoTextFormat::LineType getUnderlineType() const { return m_chooser->getUnderlineType();}
-    KoTextFormat::LineType getStrikeOutType() const { return m_chooser->getStrikeOutType();}
+    KoTextFormat::LineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
+    KoTextFormat::LineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -144,8 +144,8 @@ private:
     QColor m_backGroundColor;
     QColor m_underlineColor;
     KoTextFormat::NbLine m_nbLine;
-    KoTextFormat::LineType m_underlineType;
-    KoTextFormat::LineType m_strikeOutType;
+    KoTextFormat::LineStyle m_underlineLineStyle;
+    KoTextFormat::LineStyle m_strikeOutLineStyle;
 };
 
 #endif

@@ -2041,14 +2041,14 @@ KoTextFormat::NbLine KoTextFormatInterface::nbLineType()const
     return currentFormat()->nbLineType();
 }
 
-KoTextFormat::LineType KoTextFormatInterface::lineType()const
+KoTextFormat::LineStyle KoTextFormatInterface::underlineLineStyle()const
 {
-    return currentFormat()->lineType();
+    return currentFormat()->underlineLineStyle();
 }
 
-KoTextFormat::LineType KoTextFormatInterface::strikeOutType()const
+KoTextFormat::LineStyle KoTextFormatInterface::strikeOutLineStyle()const
 {
-    return currentFormat()->strikeOutType();
+    return currentFormat()->strikeOutLineStyle();
 }
 
 QFont KoTextFormatInterface::textFont() const
@@ -2064,7 +2064,7 @@ QString KoTextFormatInterface::textFontFamily()const
     return currentFormat()->font().family();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineType _underlineType, KoTextFormat::LineType _strikeOutType,  int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::NbLine _nbLine, KoTextFormat::LineStyle _underlineType, KoTextFormat::LineStyle _strikeOutType,  int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2072,8 +2072,8 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setTextBackgroundColor(backGroundColor);
     format.setTextUnderlineColor( underlineColor );
     format.setNbLineType (_nbLine);
-    format.setLineType (_underlineType);
-    format.setStrikeOutType(_strikeOutType );
+    format.setUnderlineLineStyle (_underlineType);
+    format.setStrikeOutLineStyle(_strikeOutType );
 
     if(!_subscript)
     {

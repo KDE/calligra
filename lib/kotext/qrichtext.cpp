@@ -6043,7 +6043,7 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     if ( flags & KoTextFormat::StrikeOut )
     {
         fn.setStrikeOut( nf.font().strikeOut() );
-        setStrikeOutType( nf.strikeOutType() );
+        setStrikeOutLineStyle( nf.strikeOutLineStyle() );
     }
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
@@ -6051,7 +6051,7 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
     {
         setTextUnderlineColor(nf.textUnderlineColor());
         setNbLineType (nf.nbLineType());
-        setLineType (nf.lineType());
+        setUnderlineLineStyle (nf.underlineLineStyle());
     }
 
     //////

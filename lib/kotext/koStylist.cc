@@ -537,8 +537,8 @@ void KoStyleFontTab::update()
     m_chooser->setUnderlineColor( m_style->format().textUnderlineColor());
 
     m_chooser->setNblineType(m_style->format().nbLineType());
-    m_chooser->setUnderlineType(m_style->format().lineType());
-    m_chooser->setStrikeOutType(m_style->format().strikeOutType());
+    m_chooser->setUnderlineLineStyle(m_style->format().underlineLineStyle());
+    m_chooser->setStrikeOutLineStyle(m_style->format().strikeOutLineStyle());
 }
 
 void KoStyleFontTab::save()
@@ -558,8 +558,8 @@ void KoStyleFontTab::save()
 
     m_style->format().setTextUnderlineColor(m_chooser->underlineColor());
     m_style->format().setNbLineType (m_chooser->getNblineType());
-    m_style->format().setLineType (m_chooser->getUnderlineType());
-    m_style->format().setStrikeOutType( m_chooser->getStrikeOutType() );
+    m_style->format().setUnderlineLineStyle (m_chooser->getUnderlineLineStyle());
+    m_style->format().setStrikeOutLineStyle( m_chooser->getStrikeOutLineStyle() );
 
 }
 

@@ -263,7 +263,7 @@ KoTextFormat::NbLine KoFontChooser::getNblineType()
     }
 }
 
-KoTextFormat::LineType KoFontChooser::getTypeOfLine( int val)
+KoTextFormat::LineStyle KoFontChooser::getTypeOfLine( int val)
 {
     switch ( val )
     {
@@ -307,7 +307,7 @@ void KoFontChooser::setNblineType(KoTextFormat::NbLine nb)
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setUnderlineType(KoTextFormat::LineType _t)
+void KoFontChooser::setUnderlineLineStyle(KoTextFormat::LineStyle _t)
 {
     switch ( _t )
     {
@@ -335,7 +335,7 @@ void KoFontChooser::setUnderlineType(KoTextFormat::LineType _t)
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setStrikeOutType(KoTextFormat::LineType _t)
+void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::LineStyle _t)
 {
     switch ( _t )
     {
@@ -361,12 +361,12 @@ void KoFontChooser::setStrikeOutType(KoTextFormat::LineType _t)
     m_changedFlags = 0;
 }
 
-KoTextFormat::LineType KoFontChooser::getUnderlineType()
+KoTextFormat::LineStyle KoFontChooser::getUnderlineLineStyle()
 {
     return getTypeOfLine( m_underlineType->currentItem());
 }
 
-KoTextFormat::LineType KoFontChooser::getStrikeOutType()
+KoTextFormat::LineStyle KoFontChooser::getStrikeOutLineStyle()
 {
     return getTypeOfLine( m_strikeOutType->currentItem());
 }
@@ -389,8 +389,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       const QColor & backGroundColor ,
                       const QColor & underlineColor,
                       KoTextFormat::NbLine _nbLine,
-                      KoTextFormat::LineType _underlineType,
-                      KoTextFormat::LineType _strikeOutType,
+                      KoTextFormat::LineStyle _underlineType,
+                      KoTextFormat::LineStyle _strikeOutType,
                       bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
@@ -401,8 +401,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_backGroundColor( backGroundColor),
       m_underlineColor( underlineColor ),
       m_nbLine( _nbLine ),
-      m_underlineType( _underlineType ),
-      m_strikeOutType( _strikeOutType )
+      m_underlineLineStyle( _underlineType ),
+      m_strikeOutLineStyle( _strikeOutType )
 {
     setButtonText( KDialogBase::User1, i18n("Reset") );
 
@@ -432,8 +432,8 @@ void KoFontDia::slotReset()
     m_chooser->setUnderlineColor( m_underlineColor );
 
     m_chooser->setNblineType(m_nbLine);
-    m_chooser->setUnderlineType(m_underlineType);
-    m_chooser->setStrikeOutType(m_strikeOutType);
+    m_chooser->setUnderlineLineStyle(m_underlineLineStyle);
+    m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
 }
 
 #include "koFontDia.moc"
