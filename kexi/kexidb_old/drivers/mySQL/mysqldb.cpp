@@ -60,9 +60,11 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 			return rec;
 		}
 	}
-	catch(KexiDBError *err)
+	catch(KexiDBError &err)
 	{
 		kdDebug() << "MySqlDB::queryRecord(): abroating..." << endl;
+		kdDebug() << "MySqlDB::queryRecord(): cause:"<<err.message() << endl;
+
 		throw err;
 	}
 	
@@ -204,7 +206,7 @@ MySqlDB::query(QString statement)
 		if(mysql_errno(m_mysql) == 0)
 			return true;
 	}
-	throw new KexiDBError(0, mysql_error(m_mysql));
+	throw KexiDBError(0, mysql_error(m_mysql));
 //	return false;
 }
 

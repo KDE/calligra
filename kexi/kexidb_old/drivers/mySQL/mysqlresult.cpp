@@ -134,6 +134,7 @@ MySqlResult::currentRecord()
 
 MySqlResult::~MySqlResult()
 {
+	kdDebug()<<"MySqlResult::~MySqlResult()"<<endl;
 	mysql_free_result(m_result);
 }
 

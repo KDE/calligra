@@ -56,7 +56,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 {
 	public:
 		MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent=0);
-		~MySqlRecord();
+		virtual ~MySqlRecord();
 
 		//KexiDBRecord members
 //		MySqlRecord *query(KexiDB *db, QString query) static;

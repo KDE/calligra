@@ -21,6 +21,7 @@ Boston, MA 02111-1307, USA.
 #define KEXIDBRECORD_H
 
 #include "kexidbfield.h"
+#include "kdebug.h"
 
 class QVariant;
 
@@ -41,7 +42,7 @@ class KexiDBRecord
 		 *  but note, that it will be quite memory-consuming so use it with care
 		 */
 		KexiDBRecord() {};
-		virtual ~KexiDBRecord() {};
+		virtual ~KexiDBRecord() {kdDebug()<<"KexiDBRecord::~KexiDBRecord()"<<endl;};
 
 //		virtual KexiDBRecord *query(KexiDB *db, QString query) static;
 

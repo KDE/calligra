@@ -274,5 +274,6 @@ MySqlRecord::last_id()
 
 MySqlRecord::~MySqlRecord()
 {
+	kdDebug()<<"MySqlRecord::~MySqlRecord()"<<endl;
 }
 
