@@ -74,15 +74,11 @@ BEGGING: Please: can somebody enhance koScript so that a formula not only gets t
 John
 =======
 
+- Formula arguments into the Context structure
 - Pulling the cell 'result' into it's own class for future enhancements to 
-  calculation precision, new datatypes (matrix?), and cleaner code
-  --will do after 1.2
-
-- Bugfixing for the 1.2 release
-  I'm on crack - I *don't* have Excel at work and have no
-  idea why I thought I did (don't boot the windows partition too much....).  So I suppose
-  the excel filter will remain as it is.
-
+  calculation precision, new datatypes (matrix?), and cleaner code 
+- code cleanups to layout processing (KSpreadCell::makeLayout/setCellText are nightmares!)
+- evaluation of how best to increase floating point precision (GnuMP?)
 
 Philipp
 =======

@@ -12,6 +12,7 @@ Bugfixes:
 - Fix #42456 (Normal): merged cells with centered text do not survive insert/delete rows
 - Fix #45943 (Crash): crash after "money format"
 - Fix function documentation (YEAR(), FACTDOUBLE() )
+- Fix parsing and error checking for spreadsheet names.
 
 Until RC1:
 ----------
