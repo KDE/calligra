@@ -36,10 +36,11 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/store
 $(srcdir)/koFrame.cc: koffice.h
 $(srcdir)/koMainWindow.cc: koffice.h
 $(srcdir)/koApplication.cc: koffice.h
-$(srcdir)/koDocument.cc: koDocument.h
+$(srcdir)/koDocument.cc: koDocument.h 
 $(srcdir)/koIMR.cc: trader.h
 $(srcdir)/koQueryTrader.cc: typerepo.h trader.h
 $(srcdir)/koFilterManager.cc: koffice.h
+$(srcdir)/koDocument.h: koffice.h
 koffice.cc: koffice.h
 koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
