@@ -86,7 +86,9 @@ VEllipse::init()
 
 	// Translate and scale:
 	QWMatrix m;
-	m.translate( m_center.x() - m_rx, m_center.y() - m_ry );
+	//m.translate( -0.5, -0.5 );
+	//m.translate( m_center.x() - m_rx, m_center.y() - m_ry );
+	m.translate( m_center.x(), m_center.y() );
 	m.scale( 2.0 * m_rx, 2.0 * m_ry );
 
 	VTransformCmd cmd( 0L, m );

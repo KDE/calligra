@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +31,7 @@
 #include <karbon_part.h>
 #include <shapes/vellipse.h>
 #include "vellipsetool.h"
+#include "vglobal.h"
 
 
 VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
@@ -130,6 +130,9 @@ VEllipseTool::VEllipseTool( KarbonView* view )
 	// create config dialog:
 	m_optionsWidget = new VEllipseOptionsWidget( view->part() );
 	registerTool( this );
+
+	m_startAngle = m_endAngle = 0;
+	m_state = normal;
 }
 
 VEllipseTool::~VEllipseTool()
@@ -148,12 +151,13 @@ VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
+		double d1 = KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ) / 2.0;
+		double d2 = KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ) / 2.0;
 		return
 			new VEllipse(
 				0L,
-				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ),
+				KoPoint( m_center.x() - d1, m_center.y() - d2 ),
+				d1 * 2.0, d2 * 2.0,
 				(VEllipse::VEllipseType)m_optionsWidget->type(),
 				m_optionsWidget->startAngle(),
 				m_optionsWidget->endAngle() );
@@ -162,12 +166,77 @@ VEllipseTool::shape( bool interactive ) const
 		return
 			new VEllipse(
 				0L,
-				m_p,
-				m_d1,
-				m_d2,
+				KoPoint( m_center.x() - m_d1, m_center.y() - m_d2 ),
+				m_d1 * 2.0,
+				m_d2 * 2.0,
 				(VEllipse::VEllipseType)m_optionsWidget->type(),
-				m_optionsWidget->startAngle(),
-				m_optionsWidget->endAngle() );
+				m_startAngle, m_endAngle );
+}
+
+void
+VEllipseTool::mouseMove()
+{
+	if( m_state == normal )
+		return;
+
+	draw();
+
+	//recalc();
+
+	if( m_state == startangle )
+	{
+		m_startAngle = atan2( last().y() - m_center.y(), last().x() - m_center.x() );
+		m_startAngle = ( ( -VGlobal::pi_2 + m_startAngle ) / VGlobal::pi_2 ) * 90.0;
+		if( m_startAngle < 0 )
+			m_startAngle += 360.0;
+	}
+	else 
+	{
+		m_endAngle = atan2( last().y() - m_center.y(), last().x() - m_center.x() );
+		m_endAngle = ( ( -VGlobal::pi_2 + m_endAngle ) / VGlobal::pi_2 ) * 90.0;
+		if( m_endAngle < 0 )
+			m_endAngle += 360.0;
+	}
+
+	draw();
+}
+
+void
+VEllipseTool::mouseDragRelease()
+{
+	if( m_optionsWidget->type() == VEllipse::full )
+		VShapeTool::mouseDragRelease();
+
+	if( m_state == normal )
+		if( m_optionsWidget->type() != VEllipse::full )
+			m_state = startangle;
+}
+
+void
+VEllipseTool::mouseButtonPress()
+{
+	if( m_state == normal )
+	{
+		VShapeTool::mouseButtonPress();
+		m_center = first();
+	}
+}
+
+void
+VEllipseTool::mouseButtonRelease()
+{
+	if( m_optionsWidget->type() == VEllipse::full || m_state == normal )
+		VShapeTool::mouseButtonRelease();
+
+	if( m_state == startangle )
+		m_state = endangle;
+	else if( m_state == endangle )
+	{
+		VShapeTool::mouseDragRelease();
+		m_startAngle = m_endAngle = 0;
+		m_state = normal;
+	}
 }
 
 #include "vellipsetool.moc"
+

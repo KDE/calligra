@@ -71,12 +71,22 @@ public:
 	virtual QString name() { return i18n( "Ellipse Tool" ); }
 	virtual QString icon() { return "14_ellipse"; }
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
-	
+
 	virtual VComposite *shape( bool interactive = false ) const;
 	void refreshUnit();
 
+protected:
+	void mouseDragRelease();
+	void mouseMove();
+	void mouseButtonPress();
+	void mouseButtonRelease();
+
 private:
+	enum { normal, startangle, endangle } m_state;
 	VEllipseOptionsWidget *m_optionsWidget;
+	double m_startAngle;
+	double m_endAngle;
+	KoPoint m_center;
 };
 
 #endif
