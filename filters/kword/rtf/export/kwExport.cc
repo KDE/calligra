@@ -890,7 +890,7 @@ void ProcessFramesetTag ( QDomNode   myNode,
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) docData )
                           << TagProcessing ( "FORMULA",   NULL,                NULL             )
-                          << TagProcessing ( "IMAGE",     NULL,                NULL             )
+                          << TagProcessing ( "PICTURE",   NULL,                NULL             )
                           << TagProcessing ( "FRAME",     ProcessFrameTag,     (void *) &frame  );
         ProcessSubtags (myNode, tagProcessingList, outputText);
     }
@@ -912,8 +912,8 @@ void ProcessFramesetTag ( QDomNode   myNode,
                 QValueList<TagProcessing> tagProcessingList;
                 tagProcessingList << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) docData )
                                   << TagProcessing ( "FORMULA",   NULL,                NULL             )
-                                  << TagProcessing ( "IMAGE",     NULL,                NULL             )
-                                  << TagProcessing ( "FRAME",     ProcessFrameTag,     (void *) &frame   );
+                                  << TagProcessing ( "PICTURE",   NULL,                NULL             )
+                                  << TagProcessing ( "FRAME",     ProcessFrameTag,     (void *) &frame  );
                 ProcessSubtags ( myNode, tagProcessingList, cellText );
 
                 AnchoredInsert *anchoredInsert = findAnchoredInsert ( AnchoredInsert ( Table (grpMgr),
@@ -1070,7 +1070,7 @@ void ProcessDocTag ( QDomNode   myNode,
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "PAPER",        ProcessPaperTag,       (void *) &paper       )
                       << TagProcessing ( "ATTRIBUTES",   ProcessAttributesTag,  (void *) &attributes  )
-                      << TagProcessing ( "PIXMAPS",      ProcessPixmapsTag,     (void *) &docData     )
+                      << TagProcessing ( "PICTURES",     ProcessPixmapsTag,     &docData              )
                       << TagProcessing ( "STYLES",       NULL,                  NULL                  )
                       << TagProcessing ( "EMBEDDED",     NULL,                  NULL                  )
                       << TagProcessing ( "FRAMESETS",    ProcessFramesetsTag,   (void *) &docData     );
