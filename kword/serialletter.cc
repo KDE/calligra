@@ -351,22 +351,27 @@ KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataB
     QToolButton *newRecord = new QToolButton( toolbar );
     newRecord->setPixmap( BarIcon( "filenew" ) );
     newRecord->setFixedSize( newRecord->sizeHint() );
+    connect( newRecord, SIGNAL( clicked() ),
+	     this, SLOT( addRecord() ) );
     
-    QPopupMenu *menu = 0;
-    menu = new QPopupMenu( this );
-    menu->insertItem( i18n( "Add &Entry" ), this, SLOT( addEntry() ) );
-    menu->insertItem( i18n( "Add &Record" ), this, SLOT( addRecord() ) );
-    newRecord->setPopup( menu );
-    
+    QToolButton *newEntry = new QToolButton( toolbar );
+    newEntry->setPixmap( BarIcon( "filenew" ) );
+    newEntry->setFixedSize( newEntry->sizeHint() );
+    connect( newEntry, SIGNAL( clicked() ),
+	     this, SLOT( addEntry() ) );
+
     QToolButton *deleteRecord = new QToolButton( toolbar );
     deleteRecord->setPixmap( BarIcon( "delete" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
+    connect( deleteRecord, SIGNAL( clicked() ),
+	     this, SLOT( removeRecord() ) );
     
-    menu = new QPopupMenu( this );
-    menu->insertItem( i18n( "Remove &Entry" ), this, SLOT( removeEntry() ) );
-    menu->insertItem( i18n( "Remove &Record" ), this, SLOT( removeRecord() ) );
-    deleteRecord->setPopup( menu );
-    
+    QToolButton *deleteEntry = new QToolButton( toolbar );
+    deleteEntry->setPixmap( BarIcon( "delete" ) );
+    deleteEntry->setFixedSize( deleteEntry->sizeHint() );
+    connect( deleteEntry, SIGNAL( clicked() ),
+	     this, SLOT( removeEntry() ) );
+
     dbList = new KWSerialLetterEditorList( back, db );
 
     if ( db->getNumRecords() > 0 ) {
