@@ -152,7 +152,7 @@ for my $file_name ( @ARGV )
      $text =~ s/\\([^n])/\\\\$1/g;
      $text =~ s/\"/\\\"/g;
 
-     if ( $text )
+     if ( $text cmp "" )
      {
        print  q|i18n("|;
        print qq|$opt_context","|        if $opt_context;   # We have a I18N context
