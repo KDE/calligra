@@ -861,7 +861,7 @@ void KSpreadView::verticalText(bool b)
     m_pTable->setSelectionVerticalText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
     QRect r( activeTable()-> selectionRect() );
     if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
-        m_pCanvas->adjustArea();
+        m_pCanvas->adjustArea(false);
     updateEditWidget();
 }
 
@@ -1360,7 +1360,7 @@ void KSpreadView::changeAngle()
         {
         QRect r( activeTable()-> selectionRect() );
         if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
-                m_pCanvas->adjustArea();
+                m_pCanvas->adjustArea(false);
         }
 }
 

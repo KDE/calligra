@@ -2029,16 +2029,19 @@ void KSpreadCanvas::setChooseMarker( const QPoint& p )
   activeTable()->setChooseRect( QRect( p.x(), p.y(), 1, 1 ) );
 }
 
-void KSpreadCanvas::adjustArea()
+void KSpreadCanvas::adjustArea(bool makeUndo)
 {
   QRect selection( activeTable()->selectionRect() );
   QRect rect=selection;
   if(selection.left() == 0)
         rect.setCoords(markerColumn(),markerRow(),markerColumn(),markerRow() );
-  if ( !doc()->undoBuffer()->isLocked() )
+  if(makeUndo)
   {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( doc(),activeTable() , rect );
-        doc()->undoBuffer()->appendUndo( undo );
+        if ( !doc()->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( doc(),activeTable() , rect );
+                doc()->undoBuffer()->appendUndo( undo );
+        }
   }
   // Columns selected
   if( selection.left() != 0 && selection.bottom() == 0x7FFF )

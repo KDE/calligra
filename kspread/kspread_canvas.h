@@ -249,7 +249,7 @@ public:
     /**
     * Adjust a area in height and width
     */
-    void adjustArea();
+    void adjustArea(bool makeUndo=true);
 
     void equalizeRow();
     void equalizeColumn();

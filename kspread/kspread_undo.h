@@ -45,6 +45,11 @@ int columnNumber;
 int columnWidth;
 };
 
+struct textOfCell {
+int row;
+int col;
+QString text;
+};
 /**
  * Abstract base class. Every undo/redo action must
  * derive from this class.
@@ -59,7 +64,7 @@ public:
     virtual void redo() = 0;
 
     KSpreadDoc* doc() { return m_pDoc; }
-    
+
 // #### To be private
 protected:
     KSpreadDoc *m_pDoc;
@@ -205,6 +210,24 @@ protected:
     QValueList<columnSize> m_lstRedoColumn;
     QValueList<rowSize> m_lstRow;
     QValueList<rowSize> m_lstRedoRow;
+    QString m_tableName;
+};
+
+class KSpreadUndoClearCell : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoClearCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    virtual ~KSpreadUndoClearCell();
+
+    virtual void undo();
+    virtual void redo();
+
+    void createList( QValueList<textOfCell> &list, KSpreadTable* table );
+
+protected:
+    QRect m_rctRect;
+    QValueList<textOfCell> m_lstClearCell;
+    QValueList<textOfCell> m_lstRedoClearCell;
     QString m_tableName;
 };
 

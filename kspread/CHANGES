@@ -912,5 +912,6 @@ into this area
 2000-08-18-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 * Implemented Undo/Redo on column/row resizing
+* Implemented Undo/Redo on clear cell
 * Another fix for merged cells (conditionnal formatting).
 

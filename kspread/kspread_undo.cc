@@ -591,7 +591,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     listCol.clear();
     listRow.clear();
 
-    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    if( m_rctRect.bottom()==0x7FFF) // entire column(s)
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
@@ -602,7 +602,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            listCol.append(tmpSize);
         }
     }
-    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    else if(m_rctRect.right()==0x7FFF) // entire row(s)
     {
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
@@ -613,7 +613,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
            listRow.append(tmpSize);
         }
     }
-    else //ligne et colonne
+    else //row and column
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
@@ -731,3 +731,77 @@ void KSpreadUndoResizeColRow::redo()
 
     doc()->undoBuffer()->unlock();
 }
+
+KSpreadUndoClearCell::KSpreadUndoClearCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
+    KSpreadUndoAction( _doc )
+{
+  m_rctRect = _selection;
+  m_tableName = _table->name();
+
+  createList( m_lstClearCell, _table );
+}
+
+void KSpreadUndoClearCell::createList( QValueList<textOfCell> &list, KSpreadTable* table )
+{
+    list.clear();
+    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
+        {
+                KSpreadCell *cell = table->nonDefaultCell( x, y );
+                textOfCell tmpText;
+                tmpText.col=x;
+                tmpText.row=y;
+                tmpText.text=cell->text();
+                list.append(tmpText);
+        }
+}
+
+KSpreadUndoClearCell::~KSpreadUndoClearCell()
+{
+}
+
+void KSpreadUndoClearCell::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    createList( m_lstRedoClearCell, table );
+
+
+    QValueList<textOfCell>::Iterator it2;
+    for ( it2 = m_lstClearCell.begin(); it2 != m_lstClearCell.end(); ++it2 )
+    {
+        KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
+        if ( (*it2).text.isNull() )
+	       cell->setCellText( "" );
+        else
+	       cell->setCellText( (*it2).text );
+    }
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoClearCell::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    QValueList<textOfCell>::Iterator it2;
+    for ( it2 = m_lstRedoClearCell.begin(); it2 != m_lstRedoClearCell.end(); ++it2 )
+    {
+        KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
+        if ( (*it2).text.isNull() )
+	       cell->setCellText( "" );
+        else
+	       cell->setCellText( (*it2).text );
+    }
+
+    doc()->undoBuffer()->unlock();
+}
+
