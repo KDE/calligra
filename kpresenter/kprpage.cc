@@ -3613,6 +3613,8 @@ void KPrPage::changeTabStopValue ( double _tabStop )
 
 KPObject *KPrPage::nextTextObject(KPTextObject *obj)
 {
+    if ( m_objectList.count()==0 )
+        return 0L;
     int pos = -1;
     if ( obj )
         pos = m_objectList.findNextRef(obj);
