@@ -125,6 +125,7 @@ protected:
     QComboBox *brushStyle;
     KColorButton *brushColor;
     KWBrushStylePreview *brushPreview;
+    QCheckBox *overwriteColor;
 
     KWFrame *frame;
     QPtrList<KWFrame> allFrames;
