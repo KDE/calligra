@@ -228,35 +228,6 @@ void GPolygon::draw (Painter& p, bool withBasePoints) {
   p.restore ();
 }
 
-void GPolygon::writeToPS (ostream& os) {
-  GObject::writeToPS (os);
-  if (kind == PK_Polygon || outlineInfo.roundness == 0) {
-    os << '[';
-    for (int i = points.count () - 1; i >= 0; i--) {
-      Coord* c = points.at (i);
-      os << ' ' << c->x () << ' ' << c->y ();
-    }
-    os << "]" 
-       << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
-       << " DrawPolygon\n";
-  }
-  else {
-    Coord *c1 = points.at (0);
-    Coord *c2 = points.at (2);
-    if (c1->x () < c2->x ())
-      os << c1->x () << ' ' << c1->y () << ' '
-         << c2->x () << ' ' << c2->y () << ' ';
-    else
-      os << c2->x () << ' ' << c2->y () << ' '
-	 << c1->x () << ' ' << c1->y () << ' ';
-    os << (fillInfo.fstyle == GObject::FillInfo::NoFill ? "false" : "true");
-    if (outlineInfo.roundness == 100)
-      os << " DrawEllipse\n";
-    else
-      os << ' ' << outlineInfo.roundness << " DrawRoundedRect\n";
-  }
-}
-
 bool GPolygon::contains (const Coord& p) {
   if (box.contains (p)) {
     QPoint pp = iMatrix.map (QPoint ((int) p.x (), (int) p.y ()));
@@ -487,8 +458,52 @@ void GPolygon::updateGradientShape (QPainter& p) {
 				     qRound (points.at (i)->y ())));
     pnts.setPoint (i, pnt);
   }
-  QRegion region (pnts);
-  gShape.setRegion (region);
+  
+  if (kind == PK_Polygon || 
+      (kind != PK_Polygon && (Roundness == 0 || Roundness == 100))) {
+    if (kind == PK_Polygon || Roundness == 0) {
+      QRegion region (pnts);
+      gShape.setRegion (region);
+    }
+    else if (Roundness == 100) {
+      // special case: ellipse
+      unsigned int w, h;
+      w = pnts.point (2).x () - pnts.point (0).x ();
+      h = pnts.point (2).y () - pnts.point (0).y ();
+      QRect rect (pnts.point (0).x (), pnts.point (0).y (), w, h);
+      QRegion region (rect.normalize (), QRegion::Ellipse);
+      gShape.setRegion (region);
+    }
+  }
+  else if (kind != PK_Polygon) {
+    unsigned int w, h;
+    w = pnts.point (2).x () - pnts.point (0).x ();
+    h = pnts.point (2).y () - pnts.point (0).y ();
+    QRect rect (pnts.point (0), pnts.point (2));
+    QRect nrect = rect.normalize ();
+
+    float xrad = nrect.width () * Roundness / 200.0;
+    float yrad = nrect.height () * Roundness / 200.0;
+
+    QRect clip1 (nrect.x (), nrect.y () + yrad, 
+		 nrect.width (), nrect.height () - 2 * yrad);
+    QRect clip2 (nrect.x () + xrad, nrect.y (), 
+		 nrect.width () - 2 * xrad, nrect.height ());
+    
+
+    QRegion region (clip1);
+    region = region.unite (QRegion (clip2));
+    region = region.unite (QRegion (nrect.x (), nrect.y (), 
+				    xrad * 2 , yrad * 2, QRegion::Ellipse));
+    region = region.unite (QRegion (nrect.right () - (2 * xrad), nrect.y (), 
+				    xrad * 2, yrad * 2, QRegion::Ellipse));
+    region = region.unite (QRegion (nrect.x (), nrect.bottom () - (2 * yrad), 
+				    xrad * 2, yrad * 2, QRegion::Ellipse));
+    region = region.unite (QRegion (nrect.right () - (2 * xrad), 
+				    nrect.bottom () - (2 * yrad), 
+				    xrad * 2, yrad * 2, QRegion::Ellipse));
+    gShape.setRegion (region);
+  }
 
   // update the gradient information
   gShape.setGradient (fillInfo.gradient);

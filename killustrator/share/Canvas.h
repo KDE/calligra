@@ -68,9 +68,6 @@ public:
   
   void printDocument ();
 
-  void printPSDocument ();
-  void writePSHeader (ostream& os);
-
   void zoomIn (int x, int y);
   void zoomOut ();
 

@@ -94,20 +94,6 @@ void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
   p.restore ();
 }
 
-void Arrow::writeToPS (ostream& os, const Coord& c, 
-		       const QColor& color, float width, float angle) {
-  os << "matrix currentmatrix\n";
-  os << c.x () << ' ' << c.y () << " translate\n"
-     << angle << " rotate\n"
-     << width << ' ' << width << " scale\n";
-  os << "[ ";
-  for (int i = points.size () - 1; i >= 0; i--) {
-    os << points[i].x () << ' ' 
-       << points[i].y () << ' ';
-  }
-  os << "] " << (fill ? "true" : "false") << " DrawPolygon\n"; 
-}
-
 void Arrow::install (Arrow* arrow) {
   arrows.insert (arrow->arrowID (), arrow);
 }

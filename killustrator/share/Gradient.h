@@ -48,8 +48,12 @@ public:
   QPixmap createPixmap (unsigned int width, unsigned int height);
 
 private:
-  void createLinearGradient (QPainter& p, unsigned int width, 
-			     unsigned int height);
+  void createHVGradient (QPainter& p, unsigned int width, 
+			 unsigned int height);
+  void createRadGradient (QPainter& p, unsigned int width, 
+			  unsigned int height);
+  void createRectGradient (QPainter& p, unsigned int width, 
+			   unsigned int height);
 
   QColor color1, color2;
   Style style;

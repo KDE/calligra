@@ -1,9 +1,6 @@
 INCLUDES= $(all_includes) -I.. 
 
-EXTRA_DIST = prolog.ps.in $(data_DATA)
-
 datadir = $(kde_datadir)/killustrator
-data_DATA = prolog.ps fontmap
 
 noinst_LIBRARIES = libkillu.a
 
@@ -93,9 +90,6 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		DocumentInfo.moc BrushCells.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
-
-prolog.ps: prolog.ps.in
-	perl ../cleanup_ps < prolog.ps.in > prolog.ps
 
 SUFFIXES = .moc .h
 

@@ -162,25 +162,6 @@ void GPolyline::draw (Painter& p, bool withBasePoints) {
   p.restore ();
 }
 
-void GPolyline::writeToPS (ostream& os) {
-  GObject::writeToPS (os);
-  os << '[';
-  for (int i = points.count () - 1; i >= 0; i--) {
-    Coord* c = points.at (i);
-    os << ' ' << c->x () << ' ' << c->y ();
-  }
-  os << "] DrawPolyline\n";
-  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
-  if (sArrow != 0L) {
-    Coord p1 = points.at (0)->transform (tmpMatrix);
-    sArrow->writeToPS (os, p1, outlineInfo.color, w, sAngle);
-  }
-  if (eArrow != 0L) {
-    Coord p2 = points.at (points.count () - 1)->transform (tmpMatrix);
-    eArrow->writeToPS (os, p2, outlineInfo.color, w, eAngle);
-  }
-}
-
 bool GPolyline::contains (const Coord& p) {
   float x1, x2, y1, y2, m, n, xp, yp;
 

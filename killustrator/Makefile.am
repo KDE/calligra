@@ -6,7 +6,7 @@ SUBDIRS = share filter xmlutils standalone koffice pics doc
 AUTOMAKE_OPTIONS = foreign
 
 # only Tom may know, why make dist forgets configure
-EXTRA_DIST = README sample.wmf sample2.wmf arrow01.wmf cleanup_ps BUGS kiml.dtd killustrator.lsm killustrator.gif configure
+EXTRA_DIST = README sample.wmf sample2.wmf arrow01.wmf BUGS kiml.dtd killustrator.lsm killustrator.gif configure
 
 messages:
 	$(XGETTEXT) -C -ktranslate -ki18n -x$(includedir)/kde.pot */*.cc && mv messages.po ../po/killustrator.pot

@@ -145,14 +145,6 @@ void GGroup::propagateProperties (GObject::Property prop, int mask) {
     }
 }
 
-void GGroup::writeToPS (ostream& os) {
-  GObject::writeToPS (os);
-    list<GObject*>::iterator i = members.begin ();
-    for (; i != members.end (); i++)
-	(*i)->writeToPS (os);
-  os << "setmatrix\n";
-}
-
 void GGroup::writeToXml (XmlWriter& xml) {
   xml.startTag ("group", false);
 

@@ -281,8 +281,6 @@ public:
   void setLayer (GLayer* l);
   GLayer* getLayer () { return layer; }
 
-  virtual void writeToPS (ostream& os);
-
   void writePropertiesToXml (XmlWriter& xml);
 
   void ref ();

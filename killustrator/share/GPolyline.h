@@ -67,8 +67,6 @@ public:
 
   virtual GObject* copy ();
 
-  virtual void writeToPS (ostream& os);
-
   virtual void writeToXml (XmlWriter&);
 
   virtual bool findNearestPoint (const Coord& p, float max_dist, 

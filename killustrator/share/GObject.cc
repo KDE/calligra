@@ -314,25 +314,6 @@ void GObject::setLayer (GLayer* l) {
   layer = l;
 }
 
-void GObject::writeToPS (ostream& os) {
-  // line width
-  os << outlineInfo.width << " setlinewidth\n";
-  // pen style
-  os << (int) outlineInfo.style << " SPSt\n";
-  // outline color
-  os << outlineInfo.color.red () / 255.0 << ' ' 
-     << outlineInfo.color.green () / 255.0
-     << ' ' << outlineInfo.color.blue () / 255.0 << " DOCol\n";
-  // fill color
-  os << fillInfo.color.red () / 255.0 << ' ' 
-     << fillInfo.color.green () / 255.0
-     << ' ' << fillInfo.color.blue () / 255.0 << " DFCol\n";
-  // transformation matrix
-  os << '[' << tMatrix.m11 () << ' ' << tMatrix.m12 () << ' ' 
-     << tMatrix.m21 () << ' ' << tMatrix.m22 () << ' '
-     << tMatrix.dx () << ' ' << tMatrix.dy () << "] SMatrix\n";
-}
-
 void GObject::updateBoundingBox (const Rect& r) {
   box = r.normalize ();
 }

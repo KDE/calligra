@@ -25,10 +25,6 @@
 #include <qpainter.h>
 #include "Gradient.h"
 
-enum { 
-    Horizontal, Vertical, Radial, Rectangular, Diagonal1, Diagonal2 
-  } Style;
-
 Gradient::Gradient (const QColor& c1, const QColor& c2, Style s) 
   : color1 (c1), color2 (c2), style (s) {
 }
@@ -64,7 +60,13 @@ QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
   switch (style) {
   case Horizontal:
   case Vertical:
-    createLinearGradient (p, width, height);
+    createHVGradient (p, width, height);
+    break;
+  case Radial:
+    createRadGradient (p, width, height);
+    break;
+  case Rectangular:
+    createRectGradient (p, width, height);
     break;
   default:
     break;
@@ -73,8 +75,8 @@ QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
   return pix;
 }
 
-void Gradient::createLinearGradient (QPainter& p, unsigned int width, 
-					 unsigned int height) {
+void Gradient::createHVGradient (QPainter& p, unsigned int width, 
+				 unsigned int height) {
   QColor col;
   QPen pen;
   double delta, dd;
@@ -104,5 +106,77 @@ void Gradient::createLinearGradient (QPainter& p, unsigned int width,
       p.drawLine (x, 0, x, height);
     else
       p.drawLine (0, x, width, x);
+  }
+}
+
+void Gradient::createRadGradient (QPainter& p, unsigned int width, 
+				 unsigned int height) {
+  QColor col;
+  QPen pen;
+  double delta, dd, scalx = 1.0, scaly = 1.0;
+  int r, g, b;
+
+  dd = QMAX(width, height) / 2.0;
+  delta = 1.0 / dd;
+  if (width > height)
+      scaly = (double) height / (double) width;
+  else
+      scalx  = (double) width / (double) height;
+
+  int rdiff = color1.red () - color2.red ();
+  int gdiff = color1.green () - color2.green ();
+  int bdiff = color1.blue () - color2.blue ();
+
+  unsigned int mx = width / 2;
+  unsigned int my = height / 2;
+  unsigned int dx, dy;
+
+  for (double d = 1.0; d > 0.0; d -= delta) {
+    r = color1.red () - qRound (rdiff * d);
+    g = color1.green () - qRound (gdiff * d);
+    b = color1.blue () - qRound (bdiff * d);
+    col.setRgb (r, g, b);
+    pen.setColor (col);
+    p.setPen (pen);
+    p.setBrush (col);
+    dx = qRound (dd * d * scalx);
+    dy = qRound (dd * d * scaly);
+    p.drawEllipse (mx - dx, my - dy, dx * 2, dy * 2);
+  }
+}
+
+void Gradient::createRectGradient (QPainter& p, unsigned int width, 
+				   unsigned int height) {
+  QColor col;
+  QPen pen;
+  double delta, dd, scalx = 1.0, scaly = 1.0;
+  int r, g, b;
+
+  dd = QMAX(width, height) / 2.0;
+  delta = 1.0 / dd;
+  if (width > height)
+      scaly = (double) height / (double) width;
+  else
+      scalx  = (double) width / (double) height;
+
+  int rdiff = color1.red () - color2.red ();
+  int gdiff = color1.green () - color2.green ();
+  int bdiff = color1.blue () - color2.blue ();
+
+  unsigned int mx = width / 2;
+  unsigned int my = height / 2;
+  unsigned int dx, dy;
+
+  for (double d = 1.0; d > 0.0; d -= delta) {
+    r = color1.red () - qRound (rdiff * d);
+    g = color1.green () - qRound (gdiff * d);
+    b = color1.blue () - qRound (bdiff * d);
+    col.setRgb (r, g, b);
+    pen.setColor (col);
+    p.setPen (pen);
+    p.setBrush (col);
+    dx = qRound (dd * d * scalx);
+    dy = qRound (dd * d * scaly);
+    p.drawRect (mx - dx, my - dy, dx * 2, dy * 2);
   }
 }

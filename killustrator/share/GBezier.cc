@@ -399,29 +399,6 @@ int GBezier::cPoint (int idx) {
     return idx + (isEndPoint (idx + 1) ? 2 : -2); 
 }
 
-void GBezier::writeToPS (ostream& os) {
-  GObject::writeToPS (os);
-  os << points.at (1)->x () << ' ' << points.at (1)->y () << " moveto\n";
-  unsigned int num = points.count ();
-  for (unsigned int i = 2; i < num - 2; i += 3) {
-    for (unsigned int j = 0; j < 3; j++) 
-      os << points.at (i + j)->x () << ' '
-         << points.at (i + j)->y () << ' ';
-    os << "curveto\n";
-  }
-  os << "SOCol stroke\n";
-  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
-  if (sArrow != 0L) {
-    Coord p1 = points.at (1)->transform (tmpMatrix);
-    sArrow->writeToPS (os, p1, outlineInfo.color, w, sAngle);
-  }
-  if (eArrow != 0L) {
-    Coord p2 = points.at (points.count () - 2)->transform (tmpMatrix);
-    eArrow->writeToPS (os, p2, outlineInfo.color, w, eAngle);
-  }
-  os << "setmatrix\n";
-}
-
 void GBezier::writeToXml (XmlWriter& xml) {
   xml.startTag ("bezier", false);
   writePropertiesToXml (xml);

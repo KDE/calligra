@@ -30,16 +30,13 @@
 #include <set>
 
 #include <stdio.h>
-#include <fstream.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <qprinter.h>
-#include <qdatetime.h>
 #include <qglobal.h>
 #include "version.h"
 #include "Painter.h"
 #include "EPSExport.h"
-#include "Canvas.h"
 
 EPSExport::EPSExport () {
 }
@@ -52,52 +49,40 @@ bool EPSExport::setup (GDocument *doc, const char* fmt) {
 }
 
 bool EPSExport::exportToFile (GDocument* doc) {
-  ofstream epsStream (outputFileName ());
-  if (!epsStream)
-    return false;
-
   // compute bounding box
   Rect box = doc->boundingBoxForAllObjects ();
 
-  if (box.left () > 0) box.left (box.left () - 1);
-  if (box.top () > 0) box.top (box.top () - 1);
-  box.right (box.right () + 2);
-  box.bottom (box.bottom () + 2);
-
-  // write header
-  epsStream  << "%!PS-Adobe-2.0 EPSF-2.0\n"
-	     << "%%Title: " << (const char *) doc->fileName () << "\n"
-	     << "%%Creator: KIllustrator " << APP_VERSION << "\n"
-	     << "%%CreationDate: " << QDateTime::currentDateTime ().toString ()
-	     << '\n'
-	     << "%%BoundingBox: " 
-	     << qRound (box.left ()) << ' '
-	     << qRound (doc->getPaperHeight () - box.bottom ()) << ' '
-	     << qRound (box.right ()) << ' '
-	     << qRound (doc->getPaperHeight () - box.top ()) << '\n'
-	     << "%%EndComments"
-	     << endl;
-
-  // write prolog
-  if (! GDocument::writePSProlog (epsStream))
-    return false;
-
-  epsStream << "/PaperWidth " << doc->getPaperWidth () << " def\n"
-            << "/PaperHeight " << doc->getPaperHeight () << " def\n"
-            << "InitTMatrix\n";
-
-  set<string> reqFonts;
-  if (doc->requiredFonts (reqFonts)) {
-    set<string>::iterator i = reqFonts.begin ();
-    for (; i != reqFonts.end (); i++) {
-      const char* fontName = i->c_str ();
-      epsStream << i->c_str () << " /_" << &fontName[1] << " TransFont\n";
-    }
+  QPrinter printer;
+  printer.setDocName (doc->fileName ());
+  printer.setCreator ("KIllustrator");
+  printer.setOutputFileName (outputFileName ());
+  printer.setOutputToFile (true);
+  switch (doc->pageLayout ().format) {
+  case PG_DIN_A4:
+    printer.setPageSize (QPrinter::A4);
+    break;
+  case PG_DIN_A5:
+    printer.setPageSize (QPrinter::B5);
+    break;
+  case PG_US_LETTER:
+    printer.setPageSize (QPrinter::Letter);
+    break;
+  case PG_US_LEGAL:
+    printer.setPageSize (QPrinter::Legal);
+    break;
+  default:
+    break;
   }
+  printer.setOrientation (doc->pageLayout ().orientation == PG_PORTRAIT ?
+			  QPrinter::Portrait : QPrinter::Landscape);
 
-  // write objects
-  doc->writeToPS (epsStream);
-
-  epsStream << "%%EOF" << endl;
+  Painter paint;
+  paint.begin (&printer);
+  // define the bounding box as clipping region
+  paint.setClipRect (0, 0, box.width (), box.height ());
+  // and move the objects to the origin
+  paint.translate (-box.left (), -box.top ());
+  doc->drawContents (paint);
+  paint.end ();
   return true;
 }

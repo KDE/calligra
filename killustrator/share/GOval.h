@@ -59,7 +59,6 @@ public:
 
   virtual GObject* copy ();
 
-  virtual void writeToPS (ostream& os);
   virtual void writeToXml (XmlWriter&);
 
   virtual int getNeighbourPoint (const Coord& p);

@@ -53,7 +53,6 @@ public:
 
   virtual GObject* copy ();
 
-  virtual void writeToPS (ostream& os);
   virtual void writeToXml (XmlWriter&);
 
   const list<GObject*>& getMembers() { return members; }

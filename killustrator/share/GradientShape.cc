@@ -36,7 +36,7 @@ void GradientShape::setRegion (const QRegion& r) {
 }
 
 void GradientShape::setBox (const Rect& r) {
-  box = r;
+  box = r.normalize ();
   setInvalid ();
 }
 

@@ -3,10 +3,11 @@
 * Laden/Speichern von Fuellstilen [10/28/98]
 * im Editpoint-Mode nur selektierte Objekte mit basePoints [10/28/98]
 * Undo fuer UngroupCmd [10/28/98]
-* Gradientfuellen fuer abgerundete Rechtecke und Kreissegmente
+* Gradientfuellen fuer abgerundete Rechtecke [10/31/98]
+* EPS-Export ueber Qt-PostScript-Ausgabe [10/31/98]
+* Gradientfuellen fuer Kreissegmente
 * geschlossene Bezierkurven
 
 * Drucken fuer KOffice
 * Clipart-Browser
-* EPS-Export ueber Qt-PostScript-Ausgabe
 * XFig-Import von Splines, Pfeilen und Fuellstilen

@@ -135,12 +135,6 @@ public:
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
 
-  bool requiredFonts (set<string>& fonts);
-
-  void writeToPS (ostream& os);
-  static const char* getPSFont (const QFont& qfont);
-  static bool writePSProlog (ostream& os);
-
   void printInfo (QString& s);
   
 protected:
@@ -171,9 +165,6 @@ private:
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
-
-  static QString psPrologPath;
-  static QDict<QString> fontMap;
 };
 
 #endif 

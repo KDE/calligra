@@ -49,9 +49,8 @@
 
 #define SOLID_BOX    0
 #define PATTERN_BOX  1
-#define TILE_BOX     2
-#define GRADIENT_BOX 3
-#define NOFILL_BOX   4
+#define GRADIENT_BOX 2
+#define NOFILL_BOX   3
 
 PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc, 
 				QWidget* parent, const char* name) : 
@@ -372,8 +371,8 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   group->setExclusive (true);
   group->move (10, 10);
 
-  const char *msg[] = { "Solid", "Pattern", "Tile", "Gradient", "No Fill" };
-  for (int i = 0; i < 5; i++) {
+  const char *msg[] = { "Solid", "Pattern", "Gradient", "No Fill" };
+  for (int i = 0; i < 4; i++) {
     fillStyleBttn[i] = new QRadioButton (group);
     fillStyleBttn[i]->setText (msg[i]);
     fillStyleBttn[i]->move (10, i * 30);
@@ -420,11 +419,13 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   box->setTitle (i18n ("No Fill"));
   wstack->addWidget (box, NOFILL_BOX);
 
+#if 0
   // ------ Tile Fill ------
   box = new QGroupBox (group);
   box->setGeometry (0, 0, 300, 300);
   box->setTitle (i18n ("Tile Fill"));
   wstack->addWidget (box, TILE_BOX);
+#endif
 
   // ------ Gradient Fill ------
   box = new QGroupBox (group);
@@ -461,8 +462,8 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   gradStyleCombo->insertItem (i18n ("Vertical"));
   gradStyleCombo->insertItem (i18n ("Radial"));
   gradStyleCombo->insertItem (i18n ("Rectangular"));
-  gradStyleCombo->insertItem (i18n ("Diagonal 1"));
-  gradStyleCombo->insertItem (i18n ("Diagonal 2"));
+  //  gradStyleCombo->insertItem (i18n ("Diagonal 1"));
+  //  gradStyleCombo->insertItem (i18n ("Diagonal 2"));
   connect (gradStyleCombo, SIGNAL(activated(int)), 
 	   this, SLOT(gradientStyleChanged(int)));
   QFrame* frame = new QFrame (box);
@@ -649,8 +650,8 @@ void PropertyEditor::readProperties () {
 	  gradColor1Bttn->setColor (g.getColor1 ());
 	  gradColor2Bttn->setColor (g.getColor2 ());
 	  gradStyleCombo->setCurrentItem ((int) g.getStyle ());
-	  wstack->raiseWidget (GRADIENT_BOX);
 	  updateGradient ();
+	  wstack->raiseWidget (GRADIENT_BOX);
 	}
 	break;
       case GObject::FillInfo::PatternFill:
@@ -744,9 +745,11 @@ void PropertyEditor::updateGradient () {
     Gradient::Rectangular, Gradient::Diagonal1, Gradient::Diagonal2 
   };
 
-  if (gradient == 0L)
-    gradient = new Gradient (gradColor1Bttn->color (), 
-			     gradColor2Bttn->color (), Gradient::Horizontal);
+  if (gradient == 0L) {
+      gradient = new Gradient (gradColor1Bttn->color (), 
+			       gradColor2Bttn->color (), Gradient::Horizontal);
+      gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
+  }
   else {
     gradient->setColor1 (gradColor1Bttn->color ());
     gradient->setColor2 (gradColor2Bttn->color ());

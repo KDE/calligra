@@ -108,7 +108,8 @@ void GOval::draw (Painter& p, bool withBasePoints) {
   if (! workInProgress ()) {
     initBrush (brush);
     p.setBrush (brush);
-    if (gradientFill ()) {
+    if (gradientFill () && 
+	outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
       if (! gShape.valid ())
 	updateGradientShape (p);
       gShape.draw (p);
@@ -149,30 +150,6 @@ void GOval::draw (Painter& p, bool withBasePoints) {
     }
   }
   p.restore ();
-}
-
-void GOval::writeToPS (ostream& os) {
-  GObject::writeToPS (os);
-  if (sPoint.x () < ePoint.x ())
-    os << sPoint.x () << ' ' << sPoint.y () << ' '
-       << ePoint.x () << ' ' << ePoint.y () << ' ';
-  else
-    os << ePoint.x () << ' ' << ePoint.y () << ' '
-       << sPoint.x () << ' ' << sPoint.y () << ' ';
-  switch (outlineInfo.shape) {
-  case GObject::OutlineInfo::PieShape:
-    os << sAngle << ' ' << eAngle
-       << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
-       << " DrawPie\n";
-    break;
-  case GObject::OutlineInfo::ArcShape:
-    os << sAngle << ' ' << eAngle << " DrawArc\n";
-    break;
-  case GObject::OutlineInfo::DefaultShape:
-    os << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
-       << " DrawEllipse\n";
-    break;
-  }
 }
 
 bool GOval::contains (const Coord& p) {
@@ -317,6 +294,8 @@ void GOval::movePoint (int idx, float dx, float dy) {
   else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
     outlineInfo.shape = GObject::OutlineInfo::ArcShape;
 
+  gShape.setInvalid ();
+
   updateRegion ();
 }
 
@@ -377,7 +356,99 @@ void GOval::updateGradientShape (QPainter& p) {
   case GObject::OutlineInfo::DefaultShape:
     gShape.setRegion (QRegion (matrix.map (rect), QRegion::Ellipse));
     break;
+  case GObject::OutlineInfo::PieShape:
+    {
+      QRegion region (QRegion (matrix.map (rect), QRegion::Ellipse));
+      float a = fabs (sAngle - eAngle);
+      
+      // polygon for clipping
+      QPointArray pnts (5);
+      float x, y;
+      
+      // center
+      Rect r (sPoint, ePoint);
+      r = r.normalize ();
+      Coord m = r.center ();
+	
+      // point #0: center
+      pnts.setPoint (0, QPoint (qRound (m.x ()), qRound (m.y ())));
+      // point #1: segPoint[0]
+      pnts.setPoint (1, QPoint (qRound (segPoint[0].x ()), 
+				qRound (segPoint[0].y ())));
+      // point #4: segPoint[1]
+      pnts.setPoint (4, QPoint (qRound (segPoint[1].x ()), 
+				qRound (segPoint[1].y ())));
+
+      if ((sAngle >= eAngle && a >= 180) || (sAngle < eAngle && a <= 180)) {
+#define WINKEL 90.0
+	// point #2
+	float x1 = m.x () - segPoint[0].x ();
+	float y1 = m.y () - segPoint[0].y ();
+	
+	// x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
+	// y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
+	x = y1; y = -x1;
+
+	x *= 1.5; y *= 1.5;
+
+	x += segPoint[0].x ();
+	y += segPoint[0].y ();
+
+	pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
+
+	// point #3
+	x1 = m.x () - segPoint[1].x ();
+	y1 = m.y () - segPoint[1].y ();
+	
+	x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
+	y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
+	
+	x *= 1.5; y *= 1.5;
+
+	x += segPoint[1].x ();
+	y += segPoint[1].y ();
+
+	pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
+
+	region = region.subtract (QRegion (matrix.map (pnts)));
+      }
+      else {
+	// point #2
+	float x1 = m.x () - segPoint[0].x ();
+	float y1 = m.y () - segPoint[0].y ();
+	
+	// x = x1 * cos (WINKEL) - y1 * sin (WINKEL);
+	// y = x1 * sin (WINKEL) + y1 * cos (WINKEL);
+	x = -y1;
+	y = x1;
+
+	x *= 1.5; y *= 1.5;
+
+	x += segPoint[0].x ();
+	y += segPoint[0].y ();
+
+	pnts.setPoint (2, QPoint (qRound (x), qRound (y)));
+
+	// point #3
+	x1 = m.x () - segPoint[1].x ();
+	y1 = m.y () - segPoint[1].y ();
+	
+	x = x1 * cos (-WINKEL) - y1 * sin (-WINKEL);
+	y = x1 * sin (-WINKEL) + y1 * cos (-WINKEL);
+	
+	x *= 1.5; y *= 1.5;
+
+	x += segPoint[1].x ();
+	y += segPoint[1].y ();
+
+	pnts.setPoint (3, QPoint (qRound (x), qRound (y)));
+	region = region.intersect (QRegion (matrix.map (pnts)));
+      }
+      gShape.setRegion (region);
+      break;
+    }
   default:
+    return;
     break;
   }
 

@@ -25,6 +25,7 @@
 #include <fstream.h>
 #include <qkeycode.h>
 #include <qstrlist.h>
+#include <qfileinfo.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -145,6 +146,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
 					       PreviewPixmap);
     previewHandlerRegistered = true;
   }
+
+  setFileCaption (UNNAMED_FILE);
 
   if (url != 0L)
     openURL (url);
@@ -1073,6 +1076,10 @@ void KIllustrator::importFromFile (int id) {
   QString fname = KFilePreviewDialog::getOpenFileName (0, (const char *) mask,
 						       this);
   if (! fname.isEmpty ()) {
+    QFileInfo finfo ((const char *) fname);
+    if (!finfo.isFile () || !finfo.isReadable ())
+      return;
+
     ImportFilter* filter = filterInfo->importFilter ();
     
     if (filter && filter->setup (document, format)) {

@@ -46,12 +46,16 @@ void PasteCmd::execute () {
     objects.clear ();
     const char* buf = QApplication::clipboard ()->text ();
     if (::strlen (buf)) {
+      QWMatrix m;
+      m.translate (10, 10);
+
       istrstream is (buf);
       document->insertFromXml (is, objects);
       document->unselectAllObjects ();
       for (list<GObject*>::iterator it = objects.begin ();
 	   it != objects.end (); it++) {
 	(*it)->ref ();
+	(*it)->transform (m, true);
 	document->selectObject (*it);
       }
     }

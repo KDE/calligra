@@ -152,48 +152,6 @@ void GText::draw (Painter& p, bool) {
   p.restore ();
 }
 
-void GText::writeToPS (ostream &os) {
-  GObject::writeToPS (os);
-  QListIterator<QString> it (text);
-  os << "[ ";
-  for (; it.current (); ++it) {
-    QString& s = *it.current ();
-    os << "(";
-    for (unsigned int i = 0; i < s.length (); i++) {
-      switch (s[i]) {
-      case '(':
-        os << "\\("; break;
-      case ')':
-        os << "\\)"; break;
-      case '\\':
-        os << "\\\\"; break;
-      case 'ä':
-        os << "\\203"; break;
-      case 'ö':
-        os << "\\204"; break;
-      case 'ü':
-        os << "\\205"; break;
-      case 'Ä':
-        os << "\\200"; break;
-      case 'Ö':
-        os << "\\201"; break;
-      case 'Ü':
-        os << "\\202"; break;
-      case 'ß':
-        os << "\\373"; break;
-      default:
-        os << s[i]; break;
-      }
-    }
-    os << ")";
-  }
-  const char* fontName = GDocument::getPSFont (textInfo.font);
-  os << " ] " << opos.x () << ' ' << opos.y () << ' '
-     << (int) textInfo.align << " /_"
-     << &fontName[1] << ' ' << textInfo.font.pointSize () 
-     << " DrawText\n";
-}
-
 void GText::setCursor (int x, int y) {
   if (y >= 0 && y < (int) text.count ())
     cursy = y;

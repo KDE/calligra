@@ -68,7 +68,6 @@ public:
 
   virtual GObject* copy ();
 
-  virtual void writeToPS (ostream& os);
   virtual void writeToXml (XmlWriter&);
 
 protected:
