@@ -1052,3 +1052,5 @@ Now you can apply parameters at a entire column/row
 2000-11-07-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can hide zero value, it's an option (kspread_dlg_preference -> hide zero)
+-Now you can convert first letter in upper case (kspread_dlg_preference-> "convert ...")
+-You can used special paste on a column/row

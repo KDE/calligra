@@ -517,6 +517,9 @@ public:
 
     void setHideZero(bool _hideZero) {m_bHideZero=_hideZero;}
 
+    bool getFirstLetterUpper() {return m_bFirstLetterUpper;}
+
+    void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
 
     void mergeCell( const QPoint &_marker );
     void dissociateCell( const QPoint &_marker, bool makeUndo=true );
@@ -924,6 +927,7 @@ protected:
     bool m_bLcMode;
     bool m_bShowColumnNumber;
     bool m_bHideZero;
+    bool m_bFirstLetterUpper;
 
     KSpreadLayout* m_defaultLayout;
 

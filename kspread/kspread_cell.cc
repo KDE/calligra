@@ -3954,6 +3954,8 @@ void KSpreadCell::checkValue()
         return;
     }
 
+    if(m_pTable->getFirstLetterUpper())
+        m_strText=m_strText[0].upper()+m_strText.right(m_strText.length()-1);
     //default format
     setFormatNumber(Number);
 }

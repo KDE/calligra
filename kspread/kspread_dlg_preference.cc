@@ -70,6 +70,10 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
   lay1->addWidget(m_pHideZero);
   m_pHideZero->setChecked(m_pView->activeTable()->getHideZero());
 
+  m_pFirstLetterUpper= new QCheckBox(i18n("Convert first letter to upper case"),tmpQGroupBox);
+  lay1->addWidget(m_pFirstLetterUpper);
+  m_pFirstLetterUpper->setChecked(m_pView->activeTable()->getFirstLetterUpper());
+
   box->addWidget( tmpQGroupBox);
 
   KButtonBox *bb = new KButtonBox( this );
@@ -92,7 +96,8 @@ void KSpreadpreference::slotOk()
   && m_pView->activeTable()->getShowFormular()==m_pFormula->isChecked()
   && m_pView->activeTable()->getAutoCalc()==m_pAutoCalc->isChecked()
   && m_pView->activeTable()->getShowGrid()==m_pGrid->isChecked()
-  && m_pView->activeTable()->getHideZero()==m_pHideZero->isChecked())
+  && m_pView->activeTable()->getHideZero()==m_pHideZero->isChecked()
+  && m_pView->activeTable()->getFirstLetterUpper()==m_pFirstLetterUpper->isChecked())
   {
   //if there is any changes
   //so it's not necessary to refresh table
@@ -107,6 +112,7 @@ void KSpreadpreference::slotOk()
         m_pView->activeTable()->setShowFormular(m_pFormula->isChecked());
         m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
         m_pView->activeTable()->setHideZero(m_pHideZero->isChecked());
+        m_pView->activeTable()->setFirstLetterUpper(m_pFirstLetterUpper->isChecked());
         accept();
   }
 }

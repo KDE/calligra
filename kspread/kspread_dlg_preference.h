@@ -50,6 +50,7 @@ protected:
   QCheckBox *m_pColumn;
   QCheckBox *m_pLcMode;
   QCheckBox *m_pHideZero;
+  QCheckBox *m_pFirstLetterUpper;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
 };
