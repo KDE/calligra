@@ -1,25 +1,45 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include "KDChartLinesPainter.h"
 #include <KDChartParams.h>
 
 #include <qpainter.h>
 
-#ifdef __WINDOWS__
+#if defined( __WINDOWS__ ) || defined( _SGIAPI )
 #include <math.h>
 #else
 #include <cmath>
 #include <stdlib.h>
 #endif
 
-#if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
+#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
 #define std
 #endif
 
@@ -82,7 +102,7 @@ void KDChartLinesPainter::paintData( QPainter* painter,
    Does the actual painting of a line or an area chart and is provided
    with the appropriate parameters from \c
    KDChartLinesPainter::paintData() and
-   KDChartAreaPainter::paintDat().
+   KDChartAreaPainter::paintData().
 
    \param painter the QPainter onto which the chart should be painted
    \param data the data that will be displayed as a chart
@@ -135,7 +155,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
 
     double logHeight = _dataRect.height();
     double logWidth = _dataRect.width();
-    double areaWidthP1000 = logWidth / 1000.0;
+    //double areaWidthP1000 = logWidth / 1000.0;
 
     QRect ourClipRect( _dataRect );
     ourClipRect.setBottom( ourClipRect.bottom() - 1 ); // protect axes
@@ -159,7 +179,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                                         datasetStart,
                                         datasetEnd,
                                         chart ) ) {
-        uint maxRow, maxRowMinus1;
+        int maxRow, maxRowMinus1;
         switch ( data->usedRows() ) {
         case 0:
             return ;
@@ -179,7 +199,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                          ? maxRow
                          : maxRowMinus1 );
     }
-    uint datasetNum = static_cast < int > ( abs( ( datasetEnd - datasetStart ) + 1.0 ) );
+    //uint datasetNum = static_cast < int > ( abs( ( datasetEnd - datasetStart ) + 1.0 ) );
 
     // Number of values: If -1, use all values, otherwise use the
     // specified number of values.
@@ -243,7 +263,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
 
     QPointArray previousPoints; // no vector since only areas need it,
                                 // and these do not support 3d yet
-    for ( int dataset = datasetEnd; ( dataset >= datasetStart && dataset >= 0 ); --dataset ) {
+    for ( int dataset = datasetEnd; ( dataset >= (int)datasetStart && dataset >= 0 ); --dataset ) {
         // the +2 is for the areas (if any)
         QPtrVector< QPointArray > points( 2 );
         points.setAutoDelete( true );
@@ -304,7 +324,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                 painter->setPen( QPen( Qt::NoPen ) );
                 painter->setBrush( QBrush( params()->dataColor( dataset ),
                                            Qt::SolidPattern ) );
-                if ( mode == Normal || dataset == datasetEnd ) {
+                if ( mode == Normal || dataset == (int)datasetEnd ) {
                     /// first dataset (or any dataset in normal mode, where
                     /// the datasets overwrite each other)
 
@@ -345,7 +365,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                     // append the previous array (there is guaranteed to be
                     // one because we are at least the second time through
                     // here) in reverse order
-                    for ( int i = 0; i < previousPoints.size(); ++i ) {
+                    for ( unsigned int i = 0; i < previousPoints.size(); ++i ) {
                         thisSection.setPoint( point + i,
                                               previousPoints.point( previousPoints.size() - i - 1 ) );
 //qDebug("\nx: %i",previousPoints.point( previousPoints.size() - i - 1 ).x());
@@ -376,7 +396,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
 
             // Do not draw the contour line if this is the last row in a
             // percent chart.
-            if ( mode != Percent || dataset != datasetEnd )
+            if ( mode != Percent || dataset != (int)datasetEnd )
                 if( showThreeDLines ) {
                     // A 3D line needs to be drawn piece-wise
                     for ( int value = 0; value < numValues-1; value++ ) {
@@ -490,7 +510,7 @@ void KDChartLinesPainter::drawMarker( QPainter* painter,
 QPoint KDChartLinesPainter::project( int x, int y, int z ) {
     double xrad = DEGTORAD( params()->threeDLineXRotation() );
     double yrad = DEGTORAD( params()->threeDLineYRotation() );
-    QPoint ret( x*cos( yrad ) + z * sin( yrad ),
-		y*cos( xrad ) - z * sin( xrad ) );
+    QPoint ret( static_cast<int>( x*cos( yrad ) + z * sin( yrad ) ),
+                static_cast<int>( y*cos( xrad ) - z * sin( xrad ) ) );
     return ret;
   }

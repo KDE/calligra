@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
 
@@ -15,14 +35,14 @@
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-#ifdef __WINDOWS__
+#if defined( __WINDOWS__ ) || defined( _SGIAPI )
 #include <math.h>
 #else
 #include <cmath>
 #include <stdlib.h>
 #endif
 
-#if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
+#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
 #define std
 #endif
 
@@ -107,7 +127,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
                          ? maxRow
                          : maxRowMinus1 );
     }
-    uint datasetNum = static_cast < uint > ( abs( ( datasetEnd - datasetStart ) + 1.0 ) );
+    uint datasetNum = abs( (int)( datasetEnd - datasetStart ) + 1 );
 
 
     // Number of values: If -1, use all values, otherwise use the
@@ -137,22 +157,22 @@ void KDChartRingPainter::paintData( QPainter* painter,
     QMemArray<double> rowsums;
     double totalSum = 0.0;
     rowsums.resize( datasetEnd+1 ); // not datasetNum!
-    for( int d1 = datasetStart; d1 <= datasetEnd; d1++ ) {
+    for( int d1 = (int)datasetStart; d1 <= (int)datasetEnd; d1++ ) {
         rowsums[d1] = data->rowAbsSum( d1 );
         totalSum += rowsums[d1];
     }
 
-    QMemArray<uint> ringthicknesses;
+    QMemArray<int> ringthicknesses;
     ringthicknesses.resize( datasetEnd+1 ); // not datasetNum!
 
     // constant ring thickness
-    uint ringthickness = _size / ( datasetNum * 2 );
+    int ringthickness = _size / ( datasetNum * 2 );
     // Never let the ring thickness be more than 1/10 of the size to
     // ensure "ringness"
     if( ringthickness > ( _size/10 ) )
         ringthickness = _size / 10;
 
-    for( int d2 = datasetStart; d2 <= datasetEnd; d2++ )
+    for( int d2 = (int)datasetStart; d2 <= (int)datasetEnd; d2++ )
         if( params()->relativeRingThickness() ) {
             // 50% should be the same thickness as the one used when ring
             // thickness is constant.
@@ -165,12 +185,12 @@ void KDChartRingPainter::paintData( QPainter* painter,
     int currentouterradius = _size/2;
 
     // Loop through all the displayable datasets; each dataset is one ring
-    for( int dataset = datasetStart; dataset <= datasetEnd; dataset++ ) {
+    for( int dataset = (int)datasetStart; dataset <= (int)datasetEnd; dataset++ ) {
         double sectorsPerValue = 5760.0 / rowsums[dataset]; // 5760 == 16*360, number of sections in Qt circle
-        int sectorsPerValueI = static_cast<int>( sectorsPerValue );
+        //int sectorsPerValueI = static_cast<int>( sectorsPerValue );
         int currentstartpos = params()->ringStart()*16;
         // Loop through all the values; each value is one piece on the ring.
-        for( uint value = 0; value < _numValues; value++ ) {
+        for( int value = 0; value < _numValues; value++ ) {
             // is there anything at all at this value?
             double cellValue = 0.0;
             if( data->cell( dataset, value ).isDouble() ) {
@@ -182,7 +202,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
 
                 QValueList<int> explodeList = params()->explodeValues();
                 bool explode = params()->explode() && // explosion is on at all
-                   ( dataset == datasetStart ) && // outermost ring
+                   ( dataset == (int)datasetStart ) && // outermost ring
      ( ( explodeList.count() == 0 ) || // either nothing on explode list
        ( explodeList.find( value ) != explodeList.end() ) ); // or pie is on it
 
@@ -190,7 +210,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
                                 currentouterradius,
                                 currentouterradius-ringthicknesses[dataset],
                                 currentstartpos,
-                                currentstartpos+sectorsPerValue*cellValue,
+                                static_cast<int>( currentstartpos+sectorsPerValue*cellValue ),
                                 dataset, value, chart, explode, regions );
             }
 
@@ -244,7 +264,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
 
         double explodeX = explodeFactor * _size * cosAngle;
         double explodeY = explodeFactor * _size * sinAngle;
-        drawPosition.moveBy( explodeX, explodeY );
+        drawPosition.moveBy( static_cast<int>( explodeX ), static_cast<int>( explodeY ) );
     } else
         drawPosition = _position;
 

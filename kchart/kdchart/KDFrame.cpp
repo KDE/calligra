@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDFrame - a multi-platform framing engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include <qpainter.h>
 #include <qbrush.h>
 
@@ -24,7 +44,7 @@
 // The reason is that KDFrame is a class completely separated
 // from the rest of the KDChart project.
 //
-#if defined( SUN7 )
+#if defined( SUN7 ) || defined( _SGIAPI )
 #include <math.h>
 #else
 #include <cmath>
@@ -32,6 +52,7 @@
 #ifdef __WINDOWS__
 #define M_PI 3.14159265358979323846
 #endif
+
 
 KDFrame::~KDFrame()
 {
@@ -70,32 +91,32 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
     if( ! _backPixmap.isNull() ) {
         QPoint ol = innerRect.topLeft();
         if( PixCentered == _backPixmapMode )
-        {
-            ol.setX( innerRect.center().x() - _backPixmap.width() / 2 );
-            ol.setY( innerRect.center().y() - _backPixmap.height()/ 2 );
-            bitBlt( painter.device(), ol, &_backPixmap );
-        } else {
-            QWMatrix m;
-            double zW = (double)innerRect.width()  / (double)_backPixmap.width();
-            double zH = (double)innerRect.height() / (double)_backPixmap.height();
-            switch ( _backPixmapMode ) {
-            case PixCentered:
-                break;
-            case PixScaled: {
+            {
+                ol.setX( innerRect.center().x() - _backPixmap.width() / 2 );
+                ol.setY( innerRect.center().y() - _backPixmap.height()/ 2 );
+                bitBlt( painter.device(), ol, &_backPixmap );
+            } else {
+                QWMatrix m;
+                double zW = (double)innerRect.width()  / (double)_backPixmap.width();
+                double zH = (double)innerRect.height() / (double)_backPixmap.height();
+                switch ( _backPixmapMode ) {
+                case PixCentered:
+                    break;
+                case PixScaled: {
                     double z;
                     z = QMIN( zW, zH );
                     m.scale( z, z );
                 }
-                break;
-            case PixStretched:
-                m.scale( zW, zH );
-                break;
+                    break;
+                case PixStretched:
+                    m.scale( zW, zH );
+                    break;
+                }
+                QPixmap pm = _backPixmap.xForm( m );
+                ol.setX( innerRect.center().x() - pm.width() / 2 );
+                ol.setY( innerRect.center().y() - pm.height()/ 2 );
+                bitBlt( painter.device(), ol, &pm );
             }
-            QPixmap pm = _backPixmap.xForm( m );
-            ol.setX( innerRect.center().x() - pm.width() / 2 );
-            ol.setY( innerRect.center().y() - pm.height()/ 2 );
-            bitBlt( painter.device(), ol, &pm );
-        }
     }
 }
 
@@ -121,7 +142,7 @@ void KDFrame::paintEdges( QPainter& painter, const QRect& innerRect ) const
 }
 
 
-void KDFrame::paintCorners( QPainter& painter, const QRect& innerRect ) const
+void KDFrame::paintCorners( QPainter& /*painter*/, const QRect& /*innerRect*/ ) const
 {
     ;
 }
@@ -225,6 +246,7 @@ void KDFrame::setSimpleFrame( SimpleFrame frame,
                               const QPixmap* backPixmap,
                               BackPixmapMode backPixmapMode )
 {
+    _profileSections.clear();
     _topProfile.clear();
     _rightProfile.clear();
     _bottomProfile.clear();
@@ -234,9 +256,12 @@ void KDFrame::setSimpleFrame( SimpleFrame frame,
     _backPixmap = backPixmap ? *backPixmap : QPixmap();
     _backPixmapMode = backPixmapMode;
     if( FrameFlat == frame ) {
-        _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                       KDFrameProfileSection::CvtPlain,
-                                                       lineWidth, pen ) );
+        KDFrameProfileSection* newsection =
+            new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                       KDFrameProfileSection::CvtPlain,
+                                       lineWidth, pen );
+        _profileSections.append( newsection );
+        _topProfile.append( newsection );
         _rightProfile  = _topProfile;
         _bottomProfile = _topProfile;
         _leftProfile   = _topProfile;
@@ -250,65 +275,113 @@ void KDFrame::setSimpleFrame( SimpleFrame frame,
             int gap2  = line2 * 4;
             int gap1  = lineWidth - line1 - line2 - line3 - gap2;
             QPen noP( Qt::NoPen );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           line1, pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           gap1,  noP ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           line2, pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           gap2,  noP ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           line3, pen ) );
+            KDFrameProfileSection* newsection;
+            newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                    KDFrameProfileSection::CvtPlain,
+                                                    line1, pen );
+            _profileSections.append( newsection );
+            _topProfile.append( newsection );
+            newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                    KDFrameProfileSection::CvtPlain,
+                                                    gap1,  noP );
+            _profileSections.append( newsection );
+            _topProfile.append( newsection );
+            newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                    KDFrameProfileSection::CvtPlain,
+                                                    line2, pen );
+            _profileSections.append( newsection );
+            _topProfile.append( newsection );
+            newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                    KDFrameProfileSection::CvtPlain,
+                                                    gap2,  noP );
+            _profileSections.append( newsection );
+            _topProfile.append( newsection );
+            newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                     KDFrameProfileSection::CvtPlain,
+                                                     line3, pen );
+            _profileSections.append( newsection );
+            _topProfile.append( newsection );
         }
             break;
         case FrameBoxRaized:
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth,    pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           midLineWidth, pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth,    pen ) );
-            break;
+            {
+                KDFrameProfileSection* newsection;
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
+                                                        KDFrameProfileSection::CvtPlain,
+                                                        lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                        KDFrameProfileSection::CvtPlain,
+                                                        midLineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
+                                                         KDFrameProfileSection::CvtPlain,
+                                                         lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                break;
+            }
         case FrameBoxSunken:
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth,    pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           midLineWidth, pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth,    pen ) );
+            {
+                KDFrameProfileSection* newsection;
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
+                                                        KDFrameProfileSection::CvtPlain,
+                                                        lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                        KDFrameProfileSection::CvtPlain,
+                                                        midLineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
+                                                        KDFrameProfileSection::CvtPlain,
+                                                        lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+            }
             break;
         case FramePanelRaized:
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth, pen ) );
-            break;
+            {
+                KDFrameProfileSection* newsection;
+                newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
+                                                         KDFrameProfileSection::CvtPlain,
+                                                         lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                break;
+            }
         case FramePanelSunken:
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth, pen ) );
+            {
+                KDFrameProfileSection* newsection;
+                newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
+                                                         KDFrameProfileSection::CvtPlain,
+                                                         lineWidth, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+            }
             break;
         case FrameSemicircular:
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
-                                                           KDFrameProfileSection::CvtConvex,
-                                                           lineWidth/2, pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
-                                                           KDFrameProfileSection::CvtPlain,
-                                                           lineWidth-2*(lineWidth/2), pen ) );
-            _topProfile.append( new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
-                                                           KDFrameProfileSection::CvtConcave,
-                                                           lineWidth/2, pen ) );
+            {
+                KDFrameProfileSection* newsection;
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
+                                                        KDFrameProfileSection::CvtConvex,
+                                                        lineWidth/2, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
+                                                         KDFrameProfileSection::CvtPlain,
+                                                         lineWidth-2*(lineWidth/2), pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+                newsection = new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
+                                                        KDFrameProfileSection::CvtConcave,
+                                                        lineWidth/2, pen );
+                _profileSections.append( newsection );
+                _topProfile.append( newsection );
+            }
             break;
         }
     }
@@ -320,8 +393,8 @@ void KDFrame::setSimpleFrame( SimpleFrame frame,
 
 
 void KDFrame::createFrameNode( QDomDocument& document, QDomNode& parent,
-			       const QString& elementName,
-			       const KDFrame& frame )
+                               const QString& elementName,
+                               const KDFrame& frame )
 {
     QDomElement frameElement = document.createElement( elementName );
     parent.appendChild( frameElement );
@@ -340,13 +413,13 @@ void KDFrame::createFrameNode( QDomDocument& document, QDomNode& parent,
     KDXML::createRectNode( document, frameElement, "InnerRect",
                            frame._innerRect );
     createFrameProfileNode( document, frameElement, "TopProfile",
-			    frame._topProfile );
+                            frame._topProfile );
     createFrameProfileNode( document, frameElement, "RightProfile",
-			    frame._rightProfile );
+                            frame._rightProfile );
     createFrameProfileNode( document, frameElement, "BottomProfile",
-			    frame._bottomProfile );
+                            frame._bottomProfile );
     createFrameProfileNode( document, frameElement, "LeftProfile",
-			    frame._leftProfile );
+                            frame._leftProfile );
     KDFrameCorner::createFrameCornerNode( document, frameElement, "CornerTL",
                                           frame._cornerTL );
     KDFrameCorner::createFrameCornerNode( document, frameElement, "CornerTR",
@@ -358,8 +431,8 @@ void KDFrame::createFrameNode( QDomDocument& document, QDomNode& parent,
 }
 
 void KDFrame::createFrameProfileNode( QDomDocument& document, QDomNode& parent,
-				      const QString& elementName,
-				      KDFrameProfile profile )
+                                      const QString& elementName,
+                                      KDFrameProfile profile )
 {
     QDomElement profileElement = document.createElement( elementName );
     parent.appendChild( profileElement );

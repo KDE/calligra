@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include <qpainter.h>
 
 #include "KDChartAxesPainter.h"
@@ -14,14 +34,14 @@
 #include "KDChartParams.h"
 #include "KDChartData.h"
 
-#ifdef __WINDOWS__
+#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI )
 #include <math.h>
 #else
 #include <cmath>
 #include <stdlib.h>
 #endif
 
-#if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
+#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
 #define std
 #endif
 
@@ -57,7 +77,7 @@ KDChartAxesPainter::~KDChartAxesPainter()
 /**
     Provides some information needed twice by ::paintAxes()  (see below)
 */
-void KDChartAxesPainter::findInfos( double averageValueP1000,
+void KDChartAxesPainter::findInfos( double /*averageValueP1000*/,
                                     const KDChartAxisParams& para,
                                     uint axisPos,
                                     KDChartAxisParams::AxisPos& basicPos,
@@ -86,6 +106,10 @@ void KDChartAxesPainter::findInfos( double averageValueP1000,
     case KDChartAxisParams::AxisPosRight: {
             orig = para.axisTrueAreaRect().bottomLeft();
             dest = para.axisTrueAreaRect().topLeft();
+        }
+        break;
+    default: {
+            qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::findInfos() unhandled enum value." );
         }
         break;
     }
@@ -274,6 +298,11 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     pYDeltaFactor = -1.0;
                 }
                 break;
+            default: {
+                    qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::paintAxes() unhandled enum value." );
+                    // NOOP since the 'basicPos' does not support more that these four values.
+                }
+                break;
             }
 
             bool bOrdinate = para.axisSteadyValueCalc();
@@ -288,33 +317,35 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                 if ( para.axisLabelsFontUseRelSize() ) {
                     actFont.setPointSizeFloat( nTxtHeight );
                 }
-                // bad days: in case of labels being too wide
-                //           to fit into the available space
-                //           we try to reduce the font size
-                //
-                //
-                // NOTE:  LABEL TEXT ROTATION COULD ALSO HELP HERE
-                //
-                //
-                //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
-                //
-                //
                 QFontMetrics fm( actFont );
-                QString strMax;
-                int maxLabelsWidth = 0;
-                for ( QStringList::Iterator it = labelTexts->begin();
-                        it != labelTexts->end();
-                        ++it ) {
-                    if ( fm.width( *it ) > maxLabelsWidth ) {
-                        maxLabelsWidth = fm.width( *it );
-                        strMax = *it;
+                if( ! para.axisLabelsDontShrinkFont() ) {
+                    // bad days: in case of labels being too wide
+                    //           to fit into the available space
+                    //           we try to reduce the font size
+                    //
+                    //
+                    // NOTE:  LABEL TEXT ROTATION COULD ALSO HELP HERE
+                    //
+                    //
+                    //   F E A T U R E   P L A N N E D   F O R   F U T U R E . . .
+                    //
+                    //
+                    QString strMax;
+                    int maxLabelsWidth = 0;
+                    for ( QStringList::Iterator it = labelTexts->begin();
+                            it != labelTexts->end();
+                            ++it ) {
+                        if ( fm.width( *it ) > maxLabelsWidth ) {
+                            maxLabelsWidth = fm.width( *it );
+                            strMax = *it;
+                        }
                     }
-                }
-                while ( fm.width( strMax ) > pTextsW
-                        && 6.0 < nTxtHeight ) {
-                    nTxtHeight -= 0.5;
-                    actFont.setPointSizeFloat( nTxtHeight );
-                    fm = QFontMetrics( actFont );
+                    while ( fm.width( strMax ) > pTextsW
+                            && 6.0 < nTxtHeight ) {
+                        nTxtHeight -= 0.5;
+                        actFont.setPointSizeFloat( nTxtHeight );
+                        fm = QFontMetrics( actFont );
+                    }
                 }
                 painter->setFont( actFont );
 
@@ -462,8 +493,19 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     }
                     if ( para.axisLabelsVisible() ) {
                         painter->drawLine( QPoint( p1X, p1Y ), QPoint( p2X, p2Y ) );
-                        painter->drawText( pTextsX, pTextsY, pTextsW, pTextsH,
-                                           textAlign, *labelit );
+                        if(    para.axisLabelsDontShrinkFont()
+                            && (    (basicPos == KDChartAxisParams::AxisPosTop)
+                                 || (basicPos == KDChartAxisParams::AxisPosBottom) )
+                            && (textAlign & Qt::AlignHCenter) ) {
+
+                            double w = fm.width( *labelit ) + 4.0;
+                            double x0 = pTextsX + pTextsW / 2.0;
+                            painter->drawText( x0 - w / 2.0, pTextsY, w, pTextsH,
+                                               textAlign, *labelit );
+
+                        } else
+                            painter->drawText( pTextsX, pTextsY, pTextsW,
+                                               pTextsH, textAlign, *labelit );
                     }
                     /* for debugging:
                     painter->drawRoundRect(pTextsX,pTextsY,pTextsW,pTextsH);
@@ -559,7 +601,7 @@ axis must be set, this means you may only call it when
     by this function
 */
 /**** static ****/
-void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
+void KDChartAxesPainter::calculateLabelTexts( QPainter& /*painter*/,
         const KDChartTableData& data,
         const KDChartParams& params,
         uint axisNumber,
@@ -698,15 +740,15 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                        ? 0
                        : para.axisDigitsBehindComma();
             double nVal  = 0.0;
-            uint nLabels = static_cast < uint > (std::fabs( nDist / nDelta ));
-            for ( uint i = 0; i < nLabels; ++i ) {
+            int nLabels = static_cast < int > (std::fabs( nDist / nDelta ));
+            for ( int i = 0; i < nLabels; ++i ) {
                labelTexts.append( QString::number( nVal, 'f', precis ) );
                nVal += nDelta;
             }
         }         // look if a string list was specified
         else if (    para.axisLabelStringList()
                   && para.axisLabelStringList()->count() ) {
-            uint nLabels = bOrdinate
+            int nLabels = bOrdinate
                            ? para.axisLabelStringList()->count()
                            : data.usedCols();
             calculateBasicTextFactors( nTxtHeight, para, averageValueP1000,
@@ -719,8 +761,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
             QStringList* tmpList = para.axisLabelStringList();
 
             // find start- and/or end-entry
-            uint iStart = 0;
-            uint iEnd = para.axisLabelStringList()->count() - 1;
+            int iStart = 0;
+            int iEnd = para.axisLabelStringList()->count() - 1;
             if(    ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() )
                 || ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueEnd() ) ) {
                 bool testStart = !( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT
@@ -761,7 +803,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                 QFontMetrics fm( font );
 
                 QStringList::Iterator it = tmpList->begin();
-                for ( uint i = 0; i < nLabels; ++i ) {
+                for ( int i = 0; i < nLabels; ++i ) {
                     if ( it != tmpList->end() ) {
                         if ( fm.width( *it ) > pTextsW ) {
                             useShortLabels = true;
@@ -789,7 +831,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                                        ? tmpList->begin()
                                        : tmpList->fromLast();
             if ( positive )
-                for ( uint i = 0; i < tmpList->count(); ++i ) {
+                for ( int i = 0; i < (int)tmpList->count(); ++i ) {
                     if ( i >= iStart )
                         break;
                     ++it;
@@ -802,8 +844,8 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                 }
             // transfer the strings
             int meter = delta;
-            uint i2 = positive ? iStart : iEnd;
-            for ( uint i = 0; i < nLabels; ) {
+            int i2 = positive ? iStart : iEnd;
+            for ( int i = 0; i < nLabels; ) {
                 if ( positive ) {
                     if ( it == tmpList->end() ) {
                         it = tmpList->begin();
@@ -983,7 +1025,7 @@ void KDChartAxesPainter::calculateLabelTexts( QPainter& painter,
                 // just initializing nLow and nHigh with values taken
                 // from col zero enabels us to compute rows with
                 // missing entries!  :-)
-                bool bInit = true;
+	        //bool bInit = true;
 
                 if ( dataDataset == KDChartParams::KDCHART_ALL_DATASETS ) {
                     nLow  = data.minValue();
@@ -1352,7 +1394,7 @@ axis must be set, this means you may only call it when
 /**** static ****/
 void KDChartAxesPainter::calculateBasicTextFactors( double nTxtHeight,
         const KDChartAxisParams& para,
-        double averageValueP1000,
+	double /*averageValueP1000*/,
         KDChartAxisParams::AxisPos basicPos,
         const QPoint& orig,
         double delimLen,
@@ -1411,13 +1453,14 @@ void KDChartAxesPainter::calculateBasicTextFactors( double nTxtHeight,
             pDelimDelta = wid / divi;
 
             pTextsW = pDelimDelta - 4.0;
+            pDelimDelta = wid / divi;
+
             pTextsX = orig.x() + 2.0
                       - ( bTouchEdges
                           ? pDelimDelta / 2.0
                           : 0.0 );
             pTextsH = para.axisTrueAreaRect().height() - delimLen * 1.33;
             pTextsY = para.axisTrueAreaRect().topLeft().y();
-
             textAlign = Qt::AlignHCenter | Qt::AlignBottom;
         }
         break;
@@ -1432,6 +1475,11 @@ void KDChartAxesPainter::calculateBasicTextFactors( double nTxtHeight,
                       - delimLen * 1.33 - 2.0;
             pTextsH = nTxtHeight;
             textAlign = Qt::AlignLeft | Qt::AlignVCenter;
+        }
+        break;
+    default: {
+            qDebug( "IMPLEMENTATION ERROR: KDChartAxesPainter::calculateBasicTextFactors() unhandled enum value." );
+            // NOOP since the 'basicPos' does not support more that these four values.
         }
         break;
     }
@@ -1585,7 +1633,7 @@ void KDChartAxesPainter::calculateOrdinateFactors(
     if ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == para.axisValueStart() ) {
         double orgLow( nLow );
         modf( nLow / nDivisor, &nLow );
-        double nMod = modf( nLow / nRound, &nLow );
+        //double nMod = modf( nLow / nRound, &nLow );
         nLow *= nRound * nDivisor;
         if ( nLow > orgLow )
             nLow -= nRound * nDivisor;
@@ -1596,7 +1644,7 @@ void KDChartAxesPainter::calculateOrdinateFactors(
         double orgHigh( nHigh );
         //nHigh += 1.1 * nDelta;
         modf( nHigh / nDivisor, &nHigh );
-        double nMod = modf( nHigh / nRound, &nHigh );
+        //double nMod = modf( nHigh / nRound, &nHigh );
         nHigh *= nRound * nDivisor;
         if ( nHigh < orgHigh )
             nHigh += nRound * nDivisor;

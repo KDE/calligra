@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include "KDChartBarPainter.h"
 #include <KDChartParams.h>
 
@@ -74,8 +94,8 @@ void KDChartBarPainter::paintData( QPainter* painter,
 
     bool barNormal = KDChartParams::BarNormal == params()->barChartSubType();
 
-    const KDChartParams::ChartType params_chartType
-        = paint2nd ? params()->additionalChartType() : params()->chartType();
+    //const KDChartParams::ChartType params_chartType
+    //  = paint2nd ? params()->additionalChartType() : params()->chartType();
 
     double logHeight = _dataRect.height();
     double logWidth = _dataRect.width();
@@ -335,14 +355,14 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 int x4 = static_cast < int > ( xpos + frontBarWidth );
                                 int xm = static_cast < int > ( xpos + frontBarWidth / 2.0 );
                                 QRect rect( ourClipRect );
-                                rect.setHeight( rect.height() + 3.0 * delta );
+                                rect.setHeight( static_cast<int>( rect.height() + 3.0 * delta ) );
                                 painter->setClipRect( rect );
                                 QPointArray points( 5 );
-                                points.setPoint( 0, xpos, yZero );
-                                points.setPoint( 1, x4,   yZero );
-                                points.setPoint( 2, x4,   yZero + height1 - 3.0 * delta );
-                                points.setPoint( 3, xm,   yZero + height1 );
-                                points.setPoint( 4, xpos, yZero + height1 - 3.0 * delta );
+                                points.setPoint( 0, static_cast<int>( xpos ), static_cast<int>( yZero ) );
+                                points.setPoint( 1, x4, static_cast<int>( yZero ) );
+                                points.setPoint( 2, x4, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points.setPoint( 3, xm, static_cast<int>( yZero + height1 ) );
+                                points.setPoint( 4, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.0 * delta ) );
                                 painter->drawPolygon( points );
                                 // Don't use points for drawing after this!
                                 if ( region ) {
@@ -351,12 +371,12 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 }
 
                                 QPointArray points2( 6 );
-                                points2.setPoint( 0, xpos, yZero + height1 - 3.0 * delta );
-                                points2.setPoint( 1, xm,   yZero + height1               );
-                                points2.setPoint( 2, x4,   yZero + height1 - 3.0 * delta );
-                                points2.setPoint( 3, x4,   yZero + height1 - 3.75 * delta );
-                                points2.setPoint( 4, xm,   yZero + height1 - 0.75 * delta );
-                                points2.setPoint( 5, xpos, yZero + height1 - 3.75 * delta );
+                                points2.setPoint( 0, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points2.setPoint( 1, xm, static_cast<int>( yZero + height1 ) );
+                                points2.setPoint( 2, x4, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points2.setPoint( 3, x4, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                points2.setPoint( 4, xm, static_cast<int>( yZero + height1 - 0.75 * delta ) );
+                                points2.setPoint( 5, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.75 * delta ) );
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
                                 if ( region ) {
@@ -380,7 +400,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 // QRect rec( xpos, yZero, frontBarWidth, -barHeight );
                                 // painter->drawRect( rec );
                                 //
-                                bool fromBottom = barNormal && !params()->threeDBars();
+                                //bool fromBottom = barNormal && !params()->threeDBars();
                                 double pt1X = xpos;
                                 double pt1Y =   yZero
                                                 - barHeight;
@@ -391,11 +411,11 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                             static_cast < int > ( yZero ) );
                                 if( pt2.y() < pt1Y ) {
                                     pt1.setY( pt2.y() );
-                                    pt2.setY( pt1Y );
+                                    pt2.setY( static_cast<int>( pt1Y ) );
                                 }
                                 if( pt2.x() < pt1X ) {
                                     pt1.setX( pt2.x() );
-                                    pt2.setX( pt1X );
+                                    pt2.setX( static_cast<int>( pt1X ) );
                                 }
                                 QSize siz( pt2.x() - pt1.x(),
                                            pt2.y() - pt1.y() );
@@ -422,15 +442,15 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 int x4 = static_cast < int > ( xpos + frontBarWidth );
                                 int xm = static_cast < int > ( xpos + frontBarWidth / 2.0 );
                                 QRect rect( ourClipRect );
-                                rect.setTop( rect.top() + 3 * delta );
-                                rect.setHeight( rect.height() - 3 * delta );
+                                rect.setTop( static_cast<int>( rect.top() + 3 * delta ) );
+                                rect.setHeight( static_cast<int>( rect.height() - 3 * delta ) );
                                 painter->setClipRect( rect );
                                 QPointArray points( 5 );
-                                points.setPoint( 0, xpos, yZero );
-                                points.setPoint( 1, x4,   yZero );
-                                points.setPoint( 2, x4,   yZero + height1 - 3.0 * delta );
-                                points.setPoint( 3, xm,   yZero + height1 );
-                                points.setPoint( 4, xpos, yZero + height1 - 3.0 * delta );
+                                points.setPoint( 0, static_cast<int>( xpos ), static_cast<int>( yZero ) );
+                                points.setPoint( 1, x4, static_cast<int>( yZero ) );
+                                points.setPoint( 2, x4, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points.setPoint( 3, xm, static_cast<int>( yZero + height1 ) );
+                                points.setPoint( 4, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.0 * delta ) );
                                 painter->drawPolygon( points );
 
                                 // Don't use points for drawing after this!
@@ -440,12 +460,12 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                 }
 
                                 QPointArray points2( 6 );
-                                points2.setPoint( 0, xpos, yZero + height1 - 3.0 * delta );
-                                points2.setPoint( 1, xm,   yZero + height1               );
-                                points2.setPoint( 2, x4,   yZero + height1 - 3.0 * delta );
-                                points2.setPoint( 3, x4,   yZero + height1 - 3.75 * delta );
-                                points2.setPoint( 4, xm,   yZero + height1 - 0.75 * delta );
-                                points2.setPoint( 5, xpos, yZero + height1 - 3.75 * delta );
+                                points2.setPoint( 0, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points2.setPoint( 1, xm, static_cast<int>( yZero + height1 ) );
+                                points2.setPoint( 2, x4, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                points2.setPoint( 3, x4, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                points2.setPoint( 4, xm, static_cast<int>( yZero + height1 - 0.75 * delta ) );
+                                points2.setPoint( 5, static_cast<int>( xpos ), static_cast<int>( yZero + height1 - 3.75 * delta ) );
                                 points2.translate( 0, yArrowGap );
                                 painter->drawPolygon( points2 );
                                 if ( region ) {
@@ -465,7 +485,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
 
                                 painter->setClipRect( ourClipRect );
                             } else {
-                                bool fromBottom = barNormal && !params()->threeDBars();
+                                //bool fromBottom = barNormal && !params()->threeDBars();
                                 double y0 = yposPositives - zeroXAxisI;
                                 double pt1X = xpos;
                                 double pt1Y =   y0
@@ -478,11 +498,11 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                             ( y0 + shiftUpperBars ) );
                                 if( pt2.y() < pt1Y ) {
                                     pt1.setY( pt2.y() );
-                                    pt2.setY( pt1Y );
+                                    pt2.setY( static_cast<int>( pt1Y ) );
                                 }
                                 if( pt2.x() < pt1X ) {
                                     pt1.setX( pt2.x() );
-                                    pt2.setX( pt1X );
+                                    pt2.setX( static_cast<int>( pt1X ) );
                                 }
                                 QSize siz( pt2.x() - pt1.x(),
                                            pt2.y() - pt1.y() );
@@ -501,19 +521,23 @@ void KDChartBarPainter::paintData( QPainter* painter,
                             // drawing the right side
                             QPointArray points( 4 );
                             if ( barHeight < 0 ) {
-                                points.setPoint( 0, xpos + frontBarWidth, yposNegatives - zeroXAxisI );
-                                points.setPoint( 1, xpos + frontBarWidth,
-                                                 yposNegatives - zeroXAxisI - barHeight );
-                                points.setPoint( 2, xpos + barWidth,
-                                                 yposNegatives - zeroXAxisI - barHeight - sideBarHeight );
-                                points.setPoint( 3, xpos + barWidth, yposNegatives - zeroXAxisI - sideBarHeight );
+                                points.setPoint( 0, static_cast<int>( xpos + frontBarWidth ),
+                                                 static_cast<int>( yposNegatives - zeroXAxisI ) );
+                                points.setPoint( 1, static_cast<int>( xpos + frontBarWidth ),
+                                                 static_cast<int>( yposNegatives - zeroXAxisI - barHeight ) );
+                                points.setPoint( 2, static_cast<int>( xpos + barWidth ),
+                                                 static_cast<int>( yposNegatives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                points.setPoint( 3, static_cast<int>( xpos + barWidth ),
+                                                 static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
                             } else {
-                                points.setPoint( 0, xpos + frontBarWidth,
-                                                 yposPositives - zeroXAxisI );
-                                points.setPoint( 1, xpos + frontBarWidth,
-                                                 yposPositives - zeroXAxisI - barHeight );
-                                points.setPoint( 2, xpos + barWidth, yposPositives - zeroXAxisI - barHeight - sideBarHeight );
-                                points.setPoint( 3, xpos + barWidth, yposPositives - zeroXAxisI - sideBarHeight );
+                                points.setPoint( 0, static_cast<int>( xpos + frontBarWidth ),
+                                                 static_cast<int>( yposPositives - zeroXAxisI ) );
+                                points.setPoint( 1, static_cast<int>( xpos + frontBarWidth ),
+                                                 static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
+                                points.setPoint( 2, static_cast<int>( xpos + barWidth ),
+                                                 static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                points.setPoint( 3, static_cast<int>( xpos + barWidth ),
+                                                 static_cast<int>( yposPositives - zeroXAxisI - sideBarHeight ) );
                             }
 
                             if ( params()->dataColor( dataset ).isValid() )
@@ -540,15 +564,22 @@ void KDChartBarPainter::paintData( QPainter* painter,
                                  // dataset value
                                  ( dataset == lastPositive ) ) {
                                 if ( barHeight < 0 ) {
-                                    points.setPoint( 0, xpos, yposNegatives - zeroXAxisI );
-                                    points.setPoint( 1, xpos + sideBarWidth, yposNegatives - zeroXAxisI - sideBarHeight );
-                                    points.setPoint( 2, xpos + barWidth, yposNegatives - zeroXAxisI - sideBarHeight );
-                                    points.setPoint( 3, xpos + frontBarWidth, yposNegatives - zeroXAxisI );
+                                    points.setPoint( 0, static_cast<int>( xpos ), static_cast<int>( yposNegatives - zeroXAxisI ) );
+                                    points.setPoint( 1, static_cast<int>( xpos + sideBarWidth ),
+                                                     static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
+                                    points.setPoint( 2, static_cast<int>( xpos + barWidth ),
+                                                     static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
+                                    points.setPoint( 3, static_cast<int>( xpos + frontBarWidth ),
+                                                     static_cast<int>( yposNegatives - zeroXAxisI ) );
                                 } else {
-                                    points.setPoint( 0, xpos, yposPositives - zeroXAxisI - barHeight );
-                                    points.setPoint( 1, xpos + sideBarWidth, yposPositives - zeroXAxisI - barHeight - sideBarHeight );
-                                    points.setPoint( 2, xpos + barWidth, yposPositives - zeroXAxisI - barHeight - sideBarHeight );
-                                    points.setPoint( 3, xpos + frontBarWidth, yposPositives - zeroXAxisI - barHeight );
+                                    points.setPoint( 0, static_cast<int>( xpos ),
+                                                     static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
+                                    points.setPoint( 1, static_cast<int>( xpos + sideBarWidth ),
+                                                     static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                    points.setPoint( 2, static_cast<int>( xpos + barWidth ),
+                                                     static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                    points.setPoint( 3, static_cast<int>( xpos + frontBarWidth ),
+                                                     static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
                                 }
                                 if ( barHeight < 0 )
                                     painter->setBrush( black );

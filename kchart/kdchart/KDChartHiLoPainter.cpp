@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include "KDChartHiLoPainter.h"
 #include <KDChartParams.h>
 #include "KDChartTextPiece.h"
@@ -56,7 +76,7 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
 void KDChartHiLoPainter::paintData( QPainter* painter,
                                     KDChartTableData* data,
                                     bool paint2nd,
-                                    KDChartDataRegionList* regions )
+                                    KDChartDataRegionList* /* regions */)
 {
     uint chart = paint2nd ? 1 : 0;
 
@@ -73,12 +93,12 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
         // PENDING(khz) Allow drawing without having a visible axis!
     }
 
-    const KDChartParams::ChartType params_chartType
-        = paint2nd ? params()->additionalChartType() : params()->chartType();
+    //const KDChartParams::ChartType params_chartType
+    //    = paint2nd ? params()->additionalChartType() : params()->chartType();
 
     double logHeight = _dataRect.height();
     double logWidth = _dataRect.width();
-    double areaWidthP1000 = logWidth / 1000.0;
+    //double areaWidthP1000 = logWidth / 1000.0;
 
     // PENDING(khz) Match this to values defined above...   :-(
     const double averageValueP1000 = ( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
@@ -292,7 +312,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                         ; // no way to draw it (really?)
                 }
                 lowText.draw( painter,
-                              valX, zeroXAxisI - valY,
+                              valX, static_cast<int>( zeroXAxisI - valY ),
                               ourClipRect,
                               params()->hiLoChartLowValuesColor() );
             }
@@ -331,7 +351,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                         ; // no way to draw it (really?)
                 }
                 highText.draw( painter,
-                               valX, zeroXAxisI - valY,
+                               valX, static_cast<int>( zeroXAxisI - valY ),
                                ourClipRect,
                                params()->hiLoChartHighValuesColor() );
             }
@@ -358,7 +378,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                 valX = xpos - openCloseTickLength - width;
                 valY = (int)openDrawValue + ( height / 2 );
                 openText.draw( painter,
-                               valX, zeroXAxisI - valY,
+                               valX, static_cast<int>( zeroXAxisI - valY ),
                                ourClipRect,
                                params()->hiLoChartOpenValuesColor() );
             }
@@ -378,7 +398,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                 }
                 KDChartTextPiece closeText( QString::number( closeValue ),
                                            theFont );
-                int width = closeText.width();
+                //int width = closeText.width();
                 int height = closeText.height();
 
                 // We can pretty safely assume that there is always enough
@@ -387,7 +407,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                 valX = xpos + openCloseTickLength;
                 valY = (int)closeDrawValue + ( height / 2 );
                 closeText.draw( painter,
-                               valX, zeroXAxisI - valY,
+                               valX, static_cast<int>( zeroXAxisI - valY ),
                                ourClipRect,
                                params()->hiLoChartCloseValuesColor() );
             }

@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include <KDChartParams.h>
 #include <KDChartAxisParams.h>
 #include <KDChartEnums.h>
@@ -59,7 +79,7 @@ KDChartParams::KDChartParams()
     setAdditionalChartType( NoType );
 
     // Default is to show all values.
-    setNumValues( -1 );
+    setNumValues( static_cast<unsigned int>( -1 ) );
 
     _defaultFont = QFont( "helvetica", 8, QFont::Normal, false );
 
@@ -1692,6 +1712,10 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                                  _axisSettings[axis].params._axisLabelsFontUseRelSize,
                                  _axisSettings[axis].params._axisLabelsFontRelSize );
 
+            // the LabelsDontShrinkFont element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontShrinkFont",
+                                   _axisSettings[axis].params._axisLabelsDontShrinkFont );
+            
             // the LabelsColor element
             KDXML::createColorNode( doc, axisSettingsElement, "LabelsColor",
                                     _axisSettings[axis].params._axisLabelsColor );
@@ -1996,7 +2020,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             }
                         } else {
                             qDebug( "Unknown subelement of ModeAndChartMap found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2053,7 +2076,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _outlineDataLineStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
                         } else {
                             qDebug( "!!!Unknown subelement of ColorSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2094,7 +2116,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _valueBlockGapIsRelative = valueBlockGapIsRelative;
                         } else {
                             qDebug( "Unknown subelement of BarSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2163,7 +2184,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _threeDLineYRotation = rotation;
                         } else {
                             qDebug( "Unknown subelement of LineSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2184,7 +2204,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _areaLocation = KDChartParams::stringToAreaLocation( string );
                         } else {
                             qDebug( "Unknown subelement of AreaSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2232,7 +2251,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _relativeRingThickness = relativeRingThickness;
                         } else {
                             qDebug( "Unknown subelement of PieRingSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2301,7 +2319,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _hiLoChartCloseValuesColor = color;
                         } else {
                             qDebug( "Unknown subelement of HiLoSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2397,7 +2414,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _ganttChartDurationsColor = color;
                         } else {
                             qDebug( "Unknown subelement of GanttSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2450,7 +2466,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _polarLineWidth = polarLineWidth;
                         } else {
                             qDebug( "Unknown subelement of PolarSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2510,7 +2525,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _legendSpacing = spacing;
                         } else {
                             qDebug( "Unknown subelement of LegendSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2610,6 +2624,10 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                                axisSettings->_axisLabelsFont,
                                                axisSettings->_axisLabelsFontUseRelSize,
                                                axisSettings->_axisLabelsFontRelSize );
+                        } else if( tagName == "LabelsDontShrinkFont" ) {
+                            bool dontShrink;
+                            if( KDXML::readBoolNode( element, dontShrink ) )
+                                axisSettings->_axisLabelsDontShrinkFont = dontShrink;
                         } else if( tagName == "LabelsColor" ) {
                             QColor color;
                             if( KDXML::readColorNode( element, color ) )
@@ -2697,7 +2715,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 axisSettings->_axisLabelTextsDirty = labelTextsDirty;
                         } else {
                             qDebug( "Unknown subelement of AxisSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
@@ -2758,7 +2775,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
 				_globalLeadingBottom = value;
 			} else {
 			    qDebug( "Unknown subelement of GlobalLeading found: %s", tagName.latin1() );
-			    return false;
 			}
 		    }
 		    node = node.nextSibling();
@@ -2837,26 +2853,25 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                 _printDataValuesSettings._dataValuesLayoutPolicy = KDChartEnums::stringToLayoutPolicy( value );
 			} else {
 			    qDebug( "Unknown subelement of DataValuesSettings1 found: %s", tagName.latin1() );
-			    return false;
 			}
 		    }
 		    node = node.nextSibling();
 		}
-	    } else if( tagName == "DataValuesSettings2" ) {
-		QDomNode node = element.firstChild();
-		while( !node.isNull() ) {
-		    QDomElement element = node.toElement();
-		    if( !element.isNull() ) { // was really an element
-			QString tagName = element.tagName();
-			if( tagName == "PrintDataValues" ) {
-			    bool value;
-			    if( KDXML::readBoolNode( element, value ) )
-				_printDataValuesSettings2._printDataValues = value;
-			} else if( tagName == "DivPow10" ) {
-			    int value;
-			    if( KDXML::readIntNode( element, value ) )
-				_printDataValuesSettings2._divPow10 = value;
-			} else if( tagName == "DigitsBehindComma" ) {
+            } else if( tagName == "DataValuesSettings2" ) {
+                QDomNode node = element.firstChild();
+                while( !node.isNull() ) {
+                    QDomElement element = node.toElement();
+                    if( !element.isNull() ) { // was really an element
+                        QString tagName = element.tagName();
+                if( tagName == "PrintDataValues" ) {
+                    bool value;
+                    if( KDXML::readBoolNode( element, value ) )
+                        _printDataValuesSettings2._printDataValues = value;
+                } else if( tagName == "DivPow10" ) {
+                int value;
+                if( KDXML::readIntNode( element, value ) )
+                    _printDataValuesSettings2._divPow10 = value;
+                } else if( tagName == "DigitsBehindComma" ) {
 			    int value;
 			    if( KDXML::readIntNode( element, value ) )
 				_printDataValuesSettings2._digitsBehindComma = value;
@@ -2894,82 +2909,80 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             QString value;
                             if( KDXML::readStringNode( element, value ) )
                                 _printDataValuesSettings2._dataValuesAnchorPositivePosition = KDChartEnums::stringToPositionFlag( value );
-			} else if( tagName == "AnchorPositiveAlign" ) {
-			    int value;
-			    if( KDXML::readIntNode( element, value ) )
-				_printDataValuesSettings2._dataValuesAnchorPositiveAlign = value;
-			} else if( tagName == "AnchorPositiveDeltaX" ) {
-			    int value;
-			    if( KDXML::readIntNode( element, value ) )
-				_printDataValuesSettings2._dataValuesAnchorPositiveDeltaX = value;
-			} else if( tagName == "AnchorPositiveDeltaY" ) {
-			    int value;
-			    if( KDXML::readIntNode( element, value ) )
-				_printDataValuesSettings2._dataValuesAnchorPositiveDeltaY = value;
-			} else if( tagName == "PositiveRotation" ) {
-			    int value;
-			    if( KDXML::readIntNode( element, value ) )
-				_printDataValuesSettings2._dataValuesPositiveRotation = value;
-			} else if( tagName == "LayoutPolicy" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                _printDataValuesSettings2._dataValuesLayoutPolicy = KDChartEnums::stringToLayoutPolicy( value );
-			} else {
-			    qDebug( "Unknown subelement of DataValuesSettings2 found: %s", tagName.latin1() );
-			    return false;
-			}
-		    }
-		    node = node.nextSibling();
-		}
-	    } else if( tagName == "AreaMap" ) {
-		QDomNode node = element.firstChild();
-		while( !node.isNull() ) {
-		    QDomElement element = node.toElement();
-		    if( !element.isNull() ) { // was really an element
-			QString tagName = element.tagName();
-			if( tagName == "FrameSettings" ) {
-	                    KDChartFrameSettings frameSettings;
-                            uint areaId = KDChartEnums::AreaUNKNOWN;
-			    if( KDChartFrameSettings::readFrameSettingsNode(
-                                element, frameSettings, areaId ) ) {
-                                _areaMap.insert( areaId, frameSettings );
-                            }
-			}
-			else
-			    qDebug( "Unknown tag in area map" );
-                            // do _not_ return false here (to enable future extentions)
-		    }
-		    node = node.nextSibling();
+            } else if( tagName == "AnchorPositiveAlign" ) {
+                int value;
+                if( KDXML::readIntNode( element, value ) )
+                _printDataValuesSettings2._dataValuesAnchorPositiveAlign = value;
+            } else if( tagName == "AnchorPositiveDeltaX" ) {
+                int value;
+                if( KDXML::readIntNode( element, value ) )
+                _printDataValuesSettings2._dataValuesAnchorPositiveDeltaX = value;
+            } else if( tagName == "AnchorPositiveDeltaY" ) {
+                int value;
+                if( KDXML::readIntNode( element, value ) )
+                    _printDataValuesSettings2._dataValuesAnchorPositiveDeltaY = value;
+                } else if( tagName == "PositiveRotation" ) {
+                    int value;
+                    if( KDXML::readIntNode( element, value ) )
+                        _printDataValuesSettings2._dataValuesPositiveRotation = value;
+                    } else if( tagName == "LayoutPolicy" ) {
+                        QString value;
+                        if( KDXML::readStringNode( element, value ) )
+                            _printDataValuesSettings2._dataValuesLayoutPolicy = KDChartEnums::stringToLayoutPolicy( value );
+                        } else {
+                            qDebug( "Unknown subelement of DataValuesSettings2 found: %s", tagName.latin1() );
+                        }
+                    }
+                    node = node.nextSibling();
                 }
-	    } else if( tagName == "CustomBoxMap" ) {
-		QDomNode node = element.firstChild();
-		int curNumber = -1;
-		while( !node.isNull() ) {
-		    QDomElement element = node.toElement();
-		    if( !element.isNull() ) { // was really an element
-			QString tagName = element.tagName();
-			if( tagName == "Number" ) {
-			    KDXML::readIntNode( element, curNumber );
-			} else if( tagName == "FrameSettings" ) {
-			    Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
-			    KDChartCustomBox customBox;
-			    KDChartCustomBox::readCustomBoxNode( element,
-                                                                 customBox );
-			    _customBoxMap.insert( curNumber, customBox );
-			} else {
-			    qDebug( "Unknown tag in area map" );
-			    return false;
-			}
-		    }
-		    node = node.nextSibling();
-		}
-	    } else {
-		qDebug( "Unknown second-level element found: %s", tagName.latin1() );
-		// NOTE: We do *not* 'return false' here but continue normal operation
-		//       since additional elements might have been added in future versions
-	    }
-	}
-	node = node.nextSibling();
+            } else if( tagName == "AreaMap" ) {
+                QDomNode node = element.firstChild();
+                while( !node.isNull() ) {
+                    QDomElement element = node.toElement();
+                    if( !element.isNull() ) { // was really an element
+                        QString tagName = element.tagName();
+                        if( tagName == "FrameSettings" ) {
+                            KDChartFrameSettings frameSettings;
+                                uint areaId = KDChartEnums::AreaUNKNOWN;
+                            if( KDChartFrameSettings::readFrameSettingsNode(
+                                    element, frameSettings, areaId ) ) {
+                                    _areaMap.insert( areaId, frameSettings );
+                            }
+                        }
+                        else
+                            qDebug( "Unknown tag in area map" );
+                              // do _not_ return false here (to enable future extentions)
+                    }
+                    node = node.nextSibling();
+                }
+            } else if( tagName == "CustomBoxMap" ) {
+                QDomNode node = element.firstChild();
+                int curNumber = -1;
+                while( !node.isNull() ) {
+                    QDomElement element = node.toElement();
+                    if( !element.isNull() ) { // was really an element
+                        QString tagName = element.tagName();
+                        if( tagName == "Number" ) {
+                            KDXML::readIntNode( element, curNumber );
+                        } else if( tagName == "FrameSettings" ) {
+                        Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
+                        KDChartCustomBox customBox;
+                        KDChartCustomBox::readCustomBoxNode( element,
+                                                                              customBox );
+                        _customBoxMap.insert( curNumber, customBox );
+                        } else {
+                            qDebug( "Unknown tag in area map" );
+                        }
+                    }
+                    node = node.nextSibling();
+                }
+            } else {
+                qDebug( "Unknown second-level element found: %s", tagName.latin1() );
+                // NOTE: We do *not* 'return false' here but continue normal operation
+                //       since additional elements might have been added in future versions
+            }
+        }
+        node = node.nextSibling();
     }
     return true;
 }
@@ -3098,7 +3111,6 @@ bool KDChartParams::readColorMapNode( const QDomElement& element,
                 value->insert( curDataset, color );
             } else {
                 qDebug( "Unknown tag in color map" );
-                return false;
             }
         }
         node = node.nextSibling();
@@ -3126,7 +3138,6 @@ bool KDChartParams::readDoubleMapNode( const QDomElement& element,
                 value->insert( curValue, doubleValue );
             } else {
                 qDebug( "Unknown tag in double map" );
-                return false;
             }
         }
         node = node.nextSibling();

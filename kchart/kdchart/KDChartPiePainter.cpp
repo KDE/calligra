@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include "KDChartEnums.h"
 #include "KDChartPiePainter.h"
 #include "KDChartParams.h"
@@ -16,13 +36,13 @@
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-#ifdef __WINDOWS__
+#if defined( __WINDOWS__ ) || defined( _SGIAPI )
 #include <math.h>
 #else
 #include <cmath>
 #endif
 
-#if defined __WINDOWS__ || defined SUN7 || ( defined HP11_aCC && defined HP1100 )
+#if defined( __WINDOWS__ ) || defined( SUN7 ) || defined( _SGIAPI ) || ( defined HP11_aCC && defined HP1100 )
 #define std
 #endif
 
@@ -178,12 +198,12 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
     // Find the backmost pie which is at +90° and needs to be drawn
     // first
-    uint backmostpie = findPieAt( 90 * 16 );
+    int backmostpie = findPieAt( 90 * 16 );
     // Find the frontmost pie (at -90°/+270°) that should be drawn last
-    uint frontmostpie = findPieAt( 270 * 16 );
+    int frontmostpie = findPieAt( 270 * 16 );
     // and put the backmost pie on the TODO stack to initialize it,
     // but only if it is not the frontmostpie
-    QValueStack < uint > todostack;
+    QValueStack < int > todostack;
     if ( backmostpie != frontmostpie )
         todostack.push( backmostpie );
     else {
@@ -203,7 +223,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
     // The list with pies that have already been drawn
 
-    QValueList < uint > donelist;
+    QValueList < int > donelist;
 
     // Draw pies until the todostack is empty or only the frontmost
     // pie is there
@@ -217,7 +237,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
         // stack to get things going.
 
         // take one pie from the stack
-        uint currentpie = todostack.pop();
+        int currentpie = todostack.pop();
         // if this pie was already drawn, ignore it
         if ( donelist.find( currentpie ) != donelist.end() )
             continue;
@@ -230,7 +250,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
         if ( currentpie == frontmostpie ) {
             Q_ASSERT( !todostack.isEmpty() );
             // QValueStack::exchange() would be nice here...
-            uint secondpie = todostack.pop();
+            int secondpie = todostack.pop();
             if ( currentpie == secondpie )
                 // no need to have the second pie twice on the stack,
                 // forget about one instance and take the third
@@ -272,7 +292,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
 
 void KDChartPiePainter::drawOnePie( QPainter* painter,
-                                    KDChartTableData* data,
+                                    KDChartTableData* /*data*/,
                                     uint dataset, uint pie, uint chart,
                                     uint threeDPieHeight,
                                     KDChartDataRegionList* regions )
@@ -308,7 +328,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
                 double explodeX = explodeFactor * _size * cosAngle;
                 double explodeY = explodeFactor * _size * sinAngle;
-                drawPosition.moveBy( explodeX, explodeY );
+                drawPosition.moveBy( static_cast<int>( explodeX ), static_cast<int>( explodeY ) );
             } else
                 drawPosition = _position;
         } else
@@ -415,7 +435,7 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
                                       const QRect& drawPosition,
                                       uint dataset, uint pie, uint chart,
                                       uint threeDHeight,
-                                      bool explode,
+                                      bool /*explode*/,
                                       QRegion* region )
 {
     // NOTE: We cannot optimize away drawing some of the effects (even
@@ -439,7 +459,7 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
     Q_ASSERT( startAngle >= 0 && startAngle <= 360 * 16 );
     Q_ASSERT( endAngle >= 0 && endAngle <= 360 * 16 );
 
-    int centerY = drawPosition.center().y();
+    //int centerY = drawPosition.center().y();
 
     if ( startAngle == endAngle ||
             startAngle == endAngle - 5760 ) { // full circle
@@ -601,7 +621,7 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
 
 void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
         const QRect& rect,
-        uint dataset, uint pie, uint chart,
+        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
         int threeDHeight,
         int angle,
         QRegion* region )
@@ -622,7 +642,7 @@ void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
 
 void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
         const QRect& rect,
-        uint dataset, uint pie, uint chart,
+        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
         int threeDHeight,
         int startAngle,
         int endAngle,
@@ -679,7 +699,7 @@ uint KDChartPiePainter::findLeftPie( uint pie )
 
 uint KDChartPiePainter::findRightPie( uint pie )
 {
-    uint rightpie = pie + 1;
+    int rightpie = pie + 1;
     if ( rightpie == _numValues )
         rightpie = 0;
     return rightpie;

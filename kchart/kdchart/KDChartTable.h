@@ -1,14 +1,32 @@
-// -*- Mode: C++ -*-
-/* $Id$
-
-Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Licensed for use in KDChart by Klarälvdalens Datakonsult AB.
+/* -*- Mode: C++ -*-
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
-/**
- * $Id$
- */
-
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #ifndef __KDCHARTTABLE_H__
 #define __KDCHARTTABLE_H__
 
@@ -379,26 +397,34 @@ public:
     void insertColumn( uint _c ) {
         detach();
         sh->insertColumn( _c );
+        ++_usedCols;
     }
 
     void insertRow( uint _r ) {
         detach();
         sh->insertRow( _r );
+        ++_usedRows;
     }
 
     void removeColumn( uint _c ) {
         detach();
         sh->removeColumn( _c );
+        if( _usedCols  )
+          --_usedCols;
     }
 
     void removeRow( uint _r ) {
         detach();
         sh->removeRow( _r );
+        if( _usedRows  )
+          --_usedRows;
     }
 
     void expand( uint _rows, uint _cols ) {
         detach();
         sh->expand( _rows, _cols );
+        _usedRows = _rows;
+        _usedCols = _cols;
     }
 
     void setUsedRows( uint _rows ) {

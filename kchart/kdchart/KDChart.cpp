@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #include <KDChart.h>
 #include <KDChartPainter.h>
 #include <KDChartParams.h>
@@ -28,6 +48,8 @@ KDChartPainter* KDChart::cpainter = 0;
 KDChartPainter* KDChart::cpainter2 = 0;
 KDChartParams::ChartType KDChart::cpainterType = KDChartParams::NoType;
 KDChartParams::ChartType KDChart::cpainterType2 = KDChartParams::NoType;
+
+void cleanupPainter();
 
 /**
    Paints a chart with the specified parameters on the specified
@@ -53,6 +75,15 @@ void KDChart::paint( QPainter* painter, KDChartParams* params,
 throw( KDChartUnknownTypeException )
 #endif
 {
+    // Install a cleanup routine that is called when the Qt
+    // application shuts down and cleans up any potentially still
+    // existing painters. Only do this once.
+    static bool bFirstCleanUpInstall = true;
+    if( bFirstCleanUpInstall ) {
+        bFirstCleanUpInstall = false;
+        qAddPostRoutine( cleanupPainter );
+    }
+
     // Check whether last call of this methode gave us the same params pointer.
     // If params changed we must create new painter(s).
     bool paramsHasChanged = ( params != oldParams );
@@ -114,16 +145,13 @@ throw( KDChartUnknownTypeException )
 
 
 /*
-          A static object that ensures that the last created painter is cleaned up.
-        */
-class KDChartCleanup
-{
-public:
-    ~KDChartCleanup()
+  This method is called at application shut-down and cleans up the
+  last created painter.
+*/
+void cleanupPainter()
 {
     delete KDChart::cpainter;
+    delete KDChart::cpainter2;
     KDChart::oldParams = 0;
 }
-};
 
-KDChartCleanup cleanup;

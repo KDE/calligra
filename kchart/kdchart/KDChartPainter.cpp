@@ -1,13 +1,33 @@
-#include <KDChartParams.h>
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
+#include <KDChartParams.h>
 #ifdef __WINDOWS__
 #include <math.h>
 #else
@@ -158,8 +178,8 @@ throw ( KDChartUnknownTypeException )
    \param painter an implementation object of a user-defined chart
    implementation
 */
-void KDChartPainter::registerPainter( const QString& painterName,
-                                      KDChartPainter* painter )
+void KDChartPainter::registerPainter( const QString& /*painterName*/,
+                                      KDChartPainter* /*painter*/ )
 {
     // PENDING(kalle) Implement this
     qDebug( "Sorry, not implemented:  KDChartPainter::registerPainter()" );
@@ -177,7 +197,7 @@ void KDChartPainter::registerPainter( const QString& painterName,
    \throw KDChartUnknownTypeException if no painter implementation is
    registered under the specified name
 */
-void KDChartPainter::unregisterPainter( const QString& painterName )
+void KDChartPainter::unregisterPainter( const QString& /*painterName*/ )
 #ifdef USE_EXCEPTIONS
 throw( KDChartUnknownTypeException )
 #endif
@@ -259,7 +279,7 @@ void KDChartPainter::paintArea( QPainter* painter,
                                 uint data3rd )
 {
     uint maskBASE = KDChartEnums::AreaBASEMask & area;
-    bool allCustomBoxes = false;
+    //bool allCustomBoxes = false;
     bool bFound;
     const KDChartParams::KDChartFrameSettings* settings =
                                 params()->frameSettings( area, bFound );
@@ -443,6 +463,8 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                     rotation += 0;
                     break;
                 */
+                default:
+                    break;
                 }
                 double anchorDX( params()->dataValuesAnchorDeltaX( region->chart,
                                                                    region->negative )
@@ -727,7 +749,7 @@ QRect KDChartPainter::calculateAreaRect( bool & allCustomBoxes,
                                          uint area,
                                          uint dataRow,
                                          uint dataCol,
-                                         uint data3rd,
+                                         uint /*data3rd*/,
                                          KDChartDataRegionList* regions ) const
 {
     QRect rect(0,0, 0,0);
@@ -890,7 +912,7 @@ QPoint KDChartPainter::pointOnCircle( const QRect& rect, int angle )
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintAxes( QPainter* painter, KDChartTableData* data )
+void KDChartPainter::paintAxes( QPainter* /*painter*/, KDChartTableData* /*data*/ )
 {
     // This method intentionally left blank.
 }
@@ -908,9 +930,9 @@ void KDChartPainter::paintAxes( QPainter* painter, KDChartTableData* data )
    be drawn
 */
 void KDChartPainter::paintLegend( QPainter* painter,
-                                  KDChartTableData* data,
+                                  KDChartTableData* /*data*/,
                                   const QFont& actLegendFont,
-                                  const QFont& actLegendTitleFont )
+                                  const QFont& /*actLegendTitleFont*/ )
 {
     if ( params()->legendPosition() == KDChartParams::NoLegend )
         return ; // do not draw legend
@@ -926,9 +948,9 @@ void KDChartPainter::paintLegend( QPainter* painter,
     if( !bFrameFound )
         painter->drawRect( _legendRect );
 
-    uint xpos = _legendRect.left() + _legendEMSpace,
-         ypos = _legendRect.top() +
-                static_cast < uint > ( _legendTitle->height() * 0.15 );
+    int xpos = _legendRect.left() + _legendEMSpace,
+        ypos = _legendRect.top() +
+                static_cast < int > ( _legendTitle->height() * 0.15 );
 
     // first paint the title, if any
     if ( _legendTitle != 0 ) { // shows that there is a title
@@ -943,7 +965,7 @@ void KDChartPainter::paintLegend( QPainter* painter,
     // loop over all the datasets, each one has one row in the legend
     // if its data are to be used in at least one of the charts drawn
     painter->setFont( actLegendFont );
-    uint dataset;
+    int dataset;
     for ( dataset = 0; dataset < _numLegendTexts; dataset++ ) {
         /*
         if( KDChartParams::DataEntry == params()->chartSourceMode( dataset ) ) {
@@ -979,7 +1001,7 @@ void KDChartPainter::paintLegend( QPainter* painter,
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data )
+void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* /*data*/ )
 {
     /*
     //
@@ -1039,7 +1061,7 @@ void KDChartPainter::paintHeader( QPainter* painter, KDChartTableData* data )
    \param painter the QPainter onto which the chart should be drawn
    \param data the data that will be displayed as a chart
 */
-void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* data )
+void KDChartPainter::paintFooter( QPainter* painter, KDChartTableData* /*data*/ )
 {
     /*
     //
@@ -1116,13 +1138,13 @@ throw( KDChartNotEnoughSpaceException )
     else
         drawRect = QRect( 0, 0, painterMetrics.width(), painterMetrics.height() );
 
-    uint yposTop    = drawRect.top();
-    uint xposLeft   = drawRect.left();
-    uint yposBottom = drawRect.height();
-    uint xposRight  = drawRect.width();
+    int yposTop    = drawRect.top();
+    int xposLeft   = drawRect.left();
+    int yposBottom = drawRect.height();
+    int xposRight  = drawRect.width();
 
-    uint trueWidth  = drawRect.width();
-    uint trueHeight = drawRect.height();
+    int trueWidth  = drawRect.width();
+    int trueHeight = drawRect.height();
 
     // Temporary values used to calculate start values xposLeft, yposTop, xposRight, yposBottom.
     // They will be replaced immediately after these calculations.
@@ -1293,7 +1315,7 @@ throw( KDChartNotEnoughSpaceException )
              params()->legendTitleText() != "" )
             hasLegendTitle = true;
 
-        uint legendTitleWidth = 0;
+        int legendTitleWidth = 0;
         if( _legendTitle )
             delete _legendTitle;
         _legendTitle = 0;
@@ -1324,13 +1346,13 @@ throw( KDChartNotEnoughSpaceException )
         _legendHeight = legendMetrics.height();
         _legendLeading = legendMetrics.leading();
 
-        uint sizeX = 0;
-        uint sizeY = static_cast < uint > ( _legendSpacing * (0.5 + _numLegendTexts) );
+        int sizeX = 0;
+        int sizeY = static_cast < int > ( _legendSpacing * (0.5 + _numLegendTexts) );
         // add space for the legend title if any was set
         if ( hasLegendTitle )
-            sizeY += static_cast < uint > ( _legendTitle->height() * 1.15 );
+            sizeY += static_cast < int > ( _legendTitle->height() * 1.15 );
 
-        uint dataset;
+        int dataset;
         for ( dataset = 0; dataset < _numLegendTexts; dataset++ ) {
             sizeX = QMAX( sizeX, legendMetrics.width( _legendTexts[ dataset ] ) );
         }
@@ -1350,7 +1372,7 @@ throw( KDChartNotEnoughSpaceException )
         switch ( params()->legendPosition() ) {
         case KDChartParams::LegendTop:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposLeft + ( (xposRight-xposLeft) - sizeX ) / 2,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
@@ -1381,26 +1403,26 @@ throw( KDChartNotEnoughSpaceException )
             break;
         case KDChartParams::LegendTopLeft:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopLeftTop:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopLeftLeft:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposLeft, yposTop, sizeX, sizeY );
             xposLeft = _legendRect.right() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopRight:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposRight - sizeX,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
@@ -1408,14 +1430,14 @@ throw( KDChartNotEnoughSpaceException )
             break;
         case KDChartParams::LegendTopRightTop:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposRight - sizeX,
                                  yposTop, sizeX, sizeY );
             yposTop = _legendRect.bottom() + params()->legendSpacing();
             break;
         case KDChartParams::LegendTopRightRight:
             if ( headerLineLeading )
-                yposTop += QMAX( params()->legendSpacing(), headerLineLeading );
+                yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
             _legendRect = QRect( xposRight - sizeX,
                                  yposTop, sizeX, sizeY );
             xposRight = _legendRect.left() - params()->legendSpacing();
@@ -1485,8 +1507,8 @@ throw( KDChartNotEnoughSpaceException )
         int nAxesRight   = nAxesRight0;
         int nAxesTop     = nAxesTop0;
         int nAxesBottom  = nAxesBottom0;
-        uint i;
-        for ( i = 0; i < KDChartParams::KDCHART_MAX_AXES; ++i ) {
+        int i;
+        for ( i = 0; i < (int)KDChartParams::KDCHART_MAX_AXES; ++i ) {
 
             const KDChartAxisParams& para = params()->axisParams( i );
             int areaSize = 0;
@@ -1533,6 +1555,8 @@ throw( KDChartNotEnoughSpaceException )
                         areaMax = static_cast < int > ( -1.0 * averageValueP1000
                                                         * areaMax );
                     break;
+                default:
+                    break;
                 }
 
                 switch ( para.axisAreaMode() ) {
@@ -1578,6 +1602,8 @@ throw( KDChartNotEnoughSpaceException )
                     break;
                 case KDChartAxisParams::AxisPosRight:
                     nAxesRight += areaSize;
+                    break;
+                default:
                     break;
                 }
 

@@ -1,12 +1,32 @@
 /* -*- Mode: C++ -*-
-
-  $Id$
-
-  KDChart - a multi-platform charting engine
-
-  Copyright (C) 2001 by Klarälvdalens Datakonsult AB
+   $Id$
+   KDChart - a multi-platform charting engine
 */
 
+/****************************************************************************
+** Copyright (C) 2001-2002 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KDChart library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KDChart licenses may use this file in
+** accordance with the KDChart Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/Public/products/ for
+**   information about KDChart Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
 #ifndef __KDCHARTPAINTER_H__
 #define __KDCHARTPAINTER_H__
 
@@ -148,23 +168,23 @@ protected:
                           to the right of the data display, it will be
                           below the headers and on top of the footers.
                           */
-    uint _legendEMSpace; // an em space in the legend font
-    uint _legendSpacing; // the line spacing in the legend font
-    uint _legendHeight; // the font height in the legend font
-    uint _legendLeading; // the font leading in the legend font
-//     uint _legendTitleSpacing; // the line spacing in the legend title font
-//    uint _legendTitleHeight; // the font height in the legend title font
-//     uint _legendTitleLeading; // the font leading in the legend title font
+    int _legendEMSpace; // an em space in the legend font
+    int _legendSpacing; // the line spacing in the legend font
+    int _legendHeight; // the font height in the legend font
+    int _legendLeading; // the font leading in the legend font
+//     int _legendTitleSpacing; // the line spacing in the legend title font
+//    int _legendTitleHeight; // the font height in the legend title font
+//     int _legendTitleLeading; // the font leading in the legend title font
     KDChartTextPiece* _legendTitle;
 
-    uint _numLegendTexts; // the number of legend items to show
+    int _numLegendTexts; // the number of legend items to show
 
     int _logicalWidth;
     int _logicalHeight;
     double _areaWidthP1000;
     double _areaHeightP1000;
 
-    QMap < uint, QString > _legendTexts; // precomputed legend texts
+    QMap < int, QString > _legendTexts; // precomputed legend texts
 
 private:
     // disallow copy-construction and assignment
