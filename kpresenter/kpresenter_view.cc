@@ -2968,12 +2968,12 @@ void KPresenterView::setupActions()
     actAutoComplete->plugAccel( accel );
 
 
-    actionInsertNote = new KAction( i18n( "Note" ), 0,
-                                    this, SLOT( insertNote() ),
-                                    actionCollection(), "insert_note" );
-    actionEditNote = new KAction( i18n("Edit Note"), 0,
-                                  this,SLOT(editNote()),
-                                  actionCollection(), "edit_note");
+    actionInsertComment = new KAction( i18n( "Comment" ), 0,
+                                    this, SLOT( insertComment() ),
+                                    actionCollection(), "insert_comment" );
+    actionEditComment = new KAction( i18n("Edit Comment"), 0,
+                                  this,SLOT(editComment()),
+                                  actionCollection(), "edit_commment");
 
 }
 
@@ -3084,7 +3084,7 @@ void KPresenterView::objectSelectedChanged()
 
     bool val=(edit!=0) && isText;
     actionInsertSpecialChar->setEnabled(val);
-    actionInsertNote->setEnabled( val );
+    actionInsertComment->setEnabled( val );
 
     actionInsertLink->setEnabled(val);
     actionFormatParag->setEnabled(val);
@@ -5637,7 +5637,7 @@ void KPresenterView::slotAutoComplete()
         edit->autoCompletion();
 }
 
-void KPresenterView::insertNote()
+void KPresenterView::insertComment()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit )
@@ -5653,12 +5653,12 @@ void KPresenterView::insertNote()
     KoNoteDia *noteDia = new KoNoteDia( this, QString::null,authorName );
     if( noteDia->exec() )
     {
-        edit->insertNote(noteDia->noteText());
+        edit->insertComment(noteDia->noteText());
     }
     delete noteDia;
 }
 
-void KPresenterView::editNote()
+void KPresenterView::editComment()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )

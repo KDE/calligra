@@ -1419,7 +1419,7 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 }
 
 
-void KPTextView::insertNote(const QString &_note)
+void KPTextView::insertComment(const QString &_note)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();

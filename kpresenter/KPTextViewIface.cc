@@ -118,5 +118,5 @@ void KPTextViewIface::insertVariable( const QString & var)
 
 void KPTextViewIface::insertNote(const QString &_note)
 {
-    m_textview->insertNote(_note);
+    m_textview->insertComment(_note);
 }
