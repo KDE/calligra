@@ -78,12 +78,12 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
-        m_cachedPixmap = m_originalImage.scale( size );
+        m_cachedPixmap.convertFromImage(m_originalImage.scale( size ), QPixmap::Color); // Always color or else B/W can be reversed
         m_cacheIsInFastMode=true;
     }
     else
     {
-        m_cachedPixmap = m_originalImage.smoothScale( size );
+        m_cachedPixmap.convertFromImage(m_originalImage.smoothScale( size ), QPixmap::Color); // Always color or else B/W can be reversed
         m_cacheIsInFastMode=false;
     }
     m_cachedSize=size;
