@@ -2909,6 +2909,10 @@ bool KWTextFrameSet::sortText(sortType type)
     return true;
 }
 
+MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& docPoint )
+{
+    return MEANING_MOUSE_INSIDE_TEXT;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

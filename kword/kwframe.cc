@@ -1373,8 +1373,9 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
     }
 
     frame = frameAtPos( docPoint.x(), docPoint.y() );
-    if ( frame == 0L )
+    if ( frame == 0L ) {
         return MEANING_NONE;
+    }
 
     // Found a frame under the cursor
     // Ctrl -> move or select
@@ -1386,8 +1387,12 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
     if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
         return defaultCursor;
 
-    // huh? return frame->getMouseMeaning( docPoint, MEANING_MOUSE_INSIDE_TEXT );
-    return MEANING_MOUSE_INSIDE_TEXT;
+    return getMouseMeaningInsideFrame( docPoint );
+}
+
+MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
+{
+    return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
@@ -1905,13 +1910,6 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
 #endif
     m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
-}
-
-bool KWPictureFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
-{
-    // For pictures there is nothing to do when clicking
-    // inside the frame, so the whole frame is a 'border' (clicking in it selects the frame)
-    return KWFrameSet::isFrameAtPos( frame, nPoint, false );
 }
 
 FrameSetType KWPictureFrameSet::type( void )

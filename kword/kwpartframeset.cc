@@ -280,5 +280,4 @@ void KWPartFrameSet::storeInternal()
     kdDebug()<<k_funcinfo<<"url: "<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal()<<endl;
 }
 
-
 #include "kwpartframeset.moc"

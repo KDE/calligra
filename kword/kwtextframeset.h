@@ -168,6 +168,7 @@ public:
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
+    virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 

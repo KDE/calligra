@@ -1205,7 +1205,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
         }
     } else {
         if ( m_mouseMode == MM_EDIT )
-            viewport()->setCursor( m_doc->getMouseCursor( normalPoint, e->state() & ControlButton ) );
+            viewport()->setCursor( m_doc->getMouseCursor( normalPoint, e->state() ) );
     }
 }
 
@@ -2197,7 +2197,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     case MM_EDIT: {
         QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
         QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-        viewport()->setCursor( m_doc->getMouseCursor( normalPoint, false /*....*/ ) );
+        viewport()->setCursor( m_doc->getMouseCursor( normalPoint, 0 /*....*/ ) );
         m_frameInline = false;
     } break;
     case MM_CREATE_TEXT:
@@ -2526,7 +2526,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( m_doc->getMouseCursor( normalPoint, true ) );
+                    viewport()->setCursor( m_doc->getMouseCursor( normalPoint, keyev->stateAfter() ) );
                 }
                 else if ( (keyev->key() == Key_Delete || keyev->key() ==Key_Backspace )
                           && m_doc->getFirstSelectedFrame() && !m_printing )
@@ -2541,7 +2541,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( m_doc->getMouseCursor( normalPoint, false ) );
+                    viewport()->setCursor( m_doc->getMouseCursor( normalPoint, keyev->stateAfter() ) );
                 }
 
                 if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )

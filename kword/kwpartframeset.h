@@ -57,6 +57,7 @@ public:
 
     virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
 
+
     /**
      * Called by KWView when the object is being edited (activated).
      * Allows to store the initial position.
@@ -90,7 +91,7 @@ public:
     void setDeleted( bool on = true );
 
     virtual void storeInternal();
-    
+
 private:
     KWChild *m_child;
     KWFramePartMoveCommand *m_cmdMoveChild;

@@ -490,7 +490,7 @@ public:
         @param point the point in normal coordinates.
         @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
-    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
+    bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
 
     /** return a frame if nPoint in on one of its borders */
     KWFrame *frameByBorder( const QPoint & nPoint );
@@ -635,7 +635,16 @@ public:
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
 
+    /**
+     * Return "what it means" to have the mouse at position nPoint,
+     * (which kwdoc tests to be over one of our frames).
+     * The meaning is "what will happen when clicking".
+     */
     virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
+    /**
+     * Return the meaning of clicking inside the frame (when neither Ctrl nor Shift is pressed)
+     */
+    virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
 
     /** Show a popup menu - called when right-clicking inside a frame of this frameset.
      * The default implementation shows "frame_popup".
@@ -870,7 +879,6 @@ public:
     // Pixmaps can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
-    virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
 #ifndef NDEBUG
     virtual void printDebug( KWFrame* frame );
 #endif
