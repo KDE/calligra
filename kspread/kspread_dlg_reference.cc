@@ -45,12 +45,12 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   m_rangeName = new QLabel(this);
   lay1->addWidget(m_rangeName);
 
-  m_pRemove = new QPushButton(i18n("Remove"), this);
+  m_pRemove = new QPushButton(i18n("&Remove..."), this);
   lay1->addWidget( m_pRemove );
   //m_pRemove->setEnabled(false);
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
   m_pCancel = bb->addButton( i18n( "&Cancel" ) );
   bb->layout();

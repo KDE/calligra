@@ -193,7 +193,7 @@ void KSpreadOsziDlg::slotCalc()
 	return;
     }
 
-    QProgressDialog dlg( i18n("Calculating"), i18n("Cancel"), 400, this, 0, FALSE );
+    QProgressDialog dlg( i18n("Calculating"), i18n("&Cancel"), 400, this, 0, FALSE );
     dlg.show();
 
     double ymin;

@@ -57,19 +57,19 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   entryList=new QMultiLineEdit(this);
   grid1->addMultiCellWidget(entryList,1,8,1,1);
 
-  m_pRemove=new QPushButton(i18n("Remove"),this);
+  m_pRemove=new QPushButton(i18n("&Remove"),this);
   grid1->addWidget(m_pRemove,3,2);
 
-  m_pAdd=new QPushButton(i18n("Add"),this);
+  m_pAdd=new QPushButton(i18n("&Add"),this);
   grid1->addWidget(m_pAdd,1,2);
 
-  m_pNew=new QPushButton(i18n("New"),this);
+  m_pNew=new QPushButton(i18n("&New"),this);
   grid1->addWidget(m_pNew,2,2);
 
-  m_pModify=new QPushButton(i18n("Modify"),this);
+  m_pModify=new QPushButton(i18n("&Modify"),this);
   grid1->addWidget(m_pModify,4,2);
 
-  m_pCopy=new QPushButton(i18n("Copy"),this);
+  m_pCopy=new QPushButton(i18n("Co&py"),this);
   grid1->addWidget(m_pCopy,5,2);
 
 

@@ -74,14 +74,14 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   Layout1->addItem( spacer );
   
   buttonOk = new QPushButton( this, "buttonOk" );
-  buttonOk->setText( i18n( "OK" ) );
+  buttonOk->setText( i18n( "&OK" ) );
   buttonOk->setAccel( 0 );
   buttonOk->setAutoDefault( TRUE );
   buttonOk->setDefault( TRUE );
   Layout1->addWidget( buttonOk );
     
   buttonCancel = new QPushButton( this, "buttonCancel" );
-  buttonCancel->setText( i18n( "Cancel" ) );
+  buttonCancel->setText( i18n( "&Cancel" ) );
   buttonCancel->setAccel( 0 );
   buttonCancel->setAutoDefault( TRUE );
   Layout1->addWidget( buttonCancel );

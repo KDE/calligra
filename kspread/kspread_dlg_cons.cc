@@ -49,10 +49,11 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_1" );
   grid1->addWidget(tmpQLabel,0,0);
-  tmpQLabel->setText( i18n("Function:") );
-
+  tmpQLabel->setText( i18n("&Function:") );  
+  
   m_pFunction = new QComboBox( this );
   grid1->addWidget(m_pFunction,1,0);
+  tmpQLabel->setBuddy(m_pFunction);
 
   m_pFunction->insertItem( i18n("Sum"), Sum );
   m_pFunction->insertItem( i18n("Average"), Average );
@@ -64,24 +65,26 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pFunction->insertItem( i18n("Variance"), Var );
 
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setText( i18n("Reference:") );
+  tmpQLabel->setText( i18n("Re&ference:") );
   grid1->addWidget(tmpQLabel,2,0);
 
   m_pRef = new QLineEdit( this );
   grid1->addWidget(m_pRef,3,0);
-
+  tmpQLabel->setBuddy(m_pRef);
+  
   tmpQLabel = new QLabel( this, "Label_1" );
   grid1->addWidget(tmpQLabel,4,0);
-  tmpQLabel->setText( i18n("Entered references:") );
+  tmpQLabel->setText( i18n("&Entered references:") );
 
   m_pRefs = new QListBox( this );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
-
-  m_pRow = new QCheckBox( i18n("Description in row"), this );
+  tmpQLabel->setBuddy(m_pRefs);
+  
+  m_pRow = new QCheckBox( i18n("&Description in row"), this );
   grid1->addWidget( m_pRow,9,0);
-  m_pCol = new QCheckBox( i18n("Description in column"), this );
+  m_pCol = new QCheckBox( i18n("De&scription in column"), this );
   grid1->addWidget(m_pCol,10,0);
-  m_pCopy = new QCheckBox( i18n("Copy data"), this );
+  m_pCopy = new QCheckBox( i18n("Co&py data"), this );
   grid1->addWidget(m_pCopy,11,0);
 
   m_pOk = new QPushButton( i18n("&OK"), this );
@@ -90,9 +93,9 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pCancel= new QPushButton( i18n("&Cancel"), this );
   grid1->addWidget(m_pCancel,1,1);
 
-  m_pAdd = new QPushButton( i18n("Add"), this );
+  m_pAdd = new QPushButton( i18n("&Add"), this );
   grid1->addWidget(m_pAdd,2,1);
-  m_pRemove = new QPushButton( i18n("Remove"), this );
+  m_pRemove = new QPushButton( i18n("&Remove"), this );
   grid1->addWidget(m_pRemove,3,1);
 
 

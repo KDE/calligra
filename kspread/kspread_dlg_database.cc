@@ -101,7 +101,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   Frame16Layout->addWidget( m_Type, 0, 0 );
 
   QLabel * TextLabel4 = new QLabel( Frame16, "TextLabel4" );
-  TextLabel4->setText( i18n( "Username:\n"
+  TextLabel4->setText( i18n( "User name:\n"
                                "(if necessary)" ) );
   Frame16Layout->addWidget( TextLabel4, 4, 0 );
 

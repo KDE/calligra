@@ -28,12 +28,12 @@
 #include <kmessagebox.h>
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
-        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,i18n("OK"),i18n("Clear All"))
+        :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,i18n("&OK"),i18n("Clear &All"))
 
 {
     m_pView=parent;
     marker=_marker;
-   QFrame *page1 = addPage(i18n("Values"));
+   QFrame *page1 = addPage(i18n("&Values"));
    QVBoxLayout *lay1 = new QVBoxLayout( page1 );
     lay1->setMargin( KDialogBase::marginHint()  );
     lay1->setSpacing( KDialogBase::spacingHint() );
@@ -58,7 +58,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     listType+=i18n("Text");
     listType+=i18n("Date");
     listType+=i18n("Time");
-    listType+=i18n("Text length");
+    listType+=i18n("Text Length");
     chooseType->insertStringList(listType);
     chooseType->setCurrentItem(0);
 
@@ -101,7 +101,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     val_max->setValidator( new KFloatValidator( val_max ) );
     lay1->addWidget(tmpQButtonGroup);
 
-    QFrame *page2 = addPage(i18n("Error Alert"));
+    QFrame *page2 = addPage(i18n("&Error Alert"));
 
     lay1 = new QVBoxLayout( page2 );
     lay1->setMargin( 5 );

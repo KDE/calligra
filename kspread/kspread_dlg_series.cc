@@ -48,7 +48,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   grid1->setSpacing( spacingHint() );
 
   QButtonGroup* gb1 = new QButtonGroup( 2, Qt::Vertical, 
-    i18n("Insert values"), page );
+    i18n("Insert Values"), page );
   column = new QRadioButton( i18n("Vertical"), gb1 );
   QWhatsThis::add(column, i18n("Insert the series vertically, one below the other") );
   row = new QRadioButton( i18n("Horizontal"), gb1 );

@@ -218,7 +218,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   Layout1->addWidget( m_buttonOk );
 
   m_buttonCancel = new QPushButton( this, "buttonCancel" );
-  m_buttonCancel->setText( i18n( "Cancel" ) );
+  m_buttonCancel->setText( i18n( "&Cancel" ) );
   m_buttonCancel->setAccel( 0 );
   m_buttonCancel->setAutoDefault( TRUE );
   Layout1->addWidget( m_buttonCancel );
