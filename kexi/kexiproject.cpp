@@ -49,13 +49,12 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 bool KexiProject::initDoc()
 {
 	QString filename;
-	KexiCreateProject *newDlg;
 	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-kexi","*.kex",
 		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
-		newDlg = new KexiCreateProject(this,0);
+		KexiCreateProject *newDlg = new KexiCreateProject(this,0);
 		newDlg->exec();
 		delete newDlg;
 		ok=true;
@@ -93,55 +92,53 @@ void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bo
 bool
 KexiProject::saveProject()
 {
-	if(m_url == "")
-	{
+	if(m_url.isEmpty())
 		return false;
-	}
 
 	KoStore* store = KoStore::createStore(m_url, KoStore::Write, "application/x-kexi");
 	if(store)
 	{
 		emit saving(store);
 	}
-	
+
 	QDomDocument domDoc("KexiProject");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-	
+
 	QDomElement projectElement = domDoc.createElement("KexiProject");
 	domDoc.appendChild(projectElement);
-	
+
 	QDomElement engineElement = domDoc.createElement("engine");
 	projectElement.appendChild(engineElement);
-	
+
 	QDomText tEngine = domDoc.createTextNode(m_cred.driver);
 	engineElement.appendChild(tEngine);
-	
+
 	QDomElement hostElement = domDoc.createElement("host");
 	projectElement.appendChild(hostElement);
-	
+
 	QDomText tHost = domDoc.createTextNode(m_cred.host);
 	hostElement.appendChild(tHost);
-	
+
 	QDomElement nameElement = domDoc.createElement("name");
 	projectElement.appendChild(nameElement);
-	
+
 	QDomText tName = domDoc.createTextNode(m_cred.database);
 	nameElement.appendChild(tName);
-	
+
 	QDomElement userElement = domDoc.createElement("user");
 	projectElement.appendChild(userElement);
-	
+
 	QDomText tUser = domDoc.createTextNode(m_cred.user);
 	userElement.appendChild(tUser);
-	
+
 	QDomElement passElement = domDoc.createElement("password");
 	projectElement.appendChild(passElement);
-	
+
 //	QDomText tPass = domDoc.createTextNode(m_cred.password);
 //	passElement.appendChild(tPass);
 
 	QDomText tPass;
-	
+
 	if(m_cred.savePassword)
 	{
 		tPass = domDoc.createTextNode(m_cred.password);
@@ -150,12 +147,12 @@ KexiProject::saveProject()
 	{
 		tPass = domDoc.createTextNode("");
 	}
-	
+
 	passElement.appendChild(tPass);
 
 	QDomElement savePassElement = domDoc.createElement("savePassword");
 	projectElement.appendChild(savePassElement);
-	
+
 	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
 	savePassElement.appendChild(tSavePass);
 
@@ -179,14 +176,14 @@ KexiProject::saveProject()
 		else
 		{
 			kdDebug() << "KexiProject::saveProject(): creating group: " << ref.group << endl;
-			
+
 			QDomElement group = domDoc.createElement(ref.group);
 			group.appendChild(item);
-			
+
 			m_refGroups.insert(ref.group, group);
 		}
 	}
-	
+
 	for(Groups::Iterator itG = m_refGroups.begin(); itG != m_refGroups.end(); itG++)
 	{
 		refs.appendChild(itG.data());
@@ -210,7 +207,7 @@ KexiProject::saveProject()
 			store->write(data);
 			store->close();
 		}
-		
+
 		delete store;
 		m_modified = false;
 //		kexi->mainWindow()->slotProjectModified();
@@ -232,32 +229,32 @@ KexiProject::loadProject(const QString& url)
 {
 	m_url = url;
 	KoStore* store = KoStore::createStore(m_url, KoStore::Read, "application/x-kexi");
-	
+
 	if(!store)
 	{
 		return false;
 	}
-	
+
 	store->open("/project.xml");
 	QDomDocument inBuf;
-	
+
 	//error reporting
 	QString errorMsg;
 	int errorLine;
 	int errorCol;
-	
+
 	bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
 	store->close();
 	delete store;
-	
+
 	if(!parsed)
 	{
 		kdDebug() << "coudn't parse:" << endl;
-		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl; 
+		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl;
 		return false;
 	}
 
-		
+
 	QDomElement projectData = inBuf.namedItem("KexiProject").toElement();
 
 	QDomElement engineElement = projectData.namedItem("engine").toElement();
@@ -276,7 +273,7 @@ KexiProject::loadProject(const QString& url)
 		QDomNode groups = reflist.item(ci);
 		QDomNodeList groupList = groups.childNodes();
 		QString groupName = groups.toElement().tagName();
-		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl; 
+		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl;
 		for(int gi = 0; gi < groupList.count(); gi++)
 		{
 			QDomElement item = groupList.item(gi).toElement();
@@ -287,9 +284,9 @@ KexiProject::loadProject(const QString& url)
 			ref.group = groupName;
 			ref.name = name;
 			ref.location = location;
-				
+
 				qDebug("KexiProject::openProject(): #ref %s:%s:%s\n",groupName.latin1(),name.latin1(),location.latin1());
-		
+
 			m_fileReferences.append(ref);
 		}
 	}
@@ -302,18 +299,18 @@ KexiProject::loadProject(const QString& url)
 	parsedCred.password = passElement.text();
 	parsedCred.savePassword = stringToBool(savePassElement.text());
 	bool mod = false;
-	
+
 	if(!parsedCred.savePassword)
 	{
 		QCString password;
 		int keep = 1;
 		int result = KPasswordDialog::getPassword(password, i18n("Password for %1 on %2").arg(parsedCred.user)
 			.arg(parsedCred.host), &keep);
-		
+
 		if(result == KPasswordDialog::Accepted)
 		{
 			parsedCred.password = password;
-			
+
 			if(keep)
 			{
 				parsedCred.savePassword = true;
@@ -321,28 +318,28 @@ KexiProject::loadProject(const QString& url)
 			}
 		}
 	}
-	
+
 	initDbConnection(parsedCred);
-	
+
 	m_modified = mod;
 	emit docModified();
 //	kexi->mainWindow()->slotProjectModified();
-	
+
 	kdDebug() << "File opened!" << endl;
-	
+
 	return true;
 }
 
 bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 {
 	kdDebug() << "KexiProject::initDbConnection()" << endl;
-	
+
 	kdDebug() << "KexiProject::initDbConnection(): engine:" << cred.driver << endl;
 	kdDebug() << "KexiProject::initDbConnection(): host:" << cred.host << endl;
 	kdDebug() << "KexiProject::initDbConnection(): user:" << cred.user << endl;
 	kdDebug() << "KexiProject::initDbConnection(): database:" << cred.database << endl;
 
-	
+
 	if(m_db->driverName() != cred.driver)
 	{
 		kdDebug() << "KexiProject::initDBConnection(): abroating" << endl;
@@ -369,7 +366,7 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 	}
 }
 
-bool 
+bool
 KexiProject::initHostConnection(const Credentials &cred)
 {
 	kdDebug() << "KexiProject::initHostConnection" << endl;

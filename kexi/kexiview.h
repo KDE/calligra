@@ -56,7 +56,7 @@ public:
 	QWidget* workspaceWidget()const { return m_workspace; };
 	KexiTabBrowser* browser()const { return m_browser; };
 	KexiWindowMode windowMode()const { return m_windowMode;};
-	KexiProject *project();
+	KexiProject *project()const ;
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -67,7 +67,6 @@ protected:
 	void			initActions();
 	void			initMainDock();
 	void			initDocBrowser();
-	virtual bool		queryExit();
 
 	QWidget			*m_mainContent;
 	KDockWidget		*m_mainDock;
@@ -93,8 +92,6 @@ protected slots:
 	void			slotShowProjectProps();
 
 	void			slotSettings();
-	void			slotKeyBindings();
-	void			slotConfigToolbars();
 
 	void			slotProjectModified();
 	void			slotDBAvaible();

@@ -78,7 +78,7 @@ DCOPObject* KexiView::dcopObject()
 }
 
 
-KexiProject *KexiView::project()
+KexiProject *KexiView::project() const
 {
     return m_project;
 }
@@ -167,10 +167,7 @@ void KexiView::initActions()
 	m_formActionList = new QPtrList<KAction>;
 
 	//standard actions
-	(void*) KStdAction::quit(qApp, SLOT(quit()), actionCollection());
 	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
-	(void*) KStdAction::keyBindings(this, SLOT(slotKeyBindings()), actionCollection());
-	(void*) KStdAction::configureToolbars(this, SLOT(slotConfigToolbars()), actionCollection());
 
 //	setStandardToolBarMenuEnabled( true );
 
@@ -252,49 +249,11 @@ KexiView::~KexiView(){
     delete dcop;
 }
 
-bool
-KexiView::queryExit()
-{
-#if 0
-	if(m_project->modified())
-	{
-		QString text = i18n("<qt>Your projectfile has changed.<br>Do you want to save it?</qt>");
-		QString caption = i18n("Save Projectfile?");
-		int ans = KMessageBox::warningYesNoCancel(this, text, caption);
-
-		if(ans == KMessageBox::Yes)
-		{
-			slotFileSave();
-		}
-		else if(ans == KMessageBox::Cancel)
-		{
-			return false;
-		}
-	}
-	return true;
-#endif
-}
-
 void
 KexiView::slotSettings()
 {
 }
 
-void
-KexiView::slotKeyBindings()
-{
-	KKeyDialog::configureKeys(actionCollection(), xmlFile());
-}
-
-void
-KexiView::slotConfigToolbars()
-{
-	KEditToolbar dlg(actionCollection());
-
-	if(dlg.exec()) {
-//		createGUI();
-	}
-}
 
 void
 KexiView::slotShowRelations()
