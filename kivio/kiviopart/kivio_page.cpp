@@ -50,6 +50,8 @@
 #include <kozoomhandler.h>
 #include <kapplication.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
+#include <kodom.h>
 #include <koStore.h>
 #include <koOasisStyles.h>
 #include <koGenStyles.h>
@@ -316,15 +318,15 @@ bool KivioPage::loadXML( const QDomElement& pageE )
 
 bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
 {
-  m_strName = page.attribute("draw:name");
-  QDomElement* masterPage = oasisStyles.masterPages()[page.attribute("draw:master-page-name")];
+  m_strName = page.attributeNS( KoXmlNS::draw, "name", QString::null);
+  QDomElement* masterPage = oasisStyles.masterPages()[page.attributeNS( KoXmlNS::draw, "master-page-name", QString::null)];
   
   if(!masterPage) {
-    kdDebug(430000) << "Couldn't find the master page! " << page.attribute("draw:master-page-name") << endl;
+    kdDebug(430000) << "Couldn't find the master page! " << page.attributeNS( KoXmlNS::draw, "master-page-name", QString::null) << endl;
     return false;
   }
   
-  QDomElement *pageLayout = oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )];
+  QDomElement *pageLayout = oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )];
   
   if(!pageLayout) {
     kdDebug(430000) << "Couldn't find the pagelayout!" << endl;
@@ -338,14 +340,14 @@ bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
     return false;
   }
   
-  QDomElement* style = oasisStyles.styles()[page.attribute("draw:style-name")]; // Find the page style
+  QDomElement* style = oasisStyles.styles()[page.attributeNS( KoXmlNS::draw, "style-name", QString::null)]; // Find the page style
   
   if(!style) {
     return false;
   }
   
-  QDomNode styleNode = style->namedItem("style:properties");
-  styleNode = styleNode.namedItem("draw:layer-set");
+  QDomNode styleNode = KoDom::namedItemNS( *style, KoXmlNS::style, "properties");
+  styleNode = KoDom::namedItemNS( styleNode, KoXmlNS::draw, "layer-set");
   QDomNode currentNode = styleNode.firstChild();
   
   // Load the layers
