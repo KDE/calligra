@@ -266,9 +266,9 @@ void
 KarbonView::textTool()
 {
     kdDebug() << "KarbonView::textTool()" << endl;
-	QFont f;
+	QFont *f = new QFont;
 
-	KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white, false );
+	/*KoFontDia *fontDia = new KoFontDia( this, "", f, false, false, Qt::black, Qt::white, false );
 	fontDia->exec();
 	int flags = fontDia->changedFlags();
 	//kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
@@ -279,10 +279,13 @@ KarbonView::textTool()
 		//fontDia->color(),fontDia->backGroundColor(), flags);
 	}
 
-	delete fontDia;
+	delete fontDia;*/
+
+	f->setFamily( m_setFontFamily->font() );
+	f->setPointSize( m_setFontSize->fontSize() );
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VCCmdText( m_part, f, "KARBON" ), true );
+	m_part->addCommand( new VCCmdText( m_part, *f, "KARBON" ), true );
 }
 
 void
@@ -502,6 +505,17 @@ KarbonView::initActions()
 	m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
+	// text
+
+	m_setFontFamily = new KFontAction( i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
+	//connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
+
+	m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
+	//connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
+
+	//m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
+	//connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
+
 	// view ----->
 	m_viewAction = new KSelectAction(
 		i18n( "View &Mode" ), 0, this,
@@ -531,11 +545,11 @@ KarbonView::initActions()
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );
-	
+
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-		
+
 	new KAction(
 		i18n( "&Refresh" ), 0, QKeySequence("Ctrl+W"), this,
 		SLOT( refreshView() ), actionCollection(), "view_refresh" );

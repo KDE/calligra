@@ -15,6 +15,9 @@ class QPaintEvent;
 class KAction;
 class KSelectAction;
 class KToggleAction;
+class KFontAction;
+class KFontSizeAction;
+class KSelectColorAction;
 
 class KarbonPart;
 class VTool;
@@ -127,6 +130,14 @@ private:
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
 	KToggleAction* m_textToolAction;
+
+	// text
+	KFontAction *m_setFontFamily;
+	KFontSizeAction *m_setFontSize;
+	KToggleAction *m_setBold;
+	KToggleAction *m_setItalics;
+	KToggleAction *m_setUnderline;
+	//KSelectColorAction *m_setTextColor;
 
 	//toolbox
 	VToolContainer *m_toolbox;

@@ -73,4 +73,10 @@
 		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
 	</ToolBar>
+	<ToolBar name="font_toolbar" fullWidth="false">
+		<Text>Font</Text>
+		<Action name="setFontFamily"/>
+		<Action name="setFontSize"/>
+		<Separator lineSeparator="true" />
+	</ToolBar>
 </kpartgui>
