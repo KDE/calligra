@@ -287,7 +287,7 @@ void KSpreadValue::setValue( const QDateTime& dt )
   QDate refDate = QDate( 1899, 12, 31 );
   QTime refTime = QTime( 0, 0 );
 
-  double f = refDate.daysTo( dt.date() );
+  double f = refDate.daysTo( dt.date() ) + 1.0;
   f += refTime.secsTo( dt.time() ) / 86400.0;
 
   setValue( f );
@@ -306,7 +306,7 @@ void KSpreadValue::setValue( const QDate& date )
 {
   // reference date is 31 Dec, 1899
   QDate refDate = QDate( 1899, 12, 31 );
-  double f = refDate.daysTo( date );
+  double f = refDate.daysTo( date ) + 1.0;
 
   setValue( f );
 }
@@ -316,7 +316,7 @@ QDateTime KSpreadValue::asDateTime() const
 {
   QDateTime dt = QDate( 1899, 12, 31 );
 
-  double f = asFloat();
+  double f = asFloat() - 1.0;
   dt = dt.addDays( (int) f );
   dt = dt.addSecs( (f-(int)f) * 86400 );
 
