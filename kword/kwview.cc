@@ -1679,7 +1679,11 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     QColor col=currentFormat.textBackgroundColor();
     //actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
-    actionBackgroundColor->setText(i18n("Text Background Color..."));
+
+    if ( m_doc->getSelectedFrames().count() > 0)
+        actionBackgroundColor->setText(i18n("Frame Background Color"));
+    else
+        actionBackgroundColor->setText(i18n("Text Background Color..."));
     actionFormatColor->setCurrentColor( currentFormat.color() );
     switch(currentFormat.vAlign())
       {
@@ -5290,6 +5294,7 @@ void KWView::frameSelectedChanged()
     }
 
     actionBackgroundColor->setEnabled( (nbFrame >= 1) && frameDifferentOfPart);
+    actionBackgroundColor->setText(i18n("Frame Background Color"));
 
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
@@ -5297,7 +5302,7 @@ void KWView::frameSelectedChanged()
         if ( frame )
         {
             QColor frameCol=frame->backgroundColor().color();
-            actionBackgroundColor->setText(i18n("Frame Background Color"));
+            //actionBackgroundColor->setText(i18n("Frame Background Color"));
             actionBackgroundColor->setCurrentColor( frameCol.isValid()? frame->backgroundColor().color() :  QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
         }
     }
