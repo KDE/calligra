@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Nash Hoogwater <nrhoogwater@wanadoo.nl>
+   Copyright (C) 2002 Nash Hoogwater <nrhoogwater@wanadoo.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -575,6 +575,9 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
  */
 void KWTableStyleManager::changeFrameStyle()
 {
+// 0. Save name, otherwise it will be gone when you return
+    save();
+
 // 1. Execute frameStylist
     KWFrameStyleManager *frameStylist = new KWFrameStyleManager( this, m_doc, m_doc->frameStyleCollection()->frameStyleList() );
 
@@ -592,6 +595,9 @@ void KWTableStyleManager::changeFrameStyle()
  */
 void KWTableStyleManager::changeStyle()
 {
+// 0. Save name, otherwise it will be gone when you return
+    save();
+
 // 1. Execute stylist
     KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList());
     styleManager->exec();
