@@ -134,12 +134,21 @@
 		floatcolor:		???
 		faktor:			???
 -->
-<!ELEMENT FORMAT EMPTY>
+<!ELEMENT FORMAT (FONT?,PEN?)>
 <!ATTLIST FORMAT        align            CDATA #REQUIRED
+                        alignY           CDATA #REQUIRED
+                        bgcolor          CDATA #REQUIRED
+                        multirow         CDATA #REQUIRED
+                        verticaltext     CDATA #REQUIRED
                         precision        CDATA #REQUIRED
+                        prefix           CDATA #REQUIRED
+                        postfix          CDATA #REQUIRED
                         float            CDATA #REQUIRED
                         floatcolor       CDATA #REQUIRED
-                        faktor           CDATA #REQUIRED>
+                        faktor           CDATA #REQUIRED
+                        format           CDATA #REQUIRED
+                        angle            CDATA #REQUIRED
+                        brushcolor       CDATA #REQUIRED>
 
 
 <!--	Describes one column

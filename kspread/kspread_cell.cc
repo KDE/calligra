@@ -231,8 +231,6 @@ void KSpreadCell::defaultStyle()
   setAlignY( KSpreadCell::Middle );
   setBackGroundBrushColor(Qt::red);
   setBackGroundBrushStyle(Qt::NoBrush);
-  QFont font( "Helvetica", 12 );
-  m_textFont = font;
   setTextColor( QColor() );
   setBgColor( QColor() );
   setFaktor( 1.0);

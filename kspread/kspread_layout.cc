@@ -27,6 +27,9 @@
 #include <qdom.h>
 #include <qapplication.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kcharsets.h>
 #include <koGlobal.h>
 
 using namespace std;
@@ -75,7 +78,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_eFormatNumber=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
-    QFont font( "Helvetica", 12 );
+    QFont font = KGlobalSettings::generalFont();
+    KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
 }
 
@@ -157,6 +161,7 @@ QDomElement KSpreadLayout::createElement( const QString &tagName, const QFont &f
     	e.setAttribute( "underline", "yes" );
     if ( font.strikeOut() )
     	e.setAttribute( "strikeout", "yes" );
+    //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
 
     return e;
 }
@@ -193,6 +198,13 @@ QFont KSpreadLayout::toFont(QDomElement &element) const
 
     if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
 	f.setStrikeOut( TRUE );
+
+/* Uncomment when charset is added to kspread_dlg_layout
+   + save a document-global charset
+    if ( element.hasAttribute( "charset" ) )
+	KGlobal::charsets()->setQFont( f, element.attribute("charset") );
+    else */
+	KGlobal::charsets()->setQFont( f, KGlobal::locale()->charset() );
 
     return f;
 }

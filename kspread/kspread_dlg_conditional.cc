@@ -470,7 +470,7 @@ if(firstCond->typeOfCondition()!=None)
   }
  else
    {
-     QFont font( "Helvetica", 12 );
+     QFont font = KGlobalSettings::generalFont();
      tmpCond[0].m_cond=None;
      tmpCond[0].fontcond=font;
      tmpCond[0].colorcond=Qt::black;
@@ -494,7 +494,7 @@ if(firstCond->typeOfCondition()!=None)
    }
  else
    {
-     QFont font( "Helvetica", 12 );
+     QFont font = KGlobalSettings::generalFont();
      tmpCond[1].m_cond=None;
      tmpCond[1].fontcond=font;
      tmpCond[1].colorcond=Qt::black;
@@ -518,7 +518,7 @@ if(firstCond->typeOfCondition()!=None)
    }
  else
    {
-     QFont font( "Helvetica", 12 );
+     QFont font = KGlobalSettings::generalFont();
      tmpCond[2].m_cond=None;
      tmpCond[2].fontcond=font;
      tmpCond[2].colorcond=Qt::black;
