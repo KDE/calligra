@@ -189,7 +189,7 @@ bool KOSpellConfig::readGlobalSettings ()
   setRunTogether   (kc->readNumEntry ("KSpell_RunTogether", 0));
   setDictionary    (kc->readEntry ("KSpell_Dictionary", ""));
   setDictFromList  (kc->readNumEntry ("KSpell_DictFromList", FALSE));
-  setEncoding (kc->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+  setEncoding (kc->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
   setIgnoreCase( kc->readNumEntry( "KSpell_IgnoreCase", 0));
   setIgnoreAccent( kc->readNumEntry( "KSpell_IgnoreAccent", 0));
   return TRUE;
@@ -296,19 +296,19 @@ bool KOSpellConfig::interpret (QString &fname, QString &lname,
     lname="no"; hname=i18n("Norwegian");
   }
   else if (dname=="polish") {
-      lname="pl"; hname=i18n("Polish"); //sChangeEncoding(KS_E_LATIN2);
+      lname="pl"; hname=i18n("Polish"); //sChangeEncoding(KOS_E_LATIN2);
   }
   else if (dname=="russian") {
     lname="ru"; hname=i18n("Russian");
   }
   else if (dname=="slovensko") {
-      lname="si"; hname=i18n("Slovenian"); //sChangeEncoding(KS_E_LATIN2);
+      lname="si"; hname=i18n("Slovenian"); //sChangeEncoding(KOS_E_LATIN2);
   }
   else if (dname=="slovak"){
-      lname="sk"; hname=i18n("Slovak"); //sChangeEncoding(KS_E_LATIN2);
+      lname="sk"; hname=i18n("Slovak"); //sChangeEncoding(KOS_E_LATIN2);
   }
   else if (dname=="czech") {
-      lname="cs"; hname=i18n("Czech"); //sChangeEncoding(KS_E_LATIN2);
+      lname="cs"; hname=i18n("Czech"); //sChangeEncoding(KOS_E_LATIN2);
   }
   else if (dname=="svenska") {
     lname="sv"; hname=i18n("Swedish");
@@ -330,7 +330,7 @@ bool KOSpellConfig::interpret (QString &fname, QString &lname,
   }
   else if( dname == "magyar" ) {
     lname="hu"; hname=i18n("Hungarian");
-    //sChangeEncoding(KS_E_LATIN2);
+    //sChangeEncoding(KOS_E_LATIN2);
   }
   else {
     lname=""; hname=i18n("Unknown ispell dictionary", "Unknown");

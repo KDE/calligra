@@ -32,22 +32,22 @@ class KOSpellConfigPrivate;
 // Should be replaced by the charset strings
 // because the config file would be more stable
 // when inserting entries in the list
-enum Encoding {
-  KS_E_ASCII=0,
-  KS_E_LATIN1=1,
-  KS_E_LATIN2=2,
-  KS_E_LATIN3=3,
-  KS_E_LATIN4=4,
-  KS_E_LATIN5=5,
-  KS_E_LATIN7=6,
-  KS_E_LATIN8=7,
-  KS_E_LATIN9=8,
-  KS_E_LATIN13=9,
-  KS_E_LATIN15=10,
-  KS_E_UTF8=11,
-  KS_E_KOI8R=12,
-  KS_E_KOI8U=13,
-  KS_E_CP1251=14
+enum OEncoding {
+  KOS_E_ASCII=0,
+  KOS_E_LATIN1=1,
+  KOS_E_LATIN2=2,
+  KOS_E_LATIN3=3,
+  KOS_E_LATIN4=4,
+  KOS_E_LATIN5=5,
+  KOS_E_LATIN7=6,
+  KOS_E_LATIN8=7,
+  KOS_E_LATIN9=8,
+  KOS_E_LATIN13=9,
+  KOS_E_LATIN15=10,
+  KOS_E_UTF8=11,
+  KOS_E_KOI8R=12,
+  KOS_E_KOI8U=13,
+  KOS_E_CP1251=14
 };
 
 /**

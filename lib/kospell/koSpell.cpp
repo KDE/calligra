@@ -107,46 +107,46 @@ void KOSpell::initSpell(KOSpellConfig *_ksc)
     codec = 0;
     switch (ksconfig->encoding())
     {
-    case KS_E_LATIN1:
+    case KOS_E_LATIN1:
         codec = QTextCodec::codecForName("ISO 8859-1");
         break;
-    case KS_E_LATIN2:
+    case KOS_E_LATIN2:
         codec = QTextCodec::codecForName("ISO 8859-2");
         break;
-    case KS_E_LATIN3:
+    case KOS_E_LATIN3:
         codec = QTextCodec::codecForName("ISO 8859-3");
         break;
-    case KS_E_LATIN4:
+    case KOS_E_LATIN4:
         codec = QTextCodec::codecForName("ISO 8859-4");
         break;
-    case KS_E_LATIN5:
+    case KOS_E_LATIN5:
         codec = QTextCodec::codecForName("ISO 8859-5");
         break;
-    case KS_E_LATIN7:
+    case KOS_E_LATIN7:
         codec = QTextCodec::codecForName("ISO 8859-7");
         break;
-    case KS_E_LATIN8:
+    case KOS_E_LATIN8:
         codec = QTextCodec::codecForName("ISO 8859-8");
         break;
-    case KS_E_LATIN9:
+    case KOS_E_LATIN9:
         codec = QTextCodec::codecForName("ISO 8859-9");
         break;
-    case KS_E_LATIN13:
+    case KOS_E_LATIN13:
         codec = QTextCodec::codecForName("ISO 8859-13");
         break;
-    case KS_E_LATIN15:
+    case KOS_E_LATIN15:
         codec = QTextCodec::codecForName("ISO 8859-15");
         break;
-    case KS_E_UTF8:
+    case KOS_E_UTF8:
         codec = QTextCodec::codecForName("UTF-8");
         break;
-    case KS_E_KOI8R:
+    case KOS_E_KOI8R:
         codec = QTextCodec::codecForName("KOI8-R");
         break;
-    case KS_E_KOI8U:
+    case KOS_E_KOI8U:
         codec = QTextCodec::codecForName("KOI8-U");
         break;
-    case KS_E_CP1251:
+    case KOS_E_CP1251:
         codec = QTextCodec::codecForName("CP1251");
         break;
     default:
@@ -191,30 +191,30 @@ bool KOSpell::initConfig()
     aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1());
     switch (ksconfig->encoding())
     {
-    case KS_E_LATIN1:
+    case KOS_E_LATIN1:
 	aspell_config_replace(config, "encoding", "latin1");
 	break;
-    case KS_E_LATIN2:
+    case KOS_E_LATIN2:
         aspell_config_replace(config, "encoding", "latin2");
 	break;
-    case KS_E_LATIN3:
+    case KOS_E_LATIN3:
 	aspell_config_replace(config, "encoding", "latin3");
         break;
         // add the other charsets here
-    case KS_E_LATIN4:
-    case KS_E_LATIN5:
-    case KS_E_LATIN7:
-    case KS_E_LATIN8:
-    case KS_E_LATIN9:
-    case KS_E_LATIN13:
-    case KS_E_LATIN15:
+    case KOS_E_LATIN4:
+    case KOS_E_LATIN5:
+    case KOS_E_LATIN7:
+    case KOS_E_LATIN8:
+    case KOS_E_LATIN9:
+    case KOS_E_LATIN13:
+    case KOS_E_LATIN15:
 	// will work, if this is the default charset in the dictionary
 	kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
 	break;
-    case KS_E_UTF8:
+    case KOS_E_UTF8:
         aspell_config_replace(config, "encoding", "utf8");
         break;
-    case KS_E_KOI8U:
+    case KOS_E_KOI8U:
         //todo
 	break;
     }
