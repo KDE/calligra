@@ -365,7 +365,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
       break;
     case KSValue::DoubleType:
       {
-	KScript::Double result = r.value()->doubleValue() + l.value()->doubleValue();
+	KScript::Double result = l.value()->doubleValue() + r.value()->doubleValue();
 	FILL_VALUE( context, l, r );
 	context.value()->setValue( result );
 	return true;
