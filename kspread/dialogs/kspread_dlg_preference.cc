@@ -44,7 +44,6 @@
 #include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <kotabbar.h>
-#include <koSpellConfig.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
