@@ -429,7 +429,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         if ( subText.hasAttributeNS( ooNS::xlink, "href" ) )
         {
           QString link = subText.attributeNS( ooNS::xlink, "href", QString::null );
-          text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
+          if ( link[0]=='#' )
+              link=link.remove( 0, 1 );
+          if ( !cell )
+              cell = table->nonDefaultCell( columns, row );
+          cell->setLink( link );
         }
       }
       else
