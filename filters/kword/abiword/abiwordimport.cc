@@ -246,10 +246,11 @@ static inline double InchesToPoints(const double d)
 static inline double PicaToPoints(const double d)
 {
     // 1 pica = 12 pt
-    return d*12;
+    return d * 12.0;
 }
 
 static inline double IndentPos( QString _str)
+// FIXME: QString::contains does *not* return a position!
 {
   double d=0;
   int pos=0;
@@ -926,118 +927,19 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         kwordOrientation=0;
     }
 
-    double kwordHeight=0.0; // Security value!
-    double kwordWidth=0.0;  // Security value!
-    int kwordFormat;
+    double kwordHeight;
+    double kwordWidth;
 
     QString strPageType=attributes.value("pagetype").stripWhiteSpace();
 
     // Do we know the page size or do we need to measure
     // For page format that KWord knows, use our own values in case the values in the file would be wrong.
 
-    // At first, the two of the most used formats
-    if (strPageType=="A4")
-    {
-        kwordHeight = CentimetresToPoints(29.7);
-        kwordWidth  = CentimetresToPoints(21.0);
-        kwordFormat = PG_DIN_A4; // ISO A4
-    }
-    else if (strPageType=="Letter")
-    {
-        kwordHeight = InchesToPoints(11.0);
-        kwordWidth  = InchesToPoints( 8.5);
-        kwordFormat = PG_US_LETTER; // US Letter
-    }
-    // Other ISO formats that KWord and AbiWord know
-    else if (strPageType=="A0")
-    {
-        kwordHeight = CentimetresToPoints(118.0);
-        kwordWidth  = CentimetresToPoints(84.1);
-        kwordFormat = PG_DIN_A0; // ISO A0
-    }
-    else if (strPageType=="A1")
-    {
-        kwordHeight = CentimetresToPoints(84.1);
-        kwordWidth  = CentimetresToPoints(59.4);
-        kwordFormat = PG_DIN_A1; // ISO A1
-    }
-    else if (strPageType=="A2")
-    {
-        kwordHeight = CentimetresToPoints(59.4);
-        kwordWidth  = CentimetresToPoints(42.0);
-        kwordFormat = PG_DIN_A2; // ISO A2
-    }
-    else if (strPageType=="A3")
-    {
-        kwordHeight = CentimetresToPoints(42.0);
-        kwordWidth  = CentimetresToPoints(29.7);
-        kwordFormat = PG_DIN_A3; // ISO A3
-    }
-    else if (strPageType=="A5")
-    {
-        kwordHeight = CentimetresToPoints(21.0);
-        kwordWidth  = CentimetresToPoints(14.8);
-        kwordFormat = PG_DIN_A5; // ISO A5
-    }
-    else if (strPageType=="A6")
-    {
-        kwordHeight = CentimetresToPoints(14.8);
-        kwordWidth  = CentimetresToPoints(10.5);
-        kwordFormat = PG_DIN_A6; // ISO A6
-    }
-    else if (strPageType=="B0")
-    {
-        kwordHeight = CentimetresToPoints(141.0);
-        kwordWidth  = CentimetresToPoints(100.0);
-        kwordFormat = PG_DIN_B0; // ISO B0
-    }
-    else if (strPageType=="B1")
-    {
-        kwordHeight = CentimetresToPoints(100.0);
-        kwordWidth  = CentimetresToPoints(70.7);
-        kwordFormat = PG_DIN_B1; // ISO B1
-    }
-    else if (strPageType=="B2")
-    {
-        kwordHeight = CentimetresToPoints(70.7);
-        kwordWidth  = CentimetresToPoints(50.0);
-        kwordFormat = PG_DIN_B2; // ISO B2
-    }
-    else if (strPageType=="B3")
-    {
-        kwordHeight = CentimetresToPoints(50.0);
-        kwordWidth  = CentimetresToPoints(35.3);
-        kwordFormat = PG_DIN_B3; // ISO B3
-    }
-    else if (strPageType=="B4")
-    {
-        kwordHeight = CentimetresToPoints(35.3);
-        kwordWidth  = CentimetresToPoints(25.8);
-        kwordFormat = PG_DIN_B4; // ISO B4
-    }
-    else if (strPageType=="B5")
-    {
-        kwordHeight = CentimetresToPoints(25.0);
-        kwordWidth  = CentimetresToPoints(17.6);
-        kwordFormat = PG_DIN_B5; // ISO B5
-    }
-    else if (strPageType=="B6")
-    {
-        kwordHeight = CentimetresToPoints(17.6);
-        kwordWidth  = CentimetresToPoints(12.5);
-        kwordFormat = PG_DIN_B6; // ISO B6
-    }
-    // Other American format that KWord and AbiWord know
-    else if (strPageType=="Legal")
-    {
-        kwordHeight = InchesToPoints(14.0);
-        kwordWidth  = InchesToPoints( 8.5);
-        kwordFormat = PG_US_LEGAL; // US Legal
-    }
-    else
-        // We do not know the format, so we must use the values in the attributes
-    {
-        kdDebug(30506) << "Other page format found: " << strPageType << endl;
+	KoFormat kwordFormat = KoPageFormat::formatFromString(strPageType);
+	
+    if (kwordFormat==PG_CUSTOM)
+	{
+        kdDebug(30506) << "Custom or other page format found: " << strPageType << endl;
 
         double height = attributes.value("height").toDouble();
         double width  = attributes.value("width" ).toDouble();
@@ -1067,20 +969,23 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
         {
             kdWarning(30506) << "Unknown unit type: " << strUnits << endl;
         }
-
-        if ((kwordHeight <= 1.0) || (kwordWidth <=1.0))
-            // At least one of the two values is ridiculous
-        {
-            kdWarning(30506) << "Page width or height is too small: "
-             << kwordHeight << "x" << kwordWidth << endl;
-            // As we have no correct page size, we assume we have A4
-            kwordHeight = CentimetresToPoints(29.7);
-            kwordWidth  = CentimetresToPoints(21.0);
-        }
-
-        kwordFormat = PG_CUSTOM; // Say that we are a custom format!
     }
+	else
+	{
+		// We have a format know by KOffice, so use KOffice's functions
+        kwordHeight = MillimetresToPoints(KoPageFormat::height(kwordFormat,PG_PORTRAIT));
+        kwordWidth  = MillimetresToPoints(KoPageFormat::width (kwordFormat,PG_PORTRAIT));
+	}
 
+    if ((kwordHeight <= 1.0) || (kwordWidth <=1.0))
+        // At least one of the two values is ridiculous
+    {
+        kdWarning(30506) << "Page width or height is too small: "
+         << kwordHeight << "x" << kwordWidth << endl;
+        // As we have no correct page size, we assume we have A4
+        kwordHeight = CentimetresToPoints(29.7);
+        kwordWidth  = CentimetresToPoints(21.0);
+    }
 
     // Now that we have gathered all the page size data, put it in the right element!
 
@@ -1360,13 +1265,12 @@ void StructureParser :: createMainFramesetElement(void)
     QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
     mainDocument.documentElement().appendChild(framesetsPluralElementOut);
 
-    //As we have a new AbiWord <section>, we think we have a KWord <FRAMESET>
     mainFramesetElement=mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("autoCreateNewFrame",1);
     mainFramesetElement.setAttribute("removable",0);
-    //Todo?  attribute "name"
+    // TODO: name attribute (needs I18N)
     framesetsPluralElementOut.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
@@ -1438,10 +1342,13 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     strHeader+="<ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\" />\n";
 
     // <PAPER> will be partialy changed by an AbiWord <pagesize> element.
-    // FIXME: default paper of AbiWord is "Letter" not "ISO A4"
-    strHeader+="<PAPER format=\"1\" width=\"595\" height=\"841\"";
+    // default paper format of AbiWord is "Letter"
+    strHeader+=QString("<PAPER format=\"%1\" width=\"%2\" height=\"%3\"")
+        .arg(PG_US_LETTER)
+        .arg(MillimetresToPoints(KoPageFormat::width (PG_US_LETTER,PG_PORTRAIT)))
+        .arg(MillimetresToPoints(KoPageFormat::height(PG_US_LETTER,PG_PORTRAIT)));
     strHeader+=" orientation=\"0\" columns=\"1\" columnspacing=\"2\"";
-    strHeader+="hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
+    strHeader+=" hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" zoom=\"100\">\n";
 
     strHeader+="<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
     strHeader+="</PAPER>\n</DOC>\n";
