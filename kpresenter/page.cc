@@ -128,7 +128,7 @@ void Page::draw( QRect _rect, QPainter *p )
     subPresStep = 1000;
     currPresPage = currPgNum();
 
-    drawPageInPainter( p, view->getDiffY(), _rect );
+    drawPageInPainter( p, diffy(), _rect );
 
     currPresPage = 1;
     currPresStep = 0;
@@ -290,7 +290,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 
     //disallow selecting objects outside the "page"
     if ( editMode ) {
-        if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+        if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos()))
             return;
     }
 
@@ -1031,7 +1031,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
         return;
 
     //disallow activating objects outside the "page"
-    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos()))
         return;
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
@@ -1342,8 +1342,6 @@ void Page::setupMenus()
     presMenu->setItemChecked( PM_SM, true );
     presMenu->setItemChecked( PM_DM, false );
     presMenu->setMouseTracking( true );
-
-
 }
 
 /*======================== clipboard cut =========================*/
@@ -1815,7 +1813,7 @@ bool Page::pNext( bool )
     if ( ++test != slideList.end() )
     {
         QPixmap _pix1( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        drawPageInPix( _pix1, view->getDiffY() );
+        drawPageInPix( _pix1, diffy() );
 
         currPresPage = *( ++slideListIterator );
         kdDebug(33001) << "Page::pNext going to page " << currPresPage << endl;
@@ -1915,7 +1913,7 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
     //kdDebug(33001) << "Page::drawPageInPix2" << endl;
     ignoreSkip = TRUE;
     currPresPage = pgnum + 1;
-    int _yOffset = view->getDiffY();
+    int _yOffset = diffy();
     view->setDiffY( __diffy );
 
     QPainter p;
@@ -1948,7 +1946,7 @@ void Page::drawPageInPix( QPixmap &_pix, int __diffy )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
     ignoreSkip = TRUE;
-    int _yOffset = view->getDiffY();
+    int _yOffset = diffy();
     view->setDiffY( __diffy );
 
     QPainter p;
@@ -1968,7 +1966,7 @@ void Page::drawPageInPainter( QPainter* painter, int __diffy, QRect _rect )
 {
     //kdDebug(33001) << "Page::drawPageInPainter" << endl;
     ignoreSkip = TRUE;
-    int _yOffset = view->getDiffY();
+    int _yOffset = diffy();
     view->setDiffY( __diffy );
 
     drawBackground( painter, _rect );
@@ -3063,8 +3061,8 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
     fillBlack = false;
     _presFakt = 1.0;
 
-    int _xOffset = view->getDiffX();
-    int _yOffset = view->getDiffY();
+    int _xOffset = diffx();
+    int _yOffset = diffy();
 
     currPresStep = 1000;
     subPresStep = 1000;
@@ -3103,7 +3101,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         painter->resetXForm();
         painter->fillRect( getPageRect( 0 ), white );
 
-        drawPageInPainter( painter, view->getDiffY(), getPageRect( i - 1 ) );
+        drawPageInPainter( painter, diffy(), getPageRect( i - 1 ) );
         kapp->processEvents();
 
         painter->resetXForm();
@@ -3151,7 +3149,7 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         painter->fillRect( getPageRect( 0 ), white );
 
         view->setDiffY( (*it-1) * ( getPageRect( 1, 1.0, false ).height() ) - qRound(MM_TO_POINT( top_margin )) );
-        drawPageInPainter( painter, view->getDiffY(), getPageRect( *it - 1 ) );
+        drawPageInPainter( painter, diffy(), getPageRect( *it - 1 ) );
         kapp->processEvents();
 
         painter->resetXForm();
@@ -3406,7 +3404,7 @@ void Page::dragMoveEvent( QDragMoveEvent *e )
 void Page::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
-    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos()))
         return;
 
     KPresenterDoc *doc = view->kPresenterDoc();
@@ -3815,66 +3813,43 @@ QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
 /*================================================================*/
 void Page::picViewOrig640x480()
 {
-    KPPixmapObject *obj = 0;
-    QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
-    QSize presSize( 640, 480 );
-    if ( origSize == QSize( -1, -1 ) || !obj )
-        return;
-
-    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+  picViewOrigHelper(640, 480);
 }
 
 /*================================================================*/
 void Page::picViewOrig800x600()
 {
-    KPPixmapObject *obj = 0;
-    QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
-    QSize presSize( 800, 600 );
-    if ( origSize == QSize( -1, -1 ) || !obj )
-        return;
-
-    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+  picViewOrigHelper(800, 600);
 }
 
 /*================================================================*/
 void Page::picViewOrig1024x768()
 {
-    KPPixmapObject *obj = 0;
-    QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
-    QSize presSize( 1024, 768 );
-    if ( origSize == QSize( -1, -1 ) || !obj )
-        return;
-
-    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+  picViewOrigHelper(1024, 768);
 }
 
 /*================================================================*/
 void Page::picViewOrig1280x1024()
 {
-    KPPixmapObject *obj = 0;
-    QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
-    QSize presSize( 1280, 1024 );
-    if ( origSize == QSize( -1, -1 ) || !obj )
-        return;
-
-    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+  picViewOrigHelper(1280, 1024);
 }
 
 /*================================================================*/
 void Page::picViewOrig1600x1200()
 {
-    KPPixmapObject *obj = 0;
-    QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
-    QSize presSize( 1600, 1200 );
-    if ( origSize == QSize( -1, -1 ) || !obj )
-        return;
+  picViewOrigHelper(1600, 1200);
+}
 
-    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+void Page::picViewOrigHelper(int x, int y)
+{
+  KPPixmapObject *obj = 0;
+  QSize origSize = getPixmapOrigSize( obj );
+  QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
+  QSize presSize( x, y );
+  if ( origSize == QSize( -1, -1 ) || !obj )
+    return;
+  
+  scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
 /*================================================================*/

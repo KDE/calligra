@@ -263,6 +263,7 @@ protected:
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
+    void picViewOrigHelper(int x, int y);
 
     void moveObject( int x, int y, bool key );
     void resizeObject();

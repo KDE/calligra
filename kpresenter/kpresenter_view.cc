@@ -2617,6 +2617,7 @@ void KPresenterView::fontChanged( const QFont &font )
     tbFont.setItalic( font.italic() );
     tbFont.setUnderline( font.underline() );
     tbFont.setPointSize( font.pointSize() );
+    
     ( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
     ( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
     ( (KToggleAction*) actionTextFontFamily )->blockSignals( false );
@@ -2637,9 +2638,9 @@ void KPresenterView::fontChanged( const QFont &font )
 /*====================== color changed ==========================*/
 void KPresenterView::colorChanged( const QColor &color )
 {
-    tbColor.setRgb( color.rgb() );
-    actionTextColor->setEnabled( true );
-    actionTextColor->setCurrentColor( tbColor );
+  tbColor = color;
+  actionTextColor->setEnabled( true );
+  actionTextColor->setCurrentColor( tbColor );
 }
 
 /*====================== align changed ==========================*/
