@@ -282,7 +282,7 @@ void TabBar::moveTab( int from, int to, bool before )
         d->visibleTabs.insert( d->visibleTabs.at( to ), tabname );
     }
 
-    repaint();
+    update();
 }
 
 bool TabBar::canScrollLeft() const
@@ -316,7 +316,7 @@ void TabBar::scrollLeft()
         return;
 
     d->leftTab--;
-    repaint( false );
+    update();
 }
 
 void TabBar::scrollRight()
@@ -325,7 +325,7 @@ void TabBar::scrollRight()
         return;
 
     d->leftTab++;
-    repaint( false );
+    update();
 }
 
 void TabBar::scrollFirst()
@@ -334,7 +334,7 @@ void TabBar::scrollFirst()
         return;
 
     d->leftTab = 1;
-    repaint( false );
+    update();
 }
 
 void TabBar::scrollLast()
@@ -365,7 +365,7 @@ void TabBar::setActiveTab( const QString& text )
         return;
 
     d->activeTab = i + 1;
-    repaint( false );
+    update();
 
     emit tabChanged( text );
 }
@@ -584,7 +584,7 @@ void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
         d->activeTab = d->moveTab;
 
         d->moveTab = 0;
-        repaint( false );
+        update();
     }
 }
 
@@ -604,13 +604,13 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
         {
             d->moveTabFlag = TabBarPrivate::moveTabBefore;
             d->moveTab = i;
-            repaint( false );
+            update();
         }
         else if ( (d->moveTab != i && d->moveTab != 0) ||
                   (d->activeTab == i - 1 && d->moveTab != 0) )
         {
             d->moveTab = 0;
-            repaint( false );
+            update();
         }
     }
 
