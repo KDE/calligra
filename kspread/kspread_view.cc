@@ -3350,11 +3350,14 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     {
         if ( statusBar() )
         {
-            statusBar()->removeItem(statusCalc);
             statusBar()->insertItem( QString(" ")+i18n("Sum: %1").arg(0)+' ', statusCalc );
             connect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
             resultOfCalc();
         }
+    }
+    else
+    {
+        statusBar()->removeItem(statusCalc);
     }
 
     KoView::guiActivateEvent( ev );

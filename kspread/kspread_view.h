@@ -641,7 +641,7 @@ private:
 
     // Statusbar items
     enum StatusBarIds {
-        statusCalc = 0
+        statusCalc = 1
         // More to be added
     };
 
