@@ -6,8 +6,8 @@ SUBDIRS = store kwmf kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kform
 
 messages:
 #	$(MAKE) -C kformula -f Makefile.am symbolnames.cc
-	$(EXTRACTRC) */*.rc */*.ui > parts.cc
-	$(XGETTEXT) parts.cc */*.cc */*.cpp -o $(podir)/koffice.pot
-	rm -f parts.cc kformula/symbolnames.cc
+	$(EXTRACTRC) */*.rc */*.ui > rc.cpp
+	$(XGETTEXT) */*.cc */*.cpp -o $(podir)/koffice.pot
+#	rm -f kformula/symbolnames.cc
 
 include ../admin/Doxyfile.am
