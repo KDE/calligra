@@ -65,7 +65,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 
 KoPicture KoPictureCollection::downloadPicture(const KURL& url)
 {
-    kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.ref() << endl;
+    kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
     
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
@@ -77,12 +77,12 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
     // Therefore we have to always download the file
     
     KoPicture pic;
-    kdDebug(30003) << "Trying to download picture from file " << url.ref() << endl;
+    kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
   
     if (pic.download(url))
         insertPicture(pic.getKey(), pic);
     else
-        kdWarning(30003) << "Could not download KoPicture from " << url.ref() << endl;
+        kdWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
     
     return pic;
 }
