@@ -588,16 +588,19 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		else if( gradient.repeatMethod() == VGradient::reflect )
 			linear->spread = ART_GRADIENT_REFLECT;
 
-		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
-		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
 		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
-		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
+		double _y1 = gradient.vector().y();
+		_y1 = m_matrix.m22() * _y1 + m_matrix.dy();
+		double _y2 = gradient.origin().y();
+		_y2 = m_matrix.m22() * _y2 + m_matrix.dy();
+		kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
+		double dy = ( _y1 - _y2 ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
 		linear->b = dy * scale;
 		linear->c = -( ( gradient.origin().x() * m_zoomFactor + m_matrix.dx() ) * linear->a +
-					   ( gradient.origin().y() * m_zoomFactor + m_matrix.dy() ) * linear->b );
+					   ( _y2 * m_zoomFactor ) * linear->b );
 		//kdDebug() << "linear->a" << linear->a << endl;
 		//kdDebug() << "linear->b" << linear->b << endl;
 		//kdDebug() << "linear->c" << linear->c << endl;
