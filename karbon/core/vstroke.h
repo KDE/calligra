@@ -34,7 +34,7 @@ class VStroke
 {
 public:
 	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
-		const VLineJoin join = join_miter, float miterLimit = 10.0 );
+			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
 
 	const VColor& color() const { return m_color; }
 	void setColor( const VColor& color ) { m_color = color; }
@@ -50,10 +50,6 @@ public:
 
 	float miterLimit() const { return m_miterLimit; }
 	void setMiterLimit( float limit ) { m_miterLimit = limit; }
-
-	// opacity:
-	float opacity() const { return m_opacity; }
-	void setOpacity( float opacity ) { m_opacity = opacity; }
 
 	// dashes:
 	const QValueList<float>& dashArray() const { return m_dashArray; }
@@ -73,7 +69,6 @@ private:
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;
 	float m_miterLimit;
-	float m_opacity;
 	QValueList<float> m_dashArray;
 	float m_dashOffset;
 };

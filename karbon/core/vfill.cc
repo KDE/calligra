@@ -8,7 +8,7 @@
 #include "vfill.h"
 
 VFill::VFill()
-	: m_opacity( 1.0 ), m_type( fill_none ), m_fillRule( fillrule_evenOdd )
+	: m_type( fill_none ), m_fillRule( fillrule_evenOdd )
 {
 }
 

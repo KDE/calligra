@@ -33,9 +33,6 @@ public:
 
 	VGradient& gradient() { return m_gradient; }
 
-	float opacity() const { return m_opacity; }
-	void setOpacity( float opacity ) { m_opacity = opacity; }
-
 	VFillType type() const { return m_type; }
 	void setType( VFillType type ) { m_type = type; }
 
@@ -49,7 +46,6 @@ private:
 	VColor m_color;
 	VGradient m_gradient;
 
-	float m_opacity;
 	VFillType m_type;
 	VFillRule m_fillRule;
 };
