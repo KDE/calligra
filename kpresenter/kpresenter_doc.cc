@@ -1214,37 +1214,48 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
     {
         dp = drawPage.toElement();
-        context.styleStack().clear(); // remove all styles
-        fillStyleStack( dp, context );
-        context.styleStack().save();
-        kdDebug ()<<"insert new page "<<endl;
-        KPrPage *newpage=new KPrPage(this);
-        m_pageList.insert( pos,newpage);
-        m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
-
-        if ( context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" )
-             || context.styleStack().hasAttribute( "presentation:transition-style", QString::null, "drawing-page" ) )
+        if ( dp.tagName()== "draw:page"  ) // don't try to parse "</draw:page>" as page
         {
-            kdDebug()<<" fill or presentation-style found \n";
-            m_pageList.at(pos)->background()->loadOasis( context );
-        }
-        else if ( !context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" ) && backgroundStyle)
-        {
+            context.styleStack().clear(); // remove all styles
+            fillStyleStack( dp, context );
             context.styleStack().save();
-            context.addStyles( backgroundStyle );
-            m_pageList.at( pos )->background()->loadOasis(context);
+            kdDebug ()<<"insert new page "<<pos<<endl;
+            KPrPage *newpage = 0L;
+            if ( pos != 0 )
+            {
+                newpage=new KPrPage(this);
+                m_pageList.insert( pos,newpage);
+            }
+            else //we create a first page into ::KPresenterDoc()
+            {
+                newpage = m_pageList.at(pos);
+            }
+            m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+
+            if ( context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" )
+                 || context.styleStack().hasAttribute( "presentation:transition-style", QString::null, "drawing-page" ) )
+            {
+                kdDebug()<<" fill or presentation-style found \n";
+                m_pageList.at(pos)->background()->loadOasis( context );
+            }
+            else if ( !context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" ) && backgroundStyle)
+            {
+                context.styleStack().save();
+                context.addStyles( backgroundStyle );
+                m_pageList.at( pos )->background()->loadOasis(context);
+                context.styleStack().restore();
+                kdDebug()<<" load standard background \n";
+            }
+
+            //All animation object for current page is store into this element
+            createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
+            // parse all objects
+            loadOasisObject(pos, newpage, drawPage, context);
+
             context.styleStack().restore();
-            kdDebug()<<" load standard background \n";
+            m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
+            m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
         }
-
-	//All animation object for current page is store into this element
-	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
-        // parse all objects
-        loadOasisObject(pos, newpage, drawPage, context);
-
-        context.styleStack().restore();
-	m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
-	m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
     }
 
     setModified(false);
