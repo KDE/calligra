@@ -520,7 +520,7 @@ void KWFrameSet::setFloating()
 
         QTextParag* parag = 0L;
         int index = 0;
-        QPoint cPoint( qRound( frames.first()->x() ), qRound( frames.first()->y() ) );
+        QPoint cPoint( m_doc->zoomPoint( frames.first()->topLeft() ) );
         kdDebug() << "KWFrameSet::setFloating looking for pos at " << cPoint.x() << " " << cPoint.y() << endl;
         frameSet->findPosition( cPoint, parag, index );
         // Create anchor. TODO: refcount the anchors!
