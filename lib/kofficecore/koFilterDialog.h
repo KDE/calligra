@@ -34,7 +34,7 @@
  * QString and return it. This string will be passed to the CTOR of the
  * filter (as 'config' argument). Of course the format of this string is
  * up to you, but using XML (QDom/QXML) seems to be a good choice...
- * For further information see koffice/filters/HOWTO
+ * For further information see http://koffice.kde.org/filters/index.html
  *
  * @ref KoFilterManager
  * @ref KoFilter

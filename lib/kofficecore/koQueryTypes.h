@@ -27,9 +27,7 @@
 
 class KoDocument;
 class KoFilter;
-#ifndef USE_QFD
 class KoFilterDialog;
-#endif
 
 /**
  *  Represents an available component.
@@ -143,7 +141,7 @@ public:
    *  Comment regarding the exported data format.
    */
   QString exportDescription;
-    
+
   /**
    *  Which one of the filter methods is implemented?
    */
@@ -171,7 +169,6 @@ public:
   static QValueList<KoFilterEntry> query( const char* _constr = "", int _count = 100 );
 };
 
-#ifndef USE_QFD
 /**
  *  Represents an available filter dialog.
  */
@@ -216,7 +213,7 @@ public:
    */
   static QValueList<KoFilterDialogEntry> query( const char* _constr = "", int _count = 100 );
 };
-#endif
+
 /**
  * Torben says: DONT USE. Use KoDataToolInfo instead!
  */
