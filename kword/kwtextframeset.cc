@@ -3274,6 +3274,7 @@ KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & da
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit updateUI( true );
+    selectionChangedNotify();
     emit showCursor();
     return macroCmd;
 }

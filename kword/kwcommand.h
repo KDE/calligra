@@ -263,6 +263,22 @@ protected:
 };
 
 /**
+ * Command created when we change frame parameter
+ */
+class KWFramePropertiesCommand : public KCommand
+{
+public:
+    KWFramePropertiesCommand( const QString &name, KWFrame *_frameBefore,  KWFrame *_frameAfter );	
+    ~KWFramePropertiesCommand();
+    void execute();
+    void unexecute();
+protected:
+    FrameIndex m_frameIndex;
+    KWFrame *m_frameBefore;
+    KWFrame *m_frameAfter;
+};
+
+/**
  * Command created when a frameset is made floating or fixed using the frame dialog
  */
 class KWFrameSetFloatingCommand : public KCommand

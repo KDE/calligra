@@ -40,6 +40,11 @@
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
+
+KWFrame::KWFrame(KWFrame * frame)
+{
+}
+
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
     : KoRect( left, top, width, height ),
       // Initialize member vars here. This ensures they are all initialized, since it's
@@ -131,7 +136,20 @@ QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor d
 
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
-    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), runAround(), runAroundGap() );
+    KWFrame *frm=new KWFrame(this);
+    copySettings(frm);
+    return frm;
+}
+
+void KWFrame::copySettings(KWFrame *frm)
+{
+    //necessary to reapply these parameters
+    frm->setFrameSet( getFrameSet() );
+    frm->setRect(x(), y(), width(), height());
+    frm->setRunAroundGap( runAroundGap());
+    frm->setRunAround( runAround());
+
+    //
     frm->setBackgroundColor( getBackgroundColor() );
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
@@ -148,7 +166,6 @@ KWFrame *KWFrame::getCopy() {
     frm->setCopy(isCopy());
     /*if(anchor())
         frm->setAnchor(anchor());*/
-    return frm;
 }
 
 // Insert all resize handles

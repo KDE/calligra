@@ -83,6 +83,7 @@ public:
      */
     KWFrame(KWFrameSet *fs, double left, double top, double width, double height,
             RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
+    KWFrame(KWFrame * frame);
     /* Destructor */
     virtual ~KWFrame();
 
@@ -187,6 +188,8 @@ public:
 
     /** returns a copy of self */
     KWFrame *getCopy();
+
+    void copySettings(KWFrame *frm);
 
     /** create XML to describe yourself */
     void save( QDomElement &frameElem );

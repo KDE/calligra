@@ -871,7 +871,7 @@ bool KWFrameDia::applyChanges()
     ASSERT(frame);
     if ( !frame )
         return false;
-
+    KWFrame *frameCopy=frame->getCopy();
     if ( tab1 )
     {
         // Copy
@@ -899,7 +899,7 @@ bool KWFrameDia::applyChanges()
         if ( cbAspectRatio && frame->getFrameSet() )
             static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
     }
-
+    bool createFrameset=false;
     if ( tab3 )
     {
         // Frame/Frameset belonging, and frameset naming
@@ -909,7 +909,7 @@ bool KWFrameDia::applyChanges()
         // * Editing a frame (fs!=0), possibly changing the frameset attachment, possibly renaming the frameset...
 
         QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
-        bool createFrameset = ( str[ 0 ] == '*' );
+        createFrameset = ( str[ 0 ] == '*' );
         if ( createFrameset )
             str.remove( 0, 1 );
         int _num = str.toInt() - 1;
@@ -1096,7 +1096,15 @@ bool KWFrameDia::applyChanges()
         u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
-
+    if(!createFrameset)
+    {
+        KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( i18n("Frame Properties"), frameCopy, frame );
+        doc->addCommand(cmd);
+    }
+    else
+    {
+        delete frameCopy;
+    }
     updateFrames();
     return true;
 }

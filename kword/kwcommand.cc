@@ -800,6 +800,63 @@ void KWFrameMoveCommand::unexecute()
     }
 }
 
+KWFramePropertiesCommand::KWFramePropertiesCommand( const QString &name, KWFrame *_frameBefore,  KWFrame *_frameAfter ) :
+    KCommand(name),
+    m_frameIndex( _frameAfter ),
+    m_frameBefore(_frameBefore),
+    m_frameAfter(_frameAfter->getCopy())
+{
+}
+
+KWFramePropertiesCommand::~KWFramePropertiesCommand()
+{
+    delete m_frameBefore;
+    delete m_frameAfter;
+}
+
+void KWFramePropertiesCommand::execute()
+{
+    kdDebug() << "KWFrameChangeParamCommand::execute" << endl;
+    KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
+    ASSERT( frameSet );
+
+    KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
+    ASSERT( frame );
+    m_frameAfter->copySettings(frame);
+
+    KWDocument * doc = frameSet->kWordDocument();
+    if(doc)
+    {
+        doc->frameChanged( frame );
+        doc->updateAllFrames();
+        doc->layout();
+        doc->repaintAllViews();
+        doc->updateRulerFrameStartEnd();
+        doc->updateResizeHandles();
+    }
+}
+
+void KWFramePropertiesCommand::unexecute()
+{
+    kdDebug() << "KWFrameChangeParamCommand::unexecute" << endl;
+    KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
+    ASSERT( frameSet );
+
+    KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
+    ASSERT( frame );
+    m_frameBefore->copySettings(frame);
+
+    KWDocument * doc = frameSet->kWordDocument();
+    if(doc)
+    {
+        doc->frameChanged( frame );
+        doc->updateAllFrames();
+        doc->layout();
+        doc->repaintAllViews();
+        doc->updateRulerFrameStartEnd();
+        doc->updateResizeHandles();
+    }
+}
 
 
 KWFrameSetFloatingCommand::KWFrameSetFloatingCommand( const QString &name, KWFrameSet *frameset, bool floating ) :
