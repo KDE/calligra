@@ -327,8 +327,6 @@ private slots:
 
 private:
     KoParagLayout m_paragLayout;
-    QString m_wordUnderCursor;
-    bool m_singleWord;
 };
 
 #endif
