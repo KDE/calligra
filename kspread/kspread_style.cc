@@ -536,22 +536,27 @@ QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_CURRENCY );
     return "";
 }
 
 QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_PERCENTAGE );
+
     return "";
 }
 
 
 QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_SCIENTIFIC );
     return "";
 }
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
     return "";
 }
 
@@ -562,12 +567,15 @@ QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_TIME );
+
     return "";
 }
 
 
 QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
 {
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_FRACTION );
     return "";
 }
 
