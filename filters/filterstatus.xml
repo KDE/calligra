@@ -179,7 +179,7 @@
             </filter>
             <filter id="kword_oowriter">
                 <title xml:lang="en_us">OpenOffice Writer</title>
-                <stat import="twostars" export="twostars"/>
+                <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="kword_palmdoc">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/palmdoc"/>
@@ -191,7 +191,7 @@
                 <webcvs importsuffix="#import" path="koffice/filters/kword/pdf"/>
                 <title xml:lang="en_us">PDF</title>
                 <note xml:lang="en_us">Portable Document Format</note>
-                <stat import="twostars" export="none"/>
+                <stat import="threestars" export="none"/>
             </filter>
             <filter id="kword_plaintext">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/ascii"/>
