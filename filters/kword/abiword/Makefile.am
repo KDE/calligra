@@ -1,11 +1,13 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
+#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexportold $(all_includes)
 
 libabiwordimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 libabiwordimport_la_LIBADD = $(KOFFICE_LIBS)
 libabiwordexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
-libabiwordexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
+#libabiwordexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
+libabiwordexport_la_LIBADD = $(KOFFICE_LIBS) ../libexportold/libkwordexportfiltersold.la
 
 ####### Files
 
