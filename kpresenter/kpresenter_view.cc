@@ -48,7 +48,7 @@
 
 #include <koAutoFormat.h>
 
-#include "transeffectdia.h"
+#include "slidetransitiondia.h"
 
 #include "confpiedia.h"
 #include "confrectdia.h"
@@ -216,7 +216,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     afChoose = 0;
     styleDia = 0;
     pgConfDia = 0;
-    transEffectDia = 0;
     rotateDia = 0;
     shadowDia = 0;
     imageEffectDia = 0;
@@ -396,7 +395,6 @@ KPresenterView::~KPresenterView()
     delete m_specialCharDlg;
     delete styleDia;
     delete pgConfDia;
-    delete transEffectDia;
     delete rotateDia;
     delete shadowDia;
     delete rb_pstyle;
@@ -1378,17 +1376,8 @@ void KPresenterView::screenConfigPages()
 
 void KPresenterView::screenTransEffect()
 {
-    delete transEffectDia;
-    transEffectDia = new KPTransEffectDia( this, "slideTransitionDialog",
-                                           kPresenterDoc(), this );
-
-    transEffectDia->setCaption( i18n("Slide Transition") );
-
-    QObject::connect( transEffectDia, SIGNAL( apply( bool ) ), this, SLOT( transEffectOk(bool) ) );
-    transEffectDia->exec();
-
-    delete transEffectDia;
-    transEffectDia = 0;
+    SlideTransitionDia transitionDia( this, "slideTransitionDialog", this );
+    transitionDia.exec();
 }
 
 void KPresenterView::screenAssignEffect()
@@ -3581,50 +3570,6 @@ void KPresenterView::pgConfOk()
     }
 }
 
-void KPresenterView::transEffectOk( bool global )
-{
-    kdDebug(33001) << "======= KPresenterView::transEffectOK global=" << global << endl;
-
-    // Collect info about current settings
-    QValueVector<TransEffectCmd::PageEffectSettings> oldSettings;
-    if ( global )
-    {
-        oldSettings.resize( m_pKPresenterDoc->getPageList().count() );
-        int i = 0;
-        for( QPtrListIterator<KPrPage> it( m_pKPresenterDoc->getPageList() ); *it; ++it, ++i )
-        {
-            oldSettings[i].pageEffect = it.current()->getPageEffect();
-            oldSettings[i].effectSpeed = it.current()->background()->getPageEffectSpeed();
-            oldSettings[i].soundEffect = it.current()->getPageSoundEffect();
-            oldSettings[i].soundFileName = it.current()->getPageSoundFileName();
-            oldSettings[i].autoAdvance = /*TODO it.current()->getAutoAdvance() */ false;
-            oldSettings[i].slideTime = it.current()->getPageTimer();
-        }
-    }
-    else
-    {
-        oldSettings.resize( 1 );
-        KPrPage *page = m_canvas->activePage();
-        oldSettings[0].pageEffect = page->getPageEffect();
-        oldSettings[0].effectSpeed = page->background()->getPageEffectSpeed();
-        oldSettings[0].soundEffect = page->getPageSoundEffect();
-        oldSettings[0].soundFileName = page->getPageSoundFileName();
-        oldSettings[0].autoAdvance = /*TODO page->getAutoAdvance() */ false;
-        oldSettings[0].slideTime = page->getPageTimer();
-    }
-    TransEffectCmd::PageEffectSettings newSettings;
-    newSettings.pageEffect = transEffectDia->getPageEffect();
-    newSettings.effectSpeed = transEffectDia->getPageEffectSpeed();
-    newSettings.soundEffect = transEffectDia->getSoundEffect();
-    newSettings.soundFileName = transEffectDia->getSoundFileName();
-    newSettings.autoAdvance = transEffectDia->getAutoAdvance();
-    newSettings.slideTime = transEffectDia->getSlideTime();
-
-    TransEffectCmd *transEffectCmd = new TransEffectCmd( oldSettings, newSettings,
-                                                         global ? 0 : m_canvas->activePage(), kPresenterDoc() );
-    transEffectCmd->execute();
-    kPresenterDoc()->addCommand( transEffectCmd );
-}
 
 void KPresenterView::rotateOk()
 {

@@ -44,7 +44,7 @@ class QScrollBar;
 class AFChoose;
 class StyleDia;
 class PgConfDia;
-class KPTransEffectDia;
+class SlideTransitionDia;
 class RotationDialogImpl;
 class ShadowDialogImpl;
 class ImageEffectDia;
@@ -653,7 +653,6 @@ protected slots:
     void slotAfchooseCanceled();
     void styleOk();
     void pgConfOk();
-    void transEffectOk( bool );
     void rotateOk();
     void shadowOk();
     void pddClosed();
@@ -832,7 +831,6 @@ private:
     AFChoose *afChoose;
     StyleDia *styleDia;
     PgConfDia *pgConfDia;
-    KPTransEffectDia *transEffectDia;
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
     ImageEffectDia *imageEffectDia;
