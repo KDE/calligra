@@ -29,8 +29,9 @@ VFill::save( QDomElement& element ) const
 		m_gradient.save( me );
 	}
 
-	// fill rule:
-	me.setAttribute( "fillRule", m_fillRule );
+	// save fill rule if necessary:
+	if( m_fillRule != fillrule_evenOdd )
+		me.setAttribute( "fillRule", m_fillRule );
 }
 
 void
