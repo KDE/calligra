@@ -2965,22 +2965,18 @@ bool KPrPage::oneObjectTextExist()
 bool KPrPage::isOneObjectSelected()
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true );
+    getAllObjectSelectedList(lst );
     QPtrListIterator<KPObject> oIt( lst );
-    for (; oIt.current(); ++oIt )
-        if ( oIt.current()->isSelected() )
-            return true;
-
-    return false;
+    return oIt.count()>0;
 }
 
 bool KPrPage::haveASelectedPartObj()
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true );
+    getAllObjectSelectedList(lst );
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
+        if (it.current()->getType() == OT_PART )
             return true;
     }
     return false;
@@ -2989,10 +2985,10 @@ bool KPrPage::haveASelectedPartObj()
 bool KPrPage::haveASelectedGroupObj()
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true );
+    getAllObjectSelectedList(lst );
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_GROUP )
+        if ( it.current()->getType() == OT_GROUP )
             return true;
     }
     return false;
@@ -3001,12 +2997,11 @@ bool KPrPage::haveASelectedGroupObj()
 bool KPrPage::haveASelectedPixmapObj()
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true );
+    getAllObjectSelectedList(lst );
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it ) {
-        if ( it.current()->isSelected() &&
-            ( ( it.current()->getType() == OT_PICTURE )
-            || ( it.current()->getType() == OT_CLIPART ) ) )
+        if (( it.current()->getType() == OT_PICTURE )
+            || ( it.current()->getType() == OT_CLIPART ) )
             return true;
     }
     return false;
