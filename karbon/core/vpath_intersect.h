@@ -23,23 +23,26 @@ public:
 
 	VSegmentList* intersect( const VSegmentList& list1, const VSegmentList& list2 );
 
+	// "begin" is special: we dont intersect a "moveto".
 	virtual bool begin( const KoPoint& p,
 		const VSegment& segment );
-	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3,
-		const VSegment& segment );
-	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3,
-		const VSegment& segment );
-	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3,
-		const VSegment& segment );
+	virtual bool curveTo ( const KoPoint&, const KoPoint&, const KoPoint&,
+		const VSegment& segment ) { return currentSegment( segment ); }
+	virtual bool curve1To( const KoPoint&, const KoPoint&,
+		const VSegment& segment ) { return currentSegment( segment ); }
+	virtual bool curve2To( const KoPoint&, const KoPoint&,
+		const VSegment& segment ) { return currentSegment( segment ); }
 	virtual bool lineTo( const KoPoint& p,
-		const VSegment& segment );
-	virtual bool end( const KoPoint& p,
-		const VSegment& segment );
+		const VSegment& segment ) { return currentSegment( segment ); }
+	virtual bool end( const KoPoint&,
+		const VSegment& segment ) { return currentSegment( segment ); }
 
 	const KoPoint& previousPoint2() const { return m_previousPoint2; }
 	void setPreviousPoint2( const KoPoint& p ) { m_previousPoint2 = p; }
 
 private:
+	bool currentSegment( const VSegment& segment );
+
 	VPath* m_path;
 	const VSegment* m_segment1; 	// current segment from list1.
 	const VSegment* m_segment2; 	// current segment from list2.

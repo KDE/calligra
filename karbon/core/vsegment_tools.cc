@@ -40,15 +40,23 @@ VSegmentTools::isFlat(
 }
 
 bool
-VSegmentTools::isFlat(
-	const KoPoint& p0,
-	const KoPoint& p1,
-	const KoPoint& p2,
-	const KoPoint& p3  )
+VSegmentTools::isFlat( const KoPoint& previous, const VSegment& segment )
 {
+	if(
+		segment.type() == VSegment::begin ||
+		segment.type() == VSegment::line ||
+		segment.type() == VSegment::end )
+			return true;
+
+	if( segment.type() == VSegment::curve1 )
+		return isFlat( previous, segment.point( 2 ), segment.point( 3 ) );
+
+	if( segment.type() == VSegment::curve2 )
+		return isFlat( previous, segment.point( 1 ), segment.point( 3 ) );
+
 	return (
-		isFlat( p0, p1, p3 ) &&
-		isFlat( p0, p2, p3 ) );
+		isFlat( previous, segment.point( 1 ), segment.point( 3 ) ) &&
+		isFlat( previous, segment.point( 2 ), segment.point( 3 ) ) );
 }
 
 bool
@@ -141,10 +149,7 @@ VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
 
 void
 VSegmentTools::polygonize(
-	const KoPoint& p0,
-	const KoPoint& p1,
-	const KoPoint& p2,
-	const KoPoint& p3,
+	const KoPoint& previous, const VSegment& segment,
 	const double zoomFactor,
 	VSegmentList& list )
 {

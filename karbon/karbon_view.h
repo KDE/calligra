@@ -47,6 +47,16 @@ protected slots:
 	void editDeleteSelection();
 	void editPurgeHistory();
 
+	// object related operations:
+	void objectMoveToTop();
+	void objectMoveUp();
+	void objectMoveDown();
+	void objectMoveToBottom();
+	void objectTrafoTranslate();
+	void objectTrafoScale();
+	void objectTrafoRotate();
+	void objectTrafoShear();
+
 	// shape-tools:
 	void ellipseTool();
 	void polygonTool();

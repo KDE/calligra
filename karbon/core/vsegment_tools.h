@@ -19,11 +19,7 @@ namespace VSegmentTools
 		const KoPoint& p,
 		const KoPoint& p3 );
 
-	bool isFlat(
-		const KoPoint& p0,
-		const KoPoint& p1,
-		const KoPoint& p2,
-		const KoPoint& p3 );
+	bool isFlat( const KoPoint& previous, const VSegment& segment );
 
 	bool linesIntersect(
 		const KoPoint& a0,
@@ -38,10 +34,7 @@ namespace VSegmentTools
 	QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
 */
 	void polygonize(
-		const KoPoint& p0,
-		const KoPoint& p1,
-		const KoPoint& p2,
-		const KoPoint& p3,
+		const KoPoint& previous, const VSegment& segment,
 		const double zoomFactor,
 		VSegmentList& list );
 }

@@ -26,7 +26,7 @@ public:
 
 	bool traverse( const VSegmentList& list );
 
-	// if one of these operations should fail, it returns false. segemnt provides direct
+	// if one of these operations should fail, it returns false. "segment" provides direct
 	// access to the refered to segment if necessary (e.g. by intersection traverser).
 	virtual bool begin( const KoPoint& p,
 		const VSegment& segment ) = 0;

@@ -17,7 +17,7 @@
 #include <qwmatrix.h>
 #include "vccmd_ellipse.h"
 #include "vccmd_star.h"
-#include "vccmd_spiral.h"
+#include "vccmd_rectangle.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -45,6 +45,12 @@ bool
 KarbonPart::initDoc()
 {
 // TODO: remove the whole test code:
+
+	VCCmdRectangle w(this, 100, 100, 200, 150 );
+	VPath *spi = w.createPath();
+
+	insertObject(spi);
+
 
 	VCCmdEllipse e( this, 100, 100, 200, 200 );
 	VPath* elly = e.createPath();
@@ -76,12 +82,8 @@ KarbonPart::initDoc()
 	insertObject( elly );
 //	insertObject( rect );
 
+
 /*
-	VCCmdSpiral t(this, 100, 100, 50.0, 25, 0.2, true);
-	VPath *spi = t.createPath();
-
-	insertObject(spi);
-
 	VPath* obj = elly->booleanOp( rect, 0 );
 
 	if ( obj )

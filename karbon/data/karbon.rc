@@ -20,16 +20,19 @@
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>
-		<Menu name="object_arrange">
-			<text>&amp;Arrange</text>
-			<Action name="object_arrange_totop"/>
-			<Action name="object_arrange_up"/>
-			<Action name="object_arrange_down"/>
-			<Action name="object_arrange_tobottom"/>
-		</Menu>
 		<Menu name="object_transform">
 			<text>&amp;Transform</text>
-			<Action name="object_trafo_move"/>
+			<Action name="object_trafo_translate"/>
+			<Action name="object_trafo_scale"/>
+			<Action name="object_trafo_rotate"/>
+			<Action name="object_trafo_shear"/>
+		</Menu>
+		<Menu name="object_arrange">
+			<text>&amp;Move</text>
+			<Action name="object_move_totop"/>
+			<Action name="object_move_up"/>
+			<Action name="object_move_down"/>
+			<Action name="object_move_tobottom"/>
 		</Menu>
 		<Separator/>
 		<Menu name="object_insert">
