@@ -79,7 +79,9 @@ public:
     }
 public:
     StackItemElementType elementType;
-    QDomElement stackElementText,stackElementFormatsPlural;
+    QDomElement stackElementParagraph; // <PARAGRAPH>
+    QDomElement stackElementText; // <TEXT>
+    QDomElement stackElementFormatsPlural; // <FORMATS>
     QString     elementName; // Name of the element
 
     QString     fontName;

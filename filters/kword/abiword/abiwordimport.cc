@@ -74,7 +74,7 @@ static void TreatAbiProps(QString strProps, AbiPropsMap &abiPropsMap)
 {
     if (strProps.isEmpty())
         return;
-    
+
     QString name,value;
     bool notFinished=true;
     int position=0;
@@ -142,7 +142,9 @@ public:
     }
 public:
     StackItemElementType elementType;
-    QDomElement stackElementText,stackElementFormatsPlural;
+    QDomElement stackElementParagraph; // <PARAGRAPH>
+    QDomElement stackElementText; // <TEXT>
+    QDomElement stackElementFormatsPlural; // <FORMATS>
     QString     fontName;
     int         fontSize;
     int         pos; //Position
@@ -189,7 +191,7 @@ private:
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
 
-void PopulateProperties(StackItem* stackItem, 
+void PopulateProperties(StackItem* stackItem,
                         const QXmlAttributes& attributes,
                         AbiPropsMap& abiPropsMap, const bool allowInit)
 // TODO: find a better name for this function
@@ -300,6 +302,7 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
         PopulateProperties(stackItem,attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeContent;
+        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
         stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
@@ -415,6 +418,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
     PopulateProperties(stackItem,attributes,abiPropsMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
+    stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackItem->stackElementText=textElementOut; // <TEXT>
     stackItem->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackItem->pos=0; // No text characters yet
@@ -546,7 +550,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     }
     if (stackCurrent->elementType!=ElementTypeParagraph)
     {
-        kdError(30506) << "Forced line break found out of turn! Aborting! (in StartElementPBR)" <<endl;
+        kdError(30506) << "Forced line break found out of turn! Aborting! (in StartElementBR)" <<endl;
         return false;
     }
     // Now we are sure to be the child of a <p> element
@@ -562,7 +566,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
 
     // We must now copy/clone the layout of elementText.
 
-    QDomNodeList nodeList=stackCurrent->stackElementText.elementsByTagName("LAYOUT");
+    QDomNodeList nodeList=stackCurrent->stackElementParagraph.elementsByTagName("LAYOUT");
 
     if (!nodeList.count())
     {
@@ -583,6 +587,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     // Now that we have done with the old paragraph,
     //  we can write stackCurrent with the data of the new one!
     stackCurrent->elementType=ElementTypeParagraph;
+    stackCurrent->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackCurrent->stackElementText=textElementOut; // <TEXT>
     stackCurrent->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackCurrent->pos=0; // No text characters yet
@@ -850,7 +855,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {//Not really needed, as it is the default behaviour for now!
         //TODO: non main text sections (e.g. footers)
         stackItem->elementType=ElementTypeSection;
-        stackItem->stackElementText=structureStack.current()->stackElementText;
+        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=true;
     }
     else if (name=="br") // NOTE: Not sure if it only exists in lower case!
@@ -858,7 +863,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         // We have a forced line break
         // NOTE: this is an empty element!
         stackItem->elementType=ElementTypeEmpty;
-        stackItem->stackElementText=structureStack.current()->stackElementText;
+        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
     }
     else if (name=="pagesize")
@@ -866,13 +871,13 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         // NOTE: this is an empty element!
     {
         stackItem->elementType=ElementTypeEmpty;
-        stackItem->stackElementText=structureStack.current()->stackElementText;
+        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=StartElementPageSize(mainDocument,attributes);
     }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
-        stackItem->stackElementText=structureStack.current()->stackElementText;
+        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
         success=true;
     }
     if (success)

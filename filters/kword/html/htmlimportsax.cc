@@ -188,6 +188,7 @@ bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QStri
         CSS2StylesMap css2StylesMap;
         PopulateProperties(stackItem,strStyle,css2StylesMap,true);
 
+        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
         stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
@@ -303,17 +304,18 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
 
     QDomElement elementText=stackCurrent->stackElementText;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
-    QDomElement paragraphElementOut=mainFramesetElement.ownerDocument().createElement("PARAGRAPH");
+    QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
     mainFramesetElement.appendChild(paragraphElementOut);
-    QDomElement textElementOut=mainFramesetElement.ownerDocument().createElement("TEXT");
+    QDomElement textElementOut=mainDocument.createElement("TEXT");
     paragraphElementOut.appendChild(textElementOut);
-    QDomElement formatsPluralElementOut=mainFramesetElement.ownerDocument().createElement("FORMATS");
+    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
     CSS2StylesMap css2StylesMap;
     PopulateProperties(stackItem,strStyle,css2StylesMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
+    stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackItem->stackElementText=textElementOut; // <TEXT>
     stackItem->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackItem->pos=0; // No text characters yet
@@ -424,7 +426,7 @@ bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     }
     if (stackCurrent->elementType!=ElementTypeParagraph)
     {
-        kdError(30503) << "Forced line break found out of turn! Aborting! (in StartElementPBR)" <<endl;
+        kdError(30503) << "Forced line break found out of turn! Aborting! (in StartElementBR)" <<endl;
         return false;
     }
     // Now we are sure to be the child of a <p> element
@@ -440,7 +442,7 @@ bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
 
     // We must now copy/clone the layout of elementText.
 
-    QDomNodeList nodeList=stackCurrent->stackElementText.toElement().elementsByTagName("LAYOUT");
+    QDomNodeList nodeList=stackCurrent->stackElementParagraph.elementsByTagName("LAYOUT");
 
     if (!nodeList.count())
     {
@@ -462,6 +464,7 @@ bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     // Now that we have done with the old paragraph,
     //  we can write stackCurrent with the data of the new one!
     stackCurrent->elementType=ElementTypeParagraph;
+    stackCurrent->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackCurrent->stackElementText=textElementOut; // <TEXT>
     stackCurrent->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
     stackCurrent->pos=0; // No text characters yet
