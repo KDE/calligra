@@ -2151,7 +2151,7 @@ void KWTextFrameSet::ensureFormatted( KoTextParag * parag, bool emitAfterFormatt
     m_textobj->ensureFormatted( parag, emitAfterFormatting );
 }
 
-void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort )
+bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted )
 {
     int availHeight = availableHeight();
 #ifdef DEBUG_FORMAT_MORE
@@ -2166,8 +2166,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     if ( frames.isEmpty() )
     {
         kdWarning(32002) << "slotAfterFormatting no more space, but no frame !" << endl;
-        *abort = true;
-        return;
+        return true; // abort
     }
 
     KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
@@ -2215,8 +2214,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 if ( wantedPosition < 0 )
                 {
                     m_textobj->setLastFormattedParag( 0 );
-                    *abort = true;
-                    return;
+                    return true; // abort
                 }
 
                 if ( wantedPosition != theFrame->top() &&
@@ -2229,11 +2227,10 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
 #endif
                     frameResized( theFrame, true );
                     // We only got room for the next paragraph, we still have to keep the formatting going...
-                    m_textobj->formatMore( 2 );
-                    *abort = true;
-                    return;
+                    return false; // keep going
                 }
-                break;
+                kdDebug() << "slotAfterFormatting didn't manage to get more space for footer/footnote, aborting" << endl;
+                return true; // abort
             }
             // Other frames are resized by the bottom
 
@@ -2268,8 +2265,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                     table->recalcRows(cell->firstCol(), cell->firstRow());
                     m_doc->delayedRepaintAllViews();
                 }
-                *abort = false;
-                break;
+                return true; // abort formatting for now (not sure this is correct)
             } else {
                 resized = QABS( theFrame->bottom() - newPosition ) > 1E-10;
 #ifdef DEBUG_FORMAT_MORE
@@ -2303,11 +2299,11 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                     m_doc->delayedRecalcFrames( theFrame->pageNum() );
 
                 m_textobj->setLastFormattedParag( 0 );
-                break;
+                return true; // abort
             } else {
-                if ( resized ) // not sure why we have this test....
-                    *abort = false;
-                break;
+                if ( resized ) // we managed to resize a frame
+                    return false; // keep going
+                return true; // abort
             }
         }
     }
@@ -2315,8 +2311,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     case KWFrame::AutoCreateNewFrame:
     {
         // We need a new frame in this frameset.
-        createNewPageAndNewFrame( lastFormatted, difference, abort );
-        break;
+        return createNewPageAndNewFrame( lastFormatted, difference );
     }
 
     case KWFrame::Ignore:
@@ -2324,8 +2319,11 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
         kdDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
 #endif
         m_textobj->setLastFormattedParag( 0 );
-        break;
+        return true; // abort
     }
+    kdWarning() << "NEVERREACHED" << endl;
+    // NEVERREACHED
+    return true;
 }
 
 void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
@@ -2408,7 +2406,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     if ( ( bottom > availHeight ) ||   // this parag is already off page
          ( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) ) // or next parag will be off page
     {
-        slotAfterFormattingNeedMoreSpace( bottom, lastFormatted, abort );
+        *abort = slotAfterFormattingNeedMoreSpace( bottom, lastFormatted );
     }
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
@@ -2450,15 +2448,14 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 // This is called when a text frame with behaviour AutoCreateNewFrame
 // has more text than available frame height, so we need to create a new page
 // so that a followup frame is created for this one
-void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, bool* abort )
+bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /*difference*/ )
 {
     KWFrame* lastFrame = frames.last();
     // This is only going to help us if the new frame is reconnected. Otherwise bail out.
     if ( !lastFrame || lastFrame->newFrameBehavior() != KWFrame::Reconnect )  {
         kdDebug(32002) << getName() << " : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting." << endl;
         m_textobj->setLastFormattedParag( 0 );
-        *abort = true;
-        return;
+        return true; // abort
     }
 
 //#ifdef DEBUG_FORMAT_MORE
@@ -2480,15 +2477,18 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
                 frameIt.current()->newFrameBehavior()==KWFrame::Reconnect)
                 heightWeWillGet += m_doc->ptToLayoutUnitPixY( frameIt.current()->height() );
 
-        kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " current overflow height:" << difference << endl;
         // This logic doesn't applies to tables though, since they can be broken over multiple pages
         // TODO: lastFormatted->containsTable() or so (containsPageBreakableItem rather).
-        if ( heightWeWillGet < difference && !grpMgr )
+
+        // "difference" doesn't apply if we're pasting multiple paragraphs.
+        // We want to compare the height of one paragraph, not all the missing height.
+        int paragHeight = lastFormatted->rect().height();
+        kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " parag height:" << paragHeight << endl;
+        if ( heightWeWillGet < paragHeight && !grpMgr )
         {
             kdDebug(32002) << "not enough height on the new page, not worth it" << endl;
             m_textobj->setLastFormattedParag( 0 );
-            *abort = true;
-            return;
+            return true; // abort
         }
 
         int num = m_doc->appendPage();
@@ -2525,11 +2525,13 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
     {
         m_textobj->setLastFormattedParag( lastFormatted );
         lastFormatted->invalidate( 0 );
-        m_textobj->formatMore( 2 );
-        *abort = true;
-        return;
+        //This was a way to format the rest from here (recursively), but it didn't help much ensureCursorVisible()
+        //So instead I fixed formatMore to return formatMore(2) itself.
+        //m_textobj->formatMore( 2 );
+        return false; // keep going
     }
     m_doc->delayedRepaintAllViews();
+    return false; // all done
 }
 
 double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
@@ -2768,7 +2770,10 @@ KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & d
 
     *cursor = *( cmd->execute( cursor ) );
 
-    m_textobj->formatMore( 2 );
+    // not enough when pasting many pages. We need the cursor's parag to be formatted.
+    //m_textobj->formatMore( 2 );
+    ensureFormatted( cursor->parag() );
+
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
     m_textobj->emitUpdateUI( true );

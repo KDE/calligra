@@ -308,7 +308,7 @@ protected slots:
 
 private:
     void init();
-    void slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort );
+    bool slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted );
     void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
     void getMargins( int yp, int h, int reqMinWidth, int* marginLeft, int* marginRight, int* pageWidth, int* validHeight,
                      int* breakBegin, int* breakEnd, KoTextParag* parag );
@@ -317,7 +317,7 @@ private:
     double footerHeaderSizeMax( KWFrame *theFrame );
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
-    void createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference, bool* abort );
+    bool createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference );
     KWTextParag* loadList( const QDomElement& list, KoOasisContext& context, KWTextParag* lastParagraph );
     KWTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph );
 

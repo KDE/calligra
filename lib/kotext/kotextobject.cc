@@ -595,8 +595,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     oldCursor.parag()->lineStartOfChar( oldCursor.index(), 0, &origLine );
 
     cursor->insert( txt, checkNewLine );  // insert the text
-    setLastFormattedParag( checkNewLine && cursor->parag()->prev() ? cursor->parag()->prev() :
-                           cursor->parag() );
+    setLastFormattedParag( checkNewLine ? oldCursor.parag() : cursor->parag() );
 
     if ( !customItemsMap.isEmpty() ) {
         customItemsMap.insertItems( oldCursor, txt.length() );
@@ -621,10 +620,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         m_lastFormatted = m_lastFormatted->next();
     }
 #endif
-    // Call formatMore until necessary
-    // ## Note that it doesn't create new pages though - this is why all
-    // the code calling insert must (after possibly doing other things)
-    // call setLastFormattedParag and formatMore...
+    // Call formatMore until necessary. This will create new pages if needed.
+    // Doing this here means callers don't have to do it, and cursor can be positionned correctly.
     ensureFormatted( cursor->parag() );
 
     // Speed optimization: if we only type a char, only repaint from current line
@@ -679,7 +676,7 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
 {
     if ( protectContent() )
         return;
-    kdDebug(32500) << "KoTextObject::pasteText" << endl;
+    kdDebug(32500) << "KoTextObject::pasteText cursor parag=" << cursor->parag()->paragId() << endl;
     QString t = text;
     // Need to convert CRLF to NL
     QRegExp crlf( QString::fromLatin1("\r\n") );
@@ -691,9 +688,7 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
     }
     if ( !t.isEmpty() )
     {
-        KoTextCursor initialCursor = *cursor;
         insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected, i18n("Paste Text") );
-        setLastFormattedParag( initialCursor.parag() );
         formatMore( 2 );
         emit repaintChanged( this );
     }
@@ -1530,8 +1525,9 @@ void KoTextObject::setViewArea( QWidget* w, int maxY )
 
 void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 {
-    if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() )
+    if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() ) {
         m_lastFormatted = parag;
+    }
 }
 
 void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormatting /* = true */ )
@@ -1550,9 +1546,12 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
         }
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
         bool ret = formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
-        if ( !ret ) // aborted
+        if ( !ret ) { // aborted
+            //kdDebug(32500) << "ensureFormatted aborted!" << endl;
             break;
+        }
     }
+    //kdDebug(32500) << name() << " ensureFormatted " << parag->paragId() << " done" << endl;
 }
 
 bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /* = true */ )
@@ -1616,7 +1615,7 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 #endif
             parag->format();
             bottom = parag->rect().top() + parag->rect().height();
-#ifdef DEBUG_FORMAT_MORE
+#if 0 //def DEBUG_FORMAT_MORE
             kdDebug(32500) << "formatMore(inside) top=" << parag->rect().top()
                       << " height=" << parag->rect().height()
                       << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
@@ -1669,6 +1668,8 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
             return false;
+        else if ( m_lastFormatted ) // we got more space, keep formatting then
+            return formatMore( 2 );
     }
 
     // Now let's see when we'll need to get back here.
