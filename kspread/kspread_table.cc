@@ -5667,7 +5667,7 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
     deleteSelection( _marker );
 }
 
-void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert )
+void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert,int insertTo )
 {
     QMimeSource* mime = QApplication::clipboard()->data();
     if ( !mime )
@@ -5680,10 +5680,10 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
     else
         return;
 
-    paste( b, _marker,makeUndo, sp, op,insert );
+    paste( b, _marker,makeUndo, sp, op,insert, insertTo );
 }
 
-void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert )
+void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUndo, PasteMode sp, Operation op,bool insert, int insertTo )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5695,15 +5695,15 @@ void KSpreadTable::paste( const QByteArray& b, const QPoint &_marker,bool makeUn
 
     // ##### TODO: Test for parsing errors
 
-    loadSelection( doc, _marker.x() - 1, _marker.y() - 1,makeUndo, sp, op, insert);
+    loadSelection( doc, _marker.x() - 1, _marker.y() - 1,makeUndo, sp, op, insert, insertTo);
     m_pDoc->setModified( true );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op,bool insert )
+bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo, PasteMode sp, Operation op,bool insert,int insertTo )
 {
     QDomElement e = doc.documentElement();
     if(!isLoading()&&makeUndo)
-        loadSelectionUndo( doc, _xshift,_yshift,insert);
+        loadSelectionUndo( doc, _xshift,_yshift,insert,insertTo);
 
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
@@ -5818,7 +5818,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     return true;
 }
 
-void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert)
+void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert,int insertTo)
 {
     QDomElement e = doc.documentElement();
     QRect rect;
@@ -5879,15 +5879,53 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
     {
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,insert );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,insert,insertTo );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
     if(insert)
         {
-        //shiftRow(rect,false);
-        shiftColumn(rect,false);
+        if(insertTo==-1)
+                shiftRow(rect,false);
+        else if(insertTo==1)
+                shiftColumn(rect,false);
         }
     }
+}
+
+bool KSpreadTable::testAreaPasteInsert()
+{
+   QMimeSource* mime = QApplication::clipboard()->data();
+    if ( !mime )
+        return false;
+
+    QByteArray b;
+
+    if ( mime->provides( "application/x-kspread-snippet" ) )
+        b = mime->encodedData( "application/x-kspread-snippet" );
+    else
+        return false;
+
+    QBuffer buffer( b );
+    buffer.open( IO_ReadOnly );
+    QDomDocument doc;
+    doc.setContent( &buffer );
+    buffer.close();
+
+    QDomElement e = doc.documentElement();
+    QRect rect;
+    if ( !e.namedItem( "columns" ).toElement().isNull() )
+        return false;
+
+    if ( !e.namedItem( "rows" ).toElement().isNull() )
+        return false;
+
+    QDomElement c = e.firstChild().toElement();
+    for( ; !c.isNull(); c = c.nextSibling().toElement() )
+    {
+        if ( c.tagName() == "cell" )
+                return true;
+    }
+    return false;
 }
 
 void KSpreadTable::deleteCells( const QRect& rect )

@@ -26,7 +26,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc kspread_dlg_show.cc kspread_dlg_series.cc \
                 kspread_dlg_validity.cc \
-	kspread_dlg_insert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
+	kspread_dlg_insert.cc kspread_dlg_pasteinsert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
@@ -64,7 +64,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
                 kspread_dlg_validity.h \
                 kspread_events.h kspread_global.h  \
-	kspread_dlg_show.h kspread_dlg_insert.h KSpreadViewIface.h \
+	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h kspread_dlg_format.h
 

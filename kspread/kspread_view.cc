@@ -87,6 +87,7 @@
 #include "kspread_dlg_angle.h"
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_validity.h"
+#include "kspread_dlg_pasteinsert.h"
 #include "kspread_undo.h"
 
 #include "handler.h"
@@ -339,7 +340,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "insertCell" );
     m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
                                actionCollection(), "removeCell" );
-    m_insertCellCopy = new KAction( i18n("Copy with insertion"), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
+    m_insertCellCopy = new KAction( i18n("Paste with insertion"), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
                                actionCollection(), "insertCellCopy" );
     m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
@@ -2186,8 +2187,14 @@ void KSpreadView::slotInsertCellCopy()
 {
      if ( !m_pTable )
         return;
-
-    m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,true, Normal,OverWrite,true);
+    if( !m_pTable->testAreaPasteInsert())
+        m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,true, Normal,OverWrite,true);
+    else
+        {
+        QRect r( activeTable()-> selectionRect() );
+        KSpreadpasteinsert dlg( this, "Remove", r );
+        dlg.exec();
+        }
     if(m_pTable->getAutoCalc())
         m_pTable->recalc(true);
     updateEditWidget();

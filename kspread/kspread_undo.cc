@@ -1544,7 +1544,7 @@ void KSpreadUndoShowTable::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert )
+KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int _insertTo )
     : KSpreadUndoAction( _doc )
 {
     if(!insert)
@@ -1558,6 +1558,7 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* tabl
     xshift=_xshift;
     yshift=_yshift;
     b_insert=insert;
+    m_iInsertTo=_insertTo;
     if( !b_insert)
         createListCell( m_data, m_lstColumn,m_lstRow,table );
 
@@ -1723,8 +1724,10 @@ void KSpreadUndoCellPaste::undo()
         }
     else
         {
-        //table->unshiftRow(m_selection);
-        table->unshiftColumn(m_selection);
+        if(m_iInsertTo==-1)
+                table->unshiftRow(m_selection);
+        else if(m_iInsertTo==1)
+                table->unshiftColumn(m_selection);
         }
     }
 
@@ -1780,8 +1783,11 @@ void KSpreadUndoCellPaste::redo()
     {
     if(b_insert)
         {
-        //table->shiftRow(m_selection);
-        table->shiftColumn(m_selection);
+        if(m_iInsertTo==-1)
+                table->shiftRow(m_selection);
+        else if(m_iInsertTo==1)
+                table->shiftColumn(m_selection);
+
         }
     table->deleteCells( m_selection );
     table->paste( m_dataRedo,m_selection.topLeft());

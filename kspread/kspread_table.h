@@ -433,8 +433,8 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite,bool insert=false );
-    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,bool insert=false );
+    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite,bool insert=false,int insertTo=0 );
+    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,bool insert=false,int insertTo=0 );
     void defaultSelection( const QPoint &_marker );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
@@ -692,11 +692,24 @@ public:
     QDomDocument saveCellRect( const QRect& );
 
     /**
+    * insertTo defined if you insert to the bottom or right
+    * insert to bottom if insertTo==1
+    * insert to right if insertTo ==-1
+    * insertTo used just for insert/paste an area
      * @see #paste
      */
-    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false );
+    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
 
-    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert);
+    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert,int insertTo);
+
+    /**
+    *  Used when you insert and paste cell
+    * return true if it's a area
+    * false if it's a column/row
+    * it's used to select if you want to insert at the bottom or right
+    * @see #paste
+     */
+    bool testAreaPasteInsert();
 
     /**
      * Deletes all cells in the given rectangle.
