@@ -222,6 +222,10 @@ void KWView::clearSelection()
             fs->removeHighlight();
         delete m_spell.kspell;
     }
+    if (searchEntry)
+        delete searchEntry;
+    if (replaceEntry)
+        delete replaceEntry;
 }
 
 void KWView::changeNbOfRecentFiles(int _nb)
