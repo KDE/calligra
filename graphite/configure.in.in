@@ -1,17 +1,2 @@
 dnl Don't compile graphite...
 DO_NOT_COMPILE="$DO_NOT_COMPILE graphite"
-
-dnl Check some maths stuff
-AC_CHECK_HEADERS(ieeefp.h float.h)
-AC_CHECK_LIB(m, isinf, [
-  AC_DEFINE_UNQUOTED(HAVE_FUNC_ISINF, 1, [Define if you have isinf])
-])
-AC_CHECK_LIB(m, finite, [
-  AC_DEFINE_UNQUOTED(HAVE_FUNC_FINITE, 1, [Define if you have finite])
-])
-AC_CHECK_LIB(m, _finite, [
-  AC_DEFINE_UNQUOTED(HAVE_FUNC__FINITE, 1, [Define if you have _finite])
-])
-AC_CHECK_LIB(m, isnan, [
-  AC_DEFINE_UNQUOTED(HAVE_FUNC_ISNAN, 1, [Define if you have isnan])
-])
