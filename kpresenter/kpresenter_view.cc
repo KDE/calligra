@@ -71,6 +71,7 @@
 #include <koAboutDia.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
+#include <kimgio.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -539,18 +540,8 @@ void KPresenterView::insertPicture()
     page->deSelectAllObj();
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-                                                        i18n( "*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-                                                              "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-                                                              "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
-                                                              "*.png *.PNG|PNG-Pictures\n"
-                                                              "*.gif *.GIF|GIF-Pictures\n"
-                                                              "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-                                                              "*.bmp *.BMP|Windows Bitmaps\n"
-                                                              "*.xbm *.XBM|XWindow Pitmaps\n"
-                                                              "*.xpm *.XPM|Pixmaps\n"
-                                                              "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-                                                              "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures" ), 0 );
-
+							kimgio_patterns(), 0);
+    
     QCursor c = page->cursor();
     page->setCursor( waitCursor );
     if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file.data(), xOffset, yOffset );
@@ -2821,17 +2812,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     QFileInfo fileInfo( filename );
 
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-                                                        i18n( "*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-                                                              "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
-                                                              "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
-                                                              "*.png *.PNG|PNG-Pictures\n"
-                                                              "*.gif *.GIF|GIF-Pictures\n"
-                                                              "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-                                                              "*.bmp *.BMP|Windows Bitmaps\n"
-                                                              "*.xbm *.XBM|XWindow Pitmaps\n"
-                                                              "*.xpm *.XPM|Pixmaps\n"
-                                                              "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-                                                              "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures" ), 0 );
+							kimgio_patterns(), 0);
 
     if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
 }

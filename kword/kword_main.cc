@@ -19,7 +19,6 @@
 #include "kword_main.moc"
 #include "kword_doc.h"
 #include "kword_shell.h"
-#include "formats.h"
 
 #include <koFactory.h>
 #include <koQueryTypes.h>
@@ -51,9 +50,6 @@ KWordApp::~KWordApp()
 /*================================================================*/
 int main( int argc, char **argv )
 {
-    FormatManager *formatMngr;
-    formatMngr = new FormatManager();
-
     // Publish our factory
     KWordAutoLoader loader( "IDL:KWord/DocumentFactory:1.0", "KWord" );
 

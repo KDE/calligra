@@ -134,7 +134,7 @@ XfigImport::XfigImport () {
 XfigImport::~XfigImport () {
 }
 
-bool XfigImport::setup (GDocument* doc, const char* format) {
+bool XfigImport::setup (GDocument* , const char* /*format*/) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
@@ -299,7 +299,7 @@ void XfigImport::parseColorObject (istream& fin) {
     colorTable.insert (number, new QColor (red, green, blue));
 }
 
-void XfigImport::parseArc (istream& fin, GDocument* doc) {
+void XfigImport::parseArc (istream& fin, GDocument* ) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, cap_style, direction,
     forward_arrow, backward_arrow, x1, y1, x2, y2, x3, y3;
@@ -358,7 +358,7 @@ void XfigImport::parseArc (istream& fin, GDocument* doc) {
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
-void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
+void XfigImport::parseEllipse (istream& fin, GDocument* ) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, direction, center_x, center_y,
     radius_x, radius_y, start_x, start_y, end_x, end_y;
@@ -386,7 +386,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
-void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
+void XfigImport::parsePolyline (istream& fin, GDocument* ) {
   int sub_type, line_style, thickness, pen_color, fill_color,
     depth, pen_style, area_fill, join_style, cap_style, radius,
     forward_arrow, backward_arrow, npoints;
@@ -472,7 +472,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
-void XfigImport::parseSpline (istream& fin, GDocument* doc) {
+void XfigImport::parseSpline (istream& fin, GDocument* ) {
   int sub_type, line_style, thickness, pen_color, fill_color, depth,
     pen_style, area_fill, cap_style, forward_arrow, backward_arrow, npoints;
   float style_val;
@@ -543,7 +543,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* doc) {
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
-void XfigImport::parseText (istream& fin, GDocument* doc) {
+void XfigImport::parseText (istream& fin, GDocument* ) {
   int sub_type, color, depth, pen_style, font, font_flags, x, y;
   float font_size, angle, height, length;
   GText *obj = new GText ();
@@ -647,7 +647,7 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
-void XfigImport::parseCompoundObject (istream& fin, GDocument* doc) {
+void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
   int upperright_x, upperright_y, lowerleft_x, lowerleft_y;
 
   fin >> upperright_x >> upperright_y >> lowerleft_x >> lowerleft_y;

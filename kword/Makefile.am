@@ -10,7 +10,7 @@ bin_PROGRAMS = kword
 kword_SOURCES = kword.idl kword_doc.cc searchdia.cc char.cc kword_main.cc kword_view.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
-		formats.cc frame.cc framedia.cc stylist.cc kcharselectdia.cc \
+		frame.cc framedia.cc stylist.cc kcharselectdia.cc \
 		kword_utils.cc preview.cc tabledia.cc insdia.cc deldia.cc variable.cc \
 		docstruct.cc kword_undo.cc clipbrd_dnd.cc footnote.cc footnotedia.cc \
 		autoformat.cc autoformatdia.cc
@@ -18,7 +18,7 @@ kword_SOURCES = kword.idl kword_doc.cc searchdia.cc char.cc kword_main.cc kword_
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
-		formats.h frame.h framedia.h stylist.h  kcharselectdia.h \
+		frame.h framedia.h stylist.h  kcharselectdia.h \
 		kword_utils.h searchdia.h preview.h tabledia.h insdia.h deldia.h variable.h \
 		docstruct.h kword_undo.h clipbrd_dnd.h footnote.h footnotedia.h \
 		autoformat.h autoformatdia.h

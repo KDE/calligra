@@ -22,7 +22,6 @@
 #include "kpresenter_shell.h"
 #include <koIMR.h>
 #include <koQueryTypes.h>
-#include "formats.h"
 
 KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
 typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
@@ -45,9 +44,6 @@ KPresenterApp::~KPresenterApp()
 /*======================== main ==================================*/
 int main( int argc, char **argv )
 {
-    FormatManager *formatMngr;
-    formatMngr = new FormatManager();
-
     KPresenterAutoLoader loader( "IDL:KPresenter/DocumentFactory:1.0", "KPresenter" );
 
     KPresenterApp app( argc, argv );

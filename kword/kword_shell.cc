@@ -22,6 +22,7 @@
 #include "kword_view.h"
 #include "kword_page.h"
 
+#include <kimgio.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -55,21 +56,15 @@ KWordShell::KWordShell()
 
     if ( !previewHandlerRegistered )
     {
-        KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "gif", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "jpeg", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "jpg", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "xpm", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "xbm", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "png", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "GIF", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "JPEG", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "JPG", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "XPM", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "XBM", pixmapPreviewHandler, PreviewPixmap );
-        KFilePreviewDialog::registerPreviewModule( "PNG", pixmapPreviewHandler, PreviewPixmap );
-        previewHandlerRegistered = true;
+      QStringList list = kimgio_types();
+      QStringList::ConstIterator it;
+      for (it = list.begin(); it != list.end(); it++) 
+	KFilePreviewDialog::registerPreviewModule( *it, pixmapPreviewHandler, PreviewPixmap );
+      
+      KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
+      KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
+      
+      previewHandlerRegistered = true;
     }
 }
 

@@ -32,7 +32,7 @@ KilluImport::KilluImport () {
 KilluImport::~KilluImport () {
 }
 
-bool KilluImport::setup (GDocument* doc, const char* format) {
+bool KilluImport::setup (GDocument* , const char* ) {
   return true;
 }
 

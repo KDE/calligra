@@ -10,7 +10,7 @@ bin_PROGRAMS = kpresenter
 kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
 	kpresenter_doc.cc kpresenter_shell.cc kpresenter.idl \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
-	formats.cc qwmf.cc kenumlistdia.cc \
+	qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
@@ -30,7 +30,7 @@ kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
 		backdia.h page.h ktextobject.h styledia.h \
-		formats.h qwmf.h global.h \
+		qwmf.h global.h \
 		kenumlistdia.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \

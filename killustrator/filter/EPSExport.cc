@@ -44,7 +44,7 @@ EPSExport::EPSExport () {
 EPSExport::~EPSExport () {
 }
 
-bool EPSExport::setup (GDocument *doc, const char* fmt) {
+bool EPSExport::setup (GDocument *, const char* ) {
   return true;
 }
 

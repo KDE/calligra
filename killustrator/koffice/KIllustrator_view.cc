@@ -802,7 +802,7 @@ void KIllustratorView::setupCanvas () {
   mainWidget = w;
 }
 
-void KIllustratorView::showCurrentMode (const char* msg) {
+void KIllustratorView::showCurrentMode (const char* ) {
     //  statusbar->changeItem (msg, 2);
 }
 

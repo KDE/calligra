@@ -46,7 +46,7 @@ ImageExport::ImageExport () {
 ImageExport::~ImageExport () {
 }
 
-bool ImageExport::setup (GDocument *doc, const char* fmt) {
+bool ImageExport::setup (GDocument *, const char* fmt) {
   bool formatSupported = false;
 
   QStrList formats = QImageIO::outputFormats ();
