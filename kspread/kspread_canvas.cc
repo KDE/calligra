@@ -2921,6 +2921,10 @@ QRect KSpreadCanvas::visibleCells()
 
 void KSpreadCanvas::paintUpdates()
 {
+  if (activeTable() == NULL)
+  {
+    return;
+  }
   QWMatrix m = m_pView->matrix();
 
   QPainter painter(this);
@@ -4008,7 +4012,8 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //Scaling means, we have at the end a qRound function.
   //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
 
-  KSpreadSheet *table = m_pCanvas->activeTable();
+  KSpreadTable *table = m_pCanvas->activeTable();
+
   if ( !table )
     return;
 

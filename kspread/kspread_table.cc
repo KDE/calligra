@@ -652,13 +652,14 @@ void KSpreadSheet::setCalcDirtyFlag()
 
 void KSpreadSheet::recalc()
 {
-   // First set all cells as dirty
-   setCalcDirtyFlag();
-
-   this->calc();
+  m_pDoc->emitBeginOperation(true);
+  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
+  setCalcDirtyFlag();
+  m_pDoc->emitEndOperation();
 }
 
-void KSpreadSheet::calc()
+/*
+void KSpreadTable::calc()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ; c; c = c->nextCell() )
@@ -666,7 +667,7 @@ void KSpreadSheet::calc()
      c->calc();
   }
 }
-
+*/
 /*
  Methods working on selections:
 
@@ -7267,13 +7268,16 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
 
 void KSpreadSheet::updateLocale()
 {
+  m_pDoc->emitBeginOperation(true);
+  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
+
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
       QString _text = c->text();
       c->setDisplayText( _text, false/* no recalc deps for each, done independently */ );
   }
-  recalc();
+  m_pDoc->emitEndOperation();
 }
 
 KSpreadCell* KSpreadSheet::getFirstCellColumn(int col) const

@@ -435,7 +435,8 @@ public:
     /**
      * Calculates all cells in the table with the CalcDirtyFlag.
      */
-    void calc();
+  //why on earth would we want to do this?
+//    void calc();
 
     /**
      * Recalculates the current table. If you want to recalculate EVERYTHING, then
