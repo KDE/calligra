@@ -294,12 +294,12 @@ protected:
     KCommand * doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes );
     void buildMaxLen();
 
-    void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int & index, const QString & word, KoTextObject *txtObj );
     KCommand *doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
-    KCommand *doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
+    KCommand *doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag, int index, const QString & word, KoTextObject *txtObj );
     KCommand *doUseBulletStyle(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
 
-    KCommand *doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+    KCommand *doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int & index, const QString & word , KoTextObject *txtObj );
 
     KCommand *doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index );
 

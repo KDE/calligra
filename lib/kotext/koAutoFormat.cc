@@ -864,14 +864,14 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
         if ( m_autoChangeFormat && index > 3)
         {
-            KCommand *cmd =doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
+            KCommand *cmd =doAutoChangeFormat( textEditCursor, parag, index, word, txtObj );
             if ( cmd )
                 txtObj->emitNewCommand( cmd );
 
         }
         if ( m_autoDetectUrl && index > 0 )
         {
-            doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
+            doAutoDetectUrl( textEditCursor, parag, index, word, txtObj );
         }
         if ( m_autoReplaceNumber )
         {
@@ -1064,7 +1064,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
                 textEditCursor->gotoRight();
                 txtObj->emitShowCursor();
                 delete [] wordArray;
-                index = index - length +it->replace().length();
+                index = index - length + it->replace().length();
                 return cmd;
             }
         }
@@ -1198,7 +1198,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
     return cmd;
 }
 
-KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int& index, const QString & word , KoTextObject *txtObj )
 {
     unsigned int length = word.length();
     if ( length != 3 )
@@ -1227,6 +1227,7 @@ KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTe
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
+        index = index - length + replacement.length();
         return cmd;
     }
     return 0L;
@@ -1240,7 +1241,7 @@ void KoAutoFormat::detectStartOfLink(const QString &word)
         m_ignoreUpperCase=true;
 }
 
-void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int& index, const QString & word, KoTextObject *txtObj )
 {
     if (word.find("http://")!=-1 || word.find("https://")!=-1 || word.find("mailto:")!=-1
         || word.find("ftp://")!=-1 || word.find("file:")!=-1
@@ -1268,6 +1269,9 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
+
+        // adjust index
+        index -= length-1; // we removed length chars and inserted one instead
     }
 
 }
@@ -1697,7 +1701,7 @@ KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextP
     return 0L;
 }
 
-bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
+bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index, QChar ch )
 {
     if( m_ignoreDoubleSpace && ch==' ' && index >=  0 )
     {
