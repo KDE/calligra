@@ -2079,51 +2079,57 @@ void Page::doObjEffects()
 	  if (objPtr->effect != EF_NONE)
 	    {
 	      _objList.append(objPtr);
+
+	      int x,y,w,h;
+	      QRect br = view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox,objPtr->oy,
+									  objPtr->ow,objPtr->oh),objPtr->objNum - 1);
+	      x = br.x(); y = br.y(); w = br.width(); h = br.height();
+
 	      switch (objPtr->effect)
 		{
 		case EF_COME_LEFT:
-		  x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
+		  x_pos1 = max(x_pos1,x - diffx() + w);
 		  break;
 		case EF_COME_TOP:
-		  y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		  y_pos1 = max(y_pos1,y - diffy() + h);
 		  break;
 		case EF_COME_RIGHT:
-		  x_pos2 = min(x_pos2,objPtr->ox - diffx());
+		  x_pos2 = min(x_pos2,x - diffx());
 		  break;
 		case EF_COME_BOTTOM:
-		  y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		  y_pos2 = min(y_pos2,y - diffy());
 		  break;
 		case EF_COME_LEFT_TOP:
 		  {
-		    x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
-		    y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		    x_pos1 = max(x_pos1,x - diffx() + w);
+		    y_pos1 = max(y_pos1,y - diffy() + h);
 		  } break;
 		case EF_COME_LEFT_BOTTOM:
 		  {
-		    x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
-		    y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		    x_pos1 = max(x_pos1,x - diffx() + w);
+		    y_pos2 = min(y_pos2,y - diffy());
 		  } break;
 		case EF_COME_RIGHT_TOP:
 		  {
-		    x_pos2 = min(x_pos2,objPtr->ox - diffx());
-		    y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		    x_pos2 = min(x_pos2,x - diffx());
+		    y_pos1 = max(y_pos1,y - diffy() + h);
 		  } break;
 		case EF_COME_RIGHT_BOTTOM:
 		  {
-		    x_pos2 = min(x_pos2,objPtr->ox - diffx());
-		    y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		    x_pos2 = min(x_pos2,x - diffx());
+		    y_pos2 = min(y_pos2,y - diffy());
 		  } break;
 		case EF_WIPE_LEFT:
-		  x_pos1 = max(x_pos1,objPtr->ow);
+		  x_pos1 = max(x_pos1,w);
 		  break;
 		case EF_WIPE_RIGHT:
-		  x_pos1 = max(x_pos1,objPtr->ow);
+		  x_pos1 = max(x_pos1,w);
 		  break;
 		case EF_WIPE_TOP:
-		  y_pos1 = max(y_pos1,objPtr->oh);
+		  y_pos1 = max(y_pos1,h);
 		  break;
 		case EF_WIPE_BOTTOM:
-		  y_pos1 = max(y_pos1,objPtr->oh);
+		  y_pos1 = max(y_pos1,h);
 		  break;
 		default: break;
 		}
@@ -2333,6 +2339,10 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
   int num;
   PicCache *pc;
   bool _clip = !(_w != 0 || _h != 0);
+  int x,y,w,h;
+  QRect br = view->KPresenterDoc()->getRealBoundingRect(QRect(_objPtr->ox,_objPtr->oy,
+							      _objPtr->ow,_objPtr->oh),_objPtr->objNum - 1);
+  x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
   switch (_objPtr->objType)
     {
@@ -2341,17 +2351,52 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	if (_w != 0 || _h != 0)
 	  {
 	    p.setClipping(true);
-	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
+	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
 	  }
-
-	p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-		     _objPtr->graphObj->getPix());
-
+	
+	if (_objPtr->angle == 0)
+	  {
+	    p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+			 _objPtr->graphObj->getPix());
+	    //0,0,_objPtr->ow,_objPtr->oh);
+	  }
+	else
+	  {
+	    p.save();
+	    r = p.viewport();
+	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+				 r.width(),r.height());
+	    
+	    QRect br = _objPtr->graphObj->getPix().rect();
+	    int pw = br.width();
+	    int ph = br.height();
+	    QRect rr = br;
+	    int pixYPos = -rr.y();
+	    int pixXPos = -rr.x();
+	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+	    
+	    QWMatrix m,mtx;
+	    mtx.rotate(_objPtr->angle);
+	    m.translate(pw / 2,ph / 2);
+	    m = mtx * m;
+	    
+	    p.setWorldMatrix(m);
+	    
+	    p.drawPixmap(rr.left() + pixXPos,rr.top() + pixYPos,
+				_objPtr->graphObj->getPix());
+	    
+	    p.resetXForm();
+	    p.setViewport(r);
+	    p.restore();
+	  }
+	
 	if (_w != 0 || _h != 0)
 	  p.setClipping(false);
       } break;
     case OT_TEXT:
       {
+	p.save();
 	if (!editMode && currPresStep == _objPtr->presNum && !goingBack)
 	  {
 	    switch (_objPtr->effect2)
@@ -2405,40 +2450,118 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
 	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
 	  }
 
-	p.translate((float)_objPtr->ox - (float)diffx() + (float)_x,(float)_objPtr->oy - (float)diffy() + (float)_y);
+	r = p.viewport();
+	p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
+		      r.width(),r.height());
 	
-	_objPtr->objPic->play(&p);
-
+	if (objPtr->angle == 0)
+	  objPtr->objPic->play(&p);
+	else
+	  {
+	    QRect br = objPtr->textObj->rect();
+	    int pw = br.width();
+	    int ph = br.height();
+	    QRect rr = br;
+	    int yPos = -rr.y();
+	    int xPos = -rr.x();
+	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+	    
+	    QWMatrix m,mtx;
+	    mtx.rotate(objPtr->angle);
+	    m.translate(pw / 2,ph / 2);
+	    m = mtx * m;
+	    
+	    p.setWorldMatrix(m);
+	    p.translate(rr.left() + xPos,rr.top() + yPos);
+	    
+	    objPtr->objPic->play(&p);
+	  }
+	
+	p.setViewport(r);
+	p.resetXForm();
+	p.restore();
+	
 	if (_w != 0 || _h != 0)
 	  p.setClipping(false);
-	
-	p.resetXForm();
       } break;
     default:
       {
 	if (_w != 0 || _h != 0)
 	  {
 	    p.setClipping(true);
-	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
+	    p.setClipRect(x - diffx() + _cx,y - diffy() + _cy,w - _w,h - _h);
 	  }
 
-	if (_objPtr->objType != OT_CLIPART)
+	p.save();
+	if (objPtr->objType != OT_CLIPART)
 	  {
 	    r = p.viewport();
-	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
+	    p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
 			  r.width(),r.height());
-	  }	
-
-	if (_objPtr->objType == OT_CLIPART)
-	  {
-	    r = p.viewport();
-	    p.setViewport(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
-			  _objPtr->ow,_objPtr->oh);
 	  }
 	
-	_objPtr->objPic = _objPtr->graphObj->getPic(_objPtr->ox - diffx(),_objPtr->oy - diffy(),_objPtr->ow,_objPtr->oh);
+	if (objPtr->objType == OT_CLIPART)
+	  {
+	    r = p.viewport();
+	    p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
+			  objPtr->ow,objPtr->oh);
+	  }
 	
-	_objPtr->objPic->play(&p);
+	objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
+	
+	if (objPtr->angle == 0)
+	  objPtr->objPic->play(&p);
+	else
+	  {
+	    QRect br = objPtr->graphObj->rect();
+	    int pw = br.width();
+	    int ph = br.height();
+	    QRect rr = br;
+	    int yPos = -rr.y();
+	    int xPos = -rr.x();
+	    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+	    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+	    
+	    if (objPtr->objType != OT_CLIPART)
+	      {
+		QWMatrix m,mtx,m2;
+		mtx.rotate(objPtr->angle);
+		m.translate(pw / 2,ph / 2);
+		m2.translate(rr.left() + xPos,rr.top() + yPos);
+		m = m2 * mtx * m;
+		
+		p.setWorldMatrix(m);
+		objPtr->graphObj->drawInPainter(&p);
+	      }
+	    else
+	      {
+		// this doesn't work well - has to be rewritten!!
+		
+		QWMatrix m,mtx;
+		mtx.rotate(objPtr->angle);
+		m.translate(pw / 2,ph / 2);
+		m = mtx * m;
+		
+		QPixmap pm(pw,ph);
+		pm.fill(white);
+		QPainter pnt;
+		pnt.begin(&pm);
+		objPtr->objPic->play(&pnt);
+		pnt.end();
+		
+		p.setViewport(objPtr->ox - diffx() + _x,objPtr->oy - diffy() + _y,
+				     r.width(),r.height());
+		p.setWorldMatrix(m);
+		
+		p.drawPixmap(rr.left() + xPos,rr.top() + yPos,pm);
+	      }
+	  }
+	
+	p.setViewport(r);
+	
+	p.resetXForm();
+	p.restore();
 	
 	if (_w != 0 || _h != 0)
 	  p.setClipping(false);
