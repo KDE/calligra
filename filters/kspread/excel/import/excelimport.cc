@@ -269,22 +269,11 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   QString inputFile = m_chain->inputFile();
 
-
-  Swinder::Reader *reader;
-  reader = Swinder::ReaderFactory::createReader( "application/msexcel" );
-
-  if( !reader )
-  {
-    KMessageBox::sorry( 0, i18n("Internal problem: format not supported." ) );
-    return KoFilter::StupidError;
-  }
-
-  Swinder::Workbook* workbook;
-  workbook = reader->load( inputFile.local8Bit() );
-  if( !workbook )
+  Swinder::Workbook* workbook = new Swinder::Workbook;
+  if( workbook->load( inputFile.local8Bit() ) )
   {
     KMessageBox::sorry( 0, i18n("Could not read from file." ) );
-    delete reader;
+    delete workbook;
     return KoFilter::StupidError;
   }
 
@@ -410,7 +399,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
        out->close();
      }
 
-  delete reader;
   delete workbook;
 
   return KoFilter::OK;
