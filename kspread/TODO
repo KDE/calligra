@@ -37,26 +37,69 @@ Things to do before the release of KOffice 1.4
 Item                                                               Prio Status
 ------------------------------------------------------------------------------
 
-* General bugs
-  + Painting
-    - 59068: Error show text on cell with right align with text	      1	----
-	     overlapped left cell.
-    - 61452: drawing problem when text overflow the right border      1 ----
+General bugs
+------------
 
-  + Printing
-  + Cut&Paste
-  + Miscellaneous
-    - 52575:1 The Open File dialog does not accept files opened	      1 ----
-              with "fish:/username@server".
+* Painting
+  + 59068: Error show text on cell with right align with text	      1	----
+	   overlapped left cell.
+  + 61452: drawing problem when text overflow the right border        1 ----
+  + 66859: Decimals are in the next horizontal cell		      1 ----
 
-    - 59510: Handles large spreadsheets "extremely" poorly.	      2 ----
+* Printing
+  + 68190: Empty document generates 2 printed pages (testcase)	      1 ----
+  + 70073: printing with kspread gives big black areas		      1 ----
+  + 72798: selective print comes up with "nothing to print"	      1 ----
+  + 77962: print range doesn't work into kspread		      1 ----
+  + 81253: Print from KSpread: artifacts in pdf and on paper	      1 ----
+  + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
+  + 87367: Ugly postscript rendering of cell borders.		      1 ----
+  + 88252: content larger than column are not print as PDF	      1 ----
+  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 ----
+  + 100643: KSpread prints a completely empty page at the end of      1 ----
+	    the... FIXME
+  + 101074: Charts are really small when printed from KSpread	      1 ----
+
+* Cut/Copy & Paste
+  + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
+  + 69283: content on middle mouse click			      1 ----
+
+* Load & Save, Import & Export
+  + 78040: font doesn't stick in cells				      1 ----
+  + 52575:1 The Open File dialog does not accept files opened	      1 ----
+            with "fish:/username@server".
+		FIXME: New bug number and better description
+
+* Miscellaneous
+  + 59510: Handles large spreadsheets "extremely" poorly.	      2 ----
 	This is perhaps already (partly) fixed, but might be
 	very difficult to fix quickly if it isn't.
+  + 60458: Inserting a row always creates cell with default number    2 ----
+	   format.
+  + 70708: undo of series broken when range contains merged cells     2 ----
+  + 77603: isdate() returns error for field references		      1 ----
+  + 78642: Function AVERAGEA does not work as documented	      1 ----
+  + 84738: Inserting a new line does not copy right settings to       1 ----
+	   new...  FIXME
+  + 86875: KSpread: does not convert automatically between text	      2 ----
+	   and...  FIXME
+  + 87471: format of whole column does not change.		      1 ----
 
-    - 60458: Inserting a row always creates cell with default number  2 ----
-	     format.
-* Filter bugs
+* Investigate further
+  + 48037: 1. Insert special doesn't work			      1 ----
+	   2. Search and replace...   FIXME
+  + 52575: Insert data from text file error and other remarks	      1 DONE
+	This bug should be split up into a number of wishes.
+  + 59757: Insert rows does not work				      1 ----
+	This sounds important.  Investigate.
+  + 60458: Creates cell with default number... FIXME		      1 ----
+	Investigate and move the bug or remove it.
+  + 61652: Wrong Parse when call a value over many cells	      1 ----
 
+  + 69285: FIXME
+
+Filter bugs
+-----------
 
 
 
