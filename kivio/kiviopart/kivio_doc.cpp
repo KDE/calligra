@@ -575,6 +575,7 @@ void KivioDoc::saveConfig()
     config->setGroup( "Interface" );
     config->writeEntry("ShowGrid", grid().isShow );
     config->writeEntry("SnapGrid",grid().isSnap);
+    config->writeEntry("GridColor",grid().color);
 }
 
 void KivioDoc::initConfig()
@@ -586,6 +587,8 @@ void KivioDoc::initConfig()
         KivioGridData d = grid();
         d.isShow = config->readBoolEntry( "ShowGrid", true );
         d.isSnap = config->readBoolEntry( "SnapGrid", true);
+        QColor color=QColor(200,200,200);
+        d.color =config->readColorEntry( "GridColor", &color );
         setGrid(d);
     }
 }
