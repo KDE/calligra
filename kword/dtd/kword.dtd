@@ -99,9 +99,9 @@ don't put a </?xml...> at the end of the file!).
                                 7...DIN B5
                                 8...US EXECUTIVE
 
-            width:          width in millimeters.
+            width:          width in pt.
 
-            height:         height in millimeters.
+            height:         height in pt.
 
             orientation:    page orientation:
 
@@ -111,7 +111,7 @@ don't put a </?xml...> at the end of the file!).
             columns:        the number of columns (only in wordprocessing
                             mode).
 
-            columnspacing:  the gap between the columns (only in
+            columnspacing:  the gap (in pt) between the columns (only in
                             wordprocessing mode).
 
             hType:          header style:
@@ -151,13 +151,13 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
 
-            left:           left margin in mm.
+            left:           left margin in pt.
 
-            right:          right margin in mm.
+            right:          right margin in pt.
 
-            top:            top margin in mm.
+            top:            top margin in pt.
 
-            bottom:         bottom margin in mm.
+            bottom:         bottom margin in pt.
 -->
 <!ELEMENT PAPERBORDERS
     EMPTY>
