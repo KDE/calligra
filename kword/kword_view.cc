@@ -206,6 +206,9 @@ void KWordView::initGui()
 
     ( (KSelectAction*)actionViewZoom )->setCurrentItem( 1 );
 
+    ((KToggleAction*)actionViewHeader)->setChecked(doc->hasHeader());
+    ((KToggleAction*)actionViewFooter)->setChecked(doc->hasFooter());
+
     showFormulaToolbar( FALSE );
 
     QWidget *tb = 0;
