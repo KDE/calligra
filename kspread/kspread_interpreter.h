@@ -15,7 +15,7 @@ class KSpreadDepend;
 class KSpreadInterpreter : public KSInterpreter
 {
 public:
-  typedef KSharedPtr<KSpreadInterpreter> Ptr;
+  typedef KSSharedPtr<KSpreadInterpreter> Ptr;
 
   KSpreadInterpreter( KSpreadDoc* );
 

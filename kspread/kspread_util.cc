@@ -83,9 +83,9 @@ util_fractionFormat(double value, KSpreadCell::formatNumber _tmpFormat)
 	break;
     } /* switch */
 
-    
+
     /* handle halfs, quaters, tenth, ... */
-    
+
     if (_tmpFormat != KSpreadCell::fraction_three_digits
 	&& _tmpFormat != KSpreadCell::fraction_two_digits
 	&& _tmpFormat != KSpreadCell::fraction_one_digit) {
@@ -104,9 +104,9 @@ util_fractionFormat(double value, KSpreadCell::formatNumber _tmpFormat)
 	      	.arg( index1 )
 		.arg( index );
     }
-   
 
-    /* handle fraction_one_digit, fraction_two_digit 
+
+    /* handle fraction_one_digit, fraction_two_digit
      * and fraction_three_digit style */
 
     double precision, denominator, numerator;
@@ -121,7 +121,7 @@ util_fractionFormat(double value, KSpreadCell::formatNumber _tmpFormat)
 	precision = pow(10.0, -index);
 	numerator = val2;
 	denominator = 1;
-	
+
 	while (fabs(numerator/denominator - result) > precision) {
 		val1 = (1 / (val1 - val2));
 		val2 = rint(val1);
@@ -134,10 +134,10 @@ util_fractionFormat(double value, KSpreadCell::formatNumber _tmpFormat)
 	}
 	index--;
     } while (fabs(denominator) > limit);
-    
+
     denominator = fabs(denominator);
     numerator = fabs(numerator);
-    
+
     if (denominator == numerator)
 	return QString().setNum(floor(value + 1));
     else
@@ -154,23 +154,23 @@ util_timeFormat(KLocale * locale, QTime m_Time,
 {
     if (tmpFormat == KSpreadCell::Time)
 	return locale->formatTime(m_Time, false);
-    
+
     if (tmpFormat == KSpreadCell::SecondeTime)
 	return locale->formatTime(m_Time, true);
-    
+
     int hour = m_Time.hour();
     int minute = m_Time.minute();
     int second = m_Time.second();
     bool pm = (hour > 12);
     QString AMPM( pm ? i18n("PM"):i18n("AM") );
-    
+
     if (tmpFormat == KSpreadCell::Time_format1) {	// 9 : 01 AM
 	return QString("%1:%2 %3")
 		.arg((pm ? hour-12 : hour),2)
 		.arg(minute,2)
 		.arg(AMPM);
     }
-    
+
     if (tmpFormat == KSpreadCell::Time_format2) {	//9:01:05 AM
 	return QString("%1:%2:%3 %4")
 		.arg((pm ? hour-12 : hour),2)
@@ -178,7 +178,7 @@ util_timeFormat(KLocale * locale, QTime m_Time,
 		.arg(second,2)
 		.arg(AMPM);
     }
-    
+
     if (tmpFormat == KSpreadCell::Time_format3) {
 	return QString("%1 %2 %3 %4")			// 9 h 01 min 28 s
 		.arg(hour,2)
@@ -273,15 +273,15 @@ util_dateFormat(KLocale * locale, QDate m_Date,
 QString util_columnLabel(int column)
 {
     if (column <= 26)
-	return QString("%1").arg((char) 'A' + column - 1);
+	return QString("%1").arg((char) ('A' + column - 1));
 
     if (column <= 26 * 26)
-	return QString("%1%2").arg('A' + ((column - 1) / 26) - 1).arg('A' +
-								      ((column - 1) % 26));
+	return QString("%1%2").arg((char)('A' + ((column - 1) / 26) - 1)).arg((char)('A' +
+								      ((column - 1) % 26)));
 
     /* limit is 26*26 */
     kdDebug(36001) << "invalid column\n";
-    return i18n("<## invalid column ##>");
+    return QString("@@@");
 }
 
 QString util_cellName(int _col, int _row)
