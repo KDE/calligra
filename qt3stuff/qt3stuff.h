@@ -38,7 +38,7 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 	Anywhere 	= 0x8000
     };
 
-    enum CursorShape {
+    /*enum CursorShape {
 	ArrowCursor,
 	UpArrowCursor,
 	CrossCursor,
@@ -56,7 +56,7 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 	ForbiddenCursor,
 	LastCursor	= ForbiddenCursor,
 	BitmapCursor	= 24
-    };
+    };*/
 
     enum Dock { Unmanaged, TornOff, Top, Bottom, Right, Left, Minimized };
     // compatibility
