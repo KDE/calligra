@@ -232,10 +232,12 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	{
 		MyTabWidget *tab = new MyTabWidget(p, n, container);
 		tab->setTabReorderingEnabled(true);
+		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
 		        container->form()->manager()->lib()->displayName(c), n, tab));
 		tab->installEventFilter(container);
 		tab->setContainer(container);
+		m_manager = container->form()->manager();
 
 		if(container->form()->interactiveMode())
 		{
@@ -439,6 +441,17 @@ void ContainerFactory::renameTabPage()
 	       tab->tabLabel(w), &ok, w->topLevelWidget());
 	if(ok)
 		tab->changeTab(w, name);
+}
+
+void ContainerFactory::reorderTabs(int oldpos, int newpos)
+{
+	KFormDesigner::ObjectTreeItem *tab = m_manager->activeForm()->objectTree()->lookup(sender()->name());
+	if(!tab)
+		return;
+
+	kdDebug() << "ContainerFactory reordering tabs for " << tab->name() << endl;
+	KFormDesigner::ObjectTreeItem *item = tab->children()->take(oldpos);
+	tab->children()->insert(newpos, item);
 }
 
 void ContainerFactory::AddStackPage()

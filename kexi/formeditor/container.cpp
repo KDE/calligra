@@ -387,7 +387,6 @@ Container::deleteItem()
 void
 Container::widgetDeleted()
 {
-	kdDebug() << "Deleting container : " << m_tree->name() << endl;
 	m_container = 0;
 	delete this;
 }

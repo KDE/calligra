@@ -10,6 +10,7 @@
 namespace KFormDesigner
 {
 	class Form;
+	class FormManager;
 	class Container;
 }
 
@@ -64,11 +65,13 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		void removeStackPage();
 		void prevStackPage();
 		void nextStackPage();
+		void reorderTabs(int oldpos, int newpos);
 
 	private:
 		KFormDesigner::WidgetList		m_classes;
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
+		KFormDesigner::FormManager  *m_manager;
 };
 
 #endif
