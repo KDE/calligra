@@ -12,6 +12,7 @@
   <Action name="copy"/>
   <Action name="paste"/>
   <Action name="specialPaste"/>
+  <Action name="insertCellCopy"/>
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_replace"/>

@@ -570,6 +570,12 @@ void KSpreadView::initializeEditActions()
   m_specialPaste->setToolTip
     (i18n("Paste the contents of the clipboard with special options."));
 
+  m_insertCellCopy = new KAction( i18n("Paste with Insertion..."),
+                                  "insertcellcopy", 0, this,
+                                  SLOT( slotInsertCellCopy() ),
+                                  actionCollection(), "insertCellCopy" );
+  m_insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
+
   m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
   m_undo->setEnabled( FALSE );
   m_undo->setToolTip(i18n("Undo the previous action."));
@@ -784,12 +790,6 @@ void KSpreadView::initializeCellOperationActions()
                               SLOT( slotRemove() ), actionCollection(),
                               "removeCell" );
   m_removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet."));
-
-  m_insertCellCopy = new KAction( i18n("Paste with Insertion..."),
-                                  "insertcellcopy", 0, this,
-                                  SLOT( slotInsertCellCopy() ),
-                                  actionCollection(), "insertCellCopy" );
-  m_insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet."));
 
   m_insertCell = new KAction( i18n("Insert Cells..."), "insertcell", 0, this,
                               SLOT( slotInsert() ), actionCollection(),
