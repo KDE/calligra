@@ -14,9 +14,11 @@ class KChartDocument;
 
 #include <qlist.h>
 #include <qobject.h>
+#include <qrect.h>
 
 #include <KChart.h>
 #include <KChartData.h>
+#include <KChartWizard.h>
 
 #include "chart.h"
 
@@ -64,25 +66,43 @@ public:
  
   // IDL
   virtual void fill( const Chart::Range& range, const Chart::Matrix& matrix );
-  
+  virtual void showWizard();
+
   // C++
   virtual void addView( KChartView *_view );
   virtual void removeView( KChartView *_view );
 
   KChart& chart() { return m_chart; }
-
+  
   void emitModified();
+
+public slots:
+  void slotWizardOk();
   
 signals:
   void sig_modified();
   
 protected:
+  const char *createColumnLabel( int _column );
+  string createDataArea( const QRect& _rect );
+  
   QList<KChartView> m_lstViews;
 
   KChart m_chart;
   KChartData* m_pData;
   
   bool m_bModified;
+
+  KChartWizard* m_pWizard;
+
+  /**
+   * The label returned by @ref #columnLabel
+   */
+  char m_arrColumnLabel[20];
+
+  string m_strDataArea;
+  QRect m_rctDataArea;
 };
 
 #endif
+

@@ -7,7 +7,7 @@ INCLUDES  = $(MICO_INCLUDES)  -I./core  -I../lib/koml \
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
-	./core/libkchartcore.la \
+	./core/libkchartcore.la ./ui/libkchartui.la \
 	../lib/koml/libkoml.la -lkfile -lkfm -lkom -lop -lkdeui -lkdecore \
 	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
 

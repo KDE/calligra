@@ -41,11 +41,12 @@ KChartWizardLabelsLegendPage.cpp: KChartWizardLabelsLegendPage.moc
 KChartWizard.cpp: KChartWizard.moc
 KChartWizardSelectChartSubTypePage.cpp: KChartWizardSelectChartSubTypePage.moc
 KChartWizardSetupDataPage.cpp: KChartWizardSetupDataPage.moc
+
 main.cpp: main.moc
 main.moc: main.cpp
 	$(MOC) main.cpp -o main.moc
 
-test_SOURCES = main.cpp
+test_SOURCES = main.cpp main.moc
 
 LDFLAGS = $(all_libraries)
 LDADD = libkchartui.la ../core/libkchartcore.la -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)

@@ -18,6 +18,8 @@
 KChartDocument::KChartDocument()
 {
   ADD_INTERFACE( "IDL:Chart/SimpleChart:1.0" );
+
+  m_pWizard = 0L;
   
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete( false );
@@ -127,6 +129,57 @@ OPParts::View_ptr KChartDocument::createView()
   return OPParts::View::_duplicate( p );
 }
 
+const char *KChartDocument::createColumnLabel( int column )
+{
+  if ( column <= 26 )
+    sprintf( m_arrColumnLabel, "%c", 'A' + column - 1 );
+  else if ( column <= 26 * 26 )
+    sprintf( m_arrColumnLabel, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
+  else
+    strcpy( m_arrColumnLabel,"@@@");
+
+  return m_arrColumnLabel;
+}                           
+
+string KChartDocument::createDataArea( const QRect& _rect )
+{
+  string l1 = createColumnLabel( _rect.left() );
+  string l2 = createColumnLabel( _rect.right() );
+  
+  char buffer[ 1024 ];
+  sprintf( buffer, "%s%i:%s%i", l1.c_str(), _rect.top(), l2.c_str(), _rect.bottom() );
+  return string( buffer );
+}
+
+void KChartDocument::slotWizardOk()
+{
+  emit sig_modified();
+  
+  // HACK , KWizard deletion does not work
+  m_pWizard->hide();
+  // delete m_pWizard;
+  // m_pWizard = 0L;
+}
+
+void KChartDocument::showWizard()
+{
+  if ( m_pWizard != 0L )
+  {    
+    m_pWizard->show();
+    return;
+  }
+  
+  m_pWizard = new KChartWizard( &m_chart, 0, "kchartwizard", false );
+  
+  string area = createDataArea( m_rctDataArea );
+  m_pWizard->setDataArea( area.c_str() );
+
+  QObject::connect( m_pWizard, SIGNAL( okclicked() ), this, SLOT( slotWizardOk() ) );
+
+  m_pWizard->adjustSize();
+  m_pWizard->show();
+}
+
 void KChartDocument::fill( const Chart::Range& range, const Chart::Matrix& matrix )
 {
   cout << "Got w=" << matrix.columns << " h=" << matrix.rows << endl;
@@ -157,16 +210,17 @@ void KChartDocument::fill( const Chart::Range& range, const Chart::Matrix& matri
   
   cerr << "3" << endl;
 
-  /*  if ( m_pData )
-     delete m_pData; */
-
   cerr << "4" << endl;
 
-   m_pData = data;
-   m_chart.setChartData( data );
+  m_rctDataArea.setCoords( range.left, range.top, range.right, range.bottom );
+
+  if ( m_pData )
+    delete m_pData;
+  
+  m_pData = data;
+  m_chart.setChartData( data );
 
   cerr << "5" << endl;  
-
   emit sig_modified();
 
   cerr << "6" << endl;
