@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 - 2003 The KSpread Team
+                             www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -202,10 +204,7 @@ void KSpreadCell::copyFormat( int _column, int _row )
     QValueList<KSpreadConditional> conditionList = cell->conditionList();
     delete m_conditions;
     if ( cell->m_conditions )
-    {
-      m_conditions = new KSpreadConditions( this );
-      m_conditions->setConditionList( conditionList );
-    }
+      setConditionList( conditionList );
     else
       m_conditions = 0;
 
@@ -247,8 +246,8 @@ void KSpreadCell::defaultStyle()
 
   if ( m_conditions )
   {
-    QValueList<KSpreadConditional> emptyList;
-    m_conditions->setConditionList( emptyList );
+    delete m_conditions;
+    m_conditions = 0;
   }
 
   delete m_Validity;
@@ -1683,6 +1682,8 @@ bool KSpreadCell::makeFormula()
       tmp += context.exception()->toString( context );
       KMessageBox::error( (QWidget*)0L, tmp);
     }
+    if ( m_conditions )
+      m_conditions->checkMatches();
     return false;
   }
 
@@ -1713,6 +1714,9 @@ bool KSpreadCell::calc(bool delay)
     setFlag(Flag_CircularCalculation);
     m_strFormulaOut = "####";
     m_value.setError ( "####" );
+    if ( m_conditions )
+      m_conditions->checkMatches();
+    
     setFlag(Flag_LayoutDirty);
     if ( m_style == ST_Select )
     {
@@ -1767,6 +1771,8 @@ bool KSpreadCell::calc(bool delay)
 	  m_strFormulaOut = "####";
 	  setFlag(Flag_DependancyError);
 	  m_value.setError( "####" );
+          if ( m_conditions )
+            m_conditions->checkMatches();
           clearFlag(Flag_Progress);
 	  if ( m_style == ST_Select )
           {
@@ -1801,6 +1807,9 @@ bool KSpreadCell::calc(bool delay)
     // setFlag(Flag_LayoutDirty);
     clearFlag(Flag_Progress);
     clearFlag(Flag_CalcDirty);
+
+    if ( m_conditions )
+      m_conditions->checkMatches();
 
     if ( m_style == ST_Select )
     {
@@ -1904,6 +1913,8 @@ bool KSpreadCell::calc(bool delay)
   setFlag(Flag_LayoutDirty);
   clearFlag(Flag_Progress);
 
+  if ( m_conditions )
+    m_conditions->checkMatches();
 
   return true;
 }
@@ -3594,6 +3605,8 @@ void KSpreadCell::setDate( QString const & dateString )
   setFlag( Flag_LayoutDirty );
   setFlag( Flag_TextFormatDirty );
   setCalcDirtyFlag();
+  if ( m_conditions )
+    m_conditions->checkMatches();
 }
 
 void KSpreadCell::setDate( QDate const & date )
@@ -3611,6 +3624,8 @@ void KSpreadCell::setDate( QDate const & date )
   setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
   update();
+  if ( m_conditions )
+    m_conditions->checkMatches();
 }
 
 void KSpreadCell::setNumber( double number )
@@ -3628,6 +3643,8 @@ void KSpreadCell::setNumber( double number )
   setFlag( Flag_TextFormatDirty );
   checkNumberFormat();
   update();
+  if ( m_conditions )
+    m_conditions->checkMatches();
 }
 
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool asText )
@@ -3653,6 +3670,8 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
       setFlag(Flag_LayoutDirty);
       setFlag(Flag_TextFormatDirty);
       update();
+      if ( m_conditions )
+        m_conditions->checkMatches();
 
       return;
     }
@@ -3664,6 +3683,8 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
       //reapply old value if action == stop
       setDisplayText( oldText, updateDepends );
     }
+    if ( m_conditions )
+      m_conditions->checkMatches();
 }
 
 
@@ -3961,7 +3982,8 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     m_content = Text;
 
     m_pTable->setRegionPaintDirty(cellRect());
-
+    if ( m_conditions )
+      m_conditions->checkMatches();
 }
 
 
@@ -4637,6 +4659,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
       delete m_conditions;
       m_conditions = new KSpreadConditions( this );
       m_conditions->loadConditions( conditionsElement );
+      m_conditions->checkMatches();
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
@@ -5009,6 +5032,9 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if ( !m_pTable->isLoading() )
     setCellText( m_strText );
 
+  if ( m_conditions )
+    m_conditions->checkMatches();
+
   return true;
 }
 
@@ -5364,6 +5390,7 @@ void KSpreadCell::setConditionList( const QValueList<KSpreadConditional> & newLi
   delete m_conditions;
   m_conditions = new KSpreadConditions( this );
   m_conditions->setConditionList( newList );
+  m_conditions->checkMatches();
 }
 
 bool KSpreadCell::hasError() const
@@ -5371,7 +5398,6 @@ bool KSpreadCell::hasError() const
   return ( testFlag(Flag_ParseError) ||
            testFlag(Flag_CircularCalculation) ||
            testFlag(Flag_DependancyError));
-
 }
 
 void KSpreadCell::clearAllErrors()

@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 - 2003 The KSpread Team
+                             www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,11 +99,20 @@ class KSpreadConditions
    * it
    */ 
   void loadConditions( const QDomElement & element );
-private:
+
+  /**
+   * returns the style that matches first (or NULL if no condition matches)
+   */
+  KSpreadStyle * matchedStyle() const;
+
+  void checkMatches();
+
+ private:
   KSpreadConditions() {}
 
   const KSpreadCell * m_cell;
   QValueList<KSpreadConditional> m_condList;
+  KSpreadStyle * m_matchedStyle;
 };
 
 

@@ -989,6 +989,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   }
 
   m_eMouseAction = NoAction;
+  m_dragging = false;
+  m_dragStart.setX( -1 );
 }
 
 void KSpreadCanvas::processClickSelectionHandle( QMouseEvent *event )
