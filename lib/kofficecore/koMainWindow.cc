@@ -399,6 +399,9 @@ bool KoMainWindow::openDocument( const KURL & url )
     if(!newdoc || !newdoc->openURL(url))
     {
         delete newdoc;
+        disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+        disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+        disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
         return false;
     }
     return true;
@@ -407,7 +410,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 // Separate from openDocument to handle async loading (remote URLs)
 void KoMainWindow::slotLoadCompleted()
 {
-    //kdDebug(30003) << "KoMainWindow::slotLoadCompleted" << endl;
+    kdDebug(30003) << "KoMainWindow::slotLoadCompleted" << endl;
     KoDocument* doc = rootDocument();
     KoDocument* newdoc = (KoDocument *)(sender());
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
@@ -436,6 +439,7 @@ void KoMainWindow::slotLoadCompleted()
 
 void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 {
+    kdDebug() << "KoMainWindow::slotLoadCanceled" << endl;
     KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
 

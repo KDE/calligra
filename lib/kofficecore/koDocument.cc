@@ -732,9 +732,24 @@ bool KoDocument::openURL( const KURL & _url )
       }
     }
   }
-  bool ret = KParts::ReadWritePart::openURL( url );
+  bool ret = false;
+  if ( url.isLocalFile() )
+  {
+      // ReadOnlyPart::openURL does something wrong for local files: it emits completed
+      // even if openFile returned false :(
+      // So, fixing here:
+      m_url = url;
+      m_file = m_url.path();
+      ret = openFile();
+      if ( ret )
+          emit completed();
+  }
+  else
+  {
+      ret = KParts::ReadWritePart::openURL( url );
+  }
   if ( autosaveOpened )
-    m_url = KURL(); // Force save to act like 'Save As'
+      m_url = KURL(); // Force save to act like 'Save As'
   return ret;
 }
 
