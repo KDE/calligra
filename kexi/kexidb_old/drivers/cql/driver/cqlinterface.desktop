@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name = cql
 Comment = cql is a lightweight engine, which is shipped with kexi and can be stored into the projectfile
-X-KDE-Library = kexicqlinterface
+X-KDE-Library = libkexicqlinterface
 ServiceTypes = KexiDB/Interface
 Type= Service
 InitialPreference=8
