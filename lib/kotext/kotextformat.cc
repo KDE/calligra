@@ -965,6 +965,7 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
         }
         // We ignore whatever else is in the string (e.g. blur radius, other shadows)
     }
+    update();
 }
 
 QColor KoTextFormat::shadowColor() const

@@ -71,45 +71,6 @@ void KoShadowPreview::drawContents( QPainter* painter )
 
     painter->restore();
 }
-/*
-    int sx = 0, sy = 0;
-
-    switch ( shadowDirection )
-    {
-    case SD_LEFT_UP:
-        sx = x - shadowDistance;
-        sy = y - shadowDistance;
-        break;
-    case SD_UP:
-        sx = x;
-        sy = y - shadowDistance;
-        break;
-    case SD_RIGHT_UP:
-        sx = x + shadowDistance;
-        sy = y - shadowDistance;
-        break;
-    case SD_RIGHT:
-        sx = x + shadowDistance;
-        sy = y;
-        break;
-    case SD_RIGHT_BOTTOM:
-        sx = x + shadowDistance;
-        sy = y + shadowDistance;
-        break;
-    case SD_BOTTOM:
-        sx = x;
-        sy = y + shadowDistance;
-        break;
-    case SD_LEFT_BOTTOM:
-        sx = x - shadowDistance;
-        sy = y + shadowDistance;
-        break;
-    case SD_LEFT:
-        sx = x - shadowDistance;
-        sy = y;
-        break;
-    }
-*/
 
 KoTextShadowWidget::KoTextShadowWidget( QWidget * parent, const char * name )
   : QWidget( parent, name )

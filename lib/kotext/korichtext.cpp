@@ -3659,6 +3659,8 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
 	of = str->at( i + index ).format();
 	if ( !changed && _f->key() != of->key() )
 	    changed = TRUE;
+        // Check things that need the textformatter to run
+        // (e.g. not color changes)
         // ######## Is this test exhaustive?
 	if ( invalid == -1 &&
 	     ( _f->font().family() != of->font().family() ||
@@ -3670,8 +3672,11 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
                _f->offsetFromBaseLine() != of->offsetFromBaseLine() ||
                _f->wordByWord() != of->wordByWord()  ||
                _f->attributeFont() != of->attributeFont() ||
-               _f->language() != of->language()) ||
-               _f->hyphenation() != of->hyphenation()) {
+               _f->language() != of->language() ||
+               _f->hyphenation() != of->hyphenation() ||
+               _f->shadowDistanceX() != of->shadowDistanceX() ||
+               _f->shadowDistanceY() != of->shadowDistanceY()
+                 ) ) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {

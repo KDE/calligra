@@ -332,7 +332,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 
     // Compatibility with KOffice-1.2
     element = parentElem.namedItem( "SHADOW" ).toElement();
-    if ( !element.isNull() )
+    if ( !element.isNull() && element.hasAttribute("direction") )
     {
         int shadowDistance = element.attribute("distance").toInt();
         int shadowDirection = element.attribute("direction").toInt();
@@ -369,8 +369,14 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             distanceY = shadowDistance;
         }
         if ( !shadowCssCompat )
-            shadowCssCompat = new QString; // ### memory leak
+            shadowCssCompat = new QString;
         *shadowCssCompat = KoTextFormat::shadowAsCss( distanceX, distanceY, shadowColor );
+        kdDebug(32500) << "setting shadow compat to " << ( *shadowCssCompat ) << endl;
+    }
+    else
+    {
+        delete shadowCssCompat;
+        shadowCssCompat = 0L;
     }
 }
 
