@@ -102,6 +102,6 @@ parser:
 
 messages: rc.cpp
 	perl extracti18n extensions/*.xml > xml_doc.cc
-	$(EXTRACTRC) *.ui >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h -o $(podir)/kspread.pot
+	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
+	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc -o $(podir)/kspread.pot
 	-rm xml_doc.cc
