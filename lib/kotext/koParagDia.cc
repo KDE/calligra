@@ -99,11 +99,6 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     customCharBox->addItem( spacer_2 );
 
     grid->addMultiCellLayout(customCharBox, 4, 4, 1, 4, Qt::AlignLeft);
-    if ( onlyStyleTypeLetter )
-    {
-        lCustom->hide();
-        bCustom->hide();
-    }
 
     spnStart = new KoSpinBox( gStyle );
     spnStart->setMinValue ( 1);
@@ -118,6 +113,15 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 
     cbRestart = new QCheckBox( i18n( "Restart numbering at this paragraph" ), gStyle );
     grid->addWidget( cbRestart, 5, 1 );
+
+    if ( onlyStyleTypeLetter )
+    {
+        lCustom->hide();
+        bCustom->hide();
+        cbRestart->hide();
+    }
+
+
     connect( cbRestart, SIGNAL( toggled(bool) ), this, SLOT( restartChanged(bool) ) );
 
     connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
