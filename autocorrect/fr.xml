@@ -1,12 +1,8 @@
 <!DOCTYPE autocorrection>
 <Word>
  <items>
-  <item find="(R)" replace="®" />
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
-  <item find="1/2" replace="½" />
-  <item find="1/4" replace="¼" />
-  <item find="3/4" replace="¾" />
   <item find="A moins" replace="À moins" />
   <item find="A propos" replace="À propos" />
   <item find="A t'on" replace="A-t-on" />
@@ -55,7 +51,9 @@
   <item find="On a pas" replace="On n'a pas" />
   <item find="On est pas" replace="On n'est pas" />
   <item find="Paques" replace="Pâques" />
+  <item find="Par acquis" replace="Par acquit" />
   <item find="Par contre" replace="En revanche" />
+  <item find="Pour acquis" replace="Pour acquit" />
   <item find="Pyrennées" replace="Pyrénées" />
   <item find="Quand à" replace="Quant à" />
   <item find="Quelque soit" replace="Quel que soit" />
@@ -65,7 +63,6 @@
   <item find="Thorvalds" replace="Torvalds" />
   <item find="Torvald" replace="Torvalds" />
   <item find="X Windows" replace="X Window" />
-  <item find="a aperçut" replace="a aperçu" />
   <item find="a conclut" replace="a conclu" />
   <item find="a conçut" replace="a conçu" />
   <item find="a définit" replace="a défini" />
@@ -75,10 +72,6 @@
   <item find="a subit" replace="a subi" />
   <item find="a t'on" replace="a-t-on" />
   <item find="a-t'il" replace="a-t-il" />
-  <item find="abandoner" replace="abandonner" />
-  <item find="abandoné" replace="abandonné" />
-  <item find="abbréviation" replace="abréviation" />
-  <item find="abcice" replace="abscisse" />
   <item find="abcisse" replace="abscisse" />
   <item find="abimer" replace="abîmer" />
   <item find="abimé" replace="abîmé" />
@@ -87,7 +80,6 @@
   <item find="abisses" replace="abysses" />
   <item find="abscent" replace="absent" />
   <item find="abscice" replace="abscisse" />
-  <item find="accadémie" replace="académie" />
   <item find="accajou" replace="acajou" />
   <item find="acceuil" replace="accueil" />
   <item find="accolyte" replace="acolyte" />
@@ -423,6 +415,7 @@
   <item find="ellaborées" replace="élaborées" />
   <item find="ellaborés" replace="élaborés" />
   <item find="elle aperçu" replace="elle aperçut" />
+  <item find="elle boîte" replace="elle boite" />
   <item find="elle choisi" replace="elle choisit" />
   <item find="elle conseil" replace="elle conseille" />
   <item find="elle fourni" replace="elle fournit" />
@@ -582,6 +575,7 @@
   <item find="identer" replace="indenter" />
   <item find="identé" replace="indenté" />
   <item find="il aperçu" replace="il aperçut" />
+  <item find="il boîte" replace="il boite" />
   <item find="il choisi" replace="il choisit" />
   <item find="il conseil" replace="il conseille" />
   <item find="il fourni" replace="il fournit" />
@@ -637,6 +631,7 @@
   <item find="l'adhérant" replace="l'adhérent" />
   <item find="l'en train" replace="l'entrain" />
   <item find="l'équivalant" replace="l'équivalent" />
+  <item find="la boite" replace="la boîte" />
   <item find="la notre" replace="la nôtre" />
   <item find="la planisphère" replace="le planisphère" />
   <item find="la sourie" replace="la souris" />
@@ -785,6 +780,7 @@
   <item find="pantomine" replace="pantomime" />
   <item find="pantouffle" replace="pantoufle" />
   <item find="pantouffles" replace="pantoufles" />
+  <item find="par acquis" replace="par acquit" />
   <item find="par delà" replace="par-delà" />
   <item find="par derrière" replace="par-derrière" />
   <item find="par dessous" replace="par-dessous" />
@@ -1091,6 +1087,7 @@
   <item find="une arcane" replace="un arcane" />
   <item find="une armistice" replace="un armistice" />
   <item find="une astérisque" replace="un astérisque" />
+  <item find="une boite" replace="une boîte" />
   <item find="une denticule" replace="un denticule" />
   <item find="une effluve" replace="un effluve" />
   <item find="une fébricule" replace="un fébricule" />
@@ -1119,6 +1116,7 @@
   <item find="vis à vis" replace="vis-à-vis" />
   <item find="vosu" replace="vous" />
   <item find="votres" replace="vôtres" />
+  <item find="vous faîtes" replace="vous faites" />
   <item find="voute" replace="voûte" />
   <item find="voutes" replace="voûtes" />
   <item find="vénus" replace="Vénus" />
