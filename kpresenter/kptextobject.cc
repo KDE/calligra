@@ -322,7 +322,9 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     //// ### Transparent background - TODO use configuration ?
     cg.setBrush( QColorGroup::Base, NoBrush );
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
-
+    bool editMode = false;
+    if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
+        editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
     if ( specEffects )
     {
         switch ( effect2 )
@@ -335,7 +337,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
             /*Qt3::QTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, zoomHandler,
-                onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() );
+                onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled()&& editMode );
         }
     }
     else
@@ -344,7 +346,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         /*Qt3::QTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
-            onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() );
+            onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() && editMode );
     }
 }
 
@@ -849,6 +851,10 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     // we call KoTextDocument::drawWYSIWYG with a cliprect.
     Q_ASSERT( from <= to );
     int i = 0;
+    bool editMode=false;
+    if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
+        editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
+
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
     Qt3::QTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
@@ -868,7 +874,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
-        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ ,true/*, resetChanged*/,m_doc->backgroundSpellCheckEnabled() );
+        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ ,true/*, resetChanged*/,m_doc->backgroundSpellCheckEnabled() && editMode );
 }
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
