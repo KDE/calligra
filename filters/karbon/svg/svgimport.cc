@@ -458,7 +458,7 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 		const char *ptr = d.latin1();
 		const char *end = d.latin1() + d.length() + 1;
 
-		double contrlx, contrly, curx, cury, tox, toy, x1, y1, x2, y2;
+		double contrlx, contrly, curx, cury, tox, toy, x1, y1, x2, y2, xc, yc;
 		bool relative;
 		VPath *path = 0L;
 		char command = *(ptr++), lastCommand = ' ';
@@ -600,52 +600,46 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curve2To( KoPoint( curx + x1, cury + y1 ),
+						path->curveTo( KoPoint( (curx + 2 * (x1 + curx)) * (1.0 / 3.0), (cury + 2 * (y1 + cury)) * (1.0 / 3.0) ),
+									   KoPoint( ((curx + tox) + 2 * (x1 + curx)) * (1.0 / 3.0), ((cury + toy) + 2 * (y1 + cury)) * (1.0 / 3.0) ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curve2To( KoPoint( x1, y1 ), KoPoint( tox, toy ) );
+						path->curveTo( KoPoint( (curx + 2 * x1) * (1.0 / 3.0), (cury + 2 * y1) * (1.0 / 3.0) ),
+									   KoPoint( (tox + 2 * x1) * (1.0 / 3.0), (toy + 2 * y1) * (1.0 / 3.0) ), KoPoint( tox, toy ) );
+					contrlx = relative ? curx + x1 : (tox + 2 * x1) * (1.0 / 3.0);
+					contrly = relative ? cury + y1 : (toy + 2 * y1) * (1.0 / 3.0);
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 					break;
 				}
-				/*case 't':
+				case 't':
 					relative = true;
 				case 'T':
 				{
+					xc = 2 * curx - contrlx;
+	                yc = 2 * cury - contrly;
+
 					ptr = getCoord(ptr, tox);
 					ptr = getCoord(ptr, toy);
 
 					if(relative)
-						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticSmoothRel(tox, toy));
+						path->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
+									   KoPoint( ((curx + tox) + 2 * xc) * (1.0 / 3.0), ((cury + toy) + 2 * yc) * (1.0 / 3.0) ),
+									   KoPoint( curx + tox, cury + toy ) );
 					else
-						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticSmoothAbs(tox, toy));
+						path->curveTo( KoPoint( (curx + 2 * xc) * (1.0 / 3.0), (cury + 2 * yc) * (1.0 / 3.0) ),
+									   KoPoint( (tox + 2 * xc) * (1.0 / 3.0), (toy + 2 * yc) * (1.0 / 3.0) ), KoPoint( tox, toy ) );
+					contrlx = xc;
+					contrly = yc;
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
 					break;
 				}
-				case 'a':
+				// TODO : arc support
+				/*case 'a':
 					relative = true;
 				case 'A':
 				{
-					bool largeArc, sweep;
-					double rx, ry, angle;
-					ptr = getCoord(ptr, rx);
-					ptr = getCoord(ptr, ry);
-					ptr = getCoord(ptr, angle);
-					ptr = getCoord(ptr, tox);
-
-					largeArc = tox == 1;
-
-					ptr = getCoord(ptr, tox);
-
-					sweep = tox == 1;
-
-					ptr = getCoord(ptr, tox);
-					ptr = getCoord(ptr, toy);
-
-					if(relative)
-						pathSegList()->appendItem(createSVGPathSegArcRel(tox, toy, rx, ry, angle, largeArc, sweep));
-					else
-						pathSegList()->appendItem(createSVGPathSegArcAbs(tox, toy, rx, ry, angle, largeArc, sweep));
-					break;
 				}*/
 			}
 
