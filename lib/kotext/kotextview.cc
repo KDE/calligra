@@ -775,6 +775,11 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
             m_singleWord = true;
             textObject()->textSelectedIsAnLink(m_refLink);
         }
+        else
+         {
+            m_singleWord = false;
+            text="";
+        }
     }
     else // No selection -> get word under cursor
     {
