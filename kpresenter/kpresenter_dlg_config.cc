@@ -370,7 +370,7 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
 void ConfigureSpellPage::slotClearIgnoreAllHistory()
 {
     int ret = KMessageBox::warningContinueCancel(0L,
-                                                 i18n("Be carefull,you go to erase all the Ignore word history."));
+                                                 i18n("Warning! You are about to erase the entire Ignore word history."));
     if (ret == KMessageBox::Continue)
         m_pView->kPresenterDoc()->clearIgnoreWordAll();
 }
