@@ -1791,12 +1791,12 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) const
 {
     uint len = text.length();
-    int nrSpaces = 0; // number of sequential spaces
+    int nrSpaces = 0; // number of consecutive spaces
     QString str;
     str.reserve( len );
     // Accumulate chars either in str or in nrSpaces (for spaces).
     // Flush str when writing a subelement (for spaces or for another reason)
-    // Flush nrSpaces when encountering two or more sequential spaces
+    // Flush nrSpaces when encountering two or more consecutive spaces
     for ( uint i = 0; i < len ; ++i ) {
         QChar ch = text[i];
         if ( ch != ' ' ) {

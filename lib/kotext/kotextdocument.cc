@@ -1451,8 +1451,9 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
     {
-        context.styleStack().save();
         QDomElement tag = text.toElement();
+        if ( tag.isNull() ) continue;
+        context.styleStack().save();
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
         if ( textFoo && tagName == "text:p" ) {  // text paragraph
