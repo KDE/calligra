@@ -5095,7 +5095,14 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
     QString text;
-
+    kdDebug()<<" table:style-name :"<<element.attribute( "table:style-name" )<<endl;
+    if ( element.hasAttribute( "table:style-name" ) )
+    {
+        QString str = element.attribute( "table:style-name" );
+        QDomElement * style = oasisStyles.styles()[str];
+        kdDebug()<<" style :"<<style<<endl;
+//todo load format
+    }
     QDomElement textP = element.namedItem( "text:p" ).toElement();
     if ( !textP.isNull() )
     {
@@ -5290,11 +5297,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             setComment( comment );
     }
 
-    if ( element.hasAttribute( "table:style-name" ) )
-    {
-        //todo
-        kdDebug()<<" cell has a style name :"<<element.attribute( "table:style-name" )<<endl;
-    }
+
     return true;
 }
 
