@@ -102,7 +102,7 @@ bool Worker::op_blank(Q_UINT32 size, QDataStream &body)
 	e.appendChild(m_helper->getFormat(xf));
 	e.setAttribute("row", (int) ++row);
 	e.setAttribute("column", (int) ++column);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 	
 	return true;
 }
@@ -954,7 +954,7 @@ bool Worker::op_colinfo(Q_UINT32, QDataStream &body)
 			col.setAttribute("hide", hidden);
 		
 		col.appendChild(m_helper->getFormat(xf));
-		m_table->appendChild(col);
+		if( m_table ) m_table->appendChild(col);
 	}
 
 	return true;
@@ -1135,7 +1135,7 @@ bool Worker::op_formula(Q_UINT32 size, QDataStream &body)
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(m_helper->getFormula(row, column, fbody, m_biff)));
 	e.appendChild(text);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 
 	a.resetRawData(store, size - 22);
 	delete []store;
@@ -1214,7 +1214,7 @@ bool Worker::op_label(Q_UINT32, QDataStream &body)
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
 	e.appendChild(text);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 
 	delete []name;
 	return true;
@@ -1236,7 +1236,7 @@ bool Worker::op_labelsst(Q_UINT32 size, QDataStream &body)
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(*(static_cast<QString *>(m_helper->queryDict(D_SST, isst)))));
 	e.appendChild(text);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 	return true;
 }
 
@@ -1277,7 +1277,7 @@ bool Worker::op_mulblank(Q_UINT32 size, QDataStream &body)
 		e.appendChild(m_helper->getFormat(xf));
 		e.setAttribute("row", row + 1);
 		e.setAttribute("column", first + i + 1);
-		m_table->appendChild(e);
+		if( m_table ) m_table->appendChild(e);
 	}
 
 	return true;
@@ -1302,9 +1302,8 @@ void Worker::rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number )
 	e.setAttribute("column", column+1);
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
-
 	e.appendChild(text);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 }
 
 bool Worker::op_rk(Q_UINT32, QDataStream &body)
@@ -1322,12 +1321,15 @@ bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 {
 	QString s;
 
+	if( size == 0 ) return true;
+
 	Q_UINT32 number;
-	Q_UINT16 column, row, xf;
+	Q_UINT16 column, row, xf = 0;
 
 	body >> row >> column;
 
 	int i, last = (size - 6) / (sizeof(xf)+sizeof(number));
+        if( last > 0 )
 	for(i = 0; i < last; ++i, ++column)	{
 		body >> xf >> number;
 		rk_internal(row, column, xf, number);
@@ -1367,7 +1369,7 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
 	e.appendChild(text);
-	m_table->appendChild(e);
+	if( m_table ) m_table->appendChild(e);
 
 	return true;
 }
@@ -1409,7 +1411,7 @@ bool Worker::op_row(Q_UINT32 size, QDataStream &body)
 	if(flags & 0x80)
 		row.appendChild(m_helper->getFormat(xf));
 	
-	m_table->appendChild(row);
+	if( m_table ) m_table->appendChild(row);
 
 	return true;
 }
