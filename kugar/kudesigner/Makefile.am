@@ -23,7 +23,7 @@ kde_module_LTLIBRARIES = libkudesignerpart.la
 libkudesignerpart_la_SOURCES = kudesigner_part.cpp \
 	kudesigner_view.cpp \
 	kudesigner_factory.cpp 
-libkudesignerpart_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH)
+libkudesignerpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(KDE_RPATH)
 libkudesignerpart_la_LIBADD = kudesigner.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE)
 
 ## The executable
