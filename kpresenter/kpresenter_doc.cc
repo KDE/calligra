@@ -1602,53 +1602,6 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     return _page;
 }
 
-/*================================================================*/
-int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
-{
-    kdDebug(33001) << "KPresenterDoc::insertPage " << _page << endl;
-
-    QString fileName=templateFileName(chooseTemplate, theFile );
-    if(fileName.isEmpty())
-        return -1;
-
-    _clean = false;
-
-    if ( _insPos == IP_AFTER )
-	_page++;
-
-    if ( _page == 0 )
-        objStartY = -1;
-    else
-        objStartY = 0;
-
-    //insert page.
-    KPrPage *newpage=new KPrPage(this);
-    m_pageList.insert( _page,newpage);
-    m_pageWhereLoadObject=newpage;
-
-    loadNativeFormat( fileName );
-    objStartY = 0;
-    m_pageWhereLoadObject=0L;
-
-    _clean = true;
-    setModified(true);
-
-    emit sig_changeActivePage(newpage );
-
-    if ( _page < (int)m_selectedSlides.count() )
-    {
-        kdDebug(33001) << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << _page << endl;
-        m_selectedSlides.insert( m_selectedSlides.at(_page), true );
-        kdDebug(33001) << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
-    }
-    else
-        m_selectedSlides.append( true );
-
-    AddRemovePage();
-
-    return _page;
-}
-
 /*=============================================================*/
 void KPresenterDoc::savePage( const QString &file, int pgnum )
 {
