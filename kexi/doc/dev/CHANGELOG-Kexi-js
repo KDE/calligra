@@ -397,6 +397,17 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-11, 12
+Property Editor
+- 'undo changes' button improved (icon, tooltip)
+- Esc key now properly undoes changes using KexiProperty::resetValue()
+- setWidget() usage fixed for spin box editors, and similar: this fixes problems with
+ key press event filtering for these editors
+- Home and End keys now moves to first/last row, also for nested properties
+- moving selection using keyboard now ensures an item is visible
+Properties
+- KexiProperty::resetValue() does nothing if property is unchanged
+
 2004-11-10
 Property Editor
 - on focus

@@ -144,7 +144,8 @@ class KEXICORE_EXPORT KexiProperty
 
 		/*! Resets this property value to its old value.
 		 The property becames unchanged after that and old value becames null.
-		 This method is equal to setValue( oldValue(), false ); */
+		 This method is equal to setValue( oldValue(), false ),
+		 but does nothing if changed() is false. */
 		void resetValue();
 
 		/*! \return old property value. This makes only sense when changed() is true.

@@ -512,6 +512,8 @@ void KexiProperty::updateValueForChild(const QCString& childName,
 
 void KexiProperty::resetValue()
 {
+	if (!m_changed)
+		return;
 	setValue( oldValue(), false );
 	if (!m_buf.isNull())
 		emit m_buf->propertyReset(*m_buf, *this);

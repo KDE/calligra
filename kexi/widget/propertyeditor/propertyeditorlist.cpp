@@ -241,7 +241,7 @@ PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *
 	}
 	m_combo->show();
 
-	setWidget(m_combo);
+	setWidget(m_combo, m_combo->lineEdit());
 	connect(m_combo, SIGNAL(activated(int)), SLOT(valueChanged()));
 }
 

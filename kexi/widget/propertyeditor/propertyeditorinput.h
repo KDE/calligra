@@ -56,8 +56,10 @@ class KEXIPROPERTYEDITOR_EXPORT PropIntSpinBox : public KIntSpinBox
 
 	public:
 	PropIntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name);
+	virtual ~PropIntSpinBox() {;}
+
 	virtual bool eventFilter(QObject *o, QEvent *e);
-	~PropIntSpinBox() {;}
+	QLineEdit * editor () const { return KIntSpinBox::editor(); }
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEditor
@@ -75,7 +77,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 		void			valueChange(int);
 
 	protected:
-		KIntSpinBox		*m_spinBox;
+		PropIntSpinBox		*m_spinBox;
 };
 
 
@@ -89,6 +91,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropDoubleSpinBox : public KDoubleSpinBox
 	virtual ~PropDoubleSpinBox() {;}
 
 	virtual bool eventFilter(QObject *o, QEvent *e);
+	QLineEdit * editor () const { return KDoubleSpinBox::editor(); }
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEditor
@@ -106,7 +109,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEd
 		void			valueChange(int);
 
 	protected:
-		KDoubleSpinBox		*m_spinBox;
+		PropDoubleSpinBox		*m_spinBox;
 };
 
 //BOOL EDITOR

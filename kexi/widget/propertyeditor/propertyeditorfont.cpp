@@ -51,7 +51,7 @@ PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, 
 	m_label->show();
 	m_button->show();
 	
-	setWidget(m_label);
+	setWidget(m_label, m_button);
 	
 	connect(m_button, SIGNAL(clicked()), this, SLOT(selectFont()));
 }

@@ -97,7 +97,7 @@ PropertyEditorDateTime::PropertyEditorDateTime(QWidget *parent, KexiProperty *pr
 	m_datetime = new QDateTimeEdit(property->value().asDateTime(), this);
 	m_datetime->resize(width(), height());
 	m_datetime->show();
-	setWidget(m_datetime);
+	setWidget(m_datetime, m_datetime->dateEdit());
 	
 	connect(m_datetime, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(valueChanged(const QDateTime&)));
 }

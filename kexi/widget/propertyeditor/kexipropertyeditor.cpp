@@ -27,6 +27,7 @@
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qeventloop.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -70,7 +71,8 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 
 	m_defaults = new KPushButton(viewport());
 	m_defaults->setFocusPolicy(QWidget::NoFocus);
-	m_defaults->setPixmap(SmallIcon("reload"));
+	m_defaults->setPixmap(SmallIcon("undo"));
+	QToolTip::add(m_defaults, i18n("Undo changes"));
 	m_defaults->hide();
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
 
@@ -343,8 +345,9 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor * /*editor*/)
 {
 	if(m_currentEditor)
 	{
-		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ?
-		         m_sync : (bool)m_editItem->property()->autoSync();
+		bool sync = (m_editItem->property()->autoSync() != 0 
+			&& (m_editItem->property()->autoSync() != 1) 
+				? m_sync : (bool)m_editItem->property()->autoSync());
 		if(!sync)
 		{
 			//js: not needed m_editItem->setValue(m_editItem->property()->value());
@@ -353,7 +356,8 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor * /*editor*/)
 		else
 		{
 			//js: not needed m_editItem->setValue(m_editItem->oldValue());
-			m_currentEditor->setValue(m_editItem->property()->oldValue());
+//			m_currentEditor->setValue(m_editItem->property()->oldValue());
+			resetItem();
 		}
 		m_editItem->updateValue();
 	}
@@ -644,5 +648,60 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 	item->updateChildrenValue();
 }
 
+void
+KexiPropertyEditor::keyPressEvent( QKeyEvent* ev )
+{
+//	if (handleKeyPress(ev))
+//		return;
+	KListView::keyPressEvent(ev);
+}
+
+bool
+KexiPropertyEditor::handleKeyPress( QKeyEvent* ev )
+{
+	if (ev->state()==NoButton 
+		&& (ev->key()==Key_Up || ev->key()==Key_Down || ev->key()==Key_Home || ev->key()==Key_End))
+	{
+		//selection moving
+		QListViewItem *item = 0; //= selectedItem(); // itemAt(mapToParent(QPoint(2,2)));
+	
+		if(ev->key()==Key_Up) {
+			//find prev visible
+			item = selectedItem() ? selectedItem()->itemAbove() : 0;
+			while (item && (!item->isSelectable() || !item->isVisible()))
+				item = item->itemAbove();
+		}
+		else if(ev->key()==Key_Down) {
+			//find next visible
+			item = selectedItem() ? selectedItem()->itemBelow() : 0;
+			while (item && (!item->isSelectable() || !item->isVisible()))
+				item = item->itemBelow();
+		}
+		else if(ev->key()==Key_Home) {
+			//find 1st visible
+			item = firstChild();
+			while (item && (!item->isSelectable() || !item->isVisible()))
+				item = item->itemBelow();
+		}
+		else if(ev->key()==Key_End) {
+			//find last visible
+			item = selectedItem();
+			QListViewItem *lastVisible = item;
+			while (item) { // && (!item->isSelectable() || !item->isVisible()))
+				item = item->itemBelow();
+				if (item && item->isSelectable() && item->isVisible())
+					lastVisible = item;
+			}
+			item = lastVisible;
+		}
+		if(item) {
+			ev->accept();
+			ensureItemVisible(item);
+			setSelected(item, true);
+			return true;
+		}
+	}
+	return false;
+}
 
 #include "kexipropertyeditor.moc"

@@ -70,9 +70,10 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 	public:
 		/*! Creates an empty KexiPropertyEditor with \a parent as parent widget. If \a autoSync == true,
-		    properties values are automatically synced as soon as editor contents change (eg the user types text, etc.)
-		    and the values are written in the buffer. Otherwise, buffer is updated only when selected item changes 
-		    or user presses Enter key. Each property can overwrite this if its autoSync() == 0 or 1.
+		 properties values are automatically synced as soon as editor contents change 
+		 (eg the user types text, etc.) and the values are written in the buffer. 
+		 Otherwise, the buffer is updated only when another item is selected
+		 or user presses Enter key. Each property can overwrite this if its autoSync() == 0 or 1.
 		*/
 		KexiPropertyEditor(QWidget *parent=0, bool autoSync=true, const char *name=0);
 		virtual ~KexiPropertyEditor();
@@ -93,6 +94,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		//! \return editor item named with \a name or null if such item not found
 		KexiPropertyEditorItem* item(const QString& name) const { return m_items[name.ascii()]; }
+
+		/*! @internal used by KexiPropertySubEditor and KexiPropertyEditor. */
+		bool handleKeyPress( QKeyEvent* ev );
 
 	signals:
 		/*! This signal is emitted when a property value has changed, ie when the user presses Enter or when another item
@@ -172,6 +176,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		int baseRowHeight() const { return m_baseRowHeight; }
 
+		virtual void keyPressEvent( QKeyEvent* ev );
+
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem *m_editItem;
 		KexiPropertyEditorItem *m_topItem; //The top item is used to control the drawing of every branches.
@@ -190,6 +196,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		KexiPropertyBuffer* setBufferLater_buffer;
 
 	friend class KexiPropertyEditorItem;
+	friend class KexiPropertySubEditor;
 };
 
 #endif

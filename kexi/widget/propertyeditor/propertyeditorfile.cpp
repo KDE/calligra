@@ -119,12 +119,13 @@ PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *proper
 	m_label->resize(width(), height()-1);
 	m_label->setBackgroundMode(Qt::PaletteBase);
 	m_label->show();
-	setWidget(m_label);
 
 	m_button = new KPushButton(i18n(" ... "), this);
 	m_button->resize(height(), height()-8);
 	m_button->move(width() - m_button->width() -1, 0);
 	m_button->show();
+
+	setWidget(m_label, m_button);
 
 	m_popup = new QLabel(0, 0, Qt::WStyle_NoBorder|Qt::WX11BypassWM|WStyle_StaysOnTop);
 	m_popup->hide();

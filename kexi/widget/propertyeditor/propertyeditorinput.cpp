@@ -102,7 +102,7 @@ PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, 
 	m_spinBox->setValue(property->value().toInt());
 	m_spinBox->show();
 
-	setWidget(m_spinBox);
+	setWidget(m_spinBox, m_spinBox->editor());
 	connect(m_spinBox, SIGNAL(valueChanged(int)), this, SLOT(valueChange(int)));
 }
 
@@ -161,7 +161,7 @@ PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *prop
 //	m_spinBox->setValue(property->value().toDouble());
 	m_spinBox->show();
 
-	setWidget(m_spinBox);
+	setWidget(m_spinBox, m_spinBox->editor());
 	connect(m_spinBox, SIGNAL(valueChanged(int)), this, SLOT(valueChange(int)));
 }
 
