@@ -64,6 +64,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     curTable = 0L;
     m_printing = false;
+    m_deleteMovingRect = false;
 
     viewport()->setBackgroundMode( PaletteBase );
     viewport()->setAcceptDrops( TRUE );
@@ -93,6 +94,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     slotNewContentsSize();
 
+    m_mouseMode = MM_EDIT; // avoid UMR in setMouseMode
     setMouseMode( MM_EDIT );
     // Create the current frameset-edit last, to have everything ready for it
     KWFrameSet * fs = m_doc->frameSet( 0 );

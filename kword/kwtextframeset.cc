@@ -1392,6 +1392,7 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWFrameSet::load( attributes, loadFrames );
 
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
+    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
     KWTextParag *lastParagraph = 0L;
 
     // <PARAGRAPH>
