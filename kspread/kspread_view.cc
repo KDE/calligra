@@ -1779,6 +1779,7 @@ void KSpreadView::initialPosition()
     updateBorderButton();
     updateShowTableMenu();
     m_tableFormat->setEnabled(false);
+    m_sort->setEnabled(false);
     m_mergeCell->setEnabled(false);
     m_insertChartFrame->setEnabled(false);
 
@@ -4511,6 +4512,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
 			   colSelected || rowSelected;
 
     m_tableFormat->setEnabled( !simpleSelection );
+    m_sort->setEnabled( !simpleSelection );
     m_mergeCell->setEnabled( !simpleSelection );
     m_insertChartFrame->setEnabled( !simpleSelection );
 

@@ -19,7 +19,7 @@ Bugfixes:
 - Fix flicker of embedded objects
 - Fix applying changes for bold and italic attribute with cell layout dialog
 - Fix paper size for custom layout in paper layout dialog
-
+- Fix enable/disable sort button when we select just one cell
 
 Changes from 1.1 to 1.2
 =======================
