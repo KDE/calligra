@@ -155,27 +155,27 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
     if ( data.type() != QVariant::Date && data.type() != QVariant::DateTime )
     {
-        kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
+        kdWarning(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
                       << data.typeName() << "(" << data.type() << ")" << endl;
-        return QString::null;
+        // dateTime will be invalid, then set to 1970-01-01
     }
-    QDate date = data.toDate();
-    QDateTime dateTime = data.type() == QVariant::DateTime ? data.toDateTime() : QDateTime(date, QTime());
-    if ( !date.isValid() )
-        return i18n("No date set"); // e.g. "last printed date" if never printed
+    QDateTime dateTime ( data.toDateTime() );
+    if ( !dateTime.isValid() )
+        dateTime.setTime_t(0); // 1970-01-01 00:00:00.000 local time
 
     if (m_strFormat.lower() == "locale" || m_strFormat.isEmpty())
-	return KGlobal::locale()->formatDate( date, false );
+        return KGlobal::locale()->formatDate( dateTime.date(), false );
     else if ( m_strFormat.lower() == "localeshort" )
-	return KGlobal::locale()->formatDate( date, true );
+        return KGlobal::locale()->formatDate( dateTime.date(), true );
     else if ( m_strFormat.lower() == "localedatetime" )
-	return KGlobal::locale()->formatDateTime( dateTime, false );
+        return KGlobal::locale()->formatDateTime( dateTime, false );
     else if ( m_strFormat.lower() == "localedatetimeshort" )
-	return KGlobal::locale()->formatDateTime( dateTime, true );
+        return KGlobal::locale()->formatDateTime( dateTime, true );
 
-    QString tmp=data.toDate().toString(m_strFormat);
-    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(date.month(), false)); //long possessive month name
-    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(date.month(), true)); //short possessive month name
+    QString tmp ( dateTime.toString(m_strFormat) );
+    const int month = dateTime.date().month();
+    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(month, false)); //long possessive month name
+    tmp.replace("PPP",  KGlobal::locale()->monthNamePossessive(month, true));  //short possessive month name
     return tmp;
 }
 
