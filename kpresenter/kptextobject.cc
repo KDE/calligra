@@ -1808,8 +1808,9 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
                 lastFormat = static_cast<KoTextFormat*> (c.format());
                 tmpText=QString::null;
             }
-            tmpText+=c.c;
         }
+        tmpText+=c.c;
+
     }
     if ( lastFormat ) {
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
