@@ -445,10 +445,11 @@ void KoVariable::resize()
     if ( m_deleted )
         return;
     KoTextFormat *fmt = format();
+    QFontMetrics fm = fmt->screenFontMetrics( 0, false );
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
-        width += fmt->screenFontMetrics( 0, false ).charWidth( txt, i ); // size at 100%
+        width += fm.charWidth( txt, i ); // size at 100%
     // zoom to LU
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
