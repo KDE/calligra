@@ -136,7 +136,7 @@ KSpreadMacroUndoAction::KSpreadMacroUndoAction( KSpreadDoc *_doc, const QString&
 
 KSpreadMacroUndoAction::~KSpreadMacroUndoAction()
 {
-
+    m_commands.setAutoDelete( true );
 }
 
 void KSpreadMacroUndoAction::addCommand(KSpreadUndoAction *command)
