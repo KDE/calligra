@@ -21,6 +21,7 @@
 #include <qevent.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vtool.h"
 
 
@@ -57,6 +58,9 @@ VTool::eventFilter( QEvent* event )
 
 	if( event->type() == QEvent::MouseMove )
 	{
+            if ( !view()->part()->isReadWrite())
+                return false;
+
 		QPoint canvasCoordinate = view()->canvasWidget()->toContents(
 			mouseEvent->pos() );
 
