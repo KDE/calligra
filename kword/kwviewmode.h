@@ -105,7 +105,7 @@ public:
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
-     KWViewModeEmbedded ( ) : KWViewMode( 0L ) {}
+    KWViewModeEmbedded ( KWDocument * doc ) : KWViewMode( doc ) {}
     virtual ~ KWViewModeEmbedded() {}
 
     // This view mode is very easy to implement ;-P
