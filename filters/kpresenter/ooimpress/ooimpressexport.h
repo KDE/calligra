@@ -33,7 +33,7 @@ class OoImpressExport : public KoFilter
     Q_OBJECT
 public:
     OoImpressExport( KoFilter * parent, const char * name, const QStringList & );
-    virtual ~OoImpressExport() {}
+    virtual ~OoImpressExport();
 
     virtual KoFilter::ConversionStatus convert( const QCString & from,
                                                 const QCString & to );
@@ -55,7 +55,12 @@ private:
     void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false );
     void setLineGeometry( QDomElement & source, QDomElement & target );
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
+
+    void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target );
+    void createPictureList( QDomNode &pictures );
+
     QString rotateValue( double val );
+    QString pictureKey( QDomElement &element );
 
     int m_currentPage;
     float m_pageHeight;
@@ -64,6 +69,14 @@ private:
     QDomElement m_styles;
     QDomDocument m_maindoc;
     QDomDocument m_documentinfo;
+
+    QMap<QString, QString> m_pictureLst;
+
+    //load from kpresenter file format
+    QMap<QString, QString> m_kpresenterPictureLst;
+    int m_pictureIndex;
+    KoStore *m_storeinp;
+    KoStore *m_storeout;
 };
 
 #endif

@@ -38,7 +38,16 @@ OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & 
     : KoFilter()
     , m_currentPage( 0 )
     , m_pageHeight( 0 )
+    , m_pictureIndex( 0 )
+    , m_storeinp( 0L )
+    , m_storeout( 0L )
 {
+}
+
+OoImpressExport::~OoImpressExport()
+{
+    delete m_storeout;
+    delete m_storeinp;
 }
 
 KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
@@ -66,25 +75,24 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     createDocumentMeta( meta );
 
     // store document meta
-    KoStore * store = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
+    m_storeout = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
 
-    if ( !store )
+    if ( !m_storeout )
     {
         kdWarning() << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
-    if ( !store->open( "meta.xml" ) )
+    if ( !m_storeout->open( "meta.xml" ) )
     {
         kdWarning() << "Couldn't open the file 'meta.xml'." << endl;
-        delete store;
         return KoFilter::CreationError;
     }
 
     QCString metaString = meta.toCString();
     //kdDebug() << "meta :" << metaString << endl;
-    store->write( metaString , metaString.length() );
-    store->close();
+    m_storeout->write( metaString , metaString.length() );
+    m_storeout->close();
 
     QDomDocument content( impl.createDocumentType( "office:document-content",
                                                    "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
@@ -96,17 +104,16 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     m_styleFactory.addAutomaticStyles( content, m_styles );
 
     // store document content
-    if ( !store->open( "content.xml" ) )
+    if ( !m_storeout->open( "content.xml" ) )
     {
         kdWarning() << "Couldn't open the file 'content.xml'." << endl;
-        delete store;
         return KoFilter::CreationError;
     }
 
     QCString contentString = content.toCString();
     //kdDebug() << "content :" << contentString << endl;
-    store->write( contentString , contentString.length() );
-    store->close();
+    m_storeout->write( contentString , contentString.length() );
+    m_storeout->close();
 
     QDomDocument styles( impl.createDocumentType( "office:document-styles",
                                                   "-//OpenOffice.org//DTD OfficeDocument 1.0//EN",
@@ -115,17 +122,16 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     createDocumentStyles( styles );
 
     // store document styles
-    if ( !store->open( "styles.xml" ) )
+    if ( !m_storeout->open( "styles.xml" ) )
     {
         kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
-        delete store;
         return KoFilter::CreationError;
     }
 
     QCString stylesString = styles.toCString();
     //kdDebug() << "styles :" << stylesString << endl;
-    store->write( stylesString , stylesString.length() );
-    store->close();
+    m_storeout->write( stylesString , stylesString.length() );
+    m_storeout->close();
 
     QDomDocument manifest( impl.createDocumentType( "manifest:manifest",
                                                     "-//OpenOffice.org//DTD Manifest 1.0//EN",
@@ -134,53 +140,47 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     createDocumentManifest( manifest );
 
     // store document manifest
-    store->enterDirectory( "META-INF" );
-    if ( !store->open( "manifest.xml" ) )
+    m_storeout->enterDirectory( "META-INF" );
+    if ( !m_storeout->open( "manifest.xml" ) )
     {
         kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
-        delete store;
         return KoFilter::CreationError;
     }
 
     QCString manifestString = manifest.toCString();
     //kdDebug() << "manifest :" << manifestString << endl;
-    store->write( manifestString , manifestString.length() );
-    store->close();
-
-    delete store;
+    m_storeout->write( manifestString , manifestString.length() );
+    m_storeout->close();
 
     return KoFilter::OK;
 }
 
 KoFilter::ConversionStatus OoImpressExport::openFile()
 {
-    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
+    m_storeinp = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
 
-    if ( !store )
+    if ( !m_storeinp )
     {
         kdWarning() << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
-    if ( !store->open( "maindoc.xml" ) )
+    if ( !m_storeinp->open( "maindoc.xml" ) )
     {
         kdWarning() << "This file doesn't seem to be a valid KPresenter file" << endl;
-        delete store;
         return KoFilter::WrongFormat;
     }
 
-    m_maindoc.setContent( store->device() );
-    store->close();
+    m_maindoc.setContent( m_storeinp->device() );
+    m_storeinp->close();
 
-    if ( store->open( "documentinfo.xml" ) )
+    if ( m_storeinp->open( "documentinfo.xml" ) )
     {
-        m_documentinfo.setContent( store->device() );
-        store->close();
+        m_documentinfo.setContent( m_storeinp->device() );
+        m_storeinp->close();
     }
     else
         kdWarning() << "Documentinfo do not exist!" << endl;
-
-    delete store;
 
     emit sigProgress( 10 );
 
@@ -332,10 +332,14 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     entry.setAttribute( "manifest:full-path", "/" );
     manifest.appendChild( entry );
 
-    entry = docmanifest.createElement( "manifest:file-entry" );
-    entry.setAttribute( "manifest:media-type", "" );
-    entry.setAttribute( "manifest:full-path", "Pictures/" );
-    manifest.appendChild( entry );
+    QMap<QString, QString>::Iterator it;
+    for ( it = m_pictureLst.begin(); it != m_pictureLst.end(); ++it )
+    {
+        entry = docmanifest.createElement( "manifest:file-entry" );
+        entry.setAttribute( "manifest:media-type", it.data() );
+        entry.setAttribute( "manifest:full-path", it.key() );
+        manifest.appendChild( entry );
+    }
 
     entry = docmanifest.createElement( "manifest:file-entry" );
     entry.setAttribute( "manifest:media-type", "text/xml" );
@@ -353,6 +357,56 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     manifest.appendChild( entry );
 
     docmanifest.appendChild( manifest );
+}
+
+
+QString OoImpressExport::pictureKey( QDomElement &elem )
+{
+    // Default date/time is the *nix epoch: 1970-01-01 00:00:00,000
+    int year=1970, month=1, day=1;
+    int hour=0, minute=0, second=0, msec=0; // We must initialize to zero, as not all compilers are C99-compliant
+    if ( elem.tagName() ==  "KEY" )
+    {
+        if( elem.hasAttribute( "year" ) )
+            year=elem.attribute( "year" ).toInt();
+        if( elem.hasAttribute( "month" ) )
+            month=elem.attribute( "month" ).toInt();
+        if( elem.hasAttribute( "day" ) )
+            day=elem.attribute( "day" ).toInt();
+        if( elem.hasAttribute( "hour" ) )
+            hour=elem.attribute( "hour" ).toInt();
+        if( elem.hasAttribute( "minute" ) )
+            minute=elem.attribute( "minute" ).toInt();
+        if( elem.hasAttribute( "second" ) )
+            second=elem.attribute( "second" ).toInt();
+        if( elem.hasAttribute( "msec" ) )
+            msec=elem.attribute( "msec" ).toInt();
+    }
+    QDateTime key;
+    key.setDate( QDate( year, month, day ) );
+    key.setTime( QTime( hour, minute, second, msec ) );
+    return key.toString();
+}
+
+void OoImpressExport::createPictureList( QDomNode &pictures )
+{
+    pictures = pictures.firstChild();
+    kdDebug()<<"void OoImpressExport::createPictureList( QDomNode &pictures ) :"<<pictures.isNull()<<endl;
+    for( ; !pictures.isNull(); pictures = pictures.nextSibling() )
+    {
+        if ( pictures.isElement() )
+        {
+            QDomElement element = pictures.toElement();
+            if ( element.tagName() ==  "KEY" )
+            {
+                kdDebug()<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
+            }
+            else
+                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+        }
+    }
+    kdDebug()<<" void OoImpressExport::createPictureList( QDomNode &pictures ) \n";
 }
 
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
@@ -410,6 +464,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             switch( o.attribute( "type" ).toInt() )
             {
             case 0: // image
+                appendPicture( doccontent, o, drawPage );
                 break;
             case 1: // line
                 appendLine( doccontent, o, drawPage );
@@ -459,6 +514,57 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         body.appendChild( drawPage );
         m_currentPage++;
     }
+}
+
+
+void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target )
+{
+    QDomElement image = doc.createElement( "draw:image" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    image.setAttribute( "draw:style-name", gs );
+    QDomElement key = source.namedItem( "KEY" ).toElement();
+
+    QString pictureName = QString( "Picture/Picture%1" ).arg( m_pictureIndex );
+
+    image.setAttribute( "xlink:type", "simple" );
+    image.setAttribute( "xlink:show", "embed" );
+    image.setAttribute( "xlink:actuate", "onLoad");
+
+    if ( !key.isNull() )
+    {
+        kdDebug()<<" Key tag exist\n";
+        QString str = pictureKey( key );
+        kdDebug()<<" key of picture : "<<str<<endl;
+        QString returnstr = m_kpresenterPictureLst[str];
+        kdDebug()<<"name of picture :"<<returnstr<<endl;
+        const int pos=returnstr.findRev('.');
+        if (pos!=-1)
+        {
+            const QString extension( returnstr.mid(pos+1) );
+            pictureName +="."+extension;
+        }
+
+        if ( m_storeinp->open( returnstr ) )
+        {
+            if ( m_storeout->open( pictureName ) )
+            {
+                m_storeout->write( m_storeinp->read( m_storeinp->size() ) );
+                m_storeout->close();
+                m_storeinp->close();
+            }
+        }
+    }
+    image.setAttribute( "xlink:href", "#" + pictureName );
+
+// set the geometry
+    set2DGeometry( source, image );
+    target.appendChild( image );
+
+    m_pictureLst.insert( pictureName , "image/png" );
+
+    ++m_pictureIndex;
 }
 
 void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target )
