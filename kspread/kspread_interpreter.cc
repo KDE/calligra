@@ -119,6 +119,7 @@ static bool kspreadfunc_sin( KSContext& context )
   return true;
 }
 
+
 static bool kspreadfunc_cos( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -432,11 +433,14 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
 	return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
       result += (*it)->doubleValue();
+      //cout <<"Value : " << (*it)->doubleValue()<<endl;
+      }
     else
       return false;
   }
-
+  //cout <<"Quit :\n";
   return true;
 }
 
@@ -699,6 +703,40 @@ static bool kspreadfunc_mult( KSContext& context )
 }
 
 
+static bool kspreadfunc_conc_helper( KSContext& context, QValueList<KSValue::Ptr>& args, QString& tmp )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+  QString tmp2;
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_conc_helper( context, (*it)->listValue(), tmp ) )
+	return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+    	tmp+= (*it)->stringValue();
+    else if( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      	tmp+= tmp2.setNum((*it)->doubleValue());
+    else
+      return false;
+  }
+  return true;
+}
+
+static bool kspreadfunc_conc( KSContext& context )
+{
+  QString tmp;
+  bool b = kspreadfunc_conc_helper( context, context.value()->listValue(), tmp );
+
+  if ( b )
+    context.setValue( new KSValue( tmp ) );
+
+  return b;
+}
+
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
@@ -731,6 +769,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "variante", new KSValue( new KSBuiltinFunction( module, "variante", kspreadfunc_variante) ) );
   module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
   module->addObject( "ecartype", new KSValue( new KSBuiltinFunction( module, "ecartype", kspreadfunc_ecarttype) ) );
+  module->addObject( "conc", new KSValue( new KSBuiltinFunction( module, "conc", kspreadfunc_conc) ) );
   return module;
 }
 

@@ -101,6 +101,7 @@ module KSpread
 		slot void TextColor();
 		slot void BackgroundColor();
 		slot void sortincr();
+		slot void sortdecrease();
 		slot void RemoveTable();
 
 		Book book();

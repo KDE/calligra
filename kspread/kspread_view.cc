@@ -687,6 +687,10 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   pix = OPUIUtils::convertPixmap( BarIcon("sort_incr") );
   m_idButtonLayout_sort_incr = m_vToolBarLayout->insertButton2( pix, 16, SIGNAL( clicked() ), this, "sortincr", true, ( wstr = Q2C( i18n( "Sort Increase" ) ) ), -1 );
 
+  pix = OPUIUtils::convertPixmap( BarIcon("sort_decrease") );
+  m_idButtonLayout_sort_decrease = m_vToolBarLayout->insertButton2( pix, 17, SIGNAL( clicked() ), this, "sortdecrease", true, ( wstr = Q2C( i18n( "Sort Decrease" ) ) ), -1 );
+
+
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
@@ -1088,6 +1092,34 @@ else
 	activeTable()->Column( r.left());
 	}	
 }
+
+
+void KSpreadView::sortdecrease()
+{
+QRect r( activeTable()-> selectionRect() );
+if ( r.left() == 0 || r.top() == 0 ||
+       r.right() == 0 || r.bottom() == 0 )
+  	{
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
+			   i18n("Ok") );
+	}
+else if( r.right() ==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else if(r.bottom()==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else
+	{
+	activeTable()->Column( r.left(),KSpreadTable::Decrease);
+	}	
+
+}
+
 void KSpreadView::reloadScripts()
 {
   // TODO
