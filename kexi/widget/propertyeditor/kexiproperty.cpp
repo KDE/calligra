@@ -29,7 +29,7 @@ KexiProperty::KexiProperty(const QString &name, QVariant value)
 	m_value = value;
 	m_list = 0;
 	m_desc = name;
-	kdDebug() << "KexiProperty::KexiProperty(): standard property (" << m_desc << ")" << endl;
+	//kdDebug() << "KexiProperty::KexiProperty(): standard property (" << m_desc << ")" << endl;
 }
 
 KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringList &list)
@@ -38,7 +38,7 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringLis
 	m_value = value;
 	m_list = new QStringList(list);
 	m_desc = name;
-	kdDebug() << "creating stringlist property" << endl;
+	//kdDebug() << "creating stringlist property" << endl;
 }
 
 KexiProperty::KexiProperty(const QString &name, QVariant value, const QString &desc)

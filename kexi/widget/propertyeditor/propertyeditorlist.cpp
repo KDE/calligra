@@ -79,9 +79,7 @@ PropComboBox::setSelected(const QStringList &list)
 	{
 		QListBoxItem *item = m_listbox->findItem(*it, Qt::ExactMatch);
 		if(item)
-		{
 			m_listbox->setSelected(item,true);
-		}
 	}
 	setEditText(list.join("|"));
 }

@@ -6,7 +6,7 @@ libkexipropertyeditor_la_SOURCES = kexiproperty.cpp kexipropertybuffer.cpp \
 	kexipropertyeditor.cpp kexipropertyeditoritem.cpp \
 	kexipropertysubeditor.cpp propertyeditorfile.cpp \
 	propertyeditorfont.cpp propertyeditorinput.cpp propertyeditorlist.cpp \
-	propertyeditordate.cpp
+	propertyeditordate.cpp kexipropertyeditorview.cpp
 
 libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexipropertyeditor_la_LIBADD = $(LIB_KIO) ../../core/libkexicore.la
