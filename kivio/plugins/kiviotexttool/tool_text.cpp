@@ -50,7 +50,6 @@ TextTool::TextTool( KivioView* parent ) : Kivio::MouseTool(parent, "Text Mouse T
 
   m_mode = stmNone;
 
-  //FIXME: Use the standard text cursor!!
   QPixmap pix = BarIcon("kivio_text_cursor",KivioFactory::global());
   m_pTextCursor = new QCursor(pix,2,2);
 }
@@ -91,20 +90,17 @@ void TextTool::processEvent( QEvent* e )
 void TextTool::setActivated(bool a)
 {
   if(a) {
-    kdDebug(43000) << "TextTool activate" << endl;
+    emit activated(this);
     m_textAction->setChecked(true);
     view()->canvasWidget()->setCursor(*m_pTextCursor);
     m_mode = stmNone;
-  
     KivioPage *pPage = view()->activePage();
     KivioStencil *pStencil = pPage->selectedStencils()->first();
   
-    if( !pStencil )
-      return;
-  
-    setStencilText();
-  
-    view()->pluginManager()->activateDefaultTool();
+    if(pStencil) {
+      setStencilText();
+      view()->pluginManager()->activateDefaultTool();
+    }
   } else {
     m_textAction->setChecked(false);
   }
