@@ -124,7 +124,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     elem.setAttribute(attrWidth, ext.width());
     elem.setAttribute(attrHeight, ext.height());
     fragment.appendChild(elem);
-    if(shadowDistance!=0 || shadowDirection!=SD_RIGHT_BOTTOM) { // no, we don't check the color :)
+    if(shadowDistance!=0 || shadowDirection!=SD_RIGHT_BOTTOM || shadowColor!=Qt::gray) {
         elem=doc.createElement(tagSHADOW);
         elem.setAttribute(attrDistance, shadowDistance);
         elem.setAttribute(attrDirection, static_cast<int>( shadowDirection ));
