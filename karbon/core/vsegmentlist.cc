@@ -365,74 +365,6 @@ VSegmentList::transform( const QWMatrix& m )
 	}
 }
 
-/*
-void
-VSegmentList::whirlPinch( const KoPoint& p, double angle, double pinch )
-{
-	double dist;
-
-	// calc max dist
-	KoRect bbox = boundingBox();
-	double maxdist = sqrt(	( p.x() - bbox.x() ) * ( p.x() - bbox.x() ) +
-							( p.y() - bbox.y() ) * ( p.y() - bbox.y() ) );
-
-	kdDebug() << "maxdist : " << maxdist << endl;
-	VSegment* segment = m_first;
-	while( segment )
-	{
-		QWMatrix m;
-		QWMatrix m2;
-		QWMatrix m3;
-		dist = sqrt(
-			( p.x() - segment->ctrlPoint1().x() ) *
-			( p.x() - segment->ctrlPoint1().x() ) +
-			( p.y() - segment->ctrlPoint1().y() ) *
-			( p.y() - segment->ctrlPoint1().y() ) );
-		kdDebug() << "dist : " << dist << endl;
-
-		if( dist != 0 ) dist = 1.0 / ( dist / maxdist );
-
-		m.translate( p.x(), p.y() );
-		m.rotate( angle * dist * pinch );
-		m.translate( -p.x(), -p.y() );
-		kdDebug() << "total angle : " << angle * dist << endl;
-		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
-
-		m.reset();
-		dist = sqrt(
-			( p.x() - segment->ctrlPoint2().x() ) *
-			( p.x() - segment->ctrlPoint2().x() ) +
-			( p.y() - segment->ctrlPoint2().y() ) *
-			( p.y() - segment->ctrlPoint2().y() ) );
-
-		if( dist != 0 ) dist = 1.0 / ( dist / maxdist );
-
-		m2.translate( p.x(), p.y() );
-		m2.rotate( angle * dist * pinch );
-		m2.translate( -p.x(), -p.y() );
-		kdDebug() << "total angle : " << angle * dist << endl;
-		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m2 ) );
-
-		m.reset();
-		dist = sqrt(
-			( p.x() - segment->knot2().x() ) *
-			( p.x() - segment->knot2().x() ) +
-			( p.y() - segment->knot2().y() ) *
-			( p.y() - segment->knot2().y() ) );
-
-		if( dist != 0 ) dist = 1.0 / ( dist / maxdist );
-
-		m3.translate( p.x(), p.y() );
-		m3.rotate( angle * dist * pinch );
-		m3.translate( -p.x(), -p.y() );
-		kdDebug() << "total angle : " << angle * dist << endl;
-		segment->setKnot2( segment->knot2().transform( m3 ) );
-
-		segment = segment->m_next;
-	}
-}
-*/
-
 void
 VSegmentList::save( QDomElement& element ) const
 {
@@ -819,3 +751,4 @@ VSegmentListIterator::operator-=( uint i )
 
 	return m_current;
 }
+

@@ -62,7 +62,7 @@
 #include <kdebug.h>
 
 // TODO: only for testing:
-#include "vboolean.h"
+#include "vwhirlpinch.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -286,16 +286,19 @@ KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	VBoolean op;
+	const KoRect& rect = m_part->document().selection().boundingBox();
+
+	VWhirlPinch op(
+		rect.center(),
+		90.0,
+		0.5,
+		200.0 );
 
 	VObjectListIterator itr( m_part->document().selection() );
-	VObject* one = itr.current();
-	VObject* two = 0L;
-	if( ++itr )
-		two = itr.current();
-
-	if( one && two )
-		op.visit( *one, *two );
+	for ( ; itr.current() ; ++itr )
+	{
+		op.visit( *itr.current() );
+	}
 
 	m_part->repaintAllViews();
 }

@@ -12,13 +12,15 @@ noinst_HEADERS = \
 	vboolean.h \
 	vinsertknots.h \
 	vpolygonize.h \
-	vvisitor.h
+	vvisitor.h \
+	vwhirlpinch.h
 
 libkarbonvisitors_la_SOURCES = \
 	vboolean.cc \
 	vinsertknots.cc \
 	vpolygonize.cc \
-	vvisitor.cc
+	vvisitor.cc \
+	vwhirlpinch.cc
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

@@ -3,7 +3,7 @@
 */
 
 #ifndef __VINSERTKNOTS_H__
-#define __VINSERTKNTOS_H__
+#define __VINSERTKNOTS_H__
 
 #include "vpath.h"
 #include "vvisitor.h"
@@ -24,3 +24,4 @@ private:
 };
 
 #endif
+
