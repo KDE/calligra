@@ -1,0 +1,216 @@
+#!/usr/bin/make -f
+# Made with the aid of debmake, by Christoph Lameter,
+# based on the sample debian/rules file for GNU hello by Ian Jackson.
+
+export DH_COMPAT=3
+
+INSTALL_DIR = install -p -d -o root -g root -m 755
+INSTALL_FILE = install -p -o root -g root -m 644
+INSTALL_SCRIPT = install -p -o root -g root -m 755
+
+tmp = debian/tmp
+overrides = $(tmp)/usr/share/lintian/overrides
+pixmaps = $(tmp)/usr/share/pixmaps
+icons = $(tmp)/usr/share/icons
+kdedocs = $(tmp)/usr/share/doc/kde/HTML
+
+ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+ifeq ($(ARCH),alpha)
+  COMPILER_FLAGS=CXX=g++-3.0 CC=gcc-3.0 CFLAGS=-mieee CXXFLAGS=-mieee
+else
+  COMPILER_FLAGS=CXX=g++ CC=gcc
+endif
+
+build: build-stamp
+
+-include debian/debiandirs
+
+debian/debiandirs: admin/debianrules
+	perl -w admin/debianrules echodirs > debian/debiandirs
+
+build-stamp:
+	dh_testdir
+	if test ! -f configure; then \
+	  $(MAKE) -f admin/Makefile.common ;\
+	fi 
+	$(COMPILER_FLAGS) \
+	./configure $(configkde) \
+	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
+	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
+	touch build-stamp
+
+clean: debian-clean
+	-rm -f debian/debiandirs
+	dh_clean
+
+debian-clean:
+	dh_testdir
+	dh_testroot
+	-rm -f build-stamp install-stamp
+	if test -d CVS; then \
+	  $(MAKE) -f admin/Makefile.common cvs-clean ;\
+	fi
+	-$(MAKE) distclean
+
+install: install-stamp
+
+install-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Install overrides.
+	$(INSTALL_DIR) $(overrides)
+	$(INSTALL_FILE) debian/*.override $(overrides)
+	for i in `ls $(overrides)/`; do \
+		mv $(overrides)/$$i $(overrides)/`echo $$i | sed -e 's#.override##'`; \
+	done
+
+	# Install pixmaps.
+	$(INSTALL_DIR) $(pixmaps)
+	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
+
+	# Install kformula icons.
+	$(INSTALL_DIR) $(icons)/locolor/16x16/apps
+	$(INSTALL_DIR) $(icons)/locolor/32x32/apps
+	$(INSTALL_FILE) debian/kformula.lo16.xpm \
+		$(icons)/locolor/16x16/apps/kformula.xpm
+	$(INSTALL_FILE) kformula/kformula.xpm \
+		$(icons)/locolor/32x32/apps/kformula.xpm
+
+	# Main install.
+	$(MAKE) install DESTDIR=`pwd`/$(tmp)
+
+	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
+	echo "#!/usr/bin/perl -w" > $(tmp)/usr/bin/kprconverter.pl.new
+	echo -n "# -- Was: " >> $(tmp)/usr/bin/kprconverter.pl.new
+	cat $(tmp)/usr/bin/kprconverter.pl >> $(tmp)/usr/bin/kprconverter.pl.new
+	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
+	chmod 755 $(tmp)/usr/bin/kprconverter.pl
+
+	# Sort out this mess where kivio wants to installed a shared library
+	# in /usr/share with the wrong extension.
+	# We'll put a symlink in kivio.links.
+	$(INSTALL_DIR) $(tmp)/usr/lib/kivio
+	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
+		$(tmp)/usr/lib/kivio/libstraight_connector.so
+
+	# Generate HTML docs from secondary docbook files (not index.docbook).
+	for i in `find $(tmp) -name "*.docbook"`; do \
+	  case "$$i" in \
+	    */index.docbook ) \
+	    ;; \
+	    * ) \
+	      pushd . > /dev/null; cd `dirname $$i`; \
+	      meinproc `basename $$i`; \
+	      popd > /dev/null; \
+	    ;; \
+	  esac; \
+	done
+
+	# Run this again for index.docbook files to ensure index.html
+	# reflects the correct set of chapter headings.
+	for i in `find $(tmp) -name "index.docbook"`; do \
+	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
+	  popd > /dev/null; done
+
+	# Make common links for docs.
+	for p in `dh_listpackages`; do \
+	  for i in `find $(kdedocs) -type d -name $$p`; do \
+	    ln -f -n -s ../common $$i/common; done; done
+
+	perl -w admin/debianrules cleanup
+
+	touch install-stamp
+	
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_movefiles -i
+	dh_installdocs -i
+	dh_installmenu -i
+	dh_installmime -i
+	dh_installman -i
+	dh_installchangelogs -pkoffice-doc-html
+	dh_link -i
+	#dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_perl -i
+	#dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_movefiles -a
+	dh_installdebconf -a
+	dh_installdocs -a
+	dh_installexamples -a
+	# Rename a couple of newly installed files.
+	mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
+	  debian/kugar/usr/share/doc/kugar/examples/README.examples
+	dh_installmenu -a
+	dh_installmime -a
+	dh_installman -a
+	# Move the .pl.* manpages to the correct place.
+	mv debian/kpresenter/usr/share/man/pl/man1/* \
+		debian/kpresenter/usr/share/man/man1
+	rm -rf debian/kpresenter/usr/share/man/pl
+	dh_undocumented -a
+	dh_installchangelogs -pkoffice
+	dh_installchangelogs -pkoffice-libs
+	dh_installchangelogs -pkoffice-dev
+	dh_installchangelogs -pkchart kchart/CHANGES
+	dh_installchangelogs -pkformula
+	dh_installchangelogs -pkontour
+	dh_installchangelogs -pkivio kivio/CHANGELOG
+	dh_installchangelogs -pkoshell
+	dh_installchangelogs -pkpresenter kpresenter/CHANGES
+	#dh_installchangelogs -pkrayon
+	dh_installchangelogs -pkspread kspread/CHANGES
+	dh_installchangelogs -pkugar kugar/ChangeLog
+	dh_installchangelogs -pkword kword/CHANGES
+	dh_link -a
+	dh_strip -a
+	dh_compress -a --exclude=.docbook --exclude=.bz2
+	dh_fixperms -a
+	dh_makeshlibs -a -V
+	dh_installdeb -a
+	dh_perl -a
+	dh_shlibdeps -pkoffice-dev \
+	  -ldebian/koffice-libs/usr/lib
+	dh_shlibdeps -pkoffice-libs \
+	  -ldebian/koffice-libs/usr/lib
+	dh_shlibdeps -pkchart \
+	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
+	dh_shlibdeps -pkformula \
+	  -ldebian/koffice-libs/usr/lib:debian/kformula/usr/lib
+	dh_shlibdeps -pkontour \
+	  -ldebian/koffice-libs/usr/lib:debian/kontour/usr/lib
+	dh_shlibdeps -pkivio \
+	  -ldebian/koffice-libs/usr/lib:debian/kivio/usr/lib
+	dh_shlibdeps -pkoshell \
+	  -ldebian/koffice-libs/usr/lib:debian/koshell/usr/lib
+	dh_shlibdeps -pkpresenter \
+	  -ldebian/koffice-libs/usr/lib:debian/kpresenter/usr/lib
+	#dh_shlibdeps -pkrayon \
+	#  -ldebian/koffice-libs/usr/lib:debian/krayon/usr/lib
+	dh_shlibdeps -pkspread \
+	  -ldebian/koffice-libs/usr/lib:debian/kspread/usr/lib
+	dh_shlibdeps -pkugar \
+	  -ldebian/koffice-libs/usr/lib:debian/kugar/usr/lib
+	dh_shlibdeps -pkword \
+	  -ldebian/koffice-libs/usr/lib:debian/kword/usr/lib
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+# Below here is fairly generic really
+
+binary: binary-indep binary-arch
+.PHONY: binary binary-arch binary-indep clean debian-clean build install
