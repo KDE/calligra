@@ -44,7 +44,7 @@ public:
 	
 	void sigProgress (const int value)
 	{
-		KoFilter::sigProgress (value);
+		emit KoFilter::sigProgress (value);
 	}
 };
 
