@@ -147,6 +147,11 @@ void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
 
    int tmp;
 
+   x1*=canvas->getZoomFactor();
+   x2*=canvas->getZoomFactor();
+   y1*=canvas->getZoomFactor();
+   y2*=canvas->getZoomFactor();
+
    if (x2<x1)
    {
       tmp=x2;
@@ -193,6 +198,10 @@ void ZoomTool::zoomOutRegion(int x1, int y1, int x2, int y2)
 {
    int tmp;
 
+   x1*=canvas->getZoomFactor();
+   x2*=canvas->getZoomFactor();
+   y1*=canvas->getZoomFactor();
+   y2*=canvas->getZoomFactor();
    if (x2<x1)
    {
       tmp=x2;

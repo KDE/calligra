@@ -404,8 +404,8 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
 {
   // transform position of the mouse pointer according to current
   // zoom factor
-  QPoint new_pos (qRound (float(e->x() - m_relativePaperArea.left()) / zoomFactor),
-                  qRound (float(e->y() - m_relativePaperArea.top()) / zoomFactor));
+  QPoint new_pos (qRound (float(e->x() + m_visibleArea.left()) / zoomFactor),
+                  qRound (float(e->y() + m_visibleArea.top()) / zoomFactor));
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
   
   emit mousePositionChanged (new_ev.x(), new_ev.y());
