@@ -26,11 +26,23 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
+#include <kcmdlineargs.h>
 #include <qdir.h>
 
 KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName )
     : KApplication(argc, argv, rAppName)
-    , m_params( argc, argv )
+{ // Depricated thanks to KAboutData
+    KGlobal::locale()->insertCatalogue("koffice");
+    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
+    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
+
+    kimgioRegister();
+
+    connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
+}
+
+KoApplication::KoApplication()
+	: KApplication()
 {
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
@@ -47,14 +59,13 @@ void KoApplication::start()
 
     ASSERT( !entry.isEmpty() );
 
-    QStringList open;
-    // Parse command line parameters
-    for( uint i = 0; i < m_params.count(); i++ )
-        if( m_params.get( i ).left( 1 ) != "-" )
-            open.append( m_params.get( i ) );
+    
+    KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
 
+    int argsCount=args->count();
+    
     // No argument
-    if ( open.isEmpty() ) {
+    if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( doc && ( doc->initDoc() ) )
         {
@@ -66,12 +77,12 @@ void KoApplication::start()
           ::exit(1);
     } else {
         // Loop through arguments
-        QStringList::Iterator it = open.begin();
-        int n = 0;
-        for( ; it != open.end(); ++it )
+        
+        short int n=0;
+        for(int it=0; it < argsCount; it++ )
         {
             KoDocument* doc = entry.createDoc( 0 );
-            KURL url( QDir::currentDirPath()+"/", *it ); // allow URLs relative to current dir
+            KURL url( QDir::currentDirPath()+"/", args->arg(0) ); // allow URLs relative to current dir
             if ( doc->loadFromURL( url ) )
             {
               KoMainWindow* shell = doc->createShell();
@@ -83,6 +94,9 @@ void KoApplication::start()
         if (n == 0) // no doc, all URLs were malformed
           ::exit(1);
     }
+    
+    args->clear();
+    // not calling this before since the program will quit there.
 }
 
 KoApplication::~KoApplication()

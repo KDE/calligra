@@ -40,7 +40,8 @@ class KoApplication : public KApplication
 public:
 
     /**
-     *  Contructor.
+     *  ##Depricated## Contructor.
+     *  See KoApplication() for the non-depricated one
      *
      *  Saves the command line arguments in m_params. It can be used in all
      *  classes derived from this class.
@@ -51,6 +52,12 @@ public:
      */
     KoApplication( int &argc, char **argv, const QCString& rAppName );
 
+    /**
+     *  Constructor
+     */
+    KoApplication();
+    
+    
     /**
      *  Destructor.
      */
@@ -68,13 +75,6 @@ public:
      *  Shows a KOffice specific about dialog for this app.
      */
     void aboutKDE() { /*aboutKDE();*/ }
-
-protected:
-
-    /**
-     *  Saves all arguments given on the command line.
-     */
-    KStartParams m_params;
 };
 
 #endif
