@@ -224,6 +224,9 @@ protected slots:
 	void slotJoinStyleClicked();
 	void slotCapStyleClicked();
 
+signals:
+	void zoomChanged( double );
+
 protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );

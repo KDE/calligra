@@ -73,6 +73,7 @@ class VDocumentTab : public QWidget
 	public slots:
 		void updateDocumentInfo();
 		void slotCommandAdded( VCommand* command );
+		void slotZoomChanged( double );
 
 	private:
 		VDocumentPreview*	m_documentPreview;

@@ -245,6 +245,7 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	m_format->setAlignment( AlignRight );
 
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
+	connect( view, SIGNAL( zoomChanged( double ) ), this, SLOT( slotZoomChanged( double ) ) );
 
 	updateDocumentInfo();
 } // VDocumentTab::VDocumentTab
@@ -265,6 +266,12 @@ void
 VDocumentTab::slotCommandAdded( VCommand * )
 {
 	m_documentPreview->reset();
+	m_documentPreview->update();
+}
+
+void
+VDocumentTab::slotZoomChanged( double )
+{
 	m_documentPreview->update();
 }
 

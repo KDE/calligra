@@ -970,6 +970,8 @@ KarbonView::zoomChanged()
 	m_canvas->repaintAll();
 
 	m_canvas->setFocus();
+
+	emit zoomChanged( zoomFactor );
 }
 
 void
