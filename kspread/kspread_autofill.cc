@@ -623,6 +623,8 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
       type = AutoFillSequenceItem::TIME;
+    else 
+      return false; // Cannot happen du to if condition
 
     while ( cell && cell2 )
     {
