@@ -1013,28 +1013,23 @@ bool KoMainWindow::queryClose()
 void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFlags )
 {
     KoDocument* doc = rootDocument();
-    KoDocument *newdoc=createDoc();
-    if (!newdoc)
+    KoDocument *newdoc = createDoc();
+    if ( !newdoc )
         return;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    if(!newdoc->initDoc( (KoDocument::InitDocFlags)initDocFlags))
+    if ( !newdoc->initDoc( (KoDocument::InitDocFlags)initDocFlags, this ) )
     {
         delete newdoc;
         return;
     }
-    if ( doc && doc->isEmpty() && !doc->isEmbedded() )
-    {
-        setRootDocument( newdoc );
-        return;
-    }
-    else if ( doc && !doc->isEmpty() )
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    if ( doc && !doc->isEmpty() )
     {
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
         s->setRootDocument( newdoc );
         return;
     }
-    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     setRootDocument( newdoc );
 }
 
