@@ -12,12 +12,16 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <kfontdialog.h>
+#include <knumvalidator.h>
 #include <math.h>
 #include <float.h>
+
 
 #include <qspinbox.h>
 #include <qpushbutton.h>
 #include <qcolor.h>
+
+
 
 #include "kdchart/KDChartParams.h"
 
@@ -103,6 +107,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
     QString tmp;
     y_interval=new QLineEdit(tmpQGroupBox);
+    y_interval->setValidator(new KFloatValidator( y_interval));
     grid2->addWidget(y_interval,0,1);
     // PENDING(kalle) Put back in
     //     if( _chart->params()->requested_yinterval != -DBL_MAX)
@@ -112,6 +117,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpLabel->setText(i18n("Y min : "));
     grid2->addWidget(tmpLabel,1,0);
     y_min=new QLineEdit(tmpQGroupBox);
+    y_min->setValidator(new KFloatValidator( y_min));
     grid2->addWidget(y_min,1,1);
     // PENDING(kalle) Put back in
     //     if( _chart->params()->requested_ymin != DBL_MAX)
@@ -121,6 +127,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpLabel->setText(i18n("Y max : "));
     grid2->addWidget(tmpLabel,2,0);
     y_max=new QLineEdit(tmpQGroupBox);
+    y_max->setValidator(new KFloatValidator( y_max));
     grid2->addWidget(y_max,2,1);
     // PENDING(kalle) Put back in
     //     if( _chart->params()->requested_ymax != -DBL_MAX)
