@@ -71,7 +71,8 @@ void GraphiteView::layoutChanged(const QValueList<FxRect> &diff) {
         int dy=-m_canvas->contentsY();
         GraphiteGlobal::self()->setZoom(zoom());
         QValueList<FxRect>::ConstIterator it=diff.begin();
-        for( ; it!=diff.end(); ++it) {
+        QValueList<FxRect>::ConstIterator end=diff.end();
+        for( ; it!=end; ++it) {
             (*it).recalculate();  // The zoom factor might have changed
             QRect r=(*it).pxRect();
             r.moveBy(dx, dy);
