@@ -552,7 +552,8 @@ if( config->hasGroup("KSpread Page Layout" ) )
 
 void KSpreadView::changeNbOfRecentFiles(int _nb)
 {
-    shell()->setMaxRecentItems( _nb );
+    if(shell())
+        shell()->setMaxRecentItems( _nb );
 }
 
 void KSpreadView::initCalcMenu()
