@@ -80,6 +80,7 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
 
     connect( nRows, SIGNAL( valueChanged( int ) ), this, SLOT( rowsChanged( int ) ) );
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
+    setFocus();
 }
 
 void KWSplitCellDia::rowsChanged( int rows ) {
