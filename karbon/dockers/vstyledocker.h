@@ -24,17 +24,48 @@
 #include <vdocker.h>
 
 #include <koIconChooser.h>
+#include <qwidget.h>
 
 class QTabWidget;
-class QWidget;
 class KarbonView;
 class KarbonPart;
+class QHButtonGroup;
+class QToolButton;
+
+class VClipartIconItem;
 
 class ClipartChooser : public KoIconChooser
 {
 public:
 	ClipartChooser( QSize iconSize, QWidget *parent = 0L, const char *name = 0L );
 	virtual void startDrag();
+};
+
+class ClipartWidget : public QWidget
+{
+	Q_OBJECT
+
+public:
+	ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent = 0L );
+	~ClipartWidget();
+
+	VClipartIconItem* selectedClipart();
+
+public slots:
+	void addClipart();
+	void deleteClipart();
+	void clipartSelected( KoIconItem* item );
+
+	void slotButtonClicked( int id );
+
+private:
+	ClipartChooser* m_clipartChooser;
+	QHButtonGroup* m_buttonGroup;
+	QToolButton* m_importClipartButton;
+	QToolButton* m_deleteClipartButton;
+	KarbonPart* m_part;
+	VClipartIconItem* m_clipartItem;
+	VClipartIconItem* m_selectedItem;
 };
 
 class VStyleDocker : public VDocker

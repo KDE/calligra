@@ -23,8 +23,13 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qsize.h>
+#include <qcursor.h>
+#include <qfileinfo.h>
+#include <qhbuttongroup.h>
+#include <qtoolbutton.h>
 
 #include <klocale.h>
+#include <kiconloader.h>
 #include <koIconChooser.h>
 #include <koMainWindow.h>
 #include <kseparator.h>
@@ -83,13 +88,8 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
 
 	//Clipart
-	ClipartChooser *pClipartChooser = new ClipartChooser( QSize( 32,  32 ), mTabWidget );
-	mTabWidget->addTab( pClipartChooser, i18n( "Clipart" ) );
-	pClipartChooser->setAutoDelete( false );
-	VClipartIconItem* item = 0L;
-	QPtrList<VClipartIconItem>* clipartItems = KarbonFactory::rServer()->cliparts();
-	for( item = clipartItems->first(); item; item = clipartItems->next() )
-		pClipartChooser->addItem( item );
+	ClipartWidget *pClipartWidget = new ClipartWidget( KarbonFactory::rServer()->cliparts(), part, mTabWidget );
+	mTabWidget->addTab( pClipartWidget, i18n( "Clipart" ) );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
 	mainWidgetLayout->addWidget( mTabWidget );
@@ -122,6 +122,148 @@ void VStyleDocker::slotItemSelected( KoIconItem *item )
 void
 VStyleDocker::mouseReleaseEvent( QMouseEvent * )
 {
+}
+
+ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent )
+	: QWidget( parent ), m_part( part )
+{
+	KIconLoader il;
+
+	QVBoxLayout* layout = new QVBoxLayout( this );
+	layout->addWidget( m_clipartChooser = new ClipartChooser( QSize( 32, 32 ), this ) );
+	layout->addWidget( m_buttonGroup = new QHButtonGroup( this ) );
+	QToolButton* m_addClipartButton;
+	m_buttonGroup->insert( m_addClipartButton = new QToolButton( m_buttonGroup ) );
+	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
+	m_buttonGroup->insert( m_deleteClipartButton = new QToolButton( m_buttonGroup ) );
+	m_clipartChooser->setFixedSize( 180, 120 );
+	m_addClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_add.png", KIcon::Small ) ) );
+	m_addClipartButton->setTextLabel( i18n( "Add" ) );
+	m_importClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_import.png", KIcon::Small ) ) );
+	m_importClipartButton->setTextLabel( i18n( "Import" ) );
+	m_deleteClipartButton->setIconSet( QPixmap( il.iconPath( "14_clipart_delete.png", KIcon::Small ) ) );
+	m_deleteClipartButton->setTextLabel( i18n( "Delete" ) );
+
+	m_buttonGroup->setInsideMargin( 3 );
+	m_importClipartButton->setEnabled( false );
+	m_deleteClipartButton->setEnabled( false );
+
+	//setFrameStyle( Box | Sunken );
+	layout->setMargin( 3 );
+
+	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
+	//connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
+	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
+
+	m_clipartChooser->setAutoDelete( false );
+	VClipartIconItem* item = 0L;
+
+	for( item = clipartItems->first(); item; item = clipartItems->next() )
+		m_clipartChooser->addItem( item );
+
+	m_clipartItem = ( clipartItems->first() ) ? clipartItems->first()->clone() : 0;
+}
+
+ClipartWidget::~ClipartWidget()
+{
+	delete m_clipartItem;
+}
+
+VClipartIconItem* ClipartWidget::selectedClipart()
+{
+	return m_clipartItem;
+}
+
+void
+ClipartWidget::clipartSelected( KoIconItem* item )
+{
+	if( item )
+	{
+		delete m_clipartItem;
+		VClipartIconItem* clipartItem = ( VClipartIconItem* ) item;
+		m_deleteClipartButton->setEnabled( clipartItem->canDelete() );
+		m_selectedItem = clipartItem;
+		m_clipartItem = clipartItem->clone();
+	}
+}
+
+void
+ClipartWidget::addClipart()
+{
+	VObject* clipart = 0L;
+	VSelection* selection = m_part->document().selection();
+
+	if( selection->objects().count() == 1 )
+		clipart = selection->objects().getFirst()->clone();
+
+	if( selection->objects().count() > 1 )
+	{
+		QPtrVector<VObject> objects;
+		selection->objects().toVector( &objects );
+		VGroup* group = new VGroup( 0L );
+
+		for( unsigned int i = 0; i < objects.count(); i++ )
+			group->append( objects[ i ]->clone() );
+
+		clipart = group;
+	}
+
+	if( clipart )
+	{
+		KoRect clipartBox = clipart->boundingBox();
+		double scaleFactor = 1. / kMax( clipartBox.width(), clipartBox.height() );
+		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
+
+		VTransformCmd trafo( 0L, trMatrix );
+		trafo.visit( *clipart );
+
+		// center the clipart
+		trMatrix.reset();
+		double size = kMax( clipart->boundingBox().width(), clipart->boundingBox().height() );
+		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
+
+		trafo.setMatrix( trMatrix );
+		trafo.visit( *clipart );
+
+		// remove Y-mirroring
+		trMatrix.reset();
+		trMatrix.scale( 1, -1 );
+		trMatrix.translate( 0, -1 );
+
+		trafo.setMatrix( trMatrix );
+		trafo.visit( *clipart );
+
+		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart, clipartBox.width(), clipartBox.height() ) );
+	}
+
+	m_clipartChooser->updateContents();
+}
+
+void
+ClipartWidget::deleteClipart()
+{
+	VClipartIconItem* clipartItem = m_clipartItem;
+	KarbonFactory::rServer()->removeClipart( clipartItem );
+	m_clipartChooser->removeItem( m_selectedItem );
+	m_clipartChooser->updateContents();
+}
+
+void
+ClipartWidget::slotButtonClicked( int id )
+{
+	switch( id )
+	{
+		case 0:
+			addClipart();
+			break;
+
+		case 1:  //importClipart();
+			break;
+
+		case 2:
+			deleteClipart();
+			break;
+	}
 }
 
 #include "vstyledocker.moc"
