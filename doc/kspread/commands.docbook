@@ -452,7 +452,7 @@ contains two or more views)
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show Page Borders</guimenuitem>
+<guimenuitem>Show/Hide Page Borders</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggle marking of printed page borders in the sheet 
 with red lines.
@@ -463,7 +463,7 @@ with red lines.
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show Comment Indicator</guimenuitem>
+<guimenuitem>Show/Hide Comment Indicator</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggle marking of cell comments.</action>
 If a cell contains a comment and this option is selected, a small red triangle
@@ -605,18 +605,48 @@ details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Page Layout...</guimenuitem>
+<guimenuitem>Change Angle...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Format printed page layout.</action>
+<listitem><para><action>Change angle of displayed text in selected cell(s).
+</action>
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Print Range</guimenuitem>
+<guimenuitem>Increase Indent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Define or reset the print range.</action>
+<listitem><para><action>Move text in selected cell(s) to the right.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Decrease Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move text in selected cell(s) to the left.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Increase Precision</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Increase displayed precision of numbers in selected 
+cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Decrease Precision</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Decrease displayed precision of numbers in selected 
+cell(s).</action>
 </para></listitem>
 </varlistentry>
 
@@ -695,48 +725,18 @@ To manage styles use <menuchoice>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Increase Indent</guimenuitem>
+<guimenuitem>Page Layout...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the right.</action>
+<listitem><para><action>Format printed page layout.</action>
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Decrease Indent</guimenuitem>
+<guimenuitem>Print Range</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the left.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Increase Precision</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Increase displayed precision of numbers in selected 
-cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Decrease Precision</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Decrease displayed precision of numbers in selected 
-cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Change Angle...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Change angle of displayed text in selected cell(s).
-</action>
+<listitem><para><action>Define or reset the print range.</action>
 </para></listitem>
 </varlistentry>
 
@@ -771,7 +771,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Insert Column(s)</guimenuitem>
+<guimenuitem>Insert Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new column(s) at left of selected column(s).
 </action>
@@ -781,7 +781,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Insert Row(s)</guimenuitem>
+<guimenuitem>Insert Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new row(s) above selected row(s).
 </action>
@@ -791,7 +791,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Delete Column(s)</guimenuitem>
+<guimenuitem>Delete Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Delete selected column(s).</action>
 </para></listitem>
@@ -800,7 +800,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Delete Row(s)</guimenuitem>
+<guimenuitem>Delete Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Delete selected row(s).</action>
 </para></listitem>
@@ -809,7 +809,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Insert Cell(s)...</guimenuitem>
+<guimenuitem>Insert Cells...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new cell(s).</action>
 </para></listitem>
@@ -818,7 +818,7 @@ item into a different cell in the row.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Remove Cell(s)...</guimenuitem>
+<guimenuitem>Remove Cells...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Remove selected cell(s).</action>
 </para></listitem>
@@ -903,20 +903,20 @@ database.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Protect Document</guimenuitem>
+<guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
-<listitem><para>
-<action>Protect the whole document or a sheet with a password.</action>
+<listitem><para><action>View or amend the special series of words recognized 
+by &kspread;.</action>
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Custom Lists...</guimenuitem>
+<guimenuitem>Protect Document</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>View or amend the special series of words recognized 
-by &kspread;.</action>
+<listitem><para>
+<action>Protect the whole document or a sheet with a password.</action>
 </para></listitem>
 </varlistentry>
 
@@ -964,7 +964,7 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Status Bar</guimenuitem>
+<guimenuitem>Show/Hide Status Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Status Bar.</action>
 The Status Bar shows additional information for selected items and
@@ -975,7 +975,7 @@ instant calculations of the selected cells.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Tab Bar</guimenuitem>
+<guimenuitem>Show/Hide Tab Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Tab Bar.</action>
 All Sheets of the current Workbook can be accessed through the Tab Bar.
@@ -985,7 +985,7 @@ All Sheets of the current Workbook can be accessed through the Tab Bar.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Formula Bar</guimenuitem>
+<guimenuitem>Show/Hide Formula Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Formula Bar.</action>
 The Formula Bar can be used to edit the content of the selected cell.
@@ -998,7 +998,7 @@ The Formula Bar can be used to edit the content of the selected cell.
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the toolbars: File, Edit, Math,
-Navigation, Format and Color/Border toolbar.</action>
+Navigation, Format and Color/Border.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1057,6 +1057,9 @@ row(s) or column(s).
 <para><variablelist>
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
 <guimenuitem>Cell Format...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Format selected cell(s).</action> See the 
@@ -1067,6 +1070,9 @@ details.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
+</shortcut>
 <guimenuitem>Cut</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Put selected item(s) into the clipboard.</action> If 
@@ -1077,6 +1083,9 @@ original location to the new one.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
 <guimenuitem>Copy</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Copy selected item(s) into the clipboard.</action>
@@ -1085,6 +1094,9 @@ original location to the new one.
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
 <guimenuitem>Paste</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Paste item(s) from the clipboard to the selected cells.
@@ -1131,6 +1143,23 @@ cell(s) completely.</action>
 
 <varlistentry>
 <term><menuchoice>
+<guimenuitem>Default</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Set default formats for selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Area Name...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Name selected area.</action> See the section 
+<link linkend="namedareas">Named Areas</link> for more details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <guimenuitem>Resize Row...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change height of selected row.</action>
@@ -1165,23 +1194,6 @@ completely.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Default</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Set default formats for selected cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenuitem>Area Name...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Name selected area.</action> See the section 
-<link linkend="namedareas">Named Areas</link> for more details.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
 <guimenuitem>Insert Cell(s)...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new cell(s) at selected location, moving 
@@ -1200,9 +1212,96 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Insert Rows</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new row(s) above selected row(s).
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Delete Rows</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete selected row(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Hide Rows</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides selected row(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Show Rows</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Shows selected row(s).
+In order to show hidden rows you need to select a range of rows that
+includes the hidden rows.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Insert Columns</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert new column(s) at left of selected column(s).
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Delete Columns</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete selected column(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Hide Columns</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides selected column(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Show Columns</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Shows selected column(s).
+In order to show hidden columns you need to select a range of columns that
+includes the hidden columns.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <guimenuitem>Add/Modify Comment...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify a comment to the selected cell.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenuitem>Selection List...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Lets you select and paste text from any
+other cell of the current column into the selected cell.</action>
 </para></listitem>
 </varlistentry>
 
