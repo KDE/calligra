@@ -46,7 +46,7 @@ public:
     bool removeTab;     // Do we have to remove a tab in the DC Event?
     int currTab;
     QPopupMenu *rb_menu;
-    int mMM, mPT, mINCH;
+    int mMM, mPT, mINCH, mRemoveTab;
 };
 
 
@@ -363,6 +363,10 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
     if ( e->button() == RightButton ) {
 	QPoint pnt( QCursor::pos() );
+	if(d->currTab==-1)
+	    d->rb_menu->setItemEnabled(d->mRemoveTab, false);
+	else
+	    d->rb_menu->setItemEnabled(d->mRemoveTab, true);
 	d->rb_menu->popup( pnt );
 	d->action = A_NONE;
 	d->mousePressed = false;
@@ -856,8 +860,11 @@ void KoRuler::setupMenu()
     d->mINCH = d->rb_menu->insertItem( i18n( "Inches (inch)" ), this, SLOT( rbINCH() ) );
     d->rb_menu->insertSeparator();
     d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
+    d->rb_menu->insertSeparator();
+    d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
     d->rb_menu->setCheckable( false );
     d->rb_menu->setItemChecked( d->mMM, true );
+    d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 }
 
 /*================================================================*/
@@ -894,6 +901,13 @@ void KoRuler::setZoom( const double& zoom )
     m_zoom=zoom;
     m_1_zoom=1/m_zoom;
     repaint( false );
+}
+
+void KoRuler::rbRemoveTab() {
+
+    d->tabList.remove( d->currTab );
+    emit tabListChanged( &d->tabList );
+    repaint(false);
 }
 
 #include <koRuler.moc>

@@ -171,6 +171,7 @@ protected slots:
     void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( QString::fromLatin1("mm") ); }
     void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( QString::fromLatin1("inch") ); }
     void pageLayoutDia() { emit openPageLayoutDia(); }
+    void rbRemoveTab();
 
 };
 
