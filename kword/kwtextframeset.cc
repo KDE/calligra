@@ -465,8 +465,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
         //QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
 
-        KWViewMode* viewMode = m_currentDrawnCanvas->viewMode(); // need to pass viewMode as param?
-        QSize availSize = viewMode->availableSizeForText( this );
+        QSize availSize = m_currentViewMode->availableSizeForText( this );
         QRect blank( 0, docHeight, availSize.width(), availSize.height() /*+ frameRect.height() ?? */ - docHeight );
         //kdDebug(32002) << this << " Blank area: " << blank << endl;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
