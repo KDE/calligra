@@ -100,6 +100,9 @@ public:
 class KSParseNode
 {
 private:
+  KSParseNode &operator=(const KSParseNode &rhs);
+  KSParseNode(const KSParseNode &rhs);
+
   KSParseNodeType  type;
   QString ident;
 
@@ -163,8 +166,8 @@ public:
   KSParseNode *getBranch( int i );
   void setBranch( int i, KSParseNode *node );
 
-  KSParseNodeExtra* extra() { return m_extra; }
-  void setExtra( KSParseNodeExtra* e ) { m_extra = e; }
+  KSParseNodeExtra* extra();
+  void setExtra( KSParseNodeExtra* e );
 
   void print( bool detailed = false );
 };

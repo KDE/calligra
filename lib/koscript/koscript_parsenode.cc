@@ -204,7 +204,9 @@ void KSParseNode::clear()
   str = 0;
   if( b1 ) delete b1;
   b1 = 0;
-  if( b2 ) delete b2;
+  // t_incr / t_decr checks as b1==b2 is used to detect postfix notation
+  // This fixes the *ugly* memory corruption (double deletion)
+  if( b2 && type!=t_incr && type!=t_decr ) delete b2;
   b2 = 0;
   if( b3 ) delete b3;
   b3 = 0;
@@ -409,6 +411,15 @@ void KSParseNode::printBranch( int indent, const char *tag, bool detailed )
     b5->printBranch( indent + 2, "5: ", detailed );
 }
 
+KSParseNodeExtra* KSParseNode::extra()
+{
+  return m_extra;
+}
+
+void KSParseNode::setExtra( KSParseNodeExtra* e )
+{
+  m_extra = e;
+}
 
 void KSParseNode::print( bool detailed )
 {
