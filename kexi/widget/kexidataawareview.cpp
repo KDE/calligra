@@ -144,13 +144,12 @@ QWidget* KexiDataAwareView::mainWidget()
 
 QSize KexiDataAwareView::minimumSizeHint() const
 {
-//	return m_view ? m_view->minimumSizeHint() : KexiViewBase::minimumSizeHint();
-	return m_internalView->minimumSizeHint();
+    return m_internalView ? m_internalView->minimumSizeHint() : QSize(0,0);//KexiViewBase::minimumSizeHint();
 }
 
 QSize KexiDataAwareView::sizeHint() const
 {
-	return m_internalView->sizeHint();
+	return m_internalView ? m_internalView->sizeHint() : QSize(0,0);//KexiViewBase::sizeHint();
 }
 
 void KexiDataAwareView::updateActions(bool activated)
