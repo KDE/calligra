@@ -136,7 +136,7 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	btngroup->insert( button, Grad );
 
 	//dialog buttons
-	dlggroup = new QButtonGroup( 2, Horizontal, this );
+	/*dlggroup = new QButtonGroup( 2, Horizontal, this );
 	dlggroup->setInsideSpacing( 2 );
 	dlggroup->setInsideMargin( 5 );
 
@@ -156,10 +156,8 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	button = new QToolButton( dlggroup );
 	pixmap = BarIcon( "gradientdlg", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
-	dlggroup->insert( button, Gradient );
+	dlggroup->insert( button, Gradient );*/
 
-	//dialog buttons
-	//m_dualColorButton = new KDualColorButton( this );
 	QGroupBox *box = new QGroupBox( 1, Qt::Vertical, this );
 	m_strokeFillPreview = new VStrokeFillPreview( m_part, box );
 
@@ -169,9 +167,6 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	connect(
 		m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
 		this, SIGNAL( fillChanged( const VFill & ) ) );
-
-	//m_dualColorButton->setMaximumWidth( 30 );
-	//m_dualColorButton->setMaximumHeight( 30 );
 }
 
 VToolContainer::~VToolContainer()
