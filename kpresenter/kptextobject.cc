@@ -422,7 +422,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
     element.setAttribute(attrColor, tmpColor);
 
     if(!tmpTextBackColor.isEmpty())
-        element.setAttribute(attrColor, tmpTextBackColor);
+        element.setAttribute(attrTextBackColor, tmpTextBackColor);
     if(tmpVerticalAlign!=Qt::AlignLeft)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
 
