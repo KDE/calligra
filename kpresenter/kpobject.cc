@@ -449,6 +449,9 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
              //<presentation:sound xlink:href="../../usr/lib/openoffice/share/gallery/sounds/pluck.wav" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
             animation.startElement( "presentation:sound" );
             animation.addAttribute( "xlink:href", a_fileName );
+            animation.addAttribute( "xlink:type", "simple" );
+            animation.addAttribute( "xlink:show", "new" );
+            animation.addAttribute( "xlink:actuate", "onRequest" );
             animation.endElement();
         }
         animation.endElement();
@@ -538,6 +541,10 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
              //<presentation:sound xlink:href="../../usr/lib/openoffice/share/gallery/sounds/pluck.wav" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
             animation.startElement( "presentation:sound" );
             animation.addAttribute( "xlink:href", a_fileName );
+            animation.addAttribute( "xlink:type", "simple" );
+            animation.addAttribute( "xlink:show", "new" );
+            animation.addAttribute( "xlink:actuate", "onRequest" );
+
             animation.endElement();
         }
         animation.endElement();

@@ -377,6 +377,10 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
         KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
         elementWriter.startElement( "presentation:sound" );
         elementWriter.addAttribute( "xlink:href", soundFileName );
+        elementWriter.addAttribute( "xlink:type", "simple" );
+        elementWriter.addAttribute( "xlink:show", "new" );
+        elementWriter.addAttribute( "xlink:actuate", "onRequest");
+
         elementWriter.endElement();
         QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
         stylepageauto.addChildElement( "sound effect", elementContents );
@@ -403,7 +407,6 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     case BT_PICTURE:
         stylepageauto.addProperty("draw:fill", "bitmap" );
         stylepageauto.addProperty("draw:fill-image-name", saveOasisPictureStyle( mainStyles ) );
-        //todo
         break;
     }
 
@@ -665,7 +668,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     }
     if ( styleStack.hasAttribute("presentation:transition-style"))
     {
-        kdDebug()<<" have a presentation:transition-style------------\n";
+        //kdDebug()<<" have a presentation:transition-style------------\n";
         const QString effect = styleStack.attribute("presentation:transition-style");
         kdDebug() << "Transition name: " << effect << endl;
         PageEffect pef;
@@ -760,7 +763,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     }
     if ( styleStack.hasChildNode("presentation:sound"))
     {
-        kdDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
+        //kdDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
         QDomElement sound = styleStack.childNode("presentation:sound").toElement();
         soundEffect = true;
         soundFileName = sound.attribute( "xlink:href" );
