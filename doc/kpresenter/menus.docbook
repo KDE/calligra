@@ -136,7 +136,7 @@ text box as shown in the screenshot below:
 <screeninfo>Tooltips</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="pics/barstyle6.png" format="PNG"/></imageobject>
+<imagedata fileref="barstyle6.png" format="PNG"/></imageobject>
 <textobject><phrase>Tooltips</phrase></textobject>
 </mediaobject>
 </screenshot>
@@ -169,7 +169,7 @@ The &kpresenter; menus are discussed in the following sections.
 <screeninfo>The <guimenu>File</guimenu> Menu</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="pics/menufile.png" format="PNG"/></imageobject>
+<imagedata fileref="menufile.png" format="PNG"/></imageobject>
 <textobject><phrase>The <guimenu>File</guimenu>
 Menu</phrase></textobject>
 </mediaobject>
