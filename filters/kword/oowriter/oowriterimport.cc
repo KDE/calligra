@@ -744,8 +744,9 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
         formats.appendChild(format);
 
-        m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
+        //m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
         // DF: this looks wrong to me. We're losing the text:p styles too!
+        // LT: works perfectly without AFAICS
     }
 
     QDomElement text = doc.createElement( "TEXT" );
