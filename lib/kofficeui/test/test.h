@@ -5,15 +5,15 @@
 #ifndef __kofficelib_test__
 #define __kofficelib_test__
 
-#include "../koPartSelectDia.h"
-#include "../koAboutDia.h"
-#include "../koPageLayoutDia.h"
-#include "../koPrintDia.h"
-
 #include <qpushbt.h>
 #include <qwidget.h>
 #include <qobject.h>
 #include <qprinter.h>
+
+#include <koPartSelectDia.h>
+#include <koAboutDia.h>
+#include <koPageLayoutDia.h>
+#include <koPrintDia.h>
 
 #include <kapp.h>
 

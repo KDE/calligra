@@ -1,9 +1,9 @@
 
-INCLUDES	=	-I../kofficecore -I$(KDEDIR)/include/idl $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES	=	-I../../kofficecore -I.. $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS		=	$(all_libraries) $(KDE_RPATH)
-LDADD 		=  	-lkofficecore -lkofficeui -lkoml -lkom -lop -lkfile -lkfm -lkdecore -lkdeui $(LIBMICO) -lqt -lXext -lX11
+LDADD 		=  	../libkofficeui.la ../../kofficecore/libkofficecore.la ../../koml/libkoml.la -lkom -lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 $(LIBSOCKET) 
 
-bin_PROGRAMS = test
+check_PROGRAMS = test
 test_SOURCES = test.cc
 DISTCLEANFILES = test.moc
 

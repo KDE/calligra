@@ -83,8 +83,9 @@ void MyApp::start()
   w->show();
 }
 
-void main(int argc,char **argv)
+int main(int argc,char **argv)
 {
   MyApp a(argc,argv);
   a.exec();
+  return 0;
 }

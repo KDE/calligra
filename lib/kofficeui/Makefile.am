@@ -1,12 +1,12 @@
 ####### General stuff
 
-INCLUDES=	-I../kofficecore -I$(KDEDIR)/include/idl $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES=	-I../kofficecore $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
 LIBADD  =       -lkdeui -lkdecore -lqt -lXext -lX11 
 
 ####### Files
 
-SUBDIRS = pics
+SUBDIRS = pics test
 
 lib_LTLIBRARIES = libkofficeui.la
 
