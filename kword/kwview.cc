@@ -4921,7 +4921,9 @@ void KWView::slotFrameSetEditChanged()
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
     QString mode=m_gui->canvasWidget()->viewMode()->type();
-    actionInsertFootEndNote->setEnabled( state && (mode!="ModeText"));
+    state =state && (mode!="ModeText");
+    actionInsertFootEndNote->setEnabled( state);
+    actionEditFootEndNote->setEnabled( state);
     slotUpdateRuler();
 }
 
@@ -5513,6 +5515,7 @@ void KWView::switchModeView()
     actionInsertFormula->setEnabled(state);
     actionInsertTable->setEnabled(state);
     actionInsertFootEndNote->setEnabled( state );
+    actionEditFootEndNote->setEnabled( state );
     actionViewFooter->setEnabled( state );
     actionViewHeader->setEnabled( state );
     actionShowDocStruct->setEnabled(state);
