@@ -1128,7 +1128,7 @@ static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
             << "  Message: " << errorMsg << endl;
         // ### TODO: the error is in which sub-file?
         KMessageBox::error( 0L, i18n("An error has occurred while parsing the KWord 1.3 file.\nAt line: %1, column %2\nError message: %3")
-            .arg( errorLine ).arg( errorColumn ).arg(i18n( errorMsg.utf8() ) ),
+            .arg( errorLine ).arg( errorColumn ).arg(i18n( "QXml", errorMsg.utf8() ) ),
             i18n("KWord 1.3 Import Filter"), 0 );
 
         return false;
