@@ -59,6 +59,7 @@ class KWordFrameSetIface;
 class DCOPObject;
 class KoXmlWriter;
 class KoSavingContext;
+class KoTextDocument;
 
 /**
  * small utility class representing a sortable (by z-order) list of frames

@@ -40,6 +40,7 @@ class Container;
 class ContextStyle;
 class SymbolAction;
 class SymbolTable;
+class DocumentWrapper;
 
 
 /**

@@ -39,6 +39,8 @@ class QComboBox;
 class KWDocument;
 class KWStyle;
 
+class KoTextDocument;
+
 /******************************************************************/
 /* Class: KWTableStylePreview                                     */
 /******************************************************************/

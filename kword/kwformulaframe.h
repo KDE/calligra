@@ -37,6 +37,7 @@ using KFormula::Container;
 using KFormula::FormulaCursor;
 using KFormula::View;
 
+class KWFormulaFrameSetEdit;
 
 class KWFormulaFrameSet : public KWFrameSet
 {
