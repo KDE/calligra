@@ -1,13 +1,3 @@
-toolbardir = $(kde_datadir)/kspread/toolbar
-toolbar_DATA = abort.png bold.png center.png chart.png colin.png \
-	colout.png done.png italic.png left.png money.png \
-	multirow.png neonpen.png paste.png percent.png precminus.png \
-	precplus.png right.png rowin.png rowout.png \
-	tab_first.png tab_last.png tab_left.png tab_right.png sort_incr.png sort_decrease.png \
-	funct.png rotate.png abs.png bra.png brackets.png frac.png \
-	index0.png index1.png index2.png index3.png integral.png matrix.png root.png \
-	borderbottom.png  borderleft.png   borderright.png bordertop.png \
-	borderall.png borderoutline.png borderremove.png black-sum.png   \
-        borderfall.png  borderhorizontal.png   borderup.png  bordervertical.png \
-        borderinside.png underline.png
+kspreadicondir = $(kde_datadir)/kspread/icons
+kspreadicon_ICON = AUTO
 
