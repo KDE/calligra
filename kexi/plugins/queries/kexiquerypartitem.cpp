@@ -29,13 +29,15 @@ void KexiQueryPartItem::store(KoStore* store) {
 	QDomDocument domDoc("Query");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
-        QDomElement nameElement = domDoc.createElement("Query");
-        QDomText attrName = domDoc.createTextNode(identifier());
+        QDomElement docElement = domDoc.createElement("query");
+	domDoc.appendChild(docElement);
+        QDomElement nameElement = domDoc.createElement("name");
+	QDomText attrName = domDoc.createTextNode(identifier());
         nameElement.appendChild(attrName);
-        domDoc.appendChild(nameElement);
+        docElement.appendChild(nameElement);
 
-        QDomElement itemsElement = domDoc.createElement("Items");
-        domDoc.appendChild(itemsElement);
+        QDomElement itemsElement = domDoc.createElement("items");
+        docElement.appendChild(itemsElement);
 
 	for (QueryEntryList::const_iterator it=m_queryEntryList.begin();it!=m_queryEntryList.end();++it) {
 		QDomElement item = domDoc.createElement("item");
@@ -63,6 +65,34 @@ void KexiQueryPartItem::store(KoStore* store) {
 
 }
 
-void KexiQueryPartItem::load(KoStore*) {
+void KexiQueryPartItem::load(KoStore* store) {
+	kdDebug()<<"*********KexiQueryPartItem::load(KoStore* store)"<<endl;
+	if(store) {
+		kdDebug()<<"*********KexiQueryPartItem::load(KoStore* store): store!=0"<<endl;
+		store->open("/query/"+identifier()+".query");
+		QDomDocument doc;
+		doc.setContent(store->device());
+		store->close();
+		QDomElement el=doc.documentElement();
+		kdDebug()<<"document tag name: "<<el.tagName()<<endl;
+		for (QDomElement itemsTag=el.firstChild().toElement();
+			!itemsTag.isNull();itemsTag=itemsTag.nextSibling().toElement()) {
+			kdDebug()<<"Looking for items tag"<<endl;
+			if (itemsTag.tagName()=="items") {
+				kdDebug()<<"Items tag found"<<endl;
+				for (QDomElement itemTag=itemsTag.firstChild().toElement();
+				!itemTag.isNull(); itemTag=itemTag.nextSibling().toElement()) {
+					m_queryEntryList.append(QueryEntry(
+						itemTag.attribute("source"),
+						itemTag.attribute("field"),
+						itemTag.attribute("shown")=="true",
+						itemTag.attribute("orC"),
+						itemTag.attribute("andC")
+					));	
+				}
+				break;
+			}
+		}
+	}
 }
 

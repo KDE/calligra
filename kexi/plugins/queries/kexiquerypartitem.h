@@ -15,6 +15,10 @@ public:
 	class QueryEntry
 	{
 	public:
+		QueryEntry(){;}
+		QueryEntry(const QString& source_, const QString& field_, 
+			bool show_, const QString& orC_, const QString& andC_): source(source_),
+				field(field_),show(show_),orC(orC_),andC(andC_){;}
 		QString source;
 		QString field;
 		bool show;
