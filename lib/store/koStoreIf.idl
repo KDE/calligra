@@ -23,11 +23,9 @@
 module KOStore
 {
 	typedef sequence<octet> Data;
-	enum Mode { Read, Write, Append };
+	enum Mode { Read, Write };
 	interface Store
 	{
-		string createFileName();
-
 		boolean open( in string name, in string mimetype );
 		void close();
 
