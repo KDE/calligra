@@ -549,14 +549,20 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
                 }
         }
     QDomElement *animation = 0L;
+    lstAnimation *tmp = 0L;
     if( element.hasAttribute("draw:id"))
-        animation = info->animationShowById(element.attribute("draw:id"));
+    {
+        tmp = info->animationShowById(element.attribute("draw:id") );
+        if ( tmp )
+            animation = tmp->element;
+    }
 
     if( animation)
     {
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         QString speed = animation->attribute( "presentation:speed" );
+        appearStep = tmp->order;
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<" speed :"<<speed<<endl;
 
         //kpresenter have three state (medium/slow/fast)
@@ -627,14 +633,20 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     }
 
     animation = 0L;
+    tmp = 0L;
     if( element.hasAttribute("draw:id"))
-        animation = info->animationHideById(element.attribute("draw:id"));
+    {
+        tmp = info->animationHideById(element.attribute("draw:id") );
+        if ( tmp )
+            animation = tmp->element;
+    }
 
     if( animation)
     {
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        disappearStep = tmp->order;
         if ( animation->hasAttribute("presentation:animation-delay" ) )
         {
             disappearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );

@@ -20,6 +20,12 @@
 #ifndef KPRLOADINGINFO_H
 #define KPRLOADINGINFO_H
 
+struct lstAnimation
+{
+    QDomElement *element;
+    int order;
+};
+
 /// Temporary information used only during loading
 class KPRLoadingInfo
 {
@@ -27,30 +33,40 @@ public:
     KPRLoadingInfo() { presSpeed = -1; }
     ~KPRLoadingInfo() {}
 
-    QDomElement* animationShowById( const QString& id ) const {
+    lstAnimation* animationShowById( const QString& id ) const {
         return m_animationsShowDict[id]; // returns 0 if not found
     }
-    void storePresentationShowAnimation( QDomElement * element, const QString& id ) {
+    void storePresentationShowAnimation( lstAnimation * element, const QString& id ) {
         m_animationsShowDict.insert( id , element );
     }
     void clearAnimationShowDict() {
-      m_animationsShowDict.clear();
+        QDictIterator<lstAnimation> it( m_animationsShowDict ); // See QDictIterator
+        for( ; it.current(); ++it )
+        {
+            delete it.current()->element;
+        }
+        m_animationsShowDict.clear();
     }
 
-    QDomElement* animationHideById( const QString& id ) const {
+    lstAnimation* animationHideById( const QString& id ) const {
         return m_animationsHideDict[id]; // returns 0 if not found
     }
-    void storePresentationHideAnimation( QDomElement * element, const QString& id ) {
+    void storePresentationHideAnimation( lstAnimation * element, const QString& id ) {
         m_animationsHideDict.insert( id , element );
     }
     void clearAnimationHideDict() {
-      m_animationsHideDict.clear();
+        QDictIterator<lstAnimation> it( m_animationsHideDict ); // See QDictIterator
+        for( ; it.current(); ++it )
+        {
+            delete it.current()->element;
+        }
+        m_animationsHideDict.clear();
     }
 
     int presSpeed;
 private:
-    QDict<QDomElement> m_animationsShowDict;
-    QDict<QDomElement> m_animationsHideDict;
+    QDict<lstAnimation> m_animationsShowDict;
+    QDict<lstAnimation> m_animationsHideDict;
 };
 
 #endif /* KPRLOADINGINFO_H */

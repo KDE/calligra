@@ -544,7 +544,10 @@ protected:
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
     void addStyles( const QDomElement* style, KoOasisContext & context );
     void fillStyleStack( const QDomElement& object, KoOasisContext & context );
-    void createPresentationAnimation(const QDomElement& element);
+    /*
+     * increaseOrder = true by default, put to false when we have group of animation
+     */
+    int createPresentationAnimation(const QDomElement& element, int order = 0 ,bool increaseOrder = true);
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
 

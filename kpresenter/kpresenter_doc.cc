@@ -1518,9 +1518,10 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
 
 }
 
-void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
+int KPresenterDoc::createPresentationAnimation(const QDomElement& element, int order, bool increaseOrder)
 {
   kdDebug()<<"void KPresenterDoc::createPresentationAnimation(const QDomElement& element)\n";
+  int orderAnimation = increaseOrder ? 0 : order;
   for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
@@ -1532,7 +1533,13 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
             QString name = e.attribute( "draw:shape-id" );
 	    kdDebug()<<" insert animation show style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
-	    m_loadingInfo->storePresentationShowAnimation( ep, name );
+            lstAnimation *tmp = new lstAnimation;
+            tmp->element = ep;
+            tmp->order = orderAnimation;
+	    m_loadingInfo->storePresentationShowAnimation( tmp, name );
+            if ( increaseOrder )
+                ++orderAnimation;
+
         }
         else if ( tagName == "presentation:hide-shape")
         {
@@ -1540,15 +1547,24 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
             QString name = e.attribute( "draw:shape-id" );
 	    kdDebug()<<" insert animation hide style : name :"<<name<<endl;
             QDomElement* ep = new QDomElement( e );
-	    m_loadingInfo->storePresentationHideAnimation( ep, name );
+            lstAnimation *tmp = new lstAnimation;
+            tmp->element = ep;
+            tmp->order = orderAnimation;
+	    m_loadingInfo->storePresentationHideAnimation( tmp, name );
+            if ( increaseOrder )
+                ++orderAnimation;
+
         }
         else if ( tagName == "presentation:animation-group" )
         {
             kdDebug()<<" presentation:animation-group exist \n";
-            createPresentationAnimation( e );
+            orderAnimation = createPresentationAnimation( e, orderAnimation, false );
             kdDebug()<<" end presentation:animation-group exist\n";
         }
     }
+  //increase when we finish it necessary for group object
+  ++orderAnimation;
+  return orderAnimation;
 }
 
 void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & context )
