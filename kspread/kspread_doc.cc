@@ -119,6 +119,48 @@ public:
   KCompletion listCompletion;
 
   KSpreadLocale locale;
+  
+  /**
+  * bool which define if you can show scroolbar
+  */
+  bool verticalScrollBar;
+  bool horizontalScrollBar;
+
+  /**
+  * completion mode
+  */
+  KGlobalSettings::Completion completionMode;
+
+  /**
+  * bool which define if you can show col/row header
+  */
+  bool columnHeader;
+  bool rowHeader;
+
+  double indentValue;
+
+  KSpread::MoveTo moveTo;
+
+  bool showError;
+
+  MethodOfCalc calcMethod;
+
+  bool showTabBar;
+
+  bool showCommentIndicator;
+  bool showFormulaBar;
+  bool showStatusBar;
+
+  bool delayCalculation;
+
+  KSpellConfig *spellConfig;
+  bool dontCheckUpperWord;
+  bool dontCheckTitleCase;
+  QStringList spellListIgnoreAll;
+  KoUnit::Unit unit;
+  KSpreadSheet *activeSheet;
+
+  int numOperations;
 };
 
 /*****************************************************************************
@@ -153,7 +195,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   d->plugins.setAutoDelete( false );
 
-  m_bDelayCalculation = false;
+  d->delayCalculation = false;
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
 
   if ( s_docs == 0 )
@@ -173,7 +215,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->tableId = 1;
   d->dcop = 0;
   d->isLoading = false;
-  m_numOperations = 1; // don't start repainting before the GUI is done...
+  d->numOperations = 1; // don't start repainting before the GUI is done...
 
   d->defaultGridPen.setColor( lightGray );
   d->defaultGridPen.setWidth( 1 );
@@ -189,26 +231,26 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   if ( name )
       dcopObject();
 
-  m_iCompletionMode=KGlobalSettings::CompletionAuto;
+  d->completionMode=KGlobalSettings::CompletionAuto;
 
-  m_bVerticalScrollBarShow=true;
-  m_bHorizontalScrollBarShow=true;
-  m_bShowColHeader=true;
-  m_bShowRowHeader=true;
-  m_dIndentValue = 10.0;
-  m_EMoveTo=KSpread::Bottom;
-  m_bShowError=false;
-  m_EMethodOfCalc=SumOfNumber;
-  m_bShowCommentIndicator=true;
-  m_bShowTabBar=true;
-  m_bShowFormulaBar=true;
-  m_bShowStatusBar=true;
-  m_pKSpellConfig=0;
+  d->verticalScrollBar=true;
+  d->horizontalScrollBar=true;
+  d->columnHeader=true;
+  d->rowHeader=true;
+  d->indentValue = 10.0;
+  d->moveTo=KSpread::Bottom;
+  d->showError=false;
+  d->calcMethod=SumOfNumber;
+  d->showCommentIndicator=true;
+  d->showTabBar=true;
+  d->showFormulaBar=true;
+  d->showStatusBar=true;
+  d->spellConfig=0;
 
-  m_bDontCheckUpperWord=false;
-  m_bDontCheckTitleCase=false;
-  m_unit = KoUnit::U_MM;
-  m_activeTable= 0L;
+  d->dontCheckUpperWord=false;
+  d->dontCheckTitleCase=false;
+  d->unit = KoUnit::U_MM;
+  d->activeSheet= 0L;
 }
 
 bool KSpreadDoc::initDoc()
@@ -490,11 +532,11 @@ QDomDocument KSpreadDoc::saveXML()
         spread.appendChild( areaname );
     }
 
-    if( !m_spellListIgnoreAll.isEmpty() )
+    if( !d->spellListIgnoreAll.isEmpty() )
     {
         QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
         spread.appendChild( spellCheckIgnore );
-        for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+        for ( QStringList::Iterator it = d->spellListIgnoreAll.begin(); it != d->spellListIgnoreAll.end(); ++it )
         {
             QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
             spellCheckIgnore.appendChild( spellElem );
@@ -547,7 +589,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 0 );
   d->isLoading = TRUE;
-  m_spellListIgnoreAll.clear();
+  d->spellListIgnoreAll.clear();
   // <spreadsheet>
   QDomElement spread = doc.documentElement();
 
@@ -612,7 +654,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       {
           if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
           {
-              m_spellListIgnoreAll.append(spellWord.attribute("word"));
+              d->spellListIgnoreAll.append(spellWord.attribute("word"));
           }
           spellWord=spellWord.nextSibling().toElement();
       }
@@ -795,6 +837,218 @@ void KSpreadDoc::setDefaultGridPen( const QPen& p )
   d->defaultGridPen = p;
 }
 
+void KSpreadDoc::setShowVerticalScrollBar(bool _show)
+{
+  d->verticalScrollBar=_show;
+}
+
+void KSpreadDoc::setShowHorizontalScrollBar(bool _show) 
+{   
+  d->horizontalScrollBar=_show;
+}
+
+bool KSpreadDoc::getShowVerticalScrollBar()const 
+{ 
+  return  d->verticalScrollBar;
+}
+
+bool KSpreadDoc::getShowHorizontalScrollBar()const 
+{  
+  return  d->horizontalScrollBar;
+}
+
+KGlobalSettings::Completion KSpreadDoc::completionMode( ) const
+{ 
+  return d->completionMode;
+}
+
+void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
+{  
+  d->completionMode= complMode;
+}
+
+void KSpreadDoc::setShowColHeader(bool _show)
+{ 
+  d->columnHeader=_show; 
+}
+
+void KSpreadDoc::setShowRowHeader(bool _show)
+{ 
+  d->rowHeader=_show;
+}
+
+bool KSpreadDoc::getShowColHeader() const
+{ 
+  return  d->columnHeader;
+}
+
+bool KSpreadDoc::getShowRowHeader() const
+{ 
+  return  d->rowHeader; 
+}
+
+double KSpreadDoc::getIndentValue()const 
+{ 
+  return d->indentValue; 
+}
+
+void KSpreadDoc::setIndentValue( double _val )
+{ 
+  d->indentValue = _val; 
+}
+
+KSpread::MoveTo KSpreadDoc::getMoveToValue() const
+{
+  return d->moveTo;
+}
+
+void KSpreadDoc::setMoveToValue(KSpread::MoveTo _moveTo)
+{
+  d->moveTo = _moveTo;
+}
+
+  /**
+  * Show or not error message
+  */
+void KSpreadDoc::setShowMessageError(bool _show)
+{   
+  d->showError=_show;
+}
+
+bool KSpreadDoc::getShowMessageError() const 
+{ 
+  return  d->showError;
+}
+
+  /**
+  * Method of calc
+  */
+void KSpreadDoc::setTypeOfCalc( MethodOfCalc _calc)
+{ 
+  d->calcMethod=_calc;
+}
+
+MethodOfCalc KSpreadDoc::getTypeOfCalc() const
+{ 
+  return d->calcMethod;
+}
+
+void KSpreadDoc::setShowTabBar(bool _tabbar)
+{  
+  d->showTabBar=_tabbar;
+}
+
+bool KSpreadDoc::getShowTabBar()const
+{ 
+  return  d->showTabBar;
+}
+
+void KSpreadDoc::setShowCommentIndicator(bool _indic) 
+{  
+  d->showCommentIndicator=_indic;
+}
+
+bool KSpreadDoc::getShowCommentIndicator() const
+{ 
+  return  d->showCommentIndicator;
+}
+
+void KSpreadDoc::setShowFormulaBar(bool _formulaBar)
+{  
+  d->showFormulaBar=_formulaBar;
+}
+
+bool KSpreadDoc::getShowFormulaBar() const
+{ 
+  return  d->showFormulaBar;
+}
+
+  /**
+   * show/hide status bar
+   */
+void KSpreadDoc::setShowStatusBar(bool _statusBar)
+{ 
+  d->showStatusBar=_statusBar;
+}
+
+bool KSpreadDoc::getShowStatusBar() const
+{ 
+  return  d->showStatusBar;
+}
+
+void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
+{
+  if (d->spellConfig == 0 )
+    d->spellConfig = new KSpellConfig();
+
+  d->spellConfig->setNoRootAffix(_kspell.noRootAffix ());
+  d->spellConfig->setRunTogether(_kspell.runTogether ());
+  d->spellConfig->setDictionary(_kspell.dictionary ());
+  d->spellConfig->setDictFromList(_kspell.dictFromList());
+  d->spellConfig->setEncoding(_kspell.encoding());
+  d->spellConfig->setClient(_kspell.client());
+}
+
+KSpellConfig * KSpreadDoc::getKSpellConfig()const
+{
+  return d->spellConfig;
+}
+
+bool KSpreadDoc::dontCheckUpperWord() const
+{ 
+  return d->dontCheckUpperWord;
+}
+
+void KSpreadDoc::setDontCheckUpperWord( bool b )
+{ 
+  d->dontCheckUpperWord = b;
+}
+
+bool KSpreadDoc::dontCheckTitleCase() const 
+{ 
+  return  d->dontCheckTitleCase; 
+}
+
+void KSpreadDoc::setDontCheckTitleCase( bool b )
+{ 
+  d->dontCheckTitleCase = b; 
+}
+
+KoUnit::Unit KSpreadDoc::getUnit() const
+{ 
+  return d->unit;
+}
+
+void KSpreadDoc::setUnit( KoUnit::Unit _unit )
+{
+    d->unit = _unit;
+}
+
+QString KSpreadDoc::getUnitName() const
+{ 
+  return KoUnit::unitName( d->unit ); 
+}
+
+void KSpreadDoc::increaseNumOperation()
+{ 
+  ++d->numOperations; 
+}
+
+void KSpreadDoc::decreaseNumOperation()
+{ 
+  --d->numOperations; 
+}
+
+void KSpreadDoc::addIgnoreWordAllList( const QStringList & _lst)
+{
+  d->spellListIgnoreAll = _lst;
+}
+
+QStringList KSpreadDoc::spellListIgnoreAll() const 
+{ 
+  return d->spellListIgnoreAll;
+}
+
 KSpreadSheet* KSpreadDoc::createTable()
 {
   QString s( i18n("Sheet%1") );
@@ -819,7 +1073,6 @@ void KSpreadDoc::resetInterpreter()
   // Perhaps something changed. Lets repaint
   emit sig_updateView();
 }
-
 
 void KSpreadDoc::addTable( KSpreadSheet *_table )
 {
@@ -933,10 +1186,10 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
 
     // choose sheet: the first or the active
     KSpreadSheet* table = 0L;
-    if ( !m_activeTable )
+    if ( !d->activeSheet )
         table = d->workbook->firstTable();
     else
-        table = m_activeTable;
+        table = d->activeSheet;
     if ( !table )
         return;
 
@@ -1418,7 +1671,7 @@ KSpreadDoc::~KSpreadDoc()
   kdDebug(36001) << "alive 1" << endl;
   delete d->workbook;
   delete d->styleManager;
-  delete m_pKSpellConfig;
+  delete d->spellConfig;
   
   delete d;
 }
@@ -1557,19 +1810,6 @@ void KSpreadDoc::refreshInterface()
   emit sig_refreshView();
 }
 
-void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
-{
-  if (m_pKSpellConfig == 0 )
-    m_pKSpellConfig = new KSpellConfig();
-
-  m_pKSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  m_pKSpellConfig->setRunTogether(_kspell.runTogether ());
-  m_pKSpellConfig->setDictionary(_kspell.dictionary ());
-  m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
-  m_pKSpellConfig->setEncoding(_kspell.encoding());
-  m_pKSpellConfig->setClient(_kspell.client());
-}
-
 void KSpreadDoc::refreshLocale()
 {
     emit sig_refreshLocale();
@@ -1589,8 +1829,8 @@ void KSpreadDoc::emitBeginOperation(bool waitCursor)
     }
 
     KoDocument::emitBeginOperation();
-    m_bDelayCalculation = true;
-    m_numOperations++;
+    d->delayCalculation = true;
+    d->numOperations++;
 }
 
 void KSpreadDoc::emitBeginOperation(void)
@@ -1604,12 +1844,12 @@ void KSpreadDoc::emitEndOperation()
   //  ElapsedTime et( "*KSpreadDoc::emitEndOperation*" );
    KSpreadSheet *t = NULL;
    CellBinding* b = NULL;
-   m_numOperations--;
+   d->numOperations--;
 
-   if (m_numOperations <= 0)
+   if (d->numOperations <= 0)
    {
-     m_numOperations = 0;
-     m_bDelayCalculation = false;
+     d->numOperations = 0;
+     d->delayCalculation = false;
      for ( t = d->workbook->firstTable(); t != NULL; t = d->workbook->nextTable() )
      {
        //       ElapsedTime etm( "Updating table..." );
@@ -1626,7 +1866,7 @@ void KSpreadDoc::emitEndOperation()
    KoDocument::emitEndOperation();
    QApplication::restoreOverrideCursor();
 
-   if (m_numOperations == 0)
+   if (d->numOperations == 0)
    {
      /* do this after the parent class emitEndOperation because that allows updates
         on the view again
@@ -1639,25 +1879,25 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
 {
   // ElapsedTime et( "*KSpreadDoc::emitEndOperation - 2 -*" );
   CellBinding  * b = 0;
-  m_numOperations--;
+  d->numOperations--;
 
-  if ( m_numOperations > 0 || !m_activeTable )
+  if ( d->numOperations > 0 || !d->activeSheet )
   {
     KoDocument::emitEndOperation();
     QApplication::restoreOverrideCursor();
     return;
   }
 
-  m_numOperations = 0;
-  m_bDelayCalculation = false;
+  d->numOperations = 0;
+  d->delayCalculation = false;
 
   {
     //ElapsedTime etm( "Updating active table..." );
-    m_activeTable->updateCellArea( rect );
+    d->activeSheet->updateCellArea( rect );
   }
 
   //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
-  for ( b = m_activeTable->firstCellBinding(); b != 0; b = m_activeTable->nextCellBinding() )
+  for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
   {
     b->cellChanged( 0 );
   }
@@ -1666,7 +1906,7 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
 
   QApplication::restoreOverrideCursor();
 
-  if ( m_numOperations == 0 )
+  if ( d->numOperations == 0 )
   {
     /* do this after the parent class emitEndOperation because that allows updates
        on the view again
@@ -1677,7 +1917,7 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
 
 bool KSpreadDoc::delayCalculation()
 {
-   return m_bDelayCalculation;
+   return d->delayCalculation;
 }
 
 void KSpreadDoc::updateBorderButton()
@@ -1701,30 +1941,25 @@ void KSpreadDoc::takeTable( KSpreadSheet * table )
 	((KSpreadView*)it.current())->removeTable( table );
 }
 
-void KSpreadDoc::setUnit( KoUnit::Unit _unit )
-{
-    m_unit = _unit;
-}
-
 void KSpreadDoc::addIgnoreWordAll( const QString & word)
 {
-    if( m_spellListIgnoreAll.findIndex( word )==-1)
-        m_spellListIgnoreAll.append( word );
+    if( d->spellListIgnoreAll.findIndex( word )==-1)
+        d->spellListIgnoreAll.append( word );
 }
 
 void KSpreadDoc::clearIgnoreWordAll( )
 {
-    m_spellListIgnoreAll.clear();
+    d->spellListIgnoreAll.clear();
 }
 
 void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
 {
-    m_activeTable = _table;
+    d->activeSheet = _table;
 }
 
 KSpreadSheet * KSpreadDoc::displayTable()const
 {
-    return m_activeTable;
+    return d->activeSheet;
 }
 
 void KSpreadDoc::addView( KoView *_view )

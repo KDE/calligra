@@ -265,54 +265,54 @@ public:
   /**
   * hide/show scrollbar
   */
-  void setShowVerticalScrollBar(bool _show) {   m_bVerticalScrollBarShow=_show;}
-  void setShowHorizontalScrollBar(bool _show) {   m_bHorizontalScrollBarShow=_show;}
+  void setShowVerticalScrollBar( bool b );
+  void setShowHorizontalScrollBar( bool b );
 
-  bool getShowVerticalScrollBar()const { return  m_bVerticalScrollBarShow;}
-  bool getShowHorizontalScrollBar()const {  return  m_bHorizontalScrollBarShow;}
+  bool getShowVerticalScrollBar() const;
+  bool getShowHorizontalScrollBar() const;
 
   /**
   * completion mode
   */
 
-  KGlobalSettings::Completion completionMode( )const { return m_iCompletionMode;}
-  void setCompletionMode( KGlobalSettings::Completion _complMode) {  m_iCompletionMode=_complMode;}
+  KGlobalSettings::Completion completionMode( )const ;
+  void setCompletionMode( KGlobalSettings::Completion _complMode);
 
   /**
   * hide/show row/col header
   */
-  void setShowColHeader(bool _show) { m_bShowColHeader=_show; }
-  void setShowRowHeader(bool _show) { m_bShowRowHeader=_show; }
+  void setShowColHeader(bool _show);
+  void setShowRowHeader(bool _show);
 
-  bool getShowColHeader()const { return  m_bShowColHeader; }
-  bool getShowRowHeader()const { return  m_bShowRowHeader; }
+  bool getShowColHeader()const;
+  bool getShowRowHeader()const;
 
   /**
   * value of indent
   */
-  double getIndentValue()const { return m_dIndentValue; }
-  void setIndentValue( double _val ) { m_dIndentValue = _val; }
+  double getIndentValue()const;
+  void setIndentValue( double _val );
 
-  KSpread::MoveTo getMoveToValue()const {return m_EMoveTo;}
-  void setMoveToValue(KSpread::MoveTo _moveTo) {m_EMoveTo=_moveTo;}
+  KSpread::MoveTo getMoveToValue()const;
+  void setMoveToValue(KSpread::MoveTo _moveTo) ;
 
   /**
   * Show or not error message
   */
-  void setShowMessageError(bool _show) {   m_bShowError=_show;}
-  bool getShowMessageError()const { return  m_bShowError;}
+  void setShowMessageError(bool _show);
+  bool getShowMessageError()const;
 
   /**
   * Method of calc
   */
-  void setTypeOfCalc( MethodOfCalc _calc) { m_EMethodOfCalc=_calc;}
-  MethodOfCalc getTypeOfCalc()const{ return m_EMethodOfCalc;}
+  void setTypeOfCalc( MethodOfCalc _calc);
+  MethodOfCalc getTypeOfCalc() const;
 
   /**
    * show/hide tabbar
    */
-  void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
-  bool getShowTabBar()const { return  m_bShowTabBar;}
+  void setShowTabBar(bool _tabbar);
+  bool getShowTabBar()const;
 
   void changeDefaultGridPenColor( const QColor &_col);
 
@@ -322,32 +322,32 @@ public:
   /**
    * show/hide comment indicator
    */
-  void setShowCommentIndicator(bool _indic) {  m_bShowCommentIndicator=_indic;}
-  bool getShowCommentIndicator()const { return  m_bShowCommentIndicator;}
+  void setShowCommentIndicator(bool _indic);
+  bool getShowCommentIndicator()const;
 
   /**
    * show/hide formula bar
    */
-  void setShowFormulaBar(bool _formulaBar) {  m_bShowFormulaBar=_formulaBar;}
-  bool getShowFormulaBar()const { return  m_bShowFormulaBar;}
+  void setShowFormulaBar(bool _formulaBar);
+  bool getShowFormulaBar()const;
+
+  /**
+   * show/hide status bar
+   */
+  void setShowStatusBar(bool _statusBar);
+  bool getShowStatusBar()const;
 
   /**
    * get custom kspell config
    */
   void setKSpellConfig(KSpellConfig _kspell);
-  KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
+  KSpellConfig * getKSpellConfig() const;
 
-  bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
-  void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord = _b; }
+  bool dontCheckUpperWord() const;
+  void setDontCheckUpperWord(bool _b);
 
-  bool dontCheckTitleCase() const { return  m_bDontCheckTitleCase; }
-  void setDontCheckTitleCase(bool _b) { m_bDontCheckTitleCase = _b; }
-
-  /**
-   * show/hide status bar
-   */
-  void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
-  bool getShowStatusBar()const { return  m_bShowStatusBar;}
+  bool dontCheckTitleCase() const;
+  void setDontCheckTitleCase(bool _b);
 
   void insertChild( KoDocumentChild * child ) { KoDocument::insertChild( child ); }
 
@@ -401,8 +401,8 @@ public:
   void takeTable( KSpreadSheet * table );
   
   // The user-chosen global unit
-  QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-  KoUnit::Unit getUnit()const { return m_unit; }
+  QString getUnitName()const ;
+  KoUnit::Unit getUnit()const;
   void setUnit( KoUnit::Unit _unit );
 
   /**
@@ -435,15 +435,14 @@ public:
 
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
-    void addIgnoreWordAllList( const QStringList & _lst)
-        { m_spellListIgnoreAll = _lst;}
-    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
+    void addIgnoreWordAllList( const QStringList & _lst);
+    QStringList spellListIgnoreAll() const ;
 
     void setDisplayTable(KSpreadSheet *_Table );
     KSpreadSheet * displayTable()const;
 
-  void increaseNumOperation() { ++m_numOperations; }
-  void decreaseNumOperation() { --m_numOperations; }
+  void increaseNumOperation();
+  void decreaseNumOperation();
 
 public slots:
 
@@ -494,48 +493,6 @@ protected:
 
   static QPtrList<KSpreadDoc>* s_docs;
   static int s_docId;
-
-  /**
-  * bool which define if you can show scroolbar
-  */
-  bool m_bVerticalScrollBarShow;
-  bool m_bHorizontalScrollBarShow;
-
-  /**
-  * completion mode
-  */
-  KGlobalSettings::Completion m_iCompletionMode;
-
-  /**
-  * bool which define if you can show col/row header
-  */
-  bool m_bShowColHeader;
-  bool m_bShowRowHeader;
-
-  double m_dIndentValue;
-
-  KSpread::MoveTo m_EMoveTo;
-
-  bool m_bShowError;
-
-  MethodOfCalc m_EMethodOfCalc;
-
-  bool m_bShowTabBar;
-
-  bool m_bShowCommentIndicator;
-  bool m_bShowFormulaBar;
-  bool m_bShowStatusBar;
-
-  bool m_bDelayCalculation;
-
-  KSpellConfig *m_pKSpellConfig;
-  bool m_bDontCheckUpperWord;
-  bool m_bDontCheckTitleCase;
-  QStringList m_spellListIgnoreAll;
-  KoUnit::Unit m_unit;
-  KSpreadSheet *m_activeTable;
-
-  int m_numOperations;
 
   class SavedDocParts : public QMap<QString, QDomElement> {};
   SavedDocParts m_savedDocParts;
