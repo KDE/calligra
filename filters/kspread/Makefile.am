@@ -1,2 +1,2 @@
-SUBDIRS = csv
+SUBDIRS = csv applixspread
 
