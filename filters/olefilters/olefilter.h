@@ -58,13 +58,24 @@ public:
 
 protected slots:
     // This slot saves a Picture to the KOffice tar storage.
-    void slotSavePic(const QString &extension, unsigned int length, const char *data, const QString &key, QString &id);
-    // Generate a name for a part to store it in the KOffice tar storage
-    // Attention: You'll have to delete [] the nameOUT string!
-    void slotPart(const char *nameIN, char **nameOUT);
+    void slotSavePic(
+        const QString &nameIN,
+        QString &storageId,
+        const QString &extension,
+        unsigned int length,
+        const char *data);
+
+    // Generate a name for a new part to store it in the KOffice tar storage,
+    // or find the name and type of an existing one.
+    void slotPart(
+        const char *nameIN,
+        QString &storageId,
+        QString &mimeType);
+
     // Get another OLE 2 stream for your filter.
     // Attention: You'll have to delete [] the stream.data ptr!
     void slotGetStream(const int &handle, myFile &stream);
+
     // Like above. Note: This method might return the wrong stream
     // as the stream names are NOT unique in the OLE 2 file!!!
     // (Therefore it's searching only in the current dir)
@@ -76,12 +87,13 @@ private:
     OLEFilter(const OLEFilter &);
     const OLEFilter &operator=(const OLEFilter &);
 
-    void convert(const QString &dirname);
+    void convert(const QString &parentPath, const QString &dirname);
     void connectCommon(FilterBase **myFilter);
 
     QMap<QString, QString> partMap;
+    QMap<QString, QString> mimeMap;
     QMap<QString, QString> imageMap;
-    QArray<unsigned short> storePath;
+    QString m_path;
 
     myFile olefile;
     int numPic;                      // for the "unique name generation"

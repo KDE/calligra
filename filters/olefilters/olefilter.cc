@@ -15,6 +15,12 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+
+DESCRIPTION
+
+   When reading, the point of this module is toperform a depth-first traversal
+   of an OLE file. This ensures that a parent object is processed only after
+   its child objects have been processed.
 */
 
 #include <olefilter.h>
@@ -84,68 +90,86 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
 
-    storePath.resize(0);               // To keep track where we are :)
-    partMap.insert("root", "root");    // Special treatment for the "root" element
-    convert("root");                   // Recursively convert the file
+    // Special treatment for the "root" element: add a precanned name
+    // conversion for what is expected by koStore.
+    partMap.insert("tar:root", "root");
+
+    // Recursively convert the file
+    convert("tar:", "root");
+    delete store;
+    store=0L;
     return success;
 }
 
-void OLEFilter::slotSavePic(const QString &extension, unsigned int length, const char *data, const QString &key, QString &id) {
-
-    if(key.isEmpty())
+void OLEFilter::slotSavePic(
+    const QString &nameIN,
+    QString &storageId,
+    const QString &extension,
+    unsigned int length,
+    const char *data)
+{
+    if(nameIN.isEmpty())
         return;
 
-    QMap<QString, QString>::Iterator it=imageMap.find(key);
+    QString key = m_path + nameIN;
+    QString id;
+    QMap<QString, QString>::Iterator it = imageMap.find(key);
 
-    if(it!=imageMap.end())        // The "key-name" is already here - return the id
-        id=imageMap[key];
-    else {
-        QString value="tar:";                          // generate one...
-        for(unsigned int i=0; i<storePath.size(); ++i) {
-            value+='/';
-            value+=QString::number(static_cast<unsigned int>(storePath[i]));
-        }
-        id=QString("pictures/picture%1.%2").arg(numPic++).arg(extension);
-        imageMap.insert(key, id);           // ...and store it
-        value+='/';
-	value+=id;
-        if(!store->open(value)) {
-            success=false;
-            kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
+    if (it != imageMap.end())
+    {
+        // The key is already here - return the part id.
+        id = imageMap[key];
+    }
+    else
+    {
+        // It's not here, so let's generate one.
+        id = m_path + "/pictures/picture" + QString::number(numPic++) + '.' + extension;
+        imageMap.insert(key, id);
+        if(!store->open(id))
+        {
+            success = false;
+            kdError(30510) << "OLEFilter::slotSavePic(): Could not open KoStore!" << endl;
             return;
         }
         // Write it to the gzipped tar file
         bool ret = store->write(data, length);
         if (!ret)
-            kdError(30510) << "OLEFilter::convert(): Could write to KoStore!" << endl;
+            kdError(30510) << "OLEFilter::slotSavePic(): Could write to KoStore!" << endl;
         store->close();
     }
+    //storageId = QFile::encodeName(id);
+    storageId = (id);
 }
 
-// Don't forget the delete [] the nameOUT string!
-void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
-
-    if(nameIN==0)
+void OLEFilter::slotPart(
+    const char *nameIN,
+    QString &storageId,
+    QString &mimeType)
+{
+    if (!nameIN)
         return;
 
-    QMap<QString, QString>::Iterator it=partMap.find(nameIN);
-    QString value;
+    QString key = m_path + nameIN;
+    QString id;
+    QMap<QString, QString>::Iterator it = partMap.find(key);
 
-    if(it!=partMap.end())        // The "key-name" is already here - return the
-        value=partMap[nameIN];   // other one
-    else {
-        QString key=QString(nameIN);           // It's not here, yet, so let's
-        value="tar:";                          // generate one...
-        for(unsigned int i=0; i<storePath.size(); ++i) {
-            value+='/';
-            value+=QString::number(static_cast<unsigned int>(storePath[i]));
-        }
-        partMap.insert(key, value);           // ...and store it
+    if (it != partMap.end())
+    {
+        // The key is already here - return the part id.
+        id = partMap[key];
+        mimeType = mimeMap[key];
     }
-    unsigned int len=value.length();
-    *nameOUT=new char[len+1];
-    strncpy(*nameOUT, QFile::encodeName(value), len);
-    *(*nameOUT+len)='\0';
+    else
+    {
+        // It's not here, so let's generate one. Note that since any
+        // references to the part will be from one level above, we trim
+        // the key by one level first!
+        id = m_path;
+        key = m_path.left(m_path.findRev('/')) + nameIN;
+        partMap.insert(key, id);
+        mimeMap.insert(key, mimeType);
+    }
+    storageId = QFile::encodeName(id);
 }
 
 // Don't forget the delete [] the stream.data ptr!
@@ -171,26 +195,25 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 }
 
 // The recursive method to do all the work
-void OLEFilter::convert(const QString &dirname) {
+void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
     bool onlyDirs=true;
-    bool resized=false;
-    short index=storePath.size()-1;
+    unsigned part=0;
 
     // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
         if(node->type==1) {   // It's a dir!
-            if(!resized) {
-                ++index;
-                storePath.resize(index+1);
-                storePath[index]=0;
-                resized=true;
-            }
             if(docfile->enterDir(node->handle)) {
-                ++storePath[index];
-                convert(node->name);  // Go one level deeper <----------
+
+                // Go one level deeper, but don't increase the depth
+                // for ObjectPools.
+                if (node->name == "ObjectPool")
+                    convert(parentPath, node->name);
+                else
+                    convert(parentPath + '/' + QString::number(part), node->name);
+                part++;
                 docfile->leaveDir();
             }
         }
@@ -199,17 +222,15 @@ void OLEFilter::convert(const QString &dirname) {
         }                     // next loop
     }
 
-    if(resized)
-        storePath.resize(index);
-
+    QString mimeType;
+    m_path = parentPath;
     if(!onlyDirs) {
         FilterBase *myFilter=0L;
         node=list.first();
 
         // Find out the correct file type and create the appropriate filter
         do {
-            if(node->name=="WordDocument" || node->name=="1Table" ||
-               node->name=="0Table" || node->name=="ObjectPool") {
+            if(node->name=="WordDocument") {
 
                 myFile main, table0, table1, data;
                 QArray<int> tmp;
@@ -238,8 +259,8 @@ void OLEFilter::convert(const QString &dirname) {
                 if(tmp.size()==1)
                     data=docfile->stream(tmp[0]);
 
+                mimeType = "application/x-kword";
                 myFilter=new WordFilter(main, table0, table1, data);
-                connectCommon(&myFilter);
             }
             else if(node->name=="Workbook") {
                 // Excel
@@ -249,15 +270,14 @@ void OLEFilter::convert(const QString &dirname) {
                 workbook.data=0L;
 
                 workbook=docfile->stream(node->handle);
+                mimeType = "application/x-kspread";
                 myFilter=new ExcelFilter(workbook);
-                connectCommon(&myFilter);
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
                 // kdDebug(30510) << "OLEFilter::convert(): Power Point" << endl;
                 myFilter=new PowerPointFilter();
-                // connect SIGNALs&SLOTs
-                connectCommon(&myFilter);
+                mimeType = "application/x-kpresenter";
             }
             else
                 node=list.next();
@@ -267,9 +287,9 @@ void OLEFilter::convert(const QString &dirname) {
             // unknown type
             kdDebug(30510) << "OLEFilter::convert(): superunknown -> black hole sun ;)" << endl;
             myFilter=new FilterBase();
-            // connect SIGNALs&SLOTs
-            connectCommon(&myFilter);
         }
+        // connect SIGNALs&SLOTs
+        connectCommon(&myFilter);
 
         // Launch the filtering process...
         success=myFilter->filter();
@@ -281,28 +301,35 @@ void OLEFilter::convert(const QString &dirname) {
         }
         else
             file=myFilter->CString();
-        // Get the name of the part (dirname==key)
-        char *tmp=0L;
-        slotPart(QFile::encodeName(dirname), &tmp);
+
+        // Get the storage name of the part (dirname==key), and associate the
+        // mimeType with it for later use.
+        QString tmp;
+        slotPart(QFile::encodeName(dirname), tmp, mimeType);
         if(!store->open(tmp)) {
             success=false;
             kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
             return;
         }
+
         // Write it to the gzipped tar file
-        store->write(file.data(), file.length());
+        bool ret = store->write(file.data(), file.length());
+        if (!ret)
+            kdError(30510) << "OLEFilter::slotSavePic(): Could write to KoStore!" << endl;
         store->close();
-        delete [] tmp;
         delete myFilter;
     }
 }
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
 
-    QObject::connect(*myFilter, SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)), this,
-                     SLOT(slotSavePic(const QString &, unsigned int, const char *, const QString &, QString &)));
-    QObject::connect(*myFilter, SIGNAL(signalPart(const char *, char **)),
-                     this, SLOT(slotPart(const char *, char **)));
+    QObject::connect(
+        *myFilter,
+        SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)),
+        this,
+        SLOT(slotSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
+    QObject::connect(*myFilter, SIGNAL(signalPart(const char *, QString &, QString &)),
+                     this, SLOT(slotPart(const char *, QString &, QString &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,
                      SLOT(slotGetStream(const int &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
