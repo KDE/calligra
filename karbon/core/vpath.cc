@@ -323,20 +323,27 @@ VPath::transform( const QWMatrix& m )
 	return *this;
 }
 
-QRect
-VPath::boundingBox( const double zoomFactor ) const
+KoRect
+VPath::boundingBox() const
 {
 	KoRect rect;
 	VBoundingBox bb;
 
 	bb.calculate( rect, m_segments );
+// TODO: swap coords to optimize normalize() away
+	return rect.normalize();
+}
+
+QRect
+VPath::boundingBox( const double zoomFactor ) const
+{
+	KoRect rect = boundingBox();
 
 	return QRect(
 		qRound( zoomFactor * rect.left() ),
-		qRound( zoomFactor * rect.bottom() ),
-		qRound( zoomFactor * ( rect.right() - rect.left() ) ),
-		qRound( zoomFactor * ( rect.top() - rect.bottom() ) ) );
-// TODO: swap bottom/top back when origin is bottom/left
+		qRound( zoomFactor * rect.top() ),
+		qRound( zoomFactor * rect.right() ),
+		qRound( zoomFactor * rect.bottom() ) );
 }
 
 VObject *

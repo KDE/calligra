@@ -15,28 +15,6 @@ VCCmdRectangle::VCCmdRectangle( KarbonPart* part,
 {
 }
 
-void
-VCCmdRectangle::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->unselectObjects();
-		m_part->insertObject( m_object );
-		m_object->setState( VObject::selected );
-	}
-}
-
-void
-VCCmdRectangle::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
-}
-
 VPath*
 VCCmdRectangle::createPath()
 {

@@ -35,10 +35,6 @@ public:
 	KarbonPart* part() const { return m_part; }
 
 protected:
-	// that's our part:
-	KarbonPart* m_part;
-
-protected:	// for selection-tool. it has to reimplement eventFilter.
 	inline void recalcCoords();
 
 	// states:
@@ -57,6 +53,10 @@ protected:	// for selection-tool. it has to reimplement eventFilter.
 	QPoint m_p;
 	double m_d1;
 	double m_d2;
+
+private:
+	// that's our part:
+	KarbonPart* m_part;
 };
 
 inline void
@@ -71,7 +71,7 @@ VTool::recalcCoords()
 			( m_lp.y() - m_fp.y() ) * ( m_lp.y() - m_fp.y() ) );
 
 		// angle:
-		m_d2 = atan2( ( m_lp.y() - m_fp.y() ) , ( m_lp.x() - m_fp.x() ) );
+		m_d2 = atan2( ( m_lp.y() - m_fp.y() ), ( m_lp.x() - m_fp.x() ) );
 
 		// define pi/2 as "0.0":
 		m_d2 -= VGlobal::pi_2;
@@ -98,8 +98,10 @@ VTool::recalcCoords()
 				m_d1 = m_d2;
 		}
 
-		m_p.setX( int( m_fp.x() - ( m_sign1 < 0.0 ? m_d1 : 0.0 ) ) );
-		m_p.setY( int( m_fp.y() - ( m_sign2 < 0.0 ? m_d2 : 0.0 ) ) );
+		m_p.setX(
+			m_fp.x() - static_cast<int>( m_sign1 < 0.0 ? m_d1 : 0.0 ) );
+		m_p.setY(
+			m_fp.y() - static_cast<int>( m_sign2 < 0.0 ? m_d2 : 0.0 ) );
 
 		if ( m_isCentered )
 		{

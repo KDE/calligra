@@ -55,6 +55,9 @@ protected slots:
 	void spiralTool();
 	void starTool();
 
+	// handle-tool:
+	void handleTool();
+
 	// zooming:
 	void zoomChanged();
 

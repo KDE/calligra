@@ -10,7 +10,8 @@
 
 #include "vlayer.h"
 
-class VHandle;
+class KoRect;
+
 class VCommand;
 class VCommandHistory;
 
@@ -30,21 +31,16 @@ public:
 	virtual bool loadXML( QIODevice*, const QDomDocument& );
 	virtual QDomDocument saveXML();
 
-	// insert a new vobject:
-	void insertObject( const VObject* object );
+	// manipulate selection:
+	const VObjectList& selection() const { return m_selection; }	// r/o access
+	void selectObject( VObject& object, bool exclusive = false );
+	void unselectObject( VObject& object );
+	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
+	void selectAllObjects();	// select all vobjects period.
+	void unselectAllObjects();	// unselect all vobjects from all vlayers.
 
-	// select all vobjects period:
-	void selectAllObjects();
-
-	// select vobjects within the rect:
-	void selectObjects( const QRect &rect );
-
-	// unselect all vobjects from all vlayers:
-	void unselectObjects();
-
-	// delete selected vobjects from all vlayers:
-	void deleteObjects( QPtrList<VObject> &list );
-	void undeleteObjects( QPtrList<VObject> &list );
+	// inserting, deleting objects:
+	void insertObject( const VObject* object );	// insert a new vobject:
 
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd );
@@ -52,14 +48,10 @@ public:
 	// remove all vobjects which are marked "deleted" and clear command-history:
 	void purgeHistory();
 
-	// read-only access to layers:
-	const QPtrList<VLayer>& layers() const { return m_layers; }
-	// sacrifying privateness: TODO: still needed?
-	VLayer* activeLayer() const { return m_activeLayer; }
-	// draw handle
-	void drawHandle( QPainter &p, const double zoomFactor ) const;
-	// access handle
-	const VHandle *handle() const { return m_handle; } 
+	// layers:
+	const QPtrList<VLayer>& layers() const { return m_layers; }	// r/o access.
+	// TODO: still needed?
+	VLayer* activeLayer() const { return m_activeLayer; }	// active layer.
 
 public slots:
     void repaintAllViews( bool erase = false );
@@ -68,15 +60,12 @@ protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
-	// each graphical object lies on a layer:
-	QPtrList<VLayer> m_layers;
-	// the active/current layer:
-	VLayer* m_activeLayer;
-	// each part has one handle:
-	VHandle *m_handle;
+	VLayerList m_layers;			// all objects exist inside a layer.
+	VLayer* m_activeLayer;				// the active/current layer.
 
-	// everybody loves undo/redo:
-	VCommandHistory* m_commandHistory;
+	VObjectList m_selection;		// a list of selected objects.
+
+	VCommandHistory* m_commandHistory;	// everybody loves undo/redo.
 };
 
 #endif

@@ -2,8 +2,11 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
+#include <koRect.h>
+
 #include "vlayer.h"
 #include "vobject.h"
+
 #include <kdebug.h>
 
 VLayer::VLayer()
@@ -35,56 +38,22 @@ VLayer::insertObject( const VObject* object )
 	m_objects.append( object );
 }
 
-void
-VLayer::selectAllObjects()
+VObjectList
+VLayer::objectsWithinRect( const KoRect& rect )
 {
-	// select all objects within this layer
-	QPtrListIterator<VObject> itr = m_objects;
-	for ( ; itr.current(); ++itr )
-		if( itr.current()->state() != VObject::deleted )
-			itr.current()->setState( VObject::selected );
-}
+	VObjectList list;
 
-void
-VLayer::selectObjects( const QRect &rect, QPtrList<VObject> &list )
-{
-	// select all objects within the rect coords
-	QPtrListIterator<VObject> itr = m_objects;
+	VObjectListIterator itr( m_objects );
     for ( ; itr.current(); ++itr )
     {
 		if( itr.current()->state() != VObject::deleted &&
-			itr.current()->boundingBox( 1 ).intersects( rect ) )
+			itr.current()->boundingBox().intersects( rect ) )
 		{
-			itr.current()->setState( VObject::selected );
 			list.append( itr.current() );
 		}
     }
-}
 
-void
-VLayer::unselectObjects()
-{
-	// unselect all objects in this layer that were selected
-	QPtrListIterator<VObject> itr = m_objects;
-	for( ; itr.current(); ++itr )
-	{
-		if( itr.current()->state() == VObject::selected )
-			itr.current()->setState( VObject::normal );
-	}
-}
-
-void
-VLayer::deleteObjects( QPtrList<VObject> &list )
-{
-	QPtrListIterator<VObject> itr = m_objects;
-	for( ; itr.current(); ++itr )
-	{
-		if( itr.current()->state() == VObject::selected )
-		{
-			itr.current()->setState( VObject::deleted );
-			list.append( itr.current() );
-		}
-	}
+	return list;
 }
 
 void

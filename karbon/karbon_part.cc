@@ -4,17 +4,15 @@
 
 #include <qdom.h>
 #include <qpainter.h>
-#include <kdebug.h>
-
-#include "vcommand.h"
-#include "vpath.h"
-#include "vhandle.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vcommand.h"
 
+#include <kdebug.h>
 
 // TODO: remove these after debugging:
+#include "vpath.h"
 #include <qwmatrix.h>
 #include "vccmd_ellipse.h"
 #include "vccmd_star.h"
@@ -29,9 +27,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 	m_activeLayer = m_layers.getLast();
-
-	// create one and only handle:
-	m_handle = new VHandle();
 }
 
 KarbonPart::~KarbonPart()
@@ -43,8 +38,6 @@ KarbonPart::~KarbonPart()
 
 	// delete the command-history:
 	delete m_commandHistory;
-
-	delete m_handle;
 }
 
 bool
@@ -132,75 +125,86 @@ KarbonPart::insertObject( const VObject* object )
 }
 
 void
-KarbonPart::selectAllObjects()
+KarbonPart::selectObject( VObject& object, bool exclusive )
 {
-	// select objects from all layers
-	QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current() ; ++itr )
-		itr.current()->selectAllObjects();
+	if( exclusive )
+		unselectAllObjects();
+
+	object.setState( VObject::selected );
+	m_selection.append( &object );
 }
 
 void
-KarbonPart::selectObjects( const QRect &rect )
+KarbonPart::unselectObject( VObject& object )
 {
-	// clear handle
-	m_handle->reset();
+	object.setState( VObject::normal );
+	m_selection.removeRef( &object );
+}
 
-	QPtrList<VObject> list;
-	// select objects from all layers
-	QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current() ; ++itr )
+void
+KarbonPart::selectAllObjects()
+{
+	m_selection.clear();
+
+	VObjectList objects;
+	VLayerListIterator itr( m_layers );
+
+	for ( ; itr.current(); ++itr )
 	{
-		// select all objects within the rect coords
-		const QPtrList<VObject> objects = itr.current()->objects();
-		QPtrListIterator<VObject> oitr = objects;
-    	for ( ; oitr.current(); ++oitr )
-	    {
-	        if( oitr.current()->state() != VObject::deleted &&
-	            oitr.current()->boundingBox( 1 ).intersects( rect ) )
+		objects = itr.current()->objects();
+		VObjectListIterator itr2( objects );
+		for ( ; itr2.current(); ++itr2 )
+		{
+			if( itr2.current()->state() != VObject::deleted )
 			{
-				oitr.current()->setState( VObject::selected );
-				list.append( oitr.current() );
+				itr2.current()->setState( VObject::selected );
+				m_selection.append( itr2.current() );
 			}
 		}
 	}
-
-	// now add the selected items to the handle
-	QPtrListIterator<VObject> oitr( list );
-	for ( ; oitr.current() ; ++oitr )
-		m_handle->addObject( oitr.current() );
 }
 
 void
-KarbonPart::unselectObjects()
+KarbonPart::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 {
-	// unselect objects from all layers
-	QPtrListIterator<VLayer> itr( m_layers );
+	if( exclusive )
+		unselectAllObjects();
+
+	VObjectList objects;
+	VLayerListIterator itr( m_layers );
+
+	for ( ; itr.current(); ++itr )
+	{
+		objects = itr.current()->objectsWithinRect( rect );
+		VObjectListIterator itr2( objects );
+		for ( ; itr2.current(); ++itr2 )
+		{
+			itr2.current()->setState( VObject::selected );
+			m_selection.append( itr2.current() );
+		}
+	}
+}
+
+void
+KarbonPart::unselectAllObjects()
+{
+	// unselect objects:
+	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
-		itr.current()->unselectObjects();
-}
-
-void
-KarbonPart::deleteObjects( QPtrList<VObject> &list )
-{
-	// delete selected objects from all layers
-	/*QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current() ; ++itr )
-		itr.current()->deleteObjects( list );*/
-	m_handle->deleteObjects( list );
-}
-
-void
-KarbonPart::undeleteObjects( QPtrList<VObject> &list )
-{
-	m_handle->undeleteObjects( list );
+	{
+		itr.current()->setState( VObject::normal );
+	}
+	
+	m_selection.clear();
 }
 
 void
 KarbonPart::addCommand( VCommand* cmd )
 {
 	m_commandHistory->addCommand( cmd );
+
 	setModified( true );
+
 	repaintAllViews();
 }
 
@@ -208,10 +212,13 @@ void
 KarbonPart::purgeHistory()
 {
 	// remove "deleted" objects from all layers:
-	QPtrListIterator<VLayer> itr( m_layers );
+	VLayerListIterator itr( m_layers );
 	for ( ; itr.current() ; ++itr )
+	{
 		itr.current()->removeDeletedObjects();
+	}
 
+	// clear command history:
 	m_commandHistory->clear();
 }
 
@@ -220,11 +227,10 @@ KarbonPart::repaintAllViews( bool /*erase*/ )
 {
 	QPtrListIterator<KoView> itr( views() );
 	for ( ; itr.current() ; ++itr )
-// TODO: any better solution for this?
-//		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll(
-// erase );
+	{
  		static_cast<KarbonView*>( itr.current() )->
 			canvasWidget()->repaintAll( true );
+	}
 }
 
 
@@ -232,13 +238,7 @@ void
 KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,
 	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
-	kdDebug() << "part->paintContent()" << endl;
-}
-
-void
-KarbonPart::drawHandle( QPainter &p, const double zoomFactor ) const
-{
-	m_handle->draw( p, zoomFactor );
+	kdDebug() << "**** part->paintContent()" << endl;
 }
 
 #include "karbon_part.moc"

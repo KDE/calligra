@@ -6,7 +6,6 @@
 #define __VMCMDDELETE_H__
 
 #include "vcommand.h"
-#include <qptrlist.h>
 
 // Delete object(s)
 
@@ -22,7 +21,7 @@ public:
 	virtual void unexecute();
 
 private:
-	QPtrList<VObject> m_objects;
+	VObjectList m_objects;
 };
 
 #endif

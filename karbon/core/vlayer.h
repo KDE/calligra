@@ -7,11 +7,12 @@
 
 #include <qptrlist.h>
 #include <qstring.h>
+
 #include "vobject.h"
 
-// Each graphical object lies on a layer.
+class KoRect;
 
-class VObject;
+// all vobjects exist inside a layer.
 
 class VLayer
 {
@@ -23,20 +24,19 @@ public:
 
 	void insertObject( const VObject* object );
 
-	void selectObjects( const QRect &rect, QPtrList<VObject> &list );
-	void selectAllObjects();
-	void unselectObjects();
-	void deleteObjects( QPtrList<VObject> &list );
+	VObjectList objectsWithinRect( const KoRect& rect );
+
+	// clean up object list:
 	void removeDeletedObjects();
 
-	const bool& isVisible() const { return m_isVisible; }
-	const bool& isReadOnly() const { return m_isReadOnly; }
+	bool isVisible() const { return m_isVisible; }
+	bool isReadOnly() const { return m_isReadOnly; }
 
 	// read-only access to objects:
-	const QPtrList<VObject>& objects() const { return m_objects; }
+	const VObjectList& objects() const { return m_objects; }
 
 private:
-	QPtrList<VObject> m_objects;
+	VObjectList m_objects;
 	QString m_name;
 	bool m_isVisible;
 	bool m_isReadOnly;

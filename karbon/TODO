@@ -1,5 +1,4 @@
+-	vtmool necessary?
 -	mirror coordinate-system so origin is bottom-left
--	add "purge history":
-	empty command-history, remove all objects with state "deleted"
 -	add validators to all tool-dialog input-fields
 

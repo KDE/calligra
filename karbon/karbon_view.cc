@@ -21,6 +21,7 @@
 #include "vctool_sinus.h"
 #include "vctool_spiral.h"
 #include "vctool_star.h"
+#include "vmtool_handle.h"
 #include "vmtool_select.h"
 
 #include "vmcmd_delete.h"
@@ -43,7 +44,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	// initial tool is select-tool:
 	selectTool();
-	m_selectToolAction->setChecked( true );
 }
 
 KarbonView::~KarbonView()
@@ -82,6 +82,9 @@ KarbonView::editSelectAll()
 {
 	// TODO : hmm should this be a proper Command or not ?
 	m_part->selectAllObjects();
+
+	handleTool();
+
 	m_part->repaintAllViews();
 }
 
@@ -89,6 +92,8 @@ void
 KarbonView::editDeleteSelection()
 {
 	m_part->addCommand( new VMCmdDelete( m_part ) );
+
+	selectTool();
 }
 
 void
@@ -104,6 +109,7 @@ KarbonView::editPurgeHistory()
 		m_part->purgeHistory();
 	}
 }
+
 
 void
 KarbonView::ellipseTool()
@@ -138,6 +144,7 @@ KarbonView::selectTool()
 {
 	s_currentTool = VMToolSelect::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	m_selectToolAction->setChecked( true );
 }
 
 void
@@ -160,6 +167,15 @@ KarbonView::starTool()
 	s_currentTool = VCToolStar::instance( m_part );
 	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
+
+
+void
+KarbonView::handleTool()
+{
+	s_currentTool = VMToolHandle::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+}
+
 
 void
 KarbonView::zoomChanged()
@@ -231,7 +247,8 @@ KarbonView::initActions()
 		<< i18n( "50%" )
 		<< i18n( "100%" )
 		<< i18n( "200%" )
-		<< i18n( "400%" );
+		<< i18n( "400%" )
+		<< i18n( "800%" );
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setCurrentItem( 2 );
 	m_zoomAction->setEditable( true );

@@ -5,7 +5,7 @@
 #ifndef __VCCOMMAND_H__
 #define __VCCOMMAND_H__
 
-#include <vcommand.h>
+#include "vcommand.h"
 
 class VPath;
 
@@ -22,7 +22,7 @@ public:
 	virtual void unexecute();
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	virtual VPath* createPath() = 0;
+	virtual VPath* createPath() { return 0L; }
 
 protected:
 	VPath* m_object;

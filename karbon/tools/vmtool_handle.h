@@ -2,20 +2,20 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VMTOOLSELECT_H__
-#define __VMTOOLSELECT_H__
+#ifndef __VMTOOLHANDLE_H__
+#define __VMTOOLHANDLE_H__
 
 #include "vtool.h"
 
 class KarbonPart;
 
-// A singleton state to select object(s)
+// A singleton state to represent a handle.
 
-class VMToolSelect : public VTool
+class VMToolHandle : public VTool
 {
 public:
-	virtual ~VMToolSelect();
-	static VMToolSelect* instance( KarbonPart* part );
+	virtual ~VMToolHandle();
+	static VMToolHandle* instance( KarbonPart* part );
 
 	virtual VCommand* createCmd( double x, double y, double d1, double d2 );
 
@@ -23,10 +23,10 @@ public:
 		KarbonView* view, const QPoint& p, double d1, double d2 );
 
 protected:
-	VMToolSelect( KarbonPart* part );
+	VMToolHandle( KarbonPart* part );
 
 private:
-	static VMToolSelect* s_instance;
+	static VMToolHandle* s_instance;
 };
 
 #endif

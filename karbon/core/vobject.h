@@ -5,7 +5,10 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
+#include <qptrlist.h>
 #include <qrect.h>
+
+#include <koRect.h>
 
 class QPainter;
 class QWMatrix;
@@ -28,6 +31,7 @@ public:
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
+	virtual KoRect boundingBox() const { return KoRect(); }
 	virtual QRect boundingBox( const double zoomFactor ) const { return QRect(); }
 
 	void setState( const VState state ) { m_state = state; }

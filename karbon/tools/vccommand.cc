@@ -3,8 +3,7 @@
 */
 
 #include "vccommand.h"
-#include <vpath.h>
-#include <vhandle.h>
+#include "vpath.h"
 
 void
 VCCommand::execute()
@@ -15,10 +14,8 @@ VCCommand::execute()
 	{
 		m_object = createPath();
 		// add path:
-		m_part->unselectObjects();
 		m_part->insertObject( m_object );
-		m_object->setState( VObject::selected );
-		//m_part->handle()->addObject( m_object );
+		m_part->selectObject( *m_object, true );
 	}
 }
 
@@ -26,6 +23,9 @@ void
 VCCommand::unexecute()
 {
 	if ( m_object )
+	{
+		m_part->unselectObject( *m_object );
 		m_object->setState( VObject::deleted );
+	}
 }
 

@@ -18,9 +18,6 @@ public:
 		 const double brX, const double brY );
 	virtual ~VCCmdRectangle() {}
 
-	virtual void execute();
-	virtual void unexecute();
-
 	// for complex shapes. needed to draw while creation (creation tool):
 	VPath* createPath();
 

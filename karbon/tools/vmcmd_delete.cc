@@ -5,22 +5,31 @@
 #include <klocale.h>
 
 #include "vmcmd_delete.h"
-#include "vpath.h"
 
 VMCmdDelete::VMCmdDelete( KarbonPart* part )
-	: VCommand( part, i18n( "Delete Object" ) )
+	: VCommand( part, i18n( "Delete Object(s)" ) )
 {
+	m_objects = m_part->selection();
+	m_part->unselectAllObjects();
 }
 
 void
 VMCmdDelete::execute()
 {
-	m_part->deleteObjects( m_objects );
+	VObjectListIterator itr( m_objects );
+	for ( ; itr.current() ; ++itr )
+	{
+		itr.current()->setState( VObject::deleted );
+	}
 }
 
 void
 VMCmdDelete::unexecute()
 {
-	m_part->undeleteObjects( m_objects );
+	VObjectListIterator itr( m_objects );
+	for ( ; itr.current() ; ++itr )
+	{
+		itr.current()->setState( VObject::normal );
+	}
 }
 

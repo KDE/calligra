@@ -120,6 +120,7 @@ public:
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
 
+	virtual KoRect boundingBox() const;
 	virtual QRect boundingBox( const double zoomFactor ) const;
 
 	virtual VObject* clone();
