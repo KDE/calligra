@@ -16,15 +16,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *//
+ */
 
 #include "misc.h"
 
 bool dbg;
 
 
-void
-enlargeRectToContainPoint(QRect& r, QPoint p)
+void enlargeRectToContainPoint(QRect& r, QPoint p)
 {
 	if (r.contains(p)) {
 		puts("enlargeRectToContainPoint: point already contained\n");	
@@ -38,8 +37,7 @@ enlargeRectToContainPoint(QRect& r, QPoint p)
 
 // Find a rectangle which encloses r whose coordinates are divisible
 // by TILE_SIZE (ie no remainder)
-QRect
-findTileExtents(QRect r)
+QRect findTileExtents(QRect r)
 {
 // 	puts("findTileExtents");
 // 	SHOW_RECT_COORDS(r);
