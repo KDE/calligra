@@ -1,7 +1,6 @@
 ####### General stuff
 
 INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
-LDFLAGS = $(all_libraries)
 
 ####### Files
 
@@ -10,6 +9,7 @@ noinst_LTLIBRARIES = libwinword97.la
 libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
 msdrawing.cc \
 msword.cc mswordgenerated.cc properties.cc document.cc
+libwinword97_la_LDFLAGS = $(all_libraries)
 
 noinst_HEADERS = wordfilter.h winworddoc.h \
 msdrawing.h \

@@ -1,4 +1,6 @@
-INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/kdgantt \
+SUBDIRS = kdgantt templates pics
+
+INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/kdgantt -Ikdgantt \
                    $(all_includes)
 
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \

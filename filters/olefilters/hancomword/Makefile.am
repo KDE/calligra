@@ -1,13 +1,13 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
-LDFLAGS	= $(all_libraries)
 
 ####### Files
 
 noinst_LTLIBRARIES = libhancomword.la
 
 libhancomword_la_SOURCES = hancomwordfilter.cc 
+libhancomword_la_LDFLAGS = $(all_libraries)
 
 noinst_HEADERS = hancomwordfilter.h
 

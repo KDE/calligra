@@ -1,5 +1,4 @@
 INCLUDES = $(KOFFICE_INCLUDES) -I../../kword/ -I../../kpresenter -I../../lib/kotext $(all_includes)
-LDFLAGS = $(all_libraries) $(KDE_RPATH)
 METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = clipartthumbnail.la kofficethumbnail.la
