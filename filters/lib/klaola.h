@@ -77,20 +77,20 @@ private:
         short subtree;
     };
 
-    bool parseHeader();
+    const bool parseHeader();
     void readBigBlockDepot();
     void readSmallBlockDepot();
     void readSmallBlockFile();
     void readRootList();
-    void readPPSEntry(long pos, long handle);
-    void createTree(long handle, short index);
-    unsigned char *readBBStream(long start);
-    unsigned char *readSBStream(long start);
+    void readPPSEntry(const long &pos, const long &handle);
+    void createTree(const long &handle, const short &index);
+    const unsigned char *readBBStream(const long &start, const bool setmaxSblock=false);
+    const unsigned char *readSBStream(const long &start);
 
-    inline long nextBigBlock(long pos);
-    inline long nextSmallBlock(long pos);
-    inline unsigned short read16(int i);
-    inline unsigned long read32(int i);
+    inline const long nextBigBlock(const long &pos);
+    inline const long nextSmallBlock(const long &pos);
+    inline const unsigned short read16(const long &i);
+    inline const unsigned long read32(const long &i);
 
     QList<QList<OLETree> > treeList;
     QList<OLEInfo> ppsList;
@@ -103,7 +103,8 @@ private:
     unsigned char *smallBlockDepot;
     unsigned char *smallBlockFile;
 
-    unsigned long maxblock;          // maximum number of blocks
+    unsigned long maxblock;          // maximum number of big-blocks
+    unsigned long maxSblock;         //                   small-blocks
     unsigned long num_of_bbd_blocks; // number of big block depot blocks
     unsigned long root_startblock;   // Root chain's first big block
     unsigned long sbd_startblock;    // small block depot's first big block

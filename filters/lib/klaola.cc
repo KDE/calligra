@@ -22,7 +22,8 @@ KLaola::KLaola(const myFile &file) {
     if(ok) {
         data=file.data;
         maxblock = file.length / 0x200 - 2;
-    
+        maxSblock=0;  // will be set in readSmallBlockDepot
+
         if(!parseHeader())
             ok=false;
         if(ok) {
@@ -194,9 +195,9 @@ const myFile KLaola::stream(const long &handle) {
         info=ppsList.at(handle);
         if(info) {
             if(info->size>=0x1000)
-                ret.data=readBBStream(info->sb);
+                ret.data=const_cast<unsigned char*>(readBBStream(info->sb));
             else
-                ret.data=readSBStream(info->sb);
+                ret.data=const_cast<unsigned char*>(readSBStream(info->sb));
             ret.length=info->size;
         }
     }
@@ -259,7 +260,7 @@ void KLaola::testIt() {
     }
 }
 
-bool KLaola::parseHeader() {
+const bool KLaola::parseHeader() {
 
     if(qstrncmp((const char*)data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
         kdebug(KDEBUG_ERROR, 31000, 
@@ -287,11 +288,11 @@ void KLaola::readBigBlockDepot() {
 }
 
 void KLaola::readSmallBlockDepot() {
-    smallBlockDepot=readBBStream(sbd_startblock);
+    smallBlockDepot=const_cast<unsigned char*>(readBBStream(sbd_startblock));
 }
 
 void KLaola::readSmallBlockFile() {    
-    smallBlockFile=readBBStream( read32( (root_startblock+1)*0x200 + 0x74) );
+    smallBlockFile=const_cast<unsigned char*>(readBBStream( read32( (root_startblock+1)*0x200 + 0x74), true));
 }
 
 void KLaola::readRootList() {
@@ -314,7 +315,7 @@ void KLaola::readRootList() {
     path[0]=0;   // current path=root dir
 }
 
-void KLaola::readPPSEntry(long pos, long handle) {
+void KLaola::readPPSEntry(const long &pos, const long &handle) {
 
     OLEInfo *info=new OLEInfo;
 
@@ -337,7 +338,7 @@ void KLaola::readPPSEntry(long pos, long handle) {
     }
 }
 
-void KLaola::createTree(long handle, short index) {
+void KLaola::createTree(const long &handle, const short &index) {
 
     OLEInfo *info=ppsList.at(handle);
     QList<OLETree> *tmpList;
@@ -360,7 +361,7 @@ void KLaola::createTree(long handle, short index) {
         createTree(info->next, index);
 }
 
-unsigned char *KLaola::readBBStream(long start) {
+const unsigned char *KLaola::readBBStream(const long &start, const bool setmaxSblock) {
 
     long i=0, tmp;
     unsigned char *p=0;
@@ -372,6 +373,8 @@ unsigned char *KLaola::readBBStream(long start) {
     }
     if(i!=0) {
         p=new unsigned char[i*0x200];
+        if(setmaxSblock)
+            maxSblock=i*8-1;
         i=0;
         tmp=start;
         while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
@@ -383,13 +386,13 @@ unsigned char *KLaola::readBBStream(long start) {
     return p;
 }
 
-unsigned char *KLaola::readSBStream(long start) {
+const unsigned char *KLaola::readSBStream(const long &start) {
 
     long i=0, tmp;
     unsigned char *p=0;
 
     tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxSblock)) {
         ++i;
         tmp=nextSmallBlock(tmp);
     }
@@ -397,7 +400,7 @@ unsigned char *KLaola::readSBStream(long start) {
         p=new unsigned char[i*0x40];
         i=0;
         tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxSblock)) {
             memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
             tmp=nextSmallBlock(tmp);
             ++i;
@@ -406,14 +409,14 @@ unsigned char *KLaola::readSBStream(long start) {
     return p;
 }
 
-inline long KLaola::nextBigBlock(long pos) {
+inline const long KLaola::nextBigBlock(const long &pos) {
 
     long x=pos*4;
     return ( (bigBlockDepot[x+3] << 24) + (bigBlockDepot[x+2] << 16) +
              (bigBlockDepot[x+1] << 8) + bigBlockDepot[x] );
 }
 
-inline long KLaola::nextSmallBlock(long pos) {
+inline const long KLaola::nextSmallBlock(const long &pos) {
 
     if(smallBlockDepot) {
         long x=pos*4;
@@ -424,10 +427,10 @@ inline long KLaola::nextSmallBlock(long pos) {
         return -2;   // Emergency Break :)
 }
 
-inline unsigned short KLaola::read16(int i) {
+inline const unsigned short KLaola::read16(const long &i) {
     return ( (data[i+1] << 8) + data[i] );
 }
 
-inline unsigned long KLaola::read32(int i) {
+inline const unsigned long KLaola::read32(const long &i) {
     return ( (read16(i+2) << 16) + read16(i) );
 }
