@@ -24,9 +24,6 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
-class KSpreadCell;
-class QCheckBox;
 class KIntNumInput;
 
 class KSpreadAngle : public KDialogBase
@@ -37,12 +34,11 @@ public:
 
 public slots:
   void slotOk();
-  void slotChangeState();
+  void slotDefault();
 protected:
   KSpreadView* m_pView;
   QPoint  marker;
-  KIntNumInput *m_pSize2;
-  QCheckBox *m_pDefault;
+  KIntNumInput *m_pAngle;
 };
 
 #endif

@@ -17,57 +17,57 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_dlg_angle.h"
-#include "kspread_view.h"
-#include "kspread_table.h"
-#include <qlayout.h>
+#include <kspread_dlg_angle.h>
+#include <kspread_cell.h>
+#include <kspread_view.h>
+#include <kspread_table.h>
 
-#include <kbuttonbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <knuminput.h>
-#include <qcheckbox.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
 
-KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel)
-{
+#include <kbuttonbox.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <knuminput.h>
 
+KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
+	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel|Default )
+{
   m_pView=parent;
   marker=_marker;
+
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
-  KSpreadCell *cell = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
-  int size=-(cell->getAngle(marker.x(), marker.y()));
-  m_pSize2=new KIntNumInput(size, page, 10);
-  m_pSize2->setRange(-90, 90, 1);
-  m_pSize2->setLabel(i18n("Angle:"));
-  m_pSize2->setSuffix(" °");
-  lay1->addWidget(m_pSize2);
-  m_pDefault=new QCheckBox(i18n("Default (0Â°)"),page);
-  lay1->addWidget(m_pDefault);
 
-  lay1->activate();
-  m_pSize2->setFocus();
+  QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
+  m_pAngle = new KIntNumInput( page );
+  m_pAngle->setRange( -90, 90, 1 );
+  m_pAngle->setLabel( i18n("Angle:") );
+  m_pAngle->setSuffix(" °");
+  lay->addWidget( m_pAngle );
+
+  QWidget* spacer = new QWidget( page );
+  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding ) );
+  lay->addWidget( spacer );
+
+  m_pAngle->setFocus();
+
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( m_pDefault, SIGNAL(clicked() ),this, SLOT(slotChangeState()));
 
-}
-
-void KSpreadAngle::slotChangeState()
-{
-    m_pSize2->setEnabled(!m_pDefault->isChecked());
+  KSpreadCell *cell = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
+  int angle=-(cell->getAngle(marker.x(), marker.y()));
+  m_pAngle->setValue( angle );
 }
 
 void KSpreadAngle::slotOk()
 {
-    if(!m_pDefault->isChecked())
-        m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(),
-                                                  -m_pSize2->value());
-    else
-        m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), 0);
+    m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
     accept();
+}
+
+void KSpreadAngle::slotDefault()
+{
+    m_pAngle->setValue( 0 );
 }
 
 
