@@ -2,7 +2,7 @@
 ## (C) 1997 Stephan Kulow
 
 AUTOMAKE_OPTIONS = foreign 1.4
-COMPILE_FIRST = lib
+COMPILE_FIRST = lib kchart kspread 
 COMPILE_LAST = filters
 SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
 DISTCLEANFILES = inst-apps
