@@ -1,172 +1,170 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ExportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;nicog@snafu.de&gt;</author>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>ExportDialogUI</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>174</width>
-            <height>222</height>
+            <width>251</width>
+            <height>291</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>HTML Export Dialog</string>
     </property>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout2</cstring>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout4</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>11</x>
-                <y>12</y>
-                <width>132</width>
-                <height>182</height>
+                <x>10</x>
+                <y>11</y>
+                <width>202</width>
+                <height>238</height>
             </rect>
         </property>
         <vbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QButtonGroup</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QButtonGroup">
+                <property name="name">
                     <cstring>buttonGroup1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>title</name>
-                    <string>&amp;Document Type</string>
+                <property name="title">
+                    <string>Document Type</string>
                 </property>
                 <vbox>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget>
-                        <class>QRadioButton</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QRadioButton">
+                        <property name="name">
                             <cstring>radioDocType1</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;HTML 4.01</string>
                         </property>
-                        <property stdset="1">
-                            <name>checked</name>
+                        <property name="checked">
                             <bool>false</bool>
                         </property>
                     </widget>
-                    <widget>
-                        <class>QRadioButton</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QRadioButton">
+                        <property name="name">
                             <cstring>radioDocType2</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;XHTML 1.0</string>
                         </property>
-                        <property stdset="1">
-                            <name>checked</name>
+                        <property name="checked">
                             <bool>true</bool>
                         </property>
                     </widget>
                 </vbox>
             </widget>
             <spacer>
-                <property>
-                    <name>name</name>
+                <property name="name" stdset="0">
                     <cstring>Spacer1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="orientation">
                     <enum>Vertical</enum>
                 </property>
-                <property stdset="1">
-                    <name>sizeType</name>
+                <property name="sizeType">
                     <enum>Expanding</enum>
                 </property>
-                <property>
-                    <name>sizeHint</name>
+                <property name="sizeHint">
                     <size>
                         <width>20</width>
                         <height>20</height>
                     </size>
                 </property>
             </spacer>
-            <widget>
-                <class>QButtonGroup</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QButtonGroup">
+                <property name="name">
                     <cstring>buttonGroupEncoding</cstring>
                 </property>
-                <property stdset="1">
-                    <name>title</name>
-                    <string>&amp;Encoding</string>
+                <property name="title">
+                    <string>Encoding</string>
                 </property>
                 <vbox>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget>
-                        <class>QRadioButton</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QRadioButton">
+                        <property name="name">
                             <cstring>radioEncodingUTF8</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>UTF-&amp;8</string>
                         </property>
-                        <property stdset="1">
-                            <name>checked</name>
+                        <property name="checked">
                             <bool>true</bool>
                         </property>
                     </widget>
-                    <widget>
-                        <class>QRadioButton</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QRadioButton">
+                        <property name="name">
                             <cstring>radioEncodingLocal</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;Local Encoding</string>
                         </property>
-                        <property stdset="1">
-                            <name>checked</name>
+                        <property name="checked">
                             <bool>false</bool>
                         </property>
                     </widget>
                 </vbox>
+            </widget>
+            <spacer>
+                <property name="name" stdset="0">
+                    <cstring>Spacer4</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>CheckBoxAuthorInfo</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>&amp;Export information about author</string>
+                </property>
             </widget>
         </vbox>
     </widget>
@@ -175,4 +173,5 @@
     <tabstop>radioDocType1</tabstop>
     <tabstop>radioDocType2</tabstop>
 </tabstops>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
