@@ -510,9 +510,17 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
 // 		     _fc.getPTY() + _fc.getPTMaxAscender() - _fc.getPTAscender() - yOffset,
 // 		     _fc.getPTPos() - xOffset + 1,
 // 		     _fc.getPTY() + _fc.getPTMaxAscender() + _fc.getPTDescender() - yOffset);
-  _painter->drawLine(_fc.getPTPos() - xOffset + 1,
+  unsigned int diffx1 = 1;
+  unsigned int diffx2 = 1;
+  if (_fc.getItalic())
+    {
+      diffx1 = static_cast<int>(static_cast<float>(_fc.getLineHeight()) / 3.732);
+      diffx2 = 0;
+    }
+
+  _painter->drawLine(_fc.getPTPos() - xOffset + diffx1,
 		     _fc.getPTY() - yOffset,
-		     _fc.getPTPos() - xOffset + 1,
+		     _fc.getPTPos() - xOffset + diffx2,
 		     _fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset);
 
   _painter->setRasterOp(rop);

@@ -40,6 +40,11 @@ public:
      */
     void cursorGotoPos( unsigned int _textpos, QPainter &_painter );
     /**
+     * Move cursor to 'mx' and 'my' whis is given in pixels.
+     */
+    void cursorGotoPixelLine(unsigned int mx,unsigned int my,QPainter &_painter);
+    void cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPainter &_painter);
+    /**
      * Move the cursor to the next character very fast. Return -1 if the next character
      * is a special object like an image or such, returns 0 if there is a character
      * but a format change and returns 1 if there is a character without a format change.

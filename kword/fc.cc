@@ -452,9 +452,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     KWChar *text = parag->getText();
     KWParagLayout *lay = parag->getParagLayout();
     
-    unsigned int bp = 0;
-    float ddx = 0.0;
-    char buffer[_textpos + 2];
+    //unsigned int bp = 0;
+    //float ddx = 0.0;
+    //char buffer[_textpos + 2];
     unsigned int pos = lineStartPos;
     ptPos = ptStartPos;
     *((KWFormat*)this) = lineStartFormat;
@@ -490,15 +490,15 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	    float dx = floor( sp );
 	    spacingError = sp - dx;
 	    
-	    ddx += dx;
-	    buffer[bp++] = text[pos].c;
+	    //ddx += dx;
+	    //buffer[bp++] = text[pos].c;
 	    ptPos += (unsigned int)dx + displayFont->getPTWidth( text[pos].c );
 
 	    pos++;
 	  }
 	  else
 	  {
-	    buffer[bp++] = text[pos].c;
+	    //buffer[bp++] = text[pos].c;
 	    ptPos += displayFont->getPTWidth( text[ pos ].c );
 	    pos++;   
 	  }
@@ -508,6 +508,48 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
     //ptPos += (unsigned int)ddx + displayFont->getPTWidth(buffer);
     
     textPos = _textpos;
+}
+
+void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPainter &_painter)
+{
+  textPos = 0;
+
+  init(document->getFirstParag(),_painter);
+  
+  if (ptY <= my && ptY + getLineHeight() >= my &&
+      ptLeft <= mx && ptLeft + ptWidth >= mx)
+    {
+      textPos = lineStartPos;
+      cursorGotoLineStart(_painter);
+      return;
+    }
+
+  while (makeNextLineLayout(_painter))
+    {
+      if (ptY <= my && ptY + getLineHeight() >= my &&
+	  ptLeft <= mx && ptLeft + ptWidth >= mx)
+	break;
+    }
+
+  textPos = lineStartPos;
+  cursorGotoLineStart(_painter);
+}
+
+void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPainter &_painter)
+{
+  if (isCursorAtLineEnd()) return;
+  unsigned int oldPTPos;
+
+  while (!isCursorAtLineEnd())
+    {
+      oldPTPos = ptPos;
+      cursorGotoRight(_painter);
+      if (mx >= oldPTPos && mx <= ptPos || textPos == lineStartPos)
+	{
+	  cursorGotoLeft(_painter);
+	  return;
+	}
+    }      
 }
 
 int KWFormatContext::cursorGotoNextChar(QPainter & _painter)

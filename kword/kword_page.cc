@@ -49,6 +49,8 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   drawBuffer();
 
   setCursor(ibeamCursor);
+  mousePressed = false;
+  setMouseTracking(true);
 }
 
 // these methods are implemented here, because it didn't compile for
@@ -63,19 +65,40 @@ unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
 /*================================================================*/
+void KWPage::mouseMoveEvent(QMouseEvent *e)
+{
+  if (mousePressed)
+    {
+      unsigned int mx = e->x() + xOffset;
+      unsigned int my = e->y() + yOffset;
+      
+      QPainter _painter;
+      _painter.begin(this);
+      
+      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+      markerIsVisible = false;
+      
+      fc->cursorGotoPixelLine(mx,my,_painter);
+      fc->cursorGotoPixelInLine(mx,my,_painter);
+      
+      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+      markerIsVisible = true;
+      
+      _painter.end();
+    }
+}
+
+/*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
-  unsigned int mx = e->x();
-  unsigned int my = e->y();
+  mousePressed = true;
+  mouseMoveEvent(e);
+}
 
-  for (unsigned int i = firstVisiblePage - 1;i < lastVisiblePage;i++)
-    {
-      if (my >= i * ZOOM(ptPaperHeight()) + ZOOM(ptTopBorder()) - 1 - yOffset &&
-	  my <= (i * ZOOM(ptPaperHeight()) + ZOOM(ptTopBorder()) - 1) + 
-	  (ZOOM(ptPaperHeight()) - ZOOM(ptTopBorder()) - ZOOM(ptBottomBorder()) + 2) - yOffset)
-	debug("Page: %d",i);
-    }
-  
+/*================================================================*/
+void KWPage::mouseReleaseEvent(QMouseEvent *e)
+{
+  mousePressed = false;
 }
 
 /*================================================================*/

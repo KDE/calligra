@@ -224,6 +224,8 @@ private slots:
     {view->extraLayout();}
   void pageBackground()
     {view->extraBackground();}
+  void configPages()
+    {view->screenConfigPages();}
   void presStructView()
     {view->screenPresStructView();}
  

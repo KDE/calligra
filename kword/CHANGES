@@ -146,3 +146,8 @@ Reggie, 30.9.1998:
 ------------------
 - Started implementing placing the cursor with the mouse (but it doesn't do
   anything at the moment...)
+
+Reggie, 1.10.1998:
+------------------
+- Cursor style is changing according to the font attribute of the current place
+- Placing the cursor with the mouse works now

@@ -49,8 +49,8 @@ public:
     { doc = _doc; }
 
   void mousePressEvent(QMouseEvent* e);
-  void mouseMoveEvent(QMouseEvent* e) {}
-  void mouseReleaseEvent(QMouseEvent* e) {}
+  void mouseMoveEvent(QMouseEvent* e);
+  void mouseReleaseEvent(QMouseEvent* e);
   void paintEvent(QPaintEvent* e);
   void keyPressEvent(QKeyEvent * e);
   void resizeEvent(QResizeEvent *e);
@@ -178,6 +178,8 @@ protected:
   KWordGUI *gui;
   QPixmap buffer;
   KWFormat format;
+  
+  bool mousePressed;
 
 };
 
