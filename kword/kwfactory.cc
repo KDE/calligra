@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include <qstringlist.h>
+#include <kiconloader.h>
 
 extern "C"
 {

@@ -33,6 +33,7 @@
 
 #include "kweditpersonnalexpressiondia.h"
 #include "kwview.h"
+#include <qpushbutton.h>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, i18n("Edit personal expression: "), Ok|Cancel, Ok, true )

@@ -101,6 +101,7 @@
 #include <stdlib.h>
 
 #include <KWordViewIface.h>
+#include <kstatusbar.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
