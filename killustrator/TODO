@@ -1,0 +1,47 @@
+TODO ($ID:$)
+
+See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
+
+Small Feature Wishes
+* Layers: Undo of deleting
+
+* If the mouse pointer (PointEditTool) is outside an arc/pie, paint an arc, else
+  paint a pie
+
+* [Ctrl] makes a circle instead of an ellipse and a sq. instead of a rectangle.
+  This switch should also be available when the first point is already set
+  (mouse: left button down)
+  [Shift] should be made to draw centerbased ellips/rectangles.
+
+* Support keywords and comments when saving as XML/.kil
+
+* [Tab] should circle to the next object (maybe config: next object in this
+  layer in all layers), presently it jumps to the zoom combobox and stays there.
+
+Bigger ones
+* Moving Objects between layers
+  (and honor the vertical position, harder for objects which are partly in a
+  layer below and above)
+
+* Zoom arbitry values
+  If this is done:
+  - Zoom to object
+
+* arbitray values for the angle of linear gradient
+  (presently: only horizontal and vertical)
+
+* Auxilary lines should be moveable by mouse and should be drawable out of the
+  rouler
+  
+* The Beziere line system needs a complete rework:
+  We need one line type, of which each node can be either an edge or a bezier
+  point (see Corel Draw! for an model)
+  -> If this is done the following point should be done
+
+* ConvertToCurve of circles is suboptimal: a circle is converted into a douzend
+  of streight lines!
+  Rectangles with round edges and arcs/pies converted to circles and
+  non-round-edged rectangles
+
+* selecting more than one point should be possible when using the point edit
+  tool

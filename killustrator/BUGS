@@ -1,4 +1,43 @@
-* german translation
+Bugs ($ID: $)
+
+See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
+------------------------------------
+Bugs from above bug page:
+* Incomplete WMF support
+* Exported EPS files doesn't work well with TeX
+  (Qt bug?, see http-page)
+* RGB errors in XFig import filter
+* Aligning to grid is not quite right under resize. Draw a small box ~100x100 pt
+  and resize it to fit an A4 page. 
+------------------------------------
+
 * undo/redo for layers
+  Presently delated layers disappear in the nirvana
+
+* if layers are disabled for editing, marked objects still have are marked.
+  (this also true for layers disabled for viewing)
+
 * seg points in rotated ellipses
-* Reihenfolge bei verteilen
+
+* Order of objects when using Arrange/Align/Distribute
+
+* Unavailable menu items should be greyed out
+
+* Translation (not moving)
+  Objectname Rectangle and Square are no translatable (at least they are not in
+  de.po)
+
+* Default name of Layers ("Layer #1") should be i18n-able
+
+* When alternating the page orientation (menu Layout|Page),
+  after the first Landscape <-> Portait change the displayed
+  minipage is not updated (the change is internally done correct)
+
+* UnitBox: The given range is relative, since internally point is used,
+  it probably should be absolute and regard the values as points.
+
+* Point editing doesn't always obey the Grid and/or auxilary line
+  More bugs: You cannot select a point using a fine grid
+
+* Arrange|Transform: Choosing relative should reset the values to 0
+  percentual isn't always default to 100%
