@@ -63,6 +63,28 @@ VPath::~VPath()
 {
 }
 
+//TODO: better move this into vpainter?
+static void
+drawNode( VPainter* painter, const KoPoint& p, int width, double zoomFactor )
+{
+	painter->moveTo(
+		KoPoint(
+			p.x() - width / zoomFactor,
+			p.y() - width / zoomFactor ) );
+	painter->lineTo(
+		KoPoint(
+			p.x() + width / zoomFactor,
+			p.y() - width / zoomFactor ) );
+	painter->lineTo(
+		KoPoint(
+			p.x() + width / zoomFactor,
+			p.y() + width / zoomFactor ) );
+	painter->lineTo(
+		KoPoint(
+			p.x() - width / zoomFactor,
+			p.y() + width / zoomFactor ) );
+}
+
 void
 VPath::draw( VPainter *painter, const KoRect& rect ) const
 {
@@ -76,7 +98,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 
 	double zoomFactor = painter->zoomFactor();
 
-	if( zoomFactor != 1 && !rect.intersects( boundingBox() ) )
+	if( zoomFactor != 1.0 && !rect.intersects( boundingBox() ) )
 		return;
 
 	painter->save();
@@ -170,27 +192,13 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::yellow );
 
-			painter->moveTo(
-				KoPoint(
-					center.x() - 2 / zoomFactor,
-					center.y() - 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() + 2 / zoomFactor,
-					center.y() - 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() + 2 / zoomFactor,
-					center.y() + 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() - 2 / zoomFactor,
-					center.y() + 2 / zoomFactor ) );
+			drawNode( painter, center, 2, zoomFactor );
+
 			painter->fillPath();
 		}
 	}
 
-	// draw small boxes for path nodes:
+	// Draw nodes:
 	if( state() == selected || state() == edit )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -200,201 +208,108 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			{
 				painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
-				painter->setPen( Qt::NoPen );
-
-				if( jtr.current()->hasSelectedNodes() )
-					painter->setBrush( Qt::blue.light() );
-				else
-					painter->setBrush( Qt::NoBrush );
 
 				if( jtr.current()->type() == VSegment::curve )
 				{
-					if( jtr.current()->hasSelectedNodes() )
-					{
-						if( jtr.current()->ctrlPointFixing() == VSegment::none ||
-							jtr.current()->ctrlPointFixing() == VSegment::second )
-						{
-							if( jtr.current()->prev()  )
-							{
-								painter->moveTo( KoPoint(
-									jtr.current()->prev()->knot().x() - 3 / zoomFactor,
-									jtr.current()->prev()->knot().y() - 3 / zoomFactor ) );
-								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() + 3 / zoomFactor,
-									jtr.current()->prev()->knot().y() - 3 / zoomFactor ) );
-								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() + 3 / zoomFactor,
-									jtr.current()->prev()->knot().y() + 3 / zoomFactor ) );
-								painter->lineTo( KoPoint(
-									jtr.current()->prev()->knot().x() - 3 / zoomFactor,
-									jtr.current()->prev()->knot().y() + 3 / zoomFactor ) );
-								painter->fillPath();
-								painter->newPath();
-								painter->setRasterOp( Qt::NotROP );
-								painter->setBrush( Qt::blue.light() );
-							}
-							painter->moveTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() - 3 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() - 3 / zoomFactor ) );
-							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() + 3 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() - 3 / zoomFactor ) );
-							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() + 3 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() + 3 / zoomFactor ) );
-							painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x() - 3 / zoomFactor,
-								jtr.current()->ctrlPoint1().y() + 3 / zoomFactor ) );
-
-							painter->fillPath();
-						}
-
-					if( jtr.current()->ctrlPointFixing() == VSegment::none ||
-						jtr.current()->ctrlPointFixing() == VSegment::first )
-					{
-						painter->newPath();
-						painter->setRasterOp( Qt::NotROP );
-						painter->setBrush( Qt::blue.light() );
-
-						painter->moveTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 3 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 3 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 3 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() - 3 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() + 3 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 3 / zoomFactor ) );
-						painter->lineTo( KoPoint(
-							jtr.current()->ctrlPoint2().x() - 3 / zoomFactor,
-							jtr.current()->ctrlPoint2().y() + 3 / zoomFactor ) );
-
-						painter->fillPath();
-					}
-
-					// draw knot always
-					painter->newPath();
-					painter->setRasterOp( Qt::NotROP );
-					painter->setBrush( Qt::blue.light() );
-
-					painter->moveTo( KoPoint(
-							jtr.current()->knot().x() - 3 / zoomFactor,
-							jtr.current()->knot().y() - 3 / zoomFactor ) );
-					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() + 3 / zoomFactor,
-							jtr.current()->knot().y() - 3 / zoomFactor ) );
-					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() + 3 / zoomFactor,
-							jtr.current()->knot().y() + 3 / zoomFactor ) );
-					painter->lineTo( KoPoint(
-							jtr.current()->knot().x() - 3 / zoomFactor,
-							jtr.current()->knot().y() + 3 / zoomFactor ) );
-					painter->fillPath();
-
-
 					VStroke stroke;
 					stroke.setLineWidth( 1.0 / zoomFactor );
 					stroke.setColor( Qt::blue.light().rgb() );
 					painter->setPen( stroke );
-
-					// line between ctrl points
 					painter->newPath();
-					if( jtr.current()->ctrlPointFixing() == VSegment::none )
+
+					// Draw control lines:
+					if(
+						jtr.current()->prev() &&
+						( jtr.current()->ctrlPoint1Selected() ||
+						  jtr.current()->prev()->knotSelected() ) )
 					{
-						if( jtr.current()->prev()  )
-						{
-							// prev knot to 1st ctrl point
-							painter->moveTo( KoPoint(
-									jtr.current()->prev()->knot().x(),
-									jtr.current()->prev()->knot().y() ) );
-							painter->lineTo( KoPoint(
-									jtr.current()->ctrlPoint1().x(),
-									jtr.current()->ctrlPoint1().y() ) );
-							painter->strokePath();
-							VStroke stroke;
-							stroke.setLineWidth( 1.0 / zoomFactor );
-							stroke.setColor( Qt::blue.light().rgb() );
-							painter->setPen( stroke );
-							painter->newPath();
-						}
-						painter->moveTo( KoPoint(
-								jtr.current()->ctrlPoint2().x(),
-								jtr.current()->ctrlPoint2().y() ) );
-						painter->lineTo( KoPoint(
-								jtr.current()->knot().x(),
-								jtr.current()->knot().y() ) );
+						painter->moveTo(
+							jtr.current()->prev()->knot() );
+						painter->lineTo(
+							jtr.current()->ctrlPoint1() );
+
+						painter->strokePath();
 					}
-					else if( jtr.current()->ctrlPointFixing() == VSegment::first )
+
+					if(
+						jtr.current()->ctrlPoint2Selected() ||
+						jtr.current()->knotSelected() )
 					{
-						painter->moveTo( KoPoint(
-								jtr.current()->knot().x(),
-								jtr.current()->knot().y() ) );
-						painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint2().x(),
-								jtr.current()->ctrlPoint2().y() ) );
+						painter->moveTo(
+							jtr.current()->ctrlPoint2() );
+						painter->lineTo(
+							jtr.current()->knot() );
+
+						painter->strokePath();
+					}
+
+
+					// Draw control node1:
+					painter->newPath();
+
+					if( jtr.current()->ctrlPoint1Selected() )
+					{
+						painter->setBrush( Qt::blue.light() );
+						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
 					}
 					else
 					{
-						painter->moveTo( KoPoint(
-								jtr.current()->knot().x(),
-								jtr.current()->knot().y() ) );
-						painter->lineTo( KoPoint(
-								jtr.current()->ctrlPoint1().x(),
-								jtr.current()->ctrlPoint1().y() ) );
+						painter->setBrush( Qt::NoBrush );
+						drawNode( painter, jtr.current()->ctrlPoint1(), 1, zoomFactor );
 					}
+
 					painter->strokePath();
+					painter->fillPath();
+
+
+					// Draw control node2:
+					painter->newPath();
+
+					if( jtr.current()->ctrlPoint2Selected() )
+					{
+						painter->setBrush( Qt::blue.light() );
+						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
 					}
+					else
+					{
+						painter->setBrush( Qt::NoBrush );
+						drawNode( painter, jtr.current()->ctrlPoint2(), 1, zoomFactor );
+					}
+
+					painter->strokePath();
+					painter->fillPath();
+				}
+
+
+				// Draw knot:
+				painter->newPath();
+
+				if( jtr.current()->knotSelected() )
+				{
+					painter->setBrush( Qt::blue.light() );
+					drawNode( painter, jtr.current()->knot(), 3, zoomFactor );
 				}
 				else
 				{
-					painter->moveTo(
-						KoPoint(
-							jtr.current()->knot().x() - 2 / zoomFactor,
-							jtr.current()->knot().y() - 2 / zoomFactor ) );
-					painter->lineTo(
-						KoPoint(
-							jtr.current()->knot().x() + 2 / zoomFactor,
-							jtr.current()->knot().y() - 2 / zoomFactor ) );
-					painter->lineTo(
-						KoPoint(
-							jtr.current()->knot().x() + 2 / zoomFactor,
-							jtr.current()->knot().y() + 2 / zoomFactor ) );
-					painter->lineTo(
-						KoPoint(
-							jtr.current()->knot().x() - 2 / zoomFactor,
-							jtr.current()->knot().y() + 2 / zoomFactor ) );
-
-					painter->fillPath();
+					painter->setBrush( Qt::NoBrush );
+					drawNode( painter, jtr.current()->knot(), 1, zoomFactor );
 				}
+
+				painter->strokePath();
+				painter->fillPath();
 			}
 		}
 
-		// draw a "knot" at the center:
+		// Draw a center node:
 		if( m_drawCenterNode )
 		{
-			const KoPoint center = boundingBox().center();
-
 			painter->newPath();
 			painter->setRasterOp( Qt::NotROP );
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::blue.light() );
 
-			painter->moveTo(
-				KoPoint(
-					center.x() - 2 / zoomFactor,
-					center.y() - 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() + 2 / zoomFactor,
-					center.y() - 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() + 2 / zoomFactor,
-					center.y() + 2 / zoomFactor ) );
-			painter->lineTo(
-				KoPoint(
-					center.x() - 2 / zoomFactor,
-					center.y() + 2 / zoomFactor ) );
+			drawNode( painter, boundingBox().center(), 2, zoomFactor );
+
 			painter->fillPath();
 		}
 	}
