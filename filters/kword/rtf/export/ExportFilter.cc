@@ -30,6 +30,7 @@
 #include <qpicture.h>
 #include <qregion.h> // for #include <kdebugclasses.h>
 #include <qimage.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -1174,9 +1175,18 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
 
 QString RTFWorker::lookupFont(const QString& fontName)
 {
-    kdDebug(30515) << "RTFWorker::lookupFont " << fontName << endl;
     if (fontName.isEmpty())
         return QString::null;
+
+    // First we have to remove Qt-typical foundry names, as some RTF readers are confused by them.
+    QString cookedFontName(fontName);
+    QRegExp regexp("\\s*\\[\\S*\\]"); // Some white space, opening square bracket, some non-white-space, ending square bracket
+    cookedFontName.remove(regexp);
+    // But we cannot have an empty name font
+    if (cookedFontName.isEmpty())
+        cookedFontName=fontName;
+
+    kdDebug(30515) << "RTFWorker::lookupFont " << fontName << " cooked: " << cookedFontName << endl;
 
     uint counter=0;  // counts position in font table (starts at 0)
     QString strFont("\\f"); // markup for font selection
@@ -1185,7 +1195,7 @@ QString RTFWorker::lookupFont(const QString& fontName)
     // search font table for this font
     for( it = m_fontList.begin(); it != m_fontList.end(); counter++, it++ )
     {
-        if((*it) == fontName)  // check for match
+        if((*it) == cookedFontName)  // check for match
         {
             strFont += QString::number(counter);
             kdDebug(30515) << strFont << endl;
@@ -1193,8 +1203,8 @@ QString RTFWorker::lookupFont(const QString& fontName)
         }
     }  // end for()
 
-    kdDebug(30515) << "New font: " << fontName << " count: " << counter << endl;
-    m_fontList << fontName;
+    kdDebug(30515) << "New font: " << cookedFontName << " count: " << counter << endl;
+    m_fontList << cookedFontName;
 
     strFont += QString::number(counter);
     return strFont;
