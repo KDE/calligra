@@ -69,8 +69,9 @@ void KoLineStyleAction::createMenu()
   int cindex = 0;
   QPen pen;
   pen.setWidth(2);
+  popup->insertItem(i18n("None"),cindex++);
 
-  for(int i = 0; i < 6; i++) {
+  for(int i = 1; i < 6; i++) {
     pix.fill(white);
     pen.setStyle(static_cast<Qt::PenStyle>(i));
     p.setPen(pen);
