@@ -1035,7 +1035,13 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     unsigned item;
 
     value = KWDocument::getAttribute( word, "mime", QString::null );
-    if ( value != "application/x-kword" )
+    if ( value.isEmpty() )
+    {
+        kdError(32001) << "No mime type specified!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    }
+    else if ( value != "application/x-kword" )
     {
         kdError(32001) << "Unknown mime type " << value << endl;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword, got %1" ).arg( value ) );
