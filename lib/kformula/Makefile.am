@@ -11,7 +11,7 @@ libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	formulaelement.cc indexelement.cc kformulacontainer.cc \
 	sequenceelement.cc textelement.cc bracketelement.cc \
 	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
-	artwork.cc kformulacommand.cc kformulamimesource.cc \
+	kformulacommand.cc kformulamimesource.cc \
 	MatrixDialog.cc sequenceparser.cc elementtype.cc kformuladocument.cc \
 	symboltable.cc kformulamathmlread.cc \
 	kformulainputfilter.cc kformulaview.cc \

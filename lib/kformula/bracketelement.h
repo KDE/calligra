@@ -239,16 +239,13 @@ private:
      QString latexString(char);
 
     /**
-     * Creates a new bracket object that matches the char.
-     */
-    Artwork* createBracket(SymbolType bracket);
-
-
-    /**
      * The brackets we are showing.
      */
     Artwork* left;
     Artwork* right;
+
+    SymbolType leftType;
+    SymbolType rightType;
 };
 
 

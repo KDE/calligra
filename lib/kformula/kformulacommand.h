@@ -26,7 +26,7 @@
 
 #include <kcommand.h>
 
-#include "artwork.h"
+#include "fontstyle.h"
 #include "kformulacontainer.h"
 #include "formulacursor.h"
 

@@ -82,7 +82,7 @@ KCommand* SymbolSequenceElement::buildCommand( Container* container, Request* re
 
 
 SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
-    : BasicElement(parent), symbol(type)
+    : BasicElement(parent), symbol( 0 ), symbolType( type )
 {
     content = new SymbolSequenceElement( this );
     upper = 0;
@@ -94,11 +94,12 @@ SymbolElement::~SymbolElement()
     delete lower;
     delete upper;
     delete content;
+    delete symbol;
 }
 
 
 SymbolElement::SymbolElement( const SymbolElement& other )
-    : BasicElement( other ), symbol( other.symbol )
+    : BasicElement( other ), symbol( 0 ), symbolType( other.symbolType )
 {
     content = new SymbolSequenceElement( *dynamic_cast<SymbolSequenceElement*>( other.content ) );
     content->setParent( this );
@@ -148,14 +149,14 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
         // the positions after the indexes.
         luPixel dx = point.x() - myPos.x();
         luPixel dy = point.y() - myPos.y();
-        if (dy < symbol.getY()) {
+        if (dy < symbol->getY()) {
             if (hasUpper() && (dx > upper->getX())) {
                 upper->moveLeft(cursor, this);
                 handled = true;
                 return upper;
             }
         }
-        else if (dy > symbol.getY()+symbol.getHeight()) {
+        else if (dy > symbol->getY()+symbol->getHeight()) {
             if (hasLower() && (dx > lower->getX())) {
                 lower->moveLeft(cursor, this);
                 handled = true;
@@ -164,8 +165,8 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
         }
 
         // Have the cursor jump behind the integral.
-        if ( ( dx < symbol.getX()+symbol.getWidth() ) &&
-             ( dx > symbol.getX()+symbol.getWidth()/2 ) ) {
+        if ( ( dx < symbol->getX()+symbol->getWidth() ) &&
+             ( dx > symbol->getX()+symbol->getWidth()/2 ) ) {
             content->moveRight( cursor, this );
             handled = true;
             return content;
@@ -187,10 +188,14 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
-    symbol.calcSizes(style, tstyle, mySize);
+    if ( symbol == 0 ) {
+        symbol = style.fontStyle().createArtwork( symbolType );
+    }
+
+    symbol->calcSizes(style, tstyle, mySize);
     content->calcSizes(style, tstyle, istyle);
 
-    //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
+    //symbol->scale(((double)parentSize)/symbol->getHeight()*2);
 
     luPixel upperWidth = 0;
     luPixel upperHeight = 0;
@@ -211,12 +216,12 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     }
 
     // widths
-    luPixel xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
+    luPixel xOffset = QMAX(symbol->getWidth(), QMAX(upperWidth, lowerWidth));
     if (style.getCenterSymbol()) {
-        symbol.setX((xOffset - symbol.getWidth()) / 2);
+        symbol->setX((xOffset - symbol->getWidth()) / 2);
     }
     else {
-        symbol.setX(xOffset - symbol.getWidth());
+        symbol->setX(xOffset - symbol->getWidth());
     }
     content->setX(xOffset + distX/2);
 
@@ -226,14 +231,14 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
     luPixel toMidline = QMAX(content->axis( style, tstyle ),
-                             upperHeight + symbol.getHeight()/2);
+                             upperHeight + symbol->getHeight()/2);
     //int fromMidline = QMAX(content->getHeight() / 2,
     luPixel fromMidline = QMAX(content->getHeight() - content->axis( style, tstyle ),
-                               lowerHeight + symbol.getHeight()/2);
+                               lowerHeight + symbol->getHeight()/2);
     setHeight(toMidline + fromMidline);
     //setMidline(toMidline);
 
-    symbol.setY(toMidline - symbol.getHeight()/2);
+    symbol->setY(toMidline - symbol->getHeight()/2);
     //content->setY(toMidline - content->getHeight()/2);
     content->setY(toMidline - content->axis( style, tstyle ));
 
@@ -242,28 +247,28 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
             upper->setX((xOffset - upperWidth) / 2);
         }
         else {
-            if (upperWidth < symbol.getWidth()) {
-                upper->setX(symbol.getX() + (symbol.getWidth() - upperWidth) / 2);
+            if (upperWidth < symbol->getWidth()) {
+                upper->setX(symbol->getX() + (symbol->getWidth() - upperWidth) / 2);
             }
             else {
                 upper->setX(xOffset - upperWidth);
             }
         }
-        upper->setY(toMidline - upperHeight - symbol.getHeight()/2);
+        upper->setY(toMidline - upperHeight - symbol->getHeight()/2);
     }
     if (hasLower()) {
         if (style.getCenterSymbol()) {
             lower->setX((xOffset - lowerWidth) / 2);
         }
         else {
-            if (lowerWidth < symbol.getWidth()) {
-                lower->setX(symbol.getX() + (symbol.getWidth() - lowerWidth) / 2);
+            if (lowerWidth < symbol->getWidth()) {
+                lower->setX(symbol->getX() + (symbol->getWidth() - lowerWidth) / 2);
             }
             else {
                 lower->setX(xOffset - lowerWidth);
             }
         }
-        lower->setY(toMidline + symbol.getHeight()/2 + distY);
+        lower->setY(toMidline + symbol->getHeight()/2 + distY);
     }
     setBaseline(content->getBaseline() + content->getY());
 }
@@ -284,7 +289,7 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
     //    return;
 
     luPt mySize = style.getAdjustedSize( tstyle );
-    symbol.draw( painter, r, style, tstyle, mySize, myPos );
+    symbol->draw( painter, r, style, tstyle, mySize, myPos );
     content->draw( painter, r, style, tstyle, istyle, myPos );
     if ( hasUpper() ) {
         upper->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),
@@ -666,7 +671,7 @@ void SymbolElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
-    element.setAttribute("TYPE", symbol.getType());
+    element.setAttribute("TYPE", symbolType);
 
     QDomDocument doc = element.ownerDocument();
 
@@ -698,7 +703,7 @@ bool SymbolElement::readAttributesFromDom(QDomElement element)
 
     QString typeStr = element.attribute("TYPE");
     if(!typeStr.isNull()) {
-        symbol.setType(static_cast<SymbolType>(typeStr.toInt()));
+        symbolType = static_cast<SymbolType>(typeStr.toInt());
     }
 
     return true;
@@ -745,7 +750,7 @@ QString SymbolElement::toLatex()
 {
     QString sym;
 
-    switch(symbol.getType()) {
+    switch(symbolType) {
 
 	case 1001:
 	 sym="\\int";
@@ -786,7 +791,7 @@ QString SymbolElement::toLatex()
 QString SymbolElement::formulaString()
 {
     QString sym;
-    switch ( symbol.getType() ) {
+    switch ( symbolType ) {
     case 1001:
         sym="int(";
 	break;
@@ -816,7 +821,7 @@ void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent )
 
     QString value;
 
-    switch( symbol.getType() )
+    switch( symbolType )
     {
     case EmptyBracket: break;
     case LeftLineBracket: case RightLineBracket:
@@ -828,7 +833,7 @@ void SymbolElement::writeMathML( QDomDocument doc, QDomNode parent )
     case Product:
         mo.appendChild( doc.createEntityReference( "prod" ) ); break;
     default:
-        mo.appendChild( doc.createTextNode( QChar( symbol.getType() ) ) );
+        mo.appendChild( doc.createTextNode( QChar( symbolType ) ) );
     }
 
     QDomElement between;

@@ -1,3 +1,24 @@
+/* This file is part of the KDE project
+   Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include <qpainter.h>
+#include <qpen.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -74,6 +95,12 @@ const AlphaTable* EsstixFontStyle::alphaTable() const
 }
 
 
+Artwork* EsstixFontStyle::createArtwork( SymbolType type ) const
+{
+    return new EsstixArtwork( type );
+}
+
+
 EsstixAlphaTable::EsstixAlphaTable()
     : script_font( "esstixthirteen" ),
       fraktur_font( "esstixfifteen" ),
@@ -118,5 +145,338 @@ AlphaTableEntry EsstixAlphaTable::entry( char pos,
 
     return entry;
 }
+
+
+static const char esstixseven_LeftSquareBracket = 0x3f;
+static const char esstixseven_RightSquareBracket = 0x40;
+static const char esstixseven_LeftCurlyBracket = 0x41;
+static const char esstixseven_RightCurlyBracket = 0x42;
+static const char esstixseven_LeftCornerBracket = 0x43;
+static const char esstixseven_RightCornerBracket = 0x44;
+static const char esstixseven_LeftRoundBracket = 0x3d;
+static const char esstixseven_RightRoundBracket = 0x3e;
+//static const char esstixseven_SlashBracket = '/';
+//static const char esstixseven_BackSlashBracket = '\\';
+static const char esstixseven_LeftLineBracket = 0x4b;
+static const char esstixseven_RightLineBracket = 0x4b;
+
+
+// esstixseven is a special font with symbols in three sizes.
+static char esstixseven_nextchar( char ch )
+{
+    switch ( ch ) {
+        // small
+    case 61: return 33;
+    case 62: return 35;
+    case 63: return 36;
+    case 64: return 37;
+    case 65: return 38;
+    case 66: return 40;
+    case 67: return 41;
+    case 68: return 42;
+    case 69: return 43;
+    case 70: return 44;
+    case 75: return 45;
+    case 76: return 47;
+
+        // middle
+    case 33: return 48;
+    case 35: return 49;
+    case 36: return 50;
+    case 37: return 51;
+    case 38: return 52;
+    case 40: return 53;
+    case 41: return 54;
+    case 42: return 55;
+    case 43: return 56;
+    case 44: return 57;
+    case 45: return 58;
+    case 46: return 59;
+    case 47: return 60;
+    }
+    return 0;
+}
+
+EsstixArtwork::EsstixArtwork( SymbolType t )
+    : Artwork( t ), esstixChar( -1 )
+{
+}
+
+
+void EsstixArtwork::calcSizes( const ContextStyle& style,
+                               ContextStyle::TextStyle tstyle,
+                               luPt parentSize )
+{
+    setBaseline( -1 );
+    esstixChar = -1;
+    luPt mySize = style.getAdjustedSize( tstyle );
+    //const SymbolTable& symbolTable = style.symbolTable();
+    switch (getType()) {
+    case LeftSquareBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_LeftSquareBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, leftSquareBracket, parentSize, mySize );
+        break;
+    case RightSquareBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_RightSquareBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, rightSquareBracket, parentSize, mySize );
+        break;
+    case LeftLineBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_LeftLineBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, leftLineBracket, parentSize, mySize );
+        break;
+    case RightLineBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_RightLineBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, rightLineBracket, parentSize, mySize );
+        break;
+    case SlashBracket:
+        //calcCharSize(style, mySize, '/');
+        break;
+    case BackSlashBracket:
+        //calcCharSize(style, mySize, '\\');
+        break;
+    case LeftCornerBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_LeftCornerBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcCharSize(style, mySize, leftAngleBracketChar);
+        break;
+    case RightCornerBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_RightCornerBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcCharSize(style, mySize, rightAngleBracketChar);
+        break;
+    case LeftRoundBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_LeftRoundBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, leftRoundBracket, parentSize, mySize );
+        break;
+    case RightRoundBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_RightRoundBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcRoundBracket( style, rightRoundBracket, parentSize, mySize );
+        break;
+    case EmptyBracket:
+        setHeight(parentSize);
+        //setWidth(style.getEmptyRectWidth());
+        setWidth(0);
+        break;
+    case LeftCurlyBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_LeftCurlyBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcCurlyBracket( style, leftCurlyBracket, parentSize, mySize );
+        break;
+    case RightCurlyBracket:
+        if ( calcEsstixDelimiterSize( style, esstixseven_RightCurlyBracket,
+                                      mySize, parentSize ) ) {
+            return;
+        }
+        calcCurlyBracket( style, rightCurlyBracket, parentSize, mySize );
+        break;
+    case Integral:
+        calcCharSize( style, qRound( 1.5*mySize ), integralChar );
+        break;
+    case Sum:
+        calcCharSize( style, qRound( 1.5*mySize ), summationChar );
+        break;
+    case Product:
+        calcCharSize( style, qRound( 1.5*mySize ), productChar );
+        break;
+    }
+}
+
+
+void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
+                         const ContextStyle& style, ContextStyle::TextStyle tstyle,
+                         luPt /*parentSize*/, const LuPixelPoint& origin)
+{
+    luPt mySize = style.getAdjustedSize( tstyle );
+    luPixel myX = origin.x() + getX();
+    luPixel myY = origin.y() + getY();
+    if ( !LuPixelRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
+        return;
+
+    painter.setPen(style.getDefaultColor());
+    //const SymbolTable& symbolTable = style.symbolTable();
+
+    switch (getType()) {
+    case LeftSquareBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
+        }
+        break;
+    case RightSquareBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
+        }
+        break;
+    case LeftCurlyBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
+        }
+        break;
+    case RightCurlyBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
+        }
+        break;
+    case LeftLineBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+        }
+        break;
+    case RightLineBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+        }
+        break;
+    case SlashBracket:
+        //drawCharacter(painter, style, myX, myY, mySize, '/');
+        break;
+    case BackSlashBracket:
+        //drawCharacter(painter, style, myX, myY, mySize, '\\');
+        break;
+    case LeftCornerBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        break;
+    case RightCornerBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        break;
+    case LeftRoundBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
+        }
+        break;
+    case RightRoundBracket:
+        if ( esstixChar != -1 ) {
+            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+        }
+        else {
+            drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
+        }
+        break;
+    case EmptyBracket:
+        break;
+    case Integral:
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), integralChar);
+        break;
+    case Sum:
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), summationChar);
+        break;
+    case Product:
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), productChar);
+        break;
+    }
+
+    // debug
+    //painter.setBrush(Qt::NoBrush);
+    //painter.setPen(Qt::green);
+    //painter.drawRect(myX, myY, getWidth(), getHeight());
+}
+
+
+
+bool EsstixArtwork::calcEsstixDelimiterSize( const ContextStyle& context,
+                                             char c,
+                                             luPt fontSize,
+                                             luPt parentSize )
+{
+    QFont f( "esstixseven" );
+
+    for ( char i=1; c != 0; ++i ) {
+        //f.setPointSizeFloat( context.layoutUnitToFontSize( i*fontSize, false ) );
+        f.setPointSizeFloat( context.layoutUnitPtToPt( i*fontSize ) );
+        QFontMetrics fm( f );
+        LuPixelRect bound = fm.boundingRect( c );
+
+        luPt height = context.ptToLayoutUnitPt( bound.height() );
+        if ( height >= parentSize ) {
+            luPt width = context.ptToLayoutUnitPt( fm.width( c ) );
+            luPt baseline = context.ptToLayoutUnitPt( -bound.top() );
+
+            esstixChar = c;
+            fontSizeFactor = i;
+
+            setHeight( height );
+            setWidth( width );
+
+            // We are only interessted in the baseline when we have
+            // a bracket of normal height (like any other char.)
+            if ( fontSizeFactor == 1 ) {
+                setBaseline( baseline );
+            }
+            else {
+                setBaseline( -1 );
+            }
+            return true;
+        }
+        c = esstixseven_nextchar( c );
+    }
+
+    // Build it up from pieces.
+    return false;
+}
+
+
+void EsstixArtwork::drawEsstixDelimiter( QPainter& painter, const ContextStyle& style,
+                                         luPixel x, luPixel y,
+                                         luPt height )
+{
+    QFont f( "esstixseven" );
+    f.setPointSizeFloat( style.layoutUnitToFontSize( fontSizeFactor*height, false ) );
+
+    painter.setFont( f );
+    painter.drawText( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y + getBaseline() ),
+                      QString( QChar( esstixChar ) ) );
+}
+
 
 KFORMULA_NAMESPACE_END

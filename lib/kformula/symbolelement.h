@@ -21,7 +21,7 @@
 #ifndef SYMBOLELEMENT_H
 #define SYMBOLELEMENT_H
 
-#include "artwork.h"
+#include "fontstyle.h"
 #include "basicelement.h"
 #include "kformuladefs.h"
 
@@ -297,7 +297,9 @@ private:
     /**
      * Our symbol.
      */
-    Artwork symbol;
+    Artwork* symbol;
+
+    SymbolType symbolType;
 };
 
 KFORMULA_NAMESPACE_END

@@ -144,8 +144,6 @@ public:
 
     bool inTable( QChar ch, CharStyle style=anyChar ) const;
 
-    bool esstixDelimiter() const { return m_esstixDelimiter; }
-
     void initFont( const InternFontTable* table,
                    const char* fontname,
                    const NameTable& tempNames,
@@ -184,8 +182,6 @@ private:
      * Basic symbol font support.
      */
     SymbolFontHelper symbolFontHelper;
-
-    bool m_esstixDelimiter;
 
     // An empty entry that's used if nothing was found.
     CharTableEntry dummyEntry;

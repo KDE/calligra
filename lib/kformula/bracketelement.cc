@@ -26,8 +26,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "artwork.h"
 #include "bracketelement.h"
+#include "fontstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "sequenceelement.h"
@@ -192,10 +192,10 @@ void SingleContentElement::writeMathML( QDomDocument doc, QDomNode parent )
 
 
 BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
-    : SingleContentElement(parent)
+    : SingleContentElement(parent),
+      left( 0 ), right( 0 ),
+      leftType( l ), rightType( r )
 {
-    right = createBracket(r);
-    left = createBracket(l);
 }
 
 
@@ -207,10 +207,10 @@ BracketElement::~BracketElement()
 
 
 BracketElement::BracketElement( const BracketElement& other )
-    : SingleContentElement( other )
+    : SingleContentElement( other ),
+      left( 0 ), right( 0 ),
+      leftType( other.leftType ), rightType( other.rightType )
 {
-    right = createBracket( other.right->getType() );
-    left = createBracket( other.left->getType() );
 }
 
 
@@ -256,6 +256,11 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
     SequenceElement* content = getContent();
     content->calcSizes(style, tstyle, istyle);
 
+    if ( left == 0 ) {
+        left = style.fontStyle().createArtwork( leftType );
+        right = style.fontStyle().createArtwork( rightType );
+    }
+
     if (content->isTextOnly()) {
         left->calcSizes(style, tstyle);
         right->calcSizes(style, tstyle);
@@ -287,13 +292,13 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
         content->setY(getHeight() / 2 - content->axis( style, tstyle ));
         setBaseline(content->getBaseline() + content->getY());
 
-        if ( ( left->getBaseline() != -1 ) && ( left->getFontSizeFactor() == 1 ) ) {
+        if ( left->getBaseline() != -1 ) {
             left->setY(getBaseline() - left->getBaseline());
         }
         else {
             left->setY((getHeight() - left->getHeight())/2);
         }
-        if ( ( right->getBaseline() != -1 ) && ( right->getFontSizeFactor() == 1 ) ) {
+        if ( right->getBaseline() != -1 ) {
             right->setY(getBaseline() - right->getBaseline());
         }
         else {
@@ -360,24 +365,13 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
 
 
 /**
- * Creates a new bracket object that matches the char.
- */
-Artwork* BracketElement::createBracket(SymbolType bracket)
-{
-    Artwork* aw = new Artwork();
-    aw->setType( bracket );
-    return aw;
-}
-
-
-/**
  * Appends our attributes to the dom element.
  */
 void BracketElement::writeDom(QDomElement element)
 {
     SingleContentElement::writeDom(element);
-    element.setAttribute("LEFT", left->getType());
-    element.setAttribute("RIGHT", right->getType());
+    element.setAttribute("LEFT", leftType);
+    element.setAttribute("RIGHT", rightType);
 }
 
 /**
@@ -391,11 +385,11 @@ bool BracketElement::readAttributesFromDom(QDomElement element)
     }
     QString leftStr = element.attribute("LEFT");
     if(!leftStr.isNull()) {
-        left->setType(static_cast<SymbolType>(leftStr.toInt()));
+        leftType = static_cast<SymbolType>(leftStr.toInt());
     }
     QString rightStr = element.attribute("RIGHT");
     if(!rightStr.isNull()) {
-        right->setType(static_cast<SymbolType>(rightStr.toInt()));
+        rightType = static_cast<SymbolType>(rightStr.toInt());
     }
     return true;
 }
@@ -404,8 +398,8 @@ QString BracketElement::toLatex()
 {
     QString ls,rs,cs;
     cs=getContent()->toLatex();
-    ls="\\left"+latexString(left->getType());
-    rs="\\right"+latexString(right->getType());
+    ls="\\left"+latexString(leftType);
+    rs="\\right"+latexString(rightType);
 
     return ls+cs+rs;
 }
@@ -450,8 +444,8 @@ void BracketElement::writeMathML( QDomDocument doc, QDomNode parent )
     if ( left->getType() != LeftRoundBracket ||
          right->getType() != RightRoundBracket )
     {
-        de.setAttribute( "open",  QString( QChar( left->getType() ) ) );
-        de.setAttribute( "close", QString( QChar( right->getType() ) ) );
+        de.setAttribute( "open",  QString( QChar( leftType ) ) );
+        de.setAttribute( "close", QString( QChar( rightType ) ) );
     }
     SingleContentElement::writeMathML( doc, de );
     parent.appendChild( de );
