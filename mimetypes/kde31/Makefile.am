@@ -3,4 +3,10 @@ x-vnd.kde.kexi.desktop vnd.palm.desktop x-kudesigner.desktop
 
 applicationdir = $(kde_mimedir)/application
 
-EXTRA_DIST = $(application_DATA)
+
+image_DATA = x-vnd.trolltech.qpicture.desktop
+
+imagedir = $(kde_mimedir)/image
+
+
+EXTRA_DIST = $(application_DATA) $(image_DATA)
