@@ -211,9 +211,9 @@ int MSWRITEImport::documentStartWrite (const int firstPageNumber)
 	}
 
 	// start document
-	// TODO: error checking
+	// TODO: error checking   
 	tagWrite ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	tagWrite ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.1//EN\" \"http://www.koffice.org/DTD/kword-1.1.dtd\">");
+	tagWrite ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.2//EN\" \"http://www.koffice.org/DTD/kword-1.2.dtd\">");
 	tagWrite ("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">");
 
 	tagWrite ("<PAPER format=\"1\" width=\"%i\" height=\"%i\" orientation=\"0\" columns=\"1\" "
@@ -270,8 +270,7 @@ int MSWRITEImport::documentEndWrite (void)
 	tagWrite ("</STYLES>");
 
 	// write out image keys
-	tagWrite ("<PIXMAPS>"); tagWrite (m_pixmaps); tagWrite ("</PIXMAPS>");
-	tagWrite ("<CLIPARTS>"); tagWrite (m_cliparts); tagWrite ("</CLIPARTS>");
+	tagWrite ("<PICTURES>"); tagWrite (m_pictures); tagWrite ("</PICTURES>");
 
 	// end document
 	tagWrite ("</DOC>");
@@ -943,57 +942,56 @@ int MSWRITEImport::tagWrite (const QString &str)
 }
 
 int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
-													const int widthTwips, const int heightTwips,
-													const int widthScaledRel1000, const int heightScaledRel1000,
-													const int horizOffsetTwips)
+												const int widthTwips, const int heightTwips,
+												const int widthScaledRel1000, const int heightScaledRel1000,
+												const int horizOffsetTwips)
 {
 	QString imageName;
 	QString fileInStore;
 
 
+	// give picture a name
+	//
+	
+	imageName = "Picture ";
+	imageName += QString::number (m_numPictures + 1);	// image numbers start at 1...
+
+	
+	// give picture a filename
+	//
+	
+	fileInStore = "pictures/picture" + QString::number (m_numPictures + 1);
+	
+	// append extension
+	if (imageType == MSWRITE_OBJECT_BMP)
+		fileInStore += ".bmp";
+	else if (imageType == MSWRITE_OBJECT_WMF)
+		fileInStore += ".wmf";
+	else
+	{
+		error ("unsupported picture type %i\n", imageType);
+		return 1;
+	}
+	
+	
 	// indicate anchored image in formatting
 	//
 
 	tagWrite ("#");
 
 	m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
-	m_formatOutput += "<ANCHOR type=\"frameset\" instance=\"";
-	if (imageType == MSWRITE_OBJECT_BMP)
-	{
-		imageName = "Picture ";
-		imageName += QString::number (m_numPixmap);
-
-		m_formatOutput += imageName;
-
-		fileInStore = "pictures/picture" + QString::number (m_numPixmap) + ".bmp";
-	}
-	else if (imageType == MSWRITE_OBJECT_WMF)
-	{
-		imageName += "Clipart ";
-		imageName += QString::number (m_numClipart);
-
-		m_formatOutput += imageName;
-
-		fileInStore = "cliparts/clipart" + QString::number (m_numClipart) + ".wmf";
-	}
-	else
-	{
-		error ("unsupported picture type %i\n", imageType);
-		return 1;
-	}
-	m_formatOutput += "\"/>";
+		m_formatOutput += "<ANCHOR type=\"frameset\" instance=\"";
+			m_formatOutput += imageName;
+		m_formatOutput += "\"/>";
 	m_formatOutput += "</FORMAT>";
 
 
 	// write framesets (truly written in documentEndWrite())
 	//
 
-	if (imageType == MSWRITE_OBJECT_BMP)
-	{
-		m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
-		m_objectFrameset += imageName;
-		m_objectFrameset += "\" visible=\"1\">";
-
+	m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
+	m_objectFrameset += imageName;
+	m_objectFrameset += "\" visible=\"1\">";
 		m_objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
 		m_objectFrameset += " left=\"";
 			m_objectFrameset += QString::number (m_left + horizOffsetTwips / 20);
@@ -1008,70 +1006,23 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 			m_objectFrameset += QString::number (m_top + (heightTwips * heightScaledRel1000 / 1000) / 20);
 			m_objectFrameset += "\"/>";
 
-		m_objectFrameset += "<IMAGE keepAspectRatio=\"false\">";
+		m_objectFrameset += "<PICTURE keepAspectRatio=\"false\">";
 		m_objectFrameset += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
 		m_objectFrameset += " filename=\"";
 		m_objectFrameset += fileInStore;
 		m_objectFrameset += "\"/>";
-		m_objectFrameset += "</IMAGE>";
+		m_objectFrameset += "</PICTURE>";
+	m_objectFrameset += "</FRAMESET>";
 
-		m_objectFrameset += "</FRAMESET>";
+	m_pictures += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
+	m_pictures += " name=\"";
+	m_pictures += fileInStore;
+	m_pictures += "\"";
+	m_pictures += " filename=\"";
+	m_pictures += fileInStore;
+	m_pictures += "\"/>";
 
-		m_pixmaps += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
-		m_pixmaps += " name=\"";
-		m_pixmaps += fileInStore;
-		m_pixmaps += "\"";
-		m_pixmaps += " filename=\"";
-		m_pixmaps += fileInStore;
-		m_pixmaps += "\"/>";
-
-		m_numPixmap++;
-	}
-	else if (imageType == MSWRITE_OBJECT_WMF)
-	{
-		m_objectFrameset += "<FRAMESET frameType=\"5\" frameInfo=\"0\" name=\"";
-		m_objectFrameset += imageName;
-		m_objectFrameset += "\" visible=\"1\">";
-
-		m_objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
-		m_objectFrameset += " left=\"";
-			m_objectFrameset += QString::number (m_left + horizOffsetTwips / 20);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " right=\"";
-			m_objectFrameset += QString::number (m_left + (horizOffsetTwips + widthTwips * widthScaledRel1000 / 1000) / 20);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " top=\"";
-			m_objectFrameset += QString::number (m_top);
-			m_objectFrameset += "\"";
-		m_objectFrameset += " bottom=\"";
-			m_objectFrameset += QString::number (m_top + (heightTwips * heightScaledRel1000 / 1000) / 20);
-			m_objectFrameset += "\"/>";
-
-#if 0
-		debug ("IMAGE!!!!!! width: %i*%i=%i\t\theight: %i*%i=%i\n",
-		widthTwips, widthScaledRel1000, (widthTwips * widthScaledRel1000 / 1000) / 20,
-		heightTwips, heightScaledRel1000, (heightTwips * heightScaledRel1000 / 1000) / 20);
-#endif
-
-		m_objectFrameset += "<CLIPART>";
-		m_objectFrameset += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
-		m_objectFrameset += " filename=\"";
-		m_objectFrameset += fileInStore;
-		m_objectFrameset += "\"/>";
-		m_objectFrameset += "</CLIPART>";
-
-		m_objectFrameset += "</FRAMESET>";
-
-		m_cliparts += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
-		m_cliparts += " name=\"";
-		m_cliparts += fileInStore;
-		m_cliparts += "\"";
-		m_cliparts += " filename=\"";
-		m_cliparts += fileInStore;
-		m_cliparts += "\"/>";
-
-		m_numClipart++;
-	}
+	m_numPictures++;
 
 	
 	// store object properties
@@ -1137,8 +1088,7 @@ MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
 
 	delayOutput (false);
 
-	m_numPixmap = 0;
-	m_numClipart = 0;
+	m_numPictures = 0;
 	m_objectUpto = 0;
 
 	m_infile = (FILE *) NULL;

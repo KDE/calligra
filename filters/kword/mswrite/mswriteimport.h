@@ -140,10 +140,10 @@ private:
 	int m_lineSpacingFromAbove;
 
 	// picture counters
-	int m_numPixmap, m_numClipart;
+	int m_numPictures;
+	QString m_pictures;
+	
 	QString m_objectFrameset;
-	QString m_pixmaps;
-	QString m_cliparts;
 
 	MSWRITE_OBJECT_DATA *m_objectData;
 	int m_objectUpto;
