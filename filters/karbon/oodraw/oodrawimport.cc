@@ -432,14 +432,14 @@ OoDrawImport::appendBrush( VObject &obj )
 			QDomElement* draw = m_draws[style];
 			if( draw )
 			{
-				double border = 1.0;
+				double border = 0.0;
 				if( draw->hasAttribute( "draw:border" ) )
-					border -= draw->attribute( "draw:cx" ).remove( '%' ).toDouble() / 100.0;
+					border += draw->attribute( "draw:border" ).remove( '%' ).toDouble() / 100.0;
 				VColor c;
 				parseColor( c, draw->attribute( "draw:start-color" ) );
-				gradient.addStop( c, 0.0, 0.5 );
+				gradient.addStop( c, border, 0.5 );
 				parseColor( c, draw->attribute( "draw:end-color" ) );
-				gradient.addStop( c, border * 1.0, 0.5 );
+				gradient.addStop( c, 1.0, 0.5 );
 
 				QString type = draw->attribute( "draw:style" );
 				if( type == "linear" || type == "axial" )
