@@ -43,7 +43,7 @@ class KexiDataTableView : public KexiTableView
 		/**
 		 * creates a table widget and fills it (partly ;) with recordset rec
 		 */
-		KexiDataTableView(QWidget *parent, const char *name, KexiDBRecordSet *rec);
+		KexiDataTableView(QWidget *parent, const char *name, KexiDB *db,KexiDBRecordSet *rec);
 		~KexiDataTableView();
 
 		/**
@@ -51,7 +51,10 @@ class KexiDataTableView : public KexiTableView
 		 * was data.
 		 */
 		void		setDataSet(KexiDBRecordSet *rec);
-
+		/**
+		 * set the database instance
+		 */
+		void		setDataBase(KexiDB *db);
 		/**
 		 * @returns the number of records in the recordset
 		 * @note not all of the records have to be processed

@@ -31,13 +31,13 @@
 #include "kexidatatableview.h"
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
- : KexiTableView(parent, name)
+ : KexiTableView(parent, name),m_db(0)
 {
 	init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDBRecordSet *rec)
- : KexiTableView(parent, name)
+KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB *db,KexiDBRecordSet *rec)
+ : KexiTableView(parent, name),m_db(db)
 {
 	init();
 	setDataSet(rec);
@@ -53,6 +53,11 @@ KexiDataTableView::init()
 
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
 	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
+}
+
+void KexiDataTableView::setDataBase(KexiDB *db)
+{
+	m_db=db;
 }
 
 void KexiDataTableView::setDataSet(KexiDBRecordSet *rec)
@@ -150,8 +155,9 @@ KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 		}
 
 		KexiDBField *fi = m_record->fieldInfo(col);
-		m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
-		 i->getValue(col));
+		if (m_db)
+			m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
+			 i->getValue(col));
 
 		KexiTableItem *newinsert = new KexiTableItem(this);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));

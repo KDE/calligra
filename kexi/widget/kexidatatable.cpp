@@ -116,6 +116,7 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 {
 	m_tableView->setDataSet(rec);
+	m_tableView->setDataBase(m_db);
 	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
 
 #if 0
