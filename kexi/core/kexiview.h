@@ -117,6 +117,7 @@ protected slots:
 	void			initHelper(bool h=true);
 
 	void			slotShowProjectProps();
+	void			slotShowSettings();
 
 	void			slotSettings();
 

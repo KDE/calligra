@@ -23,6 +23,8 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
+#include <qregexp.h>
 
 #include <koApplication.h>
 
@@ -143,8 +145,8 @@ HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &s
 	m_succeed = succeed;
 	m_execTime = execTime;
 	m_statement = statement;
-
 	m_selected = false;
+	highlight();
 }
 
 void
@@ -163,9 +165,11 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 	p->drawText(22, 2, 180, 20, Qt::AlignLeft | Qt::AlignVCenter, m_execTime.toString());
 	p->setPen(QColor(200, 200, 200));
 	p->setBrush(QColor(255, 255, 255));
-	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+	m_formated->setWidth(width - 2);
+	QRect content(2, 21, width - 2, m_formated->height());
+//	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 //	QRect content(2, 21, width - 2, p->fontMetrics().height() + 4);
-	content = QRect(2, 21, width - 2, content.height());
+//	content = QRect(2, 21, width - 2, m_for.height());
 
 	if(m_selected)
 		p->setBrush(cg.highlight());
@@ -179,7 +183,74 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 
 	content.setX(content.x() + 2);
 	content.setWidth(content.width() - 2);
-	p->drawText(content, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+//	p->drawText(content, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+	m_formated->draw(p, content.x(), content.y(), content, cg);
+}
+
+void
+HistoryEntry::highlight()
+{
+	QString statement;
+	QString text;
+	bool quote = false;
+	bool dblquote = false;
+
+	statement = m_statement;
+	statement.replace("<", "&lt;");
+	statement.replace(">", "&gt;");
+	statement.replace("\n", "<br>");
+	statement.replace(" ", "&nbsp;");
+	statement.replace("\t", "&nbsp;&nbsp;&nbsp;");
+
+	// getting quoting...
+	for(int i=0; i < statement.length(); i++)
+	{
+		QString beginTag;
+		QString endTag;
+		QChar curr = QChar(statement[i]);
+
+		if(curr == "'" && !dblquote && QChar(statement[i-1]) != "\\")
+		{
+			if(!quote)
+			{
+				quote = true;
+				beginTag += "<font color=\"#ff0000\">";
+			}
+			else
+			{
+				quote = false;
+				endTag += "</font>";
+			}
+		}
+		if(curr == "\"" && !quote && QChar(statement[i-1]) != "\\")
+		{
+			if(!dblquote)
+			{
+				dblquote = true;
+				beginTag += "<font color=\"#ff0000\">";
+			}
+			else
+			{
+				dblquote = false;
+				endTag += "</font>";
+			}
+		}
+		if(QRegExp("[0-9]").exactMatch(QString(curr)) && !quote && !dblquote)
+		{
+			beginTag += "<font color=\"#0000ff\">";
+			endTag += "</font>";
+		}
+
+		text += beginTag + curr + endTag;
+	}
+
+	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL)\\b");
+	keywords.setCaseSensitive(false);
+	text.replace(keywords, "<b>\\1</b>");
+
+	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
+	m_formated = new QSimpleRichText(text, QFont("courier", 8));
+
 }
 
 QRect

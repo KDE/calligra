@@ -35,7 +35,7 @@ KAboutData *newKexiAboutData()
 	KAboutData *aboutData=new KAboutData( "kexi", I18N_NOOP("Kexi"),
 		version, description, KAboutData::License_LGPL,
 		I18N_NOOP("(c) 2002, Kexi Team"), 0, "http://www.koffice.org/kexi");
-	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@gmx.at");
+	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Form Designer, UIModes & much more"), "jowenn@kde.org");
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");

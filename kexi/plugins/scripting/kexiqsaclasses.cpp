@@ -20,6 +20,7 @@ Boston, MA 02111-1307, USA.
 #include <stdlib.h>
 
 #include <qmessagebox.h>
+#include <qfile.h>
 
 #include "kexiqsaclasses.h"
 

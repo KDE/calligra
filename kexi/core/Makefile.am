@@ -9,7 +9,7 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	KexiProjectIface.cpp kexihandlerpopupmenu.cpp kexiprojecthandler.cpp \
 	kexirelation.cpp kexidragobjects.cpp kexidataprovider.cpp \
 	kexicontexthelp.cpp kexidatasourcedlg.cpp \
-	kexidatasourcecombobox.cpp kexidbconnection.cpp kexieventhandler.cpp
+	kexidatasourcecombobox.cpp kexidbconnection.cpp kexieventhandler.cpp kexisettings.cpp
 
 
 

@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,31 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROJECTPROPERTIES_H
-#define KEXIPROJECTPROPERTIES_H
+#ifndef KEXISETTINGS_H
+#define KEXISETTINGS_H
 
 #include <kdialogbase.h>
 
-#include <kexiDB/kexidb.h>
-
-class QComboBox;
-class KexiDBConnection;
-
-class KexiProjectProperties : public KDialogBase
+class KexiSettings : public KDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiProjectProperties(QWidget *parent, KexiDBConnection *dbconn);
-		~KexiProjectProperties();
-
-		KexiDB::Encoding encoding();
+		KexiSettings(QWidget *parent);
+		~KexiSettings();
 
 	protected:
-		void		setupDBProperties(KexiDBConnection *db);
-
-	private:
-		QComboBox	*m_encoding;
+		QPixmap		ListIcon(const char *);
 };
 
 #endif

@@ -59,6 +59,14 @@ class KexiDB : public QObject
 			LocalFileDB
 		};
 
+		enum Encoding
+		{
+			Latin1,
+			Utf8,
+			Ascii,
+			Local8Bit
+		};
+
 		KexiDB(QObject *parent=0, const char *name=0);
 		~KexiDB();
 
@@ -119,6 +127,20 @@ class KexiDB : public QObject
 		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
 		 */
 		void latestError(KexiDBError **error);
+
+		/**
+		 * forces the db to read out in a special encoding
+		 */
+		virtual void setEncoding(Encoding enc) { m_encoding = enc; }
+
+		/**
+		 * returns the selected encoding
+		 */
+		Encoding encoding() { return m_encoding; }
+
+		const QString decode(const char *);
+		const char *encode(const QString &);
+
 	public:
 		/*!
 		 *  the last error which occured. The pointer must neither be stored by the caller nor
@@ -132,6 +154,7 @@ class KexiDB : public QObject
 		KexiDBInterfaceManager	*m_manager;
 		KexiDBWatcher		*m_dbwatcher;
 		RelationList		m_relations;
+		Encoding		m_encoding;
 };
 
 #endif

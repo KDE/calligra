@@ -24,6 +24,9 @@
 #include <qdatetime.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <qsimplerichtext.h>
+
+class QSimpleRichText;
 
 class HistoryEntry
 {
@@ -36,6 +39,7 @@ class HistoryEntry
 
 		void	setSelected(bool selected) { m_selected = selected; }
 		bool	isSelected() { return m_selected; }
+		void	highlight();
 
 		QString	statement() { return m_statement; }
 		void updateTime(const QTime &execTime);
@@ -44,6 +48,7 @@ class HistoryEntry
 		bool	m_succeed;
 		QTime	m_execTime;
 		QString	m_statement;
+		QSimpleRichText	*m_formated;
 
 		int	m_y;
 		bool	m_selected;

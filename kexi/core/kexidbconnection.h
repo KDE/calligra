@@ -21,10 +21,11 @@
 #define KEXIDBCONNECTION_H
 
 #include <qobject.h>
+#include <kexiDB/kexidb.h>
 
 class QDomElement;
+class QDomDocument;
 class KoStore;
-class KexiDB;
 class KexiDBInterfaceManager;
 /**
  * this class aims to provide
@@ -71,6 +72,9 @@ class KexiDBConnection
 		 */
 		static KexiDBConnection* loadInfo(QDomElement &e);
 
+		void	setEncoding(KexiDB::Encoding e) { m_encoding = e; }
+		KexiDB::Encoding encoding() { return m_encoding; }
+
 		/**
 		 * save database-connection infos
 		 */
@@ -104,6 +108,7 @@ class KexiDBConnection
 		QString		m_port;
 		QString		m_file;
 		bool		m_persistant;
+		KexiDB::Encoding m_encoding;
 
 		QString		m_tmpname;
 		QStringList	m_tmpindex;

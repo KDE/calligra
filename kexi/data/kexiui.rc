@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="0.91">
+<kpartgui name="kexi" version="0.92">
 <MenuBar>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
@@ -14,7 +14,9 @@
   <Action name="show_nav"/>
   <Action name="show_contexthelp"/>
 </Menu>
-
+<Menu name="settings"><text>&amp;Settings</text>
+ <Action name="kexi_settings" />
+</Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1">

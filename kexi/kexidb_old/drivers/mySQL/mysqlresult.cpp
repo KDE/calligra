@@ -25,8 +25,9 @@ Boston, MA 02111-1307, USA.
 #include "mysqlresult.h"
 #include "mysqldb.h"
 
-MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent)
+MySqlResult::MySqlResult(MYSQL_RES *result, MySqlDB *parent)
 {
+	m_parent = parent;
 	//various initialisations...
 	m_result = result;
 	m_row = 0;
@@ -123,7 +124,7 @@ MySqlResult::value(unsigned int field)
 			return QVariant(ba);
 		}
 		default:
-			return QVariant((m_row)[field]);
+			return QVariant(m_parent->decode((m_row)[field]));
 	}
 
 	return 0;

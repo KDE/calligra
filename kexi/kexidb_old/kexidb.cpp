@@ -28,6 +28,7 @@ KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 {
 	kdDebug() << "KexiDB::KexiDB()" << endl;
 	m_dbwatcher = new KexiDBWatcher(this, "dbwatcher");
+	m_encoding = Latin1;
 }
 
 
@@ -178,6 +179,44 @@ KexiDB::getNativeDataType(const KexiDBField::ColumnType& t)
 
 KexiDB::~KexiDB()
 {
+}
+
+const QString
+KexiDB::decode(const char *c)
+{
+	switch(m_encoding)
+	{
+		case Latin1:
+			return QString::fromLatin1(c);
+
+		case Utf8:
+			return QString::fromUtf8(c);
+
+		case Ascii:
+			return QString::fromAscii(c);
+
+		case Local8Bit:
+			return QString::fromLocal8Bit(c);
+	}
+}
+
+const char*
+KexiDB::encode(const QString &v)
+{
+	switch(m_encoding)
+	{
+		case Latin1:
+			return v.latin1();
+
+		case Utf8:
+			return v.utf8();
+
+		case Ascii:
+			return v.ascii();
+
+		case Local8Bit:
+			return v.local8Bit();
+	}
 }
 
 void KexiDB::latestError(KexiDBError **error) {

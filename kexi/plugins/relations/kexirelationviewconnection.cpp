@@ -188,6 +188,13 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 	if(!we.contains(p))
 		return false;
 
+	/** get our coordinats
+	 *  you know what i mean the x1, y1 is the top point
+	 *  and the x2, y2 is the bottom point
+	 *  (quite tirvial :) although that was the entrace to the magic
+	 *  gate...
+	 */
+
 	int sx = m_srcTable->x() + m_srcTable->width();
 	int sy = m_srcTable->globalY(m_srcField);
 	int rx = m_rcvTable->x();
@@ -200,18 +207,17 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 
 	if(sx > rx)
 	{
-		kdDebug() << "KexiRelationViewConnection::matchesPoint(): sx > rx, that happens?" << endl;
 		x1 = m_rcvTable->x() + m_rcvTable->width();
 		x2 = m_srcTable->x();
 		y2 = sy;
 		y1 = ry;
-
-		kdDebug() << "KexiRelationViewConnection::matchesPoint(): x1 " << x1 << endl;
-		kdDebug() << "KexiRelationViewConnection::matchesPoint(): x2 " << x2 << endl;
-		kdDebug() << "KexiRelationViewConnection::matchesPoint(): y1 " << y1 << endl;
-		kdDebug() << "KexiRelationViewConnection::matchesPoint(): y2 " << y2 << endl;
 	}
 
+	/*
+	  here we call pythagoras (the greek math geek :p)
+	  see: http://w1.480.telia.com/%7Eu48019406/geekporn.gif if you don't know
+	  how these people have got sex :)
+	 */
 	float mx = x2-x1;
 	float my = y2-y1;
 	float mag = sqrt(mx * mx + my * my);

@@ -98,7 +98,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				if(fieldInfo((*it).field)->table() == m_table)
 				{
 					statement = "update " + m_table + " set " + (*it).field + "='" +
-					 value + "' where " + m_keyField + "='" + key + "'";
+					 m_db->encode(value) + "' where " + m_keyField + "='" + m_db->encode(key) + "'";
 				}
 				else
 				{
@@ -116,7 +116,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 				if(fieldInfo((*it).field)->table() == m_table)
 				{
 					statement = "insert into " + m_table + " set " + (*it).field +
-					 " = '" + value + "'";
+					 " = '" + m_db->encode(value) + "'";
 				}
 				else
 				{
@@ -200,12 +200,12 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 						{
 							kdDebug() << "MySqlRecord::forignUpdate(): update" << endl;
 							updateq = "update " + m_table + " set " + local + "='" +
-							 fkey + "' where " + m_keyField + "='" + key + "'";
+							 m_db->encode(fkey) + "' where " + m_keyField + "='" + m_db->encode(key) + "'";
 						}
 						else
 						{
 							updateq = "insert into " + m_table + " set " + local +
-							 " = '" + fkey + "'";
+							 " = '" + m_db->encode(fkey) + "'";
 
 						}
 

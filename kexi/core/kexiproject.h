@@ -94,6 +94,7 @@ public:
 	References fileReferences(const QString &group);
 
 	bool initDBConnection(KexiDBConnection *c, KoStore *store = 0);
+	KexiDBConnection *dbConnection() { return m_dbconnection; }
 
 	void clear();
 

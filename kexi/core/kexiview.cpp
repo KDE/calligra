@@ -18,42 +18,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qsqlquery.h>
-#include <qsqldatabase.h>
-#include <qstringlist.h>
 #include <qptrlist.h>
 #include <qapplication.h>
-#include <qglobal.h>
 #include <qtimer.h>
 #include <qlayout.h>
-#include <qpainter.h>
 
 #include <klocale.h>
 #include <kinstance.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kurl.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 #include <kstdguiitem.h>
-#include <kkeydialog.h>
-#include <kedittoolbar.h>
 #include <kcmdlineargs.h>
 #include <kparts/event.h>
-#include <kocontexthelp.h>
 #include <kprinter.h>
 
 #include "kexiview.h"
+#include "kexisettings.h"
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
-//#include "kexicreateproject.h"
 #include "kexiprojectproperties.h"
 #include "KexiViewIface.h"
+#include "kexidbconnection.h"
 
 #include "kexicontexthelp.h"
 
@@ -159,8 +150,13 @@ void KexiView::initActions()
 	//standard actions
 	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
 
-	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7, actionCollection(), "project_props");
+	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
+	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
+
+	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "", Key_F35,
+	 actionCollection(), "kexi_settings");
+	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
 	KToggleAction *actionNav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
 	 actionCollection(), "show_nav");
@@ -232,9 +228,21 @@ KexiView::slotDBAvaible()
 void
 KexiView::slotShowProjectProps()
 {
-	KexiProjectProperties *p = new KexiProjectProperties(this);
-	p->exec();
+	KexiProjectProperties *p = new KexiProjectProperties(this, project()->dbConnection());
+	if(p->exec())
+	{
+		project()->db()->setEncoding(p->encoding());
+		project()->dbConnection()->setEncoding(p->encoding());
+	}
+
 	delete p;
+}
+
+void
+KexiView::slotShowSettings()
+{
+	KexiSettings *s = new KexiSettings(this);
+	s->exec();
 }
 
 KexiView::~KexiView(){

@@ -33,15 +33,15 @@
 #include <kmessagebox.h>
 #include <koStore.h>
 
-#include<kexiDB/kexidb.h>
-#include<kexiDB/kexidbinterfacemanager.h>
-#include<kexiDB/kexidberror.h>
+#include <kexiDB/kexidbinterfacemanager.h>
+#include <kexiDB/kexidberror.h>
 #include "kexidbconnection.h"
 
 KexiDBConnection::KexiDBConnection()
 {
 	m_connected = false;
 	m_type = KexiDB::NoDB;
+	m_encoding = KexiDB::Latin1;
 }
 
 KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, const QString &dbname,
@@ -58,6 +58,7 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, c
 	m_port = port;
 
 	m_persistant = false;
+	m_encoding = KexiDB::Latin1;
 }
 
 KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, bool persistant)
@@ -69,6 +70,7 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &file, b
 	m_engine = engine;
 	m_file = file;
 	m_persistant = persistant;
+	m_encoding = KexiDB::Latin1;
 }
 
 KexiDB*
@@ -93,6 +95,7 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 			if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, false))
 			{
 				kdDebug() << "KexiDBConnection::connectDB(): remote = " << addDB << endl;
+				addDB->setEncoding(m_encoding);
 				return addDB;
 			}
 			else
@@ -127,6 +130,7 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 			provide(store);
 			if (addDB->load(tmpfile, m_persistant))
 			{
+				addDB->setEncoding(m_encoding);
 				return addDB;
 			}
 			else
@@ -157,6 +161,7 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 	QDomElement userElement = rootElement.namedItem("user").toElement();
 	QDomElement passElement = rootElement.namedItem("password").toElement();
 	QDomElement persElement = rootElement.namedItem("persistant").toElement();
+	QDomElement encodingElement = rootElement.namedItem("encoding").toElement();
 //	QDomElement
 //	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
 
@@ -178,6 +183,28 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 		type = KexiDB::LocalFileDB;
 	}
 
+	KexiDB::Encoding enc;
+	if(encodingElement.text().isEmpty())
+	{
+		enc = KexiDB::Latin1;
+	}
+	else if(encodingElement.text() == "Utf8")
+	{
+		enc = KexiDB::Utf8;
+	}
+	else if(encodingElement.text() == "Local8Bit")
+	{
+		enc = KexiDB::Local8Bit;
+	}
+	else if(encodingElement.text() == "Ascii")
+	{
+		enc = KexiDB::Ascii;
+	}
+	else
+	{
+		enc = KexiDB::Latin1;
+	}
+
 	switch(type)
 	{
 		case KexiDB::RemoteDB:
@@ -185,6 +212,7 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 			KexiDBConnection *conn;
 			conn = new KexiDBConnection(engineElement.text(), hostElement.text(),
 			 nameElement.text(), userElement.text(), passElement.text(), 0);
+			conn->setEncoding(enc);
 			return conn;
 		}
 		case KexiDB::LocalDirectoryDB:
@@ -198,6 +226,8 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 			{
 				conn = new KexiDBConnection(engineElement.text(), 0);
 			}
+
+			conn->setEncoding(enc);
 			return conn;
 		}
 		default:
@@ -337,6 +367,33 @@ KexiDBConnection::writeInfo(QDomDocument &domDoc)
 	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
 	savePassElement.appendChild(tSavePass);
 */
+
+//ENCODING
+	QDomElement encodingElement = domDoc.createElement("encoding");
+	connectionElement.appendChild(encodingElement);
+
+	QString ev;
+	switch(m_encoding)
+	{
+		case KexiDB::Utf8:
+			ev = "Utf8";
+			break;
+
+		case KexiDB::Local8Bit:
+			ev = "Local8Bit";
+			break;
+
+		case KexiDB::Ascii:
+			ev = "Ascii";
+			break;
+
+		default:
+			ev = "Latin1";
+			break;
+	}
+
+	QDomText tEnc = domDoc.createTextNode(ev);
+	encodingElement.appendChild(tEnc);
 }
 
 void

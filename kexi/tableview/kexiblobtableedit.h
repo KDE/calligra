@@ -26,6 +26,7 @@
 
 class KTempFile;
 class KProcess;
+class QTextEdit;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
@@ -33,14 +34,16 @@ class KexiBlobTableEdit : public KexiTableEdit
 	public:
 		KexiBlobTableEdit(const QByteArray& val, QWidget* parent = 0, const char* name = 0);
 		~KexiBlobTableEdit();
-		
+
 		virtual QVariant value();
 	protected:
 		KTempFile* m_tempFile;
 		KProcess* m_proc;
-		
+		QTextEdit *m_content;
+
 		QString openWithDlg(const QString& file);
 		void execute(const QString& app, const QString& file);
+
 	protected slots:
 		void slotFinished(KProcess* p);
 		void open();

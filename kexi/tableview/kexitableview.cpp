@@ -487,6 +487,10 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	QPtrListIterator<KexiTableItem> it(*m_contents);
 	it += rowfirst;
 
+	int maxwc = QMIN(cw, (columnPos(m_numCols - 1) + columnWidth(m_numCols - 1)));
+	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
+	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
+
 	for(r = rowfirst; r <= rowlast; r++, ++it)
 	{
 		// get row position and height
@@ -495,21 +499,26 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 		// Go through the columns in the row r
 		// if we know from where to where, go through [colfirst, collast],
 		// else go through all of them
-    	int colp, colw;
-    	colp = 0;
-    	int transly = rowp-cy;
-    	int c;
+		int colp, colw;
+		colp = 0;
+		int transly = rowp-cy;
+		int c;
+
+		if(m_bgAltering && r%2 != 0)
+			pb->fillRect(0, transly, maxwc, m_rowHeight - 1, KGlobalSettings::alternateBackgroundColor());
+		else
+			pb->fillRect(0, transly, maxwc, m_rowHeight - 1, colorGroup().base());
 
 		for(c = colfirst; c <= collast; c++)
 		{
-	    	// get position and width of column c
-	    	colp = columnPos(c);
-	    	colw = columnWidth(c);
-	    	int translx = colp-cx;
+		// get position and width of column c
+		colp = columnPos(c);
+		colw = columnWidth(c);
+		int translx = colp-cx;
 
-	    	// Translate painter and draw the cell
-	    	pb->saveWorldMatrix();
-	    	pb->translate(translx, transly);
+		// Translate painter and draw the cell
+		pb->saveWorldMatrix();
+		pb->translate(translx, transly);
 //	    	paintCell( pb, r, c, QRect(columnPos(c), rowPos(r), colw, m_rowHeight));
 	    	paintCell( pb, it.current(), c, QRect(columnPos(c), rowPos(r), colw, m_rowHeight));
 		  	pb->restoreWorldMatrix();
@@ -530,7 +539,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 //	p->setPen(colorGroup().button());
 
-	if(m_bgAltering && !print && m_contents->findRef(item)%2 != 0)
+/*	if(m_bgAltering && !print && m_contents->findRef(item)%2 != 0)
 	{
 		QPen originalPen(p->pen());
 		QBrush originalBrush(p->brush());
@@ -542,13 +551,13 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		p->setPen(originalPen);
 		p->setBrush(originalBrush);
 	}
-
+*/
 	//	Draw our lines
 	QPen pen(p->pen());
-	if(!print)
+//	if(!print)
 		p->setPen(QColor(200,200,200));
-	else
-		p->setPen(black);
+//	else
+//		p->setPen(black);
 
 	p->drawLine( x2, 0, x2, y2 );	// right
 	p->drawLine( 0, y2, x2, y2 );	// bottom
@@ -561,12 +570,13 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			p->drawRect(0, 0, x2, y2);
 	}
 
-	if(m_pCurrentItem == item && m_recordIndicator)
+/*	if(m_pCurrentItem == item && m_recordIndicator)
 	{
 		p->setBrush(colorGroup().highlight());
 		p->setPen(colorGroup().highlight());
 		p->drawRect(0, 0, x2, y2);
 	}
+*/
 
 	int x = 2;
 
@@ -1017,7 +1027,11 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 	{
 		case QVariant::ByteArray:
 			m_pEditor = new KexiBlobTableEdit(val.toByteArray(), viewport(), "inPlaceEd");
-			break;
+			m_pEditor->resize(columnWidth(m_curCol)-1, 150);
+			moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
+			m_pEditor->show();
+			m_pEditor->setFocus();
+			return;
 		case QVariant::StringList:
 			m_pEditor = new KexiComboBoxTableEdit(static_cast<KexiDBField::ColumnType>(val.toInt()),
 				m_pColumnDefaults->at(col)->toStringList(), viewport(), "inPlaceEd");
