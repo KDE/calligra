@@ -3,8 +3,6 @@ libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KOFFICEUI) ../tableview/libkexidatatable.la ../core/libkexicore.la
 
-SUBDIRS = .
-
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 

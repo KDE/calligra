@@ -14,7 +14,7 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexiDB/libkexidb.la
 
-SUBDIRS = . projectWizard
+SUBDIRS = projectWizard
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

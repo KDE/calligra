@@ -1,6 +1,3 @@
-SUBDIRS = .
-
-
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
 # kde_sounddir        Where your sounds should go to.
