@@ -879,7 +879,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>This section of the guide will cover more advanced features of data editing.  This section focuses entirely on text data.  For working with other types of data, please see the <link linkend="Guides3">next section</link>. </para>
 <sect1 id="select"><title>Selecting Text</title>
 <para>For many editing and formatting functions in KWord, you will want to perform a certain action (bold face, underline, etc) to a certain section of text, not the document as a whole. You specify which text you want by selecting (highlighting) text.</para>
-<para>Selected text has a black background to seperate it from unselected text. You select text by designating a start and an end point.  All the ttext in between the start and end point is selected text.  (Note:  The "endpoint" can be located before the start point.  The text will not be reversed.)</para>
+<para>Selected text has a black background to seperate it from unselected text. You select text by designating a start and an end point.  All the text in between the start and end point is selected text.  (Note:  The "endpoint" can be located before the start point.  The text will not be reversed.)</para>
 <para>You can select text with either the mouse or the keyboard. </para>
 <sect2 id="selkb"><title>Using The Keyboard</title>
 <informaltable frame="none"><tgroup cols="2" align="left">
