@@ -79,7 +79,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 with useDatabase(). */
 		bool isDatabaseUsed();
 		
-		/*! \brief Disconnects from driver with given parameters. 
+		/*! \brief Disconnects from driver with given parameters.
+		 
 		 The database (if used) is closed, and any active transactions 
 		 (if supported) are rolled back, so commit these before disconnecting,
 		 if you'd like to save your changes. */
@@ -96,7 +97,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		  not exist using error(), errorNum() and/or errorMsg(). */
 		bool databaseExists( const QString &dbName, bool ignoreErrors = true );
 
-		/*! Creates new database with name \a dbName, using this connection.
+		/*! \brief Creates new database with name \a dbName, using this connection.
+		
 		 If database with \a dbName already exists, or other error occured,
 		 false is returned. 
 		 For file-based drivers, \a dbName should be equal to the database
@@ -106,22 +108,26 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! 
 		\brief Opens an existing database specified by \a dbName.
+		
 		 For file-based drivers, \a dbName should be equal to filename
 		 (the same as specified for ConnectionData). */
 		bool useDatabase( const QString &dbName );
 
 		/*! 
 		\brief Closes currently used database for this connection.
+		
 		 Any active transactions (if supported) are rolled back,
 		 so commit these before closing, if you'd like to save your changes. */
 		bool closeDatabase();
 
 		/*! \brief Get the name of the current database
+		
 		\return name of currently used database for this connection or empty string
 			if there is no used database */
 		QString currentDatabase() { return m_usedDatabase; }
 
 		/*! \brief Drops database with name \a dbName.
+		
 		 if dbName is not specified, currently used database name is used
 		 (it is closed before dropping).
 		*/
@@ -161,7 +167,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 that are stored in currently used database. */
 		QValueList<int> objectIds(int objType);
 
-		/*! Creates new transaction handle and starts a new transaction.
+		/*! \brief Creates new transaction handle and starts a new transaction.
 		 \return KexiDB::Transaction object if transaction has been started 
 		 successfully, otherwise null transaction. 
 		 For drivers that allow single transaction per connection
