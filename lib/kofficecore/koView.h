@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qguardedptr.h>
 
-#include <kprinter.h>
+#include <koprinter.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 

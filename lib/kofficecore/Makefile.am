@@ -34,7 +34,7 @@ include_HEADERS = koFilter.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h \
-	koImage.h koImageCollection.h
+	koImage.h koImageCollection.h koprinter.h
 
 #libkofficecore_la_METASOURCES = AUTO
 
