@@ -79,27 +79,18 @@ SelectionTool::SelectionTool (CommandHistory *history)
    m_id=ToolSelect;
 }
 
-void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-//  if (doc->activePage()->helplineLayerIsActive ()) {
-/*    if (e->type () == QEvent::MouseButtonPress)
-      processButtonPressForHelpline ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseMove)
-      processMouseMoveForHelpline ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseButtonRelease)
-      processButtonReleaseForHelpline ((QMouseEvent *) e, doc, canvas);*/
-//  }
-//  else {
-    if(!doc->document()->isReadWrite())
-      return;
-    if (e->type () == QEvent::MouseButtonPress)
-      processButtonPressEvent ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseMove)
-      processMouseMoveEvent ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::MouseButtonRelease)
-      processButtonReleaseEvent ((QMouseEvent *) e, doc, canvas);
-    else if (e->type () == QEvent::KeyPress)
-      processKeyPressEvent ((QKeyEvent *) e, doc, canvas);
-//  }
+void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+{
+  if(!doc->document()->isReadWrite())
+    return;
+  if (e->type () == QEvent::MouseButtonPress)
+    processButtonPressEvent ((QMouseEvent *) e, doc, canvas);
+  else if (e->type () == QEvent::MouseMove)
+    processMouseMoveEvent ((QMouseEvent *) e, doc, canvas);
+  else if (e->type () == QEvent::MouseButtonRelease)
+    processButtonReleaseEvent ((QMouseEvent *) e, doc, canvas);
+  else if (e->type () == QEvent::KeyPress)
+    processKeyPressEvent ((QKeyEvent *) e, doc, canvas);
 }
 
 void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *, Canvas* canvas)
@@ -616,19 +607,26 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 
   /*****[HELPLINES]*****/
   dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
-  if (dragHorizHelpline != -1) {
-    if (ctype != C_Vert) {
+  if (dragHorizHelpline != -1)
+  {
+    if (ctype != C_Vert)
+    {
       canvas->setCursor(Qt::sizeVerCursor);
       ctype = C_Vert;
-      return;
-     }
-     dragVertHelpline = -1;
+    }
+    dragVertHelpline = -1;
+    return;
   }
-  else {
+  else
+  {
     dragVertHelpline = canvas->indexOfVertHelpline (xpos);
-    if (dragVertHelpline != -1 && ctype != C_Horiz) {
-      canvas->setCursor(Qt::sizeHorCursor);
-      ctype = C_Horiz;
+    if (dragVertHelpline != -1)
+    {
+      if(ctype != C_Horiz)
+      {
+        canvas->setCursor(Qt::sizeHorCursor);
+        ctype = C_Horiz;
+      }
       return;
     }
   }
