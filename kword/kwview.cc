@@ -1526,9 +1526,7 @@ void KWView::deleteFrame( bool _warning )
                       "Doing so will delete all the text in the table.\n"
                       "Are you sure you want to do that?"),
                 i18n("Delete Table"), i18n("&Delete"),
-#if KDE_VERSION >= 220
                 "DeleteTableConfirmation",
-#endif
                 true );
             if (result != KMessageBox::Continue)
                 return;
@@ -1557,9 +1555,7 @@ void KWView::deleteFrame( bool _warning )
                           "anymore!\n\n"
                           "Are you sure you want to do that?").arg(fs->getName()),
                     i18n("Delete Frame"), i18n("&Delete"),
-#if KDE_VERSION >= 220
                     "DeleteLastFrameConfirmation",
-#endif
                     true );
 
                 if (result != KMessageBox::Continue)
@@ -1579,9 +1575,7 @@ void KWView::deleteFrame( bool _warning )
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
                 i18n("&Delete"),
-#if KDE_VERSION >= 220
                 "DeleteLastFrameConfirmation",
-#endif
                 true );
             if (result != KMessageBox::Continue)
                 return;
@@ -1599,9 +1593,7 @@ void KWView::deleteFrame( bool _warning )
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
                 i18n("&Delete"),
-#if KDE_VERSION >= 220
                 "DeleteLastFrameConfirmation",
-#endif
                 true );
             if (result != KMessageBox::Continue)
                 return;
