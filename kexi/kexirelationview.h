@@ -67,6 +67,9 @@ class KexiRelationView : public QScrollView
 
 		ConnectionList	getConnections()const { return m_connections; };
 
+	public slots:
+		void		slotTableScrolling(QString);
+
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		drawSource(QPainter *p, RelationSource src);
@@ -99,12 +102,16 @@ class KexiRelationViewTable : public KListView
 		QString			table() const { return m_table; };
 		int			globalY(const QString &item);
 
+	signals:
+		void			tableScrolling(QString);
+
 	protected:
 		QDragObject		*dragObject();
 		virtual bool		acceptDrag(QDropEvent *e) const;
 
 	protected slots:
 		void			slotDropped(QDropEvent *e);
+		void			slotContentsMoving(int, int);
 
 	private:
 		QStringList		m_fieldList;

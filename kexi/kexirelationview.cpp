@@ -76,6 +76,8 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	tableView->show();
 
 	m_tables.insert(table, s);
+	
+	connect(tableView, SIGNAL(tableScrolling(QString)), this, SLOT(slotTableScrolling(QString)));
 }
 
 void
@@ -248,6 +250,19 @@ KexiRelationView::contentsMouseReleaseEvent(QMouseEvent *ev)
 }
 
 void
+KexiRelationView::slotTableScrolling(QString table)
+{
+	for(ConnectionList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
+	{
+		if((*itC).srcTable == table || (*itC).rcvTable == table)
+		{
+			updateContents((*itC).geometry);
+			updateContents(recalculateConnectionRect(&(*itC)));
+		}
+	}
+}
+
+void
 KexiRelationView::addConnection(SourceConnection connection)
 {
 	SourceConnection *conn = &connection;
@@ -292,7 +307,7 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 //	setResizeMode(QListView::AllColumns);
 	header()->hide();
 
-	setSorting(1, true); // disable sorting
+	setSorting(0, true); // disable sorting
 
 	int order=0;
 	for(QStringList::Iterator it = m_fieldList.begin(); it != m_fieldList.end(); it++)
@@ -305,6 +320,7 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 
 //	setDragEnabled
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
+	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
 }
 
 int
@@ -371,6 +387,12 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 	}
 	ev->ignore();
 
+}
+
+void
+KexiRelationViewTable::slotContentsMoving(int,int)
+{
+	emit tableScrolling(table());
 }
 
 KexiRelationViewTable::~KexiRelationViewTable()

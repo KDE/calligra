@@ -28,7 +28,7 @@
 #include "kexiDB/kexidbinterfacemanager.h"
 
 static const char *description =
-	I18N_NOOP("A Database Frontend");
+	I18N_NOOP("Database Management");
 // INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
 	
 	
@@ -44,12 +44,16 @@ int main(int argc, char *argv[])
 
 	KAboutData aboutData( "kexi", I18N_NOOP("Kexi"),
 		"0.1", description, KAboutData::License_GPL,
-		"(c) 2002, Lucijan Busch", 0, 0, "lucijan@gmx.at");
-	aboutData.addAuthor("Lucijan Busch","Developer & Maintainer", "lucijan@gmx.at");
-	aboutData.addAuthor("Peter Simonsson","Developer","psn@linux.se");
-	aboutData.addAuthor("Daniel Molkentin","Developer",  "molkentin@kde.org");
-	aboutData.addAuthor("Till Busch", "Buxfixes and Improvements", "till@bux.at");
-	aboutData.addAuthor("Joseph Wenninger", "A lot of work for formeditor, and a lot other stuff", "jowenn@kde.org");
+		"(c) 2002, Kexi Team", 0, "http://luci.bux.at/projects/kexi", "lucijan@gmx.at");
+	aboutData.addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@gmx.at");
+	aboutData.addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
+	aboutData.addAuthor("Joseph Wenninger", I18N_NOOP("Formdesigner, UIModes & much more"), "jowenn@kde.org");
+	aboutData.addAuthor("Daniel Molkentin",I18N_NOOP("Design, Improvements"),  "molkentin@kde.org");
+	aboutData.addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
+	aboutData.addAuthor("Till Busch", I18N_NOOP("Buxfixes, Orignial Table Widget"), "till@bux.at");
+	aboutData.addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
+	aboutData.setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
+
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 

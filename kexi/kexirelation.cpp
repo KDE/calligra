@@ -80,7 +80,6 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 
 	if(!embedd)
 		registerAs(DocumentWindow);
-
 }
 
 void
