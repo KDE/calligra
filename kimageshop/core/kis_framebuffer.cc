@@ -18,6 +18,27 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+/*
+    The krayon framebuffer is for all pixel-writing operations
+    caused by the user.  It differs from the krayon engine which
+    is responsible for writing to the tiles which compose a krayon
+    image as they are marked dirty and updated with the timer. 
+    These tile are then painted to the canvas to actually show the
+    changed channel data on the screen.
+    
+    The framebuffer allows writing directly to channel memory
+    without being concerned about tiles and layer and channel
+    internals, which should be encapsulated from these kinds of
+    operations.  This makes it like a conventional framebuffer while
+    also allowing the speed of direct access to the channel (binary)
+    data mostly through KisLayer::setPixel() and layer::pixel().  
+    
+    The krayon framebuffer also allows use of QImage methods to
+    translate back and forth between QImage data and Krayon channel
+    data - for example, in patterns which are accessed as QImages and
+    in importing and exporting common image formats with Qt image
+    methods.
+*/
 
 #include <qcolor.h>
 #include <qclipboard.h>
@@ -30,6 +51,7 @@
 #include "kis_layer.h"
 #include "kis_vec.h"
 #include "kis_util.h"
+#include "kis_selection.h"
 #include "kis_framebuffer.h"
 
 
@@ -454,6 +476,58 @@ bool KisFrameBuffer::layerToQImage(QImage *qimg, QRect & srcR, QRect & destR)
     return true;
 } 
 
+
+bool KisFrameBuffer::changeColors(uint oldColor, uint newColor, 
+    QRect & r, KisSelection *selection) 
+{
+    KisImage *img = pDoc->current();
+    if (!img) return false;
+
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return false;
+
+    QRect clipRect(r);
+    
+    if (!clipRect.intersects(lay->imageExtents()))
+        return false;
+  
+    clipRect = clipRect.intersect(lay->imageExtents());
+
+    if (!clipRect.intersects(lay->layerExtents()))
+        return false;
+  
+    clipRect = clipRect.intersect(lay->layerExtents());
+
+    int oldRed   = qRed(oldColor);
+    int oldGreen = qGreen(oldColor);
+    int oldBlue  = qBlue(oldColor);
+    
+    int newRed   = qRed(newColor);
+    int newGreen = qGreen(newColor);
+    int newBlue  = qBlue(newColor);
+
+    int sx = clipRect.left();
+    int sy = clipRect.top(); 
+    int ex = clipRect.right();
+    int ey = clipRect.bottom();
+
+    for (int y = sy; y <= ey; y++)
+    {
+        for (int x = sx; x <= ex; x++)
+	    {
+            if((oldRed   == lay->pixel(0, x, y)) 
+            && (oldGreen == lay->pixel(1, x, y))
+            && (oldBlue  == lay->pixel(2, x, y)))
+            {
+	            lay->setPixel(0, x, y, newRed);
+	            lay->setPixel(1, x, y, newGreen);
+	            lay->setPixel(2, x, y, newBlue);
+            }    
+	    } 
+    }
+
+    return true;
+}
 
 #include "kis_framebuffer.moc"
 

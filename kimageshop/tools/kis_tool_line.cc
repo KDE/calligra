@@ -116,7 +116,8 @@ void LineTool::drawLine( const QPoint& start, const QPoint& end )
 
 void LineTool::optionsDialog()
 {
-    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    LineOptionsDialog *pOptsDialog 
+        = new LineOptionsDialog(lineThickness, lineOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;

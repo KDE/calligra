@@ -54,14 +54,15 @@ QCursor KisTool::cursor()
     return m_Cursor;
 }
 
+
 // translate integer for zoom factor
-int KisTool::zoomed(int n)
+inline int KisTool::zoomed(int n)
 {
     return ((int)(n / m_pView->zoomFactor()));
 }
 
 // translate integer for zoom factor
-int KisTool::zoomedX(int n, bool zoomedImage)
+inline int KisTool::zoomedX(int n)
 {
     // current zoom factor for this view
     float zF = m_pView->zoomFactor();
@@ -69,7 +70,7 @@ int KisTool::zoomedX(int n, bool zoomedImage)
 }
 
 // translate integer for zoom factor
-int KisTool::zoomedY(int n, bool zoomedImage)
+inline int KisTool::zoomedY(int n)
 {
     // current zoom factor for this view
     float zF = m_pView->zoomFactor();
@@ -78,7 +79,7 @@ int KisTool::zoomedY(int n, bool zoomedImage)
 
 
 // translate point for zoom factor
-QPoint KisTool::zoomed(QPoint & point, bool zoomedImage)
+inline QPoint KisTool::zoomed(QPoint & point)
 {
     // current zoom factor for this view
     float zF = m_pView->zoomFactor();

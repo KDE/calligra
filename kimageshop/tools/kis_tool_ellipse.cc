@@ -113,7 +113,8 @@ void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
 
 void EllipseTool::optionsDialog()
 {
-    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    LineOptionsDialog *pOptsDialog 
+        = new LineOptionsDialog(lineThickness, lineOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;

@@ -50,6 +50,13 @@ public slots:
     bool   	m_dragging;
     const   KisBrush *m_pBrush;
     float   m_dragdist;
+    int red, blue, green;
+    int brushWidth, brushHeight;
+    QSize brushSize;
+    QPoint hotSpot;
+    int hotSpotX, hotSpotY;
+    int spacing;
+    bool alpha;
 };
 
 #endif //__brushtool_h__

@@ -244,7 +244,8 @@ void FillTool::mousePress(QMouseEvent *e)
 
 void FillTool::optionsDialog()
 {
-    FillOptionsDialog *pOptsDialog = new FillOptionsDialog();
+    FillOptionsDialog *pOptsDialog = new FillOptionsDialog(fillOpacity, 
+       toleranceRed, toleranceGreen, toleranceBlue);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;

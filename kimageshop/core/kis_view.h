@@ -75,6 +75,7 @@ class PolyLineTool;
 class RectangleTool;
 class EllipseTool;
 class ColorPicker;
+class ColorChangerTool;
 class FillTool;
 class StampTool;
 class QButton;
@@ -205,6 +206,7 @@ class KisView : public KoView
     void tool_rectangle();
     void tool_ellipse();
     void tool_colorpicker();
+    void tool_colorchanger();
     void tool_fill();
     void tool_stamp();
     void tool_paste();
@@ -293,7 +295,8 @@ class KisView : public KoView
     *m_tool_select_elliptical, *m_tool_select_contiguous,
     *m_tool_move, *m_tool_zoom, 
     *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
-    *m_tool_colorpicker, *m_tool_fill, *m_tool_stamp, *m_tool_paste,
+    *m_tool_colorpicker, *m_tool_colorchanger, 
+    *m_tool_fill, *m_tool_stamp, *m_tool_paste,
     *m_tool_airbrush, *m_tool_eraser,
     *m_tool_line, *m_tool_polyline, *m_tool_rectangle, *m_tool_ellipse;
 
@@ -306,22 +309,23 @@ class KisView : public KoView
     EllipticalSelectTool   *m_pEllipticalSelectTool;
     ContiguousSelectTool   *m_pContiguousSelectTool;
 
-    PasteTool       *m_pPasteTool;
-    MoveTool        *m_pMoveTool;
-    BrushTool       *m_pBrushTool;
-    EraserTool      *m_pEraserTool;
-    AirBrushTool    *m_pAirBrushTool;
-    PenTool         *m_pPenTool;
-    ZoomTool        *m_pZoomTool;
-    KisGradient     *m_pGradient;
-    GradientTool    *m_pGradientTool;
-    LineTool        *m_pLineTool;
-    PolyLineTool    *m_pPolyLineTool;
-    RectangleTool   *m_pRectangleTool;
-    EllipseTool     *m_pEllipseTool;   
-    ColorPicker     *m_pColorPicker;
-    FillTool        *m_pFillTool;
-    StampTool       *m_pStampTool;
+    PasteTool           *m_pPasteTool;
+    MoveTool            *m_pMoveTool;
+    BrushTool           *m_pBrushTool;
+    EraserTool          *m_pEraserTool;
+    AirBrushTool        *m_pAirBrushTool;
+    PenTool             *m_pPenTool;
+    ZoomTool            *m_pZoomTool;
+    KisGradient         *m_pGradient;
+    GradientTool        *m_pGradientTool;
+    LineTool            *m_pLineTool;
+    PolyLineTool        *m_pPolyLineTool;
+    RectangleTool       *m_pRectangleTool;
+    EllipseTool         *m_pEllipseTool;   
+    ColorPicker         *m_pColorPicker;
+    ColorChangerTool    *m_pColorChangerTool;
+    FillTool            *m_pFillTool;
+    StampTool           *m_pStampTool;
     
     const KisKrayon       *m_pKrayon;   // current krayon for this view   
     const KisBrush        *m_pBrush;    // current brush for this view

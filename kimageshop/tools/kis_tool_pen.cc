@@ -117,10 +117,10 @@ bool PenTool::paint(QPoint pos)
 
     QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
 
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
     int sy = clipRect.top() - starty;
@@ -240,7 +240,8 @@ void PenTool::mouseRelease(QMouseEvent *e)
 
 void PenTool::optionsDialog()
 {
-    PenOptionsDialog *pOptsDialog = new PenOptionsDialog();
+    PenOptionsDialog *pOptsDialog 
+        = new PenOptionsDialog(penColorThreshold, penOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;

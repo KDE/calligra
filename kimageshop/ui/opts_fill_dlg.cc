@@ -29,7 +29,9 @@
 
 #include "opts_fill_dlg.h"
 
-FillOptionsDialog::FillOptionsDialog( QWidget *parent, const char *name )
+FillOptionsDialog::FillOptionsDialog( int _opacity,
+    int _redtolerance, int _bluetolerance, int _greentolerance,
+    QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Fill Options") );
@@ -37,20 +39,20 @@ FillOptionsDialog::FillOptionsDialog( QWidget *parent, const char *name )
     QVBoxLayout* layout = new QVBoxLayout( this, 4 );
     QGridLayout* grid = new QGridLayout( layout, 2, 4);
 
-    mpOpacity = new QSpinBox( 0, 255, 10, this );
-    mpOpacity->setValue( 255 );
+    mpOpacity = new QSpinBox( 0, 255, 16, this );
+    mpOpacity->setValue( _opacity );
     QLabel* olabel = new QLabel( mpOpacity, i18n("Opacity"), this );
 
-    mpToleranceRed = new QSpinBox( 0, 255, 10, this );
-    mpToleranceRed->setValue( 0 );
+    mpToleranceRed = new QSpinBox( 0, 255, 1, this );
+    mpToleranceRed->setValue( _redtolerance );
     QLabel* rlabel = new QLabel( mpToleranceRed, i18n("Red Tolerance"), this );
 
-    mpToleranceGreen = new QSpinBox( 0, 255, 10, this );
-    mpToleranceGreen->setValue( 0 );
+    mpToleranceGreen = new QSpinBox( 0, 255, 1, this );
+    mpToleranceGreen->setValue( _greentolerance );
     QLabel* glabel = new QLabel( mpToleranceGreen, i18n("Green Tolerance"), this );
 
-    mpToleranceBlue = new QSpinBox( 0, 255, 10, this );
-    mpToleranceBlue->setValue( 0 );
+    mpToleranceBlue = new QSpinBox( 0, 255, 1, this );
+    mpToleranceBlue->setValue( _bluetolerance );
     QLabel* blabel = new QLabel( mpToleranceBlue, i18n("Blue Tolerance"), this );
 
     grid->addWidget( olabel, 0, 0 );

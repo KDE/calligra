@@ -26,13 +26,27 @@
 
 #include <kdialog.h>
 
+typedef struct _fillOptsConfig
+{
+    int _opacity;
+    int _redtolerance;
+    int _greentolerance;
+    int _bluetolerance;
+    int _huetolerance;
+    int _saturationtolerance;
+    int _valuetolerance;
+} fillOptsConfig;
+
+
 class FillOptionsDialog : public KDialog
 {
   Q_OBJECT
 
 public:
 
-    FillOptionsDialog( QWidget *parent = 0, const char *name = 0 );
+    FillOptionsDialog( int _opacity = 255, 
+        int _redtolerance = 0, int _greentolerance = 0, int _bluetolerance = 0,
+        QWidget *parent = 0, const char *name = 0 );
 
     int opacity() { return mpOpacity->value(); };
 

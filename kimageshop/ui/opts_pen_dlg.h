@@ -32,7 +32,8 @@ class PenOptionsDialog : public KDialog
 
 public:
 
-  PenOptionsDialog( QWidget *parent = 0, const char *name = 0 );
+  PenOptionsDialog( int _threshold=128, int _opacity=255,
+    QWidget *parent = 0, const char *name = 0 );
 
   int threshold() { return mThreshold->value(); };
   int opacity()   { return mOpacity->value(); };

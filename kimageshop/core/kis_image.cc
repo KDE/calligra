@@ -45,6 +45,7 @@
 #include "kis_timer.h"
 
 #define KIS_DEBUG(AREA, CMD)
+//#define TEST_UNOPTIMIZED_VISUAL
 
 KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
   : m_name (n)
@@ -135,7 +136,7 @@ KisImage::~KisImage()
 
     delete m_ptiles;
 
-    if ((visual!=unknown) && (visual!=rgb888x))
+    if ((visual != unknown) && (visual != rgb888x))
         free(m_pImgData);
 }
 
@@ -169,6 +170,97 @@ void KisImage::slotUpdateTimeOut()
 		    emit updated(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 	    }
 }
+
+
+void KisImage::setUpVisual()
+{
+    QPixmap p;
+    Display *dpy    =   p.x11Display();
+    int displayDepth=   p.x11Depth();
+    Visual *vis     =   (Visual*)p.x11Visual();
+    bool trueColour =   (vis->c_class == TrueColor);
+    
+    QImage::Endian sysBitOrder  =   QImage::systemBitOrder();
+    QImage::Endian sysByteOrder =   QImage::systemByteOrder();
+    
+    if(sysBitOrder == QImage::LittleEndian)
+    {
+        kdDebug()<<"setUpVisual() sysBitOrder is LittleEndian"<<endl;
+        mBigEndianBitOrder = false;
+    }    
+    else if(sysBitOrder == QImage::BigEndian)
+    {
+        kdDebug()<<"setUpVisual() sysBitOrder is BigEndian"<<endl;
+        mBigEndianBitOrder = true;        
+    }    
+    if(sysByteOrder == QImage::LittleEndian)
+    {
+        kdDebug()<<"setUpVisual() sysByteOrder is LittleEndian"<<endl;
+        mBigEndianByteOrder = false;                
+    }
+    else if(sysByteOrder == QImage::BigEndian)
+    { 
+        kdDebug()<<"setUpVisual() sysByteOrder is BigEndian"<<endl;
+        mBigEndianByteOrder = true;                        
+    }
+    
+    mBigEndian = (mBigEndianBitOrder || mBigEndianByteOrder);
+    
+    if(trueColour)
+        kdDebug()<<"setUpVisual() trueColour is true"<<endl;
+    else
+        kdDebug()<<"setUpVisual() trueColour is false"<<endl;
+             
+    // change the false to true to test the faster image converters
+    visual = unknown;
+
+    // do they have a worthy display - doesn't work with big endian
+    if (true && trueColour && !mBigEndian) 
+    { 
+        uint red_mask  =(uint)vis->red_mask;
+        uint green_mask=(uint)vis->green_mask;
+        uint blue_mask =(uint)vis->blue_mask;
+
+        if ((red_mask==0xf800) && (green_mask==0x7e0) && (blue_mask==0x1f))
+        {
+            kdDebug() << "visual is rgb565" << endl;
+            visual = rgb565;
+        }
+        if ((red_mask==0xff0000) && (green_mask==0xff00) && (blue_mask==0xff))
+        {
+            kdDebug() << "visual is rgb565" << endl;        
+            visual = rgb888x;
+        }
+        
+#ifdef TEST_UNOPTIMIZED_VISUAL
+       
+        visual = unknown;    
+        kdDebug() << "Using unoptimized visual" << endl;
+        
+#else 
+
+        if (visual==unknown) 
+        {
+            puts("Unoptimized visual - want to write an optimised routine?");
+            printf("red=%8x green=%8x blue=%8x\n",red_mask,green_mask,blue_mask);
+        } 
+        else 
+        {
+            puts("Using optimized visual");
+            m_pxi=XCreateImage( dpy, vis, displayDepth, ZPixmap, 0,0, TILE_SIZE,TILE_SIZE, 32, 0 );
+            printf("ximage: bytes_per_line=%d\n",m_pxi->bytes_per_line);
+
+            if (visual!=rgb888x) 
+            {
+		        m_pImgData=new char[m_pxi->bytes_per_line*TILE_SIZE];
+		        m_pxi->data=m_pImgData;
+            }
+        }
+#endif
+        
+    }
+}	
+
 
 
 void KisImage::paintContent( QPainter& painter, 
@@ -258,71 +350,24 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 }
 
 
-void KisImage::setUpVisual()
-{
-    QPixmap p;
-    Display *dpy    =   p.x11Display();
-    int displayDepth=   p.x11Depth();
-    Visual *vis     =   (Visual*)p.x11Visual();
-    bool trueColour =   (vis->c_class == TrueColor);
-
-    if(trueColour)
-        kdDebug()<<"setUpVisual() trueColour is true"<<endl;
-    else
-        kdDebug()<<"setUpVisual() trueColour is false"<<endl;
-             
-    // change the false to true to test the faster image converters
-    visual = unknown;
-    
-    if (true && trueColour) // do they have a worthy display
-    { 
-        uint red_mask  =(uint)vis->red_mask;
-        uint green_mask=(uint)vis->green_mask;
-        uint blue_mask =(uint)vis->blue_mask;
-
-        if ((red_mask==0xf800) && (green_mask==0x7e0) && (blue_mask==0x1f))
-            visual=rgb565;
-
-        if ((red_mask==0xff0000) && (green_mask==0xff00) && (blue_mask==0xff))
-            visual=rgb888x;
-
-        if (visual==unknown) 
-        {
-            puts("Unoptimized visual - want to write an optimised routine?");
-            printf("red=%8x green=%8x blue=%8x\n",red_mask,green_mask,blue_mask);
-        } 
-        else 
-        {
-            puts("Using optimized visual");
-            m_pxi=XCreateImage( dpy, vis, displayDepth, ZPixmap, 0,0, TILE_SIZE,TILE_SIZE, 32, 0 );
-            printf("ximage: bytes_per_line=%d\n",m_pxi->bytes_per_line);
-            if (visual!=rgb888x) 
-            {
-		        m_pImgData=new char[m_pxi->bytes_per_line*TILE_SIZE];
-		        m_pxi->data=m_pImgData;
-            }
-        }
-    }
-}	
-
 
 void KisImage::addLayer(const QRect& rect, const KisColor& c, 
     bool tr, const QString& name)
 {
 
-    kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
+    // kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
 
     KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
-    kdDebug(0) << "KisImage::addLayer(): new allocated" << endl; 
+    // kdDebug(0) << "KisImage::addLayer(): new allocated" << endl; 
     
     lay->allocateRect(rect);
-    kdDebug(0) << "KisImage::addLayer(): returned from lay->allocateRect()" << endl;         
+    // kdDebug(0) << "KisImage::addLayer(): returned from lay->allocateRect()" << endl;         
 
     lay->clear(c, tr);
-    kdDebug(0) << "KisImage::addLayer(): returned from lay->clear()" << endl;         
+    // kdDebug(0) << "KisImage::addLayer(): returned from lay->clear()" << endl;         
     
     m_layers.append(lay);
-    kdDebug(0) << "KisImage::addLayer(): returned from m_layers->append()" << endl;             
+    // kdDebug(0) << "KisImage::addLayer(): returned from m_layers->append()" << endl;             
     
     m_pCurrentLay=lay;
 
@@ -387,7 +432,7 @@ void KisImage::addLayer(const QRect& rect, const KisColor& c,
         m_pUpdateTimer->start(1);
     }
     
-    kdDebug(0) << "KisImage::addLayer(): leaving" << endl;  
+    // kdDebug(0) << "KisImage::addLayer(): leaving" << endl;  
 }
 
 
@@ -686,7 +731,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
     {
         for(int x = w; x; x--)
 	    {
-	    // for prepultiply => invOpac=255-(*alpha*opacity)/255;
+	        // for prepultiply => invOpac = 255 - (*alpha*opacity)/255;
 		  
 	        if (m_cMode == cm_RGBA)
 	        {
@@ -752,6 +797,10 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
         //TIME_START;
         switch(visual) 
         {
+            /* 16 bit, it seems - this will not work with
+            BigEndian machines like PPC - we need a variation
+            on this for BigEndian systems */
+            
             case rgb565: 
             {
                 ushort s;
@@ -770,7 +819,8 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
             }
                 break;
 
-            /* true color */
+            /* true color - endian issues should be irrelevant */
+            
             case rgb888x:
                 m_pxi->data=(char*)image->bits();
                 break;
@@ -793,7 +843,7 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
     Copy the composite image into a QImage so it can be converted to a
     QPixmap.  Note: surprisingly it is not quicker to render directly 
     into a QImage probably due to the CPU cache, it's also useless wrt 
-    (writing?) to other colour  spaces
+    (writing?) to other colour spaces
     */
     
     // FIXME: Make it work for non-RGB images

@@ -1,5 +1,5 @@
 /*
- *  kis_pattern.h - part of KImageShop
+ *  kis_pattern.h - part of Krayon
  *
  *  Copyright (c) 2000 Matthias Elter  <elter@kde.org>
  *
@@ -40,12 +40,23 @@ public:
     bool isValid()	const { return m_valid; }
     void setSpacing(int s) { m_spacing = s; }
     int  spacing() const { return m_spacing; }
-
+    QPoint hotSpot() const { return m_hotSpot; }
+    bool tileSymmetric() const { return m_TileSymmetric; }
+    
 private:
     void loadViaQImage(QString file);
     void loadViaFormula(int formula);
+    void readPatternInfo(QString file);
+
+    QPoint m_hotSpot;
+    
     bool m_valid;
-    int  m_spacing;        
+    bool m_TileSymmetric;            
+
+    int  m_spacing;
+    int  m_TileWidth;
+    int  m_TileHeight;
+
 };
 
 #endif

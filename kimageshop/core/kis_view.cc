@@ -95,6 +95,7 @@
 #include "kis_tool_rectangle.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_colorpicker.h"
+#include "kis_tool_colorchanger.h"
 #include "kis_tool_eraser.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_stamp.h"
@@ -365,7 +366,7 @@ void KisView::setupTools()
     m_pPenTool = new PenTool(m_pDoc, this, m_pCanvas, m_pBrush);
     m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
     m_pColorPicker = new ColorPicker(m_pDoc, this);
-
+    m_pColorChangerTool = new ColorChangerTool(m_pDoc, this);
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient);
     m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas );
     m_pPolyLineTool = new PolyLineTool( m_pDoc, this, m_pCanvas );
@@ -567,6 +568,12 @@ void KisView::setupActions()
         actionCollection(), "tool_colorpicker");
 
     m_tool_colorpicker->setExclusiveGroup( "tools" );
+
+    m_tool_colorchanger = new KToggleAction( i18n("Color changer"),
+        "colorize", 0, this, SLOT( tool_colorchanger() ),
+        actionCollection(), "tool_colorchanger");
+
+    m_tool_colorchanger->setExclusiveGroup( "tools" );
 
     m_tool_gradient = new KToggleAction( i18n("&Gradient tool"),
         "blend", 0, this, SLOT( tool_gradient() ),
@@ -1272,6 +1279,11 @@ void KisView::tool_pen()
 void KisView::tool_colorpicker()
 {
   activateTool(m_pColorPicker);
+}
+
+void KisView::tool_colorchanger()
+{
+  activateTool(m_pColorChangerTool);
 }
 
 void KisView::tool_gradient()

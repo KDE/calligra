@@ -1,5 +1,5 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  selecttool.h - part of Krayon
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
@@ -111,8 +111,8 @@ void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
         m_dragging = false;
         m_drawn = true;
         
-        QPoint zStart = zoomed(m_dragStart, false);
-        QPoint zEnd   = zoomed(m_dragEnd, false);
+        QPoint zStart = zoomed(m_dragStart);
+        QPoint zEnd   = zoomed(m_dragEnd);
                 
         if(zStart.x() <= zEnd.x())
         {

@@ -133,7 +133,6 @@ bool KisPainter::toLayer(QRect paintRect)
 
     uchar r, g, b; 
     int a = 255;
-    int bv = 0;
     int opacity = lineOpacity;
     int invopacity = 255 - opacity;
     
@@ -189,7 +188,18 @@ bool KisPainter::toLayer(QRect paintRect)
                 if (v > 255 ) v = 255;
                 a = (uchar) v; 
 	            lay->setPixel(3, x,  y, a);                
-            }    
+            }
+            /* use alpha value of the tool only -
+            ignore existing layer alpha value.  This
+            allows drawing on transparent areas  */ 
+            else if(alpha)
+            {
+                int v = opacity;
+                if (v < 0 ) v = 0;
+                if (v > 255 ) v = 255;
+                a = (uchar) v; 
+	            lay->setPixel(3, x,  y, a);                
+            }               
 	    } 
     }
 

@@ -50,11 +50,10 @@ class KisTool : public QObject
     
  protected:
 
-    int zoomed(int n);
-    int zoomedX(int n, bool zoomedImage=true);  
-    int zoomedY(int n, bool zoomedImage=true );
-
-    QPoint zoomed(QPoint & point, bool zoomedImage=true);
+    inline int zoomed(int n);
+    inline int zoomedX(int n);  
+    inline int zoomedY(int n);
+    inline QPoint zoomed(QPoint & point);
   
     KisDoc  *m_pDoc;
     KisView *m_pView;

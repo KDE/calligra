@@ -23,6 +23,10 @@
 #include <qsize.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include <qfileinfo.h>
+
+#include <kimageeffect.h>
+#include <ksimpleconfig.h>
 #include <kdebug.h>
 
 #include "kis_pattern.h"
@@ -34,8 +38,29 @@ KisPattern::KisPattern(QString file)
   : KisKrayon()
 {
     m_valid    = false;
-    m_spacing  = 3;
+    m_spacing  = 4;
+    m_hotSpot = QPoint(0, 0);            
+
     loadViaQImage(file);
+
+    if(m_valid)
+    {
+        int meanSize = (width() + height())/2;
+
+        m_spacing  = meanSize / 4;
+        if(m_spacing < 1)  m_spacing = 1;
+        if(m_spacing > 20) m_spacing = 20;
+    
+        // default hotspot
+        m_hotSpot = QPoint(width()/2, height()/2);
+
+        // search and load the brushinfo file
+        QFileInfo fi(file);
+        file = fi.dirPath() + "/" + fi.baseName() + ".patterninfo";
+        fi.setFile(file);
+        if (fi.exists() && fi.isFile())
+            readPatternInfo(file);
+    }                
 }
 
 
@@ -160,4 +185,16 @@ void KisPattern::loadViaFormula(int formula)
     //qDebug("Loading pattern: %d", formula);
 }
 
+void KisPattern::readPatternInfo(QString file)
+{
+    KSimpleConfig config(file, true);
+
+    config.setGroup("General");
+    int spacing = config.readNumEntry("Spacing", m_spacing);
+    int hotspotX = config.readNumEntry("hotspotX", m_hotSpot.x());
+    int hotspotY = config.readNumEntry("hotspotY", m_hotSpot.y());
+    
+    if(spacing > 0) m_spacing = spacing;
+    if(hotspotX > 0 && hotspotY > 0) m_hotSpot = QPoint(hotspotX, hotspotY);
+}
 

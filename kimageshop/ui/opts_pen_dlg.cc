@@ -28,7 +28,8 @@
 
 #include "opts_pen_dlg.h"
 
-PenOptionsDialog::PenOptionsDialog( QWidget *parent, const char *name )
+PenOptionsDialog::PenOptionsDialog( int _threshold, int _opacity, 
+    QWidget *parent, const char *name )
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Current Tool Options") );
@@ -36,15 +37,15 @@ PenOptionsDialog::PenOptionsDialog( QWidget *parent, const char *name )
     QVBoxLayout* layout = new QVBoxLayout( this, 3 );
     QGridLayout* grid =   new QGridLayout( layout, 2, 2);
 
-    mThreshold = new QSpinBox( 0, 255, 10, this );
-    mThreshold->setValue( 128 );
+    mThreshold = new QSpinBox( 0, 255, 16, this );
+    mThreshold->setValue( _threshold );
     QLabel* tlabel = new QLabel( mThreshold, i18n("T&hreshold"), this );
 
     grid->addWidget( tlabel, 0, 0 );
     grid->addWidget( mThreshold, 0, 1 );
 
-    mOpacity = new QSpinBox( 0, 255, 10, this );
-    mOpacity->setValue( 255 );
+    mOpacity = new QSpinBox( 0, 255, 16, this );
+    mOpacity->setValue( _opacity );
     QLabel* olabel = new QLabel( mOpacity, i18n("&Opacity"), this );
 
     grid->addWidget( olabel, 1, 0 );

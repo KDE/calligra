@@ -42,26 +42,37 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
     m_valid     = false;
     validThumb  = false;
     validPixmap = false;
-    m_spacing  = 3;
+    
+    m_spacing = 4;
+    m_hotSpot = QPoint( 0, 0 );        
 
     // load the brush image data
     loadViaQImage(file, monochrome);
 
-    // default hotspot
-    if(!special)
-        m_hotSpot = QPoint( width()/2, height()/2 );
-    else
-        m_hotSpot = QPoint( 0, 0 );        
-
-    // search and load the brushinfo file
-    if(!special)
+    if(m_valid)
     {
-        QFileInfo fi(file);
-        file = fi.dirPath() + "/" + fi.baseName() + ".brushinfo";
-        fi.setFile(file);
-        if (fi.exists() && fi.isFile())
-            readBrushInfo(file);
-    }            
+        int meanSize = (width() + height())/2;
+
+        m_spacing  = meanSize / 4;
+        if(m_spacing < 1)  m_spacing = 1;
+        if(m_spacing > 20) m_spacing = 20;
+    
+        // default hotspot
+        if(!special)
+            m_hotSpot = QPoint(width()/2, height()/2);
+        else
+            m_hotSpot = QPoint(0, 0);        
+
+        // search and load the brushinfo file
+        if(!special)
+        {
+            QFileInfo fi(file);
+            file = fi.dirPath() + "/" + fi.baseName() + ".brushinfo";
+            fi.setFile(file);
+            if (fi.exists() && fi.isFile())
+                readBrushInfo(file);
+        }
+    }                
 }
 
 

@@ -23,12 +23,12 @@
 
 #include <qobject.h>
 #include <qimage.h>
+#include <qcolor.h>
 
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_layer.h"
-
-class KisDoc;
+#include "kis_selection.h"
 
 class KisFrameBuffer : public QObject 
 {
@@ -48,6 +48,9 @@ public:
     QRect  & getRect() { return destRect; } 
     void setRect(QRect & rect);
 
+    bool changeColors(uint oldColor, uint newColor, 
+        QRect & r, KisSelection *s = 0L); 
+
     bool scaleSmooth(QRect & srcR, int newWidth, int newHeight);
     bool scaleRough(QRect & srcR, int newWidth, int newHeight);    
 
@@ -60,7 +63,6 @@ public:
     bool QImageToLayer(QImage *qimg, QRect & src, QRect & dest);
     bool layerToQImage(QImage *qimg, QRect & src, QRect & dest);
          
-
 protected:
 
     QImage srcImage;
@@ -74,6 +76,7 @@ private:
 
     KisDoc *pDoc;
     KisLayer *pScratchLayer;
+    KisSelection *pSelection;
 };
 
 #endif

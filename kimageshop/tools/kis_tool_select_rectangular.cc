@@ -109,8 +109,8 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
         m_dragging = false;
         m_drawn = true;
         
-        QPoint zStart = zoomed(m_dragStart, false);
-        QPoint zEnd   = zoomed(m_dragEnd, false);
+        QPoint zStart = zoomed(m_dragStart);
+        QPoint zEnd   = zoomed(m_dragEnd);
                 
         /* jwc - leave selection rectange boundary on screen
         it is only drawn to canvas, not to retained imagePixmap,

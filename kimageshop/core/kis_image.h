@@ -88,7 +88,11 @@ class KisImage : public QObject
     void mergeVisibleLayers();
     void mergeLinkedLayers();
     void mergeLayers(QList<KisLayer>);
-        
+
+    bool bigEndian() { return mBigEndian; }
+    bool bigEndianBitOrder() { return mBigEndianBitOrder; }        
+    bool bigEndianByteOrder() { return mBigEndianByteOrder; }
+
  signals:
     void updated();
     void updated( const QRect& rect );
@@ -111,6 +115,10 @@ class KisImage : public QObject
  private:
     enum dispVisual { unknown, rgb565, rgb888x } visual;
 
+    bool mBigEndianBitOrder;
+    bool mBigEndianByteOrder;  
+    bool mBigEndian;
+    
     int               m_xTiles;
     int               m_yTiles;
 

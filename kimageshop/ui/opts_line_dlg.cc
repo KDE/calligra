@@ -29,7 +29,8 @@
 
 #include "opts_line_dlg.h"
 
-LineOptionsDialog::LineOptionsDialog( QWidget *parent, const char *name )
+LineOptionsDialog::LineOptionsDialog( int _thickness, int _opacity, 
+    QWidget *parent, const char *name ) 
     : KDialog( parent, name, true )
 {
     setCaption( i18n("Current Tool Options") );
@@ -38,14 +39,14 @@ LineOptionsDialog::LineOptionsDialog( QWidget *parent, const char *name )
     QGridLayout* grid = new QGridLayout( layout, 2, 2);
 
     m_thickness = new QSpinBox( 1, 16, 10, this );
-    m_thickness->setValue( 1 );
+    m_thickness->setValue( _thickness );
     QLabel* tlabel = new QLabel( m_thickness, i18n("T&hickness"), this );
 
     grid->addWidget( tlabel, 0, 0 );
     grid->addWidget( m_thickness, 0, 1 );
 
     m_opacity = new QSpinBox( 0, 255, 10, this );
-    m_opacity->setValue( 255 );
+    m_opacity->setValue( _opacity );
     QLabel* olabel = new QLabel( m_opacity, i18n("&Opacity"), this );
 
     grid->addWidget( olabel, 1, 0 );

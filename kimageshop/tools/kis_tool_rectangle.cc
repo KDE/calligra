@@ -111,7 +111,8 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 
 void RectangleTool::optionsDialog()
 {
-    LineOptionsDialog *pOptsDialog = new LineOptionsDialog();
+    LineOptionsDialog *pOptsDialog 
+        = new LineOptionsDialog(lineThickness, lineOpacity);
     pOptsDialog->exec();
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;

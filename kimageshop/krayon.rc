@@ -29,6 +29,7 @@
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>      
   <Action name="tool_fill"/>
+  <Action name="tool_colorchanger"/>  
   <Action name="tool_stamp"/>
   <Action name="tool_paste"/>  
   <Action name="tool_gradient"/>  
@@ -210,10 +211,12 @@
   <Action name="tool_ellipse"/>      
 
   <Action name="tool_fill"/>
+  <Action name="tool_colorchanger"/>    
   <Action name="tool_stamp"/>
   <Action name="tool_gradient"/>  
-
-  <Action name="current_tool_properties"/>      
+  
+  <Action name="current_tool_properties"/>  
+        
 </ToolBar>
 
 </kpartgui>

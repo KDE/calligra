@@ -30,12 +30,13 @@
 
 
 // define static attributes and members
-bool 			KisConfig::doInit 	= true;
-KConfig *		KisConfig::kc 		= 0L;
-QList<KisConfig>	KisConfig::instanceList;
-QFont 			KisConfig::m_smallFont;
-QFont 			KisConfig::m_tinyFont;
-QStringList 		KisConfig::m_blendList;
+
+bool KisConfig::doInit 	= true;
+KConfig * KisConfig::kc	= 0L;
+QList<KisConfig> KisConfig::instanceList;
+QFont KisConfig::m_smallFont;
+QFont KisConfig::m_tinyFont;
+QStringList KisConfig::m_blendList;
 
 
 KisConfig * KisConfig::getNewConfig()

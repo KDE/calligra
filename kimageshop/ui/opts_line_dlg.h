@@ -32,7 +32,8 @@ class LineOptionsDialog : public KDialog
 
 public:
 
-  LineOptionsDialog( QWidget *parent = 0, const char *name = 0 );
+  LineOptionsDialog( int _thickness = 1, int _opacity = 255,
+    QWidget *parent = 0, const char *name = 0 );
 
   int thickness() { return m_thickness->value(); };
   int opacity() { return m_opacity->value(); };

@@ -28,8 +28,6 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 
-class KisDoc;
-
 class KisSelection : public QObject 
 {
     Q_OBJECT
