@@ -22,6 +22,8 @@
 
 #include <kdebug.h>
 
+#include <math.h>
+
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
