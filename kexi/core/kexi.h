@@ -42,7 +42,7 @@ namespace Kexi
 		TextViewMode = 4 //!< Also known as SQL View Mode
 	};
 	//! i18n'ed name of view mode \a m
-	KEXICORE_EXPORT QString nameForViewMode(ViewMode m);
+	KEXICORE_EXPORT QString nameForViewMode(int m);
 
 	//! A set of known connections
 	KEXICORE_EXPORT KexiDBConnectionSet& connset();

@@ -211,7 +211,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		virtual bool queryExit();
 
 		/*! Helper: switches to view \a mode. */
-		void switchToViewMode(Kexi::ViewMode mode);
+		bool switchToViewMode(int viewMode);
 
 		/*! Helper. Removed and/or adds GUI client for current dialog's view;
 		 on switching to other dialog (activeWindowChanged()) 

@@ -51,14 +51,13 @@ bool& Kexi::tempShowForms() { return _tempShowForms; }
 
 
 //--------------------------------------------------------------------------------
-QString Kexi::nameForViewMode(ViewMode m)
+QString Kexi::nameForViewMode(int m)
 {
-	switch (m) {
-	case NoViewMode: return i18n("No View");
-	case DataViewMode: return i18n("Data View");
-	case DesignViewMode: return i18n("Design View");
-	case TextViewMode: return i18n("Text View");
-	}
+	if (m==NoViewMode) return i18n("No View");
+	else if (m==DataViewMode) return i18n("Data View");
+	else if (m==DesignViewMode) return i18n("Design View");
+	else if (m==TextViewMode) return i18n("Text View");
+
 	return i18n("Unknown");
 }
 

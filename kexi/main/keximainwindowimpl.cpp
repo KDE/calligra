@@ -1706,31 +1706,31 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 	d->block_KMdiMainFrm_eventFilter=false;
 }
 
-void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
+bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 {
 	if (!d->curDialog) {
 		d->toggleLastCheckedMode();
-		return;
+		return false;
 	}
-	if (!d->curDialog->supportsViewMode( mode )) {
+	if (!d->curDialog->supportsViewMode( viewMode )) {
 		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
 			.arg(d->curDialog->partItem()->name()),
 		i18n("Selected view mode (%1) is not supported by this object type (%2)")
-			.arg(Kexi::nameForViewMode(mode))
+			.arg(Kexi::nameForViewMode(viewMode))
 			.arg(d->curDialog->part()->instanceName()) );
 		d->toggleLastCheckedMode();
-		return;
+		return false;
 	}
 	bool cancelled;
-	if (!d->curDialog->switchToViewMode( mode, cancelled )) {
-		showErrorMessage(i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(mode)),
+	if (!d->curDialog->switchToViewMode( viewMode, cancelled )) {
+		showErrorMessage(i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(viewMode)),
 			d->curDialog);
 		d->toggleLastCheckedMode();
-		return;
+		return false;
 	}
 	if (cancelled) {
 		d->toggleLastCheckedMode();
-		return;
+		return false;
 	}
 
 	//view changed: switch to this view's gui client
@@ -1741,6 +1741,7 @@ void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
 	d->curDialogViewGUIClient=viewClient; //remember
 
 	invalidateSharedActions();
+	return true;
 }
 
 
@@ -2238,7 +2239,11 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
 		dlg->activate();
-		if (dlg->currentViewMode()!=viewMode) {
+		if (viewMode!=dlg->currentViewMode()) {
+			if (!switchToViewMode(viewMode))
+				return 0;
+		}
+/*		if (dlg->currentViewMode()!=viewMode) {
 			//try to switch
 			bool cancelled;
 			if (!dlg->switchToViewMode(viewMode, cancelled)) {
@@ -2248,7 +2253,8 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 			if (cancelled)
 				return 0;
 			needsUpdateViewGUIClient = false;
-		}
+		}*/
+		needsUpdateViewGUIClient = false;
 	}
 	else {
 		dlg = d->prj->openObject(this, *item, viewMode);
@@ -2269,7 +2275,8 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	}
 
 	invalidateViewModeActions();
-	invalidateSharedActions();
+	if (viewMode!=dlg->currentViewMode())
+		invalidateSharedActions();
 
 	return dlg;
 }
