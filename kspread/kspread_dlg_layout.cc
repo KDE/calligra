@@ -440,22 +440,22 @@ void CellLayoutDlg::init()
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
     borderPage = new CellLayoutPageBorder( tab, this );
-    tab->addTab( borderPage, i18n("Border") );
+    tab->addTab( borderPage, i18n("&Border") );
 
     floatPage = new CellLayoutPageFloat( tab, this );
-    tab->addTab( floatPage, i18n("Number Format") );
+    tab->addTab( floatPage, i18n("&Number Format") );
 
     miscPage = new CellLayoutPageMisc( tab, this );
-    tab->addTab( miscPage, i18n("Misc") );
+    tab->addTab( miscPage, i18n("&Misc") );
 
     fontPage = new CellLayoutPageFont( tab, this );
-    tab->addTab( fontPage, i18n("Font") );
+    tab->addTab( fontPage, i18n("&Text") );
 
     positionPage = new CellLayoutPagePosition( tab, this);
-    tab->addTab( positionPage, i18n("Position") );
+    tab->addTab( positionPage, i18n("&Position") );
 
     patternPage=new CellLayoutPagePattern(tab,this);
-    tab->addTab( patternPage,i18n("Pattern"));
+    tab->addTab( patternPage,i18n("Back&ground"));
 
     // tab->setApplyButton();
     tab->setCancelButton();
