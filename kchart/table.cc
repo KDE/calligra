@@ -142,7 +142,7 @@ void SheetTable::nextInput()
         c = ( inCol + 1 ) % numCols();
     moveInput( r, c );
 }
-
+  
 void SheetTable::moveInput( int row, int col )
 {
     if ( col < 0 || row < 0 )
@@ -150,6 +150,10 @@ void SheetTable::moveInput( int row, int col )
     if ( col == inCol && row == inRow )
         return;
 
+  if ( col == 0 && row == 0 ) {
+        inCol = col;
+        inRow = row;
+    }
    if ( inRow >= 0 && inCol >= 0 ) {
         QString str = input->text();
         setText( inRow, inCol, str );
