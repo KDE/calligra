@@ -2399,7 +2399,16 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << endl;
 	}
 	if (e->type()==QEvent::AccelOverride) {
-		KexiVDebug << "AccelOverride EVENT" << endl;
+		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == ControlButton << endl;
+
+		//avoid sending CTRL+Tab key twice for tabbed/ideal mode, epecially for win32
+		if (static_cast<QKeyEvent*>(e)->key()==Key_Tab && static_cast<QKeyEvent*>(e)->state() == ControlButton) {
+			if (d->action_window_next->shortcut().keyCodeQt()==Key_Tab+CTRL && d->action_window_next->shortcut().count()==1
+				&& (mdiMode()==KMdi::TabPageMode || mdiMode()==KMdi::IDEAlMode))
+			{
+				static_cast<QKeyEvent*>(e)->accept();
+			}
+		}
 	}
 	if (e->type()==QEvent::Close) {
 		KexiVDebug << "Close EVENT" << endl;

@@ -397,6 +397,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-09
+Main
+- fix conflict of CTRL+Tab with tabbed/ideal mode
+
 2004-11-08
 Main
 - a fix for saving main windows settings (now mdimode is saved to proper
