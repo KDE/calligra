@@ -97,7 +97,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     slidesSelected = new QRadioButton( i18n( "&Selected slides" ), slides );
 
     lSlides = new QListView( slides );
-    lSlides->addColumn( i18n( "Slide Nr." ) );
+    lSlides->addColumn( i18n( "Slide No." ) );
     lSlides->addColumn( i18n( "Slide Title" ) );
     lSlides->header()->setMovingEnabled( false );
     lSlides->setSorting( -1 );

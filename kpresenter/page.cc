@@ -553,7 +553,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                         }
                     }
                 }
-                MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ),
+                MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
                                                       QPoint( mx - firstX, my - firstY ),
                                                       _objects, view->kPresenterDoc() );
                 view->kPresenterDoc()->commands()->addCommand( moveByCmd );
@@ -652,7 +652,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( resizeObjNum < 0 ) break;
             if ( firstX != mx || firstY != my ) {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -668,7 +668,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( resizeObjNum < 0 ) break;
             if ( firstX != mx || firstY != my ) {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and up" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -684,7 +684,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
             if ( resizeObjNum < 0 ) break;
             if ( firstX != mx || firstY != my ) {
                 kpobject = objectList()->at( resizeObjNum );
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
@@ -1478,7 +1478,7 @@ void Page::setupMenus()
     pieMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
     pieMenu->insertSeparator();
     pieMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
-    pieMenu->insertItem( KPBarIcon( "edit_pie" ), i18n( "&Configure pie/arc/chord..." ), this, SLOT( objConfigPie() ) );
+    pieMenu->insertItem( KPBarIcon( "edit_pie" ), i18n( "&Configure Pie/Arc/Chord..." ), this, SLOT( objConfigPie() ) );
     pieMenu->insertSeparator();
     pieMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
     pieMenu->insertSeparator();
@@ -4325,7 +4325,7 @@ void Page::moveObject( int x, int y, bool key )
     }
 
     if ( key ) {
-        MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ),
+        MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
                                               QPoint( x, y ),
                                               _objects, view->kPresenterDoc() );
         view->kPresenterDoc()->commands()->addCommand( moveByCmd );

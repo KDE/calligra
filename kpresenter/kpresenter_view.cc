@@ -375,7 +375,7 @@ void KPresenterView::editDelPage()
 {
     if ( KMessageBox::questionYesNo( this,
                                      i18n( "Do you want to remove the current page?\n"
-                                           "This operation is not undoable.") )
+                                           "This operation cannot be undone.") )
          != KMessageBox::Yes )
         return;
     m_pKPresenterDoc->deletePage( currPg );
@@ -816,7 +816,7 @@ void KPresenterView::extraLayout()
     KoHeadFoot hf;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS ) ) {
-	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Pagelayout" ),
+	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
 						    pgLayout, oldLayout, this );
 	pgLayoutCmd->execute();
 	kPresenterDoc()->commands()->addCommand( pgLayoutCmd );
@@ -869,8 +869,8 @@ void KPresenterView::extraWebPres()
     KURL url;
     QString config = QString::null;
     if ( KMessageBox::questionYesNo( this,
-	   i18n( "Do you want to load a configuration which should be used for this\n"
-		 "HTML Presentation, which you have already saved earlier?" ),
+	   i18n( "Do you want to load a configuration, that you have saved earlier,\n"
+		 "which should be used for this HTML Presentation?" ),
 	   i18n( "Create HTML Presentation" ) ) == KMessageBox::Yes )
     {
 	url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
@@ -880,7 +880,7 @@ void KPresenterView::extraWebPres()
 
 	if( !url.isLocalFile() )
 	{
-	  KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
+	  KMessageBox::sorry( this, i18n( "Only local files are currently supported." ) );
 	  return;
 	}
 
@@ -935,7 +935,7 @@ void KPresenterView::screenConfigPages()
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
 			       kPresenterDoc()->getPresSpeed() );
-    pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screenpresentations" ) );
+    pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->show();
 }
@@ -948,7 +948,7 @@ void KPresenterView::screenPresStructView()
 	page->setToolEditMode( TEM_MOUSE );
 
 	presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-	presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
+	presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
 	QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
 	presStructView->show();
 //     }
@@ -962,7 +962,7 @@ void KPresenterView::screenAssignEffect()
     QList<KPObject> objs;
     if ( page->canAssignEffect( objs ) ) {
         EffectDia *effectDia = new EffectDia( this, "Effect", objs, this );
-	effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
+	effectDia->setCaption( i18n( "KPresenter - Assign Effects" ) );
 	if(effectDia->exec())
             effectOk();
         delete effectDia;
@@ -1570,7 +1570,7 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
 
-    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Pagelayout" ), _layout, oldLayout, this );
+    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, this );
     pgLayoutCmd->execute();
     kPresenterDoc()->commands()->addCommand( pgLayoutCmd );
 }
@@ -2159,7 +2159,7 @@ void KPresenterView::styleOk()
 /*=================== page configuration ok ======================*/
 void KPresenterView::pgConfOk()
 {
-    PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screenpresentations" ),
+    PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screen Presentations" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
 					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
 					  kPresenterDoc()->spManualSwitch(),

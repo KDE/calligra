@@ -859,7 +859,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 KPPieObject *kppieobject = new KPPieObject();
                 kppieobject->load(obj);
                 if ( _paste ) {
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chors" ), kppieobject, this );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this );
                     insertCmd->execute();
                     _commands.addCommand( insertCmd );
                 } else
@@ -2495,7 +2495,7 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
 	}
     }
 
-    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object( s )" ), _objectList, _new, this );
+    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
 }
@@ -2520,7 +2520,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 	}
     }
 
-    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object( s )" ), _objectList, _new, this );
+    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
 }
@@ -3035,7 +3035,7 @@ void KPresenterDoc::deleteObjs( bool _add )
     }
     deSelectAllObj();
 
-    DeleteCmd *deleteCmd = new DeleteCmd( i18n( "Delete object( s )" ), _objects, this );
+    DeleteCmd *deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, this );
     deleteCmd->execute();
 
     if ( _add ) _commands.addCommand( deleteCmd );
@@ -3187,7 +3187,7 @@ void KPresenterDoc::alignObjsLeft()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) left" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -3211,7 +3211,7 @@ void KPresenterDoc::alignObjsCenterH()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) centered ( horizontal )" ),
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
 					     _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
@@ -3235,7 +3235,7 @@ void KPresenterDoc::alignObjsRight()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) right" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -3262,7 +3262,7 @@ void KPresenterDoc::alignObjsTop()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) top" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -3291,7 +3291,7 @@ void KPresenterDoc::alignObjsCenterV()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) center / vertical" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }
@@ -3318,7 +3318,7 @@ void KPresenterDoc::alignObjsBottom()
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object( s ) bottom" ), _diffs, _objects, this );
+    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, this );
     _commands.addCommand( moveByCmd2 );
     moveByCmd2->execute();
 }

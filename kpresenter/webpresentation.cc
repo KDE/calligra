@@ -466,12 +466,11 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *helptext = new QLabel( page1 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
-    helptext->setText( i18n( "Enter here your name, your Email\n"
-                             "Address and the title of the web\n"
-                             "presentation. Also enter the path\n"
-                             "into which the web presentation\n"
-                             "should be created. This must be a\n"
-                             "directory." ) );
+    helptext->setText( i18n( "Enter your name, email address and\n"
+                             "the title of the web presentation.\n"
+                             "Also enter the path into which the\n"
+                             "web presentation should be created\n"
+                             "(This must be a directory).\n" ) );
     helptext->setMaximumWidth( helptext->sizeHint().width() );
 
     QVBox *canvas = new QVBox( page1 );
@@ -485,7 +484,7 @@ void KPWebPresentationWizard::setupPage1()
     label1->setAlignment( Qt::AlignVCenter );
     QLabel *label2 = new QLabel( i18n(" Title: "), row2 );
     label2->setAlignment( Qt::AlignVCenter );
-    QLabel *label3 = new QLabel( i18n(" Email-Address: "), row3 );
+    QLabel *label3 = new QLabel( i18n(" Email Address: "), row3 );
     label3->setAlignment( Qt::AlignVCenter );
     QLabel *label4 = new QLabel( i18n(" Path: "), row4 );
     label4->setAlignment( Qt::AlignVCenter );
@@ -517,7 +516,7 @@ void KPWebPresentationWizard::setupPage2()
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
     QString help = i18n("Here you can configure the style\n"
-                        "of the webpages ( colors ). You also\n"
+                        "of the web pages (colors). You also\n"
                         "need to specify the picture format\n"
                         "which should be used for the slides.\n"
                         "PNG is a very optimized and well\n"
@@ -533,7 +532,7 @@ void KPWebPresentationWizard::setupPage2()
                      "all web browsers.\n");
 
     help += i18n( "\n"
-                  "Finally you also can specify the zoom\n"
+                  "Finally you can also specify the zoom\n"
                   "for the slides." );
     helptext->setText(help);
     helptext->setMaximumWidth( helptext->sizeHint().width() );
@@ -587,12 +586,12 @@ void KPWebPresentationWizard::setupPage3()
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
     helptext->setText( i18n( "Here you can specify titles for\n"
-                             "each slide. Click in the list on\n"
-                             "on a slide and then enter in the\n"
-                             "editbox below the title. If you\n"
-                             "click on a title the KPresenter\n"
-                             "mainview scrolls to this slide,\n"
-                             "so that you can see the slide." ) );
+                             "each slide. Click on a slide in\n"
+                             "the list and then enter the title\n"
+                             "in the textbox below. If you\n"
+                             "click on a title, the KPresenter\n"
+                             "mainview will scroll to this\n"
+                             "slide, so it can be seen." ) );
     helptext->setMaximumWidth( helptext->sizeHint().width() );
 
     QVBox *canvas = new QVBox( page3 );
@@ -608,7 +607,7 @@ void KPWebPresentationWizard::setupPage3()
              SLOT( slideTitleChanged( const QString & ) ) );
 
     slideTitles = new QListView( canvas );
-    slideTitles->addColumn( i18n( "Slide Nr." ) );
+    slideTitles->addColumn( i18n( "Slide No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
              SLOT( slideTitleChanged( QListViewItem * ) ) );
@@ -840,10 +839,10 @@ void KPWebPresentationCreateDialog::setupGUI()
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
-    step1 = new QLabel( i18n( "Initialize ( create file structure, etc. )" ), back );
+    step1 = new QLabel( i18n( "Initialize (create file structure, etc.)" ), back );
     step2 = new QLabel( i18n( "Create Pictures of the Slides" ), back );
     step3 = new QLabel( i18n( "Create HTML pages for the slides" ), back );
-    step4 = new QLabel( i18n( "Create Main Page ( Table of Contents )" ), back );
+    step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
 
     line = new QFrame( back );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );

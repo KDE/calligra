@@ -189,7 +189,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
 void KPPresStructView::setupSlideList()
 {
     slides = new QListView( hsplit );
-    slides->addColumn( i18n( "Slide Nr." ) );
+    slides->addColumn( i18n( "Slide No." ) );
     slides->addColumn( i18n( "Slide Title" ) );
     slides->header()->setMovingEnabled( false );
     slides->setAllColumnsShowFocus( true );
