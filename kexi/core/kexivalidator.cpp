@@ -21,10 +21,25 @@
 
 KexiValidator::KexiValidator(QObject * parent, const char * name)
 : QValidator(parent,name)
+, m_acceptsEmptyValue(false)
 {
 }
 
-KexiValidator::Result KexiValidator::check(const QString &, QVariant, QString &, QString &)
+KexiValidator::Result KexiValidator::check(const QString &valueName, const QVariant& v, 
+	QString &message, QString &details)
+{
+	if (v.isNull() || v.type()==QVariant::String && v.toString().isEmpty()) {
+		if (!m_acceptsEmptyValue) {
+			message = KexiValidator::msgColumnNotEmpty().arg(valueName);
+			return Error;
+		}
+		return Ok;
+	}
+	return internalCheck(valueName, v, message, details);
+}
+
+KexiValidator::Result KexiValidator::internalCheck(const QString &valueName, 
+	const QVariant& v, QString &message, QString &details)
 {
 	return Error;
 }
