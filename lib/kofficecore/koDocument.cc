@@ -185,8 +185,6 @@ KoDocument::~KoDocument()
   m_documentList->removeRef(this);
   kdDebug() << "XXXXXXXXXXXXX docList (remove): " << m_documentList->count()
 	    << endl;
-  if(m_documentList->isEmpty())
-    kapp->quit();
 }
 
 void KoDocument::delayedDestruction()
@@ -354,6 +352,8 @@ void KoDocument::slotChildDestroyed()
 void KoDocument::slotDestruct()
 {
   delete this;
+  if(m_documentList->isEmpty())
+    kapp->quit();
 }
 
 QList<KoDocumentChild> &KoDocument::children() const
