@@ -45,6 +45,7 @@ class VSegment
 {
 public:
 	VSegment();
+	VSegment( const VSegment &other );
 
 	// segment types:
 	enum VSegmentType{

@@ -27,10 +27,16 @@ VPath::VPath()
 	m_contour.setLineWidth( 3.0 );
 }
 
-VPath::VPath( const VPath& /*path*/ )
+VPath::VPath( const VPath& path )
 	: VObject()
 {
 // TODO: implement copy-ctor
+    m_segments.clear();
+    VSegmentListIterator itr( path.m_segments );
+    for( ; itr.current() ; ++itr )
+    {
+        m_segments.append( new VSegment( *( itr.current() ) ) );
+    }
 }
 
 VPath::~VPath()
