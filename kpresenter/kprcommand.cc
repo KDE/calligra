@@ -2003,10 +2003,11 @@ void KPrNameObjectCommand::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc,
+KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, KPrPage *_page,
                                                   bool _newValue, KPTextObject *_textObject):
     KNamedCommand(name),
-    m_doc(_doc),
+    m_doc( _doc ),
+    m_page(_page),
     m_textObject(_textObject),
     newValue(_newValue)
 {
@@ -2016,9 +2017,9 @@ KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresente
 void KPrHideShowHeaderFooter::execute()
 {
     if( m_textObject==m_doc->footer())
-        m_doc->setFooter( newValue );
+        m_page->setFooter( newValue );
     else if( m_textObject==m_doc->header())
-        m_doc->setHeader( newValue );
+        m_page->setHeader( newValue );
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
 
@@ -2028,9 +2029,9 @@ void KPrHideShowHeaderFooter::execute()
 void KPrHideShowHeaderFooter::unexecute()
 {
     if( m_textObject==m_doc->footer())
-        m_doc->setFooter( !newValue );
+        m_page->setFooter( !newValue );
     else if( m_textObject==m_doc->header())
-        m_doc->setHeader( !newValue );
+        m_page->setHeader( !newValue );
     else
         kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
 

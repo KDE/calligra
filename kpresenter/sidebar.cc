@@ -585,9 +585,9 @@ void OutlineSlideItem::update()
     {
         KPObject* object = it.current();
 
-        if( doc->hasHeader() && doc->isHeader( object ) )
+        if( m_page->hasHeader() && doc->isHeader( object ) )
             header = object;
-        else if( doc->hasFooter() && doc->isFooter( object ) )
+        else if( m_page->hasFooter() && doc->isFooter( object ) )
             footer = object;
         else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
             OutlineObjectItem *item = new OutlineObjectItem( this, object, true );

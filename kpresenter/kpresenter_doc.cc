@@ -132,9 +132,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
                               bool singleViewMode )
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
-      _gradientCollection(),
-      m_bHasHeader( false ),
-      m_bHasFooter( false )
+      _gradientCollection()
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -543,13 +541,14 @@ QDomDocument KPresenterDoc::saveXML()
     if ( saveOnlyPage == -1 )
         emit sigProgress( 10 );
 
+    //TODO save correct page info for header/footer
     element=doc.createElement("HEADER");
-    element.setAttribute("show", static_cast<int>( hasHeader() ));
+    element.setAttribute("show", static_cast<int>( m_pageList.at(0)->hasHeader() ));
     element.appendChild(_header->save( doc,0 ));
     presenter.appendChild(element);
 
     element=doc.createElement("FOOTER");
-    element.setAttribute("show", static_cast<int>( hasFooter() ));
+    element.setAttribute("show", static_cast<int>( m_pageList.at(0)->hasFooter() ));
     element.appendChild(_footer->save( doc,0 ));
     presenter.appendChild(element);
 
@@ -3409,7 +3408,6 @@ void KPresenterDoc::deSelectObj(KPObject *obj)
 
 void KPresenterDoc::setHeader( bool b )
 {
-    m_bHasHeader = b;
     _header->setDrawEditRect( b );
     _header->setDrawEmpty( b );
     if(!b)
@@ -3418,12 +3416,11 @@ void KPresenterDoc::setHeader( bool b )
         deSelectObj(_header);
     }
     updateHeaderFooterButton();
-    repaint(m_bHasHeader);
+    repaint(b);
 }
 
 void KPresenterDoc::setFooter( bool b )
 {
-    m_bHasFooter = b;
     _footer->setDrawEditRect( b );
     _footer->setDrawEmpty( b );
     if(!b)
@@ -3432,7 +3429,7 @@ void KPresenterDoc::setFooter( bool b )
         deSelectObj(_footer);
     }
     updateHeaderFooterButton();
-    repaint(m_bHasFooter);
+    repaint(b);
 }
 
 void KPresenterDoc::updateHeaderFooterButton()
@@ -3516,7 +3513,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
     //draw sticky obj
     for ( ; it.current() ; ++it )
     {
-        if( (it.current()==_header && !hasHeader())||(it.current()==_footer && !hasFooter()))
+        if( (it.current()==_header && !page->hasHeader())||(it.current()==_footer && !page->hasFooter()))
             continue;
         it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
     }

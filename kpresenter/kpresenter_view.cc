@@ -2309,8 +2309,8 @@ void KPresenterView::initGui()
 
 void KPresenterView::updateHeaderFooterButton()
 {
-    actionViewHeader->setChecked(m_pKPresenterDoc->hasHeader());
-    actionViewFooter->setChecked(m_pKPresenterDoc->hasFooter());
+    actionViewHeader->setChecked( m_canvas->activePage()->hasHeader());
+    actionViewFooter->setChecked( m_canvas->activePage()->hasFooter());
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -5826,9 +5826,9 @@ QString KPresenterView::presentationDurationDataFormatChange( int _time )
 void KPresenterView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
-    m_pKPresenterDoc->setFooter( state );
+    m_canvas->activePage()->setFooter( state );
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header") : i18n("Hide Header"),
-                                                                m_pKPresenterDoc, state, m_pKPresenterDoc->footer());
+                                                                m_pKPresenterDoc, m_canvas->activePage(), state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
 
     m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );
@@ -5837,9 +5837,9 @@ void KPresenterView::viewFooter()
 void KPresenterView::viewHeader()
 {
     bool state=actionViewHeader->isChecked();
-    m_pKPresenterDoc->setHeader( state);
+    m_canvas->activePage()->setHeader( state);
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer") : i18n("Hide Footer"),
-                                                                m_pKPresenterDoc, state, m_pKPresenterDoc->header());
+                                                                m_pKPresenterDoc, m_canvas->activePage(), state, m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
 
     m_pKPresenterDoc->updateSideBarItem( m_pKPresenterDoc->masterPage() );

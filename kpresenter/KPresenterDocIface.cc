@@ -178,15 +178,6 @@ void KPresenterDocIface::recalcPageNum()
     doc->recalcPageNum();
 }
 
-void KPresenterDocIface::setHeader( bool b )
-{
-    doc->setHeader(b);
-}
-
-void KPresenterDocIface::setFooter( bool b )
-{
-    doc->setFooter(b);
-}
 
 void KPresenterDocIface::initConfig()
 {
@@ -208,16 +199,6 @@ bool KPresenterDocIface::isSlideSelected( int pgNum)
     if( pgNum>= (int)doc->getPageNums())
         return false;
     return doc->isSlideSelected(pgNum);
-}
-
-bool KPresenterDocIface::hasFooter() const
-{
-    return doc->hasFooter();
-}
-
-bool KPresenterDocIface::hasHeader() const
-{
-    return doc->hasHeader();
 }
 
 //Return a reference to header textobj

@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2002,2003,2004 Laurent MONTEL <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -701,3 +701,24 @@ void KPresenterPageIface::deleteAllObjectSelected()
     KCommand * cmd=m_page->deleteSelectedObjects();
     delete cmd;
 }
+
+bool KPresenterPageIface::hasHeader()const
+{
+    return m_page->hasHeader();
+}
+
+bool KPresenterPageIface::hasFooter()const
+{
+    return m_page->hasFooter();
+}
+
+void KPresenterPageIface::setHeader( bool b )
+{
+    m_page->setHeader( b );
+}
+
+void KPresenterPageIface::setFooter( bool b )
+{
+    m_page->setFooter( b );
+}
+

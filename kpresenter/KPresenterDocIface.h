@@ -64,9 +64,6 @@ k_dcop:
     virtual void recalcPageNum();
 
 
-    virtual void setHeader( bool b );
-    virtual void setFooter( bool b );
-
     virtual void initConfig();
     virtual void saveConfig();
 
@@ -76,8 +73,6 @@ k_dcop:
     virtual bool isSlideSelected( int pgNum);
 
 
-    virtual bool hasFooter() const;
-    virtual bool hasHeader() const;
     virtual DCOPRef header();
     virtual DCOPRef footer();
 

@@ -271,10 +271,10 @@ class KPresenterDoc : public KoDocument
 
     KPTextObject *header()const { return _header; }
     KPTextObject *footer()const { return _footer; }
-    bool hasHeader()const { return m_bHasHeader; }
-    bool hasFooter()const { return m_bHasFooter; }
+
     void setHeader( bool b );
     void setFooter( bool b );
+
 
     bool isHeader(const KPObject *obj)const;
     bool isFooter(const KPObject *obj)const;
@@ -615,7 +615,6 @@ protected:
     KPGradientCollection _gradientCollection;
 
     KPTextObject *_header, *_footer;
-    bool m_bHasHeader, m_bHasFooter;
 
     QMap<KoPictureKey, QString> m_pictureMap;
 
