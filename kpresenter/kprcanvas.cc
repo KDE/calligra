@@ -2483,7 +2483,7 @@ void KPrCanvas::setupMenus()
     presMenu->insertSeparator();
     presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Page..." ), this, SLOT( slotGotoPage() ) );
     presMenu->insertSeparator();
-    presMenu->insertItem( i18n( "&Exit Presentation" ), this, SLOT( slotExitPres() ) );
+    presMenu->insertItem( i18n( "&End Slide Show" ), this, SLOT( slotExitPres() ) );
     presMenu->setItemChecked( PM_SM, true );
     presMenu->setItemChecked( PM_DM, false );
     presMenu->setMouseTracking( true );
