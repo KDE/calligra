@@ -120,7 +120,7 @@ void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
 }
 
 // Don't forget the delete [] the stream.data ptr!
-void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
+void OLEFilter::slotGetStream(const int &handle, myFile &stream) {
     stream=docfile->stream(handle);
 }
 
@@ -129,7 +129,7 @@ void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
 // Don't forget the delete [] the stream.data ptr!
 void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 
-    QArray<long> handle;
+    QArray<int> handle;
 
     handle=docfile->find(name, true);  // search only in current dir!
 
@@ -185,7 +185,7 @@ void OLEFilter::convert(const QString &dirname) {
                node->name=="0Table" || node->name=="ObjectPool") {
 
                 myFile main, table0, table1, data;
-                QArray<long> tmp;
+                QArray<int> tmp;
 
                 // WinWord
                 // kDebugInfo(31000, "OLEFilter::convert(): WinWord");
@@ -275,8 +275,8 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
                      SLOT(slotSavePic(Picture *)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, char **)),
                      this, SLOT(slotPart(const char *, char **)));
-    QObject::connect(*myFilter, SIGNAL(signalGetStream(const long &, myFile &)), this,
-                     SLOT(slotGetStream(const long &, myFile &)));
+    QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,
+                     SLOT(slotGetStream(const int &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
                      SLOT(slotGetStream(const QString &, myFile &)));
 }

@@ -29,7 +29,7 @@ struct ATRD {
     short ibst;
     short ak;
     unsigned short grfbmc;
-    long lTagBkmk;
+    int lTagBkmk;
 
     bool ok;
 };
@@ -37,7 +37,7 @@ struct ATRD {
 struct Xst {
     QString string;
     Xst *next;
-    unsigned long num;
+    unsigned int num;
 
     bool ok;
 };

@@ -29,8 +29,8 @@ struct ASUMYI {
     short fUpdateProps:1;
     short reserved:11;
     short wDlgLevel;
-    long lHighestLevel;
-    long lCurrentLevel;
+    int lHighestLevel;
+    int lCurrentLevel;
 
     bool ok;
 };

@@ -25,7 +25,7 @@
 #include "brc.h"
 
 struct PICF {
-    long lcb;
+    int lcb;
     unsigned short cbHeader;
     short mfp_mm;
     short mfp_xExt;

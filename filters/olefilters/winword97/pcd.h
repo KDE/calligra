@@ -28,7 +28,7 @@ struct PCD {
     unsigned short fCopied:1;
     unsigned short reserved:5;
     unsigned short fn:8;
-    long fc;
+    int fc;
     unsigned short prm;
     bool unicode;
 

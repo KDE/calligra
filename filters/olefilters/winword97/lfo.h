@@ -23,9 +23,9 @@
 #define LFO_H
 
 struct LFO {
-    long lsid;
-    long reserved;
-    long reserved2;
+    int lsid;
+    int reserved;
+    int reserved2;
     unsigned char clfolvl;
     char reserved3[3];
 

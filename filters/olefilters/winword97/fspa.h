@@ -23,11 +23,11 @@
 #define FSPA_H
 
 struct FSPA {
-    long spid;
-    long xaLeft;
-    long yaTop;
-    long xaRight;
-    long yaBottom;
+    int spid;
+    int xaLeft;
+    int yaTop;
+    int xaRight;
+    int yaBottom;
     unsigned short fHdr:1;
     unsigned short bx:2;
     unsigned short by:2;
@@ -36,7 +36,7 @@ struct FSPA {
     unsigned short fRcaSimple:1;
     unsigned short fBelowText:1;
     unsigned short fAnchorLock:1;
-    long cTxbx;
+    int cTxbx;
 
     bool ok;
 };

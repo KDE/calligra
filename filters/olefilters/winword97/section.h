@@ -34,8 +34,8 @@ class Section {
 
 public:
     Section(const WinWordDoc * const parent, const unsigned char * const mainData,
-            const FIB * const fib, const QArray<long> &paragMarks,
-            const QArray<long> &cellMarks, const QArray<long> &rowMarks);
+            const FIB * const fib, const QArray<int> &paragMarks,
+            const QArray<int> &cellMarks, const QArray<int> &rowMarks);
     ~Section();
 
     const bool isOk() const { return m_success; }
@@ -55,6 +55,6 @@ private:
     const WinWordDoc * const m_parent;
     const unsigned char * const m_mainData;
     const FIB * const m_fib;
-    QArray<long> m_paragMarks, m_cellMarks, m_rowMarks;
+    QArray<int> m_paragMarks, m_cellMarks, m_rowMarks;
 };
 #endif // SECTION_H

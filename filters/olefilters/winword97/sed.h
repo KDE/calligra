@@ -24,9 +24,9 @@
 
 struct SED {
     short fn;
-    long fcSepx;
+    int fcSepx;
     short fnMpr;
-    long fcMpr;
+    int fcMpr;
 
     bool ok;
 };

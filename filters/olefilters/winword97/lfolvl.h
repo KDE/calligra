@@ -23,7 +23,7 @@
 #define LFOLVL_H
 
 struct LFOLVL {
-    long iStartAt;
+    int iStartAt;
     unsigned char ilvl:4;
     unsigned char fStartAt:1;
     unsigned char fFormatting:1;

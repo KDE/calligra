@@ -66,7 +66,7 @@ protected slots:
     void slotPart(const char *nameIN, char **nameOUT);
     // Get another OLE 2 stream for your filter.
     // Attention: You'll have to delete [] the stream.data ptr!
-    void slotGetStream(const long &handle, myFile &stream);
+    void slotGetStream(const int &handle, myFile &stream);
     // Like above. Note: This method might return the wrong stream
     // as the stream names are NOT unique in the OLE 2 file!!!
     // (Therefore it's searching only in the current dir)

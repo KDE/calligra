@@ -210,7 +210,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     ps=new PreviewStack(0L, "preview stack", this);
 
-    unsigned long id;                 // id for the next widget
+    unsigned int id;                 // id for the next widget
 
     for(i=0, id=1; i<vec1.count(); ++i) {
         KMimeType::Ptr t;
@@ -254,7 +254,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 void KoFilterManager::cleanUp() {
 
     if(!dialogMap.isEmpty() && ps!=0L && !ps->isHidden()) {
-        long id=ps->id(ps->visibleWidget());
+        int id=ps->id(ps->visibleWidget());
         if(id!=0) {
             KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
@@ -267,9 +267,9 @@ void KoFilterManager::cleanUp() {
     }
 }
 
-long KoFilterManager::findWidget(const QString &ext) const {
+const int KoFilterManager::findWidget(const QString &ext) const {
 
-    QMap<QString, long>::Iterator it;
+    QMap<QString, int>::Iterator it;
     it=dialogMap.find(ext);
 
     if(it!=dialogMap.end())
@@ -423,7 +423,7 @@ void PreviewStack::showPreview(const KURL &url) {
 
     QString tmp=url.url();
     unsigned short k=0, id;
-    unsigned long foo=tmp.length();
+    unsigned int foo=tmp.length();
 
     // try to find the extension
     while(tmp[foo-k]!=QChar('.') && k<=foo) {

@@ -53,19 +53,19 @@ public:
     const QDomDocument * const part();
 
     /////////////////////////////////////////////////////////////
-    const PCD pcd(const long &pos);
+    const PCD pcd(const int &pos);
     const unsigned short numPCD() { return m_pcdCount; }
 
-    const ATRD atrd(const long &pos);
+    const ATRD atrd(const int &pos);
     const unsigned short numATRD() { return m_atrdCount; }
 
-    const BKF bkf(const long &pos);
+    const BKF bkf(const int &pos);
     const unsigned short numBKF() { return m_bkfCount; }
 
-    const BKL bkl(const long &pos);
+    const BKL bkl(const int &pos);
     const unsigned short numBKL() { return m_bklCount; }
 
-    void sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
+    void sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int &lcb,
                const unsigned char * const stream);
     //////////////////////////////////////////////////////////
 
@@ -96,13 +96,13 @@ private:
     // Stylesheet
     StyleSheet *m_styleSheet;
     // Piece table (pt), PCD stuff
-    unsigned long m_pcdCount, m_pcdCPBase, m_pcdPCDBase;
+    unsigned int m_pcdCount, m_pcdCPBase, m_pcdPCDBase;
     // ATRD
-    unsigned long m_atrdBase, m_atrdCount;
+    unsigned int m_atrdBase, m_atrdCount;
     // BKF
-    unsigned long m_bkfBase, m_bkfCount;
+    unsigned int m_bkfBase, m_bkfCount;
     // BKL
-    unsigned long m_bklBase, m_bklCount;
+    unsigned int m_bklBase, m_bklCount;
 
     STTBF m_grpXst, m_atnbkmk, m_assocStrings;
 };

@@ -240,7 +240,7 @@ CStyle::~CStyle() {
     }
 }
 
-/*void CStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
+/*void CStyle::applyCHPX(const int &fcGrpprl, const unsigned short &cb) {
 
     unsigned short offset=0;
     unsigned short value, size;
@@ -311,35 +311,35 @@ const QString CStyle::format() {
         format=QString("<FORMAT>\n");
     else {
         format=QString("<FORMAT id=\"");
-        format+=QString::number(static_cast<long>(_id));
+        format+=QString::number(static_cast<int>(_id));
         format+="\" pos=\"";
-        format+=QString::number(static_cast<long>(_pos));
+        format+=QString::number(static_cast<int>(_pos));
         if(_id==1) {
             format+="\" len=\"";
-            format+=QString::number(static_cast<long>(_len));
+            format+=QString::number(static_cast<int>(_len));
         }
         format+="\">\n";
     }
 
     if(_id==1) {
         format+="<COLOR red=\"";
-        format+=QString::number(static_cast<long>(data.text.red));
+        format+=QString::number(static_cast<int>(data.text.red));
         format+="\" green=\"";
-        format+=QString::number(static_cast<long>(data.text.green));
+        format+=QString::number(static_cast<int>(data.text.green));
         format+="\" blue=\"";
-        format+=QString::number(static_cast<long>(data.text.blue));
+        format+=QString::number(static_cast<int>(data.text.blue));
         format+="\"/>\n<FONT name=\"";
         format+=QString(data.text.fontname);
         format+="\"/>\n<SIZE value=\"";
-        format+=QString::number(static_cast<long>(data.text.size));
+        format+=QString::number(static_cast<int>(data.text.size));
         format+="\"/>\n<WEIGHT value=\"";
-        format+=QString::number(static_cast<long>(data.text.weight));
+        format+=QString::number(static_cast<int>(data.text.weight));
         format+="\"/>\n<ITALIC value=\"";
-        format+=QString::number(static_cast<long>(data.text.italic));
+        format+=QString::number(static_cast<int>(data.text.italic));
         format+="\"/>\n<UNDERLINE value=\"";
-        format+=QString::number(static_cast<long>(data.text.underline));
+        format+=QString::number(static_cast<int>(data.text.underline));
         format+="\"/>\n<VERTALIGN value=\"";
-        format+=QString::number(static_cast<long>(data.text.vertalign));
+        format+=QString::number(static_cast<int>(data.text.vertalign));
         format+="\"/>\n";
     }
     else if(_id==2) {
@@ -349,74 +349,74 @@ const QString CStyle::format() {
     }
     else if(_id==4) {
         format+="<TYPE type=\"";
-        format+=QString::number(static_cast<long>(data.variable.type));
+        format+=QString::number(static_cast<int>(data.variable.type));
         format+="\"/>\n<POS frameSet=\"";
-        format+=QString::number(static_cast<long>(data.variable.frameSet));
+        format+=QString::number(static_cast<int>(data.variable.frameSet));
         format+="\" frame=\"";
-        format+=QString::number(static_cast<long>(data.variable.frame));
+        format+=QString::number(static_cast<int>(data.variable.frame));
         format+="\" pageNum=\"";
-        format+=QString::number(static_cast<long>(data.variable.pageNum));
+        format+=QString::number(static_cast<int>(data.variable.pageNum));
         format+="\"/>\n";
         if(data.variable.type==0 || data.variable.type==1) {
             format+="<DATE year=\"";
-            format+=QString::number(static_cast<long>(data.variable.year));
+            format+=QString::number(static_cast<int>(data.variable.year));
             format+="\" month=\"";
-            format+=QString::number(static_cast<long>(data.variable.month));
+            format+=QString::number(static_cast<int>(data.variable.month));
             format+="\" day=\"";
-            format+=QString::number(static_cast<long>(data.variable.day));
+            format+=QString::number(static_cast<int>(data.variable.day));
             format+="\" fix=\"";
-            format+=QString::number(static_cast<long>(data.variable.fix));
+            format+=QString::number(static_cast<int>(data.variable.fix));
             format+="\"/>\n<FRMAT>\n";
         }
         else if(data.variable.type==2 || data.variable.type==3) {
             format+="<TIME hour=\"";
-            format+=QString::number(static_cast<long>(data.variable.hour));
+            format+=QString::number(static_cast<int>(data.variable.hour));
             format+="\" minute=\"";
-            format+=QString::number(static_cast<long>(data.variable.minute));
+            format+=QString::number(static_cast<int>(data.variable.minute));
             format+="\" second=\"";
-            format+=QString::number(static_cast<long>(data.variable.second));
+            format+=QString::number(static_cast<int>(data.variable.second));
             format+="\" msecond=\"";
-            format+=QString::number(static_cast<long>(data.variable.msecond));
+            format+=QString::number(static_cast<int>(data.variable.msecond));
             format+="\" fix=\"";
-            format+=QString::number(static_cast<long>(data.variable.fix));
+            format+=QString::number(static_cast<int>(data.variable.fix));
             format+="\"/>\n<FRMAT>\n";
         }
         else if(data.variable.type==4) {
             format+="<PGNUM value=\"";
-            format+=QString::number(static_cast<long>(data.variable.PGNum));
+            format+=QString::number(static_cast<int>(data.variable.PGNum));
             format+="\"/>\n<FRMAT>\n";
         }
         format+="<COLOR red=\"";
-        format+=QString::number(static_cast<long>(data.variable.red));
+        format+=QString::number(static_cast<int>(data.variable.red));
         format+="\" green=\"";
-        format+=QString::number(static_cast<long>(data.variable.green));
+        format+=QString::number(static_cast<int>(data.variable.green));
         format+="\" blue=\"";
-        format+=QString::number(static_cast<long>(data.variable.blue));
+        format+=QString::number(static_cast<int>(data.variable.blue));
         format+="\"/>\n<FONT name=\"";
         format+=QString(data.variable.fontname);
         format+="\"/>\n<SIZE value=\"";
-        format+=QString::number(static_cast<long>(data.variable.size));
+        format+=QString::number(static_cast<int>(data.variable.size));
         format+="\"/>\n<WEIGHT value=\"";
-        format+=QString::number(static_cast<long>(data.variable.weight));
+        format+=QString::number(static_cast<int>(data.variable.weight));
         format+="\"/>\n<ITALIC value=\"";
-        format+=QString::number(static_cast<long>(data.variable.italic));
+        format+=QString::number(static_cast<int>(data.variable.italic));
         format+="\"/>\n<UNDERLINE value=\"";
-        format+=QString::number(static_cast<long>(data.variable.underline));
+        format+=QString::number(static_cast<int>(data.variable.underline));
         format+="\"/>\n<VERTALIGN value=\"";
-        format+=QString::number(static_cast<long>(data.variable.vertalign));
+        format+=QString::number(static_cast<int>(data.variable.vertalign));
         format+="\"/>\n</FRMAT>\n";
     }
     else if(_id==5) {
         format+="<INTERNAL>\n<PART from=\"";
-        format+=QString::number(static_cast<long>(data.footnote.from));
+        format+=QString::number(static_cast<int>(data.footnote.from));
         format+="\" to=\"";
-        format+=QString::number(static_cast<long>(data.footnote.to));
+        format+=QString::number(static_cast<int>(data.footnote.to));
         format+="\" space=\"";
         format+=QChar(data.footnote.space);
         format+="\"/>\n</INTERNAL>\n<RANGE start=\"";
-        format+=QString::number(static_cast<long>(data.footnote.start));
+        format+=QString::number(static_cast<int>(data.footnote.start));
         format+="\" end=\"";
-        format+=QString::number(static_cast<long>(data.footnote.end));
+        format+=QString::number(static_cast<int>(data.footnote.end));
         format+="\"/>\n<TEXT before=\"";
         format+=QString(data.footnote.before);
         format+="\" after=\"";
@@ -425,23 +425,23 @@ const QString CStyle::format() {
         format+=QString(data.footnote.ref);
         format+="\"/>\n<FRMAT>\n";
         format+="<COLOR red=\"";
-        format+=QString::number(static_cast<long>(data.footnote.red));
+        format+=QString::number(static_cast<int>(data.footnote.red));
         format+="\" green=\"";
-        format+=QString::number(static_cast<long>(data.footnote.green));
+        format+=QString::number(static_cast<int>(data.footnote.green));
         format+="\" blue=\"";
-        format+=QString::number(static_cast<long>(data.footnote.blue));
+        format+=QString::number(static_cast<int>(data.footnote.blue));
         format+="\"/>\n<FONT name=\"";
         format+=QString(data.footnote.fontname);
         format+="\"/>\n<SIZE value=\"";
-        format+=QString::number(static_cast<long>(data.footnote.size));
+        format+=QString::number(static_cast<int>(data.footnote.size));
         format+="\"/>\n<WEIGHT value=\"";
-        format+=QString::number(static_cast<long>(data.footnote.weight));
+        format+=QString::number(static_cast<int>(data.footnote.weight));
         format+="\"/>\n<ITALIC value=\"";
-        format+=QString::number(static_cast<long>(data.footnote.italic));
+        format+=QString::number(static_cast<int>(data.footnote.italic));
         format+="\"/>\n<UNDERLINE value=\"";
-        format+=QString::number(static_cast<long>(data.footnote.underline));
+        format+=QString::number(static_cast<int>(data.footnote.underline));
         format+="\"/>\n<VERTALIGN value=\"";
-        format+=QString::number(static_cast<long>(data.footnote.vertalign));
+        format+=QString::number(static_cast<int>(data.footnote.vertalign));
         format+="\"/>\n</FRMAT>\n";
     }
     format+="</FORMAT>";
@@ -606,7 +606,7 @@ const QString PStyle::layout() {
     layout+="\"/>\n<FOLLOWING name=\"";
     layout+=_following;
     layout+="\"/>\n<FLOW value=\"";
-    layout+=QString::number(static_cast<long>(_flow));
+    layout+=QString::number(static_cast<int>(_flow));
     layout+="\"/>\n<OHEAD ";
     layout+=unit(_ohead_pt);
     layout+="/>\n<OFOOT ";
@@ -618,15 +618,15 @@ const QString PStyle::layout() {
     layout+="/>\n<LINESPACE ";
     layout+=unit(_linespace_pt);
     layout+="/>\n<COUNTER type=\"";
-    layout+=QString::number(static_cast<long>(counter.type));
+    layout+=QString::number(static_cast<int>(counter.type));
     layout+="\" depth=\"";
-    layout+=QString::number(static_cast<long>(counter.depth));
+    layout+=QString::number(static_cast<int>(counter.depth));
     layout+="\" bullet=\"";
-    layout+=QString::number(static_cast<long>(counter.bullet));
+    layout+=QString::number(static_cast<int>(counter.bullet));
     layout+="\" start=\"";
-    layout+=QString::number(static_cast<long>(counter.start));
+    layout+=QString::number(static_cast<int>(counter.start));
     layout+="\" numberingtype=\"";
-    layout+=QString::number(static_cast<long>(counter.nmbType));
+    layout+=QString::number(static_cast<int>(counter.nmbType));
     layout+="\" lefttext=\"";
     layout+=counter.lefttext;
     layout+="\" righttext=\"";
@@ -659,7 +659,7 @@ const QString PStyle::layout() {
 const QString PStyle::unit(const unsigned short &u) {
 
     QString ret="pt=\"";
-    ret+=QString::number(static_cast<long>(u));
+    ret+=QString::number(static_cast<int>(u));
     ret+="\" mm=\"";
     ret+=QString::number(static_cast<float>(u/2.83465));
     ret+="\" inch=\"";
@@ -671,15 +671,15 @@ const QString PStyle::unit(const unsigned short &u) {
 const QString PStyle::border(const myBORDER &b) {
 
     QString ret="red=\"";
-    ret+=QString::number(static_cast<long>(b.red));
+    ret+=QString::number(static_cast<int>(b.red));
     ret+="\" green=\"";
-    ret+=QString::number(static_cast<long>(b.green));
+    ret+=QString::number(static_cast<int>(b.green));
     ret+="\" blue=\"";
-    ret+=QString::number(static_cast<long>(b.blue));
+    ret+=QString::number(static_cast<int>(b.blue));
     ret+="\" style=\"";
-    ret+=QString::number(static_cast<long>(b.style));
+    ret+=QString::number(static_cast<int>(b.style));
     ret+="\" width=\"";
-    ret+=QString::number(static_cast<long>(b.width));
+    ret+=QString::number(static_cast<int>(b.width));
     ret+="\"";
     return ret;
 }
@@ -689,7 +689,7 @@ const QString PStyle::tab(const myTAB &t) {
     QString ret="<TABULATOR mmpos=\"";
     ret+=QString::number(static_cast<float>(t.pos_pt/2.83465));
     ret+="\" ptpos=\"";
-    ret+=QString::number(static_cast<long>(t.pos_pt));
+    ret+=QString::number(static_cast<int>(t.pos_pt));
     ret+="\" inchpos=\"";
     ret+=QString::number(static_cast<float>(t.pos_pt/72.0));
     ret+="\"/>\n";

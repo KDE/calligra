@@ -80,7 +80,7 @@ const QString XMLTree::part()
 //
 // And this looks related to the UTF 8 encoding ...
 
-  kDebugInfo( 31501, (const char*)QString::number((long)tmr.elapsed()));
+  kDebugInfo( 31501, (const char*)QString::number((int)tmr.elapsed()));
   kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
   t << '\0';

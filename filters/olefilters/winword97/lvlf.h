@@ -23,7 +23,7 @@
 #define LVLF_H
 
 struct LVLF {
-    long iStartAt;
+    int iStartAt;
     char nfc;
     unsigned char jc:2;
     unsigned char fLegal:1;
@@ -33,8 +33,8 @@ struct LVLF {
     unsigned char fWord6:1;
     short rgbxchNums[9];
     unsigned char ixchFollow;
-    long dxaSpace;
-    long daxIndent;
+    int dxaSpace;
+    int daxIndent;
     char cbGrpprlChpx;
     char cbGrpprlPapx;
     short reserved;

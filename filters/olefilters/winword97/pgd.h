@@ -38,7 +38,7 @@ struct PGD {
     short bkc:4;
     unsigned short lnn;
     unsigned short pgn;
-    long dym;
+    int dym;
 
     bool ok;
 };

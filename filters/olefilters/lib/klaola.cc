@@ -78,7 +78,7 @@ KLaola::~KLaola() {
 const QList<OLENode> KLaola::parseRootDir() {
 
     QList<OLENode> tmpOLENodeList;
-    QArray<long> tmp;
+    QArray<int> tmp;
 
     if(ok) {
         tmp=path.copy();
@@ -136,7 +136,7 @@ const QList<OLENode> KLaola::parseCurrentDir() {
     return nodeList;
 }
 
-const bool KLaola::enterDir(const long &handle) {
+const bool KLaola::enterDir(const int &handle) {
 
     QList<OLENode> dir;
     OLENode *node;
@@ -167,11 +167,11 @@ const bool KLaola::leaveDir() {
     return false;
 }
 
-const QArray<long> KLaola::currentPath() const {
+const QArray<int> KLaola::currentPath() const {
     return path;
 }
 
-const OLEInfo KLaola::streamInfo(const long &handle) {
+const OLEInfo KLaola::streamInfo(const int &handle) {
 
     OLEInfo *tmp, ret;
 
@@ -196,7 +196,7 @@ const OLEInfo KLaola::streamInfo(const long &handle) {
     return ret;
 }
 
-const myFile KLaola::stream(const long &handle) {
+const myFile KLaola::stream(const int &handle) {
 
     OLEInfo *info;
     myFile ret;
@@ -214,9 +214,9 @@ const myFile KLaola::stream(const long &handle) {
     return ret;
 }
 
-const QArray<long> KLaola::find(const QString &name, const bool onlyCurrentDir) {
+const QArray<int> KLaola::find(const QString &name, const bool onlyCurrentDir) {
 
-    QArray<long> ret(static_cast<int>(0));
+    QArray<int> ret(static_cast<int>(0));
     int i=0;
 
     if(ok) {
@@ -281,7 +281,7 @@ const bool KLaola::parseHeader() {
     num_of_bbd_blocks=read32(0x2c);
     root_startblock=read32(0x30);
     sbd_startblock=read32(0x3c);
-    bbd_list=new unsigned long[num_of_bbd_blocks];
+    bbd_list=new unsigned int[num_of_bbd_blocks];
 
     unsigned int i, j;
     for(i=0, j=0; i<num_of_bbd_blocks; ++i, j=j+4)
@@ -306,10 +306,10 @@ void KLaola::readSmallBlockFile() {
 
 void KLaola::readRootList() {
 
-    long pos=root_startblock;
-    long handle=0;
+    int pos=root_startblock;
+    int handle=0;
 
-    while(pos!=-2 && pos>=0 && pos<=static_cast<long>(maxblock)) {
+    while(pos!=-2 && pos>=0 && pos<=static_cast<int>(maxblock)) {
         for(int i=0; i<4; ++i, ++handle)
             readPPSEntry((pos+1)*0x200+0x80*i, handle);
         pos=nextBigBlock(pos);
@@ -323,7 +323,7 @@ void KLaola::readRootList() {
     path[0]=0;   // current path=root dir
 }
 
-void KLaola::readPPSEntry(const long &pos, const long &handle) {
+void KLaola::readPPSEntry(const int &pos, const int &handle) {
 
     OLEInfo *info=new OLEInfo;
 
@@ -335,31 +335,31 @@ void KLaola::readPPSEntry(const long &pos, const long &handle) {
         // kDebugInfo(31000, "PPS Entry %d #####################", pos);
         // kDebugInfo(31000, info->name);
         info->type=data[pos+0x42];
-        // kDebugInfo(31000, QString::number((long)info->type));
-        info->prev=static_cast<long>(read32(pos+0x44));
-        // kDebugInfo(31000, QString::number((long)info->prev));
-        info->next=static_cast<long>(read32(pos+0x48));
-        // kDebugInfo(31000, QString::number((long)info->next));
-        info->dir=static_cast<long>(read32(pos+0x4C));
-        // kDebugInfo(31000, QString::number((long)info->dir));
-        info->ts1s=static_cast<long>(read32(pos+0x64));
-        // kDebugInfo(31000, QString::number((long)info->ts1s));
-        info->ts1d=static_cast<long>(read32(pos+0x68));
-        // kDebugInfo(31000, QString::number((long)info->ts1d));
-        info->ts2s=static_cast<long>(read32(pos+0x6C));
-        // kDebugInfo(31000, QString::number((long)info->ts2s));
-        info->ts2d=static_cast<long>(read32(pos+0x70));
-        // kDebugInfo(31000, QString::number((long)info->ts2d));
-        info->sb=static_cast<long>(read32(pos+0x74));
-        // kDebugInfo(31000, QString::number((long)info->sb));
-        info->size=static_cast<long>(read32(pos+0x78));
-        // kDebugInfo(31000, QString::number((long)info->size));
+        // kDebugInfo(31000, QString::number((int)info->type));
+        info->prev=static_cast<int>(read32(pos+0x44));
+        // kDebugInfo(31000, QString::number((int)info->prev));
+        info->next=static_cast<int>(read32(pos+0x48));
+        // kDebugInfo(31000, QString::number((int)info->next));
+        info->dir=static_cast<int>(read32(pos+0x4C));
+        // kDebugInfo(31000, QString::number((int)info->dir));
+        info->ts1s=static_cast<int>(read32(pos+0x64));
+        // kDebugInfo(31000, QString::number((int)info->ts1s));
+        info->ts1d=static_cast<int>(read32(pos+0x68));
+        // kDebugInfo(31000, QString::number((int)info->ts1d));
+        info->ts2s=static_cast<int>(read32(pos+0x6C));
+        // kDebugInfo(31000, QString::number((int)info->ts2s));
+        info->ts2d=static_cast<int>(read32(pos+0x70));
+        // kDebugInfo(31000, QString::number((int)info->ts2d));
+        info->sb=static_cast<int>(read32(pos+0x74));
+        // kDebugInfo(31000, QString::number((int)info->sb));
+        info->size=static_cast<int>(read32(pos+0x78));
+        // kDebugInfo(31000, QString::number((int)info->size));
         // kDebugInfo(31000, "##################################");
         ppsList.append(info);
     }
 }
 
-void KLaola::createTree(const long &handle, const short &index) {
+void KLaola::createTree(const int &handle, const short &index) {
 
     OLEInfo *info=ppsList.at(handle);
     QList<OLETree> *tmpList;
@@ -394,13 +394,13 @@ void KLaola::createTree(const long &handle, const short &index) {
     }
 }
 
-const unsigned char *KLaola::readBBStream(const long &start, const bool setmaxSblock) {
+const unsigned char *KLaola::readBBStream(const int &start, const bool setmaxSblock) {
 
-    long i=0, tmp;
+    int i=0, tmp;
     unsigned char *p=0;
 
     tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
         ++i;
         tmp=nextBigBlock(tmp);
     }
@@ -410,7 +410,7 @@ const unsigned char *KLaola::readBBStream(const long &start, const bool setmaxSb
             maxSblock=i*8-1;
         i=0;
         tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxblock)) {
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
             memcpy(&p[i*0x200], &data[(tmp+1)*0x200], 0x200);
             tmp=nextBigBlock(tmp);
             ++i;
@@ -419,13 +419,13 @@ const unsigned char *KLaola::readBBStream(const long &start, const bool setmaxSb
     return p;
 }
 
-const unsigned char *KLaola::readSBStream(const long &start) {
+const unsigned char *KLaola::readSBStream(const int &start) {
 
-    long i=0, tmp;
+    int i=0, tmp;
     unsigned char *p=0;
 
     tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxSblock)) {
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
         ++i;
         tmp=nextSmallBlock(tmp);
     }
@@ -433,7 +433,7 @@ const unsigned char *KLaola::readSBStream(const long &start) {
         p=new unsigned char[i*0x40];
         i=0;
         tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<long>(maxSblock)) {
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
             memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
             tmp=nextSmallBlock(tmp);
             ++i;
@@ -442,17 +442,17 @@ const unsigned char *KLaola::readSBStream(const long &start) {
     return p;
 }
 
-inline const long KLaola::nextBigBlock(const long &pos) {
+inline const int KLaola::nextBigBlock(const int &pos) {
 
-    long x=pos*4;
+    int x=pos*4;
     return ( (bigBlockDepot[x+3] << 24) + (bigBlockDepot[x+2] << 16) +
              (bigBlockDepot[x+1] << 8) + bigBlockDepot[x] );
 }
 
-inline const long KLaola::nextSmallBlock(const long &pos) {
+inline const int KLaola::nextSmallBlock(const int &pos) {
 
     if(smallBlockDepot) {
-        long x=pos*4;
+        int x=pos*4;
         return ( (smallBlockDepot[x+3] << 24) + (smallBlockDepot[x+2] << 16) +
              (smallBlockDepot[x+1] << 8) + smallBlockDepot[x] );
     }
@@ -460,10 +460,10 @@ inline const long KLaola::nextSmallBlock(const long &pos) {
         return -2;   // Emergency Break :)
 }
 
-inline const unsigned short KLaola::read16(const long &i) {
+inline const unsigned short KLaola::read16(const int &i) {
     return ( (data[i+1] << 8) + data[i] );
 }
 
-inline const unsigned long KLaola::read32(const long &i) {
+inline const unsigned int KLaola::read32(const int &i) {
     return ( (read16(i+2) << 16) + read16(i) );
 }

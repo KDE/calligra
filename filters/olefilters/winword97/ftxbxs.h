@@ -23,12 +23,12 @@
 #define FTXBXS_H
 
 struct FTXBXS {
-    long cTxbx;      // also iNextReuse
-    long cReusable;
+    int cTxbx;      // also iNextReuse
+    int cReusable;
     short fReusable;
-    long reserved;
-    long lid;
-    long txidUndo;
+    int reserved;
+    int lid;
+    int txidUndo;
 
     bool ok;
 };

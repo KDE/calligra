@@ -30,9 +30,9 @@
 
 struct STYLE {
     bool paragStyle;              // is it a paragraph style?
-    unsigned long fcPAPX;         // position of the PAPX grpprl in the table stream if there is one
+    unsigned int fcPAPX;         // position of the PAPX grpprl in the table stream if there is one
     unsigned short lenPAPX;       // length of the grpprl
-    unsigned long fcCHPX;         // CHPX position
+    unsigned int fcCHPX;         // CHPX position
     unsigned short lenCHPX;       // length
 };
 
@@ -52,16 +52,16 @@ private:
 
     const bool chain_rec(const unsigned short &istd);            // recursively walks back to the NULL-Style
 
-    struct STD {                   
+    struct STD {
         unsigned short istd;
         unsigned short istdBase;
         QString name;
         STYLE style;
     };
-    
+
     myFile table;
     const FIB * const fib;
-    QMap<unsigned long, STD> styleMap;
+    QMap<unsigned int, STD> styleMap;
     QValueList<STYLE> _chain;                                    // the list with all the styles
     unsigned short lastSti;                                      // don't calculate the chain again if the
                                                                  // list is still correct!

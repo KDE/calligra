@@ -23,8 +23,8 @@
 #define LSTF_H
 
 struct LSTF {
-    long lsid;
-    long tplc;
+    int lsid;
+    int tplc;
     short rgistd[9];
     unsigned char fSimpleList:1;
     unsigned char fRestartHdn:1;

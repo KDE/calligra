@@ -52,11 +52,11 @@ public:
     // general stuff
     const unsigned char id() const { return _id; }
 
-    const unsigned long pos() const { return _pos; }
-    void pos(const unsigned long &p) { _pos=p; }
+    const unsigned int pos() const { return _pos; }
+    void pos(const unsigned int &p) { _pos=p; }
 
-    const unsigned long len() const { return _len; }
-    void len(const unsigned long &l) { _len=l; }
+    const unsigned int len() const { return _len; }
+    void len(const unsigned int &l) { _len=l; }
 
     // id=1, "normal" text
     const unsigned char textRed() const { return _id==1 ? data.text.red : 0; }
@@ -177,8 +177,8 @@ private:
 
     // KWord data
     unsigned char _id;   // 1=text, 2=image, 3=tab, 4=variable, 5=footnote
-    unsigned long _pos;
-    unsigned long _len;
+    unsigned int _pos;
+    unsigned int _len;
 
     union {
         struct {

@@ -21,8 +21,8 @@
 #include <paragraph.moc>
 
 Paragraph::Paragraph(const Section * const parent, const unsigned char * const mainData,
-              const FIB * const fib, const QArray<long> &rowMarks,
-              const QArray<long> &cellMarks) : QObject(), m_parent(parent), 
+              const FIB * const fib, const QArray<int> &rowMarks,
+              const QArray<int> &cellMarks) : QObject(), m_parent(parent), 
               m_mainData(mainData), m_fib(fib), m_rowMarks(rowMarks), 
               m_cellMarks(cellMarks) {
 

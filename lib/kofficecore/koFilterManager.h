@@ -126,7 +126,7 @@ public:
 
     // Get the ID of the QWidget in the Stack which matches this
     // extension. (internal)
-    long findWidget(const QString &ext) const;
+    const int findWidget(const QString &ext) const;
 #endif
 
     /**
@@ -165,8 +165,8 @@ private:
     bool prepare;
 #ifndef USE_QFD
     PreviewStack *ps;
-    mutable QMap<QString, long> dialogMap;
-    QMap<long, KoFilterDialog*> originalDialogs;
+    mutable QMap<QString, int> dialogMap;
+    QMap<int, KoFilterDialog*> originalDialogs;
     QString config;  // stores the config information
 #endif
 };

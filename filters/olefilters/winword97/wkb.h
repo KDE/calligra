@@ -28,7 +28,7 @@ struct WKB {
     short lvl;
     short fnpt:4;
     short fnpd:12;
-    long doc;
+    int doc;
 
     bool ok;
 };

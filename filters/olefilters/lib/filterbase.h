@@ -52,7 +52,7 @@ signals:
     // See olefilter.h for information
     void signalSavePic(Picture *pic);
     void signalPart(const char *nameIN, char **nameOUT);
-    void signalGetStream(const long &handle, myFile &stream);
+    void signalGetStream(const int &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)
     void signalGetStream(const QString &name, myFile &stream);

@@ -34,8 +34,8 @@ class Paragraph : public QObject {
 
 public:
     Paragraph(const Section * const parent, const unsigned char * const mainData,
-              const FIB * const fib, const QArray<long> &rowMarks,
-              const QArray<long> &cellMarks);
+              const FIB * const fib, const QArray<int> &rowMarks,
+              const QArray<int> &cellMarks);
     ~Paragraph();
 
     const bool isOk() const { return m_success; }
@@ -51,6 +51,6 @@ private:
     const Section * const m_parent;
     const unsigned char * const m_mainData;
     const FIB * const m_fib;
-    QArray<long> m_rowMarks, m_cellMarks;
+    QArray<int> m_rowMarks, m_cellMarks;
 };
 #endif // PARAGRAPH_H

@@ -23,7 +23,7 @@
 #define ASUMY_H
 
 struct ASUMY {
-    long lLevel;
+    int lLevel;
 
     bool ok;
 };

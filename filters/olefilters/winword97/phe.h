@@ -29,19 +29,19 @@ struct PHE {
     short reserved:5;
     short clMac:8;
     short reserved2;
-    long dxaCol;
-    long dymLine;
-    long dymHeight;
+    int dxaCol;
+    int dymLine;
+    int dymHeight;
 
     bool ok;
 };
 
 struct PHE2 {    // see page 114
-    long fSpare:1;
-    long fUnk:1;
-    long dcpTtpNext:30;
-    long dxaCol;
-    long dymTableHeight;
+    int fSpare:1;
+    int fUnk:1;
+    int dcpTtpNext:30;
+    int dxaCol;
+    int dymTableHeight;
 
     bool ok;
 };

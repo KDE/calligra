@@ -26,7 +26,7 @@ StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
     cstd=read16(table.data+fib->fcStshf+2);
     stdBaseLength=read16(table.data+fib->fcStshf+4);
 
-    unsigned long offset=stdOffset, limit=fib->fcStshf+fib->lcbStshf, tmpOffset;
+    unsigned int offset=stdOffset, limit=fib->fcStshf+fib->lcbStshf, tmpOffset;
     unsigned short istd=0, len, sti, tmp;
     StyleSheet::STD mySTD;
 
@@ -90,7 +90,7 @@ const QValueList<STYLE> StyleSheet::chain(const unsigned short &sti) {
         return _chain;
 
     _chain.clear();
-    QMap<unsigned long, StyleSheet::STD>::Iterator it=styleMap.find(sti);
+    QMap<unsigned int, StyleSheet::STD>::Iterator it=styleMap.find(sti);
     if(it!=styleMap.end() && chain_rec(it.data().istd))
         lastSti=sti;
     else {
@@ -102,7 +102,7 @@ const QValueList<STYLE> StyleSheet::chain(const unsigned short &sti) {
 
 const bool StyleSheet::chain_rec(const unsigned short &istd) {
 
-    QMap<unsigned long, StyleSheet::STD>::Iterator it=styleMap.begin();
+    QMap<unsigned int, StyleSheet::STD>::Iterator it=styleMap.begin();
     bool success=false;
     bool found=false;
 
@@ -120,7 +120,7 @@ const bool StyleSheet::chain_rec(const unsigned short &istd) {
     }
     else {
         QString d="StyleSheet::chain_rec(): ERROR: Didn't find istd(";
-        d+=QString::number((long)istd);
+        d+=QString::number((int)istd);
         d+=")!";
         kDebugError(31000, static_cast<const char*>(d));
     }
@@ -129,7 +129,7 @@ const bool StyleSheet::chain_rec(const unsigned short &istd) {
 
 const QString StyleSheet::styleName(const unsigned short &sti) {
 
-    QMap<unsigned long, StyleSheet::STD>::Iterator it=styleMap.find(sti);
+    QMap<unsigned int, StyleSheet::STD>::Iterator it=styleMap.find(sti);
     if(it!=styleMap.end())
         return it.data().name;
     else

@@ -24,6 +24,6 @@
 
 struct myFile {
     unsigned char *data;
-    unsigned long length;
+    unsigned int length;
 };
 #endif // MYFILE_H

@@ -48,13 +48,13 @@ struct CHP {
     short fDStrike:1;
     short fUsePgsuSettings:1;
     short unused:12;
-    long reserved;
+    int reserved;
     short ftc;
     short ftcAscii;
     short ftcFE;
     short fctOther;
     unsigned short hps;
-    long dxaSpace;
+    int dxaSpace;
     short iss:3;
     short kul:4;
     short fSpecSymbol:1;
@@ -69,9 +69,9 @@ struct CHP {
     unsigned char idct;
     unsigned char idctHint;
     unsigned short wCharScale;
-    //unsigned long fcPic;  // I don't know if there is an error in the descr.
-    //unsigned long fcObj;  // here too
-    unsigned long lTagObj;
+    //unsigned int fcPic;  // I don't know if there is an error in the descr.
+    //unsigned int fcObj;  // here too
+    unsigned int lTagObj;
     short ibstRMark;
     short ibstRMarkDel;
     DTTM dttmRMark;

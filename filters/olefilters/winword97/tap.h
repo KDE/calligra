@@ -29,21 +29,21 @@
 
 struct TAP {
     short jc;
-    long dxaGapHalf;
-    long dyaRowHeight;
+    int dxaGapHalf;
+    int dyaRowHeight;
     unsigned char fCantSplit;
     unsigned char fTableHeader;
     TLP tlp;
-    long lwHTMLProps;
+    int lwHTMLProps;
     short fCaFull:1;
     short fFirstRow:1;
     short fLastRow:1;
     short fOutline:1;
     short reserved:12;
     short itcMac;
-    long dxaAdjust;
-    long dxaScale;
-    long dxsInch;
+    int dxaAdjust;
+    int dxaScale;
+    int dxsInch;
     short rgdxaCenter[65];
     short rgdxaCenterPrint[65];
     TC rgtc[64];

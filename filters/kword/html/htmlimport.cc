@@ -54,7 +54,7 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
     str += "<PARAGRAPH>\n";
     str += "<TEXT>";
 
-    long buflen=in.size();
+    int buflen=in.size();
     char * buffer = new char[buflen];
     in.readBlock(buffer, buflen);
     bool add = true;    

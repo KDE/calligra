@@ -23,7 +23,7 @@
 #define MISC_H
 
 const unsigned short read16(const unsigned char *d);
-const unsigned long read32(const unsigned char *d);
+const unsigned int read32(const unsigned char *d);
 
 static const short CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
                                 0x201e, 0x2026, 0x2020, 0x2021,
@@ -35,6 +35,6 @@ static const short CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
                                 0x0153, 0x0000, 0x017e, 0x0178 };
 const short char2uni(const unsigned char &c);
 
-void align2(unsigned long &adr);
+void align2(unsigned int &adr);
 
 #endif // MISC_H
