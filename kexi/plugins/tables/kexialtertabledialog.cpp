@@ -133,6 +133,7 @@ void KexiAlterTableDialog::init()
 	m_view->adjustColumnWidthToContents(0); //adjust column width
 	m_view->adjustColumnWidthToContents(1); //adjust column width
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
+	m_view->setAcceptsRowEditAfterCellAccepting( true );
 //	setFocusProxy(m_view);
 
 	connect(m_view, SIGNAL(cellSelected(int,int)), 
@@ -173,13 +174,14 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 	//name
-	KexiProperty *prop = new KexiProperty("name", QVariant(field->name()), i18n("Name"));
+	KexiProperty *prop;
+	buff->add(prop = new KexiProperty("name", QVariant(field->name()), i18n("Name")) );
 	prop->setVisible(false);
-	buff->add(prop);
+
 	//type
-	prop = new KexiProperty("type", QVariant(field->type()), i18n("Type"));
+	buff->add( prop = new KexiProperty("type", QVariant(field->type()), i18n("Type")) );
 	prop->setVisible(false);
-	buff->add(prop);
+
 	//subtype
 	const QStringList slist = KexiDB::typeStringsForGroup(field->typeGroup());
 	const QStringList nlist = KexiDB::typeNamesForGroup(field->typeGroup());
@@ -188,19 +190,40 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	if (slist.count()>1) {//there is more than 1 type name
 		buff->add(new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 	}
-	//caption
+
 	buff->add( new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
-	//desc
-	prop = new KexiProperty("description", QVariant(field->description()));
+
+	buff->add( prop = new KexiProperty("description", QVariant(field->description())) );
 	prop->setVisible(false);
-	buff->add(prop);
-	//length
-	int len = field->length();//TODO
-	if(len == 0)
-		len = field->precision();
-	buff->add(new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
-	//pkey
+
+	buff->add(prop = new KexiProperty("unsigned", QVariant(field->isUnsigned(), 4), i18n("Unsigned number")));
+	if (!field->isNumericType())
+		prop->setVisible(false);
+
+	buff->add( prop = new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
+	if (!field->isTextType())
+		prop->setVisible(false);
+
+	buff->add( prop = new KexiProperty("precision", (int)field->precision()/*200?*/, i18n("Precision")));
+	if (!field->isFPNumericType())
+		prop->setVisible(false);
+
+//TODO: set reasonable default for column width...
+	buff->add( new KexiProperty("width", (int)field->width()/*200?*/, i18n("Column width")));
+
+	buff->add( prop = new KexiProperty("defaultValue", field->defaultValue()/*200?*/, i18n("Default value")));
+
 	buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+
+	buff->add(new KexiProperty("unique", QVariant(field->isUniqueKey(), 4), i18n("Unique")));
+
+	buff->add(new KexiProperty("notNull", QVariant(field->isNotNull(), 4), i18n("Required")));
+	
+	buff->add(prop = new KexiProperty("notEmpty", QVariant(field->isNotEmpty(), 4), i18n("Not Empty")));
+	if (!field->hasEmptyProperty())
+		prop->setVisible(false);
+
+	buff->add(new KexiProperty("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
 
 	m_fields.insert(row, buff);
 	return buff;
@@ -345,19 +368,23 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 {
 	if (colnum==0) {//'name'
 		//if 'type' is not filled yet
-		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
+//		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
+		if (item->at(1).isNull()) {
 			//auto select 1st row of 'type' column
 			m_view->data()->updateRowEditBuffer(item, 1, QVariant((int)0));
-
-			//save row
-			m_view->acceptRowEdit();
 		}
+		//save row
+//		m_view->acceptRowEdit();
 	}
 	else if (colnum==1) {//'type'
 		//if 'name' is already filled
-		if (!item->at(0).toString().isEmpty()) {
+//if (!item->at(0).toString().isEmpty()) {
 			//save row
-			m_view->acceptRowEdit();
+//			m_view->acceptRowEdit();
+//}
+		if (newValue.isNull()) {
+			//col 1 will be cleared: clear row 0 as well
+			m_view->data()->updateRowEditBuffer(item, 0, QVariant(QString::null));
 		}
 	}
 }
@@ -366,7 +393,6 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 {
 	setDirty();
 
-	//TODO
 	//-check if the row was empty before updating
 	//if yes: we want to add a property buffer for this new row (field)
 	QString fieldName = item->at(0).toString();
@@ -455,14 +481,58 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 {
 	if (m_dialog->schemaData()) //must not be
 		return 0;
-	// create new schema:
+
+	//create table schema definition
 	KexiDB::TableSchema *ts = new KexiDB::TableSchema(sdata.name());
 	ts->setName( sdata.name() );
 	ts->setCaption( sdata.caption() );
 	ts->setDescription( sdata.description() );
 
+	//for every field, create KexiDB::Field definition
+	for (int i=0;i<(int)m_fields.size();i++) {
+		KexiPropertyBuffer *b = m_fields[i];
+		if (!b)
+			continue;
+		KexiPropertyBuffer &buf = *b;
+		uint constraints = 0;
+		uint options = 0;
+		if (buf["primaryKey"]->value().toBool())
+			constraints |= KexiDB::Field::PrimaryKey;
+		if (buf["unique"]->value().toBool())
+			constraints |= KexiDB::Field::Unique;
+		if (buf["notnull"]->value().toBool())
+			constraints |= KexiDB::Field::NotNull;
+		if (buf["notEmpty"]->value().toBool())
+			constraints |= KexiDB::Field::NotEmpty;
 
-	if (!mainWin()->project()->dbConnection()->createTable(ts)) {
+		if (buf["unsigned"]->value().toBool())
+			options |= KexiDB::Field::Unsigned;
+			
+		int type = buf["type"]->value().toInt();
+
+		KexiDB::Field *f = new KexiDB::Field( 
+			buf["name"]->value().toString(),
+			static_cast<KexiDB::Field::Type>(1), //buf["type"]->value().toInt(),
+			constraints,
+			options,
+			buf["length"]->value().toInt(),
+			buf["precision"]->value().toInt(),
+			buf["defaultValue"]->value(),
+			buf["caption"]->value().toString(),
+			buf["description"]->value().toString(),
+			buf["width"]->value().toInt()
+		);
+		ts->addField(f);
+	}
+
+return 0;
+
+	//todo
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+
+	//FINALLY: create table:
+	if (!conn->createTable(ts)) {
+		//todo: show err...
 		delete ts;
 		ts = 0;
 	}

@@ -78,7 +78,10 @@ class KexiAlterTableDialog : public KexiViewBase
 
 		void removeCurrentPropertyBuffer();
 
+		/*! Reimplemented from KexiViewBase, because tables creation is more complex. */
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+
+		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
 		virtual bool storeData();
 
 	protected slots:
