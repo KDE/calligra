@@ -58,19 +58,20 @@ public:
 
     bool operator<( const KSpreadGenValidationStyle &other ) const {
         if ( allowEmptyCell != other.allowEmptyCell ) return ( allowEmptyCell < other.allowEmptyCell );
-       if ( condition != other.condition ) return ( condition < other.condition );
-       if ( titleInfo != other.titleInfo ) return ( titleInfo < other.titleInfo );
-       if ( displayValidationInformation != other.displayValidationInformation ) return ( displayValidationInformation < other.displayValidationInformation );
-       if ( messageInfo != other.messageInfo ) return ( messageInfo < other.messageInfo );
-       if ( messageType != other.messageType ) return ( messageType < other.messageType );
-       if ( displayMessage != other.displayMessage ) return ( displayMessage < other.displayMessage );
-       if ( message != other.message ) return ( message < other.message );
-       if ( title != other.title ) return ( title < other.title );
+        if ( condition != other.condition ) return ( condition < other.condition );
+        if ( titleInfo != other.titleInfo ) return ( titleInfo < other.titleInfo );
+        if ( displayValidationInformation != other.displayValidationInformation ) return ( displayValidationInformation < other.displayValidationInformation );
+        if ( messageInfo != other.messageInfo ) return ( messageInfo < other.messageInfo );
+        if ( messageType != other.messageType ) return ( messageType < other.messageType );
+        if ( displayMessage != other.displayMessage ) return ( displayMessage < other.displayMessage );
+        if ( message != other.message ) return ( message < other.message );
+        if ( title != other.title ) return ( title < other.title );
 
-       return false;
+        return false;
     }
 private:
     QString createValidationCondition( KSpreadValidity* _val );
+    QString createTextValidationCondition( KSpreadValidity* _val );
     void initVal( KSpreadValidity *_val );
 
     QString allowEmptyCell;

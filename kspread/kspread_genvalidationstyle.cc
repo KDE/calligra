@@ -132,8 +132,83 @@ void KSpreadGenValidationStyle::initVal( KSpreadValidity *_val )
 
 QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _val )
 {
+    QString result;
+    switch( _val->m_allow )
+    {
+    case Allow_All:
+        //nothing
+        break;
+    case Allow_Number:
+        break;
+    case Allow_Text:
+        result = createTextValidationCondition( _val );
+        break;
+    case Allow_Time:
+        break;
+    case Allow_Date:
+        break;
+    case Allow_Integer:
+        break;
+    case Allow_TextLength:
+         break;
+    }
     //todo
-    return "";
+    return result;
 }
 
 
+QString KSpreadGenValidationStyle::createTextValidationCondition( KSpreadValidity* _val )
+{
+    QString result;
+    switch( _val->m_cond )
+    {
+    case None:
+        //nothing
+        break;
+    case Equal:
+        result+="cell-content-text-length()";
+        result+="=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Superior:
+        result+="cell-content-text-length()";
+        result+=">";
+        result+=QString::number( _val->valMin );
+        break;
+    case Inferior:
+        result+="cell-content-text-length()";
+        result+="<";
+        result+=QString::number( _val->valMin );
+        break;
+    case SuperiorEqual:
+        result+="cell-content-text-length()";
+        result+=">=";
+        result+=QString::number( _val->valMin );
+        break;
+    case InferiorEqual:
+        result+="cell-content-text-length()";
+        result+="<=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Different:
+        result+="cell-content-text-length()";
+        result+="!=";
+        result+=QString::number( _val->valMin );
+        break;
+    case Between:
+        result+="cell-content-text-length-is-between(";
+        result+=QString::number( _val->valMin );
+        result+=",";
+        result+=QString::number( _val->valMax );
+        result+=")";
+        break;
+    case DifferentTo:
+        result+="cell-content-text-length-is-not-between(";
+        result+=QString::number( _val->valMin );
+        result+=",";
+        result+=QString::number( _val->valMax );
+        result+=")";
+        break;
+    }
+    return result;
+}

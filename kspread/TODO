@@ -375,4 +375,4 @@ Done:
 -> save/load page name
 -> save/load column/row attribute (without font)
 -> save/load note
-
+-> save/load protect doc/sheet
