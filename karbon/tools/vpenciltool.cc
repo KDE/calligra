@@ -51,86 +51,83 @@
 #include "vpenciltool.moc"
 
 VPencilOptionsWidget::VPencilOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_part(part)
+	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_part( part )
 {
-	QVBox *vbox = new QVBox(this);
+	QVBox *vbox = new QVBox( this );
 
-	m_combo = new QComboBox(vbox);
+	m_combo = new QComboBox( vbox );
 
-	m_combo->insertItem(i18n("Raw"));
-	m_combo->insertItem(i18n("Curve"));
-	m_combo->insertItem(i18n("Straight"));
+	m_combo->insertItem( i18n( "Raw" ) );
+	m_combo->insertItem( i18n( "Curve" ) );
+	m_combo->insertItem( i18n( "Straight" ) );
 
-	
-	m_widgetStack  = new QWidgetStack(vbox);
-	
+	m_widgetStack  = new QWidgetStack( vbox );
+
 	QGroupBox *group1 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget(group1,1);
-	m_optimizeRaw = new QCheckBox(i18n("Optimize"),group1);
-	
+	m_widgetStack->addWidget( group1, 1 );
+	m_optimizeRaw = new QCheckBox( i18n( "Optimize" ), group1 );
+
 	group1->setInsideMargin( 4 );
 	group1->setInsideSpacing( 2 );
-	
+
 	QGroupBox *group2 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget(group2,2);
-	
-	QVBox *vbox2 = new QVBox(group2);
-	
-	m_optimizeCurve = new QCheckBox(i18n("Optimize"),vbox2);
-	m_fittingError= new KDoubleNumInput(0.0,400.0,4.00,0.50,3,vbox2);
-	m_fittingError->setLabel(i18n("Exactness"));
-	
+	m_widgetStack->addWidget( group2, 2 );
+
+	QVBox *vbox2 = new QVBox( group2 );
+
+	m_optimizeCurve = new QCheckBox( i18n( "Optimize" ), vbox2 );
+	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, 0.50, 3, vbox2 );
+	m_fittingError->setLabel( i18n( "Exactness" ) );
+
 	group2->setInsideMargin( 4 );
 	group2->setInsideSpacing( 2 );
-	
-	
-	QGroupBox *group3 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget(group3,3);
 
-	m_combineAngle = new KDoubleNumInput(0.0,360.0,0.10,0.50,3,group3);
-	m_combineAngle->setSuffix(" deg");
-	m_combineAngle->setLabel(i18n("Combine Angle"));
-	
+	QGroupBox *group3 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
+	m_widgetStack->addWidget( group3, 3 );
+
+	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, 0.50, 3, group3 );
+	m_combineAngle->setSuffix( " deg" );
+	m_combineAngle->setLabel( i18n( "Combine Angle" ) );
+
 	group3->setInsideMargin( 4 );
 	group3->setInsideSpacing( 2 );
 
-	connect(m_combo,SIGNAL(activated(int)),this,SLOT(selectMode()) );
-	
+	connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( selectMode() ) );
+
 	//Set the default settings
 	m_mode = VPencilTool::CURVE;
 	selectMode();
-	
-	m_optimizeCurve->setChecked(true);
-	m_optimizeRaw->setChecked(true);
+
+	m_optimizeCurve->setChecked( true );
+	m_optimizeRaw->setChecked( true );
 
 	setMainWidget( vbox );
 }
 
-float VPencilOptionsWidget::combineAngle(){
+float VPencilOptionsWidget::combineAngle()
+{
 	return m_combineAngle->value();
 }
 
-bool VPencilOptionsWidget::optimize(){
-	return (m_optimizeRaw->isChecked() || m_optimizeCurve->isChecked());
+bool VPencilOptionsWidget::optimize()
+{
+	return ( m_optimizeRaw->isChecked() || m_optimizeCurve->isChecked() );
 }
 
-float VPencilOptionsWidget::fittingError(){
+float VPencilOptionsWidget::fittingError()
+{
 	return m_fittingError->value();
 }
 
-void VPencilOptionsWidget::selectMode(){
-	m_widgetStack->raiseWidget(m_combo->currentItem()+1);
-	
-	switch(m_combo->currentItem()){
-		case 0:
-			m_mode=VPencilTool::RAW;
-		break;
-		case 1:
-			m_mode=VPencilTool::CURVE;
-		break;
-		case 2:
-			m_mode=VPencilTool::STRAIGHT;
-		break;
+void VPencilOptionsWidget::selectMode()
+{
+	m_widgetStack->raiseWidget( m_combo->currentItem() + 1 );
+
+	switch( m_combo->currentItem() )
+	{
+		case 0: m_mode = VPencilTool::RAW; break;
+		case 1: m_mode = VPencilTool::CURVE; break;
+		case 2: m_mode = VPencilTool::STRAIGHT; break;
 	}
 }
 
@@ -138,9 +135,7 @@ int VPencilOptionsWidget::currentMode(){
 	return m_mode;
 }
 
-
 /* ------------------------------------------------------------------------------------------------------------------------*/
-
 
 VPencilTool::VPencilTool( KarbonPart *part, const char *name )
 	: VTool( part, name )
@@ -148,9 +143,9 @@ VPencilTool::VPencilTool( KarbonPart *part, const char *name )
 	m_Points.setAutoDelete( true );
 	m_optionWidget = new VPencilOptionsWidget( part );
 	registerTool( this );
-	m_mode=CURVE;
-	m_optimize=true;
-	m_combineAngle=3.0f;
+	m_mode = CURVE;
+	m_optimize = true;
+	m_combineAngle = 3.0f;
 }
 
 VPencilTool::~VPencilTool()
@@ -178,87 +173,82 @@ VPencilTool::activate()
 	m_close = false;
 }
 
-
 void
 VPencilTool::deactivate()
 {
 	m_Points.removeLast();
 	m_Points.removeLast();
-			
-	
+
 	VPath* line = 0L;
-	
+
 	QPtrList<KoPoint> complete;
 	QPtrList<KoPoint> *points = &m_Points;
 	
 	if( m_Points.count() > 1 )
 	{
-		if(m_optimize || m_mode==STRAIGHT){
-			complete.setAutoDelete(true);
-			m_Points.setAutoDelete(false);
+		if( m_optimize || m_mode == STRAIGHT )
+		{
+			complete.setAutoDelete( true );
+			m_Points.setAutoDelete( false );
 
 			float cangle;
 
-			if(m_mode==STRAIGHT){
+			if( m_mode == STRAIGHT )
 				cangle = m_combineAngle;
-			} else {
+			else
 				cangle = 0.50f;
-			}
-			
 
 			#define ANGLE(P0,P1)\
 				atan((P1)->y()-(P0)->y())/((P1)->x()-(P0)->x())*(180/M_PI)
 
 			//Add the first point
-			complete.append(m_Points.first());
-			complete.append(m_Points.next());
+			complete.append( m_Points.first() );
+			complete.append( m_Points.next() );
 
-			//No we need to get the angle of the first
-			//line
-			float langle= ANGLE(complete.at(0),complete.at(1));
+			//Now we need to get the angle of the first line
+			float langle = ANGLE( complete.at( 0 ), complete.at( 1 ) );
 
-			KoPoint *nextp=NULL;
-			while((nextp=m_Points.next())){
-				float angle = ANGLE(complete.last(),nextp);
-				if(QABS(angle-langle)<cangle){
+			KoPoint *nextp = NULL;
+			while( ( nextp = m_Points.next() ) )
+			{
+				float angle = ANGLE( complete.last(), nextp );
+				if( QABS( angle - langle ) < cangle )
 					complete.removeLast();
-					
-				}
 				complete.append(nextp);
 				langle=angle;
 			}
 			m_Points.clear();
 			m_Points.setAutoDelete(true);
-		
+
 			points = &complete;
 		}
-	
 
-		switch(m_mode){
+		switch(m_mode)
+		{
 			case CURVE:
-				{
-					line=bezierFit(*points,m_optionWidget->fittingError());
-					break;
-				}
+			{
+				line = bezierFit( *points, m_optionWidget->fittingError() );
+				break;
+			}
 			case STRAIGHT:
 			case RAW:
+			{
+				line = new VPath( 0L );
+				KoPoint* p1 = (*points).first();
+				KoPoint* plast = p1;
+				line->moveTo( *p1 );
+
+				KoPoint* pnext = 0L;
+
+				while( ( pnext = (*points).next() ) )
 				{
-
-					line = new VPath( 0L );
-					KoPoint* p1 = (*points).first();
-					KoPoint* plast = p1;
-					line->moveTo( *p1 );
-
-					KoPoint* pnext=0L;
-
-					while((pnext=(*points).next())){
-						line->lineTo( *pnext );
-						plast=pnext;
-					}
-					break;
+					line->lineTo( *pnext );
+					plast = pnext;
 				}
+				break;
+			}
 		}
-	
+
 		if( shiftPressed() )
 			line->close();
 	}
@@ -273,7 +263,6 @@ VPencilTool::deactivate()
 
 		view()->part()->addCommand( cmd, true );
 	}
-	
 }
 
 void
@@ -281,7 +270,7 @@ VPencilTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
-	
+
 	m_mode = m_optionWidget->currentMode();
 	m_optimize = m_optionWidget->optimize();
 	m_combineAngle = m_optionWidget->combineAngle();
@@ -295,7 +284,7 @@ VPencilTool::draw()
 		while((pnext=m_Points.next())){
 			line.lineTo( *pnext );
 		}
-		
+
 		line.setState( VObject::edit );
 		line.draw( painter, &line.boundingBox() );
 	}
@@ -353,26 +342,22 @@ VPencilTool::mouseDragRelease()
 void
 VPencilTool::mouseDragShiftPressed()
 {
-	printf("mouseDragShiftPressed\n");
 }
 
 void
 VPencilTool::mouseDragCtrlPressed()
 {
-	printf("mouseDragCtrlPressed\n");
 
 }
 
 void
 VPencilTool::mouseDragShiftReleased()
 {
-	printf("mouseDragShiftReleased\n");
 }
 
 void
 VPencilTool::mouseDragCtrlReleased()
 {
-	printf("mouseDragCtrlReleased\n");
 }
 
 void
