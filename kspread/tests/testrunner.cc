@@ -107,13 +107,13 @@ void TestRunner::runTest()
     QStringList errorList = tester->errors();
     if( tester->failed() )
     {
-      d->logView->append( i18n( "%1 tests, <b>%2 failed.</b>" ).arg( tester->count() ).
+      d->logView->append( i18n( "1 test, <b>%1 failed.</b>", "%n tests, <b>%1 failed.</b>", tester->count() ).
         arg(  tester->failed() ) );
       for( unsigned k = 0; k < errorList.count(); k++ )
         d->logView->append( errorList[k] );
     }
     else
-      d->logView->append( i18n( "%1 tests, everything is OK." ).arg( tester->count() ) );
+      d->logView->append( i18n( "1 test, everything is OK.", "%n tests, everything is OK.", tester->count() ) );
     d->logView->append( i18n("Test finished.") );
   }
 }
