@@ -530,8 +530,8 @@ void KWFrameResizeCommand::execute()
         grpMgr->updateTempHeaders();
         //repaintTableHeaders( grpMgr );
     }
-
-    frame->setSelected(true);
+    if(frame->isSelected())
+        frame->setSelected(true);
 
     m_pDoc->frameChanged( frame );
 }
@@ -548,7 +548,8 @@ void KWFrameResizeCommand::unexecute()
         grpMgr->updateTempHeaders();
         //repaintTableHeaders( grpMgr );
     }
-    frame->setSelected(true);
+    if(frame->isSelected())
+        frame->setSelected(true);
     //update frames
     m_pDoc->frameChanged( frame );
 }
@@ -572,7 +573,8 @@ void KWFrameMoveCommand::execute()
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
-        frame->setSelected(true);
+        if(frame->isSelected())
+            frame->setSelected(true);
         //it's necessary because the text doesn't move
         //with the frame as text frame
         if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
@@ -596,7 +598,8 @@ void KWFrameMoveCommand::unexecute()
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
-        frame->setSelected(true);
+        if(frame->isSelected())
+            frame->setSelected(true);
         if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
             frame->getFrameSet()->updateFrames();
         needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );

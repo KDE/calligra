@@ -1613,11 +1613,12 @@ void KWView::formatPage()
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
         gui->canvasWidget()->repaintAll(true);
-        KWFrame *frame=doc->getFirstSelectedFrame();
-        if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+
+        QList<KWFrame> selectedFrames = doc->getSelectedFrames();
+        KWFrame *frame=0L;
+        for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
         {
-            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
-                frame->setSelected(true);
+            frame->setSelected(true);
         }
 #if 0
         gui->canvasWidget()->frameSizeChanged( pgLayout );
@@ -2722,12 +2723,13 @@ void KWView::newPageLayout( KoPageLayout _layout )
     gui->getVertRuler()->setPageLayout( _layout );
     gui->canvasWidget()->repaintAll(true);
 
-    KWFrame *frame=doc->getFirstSelectedFrame();
-    if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
-        {
-            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
-                frame->setSelected(true);
-        }
+    QList<KWFrame> selectedFrames = doc->getSelectedFrames();
+    KWFrame *frame=0L;
+    for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
+    {
+        frame->setSelected(true);
+    }
+
 #if 0
     gui->canvasWidget()->frameSizeChanged( _layout );
     gui->canvasWidget()->forceFullUpdate();
