@@ -35,16 +35,25 @@ VStrokeCmd::execute()
 
 		m_oldcolors.push_back( *itr.current()->stroke() );
 
-		VStroke stroke = *itr.current()->stroke();
+		VStroke stroke( *itr.current()->stroke() );
+		stroke.setLineCap( m_stroke.lineCap() );
+		stroke.setLineJoin( m_stroke.lineJoin() );
 		if( m_stroke.type() == stroke_gradient )
 		{
 			stroke.gradient() = m_stroke.gradient();
 			stroke.setType( stroke_gradient );
+			stroke.setLineWidth( m_stroke.lineWidth() );
 		}
 		else if( m_stroke.type() == stroke_stroke )
 		{
 			stroke.setColor( m_stroke.color() );
 			stroke.setType( stroke_stroke );
+			stroke.setParent( 0L );
+			stroke.setLineWidth( m_stroke.lineWidth() );
+		}
+		else if( m_stroke.type() == stroke_none )
+		{
+			stroke.setType( stroke_none );
 		}
 		itr.current()->setStroke( stroke );
 	}

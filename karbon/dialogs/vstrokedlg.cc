@@ -111,7 +111,7 @@ void VStrokeDlg::slotOKClicked()
 	default:
 		stroke.setType ( stroke_none );
 	}
-	
+
 	switch ( m_cap ) {
 	case 1:
 		stroke.setLineCap ( cap_round ); break;
@@ -120,22 +120,22 @@ void VStrokeDlg::slotOKClicked()
 	default:
 		stroke.setLineCap ( cap_butt );
 	}
-	
-	switch ( m_join ) {
-	case 1:
-		stroke.setLineJoin ( join_round ); break;
-	case 2:
-		stroke.setLineJoin ( join_bevel ); break;
-	default:
-		stroke.setLineJoin ( join_miter );
-	}
-	
+
+	//switch ( m_join ) {
+	//case 1:
+//		stroke.setLineJoin ( join_round ); break;
+//	case 2:
+		stroke.setLineJoin ( join_bevel );// break;
+//	default:
+//		stroke.setLineJoin ( join_miter );
+//	}
+
 	float w = m_setLineWidth->value();
 	stroke.setLineWidth ( w );
-		
+
 	if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( stroke ) ), true );
-		
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), stroke ), true );
+
 	emit strokeChanged( VStroke( stroke ) );
 }
 
