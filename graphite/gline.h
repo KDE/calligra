@@ -22,8 +22,6 @@
 
 #include <gobject.h>
 
-class GLineM9r;
-
 
 class GLine : public GObject {
 
@@ -46,7 +44,7 @@ public:
     virtual const bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
-    virtual GObjectM9r *createM9r();
+    virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
     virtual const QPoint &origin() const { return m_a; }
     virtual void setOrigin(const QPoint &origin);
@@ -55,11 +53,7 @@ public:
     virtual void move(const int &dx, const int &dy);
 
     virtual void rotate(const QPoint &center, const double &angle);
-    virtual void setAngle(const double &angle) { m_angle=angle; }
-    const double &angle() const { return m_angle; }
-
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
-
     virtual void resize(const QRect &boundingRect);
 
     const QPoint &a() const { return m_a; }
@@ -69,7 +63,6 @@ public:
 
 private:
     GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
-
     QPoint m_a, m_b;
 };
 
@@ -77,16 +70,20 @@ private:
 class GLineM9r : public GObjectM9r {
 
 public:
-    GLineM9r(GLine *line) : m_line(line) { m_line->setState(GObject::Handles); }
-    virtual ~GLineM9r() { m_line->setState(GObject::Visible); }
+    GLineM9r(GLine *line, const Mode &mode);
+    virtual ~GLineM9r();
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e);
-    virtual const bool mousePressEvent(QMouseEvent *e);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const;
 
-    virtual const bool keyPressEvent(QKeyEvent *e);
-    virtual const bool keyReleaseEvent(QKeyEvent *e);
+    virtual const bool mouseMoveEvent(QMouseEvent *e, QRect &/*dirty*/);
+    virtual const bool mousePressEvent(QMouseEvent *e, QRect &/*dirty*/);
+    virtual const bool mouseReleaseEvent(QMouseEvent *e, QRect &/*dirty*/);
+    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, QRect &/*dirty*/);
+
+    virtual const bool keyPressEvent(QKeyEvent *e, QRect &/*dirty*/);
+    virtual const bool keyReleaseEvent(QKeyEvent *e, QRect &/*dirty*/);
+
+    virtual GObject *gobject() { return m_line; }
 
 private:
     GLineM9r(const GLineM9r &rhs);

@@ -34,14 +34,14 @@ class GObjectFactory {
 public:
     GObjectFactory();     // TODO: init the Dict with some prototypes
     ~GObjectFactory() {}
-    
+
     void registerPrototype(const QString &classname, const GObject *prototype);
     void unregisterPrototype(const QString &classname);
-    
+
     GObject *create(const QString &classname);  // create a new object
     GObject *create(const QDomElement &element); // create & initialize!
-    
+
 private:
-    QDict<const GObject> registry;
+    QDict<const GObject> m_registry;
 };
 #endif // gobjectfactory_h

@@ -17,18 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-// The abstract base classes for all graphic objects. This class is
-// implemented as a composite (pattern) - sort of :)
-// There are complex classes (classes which are composed of many
-// objects, like a group) and leaf classes which don't have any
-// children.
-// The resulting tree represents the Z-Order of the document.
-
 #ifndef gobject_h
 #define gobject_h
 
 #include <qbrush.h>
 #include <qpen.h>
+#include <qrect.h>
+#include <qpoint.h>
+
 #include <math.h>
 
 #include <graphiteglobal.h>
@@ -41,9 +37,62 @@ class QPainter;
 class QMouseEvent;
 class QKeyEvent;
 
-class GObjectM9r;
+class GObject;
 
 
+// This is the manipulator class for GObject. Manipulators (M9r's)
+// are used to handle the creation, selection, movement, rotation,...
+// of objects.
+// The pure virtual GObject::createM9r() factory method ensures that
+// the correct manipulator is created :) (factory method pattern)
+// The M9r is used every time a user wants to create or change an object
+// interactively.
+// First the object is "hit" - then a M9r is created and this M9r is used as
+// a kind of EventFilter. Every Event is forwarded to the M9r. If the M9r
+// decides to handle the event, it returns true afterwards. If the Event
+// remains unhandled, the M9r returns false and the Event has to be processed
+// by the calling method.
+// Whenever a repaint is needed (movement,...), the dirty rect has to be
+// set (i.e. something different to (0, 0, 0, 0).
+// A M9r can be in two different "modes": Create and Manipulate
+class GObjectM9r {
+
+public:
+    enum Mode { Create, Manipulate };
+
+    virtual ~GObjectM9r() {}
+
+    const Mode &mode() const { return m_mode; }
+    void setMode(const Mode &mode) { m_mode=mode; }
+
+    virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const = 0;
+
+    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+
+    virtual const bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+
+    virtual GObject *gobject() = 0;
+
+protected:
+    GObjectM9r(const Mode &mode) : m_mode(mode) {}
+
+    // TODO - Whenever an object is deleted its Status should be
+    // set correctly form the M9r handler. Check this in the
+    // DTOR and react accordingly!
+    Mode m_mode;
+};
+
+
+// The abstract base classes for all graphic objects. This class is
+// implemented as a composite (pattern) - sort of :)
+// There are complex classes (classes which are composed of many
+// objects, like a group) and leaf classes which don't have any
+// children.
+// The resulting tree represents the Z-Order of the document.
 class GObject {
 
 public:
@@ -93,7 +142,7 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
-    virtual GObjectM9r *createM9r() = 0;        // create a Manipulator (M9r :) for that object
+    virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
 
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
@@ -202,9 +251,9 @@ inline const QPoint GObject::zoomIt(const QPoint &point) const {
 
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
 
-    double r=sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    y+=double2Int(r*sin(angle));
-    x+=double2Int(r*(1-cos(angle)));
+    double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
+    y+=double2Int(r*std::sin(angle));
+    x+=double2Int(r*(1-std::cos(angle)));
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
@@ -213,9 +262,9 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
 
-    double r=sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    y+=r*sin(angle);
-    x+=r*(1-cos(angle));
+    double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
+    y+=r*std::sin(angle);
+    x+=r*(1-std::cos(angle));
 }
 
 inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
@@ -258,34 +307,4 @@ inline const int GObject::double2Int(const double &value) {
     else
 	return static_cast<int>(value);
 }
-
-
-// This is the manipulator class for GObject. Manipulators (M9r's)
-// are used to handle the selection, movement, rotation,... of objects.
-// The pure virtual GObject::createM9r() factory method ensures that
-// the correct manipulator is created :) (factory method pattern)
-// The M9r is used every time a user wants to change an object interactively.
-// First the object is "hit" - then a M9r is created and this M9r is used as
-// a kind of EventFilter. Every Event is forwarded to the M9r. If the M9r
-// decides to handle the event, it returns true afterwards. If the Event
-// remains unhandled, the M9r returns false and the Event has to be processed
-// by the calling method.
-// Whenever a repaint is needed (movement,...), the dirty flag has to be
-// set.
-class GObjectM9r {
-
-public:
-    virtual ~GObjectM9r() {}
-
-    virtual const bool mouseMoveEvent(QMouseEvent */*e*/, bool &/*dirty*/) { return false; }
-    virtual const bool mousePressEvent(QMouseEvent */*e*/, bool &/*dirty*/) { return false; }
-    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, bool &/*dirty*/) { return false; }
-    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/, bool &/*dirty*/) { return false; }
-
-    virtual const bool keyPressEvent(QKeyEvent */*e*/, bool &/*dirty*/) { return false; }
-    virtual const bool keyReleaseEvent(QKeyEvent */*e*/, bool &/*dirty*/) { return false; }
-
-private:
-    GObjectM9r &operator=(GObjectM9r &rhs);  // no nasty tricks, please :)
-};
 #endif

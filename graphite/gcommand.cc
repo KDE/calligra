@@ -160,7 +160,7 @@ void GCommandHistory::clipCommands() {
 	for(int i=0; i<=(index-m_undoLimit); ++i)
 	    m_commands.removeFirst();
 	index=m_commands.findRef(m_present); // calculate the new
-	count=m_commands.count();            // values (redo-branch :)
+	count=m_commands.count();            // values (for the redo-branch :)
     }
     if((index+m_redoLimit)<count) {
 	for(int i=0; i<(count-(index+m_redoLimit)); ++i)

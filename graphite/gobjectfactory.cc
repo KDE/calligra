@@ -17,4 +17,42 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qdom.h>
 #include <gobjectfactory.h>
+
+// includes needed for the prototypes :)
+#include <gline.h>
+
+
+GObjectFactory::GObjectFactory() : m_registry(17, false) {
+
+    // set up the dict
+    m_registry.setAutoDelete(true);
+    registerPrototype("gline", new GLine("line"));
+}
+
+void GObjectFactory::registerPrototype(const QString &classname, const GObject *prototype) {
+    m_registry.insert(classname, prototype);
+}
+
+void GObjectFactory::unregisterPrototype(const QString &classname) {
+    m_registry.remove(classname);
+}
+
+GObject *GObjectFactory::create(const QString &classname) {
+
+    const GObject *tmp=m_registry.find(classname);
+    if(tmp)
+	return tmp->clone();
+    else
+	return 0L;
+}
+
+GObject *GObjectFactory::create(const QDomElement &element) {
+
+    const GObject *tmp=m_registry.find(element.tagName());
+    if(tmp)
+	return tmp->instantiate(element);
+    else
+	return 0L;
+}

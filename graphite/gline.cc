@@ -18,8 +18,7 @@
 */
 
 #include <qdom.h>
-#include <qrect.h>
-//#include <qpoint.h>
+#include <qapp.h>
 
 #include <gline.h>
 
@@ -36,7 +35,7 @@ GLine::GLine(const GLine &rhs) : GObject(rhs), m_a(rhs.a()), m_b(rhs.b()) {
 
 GLine::GLine(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()) {
 
-    // TODO
+    // TODO - check whether the gobject was initialized correctly (isOk())
     //bool ok;
     //static QString tagName=QString::fromLatin1("name");
 
@@ -138,12 +137,12 @@ const bool GLine::intersects(const QRect &/*r*/) const {
 }
 
 const QRect &GLine::boundingRect() const {
-    // TODO
+    // TODO - check flag!
     return m_boundingRect;
 }
 
-GObjectM9r *GLine::createM9r() {
-    return new GLineM9r(this);
+GObjectM9r *GLine::createM9r(const GObjectM9r::Mode &mode) {
+    return new GLineM9r(this, mode);
 }
 
 void GLine::setOrigin(const QPoint &/*origin*/) {
@@ -174,32 +173,49 @@ void GLine::resize(const QRect &/*boundingRect*/) {
     // TODO
 }
 
-const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/) {
+
+GLineM9r::GLineM9r(GLine *line, const Mode &mode) : GObjectM9r(mode), m_line(line) {
+
+    QApplication::setOverrideCursor(Qt::crossCursor);
+    m_line->setState(GObject::Handles);
+}
+
+GLineM9r::~GLineM9r() {
+
+    m_line->setState(GObject::Visible);
+    QApplication::restoreOverrideCursor();
+}
+
+void GLineM9r::draw(const QPainter &p, const QRegion &reg, const bool toPrinter) const {
+    m_line->draw(p, reg, toPrinter);
+}
+
+const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/) {
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/) {
+const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/) {
+const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/) {
+const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/) {
+const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
 }

@@ -78,6 +78,6 @@ private:
     GCommand *m_present;
     KAction *m_undo, *m_redo;
     int m_undoLimit, m_redoLimit;
-    bool m_first;  // attention: this is the first command
+    bool m_first;  // attention: it's the first command in the list!
 };
 #endif // gcommand_h
