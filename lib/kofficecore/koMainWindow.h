@@ -165,13 +165,13 @@ public slots:
      *  Shows an about dialog for the app.
      */
     virtual void slotHelpAbout();
-    
+
     /**
      * View splitting stuff (testing :)
      */
     virtual void slotSplitView();
     virtual void slotRemoveView();
-    virtual void slotSetOrientation(const int &orientation);
+    virtual void slotSetOrientation();
 
 protected:
 

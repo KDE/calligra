@@ -140,15 +140,15 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 						actionCollection(), "view_split"));
     d->m_splitViewActionList->append(new KAction(i18n("Remove View"), 0, this, SLOT(slotRemoveView()),
 						actionCollection(), "view_rm_splitter"));
-    KSelectAction *orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotOrientation(int)),
+    KSelectAction *orientation=new KSelectAction(i18n("Splitter Orientation"), 0, this, SLOT(slotSetOrientation()),
 						 actionCollection(), "view_splitter_orientation");
     QStringList items;
     items << i18n("Vertical")
 	  << i18n("Horizontal");
     orientation->setItems(items);
     orientation->setCurrentItem(0);
-    d->m_splitViewActionList->append(orientation);    
-    
+    d->m_splitViewActionList->append(orientation);
+
     if ( instance )
       setInstance( instance );
 
@@ -372,8 +372,8 @@ bool KoMainWindow::saveDocument( bool saveas )
 
             // HACK - should we add extension() to KURL ?
 	    if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
-		// assume a that the the native patterns ends with .extension
-		QString s( nativeFormatPattern() );
+		// assume that the pattern ends with .extension
+		QString s( dialog->currentFilter() );
 		QString extension = s.mid( s.find( "." ) );
 		newURL.setPath( newURL.path() + extension );
 	    }
@@ -577,8 +577,9 @@ void KoMainWindow::slotRemoveView() {
     kdDebug(30003) << "KoMainWindow::slotRemoveView() called" << endl;
 }
 
-void KoMainWindow::slotSetOrientation(const int &orientation) {
-    kdDebug(30003) << "KoMainWindow::slotSetOrientation() called ... orientation:" << orientation << endl;
+void KoMainWindow::slotSetOrientation() {
+    kdDebug(30003) << "KoMainWindow::slotSetOrientation() called" << endl;
+    // access the state via d->m_splitViewActionList->last()->currentItem()
 }
 
 
