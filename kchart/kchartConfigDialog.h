@@ -61,6 +61,7 @@ protected:
 
     KChartSubTypeChartPage       *m_subTypePage;
     KChartHeaderFooterConfigPage *m_headerfooterpage;
+    KChartLegendConfigPage       *m_legendPage;
     KChartParameterConfigPage    *m_axespage;
 
     //KChartGeometryConfigPage* _geompage;
@@ -71,7 +72,6 @@ protected:
     KChartPieConfigPage*_piepage;
     KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     //KChartComboPage *_hlcChart;
-    KChartLegendConfigPage *_parameterLegend;
     KChartLine3dConfigPage *_linepage3d;
     KChartParameterPolarConfigPage *_polarpage;
 protected slots:

@@ -46,8 +46,22 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   //Layout for 4 blocks
   QGridLayout* layout = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-  //1. Block: Legend position
-  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
+  //1. Block: General settings
+  QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("General"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
+  layout->addWidget( gb, 0, 0 );
+
+  QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
+
+  QLabel* lab = new QLabel( i18n("Title:"), gb );
+  grid2->addWidget( lab, 0, 0 );
+
+  title = new QLineEdit( gb );
+  grid2->addWidget( title, 1, 0 );
+
+  // 2. Block: Legend position
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   gb->setExclusive( true );
@@ -67,28 +81,39 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lBottomRight = addButton( grid1, gb, i18n("Bottom-Right"), "chart_legend_bottomright", 2, 2 );
 
   gb->setAlignment( Qt::AlignLeft );
-  layout->addWidget( gb, 0, 0 );
-
-
-  //2. Block: Title text
-  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 0 );
 
-  QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
-
-  QLabel* lab = new QLabel( i18n("Legend title:"), gb );
-  grid2->addWidget( lab, 0, 0 );
-
-  title = new QLineEdit( gb );
-  grid2->addWidget( title, 1, 0 );
-
-  //3. Block: Text Colors
-  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
+  // 3. Block: Font
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 1 );
+
+  QGridLayout *grid4 = new QGridLayout( gb->layout(), 4, 2 );
+  titleLegendFontButton = new QPushButton( gb );
+
+  lab = new QLabel( i18n("Legend title font:"), gb );
+  grid4->addWidget( lab, 0 ,0 );
+
+  titleLegendFontButton->setText( i18n("Select font...") );
+  grid4->addWidget( titleLegendFontButton, 1, 0 );
+
+  lab = new QLabel( i18n("Legend text font:"), gb );
+  grid4->addWidget( lab, 2, 0 );
+  textLegendFontButton = new QPushButton( gb );
+  textLegendFontButton->setText( i18n("Select font...") );
+  grid4->addWidget( textLegendFontButton, 3, 0 );
+
+  connect( titleLegendFontButton, SIGNAL(clicked()), 
+	   this, SLOT(changeTitleLegendFont()));
+  connect( textLegendFontButton, SIGNAL(clicked()),
+	   this, SLOT(changeTextLegendFont()));
+
+  // 4. Block: Text Colors
+  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
+  gb->layout()->setSpacing(KDialog::spacingHint());
+  gb->layout()->setMargin(KDialog::marginHint());
+  layout->addWidget( gb, 1, 1 );
 
   QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
 
@@ -105,30 +130,6 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   legendTextColor = new KColorButton( gb );
 
   grid3->addWidget( legendTextColor, 3, 0 );
-
-  //4. Block: Font
-  gb = new QButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
-  gb->layout()->setSpacing(KDialog::spacingHint());
-  gb->layout()->setMargin(KDialog::marginHint());
-  layout->addWidget( gb, 1, 1 );
-
-  QGridLayout *grid4 = new QGridLayout( gb->layout(), 4, 2 );
-  titleLegendFontButton = new QPushButton( gb );
-
-  lab = new QLabel( i18n("Legend title font:"), gb );
-  grid4->addWidget( lab, 0 ,0 );
-
-  titleLegendFontButton->setText( i18n("Legend...") );
-  grid4->addWidget( titleLegendFontButton, 1, 0 );
-
-  lab = new QLabel( i18n("Legend text font:"), gb );
-  grid4->addWidget( lab, 2, 0 );
-  textLegendFontButton = new QPushButton( gb );
-  textLegendFontButton->setText( i18n("Text Legend...") );
-  grid4->addWidget( textLegendFontButton, 3, 0 );
-
-  connect( titleLegendFontButton, SIGNAL(clicked()), this, SLOT(changeTitleLegendFont()));
-  connect( textLegendFontButton, SIGNAL(clicked()), this, SLOT(changeTextLegendFont()));
 
   //it's not good but I don't know how
   //to reduce space

@@ -55,6 +55,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 
     m_subTypePage(0),
     m_headerfooterpage(0),
+    m_legendPage(0),
     m_axespage(0),
 
     _colorpage(0),
@@ -63,7 +64,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     _parameterfontpage(0),
     _piepage(0),
     _backgroundpixpage(0),
-    _parameterLegend(0),
     _linepage3d(0),
     _polarpage(0)
 {
@@ -99,18 +99,23 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if( flags & KC_LEGEND )
     {
-        _parameterLegend = new KChartLegendConfigPage(m_params,this );
-        addTab( _parameterLegend,i18n("Legend"));
+        m_legendPage = new KChartLegendConfigPage(m_params,this );
+        addTab( m_legendPage,i18n("Legend"));
     }
     else if( flags & KC_ALL )
     {
+	// The subtype page
         initSubtypePage();
 
-	// The Header/Footer tab
+	// The Header/Footer page
         m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params, this);
         addTab( m_headerfooterpage, i18n("Header/Footer"));
 
-	// Add axes tab if applicable.
+	// The legend page
+	m_legendPage = new KChartLegendConfigPage(m_params,this );
+        addTab( m_legendPage,i18n("Legend"));
+
+	// Add axes page if applicable.
         if( m_params->chartType() != KDChartParams::Pie
 	    && m_params->chartType() != KDChartParams::Ring )	{
             m_axespage = new KChartParameterConfigPage(m_params,this );
@@ -133,9 +138,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 
         _backgroundpixpage = new KChartBackgroundPixmapConfigPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
-
-        _parameterLegend = new KChartLegendConfigPage(m_params,this );
-        addTab( _parameterLegend,i18n("Legend"));
 
         if( m_params->chartType() == KDChartParams::Bar )
         {
@@ -257,8 +259,8 @@ void KChartConfigDialog::apply()
 
     //     for( uint i = 0; i < NUMDATACOLORS; i++ )
     // 	m_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
-    if(_parameterLegend)
-        _parameterLegend->apply();
+    if(m_legendPage)
+        m_legendPage->apply();
 
     if (m_headerfooterpage)
         m_headerfooterpage->apply();
@@ -331,8 +333,8 @@ void KChartConfigDialog::defaults()
         }*/
     if(_backgroundpixpage)
         _backgroundpixpage->init();
-    if(_parameterLegend)
-        _parameterLegend->init();
+    if(m_legendPage)
+        m_legendPage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 //      	_colorpage->setDataColor( i, m_params->dataColor( i ) );
 
