@@ -172,15 +172,8 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                      const Direction &direction,
                                      const char *_format,
                                      const QString &
-#if KDE_VERSION < 220
-                                      _native_pattern
-#endif
                                      , const QString &_native_name,
-                                     bool
-#if KDE_VERSION < 220
-                                      allfiles
-#endif
-                                               ) {
+                                     bool) {
 
     QString nativeFormat = QString::fromLatin1(_format);
     QString constraint;
@@ -195,7 +188,6 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             constraint += "Import";
     }
 
-#if KDE_VERSION >= 220 // kdelibs > 2.1 -> use the nice setMimeFilter
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
 
     QStringList mimes;
@@ -214,11 +206,6 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         dialog->setMimeFilter( mimes );
     else
         dialog->setMimeFilter( mimes, nativeFormat );
-
-#else // kdelibs == 2.1
-    dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
-                                       _native_name, allfiles));
-#endif
 
     return true;
 }

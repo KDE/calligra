@@ -39,7 +39,6 @@
 
 void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
 {
-#if KDE_VERSION >= 220
     KTrader::OfferList offers = KTrader::self()->query("application/postscript", "'KParts/ReadOnlyPart' in ServiceTypes");
 
     // Try to find a postscript component first
@@ -72,27 +71,4 @@ void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QStrin
     KRun::runURL(tmpFile,"application/postscript");
     // Note: the temp file won't be deleted :(
 
-#else
-    // ### In KDE 2.1.x kghostview was busted => not used
-
-    // Find an installed application
-    KTrader::OfferList offers = KTrader::self()->query("application/postscript");
-    KTrader::OfferList::ConstIterator it(offers.begin());
-    for( ; it != offers.end(); ++it)
-    {
-        KService::Ptr ptr = (*it);
-        kdDebug() << "KoPrintPreview::preview " << ptr->desktopEntryName() << endl;
-        if ( ptr->desktopEntryName() != "kghostview" )
-        {
-            KURL url;
-            url.setPath( tmpFile );
-            KURL::List lst;
-            lst.append( url );
-            KRun::run( *ptr, lst );
-            return;
-        }
-    }
-    // Didn't work -> kghostview :(
-    KRun::runURL(tmpFile,"application/postscript");
-#endif
 }

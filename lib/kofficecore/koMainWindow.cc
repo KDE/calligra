@@ -505,9 +505,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         dialog->setKeepLocation( true );
-#if KDE_VERSION >= 220
         dialog->setOperationMode( KFileDialog::Saving );
-#endif
         KoFilterManager * filterManager = new KoFilterManager();
         filterManager->prepareDialog(dialog, KoFilterManager::Export,
                                      _native_format, nativeFormatPattern(),
@@ -520,9 +518,7 @@ bool KoMainWindow::saveDocument( bool saveas )
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
-#if KDE_VERSION >= 220 // only in kdelibs > 2.1
                 outputFormat=dialog->currentMimeFilter().latin1();
-#endif
             }
             else
             {
@@ -538,20 +534,11 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 // ###### To be made configurable !
             if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
-#if KDE_VERSION < 220
-                // assume that the pattern ends with .extension
-                QString s( dialog->currentFilter() );
-                QString extension = s.mid( s.find( "." ) );
-                extension = extension.left( extension.find( " " ) );
-
-                newURL.setPath( newURL.path() + extension );
-#else
                 // No more extensions in filters. We need to get it from the mimetype.
                 KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
                 QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
                 kdDebug(30003) << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
                 newURL.setPath( newURL.path() + extension );
-#endif
             }
 
             if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
@@ -573,11 +560,6 @@ bool KoMainWindow::saveDocument( bool saveas )
             else
                 KRecentDocument::add(newURL.url(-1), true);
 
-#if KDE_VERSION < 220
-            KMimeType::Ptr t = KMimeType::findByURL( newURL, 0, TRUE );
-            outputFormat = t->name().latin1();
-#endif
-
             pDoc->setOutputMimeType( outputFormat );
             if ( outputFormat != _native_format )
             {
@@ -591,9 +573,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                     .arg( QString( "<b>%1</b><p>" ).arg( comment ) ), // in case we want to remove the bold later
                     i18n( "File Export: Confirmation Required" ),
                     i18n( "Continue" ),
-#if KDE_VERSION >= 220
                     "FileExportConfirmation",
-#endif
                     true );
                 if (res == KMessageBox::Cancel )
                     return false;

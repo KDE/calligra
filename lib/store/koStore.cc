@@ -37,18 +37,13 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
   kdDebug(s_area) << "KoStore Constructor filename = " << _filename
     << " mode = " << int(_mode) << endl;
 
-#if KDE_VERSION >= 220 // we have the new KTar
   m_pTar = new KTarGz( _filename, "application/x-gzip" );
-#else
-  m_pTar = new KTarGz( _filename );
-#endif
 
   init( _mode ); // open the targz file and init some vars
 
-#if KDE_VERSION >= 220 // we have the new KTar
   if ( m_bGood && _mode == Write )
       m_pTar->setOrigFileName( appIdentification );
-#endif
+
 }
 
 KoStore::KoStore( QIODevice *dev, Mode mode )
