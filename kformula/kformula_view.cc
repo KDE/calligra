@@ -37,6 +37,7 @@
 #include "kformula_factory.h"
 #include "kformula_view.h"
 #include "kformulawidget.h"
+#include "kfconfig.h"
 #include "matrixwidget.h"
 
 
@@ -82,6 +83,8 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     (void) KStdAction::selectAll(formulaWidget, SLOT(slotSelectAll()), actionCollection());
 
+    //------------------------ Settings menu
+    KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );
 
     // font stuff
 //     KFontAction* actionElement_Text_Font = new KFontAction(i18n( "Font family" ),0,
@@ -181,6 +184,12 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
         int y = formulaWidget->getCursorPoint().y();
         scrollview->ensureVisible(x, y);
     }
+}
+
+void KFormulaPartView::configure()
+{
+    KFConfig configDia( this );
+    configDia.exec();
 }
 
 #include "kformula_view.moc"

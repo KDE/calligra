@@ -47,6 +47,8 @@ public:
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
+    KFormulaDoc* document() const { return m_pDoc; }
+
 protected:
 
     virtual void resizeEvent(QResizeEvent* _ev);
@@ -56,6 +58,7 @@ protected:
 
 protected slots:
 
+    void configure();
     void cursorChanged(bool visible, bool selecting);
 
 private:

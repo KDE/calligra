@@ -102,6 +102,26 @@ QColor ContextStyle::getEmptyColor()    const
     return getDefaultColor();
 }
 
+void ContextStyle::setDefaultColor( const QColor& color )
+{
+    defaultColor = color;
+}
+void ContextStyle::setNumberColor( const QColor& color )
+{
+    numberColor = color;
+}
+void ContextStyle::setOperatorColor( const QColor& color )
+{
+    operatorColor = color;
+}
+void ContextStyle::setErrorColor( const QColor& color )
+{
+    errorColor = color;
+}
+void ContextStyle::setEmptyColor( const QColor& color )
+{
+    emptyColor = color;
+}
 
 
 void ContextStyle::setResolution(double zX, double zY)

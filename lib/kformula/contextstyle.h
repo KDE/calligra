@@ -94,6 +94,12 @@ public:
     QColor getErrorColor()    const;
     QColor getEmptyColor()    const;
 
+    void setDefaultColor( const QColor& );
+    void setNumberColor( const QColor& );
+    void setOperatorColor( const QColor& );
+    void setErrorColor( const QColor& );
+    void setEmptyColor( const QColor& );
+
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
     QFont getNumberFont()     const { return numberFont; }
