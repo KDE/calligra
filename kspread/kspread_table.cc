@@ -6737,9 +6737,13 @@ void KSpreadTable::setShowPageBorders( bool b )
 
 bool KSpreadTable::isOnNewPageX( int _column )
 {
-    int col = 1;
+    //Are these the edges of the print range?
+    if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
+        return true;
+
+    int col = m_printRange.left();
     float x = columnLayout( col )->mmWidth();
-    while ( ( col <= _column ) && ( col < KS_colMax ) )
+    while ( ( col <= _column ) && ( col < m_printRange.right() ) )
     {
         if ( x > printableWidth() )
         {
@@ -6758,9 +6762,13 @@ bool KSpreadTable::isOnNewPageX( int _column )
 
 bool KSpreadTable::isOnNewPageY( int _row )
 {
-    int row = 1;
+    //Are these the edges of the print range?
+    if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
+        return true;
+
+    int row = m_printRange.top();
     float y = rowLayout( row )->mmHeight();
-    while ( ( row <= _row ) && ( row < KS_rowMax ) )
+    while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
     {
         if ( y > printableHeight() )
         {
@@ -7288,10 +7296,10 @@ void KSpreadTable::paperLayoutDlg()
                     if ( point2.isValid() )
                     {
                         error = false;
-                        m_printRange = QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
-                                                      QMIN( point1.pos.y(), point2.pos.y() ) ),
-                                              QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
-                                                      QMAX( point1.pos.y(), point2.pos.y() ) ) );
+                        setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
+                                                       QMIN( point1.pos.y(), point2.pos.y() ) ),
+                                               QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
+                                                       QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
                     }
                 }
             }
@@ -7580,6 +7588,16 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
         tmp.replace( pos, 7, ta );
 
     return tmp;
+}
+
+
+void KSpreadTable::setPrintRange( QRect _printRange )
+{
+  if ( m_printRange == _printRange )
+    return;
+
+  m_printRange = _printRange;
+  emit sig_updateView( this );      
 }
 
 QRect KSpreadTable::getSelectionHandleArea(KSpreadCanvas* canvas)

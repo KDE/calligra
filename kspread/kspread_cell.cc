@@ -2335,15 +2335,20 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
 
   // Draw page borders
-  if ( m_pTable->isShowPageBorders() )
+  if ( m_pTable->isShowPageBorders() && 
+       //Check for the print range
+       cellRef.x() >= table()->printRange().left() &&
+       cellRef.x() <= table()->printRange().right()+1 &&
+       cellRef.y() >= table()->printRange().top() &&
+       cellRef.y() <= table()->printRange().bottom()+1 )
   {
-    if ( m_pTable->isOnNewPageY( cellRef.y() ) )
+    if ( m_pTable->isOnNewPageY( cellRef.y() ) && ( cellRef.x() <= table()->printRange().right() ) )
     {
       painter.setPen( table()->doc()->pageBorderColor() );
       painter.drawLine( corner.x(), corner.y(), corner.x() + width,
                         corner.y() );
     }
-    if ( m_pTable->isOnNewPageX( cellRef.x() ) )
+    if ( m_pTable->isOnNewPageX( cellRef.x() ) && ( cellRef.y() <= table()->printRange().bottom() ) )
     {
       painter.setPen( table()->doc()->pageBorderColor() );
       painter.drawLine( corner.x(), corner.y(), corner.x(),
