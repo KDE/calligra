@@ -286,7 +286,7 @@ void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_f
   unsigned int pos = _fc->getTextPos();
   if (_pos != -1) pos = static_cast<unsigned int>(_pos);
 
-  _fc->init(_fc->getParag(),_painter,false);
+  _fc->init(_fc->getParag(),_painter,false,false);
 
   _fc->gotoStartOfParag(_painter);
   _fc->cursorGotoLineStart(_painter);
@@ -399,7 +399,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	{
 	  if (p->getPrev()) p = p->getPrev();
 	  paintfc->setFrameSet(i + 1);
-	  paintfc->init(p,painter);
+	  paintfc->init(p,painter,true,false);
 
 	  bool bend = false;
 	  while (!bend)
@@ -747,7 +747,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    goNext = true;
 	    fc->cursorGotoPrevLine(painter);
-	    fc->makeLineLayout(painter);
+	    //fc->makeLineLayout(painter);
 	  }
 	else
 	  fc->makeLineLayout(painter);
@@ -876,7 +876,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    goNext = true;
 	    fc->cursorGotoPrevLine(painter);
-	    fc->makeLineLayout(painter);
+	    //fc->makeLineLayout(painter);
 	  }
 	else
 	  fc->makeLineLayout(painter);

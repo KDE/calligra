@@ -42,32 +42,49 @@ KWFormatContext::~KWFormatContext()
 }
 
 
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true )
+void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true )
 {
   specialHeight = 0;
   ptMaxAscender = 0;
   ptMaxDescender = 0;
-    // Offset from the top of the page
-  //ptY = document->getPTTopBorder();
-    ptY = document->getFrameSet(frameSet - 1)->getFrame(0).top();
-    //column = 1;
-    frame = 1;
-    page = 1;
 
-    // Enter the first paragraph
-    parag = 0L;
-    enterNextParag( _painter, _updateCounters );
-
-    // Loop until we got the paragraph
-    while ( parag != _parag )
+  if (_fromStart)
     {
-	// Skip the current paragraph
-	skipCurrentParag( _painter );
-	// Go to the next one
-	enterNextParag( _painter, _updateCounters );
+      // Offset from the top of the page
+      //ptY = document->getPTTopBorder();
+      ptY = document->getFrameSet(frameSet - 1)->getFrame(0).top();
+      //column = 1;
+      frame = 1;
+      page = 1;
+      
+      // Enter the first paragraph
+      parag = 0L;
+      enterNextParag( _painter, _updateCounters );
+      
+      // Loop until we got the paragraph
+      while ( parag != _parag )
+	{
+	  // Skip the current paragraph
+	  skipCurrentParag( _painter );
+	  // Go to the next one
+	  enterNextParag( _painter, _updateCounters );
+	}
+      
+      // gotoLine( 0, _painter );
     }
-
-    // gotoLine( 0, _painter );
+  else
+    {
+      parag = _parag;
+      ptY = parag->getPTYStart();
+      if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+	ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+  
+      lineStartPos = 0;
+      frame = parag->getStartFrame();
+      page = parag->getStartPage();
+	
+      makeLineLayout( _painter );
+    }
 }
 
 void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters = true )
@@ -246,7 +263,7 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
 	if ( parag->getPrev() == 0L )
 	    return;
 	// Enter the prev paragraph
-	init( parag->getPrev(), _painter );
+	init(parag->getPrev(),_painter,true,false);
 	int ret;
 	do
 	{
@@ -267,7 +284,7 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
     if ( isCursorAtLineStart() )
     {
 	unsigned int tmpPos = lineStartPos;
-	init( parag, _painter );
+	init(parag,_painter,true,false);
 	do {
 	    makeLineLayout( _painter );
 	    if (lineEndPos < tmpPos){
@@ -307,7 +324,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 	  counters[cnr][dep]--;
 	parag->getPrev()->updateCounters( this );
 	
-	init( parag->getPrev(), _painter, false );
+	init(parag->getPrev(),_painter,false,false);
 	int ret;
 	do
 	{
@@ -327,7 +344,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
     else {
 	// Re-Enter the current paragraph
 	unsigned int tmpPos = lineStartPos;
-	init (parag, _painter, false);
+	init (parag,_painter,false,false);
 	do {
 	    makeLineLayout( _painter );
 	    if (lineEndPos < tmpPos){
@@ -421,23 +438,23 @@ void KWFormatContext::cursorGotoNextLine(QPainter &_painter)
 void KWFormatContext::cursorGotoPrevLine(QPainter &_painter)
 {
   // Re-Enter the current paragraph
-  unsigned int tmpPos = lineStartPos;
-  init (parag, _painter, false);
-  do 
-    {
-      makeLineLayout( _painter );
-      if (lineEndPos < tmpPos){
-	ptY += getLineHeight();
-	// next line
-	lineStartPos = lineEndPos;
-      }
-  } 
-  while(lineEndPos < tmpPos);    
-
+   unsigned int tmpPos = lineStartPos;
+   init(parag,_painter,false,false);
+   do 
+     {
+       makeLineLayout( _painter );
+       if (lineEndPos < tmpPos){
+	 ptY += getLineHeight();
+	 // next line
+	 lineStartPos = lineEndPos;
+       }
+     } 
+   while(lineEndPos < tmpPos);    
+   
   
-  cursorGotoLineStart( _painter );
+   cursorGotoLineStart( _painter );
 
-  during_vertical_cursor_movement = false;
+   during_vertical_cursor_movement = false;
 }
 
 void KWFormatContext::cursorGotoLine( unsigned int _textpos, QPainter &_painter )

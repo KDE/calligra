@@ -29,7 +29,7 @@ public:
     KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet);
     ~KWFormatContext();
 
-    void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true );
+    void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true );
     void enterNextParag( QPainter &_painter, bool _updateCounters = true );
     void skipCurrentParag( QPainter &_painter );
     void gotoStartOfParag( QPainter &_painter );

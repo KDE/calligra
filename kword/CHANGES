@@ -244,3 +244,11 @@ Reggie, 16.10.1998 - 19.10.1998
 - Everything which worked before the page-orientation -> frame-orientation changes, works again now
 - Implemented templates
 - Started implementation of printing (at the moment, only the dialog opens :-)
+- Fixed lots of speed problems in KWFormatContext when editing long textes. It was terribly slow.
+  But it's possible that I introduced some bugs - if this is the case I'll, of course, fix them :-)
+  What I did: KWFormatContext::init(..) is called quite often when navigating with the cursor (e.g
+  a line up, deleting/inserting text, etc.). 
+  The implementation of this init methode started at the first parag of the text and went through
+  _all_ paragraphs, until the needed one was reached. For long textes (I tested with 70 pages) this was
+  damn slow when you were nearly at the end of the text. Now init doesn't go through all parags anymore
+  if it is not really needed (and it is nearly never needed!). So this is much faster now.

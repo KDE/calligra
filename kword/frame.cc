@@ -112,7 +112,7 @@ void KWTextFrameSet::init()
   format->setDefaults(doc);
   parags->setFormat(0,1,*format);
 
-//   for (int i = 0;i < 3;i++)
+//   for (int i = 0;i < 300;i++)
 //     {
 //       p = new KWParag( this,doc, p, 0L, defaultParagLayout );
 //       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
