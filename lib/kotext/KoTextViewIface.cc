@@ -22,6 +22,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
+#include "koborder.h"
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
     : DCOPObject()
@@ -269,3 +270,28 @@ void KoTextViewIface::setSpaceAfterParag(double pt)
     static_cast<KoTextParag *>(m_textView->cursor()->parag())->setMargin( QStyleSheetItem::MarginBottom,pt);
 }
 
+
+void KoTextViewIface::setLeftBorder( const QColor & c,double width )
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    parag->setLeftBorder(KoBorder( c, KoBorder::SOLID, width ));
+
+}
+
+void KoTextViewIface::setRightBorder( const QColor & c,double width )
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    parag->setRightBorder(KoBorder( c, KoBorder::SOLID, width ));
+}
+
+void KoTextViewIface::setTopBorder( const QColor & c,double width )
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    parag->setTopBorder(KoBorder( c, KoBorder::SOLID, width ));
+}
+
+void KoTextViewIface::setBottomBorder(const QColor & c,double width )
+{
+    KoTextParag *parag= static_cast<KoTextParag *>(m_textView->cursor()->parag());
+    parag->setBottomBorder(KoBorder( c, KoBorder::SOLID, width ));
+}

@@ -91,6 +91,13 @@ k_dcop:
     void setSpaceBeforeParag(double pt);
     void setSpaceAfterParag(double pt);
 
+    // apply border, for the futur add border style
+    void setLeftBorder( const QColor & c,double width );
+    void setRightBorder( const QColor & c,double width );
+
+    void setTopBorder( const QColor & c,double width );
+    void setBottomBorder(const QColor & c,double width );
+
 private:
     KoTextView *m_textView;
 
