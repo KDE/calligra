@@ -127,6 +127,7 @@ public:
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
     QString saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    void saveOasisPageEffect( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );
