@@ -1505,7 +1505,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
     int mid = 0;
     bool found = FALSE;
     while ( n1 <= n2 ) {
-        int res;
+        double res;
         mid = (n1 + n2)/2;
 #ifdef DEBUG_ITD
         kdDebug() << "ITD: begin. mid=" << mid << endl;
