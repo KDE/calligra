@@ -10,7 +10,9 @@
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 
+#include <kiconloader.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 
 #include <tkfloatspinbox.h>
 
@@ -59,22 +61,29 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	connect( m_typeOption, SIGNAL( clicked( int ) ), this, SLOT( slotTypeChanged( int ) ) );
 
 	m_capOption = new QVButtonGroup ( mainWidget );
-	button = new QRadioButton ( i18n( "Butt" ), m_capOption );
+	//button = new QRadioButton ( i18n( "Butt" ), m_capOption );	                                                          
+	button = new QRadioButton ( m_capOption );
+	button->setPixmap( DesktopIcon( "cap_butt" ) );
 	m_capOption->insert( button );
-	button = new QRadioButton ( i18n( "Round" ), m_capOption );
+	button = new QRadioButton ( m_capOption );
+	button->setPixmap( DesktopIcon( "cap_round" ) );
 	m_capOption->insert( button );
-	button = new QRadioButton ( i18n( "Square" ), m_capOption );
+	button = new QRadioButton ( m_capOption );
+	button->setPixmap( DesktopIcon( "cap_square" ) );
 	m_capOption->insert( button );
 	m_capOption->setTitle( i18n( "Cap" ) );
 	mainLayout->addWidget( m_capOption );
 	connect( m_capOption, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 
 	m_joinOption = new QVButtonGroup ( mainWidget );
-	button = new QRadioButton ( i18n( "Miter" ), m_joinOption );
+	button = new QRadioButton ( m_joinOption );
+	button->setPixmap( DesktopIcon( "join_miter" ) );
 	m_joinOption->insert( button );
-	button = new QRadioButton ( i18n( "Round" ), m_joinOption );
+	button = new QRadioButton ( m_joinOption );
+	button->setPixmap( DesktopIcon( "join_round" ) );
 	m_joinOption->insert( button );
-	button = new QRadioButton ( i18n( "Bevel" ), m_joinOption );
+	button = new QRadioButton ( m_joinOption );
+	button->setPixmap( DesktopIcon( "join_bevel" ) );
 	m_joinOption->insert( button );
 	m_joinOption->setTitle( i18n( "Join" ) );
 	mainLayout->addWidget( m_joinOption );
