@@ -1,5 +1,11 @@
-2004-10-04  Inge Wallin  <ingwa@c83-250-5-110.bredband.comhem.se>
+2004-10-04  Inge Wallin  <inge@lysator.liu.se>
 
+	* Cleaned the following files a little.  Made the code more
+	readable, fixed indentation, added (a few) comments:
+	(Man, there are a lot of coding styles in there...)
+	- kchart_part.h
+	- kchart_part.cc
+	
 	* Cleaned the following files a little.  Made the code more
 	readable, fixed indentation, added (a few) comments:
 	- kchart.la.cc

@@ -3,6 +3,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
+
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
@@ -18,7 +19,9 @@
 #include "kchart_params.h"
 #include "kdchart/KDChart.h"
 
+
 using namespace std;
+
 
 // Some hardcoded data for a chart
 
@@ -33,10 +36,13 @@ using namespace std;
 
 #include <qpainter.h>
 
-KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
-      _params( 0 ),
-      _parentWidget( parentWidget )
+
+KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
+			QObject* parent, const char* name,
+			bool singleViewMode )
+  : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
+    m_params( 0 ),
+    m_parentWidget( parentWidget )
 {
     m_bLoading = false;
     kdDebug(35001) << "Constructor started!" << endl;
@@ -46,14 +52,16 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
     (void)new WizardExt( this );
     initDoc(KoDocument::InitDocAppStarting);
     m_bCanChangeValue=true;
+
     // hack
     setModified(true);
 }
 
+
 KChartPart::~KChartPart()
 {
     kdDebug(35001) << "Part is going to be destroyed now!!!" << endl;
-    delete _params;
+    delete m_params;
 }
 
 
@@ -61,11 +69,13 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // Initialize the parameter set for this chart document
     kdDebug(35001) << "InitDOC" << endl;
-    _params = new KChartParams();
-    _params->setThreeDBars( true );
+
+    m_params = new KChartParams();
+    m_params->setThreeDBars( true );
 
     return TRUE;
 }
+
 
 void KChartPart::initRandomData()
 {
@@ -73,21 +83,20 @@ void KChartPart::initRandomData()
     // fill cells
     int col,row;
     // initialize some data, if there is none
-    if (currentData.rows() == 0) {
+    if (m_currentData.rows() == 0) {
         kdDebug(35001) << "Initialize with some data!!!" << endl;
-        currentData.expand(4,4);
-        currentData.setUsedRows( 4 );
-        currentData.setUsedCols( 4 );
-        for (row = 0;row < 4;row++)
-            for (col = 0;col < 4;col++) {
-                KoChart::Value t( (double)row+col );
+        m_currentData.expand(4,4);
+        m_currentData.setUsedRows( 4 );
+        m_currentData.setUsedCols( 4 );
+        for (row = 0; row < 4; row++)
+            for (col = 0; col < 4; col++) {
+                KoChart::Value t( (double) row + col );
                 // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
-                currentData.setCell(row,col,t);
+                m_currentData.setCell(row, col, t);
             }
     }
 
 }
-
 
 
 KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
@@ -95,14 +104,18 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
     return new KChartView( this, parent, name );
 }
 
-void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent, double /*zoomX*/, double /*zoomY*/ )
+
+void KChartPart::paintContent( QPainter& painter, const QRect& rect,
+			       bool transparent,
+			       double /*zoomX*/, double /*zoomY*/ )
 {
     if (isLoading()) {
         kdDebug(35001) << "Loading... Do not paint!!!..." << endl;
         return;
     }
-    // if params is 0, initDoc() has not been called
-    Q_ASSERT( _params != 0 );
+
+    // If params is 0, initDoc() has not been called.
+    Q_ASSERT( m_params != 0 );
 
     // ####### handle transparency
     if( !transparent )
@@ -111,19 +124,19 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
     // ## TODO: support zooming
 
     // kdDebug(35001) << "KChartPart::paintContent called, rows = "
-    //                << currentData.usedRows() << ", cols = "
-    //                << currentData.usedCols() << endl;
+    //                << m_currentData.usedRows() << ", cols = "
+    //                << m_currentData.usedCols() << endl;
 
     // Need to draw only the document rectangle described in the parameter rect.
     //  return;
-    KDChart::paint( &painter, _params, &currentData, 0, &rect );
+    KDChart::paint( &painter, m_params, &m_currentData, 0, &rect );
 }
 
 
 void KChartPart::setData( const KoChart::Data& data )
 {
     // FIXME(khz): replace this when automatic string detection works in KDChart
-    //currentData = data;
+    //m_currentData = data;
 
     uint col, row;
 
@@ -132,22 +145,22 @@ void KChartPart::setData( const KoChart::Data& data )
 
     //Does the first row (without first cell) contain only strings
     bool isStringFirstRow = TRUE;
-    for( uint col = 1; isStringFirstRow && col < data.cols(); col++ )
-    {
+    for ( uint col = 1; isStringFirstRow && col < data.cols(); col++ ) {
         isStringFirstRow = data.cell( 0, col ).isString();
     }
-    //Just in case, we only have 1 row, we never use it for label text => prevents crash
-    if( data.rows() == 1 )
+    // Just in case, we only have 1 row, we never use it for label text => prevents crash
+    if ( data.rows() == 1 )
         isStringFirstRow = FALSE;
 
-    //Does the first column (without first cell) contain only strings
+    // Does the first column (without first cell) contain only strings
     bool isStringFirstCol = TRUE;
-    for( uint row = 1; isStringFirstCol && row < data.rows(); row++ )
-    {
+    for ( uint row = 1; isStringFirstCol && row < data.rows(); row++ ) {
         isStringFirstCol = data.cell( row, 0 ).isString();
     }
-    //Just in case, we only have 1 column, we never use it for axis label text => prevents crash
-    if( data.cols() == 1 )
+
+    // Just in case, we only have 1 column, we never use it for axis
+    // label text => prevents crash.
+    if ( data.cols() == 1 )
         isStringFirstRow = FALSE;
 
     uint colStart = 0;
@@ -155,64 +168,68 @@ void KChartPart::setData( const KoChart::Data& data )
     bool hasColHeader = FALSE;
     bool hasRowHeader = FALSE;
 
-    //Let's check if we have a full axis label text column
-    if( isStringFirstCol && isStringTopLeft || isStringFirstCol && isStringFirstRow )
+    // Let's check if we have a full axis label text column
+    if ( isStringFirstCol && isStringTopLeft
+	 || isStringFirstCol && isStringFirstRow )
     {
         hasColHeader = TRUE;
         colStart = 1;
     }
 
-    //Let's check if we have a full label text row
-    if( isStringFirstRow && isStringTopLeft || isStringFirstCol && isStringFirstRow )
+    // Let's check if we have a full label text row.
+    if ( isStringFirstRow && isStringTopLeft 
+	 || isStringFirstCol && isStringFirstRow )
     {
         hasRowHeader = TRUE;
         rowStart = 1;
     }
 
-    if( hasColHeader )
+    if ( hasColHeader )
     {
-        _params->setLegendSource( KDChartParams::LegendManual );
+        m_params->setLegendSource( KDChartParams::LegendManual );
         for( row = rowStart; row < data.rows(); row++ )
         {
-            _params->setLegendText( row - rowStart, data.cell( row, 0 ).stringValue() );
+            m_params->setLegendText( row - rowStart, data.cell( row, 0 ).stringValue() );
         }
     }
     else
-        _params->setLegendSource( KDChartParams::LegendAutomatic );
+        m_params->setLegendSource( KDChartParams::LegendAutomatic );
 
-    if( hasRowHeader )
+    if ( hasRowHeader )
     {
-        KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
-        longLabels.clear();
-        shortLabels.clear();
-        for( uint col = colStart; col < data.cols(); col++ )
+        KDChartAxisParams bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+
+        m_longLabels.clear();
+        m_shortLabels.clear();
+        for ( uint col = colStart; col < data.cols(); col++ )
         {
-            longLabels << data.cell( 0, col ).stringValue();
-            shortLabels << data.cell( 0, col ).stringValue().left( 3 );
+            m_longLabels << data.cell( 0, col ).stringValue();
+            m_shortLabels << data.cell( 0, col ).stringValue().left( 3 );
         }
-        bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
-        _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+        bottomparms.setAxisLabelStringLists( &m_longLabels, &m_shortLabels );
+        m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
     }
     else
     {
-        longLabels.clear();
-        shortLabels.clear();
+        m_longLabels.clear();
+        m_shortLabels.clear();
     }
 
-    if( hasColHeader || hasRowHeader )
+    if ( hasColHeader || hasRowHeader )
     {
         KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
-        for( col = colStart; col < data.cols(); col++ )
+        for ( col = colStart; col < data.cols(); col++ )
         {
-            for( row = rowStart; row < data.rows(); row++ )
+            for ( row = rowStart; row < data.rows(); row++ )
             {
-                matrix.setCell( row - rowStart, col - colStart, KoChart::Value( data.cell( row, col ).doubleValue() ) );
+                matrix.setCell( row - rowStart, col - colStart,
+				KoChart::Value( data.cell( row, col ).doubleValue() ) );
             }
         }
-        currentData = matrix;
+        m_currentData = matrix;
     }
     else
-        currentData = data;
+        m_currentData = data;
 
     //  initLabelAndLegend();
     emit docChanged();
@@ -221,17 +238,20 @@ void KChartPart::setData( const KoChart::Data& data )
 
 bool KChartPart::showWizard()
 {
-    KChartWizard* wizard = new KChartWizard( this, _parentWidget, "wizard" );
-    bool ret = wizard->exec();
+    KChartWizard  *wizard = new KChartWizard( this, m_parentWidget, "wizard" );
+    bool           ret = wizard->exec();
+
     delete wizard;
     return ret;
 }
+
 
 void KChartPart::initLabelAndLegend()
 {
     // Labels and legends are automatically initialized to reasonable
     // default values in KDChart
 }
+
 
 void KChartPart::loadConfig( KConfig *conf )
 {
@@ -271,15 +291,17 @@ void KChartPart::loadConfig( KConfig *conf )
     //   llabel = conf->readBoolEntry("llabel", llabel);
     //   yval_style = conf->readNumEntry("yval_style", yval_style);
     //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
-    _params->setLineMarker(conf->readBoolEntry("lineMarker",_params->lineMarker()));
-    _params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
-                                                         _params->threeDBarDepth() ) );
-    _params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
-                                                          _params->threeDBarAngle() ) );
+    m_params->setLineMarker(conf->readBoolEntry("lineMarker", 
+						m_params->lineMarker()));
+    m_params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
+							  m_params->threeDBarDepth() ) );
+    m_params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
+						     m_params->threeDBarAngle() ) );
 
-    KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams rightparams = _params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+
     bottomparams.setAxisLineColor( conf->readColorEntry( "XTitleColor", 0 ) );
     leftparams.setAxisLineColor( conf->readColorEntry( "YTitleColor", 0 ) );
     rightparams.setAxisLineColor( conf->readColorEntry( "YTitle2Color", 0 ) );
@@ -287,12 +309,12 @@ void KChartPart::loadConfig( KConfig *conf )
     leftparams.setAxisLabelsColor( conf->readColorEntry( "YLabelColor", 0 ) );
     rightparams.setAxisLabelsColor( conf->readColorEntry( "YLabel2Color", 0 ) );
     leftparams.setAxisGridColor( conf->readColorEntry( "GridColor", 0 ) );
-    _params->setOutlineDataColor( conf->readColorEntry( "LineColor", 0 ) );
-    _params->setAxisParams( KDChartAxisParams::AxisPosLeft,
+    m_params->setOutlineDataColor( conf->readColorEntry( "LineColor", 0 ) );
+    m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,
                             leftparams );
-    _params->setAxisParams( KDChartAxisParams::AxisPosRight,
+    m_params->setAxisParams( KDChartAxisParams::AxisPosRight,
                             rightparams );
-    _params->setAxisParams( KDChartAxisParams::AxisPosBottom,
+    m_params->setAxisParams( KDChartAxisParams::AxisPosBottom,
                             bottomparams );
 
     //   hlc_style = (KChartHLCStyle)conf->readNumEntry("hlc_style", hlc_style);
@@ -316,7 +338,7 @@ void KChartPart::loadConfig( KConfig *conf )
     // 							 percent_labels);
     //   label_dist = conf->readNumEntry("label_dist", label_dist);
     //   label_line = conf->readBoolEntry("label_line", label_line);
-    _params->setChartType( (KDChartParams::ChartType)conf->readNumEntry( "type", _params->chartType() ) );
+    m_params->setChartType( (KDChartParams::ChartType)conf->readNumEntry( "type", m_params->chartType() ) );
     //   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
 
     //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
@@ -330,11 +352,13 @@ void KChartPart::loadConfig( KConfig *conf )
     //   backgroundPixmapIntensity = conf->readDoubleNumEntry( "backgroundPixmapIntensity", 0.25 );
 }
 
+
 void KChartPart::defaultConfig(  )
 {
-    delete _params;
-    _params = new KChartParams();
+    delete m_params;
+    m_params = new KChartParams();
 }
+
 
 void KChartPart::saveConfig( KConfig *conf )
 {
@@ -366,20 +390,20 @@ void KChartPart::saveConfig( KConfig *conf )
     //   conf->writeEntry("yval_style", yval_style );
     //   conf->writeEntry("stack_type", (int)stack_type);
 
-    conf->writeEntry( "_3d_depth", _params->threeDBarDepth() );
-    conf->writeEntry( "_3d_angle", _params->threeDBarAngle() );
+    conf->writeEntry( "_3d_depth", m_params->threeDBarDepth() );
+    conf->writeEntry( "_3d_angle", m_params->threeDBarAngle() );
 
-    KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams rightparams = _params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
-    conf->writeEntry( "LineColor", _params->outlineDataColor() );
-    conf->writeEntry( "XTitleColor", bottomparams.axisLineColor() );
-    conf->writeEntry( "YTitleColor", leftparams.axisLineColor() );
+    KDChartAxisParams leftparams   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparams  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    conf->writeEntry( "LineColor",    m_params->outlineDataColor() );
+    conf->writeEntry( "XTitleColor",  bottomparams.axisLineColor() );
+    conf->writeEntry( "YTitleColor",  leftparams.axisLineColor() );
     conf->writeEntry( "YTitle2Color", rightparams.axisLineColor() );
-    conf->writeEntry( "XLabelColor", bottomparams.axisLabelsColor() );
-    conf->writeEntry( "YLabelColor", leftparams.axisLabelsColor() );
+    conf->writeEntry( "XLabelColor",  bottomparams.axisLabelsColor() );
+    conf->writeEntry( "YLabelColor",  leftparams.axisLabelsColor() );
     conf->writeEntry( "YLabel2Color", rightparams.axisLabelsColor() );
-    conf->writeEntry( "GridColor", leftparams.axisGridColor() );
+    conf->writeEntry( "GridColor",    leftparams.axisGridColor() );
 
     //   conf->writeEntry("hlc_style", (int)hlc_style);
     //   conf->writeEntry("hlc_cap_width", hlc_cap_width );
@@ -405,7 +429,7 @@ void KChartPart::saveConfig( KConfig *conf )
     //   conf->writeEntry("percent_labels",(int) percent_labels );
     //   conf->writeEntry("label_dist", label_dist);
     //   conf->writeEntry("label_line", label_line);
-    conf->writeEntry( "type", (int)_params->chartType() );
+    conf->writeEntry( "type", (int) m_params->chartType() );
     //   conf->writeEntry("other_threshold", other_threshold);
 
     // background pixmap stuff
@@ -415,25 +439,26 @@ void KChartPart::saveConfig( KConfig *conf )
     //   conf->writeEntry( "backgroundPixmapScaled", backgroundPixmapScaled );
     //   conf->writeEntry( "backgroundPixmapCentered", backgroundPixmapCentered );
     //   conf->writeEntry( "backgroundPixmapIntensity", backgroundPixmapIntensity );
-    conf->writeEntry( "lineMarker",(int)_params->lineMarker());
+    conf->writeEntry( "lineMarker", (int) m_params->lineMarker());
 }
+
 
 QDomDocument KChartPart::saveXML()
 {
     kdDebug(35001) << "kchart saveXML called" << endl;
-    QDomDocument doc = _params->saveXML( false );
+    QDomDocument doc = m_params->saveXML( false );
 
-    // save the data values
+    // Save the data values.
     QDomElement docRoot = doc.documentElement();
     QDomElement data = doc.createElement( "data" );
     docRoot.appendChild( data );
 
-    int cols = currentData.usedCols()
-             ? QMIN(currentData.usedCols(), currentData.cols())
-             : currentData.cols();
-    int rows = currentData.usedRows()
-             ? QMIN(currentData.usedRows(), currentData.rows())
-             : currentData.rows();
+    int cols = m_currentData.usedCols()
+             ? QMIN(m_currentData.usedCols(), m_currentData.cols())
+             : m_currentData.cols();
+    int rows = m_currentData.usedRows()
+             ? QMIN(m_currentData.usedRows(), m_currentData.rows())
+             : m_currentData.rows();
     data.setAttribute( "cols", cols );
     data.setAttribute( "rows", rows );
     kdDebug(35001) << "      writing  " << cols << "," << rows << "  (cols,rows)." << endl;
@@ -443,21 +468,19 @@ QDomDocument KChartPart::saveXML()
             QDomElement e = doc.createElement( "cell" );
             data.appendChild( e );
             QString valType;
-            KoChart::Value & cell( currentData.cell( i,j ) );
+            KoChart::Value & cell( m_currentData.cell( i,j ) );
             switch ( cell.valueType() ) {
-                case KoChart::Value::NoValue: valType = "NoValue";
-                              break;
-                case KoChart::Value::String:  valType = "String";
-                              break;
-                case KoChart::Value::Double:  valType = "Double";
-                              break;
-                case KoChart::Value::DateTime:valType = "DateTime";
-                              break;
+                case KoChart::Value::NoValue:  valType = "NoValue";   break;
+                case KoChart::Value::String:   valType = "String";    break;
+                case KoChart::Value::Double:   valType = "Double";    break;
+                case KoChart::Value::DateTime: valType = "DateTime";  break;
                 default: {
                     valType = "(unknown)";
-                    kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type." << endl;
+                    kdDebug(35001) << "ERROR: cell " << i << "," << j 
+				   << " has unknown type." << endl;
                 }
             }
+
             e.setAttribute( "valType", valType );
             kdDebug(35001) << "      cell " << i << "," << j << " saved with type '" << valType << "'." << endl;
             switch ( cell.valueType() ) {
@@ -479,11 +502,16 @@ QDomDocument KChartPart::saveXML()
     return doc;
 }
 
-bool KChartPart::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
+
+bool KChartPart::loadOasis( const QDomDocument& doc,
+			    KoOasisStyles&      oasisStyles,
+			    const QDomDocument& settings,
+			    KoStore* )
 {
     //todo
     return false;
 }
+
 
 bool KChartPart::saveOasis(KoStore*, KoXmlWriter*)
 {
@@ -491,20 +519,22 @@ bool KChartPart::saveOasis(KoStore*, KoXmlWriter*)
     return false;
 }
 
+
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;
-    bool result=_params->loadXML( doc );
-    if(!result)
+    bool result=m_params->loadXML( doc );
+    if (!result)
     {
         //try to load old file format
         result=loadOldXML( doc );
     }
-    if( result )
+
+    if ( result )
     {
-        result = loadData( doc, currentData );
+        result = loadData( doc, m_currentData );
 #if 0
-        bool retData = loadData( doc, currentData );
+        bool retData = loadData( doc, m_currentData );
         if ( !retData )
             initRandomData();
 #endif
@@ -513,7 +543,8 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 }
 
 
-bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
+bool KChartPart::loadData( const QDomDocument& doc,
+			   KoChart::Data& m_currentData )
 {
     kdDebug(35001) << "kchart loadData called" << endl;
 
@@ -522,17 +553,19 @@ bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
     bool ok;
     int cols = data.attribute("cols").toInt(&ok);
     kdDebug(35001) << "cols readed as:" << cols << endl;
-    if( !ok ){
+    if ( !ok ){
          return false;
     }
+
     int rows = data.attribute("rows").toInt(&ok);
-    if( !ok ){
+    if ( !ok ){
          return false;
     }
+
     kdDebug(35001) << rows << " x " << cols << endl;
-    currentData.expand(rows, cols);
-    currentData.setUsedCols( cols );
-    currentData.setUsedRows( rows );
+    m_currentData.expand(rows, cols);
+    m_currentData.setUsedCols( cols );
+    m_currentData.setUsedRows( rows );
     kdDebug(35001) << "Expanded!" << endl;
     QDomNode n = data.firstChild();
     //QArray<int> tmpExp(rows*cols);
@@ -547,41 +580,41 @@ bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
             if ( !e.isNull() && e.tagName() == "cell" ) {
                 // add the cell to the corresponding place...
                 KoChart::Value t;
-                if( e.hasAttribute("value") && e.hasAttribute("valType") ) {
+                if ( e.hasAttribute("value") && e.hasAttribute("valType") ) {
                     QString valueType = e.attribute("valType").lower();
-                    if( "string" == valueType ) {
+                    if ( "string" == valueType ) {
                         QString strVal = e.attribute("value");
                         t = KoChart::Value( strVal );
                     }
-                    else if( "double" == valueType ) {
+                    else if ( "double" == valueType ) {
                         bool bOk;
                         double val = e.attribute("value").toDouble(&bOk);
-                        if( !bOk )
+                        if ( !bOk )
                             val = 0.0;
                         t = KoChart::Value( val );
                     /*
-                    } else if( "datetime" == valueType ) {
+                    } else if ( "datetime" == valueType ) {
                         t = . . .
                     */
                     } else {
                         t.clearValue();
-                        if( "novalue" != valueType )
+                        if ( "novalue" != valueType )
                             kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type '" << valueType << "'." << endl;
                     }
                 } else
                     t.clearValue();
 
-                currentData.setCell(i,j, t );
+                m_currentData.setCell(i,j, t );
 
 		/*
                 if ( e.hasAttribute( "hide" ) ) {
                     tmpMissing[cols*j+i] = (bool)e.attribute("hide").toInt( &ok );
-                    if( !ok )
+                    if ( !ok )
                         return false;
                 } else {
                     tmpMissing[cols*j+i] = false;
                 }
-                if( e.hasAttribute( "dist" ) ) {
+                if ( e.hasAttribute( "dist" ) ) {
                     tmpExp[cols*j+i] = e.attribute("dist").toInt( &ok );
                     if ( !ok )
                         return false;
@@ -595,12 +628,11 @@ bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
         }
     }
     /*
-    _params->missing=tmpMissing;
-    _params->explode=tmpExp;
+    m_params->missing=tmpMissing;
+    m_params->explode=tmpExp;
     */
     return true;
 }
-
 
 
 bool KChartPart::loadOldXML( const QDomDocument& doc )
@@ -630,7 +662,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     int rows = data.attribute("rows").toInt(&ok);
     if (!ok)  { return false; }
     kdDebug(35001) << rows << " x " << cols << endl;
-    currentData.expand(rows, cols);
+    m_currentData.expand(rows, cols);
     kdDebug(35001) << "Expanded!" << endl;
     QDomNode n = data.firstChild();
     QArray<int> tmpExp(rows*cols);
@@ -642,6 +674,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
+
             QDomElement e = n.toElement();
             if ( !e.isNull() && e.tagName() == "cell" ) {
                 // add the cell to the corresponding place...
@@ -650,7 +683,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 kdDebug(35001) << i << " " << j << "=" << val << endl;
                 KoChart::Value t( val );
                 // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
-                currentData.setCell(i,j,t);
+                m_currentData.setCell(i,j,t);
                 if ( e.hasAttribute( "hide" ) ) {
                     tmpMissing[cols*j+i] = (bool)e.attribute("hide").toInt( &ok );
                     if ( !ok )
@@ -658,7 +691,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 } else {
                     tmpMissing[cols*j+i] = false;
                 }
-                if( e.hasAttribute( "dist" ) ) {
+                if ( e.hasAttribute( "dist" ) ) {
                     tmpExp[cols*j+i] = e.attribute("dist").toInt( &ok );
                     if ( !ok )
                         return false;
@@ -670,8 +703,8 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             }
         }
     }
-    _params->missing=tmpMissing;
-    _params->explode=tmpExp;
+    m_params->missing=tmpMissing;
+    m_params->explode=tmpExp;
 #endif
 
 
@@ -699,23 +732,23 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
 */
     bool ok;
     QDomElement params = chart.namedItem( "params" ).toElement();
-    if( params.hasAttribute( "type" ) ) {
+    if ( params.hasAttribute( "type" ) ) {
         int type=params.attribute("type").toInt( &ok );
         if ( !ok )
             return false;
         switch(type)
         {
         case 1:
-            _params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KDChartParams::Line);
             break;
         case 2:
-            _params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KDChartParams::Area);
             break;
         case 3:
-            _params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KDChartParams::Bar);
             break;
         case 4:
-            _params->setChartType(KDChartParams::HiLo);
+            m_params->setChartType(KDChartParams::HiLo);
             break;
         case 5:
         case 6:
@@ -727,35 +760,35 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                    KCHARTTYPE_COMBO_HLC_AREA,
             */
             /* line by default*/
-            _params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KDChartParams::Line);
             break;
         case 9:
-            _params->setChartType(KDChartParams::HiLo);
+            m_params->setChartType(KDChartParams::HiLo);
             break;
         case 10:
-            _params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KDChartParams::Bar);
             break;
         case 11:
-            _params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KDChartParams::Area);
             break;
         case 12:
-            _params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KDChartParams::Bar);
             break;
         case 13:
-            _params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KDChartParams::Area);
             break;
         case 14:
-            _params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KDChartParams::Bar);
             break;
         case 15:
-            _params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KDChartParams::Area);
             break;
         case 16:
-            _params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KDChartParams::Line);
             break;
         case 17:
         case 18:
-            _params->setChartType(KDChartParams::Pie);
+            m_params->setChartType(KDChartParams::Pie);
             break;
 
         }
@@ -763,195 +796,195 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             return false;
     }
 #if 0
-    if( params.hasAttribute( "subtype" ) ) {
-        _params->stack_type = (KChartStackType)params.attribute("subtype").toInt( &ok );
+    if ( params.hasAttribute( "subtype" ) ) {
+        m_params->stack_type = (KChartStackType)params.attribute("subtype").toInt( &ok );
         if ( !ok )
             return false;
     }
-    if( params.hasAttribute( "hlc_style" ) ) {
-        _params->hlc_style = (KChartHLCStyle)params.attribute("hlc_style").toInt( &ok );
+    if ( params.hasAttribute( "hlc_style" ) ) {
+        m_params->hlc_style = (KChartHLCStyle)params.attribute("hlc_style").toInt( &ok );
         if ( !ok )
             return false;
     }
-    if( params.hasAttribute( "hlc_cap_width" ) ) {
-        _params->hlc_cap_width = (short)params.attribute( "hlc_cap_width" ).toShort( &ok );
-        if( !ok )
+    if ( params.hasAttribute( "hlc_cap_width" ) ) {
+        m_params->hlc_cap_width = (short)params.attribute( "hlc_cap_width" ).toShort( &ok );
+        if ( !ok )
             return false;
     }
 
     QDomElement title = params.namedItem( "title" ).toElement();
-    if( !title.isNull()) {
+    if ( !title.isNull()) {
         QString t = title.text();
-        _params->title=t;
+        m_params->title=t;
     }
     QDomElement titlefont = params.namedItem( "titlefont" ).toElement();
-    if( !titlefont.isNull()) {
+    if ( !titlefont.isNull()) {
         QDomElement font = titlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setTitleFont(toFont(font));
+            m_params->setTitleFont(toFont(font));
     }
     QDomElement xtitle = params.namedItem( "xtitle" ).toElement();
-    if( !xtitle.isNull()) {
+    if ( !xtitle.isNull()) {
         QString t = xtitle.text();
-        _params->xtitle=t;
+        m_params->xtitle=t;
     }
     QDomElement xtitlefont = params.namedItem( "xtitlefont" ).toElement();
-    if( !xtitlefont.isNull()) {
+    if ( !xtitlefont.isNull()) {
         QDomElement font = xtitlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setXTitleFont(toFont(font));
+            m_params->setXTitleFont(toFont(font));
     }
     QDomElement ytitle = params.namedItem( "ytitle" ).toElement();
-    if( !ytitle.isNull()) {
+    if ( !ytitle.isNull()) {
         QString t = ytitle.text();
-        _params->ytitle=t;
+        m_params->ytitle=t;
     }
     QDomElement ytitle2 = params.namedItem( "ytitle2" ).toElement();
-    if( !ytitle2.isNull()) {
+    if ( !ytitle2.isNull()) {
         QString t = ytitle2.text();
-        _params->ytitle2=t;
+        m_params->ytitle2=t;
     }
     QDomElement ytitlefont = params.namedItem( "ytitlefont" ).toElement();
-    if( !ytitlefont.isNull()) {
+    if ( !ytitlefont.isNull()) {
         QDomElement font = ytitlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setYTitleFont(toFont(font));
+            m_params->setYTitleFont(toFont(font));
     }
     QDomElement ylabelfmt = params.namedItem( "ylabelfmt" ).toElement();
-    if( !ylabelfmt.isNull()) {
+    if ( !ylabelfmt.isNull()) {
         QString t = ylabelfmt.text();
-        _params->ylabel_fmt=t;
+        m_params->ylabel_fmt=t;
     }
     QDomElement ylabel2fmt = params.namedItem( "ylabel2fmt" ).toElement();
-    if( !ylabel2fmt.isNull()) {
+    if ( !ylabel2fmt.isNull()) {
         QString t = ylabel2fmt.text();
-        _params->ylabel2_fmt=t;
+        m_params->ylabel2_fmt=t;
     }
     QDomElement labelfont = params.namedItem( "labelfont" ).toElement();
-    if( !labelfont.isNull()) {
+    if ( !labelfont.isNull()) {
         QDomElement font = labelfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setLabelFont(toFont(font));
+            m_params->setLabelFont(toFont(font));
     }
 
     QDomElement yaxisfont = params.namedItem( "yaxisfont" ).toElement();
-    if( !yaxisfont.isNull()) {
+    if ( !yaxisfont.isNull()) {
         QDomElement font = yaxisfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setYAxisFont(toFont(font));
+            m_params->setYAxisFont(toFont(font));
     }
 
     QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
-    if( !xaxisfont.isNull()) {
+    if ( !xaxisfont.isNull()) {
         QDomElement font = xaxisfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setXAxisFont(toFont(font));
+            m_params->setXAxisFont(toFont(font));
     }
     QDomElement annotationFont = params.namedItem("annotationfont").toElement();
-    if( !annotationFont.isNull()) {
+    if ( !annotationFont.isNull()) {
         QDomElement font = annotationFont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            _params->setAnnotationFont(toFont(font));
+            m_params->setAnnotationFont(toFont(font));
     }
 
     QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
-    if( !yaxis.isNull()) {
-        if(yaxis.hasAttribute( "yinterval" )) {
-            _params->requested_yinterval= yaxis.attribute("yinterval").toDouble( &ok );
+    if ( !yaxis.isNull()) {
+        if (yaxis.hasAttribute( "yinterval" )) {
+            m_params->requested_yinterval= yaxis.attribute("yinterval").toDouble( &ok );
             if ( !ok ) return false;
         }
-        if(yaxis.hasAttribute( "ymin" )) {
-            _params->requested_ymin= yaxis.attribute("ymin").toDouble( &ok );
+        if (yaxis.hasAttribute( "ymin" )) {
+            m_params->requested_ymin= yaxis.attribute("ymin").toDouble( &ok );
             if ( !ok ) return false;
         }
-        if(yaxis.hasAttribute( "ymax" ) ) {
-            _params->requested_ymax= yaxis.attribute("ymax").toDouble( &ok );
+        if (yaxis.hasAttribute( "ymax" ) ) {
+            m_params->requested_ymax= yaxis.attribute("ymax").toDouble( &ok );
             if ( !ok ) return false;
         }
     }
 #endif
 
     QDomElement graph = params.namedItem( "graph" ).toElement();
-    if(!graph.isNull()) {
-        if(graph.hasAttribute( "grid" )) {
+    if (!graph.isNull()) {
+        if (graph.hasAttribute( "grid" )) {
             bool b=(bool) graph.attribute("grid").toInt( &ok );
-            _params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,b );
-            _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,b );
-            if(!ok) return false;
+            m_params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,b );
+            m_params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,b );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute( "xaxis" )) {
+        if (graph.hasAttribute( "xaxis" )) {
             bool b=(bool) graph.attribute("xaxis").toInt( &ok );
-            if(!ok) return false;
-            _params->setAxisVisible(KDChartAxisParams::AxisPosBottom,b);
+            if (!ok) return false;
+            m_params->setAxisVisible(KDChartAxisParams::AxisPosBottom,b);
         }
-        if(graph.hasAttribute( "yaxis" )) {
+        if (graph.hasAttribute( "yaxis" )) {
             bool b=(bool) graph.attribute("yaxis").toInt( &ok );
-            if(!ok) return false;
-            _params->setAxisVisible(KDChartAxisParams::AxisPosLeft,b);
+            if (!ok) return false;
+            m_params->setAxisVisible(KDChartAxisParams::AxisPosLeft,b);
         }
 #if 0
         //no implemented
-        if(graph.hasAttribute( "shelf" )) {
-            _params->shelf=(bool) graph.attribute("shelf").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "shelf" )) {
+            m_params->shelf=(bool) graph.attribute("shelf").toInt( &ok );
+            if (!ok) return false;
         }
 #endif
-        if(graph.hasAttribute( "yaxis2" )) {
+        if (graph.hasAttribute( "yaxis2" )) {
             bool b=(bool) graph.attribute("yaxis2").toInt( &ok );
-            if(!ok) return false;
-            _params->setAxisVisible(KDChartAxisParams::AxisPosRight,b);
+            if (!ok) return false;
+            m_params->setAxisVisible(KDChartAxisParams::AxisPosRight,b);
         }
 
 #if 0
         //no implemented
-        if(graph.hasAttribute( "ystyle" )) {
-            _params->yval_style=(bool) graph.attribute("ystyle").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "ystyle" )) {
+            m_params->yval_style=(bool) graph.attribute("ystyle").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute( "border" )) {
-            _params->border=(bool) graph.attribute("border").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "border" )) {
+            m_params->border=(bool) graph.attribute("border").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute( "transbg" )) {
-            _params->transparent_bg=(bool) graph.attribute("transbg").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "transbg" )) {
+            m_params->transparent_bg=(bool) graph.attribute("transbg").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute( "xlabel" )) {
-            _params->hasxlabel=(bool) graph.attribute("xlabel").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "xlabel" )) {
+            m_params->hasxlabel=(bool) graph.attribute("xlabel").toInt( &ok );
+            if (!ok) return false;
         }
-        if( graph.hasAttribute( "xlabel_spacing" ) ) {
-            _params->xlabel_spacing = (short)graph.attribute( "xlabel_spacing" ).toShort( &ok );
-            if( !ok )
+        if ( graph.hasAttribute( "xlabel_spacing" ) ) {
+            m_params->xlabel_spacing = (short)graph.attribute( "xlabel_spacing" ).toShort( &ok );
+            if ( !ok )
                 return false;
         }
-        if( graph.hasAttribute( "ylabel_density" ) ) {
-            _params->ylabel_density = (short)graph.attribute( "ylabel_density" ).toShort( &ok );
-            if( !ok )
+        if ( graph.hasAttribute( "ylabel_density" ) ) {
+            m_params->ylabel_density = (short)graph.attribute( "ylabel_density" ).toShort( &ok );
+            if ( !ok )
                 return false;
         }
-        if(graph.hasAttribute( "line")) {
-            _params->label_line=(bool) graph.attribute("line").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "line")) {
+            m_params->label_line=(bool) graph.attribute("line").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute( "percent")) {
-            _params->percent_labels=(KChartPercentType) graph.attribute("percent").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute( "percent")) {
+            m_params->percent_labels=(KChartPercentType) graph.attribute("percent").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute("cross")) {
-            _params->cross=(bool) graph.attribute("cross").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute("cross")) {
+            m_params->cross=(bool) graph.attribute("cross").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute("thumbnail")) {
-            _params->thumbnail=(bool) graph.attribute("thumbnail").toInt( &ok );
-            if(!ok) return false;
+        if (graph.hasAttribute("thumbnail")) {
+            m_params->thumbnail=(bool) graph.attribute("thumbnail").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graph.hasAttribute("thumblabel")) {
-            _params->thumblabel= graph.attribute("thumblabel");
+        if (graph.hasAttribute("thumblabel")) {
+            m_params->thumblabel= graph.attribute("thumblabel");
         }
-        if(graph.hasAttribute("thumbval")) {
-            _params->thumbval=(bool) graph.attribute("thumbval").toDouble( &ok );
-            if(!ok)
+        if (graph.hasAttribute("thumbval")) {
+            m_params->thumbval=(bool) graph.attribute("thumbval").toDouble( &ok );
+            if (!ok)
                 return false;
         }
 #endif
@@ -959,217 +992,217 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
 
 #if 0
     QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
-    if(!graphparams.isNull()) {
-        if(graphparams.hasAttribute( "dept3d" )) {
-            _params->_3d_depth=graphparams.attribute("dept3d").toDouble( &ok );
-            if(!ok) return false;
+    if (!graphparams.isNull()) {
+        if (graphparams.hasAttribute( "dept3d" )) {
+            m_params->_3d_depth=graphparams.attribute("dept3d").toDouble( &ok );
+            if (!ok) return false;
         }
-        if(graphparams.hasAttribute( "angle3d" )) {
-            _params->_3d_angle=graphparams.attribute("angle3d").toShort( &ok );
-            if(!ok) return false;
+        if (graphparams.hasAttribute( "angle3d" )) {
+            m_params->_3d_angle=graphparams.attribute("angle3d").toShort( &ok );
+            if (!ok) return false;
         }
-        if(graphparams.hasAttribute( "barwidth" )) {
-            _params->bar_width=graphparams.attribute("barwidth").toShort( &ok );
-            if(!ok) return false;
+        if (graphparams.hasAttribute( "barwidth" )) {
+            m_params->bar_width=graphparams.attribute("barwidth").toShort( &ok );
+            if (!ok) return false;
         }
-        if(graphparams.hasAttribute( "colpie" )) {
-            _params->colPie=graphparams.attribute("colpie").toInt( &ok );
-            if(!ok) return false;
+        if (graphparams.hasAttribute( "colpie" )) {
+            m_params->colPie=graphparams.attribute("colpie").toInt( &ok );
+            if (!ok) return false;
         }
-        if(graphparams.hasAttribute( "other_threshold" )) {
-            _params->other_threshold=graphparams.attribute("other_threshold").toShort( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "other_threshold" )) {
+            m_params->other_threshold=graphparams.attribute("other_threshold").toShort( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "offsetCol" )) {
-            _params->offsetCol = graphparams.attribute("offsetCol").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "offsetCol" )) {
+            m_params->offsetCol = graphparams.attribute("offsetCol").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "hard_size" )) {
-            _params->hard_size = (bool)graphparams.attribute("hard_size").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "hard_size" )) {
+            m_params->hard_size = (bool)graphparams.attribute("hard_size").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "hard_graphheight" )) {
-            _params->hard_graphheight = graphparams.attribute("hard_graphheight").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "hard_graphheight" )) {
+            m_params->hard_graphheight = graphparams.attribute("hard_graphheight").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "hard_graphwidth" )) {
-            _params->hard_graphwidth = graphparams.attribute("hard_graphwidth").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "hard_graphwidth" )) {
+            m_params->hard_graphwidth = graphparams.attribute("hard_graphwidth").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "hard_xorig" )) {
-            _params->hard_xorig = graphparams.attribute("hard_xorig").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "hard_xorig" )) {
+            m_params->hard_xorig = graphparams.attribute("hard_xorig").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "hard_yorig" )) {
-            _params->hard_yorig = graphparams.attribute("hard_yorig").toInt( &ok );
-            if(!ok)
+        if (graphparams.hasAttribute( "hard_yorig" )) {
+            m_params->hard_yorig = graphparams.attribute("hard_yorig").toInt( &ok );
+            if (!ok)
                 return false;
         }
-        if(graphparams.hasAttribute( "labeldist" )) {
-            _params->label_dist=graphparams.attribute("labeldist").toInt( &ok );
-            if(!ok) return false;
+        if (graphparams.hasAttribute( "labeldist" )) {
+            m_params->label_dist=graphparams.attribute("labeldist").toInt( &ok );
+            if (!ok) return false;
         }
     }
 
     QDomElement graphcolor = params.namedItem( "graphcolor" ).toElement();
-    if(!graphcolor.isNull()) {
-        if(graphcolor.hasAttribute( "bgcolor" )) {
-            _params->BGColor= QColor( graphcolor.attribute( "bgcolor" ) );
+    if (!graphcolor.isNull()) {
+        if (graphcolor.hasAttribute( "bgcolor" )) {
+            m_params->BGColor= QColor( graphcolor.attribute( "bgcolor" ) );
         }
-        if(graphcolor.hasAttribute( "gridcolor" )) {
-            _params->GridColor= QColor( graphcolor.attribute( "gridcolor" ) );
+        if (graphcolor.hasAttribute( "gridcolor" )) {
+            m_params->GridColor= QColor( graphcolor.attribute( "gridcolor" ) );
         }
-        if(graphcolor.hasAttribute( "linecolor" )) {
-            _params->LineColor= QColor( graphcolor.attribute( "linecolor" ) );
+        if (graphcolor.hasAttribute( "linecolor" )) {
+            m_params->LineColor= QColor( graphcolor.attribute( "linecolor" ) );
         }
-        if(graphcolor.hasAttribute( "plotcolor" )) {
-            _params->PlotColor= QColor( graphcolor.attribute( "plotcolor" ) );
+        if (graphcolor.hasAttribute( "plotcolor" )) {
+            m_params->PlotColor= QColor( graphcolor.attribute( "plotcolor" ) );
         }
-        if(graphcolor.hasAttribute( "volcolor" )) {
-            _params->VolColor= QColor( graphcolor.attribute( "volcolor" ) );
+        if (graphcolor.hasAttribute( "volcolor" )) {
+            m_params->VolColor= QColor( graphcolor.attribute( "volcolor" ) );
         }
-        if(graphcolor.hasAttribute( "titlecolor" )) {
-            _params->TitleColor= QColor( graphcolor.attribute( "titlecolor" ) );
+        if (graphcolor.hasAttribute( "titlecolor" )) {
+            m_params->TitleColor= QColor( graphcolor.attribute( "titlecolor" ) );
         }
-        if(graphcolor.hasAttribute( "xtitlecolor" )) {
-            _params->XTitleColor= QColor( graphcolor.attribute( "xtitlecolor" ) );
+        if (graphcolor.hasAttribute( "xtitlecolor" )) {
+            m_params->XTitleColor= QColor( graphcolor.attribute( "xtitlecolor" ) );
         }
-        if(graphcolor.hasAttribute( "ytitlecolor" )) {
-            _params->YTitleColor= QColor( graphcolor.attribute( "ytitlecolor" ) );
+        if (graphcolor.hasAttribute( "ytitlecolor" )) {
+            m_params->YTitleColor= QColor( graphcolor.attribute( "ytitlecolor" ) );
         }
-        if(graphcolor.hasAttribute( "ytitle2color" )) {
-            _params->YTitle2Color= QColor( graphcolor.attribute( "ytitle2color" ) );
+        if (graphcolor.hasAttribute( "ytitle2color" )) {
+            m_params->YTitle2Color= QColor( graphcolor.attribute( "ytitle2color" ) );
         }
-        if(graphcolor.hasAttribute( "xlabelcolor" )) {
-            _params->XLabelColor= QColor( graphcolor.attribute( "xlabelcolor" ) );
+        if (graphcolor.hasAttribute( "xlabelcolor" )) {
+            m_params->XLabelColor= QColor( graphcolor.attribute( "xlabelcolor" ) );
         }
-        if(graphcolor.hasAttribute( "ylabelcolor" )) {
-            _params->YLabelColor= QColor( graphcolor.attribute( "ylabelcolor" ) );
+        if (graphcolor.hasAttribute( "ylabelcolor" )) {
+            m_params->YLabelColor= QColor( graphcolor.attribute( "ylabelcolor" ) );
         }
-        if(graphcolor.hasAttribute( "ylabel2color" )) {
-            _params->YLabel2Color= QColor( graphcolor.attribute( "ylabel2color" ) );
+        if (graphcolor.hasAttribute( "ylabel2color" )) {
+            m_params->YLabel2Color= QColor( graphcolor.attribute( "ylabel2color" ) );
         }
     }
 
     QDomElement annotation = params.namedItem( "annotation" ).toElement();
-    if(!annotation.isNull()) {
-        _params->annotation=new KChartAnnotationType;
-        if(annotation.hasAttribute( "color" )) {
-            _params->annotation->color= QColor( annotation.attribute( "color" ) );
+    if (!annotation.isNull()) {
+        m_params->annotation=new KChartAnnotationType;
+        if (annotation.hasAttribute( "color" )) {
+            m_params->annotation->color= QColor( annotation.attribute( "color" ) );
         }
-        if(annotation.hasAttribute( "point" )) {
-            _params->annotation->point=annotation.attribute("point").toDouble( &ok );
-            if(!ok) return false;
+        if (annotation.hasAttribute( "point" )) {
+            m_params->annotation->point=annotation.attribute("point").toDouble( &ok );
+            if (!ok) return false;
         }
     }
     QDomElement note = params.namedItem( "note" ).toElement();
     if ( !note.isNull()) {
         QString t = note.text();
-        _params->annotation->note=t;
+        m_params->annotation->note=t;
     }
 
     QDomElement scatter = params.namedItem( "scatter" ).toElement();
-    if( !scatter.isNull() ) {
-        _params->scatter = new KChartScatterType;
-        if( scatter.hasAttribute( "point" ) ) {
-            _params->scatter->point = scatter.attribute( "point" ).toDouble( &ok );
-            if( !ok )
+    if ( !scatter.isNull() ) {
+        m_params->scatter = new KChartScatterType;
+        if ( scatter.hasAttribute( "point" ) ) {
+            m_params->scatter->point = scatter.attribute( "point" ).toDouble( &ok );
+            if ( !ok )
                 return false;
         }
-        if( scatter.hasAttribute( "val" ) ) {
-            _params->scatter->val = scatter.attribute( "val" ).toDouble( &ok );
-            if( !ok )
+        if ( scatter.hasAttribute( "val" ) ) {
+            m_params->scatter->val = scatter.attribute( "val" ).toDouble( &ok );
+            if ( !ok )
                 return false;
         }
-        if( scatter.hasAttribute( "width" ) ) {
-            _params->scatter->width = scatter.attribute( "val" ).toUShort( &ok );
-            if( !ok )
+        if ( scatter.hasAttribute( "width" ) ) {
+            m_params->scatter->width = scatter.attribute( "val" ).toUShort( &ok );
+            if ( !ok )
                 return false;
         }
-        if( scatter.hasAttribute( "color" )) {
-            _params->scatter->color= QColor( scatter.attribute( "color" ) );
+        if ( scatter.hasAttribute( "color" )) {
+            m_params->scatter->color= QColor( scatter.attribute( "color" ) );
         }
-        if( scatter.hasAttribute( "ind" ) ) {
-            _params->scatter->ind = (KChartScatterIndType)scatter.attribute( "ind" ).toInt( &ok );
-            if( !ok )
+        if ( scatter.hasAttribute( "ind" ) ) {
+            m_params->scatter->ind = (KChartScatterIndType)scatter.attribute( "ind" ).toInt( &ok );
+            if ( !ok )
                 return false;
         }
     }
 
     QDomElement legend = chart.namedItem("legend").toElement();
-    if(!legend.isNull()) {
+    if (!legend.isNull()) {
         int number = legend.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
         QDomNode name = legend.firstChild();
-        _params->legend.clear();
+        m_params->legend.clear();
         for(int i=0; i<number; i++) {
-            if(name.isNull()) {
+            if (name.isNull()) {
                 kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
             QDomElement element = name.toElement();
-            if( !element.isNull() && element.tagName() == "name" ) {
+            if ( !element.isNull() && element.tagName() == "name" ) {
                 QString t = element.text();
-                _params->legend+=t;
+                m_params->legend+=t;
                 name = name.nextSibling();
             }
         }
 
     }
     QDomElement xlbl = chart.namedItem("xlbl").toElement();
-    if(!xlbl.isNull()) {
+    if (!xlbl.isNull()) {
         int number = xlbl.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
         QDomNode label = xlbl.firstChild();
-        _params->xlbl.clear();
+        m_params->xlbl.clear();
         for (int i=0; i<number; i++) {
             if (label.isNull()) {
                 kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
             QDomElement element = label.toElement();
-            if( !element.isNull() && element.tagName() == "label" ) {
+            if ( !element.isNull() && element.tagName() == "label" ) {
                 QString t = element.text();
-                _params->xlbl+=t;
+                m_params->xlbl+=t;
                 label = label.nextSibling();
             }
         }
     }
 
     QDomElement backgroundPixmap = chart.namedItem( "backgroundPixmap" ).toElement();
-    if( !backgroundPixmap.isNull() ) {
-        if( backgroundPixmap.hasAttribute( "name" ) )
-            _params->backgroundPixmapName = backgroundPixmap.attribute( "name" );
-        if( backgroundPixmap.hasAttribute( "isDirty" ) ) {
-            _params->backgroundPixmapIsDirty = (bool)backgroundPixmap.attribute( "isDirty" ).toInt( &ok );
-            if( !ok )
+    if ( !backgroundPixmap.isNull() ) {
+        if ( backgroundPixmap.hasAttribute( "name" ) )
+            m_params->backgroundPixmapName = backgroundPixmap.attribute( "name" );
+        if ( backgroundPixmap.hasAttribute( "isDirty" ) ) {
+            m_params->backgroundPixmapIsDirty = (bool)backgroundPixmap.attribute( "isDirty" ).toInt( &ok );
+            if ( !ok )
                 return false;
         }
-        if( backgroundPixmap.hasAttribute( "scaled" ) ) {
-            _params->backgroundPixmapScaled = (bool)backgroundPixmap.attribute( "scaled" ).toInt( &ok );
-            if( !ok )
+        if ( backgroundPixmap.hasAttribute( "scaled" ) ) {
+            m_params->backgroundPixmapScaled = (bool)backgroundPixmap.attribute( "scaled" ).toInt( &ok );
+            if ( !ok )
                 return false;
         }
-        if( backgroundPixmap.hasAttribute( "centered" ) ) {
-            _params->backgroundPixmapCentered = (bool)backgroundPixmap.attribute( "centered" ).toInt( &ok );
-            if( !ok )
+        if ( backgroundPixmap.hasAttribute( "centered" ) ) {
+            m_params->backgroundPixmapCentered = (bool)backgroundPixmap.attribute( "centered" ).toInt( &ok );
+            if ( !ok )
                 return false;
         }
-        if( backgroundPixmap.hasAttribute( "intensity" ) ) {
-            _params->backgroundPixmapIntensity = backgroundPixmap.attribute( "intensity" ).toFloat( &ok );
-            if( !ok )
+        if ( backgroundPixmap.hasAttribute( "intensity" ) ) {
+            m_params->backgroundPixmapIntensity = backgroundPixmap.attribute( "intensity" ).toFloat( &ok );
+            if ( !ok )
                 return false;
         }
     }
 
     QDomElement extcolor = chart.namedItem("extcolor").toElement();
-    if(!extcolor.isNull()) {
+    if (!extcolor.isNull()) {
         unsigned int number = extcolor.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
         QDomNode color = extcolor.firstChild();
@@ -1180,20 +1213,21 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 break;
             }
             QDomElement element = color.toElement();
-            if( !element.isNull()) {
-                if(element.hasAttribute( "name" )) {
-                    _params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));
+            if ( !element.isNull()) {
+                if (element.hasAttribute( "name" )) {
+                    m_params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));
                 }
                 color = color.nextSibling();
             }
         }
     }
-    if( !_params->backgroundPixmapName.isNull() ) {
-        _params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ));
-        _params->backgroundPixmapIsDirty = true;
+    if ( !m_params->backgroundPixmapName.isNull() ) {
+        m_params->backgroundPixmap.load( locate( "wallpaper", m_params->backgroundPixmapName ));
+        m_params->backgroundPixmapIsDirty = true;
     }
 #endif
     return true;
 }
+
 
 #include "kchart_part.moc"
