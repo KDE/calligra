@@ -1759,43 +1759,50 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      y = y0 =  markerRow();
 	      
               // HELP! This is by far to slow and inefficent!
-	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty()){
-
+	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty())
+		  {
 		  gotoLocation( markerColumn(), QMIN(0x7FFF,y+1  ), 0, make_select,true,true  );
-	      }
-	      else{
-		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF)))->isEmpty()){
-
-		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF  ){
-
-			  y ++;		  
-		      }
-		      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
-		  }else{
-		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty())){
-			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF ){
+		  }
+	      else
+		  {
+		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF)))->isEmpty())
+		      {
+		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF  )
+			  {
 			      y ++;		  
 			  }
-			  gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
-		      }else{
-			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty())){
-			      
-			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF ){
-				  y ++;		
+		      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+		      }
+		  else
+		      {
+		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty()))
+			  {
+			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
+			      {
+				  y ++;		  
 			      }
+			  gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+			  }
+		      else
+			  {
+			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty()))
+			      {
+			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
+				  {
+				      y ++;		
+				  }
 			      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
 			      
+			      }
 			  }
 		      }
 		  }
-	      }
 	  }
 	  repaint();
 
 	  return;
 
       case Key_Right:
-	  
 	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
@@ -1803,43 +1810,55 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
-	  else{
+	  else
+	      {
 
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
-
-	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty()){
-		  
+	      
+	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty())
+		  {
 		  gotoLocation( x+1, markerRow()  , 0, make_select,true,true  );
-	      }
-	      else{
-		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y))->isEmpty()){
+		  }
+	      else
+		  {
+		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y))->isEmpty())
+		      {
               // HELP! This is by far to slow and inefficent!
 
-		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <=26*26  ){
-
+		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <=26*26  )
+			  {
 			  x ++;		  
-		      }
+			  }
 		      gotoLocation( x, markerRow() , 0, make_select,true,true  );
-		  }else{
-		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty())){
-			  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x <= 26*26){
-			      x ++;		  
-			  }
-			  gotoLocation( x, markerRow(), 0, make_select,true,true  );
-		      }else{
-			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty())){
-
-			      while (( activeTable()->cellAt( x +1,y ))->isEmpty() && y <= 26*26 ){
-				  x ++;
+		      }
+		  else
+		      {
+			  if(!(activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty()))
+			      {
+				  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x <= 26*26)
+				      {
+					  x ++;		  
+				      }
+				  gotoLocation( x, markerRow(), 0, make_select,true,true  );
 			      }
-			      gotoLocation( x, markerRow(), 0, make_select,true,true  );
-			      
-			  }
+			  else
+			      {
+				  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty()))
+				      {
+					  
+					  while (( activeTable()->cellAt( x +1,y ))->isEmpty() && x <= 26*26 )
+					      {
+						  
+						  x ++;
+					      }
+					  gotoLocation( x, markerRow(), 0, make_select,true,true  );
+					  
+				      }
+			      }
 		      }
 		  }
 	      }
-	  }
 	  repaint();
 	  return;
 
@@ -1858,17 +1877,21 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
 
-	      if(!emptycell){
-		  while (!emptycell && !(activeTable()->cellAt( x - 1,y  ))->isEmpty() && x >= 0 ){
-              // HELP! This is by far to slow and inefficent!
-		      x --;
+	      if(!emptycell)
+		  {
+		      while (!emptycell && !(activeTable()->cellAt( x - 1,y  ))->isEmpty() && x >= 0 )
+			  {
+			  // HELP! This is by far to slow and inefficent!
+			  x --;
+			  }
 		  }
-	      }
-	      else{
-		  while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && x >= 0 ){
-		      x--;
+	      else
+		  {
+		      while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && x >= 0 )
+			  {
+			      x--;
+			  }
 		  }
-	      }
 	      gotoLocation( QMAX(x,1),markerRow()  , 0, make_select,true,true );
 	      repaint();
 	  }
