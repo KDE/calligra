@@ -223,6 +223,27 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         ytitlefont.appendChild( doc.createElement( "font",_params->yTitleFont() ) );
         params.appendChild(ytitlefont);
         }
+   if((!_params->ylabel_fmt.isEmpty())||(!_params->ylabel2_fmt.isEmpty()))
+        {
+        if(!_params->ylabel_fmt.isEmpty())
+                {
+                QDomElement ylabelfmt = doc.createElement( "ylabelfmt" );
+                ylabelfmt.appendChild( doc.createTextNode( _params->ylabel_fmt ) );
+                params.appendChild( ylabelfmt );
+                }
+        if(!_params->ylabel2_fmt.isEmpty())
+                {
+                QDomElement ylabel2fmt = doc.createElement( "ylabel2fmt" );
+                ylabel2fmt.appendChild( doc.createTextNode( _params->ylabel2_fmt ) );
+                params.appendChild( ylabel2fmt );
+                }
+
+        }
+
+  QDomElement labelfont = doc.createElement("labelfont");
+  labelfont.appendChild( doc.createElement( "font",_params->labelFont() ) );
+  params.appendChild(labelfont);
+
   QDomElement yaxis = doc.createElement("yaxis");
   yaxis.setAttribute("ymin",_params->requested_ymin);
   yaxis.setAttribute("ymax",_params->requested_ymax);
@@ -376,6 +397,26 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	    if ( !font.isNull() )
 		_params->setYTitleFont(font.toFont());
         }
+  QDomElement ylabelfmt = params.namedItem( "ylabelfmt" ).toElement();
+    if ( !ylabelfmt.isNull())
+        {
+         QString t = ylabelfmt.text();
+         _params->ylabel_fmt=t;
+        }
+  QDomElement ylabel2fmt = params.namedItem( "ylabel2fmt" ).toElement();
+    if ( !ylabel2fmt.isNull())
+        {
+         QString t = ylabel2fmt.text();
+         _params->ylabel2_fmt=t;
+        }
+  QDomElement labelfont = params.namedItem( "labelfont" ).toElement();
+    if ( !labelfont.isNull())
+        {
+        QDomElement font = labelfont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setLabelFont(font.toFont());
+        }
+
   QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
     if ( !yaxis.isNull())
         {
@@ -460,7 +501,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         }
    QDomElement graphcolor = params.namedItem( "graphcolor" ).toElement();
    if(!graphcolor.isNull())
-        { cout <<"Chargement des couleurs\n";
+        {
          if(graphcolor.hasAttribute( "bgcolor" ))
                 {
                 _params->BGColor= QColor( graphcolor.attribute( "bgcolor" ) );
@@ -549,6 +590,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.15  2000/01/05 07:50:22  mlaurent
+ * Improved save parameters
+ *
  * Revision 1.14  2000/01/04 21:02:31  mlaurent
  * Start save parameters in file
  *

@@ -74,8 +74,12 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   tmpLabel->setText(i18n("YLabel format : "));
   tmpLabel->setGeometry(10,480,80,30);
   ylabel_fmt=new QLineEdit(this);
-  //don't work %g not remove before to put text
-  //ylabel_fmt->setText(_chart->params()->ylabel_fmt);
+
+  if( !_chart->params()->ylabel_fmt.isEmpty())
+        {
+        int len=_chart->params()->ylabel_fmt.length();
+         ylabel_fmt->setText(_chart->params()->ylabel_fmt.right(len-3));
+        }
   ylabel_fmt->setGeometry( 100, 480, 110, 30 );
   /*connect( grid, SIGNAL( toggled( bool ) ),
 	   this, SLOT( setGrid( bool ) ) );
@@ -192,16 +196,27 @@ void kchartWizardSetupAxesPage::apply()
  _chart->params()->grid =grid->isChecked() ;
  if( !y_interval->text().isEmpty())
         _chart->params()->requested_yinterval=y_interval->text().toDouble();
+ else
+        _chart->params()->requested_yinterval=-MAXDOUBLE;
  if( !y_max->text().isEmpty())
         _chart->params()->requested_ymax=y_max->text().toDouble();
+ else
+        _chart->params()->requested_ymax= -MAXDOUBLE;
  if( !y_min->text().isEmpty())
         _chart->params()->requested_ymin=y_min->text().toDouble();
+ else
+        _chart->params()->requested_ymin=MAXDOUBLE;
+
  _chart->params()->border =border->isChecked() ;
  _chart->params()->_3d_angle=angle->value();
  if(! ylabel_fmt->text().isEmpty())
         {
         QString tmp="%g "+ylabel_fmt->text();
         _chart->params()->ylabel_fmt=tmp;
+        }
+ else
+        {
+        _chart->params()->ylabel_fmt="";
         }
 }
 /*

@@ -2,3 +2,10 @@
 ------------------------------------------------------
 -Start to save parameters in file
 -Add parameters in KchartWizard
+
+2000-01-05 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now you can put a format in Ylabel (ex: mV => you look at 1 mV 2mV in yaxis)
+-Save and load colors
+-Save and load ylabel_fmt and ylabel2_fmt
+ 
