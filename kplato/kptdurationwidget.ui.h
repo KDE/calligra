@@ -42,7 +42,7 @@ void KPTDurationWidget::subtractMonth()
 
 KPTDuration KPTDurationWidget::value()
 {
-    KPTDuration result(hhmmss->time());
+    KPTDuration result(hhmmss->time().hour(), hhmmss->time().minute(), hhmmss->time().second());
     result.addDays(days->value());
     
     return result;
@@ -61,9 +61,14 @@ void KPTDurationWidget::hhmmss_valueChanged( const QTime & )
 
 void KPTDurationWidget::setValue( const KPTDuration &duration )
 {
-    KPTDuration tmp = duration;
-    tmp.addDays(-duration.days());
-    hhmmss->setTime(tmp.time());
-    days->setValue(duration.days());
+    unsigned days;
+    unsigned hours;
+    unsigned minutes;
+    unsigned seconds;
+
+    duration.get(&days, &hours, &minutes, &seconds);
+    QTime tmp(days, hours, minutes, seconds);
+    hhmmss->setTime(tmp);
+    this->days->setValue(days);
     emit valueChanged();
 }

@@ -477,8 +477,8 @@ public:
   */
 class KPTEffort {
 public:
-    KPTEffort ( KPTDuration e = KPTDuration(), KPTDuration p = KPTDuration(),
-		KPTDuration o = KPTDuration() );
+    KPTEffort ( KPTDuration e = KPTDuration::zeroDuration, KPTDuration p = KPTDuration::zeroDuration,
+		KPTDuration o = KPTDuration::zeroDuration );
 
     KPTEffort ( double e, double p = 0, double o = 0);
     ~KPTEffort();
@@ -495,10 +495,10 @@ public:
     const KPTDuration& pessimistic() const {return m_pessimisticEffort;}
     const KPTDuration& expected() const {return m_expectedEffort;}
 
-    void set( KPTDuration e, KPTDuration p = 0, KPTDuration o = 0 );
+    void set( KPTDuration e, KPTDuration p = KPTDuration::zeroDuration, KPTDuration o = KPTDuration::zeroDuration );
     void set( int e, int p = -1, int o = -1 );
-    void set(int weeks, int days, int hours, int minutes);
-    void expectedEffort(int *weeks, int *days, int *hours, int *minutes);
+    void set(unsigned days, unsigned hours, unsigned minutes);
+    void expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes);
 
     bool load(QDomElement &element);
     void save(QDomElement &element) const;

@@ -21,117 +21,173 @@
 #include "kptdatetime.h"
 
 #include <kdebug.h>
+#include <qregexp.h>
 
 // Set the value of KPTDuration::zeroDuration to zero.
-const KPTDuration KPTDuration::zeroDuration( 0, 0 );
+const KPTDuration KPTDuration::zeroDuration( 0, 0, 0 );
 
 KPTDuration::KPTDuration() {
-    zero = QDateTime(QDate(0,1,1));
-    m_theTime = QDateTime(QDate(0,1,1));
+    m_ms = 0;
 }
 
 KPTDuration::KPTDuration(const KPTDuration &d) {
-    zero = QDateTime(QDate(0,1,1));
-    set(d.m_theTime);
+    m_ms = d.m_ms;
 }
 
-KPTDuration::KPTDuration(int h, int m, int s, int ms) {
-    zero = QDateTime(QDate(0,1,1));
-    m_theTime = QDateTime(QDate(0,1,1));
-    int dur = h*3600+m*60+s;
-    m_theTime = m_theTime.addSecs(dur);
-    //kdDebug()<<k_funcinfo<<m_theTime.toString()<<endl;
+KPTDuration::KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
+    m_ms = ms;
+    m_ms += s * 1000;
+    m_ms += m * 60 * 1000;
+    m_ms += h * 60 * 60 * 1000;
+    m_ms += d * 24 * 60 * 60 * 1000;
 }
 
-KPTDuration::KPTDuration(const QTime time) {
-    zero = QDateTime(QDate(0,1,1));
-    m_theTime = QDateTime(QDate(0,1,1),time);
+KPTDuration::KPTDuration(unsigned seconds) {
+    m_ms = seconds * 1000;
 }
-
-KPTDuration::KPTDuration(const QDateTime time) {
-    zero = QDateTime(QDate(0,1,1));
-    m_theTime = time;
-}
-
-KPTDuration::KPTDuration(int seconds) {
-    zero = QDateTime(QDate(0,1,1));
-    m_theTime = QDateTime(QDate(0,1,1));
-    m_theTime = m_theTime.addSecs(seconds);
-}
-
 
 KPTDuration::~KPTDuration() {
 }
 
-void KPTDuration::add(KPTDuration time) {
-    int secs = zero.time().secsTo(time.time());
-    m_theTime = m_theTime.addDays(time.days());
-    m_theTime = m_theTime.addSecs(secs);
+void KPTDuration::add(const KPTDuration &delta) {
+    m_ms += delta.m_ms;
 }
 
-void KPTDuration::add(KPTDuration *time) {
-    add(*time);
-}
-
-void KPTDuration::subtract(const KPTDuration &duration) {
-    kdDebug()<<"subtract "<<duration.toString()<<" from "<<m_theTime.toString()<<endl;
-    if (duration > *this) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<endl;
-        m_theTime = zero;
+void KPTDuration::add(Q_INT64 delta) {
+    Q_INT64 tmp = m_ms + delta;
+    if (tmp < 0) {
+        kdDebug()<<k_funcinfo<<"Underflow"<<delta<<" from "<<this->toString()<<endl;
+        m_ms = 0;
         return;
     }
-    m_theTime = m_theTime.addDays(-zero.date().daysTo(duration.date()));
-    m_theTime = m_theTime.addSecs(-zero.time().secsTo(duration.time()));
+    m_ms = tmp;
 }
 
-void KPTDuration::subtract(const KPTDuration *duration) {
-    subtract(*duration);
-}
-
-void const KPTDuration::set(const KPTDuration newTime) {
-    set(newTime.m_theTime);
-}
-
-void const KPTDuration::set(const QDateTime newTime) {
-    m_theTime.setDate(newTime.date());
-    m_theTime.setTime(newTime.time());
+void KPTDuration::subtract(const KPTDuration &delta) {
+    if (m_ms < delta.m_ms) {
+        kdDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from "<<this->toString()<<endl;
+        m_ms = 0;
+        return;
+    }
+    m_ms -= delta.m_ms;
 }
 
 KPTDuration KPTDuration::operator*(int unit) const {
     KPTDuration dur;
-    if (unit > 0)
-        dur.addSecs(unit*duration()); //FIXME
+    if (unit < 0) {
+        kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+    }
+    else {
+        dur.m_ms = m_ms * unit; //FIXME
+    }
     return dur;
 }
 
 KPTDuration KPTDuration::operator/(int unit) const {
     KPTDuration dur;
-    if (unit > 0)
-        dur.set(KPTDuration(duration()/unit)); //FIXME
+    if (unit <= 0) {
+        kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+    }
+    else {
+        dur.m_ms = m_ms / unit; //FIXME
+    }
     return dur;
 }
 
 bool KPTDuration::isCloseTo(const KPTDuration &d) const {
-    KPTDuration limit(0,0,30);
-    return (KPTDateTime(m_theTime) - KPTDateTime(d.dateTime())) < limit;
+    Q_INT64 limit = 30000;
+    Q_INT64 delta = m_ms - d.m_ms;
+   
+    return (delta >= 0) ? (delta < limit) : (-delta < limit);
 }
 
 QString KPTDuration::toString(Format format) const {
-    int days = zero.daysTo(m_theTime);
-    int secs = zero.time().secsTo(m_theTime.time());
+    Q_INT64 ms;
+    double days;
+    unsigned hours;
+    unsigned minutes;
+    unsigned seconds;
+    QString result;
+
     switch (format) {
-        case Format_DateTime:
-            return m_theTime.toString();
         case Format_Hour:
-            return QString("%1h%2m").arg(days*24 + secs/3600).arg((secs%3600)/60);
-        case Format_Day: {
-            return QString("%1.%2d").arg(days).arg(secs/8640);
-        }
-        case Format_Week: {
-            return QString("%1w%2.%3d").arg(days/7).arg(days%7).arg(secs/8640);
-        }
-        default: // avoid warning
+            ms = m_ms;
+            hours = ms / (1000 * 60 * 60);
+            ms -= hours * (1000 * 60 * 60);
+            minutes = ms / (1000 * 60);
+            result = QString("%1h%2m").arg(hours).arg(minutes);
+            break;
+        case Format_Day:
+            days = m_ms / (1000 * 60 * 60 * 24.0);
+            result = QString("%1d").arg(QString::number(days, 'f', 4));
+            break;
+        case Format_DayTime:
+            ms = m_ms;
+            days = m_ms / (1000 * 60 * 60 * 24);
+            ms -= (int)days * (1000 * 60 * 60 * 24);
+            hours = ms / (1000 * 60 * 60);
+            ms -= hours * (1000 * 60 * 60);
+            minutes = ms / (1000 * 60);
+            ms -= minutes * (1000 * 60);
+            seconds = ms / (1000);
+            ms -= seconds * (1000);
+            result.sprintf("%u %02u:%02u:%02u.%u", (unsigned)days, hours, minutes, seconds, (unsigned)ms);
+            break;
+        default:
+            kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
             break;
     }
-    return m_theTime.toString();
+    return result;
 }
+
+KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format) {
+    // FIXME: Older versions of this code saved durations as QDateTime's. To avoid
+    // making all test files instantly obsolete, we detect this case here. Before
+    // we ship, this should be removed!
+    if (s[1].isLetter())
+    {
+        QDateTime zero(QDate(0, 1, 1));
+	int seconds = zero.secsTo(QDateTime::fromString(s));
+        return KPTDuration(seconds);
+    }
+    QRegExp matcher;
+    KPTDuration tmp;
+    switch (format) {
+        case Format_DayTime:
+            matcher.setPattern("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$" );
+            matcher.search(s);
+            tmp.addDays(matcher.cap(1).toUInt());
+            tmp.addHours(matcher.cap(2).toUInt());
+            tmp.addMinutes(matcher.cap(3).toUInt());
+            tmp.addSeconds(matcher.cap(4).toUInt());
+            tmp.addMilliseconds(matcher.cap(5).toUInt());
+            break;
+        default:
+            kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
+            break;
+    }
+    return tmp;
+}
+
+void KPTDuration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
+    Q_INT64 ms;
+    unsigned tmp;
+
+    ms = m_ms;
+    tmp = ms / (1000 * 60 * 60 * 24);
+    *days = tmp;
+    ms -= tmp * (1000 * 60 * 60 * 24);
+    tmp = ms / (1000 * 60 * 60);
+    *hours = tmp;
+    ms -= tmp * (1000 * 60 * 60);
+    tmp = ms / (1000 * 60);
+    *minutes = tmp;
+    ms -= tmp * (1000 * 60);
+    tmp = ms / (1000);
+    if (seconds)
+        *seconds = tmp;
+    ms -= tmp * (1000);
+    if (milliseconds)
+        *milliseconds = ms;
+}
+

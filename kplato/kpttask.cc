@@ -33,7 +33,7 @@
 KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_resource.setAutoDelete(true);
     m_requests = 0;
-    KPTDuration d(24, 0);
+    KPTDuration d(1, 0, 0);
     m_effort = new KPTEffort(d) ;
 
     if (m_parent)
@@ -49,7 +49,7 @@ int KPTTask::type() const {
 	if ( numChildren() > 0 && !allChildrenDeleted()) {
 	  return KPTNode::Type_Summarytask;
 	}
-	else if ( 0 == effort()->expected().duration() ) {
+	else if ( 0 == effort()->expected().seconds() ) {
 		return KPTNode::Type_Milestone;
 	}
 	else {

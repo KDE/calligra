@@ -140,7 +140,7 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
-        dur->addSecs(1); // avoid bug in KDGannt
+        dur->addSeconds(1); // avoid bug in KDGannt
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
 	  item = new KPTGanttViewSummaryItem(parentItem, node);
@@ -167,7 +167,7 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
-        dur->addSecs(1); // avoid bug in KDGannt
+        dur->addSeconds(1); // avoid bug in KDGannt
 	// display summary item
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
@@ -194,7 +194,7 @@ void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *
 	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
-        dur->addSecs(1); // avoid bug in KDGannt
+        dur->addSeconds(1); // avoid bug in KDGannt
 	// display summary item
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
@@ -221,7 +221,7 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
-        dur->addSecs(1); // avoid bug in KDGannt
+        dur->addSeconds(1); // avoid bug in KDGannt
 	// display task item
 	KPTGanttViewTaskItem *item;
 	if ( parentItem ) {

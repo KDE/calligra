@@ -182,7 +182,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
     connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
 
 
-    connect(effort, SIGNAL(valueChanged()), SLOT(sendChanged()));
+    connect(effort, SIGNAL(valueChanged(const KPTDuration &)), SLOT(sendChanged()));
     connect(effortType, SIGNAL(activated(int)), SLOT(sendChanged()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));

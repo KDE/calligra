@@ -31,20 +31,12 @@ KPTDateTime::KPTDateTime(const QDate &date, const QTime &time) : QDateTime(date,
 }
 
 void KPTDateTime::add(const KPTDuration &duration) {
-    int days = KPTDuration::zeroDuration.dateTime().daysTo(duration.dateTime());
-    QTime t; //00:00:00
-    int secs = t.secsTo(duration.dateTime().time());
-    *this = addDays(days);
-    *this = addSecs(secs);
+    *this = addSecs(duration.seconds());
     //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
 void KPTDateTime::subtract(const KPTDuration &duration) {
-    int days =  KPTDuration::zeroDuration.dateTime().daysTo(duration.dateTime());
-    QTime t; //00:00:00
-    int secs = t.secsTo(duration.dateTime().time());
-    *this = addDays(-days);
-    *this = addSecs(-secs);
+    *this = addSecs(-duration.seconds());
     //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
@@ -52,10 +44,10 @@ KPTDuration KPTDateTime::duration(const KPTDateTime &dt) const {
     KPTDuration dur;
     if (*this > dt) {
         dur.addDays(dt.daysTo(*this));
-        dur.addSecs(dt.time().secsTo(time()));
+        dur.addSeconds(dt.time().secsTo(time()));
     } else {
         dur.addDays(daysTo(dt));
-        dur.addSecs(time().secsTo(dt.time()));
+        dur.addSeconds(time().secsTo(dt.time()));
     }
     //kdDebug()<<k_funcinfo<<"this="<<this->toString()<<" - dt="<<dt.toString()<<" gives: "<<dur.toString()<<endl;
     return dur;

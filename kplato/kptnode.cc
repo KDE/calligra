@@ -386,7 +386,7 @@ void KPTNode::set_pert_values( const KPTDateTime& time,
 
 const KPTDuration& KPTNode::optimisticDuration(const KPTDateTime &start)
 {
-    m_duration.set(KPTDuration::zeroDuration);
+    m_duration = KPTDuration::zeroDuration;
     if (m_effort)
         calcDuration(start, m_effort->optimistic());
     return m_duration;
@@ -394,7 +394,7 @@ const KPTDuration& KPTNode::optimisticDuration(const KPTDateTime &start)
 
 const KPTDuration& KPTNode::pessimisticDuration(const KPTDateTime &start)
 {
-    m_duration.set(KPTDuration::zeroDuration);
+    m_duration = KPTDuration::zeroDuration;
     if (m_effort)
         calcDuration(start, m_effort->pessimistic());
     return m_duration;
@@ -426,7 +426,7 @@ const KPTDuration& KPTNode::expectedDurationBackwards(const KPTDateTime &start)
 const KPTDuration& KPTNode::expectedDuration(const KPTDateTime &start)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    m_duration.set(KPTDuration::zeroDuration);
+    m_duration = KPTDuration::zeroDuration;
     if (m_effort)
         calcDuration(start, m_effort->expected());
     return m_duration;
@@ -442,7 +442,7 @@ const KPTDuration& KPTNode::expectedDuration() const
 void KPTNode::calcDuration( const KPTDateTime &time, const KPTDuration &effort, bool forward)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    m_duration.add(effort);
+    m_duration += effort;
 }
 
 QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
@@ -531,16 +531,16 @@ const KPTEffort KPTEffort::zeroEffort( KPTDuration::zeroDuration,
                        KPTDuration::zeroDuration );
 
 void KPTEffort::set( KPTDuration e, KPTDuration p, KPTDuration o ) {
-    m_expectedEffort.set(e);
-    p == KPTDuration::zeroDuration ? m_pessimisticEffort.set(e) :  m_pessimisticEffort.set(p);
-    o == KPTDuration::zeroDuration ? m_optimisticEffort.set(e) : m_optimisticEffort.set(o);
+    m_expectedEffort = e;
+    m_pessimisticEffort = (p == KPTDuration::zeroDuration) ? e :  p;
+    m_optimisticEffort = (o == KPTDuration::zeroDuration) ? e :  o;
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
 }
 
 void KPTEffort::set( int e, int p, int o ) {
-    m_expectedEffort.set(KPTDuration(e));
-    p < 0 ? m_pessimisticEffort.set(KPTDuration(e)) :  m_pessimisticEffort.set(KPTDuration(p));
-    o < 0 ? m_optimisticEffort.set(KPTDuration(e)) : m_optimisticEffort.set(KPTDuration(o));
+    m_expectedEffort = KPTDuration(e);
+    m_pessimisticEffort = (p < 0) ? KPTDuration(e) :  KPTDuration(p);
+    m_optimisticEffort = (o < 0) ? KPTDuration(e) :  KPTDuration(o);
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
     //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
     //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
@@ -549,25 +549,20 @@ void KPTEffort::set( int e, int p, int o ) {
 }
 
 //TODO (?): effort is not really a duration, should maybe not use KPTDuration for storage
-void KPTEffort::set(int weeks, int days, int hours, int minutes) {
-    KPTDuration dur;
-    dur.addSecs(hours*3600+minutes*60);
-    dur.addDays(weeks*5+days); //FIXME: workdays in a week
+void KPTEffort::set(unsigned days, unsigned hours, unsigned minutes) {
+    KPTDuration dur(days, hours, minutes);
     set(dur);
     //kdDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
 }
 
-void KPTEffort::expectedEffort(int *weeks, int *days, int *hours, int *minutes) {
-    *hours = m_expectedEffort.time().hour();
-    *minutes = m_expectedEffort.time().minute();
-    *days = m_expectedEffort.days();
-    *weeks = 0;
+void KPTEffort::expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes) {
+    m_expectedEffort.get(days, hours, minutes);
 }
 
 bool KPTEffort::load(QDomElement &element) {
-    m_expectedEffort = KPTDuration(QDateTime::fromString(element.attribute("expected")));
-    m_optimisticEffort = KPTDuration(QDateTime::fromString(element.attribute("optimistic")));
-    m_pessimisticEffort = KPTDuration(QDateTime::fromString(element.attribute("pessimistic")));
+    m_expectedEffort = KPTDuration::fromString(element.attribute("expected"));
+    m_optimisticEffort = KPTDuration::fromString(element.attribute("optimistic"));
+    m_pessimisticEffort = KPTDuration::fromString(element.attribute("pessimistic"));
     setType(element.attribute("type", "WorkBased"));
     return true;
 }
@@ -607,7 +602,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     QString s = "  Constraint: " + constraintToString();
     kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;
     //kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" secs")<<" ("<<m_duration.toString()<<")"<<endl;
+    kdDebug()<<indent<<"  Duration: "<<m_duration.seconds()<<QCString(" secs")<<" ("<<m_duration.toString()<<")"<<endl;
     kdDebug()<<indent<<"  Start time: "<<m_startTime.toString()<<endl;
     kdDebug()<<indent<<"  End time: " <<m_endTime.toString()<<endl;
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;

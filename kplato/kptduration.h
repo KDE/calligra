@@ -20,11 +20,8 @@
 #ifndef kptduration_h
 #define kptduration_h
 
-#include <math.h>
-
-#include <qdatetime.h>
-
-class KPTDuration;
+#include <qglobal.h>
+#include <qstring.h>
 
 /**
  * The duration class can be used to store a timespan in a convenient format.
@@ -32,40 +29,60 @@ class KPTDuration;
  */
 class KPTDuration {
     public:
-        enum Format { Format_DateTime, Format_Hour, Format_Day, Format_Week };
+        /**
+         * DayTime  = d hh:mm:ss.sss
+         * Day      = d.ddd
+         * Hour     = hh:mm
+         */
+        enum Format { Format_DayTime, Format_Day, Format_Hour };
 
         KPTDuration();
         KPTDuration(const KPTDuration &d);
-        KPTDuration(int h, int m, int s=0, int ms=0);
-        KPTDuration(const QTime time);
-        KPTDuration(const QDateTime time);
-        KPTDuration(int seconds);
+        KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
+        KPTDuration(unsigned s);
         ~KPTDuration();
 
-        void add(KPTDuration time);
-        void add(KPTDuration *time);
-        void addSecs(int secs) { m_theTime = m_theTime.addSecs(secs); }
-        void addDays(int days) { m_theTime = m_theTime.addDays(days); }
-        void addMonths(int months) { m_theTime = m_theTime.addMonths(months); }
-        void addYears(int years) { m_theTime = m_theTime.addYears(years); }
         /**
-         * Subtracts @param duration from *this.
-         * If @param duration > *this, *this is set to zeroDuration.
+         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void subtract(const KPTDuration &duration);
-        void subtract(const KPTDuration *duration);
-        void const set(const KPTDuration newTime);
-        void const set(const QDateTime newTime);
+        void addMilliseconds(int delta)  { add(delta); }
 
-        int duration() const { return zero.secsTo(m_theTime); } // Note: this defies the use of QDateTime. We could just have used an int!
+        /**
+         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         */
+        void addSeconds(int delta) { addMilliseconds(delta * 1000); }
 
-        bool   operator==( const KPTDuration &d ) const { return m_theTime == d.m_theTime; }
-        bool   operator!=( const KPTDuration &d ) const { return m_theTime != d.m_theTime; }
-        bool   operator<( const KPTDuration &d ) const { return m_theTime < d.m_theTime; }
-        bool   operator<=( const KPTDuration &d ) const { return m_theTime <= d.m_theTime; }
-        bool   operator>( const KPTDuration &d ) const { return m_theTime > d.m_theTime; }
-        bool   operator>=( const KPTDuration &d ) const { return m_theTime >= d.m_theTime; }
-        KPTDuration &operator=(const KPTDuration &d ) { set(d); return *this;}
+        /**
+         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         */
+        void addMinutes(int delta) { addSeconds(delta * 60); }
+
+        /**
+         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         */
+        void addHours(int delta) { addMinutes(delta * 60); }
+
+        /**
+         * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
+         */
+        void addDays(int delta) { addHours(delta * 24); }
+
+        Q_INT64 milliseconds() const { return m_ms; }
+        unsigned seconds() const { return m_ms / 1000; }
+        unsigned minutes() const { return seconds() / 60; }
+        unsigned hours() const { return minutes() / 60; }
+        unsigned days() const { return hours() / 24; }
+        void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
+
+        bool isCloseTo(const KPTDuration &d) const;
+
+        bool   operator==( const KPTDuration &d ) const { return m_ms == d.m_ms; }
+        bool   operator!=( const KPTDuration &d ) const { return m_ms != d.m_ms; }
+        bool   operator<( const KPTDuration &d ) const { return m_ms < d.m_ms; }
+        bool   operator<=( const KPTDuration &d ) const { return m_ms <= d.m_ms; }
+        bool   operator>( const KPTDuration &d ) const { return m_ms > d.m_ms; }
+        bool   operator>=( const KPTDuration &d ) const { return m_ms >= d.m_ms; }
+        KPTDuration &operator=(const KPTDuration &d ) { m_ms = d.m_ms; return *this;}
         KPTDuration operator*(int unit) const; 
         KPTDuration operator/(int unit) const;
         
@@ -77,31 +94,28 @@ class KPTDuration {
             {KPTDuration dur; dur.subtract(d); return dur; }
         KPTDuration &operator-=(const KPTDuration &d) {subtract(d); return *this; }
 
-        QString toString(Format format = Format_DateTime) const;
-        static KPTDuration fromString(const QString &s) { return KPTDuration(QDateTime::fromString(s)); }
+        QString toString(Format format = Format_DayTime) const;
+        static KPTDuration fromString(const QString &s, Format format = Format_DayTime);
 
-        QDateTime dateTime() const { return m_theTime; }
-        QDate date() const { return m_theTime.date(); }
-        QTime time() const { return m_theTime.time(); }
-
-        QTime timeDuration() const { return QTime(m_theTime.time().hour()-zero.time().hour(),
-                                                                 m_theTime.time().minute()-zero.time().minute(),
-                                                                 m_theTime.time().second()-zero.time().second());
-        }
-
-        int days() const { return zero.daysTo(m_theTime); }
-        int hours() const { return zero.secsTo(m_theTime) / 3600; }
-        int hoursTo(const QDateTime &dt) const { return m_theTime.secsTo(dt) / 3600; }
-
-        bool isCloseTo(const KPTDuration &d) const;
-
-    /**
-     * This is useful for occasions where we need a zero duration.
-     */
-    static const KPTDuration zeroDuration;
+        /**
+         * This is useful for occasions where we need a zero duration.
+         */
+        static const KPTDuration zeroDuration;
 
     private:
-        QDateTime zero, m_theTime;
+	/**
+	 * Duration in milliseconds. Signed to allow for simple calculations which
+	 * might go negative for intermediate results.
+	 */
+        Q_INT64 m_ms;
+
+        void add(Q_INT64 delta);
+        void add(const KPTDuration &delta);
+
+        /**
+         * Subtracts @param delta from *this. If @param delta > *this, *this is set to zeroDuration.
+         */
+        void subtract(const KPTDuration &delta);
 };
 
 #endif
