@@ -92,3 +92,48 @@ void CStyle::imageFilename(const QString name) {
         data.image.filename[len]='\0';
     }
 }
+
+void CStyle::variableFontname(const QString name) {
+    if(_id==4) {
+        int len=name.length();
+        data.variable.fontname=new char[len+1];
+        strncpy(data.variable.fontname, (const char*)name, len);
+        data.variable.fontname[len]='\0';
+    }
+}
+
+void CStyle::footnoteFontname(const QString name) {
+    if(_id==5) {
+        int len=name.length();
+        data.footnote.fontname=new char[len+1];
+        strncpy(data.footnote.fontname, (const char*)name, len);
+        data.footnote.fontname[len]='\0';
+    }
+}
+
+void CStyle::footnoteBefore(const QString name) {
+    if(_id==5) {
+        int len=name.length();
+        data.footnote.before=new char[len+1];
+        strncpy(data.footnote.before, (const char*)name, len);
+        data.footnote.before[len]='\0';
+    }
+}
+
+void CStyle::footnoteAfter(const QString name) {
+    if(_id==5) {
+        int len=name.length();
+        data.footnote.after=new char[len+1];
+        strncpy(data.footnote.after, (const char*)name, len);
+        data.footnote.after[len]='\0';
+    }
+}
+
+void CStyle::footnoteRef(const QString name) {
+    if(_id==5) {
+        int len=name.length();
+        data.footnote.ref=new char[len+1];
+        strncpy(data.footnote.ref, (const char*)name, len);
+        data.footnote.ref[len]='\0';
+    }
+}
