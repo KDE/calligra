@@ -185,6 +185,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       m_docAutoFormat( autoFormat )
 {
     noSignal=true;
+    autocorrectionEntryChanged= false;
     setupTab1();
     setupTab2();
     setupTab3();
@@ -591,6 +592,9 @@ void KoAutoFormatDia::setupTab3()
 
 void KoAutoFormatDia::initTab3()
 {
+    //force to re-readconfig when we reset config and we change a entry
+    if ( autocorrectionEntryChanged )
+        m_docAutoFormat->readConfig( true );
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
@@ -622,6 +626,7 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
         m_docAutoFormat->readConfig( true );
         initTab3();
         initTab4();
+        autocorrectionEntryChanged=true;
         changeLanguage=false;
     }
 }
@@ -666,6 +671,7 @@ void KoAutoFormatDia::slotClearTextFormatEntry()
     {
         KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
         entry->clearFormatEntryContext( );
+        autocorrectionEntryChanged= true;
     }
 }
 
@@ -688,6 +694,7 @@ void KoAutoFormatDia::slotChangeTextFormatEntry()
         {
             dia->ctxOptions( );
             entry->setFormatEntryContext( tmpFormat );
+            autocorrectionEntryChanged= true;
 
         }
         else
@@ -707,6 +714,7 @@ void KoAutoFormatDia::slotRemoveEntry()
         m_docAutoFormat->removeAutoFormatEntry(m_pListView->currentItem()->text(0));
         pbAdd->setText(i18n("&Add"));
         refreshEntryList();
+        autocorrectionEntryChanged= true;
     }
 }
 
@@ -800,6 +808,7 @@ void KoAutoFormatDia::slotAddEntry()
     m_replace->clear();
 
     refreshEntryList();
+    autocorrectionEntryChanged= true;
 }
 
 
@@ -902,6 +911,14 @@ void KoAutoFormatDia::slotOk()
     {
        KDialogBase::slotOk();
     }
+}
+
+void KoAutoFormatDia::slotCancel()
+{
+    //force to reload
+    if ( autocorrectionEntryChanged )
+        m_docAutoFormat->readConfig( true );
+    KDialogBase::slotCancel();
 }
 
 void KoAutoFormatDia::chooseDoubleQuote1()

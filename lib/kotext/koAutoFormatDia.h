@@ -134,8 +134,12 @@ protected:
     KoAutoFormatExceptionWidget *twoUpperLetter;
     bool noSignal;
     bool changeLanguage;
+
+    bool autocorrectionEntryChanged;
 protected slots:
     virtual void slotOk();
+    virtual void slotCancel();
+
     void slotBulletStyleToggled( bool );
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
     void slotRemoveEntry();
