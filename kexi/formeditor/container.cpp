@@ -434,11 +434,11 @@ Container::createBoxLayout(WidgetList *list)
 void
 Container::createGridLayout()
 {
+	//Those lists sort widgets by y and x
 	VerWidgetList *vlist = new VerWidgetList();
 	HorWidgetList *hlist = new HorWidgetList();
-	int ncol = 0;
+	// The vector are used to store the x (or y) beginning of each column (or row)
 	QValueVector<int> cols;
-	int nrow = 0;
 	QValueVector<int> rows;
 	int end=-1000;
 	bool same = false;
@@ -451,14 +451,15 @@ Container::createGridLayout()
 		hlist->append( tree->widget());
 	hlist->sort();
 
+	// First we need to make sure that two widgets won't be in the same row, ie that no widget overlap another one
 	for(QWidget *w = vlist->first(); w; w = vlist->next())
 	{
 		QWidget *nextw = vlist->next();
 		if(!nextw)
 			break;
-		while(w->y() <= nextw->y() <= w->geometry().bottom())
+		while((w->y() <= nextw->y()) && (nextw->y() <= w->geometry().bottom()))
 		{
-			//kdDebug() << "examining the widget " << nextw->name() << "compared to " << w->name() << endl;
+			// If the geometries of the two widgets intersect each other, we move one of the widget to the rght or bottom of the other
 			if(w->geometry().intersects(nextw->geometry()))
 			{
 				if((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
@@ -475,25 +476,22 @@ Container::createGridLayout()
 				break;
 		}
 		QWidget *widg = vlist->prev();
-		//kdDebug() << "examining the next widget is" << widg << "and w is " << w->name() << endl;
 		if(!widg)
 			break;
+		// the list current item has to be w
 		while(w->name() != widg->name())
-		{
 			widg = vlist->prev();
-			//if(widg)
-				//kdDebug() << "making prev in the list " << widg->name() << endl;
-		}
 	}
 
+	// Then we count the number of rows in the layout, and set their beginnings
 	for(QWidget *w = vlist->first(); w; w = vlist->next())
 	{
-		if(!same)
+		if(!same) // this widget will make a new row
 		{
 			end = w->geometry().bottom();
-			nrow++;
 			rows.append(w->y());
 		}
+		// If same == true, it means we are in the same row as prev widget (so no need to create a new column, and we use)
 
 		QWidget *nextw = vlist->next();
 		if(!nextw)
@@ -515,16 +513,17 @@ Container::createGridLayout()
 				end = w->geometry().bottom();
 		}
 	}
-	kdDebug() << "the new grid will have n rows: n == " << nrow << endl;
+	kdDebug() << "the new grid will have n rows: n == " << rows.size() << endl;
 
 	end = -10000;
 	same = false;
+	// We do the same thing for the columns
 	for(QWidget *w = hlist->first(); w; w = hlist->next())
 	{
 		if(!same)
 		{
 			end = w->geometry().right();
-			ncol++;
+			//ncol++;
 			cols.append(w->x());
 		}
 
@@ -548,28 +547,32 @@ Container::createGridLayout()
 				end = w->geometry().right();
 		}
 	}
-	kdDebug() << "the new grid will have n columns: n == " << ncol << endl;
+	kdDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
 
-	QGridLayout *layout = new QGridLayout(m_container, nrow, ncol, 10, 2, "grid");
+	// We create the layout ..
+	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), 10, 2, "grid");
 	m_layout = (QLayout*)layout;
 
+	// .. and we fill it with widgets
 	for(QWidget *w = vlist->first(); w; w = vlist->next())
 	{
 		QRect r = w->geometry();
 		uint wcol=0, wrow=0, endrow=0, endcol=0;
 		uint i = 0;
 
+		// We look for widget row(s) ..
 		while(r.y() >= rows[i])
 		{
-			if(rows.size() <= i+1)
+			if(rows.size() <= i+1) // we are the last row
 			{
 				wrow = i;
 				break;
 			}
 			if(r.y() < rows[i+1])
 			{
-				wrow = i;
+				wrow = i; // the widget will be in this row
 				uint j = i + 1;
+				// Then we check if the widget needs to span multiple rows
 				while(rows.size() >= j+1 && r.bottom() > rows[j])
 				{
 					endrow = j;
@@ -582,10 +585,11 @@ Container::createGridLayout()
 		}
 		//kdDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<  " and will go to the row " << endrow << endl;
 
+		// .. and column(s)
 		i = 0;
 		while(r.x() >= cols[i])
 		{
-			if(cols.size() <= i+1)
+			if(cols.size() <= i+1) // last column
 			{
 				wcol = i;
 				break;
@@ -594,6 +598,7 @@ Container::createGridLayout()
 			{
 				wcol = i;
 				uint j = i + 1;
+				// Then we check if the widget needs to span multiple columns
 				while(cols.size() >= j+1 && r.right() > cols[j])
 				{
 					endcol = j;

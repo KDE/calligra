@@ -10,7 +10,6 @@
 	  (at least commercial) license mentions that there cannot be
 	  a project that is a replacement of the Qt developed out of the Qt)
 	4. It wouldn't hurt to ask them, as well.
-* Add grid layout (if really needed)
 * Add many other widgets :-)
 * Create db-aware widget factory
 
@@ -45,3 +44,4 @@
 * Remove all these " Q*** " names (3/08/04)
 * When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation) (3/11/04)
 * Add many other widgets :-) (part I : all basic widgets) (3/20/04)
+* Add grid layout (3/27/04)
