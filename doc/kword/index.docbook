@@ -37,7 +37,9 @@
   <!ENTITY mmerge SYSTEM "mailmerge.docbook">
   <!ENTITY insfile SYSTEM "insertfile.docbook">
   <!ENTITY bookmarks SYSTEM "bookmarks.docbook">
-
+  <!ENTITY migrating SYSTEM "migrating.docbook">
+  <!ENTITY chapnumb SYSTEM "chapnumb.docbook">
+  
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
@@ -61,8 +63,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-08-06</date>
-<releaseinfo>1.02.00</releaseinfo>
+<date>2002-10-18</date>
+<releaseinfo>1.03.00</releaseinfo>
 
 <abstract>
 <para>
@@ -70,7 +72,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes KWord 1.2.
+This manual describes KWord 1.3.
 </para>
 </abstract>
 
@@ -82,6 +84,35 @@ This manual describes KWord 1.2.
 </keywordset>
 
 </bookinfo>
+
+<!--
+TODO:
+- Horizontal lines
+- Endnotes
+- Delete from Document structure
+- Write Migrating section
+- Write Watermark proceedure
+- MDI vs SDI
+- Update Filters
+- Update screenshots/toobar icons
+- Write Chapter Numbering
+- Personal expressions path
+- "Copy link"
+- Spell check selected text
+- Word by word strikout and underline
+- Add offset from baseline
+- Convert table to text
+- How to change page numbering between different sections of the document proceedure
+- Personal dictionary
+- Variable - date of last printing
+- "myspell = openoffice dictionary
+- Edit ignore all list - RMB, etc
+- Autocorrection - capitalize name of the day.
+- Undo/Redo has changed to listbox
+- Global document language
+- Add personal expression from selected text
+
+-->
 
 <chapter id="introduction">
 <title>Introduction</title>
@@ -274,6 +305,8 @@ comments are stored in the &kword; file, and can be changed or deleted easily.</
 <listitem>
 <para>&kword; can load and save documents from other wordprocessing programs with an extensive list of filters.</para>
 </listitem>
+<listitem><para>&kword; can create PDF files.</para></listitem>
+
 <listitem>
 <para>You can edit one document from multiple views.  This allows you to have several windows open on <emphasis>one document
 </emphasis>.  Edits in one window are immediately updated in the other window.</para>
@@ -451,15 +484,12 @@ If any document variables were changed, &kword; will update their values through
 <para>The sections that are included in this chapter are for advanced users.  The instructions for these sections 
 will assume you are familiar with the basic operation of &kword;.</para>
 &struct;
-<!--<sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>-->
+&chapnumb;
 &mmerge;
 </chapter>
 
 <!-- **************************************************************************************************** -->
-<chapter id="migration">
-<title>Migrating to &kword;</title>
-<para></para>
-</chapter>
+&migrating;
 <!-- **************************************************************************************************** -->
 <chapter id="quickdirty">
 <title>How do I...</title>
@@ -555,8 +585,7 @@ headers in your document.</para>
 </sect1>
 
 <sect1 id="qd-pdf">
-<title>How do I create a <literal role="extension">.pdf</literal> file
-to post on the web?</title>
+<title>How do I create a <literal role="extension">.pdf</literal> file?</title>
 <para>&kword; differs slightly from other word processors here.  Instead of saving your file as a 
 <literal role="extension">.pdf</literal> file, you <emphasis>print</emphasis> your file to create the
 <literal role="extension">.pdf</literal> file.</para>
@@ -702,6 +731,14 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 </answer>
 </qandaentry>
 
+<qandaentry>
+<question id="symbolfonts">
+<para>Symbol fonts are not working well, what can I do?</para>
+</question>
+<answer>
+<para>ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip and http://www.stixfonts.org/</para>
+</answer>
+</qandaentry>
 
 
 </qandaset>

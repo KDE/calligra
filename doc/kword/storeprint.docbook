@@ -163,6 +163,9 @@ begin.</para>
 <para>Once you have entered text and data into a document, you will
 usually want to save this to a file on your hard drive.</para>
 
+<tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
+<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file</link>.</para></tip>
+
 <sect2 id="command-save">
 <title>The Save Command</title>
 
@@ -275,6 +278,9 @@ previous location.</para></important>
 
 <para>When you are in the folder you want to save the file in, type a filename into the
 <guilabel>Location</guilabel> box.</para>
+<tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
+<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file</link>.</para></tip>
+
 <tip><para> There is no need to put a <literal
 role="extension">.kwd</literal> at the end of your filename, &kword;
 will do this for you.</para></tip>
