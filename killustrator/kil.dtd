@@ -1,51 +1,30 @@
-<!-- Document Type Definition for the KIllustrator Markup Language 
+<!-- Document Type Definition for the KIllustrator Markup Language
      (KIL), the file format for KIllustrator.
-     version = 0.2  status = draft  date = 18/Feb/1999
-     syntax = XML author = kus@iti.cs.uni-magdeburg.de -->
+     version = 0.3  status = draft  date = 13/Jun/2001
+     syntax = XML author = rwlbuis@wanadoo.nl -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
-<!--
-     The base_content_attributes, font_attributes
--->
-<!ENTITY % base_content_attributes
-         'matrix      CDATA   #IMPLIED
-          strokecolor CDATA   "black"
-          strokestyle CDATA   #IMPLIED
-          linewidth   CDATA   "1"
-          fillcolor   CDATA   #IMPLIED
-          fillstyle   (0 | 1 | 2 | 3 | 4) "1"
-          fillpattern CDATA   #IMPLIED
-          gradstyle   (0 | 1 | 2 | 3 | 4 | 5)   #IMPLIED
-          gradcolor1  CDATA   #IMPLIED
-          gradcolor2  CDATA   #IMPLIED
-          id          ID      #IMPLIED
-          ref         IDREF   #IMPLIED'
+
+<!ELEMENT killustrator (head | page*) >
+<!ATTLIST killustrator editor  CDATA "KIllustrator"
+                       mime    CDATA "application/x-killustrator"
+                       version CDATA (1 | 2 | 3) "3"
 >
 
-<!-- ============================================================= -->
-<!--
-     The base_content_model, doc and head elements
--->
-<!ENTITY % base_content_model
-         '(rectangle | ellipse | text | polyline | polygon | 
-           bezier | group)*'
+<!ELEMENT head (grid) >
+<!ATTLIST head currentpagenum  CDATA #IMPLIED
 >
-
-<!ELEMENT doc (head, %base_content_model;) >
-<!ATTLIST doc editor CDATA "KIllustrator"
-              mime   CDATA "application/x-killustrator"
->
-
-<!ELEMENT head (layout, grid, helplines, info?) >
-
 <!-- ============================================================= -->
 <!--
      Header elements.
 -->
 
 <!--
-     The document layout.
+     The document layout
+     The page width, height and margins are given in the measure
+     specified in unit. Unit also is used for a number of other measurement
+     attributes in the document such as object and point positions..
 -->
 <!ELEMENT layout EMPTY >
 <!ATTLIST layout format      (a3 | a4 | a5 | usletter | uslegal | custom) "a4"
@@ -56,25 +35,28 @@
                  tmargin     CDATA #IMPLIED
                  rmargin     CDATA #IMPLIED
                  bmargin     CDATA #IMPLIED
-                 unit        (mm | cm | pt | inch) "pt"
+>
+
+
+<!--
+    page Information is grouped by pages
+-->
+<!ELEMENT page (layout | layer* >
+<!ATTLIST page id        CDATA #IMPLIED
 >
 
 <!--
-    Information about the document.
+     The document gridline info
+       dx - x size of grid
+       dy - y size of grid
+       align - 0 = no, 1 = yes.
 -->
-<!ELEMENT info EMPTY >
-<!ATTLIST info author        CDATA #IMPLIED
-               creation_date CDATA #IMPLIED
-               last_modified CDATA #IMPLIED
->
-
-<!--
-     The document layout.
--->
-<!ELEMENT grid EMPTY >
+<!ELEMENT grid (helplines) >
 <!ATTLIST grid dx    CDATA #IMPLIED
                dy    CDATA #IMPLIED
                align ( 0 | 1 ) "0"
+               show  ( 0 | 1 ) "0"
+               color CDATA #IMPLIED
 >
 
 <!--
@@ -98,6 +80,15 @@
 <!ATTLIST vl pos CDATA #IMPLIED
 >
 
+<!--
+     Layer belonging to a page.
+     Flags - 1 = visible, 2 = editable, 4 = printable
+-->
+<!ELEMENT layer (rectangle | ellipse | text | polyline | polygon |
+           bezier | group | object | pixmap | clipart | curve)* >
+<!ATTLIST layer flags       CDATA
+                 id         ID #IMPLIED
+>
 <!-- ============================================================= -->
 <!--
      Predefined graphic objects.
@@ -106,11 +97,15 @@
 
 <!--
      rectangle
-     A rectangle with rounded corners.
+     A rectangle that may have rounded corners.
+        x - upper left corner not including dx
+        y - upper left corner not including dy
+        width - width of the rectangle
+        height - height of the rectangle
+        rounding - the amount of rounding (0 is no rounding)
 -->
-<!ELEMENT rectangle EMPTY >
-<!ATTLIST rectangle %base_content_attributes;
-                    x        CDATA #IMPLIED
+<!ELEMENT rectangle (polyline) >
+<!ATTLIST rectangle x        CDATA #IMPLIED
                     y        CDATA #IMPLIED
                     width    CDATA #IMPLIED
                     height   CDATA #IMPLIED
@@ -120,10 +115,12 @@
 <!--
      ellipse
      An ellipse or an ellipse segment.
+       x,y - center of the ellipse not including dx, dy
+       rx, ry - radii of the ellipse
+       angle1, angle2 - starting/ending angle of arc or pie ???
 -->
-<!ELEMENT ellipse EMPTY >
-<!ATTLIST ellipse %base_content_attributes;
-                  x        CDATA #IMPLIED
+<!ELEMENT ellipse (gobject) >
+<!ATTLIST ellipse x        CDATA #IMPLIED
                   y        CDATA #IMPLIED
                   rx       CDATA #IMPLIED
                   ry       CDATA #IMPLIED
@@ -134,25 +131,28 @@
 
 <!--
      text element
+     x,y - starting point of text not counting dx, dy
+     align 0 = left, 1 = right, 2 = center
 -->
-<!ELEMENT text (font)* >
-<!ATTLIST text %base_content_attributes;
-               x     CDATA       #IMPLIED
+<!ELEMENT text (#CDATA | gobject | font) >
+<!ATTLIST      x     CDATA       #IMPLIED
                y     CDATA       #IMPLIED
-               align (0 | 1 | 2) "0"
+               ref   IDREF       #IMPLIED
+               align (0  | 1 | 2) "0"
 >
 
-<!ELEMENT font (#PCDATA | br)* >
+<!ELEMENT font EMPTY >
 <!ATTLIST font face       CDATA #REQUIRED
                point-size CDATA #REQUIRED
                weight     CDATA #REQUIRED
+               italic     CDATA #IMPLIED
 >
 
 <!--
      polyline
      A sequence of paths with optionally arrows at the end.
 -->
-<!ELEMENT polyline (point)* >
+<!ELEMENT polyline (point* | gobject) >
 <!ATTLIST polyline %base_content_attributes; 
                    arrow1 CDATA "0"
                    arrow2 CDATA "0"
@@ -160,7 +160,8 @@
 
 <!--
      point
-     A single point as part of a line or bezier curve.
+     A single point as part of an object
+     x,y - point position (not including dx, dy ??)
 -->
 <!ELEMENT point EMPTY >
 <!ATTLIST point x  CDATA #IMPLIED
@@ -171,18 +172,23 @@
      polygon
      It requires at least 3 points. The first and last are 
      connected.
+     x,y - top left of enclosing rectangle not including dx, dy
+
 -->
-<!ELEMENT polygon (point)* >
-<!ATTLIST polygon  %base_content_attributes;
+<!ELEMENT polygon (polyline)* >
+<!ATTLIST polygon  width    CDATA #IMPLIED
+                   height   CDATA #IMPLIED
+                   x        CDATA #IMPLIED
+                   y        CDATA #IMPLIED
+                   rounding CDATA #IMPLIED  (0 | 1) "0"
 >
 
 <!--
      group element
      A group of other graphic objects.
 -->
-<!ELEMENT group (%base_content_model;) >
-<!ATTLIST group  %base_content_attributes;
->
+<!ELEMENT group (gobject | rectangle* | polyline* | polygon* | ellipse* |
+                 text* | bezier* | pixmap* | clipart* | curve* | group*) >
 
 <!--
      bezier curve
@@ -190,11 +196,127 @@
      Point #1, #4, #7 etc. are endpoints, the others are 
      supporting points.
 -->
-<!ELEMENT bezier (point)* >
-<!ATTLIST bezier %base_content_attributes;
-                 arrow1 CDATA "0"
-                 arrow2 CDATA "0"
-                 closed (0 | 1) "0"
+<!ELEMENT bezier (polyline) >
+<!ATTLIST bezier closed (0 | 1) "0"
+>
+
+<!--
+     Curve
+     A curve consisting of line and/or bezier segments.
+-->
+<!ELEMENT curve (seg*, gobject) >
+<!ATTLIST curve closed (0 | 1) "0"
+>
+
+<!--
+     Segment
+     Kind
+
+     0 : line.
+     1 : bezier.
+
+     When the segment is of kind line it consists of 2 points.
+     When the segment is of kind bezier it consists of 4 points.
+-->
+<!ELEMENT seg (point*) >
+<!ATTLIST seg kind (0 | 1) "0"
+>
+
+<!--
+     The base_content_attributes, the gobject tag specifies
+     the parameters controlling the appearance of objects
+     such as line parameters, fill colors and patterns, and
+     fill gradients.
+        strokecolor - line color coded in hex digits #rrggbb -
+                      see QT documentation on QColor::setNamedColor()
+        strokestyle - see QPen::setPenStyle() - 0 = no pen, 1 = solod, 2 = dashed line,
+                      3 = dotted line, 4 = dash-dot, 5 = dash dotdot
+        linewidth     pt.
+        fillcolor     coded in hex digits #rrggbb per QColor::setNamedColor()
+        fillstyle     0 = no fill, 1 = solid fill, 2 = pattern fill
+                      3 = gradiant fill
+        fillpattern   0 to 15 as defined in QT documentation on QBrush::setStyle()
+        gradstyle     0 = linear, 1 = radial, 2 = rectangular
+        gradcolor1    coded in hex digits #rrggbb per QColor::setNamedColor()
+        gradcolor2    coded in hex digits #rrggbb per QColor::setNamedColor()
+        id            - ??
+        ref           - ??
+
+
+-->
+<!ELEMENT gobject (matrix) >
+<!ATTLIST gobject strokecolor CDATA   "#000000"
+                  strokestyle CDATA   #IMPLIED
+                  linewidth   CDATA   "1"
+                  fillcolor   CDATA   #IMPLIED
+                  fillstyle   (0 | 1 | 2 | 3 | 4) "1"
+                  fillpattern CDATA   #IMPLIED
+                  gradstyle   (0 | 1 | 2)   #IMPLIED
+                  gradcolor1  CDATA   #IMPLIED
+                  gradcolor2  CDATA   #IMPLIED
+                  id          ID      #IMPLIED
+                  ref         IDREF   #IMPLIED
+>
+
+<!--
+     The matrix represents the multiplication needed to put the
+     gobject on the right place on the page. It specifies
+     translation, rotation and stretching. Notice that the
+     multiplication together with x,y attributes of the gobject
+     determine the final position on the page.
+-->
+
+<!ELEMENT matrix EMPTY >
+<!ATTLIST matrix  dx  CDATA   #IMPLIED
+                  dy  CDATA   #IMPLIED
+                  m11 CDATA   #IMPLIED
+                  m12 CDATA   #IMPLIED
+                  m21 CDATA   #IMPLIED
+                  m22 CDATA   #IMPLIED
+>
+
+<!-- ============================================================= -->
+
+<!--
+     pixmap
+     A bitmap image.
+-->
+<!ELEMENT pixmap (gobject) >
+<!ATTLIST pixmap src CDATA ""
+>
+
+<!--
+     clipart
+     WMF clipart.
+-->
+<!ELEMENT clipart (gobject) >
+<!ATTLIST clipart src CDATA ""
+>
+
+
+<!--
+     object is the tag for embedded objects
+        mime - The mime of the embedded application
+        url - path to the file of embedded information
+-->
+
+<!ELEMENT object (gobject | rect) >
+<!ATTLIST object  mime CDATA   #IMPLIED
+                  url  CDATA   #IMPLIED
+>
+
+<!--
+
+     rect defines the rectangle that contains the embedded object
+     x,y - upper left corner of the rectangle not including dx and dy.
+     height, width are the rectangle height and width
+-->
+
+<!ELEMENT rect EMPTY >
+<!ATTLIST rect  x CDATA   #IMPLIED
+                y CDATA   #IMPLIED
+                h CDATA   #IMPLIED
+                w CDATA   #IMPLIED
 >
 
 <!-- ============================================================= -->
