@@ -192,6 +192,24 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 
 bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 {
+	kdDebug() << "event!" << endl;
+	switch( ev->type() )
+	{
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+		case QEvent::MouseButtonDblClick:
+		case QEvent::MouseMove:
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease:
+		case QEvent::Enter:
+		case QEvent::Leave:
+		case QEvent::Wheel:
+		case QEvent::ContextMenu:
+			return true; // ignore
+		default:
+			break;
+	}
+	return false;
 }
 
 KexiFormBase::~KexiFormBase(){

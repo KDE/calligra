@@ -68,7 +68,7 @@ class KexiFormBase : public KexiDialogBase
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
 		
-		virtual bool eventFilter(QObject *obj, QEvent *ev);
+		bool eventFilter(QObject *obj, QEvent *ev);
 
 };
 
