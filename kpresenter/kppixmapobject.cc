@@ -170,13 +170,6 @@ int KPPixmapObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
-    /*
-    if ( move )
-    {
-        KPObject::draw( _painter, _zoomHandler, drawSelection );
-        return;
-    }
-    */
     if ( image.isNull() ) return;
 
     double ox = orig.x();

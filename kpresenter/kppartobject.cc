@@ -115,13 +115,6 @@ void KPPartObject::resizeBy( double _dx, double _dy )
 /*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection )
 {
-    /*
-    if ( move )
-    {
-        KPObject::draw( _painter, _zoomhandler, drawSelection );
-        return;
-    }
-    */
 //     int ox = orig.x() - _diffx;
 //     int oy = orig.y() - _diffy;
     double ow = ext.width();

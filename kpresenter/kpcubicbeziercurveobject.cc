@@ -143,12 +143,6 @@ int KPCubicBezierCurveObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
-    /*
-    if ( move ) {
-        KPObject::draw( _painter, _zoomHandler, drawSelection );
-        return;
-    }
-    */
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();

@@ -222,13 +222,6 @@ int KPTextObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
-    /*
-    if ( move )
-    {
-        KPObject::draw( _painter, _zoomHandler, drawSelection );
-        return;
-    }
-    */
     draw( _painter,_zoomHandler, false, 0L, true, drawSelection );
 }
 
