@@ -135,16 +135,18 @@ class Para: public Layout
 		void generate        (QTextStream&);
 
 	private:
-		void analyseParam    (const Markup*);
-		void analyseName     (const Markup*);
-		void analyseInfo     (const Markup*);
-		void analyseBrk      (const Markup*);
-		void analyseFormats  (const Markup*);
+		void analyseParam     (const Markup*);
+		void analyseName      (const Markup*);
+		void analyseInfo      (const Markup*);
+		void analyseBrk       (const Markup*);
+		void analyseLayoutPara(const Markup*);
+		void analyseFormat    (const Markup*);
 
 		/**
 		 * If the paragraph is a title, generate the command.
 		 */
 		void generateTitle(QTextStream&);
+
 		/**
 		 * Write the paragraph style, format.
 		 */

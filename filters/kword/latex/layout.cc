@@ -50,7 +50,7 @@ void Layout::analyseLayout(const Markup * balise_initiale)
 	// Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT>
 	
 	// No parameters for this markup
-	kdDebug() << "ANALYSE OF A LAYOUT" << endl;
+	kdDebug() << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
 	
 	// Analyse children markups
 	savedToken = enterTokenChild(balise_initiale);
@@ -77,13 +77,13 @@ void Layout::analyseLayout(const Markup * balise_initiale)
 			kdDebug() << "COUNTER : " << endl;
 			analyseCounter(balise);
 		}
-		else if(strcmp(balise->token.zText, "FORMAT")== 0)
+		/*else if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
 			Format::analyse(balise);
-		}
+		}*/
 	}
-	kdDebug() << "END OF A LAYOUT" << endl;
+	kdDebug() << "END OF THE BEGINING OF A LAYOUT" << endl;
 	setTokenCurrent(savedToken);
 }
 

@@ -171,17 +171,17 @@ void Para::analyse(const Markup * balise_initiale)
 		{
 			analyseBrk(balise);
 		}
-		else if(strcmp(balise->token.zText, "FORMATS")== 0)
+		/*else if(strcmp(balise->token.zText, "FORMATS")== 0)
 		{
-			/* IMPORTANT ==> police + style */
+			// IMPORTANT ==> police + style
 			kdDebug() << "FORMATS" << endl;
 			analyseFormats(balise);
 			
-		}
+		}*/
 		else if(strcmp(balise->token.zText, "LAYOUT")== 0)
 		{
 			kdDebug() << "LAYOUT" << endl;
-			analyseLayout(balise);
+			analyseLayoutPara(balise);
 		}
 	}
 	kdDebug() << "END OF PARAGRAPH" << endl;
@@ -251,60 +251,74 @@ void Para::analyseBrk(const Markup* balise)
 }
 
 /*******************************************/
-/* AnalyseFormats                          */
+/* AnalyseLayoutPara                       */
 /*******************************************/
-/* Analyse the formats.                    */
+/* Analyse the layout of a para.           */
 /* For each format, keep the type (picture,*/
 /* text, variable, footnote) and put the   */
 /* zone in a list.                         */
 /*******************************************/
-void Para::analyseFormats(const Markup *balise_initiale)
+void Para::analyseLayoutPara(const Markup *balise_initiale)
 {
 	Token* savedToken = 0;
 	Markup* balise    = 0;
 
 	savedToken = enterTokenChild(balise_initiale);
+	analyseLayout(balise_initiale);
 	while((balise = getNextMarkup()) != NULL)
 	{
 		kdDebug() << balise << endl;
 		kdDebug() << balise->token.zText << endl;
 		if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
-			Format *zone = 0;
-			kdDebug() << "ANALYSE FORMAT BODY" << endl;
-			switch(getTypeFormat(balise))
-			{
-				case EF_ERROR: kdDebug() << "Id format error" << endl;
-					break;
-				case EF_TEXTZONE: /* It's a text line */
-						zone = new TextZone(_texte, this);
-					break;
-				case EF_FOOTNOTE: /* It's a footnote */
-						zone = new Footnote(this);
-					break;
-				case EF_PICTURE: /* It's a picture */
-				//		zone = new PictureZone(this);
-					break;
-				case EF_VARIABLE: /* It's a variable */
-				//		zone = new VariableZone(this);
-					break;
-				default: /* Unknown */
-						kdDebug() << "Format not yet supported" << endl;
-				}
-			if(zone != 0)
-			{
-				zone->analyse(balise);
-				if(_lines == 0)
-					_lines = new ListeFormat;
-
-				/* add the text */
-				_lines->addLast(zone);
-			}
+			analyseFormat(balise);
 		}
 		else
 			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;
 	}
 	setTokenCurrent(savedToken);
+
+}
+
+/*******************************************/
+/* AnalyseFormat                           */
+/*******************************************/
+/* Analyse one format.                     */
+/*  keep the type (picture, text, variable,*/
+/* footnote) and put the zone in a list.   */
+/*******************************************/
+void Para::analyseFormat(const Markup *balise)
+{
+	Format *zone = 0;
+	kdDebug() << "ANALYSE FORMAT BODY" << endl;
+	switch(getTypeFormat(balise))
+	{
+		case EF_ERROR: kdDebug() << "Id format error" << endl;
+			break;
+		case EF_TEXTZONE: /* It's a text line */
+				zone = new TextZone(_texte, this);
+			break;
+		case EF_FOOTNOTE: /* It's a footnote */
+				zone = new Footnote(this);
+			break;
+		case EF_PICTURE: /* It's a picture */
+		//		zone = new PictureZone(this);
+			break;
+		case EF_VARIABLE: /* It's a variable */
+		//		zone = new VariableZone(this);
+			break;
+		default: /* Unknown */
+				kdDebug() << "Format not yet supported" << endl;
+		}
+	if(zone != 0)
+	{
+		zone->analyse(balise);
+		if(_lines == 0)
+			_lines = new ListeFormat;
+
+		/* add the text */
+		_lines->addLast(zone);
+	}
 }
 
 /*******************************************/
