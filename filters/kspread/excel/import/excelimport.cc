@@ -47,7 +47,7 @@ K_EXPORT_COMPONENT_FACTORY( libexcelimport, ExcelImportFactory( "kofficefilters"
 
 // UString -> QConstString conversion. Use .string() to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
-inline QConstString string( const Sidewinder::UString& str ) {
+inline QConstString string( const Swinder::UString& str ) {
    // Let's hope there's no copying of the QConstString happening...
    return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
 }
@@ -58,24 +58,24 @@ ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
 }
 
 // convert from RGB values to "#rrggbb"
-static QString convertColor( const Sidewinder::Color& color )
+static QString convertColor( const Swinder::Color& color )
 {
   return QColor( color.red, color.green, color.blue ).name();
 }
 
-static QDomElement convertPen( QDomDocument& doc, const Sidewinder::Pen& pen )
+static QDomElement convertPen( QDomDocument& doc, const Swinder::Pen& pen )
 {
   QDomElement penElement = doc.createElement( "pen" );
 
   unsigned style = 0;
   switch( pen.style )
   {
-    case Sidewinder::Pen::NoLine:         style = 0; break;
-    case Sidewinder::Pen::SolidLine:      style = 1; break;
-    case Sidewinder::Pen::DashLine:       style = 2; break;
-    case Sidewinder::Pen::DotLine:        style = 3; break;
-    case Sidewinder::Pen::DashDotLine:    style = 4; break;
-    case Sidewinder::Pen::DashDotDotLine: style = 5; break;
+    case Swinder::Pen::NoLine:         style = 0; break;
+    case Swinder::Pen::SolidLine:      style = 1; break;
+    case Swinder::Pen::DashLine:       style = 2; break;
+    case Swinder::Pen::DotLine:        style = 3; break;
+    case Swinder::Pen::DashDotLine:    style = 4; break;
+    case Swinder::Pen::DashDotDotLine: style = 5; break;
     default: style = 1; break; // fallback, solid line
   }
 
@@ -86,23 +86,23 @@ static QDomElement convertPen( QDomDocument& doc, const Sidewinder::Pen& pen )
   return penElement;
 }
 
-QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
+QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
 {
   QDomElement e = doc.createElement( "format" );
 
   unsigned align = 0;
   switch( format.alignment().alignX() )
   {
-    case Sidewinder::Format::Left: align = 1; break;
-    case Sidewinder::Format::Center: align = 2; break;
-    case Sidewinder::Format::Right: align = 3; break;
+    case Swinder::Format::Left: align = 1; break;
+    case Swinder::Format::Center: align = 2; break;
+    case Swinder::Format::Right: align = 3; break;
      default: align = 0; break;
   };
 
   e.setAttribute( "align", QString::number( align ) );
 
   QDomElement fontElement = doc.createElement( "font" );
-  const Sidewinder::FormatFont& font = format.font();
+  const Swinder::FormatFont& font = format.font();
   QString fontFamily = string( font.fontFamily()).string();
   double fontSize = font.fontSize();
   fontElement.setAttribute( "family", fontFamily );
@@ -123,7 +123,7 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
 
   // cell borders
 
-  const Sidewinder::FormatBorders& borders = format.borders();
+  const Swinder::FormatBorders& borders = format.borders();
 
   QDomElement leftBorderElement = doc.createElement( "left-border" );
   leftBorderElement.appendChild( convertPen( doc, borders.leftBorder() ) );
@@ -144,7 +144,7 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
   return e;
 }
 
-static QDomElement convertValue( QDomDocument& doc, const Sidewinder::Value& value )
+static QDomElement convertValue( QDomDocument& doc, const Swinder::Value& value )
 {
   QDomElement textElement;
   textElement = doc.createElement( "text" );
@@ -270,8 +270,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   QString inputFile = m_chain->inputFile();
 
 
-  Sidewinder::Reader *reader;
-  reader = Sidewinder::ReaderFactory::createReader( "application/msexcel" );
+  Swinder::Reader *reader;
+  reader = Swinder::ReaderFactory::createReader( "application/msexcel" );
 
   if( !reader )
   {
@@ -279,7 +279,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     return KoFilter::StupidError;
   }
 
-  Sidewinder::Workbook* workbook;
+  Swinder::Workbook* workbook;
   workbook = reader->load( inputFile.local8Bit() );
   if( !workbook )
   {
@@ -307,7 +307,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   for( unsigned i=0; i < workbook->sheetCount(); i++ )
   {
-    Sidewinder::Sheet* sheet = workbook->sheet( i );
+    Swinder::Sheet* sheet = workbook->sheet( i );
 
     if( !sheet ) break;
 
@@ -333,7 +333,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     // columns, i.e <column>
     for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
     {
-      Sidewinder::Column* column = sheet->column( i, false );
+      Swinder::Column* column = sheet->column( i, false );
       if( column )
       {
         QDomElement e;
@@ -349,7 +349,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     // rows, i.e <row>
     for( unsigned i = 0; i <= sheet->maxRow(); i++ )
     {
-      Sidewinder::Row* row = sheet->row( i, false );
+      Swinder::Row* row = sheet->row( i, false );
       if( row )
       {
         QDomElement e;
@@ -366,7 +366,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     for( unsigned row = 0; row <= sheet->maxRow(); row++ )
       for( unsigned col = 0; col <= sheet->maxColumn(); col++ )
       {
-        Sidewinder::Cell* cell = sheet->cell( col, row, false );
+        Swinder::Cell* cell = sheet->cell( col, row, false );
         if( cell )
         {
           QDomElement ce;

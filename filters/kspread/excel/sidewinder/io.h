@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet 
+/* Swinder - Portable library for spreadsheet 
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef SIDEWINDER_IO_H
-#define SIDEWINDER_IO_H
+#ifndef SWINDER_IO_H
+#define SWINDER_IO_H
 
-namespace Sidewinder
+namespace Swinder
 {
 
 class Workbook;
@@ -76,7 +76,7 @@ public:
   static Writer* createWriter( const char* mimetype );
 };
 
-}; // namespace Sidewinder
+}; // namespace Swinder
 
 
-#endif // SIDEWINDER_WORKBOOK_H
+#endif // SWINDER_WORKBOOK_H

@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include <iostream>
 #include <map>
 
-namespace Sidewinder
+namespace Swinder
 {
 
 class Sheet::Private
@@ -59,7 +59,7 @@ public:
 
 };
 
-using namespace Sidewinder;
+using namespace Swinder;
 
 Sheet::Sheet( Workbook* wb )
 {

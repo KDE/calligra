@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,15 +17,16 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef SIDEWINDER_EXCEL_H
-#define SIDEWINDER_EXCEL_H
+#ifndef SWINDER_EXCEL_H
+#define SWINDER_EXCEL_H
 
 #include <string>
 #include <iostream>
 
-#include "sidewinder.h"
+#include "swinder.h"
+#include "io.h"
 
-namespace Sidewinder
+namespace Swinder
 {
 
 /**
@@ -96,6 +97,10 @@ public:
     with the id of the record they handle.
   */  
   static const unsigned int id;
+  
+  virtual unsigned int rtti(){
+	  return this->id;
+  }
   
   /**
     Creates a new generic record.
@@ -311,6 +316,9 @@ public:
    */
   ~BackupRecord();
   
+  unsigned int rtti(){
+	  return this->id;
+  }
   /**
    * Returns true if a backup is made when saving the file.
    * 
@@ -360,6 +368,10 @@ public:
     Static ID of the BOF record.
   */
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
     Supported BOF type.
@@ -424,6 +436,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Blank record.
    */
@@ -453,6 +469,10 @@ public:
     Static ID of the BoolErr record.
   */
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   enum { ErrorUnknown, 
    ErrorNull, 
@@ -526,6 +546,9 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
   /**
    * Creates a new BottomMargin record.
    */
@@ -579,6 +602,10 @@ class BoundSheetRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new BoundSheet record.
@@ -669,6 +696,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new CalcMode record.
    */
@@ -717,6 +748,10 @@ class ColInfoRecord : public Record, public ColumnSpanInfo
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new ColInfo record.
@@ -833,6 +868,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new DateMode record.
    */
@@ -883,6 +922,10 @@ class DimensionRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Dimension record.
@@ -978,6 +1021,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new EOF record.
    */
@@ -1017,6 +1064,10 @@ class FontRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Font record.
@@ -1188,6 +1239,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Header record.
    */
@@ -1237,6 +1292,10 @@ class FormatRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Format record.
@@ -1308,6 +1367,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Header record.
    */
@@ -1352,6 +1415,10 @@ class HeaderRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Header record.
@@ -1404,6 +1471,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Label record.
    */
@@ -1454,6 +1525,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new LabelSST record.
    */
@@ -1494,6 +1569,10 @@ class LeftMarginRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new LeftMargin record.
@@ -1543,6 +1622,10 @@ class MergedCellsRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new MergedCells record.
@@ -1607,6 +1690,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new MulBlank record.
    */
@@ -1655,6 +1742,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new MulRK record.
    */
@@ -1695,6 +1786,8 @@ public:
    */
   double asFloat( unsigned i ) const;
   
+  unsigned encodedRK( unsigned i ) const;
+  
   virtual const char* name(){ return "MULRK"; }
 
   virtual void dump( std::ostream& out ) const;
@@ -1722,6 +1815,10 @@ class NumberRecord : public Record, public CellInfo
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Number record.
@@ -1772,6 +1869,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Palette record.
    */
@@ -1818,6 +1919,10 @@ class RightMarginRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new RightMargin record.
@@ -1866,6 +1971,10 @@ class RKRecord : public Record, public CellInfo
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new RK record.
@@ -1923,6 +2032,8 @@ public:
    */
   void setFloat( double f );
 
+  unsigned encodedRK() const;
+  
   virtual const char* name(){ return "RK"; }
   
   virtual void dump( std::ostream& out ) const;
@@ -1945,6 +2056,10 @@ class RowRecord : public Record, public ColumnSpanInfo
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new Row record.
@@ -2044,6 +2159,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new Label record.
    */
@@ -2097,6 +2216,10 @@ public:
 
   static const unsigned int id;
   
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new SST record.
    */ 
@@ -2145,6 +2268,10 @@ public:
 
   static const unsigned int id;
 
+  unsigned int rtti(){
+	  return this->id;
+  }
+
   /**
    * Creates a new TopMargin record.
    */
@@ -2191,6 +2318,10 @@ class XFRecord : public Record
 public:
 
   static const unsigned int id;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
 
   /**
    * Creates a new XF record.
@@ -2679,13 +2810,11 @@ class ExcelReader: public Reader
 public:
   ExcelReader();
   virtual ~ExcelReader();
-  
   virtual Workbook* load( const char* filename );
+  virtual void handleRecord( Record* record );
     
 private:
-
-  void handleRecord( Record* record );
-    
+  
   void handleBoundSheet( BoundSheetRecord* record );
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
@@ -2728,7 +2857,7 @@ private:
 };
 
 
-}; // namespace Sidewinder
+}; // namespace Swinder
 
 
-#endif // SIDEWINDER_EXCEL_H
+#endif // SWINDER_EXCEL_H

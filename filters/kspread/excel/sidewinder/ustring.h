@@ -19,10 +19,10 @@
  *  Boston, MA 02111-1307, USA.
  */
 
-#ifndef SIDEWINDER_USTRING_H_
-#define SIDEWINDER_USTRING_H_
+#ifndef SWINDER_USTRING_H_
+#define SWINDER_USTRING_H_
 
-namespace Sidewinder {
+namespace Swinder {
 
   /**
    * @return True if d is not a number (platform support required).
@@ -365,18 +365,18 @@ namespace Sidewinder {
   }
   bool operator==(const UString& s1, const UString& s2);
   inline bool operator!=(const UString& s1, const UString& s2) {
-    return !Sidewinder::operator==(s1, s2);
+    return !Swinder::operator==(s1, s2);
   }
   bool operator<(const UString& s1, const UString& s2);
   bool operator==(const UString& s1, const char *s2);
   inline bool operator!=(const UString& s1, const char *s2) {
-    return !Sidewinder::operator==(s1, s2);
+    return !Swinder::operator==(s1, s2);
   }
   inline bool operator==(const char *s1, const UString& s2) {
     return operator==(s2, s1);
   }
   inline bool operator!=(const char *s1, const UString& s2) {
-    return !Sidewinder::operator==(s1, s2);
+    return !Swinder::operator==(s1, s2);
   }
   bool operator==(const CString& s1, const CString& s2);
   UString operator+(const UString& s1, const UString& s2);
@@ -390,6 +390,6 @@ namespace Sidewinder {
       const UString& string() const { return *this; }
   };
 
-} // namespace SIDEWINDER_USTRING_H
+} // namespace SWINDER_USTRING_H
 
 #endif

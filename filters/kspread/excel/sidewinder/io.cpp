@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet 
+/* Swinder - Portable library for spreadsheet 
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include "io.h"
 #include "excel.h"
 
-using namespace Sidewinder;
+using namespace Swinder;
 
 Reader* ReaderFactory::createReader( const char* mimetype )
 {

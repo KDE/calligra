@@ -17,13 +17,13 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef SIDEWINDER_FORMAT_H
-#define SIDEWINDER_FORMAT_H
+#ifndef SWINDER_FORMAT_H
+#define SWINDER_FORMAT_H
 
 #include "ustring.h"
 #include "defs.h"
 
-namespace Sidewinder
+namespace Swinder
 {
 
 /**
@@ -520,5 +520,5 @@ private:
 
 };
 
-#endif // SIDEWINDER_FORMAT_H
+#endif // SWINDER_FORMAT_H
 

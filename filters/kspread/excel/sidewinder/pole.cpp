@@ -1,148 +1,158 @@
-/* POLE - Portable library to access OLE Storage
-   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+/* POLE - Portable C++ library to access OLE Storage 
+   Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-   
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   Redistribution and use in source and binary forms, with or without 
+   modification, are permitted provided that the following conditions 
+   are met:
+   * Redistributions of source code must retain the above copyright notice, 
+     this list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of the authors nor the names of its contributors may be 
+     used to endorse or promote products derived from this software without 
+     specific prior written permission.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, US
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+   THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <fstream>
-#include <string>
-#include <list>
 #include <iostream>
+#include <list>
+#include <string>
 #include <vector>
 
 #include "pole.h"
 
+// enable to activate debugging output
+// #define POLE_DEBUG
+
 namespace POLE
 {
 
-class Entry
+class Header
 {
   public:
-    Entry* parent;
-    std::string name;
-    unsigned long size;
-    unsigned start;
-    bool dir;
-    std::vector<Entry*> children;
-    Entry();
-    ~Entry();
-  private:
-    Entry( const Entry& );
-    Entry& operator=( const Entry& );
+    unsigned char id[8];       // signature, or magic identifier
+    unsigned b_shift;          // bbat->blockSize = 1 << b_shift
+    unsigned s_shift;          // sbat->blockSize = 1 << s_shift
+    unsigned num_bat;          // blocks allocated for big bat
+    unsigned dirent_start;     // starting block for directory info
+    unsigned threshold;        // switch from small to big file (usually 4K)
+    unsigned sbat_start;       // starting block index to store small bat
+    unsigned num_sbat;         // blocks allocated for small bat
+    unsigned mbat_start;       // starting block to store meta bat
+    unsigned num_mbat;         // blocks allocated for meta bat
+    unsigned long bb_blocks[109];
+    
+    Header();
+    bool valid();
+    void load( const unsigned char* buffer );
+    void save( unsigned char* buffer );
+    void debug();
 };
 
 class AllocTable
 {
   public:
-
+    static const unsigned Eof;
+    static const unsigned Avail;
+    static const unsigned Bat;    
+    static const unsigned MetaBat;    
+    unsigned blockSize;
     AllocTable();
-
-    ~AllocTable();
-
-    bool dirty;
-
     void clear();
-
-    unsigned long size();
-
+    unsigned long count();
     void resize( unsigned long newsize );
-
+    void preserve( unsigned long n );
     void set( unsigned long index, unsigned long val );
-
+    unsigned unused();
+    void setChain( std::vector<unsigned long> );
     std::vector<unsigned long> follow( unsigned long start );
-
     unsigned long operator[](unsigned long index );
-
+    void load( const unsigned char* buffer, unsigned len );
+    void save( unsigned char* buffer );
+    unsigned size();
+    void debug();
   private:
-
     std::vector<unsigned long> data;
-
     AllocTable( const AllocTable& );
-
     AllocTable& operator=( const AllocTable& );
+};
+
+class DirEntry
+{
+  public:
+    bool valid;            // false if invalid (should be skipped)
+    std::string name;      // the name, not in unicode anymore 
+    bool dir;              // true if directory   
+    unsigned long size;    // size (not valid if directory)
+    unsigned long start;   // starting block
+    unsigned prev;         // previous sibling
+    unsigned next;         // next sibling
+    unsigned child;        // first child
+};
+
+class DirTree
+{
+  public:
+    static const unsigned End;
+    DirTree();
+    void clear();
+    unsigned entryCount();
+    DirEntry* entry( unsigned index );
+    DirEntry* entry( const std::string& name, bool create=false );
+    int indexOf( DirEntry* e );
+    int parent( unsigned index );
+    std::string fullName( unsigned index );
+    std::vector<unsigned> children( unsigned index );
+    void load( unsigned char* buffer, unsigned len );
+    void save( unsigned char* buffer );
+    unsigned size();
+    void debug();
+  private:
+    std::vector<DirEntry> entries;
+    DirTree( const DirTree& );
+    DirTree& operator=( const DirTree& );
 };
 
 class StorageIO
 {
   public:
-
-    // result of operation
-    int result;
-
-    // owner of this object
-    Storage* doc;
-
-    // filename (possible required)
-    std::string filename;
-
-    // working mode: ReadOnly, WriteOnly, or ReadWrite
-    int mode;
-
-    // working file
-    std::fstream file;
-
-    // size of the file
-    unsigned long filesize;
-
-    // header (first 512 byte)
-    unsigned char header[512];
-
-    // magic id, first 8 bytes of header
-    unsigned char magic[8];
-
-    // switch from small to big file (usually 4K)
-    unsigned threshold;
-
-    // size of big block (should be 512 bytes)
-    unsigned bb_size;
-
-    //  size of small block (should be 64 bytes )
-    unsigned sb_size;
-
-    // allocation table for big blocks
-    AllocTable bb;
+    Storage* storage;         // owner
+    std::string filename;     // filename
+    std::fstream file;        // associated with above name
+    int result;               // result of operation
+    bool opened;              // true if file is opened
+    unsigned long filesize;   // size of the file
     
-    // allocation table for small blocks
-    AllocTable sb;
-
-    // starting block index to store small-BAT
-    unsigned sbat_start;
-
-    // blocks where to find data for "small" files
-    std::vector<unsigned long> sb_blocks;
-
-    // starting block to store meta BAT
-    unsigned mbat_start;
+    Header* header;           // storage header 
+    DirTree* dirtree;         // directory tree
+    AllocTable* bbat;         // allocation table for big blocks
+    AllocTable* sbat;         // allocation table for small blocks
     
-    // starting block index to store directory info
-    unsigned dirent_start;
+    std::vector<unsigned long> sb_blocks; // blocks for "small" files
+       
+    std::list<Stream*> streams;
 
-    // root directory entry
-    Entry* root;
-    
-    // current directory entry
-    Entry* current_dir;
-
-    // constructor
-    StorageIO( Storage* storage, const char* fileName, int mode );
-
-    // destructor
+    StorageIO( Storage* storage, const char* filename );
     ~StorageIO();
-
+    
+    bool open();
+    void close();
     void flush();
+    void load();
+    void create();
 
     unsigned long loadBigBlocks( std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen );
 
@@ -151,22 +161,10 @@ class StorageIO
     unsigned long loadSmallBlocks( std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen );
 
     unsigned long loadSmallBlock( unsigned long block, unsigned char* buffer, unsigned long maxlen );
+    
+    StreamIO* streamIO( const std::string& name ); 
 
-    // construct directory tree
-    Entry* buildTree( Entry* parent, int index, const unsigned char* dirent );
-
-    std::string fullName( Entry* e );
-
-    // given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
-    Entry* entry( const std::string& name );
-
-
-  private:
-
-    void load();
-
-    void create();
-
+  private:  
     // no copy or assign
     StorageIO( const StorageIO& );
     StorageIO& operator=( const StorageIO& );
@@ -176,30 +174,23 @@ class StorageIO
 class StreamIO
 {
   public:
-
-    StreamIO( StorageIO* io, Entry* entry );
-
-    ~StreamIO();
-
-    unsigned long size();
-
-    void seek( unsigned long pos );
-
-    unsigned long tell();
-
-    int getch();
-
-    unsigned long read( unsigned char* data, unsigned long maxlen );
-
-    unsigned long read( unsigned long pos, unsigned char* data, unsigned long maxlen );
-
     StorageIO* io;
+    DirEntry* entry;
+    std::string fullName;
+    bool eof;
+    bool fail;
 
-    Entry* entry;
+    StreamIO( StorageIO* io, DirEntry* entry );
+    ~StreamIO();
+    unsigned long size();
+    void seek( unsigned long pos );
+    unsigned long tell();
+    int getch();
+    unsigned long read( unsigned char* data, unsigned long maxlen );
+    unsigned long read( unsigned long pos, unsigned char* data, unsigned long maxlen );
 
 
   private:
-
     std::vector<unsigned long> blocks;
 
     // no copy or assign
@@ -214,7 +205,6 @@ class StreamIO
     unsigned long cache_size;
     unsigned long cache_pos;
     void updateCache();
-
 };
 
 }; // namespace POLE
@@ -233,54 +223,150 @@ static inline unsigned long readU32( const unsigned char* ptr )
 
 static inline void writeU16( unsigned char* ptr, unsigned long data )
 {
-  ptr[0] = data & 0xff;
-  ptr[1] = (data >> 8) & 0xff;
+  ptr[0] = (unsigned char)(data & 0xff);
+  ptr[1] = (unsigned char)((data >> 8) & 0xff);
 }
 
 static inline void writeU32( unsigned char* ptr, unsigned long data )
 {
-  ptr[0] = data & 0xff;
-  ptr[1] = (data >> 8) & 0xff;
-  ptr[2] = (data >> 16) & 0xff;
-  ptr[3] = (data >> 24) & 0xff;
+  ptr[0] = (unsigned char)(data & 0xff);
+  ptr[1] = (unsigned char)((data >> 8) & 0xff);
+  ptr[2] = (unsigned char)((data >> 16) & 0xff);
+  ptr[3] = (unsigned char)((data >> 24) & 0xff);
 }
 
 static const unsigned char pole_magic[] = 
  { 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 };
- 
-Entry::Entry()
+
+// =========== Header ==========
+
+Header::Header()
 {
-  name = "Unnamed";
-  size = 0;
-  dir = false;
+  b_shift = 9;
+  s_shift = 6;
+  num_bat = 0;
+  dirent_start = 0;
+  threshold = 4096;
+  sbat_start = 0;
+  num_sbat = 0;
+  mbat_start = 0;
+  num_mbat = 0;
+
+  for( unsigned i = 0; i < 8; i++ )
+    id[i] = pole_magic[i];  
+  for( unsigned i=0; i<109; i++ )
+    bb_blocks[i] = AllocTable::Avail;
 }
 
-Entry::~Entry()
-{ 
-  for( unsigned i=0; i<children.size(); i++ )
-  {
-    Entry* entry = children[ i ];
-    delete entry;
-  }
+bool Header::valid()
+{
+  if( threshold != 4096 ) return false;
+  if( num_bat == 0 ) return false;
+  if( (num_bat > 109) && (num_bat > (num_mbat * 127) + 109)) return false;
+  if( (num_bat < 109) && (num_mbat != 0) ) return false;
+  if( s_shift > b_shift ) return false;
+  if( b_shift <= 6 ) return false;
+  if( b_shift >=31 ) return false;
+  
+  return true;
 }
+
+void Header::load( const unsigned char* buffer )
+{
+  b_shift      = readU16( buffer + 0x1e );
+  s_shift      = readU16( buffer + 0x20 );
+  num_bat      = readU32( buffer + 0x2c );
+  dirent_start = readU32( buffer + 0x30 );
+  threshold    = readU32( buffer + 0x38 );
+  sbat_start   = readU32( buffer + 0x3c );
+  num_sbat     = readU32( buffer + 0x40 );
+  mbat_start   = readU32( buffer + 0x44 );
+  num_mbat     = readU32( buffer + 0x48 );
+  
+  for( unsigned i = 0; i < 8; i++ )
+    id[i] = buffer[i];  
+  for( unsigned i=0; i<109; i++ )
+    bb_blocks[i] = readU32( buffer + 0x4C+i*4 );
+}
+
+void Header::save( unsigned char* buffer )
+{
+  memset( buffer, 0, 0x4c );
+  memcpy( buffer, pole_magic, 8 );        // ole signature
+  writeU32( buffer + 8, 0 );              // unknown 
+  writeU32( buffer + 12, 0 );             // unknown
+  writeU32( buffer + 16, 0 );             // unknown
+  writeU16( buffer + 24, 0x003e );        // revision ?
+  writeU16( buffer + 26, 3 );             // version ?
+  writeU16( buffer + 28, 0xfffe );        // unknown
+  writeU16( buffer + 0x1e, b_shift );
+  writeU16( buffer + 0x20, s_shift );
+  writeU32( buffer + 0x2c, num_bat );
+  writeU32( buffer + 0x30, dirent_start );
+  writeU32( buffer + 0x38, threshold );
+  writeU32( buffer + 0x3c, sbat_start );
+  writeU32( buffer + 0x40, num_sbat );
+  writeU32( buffer + 0x44, mbat_start );
+  writeU32( buffer + 0x48, num_mbat );
+  
+  for( unsigned i=0; i<109; i++ )
+    writeU32( buffer + 0x4C+i*4, bb_blocks[i] );
+}
+
+void Header::debug()
+{
+  std::cout << std::endl;
+  std::cout << "b_shift " << b_shift << std::endl;
+  std::cout << "s_shift " << s_shift << std::endl;
+  std::cout << "num_bat " << num_bat << std::endl;
+  std::cout << "dirent_start " << dirent_start << std::endl;
+  std::cout << "threshold " << threshold << std::endl;
+  std::cout << "sbat_start " << sbat_start << std::endl;
+  std::cout << "num_sbat " << num_sbat << std::endl;
+  std::cout << "mbat_start " << mbat_start << std::endl;
+  std::cout << "num_mbat " << num_mbat << std::endl;
+  
+  unsigned s = (num_bat<=109) ? num_bat : 109;
+  std::cout << "bat blocks: ";
+  for( unsigned i = 0; i < s; i++ )
+    std::cout << bb_blocks[i] << " ";
+  std::cout << std::endl;
+}
+ 
+// =========== AllocTable ==========
+
+const unsigned AllocTable::Avail = 0xffffffff;
+const unsigned AllocTable::Eof = 0xfffffffe;
+const unsigned AllocTable::Bat = 0xfffffffd;
+const unsigned AllocTable::MetaBat = 0xfffffffc;
 
 AllocTable::AllocTable()
 {
-  dirty = false;
+  blockSize = 4096;
+  // initial size
+  resize( 128 );
 }
 
-AllocTable::~AllocTable()
-{
-}
-
-unsigned long AllocTable::size()
+unsigned long AllocTable::count()
 {
   return data.size();
 }
 
 void AllocTable::resize( unsigned long newsize )
 {
+  unsigned oldsize = data.size();
   data.resize( newsize );
+  if( newsize > oldsize )
+    for( unsigned i = oldsize; i<newsize; i++ )
+      data[i] = Avail;
+}
+
+// make sure there're still free blocks
+void AllocTable::preserve( unsigned long n )
+{
+  std::vector<unsigned long> pre;
+  for( unsigned i=0; i < n; i++ )
+    pre.push_back( unused() );
 }
 
 unsigned long AllocTable::operator[]( unsigned long index )
@@ -292,234 +378,609 @@ unsigned long AllocTable::operator[]( unsigned long index )
 
 void AllocTable::set( unsigned long index, unsigned long value )
 {
-  if( index >= size() ) resize( index + 1);
+  if( index >= count() ) resize( index + 1);
   data[ index ] = value;
 }
 
+void AllocTable::setChain( std::vector<unsigned long> chain )
+{
+  if( chain.size() )
+  {
+    for( unsigned i=0; i<chain.size()-1; i++ )
+      set( chain[i], chain[i+1] );
+    set( chain[ chain.size()-1 ], AllocTable::Eof );
+  }
+}
+
+// follow 
 std::vector<unsigned long> AllocTable::follow( unsigned long start )
 {
   std::vector<unsigned long> chain;
 
-  if( start >= size() ) return chain; 
+  if( start >= count() ) return chain; 
 
   unsigned long p = start;
-  while( p < size() )
-{
-    if( p >= (unsigned long)0xfffe ) break;
-    if( p >= size() ) break;
+  while( p < count() )
+  {
+    if( p == (unsigned long)Eof ) break;
+    if( p == (unsigned long)Bat ) break;
+    if( p == (unsigned long)MetaBat ) break;
+    if( p >= count() ) break;
     chain.push_back( p );
-    if( data[p] >= size() ) break;
+    if( data[p] >= count() ) break;
     p = data[ p ];
-}
+  }
 
   return chain;
 }
 
+unsigned AllocTable::unused()
+{
+  // find first available block
+  for( unsigned i = 0; i < data.size(); i++ )
+    if( data[i] == Avail )
+      return i;
+  
+  // completely full, so enlarge the table
+  unsigned block = data.size();
+  resize( data.size()+10 );
+  return block;      
+}
+
+void AllocTable::load( const unsigned char* buffer, unsigned len )
+{
+  resize( len / 4 );
+  for( unsigned i = 0; i < count(); i++ )
+    set( i, readU32( buffer + i*4 ) );
+}
+
+// return space required to save this dirtree
+unsigned AllocTable::size()
+{
+  return count() * 4;
+}
+
+void AllocTable::save( unsigned char* buffer )
+{
+  for( unsigned i = 0; i < count(); i++ )
+    writeU32( buffer + i*4, data[i] );
+}
+
+void AllocTable::debug()
+{
+  std::cout << "block size " << data.size() << std::endl;
+  for( unsigned i=0; i< data.size(); i++ )
+  {
+     if( data[i] == Avail ) continue;
+     std::cout << i << ": ";
+     if( data[i] == Eof ) std::cout << "[eof]";
+     else if( data[i] == Bat ) std::cout << "[bat]";
+     else if( data[i] == MetaBat ) std::cout << "[metabat]";
+     else std::cout << data[i];
+     std::cout << std::endl;
+  }
+}
+
+// =========== DirTree ==========
+
+const unsigned DirTree::End = 0xffffffff;
+
+DirTree::DirTree()
+{
+  clear();
+}
+
+void DirTree::clear()
+{
+  // leave only root entry
+  entries.resize( 1 );
+  entries[0].valid = true;
+  entries[0].name = "Root Entry";
+  entries[0].dir = true;
+  entries[0].size = 0;
+  entries[0].start = End;
+  entries[0].prev = End;
+  entries[0].next = End;
+  entries[0].child = End;
+}
+
+unsigned DirTree::entryCount()
+{
+  return entries.size();
+}
+
+DirEntry* DirTree::entry( unsigned index )
+{
+  if( index >= entryCount() ) return (DirEntry*) 0;
+  return &entries[ index ];
+}
+
+int DirTree::indexOf( DirEntry* e )
+{
+  for( unsigned i = 0; i < entryCount(); i++ )
+    if( entry( i ) == e ) return i;
+    
+  return -1;
+}
+
+int DirTree::parent( unsigned index )
+{
+  // brute-force, basically we iterate for each entries, find its children
+  // and check if one of the children is 'index'
+  for( unsigned j=0; j<entryCount(); j++ )
+  {
+    std::vector<unsigned> chi = children( j );
+    for( unsigned i=0; i<chi.size();i++ )
+      if( chi[i] == index )
+        return j;
+  }
+        
+  return -1;
+}
+
+std::string DirTree::fullName( unsigned index )
+{
+  // don't use root name ("Root Entry"), just give "/"
+  if( index == 0 ) return "/";
+
+  std::string result = entry( index )->name;
+  result.insert( 0,  "/" );
+  int p = parent( index );
+  DirEntry * _entry = 0;
+  while( p > 0 )
+  {
+    _entry = entry( p );
+    if (_entry->dir && _entry->valid)
+    {
+      result.insert( 0,  _entry->name);
+      result.insert( 0,  "/" );
+    }
+    --p;
+    index = p;
+    if( index <= 0 ) break;
+  }
+  return result;
+}
+
+// given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
+// if not found and create is false, return 0
+// if create is true, a new entry is returned
+DirEntry* DirTree::entry( const std::string& name, bool create )
+{
+   if( !name.length() ) return (DirEntry*)0;
+ 
+   // quick check for "/" (that's root)
+   if( name == "/" ) return entry( 0 );
+   
+   // split the names, e.g  "/ObjectPool/_1020961869" will become:
+   // "ObjectPool" and "_1020961869" 
+   std::list<std::string> names;
+   std::string::size_type start = 0, end = 0;
+   if( name[0] == '/' ) start++;
+   while( start < name.length() )
+   {
+     end = name.find_first_of( '/', start );
+     if( end == std::string::npos ) end = name.length();
+     names.push_back( name.substr( start, end-start ) );
+     start = end+1;
+   }
+  
+   // start from root 
+   int index = 0 ;
+
+   // trace one by one   
+   std::list<std::string>::iterator it; 
+
+   for( it = names.begin(); it != names.end(); ++it )
+   {
+     // find among the children of index
+     std::vector<unsigned> chi = children( index );
+     unsigned child = 0;
+     for( unsigned i = 0; i < chi.size(); i++ )
+     {
+       DirEntry* ce = entry( chi[i] );
+       if( ce ) 
+       if( ce->valid && ( ce->name.length()>1 ) )
+       if( ce->name == *it )
+             child = chi[i];
+     }
+     
+     // traverse to the child
+     if( child > 0 ) index = child;
+     else
+     {
+       // not found among children
+       if( !create ) return (DirEntry*)0;
+       
+       // create a new entry
+       unsigned parent = index;
+       entries.push_back( DirEntry() );
+       index = entryCount()-1;
+       DirEntry* e = entry( index );
+       e->valid = true;
+       e->name = *it;
+       e->dir = false;
+       e->size = 0;
+       e->start = 0;
+       e->child = End;
+       e->prev = End;
+       e->next = entry(parent)->child;
+       entry(parent)->child = index;
+     }
+   }
+
+   return entry( index );
+}
+
+// helper function: recursively find siblings of index
+void dirtree_find_siblings( DirTree* dirtree, std::vector<unsigned>& result, 
+  unsigned index )
+{
+  DirEntry* e = dirtree->entry( index );
+  if( !e ) return;
+  if( !e->valid ) return;
+
+  // prevent infinite loop  
+  for( unsigned i = 0; i < result.size(); i++ )
+    if( result[i] == index ) return;
+
+  // add myself    
+  result.push_back( index );
+  
+  // visit previous sibling, don't go infinitely
+  unsigned prev = e->prev;
+  if( ( prev > 0 ) && ( prev < dirtree->entryCount() ) )
+  {
+    for( unsigned i = 0; i < result.size(); i++ )
+      if( result[i] == prev ) prev = 0;
+    if( prev ) dirtree_find_siblings( dirtree, result, prev );
+  }
+    
+  // visit next sibling, don't go infinitely
+  unsigned next = e->next;
+  if( ( next > 0 ) && ( next < dirtree->entryCount() ) )
+  {
+    for( unsigned i = 0; i < result.size(); i++ )
+      if( result[i] == next ) next = 0;
+    if( next ) dirtree_find_siblings( dirtree, result, next );
+  }
+}
+
+std::vector<unsigned> DirTree::children( unsigned index )
+{
+  std::vector<unsigned> result;
+  
+  DirEntry* e = entry( index );
+  if( e ) if( e->valid && e->child < entryCount() )
+    dirtree_find_siblings( this, result, e->child );
+    
+  return result;
+}
+
+void DirTree::load( unsigned char* buffer, unsigned size )
+{
+  entries.clear();
+  
+  for( unsigned i = 0; i < size/128; i++ )
+  {
+    unsigned p = i * 128;
+    
+    // would be < 32 if first char in the name isn't printable
+    unsigned prefix = 32;
+    
+    // parse name of this entry, which stored as Unicode 16-bit
+    std::string name;
+    int name_len = readU16( buffer + 0x40+p );
+    if( name_len > 64 ) name_len = 64;
+    for( int j=0; ( buffer[j+p]) && (j<name_len); j+= 2 )
+      name.append( 1, buffer[j+p] );
+      
+    // first char isn't printable ? remove it...
+    if( buffer[p] < 32 )
+    { 
+      prefix = buffer[0]; 
+      name.erase( 0,1 ); 
+    }
+    
+    // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
+    unsigned type = buffer[ 0x42 + p];
+    
+    DirEntry e;
+    e.valid = true;
+    e.name = name;
+    e.start = readU32( buffer + 0x74+p );
+    e.size = readU32( buffer + 0x78+p );
+    e.prev = readU32( buffer + 0x44+p );
+    e.next = readU32( buffer + 0x48+p );
+    e.child = readU32( buffer + 0x4C+p );
+    e.dir = ( type!=2 );
+    
+    // sanity checks
+    if( (type != 2) && (type != 1 ) && (type != 5 ) ) e.valid = false;
+    if( name_len < 1 ) e.valid = false;
+    
+    entries.push_back( e );
+  }  
+}
+
+// return space required to save this dirtree
+unsigned DirTree::size()
+{
+  return entryCount() * 128;
+}
+
+void DirTree::save( unsigned char* buffer )
+{
+  memset( buffer, 0, size() );
+  
+  // root is fixed as "Root Entry"
+  DirEntry* root = entry( 0 );
+  std::string name = "Root Entry";
+  for( unsigned j = 0; j < name.length(); j++ )
+    buffer[ j*2 ] = name[j];
+  writeU16( buffer + 0x40, name.length()*2 + 2 );    
+  writeU32( buffer + 0x74, 0xffffffff );
+  writeU32( buffer + 0x78, 0 );
+  writeU32( buffer + 0x44, 0xffffffff );
+  writeU32( buffer + 0x48, 0xffffffff );
+  writeU32( buffer + 0x4c, root->child );
+  buffer[ 0x42 ] = 5;
+  buffer[ 0x43 ] = 1; 
+
+  for( unsigned i = 1; i < entryCount(); i++ )
+  {
+    DirEntry* e = entry( i );
+    if( !e ) continue;
+    if( e->dir )
+    {
+      e->start = 0xffffffff;
+      e->size = 0;
+    }
+    
+    // max length for name is 32 chars
+    std::string name = e->name;
+    if( name.length() > 32 )
+      name.erase( 32, name.length() );
+      
+    // write name as Unicode 16-bit
+    for( unsigned j = 0; j < name.length(); j++ )
+      buffer[ i*128 + j*2 ] = name[j];
+
+    writeU16( buffer + i*128 + 0x40, name.length()*2 + 2 );    
+    writeU32( buffer + i*128 + 0x74, e->start );
+    writeU32( buffer + i*128 + 0x78, e->size );
+    writeU32( buffer + i*128 + 0x44, e->prev );
+    writeU32( buffer + i*128 + 0x48, e->next );
+    writeU32( buffer + i*128 + 0x4c, e->child );
+    buffer[ i*128 + 0x42 ] = e->dir ? 1 : 2;
+    buffer[ i*128 + 0x43 ] = 1; // always black
+  }  
+}
+
+void DirTree::debug()
+{
+  for( unsigned i = 0; i < entryCount(); i++ )
+  {
+    DirEntry* e = entry( i );
+    if( !e ) continue;
+    std::cout << i << ": ";
+    if( !e->valid ) std::cout << "INVALID ";
+    std::cout << e->name << " ";
+    if( e->dir ) std::cout << "(Dir) ";
+    else std::cout << "(File) ";
+    std::cout << e->size << " ";
+    std::cout << "s:" << e->start << " ";
+    std::cout << "(";
+    if( e->child == End ) std::cout << "-"; else std::cout << e->child;
+    std::cout << " ";
+    if( e->prev == End ) std::cout << "-"; else std::cout << e->prev;
+    std::cout << ":";
+    if( e->next == End ) std::cout << "-"; else std::cout << e->next;
+    std::cout << ")";    
+    std::cout << std::endl;
+  }
+}
+
 // =========== StorageIO ==========
 
-StorageIO::StorageIO( Storage* storage, const char* fname, int m ):
-  doc( storage ), filename( fname), mode( m )
+StorageIO::StorageIO( Storage* st, const char* fname )
 {
-  // initialization
-  result = Storage::Ok; 
-  root = (Entry*) 0L;
-  current_dir = (Entry*) 0L;
-  bb_size = 512;
-  sb_size = 64;
-  threshold = 4096;
-
-  // prepare input stream
-  int om = std::ios::in;
-  if( mode == Storage::WriteOnly ) om = std::ios::out;
-  if( mode == Storage::ReadWrite) om = std::ios::app;
-  om |= std::ios::binary;
-  //file.open( filename.c_str(), om );
-  file.open( filename.c_str(), std::ios::binary | std::ios::in );
-
-  // check for error
-  if( !file.good() )
-  {
-    std::cerr << "Can't open " << filename << "\n\n";
-    result = Storage::OpenFailed;
-    return;
-  }
-
-  // assume we'll be just fine
+  storage = st;
+  filename = fname;
   result = Storage::Ok;
-
-  if( mode == Storage::WriteOnly ) create();
-  else load();
-
+  opened = false;
+  
+  header = new Header();
+  dirtree = new DirTree();
+  bbat = new AllocTable();
+  sbat = new AllocTable();
+  
+  filesize = 0;
+  bbat->blockSize = 1 << header->b_shift;
+  sbat->blockSize = 1 << header->s_shift;
 }
 
 StorageIO::~StorageIO()
 {
-  filename = std::string();
-  flush();
-  file.close();
+  if( opened ) close();
+  delete sbat;
+  delete bbat;
+  delete dirtree;
+  delete header;
+}
+
+bool StorageIO::open()
+{
+  // already opened ? close first
+  if( opened ) close();
+  
+  load();
+  
+  return result == Storage::Ok;
 }
 
 void StorageIO::load()
 {
-  unsigned bb_shift;  // should be 9 (2^9 = 1024)
-  unsigned sb_shift;  // should be 6 (2^6 = 64)
-  unsigned num_bat;   // blocks for big-BAT
-  unsigned num_sbat;  // blocks for small-BAT
-  unsigned num_mbat;  // blocks for meta-BAT
-
+  unsigned char* buffer = 0;
+  unsigned long buflen = 0;
+  std::vector<unsigned long> blocks;
+  
+  // open the file, check for error
+  result = Storage::OpenFailed;
+  file.open( filename.c_str(), std::ios::binary | std::ios::in );
+  if( !file.good() ) return;
+  
   // find size of input file
   file.seekg( 0, std::ios::end );
   filesize = file.tellg();
 
   // load header
+  buffer = new unsigned char[512];
   file.seekg( 0 ); 
-  file.read( (char*)header, sizeof( header ) );
-  if( file.gcount() != sizeof( header ) )
-  {
-    result = Storage::NotOLE;
-    return;
-  }
+  file.read( (char*)buffer, 512 );
+  header->load( buffer );
+  delete[] buffer;
 
   // check OLE magic id
+  result = Storage::NotOLE;
   for( unsigned i=0; i<8; i++ )
-  {
-    magic[i] = header[i];
-    if( magic[i] != pole_magic[i] )
-    {
-      result = Storage::NotOLE;
+    if( header->id[i] != pole_magic[i] )
       return;
-    }
+  
+  // sanity checks
+  result = Storage::BadOLE;
+  if( !header->valid() ) return;
+  if( header->threshold != 4096 ) return;
+
+  // important block size
+  bbat->blockSize = 1 << header->b_shift;
+  sbat->blockSize = 1 << header->s_shift;
+  
+  // find blocks allocated to store big bat
+  // the first 109 blocks are in header, the rest in meta bat
+  blocks.clear();
+  blocks.resize( header->num_bat );
+  for( unsigned i = 0; i < 109; i++ )
+    if( i >= header->num_bat ) break;
+    else blocks[i] = header->bb_blocks[i];
+  if( (header->num_bat > 109) && (header->num_mbat > 0) )
+  {
+    unsigned char* buffer2 = new unsigned char[ bbat->blockSize ];
+    unsigned k = 109;
+    for( unsigned r = 0; r < header->num_mbat; r++ )
+    {
+      loadBigBlock( header->mbat_start+r, buffer2, bbat->blockSize );
+      for( unsigned s=0; s < bbat->blockSize; s+=4 )
+      {
+        if( k >= header->num_bat ) break;
+        else  blocks[k++] = readU32( buffer2 + s );
+      }  
+     }    
+    delete[] buffer2;
   }
 
-  // load important variables
-  bb_shift = readU16( header + 0x1e );
-  sb_shift = readU16( header + 0x20 );
-  num_bat = readU32( header + 0x2c );
-  dirent_start = readU32( header + 0x30 );
-  threshold = readU32( header + 0x38 );
-  sbat_start = readU32( header + 0x3c );
-  num_sbat = readU32( header + 0x40 );
-  mbat_start = readU32( header + 0x44 );
-  num_mbat = readU32( header + 0x48 );
-
-  // sanity checks !!
-  if( ( threshold != 4096 ) || ( num_bat == 0 ) ||
-      ( sb_shift > bb_shift ) || ( bb_shift <= 6 ) || ( bb_shift >=31 ) )
+  // load big bat
+  buflen = blocks.size()*bbat->blockSize;
+  if( buflen > 0 )
   {
-    result = Storage::BadOLE;
+    buffer = new unsigned char[ buflen ];  
+    loadBigBlocks( blocks, buffer, buflen );
+    bbat->load( buffer, buflen );
+    delete[] buffer;
+  }  
+
+  // load small bat
+  blocks.clear();
+  blocks = bbat->follow( header->sbat_start );
+  buflen = blocks.size()*bbat->blockSize;
+  if( buflen > 0 )
+  {
+    buffer = new unsigned char[ buflen ];  
+    loadBigBlocks( blocks, buffer, buflen );
+    sbat->load( buffer, buflen );
+    delete[] buffer;
+  }  
+  
+  // load directory tree
+  blocks.clear();
+  blocks = bbat->follow( header->dirent_start );
+  buflen = blocks.size()*bbat->blockSize;
+  buffer = new unsigned char[ buflen ];  
+  loadBigBlocks( blocks, buffer, buflen );
+  dirtree->load( buffer, buflen );
+  unsigned sb_start = readU32( buffer + 0x74 );
+  delete[] buffer;
+  
+  // fetch block chain as data for small-files
+  sb_blocks = bbat->follow( sb_start ); // small files
+  
+  // for troubleshooting, just enable this block
+#if 0
+  header->debug();
+  sbat->debug();
+  bbat->debug();
+  dirtree->debug();
+#endif
+  
+  // so far so good
+  result = Storage::Ok;
+  opened = true;
+}
+
+void StorageIO::create()
+{
+  // std::cout << "Creating " << filename << std::endl; 
+  
+  file.open( filename.c_str(), std::ios::out|std::ios::binary );
+  if( !file.good() )
+  {
+    std::cerr << "Can't create " << filename << std::endl;
+    result = Storage::OpenFailed;
     return;
   }
   
-  // important block size
-  bb_size = 1 << bb_shift;
-  sb_size = 1 << sb_shift;
-
-  std::vector<unsigned long> chain;
-  unsigned char buffer[bb_size];
-
-  // load blocks in meta BAT
-  std::vector<unsigned long> metabat( num_mbat * bb_size / 4 );
-  unsigned q = 0;
-  for( unsigned r=0; r<num_mbat; r++ )
-  {
-    unsigned char metabuf[ bb_size ];
-    loadBigBlock( mbat_start+r, metabuf, sizeof( metabuf ) );
-    for( unsigned s=0; s< bb_size/4; s++ )
-      metabat[q++] = readU32( metabuf + s*4 ); 
-  }
-
-  // load big BAT, keep it in memory
-  // each entry in alloc table takes 4 bytes
-  bb.resize( num_bat * bb_size / 4 );
-  for( unsigned long i=0; i< num_bat; i++ )
-  {
-    // note that first 109 blocks are defined in header
-    // the rest are from meta BAT
-    unsigned long block = (i<109) ? readU32( header + 0x4C+i*4 ) : metabat[i-109];
-
-    loadBigBlock( block, buffer, bb_size );
-
-    for( unsigned m=0; m<bb_size/4; m++)
-      bb.set( i*bb_size/4 + m, readU32( buffer + m*4 ) );
-  }
-
-  // load small BAT, also keep in memory
-  // to get blocks for small BAT, follow chain in big BAT
-  chain = bb.follow( sbat_start );
-  //sb.resize( chain.size() * bb_size / 4 );
-  for( unsigned long i=0; i < chain.size(); i++ )
-  {
-    unsigned long block = chain[i];
-    loadBigBlock( block, buffer, bb_size );
-    for( unsigned m=0; m<bb_size/4; m++ )
-      sb.set( i*bb_size/4 + m, readU32( buffer + m*4 ) ); 
-  }
-
-  // construct root directory tree
-  unsigned char* dirent;
-  chain = bb.follow( dirent_start );
-  unsigned bufsize = chain.size() * bb_size;
-  dirent = new unsigned char[bufsize];
-  loadBigBlocks( chain, dirent, bufsize );
-  root = buildTree( (Entry*)0L, 0, dirent );
-  
-  // fetch block chain as data for small-files
-  sb_blocks = bb.follow( readU32( dirent + 0x74 ) );
-
-  delete [] dirent;
-  
-  // start with root directory
-  current_dir = root;
-
-  // done, without error
-  result = Storage::Ok;
-}
-
-// unsupported yet
-void StorageIO::create()
-{
-  unsigned bb_shift = 9;
-  unsigned sb_shift = 6;
-  bb_size = 1 << bb_shift;
-  sb_size = 1 << sb_shift;
-  threshold = 4096;
-
-  // construct blank header
-  // only few important parts, the rest will be fixed-up in flush()
-  for( int i=0; i<8; i++ ) header[i] = pole_magic[i];
-  writeU32( header + 8, 0 );
-  writeU32( header + 12, 0 );
-  writeU32( header + 16, 0 );
-  writeU16( header + 24, 0x3B00 );  // revision ?
-  writeU16( header + 26, 3 );       // version ?
-  writeU16( header + 28, 0xfffe );  // unknown
-  writeU16( header + 30, bb_shift );
-  writeU16( header + 32, sb_shift );
-  writeU16( header + 34, 0 );
-  writeU32( header + 36, 0 );
-  writeU32( header + 40, 0 );
-  writeU32( header + 52, 0 );
-  for( int j=0x4C; j<512; j++ ) header[j] = 0xff;
-
-  // done, without error
+  // so far so good
+  opened = true;
   result = Storage::Ok;
 }
 
 void StorageIO::flush()
 {
-  if( mode == Storage::ReadOnly ) return;
+  /* Note on Microsoft implementation:
+     - directory entries are stored in the last block(s)
+     - BATs are as second to the last
+     - Meta BATs are third to the last  
+  */
+}
 
-  // header fix-up
-  writeU32( header + 0x30, dirent_start );
-  writeU32( header + 0x38, threshold );
-  writeU32( header + 0x3c, sbat_start );
-  writeU32( header + 0x44, mbat_start );
+void StorageIO::close()
+{
+  if( !opened ) return;
+  
+  file.close(); 
+  opened = false;
+  
+  std::list<Stream*>::iterator it;
+  for( it = streams.begin(); it != streams.end(); ++it )
+    delete *it;
+}
 
-  // write the header
+StreamIO* StorageIO::streamIO( const std::string& name )
+{
+  // sanity check
+  if( !name.length() ) return (StreamIO*)0;
 
+  // search in the entries
+  DirEntry* entry = dirtree->entry( name );
+  //if( entry) std::cout << "FOUND\n";
+  if( !entry ) return (StreamIO*)0;
+  //if( !entry->dir ) std::cout << "  NOT DIR\n";
+  if( entry->dir ) return (StreamIO*)0;
 
-
-  // dirty ?
+  StreamIO* result = new StreamIO( this, entry );
+  result->fullName = name;
+  
+  return result;
 }
 
 unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
@@ -536,9 +997,8 @@ unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
   for( unsigned long i=0; (i < blocks.size() ) & ( bytes<maxlen ); i++ )
   {
     unsigned long block = blocks[i];
-    if( block < 0 ) continue;
-    unsigned long pos =  bb_size * ( block+1 );
-    unsigned long p = (bb_size < maxlen-bytes) ? bb_size : maxlen-bytes;
+    unsigned long pos =  bbat->blockSize * ( block+1 );
+    unsigned long p = (bbat->blockSize < maxlen-bytes) ? bbat->blockSize : maxlen-bytes;
     if( pos + p > filesize ) p = filesize - pos;
     file.seekg( pos );
     file.read( (char*)data + bytes, p );
@@ -554,13 +1014,12 @@ unsigned long StorageIO::loadBigBlock( unsigned long block,
   // sentinel
   if( !data ) return 0;
   if( !file.good() ) return 0;
-  if( block < 0 ) return 0;
-
+  
   // wraps call for loadBigBlocks
   std::vector<unsigned long> blocks;
   blocks.resize( 1 );
   blocks[ 0 ] = block;
-
+  
   return loadBigBlocks( blocks, data, maxlen );
 }
 
@@ -575,29 +1034,30 @@ unsigned long StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks,
   if( maxlen == 0 ) return 0;
 
   // our own local buffer
-  unsigned char buf[ bb_size ];
+  unsigned char* buf = new unsigned char[ bbat->blockSize ];
 
   // read small block one by one
   unsigned long bytes = 0;
   for( unsigned long i=0; ( i<blocks.size() ) & ( bytes<maxlen ); i++ )
   {
     unsigned long block = blocks[i];
-    if( block < 0 ) continue;
 
     // find where the small-block exactly is
-    unsigned long pos = block * sb_size;
-    unsigned long bbindex = pos / bb_size;
+    unsigned long pos = block * sbat->blockSize;
+    unsigned long bbindex = pos / bbat->blockSize;
     if( bbindex >= sb_blocks.size() ) break;
 
-    loadBigBlock( sb_blocks[ bbindex ], buf, bb_size );
+    loadBigBlock( sb_blocks[ bbindex ], buf, bbat->blockSize );
 
     // copy the data
-    unsigned offset = pos % bb_size;
-    unsigned long p = (maxlen-bytes < bb_size-offset ) ? maxlen-bytes :  bb_size-offset;
-    p = (sb_size<p ) ? sb_size : p;
+    unsigned offset = pos % bbat->blockSize;
+    unsigned long p = (maxlen-bytes < bbat->blockSize-offset ) ? maxlen-bytes :  bbat->blockSize-offset;
+    p = (sbat->blockSize<p ) ? sbat->blockSize : p;
     memcpy( data + bytes, buf + offset, p );
     bytes += p;
   }
+  
+  delete[] buf;
 
   return bytes;
 }
@@ -608,7 +1068,6 @@ unsigned long StorageIO::loadSmallBlock( unsigned long block,
   // sentinel
   if( !data ) return 0;
   if( !file.good() ) return 0;
-  if( block < 0 ) return 0;
 
   // wraps call for loadSmallBlocks
   std::vector<unsigned long> blocks;
@@ -618,133 +1077,24 @@ unsigned long StorageIO::loadSmallBlock( unsigned long block,
   return loadSmallBlocks( blocks, data, maxlen );
 }
 
-// recursive function to construct directory tree
-Entry* StorageIO::buildTree( Entry* parent, int index, const unsigned char* dirent )
-{
-  Entry* entry = (Entry*) 0L;
-
-  // find where to start
-  unsigned p = index * 128;
-
-  // would be < 32 if first char in the name isn't printable
-  unsigned prefix = 32;
-
-  // parse name of this entry, which stored as Unicode 16-bit
-  std::string name;
-  int name_len = readU16( dirent + 64+p );
-  for( int j=0; ( dirent[j+p]) && (j<name_len); j+= 2 )
-     name.append( 1, dirent[j+p] );
-
-  // emtpy name ?
-  if( !name.length() ) return entry;
-
-  // first char isn't printable ? remove it...
-  if( dirent[p] < 32 ){ prefix = dirent[0]; name.erase( 0,1 ); }
-
-  // type of this entry will decide which Entry should be created
-  // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
-  unsigned type  = dirent[ 0x42 + p];
-  if( ( type == 2 ) || ( type == 1 ) || ( type == 5 ) ) entry = new Entry();
-  if( entry ) entry->dir = ( ( type == 1 ) || ( type == 5 ) );
-
-  // barf on error
-  if( !entry ) return entry;
-
-  // fetch important data
-  entry->name = name;
-  entry->start = readU32( dirent + 0x74+p );
-  entry->size  = readU32( dirent + 0x78+p );
-
-  // append as another child
-  entry->parent = parent;
-  if( parent ) parent->children.push_back( entry );
-
-  // check previous
-  int prev  = readU32( dirent + 0x44+p );
-  if( prev >= 0 ) buildTree( parent, prev, dirent );
-  
-  // traverse to sub
-  int dir   = readU32( dirent + 0x4C+p );
-  if( entry->dir && (dir > 0 ))
-       buildTree( entry, dir, dirent );
-
-  // check next
-  int next  = readU32( dirent + 0x48+p );
-  if( next >= 0 ) buildTree( parent, next, dirent );
-  return entry;
-}
-
-// given an entry, find a complete path from root
-std::string StorageIO::fullName( Entry* e )
-{
-  if( !e ) return (const char*) 0L;
-
-  std::string result;
-
-  while( e->parent )
-  {
-     result.insert( 0, e->name );
-     result.insert( 0,  "/" );
-     e = e->parent;
-  }
-
-  // don't use specified root name (like "Root Entry")
-  if( !result.length() ) result = "/";
-
-  return result;
-}
-
-// given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
-Entry* StorageIO::entry( const std::string& name )
-{
-   Entry* entry = (Entry*) 0L;
-
-   // sanity check
-   if( !root ) return (Entry*) 0L;
-   if( !name.length() ) return (Entry*) 0L;
-   
-   // start from root when name is absolute
-   // or current directory when name is relative
-   entry = (name[0] == '/' ) ? root : current_dir;
-
-   // split the names, e.g  "/ObjectPool/_1020961869" will become:
-   // "ObjectPool" and "_1020961869" 
-   std::list<std::string> names;
-   std::string::size_type start = 0, end = 0;
-   while( start < name.length() )
-   {
-     end = name.find_first_of( '/', start );
-     if( end == std::string::npos ) end = name.length();
-     names.push_back( name.substr( start, end-start ) );
-     start = end+1;
-   }
-  
-   std::list<std::string>::iterator it; 
-   for( it = names.begin(); it != names.end(); ++it )
-   {
-     std::string entryname = *it;
-     Entry *child = (Entry*) 0L;
-     if( entry->dir )
-       for( unsigned j=0; j < entry->children.size(); j++ )
-         if( entry->children[j]->name == entryname )
-           child = entry->children[j];
-     if( !child ) return (Entry*) 0L;
-      entry = child;
-   }
-
-   return entry;
-}
-
 // =========== StreamIO ==========
 
-StreamIO::StreamIO( StorageIO* _io, Entry* _entry ):
-  io( _io ), entry( _entry ), m_pos( 0 ),
-  cache_data( 0 ), cache_size( 0 ), cache_pos( 0 )
+StreamIO::StreamIO( StorageIO* s, DirEntry* e)
 {
-  blocks = ( entry->size >= io->threshold ) ? io->bb.follow( entry->start ) :
-     io->sb.follow( entry->start );
+  io = s;
+  entry = e;
+  eof = false;
+  fail = false;
+  
+  m_pos = 0;
+
+  if( entry->size >= io->header->threshold ) 
+    blocks = io->bbat->follow( entry->start );
+  else
+    blocks = io->sbat->follow( entry->start );
 
   // prepare cache
+  cache_pos = 0;
   cache_size = 4096; // optimal ?
   cache_data = new unsigned char[cache_size];
   updateCache();
@@ -793,48 +1143,50 @@ unsigned long StreamIO::read( unsigned long pos, unsigned char* data, unsigned l
 
   unsigned long totalbytes = 0;
   
-  if ( entry->size < io->threshold )
+  if ( entry->size < io->header->threshold )
   {
     // small file
-    unsigned long index = pos / io->sb_size;
+    unsigned long index = pos / io->sbat->blockSize;
 
     if( index >= blocks.size() ) return 0;
 
-    unsigned char buf[ io->sb_size ];
-    unsigned long offset = pos % io->sb_size;
+    unsigned char* buf = new unsigned char[ io->sbat->blockSize ];
+    unsigned long offset = pos % io->sbat->blockSize;
     while( totalbytes < maxlen )
     {
       if( index >= blocks.size() ) break;
-      io->loadSmallBlock( blocks[index], buf, io->bb_size );
-      unsigned long count = io->sb_size - offset;
+      io->loadSmallBlock( blocks[index], buf, io->bbat->blockSize );
+      unsigned long count = io->sbat->blockSize - offset;
       if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
       memcpy( data+totalbytes, buf + offset, count );
       totalbytes += count;
       offset = 0;
       index++;
     }
+    delete[] buf;
 
   }
   else
   {
     // big file
-    unsigned long index = pos / io->bb_size;
+    unsigned long index = pos / io->bbat->blockSize;
     
     if( index >= blocks.size() ) return 0;
     
-    unsigned char buf[ io->bb_size ];
-    unsigned long offset = pos % io->bb_size;
+    unsigned char* buf = new unsigned char[ io->bbat->blockSize ];
+    unsigned long offset = pos % io->bbat->blockSize;
     while( totalbytes < maxlen )
     {
       if( index >= blocks.size() ) break;
-      io->loadBigBlock( blocks[index], buf, io->bb_size );
-      unsigned long count = io->bb_size - offset;
+      io->loadBigBlock( blocks[index], buf, io->bbat->blockSize );
+      unsigned long count = io->bbat->blockSize - offset;
       if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
       memcpy( data+totalbytes, buf + offset, count );
       totalbytes += count;
       index++;
       offset = 0;
     }
+    delete [] buf;
 
   }
 
@@ -862,141 +1214,69 @@ void StreamIO::updateCache()
 
 // =========== Storage ==========
 
-Storage::Storage()
+Storage::Storage( const char* filename )
 {
-  io = (StorageIO*) 0L;
-  result = Storage::Ok;
+  io = new StorageIO( this, filename );
 }
 
 Storage::~Storage()
 {
-  close();
   delete io;
 }
 
-bool Storage::open( const char* fileName, int m )
+int Storage::result()
 {
-  // only a few modes accepted
-  if( ( m != ReadOnly ) && ( m != WriteOnly ) && ( m != ReadWrite ) )
-  {
-    result = UnknownError;
-    return false;
-  }
-
-  io = new StorageIO( this, fileName, m );
-
-  result = io->result;
-  
-  return result == Storage::Ok;
+  return io->result;
 }
 
-void Storage::flush()
+bool Storage::open()
 {
-  if( io ) io->flush();
+  return io->open();
 }
 
 void Storage::close()
 {
-  flush();
+  io->close();
 }
 
-// list all files and subdirs in current path
-std::list<std::string> Storage::listDirectory()
+std::list<std::string> Storage::entries( const std::string& path )
 {
-  std::list<std::string> entries;
-
-  // sanity check
-  if( !io ) return entries;
-  if( !io->current_dir ) return entries;
-
-  // sentinel: do nothing if not a directory
-  if( !io->current_dir->dir ) return entries;
-
-  // find all children belongs to this directory
-  for( unsigned i = 0; i<io->current_dir->children.size(); i++ )
+  std::list<std::string> result;
+  DirTree* dt = io->dirtree;
+  DirEntry* e = dt->entry( path, false );
+  if( e  && e->dir )
   {
-    Entry* e = io->current_dir->children[i];
-    if( e ) entries.push_back( e->name );
+    unsigned parent = dt->indexOf( e );
+    std::vector<unsigned> children = dt->children( parent );
+    for( unsigned i = 0; i < children.size(); i++ )
+      result.push_back( dt->entry( children[i] )->name );
   }
-
-  return entries;
+  
+  return result;
 }
 
-// enters a sub-directory, returns false if not a directory or not found
-bool Storage::enterDirectory( const std::string& directory )
+bool Storage::isDirectory( const std::string& name )
 {
-  // sanity check
-  if( !io ) return false;
-  if( !io->current_dir ) return false;
-
-  // look for the specified sub-dir
-  for( unsigned i = 0; i<io->current_dir->children.size(); i++ )
-  {
-    Entry* e = io->current_dir->children[i];
-    if( e ) if( e->name == directory ) 
-      if ( e->dir )
-      {
-        io->current_dir = e;
-        return true;
-      }
-  }
-
-  return false;
-}
-
-// goes up one level (like cd ..)
-void Storage::leaveDirectory()
-{
-  // sanity check
-  if( !io ) return;
-  if( !io->current_dir ) return;
-
-  Entry* parent = io->current_dir->parent;
-  if( parent ) if( parent->dir ) 
-    io->current_dir = parent;
-}
-
-// note: without trailing "/"
-std::string Storage::path()
-{
-  // sanity check
-  if( !io ) return std::string();
-  if( !io->current_dir ) return std::string();
-
-  return io->fullName( io->current_dir );
-}
-
-Stream* Storage::stream( const std::string& name )
-{
-  // sanity check
-  if( !name.length() ) return (Stream*) 0L;
-  if( !io ) return (Stream*) 0L;
-
-  // make absolute if necesary
-  std::string fullName = name;
-  if( name[0] != '/' ) fullName.insert( 0, path() + "/" );
-
-  // find to which entry this stream associates
-  Entry* entry =  io->entry( name );
-  if( !entry ) return (Stream*) 0L;
-
-  StreamIO* sio = new StreamIO( io, entry );
-  Stream* s = new Stream( sio );
-
-  return s;
+  DirEntry* e = io->dirtree->entry( name, false );
+  return e ? e->dir : false;
 }
 
 // =========== Stream ==========
 
-Stream::Stream( StreamIO* _io ):
-  io( _io )
+Stream::Stream( Storage* storage, const std::string& name )
 {
+  io = storage->io->streamIO( name );
 }
 
 // FIXME tell parent we're gone
 Stream::~Stream()
 {
   delete io;
+}
+
+std::string Stream::fullName()
+{
+  return io ? io->fullName : std::string();
 }
 
 unsigned long Stream::tell()
@@ -1016,7 +1296,7 @@ unsigned long Stream::size()
 
 int Stream::getch()
 {
-  return io ? io->getch() : -1;
+  return io ? io->getch() : 0;
 }
 
 unsigned long Stream::read( unsigned char* data, unsigned long maxlen )
@@ -1024,3 +1304,12 @@ unsigned long Stream::read( unsigned char* data, unsigned long maxlen )
   return io ? io->read( data, maxlen ) : 0;
 }
 
+bool Stream::eof()
+{
+  return io ? io->eof : false;
+}
+
+bool Stream::fail()
+{
+  return io ? io->fail : true;
+}

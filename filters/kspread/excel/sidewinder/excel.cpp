@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -27,9 +27,13 @@
 #include <stdio.h> // memcpy
 
 #include "pole.h"
-#include "sidewinder.h"
+#include "swinder.h"
+#include "io.h"
 
-using namespace Sidewinder;
+using namespace Swinder;
+
+// Use anonymous namespace to cover following functions
+namespace{
 
 static inline unsigned long readU16( const void* p )
 {
@@ -43,14 +47,42 @@ static inline unsigned long readU32( const void* p )
   return ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24);
 }
 
+typedef double& data_64;
+inline void convert_64 (data_64 convert){
+	register unsigned char temp;
+	register unsigned int u_int_temp;
+	temp = ((unsigned char*)&convert)[0];
+	((unsigned char*)&convert)[0] = ((unsigned char*)&convert)[3];
+	((unsigned char*)&convert)[3] = temp;
+	temp = ((unsigned char*)&convert)[1];
+	((unsigned char*)&convert)[1] = ((unsigned char*)&convert)[2];
+	((unsigned char*)&convert)[2] = temp;
+	temp = ((unsigned char*)&convert)[4];
+	((unsigned char*)&convert)[4] = ((unsigned char*)&convert)[7];
+	((unsigned char*)&convert)[7] = temp;
+	temp = ((unsigned char*)&convert)[5];
+	((unsigned char*)&convert)[5] = ((unsigned char*)&convert)[6];
+	((unsigned char*)&convert)[6] = temp;
+        
+        u_int_temp = ((unsigned int *)&convert)[0];
+	((unsigned int *)&convert)[0] = ((unsigned int *)&convert)[1];
+	((unsigned int *)&convert)[1] = u_int_temp;
+}
+
+inline bool isLittleEndian(void)
+{
+        long i = 0x44332211;
+        unsigned char* a = (unsigned char*) &i;
+        return ( *a == 0x11 );
+};
+
+
 // FIXME check that double is 64 bits
 static inline double readFloat64( const void*p )
 {
-  const unsigned char* ptr = (const unsigned char*) p;
+  const double* ptr = (const double*) p;
   double num = 0.0;
-  memcpy( (char*)&num, ptr, 8 );
-//  *((unsigned*) &num) = readU32( ptr );
-//  *((unsigned*) &num + 1) = readU32( ptr+4 );
+  num = *ptr;
   return num;
 }
 
@@ -79,6 +111,8 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
     memcpy( &f, r, 8 );
     f *= factor;
   }
+}
+
 }
 
 //=============================================
@@ -165,7 +199,7 @@ void EString::setSize( unsigned s )
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromUnicodeString( const void* p, unsigned maxsize )
+EString EString::fromUnicodeString( const void* p, unsigned /* maxsize */ )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
@@ -222,7 +256,7 @@ EString EString::fromUnicodeString( const void* p, unsigned maxsize )
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromByteString( const void* p, unsigned maxsize )
+EString EString::fromByteString( const void* p, unsigned /* maxsize */ )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
@@ -246,7 +280,7 @@ EString EString::fromByteString( const void* p, unsigned maxsize )
 
 // FIXME use maxsize for sanity check
 EString EString::fromByteString( const void* p, bool longString, 
-  unsigned maxsize )
+  unsigned /* maxsize */ )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
@@ -280,7 +314,7 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
   UString str = UString::null;
   
   bool richText = false;
-  unsigned formatRuns = 0;
+  // unsigned formatRuns = 0;
   
   unsigned len = data[0];
   unsigned flag = data[1];
@@ -539,11 +573,11 @@ unsigned Record::position() const
   return stream_position;
 }
 
-void Record::setData( unsigned size, const unsigned char* data )
+void Record::setData( unsigned /* size */, const unsigned char* /* data */)
 {
 }
 
-void Record::dump( std::ostream& out ) const
+void Record::dump( std::ostream& /* out */ ) const
 {
   // nothing to dump
 }
@@ -1328,7 +1362,7 @@ EOFRecord::~EOFRecord()
 {
 }
 
-void EOFRecord::setData( unsigned size, const unsigned char* data )
+void EOFRecord::setData( unsigned /* size */, const unsigned char* /* data */ )
 {
   // no data associated with EOF record
 }
@@ -2037,6 +2071,7 @@ public:
   std::vector<bool> isIntegers;
   std::vector<int> intValues;
   std::vector<double> floatValues;
+  std::vector<unsigned> rkValues;
 };
 
 MulRKRecord::MulRKRecord():
@@ -2074,6 +2109,12 @@ double MulRKRecord::asFloat( unsigned i ) const
   return d->floatValues[ i ];
 }
 
+unsigned MulRKRecord::encodedRK( unsigned i ) const
+{
+  if( i >= d->rkValues.size() ) return 0;
+  return d->rkValues[ i ];
+}
+
 void MulRKRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 6 ) return;
@@ -2091,6 +2132,7 @@ void MulRKRecord::setData( unsigned size, const unsigned char* data )
   {
     d->xfIndexes.push_back( readU16( data+i ) );
     unsigned rk = readU32( data+i+2 );
+    d->rkValues.push_back( rk );
     bool isInteger = true; int iv = 0; double fv = 0.0;
     decodeRK( rk, isInteger, iv, fv );
 
@@ -2270,6 +2312,7 @@ class RKRecord::Private
 {
 public:
   bool integer;
+  unsigned rk;
   int i;
   double f;
 };
@@ -2279,6 +2322,7 @@ RKRecord::RKRecord():
 {
   d = new RKRecord::Private();
   d->integer = true;
+  d->rk = 0;
   d->i = 0;
   d->f = 0.0;
 }
@@ -2328,6 +2372,11 @@ void RKRecord::setFloat( double f )
   d->f = f;
 }
 
+unsigned RKRecord::encodedRK() const
+{
+  return d->rk;
+}
+
 // FIXME check sizeof(int) is 32
 // big vs little endian problem
 void RKRecord::setData( unsigned size, const unsigned char* data )
@@ -2339,7 +2388,8 @@ void RKRecord::setData( unsigned size, const unsigned char* data )
   setXfIndex( readU16( data+4 ) );
 
   int i = 0; double f = 0.0;
-  decodeRK( readU32( data+6 ), d->integer, i, f );
+  d->rk = readU32( data+6 );
+  decodeRK( d->rk, d->integer, i, f );
   if( d->integer ) setInteger( i );
   else setFloat( f );
 }
@@ -2995,7 +3045,7 @@ bool XFRecord::diagonalBottomLeft() const
 
 void XFRecord::setDiagonalBottomLeft( bool dd )
 {
-  d->diagonalBottomLeft = d;
+  d->diagonalBottomLeft = dd;
 }
 
 unsigned XFRecord::diagonalStyle() const
@@ -3079,7 +3129,7 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   
     unsigned linestyle = readU16( data + 10 );
     unsigned color1 = readU16( data + 12 );
-    unsigned color2 = readU16( data + 14 );
+    // unsigned color2 = readU16( data + 14 );
     unsigned flag = readU16( data + 16 );
     unsigned fill = readU16( data + 18 );
   
@@ -3168,7 +3218,7 @@ public:
   // color table (from Palette record)
   std::vector<Color> colorTable;
   
-  // mapping from font index to Sidewinder::FormatFont
+  // mapping from font index to Swinder::FormatFont
   std::map<unsigned,FormatFont> fontCache;
 };
 
@@ -3187,8 +3237,8 @@ Workbook*
 ExcelReader::load(
 const char* filename )
 {
-  POLE::Storage storage;
-  if( !storage.open( filename ) )
+  POLE::Storage storage( filename );
+  if( !storage.open() )
   {
     std::cerr << "Cannot open " << filename << std::endl;
     //return Error::CannotOpen;    
@@ -3198,14 +3248,21 @@ const char* filename )
   
   // TODO check ole correctness
 
+  unsigned version = Swinder::Excel97;
   POLE::Stream* stream;
-  stream = storage.stream( "Workbook" ); // Excel 97/2000/XP/2003
-  if( !stream ) stream = storage.stream( "Book" ); // Excel 5.0/7.0
+  stream = new POLE::Stream( &storage, "/Workbook" );
+  if( stream->fail() )
+  {
+    delete stream;
+    stream = new POLE::Stream( &storage, "/Book" );
+    version = Swinder::Excel95;
+  }
   
-  if( !stream )
+  if( stream->fail() )
   {
     std::cerr << filename << " is not Excel doc" << std::endl;
     setResult( CannotOpen );
+    delete stream;
     return (Workbook*)0;
   }
 
@@ -3217,7 +3274,6 @@ const char* filename )
   d->workbook = new Workbook();
   
   // assume
-  unsigned version = Sidewinder::Excel97;
 
   while( stream->tell() < stream_size )
   {
@@ -3248,10 +3304,11 @@ const char* filename )
       handleRecord( record );
       
       // special handling to find Excel version
-      BOFRecord* bof = dynamic_cast<BOFRecord*>(record);
+      if ( record->rtti() == BOFRecord::id ){
+	      BOFRecord* bof = static_cast<BOFRecord*>(record);
       if( bof ) if( bof->type() == BOFRecord::Workbook )
         version = bof->version();
-
+      }
       //record->dump( std::cout );
 
       delete record;
@@ -3271,31 +3328,56 @@ void ExcelReader::handleRecord( Record* record )
 {
   if( !record ) return;
 
-  handleBottomMargin( dynamic_cast<BottomMarginRecord*>( record ) );
-  handleBoundSheet( dynamic_cast<BoundSheetRecord*>( record ) );
-  handleBOF( dynamic_cast<BOFRecord*>( record ) );
-  handleBoolErr( dynamic_cast<BoolErrRecord*>( record ) );
-  handleBlank( dynamic_cast<BlankRecord*>( record ) );
-  handleColInfo( dynamic_cast<ColInfoRecord*>( record ) );
-  handleFormat( dynamic_cast<FormatRecord*>( record ) );
-  handleFont( dynamic_cast<FontRecord*>( record ) );
-  handleFooter( dynamic_cast<FooterRecord*>( record ) );
-  handleHeader( dynamic_cast<HeaderRecord*>( record ) );
-  handleLabel( dynamic_cast<LabelRecord*>( record ) );
-  handleLabelSST( dynamic_cast<LabelSSTRecord*>( record ) );
-  handleLeftMargin( dynamic_cast<LeftMarginRecord*>( record ) );
-  handleMergedCells( dynamic_cast<MergedCellsRecord*>( record ) );
-  handleMulBlank( dynamic_cast<MulBlankRecord*>( record ) );
-  handleMulRK( dynamic_cast<MulRKRecord*>( record ) );
-  handleNumber( dynamic_cast<NumberRecord*>( record ) );
-  handlePalette( dynamic_cast<PaletteRecord*>( record ) );
-  handleRightMargin( dynamic_cast<RightMarginRecord*>( record ) );
-  handleRK( dynamic_cast<RKRecord*>( record ) );
-  handleRow( dynamic_cast<RowRecord*>( record ) );
-  handleRString( dynamic_cast<RStringRecord*>( record ) );
-  handleSST( dynamic_cast<SSTRecord*>( record ) );
-  handleTopMargin( dynamic_cast<TopMarginRecord*>( record ) );
-  handleXF( dynamic_cast<XFRecord*>( record ) );
+  if ( record->rtti() == BottomMarginRecord::id )
+	  handleBottomMargin( static_cast<BottomMarginRecord*>( record ) );
+  if ( record->rtti() == BoundSheetRecord::id )
+	  handleBoundSheet( static_cast<BoundSheetRecord*>( record ) );
+  if ( record->rtti() == BOFRecord::id )
+	  handleBOF( static_cast<BOFRecord*>( record ) );
+  if ( record->rtti() == BoolErrRecord::id )
+	  handleBoolErr( static_cast<BoolErrRecord*>( record ) );
+  if ( record->rtti() == BlankRecord::id )
+	  handleBlank( static_cast<BlankRecord*>( record ) );
+  if ( record->rtti() == ColInfoRecord::id )
+	  handleColInfo( static_cast<ColInfoRecord*>( record ) );
+  if ( record->rtti() == FormatRecord::id )
+	  handleFormat( static_cast<FormatRecord*>( record ) );
+  if ( record->rtti() == FontRecord::id )
+	  handleFont( static_cast<FontRecord*>( record ) );
+  if ( record->rtti() == FooterRecord::id )
+	   handleFooter( static_cast<FooterRecord*>( record ) );
+  if ( record->rtti() == HeaderRecord::id )
+	  handleHeader( static_cast<HeaderRecord*>( record ) );
+  if ( record->rtti() == LabelRecord::id )
+	  handleLabel( static_cast<LabelRecord*>( record ) );
+  if ( record->rtti() == LabelSSTRecord::id )
+	  handleLabelSST( static_cast<LabelSSTRecord*>( record ) );
+  if ( record->rtti() == LeftMarginRecord::id )
+	  handleLeftMargin( static_cast<LeftMarginRecord*>( record ) );
+  if ( record->rtti() == MergedCellsRecord::id )
+	  handleMergedCells( static_cast<MergedCellsRecord*>( record ) );
+  if ( record->rtti() == MulBlankRecord::id )
+	  handleMulBlank( static_cast<MulBlankRecord*>( record ) );
+  if ( record->rtti() == MulRKRecord::id )
+	  handleMulRK( static_cast<MulRKRecord*>( record ) );
+  if ( record->rtti() == NumberRecord::id )
+	  handleNumber( static_cast<NumberRecord*>( record ) );
+  if ( record->rtti() == PaletteRecord::id )
+	  handlePalette( static_cast<PaletteRecord*>( record ) );
+  if ( record->rtti() == RightMarginRecord::id )
+	  handleRightMargin( static_cast<RightMarginRecord*>( record ) );
+  if ( record->rtti() == RKRecord::id )
+	  handleRK( static_cast<RKRecord*>( record ) );
+  if ( record->rtti() == RowRecord::id )
+	  handleRow( static_cast<RowRecord*>( record ) );
+  if ( record->rtti() == RStringRecord::id )
+	  handleRString( static_cast<RStringRecord*>( record ) );
+  if ( record->rtti() == SSTRecord::id )
+	  handleSST( static_cast<SSTRecord*>( record ) );
+  if ( record->rtti() == TopMarginRecord::id )
+	  handleTopMargin( static_cast<TopMarginRecord*>( record ) );
+  if ( record->rtti() == XFRecord::id )
+	  handleXF( static_cast<XFRecord*>( record ) );
 }
 
 void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
@@ -3947,7 +4029,7 @@ static Pen convertBorderStyle( unsigned style )
   return pen;
 }
 
-// big task: convert Excel XFormat into Sidewinder::Format
+// big task: convert Excel XFormat into Swinder::Format
 Format ExcelReader::convertFormat( unsigned xfIndex )
 {
   Format format;
@@ -4004,3 +4086,347 @@ void ExcelReader::handleXF( XFRecord* record )
 }
 
 
+#ifdef SWINDER_XLS2RAW
+
+#include <iostream>
+#include <iomanip>
+
+class HookedReader: public Swinder::ExcelReader
+{
+public:
+  HookedReader();
+  virtual void handleRecord( Swinder::Record* );
+};
+
+using namespace Swinder;
+
+HookedReader::HookedReader(): ExcelReader() 
+{
+}
+
+const char* rttiAsString( int rtti )
+{
+  static char buf[10];
+  snprintf( buf, 9, "%04x", rtti );
+  return buf;
+}
+
+void HookedReader::handleRecord( Record* record )
+{
+  std::cout << "Record " << rttiAsString(record->rtti()) << " ";
+  
+  bool handled = false;
+  
+  if( record->rtti() == NumberRecord::id )
+  {
+    NumberRecord* r = (NumberRecord*) record;
+    handled = true;
+    std::cout << "NUMBER" << std::endl;
+    std::cout << "          Row  " << r->row() << std::endl;
+    std::cout << "       Column  " << r->column() << std::endl;
+    std::cout << "        Value  " << std::setprecision(13) << r->number() << std::endl;
+  }
+
+  if( record->rtti() == LabelSSTRecord::id )
+  {
+    LabelSSTRecord* r = (LabelSSTRecord*)( record );    
+    handled = true;
+    std::cout << "LabelSST" << std::endl;
+    std::cout << "           Row  " << r->row() << std::endl;
+    std::cout << "        Column  " << r->column() << std::endl;
+    std::cout << "  String Index  " << r->sstIndex() << std::endl;
+  }
+
+  if( record->rtti() == BOFRecord::id )
+  {
+    BOFRecord* r = (BOFRecord*) record;
+    handled = true;
+    std::cout << "BOF" << std::endl;
+    std::cout << "  Version  " << r->version() << " (" << r->versionAsString() << ")" << std::endl; 
+    std::cout << "     Type  " << r->type() << " (" << r->typeAsString() << ")" << std::endl; 
+  }
+
+  if( record->rtti() == SSTRecord::id )
+  {
+    SSTRecord* r =  (SSTRecord*) record;
+    handled = true;
+    std::cout << "SST" << std::endl;
+    std::cout << "  Count  " << r->count() << std::endl;
+    for( unsigned k = 0; k < r->count(); k++ )
+      std::cout << "  String #" << 
+      k << "  " << 
+      r->stringAt(k).ascii() << std::endl;
+  }
+
+  if( record->rtti() == RKRecord::id )
+  {
+    std::cout << "RK" << std::endl;
+    handled = true;
+    RKRecord* r = (RKRecord*) record ;
+    std::cout << "         Row  " << r->row() << std::endl;
+    std::cout << "      Column  " << r->column() << std::endl;
+    std::string str = r->isInteger() ? "Integer": "Float";
+    std::cout << "        Type  " << str << std::endl;
+    std::cout << "       Value  " << std::setprecision(13) << r->asFloat() << std::endl;
+    std::cout << "  Encoded RK  " << std::setbase(16) << r->encodedRK() << std::endl;
+    std::cout << std::setbase(10);
+  } 
+  
+  if( !handled )
+    std::cout << std::endl;
+}
+
+int main( int argc, char ** argv )
+{
+  if( argc < 2 )
+  {
+    std::cout << "Usage: xls2raw filename" << std::endl;
+    return 0;
+  }
+
+  char* filename = argv[1];
+  std::cout << "Checking " << filename << std::endl;
+  HookedReader* reader = new HookedReader();
+  reader->load( filename );
+  delete reader;
+    
+  return 0;
+}
+
+#endif  // XLS2RAW
+
+#ifdef SWINDER_CHECK_GUI
+
+#include <qapplication.h>
+#include <qlistview.h>
+#include <qstring.h>
+
+using namespace Swinder;
+
+
+ 
+class RawViewer: public QListView
+{
+public:
+  RawViewer( QWidget* parent = 0, const char* name = 0 );
+  ~RawViewer(); 
+  void open( const QString& filename );
+};
+
+class HookedReader: public Swinder::ExcelReader
+{
+public:
+  HookedReader( QListView* view );
+  virtual void handleRecord( Swinder::Record* );
+private:
+  int index;
+  QListView* view;
+};
+
+class SimpleItem: public QListViewItem
+{
+public:
+  SimpleItem( QListView* parent, int pos, const QString& s1, 
+    const QString& s2 = QString::null );
+  SimpleItem( QListViewItem* parent, int pos, const QString& s1, 
+    const QString& s2 = QString::null );
+  virtual int compare( QListViewItem*, int, bool ) const;
+  int index;
+};
+
+SimpleItem::SimpleItem( QListView* parent, int pos, const QString& s1, const QString& s2 ):
+QListViewItem( parent, s1, s2 )
+{
+  index = pos;
+}
+
+SimpleItem::SimpleItem( QListViewItem* parent, int pos, const QString& s1, const QString& s2 ):
+QListViewItem( parent, s1, s2 )
+{
+  index = pos;
+}
+
+int SimpleItem::compare( QListViewItem* item, int, bool ) const
+{
+  SimpleItem* recordItem = dynamic_cast<SimpleItem*>( item );
+  if( !recordItem ) return -1;
+  if( index < recordItem->index ) return -1;
+  if( index > recordItem->index ) return 1;
+  return 0;  
+}
+
+using namespace Swinder;
+
+HookedReader::HookedReader( QListView* v )
+{
+  view = v;
+  index = 0;
+  view->clear();
+  view->setSorting( 0 );
+}
+
+QString columnLabel( unsigned column )
+{
+  QString str;
+  unsigned digits = 1;
+  unsigned offset = 0;
+  
+  column--;
+  for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
+    offset += limit;
+      
+  for( unsigned c = column - offset; digits; --digits, c/=26 )
+    str.prepend( QChar( 'A' + (c%26) ) );
+    
+  return str;
+}
+
+QString cellLabel( unsigned row, unsigned column )
+{
+  return QString("%1%2").arg( columnLabel( column+1 ) ).arg( row+1 );
+}
+
+void HookedReader::handleRecord( Swinder::Record* record )
+{
+  unsigned prev = index;
+  
+  QString recName = QString::fromLatin1( record->name() );
+  QString recId = QString::number( record->recordType(), 16 );
+  
+  if( record->recordType() == NumberRecord::id )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "NUMBER" );
+    item->setOpen( true );
+    NumberRecord* r = (NumberRecord*)( record );    
+    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
+    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
+    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
+    new SimpleItem( item, 5, "Value", QString::number( r->number() ) );
+  }
+
+  if( record->recordType() == LabelSSTRecord::id )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "LabelSST" );
+    item->setOpen( true );
+    LabelSSTRecord* r = (LabelSSTRecord*)( record );    
+    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
+    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
+    new SimpleItem( item, 3, "String Index", QString::number( r->sstIndex() ) );
+  }
+
+  if( dynamic_cast<BOFRecord*>( record ) )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, recName + " Id=" + recId );
+    item->setOpen( true );
+    BOFRecord* r = dynamic_cast<BOFRecord*>( record );    
+    new QListViewItem( item, "Version", QString("%1 (%2)").arg(r->version()).arg(r->versionAsString() ) );
+    new QListViewItem( item, "Type", QString("%1 (%2)").arg(r->type()).arg(r->typeAsString() ) );    
+  }
+
+  if( dynamic_cast<SSTRecord*>( record ) )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "SST" );
+    item->setOpen( true );
+    SSTRecord* r = dynamic_cast<SSTRecord*>( record );
+    new SimpleItem( item, -1, QString("Count"), QString::number( r->count() ) );
+    for( unsigned k = 0; k < r->count(); k++ )
+      new SimpleItem( item, k, QString("String #%1").arg(k), 
+        QString("%1").arg(r->stringAt(k).ascii() ) );  
+  }
+
+  if( dynamic_cast<RKRecord*>( record ) )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "RK" );
+    item->setOpen( true );
+    RKRecord* r = dynamic_cast<RKRecord*>( record );
+    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
+    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
+    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
+    new SimpleItem( item, 4, "Type", r->isInteger() ? "Integer": "Float" );
+    new SimpleItem( item, 5, "Value", QString::number( r->asFloat() ) );
+    new SimpleItem( item, 6, "Encoded RK", QString::number( r->encodedRK(), 16 ) );
+  }
+
+  if( dynamic_cast<RKRecord*>( record ) )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "RK" );
+    item->setOpen( true );
+    RKRecord* r = dynamic_cast<RKRecord*>( record );
+    new SimpleItem( item, 1, "Cell", cellLabel( r->row(), r->column() ) );
+    new SimpleItem( item, 2, "Row", QString::number( r->row() ) );
+    new SimpleItem( item, 3, "Column", QString::number( r->column() ) );
+    new SimpleItem( item, 4, "Type", r->isInteger() ? "Integer": "Float" );
+    new SimpleItem( item, 5, "Value", QString::number( r->asFloat() ) );
+    new SimpleItem( item, 6, "Encoded RK", QString::number( r->encodedRK(), 16 ) );
+  }
+
+  
+  
+  if( dynamic_cast<MulRKRecord*>( record ) )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, "MULRK" );
+    item->setOpen( true );
+    MulRKRecord* r = dynamic_cast<MulRKRecord*>( record );
+    new SimpleItem( item, -1, "Row", QString::number( r->row() ) );
+    unsigned c1 = r->firstColumn();
+    unsigned c2 = r->lastColumn();
+    for( unsigned c = c1; c <= c2; c++ )
+    {
+      new SimpleItem( item, c*10, "Cell", cellLabel( r->row(), c ) );
+      new SimpleItem( item, c*10+1, "Column", QString::number( c ) );
+      new SimpleItem( item, c*10+2, "Value", QString::number( r->asFloat(c-c1) ) );
+      new SimpleItem( item, c*10+3, "Encoded RK", QString::number( r->encodedRK(c-c1), 16 ) );
+    }
+    
+  }
+
+  
+  if( index == prev )
+  {
+    SimpleItem* item = new SimpleItem( view, index++, QString("Unknown %1").arg(recId) );
+    item->setOpen( true );
+    new SimpleItem( item, 0, "Stream position", QString::number( record->position() ) );
+  }
+  
+}
+ 
+RawViewer::RawViewer( QWidget* parent, const char* name ):
+QListView( parent, name )
+{
+  addColumn( "Key" );
+  addColumn( "Value" );
+  resize( 300, 450 );
+}
+ 
+RawViewer::~ RawViewer()
+{
+}
+ 
+void RawViewer::open( const QString& fname )
+{
+  clear();
+  HookedReader* reader = new HookedReader( this );
+  reader->load( fname );
+  delete reader;
+}
+ 
+
+int main( int argc, char ** argv )
+{
+  if( argc < 2 )
+  {
+    std::cout << "Usage: swindercheck filename" << std::endl;
+    return 0;
+  }
+
+  char* filename = argv[1];
+    
+  QApplication a( argc, argv );
+  RawViewer * mw = new RawViewer();
+  mw->open( argv[1] );
+  mw->show();
+  a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
+  return a.exec();  
+}
+
+#endif // SWINDER_CHECK_GUI

@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,13 +17,13 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef SIDEWINDER_SHEET_H
-#define SIDEWINDER_SHEET_H
+#ifndef SWINDER_SHEET_H
+#define SWINDER_SHEET_H
 
 #include "ustring.h"
 #include "format.h"
 
-namespace Sidewinder
+namespace Swinder
 {
 
 class Workbook;
@@ -198,5 +198,5 @@ private:
 
 };
 
-#endif // SIDEWINDER_SHEET_H
+#endif // SWINDER_SHEET_H
 

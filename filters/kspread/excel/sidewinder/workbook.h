@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet 
+/* Swinder - Portable library for spreadsheet 
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef SIDEWINDER_WORKBOOK_H
-#define SIDEWINDER_WORKBOOK_H
+#ifndef SWINDER_WORKBOOK_H
+#define SWINDER_WORKBOOK_H
 
-namespace Sidewinder
+namespace Swinder
 {
 
 class Sheet;
@@ -45,7 +45,7 @@ public:
   bool autoCalc() const;
   
   void setAutoCalc( bool a );
-
+  
 private:
   // no copy or assign
   Workbook( const Workbook& );
@@ -58,5 +58,5 @@ private:
 };
 
 
-#endif // SIDEWINDER_WORKBOOK_H
+#endif // SWINDER_WORKBOOK_H
 

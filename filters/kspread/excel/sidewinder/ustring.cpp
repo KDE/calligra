@@ -21,6 +21,20 @@
 
 #include "ustring.h"
 
+#define USTRING_SIMPLIFIED
+
+
+#ifdef USTRING_SIMPLIFIED
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#endif
+
+
+#ifndef USTRING_SIMPLIFIED
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -45,7 +59,9 @@
 #include <ieeefp.h>
 #endif
 
-namespace Sidewinder {
+#endif
+
+namespace Swinder {
 #ifdef WORDS_BIGENDIAN
   unsigned char NaN_Bytes[] = { 0x7f, 0xf8, 0, 0, 0, 0, 0, 0 };
   unsigned char Inf_Bytes[] = { 0x7f, 0xf0, 0, 0, 0, 0, 0, 0 };
@@ -61,9 +77,15 @@ namespace Sidewinder {
   const double Inf = *( reinterpret_cast<const double*>( Inf_Bytes ) );
 };
 
-using namespace Sidewinder;
+using namespace Swinder;
 
-bool Sidewinder::isNaN(double d)
+#ifdef USTRING_SIMPLIFIED
+bool Swinder::isNaN(double)
+{
+  return false;
+}
+#else
+bool Swinder::isNaN(double d)
 {
 #ifdef HAVE_FUNC_ISNAN
   return isnan(d);
@@ -73,8 +95,15 @@ bool Sidewinder::isNaN(double d)
   return !(d == d);
 #endif
 }
+#endif
 
-bool Sidewinder::isPosInf(double d)
+#ifdef USTRING_SIMPLIFIED
+bool Swinder::isPosInf(double)
+{
+  return false;
+}
+#else
+bool Swinder::isPosInf(double d)
 {
 #if defined(HAVE_FUNC_ISINF)
   return (isinf(d) == 1);
@@ -86,8 +115,15 @@ bool Sidewinder::isPosInf(double d)
   return false;
 #endif
 }
+#endif
 
-bool Sidewinder::isNegInf(double d)
+#ifdef USTRING_SIMPLIFIED
+bool Swinder::isNegInf(double d)
+{
+  return false;
+}
+#else
+bool Swinder::isNegInf(double d)
 {
 #if defined(HAVE_FUNC_ISINF)
   return (isinf(d) == -1);
@@ -99,6 +135,7 @@ bool Sidewinder::isNegInf(double d)
   return false;
 #endif
 }
+#endif
 
 CString::CString(const char *c)
 {
@@ -168,7 +205,7 @@ int CString::length() const
   return strlen(data);
 }
 
-bool Sidewinder::operator==(const Sidewinder::CString& c1, const Sidewinder::CString& c2)
+bool Swinder::operator==(const Swinder::CString& c1, const Swinder::CString& c2)
 {
   return (strcmp(c1.c_str(), c2.c_str()) == 0);
 }
@@ -565,7 +602,7 @@ void UString::release()
   }
 }
 
-bool Sidewinder::operator==(const UString& s1, const UString& s2)
+bool Swinder::operator==(const UString& s1, const UString& s2)
 {
   if (s1.rep->len != s2.rep->len)
     return false;
@@ -574,7 +611,7 @@ bool Sidewinder::operator==(const UString& s1, const UString& s2)
 		 s1.rep->len * sizeof(UChar)) == 0);
 }
 
-bool Sidewinder::operator==(const UString& s1, const char *s2)
+bool Swinder::operator==(const UString& s1, const char *s2)
 {
   if (s2 == 0L && s1.isNull())
     return true;
@@ -593,7 +630,7 @@ bool Sidewinder::operator==(const UString& s1, const char *s2)
   return true;
 }
 
-bool Sidewinder::operator<(const UString& s1, const UString& s2)
+bool Swinder::operator<(const UString& s1, const UString& s2)
 {
   const int l1 = s1.length();
   const int l2 = s2.length();
@@ -612,7 +649,7 @@ bool Sidewinder::operator<(const UString& s1, const UString& s2)
   return (l1 < l2);
 }
 
-UString Sidewinder::operator+(const UString& s1, const UString& s2)
+UString Swinder::operator+(const UString& s1, const UString& s2)
 {
   UString tmp(s1);
   tmp.append(s2);

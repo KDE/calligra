@@ -1,20 +1,29 @@
-/* POLE - Portable library to access OLE Storage 
-   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+/* POLE - Portable C++ library to access OLE Storage 
+   Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-   
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   Redistribution and use in source and binary forms, with or without 
+   modification, are permitted provided that the following conditions 
+   are met:
+   * Redistributions of source code must retain the above copyright notice, 
+     this list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of the authors nor the names of its contributors may be 
+     used to endorse or promote products derived from this software without 
+     specific prior written permission.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, US
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+   THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #ifndef POLE_H
@@ -28,101 +37,140 @@ namespace POLE
 
 class StorageIO;
 class Stream;
+class StreamIO;
 
 class Storage
 {
+  friend class Stream;
+  friend class StreamOut;
 
 public:
 
-  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError, 
-    StupidWorkaroundForBrokenCompiler=255 };
+  // for Storage::result()
+  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
+  
+  /**
+   * Constructs a storage with name filename.
+   **/
+  Storage( const char* filename );
 
-  enum { ReadOnly, WriteOnly, ReadWrite };
-
-  Storage();
-
+  /**
+   * Destroys the storage.
+   **/
   ~Storage();
-
+  
   /**
-   * Opens the specified file, using the mode m.
-   *
-   * @return true if succesful, otherwise false.
-   */
-  bool open( const char* filename, int m = ReadOnly );
-
-  /**
-   * Flushes the buffer to the disk.
-   */
-  void flush();
+   * Opens the storage. Returns true if no error occurs.
+   **/
+  bool open();
 
   /**
    * Closes the storage.
-   *
-   * If it was opened using WriteOnly or ReadWrite, this function
-   * also flushes the buffer.
-   */
+   **/
   void close();
-
-  std::list<std::string> listDirectory();
-
-  bool enterDirectory( const std::string& directory );
-
-  void leaveDirectory();
-
-  std::string path();
+  
+  /**
+   * Returns the error code of last operation.
+   **/
+  int result();
 
   /**
-   * Creates an input/output stream for specified name. You should 
-   * delete the stream because it is not owned by the storage.
-   *
-   * If name does not exist or is a directory, this function
-   * will return null.
+   * Finds all stream and directories in given path.
+   **/
+  std::list<std::string> entries( const std::string& path = "/" );
+  
+  /**
+   * Returns true if specified entry name is a directory.
    */
-  Stream* stream( const std::string& name );
+  bool isDirectory( const std::string& name ); 
 
-  int result;
-
-protected:
-
-  StorageIO* io;
-
+  /**
+   * Finds and returns a stream with the specified name.
+   * If reuse is true, this function returns the already created stream
+   * (if any). Otherwise it will create the stream.
+   *
+   * When errors occur, this function returns NULL.
+   *
+   * You do not need to delete the created stream, it will be handled
+   * automatically.
+   **/
+  Stream* stream( const std::string& name, bool reuse = true );
+  //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
+  
 private:
-
+  StorageIO* io;
+  
   // no copy or assign
   Storage( const Storage& );
   Storage& operator=( const Storage& );
 
 };
 
-class StreamIO;
-
 class Stream
 {
-  public:
+  friend class Storage;
+  friend class StorageIO;
+  
+public:
 
-    Stream( StreamIO* io );
+  /**
+   * Creates a new stream.
+   */
+  // name must be absolute, e.g "/Workbook"
+  Stream( Storage* storage, const std::string& name );
 
-    ~Stream();
+  /**
+   * Destroys the stream.
+   */
+  ~Stream();
 
-    unsigned long size();
+  /**
+   * Returns the full stream name.
+   */
+  std::string fullName(); 
+  
+  /**
+   * Returns the stream size.
+   **/
+  unsigned long size();
 
-    unsigned long tell();
+  /**
+   * Returns the current read/write position.
+   **/
+  unsigned long tell();
 
-    void seek( unsigned long pos ); 
+  /**
+   * Sets the read/write position.
+   **/
+  void seek( unsigned long pos ); 
 
-    int getch();
+  /**
+   * Reads a byte.
+   **/
+  int getch();
 
-    unsigned long read( unsigned char* data, unsigned long maxlen );
+  /**
+   * Reads a block of data.
+   **/
+  unsigned long read( unsigned char* data, unsigned long maxlen );
+  
+  /**
+   * Returns true if the read/write position is past the file.
+   **/
+  bool eof();
+  
+  /**
+   * Returns true whenever error occurs.
+   **/
+  bool fail();
 
-  private:
+private:
+  StreamIO* io;
 
-    StreamIO* io;
-
-    // no copy or assign
-    Stream( const Stream& );
-    Stream& operator=( const Stream& );
+  // no copy or assign
+  Stream( const Stream& );
+  Stream& operator=( const Stream& );    
 };
-
 
 }
 
