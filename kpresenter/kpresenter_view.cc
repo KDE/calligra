@@ -2520,6 +2520,7 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignRight->setEnabled(isText);
     actionTextAlignBlock->setEnabled(isText);
     actionTextTypeUnsortList->setEnabled(isText);
+    actionTextTypeEnumList->setEnabled(isText);
     actionTextDepthPlus->setEnabled(isText);
     actionFormatDefault->setEnabled(isText);
     actionTextDepthMinus->setEnabled(isText);
