@@ -27,7 +27,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_reference.cc kspread_dlg_subtotal.cc \
 	kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
-	kspread_dlg_special.cc \
+	kspread_dlg_special.cc kspread_scripting.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc kspread_dlg_conditional.cc\
 	kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc kspread_dlg_show.cc kspread_dlg_series.cc \

@@ -670,12 +670,14 @@ void CellFormatDlg::initGUI()
   alignY         = m_style->alignY();
   textColor      = m_style->pen().color();
   bgColor        = m_style->bgColor();
-  textFontSize   = m_style->font().pointSize();
-  textFontFamily = m_style->font().family();
-  textFontBold   = m_style->font().bold();
-  textFontItalic = m_style->font().italic();
-  strike         = m_style->font().strikeOut();
-  underline      = m_style->font().underline();
+  textFontSize   = m_style->fontSize();
+  textFontFamily = m_style->fontFamily();
+
+  uint flags     = m_style->fontFlags();
+  textFontBold   = ( flags & (uint) KSpreadStyle::FBold );
+  textFontItalic = ( flags & (uint) KSpreadStyle::FItalic );
+  strike         = ( flags & (uint) KSpreadStyle::FStrike );
+  underline      = ( flags & (uint) KSpreadStyle::FUnderline );
 
   // Needed to initialize the font correctly ( bug in Qt )
   textFont   = m_style->font();
@@ -2989,22 +2991,38 @@ void CellFormatPageFont::apply( KSpreadCustomStyle * style )
 {
   if ( !bTextColorUndefined && textColor != dlg->textColor )
     style->changeTextColor( textColor );
-  if ( fontChanged )
-  {
-    QFont f( style->font() );
-    if ( size_combo->currentItem() != 0 )
-      f.setPointSize( selFont.pointSize() );
-    if ( !family_combo->currentText().isEmpty() )
-      f.setFamily( selFont.family() );
-    if ( weight_combo->currentItem() != 0 )
-      f.setBold( selFont.bold() );
-    if ( style_combo->currentItem() != 0 )
-      f.setItalic( selFont.italic() );
-    f.setStrikeOut( strike->isChecked() );
-    f.setUnderline( underline->isChecked() );
 
-    style->changeFont( f );
-  }
+  if ( ( size_combo->currentItem() != 0 )
+       && ( dlg->textFontSize != selFont.pointSize() ) )
+    style->changeFontSize( selFont.pointSize() );
+
+  if ( ( selFont.family() != dlg->textFontFamily )
+       && !family_combo->currentText().isEmpty() )
+    style->changeFontFamily( selFont.family() );
+  
+  uint flags;
+  
+  if ( weight_combo->currentItem() != 0 && selFont.bold() )
+    flags |= KSpreadStyle::FBold;
+  else
+    flags &= ~(uint) KSpreadStyle::FBold;
+  
+  if ( style_combo->currentItem() != 0 && selFont.italic() )
+    flags |= KSpreadStyle::FItalic;
+  else
+    flags &= ~(uint) KSpreadStyle::FItalic;
+  
+  if ( strike->isChecked() )
+    flags |= KSpreadStyle::FStrike;
+  else
+    flags &= ~(uint) KSpreadStyle::FStrike;
+  
+  if ( underline->isChecked() )
+    flags |= KSpreadStyle::FUnderline;
+  else
+    flags &= ~(uint) KSpreadStyle::FUnderline;
+
+  style->changeFontFlags( flags );
 }
 
 void CellFormatPageFont::apply( ColumnFormat *_obj)
@@ -3080,9 +3098,10 @@ void CellFormatPageFont::applyFormat( KSpreadFormat *_obj )
     _obj->setTextColor( textColor );
   if (fontChanged)
   {
-    if ( size_combo->currentItem() != 0 )
+    if ( ( size_combo->currentItem() != 0 )
+         && ( dlg->textFontSize != selFont.pointSize() ) )
       _obj->setTextFontSize( selFont.pointSize() );
-    if ( !family_combo->currentText().isEmpty() )
+    if ( ( selFont.family() != dlg->textFontFamily ) && ( !family_combo->currentText().isEmpty() ) )
       _obj->setTextFontFamily( selFont.family() );
     if ( weight_combo->currentItem() != 0 )
       _obj->setTextFontBold( selFont.bold() );

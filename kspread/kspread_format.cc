@@ -125,6 +125,9 @@ void KSpreadFormat::setKSpreadStyle( KSpreadStyle * style )
   m_pStyle = style;
   m_pStyle->addRef();
   formatChanged();
+  kdDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
+  if ( style->type() == KSpreadStyle::BUILTIN || style->type() == KSpreadStyle::CUSTOM )
+    kdDebug() << "Style name: " << ((KSpreadCustomStyle *) m_pStyle)->name() << endl;
 }
 
 void KSpreadFormat::clearFlag( FormatFlags flag )
@@ -1687,7 +1690,7 @@ const QColor& KSpreadFormat::textColor( int col, int row ) const
   return textPen( col, row ).color();
 }
 
-const QFont& KSpreadFormat::textFont( int col, int row ) const
+const QFont KSpreadFormat::textFont( int col, int row ) const
 {
   if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
   {
@@ -1701,32 +1704,74 @@ const QFont& KSpreadFormat::textFont( int col, int row ) const
 
 int KSpreadFormat::textFontSize( int col, int row ) const
 {
-  return textFont( col, row ).pointSize();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontSize( col, row );
+  }
+
+  return m_pStyle->fontSize();
 }
 
-QString KSpreadFormat::textFontFamily( int col, int row ) const
+QString const & KSpreadFormat::textFontFamily( int col, int row ) const
 {
-  return textFont( col, row ).family();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontFamily( col, row );
+  }
+
+  return m_pStyle->fontFamily();
 }
 
 bool KSpreadFormat::textFontBold( int col, int row ) const
 {
-  return textFont( col, row ).bold();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontBold( col, row );
+  }
+
+  return ( m_pStyle->fontFlags() & KSpreadStyle::FBold );
 }
 
 bool KSpreadFormat::textFontItalic( int col, int row ) const
 {
-  return textFont( col, row ).italic();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontItalic( col, row );
+  }
+
+  return ( m_pStyle->fontFlags() & KSpreadStyle::FItalic );
 }
 
 bool KSpreadFormat::textFontUnderline( int col, int row ) const
 {
-  return textFont( col, row ).underline();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontUnderline( col, row );
+  }
+
+  return ( m_pStyle->fontFlags() & KSpreadStyle::FUnderline );
 }
 
 bool KSpreadFormat::textFontStrike( int col, int row ) const
 {
-  return textFont( col, row ).strikeOut();
+  if ( !hasProperty( PFont ) && !hasNoFallBackProperties( PFont ) )
+  {
+    const KSpreadFormat * l = fallbackFormat( col, row );
+    if ( l )
+      return l->textFontStrike( col, row );
+  }
+
+  return ( m_pStyle->fontFlags() & KSpreadStyle::FStrike );
 }
 
 KSpreadFormat::Align KSpreadFormat::align( int col, int row ) const
@@ -1957,7 +2002,7 @@ const QBrush & KSpreadFormat::backGroundBrush() const
   return m_pStyle->backGroundBrush();
 }
 
-const QFont & KSpreadFormat::textFont() const
+const QFont KSpreadFormat::textFont() const
 {
   return m_pStyle->font();
 }

@@ -36,7 +36,7 @@ KSpreadStyle::KSpreadStyle()
     m_floatFormat( KSpreadFormat::OnlyNegSigned ),
     m_floatColor( KSpreadFormat::AllBlack ),
     m_formatType( KSpreadFormat::Number ),
-    m_textFont( KoGlobal::defaultFont() ),
+    m_fontFlags( 0 ),
     m_bgColor( Qt::white ),
     m_backGroundBrush( Qt::red, Qt::NoBrush ),
     m_rotateAngle( 0 ),
@@ -46,6 +46,11 @@ KSpreadStyle::KSpreadStyle()
     m_properties( 0 )
 {
   kdDebug() << "Style constructor I" << endl;
+
+  QFont f( KoGlobal::defaultFont() );
+  m_fontFamily = f.family();
+  m_fontSize = f.pointSize();
+
   QPen pen( Qt::black, 1, Qt::NoPen );
 
   m_leftBorderPen   = pen;
@@ -68,7 +73,9 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
     m_floatFormat( style->m_floatFormat ),
     m_floatColor( style->m_floatColor ),
     m_formatType( style->m_formatType ),
-    m_textFont( style->m_textFont ),
+    m_fontFamily( style->m_fontFamily ),
+    m_fontFlags( style->m_fontFlags ),
+    m_fontSize( style->m_fontSize ),
     m_textPen( style->m_textPen ),
     m_bgColor( style->m_bgColor ),
     m_rightBorderPen( style->m_rightBorderPen ),
@@ -89,7 +96,7 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
     m_properties( style->m_properties )
 {
   kdDebug() << "Style constructor II" << endl;
-  kdDebug() << "This: " << this << " - " <<  m_parent << endl;
+  kdDebug() << "This: " << this << " - " <<  m_parent << ", style type: " << style->m_type << endl;
 }
 
 KSpreadStyle::~KSpreadStyle()
@@ -162,8 +169,15 @@ void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
   if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
     format.setAttribute( "hideformula", "yes" );
 
-  if ( featureSet( SFont ) )
-    format.appendChild( util_createElement( "font", m_textFont, doc ) );
+  if ( featureSet( SFontFamily ) )
+    format.setAttribute( "font-family", m_fontFamily );
+  if ( featureSet( SFontSize ) )
+    format.setAttribute( "font-size", m_fontSize );
+  if ( featureSet( SFontFlag ) )
+    format.setAttribute( "font-flags", m_fontFlags );
+
+  //  if ( featureSet( SFont ) )
+  //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
 
   if ( featureSet( STextPen ) && m_textPen.color().isValid() )
     format.appendChild( util_createElement( "pen", m_textPen, doc ) );
@@ -375,7 +389,51 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     m_featuresSet |= SHideFormula;
   }
 
-  // TODO: if attribute loaded: set flags so that not the parent attribute gets loaded
+  // TODO: remove that...
+  QDomElement font = format.namedItem( "font" ).toElement();
+  if ( !font.isNull() )
+  {
+    QFont f( util_toFont( font ) );
+    m_fontFamily = f.family();
+    m_fontSize = f.pointSize();
+    if ( f.italic() )
+      m_fontFlags |= FItalic;
+    if ( f.bold() )
+      m_fontFlags |= FBold;
+    if ( f.underline() )
+      m_fontFlags |= FUnderline;
+    if ( f.strikeOut() )
+      m_fontFlags |= FStrike;
+
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+    m_featuresSet |= SFontFlag;
+    m_featuresSet |= SFontSize;
+  }
+
+  if ( format.hasAttribute( "font-family" ) )
+  {
+    m_fontFamily = format.attribute( "font-family" );
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+  }
+  if ( format.hasAttribute( "font-size" ) )
+  {
+    m_fontSize = format.attribute( "font-size" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontSize;
+  }
+
+  if ( format.hasAttribute( "font-flags" ) )
+  {
+    m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
 
   if ( format.hasAttribute( "brushcolor" ) )
   {
@@ -396,13 +454,6 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   {
     m_textPen = util_toPen( pen );
     m_featuresSet |= STextPen;
-  }
-
-  QDomElement font = format.namedItem( "font" ).toElement();
-  if ( !font.isNull() )
-  {
-    m_textFont = util_toFont( font );
-    m_featuresSet |= SFont;
   }
 
   QDomElement left = format.namedItem( "left-border" ).toElement();
@@ -561,9 +612,38 @@ bool KSpreadStyle::hasFeature( FlagsSet f ) const
   return b;
 }
 
-QFont const & KSpreadStyle::font() const 
+QFont KSpreadStyle::font() const 
 {
-  return ( !m_parent || featureSet( SFont ) ? m_textFont : m_parent->font() ); 
+  QString family = fontFamily();
+  int  size      = fontSize();
+  uint ff        = fontFlags();
+
+  QFont f( family, size );
+  if ( ff & (uint) FBold )
+    f.setBold( true );
+  if ( ff & (uint) FItalic )
+    f.setItalic( true );
+  if ( ff & (uint) FUnderline )
+    f.setUnderline( true );
+  if ( ff & (uint) FStrike )
+    f.setStrikeOut( true );
+
+  return f;
+}
+
+QString const & KSpreadStyle::fontFamily() const
+{
+  return ( !m_parent || featureSet( SFontFamily ) ? m_fontFamily : m_parent->fontFamily() ); 
+}
+
+uint KSpreadStyle::fontFlags() const
+{
+  return ( !m_parent || featureSet( SFontFlag ) ? m_fontFlags : m_parent->fontFlags() ); 
+}
+
+int KSpreadStyle::fontSize() const
+{
+  return ( !m_parent || featureSet( SFontSize ) ? m_fontSize : m_parent->fontSize() ); 
 }
 
 QPen const & KSpreadStyle::pen() const 
@@ -708,19 +788,175 @@ KSpreadStyle * KSpreadStyle::setAlignY( KSpreadFormat::AlignY alignY )
   return this;
 }
 
-KSpreadStyle * KSpreadStyle::setFont( QFont const & font )
+KSpreadStyle * KSpreadStyle::setFont( QFont const & f )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
-    style->m_textFont = font;
-    style->m_featuresSet |= SFont;
+    if ( style->m_fontFamily != f.family() )
+    {
+      style->m_fontFamily = f.family();
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontFamily;
+    }
+    if ( style->m_fontSize != f.pointSize() )
+    {
+      style->m_fontSize = f.pointSize();
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontSize;
+    }
+    if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
+    {
+      if ( f.italic() )
+        style->m_fontFlags |= FItalic;
+      else
+        style->m_fontFlags &= ~(uint) FItalic;
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontFlag;
+    }
+    if ( f.bold() != (m_fontFlags & (uint) FBold ) )
+    {
+      if ( f.bold() )
+        style->m_fontFlags |= FBold;
+      else
+        style->m_fontFlags &= ~(uint) FBold;
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontFlag;
+    }
+    if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
+    {
+      if ( f.underline() )
+        style->m_fontFlags |= FUnderline;
+      else
+        style->m_fontFlags &= ~(uint) FUnderline;
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontFlag;
+    }
+    if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
+    {
+      if ( f.strikeOut() )
+        style->m_fontFlags |= FStrike;
+      else
+        style->m_fontFlags &= ~(uint) FStrike;
+      style->m_featuresSet |= SFont;
+      style->m_featuresSet |= SFontFlag;
+    }
 
     return style;
   }
 
-  m_textFont = font;
+  if ( m_fontFamily != f.family() )
+  {
+    m_fontFamily = f.family();
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+  }
+  if ( m_fontSize != f.pointSize() )
+  {
+    m_fontSize = f.pointSize();
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontSize;
+  }
+  if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
+  {
+    if ( f.italic() )
+      m_fontFlags |= FItalic;
+    else
+      m_fontFlags &= ~(uint) FItalic;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.bold() != (m_fontFlags & (uint) FBold ) )
+  {
+    if ( f.bold() )
+      m_fontFlags |= FBold;
+    else
+      m_fontFlags &= ~(uint) FBold;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
+  {
+    if ( f.underline() )
+      m_fontFlags |= FUnderline;
+    else
+      m_fontFlags &= ~(uint) FUnderline;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
+  {
+    if ( f.strikeOut() )
+      m_fontFlags |= FStrike;
+    else
+      m_fontFlags &= ~(uint) FStrike;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+
+  return this;
+}
+
+KSpreadStyle * KSpreadStyle::setFontFamily( QString const & fam )
+{
+  if ( m_type != AUTO || m_usageCount > 1 )
+  {
+    if ( m_fontFamily != fam )
+    {
+      KSpreadStyle * style  = new KSpreadStyle( this );
+      style->m_fontFamily   = fam;
+      style->m_featuresSet |= SFontFamily;
+      style->m_featuresSet |= SFont;
+      return style;
+    }
+    return this;
+  }
+
+  m_fontFamily   = fam;
   m_featuresSet |= SFont;
+  m_featuresSet |= SFontFamily;
+  return this;
+}
+
+KSpreadStyle * KSpreadStyle::setFontFlags( uint flags )
+{
+  if ( m_type != AUTO || m_usageCount > 1 )
+  {
+    if ( m_fontFlags != flags )
+    {
+      KSpreadStyle * style = new KSpreadStyle( this );
+      style->m_fontFlags = flags;
+      style->m_featuresSet |= SFontFlag;
+      style->m_featuresSet |= SFont;
+      return style;
+    }
+    return this;
+  }
+
+  m_fontFlags    = flags;
+  m_featuresSet |= SFont;
+  m_featuresSet |= SFontFlag;
+  return this;
+}
+
+KSpreadStyle * KSpreadStyle::setFontSize( int size )
+{
+  if ( m_type != AUTO || m_usageCount > 1 )
+  {
+    if ( m_fontSize != size )
+    {
+      KSpreadStyle * style  = new KSpreadStyle( this );
+      style->m_fontSize     = size;
+      style->m_featuresSet |= SFontSize;
+      style->m_featuresSet |= SFont;
+      return style;
+    }
+    return this;
+  }
+
+  m_fontSize     = size;
+  m_featuresSet |= SFont;
+  m_featuresSet |= SFontSize;
   return this;
 }
 
@@ -1196,7 +1432,9 @@ KSpreadCustomStyle::KSpreadCustomStyle( KSpreadStyle * parent, QString const & n
   changeFloatFormat( parent->floatFormat() );
   changeFloatColor( parent->floatColor() );
   changeFormatType( parent->formatType() );
-  changeFont( parent->font() );
+  changeFontFamily( parent->fontFamily() );
+  changeFontSize( parent->fontSize() );
+  changeFontFlags( parent->fontFlags() );
   changePen( parent->pen() );
   changeBgColor( parent->bgColor() );
   changeRightBorderPen( parent->rightBorderPen() );
@@ -1310,7 +1548,11 @@ bool KSpreadCustomStyle::definesAll() const
     return false;
   if ( !( m_featuresSet & (uint) SBackgroundBrush ) )
     return false;
-  if ( !( m_featuresSet & (uint) SFont ) )
+  if ( !( m_featuresSet & (uint) SFontFamily ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFontSize ) )
+    return false;
+  if ( !( m_featuresSet & (uint) SFontFlag ) )
     return false;
   if ( !( m_featuresSet & (uint) STextPen ) )
     return false;
@@ -1358,10 +1600,87 @@ void KSpreadCustomStyle::changeAlignY( KSpreadFormat::AlignY alignY )
   m_featuresSet |= SAlignY;
 }
 
-void KSpreadCustomStyle::changeFont( QFont const & font )
+void KSpreadCustomStyle::changeFont( QFont const & f )
 {
-  m_textFont = font;
-  m_featuresSet |= SFont;
+  if ( m_fontFamily != f.family() )
+  {
+    m_fontFamily = f.family();
+    m_featuresSet |= SFontFamily;
+    m_featuresSet |= SFont;
+  }
+  if ( m_fontSize != f.pointSize() )
+  {
+    m_fontSize = f.pointSize();
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontSize;
+  }
+
+  if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
+  {
+    if ( f.italic() )
+      m_fontFlags |= FItalic;
+    else
+      m_fontFlags &= ~(uint) FItalic;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.bold() != (m_fontFlags & (uint) FBold ) )
+  {
+    if ( f.bold() )
+      m_fontFlags |= FBold;
+    else
+      m_fontFlags &= ~(uint) FBold;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
+  {
+    if ( f.underline() )
+      m_fontFlags |= FUnderline;
+    else
+      m_fontFlags &= ~(uint) FUnderline;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+  if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
+  {
+    if ( f.strikeOut() )
+      m_fontFlags |= FStrike;
+    else
+      m_fontFlags &= ~(uint) FStrike;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+}
+
+void KSpreadCustomStyle::changeFontFamily( QString const & fam )
+{
+  if ( m_fontFamily != fam )
+  {
+    m_fontFamily   = fam;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+  }
+}
+
+void KSpreadCustomStyle::changeFontSize( int size )
+{
+  if ( m_fontSize != size )
+  {
+    m_fontSize     = size;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontSize;
+  }
+}
+
+void KSpreadCustomStyle::changeFontFlags( uint flags )
+{
+  if ( m_fontFlags != flags )
+  {
+    m_fontFlags    = flags;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
 }
 
 void KSpreadCustomStyle::changeTextColor( QColor const & color )
@@ -1378,7 +1697,6 @@ void KSpreadCustomStyle::changePen( QPen const & pen )
 
 void KSpreadCustomStyle::changeBgColor( QColor const & color )
 {
-  kdDebug() << "Changing bgColor " << endl;
   m_bgColor = color;
   m_featuresSet |= SBackgroundColor;
 }

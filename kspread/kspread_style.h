@@ -38,6 +38,14 @@ class KSpreadStyle
  public:
   typedef enum E1 { BUILTIN, CUSTOM, AUTO, TENTATIVE } StyleType;
 
+  enum FontFlags
+    {
+      FBold      = 0x01,
+      FUnderline = 0x02,
+      FItalic    = 0x04,
+      FStrike    = 0x08
+    };
+
   enum Properties
     {
       PDontPrintText = 0x01,
@@ -73,13 +81,15 @@ class KSpreadStyle
       SPrecision       = 0x80000,
       SFormatType      = 0x100000,
       SAngle           = 0x200000,
-      SComment         = 0x400000,
-      SIndent          = 0x800000,
-      SDontPrintText   = 0x1000000,
-      SCustomFormat    = 0x2000000,
-      SNotProtected    = 0x4000000,
-      SHideAll         = 0x8000000,
-      SHideFormula     = 0x10000000 
+      SIndent          = 0x400000,
+      SDontPrintText   = 0x800000,
+      SCustomFormat    = 0x1000000,
+      SNotProtected    = 0x2000000,
+      SHideAll         = 0x4000000,
+      SHideFormula     = 0x8000000,
+      SFontSize        = 0x10000000,
+      SFontFlag        = 0x20000000,
+      SFontFamily      = 0x40000000
     };
   
   KSpreadStyle();
@@ -100,9 +110,8 @@ class KSpreadStyle
   bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f ) const;
 
-  QFont   const & font()    const;
-  QPen    const & pen()     const;
-  QColor  const & bgColor() const;
+  QPen    const & pen()             const;
+  QColor  const & bgColor()         const;
   QPen    const & rightBorderPen()  const;
   QPen    const & bottomBorderPen() const;
   QPen    const & leftBorderPen()   const;
@@ -110,9 +119,10 @@ class KSpreadStyle
   QPen    const & fallDiagonalPen() const;
   QPen    const & goUpDiagonalPen() const;
   QBrush  const & backGroundBrush() const;
-  QString const & strFormat() const;
-  QString const & prefix()    const;
-  QString const & postfix()   const;
+  QString const & strFormat()       const;
+  QString const & prefix()          const;
+  QString const & postfix()         const;
+  QString const & fontFamily()      const;
 
   KSpreadFormat::Align       alignX()      const;
   KSpreadFormat::AlignY      alignY()      const;
@@ -122,14 +132,20 @@ class KSpreadStyle
 
   KSpreadFormat::Currency const & currency() const;
 
-  int    precision()       const;
-  int    rotateAngle()     const;
-  double indent()          const;
-  double factor()          const;
+  QFont  font()        const;
+  uint   fontFlags()   const;
+  int    fontSize()    const;
+  int    precision()   const;
+  int    rotateAngle() const;
+  double indent()      const;
+  double factor()      const;
 
   KSpreadStyle * setAlignX( KSpreadFormat::Align  alignX );
   KSpreadStyle * setAlignY( KSpreadFormat::AlignY alignY );
-  KSpreadStyle * setFont( QFont const & font );
+  KSpreadStyle * setFont( QFont const & f );
+  KSpreadStyle * setFontFamily( QString const & fam );
+  KSpreadStyle * setFontFlags( uint flags );
+  KSpreadStyle * setFontSize( int size );
   KSpreadStyle * setPen( QPen const & pen );
   KSpreadStyle * setBgColor( QColor const & color );
   KSpreadStyle * setRightBorderPen( QPen const & pen ); 
@@ -185,7 +201,10 @@ class KSpreadStyle
   /**
    * The font used to draw the text
    */
-  QFont m_textFont;
+  QString   m_fontFamily;
+  uint      m_fontFlags;
+  int       m_fontSize;
+
   /**
    * The pen used to draw the text
    */
@@ -291,7 +310,10 @@ class KSpreadCustomStyle : public KSpreadStyle
 
   void changeAlignX( KSpreadFormat::Align  alignX );
   void changeAlignY( KSpreadFormat::AlignY alignY );
-  void changeFont( QFont const & font );
+  void changeFont( QFont const & f );
+  void changeFontFamily( QString const & fam );
+  void changeFontSize( int size );
+  void changeFontFlags( uint flags );
   void changePen( QPen const & pen );
   void changeTextColor( QColor const & color );
   void changeBgColor( QColor const & color );

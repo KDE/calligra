@@ -328,9 +328,9 @@ public:
      */
     virtual const QColor& bgColor( int col, int row ) const;
 
-    virtual const QFont& textFont( int col, int row ) const;
+    virtual const QFont textFont( int col, int row ) const;
     int textFontSize( int col, int row ) const;
-    QString textFontFamily( int col, int row ) const;
+    QString const & textFontFamily( int col, int row ) const;
     bool textFontBold( int col, int row ) const;
     bool textFontItalic( int col, int row ) const;
     bool textFontUnderline( int col, int row ) const;
@@ -428,7 +428,7 @@ private:
     const QPen & fallDiagonalPen() const;
     const QPen & goUpDiagonalPen() const;
     const QBrush & backGroundBrush() const;
-    const QFont & textFont() const;
+    const QFont textFont() const;
     const QPen  & textPen() const;
 };
 

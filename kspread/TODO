@@ -91,6 +91,9 @@ Norbert
 + StarCalc/OpenCalc import filter
 - StarCalc/OpenCalc filter for embedding/embedded objects
 + StarCalc/OpenCalc export filter
+- qsa support + recording
+- Button + Drop-Down-List support (within cells)
+- better AutoFormat dialog + better templates
 
 - Multiple Operations
 + Lookup & Reference functions (LOOKUP needs to fixed)

@@ -138,6 +138,7 @@ void KSpreadStyleManager::createBuiltinStyles()
   f.setPointSize( f.pointSize() + 2 );
   f.setBold( true );
   header1->changeFont( f );
+  header1->setType( KSpreadStyle::BUILTIN );
   m_styles[ header1->name() ] = header1;
 
   KSpreadCustomStyle * header2 = new KSpreadCustomStyle( i18n( "Header1" ), header1 );
@@ -145,6 +146,7 @@ void KSpreadStyleManager::createBuiltinStyles()
   header2->changeBgColor( color );
   QPen pen( Qt::black, 1, Qt::SolidLine );
   header2->changeBottomBorderPen( pen );
+  header2->setType( KSpreadStyle::BUILTIN );
 
   m_styles[ header2->name() ] = header2;
 }
