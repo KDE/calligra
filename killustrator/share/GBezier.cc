@@ -25,7 +25,11 @@
 #include <iostream.h>
 #include <math.h>
 #include <assert.h>
+#ifdef __FreeBSD__
+#include <float.h>
+#else
 #include <values.h>
+#endif
 #include "GBezier.h"
 #include "GBezier.moc"
 

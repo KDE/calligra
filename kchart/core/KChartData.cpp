@@ -5,7 +5,11 @@
 #include "KChartData.moc"
 #endif
 
+#ifdef __FreeBSD__
+#include <float.h>
+#else
 #include <values.h>
+#endif
 #include <math.h> // MAXDOUBLE
 
 #define INITIALDATASETSIZE 20

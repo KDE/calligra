@@ -23,7 +23,12 @@
 */
 
 #include <iostream.h>
+#ifdef __FreeBSD__
+#include <float.h>
+#else
 #include <values.h>
+#endif
+
 #include "BezierTool.h"
 #include "BezierTool.moc"
 #include "GDocument.h"

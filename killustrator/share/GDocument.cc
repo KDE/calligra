@@ -37,7 +37,12 @@
 #include <iostream.h>
 #include <fstream.h>
 
+#ifdef __FreeBSD__
+#include <float.h>
+#else
 #include <values.h>
+#endif
+
 #include <stack>
 #include <vector>
 #include <algorithm>
