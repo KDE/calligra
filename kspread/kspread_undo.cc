@@ -64,6 +64,7 @@ void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
     {
 	m_pDoc->enableUndo( hasUndoActions() );
 	m_pDoc->enableRedo( hasRedoActions() );
+        m_pDoc->setModified( true );
     }
 }
 

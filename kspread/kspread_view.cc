@@ -1479,7 +1479,6 @@ void KSpreadView::hideTable()
 {
     if ( !m_pTable )
        return;
-    m_pDoc->setModified( true );
     m_pTabBar->hideTable();
 }
 

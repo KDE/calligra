@@ -1189,3 +1189,7 @@ a text which is in kwrite and kspread)
 2001-02-21-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Add new mathematic function : ROMAN
+
+2001-03-14-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now when you resize a col/row until 0 you hide row/col
