@@ -2896,13 +2896,14 @@ KexiMainWindowImpl::initUserActions()
 */
 }
 
-#ifndef KEXI_NO_MIGRATION
 void KexiMainWindowImpl::slotMigrationWizard()
 {
+#ifndef KEXI_NO_MIGRATION
 	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
 	iw->setGeometry(300,300,400,300);
 	iw->show();
-}
 #endif
+}
+
 #include "keximainwindowimpl.moc"
 

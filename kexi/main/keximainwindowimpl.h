@@ -123,9 +123,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual tristate saveObject( KexiDialogBase *dlg, 
 			const QString& messageWhenAskingForName = QString::null );
 
-#ifndef KEXI_NO_MIGRATION
 		void slotMigrationWizard();
-#endif
 
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database 

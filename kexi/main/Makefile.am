@@ -32,6 +32,7 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/main/startup \
 	-I$(top_builddir)/kexi/main/startup \
 	-I$(top_srcdir)/kexi/widget/propertyeditor \
+	-I$(top_srcdir)/kexi/migration \
 	$(all_includes)
 
 METASOURCES = AUTO
