@@ -21,6 +21,7 @@
 #define KEXIDB_DRIVER_H
 
 #include <qobject.h>
+#include <qdatetime.h>
 #include <qdict.h>
 
 #include <kexidb/object.h>
@@ -188,6 +189,19 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		//! Like above method, for \a field.
 		inline QString valueToSQL( const Field *field, const QVariant& v ) const {
 			return valueToSQL( (field ? field->type() : Field::InvalidType), v );
+		}
+
+		/*! not compatible with all drivers - reimplement */
+		inline virtual QString dateTimeToSQL(const QDateTime& v) const {
+		/*! (was compatible with SQLite: http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions)
+			Now it's ISO 8601 DateTime format - with "T" delimiter:
+			http://www.w3.org/TR/NOTE-datetime
+			(e.g. "1994-11-05T13:15:30" not "1994-11-05 13:15:30")
+			@todo add support for time zones?
+		*/
+//old			const QDateTime dt( v.toDateTime() );
+//old			return QString("\'")+dt.date().toString(Qt::ISODate)+" "+dt.time().toString(Qt::ISODate)+"\'";
+			return QString("\'")+v.toString(Qt::ISODate)+"\'";
 		}
 
 		/*! Driver-specific SQL string escaping.
