@@ -43,17 +43,15 @@ SymbolFontHelper::SymbolFontHelper()
 
 bool SymbolFontStyle::init( ContextStyle* context )
 {
-    if ( fontAvailable( "symbol" ) ) {
-        symbolTable()->init( context );
+    // We require the symbol font to be there as it's the last resort
+    // anyway.
+    symbolTable()->init( context );
 
-        SymbolTable::NameTable names;
-        fillNameTable( names );
-        symbolTable()->initFont( symbolMap, "symbol", names, normalChar );
-        return true;
-    }
-    else {
-        return false;
-    }
+    SymbolTable::NameTable names;
+    fillNameTable( names );
+    symbolTable()->initFont( symbolMap, "symbol", names, normalChar );
+
+    return fontAvailable( "symbol" );
 }
 
 

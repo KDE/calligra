@@ -551,7 +551,7 @@ protected:
      * Parses the sequence and generates a new syntax tree.
      * Has to be called after each modification.
      */
-    virtual void parse();
+    //virtual void parse();
 
     /**
      * @returns whether the child is the first element of its token.

@@ -1215,8 +1215,8 @@ KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
 
 KCommand* SequenceElement::input( Container* container, QChar ch )
 {
-    int latin1 = ch.latin1();
-    switch (latin1) {
+    int unicode = ch.unicode();
+    switch (unicode) {
     case '(': {
         BracketRequest r( container->document()->leftBracketChar(),
                           container->document()->rightBracketChar() );
@@ -1571,8 +1571,8 @@ KCommand* NameSequence::buildCommand( Container* container, Request* request )
 
 KCommand* NameSequence::input( Container* container, QChar ch )
 {
-    int latin1 = ch.latin1();
-    switch (latin1) {
+    int unicode = ch.unicode();
+    switch (unicode) {
     case '(':
     case '[':
     case '|':
@@ -1651,14 +1651,14 @@ BasicElement* NameSequence::createElement( QString type )
     return 0;
 }
 
-void NameSequence::parse()
-{
-    // A name sequence is known as name and so are its children.
-    // Caution: this is fake!
-    for ( int i = 0; i < countChildren(); i++ ) {
-        getChild( i )->setElementType( getElementType() );
-    }
-}
+// void NameSequence::parse()
+// {
+//     // A name sequence is known as name and so are its children.
+//     // Caution: this is fake!
+//     for ( int i = 0; i < countChildren(); i++ ) {
+//         getChild( i )->setElementType( getElementType() );
+//     }
+// }
 
 QString NameSequence::buildName()
 {
