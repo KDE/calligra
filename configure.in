@@ -110,4 +110,5 @@ AC_OUTPUT( \
 	po/no/Makefile \
 	po/fr/Makefile \
 	po/sv/Makefile 
+	po/sk/Makefile 
  )
