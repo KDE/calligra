@@ -37,9 +37,11 @@ class VColorDocker : public VDocker
 
 public:
 	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	 virtual ~VColorDocker();
+
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
 	 VColor color() { return *m_Color; }
-  
+ 
 public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
@@ -62,7 +64,7 @@ private:
 	VColorSlider *mOpacity;
 	KarbonPart *m_part;
 	KarbonView *m_view;
-	
+
 private slots:
 	void updateCanvas();
 	void updateCMYK();

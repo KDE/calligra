@@ -117,6 +117,11 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_Color = new VColor();
 }
 
+VColorDocker::~VColorDocker()
+{
+	delete m_Color;
+}
+
 void VColorDocker::slotItemSelected( KoIconItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
