@@ -42,21 +42,21 @@ class KoPictureFilePreviewWidget : public QScrollView
 {
 public:
     KoPictureFilePreviewWidget( QWidget *parent )
-	: QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
+        : QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
     void setPixmap( const QPixmap &pix ) {
-	pixmap = pix;
+        viewport()->erase();
+        pixmap = pix;
         const QBitmap nullBitmap;
         pixmap.setMask( nullBitmap );  //don't show transparency
-	resizeContents( pixmap.width(), pixmap.height() );
-	viewport()->repaint( false );
+        resizeContents( pixmap.width(), pixmap.height() );
+        viewport()->repaint( false );
     }
 
-    void setClipart( const QString &s )
-    {
+    void setClipart( const QString &s ) {
         KoPicture picture;
-        if (picture.loadFromFile(s))
-        {
+        if (picture.loadFromFile(s)) {
+            viewport()->erase();
             pixmap = QPixmap( 200, 200 );
             pixmap.fill( Qt::white );
 
@@ -72,7 +72,7 @@ public:
     }
 
     void drawContents( QPainter *p, int, int, int, int ) {
-	p->drawPixmap( 0, 0, pixmap );
+        p->drawPixmap( 0, 0, pixmap );
     }
 
 private:
@@ -91,20 +91,20 @@ KoPictureFilePreview::KoPictureFilePreview( QWidget *parent )
 void KoPictureFilePreview::showPreview( const KURL &u )
 {
     if ( u.isLocalFile() ) {
-	QString path = u.path();
-	QFileInfo fi( path );
+        QString path = u.path();
+        QFileInfo fi( path );
         // ## TODO use KMimeType::findByURL
-    QString extension( fi.extension().lower() );
-	if ( extension == "wmf" || extension == "emf"
-        || extension == "svg" || extension == "qpic")
-	    m_widget->setClipart( path );
-	else {
-	    QPixmap pix( path );
-	    m_widget->setPixmap( pix );
-	}
+        QString extension( fi.extension().lower() );
+        if ( extension == "wmf" || extension == "emf"
+             || extension == "svg" || extension == "qpic")
+            m_widget->setClipart( path );
+        else {
+            QPixmap pix( path );
+            m_widget->setPixmap( pix );
+        }
     } else {
         // ## TODO support for remote URLs
-	m_widget->setPixmap( QPixmap() );
+        m_widget->setPixmap( QPixmap() );
     }
 }
 
