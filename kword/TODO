@@ -8,7 +8,6 @@ Missing or incomplete stuff:
 - Preview widget for style templates editor
 - Tabulators don't work correctly in "Blocksatz"
 - Table configuration dialog
-- Make CTRL+B, CTRL+U, etc. working (bold, underline, etc.)
 
 Optimations:
 ----------------------------------------

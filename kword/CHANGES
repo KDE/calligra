@@ -1629,3 +1629,8 @@ Reggie, 20.11.1999:
 Started working on automatically removing empty pages at the end. It
 already works somehow, but the code is not used at the moment, as
 there are some annoying bugs.
+
+Reggie, 21.11.1999:
+-----------------
+- Shortcuts CTRL+B, CTRL+U, CTRL+I for bold, italic, underline works
+

@@ -2839,6 +2839,23 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 	if ( !kInsertTableRow() )
 	    STOP;
 
+    if ( e->state() & ControlButton ) {
+	if ( e->key() == Key_B ) {
+	    stopProcessKeyEvent();
+	    gui->getView()->textBold();
+	    return;
+	} else if ( e->key() == Key_I ) {
+	    stopProcessKeyEvent();
+	    gui->getView()->textItalic();
+	    return;
+	} else if ( e->key() == Key_U ) {
+	    stopProcessKeyEvent();
+	    gui->getView()->textUnderline();
+	    return;
+	}
+    }
+    
+
     unsigned int oldPage = fc->getPage();
     unsigned int oldFrame = fc->getFrame();
     KWParag* oldParag = fc->getParag();
@@ -2848,8 +2865,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 	if ( !kContinueSelection( e ) )
 	    STOP;
 
-    switch( e->key() )
-    {
+    switch( e->key() ) {
     case Key_Home:
 	if ( !kHome( e, oldPage, oldFrame, oldParag, frameSet ) )
 	    STOP;
@@ -3028,7 +3044,7 @@ void KWPage::formatChanged( KWFormat &_format, bool _redraw, int flags )
 
 	doc->setSelection( FALSE );
 	doc->setFormat( format, flags );
-	KWFormatContext fc1( doc, doc->getSelStart()->getFrameSet() ), 
+	KWFormatContext fc1( doc, doc->getSelStart()->getFrameSet() ),
 	    fc2( doc, doc->getSelEnd()->getFrameSet() );
 	fc1 = *doc->getSelStart();
 	fc2 = *doc->getSelEnd();
