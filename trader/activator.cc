@@ -173,15 +173,15 @@ CORBA::Object_ptr Activator::activate( const char *_server, const char *_repoid,
   CORBA::ORB::ObjectTag_var tag = CORBA::ORB::string_to_tag( _server );
   obj = 0L;
   if( _addr )
-    obj = _orbnc()->bind ( _repoid, tag, _addr );
+    obj = orb->bind ( _repoid, tag, _addr );
   if( CORBA::is_nil( obj ) )
   {
     // try address of the impl repo
     const CORBA::Address *addr = imr->_ior()->addr();
-    obj = _orbnc()->bind( _repoid, tag, addr->stringify().c_str());
+    obj = orb->bind( _repoid, tag, addr->stringify().c_str());
   }
   if (CORBA::is_nil( obj ) )
-    obj = _orbnc()->bind( _repoid, tag );
+    obj = orb->bind( _repoid, tag );
 
   if ( CORBA::is_nil( obj ) )
   {
