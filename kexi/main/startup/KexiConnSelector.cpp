@@ -200,6 +200,7 @@ void KexiConnSelectorWidget::hideHelpers()
 	m_remote->label->hide();
 	m_remote->label_back->hide();
 	m_remote->btn_back->hide();
+	m_remote->icon->hide();
 }
 
 #include "KexiConnSelector.moc"

@@ -151,7 +151,7 @@ bool pqxxMigrate::drv_connect()
 	QString socket;
 
 	//Setup local/remote connection
-	if (m_externalData->hostName.isEmpty() || m_externalData->hostName == "localhost")
+	if (m_externalData->hostName.isEmpty())
 	{
 		if (m_externalData->fileName().isEmpty())
 		{
@@ -420,3 +420,26 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 
 	return ukey;
 }
+
+//==================================================================================
+//Return a list of database names
+/*bool pqxxMigrate::drv_getDatabasesList( QStringList &list )
+{
+    KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
+
+    if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
+    {
+        std::string N;
+        for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
+        {
+            // Read value of column 0 into a string N
+            c[0].to(N);
+            // Copy the result into the return list
+            list << QString::fromLatin1 (N.c_str());
+	    KexiDBDrvDbg << N.c_str() << endl;
+        }
+        return true;
+    }
+
+    return false;
+}*/

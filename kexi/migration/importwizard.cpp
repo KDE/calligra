@@ -16,11 +16,14 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <qlayout.h>
 #include <kcombobox.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
+#include <main/startup/KexiConnSelector.h>
+
 #include <kdebug.h>
 #include <klineedit.h>
 
@@ -32,12 +35,15 @@ namespace KexiMigration
 importWizard::importWizard(QWidget *parent, const char *name)
         : KWizard(parent, name)
 {
-    setupPage1();
-    setupPage2();
-    setupPage3();
-    setupPage4();
-    
-    connect(srcCombo, SIGNAL(activated(const QString & string)), this, SLOT(populateSrcDBList(const QString & driverName)));
+    setMinimumSize(400, 300);
+    createBlankPages();
+    setupintro();
+    setupsrcType();
+    setupsrc();
+    setupdstType();
+    setupdst();
+    setupfinish();
+    connect(this, SIGNAL(selected(const QString &)), this, SLOT(nextClicked(const QString &)));
 }
 
 //===========================================================
@@ -47,63 +53,85 @@ importWizard::~importWizard()
 
 //===========================================================
 //
-void importWizard::setupPage1()
-{
-    page1 = new QHBox(this);
-    QLabel *lblIntro = new QLabel(page1);
+void importWizard::setupintro()
+{  
+    QLabel *lblIntro = new QLabel(intro);
     lblIntro->setText("This wizard will guide you through the\n"
                       "process of converting an existing data\n"
                       "set into a kexi database");
-
-    this->addPage(page1, "Introduction");
 }
 
 //===========================================================
 //
-void importWizard::setupPage2()
+void importWizard::setupsrcType()
 {
-    page2 = new QHBox(this);
-    QLabel *lblSource = new QLabel(page2);
+    QLabel *lblSource = new QLabel(srcType);
+    lblSource->setText("Here you can choose the type\n"
+                       "of data to import data from");
+
+    QVBox *srcTypeControls = new QVBox(srcType);
+    srcTypeCombo = new KComboBox(srcTypeControls);
+    srcTypeCombo->insertItem("PostgreSQL Database", 0);
+    srcTypeCombo->insertItem("Text File", 1);
+}
+
+//===========================================================
+//
+void importWizard::setupsrc()
+{
+    
+    QLabel *lblSource = new QLabel(src);
     lblSource->setText("Here you can choose the location\n"
                        "to import data from");
 
-    QVBox *p2Controls = new QVBox(page2);
-    srcCombo = new KComboBox(p2Controls);
-    srcCombo->insertItem("PostgreSQL Database", 0);
-    srcCombo->insertItem("Text File", 1);
+    QVBox *srcControls = new QVBox(src);
 
-    srcDBList = new KListView(p2Controls);
-    this->addPage(page2, "Source Data");
+    srcList = new KListView(srcControls);
+    
 }
 
 //===========================================================
 //
-void importWizard::setupPage3()
+void importWizard::setupdstType()
 {
     KexiDB::DriverManager manager;
 
-    page3 = new QHBox(this);
-
     QStringList names = manager.driverNames();
-    QLabel *lblDest = new QLabel(page3);
+    QLabel *lblDest = new QLabel(dstType);
+    lblDest->setText("Here you can choose the location\n"
+                     "to save the data");
+
+    QVBox *dstTypeControls = new QVBox(dstType);
+
+    dstTypeCombo = new KComboBox(dstTypeControls);
+    dstTypeCombo->insertStringList(names);
+}
+
+//===========================================================
+//
+void importWizard::setupdst()
+{
+    QLabel *lblDest = new QLabel(dst);
     lblDest->setText("Here you can choose the location\n"
                      "to save the data in and the new\n"
                      "database name");
 
-    QVBox *p3Controls = new QVBox(page3);
+    QVBox *dstControls = new QVBox(dst);
 
-    dstConnList = new Kexi::KexiMiniConnList(p3Controls);
-    dstNewDBName = new KLineEdit(p3Controls);
+    dstList = new KexiConnSelectorWidget(Kexi::connset(), dstControls, "ConnSelector");
     
-    this->addPage(page3, "Final Location");
+    dstList->hideHelpers();
+    
+    dstNewDBName = new KLineEdit(dstControls);
+    dstNewDBName->setText("Enter new database name here");
 }
 
 //===========================================================
 //
-void importWizard::setupPage4()
+void importWizard::setupfinish()
 {
-    page4 = new QHBox(this);
-    QLabel *lblDone = new QLabel(page4);
+    finish->hide();
+    QLabel *lblDone = new QLabel(finish);
     lblDone->setText("Finished!\n"
                      "All required information has now\n"
                      "been gathered.  Click Finish below\n"
@@ -112,8 +140,7 @@ void importWizard::setupPage4()
                      "information such as field types if\n"
                      "the import module cannot automatically\n"
                      "determine this for you");
-
-    this->addPage(page4, "Finished");
+    finish->show();
 }
 
 //===========================================================
@@ -138,7 +165,7 @@ void importWizard::doImport()
     }
 
     //Create connections to the kexi database
-    kexi_conn = driver->createConnection(*(dstConnList->selectedConnection()));
+    /*kexi_conn = driver->createConnection(*(dstList->selectedConnection()));*/
 
     import = new pqxxMigrate(&conn_data_from, "from_db", kexi_conn, false);
     if (import->performImport())
@@ -154,6 +181,59 @@ void importWizard::doImport()
 void importWizard::populateSrcDBList(const QString& driverName)
 {
     kdDebug() << "Populating list of source databases for " << driverName << endl;
+}
+
+void importWizard::nextClicked(const QString & p)
+{
+    kdDebug() << "Next Button Clicked " << endl;
+    if (currentPage() == intro)
+    {
+        kdDebug() << "Current page is introduction" << endl;
+    }
+    else if (currentPage() == srcType)
+    {    
+        kdDebug() << "Current page is source type" << endl;
+    }
+    else if (currentPage() == src)
+    {    
+        kdDebug() << "Current page is source" << endl;
+     
+    }
+    else if (currentPage() == dstType)
+    {    
+        kdDebug() << "Current page is destination type" << endl;
+    }
+    else if (currentPage() == dst)
+    {    
+        kdDebug() << "Current page is destination" << endl;
+        dst->hide();
+        if (dstTypeCombo->currentText() == "PostgreSQL")
+        {
+            dstList->showAdvancedConn();
+        }
+        dst->show();
+    }
+    else if (currentPage() == finish)
+    {    
+        kdDebug() << "Current page is finished" << endl;
+        
+    }
+}
+
+void importWizard::createBlankPages()
+{
+intro = new QHBox(this);
+srcType = new QHBox(this);
+src = new QHBox(this);
+dstType = new QHBox(this);
+dst = new QHBox(this);
+finish = new QHBox(this);
+this->addPage(intro, "Introduction");
+this->addPage(srcType, "Source Data Type");
+this->addPage(src, "Source Data");
+this->addPage(dstType, "Destination Data Type"); 
+this->addPage(dst, "Destination Data");
+this->addPage(finish, "Finished");
 }
 };
 #include "importwizard.moc"

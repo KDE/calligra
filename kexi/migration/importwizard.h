@@ -13,11 +13,11 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <kwizard.h>
-#include "keximiniconnlist.h"
 
+class KexiConnSelectorWidget;
 class QHBox;
 class KComboBox;
-class KListBox;
+class KListView;
 class KLineEdit;
 
 namespace KexiMigration {
@@ -29,21 +29,23 @@ class importWizard : public KWizard
 {
 Q_OBJECT
 private:
-    QHBox *page1, *page2, *page3, *page4;
-    KComboBox *srcCombo;
-    KListView* srcDBList;
-    Kexi::KexiMiniConnList *dstConnList;
+    QHBox *intro, *srcType, *src, *dstType, *dst, *finish;
+    KComboBox *srcTypeCombo, *dstTypeCombo;
+    KListView* srcList;
+    KexiConnSelectorWidget *dstList;
     KLineEdit *dstNewDBName;
     
-    void setupPage1();
-    void setupPage2();
-    void setupPage3();
-    void setupPage4();
+    void setupintro();
+    void setupsrcType();
+    void setupsrc();
+    void setupdstType();
+    void setupdst();
+    void setupfinish();
     void doImport();
-
+    void createBlankPages();
 private slots:
     void populateSrcDBList(const QString& driverName);
-
+    void nextClicked(const QString &);
 public:
     importWizard(QWidget *parent = 0, const char *name = 0);
 

@@ -16,8 +16,9 @@ METASOURCES = AUTO
 
 keximigratetest_SOURCES = keximigratetest.cpp keximigrate.cpp pqxxmigrate.cpp \
 		importwizard.cpp keximiniconnlist.cpp
-keximigratetest_LDADD = $(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) \
-	$(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la -lpqxx
+keximigratetest_LDADD = $(top_builddir)/kexi/main/libkeximain.la \
+	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la \
+	-lpqxx
 keximigratetest_LDFLAGS = -no-undefined $(all_libraries) $(KDE_RPATH) \
 	-L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
 
