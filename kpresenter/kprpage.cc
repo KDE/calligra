@@ -3543,13 +3543,14 @@ void KPrPage::changeTabStopValue ( double _tabStop )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected() && it.current()->getType()==OT_TEXT)
+        if(it.current()->getType()==OT_TEXT)
         {
             KPTextObject *obj = dynamic_cast<KPTextObject *>(it.current());
             if ( obj )
             {
                 obj->textDocument()->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPt( _tabStop ));
                 obj->layout();
+                m_doc->repaint( obj );
             }
         }
     }
