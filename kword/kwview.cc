@@ -266,7 +266,9 @@ void KWView::setupActions()
              this, SLOT( viewZoom( const QString & ) ) );
     QStringList lst;
     lst << "50%";
+    lst << "75%";
     lst << "100%";
+    lst << "125%";
     lst << "150%";
     lst << "200%";
     lst << "250%";
