@@ -1828,16 +1828,8 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
-#if 0
-    QString mode = viewMode()->type();
-    bool state = (mode=="ModeText");
-    if ( state )
-    {
-        //don't active an other frameset as main frameset
-        if ( m_doc->frameSet( 0 )!= fs )
-            return;
-    }
-#endif
+    if ( !fs->isVisible( viewMode() ) )
+        return;
     KWTableFrameSet *table = fs->getGroupManager();
     bool emitChanged = checkCurrentEdit( table ? table : fs );
 
