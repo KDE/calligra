@@ -33,11 +33,9 @@
 class KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void) : m_worker(NULL), m_chain(NULL), m_hType(0), m_fType(0) {}
-        KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker(newWorker), m_chain(NULL)
-        { if (newWorker) newWorker->registerKWordLeader(this); }
-        virtual ~KWEFKWordLeader(void) {}
-
+        KWEFKWordLeader(void);
+        KWEFKWordLeader(KWEFBaseWorker* newWorker);
+        virtual ~KWEFKWordLeader(void);
     public:
         void setWorker ( KWEFBaseWorker *newWorker );
         KWEFBaseWorker *getWorker(void) const;

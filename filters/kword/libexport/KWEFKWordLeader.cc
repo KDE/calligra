@@ -51,6 +51,22 @@
 #include "KWEFBaseWorker.h"
 #include "KWEFKWordLeader.h"
 
+KWEFKWordLeader::KWEFKWordLeader(void)
+    : m_syntaxVersion(-1), m_oldSyntax(false), m_numPages(-1),
+    m_columns( 1 ), m_columnspacing( 0.0 ), m_worker(NULL), m_chain(NULL), m_hType(0), m_fType(0)
+{
+}
+
+KWEFKWordLeader::KWEFKWordLeader(KWEFBaseWorker* newWorker)
+    : m_syntaxVersion(-1), m_oldSyntax(false), m_numPages(-1),
+    m_columns( 1 ), m_columnspacing( 0.0 ),m_worker(newWorker), m_chain(NULL)
+{
+    if (newWorker) newWorker->registerKWordLeader(this);
+}
+
+KWEFKWordLeader::~KWEFKWordLeader(void)
+{
+}
 
 static FrameAnchor *findAnchor ( const KoPictureKey& key,
                                  QValueList<ParaData>& paraList )
