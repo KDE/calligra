@@ -73,6 +73,7 @@
 #include <klocale.h>
 #undef Bool
 #include <kspell.h>
+#include <kspelldlg.h>
 #include <tkcoloractions.h>
 #include <kstandarddirs.h>
 #include <kparts/event.h>
@@ -3351,10 +3352,10 @@ void KWView::startKSpell()
 
     QObject::connect( m_spell.kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
-    QObject::connect( m_spell.kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
-                      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
-    QObject::connect( m_spell.kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-                      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int ) ),
+                      this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &, const QString &, unsigned int ) ),
+                      this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
@@ -3398,7 +3399,7 @@ void KWView::spellCheckerReady()
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
 }
 
-void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
+void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
     //kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
@@ -3416,7 +3417,7 @@ void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
     fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
 }
 
-void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
+void KWView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 

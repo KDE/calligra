@@ -260,8 +260,8 @@ public slots:
     void newRightIndent( double _rightIndent);
 
     void spellCheckerReady();
-    void spellCheckerMisspelling( QString, QStringList*, unsigned );
-    void spellCheckerCorrected( QString, QString, unsigned );
+    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
+    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
 
