@@ -109,7 +109,7 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
-    kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+    //kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag ) {
         if ( m_bgSpell.currentTextObj )
