@@ -103,6 +103,8 @@ class VTextOptionsWidget : public QFrame
 		QString text();
 		void setPosition( VText::Position position );
 		VText::Position position();
+		void setAlignment( VText::Alignment alignment );
+		VText::Alignment alignment();
 
 	public slots:
 		void valueChanged( int );
@@ -161,7 +163,7 @@ class VTextTool : public VTool, public VVisitor
 			public:
 				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text );
 				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
-						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, const QString& newText );
+						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText );
 				virtual ~VTextCmd();
 
 				virtual void execute();
@@ -177,6 +179,8 @@ class VTextTool : public VTool, public VVisitor
 					VPath            newBasePath;
 					VText::Position  oldPosition;
 					VText::Position  newPosition;
+					VText::Alignment oldAlignment;
+					VText::Alignment newAlignment;
 					QString          oldText;
 					QString          newText;
 				} VTextModifPrivate;

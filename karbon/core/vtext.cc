@@ -124,8 +124,8 @@ VText::VText( VObject* parent, VState state )
 }
 
 
-VText::VText( const QFont &font, const VPath& basePath, Position position, const QString& text )
-	: VObject( 0L ), m_font( font ), m_basePath( basePath ), m_position( position ), m_text( text )
+VText::VText( const QFont &font, const VPath& basePath, Position position, Alignment alignment, const QString& text )
+	: VObject( 0L ), m_font( font ), m_basePath( basePath ), m_position( position ), m_alignment( alignment ), m_text( text )
 {
 	m_glyphs.setAutoDelete( true );
 	m_boundingBoxIsInvalid = true;
@@ -134,7 +134,7 @@ VText::VText( const QFont &font, const VPath& basePath, Position position, const
 }
 
 VText::VText( const VText& text )
-	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_text( text.m_text )
+	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_alignment( text.m_alignment ), m_text( text.m_text )
 {
 	m_stroke = new VStroke( *text.m_stroke );
 	m_stroke->setParent( this );
@@ -257,6 +257,7 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "italic", m_font.italic() );
 		me.setAttribute( "bold", m_font.bold() );
 		me.setAttribute( "position", m_position );
+		me.setAttribute( "position", m_alignment );
 
 		element.appendChild( me );
 
@@ -280,6 +281,7 @@ VText::load( const QDomElement& element )
 	m_font.setWeight( QFont::Normal );
 	m_font.setBold( element.attribute( "bold" ) == 0 ? false : true );
 	m_position = (Position)element.attribute( "position", "0" ).toInt();
+	m_alignment = (Alignment)element.attribute( "alignment", "0" ).toInt();
 
 	m_text = element.attribute( "text", "" );
 
@@ -380,21 +382,10 @@ VText::traceText()
 
 	FT_Set_Char_Size( fontFace, FT_FROMFLOAT( m_font.pointSize() ), FT_FROMFLOAT( m_font.pointSize() ), 0, 0 );
 
-	float x = 0;
-	float y = 0;
-	float dx = 0;
-	float sp = 0;
-	KoPoint point;
-	KoPoint normal;
-	KoPoint tangent;
-	VPathIterator pathIt( m_basePath );
-	VSegment* oldSeg = pathIt.current();
-	VSegment* seg = ++pathIt;
-	KoPoint extPoint;
-	bool ext = false;
-	float fsx = 0;
-	int yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
-	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
+		// storing glyphs.
+	float l = 0;
+	QValueList<float> glyphXAdvance;
+	QValueList<float> glyphYAdvance;
 	for( int i = 0; i < m_text.length(); i++ )
 	{
 		// get the glyph index for the current character
@@ -418,41 +409,89 @@ VText::traceText()
 		FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
 		//composite->close();
 
+		m_glyphs.append( composite );
+		glyphXAdvance.append( FT_TOFLOAT( fontFace->glyph->advance.x ) );
+		glyphYAdvance.append( FT_TOFLOAT( fontFace->glyph->advance.y ) );
+		l += FT_TOFLOAT( fontFace->glyph->advance.x );
+	}
+
+	 // Placing the stored glyphs.
+	float pathLength = 0;
+	VPathIterator pIt( m_basePath );
+	VSegment* seg;
+	while ( ( seg = ++pIt ) )
+		pathLength += seg->length();
+	float x = 0;
+	switch( m_alignment )
+	{
+		case Left: x = 0; break;
+		case Center: x = ( pathLength - l ) / 2; break;
+		case Right: x = pathLength - l; break;
+	}
+	float y = 0;
+	float dx = 0;
+	float sp = 0;
+	KoPoint point;
+	KoPoint normal;
+	KoPoint tangent;
+	VPathIterator pathIt( m_basePath );
+	VSegment* oldSeg = pathIt.current();
+	seg = ++pathIt;
+	KoPoint extPoint;
+	bool ext = false;
+	float fsx = 0;
+	float yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
+	kdDebug() << "Position: " << m_position << " -> " << yoffset << endl;
+	for( int i = 0; i < m_text.length(); i++ )
+	{
+		VComposite* composite = m_glyphs.at( i );
+	
 		// Step 1: place (0, 0) to the rotation center of the glyph.
-		dx = FT_TOFLOAT( fontFace->glyph->advance.x ) / 2;
+		dx = *glyphXAdvance.at( i ) / 2;
 		x += dx;
 		composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
 
 		// Step 2: find the position where to draw.
-		while ( seg && x > fsx + seg->length() )
+		//   3 possibilities: before, on, and after the basePath...
+		if ( x < 0 )
 		{
-			fsx += seg->length();
-			oldSeg = seg;
-			seg = ++pathIt;
-		}
-		if( seg )
-		{
-			sp = ( x - fsx ) / seg->length();
-			seg->pointTangentNormal( sp, &point, &tangent, &normal );
+			if( !ext )
+				seg->pointTangentNormal( 0, &extPoint, &tangent, &normal );
+			point = extPoint + x * tangent;
+			ext = true;
 		}
 		else
 		{
-			ext = true;
-			if( ext )
-				oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
-			point = extPoint + ( x - fsx ) * tangent;
+			while ( seg && x > fsx + seg->length() )
+			{
+				fsx += seg->length();
+				oldSeg = seg;
+				seg = ++pathIt;
+			}
+			if( seg )
+			{
+				ext = false;
+				sp = ( x - fsx ) / seg->length();
+				seg->pointTangentNormal( sp, &point, &tangent, &normal );
+			}
+			else
+			{
+				if( !ext )
+					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
+				point = extPoint + ( x - fsx ) * tangent;
+				ext = true;
+			}
 		}
 
 		// Step 3: transform glyph and append it. That's it, we've got
 		// text following a path. Really easy, isn't it ;) ?
 		composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
 		composite->setState( state() );
-		m_glyphs.append( composite );
 
 		//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;
 
 		x += dx;
-		y += FT_TOFLOAT( fontFace->glyph->advance.y );
+		y += *glyphYAdvance.at( i );
 	}
 	FT_Done_Face( fontFace );
 	FT_Done_FreeType( library );

@@ -43,9 +43,15 @@ public:
 		On,
 		Under
 	};
+	
+	enum Alignment {
+		Left,
+		Center,
+		Right
+	};
 
 	VText( VObject* parent, VState state = normal );
-	VText( const QFont &font, const VPath& basePath, Position position, const QString& text );
+	VText( const QFont &font, const VPath& basePath, Position position, Alignment alignment, const QString& text );
 	VText( const VText& text );
 	virtual ~VText();
 
@@ -57,6 +63,8 @@ public:
 	virtual VPath& basePath() { return m_basePath; }
 	virtual void setPosition( Position position ) { m_position = position; }
 	virtual Position position() { return m_position; }
+	virtual void setAlignment( Alignment alignment ) { m_alignment = alignment; }
+	virtual Alignment alignment() { return m_alignment; }
 	
 	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
 
@@ -87,6 +95,8 @@ private:
 	VPath       m_basePath;
 		// The text position 
 	Position    m_position;
+		// The text alignment
+	Alignment   m_alignment;
 		// The text to draw
 	QString     m_text;
 		// The glyphs (allow to keep a font even if not present on the computer. works as long as you don't edit the text.)

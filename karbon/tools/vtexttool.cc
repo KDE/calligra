@@ -321,6 +321,9 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	m_textEditor->setMinimumHeight( 100 );
 	m_convertToShapes->setEnabled( false );
 	 // TODO: Find a way to display correctly the following icons...
+	m_textAlignment->insertItem( "Left" );
+	m_textAlignment->insertItem( "Center" );
+	m_textAlignment->insertItem( "Right" );
 	m_textPosition->insertItem( SmallIcon( "14_text_above" ) );
 	m_textPosition->insertItem( SmallIcon( "14_text_on" ) );
 	m_textPosition->insertItem( SmallIcon( "14_text_under" ) );
@@ -330,6 +333,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	connect( m_italicCheck, SIGNAL( stateChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_fontSize, SIGNAL( valueChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_textPosition, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
+	connect( m_textAlignment, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
 	
 	connect( m_textEditor, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
@@ -399,6 +403,16 @@ VText::Position VTextOptionsWidget::position()
 {
 	return (VText::Position)m_textPosition->currentItem();
 } // VTextOptionsWidget::position
+
+void VTextOptionsWidget::setAlignment( VText::Alignment alignment )
+{
+	m_textAlignment->setCurrentItem( alignment );
+} // VTextOptionsWidget::setAlignment
+
+VText::Alignment VTextOptionsWidget::alignment()
+{
+	return (VText::Alignment)m_textAlignment->currentItem();
+} // VTextOptionsWidget::alignment
 
 VTextTool::VTextTool( KarbonView* view )
 		: VTool( view )
@@ -510,7 +524,7 @@ void VTextTool::mouseDragRelease()
 	path.moveTo( first() );
 	path.lineTo( last() );
 	m_text = 0L;
-	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->text() );
+	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
 	m_editedText->traceText();
 	m_creating = true;
@@ -528,6 +542,7 @@ void VTextTool::textChanged()
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
+	m_editedText->setAlignment( m_optionsWidget->alignment() );
 	m_editedText->traceText();
 	
 	drawEditedText();
@@ -540,6 +555,7 @@ void VTextTool::accept()
 		m_text->setFont( m_editedText->font() );
 		m_text->setBasePath( m_editedText->basePath() );
 		m_text->setPosition( m_editedText->position() );
+		m_text->setAlignment( m_editedText->alignment() );
 		m_text->setText( m_editedText->text() );
 		m_text->traceText();
 		//m_text->setParent( view()->part()->document().activeLayer() );
@@ -583,7 +599,7 @@ void VTextTool::visitVComposite( VComposite& composite )
 		return;
 
 	m_text = 0L; 
-	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->text() );
+	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
 	m_editedText->traceText();
 	m_creating = true;
@@ -594,7 +610,7 @@ void VTextTool::visitVComposite( VComposite& composite )
 void VTextTool::visitVPath( VPath& path )
 {
 	m_text = 0L; 
-	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->text() );
+	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
 	m_editedText->traceText();
 	m_creating = true;
@@ -609,6 +625,7 @@ void VTextTool::visitVText( VText& text )
 	m_optionsWidget->setFont( text.font() );
 	m_optionsWidget->setText( text.text() );
 	m_optionsWidget->setPosition( text.position() );
+	m_optionsWidget->setAlignment( text.alignment() );
 	m_creating = false;
 	
 	text.setState( VObject::hidden );
@@ -626,7 +643,7 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& 
 } // VTextTool::VTextCmd::VTextCmd
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
-		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, const QString& newText )
+		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText )
 		: VCommand( doc, name, "14_text" ), m_view( view ), m_text( text )
 {
 	m_textModifications = (VTextModifPrivate*)malloc( sizeof( VTextModifPrivate ) );
@@ -636,6 +653,8 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& 
 	m_textModifications->oldBasePath = text->basePath();
 	m_textModifications->newPosition = newPosition;
 	m_textModifications->oldPosition = text->position();
+	m_textModifications->newAlignment= newAlignment;
+	m_textModifications->oldAlignment= text->alignment();
 	m_textModifications->newText     = newText;
 	m_textModifications->oldText     = text->text();
 	
@@ -669,6 +688,7 @@ void VTextTool::VTextCmd::execute()
 		m_text->setFont( m_textModifications->newFont );
 		m_text->setBasePath( m_textModifications->newBasePath );
 		m_text->setPosition( m_textModifications->newPosition );
+		m_text->setAlignment( m_textModifications->newAlignment );
 		m_text->setText( m_textModifications->newText );
 		m_text->traceText();
 	}
@@ -691,6 +711,7 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setFont( m_textModifications->oldFont );
 		m_text->setBasePath( m_textModifications->oldBasePath );
 		m_text->setPosition( m_textModifications->oldPosition );
+		m_text->setAlignment( m_textModifications->oldAlignment );
 		m_text->setText( m_textModifications->oldText );
 		m_text->traceText();
 	}
