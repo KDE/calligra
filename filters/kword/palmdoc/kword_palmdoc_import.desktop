@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KWord Palm Doc Import Filter
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/vnd.palm
+X-KDE-Weight=1
+X-KDE-Library=libpalmdocimport
+ServiceTypes=KOfficeFilter

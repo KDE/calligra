@@ -1,0 +1,6 @@
+[Desktop Entry]
+Icon=wordprocessing
+Type=MimeType
+MimeType=application/vnd.palm
+Patterns=*.pdb;*.PDB;*.prc;*.PRC;
+Comment=Palm document
