@@ -1433,7 +1433,18 @@ bool KWFrameDia::applyChanges()
             doc->repaintAllViews();
         }
     }
+    int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
 
+    double px = QMAX(0,KoUnit::fromUserValue( sx->text(), doc->getUnit() ));
+    double py = QMAX(0, KoUnit::fromUserValue(sy->text(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
+    double pw = QMAX(KoUnit::fromUserValue( sw->text(), doc->getUnit() ),0);
+    double ph = QMAX(KoUnit::fromUserValue(sh->text(), doc->getUnit() ),0);
+
+    KoRect rect( px, py, pw, ph );
+
+    //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
+    //<< " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
+    //kdDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph "<<ph<<endl;
     // Undo/redo for frame properties
   if(frame) { // only do undo/redo when we edit 1 frame for now..
     if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
@@ -1457,6 +1468,17 @@ bool KWFrameDia::applyChanges()
         kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
         KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
         _frameSet->addFrame( frame );
+
+        if( !doc->isOutOfPage( rect , frame->pageNum() ) )
+        {
+            frame->setRect( px, py, pw, ph );
+            doc->frameChanged( frame );
+        }
+        else
+        {
+            KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
+        }
+
         doc->addFrameSet( _frameSet );
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Create text frame") );
@@ -1518,15 +1540,6 @@ bool KWFrameDia::applyChanges()
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                 //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
-	        // Can't use frame->pageNum() here since frameset might be 0
-	        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
-
-                double px = KoUnit::fromUserValue( QMAX( sx->text(), 0 ), doc->getUnit() );
-                double py = KoUnit::fromUserValue( (QMAX( sy->text(),0)) + (pageNum * doc->ptPaperHeight()), doc->getUnit());
-                double pw = KoUnit::fromUserValue( QMAX( sw->text(), 0 ), doc->getUnit() );
-                double ph = KoUnit::fromUserValue( QMAX( sh->text(), 0 ), doc->getUnit() );
-
-                KoRect rect( px, py, pw, ph );
                 if( !doc->isOutOfPage( rect , frame->pageNum() ) )
                 {
                     FrameIndex index( frame );
