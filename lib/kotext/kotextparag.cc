@@ -382,8 +382,7 @@ int KoTextParag::lineSpacing( int line ) const
         }
         else if ( m_layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
         {
-            //todo
-            return shadow ;
+            return (int)(QMAX(m_layout.lineSpacingValue()-1, 1)*height + shadow );
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;
