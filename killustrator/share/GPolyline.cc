@@ -278,8 +278,20 @@ unsigned int GPolyline::numOfPoints () const {
 }
 
 int GPolyline::getNeighbourPoint (const Coord& p) {
-  for (unsigned int i = 0; i < points.count (); i++) { 
-    Coord c = points.at (i)->transform (tMatrix);
+  Coord c;
+
+  // for speedup in add line segments check first point #0 and #num-1
+  c = points.at (0)->transform (tMatrix);
+  if (c.isNear (p, NEAR_DISTANCE))
+    return 0;
+  unsigned int last = points.count () - 1;
+  c = points.at (last)->transform (tMatrix);
+  if (c.isNear (p, NEAR_DISTANCE))
+    return last;
+
+  // and now the remaining
+  for (unsigned int i = 1; i < last; i++) { 
+    c = points.at (i)->transform (tMatrix);
     if (c.isNear (p, NEAR_DISTANCE))
       return i;
   }
