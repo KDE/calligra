@@ -14,7 +14,7 @@ bool Document::analyse(QPtrList<Element>* root)
 bool Document::generate(KoStore* store)
 {
 	QDomDocument doc("KWORD");
-	doc->appendChild(doc->createProcessingInstruction("xml", 
+	doc.appendChild(doc.createProcessingInstruction("xml", 
 				"version=\"1.0\" encoding=\"UTF-8\""));
   QDomElement root = doc.createElement( "DOC" );
 	root.setAttribute("editor", "LaTex Import Filter");
