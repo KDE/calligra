@@ -18,7 +18,7 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <ctype.h>
 #include <math.h>
 
@@ -3244,7 +3244,8 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 
 struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
     bool b;
-    SetSelectionMoneyFormatWorker( bool _b ) : b( _b ) { }
+    KSpreadDoc *m_pDoc;
+    SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format money"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PFormatNumber )
@@ -3254,12 +3255,12 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
     void doWork( RowLayout* rw ) {
 	rw->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
 	rw->setFaktor( 1.0 );
-	rw->setPrecision( b ? KGlobal::locale()->fracDigits() : 0 );
+	rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void doWork( ColumnLayout* cl ) {
 	cl->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
 	cl->setFaktor( 1.0 );
-	cl->setPrecision( b ? KGlobal::locale()->fracDigits() : 0 );
+	cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( KSpreadCell* c ) {
 	c->clearProperty( KSpreadCell::PFaktor );
@@ -3277,7 +3278,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
 	    cell->setDisplayDirtyFlag();
 	cell->setFormatNumber( b ? KSpreadCell::Money : KSpreadCell::Number );
 	cell->setFaktor( 1.0 );
-	cell->setPrecision( b ? KGlobal::locale()->fracDigits() : 0 );
+	cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
     }
@@ -3286,7 +3287,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
 
 void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker, bool b )
 {
-    SetSelectionMoneyFormatWorker w( b );
+    SetSelectionMoneyFormatWorker w( b,doc() );
     workOnCells( _marker, w );
 }
 

@@ -152,7 +152,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
     if( other==0L)
       {
 	//	other=new QStringList();
-	KConfig *config = KSpreadFactory::global()->config(); 
+	KConfig *config = KSpreadFactory::global()->config();
 	config->setGroup( "Parameters" );
 	other=new QStringList(config->readListEntry("Other list"));
       }
@@ -163,11 +163,11 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
     }
 
     if ( day->find( _str ) != day->end() )
-    {    
+    {
       type = DAY;
       return;
     }
-    
+
     if( other->find(_str)!=other->end())
       {
 	type = OTHER;
@@ -175,7 +175,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	otherEnd=other->count();
 	int index= other->findIndex(_str);
 	//find end and begin of qstringlist of other.
-	for ( QStringList::Iterator it = other->find(_str); it != other->end();++it ) 
+	for ( QStringList::Iterator it = other->find(_str); it != other->end();++it )
 	  {
 	    if((*it)=="\\")
 	      {
@@ -185,7 +185,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	    index++;
 	  }
 	index= other->findIndex(_str);
-	for ( QStringList::Iterator it = other->find(_str); it != other->begin();--it ) 
+	for ( QStringList::Iterator it = other->find(_str); it != other->begin();--it )
 	  {
 	    if((*it)=="\\")
 	      {
@@ -430,7 +430,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     }
 
 }
-
+#include <kdebug.h>
 void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList,
                                  QList<AutoFillSequence>& _seqList )
 {
@@ -539,6 +539,23 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
                 QString tmp;
                 tmp=tmp.setNum(val);
                 cell->setCellText( tmp, true );
+                }
+            else if(_srcList.at( s )->isDate() && _srcList.count()==1)
+                {
+                    QDate tmpDate=(_srcList.at( s )->valueDate());
+                    tmpDate=tmpDate.addDays( incre );
+                    incre++;
+                    cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
+                }
+             else if(_srcList.at( s )->isTime() && _srcList.count()==1)
+                {
+                    if(incre==1)
+                        incre=60;
+                    QTime tmpTime=(_srcList.at( s )->valueTime());
+                    //add a minute
+                    tmpTime=tmpTime.addSecs( incre );
+                    incre+=60;
+                    cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
                 }
             else
                 cell->setCellText( _srcList.at( s )->text(), true );
