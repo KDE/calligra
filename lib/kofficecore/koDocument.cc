@@ -309,7 +309,7 @@ bool KoDocument::saveFile()
       if ( d->lastErrorMessage.isEmpty() )
           KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
       else if ( d->lastErrorMessage != "USER_CANCELED" )
-          KMessageBox::error( 0L, i18n( "Could not save\n%1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
+          KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
   }
   return ret;
 }
@@ -849,7 +849,7 @@ bool KoDocument::openFile()
       if ( d->lastErrorMessage.isEmpty() )
           KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
       else if ( d->lastErrorMessage != "USER_CANCELED" )
-          KMessageBox::error( 0L, i18n( "Could not open\n%1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
+          KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
     }
   }
   else {
