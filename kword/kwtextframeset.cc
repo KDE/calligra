@@ -130,12 +130,12 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
 }
 
-void KWTextFrameSet::slotParagraphModified(KoTextParag*_parag)
+void KWTextFrameSet::slotParagraphModified(KoTextParag* /*_parag*/)
 {
     //todo
 }
 
-void KWTextFrameSet::slotParagraphCreated(KoTextParag*_parag)
+void KWTextFrameSet::slotParagraphCreated(KoTextParag* /*_parag*/)
 {
     //todo
 }
@@ -1347,16 +1347,34 @@ struct FrameStruct
 {
     KWFrame * frame;
     bool operator < ( const FrameStruct & t ) const {
-        return frame->y() < t.frame->y() ||
-            ( frame->y() == t.frame->y() && frame->x() < t.frame->x() );
+        return compare(frame, t.frame) < 0;
     }
     bool operator <= ( const FrameStruct & t ) const {
-        return frame->y() < t.frame->y() ||
-            ( frame->y() == t.frame->y() && frame->x() <= t.frame->x() );
+        return compare(frame, t.frame) <= 0;
     }
     bool operator > ( const FrameStruct & t ) const {
-        return frame->y() > t.frame->y() ||
-            ( frame->y() == t.frame->y() && frame->x() > t.frame->x() );
+        return compare(frame, t.frame) > 0;
+    }
+
+    /*
+    the sorting of all frames in the same frameset is done as all sorting 
+    based on a simple frameOne > frameTwo question.
+    Frame frameOne is greater then frameTwo if the center point lies more down then (the whole of)
+    frame frameTwo. When they are equal, the X position is considered. */
+    int compare (const KWFrame *frameOne, const KWFrame *frameTwo) const {
+        double centerX = frameOne->left() + (frameOne->width() /2);
+        // reverse the return values of the next two for RTL
+        if ( centerX > frameTwo->right()) return 3; // frameOne > frameTwo
+        if ( centerX < frameTwo->left()) return -3; // frameOne < frameTwo
+
+        // check the Y position. Y is greater only when it is below the other frame.
+        double centerY = frameOne->top() + (frameOne->height() /2);
+        if ( centerY > frameTwo->bottom() ) return 2; //  frameOne > frameTwo
+        if ( centerY < frameTwo->top() ) return -2; //  frameOne < frameTwo
+
+        // the center of frameOne lies inside frameTwo. Lets check the topleft pos.
+        if (frameOne->top() > frameTwo->top()) return 1;
+        return -1;
     }
 };
 
@@ -1371,7 +1389,9 @@ void KWTextFrameSet::updateFrames()
 
     //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
-    // Sort frames of this frameset on (page, y coord, x coord)
+    // Sort frames of this frameset on (y coord, x coord)
+    // Adjustment on 20-Jun-2002 which does not change the itent of this but moves the
+    // sorting from top-left of frame to the whole frame area. (TZ)
 
     QValueList<FrameStruct> sortedFrames;
 
