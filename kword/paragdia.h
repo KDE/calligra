@@ -17,7 +17,7 @@
 #define paragdia_h
 
 #include <qtabdialog.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlist.h>
 
 #include "paraglayout.h"
@@ -157,7 +157,7 @@ public:
     static const int PD_NUMBERING = 8;
     static const int PD_TABS = 16;
 
-    KWParagDia( QWidget*, const char*, QStrList _fontList, int _flags, KWordDocument *_doc );
+    KWParagDia( QWidget*, const char*, QStringList _fontList, int _flags, KWordDocument *_doc );
     ~KWParagDia();
 
     int getFlags() { return flags; }
@@ -226,7 +226,7 @@ protected:
     KWParagLayout::Border leftBorder, rightBorder, topBorder, bottomBorder;
     int flags;
     KWParagLayout::Counter counter;
-    QStrList fontList;
+    QStringList fontList;
     KWordDocument *doc;
 
 protected slots:

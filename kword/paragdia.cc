@@ -33,7 +33,6 @@
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlineedit.h>
-#include <qstrlist.h>
 #include <qlistbox.h>
 #include <qspinbox.h>
 
@@ -283,7 +282,7 @@ void KWNumPreview::drawContents( QPainter* painter )
 /******************************************************************/
 
 /*================================================================*/
-KWParagDia::KWParagDia( QWidget* parent, const char* name, QStrList _fontList,
+KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList,
                         int _flags, KWordDocument *_doc )
     : QTabDialog( parent, name, true )
 {

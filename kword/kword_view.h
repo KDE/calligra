@@ -24,6 +24,8 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qbrush.h>
+#include <qstringlist.h>
+#include <qstrlist.h>
 
 #include <knewpanner.h>
 
@@ -441,7 +443,8 @@ protected:
     // text toolbar values
     QFont tbFont;
     QColor tbColor;
-    QStrList fontList, styleList;
+    QStringList fontList;
+    QStrList styleList;
 
     KWordGUI *gui;
     bool m_bShowGUI;

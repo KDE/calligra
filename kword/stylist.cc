@@ -47,7 +47,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWStyleManager::KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStrList _fontList )
+KWStyleManager::KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStringList _fontList )
     : QTabDialog( _parent, "", true )
 {
     fontList = _fontList;
@@ -336,7 +336,7 @@ void KWStylePreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 /*================================================================*/
-KWStyleEditor::KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStrList _fontList )
+KWStyleEditor::KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStringList _fontList )
     : QTabDialog( _parent, "", true )
 {
     fontList = _fontList;
@@ -624,7 +624,7 @@ void KWStyleEditor::apply()
     {
         bool same = false;
         for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ )
-        {   
+        {
             if ( doc->paragLayoutList.at( i )->getName() == eName->text() )
                 same = true;
         }

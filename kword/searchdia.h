@@ -17,7 +17,7 @@
 #define search_h
 
 #include <qtabdialog.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qcolor.h>
 #include <qstring.h>
 
@@ -76,7 +76,7 @@ public:
     };
 
     KWSearchDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, KWordView *_view,
-                 KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStrList _fontlist );
+                 KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStringList _fontlist );
 
 protected:
     void setupTab1();
@@ -109,7 +109,7 @@ protected:
     KWPage *page;
     KWordView *view;
     KWSearchEntry *searchEntry, *replaceEntry;
-    QStrList fontlist;
+    QStringList fontlist;
 
 protected slots:
     void searchFirst();

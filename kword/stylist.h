@@ -17,6 +17,7 @@
 #define stylist_h
 
 #include <qtabdialog.h>
+#include <qstringlist.h>
 
 #include "paragdia.h"
 
@@ -40,7 +41,7 @@ class KWStyleManager : public QTabDialog
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStrList _fontList );
+    KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStringList _fontList );
 
 protected:
     void setupTab1();
@@ -55,7 +56,7 @@ protected:
 
     KWordDocument *doc;
     KWStyleEditor *editor;
-    QStrList fontList;
+    QStringList fontList;
 
 protected slots:
     void apply();
@@ -96,7 +97,7 @@ class KWStyleEditor : public QTabDialog
     Q_OBJECT
 
 public:
-    KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStrList _fontList );
+    KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStringList _fontList );
     ~KWStyleEditor() { delete style; }
 
 protected:
@@ -114,7 +115,7 @@ protected:
     KWParagLayout *style, *ostyle;
     KWordDocument *doc;
     KWParagDia *paragDia;
-    QStrList fontList;
+    QStringList fontList;
 
 signals:
     void updateStyleList();

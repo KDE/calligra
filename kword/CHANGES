@@ -1221,3 +1221,6 @@ Reggie, 25.5.1999:
 - More work on advanced autocorrection
 - Started with configuration of advanced autocorrection
 
+Reggie, 28.5.1999:
+------------------
+- Some QStrList -> QStringList

@@ -34,6 +34,7 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qevent.h>
+#include <qstrlist.h>
 
 #include <stdlib.h>
 
@@ -43,7 +44,7 @@
 
 /*================================================================*/
 KWSearchDia::KWSearchDia( QWidget* parent, const char* name, KWordDocument *_doc, KWPage *_page, KWordView *_view,
-                          KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStrList _fontlist )
+                          KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStringList _fontlist )
     : QTabDialog( parent, name, false )
 {
     doc = _doc;
@@ -167,7 +168,7 @@ void KWSearchDia::setupTab1()
     cVertAlign->setChecked( searchEntry->checkVertAlign );
 
     cmFamily = new QComboBox( true, gSearch );
-    cmFamily->insertStrList( &fontlist );
+    cmFamily->insertStringList( fontlist );
     cmFamily->resize( cmFamily->sizeHint() );
     sGrid->addWidget( cmFamily, 1, 2 );
     for ( int j = 0; j < cmFamily->count(); j++ )
@@ -409,7 +410,7 @@ void KWSearchDia::setupTab2()
     rcVertAlign->setChecked( replaceEntry->checkVertAlign );
 
     rcmFamily = new QComboBox( true, gReplace );
-    rcmFamily->insertStrList( &fontlist );
+    rcmFamily->insertStringList( fontlist );
     rcmFamily->resize( rcmFamily->sizeHint() );
     rGrid->addWidget( rcmFamily, 1, 2 );
     for ( int j = 0; j < rcmFamily->count(); j++ )

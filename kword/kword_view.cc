@@ -384,9 +384,14 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
 
     if ( _format.getUserFont()->getFontName() )
     {
-        fontList.find( _format.getUserFont()->getFontName() );
-        if ( !CORBA::is_nil( m_vToolBarText ) )
-            m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, fontList.at() );
+        QValueList<QString>::Iterator it = fontList.find( _format.getUserFont()->getFontName().lower() );
+        if ( !CORBA::is_nil( m_vToolBarText ) && it != fontList.end() )
+        {
+            QValueList<QString>::Iterator it2 = fontList.begin();
+            int pos = 0;
+            for ( ; it != it2; ++it2, ++pos );
+            m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, pos );
+        }
     }
 
     if ( _format.getPTFontSize() != -1 )
@@ -2414,12 +2419,12 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     OpenPartsUI::StrList fonts;
     fonts.length( fontList.count() );
     for( unsigned int i = 0; i < fontList.count(); i++ )
-        fonts[ i ] = CORBA::string_dup( fontList.at( i ) );
+        fonts[ i ] = CORBA::string_dup( fontList[ i ] );
     toolTip = Q2C( i18n( "Font List" ) );
     m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
                                                           "textFontSelected", true, toolTip,
                                                           200, -1, OpenPartsUI::AtBottom );
-    tbFont.setFamily( fontList.at( 0 ) );
+    tbFont.setFamily( fontList[ 0 ] );
     m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, 0 );
 
     m_vToolBarText->insertSeparator( -1 );
@@ -2847,7 +2852,7 @@ void KWordView::getFonts()
 
     kde_display = kapp->getDisplay();
 
-    bool have_installed = kapp->getKDEFonts( &fontList );
+    bool have_installed = kapp->getKDEFonts( fontList );
 
     if ( have_installed )
         return;
@@ -2887,11 +2892,10 @@ void KWordView::getFonts()
         if( !qfontname.contains( "open look", TRUE ) )
         {
             if( qfontname != "nil" ){
-                if( fontList.find( qfontname ) == -1 )
-                    fontList.inSort( qfontname );
+                if( fontList.find( qfontname ) == fontList.end() )
+                    fontList.append( qfontname );
             }
         }
-
 
         fontNames ++;
 
