@@ -121,7 +121,7 @@ bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
 
 /*
  * Create a uniq name for a object.
- * if the name already exists append ' (x)'.
+ * if the name already exists append ' (x)'. // Fixme: not allowed by I18N
  */
 void KPrPage::unifyObjectName( KPObject *object ) {
     if ( object->getObjectName().isEmpty() ) {
@@ -137,7 +137,7 @@ void KPrPage::unifyObjectName( KPObject *object ) {
         count++;
         QRegExp rx( " \\(\\d{1,3}\\)$" );
         if ( rx.search( objectName ) != -1 ) {
-            objectName.replace( rx, "" );
+            objectName.remove( rx );
         }
         objectName += QString(" (%1)").arg( count );
         object->setObjectName( objectName );
