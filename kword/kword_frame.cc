@@ -238,7 +238,8 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
 /*================================================================*/
 KWFrame::~KWFrame()
 {
-    if ( handles.size() >= 8 ) {
+//kdDebug () << "KWFrame::~KWFrame " << this << endl;
+    if ( handles && handles.size() >= 8 ) {
         for ( unsigned int i = 0; i < 8; ++i ) {
             if ( handles[ i ] )
                 delete handles[ i ];
@@ -712,8 +713,7 @@ void KWTextFrameSet::assign( KWTextFrameSet *fs )
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
-    if(doc) doc->delFrameSet(this);
-
+//kdDebug () << "KWTextFrameSet::~KWTextFrameSet " << this << endl;
     KWParag *p = getLastParag();
 
     while ( p != parags )
@@ -723,8 +723,11 @@ KWTextFrameSet::~KWTextFrameSet()
         p->setNext( 0L );
     }
 
-    delete parags;
+    if(parags) delete parags;
     parags = 0L;
+
+    if(doc) doc->delFrameSet(this);
+    doc=0L;
 }
 
 /*================================================================*/
@@ -1258,6 +1261,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
 
 /*================================================================*/
 KWPictureFrameSet::~KWPictureFrameSet() {
+//kdDebug () << "KWPictureFrameSet::~KWPictureFrameSet " << this << endl;
     if(image) {
         image->decRef();
     }
@@ -2096,7 +2100,9 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
 
 /*================================================================*/
 KWGroupManager::~KWGroupManager() {
+//kdDebug () << "KWGroupManager::~KWGroupManager " << this << endl;
     if(doc) doc->delGroupManager(this); 
+    doc=0L;
 }
 
 /*================================================================*/
@@ -2211,7 +2217,7 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
             frame->setBTop( u );
             frame->setBBottom( u );
             frame->setNewFrameBehaviour( NoFollowup );
-            _wid = wid;
+            _wid = wid-1;
             _wid += static_cast<int>(frame->getBLeft().pt() + frame->getBRight().pt());
             _hei = hei;
             _hei += static_cast<int>(frame->getBTop().pt() + frame->getBBottom().pt());

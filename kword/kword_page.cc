@@ -1534,18 +1534,7 @@ void KWPage::deleteTable( KWGroupManager *g )
     if ( blinking )
         stopBlinkCursor();
 
-    KWFrameSet *f = doc->getFrameSet( fc->getFrameSet() - 1 );
-    for ( unsigned int i = 0; i < g->getNumCells(); ++i ) {
-        KWFrameSet *fs = g->getCell( i )->frameSet;
-        if ( f == fs ) {
-            fc->setFrameSet( 1 );
-            fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
-        }
-        doc->delFrameSet( g->getCell( i )->frameSet );
-    }
-
     doc->delGroupManager( g );
-
     doc->recalcFrames();
     doc->updateAllFrames();
     recalcAll = TRUE;
