@@ -163,8 +163,7 @@ bool KSpreadDoc::initDoc()
 
     if ( ret == KoTemplateChooseDia::File )
     {
-	KURL url;
-	url.setPath(f);
+	KURL url( f );
 	return openURL( url );
     }
 
