@@ -7,6 +7,8 @@ class QButtonGroup;
 class QPushButton;
 class KChartPart;
 
+#include "kdchart/KDChartParams.h"
+
 class KChartWizardSelectChartSubTypePage : public QWidget
 {
   Q_OBJECT
@@ -19,13 +21,10 @@ public slots:
 
 private:
   KChartPart* _chart;
-#warning "Put back in"
-  //  KChartType _charttype;
-  QRadioButton *depth;
-  QRadioButton *sum;
-  QRadioButton *beside;
-  QRadioButton *layer;
-  QRadioButton *percent;
+  KDChartParams::ChartType _charttype;
+  QRadioButton* normal;
+  QRadioButton* stacked;
+  QRadioButton* percent;
 };
 
 

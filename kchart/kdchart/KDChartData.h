@@ -38,9 +38,20 @@ class KDChartData
 {
 public:
     enum ValueType { NoValue, String, Double, DateTime };
-    KDChartData( double value );
-    KDChartData( const QString& value );
-    KDChartData();
+    KDChartData( double value ) {
+        dValue = value;
+        _valueType = Double;
+    }
+
+    KDChartData( const QString& value ) :
+        sValue( value ),
+        _valueType( String )
+    {}
+
+    KDChartData() {
+        _valueType = NoValue;
+    }
+
 
     ValueType valueType() const
     {

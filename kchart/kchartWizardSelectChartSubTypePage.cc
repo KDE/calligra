@@ -23,10 +23,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
   QWidget( parent ),
   _chart( chart )
 {
-    qDebug( "Sorry, not implemented: KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage()" );
-#warning Put back in
-#ifdef K
-    //  _charttype = _chart->chartType();
+    _charttype = _chart->params()->chartType();
     chartSubType=true;
 
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
@@ -39,91 +36,90 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
-    depth=new QRadioButton( i18n("Depth"), grp ); ;
-    sum=new QRadioButton( i18n("Sum"), grp );
-    beside=new QRadioButton( i18n("Beside"), grp );
-    layer=new QRadioButton( i18n("Layer"), grp );
-    percent=new QRadioButton( i18n("Percent (only bar2D and bar3D)"), grp );
-    switch((int)_chart->params()->stack_type)
-        {
-         case (int)KCHARTSTACKTYPE_DEPTH:
-                {
-                 depth->setChecked(true);
-                 break;
-                }
-         case (int)KCHARTSTACKTYPE_SUM:
-                {
-                 sum->setChecked(true);
-                 break;
-                }
-         case (int)KCHARTSTACKTYPE_BESIDE:
-                {
-                 beside->setChecked(true);
-                 break;
-                }
-          case (int)KCHARTSTACKTYPE_LAYER:
-                {
-                 layer->setChecked(true);
-                 break;
-                 }
-          case (int)KCHARTSTACKTYPE_PERCENT:
-                {
-                 percent->setChecked(true);
-                 break;
-                }
-          default:
-                {
-                 kdDebug(35001)<<"Error in stack_type\n";
-                 break;
-                }
-        }
-if(!chartSubType)
+    normal = new QRadioButton( i18n( "Normal" ), grp );
+    stacked = new QRadioButton( i18n( "Stacked" ), grp );
+    percent = new QRadioButton( i18n( "Percent" ), grp );
+
+    if( ( _chart->params()->chartType() == KDChartParams::Bar &&
+          _chart->params()->barChartSubType() == KDChartParams::BarNormal ) ||
+        ( _chart->params()->chartType() == KDChartParams::Line &&
+          _chart->params()->lineChartSubType() == KDChartParams::LineNormal ) &&
+        ( _chart->params()->chartType() == KDChartParams::Area &&
+          _chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
+        normal->setChecked( true );
+    else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
+          _chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
+        ( _chart->params()->chartType() == KDChartParams::Line &&
+          _chart->params()->lineChartSubType() == KDChartParams::LineStacked ) &&
+        ( _chart->params()->chartType() == KDChartParams::Area &&
+          _chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
+        stacked->setChecked( true );
+    else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
+          _chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
+        ( _chart->params()->chartType() == KDChartParams::Line &&
+          _chart->params()->lineChartSubType() == KDChartParams::LinePercent ) &&
+        ( _chart->params()->chartType() == KDChartParams::Area &&
+          _chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
+        percent->setChecked( true );
+    else {
+        kdDebug(35001)<<"Error in stack_type\n";
+    }
+    if(!chartSubType)
         grp->setEnabled(false);
 
-grid1->addWidget(grp,0,0);
-#endif
+    grid1->addWidget(grp,0,0);
 }
 
 
 
 void KChartWizardSelectChartSubTypePage::apply()
 {
-    qDebug( "Sorry, not implemented: KChartWizardSelectChartSubTypePage::apply()" );
-#warning Put back in
-#ifdef K
-if(chartSubType)
-{
- if(depth->isChecked())
-        {
-        _chart->params()->stack_type = KCHARTSTACKTYPE_DEPTH;
-        }
- else if(sum->isChecked())
-        {
-        _chart->params()->stack_type = KCHARTSTACKTYPE_SUM;
-        }
- else if(beside->isChecked())
-        {
-        _chart->params()->stack_type = KCHARTSTACKTYPE_BESIDE;
-        }
- else if(layer->isChecked())
-        {
-        _chart->params()->stack_type = KCHARTSTACKTYPE_LAYER;
-        }
- else if(percent->isChecked())
-        {
-        _chart->params()->stack_type = KCHARTSTACKTYPE_PERCENT;
-        }
-
- else
-        {
-        kdDebug(35001)<<"Error in groupbutton\n";
-        }
- }
-else
- {
- _chart->params()->stack_type = KCHARTSTACKTYPE_DEPTH;
- }
-#endif
+    if(chartSubType) {
+        if( normal->isChecked() )
+            switch( _chart->params()->chartType() ) {
+            case KDChartParams::Bar:
+                _chart->params()->setBarChartSubType( KDChartParams::BarNormal );
+                break;
+            case KDChartParams::Line:
+                _chart->params()->setLineChartSubType( KDChartParams::LineNormal );
+                break;
+            case KDChartParams::Area:
+                _chart->params()->setAreaChartSubType( KDChartParams::AreaNormal );
+                break;
+            default:
+                kdDebug( 35001 ) << "Error in group button\n";
+            }
+        else if( stacked->isChecked() )
+            switch( _chart->params()->chartType() ) {
+            case KDChartParams::Bar:
+                _chart->params()->setBarChartSubType( KDChartParams::BarStacked );
+                break;
+            case KDChartParams::Line:
+                _chart->params()->setLineChartSubType( KDChartParams::LineStacked );
+                break;
+            case KDChartParams::Area:
+                _chart->params()->setAreaChartSubType( KDChartParams::AreaStacked );
+                break;
+            default:
+                kdDebug( 35001 ) << "Error in group button\n";
+            }
+        else if( percent->isChecked() )
+            switch( _chart->params()->chartType() ) {
+            case KDChartParams::Bar:
+                _chart->params()->setBarChartSubType( KDChartParams::BarPercent );
+                break;
+            case KDChartParams::Line:
+                _chart->params()->setLineChartSubType( KDChartParams::LinePercent );
+                break;
+            case KDChartParams::Area:
+                _chart->params()->setAreaChartSubType( KDChartParams::AreaPercent );
+                break;
+            default:
+                kdDebug( 35001 ) << "Error in group button\n";
+            }
+        else
+            kdDebug(35001)<<"Error in groupbutton\n";
+    }
 }
 
 

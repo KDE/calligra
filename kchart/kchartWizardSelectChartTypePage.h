@@ -8,6 +8,8 @@ class QPushButton;
 class QButtonGroup;
 class KChartPart;
 
+#include "kdchart/KDChartParams.h"
+
 class KChartWizardSelectChartTypePage : public QWidget
 {
   Q_OBJECT
@@ -30,8 +32,7 @@ private:
   int ylabelsize;
   int xstep;
   int ystep;
-#warning Put back in  
-  //  KChartType _type;
+  KDChartParams::ChartType _type;
 
   void addButton(QString name, QString icon_name, int type);
 };

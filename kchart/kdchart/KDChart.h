@@ -25,10 +25,10 @@
 #ifndef __KDCHART_H__
 #define __KDCHART_H__
 
-#include <KDChartTable.h>
-#include <KDChartUnknownTypeException.h>
-#include <KDChartParams.h>
-#include <KDChartDataRegion.h>
+#include "KDChartTable.h"
+#include "KDChartUnknownTypeException.h"
+#include "KDChartParams.h"
+#include "KDChartDataRegion.h"
 
 class KDChartPainter;
 class QPainter;

@@ -84,8 +84,9 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
     if( _params->chartType() == KDChartParams::HiLo &&
         ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
           _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
-        _hlcChart=new KChartComboPage(_params,this);
-        addTab( _hlcChart, i18n( "HLC Chart" ) );
+        // PENDING(kalle) Combo page needs to be redone completely.
+        //         _hlcChart=new KChartComboPage(_params,this);
+//         addTab( _hlcChart, i18n( "HLC Chart" ) );
     }
 
     //init
@@ -109,7 +110,7 @@ void KChartConfigDialog::apply()
     // being used by the application.
 
     // color page
-    
+
     // PENDING(kalle) Replace with equivalents
     //     _params->BGColor = _colorpage->backgroundColor();
     //     _params->GridColor = _colorpage->gridColor();
@@ -206,5 +207,5 @@ void KChartConfigDialog::defaults()
     // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }
 
-            
-    
+
+

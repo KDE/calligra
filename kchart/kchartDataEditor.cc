@@ -49,7 +49,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 }
 
 
-void kchartDataEditor::getData( KoChart::Data* dat ) 
+void kchartDataEditor::getData( KoChart::Data* dat )
 {
     // Make sure that the data table is not smaller than the used data
     if( dat->rows() < _widget->usedRows() ||
@@ -78,60 +78,50 @@ void kchartDataEditor::getData( KoChart::Data* dat )
 
 void kchartDataEditor::setLegend( QStringList legend )
 {
-    for (int row = 0;row < _widget->rows();row++)
-        {
-            if(!legend[row].isNull())
-                {
-                    QString tmp=legend[row];
-                    _widget->fillY(row,tmp);
-                }
+    for (int row = 0;row < _widget->rows();row++) {
+        if( !legend[row].isNull() ) {
+            QString tmp=legend[row];
+            _widget->fillY(row,tmp);
         }
+    }
 }
 
 
 void kchartDataEditor::getLegend( KDChartParams* params )
 {
-    qDebug( "Sorry, not implemented: kchartDataEditor::getLegend()" );
-#warning Put back in
-#ifdef K
-    params->legend.clear();
-    for (int row = 0;row < _widget->rows();row++)
-        {
-            if(! (row >= _widget->usedRows()) )
-                {
-                    params->legend+=_widget->getY(row);
-                }
+    // PENDING(kalle) Put back in
+    //     params->legend.clear();
+    //     for (int row = 0;row < _widget->rows();row++)
+    //         {
+    //             if(! (row >= _widget->usedRows()) )
+    //                 {
+    //                     params->legend+=_widget->getY(row);
+    //                 }
 
-        }
-#endif
+    //         }
 }
 
 void kchartDataEditor::setXLabel( QStringList xlbl )
 {
-    for (int col = 0;col < _widget->cols();col++)
-        {
-            if(!xlbl[col].isNull())
-                {
-                    QString tmp=xlbl[col];
-                    _widget->fillX(col,tmp);
-                }
+    for (int col = 0;col < _widget->cols();col++) {
+        if( !xlbl[col].isNull() ) {
+            QString tmp=xlbl[col];
+            _widget->fillX(col,tmp);
         }
+    }
 }
 
 void kchartDataEditor::getXLabel( KDChartParams* params )
 {
-    qDebug( "Sorry, not implemented: kchartDataEditor::getXLabel()" );
-#warning Put back in
-#ifdef K
-    params->xlbl.clear();
-    for (int col = 0;col < _widget->cols();col++)
-        {
-            if(! (col >= _widget->usedCols()) )
-                {
-                    params->xlbl+=_widget->getX(col);
-                }
+    // PENDING(kalle) Put back in
+    //     params->xlbl.clear();
+    //     for (int col = 0;col < _widget->cols();col++)
+    //         {
+    //             if(! (col >= _widget->usedCols()) )
+    //                 {
+    //                     params->xlbl+=_widget->getX(col);
+    //                 }
 
-        }
-#endif
+    //         }
 }
 

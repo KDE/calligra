@@ -35,7 +35,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
                           $(top_builddir)/lib/kofficeui/libkofficeui.la	\
-			  kdchart/libkdchart.a			
+			  kdchart/libkdchart.la			
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kchart.la

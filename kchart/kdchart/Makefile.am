@@ -1,11 +1,10 @@
-lib_LIBRARIES = libkdchart.a
+lib_LTLIBRARIES = libkdchart.la
 
-libkdchart_a_SOURCES = KDChartAreaPainter.cpp	\
+libkdchart_la_SOURCES = KDChartAreaPainter.cpp	\
 			KDChartAxesPainter.cpp	\
 			KDChartAxisParams.cpp	\
 			KDChartBarPainter.cpp	\
 			KDChart.cpp			\
-			KDChartData.cpp			\
 			KDChartHiLoPainter.cpp	\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp		\
