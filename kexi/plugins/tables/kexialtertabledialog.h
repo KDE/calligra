@@ -73,6 +73,8 @@ class KexiAlterTableDialog : public KexiViewBase
 		 or 0 if current row is empty. */
 		virtual KexiPropertyBuffer *propertyBuffer();
 
+		void removeCurrentPropertyBuffer();
+
 		virtual bool dirty();
 
 	protected slots:
@@ -86,15 +88,19 @@ class KexiAlterTableDialog : public KexiViewBase
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
 			QVariant newValue, KexiDB::ResultInfo* result);
 
-		//! Called on row change in tableview.
+		//! Called on row change in a tableview.
 		void slotRowUpdated(KexiTableItem *item);
 
 		//! Called before row inserting in tableview.
 		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result);
 
-		//! Called before row updating in tableview.
+/*		//! Called before row updating in tableview.
 		void slotAboutToUpdateRow(KexiTableItem* item, 
 			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
+*/
+
+		//! Called on row delete in a tableview.
+		void slotRowDeleted();
 
 	private:
 		KexiTableView *m_view;
@@ -104,6 +110,7 @@ class KexiAlterTableDialog : public KexiViewBase
 		FieldsBuffer m_fields; //!< buffer
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 		bool m_dirty : 1;
+		bool m_currentBufferCleared : 1;
 };
 
 #endif

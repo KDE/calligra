@@ -55,25 +55,30 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	m_table = &table; //orig table
 	m_newTable = new KexiDB::TableSchema(*m_table); //deep copy of the original table
 	m_fields.resize(MAX_FIELDS);
+	m_fields.setAutoDelete(true);
 	m_row = -99;
+	m_currentBufferCleared = false;
 	init();
 }
 
 KexiAlterTableDialog::~KexiAlterTableDialog()
 {
+	removeCurrentPropertyBuffer();
 }
 
 void KexiAlterTableDialog::init()
 {
 	KexiTableViewData *data = new KexiTableViewData();
 	data->setInsertingEnabled( false );
-	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text, 
-		KexiDB::Field::PrimaryKey);
-	col->setValidator( new Kexi::IdentifierValidator() );
+	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
+//		KexiDB::Field::PrimaryKey);
+	KexiValidator *vd = new Kexi::IdentifierValidator();
+	vd->setAcceptsEmptyValue(true);
+	col->setValidator( vd );
 
 	data->addColumn( col );
-	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum,
-		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
+	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
+//		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
 	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
@@ -136,8 +141,10 @@ void KexiAlterTableDialog::init()
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
 	connect(data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
 		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)));
-	connect(data, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)),
-		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)));
+//	connect(data, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)),
+//		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)));
+	connect(data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
+	
 
 /*	//! before closing - we'are accepting editing
 	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
@@ -164,11 +171,11 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 	//name
-	KexiProperty *prop = new KexiProperty("name", QVariant(field->type()));
+	KexiProperty *prop = new KexiProperty("name", QVariant(field->name()), i18n("Name"));
 	prop->setVisible(false);
 	buff->add(prop);
 	//type
-	prop = new KexiProperty("type", QVariant(field->name()), i18n("Name"));
+	prop = new KexiProperty("type", QVariant(field->type()), i18n("Type"));
 	prop->setVisible(false);
 	buff->add(prop);
 	//subtype
@@ -301,6 +308,21 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
 {
 	return m_fields.at(m_view->currentRow());
+//	return m_currentBufferCleared ? 0 : m_fields.at(m_view->currentRow());
+}
+
+void KexiAlterTableDialog::removeCurrentPropertyBuffer()
+{
+	const int r = m_view->currentRow();
+	KexiPropertyBuffer *buf = m_fields.at(r);
+	if (!buf)
+		return;
+	buf->debug();
+//	m_currentBufferCleared = true;
+	m_fields.remove(r);
+	propertyBufferSwitched();
+//	delete buf;
+//	m_currentBufferCleared = false;
 }
 
 /*
@@ -326,7 +348,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 {
 	if (colnum==0) {//'name'
 		//if 'type' is not filled yet
-		if (item->at(1).isNull()) {
+		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
 			//auto select 1st row of 'type' column
 			m_view->data()->updateRowEditBuffer(item, 1, QVariant((int)0));
 
@@ -350,9 +372,20 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	//TODO
 	//-check if the row was empty before updating
 	//if yes: we want to add a property buffer for this new row (field)
-	if (!propertyBuffer()) {
-		//-- create new field:
-		QString fieldName = item->at(0).toString();
+	QString fieldName = item->at(0).toString();
+	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
+
+	if (!buffer_allowed && propertyBuffer()) {
+		//there is a buffer, but it's not allowed - remove it:
+		removeCurrentPropertyBuffer();
+
+		//clear 'type' column:
+		m_view->data()->clearRowEditBuffer();
+		m_view->data()->updateRowEditBuffer(m_view->selectedItem(), 1, QVariant());
+		m_view->data()->saveRowChanges(*m_view->selectedItem());
+	
+	} else if (buffer_allowed && !propertyBuffer()) {
+		//-- create a new field:
 
 		//take the 1st type for the group
 		int typegroup = item->at(1).toInt() +1 /*counting from 1*/;
@@ -391,7 +424,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 		newbuff->add( prop );
 
 //js TODO:
-		//add this field to the list of new fields
+//		//add this field to the list of new fields
 
 		//refresh property editor:
 		propertyBufferSwitched();
@@ -405,7 +438,25 @@ void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item,
 	//TODO
 }
 
-void KexiAlterTableDialog::slotAboutToUpdateRow(
+void KexiAlterTableDialog::slotRowDeleted()
+{
+	//remove current prop. buffer
+	removeCurrentPropertyBuffer();
+
+	//let's move up all buffers that are below that deleted
+	m_fields.setAutoDelete(false);//to avoid auto deleting in insert()
+	const int r = m_view->currentRow();
+	for (int i=r;i<int(m_fields.size()-1);i++) {
+		KexiPropertyBuffer *b = m_fields[i+1];
+		m_fields.insert( i , b );
+	}
+	m_fields.insert( m_fields.size()-1, 0 );
+	m_fields.setAutoDelete(true);
+
+	propertyBufferSwitched();
+}
+
+/*void KexiAlterTableDialog::slotAboutToUpdateRow(
 	KexiTableItem* item, KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result)
 {
 	KexiDB::RowEditBuffer::SimpleMap map = buffer->simpleBuffer();
@@ -415,14 +466,12 @@ void KexiAlterTableDialog::slotAboutToUpdateRow(
 	QVariant *buf_type = buffer->at( m_view->field(1)->name() );
 
 	//check if there is a type specified
-	if ((old_type.isNull() && !buf_type) || (buf_type && buf_type->isNull())) {
-		kdDebug() << "err" << endl;
-	}
-
+//	if ((old_type.isNull() && !buf_type) || (buf_type && buf_type->isNull())) {
+		//kdDebug() << "err" << endl;
+	//}
 //	allow = true;
-
-	m_dirty = m_dirty | result->success;
-}
+//	m_dirty = m_dirty | result->success;
+}*/
 
 
 #include "kexialtertabledialog.moc"
