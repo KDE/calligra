@@ -1,5 +1,5 @@
 
-SUBDIRS = koml store kofficecore kofficeui kscript
+SUBDIRS = koml store kofficecore kofficeui kscript kformula
 
 messages:
 	$(EXTRACTRC) */*.rc > parts.cc
