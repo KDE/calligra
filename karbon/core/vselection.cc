@@ -301,7 +301,7 @@ VSelection::appendNode( const KoPoint &p )
 		QPtrListIterator<VSegment> it2( op.result() );
 		for( it2.toFirst(); it2.current(); ++it2 )
 		{
-			it2.current()->select( p );
+			it2.current()->select( p, 2.0 );
 			m_segments.append( it2.current() );
 		}
 	}

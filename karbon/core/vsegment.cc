@@ -53,6 +53,10 @@ VSegment::VSegment( VSegmentType type )
 	m_nodeSelected[1] = false;
 	m_nodeSelected[2] = false;
 
+	m_nodeEdited[0] = false;
+	m_nodeEdited[1] = false;
+	m_nodeEdited[2] = false;
+
 	m_type = type;
 	m_ctrlPointFixing = none;
 	m_smooth = false;
@@ -72,6 +76,10 @@ VSegment::VSegment( const VSegment& segment )
 	m_nodeSelected[0] = segment.m_nodeSelected[0];
 	m_nodeSelected[1] = segment.m_nodeSelected[1];
 	m_nodeSelected[2] = segment.m_nodeSelected[2];
+
+	m_nodeEdited[0] = segment.m_nodeEdited[0];
+	m_nodeEdited[1] = segment.m_nodeEdited[1];
+	m_nodeEdited[2] = segment.m_nodeEdited[2];
 
 	m_type = segment.m_type;
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
@@ -541,12 +549,13 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 			m_prev->m_nodeSelected[2] )
 		{
 			m_nodeSelected[0] = select;
+			m_nodeEdited[0] = select;
 
 			if( select )
 			{
-				m_prev->m_nodeSelected[2] = false;
-				m_nodeSelected[1] = false;
-				m_nodeSelected[2] = false;
+				m_prev->m_nodeEdited[2] = false;
+				m_nodeEdited[1] = false;
+				m_nodeEdited[2] = false;
 			}
 
 			success = true;
@@ -561,12 +570,13 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 		if( m_nodeSelected[2] )
 		{
 			m_nodeSelected[1] = select;
+			m_nodeEdited[1] = select;
 
 			if( select )
 			{
-				m_prev->m_nodeSelected[2] = false;
-				m_nodeSelected[0] = false;
-				m_nodeSelected[2] = false;
+				m_prev->m_nodeEdited[2] = false;
+				m_nodeEdited[0] = false;
+				m_nodeEdited[2] = false;
 			}
 
 			success = true;
@@ -575,7 +585,8 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 
 	if( m_node[2].isNear( p, isNearRange ) )
 	{
-		m_nodeSelected[2] = select;
+		m_nodeSelected[1] = m_nodeEdited[1] = select;
+		m_nodeSelected[2] = m_nodeEdited[2] = select;
 		success = true;
 	}
 
@@ -619,6 +630,14 @@ VSegment::select( const KoRect& rect )
 		success = true;
 	}
 
+	// reset edited nodes
+	if( success )
+	{
+		m_nodeEdited[0] = false;
+		m_nodeEdited[1] = false;
+		m_nodeEdited[2] = false;
+	}
+
 	return success;
 }
 
@@ -626,13 +645,22 @@ void
 VSegment::deselect( const KoRect& rect )
 {
 	if( rect.contains( m_node[0] ) )
+	{
 		m_nodeSelected[0] = false;
+		m_nodeEdited[0] = false;
+	}
 
 	if( rect.contains( m_node[1] ) )
+	{
 		m_nodeSelected[1] = false;
+		m_nodeEdited[1] = false;
+	}
 
 	if( rect.contains( m_node[2] ) )
+	{
 		m_nodeSelected[2] = false;
+		m_nodeEdited[2] = false;
+	}
 }
 
 void
@@ -642,6 +670,9 @@ VSegment::deselect()
 	m_nodeSelected[0] = false;
 	m_nodeSelected[1] = false;
 	m_nodeSelected[2] = false;
+	m_nodeEdited[0] = false;
+	m_nodeEdited[1] = false;
+	m_nodeEdited[2] = false;
 }
 
 bool

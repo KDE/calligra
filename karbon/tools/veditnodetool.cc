@@ -151,12 +151,13 @@ VEditNodeTool::eventFilter( QEvent* event )
 		if( m_state == moving )
 		{
 			m_state = normal;
-			view()->part()->addCommand(
-				new VTranslateCmd(
+
+			VTranslateCmd *cmd = new VTranslateCmd(
 					&view()->part()->document(),
 					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
-					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) ),
-				true );
+					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) );
+			cmd->setSelectedSubObjects( true );
+			view()->part()->addCommand( cmd, true );
 
 //			view()->part()->repaintAllViews();
 		}

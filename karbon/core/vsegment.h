@@ -235,6 +235,9 @@ public:
 	bool selected( uint index ) const
 		{ return m_nodeSelected[--index]; }
 
+	bool edited( uint index ) const
+		{ return m_nodeEdited[--index]; }
+
 	/**
 	 * Returns true if at least one node is selected.
 	 */
@@ -249,8 +252,10 @@ public:
 	VSegment* clone() const;
 
 private:
+	// TODO : struct?
 	KoPoint m_node[3];
 	bool m_nodeSelected[3];
+	bool m_nodeEdited[3];
 
 	VSegment* m_prev;
 	VSegment* m_next;

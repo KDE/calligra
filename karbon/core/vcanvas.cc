@@ -30,6 +30,7 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	viewport()->setBackgroundColor( Qt::white );
 	viewport()->setBackgroundMode( QWidget::NoBackground );
 
+	resizeContents( 800, 600 );
 	m_pixmap = new QPixmap( 800, 600 );
 
 	setFocus();

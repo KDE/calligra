@@ -470,16 +470,16 @@ VSegmentList::transform( const QWMatrix& m, bool selectedSubObjects )
 		{
 			if(
 				segment->prev() &&
-				segment->prev()->m_nodeSelected[2] )
+				segment->prev()->edited( 2 ) )
 			{
 				// Do nothing.
 			}
-			else if( segment->m_nodeSelected[0] )
+			else if( segment->edited( 0 ) )
 			{
 				segment->m_node[0] = segment->m_node[0].transform( m );
 			}
 
-			if( segment->m_nodeSelected[2] )
+			if( segment->edited( 2 ) )
 			{
 				segment->m_node[1] = segment->m_node[1].transform( m );
 				segment->m_node[2] = segment->m_node[2].transform( m );
@@ -497,7 +497,7 @@ VSegmentList::transform( const QWMatrix& m, bool selectedSubObjects )
 						segment->next()->m_node[0].transform( m );
 				}
 			}
-			else if( segment->m_nodeSelected[1] )
+			else if( segment->edited( 1 ) )
 			{
 				segment->m_node[1] = segment->m_node[1].transform( m );
 			}

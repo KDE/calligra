@@ -9,8 +9,8 @@
 #include "vtransformcmd.h"
 
 
-VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
-		: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
+VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat, bool selectedSubObjects )
+		: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat ), m_selectedSubObjects( selectedSubObjects )
 {
 	m_selection = m_doc->selection()->clone();
 
@@ -37,7 +37,7 @@ VTransformCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat );
+		itr.current()->transform( m_mat, m_selectedSubObjects );
 	}
 }
 
@@ -48,7 +48,7 @@ VTransformCmd::unexecute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat.invert() );
+		itr.current()->transform( m_mat.invert(), m_selectedSubObjects );
 	}
 }
 

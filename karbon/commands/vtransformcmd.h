@@ -19,8 +19,10 @@ class VSelection;
 class VTransformCmd : public VCommand
 {
 public:
-	VTransformCmd( VDocument *doc, const QWMatrix& mat );
+	VTransformCmd( VDocument *doc, const QWMatrix& mat, bool selectedSubObjects = false );
 	virtual ~VTransformCmd();
+
+	void setSelectedSubObjects( bool selectedSubObjects ) { m_selectedSubObjects = selectedSubObjects; }
 
 	virtual void execute();
 	virtual void unexecute();
@@ -31,6 +33,7 @@ protected:
 	VSelection* m_selection;
 
 	QWMatrix m_mat;
+	bool m_selectedSubObjects;
 };
 
 class VTranslateCmd : public VTransformCmd
