@@ -71,6 +71,10 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   brush = QBrush(white,SolidPattern);
   lineBegin = L_NORMAL;
   lineEnd = L_NORMAL;
+  gColor1 = red;
+  gColor2 = green;
+  gType = BCT_GHORZ;
+  fillType = FT_BRUSH;
   setMouseTracking(true);
   m_bShowGUI = true;
   m_bRectSelection = false;
@@ -355,7 +359,7 @@ void KPresenterView_impl::insertRectangle()
 void KPresenterView_impl::insertCircleOrEllipse()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertCircleOrEllipse(pen,brush,xOffset,yOffset);
+  m_pKPresenterDoc->insertCircleOrEllipse(pen,brush,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*===================== insert a textobject =====================*/
@@ -409,6 +413,10 @@ void KPresenterView_impl::extraPenBrush()
   styleDia->setBrush(m_pKPresenterDoc->getBrush(brush));
   styleDia->setLineBegin(m_pKPresenterDoc->getLineBegin(lineBegin));
   styleDia->setLineEnd(m_pKPresenterDoc->getLineEnd(lineEnd));
+  styleDia->setFillType(m_pKPresenterDoc->getFillType(fillType));
+  styleDia->setGradient(m_pKPresenterDoc->getGColor1(gColor1),
+			m_pKPresenterDoc->getGColor2(gColor2),
+			m_pKPresenterDoc->getGType(gType));
   styleDia->setCaption(klocale->translate(i18n("KPresenter - Pen and Brush")));
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   styleDia->show();
@@ -1285,19 +1293,24 @@ void KPresenterView_impl::afChooseOk(const char* c)
   QString fileName(afDir + "/kpresenter/autoforms/" + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
   
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fileName,xOffset,yOffset);
+  m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fillType,gColor1,gColor2,gType,fileName,xOffset,yOffset);
 }
 
 /*=========== take changes for style dialog =====================*/
 void KPresenterView_impl::styleOk()
 {
   if (!m_pKPresenterDoc->setPenBrush(styleDia->getPen(),styleDia->getBrush(),styleDia->getLineBegin(),
-				     styleDia->getLineEnd(),xOffset,yOffset))
+				     styleDia->getLineEnd(),styleDia->getFillType(),styleDia->getGColor1(),
+				     styleDia->getGColor2(),styleDia->getGType(),xOffset,yOffset))
     {
       pen = styleDia->getPen();
       brush = styleDia->getBrush();
       lineBegin = styleDia->getLineBegin();
       lineEnd = styleDia->getLineEnd();
+      fillType = styleDia->getFillType();
+      gColor1 = styleDia->getGColor1();
+      gColor2 = styleDia->getGColor2();
+      gType = styleDia->getGType();
     }
 }
 
@@ -1495,14 +1508,14 @@ void KPresenterView_impl::insertLineD2()
 void KPresenterView_impl::insertNormRect()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,xOffset,yOffset);
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*===================== insert round rect =======================*/
 void KPresenterView_impl::insertRoundRect()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*======================== set pres pen width 1 =================*/
@@ -1899,14 +1912,14 @@ void KPresenterView_impl::insertLineD2idl()
 void KPresenterView_impl::insertNormRectidl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,xOffset,yOffset);
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_NORM,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*===================== insert round rect =======================*/
 void KPresenterView_impl::insertRoundRectidl()
 {
   page->deSelectAllObj();
-  m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
+  m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,fillType,gColor1,gColor2,gType,xOffset,yOffset);
 }
 
 /*=========================== search =============================*/

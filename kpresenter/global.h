@@ -42,6 +42,7 @@ enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2,PEF_CLOSE_AL
 enum LineEnd {L_NORMAL,L_ARROW,L_SQUARE,L_CIRCLE};
 enum ShadowDirection {SD_LEFT_UP = 1,SD_UP = 2,SD_RIGHT_UP = 3,SD_RIGHT = 4,SD_RIGHT_BOTTOM = 5,SD_BOTTOM = 6,\
 		      SD_LEFT_BOTTOM = 7,SD_LEFT = 8};
+enum FillType {FT_BRUSH = 0,FT_GRADIENT = 1};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;

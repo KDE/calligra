@@ -581,6 +581,9 @@ protected:
   QBrush brush;
   LineEnd lineBegin;
   LineEnd lineEnd;
+  QColor gColor1,gColor2;
+  BCType gType;
+  FillType fillType;
 
   // the page
   Page *page;

@@ -838,7 +838,8 @@ void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect page
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,int diffx,int diffy)
+bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
+					  BCType gt,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   bool ret = false;
@@ -862,6 +863,10 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 	      {
 		dynamic_cast<KPRectObject*>(kpobject)->setPen(pen);
 		dynamic_cast<KPRectObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPRectObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPRectObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPRectObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPRectObject*>(kpobject)->setGType(gt);
 		ret = true;
 		repaint(kpobject);
 	      } break;
@@ -869,6 +874,10 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 	      {
 		dynamic_cast<KPEllipseObject*>(kpobject)->setPen(pen);
 		dynamic_cast<KPEllipseObject*>(kpobject)->setBrush(brush);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPEllipseObject*>(kpobject)->setGType(gt);
 		ret = true;
 		repaint(kpobject);
 	      } break;
@@ -878,6 +887,10 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 		dynamic_cast<KPAutoformObject*>(kpobject)->setBrush(brush);
 		dynamic_cast<KPAutoformObject*>(kpobject)->setLineBegin(lb);
 		dynamic_cast<KPAutoformObject*>(kpobject)->setLineEnd(le);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setFillType(ft);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setGColor1(g1);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setGColor2(g2);
+		dynamic_cast<KPAutoformObject*>(kpobject)->setGType(gt);
 		ret = true;
 		repaint(kpobject);
 	      } break;
@@ -1075,6 +1088,122 @@ QBrush KPresenterDocument_impl::getBrush(QBrush brush)
   return brush;
 }
 
+/*================================================================*/
+FillType KPresenterDocument_impl::getFillType(FillType ft)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getFillType();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+	      break;
+	    default: break;
+	    }
+	}      
+    }
+
+  return ft;
+}
+
+/*================================================================*/
+QColor KPresenterDocument_impl::getGColor1(QColor g1)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getGColor1();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getGColor1();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+	      break;
+	    default: break;
+	    }
+	}      
+    }
+
+  return g1;
+}
+
+/*================================================================*/
+QColor KPresenterDocument_impl::getGColor2(QColor g2)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getGColor2();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getGColor2();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+	      break;
+	    default: break;
+	    }
+	}      
+    }
+
+  return g2;
+}
+
+/*================================================================*/
+BCType KPresenterDocument_impl::getGType(BCType gt)
+{
+  KPObject *kpobject = 0;
+  
+  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+    {
+      kpobject = objectList()->at(i);
+      if (kpobject->isSelected())
+	{
+	  switch (kpobject->getType())
+	    {
+	    case OT_RECT:
+	      return dynamic_cast<KPRectObject*>(kpobject)->getGType();
+	      break;
+	    case OT_ELLIPSE:
+	      return dynamic_cast<KPEllipseObject*>(kpobject)->getGType();
+	      break;
+	    case OT_AUTOFORM:
+	      return dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
+	      break;
+	    default: break;
+	    }
+	}      
+    }
+
+  return gt;
+}
+
 /*======================== lower objects =========================*/
 void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 {
@@ -1196,9 +1325,10 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
 }
 
 /*===================== insert a rectangle =======================*/
-void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,int diffx,int diffy)
+void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
+					      BCType gt,int diffx,int diffy)
 {
-  KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,getRndX(),getRndY());
+  KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
   kprectobject->setOrig(diffx + 10,diffy + 10);
   kprectobject->setSize(150,150);
   kprectobject->setSelected(true);
@@ -1211,9 +1341,10 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int diffx,int diffy)
+void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+						    BCType gt,int diffx,int diffy)
 {
-  KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush);
+  KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush,ft,g1,g2,gt);
   kpellipseobject->setOrig(diffx + 10,diffy + 10);
   kpellipseobject->setSize(150,150);
   kpellipseobject->setSelected(true);
@@ -1241,9 +1372,10 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,QString fileName,int diffx,int diffy)
+void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
+					     BCType gt,QString fileName,int diffx,int diffy)
 {
-  KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le);
+  KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le,ft,g1,g2,gt);
   kpautoformobject->setOrig(diffx + 10,diffy + 10);
   kpautoformobject->setSize(150,150);
   kpautoformobject->setSelected(true);

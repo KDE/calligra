@@ -22,19 +22,46 @@
 
 /*================ default constructor ===========================*/
 KPAutoformObject::KPAutoformObject()
-  : KPObject(), pen(), brush(), filename(), atfInterp(0,"")
+  : KPObject(), pen(), brush(), filename(), gColor1(red), gColor2(green), atfInterp(0,"")
 {
   lineBegin = L_NORMAL;
   lineEnd = L_NORMAL;
+  gradient = 0;
+  fillType = FT_BRUSH;
+  gType = BCT_GHORZ;
 }
 
 /*================== overloaded constructor ======================*/
-KPAutoformObject::KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd)
-  : KPObject(), pen(_pen), brush(_brush), filename(_filename), atfInterp(0,"")
+KPAutoformObject::KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd,
+				   FillType _fillType,QColor _gColor1,QColor _gColor2,BCType _gType)
+  : KPObject(), pen(_pen), brush(_brush), filename(_filename), gColor1(_gColor1), gColor2(_gColor2), atfInterp(0,"")
 {
   atfInterp.load(filename);
   lineBegin = _lineBegin;
   lineEnd = _lineEnd;
+  gType = _gType;
+  fillType = _fillType;
+
+  if (fillType == FT_GRADIENT)
+    gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+  else
+    gradient = 0;
+}
+
+/*================================================================*/
+void KPAutoformObject::setSize(int _width,int _height)
+{
+  KPObject::setSize(_width,_height);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
+}
+
+/*================================================================*/
+void KPAutoformObject::resizeBy(int _dx,int _dy)
+{
+  KPObject::resizeBy(_dx,_dy);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
 }
 
 /*====================== set filename ============================*/
@@ -42,6 +69,19 @@ void KPAutoformObject::setFileName(QString _filename)
 {
   filename = _filename;
   atfInterp.load(filename);
+}
+
+/*================================================================*/
+void KPAutoformObject::setFillType(FillType _fillType)
+{ 
+  fillType = _fillType; 
+
+  if (fillType == FT_BRUSH && gradient) 
+    {
+      delete gradient;
+      gradient = 0;
+    }
+  if (fillType == FT_GRADIENT && !gradient) gradient = new KPGradient(gColor1,gColor2,gType,getSize());
 }
 
 /*========================= save =================================*/

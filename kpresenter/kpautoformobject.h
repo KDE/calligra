@@ -18,10 +18,13 @@
 
 #include <qpntarry.h>
 #include <qlist.h>
+#include <qregion.h>
+#include <qpicture.h>
 
 #include "kpobject.h"
 #include "autoformEdit/atfinterpreter.h"
 #include "kpresenter_utils.h"
+#include "kpgradient.h"
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -35,7 +38,13 @@ class KPAutoformObject : public KPObject
 
 public:
   KPAutoformObject();
-  KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd);
+  KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd,
+		   FillType _fillType,QColor _gColor1,QColor _gColor2,BCType _gType);
+  ~KPAutoformObject()
+    { if (gradient) delete gradient; }
+
+  virtual void setSize(int _width,int _height);
+  virtual void resizeBy(int _dx,int _dy);
 
   virtual void setPen(QPen _pen)
     { pen = _pen; }
@@ -46,6 +55,13 @@ public:
     { lineBegin = _lineBegin; }
   virtual void setLineEnd(LineEnd _lineEnd)
     { lineEnd = _lineEnd; }
+  virtual void setFillType(FillType _fillType);
+  virtual void setGColor1(QColor _gColor1)
+    { if (gradient) gradient->setColor1(_gColor1); gColor1 = _gColor1; }
+  virtual void setGColor2(QColor _gColor2)
+    { if (gradient) gradient->setColor2(_gColor2); gColor2 = _gColor2; }
+  virtual void setGType(BCType _gType)
+    { if (gradient) gradient->setBackColorType(_gType); gType = _gType; }
 
   virtual ObjType getType()
     { return OT_AUTOFORM; }
@@ -59,6 +75,14 @@ public:
     { return lineBegin; }
   virtual LineEnd getLineEnd()
     { return lineEnd; }
+  virtual FillType getFillType()
+    { return fillType; }
+  virtual QColor getGColor1()
+    { return gColor1; }
+  virtual QColor getGColor2()
+    { return gColor2; }
+  virtual BCType getGType()
+    { return gType; }
 
   virtual void save(ostream& out);
   virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
@@ -73,7 +97,11 @@ protected:
   QBrush brush;
   QString filename;
   LineEnd lineBegin,lineEnd;
+  QColor gColor1,gColor2;
+  BCType gType;
+  FillType fillType;
 
+  KPGradient *gradient;
   ATFInterpreter atfInterp;
 
 };

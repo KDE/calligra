@@ -47,10 +47,20 @@ public:
   virtual BCType getBackColorType()
     { return bcType; }
  
+  virtual void setColor1(QColor _color)
+    { color1 = _color; paint(); }
+  virtual void setColor2(QColor _color)
+    { color2 = _color; paint(); }
+  virtual void setBackColorType(BCType _type)
+    { bcType = _type; paint(); }
+ 
   virtual QPixmap* getGradient()
     { return &pixmap; }
   virtual QSize getSize()
     { return pixmap.size(); }
+
+  virtual void setSize(QSize _size)
+    { pixmap.resize(_size); paint(); }
 
   virtual void addRef();
   virtual bool removeRef();

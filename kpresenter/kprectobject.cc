@@ -22,20 +22,60 @@
 
 /*================ default constructor ===========================*/
 KPRectObject::KPRectObject()
-  : KPObject(), pen(), brush()
+  : KPObject(), pen(), brush(), gColor1(red), gColor2(green)
 {
   rectType = RT_NORM;
   xRnd = 20;
   yRnd = 20;
+  gradient = 0;
+  fillType = FT_BRUSH;
+  gType = BCT_GHORZ;
 }
 
 /*================== overloaded constructor ======================*/
-KPRectObject::KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,int _xRnd,int _yRnd)
-  : KPObject(), pen(_pen), brush(_brush)
+KPRectObject::KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,FillType _fillType,
+			   QColor _gColor1,QColor _gColor2,BCType _gType,int _xRnd,int _yRnd)
+  : KPObject(), pen(_pen), brush(_brush), gColor1(_gColor1), gColor2(_gColor2)
 {
   rectType = _rectType;
   xRnd = _xRnd;
   yRnd = _yRnd;
+  gType = _gType;
+  fillType = _fillType;
+
+  if (fillType == FT_GRADIENT)
+    gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+  else
+    gradient = 0;
+}
+
+/*================================================================*/
+void KPRectObject::setSize(int _width,int _height)
+{
+  KPObject::setSize(_width,_height);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
+}
+
+/*================================================================*/
+void KPRectObject::resizeBy(int _dx,int _dy)
+{
+  KPObject::resizeBy(_dx,_dy);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
+}
+
+/*================================================================*/
+void KPRectObject::setFillType(FillType _fillType)
+{ 
+  fillType = _fillType; 
+
+  if (fillType == FT_BRUSH && gradient)
+    {
+      delete gradient;
+      gradient = 0;
+    }
+  if (fillType == FT_GRADIENT && !gradient) gradient = new KPGradient(gColor1,gColor2,gType,getSize());
 }
 
 /*========================= save =================================*/

@@ -22,14 +22,56 @@
 
 /*================ default constructor ===========================*/
 KPEllipseObject::KPEllipseObject()
-  : KPObject(), pen(), brush()
+  : KPObject(), pen(), brush(), gColor1(red), gColor2(green)
 {
+  gradient = 0;
+  fillType = FT_BRUSH;
+  gType = BCT_GHORZ;
+  drawShadow = false;
 }
 
 /*================== overloaded constructor ======================*/
-KPEllipseObject::KPEllipseObject(QPen _pen,QBrush _brush)
-  : KPObject(), pen(_pen), brush(_brush)
+KPEllipseObject::KPEllipseObject(QPen _pen,QBrush _brush,FillType _fillType,
+				 QColor _gColor1,QColor _gColor2,BCType _gType)
+  : KPObject(), pen(_pen), brush(_brush), gColor1(_gColor1), gColor2(_gColor2)
 {
+  gType = _gType;
+  fillType = _fillType;
+
+  if (fillType == FT_GRADIENT)
+    gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+  else
+    gradient = 0;
+  drawShadow = false;
+}
+
+/*================================================================*/
+void KPEllipseObject::setSize(int _width,int _height)
+{
+  KPObject::setSize(_width,_height);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
+}
+
+/*================================================================*/
+void KPEllipseObject::resizeBy(int _dx,int _dy)
+{
+  KPObject::resizeBy(_dx,_dy);
+  if (fillType == FT_GRADIENT && gradient)
+    gradient->setSize(getSize());
+}
+
+/*================================================================*/
+void KPEllipseObject::setFillType(FillType _fillType)
+{ 
+  fillType = _fillType; 
+
+  if (fillType == FT_BRUSH && gradient) 
+    {
+      delete gradient;
+      gradient = 0;
+    }
+  if (fillType == FT_GRADIENT && !gradient) gradient = new KPGradient(gColor1,gColor2,gType,getSize());
 }
 
 /*========================= save =================================*/
@@ -212,6 +254,7 @@ void KPEllipseObject::draw(QPainter *_painter,int _diffx,int _diffy)
   
   if (shadowDistance > 0)
     {
+      drawShadow = true;
       QPen tmpPen(pen);
       pen.setColor(shadowColor);
       QBrush tmpBrush(brush);
@@ -263,6 +306,8 @@ void KPEllipseObject::draw(QPainter *_painter,int _diffx,int _diffy)
 
   r = _painter->viewport();
   _painter->setViewport(ox,oy,r.width(),r.height());
+
+  drawShadow = false;
   
   if (angle == 0)
     paint(_painter);
@@ -296,13 +341,61 @@ void KPEllipseObject::draw(QPainter *_painter,int _diffx,int _diffy)
 /*======================== paint =================================*/
 void KPEllipseObject::paint(QPainter* _painter)
 {
-  int ow = ext.width();
-  int oh = ext.height();
+  if (drawShadow || fillType == FT_BRUSH || !gradient)
+    {
+      int ow = ext.width();
+      int oh = ext.height();
+      
+      _painter->setPen(pen);
+      int pw = pen.width();
+      _painter->setBrush(brush);
+      _painter->drawEllipse(pw,pw,ow - 2 * pw,oh - 2 * pw);
+    }
+  else
+    {
+      int ow = ext.width();
+      int oh = ext.height();
+      int pw = pen.width();
 
-  _painter->setPen(pen);
-  int pw = pen.width();
-  _painter->setBrush(brush);
-  _painter->drawEllipse(pw,pw,ow - 2 * pw,oh - 2 * pw);
+      int ox = _painter->viewport().x() + static_cast<int>(_painter->worldMatrix().dx()) + pw;
+      int oy = _painter->viewport().y() + static_cast<int>(_painter->worldMatrix().dy()) + pw;
+
+      if (angle == 0)
+	{
+	  _painter->save();
+
+	  QRegion clipregion(ox,oy,ow - 2 * pw,oh - 2 * pw,QRegion::Ellipse);
+	  _painter->setClipRegion(clipregion);
+	  
+	  _painter->drawPixmap(pw,pw,*gradient->getGradient());
+
+	  _painter->save();
+	}
+      else
+	{
+	  QRegion clipregion(0,0,ow - 2 * pw,oh - 2 * pw,QRegion::Ellipse);
+	  QPicture pic;
+	  QPainter p;
+
+	  p.begin(&pic);
+	  p.setClipRegion(clipregion);
+	  p.drawPixmap(0,0,*gradient->getGradient());
+	  p.end();
+
+	  QPixmap pix(ow - 2 * pw,oh - 2 * pw);
+	  pix.fill(white);
+	  QPainter p2;
+	  p2.begin(&pix);
+	  p2.drawPicture(pic);
+	  p2.end();
+
+	  _painter->drawPixmap(pw,pw,pix);
+	}
+
+      _painter->setPen(pen);
+      _painter->setBrush(NoBrush);
+      _painter->drawEllipse(pw,pw,ow - 2 * pw,oh - 2 * pw);
+    }
 }
 
 

@@ -28,6 +28,7 @@ PBPreview::PBPreview(QWidget* parent=0,const char* name=0,int _paintType=0)
   paintType = _paintType;
   pen = QPen(black,1,SolidLine);
   brush = QBrush(white,SolidPattern);
+  gradient = 0;
 }
 
 /*================== paint event =================================*/
@@ -56,8 +57,13 @@ void PBPreview::paintEvent(QPaintEvent*)
       painter.setPen(pen);
       painter.drawLine(diff1.width() / 2,height()/2,width() - diff2.width() / 2,height()/2);
    }
-  else
+  else if (paintType == 1)
     painter.fillRect(0,0,width(),height(),brush);
+  else if (paintType == 2 && gradient)
+    {
+      gradient->setSize(size());
+      painter.drawPixmap(0,0,*gradient->getGradient());
+    }
 
   painter.end();
 }
@@ -162,9 +168,14 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   brushFrame->move(penFrame->x()+penFrame->width()+20,20);
   brushFrame->setTitle(i18n("Brush"));
 
+  fillStyle = new QRadioButton(i18n("Fill with brush:"),brushFrame,"");
+  fillStyle->resize(fillStyle->sizeHint());
+  fillStyle->move(10,20);
+  connect(fillStyle,SIGNAL(clicked()),this,SLOT(rBrush()));
+
   chooseBCol = new QPushButton(brushFrame,"BCol");
   chooseBCol->setText(i18n("Choose color..."));
-  chooseBCol->move(10,20);
+  chooseBCol->move(fillStyle->x(),fillStyle->y() + fillStyle->height() + 20);
   chooseBCol->resize(chooseBCol->sizeHint());
   connect(chooseBCol,SIGNAL(clicked()),this,SLOT(changeBCol()));
 
@@ -201,7 +212,52 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   brushPrev->resize(chooseBStyle->width(),25);
   brushPrev->setBrush(brush);
 
-  brushFrame->resize(2*chooseBStyle->x()+chooseBStyle->width(),penFrame->height());
+  line = new QFrame(brushFrame);
+  line->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+  line->move(brushPrev->x(),brushPrev->y() + brushPrev->height() + 15);
+  line->resize(chooseBStyle->width(),5);
+
+  fillGradient = new QRadioButton(i18n("Fill with gradient:"),brushFrame,"");
+  fillGradient->resize(fillGradient->sizeHint());
+  fillGradient->move(line->x(),line->y() + line->height() + 15);
+  connect(fillGradient,SIGNAL(clicked()),this,SLOT(rGradient()));
+
+  gColors = new QLabel(brushFrame);
+  gColors->setText(i18n("Choose gradient colors:"));
+  gColors->move(fillGradient->x(),fillGradient->y() + fillGradient->height() + 20);
+  gColors->resize(gColors->sizeHint());
+
+  gradient1 = new KColorButton(red,brushFrame);
+  gradient1->resize(chooseBCol->size());
+  gradient1->move(gColors->x(),gColors->y() + gColors->height() + 10);
+  connect(gradient1,SIGNAL(changed(const QColor &)),this,SLOT(gColor1(const QColor &)));
+  
+  gradient2 = new KColorButton(green,brushFrame);
+  gradient2->resize(chooseBCol->size());
+  gradient2->move(gradient1->x(),gradient1->y() + gradient1->height() + 10);
+  connect(gradient2,SIGNAL(changed(const QColor &)),this,SLOT(gColor2(const QColor &)));
+
+  gStyle = new QLabel(brushFrame);
+  gStyle->setText(i18n("Choose gradient style:"));
+  gStyle->move(gradient2->x(),gradient2->y() + gradient2->height() + 20);
+  gStyle->resize(gStyle->sizeHint());
+
+  gradients = new QComboBox(false,brushFrame,"");
+  gradients->move(gStyle->x(),gStyle->y() + gStyle->height() + 10);
+  gradients->insertItem(i18n("Horizontal Gradient"),-1);
+  gradients->insertItem(i18n("Vertical Gradient"),-1);
+  gradients->resize(chooseBStyle->size());
+  connect(gradients,SIGNAL(activated(int)),this,SLOT(gcStyle(int)));
+
+  gradient = new KPGradient(red,green,BCT_GHORZ,QSize(chooseBCol->width(),25));
+
+  gPrev = new PBPreview(brushFrame,"",2);
+  gPrev->move(gradients->x(),gradients->y() + gradients->height() + 20);
+  gPrev->resize(chooseBCol->width(),25);
+  gPrev->setGradient(gradient);
+
+  brushFrame->resize(2*chooseBStyle->x()+chooseBStyle->width(),gPrev->y() + gPrev->height() + 10);
+  penFrame->resize(penFrame->width(),brushFrame->height());
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));
@@ -243,6 +299,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 /*===================== destructor ===============================*/
 StyleDia::~StyleDia()
 {
+  delete gradient;
 }
 
 /*=========================== set pen =============================*/
@@ -302,6 +359,36 @@ void StyleDia::setLineEnd(LineEnd le)
   lineEnd = le;
   penPrev->setLineEnd(lineEnd);
   clineEnd->setCurrentItem(static_cast<int>(lineEnd));
+}
+
+/*================================================================*/
+void StyleDia::setFillType(FillType ft)
+{
+  if (ft == FT_BRUSH)
+    {
+      fillStyle->setChecked(true);
+      fillGradient->setChecked(false);
+      rBrush();
+    }
+  else
+    {
+      fillStyle->setChecked(false);
+      fillGradient->setChecked(true);
+      rGradient();
+    }
+}
+
+/*================================================================*/
+void StyleDia::setGradient(QColor _c1,QColor _c2,BCType _t)
+{
+  gradient1->setColor(_c1);
+  gradient2->setColor(_c2);
+  gradients->setCurrentItem(static_cast<int>(_t - 1));
+
+  gradient->setColor1(QColor(_c1));
+  gradient->setColor2(QColor(_c2));
+  gradient->setBackColorType(_t);
+  gPrev->setGradient(gradient);
 }
 
 /*====================== change pen-color =========================*/
@@ -388,5 +475,48 @@ void StyleDia::changeLineEnd(int item)
 {
   lineEnd = (LineEnd)item;
   penPrev->setLineEnd(lineEnd);
+}
+
+/*=================================================================*/
+void StyleDia::gColor1(const QColor &newColor)
+{
+  gradient->setColor1(QColor(newColor));
+  gPrev->setGradient(gradient);
+}
+
+/*=================================================================*/
+void StyleDia::gColor2(const QColor &newColor)
+{
+  gradient->setColor2(QColor(newColor));
+  gPrev->setGradient(gradient);
+}
+
+/*=================================================================*/
+void StyleDia::gcStyle(int item)
+{
+  gradient->setBackColorType(static_cast<BCType>(item + 1));
+  gPrev->setGradient(gradient);
+}
+
+/*=================================================================*/
+void StyleDia::rBrush()
+{
+  gradients->setEnabled(false);
+  gradient1->setEnabled(false);
+  gradient2->setEnabled(false);
+  
+  chooseBCol->setEnabled(true);
+  chooseBStyle->setEnabled(true);
+}
+
+/*=================================================================*/
+void StyleDia::rGradient()
+{
+  gradients->setEnabled(true);
+  gradient1->setEnabled(true);
+  gradient2->setEnabled(true);
+  
+  chooseBCol->setEnabled(false);
+  chooseBStyle->setEnabled(false);
 }
 

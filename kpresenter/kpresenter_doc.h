@@ -196,7 +196,7 @@ public:
   void setBackClipFilename(unsigned int,QString);
   void setBackView(unsigned int,BackView);
   void setBackType(unsigned int,BackType);
-  bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,int,int);
+  bool setPenBrush(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,int,int);
   void setPageEffect(unsigned int,PageEffect);
   BackType getBackType(unsigned int);
   BackView getBackView(unsigned int);
@@ -210,6 +210,10 @@ public:
   QBrush getBrush(QBrush);
   LineEnd getLineBegin(LineEnd);
   LineEnd getLineEnd(LineEnd);
+  FillType getFillType(FillType);
+  QColor getGColor1(QColor);
+  QColor getGColor2(QColor);
+  BCType getGType(BCType);
 
   // raise and lower objs
   void raiseObjs(int,int);
@@ -221,10 +225,10 @@ public:
   void changePicture(QString,int,int);
   void changeClipart(QString,int,int);
   void insertLine(QPen,LineEnd,LineEnd,LineType,int,int);
-  void insertRectangle(QPen,QBrush,RectType,int,int);
-  void insertCircleOrEllipse(QPen,QBrush,int,int);
+  void insertRectangle(QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
+  void insertCircleOrEllipse(QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
   void insertText(int,int);
-  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,QString,int,int);
+  void insertAutoform(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
   
   // get list of pages and objects
   QList<KPBackGround> *backgroundList() {return &_backgroundList;}

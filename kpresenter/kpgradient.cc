@@ -78,6 +78,14 @@ void KPGradient::paint()
 	    break;
 	  }
 
+	if (bcType == BCT_GHORZ)
+	  {
+	    QColor _c;
+	    _c = color1;
+	    color1 = color2;
+	    color2 = _c;
+	  }
+
 	QPixmap pmCrop;
 	QColor cRow;
 	int ySize;
