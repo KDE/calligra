@@ -282,6 +282,8 @@ void VConfigMiscPage::apply()
 void VConfigMiscPage::slotDefault()
 {
 	m_undoRedo->setValue( 30 );
+        m_unit->setCurrentItem(0);
+
 }
 
 
