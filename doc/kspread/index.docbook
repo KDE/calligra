@@ -33,7 +33,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-04-27</date>
+<date>2002-05-04</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 
@@ -406,9 +406,9 @@ menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
 
 <sect1 id="sort">
 <title>Sorting Data</title>
-<para>In the simple example shown below, the data consists of the names of a 
-number of mountains together with their height above sea level. &kspread; 
-lets us sort data such as this in different ways.</para>
+<para>In the simple example shown below, the data consists of the names and 
+countries of a number of mountains together with their height above sea level. 
+&kspread; can sort data such as this in different ways.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -419,22 +419,40 @@ lets us sort data such as this in different ways.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>We may, for example, want the data sorted so that the names are in 
-alphabetical order. To do this select the area containing the data (A2:B5 
+<para>We may want the data sorted so that the names are in 
+alphabetical order. To do this select the area containing the data (A2:C7 
 in this case) and choose <guimenuitem>Sort Increasing</guimenuitem> or 
 <guimenuitem>Sort Decreasing</guimenuitem> from the <guimenu>Data</guimenu> 
 menu.</para>
-<para>These two options sort the data according to the contents of the cells 
-in the left column of the selected area. You can also sort by the contents of 
-cells in another column, or in a row, by choosing <menuchoice><guimenu>Data
-</guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> which brings up a 
-dialog box where you can choose the row or column to be used as a sort key.
-</para>
 <para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
 before upper case letters which come before lower case letters, so that cells 
 containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
 <userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
 the following order: <emphasis>77  Bat  Cat  bar</emphasis>.</para>
+<para>The <guimenuitem>Sort Increasing</guimenuitem> and <guimenuitem>Sort 
+Decreasing</guimenuitem> options from the <guimenu>Data</guimenu> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice><guimenu>Data
+</guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> to bring up the 
+<guilabel>Sort</guilabel> dialog box.</para>
+<para>Using the <guilabel>Sort criteria</guilabel> page of this dialog box you 
+can choose which column of the data is to be used as a primary sort key and, 
+if you wish, other columns to be used as secondary and tertiary keys. Using 
+the example in the above screenshot, choosing column B as the first key and 
+column C as the second would sort the data by country and, for each country, 
+by height.</para>
+<para>The <guilabel>Options</guilabel> page lets you sort by row instead of by 
+column and allows you to sort using the order of items in a custom list such 
+as January, February... instead of alphanumerically.</para>
+<para>&kspread; can also place the results of a sort into a different area of 
+the table, rather than overwriting the original data. To do this enter the 
+top left cell reference of the target area into the <guilabel>Starting cell:
+</guilabel> text box in the <guilabel>Options</guilabel> page. The cell 
+formats will also be copied to the new area if you check the <guilabel>
+Copy layout</guilabel> box. If you check the <guilabel>First row contains 
+header</guilabel> box data in the first row will be copied directly to the 
+first row of the target area without being included in the sort operation.
+</para>
 </sect1>
 
 
@@ -533,7 +551,7 @@ whether all or only selected pages are to be printed.</para>
 items in the table. You can quickly see how a table will be spilt into 
 separate pages for printing by checking the <menuchoice><guimenu>View</guimenu>
 <guimenuitem>Show Page Borders</guimenuitem></menuchoice> box. The boundaries 
-of each printed page will then be marked by red lines in the table.</para>
+of each printed page will then be marked by colored lines in the table.</para>
 
 <para>For a more detailed view of what is to be sent to the printer, including 
 anything you have asked to be included in the page headers and footers (see 
@@ -702,12 +720,16 @@ enter <userinput>4</userinput> into cell A1 and <userinput>2</userinput> into
 A2 then select both cells and Drag and Copy them down, the step size will be 
 calculated as the value in A2 minus the value in A1, -2 in this case so you 
 will get the series 4, 2, 0, -2, -4...</para>
+<para>It will even cope with series where the step value is not a constant 
+value but is itself a series. So that if you start with 1, 3, 4, 6 Drag and 
+Copy will extend it to 1, 3, 4, 6, 7, 9, 10, 12..., the step value in this 
+example being the series 2, 1, 2, 1...</para>
 <para>If you select a cell and choose <guimenuitem>Series...</guimenuitem> 
 from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series
 </guilabel> dialog box. This is useful for creating series that are too long 
 to be conveniently constructed using the Drag and Copy method, or for 
-creating geometric series (where the step value is used as a multiplier).
-</para>
+creating geometric series such as 1, 1.5, 2.25, 3.375... where the step value,
+1.5 in this case, is used as a multiplier.</para>
 <para>If the type of series that you want is too complicated for any of the 
 previous methods, consider using a formula and Drag and Copying that. For 
 example to create a series with the values 1, 1/2, 1/4, 1/8... enter 
@@ -1516,6 +1538,9 @@ color of the table grid. If you do not want the grid to appear at all uncheck
 the <guilabel>Show grid</guilabel> and <guilabel>Print grid</guilabel> boxes 
 in the <link linkend="configpref"><guilabel>Preferences</guilabel></link> 
 configuration page.</para>
+<para>This page also lets you select the color of the lines used to indicate 
+the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
+box in the <guimenu>View</guimenu> menu is checked.</para>
 </sect1>
 
 <sect1 id="configpagelayout">
