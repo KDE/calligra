@@ -65,26 +65,6 @@ KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEdit
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
-  // initialize Childs
-  QValueList<FormObject*>::Iterator it = m_pDoc->m_lstFormObjects.begin();
-  for( ; it != m_pDoc->m_lstFormObjects.end(); ++it )
-  {
-    cerr << "KFormViewer: Inserting child" << endl;
-
-    QWidget* obj = new WidgetWrapper( (*it)->create( this ) );
-    
-    if( obj )
-    {
-      QScrollView::addChild( obj );
-      QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
-
-      QObject::connect( obj,  SIGNAL( clicked( WidgetWrapper* ) ),
-                        this, SLOT( slotWidgetSelected( WidgetWrapper* ) ) );
-      QObject::connect( this, SIGNAL( unselectAll() ),
-                        obj,  SLOT( slotUnselect() ) );
-    }
-  }
-
   slotUpdateView();
 }
 
@@ -134,7 +114,13 @@ void KformEditorView::init()
     m_vStatusBar->insertItem( Q2C( i18n( "Form editor started" ) ), 1);
 
     m_vStatusBar->enable( ::OpenPartsUI::Show );
-  } 
+  }
+
+  /******************************************************
+   * Childs
+   ******************************************************/
+
+  initChilds();
 }
 
 void KformEditorView::cleanUp()
@@ -429,6 +415,31 @@ void KformEditorView::newView()
   KformEditorShell* shell = new KformEditorShell;
   shell->show();
   shell->setDocument( m_pDoc );
+}
+
+void KformEditorView::initChilds()
+{
+  // Remove all existing childs
+
+  // insert childs, data from m_pDoc
+  QValueList<FormObject*>::Iterator it = m_pDoc->m_lstFormObjects.begin();
+  for( ; it != m_pDoc->m_lstFormObjects.end(); ++it )
+  {
+    cerr << "KFormViewer: Inserting child" << endl;
+ 
+    QWidget* obj = new WidgetWrapper( (*it)->create( this ) );
+ 
+    if( obj )
+    {
+      QScrollView::addChild( obj );
+      QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
+ 
+      QObject::connect( obj,  SIGNAL( clicked( WidgetWrapper* ) ),
+                        this, SLOT( slotWidgetSelected( WidgetWrapper* ) ) );
+      QObject::connect( this, SIGNAL( unselectAll() ),
+                        obj,  SLOT( slotUnselect() ) );
+    }
+  }
 }
 
 void KformEditorView::editUndo()

@@ -177,6 +177,7 @@ bool KformEditorShell::openDocument( const char *_url, const char *_format )
   m_pDoc = new KformEditorDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
   {
+    kdebug( KDEBUG_INFO, 0, "MK: nicht load from URL" );
     return false;
   }
   m_pView = m_pDoc->createFormView( frame() );

@@ -84,6 +84,7 @@ protected:
   virtual void helpUsing();
   void resizeEvent( QResizeEvent* _event );
   void mouseMoveEvent( QMouseEvent* _event );
+  void initChilds();
 
 private:
 

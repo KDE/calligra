@@ -41,6 +41,8 @@
 
 KformEditorDoc::KformEditorDoc()
 {
+  kdebug( KDEBUG_INFO, 0, "KformEditorDoc::KformEditorDoc()" );
+
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
   m_bEmpty = true;
