@@ -2034,21 +2034,26 @@ bool KWDocument::completeSaving( KoStore *_store )
 bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
 {
     int i = 0;
+    //kdDebug() << "KWDocument::saveChildren path=" << _path << " " << children().count() << " children" << endl;
 
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         KoDocument* childDoc = it.current()->document();
-        kdDebug() << "KWDocument::saveChildren url:" << childDoc->url().url()
-                  << " extern:" << childDoc->isStoredExtern() << endl;
-        if ( childDoc->isStoredExtern() ) {
-            if ( !childDoc->save() )
-                return FALSE;
-        }
-        else {
-            QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-            if ( !childDoc->saveToStore( _store, internURL ) )
-                return FALSE;
-        }
+        if (childDoc)
+        {
+            kdDebug() << "KWDocument::saveChildren url:" << childDoc->url().url()
+                      << " extern:" << childDoc->isStoredExtern() << endl;
+            if ( childDoc->isStoredExtern() ) {
+                if ( !childDoc->save() )
+                    return FALSE;
+            }
+            else {
+                QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+                if ( !childDoc->saveToStore( _store, internURL ) )
+                    return FALSE;
+            }
+        } else
+            kdWarning() << "No document to save for child document " << it.current()->url().url() << endl;
     }
     return true;
 }
