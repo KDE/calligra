@@ -47,7 +47,6 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 {
 	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
 	editor->setAlignment(align);
-	editor->setMargin(8); //to move away from resize handle
 	editor->setPalette(w->palette());
 	editor->setFont(w->font());
 	editor->setGeometry(geometry);
@@ -57,6 +56,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 		editor->setBackgroundMode(background);
 	editor->installEventFilter(this);
 	editor->setFrame(useFrame);
+	editor->setMargin(2); //to move away from resize handle
 	editor->show();
 	editor->setFocus();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
