@@ -161,6 +161,7 @@ VSelectNodesTool::mouseDragRelease()
 	{
 		m_state = normal;
 
+		view()->part()->document().selection()->setState( VObject::selected );
 		VTranslateCmd *cmd = new VTranslateCmd(
 				&view()->part()->document(),
 				qRound( ( last().x() - first().x() ) * ( 1.0 / view()->zoom() ) ),
