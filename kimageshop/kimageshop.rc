@@ -1,5 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop" version="2">
 <MenuBar>
+ <Menu name="Import/Export"><text>Import/Export</text>
+  <Action name="import_image"/>
+  <Action name="export_image"/>
+ </Menu>
  <Menu name="Edit"><text>Edit</text>
   <Action name="copy"/>
   <Action name="cut"/>
@@ -17,6 +21,9 @@
   <Action name="dialog_gradienteditor"/>
  </Menu>
  <Menu name="Image"><text>Image</text>
+  <Action name="add_new_image_tab"/> 
+  <Action name="remove_current_image_tab"/>  
+  <Separator/>  
   <Action name="merge_all_layers"/>
   <Action name="merge_visible_layers"/>
   <Action name="merge_linked_layers"/>
@@ -24,6 +31,7 @@
  <Menu name="Layer"><text>Layer</text>
   <Action name="insert_layer"/>
   <Action name="insert_layer_image"/>
+  <Action name="save_layer_image"/>  
   <Separator/>
   <Action name="layer_rotateright90"/>
   <Action name="layer_rotate180"/>
@@ -41,14 +49,6 @@
   <Action name="save_options"/>
   <Separator/>
   <Action name="configure"/>
- </Menu>
- <Menu name="help"><text>Help</text>
-  <Action name="help_contents"/>
-  <Action name="help_whatsthis"/>
-  <Separator/>
-  <Action name="help_bugreport"/>
-  <Separator/>
-  <Action name="help_about"/>
  </Menu>
 </MenuBar>
 <ToolBar name="edit" position="top"><Text>Edit</Text>

@@ -47,37 +47,41 @@ KisResourceServer* KisFactory::s_rserver = 0;
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-  s_aboutData = new KAboutData( "kimageshop",
-								I18N_NOOP("KImageShop"),
-								"0.1.0",
-								I18N_NOOP("KOffice image manipulation application."),
-								KAboutData::License_GPL,
-								"(c) 1999-2000 The KImageShop team.",
-								"",
-								"http://koffice.kde.org",
-								"submit@bugs.kde.org");
+    s_aboutData = new KAboutData( "kimageshop",
+	I18N_NOOP("KImageShop"),
+	"0.1.0",
+	I18N_NOOP("KOffice image manipulation application."),
+	KAboutData::License_GPL,
+	"(c) 1999-2000 The KImageShop team.",
+	"",
+	"http://koffice.kde.org",
+	"submit@bugs.kde.org");
 
-  (void)global();
-  s_pserver = new KisPluginServer;
-  s_rserver = new KisResourceServer;
+    (void)global();
+    s_pserver = new KisPluginServer;
+    s_rserver = new KisResourceServer;
 
-  //KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global)); //jwc
-  // jwc - setLogFile() expect char * for not QString
+    //KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global)); //jwc
+    // jwc - setLogFile() expect char * for not QString
 
-  QString FileName = locateLocal("kis", "kimageshop.log", s_global);  
-  char *latinFileName = FileName.latin1();
-  KisLog::setLogFile(latinFileName);
+    QString FileName = locateLocal("kis", "kimageshop.log", s_global);  
+    char *latinFileName = FileName.latin1();
+    KisLog::setLogFile(latinFileName);
   
-  log() << "Starting KImageShop" << endl;
+    log() << "Starting KImageShop" << endl;
 }
 
 KisFactory::~KisFactory()
 {
-  delete s_pserver;
-  delete s_rserver;
-  delete s_aboutData;
-  delete s_global;
+    delete s_pserver;
+    delete s_rserver;
+    delete s_aboutData;
+    delete s_global;
 }
+
+/*
+    Create the document
+*/
 
 KParts::Part* KisFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
@@ -86,7 +90,7 @@ KParts::Part* KisFactory::createPart( QWidget *parentWidget, const char *widgetN
     KisDoc *doc = new KisDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
-      doc->setReadWrite( false );
+        doc->setReadWrite( false );
 
     emit objectCreated(doc);
     return doc;
@@ -97,25 +101,35 @@ KInstance* KisFactory::global()
     if ( !s_global )
     {
 	s_global = new KInstance(s_aboutData);
+
 	s_global->dirs()->addResourceType("kis",
-					  KStandardDirs::kde_default("data") + "kimageshop/");
+	    KStandardDirs::kde_default("data") + "kimageshop/");
+
 	s_global->dirs()->addResourceType("kis_images",
-					  KStandardDirs::kde_default("data") + "kimageshop/images/");
+	    KStandardDirs::kde_default("data") + "kimageshop/images/");
+
 	s_global->dirs()->addResourceType("kis_brushes",
-					  KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+	    KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+
 	s_global->dirs()->addResourceType("kis_pattern",
-					  KStandardDirs::kde_default("data") + "kimageshop/pattern/");
+            KStandardDirs::kde_default("data") + "kimageshop/pattern/");
+
 	s_global->dirs()->addResourceType("kis_gradients",
-					  KStandardDirs::kde_default("data") + "kimageshop/gradients/");
+	    KStandardDirs::kde_default("data") + "kimageshop/gradients/");
+
 	s_global->dirs()->addResourceType("kis_pics",
-					  KStandardDirs::kde_default("data") + "kimageshop/pics/");
+	    KStandardDirs::kde_default("data") + "kimageshop/pics/");
+
 	s_global->dirs()->addResourceType("kis_plugins",
-					  KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+	    KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+
 	s_global->dirs()->addResourceType("toolbars",
-					  KStandardDirs::kde_default("data") + "koffice/toolbar/");
+	    KStandardDirs::kde_default("data") + "koffice/toolbar/");
+                                          
 	// Tell the iconloader about share/apps/koffice/icons
 	s_global->iconLoader()->addAppDir("koffice");
     }
+
     return s_global;
 }
 

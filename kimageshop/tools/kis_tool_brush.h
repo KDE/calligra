@@ -36,7 +36,8 @@ class BrushTool : public KisTool
   QString toolName() { return QString("BrushTool"); }
 
   void setBrush(const KisBrush *_brush);
-  bool paint(QPoint pos);
+  bool paintMonochrome(QPoint pos);
+  bool paintColor(QPoint pos);
 
  public slots:
   virtual void mousePress(QMouseEvent*); 

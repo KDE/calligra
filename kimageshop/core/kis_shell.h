@@ -42,6 +42,10 @@ public:
 public slots:
 
   virtual void slotFileNew();
+  virtual void slotFileNewDocument();
+  virtual void slotFileAddNewImage();
+  virtual void slotFileRemoveCurrentImage();
+
   virtual void slotFilePrint();
   virtual void slotFileClose();
 

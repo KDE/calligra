@@ -52,15 +52,11 @@ void MoveCommand::unexecute()
 void MoveCommand::moveTo( QPoint _pos )
 {
   KisImage* img = m_pDoc->current();
-  if (!img)
-	return;
+  if (!img) return;
 
   img->setCurrentLayer( m_layer );
-
   QRect oldRect = img->getCurrentLayer()->imageExtents();
-
   img->getCurrentLayer()->moveTo( _pos.x(), _pos.y() );
-
   img->markDirty( img->getCurrentLayer()->imageExtents() );
   img->markDirty( oldRect );
 }
@@ -79,8 +75,7 @@ MoveTool::~MoveTool()
 void MoveTool::mousePress( QMouseEvent *e )
 {
   KisImage* img = m_pDoc->current();
-  if (!img)
-	return;
+  if (!img)return;
 
   if( e->button() != LeftButton )
     return;
@@ -96,14 +91,14 @@ void MoveTool::mousePress( QMouseEvent *e )
   m_dragStart.setY( e->y() );
   m_layerStart = img->getCurrentLayer()->imageExtents().topLeft();
   m_layerPosition = m_layerStart;
+ 
 }
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
   KisImage* img = m_pDoc->current();
-  if (!img)
-	return;
-
+  if (!img) return;
+  
   if( m_dragging )
   {
     m_dragPosition = e->pos() - m_dragStart;

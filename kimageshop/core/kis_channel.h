@@ -24,53 +24,61 @@
 
 #include <qrect.h>
 #include <qpoint.h>
-#include <ostream.h> //jwc
+#include <koStore.h> //jwc
+
 #include "kis_global.h"
+
 
 class KisChannel
 {
- public:
+public:
 
-  KisChannel(cId id, uchar bitDepth = 8);
-  virtual ~KisChannel();
+    KisChannel(cId id, uchar bitDepth = 8);
+    virtual ~KisChannel();
 
-  cId    channelId()    const { return m_id; }
-  uchar  bitDepth()     const { return m_bitDepth; }
-  uint   xTiles()       const { return m_xTiles; }
-  uint   yTiles()       const { return m_xTiles; }
-  int    width()        const { return m_imgRect.width(); }
-  int    height()       const { return m_imgRect.height(); }
-  QRect  tileExtents()  const { return m_tileRect; };
-  QRect  imageExtents() const { return m_imgRect; };
-  QPoint offset()       const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
+    cId    channelId()    const { return m_id; }
+    uchar  bitDepth()     const { return m_bitDepth; }
+    uint   xTiles()       const { return m_xTiles; }
+    // very bad bug - jwc - yTiles() returned m_xTiles, not m_yTiles
+    // this casued memory allocation problems with channelMem
+    //uint   yTiles()       const { return m_xTiles; }
+    uint   yTiles()       const { return m_yTiles; }
+    int    width()        const { return m_imgRect.width(); }
+    int    height()       const { return m_imgRect.height(); }
+    QRect  tileExtents()  const { return m_tileRect; };
+    QRect  imageExtents() const { return m_imgRect; };
+    QPoint offset()       const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
-  uchar** tiles()       { return m_tiles; }
+    uchar** tiles()       { return m_tiles; }
 
-  void allocateRect(QRect newRect);
+    void allocateRect(QRect newRect);
   
-  void moveBy(int dx, int dy);
-  void moveTo(int x, int y);
+    void moveBy(int dx, int dy);
+    void moveTo(int x, int y);
   
-  void  setPixel(uint x, uint y, uchar val);
-  uchar pixel(uint x, uint y);
+    void  setPixel(uint x, uint y, uchar val);
+    uchar pixel(uint x, uint y);
 	
-  QRect tileRect(int tileNo);
+    QRect tileRect(int tileNo);
 
-  uint lastTileOffsetX();
-  uint lastTileOffsetY();
+    uint lastTileOffsetX();
+    uint lastTileOffsetY();
 
-  //bool  writeToStore(ostorestream *out); //jwc
-  //bool  loadFromStore(istorestream *in); //jwc
-  
+    bool  writeToStore(KoStore *store); 
+    bool  loadFromStore(KoStore *store); 
+    
+ 
  protected:
   
-  cId      m_id;
-  uchar    m_bitDepth;
-  // array of pointers to tile data
-  uchar**  m_tiles;
-  uint     m_xTiles, m_yTiles;
+    cId      m_id;
+    uchar    m_bitDepth;
+    
+    // array of pointers to tile data
+    uchar**  m_tiles;
+    uint     m_xTiles, m_yTiles;
   
-  QRect    m_imgRect, m_tileRect;
+    QRect    m_imgRect, m_tileRect;
+
 };
 
 

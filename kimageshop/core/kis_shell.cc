@@ -31,81 +31,126 @@
 #include "kis_shell.h"
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
+#include <kdebug.h>
 
 KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
-  m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
+    m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
-  m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), ID_STATUSBAR_INFOTEXT );
+    m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 
+        ID_STATUSBAR_INFOTEXT );
 
   //setStatusBar( m_pStatusBar ); //jwc
 }
+
 
 KisShell::~KisShell()
 {
 }
 
-QString KisShell::nativeFormatName() const {
-  return i18n("KImageShop");
+
+QString KisShell::nativeFormatName() const 
+{
+    return i18n("KImageShop");
 }
+
+
 
 void KisShell::slotFileNew()
 {
   // This is buggy - Please contact me whenever this should be compiled
   // again! (Can't test it right now, because it crashes) (Werner)
-#ifdef __GNUC__
-#warning BUG
-#endif
-  KisDoc* doc = (KisDoc*)rootDocument();
+  
+//#ifdef __GNUC__
+//#warning BUG
+//#endif
 
-  if ( !doc )
+    KisDoc* doc = (KisDoc*)rootDocument();
+
+    if( !doc )
     {
-      doc = (KisDoc*)createDoc();
-      if ( !doc->initDoc() )
+        kdDebug(0) << "KisShell::slotFileNew: no rootDocument()" << endl;
+        
+        doc = (KisDoc*)createDoc();
+        if ( !doc->initDoc() )
 	{
-	  delete doc;
-	  return;
+	    delete doc;
+	    return;
 	}
-      setRootDocument( doc );
+        setRootDocument( doc );
     }
     else
     {
-      doc->slotNewImage();
+        bool ok = doc->slotNewImage();
+    }
+}
+
+
+void KisShell::slotFileNewDocument()
+{
+    KisDoc* doc = (KisDoc*)rootDocument();
+    if(doc)
+    {
+        bool ok = doc->slotNewImage();
+    }
+}
+
+
+void KisShell::slotFileAddNewImage()
+{
+    KisDoc* doc = (KisDoc*)rootDocument();
+    if(doc)
+    {
+        bool ok = doc->slotNewImage();
+    }
+}
+
+
+void KisShell::slotFileRemoveCurrentImage()
+{
+    KisDoc* doc = (KisDoc*)rootDocument();
+    if(doc)
+    {
+        doc->slotRemoveImage(doc->currentImage());
     }
 }
 
 bool KisShell::openDocument( const KURL & url )
 {
-  KoDocument* doc = rootDocument();
+    KoDocument* doc = rootDocument();
 
-  if (!doc)
+    if (!doc)
+    {
+	KoDocument* newdoc = createDoc();
+	if (newdoc->openURL( url ))
 	{
-	  KoDocument* newdoc = createDoc();
-	  if (newdoc->openURL( url ))
-		{
-		  setRootDocument( newdoc );
-		  return true;
-		}
-	  return false;
+	    setRootDocument( newdoc );
+	    return true;
 	}
+	return false;
+    }
+    
   return doc->openURL( url );
 }
+
 
 void KisShell::slotFilePrint()
 {
   // TODO
 }
 
+
 void KisShell::slotFileClose()
 {
-  KisDoc* doc = (KisDoc*)rootDocument();
-  doc->slotRemoveImage( doc->currentImage() );
+    KisDoc* doc = (KisDoc*)rootDocument();
+    doc->slotRemoveImage( doc->currentImage() );
 }
+
 
 void KisShell::statusMsg( const QString& text )
 {
-  m_pStatusBar->changeItem( text, ID_STATUSBAR_INFOTEXT );
+    m_pStatusBar->changeItem( text, ID_STATUSBAR_INFOTEXT );
 }
 
 #include "kis_shell.moc"

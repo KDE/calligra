@@ -31,37 +31,37 @@ class QPixmap;
 class KisBrush : public IconItem
 {
  public:
-  KisBrush(QString file);
+  KisBrush(QString file, bool monochrome = false, bool special = false);
   virtual ~KisBrush();
 
-  void 	    setSpacing(int s)                 { m_spacing = s;     }
-  int       spacing()   	      const { return m_spacing;  }
-  bool      isValid()   	      const { return m_valid;    }
-  void      setHotSpot(QPoint);
-  QPoint    hotSpot()   	      const { return m_hotSpot;  }
-  QPixmap&  pixmap() const;
-  QSize     size()                    const { return QSize(m_w, m_h); } 
-  int       width()                   const { return m_w; }
-  int       height()                  const { return m_h; }
-  uchar     value(int x, int y) const;
-  uchar*    scanline(int) const;
-  uchar*    bits() const;
-
-  // debug
-  void      dump() const;
+    void 	    setSpacing(int s)                 { m_spacing = s;     }
+    int       spacing()   	      const { return m_spacing;  }
+    bool      isValid()   	      const { return m_valid;    }
+    void      setHotSpot(QPoint);
+    QPoint    hotSpot()   	      const { return m_hotSpot;  }
+    QPixmap&  pixmap() const;
+    QSize     size()                    const { return QSize(m_w, m_h); } 
+    int       width()                   const { return m_w; }
+    int       height()                  const { return m_h; }
+    uchar     value(int x, int y) const;
+    uchar*    scanline(int) const;
+    uchar*    bits() const;
+    QPixmap  *m_pPixmap;
+    // debug
+    void      dump() const;
 
  private:
-  void      loadViaQImage(QString file);
-  void      readBrushInfo(QString file);
+    void      loadViaQImage(QString file, bool monochrome = false);
+    void      readBrushInfo(QString file);
 
-  bool      m_valid;
-  int       m_spacing;
-  QPoint    m_hotSpot;
+    bool      m_valid;
+    int       m_spacing;
+    QPoint    m_hotSpot;
 
-  int       m_w, m_h;
-  uchar*    m_pData;
+    int       m_w, m_h;
+    uchar*    m_pData;
 
-  QPixmap  *m_pPixmap;
+    //QPixmap  *m_pPixmap;
 };
 
 #endif

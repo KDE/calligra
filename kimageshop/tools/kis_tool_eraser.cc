@@ -29,195 +29,199 @@
 EraserTool::EraserTool(KisDoc *doc, KisView *view, const KisBrush *_brush)
   : KisTool(doc, view)
 {
-  m_dragging = false;
-  m_Cursor = KisCursor::brushCursor();
-  m_pBrush = _brush;
-  m_dragdist = 0;
+    m_dragging = false;
+    m_Cursor = KisCursor::brushCursor();
+    m_pBrush = _brush;
+    m_dragdist = 0;
 }
 
 EraserTool::~EraserTool() {}
 
 void EraserTool::setBrush(const KisBrush *_brush)
 {
-  m_pBrush = _brush;
+    m_pBrush = _brush;
 }
 
 void EraserTool::mousePress(QMouseEvent *e)
 {
-  KisImage * img = m_pDoc->current();
-  if (!img)	return;
+    KisImage * img = m_pDoc->current();
+    if (!img)	return;
 
-  if (e->button() != QMouseEvent::LeftButton)
-    return;
+    if (e->button() != QMouseEvent::LeftButton)
+        return;
 
-   if( !img->getCurrentLayer()->visible() )
-    return;
+    if( !img->getCurrentLayer()->visible() )
+        return;
 
-  m_dragging = true;
-  m_dragStart = e->pos();
-  m_dragdist = 0;
+    m_dragging = true;
+    m_dragStart = e->pos();
+    m_dragdist = 0;
 
-  paint(e->pos());
+    paint(e->pos());
   
-  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  img->markDirty(updateRect);
+    QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+    img->markDirty(updateRect);
 }
+
 
 bool EraserTool::paint(QPoint pos)
 {
-  KisImage * img = m_pDoc->current();
-  KisLayer *lay = img->getCurrentLayer();
-  if (!img)	return false;
-  if (!lay) return false;
-  if (!m_pBrush) return false;
+    KisImage * img = m_pDoc->current();
+    KisLayer *lay = img->getCurrentLayer();
+    
+    if (!img)	return false;
+    if (!lay)   return false;
+    if (!m_pBrush) return false;
 
-  // FIXME: Implement this for non-RGB modes.
-  if (!img->colorMode() == cm_RGB 
-	  && !img->colorMode() == cm_RGBA)
+    // FIXME: Implement this for non-RGB modes.
+    if (!img->colorMode() == cm_RGB  && !img->colorMode() == cm_RGBA)
 	return false;
 
-  int startx = (pos - m_pBrush->hotSpot()).x();
-  int starty = (pos - m_pBrush->hotSpot()).y();
+    int startx = (pos - m_pBrush->hotSpot()).x();
+    int starty = (pos - m_pBrush->hotSpot()).y();
 
-  QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
+    QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
 
-  if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
-    return false;
+    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+        return false;
   
-  clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
 
-  int sx = clipRect.left() - startx;
-  int sy = clipRect.top() - starty;
-  int ex = clipRect.right() - startx;
-  int ey = clipRect.bottom() - starty;
+    int sx = clipRect.left() - startx;
+    int sy = clipRect.top() - starty;
+    int ex = clipRect.right() - startx;
+    int ey = clipRect.bottom() - starty;
 
-  uchar *sl;
-  uchar bv, invbv;
+    uchar *sl;
+    uchar bv, invbv;
 
-  bool alpha = (img->colorMode() == cm_RGBA);
+    bool alpha = (img->colorMode() == cm_RGBA);
 
-  if (alpha)
+    if (alpha)
     {
-	  uchar a;
-	  int   v;
+        uchar a;
+	int   v;
 
-      for (int y = sy; y <= ey; y++)
-		{
-		  sl = m_pBrush->scanline(y);
-		  
-		  for (int x = sx; x <= ex; x++)
-			{
-			  bv = *(sl + x);
-			  if (bv == 0) continue;
-
-			  a = lay->pixel(3, startx + x, starty + y);
-			  v = a - bv;
-			  if (v < 0 ) v = 0;
-			  if (v > 255 ) v = 255;
-			  a = (uchar) v;
-			  
-			  lay->setPixel(3, startx + x, starty + y, a);
-			}
-		}
-    }
-  else   // no alpha channel -> erase to background color
+        for (int y = sy; y <= ey; y++)
 	{
-	  uchar r, g, b;
-	  int red = m_pView->bgColor().R();
-	  int green = m_pView->bgColor().G();
-	  int blue = m_pView->bgColor().B();
-
-	  for (int y = sy; y <= ey; y++)
-		{
-		  sl = m_pBrush->scanline(y);
+	    sl = m_pBrush->scanline(y);
 		  
-		  for (int x = sx; x <= ex; x++)
-			{
-			  r = lay->pixel(0, startx + x, starty + y);
-			  g = lay->pixel(1, startx + x, starty + y);
-			  b = lay->pixel(2, startx + x, starty + y);
+	    for (int x = sx; x <= ex; x++)
+	    {
+	        bv = *(sl + x);
+		if (bv == 0) continue;
+
+		a = lay->pixel(3, startx + x, starty + y);
+		v = a - bv;
+		if (v < 0 ) v = 0;
+		if (v > 255 ) v = 255;
+		a = (uchar) v;
 			  
-			  bv = *(sl + x);
-			  if (bv == 0) continue;
-			  
-			  invbv = 255 - bv;
-			  
-			  b = ((blue * bv) + (b * invbv))/255;
-			  g = ((green * bv) + (g * invbv))/255;
-			  r = ((red * bv) + (r * invbv))/255;
-			  
-			  lay->setPixel(0, startx + x, starty + y, r);
-			  lay->setPixel(1, startx + x, starty + y, g);
-			  lay->setPixel(2, startx + x, starty + y, b);
-			} 
-		}
+		lay->setPixel(3, startx + x, starty + y, a);
+	    }
 	}
-  return true;
+    }
+    else   // no alpha channel -> erase to background color
+    {
+        uchar r, g, b;
+	int red = m_pView->bgColor().R();
+	int green = m_pView->bgColor().G();
+	int blue = m_pView->bgColor().B();
+
+	for (int y = sy; y <= ey; y++)
+	{
+	    sl = m_pBrush->scanline(y);
+		  
+	    for (int x = sx; x <= ex; x++)
+	    {
+		  r = lay->pixel(0, startx + x, starty + y);
+		  g = lay->pixel(1, startx + x, starty + y);
+		  b = lay->pixel(2, startx + x, starty + y);
+			  
+		  bv = *(sl + x);
+		  if (bv == 0) continue;
+			  
+		  invbv = 255 - bv;
+			  
+		  b = ((blue * bv) + (b * invbv))/255;
+		  g = ((green * bv) + (g * invbv))/255;
+		  r = ((red * bv) + (r * invbv))/255;
+			  
+		  lay->setPixel(0, startx + x, starty + y, r);
+		  lay->setPixel(1, startx + x, starty + y, g);
+		  lay->setPixel(2, startx + x, starty + y, b);
+	    } 
+	}
+    }
+
+    return true;
 }
+
 
 void EraserTool::mouseMove(QMouseEvent *e)
 {
-  KisImage * img = m_pDoc->current();
-  if (!img)	return;
+    KisImage * img = m_pDoc->current();
+    if (!img)	return;
 
-  int spacing = m_pBrush->spacing();
+    int spacing = m_pBrush->spacing();
 
-  if (spacing <= 0) spacing = 1;
+    if (spacing <= 0) spacing = 1;
 
-  if(m_dragging)
+    if(m_dragging)
     {
-      if( !img->getCurrentLayer()->visible() )
-	return;
+        if( !img->getCurrentLayer()->visible() )
+	    return;
 
-      KisVector end(e->x(), e->y());
-      KisVector start(m_dragStart.x(), m_dragStart.y());
+        KisVector end(e->x(), e->y());
+        KisVector start(m_dragStart.x(), m_dragStart.y());
             
-      KisVector dragVec = end - start;
-      float saved_dist = m_dragdist;
-      float new_dist = dragVec.length();
-      float dist = saved_dist + new_dist;
+        KisVector dragVec = end - start;
+        float saved_dist = m_dragdist;
+        float new_dist = dragVec.length();
+        float dist = saved_dist + new_dist;
 
-      if ((int)dist < spacing)
+        if ((int)dist < spacing)
 	{
-	  m_dragdist += new_dist; // save for next moveevent
-	  m_dragStart = e->pos();
-	  return;
+	    m_dragdist += new_dist; // save for next moveevent
+	    m_dragStart = e->pos();
+	    return;
 	}
-      else
-	m_dragdist = 0; // reset
+        else
+	    m_dragdist = 0; // reset
 
-      dragVec.normalize();
+        dragVec.normalize();
 
-      KisVector step = start;
+        KisVector step = start;
 
-      while (dist >= spacing)
+        while (dist >= spacing)
 	{
-	  if (saved_dist > 0)
+	    if (saved_dist > 0)
 	    {
 	      step += dragVec * (spacing-saved_dist);
 	      saved_dist -= spacing;
 	    }
-	  else
+	    else
 	      step += dragVec * spacing;
 
-	  QPoint p(step.x(), step.y());
+	    QPoint p(step.x(), step.y());
 	  	  
-	  if (paint(p))
-	    img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
-	  dist -= spacing;
-	}
+	    if (paint(p))
+	        img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+	    dist -= spacing;
+	    }
 
-      if (dist > 0)
-	m_dragdist = dist; //save for next moveevent
-      m_dragStart = e->pos();
+        if (dist > 0)
+	    m_dragdist = dist; //save for next moveevent
+        m_dragStart = e->pos();
     }
 }
 
 void EraserTool::mouseRelease(QMouseEvent *e)
 {
-  if (e->button() != LeftButton)
-    return;
-  m_dragging = false;
+    if (e->button() != LeftButton)
+        return;
+    m_dragging = false;
 }
+
 
 

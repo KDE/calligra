@@ -28,8 +28,10 @@
 #include <koDocument.h>
 //#include <koUndo.h> //jwc
 
+#include <iostream.h>
 #include "kis_image.h"
 #include "kis_global.h"
+#include "kis_view.h"
 
 class KisBrush;
 class NewDialog;
@@ -52,16 +54,19 @@ public:
 	 * Reimplemented from KoDocument.
 	 * See koDocument.h.
 	 */
+
     virtual KoMainWindow* createShell();
+
     virtual QCString mimeType() const;
 
     virtual bool initDoc();
 
-    virtual bool save( ostream&, const char *_format );
-    virtual bool load( istream& in, KoStore* _store );
-    //virtual bool loadXML( const QDomDocument& doc, KoStore* store ); //jwc
-    virtual bool loadXML( QIODevice *, const QDomDocument & doc ); // jwc
+    virtual QDomDocument saveXML();
+    
+    virtual bool loadXML( QIODevice *, const QDomDocument & doc ); 
+
     virtual bool completeLoading( KoStore* store );
+    
     virtual bool completeSaving( KoStore* );
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
@@ -111,12 +116,27 @@ public:
 	 */
     QStringList images();
 
+	/*
+	 *  save current image as Qt image (standard image formats)
+	 */    
+    bool saveAsQtImage(QString file);
+
+	/*
+	 *  write curren screen contents into layer
+	 */    
+    void CopyToLayer(KisView *pView);
+
+	/*
+	 *  auxillary to above
+	 */    
+    bool QtImageToLayer(QImage *qimage, KisView *pView);
+
 public slots:
   void slotImageUpdated();
   void slotImageUpdated( const QRect& rect );
   void slotLayersUpdated();
 
-  void slotNewImage();
+  bool slotNewImage();
   void setCurrentImage(const QString& _name);
   void slotRemoveImage( const QString& name );
 
@@ -129,9 +149,10 @@ signals:
 protected:
   virtual KoView* createViewInstance( QWidget* parent, const char* name );
   //KoCommandHistory  m_commands; //jwc
-  QList <KisImage>  m_Images;
-  KisImage         *m_pCurrent;
-  NewDialog        *m_pNewDialog;
+  QList <KisImage> m_Images;
+  KisImage  * m_pCurrent;
+  NewDialog * m_pNewDialog;
+    
 };
 
 #endif // __kis_doc_h__

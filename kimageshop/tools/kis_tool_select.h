@@ -22,17 +22,18 @@
 #define __selecttool_h__
 
 #include <qpoint.h>
-
+#include "kis_view.h"
 #include "kis_tool.h"
 
 class KisDoc;
 class KisCanvas;
+class KisView;
 
 class SelectTool : public KisTool
 {
 public:
 
-  SelectTool( KisDoc* _doc, KisCanvas* _canvas );
+  SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
   ~SelectTool();
 
   virtual QString toolName() { return QString( "SelectTool" ); }
@@ -50,7 +51,10 @@ protected:
   QPoint     m_dragStart;
   QPoint     m_dragEnd;
   bool       m_dragging;
+  bool       m_drawn;   
+  bool       m_init;
   KisCanvas *m_canvas;
+  KisView   *m_view;
 };
 
 #endif //__selecttool_h__

@@ -123,9 +123,9 @@ void ChannelTable::init( KisDoc* doc )
   connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
 }
 
-void ChannelTable::paintCell( QPainter* /*_painter*/, int /*_row*/, int )
+void ChannelTable::paintCell( QPainter* _painter, int _row, int )
 {
-/*
+#if 0
   QString tmp;
 
   switch( _row )
@@ -156,7 +156,8 @@ void ChannelTable::paintCell( QPainter* /*_painter*/, int /*_row*/, int )
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
   _painter->drawText( 80, 20, tmp );
-*/
+#endif  
+
 }
 
 void ChannelTable::updateTable()

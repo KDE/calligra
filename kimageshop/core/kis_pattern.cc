@@ -30,45 +30,47 @@
 KisPattern::KisPattern(QString file)
   : IconItem()
 {
-  m_valid    = false;
-  loadViaQImage(file);
+    m_valid    = false;
+    loadViaQImage(file);
 }
 
 KisPattern::~KisPattern()
 {
-  delete m_pImage;
-  delete m_pPixmap;
+    delete m_pImage;
+    delete m_pPixmap;
 }
 
 void KisPattern::loadViaQImage(QString file)
 {
-  // load via QImage
-  m_pImage = new QImage(file);
+    // load via QImage
+    m_pImage = new QImage(file);
 
-  if (m_pImage->isNull())
+    if (m_pImage->isNull())
     {
-      m_valid = false;
-      qDebug("Failed to load pattern: %s", file.latin1());
+        m_valid = false;
+        qDebug("Failed to load pattern: %s", file.latin1());
     }
 
-  *m_pImage = m_pImage->convertDepth(32);
+    *m_pImage = m_pImage->convertDepth(32);
 
-  // create pixmap for preview dialog
-  m_pPixmap = new QPixmap;
-  m_pPixmap->convertFromImage(*m_pImage, QPixmap::AutoColor);
+    // create pixmap for preview dialog
+    m_pPixmap = new QPixmap;
+    m_pPixmap->convertFromImage(*m_pImage, QPixmap::AutoColor);
 
-  m_w = m_pImage->width();
-  m_h = m_pImage->height();
+    m_w = m_pImage->width();
+    m_h = m_pImage->height();
  
-  m_valid = true;
-  qDebug("Loading pattern: %s",file.latin1());
+    m_valid = true;
+    qDebug("Loading pattern: %s",file.latin1());
 }
 
-QPixmap& KisPattern::pixmap() const {
-  return *m_pPixmap;
+QPixmap& KisPattern::pixmap() const 
+{
+    return *m_pPixmap;
 }
 
-QImage* KisPattern::image() const {
-  return m_pImage;
+QImage* KisPattern::image() const 
+{
+    return m_pImage;
 }
 

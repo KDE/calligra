@@ -22,7 +22,8 @@
 #define __pentool_h__
 
 #include <qpoint.h>
-
+#include "kis_view.h"
+#include "kis_canvas.h"
 #include "kis_tool.h"
 
 class KisBrush;
@@ -30,24 +31,33 @@ class KisBrush;
 class PenTool : public KisTool
 {
  public:
-  PenTool(KisDoc *doc, KisView *view, const KisBrush *_brush);
-  ~PenTool();
+    PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush);
+    ~PenTool();
   
-  QString toolName() { return QString("BrushTool"); }
+    QString toolName() { return QString("BrushTool"); }
 
-  void setBrush(const KisBrush *_brush);
-  bool paint(QPoint pos);
+    void setBrush(const KisBrush *_brush);
+    bool paint(QPoint pos);
 
  public slots:
-  virtual void mousePress(QMouseEvent*); 
-  virtual void mouseMove(QMouseEvent*);
-  virtual void mouseRelease(QMouseEvent*);
+    virtual void mousePress(QMouseEvent*); 
+    virtual void mouseMove(QMouseEvent*);
+    virtual void mouseRelease(QMouseEvent*);
 
  protected:
-  QPoint 	m_dragStart;
-  bool   	m_dragging;
-  float         m_dragdist;
-  const KisBrush  	*m_pBrush;
+    QPoint 	        m_dragStart;
+    bool   	        m_dragging;
+    float               m_dragdist;
+    const KisBrush      *m_pBrush;
+    KisView             *m_pView;
+    KisCanvas           *m_pCanvas;
+
+    QPen pen;
+    int  penW;
+    QPointArray polyline;
+    QPixmap *buffer;
+  
 };
 
 #endif //__pentool_h__
+

@@ -43,8 +43,11 @@ class KisImage : public QObject
     Q_OBJECT
 
  public:
-	KisImage( const QString& name, int width = 512, int height = 512,
-			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
+    //KisImage( const QString& name, int width = 512, int height = 512,
+    //			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
+    
+    KisImage( const QString& name, int width, int height,
+    			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
     virtual ~KisImage();
 
     int     height()       { return m_height; }
@@ -53,15 +56,17 @@ class KisImage : public QObject
     QRect   imageExtents() { return QRect(0, 0, m_width, m_height); }
 
     QString name()         { return m_name; }
-	QString author()       { return m_author; }
-	QString email()        { return m_email; }
+    QString author()       { return m_author; }
+    QString email()        { return m_email; }
 
-	cMode   colorMode()    { return m_cMode; } 
-	uchar   bitDepth()     { return m_bitDepth; }
-
+    cMode   colorMode()    { return m_cMode; } 
+    uchar   bitDepth()     { return m_bitDepth; }
+#ifdef JOHN
+    QPixmap *imagePixmap;    
+#endif    
     void setName(const QString& n)    { m_name = n; }
-	void setAuthor(const QString& a)  { m_author = a; }
-	void setEmail(const QString& e)  { m_email = e; }
+    void setAuthor(const QString& a)  { m_author = a; }
+    void setEmail(const QString& e)  { m_email = e; }
     
     void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
     void paintPixmap( QPainter *painter, QRect area);
@@ -81,20 +86,21 @@ class KisImage : public QObject
     KisLayer* layerPtr( KisLayer *_layer );
     QList<KisLayer> layerList() { return m_layers; };
  
-	void markDirty( QRect rect );
+    void markDirty( QRect rect );
      
     void mergeAllLayers();
     void mergeVisibleLayers();
     void mergeLinkedLayers();
     void mergeLayers(QList<KisLayer>);
-    
+
+        
  signals:
     void updated();
     void updated( const QRect& rect );
     void layersUpdated();
 
  protected slots:
-	void slotUpdateTimeOut();  
+    void slotUpdateTimeOut();  
     
  protected:
     void compositeImage( QRect _rect );
@@ -120,14 +126,14 @@ class KisImage : public QObject
     char        *m_pImgData;
     XImage      *m_pxi;
     QString      m_name;
-	QString      m_author;
-	QString      m_email;
+    QString      m_author;
+    QString      m_email;
     int          m_width;
     int          m_height;
-	cMode        m_cMode;
-	uchar        m_bitDepth;
-	QArray<bool> m_dirty;
-	QTimer      *m_pUpdateTimer;
+    cMode        m_cMode;
+    uchar        m_bitDepth;
+    QArray<bool> m_dirty;
+    QTimer      *m_pUpdateTimer;
 };
 
 #endif

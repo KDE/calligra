@@ -50,6 +50,7 @@ class KisLayer : public QObject
 	void    setVisible(bool v) { m_visible = v; }
 	void    setLinked(bool l)  { m_linked = l; }
 
+#ifndef JOHN
 	void    moveBy(int dx, int dy);
 	void    moveTo(int x, int y) const;
 
@@ -80,13 +81,14 @@ class KisLayer : public QObject
 
 	KisChannel* firstChannel();
 	KisChannel* nextChannel();
-
+#endif
  signals:
 	void layerPropertiesChanged();
-
+#ifndef JOHN
  protected:
 	void calcNumChannels();
 
+#endif
  protected:
 	uchar    m_opacity;
 	uchar    m_channels;
@@ -96,7 +98,8 @@ class KisLayer : public QObject
 	cMode    m_cMode;
 	uchar    m_bitDepth;
 	
-	KisChannel* m_ch[MAX_CHANNELS];;
+	KisChannel* m_ch[MAX_CHANNELS];
+        
 };
 
 #endif // __kis_layer_h__
