@@ -254,6 +254,8 @@ QString SQLiteConnection::serverResultName()
 
 void SQLiteConnection::drv_clearServerResult()
 {
+	if (!d)
+		return;
 	d->res = SQLITE_OK;
 	d->errmsg_p = 0;
 }

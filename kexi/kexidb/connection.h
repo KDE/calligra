@@ -404,13 +404,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		virtual QString anyAvailableDatabaseName();
 		
-		/*! Sets \a dbName as name of a database that can be accessioble. 
+		/*! Sets \a dbName as name of a database that can be accessible. 
 		 This is option that e.g. application that make use of KexiDB library can set
 		 to tune connection's behaviour when it needs to temporary connect to any database
 		 in the server to do some work.
 		 You can pass empty dbName - then anyAvailableDatabaseName() will try return
-		 DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME value instead of the 
-		 one previously set with setAvailableDatabaseName().
+		 DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME (the default) value 
+		 instead of the one previously set with setAvailableDatabaseName().
 		 
 		 \sa anyAvailableDatabaseName()
 		*/
@@ -419,7 +419,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Because some engines need to have opened any database before
 		 executing administrative sql statements like "create database" or "drop database",
 		 this method is used to use appropriate, existing database for this connection.
-		 For file-based db drivers this always return true and not sets tmpdbName
+		 For file-based db drivers this always return true and does not set tmpdbName
 		 to any value. For other db drivers: this sets tmpdbName to db name computed 
 		 using anyAvailableDatabaseName(), and if the name computed is empty, false 
 		 is returned; if it is not empty, useDatabase() is called. 

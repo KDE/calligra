@@ -301,14 +301,13 @@ bool Connection::createDatabase( const QString &dbName )
 		setError(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
 		return false;
 	}
+	if (m_driver->isSystemDatabaseName( dbName )) {
+		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Cannot create database \"%1\". This name is reserved for system database.").arg(dbName) );
+		return false;
+	}
 	if (m_driver->isFileDriver()) {
 		//update connection data if filename differs
 		m_data.setFileName( dbName );
-
-		//for file-based db: file must not exists
-//		QFileInfo file(conn_data.fileName);
-//		if (file.exists()) {
-//		}
 	}
 
 	QString tmpdbName;
@@ -489,21 +488,34 @@ bool Connection::dropDatabase( const QString &dbName )
 	QString dbToDrop;
 	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
 		if (!m_driver->isFileDriver() 
-		 || (m_driver->isFileDriver() && m_data.m_fileName.isEmpty()) ) {
+		 || (m_driver->isFileDriver() && m_data.fileName().isEmpty()) ) {
 			setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot drop database - name not specified.") );
 			return false;
 		}
 		//this is a file driver so reuse previously passed filename
-		dbToDrop = m_data.m_fileName;
+		dbToDrop = m_data.fileName();
 	}
 	else {
-		dbToDrop = dbName.isEmpty() ? m_usedDatabase : dbName;
+		if (dbName.isEmpty()) {
+			dbToDrop = m_usedDatabase;
+		} else {
+			if (m_driver->isFileDriver()) //lets get full path
+				dbToDrop = QFileInfo(dbName).absFilePath();
+			else
+				dbToDrop = dbName;
+		}
 	}
 
 	if (dbToDrop.isEmpty()) {
+		setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot delete database - name not specified.") );
 		return false;
 	}
 
+	if (m_driver->isSystemDatabaseName( dbToDrop )) {
+		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Cannot delete system database \"%1\".").arg(dbToDrop) );
+		return false;
+	}
+	
 	if (isDatabaseUsed() && m_usedDatabase == dbToDrop) {
 		//we need to close database because cannot drop used this database
 		if (!closeDatabase())

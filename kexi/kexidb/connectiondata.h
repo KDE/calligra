@@ -91,7 +91,7 @@ class KEXI_DB_EXPORT ConnectionData
 		void setFileName( const QString& fn );
 
 		/*! For file-based database engines like SQLite, \a fileName is used
-			instead hostName and port */
+			instead hostName and port. This method returns filename with a path. */
 		QString fileName() const { return m_fileName; }
 
 		/*! \return file path (for file-based engines) but without a file name */

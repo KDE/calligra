@@ -59,9 +59,9 @@ ConnectionData::~ConnectionData()
 
 void ConnectionData::setFileName( const QString& fn )
 {
-	if (m_fileName != fn) {
-		QFileInfo file(fn);
-		m_fileName = fn;
+	QFileInfo file(fn);
+	if (m_fileName != file.absFilePath()) {
+		m_fileName = file.absFilePath();
 		m_dbPath = file.dirPath(true);
 		m_dbFileName = file.fileName();
 	}

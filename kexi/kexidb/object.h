@@ -26,8 +26,7 @@
 
 namespace KexiDB {
 
-/*!
-
+/*! Prototype of KexiDB object, handles result of last operation.
 */
 class KEXI_DB_EXPORT Object
 {
@@ -64,7 +63,7 @@ class KEXI_DB_EXPORT Object
 		 Use this in your application to give users more information on what's up.
 		 
 		 Reimplement this for your driver - default implementation just returns 0.
-		 Note that this error value is not the same as the one returned 
+		 Note that this result value is not the same as the one returned 
 		 by errorNum() (Object::m_errno member)
 		 \sa serverErrorMsg(), drv_clearServerResult()
 		*/
@@ -93,17 +92,17 @@ class KEXI_DB_EXPORT Object
 		 and default message for this will be set.
 		 Use this in KexiDB::Object subclasses to informa the world about your 
 		 object's state. */
-		void setError(int code = ERR_OTHER,  const QString &msg = QString::null );
+		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
 
 		/* \overload void setError(int code,  const QString &msg = QString::null )
 		
 			Sets error code to ERR_OTHER. Use this if you don't care about 
 			setting error code.
 		*/
-		void setError( const QString &msg );
+		virtual void setError( const QString &msg );
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
-		void setError( KexiDB::Object *obj );
+		virtual void setError( KexiDB::Object *obj );
 
 		/*! Clears error flag. 
 		 Also calls drv_clearServerResult().
@@ -125,7 +124,7 @@ class KEXI_DB_EXPORT Object
 		QString m_errMsg;
 
 		class Private;
-		Private *d_object; //for future extension
+		Private *d_object; //!< for future extensions
 };
 
 } //namespace KexiDB

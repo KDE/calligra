@@ -94,10 +94,9 @@ bool Driver::isValid()
 	}
 		
 	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n").arg(name());
-	QString not_init = i18n("not initialized for  driver.");
+	QString not_init = i18n("Value of \"%1\" is not initialized for the driver.");
 	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
-		setError(ERR_INVALID_DRIVER_IMPL, inv_impl
-			+ QString("DriverBehaviour::ROW_ID_FIELD_NAME ") + not_init);
+		setError(ERR_INVALID_DRIVER_IMPL, inv_impl + not_init.arg("DriverBehaviour::ROW_ID_FIELD_NAME"));
 		return false;
 	}
 	
