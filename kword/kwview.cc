@@ -824,12 +824,18 @@ void KWView::setupActions()
                         this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
     KAction* actLineBreak = new KAction( i18n( "Line break" ), SHIFT+Key_Return,
                         this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
+
+    KAction* actAutoComplete = new KAction( i18n( "AutoComplete" ), CTRL+Key_T,
+                        this, SLOT( slotAutoComplete() ), actionCollection(), "auto_complete" );
+
     // Necessary for the actions that are not plugged anywhere
     KAccel * accel = new KAccel( this );
     actNbsp ->plugAccel( accel );
     accel = new KAccel( this ); // needed ?
     actSoftHyphen->plugAccel( accel );
     actLineBreak->plugAccel( accel );
+    actAutoComplete->plugAccel( accel );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -4498,6 +4504,14 @@ void KWView::slotAllowAutoFormat()
     bool state = actionAllowAutoFormat->isChecked();
     m_doc->setAllowAutoFormat( state );
 }
+
+void KWView::slotAutoComplete()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->autoCompletion();
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

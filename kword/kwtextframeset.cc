@@ -2215,6 +2215,16 @@ void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, 
     }
 }
 
+void KWTextFrameSetEdit::doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index )
+{
+    if( textFrameSet()->kWordDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->doAutoCompletion(  cursor, parag, index, textObject());
+    }
+}
+
 void KWTextFrameSetEdit::startDrag()
 {
     textView()->dragStarted();

@@ -315,6 +315,8 @@ public slots:
 
     void slotAllowAutoFormat();
 
+    void slotAutoComplete();
+
     // end of public slots
 
 protected slots:
