@@ -31,7 +31,10 @@ VObject*
 VCCmdSpiral::createPath()
 {
 	VPath* path = new VPath();
-	path->fill().setFillRule( fillrule_winding );
+
+	VFill fill;
+	fill.setFillRule( fillrule_winding );
+	path->setFill( fill );
 
 	// advance by pi/2 clockwise or cclockwise?
 	double adv_ang = ( m_clockWise ? -1.0 : 1.0 ) * VGlobal::pi_2;

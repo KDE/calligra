@@ -150,8 +150,8 @@ VText::draw( VPainter* painter, const KoRect& rect,
 	{
 		//kdDebug() << "draw!!!!" << itr.current() << endl;
 		//itr.current()->setState( state() );
-		itr.current()->fill() = fill();
-		itr.current()->stroke() = stroke();
+		itr.current()->setFill( m_fill );
+		itr.current()->setStroke( m_stroke );
 		itr.current()->draw( painter, rect, zoomFactor );
 	}
 }

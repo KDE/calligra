@@ -22,9 +22,9 @@ enum VState
 
 
 class QDomElement;
-class VPainter;
 class QWMatrix;
-
+class VPainter;
+class VVisitor;
 
 // The base class for all karbon objects.
 
@@ -49,8 +49,8 @@ public:
 	VState state() const { return m_state; }
 	virtual void setState( const VState state ) { m_state = state; }
 
-	VFill& fill() { return m_fill; }
-	VStroke& stroke() { return m_stroke; }
+	const VFill& fill() const { return m_fill; }
+	const VStroke& stroke() const { return m_stroke; }
 
 	virtual void setFill( const VFill &fill ) { m_fill = fill; }
 	virtual void setStroke( const VStroke &stroke ) { m_stroke = stroke; }
@@ -60,10 +60,15 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
-private:
-	VState m_state;
+	/// Accept a VVisitor.
+	virtual void accept( const VVisitor& /*visitor*/ ) {}
+
+protected:
 	VFill m_fill;
 	VStroke m_stroke;
+
+private:
+	VState m_state;
 };
 
 #endif

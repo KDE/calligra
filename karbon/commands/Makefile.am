@@ -1,6 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/../visitors \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libkarboncommands.la

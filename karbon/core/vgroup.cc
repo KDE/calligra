@@ -18,7 +18,7 @@ VGroup::VGroup() : VObject()
 
 VGroup::VGroup( const VObjectList &objects ) : VObject(), m_objects( objects )
 {
-	fill().setType( fill_unknown );
+	m_fill.setType( fill_unknown );
 	//stroke().setType( stroke_unknown );
 }
 

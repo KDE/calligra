@@ -511,6 +511,40 @@ VSegmentList::operator=( const VSegmentList& list )
 }
 
 bool
+VSegmentList::insert( const VSegment* /*segment*/ )
+{
+/*
+	VSegment* s = const_cast<VSegment*>( segment );
+
+	if( index == 0 )
+	{
+		prepend( s );
+		return true;
+	}
+	else if( index == m_number )
+	{
+		append( s );
+		return true;
+	}
+
+	VSegment* next = locate( index );
+	if( !next )
+		return false;
+
+	VSegment* prev = next->m_prev;
+
+	next->m_prev = s;
+	prev->m_next = s;
+	s->m_prev = prev;
+	s->m_next = next;
+
+	m_current = s;
+	++m_number;
+*/
+	return true;
+}
+
+bool
 VSegmentList::insert( uint index, const VSegment* segment )
 {
 	VSegment* s = const_cast<VSegment*>( segment );

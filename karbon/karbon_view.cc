@@ -255,10 +255,10 @@ kdDebug() << "KarbonView::dummyForTesting()" << endl;
 	{
 		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
 		{
-			//path->insertKnots( 5 );
+			path->insertKnots( 5 );
 			path->convertToCurves();
 			//path->whirlPinch( KoPoint( rect.x() + rect.width() / 2, rect.y() + rect.height() / 2 ), 30, 1 );
-			path->whirlPinch( KoPoint( 100, 100 ), 5, 1 );
+			path->whirlPinch( KoPoint( 100, 100 ), 90, 1 );
 		}
 	}
 

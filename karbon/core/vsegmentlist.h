@@ -63,6 +63,7 @@ public:
 	// general list stuff:
 	VSegmentList& operator=( const VSegmentList& list );
 
+	bool insert( const VSegment* segment );
 	bool insert( uint i, const VSegment* segment );
 	void prepend( const VSegment* segment );
 	void append( const VSegment* segment );

@@ -1,13 +1,14 @@
 INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir) \
 	-I$(srcdir)/core \
+	-I$(srcdir)/visitors \
 	-I$(srcdir)/tools \
 	-I$(srcdir)/commands \
 	-I$(srcdir)/ui \
 	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core ui commands tools filters render . data pics
+SUBDIRS = core visitors ui commands tools filters render . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
