@@ -54,4 +54,5 @@ AC_OUTPUT(Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
 	kchart/ui/Makefile
+	kchart/pics/Makefile
  )
