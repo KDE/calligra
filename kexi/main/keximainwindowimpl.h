@@ -211,6 +211,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		virtual bool queryClose();
 		virtual bool queryExit();
 
+		/*! Helper: switches to view \a mode. */
+		void switchToViewMode(Kexi::ViewMode mode);
+
 	protected slots:
 
 		/**

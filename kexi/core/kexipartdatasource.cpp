@@ -18,18 +18,32 @@
 */
 
 #include "kexipartdatasource.h"
+#include "kexipart.h"
 
-namespace KexiPart
+namespace KexiPart {
+
+class DataSourcePrivate
 {
+	public:
+		DataSourcePrivate() {}
+		~DataSourcePrivate() {}
+		Part *part;
+};
+
+}
+
+using namespace KexiPart;
 
 DataSource::DataSource(Part *part)
+ : d(new DataSourcePrivate())
 {
-	m_part = part;
+	d->part = part;
 }
 
 DataSource::~DataSource()
 {
+	delete d;
 }
 
-};
+Part* DataSource::part() const { return d->part; }
 

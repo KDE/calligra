@@ -29,9 +29,10 @@ namespace KexiDB
 
 namespace KexiPart
 {
-
+	class DataSourcePrivate;
 	class Item;
 	class Part;
+	
 /**
  * this class provides a datasource framework for e.g. tables and queries
  * using this framework one can query for
@@ -59,10 +60,10 @@ class KEXICORE_EXPORT DataSource
 		/**
 		 * @returns the part providing this datasource
 		 */
-		Part *part() { return m_part; }
+		Part *part() const;
 
 	private:
-		Part *m_part;
+		DataSourcePrivate *d;
 };
 
 };

@@ -62,7 +62,7 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item) = 0;
 
 		/*! i18n'd instance name usable for displaying in gui.
-		 @todo move this to Info class when the name could be moved as localised property 
+		 @todo move this to Info class when the name could be moved as localized property 
 		 to service's .desktop file. */
 		inline QString instanceName() const { return m_names["instance"]; }
 		

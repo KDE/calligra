@@ -40,6 +40,18 @@ KexiPart::Manager& Kexi::partManager() { return _partManager; }
 bool _tempShowForms = 0;
 bool& Kexi::tempShowForms() { return _tempShowForms; }
 
+
+//--------------------------------------------------------------------------------
+QString Kexi::nameForViewMode(ViewMode m)
+{
+	switch (m) {
+	case DataViewMode: return i18n("Data View");
+	case DesignViewMode: return i18n("Design View");
+	case TextViewMode: return i18n("Text View");
+	}
+	return i18n("Unknown");
+}
+
 //--------------------------------------------------------------------------------
 
 QString Kexi::string2FileName(const QString &s)

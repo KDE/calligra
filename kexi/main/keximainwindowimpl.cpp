@@ -1566,20 +1566,25 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 	d->block_KMdiMainFrm_eventFilter=false;
 }
 
-void KexiMainWindowImpl::slotViewDataMode()
+void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
 {
 	if (!d->curDialog) {
 		d->toggleLastCheckedMode();
 		return;
 	}
-	if (!d->curDialog->supportsViewMode( Kexi::DataViewMode )) {
-		// js TODO error...
+	if (!d->curDialog->supportsViewMode( mode )) {
+		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
+		.arg(d->curDialog->partItem()->name()),
+		i18n("Selected view mode (%1) is not supported by this object type (%2)")
+		.arg(Kexi::nameForViewMode(mode))
+		.arg(d->curDialog->part()->instanceName()) );
 		d->toggleLastCheckedMode();
 		return;
 	}
 	bool cancelled;
-	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode, cancelled )) {
-		// js TODO error...
+	if (!d->curDialog->switchToViewMode( mode, cancelled )) {
+		showErrorMessage(i18n("Switching to other view failed."),
+		Kexi::nameForViewMode(mode) );
 		d->toggleLastCheckedMode();
 		return;
 	}
@@ -1588,11 +1593,44 @@ void KexiMainWindowImpl::slotViewDataMode()
 		return;
 	}
 	invalidateSharedActions();
-//	d->last_checked_mode = d->action_view_data_mode;
+}
+
+
+void KexiMainWindowImpl::slotViewDataMode()
+{
+	switchToViewMode(Kexi::DataViewMode);
+/*
+	if (!d->curDialog) {
+		d->toggleLastCheckedMode();
+		return;
+	}
+	if (!d->curDialog->supportsViewMode( Kexi::DataViewMode )) {
+		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
+		.arg(d->curDialog->partItem()->name()),
+		i18n("Selected view mode (%1) is not supported by this object type (%2)")
+		.arg(Kexi::nameForViewMode(Kexi::DataViewMode)
+		.arg(d->curDialog->part()->instanceName()) );
+		d->toggleLastCheckedMode();
+		return;
+	}
+	bool cancelled;
+	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode, cancelled )) {
+		showErrorMessage(i18n("Switching to other view failed."));
+		d->toggleLastCheckedMode();
+		return;
+	}
+	if (cancelled) {
+		d->toggleLastCheckedMode();
+		return;
+	}
+	invalidateSharedActions();
+	*/
 }
 
 void KexiMainWindowImpl::slotViewDesignMode()
 {
+	switchToViewMode(Kexi::DesignViewMode);
+/*
 	if (!d->curDialog) {
 		d->toggleLastCheckedMode();
 		return;
@@ -1612,12 +1650,13 @@ void KexiMainWindowImpl::slotViewDesignMode()
 		return;
 	}
 	invalidateSharedActions();
-//	d->last_checked_mode = d->action_view_design_mode;
+*/
 }
 
 void KexiMainWindowImpl::slotViewTextMode()
 {
-	if (!d->curDialog) {
+	switchToViewMode(Kexi::TextViewMode);
+/*	if (!d->curDialog) {
 		d->toggleLastCheckedMode();
 		return;
 	}
@@ -1637,7 +1676,7 @@ void KexiMainWindowImpl::slotViewTextMode()
 		return;
 	}
 	invalidateSharedActions();
-//	d->last_checked_mode = d->action_view_text_mode;
+*/
 }
 
 void
