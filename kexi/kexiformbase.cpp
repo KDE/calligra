@@ -19,7 +19,9 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kaction.h>
 
+#include <qptrlist.h>
 #include <qsize.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -42,11 +44,48 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	m_dotSpacing = 10;
 
 	resize( 250, 250 );
+
+	m_widgetRect = false;
 }
 
-void KexiFormBase::addWidgetLineEdit()
+void KexiFormBase::setActions(QPtrList<KAction> *actions)
+{
+	kdDebug() << "actions set..." << endl;
+	QPtrListIterator<KAction> it(*actions);
+	for(; it.current() != 0; ++it)
+	{
+		registerAction(it.current());
+	}
+}
+
+void KexiFormBase::unregisterActions(QPtrList<KAction> *actions)
+{
+	kdDebug() << "unregistering actions..." << endl;
+	QPtrListIterator<KAction> it(*actions);
+	for(; it.current() != 0; ++it)
+	{
+		disconnect(it.current(), 0, 0, 0);
+	}
+}
+
+void KexiFormBase::registerAction(KAction *action)
+{
+	kdDebug() << "registerd: " << action->name() << endl;
+
+	
+	if(!strcmp(action->name(),"widget_line_edit")==1)
+	{
+		connect(action, SIGNAL(activated()), this, SLOT(slotWidgetLineEdit()));
+	}
+}
+
+void KexiFormBase::slotWidgetLineEdit()
 {
 	kdDebug() << "add line edit widget at " << this << endl;
+}
+
+void KexiFormBase::mouseMoveEvent(QMouseEvent *ev)
+{
 }
 
 void KexiFormBase::paintEvent(QPaintEvent *ev)
@@ -69,6 +108,10 @@ void KexiFormBase::paintEvent(QPaintEvent *ev)
 	
 	p->end();
 	
+}
+
+void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
+{
 }
 
 KexiFormBase::~KexiFormBase(){
