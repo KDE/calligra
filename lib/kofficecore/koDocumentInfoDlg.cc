@@ -263,6 +263,8 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   config.writeEntry("postal-code",d->m_lePostalCode->text());
   config.writeEntry("city",  d->m_leCity->text());
   config.writeEntry("street", d->m_leStreet->text());
+
+  d->m_info->documentInfochanged();
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )

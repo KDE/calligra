@@ -418,6 +418,7 @@ public:
 
   void emitProgress( int value ) { emit sigProgress( value ); }
 
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes

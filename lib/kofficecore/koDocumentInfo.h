@@ -31,6 +31,7 @@ class KoDocumentInfoPage;
 
 class KoDocumentInfo : public QObject
 {
+    Q_OBJECT
 public:
     KoDocumentInfo( QObject* parent = 0, const char* name = 0 );
 
@@ -39,6 +40,9 @@ public:
 
     KoDocumentInfoPage* page( const QString& name );
     QStringList pages();
+    void  documentInfochanged() { emit sigDocumentInfoModifed();}
+ signals:
+    void sigDocumentInfoModifed();
 };
 
 class KoDocumentInfoPage : public QObject
