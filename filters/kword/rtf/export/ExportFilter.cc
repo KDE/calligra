@@ -41,6 +41,16 @@
 
 #include "ExportFilter.h"
 
+// 1 twip = 1/20 pt = 1/1400 inch
+// 1 inch = 25.4 mm
+
+// some conversion macros
+#define TWIP_TO_MM(x) (x)*25.4/1440.0
+#define MM_TO_TWIP(x) (x)*1440.0/25.4
+#define PT_TO_TWIP(x) (x)*20
+#define TWIP_TO_PT(x) (x)/20
+
+
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
 
@@ -158,8 +168,8 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 
   
     // find displayed width and height (in twips)
-    const long width  = long((anchor.right  - anchor.left) * 20);
-    const long height = long((anchor.bottom - anchor.top)  * 20);
+    const long width  = (long)(PT_TO_TWIP(anchor.right  - anchor.left));
+    const long height = (long)(PT_TO_TWIP(anchor.bottom - anchor.top));
 
     // find original image width and height (in twips)
     long origWidth  = width;
@@ -173,7 +183,6 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         if( resx <= 0 ) resx = 2835;
         if( resy <= 0 ) resy = 2835;
 
-        // 1 pt = 2834.65, 1 twip = 20 pt 
         origWidth =  long(img.width() * 2834.65 * 20 / resx);
         origHeight = long(img.height() * 2834.65 * 20 / resy);
     }
@@ -186,16 +195,13 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) && 
             ( image.size() > 22 ) )
         {
-            // FIXME what is exactly this value ?
-            double magicfactor = 1.76;
-
             // grab bounding box, find original size
             unsigned left = data[6]+(data[7]<<8);
             unsigned top = data[8]+(data[9]<<8);
             unsigned right = data[10]+(data[11]<<8);
             unsigned bottom = data[12]+(data[13]<<8);
-            origWidth = (right-left) / magicfactor;
-            origHeight = (bottom-top) / magicfactor;
+            origWidth = (long) (MM_TO_TWIP(right-left)/100);
+            origHeight = (long) (MM_TO_TWIP(bottom-top)/100);
 
             // throw away WMF metaheader (22 bytes)
             QByteArray tmp;
@@ -210,10 +216,18 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     int scaleX = width * 100 / origWidth;
     int scaleY = height * 100 / origHeight;
 
+    // size in 1/100 mm
+    int picw = (int)(100 * TWIP_TO_MM(origWidth));
+    int pich = (int)(100 * TWIP_TO_MM(origHeight));
+
     m_textBody += "\\picscalex";
     m_textBody += QString::number(scaleX, 10);
     m_textBody += "\\picscaley";
     m_textBody += QString::number(scaleY, 10);
+    m_textBody += "\\picw";
+    m_textBody += QString::number(picw,10);
+    m_textBody += "\\pich";
+    m_textBody += QString::number(pich,10);
     m_textBody += "\\picwgoal";
     m_textBody += QString::number(origWidth, 10);
     m_textBody += "\\pichgoal";
@@ -1123,6 +1137,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
     
             strLayout += "\\tx";
             strLayout += QString::number(int((*it).m_ptpos)*20, 10);
+
         }
     }
 
