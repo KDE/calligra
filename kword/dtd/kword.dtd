@@ -806,6 +806,7 @@ don't put a </?xml...> at the end of the file!).
                 2 = dots
                 3 = dash - dot patterns
                 4 = dash dot dot patterns
+                5 = double line
 -->
 <!ELEMENT LEFTBORDER
     EMPTY>
