@@ -100,7 +100,7 @@ KexiCreateProject::slotValueChanged(KexiCreateProjectPage *page, QString &data)
 
 /*! Page signals that we should accept it. If we are at the last page and Finish buton
 	is enabled, we accpet our wizard dialog with accept(). Otherwise we try to
-	move to next page is exists.
+	move to next page if exists.
 */
 void
 KexiCreateProject::slotPageAccepted()
