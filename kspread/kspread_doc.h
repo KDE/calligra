@@ -130,8 +130,7 @@ public:
   KSpreadMap* workbook() const; 
    
   /**
-   * Same as workbook().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use workbook().
    */
   KSpreadMap* map() const { return workbook(); }
   
@@ -196,8 +195,7 @@ public:
   KoUnit::Unit unit() const;
   
   /**
-   * Same as unit().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use unit().
    */  
   KoUnit::Unit getUnit() const { return unit(); }
   
@@ -214,8 +212,7 @@ public:
   QString unitName() const;
   
   /**
-   * Same as unitName().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use unitName().
    */  
   QString getUnitName() const { return unitName(); }
   
@@ -241,8 +238,7 @@ public:
   bool showVerticalScrollBar() const;
 
   /**
-   * Same as showVerticalScrollBar().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showVerticalScrollBar().
    */  
   bool getShowVerticalScrollBar() const { return showVerticalScrollBar(); }
   
@@ -258,8 +254,7 @@ public:
   bool showHorizontalScrollBar() const;
   
   /**
-   * Same as showHorizontalScrollBar().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showHorizontalScrollBar().
    */  
   bool getShowHorizontalScrollBar() const { return showHorizontalScrollBar(); }
 
@@ -275,14 +270,12 @@ public:
   bool showColumnHeader() const;
   
   /**
-   * Same as setShowColumnHeader().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use setShowColumnHeader().
    */  
   void setShowColHeader( bool b ){ setShowColumnHeader( b ) ; }
   
   /**
-   * Same as showColumnHeader().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showColumnHeader().
    */  
   bool getShowColHeader() const { return showColumnHeader(); } 
   
@@ -298,8 +291,7 @@ public:
   bool showRowHeader() const;
 
   /**
-   * Same as showRowHeader().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showRowHeader().
    */  
   bool getShowRowHeader() const { return showRowHeader(); } 
   
@@ -314,8 +306,7 @@ public:
   double indentValue() const;
 
   /**
-   * Same as indentValue().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use indentValue().
    */  
   double getIndentValue() const { return indentValue(); }
 
@@ -331,8 +322,7 @@ public:
   bool showStatusBar() const;
 
   /**
-   * Same as showStatusBar().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showStatusBar().
    */  
   bool getShowStatusBar() const { return showStatusBar(); }
   
@@ -348,8 +338,7 @@ public:
   bool showTabBar() const;
   
   /**
-   * Same as showTabBar().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showTabBar().
    */  
   bool getShowTabBar() const { return showTabBar(); }
 
@@ -365,8 +354,7 @@ public:
   bool showFormulaBar() const;
   
   /**
-   * Same as showFormulaBar().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showFormulaBar().
    */  
   bool getShowFormulaBar() const { return showFormulaBar(); }
 
@@ -382,8 +370,7 @@ public:
   bool showCommentIndicator() const;  
   
   /**
-   * Same as showCommentIndicator().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showCommentIndicator().
    */  
   bool getShowCommentIndicator() const { return showCommentIndicator(); }  
 
@@ -398,8 +385,7 @@ public:
   bool showMessageError() const;
 
   /**
-   * Same as showMessageError().
-   * This function is obsolete and will be removed in future version.
+   * \deprecated Use showMessageError().
    */     
   bool getShowMessageError() const{ return showMessageError(); }
   
