@@ -104,7 +104,7 @@ consists of two elements:</para>
 <term>Drop-down box</term>
 <listitem>
 <para>The drop down box determines the spacing between lines.  There are three predefined line spacing choices:
-<guilabel>Single</guilabel>, <guilabel>1.5 lines.</guilabel> and <guilabel>Double</guilabel>.  You can
+<guilabel>Single</guilabel>, <guilabel>1.5 lines</guilabel> and <guilabel>Double</guilabel>.  You can
 also select <guilabel>Custom</guilabel> which will allow you to enter a specific line spacing.</para>
 <para>The values selected here will be applied to all lines within the selected paragraphs.</para>
 </listitem>

@@ -15,7 +15,7 @@ files that are compressed to reduce their space requirements. </para>
 <prompt>%</prompt> <userinput><command>tar -xzvf </command><replaceable>filename</replaceable></userinput>
 </screen>
 <para>This will expand the &kword; document file into its component files.</para>
-<para>The text portion of all KWord files are &XML; (eXtensible Markup Language) files.</para>
+<para>The text portion of all &kword; files are &XML; (eXtensible Markup Language) files.</para>
 <note><para>For more information on &XML; documents, processors and technology, please visit
 <simplelist>
 <member><ulink url="http://www.w3.org/XML/">World Wide Web Consortium &XML; pages</ulink></member>
@@ -27,8 +27,8 @@ files that are compressed to reduce their space requirements. </para>
 <variablelist>
 <varlistentry>
 <term><filename>maindoc.xml</filename></term>
-<listitem><para>This file contains the bulk of the kword text, tables and formula information. It is marked with
-&XML; tags according to the official DTD.  A copy of the kword 1.1 DTD is located at:
+<listitem><para>This file contains the bulk of the &kword; text, tables and formula information. It is marked with
+&XML; tags according to the official DTD.  A copy of the &kword; 1.1 DTD is located at:
 <ulink url="http://www.koffice.org/DTD/kword-1.1.dtd">http://www.koffice.org/DTD/kword-1.1.dtd</ulink>.
 </para></listitem>
 </varlistentry>
@@ -61,7 +61,7 @@ lower memory requirements.</para>
 <prompt>%</prompt> <userinput><command>unzip </command><replaceable>filename</replaceable></userinput>
 </screen>
 <para>This will expand the &kword; document file into its component files.</para>
-<para>The text portion of all KWord files are &XML; (eXtensible Markup Language) files.</para>
+<para>The text portion of all &kword; files are &XML; (eXtensible Markup Language) files.</para>
 <note><para>For more information on &XML; documents, processors and technology, please visit
 <simplelist>
 <member><ulink url="http://www.w3.org/XML/">World Wide Web Consortium &XML; pages</ulink></member>
@@ -73,7 +73,7 @@ lower memory requirements.</para>
 <variablelist>
 <varlistentry>
 <term><filename>maindoc.xml</filename></term>
-<listitem><para>This file contains the bulk of the kword text, tables and formula information. It is marked with
+<listitem><para>This file contains the bulk of the &kword; text, tables and formula information. It is marked with
 &XML; tags according to the official DTD.</para>
 <para>A copy of the &kword; 1.2 DTD is located at:
 <ulink url="http://www.koffice.org/DTD/kword-1.2.dtd">http://www.koffice.org/DTD/kword-1.2.dtd</ulink>.
@@ -91,7 +91,7 @@ boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document In
 
 <varlistentry>
 <term><filename>mimetype</filename></term>
-<listitem><para>This file contains the mimetype for kword files.  This information is used by &kde; to determine that this is a
+<listitem><para>This file contains the mimetype for &kword; files.  This information is used by &kde; to determine that this is a
 &kword; file.</para>
 <para>This file always contains:  <emphasis>application/x-kword</emphasis></para>
 </listitem>

@@ -58,7 +58,7 @@ entitled: <link linkend="basic-menubar">The Basic Menubar</link>.</para>
 <term><emphasis><anchor id="statb"/>Statusbar</emphasis></term>
 <listitem><para>The statusbar provides important information during the editing of your document.
 In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
-the statusbar whenever you hold the mouse over a menu item..</para>
+the statusbar whenever you hold the mouse over a menu item.</para>
 <para>The statusbar can be toggled on and off.
 See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
 </listitem>
