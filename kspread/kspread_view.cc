@@ -613,6 +613,8 @@ void KSpreadView::initializeEditActions()
   m_redo->setToolTip(i18n("Redo the action that has been undone."));
 
   m_findAction = KStdAction::find(this, SLOT(find()), actionCollection());
+  /*m_findNext =*/ KStdAction::findNext( this, SLOT( findNext() ), actionCollection() );
+  /*m_findPrevious =*/ KStdAction::findPrev( this, SLOT( findPrevious() ), actionCollection() );
 
   m_replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
 }
@@ -3074,7 +3076,7 @@ void KSpreadView::insertTable()
     m_removeTable->setEnabled( true );
     m_hideTable->setEnabled( true );
   }
-  
+
   m_pDoc->emitEndOperation();
 }
 
@@ -3429,6 +3431,7 @@ void KSpreadView::findNext()
     }
     KFind::Result res = KFind::NoMatch;
     KSpreadCell* cell = findNextCell();
+    bool forw = ! ( m_findOptions & KFindDialog::FindBackwards );
     while ( res == KFind::NoMatch && cell )
     {
         if ( findObj->needData() )
@@ -3543,7 +3546,7 @@ void KSpreadView::replace()
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
         QRect region( m_findPos, m_findEnd );
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, region );
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, activeTable(), region );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -5868,7 +5871,7 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
         if ( !m_pTable || m_pTable->isProtected() )
         {
           m_removeTable->setEnabled( false );
-          m_hideTable->setEnabled( false );          
+          m_hideTable->setEnabled( false );
         }
         else
         {

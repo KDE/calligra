@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="10">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="11">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -15,6 +15,8 @@
   <Action name="insertCellCopy"/>
   <Separator/>
   <Action name="edit_find"/>
+  <Action name="edit_find_next"/>
+  <Action name="edit_find_last"/>
   <Action name="edit_replace"/>
   <Menu name="Clear"><text>Clear</text>
         <Action name="cleartext"/>
