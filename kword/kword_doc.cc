@@ -1291,19 +1291,19 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     // do some sanity checking on document.
     for (unsigned int i = getNumFrameSets()-1; i>0; i--) {
         if(! getFrameSet(i)) {
-            kdDebug () << "frameset " << i << "is NULL!!" << endl; 
+            kdDebug () << "frameset " << i << "is NULL!!" << endl;
             // delete the thing..
         } else if(! getFrameSet(i)->getFrame(0)) {
-            kdDebug () << "frameset " << i << "has no frames" << endl; 
+            kdDebug () << "frameset " << i << "has no frames" << endl;
             delFrameSet(getFrameSet(i));
         }
     }
-    for (unsigned i = getNumGroupManagers()-1; i>0; i--) {
+    for (int i = getNumGroupManagers()-1; i>0; i--) {
         if(! getGroupManager(i)) {
-            kdDebug () << "GroupManager " << i << "is NULL!!" << endl; 
+            kdDebug () << "GroupManager " << i << "is NULL!!" << endl;
             // delete the thing.. somehow..
         } else if(! getGroupManager(i)->getFrameSet(0,0)) {
-            kdDebug () << "GroupManager " << i << "has no frames" << endl; 
+            kdDebug () << "GroupManager " << i << "has no frames" << endl;
             //delGroupManager(getGroupManager(i)); // prevents kword from starting..
         }
     }
