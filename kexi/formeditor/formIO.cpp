@@ -171,10 +171,15 @@ FormIO::loadForm(Form *form, QWidget *container, const QString &filename)
 		if(m_filename.isNull())
 			return 0;
 	}
+	else
+		m_filename = filename;
 
 	QFile file(m_filename);
 	if(!file.open(IO_ReadOnly))
+	{
+		kdDebug() << "Cannot open the file " << filename << endl;
 		return 0;
+	}
 	QTextStream stream(&file);
 	QString text = stream.read();
 
@@ -879,6 +884,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		w = lib->createWidget(classname, parent, wname.latin1(), container);
 
 	if(!w)  return;
+	w->setStyle(&(container->widget()->style()));
 	w->show();
 
 	// We create and insert the ObjectTreeItem at the good place in the ObjectTree

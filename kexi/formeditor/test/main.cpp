@@ -40,26 +40,6 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-//    container->show();
-
-/*
-    QTabWidget *tab = new QTabWidget();
-    QWidget *container = new QWidget(tab);
-    KFormDesigner::ContainerFactory *c = new KFormDesigner::ContainerFactory(0, container);
-    QPushButton *p = new QPushButton("Pushbutton", container);
-    c->addWidget(p, QRect(10, 10, 80, 30));
-    tab->addTab(container, "Page 1");
-    tab->show();
-    QButtonGroup *btn = new QButtonGroup("buttons", container);
-    c->addWidget(btn, QRect(10, 50, 150, 150));
-    KFormDesigner::ContainerFactory *btnC = new KFormDesigner::ContainerFactory(c, btn);
-    QPushButton *btn2 = new QPushButton("PB", btn);
-    btnC->addWidget(btn2, QRect(10, 10, 80, 30));
-
-    new KFormDesigner::WidgetLibrary();
-
-    app.setMainWidget(tab);
-*/
    KGlobal::iconLoader()->addAppDir("kexi");
 
     KFMView *v = new KFMView();
@@ -67,34 +47,23 @@ int main(int argc, char **argv)
     app.setMainWidget(v);
 
 
-    /*
+
     // see if we are starting with session management
-    if (app.isRestored())
-    {
-        RESTORE(KFormDesigner);
-    }
-    else
-    {
-        // no session.. just start up normally
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-        if (args->count() == 0)
-        {
-            KFormDesigner *widget = new KFormDesigner;
-            widget->show();
-        }
-        else
-        {
-            int i = 0;
-            for (; i < args->count(); i++)
-            {
-                KFormDesigner *widget = new KFormDesigner;
-                widget->show();
-                widget->load(args->url(i));
-            }
+	if (app.isRestored())
+	{
+		RESTORE(KFMView);
+	}
+	else
+	{
+	// no session.. just start up normally
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if (args->count() >= 1)
+	{
+            for (int i = 0; i < args->count(); i++)
+		v->loadUIFile(args->arg(i));
         }
         args->clear();
     }
-    */
 
     return app.exec();
 }

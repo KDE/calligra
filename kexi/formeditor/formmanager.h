@@ -127,7 +127,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
 		   the active Form.
 		  */
-		void loadForm(bool preview=false);
+		void loadForm(bool preview=false, const QString &filename=QString::null);
 		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, but the former name
 		  is used if there is one (using Form::filename()).
 		 */
@@ -177,6 +177,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
+		void slotStyle();
 
 		void layoutHBox();
 		void layoutVBox();
@@ -219,7 +220,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QString			m_insertClass;
 
 		// Actions
-		QGuardedPtr<KActionCollection>	m_collection;
+		KActionCollection	*m_collection;
 		KMainWindow 		*m_client;
 		KToggleAction		*m_pointer;
 

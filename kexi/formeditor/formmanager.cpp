@@ -23,6 +23,8 @@
 #include <qcursor.h>
 #include <qstring.h>
 #include <qlabel.h>
+#include <qobjectlist.h>
+#include <qstylefactory.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
@@ -31,6 +33,11 @@
 #include <kxmlguiclient.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
+#include <kstyle.h>
+#include <kactionclasses.h>
+#include <kapplication.h>
+#include <kglobal.h>
 
 #include <kdeversion.h>
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
@@ -111,6 +118,32 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	m_pointer = new KToggleAction(i18n("Pointer"), "stop", KShortcut(0), this, SLOT(stopInsert()), parent, "pointer");
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
+
+	// Create the Style selection action (with a combo box in toolbar and submenu items)
+	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Key_S, this, SLOT(slotStyle()), parent, "change_style");
+	m_style->setEditable(false);
+
+	KGlobal::config()->setGroup("General");
+	const QString currentStyle = kapp->style().name();
+	const QStringList styles = QStyleFactory::keys();
+	m_style->setItems(styles);
+	m_style->setCurrentItem(0);
+
+	QStringList::ConstIterator it = styles.begin();
+	QStringList::ConstIterator end = styles.end();
+	int idx = 0;
+	for (; it != end; ++it, ++idx)
+	{
+		if ((*it).lower() == currentStyle) {
+			m_style->setCurrentItem(idx);
+			break;
+        	}
+	}
+
+	m_style->setToolTip(i18n("Set the current style to view."));
+	m_style->setMenuAccelsEnabled(true);
+	actions.append(m_style);
+
 	return actions;
 }
 
@@ -264,13 +297,13 @@ FormManager::importForm(QWidget *w, Form *form, bool preview)
 }
 
 void
-FormManager::loadForm(bool preview)
+FormManager::loadForm(bool preview, const QString &filename)
 {
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
 	QWidget *w = new QWidget(m_parent, 0, Qt::WDestructiveClose);
 	form->createToplevel(w);
-	if(!FormIO::loadForm(form, w))
+	if(!FormIO::loadForm(form, w, filename))
 	{
 		delete form;
 		return;
@@ -604,6 +637,23 @@ FormManager::adjustWidgetSize()
 		return;
 
 	m_active->selectedWidgets()->first()->resize(m_active->selectedWidgets()->first()->sizeHint());
+}
+
+void
+FormManager::slotStyle()
+{
+	if(!activeForm())
+		return;
+
+	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+	QString style = m_style->currentText();
+	kdDebug() << "Changing style of the form to " << style << endl;
+	activeForm()->toplevelContainer()->widget()->setStyle( style);
+
+	QObjectList *l = activeForm()->toplevelContainer()->widget()->queryList( "QWidget" );
+	for(QObject *o = l->first(); o; o = l->next())
+		(static_cast<QWidget*>(o))->setStyle( style );
+	delete l;
 }
 
 void

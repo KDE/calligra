@@ -17,6 +17,8 @@
 #include <kdebug.h>
 #include <kstdaction.h>
 
+#include "form.h"
+#include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
 #include "kexipropertyeditor.h"
@@ -58,15 +60,16 @@ KFMView::KFMView()
 	KStdAction::cut(manager, SLOT(cutWidget()), actionCollection());
 	KStdAction::copy(manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
-	KStdAction::quit( KApplication::kApplication(), SLOT(quit()), actionCollection());
+	KStdAction::quit( kapp, SLOT(quit()), actionCollection());
 	new KAction(i18n("Edit tab order"), "tab_order", KShortcut(0), manager, SLOT(editTabOrder()), actionCollection(), "taborder");
-	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), manager, SLOT(ajustWidgetSize()), actionCollection(), "adjust");
+	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust");
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
 #else
 	//TODO
 #endif
+
 	manager->createActions(actionCollection(), this);
 
 	createGUI("kfmui.rc", true);
@@ -81,6 +84,13 @@ KFMView::slotPreviewForm()
 		return;
 	QWidget *widg = new QWidget(w);
 	manager->previewForm(manager->activeForm(), widg);
+}
+
+void
+KFMView::loadUIFile(const QString &filename)
+{
+	kdDebug() << "Truing to load the UI FIle : " << filename << endl;
+	manager->loadForm(false, filename);
 }
 
 KFMView::~KFMView()

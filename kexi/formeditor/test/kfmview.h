@@ -23,6 +23,8 @@ class KFMView : public KMainWindow
 		KFMView();
 		~KFMView();
 
+		void loadUIFile(const QString &filename);
+
 	public slots:
 		void slotPreviewForm();
 

@@ -8,6 +8,7 @@
   <Menu name="tools">
    <Action name="taborder"/>
    <Action name="adjust"/>
+   <Action name="change_style"/>
   </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
@@ -47,7 +48,6 @@
 
 <ToolBar name="containers" fullWidth="false">
  <text>Containers</text>
-   <Action name="pointer"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
@@ -74,6 +74,10 @@
    <Action name="library_widget_Line"/>
    <Action name="library_widget_Spacer"/>
    <ActionList name="undo_actions" />
+</ToolBar>
+<ToolBar name="tools" fullWidth="false">
+   <Action name="pointer"/>
+   <Action name="change_style"/>
 </ToolBar>
 
 </kpartgui>
