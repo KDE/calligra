@@ -46,14 +46,15 @@ private slots:
 private:
   void init();
 
-  KSpreadView* m_pView;
-  QButtonGroup *grp;
-  QRadioButton *rb_row;
-  QRadioButton *rb_column;
-  QComboBox *combo;
-  QStringList list_column;
-  QStringList list_row;
-  QCheckBox *decrease;
+  KSpreadView  * m_pView;
+  QButtonGroup * m_grp;
+  QRadioButton * m_rb_row;
+  QRadioButton * m_rb_column;
+  QComboBox    * m_combo;
+  QStringList    m_list_column;
+  QStringList    m_list_row;
+  QCheckBox    * m_decrease;
+  QCheckBox    * m_cpLayout;
 };
 
 #endif

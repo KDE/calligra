@@ -35,30 +35,35 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView* parent, const char* name)
 	: KDialogBase( parent, name, TRUE,i18n("Sort"),Ok|Cancel )
 {
   m_pView = parent;
-  QWidget *page = new QWidget( this );
+  QWidget * page = new QWidget( this );
   setMainWidget(page);
   QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  QGridLayout *lay2 = new QGridLayout( lay1,2,2 );
+  QGridLayout *lay2 = new QGridLayout( lay1, 2, 2 );
   lay2->setSpacing( 15 );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Sort by"),page);
-  grp->setRadioButtonExclusive( TRUE );
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, 
+                                        i18n("Sort by"), page);
+  grp->setRadioButtonExclusive( true );
   grp->layout();
-  lay2->addWidget(grp,0,0);
-  rb_row = new QRadioButton( i18n("Row"), grp );
-  rb_column = new QRadioButton( i18n("Column"), grp );
+  lay2->addWidget(grp, 0, 0);
 
-  combo=new QComboBox(page);
-  lay2->addWidget(combo,0,1);
+  m_rb_row = new QRadioButton( i18n("Row"), grp );
+  m_rb_column = new QRadioButton( i18n("Column"), grp );
 
-  decrease=new QCheckBox(i18n("Decrease mode"),page);
-  lay2->addWidget(decrease,1,0);
+  m_combo = new QComboBox(page);
+  lay2->addWidget(m_combo, 0, 1);
+
+  m_decrease = new QCheckBox(i18n("Decrease mode"), page);
+  lay2->addWidget(m_decrease, 1, 0);
+
+  m_cpLayout = new QCheckBox(i18n("&Copy layout"), page);
+  lay2->addWidget(m_cpLayout, 2, 0);
 
   init();
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
+  connect( grp, SIGNAL(pressed(int)), this,SLOT(slotpress(int)));
 }
 
 void KSpreadSortDlg::init()
@@ -68,49 +73,49 @@ void KSpreadSortDlg::init()
     // Entire columns selected ?
     if ( m_pView->activeTable()->isColumnSelected() )
     {
-	rb_row->setEnabled(false);
-	rb_column->setChecked(true);
+	m_rb_row->setEnabled(false);
+	m_rb_column->setChecked(true);
 
-	for(int i=r.left();i<=r.right();i++)
-	    list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
+	for (int i = r.left(); i <= r.right(); ++i)
+	    m_list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
     }
     // Entire rows selected ?
     else if ( m_pView->activeTable()->isRowSelected() )
     {
-	rb_column->setEnabled(false);
-	rb_row->setChecked(true);
+	m_rb_column->setEnabled(false);
+	m_rb_row->setChecked(true);
 
-	for(int i=r.top();i<=r.bottom();i++)
-	    list_row += i18n("Row %1").arg(i);
+	for (int i = r.top(); i <= r.bottom(); ++i)
+	    m_list_row += i18n("Row %1").arg(i);
     }
     else
     {
 	// Selection is only one row
-	if( r.top() == r.bottom() )
+	if ( r.top() == r.bottom() )
         {
-	    rb_column->setEnabled(false);
-	    rb_row->setChecked(true);
+	    m_rb_column->setEnabled(false);
+	    m_rb_row->setChecked(true);
 	}
 	// only one column
-	else if(r.left()==r.right())
+	else if (r.left() == r.right())
         {
-	    rb_row->setEnabled(false);
-	    rb_column->setChecked(true);
+	    m_rb_row->setEnabled(false);
+	    m_rb_column->setChecked(true);
 	}
 	else
         {
-	    rb_column->setChecked(true);
+	    m_rb_column->setChecked(true);
 	}
 
-	for(int i=r.left();i<=r.right();i++)
-	    list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
+	for (int i = r.left(); i <= r.right(); ++i)
+	    m_list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
 
-	for(int i=r.top();i<=r.bottom();i++)
-	    list_row += i18n("Row %1").arg(i);
+	for (int i = r.top(); i <= r.bottom(); ++i)
+	    m_list_row += i18n("Row %1").arg(i);
     }
 
     // Initialize the combo box
-    if ( rb_row->isChecked() )
+    if ( m_rb_row->isChecked() )
 	slotpress(0);
     else
 	slotpress(1);
@@ -121,12 +126,12 @@ void KSpreadSortDlg::slotpress(int id)
     switch(id)
     {
     case 0 :
-	combo->clear();
-	combo->insertStringList(list_row);
+	m_combo->clear();
+	m_combo->insertStringList(m_list_row);
 	break;
     case 1 :
-	combo->clear();
-	combo->insertStringList(list_column);
+	m_combo->clear();
+	m_combo->insertStringList(m_list_column);
 	break;
     default :
 	kdDebug(36001) << "Error in signal : pressed(int id)" << endl;
@@ -138,26 +143,34 @@ void KSpreadSortDlg::slotOk()
 {
     QRect r = m_pView->activeTable()-> selectionRect();
 
-    if( rb_row->isChecked())
+    if( m_rb_row->isChecked())
     {
-	if(!decrease->isChecked())
+	if (!m_decrease->isChecked())
         {
-	    m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
+	    m_pView->activeTable()->sortByRow(m_combo->currentItem() + r.top(),
+                                              KSpreadTable::Increase,
+                                              m_cpLayout->isChecked());
 	}
 	else
         {
-	    m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+	    m_pView->activeTable()->sortByRow(m_combo->currentItem() + r.top(),
+                                              KSpreadTable::Decrease,
+                                              m_cpLayout->isChecked());
 	}
     }
-    else if(rb_column->isChecked())
+    else if (m_rb_column->isChecked())
     {
-	if(!decrease->isChecked())
+	if (!m_decrease->isChecked())
         {
-	    m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
+	    m_pView->activeTable()->sortByColumn(m_combo->currentItem() + r.left(),
+                                                 KSpreadTable::Increase,
+                                                 m_cpLayout->isChecked());
 	}
 	else
         {
-	    m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
+	    m_pView->activeTable()->sortByColumn(m_combo->currentItem() + r.left(),
+                                                 KSpreadTable::Decrease,
+                                                 m_cpLayout->isChecked());
 	}
     }
     else

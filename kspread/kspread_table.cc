@@ -2933,7 +2933,7 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
 }
 
 
-void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
+void KSpreadTable::sortByRow( int ref_row, SortingOrder mode, bool cpLayout )
 {
     QRect r( selectionRect() );
     Q_ASSERT( mode == Increase || mode == Decrease );
@@ -3025,16 +3025,16 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
             for( int y = r.bottom(); y >= r.top(); --y )
             {
               if ( y != ref_row )
-                swapCells( d, y, bestX, y );
+                swapCells( d, y, bestX, y, cpLayout );
             }
-            swapCells( d, ref_row, bestX, ref_row );           
+            swapCells( d, ref_row, bestX, ref_row, cpLayout );
         }
 
     }
     doc()->emitEndOperation();
 }
 
-void KSpreadTable::sortByColumn(int ref_column, SortingOrder mode)
+void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode, bool cpLayout )
 {
     Q_ASSERT( mode == Increase || mode == Decrease );
 
@@ -3125,18 +3125,18 @@ void KSpreadTable::sortByColumn(int ref_column, SortingOrder mode)
             for (int x = r.left(); x <= r.right(); x++)
             {
               if ( x != ref_column )
-                swapCells( x, d, x, bestY );
+                swapCells( x, d, x, bestY, cpLayout );
             }
-            swapCells( ref_column, d, ref_column, bestY );
+            swapCells( ref_column, d, ref_column, bestY, cpLayout );
         }
     }
    doc()->emitEndOperation();
 }
 
-void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
+void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
-  KSpreadCell *ref1 = cellAt( x1, y1 );
-  KSpreadCell *ref2 = cellAt( x2, y2 );
+  KSpreadCell * ref1 = cellAt( x1, y1 );
+  KSpreadCell * ref2 = cellAt( x2, y2 );
   
   if ( ref1->isDefault() )
   {
@@ -3203,8 +3203,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
         }
 
   // I'll put this in the sort dlg after feature freeze
-  bool changeLayout = true;
-  if (changeLayout)
+  if (cpLayout)
   {
     KSpreadLayout::Align a = ref1->align( ref1->column(), ref1->row() );
     ref1->setAlign( ref2->align( ref2->column(), ref2->row() ) );
@@ -4190,9 +4189,8 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     {
         KSpreadCell * cell = cellAt( _marker.x(), _marker.y() );
         if( !cell->isDefault() )
-            QApplication::clipboard()->setText( cell->strOutText() );
-
-        return "cell->strOutText()";
+          return cell->strOutText();
+        return "";
     }
 
     int x;
@@ -4218,7 +4216,7 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
       {
-        KSpreadCell * cell = cellAt( x, y );
+        KSpreadCell * cell = cellAt( x, y, true );
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
@@ -4245,7 +4243,7 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
               for ( i = 0; i < s; ++i )
                 result += " ";
               result += cell->strOutText();
-              for ( i = s; s < l; ++i )
+              for ( i = s; i < l; ++i )
                 result += " ";
             }
         }

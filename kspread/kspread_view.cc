@@ -2172,9 +2172,9 @@ void KSpreadView::sortInc()
 
     // Entire row(s) selected ? Or just one row ?
     if( activeTable()->isRowSelected() || r.top() == r.bottom() )
-        activeTable()->sortByRow( r.top() );
+        activeTable()->sortByRow( r.top(), KSpreadTable::Increase, false );
     else
-        activeTable()->sortByColumn( r.left());
+        activeTable()->sortByColumn( r.left(), KSpreadTable::Increase, false);
     updateEditWidget();
 }
 
@@ -2190,9 +2190,9 @@ void KSpreadView::sortDec()
 
     // Entire row(s) selected ? Or just one row ?
     if( activeTable()->isRowSelected() || r.top() == r.bottom() )
-        activeTable()->sortByRow( r.top(),KSpreadTable::Decrease);
+        activeTable()->sortByRow( r.top(),KSpreadTable::Decrease, false);
     else
-        activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease);
+        activeTable()->sortByColumn( r.left(),KSpreadTable::Decrease, false);
     updateEditWidget();
 }
 
