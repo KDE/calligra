@@ -66,6 +66,7 @@ QString Kexi::string2FileName(const QString &s)
 QString Kexi::string2Identifier(const QString &s)
 {
 	QString r, id = s.simplifyWhiteSpace();
+	r.reserve(id.length());
 	if (id.isEmpty())
 		return id;
 //		return "_";
