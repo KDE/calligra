@@ -70,6 +70,14 @@ private:
     WinWordDoc(const WinWordDoc &);
     const WinWordDoc &operator=(const WinWordDoc &);
 
+    void gotError(const QString &text);
+    void gotParagraph(const QString &text, PAP &style);
+    void gotHeadingParagraph(const QString &text, PAP &style);
+    void gotListParagraph(const QString &text, PAP &style);
+    void gotTableEnd();
+    void gotTableParagraph(const QString &text, PAP &style);
+    void gotTableStart();
+
     void FIBInfo();
 
     void locateATRD();
@@ -81,11 +89,12 @@ private:
 
     bool m_success, m_ready;
     QDomDocument m_part;
-    myFile m_main, m_table, m_data;
+    unsigned m_tableManager;
+    unsigned m_tableRow;
+    unsigned m_tableColumn;
 
     // Stylesheet
     StyleSheet *m_styleSheet;
-    void gotParagraph(const QString &text);
     // ATRD
     unsigned long m_atrdBase, m_atrdCount;
     // BKF
@@ -101,3 +110,4 @@ private:
     QString m_body;
 };
 #endif // WINWORDDOC_H
+

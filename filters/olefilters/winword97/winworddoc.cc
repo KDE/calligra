@@ -25,97 +25,159 @@ WinWordDoc::WinWordDoc(
     const myFile &table0Stream,
     const myFile &table1Stream,
     const myFile &dataStream) :
-	MsWord(
+        MsWord(
             mainStream.data,
             table0Stream.data,
             table1Stream.data,
             dataStream.data),
-	m_part(part), m_main(mainStream), m_data(dataStream)
+        m_part(part)
 {
-    m_success=true;
-    m_ready=false;
-    m_styleSheet=0L;
-    m_atrdCount=0;
-    m_bkfCount=0;
-    m_bklCount=0;
+    m_success = true;
+    m_ready = false;
 
-    if(m_fib.fWhichTblStm==0)
-        m_table=table0Stream;
-    else
-        m_table=table1Stream;
-
-    //m_styleSheet=new StyleSheet(m_table, &m_fib);
     m_body = QString("");
-    // print some debug info
-    // FIBInfo();
+    m_tableManager = 0;
 }
 
-WinWordDoc::~WinWordDoc() {
-
-    delete [] m_main.data;
-    m_main.data=0L;
-    delete [] m_table.data;
-    m_table.data=0L;
-    delete [] m_data.data;
-    m_data.data=0L;
-    //delete m_styleSheet;
-    m_styleSheet=0L;
-
-    m_grpXst.stringList.clear();
-    for(unsigned char **tmp=m_grpXst.extraData.first(); tmp!=0L; tmp=m_grpXst.extraData.next()) {
-        delete [] *tmp;
-        *tmp=0L;
-    }
-    m_grpXst.extraData.clear();
-
-    m_atnbkmk.stringList.clear();
-    for(unsigned char **tmp=m_atnbkmk.extraData.first(); tmp!=0L; tmp=m_atnbkmk.extraData.next()) {
-        delete [] *tmp;
-        *tmp=0L;
-    }
-    m_atnbkmk.extraData.clear();
-
-    m_assocStrings.stringList.clear();
-    for(unsigned char **tmp=m_assocStrings.extraData.first(); tmp!=0L; tmp=m_assocStrings.extraData.next()) {
-        delete [] *tmp;
-        *tmp=0L;
-    }
-
-    m_assocStrings.extraData.clear();
+WinWordDoc::~WinWordDoc()
+{
 }
 
-const bool WinWordDoc::convert() {
-
-    if(!m_success || m_ready)
+const bool WinWordDoc::convert()
+{
+    if (!m_success || m_ready)
         return false;
-//    if(!checkBinTables())         // are the bin tables ok (==not compressed)
-//        return false;
-    locateATRD();
-    locateBKF();
-    locateBKL();
-    //readCommentStuff();
-    //sttbf(m_assocStrings, m_fib.fcSttbfAssoc, m_fib.lcbSttbfAssoc, m_table.data);
-
-    // FFN, FRD - TODO(?)
-
-    getParagraphs();
-
-    m_success=true;
+    parse();
+    m_success = true;
 
     return m_success;
 }
 
-void WinWordDoc::gotParagraph(const QString &text)
+void WinWordDoc::gotError(const QString &text)
 {
-    m_body.append("<PARAGRAPH><TEXT>");
+    m_body.append("<PARAGRAPH>\n <TEXT>\n");
     m_body.append(text);
-    m_body.append("</TEXT></PARAGRAPH>\n");
+    m_body.append("\n </TEXT>\n</PARAGRAPH>\n");
 }
 
-const QDomDocument * const WinWordDoc::part() {
-    if(m_ready && m_success)
+void WinWordDoc::gotParagraph(const QString &text, PAP &style)
+{
+    m_body.append("<PARAGRAPH>\n <TEXT>\n");
+    m_body.append(text);
+    m_body.append("\n </TEXT>\n</PARAGRAPH>\n");
+}
+
+void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
+{
+    // 0 Arabic numbering 
+    // 1 Upper case Roman 
+    // 2 Lower case Roman 
+    // 3 Upper case Letter 
+    // 4 Lower case letter 
+    // 5 Ordinal
+
+    static unsigned numberingTypes[6] =
+    {
+        1, 5, 4, 3, 2, 6
+    };
+
+    m_body.append("<PARAGRAPH>\n <TEXT>\n");
+    m_body.append(text);
+    m_body.append("\n </TEXT>\n"
+            "  <LAYOUT>\n"
+            "   <NAME value=\"Head ");
+    m_body.append(QString::number(style.istd));
+    m_body.append("\"/>\n   <COUNTER type=\"");
+    m_body.append(QString::number(numberingTypes[style.anld.nfc]));
+    m_body.append("\" depth=\"");
+    m_body.append(QString::number(style.istd - 1));
+    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+            "  </LAYOUT>\n"
+            "</PARAGRAPH>\n");
+}
+
+void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
+{
+    // 0 Arabic numbering 
+    // 1 Upper case Roman 
+    // 2 Lower case Roman 
+    // 3 Upper case Letter 
+    // 4 Lower case letter 
+    // 5 Ordinal
+
+    static unsigned numberingTypes[6] =
+    {
+        1, 5, 4, 3, 2, 6
+    };
+
+    m_body.append("<PARAGRAPH>\n <TEXT>\n");
+    m_body.append(text);
+    m_body.append("\n </TEXT>\n"
+            "  <LAYOUT>\n"
+            "   <COUNTER type=\"");
+    m_body.append(QString::number(numberingTypes[style.anld.nfc]));
+    m_body.append("\" depth=\"");
+    m_body.append(QString::number(style.ilvl));
+    m_body.append("\" bullet=\"176\" start=\"");
+    m_body.append(QString::number(style.anld.iStartAt));
+    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+            "  </LAYOUT>\n"
+            "</PARAGRAPH>\n");
+}
+
+void WinWordDoc::gotTableEnd()
+{
+//QString m_body = QString("");
+//    m_body.append("<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
+//        " <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
+//kdDebug(30000) << m_body << endl;
+}
+
+void WinWordDoc::gotTableParagraph(const QString &text, PAP &style)
+{
+//QString m_body = QString("");
+//    m_body.append("<FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
+//    m_body.append(QString::number(m_tableManager));
+//    m_body.append("\" row=\"");
+//    m_body.append(QString::number(m_tableRow));
+//    m_body.append("\" col=\"");
+//    m_body.append(QString::number(m_tableColumn));
+//    m_body.append("\" removeable=\"0\" visible=\"1\">\n"
+//        "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
+//    m_body.append("<PARAGRAPH>\n <TEXT>\n");
+//    m_body.append(text);
+//    m_body.append("\n </TEXT>\n</PARAGRAPH>\n</FRAMESET>\n");
+//kdDebug(30000) << m_body << endl;
+    gotParagraph(text, style);
+    if (style.fTtp)
+    {
+        m_tableRow++;
+        m_tableColumn = 0;
+    }
+    else
+    {
+        m_tableColumn++;
+    }
+}
+
+void WinWordDoc::gotTableStart()
+{
+    // Create a unique group manager for each new table.
+
+    m_tableManager++;
+    m_tableRow = 0;
+    m_tableColumn = 0;
+//QString m_body = QString("");
+//    m_body.append("</FRAMESET>\n");
+//kdDebug(30000) << m_body << endl;
+}
+
+const QDomDocument * const WinWordDoc::part()
+{
+    if (m_ready && m_success)
         return &m_part;
-    else {
+    else
+    {
         QString newstr;
 
         newstr=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n"
@@ -392,11 +454,9 @@ const bool WinWordDoc::checkBinTables() {
 }
 
 void WinWordDoc::readCommentStuff() {
-    sttbf(m_grpXst, m_fib.fcGrpXstAtnOwners, m_fib.lcbGrpXstAtnOwners, m_table.data);
-    sttbf(m_atnbkmk, m_fib.fcSttbfAtnbkmk, m_fib.lcbSttbfAtnbkmk, m_table.data);
+//    sttbf(m_grpXst, m_fib.fcGrpXstAtnOwners, m_fib.lcbGrpXstAtnOwners, m_table.data);
+//    sttbf(m_atnbkmk, m_fib.fcSttbfAtnbkmk, m_fib.lcbSttbfAtnbkmk, m_table.data);
 }
-
-
 
 
 

@@ -2829,6 +2829,9 @@ public:
         // otherwise they are ignored.
         U8 fWord6:1;
 
+        //  unused.
+        U8 unused5_7:1;
+
         // contains the character offsets into the LVL's XST of the inherited 
         // numbers of previous levels. This array should be zero terminated 
         // unless it is full (all 9 levels full). The XST contains place 

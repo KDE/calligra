@@ -37,7 +37,7 @@ class MsWord: public MsWordGenerated
 {
 public:
 
-    // Construction.
+    // Construction. Invoke with the OLE streams that comprise the Word document.
 
     MsWord(
         const U8 *mainStream,
@@ -45,6 +45,22 @@ public:
         const U8 *table1Stream,
         const U8 *dataStream);
     virtual ~MsWord();
+
+    // Call the parse() function to process the document. The callbacks return
+    // the text along with any relevant attributes.
+
+    void parse();
+    virtual void gotError(const QString &text) = 0;
+    virtual void gotParagraph(const QString &text, PAP &style);
+    virtual void gotHeadingParagraph(const QString &text, PAP &style);
+    virtual void gotListParagraph(const QString &text, PAP &style);
+    virtual void gotTableEnd();
+    virtual void gotTableParagraph(const QString &text, PAP &style);
+    virtual void gotTableStart();
+
+// TBD: this will be not remain public once I figure out how the nested classes
+// can be made to work (as friends?).
+public:
 
     // Hand-generated structure definitions and reader prototypes. Reader
     // prototypes are also declared for inherited structure definitions
@@ -118,14 +134,6 @@ public:
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
 
-protected:
-
-    // Iterator for text by paragraph. The callback gotParagraph() returns
-    // the text fetched. TBD: This is a crappy iterator design.
-
-    void getParagraphs();
-    virtual void gotParagraph(const QString &text);
-
     // Some fundamental data structures. We keep pointers to our streams,
     // and a copy of the FIB.
 
@@ -134,17 +142,22 @@ protected:
     const U8 *m_dataStream;
     FIB m_fib;
 
-    // Cache for styles in stylesheet. TBD: Eventually, this should be an array of
-    // fully "decoded" PAPs - that will help performance with lots of paragraphs.
+    // Cache for styles in stylesheet. This is an array of fully "decoded"
+    // PAPs - that will help performance with lots of paragraphs.
 
-    STD **m_styles;
+    PAP *m_styles;
+
+    // Cache for list styles. This is an array of LVLF pointersfully "decoded"
+    // PAPs - that will help performance with lots of paragraphs.
+
+    LVLF ***m_listStyles;
 
     // For the grpprl array, we store the offset to the
     // byte count preceeding the first entry, and the number of entries.
 
     struct
     {
-    	U32 byteCountOffset;
+        U32 byteCountOffset;
         U32 count;
     } m_grpprls;
 
@@ -160,18 +173,18 @@ protected:
         // We would like to define the constructor in terms of a callback to
         // take the data within the plex. Unfortunately, egcs-2.91-66 does not
         // support taking the address of bound pointer-to-member.
-	//
+        //
         // Plex(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-	Plex(MsWord *client, const U8 *plex, const U32 byteCount);
+        Plex(MsWord *client, const U8 *plex, const U32 byteCount);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
         //
         // template<class T>
         // PlexIterator<T>(Plex<T> plex);
-	//
-	// but that results in a compiler error.
+        //
+        // but that results in a compiler error.
 
         void startIteration();
         bool getNext(U32 *startFc, U32 *endFc, T *data);
@@ -197,18 +210,18 @@ protected:
         // We would like to define the constructor in terms of a callback to
         // take the data within the plex. Unfortunately, egcs-2.91-66 does not
         // support taking the address of bound pointer-to-member.
-	//
+        //
         // Fkp(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-	Fkp(MsWord *client, const U8 *fkp);
+        Fkp(MsWord *client, const U8 *fkp);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
         //
         // template<class T>
         // FkpIterator<T>(Fkp<T> fkp);
-	//
-	// but that results in a compiler error.
+        //
+        // but that results in a compiler error.
 
         void startIteration();
         bool getNext(U32 *startFc, U32 *endFc, U8 *rgb, T1 *data1, T2 *data2);
@@ -225,11 +238,12 @@ private:
 
     // Error handling and reporting support.
 
-    QString m_error;
-    static const int area = 30513;
+    static const int s_area = 30513;
+    QString m_constructionError;
+    void constructionError(unsigned line, const char *reason);
+    static const unsigned s_minWordVersion = 100;
 
     Plex<PCD> *m_pcd;
-    void error(unsigned line, const char *reason);
     void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
     void getPAPX(
         const U8 *fkp,
@@ -241,16 +255,27 @@ private:
 
     static short char2unicode(unsigned char c);
 
-    // Initialise the PAP for a paragrpah.
+    // Decode a paragraph into the various types for which we have callbacks.
 
-    void fill(
-        PAP *pap,
-        const PAPXFKP *papx,
-        const PHE *phe);
+    void decodeParagraph(const QString &text, PAP &style);
+    bool m_wasInTable;
+
+    // Initialise and construct the PAP for a paragrpah.
+
+    void paragraphStyleCreate(PAP *pap);
+    void paragraphStyleModify(PAP *pap, unsigned style);
+    void paragraphStyleModify(PAP *pap, const U8 *grpprl, unsigned count);
+    void paragraphStyleModify(PAP *pap, LFO &style, bool useFormatting, bool useStartAt);
+    void paragraphStyleModify(PAP *pap, PAPXFKP &style);
+    void paragraphStyleModify(PAP *pap, PHE &layout);
+    void paragraphStyleModify(PAP *pap, STD &style);
 
     // Fetch the styles in the style sheet.
 
     void getStyles();
+
+    // Fetch the list styles.
+
+    void getListStyles();
 };
 #endif
-
