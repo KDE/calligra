@@ -21,7 +21,5 @@ messages:
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(idldir)
 
-datatools.idl: $(idldir)/datatools.idl
-	-rm -f datatools.idl
-	$(LN_S) $(idldir)/datatools.idl datatools.idl
+datatools_IDLDIR: $(idldir)
 

@@ -41,9 +41,7 @@ noinst_HEADERS =	kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 					KoDiagrammGeometryConfigPage.h
 
 
-chart.idl: $(interfacedir)/chart.idl
-	-rm -f chart.idl
-	$(LN_S) $(interfacedir)/chart.idl chart.idl
+char_IDLDIR = $(interfacedir)
 
 METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
 	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \

@@ -44,13 +44,9 @@ kdemimedir = $(kde_mimedir)/application
 
 SUBDIRS =  . pics dtd toolbar
 
-chart.idl: $(interfacedir)/chart.idl
-	-rm -f chart.idl
-	$(LN_S) $(interfacedir)/chart.idl chart.idl
+chart_IDLDIR = $(interfacedir)
 
-datatools.idl: $(idldir)/datatools.idl
-	-rm -f datatools.idl
-	$(LN_S) $(idldir)/datatools.idl datatools.idl  
+datatools_IDLDIR = $(idldir)
 
 parser:
 	flex lex.l
