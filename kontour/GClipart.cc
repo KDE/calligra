@@ -89,16 +89,10 @@ void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool) {
   }
   else {
     if (! url.isMalformed ()) {
-      p.setWorldMatrix (tmpMatrix, true);
-      QWMatrix mx = p.worldMatrix ();
-      QRect mr = mx.map (QRect (0, 0, qRound (width), qRound (height)));
-      QRect oldWin = p.window ();
-      QRect vPort = p.viewport ();
-      p.setViewport (mr);
-      p.setWorldMatrix (QWMatrix ());
-      p.drawPicture (*pic);
-      p.setWindow (oldWin);
-      p.setViewport (vPort);
+      QRect br = pic->boundingRect();
+      if ( br.width() && br.height() )
+        p.scale( (double)width / (double)br.width(), (double)height / (double)br.height() );
+      p.drawPicture( *pic );
     }
     else {
       p.setPen (gray);

@@ -94,21 +94,11 @@ void GPart::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool)
    }
   else
    {
-//    float s = p.worldMatrix ().m11 ();
-//    QRect win = p.window ();
-//    QRect vPort = p.viewport ();
-//    QPicture *pic = child->draw (1.0, true);
-//    p.setViewport (r.x () * s, r.y () * s, vPort.width (), vPort.height ());
-    //p.drawPicture (*pic);
+    // ### why is this using a pixmap ? why not paint directly into "p" ? (David)
     QPixmap pic(r.width(), r.height());
     QPainter picp(&pic);
-//    picp.begin();
     child->document()->paintEverything(picp, QRect(0, 0, r.width(), r.height()), false, 0);
-//    picp.end();
     p.drawPixmap(r.x(), r.y(), pic);
-//    p.drawRect (r);
-//    p.setViewport (vPort);
-//    p.setWindow (win);
    }
   p.restore ();
  }
