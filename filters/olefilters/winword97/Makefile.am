@@ -17,8 +17,11 @@ msword.h mswordgenerated.h properties.h document.h
 
 METASOURCES = AUTO
 
-service_DATA = ole_winword97_import.desktop
-servicedir = $(kde_servicesdir)
+install-data-local: uninstall.desktop
+	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(DESTDIR)$(kde_servicesdir)/ole_winword97_import.desktop
+
+#service_DATA = ole_winword97_import.desktop
+#servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
 	$(XGETTEXT) *.cc *.cpp -o $(podir)/olefilterswinword97filter.pot
