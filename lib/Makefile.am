@@ -8,3 +8,6 @@ messages:
 	$(EXTRACTRC) */*.rc > parts.cc
 	$(XGETTEXT) parts.cc */*.cc */*.cpp -o $(podir)/koffice.pot
 	rm parts.cc
+
+include ../admin/Doxyfile.am
+DOXYGEN_EXCLUDE = koml/* kscript/*
