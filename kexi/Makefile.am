@@ -10,8 +10,8 @@ libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp \
 	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp
 
-libkexipart_la_LDFLAGS = $(KDE_PLUGIN)
-libkexipart_la_LIBADD = -lkofficecore -lkofficeui $(LIB_KPARTS) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
+libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kexi.la
