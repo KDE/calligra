@@ -2,6 +2,7 @@
 
 #include <qmsgbox.h>
 #include <stdlib.h>
+#include <kstddirs.h>
 #include <dirent.h>
 #include <unistd.h>
 
@@ -16,8 +17,7 @@
 KoPrintDia::KoPrintDia( QWidget* parent, const char* name )
 	: QDialog( parent, name, TRUE ), KoPrintDiaData( this )
 {
-    QString dir = kapp->kde_configdir().copy();
-    dir += "/printer";
+    QString dir = locate("config", "printer");
 
     printer->insertItem( i18n( "File" ) );
     printer->insertItem( i18n( "UNIX Printer" ) );
