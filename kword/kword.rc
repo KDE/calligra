@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="58">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="59">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -130,6 +130,7 @@
   <Action name="configure_footendnote"/>
   <Action name="change_case"/>
   <Action name="personal_expr"/>
+  <Action name="custom_vars"/>
   <ActionList name="datatools"/>
   <Separator/>
   <Action name="edit_sldatabase"/>

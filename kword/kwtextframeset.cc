@@ -3075,10 +3075,13 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     KoVariable * var = 0L;
     if ( type == VT_CUSTOM )
     {
-        // Choose an existing variable
-        KoVariableNameDia dia( m_canvas, doc->getVariableCollection()->getVariables() );
+        KoCustomVarDialog dia( m_canvas );
         if ( dia.exec() == QDialog::Accepted )
-            var = new KoCustomVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+        {
+            KoCustomVariable *v = new KoCustomVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+            v->setValue( dia.value() );
+            var = v;
+        }
     }
     else if ( type == VT_MAILMERGE )
     {
@@ -3276,7 +3279,6 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         }
     }
 }
-
 //////
 
 bool KWFootNoteFrameSet::isFootNote() const

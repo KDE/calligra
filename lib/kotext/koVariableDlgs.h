@@ -126,4 +126,41 @@ protected:
 
 };
 
+/**
+ * Class: KoCustomVarDialog
+ * This dialog allows to add a new custom variable or
+ * to edit an existing one.
+ */
+class KoCustomVarDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Add new variable
+     */
+    KoCustomVarDialog( QWidget *parent );
+    /**
+     * Edit existing variable @p var
+     */
+    KoCustomVarDialog( QWidget *parent, KoCustomVariable *var );
+
+    virtual QString name();
+    virtual QString value();
+
+protected slots:
+    void slotAddOk();
+    void slotEditOk();
+    void slotTextChanged(const QString&);
+
+protected:
+    QVBox *back;
+    KLineEdit *m_name;
+    KLineEdit *m_value;
+
+private:
+    void init();
+    KoCustomVariable *m_var;
+};
+
 #endif

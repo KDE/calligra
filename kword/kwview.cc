@@ -860,7 +860,11 @@ void KWView::setupActions()
     actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
     actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 
-    actionEditPersonnalExpr=new KAction( i18n( "Edit Personal Expressions..." ), 0,
+    actionEditCustomVars = new KAction( i18n( "Custom &Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ), // TODO: new dialog w add etc.
+                                        actionCollection(), "custom_vars" );
+
+    actionEditPersonnalExpr=new KAction( i18n( "&Personal Expressions..." ), 0,
                                          this, SLOT( editPersonalExpr() ),
                                      actionCollection(), "personal_expr" );
     actionEditPersonnalExpr->setToolTip( i18n( "Add or change one or more personal expressions." ) );
@@ -959,8 +963,8 @@ void KWView::setupActions()
     Q_UNUSED( actComplete );
 #endif
 
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
+    actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
+                                        this, SLOT( editCustomVariable() ), 
                                         actionCollection(), "edit_customvars" );
     actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
@@ -1156,10 +1160,6 @@ void KWView::refreshCustomMenu()
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
     actionInsertCustom->insert( act );
 
-    actionInsertCustom->popupMenu()->insertSeparator();
-
-    actionEditCustomVars->setEnabled(state);
-    actionInsertCustom->insert( actionEditCustomVars );
 }
 
 
@@ -2193,6 +2193,31 @@ void KWView::deleteFrame( bool _warning )
         m_doc->deleteSeveralFrame();
 
         m_gui->canvasWidget()->emitFrameSelectedChanged();
+    }
+}
+
+void KWView::editCustomVariable()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if (edit)
+    {
+        KoCustomVariable *var = static_cast<KoCustomVariable *>(edit->variable());
+        if (var)
+        {
+            QString oldvalue = var->value();
+            KoCustomVarDialog dia( this, var );
+            if ( dia.exec() )
+            {
+                m_doc->recalcVariables( VT_CUSTOM );
+                if( var->value() != oldvalue )
+                {
+                    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
+                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_doc, oldvalue, var->value(), var );
+                    macroCommand->addCommand(cmd);
+                    m_doc->addCommand(macroCommand);
+                }
+            }
+        }
     }
 }
 

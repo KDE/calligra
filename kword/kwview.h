@@ -179,6 +179,7 @@ public slots:
     void editFind();
     void editReplace();
     void editDeleteFrame();
+    void editCustomVariable();
     void editCustomVars();
     void editMailMergeDataBase();
 

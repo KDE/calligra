@@ -245,3 +245,93 @@ void KoCustomVariablesDia::slotOk()
     list->setValues();
     accept();
 }
+
+/******************************************************************
+ *
+ * Class: KoCustomVarDialog
+ *
+ ******************************************************************/
+
+KoCustomVarDialog::KoCustomVarDialog( QWidget *parent )
+    : KDialogBase( parent, "", TRUE,i18n( "Add Variable" ), Ok|Cancel )
+{
+    init();
+    m_name->setFocus();
+
+
+    connect( this, SIGNAL( okClicked() ),
+             this, SLOT( slotAddOk() ) );
+    connect( this, SIGNAL( cancelClicked() ),
+             this, SLOT( reject() ) );
+
+    connect( m_name, SIGNAL( textChanged(const QString&) ),
+             this, SLOT( slotTextChanged(const QString&) ) );
+
+    enableButtonOK( false );
+    resize( 350, 100 );
+
+}
+// edit existing variable
+KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
+    : KDialogBase( parent, "", TRUE,i18n( "Edit Variable" ), Ok|Cancel )
+{
+    m_var = var;
+    init();
+    m_name->setText( m_var->name() );
+    m_value->setText( m_var->value() );
+    m_name->setReadOnly(true);
+    m_value->setFocus();
+
+
+    connect( this, SIGNAL( okClicked() ),
+             this, SLOT( slotEditOk() ) );
+    connect( this, SIGNAL( cancelClicked() ),
+             this, SLOT( reject() ) );
+
+    enableButtonOK( true );
+    resize( 350, 100 );
+}
+
+void KoCustomVarDialog::init()
+{
+    back = makeVBoxMainWidget();
+    QHBox *row1 = new QHBox( back );
+    row1->setSpacing( 5 );
+    QLabel *ln = new QLabel( i18n( "Name:" ), row1 );
+    ln->setFixedSize( ln->sizeHint() );
+    m_name = new KLineEdit( row1 );
+
+    QHBox *row2 = new QHBox( back );
+    row2->setSpacing( 5 );
+    QLabel *lv = new QLabel( i18n( "Value:" ), row2 );
+    lv->setFixedSize( lv->sizeHint() );
+    m_value = new KLineEdit( row2 );
+}
+
+void KoCustomVarDialog::slotAddOk()
+{
+    accept();
+}
+void KoCustomVarDialog::slotEditOk()
+{
+    m_var->setValue( m_value->text() );
+    accept();
+}
+
+void KoCustomVarDialog::slotTextChanged(const QString&)
+{
+    enableButtonOK( !m_name->text().isEmpty() );
+}
+QString KoCustomVarDialog::name()
+{
+    if ( m_name->text().isEmpty() )
+        return QString( "No name" );
+    return m_name->text();
+}
+
+QString KoCustomVarDialog::value()
+{
+    if ( m_value->text().isEmpty() )
+        return QString( "No value" );
+    return m_value->text();
+}
