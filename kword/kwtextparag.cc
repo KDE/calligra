@@ -198,7 +198,13 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     QTextFormat *format = at( 0 )->format(); // paragFormat();
     QFont oldFont = p->font();
     QFont newFont = format->font();
+    QPen tmpPen=p->pen();
+    QColor oldColor = tmpPen.color();
+    QColor newColor = format->color();
+
     p->setFont( newFont );
+    tmpPen.setColor(newColor);
+    p->setPen(tmpPen);
 
     // Now draw any bullet that is required over the space left for it.
     if ( m_layout.counter->isBullet() )
@@ -246,7 +252,11 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         if ( !counterText.isEmpty() )
             p->drawText( x - size, y - h + base, counterText + ' ' );
     }
+    tmpPen=p->pen();
+    tmpPen.setColor( oldColor);
+    p->setPen(tmpPen);
     p->setFont( oldFont );
+
 }
 
 int KWTextParag::topMargin() const

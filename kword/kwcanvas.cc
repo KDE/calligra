@@ -1384,6 +1384,13 @@ void KWCanvas::editFrameProperties()
 
 void KWCanvas::frameDiaClosed() // get rid of this?
 {
+    QList<KWFrame> frames=doc->getSelectedFrames();
+    if(frames.count()==1)
+    {
+        KWFrame *theFrame = frames.at(0);
+        if(theFrame->isSelected())
+            theFrame->setSelected(true);
+    }
     doc->repaintAllViews();
 #if 0
     doc->updateAllFrames(); // already done in framedia
