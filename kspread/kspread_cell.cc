@@ -1757,19 +1757,6 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* 
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
 
-  if (view != NULL)
-  {
-    if (view->zoom() > 1.5)
-    {
-      height++;
-      width++;
-    }
-    if (view->zoom() < 0.5)
-    {
-      height--;
-      width--;
-    }
-  }
   bool selected = false;
 
   if (view != NULL)
@@ -1947,19 +1934,18 @@ void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
   int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
   int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
 
+  // Todo: Remove following hack, when we switch to real usage of zoom instead of simple scaling
+  // The hack principally only rises the painting are, as with zoom > 1.5 (sometimes earlier) not everything
+  // is repainted. QT-Bug?
   if (view != NULL)
   {
-    if (view->zoom() > 1.5)
+    if ( view->zoom() > 1.0 )
     {
       height++;
       width++;
     }
-    if (view->zoom() < 0.5)
-    {
-      height--;
-      width--;
-    }
   }
+
   // Determine the correct background color
   if ( selected )
   {
@@ -2015,21 +2001,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
   int width =  colLayout->width();
-/*
-  if (view != NULL)
-  {
-    if (view->zoom() > 1.5)
-    {
-      height++;
-      width++;
-    }
-    if (view->zoom() < 0.5)
-    {
-      height--;
-      width--;
-    }
-  }
-*/
+
   /* Each cell is responsible for drawing it's top and left portions of the
      "default" grid. --Or not drawing it if it shouldn't be there.
      It's even responsible to paint the right and bottom, if it is the last
@@ -2042,14 +2014,17 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
 
   paintLeft = ( left_pen.style() == Qt::NoPen &&
                 table()->getShowGrid() );
-  paintRight = ( ((view != NULL) && (( view->zoom()<= 0.5 ) || ( view->zoom()>= 1.5 )) ) || //If we zoom, we repaint the borders too
+  // Todo: Remove the both zoom-hacks, when we switch to real usage of zoom instead of simple scaling
+  // The hack principally only paints borders again, as with zoom != 1.0 the border is at zoom <1.0
+  // erased by normal background and on zoom>1.0 we erase it intenionally (see hack above)
+  paintRight = ( ( ( view != NULL ) && ( view->zoom() != 1.0 ) ) || //If we zoom, we repaint the borders again
                  painter.device()->isExtDev() && // Only on printout
                  right_pen.style() == Qt::NoPen &&
                  table()->getShowGrid() &&
                  table()->isOnNewPageX( cellRef.x() + 1 ) );  //Only when last cell on page
   paintTop = ( top_pen.style() == Qt::NoPen &&
                table()->getShowGrid() );
-  paintBottom = ( ((view != NULL) && (( view->zoom()<= 0.5 ) || ( view->zoom()>= 1.5 )) ) || //If we zoom, we repaint the borders too
+  paintBottom = ( ( ( view != NULL ) && ( view->zoom() != 1.0 ) ) || //If we zoom, we repaint the borders again
                   painter.device()->isExtDev() &&  // Only on printout
                   bottom_pen.style() == Qt::NoPen &&
                   table()->getShowGrid() &&
@@ -2148,6 +2123,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
   }
 }
 
+
 void KSpreadCell::paintCommentIndicator(QPainter& painter, KSpreadView* view,
                                         QPoint corner, QPoint cellRef)
 {
@@ -2185,30 +2161,14 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, KSpreadView* view,
   }
 }
 
+
 // small blue rectangle if this cell holds a formula
-void KSpreadCell::paintFormulaIndicator(QPainter& painter, KSpreadView* view,
+void KSpreadCell::paintFormulaIndicator(QPainter& painter, KSpreadView* /*view*/,
                                         QPoint corner, QPoint cellRef )
 {
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
-  int width =  colLayout->width();
-
-  /*
-  if (view != NULL)
-  {
-    if (view->zoom() > 1.5)
-    {
-      height++;
-      width++;
-    }
-    if (view->zoom() < 0.5)
-    {
-      height--;
-      width--;
-    }
-  }
-  */
 
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
   {
@@ -2221,6 +2181,8 @@ void KSpreadCell::paintFormulaIndicator(QPainter& painter, KSpreadView* view,
     painter.drawPolygon( point );
   }
 }
+
+
 void KSpreadCell::paintMoreTextIndicator(QPainter& painter, KSpreadView* view,
                                          QPoint corner, QPoint cellRef)
 {
