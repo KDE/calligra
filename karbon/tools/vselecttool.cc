@@ -69,9 +69,6 @@ VSelectTool::draw()
 	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
-	//KoPoint current = view()->canvasWidget()->toContents( QPoint( m_current.x(), m_current.y() ) );
-	//current.setY( -current.y() + view()->canvasWidget()->contentsHeight() );
-
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
 	if( m_state != normal || rect.contains( first() ) || m_activeNode != node_none )
@@ -87,8 +84,6 @@ VSelectTool::draw()
 		{
 			itr.current()->draw( painter, &itr.current()->boundingBox() );
 		}
-
-		//painter->setZoomFactor( 1.0 );
 	}
 	else if( m_state == normal )
 	{
@@ -144,18 +139,6 @@ VSelectTool::mouseButtonPress()
 	//view()->painterFactory()->painter()->end();
 
 	draw();
-
-/*
-	m_fp.setX( mouse_event->pos().x() );
-	m_fp.setY( mouse_event->pos().y() );
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
-
-	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	m_activeNode = view()->part()->document().selection()->handleNode( lp );
-	view()->part()->document().selection()->setState( VObject::edit );
-	view()->part()->repaintAllViews( true );
-*/
 }
 
 void
