@@ -117,3 +117,14 @@ void KarbonViewIface::ungroupSelection()
 {
     m_view->ungroupSelection();
 }
+
+void KarbonViewIface::configure()
+{
+    m_view->configure();
+}
+
+void KarbonViewIface::setLineWidth( double val)
+{
+    m_view->setLineWidth( val );
+}
+

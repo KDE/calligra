@@ -65,3 +65,9 @@ int KarbonPartIface::maxRecentFiles() const
     return m_part->maxRecentFiles();
 }
 
+
+void KarbonPartIface::purgeHistory()
+{
+    m_part->purgeHistory();
+}
+

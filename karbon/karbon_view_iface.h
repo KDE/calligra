@@ -52,7 +52,8 @@ k_dcop:
 
     void groupSelection();
     void ungroupSelection();
-
+    void configure();
+    void setLineWidth( double val);
 private:
 	KarbonView *m_view;
 };

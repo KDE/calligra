@@ -106,10 +106,10 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setAlignment( AlignLeft | AlignVCenter );
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
-	
+
 	//Create Color Manager
 	m_ColorManager = new VColorDlg( m_part, this );
-	
+
 	if( shell() )
 	{
 		setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -173,7 +173,7 @@ KarbonView::dropEvent ( QDropEvent *e )
 	//Accepts QColor - from Color Manager's KColorPatch
 	QColor color;
 	VColor realcolor;
-	
+
 	if ( KColorDrag::decode( e, color) )
 	{
 		float r = color.red() / 255.0, g = color.green() / 255.0, b = color.blue() / 255.0;
@@ -629,18 +629,27 @@ KarbonView::slotFillColorChanged( const QColor &c )
 void
 KarbonView::setLineWidth()
 {
+    setLineWidth( m_setLineWidth->value() );
+}
+
+//necessary for dcop call !
+void
+KarbonView::setLineWidth( double val)
+{
 	// TODO : maybe this can become a command
 	kdDebug() << "KarbonView::setLineWidth" << endl;
 	VObjectListIterator itr( m_part->document().selection()->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
-		stroke.setLineWidth( m_setLineWidth->value() );
+		stroke.setLineWidth( val );
 		itr.current()->setStroke( stroke );
 	}
 
 	m_part->repaintAllViews();
 }
+
+
 
 void
 KarbonView::viewColorManager()

@@ -62,6 +62,7 @@ public:
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
+    void setLineWidth( double val);
 
 public slots:
 	// editing:

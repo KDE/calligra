@@ -41,6 +41,7 @@ k_dcop:
     void setUndoRedoLimit( int _undo );
     void initConfig();
     int maxRecentFiles() const;
+    void purgeHistory();
 
 private:
 	KarbonPart *m_part;
