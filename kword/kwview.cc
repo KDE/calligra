@@ -1810,7 +1810,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionConfigureCompletion->setEnabled( true );
         actionFormatBullet->setEnabled(true);
         actionFormatNumber->setEnabled( true);
-
+        actionSelectBookmark->setEnabled( true );
         KAction* act = actionCollection()->action("edit_sldatabase");
         if (act)
             act->setEnabled( true );

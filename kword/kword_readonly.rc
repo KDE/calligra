@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="2">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="file_statistics"/>
@@ -21,6 +21,10 @@
   <Action name="show_ruler"/>
   <Separator/>
   <Action name="view_zoom"/>
+ </Menu>
+ <Menu name="tools"><text>&amp;Tools</text>
+  <Separator/>
+  <Action name="select_bookmark"/>
  </Menu>
 </MenuBar>
 <ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
