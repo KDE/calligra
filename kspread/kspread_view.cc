@@ -405,7 +405,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
       addTable( tbl );
-    tbl = m_pDoc->map()->initialActiveTable();
+    tbl = 0L;
+    if ( m_pDoc->isEmbedded() )
+    {
+        tbl = m_pDoc->displayTable();
+    }
+    if ( !tbl )
+        tbl = m_pDoc->map()->initialActiveTable();
     if (tbl)
       setActiveTable(tbl);
     else

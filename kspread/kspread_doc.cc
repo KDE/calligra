@@ -1181,5 +1181,10 @@ void KSpreadDoc::setDisplayTable(KSpreadTable *_table )
     m_activeTable = _table;
 }
 
+KSpreadTable * KSpreadDoc::displayTable()const
+{
+    return m_activeTable;
+}
+
 #include "kspread_doc.moc"
 

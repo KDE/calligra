@@ -350,6 +350,7 @@ public:
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
 
     void setDisplayTable(KSpreadTable *_Table );
+    KSpreadTable * displayTable()const;
 
 public slots:
 
