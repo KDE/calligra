@@ -143,7 +143,7 @@ void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders, bool
         if(addCommand)
             m_history.addCommand(new GBordersCmd(this, i18n("Changing Page Borders"),
                                                  m_pageLayout.borders, pageBorders), false);
-        QRegion diff=Graphite::diff(m_pageLayout.borders, pageBorders, m_pageLayout.width(), m_pageLayout.height());
+        QValueList<FxRect> diff=Graphite::diff(m_pageLayout.borders, pageBorders, m_pageLayout.width(), m_pageLayout.height());
         m_pageLayout.borders=pageBorders;
         updatePage(diff);
     }
@@ -154,7 +154,7 @@ void GraphitePart::setPageLayout(const Graphite::PageLayout &pageLayout, bool ad
         if(addCommand)
             m_history.addCommand(new GLayoutCmd(this, i18n("Changing Page Layout"),
                                                 m_pageLayout, pageLayout), false);
-        QRegion diff=Graphite::diff(m_pageLayout, pageLayout);
+        QValueList<FxRect> diff=Graphite::diff(m_pageLayout, pageLayout);
         m_pageLayout=pageLayout;
         updatePage(diff);
     }
@@ -234,7 +234,7 @@ void GraphitePart::documentRestored() {
     setModified(false);
 }
 
-void GraphitePart::updatePage(const QRegion &diff) {
+void GraphitePart::updatePage(const QValueList<FxRect> &diff) {
     m_nodeZero->resize(m_pageLayout.fxRect());
     emit layoutChanged(diff);
 }

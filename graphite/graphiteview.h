@@ -50,7 +50,7 @@ public:
     //virtual void print( QPrinter &printer );
 
 public slots:
-    void layoutChanged(const QRegion &diff);
+    void layoutChanged(const QValueList<FxRect> &diff);
 
 protected slots:
     void slotViewZoom(const QString &text);

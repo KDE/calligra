@@ -96,7 +96,7 @@ public slots:
 
 signals:
     void unitChanged(Graphite::Unit);
-    void layoutChanged(const QRegion &diff);
+    void layoutChanged(const QValueList<FxRect> &diff);
 
 protected:
     virtual KoView *createViewInstance(QWidget *parent, const char *name);
@@ -111,7 +111,7 @@ private slots:
 private:
     GraphitePart &operator=(const GraphitePart &rhs);
 
-    void updatePage(const QRegion &diff=QRegion());  // updates the page layout and emits layoutChanged
+    void updatePage(const QValueList<FxRect> &diff=QValueList<FxRect>());  // updates the page layout and emits layoutChanged
 
     KCommandHistory m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs

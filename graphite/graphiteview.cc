@@ -44,7 +44,7 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
     // doc-view magic
     connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
             SLOT(rulerUnitChanged(Graphite::Unit)));
-    connect(m_doc, SIGNAL(layoutChanged(const QRegion &)), this, SLOT(layoutChanged(const QRegion &)));
+    connect(m_doc, SIGNAL(layoutChanged(const QValueList<FxRect> &)), this, SLOT(layoutChanged(const QValueList<FxRect> &)));
 }
 
 GraphiteView::~GraphiteView() {
@@ -52,17 +52,28 @@ GraphiteView::~GraphiteView() {
     m_canvas=0L;
 }
 
-void GraphiteView::layoutChanged(const QRegion &diff) {
+void GraphiteView::layoutChanged(const QValueList<FxRect> &diff) {
 
     m_vert->setPageLayout(m_doc->pageLayout());
     m_horiz->setPageLayout(m_doc->pageLayout());
     m_canvas->resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
-    if(diff.isNull())
+    // seems we changed a lot of stuff... let's update completely
+    if(diff.isEmpty()) {
         m_canvas->viewport()->erase();
-    else
-        m_canvas->viewport()->erase(diff);
-    m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
-                                 m_canvas->visibleHeight());
+        m_canvas->viewport()->update(0, 0, m_canvas->visibleWidth(),
+                                     m_canvas->visibleHeight());
+    }
+    else {
+        double oldZoom=GraphiteGlobal::self()->zoom();
+        GraphiteGlobal::self()->setZoom(zoom());
+        QValueList<FxRect>::ConstIterator it=diff.begin();
+        for( ; it!=diff.end(); ++it) {
+            (*it).recalculate();
+            m_canvas->viewport()->erase((*it).pxRect());
+            m_canvas->viewport()->update((*it).pxRect());
+        }
+        GraphiteGlobal::self()->setZoom(oldZoom);
+    }
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {

@@ -20,9 +20,9 @@
 #ifndef GRAPHITE_GLOBAL_H
 #define GRAPHITE_GLOBAL_H
 
-#include <qprinter.h>
-#include <kimageeffect.h>
-#include <float.h>
+#include <qvaluelist.h>
+#include <qprinter.h>  // QPrinter enums
+#include <kimageeffect.h>   // KImageEffect enum
 
 class QPoint;
 class QPen;
@@ -151,9 +151,10 @@ struct PageLayout {
 
 bool operator==(const PageLayout &lhs, const PageLayout &rhs);
 bool operator!=(const PageLayout &lhs, const PageLayout &rhs);
-QRegion diff(const PageBorders &oldBorders, const PageBorders &newBorders,
+
+QValueList<FxRect> diff(const PageBorders &oldBorders, const PageBorders &newBorders,
              const double &width, const double &height);
-QRegion diff(const PageLayout &oldLayout, const PageLayout &newLayout);
+QValueList<FxRect> diff(const PageLayout &oldLayout, const PageLayout &newLayout);
 
 }; //namespace Graphite
 
