@@ -17,30 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
 #include <stdlib.h>
 #include <math.h>
 
 #include "kspread_dlg_layout.h"
 #include "kspread_undo.h"
 #include "kspread_table.h"
-#include "kspread_cell.h"
-#include "kspread_doc.h"
-#include "kspread_view.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"
 
 #include <qlabel.h>
-#include <qpainter.h>
 #include <qlayout.h>
 #include <qfontdatabase.h>
-#include <kcolordlg.h>
-#include <klocale.h>
 #include <kdebug.h>
-#include <kstddirs.h>
 #include <knumvalidator.h>
 #include <qradiobutton.h>
-#include <qpixmap.h>
 #include <klineedit.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QFrame( parent )

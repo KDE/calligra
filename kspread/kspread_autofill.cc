@@ -17,14 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_autofill.h"
-#include "kspread_cell.h"
 #include "kspread_table.h"
 #include "kspread_undo.h"
 #include "kspread_doc.h"
 
-#include <kapp.h>
-#include <klocale.h>
 #include <math.h>
 #include <kconfig.h>
 #include <kdebug.h>

@@ -24,31 +24,19 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#include <kprinter.h>
-#include <qdom.h>
-#include <qtextstream.h>
-#include <qbuffer.h>
-#include <qdatetime.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kurl.h>
-#include <kapp.h>
-#include <klocale.h>
 #include <ksconfig.h>
 
 #include <koTemplateChooseDia.h>
-#include <koFilterManager.h>
-#include <koStoreDevice.h>
 
 #include "kspread_doc.h"
-#include "kspread_interpreter.h"
 #include "kspread_map.h"
 #include "kspread_undo.h"
 #include "kspread_view.h"
-#include "kspread_factory.h"
 
 #include "koDocumentInfo.h"
 

@@ -1,10 +1,9 @@
 #include "KSpreadMapIface.h"
 
 #include "kspread_map.h"
-#include "kspread_table.h"
 #include "kspread_doc.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
 

@@ -17,20 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
 
 #include "kspread_dlg_goto.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
-#include "kspread_table.h"
 #include "kspread_util.h"
 
 #include <qlayout.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
-#include <qrangecontrol.h>
-#include <kmessagebox.h>
 
 
 KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )

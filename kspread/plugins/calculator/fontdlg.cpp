@@ -28,7 +28,6 @@
 
 #include <qfontdialog.h>
 #include <klocale.h>
-#include <qgrid.h>
 #include <qlayout.h>
 
 

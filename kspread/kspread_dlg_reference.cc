@@ -21,18 +21,13 @@
 
 
 #include "kspread_dlg_reference.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
-#include "kspread_table.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_map.h"
-#include <kapp.h>
-#include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
-#include <qlistbox.h>
 #include <kdebug.h>
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )

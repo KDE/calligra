@@ -22,26 +22,15 @@
 #include <math.h>
 #include <float.h>
 
-#include <qpainter.h>
 #include <qapplication.h>
-#include <qpointarray.h>
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
-#include <qdom.h>
-#include <qstyle.h>
 
-#include "kspread_table.h"
 #include "kspread_canvas.h"
 #include "kspread_map.h"
-#include "kspread_cell.h"
-#include "kspread_interpreter.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
-#include "kspread_factory.h"
 
-#include <kinstance.h>
-#include <klocale.h>
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 #include <kdebug.h>

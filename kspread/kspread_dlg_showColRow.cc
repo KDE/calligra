@@ -23,11 +23,8 @@
 #include "kspread_view.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
-#include <kapp.h>
-#include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
-#include <qtl.h>
 
 KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
 	: QDialog( parent, name,TRUE )

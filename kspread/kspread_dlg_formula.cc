@@ -18,26 +18,19 @@
 */
 
 #include <qtextbrowser.h>
-#include <qlayout.h>
 #include <qtabwidget.h>
-#include <qsizepolicy.h>
-#include <qvalidator.h>
 
 #include "kspread_dlg_formula.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_util.h"
-#include "kspread_layout.h"
-#include "kspread_table.h"
 #include "kspread_editors.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
-#include <kdialog.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : QDialog( parent, name )

@@ -4,7 +4,7 @@
 #include "kspread_table.h"
 #include "kspread_util.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
 

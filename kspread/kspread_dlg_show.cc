@@ -23,13 +23,8 @@
 #include "kspread_dlg_show.h"
 #include "kspread_view.h"
 #include "kspread_tabbar.h"
-#include "kspread_table.h"
-#include <kapp.h>
-#include <klocale.h>
-#include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
-#include <qlistbox.h>
 
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )

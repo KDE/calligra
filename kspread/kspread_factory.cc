@@ -17,16 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_factory.h"
 #include "kspread_doc.h"
 #include "kspread_aboutdata.h"
 #include "KSpreadAppIface.h"
 
-#include <klocale.h>
-#include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 
 extern "C"
 {

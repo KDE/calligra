@@ -5,7 +5,7 @@
 #include <qfile.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 
 static KSpreadParameterType toType( const QString& type )

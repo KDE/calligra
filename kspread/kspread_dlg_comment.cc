@@ -18,16 +18,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
 
 #include "kspread_dlg_comment.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_table.h"
 #include <qlayout.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
-#include <qpushbutton.h>
 #include <qmultilineedit.h>
 
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)

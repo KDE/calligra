@@ -1,8 +1,5 @@
-#include "kspread_interpreter.h"
 #include "kspread_util.h"
 #include "kspread_doc.h"
-#include "kspread_map.h"
-#include "kspread_cell.h"
 #include "kspread_table.h"
 
 #include <koscript_parser.h>
@@ -13,9 +10,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
-#include <klocale.h>
-#include <kapp.h>
-#include <qdatetime.h>
 
 #include <kdebug.h>
 

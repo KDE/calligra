@@ -1,11 +1,8 @@
 #include "kspread_editors.h"
 #include "kspread_canvas.h"
-#include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
 
-#include <qlineedit.h>
-#include <qlayout.h>
 #include <qapplication.h>
 
 #include <kdebug.h>

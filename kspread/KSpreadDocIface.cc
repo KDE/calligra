@@ -4,7 +4,7 @@
 #include "kspread_doc.h"
 #include "kspread_map.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KSpreadDocIface::KSpreadDocIface( KSpreadDoc* doc )

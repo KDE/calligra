@@ -1,18 +1,12 @@
 // -*- mode: c++; c-basic-offset: 4 -*-
 #include "kspread_canvas.h"
-#include "kspread_table.h"
-#include "kspread_cell.h"
 #include "kspread_util.h"
 #include "kspread_editors.h"
 #include "kspread_map.h"
 #include "kspread_undo.h"
 
-#include "kspread_view.h"
 #include "kspread_doc.h"
 
-#include "kspread_tabbar.h"
-#include <qapplication.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <kdebug.h>
@@ -21,7 +15,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <qlabel.h>
-#include <qpainter.h>
 #include <qdrawutil.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )

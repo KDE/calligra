@@ -17,16 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
-#include <qdom.h>
-#include <qmessagebox.h>
 
 #include "kspread_map.h"
 #include "kspread_doc.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
-#include "kspread_table.h"
-#include "kspread_util.h"
 
 #include "KSpreadMapIface.h"
 

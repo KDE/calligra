@@ -1,8 +1,6 @@
 #include "KSpreadCellIface.h"
 
 #include "kspread_table.h"
-#include "kspread_cell.h"
-#include <qpen.h>
 
 KSpreadCellIface::KSpreadCellIface()
 {

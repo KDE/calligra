@@ -1,5 +1,4 @@
 #include <kbuttonbox.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 
 #include "kspread_dlg_oszi.h"
@@ -10,12 +9,7 @@
 #include "qtai_plot.h"
 
 #include <qlineedit.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qmessagebox.h>
 #include <qprogressdialog.h>
-#include <qpushbutton.h>
 #include <qslider.h>
 
 #include <math.h>

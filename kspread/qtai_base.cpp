@@ -17,18 +17,18 @@
 
 #include <qpainter.h>
 #include <qbitmap.h>
-#include <qpntarry.h>
-#include <qapp.h>
-#include <qsocknot.h>
-#include <qpopmenu.h>
+#include <qpointarray.h>
+#include <qapplication.h>
+#include <qsocketnotifier.h>
+#include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qkeycode.h>
 #include <qtimer.h>
-#include <qbttngrp.h>
-#include <qfiledlg.h>
+#include <qbuttongroup.h>
+#include <qfiledialog.h>
 #include <qstrlist.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <kdebug.h>
 
 #include <stdio.h>

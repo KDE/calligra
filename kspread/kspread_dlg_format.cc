@@ -1,23 +1,17 @@
 #include "kspread_dlg_format.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
-#include "kspread_factory.h"
 #include "kspread_undo.h"
 #include "kspread_doc.h"
 
-#include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ksimpleconfig.h>
 #include <kbuttonbox.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qstringlist.h>
-#include <qdom.h>
 #include <qfile.h>
 
 

@@ -26,9 +26,7 @@
 
 #include "configdlg.h"
 
-#include <kcolordlg.h>
 #include <klocale.h>
-#include <qgrid.h>
 #include <qlayout.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken

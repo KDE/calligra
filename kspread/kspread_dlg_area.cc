@@ -25,14 +25,10 @@
 #include "kspread_table.h"
 #include "kspread_doc.h"
 
-#include <kapp.h>
-#include <klocale.h>
-#include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
 
 #include <qlineedit.h>
-#include <qlabel.h>
 
 #include <kmessagebox.h>
 

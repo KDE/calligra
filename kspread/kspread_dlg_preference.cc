@@ -17,28 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
-#include <qgroupbox.h>
-#include <qgrid.h>
 #include <qvbox.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 
 #include "kspread_dlg_preference.h"
-#include "kspread_view.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kbuttonbox.h>
-#include <kdialogbase.h>
 #include <kconfig.h>
-#include <kcolorbutton.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kspell.h>

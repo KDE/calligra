@@ -20,19 +20,13 @@
 #include "main.h"
 #include "kcalc.h"
 #include "kspread_view.h"
-#include "kspread_table.h"
 #include "kspread_events.h"
-#include "kspread_cell.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_map.h"
 
-#include <qstring.h>
 
-#include <kaction.h>
 #include <kdebug.h>
-#include <kinstance.h>
-#include <kiconloader.h>
 
 #include <stdio.h>
 

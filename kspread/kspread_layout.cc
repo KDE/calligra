@@ -18,20 +18,13 @@
 */
 
 #include "kspread_canvas.h"
-#include "kspread_layout.h"
 #include "kspread_table.h"
 #include "kspread_doc.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <qdom.h>
-#include <qapplication.h>
 #include <kdebug.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <kcharsets.h>
-#include <koGlobal.h>
 #include <iostream.h>
 
 using namespace std;

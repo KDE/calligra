@@ -23,54 +23,27 @@
 #include <time.h>
 #include <assert.h>
 
-#include <qpushbutton.h>
-#include <qprintdialog.h>
-#include <qcollection.h>
-#include <qkeycode.h>
-#include <qmime.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>
-#include <qframe.h>
-#include <qscrollbar.h>
-#include <qbutton.h>
-#include <qpopupmenu.h>
-#include <qdir.h>
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kstdaccel.h>
 #include <kstdaction.h>
-#include <kglobal.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
-#include <kcoloractions.h>
 #include <tkcoloractions.h>
-#include <kaction.h>
-#include <kstatusbar.h>
-#include <ksconfig.h>
-#include <kprocess.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
 
-#include <koFind.h>
-#include <koPartSelectDia.h>
-#include <koQueryTrader.h>
 #include <koReplace.h>
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
 
 
 #include "kspread_map.h"
-#include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
-#include "kspread_doc.h"
 #include "kspread_dlg_cons.h"
-#include "kspread_util.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
-#include "kspread_view.h"
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_sort.h"

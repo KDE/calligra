@@ -3,7 +3,7 @@
 #include "kspread_doc.h"
 
 #include <dcopclient.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 KSpreadAppIface::KSpreadAppIface()
     : DCOPObject( "Application" )

@@ -18,13 +18,9 @@
 */
 
 #include "kspread_undo.h"
-#include "kspread_table.h"
-#include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
 
-#include <qcstring.h>
-#include <qtextstream.h>
 
 /****************************************************************************
  *

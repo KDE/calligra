@@ -21,13 +21,11 @@
 
 */
 
-#include "kcalc.h"
 #include "configdlg.h"
 #include "fontdlg.h"
 #include "version.h"
 #include <klocale.h>
 #include <knotifyclient.h>
-#include <qgrid.h>
 #include <qlayout.h>
 
 // What's that?!? (Werner)

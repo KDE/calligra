@@ -19,7 +19,6 @@
 
 #include "kspread_util.h"
 #include "kspread_map.h"
-#include "kspread_table.h"
 #include "kspread_doc.h"
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -30,8 +29,6 @@
 #include <string>
 #include <math.h>
 
-#include <klocale.h>
-#include <kapp.h>
 #include <kdebug.h>
 
 QString

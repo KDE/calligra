@@ -21,30 +21,13 @@
 #include <ctype.h>
 #include <math.h>
 
-#include <qpainter.h>
 #include <qapplication.h>
-#include <qdrawutil.h>
-#include <qkeycode.h>
-#include <qregexp.h>
-#include <qpoint.h>
-#include <kprinter.h>
-#include <qcursor.h>
-#include <qptrstack.h>
-#include <qbuffer.h>
-#include <qmessagebox.h>
 #include <qclipboard.h>
 #include <qpicture.h>
-#include <qdom.h>
-#include <qtextstream.h>
 #include <qdragobject.h>
-#include <qmime.h>
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <koFind.h>
 #include <koReplace.h>
 
-#include "kspread_table.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"

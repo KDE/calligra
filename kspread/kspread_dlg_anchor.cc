@@ -18,21 +18,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
 
 #include "kspread_dlg_anchor.h"
-#include "kspread_view.h"
 #include "kspread_canvas.h"
-#include "kspread_doc.h"
 #include "kspread_table.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qvbox.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
 #include <kmessagebox.h>
-#include <kdialogbase.h>
 #include <kdebug.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
