@@ -21,11 +21,11 @@ int main(int argc, char **argv)
 	QFileInfo info=QFileInfo(argv[0]);
 	prgname = info.baseName().latin1();
 	KInstance instance( prgname );
-	if (argc<=1) {
-		return 0;
+	if (argc<2) {
+		return 1;
 	}
 	QCString drv_name(argv[1]);
-	QCString test_name = QString(argv[2]).lower().latin1();
+	QCString db_name = QString(argv[2]).lower().latin1();
 
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();
@@ -39,17 +39,17 @@ int main(int argc, char **argv)
 
 	//get driver
 	KexiDB::Driver *driver = manager.driver(drv_name);
-	if (manager.error()) {
+	if (!driver || manager.error()) {
 		kdDebug() << manager.errorMsg() << endl;
 		return 1;
 	}
 
 	//connection data that can be later reused
 	KexiDB::ConnectionData conn_data;
-	conn_data.setFileName("../newapi/db");
+	conn_data.setFileName(db_name);
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
-	if (driver->error()) {
+	if (!conn || driver->error()) {
 		kdDebug() << "error: " << driver->errorMsg() << endl;
 		return 1;
 	}
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 		kdDebug() << "error: " << conn->errorMsg() << endl;
 		return 1;
 	}
-	if (!conn->useDatabase( "../newapi/db" )) {
+	if (!conn->useDatabase( db_name )) {
 		kdDebug() << "error: " << conn->errorMsg() << endl;
 		return 1;
 	}
