@@ -31,7 +31,7 @@
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8 };
+                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
 

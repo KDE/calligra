@@ -148,7 +148,7 @@ void KoVariableCollection::recalcVariables(int type)
     QPtrListIterator<KoVariable> it( variables );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->type() == type )
+        if ( it.current()->type() == type || type == VT_ALL )
         {
             update = true;
             it.current()->recalc();
