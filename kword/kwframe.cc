@@ -19,6 +19,7 @@
 
 #include "kwdoc.h"
 #include "kwview.h"
+#include "kwviewmode.h"
 #include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwframe.h"
@@ -268,15 +269,14 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 
 void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode )
 {
-    // TODO use viewMode
     painter->save();
 
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
-        QRect frameRect( m_doc->zoomRect( *frame ) );
-        QRect outerRect( frame->outerRect() );
+        QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
         //kdDebug(32002) << "KWFrameSet::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
         //kdDebug(32002) << "KWFrameSet::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
 
@@ -433,11 +433,11 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     }
 }
 
-KoPoint KWFrameSet::floatingFrameSize( int frameNum )
+QSize KWFrameSet::floatingFrameSize( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
-    return KoPoint( frame->width(), frame->height() ); // well maybe we should have a KoSize after all :)
+    return frame->outerRect().size();
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
@@ -547,7 +547,7 @@ void KWFrameSet::updateFrames()
 
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode /*TODO*/)
+                               KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
     //kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
     //               << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
@@ -567,7 +567,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         }
 
         QRect r(crect);
-        QRect frameRect( m_doc->zoomRect( *frame ) );
+        QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+        QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
         r = r.intersect( frameRect );
         //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
@@ -577,23 +578,24 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             // ( frame and r are up to here in this system )
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
-            int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+            int offsetX = normalFrameRect.left();
+            int offsetY = normalFrameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
-            r.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
+            QRect icrect = viewMode->viewToNormal( r );
+            icrect.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
 
-            QRegion reg = frameClipRegion( p, frame, crect );
+            QRegion reg = frameClipRegion( p, frame, crect, viewMode );
             if ( !reg.isEmpty() )
             {
                 p->save();
                 p->setClipRegion( reg );
-                p->translate( offsetX, offsetY );
+                p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
 
                 QBrush bgBrush( frame->getBackgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
-                drawFrame( frame, p, r, cg, onlyChanged, resetChanged, edit );
+                drawFrame( frame, p, icrect, cg, onlyChanged, resetChanged, edit );
 
                 p->restore();
             }
@@ -955,7 +957,7 @@ void KWFrameSet::finalize()
 
 // This determines where to clip the painter to draw the contents of a given frame
 // It clips to the frame, and clips out any "on top" frame.
-QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect )
+QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode )
 {
     QRect rc = painter->xForm( kWordDocument()->zoomRect( *frame ) );
     rc &= painter->xForm( crect ); // intersect
@@ -968,7 +970,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         QListIterator<KWFrame> fIt( m_framesOnTop );
         for ( ; fIt.current() ; ++fIt )
         {
-            QRect r = painter->xForm( fIt.current()->outerRect() );
+            QRect r = painter->xForm( viewMode->normalToView( fIt.current()->outerRect() ) );
             //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }
@@ -1261,6 +1263,7 @@ void KWFormulaFrameSet::drawFrame( KWFrame* frame, QPainter* painter, const QRec
                                    QColorGroup& cg, bool onlyChanged, bool resetChanged,
                                    KWFrameSetEdit *edit )
 {
+    //kdDebug() << "KWFormulaFrameSet::drawFrame m_changed=" << m_changed << " onlyChanged=" << onlyChanged << endl;
     if ( m_changed || !onlyChanged )
     {
         if ( resetChanged )
@@ -1273,6 +1276,7 @@ void KWFormulaFrameSet::drawFrame( KWFrame* frame, QPainter* painter, const QRec
         }
         else
         {
+            //kdDebug() << "KWFormulaFrameSet::drawFrame drawing (without edit) crect=" << DEBUGRECT( crect ) << endl;
             formula->draw( *painter, crect, cg );
         }
     }

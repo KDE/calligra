@@ -32,9 +32,9 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     for ( int page = 0; page < doc->getPages(); page++ )
     {
         // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-        int pagetop = m_canvas->pageTop( page );
+        int pagetop = doc->pageTop( page );
         int pagewidth = doc->paperWidth();
-        int pageheight = m_canvas->pageTop( page+1 ) - pagetop;
+        int pageheight = doc->pageTop( page+1 ) - pagetop;
         QRect pageRect( 0, pagetop, pagewidth, pageheight );
         if ( crect.intersects( pageRect ) )
         {
@@ -72,7 +72,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
         }
     }
     // Take care of the area at the bottom of the last page
-    int lastBottom = m_canvas->pageTop( doc->getPages() );
+    int lastBottom = doc->pageTop( doc->getPages() );
     if ( crect.bottom() > lastBottom )
     {
         QRect bottomArea( 0, lastBottom, crect.width(), crect.bottom() - lastBottom + 1 );
@@ -94,29 +94,31 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
 //////////////////////// Preview mode ////////////////////////////////
 
-KoPoint KWViewModePreview::normalToView( const KoPoint & nPoint )
+QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 {
-    double paperWidth = m_canvas->kWordDocument()->ptPaperWidth();
-    double paperHeight = m_canvas->kWordDocument()->ptPaperHeight();
-    int page = static_cast<int>( nPoint.y() / paperHeight );
-    double yInPage = nPoint.y() - page * paperHeight;
+    KWDocument * doc = m_canvas->kWordDocument();
+    // Can't use nPoint.y() / doc->paperHeight() since this would be a rounding problem
+    double unzoomedY = doc->unzoomItY( nPoint.y() );
+    int page = static_cast<int>( unzoomedY / doc->ptPaperHeight() ); // quotient
+    double yInPagePt = unzoomedY - page * doc->ptPaperHeight();        // and rest
     int row = page / m_pagesPerRow;
     int col = page % m_pagesPerRow;
-    return KoPoint( col * ( paperWidth + m_spacing ) + nPoint.x(),
-                    row * ( paperHeight + m_spacing ) + yInPage );
+    return QPoint( col * ( doc->paperWidth() + m_spacing ) + nPoint.x(),
+                   row * ( doc->paperHeight() + m_spacing ) + doc->zoomItY( yInPagePt ) );
 }
 
-KoPoint KWViewModePreview::viewToNormal( const KoPoint & vPoint )
+QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
 {
     // Well, just the opposite of the above.... hmm.... headache....
-    double paperWidth = m_canvas->kWordDocument()->ptPaperWidth();
-    double paperHeight = m_canvas->kWordDocument()->ptPaperHeight();
+    KWDocument * doc = m_canvas->kWordDocument();
+    int paperWidth = doc->paperWidth();
+    int paperHeight = doc->paperHeight();
     int col = static_cast<int>( vPoint.x() / ( paperWidth + m_spacing ) );
-    double xInPage = vPoint.x() - col * ( paperWidth + m_spacing );
+    int xInPage = vPoint.x() - col * ( paperWidth + m_spacing );
     int row = static_cast<int>( vPoint.y() / ( paperHeight + m_spacing ) );
-    double yInPage = vPoint.y() - row * ( paperHeight + m_spacing );
+    int yInPage = vPoint.y() - row * ( paperHeight + m_spacing );
     int page = row * m_pagesPerRow + col;
-    return KoPoint( xInPage, yInPage + page * paperHeight );
+    return QPoint( xInPage, yInPage + doc->pageTop( page ) );
 }
 
 void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )

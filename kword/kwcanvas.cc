@@ -50,6 +50,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_currentFrameSetEdit = 0L;
     m_mousePressed = false;
     m_viewMode = new KWViewModeNormal( this );
+    //m_viewMode = new KWViewModePreview( this ); // for testing
     cmdMoveFrame=0L;
 
     // Default table parameters.
@@ -163,7 +164,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->save();
         int pgNum = (*it) - 1;
-        int yOffset = pageTop( pgNum );
+        int yOffset = doc->pageTop( pgNum );
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect( 0, yOffset, doc->paperWidth(), doc->paperHeight() );
         painter->fillRect( pageRect, white );
@@ -372,8 +373,9 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
 
 void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 {
-    int mx = e->pos().x();
-    int my = e->pos().y();
+    QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
+    int mx = normalPoint.x();
+    int my = normalPoint.y();
 
     if ( e->button() == RightButton ) {
         if(!doc->isReadWrite()) // The popups are not available in readonly mode, since the GUI isn't built...
@@ -1669,12 +1671,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 
 void KWCanvas::slotNewContentsSize()
 {
-    resizeContents( doc->paperWidth(), pageTop( doc->getPages() ) /*i.e. bottom of last one*/ );
-}
-
-unsigned int KWCanvas::pageTop( int pgNum /*0-based*/ ) const
-{
-    return doc->zoomItY( pgNum * doc->ptPaperHeight() );
+    resizeContents( doc->paperWidth(), doc->pageTop( doc->getPages() ) /*i.e. bottom of last one*/ );
 }
 
 void KWCanvas::resizeEvent( QResizeEvent *e )
@@ -1712,7 +1709,7 @@ int KWCanvas::getVertRulerPos(int y)
     int pageNum=1;
     if( m_currentFrameSetEdit )
         pageNum = m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
-    return ( -(y==-1 ? contentsY() : y) + pageTop(pageNum - 1) );
+    return ( -(y==-1 ? contentsY() : y) + doc->pageTop(pageNum - 1) );
 }
 
 int KWCanvas::getHorzRulerPos(int x)

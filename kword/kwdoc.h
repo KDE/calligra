@@ -182,6 +182,8 @@ public:
     unsigned int paperHeight() const { return static_cast<unsigned int>(zoomItY( m_pageLayout.ptHeight )); }
     unsigned int paperWidth() const { return static_cast<unsigned int>(zoomItX( m_pageLayout.ptWidth )); }
     unsigned int columnSpacing() const { return static_cast<unsigned int>(zoomItX( m_pageColumns.ptColumnSpacing )); }
+    // Top of the page number pgNum, in pixels (in the normal coord system)
+    unsigned int pageTop( int pgNum /*0-based*/ ) const { return zoomItY( ptPageTop( pgNum ) ); }
 
     // Those distances are in _pt_, i.e. the real distances, stored in m_pageLayout
     double ptTopBorder() const { return m_pageLayout.ptTop; }
@@ -391,6 +393,17 @@ public:
     QRect zoomRect( const KoRect & r ) const {
         return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
                       zoomItX( r.width() ), zoomItY( r.height() ) );
+    }
+
+    // Input: pixels. Output: pt.
+    double unzoomItX( int x ) const {
+        return static_cast<double>( x ) / m_zoomedResolutionX;
+    }
+    double unzoomItY( int y ) const {
+        return static_cast<double>( y ) / m_zoomedResolutionY;
+    }
+    KoPoint unzoomPoint( const QPoint & p ) const {
+        return KoPoint( unzoomItX( p.x() ), unzoomItY( p.y() ) );
     }
 
     // useless method

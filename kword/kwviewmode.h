@@ -20,7 +20,7 @@
 #ifndef kwviewmode_h
 #define kwviewmode_h
 
-#include <koRect.h>
+#include <qrect.h>
 class KWCanvas;
 class QPainter;
 class QRegion;
@@ -33,7 +33,7 @@ class QRegion;
  * coordinate system and its own.
  * When drawing, we use normalcoord->viewcoord and when handling mouse clicks
  * we use viewcoord->normalcoord.
- * Note that this all in unzoomed (pt) coordinates (mainly to prevent rounding problems).
+ * Note that this all in zoomed (pixel) coordinates (see DESIGN file).
  *
  * The View Mode is obviously also responsible for drawing pages etc.
  */
@@ -45,16 +45,16 @@ public:
     virtual ~KWViewMode() {}
 
     // Normal coord -> view coord
-    virtual KoPoint normalToView( const KoPoint & nPoint ) = 0;
+    virtual QPoint normalToView( const QPoint & nPoint ) = 0;
 
-    KoRect normalToView( const KoRect & nRect )
-    { return KoRect( normalToView( nRect.topLeft() ), normalToView( nRect.bottomRight() ) ); }
+    QRect normalToView( const QRect & nRect )
+    { return QRect( normalToView( nRect.topLeft() ), normalToView( nRect.bottomRight() ) ); }
 
     // View coord -> normal coord
-    virtual KoPoint viewToNormal( const KoPoint & vPoint ) = 0;
+    virtual QPoint viewToNormal( const QPoint & vPoint ) = 0;
 
-    KoRect viewToNormal( const KoRect & nRect )
-    { return KoRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
+    QRect viewToNormal( const QRect & nRect )
+    { return QRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
@@ -70,8 +70,8 @@ public:
     virtual ~KWViewModeNormal() {}
 
     // This view mode is very easy to implement ;-P
-    virtual KoPoint normalToView( const KoPoint & nPoint ) { return nPoint; }
-    virtual KoPoint viewToNormal( const KoPoint & vPoint ) { return vPoint; }
+    virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
+    virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
@@ -87,8 +87,8 @@ public:
     {}
     virtual ~KWViewModePreview() {}
 
-    virtual KoPoint normalToView( const KoPoint & nPoint );
-    virtual KoPoint viewToNormal( const KoPoint & vPoint );
+    virtual QPoint normalToView( const QPoint & nPoint );
+    virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 
 private:

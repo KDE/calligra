@@ -87,8 +87,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 QSize KWAnchor::size() const
 {
     KWDocument * doc = m_frameset->kWordDocument();
-    KoPoint p = m_frameset->floatingFrameSize( m_frameNum );
-    return QSize( doc->zoomItX( p.x() ), doc->zoomItY( p.y() ) );
+    return m_frameset->floatingFrameSize( m_frameNum );
 }
 
 void KWAnchor::resize()

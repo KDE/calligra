@@ -215,7 +215,7 @@ public:
     virtual void updateFrames();
 
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    virtual KoPoint floatingFrameSize( int frameNum );
+    virtual QSize floatingFrameSize( int frameNum );
     /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     /** Store command for deleting an anchored object */

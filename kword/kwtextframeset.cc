@@ -244,10 +244,11 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     }
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible )
+void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWViewMode * viewMode )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
 
+    m_currentViewMode = viewMode; // in case KWAnchor gets called
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
@@ -278,7 +279,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             //kdDebug(32002) << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
             //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
-            QRegion reg = frameClipRegion( p, frame, clip );
+            QRegion reg = frameClipRegion( p, frame, clip, viewMode );
             if ( !reg.isEmpty() )
             {
                 cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
@@ -2997,7 +2998,7 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    textFrameSet()->drawCursor( &p, cursor, visible );
+    textFrameSet()->drawCursor( &p, cursor, visible, m_canvas->viewMode() );
     cursorVisible = visible;
 }
 

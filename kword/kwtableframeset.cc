@@ -28,6 +28,7 @@ DESCRIPTION
 #include "kwanchor.h"
 #include "kwtableframeset.h"
 #include "kwcanvas.h"
+#include "kwviewmode.h"
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -116,11 +117,11 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     }
 }
 
-KoPoint KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
+QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 {
     // ## TODO cut into one rectangle per page
     KoRect r = boundingRect();
-    return KoPoint( r.width(), r.height() );
+    return kWordDocument()->zoomRect( r ).size();
 }
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
@@ -1352,15 +1353,14 @@ bool KWTableFrameSet::contains( double mx, double my ) {
 
 void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode )
 {
-    // TODO use viewMode
     painter->save();
 
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
-        QRect frameRect( m_doc->zoomRect( *frame ) );
-        QRect outerRect( frame->outerRect() );
+        QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
 
         if ( !crect.intersects( outerRect ) )
             continue;

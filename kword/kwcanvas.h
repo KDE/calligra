@@ -66,6 +66,8 @@ public:
     KWGUI * gui() const { return m_gui; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
+    KWViewMode *viewMode() const { return m_viewMode; }
+
     void repaintAll( bool erase = false );
     /**
      * Only repaint the frameset @p fs.
@@ -149,9 +151,6 @@ public:
     //koruler position
     int getVertRulerPos(int y=-1);
     int getHorzRulerPos(int x=-1);
-
-    // temp hack. Should be moved to KWViewModeNormal probably
-    unsigned int pageTop( int pgNum /*0-based*/ ) const;
 
 protected:
     /** Set format changes on selection on current cursor */

@@ -390,9 +390,9 @@ public:
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
-    /** Get the size of the "floating frame" identified by frameNum.
+    /** Get the [zoomed] size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
-    virtual KoPoint floatingFrameSize( int frameNum );
+    virtual QSize floatingFrameSize( int frameNum );
     /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
     /** Store command for deleting an anchored object */
@@ -444,7 +444,7 @@ protected:
 
     // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
     // in the rectangle delimited by @p crect.
-    QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
+    QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode );
 
     virtual void deleteAnchors();
     virtual void updateAnchors( bool placeHolderExists = false );

@@ -19,7 +19,7 @@ This is also called the "Normal" coordinate system.
  |
  | And for text framesets, there's also :
  |
- |--KWTextFrameSet::contentsToInternal
+ |--KWTextFrameSet::normalToInternal
  V
 Internal coordinates (pixel values for QRT)
  
