@@ -410,7 +410,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
          && textPen( _col, _row ).color().isValid() )
     {
-        currentCellStyle.addAttribute( "fo:color", textColor( _col, _row ).name() );
+        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name() );
         //format.appendChild( util_createElement( "pen", textPen( _col, _row ), doc ) );
     }
     //FIXME fallback ????

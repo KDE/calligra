@@ -35,7 +35,7 @@ Format
    [!] Numeric format 
    [X] Borders
    [ ] Border shadow
-   [ ] Font color
+   [X] Font color
    [X] Background style
 
 Sheet

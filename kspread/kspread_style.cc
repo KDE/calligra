@@ -1112,16 +1112,16 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty("fo:font-size",m_fontSize  );
     }
+    if ( featureSet( STextPen ) && m_textPen.color().isValid() )
+    {
+        style.addProperty("fo:color", m_textPen.color().name() );
+    }
 #if 0
     if ( featureSet( SFontFlag ) )
         format.setAttribute( "font-flags", m_fontFlags );
 
     //  if ( featureSet( SFont ) )
     //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
-
-    if ( featureSet( STextPen ) && m_textPen.color().isValid() )
-        format.appendChild( util_createElement( "pen", m_textPen, doc ) );
-
 #endif
 
     if ( featureSet( SBackgroundBrush ) )
