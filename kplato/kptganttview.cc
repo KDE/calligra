@@ -312,6 +312,7 @@ void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
     //kdDebug()<<k_funcinfo<<endl;
     if (node->isDeleted())
         return;
+    item->setListViewText(node->name());
     KPTDateTime time = node->startTime();
     KPTDuration dur = node->duration();
     if (dur == KPTDuration::zeroDuration)
@@ -327,6 +328,7 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
     //kdDebug()<<k_funcinfo<<endl;
     if (task->isDeleted())
         return;
+    item->setListViewText(task->name());
     KPTDateTime time = task->startTime();
     KPTDuration dur = task->duration();
     if (dur == KPTDuration::zeroDuration)
@@ -347,6 +349,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     //kdDebug()<<k_funcinfo<<endl;
     if (task->isDeleted())
         return;
+    item->setListViewText(task->name());
     KPTDateTime time = task->startTime();
     KPTDuration dur = task->duration();
     if (dur == KPTDuration::zeroDuration)
@@ -373,6 +376,7 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     if (task->isDeleted()) {
         return;
     }
+    item->setListViewText(task->name());
     item->setStartTime(task->startTime());
     //item->setOpen(true);
     if (m_showSlack) { // Test
