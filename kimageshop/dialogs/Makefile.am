@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets $(all_includes) $(KOFFICE_INCLUDES)
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../widgets $(all_includes) $(KOFFICE_INCLUDES) $(MICO_INCLUDES)
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
