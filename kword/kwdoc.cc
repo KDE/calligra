@@ -462,7 +462,7 @@ void KWDocument::initConfig()
   {
       config->setGroup( "Kword Path" );
       m_personalExpressionPath=config->readListEntry( "expression path"/*,KWFactory::global()->dirs()->resourceDirs("expression")*/ );
-      m_personalExpressionPath=config->readEntry( "picture path",KGlobalSettings::documentPath());
+      m_picturePath=config->readEntry( "picture path",KGlobalSettings::documentPath());
   }
 }
 

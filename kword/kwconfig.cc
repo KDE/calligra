@@ -52,7 +52,9 @@
 #include <kstandarddirs.h>
 #include <kdeversion.h>
 #include <kdebug.h>
-
+#include <kglobalsettings.h>
+#include <kurlrequesterdlg.h>
+#include <kfiledialog.h>
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
 static inline QPixmap loadIcon( const char * name ) {
@@ -890,15 +892,28 @@ void ConfigurePathPage::slotSelectionChanged(QListViewItem * item)
 void ConfigurePathPage::slotModifyPath()
 {
     QListViewItem *item = m_pPathView->currentItem ();
-    if ( item )
+    if ( item && (item->text(0)==i18n("Personal Expression")))
     {
-        KWEditPathDia * dlg = new KWEditPathDia( item->text( 1), 0L, "editpath");
+        KWEditPathDia * dlg = new KWEditPathDia( item->text( 1), true/*multi path*/,  0L, "editpath");
         if (dlg->exec() )
         {
             item->setText(1, dlg->newPath());
         }
         delete dlg;
     }
+    if ( item && (item->text(0)==i18n("Picture path")))
+    {
+
+        KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
+                      "picture path dlg");
+        dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
+        if ( dlg->exec() )
+        {
+            item->setText( 1, dlg->selectedURL().path());
+        }
+        delete dlg;
+    }
+
 }
 
 void ConfigurePathPage::slotDefault()
@@ -906,6 +921,9 @@ void ConfigurePathPage::slotDefault()
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
         item->setText(1, KWFactory::global()->dirs()->resourceDirs("expression").join(";"));
+    item = m_pPathView->findItem(i18n("Picture path"), 0);
+    if ( item )
+        item->setText(1, KGlobalSettings::documentPath());
 }
 
 void ConfigurePathPage::apply()

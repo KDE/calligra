@@ -29,12 +29,13 @@ class KWEditPathDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWEditPathDia( const QString & _path, QWidget *parent, const char *name );
+    KWEditPathDia( const QString & _path, bool _multiPath, QWidget *parent, const char *name );
     QString newPath()const;
 
 private:
     KEditListBox *m_listpath;
     KURLRequester *urlReq;
+    bool m_multiPath;
 };
 
 #endif

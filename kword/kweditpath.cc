@@ -29,9 +29,10 @@
 #include <kurlrequester.h>
 #include <qhbox.h>
 #include <klineedit.h>
-KWEditPathDia::KWEditPathDia( const QString & _path, QWidget *parent, const char *name )
+KWEditPathDia::KWEditPathDia( const QString & _path, bool _multiPath, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
+    m_multiPath = _multiPath;
     setCaption( i18n("Edit Path") );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
