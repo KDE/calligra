@@ -120,10 +120,6 @@ void KPBackGround::reload()
 }
 
 
-void KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
-{
-}
-
 QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
 {
     QDomElement page=doc.createElement("PAGE");
@@ -202,6 +198,28 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     }
 
     return page;
+}
+
+
+
+QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+{
+    KoGenStyle stylepage( KPresenterDoc::STYLE_BACKGROUNDPAGE, "drawing-page" );
+    stylepage.addAttribute( "presentation:background-visible", "true" ); //for the moment it's not implemented into kpresenter
+    stylepage.addAttribute( "presentation:background-objects-visible", "true" );
+
+    switch ( backType )
+    {
+    case BT_COLOR:
+        stylepage.addAttribute( "draw:fill","solid" );
+        stylepage.addAttribute( "draw:fill-color", backColor1.name() );
+        break;
+    case BT_CLIPART:
+    case BT_PICTURE:
+        //todo
+        break;
+    }
+    return mainStyles.lookup( stylepage, "dp" );
 }
 
 

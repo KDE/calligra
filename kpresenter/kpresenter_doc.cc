@@ -1000,6 +1000,17 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     }
     stylesWriter.endElement(); // office:styles
 //todo add other style
+
+    stylesWriter.startElement( "office:automatic-styles" );
+    styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        //FIXME fourth element is not good :(
+        (*it).style->writeStyle( &stylesWriter, "style:style", (*it).name , "style:properties" /*, "style:paragraph-properties"*/ /* I don't know whatis it*/ );
+    }
+    stylesWriter.endElement(); // office:automatic-styles
+
+
     stylesWriter.endElement(); // root element (office:document-styles)
     stylesWriter.endDocument();
 }

@@ -98,6 +98,7 @@ DCOPObject* KPrPage::dcopObject()
 
 bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )
 {
+    kdDebug()<<"saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )*****************\n";
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
     xmlWriter.addAttribute( "draw:name", m_manualTitle );
@@ -105,7 +106,10 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:id", posPage );
     //xmlWriter.addAttribute( "draw:master-page-name", master-page-name); ??? FIXME
 
-    kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter,mainStyles );
+    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter,mainStyles );
+    kdDebug()<<" styleName :"<<styleName<<endl;
+    if ( !styleName.isEmpty() )
+        xmlWriter.addAttribute( "draw:style-name", styleName );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
