@@ -467,9 +467,11 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     int topBorder = 0;
 
     while ( !e.isNull() ) {
+        typedef QMap<KoVariable *, int>Variable;
+        Variable varMap;
+        varMap.clear();
         if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
-
             KoParagLayout paragLayout = loadParagLayout(e, m_doc, true);
             //compatibility
             if(type!=-1)
@@ -563,16 +565,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         // If varFormat is 0 (no key specified), the default format will be used.
                         KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc );
                         var->load( varElem );
-                        KoTextFormat f;/* = loadFormat(n, paragraphFormat(), m_doc->defaultFont() );*/
-                        lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &f ) );
-
-                        var->recalc();
-/*
-                        if(len>1) {
-                            removePosList.append(index+1);
-                            removeLenList.append(len-1);
-                        }
-*/
+                        varMap.insert( var, index );
                     }
                     n = n.nextSibling().toElement();
                 }
@@ -589,6 +582,14 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
         if ( e.isNull() )
             break;
         i = 0;
+        Variable::Iterator it;
+        for ( it=varMap.begin(); it !=varMap.end();++it)
+        {
+            KoTextFormat f;
+            lastParag->setCustomItem( it.data(), it.key(), lastParag->document()->formatCollection()->format( &f ) );
+
+            it.key()->recalc();
+        }
         if ( !lastParag->length() == 0 )
             lastParag = new KoTextParag( textDocument(), lastParag, 0 );
     }
@@ -1777,12 +1778,6 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
     QString tmpText;
     for ( int i = from; i <= to; ++i ) {
         KoTextStringChar &c = parag->string()->at(i);
-        if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
-            if ( lastFormat )
-                paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
-            lastFormat = static_cast<KoTextFormat*> (c.format());
-            tmpText=QString::null;
-        }
         if ( c.isCustom() )
         {
             QDomElement variable = doc.createElement("CUSTOM");
@@ -1790,7 +1785,16 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
             paragraph.appendChild( variable );
             static_cast<KoTextCustomItem *>( c.customItem() )->save(variable );
         }
-        tmpText+=c.c;
+        else
+        {
+            if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
+                if ( lastFormat )
+                    paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
+                lastFormat = static_cast<KoTextFormat*> (c.format());
+                tmpText=QString::null;
+            }
+            tmpText+=c.c;
+        }
     }
     if ( lastFormat ) {
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
