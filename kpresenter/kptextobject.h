@@ -50,6 +50,8 @@ public:
   { if (gradient) gradient->setBackColorType(_gType); gType = _gType; redrawPix = true; }
   virtual void setDrawEditRect(bool b)
   { drawEditRect = b; }
+  virtual void setDrawEmpty(bool b)
+  { drawEmpty = b; }
   
   virtual ObjType getType()
   { return OT_TEXT; }
@@ -71,6 +73,8 @@ public:
   { return gType; }
   virtual bool getDrawEditRect()
   { return drawEditRect; }
+  virtual bool getDrawEmpty()
+  { return drawEmpty; }
   
   virtual void save(ostream& out);
   virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst);
@@ -100,7 +104,7 @@ protected:
   KPGradient *gradient;
   QPixmap pix;
   bool redrawPix;
-  bool drawEditRect;
+  bool drawEditRect,drawEmpty;
   
 };
 

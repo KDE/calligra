@@ -35,6 +35,7 @@ KPTextObject::KPTextObject()
   gColor1 = red;
   gColor2 = green;
   drawEditRect = true;
+  drawEmpty = true;
 }
 
 /*======================= set size ===============================*/
@@ -395,14 +396,14 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	      switch (effect2)
 		{
 		case EF2T_PARA:
-		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping,drawEmpty);
 		  break;
 		default:
-		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 		}
 	    }
 	  else
-	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 
 	  ktextobject.disableDrawAllInOneColor();
 	}
@@ -437,14 +438,14 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	      switch (effect2)
 		{
 		case EF2T_PARA:
-		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping,drawEmpty);
 		  break;
 		default:
-		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 		}
 	    }
 	  else
-	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 
 	  ktextobject.disableDrawAllInOneColor();
 	}
@@ -460,14 +461,14 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  switch (effect2)
 	    {
 	    case EF2T_PARA:
-	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping,drawEmpty);
 	      break;
 	    default:
-	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 	    }
 	}
       else
-	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
     }
   else
     {
@@ -493,14 +494,14 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  switch (effect2)
 	    {
 	    case EF2T_PARA:
-	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping,drawEmpty);
 	      break;
 	    default:
-	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
 	    }
 	}
       else
-	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping,drawEmpty);
     }
 
   _painter->setViewport(r);

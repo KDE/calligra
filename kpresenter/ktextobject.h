@@ -1151,7 +1151,7 @@ public:
    * If <i>_clip</i> is true, the clipping rect is set to <i>_x, _y, _w, _h</i>, else no clipping rect is set.
    */
   QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
-  void draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
+  void draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true,bool _drawempty=true);
 
   /**
    * Resize the KTextObject.

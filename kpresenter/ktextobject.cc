@@ -1658,7 +1658,7 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,in
 }
 
 /*=================== get QPicture of the obj ====================*/
-void KTextObject::draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true)
+void KTextObject::draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true,bool _drawempty=true)
 {
   p.save();
 
@@ -1675,7 +1675,7 @@ void KTextObject::draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=fal
   to = max(from,to);
 
   if (paragraphList.count() == 1 && paragraphAt(0)->lines() == 1 &&
-      paragraphAt(0)->lineAt(0)->items() == 1 && !presMode)
+      paragraphAt(0)->lineAt(0)->items() == 1 && !presMode && _drawempty)
     {
       QFont _font("helvetica",12);
       _font.setBold(true);
