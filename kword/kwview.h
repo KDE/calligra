@@ -82,9 +82,10 @@ class KWTableFrameSet;
 
 class KoSpell;
 #ifdef HAVE_LIBKSPELL2
-#include <kspell2/dialog.h>
-using namespace KSpell2;
-class KSpell2::Dialog;
+#include <kspell2/broker.h>
+namespace KSpell2 {
+    class Dialog;
+}
 #endif
 
 
@@ -119,6 +120,11 @@ public:
 
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders(bool b);
+
+    /**
+     * Returns the KWord global KSpell2 Broker object.
+     */
+    KSpell2::Broker *broker() const;
 
     // Currently unused
     //bool viewTableGrid() const { return m_viewTableGrid; }
@@ -757,6 +763,10 @@ private:
         KSpell2::Dialog *dlg;
 #endif
      } m_spell;
+#ifdef HAVE_LIBKSPELL2
+    KSpell2::Broker::Ptr m_broker;
+#endif
+
 
     KWFrameSet *fsInline;
 

@@ -36,7 +36,9 @@ class KIntNumInput;
 class KCommand;
 class KWDocument;
 class KListView;
-class KoSpellConfigWidget;
+namespace KSpell2 {
+    class ConfigWidget;
+}
 
 class ConfigureSpellPage : public QObject
 {
@@ -48,7 +50,7 @@ public:
 private:
     KWView* m_pView;
     KConfig* config;
-    KoSpellConfigWidget *m_spellConfigWidget;
+    KSpell2::ConfigWidget *m_spellConfigWidget;
 };
 
 class ConfigureInterfacePage : public QObject

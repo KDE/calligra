@@ -1562,7 +1562,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             spellWord=spellWord.nextSibling().toElement();
         }
     }
-    //m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
 
     emit sigProgress(25);
 

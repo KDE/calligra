@@ -119,6 +119,7 @@
 #include <stdlib.h>
 
 #ifdef HAVE_LIBKSPELL2
+#include <kspell2/dialog.h>
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include "kospell.h"
@@ -138,6 +139,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_spell.kospell = 0;
 #ifdef HAVE_LIBKSPELL2
     m_spell.dlg = 0;
+    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
 #endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
@@ -5321,7 +5323,7 @@ void KWView::startKSpell()
 {
 #ifdef HAVE_LIBKSPELL2
     if ( !m_spell.kospell )
-        m_spell.kospell = new KoSpell( Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) ), this  );
+        m_spell.kospell = new KoSpell( m_broker, this  );
 
     // Spell-check the next paragraph
     Q_ASSERT( m_spell.textIterator );
@@ -7212,10 +7214,9 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
-    #ifdef HAVE_LIBKSPELL2
+#ifdef HAVE_LIBKSPELL2
 //not perfect, improve API!!!!
-    KSpell2::Broker::Ptr broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
-    DefaultDictionary *dict = broker->defaultDictionary();
+    DefaultDictionary *dict = m_broker->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )
     {
@@ -7230,7 +7231,7 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
             }
         }
     }
-    #endif
+#endif
     return listAction;
 }
 
@@ -7262,6 +7263,11 @@ void KWView::slotChildActivated( bool a )
           fs->endEditing();
   }
   KoView::slotChildActivated( a );
+}
+
+Broker *KWView::broker() const
+{
+    return m_broker;
 }
 
 /******************************************************************/

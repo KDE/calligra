@@ -47,6 +47,12 @@
 #include <kovariable.h>
 #include <kformulaconfigpage.h>
 
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/configwidget.h>
+#include <kspell2/settings.h>
+#include <kspell2/broker.h>
+using namespace KSpell2;
+#endif
 #include <float.h>
 #include <kmessagebox.h>
 #include <klistview.h>
@@ -195,19 +201,20 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-
+    m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
+    m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
 }
 
 void ConfigureSpellPage::apply()
 {
   KWDocument* doc = m_pView->kWordDocument();
 
-  //bool state=m_spellConfigWidget->backgroundSpellCheck();
-  //config->writeEntry( "SpellCheck", (int)state );
+  m_spellConfigWidget->save();
 
-  //m_pView->kWordDocument()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
-  //FIXME reactivate just if there is a changes.
-  //doc->enableBackgroundSpellCheck( state );
+  m_pView->kWordDocument()->addIgnoreWordAllList(
+      m_pView->broker()->settings()->currentIgnoreList() );
+  //FIXME reactivate just if there are changes.
+  doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
   doc->reactivateBgSpellChecking();
 }
 
