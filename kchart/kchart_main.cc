@@ -18,8 +18,10 @@ typedef AutoLoader<KChartFactory> KChartAutoLoader;
  *
  *******************************************************************/
 
-KChartApp::KChartApp( int argc, char** argv ) : OPApplication( argc, argv )
+KChartApp::KChartApp( int argc, char** argv ) : 
+      OPApplication( argc, argv, "kchart" )
 {
+   getLocale()->insertCatalogue("koffice");
 }
 
 KChartApp::~KChartApp()

@@ -8,8 +8,10 @@ bool g_bWithGUI = true;
 FACTORY( KSpreadDoc, KSpread::Factory_skel, KSpreadFactory )
 typedef AutoLoader<KSpreadFactory> KSpreadAutoLoader;
 
-KSpreadApp::KSpreadApp( int argc, char** argv ) : OPApplication( argc, argv )
+KSpreadApp::KSpreadApp( int argc, char** argv ) : 
+     OPApplication( argc, argv, "kspread" )
 {
+  getLocale()->insertCatalogue("koffice");
   m_pShell = 0L;
 }
 
