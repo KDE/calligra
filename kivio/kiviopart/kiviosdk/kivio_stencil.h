@@ -75,7 +75,8 @@ typedef enum
 {
   kstNormal = 0,
   kstConnector,
-  kstGroup
+  kstGroup,
+  kstText
 } KivioStencilType;
 
 #define KIVIO_RESIZE_HANDLE_POSITION_ALL \

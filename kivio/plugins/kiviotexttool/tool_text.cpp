@@ -182,6 +182,7 @@ void TextTool::text(QRect r)
     }
 
     KivioStencil* stencil = ss->newStencil();
+    stencil->setType(kstText);
     stencil->setPosition(x,y);
     stencil->setDimensions(w,h);
     stencil->setText("");

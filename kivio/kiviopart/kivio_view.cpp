@@ -395,10 +395,10 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
   (void) new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
-  (void) new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
+   m_menuTextFormatAction = new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
     actionCollection(), "textFormat");
 
-  (void) new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
+   m_menuStencilConnectorsAction = new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
     actionCollection(), "stencilFormat");
 
    m_arrowHeadsMenuAction = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
@@ -1238,6 +1238,9 @@ void KivioView::updateToolBars()
 
         m_setArrowHeads->setCurrentStartArrow(0);
         m_setArrowHeads->setCurrentEndArrow(0);
+
+        m_menuTextFormatAction->setEnabled( false );
+        m_menuStencilConnectorsAction->setEnabled( false );
     }
     else
     {
@@ -1261,6 +1264,9 @@ void KivioView::updateToolBars()
         m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
         m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
 
+        m_menuTextFormatAction->setEnabled( true );
+        m_menuStencilConnectorsAction->setEnabled( true );
+
         if ( pStencil->type() != kstConnector )
         {
            m_setArrowHeads->setEnabled (false);
@@ -1272,6 +1278,17 @@ void KivioView::updateToolBars()
             m_arrowHeadsMenuAction->setEnabled (true);
             m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
             m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
+        }
+
+        if ( pStencil->type() != kstText )
+        {
+            m_setFGColor->setEnabled (true);
+            m_setBGColor->setEnabled (true);
+        }
+        else
+        {
+            m_setFGColor->setEnabled (false);
+            m_setBGColor->setEnabled (false);
         }
     }
 
