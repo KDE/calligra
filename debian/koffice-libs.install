@@ -51,8 +51,6 @@ usr/lib/kde3/libhtmlexport.la
 usr/lib/kde3/libhtmlexport.so
 usr/lib/kde3/libhtmlimport.la
 usr/lib/kde3/libhtmlimport.so
-usr/lib/kde3/libkarbonepsimport.la
-usr/lib/kde3/libkarbonepsimport.so
 usr/lib/kde3/libkarbonmsodimport.la
 usr/lib/kde3/libkarbonmsodimport.so
 usr/lib/kde3/libkfolatexexport.la
@@ -180,7 +178,6 @@ usr/share/icons/crystalsvg/32x32/actions/under.png
 usr/share/mimelnk
 usr/share/services/clipartthumbnail.desktop
 usr/share/services/generic_filter.desktop
-usr/share/services/karbon_eps_import.desktop
 usr/share/services/karbon_msod_import.desktop
 usr/share/services/karbon_ps_import.desktop
 usr/share/services/kexi/kexicsvimport.desktop
