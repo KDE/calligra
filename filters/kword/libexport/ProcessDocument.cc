@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -56,6 +56,19 @@
 
 // TODO: verify that all document info is read!
 
+void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    QString *tagText = (QString *) tagData;
+    
+    kdDebug(30508)<< "Not an element: " << myNode.nodeName() << " parent: " << myNode.parentNode().nodeName() << endl;
+
+    *tagText = myNode.toElement().text(); // Get the text, also from a CDATA section
+
+    AllowNoAttributes (myNode);
+
+    AllowNoSubtags (myNode, leader);
+}
+
 static void ProcessAboutTag ( QDomNode         myNode,
                               void            *tagData,
                               KWEFKWordLeader *leader )
@@ -63,10 +76,12 @@ static void ProcessAboutTag ( QDomNode         myNode,
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
     AllowNoAttributes (myNode);
+    kdDebug(30508) << "About node: " << myNode.nodeName() << endl;
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, (void *) &(*docInfo).title    ) );
-    tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, (void *) &(*docInfo).abstract ) );
+    tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, &docInfo->title    ) );
+    tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, &docInfo->abstract ) );
+    kdDebug(30508) << "Abstract: " << docInfo->abstract << endl;
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -80,16 +95,16 @@ static void ProcessAuthorTag ( QDomNode         myNode,
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "full-name",   ProcessTextTag, (void *) &(*docInfo).fullName   ) );
-    tagProcessingList.append ( TagProcessing ( "title",       ProcessTextTag, (void *) &(*docInfo).jobTitle   ) );
-    tagProcessingList.append ( TagProcessing ( "company",     ProcessTextTag, (void *) &(*docInfo).company    ) );
-    tagProcessingList.append ( TagProcessing ( "email",       ProcessTextTag, (void *) &(*docInfo).email      ) );
-    tagProcessingList.append ( TagProcessing ( "telephone",   ProcessTextTag, (void *) &(*docInfo).telephone  ) );
-    tagProcessingList.append ( TagProcessing ( "fax",         ProcessTextTag, (void *) &(*docInfo).fax        ) );
-    tagProcessingList.append ( TagProcessing ( "country",     ProcessTextTag, (void *) &(*docInfo).country    ) );
-    tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, (void *) &(*docInfo).postalCode ) );
-    tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, (void *) &(*docInfo).city       ) );
-    tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, (void *) &(*docInfo).street     ) );
+    tagProcessingList.append ( TagProcessing ( "full-name",   ProcessTextTag, &docInfo->fullName   ) );
+    tagProcessingList.append ( TagProcessing ( "title",       ProcessTextTag, &docInfo->jobTitle   ) );
+    tagProcessingList.append ( TagProcessing ( "company",     ProcessTextTag, &docInfo->company    ) );
+    tagProcessingList.append ( TagProcessing ( "email",       ProcessTextTag, &docInfo->email      ) );
+    tagProcessingList.append ( TagProcessing ( "telephone",   ProcessTextTag, &docInfo->telephone  ) );
+    tagProcessingList.append ( TagProcessing ( "fax",         ProcessTextTag, &docInfo->fax        ) );
+    tagProcessingList.append ( TagProcessing ( "country",     ProcessTextTag, &docInfo->country    ) );
+    tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, &docInfo->postalCode ) );
+    tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, &docInfo->city       ) );
+    tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, &docInfo->street     ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -104,8 +119,8 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL              ) );
-    tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, (void *) &docInfo ) );
-    tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  (void *) &docInfo ) );
+    tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, &docInfo ) );
+    tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  &docInfo ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     leader->doFullDocumentInfo (docInfo);
@@ -434,6 +449,7 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
+        << TagProcessing ( "LANGUAGE",            NULL,                   NULL                               )
         ;
 }
 
@@ -802,28 +818,4 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
         kdWarning (30508) << "Empty layout name!" << endl;
     }
 
-}
-
-
-// --------------------------------------------------------------------------------
-
-
-void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
-{
-    QString *tagText = (QString *) tagData;
-
-    QDomText myText ( myNode.firstChild ().toText () );
-
-    if ( !myText.isNull () )
-    {
-        *tagText = myText.data ();
-    }
-    else
-    {
-        *tagText = QString::null;
-    }
-
-    AllowNoAttributes (myNode);
-
-    AllowNoSubtags (myNode, leader);
 }
