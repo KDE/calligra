@@ -35,7 +35,7 @@
 #include <knumvalidator.h>
 
 KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name,TRUE )
+        : QDialog( parent, name,TRUE )
 {
   m_pView = parent;
   marker=_marker;
@@ -138,55 +138,55 @@ KSpreadTable *m_pTable;
 m_pTable=m_pView->activeTable();
 
 if(column->isChecked())
-	mode=Column;
+        mode=Column;
 else if(row->isChecked())
-	mode=Row;
+        mode=Row;
 
 if(linear->isChecked())
-	type=Linear;
+        type=Linear;
 else if(geometric->isChecked())
-	type=Geometric;
+        type=Geometric;
 
 if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
-	{
-	KMessageBox::error( this, i18n("Area text is empty!") );
-	}
+        {
+        KMessageBox::error( this, i18n("Area text is empty!") );
+        }
 else
-	{
-	if(step->text().toInt()>=0)
-		{
+        {
+        if(step->text().toInt()>=0)
+                {
                 if(linear->isChecked() &&step->text().toInt() ==0)
                 {
-                KMessageBox::error( this, i18n("Sorry but step should be supperior to zero\n"
-                "Otherwise linear series is infinite!") );
+                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than 0.\n"
+                "Otherwise the linear series is infinite!") );
                 step->setFocus();
                 }
                 else if(geometric->isChecked() &&step->text().toInt() <=1)
                 {
-                KMessageBox::error( this, i18n("Sorry but step should be supperior to one\n"
-                "Otherwise geometric series is infinite!") );
+                KMessageBox::error( this, i18n("Sorry, but the step value has to be greater than one\n"
+                "Otherwise the geometric series is infinite!") );
                 step->setFocus();
                 }
                 else
                 {
-		        int val_end=QMAX(end->text().toInt(),start->text().toInt());
-		        int val_start=QMIN(end->text().toInt(),start->text().toInt());
-		        m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
+                        int val_end=QMAX(end->text().toInt(),start->text().toInt());
+                        int val_start=QMIN(end->text().toInt(),start->text().toInt());
+                        m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
 
-		        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
-		        if ( cell->text() != 0L )
-			        m_pView->editWidget()->setText( cell->text() );
-		        else
-			        m_pView->editWidget()->setText( "" );
-		        accept();
+                        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
+                        if ( cell->text() != 0L )
+                                m_pView->editWidget()->setText( cell->text() );
+                        else
+                                m_pView->editWidget()->setText( "" );
+                        accept();
                 }
 
                 }
-	else
-		{
-	 	KMessageBox::error( this, i18n("Step is negative !") );
-		}
-	}
+        else
+                {
+                KMessageBox::error( this, i18n("Step is negative !") );
+                }
+        }
 }
 
 
