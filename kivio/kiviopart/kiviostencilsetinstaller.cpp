@@ -151,6 +151,6 @@ namespace Kivio {
     install(m_url->url());
     accept();
   }
-};
+}
 
 #include "kiviostencilsetinstaller.moc"

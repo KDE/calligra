@@ -51,6 +51,6 @@ namespace Kivio {
     private:
       QString m_currentDir;
   };
-};
+}
 
 #endif

@@ -57,6 +57,6 @@ namespace Kivio {
       Kivio::MouseToolAction* m_targetAction;
       bool m_permanent;
   };
-};
+}
 
 #endif

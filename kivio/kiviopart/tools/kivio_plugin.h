@@ -35,6 +35,6 @@ namespace Kivio {
       
       KivioView* view() { return static_cast<KivioView*>(parent()); }
   };
-};
+}
 
 #endif

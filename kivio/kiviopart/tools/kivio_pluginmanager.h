@@ -54,6 +54,6 @@ namespace Kivio {
       Kivio::MouseTool* m_activeTool;
       Kivio::MouseTool* m_defaultTool;
   };
-};
+}
 
 #endif

@@ -50,6 +50,6 @@ namespace Kivio {
       /** this should be emited when the tool wants to be active */
       void activated(Kivio::MouseTool*);
   };
-};
+}
 
 #endif

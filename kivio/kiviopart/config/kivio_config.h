@@ -56,6 +56,6 @@ namespace Kivio {
     protected:
       Config();
   };
-};
+}
 
 #endif

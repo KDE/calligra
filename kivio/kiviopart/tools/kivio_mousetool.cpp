@@ -29,6 +29,6 @@ namespace Kivio {
   MouseTool::~MouseTool()
   {
   }
-};
+}
 
 #include "kivio_mousetool.moc"

@@ -182,6 +182,6 @@ namespace Kivio {
     
     emit addStencilSet(m_currentDir);
   }
-};
+}
 
 #include "kivioaddstencilsetpanel.moc"

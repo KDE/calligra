@@ -71,4 +71,4 @@ namespace Kivio {
     
     return gd;
   }
-};
+}

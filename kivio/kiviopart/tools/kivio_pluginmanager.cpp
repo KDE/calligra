@@ -94,6 +94,6 @@ namespace Kivio {
     
     return static_cast<Kivio::Plugin*>(p);
   }
-};
+}
 
 #include "kivio_pluginmanager.moc"

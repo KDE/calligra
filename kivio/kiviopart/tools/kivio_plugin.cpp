@@ -29,6 +29,6 @@ namespace Kivio {
   Plugin::~Plugin()
   {
   }
-};
+}
 
 #include "kivio_plugin.moc"

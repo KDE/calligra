@@ -48,6 +48,6 @@ namespace Kivio {
     private:
       KURLRequester* m_url;
   };
-};
+}
 
 #endif
