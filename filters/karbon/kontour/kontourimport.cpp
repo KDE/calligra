@@ -192,7 +192,7 @@ KontourImport::convert()
 			firsty = point.attribute( "y" ).toDouble();
 			path->moveTo( KoPoint( firstx, firsty ) );
 			point = point.nextSibling().toElement();
-			for( ; !point.isNull(); point = point.nextSibling().toElement() )
+			for( ; point.tagName() != "gobject"; point = point.nextSibling().toElement() )
 			{
 				x = point.attribute( "x" ).toDouble();
 				y = point.attribute( "y" ).toDouble();
@@ -200,9 +200,7 @@ KontourImport::convert()
 			}
 			// back to first point
 			path->lineTo( KoPoint( firstx, firsty ) );
-			path->close();
-			QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
-			parseGObject( path, object );
+			parseGObject( path, point );
 			m_document.append( path );	
 		}
 	}
