@@ -48,6 +48,7 @@
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
+#include "vpolylinetool.h"
 
 // commands:
 #include "vdeletecmd.h"
@@ -140,6 +141,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_sinusTool = new VSinusTool( this );
 	m_spiralTool = new VSpiralTool( this );
 	m_starTool = new VStarTool( this );
+	m_polylineTool = new VPolylineTool( this );
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -199,6 +201,7 @@ KarbonView::~KarbonView()
 	delete( m_sinusTool );
 	delete( m_spiralTool );
 	delete( m_starTool );
+	delete( m_polylineTool );
 	// widgets:
 	delete ( m_status );
 	delete ( m_painterFactory );
@@ -677,6 +680,23 @@ KarbonView::gradTool()
 	//}
 }
 
+void
+KarbonView::polylineTool()
+{
+	if( m_currentTool == m_polylineTool )
+	{
+			// Ends the current polyline and prepare for the next.
+		m_currentTool->deactivate();
+		m_currentTool->activate();
+	}
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_polylineTool;
+		m_currentTool->activate();
+	}
+}	// KarbonView::polylineTool
+
 
 void
 KarbonView::pathInsertKnots()
@@ -964,6 +984,9 @@ KarbonView::initActions()
 	m_gradToolAction = new KToggleAction(
 		i18n( "G&radient" ), "14_gradient", 0, this,
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
+	m_polylineToolAction = new KToggleAction(
+		i18n( "Poly&line" ), "pencil", 0, this,
+		SLOT( polylineTool() ), actionCollection(), "tool_polyline" );
 	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
 		SLOT( textTool() ), actionCollection(), "tool_text" );*/

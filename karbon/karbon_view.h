@@ -60,6 +60,7 @@ class VShearTool;
 class VSinusTool;
 class VSpiralTool;
 class VStarTool;
+class VPolylineTool;
 class VStroke;
 class VTool;
 class VTransformDlg;
@@ -153,6 +154,7 @@ protected slots:
 	void starTool();
 	void textTool();
 	void gradTool();
+	void polylineTool();
 
 	// view:
 	void viewModeChanged();
@@ -200,6 +202,7 @@ private:
 	KToggleAction* m_starToolAction;
 	KToggleAction* m_textToolAction;
 	KToggleAction* m_gradToolAction;
+	KToggleAction* m_polylineToolAction;
 
 	VEllipseTool* m_ellipseTool;
 	VPolygonTool* m_polygonTool;
@@ -213,6 +216,7 @@ private:
 	VSpiralTool* m_spiralTool;
 	VStarTool* m_starTool;
 	VGradientTool* m_gradTool;
+	VPolylineTool* m_polylineTool;
 
 	// text:
 	KFontAction *m_setFontFamily;
