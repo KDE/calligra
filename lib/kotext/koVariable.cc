@@ -235,14 +235,12 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
 
     }
-#if 0
-    else if ( parag->koTextDocument()->textFrameSet() &&
-                parag->koTextDocument()->textFrameSet()->kWordDocument()->viewFormattingChars() && p->device()->devType() != QInternal::Printer )
+    else if ( textDocument() && textDocument()->drawFormattingChars()
+              && p->device()->devType() != QInternal::Printer )
     {
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
-#endif
     //p->setFont( customItemFont ); // already done by the caller
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );

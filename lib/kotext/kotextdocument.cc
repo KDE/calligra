@@ -30,6 +30,7 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
       m_zoomHandler( zoomHandler ),
       m_bDestroying( false )
 {
+    m_bDrawFormattingChars=false;
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
         formatter = new KoTextFormatter;
@@ -171,11 +172,12 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        KoZoomHandler* zoomHandler, bool drawCursor,
-                                       QTextCursor *cursor, bool resetChanged )
+                                       QTextCursor *cursor, bool resetChanged, bool drawFormattingChars )
 {
 #ifdef DEBUG_PAINTING
     kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
+    m_bDrawFormattingChars=drawFormattingChars;
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
@@ -285,8 +287,9 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
                                               KoZoomHandler* zoomHandler, bool onlyChanged,
                                               bool drawCursor, QTextCursor *cursor,
-                                              bool resetChanged )
+                                              bool resetChanged, bool drawFormattingChars )
 {
+    m_bDrawFormattingChars=drawFormattingChars;
     if ( isWithoutDoubleBuffer() /* || par && par->withoutDoubleBuffer */ ) {
 	//setWithoutDoubleBuffer( TRUE );
 	QRect crect( cx, cy, cw, ch );
@@ -360,7 +363,7 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
             drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
-                              zoomHandler, drawCursor, cursor, resetChanged );
+                              zoomHandler, drawCursor, cursor, resetChanged, drawFormattingChars );
         }
 
 	parag = static_cast<KoTextParag *>( parag->next() );

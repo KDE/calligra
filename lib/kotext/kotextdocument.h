@@ -90,7 +90,7 @@ public:
     Qt3::QTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
                                   KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
                                   bool drawCursor = FALSE, QTextCursor *cursor = 0,
-                                  bool resetChanged = TRUE );
+                                  bool resetChanged = TRUE, bool drawFormattingChars= FALSE );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to QTextDocument::draw, but modified for wysiwyg */
@@ -98,7 +98,10 @@ public:
                            QPixmap *&doubleBuffer, const QColorGroup &cg,
                            KoZoomHandler* zoomHandler,
                            bool drawCursor, QTextCursor *cursor,
-                           bool resetChanged = TRUE );
+                           bool resetChanged = TRUE,
+			   bool drawFormattingChars = FALSE);
+
+    bool drawFormattingChars(){ return m_bDrawFormattingChars;}
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
@@ -111,6 +114,7 @@ private:
     QPixmap *bufferPixmap( const QSize &s );
     bool m_bDestroying;
     QPixmap *ko_buf_pixmap;
+    bool m_bDrawFormattingChars;
 };
 
 /**
