@@ -392,6 +392,7 @@ void KPresenterDoc::initConfig()
     {
         config->setGroup( "Kpresenter Path" );
         m_picturePath=config->readEntry( "picture path",KGlobalSettings::documentPath());
+        setBackupPath(config->readEntry( "backup path", QString::null ));
     }
 
     // Apply configuration, without creating an undo/redo command

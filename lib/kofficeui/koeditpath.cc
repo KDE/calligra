@@ -29,6 +29,8 @@
 #include <kurlrequester.h>
 #include <qhbox.h>
 #include <klineedit.h>
+#include <qvbox.h>
+#include <qcheckbox.h>
 
 KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
@@ -68,6 +70,23 @@ QString KoEditPathDia::newPath()const
         tmp += m_listpath->listBox()->text( i );
     }
     return tmp;
+}
+
+
+KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const char *name )
+    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+{
+    setCaption( i18n("Edit Path") );
+    QVBox *page =makeVBoxMainWidget();
+    m_urlReq = new KURLRequester(page);
+    m_urlReq->lineEdit()->setText( _path );
+    m_urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
+    m_defaultPath = new QCheckBox( i18n("Default path"), page );
+}
+
+QString KoChangePathDia::newPath() const
+{
+    return m_defaultPath->isChecked() ? QString::null : m_urlReq->lineEdit()->text();
 }
 
 #include "koeditpath.moc"

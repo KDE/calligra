@@ -293,3 +293,4 @@ Changes after KWord-1.2
 - Now we can edit "ignore all list" 
 - Add support for convert text to textbox
 - Now we can add/remove word in personal dictionary
+- Now we can change backup path

@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 class KEditListBox;
 class KURLRequester;
+class QCheckBox;
 
 class KoEditPathDia : public KDialogBase
 {
@@ -35,6 +36,17 @@ public:
 private:
     KEditListBox *m_listpath;
     KURLRequester *urlReq;
+};
+
+class KoChangePathDia : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KoChangePathDia( const QString & _path, QWidget *parent, const char *name );
+    QString newPath()const;
+private:
+    KURLRequester *m_urlReq;
+    QCheckBox *m_defaultPath;
 };
 
 #endif

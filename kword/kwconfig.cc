@@ -871,6 +871,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
     (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
+    (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
 
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
@@ -908,7 +909,16 @@ void ConfigurePathPage::slotModifyPath()
         }
         delete dlg;
     }
+    if ( item && (item->text(0)==i18n("Backup path")))
+    {
+        KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L, "backup path" );
+        if (dlg->exec() )
+        {
+            item->setText(1, dlg->newPath());
+        }
+        delete dlg;
 
+    }
 }
 
 void ConfigurePathPage::slotDefault()
@@ -919,6 +929,9 @@ void ConfigurePathPage::slotDefault()
     item = m_pPathView->findItem(i18n("Picture path"), 0);
     if ( item )
         item->setText(1, KGlobalSettings::documentPath());
+    item = m_pPathView->findItem(i18n("Backup path"), 0);
+    if ( item )
+        item->setText(1, QString::null );
 }
 
 void ConfigurePathPage::apply()
@@ -945,6 +958,18 @@ void ConfigurePathPage::apply()
             config->writeEntry( "picture path",res );
         }
     }
+    item = m_pPathView->findItem(i18n("Backup path"), 0);
+    if ( item )
+    {
+        QString res = item->text(1 );
+        if ( res != m_pView->kWordDocument()->backupPath())
+        {
+            config->setGroup( "Kword Path" );
+            m_pView->kWordDocument()->setBackupPath( res );
+            config->writeEntry( "backup path",res );
+        }
+    }
+
 }
 
 #include "kwconfig.moc"
