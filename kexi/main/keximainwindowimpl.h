@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KexiMainWindowIMPL_H
-#define KexiMainWindowIMPL_H
+#ifndef KEXIMAINWINDOWIMPL_H
+#define KEXIMAINWINDOWIMPL_H
 
 #include "core/keximainwindow.h"
 
