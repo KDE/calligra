@@ -542,6 +542,8 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 	}
         re.setPattern("[.?!]+");         // count "..." as only one "."
         s.replace(re, ".");
+        re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
+        s.replace(re, "0,0");
         re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
         s.replace(re, "*");
         for ( uint i = 0 ; i < s.length() ; ++i )
