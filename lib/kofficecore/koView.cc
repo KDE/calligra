@@ -33,6 +33,8 @@
 #include <kstatusbar.h>
 #include <qapplication.h>
 
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+
 class KoViewPrivate
 {
 public:
@@ -687,10 +689,11 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   // This initial calculation uses R1 but omits borders because the frame is currently inactive (-> 0)
   QRect geom = child->geometry();
   double zoom = parentView()->zoom();
-  m_frame->setGeometry( static_cast<int>((double)geom.x() * zoom) - parentView()->canvasXOffset(),
-                        static_cast<int>((double)geom.y() * zoom) - parentView()->canvasYOffset(),
-                        static_cast<int>((double)geom.width() * zoom),
-                        static_cast<int>((double)geom.height() * zoom) );
+  // cast to int gives rounding probs, so we add 0.5 to fix it.
+  m_frame->setGeometry( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - parentView()->canvasXOffset(),
+                        static_cast<int>((double)geom.y() * zoom + 0.5) - parentView()->canvasYOffset(),
+                        static_cast<int>((double)geom.width() * zoom + 0.5),
+                        static_cast<int>((double)geom.height() * zoom + 0.5) );
 
   m_frame->show();
   m_frame->raise();
@@ -715,8 +718,6 @@ KoViewChild::~KoViewChild()
   delete d;
 }
 
-#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
-
 void KoViewChild::slotFrameGeometryChanged()
 {
   // Set our geometry from the frame geometry (R2 reversed)
@@ -736,10 +737,10 @@ void KoViewChild::slotFrameGeometryChanged()
                           geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
                           geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
     double zoom = parentView()->zoom();
-    QRect unzoomedRect( static_cast<int>( (double)borderLessRect.x() / zoom ),
-                        static_cast<int>( (double)borderLessRect.y() / zoom ),
-                        static_cast<int>( (double)borderLessRect.width() / zoom ),
-                        static_cast<int>( (double)borderLessRect.height() / zoom ) );
+    QRect unzoomedRect( static_cast<int>( (double)borderLessRect.x() / zoom + 0.5 ),
+                        static_cast<int>( (double)borderLessRect.y() / zoom + 0.5 ),
+                        static_cast<int>( (double)borderLessRect.width() / zoom + 0.5 ),
+                        static_cast<int>( (double)borderLessRect.height() / zoom + 0.5 ) );
     kdDebug() << "KoViewChild::slotFrameGeometryChanged child geometry "
               << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
               << DEBUGRECT( unzoomedRect ) << endl;
@@ -759,10 +760,10 @@ void KoViewChild::slotDocGeometryChanged()
   // The frame's resizeEvent will call slotFrameGeometryChanged.
   double zoom = parentView()->zoom();
   QRect geom = m_child->geometry();
-  QRect borderRect( static_cast<int>( (double)geom.x() * zoom ) - m_frame->leftBorder() - parentView()->canvasXOffset(),
-                    static_cast<int>( (double)geom.y() * zoom ) - m_frame->topBorder() - parentView()->canvasYOffset(),
-                    static_cast<int>( (double)geom.width() * zoom ) + m_frame->leftBorder() + m_frame->rightBorder(),
-                    static_cast<int>( (double)geom.height() * zoom ) + m_frame->topBorder() + m_frame->bottomBorder() );
+  QRect borderRect( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - m_frame->leftBorder() - parentView()->canvasXOffset(),
+                    static_cast<int>( (double)geom.y() * zoom + 0.5 ) - m_frame->topBorder() - parentView()->canvasYOffset(),
+                    static_cast<int>( (double)geom.width() * zoom + 0.5 ) + m_frame->leftBorder() + m_frame->rightBorder(),
+                    static_cast<int>( (double)geom.height() * zoom + 0.5 ) + m_frame->topBorder() + m_frame->bottomBorder() );
   kdDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
             << ( m_frame->geometry() == borderRect ? "already " : "set to " )
             << DEBUGRECT( borderRect ) << endl;
