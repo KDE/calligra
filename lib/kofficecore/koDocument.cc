@@ -652,7 +652,7 @@ bool KoDocument::openFile()
       m_url = KURL();
     // and remove temp file
     if(!importedFile.isEmpty())
-      unlink( importedFile.ascii() );
+      unlink( QFile::encodeName(importedFile) );
   }
 
   if ( ok && d->m_bSingleViewMode )

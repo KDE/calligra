@@ -265,8 +265,8 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
         mimeType = t->name();
     }
     else {
-        kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
-        mimeType = "text/plain";
+        kdDebug(30003) << "No MimeType found. Setting " << _native_format << endl;
+        mimeType = _native_format;
     }
 
     if ( mimeType == _native_format || mimeType == "application/x-gzip" || mimeType == "text/xml" )
@@ -349,8 +349,8 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
         mimeType = t->name();
     }
     else {
-        kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
-        mimeType = "text/plain";
+        kdDebug(30003) << "No MimeType found. Setting " << _native_format << endl;
+        mimeType = _native_format;
     }
 
     if ( mimeType == _native_format )
@@ -373,7 +373,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
         QString tmp = i18n("Could not export file of type\n%1").arg( t->name() );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
-        return file;
+        return QString::null;
     }
 
     d->m_vec=vec;
