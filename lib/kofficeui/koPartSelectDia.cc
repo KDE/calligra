@@ -71,6 +71,8 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	}
     }
     selectionChanged( 0 );
+    
+    resize( listview->sizeHint().width() + 20, 300 );
 }
 
 void KoPartSelectDia::selectionChanged( QListViewItem *item ) 
