@@ -90,9 +90,8 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     choose->setCurrentItem(0);
 
     edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
-    edit1->setText(i18n("Minimum: " ));
+    edit1->setText(i18n("Minimum:" ));
     grid1->addWidget(edit1,2,0);
-
 
     val_min=new QLineEdit(tmpQButtonGroup);
     val_min->resize( val_min->sizeHint() );
@@ -100,7 +99,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     val_min->setValidator( new KFloatValidator( val_min ) );
 
     edit2 = new QLabel( tmpQButtonGroup, "Label_4" );
-    edit2->setText(i18n("Maximum: " ));
+    edit2->setText(i18n("Maximum:" ));
     grid1->addWidget(edit2,3,0);
 
     val_max=new QLineEdit(tmpQButtonGroup);
@@ -108,6 +107,28 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     grid1->addWidget(val_max,3,1);
     val_max->setValidator( new KFloatValidator( val_max ) );
     lay1->addWidget(tmpQButtonGroup);
+
+    //Apply minimum width of column1 to avoid horizontal move when changing option
+    //A bit ugly to apply text always, but I couldn't get a label->QFontMetrix.boundingRect("text").width()
+    //to give mew the correct results - Philipp
+    edit2->setText( i18n( "Date:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Date minimum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Date maximum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Time:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Time minimum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Time maximum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Minimum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Maximum:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
+    edit2->setText( i18n( "Number:" ) );
+    grid1->addColSpacing( 0, edit2->width() );
 
     QFrame *page2 = addPage(i18n("&Error Alert"));
 
@@ -118,15 +139,15 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_2" );
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Contents") );
-    grid1 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
     tmpQLabel->setText(i18n("Action:" ));
-    grid1->addWidget(tmpQLabel,0,0);
+    grid2->addWidget(tmpQLabel,0,0);
 
     chooseAction=new QComboBox(tmpQButtonGroup);
     chooseAction->resize( chooseAction->sizeHint() );
-    grid1->addWidget(chooseAction,0,1);
+    grid2->addWidget(chooseAction,0,1);
     QStringList list2;
     list2+=i18n("Stop");
     list2+=i18n("Warning");
@@ -135,17 +156,17 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     chooseAction->setCurrentItem(0);
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
     tmpQLabel->setText(i18n("Title:" ));
-    grid1->addWidget(tmpQLabel,1,0);
+    grid2->addWidget(tmpQLabel,1,0);
 
     title=new QLineEdit(  tmpQButtonGroup);
-    grid1->addWidget(title,1,1);
+    grid2->addWidget(title,1,1);
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
     tmpQLabel->setText(i18n("Message:" ));
-    grid1->addWidget(tmpQLabel,2,0);
+    grid2->addWidget(tmpQLabel,2,0);
 
      message =new QMultiLineEdit( tmpQButtonGroup);
-     grid1->addMultiCellWidget(message,2,3,1,1);
+     grid2->addMultiCellWidget(message,2,3,1,1);
      lay1->addWidget(tmpQButtonGroup);
 
      connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
@@ -183,15 +204,15 @@ switch(_index)
                 val_max->setValidator( new KFloatValidator( val_max ) );
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Number: "));
+                        edit1->setText(i18n("Number:"));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Minimum: " ));
-                        edit2->setText(i18n("Maximum: " ));
+                        edit1->setText(i18n("Minimum:" ));
+                        edit2->setText(i18n("Maximum:" ));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -208,15 +229,15 @@ switch(_index)
                 val_max->setValidator( new KIntValidator( val_max ) );
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Number: "));
+                        edit1->setText(i18n("Number:"));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Minimum: " ));
-                        edit2->setText(i18n("Maximum: " ));
+                        edit1->setText(i18n("Minimum:" ));
+                        edit2->setText(i18n("Maximum:" ));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -232,7 +253,7 @@ switch(_index)
                 edit2->setEnabled(false);
                 break;
         case 4:
-                edit1->setText(i18n("Date: "));
+                edit1->setText(i18n("Date:"));
                 edit2->setText("");
                 val_min->setEnabled(true);
                 edit1->setEnabled(true);
@@ -244,15 +265,15 @@ switch(_index)
                 val_max->clearValidator();
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Date: "));
+                        edit1->setText(i18n("Date:"));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Date minimum"));
-                        edit2->setText(i18n("Date maximum"));
+                        edit1->setText(i18n("Date minimum:"));
+                        edit2->setText(i18n("Date maximum:"));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -268,15 +289,15 @@ switch(_index)
                 val_max->clearValidator();
                 if( choose->currentItem()<=4)
                         {
-                        edit1->setText(i18n("Time: "));
+                        edit1->setText(i18n("Time:"));
                         edit2->setText("");
                         edit2->setEnabled(false);
                         val_max->setEnabled(false);
                         }
                 else
                         {
-                        edit1->setText(i18n("Time minimum"));
-                        edit2->setText(i18n("Time maximum"));
+                        edit1->setText(i18n("Time minimum:"));
+                        edit2->setText(i18n("Time maximum:"));
                         edit2->setEnabled(true);
                         val_max->setEnabled(true);
                         }
@@ -316,8 +337,8 @@ switch(_index)
                 if(chooseType->currentItem()==1 || chooseType->currentItem()==2
                 || chooseType->currentItem()==6)
                         {
-                        edit1->setText(i18n("Minimum: " ));
-                        edit2->setText(i18n("Maximum: " ));
+                        edit1->setText(i18n("Minimum:" ));
+                        edit2->setText(i18n("Maximum:" ));
                         }
                 else if(chooseType->currentItem()==3)
                         {
@@ -326,13 +347,13 @@ switch(_index)
                         }
                 else if(chooseType->currentItem()==4)
                         {
-                        edit1->setText(i18n("Date minimum"));
-                        edit2->setText(i18n("Date maximum"));
+                        edit1->setText(i18n("Date minimum:"));
+                        edit2->setText(i18n("Date maximum:"));
                         }
                 else if(chooseType->currentItem()==5)
                         {
-                        edit1->setText(i18n("Time minimum"));
-                        edit2->setText(i18n("Time maximum"));
+                        edit1->setText(i18n("Time minimum:"));
+                        edit2->setText(i18n("Time maximum:"));
                         }
                 break;
         }
