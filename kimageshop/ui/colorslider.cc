@@ -111,15 +111,15 @@ void ColorSlider::slotSliderMoved(int x)
   if (x > m_pColorFrame->contentsRect().width())
 	x = m_pColorFrame->contentsRect().width();
 
-  //kdebug(KDEBUG_INFO, 0, "x: %d", x);
+  //kDebugInfo( 0, "x: %d", x);
   float factor = x;
   factor /= m_pColorFrame->contentsRect().width();
-  //kdebug(KDEBUG_INFO, 0, "factor: %f", factor);
+  //kDebugInfo( 0, "factor: %f", factor);
   int range = m_max - m_min;
-  //kdebug(KDEBUG_INFO, 0, "range: %d", range);
+  //kDebugInfo( 0, "range: %d", range);
   
   m_value = static_cast<int>(factor * range);
-  //kdebug(KDEBUG_INFO, 0, "m_value: %d", m_value);
+  //kDebugInfo( 0, "m_value: %d", m_value);
 
   emit valueChanged(m_value);
   emit colorSelected(m_pColorFrame->colorAt(QPoint(x, m_pColorFrame->contentsRect().height()/2)));

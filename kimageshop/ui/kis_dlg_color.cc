@@ -323,7 +323,7 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *)
   m_pColorFrame->setGeometry(2, h-24, w-4, 22);
   m_pRGBWidget->setGeometry(42,17,w-44,h-42);
   m_pGreyWidget->setGeometry(42,17,w-44,h-42);
-  kdebug(KDEBUG_INFO, 0, "w: %d h: %d", w, h);
+  kDebugInfo( 0, "w: %d h: %d", w, h);
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
