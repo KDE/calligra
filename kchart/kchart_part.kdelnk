@@ -1,27 +1,8 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KChart
-Name[da]=Graf
-Name[no]=Graf
-Name[pt]=Gr·ficos
-Name[ro]=Chart
-Name[ru]=Á“¡∆…À…
 Exec=kchart.bin --server
 Comment=Kalles Charter
-Comment[br]=Frammluner Kalles
-Comment[ca]=Els gr‡fics de Kalle
-Comment[da]=Kalles graf
-Comment[de]=Kalles Chart
-Comment[es]=El Renderizador de Tablas de Kalle
-Comment[fi]=Kallen kuvaajaohjelma
-Comment[no]=Kalles graf
-Comment[pl]=Wykresy Kallego Dalheimera
-Comment[pt]=Ferramenta para fazer gr·ficos
-Comment[pt_BR]=Programa de desenho de fluxogramas
-Comment[ro]=Kchart
-Comment[ru]=Á“¡∆…À… Kalle
-Comment[sl]=Kallesovi grafikoni
-Comment[sv]=Kalles diagram
 MimeTypes=application/x-kchart,
 RepoID=IDL:KCharter/Factory:1.0,
 ActivationMode=shared

@@ -2,18 +2,6 @@
 [KDE Desktop Entry]
 MimeType=application/x-kspread
 Comment=KSpread
-Comment[ca]=Fulla de càlcul
-Comment[cs]=Tabulkovı procesor
-Comment[da]=KRegneark
-Comment[de]=Tabellenkalkulation
-Comment[fi]=Taulukkolaskentaohjelma
-Comment[hu]=KSzámolótábla
-Comment[is]=Töflureiknir
-Comment[it]=Foglio Elettronico
-Comment[pl]=Plik arkusza kalkulacyjnego
-Comment[ru]=üÌÅËÔÒÏÎÎÁÑ ÔÁÂÌÉÃÁ
-Comment[sk]=KSpread (tabuµkovı kalkulátor)
-Comment[sv]=Kalkylprogram
 DefaultApp=KSpread
 Icon=txt.xpm
 Type=MimeType
