@@ -78,6 +78,8 @@ k_dcop:
     bool disappearSoundEffect() const;
     QString appearSoundEffectFileName() const;
     QString disappearSoundEffectFileName() const;
+    QString typeString() const;
+
 
 private:
     KPObject *obj;

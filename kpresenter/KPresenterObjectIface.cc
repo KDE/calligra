@@ -211,3 +211,7 @@ QString KPresenterObjectIface::disappearSoundEffectFileName() const
     return obj->getDisappearSoundEffectFileName();
 }
 
+QString KPresenterObjectIface::typeString() const
+{
+    return obj->getTypeString();
+}
