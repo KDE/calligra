@@ -1,0 +1,17 @@
+debian/tmp/usr/bin/kformula
+debian/tmp/usr/lib/kformulamain.*
+debian/tmp/usr/lib/kde3/libkformulapart.*
+debian/tmp/usr/share/applnk/Office/kformula.desktop
+debian/tmp/usr/share/apps/kformula
+debian/tmp/usr/share/doc/kde/HTML/en/kformula/*.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/kformula/*.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/kformula/*.png
+debian/tmp/usr/share/doc/kde/HTML/en/kformula/common
+debian/tmp/usr/share/icons/hicolor/16x16/apps/kformula.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/kformula.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/kformula.png
+debian/tmp/usr/share/icons/hicolor/22x22/actions/inscol.png
+debian/tmp/usr/share/icons/hicolor/22x22/actions/insrow.png
+debian/tmp/usr/share/icons/hicolor/22x22/actions/remcol.png
+debian/tmp/usr/share/icons/hicolor/22x22/actions/remrow.png
+debian/kformula.xpm usr/share/pixmaps

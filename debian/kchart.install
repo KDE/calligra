@@ -1,0 +1,14 @@
+debian/tmp/usr/bin/kchart
+debian/tmp/usr/lib/kchart.*
+debian/tmp/usr/lib/libkdchart.*
+debian/tmp/usr/lib/kde3/libkchartpart.*
+debian/tmp/usr/share/applnk/Office/kchart.desktop
+debian/tmp/usr/share/apps/kchart
+debian/tmp/usr/share/doc/kde/HTML/en/kchart/*.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/kchart/*.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/kchart/*.png
+debian/tmp/usr/share/doc/kde/HTML/en/kchart/common
+debian/tmp/usr/share/icons/hicolor/16x16/apps/kchart.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/kchart.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/kchart.png
+debian/kchart.xpm usr/share/pixmaps

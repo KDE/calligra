@@ -1,0 +1,16 @@
+debian/tmp/usr/bin/kivio
+debian/tmp/usr/lib/kivio.*
+debian/tmp/usr/lib/kde3/libkiviopart.*
+debian/tmp/usr/lib/kde3/libkivioconnectortool.*
+debian/tmp/usr/lib/kde3/libkivioselecttool.*
+debian/tmp/usr/lib/kde3/libkiviotexttool.*
+debian/tmp/usr/lib/kde3/libkiviozoomtool.*
+debian/tmp/usr/share/applnk/Office/kivio.desktop
+debian/tmp/usr/share/apps/kivio
+debian/tmp/usr/share/services/kivio*
+debian/tmp/usr/share/icons/hicolor/16x16/apps/kivio.png
+debian/tmp/usr/share/icons/hicolor/22x22/apps/kivio.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/kivio.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/kivio.png
+debian/kivio.xpm usr/share/pixmaps
+debian/tmp/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp usr/lib/kde3
