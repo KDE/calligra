@@ -443,7 +443,10 @@ void KoTextView::handleImComposeEvent( QIMEvent * e )
     // insert preedit
     int preeditStartIdx = m_cursor->index();
     textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
-    insertText( e->text() );
+    textObject()->insert( m_cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text"),
+                          CustomItemsMap(),
+                          KoTextDocument::Standard,
+                          false /* NOT REPAINT CURSOR! */);
     textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
 
     // selection
