@@ -57,7 +57,7 @@ namespace KFormEditor
 			void mouseReleaseEvent(QMouseEvent *ev);
 			void resizeEvent(QResizeEvent *ev);
 			
-			void insertWidget(QWidget *widget, int x, int y, int w, int h);
+			void insertWidget(QWidget *widget, const QRect &r);
 			void installEventFilterRecursive(QObject *obj);
 
 			void setResizeHandles(QWidget *m_activeWidget);

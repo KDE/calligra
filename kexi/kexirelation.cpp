@@ -21,6 +21,7 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qdom.h>
+#include <qhbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,11 +46,14 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 
 	m_db = kexi->project()->db();
 
-	m_tableCombo = new QComboBox(this);
+	QHBox *hbox = new QHBox(this);
+	
+	m_tableCombo = new QComboBox(hbox);
+	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	m_tableCombo->insertStringList(kexi->project()->db()->tables());
 	m_tableCombo->show();
 
-	QPushButton *btnAdd = new QPushButton(i18n("&Add"), this);
+	QPushButton *btnAdd = new QPushButton(i18n("&Add"), hbox);
 	btnAdd->show();
 	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
@@ -72,25 +76,27 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name, bool embedd)
 		}
 	}
 
-	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(m_tableCombo,	0,	0);
-	g->addWidget(btnAdd,		0,	1);
-	g->addMultiCellWidget(m_view,	1,	1,	0,	1);
+	QVBoxLayout *g = new QVBoxLayout(this);
+	g->addWidget(hbox);
+	g->addWidget(m_view);
 }
 
 void
 KexiRelation::slotAddTable()
 {
-	KexiDBRecord *r = m_db->queryRecord("select * from " + m_tableCombo->currentText() + " limit 1");
-	QStringList fields;
-	for(uint i=0; i < r->fieldCount(); i++)
+	if (m_tableCombo->count() > 0)
 	{
-		fields.append(r->fieldInfo(i)->name());
-	}
-	m_view->addTable(m_tableCombo->currentText(), fields);
+		KexiDBRecord *r = m_db->queryRecord("select * from " + m_tableCombo->currentText() + " limit 1");
+		QStringList fields;
+		for(uint i=0; i < r->fieldCount(); i++)
+		{
+			fields.append(r->fieldInfo(i)->name());
+		}
+		m_view->addTable(m_tableCombo->currentText(), fields);
 	
-	delete r;
-	m_tableCombo->removeItem(m_tableCombo->currentItem());
+		delete r;
+		m_tableCombo->removeItem(m_tableCombo->currentItem());
+	}
 }
 
 static RelationList*

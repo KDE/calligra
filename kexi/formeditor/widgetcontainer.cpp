@@ -39,6 +39,8 @@
 
 #include <qobjectlist.h>
 
+#include <kdebug.h>
+
 #include "widgetcontainer.h"
 #include "resizehandle.h"
 #include "containerIface.h"
@@ -89,7 +91,8 @@ namespace KFormEditor {
 		m_widgetRectRequested=true;
 	}
 
-        void WidgetContainer::registerSubContainer(WidgetContainer *cont) {
+	void WidgetContainer::registerSubContainer(WidgetContainer *cont)
+	{
 		cont->setTopLevelContainer((m_topLevelContainer==0)?this:m_topLevelContainer);
 	}
 
@@ -200,8 +203,13 @@ namespace KFormEditor {
 				widgetheight=-widgetheight;
 			}
 
-			insertWidget(m_pendingWidget, m_widgetRectBX, m_widgetRectBY,
-				widgetwidth,widgetheight);
+			if ((widgetwidth==0)&&(widgetheight==0))
+			{
+				widgetwidth = m_pendingWidget->sizeHint().width();
+				widgetheight = m_pendingWidget->sizeHint().height();
+			}
+
+			insertWidget(m_pendingWidget, QRect(m_widgetRectBX, m_widgetRectBY, widgetwidth, widgetheight ) );
 			m_widgetRectBX = 0;
 			m_widgetRectBY = 0;
 			m_widgetRectEX = 0;
@@ -222,10 +230,10 @@ namespace KFormEditor {
 
 	}
 
-	void WidgetContainer::insertWidget(QWidget *widget, int x, int y, int w, int h)
+	void WidgetContainer::insertWidget(QWidget *widget, const QRect &r)
 	{
-		widget->move(x, y);
-		widget->resize(w, h);
+		widget->move(r.x(), r.y());
+		widget->resize(r.width(), r.height());
 		widget->show();
 		widget->setFocusPolicy(QWidget::NoFocus);
 		activateWidget(widget);
