@@ -891,21 +891,15 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:fraction" );
-    if ( !_prefix.isEmpty() )
-    {
-        QString text( _prefix );
-        addTextNumber(text, elementWriter );
-    }
+    text= _prefix;
+    addTextNumber(text, elementWriter );
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
     //TODO add for future
     //elementWriter.addAttribute( "number:denominator-value", denominatorValue );
-    if ( !_suffix.isEmpty() )
-    {
-        QString text( _suffix );
-        addTextNumber(text, elementWriter );
-    }
+    text=_suffix;
+    addTextNumber(text, elementWriter );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -939,18 +933,12 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:number" );
-    if ( !_prefix.isEmpty() )
-    {
-        QString text( _prefix );
-        addTextNumber(text, elementWriter );
-    }
+    text= _prefix ;
+    addTextNumber(text, elementWriter );
     elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
-    if ( !_suffix.isEmpty() )
-    {
-        QString text( _suffix );
-        addTextNumber(text, elementWriter );
-    }
+    text =_suffix ;
+    addTextNumber(text, elementWriter );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
@@ -984,20 +972,14 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:scientific-number" );
-    if ( !_prefix.isEmpty() )
-    {
-        QString text( _prefix );
-        addTextNumber(text, elementWriter );
-    }
+    text =  _prefix ;
+    addTextNumber(text, elementWriter );
 
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
-    if ( !_suffix.isEmpty() )
-    {
-        QString text( _suffix );
-        addTextNumber(text, elementWriter );
-    }
+    text = _suffix;
+    addTextNumber(text, elementWriter );
 
     elementWriter.endElement();
 
