@@ -2583,6 +2583,8 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
     kppixmapobject->setOrig( (   x  / m_doc->zoomHandler()->unzoomItX(m_doc->rastX()) ) * m_doc->zoomHandler()->unzoomItX(m_doc->rastX()), ( y  / m_doc->zoomHandler()->unzoomItY(m_doc->rastY()) ) * m_doc->zoomHandler()->unzoomItY(m_doc->rastY() ));
     kppixmapobject->setSelected( true );
 
+    kppixmapobject->setSize( m_doc->zoomHandler()->unzoomItX( 10 ),m_doc->zoomHandler()->unzoomItY( 10 ) );
+
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc,this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
