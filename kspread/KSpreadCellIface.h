@@ -22,6 +22,7 @@ k_dcop:
     virtual void setValue( int value );
     virtual void setValue( double value );
     virtual double value() const;
+    virtual QString visibleContentAsString() const;
     virtual void setBgColor(const QString& _c);
     virtual void setBgColor(int r,int g,int b);
     virtual QString bgColor() const;

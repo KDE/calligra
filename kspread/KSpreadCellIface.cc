@@ -32,6 +32,20 @@ void KSpreadCellIface::setText( const QString& text )
     cell->setCellText( text );
 }
 
+QString KSpreadCellIface::visibleContentAsString() const 
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if (cell->isEmpty()) return QString::null;
+    QString ret;
+    ret=cell->value().asString();
+
+    if (ret.isEmpty()) 
+    {
+	ret=QString::number(cell->value().asFloat());
+    }
+    return ret;
+}
+
 QString KSpreadCellIface::comment() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );
