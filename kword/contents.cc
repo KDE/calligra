@@ -234,7 +234,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
             // (not the whole line anymore), so we need the 4 borders.
             style->paragLayout().leftBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
             style->paragLayout().rightBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
-            style->paragLayout().alignment = Qt::AlignCenter;
+            style->paragLayout().alignment = Qt::AlignHCenter;
         }
         else
         {

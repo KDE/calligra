@@ -1845,7 +1845,7 @@ void KWView::showAlign( int align ) {
         case Qt::AlignLeft:
             actionFormatAlignLeft->setChecked( TRUE );
             break;
-        case Qt::AlignCenter:
+        case Qt::AlignHCenter:
             actionFormatAlignCenter->setChecked( TRUE );
             break;
         case Qt::AlignRight:
@@ -4566,7 +4566,7 @@ void KWView::textAlignCenter()
         KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
-            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignCenter );
+            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignHCenter );
             if (cmd)
             {
                 if ( !macroCmd )
