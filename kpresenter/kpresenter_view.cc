@@ -6028,6 +6028,7 @@ void KPresenterView::viewHelpLines()
 {
     bool state=actionViewShowHelpLine->isChecked();
     m_pKPresenterDoc->setShowHelplines( state );
+    m_pKPresenterDoc->updateHelpLineButton();
     m_canvas->deSelectAllObj();
     refreshRuler( state );
     m_pKPresenterDoc->repaint(false);
@@ -6038,6 +6039,7 @@ void KPresenterView::viewGrid()
 {
     m_pKPresenterDoc->setShowGrid( actionViewShowGrid->isChecked() );
     m_pKPresenterDoc->setModified( true );
+    m_pKPresenterDoc->updateGridButton();
     m_pKPresenterDoc->repaint(false);
 }
 
@@ -6045,6 +6047,7 @@ void KPresenterView::viewGridToFront()
 {
     m_pKPresenterDoc->setGridToFront( actionViewGridToFront->isChecked() );
     m_pKPresenterDoc->setModified( true );
+    m_pKPresenterDoc->updateGridButton();
     m_pKPresenterDoc->repaint(false);
 }
 
@@ -6052,6 +6055,7 @@ void KPresenterView::viewHelpLineToFront()
 {
     m_pKPresenterDoc->setHelpLineToFront( actionViewHelpLineToFront->isChecked() );
     m_pKPresenterDoc->setModified( true );
+    m_pKPresenterDoc->updateHelpLineButton();
     m_pKPresenterDoc->repaint(false);
 }
 
