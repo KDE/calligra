@@ -388,7 +388,7 @@ void KexiStartupDialog::templatesPageShown(QWidget *page)
 		if (templ->count()==0) {
 			//add items (on demand):
 			d->viewPersonalTempl->addItem("cd_catalog", i18n("CD Catalog"),
-				i18n("Easy to use database for storing information about your CD collection."),
+				i18n("Easy-to-use database for storing information about your CD collection."),
 				DesktopIcon("cdrom_unmount"));
 			d->viewPersonalTempl->addItem("expenses", i18n("Expenses"),
 				i18n("A database for managing your personal expenses."),

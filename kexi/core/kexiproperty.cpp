@@ -119,7 +119,7 @@ valueToCursorName(int shape)
 		case Qt::SplitHCursor: return i18n("Split Horizontal");
 		case Qt::PointingHandCursor: return i18n("Pointing Hand");
 		case Qt::ForbiddenCursor: return i18n("Forbidden");
-		case Qt::WhatsThisCursor: return i18n("Whats This");
+		case Qt::WhatsThisCursor: return i18n("What's This");
 		default: return QString();
 	}
 }
