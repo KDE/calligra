@@ -33,6 +33,7 @@
 
 struct KoTextObject::KoTextObjectPrivate
 {
+public:
     KoTextObjectPrivate() {
         afterFormattingEmitted = false;
     }
