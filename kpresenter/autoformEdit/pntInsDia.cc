@@ -14,6 +14,8 @@
 /* Module: point insert dialog                                    */
 /******************************************************************/
 
+#include <qspinbox.h>
+
 #include "pntInsDia.h"
 #include "pntInsDia.moc"
 

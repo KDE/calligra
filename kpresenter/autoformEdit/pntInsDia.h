@@ -23,7 +23,7 @@
 #include <qradiobt.h>
 #include <qbttngrp.h>
 
-#include <qspinbox.h>
+class QSpinBox;
 
 /******************************************************************/
 /* class PntInsDia                                                */
