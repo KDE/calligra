@@ -42,8 +42,10 @@ void RotationDialogImpl::setAngle( double angle )
 	 || angle == 180
 	 || angle == 270 )
 	angleGroup->setButton( (int)angle );
-    else if ( angle == 1 )
-	angleGroup->setButton( 0 );
+    else if ( angle == 0 )
+	angleGroup->setButton( 1 );
+    else
+        angleGroup->setButton( 0 );
 }
 
 double RotationDialogImpl::angle()
