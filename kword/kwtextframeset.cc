@@ -1968,33 +1968,22 @@ double KWTextFrameSet::footerHearderSizeMax(  KWFrame *theFrame )
 {
     double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
     int page = theFrame->pageNum();
-    if(theFrame->getFrameSet()->isAHeader()&& m_doc->isHeaderVisible())
+    bool header=theFrame->getFrameSet()->isAHeader();
+    bool state =header ? m_doc->isHeaderVisible():m_doc->isFooterVisible();
+    if(state )
     {
         QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
         KWFrame *frm=0L;
         for ( ; fit.current() ; ++fit )
         {
-            if(fit.current()->isVisible() && fit.current()->isAFooter())
+            state=header ? fit.current()->isAFooter():fit.current()->isAHeader();
+            if(fit.current()->isVisible() && state)
             {
                 frm=fit.current()->getFrame( 0 );
                 if(frm->pageNum()==page )
                     return (tmp-frm->height());
             }
 
-        }
-    }
-    else if(theFrame->getFrameSet()->isAFooter()&&m_doc->isFooterVisible())
-    {
-        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-        KWFrame *frm=0L;
-        for ( ; fit.current() ; ++fit )
-        {
-            if(fit.current()->isVisible()&&fit.current()->isAHeader())
-            {
-                frm=fit.current()->getFrame( 0 );
-                if(frm->pageNum()==page )
-                    return (tmp-frm->height());
-            }
         }
     }
     return 0;
