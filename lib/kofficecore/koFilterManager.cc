@@ -310,9 +310,8 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp;
-        tmp.sprintf( i18n("Could not import file of type\n%s"), t->mimeType().ascii() );
-        QMessageBox::critical( 0L, i18n("Missing import filter"), tmp, i18n("OK") );
+        QString tmp = i18n("Could not import file of type\n%1").arg( t->mimeType() );
+        KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
         return "";
     }
 
@@ -383,9 +382,8 @@ const bool KoFilterManager::export_() {
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp;
-        tmp.sprintf( i18n("Could not export file of type\n%s"), t->mimeType().ascii() );
-        QMessageBox::critical( 0L, i18n("Missing export filter"), tmp, i18n("OK") );
+        QString tmp = i18n("Could not export file of type\n%1").arg( t->mimeType() );
+        KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
         return false;
     }
 
