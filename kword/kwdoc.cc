@@ -1414,11 +1414,6 @@ bool KWDocument::completeLoading( KoStore *_store )
                 }
             }
 
-            QString filename = *it;
-            int dashdash = filename.findRev( "--" );
-            if ( dashdash != -1 )
-                filename == filename.left( dashdash );
-
             if ( !img.isNull() )
                 m_imageCollection.insertImage( *it, img );
         }
@@ -1632,19 +1627,6 @@ bool KWDocument::completeSaving( KoStore *_store )
 
     return TRUE;
 }
-
-#if 0 // old stuff, doesn't seem to be used anymore
-void KWDocument::enableEmbeddedParts( bool f )
-{
-    KWFrameSet *frameSet = 0L;
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
-    {
-        frameSet = getFrameSet( i );
-        if ( frameSet->getFrameType() == FT_PART )
-            dynamic_cast<KWPartFrameSet*>( frameSet )->enableDrawing( f );
-    }
-}
-#endif
 
 /*================================================================*/
 bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
