@@ -469,10 +469,10 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchron
     OUTPUT (checkWord2);
 
   proc->fputs ("%"); // turn off terse mode
-  cleanFputsWord( qs ); // send the word to ispell
 
-  //MAGIC 2: and here we wait for the results
-  enter_loop();
+  if (cleanFputsWord( qs )) // send the word to ispell
+     enter_loop(); //MAGIC 2: and here we wait for the results
+
   return true;
 }
 
