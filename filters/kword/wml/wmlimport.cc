@@ -26,10 +26,12 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qvaluelist.h>
+#include <qfont.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
+#include <koGlobal.h>
 
 #include <wmlimport.h>
 #include <wmlparser.h>
@@ -69,24 +71,27 @@ static QString WMLFormatAsXML( WMLFormat format )
 
   if( format.href.isEmpty() )
   {
+    QFont font = KoGlobal::defaultFont();
+    QString fontFamily = font.family();
+    QString fontSize = QString::number( 
+      format.fontsize == WMLFormat::Big ? font.pointSizeFloat()+3 :
+      format.fontsize == WMLFormat::Small ? font.pointSizeFloat()-3 : font.pointSizeFloat() );
+    QString boldness = format.bold ? "75" : "50";
+    QString italic = format.italic ? "1" : "0";
+    QString underline = format.underline ? "1" : "0";
 
-  if( format.bold ) result.append("<WEIGHT value=\"75\" />\n" );
-  if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
-  if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
-
-  // hard-code font size
-  int fontsize = 11;
-  if( format.fontsize == WMLFormat::Big ) fontsize = 14;
-  if( format.fontsize == WMLFormat::Small ) fontsize = 8;
-  result.append( "<SIZE value=\"" + QString::number(fontsize) + "\" />\n" );
-
-  result.prepend("<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
-    "\" len=\"" + QString::number(format.len) + "\">\n");
-  result.append( "</FORMAT>\n" );
-
+    result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
+       "\" len=\"" + QString::number(format.len) + "\">\n";
+    result.append( "  <FONT name=\"" + fontFamily + "\" />\n" );
+    result.append( "  <SIZE value=\"" + fontSize + "\" />\n" );
+    result.append( "  <WEIGHT value=\"" + boldness + "\" />\n" );
+    result.append( "  <ITALIC value=\"" + italic  + "\" />\n" );
+    result.append( "  <UNDERLINE value=\"" + underline + "\" />\n" );
+    result.append( "</FORMAT>\n" );
   }
   else
   {
+    // hyperlink
     result.append( "<FORMAT id=\"4\" pos=\"" + QString::number(format.pos) +
      "\" len=\"" + QString::number(format.len) + "\">\n");
     result.append( "<VARIABLE>\n" );
@@ -109,6 +114,10 @@ static QString WMLLayoutAsXML( WMLLayout layout )
   if( layout.align == WMLLayout::Center ) align = "center";
   if( layout.align == WMLLayout::Right ) align = "right";
 
+  QFont font = KoGlobal::defaultFont();
+  QString fontFamily = font.family();
+  QString fontSize = QString::number( font.pointSizeFloat() );
+
   result.append( "<LAYOUT>\n" );
   result.append( "  <NAME value=\"Standard\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
@@ -128,8 +137,8 @@ static QString WMLLayoutAsXML( WMLLayout layout )
   result.append( "    <STRIKEOUT value=\"0\" />\n" );
   result.append( "    <CHARSET value=\"0\" />\n" );
   result.append( "    <VERTALIGN value=\"0\" />\n" );
-  result.append( "    <FONT name=\"Helvetica\" />\n" );
-  result.append( "    <SIZE value=\"11\" />\n" );
+  result.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
+  result.append( "    <SIZE value=\"" + fontSize + "\" />\n" );
   result.append( "  </FORMAT>\n" );
   result.append( "</LAYOUT>\n" );
 
