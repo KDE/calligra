@@ -33,13 +33,39 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
 
   setupTreeView();
 
-  infoWidget = new QWidget(this,"");
+  list = new KTabListBox(panner,"",2);
+  list->setTableFlags(list->tableFlags() | Tbl_smoothHScrolling | Tbl_smoothVScrolling);
+  list->setColumn(0,i18n("Description"),200);
+  list->setColumn(1,i18n("Value"),200);
 
-  panner->activate(treelist,infoWidget);
+  panner->activate(treelist,list);
 
-  resize(600,500);
+  resize(600,400);
   panner->move(0,0);
-  panner->resize(600,500);
+  panner->resize(600,400);
+}
+
+/*================================================================*/
+void PresStructViewer::itemSelected(int _index)
+{
+  KTreeListItem *item = treelist->itemAt(_index);
+  QString text(item->getText());
+
+  // must be a page
+  if (text.contains("Page",false) > 0)
+    {
+      ItemInfo *info = 0;
+      for (unsigned int i = 0;i < pageList.count();i++)
+	{
+	  info = pageList.at(i);
+	  if (info->item == item) fillWithPageInfo(doc->backgroundList()->at(info->num),info->num);
+	}
+    }
+
+  // must be an object
+  else
+    {
+    }
 }
 
 /*================================================================*/
@@ -62,6 +88,7 @@ void PresStructViewer::setupTreeView()
   treelist = new KTreeList(this,"");
 
   KTreeListItem *item = 0;
+  ItemInfo *info = 0;
 
   QString pixdir = kapp->kde_toolbardir();
   QString page_name,obj_name;
@@ -72,7 +99,10 @@ void PresStructViewer::setupTreeView()
       page_name.sprintf("%d. Page",i + 1);
       item = new KTreeListItem(page_name.data(),new QPixmap(pixdir + "/filenew.xpm"));
       treelist->insertItem(item,-1,false);
-      pageList.append(item);
+      info = new ItemInfo;
+      info->num = i;
+      info->item = item;
+      pageList.append(info);
     }
 
   pixdir = kapp->kde_datadir();
@@ -86,34 +116,56 @@ void PresStructViewer::setupTreeView()
       if (pgnum != -1)
 	{
 	  pgnum--;
-	  treelist->addChildItem(item,treelist->itemIndex(pageList.at(pgnum)));;
-	  objList.append(item);
+	  treelist->addChildItem(item,treelist->itemIndex(pageList.at(pgnum)->item));;
+	  info = new ItemInfo;
+	  info->num = i;
+	  info->item = item;
+	  objList.append(info);
 	}
     }
+
+  connect(treelist,SIGNAL(highlighted(int)),this,SLOT(itemSelected(int)));
 }
 
+/*================================================================*/
+void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
+{
+  QString str;
+  int r,g,b;
+  QColor c;
 
+  list->setNumRows(0);
+  str.sprintf("%d",_num + 1);
+  list->appendItem(i18n("Number")); 
+  list->changeItemPart(str,list->count() - 1,1);
 
+  list->appendItem(i18n("Back Type")); 
+  list->changeItemPart(i18n(BackTypeName[static_cast<int>(_page->getBackType())]),
+		       list->count() - 1,1);
 
+  list->appendItem(i18n("Back View")); 
+  list->changeItemPart(i18n(BackViewName[static_cast<int>(_page->getBackView())]),
+		       list->count() - 1,1);
 
+  c = _page->getBackColor1();
+  c.rgb(&r,&g,&b);
+  str.sprintf("#%02X%02X%02X",r,g,b);
+  list->appendItem(i18n("Color1")); 
+  list->changeItemPart(str,list->count() - 1,1);
 
+  c = _page->getBackColor2();
+  c.rgb(&r,&g,&b);
+  str.sprintf("#%02X%02X%02X",r,g,b);
+  list->appendItem(i18n("Color2")); 
+  list->changeItemPart(str,list->count() - 1,1);
 
+  list->appendItem(i18n("Picture Filename")); 
+  list->changeItemPart(_page->getBackPixFilename(),list->count() - 1,1);
 
+  list->appendItem(i18n("Clipart Filename")); 
+  list->changeItemPart(_page->getBackClipFilename(),list->count() - 1,1);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  list->appendItem(i18n("Effect for changing to next page")); 
+  list->changeItemPart(i18n(PageEffectName[static_cast<int>(_page->getPageEffect())]),
+		       list->count() - 1,1);
+}

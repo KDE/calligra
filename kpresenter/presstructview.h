@@ -22,17 +22,26 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qlist.h>
+#include <qcolor.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
 #include <kapp.h>
+#include <ktablistbox.h>
 
 #include "kpobject.h"
+#include "kpbackground.h"
 
 class KPresenterDocument_impl;
 
 const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autoform",
 			   "Clipart","Undefined"};
+const QString BackTypeName[] = {"Color","Picture","Clipart"};
+const QString BackViewName[] = {"Zoom","Center","Tiled"};
+const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gradient"};
+const QString PageEffectName[] = {"No effect","Close horizontal","Close vertical","Close from all directions",
+				  "Open horizontal","Open vertical","Open from all directions","Interlocking horizontal 1",
+				  "Interlocking horizontal 2","Interlocking vertical 1","Interlocking vertical 2"};
 
 /******************************************************************/
 /* Class: PresStructViewer                                        */
@@ -48,16 +57,26 @@ public:
 signals:
   void presStructViewClosed();
 
+protected slots:
+  void itemSelected(int);
+
 protected:
+  struct ItemInfo
+  {
+    int num;
+    KTreeListItem *item;
+  };
+
   void resizeEvent(QResizeEvent *e);
   void closeEvent(QCloseEvent *e);
   void setupTreeView();
+  void fillWithPageInfo(KPBackGround *_page,int _num);
 
   KNewPanner *panner;
   KTreeList *treelist;
-  QWidget *infoWidget;
+  KTabListBox *list;
   KPresenterDocument_impl *doc;
-  QList<KTreeListItem> pageList,objList;
+  QList<ItemInfo> pageList,objList;
 
 };
 

@@ -2273,8 +2273,12 @@ void KPresenterView_impl::setupMenu()
 
       // insert menu
       m_idMenuInsert = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Insert")));
-      m_idMenuInsert_Page = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pa&ge...")),m_idMenuInsert,
-						   this,CORBA::string_dup("insertPage"));
+
+      tmp = kapp->kde_toolbardir().copy();
+      tmp += "/filenew.xpm";
+      pix = loadPixmap(tmp);
+      m_idMenuInsert_Page = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pa&ge...")),m_idMenuInsert,
+						    this,CORBA::string_dup("insertPage"));
       m_rMenuBar->insertSeparator(m_idMenuInsert);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/picture.xpm";
