@@ -1270,6 +1270,15 @@ bool KSpreadCell::calc( bool _makedepend )
 	for ( int x = left; x <= right; x++ )
 	  for ( int y = top; y <= bottom; y++ )
 	  {
+		if (!dep->m_pTable)
+		{
+	  		m_bError = true;
+	  		m_strFormularOut = "####";
+	  		m_bValue = false;
+			m_bBool = false;
+			m_bProgressFlag = false;
+			return false;
+		}
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
 	      return false;
@@ -1293,6 +1302,15 @@ bool KSpreadCell::calc( bool _makedepend )
       }
       else
       {
+	if (!dep->m_pTable)
+	{
+	  	m_bError = true;
+	  	m_strFormularOut = "####";
+	  	m_bValue = false;
+		m_bBool = false;
+		m_bProgressFlag = false;
+	  	return false;
+	}
 	KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
 	if ( cell == 0L )
 	  return false;
