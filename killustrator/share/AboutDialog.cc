@@ -29,6 +29,7 @@
 #include <qpushbt.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <kiconloader.h>
 #include "version.h"
 
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998\n\
@@ -46,13 +47,17 @@ AboutDialog::AboutDialog (QWidget* parent) :
     resize (400, 300);
     setFixedSize (size ());
 
-    QLabel *label = new QLabel ("KIllustrator", this);
+    QLabel *label = new QLabel (this);
+    label->setPixmap (Icon("killustrator.xpm"));
+    label->setGeometry (50, 30, 33, 33);
+
+    label = new QLabel ("KIllustrator", this);
     label->setFont (QFont ("helvetica", 18, QFont::Bold));
-    label->setGeometry (50, 30, 100, 25);
+    label->setGeometry (100, 30, 100, 25);
 
     label = new QLabel (info.data (), this);
     label->setAlignment (AlignLeft|WordBreak);
-    label->setGeometry (50, 60, 290, 180);
+    label->setGeometry (50, 65, 290, 180);
 
     QFrame* frame = new QFrame (this);
     frame->setLineWidth (1);
