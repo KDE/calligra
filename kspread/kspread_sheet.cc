@@ -6715,6 +6715,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug()<<"default column style :"<<style<<endl;
         styleStack.push( *style );
         layout.loadOasisStyleProperties( styleStack, oasisStyles );
+        styleStack.pop();
     }
 
 
@@ -6722,7 +6723,6 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     {
         QString str = column.attribute( "table:style-name" );
         QDomElement *style = oasisStyles.styles()[str];
-        styleStack.pop();
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }

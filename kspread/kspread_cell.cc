@@ -5524,35 +5524,8 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            bool ok = false;
             QStringList listVal = QStringList::split( ",", valExpression );
-            kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
-
-            d->extra()->validity->valMin = listVal[0].toDouble(&ok);
-            if ( !ok )
-            {
-                d->extra()->validity->valMin = listVal[0].toInt(&ok);
-                if ( !ok )
-                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
-#if 0
-                if ( !ok )
-                    d->extra()->validity->valMin = listVal[0];
-#endif
-            }
-            ok=false;
-            d->extra()->validity->valMax = listVal[1].toDouble(&ok);
-            if ( !ok )
-            {
-                d->extra()->validity->valMax = listVal[1].toInt(&ok);
-                if ( !ok )
-                    kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
-
-#if 0
-
-                if ( !ok )
-                    d->extra()->validity->valMax = listVal[1];
-#endif
-            }
+            loadOasisValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
@@ -5563,38 +5536,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( ")" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
-            bool ok = false;
-
-            d->extra()->validity->valMin = listVal[0].toDouble(&ok);
-            if ( !ok )
-            {
-                d->extra()->validity->valMin = listVal[0].toInt(&ok);
-                if ( !ok )
-                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
-
-#if 0
-                if ( !ok )
-                   bool ok = false;
-             d->extra()->validity->valMin = listVal[0];
-#endif
-            }
-            ok=false;
-            d->extra()->validity->valMax = listVal[1].toDouble(&ok);
-            if ( !ok )
-            {
-                d->extra()->validity->valMax = listVal[1].toInt(&ok);
-                if ( !ok )
-                    kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
-
-#if 0
-
-                if ( !ok )
-                    d->extra()->validity->valMax = listVal[1];
-#endif
-            }
-
-
-
+            loadOasisValidationValue( listVal );
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         else
@@ -5633,35 +5575,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( "," , valExpression );
-                bool ok = false;
-                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
-
-                d->extra()->validity->valMin = listVal[0].toDouble(&ok);
-                if ( !ok )
-                {
-                    d->extra()->validity->valMin = listVal[0].toInt(&ok);
-                if ( !ok )
-                    kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
-
-#if 0
-                    if ( !ok )
-                        d->extra()->validity->valMin = listVal[0];
-#endif
-                }
-                ok=false;
-                d->extra()->validity->valMax = listVal[1].toDouble(&ok);
-                if ( !ok )
-                {
-                    d->extra()->validity->valMax = listVal[1].toInt(&ok);
-                    if ( !ok )
-                        kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
-
-#if 0
-
-                    if ( !ok )
-                        d->extra()->validity->valMax = listVal[1];
-#endif
-                }
+                loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
@@ -5669,33 +5583,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( ",", valExpression );
-                bool ok = false;
-                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
-                d->extra()->validity->valMin = listVal[0].toDouble(&ok);
-                if ( !ok )
-                {
-                    d->extra()->validity->valMin = listVal[0].toInt(&ok);
-                    if ( !ok )
-                        kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
-
-#if 0
-                    if ( !ok )
-                        d->extra()->validity->valMin = listVal[0];
-#endif
-                }
-                ok=false;
-                d->extra()->validity->valMax = listVal[1].toDouble(&ok);
-                if ( !ok )
-                {
-                    d->extra()->validity->valMax = listVal[1].toInt(&ok);
-                    if ( !ok )
-                        kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
-
-#if 0
-                    if ( !ok )
-                        d->extra()->validity->valMax = listVal[1];
-#endif
-                }
+                loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Different;
             }
         }
@@ -5761,6 +5649,51 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
 }
 
 
+void KSpreadCell::loadOasisValidationValue( const QStringList &listVal )
+{
+    bool ok = false;
+    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+    if ( d->extra()->validity->m_allow == Allow_Date )
+    {
+        d->extra()->validity->dateMin = QDate::fromString( listVal[0] );
+        d->extra()->validity->dateMax = QDate::fromString( listVal[1] );
+    }
+    else if ( d->extra()->validity->m_allow == Allow_Time )
+    {
+        d->extra()->validity->timeMin = QTime::fromString( listVal[0] );
+        d->extra()->validity->timeMax = QTime::fromString( listVal[1] );
+    }
+    else
+    {
+        d->extra()->validity->valMin = listVal[0].toDouble(&ok);
+        if ( !ok )
+        {
+            d->extra()->validity->valMin = listVal[0].toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+
+#if 0
+            if ( !ok )
+                d->extra()->validity->valMin = listVal[0];
+#endif
+        }
+        ok=false;
+        d->extra()->validity->valMax = listVal[1].toDouble(&ok);
+        if ( !ok )
+        {
+            d->extra()->validity->valMax = listVal[1].toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
+#if 0
+            if ( !ok )
+                d->extra()->validity->valMax = listVal[1];
+#endif
+        }
+    }
+}
+
 void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
 {
     QString value;
@@ -5799,20 +5732,30 @@ void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
     kdDebug()<<" value :"<<value<<endl;
-    bool ok = false;
-    d->extra()->validity->valMin = value.toDouble(&ok);
-    if ( !ok )
+    if ( d->extra()->validity->m_allow == Allow_Date )
     {
-        d->extra()->validity->valMin = value.toInt(&ok);
+        d->extra()->validity->dateMin = QDate::fromString( value );
+    }
+    else if (d->extra()->validity->m_allow == Allow_Date )
+    {
+        d->extra()->validity->timeMin = QTime::fromString( value );
+    }
+    else
+    {
+        bool ok = false;
+        d->extra()->validity->valMin = value.toDouble(&ok);
         if ( !ok )
-            kdDebug()<<" Try to parse this value :"<<value<<endl;
+        {
+            d->extra()->validity->valMin = value.toInt(&ok);
+            if ( !ok )
+                kdDebug()<<" Try to parse this value :"<<value<<endl;
 
 #if 0
-        if ( !ok )
-            d->extra()->validity->valMin = value;
+            if ( !ok )
+                d->extra()->validity->valMin = value;
 #endif
+        }
     }
-
 }
 
 

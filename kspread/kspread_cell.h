@@ -934,6 +934,7 @@ private:
     void checkForNamedAreas( QString & formula ) const;
     void convertFormula( QString & text, const QString & f ) const;
     QString convertFormulaToOasisFormat( const QString & formula ) const;
+    void loadOasisValidationValue( const QStringList &listVal );
 
 };
 
