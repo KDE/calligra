@@ -22,7 +22,7 @@
 #include <kis_doc.h>
 
 typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libmagickimport, MagickImportFactory("magickimport"));
+K_EXPORT_COMPONENT_FACTORY(libmagickimport, MagickImportFactory("magickimport"))
 
 MagickImport::MagickImport(KoFilter *, const char *, const QStringList&) : KoFilter()
 {

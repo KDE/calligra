@@ -79,7 +79,7 @@ protected:
 };
 
 
-K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() )
 
 
 EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )

@@ -31,7 +31,7 @@
 
 typedef         KGenericFactory < RTFExport,
                 KoFilter > RTFExportFactory;
-K_EXPORT_COMPONENT_FACTORY(librtfexport, RTFExportFactory("rtfexport"));
+K_EXPORT_COMPONENT_FACTORY(librtfexport, RTFExportFactory("rtfexport"))
 
 // global variables
 QValueList < FontTable > fontTable;     // holds all fonts found in the

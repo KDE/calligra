@@ -27,7 +27,7 @@
 #include <texgraphexportdia.h>
 
 typedef KGenericFactory<TEXGRAPHExport, KoFilter> TEXGRAPHExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libtexgraphexport, TEXGRAPHExportFactory( "kontourlatexfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libtexgraphexport, TEXGRAPHExportFactory( "kontourlatexfilter" ) )
 
 
 TEXGRAPHExport::TEXGRAPHExport(KoFilter *, const char *, const QStringList&) :

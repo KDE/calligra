@@ -46,7 +46,7 @@ protected:
 	}
 };
 
-K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory() );
+K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory() )
 
 EpsImport::EpsImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
