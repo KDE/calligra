@@ -48,6 +48,7 @@ KugarPart::~KugarPart()
 
 bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 {
+	m_docURL=url();
 	bool ok=true;
         if (file)
         {
@@ -129,7 +130,20 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
         if (url.isMalformed())
         {
                 if (tpl.find('/') >= 0)
-                        localtpl = tpl;
+		{
+			if (tpl.startsWith(".")) 
+			{
+				KURL tmpURL(m_docURL);
+				tmpURL.setFileName("");
+				tmpURL.addPath(tpl);
+				if (KIO::NetAccess::download(tmpURL,localtpl))
+					isTemp=true;
+				else
+				KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));
+			}
+			else
+			localtpl=tpl;
+		}
                 else
                         localtpl = kapp -> dirs() -> findResource("data","kugar/templates/" + tpl);
         }

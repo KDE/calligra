@@ -37,6 +37,7 @@ private:
 	QString m_reportData;
 	MReportEngine *m_reportEngine;
 	bool m_templateOk;
+	KURL m_docURL;
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 	
