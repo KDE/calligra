@@ -429,7 +429,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "SIZE" ).toElement();
     if ( !elem.isNull() )
     {
-        int size = elem.attribute("value").toInt();
+        double size = elem.attribute("value").toDouble();
         font.setPointSize( KoTextZoomHandler::ptToLayoutUnitPt( size ) );
     }
     elem = formatElem.namedItem( "ITALIC" ).toElement();
