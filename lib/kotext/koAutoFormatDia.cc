@@ -84,8 +84,12 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
     exceptionList=new QListBox(this);
     exceptionList->insertStringList(m_listException);
     grid->addMultiCellWidget(exceptionList,2,5,0,0);
-    pbRemoveException->setEnabled(m_listException.count()>0);
+    pbRemoveException->setEnabled( exceptionList->currentItem()!=-1 && m_listException.count()>0);
     connect(exceptionLine ,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
+
+    connect( exceptionList , SIGNAL(selectionChanged () ),
+            this,SLOT(slotExceptionListSelected()) );
+
     pbAddException->setEnabled(false);
 
     cbAutoInclude = new QCheckBox( i18n("Auto includes"), this );
@@ -112,7 +116,7 @@ void KoAutoFormatExceptionWidget::slotAddException()
 
             exceptionList->clear();
             exceptionList->insertStringList(m_listException);
-            pbRemoveException->setEnabled(m_listException.count()>0);
+            pbRemoveException->setEnabled( exceptionList->currentItem()!=-1 && m_listException.count()>0);
             pbAddException->setEnabled(false);
         }
         exceptionLine->clear();
@@ -126,7 +130,7 @@ void KoAutoFormatExceptionWidget::slotRemoveException()
         m_listException.remove(exceptionList->currentText());
         exceptionList->clear();
         pbAddException->setEnabled(false);
-        pbRemoveException->setEnabled(m_listException.count()>0);
+        pbRemoveException->setEnabled( exceptionList->currentItem()!=-1 && m_listException.count()>0);
         exceptionList->insertStringList(m_listException);
     }
 }
@@ -147,6 +151,10 @@ void KoAutoFormatExceptionWidget::setAutoInclude(bool b)
     cbAutoInclude->setChecked( b );
 }
 
+void KoAutoFormatExceptionWidget::slotExceptionListSelected()
+{
+    pbRemoveException->setEnabled( exceptionList->currentItem()!=-1 );
+}
 
 /******************************************************************/
 /* Class: KoAutoFormatDia                                         */

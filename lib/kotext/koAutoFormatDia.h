@@ -69,6 +69,7 @@ protected slots:
     void slotAddException();
     void slotRemoveException();
     void textChanged ( const QString & );
+    void slotExceptionListSelected();
  private:
     QListBox *exceptionList;
     KoAutoFormatLineEdit *exceptionLine;
