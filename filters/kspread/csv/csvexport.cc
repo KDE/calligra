@@ -27,7 +27,7 @@
 #include <koFilterChain.h>
 
 #include <kspread_map.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_doc.h>
 
 #include <csvexportdialog.h>
@@ -131,22 +131,22 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
       first = false;
 
       // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
-            
+
       // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
       // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
       int iMaxColumn = table->maxColumn();
       int iMaxRow = table->maxRow();
-      
+
       // this is just a bad approximation which fails for documents with less than 50 rows, but
       // we don't need any progress stuff there anyway :) (Werner)
       int value = 0;
       int step = iMaxRow > 50 ? iMaxRow/50 : 1;
       int i = 1;
-      
+
       QString emptyLines;
       for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
       {
-        if ( i > step ) 
+        if ( i > step )
         {
           value += 2;
           emit sigProgress(value);
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
             QString text;
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
-              switch( cell->content() ) 
+              switch( cell->content() )
               {
                case KSpreadCell::Text:
                 text = cell->text();

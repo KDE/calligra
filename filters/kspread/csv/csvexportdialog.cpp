@@ -21,7 +21,7 @@
 #include <exportdialogui.h>
 
 #include <kspread_map.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -30,7 +30,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlistview.h>
-#include <qptrlist.h> 
+#include <qptrlist.h>
 #include <qradiobutton.h>
 #include <qtextstream.h>
 
@@ -72,7 +72,7 @@ void CSVExportDialog::fillTable( KSpreadMap * map )
   QPtrListIterator<KSpreadTable> it( map->tableList() );
   for( ; it.current(); ++it )
   {
-    item = new QCheckListItem( m_dialog->m_tableList, 
+    item = new QCheckListItem( m_dialog->m_tableList,
                                it.current()->tableName(),
                                QCheckListItem::CheckBox );
     item->setOn(false);
@@ -81,7 +81,7 @@ void CSVExportDialog::fillTable( KSpreadMap * map )
 
   m_dialog->m_tableList->setSorting(1, true);
   m_dialog->m_tableList->sort();
-  m_dialog->m_tableList->setSorting( -1 );  
+  m_dialog->m_tableList->setSorting( -1 );
 }
 
 QChar CSVExportDialog::getDelimiter() const
@@ -113,7 +113,7 @@ bool CSVExportDialog::exportTable(QString const & tableName) const
       if ( ((QCheckListItem * ) item)->text() == tableName )
         return true;
     }
-  }  
+  }
   return false;
 }
 
