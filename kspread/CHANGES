@@ -18,6 +18,7 @@ Bugfixes:
 - Fix printout of thick borders on page borders
 - Fix flicker of embedded objects
 - Fix applying changes for bold and italic attribute with cell layout dialog
+- Fix paper size for custom layout in paper layout dialog
 
 
 Changes from 1.1 to 1.2
