@@ -24,7 +24,6 @@
 #include "koPointArray.h"
 #include <kpobject.h>
 #include <koSize.h>
-#define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
 class KoZoomHandler;
