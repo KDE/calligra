@@ -8,6 +8,7 @@ libkexidatatable_la_SOURCES = kexicelleditorfactory.cpp \
 		kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
 		kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexitableviewpropertybuffer.cpp
 
+noinst_HEADERS = kexitableview_p.h kexidatetimeeditor_p.h
 
 libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexidatatable_la_LIBADD = $(LIB_KDEUI) \

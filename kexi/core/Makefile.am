@@ -13,6 +13,8 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexivalidator.cpp \
 	kexiuseraction.cpp kexiuseractionmethod.cpp \
 	kexistartupdata.cpp keximsghandler.cpp kexiguimsghandler.cpp
 
+noinst_HEADERS = kexi_p.h kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
+
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
 
 SUBDIRS = .

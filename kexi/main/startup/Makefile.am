@@ -11,6 +11,8 @@ libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.
 	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
 	KexiStartup.cpp KexiStartup_p.cpp
 
+noinst_HEADERS = KexiStartup_p.h
+
 libkeximainstartup_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkeximainstartup_la_LIBADD =
 
