@@ -68,8 +68,8 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
 
     // test
-    GLine *line=new GLine("foo");
-    GLineM9r *m9r=(GLineM9r*)line->createM9r();
+    GObject *line=new GLine("foo");
+    GObjectM9r *m9r=line->createM9r();
     QRect r;
     m9r->mousePressEvent(e, view, r);
 }

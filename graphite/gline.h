@@ -77,18 +77,18 @@ public:
     virtual void draw(QPainter &p, const QRegion &reg,
 		      const bool toPrinter=false);
 
-    virtual const bool mouseMoveEvent(QMouseEvent *e, const GraphiteView *view,
+    virtual const bool mouseMoveEvent(QMouseEvent *e, GraphiteView *view,
 				      QRect &dirty);
-    virtual const bool mousePressEvent(QMouseEvent *e, const GraphiteView *view,
+    virtual const bool mousePressEvent(QMouseEvent *e, GraphiteView *view,
 				       QRect &dirty);
-    virtual const bool mouseReleaseEvent(QMouseEvent *e, const GraphiteView *view,
+    virtual const bool mouseReleaseEvent(QMouseEvent *e, GraphiteView *view,
 					 QRect &dirty);
-    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, const GraphiteView *view,
+    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, GraphiteView *view,
 					     QRect &dirty);
 
-    virtual const bool keyPressEvent(QKeyEvent *e, const GraphiteView *view,
+    virtual const bool keyPressEvent(QKeyEvent *e, GraphiteView *view,
 				     QRect &dirty);
-    virtual const bool keyReleaseEvent(QKeyEvent *e, const GraphiteView *view,
+    virtual const bool keyReleaseEvent(QKeyEvent *e, GraphiteView *view,
 				       QRect &dirty);
 
     virtual GObject *gobject() { return m_line; }

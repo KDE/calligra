@@ -34,6 +34,14 @@
 #include <graphitefactory.h>
 
 
+GObjectM9r::~GObjectM9r() {
+
+    if(m_dialog!=0L) {
+	delete m_dialog;
+	m_dialog=0L;
+    }
+}
+
 KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
     return new KDialogBase(KDialogBase::IconList,
 			   i18n("Change Properties"),
@@ -73,18 +81,20 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 
     QComboBox *style=new QComboBox(frame);
     QPainter painter;
+    QPixmap *pm;
     for(int i=0; i<6; ++i) {
-	QPixmap pm(70, 15);
-	painter.begin(&pm);
-	painter.fillRect(0, 0, 70, 15, QColor(Qt::white));
+	pm=new QPixmap(70, 15);
+	pm->fill();
+	painter.begin(pm);
 	painter.setPen(QPen(QColor(Qt::black),
-			    static_cast<unsigned int>(3),
+			    static_cast<unsigned int>(2),
 			    static_cast<Qt::PenStyle>(i)));
-	painter.drawLine(0, 35, 70, 35);
+	painter.drawLine(0, 7, 70, 7);
 	painter.end();
-	style->insertItem(pm);
+	style->insertItem(*pm);
     }
     connect(style, SIGNAL(activated(int)), this, SLOT(setPenStyle(int)));
+    style->setCurrentItem(m_object->pen().style());
     grid->addWidget(style, 2, 1);
 
     return dia;

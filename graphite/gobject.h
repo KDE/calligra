@@ -65,7 +65,7 @@ class GObjectM9r : public QObject {
 public:
     enum Mode { Create, Manipulate };
 
-    virtual ~GObjectM9r() {}
+    virtual ~GObjectM9r();
 
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
@@ -90,25 +90,27 @@ public:
     virtual GObject *gobject() = 0;
 
 protected:
-    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode), first_call(true) {}
+    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode), first_call(true),
+				   m_dialog(0L) {}
 
-    // This menthod creates a property dialog for an object. It
-    // creates an empty KDialogBase (IconList mode!).
+    // This menthod returns a property dialog for an object. It
+    // creates an empty KDialogBase (IconList mode!) or returns the
+    // existing one.
     // If you decide to override this method make sure that the first
     // thing you do in your implementation is calling this method of
-    // your parent. Then add your pages to the returned dialog.
+    // your parent. Then add your pages to the dialog.
     // Note: This dialog is modal and it has an "Apply" button. The
     // user is able to change the properties and see the result after
     // pressing 'Apply'.
-    // Don't forget to call delayedDestruct() on closing!!!
+    // This dialog will be destroyed whenever the M9r gets deleted.
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
     // TODO - Whenever an object is deleted,... its Status should be
     // set correctly form the M9r. Check this in the DTOR and react
     // accordingly!
     Mode m_mode;
-
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
+    KDialogBase *m_dialog;
 };
 
 

@@ -26,6 +26,7 @@
 // test
 #include <kdialogbase.h>
 #include <kdebug.h>
+#include <graphiteview.h>
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
 								      m_a(a), m_b(b) {
@@ -261,57 +262,53 @@ void GLine::resize(const QRect &boundingRect) {
 
 
 GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(line, mode), m_line(line) {
-
-    QApplication::setOverrideCursor(Qt::crossCursor);
     m_line->setState(GObject::Handles);
 }
 
 GLineM9r::~GLineM9r() {
-
+    // TODO - other state, when it has been deleted!
     m_line->setState(GObject::Visible);
-    // TODO - better solution!
-    QApplication::restoreOverrideCursor();
 }
 
 void GLineM9r::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
     m_line->draw(p, reg, toPrinter);
 }
 
-const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 				    QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, const GraphiteView *view,
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView *view,
 				     QRect &/*dirty*/) {
     // TODO
     // test
-    kdDebug(37001) << "here we go..." << endl;
-    KDialogBase *dia=createPropertyDialog((QWidget*)view);
+    kdDebug(37001) << "GLineM9r::mousePressEvent(): here we go..." << endl;
+    KDialogBase *dia=createPropertyDialog(view->canvas());
     dia->exec();
     return false;
 }
 
-const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 				       QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 					   QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
 				   QRect &/*dirty*/) {
     // TODO
     return false;
 }
 
-const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, const GraphiteView */*view*/,
+const bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
 				     QRect &/*dirty*/) {
     // TODO
     return false;
