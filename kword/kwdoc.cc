@@ -2674,6 +2674,59 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
     pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
+
+//<style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="right" style:rel-width="1%" style:color="#000000"/>
+
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter noteTmpWriter( &buffer );  // TODO pass indentation level
+    noteTmpWriter.startElement( "style:footnote-sep" );
+    QString tmp;
+    switch( m_footNoteSeparatorLinePos )
+    {
+    case SLP_CENTERED:
+        tmp = "centered";
+        break;
+    case SLP_RIGHT:
+        tmp = "right";
+        break;
+    case SLP_LEFT:
+        tmp = "left";
+        break;
+    }
+
+    noteTmpWriter.addAttribute( "style:adjustment", tmp );
+
+    //TODO width
+    tmp = QString( "%1%" ).arg( footNoteSeparatorLineLength() );
+    noteTmpWriter.addAttribute( "style:rel-width", tmp );
+    switch( m_footNoteSeparatorLineType )
+    {
+    case SLT_SOLID:
+        tmp = "solid";
+        break;
+    case SLT_DASH:
+        tmp = "dash";
+        break;
+    case SLT_DOT:
+        tmp = "dotted";
+        break;
+    case SLT_DASH_DOT:
+        tmp = "dot-dash";
+        break;
+    case SLT_DASH_DOT_DOT:
+        tmp = "dot-dot-dash";
+        break;
+    }
+
+    noteTmpWriter.addAttribute( "style:line-style", tmp );
+
+    noteTmpWriter.endElement();
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    pageLayout.addChildElement( "separator", elementContents );
+
+
+
     // TODO (from variablesettings I guess) pageLayout.addAttribute( "style:first-page-number", ... );
     /*QString pageLayoutStyleName =*/ mainStyles.lookup( pageLayout, "pm" );
 
