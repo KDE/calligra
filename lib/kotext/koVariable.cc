@@ -548,7 +548,7 @@ void KoVariable::load( QDomElement & )
 {
 }
 
-KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
+KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat )
 {
     QCString string;
     QStringList stringList;
@@ -559,12 +559,18 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            varFormat = coll->format( KoDateVariable::formatStr() );
+            if ( _forceDefaultFormat )
+                varFormat = coll->format( KoDateVariable::defaultFormat() );
+            else
+                varFormat = coll->format( KoDateVariable::formatStr() );
         }
         case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            varFormat = coll->format( KoTimeVariable::formatStr() );
+            if ( _forceDefaultFormat )
+                varFormat = coll->format( KoTimeVariable::defaultFormat() );
+            else
+                varFormat = coll->format( KoTimeVariable::formatStr() );
         }
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );
@@ -716,6 +722,13 @@ QStringList KoDateVariable::subTypeFormat()
     return listDateFormat;
 }
 
+QCString KoDateVariable::defaultFormat()
+{
+    return QCString(QCString("DATE")
+                    + QCString("0") // no support for short locale dates yet - TODO
+                    + QCString("locale"));
+}
+
 QCString KoDateVariable::formatStr()
 {
     QCString string;
@@ -783,9 +796,8 @@ QCString KoDateVariable::formatStr()
     }
     config.sync();
     delete dialog;
-    return QCString(QCString("DATE")
-                    + QCString("0") // no support for short locale dates yet - TODO
-                    + string );
+    return QCString(QCString("DATE") + QCString("0") + // no support for short locale dates yet - TODO
+                    string );
 }
 
 /******************************************************************/
@@ -944,6 +956,12 @@ QCString KoTimeVariable::formatStr()
     delete dialog;
     return QCString("TIME"+string );
 }
+
+QCString KoTimeVariable::defaultFormat()
+{
+    return QCString(QCString("TIME")+QCString("locale") );
+}
+
 
 /******************************************************************/
 /* Class: KoCustomVariable                                        */

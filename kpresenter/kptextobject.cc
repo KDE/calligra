@@ -671,7 +671,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             kdDebug() << "loadKTextObject variable type=" << type << " key=" << key << endl;
             KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
             // If varFormat is 0 (no key specified), the default format will be used.
-            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc );
+            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc, true/* force default format for date/time*/ );
             var->load( varElem );
             KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont() );
 

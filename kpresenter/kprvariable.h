@@ -35,7 +35,7 @@ class KPrVariableCollection : public KoVariableCollection
 {
  public:
     KPrVariableCollection(KoVariableSettings *_setting);
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat=false );
     QPtrList<KAction> variableActionList();
 };
 

@@ -31,7 +31,7 @@ KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
 {
 }
 
-KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
+KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
     switch(type) {
@@ -49,11 +49,21 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
         return new KPrFieldVariable( textdoc, subtype, varFormat, this, m_doc );
     case VT_DATE:
         if ( !varFormat )
-            varFormat =  coll->format( KoDateVariable::formatStr() );
+        {
+            if ( _forceDefaultFormat )
+                varFormat = coll->format( KoDateVariable::defaultFormat() );
+            else
+                varFormat =  coll->format( KoDateVariable::formatStr() );
+        }
         return new KPrDateVariable( textdoc, subtype, varFormat, this, m_doc );
     case VT_TIME:
         if ( !varFormat )
-            varFormat =  coll->format( KoTimeVariable::formatStr() );
+        {
+            if ( _forceDefaultFormat )
+                varFormat = coll->format( KoTimeVariable::defaultFormat() );
+            else
+                varFormat =  coll->format( KoTimeVariable::formatStr() );
+        }
         return new KPrTimeVariable( textdoc, subtype, varFormat, this, m_doc );
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );

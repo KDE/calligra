@@ -221,7 +221,7 @@ public:
 
     bool customVariableExist(const QString &varname)const ;
 
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat=false );
 
     KoVariableSettings *variableSetting(){return m_variableSettings;}
 
@@ -383,6 +383,10 @@ public:
      * Returns the date format string with prefix "DATE"
      */
     static QCString formatStr();
+    /**
+     * Return the default date format for old file.
+     */
+    static QCString defaultFormat();
 
 protected:
     short int m_subtype;
@@ -417,6 +421,10 @@ public:
      * Returns the time format string with prefix "TIME"
      */
     static QCString formatStr();
+    /**
+     * Return the default date format for old file.
+     */
+    static QCString defaultFormat();
 
 protected:
     short int m_subtype;
