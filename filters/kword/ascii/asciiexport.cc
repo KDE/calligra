@@ -5,6 +5,7 @@
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@ID-PRO.de>
    Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2003 Clarence Dang <dang@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,13 +23,21 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+#include <limits.h>
+
+#include <qcstring.h>
+#include <qfile.h>
 #include <qiodevice.h>
+#include <qstring.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+
 #include <koFilterChain.h>
+#include <koStore.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -36,56 +45,85 @@
 
 #include <ExportDialog.h>
 #include <asciiexport.h>
-#include <asciiexport.moc>
+
 
 class ASCIIExportFactory : KGenericFactory<ASCIIExport, KoFilter>
 {
 public:
-    ASCIIExportFactory(void) : KGenericFactory<ASCIIExport, KoFilter> ("kwordasciiexport")
-    {}
-protected:
-    virtual void setupTranslations( void )
+    ASCIIExportFactory() : KGenericFactory<ASCIIExport, KoFilter>("kwordasciiexport")
     {
-        KGlobal::locale()->insertCatalogue( "kwordasciifilter" );
+    }
+
+protected:
+    virtual void setupTranslations(void)
+    {
+        KGlobal::locale()->insertCatalogue("kwordasciifilter");
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libasciiexport, ASCIIExportFactory() );
+K_EXPORT_COMPONENT_FACTORY(libasciiexport, ASCIIExportFactory());
+
 
 class ASCIIWorker : public KWEFBaseWorker
 {
 public:
-    ASCIIWorker(void) : m_ioDevice(NULL), m_streamOut(NULL), m_eol("\n"),
-        m_inList(false) { }
-    virtual ~ASCIIWorker(void) { delete m_streamOut;}
+    ASCIIWorker() : m_ioDevice(NULL), m_streamOut(NULL), m_eol("\n")/*,
+        m_inList(false)*/
+    {
+    }
+
+    virtual ~ASCIIWorker()
+    {
+        delete m_streamOut;
+    }
+
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
+
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
-    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+
+    virtual bool doHeader(const HeaderData& header);
+    virtual bool doFooter(const FooterData& footer);
+
+    virtual bool doFullParagraphList(const QValueList<ParaData>& paraList,
+                                     const int printSeparator = 0);
+    virtual bool doFullParagraph(const ParaData& para);
+    virtual bool doFullParagraph(const QString& paraText,
+        const LayoutData& layout,
         const ValueListFormatData& paraFormatDataList);
+
 public:
-    inline QString getEndOfLine(void) const {return m_eol;}
-    inline void setEndOfLine(const QString& str) {m_eol=str;}
-    inline QTextCodec* getCodec(void) const { return m_codec; }
-    inline void setCodec(QTextCodec* codec) { m_codec=codec; }
+    QString getEndOfLine(void) const { return m_eol; }
+    void setEndOfLine(const QString& str) { m_eol = str; }
+
+    QTextCodec* getCodec(void) const { return m_codec; }
+    void setCodec(QTextCodec* codec) { m_codec = codec; }
+
 private:
-    void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
+    virtual bool ProcessTable(const Table& table);
+    virtual bool ProcessParagraphData (const QString& paraText,
+        const ValueListFormatData& paraFormatDataList);
+
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
+
     QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_eol; // End of line character(s)
+
+#if 0
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
     bool m_inList; // Are we currently in a list?
     bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
     int  m_counterList; // Counter for te lists
+#endif
 };
 
 bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
-    m_ioDevice=new QFile(filenameOut);
+    m_ioDevice = new QFile(filenameOut);
 
     if (!m_ioDevice)
     {
@@ -93,13 +131,13 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    if ( !m_ioDevice->open (IO_WriteOnly) )
+    if (!m_ioDevice->open(IO_WriteOnly))
     {
         kdError(30502) << "Unable to open output file!" << endl;
         return false;
     }
 
-    m_streamOut=new QTextStream(m_ioDevice);
+    m_streamOut = new QTextStream(m_ioDevice);
     if (!m_ioDevice)
     {
         kdError(30502) << "Could not create output stream! Aborting!" << endl;
@@ -115,7 +153,7 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    m_streamOut->setCodec( getCodec() );
+    m_streamOut->setCodec(getCodec());
 
     return true;
 }
@@ -139,50 +177,55 @@ bool ASCIIWorker::doCloseDocument(void)
     return true;
 }
 
-// ProcessParagraphData () mangles the pure text through the
-// formatting information stored in the FormatData list and prints it
-// out to the export file.
-
-void ASCIIWorker::ProcessParagraphData (const QString& paraText,
-    const ValueListFormatData& paraFormatDataList)
+static bool isParaListEmpty(const QValueList<ParaData>& para)
 {
-    if ( paraText.length () > 0 )
+    if (para.count() == 1)
     {
-        ValueListFormatData::ConstIterator  paraFormatDataIt;
-
-        for ( paraFormatDataIt = paraFormatDataList.begin ();
-              paraFormatDataIt != paraFormatDataList.end ();
-              paraFormatDataIt++ )
-        {
-            if (1==(*paraFormatDataIt).id) // Normal text
-            {
-                QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
-
-                // Replace line feeds by line ends
-                int pos;
-                int oldpos=0;
-                while ((pos=strText.find(QChar(10),oldpos))>-1)
-                {
-                    strText.replace(pos,1,m_eol);
-                    oldpos=pos+1;
-                }
-
-                *m_streamOut << strText;
-            }
-            else if (4==(*paraFormatDataIt).id) // Variable
-            {
-                // Just write the result of the variable
-                *m_streamOut << (*paraFormatDataIt).variable.m_text;
-            }
-            else
-            {
-                kdWarning(30502) << "Not supported paragraph type: "
-                    << (*paraFormatDataIt).id << endl;
-            }
-        }
+        if (para.first().text.isEmpty())
+            return true;
     }
 
-    *m_streamOut << m_eol; // Write end of line
+    return false;
+}
+
+bool ASCIIWorker::doHeader(const HeaderData& header)
+{
+    if (isParaListEmpty(header.para))
+        return true;
+
+    return doFullParagraphList(header.para, +1);
+}
+
+bool ASCIIWorker::doFooter(const FooterData& footer)
+{
+    if (isParaListEmpty(footer.para))
+        return true;
+
+    return doFullParagraphList(footer.para, +1);
+}
+
+bool ASCIIWorker::doFullParagraphList(const QValueList<ParaData>& paraList,
+                                      const int printSeparator)
+{
+    if (printSeparator == -1)
+        *m_streamOut << "--" << m_eol;
+
+    for (QValueList<ParaData>::ConstIterator it = paraList.begin();
+         it != paraList.end();
+         it++)
+    {
+        if (!doFullParagraph(*it)) return false;
+    }
+
+    if (printSeparator == +1)
+        *m_streamOut << "--" << m_eol;
+
+    return true;
+}
+
+bool ASCIIWorker::doFullParagraph(const ParaData& para)
+{
+    return doFullParagraph(para.text, para.layout, para.formattingList);
 }
 
 bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
@@ -190,7 +233,10 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
 {
     kdDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
 
+#if 0
     // As KWord has only one depth of lists, we can process lists very simply.
+    // --
+    // Not anymore - Clarence
     if ( layout.counter.numbering == CounterData::NUM_LIST )
     {
         // Are we still in a list of the right type?
@@ -316,20 +362,119 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
             ProcessParagraphData ( paraText, paraFormatDataList);
         }
     }
+#else
+    if (!layout.counter.text.isEmpty())
+        *m_streamOut << layout.counter.text << " ";
+
+    if (!ProcessParagraphData(paraText, paraFormatDataList)) return false;
+#endif
 
     kdDebug(30502) << "Exiting ASCIIWorker::doFullParagraph" << endl;
     return true;
 }
 
 
-ASCIIExport::ASCIIExport(KoFilter *, const char *, const QStringList &) :
-                     KoFilter()
+bool ASCIIWorker::ProcessTable(const Table& table)
+{
+    kdDebug(30502) << "processTable CALLED!" << endl;
+
+    // just dump the table out (no layout for now)
+    for (QValueList<TableCell>::ConstIterator it = table.cellList.begin();
+         it != table.cellList.end();
+         it++)
+    {
+        if (!doFullParagraphList(*(*it).paraList)) return false;
+    }
+
+    return true;
+}
+
+// ProcessParagraphData () mangles the pure text through the
+// formatting information stored in the FormatData list and prints it
+// out to the export file.
+bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
+    const ValueListFormatData& paraFormatDataList)
+{
+    bool lastSegmentWasText = true;
+
+    if (!paraText.isEmpty())
+    {
+        ValueListFormatData::ConstIterator  paraFormatDataIt;
+
+        for (paraFormatDataIt = paraFormatDataList.begin ();
+             paraFormatDataIt != paraFormatDataList.end ();
+             paraFormatDataIt++)
+        {
+            lastSegmentWasText = true;
+
+            switch ((*paraFormatDataIt).id)
+            {
+                case 1: // Normal text
+                {
+                    QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
+
+                    // Replace line feeds by line ends
+                    int pos;
+                    int oldpos=0;
+                    while ((pos=strText.find(QChar(10),oldpos))>-1)
+                    {
+                        strText.replace(pos,1,m_eol);
+                        oldpos=pos+1;
+                    }
+
+                    *m_streamOut << strText;
+                    break;
+                }
+                case 4: // Variable
+                {
+                    // Just write the result of the variable
+                    *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                    break;
+                }
+                case 6: // Frame Anchor
+                {
+                    if ((*paraFormatDataIt).frameAnchor.type == 6) // Table
+                    {
+                        if ((*paraFormatDataIt).pos)
+                            *m_streamOut << m_eol;
+
+                        if (!ProcessTable((*paraFormatDataIt).frameAnchor.table))
+                            return false;
+                    }
+                    else
+                    {
+                        kdWarning(30502) << "Unsupported frame anchor type: "
+                            << (*paraFormatDataIt).frameAnchor.type << endl;
+                    }
+                    
+                    lastSegmentWasText = false;
+                    break;
+                }
+                default:
+                {
+                    kdWarning(30502) << "Not supported paragraph type: "
+                        << (*paraFormatDataIt).id << endl;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (lastSegmentWasText)
+        *m_streamOut << m_eol; // Write end of line
+
+    return true;
+}
+
+
+ASCIIExport::ASCIIExport(KoFilter*, const char*, const QStringList&)
+           : KoFilter()
 {
 }
 
-KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCString& to)
 {
-    if ( to != "text/plain" || from != "application/x-kword" )
+    if (to != "text/plain" || from != "application/x-kword")
     {
         return KoFilter::NotImplemented;
     }
@@ -348,7 +493,7 @@ KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCS
         return KoFilter::UserCancelled;
     }
 
-    ASCIIWorker* worker=new ASCIIWorker();
+    ASCIIWorker* worker = new ASCIIWorker();
 
     if (!worker)
     {
@@ -362,7 +507,7 @@ KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCS
 
     delete dialog;
 
-    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
     if (!leader)
     {
@@ -371,10 +516,12 @@ KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCS
         return KoFilter::StupidError;
     }
 
-    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
+    KoFilter::ConversionStatus result = leader->convert(m_chain,from,to);
 
     delete leader;
     delete worker;
 
     return result;
 }
+
+#include <asciiexport.moc>

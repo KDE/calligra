@@ -20,23 +20,17 @@
 #ifndef ASCIIEXPORT_H
 #define ASCIIEXPORT_H
 
-#include <qstring.h>
-#include <qcstring.h>
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
 
-
-class ASCIIExport : public KoFilter {
-
+class ASCIIExport : public KoFilter
+{
     Q_OBJECT
 
 public:
-    ASCIIExport(KoFilter *parent, const char *name, const QStringList &);
+    ASCIIExport(KoFilter* parent, const char* name, const QStringList&);
     virtual ~ASCIIExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 };
+
 #endif // ASCIIEXPORT_H
