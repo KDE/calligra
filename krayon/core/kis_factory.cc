@@ -29,7 +29,6 @@
 #include "kis_pluginserver.h"
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
-#include "kis_log.h"
 
 extern "C"
 {
@@ -52,12 +51,6 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     (void)global();
     s_pserver = new KisPluginServer;
     s_rserver = new KisResourceServer;
-
-    QString FileName = locateLocal("kis", "krayon.log", s_global);
-    const char *latinFileName = FileName.latin1();
-    KisLog::setLogFile(latinFileName);
-
-    log() << "Starting Krayon" << endl;
 }
 
 KisFactory::~KisFactory()
