@@ -597,6 +597,8 @@ private:
     // don't allow copy or assignment
     KSpreadView( const KSpreadView& );
     KSpreadView& operator=( const KSpreadView& );
+    
+    void initView();    
 
     bool spellSwitchToOtherTable();
     void spellCleanup();

@@ -1555,73 +1555,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
         this, SLOT( commandExecuted() ) );
 
     // GUI Initializations
+    initView();
 
-    // Vert. Scroll Bar
-    d->calcLabel  = 0;
-    d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
-    d->vertScrollBar->setRange( 0, 4096 );
-    d->vertScrollBar->setOrientation( QScrollBar::Vertical );
+    d->initActions();
 
-    // Horz. Scroll Bar
-    d->horzScrollBar = new QScrollBar( this, "ScrollBar_1" );
-    d->horzScrollBar->setRange( 0, 4096 );
-    d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
-
-    d->tabBar = new KoTabBar( this );
-    d->tabBar->setReadOnly( !d->doc->isReadWrite() );
-    QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
-      this, SLOT( moveTable( unsigned, unsigned ) ) );
-    QObject::connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
-      this, SLOT( popupTabBarMenu( const QPoint& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
-      this, SLOT( slotRename() ) );
-
-    // Paper and Border widgets
-    d->frame = new QWidget( this );
-    d->frame->raise();
-
-    // Edit Bar
-    d->toolWidget = new QFrame( this );
-
-    d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
-    d->formulaBarLayout->addSpacing( 2 );
-
-    d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
-
-    d->posWidget->setMinimumWidth( 100 );
-    d->formulaBarLayout->addWidget( d->posWidget );
-    d->formulaBarLayout->addSpacing( 6 );
-
-    d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
-    d->formulaBarLayout->addWidget( d->cancelButton );
-    d->okButton = d->newIconButton( "ok", TRUE, d->toolWidget );
-    d->formulaBarLayout->addWidget( d->okButton );
-    d->formulaBarLayout->addSpacing( 6 );
-
-    // The widget on which we display the table
-    d->canvas = new KSpreadCanvas( d->frame, this, doc );
-
-    // The line-editor that appears above the table and allows to
-    // edit the cells content. It knows about the two buttons.
-    d->editWidget = new KSpreadEditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
-    d->editWidget->setFocusPolicy( QWidget::StrongFocus );
-    d->formulaBarLayout->addWidget( d->editWidget, 2 );
-    d->formulaBarLayout->addSpacing( 2 );
-
-    d->canvas->setEditWidget( d->editWidget );
-
-    d->hBorderWidget = new KSpreadHBorder( d->frame, d->canvas,this );
-    d->vBorderWidget = new KSpreadVBorder( d->frame, d->canvas ,this );
-
-    d->canvas->setFocusPolicy( QWidget::StrongFocus );
-    QWidget::setFocusPolicy( QWidget::StrongFocus );
-    setFocusProxy( d->canvas );
-
-    connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
-
-    QObject::connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
-    QObject::connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
 
     // Handler for moving and resizing embedded parts
     ContainerHandler* h = new ContainerHandler( this, d->canvas );
@@ -1636,16 +1573,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // just before.
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
-
-    KStatusBar * sb = statusBar();
-    Q_ASSERT(sb);
-    d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-    addStatusBarItem( d->calcLabel, 0 );
-    if (d->calcLabel)
-        connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
-
-    d->initActions();
-
 
     QObject::connect( d->doc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
@@ -1713,6 +1640,86 @@ KSpreadView::~KSpreadView()
 
     delete d->actions;
     delete d;
+}
+
+// should be called only once, from the constructor
+void KSpreadView::initView()
+{
+    // Vert. Scroll Bar
+    d->calcLabel  = 0;
+    d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
+    d->vertScrollBar->setRange( 0, 4096 );
+    d->vertScrollBar->setOrientation( QScrollBar::Vertical );
+
+    // Horz. Scroll Bar
+    d->horzScrollBar = new QScrollBar( this, "ScrollBar_1" );
+    d->horzScrollBar->setRange( 0, 4096 );
+    d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
+
+    d->tabBar = new KoTabBar( this );
+    d->tabBar->setReadOnly( !d->doc->isReadWrite() );
+    QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
+    QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
+      this, SLOT( moveTable( unsigned, unsigned ) ) );
+    QObject::connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
+      this, SLOT( popupTabBarMenu( const QPoint& ) ) );
+    QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
+      this, SLOT( slotRename() ) );
+
+    // Paper and Border widgets
+    d->frame = new QWidget( this );
+    d->frame->raise();
+
+    // Edit Bar
+    d->toolWidget = new QFrame( this );
+
+    d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
+    d->formulaBarLayout->addSpacing( 2 );
+
+    d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
+
+    d->posWidget->setMinimumWidth( 100 );
+    d->formulaBarLayout->addWidget( d->posWidget );
+    d->formulaBarLayout->addSpacing( 6 );
+
+    d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
+    d->formulaBarLayout->addWidget( d->cancelButton );
+    d->okButton = d->newIconButton( "ok", TRUE, d->toolWidget );
+    d->formulaBarLayout->addWidget( d->okButton );
+    d->formulaBarLayout->addSpacing( 6 );
+
+    // The widget on which we display the table
+    d->canvas = new KSpreadCanvas( d->frame, this, d->doc );
+
+    // The line-editor that appears above the table and allows to
+    // edit the cells content. It knows about the two buttons.
+    d->editWidget = new KSpreadEditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
+    d->editWidget->setFocusPolicy( QWidget::StrongFocus );
+    d->formulaBarLayout->addWidget( d->editWidget, 2 );
+    d->formulaBarLayout->addSpacing( 2 );
+
+    d->canvas->setEditWidget( d->editWidget );
+
+    d->hBorderWidget = new KSpreadHBorder( d->frame, d->canvas,this );
+    d->vBorderWidget = new KSpreadVBorder( d->frame, d->canvas ,this );
+
+    d->canvas->setFocusPolicy( QWidget::StrongFocus );
+    QWidget::setFocusPolicy( QWidget::StrongFocus );
+    setFocusProxy( d->canvas );
+
+    connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
+
+    QObject::connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
+    QObject::connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
+
+    KStatusBar * sb = statusBar();
+    Q_ASSERT(sb);
+    d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+    addStatusBarItem( d->calcLabel, 0 );
+    if (d->calcLabel)
+        connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
+
+
 }
 
 
