@@ -134,7 +134,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
     // We start from the end, to avoid the parag shifting problem
     KoTextParag *p = textdoc->lastParag();
     KoTextCursor *posOfTable=0L;
-    KWTextParag *posOfToc=0L;
+    KoTextParag *posOfToc=0L;
 
     while ( p )
     {
