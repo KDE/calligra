@@ -1103,6 +1103,15 @@ void KWView::refreshMenuExpression()
 
 void KWView::loadexpressionActions( KActionMenu * parentMenu)
 {
+    KActionPtrList lst = actionCollection()->actions("expression-action");
+    QValueList<KAction *> actions = lst;
+    QValueList<KAction *>::ConstIterator it = lst.begin();
+    QValueList<KAction *>::ConstIterator end = lst.end();
+    for (; it != end; ++it )
+    {
+        delete *it;
+    }
+
     parentMenu->popupMenu()->clear();
     QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
@@ -1153,6 +1162,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                             QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
                             KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
                                                          actionCollection(), "expression-action" );
+                            act->setGroup("expression-action");
                             subMenu->insert( act );
                         }
                     }
@@ -1204,6 +1214,16 @@ void KWView::addVariableActions( int type, const QStringList & texts,
 
 void KWView::refreshCustomMenu()
 {
+#if 0
+    KActionPtrList lst2 = actionCollection()->actions("custom-action");
+    QValueList<KAction *> actions = lst2;
+    QValueList<KAction *>::ConstIterator it2 = lst2.begin();
+    QValueList<KAction *>::ConstIterator end = lst2.end();
+    for (; it2 != end; ++it2 )
+    {
+        delete *it2;
+    }
+#endif
     actionInsertCustom->popupMenu()->clear();
     QPtrListIterator<KoVariable> it( m_doc->getVariableCollection()->getVariables() );
     KAction * act=0;
@@ -1220,6 +1240,7 @@ void KWView::refreshCustomMenu()
                  lst.append( varName );
                  act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
                                     actionCollection(), "custom-action" );
+                 act->setGroup( "custom-action" );
                  actionInsertCustom->insert( act );
             }
         }
