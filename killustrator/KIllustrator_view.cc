@@ -130,6 +130,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl;
     canvas->docSizeChanged();
     connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
+    connect (activeDocument(),SIGNAL(pageChanged()),this,SLOT(refreshLayerPanel()));
     readConfig();
 }
 
@@ -1215,6 +1216,11 @@ void KIllustratorView::slotLayersPanel(bool b)
   m_showLayers->setChecked(b);
   //((KToggleAction*)actionCollection()->action("layers"))->setChecked(b);
  }
+
+void KIllustratorView::refreshLayerPanel()
+{
+   mLayerPanel->manageDocument(activeDocument());
+}
 
 void KIllustratorView::slotLoadPalette () {
 

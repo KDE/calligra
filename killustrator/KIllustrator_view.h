@@ -131,6 +131,8 @@ protected slots:
        void insertPartSlot (KIllustratorChild *child, GPart *part);
        void changeChildGeometrySlot (KIllustratorChild *child);
 
+    void refreshLayerPanel();
+
 private slots:
     /**
      * Actions
@@ -200,9 +202,9 @@ private slots:
     void slotViewResize();
     void activatePart (Tool::ToolID,GObject *obj);
     void createLayerPanel(bool enable);
-    
+
 protected:
- 
+
     KIllustratorDocument *m_pDoc;
     EditPointTool *editPointTool;
     InsertPartTool *insertPartTool;
