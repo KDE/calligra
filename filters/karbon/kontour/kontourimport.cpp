@@ -66,7 +66,6 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 	inpdoc.setContent( inpdev );
 		            
 	// Do the conversion!
-
 	convert();
 	
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
@@ -78,8 +77,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 	QCString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
-	return KoFilter::OK;
-                                     // was successfull
+	return KoFilter::OK; // was successfull
 }
 
 void
@@ -140,6 +138,34 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				stroke.setColor( color );
 			}
 			break;
+			case 2: case 3: case 4: case 5:
+			{
+				QColor c;
+				c.setNamedColor( e.attribute( "strokecolor" ) );
+				VColor color( c );
+				stroke.setColor( color );
+				VDashPattern dash;
+				QValueList<float> list;
+				switch ( strokestyle )
+				{
+					case 2:
+						list << 10 << 5;
+						break;
+					case 3:
+						list << 1 << 5;
+						break;
+					case 4:
+						list << 10 << 5 << 1 << 5;
+						break;
+					case 5:
+						list << 10 << 5 << 1 << 5 << 1 << 5;
+						break;
+				};
+				
+				dash.setArray( list );
+				stroke.dashPattern() = dash;
+			}
+			break;
 		}
 		float lineWidth = e.attribute( "linewidth" ).toFloat();
 		stroke.setLineWidth( lineWidth );
@@ -154,6 +180,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				  matrix.attribute( "dx" ).toDouble(),
 				  matrix.attribute( "dy" ).toDouble() );
 	
+	// undo y-mirroring
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_document.height() );
 	VTransformCmd trafo( 0L, mat );
@@ -164,7 +191,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 void
 KontourImport::convert()
 {	
-	QDomElement docElem = inpdoc.documentElement();    	
+	QDomElement docElem = inpdoc.documentElement();
 	QDomElement lay;
 	double height;
 	double width;
