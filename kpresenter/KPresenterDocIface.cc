@@ -49,3 +49,8 @@ DCOPRef KPresenterDocIface::getPage( int num )
     return DCOPRef( kapp->dcopClient()->appId(), 
 		    doc->backgroundList()->at( num )->dcopObject()->objId() );
 }
+
+int KPresenterDocIface::getPageOfObj( int obj )
+{
+    return doc->getPageOfObj( obj, 0, 0, 0 ) - 1;
+}

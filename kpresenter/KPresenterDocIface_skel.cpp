@@ -57,6 +57,16 @@ bool KPresenterDocIface::process(const QCString &fun, const QByteArray &data, QC
 		out << getPage(num );
 		return TRUE;
 	}
+	if ( fun == "getPageOfObj(int)" )
+	{
+		QDataStream str( data, IO_ReadOnly );
+		int obj;
+		str >> obj;
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getPageOfObj(obj );
+		return TRUE;
+	}
 	if ( DCOPObject::process( fun, data, replyType, replyData ) )
 		return TRUE;
 	return FALSE;
