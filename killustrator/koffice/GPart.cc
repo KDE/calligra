@@ -24,8 +24,10 @@
 
 #include <GPart.h>
 #include <kdebug.h>
+#include <koQueryTrader.h>
 #include <qdom.h>
 #include <qpainter.h>
+#include <qstring.h>
 #include <qpixmap.h>
 
 #include <KIllustrator_view.h>
@@ -41,27 +43,13 @@ GPart::GPart (KIllustratorChild *c) {
   calcBoundingBox ();
 }
 
-GPart::GPart (const QDomElement &element) :
-    GObject (element.namedItem("gobject").toElement()) {
-
-    int x = 0, y = 0, w = 0, h = 0;
-    QString url, mime;
-
-    x = element.attribute("x").toInt();
-    y = element.attribute("y").toInt();
-    w = element.attribute("width").toInt();
-    h = element.attribute("height").toInt();
-    url = element.attribute("url");
-    mime = element.attribute("mime");
-    initialGeom = QRect (x, y, w, h);
-
-  // ####### Torben
-/*  child = new KIllustratorChild ();
-  child->setURL (url.c_str ());
-  child->setMimeType (mime.c_str ());
-  child->setGeometry (initialGeom);  */
+GPart::GPart (KIllustratorDocument *doc, const QDomElement &element) :
+    GObject (element.namedItem("gobject").toElement())
+ {
+    child = new KIllustratorChild(doc, 0, QRect(0,0,0,0));
+    child->load(element);
     calcBoundingBox ();
-}
+ }
 
 GPart::GPart (const GPart& obj) : GObject (obj) {
   calcBoundingBox ();
@@ -136,18 +124,20 @@ GObject* GPart::copy () {
 }
 
 GObject* GPart::clone (const QDomElement &element) {
-  return new GPart (element);
+  return new GPart (0, element);
 }
 
 QDomElement GPart::writeToXml (QDomDocument &document) {
 
     QDomElement element=document.createElement("object");
-    element.setAttribute ("x", oldGeom.x ());
-    element.setAttribute ("y", oldGeom.y ());
-    element.setAttribute ("width", oldGeom.width ());
-    element.setAttribute ("height", oldGeom.height ());
     element.setAttribute ("url", child->url().url() );
     element.setAttribute ("mime", child->document()->nativeFormatMimeType ());
+    QDomElement rect = document.createElement("rect");
+    rect.setAttribute("x", oldGeom.x());
+    rect.setAttribute("y", oldGeom.y());
+    rect.setAttribute("w", oldGeom.width());
+    rect.setAttribute("h", oldGeom.height());
+    element.appendChild(rect);
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

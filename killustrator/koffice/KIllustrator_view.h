@@ -47,7 +47,6 @@ class KIllustratorChild;
 class KIllustratorDocument;
 class Canvas;
 class GDocument;
-class LayerDialog;
 class ToolController;
 class Canvas;
 class Ruler;
@@ -64,6 +63,9 @@ class KColorBarAction;
 class KSelectAction;
 class KStatusBar;
 class ZoomTool;
+class ToolDockManager;
+class ToolDockBase;
+class LayerPanel;
 
 class KIllustratorView : public KoView, public MainView
 {
@@ -184,7 +186,7 @@ private slots:
     void slotNewNode( bool );
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
-    void slotLayers();
+    void slotLayersPanel(bool);
     void slotViewZoom (const QString&);
     void slotLoadPalette ();
     void slotConfigurePolygon();
@@ -212,7 +214,6 @@ protected:
     Canvas *canvas;
     Ruler *hRuler, *vRuler;
     KStatusBar *statusbar;
-    LayerDialog *layerDialog;
     CommandHistory cmdHistory;
 
     ZoomTool *mZoomTool;
@@ -235,6 +236,9 @@ protected:
     KToggleAction* m_deleteNode;
     KToggleAction* m_splitLine;
     KSelectAction *m_viewZoom;
+    ToolDockManager *mToolDockManager;
+    LayerPanel *mLayerPanel;
+    ToolDockBase *mLayerDockBase;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
             lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;

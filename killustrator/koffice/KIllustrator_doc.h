@@ -46,6 +46,7 @@ public:
     KIllustratorChild( KIllustratorDocument* killu, KoDocument* doc, const QRect& geometry );
     ~KIllustratorChild();
 
+    virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
     KIllustratorDocument* killuParent () { return (KIllustratorDocument*)parent(); }
 };
 

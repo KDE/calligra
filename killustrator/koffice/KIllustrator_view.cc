@@ -29,6 +29,9 @@
 #include <KIllustrator_doc.h>
 #include <KIllustrator_factory.h>
 
+#include "LayerPanel.h"
+#include "tooldockbase.h"
+#include "tooldockmanager.h"
 #include "CanvasView.h"
 #include <GDocument.h>
 #include <Canvas.h>
@@ -52,7 +55,6 @@
 #include <GridDialog.h>
 #include <HelplineDialog.h>
 #include <TransformationDialog.h>
-#include <LayerDialog.h>
 #include <PStateManager.h>
 #include <ExportFilter.h>
 #include <GroupCmd.h>
@@ -99,10 +101,9 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_bShowGUI = true;
     m_bShowRulers = true;
     scrollview = 0L;
-    layerDialog = 0L;
     objMenu = 0L;
     mParent = parent;
-    
+
     readConfig();
     
     // restore default settings
@@ -121,6 +122,7 @@ KIllustratorView::~KIllustratorView()
  writeConfig();
  delete mZoomTool;
  delete objMenu;
+ delete mToolDockManager;
 }
 
 void KIllustratorView::createMyGUI()
@@ -151,7 +153,6 @@ void KIllustratorView::createMyGUI()
     KToggleAction *m_normal = new KToggleAction( i18n("&Normal"), 0, actionCollection(), "normal" );
     m_normal->setExclusiveGroup( "Outline" );
     connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
-    new KAction( i18n("&Layers..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
     KToggleAction *m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
     KToggleAction *m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
@@ -343,6 +344,16 @@ void KIllustratorView::setupCanvas()
     hRuler->updateVisibleArea (x/2, y/2);
     vRuler->updateVisibleArea (x/2, y/2);
     
+    mToolDockManager = new ToolDockManager(scrollview);
+
+    //Layer Panel
+    mLayerPanel = new LayerPanel(this);
+    mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
+    mLayerDockBase->move(0,0);
+    KToggleAction* showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
+    connect( showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
+    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
+    
     QObject::connect (canvas, SIGNAL(sizeChanged ()),
                       scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
@@ -489,10 +500,11 @@ void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-void KIllustratorView::guiActivateEvent( KParts::GUIActivateEvent *ev ) {
-    if(ev->activated())
-        showNodesToolbar(false);
-}
+void KIllustratorView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+ {
+  if(ev->activated())
+   showNodesToolbar(false);
+ }
 
 void KIllustratorView::showTransformationDialog( int id )
 {
@@ -1189,16 +1201,14 @@ void KIllustratorView::slotSplitLine( bool b )
         editPointTool->setMode (EditPointTool::Split);
 }
 
-void KIllustratorView::slotLayers()
-{
-    if (!layerDialog)
-        layerDialog = new LayerDialog ();
-    layerDialog->manageDocument (m_pDoc->gdoc());
-    layerDialog->show ();
-}
+void KIllustratorView::slotLayersPanel(bool b)
+ {
+  mLayerPanel->manageDocument(activeDocument());
+  ((KToggleAction*)actionCollection()->action("layers"))->setChecked(b);
+ }
 
 void KIllustratorView::slotLoadPalette () {
-    // TODO
+   
 }
 
 void KIllustratorView::slotViewZoom (const QString& s) {

@@ -30,8 +30,6 @@
   <Action name="outline"/>
   <Action name="normal"/>
   <Separator/>
-  <Action name="layers"/>
-  <Separator/>
   <Action name="showRuler"/>
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
@@ -93,6 +91,9 @@
    <Action name="polygonSettings"/>
   </Menu>
   <Separator/>
+   <Menu name="panelsettings"><text>&amp;Panels</text>
+    <Action name="layers"/>
+   </Menu>
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>

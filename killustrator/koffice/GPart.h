@@ -38,7 +38,7 @@ class GPart : public GObject {
 public:
   GPart ();
   GPart (KIllustratorChild *c);
-  GPart (const QDomElement &element);
+  GPart (KIllustratorDocument *doc, const QDomElement &element);
   GPart (const GPart& p);
 
   ~GPart ();

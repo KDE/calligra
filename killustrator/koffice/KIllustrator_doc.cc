@@ -53,6 +53,10 @@ KIllustratorChild::~KIllustratorChild ()
 {
 }
 
+KoDocument *KIllustratorChild::hitTest( const QPoint &, const QWMatrix & )
+{
+    return 0L;
+}
 // ----------------------------------------------------------
 
 KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
