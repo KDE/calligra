@@ -85,37 +85,38 @@ KWordChild::~KWordChild()
 KWordDocument::KWordDocument()
     : formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( BarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
-      autoFormat( this ), urlIntern(), pglChanged( true )
+      autoFormat( this ), urlIntern(), pglChanged( TRUE )
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
 
     // Use CORBA mechanism for deleting views
-    m_lstViews.setAutoDelete( false );
-    m_lstChildren.setAutoDelete( true );
+    m_lstViews.setAutoDelete( FALSE );
+    m_lstChildren.setAutoDelete( TRUE );
 
-    m_bModified = false;
-    hasSelection = false;
+    m_bModified = FALSE;
+    hasSelection = FALSE;
 
     rastX = rastY = 10;
 
-    m_bEmpty = true;
+    m_bEmpty = TRUE;
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
-    _loaded = false;
-    _header = false;
-    _footer = false;
-    _needRedraw = false;
+    _loaded = FALSE;
+    _header = FALSE;
+    _footer = FALSE;
+    _needRedraw = FALSE;
 
     cUserFont = 0L;
     cParagLayout = 0L;
     cDisplayFont = 0L;
 
-    paragLayoutList.setAutoDelete( false );
-    userFontList.setAutoDelete( false );
-    displayFontList.setAutoDelete( false );
-    frames.setAutoDelete( true );
-    grpMgrs.setAutoDelete( true );
-
+    paragLayoutList.setAutoDelete( FALSE );
+    userFontList.setAutoDelete( FALSE );
+    displayFontList.setAutoDelete( FALSE );
+    frames.setAutoDelete( TRUE );
+    grpMgrs.setAutoDelete( TRUE );
+    variables.setAutoDelete( FALSE );
+    
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
 }
@@ -142,10 +143,10 @@ CORBA::Boolean KWordDocument::initDoc()
 
     QString _template;
 
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, true, false );
+    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, TRUE, FALSE );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
-	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kwt" );
+	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
 	bool ok = loadTemplate( fileName.data() );
 	setURL( QString::null );
 	return ok;
@@ -153,7 +154,7 @@ CORBA::Boolean KWordDocument::initDoc()
 	QString fileName( _template );
 	bool ok = loadTemplate( fileName.data() );
 	setURL( fileName );
-	_loaded = true;
+	_loaded = TRUE;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate("kword_template", "Wordprocessing/PlainText.kwt") );
@@ -162,9 +163,9 @@ CORBA::Boolean KWordDocument::initDoc()
 	return ok;
     }
     else
-	return false;
+	return FALSE;
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -173,40 +174,40 @@ bool KWordDocument::loadTemplate( const char *_url )
 //     KURL u( _url );
 
 //     if ( u.isMalformed() )
-//	   return false;
+//	   return FALSE;
 
 //     if ( !u.isLocalFile() )
 //     {
 //	   cerr << "Can not open remote URL" << endl;
-//	   return false;
+//	   return FALSE;
 //     }
 
 //     ifstream in( u.path().ascii() );
 //     if ( !in )
 //     {
 //	   cerr << "Could not open" << u.path().ascii() << endl;
-//	   return false;
+//	   return FALSE;
 //     }
 
 //     KOMLStreamFeed feed( in );
 //     KOMLParser parser( &feed );
 
 //     if ( !loadXML( parser, 0L ) )
-//	   return false;
+//	   return FALSE;
 
-//     setModified( true );
+//     setModified( TRUE );
 
-//     _loaded = false;
-//     return true;
+//     _loaded = FALSE;
+//     return TRUE;
     bool ok = loadFromURL( _url, "application/x-kword" );
-    _loaded = false;
+    _loaded = FALSE;
     return ok;
 }
 
 /*================================================================*/
 void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
-    pglChanged = true;
+    pglChanged = TRUE;
     if ( processingType == WP ) {
 	pageLayout = _layout;
 	pageColumns = _cl;
@@ -595,9 +596,9 @@ void KWordDocument::cleanUp()
 /*================================================================*/
 bool KWordDocument::hasToWriteMultipart()
 {
-    //if ( m_lstChildren.count() == 0 ) return false;
+    //if ( m_lstChildren.count() == 0 ) return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -609,18 +610,18 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
     for( ; it.current(); ++it ) {
 	cerr << "Loading child" << endl;
 	if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
-	    return false;
+	    return FALSE;
     }
 
     cerr << "Loading done" << endl;
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
 bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
-    _loaded = true;
+    _loaded = TRUE;
     pixmapKeys.clear();
     imageRequests.clear();
     imageRequests2.clear();
@@ -710,13 +711,14 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     lay->setCounterRightText( "" );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 
-    if (true /*no variable formats were loaded*/)
+    if (TRUE /*no variable formats were loaded*/)
     {
 	varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
 	varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
 	varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
 	varFormats.insert( VT_TIME_VAR, new KWVariableTimeFormat() );
 	varFormats.insert( VT_PGNUM, new KWVariablePgNumFormat() );
+	varFormats.insert( VT_CUSTOM, new KWVariableCustomFormat() );
 	// ... and so on ...
     }
 
@@ -743,7 +745,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     // DOC
     if ( !parser.open( "DOC", tag ) ) {
 	cerr << "Missing DOC" << endl;
-	return false;
+	return FALSE;
     }
 
     KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -752,7 +754,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	if ( ( *it ).m_strName == "mime" ) {
 	    if ( ( *it ).m_strValue != "application/x-kword" ) {
 		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-		return false;
+		return FALSE;
 	    }
 	} else if ( ( *it ).m_strName == "url" )
 	    urlIntern = ( *it ).m_strValue.c_str();
@@ -890,7 +892,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    return false;
+		    return FALSE;
 		}
 	    }
 
@@ -963,7 +965,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
 		    QApplication::restoreOverrideCursor();
-		    return false;
+		    return FALSE;
 		}
 	    }
 	}
@@ -973,7 +975,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
 	if ( !parser.close( tag ) ) {
 	    cerr << "ERR: Closing Child" << endl;
-	    return false;
+	    return FALSE;
 	}
     }
 
@@ -987,18 +989,18 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     }
     setPageLayout( __pgLayout, __columns, __hf );
 
-    bool _first_footer = false, _even_footer = false, _odd_footer = false;
-    bool _first_header = false, _even_header = false, _odd_header = false;
-    bool _footnotes = false;
+    bool _first_footer = FALSE, _even_footer = FALSE, _odd_footer = FALSE;
+    bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
+    bool _footnotes = FALSE;
 
     for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
-	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER ) _first_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER ) _even_header = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER ) _first_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER ) _odd_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER ) _even_footer = true;
-	if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = true;
+	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER ) _first_header = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER ) _even_header = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER ) _first_footer = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER ) _odd_footer = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER ) _even_footer = TRUE;
+	if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = TRUE;
     }
 
     if ( !_first_header ) {
@@ -1007,7 +1009,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_even_header ) {
@@ -1016,7 +1018,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_odd_header ) {
@@ -1025,7 +1027,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_first_footer ) {
@@ -1035,7 +1037,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_even_footer ) {
@@ -1045,7 +1047,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_odd_footer ) {
@@ -1055,7 +1057,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( false );
+	fs->setAutoCreateNewFrame( FALSE );
     }
 
     if ( !_footnotes ) {
@@ -1069,8 +1071,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	    fs->addFrame( frame );
 	}
 	frames.append( fs );
-	fs->setAutoCreateNewFrame( true );
-	fs->setVisible( false );
+	fs->setAutoCreateNewFrame( TRUE );
+	fs->setVisible( FALSE );
     }
 
     for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
@@ -1111,7 +1113,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     entry->setReplace( "®" );
     autoFormat.addAutoFormatEntry( entry );
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -1128,7 +1130,7 @@ void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& 
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
-	    KWParagLayout *pl = new KWParagLayout( this, false );
+	    KWParagLayout *pl = new KWParagLayout( this, FALSE );
 	    pl->load( parser, lst );
 	    addStyleTemplate( pl );
 	} else
@@ -1147,11 +1149,11 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
 
-    bool autoCreateNewFrame = true;
+    bool autoCreateNewFrame = TRUE;
     FrameInfo frameInfo = FI_BODY;
     QString _name = "";
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
-    bool _visible = true;
+    bool _visible = TRUE;
 
     while ( parser.open( 0L, tag ) )
     {
@@ -1163,8 +1165,8 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    FrameType frameType = FT_BASE;
 	    _name = "";
 	    _row = _col = 0, _rows = 1, _cols = 1;
-	    _visible = true;
-	    bool removeable = false;
+	    _visible = TRUE;
+	    bool removeable = FALSE;
 	    QString fsname;
 
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -1308,7 +1310,7 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
     for ( ; it3.current(); ++it3 )
 	it3.current()->setImage( imageCollection.getImage( it3.currentKey() ) );
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -1387,14 +1389,14 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 
     out << etag << "</DOC>" << endl;
 
-    return true;
+    return TRUE;
 }
 
 /*==============================================================*/
 bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 {
     if ( !_store )
-	return true;
+	return TRUE;
 
     CORBA::String_var u = url();
     QDictIterator<KWImage> it = imageCollection.iterator();
@@ -1426,7 +1428,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	images.append( it.current()->getFilename() );
     }
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -1506,9 +1508,9 @@ void KWordDocument::addView( KWordView *_view )
 /*================================================================*/
 void KWordDocument::removeView( KWordView *_view )
 {
-    m_lstViews.setAutoDelete( false );
+    m_lstViews.setAutoDelete( FALSE );
     m_lstViews.removeRef( _view );
-    m_lstViews.setAutoDelete( true );
+    m_lstViews.setAutoDelete( TRUE );
 }
 
 /*================================================================*/
@@ -1543,7 +1545,7 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int d
     KWordChild* ch = new KWordChild( this, _rect, doc, diffx, diffy );
 
     insertChild( ch );
-    m_bModified = true;
+    m_bModified = TRUE;
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
     KWFrame *frame = new KWFrame( _rect.x() + diffx, _rect.y() + diffy, _rect.width(), _rect.height() );
@@ -1728,7 +1730,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			       bool _viewFormattingChars, bool _drawVarBack )
 {
     if ( !getFrameSet( _fc.getFrameSet() - 1 )->isVisible() )
-	return false;
+	return FALSE;
 
     _painter.save();
 
@@ -1757,7 +1759,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     if ( cr.intersect( visible ).isEmpty() )
     {
 	_painter.restore();
-	return false;
+	return FALSE;
     }
 
     _painter.setClipRegion( cr );
@@ -1849,7 +1851,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	if ( i > 200 || _fc.getTextPos() > textLen )
 	{
 	    warning( "Reggie: WOW - something has gone really wrong here!!!!!" );
-	    return false;
+	    return FALSE;
 	}
 
 	buffer[ i ] = text[ _fc.getTextPos() ].c;
@@ -2008,7 +2010,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 		// Blanks are not printed at all - but we have to underline it in some cases
 		if ( text[ _fc.getTextPos() ].c == ' ' )
 		{
-		    bool goneForward = false;
+		    bool goneForward = FALSE;
 		    if ( _fc.getUnderline() && _fc.getTextPos() > _fc.getLineStartPos() && _fc.getTextPos() < _fc.getLineEndPos() - 1 )
 		    {
 			if ( text[ _fc.getTextPos() - 1 ].c != KWSpecialChar && text[ _fc.getTextPos() + 1 ].c != KWSpecialChar )
@@ -2026,7 +2028,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 					 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus + fm.underlinePos() + fm.lineWidth() / 2;
 				int lx1 = _fc.getPTPos();
 				_fc.cursorGotoNextChar();
-				goneForward = true;
+				goneForward = TRUE;
 				int lx2 = _fc.getPTPos();
 				_painter.drawLine( lx1, ly, lx2, ly );
 			    }
@@ -2046,7 +2048,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	_painter.drawPixmap( _fc.getPTPos() + 3, _fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(), ret_pix );
 
     _painter.restore();
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -2058,7 +2060,7 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameset = getFrameSet( i );
-	if ( !frameset->isVisible() ) 
+	if ( !frameset->isVisible() )
 	    continue;
 
 	if ( isAHeader( frameset->getFrameInfo() ) && !hasHeader() ||
@@ -2067,12 +2069,12 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 	     isAWrongFooter( frameset->getFrameInfo(), getFooterType() ) )
 	    continue;
 	for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
-	    bool isRight = true, isBottom = true;
+	    bool isRight = TRUE, isBottom = TRUE;
 	    if ( frameset->getGroupManager() ) {
 		unsigned int r, c;
 		frameset->getGroupManager()->getFrameSet( frameset, r, c );
-		if ( r < frameset->getGroupManager()->getRows() - 1 ) isBottom = false;
-		if ( c < frameset->getGroupManager()->getCols() - 1 ) isRight = false;
+		if ( r < frameset->getGroupManager()->getRows() - 1 ) isBottom = FALSE;
+		if ( c < frameset->getGroupManager()->getCols() - 1 ) isRight = FALSE;
 	    }
 
 	    tmp = frameset->getFrame( j );
@@ -2157,7 +2159,7 @@ void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() ) {
 		if ( viewPtr != _view ) {
 		    if ( _clear ) viewPtr->getGUI()->getPaperWidget()->clear();
-		    viewPtr->getGUI()->getPaperWidget()->repaintScreen( false );
+		    viewPtr->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 		}
 	    }
 	}
@@ -2629,7 +2631,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
     if ( _string.isEmpty() ) return;
 
     if ( _mime == "text/plain" ) {     // ----------------- MIME type text/plain
-	while ( true ) {
+	while ( TRUE ) {
 	    index = _string.find( '\n', 0 );
 	    if ( index == -1 ) break;
 
@@ -2667,7 +2669,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		}
 
 		parag2 = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
-				      this, 0L, 0L, defaultParagLayout, false );
+				      this, 0L, 0L, defaultParagLayout, FALSE );
 		parag2->load( parser, lst );
 		
 		KWParag::correctFormat( _fc->getParag(), parag2 );
@@ -2847,7 +2849,7 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
     QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
 
     QList<KWFrame> frameList;
-    frameList.setAutoDelete( false );
+    frameList.setAutoDelete( FALSE );
 
     KWFrameSet *frameSet = 0L;
     KWFrame *frame;
@@ -2885,14 +2887,14 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
 
 	frameList.clear();
     }
-    
+
 //     if ( redrawBackgroundWhenAppendPage )
 // 	drawAllBorders();
     updateAllFrames();
     updateAllViewportSizes();
 
     if ( hasHeader() || hasFooter() )
-	recalcFrames( false, true );
+	recalcFrames( FALSE, TRUE );
 }
 
 /*================================================================*/
@@ -2903,7 +2905,7 @@ int KWordDocument::getFrameSet( unsigned int mx, unsigned int my )
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	if ( frameSet->contains( mx, my ) ) {
-	    if ( !frameSet->isVisible() ) 
+	    if ( !frameSet->isVisible() )
 		continue;
 	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
@@ -2927,7 +2929,7 @@ int KWordDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	if ( frameSet->contains( mx, my ) ) {
-	    if ( !frameSet->isVisible() ) 
+	    if ( !frameSet->isVisible() )
 		continue;
 	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
@@ -2965,7 +2967,7 @@ void KWordDocument::deSelectAllFrames()
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ )
-	    frameSet->getFrame( j )->setSelected( false );
+	    frameSet->getFrame( j )->setSelected( FALSE );
     }
 }
 
@@ -2977,7 +2979,7 @@ QCursor KWordDocument::getMouseCursor( unsigned int mx, unsigned int my )
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	if ( frameSet->contains( mx, my ) ) {
-	    if ( !frameSet->isVisible() ) 
+	    if ( !frameSet->isVisible() )
 		continue;
 	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
@@ -3001,7 +3003,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
-	    if ( !frameSet->isVisible() ) 
+	    if ( !frameSet->isVisible() )
 		continue;
 	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
@@ -3028,7 +3030,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame( int &_frameset )
 	_frameset = getNumFrameSets() - 1 - i;
 	frameSet = getFrameSet( getNumFrameSets() - 1 - i );
 	for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
-	    if ( !frameSet->isVisible() ) 
+	    if ( !frameSet->isVisible() )
 		continue;
 	    if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
@@ -3061,7 +3063,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			   float /*left_margin*/, float /*top_margin*/ )
 {
     QList<KWFormatContext> fcList;
-    fcList.setAutoDelete( true );
+    fcList.setAutoDelete( TRUE );
 
     KWFormatContext *fc = 0L;
     unsigned int i = 0, j = 0;
@@ -3070,7 +3072,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 	if ( frames.at( i )->getFrameType() == FT_TEXT ) {
 	    frames.at( i )->setCurrent( 0 );
 	    fc = new KWFormatContext( this, i + 1 );
-	    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( i ) )->getFirstParag(), true );
+	    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( i ) )->getFirstParag(), TRUE );
 	    fcList.append( fc );
 	}
     }
@@ -3082,7 +3084,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 	if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) ) printer->newPage();
 	printBorders( *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
 	for ( j = 0; j < frames.count(); j++ ) {
-	    if ( !getFrameSet( j )->isVisible() ) 
+	    if ( !getFrameSet( j )->isVisible() )
 		continue;
 	    if ( isAHeader( getFrameSet( j )->getFrameInfo() ) && !hasHeader() ||
 		 isAFooter( getFrameSet( j )->getFrameInfo() ) && !hasFooter() ||
@@ -3119,8 +3121,8 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		painter->restore();
 	    } break;
 	    case FT_TEXT: {
-		bool bend = false;
-		bool reinit = true;
+		bool bend = FALSE;
+		bool reinit = TRUE;
 		fc = fcList.at(j - minus);
 		if ( frames.at( j )->getFrameInfo() != FI_BODY ) {
 		    if ( frames.at( j )->getFrameInfo() == FI_EVEN_HEADER || frames.at( j )->getFrameInfo() == FI_FIRST_HEADER ||
@@ -3161,16 +3163,16 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			default: break;
 			}
 		    }
-		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), true,
+		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), TRUE,
 			      frames.at( j )->getCurrent() + 1, i + 1 );
 		    if ( static_cast<int>( frames.at( j )->getNumFrames() - 1 ) > static_cast<int>( frames.at( j )->getCurrent() ) )
 			frames.at( j )->setCurrent( frames.at( j )->getCurrent() + 1 );
-		    reinit = false;
+		    reinit = FALSE;
 		}
 		if ( reinit )
-		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), true );
+		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), TRUE );
 		while ( !bend ) {
-		    printLine( *fc, *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight(), false, false );
+		    printLine( *fc, *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight(), FALSE, FALSE );
 		    bend = !fc->makeNextLineLayout();
 		}
 	    } break;
@@ -3189,9 +3191,9 @@ void KWordDocument::updateAllFrames()
     QList<KWFrame> _frames;
     QList<KWGroupManager> mgrs;
     QList<KWFrame> del;
-    _frames.setAutoDelete( false );
-    mgrs.setAutoDelete( false );
-    del.setAutoDelete( true );
+    _frames.setAutoDelete( FALSE );
+    mgrs.setAutoDelete( FALSE );
+    del.setAutoDelete( TRUE );
     unsigned int i = 0, j = 0;
     KWFrameSet *frameset = 0L;
     KWFrame *frame1, *frame2;
@@ -3199,7 +3201,7 @@ void KWordDocument::updateAllFrames()
 
     for ( i = 0; i < frames.count(); i++ ) {
 	frameset = frames.at( i );
-	if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) || !frameset->isVisible() ) 
+	if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) || !frameset->isVisible() )
 	    continue;
 	if ( frameset->getGroupManager() ) {
 	    if ( mgrs.findRef( frameset->getGroupManager() ) == -1 ) {
@@ -3308,8 +3310,8 @@ void KWordDocument::setHeader( bool h )
 	}
     }
 
-    recalcFrames( true, true );
-    updateAllViews( 0L, true );
+    recalcFrames( TRUE, TRUE );
+    updateAllViews( 0L, TRUE );
 }
 
 /*================================================================*/
@@ -3325,32 +3327,32 @@ void KWordDocument::setFooter( bool f )
 	}
     }
 
-    recalcFrames( true, true );
-    updateAllViews( 0L, true );
+    recalcFrames( TRUE, TRUE );
+    updateAllViews( 0L, TRUE );
 }
 
 /*================================================================*/
 bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff )
 {
-    if ( diff < 0 ) return false;
+    if ( diff < 0 ) return FALSE;
 
     if ( !frameset->getGroupManager() ) {
 	// a normal frame _must_ not leave the page
 	if ( frameset->getFrameInfo() == FI_BODY ) {
 	    if ( static_cast<int>( frame->bottom() + diff ) < static_cast<int>( ( page + 1 ) * getPTPaperHeight() ) )
-		return true;
-	    return false;
+		return TRUE;
+	    return FALSE;
 	} else { // headers and footers may always resize - ok this may lead to problems in strange situations, but let's ignore them :- )
 
 	    // a footer has to moved a bit to the top before he gets resized
 	    if ( isAFooter( frameset->getFrameInfo() ) )
 		frame->moveTopLeft( QPoint( 0, frame->y() - diff ) );
-	    return true;
+	    return TRUE;
 	}
     } else // tables may _always_ resize, because the group managers can add pages if needed
-	return true;
+	return TRUE;
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -3361,7 +3363,7 @@ bool KWordDocument::getAutoCreateNewFrame()
 	    return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getAutoCreateNewFrame();
     }
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -3381,7 +3383,7 @@ KWUnit KWordDocument::getRunAroundGap()
 
     if ( frame ) return frame->getRunAroundGap();
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -3479,7 +3481,7 @@ KWFrameSet *KWordDocument::getFrameCoords( unsigned int &x, unsigned int &y, uns
 void KWordDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
 {
     QList<KWGroupManager> grpMgrs;
-    grpMgrs.setAutoDelete( false );
+    grpMgrs.setAutoDelete( FALSE );
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	if ( getFrameSet( i )->hasSelectedFrame() ) {
@@ -3506,7 +3508,7 @@ void KWordDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
 	if ( getFrameSet( i )->hasSelectedFrame() ) {
 	    for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-		if ( getFrameSet( i )->getFrame( j )->isSelected() && x + w < getPTPaperWidth() && 
+		if ( getFrameSet( i )->getFrame( j )->isSelected() && x + w < getPTPaperWidth() &&
 		     y + h < pages * getPTPaperHeight() ) {
 		    if ( !getFrameSet( i )->getGroupManager() )
 			getFrameSet( i )->getFrame( j )->setRect( x, y, w, h );
@@ -3582,7 +3584,7 @@ void KWordDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )
 long int KWordDocument::getPageNum( int bottom )
 {
     int num = 0;
-    while ( true ) {
+    while ( TRUE ) {
 	if ( bottom < ( num + 1 ) * static_cast<int>( getPTPaperHeight() ) )
 	    return num;
 
@@ -3602,4 +3604,35 @@ void KWordDocument::addImageRequest( const QString &filename, KWCharImage *img )
 void KWordDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs )
 {
     imageRequests2.insert( filename, fs );
+}
+
+/*================================================================*/
+void KWordDocument::registerVariable( KWVariable *var )
+{
+    if ( !var )
+	return;
+    
+    variables.append( var );
+    if ( var->getType() == VT_CUSTOM ) {
+	if ( !varValues.contains( ( (KWCustomVariable*)var )->getName() ) )
+	    varValues[ ( (KWCustomVariable*)var )->getName() ] = i18n( "No value" );
+    }
+}
+
+/*================================================================*/
+void KWordDocument::unregisterVariable( KWVariable *var )
+{
+    variables.take( variables.findRef( var ) );
+}
+
+/*================================================================*/
+void KWordDocument::setVariableValue( const QString &name, const QString &value )
+{
+    varValues[ name ] = value;
+}
+
+/*================================================================*/
+QString KWordDocument::getVariableValue( const QString &name )
+{
+    return varValues[ name ];
 }

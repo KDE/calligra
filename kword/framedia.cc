@@ -516,9 +516,9 @@ void KWFrameDia::setupTab4Geometry()
     if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
 					    ( doc->getProcessingType() == KWordDocument::WP &&
 					      doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-	unsigned int x, y, w, h, _num;
+	unsigned int x, y, w, h;//, _num;
 
-	KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
+	//KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
 	QString _x, _y, _w, _h;
 
 	switch ( KWUnit::unitType( doc->getUnit() ) ) {

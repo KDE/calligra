@@ -16,11 +16,13 @@
 #include "variable.h"
 #include "parag.h"
 #include "defs.h"
+#include "kword_doc.h"
 
 #include <komlMime.h>
+#include <klocale.h>
+
 #include <strstream>
 #include <fstream>
-
 #include <unistd.h>
 
 /******************************************************************/
@@ -96,8 +98,44 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 }
 
 /******************************************************************/
+/* Class: KWVariableCustomFormat                                  */
+/******************************************************************/
+
+/*================================================================*/
+void KWVariableCustomFormat::setFormat( QString _format )
+{
+    KWVariableFormat::setFormat( _format );
+}
+
+/*================================================================*/
+QString KWVariableCustomFormat::convert( KWVariable *_var )
+{
+    if ( _var->getType() != VT_CUSTOM ) {
+        qWarning( "Can't convert variable of type %d to a page num!!!", _var->getType() );
+        return QString();
+    }
+
+    return dynamic_cast<KWCustomVariable*>( _var )->getValue();
+}
+
+/******************************************************************/
 /* Class: KWVariable                                              */
 /******************************************************************/
+
+/*================================================================*/
+KWVariable::KWVariable( KWordDocument *_doc ) 
+    : text() 
+{ 
+    varFormat = 0L; 
+    doc = _doc; 
+    doc->registerVariable( this );
+}
+
+/*================================================================*/
+KWVariable::~KWVariable()
+{
+    doc->unregisterVariable( this );
+}
 
 /*================================================================*/
 void KWVariable::save( ostream &out )
@@ -275,4 +313,50 @@ void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
         time = QTime::currentTime();
 }
 
+/******************************************************************/
+/* Class: KWCustomVariable                                        */
+/******************************************************************/
 
+/*================================================================*/
+KWCustomVariable::KWCustomVariable( KWordDocument *_doc, const QString &name_ )
+    : KWVariable( _doc ), name( name_ )
+{
+    doc->unregisterVariable( this );
+    doc->registerVariable( this );
+    recalc();
+}
+
+/*================================================================*/
+void KWCustomVariable::recalc()
+{
+}
+
+/*================================================================*/
+void KWCustomVariable::save( ostream &out )
+{
+    KWVariable::save( out );
+}
+
+/*================================================================*/
+void KWCustomVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+{
+    KWVariable::load( name, tag, lst );
+}
+
+/*================================================================*/
+QString KWCustomVariable::getName() const
+{
+    return name;
+}
+
+/*================================================================*/
+QString KWCustomVariable::getValue() const
+{
+    return doc->getVariableValue( name );
+}
+    
+/*================================================================*/
+void KWCustomVariable::setValue( const QString &v )
+{
+    doc->setVariableValue( name, v );
+}

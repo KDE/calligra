@@ -35,6 +35,7 @@
 #include "framedia.h"
 #include "font.h"
 #include "docstruct.h"
+#include "variabledlgs.h"
 
 #include <qtextstream.h>
 #include <qevent.h>
@@ -4192,6 +4193,17 @@ void KWPage::insertVariable( VariableType type )
 	var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	fc->getParag()->insertVariable( fc->getTextPos(), var );
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
+    } break;
+    case VT_CUSTOM: {
+	
+	KWVariableNameDia *dia = new KWVariableNameDia( this, doc->getVariables() );
+	if ( dia->exec() == QDialog::Accepted ) {
+	    KWCustomVariable *var = new KWCustomVariable( doc, dia->getName() );
+	    var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
+	    fc->getParag()->insertVariable( fc->getTextPos(), var );
+	    fc->getParag()->setFormat( fc->getTextPos(), 1, format );
+	}
+	delete dia;
     } break;
     default: break;
     }

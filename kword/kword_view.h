@@ -108,7 +108,8 @@ public:
     virtual void editFind();
     virtual void editDeleteFrame();
     virtual void editReconnectFrame();
-
+    virtual void editCustomVars();
+    
     virtual void newView();
     virtual void viewFormattingChars();
     virtual void viewFrameBorders();
@@ -127,7 +128,7 @@ public:
     virtual void insertVariableTimeFix();
     virtual void insertVariableTimeVar();
     virtual void insertVariablePageNum();
-    virtual void insertVariableOther();
+    virtual void insertVariableCustom();
     virtual void insertFootNoteEndNote();
 
     virtual void formatFont();
@@ -279,7 +280,7 @@ protected:
 
     bool m_bUnderConstruction;
 
-// edit menu
+    // edit menu
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
     CORBA::Long m_idMenuEdit_Redo;
@@ -290,8 +291,9 @@ protected:
     CORBA::Long m_idMenuEdit_Find;
     CORBA::Long m_idMenuEdit_DeleteFrame;
     CORBA::Long m_idMenuEdit_ReconnectFrame;
+    CORBA::Long m_idMenuEdit_CustomVars;
 
-// view menu
+    // view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_FormattingChars;
@@ -302,7 +304,7 @@ protected:
     CORBA::Long m_idMenuView_FootNotes;
     CORBA::Long m_idMenuView_EndNotes;
 
-// insert menu
+    // insert menu
     OpenPartsUI::Menu_var m_vMenuInsert;
     CORBA::Long m_idMenuInsert_Picture;
     CORBA::Long m_idMenuInsert_Clipart;
@@ -315,10 +317,10 @@ protected:
     CORBA::Long m_idMenuInsert_VariableTimeFix;
     CORBA::Long m_idMenuInsert_VariableTimeVar;
     CORBA::Long m_idMenuInsert_VariablePageNum;
-    CORBA::Long m_idMenuInsert_VariableOther;
+    CORBA::Long m_idMenuInsert_VariableCustom;
     CORBA::Long m_idMenuInsert_FootNoteEndNote;
 
-// format menu
+    // format menu
     OpenPartsUI::Menu_var m_vMenuFormat;
     CORBA::Long m_idMenuFormat_Font;
     CORBA::Long m_idMenuFormat_Color;
@@ -328,14 +330,14 @@ protected:
     CORBA::Long m_idMenuFormat_Style;
     CORBA::Long m_idMenuFormat_FrameSet;
 
-// extra menu
+    // extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;
     CORBA::Long m_idMenuExtra_Spelling;
     CORBA::Long m_idMenuExtra_AutoFormat;
     CORBA::Long m_idMenuExtra_Stylist;
     CORBA::Long m_idMenuExtra_Options;
 
-// tools menu
+    // tools menu
     OpenPartsUI::Menu_var m_vMenuTools;
     CORBA::Long m_idMenuTools_Edit;
     CORBA::Long m_idMenuTools_EditFrame;

@@ -28,8 +28,9 @@ class KWordDocument;
 class KWVariable;
 class KWParag;
 
-enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, VT_NUMPAGES = 5, VT_NONE};
-enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3};
+enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, 
+		   VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_NONE };
+enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4 };
 
 /******************************************************************/
 /* Class: KWVariableFormat                                        */
@@ -41,7 +42,7 @@ public:
     KWVariableFormat() {}
     virtual ~KWVariableFormat() {}
 
-    virtual VariableFormatType getType() = 0;
+    virtual VariableFormatType getType() const = 0;
 
     virtual void setFormat( QString _format )
     { format = _format; }
@@ -62,7 +63,7 @@ class KWVariableDateFormat : public KWVariableFormat
 public:
     KWVariableDateFormat() : KWVariableFormat() {}
 
-    virtual VariableFormatType getType()
+    virtual VariableFormatType getType() const
     { return VFT_DATE; }
 
     virtual void setFormat( QString _format );
@@ -80,7 +81,7 @@ class KWVariableTimeFormat : public KWVariableFormat
 public:
     KWVariableTimeFormat() : KWVariableFormat() {}
 
-    virtual VariableFormatType getType()
+    virtual VariableFormatType getType() const
     { return VFT_TIME; }
 
     virtual void setFormat( QString _format );
@@ -98,7 +99,7 @@ class KWVariablePgNumFormat : public KWVariableFormat
 public:
     KWVariablePgNumFormat() { pre = "-"; post = "-"; }
 
-    virtual VariableFormatType getType()
+    virtual VariableFormatType getType() const
     { return VFT_PGNUM; }
 
     virtual void setFormat( QString _format );
@@ -108,13 +109,38 @@ public:
     void setPre( const QString &_pre ) { pre = _pre; }
     void setPost( const QString &_post ) { pre = _post; }
 
-    QString getPre() { return pre; }
-    QString getPost() { return post; }
+    QString getPre() const { return pre; }
+    QString getPost() const { return post; }
 
 protected:
     QString pre, post;
 
 };
+
+/******************************************************************/
+/* Class: KWVariableCustomFormat                                   */
+/******************************************************************/
+
+class KWVariableCustomFormat : public KWVariableFormat
+{
+public:
+    KWVariableCustomFormat() {}
+
+    virtual VariableFormatType getType() const
+    { return VFT_CUSTOM; }
+
+    virtual void setFormat( QString _format );
+
+    virtual QString convert( KWVariable *_var );
+
+};
+
+
+
+// ----------------------------------------------------------------------------------------------
+
+
+
 
 /******************************************************************/
 /* Class: KWVariable                                              */
@@ -123,8 +149,8 @@ protected:
 class KWVariable
 {
 public:
-    KWVariable( KWordDocument *_doc ) : text() { varFormat = 0L; doc = _doc; }
-    virtual ~KWVariable() {}
+    KWVariable( KWordDocument *_doc );
+    virtual ~KWVariable();
 
     virtual KWVariable *copy() {
         KWVariable *v = new KWVariable( doc );
@@ -133,12 +159,12 @@ public:
         return v;
     }
 
-    virtual VariableType getType()
+    virtual VariableType getType() const
     { return VT_NONE; }
 
     void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
     { if ( _deleteOld && varFormat ) delete varFormat; varFormat = _varFormat; }
-    KWVariableFormat *getVariableFormat()
+    KWVariableFormat *getVariableFormat() const
     { return varFormat; }
 
     QString getText()
@@ -177,11 +203,11 @@ public:
         return var;
     }
 
-    virtual VariableType getType()
+    virtual VariableType getType() const
     { return VT_PGNUM; }
 
     virtual void recalc() { pgNum = pageNum; }
-    long unsigned int getPgNum() { return pgNum; }
+    long unsigned int getPgNum() const { return pgNum; }
 
     virtual void save( ostream &out );
     virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
@@ -208,12 +234,12 @@ public:
         return var;
     }
 
-    virtual VariableType getType()
+    virtual VariableType getType() const
     { return fix ? VT_DATE_FIX : VT_DATE_VAR; }
 
     virtual void recalc();
 
-    QDate getDate() { return date; }
+    QDate getDate() const { return date; }
     void setDate( QDate _date ) { date = _date; }
 
     virtual void save( ostream &out );
@@ -242,12 +268,12 @@ public:
         return var;
     }
 
-    virtual VariableType getType()
+    virtual VariableType getType() const
     { return fix ? VT_TIME_FIX : VT_TIME_VAR; }
 
     virtual void recalc();
 
-    QTime getTime() { return time; }
+    QTime getTime() const { return time; }
     void setTime( QTime _time ) { time = _time; }
 
     virtual void save( ostream &out );
@@ -257,6 +283,40 @@ protected:
     QTime time;
     bool fix;
 
+};
+
+/******************************************************************/
+/* Class: KWCustomVariable                                        */
+/******************************************************************/
+
+class KWCustomVariable : public KWVariable
+{
+public:
+    KWCustomVariable( KWordDocument *_doc, const QString &name_ );
+
+    virtual KWVariable *copy() {
+        KWCustomVariable *var = new KWCustomVariable( doc, name );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+    }
+
+    virtual VariableType getType() const
+    { return VT_CUSTOM; }
+
+    virtual void recalc();
+
+    virtual void save( ostream &out );
+    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+
+    virtual QString getName() const;
+    virtual QString getValue() const;
+    
+    virtual void setValue( const QString &v );
+    
+protected:
+    QString name;
+    
 };
 
 #endif

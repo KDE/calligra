@@ -357,6 +357,15 @@ public:
     void addImageRequest( const QString &filename, KWCharImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
 
+    void registerVariable( KWVariable *var );
+    void unregisterVariable( KWVariable *var );
+    QList<KWVariable> *getVariables() {
+	return &variables;
+    }
+
+    void setVariableValue( const QString &name, const QString &value );
+    QString getVariableValue( const QString &name );
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -438,7 +447,9 @@ protected:
     QStringList pixmapKeys;
     QDict<KWCharImage> imageRequests;
     QDict<KWPictureFrameSet> imageRequests2;
-
+    QList<KWVariable> variables;
+    QMap< QString, QString > varValues;
+    
 };
 
 #endif

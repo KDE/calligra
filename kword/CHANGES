@@ -1438,7 +1438,9 @@ Reggie, 19 - 20.8.1999:
 - Removed some hacks which are not needed anymore
 - Fixed some crashing code
 
-
 Reggie, 24.8.1999:
 ------------------
 - Fix in framedia
+- Implemented inserting custom variables
+- Implemented editing values of custom variables
+- Some fixes

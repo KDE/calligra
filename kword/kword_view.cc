@@ -47,6 +47,7 @@
 #include "footnotedia.h"
 #include "autoformatdia.h"
 #include "font.h"
+#include "variabledlgs.h"
 
 #include <opUIUtils.h>
 #include <opMenuIf.h>
@@ -775,6 +776,15 @@ void KWordView::editReconnectFrame()
     gui->getPaperWidget()->editReconnectFrame();
 }
 
+/*===============================================================*/
+void KWordView::editCustomVars()
+{
+    KWVariableValueDia *dia = new KWVariableValueDia( this, m_pKWordDoc->getVariables() );
+    dia->exec();
+    gui->getPaperWidget()->recalcWholeText();
+    gui->getPaperWidget()->repaintScreen( FALSE );
+}
+
 /*================================================================*/
 void KWordView::newView()
 {
@@ -900,8 +910,9 @@ void KWordView::insertVariablePageNum()
 }
 
 /*===============================================================*/
-void KWordView::insertVariableOther()
+void KWordView::insertVariableCustom()
 {
+    gui->getPaperWidget()->insertVariable( VT_CUSTOM );
 }
 
 /*===============================================================*/
@@ -1767,6 +1778,11 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Reconnect Frame..." ) );
     m_idMenuEdit_ReconnectFrame = m_vMenuEdit->insertItem4( text, this, "editReconnectFrame", 0, -1, -1 );
 
+    m_vMenuEdit->insertSeparator( -1 );
+    
+    text = Q2C( i18n( "&Custom Variables..." ) );
+    m_idMenuEdit_CustomVars = m_vMenuEdit->insertItem4( text, this, "editCustomVars", 0, -1, -1 );
+
     // View
     text = Q2C( i18n( "&View" ) );
     _menubar->insertMenu( text, m_vMenuView, -1, -1 );
@@ -1842,8 +1858,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "Page Number" ) );
     m_idMenuInsert_VariablePageNum = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariablePageNum", 0, -1, -1 );
     m_vMenuInsert_Variable->insertSeparator( -1 );
-    text = Q2C( i18n( "Other..." ) );
-    m_idMenuInsert_VariableOther = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableOther", 0, -1, -1 );
+    text = Q2C( i18n( "Custom..." ) );
+    m_idMenuInsert_VariableCustom = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableCustom", 0, -1, -1 );
 
     // tools menu
     text = Q2C( i18n( "&Tools" ) );
@@ -2986,7 +3002,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     QValueList<int> l;
     l << 0;
     panner->setSizes( l );
-        
+
     KoPageLayout layout;
     KoColumns cols;
     KoKWHeaderFooter hf;
