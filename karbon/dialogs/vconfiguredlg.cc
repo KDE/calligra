@@ -304,10 +304,12 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 
 	m_oldAutoSave =  m_view->part()->defaultAutoSave() / 60;
 
+        m_oldBackupFile = true;
 	if( m_config->hasGroup( "Interface" ) )
 	{
 		m_config->setGroup( "Interface" );
 		m_oldAutoSave = m_config->readNumEntry( "AutoSave", m_oldAutoSave );
+                m_oldBackupFile=m_config->readBoolEntry("BackupFile",m_oldBackupFile);
 	}
 
 	m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
@@ -315,6 +317,9 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	m_autoSave->setLabel( i18n( "Auto save (min):" ) );
 	m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
 	m_autoSave->setSuffix( i18n( "min" ) );
+
+        m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+        m_createBackupFile->setChecked(m_oldBackupFile);
 }
 
 void VConfigDefaultPage::apply()
@@ -331,11 +336,20 @@ void VConfigDefaultPage::apply()
 		m_view->part()->setAutoSave( autoSave * 60 );
 		m_oldAutoSave = autoSave;
 	}
+
+        bool state =m_createBackupFile->isChecked();
+        if(state!=m_oldBackupFile)
+        {
+            m_config->writeEntry( "BackupFile", state );
+            m_view->part()->setBackupFile( state);
+            m_oldBackupFile=state;
+        }
 }
 
 void VConfigDefaultPage::slotDefault()
 {
 	m_autoSave->setValue( m_view->part()->defaultAutoSave() / 60 );
+        m_createBackupFile->setChecked( true );
 }
 
 #include "vconfiguredlg.moc"

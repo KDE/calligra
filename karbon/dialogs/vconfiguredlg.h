@@ -100,6 +100,8 @@ private:
 
 	KIntNumInput* m_autoSave;
 	int m_oldAutoSave;
+    QCheckBox *m_createBackupFile;
+    bool m_oldBackupFile;
 };
 
 

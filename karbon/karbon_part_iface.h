@@ -44,6 +44,9 @@ k_dcop:
 	void clearHistory();
 	QString unitName() const;
 
+    void setBackupFile( bool _b );
+    bool backupFile()const;
+
 private:
 	KarbonPart *m_part;
 };

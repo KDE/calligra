@@ -77,3 +77,12 @@ QString KarbonPartIface::unitName() const
     return m_part->getUnitName();
 }
 
+void KarbonPartIface::setBackupFile( bool _b )
+{
+    m_part->setBackupFile( _b);
+}
+
+bool KarbonPartIface::backupFile()const
+{
+    return m_part->backupFile();
+}

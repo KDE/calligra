@@ -273,6 +273,8 @@ KarbonPart::initConfig()
 		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
 		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", VGlobal::maxRecentFiles );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
+                setBackupFile( config->readNumEntry("BackupFile", true));
+
 	}
 
 	if( config->hasGroup( "Misc" ) )
