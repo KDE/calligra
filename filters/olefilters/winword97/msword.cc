@@ -1217,10 +1217,17 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
 
     // Calculate the number of entries in the plex.
 
-    if (m_document->m_fib.nFib > s_maxWord6Version)
-        m_crun = (m_byteCount - sizeof(startFc)) / (sizeof(T) + sizeof(startFc));
+    if (m_byteCount > sizeof(startFc))
+    {
+        if (m_document->m_fib.nFib > s_maxWord6Version)
+            m_crun = (m_byteCount - sizeof(startFc)) / (sizeof(T) + sizeof(startFc));
+        else
+            m_crun = (m_byteCount - sizeof(startFc)) / (word6Size + sizeof(startFc));
+    }
     else
-        m_crun = (m_byteCount - sizeof(startFc)) / (word6Size + sizeof(startFc));
+    {
+        m_crun = 0;
+    }
     //kdDebug(s_area) << "MsWord::Plex::startIteration: " << m_crun << endl;
     m_fcNext = m_plex;
     m_dataNext = m_plex + ((m_crun + 1) * sizeof(startFc));
