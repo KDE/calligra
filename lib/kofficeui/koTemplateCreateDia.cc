@@ -323,6 +323,9 @@ void KoTemplateCreateDia::slotAddGroup() {
     QString name=KoNewGroupDia::newGroupName(this);
     if(name.isEmpty())
 	return;
+    KoTemplateGroup *group=d->m_tree->find(name);
+    if(group && !group->isHidden())
+	return;
 
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;

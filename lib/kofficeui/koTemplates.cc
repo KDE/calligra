@@ -177,22 +177,12 @@ void KoTemplateTree::writeTemplateTree() {
 	}
 	for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
 	    //kdDebug() << "template: " << t->name() << endl;
-	    // new template file
-	    if(!t->isHidden() && t->touched()) {
-		//kdDebug() << "new template" << endl;
+	    if(t->touched())
 		writeTemplate(t, group, localDir);
-	    }
-	    // global template file which should be "deleted"
-	    else if(t->isHidden() && t->touched() && !t->file().contains(localDir)) {
-		//kdDebug() << "delete global template" << endl;
-		writeTemplate(t, group, localDir);
-	    }
-	    // delete local template file
-	    else if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
+	    if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
 		//kdDebug() << "delete local template (rm -rf)" << endl;
+		writeTemplate(t, group, localDir);
 		QString command="rm -rf ";
-		command+=KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop");
-		command+=" ";
 		command+=t->file();
 		command+=" ";
 		command+=t->picture();
