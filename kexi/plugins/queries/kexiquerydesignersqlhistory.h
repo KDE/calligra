@@ -30,7 +30,7 @@
 class QSimpleRichText;
 class KPopupMenu;
 
-class KEXI_HAND_QUERY_EXPORT HistoryEntry
+class HistoryEntry
 {
 	public:
 		HistoryEntry(bool success, const QTime &time, const QString &statement, /*int y,*/ const QString &error = QString::null);
@@ -59,7 +59,7 @@ class KEXI_HAND_QUERY_EXPORT HistoryEntry
 
 typedef QPtrList<HistoryEntry> History;
 
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
+class KexiQueryDesignerSQLHistory : public QScrollView
 {
 	Q_OBJECT
 

@@ -32,7 +32,7 @@ class KexiQueryDesignerSQLViewPrivate;
  and SQL history/status widget splitted vertically. 
  Depending on user's will, the widget can be in "sql history" 
  mode or in "sql status" mode. */
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
+class KexiQueryDesignerSQLView : public KexiViewBase
 {
 	Q_OBJECT
 

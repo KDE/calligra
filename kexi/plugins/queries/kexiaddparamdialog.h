@@ -24,7 +24,7 @@
 
 class KexiAddParamWidget;
 
-class KEXI_HAND_QUERY_EXPORT KexiAddParamDialog : public KDialogBase
+class KexiAddParamDialog : public KDialogBase
 {
 	Q_OBJECT
 	
