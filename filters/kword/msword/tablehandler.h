@@ -24,6 +24,7 @@
 #include <handlers.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qobject.h>
 #include <deque>
 
 namespace KWord
@@ -45,8 +46,9 @@ namespace KWord
     };
 };
 
-class KWordTableHandler : public wvWare::TableHandler
+class KWordTableHandler : public QObject, public wvWare::TableHandler
 {
+    Q_OBJECT
 public:
     KWordTableHandler();
 
@@ -57,12 +59,18 @@ public:
     virtual void tableCellEnd();
 
     ///////// Our own interface
-    void setCurrentTableName( const QString& name ) {
-        m_currentTableName = name;
-    }
+    void tableStart( const QString& name );
+    void tableEnd();
+
+signals:
+    // Tells Document to create frameset for cell
+    void sigTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName );
+    void sigTableCellEnd();
 
 private:
     QString m_currentTableName;
+    int m_row;
+    int m_column;
 };
 
 #endif // TABLEHANDLER_H

@@ -472,6 +472,11 @@ QString KWordTextHandler::getFont(unsigned fc) const
 
 void KWordTextHandler::writeOutParagraph( const QString& styleName, const QString& text )
 {
+    if ( m_framesetElement.isNull() )
+    {
+        kdWarning() << "KWordTextHandler: no frameset element to write to! text=" << text << endl;
+        return;
+    }
     QDomElement paragraphElementOut=mainDocument().createElement("PARAGRAPH");
     m_framesetElement.appendChild(paragraphElementOut);
     QDomElement textElement=mainDocument().createElement("TEXT");

@@ -55,6 +55,10 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
+        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QString& ) ),
+                 this, SLOT( slotTableCellStart( int, int, int, int, const QString& ) ) );
+        connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
+                 this, SLOT( slotTableCellEnd() ) );
     }
 }
 
@@ -285,6 +289,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 
 void Document::headerEnd()
 {
+    m_textHandler->setFrameSetElement( QDomElement() );
 }
 
 void Document::footnoteStart()
@@ -313,6 +318,31 @@ void Document::footnoteStart()
 void Document::footnoteEnd()
 {
     kdDebug() << k_funcinfo << endl;
+    m_textHandler->setFrameSetElement( QDomElement() );
+}
+
+void Document::slotTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName )
+{
+    // Create footnote/endnote frameset
+    QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+    framesetElement.setAttribute( "frameType", 1 /* text */ );
+    framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
+    framesetElement.setAttribute( "grpmgr", tableName );
+    framesetElement.setAttribute( "name", i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column) );
+    framesetElement.setAttribute( "row", row );
+    framesetElement.setAttribute( "column", column );
+    framesetElement.setAttribute( "rows", rowSize );
+    framesetElement.setAttribute( "columns", columnSize );
+    m_framesetsElement.appendChild(framesetElement);
+
+    createInitialFrame( framesetElement, 0 /*?*/, 41 /*?*/, true );
+
+    m_textHandler->setFrameSetElement( framesetElement );
+}
+
+void Document::slotTableCellEnd()
+{
+    m_textHandler->setFrameSetElement( QDomElement() );
 }
 
 void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend )
@@ -353,7 +383,7 @@ void Document::processSubDocQueue()
     while ( !m_tableQueue.empty() )
     {
         KWord::Table& table = m_tableQueue.front();
-        m_tableHandler->setCurrentTableName( table.name );
+        m_tableHandler->tableStart( table.name );
         QValueList<KWord::Row> &rows = table.rows;
         for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
             KWord::TableRowFunctorPtr f = (*it).functorPtr;
@@ -361,6 +391,7 @@ void Document::processSubDocQueue()
             (*f)(); // call it
             delete f; // delete it
         }
+        m_tableHandler->tableEnd();
         m_tableQueue.pop();
     }
 }

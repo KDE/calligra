@@ -84,6 +84,11 @@ protected slots:
     // Add to our parsing queue, for tables
     void slotTableFound( const KWord::Table& table );
 
+    // Similar to footnoteStart/footnoteEnd but for cells.
+    // This is connected to KWordTableHandler
+    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName );
+    void slotTableCellEnd();
+
 private:
     void processStyles();
     void processAssociatedStrings();

@@ -29,11 +29,36 @@
 
 KWordTableHandler::KWordTableHandler()
 {
+    tableEnd();
+}
+
+// Called by Document before invoking the table-row-functors
+void KWordTableHandler::tableStart( const QString& name )
+{
+    Q_ASSERT( !name.isEmpty() );
+    m_currentTableName = name;
+    m_row = -1;
+}
+
+void KWordTableHandler::tableEnd()
+{
+    m_currentTableName = QString::null;
+    m_row = -2;
+    m_column = -2;
+    // Warning: if doing more here, check that it's still ok to call this from the ctor
 }
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> /*tap*/ )
 {
     kdDebug() << k_funcinfo << endl;
+    if ( m_row == -2 || m_column == -2 )
+    {
+        kdWarning() << "tableRowStart: tableStart not called previously!" << endl;
+        return;
+    }
+    Q_ASSERT( !m_currentTableName.isEmpty() );
+    m_row++;
+    m_column = -1;
 }
 
 void KWordTableHandler::tableRowEnd()
@@ -44,9 +69,14 @@ void KWordTableHandler::tableRowEnd()
 void KWordTableHandler::tableCellStart()
 {
     kdDebug() << k_funcinfo << endl;
+    m_column++;
+    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, 1 /*TODO*/, m_currentTableName );
 }
 
 void KWordTableHandler::tableCellEnd()
 {
     kdDebug() << k_funcinfo << endl;
+    emit sigTableCellEnd();
 }
+
+#include "tablehandler.moc"
