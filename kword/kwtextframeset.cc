@@ -1141,11 +1141,11 @@ struct FrameStruct
 void KWTextFrameSet::updateFrames()
 {
     // Not visible ? Don't bother then.
-    if ( !isVisible() )
+    if ( !isVisible() ) {
+        m_textobj->setVisible(false);
         return;
-
-    if ( frames.isEmpty() )
-        return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
+    }
+    m_textobj->setVisible(true);
 
     //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 

@@ -359,6 +359,9 @@ public: // made public for KWTextFrameSet...
     /** for KWTextFrameSet */
     UndoRedoInfo & undoRedoInfoStruct() { return undoRedoInfo; }
 
+    void setVisible(bool vis) { m_visible=vis; }
+    bool isVisible() const { return m_visible; }
+
 private slots:
     void doChangeInterval();
     /** This is done in a singleShot timer because of macro-commands.
@@ -379,6 +382,8 @@ private:
     /** The style to use by default (initial pararaph, and when deleting a used style)
         TODO: check that we support 0 */
     KoStyle* m_defaultStyle;
+
+    bool m_visible;
 
     /** Currently built undo/redo info */
     UndoRedoInfo undoRedoInfo;
@@ -405,6 +410,7 @@ private:
 #endif
 
     static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
+
 };
 
 #endif
