@@ -399,6 +399,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
 KSpreadView::~KSpreadView()
 {
+    m_pTable = 0; // set the active table to 0L so that when during destruction
+    // of embedded child documents possible repaints in KSpreadTable are not
+    // performed. The repains can happen if you delete an embedded document,
+    // which leads to an regionInvalidated() signal emission in KoView, which calls
+    // repaint, etc.etc. :-) (Simon)
 }
 
 void KSpreadView::initialPosition()
