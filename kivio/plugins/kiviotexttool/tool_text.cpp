@@ -26,12 +26,12 @@
 #include <koPoint.h>
 #include <klocale.h>
 #include <kozoomhandler.h>
+#include <kinputdialog.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
 #include "kivio_page.h"
 #include "kivio_doc.h"
-#include "stencil_text_dlg.h"
 
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner.h"
@@ -245,12 +245,14 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
     return;
 
   KivioStencil* stencil = stencils->first();
-  KivioStencilTextDlg d(view(), stencil->text());
+  bool ok = false;
+  QString text = KInputDialog::getMultiLineText(i18n("Stencil Text"), i18n("Stencil text:"),
+      stencil->text(), &ok, view());
 
-  if( !d.exec() )
+  if(!ok) {
     return;
+  }
 
-  QString text = d.text();
   KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
   bool createMacro = false;
   KivioDoc* doc = view()->doc();
@@ -283,19 +285,21 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   if(!stencil) {
     return;
   }
-  
+
   QString name = stencil->getTextBoxName(pos);
-  
+
   if(name.isEmpty()) {
     return;
   }
 
-  KivioStencilTextDlg d(view(), stencil->text(name));
+  bool ok = false;
+  QString text = KInputDialog::getMultiLineText(i18n("Stencil Text"), i18n("Stencil text:"),
+      stencil->text(name), &ok, view());
 
-  if(!d.exec())
+  if(!ok) {
     return;
+  }
 
-  QString text = d.text();
   KivioDoc* doc = view()->doc();
   KivioPage* page = view()->activePage();
 
