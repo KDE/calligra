@@ -36,20 +36,19 @@ class KPClipartObject : public KP2DObject
 {
 public:
     KPClipartObject( KPClipartCollection *_clipartCollection );
-    KPClipartObject( KPClipartCollection *_clipartCollection, const QString &_filename, QDateTime _lastModified );
+    KPClipartObject( KPClipartCollection *_clipartCollection, const KPClipartKey & key );
     virtual ~KPClipartObject() {}
 
     KPClipartObject &operator=( const KPClipartObject & );
 
-    virtual void setFileName( const QString &_filename, QDateTime _lastModified );
+    void setClipart( const KPClipartKey & key );
 
-    void reload()
-    { setFileName( key.filename, key.lastModified ); }
+    void reload() { setClipart( m_clipart.key() ); }
 
     virtual ObjType getType() const
     { return OT_CLIPART; }
     QString getFileName() const
-    { return key.filename; }
+    { return m_clipart.key().filename(); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element);
@@ -57,11 +56,10 @@ public:
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
     KPClipartCollection::Key getKey() const
-    { return key; }
+    { return m_clipart.key(); }
 
 protected:
-    QPicture *picture;
-    KPClipartCollection::Key key;
+    KPClipart m_clipart;
 
     KPClipartCollection *clipartCollection;
 

@@ -20,94 +20,50 @@
 #ifndef kpclipartcollection_h
 #define kpclipartcollection_h
 
-#include <qmap.h>
-#include <qdatetime.h>
-#include <qpicture.h>
+#include <koClipartCollection.h>
 
 class QDomElement;
 class QDomDocument;
 
+typedef KoClipartKey KPClipartKey;
+typedef KoClipart KPClipart;
+
 /******************************************************************/
 /* Class: KPClipartCollection                                     */
 /******************************************************************/
-
-class KPClipartCollection
+class KPClipartCollection : public KoClipartCollection
 {
 public:
-    struct Key
-    {
-        Key()
-            : filename(), lastModified()
-        {}
-
-        Key( const QString &fn, const QDateTime &mod )
-            : filename( fn ), lastModified( mod )
-        {}
-        Key( const Key &key )
-            : filename( key.filename ), lastModified( key.lastModified )
-        {}
-
-        Key &operator=( const Key &key ) {
-            filename = key.filename;
-            lastModified = key.lastModified;
-            return *this;
-        }
-
-        bool operator==( const Key &key ) const {
-            return ( key.filename == filename &&
-                     key.lastModified == lastModified );
-        }
-
-        bool operator<( const Key &key ) const {
-            QString s1( key.toString() );
-            QString s2( toString() );
-            return ( s1 < s2 );
-        }
-
-        QString toString() const {
-            QString s = QString( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
-            return QString( s );
-        }
-
-        QDomElement saveXML( QDomDocument &doc );
-        void setAttributes( QDomElement &elem );
-        void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
-
-        QString filename;
-        QDateTime lastModified;
-    };
+    typedef KoClipartKey Key; // to avoid porting everything. Get rid if you want to.
 
     KPClipartCollection()
         : allowChangeRef( true )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
-    ~KPClipartCollection();
+    ~KPClipartCollection() {}
 
-    QPicture *findClipart( const Key &key );
-    QPicture *insertClipart( const Key &key, const QPicture &pic );
+    // KPresenter uses dateTime.isValid() for images in the collection and
+    // !isValid() for images to be loaded from disk.
+    // This method handles both cases.
+    KPClipart findOrLoad( const QString & fileName, const QDateTime & dateTime );
 
-    void addRef( const Key &key );
-    void removeRef( const Key &key );
+    //void addRef( const Key &key );
+    //void removeRef( const Key &key );
 
-    QMap< Key, QPicture >::Iterator begin() { return data.begin(); }
-    QMap< Key, QPicture >::Iterator end() { return data.end(); }
+    //int references( const Key &key ) { return refs.contains( key ) ? refs.find( key ).data() : -1; }
 
-    int references( const Key &key ) { return refs.contains( key ) ? refs.find( key ).data() : -1; }
+    //void setAllowChangeRef( bool b )
+    //{ allowChangeRef = b ; }
 
     QDate tmpDate() { return date; }
     QTime tmpTime() { return time; }
 
-    void setAllowChangeRef( bool b )
-    { allowChangeRef = b ; }
-
 protected:
-    QMap< Key, QPicture > data;
-    QMap< Key, int > refs;
+    //QMap< Key, int > refs;
 
     QDate date;
     QTime time;
 
     bool allowChangeRef;
-
 };
 
 #endif

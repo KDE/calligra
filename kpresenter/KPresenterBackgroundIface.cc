@@ -62,7 +62,7 @@ QString KPresenterBackgroundIface::getBackPixFilename()
 
 QString KPresenterBackgroundIface::getBackClipFilename()
 {
-    return back->getBackClipFilename();
+    return back->getBackClipKey().filename();
 }
 
 int KPresenterBackgroundIface::getPageEffect()

@@ -25,7 +25,6 @@
 #include <kpgradientcollection.h>
 #include <kptextobject.h>
 
-#include <qpicture.h>
 #include <qpainter.h>
 #include <qfileinfo.h>
 
@@ -57,7 +56,6 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
     gradientCollection = _gradientCollection;
     clipartCollection = _clipartCollection;
     gradient = 0L;
-    picture = 0L;
 
     doc = _doc;
 }
@@ -85,22 +83,15 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
 }
 
 /*================================================================*/
-void KPBackGround::setBackClipFilename( const QString &_filename, QDateTime _lastModified )
+void KPBackGround::setBackClipart( const QString &_filename, QDateTime _lastModified )
 {
     if ( backType != BT_CLIPART )
         return;
 
-    if ( !_lastModified.isValid() )
-    {
-        QFileInfo inf( _filename );
-        _lastModified = inf.lastModified();
-    }
+    //if ( picture )
+    //    clipartCollection->removeRef( clipKey );
 
-    if ( picture )
-        clipartCollection->removeRef( clipKey );
-
-    clipKey = KPClipartCollection::Key(_filename, _lastModified );
-    picture = clipartCollection->findClipart( clipKey );
+    backClipart = clipartCollection->findOrLoad( _filename, _lastModified );
 }
 
 /*================================================================*/
@@ -146,7 +137,7 @@ void KPBackGround::restore()
         setBackPixmap( backImage.key().filename(), backImage.key().lastModified() );
 
     if ( backType == BT_CLIPART )
-	setBackClipFilename( clipKey.filename, clipKey.lastModified );
+	setBackClipart( backClipart.key().filename(), backClipart.key().lastModified() );
 
     if ( backType != BT_PICTURE )
         backImage = KPImage();
@@ -202,8 +193,12 @@ QDomElement KPBackGround::save( QDomDocument &doc )
         page.appendChild( elem );
     }
 
-    if ( picture && backType == BT_CLIPART )
-        page.appendChild(clipKey.saveXML(doc));
+    if ( !backClipart.isNull() && backType == BT_CLIPART )
+    {
+        QDomElement elem=doc.createElement( "BACKCLIPKEY" );
+        backClipart.key().saveAttributes( elem );
+        page.appendChild( elem );
+    }
 
     element=doc.createElement("PGEFFECT");
     element.setAttribute("value", static_cast<int>( pageEffect ));
@@ -281,7 +276,7 @@ void KPBackGround::load( const QDomElement &element )
     if(!e.isNull()) {
         KPImageKey key;
         key.loadAttributes(e, imageCollection->tmpDate(), imageCollection->tmpTime());
-        backImage = KPImage( key, QImage() );
+        backImage = KPImage( key, QImage() ); // Image will be set by reload(), called by completeLoading()
     }
     else {
         // try to find a BACKPIX tag if the BACKPIXKEY is not available...
@@ -325,8 +320,11 @@ void KPBackGround::load( const QDomElement &element )
         }
     }
     e=element.namedItem("BACKCLIPKEY").toElement();
-    if(!e.isNull())
+    if(!e.isNull()) {
+        KPClipartKey clipKey;
         clipKey.loadAttributes(e, clipartCollection->tmpDate(), clipartCollection->tmpTime());
+        backClipart = KPClipart( clipKey, QPicture() ); // Picture will be set by reload(), called by completeLoading()
+    }
     else {
         // try to find a BACKCLIP tag if the BACKCLIPKEY is not available...
         e=element.namedItem("BACKCLIP").toElement();
@@ -343,9 +341,9 @@ void KPBackGround::load( const QDomElement &element )
                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-            clipKey.filename = _fileName;
-            clipKey.lastModified.setDate( clipartCollection->tmpDate() );
-            clipKey.lastModified.setTime( clipartCollection->tmpTime() );
+            //KPClipartKey clipKey( _fileName, QDateTime( clipartCollection->tmpDate(),
+            //                                            clipartCollection->tmpTime() ) );
+            backClipart = clipartCollection->loadClipart( _fileName ); // load from disk !
         }
     }
 }
@@ -476,8 +474,8 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 /*================================================================*/
 void KPBackGround::drawBackClip( QPainter *_painter )
 {
-    if ( picture )
-        _painter->drawPicture( *picture );
+    if ( !backClipart.isNull() )
+        _painter->drawPicture( *backClipart.picture() );
 }
 
 /*================================================================*/

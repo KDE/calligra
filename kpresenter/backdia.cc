@@ -309,7 +309,7 @@ void BackDia::updateConfiguration()
     if ( !chosenPic.isEmpty() && picChanged )
         preview->backGround()->setBackPixmap( getBackPixFilename(), picLastModified );
     if ( !chosenClip.isEmpty() && clipChanged )
-        preview->backGround()->setBackClipFilename( getBackClipFilename(), clipLastModified );
+        preview->backGround()->setBackClipart( getBackClipFilename(), clipLastModified );
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
         preview->backGround()->restore();

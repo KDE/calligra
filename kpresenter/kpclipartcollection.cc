@@ -21,93 +21,16 @@
 #include <qwmf.h>
 #include <qdom.h>
 
-/******************************************************************/
-/* Class: KPClipartCollection                                     */
-/******************************************************************/
-
-QDomElement KPClipartCollection::Key::saveXML( QDomDocument &doc )
+KPClipart KPClipartCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
 {
-    QDomElement elem=doc.createElement( "BACKCLIPKEY" );
-    setAttributes( elem );
-    return elem;
+    ASSERT( !fileName.isEmpty() );
+    if ( dateTime.isValid() )
+        return findClipart( KPClipartKey( fileName, dateTime ) );
+    else
+        return loadClipart( fileName );
 }
 
-void KPClipartCollection::Key::setAttributes( QDomElement &elem )
-{
-    QDate date = lastModified.date();
-    QTime time = lastModified.time();
-    elem.setAttribute( "filename", filename );
-    elem.setAttribute( "year", date.year() );
-    elem.setAttribute( "month", date.month() );
-    elem.setAttribute( "day", date.day() );
-    elem.setAttribute( "hour", time.hour() );
-    elem.setAttribute( "minute", time.minute() );
-    elem.setAttribute( "second", time.second() );
-    elem.setAttribute( "msec", time.msec() );
-}
-
-void KPClipartCollection::Key::loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime )
-{
-    int year=dDate.year(), month=dDate.month(), day=dDate.day();
-    int hour=dTime.hour(), minute=dTime.minute(), second=dTime.second(), msec=dTime.msec();
-    if( elem.hasAttribute( "filename" ) )
-        filename=elem.attribute( "filename" );
-    if( elem.hasAttribute( "year" ) )
-        year=elem.attribute( "year" ).toInt();
-    if( elem.hasAttribute( "month" ) )
-        month=elem.attribute( "month" ).toInt();
-    if( elem.hasAttribute( "day" ) )
-        day=elem.attribute( "day" ).toInt();
-    if( elem.hasAttribute( "hour" ) )
-        hour=elem.attribute( "hour" ).toInt();
-    if( elem.hasAttribute( "minute" ) )
-        minute=elem.attribute( "minute" ).toInt();
-    if( elem.hasAttribute( "second" ) )
-        second=elem.attribute( "second" ).toInt();
-    if( elem.hasAttribute( "msec" ) )
-        msec=elem.attribute( "msec" ).toInt();
-    lastModified.setDate( QDate( year, month, day ) );
-    lastModified.setTime( QTime( hour, minute, second, msec ) );
-}
-
-/*================================================================*/
-KPClipartCollection::~KPClipartCollection()
-{
-    data.clear();
-    refs.clear();
-}
-
-/*================================================================*/
-QPicture *KPClipartCollection::findClipart( const Key &key )
-{
-    QMap< Key, QPicture >::Iterator it = data.find ( key );
-
-    if ( it != data.end() && it.key() == key )
-        return &it.data();
-    else {
-        QWinMetaFile wmf;
-        wmf.load( key.filename );
-        QPicture pic;
-        wmf.paint( &pic );
-        return insertClipart( key, pic );
-    }
-}
-
-/*================================================================*/
-QPicture *KPClipartCollection::insertClipart( const Key &key, const QPicture &pic )
-{
-    QPicture *picture = new QPicture;
-    picture->setData( pic.data(), pic.size() );
-
-    data.insert( Key( key ), *picture );
-
-    int ref = 1;
-    refs.insert( Key( key ), ref );
-
-    return picture;
-}
-
-/*================================================================*/
+#if 0
 void KPClipartCollection::addRef( const Key &key )
 {
     if ( !allowChangeRef )
@@ -141,3 +64,4 @@ void KPClipartCollection::removeRef( const Key &key )
         }
     }
 }
+#endif

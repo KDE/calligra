@@ -28,10 +28,12 @@
 /*======================== constructor ===========================*/
 SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
 			bool _backUnbalanced, int _backXFactor, int _backYFactor,
-			const KoImageKey & _backPix, QString _backClip, BackView _backView, BackType _backType,
+			const KoImageKey & _backPix, const KPClipartKey & _backClip,
+                        BackView _backView, BackType _backType,
 			QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-			const KoImageKey & _oldBackPix, QString _oldBackClip, BackView _oldBackView, BackType _oldBackType,
+			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
+                        BackView _oldBackView, BackType _oldBackType,
 			bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc )
     : Command( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
       xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
@@ -58,7 +60,7 @@ void SetBackCmd::execute()
 	doc->setBackType( currPgNum - 1, backType );
 	doc->setBackView( currPgNum - 1, backView );
 	doc->setBackPixmap( currPgNum - 1, backPix );
-	doc->setBackClipFilename( currPgNum - 1, backClip );
+	doc->setBackClipart( currPgNum - 1, backClip );
 	doc->restoreBackground( currPgNum - 1 );
     } else {
 	unsigned int i = 0;
@@ -68,7 +70,7 @@ void SetBackCmd::execute()
 	    doc->setBackType( i, backType );
 	    doc->setBackView( i, backView );
 	    doc->setBackPixmap( i, backPix );
-	    doc->setBackClipFilename( i, backClip );
+	    doc->setBackClipart( i, backClip );
 	}
 
 	for ( i = 0; i < doc->getPageNums(); i++ )
@@ -87,7 +89,7 @@ void SetBackCmd::unexecute()
 	doc->setBackType( currPgNum - 1, oldBackType );
 	doc->setBackView( currPgNum - 1, oldBackView );
 	doc->setBackPixmap( currPgNum - 1, oldBackPix );
-	doc->setBackClipFilename( currPgNum - 1, oldBackClip );
+	doc->setBackClipart( currPgNum - 1, oldBackClip );
 	doc->restoreBackground( currPgNum - 1 );
     } else {
 	unsigned int i = 0;
@@ -97,7 +99,7 @@ void SetBackCmd::unexecute()
 	    doc->setBackType( i, oldBackType );
 	    doc->setBackView( i, oldBackView );
 	    doc->setBackPixmap( i, oldBackPix );
-	    doc->setBackClipFilename( i, oldBackClip );
+	    doc->setBackClipart( i, oldBackClip );
 	}
 
 	for ( i = 0; i < doc->getPageNums(); i++ )

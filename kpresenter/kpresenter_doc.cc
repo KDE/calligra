@@ -356,26 +356,14 @@ QDomDocument KPresenterDoc::saveXML()
 
     makeUsedPixmapList();
 
-    // Save the PIXMAPS list
+    // Save the PIXMAPS and CLIPARTS list
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
+
     QDomElement pixmaps = _imageCollection.saveXML( doc, usedPixmaps, prefix );
-    presenter.appendChild(pixmaps);
+    presenter.appendChild( pixmaps );
 
-    QDomElement cliparts=doc.createElement("CLIPARTS");
-    int i = 0;
-    QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
-
-    for( ; it2 != _clipartCollection.end(); ++it2 ) {
-        KPClipartCollection::Key key = it2.key();
-        QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
-        if ( !isStoredExtern() )
-            clipartName.prepend( url().url() + "/" );
-        element=doc.createElement("KEY");
-        key.setAttributes(element);
-        element.setAttribute("name", clipartName);
-        cliparts.appendChild(element);
-    }
-    presenter.appendChild(cliparts);
+    QDomElement cliparts = _clipartCollection.saveXML( doc, usedCliparts, prefix );
+    presenter.appendChild( cliparts );
 
     setModified( false );
     return doc;
@@ -464,28 +452,9 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 {
     if ( !_store )
 	return true;
-
-    _imageCollection.saveToStore( _store, usedPixmaps,
-                                   isStoredExtern() ? QString::null : url().url() + "/" );
-
-    // TODO a KoClipartCollection
-    QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
-    int i = 0;
-    for( ; it2 != _clipartCollection.end(); ++it2 ) {
-	if ( _clipartCollection.references( it2.key() ) > 0 && !it2.key().filename.isEmpty() ) {
-
-	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
-	    if ( !isStoredExtern() )
-		u2.prepend( url().url() + "/" );
-
-	    if ( _store->open( u2 ) ) {
-		KoStoreDevice dev( _store );
-		dev.writeBlock( it2.data().data(), it2.data().size() );
-		_store->close();
-	    }
-	}
-    }
-
+    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
+    _imageCollection.saveToStore( _store, usedPixmaps, prefix );
+    _clipartCollection.saveToStore( _store, usedCliparts, prefix );
     return true;
 }
 
@@ -1203,22 +1172,10 @@ void KPresenterDoc::setBackPixmap( unsigned int pageNum, const KPImageKey & key 
 }
 
 /*==================== set background clipart ====================*/
-void KPresenterDoc::setBackClipFilename( unsigned int pageNum, QString backClip )
+void KPresenterDoc::setBackClipart( unsigned int pageNum, const KPClipartKey & key )
 {
-    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
-    QDateTime dt;
-
-    if ( !QFileInfo( backClip ).exists() ) {
-	for ( ; it != _clipartCollection.end(); ++it ) {
-	    if ( it.key().filename == backClip ) {
-		dt = it.key().lastModified;
-		break;
-	    }
-	}
-    }
-
     if ( pageNum < _backgroundList.count() )
-	backgroundList()->at( pageNum )->setBackClipFilename( backClip, dt );
+	backgroundList()->at( pageNum )->setBackClipart( key.filename(), key.lastModified() );
     setModified(true);
 }
 
@@ -1927,30 +1884,12 @@ KoImageKey KPresenterDoc::getBackPixKey( unsigned int pageNum )
 }
 
 /*=============================================================*/
-QString KPresenterDoc::getBackClipFilename( unsigned int pageNum )
+KPClipartKey KPresenterDoc::getBackClipKey( unsigned int pageNum )
 {
     if ( pageNum < _backgroundList.count() )
-	return backgroundList()->at( pageNum )->getBackClipFilename();
+	return backgroundList()->at( pageNum )->getBackClipKey();
 
-    return QString::null;
-}
-
-/*=============================================================*/
-/*QDateTime KPresenterDoc::getBackPixLastModified( unsigned int pageNum )
-{
-    if ( pageNum < _backgroundList.count() )
-	return backgroundList()->at( pageNum )->getKey().lastModified;
-
-    return QDateTime();
-}*/
-
-/*=============================================================*/
-QDateTime KPresenterDoc::getBackClipLastModified( unsigned int pageNum )
-{
-    if ( pageNum < _backgroundList.count() )
-	return backgroundList()->at( pageNum )->getBackClipKey().lastModified;
-
-    return QDateTime();
+    return KPClipartKey( QString::null, QDateTime() );
 }
 
 /*=============================================================*/
@@ -2612,19 +2551,10 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 /*=================== insert a clipart ==========================*/
 void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
 {
-    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
-    QDateTime dt;
+    KPClipartKey key = _clipartCollection.loadClipart( filename ).key();
+    kdDebug() << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
-    if ( !QFileInfo( filename ).exists() ) {
-	for ( ; it != _clipartCollection.end(); ++it ) {
-	    if ( it.key().filename == filename ) {
-		dt = it.key().lastModified;
-		break;
-	    }
-	}
-    }
-
-    KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection, filename, dt );
+    KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection, key );
     kpclipartobject->setOrig( ( ( diffx + 10 ) / _rastX ) * _rastX, ( ( diffy + 10 ) / _rastY ) * _rastY );
     kpclipartobject->setSize( 150, 150 );
     kpclipartobject->setSelected( true );
@@ -2660,27 +2590,17 @@ void KPresenterDoc::changePicture( const QString & filename )
 /*======================= change clipart ========================*/
 void KPresenterDoc::changeClipart( const QString & filename )
 {
-    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
-    QDateTime dt;
-
-    if ( !QFileInfo( filename ).exists() ) {
-	for ( ; it != _clipartCollection.end(); ++it ) {
-	    if ( it.key().filename == filename ) {
-		dt = it.key().lastModified;
-		break;
-	    }
-	}
-    }
-
-    KPObject *kpobject = 0;
+    // filename has been chosen in KPresenterView with a filedialog,
+    // so we know it exists
+    KPClipart clipart = _clipartCollection.loadClipart( filename );
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
+	KPObject *kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() && kpobject->getType() == OT_CLIPART ) {
 	    ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ),
 						     dynamic_cast<KPClipartObject*>( kpobject ),
 						     dynamic_cast<KPClipartObject*>( kpobject )->getKey(),
-						     KPClipartCollection::Key( filename, dt ), this );
+						     clipart.key(), this );
 	    chgClipCmd->execute();
 	    _commands.addCommand( chgClipCmd );
 	    break;
@@ -3494,28 +3414,34 @@ void KPresenterDoc::setFooter( bool b )
 void KPresenterDoc::makeUsedPixmapList()
 {
     usedPixmaps.clear();
+    usedCliparts.clear();
 
     KPObject *kpobject = 0L;
     int i = 0;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next(), ++i ) {
-	if ( kpobject->getType() == OT_PICTURE ) {
+	if ( kpobject->getType() == OT_PICTURE || kpobject->getType() == OT_CLIPART ) {
 	    if ( saveOnlyPage != -1 ) {
 		int pg = getPageOfObj( i, 0, 0 ) - 1;
 		if ( saveOnlyPage != pg )
 		    continue;
 	    }
-	    usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
+            if ( kpobject->getType() == OT_PICTURE )
+                usedPixmaps.append( dynamic_cast<KPPixmapObject*>( kpobject )->getKey() );
+            else // if ( kpobject->getType() == OT_CLIPART )
+                usedCliparts.append( dynamic_cast<KPClipartObject*>( kpobject )->getKey() );
 	}
     }
 
     KPBackGround *kpbackground = 0;
     i = 0;
-    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next(), ++i ) {
-	if ( kpbackground->getBackType() == BT_PICTURE ) {
-	    if ( saveOnlyPage != -1 && i != saveOnlyPage )
-		continue;
-	    usedPixmaps.append( kpbackground->getBackPixKey() );
-	}
+    for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next(), ++i )
+    {
+        if ( saveOnlyPage != -1 && i != saveOnlyPage )
+            continue;
+        if ( kpbackground->getBackType() == BT_PICTURE )
+            usedPixmaps.append( kpbackground->getBackPixKey() );
+        else if ( kpbackground->getBackType() == BT_CLIPART )
+            usedCliparts.append( kpbackground->getBackClipKey() );
     }
 }
 

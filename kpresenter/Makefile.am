@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc ktextedit.cc styledia.cc \
-	qwmf.cc pgconfdia.cc effectdia.cc \
+	pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc searchdia.ui \
 	shadowdia.cc presstructview.cc \
 	confpiedia.cc confrectdia.cc \
@@ -52,7 +52,7 @@ dummy.cc:
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextedit.h styledia.h \
-		qwmf.h global.h \
+		global.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h shadowdia.h presstructview.h \
 		confpiedia.h confrectdia.h \

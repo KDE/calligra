@@ -44,13 +44,13 @@ ChgClipCmd::~ChgClipCmd()
 /*======================== execute ===============================*/
 void ChgClipCmd::execute()
 {
-    object->setFileName( newKey.filename, newKey.lastModified );
+    object->setClipart( newKey );
     doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void ChgClipCmd::unexecute()
 {
-    object->setFileName( oldKey.filename, oldKey.lastModified );
+    object->setClipart( oldKey );
     doc->repaint( object );
 }

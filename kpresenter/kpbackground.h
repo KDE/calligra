@@ -67,7 +67,7 @@ public:
     void setBackYFactor( int _yfactor )
     { removeGradient(); yfactor = _yfactor; }
     void setBackPixmap( const QString &_filename, QDateTime _lastModified );
-    void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
+    void setBackClipart(  const QString &_filename, QDateTime _lastModified );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
 
@@ -85,10 +85,8 @@ public:
     { return bcType; }
     KPImageKey getBackPixKey() const
     { return backImage.key(); }
-    KPClipartCollection::Key getBackClipKey() const
-    { return clipKey; }
-    QString getBackClipFilename() const
-    { return clipKey.filename; }
+    KPClipartKey getBackClipKey() const
+    { return backClipart.key(); }
 
     PageEffect getPageEffect() const
     { return pageEffect; }
@@ -131,8 +129,7 @@ protected:
     KPGradientCollection *gradientCollection;
     KPClipartCollection *clipartCollection;
     QPixmap *gradient;
-    QPicture *picture;
-    KPClipartCollection::Key clipKey;
+    KPClipart backClipart;
 
     QSize ext;
     KPresenterDoc *doc;

@@ -117,7 +117,7 @@ public:
     // background
     void setBackColor( unsigned int, QColor, QColor, BCType, bool, int, int );
     void setBackPixmap( unsigned int pageNum, const KPImageKey & key );
-    void setBackClipFilename( unsigned int pageNum, QString backClip );
+    void setBackClipart( unsigned int pageNum, const KPClipartKey & key );
     void setBackView( unsigned int, BackView );
     void setBackType( unsigned int, BackType );
     bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
@@ -134,8 +134,8 @@ public:
     //QString getBackPixFilename( unsigned int );
     KoImageKey getBackPixKey( unsigned int );
     //QDateTime getBackPixLastModified( unsigned int );
-    QString getBackClipFilename( unsigned int );
-    QDateTime getBackClipLastModified( unsigned int );
+    KPClipartKey getBackClipKey( unsigned int );
+    //QDateTime getBackClipLastModified( unsigned int );
     QColor getBackColor1( unsigned int );
     QColor getBackColor2( unsigned int );
     bool getBackUnbalanced( unsigned int );
@@ -393,6 +393,7 @@ protected:
     QString urlIntern;
 
     QValueList<KPImageKey> usedPixmaps;
+    QValueList<KPClipartKey> usedCliparts;
     DCOPObject *dcop;
 
     int saveOnlyPage;
