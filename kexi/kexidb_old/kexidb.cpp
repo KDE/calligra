@@ -19,6 +19,7 @@
  */
 
 #include <kdebug.h>
+#include <qtextcodec.h> //tmp
 
 #include "kexidbinterfacemanager.h"
 #include "kexidbrecordset.h"
@@ -200,11 +201,15 @@ KexiDB::decode(const char *c)
 			return QString::fromUtf8(c);
 
 		case Ascii:
+#if (QT_VERSION >= 310)
 			return QString::fromAscii(c);
-
+#else //(js) tmp
+		    return QString::fromLatin1( c );
+#endif
 		case Local8Bit:
 			return QString::fromLocal8Bit(c);
 	}
+	return QString::null;
 }
 
 const char*
@@ -224,6 +229,7 @@ KexiDB::encode(const QString &v)
 		case Local8Bit:
 			return v.local8Bit();
 	}
+	return v.latin1();
 }
 
 void KexiDB::latestError(KexiDBError **error) {

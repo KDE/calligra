@@ -34,7 +34,7 @@ public:
     KexiProjectIface(  KexiProject *doc_ );
 
 k_dcop:
-    bool dbIsAvaible()const;
+    bool dbIsAvaible(); //(js) const;
 
 private:
     KexiProject *doc;

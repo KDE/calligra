@@ -40,7 +40,7 @@ KexiContextHelp::KexiContextHelp(KexiView *view, KToggleAction *a, QWidget *pare
 	m_action = a;
 }
 
-void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 )
+void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
 {
 	m_widget->setContextHelp(title,text,icon);
 }

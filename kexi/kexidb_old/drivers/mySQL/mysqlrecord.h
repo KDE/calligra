@@ -3,16 +3,16 @@ Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
 Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
 
 This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public
+modify it under the terms of the GNU Library General Public
 License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details.
+Library General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Library General Public License
 along with this program; see the file COPYING.  If not, write to
 the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
@@ -28,12 +28,19 @@ Boston, MA 02111-1307, USA.
 #include <qvaluelist.h>
 #include <qobject.h>
 
+#ifdef Q_WS_WIN
+# include <mysql/config-win.h>
+#endif
 #include <mysql/mysql.h>
-
-#include "mysqlresult.h"
+#ifndef _mysql_h
+typedef struct st_mysql_res MYSQL_RES;
+#endif
+//#include "mysqlresult.h"
 
 #include <kexidbrecordset.h>
 #include <kexidbfield.h>
+
+//#define BOOL bool
 
 class KexiDB;
 class MySqlRecord;
@@ -53,7 +60,7 @@ typedef QMap<QString , QVariant> ContentBuffer;
 typedef QValueVector<QString> FieldName;
 typedef QMap<uint, QVariant> KeyBuffer;
 
-class MySqlRecord : public KexiDBRecordSet, public MySqlResult
+class KEXI_MYSQL_IFACE_EXPORT MySqlRecord : public KexiDBRecordSet, public MySqlResult
 {
 	Q_OBJECT
 

@@ -4,12 +4,13 @@ kexiprojectwizard_la_SOURCES = kexicreateproject.cpp kexicreateprojectpageauth.c
 	kexicreateprojectpagefile.cpp
 
 kexiprojectwizard_la_LDFLAGS = $(all_libraries) -Wnounresolved -module
-kexiprojectwizard_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../../kexiDB/libkexidb.la ../libkexicore.la
+kexiprojectwizard_la_LIBADD = $(LIB_KOFFICEUI) -lkpath -lktexteditor  ../../kexiDB/libkexidb.la ../libkexicore.la
 
 SUBDIRS = .
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
-
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
+	-DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
+	-DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT= -DKEXIPRJWIZARD_EXPORT=
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.

@@ -9,9 +9,9 @@
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of        *
+ *   the License, or (at your option) any later version.                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -45,7 +45,7 @@ typedef QPtrList<KexiCreateProjectPage> PageList;
     the dirtiest class you ever saw
  */
 
-class KexiCreateProject : public KWizard, public KexiCreateProjectIface {
+class KEXIPRJWIZARD_EXPORT KexiCreateProject : public KWizard, public KexiCreateProjectIface {
    Q_OBJECT
 
 	public:
@@ -90,7 +90,7 @@ class KexiCreateProject : public KWizard, public KexiCreateProjectIface {
 		void			accept();
 };
 
-class KexiCreateProjectFactory : public KLibFactory {
+class KEXIPRJWIZARD_EXPORT KexiCreateProjectFactory : public KLibFactory {
         Q_OBJECT
         public:
                 KexiCreateProjectFactory():KLibFactory(){}
@@ -100,7 +100,6 @@ class KexiCreateProjectFactory : public KLibFactory {
                 {
 			return new KexiCreateProject(parent,name,args);
 //                        kdDebug()<<"JWKEXIFACTORY"<<endl;
-			return 0;
                 }
 };
 

@@ -26,7 +26,7 @@
 #include <qdict.h>
 #include <qstringlist.h>
 
-class KexiDBUpdateRecord {
+class KEXIDB_EXPORT KexiDBUpdateRecord {
 public:
 
 	void reset();

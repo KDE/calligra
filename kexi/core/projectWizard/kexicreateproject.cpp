@@ -9,9 +9,9 @@
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of        *
+ *   the License, or (at your option) any later version.                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -43,9 +43,7 @@ KexiCreateProject::KexiCreateProject(QObject *project,const char* name, const QS
 {
 	m_project=KEXIPROJECT(project);
 	setCaption(i18n("Create Project"));
-
 	m_wpic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
-
 	m_pageEngine = new KexiCreateProjectPageEngine(this, m_wpic, "page_engine");
 	addItem(m_pageEngine, i18n("Engine"));
 	m_pageLocation = new KexiCreateProjectPageLocation(this, m_wpic, "page_location");
@@ -203,7 +201,9 @@ KexiCreateProject::requireSection(const QString &section)
 
 QString KexiCreateProject::projectFileName()
 {
+#ifdef __GNUC__
 #warning "TODO"
+#endif
 	return QString("/home/jowenn/kexidb");
 }
 
@@ -211,9 +211,11 @@ KexiCreateProject::~KexiCreateProject()
 {
 }
 
-extern "C" {
+/*extern "C" {
 	void * init_kexiprojectwizard() {return new KexiCreateProjectFactory();}
-}
+}*/
+
+K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KexiCreateProjectFactory );
 
 /*
 K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KGenericFactory<KexiCreateProject>)

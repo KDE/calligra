@@ -26,7 +26,7 @@ KexiProjectIface::KexiProjectIface( KexiProject *doc_ )
    doc = doc_;
 }
 
-bool KexiProjectIface::dbIsAvaible()const
+bool KexiProjectIface::dbIsAvaible()//(js) const
 {
     return doc->dbIsAvaible();
 }

@@ -2,16 +2,16 @@
    Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
+   modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
+   You should have received a copy of the GNU Library General Public License
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
@@ -196,12 +196,21 @@ HistoryEntry::highlight()
 	bool dblquote = false;
 
 	statement = m_statement;
+#if QT_VERSION >= 0x030100 //(js)
 	statement.replace("<", "&lt;");
 	statement.replace(">", "&gt;");
-	statement.replace("\n", "<br>");
+	statement.replace("\r\n", "<br>"); //(js) first win32 specific pair
+	statement.replace("\n", "<br>"); // now single \n
 	statement.replace(" ", "&nbsp;");
 	statement.replace("\t", "&nbsp;&nbsp;&nbsp;");
-
+#else //temporary
+	statement.replace(QRegExp("<"), "&lt;");
+	statement.replace(QRegExp(">"), "&gt;");
+	statement.replace(QRegExp("\r\n"), "<br>"); //(js) first win32 specific pair
+	statement.replace(QRegExp("\n"), "<br>"); // now single \n
+	statement.replace(QRegExp(" "), "&nbsp;");
+	statement.replace(QRegExp("\t"), "&nbsp;&nbsp;&nbsp;");
+#endif
 	// getting quoting...
 	for(int i=0; i < statement.length(); i++)
 	{

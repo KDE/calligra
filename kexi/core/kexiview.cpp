@@ -33,7 +33,6 @@
 #include <kstdguiitem.h>
 #include <kcmdlineargs.h>
 #include <kparts/event.h>
-#include <kprinter.h>
 
 #ifndef KEXI_NO_PRINT
 #include <kprinter.h>

@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-class KexiSettings : public KDialogBase
+class KEXICORE_EXPORT KexiSettings : public KDialogBase
 {
 	Q_OBJECT
 

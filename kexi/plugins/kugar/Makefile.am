@@ -4,12 +4,15 @@ kexihandler_kugar_la_SOURCES = kexikugarlicense.ui kexikugarhandler.cpp kexikuga
 		kexikugarwrapper.cpp kexikugarhandleritem.cpp kexikugardesignerwrapper.cpp kexitempdir.cpp
 		
 kexihandler_kugar_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_kugar_la_LIBADD = ../../core/libkexicore.la
+kexihandler_kugar_la_LIBADD = -lkpath ../../core/libkexicore.la
 
 
 SUBDIRS = . kudesigner
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
+-DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
+-DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT=
+
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.

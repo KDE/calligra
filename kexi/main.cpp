@@ -1,19 +1,25 @@
-/***************************************************************************
+/*
                           main.cpp  -  description
                              -------------------
     begin                : Sun Jun  9 12:15:11 CEST 2002
     copyright            : (C) 2002 by lucijan busch, Joseph Wenninger
     email                : lucijan@gmx.at, jowenn@kde.org
- ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include <koApplication.h>
 #include <kcmdlineargs.h>
@@ -40,5 +46,5 @@ int main(int argc, char *argv[])
 
 	if (!app.start()) return 1;
 
-	app.exec();
+	return app.exec();
 }
