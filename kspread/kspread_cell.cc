@@ -5131,7 +5131,7 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
 void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 {
-    if ( m_strComment )
+    if ( hasProperty( KSpreadFormat::PComment ) /*fixme*/)
     {
         xmlwriter.startElement( "office:annotation" );
         QStringList text = QStringList::split( "\n", *m_strComment );
@@ -5144,9 +5144,133 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
     }
 }
 
-bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles )
+void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 {
-    xmlwriter.startElement( "table:table-cell" );
+    KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
+    if ( hasProperty( KSpreadFormat::PAlign ) || !hasNoFallBackProperties( KSpreadFormat::PAlign ) )
+    {
+        alignX = align( column(), row() );
+        QString value ="start";
+        if ( alignX == KSpreadFormat::Center )
+            value = "center";
+        else if ( alignX == KSpreadFormat::Right )
+            value = "end";
+        else if ( alignX == KSpreadFormat::Left )
+            value = "start";
+        currentCellStyle.addProperty( "fo:text-align", value );
+    }
+
+    if ( hasProperty( KSpreadFormat::PAlignY ) || !hasNoFallBackProperties( KSpreadFormat::PAlignY ) )
+    {
+        KSpreadFormat::AlignY align = alignY( column(), row() );
+        if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
+            currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PIndent ) || !hasNoFallBackProperties( KSpreadFormat::PIndent ) )
+    {
+        double indent = getIndent( column(), row() );
+        if ( indent > 0.0 )
+        {
+            currentCellStyle.addPropertyPt("fo:margin-left", indent );
+            if ( alignX == KSpreadFormat::Undefined )
+                currentCellStyle.addProperty("fo:text-align", "start" );
+        }
+    }
+
+    if ( hasProperty( KSpreadFormat::PAngle ) || !hasNoFallBackProperties( KSpreadFormat::PAngle ) )
+    {
+        currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( column(), row() ) ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PMultiRow ) || !hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
+    {
+        if ( multiRow( column(), row() ) )
+            currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
+    }
+    if ( hasProperty( KSpreadFormat::PVerticalText ) || !hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )
+    {
+        if ( verticalText( column(), row() ) )
+        {
+            currentCellStyle.addProperty( "fo:direction", "ttb" );
+            currentCellStyle.addProperty( "style:rotation-angle", "0" );
+        }
+    }
+    if ( hasProperty( KSpreadFormat::PDontPrintText ) || !hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) )
+    {
+        if ( !getDontprintText( column(), row() ) )
+        {
+            currentCellStyle.addProperty( "style:print-content", "false");
+        }
+    }
+#if 0
+    if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
+        cs.left  = leftBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
+        cs.right = rightBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
+        cs.top  = topBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
+        cs.bottom  = bottomBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+        cs.notProtected = notProtected( col, row );
+
+    if ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+        cs.hideAll = isHideAll( col, row );
+
+    if ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+        cs.hideFormula = isHideFormula( col, row );
+#endif
+}
+
+
+bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated )
+{
+    if ( !isObscuringForced() )
+        xmlwriter.startElement( "table:table-cell" );
+    else
+        xmlwriter.startElement( "table:covered-table-cell" );
+#if 0
+    //add font style
+    QFont font;
+    KSpreadValue const value( cell->value() );
+    if ( !cell->isDefault() )
+    {
+      font = cell->textFont( i, row );
+      m_styles.addFont( font );
+
+      if ( cell->hasProperty( KSpreadFormat::PComment ) )
+        hasComment = true;
+    }
+#endif
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL /*Name?????*/ );
+    saveOasisCellStyle( currentCellStyle );
+    xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
+    // group empty cells with the same style
+    if ( isEmpty() && !hasProperty( KSpreadFormat::PComment ) && !isObscuringForced() && !isForceExtraCells() )
+    {
+      int j = column + 1;
+      while ( j <= maxCols )
+      {
+        KSpreadCell *nextCell = m_pTable->cellAt( j, row );
+        KoGenStyle nextCellStyle( KSpreadDoc::STYLE_CELL /*Name?????*/ );
+        nextCell->saveOasisCellStyle( nextCellStyle );
+
+        if ( nextCell->isEmpty() && !nextCell->hasProperty( KSpreadFormat::PComment )
+             && ( nextCellStyle==currentCellStyle ) && !isObscuringForced() && !isForceExtraCells() )
+          ++repeated;
+        else
+          break;
+        ++j;
+      }
+      if ( repeated > 1 )
+        xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
+    }
+
     saveOasisAnnotation( xmlwriter );
     if ( d->value.isBoolean() )
     {

@@ -629,6 +629,12 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:row-properties" );
     }
 
+    styles = mainStyles.styles( STYLE_CELL );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+    }
+
     contentWriter.endElement(); // office:automatic-styles
 
 

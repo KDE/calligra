@@ -7049,7 +7049,14 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
 
 void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols )
 {
-    //todo
+    int i = 1;
+    while ( i <= maxCols )
+    {
+        int repeated = 1;
+        KSpreadCell* cell = cellAt( i, row );
+        cell->saveOasis( xmlWriter, mainStyles, row, i,  maxCols, repeated );
+        i += repeated;
+    }
 }
 
 bool KSpreadSheet::loadXML( const QDomElement& table )

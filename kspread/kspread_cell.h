@@ -43,7 +43,7 @@ class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
 class KoGenStyles;
-
+class KoGenStyle;
 class KSParseNode;
 
 
@@ -246,7 +246,8 @@ public:
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
-    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles);
+    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated );
+    void saveOasisCellStyle( KoGenStyle &currentCellStyle );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
