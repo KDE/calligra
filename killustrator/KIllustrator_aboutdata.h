@@ -41,7 +41,7 @@ KAboutData * newKIllustratorAboutData()
 					     "http://www.koffice.org/killustrator/");
   aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
   aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
-  aboutData->addAuthor("Alexander Neundrof", 0, "neundrof@kde.org");
+  aboutData->addAuthor("Alexander Neundorf", 0, "neundorf@kde.org");
   aboutData->addAuthor("Rob Buis", 0, "rwlbuis@wanadoo.nl");
   return aboutData;
 }
