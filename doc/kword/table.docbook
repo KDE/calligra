@@ -67,20 +67,20 @@ useful for laying out your table.  You cannot edit
 your table layout here.</para>
 
 <para>The left half of the dialog box consists of two combo boxes,
-and two number selection boxes.</para>
+and two spin boxes.</para>
 
 <para>The spin box labeled <guilabel>Number of
-Rows:</guilabel>, allows you to specify from 1 to 128 rows in the
+rows:</guilabel>, allows you to specify from 1 to 128 rows in the
 table.</para>
 
 <para>The spin box labeled <guilabel>Number of
-Columns:</guilabel>, allows you to specify from 1 to 128 columns in the
+columns:</guilabel>, allows you to specify from 1 to 128 columns in the
 table.</para>
 
 <para>While adjusting either of these two options, the preview box
 adjusts to your new settings.</para>
 
-<para>The combo box labeled <guilabel>Cell Height</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell heights</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -102,7 +102,7 @@ size.</para>
 <varlistentry>
 <term><guilabel>Manual</guilabel></term>
 <listitem>
-<para>When selected, calculate the cell height by dividing the user
+<para>When selected, &kword; will calculate the cell height by dividing the user
 specified size of the table by the number of rows.</para>
 <para>If this is selected, and you create a table with 3 rows and
 <quote>draw</quote> the table 3 inches tall, each cell will be 1 inch in
@@ -177,7 +177,7 @@ or by using the keyboard (use the arrow keys to move up, down, left or right one
 <para>To delete a table in &kword;:</para>
 
 <para>Place the mouse pointer over the frame of any cell of the table you want to
-delete. Hold down the &Ctrl; key and click once with the &LMB;. </para>
+delete and click once with the &LMB;. </para>
 <warning>
 <para>Be sure you have selected the correct table before continuing.
 &kword; will not ask for confirmation.</para>
@@ -286,7 +286,7 @@ box limits you to the columns currently in the table.</para>
 
 <para>To delete a row from a table:</para>
 
-<para><link linkend="table-format-selrow">Select the row(s)</link> you want to delete  Then:</para>
+<para>Click once with the &LMB; in any cell in the row you want to delete  Then:</para>
 
 <itemizedlist>
 <listitem>
@@ -307,7 +307,7 @@ toolbar.</para>
 continuing.</para>
 <para>&kword; will delete any data contained within the selected rows.</para>
 </warning>
-<para>Click <guibutton>OK</guibutton> to delete the row, or click <guibutton>Cancel</guibutton> to not
+<para>Click <guibutton>Delete</guibutton> to delete the row, or click <guibutton>Cancel</guibutton> to not
 delete any rows.</para>
 
 </sect2>
@@ -318,7 +318,7 @@ delete any rows.</para>
 
 <para>To delete a column from a table:</para>
 
-<para><link linkend="table-format-selcol">Select the columns(s)</link> you want to delete  Then:</para>
+<para>Click once with the &LMB; in any cell in the column you want to delete  Then:</para>
 
 <itemizedlist>
 <listitem>
@@ -342,7 +342,7 @@ continuing.</para>
 <para>&kword; will delete any data contained within these columns.</para>
 </warning>
 
-<para>Click <guibutton>OK</guibutton> to delete the column(s), or click
+<para>Click <guibutton>Delete</guibutton> to delete the column(s), or click
 <guibutton>Cancel</guibutton> to not delete any columns.</para>
 
 </sect2>
@@ -355,7 +355,7 @@ continuing.</para>
 <link linkend="table-resize-column-mouse">the mouse</link> or <link linkend="table-resize-column-dialog">the keyboard</link>.</para>
 <sect3 id="table-resize-column-mouse"><title>Using the mouse</title>
 <para>First select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
-<para>The cell is now surrounded by 8 black boxes.  Place the mouse over the box in the middle of the
+<para>The cell is now surrounded by 8 colored boxes.  Place the mouse over the box in the middle of the
 right vertical border of the cell.  The mouse pointer changes to a double-headed arrow.  Click on the box and drag the right edge of the
 cell to the desired width.  When you release the &LMB;, the entire column will assume the width of this cell.</para>
 </sect3>
@@ -365,8 +365,8 @@ cell to the desired width.  When you release the &LMB;, the entire column will a
 <para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
 <guimenuitem>Resize
 Column...</guimenuitem></menuchoice> from the menubar.</para>
-<para>A dialog box will appear.  In the spin box labeled <guilabel>Column</guilabel>, you can chose a different column to set.  
-In the text box labeled <guilabel>Width</guilabel>, enter the desired width of the column.</para>
+<para>A dialog box will appear.  In the spin box labeled <guilabel>Column:</guilabel>, you can chose a different column to set.  
+In the text box labeled <guilabel>Width:</guilabel>, enter the desired width of the column.</para>
 <para>Click <guibutton>OK</guibutton> to change the width, or click <guibutton>Cancel</guibutton> to leave the column 
 width unchanged.</para>
 </sect3>
@@ -503,12 +503,12 @@ from the menubar. A dialog will appear.</para>
 </screenshot>
 
 <para>You can use this dialog to change the number of rows in your table by using the spin box labeled
-<guilabel>Number of Rows:</guilabel>.</para>
+<guilabel>Number of rows:</guilabel>.</para>
 <warning><para>If you reduce the number of rows using this dialog box, &kword; will delete the bottom row(s)
 <emphasis>including the data within the rows</emphasis>.</para><para>Be sure you do not have any data in these rows.
 that you need to preserve.</para></warning>
 <para>You can use this dialog to change the number of columns in your table by using the spin box labeled
-<guilabel>Number of Columns:</guilabel>.</para>
+<guilabel>Number of columns:</guilabel>.</para>
 <warning><para>If you reduce the number of columns using this dialog box, &kword; will delete the right most column(s)
 <emphasis>including the data within the columns</emphasis>.</para><para>Be sure you do not have any data in these columns
 that you need to preserve.</para></warning>
@@ -558,12 +558,12 @@ gives an example of what a table template will look like when applied to your ta
 <variablelist>
 <varlistentry>
 <term><guilabel>First row</guilabel></term>
-<listitem><para>This check box will toggle formatting of all cells in the first row.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the top row.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Last row</guilabel></term>
-<listitem><para>This check box will toggle formatting of all cells in the last row.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the bottom row.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -574,12 +574,12 @@ by any of the other four options.</para></listitem>
 
 <varlistentry>
 <term><guilabel>First column</guilabel></term>
-<listitem><para>This check box will toggle formatting of all cells in the first column.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the left column.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Last column</guilabel></term>
-<listitem><para>This check box will toggle formatting of all cells in the last column.</para></listitem>
+<listitem><para>This check box will toggle formatting of all cells in the right column.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -633,7 +633,7 @@ from the menubar. A dialog box will appear.</para>
 
 <para>All of the currently defined table styles are listed in the listbox on the left.  The currently selected table style is highlighted, and
 the name of the currently selected table style is listed in the text box labeled <guilabel>Name</guilabel>. (In this example,
-the currently selected table style is <emphasis>Plain</emphasis>.)</para>
+the currently selected table style is <emphasis>Header 1</emphasis>.)</para>
 <para>Select the name of the table style you want to change by clicking on the name of the table styles in the listbox on the left.</para>
 
 <para>There is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
