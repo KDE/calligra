@@ -41,6 +41,8 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_sheetprint.h>
+#include <kspread_style.h>
+#include <kspread_style_manager.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
 
@@ -207,7 +209,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
   double height = -1.0;
   bool insertPageBreak = false;
-  KSpreadFormat layout( table );
+  KSpreadFormat layout( table, table->doc()->styleManager()->defaultStyle() );
 
   while( !node.isNull() )
   {
@@ -902,7 +904,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     double width   = POINT_TO_MM( colWidth );
     bool collapsed = ( e.attribute( "table:visibility" ) == "collapse" );
     bool insertPageBreak = false;
-    KSpreadFormat styleLayout( table );
+    KSpreadFormat styleLayout( table, table->doc()->styleManager()->defaultStyle() );
 
     kdDebug() << "Check table:number-columns-repeated" << endl;
     if ( e.hasAttribute( "table:number-columns-repeated" ) )
@@ -930,7 +932,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
         if ( st && !st->isNull() )
         {
-          KSpreadFormat * layout = new KSpreadFormat( 0 );
+          KSpreadFormat * layout = new KSpreadFormat( 0, m_doc->styleManager()->defaultStyle() );
 
           readInStyle( layout, *st );
 
@@ -2107,7 +2109,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     if ( !e.isNull() )
     {
-      KSpreadFormat * layout = new KSpreadFormat( 0 );
+      KSpreadFormat * layout = new KSpreadFormat( 0, m_doc->styleManager()->defaultStyle() );
 
       readInStyle( layout, e );
       kdDebug() << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
@@ -2133,7 +2135,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       continue;
     }
 
-    KSpreadFormat * layout = new KSpreadFormat( 0 );
+    KSpreadFormat * layout = new KSpreadFormat( 0, m_doc->styleManager()->defaultStyle() );
     readInStyle( layout, defs );
     kdDebug() << "Default style " << defs.attribute( "style:name" ) << " loaded " << endl;
 

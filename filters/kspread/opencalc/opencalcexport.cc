@@ -44,6 +44,8 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_sheetprint.h>
+#include <kspread_style.h>
+#include <kspread_style_manager.h>
 #include <kspread_util.h>
 
 typedef QValueList<Reference> AreaList;
@@ -719,7 +721,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   KoDocument * document = m_chain->inputDocument();
   KSpreadDoc * ksdoc    = static_cast<KSpreadDoc *>(document);
 
-  KSpreadFormat * format = new KSpreadFormat( 0 );
+  KSpreadFormat * format = new KSpreadFormat( 0, ksdoc->styleManager()->defaultStyle() );
   KLocale const * const locale = ksdoc->locale();
   QString language;
   QString country;

@@ -22,7 +22,11 @@
 #include <koGlobal.h>
 
 #include <kspread_cell.h>
+#include <kspread_doc.h>
 #include <kspread_format.h>
+#include <kspread_sheet.h>
+#include <kspread_style.h>
+#include <kspread_style_manager.h>
 
 #include <qdom.h>
 
@@ -444,7 +448,7 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
   int col = cell->column();
   int row = cell->row();
 
-  KSpreadFormat * f = new KSpreadFormat( 0 );
+  KSpreadFormat * f = new KSpreadFormat( 0, cell->table()->doc()->styleManager()->defaultStyle() );
 
   QFont font = cell->textFont( col, row );
   if ( font != f->font() )
