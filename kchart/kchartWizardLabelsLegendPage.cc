@@ -48,9 +48,8 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     titlecolor=new KColorButton(tmpQGroupBox);
     grid2->addWidget(titlecolor,0,3);
-    // PENDING(kalle) Put back in
-    //   title_color=_chart->params()->TitleColor;
-    //   titlecolor->setColor( title_color );
+    title_color=_chart->params()->headerFooterColor( KDChartParams::HdFtPosHeader );
+    titlecolor->setColor( title_color );
 
 
     QLabel* xlabelLA = new QLabel( i18n( "X-Title:" ), tmpQGroupBox );
@@ -260,9 +259,10 @@ void KChartWizardLabelsLegendPage::apply(  )
     //    _chart->params()->ytitle= _ylabelED->text();
     //    _chart->params()->XTitleColor=x_color;
     //    _chart->params()->YTitleColor=y_color;
-    //    _chart->params()->TitleColor=title_color;
     //    _chart->params()->YTitle2Color=y_color2;
     //    _chart->params()->ytitle2=_ylabel2ED->text();
+
+    _chart->params()->setHeaderFooterColor( KDChartParams::HdFtPosHeader,title_color);
     _chart->params()->setHeader1Font(title);
     _chart->params()->setLegendTitleText(_legendTitleText->text());
     _chart->params()->setLegendTitleTextColor(_legendTitleColor);
