@@ -111,26 +111,29 @@ bool Cursor::open()
 		if (!close())
 			return false;
 	}
-	QString statement;
 	if (!m_rawStatement.isEmpty())
-		statement = m_rawStatement;
+		m_conn->m_sql = m_rawStatement;
 	else {
 		if (!m_query) {
 			KexiDBDbg << "Cursor::open(): no query statement (or schema) defined!" << endl;
+			setError(ERR_SQL_EXECUTION_ERROR, i18n("No query statement or schema defined."));
 			return false;
 		}
-		statement = m_conn->selectStatement( *m_query );
-		if (statement.isEmpty()) {
+		m_conn->m_sql = m_conn->selectStatement( *m_query );
+		if (m_conn->m_sql.isEmpty()) {
 			KexiDBDbg << "Cursor::open(): empty statement!" << endl;
+			setError(ERR_SQL_EXECUTION_ERROR, i18n("Query statement is empty."));
 			return false;
 		}
 	}
-	m_opened = drv_open(statement);
+	m_opened = drv_open(m_conn->m_sql);
 //	m_beforeFirst = true;
 	m_afterLast = false; //we are not @ the end
 	m_at = 0; //we are before 1st rec
-	if (!m_opened)
+	if (!m_opened) {
+		setError(ERR_SQL_EXECUTION_ERROR, i18n("Error opening database cursor."));
 		return false;
+	}
 	m_validRecord = false;
 
 //luci:	WHAT_EXACTLY_SHOULD_THAT_BE?

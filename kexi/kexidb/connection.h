@@ -372,14 +372,23 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool querySingleString(const QString& sql, QString &value);
 
 		/*! Convenience function: executes \a sql query and stores first record's first field's number value 
-		 inside \a value. \sa querySingleString(). */
+		 inside \a value. \sa querySingleString(). 
+		 Note: "LIMIT 1" is appended to \a sql statement */
 		bool querySingleNumber(const QString& sql, int &number);
 
-		/*! Executes \a sql query and returns true if there is at least one record returned.
+		/*! \return true if there is at least one record returned in \a sql query.
 		 Does not fetch any records. \a success will be set to false 
 		 on query execution errors (true otherwise), so you can see a difference between 
-		 "no results" and "query execution error" states. */
+		 "no results" and "query execution error" states. 
+		 Note: real executed query is: "SELECT 1 FROM (\a sql) LIMIT 1" */
 		bool resultExists(const QString& sql, bool &success);
+
+//TODO perhaps use Q_ULLONG here?
+		/*! \return number of records in \a sql query.
+		 Does not fetch any records. -1 is returned on query execution errors (>0 otherwise).
+		 Note: real executed query is: "SELECT COUNT() FROM (\a sql) LIMIT 1" 
+		 (using querySingleNumber()) */
+		int resultCount(const QString& sql);
 
 		//PROTOTYPE:
 		#define A , const QVariant&

@@ -179,13 +179,14 @@ void SQLiteCursor::drv_getNextRecord()
 		m_result = FetchError;
 	
 	//debug
+/*
 	if (m_result == FetchOK && d->curr_coldata) {
 		for (uint i=0;i<m_fieldCount;i++) {
 			KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
 			<< " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
 		}
 //		KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched"<<endl;
-	}
+	}*/
 }
 
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()

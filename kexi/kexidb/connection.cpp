@@ -1577,7 +1577,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = sql;
+	m_sql = sql + " LIMIT 1"; // is this safe?
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
@@ -1594,7 +1594,7 @@ bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
 bool Connection::querySingleString(const QString& sql, QString &value)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = sql;
+	m_sql = sql + " LIMIT 1"; // is this safe?;
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
@@ -1621,7 +1621,7 @@ bool Connection::querySingleNumber(const QString& sql, int &number)
 bool Connection::resultExists(const QString& sql, bool &success)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = sql;
+	m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		success = false;
@@ -1634,6 +1634,14 @@ bool Connection::resultExists(const QString& sql, bool &success)
 		return false;
 	}
 	return deleteCursor(cursor);
+}
+
+int Connection::resultCount(const QString& sql)
+{
+	int count = -1;
+	m_sql = QString("SELECT COUNT() FROM (") + sql + ")";
+	querySingleNumber(m_sql, count);
+	return count;
 }
 
 KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )//KexiDB::Cursor *table_cur )
