@@ -70,6 +70,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 		 reparent(w,QPoint(0,0),true);
 		w->setWidget(this);
 	      	m_view->mainWindow()->moveDockWindow(w, DockLeft);
+		w->setCaption(this->caption());
 		return;
 	}
 	reparent(m_view->workspaceWidget(),QPoint(0,0),true);

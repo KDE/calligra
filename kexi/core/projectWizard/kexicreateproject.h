@@ -21,6 +21,8 @@
 #include <kwizard.h>
 #include <qpixmap.h>
 #include <qptrlist.h>
+#include <kexicreateprojectiface.h>
+#include <qstringlist.h>
 
 /**
   *@author lucijan busch
@@ -41,11 +43,11 @@ typedef QPtrList<KexiCreateProjectPage> PageList;
     the dirtiest class you ever saw
  */
 
-class KexiCreateProject : public KWizard  {
+class KexiCreateProject : public KWizard, public KexiCreateProjectIface {
    Q_OBJECT
 
 	public:
-		KexiCreateProject(KexiProject *project, const char *name=0);
+		KexiCreateProject(QObject *project, const char *name=0, const QStringList & = QStringList());
 		~KexiCreateProject();
 
 		/*! adds the page to the pagelist
@@ -54,7 +56,7 @@ class KexiCreateProject : public KWizard  {
 		void			registerPage(KexiCreateProjectPage *page);
 
 		KexiProject *project()const ;
-
+		int execute() {return exec();}
 	protected:
 		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
 		/*! adds pages, needed for a section

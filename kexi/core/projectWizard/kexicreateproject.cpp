@@ -19,6 +19,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kwizard.h>
+#include <qstringlist.h>
 
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpageengine.h"
@@ -26,15 +27,18 @@
 #include "kexicreateprojectpageauth.h"
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
+#include <kexiprojecthandler.h>
+
+#include <kgenericfactory.h>
 
 //#include "kexitabbrowser.h"
-//#include "kexicreateproject.h"
+#include "kexicreateproject.h"
 //#include "kexiview.h"
 //#include "kexiproject.h"
 
-KexiCreateProject::KexiCreateProject(KexiProject *project,const char* name) : KWizard(0,name,true)
+KexiCreateProject::KexiCreateProject(QObject *project,const char* name, const QStringList &) : KWizard(0,name,true), KexiCreateProjectIface()
 {
-	m_project=project;
+	m_project=KEXIPROJECT(project);
 	setCaption(i18n("Create Project"));
 
 	m_wpic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
@@ -182,5 +186,8 @@ KexiCreateProject::requireSection(const QString &section)
 KexiCreateProject::~KexiCreateProject()
 {
 }
+
+
+K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KGenericFactory<KexiCreateProject> )
 
 #include "kexicreateproject.moc"

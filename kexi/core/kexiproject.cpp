@@ -22,7 +22,7 @@
 #include "kexiproject.moc"
 #include "kexi_factory.h"
 #include "kexiview.h"
-#include "kexicreateproject.h"
+#include "kexicreateprojectiface.h"
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
 
@@ -90,9 +90,10 @@ bool KexiProject::initDoc()
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
-		KexiCreateProject *newDlg = new KexiCreateProject(this,0);
-		ok=(newDlg->exec()==QDialog::Accepted);
+		QWidget *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QWidget>( "kexiprojectwizard", this );
+		ok=(static_cast<KexiCreateProjectIface*>(newDlg->qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
 		delete newDlg;
+		ok=false;
 	} else if (ret==KoTemplateChooseDia::File) {
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;

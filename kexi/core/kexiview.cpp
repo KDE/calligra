@@ -47,7 +47,7 @@
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
-#include "kexicreateproject.h"
+//#include "kexicreateproject.h"
 #include "kexiprojectproperties.h"
 #include "kexiproject.h"
 #include "KexiViewIface.h"
