@@ -407,8 +407,24 @@ the original cell will be relocated to the rightmost cell.</para>
 <title>Ungroup a Table</title>
 
 <para>If you select <menuchoice> <guimenu>Table</guimenu>
-<guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table 
+<guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table
 into an individual frame.  You can then move these frames around independently on the page.</para>
+
+</sect2>
+
+<sect2 id="table-protect">
+<title>Protecting a cell in a table.</title>
+
+<para>You can protect any or all cells in a table from accidental modification or deletion.</para>
+<para>Simply select the cell(s) you want to protect, then:</para>
+<para>Select <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Cells</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice>
+from the menubar or click on the cell border once with the &RMB; and select 
+<menuchoice> <guimenuitem>Cells</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
+from the subment.</para>
+<para>You will not be able to change the contents or formatting of that cell.</para>
+
+<note><para>To disable the protection, simply repeat the steps above, and the cells will no longer be protected.</para></note>
 
 </sect2>
 

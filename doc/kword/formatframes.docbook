@@ -68,7 +68,7 @@ tabs labeled <link linkend="format-frame-options">Options</link>,
 </mediaobject>
 </screenshot>
 
-<para>The tab labeled <guilabel>Options</guilabel> is used to determine how 
+<para>The tab labeled <guilabel>Options</guilabel> is used to determine how
 &kword; behaves when there is too much text
 to fit within the current bounds of the
 frame.</para>
@@ -79,18 +79,17 @@ frame.</para>
 <varlistentry>
 <term><guilabel>Create a new
 page</guilabel></term>
-<listitem><para>When a frame set becomes full, &kword; automatically
+<listitem><para>When a frame becomes full, &kword; automatically
 creates a new page. On this new page, it creates a new frame, of the
-same size and position.  It also sets the frame so that your text
-automatically flows into the new frame</para></listitem>
+same size and position.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Resize last
 frame</guilabel></term>
-<listitem><para>When a frame set becomes full, &kword;
+<listitem><para>When a frame becomes full, &kword;
 automatically extends the bottom border of the text frame to accommodate
-the new text.  It will continue to expand as new text is added.</para></listitem>
+the new text.  It will continue to expand as new text is added. Conversely, it will shrink again if text is removed from the frame.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -119,7 +118,7 @@ frame set.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Place a copy of this frame</guilabel></term>
-<listitem><para>Creates a new page, with a new frame the same size, shape and position on the page.  Additionally, &kword; 
+<listitem><para>Creates a new page, with a new frame the same size, shape and position on the page.  Additionally, &kword;
 copies the contents of the frame from the previous page.</para>
 <tip><para>This is useful for title frames, headers and footer frames.  Each page will have an automatic copy of the information
 on every new page.</para></tip></listitem>
@@ -127,11 +126,6 @@ on every new page.</para></tip></listitem>
 </variablelist>
 
 
-<note>
-<para>Remember these options only apply to a full frame set.  If there is
-already another window for text to flow into, the text will flow into
-the next frame in the frame set as you have previously determined.</para>
-</note>
 
 <para>If you place a mark in the checkbox labled <guilabel>Changes will be applied to all
 frames in the frameset</guilabel>, then any changes made in the frame properties dialog box
@@ -177,8 +171,7 @@ possible choices.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Run around the bounding rectangle of other
-frames</guilabel></term>
+<term><guilabel>Text will run around the frame</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will wrap the text
 of this frame around other overlapping frames.</para>
@@ -186,15 +179,18 @@ of this frame around other overlapping frames.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Run through this frames</guilabel></term>
+<term><guilabel>Text will run through this frames</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will ignore all
 other frames when it displays the text in this frame.</para>
+<para>If this option is selected, you can determine which side the text runs around in the section labeled 
+<guilabel>Run Around Side</guilabel>.  Simply choose <guilabel>Left</guilabel>, <guilabel>Right</guilabel>,
+or <guilabel>Biggest side</guilabel>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Don't run around this frames</guilabel></term>
+<term><guilabel>Text will not run around the frame</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will not wrap any
 text around the edges of other frames, but instead, to skip down below

@@ -59,7 +59,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-21-05</date>
+<date>2002-02-06</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -556,13 +556,6 @@ onto any website.</para>
 <para>Templates can only be removed using the template creation dialog. For instructions, click
 <link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
-
-<sect1 id="qd-reorder">
-<title>How do I re-order the frames in a frameset</title>
-<para></para>
-</sect1>
-
-
 
 </chapter>
 

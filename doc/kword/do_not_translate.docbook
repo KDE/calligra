@@ -48,23 +48,23 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry><entry>Finding and Replacing Text </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Spell Checking </entry><entry>Checked (May 21, 2002)</entry></row>
-<row><entry></entry><entry>Thesaurus </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Thesaurus </entry><entry>Checked (June 2, 2002)</entry></row>
 <row><entry></entry><entry>Autocorrection </entry><entry>Checked (May 21, 2002)</entry></row>
-<row><entry></entry><entry>Autoformat</entry><entry>Not written.</entry></row>
-<row><entry></entry><entry>Autocompletion</entry><entry>Not written.</entry></row>
+<row><entry></entry><entry>Autoformat</entry><entry>Checked (June 2, 2002)</entry></row>
+<row><entry></entry><entry>Autocompletion</entry><entry>Checked (June 2, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Document Layout </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Formatting the Page </entry><entry>Checked (May 26, 2002)</entry></row>
-<row><entry></entry><entry>Working with Frames </entry><entry><para>Checked (May 26, 2002)</para><para>Ensure bring to front and put back frames works the way documented ;-></para></entry></row>
-<row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry><para>Checked (May 26, 2002)</para><para>Needs a new screenshot</para></entry></row>
+<row><entry></entry><entry>Working with Frames </entry><entry><para>Checked (May 26, 2002)</para></entry></row>
+<row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry><para>Checked (May 26, 2002)</para></entry></row>
 <row><entry></entry><entry>Formatting paragraph </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Formatting Characters </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Styles </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Columns </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Lists </entry><entry>Checked (May 26, 2002)</entry></row>
-<row><entry></entry><entry>Tables </entry><entry><para>Checked (May 26, 2002)</para><para>Table protected cells.</para></entry></row>
+<row><entry></entry><entry>Tables </entry><entry><para>Checked (May 26, 2002)</para><para>Resize Column.</para></entry></row>
 <row><entry></entry><entry>Headers/Footers </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry></row>
@@ -92,8 +92,6 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>How do I get the pages numbers on the outsides of the pages ...</entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry><entry>How do I create a .pdf file to post on the web? </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry><entry>How do I remove template categories from the open dialog. </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>How do I re-order the frames in a frameset. </entry><entry>Not Written</entry></row>
-
 
 <row><entry></entry></row>
 

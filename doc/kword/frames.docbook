@@ -26,16 +26,16 @@ area where text (or other data), can be placed.</para>
 <varlistentry>
 <term>Frameset</term>
 <listitem>
-<para>A frame set is a group of frames.  Each frame in the Frameset has a
-position within the Frameset</para>
+<para>A frame set is a group of frames.  Each frame in the frameset has a
+position within the frameset</para>
 
-<para>The position is determined when the frames are created.  The first
-frame created is Frame #1, the second is Frame #2, &etc;</para>
+<para>The position is determined by their placement on the page.  The frame which begins closest 
+to the top of the page is Frame #1.  The next frame that is closest to the top of the page is Frame #2, etc.</para>
 
 <para>All text flows from one frame to another <emphasis>within a
 frame set, and only within a frame set.</emphasis> Text flows from frame
 to frame within the frame set <emphasis>according to the position of each
-frame</emphasis></para>
+frame</emphasis> on the page (and therefore the order of the frames within the frameset).</para>
 
 <para>As an example:  If we have a frame set that consists of three
 frames (#1, #2, and #3).</para>
@@ -93,18 +93,10 @@ format="PNG"/></imageobject></inlinemediaobject> on the tool-bar.</para>
 <para>Whatever method you choose, &kword; responds by changing the cursor
 to a set of cross hairs.</para>
 
-<para>Using the mouse, place the cursor at one of the corners of your
-new text frame. (Any corner will work)</para>
+<para>Using the mouse, place the crosshairs at the desired position of the upper left corner of the
+new text frame.</para>
 
-<para>Now click and hold with the <mousebutton>left</mousebutton> mouse
-button.</para>
-
-<para>Drag the mouse towards the opposite corner of the rectangle.  As
-you drag the mouse, you will see a box drawn.  This box represents the
-boundaries of your new text frame.</para>
-
-<para>When you are satisfied with the size and shape of the new text
-frame, release the mouse button.  </para>
+<para>Click once with the &LMB;.</para>
 
 <para>A dialog box appears.</para>
 
@@ -128,22 +120,22 @@ document which currently has two framesets (called <guilabel>Frameset
 framesets.</term>
 
 <listitem><para>To do this, simply select the frameset you want the new frame to belong to.
- (Either <guilabel>Frameset 1</guilabel>, or
-<guilabel>Frameset 2</guilabel> in the example.)</para>
+ (Either <guilabel>Text Frameset 1</guilabel>, or
+<guilabel>Text Frameset 2</guilabel> in the example.)</para>
 
 <para>When this text frame is created, the new text frame will become
-the last frame in the selected frameset.</para>
+a member of the selected frameset.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry><term>Create a new frameset.  </term>
 
 <listitem><para>If you want this to be a new frame set, you should enter a descriptive
-name for your new frame set.  (A name which will tell you what you might
+name for your new frameset.  (A name which will tell you what you might
 find in that frame set).  This name should be entered in the text box
 labeled <guilabel>Name of new Frameset</guilabel>.</para>
 <para>This newly added frame will be the
-first (and currently only) frame in the frameset.</para>
+only frame in the frameset.</para>
 </listitem></varlistentry>
 </variablelist>
 
@@ -156,6 +148,19 @@ created.</para>
 
 <para>If you click <guibutton>Cancel</guibutton>, the new frame will not
 be created, and you will be returned to editing your document.</para>
+
+<tip>
+<para>By default, &kword; creates a small frame with the upper left corner of the 
+frame located on the page where you clicked with the mouse cursor.  After the frame is 
+created, you are expected to reshape the frame to fit your needs.</para>
+
+<para>If you would prefer to establish the shape of your frame <emphasis>while you are
+creating</emphasis> the frame, simply click the &LMB; where you want the upper left corner to 
+be placed and hold the button down.  Drag the mouse towards the opposite corner of the frame to establish the 
+boundries of the new frame.  As
+you drag the mouse, you will see a box drawn.  This box represents the
+boundaries of your new text frame.  When you are satisfied with the size and shape of the new text
+frame, release the mouse button.  </para></tip>
 
 </sect2>
 
@@ -181,7 +186,7 @@ to delete. (Or holding down the &Ctrl; key and clicking inside the frame with th
 </listitem>
 
 <listitem>
-<para>selecting <menuchoice>
+<para>Selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Delete
 Frame</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
@@ -198,7 +203,7 @@ Frame</guimenuitem>.</para>
 <warning><para>If you are trying to delete the last frame in a frame set, &kword;
 will ask you if you want to delete the current text frame.  If you click
 <guibutton>Delete</guibutton>, the frame, all frames connected to it,
-and the data within these frames (if there is any), will be deleted.</para>
+and the data within these frames, will be deleted.</para>
 <para>If
 you click <guibutton>Cancel</guibutton>, the frame will not be
 deleted.</para></warning>
@@ -304,35 +309,54 @@ labeled <guilabel>Connect Text Frames</guilabel>.</para>
 frameset.</para>
 
 <para>When you click <guibutton>OK</guibutton>, the currently selected frame will be added
-<emphasis>to the end</emphasis> of that frameset.</para>
+to that frameset.</para>
 
 </sect2>
 
 <sect2 id="raise-frame"><title>Raise and Lower Frames</title>
 <para>When two frames occupy the same place on a page, they must overlap.  
 When they overlap, one frame sits <emphasis>above</emphasis> the other frame.</para>
-<para>You can raise and lower the frames to change which frame sits above the other frames by using two commands.</para>
+<para>You can raise and lower the frames to change which frame sits above the other frames by using four commands.</para>
 
 <variablelist>
 <varlistentry>
-<term>Raise frame</term>
-<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &RMB;.</para>
+<term>Bring to Front</term>
+<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame on top of <emphasis>all other frames</emphasis> that it overlaps.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Raise Frame</term>
+<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Raise Frame</guimenuitem>
 </menuchoice> from the menubar.</para>
-<para>This will place the frame on top of <emphasis>all other frames</emphasis> that it overlaps.</para>
+<para>This will move the frame up <emphasis>one level</emphasis> of any frame that it overlaps.</para>
 <tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo> is the
 same as selecting <guilabel>Raise Frame</guilabel> from the menubar.</para></tip>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>Lower frame</term>
-<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &RMB;.</para>
+<term>Send to Back</term>
+<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Send to back</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame below <emphasis>all other frames</emphasis> that it overlaps.</para>
+</listitem></varlistentry>
+
+<varlistentry>
+<term>Lower Frame</term>
+<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Lower Frame</guimenuitem>
 </menuchoice> from the menubar.</para>
-<para>This will place the frame below <emphasis>all other frames</emphasis> that it overlaps.</para>
+<para>This will move the frame down <emphasis>one level</emphasis> of any frame that it overlaps.</para>
 <tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo> is the
 same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip>
 </listitem></varlistentry>
