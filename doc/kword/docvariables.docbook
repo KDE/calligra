@@ -2,7 +2,7 @@
 <para>A variable is a simple way of allowing &kword; to modify the document in <emphasis>very</emphasis>
 specific ways to reflect the changing nature of the document or report.</para>
 <para>A variable can be a number (such as a page number, the total number of pages in a document, etc), 
-a selection of words (clients name, product name, the documents filename, etc), 
+a selection of words (clients name, product name, the documents filename, etc),
 a date, a time, or nearly anything you desire.</para>
 <para>Once the variable is defined, a <emphasis>placeholder</emphasis> is inserted in the document.
 &kword; will replace this placeholder with the value of that variable each time the placeholder is used.</para>
@@ -28,7 +28,7 @@ fixed as long as the document is around), or the date and time may serve as
 a notice of the last date of modification (which would change with each passing day).</para>
 <para>&kword; allows for both fixed and variable date and time variables in the document.</para>
 <sect3 id="insert-date"><title>Insert Date</title>
-<para>To insert the date in the document, simply place the cursor in the text box where the date 
+<para>To insert the date in the document, simply place the cursor in the text box where the date
 should be inserted and select
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Date</guimenuitem>
@@ -87,7 +87,7 @@ checkbox.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
 
 <varlistentry>
 <term>Custom String</term>
-<listitem><para>If the appropriate format for the date can not be found, it is possible to create custom 
+<listitem><para>If the appropriate format for the date can not be found, it is possible to create custom
 date format strings.</para>
 <para>A date format string consists of a list of letters and numbers which follow
 specific rules (which are outlined below) to create the completed date.</para>
@@ -376,84 +376,8 @@ current values).  This is <emphasis>especially</emphasis> important with dates a
 </sect2>
 <sect2 id="update-variables-one"><title>Updating One Date or Time Variable Value </title>
 <para>You can tell &kword; to update a single date or time variable value, and leave the others unchanged.</para>
-<para>Simply place the cursor over the variable you want to update and click with the &RMB;. A small menu will appear which will show 
-several new date or time formatting options and the option to change either dates or times to fixed or variable time formats.  Simply select 
+<para>Simply place the cursor over the variable you want to update and click with the &RMB;. A small menu will appear which will show
+several new date or time formatting options and the option to change either dates or times to fixed or variable time formats.  Simply select
 the new option and this variable will be updated.</para>
 </sect2>
-</sect1>
-<sect1 id="expressions"><title>Expressions </title>
-<para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the
-text is inserted into &kword;.</para>
-<note><para>  Expressions are different from variables.  Expressions are inserted as regular text, and can only be
-changed later by manually editing the text. Variables, insert a placeholder in the document which can be updated at
-a later date.</para></note>
-<sect2 id="expressions-insert"><title>Using expressions</title>
-<para>To use an expression could not be easier.</para>
-<para>Simply place the cursor at the location you want the expression inserted and select
-<menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
-</menuchoice> from the menubar.  This will give you a submenu with groups of expressions.  Select the group that is appropriate
-for your expression.  This will bring up a list of expressions available to you.  Select the appropriate expression.</para>
-<para>Once selected, that expression will be inserted at the cursor position.</para>
-</sect2>
-<sect2 id="expressions-add"><title>Add new expressions</title>
-<para>Adding an expression is accomplished by selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Edit personal expressions</guimenuitem>
-</menuchoice> from the menubar. This will bring up a dialog box. </para>
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="expression.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-<para>The drop down box at the top shows you what group the current expression list is 
-from.  <emphasis>Custom</emphasis> is the group name in the example above</para>
-<note><para>You will need to create a new group the first time you want to add a new expression.  &kword;
- will not allow the user to edit or remove any predefined expressions.</para></note>
-<para>The left side of the dialog box lists all the available expressions for that group.
-There are no expressions yet in the example above.</para>
-<para>You manipulate the expressions with the six buttons to the right.</para>
-<variablelist>
-<varlistentry>
-<term><guibutton>Add group</guibutton></term>
-<listitem><para>Click this button to add a new expression group.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guibutton>Delete Group</guibutton></term>
-<listitem><para>Deletes the currently selected group and all the expressions within the group.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guibutton>Rename Group</guibutton></term>
-<listitem><para>Changes the name of the currently selected group.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guibutton>Add new expression</guibutton></term>
-<listitem><para>Click this button and a small dialog box appears.  Enter your expression in the dialog box.  
-Click <guibutton>OK</guibutton>.  The expression is now part of the current group.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guibutton>Delete expression</guibutton></term>
-<listitem><para>Removes the currently selected expression.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guibutton>Rename expression</guibutton></term>
-<listitem><para>Changes the contents of the currently selected expression.</para></listitem>
-</varlistentry>
-</variablelist>
-<para>When you are satisfied with all your changes, click <guibutton>OK</guibutton>.</para>
-<para>Click <guibutton>Cancel</guibutton> to abort changes.</para>
-</sect2>
-</sect1>
-<sect1 id="links"><title>Document Links </title>
-<para></para>
-</sect1>
-<!-- Not currently implemented in kword.....
-<sect1 id="endnotes-and-footnotes"><title>Endnotes/Footnotes</title><para></para></sect1> -->
-<sect1 id="comments"><title>Document Comments </title>
-<para></para>
 </sect1>

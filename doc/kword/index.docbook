@@ -25,10 +25,14 @@
   <!ENTITY techstuff SYSTEM "techinfo.docbook">
   <!ENTITY graphics SYSTEM "graphics.docbook">
   <!ENTITY toc SYSTEM "toc.docbook">
-  <!ENTITY misc SYSTEM "insertmisc.docbook">
   <!ENTITY parts SYSTEM "kparts.docbook">
   <!ENTITY formulas SYSTEM "formulas.docbook">
   <!ENTITY lists SYSTEM "lists.docbook">
+  <!ENTITY variables SYSTEM "docvariables.docbook">
+  <!ENTITY expressions SYSTEM "expressions.docbook">
+  <!ENTITY links SYSTEM "doclinks.docbook">
+  <!ENTITY comments SYSTEM "doccomments.docbook">
+  <!ENTITY footend SYSTEM "footendnotes.docbook">
   
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
@@ -55,7 +59,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-05</date>
+<date>2002-21-05</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -64,7 +68,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This documentation describes KWord 1.2.
+This manual describes KWord 1.2.
 </para>
 </abstract>
 
@@ -409,7 +413,12 @@ If any document variables were changed, &kword; will update their values through
 </sect1>
 &graphics;
 &toc;
-&misc;
+<!--&misc;-->
+&variables;
+&expressions;
+&links;
+&comments;
+&footend;
 &parts;
 &formulas;
 </chapter>

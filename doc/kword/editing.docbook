@@ -432,6 +432,7 @@ the toolbar.</para>
 <imagedata fileref="finddlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
+
 <sect3><title>Basic Text Search</title>
 <para>The drop-down box labelled <guilabel>Text to Find</guilabel>,
 provides a place for you to enter the text of your search command. (In
@@ -457,8 +458,8 @@ want.</para>
 <title>Pattern Matching</title>
 
 <para>The default action for &kword; is to search for an exact match of
-the text.  Fortunatly, however, &kword; has the ability to match text
-according to patterns.  </para>
+the text.  &kword; has the ability to match text
+that follows a <emphasis>pattern</emphasis> or a set of rules.  </para>
 
 <para>To enable patterns, place a mark in the box labeld <guilabel>Use
 Patterns</guilabel>.</para>
@@ -472,13 +473,91 @@ with &UNIX; pattern matching.</para>
 button, to insert your text string.  You can type it into the search
 line.  The <guibutton>Insert Pattern</guibutton> button is a convenience
 for people unfamiliar with pattern matching.</para>
-</note> 
+</note>
 
 <para>You should now type the text in place, stopping to insert the
 pattern elements where necessary.  </para>
 
 <para>For specific information on pattern matching, take a look at the
 section entitled <link linkend="patterns">Pattern Matching</link></para>
+
+</sect4>
+
+<sect4 id="find-formatting"><title>Formatting options</title>
+<para>&kword; also has the ability to search your document for text that matches
+certain formatting options as well as the text itself.</para>
+
+<para>To include formatting options in your search, click the button labeled
+<guibutton>Show Formatting Options</guibutton>. </para>
+<para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections.</para>
+
+<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="finddlg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can use this dialog to select the options you want to include in your search.</para>
+<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will evaluate 
+any searchable text for that property.  If no mark is in the checkbox, &kword; does not consider that property when performing a search.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Family</guilabel></term>
+<listitem>
+<para>Use this drop down box to select the font family you want to include in your search text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Size</guilabel></term>
+<listitem>
+<para>Use this spin box to set the font size you want &kword; to search for.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<listitem>
+<para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively, 
+you want &kword; to search
+for.  For more information on selecting a color, see the 
+section on <link linkend="select-colors">Selecting Colors from the Color Dialog</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Bold</guilabel>, <guilabel>Italic</guilabel> and <guilabel>Strikeout</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
+to include boldface, italicized or strikout fonts in the search text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Underline</guilabel>, <guilabel>Double underline</guilabel> or
+<guilabel>Without</guilabel> to modify your search.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical Alignment</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
+<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Once you have selected your options, click <guibutton>OK</guibutton> to accept your search options.</para>
+<para>Click <guibutton>Cancel</guibutton> to ignore all changes.</para>
+<para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the default values.</para>
 
 </sect4>
 
@@ -498,7 +577,7 @@ same.  For example.  Searching for:</para><para>
 <emphasis>KDE</emphasis></para><para>will match:</para><para>
 <emphasis>KDE</emphasis> and
 <emphasis>hiddenKDEinwords</emphasis> but not: </para><para><emphasis>Kde,
-kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para> 
+kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para>
 </listitem>
 </varlistentry>
 
@@ -526,18 +605,6 @@ hiddenKDEinwords</emphasis> or <emphasis>KDElike</emphasis>.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>From Cursor</guilabel></term>
-<listitem>
-<para>By default, &kword; begins searching at the beginning of the
-document.  If this option is selected, &kword; begins its search from
-the current possition of the cursor. The direction that &kword; searches
-is, by default forward in the document, but can be changed with the
-<guilabel>Find Backwards</guilabel> option.</para>
-</listitem>
-</varlistentry>
-
-
-<varlistentry>
 <term><guilabel>Selected Text</guilabel></term>
 <listitem><para>If you want to limit your search to a specific part of
 the document (a few paragraphs, for example), you can select the part of
@@ -549,6 +616,17 @@ option to enable or disable this restriction.</para>
 <para>This option will not be available if you have not selected text
 prior to selecting the <guilabel>Find</guilabel> command.</para>
 </note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>From Cursor</guilabel></term>
+<listitem>
+<para>By default, &kword; begins searching at the beginning of the
+document.  If this option is selected, &kword; begins its search from
+the current possition of the cursor. The direction that &kword; searches
+is, by default forward in the document, but can be changed with the
+<guilabel>Find Backwards</guilabel> option.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -635,12 +713,169 @@ section entitled <link linkend="patterns">Pattern Matching</link></para>
 
 </sect4>
 
+<sect4 id="replace-formatting"><title>Formatting options</title>
+<para>&kword; also has the ability to search your document for text that matches
+certain formatting options as well as the text itself.</para>
+
+<para>To include formatting options in your search, click the button labeled
+<guibutton>Show Formatting Options</guibutton>. </para>
+<para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections.</para>
+
+<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="finddlg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can use this dialog to select the options you want to include in your search.</para>
+<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will evaluate 
+any searchable text for that property.  If no mark is in the checkbox, &kword; does not consider that property when performing a search.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Family</guilabel></term>
+<listitem>
+<para>Use this drop down box to select the font family you want to include in your search text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Size</guilabel></term>
+<listitem>
+<para>Use this spin box to set the font size you want &kword; to search for.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<listitem>
+<para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively, 
+you want &kword; to search
+for.  For more information on selecting a color, see the 
+section on <link linkend="select-colors">Selecting Colors from the Color Dialog</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Bold</guilabel>, <guilabel>Italic</guilabel> and <guilabel>Strikeout</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
+to include boldface, italicized or strikout fonts in the search text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Underline</guilabel>, <guilabel>Double underline</guilabel> or
+<guilabel>Without</guilabel> to modify your search.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical Alignment</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
+<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Once you have selected your options, click <guibutton>OK</guibutton> to accept your search options.</para>
+<para>Click <guibutton>Cancel</guibutton> to ignore all changes.</para>
+<para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the initial values prior to changing options.</para>
+
+</sect4>
+
+<sect4 id="replace-formatting-text"><title>Replace with formatted text</title>
+<para>&kword; also has the ability to replace the found text with formatted text.</para>
+
+<para>To include formatting options in your search, click the button labeled
+<guibutton>Show Formatting Options</guibutton> in the <guilabel>Replace with</guilabel> section. </para>
+<para>Clicking <guibutton>No options</guibutton> disables all previous formatting options selections. This ensures that &kword; 
+changes the text, but not the formatting of the text (bold text will remain boldface, superscript text will remain superscript, etc).</para>
+
+<para>Once<guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="finddlg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can use this dialog to select the format of the replaced text.</para>
+<para>The left column consists of nine checkboxes.  If there is a mark in the checkbox, then &kword; will change
+any replaced text to match the property selected.  
+If no mark is in the checkbox, &kword; does not consider that property when replacing text.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Family</guilabel></term>
+<listitem>
+<para>Use this drop down box to select the font family you want your replacement text to use.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Size</guilabel></term>
+<listitem>
+<para>Use this spin box to set the font size you want &kword; to use for your replaced text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<listitem>
+<para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
+you want &kword; to use.  For more information on selecting a color, see the
+section on <link linkend="select-colors">Selecting Colors from the Color Dialog</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Bold</guilabel>, <guilabel>Italic</guilabel> and <guilabel>Strikeout</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
+to change the fonts to boldface, italicized or strikout fonts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Underline</guilabel>, <guilabel>Double underline</guilabel> or
+<guilabel>Without</guilabel> to use for the replacment text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical Alignment</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
+<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to use.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Once you have selected your options, click <guibutton>OK</guibutton> to accept your text options.</para>
+<para>Click <guibutton>Cancel</guibutton> to ignore all changes.</para>
+<para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the initial values prior to making any changes.</para>
+
+</sect4>
+
+
 <sect4>
 <title>Other Replace Options</title>
 
-<para>In addition to pattern matching, you can limit the search results
-with a few useful options.</para>
-
+<para>You can place a mark in <guilabel>Use placeholders</guilabel> to help explain how &kword; will replace your text.</para>
+<para>Currently the only placeholder is <guilabel>Complete text found</guilabel>.  If you insert this </para>
+<para>Additional options in the dialog are:</para>
 <variablelist>
 <varlistentry>
 <term><guilabel>Case Sensitive</guilabel></term>
@@ -832,7 +1067,7 @@ with zero or more periods (.) at the end.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Tab</guilabel></term>
+<term><guilabel>TAB</guilabel></term>
 <listitem>
 <para>Once selected, &kword; will insert a back slash folllowed by a t (\t) into your string. &kword; will match any
 string of characters with a tab character (for use with tab stops) in that portion of the string.</para>
@@ -840,15 +1075,18 @@ string of characters with a tab character (for use with tab stops) in that porti
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>NL</guilabel></term>
+<term><guilabel>Newline</guilabel></term>
 <listitem>
 <para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>n</emphasis> (\n) into your string.
-&kword; will match any string of characters with a newline  character in that portion of the string.</para>
+&kword; will match any string of characters with a newline character in that portion of the string. (Newline characters are also referred to 
+as <emphasis>Line Breaks</emphasis>).</para>
+<tip><para>A newline character is inserted into a &kword; document by clicking <keycombo
+action="simul">&Shift;<keycap>Return</keycap></keycombo></para></tip>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>CR</guilabel></term>
+<term><guilabel>Carriage Return</guilabel></term>
 <listitem>
 <para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>r</emphasis> (\r) into your string.
 &kword; will match any string of characters with a carrage return character in that portion of the string.</para>
@@ -873,20 +1111,6 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 <listitem>
 <para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>d</emphasis> (\d) into your string.
 &kword; will match any string of characters with a numerical digit (any number 0-9) in that portion of the string.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Unicode Point</guilabel></term>
-<listitem>
-<para>STUFF????</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>ASCII/Latin-1 character</guilabel></term>
-<listitem>
-<para>STUFF????</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -929,7 +1153,7 @@ box.</para>
 the spelling program has determined as possible correct spellings.</para>
 
 <para>There is a progress bar below the list of suggestions which tells
-you how much of the document has been spell checked. In this example, that is 48 percent.</para>
+you how much of the document has been spell checked. In this example, that is 30 percent.</para>
 
 <para>From here you have eight options:</para>
 
@@ -1036,19 +1260,11 @@ from the Menu bar </para>
 </screenshot>
 
 <variablelist>
-<varlistentry>
-<term><guilabel>Replace Quotes by Typographical Quotes</guilabel></term>
-<listitem>
-<para>When selected, this option will replace the standard keyboard
-quotes, with typographical quotation marks.  If you want to change the
-quotation character, click on one of the buttons. Clicking on 
-<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
-</listitem>
-</varlistentry>
+
 
 <varlistentry>
 <term><guilabel>Convert the first letter from the first word of a
-sentance automatically to Upper Case</guilabel></term>
+sentance automatically to uppercase</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically capitalize the first
 letter after a period. You can tell &kword; when not to alter capitalization
@@ -1058,8 +1274,8 @@ in certain instances (ie <quote>Sr.</quote> or <quote>Jr.</quote>.  For more det
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Convert two Upper Case letters to one Upper Case and one
-Lower Case letter</guilabel></term>
+<term><guilabel>Convert two uppercase letters to one uppercase and one
+lowercase letter</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically convert a double capital
 letter (a common typographical error), into a single capital
@@ -1070,7 +1286,7 @@ in certain instances.  For more details, see the section entitled
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Auto detect URL</guilabel></term>
+<term><guilabel>Autoformat URLs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will scan text for patterns which suggest a certain section
 of text is a <link linkend="defurl">URL</link> and automatically creates a link.</para>
@@ -1080,7 +1296,7 @@ of text is a <link linkend="defurl">URL</link> and automatically creates a link.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Ignore Double Spaces</guilabel></term>
+<term><guilabel>Suppress Double Spaces</guilabel></term>
 <listitem>
 <para>When checked, &kword; will ignore the second space typed.  
 This prevents users from adding double spaces between words or sentances</para>
@@ -1088,14 +1304,14 @@ This prevents users from adding double spaces between words or sentances</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Remove space at the begin and end line</guilabel></term>
+<term><guilabel>Remove spaces at the begining and end of paragraphs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically remove spaces at the beginning and/or the end of a line of text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Automatic *Bold* _Underline_</guilabel></term>
+<term><guilabel>Automatically do bold and underline formatting</guilabel></term>
 <listitem>
 <para>When selected, &kword; will look for words surrounded by asterisks ( * ).  It will remove the asterisks and change the font of all
 words in between the two asterisks to bold face.</para>
@@ -1112,10 +1328,10 @@ words in between the two underscores.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Use bullet style -*</guilabel></term>
+<term><guilabel>Use lists formatting for bulleted paragraphs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style
-to a bulleted list.</para>
+to a bulleted list.  The bullet will begin with the letter selected in the left button below this option.</para>
 </listitem>
 </varlistentry>
 
@@ -1123,6 +1339,37 @@ to a bulleted list.</para>
 </variablelist>
 </sect2>
 
+<sect2 id="quotes-autocorrection"><title>Custom Quotes</title>
+<para>Select the tab labeled <guilabel>Custom Quotes</guilabel></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="auto4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Replace double quotes by typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard double
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace single quotes by typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard single
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
 <sect2 id="advanced-autocorrection">
 <title>Advanced Autocorrection</title>
 
@@ -1146,11 +1393,9 @@ automatically replaced with the text in
 <title>Adding an autocorrection string</title>
 
 <para>To add an autocorrection string, simply type the text you want &kword; to 
-check for in the text box directly below the checkbox labeled 
-<guilabel>Active Autocorrection</guilabel> (labeled with a red <emphasis>F</emphasis> 
-in the screenshot).  Then enter the text you want &kword;
-to substitute in the text box to the right (labeled with a red <emphasis>R</emphasis>
-).</para>
+check for in the text box labeled
+<guilabel>Find</guilabel> Then enter the text you want &kword;
+to substitute in the text box labeled <guilabel>Replace</guilabel>.</para>
 
 
 <note><para>If you want to insert symbols or special characters not avaialable on your
