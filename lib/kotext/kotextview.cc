@@ -1110,7 +1110,11 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, boo
             ensureCursorVisible();
             return 0L;
         }
-
+        if ( tmp->protectContent())
+        {
+            tmp->textDocument()->removeSelection( KoTextDocument::Standard );
+            tmp->selectionChangedNotify();
+        }
         // Tricky. We don't want to do the placeCursor after removing the selection
         // (the user pointed at some text with the old selection in place).
         // However, something got deleted in our parag, dropCursor's index needs adjustment.
