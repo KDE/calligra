@@ -40,6 +40,7 @@ class KWDocument;
 class KWTableFrameSetEdit;
 class QPainter;
 class KWAnchor;
+class KWordFrameSetIface;
 
 /**
  * Class: KWTableFrameSet
@@ -93,6 +94,8 @@ public:
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_TABLE; }
+
+    virtual KWordFrameSetIface* dcopObject();
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ );
 

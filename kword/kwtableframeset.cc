@@ -33,6 +33,9 @@ DESCRIPTION
 #include "kwview.h"
 #include <kotextobject.h> // for customItemChar !
 #include <qpopupmenu.h>
+#include <dcopobject.h>
+#include "KWordFrameSetIface.h"
+#include "KWordTableFrameSetIface.h"
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -56,6 +59,14 @@ KWTableFrameSet::~KWTableFrameSet()
     //delete m_anchor;
     //m_anchor = 0L;
     m_doc = 0L;
+}
+
+KWordFrameSetIface* KWTableFrameSet::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KWordTableFrameSetIface( this );
+
+    return m_dcop;
 }
 
 KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )

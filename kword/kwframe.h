@@ -729,6 +729,9 @@ public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
     virtual ~KWPartFrameSet();
 
+    virtual KWordFrameSetIface* dcopObject();
+
+
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
@@ -762,6 +765,9 @@ public:
     KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas );
     virtual ~KWPartFrameSetEdit();
 
+    virtual DCOPObject* dcopObject();
+
+
     KWPartFrameSet * partFrameSet() const
     {
         return static_cast<KWPartFrameSet*>(frameSet());
@@ -776,6 +782,8 @@ private:
 protected slots:
     void slotChildChanged();
     void slotChildActivated(bool);
+    DCOPObject *m_dcop;
+
 };
 
 /******************************************************************/

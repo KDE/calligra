@@ -48,6 +48,8 @@
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
 #include "KWordPictureFrameSetIface.h"
+#include "KWordPartFrameSetIface.h"
+#include "KWordPartFrameSetEditIface.h"
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -1644,6 +1646,15 @@ KWPartFrameSet::~KWPartFrameSet()
 {
 }
 
+KWordFrameSetIface* KWPartFrameSet::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KWordPartFrameSetIface( this );
+
+    return m_dcop;
+}
+
+
 void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect & /*crect TODO*/,
                                 QColorGroup &, bool onlyChanged, bool, KWFrameSetEdit * )
 {
@@ -1710,6 +1721,7 @@ KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
     m_cmdMoveChild=0L;
+    m_dcop=0L;
     QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
                       this, SLOT( slotChildChanged() ) );
     QObject::connect( m_canvas->gui()->getView() ,SIGNAL(activated( bool ))
@@ -1719,6 +1731,14 @@ KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
 {
     kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
+    delete m_dcop;
+}
+
+DCOPObject* KWPartFrameSetEdit::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KWordPartFrameSetEditIface( this );
+    return m_dcop;
 }
 
 
