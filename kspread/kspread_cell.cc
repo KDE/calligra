@@ -2802,14 +2802,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMAX( doc->zoomItY( rect.top() ),
-                              doc->zoomItY( cellRect.y() ) - top ),
-                        QMIN( doc->zoomItX( rect.right() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMIN( doc->zoomItY( rect.bottom() ),
-                              doc->zoomItY( cellRect.bottom() ) + bottom ) );
+      painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.x() ) ),
+                        QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.y() ) - top ),
+                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.x() ) ),
+                        QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.bottom() ) + bottom ) );
     }
     else
     {
@@ -2831,14 +2827,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMAX( doc->zoomItY( rect.top() ),
-                              doc->zoomItY( cellRect.y() ) - top ),
-                        QMIN( doc->zoomItX( rect.right() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMIN( doc->zoomItY( rect.bottom() ),
-                              doc->zoomItY( cellRect.bottom() ) + bottom ) );
+      painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.right() ) ),
+                        QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.y() ) - top ),
+                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ), 
+                        QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.bottom() ) + bottom ) );
     }
     else
     {
@@ -2877,7 +2869,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
+      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ), 
                         doc->zoomItY( QMAX( rect.top(),    cellRect.bottom() ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() ) ) );
@@ -2915,14 +2907,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMAX( doc->zoomItY( rect.top() ),
-                              doc->zoomItY( cellRect.y() ) ),
-                        QMIN( doc->zoomItX( rect.right() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMIN( doc->zoomItY( rect.bottom() ),
-                              doc->zoomItY( cellRect.bottom() ) + bottom ) );
+      painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.x() ) ),
+                        QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.y() ) ),
+                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.x() ) ),
+                        QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.y() ) + bottom ) );
     }
     else
     {
@@ -2948,14 +2936,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMAX( doc->zoomItY( rect.top() ),
-                              doc->zoomItY( cellRect.y() ) ),
-                        QMIN( doc->zoomItX( rect.right() ),
-                              doc->zoomItX( cellRect.x() ) ),
-                        QMIN( doc->zoomItY( rect.bottom() ),
-                              doc->zoomItY( cellRect.bottom() ) + bottom ) );
+      painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.right() ) ),
+                        QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.y() ) ),
+                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ),
+                        QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.y() ) + bottom ) );
     }
     else
     {
@@ -2984,14 +2968,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       //On paper, we always have full cells, on screen not
       if ( painter.device()->isExtDev() )
       {
-        painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                                doc->zoomItX( cellRect.x() ) ),
-                          QMAX( doc->zoomItY( rect.top() ),
-                                doc->zoomItY( cellRect.y() ) - bottom ),
-                          QMIN( doc->zoomItX( rect.right() ),
-                                doc->zoomItX( cellRect.x() ) ),
-                          QMIN( doc->zoomItY( rect.bottom() ),
-                                doc->zoomItY( cellRect.bottom() ) ) );
+        painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.x() ) ),
+                          QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.bottom() ) - bottom ),
+                          QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.x() ) ),
+                          QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.bottom() ) ) );
       }
       else
       {
@@ -3017,14 +2997,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       //On paper, we always have full cells, on screen not
       if ( painter.device()->isExtDev() )
       {
-        painter.drawLine( QMAX( doc->zoomItX( rect.left() ),
-                                doc->zoomItX( cellRect.x() ) ),
-                          QMAX( doc->zoomItY( rect.top() ),
-                                doc->zoomItY( cellRect.y() ) - bottom ),
-                          QMIN( doc->zoomItX( rect.right() ),
-                                doc->zoomItX( cellRect.x() ) ),
-                          QMIN( doc->zoomItY( rect.bottom() ),
-                                doc->zoomItY( cellRect.bottom() ) ) );
+        painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.right() ) ),
+                          QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.bottom() ) - bottom ),
+                          QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ),
+                          QMIN( doc->zoomItY( rect.bottom() ),doc->zoomItY( cellRect.bottom() ) ) );
       }
       else
       {
