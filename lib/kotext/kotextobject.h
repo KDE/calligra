@@ -147,7 +147,7 @@ public:
     void applyStyle( QTextCursor * cursor, const KoStyle * style,
                      int selectionId = QTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
-                     bool zoomFormats = true, bool createUndoRedo = true, bool interactive = true );
+                     bool createUndoRedo = true, bool interactive = true );
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
      *  @param paragLayoutChanged paragraph flags
@@ -161,7 +161,7 @@ public:
     /** Return the user-visible font size for this format (i.e. LU to pt conversion) */
     int docFontSize( QTextFormat * format ) const;
     /** Return the font size in LU, for this user-visible font size in pt */
-    float zoomedFontSize( int docFontSize ) const;
+    int zoomedFontSize( int docFontSize ) const;
     /** Return a modified version of @p f where the font size has been adapted
         to layout units (using @ref zoomedFontSize) */
     KoTextFormat * zoomFormatFont( const KoTextFormat * f );

@@ -26,6 +26,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#define DEBUG_FORMATS
+
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, KoStyle* defaultStyle,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
@@ -45,9 +47,6 @@ KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoStyle* defaultStyle,
 void KoTextObject::init()
 {
     m_availableHeight = -1;
-#ifdef ZOOM_FONTS
-    m_origFontSizes.setAutoDelete( true );
-#endif
     m_lastFormatted = textdoc->firstParag();
     m_highlightSelectionAdded = false;
     interval = 0;
@@ -80,29 +79,14 @@ int KoTextObject::availableHeight() const
 int KoTextObject::docFontSize( QTextFormat * format ) const
 {
     ASSERT( format );
-#ifdef ZOOM_FONTS // old stuff
-    int * oldSize = m_origFontSizes.find( format );
-    if ( !oldSize )
-    {
-        kdDebug() << "Can't find format in m_origFontSizes: " << format << "( " << format->key() << ")" << endl;
-        return 0;
-    }
-    else
-        return *oldSize;
-#else
     return static_cast<int>( textdoc->zoomHandler()->layoutUnitToPt( format->font().pointSize() ) );
-#endif
 }
 
-float KoTextObject::zoomedFontSize( int docFontSize ) const
+int KoTextObject::zoomedFontSize( int docFontSize ) const
 {
-#ifdef ZOOM_FONTS // old stuff
-    // Has to be the same calculation as in zoom(), except that here we are never printing
-    double factor = zh->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
-    return static_cast<float>( docFontSize ) * factor;
-#else
+    kdDebug() << "KoTextObject::zoomedFontSize: docFontSize=" << docFontSize
+              << " - in LU: " << textdoc->zoomHandler()->ptToLayoutUnit( docFontSize ) << endl;
     return textdoc->zoomHandler()->ptToLayoutUnit( docFontSize );
-#endif
 }
 
 // This used to mean "adapt the font to the zoom setting",
@@ -111,19 +95,11 @@ KoTextFormat * KoTextObject::zoomFormatFont( const KoTextFormat * f )
 {
     KoTextFormat format = *f;
     int origFontSize = format.font().pointSize();
-    format.setPointSizeFloat( zoomedFontSize( origFontSize ) );                  // zoom it
+    format.setPointSize( zoomedFontSize( origFontSize ) );                  // zoom it
+    kdDebug() << "zoomFormatFont size zoomed from " << origFontSize << " to " << format.pointSizeFloat() << endl;
     QTextFormat * fcf = textDocument()->formatCollection()->format( &format );   // find it in the collection
 #ifdef DEBUG_FORMATS
     kdDebug() << "zoomFormatFont new format is " << fcf << " " << fcf->key() << endl;
-#endif
-#ifdef ZOOM_FONTS
-    if ( !m_origFontSizes.find( fcf ) )
-    {
-#ifdef DEBUG_FORMATS
-        kdDebug() << "zoomFormatFont inserting " << fcf << " " << fcf->key() << " into m_origFontSizes" << endl;
-#endif
-        m_origFontSizes.insert( fcf, new int( origFontSize ) );           // insert in dict if necessary
-    }
 #endif
     return static_cast<KoTextFormat *>(fcf);
 }
@@ -582,7 +558,7 @@ void KoTextObject::pasteText( QTextCursor * cursor, const QString & text, KoText
 void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
                                int selectionId,
                                int paragLayoutFlags, int formatFlags,
-                               bool zoomFormats, bool createUndoRedo, bool interactive )
+                               bool createUndoRedo, bool interactive )
 {
     QTextDocument * textdoc = textDocument();
     if ( interactive )
@@ -639,19 +615,7 @@ void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
 
     if ( formatFlags != 0 )
     {
-        KoTextFormat * newFormat;
-        if ( zoomFormats )
-        {
-            newFormat = zoomFormatFont( & newStyle->format() );
-#ifdef DEBUG_FORMATS
-            kdDebug() << "KoTextObject::applyStyle zoomed format " << newStyle->format().key()
-                      << " (pointsize " << newStyle->format().pointSizeFloat() << ")"
-                      << " to newFormat=" << newFormat << " " << newFormat->key()
-                      << " (pointsize " << newFormat->pointSizeFloat() << ")" << endl;
-#endif
-        } else {
-            newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( &newStyle->format() ) );
-        }
+        KoTextFormat * newFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( &newStyle->format() ) );
 
         if ( createUndoRedo )
         {
@@ -784,7 +748,7 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
                 applyStyle( &cursor, changedStyle,
                             -1, // A selection we can't possibly have
                             paragLayoutChanged, formatChanged,
-                            false, false, false ); // don't zoom formats, don't create undo/redo, not interactive
+                            false, false ); // don't create undo/redo, not interactive
             }
         }
         p = static_cast<KoTextParag *>(p->next());
@@ -807,35 +771,9 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
         if ( zoomFont ) // The format has a user-specified font (e.g. setting a style, or a new font size)
         {
             origFontSize = format->font().pointSize();
-            static_cast<KoTextFormat *>(format)->setPointSizeFloat( zoomedFontSize( origFontSize ) );
+            format->setPointSize( zoomedFontSize( origFontSize ) );
             kdDebug(32001) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
         }
-#ifdef ZOOM_FONTS
-        else // The format has a zoomed font already (we're only changing bold/italic, or the family, etc.)
-        {
-            kdDebug(32001) << "KoTextObject::setFormatCommand font already zoomed,  finding orig size" << endl;
-            if ( currentFormat->font().pointSizeFloat() == format->font().pointSizeFloat() )
-            {
-                // read orig size from previous format, to reuse it.
-                int * pDocFontSize = m_origFontSizes.find( currentFormat );
-                if ( !pDocFontSize )
-                {
-                    ASSERT( currentFormat->parent() );
-                    kdWarning() << currentFormat << " " << currentFormat->key() << " not in m_origFontSizes " << endl;
-                    QPtrDictIterator<int> it( m_origFontSizes );
-                    for ( ; it.current() ; ++it ) {
-                        kdDebug() << " m_origFontSizes : format=" << it.currentKey()
-                                  << " key=" << static_cast<QTextFormat*>(it.currentKey())->key()
-                                  << " size=" << it.current() << endl;
-                    }
-                }
-                else
-                    origFontSize = *pDocFontSize;
-            }
-            else // shouldn't happen ?
-                kdWarning() << "Zoomed font, no clue about doc-font-size for it " << currentFormat->key() << " old: " << format->key() << endl;
-        }
-#endif
         // Find format in collection
         currentFormat->removeRef();
         currentFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( format ) );
@@ -844,13 +782,6 @@ KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * 
             currentFormat = static_cast<KoTextFormat *>( textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() ) );
         }
 
-#ifdef ZOOM_FONTS
-        if ( origFontSize > 0 && ! m_origFontSizes.find( currentFormat ) )
-        {
-            kdDebug() << "KoTextObject::setFormatCommand inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
-            m_origFontSizes.insert( currentFormat, new int( origFontSize ) );
-        }
-#endif
     }
 
     if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
