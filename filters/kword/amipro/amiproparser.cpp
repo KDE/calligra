@@ -174,7 +174,7 @@ bool AmiProParser::process( const QString& filename )
     // leave [edoc]
     if( enter_new_section && ( old_section == "edoc" ) )
     {
-      parseParagraph( lines );
+      parseParagraph( lines.join(" ") );
       lines.clear();
     }
 
@@ -189,7 +189,7 @@ bool AmiProParser::process( const QString& filename )
     {
       if( line.isEmpty() ) 
       {
-         parseParagraph( lines );
+         parseParagraph( lines.join(" ") );
          lines.clear(); 
       }
         lines.append( line );
@@ -242,6 +242,13 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
   for( unsigned i=0; i<lines.count(); i++ )
     if( lines[i][0] == '>' ) break;
       else partext.append( lines[i] + "\n" );
+
+  QChar ch = partext[partext.length()-1];
+  while( ( ch == '\n' ) || ( ch == '\r' ) )
+  {
+    partext.remove( partext.length()-1, 1 );
+    ch = partext[partext.length()-1];
+  }
 
   // "unescape", process special chars and such
   QString text = AmiProUnescape( partext );
