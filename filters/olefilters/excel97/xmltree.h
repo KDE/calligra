@@ -27,6 +27,28 @@
 #include <qintdict.h>
 #include <klocale.h>
 
+class SharedFormula : public QObject
+{
+	Q_OBJECT
+public:
+	SharedFormula(int fr, int lr, int fc, int lc, QDataStream *stream)
+		{ m_fr = fr; m_lr = lr; m_fc = fc; m_lc = lc; m_stream = stream; }
+	SharedFormula()
+		{ }
+
+	bool checkrow(int row)
+		{ return (row >= m_fr && row <= m_lr); }
+
+	bool checkcol(int col)
+		{ return (col >= m_fc && col <= m_lc); }
+
+	QDataStream &stream() { return *m_stream; }
+
+private:
+	int m_fr, m_lr, m_fc, m_lc;
+	QDataStream *m_stream;
+};
+
 class MergeInfo : public QObject
 {
 	Q_OBJECT
@@ -147,6 +169,7 @@ private:
 
 	QQueue<QDomElement> tables;
 	QList<MergeInfo> mergelist;
+	QList<SharedFormula> shrfmlalist;
 
 	KLocale m_locale;
 

@@ -155,6 +155,7 @@ headerCount(0), xfCount(0)
 	m_streamDepth = 0;
 	m_chartSeriesCount = 0;
 	mergelist.setAutoDelete(true);
+	shrfmlalist.setAutoDelete(true);
 
 	root = new QDomDocument("spreadsheet");
 
@@ -687,7 +688,23 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 		switch (ptg)
 		{
 			case 0x01:  // ptgExpr
-				kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet" << endl;
+				Q_UINT16 sfrow, sfcol;
+				rgce >> sfrow >> sfcol;
+				sfrow++;
+				sfcol++;
+				
+				kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet. Requested in Row " << row << " Col " << column << " !" << endl;
+				kdDebug(s_area) << "Taking formula from Row " << sfrow << " Col " << sfcol << " !" << endl;
+
+				SharedFormula *fmla;
+				for(fmla = shrfmlalist.first(); fmla != 0; fmla = shrfmlalist.next())
+				{
+					if(fmla->checkrow(sfrow) && fmla->checkcol(sfcol))
+					{
+						kdDebug(s_area) << "*********** Found a shared formula for this row/col!" << endl;
+					}
+				}
+	
 				return ""; // Return empty formula-string on error
 				break;
 			case 0x03:  // ptgAdd
@@ -2964,8 +2981,38 @@ bool XMLTree::_setup(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool XMLTree::_shrfmla(Q_UINT32, QDataStream &)
+bool XMLTree::_shrfmla(Q_UINT32 size, QDataStream &body)
 {
+	Q_UINT16 firstrow, lastrow;
+	Q_UINT8 firstcol, lastcol;
+	Q_UINT16 dataLen;
+	Q_UINT16 temp;
+
+	body >> firstrow >> lastrow >> firstcol >> lastcol;
+	body >> temp >> dataLen;
+
+	kdDebug() << "FR: " << firstrow << " LR: " << lastrow << endl;
+	kdDebug() << "FC: " << firstcol << " LC: " << lastcol << endl;
+
+	if(firstrow == 0 && lastrow == 2 && firstcol == 3 && lastcol == 0)
+		return true;
+	kdDebug() << "DATALEN: " << dataLen << endl;
+
+	char *store = new char[dataLen];
+
+	QByteArray a;
+
+//	body.readRawBytes(store, dataLen);
+
+	a.setRawData(store, dataLen);
+
+	QDataStream fbody(a, IO_ReadOnly);
+	fbody.setByteOrder(QDataStream::LittleEndian);
+
+	shrfmlalist.append(new SharedFormula(firstrow, lastrow, firstcol, lastcol, &fbody));
+
+//	delete []store;
+
 	return true;
 }
 
