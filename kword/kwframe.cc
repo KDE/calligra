@@ -372,8 +372,7 @@ KWAnchor * KWFrameSet::findAnchor( int frameNum )
              && anchor->frameSet() == this && anchor->frameNum() == frameNum )
                 return anchor;
     }
-    // kdWarning
-    kdFatal() << "KWFrameSet::findAnchor anchor not found (frameset='" << getName()
+    kdWarning() << "KWFrameSet::findAnchor anchor not found (frameset='" << getName()
                 << "' frameNum=" << frameNum << ")" << endl;
     return 0L;
 }
