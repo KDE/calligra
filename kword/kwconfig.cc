@@ -83,7 +83,7 @@ KWConfig::KWConfig( KWView* parent )
   m_interfacePage=new ConfigureInterfacePage(parent, page2);
 
   QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                              loadIcon("misc_doc") );
+                              loadIcon("kword_kwd") );
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
