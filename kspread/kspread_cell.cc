@@ -2404,11 +2404,10 @@ void KSpreadCell::paintText( QPainter& painter,
 
   QPen tmpPen( textColorPrint );
 
-  KSpreadConditional condition;
-
   //Set the font according to condition
   applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
+  KSpreadConditional condition;
   //Check for red font color for negativ values
   if( !conditions.currentCondition( condition ) )
   {
@@ -2572,20 +2571,19 @@ void KSpreadCell::paintText( QPainter& painter,
   {
     QString t;
     int i = 0;
-    int dy = 0;
-    int dx = 0;
-    int j = 0;
+    int len = 0;
+    double dy = 0.0;
     QFontMetrics fm = painter.fontMetrics();
     do
     {
-      i = m_strOutText.length();
-      t = m_strOutText.at( j );
-      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
+      len = m_strOutText.length();
+      t = m_strOutText.at( i );
+      painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX ),
                         doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );
-      dy += fm.descent() + fm.ascent();
-      j++;
+      dy += doc->unzoomItY( fm.descent() + fm.ascent() );
+      i++;
     }
-    while ( j != i );
+    while ( i != len );
   }
 
   if( testFlag(Flag_CellTooShort) )
@@ -2988,7 +2986,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     for ( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
       ColumnLayout *cl2 = m_pTable->columnLayout( i );
-      len += cl2->dblWidth() - 1; //Why -1 ? Philipp
+      len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
 
     QString tmp;
@@ -3035,11 +3033,11 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     for( int i = column(); i <= column() + m_iExtraXCells; i++ )
     {
         ColumnLayout *cl2 = m_pTable->columnLayout( i );
-        len += cl2->dblWidth() - 1;
+        len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
     if( !isEmpty() )
         tmpIndent = getIndent( column(), row() );
-    if( ( m_dOutTextWidth + tmpIndent > len )|| m_dOutTextWidth == 0.0 )
+    if( ( m_dOutTextWidth + tmpIndent > len ) || m_dOutTextWidth == 0.0 )
         return QString( "" );
 
     for ( int i = m_strOutText.length(); i != 0; i-- )
