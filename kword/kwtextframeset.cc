@@ -1480,8 +1480,7 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor,const QList<KoTabulator> *
 	formatMore();
     }
 
-    undoRedoInfo.newParagLayout.m_tabList.clear();
-    undoRedoInfo.newParagLayout.setTabList(tabList);
+    undoRedoInfo.newParagLayout.setTabList( tabList );
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();
@@ -2538,10 +2537,10 @@ void KWTextFrameSetEdit::updateUI()
 	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.bottomBorder, m_paragLayout.topBorder );
     }
 
-    if ( m_paragLayout.styleName != parag->styleName() )
+    if ( m_paragLayout.styleName() != parag->styleName() )
     {
-        m_paragLayout.styleName = parag->styleName();
-        m_canvas->gui()->getView()->showStyle( m_paragLayout.styleName );
+        m_paragLayout.setStyleName( parag->styleName() );
+        m_canvas->gui()->getView()->showStyle( m_paragLayout.styleName() );
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft].pt() != parag->margin(QStyleSheetItem::MarginLeft).pt()
@@ -2552,16 +2551,7 @@ void KWTextFrameSetEdit::updateUI()
 	m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] );
     }
 
-    m_paragLayout.m_tabList.clear();
-    QListIterator<KoTabulator> it( *parag->tabList() );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        m_paragLayout.m_tabList.append( t );
-    }
+    m_paragLayout.setTabList( parag->tabList() );
     m_canvas->gui()->getHorzRuler()->setTabList( parag->tabList());
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.

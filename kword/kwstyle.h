@@ -39,7 +39,7 @@ public:
     // but this already happens when loading styles)
     //KWStyle( const KWStyle & style );
 
-    QString name() const { return m_paragLayout.styleName; }
+    QString name() const { return m_paragLayout.styleName(); }
 
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
     KWParagLayout & paragLayout()  { return m_paragLayout; }

@@ -994,7 +994,10 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     QDomElement layout = attributes.namedItem( "LAYOUT" ).toElement();
     if ( !layout.isNull() )
     {
-        KWParagLayout paragLayout( layout );
+        //KWTextParag * parag = static_cast<KWTextParag *>(_parag);
+        KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+        KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+        KWParagLayout paragLayout( layout, doc );
         setParagLayout( paragLayout );
 
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
@@ -1052,28 +1055,9 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     }
 }
 
-KWParagLayout KWTextParag::createParagLayout() const
+KWParagLayout KWTextParag::createParagLayout()
 {
-    KWParagLayout l;
-
-    // From QTextParag
-    l.alignment = alignment();
-
-    // From KWTextParag
-    for ( int i = 0 ; i < 5 ; ++i )
-        l.margins[i] = m_margins[i];
-    l.leftBorder = m_leftBorder;
-    l.rightBorder = m_rightBorder;
-    l.topBorder = m_topBorder;
-    l.bottomBorder = m_bottomBorder;
-    if ( m_counter )
-        l.counter = *m_counter;
-    l.lineSpacing = m_lineSpacing;
-    l.styleName = m_styleName;
-
-    l.m_tabList.clear();
-    l.setTabList(&m_tabList );
-    return l;
+    return KWParagLayout( *this );
 }
 
 void KWTextParag::setParagLayout( const KWParagLayout & layout )
@@ -1088,30 +1072,69 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
     setBottomBorder( layout.bottomBorder );
     setCounter( layout.counter );
 
-    QList<KoTabulator>tmp;
-    QListIterator<KoTabulator> it( layout.m_tabList );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        tmp.append( t );
-    }
-
-    setTabList( &tmp );
+    setTabList( layout.tabList() );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
-    m_styleName = layout.styleName;
+    m_styleName = layout.styleName();
 }
 
-////
-
-KWParagLayout::KWParagLayout( QDomElement & parentElem )
+// Create a default KWParagLayout.
+KWParagLayout::KWParagLayout()
 {
-    // Name of the style
-    QDomElement element = parentElem.namedItem("NAME").toElement();
+    initialise();
+}
+
+// Create a KWParagLayout from an existing paragraph's layout.
+KWParagLayout::KWParagLayout( KWTextParag &parag )
+{
+    initialise();
+
+    // From QTextParag
+    alignment = parag.alignment();
+
+    // From KWTextParag
+    for ( int i = 0 ; i < 5 ; ++i )
+        margins[i] = parag.margins()[i];
+    leftBorder = parag.leftBorder();
+    rightBorder = parag.rightBorder();
+    topBorder = parag.topBorder();
+    bottomBorder = parag.bottomBorder();
+    if ( parag.counter() )
+        counter = *parag.counter();
+    lineSpacing = parag.kwLineSpacing();
+    m_styleName = parag.styleName();
+    setTabList( parag.tabList() );
+}
+
+// Create a KWParagLayout from XML.
+//
+// If a document is supplied, default values are taken from the style in the
+// document named by the layout. This allows for simplified import filters,
+// and also looks to the day that redundant data can be eliminated from the
+// saved XML.
+KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
+{
+    initialise();
+
+    // Name of the style. If there is no style, then we do not supply
+    // any default!
+    QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( !element.isNull() )
-        styleName = element.attribute("value");
+    {
+        m_styleName = element.attribute( "value" );
+        if ( doc )
+        {
+            // Default all the layout stuff from the style.
+            KWStyle *existingStyle = doc->findStyle( m_styleName );
+            if (existingStyle)
+            {
+                *this = existingStyle->paragLayout();
+            }
+            else
+            {
+                kdError(32001) << "Cannot find style \"" << m_styleName << "\"" << endl;
+            }
+        }
+    }
 
     element = parentElem.namedItem( "TABULATOR" ).toElement();
     if ( !element.isNull() )
@@ -1201,7 +1224,18 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem )
 
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
+    {
         counter.load( element );
+    }
+}
+
+void KWParagLayout::initialise()
+{
+    alignment = Qt::AlignLeft;
+    leftBorder.ptWidth = 0;
+    rightBorder.ptWidth = 0;
+    topBorder.ptWidth = 0;
+    bottomBorder.ptWidth = 0;
 }
 
 void KWParagLayout::save( QDomElement & parentElem )
@@ -1209,7 +1243,7 @@ void KWParagLayout::save( QDomElement & parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    element.setAttribute( "value", styleName );
+    element.setAttribute( "value", m_styleName );
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
@@ -1279,7 +1313,12 @@ void KWParagLayout::save( QDomElement & parentElem )
     }
 }
 
-void KWParagLayout::setTabList(const QList<KoTabulator> *tabList )
+void KWParagLayout::setStyleName( const QString &styleName )
+{
+    m_styleName = styleName;
+}
+
+void KWParagLayout::setTabList( const QList<KoTabulator> *tabList )
 {
     m_tabList.clear();
     QListIterator<KoTabulator> it( *tabList);

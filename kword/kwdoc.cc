@@ -948,15 +948,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(15);
 
-    QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
-    if ( !framesets.isNull() )
-        loadFrameSets( framesets );
-
-    emit sigProgress(75);
-
+    // Load all styles before the corresponding paragrpahs try to use them!
     QDomElement stylesElem = word.namedItem( "STYLES" ).toElement();
     if ( !stylesElem.isNull() )
         loadStyleTemplates( stylesElem );
+
+    emit sigProgress(25);
+
+    QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
+    if ( !framesets.isNull() )
+        loadFrameSets( framesets );
 
     emit sigProgress(85);
 

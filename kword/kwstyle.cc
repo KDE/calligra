@@ -23,13 +23,7 @@
 
 KWStyle::KWStyle( const QString & name )
 {
-    m_paragLayout.styleName = name;
-    m_paragLayout.alignment = Qt::AlignLeft;
-    //default ptWidth=0
-    m_paragLayout.leftBorder.ptWidth=0;
-    m_paragLayout.rightBorder.ptWidth=0;
-    m_paragLayout.topBorder.ptWidth=0;
-    m_paragLayout.bottomBorder.ptWidth=0;
+    m_paragLayout.setStyleName( name );
     m_format.setColor( Qt::black );
 }
 

@@ -1476,7 +1476,7 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setRightBorder( lay.rightBorder );
     setTopBorder( lay.topBorder );
     setBottomBorder( lay.bottomBorder );
-    setTabList( &lay.m_tabList);
+    setTabList( lay.tabList() );
     oldLayout=lay;
     //setTabList( lay.ParagLayout->getTabList );
     //border init it's necessary to allow left border works

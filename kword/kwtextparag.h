@@ -33,7 +33,7 @@
 using namespace Qt3;
 class QDomDocument;
 class KWTextFrameSet;
-
+class KWDocument;
 class KWTextParag;
 
 class Counter
@@ -151,15 +151,17 @@ private:
  * It's separated from KWTextParag so that it can be copied in
  * the undo/redo history, and in KWStyle.
  */
-struct KWParagLayout
+class KWParagLayout
 {
-    KWParagLayout() {}
-    // Load from file
-    KWParagLayout( QDomElement & parentElem );
+public:
+    KWParagLayout();
+    // Create from existing paragraph.
+    KWParagLayout( KWTextParag &parag );
+    // Load from XML, optionally using styles from document.
+    KWParagLayout( QDomElement & parentElem, KWDocument *doc = 0L );
 
+    // Save to XML.
     void save( QDomElement & parentElem );
-
-    void setTabList(const QList<KoTabulator> *tabList );
 
     // From QTextParag
     int alignment;
@@ -169,9 +171,19 @@ struct KWParagLayout
     KWUnit lineSpacing;
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter counter;
-    QString styleName;
 
+    void setStyleName( const QString &styleName );
+    QString styleName() const { return m_styleName; }
+
+    void setTabList( const QList<KoTabulator> *tabList );
+    const QList<KoTabulator> *tabList() const { return &m_tabList; }
+
+private:
+    QString m_styleName;
     QList<KoTabulator> m_tabList;
+
+    // Common setup.
+    void initialise();
 };
 
 /**
@@ -184,10 +196,10 @@ public:
     ~KWTextParag();
 
     // Creates a KWParagLayout structure from our info (proper+inherited), for undo/redo purposes
-    KWParagLayout createParagLayout() const;
+    KWParagLayout createParagLayout();
 
     // Sets all the parameters from a paraglayout struct
-    void setParagLayout( const KWParagLayout & layout );
+    void setParagLayout( const KWParagLayout &layout );
 
     // Margins
     KWUnit margin( QStyleSheetItem::Margin m ) { return m_margins[m]; }

@@ -263,7 +263,7 @@ void KWStyleManager::copyStyle()
   newStyle->paragLayout()=oldStyle->paragLayout();
   //rename style name because I copy all paragLayout
   //so I copy also name so I must rename new style
-  newStyle->paragLayout().styleName=str;
+  newStyle->paragLayout().setStyleName( str );
   doc->addStyleTemplate(newStyle);
   lStyleList->insertItem( str );
   lStyleList->setCurrentItem( lStyleList->count() - 1 );
@@ -656,7 +656,7 @@ void KWStyleEditor::changeTabulators()
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "Tabulators" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
-    paragDia->setTabList(&style->paragLayout().m_tabList);
+    paragDia->setTabList( style->paragLayout().tabList() );
     paragDia->show();
 }
 
@@ -708,7 +708,7 @@ bool KWStyleEditor::apply()
         }
 
         if ( !same ) {
-            ostyle->paragLayout().styleName=eName->text();
+            ostyle->paragLayout().setStyleName( eName->text() );
             emit updateStyleList();
         }
     }
