@@ -2211,8 +2211,13 @@ void KWDocument::updateAllFrames()
 void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
     updateAllFrames();
+    // If frame with text flowing around it -> re-layout all frames
     if ( !frame || frame->getRunAround() != RA_NO )
         layout();
+    else
+        // Otherwise only layout the frame that has changed
+        frame->getFrameSet()->layout();
+
     repaintAllViewsExcept( view );
 }
 
