@@ -78,13 +78,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
  
       registry = new KRegistry;
       registry->addFactory( new KMimeTypeFactory );
-
-      registry->load( "/tmp/dumpkoffice" );
-      if ( registry->isModified() )
-      {
-          registry->save( "/tmp/dumpkoffice" );
-          registry->clearModified();
-      }
+      registry->load();
 
       KMimeType::check();
 
