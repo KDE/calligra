@@ -1745,7 +1745,7 @@ void KPresenterView::setupActions()
 				    this, SLOT( insertPage() ),
 				    actionCollection(), "insert_page" );
 
-    actionInsertPicture = new KAction( i18n( "P&icture..." ), "picture", Key_F3,
+    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", Key_F3,
 				       this, SLOT( insertPicture() ),
 				       actionCollection(), "insert_picture" );
 
@@ -1755,7 +1755,7 @@ void KPresenterView::setupActions()
 
     // ----------------- tools actions
 
-    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "mouse", Key_F5,
+    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", Key_F5,
 					  this, SLOT( toolsMouse() ),
 					  actionCollection(), "tools_mouse" );
     ( (KToggleAction*)actionToolsMouse )->setExclusiveGroup( "tools" );
@@ -1782,7 +1782,7 @@ void KPresenterView::setupActions()
 					actionCollection(), "tools_pie" );
     ( (KToggleAction*)actionToolsPie )->setExclusiveGroup( "tools" );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), "text", Key_F10,
+    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10,
 					 this, SLOT( toolsText() ),
 					 actionCollection(), "tools_text" );
     ( (KToggleAction*)actionToolsText )->setExclusiveGroup( "tools" );
@@ -1797,12 +1797,12 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_diagramm" );
     ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "T&able"), "table", CTRL + Key_F1,
+    actionToolsTable = new KToggleAction( i18n( "T&able"), "frame_spreadsheet", CTRL + Key_F1,
 					   this, SLOT( toolsTable() ),
 					   actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
 
-    actionToolsObject = new KToggleAction( i18n( "&Object..." ), "parts", CTRL + Key_F2,
+    actionToolsObject = new KToggleAction( i18n( "&Object..." ),"frame_query", CTRL + Key_F2,
 					   this, SLOT( toolsObject() ),
 					   actionCollection(), "tools_object" );
     ( (KToggleAction*)actionToolsObject )->setExclusiveGroup( "tools" );
@@ -2016,7 +2016,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "screen_assigneffect" );
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-				     "kpstart", 0,
+				     "1rightarrow", 0,
 				     this, SLOT( screenStart() ),
 				     actionCollection(), "screen_start" );
 
