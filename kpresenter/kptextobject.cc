@@ -144,6 +144,7 @@ KPTextObject::~KPTextObject()
 {
     textDocument()->takeFlow();
     m_doc = 0L;
+    delete m_textobj;
 }
 
 DCOPObject* KPTextObject::dcopObject()
