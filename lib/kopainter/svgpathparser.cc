@@ -18,8 +18,8 @@
 */
 
 #include "svgpathparser.h"
+#include <qstring.h>
 #include <math.h>
-#include <qregexp.h>
 
 // parses the coord into number and forwards to the next token
 const char *
@@ -89,11 +89,10 @@ SVGPathParser::getCoord( const char *ptr, double &number )
 void
 SVGPathParser::parseSVG( const QString &s, bool process )
 {
-	QString d = s;
-	d = d.replace( QRegExp( "," ), " ");
-
-	if( !d.isEmpty() )
+	if( !s.isEmpty() )
 	{
+		QString d = s;
+		d = d.replace( ',', ' ' );
 		d = d.simplifyWhiteSpace();
 
 		const char *ptr = d.latin1();
