@@ -150,7 +150,7 @@ bool KoTextDocCommandHistory::isRedoAvailable()
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
-    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str )
+    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str.copy() )
 {
     for ( int j = 0; j < (int)text.size(); ++j ) {
 	if ( text[ j ].format() )
@@ -239,7 +239,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 
 KoTextDocFormatCommand::KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx,
 					const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl )
-    : KoTextDocCommand( d ), startId( sid ), startIndex( sidx ), endId( eid ), endIndex( eidx ), oldFormats( old ), flags( fl )
+    : KoTextDocCommand( d ), startId( sid ), startIndex( sidx ), endId( eid ), endIndex( eidx ), oldFormats( old.copy() ), flags( fl )
 {
     format = d->formatCollection()->format( f );
     for ( int j = 0; j < (int)oldFormats.size(); ++j ) {

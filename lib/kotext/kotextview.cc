@@ -264,17 +264,16 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
     case Key_Direction_L: {
 	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirL )
 	    return;
-        //// TODO load/save this attrib
         KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirL );
         textObject()->emitNewCommand( cmd );
-    break;
+        break;
     }
     case Key_Direction_R: {
 	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirR )
 	    return;
         KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirR );
         textObject()->emitNewCommand( cmd );
-	break;
+        break;
     }
     default: {
             //kdDebug(32500) << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
