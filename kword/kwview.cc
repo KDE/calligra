@@ -6470,15 +6470,14 @@ void KWView::insertFile()
                             i18n("Insert File"));
         return;
     }
-    insertFile( url.path() );
+    insertFile( url );
 }
 
-void KWView::insertFile(const QString & path)
+void KWView::insertFile(const KURL& _url)
 {
     KMacroCommand* macroCmd = 0L;
     bool hasFixedFramesets = false;
-    // ### TODO network transparency
-    KoStore* store=KoStore::createStore( path, KoStore::Read );
+    KoStore* store=KoStore::createStore( _url, KoStore::Read );
     QString maindoc = "maindoc.xml";
     if ( store )
     {
