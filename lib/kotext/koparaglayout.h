@@ -24,6 +24,7 @@
 #include "koborder.h"
 class KoParagCounter;
 class KoStyle;
+class KoOasisContext;
 
 /**
  * This class holds the paragraph-specific formatting information
@@ -118,6 +119,9 @@ public:
      * This format is used by KWord for paragraphs, and by KPresenter+KWord for styles.
      */
     static void loadParagLayout( KoParagLayout& layout, const QDomElement& parentElem, int docVersion = 2 );
+
+    /// Load this parag layout from Oasis XML
+    static void loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context );
 
 private:
     KoTabulatorList m_tabList;

@@ -27,6 +27,7 @@
 #include <assert.h>
 #include <kdebug.h>
 #include "kovariable.h"
+#include <kooasiscontext.h>
 
 //#define DEBUG_PAINT
 
@@ -1647,6 +1648,228 @@ QString KoTextParag::toString( int from, int length ) const
     return str;
 }
 
+void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos )
+{
+    kdDebug() << k_funcinfo << endl;
+    // parse every child node of the parent
+    for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    {
+        QDomElement ts ( node.toElement() );
+        QString textData;
+        QString tagName( ts.tagName() );
+        bool textFoo = tagName.startsWith( "text:" );
+
+        // Try to keep the order of the tag names by probability of happening
+        if ( tagName == "text:span" )
+        {
+            context.m_styleStack.save();
+            context.fillStyleStack( ts, "text:style-name" );
+            loadOasisSpan( ts, context, pos ); // recurse
+            context.m_styleStack.restore();
+        }
+        else if ( textFoo && tagName == "text:s" )
+        {
+            int howmany = 1;
+            if (ts.hasAttribute("text:c"))
+                howmany = ts.attribute("text:c").toInt();
+
+            textData.fill(32, howmany);
+            //shouldWriteFormat=true;
+        }
+        else if ( textFoo && tagName == "text:tab-stop" )
+        {
+            // KWord currently uses \t.
+            // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
+            // One more good reason to switch to <text:tab-stop> instead...
+            textData = '\t';
+            //shouldWriteFormat=true;
+        }
+        else if ( textFoo && tagName == "text:line-break" )
+        {
+            textData = '\n';
+            //shouldWriteFormat=true;
+        }
+#if 0
+        else if ( textFoo &&
+                  ( tagName == "text:footnote" || tagName == "text:endnote" ) )
+        {
+            textData = '#'; // anchor placeholder
+            importFootnote( doc, ts, outputFormats, pos, tagName );
+        }
+        else if ( tagName == "draw:image" )
+        {
+            textData = '#'; // anchor placeholder
+            QString frameName = appendPicture(doc, ts);
+            anchorFrameset( doc, outputFormats, pos, frameName );
+        }
+        else if ( tagName == "draw:text-box" )
+        {
+            textData = '#'; // anchor placeholder
+            QString frameName = appendTextBox(doc, ts);
+            anchorFrameset( doc, outputFormats, pos, frameName );
+        }
+        else if ( textFoo && tagName == "text:a" )
+        {
+            m_styleStack.save();
+            QString href( ts.attribute("xlink:href") );
+            if ( href.startsWith("#") )
+            {
+                // We have a reference to a bookmark (### TODO)
+                // As we do not support it now, treat it as a <text:span> without formatting
+                parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
+            }
+            else
+            {
+                // The problem is that KWord's hyperlink text is not inside the normal text, but for OOWriter it is nearly a <text:span>
+                // So we have to fake.
+                QDomElement fakeParagraph, fakeFormats;
+                uint fakePos=0;
+                QString text;
+                parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
+                textData = '#'; // hyperlink placeholder
+                QDomElement linkElement (doc.createElement("LINK"));
+                linkElement.setAttribute("hrefName",ts.attribute("xlink:href"));
+                linkElement.setAttribute("linkName",text);
+                appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
+            }
+            m_styleStack.restore();
+        }
+        else if ( textFoo &&
+                  (tagName == "text:date" // fields
+                   || tagName == "text:print-time"
+                   || tagName == "text:print-date"
+                   || tagName == "text:creation-time"
+                   || tagName == "text:creation-date"
+                   || tagName == "text:modification-time"
+                   || tagName == "text:modification-date"
+                   || tagName == "text:time"
+                   || tagName == "text:page-number"
+                   || tagName == "text:file-name"
+                   || tagName == "text:author-name"
+                   || tagName == "text:author-initials"
+                   || tagName == "text:subject"
+                   || tagName == "text:title"
+                   || tagName == "text:description"
+                   || tagName == "text:variable-set"
+                   || tagName == "text:page-variable-get"
+                   || tagName == "text:user-defined" ) )
+            // TODO in kword: text:printed-by, initial-creator
+        {
+            textData = "#";     // field placeholder
+            appendField(doc, outputFormats, ts, pos);
+        }
+        else if ( textFoo && tagName == "text:bookmark" )
+        {
+            // the number of <PARAGRAPH> tags in the frameset element is the parag id
+            // (-1 for starting at 0, +1 since not written yet)
+            Q_ASSERT( !m_currentFrameset.isNull() );
+            appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
+                            pos, ts.attribute( "text:name" ) );
+        }
+        else if ( textFoo && tagName == "text:bookmark-start" ) {
+            m_bookmarkStarts.insert( ts.attribute( "text:name" ),
+                                     BookmarkStart( m_currentFrameset.attribute( "name" ),
+                                                    numberOfParagraphs( m_currentFrameset ),
+                                                    pos ) );
+        }
+        else if ( textFoo && tagName == "text:bookmark-end" ) {
+            QString bkName = ts.attribute( "text:name" );
+            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
+            if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
+                // insert simple bookmark then
+                appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
+                                pos, ts.attribute( "text:name" ) );
+            } else {
+                if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
+                    // Oh tell me this never happens...
+                    kdWarning(30518) << "Cross-frameset bookmark! Not supported." << endl;
+                } else {
+                    appendBookmark( doc, (*it).paragId, (*it).pos,
+                                    numberOfParagraphs( m_currentFrameset ), pos, it.key() );
+                }
+                m_bookmarkStarts.remove( it );
+            }
+        }
+#endif
+        else {
+            QDomText t ( node.toText() );
+            if ( t.isNull() ) // no textnode, we must ignore
+            {
+                kdWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+                continue;
+            }
+            else
+            {
+                textData = t.data();
+                //shouldWriteFormat=true;
+            }
+        }
+
+        const uint length = textData.length();
+        append( textData );
+        setFormat( pos, length, paragFormat(), TRUE ); // ### format!
+
+        //if (shouldWriteFormat)
+        //{
+        //    writeFormat( doc, outputFormats, 1 /* id for normal text */, pos, length );
+        //}
+
+        pos += length;
+    }
+}
+
+KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle )
+{
+    KoParagLayout layout;
+
+    // Only when loading paragraphs, not when loading styles
+    if ( findStyle )
+    {
+        KoStyle *style;
+        // Name of the style. If there is no style, then we do not supply
+        // any default!
+        QString styleName = context.m_styleStack.userStyleName();
+        if ( !styleName.isEmpty() )
+        {
+            style = styleCollection->findStyle( styleName );
+            if (!style)
+            {
+                kdError(32001) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;
+                style = styleCollection->findStyle( "Standard" );
+            }
+            //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
+        }
+        else
+        {
+            kdError(32001) << "No style name !? - using Standard" << endl;
+            style = styleCollection->findStyle( "Standard" );
+        }
+        Q_ASSERT(style);
+        layout.style = style;
+    }
+
+    KoParagLayout::loadOasisParagLayout( layout, context );
+
+    return layout;
+}
+
+void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context, KoStyleCollection *styleCollection )
+{
+    // first load layout from style
+    KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
+    setParagLayout( paragLayout );
+
+    // Load default format from style.
+    KoTextFormat *defaultFormat = style() ? &style()->format() : 0L;
+    setFormat( document()->formatCollection()->format( defaultFormat ) );
+
+    uint pos = 0;
+    loadOasisSpan( parent, context, pos );
+
+    setChanged( true );
+    invalidate( 0 );
+}
+
 int KoTextParag::documentWidth() const
 {
     return doc ? doc->width() : 0; //docRect.width();
@@ -1817,3 +2040,4 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         painter.restore();
     }
 }
+

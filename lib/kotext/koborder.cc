@@ -104,6 +104,42 @@ KoBorder KoBorder::loadBorder( const QDomElement & elem )
     return bd;
 }
 
+KoBorder KoBorder::loadFoBorder( const QString& border )
+{
+    KoBorder bd;
+    //string like "0.088cm solid #800000"
+
+    if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
+        return bd;
+
+    // ## isn't it faster to use QStringList::split than parse it 3 times?
+    QString _width = border.section(' ', 0, 0);
+    QString _style = border.section(' ', 1, 1);
+    QString _color = border.section(' ', 2, 2);
+
+   bd.setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
+
+    if ( _style == "dashed" )
+        bd.style = DASH;
+    else if ( _style == "dotted" )
+        bd.style = DOT;
+    else if ( _style == "dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
+        bd.style = DASH_DOT;
+    else if ( _style == "dot-dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
+        bd.style = DASH_DOT_DOT;
+    else if ( _style == "double" )
+        bd.style = DOUBLE_LINE;
+    else
+        bd.style = SOLID;
+
+    if ( _color.isEmpty() )
+        bd.color = QColor();
+    else
+        bd.color.setNamedColor( _color );
+
+    return bd;
+}
+
 void KoBorder::save( QDomElement & elem ) const
 {
     if (color.isValid()) {

@@ -861,7 +861,8 @@ public:
     virtual ~KoTextParagData() {}
     virtual void join( KoTextParagData * ) {}
 };*/
-
+class KoOasisContext;
+class KoStyleCollection;
 class KoTextParag
 {
     friend class KoTextDocument;

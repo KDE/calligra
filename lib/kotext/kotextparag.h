@@ -146,6 +146,9 @@ public:
     /** The app should call this during formatting - e.g. in formatVertically */
     void fixParagWidth( bool viewFormattingChars );
 
+    /** Load from XML */
+    void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
+
 #ifndef NDEBUG
     void printRTDebug( int );
 #endif
@@ -185,3 +188,7 @@ protected:
 protected:
     KoParagLayout m_layout;
     QMap<int, int> m_tabCache;
+
+private:
+   void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
+   KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );

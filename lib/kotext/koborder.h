@@ -49,6 +49,7 @@ public:
 
     // Load from XML
     static KoBorder loadBorder( const QDomElement & elem );
+    static KoBorder loadFoBorder( const QString& border );
     // Save to XML
     void save( QDomElement & elem ) const;
 
