@@ -132,8 +132,17 @@ bool Connection::drv_getDatabasesList( QStringList &list )
 
 bool Connection::drv_databaseExists( const QString &dbName )
 {
-	Q_UNUSED(dbName);
-	return false;
+	QStringList list = databaseNames();
+	if (error()) {
+		return false;
+	}
+
+	if (list.find( dbName )==list.end()) {
+		setError(ERR_OBJECT_NOT_EXISTING, i18n("The database '%1' does not exist.").arg(dbName));
+		return false;
+	}
+
+	return true;
 }
 
 bool Connection::databaseExists( const QString &dbName )
@@ -141,13 +150,7 @@ bool Connection::databaseExists( const QString &dbName )
 	if (!checkConnected())
 		return false;
 	clearError();
-	QStringList list = databaseNames();
-	if (error()) {
-		clearError();
-		return false;
-	}
-	if ( (list.find( dbName )==list.end()) || !drv_databaseExists(dbName) )
-		return false;
+
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
@@ -165,7 +168,8 @@ bool Connection::databaseExists( const QString &dbName )
 			return false;
 		}
 	}
-	return true;
+
+	return drv_databaseExists(dbName);
 }
 
 bool Connection::createDatabase( const QString &dbName )

@@ -156,13 +156,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_getDatabasesList( QStringList &list );
 
 		/*! For optional reimplemenation: asks server if database \a dbName exists.
-			This method is used internally in databaseExists() as "last-chance" 
-			method for checking if database exists (it is called if there is no given \a dbName
-			in the list created by drv_getDatabasesList()).
-
-			Default implementation just returns false, what mean that server just returns
-			full list of available databases. Reimplement this method for servers that 
-			do not offer databases list, but can be queried about given \a dbName.
+			This method is used internally in databaseExists(). The default  implementation
+			calls databaseNames and checks if that list contains \a dbName. If you need to
+			ask the server specifically if a database exists, eg. if you can't retrieve a list
+			of all available database names, please reimplement this method and do all needed checks
 
 			Note: This method should also work if there is already database used (with useDatabase());
 			in this situation no changes should be made in current database selection. */

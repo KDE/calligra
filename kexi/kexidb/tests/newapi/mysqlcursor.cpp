@@ -44,7 +44,7 @@ int main(int /*argc*/, char */*argv[]*/)
 		return 1;
 	}
 	if (!conn->useDatabase( "test" )) {
-		kdDebug() << conn->errorMsg() << endl;
+		kdDebug() <<"use db:"<< conn->errorMsg() << endl;
 		return 1;
 	}
 
