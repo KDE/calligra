@@ -25,6 +25,8 @@
 
 #undef WITH_SYMBOL_UNDERSCORE
 
+#undef KDEMAXPATHLEN
+
 #ifndef HAVE_BOOL
 #define HAVE_BOOL
 typedef int bool;
