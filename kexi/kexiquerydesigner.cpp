@@ -57,7 +57,7 @@ class KexiQueryDesigner::EditGUIClient: public KXMLGUIClient
 		KToggleAction *m_actionView;
 };
 
-//KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGuiClient=0;
+KexiQueryDesigner::EditGUIClient *KexiQueryDesigner::m_editGUIClient=0;
 
 KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
  : KexiDialogBase(parent, name)
@@ -71,6 +71,25 @@ KexiQueryDesigner::KexiQueryDesigner(QWidget *parent, const char *name)
 	QGridLayout *g = new QGridLayout(this);
 	g->addWidget(editor, 0, 0);
 }
+
+KXMLGUIClient *KexiQueryDesigner::guiClient()
+{
+        if (!m_editGUIClient)
+                m_editGUIClient=new EditGUIClient();
+        return m_editGUIClient;
+}
+
+
+void KexiQueryDesigner::activateActions()
+{
+        m_editGUIClient->activate(this);
+}
+
+void KexiQueryDesigner::deactivateActions()
+{
+        m_editGUIClient->deactivate(this);
+}
+
 
 void
 KexiQueryDesigner::slotEditState()

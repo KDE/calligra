@@ -48,7 +48,7 @@ namespace KFormEditor {
 	WidgetContainer::WidgetContainer(QWidget *parent, const char *name, QString identifier)
 	: QWidget(parent,name)
 	{
-		m_topLevelContainer=0;
+		m_topLevelContainer=this;
 		setMinimumWidth(50);
 		setMinimumHeight(50);
 
@@ -68,7 +68,7 @@ namespace KFormEditor {
 
         void WidgetContainer::setTopLevelContainer(WidgetContainer *tpc)
 	{
-		if (!m_topLevelContainer) {
+		if (this!=m_topLevelContainer) {
 			m_topLevelContainer=tpc;
 		}
 	}

@@ -32,8 +32,9 @@ class KexiQueryDesigner : public KexiDialogBase
 		KexiQueryDesigner(QWidget *parent, const char *name=0);
 		~KexiQueryDesigner();
 		
-		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-
+		virtual KXMLGUIClient *guiClient();
+		virtual void deactivateActions();
+		virtual void activateActions();
 	private:
 		class EditGUIClient;
 		friend class EditGUIClient;
