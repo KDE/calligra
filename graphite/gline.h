@@ -38,7 +38,8 @@ public:
 
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
-    virtual void draw(QPainter &p, const QRegion &reg, const bool toPrinter=false);
+    virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
+    virtual void drawHandles(QPainter &p);
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual const bool intersects(const QRect &r) const;
@@ -46,13 +47,14 @@ public:
 
     virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
-    virtual const QPoint &origin() const { return m_a; }
+    virtual const QPoint origin() const { return m_a; }
     virtual void setOrigin(const QPoint &origin);
     virtual void moveX(const int &dx);
     virtual void moveY(const int &dy);
     virtual void move(const int &dx, const int &dy);
 
     virtual void rotate(const QPoint &center, const double &angle);
+    virtual void setAngle(const double &angle);
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
     virtual void resize(const QRect &boundingRect);
 
@@ -74,8 +76,7 @@ public:
     GLineM9r(GLine *line, const Mode &mode);
     virtual ~GLineM9r();
 
-    virtual void draw(QPainter &p, const QRegion &reg,
-		      const bool toPrinter=false);
+    virtual void draw(QPainter &p);
 
     virtual const bool mouseMoveEvent(QMouseEvent *e, GraphiteView *view,
 				      QRect &dirty);
@@ -92,11 +93,6 @@ public:
 				       QRect &dirty);
 
     virtual GObject *gobject() { return m_line; }
-
-public slots: // TODO
-    virtual void setPenStyle(const Qt::PenStyle &/*style*/) {}
-    virtual void setPenWidth(const int &/*width*/) {}
-    virtual void setPenColor(const QColor &/*color*/) {}
 
 private:
     GLineM9r(const GLineM9r &rhs);

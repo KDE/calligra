@@ -70,8 +70,8 @@ public:
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
 
-    virtual void draw(QPainter &p, const QRegion &reg,
-		      const bool toPrinter=false) = 0;
+    // call drawHandles
+    virtual void draw(QPainter &p) = 0;
 
     virtual const bool mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 				      QRect &/*dirty*/) { return false; }
@@ -121,10 +121,10 @@ class G1DObjectM9r : public GObjectM9r {
 public:
     virtual ~G1DObjectM9r() {}
 
-public slots:
-    virtual void setPenStyle(int /*style*/) {}
-    virtual void setPenWidth(int /*width*/) {}
-    virtual void setPenColor(const QColor &/*color*/) {}
+protected slots:
+    virtual void setPenStyle(int style);
+    virtual void setPenWidth(int width);
+    virtual void setPenColor(const QColor &color);
 
 protected:
     G1DObjectM9r(GObject *object, const Mode &mode) : GObjectM9r(mode),
@@ -135,14 +135,15 @@ private:
     GObject *m_object;
 };
 
-// TODO G2DObjectM9r - with a gradient/brush page
+// TODO G2DObjectM9r - with an additional gradient/brush page
 
 // The abstract base classes for all graphic objects. This class is
 // implemented as a composite (pattern) - sort of :)
 // There are complex classes (classes which are composed of many
 // objects, like a group) and leaf classes which don't have any
 // children.
-// The resulting tree represents the Z-Order of the document.
+// The resulting tree represents the Z-Order of the document. (First
+// the object draws "itself" and then its children)
 class GObject {
 
 public:
@@ -152,8 +153,8 @@ public:
 
     virtual ~GObject() {}
 
-    const bool isOk() const { return m_ok; }
-    void setOk(const bool &ok=true) { m_ok=ok; }
+    virtual const bool isOk() const { return m_ok; }
+    virtual void setOk(const bool &ok=true) { m_ok=ok; }
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
     // create an object and initialize it with the given XML (calls the XML-CTOR)
@@ -180,7 +181,12 @@ public:
 
     // toPrinter is set when we print the document - this means we don't
     // have to paint "invisible" (normally they are colored gray) objects
-    virtual void draw(QPainter &p, const QRegion &reg, const bool toPrinter=false) = 0;
+    // Whenever you paint an object, check if it is within the requested
+    // area (region). Add the area of "your" object (boundingRect) to the
+    // region to maintain a correct Z order!
+    virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false) = 0;
+    // Used to draw the handles/rot-handles when selected
+    virtual void drawHandles(QPainter &p) = 0;
 
     const int &zoom() const { return m_zoom; }
     virtual void setZoom(const short &zoom=100) { m_zoom=zoom; }
@@ -197,7 +203,7 @@ public:
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
 
-    virtual const QPoint &origin() const = 0;             // the origin coordinate of the obj
+    virtual const QPoint origin() const = 0;             // the origin coordinate of the obj
     virtual void setOrigin(const QPoint &origin) = 0;
     virtual void moveX(const int &dx) = 0;
     virtual void moveY(const int &dy) = 0;
@@ -262,7 +268,7 @@ protected:
     double m_angle;			         // angle (radians!)
 
     mutable bool m_boundingRectDirty;            // is the cached bounding rect still correct?
-    mutable QRect m_boundingRect;                // bounding rect (cache)
+    mutable QRect m_boundingRect;           // bounding rect (cache) - don't use directly!
 
     FillStyle m_fillStyle;
     QBrush m_brush;
@@ -272,7 +278,7 @@ protected:
     bool m_ok;      // used to express errors (e.g. during loading)
 
 private:
-    GObject &operator=(const GObject &rhs);    // don't assign the objects, clone them
+    GObject &operator=(const GObject &rhs); // don't assign the objects, clone them
 };
 
 

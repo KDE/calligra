@@ -23,10 +23,6 @@
 
 #include <gline.h>
 
-// test
-#include <kdialogbase.h>
-#include <kdebug.h>
-#include <graphiteview.h>
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
 								      m_a(a), m_b(b) {
@@ -108,9 +104,9 @@ QDomElement GLine::save(QDomDocument &doc) const {
     return e;
 }
 
-void GLine::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
+void GLine::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 
-    if(m_state!=GObject::Visible && (!toPrinter && m_state!=GObject::Invisible))
+    if(m_state==GObject::Deleted || (toPrinter && m_state==GObject::Invisible))
 	return;
 
     if(!reg.contains(boundingRect()))
@@ -120,6 +116,19 @@ void GLine::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
     p.setPen(m_pen);
     p.drawLine(m_a, m_b);
     p.restore();
+
+    // resize the region
+    reg+=boundingRect();
+}
+
+void GLine::drawHandles(QPainter &/*p*/) {
+
+    if(m_state==Handles) {
+	// TODO
+    }
+    else if(m_state==Rot_Handles) {
+	// TODO
+    }
 }
 
 const GLine *GLine::hit(const QPoint &p) const {
@@ -166,7 +175,7 @@ const bool GLine::intersects(const QRect &r) const {
 
     if(r.contains(m_a) || r.contains(m_b))
 	return true;
-    else if(r.intersects(m_boundingRect))
+    else if(r.intersects(boundingRect()))
 	return true;
     else {
 	// f(x)=mx+d
@@ -245,6 +254,10 @@ void GLine::rotate(const QPoint &center, const double &angle) {
     m_boundingRectDirty=true;
 }
 
+void GLine::setAngle(const double &/*angle*/) {
+    // TODO
+}
+
 void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
 
     scalePoint(m_a, xfactor, yfactor, origin);
@@ -266,12 +279,12 @@ GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(line, mode), m_
 }
 
 GLineM9r::~GLineM9r() {
-    // TODO - other state, when it has been deleted!
-    m_line->setState(GObject::Visible);
+    if(m_line->state()==GObject::Handles || m_line->state()==GObject::Rot_Handles)
+	m_line->setState(GObject::Visible);
 }
 
-void GLineM9r::draw(QPainter &p, const QRegion &reg, const bool toPrinter) {
-    m_line->draw(p, reg, toPrinter);
+void GLineM9r::draw(QPainter &p) {
+    m_line->drawHandles(p);
 }
 
 const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
@@ -280,13 +293,9 @@ const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
     return false;
 }
 
-const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView *view,
+const bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
 				     QRect &/*dirty*/) {
     // TODO
-    // test
-    kdDebug(37001) << "GLineM9r::mousePressEvent(): here we go..." << endl;
-    KDialogBase *dia=createPropertyDialog(view->canvas());
-    dia->exec();
     return false;
 }
 

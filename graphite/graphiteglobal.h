@@ -42,15 +42,24 @@ class GraphiteGlobal {
 public:
     static GraphiteGlobal *self();
 
+    // size of the "fuzzy" zone for selections
     const int &fuzzyBorder() const { return m_fuzzyBorder; }
     void setFuzzyBorder(const int &fuzzyBorder) { m_fuzzyBorder=fuzzyBorder; }
+    
+    // size of the "handles"
+    const int &handleSize() const { return m_handleSize; }
+    void setHandleSize(const int &handleSize) { m_handleSize=handleSize; }
+    
+    // size (diameter) of the "rot-handles"
+    const int &rotHandleSize() const { return m_rotHandleSize; }
+    void setRotHandleSize(const int &rotHandleSize) { m_rotHandleSize=rotHandleSize; }
 
     // more to come...
     // maybe I'll add a init(...) method which takes a KConfig file
     // and initializes all the "global" vars.
 
 private:
-    GraphiteGlobal() : m_fuzzyBorder(3) {}
+    GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4), m_rotHandleSize(4) {}
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
 
@@ -58,5 +67,7 @@ private:
 
     static GraphiteGlobal *m_self;
     int m_fuzzyBorder;
+    int m_handleSize;
+    int m_rotHandleSize;
 };
 #endif // GRAPHITE_GLOBAL_H

@@ -43,19 +43,44 @@ GObjectM9r::~GObjectM9r() {
 }
 
 KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
-    return new KDialogBase(KDialogBase::IconList,
-			   i18n("Change Properties"),
-			   KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
-			   KDialogBase::Ok, parent, "property dia", true, true);
+
+    if(m_dialog==0L)
+	m_dialog=new KDialogBase(KDialogBase::IconList,
+				 i18n("Change Properties"),
+				 KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+				 KDialogBase::Ok, parent, "property dia", true, true);
+    return m_dialog;
+}
+
+
+void G1DObjectM9r::setPenStyle(int style) {
+
+    QPen p=m_object->pen();
+    p.setStyle(static_cast<Qt::PenStyle>(style));
+    m_object->setPen(p);
+}
+
+void G1DObjectM9r::setPenWidth(int width) {
+
+    QPen p=m_object->pen();
+    p.setWidth(width);
+    m_object->setPen(p);
+}
+
+void G1DObjectM9r::setPenColor(const QColor &color) {
+
+    QPen p=m_object->pen();
+    p.setColor(color);
+    m_object->setPen(p);
 }
 
 KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 
-    KDialogBase *dia=GObjectM9r::createPropertyDialog(parent);
-    if(!dia)
+    GObjectM9r::createPropertyDialog(parent);
+    if(!m_dialog)
 	return 0L;
 
-    QFrame *frame=dia->addPage(i18n("Pen"), i18n("Pen Settings"),
+    QFrame *frame=m_dialog->addPage(i18n("Pen"), i18n("Pen Settings"),
 			       BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
 
     QGridLayout *grid=new QGridLayout(frame, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
@@ -97,7 +122,7 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
     style->setCurrentItem(m_object->pen().style());
     grid->addWidget(style, 2, 1);
 
-    return dia;
+    return m_dialog;
 }
 
 
@@ -181,7 +206,7 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
 	m_name="no name";
 
     m_state=static_cast<State>(element.attribute(attrState).toInt(&ok));
-    if(!ok)
+    if(!ok || m_state==Handles || m_state==Rot_Handles)
 	m_state=Visible;
 
     m_angle=element.attribute(attrAngle).toDouble(&ok);
