@@ -100,7 +100,6 @@
 #include "kiviooptionsdialog.h"
 
 #include "stencilbardockmanager.h"
-#include "add_spawner_set_dlg.h"
 #include "kivio_common.h"
 #include "kivio_painter.h"
 #include "kivio_rect.h"
@@ -120,6 +119,7 @@
 #include "kivio_paragraph_action.h"
 #include "KIvioViewIface.h"
 #include "kivio_command.h"
+#include "kiviostencilsetaction.h"
 #include <qiconview.h>
 
 
@@ -376,11 +376,12 @@ void KivioView::createProtectionDock()
 
 void KivioView::setupActions()
 {
-  //FIXME: Port to KOffice!
-  AddSpawnerSetAction* addSpSet =  new AddSpawnerSetAction( i18n("Add Stencil Set"), "open_stencilset", 0, actionCollection(), "addStencilSet" );
+  KivioStencilSetAction* addSpSet =  new KivioStencilSetAction( i18n("Add Stencil Set"),
+    "open_stencilset", actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
-  (void) new KAction( i18n("Align && Distribute..."), ALT+Key_A, this, SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
+  (void) new KAction( i18n("Align && Distribute..."), ALT+Key_A, this,
+    SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
   KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
   m_editCopy=KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );

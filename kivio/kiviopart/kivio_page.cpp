@@ -370,7 +370,8 @@ void KivioPage::printSelected( KivioPainter& painter )
   KivioStencil *pStencil;
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
-  zoomHandler.setZoomAndResolution(100, 600, 600); // FIXME: Hmmm... resolution sucks ;)
+  // FIXME: Hmmm... resolution sucks ;)
+  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
 
   data.painter = &painter;
   data.zoomHandler = &zoomHandler;

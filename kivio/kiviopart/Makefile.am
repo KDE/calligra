@@ -19,46 +19,7 @@ INCLUDES = -I$(srcdir)/ui\
 	$(all_includes)
 
 libkiviopart_la_METASOURCES = AUTO
-libkiviopart_la_SOURCES = kivio_canvas.cpp \
-		kivio_doc.cpp\
-		kivio_factory.cpp\
-		kivio_tabbar.cpp\
-		kivio_view.cpp\
-		kivio_map.cpp\
-		kivio_page.cpp\
-		kivio_dlg_pageshow.cpp\
-		kivio_ruler.cpp\
-		kivio_zoomaction.cpp\
-		add_spawner_set_dlg.cpp\
-		kivio_icon_view.cpp\
-		kivio_config.cpp\
-		kivio_spawner_drag.cpp\
-		kivio_intra_stencil_data.cpp\
-		kivio_stackbar.cpp\
-		stencilbarbutton.cpp\
-		stencilbardockmanager.cpp\
-		stencilbarmovemanager.cpp\
-		kivio_lineendsaction.cpp\
-		tooldockbase.cpp\
-		tooldockmanager.cpp\
-		kivio_paragraph_action.cpp\
-		stencil_text_dlg.cpp\
-		kivio_grid_data.cpp\
-		kivio_guidelines.cpp\
-		kivio_stencil_geometry_panel.cpp\
-		kivio_viewmanager_panel.cpp\
-		KIvioViewIface.skel\
-		KIvioViewIface.cc\
-		KIvioDocIface.skel\
-		KIvioDocIface.cc\
-		KIvioMapIface.skel\
-		KIvioMapIface.cc\
-		KIvioPageIface.skel\
-		KIvioPageIface.cc\
-		kivio_command.cc\
-		KIvioLayerIface.skel\
-		KIvioLayerIface.cc\
-		kivioglobal.cpp
+libkiviopart_la_SOURCES = kivio_canvas.cpp 		kivio_doc.cpp		kivio_factory.cpp		kivio_tabbar.cpp		kivio_view.cpp		kivio_map.cpp		kivio_page.cpp		kivio_dlg_pageshow.cpp		kivio_ruler.cpp		kivio_zoomaction.cpp		add_spawner_set_dlg.cpp		kivio_icon_view.cpp		kivio_config.cpp		kivio_spawner_drag.cpp		kivio_intra_stencil_data.cpp		kivio_stackbar.cpp		stencilbarbutton.cpp		stencilbardockmanager.cpp		stencilbarmovemanager.cpp		kivio_lineendsaction.cpp		tooldockbase.cpp		tooldockmanager.cpp		kivio_paragraph_action.cpp		stencil_text_dlg.cpp		kivio_grid_data.cpp		kivio_guidelines.cpp		kivio_stencil_geometry_panel.cpp		kivio_viewmanager_panel.cpp		KIvioViewIface.skel		KIvioViewIface.cc		KIvioDocIface.skel		KIvioDocIface.cc		KIvioMapIface.skel		KIvioMapIface.cc		KIvioPageIface.skel		KIvioPageIface.cc		kivio_command.cc		KIvioLayerIface.skel		KIvioLayerIface.cc		kivioglobal.cpp kiviostencilsetaction.h kiviostencilsetaction.cpp
 
 EXTRA_DIST = \
 		main.cpp\

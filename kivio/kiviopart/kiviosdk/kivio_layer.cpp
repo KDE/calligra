@@ -306,7 +306,8 @@ void KivioLayer::printContent( KivioPainter& painter )
   KivioStencil *pStencil = m_pStencilList->first();
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
-  zoomHandler.setZoomAndResolution(100, 600, 600); // FIXME: Hmmm... resolution sucks ;)
+  // FIXME: Hmmm... resolution sucks ;)
+  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
 
   painter.setFGColor( QColor(0,0,0) );
 
