@@ -44,19 +44,29 @@ public:
     KoPictureFilePreviewWidget( QWidget *parent )
         : QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
-    bool setPicture( const QString & filename )
+    bool setPicture( const KURL& url )
     {
         KoPicture picture;
-        if (picture.loadFromFile( filename ))
-        {
-            m_size = picture.getOriginalSize();
-            m_picture = picture;
-            resizeContents( m_size.width(), m_size.height() );
-            repaintContents();
-            return true;
-        }
-        else
-            return false;
+	if ( url.isLocalFile() )
+	{
+            if ( !picture.loadFromFile( url.path() ) )
+	    {
+	        return false;
+	    }
+	}
+	else
+	{
+	    // ### TODO: find a way to avoid to download the file again later
+            if ( !picture.setKeyAndDownloadPicture( url, this ) )
+	    {
+	        return false;
+	    }
+	}
+        m_size = picture.getOriginalSize();
+        m_picture = picture;
+        resizeContents( m_size.width(), m_size.height() );
+        repaintContents();
+        return true;
     }
 
     void setNullPicture(void)
@@ -88,13 +98,7 @@ KoPictureFilePreview::KoPictureFilePreview( QWidget *parent )
 
 void KoPictureFilePreview::showPreview( const KURL &u )
 {
-    if ( u.isLocalFile() ) {
-        QString path = u.path();
-        m_widget->setPicture( path );
-    } else {
-        // ## TODO support for remote URLs
-        m_widget->setNullPicture();
-    }
+    m_widget->setPicture( u );
 }
 
 void KoPictureFilePreview::clearPreview()
@@ -104,7 +108,7 @@ void KoPictureFilePreview::clearPreview()
 
 QString KoPictureFilePreview::clipartPattern()
 {
-    return i18n( "*.svg *.wmf|Clipart (*.svg *.wmf)" );
+    return i18n( "*.svg *.wmf *.qpic|Clipart (*.svg *.wmf *.qpic)" );
 }
 
 QStringList KoPictureFilePreview::clipartMimeTypes()
@@ -112,6 +116,6 @@ QStringList KoPictureFilePreview::clipartMimeTypes()
     QStringList lst;
     lst << "image/svg+xml";
     lst << "image/x-wmf";
-    // TODO; image/x-qpicture
+    lst << "image/x-vnd.trolltech.qpicture";
     return lst;
 }
