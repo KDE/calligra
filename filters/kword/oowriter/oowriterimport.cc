@@ -1078,6 +1078,13 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
     }
     layoutElement.appendChild( flowElement );
 
+    if ( m_styleStack.hasAttribute( "fo:writing-mode" ) ) // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
+    {
+        // LTR is lr-tb. RTL is rl-tb
+        QString writingMode = m_styleStack.attribute( "fo:writing-mode" );
+        flowElement.setAttribute( "dir", writingMode=="rl-tb" || writingMode=="rl" ? "R" : "L" );
+    }
+
     // Indentation (margins)
     OoUtils::importIndents( layoutElement, m_styleStack );
 
