@@ -61,7 +61,7 @@
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
-//#define DEBUG_DTI
+#define DEBUG_DTI
 //#define DEBUG_ITD
 
 /**
@@ -201,8 +201,8 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         KWFrame *theFrame = frameIt.current();
         if ( theFrame->contains( dPoint ) )
         {
-            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->x() ) );
-            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->y() + theFrame->internalY() ) );
+            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->innerRect().x() ) );
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->innerRect().y() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning InsideFrame " << iPoint.x() << "," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
@@ -224,7 +224,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         if ( openLeftRect.contains( dPoint ) )
         {
             // We are at the left of this frame (and not in any other frame of this frameset)
-            iPoint.setX( 0 );
+            iPoint.setX( m_doc->ptToLayoutUnitPixX(theFrame->innerRect().left() ));
             iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning LeftOfFrame " << iPoint.x() << "," << iPoint.y()
@@ -241,7 +241,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         if ( openTopRect.contains( dPoint ) )
         {
             // We are at the top of this frame (...)
-            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
+            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->innerRect().left() ) );
             iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
 #ifdef DEBUG_DTI
             kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
@@ -535,7 +535,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
             int translationX = viewFrameRect.left();
             int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->innerRect()->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->innerRect()->internalY() ) << endl;
+            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->innerRect()->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
 #endif
             p->translate( translationX, translationY );
             p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
