@@ -198,22 +198,22 @@ bool importWizard::checkUserInput()
     if (srcTypeCombo->currentText() != "PostgreSQL Database")
     {
         problem = true;
-        finishtxt = i18n("Source type was not PostgreSQL Database");
+        finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
     if (dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "")
     {
         problem = true;
-        finishtxt = finishtxt + i18n("\nNo new database name was entered");
+        finishtxt = finishtxt + i18n("\nNo new database name was entered.");
     }
 
     if (problem)
     {
-        finishtxt = i18n("I found the following problems with the data you entered:\n\n") + finishtxt;
-        finishtxt = finishtxt + i18n("\n\nPlease go back and correct these errors");
+        finishtxt = i18n("The following problems were found with the data you entered:\n\n") + finishtxt;
+        finishtxt = finishtxt + i18n("\n\nPlease go back and correct these errors.");
     }
     else
     {
-        finishtxt = i18n("I did not find any problems with the data you entered");
+        finishtxt = i18n("No problems were found with the data you entered.");
     }
     lblfinishTxt->setText(finishtxt);
     
@@ -251,11 +251,11 @@ void importWizard::accept()
     
     if (import->performImport())
     {
-        KMessageBox::error(this, i18n("Import Suceeded"), i18n("Yay"));
+        KMessageBox::error(this, i18n("Import Succeeded."), i18n("Success"));
     }
     else
     {
-        KMessageBox::error(this, i18n("Import failed because: "), i18n("Oh no"));
+        KMessageBox::error(this, i18n("Import failed because: "), i18n("Failure"));
     }
 }
 
