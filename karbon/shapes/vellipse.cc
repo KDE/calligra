@@ -159,15 +159,15 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 	docWriter->addAttributePt( "svg:ry", m_ry );
 
 	if( m_type == full )
-		docWriter->addAttribute( "kind", "full" );
+		docWriter->addAttribute( "draw:kind", "full" );
 	else
 	{
 		if( m_type == cut )
-			docWriter->addAttribute( "kind", "cut" );
+			docWriter->addAttribute( "draw:kind", "cut" );
 		else if( m_type == section )
-			docWriter->addAttribute( "kind", "section" );
+			docWriter->addAttribute( "draw:kind", "section" );
 		else
-			docWriter->addAttribute( "kind", "arc" );
+			docWriter->addAttribute( "draw:kind", "arc" );
 
 		docWriter->addAttribute( "draw:start-angle", m_startAngle );
 		docWriter->addAttribute( "draw:end-angle", m_endAngle );
@@ -176,6 +176,34 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 	VObject::saveOasis( store, docWriter, mainStyles );
 
 	docWriter->endElement();
+}
+
+bool
+VEllipse::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+{
+	setState( normal );
+
+	m_rx = KoUnit::parseValue( element.attribute( "svg:rx" ) );
+	m_ry = KoUnit::parseValue( element.attribute( "svg:ry" ) );
+
+	m_center.setX( KoUnit::parseValue( element.attribute( "svg:cx" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "svg:cy" ) ) );
+
+	m_startAngle = element.attribute( "draw:start-angle" ).toDouble();
+	m_endAngle = element.attribute( "draw:end-angle" ).toDouble();
+
+	if( element.attribute( "draw:kind" ) == "cut" )
+		m_type = cut;
+	else if( element.attribute( "draw:kind" ) == "section" )
+		m_type = section;
+	else if( element.attribute( "draw:kind" ) == "arc" )
+		m_type = arc;
+	else
+		m_type = full;
+
+	init();
+
+	return true;
 }
 
 void

@@ -364,6 +364,18 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 	docWriter->endElement();
 }
 
+bool
+VPath::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+{
+	setState( normal );
+
+	QString data = element.attribute( "d" );
+	if( data.length() > 0 )
+	{
+		loadSvgPath( data );
+	}
+}
+
 void
 VPath::load( const QDomElement& element )
 {

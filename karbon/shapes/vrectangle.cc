@@ -150,6 +150,25 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 	docWriter->endElement();
 }
 
+bool
+VRectangle::loadOasis( const QDomElement &element, KoOasisStyles & )
+{
+	setState( normal );
+
+	m_width  = KoUnit::parseValue( element.attribute( "svg:width" ), 10.0 );
+	m_height = KoUnit::parseValue( element.attribute( "svg:height" ), 10.0 );
+
+	m_topLeft.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
+	m_topLeft.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
+
+	m_rx  = KoUnit::parseValue( element.attribute( "svg:rx" ) );
+	m_ry  = KoUnit::parseValue( element.attribute( "svg:ry" ) );
+
+	init();
+
+	return true;
+}
+
 void
 VRectangle::load( const QDomElement& element )
 {

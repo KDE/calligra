@@ -184,6 +184,51 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyl
 
 	docWriter->endElement();
 }
+
+bool
+VGroup::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+{
+	m_objects.setAutoDelete( true );
+	m_objects.clear();
+	m_objects.setAutoDelete( false );
+
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "draw:path" )
+			{
+				VPath* composite = new VPath( this );
+				composite->loadOasis( e, oasisStyles );
+				append( composite );
+			}
+			else if( e.tagName() == "draw:ellipse" )
+			{
+				VEllipse* ellipse = new VEllipse( this );
+				ellipse->loadOasis( e, oasisStyles );
+				append( ellipse );
+			}
+			else if( e.tagName() == "draw:rect" )
+			{
+				VRectangle* rectangle = new VRectangle( this );
+				rectangle->loadOasis( e, oasisStyles );
+				append( rectangle );
+			}
+			else if( e.tagName() == "draw:g" )
+			{
+				VGroup* group = new VGroup( this );
+				group->loadOasis( e, oasisStyles );
+				append( group );
+			}
+		}
+	}
+
+	return true;
+}
+
 void
 VGroup::load( const QDomElement& element )
 {

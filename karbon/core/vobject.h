@@ -143,7 +143,7 @@ public:
 	 */
 	virtual void load( const QDomElement& element );
 
-	virtual bool loadOasis( const QDomElement &page, KoOasisStyles &oasisStyles );
+	virtual bool loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles );
 
 	/**
 	 * Create an exact copy of this object.

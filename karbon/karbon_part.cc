@@ -29,6 +29,7 @@
 #include <ktempfile.h>
 #include <koTemplateChooseDia.h>
 #include <koStoreDevice.h>
+#include <koOasisStyles.h>
 #include <koxmlwriter.h>
 
 #include "karbon_factory.h"
@@ -216,7 +217,20 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore *
 		return false;
 	}
 
-	m_doc.loadOasis(page, styles );
+	QString masterPageName = "Standard"; // use default layout as fallback
+	QDomElement *master = styles.masterPages()[ masterPageName ];
+	Q_ASSERT( master );
+	QDomElement *style =master ? styles.styles()[master->attribute( "style:page-layout-name" )] : 0;
+	if( style )
+	{
+        	m_pageLayout.loadOasis( *style );
+		m_doc.setWidth( m_pageLayout.ptWidth );
+		m_doc.setHeight( m_pageLayout.ptHeight );
+	}
+	else
+		return false;
+
+	m_doc.loadOasis( page, styles );
 
 	return true;
 }
@@ -258,6 +272,15 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 		(*it).style->writeStyle( &docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
 
 	docWriter.endElement(); // office:automatic-styles
+
+	styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
+	it = styles.begin();
+	docWriter.startElement("office:master-styles");
+
+	for( ; it != styles.end(); ++it)
+		(*it).style->writeStyle( &docWriter, mainStyles, "style:master-page", (*it).name, "");
+
+	docWriter.endElement(); // office:master-styles
 
 	// And now we can copy over the contents from the tempfile to the real one
 	tmpFile->close();
