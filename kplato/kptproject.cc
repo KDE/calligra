@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptproject.h"
+#include <kdebug.h>
 
 KPTProject::KPTProject() : KPTNode(), startNode( this ), endNode( this ) {
         m_nodeType=PROJECT;
@@ -53,143 +54,133 @@ KPTDuration *KPTProject::getFloat() {
     return 0L;
 }
 
-void KPTProject::forward_pass( std::list<KPTNode*> nodelist ){
-  /* Propagate (start) value of first node in list to all nodes in project */
-  /* First find the first node with no predecessors values */
-  for( list<KPTNode*>::iterator i_node
-     = find_if( nodelist.begin(), nodelist.end(),
-            no_unvisited( &KPTNode::predecessors ) );
-       i_node != nodelist.end();
-       i_node = find_if( nodelist.begin(), nodelist.end(),
-             no_unvisited( &KPTNode::predecessors ) ) ){
-    /* at this point i_node will contain the first node from
-     * which we can search: refer to node as n and earliest
-     * finish (or latest start) time for n as t */
-    KPTNode &n = **i_node;
-    KPTDuration t( n.earliestStart );
-    /* *** expected should be more general than this *** */
-    /* *** we could use (say) a member function pointer *** */
-    t.add( n.effort()->expected() );
-    /* Go through arcs from n, propagating values */
-    for( vector<KPTNode*>::iterator i = n.successors.list.begin();
-     i != n.successors.list.end(); ++i ){
-      /* add new nodes if necessary */
-      if( (*i)->predecessors.unvisited == (*i)->predecessors.number )
-    nodelist.push_back( *i );
-      /* reduce unvisited to indicate that an arc/relation has been followed */
-      (*i)->predecessors.unvisited--;
-      /* act if t is later than start of arc node */
-      if( t > (*i)->earliestStart ){
-    (*i)->earliestStart = t;
-      }
+void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
+    /* Propagate (start) value of first node in list to all nodes in project */
+    /* First find the first node with no predecessors values */
+    list<KPTNode*>::iterator curNode;
+    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::predecessors ) );
+    while(curNode != nodelist.end()) {
+        /* at this point curNode will contain the first node from
+         * which we can search: refer to node as currentNode and earliest
+         * finish (or latest start) time for currentNode as duration */
+        KPTNode &currentNode = **curNode;
+        KPTDuration duration( currentNode.earliestStart );
+        /* *** expected should be more general than this *** */
+        /* *** we could use (say) a member function pointer *** */
+        duration.add( currentNode.effort()->expected() );
+        /* Go through arcs from currentNode, propagating values */
+        for( vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
+            /* add new nodes if necessary */
+            if( (*i)->predecessors.unvisited == (*i)->predecessors.number )
+            nodelist.push_back( *i );
+            /* reduce unvisited to indicate that an arc/relation has been followed */
+            (*i)->predecessors.unvisited--;
+            /* act if duration is later than start of arc node */
+            if( duration > (*i)->earliestStart ){
+                (*i)->earliestStart = duration;
+            }
+        }
+        /* Only act if node is an end node here - KPTRelations
+         * should not be followed for a start node */
+        if( (*curNode)->owner_node()->end_node() == *curNode )
+            /* Go through relations from currentNode, propagating values */
+            for( QPtrListIterator<KPTRelation> i( currentNode.owner_node()->m_dependChildNodes ); i.current(); ++i ) {
+                /* add new nodes if necessary */
+                if( i.current()->child()->start_node()->predecessors.unvisited == i.current()->child()->start_node()->predecessors.number )
+                    nodelist.push_back( i.current()->child()->start_node() );
+                /* reduce unvisited to indicate that a relation has been followed */
+                i.current()->child()->start_node()->predecessors.unvisited--;
+                /* calculate u = duration (plus) lag of relation */
+                KPTDuration u( duration );
+                u.add( i.current()->lag() );
+                /* act if u is later than start of next node */
+                if( u > i.current()->child()->start_node()->earliestStart ) {
+                    i.current()->child()->start_node()->earliestStart = u;
+                }
+            }
+        /* Remove currentNode from list so that we don't use it again */
+        nodelist.erase( curNode );
+        curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited(&KPTNode::predecessors) );
     }
-    /* Only act if node is an end node here - KPTRelations
-     * should not be followed for a start node */
-    if( (*i_node)->owner_node()->end_node() == *i_node )
-      /* Go through relations from n, propagating values */
-      for( QPtrListIterator<KPTRelation> i( n.owner_node()->m_dependChildNodes );
-       i.current(); ++i ){
-    /* add new nodes if necessary */
-    if( i.current()->child()->start_node()->predecessors.unvisited
-        == i.current()->child()->start_node()->predecessors.number )
-      nodelist.push_back( i.current()->child()->start_node() );
-    /* reduce unvisited to indicate that a relation has been followed */
-    i.current()->child()->start_node()->predecessors.unvisited--;
-    /* calculate u = t (plus) lag of relation */
-    KPTDuration u( t );
-    u.add( i.current()->lag() );
-    /* act if u is later than start of next node */
-    if( u > i.current()->child()->start_node()->earliestStart ){
-      i.current()->child()->start_node()->earliestStart = u;
-    }
-      }
-    /* Remove n from list so that we don't use it again */
-    nodelist.erase( i_node );
-  }
 }
 
 void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
-  /* Propagate (start) value of first node in list to all nodes in project */
-  /* First find the first node with no successor values */
-  for( list<KPTNode*>::iterator i_node
-     = find_if( nodelist.begin(), nodelist.end(),
-            no_unvisited( &KPTNode::successors ) );
-       i_node != nodelist.end();
-       i_node = find_if( nodelist.begin(), nodelist.end(),
-             no_unvisited( &KPTNode::successors ) ) ){
-    /* at this point i_node will contain the first node from
-     * which we can search: refer to node as n and earliest
-     * finish (or latest start) time for n as t */
+    /* Propagate (start) value of first node in list to all nodes in project */
+    /* First find the first node with no successor values */
+    list<KPTNode*>::iterator curNode;
+    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors ) ); 
+    while(curNode != nodelist.end()) {
+        /* at this point curNode will contain the first node from
+        * which we can search: refer to node as currentNode and earliest
+        * finish (or latest start) time for currentNode as t */
 
-    for( list<KPTNode*>::const_iterator k = nodelist.begin();
-     k != nodelist.end(); ++k )
-      {
-    std::cerr << (*k)->name().latin1() << " ("
-          << (*k)->successors.unvisited
-          << ") :";
-      }
-    std::cerr << endl;
+#ifdef DEBUGPERT
+        for( list<KPTNode*>::const_iterator k = nodelist.begin(); k != nodelist.end(); ++k ) {
+            kdDebug() << (*k)->name().latin1() << " (" << (*k)->successors.unvisited << ")" << endl;;
+        }
+        kdDebug() << endl;
+#endif
 
-    KPTNode &n = **i_node;
-    KPTDuration t( n.latestFinish );
-    /* *** expected should be more general than this *** */
-    /* *** we could use (say) a member function pointer *** */
-    t.subtract( n.effort()->expected() );
-    std::cerr << "*******" << t.toString().latin1() << endl;
-    /* Go through arcs from n, propagating values */
-    for( vector<KPTNode*>::iterator i = n.predecessors.list.begin();
-     i != n.predecessors.list.end(); ++i ){
-      /* add new nodes if necessary */
-      if( (*i)->successors.unvisited == (*i)->successors.number )
-    nodelist.push_back( *i );
-      /* reduce unvisited to indicate that an arc/relation has been followed */
-      (*i)->successors.unvisited--;
-      /* act if t is earlier than finish of arc node */
-      if( t < (*i)->latestFinish ){
-    (*i)->latestFinish = t;
-      }
+        KPTNode &currentNode = **curNode;
+        KPTDuration t( currentNode.latestFinish );
+        /* *** expected should be more general than this *** */
+        /* *** we could use (say) a member function pointer *** */
+        t.subtract( currentNode.effort()->expected() );
+#ifdef DEBUGPERT
+        kdDebug() << "*******" << t.toString().latin1() << endl;
+#endif
+        /* Go through arcs from currentNode, propagating values */
+        for( vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
+            /* add new nodes if necessary */
+            if( (*i)->successors.unvisited == (*i)->successors.number )
+                nodelist.push_back( *i );
+            /* reduce unvisited to indicate that an arc/relation has been followed */
+            (*i)->successors.unvisited--;
+            /* act if t is earlier than finish of arc node */
+            if( t < (*i)->latestFinish ) {
+                (*i)->latestFinish = t;
+            }
+        }
+        /* Only act if node is an start node here - KPTRelations
+        * should not be followed for a end node */
+        if( (*curNode)->owner_node()->start_node() == *curNode )
+            /* Go through relations from currentNode, propagating values */
+            for( QPtrListIterator<KPTRelation> i( currentNode.owner_node()->m_dependParentNodes ); i.current(); ++i ) {
+                /* add new nodes if necessary */
+                if( i.current()->parent()->end_node()->successors.unvisited == i.current()->parent()->end_node()->successors.number )
+                    nodelist.push_back( i.current()->parent()->end_node() );
+                /* reduce unvisited to indicate that a relation has been followed */
+                i.current()->parent()->end_node()->successors.unvisited--;
+                /* calculate u = t (minus) lag of relation */
+                KPTDuration u( t );
+                u.subtract( i.current()->lag() );
+                /* act if u is earlier than end of next node */
+                if( u < i.current()->parent()->end_node()->latestFinish ) {
+                    i.current()->parent()->end_node()->latestFinish = u;
+                }
+        }
+        /* Remove currentNode from list so that we don't use it again */
+        nodelist.erase( curNode );
+        curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors) );
     }
-    /* Only act if node is an start node here - KPTRelations
-     * should not be followed for a end node */
-    if( (*i_node)->owner_node()->start_node() == *i_node )
-      /* Go through relations from n, propagating values */
-      for( QPtrListIterator<KPTRelation> i( n.owner_node()->m_dependParentNodes );
-       i.current(); ++i ){
-    /* add new nodes if necessary */
-    if( i.current()->parent()->end_node()->successors.unvisited
-        == i.current()->parent()->end_node()->successors.number )
-      nodelist.push_back( i.current()->parent()->end_node() );
-    /* reduce unvisited to indicate that a relation has been followed */
-    i.current()->parent()->end_node()->successors.unvisited--;
-    /* calculate u = t (minus) lag of relation */
-    KPTDuration u( t );
-    u.subtract( i.current()->lag() );
-    /* act if u is earlier than end of next node */
-    if( u < i.current()->parent()->end_node()->latestFinish ){
-      i.current()->parent()->end_node()->latestFinish = u;
-    }
-      }
-    /* Remove n from list so that we don't use it again */
-    nodelist.erase( i_node );
-  }
 }
 
 void KPTProject::pert_cpm() {
-  list<KPTNode*> nodelist;
-  /* Set initial time for nodes to zero */
-  KPTDuration time( KPTDuration::zeroDuration );
-  set_pert_values( time, &KPTNode::earliestStart );
-  /* initialise list of nodes - start with start node of this */
-  nodelist.push_back( start_node() );
-  /* Now find earliest starts */
-  forward_pass( nodelist );
-  /* **Note that nodelist is now empty again** */
-  nodelist.clear();
-  /* Now set final project time to earlies start time of end node */
-  time = end_node()->earliestStart;
-  set_pert_values( time, &KPTNode::latestFinish );
-  /* reinitialise list of nodes - start with end node of this */
-  nodelist.push_back( end_node() );
-  /* Finally, find latest finishes */
-  backward_pass( nodelist );
+    list<KPTNode*> nodelist;
+    /* Set initial time for nodes to zero */
+    KPTDuration time( KPTDuration::zeroDuration );
+    set_pert_values( time, &KPTNode::earliestStart );
+    /* initialise list of nodes - start with start node of this */
+    nodelist.push_back( start_node() );
+    /* Now find earliest starts */
+    forward_pass( nodelist );
+    /* **Note that nodelist is now empty again** */
+    nodelist.clear();
+    /* Now set final project time to earlies start time of end node */
+    time = end_node()->earliestStart;
+    set_pert_values( time, &KPTNode::latestFinish );
+    /* reinitialise list of nodes - start with end node of this */
+    nodelist.push_back( end_node() );
+    /* Finally, find latest finishes */
+    backward_pass( nodelist );
 }
