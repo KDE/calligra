@@ -57,7 +57,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
     QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
     pix.fill( Qt::white );
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
-    view->getCanvas()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
+    view->getCanvas()->drawPageInPix2( pix, i );
 
     int w = doc->getPageRect( 0, 0, 0 ).width();
     int h = doc->getPageRect( 0, 0, 0 ).height();

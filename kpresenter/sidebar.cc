@@ -130,7 +130,7 @@ QPixmap ThumbBar::getSlideThumb(int slideNr)
   QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
   pix.fill( Qt::white );
 
-  view->getCanvas()->drawPageInPix2( pix, slideNr * doc->getPageRect( 0, 0, 0 ).height(), slideNr);
+  view->getCanvas()->drawPageInPix2( pix, slideNr);
 
   int extent = 120;
 
