@@ -590,10 +590,7 @@ void KWFrameMoveCommand::execute()
 
         if(frame->isSelected())
             frame->updateResizeHandles();
-        //it's necessary because the text doesn't move
-        //with the frame as text frame
-        if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
-            frame->getFrameSet()->updateFrames();
+
         needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
     }
 
@@ -616,8 +613,6 @@ void KWFrameMoveCommand::unexecute()
 
         if(frame->isSelected())
             frame->updateResizeHandles();
-        if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
-            frame->getFrameSet()->updateFrames();
         needRelayout = needRelayout || ( frame->getRunAround() != RA_NO );
     }
 
