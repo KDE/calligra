@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=KSpread Ascii Import Filter
+Export=application/x-kspread
+ExportDescription=KSpread
+Import=text/plain
+ImportDescription=ASCII
+Implemented=file
+X-KDE-Library=libkspreadasciiimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
