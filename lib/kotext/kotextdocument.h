@@ -71,15 +71,25 @@ public:
      * Returns true, unless canceled. See KoParagVisitor. */
     bool visitFromTo( KoTextParag *firstParag, int firstIndex, KoTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw = true );
 
-    /** Used by ~KoTextParag to know if it should die quickly */
+    /**
+     * Used by ~KoTextParag to know if it should die quickly
+     */
     bool isDestroying() const { return m_bDestroying; }
 
+    /**
+     * Flags for drawWYSIWYG and drawParagWYSIWYG
+     */
+    enum DrawingFlags {
+        DrawMisspelledLine = 1,
+        DrawFormattingChars = 2,
+        DrawSelections = 4
+    };
     /** The main drawing method. Equivalent to KoTextDocument::draw, but reimplemented
      * for wysiwyg */
     KoTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-                                  KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
-                                  bool drawCursor = FALSE, KoTextCursor *cursor = 0,
-                                  bool resetChanged = TRUE, bool drawingMissingSpellLine = FALSE, bool drawFormattingChars= FALSE );
+                              KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
+                              bool drawCursor = FALSE, KoTextCursor *cursor = 0,
+                              bool resetChanged = TRUE, uint drawingFlags = KoTextDocument::DrawSelections );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to KoTextDocument::draw, but modified for wysiwyg */
@@ -88,15 +98,14 @@ public:
                            KoZoomHandler* zoomHandler,
                            bool drawCursor, KoTextCursor *cursor,
                            bool resetChanged = TRUE,
-                           bool drawingMissingSpellLine = FALSE,
-			   bool drawFormattingChars = FALSE);
+                           uint drawingFlags = KoTextDocument::DrawSelections );
 
-    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */
-    bool drawFormattingChars() const { return m_bDrawFormattingChars; }
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
     bool drawingShadow() const { return m_bDrawingShadow; }
-
-    bool drawingMissingSpellLine() const { return m_bDrawingMissingSpellLine; }
+    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */
+    bool drawFormattingChars() const { return (m_drawingFlags & DrawFormattingChars); }
+    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
+    bool drawingMissingSpellLine() const { return (m_drawingFlags & DrawMisspelledLine); }
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
@@ -107,6 +116,5 @@ private:
     // (due to the pixelx/pixelww stuff in KoTextFormatter)
     KoZoomHandler * m_zoomHandler;
     bool m_bDestroying;
-    bool m_bDrawFormattingChars;
     bool m_bDrawingShadow;
-    bool m_bDrawingMissingSpellLine;
+    uint m_drawingFlags;

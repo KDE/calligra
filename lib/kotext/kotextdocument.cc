@@ -37,8 +37,7 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
     fCollection = fc;
     init();
 
-    m_bDrawFormattingChars=false;
-    m_bDrawingMissingSpellLine=false;
+    m_drawingFlags = 0;
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
         formatter = new KoTextFormatter;
@@ -121,6 +120,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
     if ( !firstParag() )
 	return;
 
+    Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
     if ( paper ) {
 	p->setBrushOrigin( -(int)p->translationX(),
 			   -(int)p->translationY() );
@@ -158,13 +158,12 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        KoZoomHandler* zoomHandler, bool drawCursor,
-                                       KoTextCursor *cursor, bool resetChanged, bool drawingMissingSpellLine, bool drawFormattingChars )
+                                       KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
 {
 #ifdef DEBUG_PAINTING
     kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
-    m_bDrawFormattingChars=drawFormattingChars;
-    m_bDrawingMissingSpellLine=drawingMissingSpellLine;
+    m_drawingFlags = drawingFlags;
     int sx = 0, sy = 0;
     if ( parag->shadowDistance() )
     {
@@ -253,13 +252,13 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
         painter->save();
         painter->translate( sx, sy );
         m_bDrawingShadow = true;
-        parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
+        parag->paint( *painter, cg, drawCursor ? cursor : 0, FALSE /*don't draw selections*/,
                       crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
         painter->restore();
     }
     m_bDrawingShadow = false;
 
-    parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
+    parag->paint( *painter, cg, drawCursor ? cursor : 0, (m_drawingFlags & DrawSelections),
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 
 
@@ -297,12 +296,11 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 }
 
 KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
-                                              KoZoomHandler* zoomHandler, bool onlyChanged,
-                                              bool drawCursor, KoTextCursor *cursor,
-                                              bool resetChanged, bool drawingMissingSpellLine,bool drawFormattingChars )
+                                          KoZoomHandler* zoomHandler, bool onlyChanged,
+                                          bool drawCursor, KoTextCursor *cursor,
+                                          bool resetChanged, uint drawingFlags )
 {
-    m_bDrawFormattingChars=drawFormattingChars;
-    m_bDrawingMissingSpellLine=drawingMissingSpellLine;
+    m_drawingFlags = drawingFlags;
     if ( p->device()->devType() == QInternal::Printer ) {
     // This stuff relies on doLayout()... simpler to just test for Printer.
     // If someone understand doLayout() please tell me (David)
@@ -380,7 +378,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
             drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
-                              zoomHandler, drawCursor, cursor, resetChanged, drawingMissingSpellLine, drawFormattingChars  );
+                              zoomHandler, drawCursor, cursor, resetChanged, drawingFlags );
         }
 
 	parag = parag->next();
