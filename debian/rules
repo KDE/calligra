@@ -27,8 +27,9 @@ endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
-# These options are for distributed compiling
-# DEB_CONCURRENCY_LEVEL must always be >= 1
+
+# These options are for distributed compiling.
+# DEB_CONCURRENCY_LEVEL must always be >= 1.
 DEB_CONCURRENCY_LEVEL   ?= 1
 do_parallel = -j$(DEB_CONCURRENCY_LEVEL)
 DEB_DISTCC_HOSTS        ?= localhost
@@ -174,9 +175,9 @@ binary-common:
 	  case "$$pkg" in \
 	    kivio ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGELOG ;; \
-	    kugar | krita ) \
+	    krita | kugar ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/ChangeLog ;; \
-	    kchart | kpresenter | kspread | kword | kexi ) \
+	    kchart | kexi | kpresenter | kspread | kword ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGES ;; \
 	    * ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg ;; \
