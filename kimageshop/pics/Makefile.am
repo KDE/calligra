@@ -6,8 +6,7 @@ data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
         dialog.png krayon_box.png \
         gradient.png line.png polyline.png \
         rectangle.png ellipse.png \
-        visible.png novisible.png linked.png unlinked.png \
-        tab_first.png tab_left.png tab_right.png tab_last.png
+        visible.png novisible.png linked.png unlinked.png
 
 # directory for pixmaps
 datadir = $(kde_datadir)/krayon/pics
