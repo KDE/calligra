@@ -1804,7 +1804,7 @@ void KWView::viewZoom( const QString &s )
     QString z( s );
     bool ok=false;
     KWCanvas * canvas = m_gui->canvasWidget();
-    int zoom;
+    int zoom = 0;
 
     if( z != i18n( "Zoom to width" ) && z!=i18n( "Zoom to Whole Page" ) )
     {
@@ -1815,27 +1815,27 @@ void KWView::viewZoom( const QString &s )
     else
     {
         if( z==i18n("Zoom to width"))
+        {
             zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
+            ok = true;
+        }
         else if( z==i18n( "Zoom to Whole Page" ))
         {
             double height=m_doc->resolutionY() * m_doc->ptPaperHeight();
             double width=m_doc->resolutionX() * m_doc->ptPaperWidth();
             zoom = QMIN(qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height  ),qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width  ));
+            ok = true;
         }
 
-        ok = true;
     }
-    //bad value
-    if(!ok)
-        zoom=m_doc->zoom();
-    else if(zoom<10 ) //zoom should be >10
-        zoom=m_doc->zoom();
+    if( !ok || zoom<10 ) //zoom should be valid and >10
+        zoom = m_doc->zoom();
     //refresh menu
     changeZoomMenu( zoom );
     //refresh menu item
     showZoom(zoom);
     //apply zoom if zoom!=m_doc->zoom()
-    if(zoom != m_doc->zoom() )
+    if( zoom != m_doc->zoom() )
     {
         setZoom( zoom, true );
 
