@@ -355,6 +355,20 @@
                 List numbering starts at <start> everytime another list is used (everytime a 
                 non numbering paragraph has been used)
                 Chapter numbering is used throughout the whole document (in future throughout books)
+        lefttext
+                The text that is printed left of the first numeral
+        righttext
+                The text that is printed right of the last numeral
+                A usual value for this one is "." (dot).
+
+        bullet  The unicode character code that is the custom bullet (for type=6)
+        bulletfont
+                The font to use for the custom bullet can be found in (use "symbol" if in doubt)
+        customdef
+                Definition of a custom counter - not supported yet
+        restart
+                If "true" or "1", this paragraph is numbered as specified by start.
+                Otherwise (default) it will extend the current list (with equal type and depth).
 -->
 
 <!ELEMENT COUNTER
@@ -364,7 +378,12 @@
     depth CDATA #REQUIRED
     bullet CDATA #IMPLIED
     start CDATA #IMPLIED
-    numberingtype CDATA #REQUIRED>
+    numberingtype CDATA #REQUIRED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
