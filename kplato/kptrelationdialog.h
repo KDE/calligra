@@ -43,7 +43,7 @@ protected:
     
 private:
     QButtonGroup *relationType;
-    QButtonGroup *timingType;
+//    QButtonGroup *timingType;
     KPTRelation *m_relation;
     KPTNode *m_parent, *m_child;
 };
