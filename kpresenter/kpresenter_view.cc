@@ -477,7 +477,8 @@ void KPresenterView::editCut()
         m_canvas->copyObjs();
 	m_canvas->deleteObjs();
     } else {
-	m_canvas->currentTextObjectView()->cut();
+        if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())
+            m_canvas->currentTextObjectView()->cut();
     }
 }
 
@@ -536,7 +537,8 @@ void KPresenterView::editPaste()
             setCursor( c );
         }
     } else {
-        m_canvas->currentTextObjectView()->paste();
+        if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())
+            m_canvas->currentTextObjectView()->paste();
     }
 }
 
@@ -6461,6 +6463,7 @@ void KPresenterView::slotObjectEditChanged()
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
     }
+
     actionFormatStyle->setEnabled(isText);
     state=m_canvas->oneObjectTextExist();
     actionEditSearch->setEnabled(state);
