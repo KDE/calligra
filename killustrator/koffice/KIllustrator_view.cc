@@ -75,7 +75,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
-#include <kmsgbox.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kcombo.h>
@@ -428,9 +427,8 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 
   m_vToolBarTools = factory->create (OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarTools->setFullWidth (false);
-  QString tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/selecttool.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap (tmp);
+  OpenPartsUI::Pixmap_var pix = 
+    OPUIUtils::convertPixmap (ICON("selecttool.xpm"));
   CORBA::WString_var toolTip = Q2C( i18n ("Selection Mode") );
   m_idSelectionTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_SELECT,
@@ -439,9 +437,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_SELECT, true);
   m_vToolBarTools->setButton (ID_TOOL_SELECT, true);
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/pointtool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap (ICON("pointtool.xpm"));
   toolTip = Q2C( i18n ("Edit Point") );
   m_idEditPointTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_EDITPOINT,
@@ -450,9 +446,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_EDITPOINT, true);
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/freehandtool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("freehandtool.xpm"));
   toolTip = Q2C( i18n ("Create FreeHand Line") );
   m_idFreeHandTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_FREEHAND,
@@ -461,9 +455,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_FREEHAND, true);
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/linetool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("linetool.xpm"));
   toolTip = Q2C( i18n ("Create Polyline") );
   m_idPolylineTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_LINE,
@@ -472,9 +464,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_LINE, true);
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/beziertool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("beziertool.xpm"));
   toolTip = Q2C( i18n ("Create Bezier Curve") );
   m_idBezierTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_BEZIER,
@@ -483,10 +473,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_BEZIER, true);
 
-
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/recttool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("recttool.xpm"));
   toolTip = Q2C( i18n ("Create Rectangle") );
   m_idRectangleTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_RECTANGLE,
@@ -496,9 +483,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->setToggle (ID_TOOL_RECTANGLE, true);
 
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/polygontool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("polygontool.xpm"));
   toolTip = Q2C( i18n ("Create Polygon") );
   m_idPolygonTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_POLYGON,
@@ -509,9 +494,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->addConnection (ID_TOOL_POLYGON, SIGNAL(doubleClicked(int)),
 				  this, "configPolygonTool");
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/ellipsetool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("ellipsetool.xpm"));
   toolTip = Q2C( i18n ("Create Ellipse") );
   m_idEllipseTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ELLIPSE,
@@ -522,9 +505,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarTools->addConnection (ID_TOOL_ELLIPSE, SIGNAL(doubleClicked(int)),
 				  this, "configEllipseTool");
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/texttool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("texttool.xpm"));
   toolTip = Q2C( i18n ("Create/Edit Text") );
   m_idTextTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_TEXT,
@@ -533,9 +514,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				    toolTip, -1);
   m_vToolBarTools->setToggle (ID_TOOL_TEXT, true);
 
-  tmp = kapp->kde_datadir().copy ();
-  tmp += "/killustrator/pics/zoomtool.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("zoomtool.xpm"));
   toolTip = Q2C( i18n ("Zoom In") );
   m_idZoomTool =
     m_vToolBarTools->insertButton2 (pix, ID_TOOL_ZOOM,
@@ -645,9 +624,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   m_vToolBarEditPoint =
     factory->create (OpenPartsUI::ToolBarFactory::Transient);
 
-  tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/moveNode.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("moveNode.xpm"));
   toolTip = Q2C( i18n ("Move Point") );
   m_idMovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_MOVE,
@@ -656,9 +633,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 					toolTip, -1);
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_MOVE, true);
 
-  tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/newNode.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("newNode.xpm"));
   toolTip = Q2C( i18n ("Insert Point") );
   m_idInsertPoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_INSERT,
@@ -667,9 +642,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 					toolTip, -1);
   m_vToolBarEditPoint->setToggle (ID_TOOL_EP_INSERT, true);
 
-  tmp = kapp->kde_datadir ().copy ();
-  tmp += "/killustrator/pics/deleteNode.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("deleteNode.xpm"));
   toolTip = Q2C( i18n ("Remove Point") );
   m_idRemovePoint =
     m_vToolBarEditPoint->insertButton2 (pix, ID_TOOL_EP_DELETE,
@@ -998,11 +971,13 @@ void KIllustratorView::editProperties () {
   int result = 1;
 
   if (m_pDoc->selectionIsEmpty ()) {
-    result = KMsgBox::yesNo (this, "Warning",
-		    i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-		    KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+    result = QMessageBox::warning (this, i18n("Warning"),
+				   i18n ("This action will set the default\n"
+					 "properties for new objects !\n"
+					 "Would you like to do it ?"),
+				   i18n ("Yes"), i18n ("No"));
   }
-  if (result == 1)
+  if (result == 0)
     PropertyEditor::edit (&cmdHistory, m_pDoc);
 }
 
@@ -1122,10 +1097,12 @@ void KIllustratorView::setPenColor (CORBA::Long id) {
   }
   else {
     int result =
-      KMsgBox::yesNo (this, "Warning",
-		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
-    if (result == 1)
+      QMessageBox::warning (this, i18n("Warning"),
+			    i18n ("This action will set the default\n"
+				  "properties for new objects !\n"
+				  "Would you like to do it ?"),
+			    i18n ("Yes"), i18n ("No"));
+    if (result == 0)
       GObject::setDefaultOutlineInfo (oInfo);
   }
 }
@@ -1151,10 +1128,12 @@ void KIllustratorView::setFillColor (CORBA::Long id) {
   }
   else {
     int result =
-      KMsgBox::yesNo (this, "Warning",
-		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
-		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
-    if (result == 1)
+      QMessageBox::warning(this, i18n("Warning"),
+			   i18n ("This action will set the default\n"
+				 "properties for new objects !\n"
+				 "Would you like to do it ?"),
+			   i18n ("Yes"), i18n ("No"));
+    if (result == 0)
       GObject::setDefaultFillInfo (fInfo);
   }
 }
