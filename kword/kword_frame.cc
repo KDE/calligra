@@ -34,7 +34,7 @@
 #include <fstream>
 #include <unistd.h>
 #include <limits.h>
-
+#include <stdlib.h>
 #include <qpicture.h>
 #include <qvaluelist.h>
 #include <qwidget.h>
@@ -559,8 +559,8 @@ bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-/* Select the first frame where the x and y coords fall into 
-   returns 0 if none was selected, return 1 if selected, return 2 
+/* Select the first frame where the x and y coords fall into
+   returns 0 if none was selected, return 1 if selected, return 2
    if the frame was allready selected.
 */
 int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
@@ -610,7 +610,7 @@ void KWFrameSet::save( QTextStream&out )
         frame = getFrame( i );
         if(getGroupManager() && getGroupManager()->isAnchored()) {
             // set the frame cooridinates to the offset.
-            out << indent << "<FRAME left=\"" << frame->left() 
+            out << indent << "<FRAME left=\"" << frame->left()
                 << "\" top=\"" << frame->top() - getGroupManager()->getOrigin().y()
                 << "\" right=\"" << frame->right()
                 << "\" bottom=\"" << frame->bottom() - getGroupManager()->getOrigin().y() << "\" ";
@@ -630,8 +630,8 @@ void KWFrameSet::save( QTextStream&out )
             out << "lWidth=\"" << frame->getLeftBorder().ptWidth << "\" ";
         }
         if(frame->getLeftBorder().color != Qt::white) {
-            out << "lRed=\"" << frame->getLeftBorder().color.red() << "\" lGreen=\"" 
-                << frame->getLeftBorder().color.green() << "\" lBlue=\"" 
+            out << "lRed=\"" << frame->getLeftBorder().color.red() << "\" lGreen=\""
+                << frame->getLeftBorder().color.green() << "\" lBlue=\""
                 << frame->getLeftBorder().color.blue() << "\" ";
         }
         if(frame->getLeftBorder().style != KWParagLayout::SOLID) {
@@ -642,8 +642,8 @@ void KWFrameSet::save( QTextStream&out )
             out << "rWidth=\"" << frame->getRightBorder().ptWidth << "\" ";
         }
         if(frame->getRightBorder().color != Qt::white) {
-            out << "rRed=\"" << frame->getRightBorder().color.red() << "\" rGreen=\"" 
-                << frame->getRightBorder().color.green() << "\" rBlue=\"" 
+            out << "rRed=\"" << frame->getRightBorder().color.red() << "\" rGreen=\""
+                << frame->getRightBorder().color.green() << "\" rBlue=\""
                 << frame->getRightBorder().color.blue() << "\" ";
         }
         if(frame->getRightBorder().style != KWParagLayout::SOLID) {
@@ -654,8 +654,8 @@ void KWFrameSet::save( QTextStream&out )
             out << "tWidth=\"" << frame->getTopBorder().ptWidth << "\" ";
         }
         if(frame->getTopBorder().color != Qt::white) {
-            out << "tRed=\"" << frame->getTopBorder().color.red() << "\" tGreen=\"" 
-                << frame->getTopBorder().color.green() << "\" tBlue=\"" 
+            out << "tRed=\"" << frame->getTopBorder().color.red() << "\" tGreen=\""
+                << frame->getTopBorder().color.green() << "\" tBlue=\""
                 << frame->getTopBorder().color.blue() << "\" ";
         }
         if(frame->getTopBorder().style != KWParagLayout::SOLID) {
@@ -666,8 +666,8 @@ void KWFrameSet::save( QTextStream&out )
             out << "bWidth=\"" << frame->getBottomBorder().ptWidth << "\" ";
         }
         if(frame->getBottomBorder().color != Qt::white) {
-            out << "bRed=\"" << frame->getBottomBorder().color.red() << "\" bGreen=\"" 
-                << frame->getBottomBorder().color.green() << "\" bBlue=\"" 
+            out << "bRed=\"" << frame->getBottomBorder().color.red() << "\" bGreen=\""
+                << frame->getBottomBorder().color.green() << "\" bBlue=\""
                 << frame->getBottomBorder().color.blue() << "\" ";
         }
         if(frame->getBottomBorder().style != KWParagLayout::SOLID) {
@@ -2193,8 +2193,8 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
     rows = QMAX( row + 1, rows );
     cols = QMAX( col + 1, cols );
 
-    for (i = 0; i < cells.count() && (cells.at(i)->row < row || 
-        cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ ); 
+    for (i = 0; i < cells.count() && (cells.at(i)->row < row ||
+        cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ );
     if(fs->getName().isEmpty())
         fs->setName(QString ("Cell %1,%2").arg(col+1).arg(row+1));
 
@@ -2253,7 +2253,7 @@ KWGroupManager::Cell *KWGroupManager::getCell( KWFrameSet *f ) {
 bool KWGroupManager::isTableHeader( KWFrameSet *fs )
 {
     Cell *cell = getCell(fs);
-    if(cell) 
+    if(cell)
         return fs->isRemoveableHeader() || cell->row==0;
 
     return false;
@@ -2277,14 +2277,14 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
     // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
     KWUnit oneMm;
     oneMm.setMM( 1 );
-    double minBaseHeight= doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 
+    double minBaseHeight= doc->getDefaultParagLayout()->getFormat().getPTFontSize() +
             oneMm.pt() * 2;
     if(baseHeight < minBaseHeight + oneMm.pt() * 2)
         baseHeight =minBaseHeight + oneMm.pt() * 2;
     if(baseWidth < minFrameWidth + oneMm.pt() * 2)
         baseWidth = minFrameWidth +  oneMm.pt() * 2;
     // cast them only one time up here..
-    unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5); 
+    unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5);
     unsigned int frameHeight = static_cast<unsigned int> (baseHeight + 0.5);
     // move/size the cells
     for ( unsigned int i = 0; i < rows; i++ ) {
@@ -2295,7 +2295,7 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
             frame->setBTop( oneMm );
             frame->setBBottom( oneMm );
             frame->setNewFrameBehaviour( NoFollowup );
-            frame->setRect( x + j * (frameWidth + tableCellSpacing), 
+            frame->setRect( x + j * (frameWidth + tableCellSpacing),
                 y + i * (frameHeight + tableCellSpacing), baseWidth, baseHeight );
         }
     }
@@ -2315,7 +2315,7 @@ void KWGroupManager::init()
 void KWGroupManager::recalcCols()
 {
     unsigned int row=0,col=0;
-    if(! cells.isEmpty() && isOneSelected(row,col)) {
+    /*if(! cells.isEmpty() && isOneSelected(row,col))*/ {
         // ** check/set sizes of frames **
         // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
@@ -2337,7 +2337,7 @@ void KWGroupManager::recalcCols()
                 }
             }
         }
-            
+
         int postAdjust=0;
         if(coordinate != activeCell->frameSet->getFrame(0)->left()) { // left pos changed
             // we are now going to move the rest of the cells in this column as well.
@@ -2353,7 +2353,7 @@ void KWGroupManager::recalcCols()
                     cell = getCell(i,col-1);
                     if(cell->row == i) // dont resize joined cells more then ones.
                         difference=activeCell->frameSet->getFrame(0)->left() - coordinate;
-                    else 
+                    else
                         cell=0;
                 }
                 if(cell) {
@@ -2372,13 +2372,13 @@ void KWGroupManager::recalcCols()
             if(col!=0)
                 activeCell->frameSet->getFrame(0)->setWidth(
                   activeCell->frameSet->getFrame(0)->width() +
-                  activeCell->frameSet->getFrame(0)->left() - coordinate); 
+                  activeCell->frameSet->getFrame(0)->left() - coordinate);
 
             // if we found cells that ware made to small, we adjust them using the postAdjust var.
             for ( unsigned int i = 0; i < rows; i++) {
                 if(col==0) col++;
                 cell = getCell(i,col-1);
-                if(cell->row == i) 
+                if(cell->row == i)
                     cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
             }
         } else {
@@ -2416,7 +2416,7 @@ void KWGroupManager::recalcCols()
                 }
                 for ( unsigned int i = 0; i < rows; i++) {
                     cell = getCell(i,col);
-                    if(cell->row == i) 
+                    if(cell->row == i)
                         cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
                 }
             }
@@ -2484,7 +2484,7 @@ void KWGroupManager::recalcRows()
                     cell = getCell(row-1,i);
                     if(cell->col == i) // dont resize joined cells more then ones.
                         difference= activeCell->frameSet->getFrame(0)->top()- coordinate;
-                    else 
+                    else
                         cell=0;
                 }
                 if(cell) {
@@ -2574,7 +2574,7 @@ void KWGroupManager::recalcRows()
         for(i = 0; i < cols; i++) {
             Cell *cell = getCell(j,i);
             KWFrameSet *fs=cell->frameSet;
-            if(cell->row < fromRow) 
+            if(cell->row < fromRow)
                 fromRow = cell->row;
             if ( fs->getFrame( 0 )->bottom() >  // fits on page?
                   static_cast<int>((doingPage+1) * doc->getPTPaperHeight() - doc->getPTBottomBorder())) { // no
@@ -2670,7 +2670,7 @@ void KWGroupManager::deselectAll()
 }
 
 /*================================================================*/
-/* the selectUntil method will select all frames from the first 
+/* the selectUntil method will select all frames from the first
    selected to the frame of the argument frameset.
 */
 void KWGroupManager::selectUntil( KWFrameSet *fs) {
@@ -2784,7 +2784,12 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool isAHeader 
 
     int ww = 0;
     for ( i = 0; i < getCols(); i++ ) {
-        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), colStart[i+1] - colStart[i], doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
+      int tmpWidth= colStart[i+1] - colStart[i]-tableCellSpacing;
+      if((i+1)==getCols())
+	tmpWidth= colStart[i+1] - colStart[i]+tableCellSpacing-2;
+      KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
+
+      //        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), colStart[i+1] - colStart[i], doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
@@ -2849,7 +2854,7 @@ void KWGroupManager::insertCol( unsigned int _idx )
 
     for ( i = 0; i < cells.count(); i++ ) {
         Cell *cell = cells.at(i);
-        if ( cell->col == 0 ) 
+        if ( cell->col == 0 )
             for( int colspan=cell->rows; colspan>0; colspan--)
                 h.append( new int( cell->frameSet->getFrame( 0 )->height() / cell->rows ) );
         if ( cell->col >= _idx ) cell->col++;
@@ -3125,7 +3130,7 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
     }
 
     firstFrame->setWidth(static_cast<int>(width));
-    firstFrame->setHeight(static_cast<int>(height)); 
+    firstFrame->setHeight(static_cast<int>(height));
     cell->rows = cell->rows - intoRows +1;
     if(cell->rows < 1)  cell->rows=1;
     cell->cols = cell->cols - intoCols +1;
@@ -3142,19 +3147,19 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
             lastFrameSet->setName(QString("split cell"));
             lastFrameSet->setGroupManager( this );
 
-            KWFrame *frame = new KWFrame(lastFrameSet, 
-                    firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x), 
-                    firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y), 
+            KWFrame *frame = new KWFrame(lastFrameSet,
+                    firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
+                    firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
                     width, height);
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
             lastFrameSet->addFrame( frame );
             if ( anchored ) { // is this needed?
                 KWFrame *aFrame = lastFrameSet->getFrame( 0 );
-     
+
                 if (aFrame)
                     aFrame->moveBy( -origin.x(), -origin.y() );
-            } 
+            }
             doc->addFrameSet(lastFrameSet);
 
             newCell->frameSet = lastFrameSet;
@@ -3170,11 +3175,11 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
                 newCell->cols -=newCols;
 
             unsigned int i;
-            for (i = 0; i < cells.count() && ((cells.at(i)->row < newCell->row || 
-                cells.at(i)->row == newCell->row) && cells.at(i)->col < newCell->col) ; i++ ); 
+            for (i = 0; i < cells.count() && ((cells.at(i)->row < newCell->row ||
+                cells.at(i)->row == newCell->row) && cells.at(i)->col < newCell->col) ; i++ );
             cells.insert(i, newCell );
         }
-    } 
+    }
 
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(newRows>0) rows+= newRows;
@@ -3218,7 +3223,7 @@ void KWGroupManager::preRender() {
         if ( doc->getFrameSet( i )->getGroupManager() == this) {
             KWFormatContext fc( doc, i + 1 );
             fc.init( doc->getFirstParag( i ) );
-    
+
             // and render
 /*
             if(!isRendered) {
@@ -3232,7 +3237,7 @@ void KWGroupManager::preRender() {
 
 /*================================================================*/
 /* checks the cells for missing cells or duplicates, will correct
-   mistakes. 
+   mistakes.
 */
 void KWGroupManager::validate()
 {
@@ -3265,7 +3270,7 @@ void KWGroupManager::validate()
                     found=true;
                 }
             }
-            if(! found) { 
+            if(! found) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
                 Cell *cell = new Cell;
                 KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
@@ -3281,7 +3286,7 @@ void KWGroupManager::validate()
                         width=cells.at(i)->frameSet->getFrame(0)->width();
                     if(cells.at(i)->row==row && cells.at(i)->rows==1)
                         height=cells.at(i)->frameSet->getFrame(0)->height();
-                    if(x!=-1 && y!=-1 && width!=-1 && height != -1) 
+                    if(x!=-1 && y!=-1 && width!=-1 && height != -1)
                         break;
                 }
                 if(x== -1) x=0;
@@ -3295,7 +3300,7 @@ void KWGroupManager::validate()
                 _frameSet->addFrame( frame );
                 if ( anchored ) {
                     KWFrame *newFrame = _frameSet->getFrame( 0 );
-         
+
                     if (newFrame)
                         newFrame->moveBy( -origin.x(), -origin.y() );
                 }
@@ -3308,8 +3313,8 @@ void KWGroupManager::validate()
                 cell->cols = 1;
 
                 unsigned int i;
-                for (i = 0; i < cells.count() && (cells.at(i)->row < row || 
-                    cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ ); 
+                for (i = 0; i < cells.count() && (cells.at(i)->row < row ||
+                    cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ );
                 cells.insert(i, cell );
             }
         }

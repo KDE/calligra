@@ -1481,6 +1481,7 @@ void KWordView::formatParagraph()
     paragDia->setBottomBorder( gui->getPaperWidget()->getBottomBorder() );
     paragDia->setCounter( gui->getPaperWidget()->getCounter() );
     paragDia->setTabList( gui->getPaperWidget()->getParagLayout()->getTabList() );
+    paragDia->setAfterInitBorder(true);
     paragDia->show();
     delete paragDia;
     paragDia = 0;

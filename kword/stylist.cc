@@ -243,7 +243,7 @@ void KWStyleManager::editStyle()
 /*================================================================*/
 void KWStyleManager::addStyle()
 {
-    QString str=i18n( "New Style Template ( %d )" ).arg(doc->paragLayoutList.count());
+    QString str=i18n( "New Style Template ( %1 )" ).arg(doc->paragLayoutList.count());
     ( void )new KWParagLayout( doc, true, str );
     lStyleList->insertItem( str );
     lStyleList->setCurrentItem( lStyleList->count() - 1 );
@@ -556,6 +556,7 @@ void KWStyleEditor::changeBorders()
     paragDia->setRightBorder( style->getRightBorder() );
     paragDia->setTopBorder( style->getTopBorder() );
     paragDia->setBottomBorder( style->getBottomBorder() );
+    paragDia->setAfterInitBorder(true);
     paragDia->show();
 }
 

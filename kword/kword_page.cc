@@ -27,6 +27,7 @@
 #include <koRuler.h>
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
+#include <stdlib.h>
 
 #include "kword_doc.h"
 #include "kword_page.h"
@@ -407,7 +408,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         bool move=true;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
         if(newY2-my < minFrameHeight+5) my=newY2-minFrameHeight-5;
-        if(my < (int)( frame->getPageNum() * ptPaperHeight())) 
+        if(my < (int)( frame->getPageNum() * ptPaperHeight()))
             my = frame->getPageNum() * ptPaperHeight();
 
         if(move) newY1=my;
@@ -415,7 +416,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         bool move=true;
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
         if(my-newY1 < minFrameHeight+5) my=newY1+minFrameHeight+5;
-        if(my >= (int)((frame->getPageNum()+1) * ptPaperHeight())) 
+        if(my >= (int)((frame->getPageNum()+1) * ptPaperHeight()))
             my = (frame->getPageNum()+1) * ptPaperHeight();
 
         if(move) newY2=my;
@@ -434,7 +435,7 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
         if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
         if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
         if(mx-newX1 < minFrameWidth) mx=newX1+minFrameHeight+5;
-        if(mx > static_cast<int> (ptPaperWidth())) 
+        if(mx > static_cast<int> (ptPaperWidth()))
             mx = ptPaperWidth();
 
         if(move) newX2=mx;
@@ -734,7 +735,7 @@ void KWPage::vmpCreatePixmap( int mx, int my )
 }
 
 /*================================================================*/
-/* pastes the clipboard to cursor position 
+/* pastes the clipboard to cursor position
  */
 void KWPage::vmpMidButton()
 {
@@ -752,11 +753,11 @@ void KWPage::vmpMidButton()
     {
        // jwc - do not *paste* message about empty clipboard into document
        // instead, show message that clipboard is empty.  The Qt clipboard
-       // contents can be not empty, but still null. The <empty message> 
+       // contents can be not empty, but still null. The <empty message>
        // text inserted into clipboard when clipboard is empty is a Kde
        // klipper bug but until that is fixed checking for that message
        // is needed to avoid improper insertion of the message text
-       
+
         if( !cb->text().isNull() )
         {
             QString text = cb->text();
@@ -769,7 +770,7 @@ void KWPage::vmpMidButton()
         else
             emptyMessage = TRUE;
     }
-    else 
+    else
         emptyMessage = TRUE;
 
     if(emptyMessage)
@@ -777,7 +778,7 @@ void KWPage::vmpMidButton()
         maybeDrag = FALSE;
 
         if ( doc->has_selection())
-        { 
+        {
             doc->setSelection( FALSE );
             repaintScreen( FALSE );
         }
@@ -817,7 +818,7 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
             if(frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY) return;
             // enable delete
             frame_edit_menu->setItemEnabled(frEditDel, true);
-            // if text frame, 
+            // if text frame,
             if(frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT) {
                 // if frameset 0 disable delete
                 if(doc->getProcessingType() == KWordDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)) {
@@ -826,7 +827,7 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
                 } else {
                     frame_edit_menu->setItemEnabled(frEditReconnect, true);
                 }
-            } else 
+            } else
                 frame_edit_menu->setItemEnabled(frEditReconnect, false);
             frame_edit_menu->popup( pnt );
         } break;
@@ -868,10 +869,10 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
     int mx = e->x() + contentsX();
     int my = e->y() + contentsY();
 
-    // focus change. 
+    // focus change.
     QPainter _painter;
     _painter.begin( viewport() );
-    if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd() 
+    if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd()
             && mouseMode != MM_EDIT ) {
         doc->drawSelection( _painter, contentsX(), contentsY() );
         doc->setSelection( FALSE );
@@ -944,13 +945,13 @@ void KWPage::vmrEdit()
 /*================================================================*/
 void KWPage::vmrEditFrame( int /*mx*/, int /*my*/ )
 {
-    int frameset=0; 
+    int frameset=0;
     KWFrame *frame= doc->getFirstSelectedFrame(frameset);
     if(!frame) return;
     if ( doc->getProcessingType() == KWordDocument::DTP )
         setRuler2Frame( frame );
     gui->getHorzRuler()->setFrameStart( frame->x() );
-    
+
     if ( mouseMoved ) {
         doc->recalcFrames();
         doc->updateAllFrames();
@@ -1063,7 +1064,7 @@ void KWPage::vmrCreateTable()
 
             QString _name;
             int numGroupManagers=doc->getNumGroupManagers();
-            bool found=true; 
+            bool found=true;
             while(found) { // need a new name for the new groupmanager.
                 bool same = false;
                 _name.sprintf( "grpmgr_%d",numGroupManagers);
@@ -2472,7 +2473,7 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 
 
 /*=============================
-  kPrior - Prior key handler - same as PageUp. Move cursor up one 
+  kPrior - Prior key handler - same as PageUp. Move cursor up one
   visible document area height and adjust page view accordingly
 			  ===================================*/
 
@@ -2489,7 +2490,7 @@ bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs 
         if ( fc->isCursorInFirstLine() )
             gotoPrevTableCell = TRUE;
     }
-    
+
      unsigned int curY  = fc->getPTY();
      unsigned int oldY  = curY;
      unsigned int newY  = curY;
@@ -2525,7 +2526,7 @@ bool KWPage::kPrior( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs 
     {
         continueKeySelection();
         return FALSE;
-    } 
+    }
         else if ( gotoPrevTableCell )
         cursorGotoPrevTableCell();
 
@@ -2550,18 +2551,18 @@ bool KWPage::kNext( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
         if ( fc->isCursorInLastLine() )
             gotoNextTableCell = TRUE;
     }
-    
+
      unsigned int curY  = fc->getPTY();
-     unsigned int oldY  = curY;      
+     unsigned int oldY  = curY;
      unsigned int newY  = curY;
      unsigned int travY = 0;
-     newY = (unsigned int)visibleHeight(); 
-      	    
+     newY = (unsigned int)visibleHeight();
+
       // move cursor down until the total Y distance traversed is
       // equal to a viewport height.  In framesets with colums it will
       // go up and down columns with flow
 
-     while(travY <= newY)   
+     while(travY <= newY)
      {
          fc->cursorGotoDown();
 	 travY += fc->getLineHeight();
@@ -2573,14 +2574,14 @@ bool KWPage::kNext( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
                                      fc->getParag()->getParagLayout()->getRightBorder(),
                                      fc->getParag()->getParagLayout()->getTopBorder(),
                                      fc->getParag()->getParagLayout()->getBottomBorder() );
-	 
+
          curY = fc->getPTY();
          if(curY == oldY)
 	      break;
          else
-	      oldY = curY;      
+	      oldY = curY;
       }
-      
+
      fc->cursorGotoLineEnd( );
      scrollToCursor();
 
@@ -2785,8 +2786,8 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
     unsigned int tmpTextPos = fc->getTextPos()-1;
     unsigned int paraLen = ( fc->getParag()->getPrev() ? fc->getParag()->getPrev()->getTextLen() : 0 );
     KWChar *theString = fc->getParag()->getText();
-    if(fc->getTextPos()!=0 && 
-          theString[tmpTextPos].attrib && 
+    if(fc->getTextPos()!=0 &&
+          theString[tmpTextPos].attrib &&
           theString[tmpTextPos].attrib->getClassId()==ID_KWCharAnchor) {
         tmpTextPos--;
     }
@@ -3000,11 +3001,11 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 
           unsigned int mx = contentsX() + ptLeftBorder();
           unsigned int my = contentsY() + ptTopBorder();
-	      
+
           int frameset = doc->getFrameSet(mx, my);
 
-          if ( frameset != -1 
-	  && doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) 
+          if ( frameset != -1
+	  && doc->getFrameSet( frameset )->getFrameType() == FT_TEXT )
 	  {
                 fc->setFrameSet( frameset + 1 );
                 fc->cursorGotoPixelLine( mx, my );
@@ -3013,7 +3014,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 
           gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
 
-          if ( fc->getParag() ) 
+          if ( fc->getParag() )
 	  {
                  gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
                  gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
@@ -3505,8 +3506,8 @@ void KWPage::frameSizeChanged( KoPageLayout /* _layout */)
 }
 
 /*================================================================*/
-/* this method is depricated, use 
-   void KWPage::setRuler2Frame( KWFrame *frame) instead 
+/* this method is depricated, use
+   void KWPage::setRuler2Frame( KWFrame *frame) instead
 */
 void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame ) {
    setRuler2Frame (doc->getFrameSet( _frameset )->getFrame( _frame ));

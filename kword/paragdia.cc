@@ -662,6 +662,7 @@ void KWParagDia::setupTab3()
 
     grid3->setRowStretch( 7, 1 );
     grid3->setColStretch( 1, 1 );
+    m_bAfterInitBorder=false;
 }
 
 /*================================================================*/
@@ -1000,6 +1001,8 @@ void KWParagDia::brdLeftToggled( bool _on )
     if ( !_on )
         leftBorder.ptWidth = 0;
     else {
+       if(m_bAfterInitBorder)
+	{
         leftBorder.ptWidth = cWidth->currentText().toInt();
         leftBorder.color = QColor( bColor->color() );
         QString stl( cStyle->currentText() );
@@ -1014,6 +1017,7 @@ void KWParagDia::brdLeftToggled( bool _on )
             leftBorder.style = KWParagLayout::DASH_DOT;
         else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
             leftBorder.style = KWParagLayout::DASH_DOT_DOT;
+	}
     }
     prev3->setLeftBorder( leftBorder );
 }
@@ -1024,6 +1028,8 @@ void KWParagDia::brdRightToggled( bool _on )
     if ( !_on )
         rightBorder.ptWidth = 0;
     else {
+       if(m_bAfterInitBorder)
+	{
         rightBorder.ptWidth = cWidth->currentText().toInt();
         rightBorder.color = QColor( bColor->color() );
         QString stl( cStyle->currentText() );
@@ -1038,6 +1044,7 @@ void KWParagDia::brdRightToggled( bool _on )
             rightBorder.style = KWParagLayout::DASH_DOT;
         else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
             rightBorder.style = KWParagLayout::DASH_DOT_DOT;
+	}
     }
     prev3->setRightBorder( rightBorder );
 }
@@ -1048,6 +1055,8 @@ void KWParagDia::brdTopToggled( bool _on )
     if ( !_on )
         topBorder.ptWidth = 0;
     else {
+       if(m_bAfterInitBorder)
+	{
         topBorder.ptWidth = cWidth->currentText().toInt();
         topBorder.color = QColor( bColor->color() );
         QString stl( cStyle->currentText() );
@@ -1062,6 +1071,7 @@ void KWParagDia::brdTopToggled( bool _on )
             topBorder.style = KWParagLayout::DASH_DOT;
         else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
             topBorder.style = KWParagLayout::DASH_DOT_DOT;
+	}
     }
     prev3->setTopBorder( topBorder );
 }
@@ -1072,6 +1082,8 @@ void KWParagDia::brdBottomToggled( bool _on )
     if ( !_on )
         bottomBorder.ptWidth = 0;
     else {
+       if(m_bAfterInitBorder)
+	{
         bottomBorder.ptWidth = cWidth->currentText().toInt();
         bottomBorder.color = QColor( bColor->color() );
         QString stl( cStyle->currentText() );
@@ -1086,6 +1098,7 @@ void KWParagDia::brdBottomToggled( bool _on )
             bottomBorder.style = KWParagLayout::DASH_DOT;
         else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
             bottomBorder.style = KWParagLayout::DASH_DOT_DOT;
+	}
     }
     prev3->setBottomBorder( bottomBorder );
 }

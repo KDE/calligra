@@ -196,6 +196,7 @@ public:
     void setCounter( KWParagLayout::Counter _counter );
     KWParagLayout::Counter getCounter() { return counter; }
 
+    void setAfterInitBorder(bool _b){m_bAfterInitBorder=_b;}
 protected:
     void setupTab1();
     void setupTab2();
@@ -236,7 +237,7 @@ protected:
     KWParagLayout::Counter counter;
     QStringList fontList;
     KWordDocument *doc;
-
+    bool m_bAfterInitBorder;
 protected slots:
     void leftChanged( const QString & );
     void rightChanged( const QString & );
