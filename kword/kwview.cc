@@ -727,12 +727,21 @@ void KWView::print( KPrinter &prt )
 
     prt.setFullPage( true );
 
+    // ### HACK: disable zooming-when-printing if embedded parts are used.
+    // No koffice app supports zooming in paintContent currently.
+    bool doZoom = true;
+    QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+    for ( ; fit.current() && doZoom ; ++fit )
+        if ( fit.current()->getFrameType() == FT_PART )
+            doZoom = false;
+
     int oldZoom = doc->zoom();
     // We don't get valid metrics from the printer - and we want a better resolution
     // anyway (it's the PS driver that takes care of the printer resolution).
     QPaintDeviceMetrics metrics( &prt );
     //doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
-    doc->setZoomAndResolution( 100, 300, 300, false );
+    if ( doZoom )
+        doc->setZoomAndResolution( 100, 300, 300, false );
     //kdDebug() << "KWView::print zoom&res set" << endl;
 
     bool serialLetter = FALSE;
@@ -772,7 +781,8 @@ void KWView::print( KPrinter &prt )
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        painter.scale( metrics.logicalDpiX() / 300.0, metrics.logicalDpiY() / 300.0 );
+        if ( doZoom )
+            painter.scale( metrics.logicalDpiX() / 300.0, metrics.logicalDpiY() / 300.0 );
         gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
