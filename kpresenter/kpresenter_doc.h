@@ -364,7 +364,6 @@ class KPresenterDoc : public KoDocument
     void updateZoomRuler();
     void newZoomAndResolution( bool updateViews, bool forPrint );
 
-    void addRemovePage( int pos, bool addPage );
     void movePageTo( int oldPos, int newPos );
 
     void updateSideBarItem( int pgNum, bool sticky = false );
@@ -577,6 +576,11 @@ protected:
 
     void parseOasisHelpLine( const QString &str );
 
+    /**
+     * recalc the variables 
+     * update statusbar and sidebar menu
+     */ 
+    void pageOrderChanged();
     // ************ variables ************
 
     // screenpresentations

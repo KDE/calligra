@@ -3113,12 +3113,13 @@ void KPresenterDoc::insertPage( KPrPage *page, int currentPageNum, int insertPag
 
     m_pageList.insert( insertPageNum, page );
 
-    addRemovePage( insertPageNum, true );
+    pageOrderChanged();
     //activate this page in all views which on slide currentPageNum
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
         KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        view->addSideBarItem( insertPageNum );
 
         // change to the new page if the view was on the current page.
         if ( view->getCurrPgNum() - 1 == currentPageNum )
@@ -3138,12 +3139,14 @@ void KPresenterDoc::takePage( KPrPage *page, int pageNum )
     m_pageList.take( pos );
     m_deletedPageList.append( page );
 
-    addRemovePage( pos, false );
+    pageOrderChanged();
 
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
         KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        view->removeSideBarItem( pos );
+
         // change to the new page if the view was on the current page.
         if ( view->getCurrPgNum() - 1 == pos )
         {
@@ -3156,25 +3159,11 @@ void KPresenterDoc::takePage( KPrPage *page, int pageNum )
     }
 
     repaint( false );
-
-    emit sig_updateMenuBar();
 }
 
-void KPresenterDoc::addRemovePage( int pos, bool addPage )
+void KPresenterDoc::pageOrderChanged()
 {
-    kdDebug(33001) << "addRemovePage pos = " << pos << endl;
-    recalcPageNum();
-
     recalcVariables( VT_PGNUM );
-
-    // Update the sidebars
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it ) {
-        if ( addPage )
-            static_cast<KPresenterView*>(it.current())->addSideBarItem( pos );
-        else
-            static_cast<KPresenterView*>(it.current())->removeSideBarItem( pos );
-    }
 
     //update statusbar
     emit pageNumChanged();
@@ -3187,9 +3176,8 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
 
     KPrPage * page = m_pageList.take( oldPos );
     m_pageList.insert( newPos, page );
-
-    recalcPageNum();
-    recalcVariables( VT_PGNUM );
+    
+    pageOrderChanged();
 
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
@@ -3197,6 +3185,7 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
     {
         KPresenterView *view = static_cast<KPresenterView*>( it.current() );
         view->moveSideBarItem( oldPos, newPos );
+
         // change to the new page if the view was on the old pos.
         if ( view->getCurrPgNum() - 1 == oldPos )
         {
@@ -3207,10 +3196,6 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
             view->recalcCurrentPageNum();
         }
     }
-
-    //update statusbar
-    emit pageNumChanged();
-    emit sig_updateMenuBar();
 }
 
 QString KPresenterDoc::templateFileName( bool chooseTemplate, const QString &theFile )
