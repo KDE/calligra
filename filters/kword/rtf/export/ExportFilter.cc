@@ -78,8 +78,8 @@ QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, co
     QString row;
     row += "\\trowd\\trgaph60";  // start new row
     row += "\\trleft";
-    if (firstLeft>=0)
-        row += QString::number(qRound(PT_TO_TWIP(firstLeft)) - m_paperMarginLeft);
+    if (firstLeft>m_paperMarginLeft)
+        row += QString::number(firstLeft - m_paperMarginLeft);
     else
         row += '0';
     row += textCellx;
@@ -95,7 +95,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 #ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
-    int firstLeft=-1; // \trleft undefined
+    int firstLeft=-1; // position of left border, in twips
     int debugCellCurrent = 0; //DEBUG
     int debugRowCurrent = 0; //DEBUG
     QString textCellx; // All \cellx
@@ -127,7 +127,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
         if (firstLeft<0) // Not yet set, so set the position of the left border.
         {
-            firstLeft=frame.left;
+            firstLeft=qRound(PT_TO_TWIP(frame.left));
             if (firstLeft<0) // If still negative, set it to 0
                 firstLeft=0;
         }
@@ -138,13 +138,15 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         textCellx += QString::number(qRound(PT_TO_TWIP(frame.right)) - m_paperMarginRight); //right border of cell
 #endif
 
+        QString endOfParagraph;
         QValueList<ParaData> *paraList = (*itCell).paraList;
         QValueList<ParaData>::ConstIterator it;
         for (it=paraList->begin();it!=paraList->end();it++)
         {
+            rowText += endOfParagraph;
             rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
             rowText += m_eol;
-            rowText += "\\par";
+            endOfParagraph += "\\par"; // The problem is that the last paragraph ends with \cell not with \par
         }
 #ifdef FULL_TABLE_SUPPORT
         rowText += "\\cell";
