@@ -119,9 +119,28 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   return mymap;
 }
 
-bool KSpreadMap::loadOasis( const QDomElement& mymap )
+bool KSpreadMap::loadOasis( const QDomElement& body )
 {
-    //todo
+    QDomNode tableNode = body.namedItem( "table:table" );
+
+    // sanity check
+    if ( tableNode.isNull() ) return false;
+
+    while ( !tableNode.isNull() )
+    {
+        QDomElement tableElement = tableNode.toElement();
+        if( !tableElement.isNull() )
+        if( tableElement.nodeName() == "table:table" )
+        if( !tableElement.attribute( "table:name" ).isEmpty() )
+            {
+                KSpreadSheet* sheet = m_pDoc->createTable();
+                m_pDoc->addTable( sheet );
+                sheet->setTableName( tableElement.attribute( "table:name" ), true, false );
+            }
+        
+        tableNode = tableNode.nextSibling();
+    }
+       
     return true;
 }
 
