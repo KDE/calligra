@@ -39,6 +39,7 @@
 	<Example>COMPARE("KOffice"; "KOffice", true) returns 0</Example>
         <Example>COMPARE("koffice"; "KOffice", true) returns 1</Example>
         <Example>COMPARE("kspread"; "KOffice", false) returns 1</Example>
+        <Related>EXACT</Related>
       </Help>
     </Function>
 
@@ -58,6 +59,7 @@
 	<Syntax>EXACT(string1;string2)</Syntax>
 	<Example>EXACT("KOffice";"KOffice") returns True</Example>
         <Example>EXACT("KSpread";"KOffice") returns False</Example>
+        <Related>COMPARE</Related>
       </Help>
     </Function>
 
@@ -84,6 +86,7 @@
 	<Text>The REPLACE() function replaces a string s1 in the string s with string s2.</Text>
 	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
 	<Example>REPLACE("KOffice"; "Office"; "Spread"; TRUE) returns "KSpread"</Example>
+        <Related>FIND</Related>
       </Help>
     </Function>
 
@@ -103,6 +106,7 @@
 	<Syntax>FIND(needle;haystack)</Syntax>
 	<Example>FIND("KOf";"KOffice") returns True</Example>
 	<Example>FIND("KSpread";"KOffice") returns False</Example>
+        <Related>REPLACE</Related>
       </Help>
     </Function>
 
@@ -127,6 +131,8 @@
 	<Syntax>MID(text;position)</Syntax>
 	<Example>MID("KOffice";2;3) returns "ffi"</Example>
 	<Example>MID("KOffice";2) returns "ffice"</Example>
+        <Related>LEFT</Related>
+        <Related>RIGHT</Related>
       </Help>
     </Function>
 
@@ -205,6 +211,8 @@
 	<Syntax>RIGHT(text;length)</Syntax>
 	<Example>RIGHT("hello";2) returns "lo"</Example>
 	<Example>RIGHT("KSpread";10) returns "KSpread"</Example>
+        <Related>LEFT</Related>
+        <Related>MID</Related>
       </Help>
     </Function>
 
@@ -224,6 +232,8 @@
 	<Syntax>LEFT(text;length)</Syntax>
 	<Example>LEFT("hello";2) returns "he"</Example>
 	<Example>LEFT("KSpread";10) returns "KSpread"</Example>
+        <Related>RIGHT</Related>
+        <Related>MID</Related>
       </Help>
     </Function>
 
@@ -258,6 +268,8 @@
 	<Example>TOGGLE("hello") returns "HELLO"</Example>
 	<Example>TOGGLE("HELLO") returns "hello"</Example>
 	<Example>TOGGLE("HeLlO") returns "hElLo"</Example>
+        <Related>UPPER</Related>
+        <Related>LOWER</Related>
       </Help>
     </Function>
 
@@ -286,6 +298,7 @@
 	<Text>The SLEEK() function removes all spaces from the string.</Text>
 	<Syntax>SLEEK(text)</Syntax>
 	<Example>SLEEK("This is   some  text ") returns "Thisissometext"</Example>
+        <Related>TRIM</Related>
       </Help>
     </Function>
 
@@ -301,6 +314,8 @@
 	<Syntax>UPPER(text)</Syntax>
 	<Example>UPPER("hello") returns "HELLO"</Example>
 	<Example>UPPER("HELLO") returns "HELLO"</Example>
+        <Related>LOWER</Related>
+        <Related>TOGGLE</Related>
       </Help>
     </Function>
 
@@ -316,6 +331,8 @@
 	<Syntax>LOWER(text)</Syntax>
 	<Example>LOWER("hello") returns "hello"</Example>
 	<Example>LOWER("HELLO") returns "hello"</Example>
+        <Related>UPPER</Related>
+        <Related>TOGGLE</Related>
       </Help>
     </Function>
 

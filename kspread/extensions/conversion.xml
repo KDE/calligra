@@ -17,6 +17,7 @@
 	<Example>BOOL2STRING(true) returns "True"</Example>
 	<Example>BOOL2STRING(false) returns "False"</Example>
         <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
+        <Related>STRING2BOOL</Related>
       </Help>
     </Function>
 
@@ -33,6 +34,7 @@
         <Example>INT2BOOL(1) returns true</Example>
         <Example>INT2BOOL(0) returns false</Example>
         <Example>OR(INT2BOOL(1), false) returns true</Example>
+        <Related>BOOL2INT</Related>
       </Help>
     </Function>
 
@@ -48,6 +50,7 @@
         <Syntax>BOOL2INT(value)</Syntax>
         <Example>BOOL2INT(True) returns 1</Example>
         <Example>BOOL2INT(False) returns 0</Example>
+        <Related>INT2BOOL</Related>
       </Help>
     </Function>
 
@@ -294,6 +297,9 @@
 	<Syntax>POLR(X;Y)</Syntax>
 	<Example>POLR(12;12) returns 16.9705</Example>
 	<Example>POLR(12;0) returns 12</Example>
+        <Related>POLA</Related>
+        <Related>CARX</Related>
+        <Related>CARY</Related>
       </Help>
     </Function>
 
@@ -314,6 +320,9 @@
 	<Example>POLA(12;12) returns 0.78539816</Example>
 	<Example>POLA(12;0) returns 0</Example>
             <Example>POLA(0;12) returns 1.5707</Example>
+        <Related>POLR</Related>
+        <Related>CARX</Related>
+        <Related>CARY</Related>
       </Help>
     </Function>
 
@@ -333,6 +342,9 @@
 	<Syntax>CARX(Radius;Angle)</Syntax>
 	<Example>CARX(12;1.5707) returns 0.00115592</Example>
 	<Example>CARX(12;0) returns 12</Example>
+        <Related>CARY</Related>
+        <Related>POLA</Related>
+        <Related>POLR</Related>
       </Help>
     </Function>
 
@@ -390,6 +402,9 @@
         <Syntax>CARY(Radius;Angle)</Syntax>
         <Example>CARY(12;1.5707) returns 12</Example>
         <Example>CARY(12;0) returns 0</Example>
+        <Related>CARX</Related>
+        <Related>POLA</Related>
+        <Related>POLR</Related>
       </Help>
     </Function>
 

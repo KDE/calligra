@@ -112,6 +112,7 @@
 	<Syntax>EVEN(value)</Syntax>
 	<Example>EVEN(1.2) returns 2</Example>
 	<Example>EVEN(2) returns 2</Example>
+	<Related>ODD</Related>
       </Help>
     </Function>
 
@@ -127,6 +128,7 @@
 	<Syntax>ODD(value)</Syntax>
 	<Example>ODD(1.2) returns 3</Example>
 	<Example>ODD(2) returns 3</Example>
+	<Related>EVEN</Related>
       </Help>
     </Function>
 
@@ -147,6 +149,7 @@
 	<Syntax>MOD(value;value)</Syntax>
 	<Example>MOD(12;5) returns 2</Example>
 	<Example>MOD(5;5) returns 0</Example>
+	<Related>DIV</Related>
       </Help>
     </Function>
 
@@ -210,6 +213,7 @@
 	<Syntax>COUNT(value;value;value...)</Syntax>
 	<Example>COUNT(-5;"KSpread";2) returns 2</Example>
 	<Example>COUNT(5) returns 1</Example>
+	<Related>SUM</Related>
       </Help>
     </Function>
 
@@ -256,6 +260,7 @@
 	<Syntax>SUM(value;value;...)</Syntax>
 	<Example>SUM(12;5;7) equals 24</Example>
 	<Example>SUM(12.5;2) equals 14.5</Example>
+	<Related>SUMSQ</Related>
       </Help>
     </Function>
 
@@ -287,6 +292,7 @@
 	<Syntax>PRODUCT(value;value;...)</Syntax>
 	<Example>PRODUCT(3;5;7) equals 105</Example>
 	<Example>PRODUCT(12.5;2) equals 25</Example>
+	<Related>MULTIPLY</Related>
       </Help>
     </Function>
 
@@ -318,6 +324,8 @@
 	<Syntax>DIV(value;value;...)</Syntax>
 	<Example>DIV(20;2;2) returns 5</Example>
 	<Example>DIV(25;2.5) returns 10</Example>
+	<Related>MULTIPLY</Related>
+	<Related>MOD</Related>
       </Help>
     </Function>
 
@@ -349,6 +357,7 @@
 	<Syntax>SUMSQ(value;value;...)</Syntax>
 	<Example>SUMSQ(12;5;7) equals 218</Example>
 	<Example>SUMSQ(12.5;2) equals 173</Example>
+	<Related>SUM</Related>
       </Help>
     </Function>
 
@@ -381,6 +390,8 @@
 	<Syntax>MAX(value;value;...)</Syntax>
 	<Example>MAX(12;5;7) returns 12</Example>
 	<Example>MAX(12.5;2) returns 12.5</Example>
+	<Related>MIN</Related>
+	<Related>COUNT</Related>
       </Help>
     </Function>
 
@@ -412,6 +423,8 @@
 	<Syntax>MIN(value;value;...)</Syntax>
 	<Example>MIN(12;5;7) returns 5</Example>
 	<Example>MIN(12.5;2) returns 2</Example>
+	<Related>MAX</Related>
+	<Related>COUNT</Related>
       </Help>
     </Function>
 
@@ -443,6 +456,7 @@
 	<Syntax>MULTIPLY(value;value;...)</Syntax>
 	<Example>MULTIPLY(12;5;7) equals 420</Example>
 	<Example>MULTIPLY(12.5;2) equals 25</Example>
+	<Related>DIV</Related>
       </Help>
     </Function>
 
@@ -473,6 +487,7 @@
 	<Syntax>LN(x)</Syntax>
 	<Example>LN(0.8) equals -0.22314355</Example>
 	<Example>LN(0) equals -inf</Example>
+	<Related>LOG</Related>
       </Help>
     </Function>
 
@@ -492,8 +507,10 @@
 	<Syntax>LOGn(value;base)</Syntax>
 	<Example>LOGn(12;10) equals 1.07918125</Example>
 	<Example>LOGn(12;2) equals 3.5849625</Example>
+	<Related>LOG</Related>
       </Help>
     </Function>
+
 
     <Function>
       <Name>SQRTN</Name>
@@ -510,6 +527,7 @@
 	<Text>The SQRTn() function returns the non-negative nth root of x.</Text>
 	<Syntax>SQRTn(x,n)</Syntax>
 	<Example>SQRTn(9;2) equals 3</Example>
+	<Related>SQRT</Related>
       </Help>
     </Function>
 
@@ -524,6 +542,7 @@
 	<Text>The CUR() function returns the non-negative cube root of x.</Text>
 	<Syntax>CUR(x)</Syntax>
 	<Example>CUR(27) equals 3</Example>
+	<Related>SQRT</Related>
       </Help>
     </Function>
 
@@ -539,6 +558,8 @@
 	<Syntax>LOG(x)</Syntax>
 	<Example>LOG(0.8) equals -0.09691001</Example>
 	<Example>LOG(0) equals -inf.</Example>
+	<Related>LN</Related>
+	<Related>LOGN</Related>
       </Help>
     </Function>
 
@@ -554,6 +575,7 @@
 	<Syntax>EXP(x)</Syntax>
 	<Example>EXP(9) equals 8 103.08392758</Example>
 	<Example>EXP(-9) equals 0.00012341</Example>
+	<Related>LN</Related>
       </Help>
     </Function>
 
@@ -569,6 +591,7 @@
 	<Syntax>CEIL(x)</Syntax>
 	<Example>CEIL(12.5) equals 13</Example>
 	<Example>CEIL(-12.5) equals -12</Example>
+	<Related>FLOOR</Related>
       </Help>
     </Function>
 
@@ -584,6 +607,7 @@
 	<Syntax>FLOOR(x)</Syntax>
 	<Example>FLOOR(12.5) equals 12</Example>
 	<Example>FLOOR(-12.5) equals -13</Example>
+	<Related>CEIL</Related>
       </Help>
     </Function>
 
@@ -614,6 +638,7 @@
 	<Syntax>INT(x)</Syntax>
 	<Example>INT(12.55) equals 12</Example>
 	<Example>INT(15) equals 15</Example>
+	<Related>FLOOR</Related>
       </Help>
     </Function>
 
