@@ -5233,6 +5233,17 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignCenter->setEnabled( rw );
     actionFormatAlignRight->setEnabled( rw );
     actionFormatAlignBlock->setEnabled( rw );
+
+    actionBorderLeft->setEnabled( rw );;
+    actionBorderRight->setEnabled( rw );
+    actionBorderTop->setEnabled( rw );
+    actionBorderBottom->setEnabled( rw );
+    actionBorderOutline->setEnabled( rw );
+    actionBorderColor->setEnabled( rw );
+    actionBorderWidth->setEnabled( rw );
+    actionBorderStyle->setEnabled( rw );
+
+
     actionFormatIncreaseIndent->setEnabled(state);
     actionInsertLink->setEnabled(state);
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
