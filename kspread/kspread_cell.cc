@@ -5322,12 +5322,38 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
       KSpreadFormat::FormatType type = formatType();
 
       if ( type == KSpreadFormat::Percentage )
+        {
         xmlwriter.addAttribute( "office:value-type", "percentage" );
+        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        }
+      else if ( type == KSpreadFormat::Money )
+        {
+        xmlwriter.addAttribute( "office:value-type", "currency" );
+        // TODO: add code of currency
+        //xmlwriter.addAttribute( "tableoffice:currency", locale()->currencySymbol() );
+        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        }
+      else if ( isDate() )
+        {
+          xmlwriter.addAttribute( "office:value-type", "date" );
+          xmlwriter.addAttribute( "office:date-value", d->value.asDate().toString( Qt::ISODate ) );
+        }
+      else if ( isTime() )
+        {
+          xmlwriter.addAttribute( "office:value-type", "time" );
+          xmlwriter.addAttribute( "office:time-value", d->value.asTime().toString( "PThhHmmMssS" ) );
+        }
       else
+        {
         xmlwriter.addAttribute( "office:value-type", "float" );
-
-      xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        xmlwriter.addAttribute( "office:value", QString::number( d->value.asFloat() ) );
+        }
     }
+    else if ( d->value.isString() )
+      {
+        xmlwriter.addAttribute( "office:value-type", "string" );
+        xmlwriter.addAttribute( "office:string-value", d->value.asString() );
+      }
     else
     {
       kdDebug() << "Type: " << d->value.type() << endl;
@@ -5416,6 +5442,12 @@ QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) cons
         if ( formula[i] == '!' )
         {
             insertBracket( s );
+            s += '.';
+            ++i;
+            continue;
+        }
+        if ( formula[i] == ',' )
+        {
             s += '.';
             ++i;
             continue;
@@ -5598,6 +5630,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             if ( ok )
             {
                 setValue( QDate( year, month, day ) );
+                setFormatType( KSpreadFormat::ShortDate );
                 kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
@@ -5642,8 +5675,17 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
                 setValue( QTime( hours % 24, minutes, seconds ) );
-                setFormatType( KSpreadFormat::Custom );
+                setFormatType( KSpreadFormat::Time );
             }
+        }
+        else if( valuetype == "string" )
+        {
+          bool ok = false;
+          QString value = element.attribute( "office:value" );
+            if ( value.isEmpty() )
+                value = element.attribute( "office:string-value" );
+          setValue( value );
+          setFormatType( KSpreadFormat::Text_format );
         }
         else
             kdDebug()<<" type of value found : "<<valuetype<<endl;
@@ -6973,6 +7015,8 @@ void KSpreadCell::convertFormula( QString & text, const QString & f ) const
       if ( !inQuote )
         parameter += ")";
     }
+    else if ( f[p] == '.' && f[p+1].isNumber() ) // Convert '.' to ',' in floating point numbers
+      parameter += ',';
     else
       parameter += f[p];
 
