@@ -85,6 +85,9 @@
 #include "kprcanvas.h"
 #include "kprcanvas.moc"
 
+#include "effecthandler.h"
+#include <unistd.h>
+
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
@@ -142,6 +145,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawLineWithCubicBezierCurve = true;
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0.0, 0.0, 0.0, 0.0,
                                               0.0, 0.0, 0.0, 0.0 );
+        m_effectHandler = 0;
     } else {
         m_view = 0;
         hide();
@@ -316,7 +320,8 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
         else
         {
-            PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
+            //PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
+            PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, m_effectTimer.isActive(), !goingBack );
             drawPresPage( &bufPainter, crect, step );
             if ( m_drawMode && m_drawModeLines.count() )
             {
@@ -1129,7 +1134,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             m_view->screenPrev();
         else if ( e->button() == RightButton ) {
             if ( !m_drawMode && !spManualSwitch() )
+            {
+                finishObjectEffects();
                 m_view->stopAutoPresTimer();
+            }
 
             setCursor( arrowCursor );
             QPoint pnt = QCursor::pos();
@@ -2094,10 +2102,12 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             break;
         case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
             setSwitchingMode( false );
+            finishObjectEffects();
             m_view->screenPrev();
             break;
         case Key_Escape: case Key_Q: case Key_X:
             setSwitchingMode( false );
+            finishObjectEffects();
             m_view->screenStop();
             break;
         case Key_G:
@@ -3518,6 +3528,16 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step )
 
 void KPrCanvas::doObjEffects()
 {
+    if ( m_effectHandler )
+    {
+        m_effectTimer.stop();
+        QObject::disconnect( &m_effectTimer, SIGNAL( timeout() ), this, SLOT( slotDoEffect() ) );
+
+        m_effectHandler->finish();
+        delete m_effectHandler;
+        m_effectHandler = 0;
+    }
+    
     /// ### Note: this is for full-screen mode only.
     /// ### There should be NO use of diffx(), diffy() anywhere in this method!
 
@@ -3539,6 +3559,7 @@ void KPrCanvas::doObjEffects()
         drawn = true;
     }
 
+
     QPtrList<KPObject> _objList;
     QTime _time;
     int _step = 0, _steps1 = 0, _steps2 = 0, x_pos1 = 0, y_pos1 = 0;
@@ -3551,8 +3572,32 @@ void KPrCanvas::doObjEffects()
     QString _soundFileName = QString::null;
     if ( !drawn )
         bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
-    QPixmap *screen = new QPixmap( screen_orig );
+    //QPixmap *screen = new QPixmap( screen_orig );
 
+    QPtrList<KPObject> allObjects( m_activePage->objectList() );
+    
+    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
+    for ( ; it.current(); ++it ) {
+        if ( objectIsAHeaderFooterHidden( it.current() ) )
+            continue;
+        else
+            allObjects.append( it.current() );
+    }
+
+    //m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, objectList(), m_view );
+    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view );
+    if ( m_effectHandler->doEffect() )
+    {
+        delete m_effectHandler;
+        m_effectHandler = 0;
+    }
+    else
+    {
+        connect( &m_effectTimer, SIGNAL( timeout() ), SLOT( slotDoEffect() ) );
+        m_effectTimer.start( 50, true );
+    }
+
+#if 0
     QPtrListIterator<KPObject> oit(getObjectList());
     for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
@@ -4216,7 +4261,37 @@ void KPrCanvas::doObjEffects()
         m_view->setAutoPresTimer( timer );
 
     delete screen;
+#endif
 }
+
+void KPrCanvas::slotDoEffect()
+{
+    if ( m_effectHandler->doEffect() )
+    {
+        m_effectTimer.stop();
+        QObject::disconnect( &m_effectTimer, SIGNAL( timeout() ), this, SLOT( slotDoEffect() ) );
+        delete m_effectHandler;
+        m_effectHandler = 0;
+    }
+    else
+    {
+        m_effectTimer.start( 50, true );
+    }
+}
+
+
+void KPrCanvas::finishObjectEffects()
+{
+    if ( m_effectHandler )
+    {
+        m_effectTimer.stop();
+        QObject::disconnect( &m_effectTimer, SIGNAL( timeout() ), this, SLOT( slotDoEffect() ) );
+        m_effectHandler->finish();
+        delete m_effectHandler;
+        m_effectHandler = 0;
+    }
+}
+
 
 void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h,
                             int _cx, int _cy )
@@ -4252,6 +4327,8 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
     kpobject->setSubPresStep( 0 );
     kpobject->doSpecificEffects( false );
     kpobject->setOwnClipping( true );
+
+    p.translate(-_x,-_y);
 
     KPObject *obj = 0;
     for ( unsigned int i = tmpObjs.findRef( kpobject ) +1 ; i < tmpObjs.count(); i++ ) {
@@ -4964,6 +5041,7 @@ void KPrCanvas::gotoPage( int pg )
     if ( page != m_step.m_pageNumber || m_step.m_step != *m_pageEffectSteps.begin() || m_step.m_subStep != 0 ) {
         // clear drawed lines
         m_drawModeLines.clear();
+        goingBack = false;
 
         m_step.m_pageNumber = page;
         kdDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
@@ -4978,12 +5056,14 @@ void KPrCanvas::gotoPage( int pg )
         //recalculate the page numbers
         m_view->kPresenterDoc()->recalcPageNum();
 
+#if 0
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
         resize( desk.width(), desk.height() );
 #else
         resize( QApplication::desktop()->screenGeometry(this).size());
 #endif
+#endif        
         doObjEffects();
         setFocus();
         m_view->refreshPageButton();

@@ -12,6 +12,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc  \
+  effecthandler.cc \
 	transeffectdia.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
@@ -65,7 +66,7 @@ kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresenter_view.h \
 		backdia.h styledia.h \
 		global.h kprcommand.h kpresenter_sound_player.h \
-		pgconfdia.h effectdia.h kpresenter_utils.h \
+		pgconfdia.h effectdia.h kpresenter_utils.h effecthandler.h\
 		confpiedia.h confrectdia.h  searchdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kptextobject.h \

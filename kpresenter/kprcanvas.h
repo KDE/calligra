@@ -31,6 +31,7 @@
 #include <qpixmap.h>
 #include <qpointarray.h>
 #include <qvaluevector.h>
+#include <qtimer.h>
 
 #include <koRuler.h>
 #include <koQueryTrader.h>
@@ -70,6 +71,7 @@ class KPrinter;
 class KPTextView;
 class KPPartObject;
 class KCommand;
+class EffectHandler;
 /**
  * Class KPCanvas - There is a single instance of this class for a given view.
  *
@@ -251,6 +253,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     // get - set data
     const QPtrList<KPObject> & getObjectList() const;
 
+    void playSound( const QString &soundFileName );
     void stopSound();
 
     ///for KPTextView
@@ -526,6 +529,12 @@ protected:
     /// draw grid
     void drawGrid(QPainter *painter, const QRect &rect2) const;
 
+    /**
+     * Finish the object effects.
+     * This shown the last step of the effect. It stops the effect timer and 
+     * disconnect it and the effect handler deleted.
+     */
+    void finishObjectEffects();
 
     QRect getOldBoundingRect( const KPObject *obj );
 
@@ -640,8 +649,6 @@ private:
 
     bool nextPageTimer;
 
-    void playSound( const QString &soundFileName );
-
     void drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint );
 
     void drawPieObject(QPainter *p,  const QRect & );
@@ -687,6 +694,14 @@ private slots:
     void slotGotoPage();
     void slotExitPres();
     void terminateEditing( KPTextObject * );
+
+    /**
+     * Do the next step of the object effect.
+     * This restarts the effect tmer. If the effects are
+     * completed the timer is disconnected and the effect handler
+     * deleted.
+     */
+    void slotDoEffect();
 
 private:
     // variables
@@ -741,6 +756,10 @@ private:
     QValueList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
     QValueList<int>::Iterator m_presentationSlidesIterator;
+    /// EffectHandler for object effects
+    EffectHandler *m_effectHandler;
+    /// EffectTimer
+    QTimer m_effectTimer;
     /// menu identifier for draw mode
     int PM_DM;
     int firstX, firstY;
