@@ -150,3 +150,16 @@ void KPresenterDocIface::setDisplayLink(bool b)
     doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
     doc->recalcVariables(VT_LINK);
 }
+
+bool KPresenterDocIface::setCustomVariableValue(const QString & varname, const QString & value)
+{
+    bool exist=doc->getVariableCollection()->customVariableExist(varname);
+    if(exist)
+    {
+        doc->getVariableCollection()->setVariableValue( varname, value );
+        doc->recalcVariables(VT_CUSTOM);
+    }
+    else
+        return false;
+    return true;
+}

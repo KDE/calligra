@@ -118,6 +118,9 @@ public:
     bool insertNewTemplate( bool clean=false );
 
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
+
+    const QPtrList<KPObject> & stickyObject() const { return m_stikyObj;}
+
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 
@@ -423,6 +426,7 @@ private:
     QPtrList<KPrPage> m_pageList;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
+    QPtrList<KPObject> m_stikyObj;
 };
 
 #endif

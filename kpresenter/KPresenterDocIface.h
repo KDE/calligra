@@ -54,6 +54,8 @@ k_dcop:
     virtual void recalcVariables( int type );
     virtual void recalcAllVariables();
     virtual void recalcVariables(const QString &varName);
+    bool setCustomVariableValue(const QString & varname, const QString & value);
+
     virtual int startingPage();
     virtual void setStartingPage(int nb);
 
