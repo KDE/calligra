@@ -1,12 +1,12 @@
 <!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
- <!ENTITY kword   "<application>KWord</application>">
- <!ENTITY KWord   "<application>KWord</application>">
- 
- <!ENTITY % addindex "IGNORE">
- <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+  <!ENTITY kappname "&kword;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" -- change language only here -->
+  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V1.0//EN">
+  %ents;
 ]>
 
-<book lang="en">
+<book lang="&language;">
 <bookinfo>
 <title>The KWord Users Manual</title>
 <authorgroup>
@@ -3104,7 +3104,7 @@ format.</para></glossdef>
 <glossentry id="defbinarycode">
 <glossterm>Binary code</glossterm>
 <glossdef><para>Binary code is the actual instructions for the
-computer. So if we refer to "binaries" we mean the executable &KWord;
+computer. So if we refer to "binaries" we mean the executable &kword;
 program.</para></glossdef>
 </glossentry>
 
@@ -3189,7 +3189,7 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <glossentry id="defframe">
 <glossterm>Frame</glossterm>
-<glossdef><para>Well, about everything in &KWord; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef>
+<glossdef><para>Well, about everything in &kword; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef>
 </glossentry>
 
 <glossentry id="defframeset">
@@ -3199,7 +3199,7 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <glossentry id="defframeeditmode">
 <glossterm>Frame Edit Mode</glossterm>
-<glossdef><para>In the "frame edit mode" &KWord; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef>
+<glossdef><para>In the "frame edit mode" &kword; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef>
 </glossentry>
 
 <glossentry id="defftp">
@@ -3209,7 +3209,7 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <glossentry id="defhardframebreak">
 <glossterm>Hard Frame Break</glossterm>
-<glossdef><para>Normally, only when your text reaches the end of a frame, &KWord; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &KWord; to continue with the next frame at a certain position in your text.</para></glossdef>
+<glossdef><para>Normally, only when your text reaches the end of a frame, &kword; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &kword; to continue with the next frame at a certain position in your text.</para></glossdef>
 </glossentry>
 
 <glossentry id="defheader">
@@ -3294,7 +3294,7 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <glossentry id="deftexteditmode">
 <glossterm>Text Edit Mode</glossterm>
-<glossdef><para>In the "text edit mode" &KWord; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef>
+<glossdef><para>In the "text edit mode" &kword; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="deftgz">

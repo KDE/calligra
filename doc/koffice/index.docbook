@@ -1,22 +1,20 @@
 <!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
- <!ENTITY KOffice   "<application>KOffice</application>">
- <!ENTITY KWord   "<application>KWord</application>">
- <!ENTITY KSpread   "<application>KSpread</application>">
- <!ENTITY % addindex "IGNORE">
- <![ %addindex; [ <!ENTITY kdedocindex SYSTEM "docindex.docbook"> ]]>
+  <!ENTITY kappname "&koffice;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" -- change language only here -->
+  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V1.0//EN">
+  %ents;
 ]>
 
-<book lang="en">
+<book lang="&language;">
 <bookinfo>
 <title>KOffice</title>
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
 <author>
-  <firstname>Jost</firstname>
-  <surname>Schenck</surname>
-  <affiliation>
-  <address><email>jost@schenck.de</email></address>
-  </affiliation> 
+<firstname>Jost</firstname>
+<surname>Schenck</surname>
+<affiliation><address><email>jost@schenck.de</email></address></affiliation> 
 </author>
 </authorgroup> 
 
