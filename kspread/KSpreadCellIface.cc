@@ -329,6 +329,7 @@ QString KSpreadCellIface::getFormatNumber() const
         case KSpreadCell::date_format14:
         case KSpreadCell::date_format15:
         case KSpreadCell::date_format16:
+	case KSpreadCell::date_format17:
                 stringFormat="date format";
                 break;
         case KSpreadCell::Time:
