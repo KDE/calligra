@@ -5788,24 +5788,22 @@ void KPresenterView::refreshAllVariable()
 void KPresenterView::changeZoomMenu( int zoom )
 {
     QStringList lst;
+    lst << i18n( "Width" );
+    lst << i18n( "Whole Slide" );
+
     if(zoom>0)
     {
-        if( lst.contains( i18n( "Width" ) ) == 0 )
-            lst << i18n( "Width" );
-        if( lst.contains( i18n( "Whole Slide" ) )==0)
-            lst << i18n( "Whole Slide" );
         QValueList<int> list;
-        QString z;
-        int val;
         bool ok;
-        QStringList itemsList = actionViewZoom->items();
-        for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+        const QStringList itemsList ( actionViewZoom->items() );
+        QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+
+        for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
         {
-            z = (*it).replace( "%", "" );
-            z = z.simplifyWhiteSpace();
-            val=z.toInt(&ok);
+            regexp.search(*it);
+            const int val=regexp.cap(1).toInt(&ok);
             //zoom : limit inferior=10
-            if(ok && val>9  &&list.contains(val)==0)
+            if(ok && val>9 && list.contains(val)==0)
                 list.append( val );
         }
         //necessary at the beginning when we read config
@@ -5816,12 +5814,11 @@ void KPresenterView::changeZoomMenu( int zoom )
         qHeapSort( list );
 
         for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-            lst.append( (QString::number(*it)+'%') );
+            lst.append( (QString::number(*it)+'%') ); // ### TODO: I18N
     }
     else
     {
-        lst << i18n( "Width" );
-        lst << i18n( "Whole Slide" );
+        // ### TODO: I18N
         lst << "33%";
         lst << "50%";
         lst << "75%";
@@ -5841,7 +5838,7 @@ void KPresenterView::changeZoomMenu( int zoom )
 void KPresenterView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
-    QString zoomStr = QString::number( zoom ) + '%';
+    QString zoomStr = QString::number( zoom ) + '%';  // ### TODO: I18N
     int pos = list.findIndex(zoomStr);
     if( pos == -1)
     {
@@ -5853,25 +5850,24 @@ void KPresenterView::showZoom( int zoom )
 
 void KPresenterView::viewZoom( const QString &s )
 {
-    QString z( s );
     bool ok=false;
     int zoom = 0;
-    if ( z == i18n("Width") )
+    if ( s == i18n("Width") )
     {
         zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) /
                        (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
     }
-    else if ( z == i18n("Whole Slide") )
+    else if ( s == i18n("Whole Slide") )
     {
         zoom = getZoomEntirePage();
         ok = true;
     }
     else
     {
-        z = z.replace( "%", "" );
-        z = z.simplifyWhiteSpace();
-        zoom = z.toInt(&ok);
+        QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+        regexp.search(s);
+        zoom=regexp.cap(1).toInt(&ok);
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = zoomHandler()->zoom();
