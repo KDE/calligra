@@ -1049,22 +1049,16 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");
-    //todo define how to save it to use into ooimpress
     settingsWriter.addAttribute("config:name", "view-settings");
-
     KoUnit::saveOasis(&settingsWriter, m_unit);
-
     settingsWriter.startElement( "config:config-item-map-indexed" );
     settingsWriter.addAttribute( "config:name", "Views" );
-
     settingsWriter.startElement("config:config-item-map-entry" );
+
     saveOasisSettings( settingsWriter );
-    settingsWriter.endElement();
 
-
+    settingsWriter.endElement(); //config:config-item-map-entry
     settingsWriter.endElement(); //config:config-item-map-indexed
-
-
     settingsWriter.endElement(); // config:config-item-set
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
@@ -1141,18 +1135,28 @@ bool KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
         return true; //not a error some file doesn't have settings.xml
 
     KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.configItem( "view-settings" );
+    bool tmp = settings.selectItemSet( "view-settings" );
     kdDebug()<<" settings : view-settings :"<<tmp<<endl;
 
     if ( tmp )
     {
-        tmp = settings.mapItem( "Views" );
+        tmp = settings.selectItemMap( "Views" );
         kdDebug()<<" View :"<<tmp<<endl;
         if ( tmp )
         {
             parseOasisHelpLine(  settings.parseConfigItemString( "SnapLinesDrawing" ) );
             setShowHelplines( settings.parseConfigItemBool( "SnapLineIsVisible" ) );
-            //todo other argument
+            int valx = settings.parseConfigItemInt( "GridFineWidth" );
+            QString pt_x;
+            pt_x.setNum(( valx/100.0 ));
+            pt_x+="mm";
+            m_gridX = KoUnit::parseValue(pt_x);
+            int valy = settings.parseConfigItemInt( "GridFineHeight" );
+            QString pt_y;
+            pt_y.setNum(( valy/100.0 ));
+            pt_y+="mm";
+            m_gridY = KoUnit::parseValue(pt_y);
+
         }
     }
 
