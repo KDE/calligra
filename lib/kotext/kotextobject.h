@@ -458,6 +458,7 @@ private slots:
     void slotAfterUndoRedo();
     void slotParagraphModified(KoTextParag *);
     void slotParagraphCreated(KoTextParag *);
+    void slotParagraphDeleted(KoTextParag *);
 private:
     void init();
 

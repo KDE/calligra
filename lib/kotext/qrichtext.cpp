@@ -40,6 +40,7 @@
 #include "qdrawutil.h"
 
 #include <stdlib.h>
+#include "koparagcounter.h" //// kotext
 //#include <kdebug.h>
 //#include <kdebugclasses.h>
 
@@ -1236,6 +1237,9 @@ bool KoTextCursor::remove()
 	    delete string;
 	    string = p;
 	    string->invalidate( 0 );
+            //// kotext
+            string->invalidateCounters();
+            ////
 	    KoTextParag *s = string;
 	    while ( s ) {
 		s->id = s->p ? s->p->id + 1 : 0;
@@ -2540,6 +2544,10 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
     c2.parag()->remove( 0, c2.index() );
     while ( p ) {
 	p->move( dy );
+        //// kotext
+        if ( p->paragLayout().counter )
+            p->paragLayout().counter->invalidate();
+        ////
 	p->invalidate( 0 );
 	p->setEndState( -1 );
 	p = p->next();
@@ -3733,7 +3741,6 @@ KoTextParag::~KoTextParag()
     //// kotext
     if ( !document()->isDestroying() )
     {
-        invalidateCounters();
         emit document()->paragraphDeleted( this );
     }
     //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
@@ -3843,6 +3850,9 @@ void KoTextParag::join( KoTextParag *s )
     }
     delete s;
     invalidate( 0 );
+    //// kotext
+    invalidateCounters();
+    ////
     r.setHeight( oh );
     needPreProcess = TRUE;
     if ( n ) {

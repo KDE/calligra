@@ -79,15 +79,21 @@ void KoTextObject::init()
     connect( formatTimer, SIGNAL( timeout() ),
              this, SLOT( formatMore() ) );
 
-    connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
-             this, SIGNAL( paragraphDeleted( KoTextParag* ) ) );
-
     // Apply default style to initial paragraph
     if ( m_lastFormatted && m_defaultStyle )
         m_lastFormatted->applyStyle( m_defaultStyle );
 
-    connect( this, SIGNAL(paragraphModified( KoTextParag* )), this, SLOT(slotParagraphModified(KoTextParag *)));
-    connect( this, SIGNAL(paragraphCreated( KoTextParag* )), this, SLOT(slotParagraphCreated(KoTextParag *)));
+    connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
+             this, SIGNAL( paragraphDeleted( KoTextParag* ) ) );
+    connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
+             this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
+
+    connect( this, SIGNAL(paragraphModified( KoTextParag* )),
+             this, SLOT(slotParagraphModified(KoTextParag *)));
+    connect( this, SIGNAL(paragraphCreated( KoTextParag* )),
+             this, SLOT(slotParagraphCreated(KoTextParag *)));
+
+
 }
 
 KoTextObject::~KoTextObject()
@@ -121,6 +127,10 @@ void KoTextObject::slotParagraphCreated(KoTextParag * parag)
         parag->string()->setNeedsSpellCheck( true );
 }
 
+void KoTextObject::slotParagraphDeleted(KoTextParag * /*parag*/)
+{
+    // ### TODO: remove from kwbgspellcheck
+}
 
 int KoTextObject::docFontSize( KoTextFormat * format ) const
 {
@@ -1303,7 +1313,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
     KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, true, true );
-    kdDebug() << "KoTextObject::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
+    //kdDebug() << "KoTextObject::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
 
     textdoc->removeSelectedText( selectionId, cursor );
 
