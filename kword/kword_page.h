@@ -192,6 +192,8 @@ public:
   void setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable);
   void setFrameBackgroundColor(QBrush _color);
 
+  KWGroupManager *getTable();
+
 public slots:
   void newLeftIndent(int _left); 
   void newFirstIndent(int _first);

@@ -1465,6 +1465,86 @@ bool KWGroupManager::isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int
 }
 
 /*================================================================*/
+void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
+{
+  unsigned int i = 0;
+  unsigned int _rows = rows;
+
+  QList<int> w;
+  w.setAutoDelete(true);
+  QRect r = getBoundingRect();
+
+  for (i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row == 0) w.append(new int(cells.at(i)->frameSet->getFrame(0)->width()));
+      if (cells.at(i)->row >= _idx) cells.at(i)->row++;
+    }
+
+  QList<KWTextFrameSet> nCells;
+  nCells.setAutoDelete(false);
+
+  int ww = 0;
+  for (i = 0;i < getCols();i++)
+    {
+      KWFrame *frame = new KWFrame(r.x() + ww,r.y(),*w.at(i),doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10);
+      KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
+      _frameSet->addFrame(frame);
+      _frameSet->setAutoCreateNewFrame(false);
+      _frameSet->setGroupManager(this);
+      addFrameSet(_frameSet,_idx,i);
+      nCells.append(_frameSet);
+      ww += *w.at(i) + 2;
+    }
+  
+  rows = ++_rows;
+
+  for (i = 0;i < nCells.count();i++)
+    doc->addFrameSet(nCells.at(i));
+
+  recalcRows(_painter);
+}
+
+/*================================================================*/
+void KWGroupManager::insertCol(unsigned int _idx)
+{
+  unsigned int i = 0;
+  unsigned int _cols = cols;
+
+  QList<int> h;
+  h.setAutoDelete(true);
+  QRect r = getBoundingRect();
+
+  for (i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->col == 0) h.append(new int(cells.at(i)->frameSet->getFrame(0)->height()));
+      if (cells.at(i)->col >= _idx) cells.at(i)->col++;
+    }
+
+  QList<KWTextFrameSet> nCells;
+  nCells.setAutoDelete(false);
+
+  int hh = 0;
+  for (i = 0;i < getRows();i++)
+    {
+      KWFrame *frame = new KWFrame(r.x(),r.y() + hh,60,*h.at(i));
+      KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
+      _frameSet->addFrame(frame);
+      _frameSet->setAutoCreateNewFrame(false);
+      _frameSet->setGroupManager(this);
+      addFrameSet(_frameSet,i,_idx);
+      nCells.append(_frameSet);
+      hh += *h.at(i) + 2;
+    }
+  
+  cols = ++_cols;
+
+  for (i = 0;i < nCells.count();i++)
+    doc->addFrameSet(nCells.at(i));
+
+  recalcCols();
+}
+
+/*================================================================*/
 bool isAHeader(FrameInfo fi) 
 { 
   return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER); 

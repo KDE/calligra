@@ -954,6 +954,87 @@ void KWordView::toolsPart()
 }
 
 /*===============================================================*/
+void KWordView::tableInsertRow()
+{
+  gui->getPaperWidget()->mmEdit();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+  else
+    {
+      KWInsertDia dia(0L,"",grpMgr,m_pKWordDoc,KWInsertDia::ROW,gui->getPaperWidget());
+      dia.setCaption(i18n("Insert Row"));
+      dia.show();
+    }
+}
+
+/*===============================================================*/
+void KWordView::tableInsertCol()
+{
+  gui->getPaperWidget()->mmEdit();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+  else
+    {
+      if (grpMgr->getBoundingRect().right() + 62 > static_cast<int>(m_pKWordDoc->getPTPaperWidth()))
+	QMessageBox::critical(0L,i18n("Error"),i18n("There is not enough space at the right of the table\nto insert a new column."),i18n("OK"));
+      else
+	{
+	  KWInsertDia dia(0L,"",grpMgr,m_pKWordDoc,KWInsertDia::COL,gui->getPaperWidget());
+	  dia.setCaption(i18n("Insert Column"));
+	  dia.show();
+	}
+    }
+}
+
+/*===============================================================*/
+void KWordView::tableDeleteRow()
+{
+  gui->getPaperWidget()->mmEdit();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+  else
+    {
+    }
+}
+
+/*===============================================================*/
+void KWordView::tableDeleteCol()
+{
+  gui->getPaperWidget()->mmEdit();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+  else
+    {
+    }
+}
+
+/*===============================================================*/
+void KWordView::tableJoinCells()
+{
+}
+
+/*===============================================================*/
+void KWordView::tableUngroupTable()
+{
+  gui->getPaperWidget()->mmEdit();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to put the cursor into a table to edit it!"),i18n("OK"));
+  else
+    {
+    }
+}
+
+/*===============================================================*/
 void KWordView::helpContents()
 {
 }
@@ -1427,6 +1508,23 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", ALT + Key_A, -1, -1 );
 
+  // table menu
+  _menubar->insertMenu( i18n( "&Table" ), m_vMenuTable, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("rowin.xpm"));
+  m_idMenuTable_InsertRow = m_vMenuTable->insertItem6( pix, i18n("&Insert Row..."), this, "tableInsertRow",0, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("colin.xpm"));
+  m_idMenuTable_InsertCol = m_vMenuTable->insertItem6( pix, i18n("I&nsert Column..."), this, "tableInsertCol",0, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("rowout.xpm"));
+  m_idMenuTable_DeleteRow = m_vMenuTable->insertItem6( pix, i18n("&Delete Row..."), this, "tableDeleteRow",0, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("colout.xpm"));
+  m_idMenuTable_DeleteCol = m_vMenuTable->insertItem6( pix, i18n("&Delete Column..."), this, "tableDeleteCol",0, -1, -1 );
+
+  m_vMenuTable->insertSeparator( -1 );
+
+  m_idMenuTable_JoinCells = m_vMenuTable->insertItem4( i18n("&Join Cells..."), this, "tableJoinCells", 0, -1, -1 );
+  m_idMenuTable_UngroupTable = m_vMenuTable->insertItem4( i18n("&Ungroup Table"), this, "tableUngroupTable", 0, -1, -1 );
+ 
   // extra menu
   _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
@@ -1535,6 +1633,28 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 								  true, i18n("Insert Special Character"), -1);
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
+
+  // TOOLBAR table
+  m_vToolBarTable = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
+  m_vToolBarTable->setFullWidth(false);
+
+  pix = OPUIUtils::convertPixmap(ICON("rowin.xpm"));
+  m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableInsertRow", 
+							     true,i18n("Insert Row"),-1);
+
+  pix = OPUIUtils::convertPixmap(ICON("colin.xpm"));
+  m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableInsertCol", 
+							     true,i18n("Insert Column"),-1);
+
+  pix = OPUIUtils::convertPixmap(ICON("rowout.xpm"));
+  m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableDeleteRow", 
+							     true,i18n("Delete Row"),-1);
+
+  pix = OPUIUtils::convertPixmap(ICON("colout.xpm"));
+  m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableDeleteCol", 
+							     true,i18n("Delete Column"),-1);
+  
+  m_vToolBarTable->enable(OpenPartsUI::Show);
 
   // TOOLBAR Tools
   m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );

@@ -383,6 +383,9 @@ public:
   void selectUntil(KWFrameSet *fs);
   bool isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int &col);
 
+  void insertRow(unsigned int _idx,QPainter &_painter);
+  void insertCol(unsigned int _idx);
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

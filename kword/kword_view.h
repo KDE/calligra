@@ -54,6 +54,7 @@ class KWPaintWindow;
 #include "stylist.h"
 #include "searchdia.h"
 #include "tabledia.h"
+#include "insdia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -143,6 +144,13 @@ public:
   virtual void toolsKSpreadTable();
   virtual void toolsFormula();
   virtual void toolsPart();
+
+  virtual void tableInsertRow();
+  virtual void tableInsertCol();
+  virtual void tableDeleteRow();
+  virtual void tableDeleteCol();
+  virtual void tableJoinCells();
+  virtual void tableUngroupTable();
 
   virtual void helpContents();
   virtual void helpAbout();
@@ -301,6 +309,15 @@ protected:
   CORBA::Long m_idMenuTools_Formula;
   CORBA::Long m_idMenuTools_Part;
 
+  // table menu
+  OpenPartsUI::Menu_var m_vMenuTable;
+  CORBA::Long m_idMenuTable_InsertRow;
+  CORBA::Long m_idMenuTable_InsertCol;
+  CORBA::Long m_idMenuTable_DeleteRow;
+  CORBA::Long m_idMenuTable_DeleteCol;
+  CORBA::Long m_idMenuTable_JoinCells;
+  CORBA::Long m_idMenuTable_UngroupTable;
+
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_Contents;
@@ -368,6 +385,13 @@ protected:
   CORBA::Long m_idComboFrame_BorderWidth;
   CORBA::Long m_idComboFrame_BorderStyle;
   CORBA::Long m_idButtonFrame_BackColor;
+
+  // table toolbar
+  OpenPartsUI::ToolBar_var m_vToolBarTable;
+  CORBA::Long m_idButtonTable_InsertRow;
+  CORBA::Long m_idButtonTable_DeleteRow;
+  CORBA::Long m_idButtonTable_InsertCol;
+  CORBA::Long m_idButtonTable_DeleteCol;
 
   QList<KWordFrame> m_lstFrames;
 

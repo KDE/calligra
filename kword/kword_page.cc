@@ -3566,3 +3566,8 @@ void KWPage::setFrameBackgroundColor(QBrush _color)
   doc->updateAllViews(0L);
 }
 
+/*================================================================*/
+KWGroupManager *KWPage::getTable() 
+{
+  return doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager(); 
+}

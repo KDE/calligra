@@ -706,3 +706,10 @@ Reggie, 21.1.1999:
 - Selecting multiple cells in a table is more comfortable
 - Some more fixes to avoid crashes when inserting objects
 - Fixed saving/loading background colors of frames
+
+Reggie, 23.1.1999:
+------------------
+- Added menu and toolbar for table settings
+- Added dialog for inserting rows/cols in tables
+- Implemented inserting rows in tables
+- Implemented inserting columns in tables

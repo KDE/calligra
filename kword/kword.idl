@@ -49,6 +49,13 @@ module KWord
       slot void toolsFormula();
       slot void toolsPart();
 
+      slot void tableInsertRow();
+      slot void tableInsertCol();
+      slot void tableDeleteRow();
+      slot void tableDeleteCol();
+      slot void tableJoinCells();
+      slot void tableUngroupTable();
+
       slot void helpContents();
       slot void helpAbout();
       slot void helpAboutKOffice();
