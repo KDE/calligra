@@ -353,15 +353,22 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint, MouseMeaning m
         KWFrame * frame = m_doc->frameUnderMouse( nPoint );
         KWFrameSet *fs = frame ? frame->frameSet() : 0;
         KWTableFrameSet *table= fs ? fs->getGroupManager() : 0;
+        KWDocument::TableToSelectPosition posn;
 
         if ( fs && ( e->state() & ShiftButton ) && table ) { // is table and we hold shift
             KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
             table->selectUntil( docPoint.x(), docPoint.y() );
         }
-        else if ( ( e->state() & ShiftButton ) && (m_doc->positionToSelectRowcolTable( nPoint, &table) != KWDocument::TABLE_POSITION_NONE) ) // we are in position to select full row/cells of a table + hold shift
-        {
-            KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-            table->selectUntil( table->boundingRect().right(), docPoint.y() );
+        else if ( (posn = m_doc->positionToSelectRowcolTable( nPoint, &table))
+            != KWDocument::TABLE_POSITION_NONE)  // we are in position to select full row/cells of a table + hold shift
+        { 
+            if( e->state() & ShiftButton ) {
+                KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
+                if(posn == KWDocument::TABLE_POSITION_RIGHT)
+                    table->selectUntil( table->boundingRect().right(), docPoint.y() );
+                else
+                    table->selectUntil( docPoint.x(), table->boundingRect().bottom() );
+            }
         }
         else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
