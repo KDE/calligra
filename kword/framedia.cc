@@ -110,6 +110,7 @@ void KWFrameDia::init() {
         {
             setupTab2();
             setupTab4();
+            runGroup->setEnabled(false);
         }
         else if(frameType == FT_TEXT)
         {
@@ -121,6 +122,7 @@ void KWFrameDia::init() {
                 setupTab3();
             }
             setupTab4();
+
             if(frame->getFrameSet() &&
                frame->getFrameSet()->getGroupManager())
             { // table
