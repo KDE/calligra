@@ -886,7 +886,7 @@ void KWView::setupActions()
     actionAllowAutoFormat->setToolTip( i18n( "Toggle autocorrection on and off." ) );
     actionAllowAutoFormat->setWhatsThis( i18n( "Toggle autocorrection on and off." ) );
 
-    actionAutoFormat = new KAction( i18n( "&Autocorrection..." ), 0,
+    actionAutoFormat = new KAction( i18n( "Configure &Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "configure_autocorrection" );
     actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
