@@ -1,13 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=KWord HTML Import Filter
+Name[az]=KWord HTML Alma Filter
+Name[br]=Sil Enporzh HTML KWord
 Name[ca]=Filtre d'importació HTML de KWord
 Name[cs]=KWord HTML importní filtr
 Name[da]=KWord Html Importfilter
 Name[de]=HTML-Import-Filter für KWord
 Name[el]=Φίλτρο εισαγωγής HTML του KWord
 Name[eo]=HTML-importfiltrilo por Verkilo
-Name[es]=Filtro de Importación HTML de KWord
+Name[es]=Filtro de importación HTML de KWord
 Name[et]=KWord'i HTML importfilter
 Name[fi]=KWord HTML-tuontisuodin
 Name[fr]=Filtre d'import HTML de KWord
@@ -25,7 +27,6 @@ Name[nl]=KWord's HTML-importfilter
 Name[no]=KWord HTML-importfilter
 Name[no_NY]=HTML-importfilter for KWord
 Name[oc]=Filtre d'importacion HTML de KWord
-Name[pl]=Filtr importuj�cy KWorda do plików HTML
 Name[pt]=Ficheiro de importação de HTML para o KWord
 Name[pt_BR]=Filtro de importação HTML para o KWord
 Name[ro]=Filtru de import HTML pentru KWord

@@ -1,13 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=KWord HTML Export Filter
+Name[az]=KWord HTML Vermə Süzgəci
+Name[br]=Sil Ezporzh HTML KWord
 Name[ca]=Filtre d'exportació HTML de KWord
 Name[cs]=KWord HTML exportní filtr
 Name[da]=KWordHtml-Eksportfilter
 Name[de]=HTML-Export-Filter für KWord
 Name[el]=Φίλτρο Εξαγωγής HTML του KWord
 Name[eo]=HTML-eksportfiltrilo por Verkilo
-Name[es]=Filtro de Exportación HTML de KWord
+Name[es]=Filtro de exportación HTML de KWord
 Name[et]=KWord'i HTML eksportfilter
 Name[fi]=KWord HTML-vientisuodin
 Name[fr]=Filtre d'export HTML de KWord
@@ -25,7 +27,6 @@ Name[nl]=KWord's HTML-exportfilter
 Name[no]=KWord HTML-eksportfilter
 Name[no_NY]=HTML-eksportfilter for KWord
 Name[oc]=Filtre d'exportacion HTML de KWord
-Name[pl]=Filtr eksportuj�cy KWorda do plików HTML
 Name[pt]=Filtro de exportação de HTML para o KWord
 Name[pt_BR]=Filtro de exportação HTML para o KWord
 Name[ro]=Filtru de export HTML pentru KWord
