@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = kwmailmerge_classic.la
 ## Plugin encapsulating the (old) internally stored style
 kwmailmerge_classic_la_SOURCES = serialletter_classicplugin.cc
 kwmailmerge_classic_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kwmailmerge_classic_la_LIBADD = ../libkwmailmerge_interface.la $(LIB_KDEUI)
+kwmailmerge_classic_la_LIBADD = ../libkwmailmerge_interface.la $(LIB_KDEUI) $(LIB_KOTEXT)
 
 METASOURCES = AUTO
 
