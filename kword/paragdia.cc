@@ -28,6 +28,8 @@ KWPagePreview::KWPagePreview(QWidget* parent,const char* name)
   right = 0;
   first = 0;
   spacing = 0;
+  before = 0;
+  after = 0;
 }
 
 /*================================================================*/
@@ -42,7 +44,7 @@ void KWPagePreview::drawContents(QPainter* p)
   int dr = static_cast<int>(right / 2);
   int df = static_cast<int>(first / 2 + left / 2);
 
-  //int spc = static_cast<int>(POINT_TO_MM(spacing / 2));
+  int spc = static_cast<int>(POINT_TO_MM(spacing) / 5);
 
   // draw page
   p->setPen(QPen(black));
@@ -57,19 +59,20 @@ void KWPagePreview::drawContents(QPainter* p)
   p->setPen(NoPen);
   p->setBrush(QBrush(lightGray));
 
-  for (int i = 1;i <= 8;i++)
+  for (int i = 1;i <= 4;i++)
     p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
   
   p->setBrush(QBrush(darkGray));
 
-  for (int i = 9;i <= 12;i++)
-    p->drawRect((i == 9 ? df : dl) + _x + 6,_y + 6 + (i - 1) * 12 + 2,
-		wid - 12 - ((i / 4) * 4 == i ? 50 : 0) - ((i == 12 ? 0 : dr) + (i == 9 ? df : dl)),6);
+  for (int i = 5;i <= 8;i++)
+    p->drawRect((i == 5 ? df : dl) + _x + 6,_y + 6 + (i - 1) * 12 + 2 + (i - 5) * spc + static_cast<int>(before / 2),
+		wid - 12 - ((i / 4) * 4 == i ? 50 : 0) - ((i == 12 ? 0 : dr) + (i == 5 ? df : dl)),6);
 
   p->setBrush(QBrush(lightGray));
 
-  for (int i = 13;i <= 16;i++)
-    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2,wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
+  for (int i = 9;i <= 12;i++)
+    p->drawRect(_x + 6,_y + 6 + (i - 1) * 12 + 2 + 3 * spc + static_cast<int>(before / 2) + static_cast<int>(after / 2),
+		wid - 12 - ((i / 4) * 4 == i ? 50 : 0),6);
 
 }
 
@@ -185,6 +188,7 @@ void KWParagDia::setupTab1()
   eSpacing->setFrame(true);
   eSpacing->resize(cSpacing->size());
   eSpacing->setEnabled(false);
+  connect(eSpacing,SIGNAL(textChanged(const char*)),this,SLOT(spacingChanged(const char*)));
   spacingGrid->addWidget(eSpacing,2,0);
 
   // grid col spacing
@@ -214,6 +218,7 @@ void KWParagDia::setupTab1()
   eBefore->setEchoMode(QLineEdit::Normal);
   eBefore->setFrame(true);
   eBefore->resize(eBefore->sizeHint().width() / 2,eBefore->sizeHint().height());
+  connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
   pSpaceGrid->addWidget(eBefore,1,1);
  
   lAfter = new QLabel(i18n("After (mm):"),pSpaceFrame);
@@ -227,6 +232,7 @@ void KWParagDia::setupTab1()
   eAfter->setEchoMode(QLineEdit::Normal);
   eAfter->setFrame(true);
   eAfter->resize(eAfter->sizeHint().width() / 2,eAfter->sizeHint().height());
+  connect(eAfter,SIGNAL(textChanged(const char*)),this,SLOT(afterChanged(const char*)));
   pSpaceGrid->addWidget(eAfter,2,1);
 
   // grid col spacing
@@ -314,4 +320,22 @@ void KWParagDia::spacingActivated(int _index)
 	}
     }
   prev1->setSpacing(atof(eSpacing->text()));
+}
+
+/*================================================================*/
+void KWParagDia::spacingChanged(const char* _text)
+{
+  prev1->setSpacing(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::beforeChanged(const char* _text)
+{
+  prev1->setBefore(atof(_text));
+}
+
+/*================================================================*/
+void KWParagDia::afterChanged(const char* _text)
+{
+  prev1->setAfter(atof(_text));
 }

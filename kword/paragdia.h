@@ -55,11 +55,15 @@ public:
     { first = _first; repaint(false); }
   void setSpacing(float _spacing)
     { spacing = _spacing; repaint(false); }
+  void setBefore(float _before)
+    { before = _before; repaint(false); }
+  void setAfter(float _after)
+    { after = _after; repaint(false); }
 
 protected:
   void drawContents(QPainter*);
 
-  float left,right,first,spacing;
+  float left,right,first,spacing,before,after;
 
 };
 
@@ -92,6 +96,9 @@ protected slots:
   void rightChanged(const char*);
   void firstChanged(const char*);
   void spacingActivated(int);
+  void spacingChanged(const char*);
+  void beforeChanged(const char*);
+  void afterChanged(const char*);
 
 };
 
