@@ -58,8 +58,6 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 			       const QCString &from, const QCString &to,
 			       const QString &config) {
 
-    kdDebug(30501) << "here we go... " << document->className() << endl;
-
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
@@ -70,9 +68,6 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
         kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
         return false;
     }
-
-
-    kdDebug(30501) << "...still here..." << endl;
 
     const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
 
@@ -103,9 +98,21 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
     int iMaxColumn = table->maxColumn();
     int iMaxRow = table->maxRow();
 
+    // this is just a bad approximation which fails for documents with less than 50 rows, but
+    // we don't need any progress stuff there anyway :) (Werner)
+    int value=0;
+    int step=iMaxRow > 50 ? iMaxRow/50 : 1;
+    int i=1;
+
     QString emptyLines;
-    for ( int currentrow = 1 ; currentrow < iMaxRow ; currentrow++ )
+    for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
     {
+	if(i>step) {
+	    value+=2;
+	    emit sigProgress(value);
+	    i=0;
+	}
+
         QString separators;
         QString line;
         for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
@@ -149,6 +156,7 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
         emptyLines += "\n";
     }
     str += "\n"; // Last CR
+    emit sigProgress(100);
 
     // Ok, now write to export file
     QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?

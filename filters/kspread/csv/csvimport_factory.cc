@@ -25,7 +25,7 @@
 
 extern "C"
 {
-    void* init_libcsvfilter()
+    void* init_libcsvimport()
     {
         return new CSVFilterFactory;
     }
@@ -36,7 +36,7 @@ KInstance* CSVFilterFactory::s_global = 0;
 CSVFilterFactory::CSVFilterFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "csvfilter" );
+    s_global = new KInstance( "csvimport" );
 }
 
 CSVFilterFactory::~CSVFilterFactory()

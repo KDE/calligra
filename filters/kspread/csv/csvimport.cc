@@ -86,8 +86,21 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
     QChar x;
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
     QString field = "";
+    int step=in.size()/50;
+    kdDebug() << "step: " << step << endl;
+    int value=0;
+    int i=0;
+    emit sigProgress(value);
+
     while ( !inputStream.eof() && bSuccess==true )
     {
+	++i;
+	if(i>step) {
+	    kdDebug() << "emitted" << endl;
+	    i=0;
+	    value+=2;
+	    emit sigProgress(value);
+	}
         inputStream >> x; // read one char
         if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
         switch (state)
@@ -136,6 +149,7 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
         }
     }
 
+    emit sigProgress(100);
     //for debugging only
 #if 0
     kdDebug(30501) << "XXYYYYYYZZ" << endl;

@@ -25,7 +25,7 @@
 
 extern "C"
 {
-    void* init_libcsvexport_test()
+    void* init_libcsvexport()
     {
         return new CSVExportFactory;
     }
