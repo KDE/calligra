@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="28">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="29">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -77,11 +77,17 @@
   <Action name="format_frameset"/>
   <Action name="edit_delframe"/>
   <Separator/>
-  <Action name="raiseframe"/>
-  <Action name="lowerframe"/>
-  <Separator/>
   <!--<Action name="border_color"/> Can't do that while we're sharing the action with paragraphs-->
   <Action name="border_backgroundcolor"/>
+  <Menu name="Frame"><text>Configure Frame Borders</text>
+   <Action name="border_outline"/>
+   <Action name="border_left"/>
+   <Action name="border_right"/>
+   <Action name="border_top"/>
+   <Action name="border_bottom"/>
+   <Action name="border_style"/>	
+   <Action name="border_color"/>
+  </Menu>
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>
@@ -243,6 +249,15 @@
  <Action name="edit_delframe"/>
  <Separator/> 
  <Action name="border_backgroundcolor"/>
+ <Menu name="Frame"><text>Configure Frame Borders</text>
+  <Action name="border_outline"/>
+  <Action name="border_left"/>
+  <Action name="border_right"/>
+  <Action name="border_top"/>
+  <Action name="border_bottom"/>
+  <Action name="border_style"/>	
+  <Action name="border_color"/>
+  </Menu>
  <Separator/> 
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>
@@ -265,6 +280,15 @@
  <Action name="table_delrow"/>
  <Action name="table_delcol"/>
  <Separator/>
+ <Menu name="TableBorders"><text>Configure Table Borders</text>
+  <Action name="border_outline"/>
+  <Action name="border_left"/>
+  <Action name="border_right"/>
+  <Action name="border_top"/>
+  <Action name="border_bottom"/>
+  <Action name="border_style"/>	
+  <Action name="border_color"/>
+  </Menu>
  <Action name="table_ungroup"/>
 </Menu>
 </kpartgui>
