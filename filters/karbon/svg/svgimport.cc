@@ -363,7 +363,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 	else if( command == "font-family" )
 	{
 		QString family = params;
-		family = family.replace( QChar( '\'' ) , QChar( ' ' ) );
+		family.replace( QRegExp( "'" ) , QChar( ' ' ) );
 		gc->font.setFamily( family );
 	}
 	else if( command == "font-size" )
