@@ -13,8 +13,8 @@ documents.  We will begin with changing the size and shape of the page
 and the margins, and work progressively through smaller and smaller
 blocks of text (frames, then paragraphs, then characters).</para>
 
-<para>After we have discussed formatting individual characters, we will
-deal with some miscellaneous topics related to layout of your
+<para>After we have discussed formatting individual characters, we
+will deal with some miscellaneous topics related to layout of your
 document.</para>
 
 <sect1 id="page-format">
@@ -26,12 +26,12 @@ Templates</link>, we mentioned that there were differences in your
 formatting options.</para>
 
 <para>Well these differences are most important when we talk about
-Formatting the Page.  What follows are two sections, one for formatting
-the page with a <link linkend="wp-page-format">Text Oriented
-Document</link>, and another section for formatting the page with a
-<link linkend="dtp-page-format">Publishing Template</link>. Each section
-is independent of each other, so you should refer to the section that
-applies to your document.</para>
+Formatting the Page.  What follows are two sections, one for
+formatting the page with a <link linkend="wp-page-format">Text
+Oriented Document</link>, and another section for formatting the page
+with a <link linkend="dtp-page-format">Publishing
+Template</link>. Each section is independent of each other, so you
+should refer to the section that applies to your document.</para>
 
 <sect2 id="wp-page-format">
 <title> Formatting the Page (Text Oriented Document)</title>
@@ -142,8 +142,8 @@ one:</para>
 <itemizedlist>
 <listitem>
 <para><guilabel>Same header for all pages</guilabel> - If you select
-this option, all pages, even or odd, including the first page, will have
-the same headers. This is the default.</para>
+this option, all pages, even or odd, including the first page, will
+have the same headers. This is the default.</para>
 </listitem>
 
 <listitem>
@@ -1665,6 +1665,8 @@ linkend="select-colors">Color Selection Dialog Box</link>.</para>
 </sect2>
 <sect2 id="change-font-case">
 <title>Changing Font Case</title>
+
+<para></para>
 </sect2>
 
 

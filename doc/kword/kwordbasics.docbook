@@ -52,12 +52,12 @@ entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><para><emphasis><anchor id="da"/>The Document Area.</emphasis></para></term>
+<term><emphasis><anchor id="da"/>The Document Area.</emphasis></term>
 
-<listitem><para>The document area consists of:</para></listitem>
+<listitem><para>The document area consists of:</para>
 
 
-
+<itemizedlist>
 <listitem><para><emphasis>Horizontal and Vertical Rulers</emphasis> -
 The rulers can be used to help you layout your document.  For more
 information on Rulers, see <link linkend="rulers">Using
@@ -81,6 +81,8 @@ entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
 shows you the current status of your document, and allows you to adjust
 frames, select text, and cut and paste text.  </para>
 </listitem>
+</itemizedlist></listitem>
+
 </varlistentry>
 </variablelist>
 

@@ -1,8 +1,9 @@
 <!-- <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
 To work on this document standalone, uncomment the prolog.  
 Comment it out again when you are done -->
-
+	
 <chapter id="menu-items">
 <title>The Menu Items/Tool Bars</title>
 
@@ -14,22 +15,22 @@ bars and the toolbars.</para>
 
 <para>The menu bar is organized into groups of functions (&eg; file
 functions, table functions, &etc;).  Below each of these groups, is a
-submenu of actions.  Some of these submenus will have sub menus of their
-own.  All of the functions of &kword; can be found inside the menu bar
-hierarchy.</para>
+submenu of actions.  Some of these submenus will have sub menus of
+their own.  All of the functions of &kword; can be found inside the
+menu bar hierarchy.</para>
 
 <para>The tool bars are also organized into groups.  Each toolbar
-consists of a set of buttons.  Each button performs a specific function.
-The toolbars are designed to act as shortcuts for more commonly used
-functions.</para>
+consists of a set of buttons.  Each button performs a specific
+function.  The toolbars are designed to act as shortcuts for more
+commonly used functions.</para>
 
 <para>The first part of this section of the manual discusses the
 manipulation of &kword;'s toolbars to suit your needs.</para>
 
 <para>The second part of this section, takes a detailed look at each
 menu bar function, and each tool bar button, and provides you with a
-brief summary of its action.  Most of these menu bar functions and tool
-bar buttons also provide you with a link to more detailed
+brief summary of its action.  Most of these menu bar functions and
+tool bar buttons also provide you with a link to more detailed
 information.</para>
 
 </sect1>
@@ -38,17 +39,17 @@ information.</para>
 <title>Hiding, Changing, and Moving Tool Bars</title>
 
 <para>&kword; offers the user great flexibility when it comes to
-toolbars.  This first section will show you some of the many options you
-have for relocating, reformatting and removing toolbars from your
+toolbars.  This first section will show you some of the many options
+you have for relocating, reformatting and removing toolbars from your
 desktop.</para>
 
 <sect2 id="hide-toolbar">
 <title>Hiding and Flattening Tool Bars </title>
 
-<para>When you start &kword; for the first time, all the several toolbars are visible.
-If you don't think you will need a toolbar, and want to reclaim that
-desktop space, you have two options. You can hide the toolbars or you
-can temporarily flatten the toolbars.</para>
+<para>When you start &kword; for the first time, all the several
+toolbars are visible.  If you don't think you will need a toolbar, and
+want to reclaim that desktop space, you have two options. You can hide
+the toolbars or you can temporarily flatten the toolbars.</para>
 
 <sect3>
 <title>Flattening Toolbars</title>
@@ -84,9 +85,9 @@ button to use this option.</para>
 <para>A small menu will appear at the mouse cursor.  Select
 <guimenuitem>Flat</guimenuitem>.</para>
 
-<para>To restore this menu to its original size and position, place the
-mouse cursor over the stipled area near the menu bar, and click with the
-&LMB;.</para>
+<para>To restore this menu to its original size and position, place
+the mouse cursor over the stipled area near the menu bar, and click
+with the &LMB;.</para>
 </note>
 
 </sect3>
@@ -94,12 +95,12 @@ mouse cursor over the stipled area near the menu bar, and click with the
 <sect3>
 <title>Hiding/Restoring Toolbars</title>
 
-<para>If you want to eliminate the toolbar entirely from the window, you
-should hide the toolbar.</para>
+<para>If you want to eliminate the toolbar entirely from the window,
+you should hide the toolbar.</para>
 
 <para>To hide a toolbar, Select <guimenu>Settings</guimenu> from the
-menubar.  This will bring up a submenu.  All of the toolbars are listed.
-Simply select the toolbar you want to hide or restore.</para>
+menubar.  This will bring up a submenu.  All of the toolbars are
+listed.  Simply select the toolbar you want to hide or restore.</para>
 
 </sect3>
 </sect2>
@@ -122,10 +123,11 @@ edges of the &kword; screen.</para>
 
 <para>By locating a tool bar in the <guilabel>Bottom</guilabel>
 position, for example, you move the toolbar into a horizontal position
-below the Document Area, and along the bottom of the &kword; window. By
-locating a tool bar in the <guilabel>Left</guilabel> position,however,
-you move the toolbar into a verticle position to the left of the
-Document Area, and along the left edge of the &kword; window.</para>
+below the Document Area, and along the bottom of the &kword;
+window. By locating a tool bar in the <guilabel>Left</guilabel>
+position,however, you move the toolbar into a verticle position to the
+left of the Document Area, and along the left edge of the &kword;
+window.</para>
 
 <para>Multiple toolbars can be located at each of these points in the
 screen.  (You could, for instance, move all the toolbars to the top of
@@ -136,16 +138,24 @@ compact way at that location.</para>
 
 <itemizedlist>
 
-<listitem><para>Click on the striped area of the toolbar with the &LMB; 
-and hold the button down.  Drag the toolbar to the desired location.  You will see a rectangular shape 
-indicating the position and orientation of the toolbar.  When at the desired location, release the &LMB;
-and the toolbar will be inserted there.</para>
-<para>or</para></listitem>
+<listitem>
+<para>Click on the striped area of the toolbar with the &LMB; and hold
+the button down.  Drag the toolbar to the desired location.  You will
+see a rectangular shape indicating the position and orientation of the
+toolbar.  When at the desired location, release the &LMB; and the
+toolbar will be inserted there.</para>
 
-<listitem><para>Click on the striped area of the toolbar with the &RMB;. A sub-menu will appear.  Select
-<guimenuitem>Orientation</guimenuitem>. Another small submenu will appear.  
-Select <guimenuitem>Top</guimenuitem>, <guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, 
-or <guimenuitem>Right</guimenuitem>.</para></listitem>
+<para>or</para>
+</listitem>
+
+<listitem>
+<para>Click on the striped area of the toolbar with the &RMB;. A
+sub-menu will appear.  Select
+<guimenuitem>Orientation</guimenuitem>. Another small submenu will
+appear.  Select <guimenuitem>Top</guimenuitem>,
+<guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, or
+<guimenuitem>Right</guimenuitem>.</para>
+</listitem>
 </itemizedlist>
 </sect2>
 
@@ -153,7 +163,8 @@ or <guimenuitem>Right</guimenuitem>.</para></listitem>
 <title>Changing the look of your toolbars</title>
 
 <para>Toolbars can have their buttons displayed different ways.  Below
-are examples of the four options for the <emphasis>File</emphasis> toolbar.</para>
+are examples of the four options for the <emphasis>File</emphasis>
+toolbar.</para>
 
 <informaltable>
 <tgroup cols="2">
@@ -186,23 +197,26 @@ format="PNG"/></imageobject> </inlinemediaobject></entry>
 </informaltable>
 
 <para>To change the appearance of a toolbar, place the cursor over on
-the toolbar you want to minimize, and click with the
-&RMB;.</para>
+the toolbar you want to minimize, and click with the &RMB;.</para>
 
 <para>A small menu will appear at the mouse cursor.  Select
-<guimenuitem>Text position</guimenuitem>. This will open a submenu, select
-your preference from the list.</para>
+<guimenuitem>Text position</guimenuitem>. This will open a submenu,
+select your preference from the list.</para>
 
 <sect3 id="toolbar-options-size">
 <title>Changing Icon Size</title>
-<para>You can also select the size of the icons by clicking on the 
+
+<para>You can also select the size of the icons by clicking on the
 toolbar with the &RMB;.  A small submenu will appear.  Select
-<guimenuitem>Icon Size</guimenuitem> and then your preferred icon size.</para>
-</sect3>
-<note>
-<para>Setting the look of one toolbar does not alter the look of another
-toolbar.</para>
+<guimenuitem>Icon Size</guimenuitem> and then your preferred icon
+size.</para>
+
+<note> 
+<para>Setting the look of one toolbar does not alter the look
+of another toolbar.</para> 
 </note>
+
+</sect3>
 
 </sect2>
 
@@ -224,10 +238,10 @@ divided into 10 general categories.</para>
 <sect2 id="file">
 <title><guimenu>File</guimenu> Menu</title>
 
-<para>By clicking on the <guimenu>File</guimenu> menu, you can begin new
-documents, load previously edited documents, print your documents, close
-the current document (so you can load another document), or quit &kword;
-entirely.</para>
+<para>By clicking on the <guimenu>File</guimenu> menu, you can begin
+new documents, load previously edited documents, print your documents,
+close the current document (so you can load another document), or quit
+&kword; entirely.</para>
 
 <variablelist>
 
@@ -246,8 +260,9 @@ Document</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>N</keycap></keycombo> or clicking
 <inlinemediaobject><imageobject>
-<imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
-the menubar.</para>
+<imagedata fileref="filenew2.png"
+format="PNG"/></imageobject></inlinemediaobject> is equivalent to
+using the menubar.</para>
 </listitem>
 </varlistentry>
 
@@ -265,10 +280,9 @@ For Step by Step instructions see <link linkend="loading">Retrieving a
 Saved Document</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>O</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject>
-<imagedata fileref="fileopen.png" format="PNG"/>
-</imageobject></inlinemediaobject> is equivalent to using
-the menubar.</para>
+<inlinemediaobject><imageobject> <imagedata fileref="fileopen.png"
+format="PNG"/> </imageobject></inlinemediaobject> is equivalent to
+using the menubar.</para>
 </listitem>
 </varlistentry>
 
@@ -278,9 +292,10 @@ the menubar.</para>
 <guimenu>File</guimenu><guimenuitem>Open
 Recent</guimenuitem></menuchoice></term>
 <listitem>
-<para><action>For opening the most recently edited
-files. Once you have clicked on this option, a list of recently edited files will appear.  
-Select the file you want and &kword; will open the file. </action></para>
+<para><action>For opening the most recently edited files. Once you
+have clicked on this option, a list of recently edited files will
+appear. Select the file you want and &kword; will open the
+file. </action></para>
 </listitem>
 </varlistentry>
 
@@ -292,12 +307,13 @@ Select the file you want and &kword; will open the file. </action></para>
 </shortcut>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice></term>
 <listitem>
-<para><action>Saves your current file to disk.</action>  If you have not
-saved the file yet, you will be prompted for a filename. For more
+<para><action>Saves your current file to disk.</action>  If you have
+not saved the file yet, you will be prompted for a filename. For more
 details, see <link linkend="saving">Saving a Document</link>.</para> 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>S</keycap></keycombo> or clicking
-<inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG"/>
+<inlinemediaobject><imageobject><imagedata fileref="filefloppy.png"
+format="PNG"/> 
 </imageobject></inlinemediaobject> is equivalent to
 using the menubar. </para> 
 </listitem>
@@ -338,25 +354,26 @@ starting point for future documents.</action> For more details, see
 </menuchoice>
 </term>
 <listitem>
+
 <para><action>Opens a window that counts the sentences, words,
-characters and syllables in your document.</action></para> 
-<para>The number of sentences is not always absolutely correct, as
-&kword; has to guess if a dot really starts a new sentence or not. The
-number of syllables is estimated, &kword; therefore assumes that the
-text is written in English.</para>
+characters and syllables in your document.</action></para> <para>The
+number of sentences is not always absolutely correct, as &kword; has
+to guess if a dot really starts a new sentence or not. The number of
+syllables is estimated, &kword; therefore assumes that the text is
+written in English.</para>
 
 <para>The <guilabel>Flesch reading ease</guilabel> score is a number
-between 0 and 100 which estimates how readable a text is. The higher the
-number, the easier the text can be read. Texts with a score of 70-80
-have a fairly good readability.</para>
+between 0 and 100 which estimates how readable a text is. The higher
+the number, the easier the text can be read. Texts with a score of
+70-80 have a fairly good readability.</para>
 
-<para>The Flesch formula uses the number of words per sentences and the
-number of syllables per word. It assumes that the use of short words and
-short sentences increases the readability of a text. It says nothing
-about grammar or meaning. As both the number of sentences and the number
-of syllables is estimated, the result is not absolutely precise. The
-text should be at least 200 words long, if it isn't the score will be
-marked as approximated.</para>
+<para>The Flesch formula uses the number of words per sentences and
+the number of syllables per word. It assumes that the use of short
+words and short sentences increases the readability of a text. It says
+nothing about grammar or meaning. As both the number of sentences and
+the number of syllables is estimated, the result is not absolutely
+precise. The text should be at least 200 words long, if it isn't the
+score will be marked as approximated.</para>
 
 <para>The Flesch score is defined for English text only, but the basic
 idea should work for many other languages, too.</para>
@@ -486,8 +503,9 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
 <para><action>Reverses the last action you performed.</action> Not all
 actions can be reversed.  If you are not able to Undo the last action,
 the <guimenuitem>Undo</guimenuitem> option will be replaced with
-<guimenuitem>No Undo Possible</guimenuitem>.  For a more thourough discussion
-of Undo/Redo, <link linkend="undo-redo">click here</link>.</para>
+<guimenuitem>No Undo Possible</guimenuitem>.  For a more thourough
+discussion of Undo/Redo, <link linkend="undo-redo">click
+here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>Z</keycap></keycombo> or clicking
@@ -576,11 +594,11 @@ the menubar.</para>
 </term>
 <listitem>
 <para><action>Inserts a copy of the clipboard into the current cursor
-position.</action>  If there is highlighted text, &kword; replaces
-replaces all highlighted  text with the contents of the clipboard.  The
-clipboard is not altered.  For a more complete directions on Cutting and
-Pasting, and a full description of the clipboard, <link
-linkend="clipboard">click here</link>.</para> 
+position.</action> If there is highlighted text, &kword; replaces
+replaces all highlighted text with the contents of the clipboard.  The
+clipboard is not altered.  For a more complete directions on Cutting
+and Pasting, and a full description of the clipboard, <link
+linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>V</keycap></keycombo> or clicking
@@ -653,9 +671,9 @@ using the menubar.</para></listitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Create/edit a database of letters for custom numbering.  
+<para><action>Create/edit a database of letters for custom numbering.</action> 
 For more information See <link linkend="custom-letter">Using Custom Numbers 
-and Letters</link>.</action></para>
+and Letters</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -936,9 +954,10 @@ linkend="variables">Special Variables</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Selecting this option will allow you to insert common phrases.</action>
-The phrases are organised into categories. For information on using and adding expressions
-refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+<para><action>Selecting this option will allow you to insert common
+phrases.</action> The phrases are organised into categories. For
+information on using and adding expressions refer to the section
+entitled <link linkend="expressions">Expressions</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1199,10 +1218,10 @@ more information go to <link linkend="formulas">Formulas</link></para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to configure basic formating options for the Frameset.</action> 
-More information on this subject can
-be found in <link linkend="format-frame">Setting properties for frames</link>.</para>
-
+<para><action>Allows you to configure basic formating options for the
+Frameset.</action> More information on this subject can be found in
+<link linkend="format-frame">Setting properties for
+frames</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1349,8 +1368,8 @@ linkend="tables">click here</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Deletes the table the cursor is in.</action>  For more on
-tables, <link linkend="tables">click here</link>.</para>
+<para><action>Deletes the table the cursor is in.</action>  You can
+find more about tables in the section <xref linkend="tables"/>.</para>
 </listitem>
 </varlistentry>
 
@@ -1425,9 +1444,6 @@ For information on using and adding expressions
 refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
 </listitem>
 </varlistentry>
-
-
-
 
 </variablelist>
 
@@ -1584,69 +1600,8 @@ linkend="options-kword">here</link></para>
 <sect2 id="help">
 <title>Help</title>
 
-<variablelist>
+&help.menu.documentation;
 
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul"><keycap>F1</keycap></keycombo>
-</shortcut>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>KWord Handbook</guimenuitem>
-</menuchoice></term>
-<listitem>
-<para><action>Shows the contents of the documentation.</action></para>
-<para>Typing 
-<keycombo action="simul"><keycap>F1</keycap></keycombo>
-is equivalent to using the menubar. </para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Shift;<keycap>F1</keycap></keycombo>
-</shortcut>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>What's <accel>T</accel>his?</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>The mouse changes to an arrow with a question mark beside it. 
-Now you can click on a component of the &kword; interface, and you can
-get brief help.</action></para>
-<para>Typing 
-<keycombo action="simul">&Shift;<keycap>F1</keycap></keycombo>
-is equivalent to using the menubar. </para>
-</listitem> 
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>R</accel>eport Bug...</guimenuitem>
-</menuchoice></term>
-<listitem>
-<para><action>If &kword; crashes, or you have an idea that you think the
-developers should know about, select this option, and fill out the form
-on the internet.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem><accel>A</accel>bout &kword;</guimenuitem>
-</menuchoice></term>
-<listitem><para>Shows information on &kword;</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu><accel>H</accel>elp</guimenu>
-<guimenuitem>About <accel>K</accel>DE</guimenuitem>
-</menuchoice></term>
-<listitem><para>Shows information on &kde;.</para></listitem>
-</varlistentry>
-</variablelist>
 </sect2>
 
 </sect1>
@@ -1655,7 +1610,8 @@ on the internet.</action></para>
 <title>Formatting ToolBar</title>
 
 <para>The Formatting Toolbar consists of 9 buttons.  Each button
-performs a task from the <link linkend="change-font-dialog">format character dialog</link>.</para>
+performs a task from the <link linkend="change-font-dialog">format
+character dialog</link>.</para>
 
 <screenshot>
 <mediaobject>
@@ -1832,8 +1788,8 @@ task for more details. </para>
 <sect1 id="paragraph-toolbar">
 <title>Paragraph Toolbar</title>
 
-<para>The Insert Toolbar consists of 8 buttons.  Each button performs a
-task from the menubar.  Click on that task for more details. </para>
+<para>The Insert Toolbar consists of 8 buttons.  Each button performs
+a task from the menubar.  Click on that task for more details. </para>
 
 <screenshot>
 <mediaobject>

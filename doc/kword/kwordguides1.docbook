@@ -235,6 +235,7 @@ probelm with the save, an error box will appear.</para>
 <sect2 id="command-save-as">
 <title>The Save As.. Command</title>
 <sect3 id="command-save-as-general">
+<title>General</title>
 <para>The Save As... command can be invoked 2
 ways:</para>
 
@@ -258,6 +259,7 @@ previous location.</para></important>
 </sect3>
 <sect3 id="command-save-as-dlg">
 <title>Using the dialog box</title>
+
 <para>When you select the <guimenuitem>Save As...</guimenuitem>
 function, a dialog appears.</para>
 
@@ -370,7 +372,7 @@ on the toolbar.</para>
 </itemizedlist>
 
 <para>Any of these methods results in the same action by &kword;.</para>
-<sect3 id="command-open-dlg">
+<sect2 id="command-open-dlg">
 <title>Using the dialog box</title>
 <para>When trying to open a file, a dialog appears.</para>
 
@@ -406,7 +408,8 @@ button, the load will be aborted.</para>
 
 <para>There is a <guibutton>OK</guibutton> button, which will be used
 when we have selected the correct filename.</para>
-</sect3>
+
+</sect2>
 </sect1>
 
 <sect1 id="printing">
