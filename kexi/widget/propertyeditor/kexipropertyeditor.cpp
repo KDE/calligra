@@ -152,7 +152,13 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 		m_editItem->setValue(m_currentEditor->getValue());
 		if(m_buffer)
 		{
-			m_buffer->changeProperty( m_editItem->name().latin1(), editor->getValue());
+		if(!m_editItem->parent())
+			m_buffer->changeProperty(m_editItem->name().latin1(), editor->getValue());
+		else
+		{
+			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
+			m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
+		}
 		}
 	}
 

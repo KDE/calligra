@@ -22,6 +22,7 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qpoint.h>
 #include <kdebug.h>
 
 #include <klocale.h>
@@ -33,40 +34,57 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *
 {
 	m_value = property->value();
 	m_property=property;
+	m_childprop = 0;
+	m_children = 0;
 	
-	childprop.setAutoDelete(true);
-
 	switch(property->type())
 	{
 		case QVariant::Size:
 		{
+			m_childprop = new QPtrList<KexiProperty>();
 			QSize s = m_value.toSize();
 			KexiProperty *width = new KexiProperty(i18n("width"), s.width() );
-			childprop.append(width);
+			m_childprop->append(width);
 			KexiProperty *height = new KexiProperty(i18n("height"), s.height() );
-			childprop.append(height);
-			new KexiPropertyEditorItem(this, width);
-			new KexiPropertyEditorItem(this, height);
+			m_childprop->append(height);
+			
+			m_children = new ChildDict();
+			m_children->insert("width", new KexiPropertyEditorItem(this, width));
+			m_children->insert("height", new KexiPropertyEditorItem(this, height));
+			break;
+		}
+		case QVariant::Point:
+		{
+			m_childprop = new QPtrList<KexiProperty>();
+			QPoint p = m_value.toPoint();
+			KexiProperty *x = new KexiProperty(i18n("x"), p.x() );
+			m_childprop->append(x);
+			KexiProperty *y = new KexiProperty(i18n("y"), p.y() );
+			m_childprop->append(y);
+			
+			m_children = new ChildDict();
+			m_children->insert("x", new KexiPropertyEditorItem(this, x));
+			m_children->insert("y", new KexiPropertyEditorItem(this, y));
 			break;
 		}
 		case QVariant::Rect:
 		{
+			m_childprop = new QPtrList<KexiProperty>();
 			QRect r = m_value.toRect();
 			KexiProperty *x = new KexiProperty(i18n("x"), r.x() );
-			childprop.append(x);
+			m_childprop->append(x);
 			KexiProperty *y = new KexiProperty(i18n("y"), r.y() );
-			childprop.append(y);
+			m_childprop->append(y);
 			KexiProperty *wid = new KexiProperty(i18n("width"), r.width() );
-			childprop.append(wid);
+			m_childprop->append(wid);
 			KexiProperty *hei = new KexiProperty(i18n("height"), r.height() );
-			childprop.append(hei);
+			m_childprop->append(hei);
 			
-			new KexiPropertyEditorItem(this, x);
-			new KexiPropertyEditorItem(this, y);
-			new KexiPropertyEditorItem(this, wid);
-			new KexiPropertyEditorItem(this, hei);
-			
-			kdDebug() << "creating sub editors" << endl;
+			m_children = new ChildDict();
+			m_children->insert("x", new KexiPropertyEditorItem(this, x));
+			m_children->insert("y", new KexiPropertyEditorItem(this, y));
+			m_children->insert("width", new KexiPropertyEditorItem(this, wid));
+			m_children->insert("height", new KexiPropertyEditorItem(this, hei));
 			break;
 		}
 		
@@ -84,6 +102,8 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *
 			return;
 		}
 	}
+	
+	m_childprop->setAutoDelete(true);
 }
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
@@ -91,6 +111,8 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 {
 	m_value = property->value();
 	m_property=property;
+	m_childprop = 0;
+	m_children = 0;
 }
 
 
@@ -112,7 +134,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			case QVariant::Pixmap:
 			{
 				p->drawPixmap(1, 1, m_value.toPixmap());
-				break;
+				return;
 			}
 			case QVariant::Color:
 			{
@@ -175,6 +197,60 @@ KexiPropertyEditorItem::format(const QVariant &v)
 	}
 }
 
+QVariant
+KexiPropertyEditorItem::getComposedValue()
+{
+	switch(m_property->type())
+	{
+		case QVariant::Size:
+		{
+			QSize s;
+			s.setWidth((*m_children)["width"]->value().toInt());
+			s.setHeight((*m_children)["height"]->value().toInt());
+			setValue(s);
+			return s;
+		}
+		case QVariant::Point:
+		{
+			QPoint p;
+			p.setX((*m_children)["x"]->value().toInt());
+			p.setY((*m_children)["y"]->value().toInt());
+			setValue(p);
+			return p;
+		}
+		case QVariant::Rect:
+		{
+			QRect r;
+			r.setX((*m_children)["x"]->value().toInt());
+			r.setY((*m_children)["y"]->value().toInt());
+			r.setWidth((*m_children)["width"]->value().toInt());
+			r.setHeight((*m_children)["height"]->value().toInt());
+			setValue(r);
+			return r;
+		}
+		
+		default:
+		{
+			return 0;
+		}
+	
+	}
+}
+
 KexiPropertyEditorItem::~KexiPropertyEditorItem()
 {
+	switch(m_property->type())
+	{
+		case QVariant::Point:
+		case QVariant::Rect:
+		case QVariant::Size:
+		{
+			delete m_childprop;
+			delete m_children;
+		}
+		default:
+		{
+			return;
+		}
+	}
 }

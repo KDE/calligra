@@ -42,7 +42,7 @@ test::test()
 	KexiPropertyEditor *edit = new KexiPropertyEditor(this,true);
 	setCentralWidget(edit);
 	edit->setBuffer(m_buffer);
-	edit->resize(edit->sizeHint());
+	resize(500,500);
 }
 
 test::~test()

@@ -22,9 +22,12 @@
 
 #include <klistview.h>
 #include <qptrlist.h>
+#include <qdict.h>
 
 #include "kexipropertyeditor.h"
 #include "kexiproperty.h"
+
+typedef QDict<KexiPropertyEditorItem> ChildDict;
 
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
@@ -39,8 +42,12 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		KexiProperty*	property() { return m_property;}
 
 		void		setValue(QVariant value);
+		QVariant	getComposedValue();
 
 		static QString	format(const QVariant &s);
+
+	protected slots:
+		void childChanged(KexiPropertyEditorItem *item);
 
 	protected:
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
@@ -48,7 +55,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 	private:
 		QVariant	m_value;
 		KexiProperty	*m_property;
-		QPtrList<KexiProperty>	childprop;
+		QPtrList<KexiProperty>	*m_childprop;
+		ChildDict	*m_children;
 };
 
 #endif

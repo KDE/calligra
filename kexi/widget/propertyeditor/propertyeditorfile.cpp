@@ -27,6 +27,7 @@
 #include <qevent.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "propertyeditorfile.h"
 #include "kexiproperty.h"
@@ -61,13 +62,6 @@ PropertyEditorFile::selectFile()
 {
 	m_url = KFileDialog::getOpenFileName(QString::null, m_filter, this, i18n("Choose a file"));
 	m_lineedit->setText(m_url.filename());
-	
-	emit changed(this);
-}
-
-void
-PropertyEditorFile::valueChanged()
-{
 	emit changed(this);
 }
 
@@ -94,22 +88,24 @@ PropertyEditorFile::resizeEvent(QResizeEvent *ev)
 PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *property, const char *name)
  : PropertyEditorFile(parent, property, name)
  {
- 	setFilter(i18n("*.png *.xpm *.bmp|Pixmap Files"), false);
+	setFilter(i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"), false);
+	m_property = property;
  }
  
  
 QVariant
 PropertyEditorPixmap::getValue()
 {
-	QPixmap *pix = new QPixmap(m_url.path());
-	return QVariant(*pix);
-}
-
-void
-PropertyEditorPixmap::selectFile()
-{
-	m_url = KFileDialog::getOpenFileName(QString::null, m_filter, this, i18n("Choose a file"));
-	emit changed(this);
+	if(!m_url.isEmpty() )
+	{
+		QVariant v = QPixmap(m_url.path());
+		return v;
+	}
+	else
+	{
+		QVariant p = m_property->value();
+		return p;
+	}
 }
 
 #include "propertyeditorfile.moc"

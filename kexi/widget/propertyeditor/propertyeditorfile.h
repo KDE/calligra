@@ -42,7 +42,6 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEdito
 		void resizeEvent(QResizeEvent *ev);
 
 	protected slots:
-		void valueChanged();
 		void selectFile();
 
 	protected:
@@ -62,9 +61,9 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public PropertyEditorFile
 		~PropertyEditorPixmap() {;}
 
 		virtual QVariant	getValue();
-	
-	protected slots:
-		void selectFile();
+
+	private:
+		KexiProperty	*m_property;
 
 };
 
