@@ -50,7 +50,7 @@ class PropertyEditor : public QDialog {
   Q_OBJECT
 public:
   PropertyEditor (CommandHistory* history, GDocument* doc,
-		  QWidget* parent = 0L, const char* name = 0L);
+                  QWidget* parent = 0L, const char* name = 0L);
 
   static int edit (CommandHistory* history, GDocument* doc);
 
@@ -87,7 +87,6 @@ private:
 
   // OutlinePen Tab
   UnitBox *widthField;
-  //  ColorComboBox* penColorField;
   KColorButton* penColorBttn;
   QComboBox* penStyleField;
   QComboBox *leftArrows, *rightArrows;

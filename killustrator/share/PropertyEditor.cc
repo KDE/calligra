@@ -57,7 +57,6 @@
 #include "CommandHistory.h"
 #include "Gradient.h"
 #include "BrushCells.h"
-#include "ColorComboBox.h"
 #include "UnitBox.h"
 
 #define SOLID_BOX    0
@@ -66,7 +65,7 @@
 #define NOFILL_BOX   3
 
 PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
-				QWidget* parent, const char* name) :
+                                QWidget* parent, const char* name) :
     QDialog (parent, name, true) {
   QPushButton* button;
   QWidget* widget;
@@ -90,21 +89,21 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 
   if (haveObjects) {
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++) {
+         it != document->getSelection ().end (); it++) {
       GObject* o = *it;
       if (o->isA ("GText")) {
-	haveTextObjects = true;
-	GText* tobj = (GText *) o;
-	text = tobj->line (0);
+        haveTextObjects = true;
+        GText* tobj = (GText *) o;
+        text = tobj->line (0);
       }
       else if (o->isA ("GPolyline") || o->isA ("GBezier"))
-	haveLineObjects = true;
+        haveLineObjects = true;
       else if (o->isA ("GOval"))
-	haveEllipseObjects = true;
+        haveEllipseObjects = true;
       else if (o->isA ("GPolygon")) {
-	GPolygon* polygon = (GPolygon *) o;
-	if (polygon->isRectangle ())
-	  haveRectangleObjects = true;
+        GPolygon* polygon = (GPolygon *) o;
+        if (polygon->isRectangle ())
+          haveRectangleObjects = true;
       }
     }
   }
@@ -312,19 +311,19 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     ellipseKind[0]->setToggleButton (true);
     ellipseKind[0]->setPixmap (UserIcon ("ellipse1"));
     ellipseKind[0]->setGeometry (0, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     ellipseKind[1] = new QPushButton (group);
     ellipseKind[1]->setToggleButton (true);
     ellipseKind[1]->setPixmap (UserIcon ("ellipse2"));
     ellipseKind[1]->setGeometry (1 * BUTTON_WIDTH, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     ellipseKind[2] = new QPushButton (group);
     ellipseKind[2]->setToggleButton (true);
     ellipseKind[2]->setPixmap (UserIcon ("ellipse3"));
     ellipseKind[2]->setGeometry (2 * BUTTON_WIDTH, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();
     group->setExclusive (true);
   }
@@ -352,19 +351,19 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     textAlign[0]->setToggleButton (true);
     textAlign[0]->setPixmap (UserIcon ("tleftalign"));
     textAlign[0]->setGeometry (0, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     textAlign[1] = new QPushButton (group);
     textAlign[1]->setToggleButton (true);
     textAlign[1]->setPixmap (UserIcon ("tcenteralign"));
     textAlign[1]->setGeometry (1 * BUTTON_WIDTH, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     textAlign[2] = new QPushButton (group);
     textAlign[2]->setToggleButton (true);
     textAlign[2]->setPixmap (UserIcon ("trightalign"));
     textAlign[2]->setGeometry (2 * BUTTON_WIDTH, 0,
-				 BUTTON_WIDTH, BUTTON_HEIGHT);
+                                 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();
     group->setExclusive (true);
   }
@@ -388,7 +387,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
     fillStyleBttn[i]->setText (i18n (msg[i]));
     fillStyleBttn[i]->move (10, i * 30);
     connect (fillStyleBttn[i], SIGNAL(clicked()),
-	     this, SLOT(fillStyleChanged()));
+             this, SLOT(fillStyleChanged()));
   }
   group->adjustSize ();
 
@@ -398,7 +397,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   fillColorBtn1->setColor (white);
   fillColorBtn1->move (180, 25);
   connect (fillColorBtn1, SIGNAL(changed(const QColor&)),
-	   this, SLOT(fillColor1Changed(const QColor&)));
+           this, SLOT(fillColor1Changed(const QColor&)));
 
   // ------ Solid Fill ------
   QGroupBox *box = new QGroupBox (wstack);
@@ -453,7 +452,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   fillColorBtn2->setColor (white);
   fillColorBtn2->move (80, 50);
   connect (fillColorBtn2, SIGNAL(changed(const QColor&)),
-	   this, SLOT(gradientColorChanged(const QColor&)));
+           this, SLOT(gradientColorChanged(const QColor&)));
 
   label = new QLabel (box);
   label->setAlignment (AlignLeft | AlignVCenter);
@@ -465,7 +464,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   gradStyleCombo->insertItem (i18n ("Radial"));
   gradStyleCombo->insertItem (i18n ("Rectangular"));
   connect (gradStyleCombo, SIGNAL(activated(int)),
-	   this, SLOT(gradientStyleChanged(int)));
+           this, SLOT(gradientStyleChanged(int)));
   label = new QLabel (box);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Angle:"));
@@ -474,7 +473,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   gradientAngle->move(80,120);
   gradientAngle->setSuffix("°");
   connect (gradientAngle, SIGNAL(valueChanged(int)),
-	   this, SLOT(gradientAngleChanged(int)));
+           this, SLOT(gradientAngleChanged(int)));
   QFrame* frame = new QFrame (box);
   frame->setLineWidth (1);
   frame->setFrameStyle (QFrame::Panel | QFrame::Sunken);
@@ -515,11 +514,11 @@ void PropertyEditor::applyPressed () {
     }
     else if (ellipseKind[0] != 0L) {
       if (ellipseKind[1]->isOn ())
-	oinfo.shape = GObject::OutlineInfo::ArcShape;
+        oinfo.shape = GObject::OutlineInfo::ArcShape;
       else if (ellipseKind[2]->isOn ())
-	oinfo.shape = GObject::OutlineInfo::PieShape;
+        oinfo.shape = GObject::OutlineInfo::PieShape;
       else
-	oinfo.shape = GObject::OutlineInfo::DefaultShape;
+        oinfo.shape = GObject::OutlineInfo::DefaultShape;
     }
     else if (roundnessSlider != 0L) {
       oinfo.roundness = roundnessSlider->value ();
@@ -556,19 +555,19 @@ void PropertyEditor::applyPressed () {
     // Font
     if (haveObjects) {
       if (haveTextObjects) {
-	GText::TextInfo tinfo;
-	tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
-	tinfo.font = fontSelector->font ();
-	if (textAlign[0]->isOn ())
-	  tinfo.align = GText::TextInfo::AlignLeft;
-	else if (textAlign[1]->isOn ())
-	  tinfo.align = GText::TextInfo::AlignCenter;
-	else if (textAlign[2]->isOn ())
-	  tinfo.align = GText::TextInfo::AlignRight;
-	cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
+        GText::TextInfo tinfo;
+        tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
+        tinfo.font = fontSelector->font ();
+        if (textAlign[0]->isOn ())
+          tinfo.align = GText::TextInfo::AlignLeft;
+        else if (textAlign[1]->isOn ())
+          tinfo.align = GText::TextInfo::AlignCenter;
+        else if (textAlign[2]->isOn ())
+          tinfo.align = GText::TextInfo::AlignRight;
+        cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
       }
       else
-	cmd = new SetPropertyCmd (document, oinfo, finfo);
+        cmd = new SetPropertyCmd (document, oinfo, finfo);
 
       cmdHistory->addCommand (cmd, true);
     }
@@ -600,16 +599,16 @@ void PropertyEditor::readProperties () {
       Rect boundingBox = object->boundingBox ();
       infoLabel[0]->setText (QString (object->typeName ()));
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
-	       ustr);
+               ustr);
       infoLabel[1]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
-	       ustr);
+               ustr);
       infoLabel[2]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
-	       ustr);
+               ustr);
       infoLabel[3]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
-	       ustr);
+               ustr);
       infoLabel[4]->setText (buf);
 
       // Outline tab
@@ -618,82 +617,82 @@ void PropertyEditor::readProperties () {
       penColorBttn->setColor (oInfo.color);
       penStyleField->setCurrentItem (oInfo.style);
       if (object->isA ("GPolyline") || object->isA ("GBezier")) {
-	leftArrows->setCurrentItem (oInfo.startArrowId);
-	rightArrows->setCurrentItem (oInfo.endArrowId);
+        leftArrows->setCurrentItem (oInfo.startArrowId);
+        rightArrows->setCurrentItem (oInfo.endArrowId);
       }
       else if (object->isA ("GPolygon")) {
-	GPolygon* polygon = (GPolygon *) object;
-	if (polygon->isRectangle ())
-	  roundnessSlider->setValue (oInfo.roundness);
+        GPolygon* polygon = (GPolygon *) object;
+        if (polygon->isRectangle ())
+          roundnessSlider->setValue (oInfo.roundness);
       }
       else if (object->isA ("GOval")) {
-	switch (oInfo.shape) {
-	case GObject::OutlineInfo::ArcShape:
-	  ellipseKind[1]->setOn (true);
-	  break;
-	case GObject::OutlineInfo::PieShape:
-	  ellipseKind[2]->setOn (true);
-	  break;
-	default:
-	  ellipseKind[0]->setOn (true);
-	  break;
-	}
+        switch (oInfo.shape) {
+        case GObject::OutlineInfo::ArcShape:
+          ellipseKind[1]->setOn (true);
+          break;
+        case GObject::OutlineInfo::PieShape:
+          ellipseKind[2]->setOn (true);
+          break;
+        default:
+          ellipseKind[0]->setOn (true);
+          break;
+        }
       }
 
       // Fill tab
       switch (object->getFillStyle ()) {
       case GObject::FillInfo::NoFill:
-	fillStyleBttn[NOFILL_BOX]->setChecked (true);
-	wstack->raiseWidget (NOFILL_BOX);
-	fillColorBtn1->hide();
-	break;
+        fillStyleBttn[NOFILL_BOX]->setChecked (true);
+        wstack->raiseWidget (NOFILL_BOX);
+        fillColorBtn1->hide();
+        break;
       case GObject::FillInfo::SolidFill:
-	fillStyleBttn[SOLID_BOX]->setChecked (true);
-	fillColorBtn1->setColor (object->getFillColor ());
-	fillColorBtn2->setColor (object->getFillColor ());
-	wstack->raiseWidget (SOLID_BOX);
-	break;
+        fillStyleBttn[SOLID_BOX]->setChecked (true);
+        fillColorBtn1->setColor (object->getFillColor ());
+        fillColorBtn2->setColor (object->getFillColor ());
+        wstack->raiseWidget (SOLID_BOX);
+        break;
       case GObject::FillInfo::GradientFill:
-	{
-	  Gradient g = object->getFillGradient ();
-	  fillStyleBttn[GRADIENT_BOX]->setChecked (true);
-	  fillColorBtn1->setColor (g.getColor1 ());
-	  fillColorBtn2->setColor (g.getColor2 ());
-	  gradStyleCombo->setCurrentItem ((int) g.getStyle ());
-	  gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
-//	  gradientAngle->setValue(g.getAngle());
-	  updateGradient ();
-	  wstack->raiseWidget (GRADIENT_BOX);
-	}
-	break;
+        {
+          Gradient g = object->getFillGradient ();
+          fillStyleBttn[GRADIENT_BOX]->setChecked (true);
+          fillColorBtn1->setColor (g.getColor1 ());
+          fillColorBtn2->setColor (g.getColor2 ());
+          gradStyleCombo->setCurrentItem ((int) g.getStyle ());
+          gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
+//        gradientAngle->setValue(g.getAngle());
+          updateGradient ();
+          wstack->raiseWidget (GRADIENT_BOX);
+        }
+        break;
       case GObject::FillInfo::PatternFill:
-	fillStyleBttn[PATTERN_BOX]->setChecked (true);
-	fillColorBtn1->setColor (object->getFillColor ());
-	fillColorBtn2->setColor (object->getFillColor ());
-	brushCells->setColor( object->getFillColor () );
-	brushCells->selectBrush (object->getFillPattern ());
-	wstack->raiseWidget (PATTERN_BOX);
-	break;
+        fillStyleBttn[PATTERN_BOX]->setChecked (true);
+        fillColorBtn1->setColor (object->getFillColor ());
+        fillColorBtn2->setColor (object->getFillColor ());
+        brushCells->setColor( object->getFillColor () );
+        brushCells->selectBrush (object->getFillPattern ());
+        wstack->raiseWidget (PATTERN_BOX);
+        break;
       default:
-	break;
+        break;
       }
 
       // Font tab
       if (object->isA ("GText")) {
-	GText* tobj = (GText *) object;
-	GText::TextInfo tInfo = tobj->getTextInfo ();
-	fontSelector->setFont (tInfo.font);
-	switch (tInfo.align) {
-	case GText::TextInfo::AlignCenter:
-	  textAlign[1]->setOn (true);
-	  break;
-	case GText::TextInfo::AlignRight:
-	  textAlign[2]->setOn (true);
-	  break;
-	default:
-	  textAlign[0]->setOn (true);
-	  break;
-	}
+        GText* tobj = (GText *) object;
+        GText::TextInfo tInfo = tobj->getTextInfo ();
+        fontSelector->setFont (tInfo.font);
+        switch (tInfo.align) {
+        case GText::TextInfo::AlignCenter:
+          textAlign[1]->setOn (true);
+          break;
+        case GText::TextInfo::AlignRight:
+          textAlign[2]->setOn (true);
+          break;
+        default:
+          textAlign[0]->setOn (true);
+          break;
+        }
       }
     }
     else {
@@ -701,20 +700,20 @@ void PropertyEditor::readProperties () {
       // Info tab
       Rect boundingBox = document->boundingBoxForSelection ();
       if (! haveObjects)
-	infoLabel[0]->setText (i18n ("no selection"));
+        infoLabel[0]->setText (i18n ("no selection"));
       else
-	infoLabel[0]->setText (i18n ("multiple selection"));
+        infoLabel[0]->setText (i18n ("multiple selection"));
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
-	       ustr);
+               ustr);
       infoLabel[1]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
-	       ustr);
+               ustr);
       infoLabel[2]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
-	       ustr);
+               ustr);
       infoLabel[3]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
-	       ustr);
+               ustr);
       infoLabel[4]->setText (buf);
 
       // Outline tab
@@ -728,8 +727,8 @@ void PropertyEditor::readProperties () {
 
       // Font tab
       if (!haveObjects || haveTextObjects) {
-	GText::TextInfo tInfo = GText::getDefaultTextInfo ();
-	fontSelector->setFont (tInfo.font);
+        GText::TextInfo tInfo = GText::getDefaultTextInfo ();
+        fontSelector->setFont (tInfo.font);
       }
     }
 }
@@ -741,7 +740,7 @@ void PropertyEditor::fillStyleChanged() {
         fillColorBtn1->hide();
       else fillColorBtn1->show();
       if (i == GRADIENT_BOX)
-	updateGradient ();
+        updateGradient ();
       else if(i == PATTERN_BOX)
         brushCells->setColor(fillColorBtn1->color());
       wstack->raiseWidget (i);
@@ -782,7 +781,7 @@ void PropertyEditor::updateGradient () {
 
   if (gradient == 0L) {
       gradient = new Gradient (fillColorBtn1->color (),
-			       fillColorBtn2->color (), Gradient::Linear,0);
+                               fillColorBtn2->color (), Gradient::Linear,0);
       gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
   }
   else {
@@ -791,7 +790,7 @@ void PropertyEditor::updateGradient () {
     gradient->setStyle  (styles[gradStyleCombo->currentItem ()]);
   }
   gradPreview->setPixmap (gradient->createPixmap (gradPreview->width (),
-						  gradPreview->height ()));
+                                                  gradPreview->height ()));
 }
 
 int PropertyEditor::edit (CommandHistory* history, GDocument* doc) {

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,35 +26,35 @@
 #define BrushCells_h_
 
 #include <qtableview.h>
-#include <qpixmap.h>
 #include <qbrush.h>
-#include "version.h"
 
 #include <vector>
 
 class QColor;
+class QPixmap;
 
 class BrushCells : public QTableView {
-  Q_OBJECT
+
+    Q_OBJECT
 public:
-  BrushCells (QWidget *parent = 0L, const QColor &colour = QT_PRFX::black,
-              const char *name = 0);
-  ~BrushCells ();
-  
-  QT_PRFX::BrushStyle brushStyle ();
-  void selectBrush (QT_PRFX::BrushStyle style);
-  void setColor(const QColor &);
+    BrushCells (QWidget *parent = 0L, const QColor &colour = Qt::black,
+                const char *name = 0);
+    ~BrushCells ();
+
+    Qt::BrushStyle brushStyle ();
+    void selectBrush (Qt::BrushStyle style);
+    void setColor(const QColor &);
 
 protected:
-  virtual int cellWidth (int col);
-  virtual int cellHeight (int row);
-  virtual void paintCell (QPainter *, int row, int col);
-  
-  virtual void mousePressEvent (QMouseEvent *event);
+    virtual int cellWidth (int col);
+    virtual int cellHeight (int row);
+    virtual void paintCell (QPainter *, int row, int col);
+
+    virtual void mousePressEvent (QMouseEvent *event);
 
 private:
-  std::vector<QPixmap> brushPixmaps;
-  int currentBrush;
+    std::vector<QPixmap> brushPixmaps;
+    int currentBrush;
 };
 
 #endif

@@ -10,10 +10,10 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 RectangleTool.h OvalTool.h TextTool.h FreeHandTool.h \
 		 SelectionTool.h PolygonTool.h ToolController.h \
 		 EditPointTool.h BezierTool.h ZoomTool.h \
-		 ColorField.h Canvas.h \
+		 Canvas.h \
 		 QwViewport.h GDocument.h \
 		 Coord.h PropertyEditor.h FloatSpinBox.h \
-                 ColorComboBox.h FontSelector.h AlignmentDialog.h \
+                             FontSelector.h AlignmentDialog.h \
 		 GridDialog.h PolygonConfigDialog.h PolygonPreview.h \
                  Command.h AlignCmd.h DistributeCmd.h InsertClipartCmd.h \
 		 TranslateCmd.h ScaleCmd.h RotateCmd.h \
@@ -48,10 +48,10 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  RectangleTool.cc OvalTool.cc TextTool.cc \
 			  SelectionTool.cc PolygonTool.cc ToolController.cc \
 			  EditPointTool.cc BezierTool.cc ZoomTool.cc \
-			  ColorField.cc Canvas.cc \
+			  Canvas.cc \
                           QwViewport.cc GDocument.cc \
 			  Coord.cc PropertyEditor.cc FloatSpinBox.cc \
-                          ColorComboBox.cc FontSelector.cc AlignmentDialog.cc \
+                                            FontSelector.cc AlignmentDialog.cc \
 			  PolygonConfigDialog.cc PolygonPreview.cc \
 			  GridDialog.cc Command.cc DuplicateCmd.cc \
                           AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
