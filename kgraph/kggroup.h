@@ -23,8 +23,6 @@
 #define kggroup_h
 
 #include <qlist.h>
-#include <qguardedptr.h>
-
 #include <kgobject.h>
 
 class QDomElement;
@@ -32,21 +30,25 @@ class QDomDocument;
 
 
 class KGGroup {
-    
+
 public:
     KGGroup();                           // creates an empty group with a unique ID
     KGGroup(const QDomElement &element); // "loads" a group from XML
     ~KGGroup();
 
-    const int id() { return m_id; }
-    const QDomElement save(const QDomDocument &document);  // save the group
-    
+    const int id() const { return m_id; }
+    const bool active() const { return m_active; }
+    void setActive(const bool &active=true) { m_active=active; }
+
+    const QDomElement save(QDomDocument &document);  // save the group
+
     void addMember(KGObject *member);
     void removeMember(KGObject *member);
-    
+
 private:
-    QList< QGuardedPtr<KGObject> > members;
-    static int ID;   // This is the counter for a unique group ID
-    const int m_id;  // This is the id of this group
+    QList<KGObject> members;
+    static int ID;   // This is the common counter for a unique group ID
+    int m_id;        // This is the id of this group
+    bool m_active;   // Group active or inavtive?
 };
 #endif // kggroup_h

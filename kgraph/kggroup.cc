@@ -18,14 +18,44 @@
 */
 
 #include <kggroup.h>
+#include <qdom.h>
 
 int KGGroup::ID=0;
 
-KGGroup::KGGroup() : m_id(++ID) {
+KGGroup::KGGroup() : m_id(++ID), m_active(true) {
 }
 
-KGGroup::KGGroup(const QDomElement &/*element*/) : m_id(++ID) {
+KGGroup::KGGroup(const QDomElement &element) {
+
+    bool ok;
+    m_id=element.attribute("id").toInt(&ok);
+    if(!ok)
+	m_id=++ID;
+
+    int tmp=element.attribute( "active" ).toInt(&ok);
+    if(!ok || tmp!=0)
+	m_active=true;
+    else
+	m_active=false;
 }
 
 KGGroup::~KGGroup() {
+    members.clear();
+}
+
+const QDomElement KGGroup::save(QDomDocument &document) {
+
+    QDomElement element=document.createElement("group");
+    element.setAttribute("id", m_id);
+    element.setAttribute("active", m_active);
+    return element;
+}
+
+void KGGroup::addMember(KGObject *member) {
+    if(!members.findRef(member))
+	members.append(member);
+}
+
+void KGGroup::removeMember(KGObject *member) {
+    members.removeRef(member);
 }
