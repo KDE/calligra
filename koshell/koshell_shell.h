@@ -57,14 +57,16 @@ protected slots:
   virtual void slotFileClose();
   virtual void slotFileOpen();
   void slotKoolBar( int _grp, int _item );
-
+  void slotHideKoolbar();
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
 
 protected:
 
+  void setupActions();
+  
   virtual bool queryClose();
-
+  
   virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
   void closeDocument();
 
@@ -81,7 +83,7 @@ protected:
   void switchToPage( QValueList<Page>::Iterator it );
 
   KoKoolBar* m_pKoolBar;
-
+    
   int m_grpFile;
   int m_grpDocuments;
 

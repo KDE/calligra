@@ -20,12 +20,11 @@ noinst_HEADERS = koshell_shell.h
 
 METASOURCES = AUTO
 
-# The ui standards provide it all for us, currently.
-# rcdir = $(kde_datadir)/koshell
-# rc_DATA = koshell_shell.rc
+rcdir = $(kde_datadir)/koshell
+rc_DATA = koshellui.rc
 
 applnk_DATA = koshell.desktop
 applnkdir = $(kde_appsdir)/Office
 
-messages:
-	$(XGETTEXT) *.cc -o $(podir)/koshell.pot
+messages: rc.cpp
+	$(XGETTEXT) rc.cpp *.cc -o $(podir)/koshell.pot

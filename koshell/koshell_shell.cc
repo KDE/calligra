@@ -34,6 +34,7 @@
 #include <kmessagebox.h>
 #include <krecentdocument.h>
 #include <kparts/partmanager.h>
+#include <kaction.h>
 
 #include <koQueryTrader.h>
 #include <koKoolBar.h>
@@ -52,7 +53,7 @@ KoShellWindow::KoShellWindow()
   m_pLayout = new QHBox( centralWidget() );
 
   m_pKoolBar = new KoKoolBar( m_pLayout );
-
+     
   m_pFrame = new KoShellFrame( m_pLayout );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
@@ -92,10 +93,18 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
+  
+  setupActions(); 
+}
 
-  // Not implemented yet
-  actionCollection()->action("view_split")->setEnabled(false);
-  actionCollection()->action("view_splitter_orientation")->setEnabled(false);
+void KoShellWindow::setupActions()
+{
+	// Not implemented yet
+  	actionCollection()->action("view_split")->setEnabled(false);
+  	actionCollection()->action("view_splitter_orientation")->setEnabled(false);
+	
+	(void)new KToggleAction(i18n("Show / Hide Koolbar"), "view_choose", this, SLOT( slotHideKoolbar() ),
+                      actionCollection(), "hide_koolbar");
 }
 
 KoShellWindow::~KoShellWindow()
@@ -326,6 +335,14 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
       ++it;
     }
   }
+}
+
+void KoShellWindow::slotHideKoolbar()
+{
+	if( m_pKoolBar->isShown() )
+		m_pKoolBar->hide();
+	else
+		m_pKoolBar->show();
 }
 
 void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
