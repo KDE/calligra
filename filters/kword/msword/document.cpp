@@ -439,14 +439,15 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
     {
         for ( int i = 0 ; i < pap->itbdMac ; ++i )
         {
+            const wvWare::Word97::TabDescriptor &td = pap->rgdxaTab[i];
             QDomElement tabElement = m_mainDocument.createElement( "TABULATOR" );
-            tabElement.setAttribute( "ptpos", (double)pap->rgdxaTab[i] / 20.0 );
+            tabElement.setAttribute( "ptpos", (double)td.rgdxaTab / 20.0 );
             // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
             // which kword doesn't support. We map it to 0 with a clever '%4' :)
-            tabElement.setAttribute( "type", pap->rgtbd[i].jc % 4 );
+            tabElement.setAttribute( "type", td.rgtbd.jc % 4 );
             int filling = 0;
             double width = 0.5; // default kword value, see koparaglayout.cc
-            switch ( pap->rgtbd[i].tlc ) {
+            switch ( td.rgtbd.tlc ) {
             case 1: // dots
             case 2: // hyphenated
                 filling = 1; // KWord: dots
