@@ -30,6 +30,7 @@
 
 #include "kword13parser.h"
 #include "kword13document.h"
+#include "kword13oasisgenerator.h"
 #include "kword13import.h"
 
 typedef KGenericFactory<KWord13Import, KoFilter> KWord13ImportFactory;
@@ -70,8 +71,6 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     // We need KimageIO's help in OOWriterWorker::convertUnknownImage
     KImageIO::registerFormats();
 
-    KoFilter::ConversionStatus result = KoFilter::StupidError;
-    
     KWord13Document kwordDocument;
     
     KoStoreDevice* subFile;
@@ -103,10 +102,29 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
             file.close();
         }
     }
+
+    // ### TODO: do post-parsing data processing (table groups, load pictures...)
+        
+    const QString filenameOut ( m_chain->outputFile() );
     
-    // ### TODO
+    if ( filenameOut.isEmpty() )
+    {
+        kdError(30520) << "Empty file name for saving as OASIS! Aborting!" << endl;
+        return KoFilter::StupidError;
+    }
     
-    return result;
+    KWord13OasisGenerator generator;
+    
+    if ( ! generator.generate( filenameOut, kwordDocument ) )
+    {
+        kdError(30520) << "Could not save as OASIS! Aborting!" << endl;
+        return KoFilter::StupidError;
+    }
+    
+   
+    kdDebug(30520) << "Filter has finished!" << endl;
+    
+    return KoFilter::OK;
 }
 
 #include "kword13import.moc"
