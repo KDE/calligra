@@ -666,8 +666,9 @@ bool KoMainWindow::saveDocument( bool saveas )
     bool reset_url;
     if ( pDoc->url().isEmpty() )
     {
-        emit saveDialogShown(false);
+        emit saveDialogShown();
         reset_url = true;
+        saveas = true;
     }
     else
         reset_url = false;
@@ -915,7 +916,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 #endif
 
     if (!ret && reset_url)
-        saveDialogShown(true);
+        pDoc->resetURL(); //clean the suggested filename as the save dialog was rejected
     return ret;
 }
 

@@ -152,7 +152,7 @@ signals:
      */
     void documentSaved();
     /// This signals is emmitted before the save dialog is shown
-    void saveDialogShown(bool reset);
+    void saveDialogShown();
 
 public slots:
 
