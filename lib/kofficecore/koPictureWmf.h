@@ -26,11 +26,14 @@
 class QPainter;
 class QSize;
 
-// TODO: fix documentation
+/**
+ * \file koPictureWmf.h
+ * \todo fix documentation
+ */
 
 /**
  * @internal
- * KoPictureWmf is a container class
+ * KoPictureWmf is a container class for WMF pictures.
  */
 class KoPictureWmf : public KoPictureBase
 {
@@ -101,7 +104,8 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     /**
-     * @internal (Draw a QPicture)
+     * @internal
+     * Draw a QPicture
      */
     void drawQPicture(QPicture& clipart, QPainter& painter,
         int x, int y, int width, int height, int sx, int sy, int sw, int sh);
