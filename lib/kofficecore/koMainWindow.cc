@@ -1285,21 +1285,21 @@ void KoMainWindow::slotCloseAllViews() {
     // Attention: Very touchy code... you know what you're doing? Goooood :)
     d->m_forQuit=true;
     if(queryClose()) {
-        hide();
-        d->m_rootDoc->removeShell(this);
         // In case the document is embedded we close all open "extra-shells"
         if(d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
+            hide();
+            d->m_rootDoc->removeShell(this);
             QPtrListIterator<KoMainWindow> it(d->m_rootDoc->shells());
             while (it.current()) {
                 it.current()->hide();
                 delete it.current(); // this updates the lists' current pointer and thus
                                      // the iterator (the shell dtor calls removeShell)
+            d->m_rootDoc=0;
             }
         }
         // not embedded -> destroy the document and all shells/views ;)
         else
-            delete d->m_rootDoc;
-        d->m_rootDoc=0;
+	    setRootDocument( 0L );
         close();  // close this window (and quit the app if necessary)
     }
     d->m_forQuit=false;
