@@ -37,12 +37,12 @@ libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) 
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	dockers/libkarbondockers.la \
-	dialogs/libkarbondialogs.la \
 	widgets/libkarbonwidgets.la \
 	render/libvpainter.la \
 	tools/libkarbontools.la \
 	shapes/libkarbonshapes.la \
 	core/libkarboncore.la \
+	dialogs/libkarbondialogs.la \
 	libkarbonbase.la
 
 libkarbonpart_la_METASOURCES = AUTO
