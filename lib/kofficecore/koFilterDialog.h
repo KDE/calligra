@@ -6,7 +6,7 @@
 #include <qwidget.h>
 
 /**
- * This is an abstract base class for filter config dialogs. Derive your 
+ * This is an abstract base class for filter config dialogs. Derive your
  * dialog class from this one. Create a dialog in the CTOR and destroy it in
  * the DTOR. The KOffice part will search for the dialog (via the trader and
  * service stuff) and display it if the user selects the appropriate extension.
@@ -16,6 +16,8 @@
  * will be passed to the CTOR of the filter. Of course the format of this
  * string is up to you, but using XML (QDom/QXML) seems to be a good
  * choice...
+ *
+ * @short An abstract base class for filter dialogs.
  */
 class KoFilterDialog : public QWidget {
 

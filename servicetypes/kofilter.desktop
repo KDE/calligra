@@ -2,18 +2,14 @@
 Type=ServiceType
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
-Comment[ca]=Filtre KOffice
 Comment[cs]=Filter KOffice
-Comment[da]=KOffice filter
-Comment[eo]=filtrilo por Oficejo
-Comment[fi]=KOffice suodatin
-Comment[hu]=KOffice Szûrõ
-Comment[ja]=KOffice¥Õ¥£¥ë¥¿¡¼
-Comment[mi]=KOffice Szûrõ
+Comment[de]=KOffice-Filter
+Comment[eo]=KOficejo-filtrilo
+Comment[fi]=KOffice-suodin
+Comment[hu]=KOffice szÅ±rÅ‘
+Comment[ja]=KOfficeãƒ•ã‚£ãƒ«ã‚¿ãƒ¼
 Comment[no]=KOffice-filter
-Comment[no_NY]=KOffice-filter
-Comment[sr]=Filter za KOffice
-Comment[sv]=KOffice-filter
+Comment[sl]=Filter za KOffice
 
 [PropertyDef::Import]
 Type=QString
@@ -25,4 +21,7 @@ Type=QString
 Type=QString
 
 [PropertyDef::ExportDescription]
+Type=QString
+
+[PropertyDef::Implemented]
 Type=QString

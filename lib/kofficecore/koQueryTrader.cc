@@ -187,6 +187,7 @@ static KoFilterEntry koParseFilterProperties( KService::Ptr service )
   e.importDescription = service->property( "ImportDescription" ).toString();
   e.export_ = service->property( "Export" ).toString();
   e.exportDescription = service->property( "ExportDescription" ).toString();
+  e.implemented = service->property( "Implemented" ).toString();
 
   return e;
 }
@@ -203,6 +204,7 @@ KoFilterEntry::KoFilterEntry( const KoFilterEntry& e ) : KoComponentEntry( e )
   importDescription = e.importDescription;
   export_ = e.export_;
   exportDescription = e.exportDescription;
+  implemented = e.implemented;
 }
 
 KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _e )

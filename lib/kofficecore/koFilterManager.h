@@ -112,11 +112,11 @@ public:
      * @return Sucess?
      */
     const bool prepareDialog( KFileDialog *dialog,
-                                 const Direction &direction,
-                                 const char *_format,
-                                 const char *_native_pattern,
-                                 const char *_native_name,
-                                 const bool allfiles );
+			      const Direction &direction,
+			      const char *_format,
+			      const char *_native_pattern,
+			      const char *_native_name,
+			      const bool allfiles );
 
     /**
      * Cleans up the KFileDialog (deletes all the stuff)

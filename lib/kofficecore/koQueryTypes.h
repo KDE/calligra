@@ -143,6 +143,11 @@ public:
    *  Comment regarding the exported data format.
    */
   QString exportDescription;
+    
+  /**
+   *  Which one of the filter methods is implemented?
+   */
+  QString implemented;
 
   /**
    *  @return TRUE if the filter can imports the requested mimetype.

@@ -2,10 +2,14 @@
 Type=Service
 Name=KSpredCSVExportFilter
 Comment=KSpread CSV Export Filter
+Comment[hu]=KSzámolótábla CSV Export szűrője
+Comment[no]=KSpread CSV eksportfilter
+Comment[sl]=Filter za izvoz CSV iz KSpread
 Export=text/x-csv
 ExportDescription=CSV
 Import=application/x-kspread
 ImportDescription=KSpread
+Implemented=XML
 X-KDE-Library=libcsvexport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
