@@ -70,22 +70,34 @@ bool clsTblDesigner2::populateTblDesigner(QString tblName){
 void clsTblDesigner2::addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null)
 {
 	kdDebug() << "clsTblDesigner2::addRow: adding row " << m_rows << endl;
-	m_table->setNumRows(m_rows + 1);
-	m_table->setItem(m_rows, 0, new QCheckTableItem(m_table, ""));
-	m_table->setItem(m_rows, 0, new QCheckTableItem(m_table, ""));
 	QComboTableItem *dataTypeView = new QComboTableItem(m_table, m_comboEntries, false);
+	QCheckTableItem *primary_keyView = new QCheckTableItem(m_table, "");
+	QCheckTableItem *allow_nullView = new QCheckTableItem(m_table, "");
+	QString sizestr;
+	sizestr.setNum(size);
+	
+	m_table->setNumRows(m_rows + 1);
+	
+	m_table->setItem(m_rows, 0, primary_keyView);
+	primary_keyView->setChecked(primary_key);
+	m_table->setText(m_rows, 1, name);
 	m_table->setItem(m_rows, 2, dataTypeView);
+	m_table->setText(m_rows, 3, sizestr);
+	m_table->setText(m_rows, 4, default_v);
+	m_table->setItem(m_rows, 5, allow_nullView);
+	allow_nullView->setChecked(allow_null);
+	
 	
 	switch(type)
 	{
 	
 		case t_int:
-			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is int" << endl;
+//			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is int" << endl;
 			dataTypeView->setCurrentItem(0);
 			break;
 	
 		case t_char:
-			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is char" << endl;
+//			kdDebug() << "clsTblDesigner2::addRow: " << m_rows << " is char" << endl;
 			dataTypeView->setCurrentItem(1);
 			break;
 			
@@ -107,9 +119,7 @@ void clsTblDesigner2::addRow(bool primary_key, QString name, DataType type, int 
 */
 	
 	}
-	m_table->setText(m_rows, 1, name);
 	//m_table->setText(m_rows, 3, (const QString)size);
-	m_table->setText(m_rows, 4, default_v);
 	m_rows++;
 }
 
