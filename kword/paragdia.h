@@ -83,6 +83,7 @@ public:
   void setFirstLineIndent(float _first);
   void setSpaceAfterParag(float _after);
   void setSpaceBeforeParag(float _before);
+  void setLineSpacing(unsigned int _spacing);
 
   float getLeftIndent()
     { return atof(eLeft->text()); } 
@@ -92,6 +93,9 @@ public:
     { return atof(eBefore->text()); } 
   float getSpaceAfterParag()
     { return atof(eAfter->text()); } 
+  unsigned int  getLineSpacing()
+    { return atoi(eSpacing->text()); } 
+  
 
 protected:
   void setupTab1();

@@ -29,6 +29,7 @@ public:
     void setptLeftIndent( unsigned int _i ) { ptLeftIndent = _i; }
     void setptParagFootOffset( unsigned int _i) { ptParagFootOffset = _i; }
     void setptParagHeadOffset( unsigned int _i) { ptParagHeadOffset = _i; }
+    void setPTLineSpacing( unsigned int _i) { ptLineSpacing = _i; }
     void setName( const char* _n) { name = _n; }
     void setFlow( Flow _f ) { flow = _f; }
     /**
@@ -87,6 +88,7 @@ public:
     unsigned int getPTLeftIndent() { return ptLeftIndent; }
     unsigned int getPTParagFootOffset() { return ptParagFootOffset; }
     unsigned int getPTParagHeadOffset() { return ptParagHeadOffset; }
+    unsigned int getPTLineSpacing() { return ptLineSpacing; }
     Flow getFlow() { return flow; }
     /**
      * @return the flow of the Counter.
@@ -125,6 +127,7 @@ protected:
     unsigned int ptParagHeadOffset;
     unsigned int ptFirstLineLeftIndent;
     unsigned int ptLeftIndent;
+    unsigned int ptLineSpacing;
     /**
      * This instance holds information about the font and color etc. for
      * the parags text.

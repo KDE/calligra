@@ -154,7 +154,7 @@ public:
 
     unsigned short getCounter( unsigned int _counternr, unsigned int _depth );
 
-    unsigned int getLineHeight() { return ptMaxAscender + ptMaxDescender; }
+    unsigned int getLineHeight();
 
     void apply( KWFormat &_format );
     

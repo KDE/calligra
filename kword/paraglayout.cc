@@ -17,6 +17,7 @@ KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
     counterRightText = "";
     followingParagLayout = this;
     numberLikeParagLayout = 0L;
+    ptLineSpacing = 0;
     
     format.setDefaults( _doc );
     
@@ -44,6 +45,7 @@ KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
   counterRightText = qstrdup(_layout.getCounterRightText());
   followingParagLayout = this;
   numberLikeParagLayout = 0L;
+  ptLineSpacing = _layout.getPTLineSpacing();
 
   format.setDefaults( document );
 

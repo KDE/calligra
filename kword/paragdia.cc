@@ -134,6 +134,14 @@ void KWParagDia::setSpaceAfterParag(float _after)
 }
 
 /*================================================================*/
+void KWParagDia::setLineSpacing(unsigned int  _spacing)
+{
+  QString str;
+  str.sprintf("%d",_spacing);
+  eSpacing->setText(str);
+}
+
+/*================================================================*/
 void KWParagDia::setupTab1()
 {
   tab1 = new QWidget(this);
@@ -218,9 +226,9 @@ void KWParagDia::setupTab1()
   connect(cSpacing,SIGNAL(activated(int)),this,SLOT(spacingActivated(int)));
   spacingGrid->addWidget(cSpacing,1,0);
 
-  eSpacing = new KRestrictedLine(spacingFrame,"","1234567890.");
-  eSpacing->setText("0.00");
-  eSpacing->setMaxLength(5);
+  eSpacing = new KRestrictedLine(spacingFrame,"","1234567890");
+  eSpacing->setText("0");
+  eSpacing->setMaxLength(2);
   eSpacing->setEchoMode(QLineEdit::Normal);
   eSpacing->setFrame(true);
   eSpacing->resize(cSpacing->size());
@@ -239,6 +247,11 @@ void KWParagDia::setupTab1()
   // activate grid
   spacingGrid->activate();
   grid1->addWidget(spacingFrame,1,0);
+
+
+  cSpacing->setCurrentItem(4);
+  cSpacing->setEnabled(false);
+  eSpacing->setEnabled(true);
 
   // --------------- paragraph spacing ---------------
   pSpaceFrame = new QGroupBox(i18n("Paragraph Space"),tab1);

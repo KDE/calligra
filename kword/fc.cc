@@ -3,6 +3,7 @@
 
 #include "fc.h"
 #include "kword_doc.h"
+#include "paraglayout.h"
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -756,6 +757,11 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned int _depth )
 {
     return counters[ _counternr ][ _depth ];
+}
+
+unsigned int KWFormatContext::getLineHeight()
+{ 
+  return ptMaxAscender + ptMaxDescender + getParag()->getParagLayout()->getPTLineSpacing(); 
 }
 
 void KWFormatContext::makeCounterLayout( QPainter &_painter )
