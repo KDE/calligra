@@ -266,25 +266,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "value", "double" );
         else
             elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-        QString strLineType;
-        switch ( curFormat->lineType() )
-        {
-        case KoTextFormat::SOLID:
-            strLineType ="solid";
-            break;
-        case KoTextFormat::DASH:
-            strLineType ="dash";
-            break;
-        case KoTextFormat::DOT:
-            strLineType ="dot";
-            break;
-        case KoTextFormat::DASH_DOT:
-            strLineType="dashdot";
-            break;
-        case KoTextFormat::DASH_DOT_DOT:
-            strLineType="dashdotdot";
-            break;
-        }
+        QString strLineType=lineTypeToString( curFormat->lineType() );
         elem.setAttribute( "styleline", strLineType );
         if ( curFormat->textUnderlineColor().isValid() )
         {
@@ -293,33 +275,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "blue", curFormat->textUnderlineColor().blue() );
         }
     }
-    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() )
+    if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() || curFormat->strikeOutType()!= refFormat->strikeOutType())
     {
         elem = doc.createElement( "STRIKEOUT" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
-        //todo remove duplicate code
-        QString strLineType;
-        switch ( curFormat->strikeOutType() )
-        {
-        case KoTextFormat::SOLID:
-            strLineType ="solid";
-            break;
-        case KoTextFormat::DASH:
-            strLineType ="dash";
-            break;
-        case KoTextFormat::DOT:
-            strLineType ="dot";
-            break;
-        case KoTextFormat::DASH_DOT:
-            strLineType="dashdot";
-            break;
-        case KoTextFormat::DASH_DOT_DOT:
-            strLineType="dashdotdot";
-            break;
-        }
+        QString strLineType=lineTypeToString( curFormat->lineType() );
         elem.setAttribute( "styleline", strLineType );
-
     }
     // ######## Not needed in 3.0?
     /*
@@ -507,25 +469,20 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
             format.setNbLineType ( KoTextFormat::SIMPLE);
         else if ( value == "double" )
-          format.setNbLineType ( KoTextFormat::DOUBLE);
-        //remove duplicate code
+            format.setNbLineType ( KoTextFormat::DOUBLE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            if ( strLineType =="solid")
-                format.setLineType( KoTextFormat::SOLID );
-            else if ( strLineType =="dash" )
-                format.setLineType( KoTextFormat::DASH );
-            else if ( strLineType =="dot" )
-                format.setLineType( KoTextFormat::DOT );
-            else if ( strLineType =="dashdot")
-                format.setLineType( KoTextFormat::DASH_DOT );
-            else if ( strLineType =="dashdotdot")
-                format.setLineType( KoTextFormat::DASH_DOT_DOT );
-            else
-                format.setLineType( KoTextFormat::SOLID );
+            format.setLineType( stringToLineType( strLineType ));
         }
+        if ( elem.hasAttribute("red") && elem.hasAttribute("green") && elem.hasAttribute("blue"))
+        {
 
+            QColor col( elem.attribute("red").toInt(),
+                        elem.attribute("green").toInt(),
+                        elem.attribute("blue").toInt() );
+            format.setTextUnderlineColor( col );
+        }
     }
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
@@ -534,18 +491,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            if ( strLineType =="solid")
-                format.setStrikeOutType( KoTextFormat::SOLID );
-            else if ( strLineType =="dash" )
-                format.setStrikeOutType( KoTextFormat::DASH );
-            else if ( strLineType =="dot" )
-                format.setStrikeOutType( KoTextFormat::DOT );
-            else if ( strLineType =="dashdot")
-                format.setStrikeOutType( KoTextFormat::DASH_DOT );
-            else if ( strLineType =="dashdotdot")
-                format.setStrikeOutType( KoTextFormat::DASH_DOT_DOT );
-            else
-                format.setStrikeOutType( KoTextFormat::SOLID );
+            format.setStrikeOutType( stringToLineType( strLineType ));
         }
 
     }
@@ -1068,3 +1014,42 @@ void KWTextParag::join( KoTextParag *parag )
     KoTextParag::join( parag );
 }
 
+QString KWTextParag::lineTypeToString( KoTextFormat::LineType _lineType )
+{
+    QString strLineType;
+    switch ( _lineType )
+    {
+    case KoTextFormat::SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}
+
+KoTextFormat::LineType KWTextParag::stringToLineType( const QString & _str )
+{
+    if ( _str =="solid")
+        return KoTextFormat::SOLID;
+    else if ( _str =="dash" )
+        return KoTextFormat::DASH;
+    else if ( _str =="dot" )
+        return KoTextFormat::DOT;
+    else if ( _str =="dashdot")
+        return KoTextFormat::DASH_DOT;
+    else if ( _str=="dashdotdot")
+        return KoTextFormat::DASH_DOT_DOT;
+    else
+        return KoTextFormat::SOLID;
+}
