@@ -39,6 +39,8 @@ KSpreadFactory::~KSpreadFactory()
     delete s_global->aboutData();
     delete s_global;
   }
+  if( s_dcopObject )
+    delete s_dcopObject;
 }
 
 KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
