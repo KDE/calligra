@@ -307,6 +307,7 @@ KoMainWindow::~KoMainWindow()
          !d->m_rootDoc->isEmbedded())
     {
         //kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
+        d->m_manager->removePart( d->m_rootDoc ); // otherwise ~PartManager will try to access the deleted doc
         delete d->m_rootDoc;
     }
 
@@ -361,6 +362,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     //kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
+    d->m_manager->removePart( oldRootDoc ); // otherwise ~PartManager will try to access the deleted doc
     delete oldRootDoc;
   }
 }
