@@ -136,6 +136,7 @@
  <Action name="middle"/>
  <Action name="bottom"/>
  <Action name="multiRow"/>
+ <Action name="verticaltext"/>
 </ToolBar>
 <ToolBar name="mathToolBar">
  <Action name="autoSum"/>

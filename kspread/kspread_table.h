@@ -384,6 +384,8 @@ public:
 
     void setSelectionfirstLetterUpper( const QPoint &_marker);
 
+    void setSelectionVerticalText( const QPoint &_marker,bool _b);
+
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );

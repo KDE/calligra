@@ -175,10 +175,6 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void togglePageBorders( bool );
-//    void toggleGrid( bool );
-//    void toggleFormular( bool);
-//    void toggleLcMode( bool);
-//    void toggleColumnNumber(bool);
     void gotoCell();
     void replace();
     void conditional();
@@ -259,6 +255,7 @@ public slots:
     void equalizeRow();
     void preference();
     void firstLetterUpper();
+    void verticalText(bool );
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -463,6 +460,7 @@ private:
     KAction* m_equalizeColumn;
     KAction* m_preference;
     KAction* m_firstLetterUpper;
+    KToggleAction* m_verticalText;
 //    KToggleAction* m_showColumnNumber;
     /**
      * Pointer to the last popup menu.

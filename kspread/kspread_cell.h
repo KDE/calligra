@@ -309,6 +309,8 @@ public:
 
     void setMultiRow( bool _b ) { m_bMultiRow = _b; m_bLayoutDirtyFlag = TRUE; }
 
+    void setVerticalText( bool _b ) { m_bVerticalText = _b; m_bLayoutDirtyFlag = TRUE; }
+
     void setStyle( Style _s );
     void setAction( const QString& _action ) { m_strAction = _action; }
 

@@ -65,7 +65,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_backGroundBrush.setColor( Qt::red );
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
-
+    m_bVerticalText=FALSE;
     m_textColor = Qt::black;
     m_textPen.setColor( m_textColor );
 }

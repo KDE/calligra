@@ -515,3 +515,15 @@ bold,italic,multirow,underline etc... thanks a lot.
 2000-05-17 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Improved layout management in kspread_dlg_layout->font.
+
+2000-05-20 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can put a vertical text  example : a
+                                            b
+                                            c
+                                            g
+This is an optional function.
+=>you can show this function if you used kedittoolbar and add "Vertical text"
+As kedittoolbar doesn't work for this moment, add this line to your
+personal kspread.rc file
+<Action name="verticaltext"/>

@@ -142,6 +142,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setFloatColor( o->floatColor() );
     setFaktor( o->faktor() );
     setMultiRow( o->multiRow() );
+    setVerticalText( o->verticalText() );
     setStyle( o->style() );
 
     KSpreadConditional *tmpCondition;
@@ -187,68 +188,6 @@ void KSpreadCell::copyAll( KSpreadCell *cell )
 	m_pPrivate = cell->m_pPrivate->copy( this );
 }
 
-/* The old implementation
-void KSpreadCell::copyAll( KSpreadCell *cell)
-{
-    setText(cell->text());
-    setAlign( cell->align() );
-    setAlignY( cell->alignY());
-    setTextFont( cell->textFont() );
-    setTextColor( cell->textColor() );
-    setBgColor( cell->bgColor( ) );
-  //When you use column() and row() it don't work
-
-  //setLeftBorderWidth( cell->leftBorderWidth( ) );
-  //setLeftBorderStyle( cell->leftBorderStyle(  ) );
-  //setLeftBorderColor( cell->leftBorderColor(  ) );
- // setTopBorderWidth( cell->topBorderWidth(  ) );
-  //setTopBorderStyle( cell->topBorderStyle(  ) );
-  //setTopBorderColor( cell->topBorderColor(  ) );
-  //setBottomBorderWidth( cell->bottomBorderWidth( ) );
-  //setBottomBorderStyle( cell->bottomBorderStyle(  ) );
-  //setBottomBorderColor( cell->bottomBorderColor( ) );
-  //setRightBorderWidth( cell->rightBorderWidth( ) );
-  //setRightBorderStyle( cell->rightBorderStyle( ) );
-  //setRightBorderColor( cell->rightBorderColor(  ) );
-  setPrecision( cell->precision() );
-  setPrefix( cell->prefix() );
-  setPostfix( cell->postfix() );
-  setFloatFormat( cell->floatFormat() );
-  setFloatColor( cell->floatColor() );
-  setFaktor( cell->faktor() );
-  setMultiRow( cell->multiRow() );
-  KSpreadConditional *tmpCondition=0;
-  //tmpCondition=o->getFirstCondition(0);
-  if(cell->getFirstCondition(0)!=0)
- {
-  	tmpCondition=getFirstCondition();
-  	tmpCondition->val1=cell->getFirstCondition(0)->val1;
-  	tmpCondition->val2=cell->getFirstCondition(0)->val2;
-  	tmpCondition->colorcond=cell->getFirstCondition(0)->colorcond;
-  	tmpCondition->fontcond=cell->getFirstCondition(0)->fontcond;
-  	tmpCondition->m_cond=cell->getFirstCondition(0)->m_cond;
-	}
-  if(cell->getSecondCondition(0)!=0)
-    	{
-  	tmpCondition=getSecondCondition();
-  	tmpCondition->val1=cell->getSecondCondition(0)->val1;
-  	tmpCondition->val2=cell->getSecondCondition(0)->val2;
-  	tmpCondition->colorcond=cell->getSecondCondition(0)->colorcond;
-  	tmpCondition->fontcond=cell->getSecondCondition(0)->fontcond;
-  	tmpCondition->m_cond=cell->getSecondCondition(0)->m_cond;
-	}
-  if(cell->getThirdCondition(0)!=0)
-    	{
-  	tmpCondition=getThirdCondition();
-  	tmpCondition->val1=cell->getThirdCondition(0)->val1;
-  	tmpCondition->val2=cell->getThirdCondition(0)->val2;
-  	tmpCondition->colorcond=cell->getThirdCondition(0)->colorcond;
-  	tmpCondition->fontcond=cell->getThirdCondition(0)->fontcond;
-  	tmpCondition->m_cond=cell->getThirdCondition(0)->m_cond;
-	}
-
-}
-*/
 
 void KSpreadCell::defaultStyle()
 {
@@ -932,7 +871,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     	{
     	KSpreadConditional *tmpCondition=0;
 	switch(m_numberOfCond)
-		{	
+		{
 		case 0:
 			tmpCondition=m_firstCondition;
 			break;
@@ -943,7 +882,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 			tmpCondition=m_thirdCondition;
 			break;
 		}
-	
+
 	m_textPen.setColor(tmpCondition->colorcond);
  	}
     else
@@ -963,7 +902,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         {
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
-		{	
+		{
 		case 0:
 			tmpCondition=m_firstCondition;
 			break;
@@ -980,8 +919,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         _painter.setFont( m_textFont );
 
   QFontMetrics fm = _painter.fontMetrics();
-  m_iOutTextWidth = fm.width( m_strOutText );
-  m_iOutTextHeight = fm.ascent() + fm.descent();
+  if(!m_bVerticalText)
+        {
+        m_iOutTextWidth = fm.width( m_strOutText );
+        m_iOutTextHeight = fm.ascent() + fm.descent();
+        }
+  else
+        {
+        m_iOutTextWidth = fm.width( " ");
+        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length()-1);
+        }
 
   // Calculate the size of the cell
   RowLayout *rl = m_pTable->rowLayout( m_iRow );
@@ -1156,16 +1103,29 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
   switch( m_eAlignY )
   {
-  case KSpreadCell::Top:
-    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE+ fm.ascent();
-    break;
-  case KSpreadCell::Bottom:
-    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Middle:
-    m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
-    break;
+        case KSpreadCell::Top:
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE+ fm.ascent();
+                break;
+        case KSpreadCell::Bottom:
+                if(!m_bVerticalText)
+                        m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+                else
+                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                break;
+        case KSpreadCell::Middle:
+                if(!m_bVerticalText)
+                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                else
+                        if(( h - m_iOutTextHeight )>0)
+                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                break;
   }
+
   // Vertical alignment
   //m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
   m_fmAscent=fm.ascent();
@@ -1246,7 +1206,7 @@ if(m_bValue && !m_pTable->getShowFormular())
 for(int i=0;i<3;i++)
 {
 switch(i)
-	{	
+	{
 	case 0:
 		tmpCondition=m_firstCondition;
 		break;
@@ -1345,17 +1305,30 @@ ColumnLayout *cl = m_pTable->columnLayout( _col );
 int w = cl->width();
 int h = rl->height();
 switch( m_eAlignY )
-  {
-  case KSpreadCell::Top:
-    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-    break;
-  case KSpreadCell::Bottom:
-    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Middle:
-    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-    break;
-  }
+{
+        case KSpreadCell::Top:
+                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                break;
+        case KSpreadCell::Bottom:
+                if(!m_bVerticalText)
+                        m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+                else
+                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                break;
+        case KSpreadCell::Middle:
+                if(!m_bVerticalText)
+                        m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                else
+                        if(( h - m_iOutTextHeight )>0)
+                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                break;
+}
+
 if ( a == KSpreadCell::Undefined )
   {
     if ( m_bValue )
@@ -1382,19 +1355,14 @@ switch( a )
 
 void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
-int a = m_eAlign;
-RowLayout *rl = m_pTable->rowLayout( _row );
-ColumnLayout *cl = m_pTable->columnLayout( _col );
 
-int w = cl->width();
-int h = rl->height();
 KSpreadConditional *tmpCondition=0;
 
 
 if(m_conditionIsTrue && !m_pTable->getShowFormular())
         {
         switch(m_numberOfCond)
-		{	
+		{
 		case 0:
 			tmpCondition=m_firstCondition;
 			break;
@@ -1409,47 +1377,23 @@ if(m_conditionIsTrue && !m_pTable->getShowFormular())
 	}
 else
 	{
-	_paint.setFont( m_textFont );	
+	_paint.setFont( m_textFont );
 	}
 QFontMetrics fm = _paint.fontMetrics();
-m_iOutTextWidth = fm.width( m_strOutText );
-m_iOutTextHeight = fm.ascent() + fm.descent();
+if(!m_bVerticalText)
+        {
+        m_iOutTextWidth = fm.width( m_strOutText );
+        m_iOutTextHeight = fm.ascent() + fm.descent();
+        }
+  else
+        {
+        m_iOutTextWidth = fm.width( " ");
+        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length()-1);
+        }
 m_fmAscent=fm.ascent();
 
-switch( m_eAlignY )
-  {
-  case KSpreadCell::Top:
-    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
-    break;
-  case KSpreadCell::Bottom:
-    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Middle:
-    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
-    break;
-  }
-if ( a == KSpreadCell::Undefined )
-  {
-    if ( m_bValue )
-      a = KSpreadCell::Right;
-    else
-      a = KSpreadCell::Left;
-  }
-if(m_pTable->getShowFormular())
-      a = KSpreadCell::Left;
+offsetAlign(_col,_row);
 
-switch( a )
-  {
-  case KSpreadCell::Left:
-    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-    break;
-  case KSpreadCell::Right:
-    m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
-    break;
-  case KSpreadCell::Center:
-    m_iTextX = ( w - m_iOutTextWidth ) / 2;
-    break;
-  }
 }
 
 
@@ -1993,7 +1937,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
         {
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
-	{	
+	{
 	case 0:
 		tmpCondition=m_firstCondition;
 		break;
@@ -2014,9 +1958,9 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	}
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
-    if ( !m_bMultiRow )
+    if ( !m_bMultiRow && !m_bVerticalText)
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
-    else
+    else if( m_bMultiRow && !m_bVerticalText)
     {
       QString t;
       int i;
@@ -2044,8 +1988,8 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	    a = KSpreadCell::Left;
 	}
 	if(m_pTable->getShowFormular())
-	    a = KSpreadCell::Left;	
-	
+	    a = KSpreadCell::Left;
+
 	switch( a )
 	{
 	case KSpreadCell::Left:
@@ -2063,6 +2007,48 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	dy += fm.descent() + fm.ascent();
       }
       while ( i != -1 );
+    }
+    else if( m_bVerticalText)
+    {
+      QString t;
+      int i=0;
+      int dy = 0;
+      int dx = 0;
+      int j=0;
+      QFontMetrics fm = _painter.fontMetrics();
+      do
+      {
+        i=m_strOutText.length();
+        t=m_strOutText.at(j);
+	int a = m_eAlign;
+	if ( a == KSpreadCell::Undefined )
+	{
+	  if ( m_bValue )
+	    a = KSpreadCell::Right;
+	  else
+	    a = KSpreadCell::Left;
+	}
+	if(m_pTable->getShowFormular())
+	    a = KSpreadCell::Left;
+
+	switch( a )
+	{
+	case KSpreadCell::Left:
+	  m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+	  break;
+	case KSpreadCell::Right:
+	  m_iTextX = w - BORDER_SPACE - fm.width( t )
+	    - rightBorderWidth( _col, _row );
+	  break;
+	case KSpreadCell::Center:
+	  m_iTextX = ( w - fm.width( t ) ) / 2;
+	}
+
+	_painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+	dy += fm.descent() + fm.ascent();
+        j++;
+      }
+      while ( j != i );
     }
   }
 
@@ -2166,7 +2152,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
       	{
         KSpreadConditional *tmpCondition=0;
         switch(m_numberOfCond)
-		{	
+		{
 		case 0:
 			tmpCondition=m_firstCondition;
 			break;
@@ -3068,7 +3054,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     format.setAttribute( "multirow", "yes" );
   if ( style() )
       format.setAttribute( "style", (int)style() );
-
+  if ( verticalText() )
+      format.setAttribute( "verticaltext", "yes" );
   if ( isForceExtraCells() )
   {
     format.setAttribute( "colspan", extraXCells() );
@@ -3250,6 +3237,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );
 	if ( f.hasAttribute( "multirow" ) )
 	    setMultiRow( true );
+        if ( f.hasAttribute( "verticaltext" ) )
+	    setVerticalText( true );
 	if ( f.hasAttribute( "colspan" ) )
         {
 	    int i = f.attribute("colspan").toInt( &ok );

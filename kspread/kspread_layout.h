@@ -178,6 +178,10 @@ public:
     virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
     virtual void setBackGroundBrush( const QBrush& _p) {m_backGroundBrush= _p;}
 
+
+    virtual void setVerticalText( bool _b ) { m_bVerticalText = _b; }
+    virtual bool verticalText() { return m_bVerticalText; }
+
     KSpreadTable* table() { return m_pTable; }
 
 protected:
@@ -277,6 +281,8 @@ protected:
      * Used to display 0.15 as 15% for example.
      */
     double m_dFaktor;
+
+    bool m_bVerticalText;
 
     KSpreadTable *m_pTable;
 };

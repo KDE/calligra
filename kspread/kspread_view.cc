@@ -271,6 +271,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_removeTable = new KAction( i18n("Preference..."), 0, this, SLOT( preference() ), actionCollection(), "preference" );
     m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),KSBarIcon("first_letter_upper") ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
+    m_verticalText = new KToggleAction( i18n("Vertical text"),KSBarIcon("vertical_text") ,0 ,actionCollection(), "verticaltext" );
+    connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
     //m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
     //connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
     //m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
@@ -728,6 +730,8 @@ void KSpreadView::updateEditWidget()
     else if ( cell->alignY() == KSpreadLayout::Bottom )
 	m_alignBottom->setChecked( TRUE );
 
+    m_verticalText->setChecked( cell->verticalText() );
+
     m_multiRow->setChecked( cell->multiRow() );
     if( cell->faktor()==100.0 && cell->postfix()=="%")
     	m_percent->setChecked( TRUE );
@@ -1149,6 +1153,14 @@ void KSpreadView::firstLetterUpper()
     if( !m_pTable  )
 	return;
     m_pTable->setSelectionfirstLetterUpper( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    updateEditWidget();
+}
+
+void KSpreadView::verticalText(bool b)
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionVerticalText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
     updateEditWidget();
 }
 
