@@ -144,6 +144,11 @@ class KexiMainWindowImpl::Private
 		int privateDocIDCounter; //!< counter: ID for private "document" like Relations window
 
 		bool block_KMdiMainFrm_eventFilter : 1;
+
+		//! Set to true only in destructor, used by closeDialog() to know if 
+		//! user can cancel dialog closing. If true user even doesn't see any messages
+		//! before closing a dialog. This is for extremely sanity... and shouldn't be even needed.
+		bool forceDialogClosing : 1;
 	Private()
 		: dialogs(401)
 //		, actionProxies(401)
@@ -161,6 +166,7 @@ class KexiMainWindowImpl::Private
 		privateDocIDCounter=0;
 		action_view_nav=0;
 		action_view_propeditor=0;
+		forceDialogClosing=false;
 	}
 };
 
@@ -234,7 +240,9 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 KexiMainWindowImpl::~KexiMainWindowImpl()
 {
-	closeProject();
+	bool cancelled;
+	d->forceDialogClosing=true;
+	closeProject(cancelled);
 	delete d;
 }
 
@@ -630,16 +638,19 @@ KexiMainWindowImpl::selectProject(KexiDB::ConnectionData *cdata)
 	return projectData;
 }
 
-bool KexiMainWindowImpl::closeProject()
+bool KexiMainWindowImpl::closeProject(bool &cancelled)
 {
+	cancelled=false;
 	if (!d->prj)
 		return true;
 		
 	//close each window, optionally asking if user wants to close (if data changed)
 	while (d->curDialog) {
-		if (!closeDialog( d->curDialog )) {
+		if (!closeDialog( d->curDialog, cancelled )) {
 			return false;
 		}
+		if (cancelled)
+			return true;
 	}
 
 	delete d->prj;
@@ -868,7 +879,12 @@ KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 {
 	storeSettings();
 
-	if (!closeProject()) {
+	bool cancelled = false;
+	if (!closeProject(cancelled)) {
+		//todo: error message
+		return;
+	}
+	if (cancelled) {
 		ev->ignore();
 		return;
 	}
@@ -1475,11 +1491,13 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
-	closeDialog(static_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
+	bool cancelled;
+	closeDialog(static_cast<KexiDialogBase *>(pWnd), cancelled, layoutTaskBar);
 }
 
-bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg ) //, bool dontAsk = true )
+bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, bool dontAsk = true )
 {
+	cancelled=false;
 	if (dlg->neverSaved()) {
 		if (!d->nameDialog) {
 			d->nameDialog = new KexiNameDialog(QString::null,
@@ -1489,20 +1507,36 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg ) //, bool dontAsk = tr
 		d->nameDialog->widget()->setNameText(dlg->partItem()->name());
 		d->nameDialog->setCaption(i18n("Save Object As"));
 		d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) ); 
-		if (d->nameDialog->exec()!=QDialog::Accepted)
-			return false;
+		bool found;
+		do {
+			if (d->nameDialog->exec()!=QDialog::Accepted) {
+				cancelled=true;
+				return true;
+			}
+			//check if that name already exists
+			KexiDB::SchemaData tmp_sdata;
+			found = project()->dbConnection()->findObjectSchemaData( 
+					dlg->part()->info()->projectPartID(), 
+					d->nameDialog->widget()->nameText(), tmp_sdata );
+			if (found) {
+				KMessageBox::information(this, i18n("%1 \"%2\" already exists.\nPlease choose other name.")
+					.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
+			}
+		}
+		while (found);
 
 		return dlg->storeNewData();
 	}
 	return dlg->storeData();
 }
 
-bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
+bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar)
 {
+	cancelled = false;
 	if (!dlg)
 		return true;
 	bool remove_on_closing = dlg->partItem()->neverSaved();
-	if (dlg->dirty()) {
+	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int res = KMessageBox::warningYesNoCancel( this,
 			i18n( "<p>The object has been modified: %1 \"%2\".</p><p>Do you want to save it?</p>" )
@@ -1510,15 +1544,19 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 			QString::null,
 			KStdGuiItem::save(),
 			KStdGuiItem::discard());
-		if (res==KMessageBox::Cancel)
-			return false;
+		if (res==KMessageBox::Cancel) {
+			cancelled=true;
+			return true;
+		}
 		if (res==KMessageBox::Yes) {
 			//save it
 //			if (!dlg->storeData())
-			if (!saveObject( dlg )) {
+			if (!saveObject( dlg, cancelled )) {
 //js:TODO show error info; (retry/ignore/cancel)
 				return false;
 			}
+			if (cancelled)
+				return true;
 			remove_on_closing = false;
 		}
 	}

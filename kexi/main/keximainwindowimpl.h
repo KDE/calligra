@@ -99,11 +99,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 			Just calls closeDialog(). Use closeDialog() if you need, not this one. */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
 
-		/*! Closes dialog \a dlg. It dialog's data (see KexiDialoBase::dirty()) is unsaved,
+		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
-		 \return true on successull closing or false on closing error 
-		 (or if user pressed Cancel button on question). */
-		bool closeDialog(KexiDialogBase *dlg, bool layoutTaskBar = true);
+		 \return true on successull closing or false on closing error.
+		 If closing was cancelled by user, true is returned and cancelled is true. */
+		bool closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar = true);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
@@ -114,7 +114,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
-		bool saveObject( KexiDialogBase *dlg );
+		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
+		 User is asked for name and caption, before saving.
+		 \return true on successull closing or false on saving error.
+		 If saving was cancelled by user, true is returned and cancelled is true. */
+		bool saveObject( KexiDialogBase *dlg, bool &cancelled );
 
 	protected:
 		/**
@@ -171,8 +175,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		KexiProjectData* selectProject(KexiDB::ConnectionData *cdata);
 		
 		/*! Closes current project, \return true on success.
-		 Application state (e.g. actions) is updated. */
-		bool closeProject();
+		 Application state (e.g. actions) is updated. 
+		 \return true on success. 
+		 If closing was cancelled by user, true is returned and cancelled is true. */
+		bool closeProject(bool &cancelled);
 		
 		/*! Shows dialog for creating new blank database,
 		 ans creates one. Dialog is not shown if option for automatic creation 

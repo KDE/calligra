@@ -156,6 +156,16 @@ void KexiNameWidget::setMessageText(const QString& msg)
 		lbl_message->show();
 }
 
+QString KexiNameWidget::captionText() const
+{
+	return le_caption->text();
+}
+
+QString KexiNameWidget::nameText() const
+{
+	return le_name->text().lower();
+}
+
 bool KexiNameWidget::checkValidity()
 {
 	if (acceptsEmptyValue())

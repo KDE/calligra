@@ -74,8 +74,8 @@ void KexiNameDialog::init()
 void KexiNameDialog::slotTextChanged()
 {
 	if (!m_widget->acceptsEmptyValue()) {
-		enableButtonOK( !m_widget->captionLineEdit()->text().isEmpty() 
-			&& !m_widget->nameLineEdit()->text().isEmpty() );
+		enableButtonOK( !m_widget->captionText().isEmpty() 
+			&& !m_widget->nameText().isEmpty() );
 	}
 }
 

@@ -24,9 +24,6 @@
 #include <qlayout.h>
 #include <klineedit.h>
 
-class QLablel;
-class QGridLayout;
-class KLineEdit;
 class KexiValidator;
 
 class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
@@ -50,8 +47,17 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		KLineEdit* nameLineEdit() const { return le_name; }
 
 		QString messageText() const { return lbl_message->text(); }
+		
 		void setMessageText(const QString& msg);
+
+		//! \return entered caption text
+		QString captionText() const;
+
 		void setCaptionText(const QString& capt);
+		//! \return entered name text, always in lower case
+
+		QString nameText() const;
+
 		void setNameText(const QString& name);
 
 		/*! By default empty values are not accepted. */
