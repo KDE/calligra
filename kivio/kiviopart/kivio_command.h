@@ -272,11 +272,12 @@ protected:
     QFont newFont;
 };
 
-class KivioChangeStencilTextColorCommand : public KNamedCommand
+class KivioChangeStencilColorCommand : public KNamedCommand
 {
 public:
-    KivioChangeStencilTextColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor);
-    ~KivioChangeStencilTextColorCommand();
+    enum ColorType { CT_TEXTCOLOR, CT_FGCOLOR, CT_BGCOLOR };
+    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
+    ~KivioChangeStencilColorCommand();
 
     virtual void execute();
     virtual void unexecute();
@@ -286,6 +287,7 @@ protected:
     KivioStencil *m_stencil;
     QColor oldColor;
     QColor newColor;
+    ColorType type;
 };
 
 class KivioChangeLineWidthCommand : public KNamedCommand

@@ -397,29 +397,52 @@ void KivioChangeStencilFontCommand::unexecute()
     m_page->doc()->slotSelectionChanged();
 }
 
-KivioChangeStencilTextColorCommand::KivioChangeStencilTextColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor)
+KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
     :KNamedCommand( _name),
      m_page(_page),
      m_stencil( _stencil ),
      oldColor( _oldColor),
-     newColor( _newColor)
+     newColor( _newColor),
+     type( _type )
 {
 }
 
-KivioChangeStencilTextColorCommand::~KivioChangeStencilTextColorCommand()
+KivioChangeStencilColorCommand::~KivioChangeStencilColorCommand()
 {
 }
 
-void KivioChangeStencilTextColorCommand::execute()
+void KivioChangeStencilColorCommand::execute()
 {
-    m_stencil->setTextColor( newColor );
+    switch( type )
+    {
+    case CT_TEXTCOLOR:
+        m_stencil->setTextColor( newColor );
+        break;
+    case CT_BGCOLOR:
+        m_stencil->setBGColor( newColor );
+        break;
+    case CT_FGCOLOR:
+        m_stencil->setFGColor( newColor );
+        break;
+    }
     m_page->doc()->updateView(m_page);
     m_page->doc()->slotSelectionChanged();
 }
 
-void KivioChangeStencilTextColorCommand::unexecute()
+void KivioChangeStencilColorCommand::unexecute()
 {
-    m_stencil->setTextColor( oldColor );
+    switch( type )
+    {
+    case CT_TEXTCOLOR:
+        m_stencil->setTextColor( oldColor );
+        break;
+    case CT_BGCOLOR:
+        m_stencil->setBGColor( oldColor );
+        break;
+    case CT_FGCOLOR:
+        m_stencil->setFGColor( oldColor );
+        break;
+    }
     m_page->doc()->updateView(m_page);
     m_page->doc()->slotSelectionChanged();
 }

@@ -871,12 +871,25 @@ void KivioView::setFGColor()
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
+    bool createMacro = false;
     while( pStencil )
     {
-        pStencil->setFGColor( m_setFGColor->color() );
+        QColor col( m_setFGColor->color());
+        if ( col != pStencil->fgColor() )
+        {
+            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change FG Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+
+            pStencil->setFGColor( col );
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -885,12 +898,27 @@ void KivioView::setBGColor()
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
+    KMacroCommand * macro = new KMacroCommand( i18n("Change BackGround Color"));
+    bool createMacro = false;
 
     while( pStencil )
     {
-        pStencil->setBGColor( m_setBGColor->color() );
+        QColor col( m_setBGColor->color());
+        if ( col != pStencil->bgColor() )
+        {
+            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
+
+            pStencil->setBGColor( col );
+            macro->addCommand( cmd );
+            createMacro = true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if ( createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
+
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -906,13 +934,12 @@ void KivioView::setTextColor()
         QColor col(m_setTextColor->color());
         if ( col != pStencil->textColor() )
         {
-            KivioChangeStencilTextColorCommand * cmd = new KivioChangeStencilTextColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col);
-
-            pStencil->setTextColor( m_setTextColor->color() );
-            pStencil = m_pActivePage->selectedStencils()->next();
+            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
+            pStencil->setTextColor( col );
             macro->addCommand( cmd );
             createMacro = true;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
     }
     if ( createMacro )
         m_pDoc->addCommand( macro );
@@ -1008,10 +1035,11 @@ void KivioView::setFontFamily( const QString &str )
             KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
             pStencil->setTextFont( f );
 
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
+
     }
     if ( createMacro )
         m_pDoc->addCommand( macro  );
@@ -1040,11 +1068,10 @@ void KivioView::setFontSize(const QString &str )
             KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
 
             pStencil->setTextFont( f );
-
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
 
     }
     if ( createMacro )
@@ -1072,11 +1099,11 @@ void KivioView::toggleFontBold(bool b)
             KivioChangeStencilFontCommand *cmd = new KivioChangeStencilFontCommand( i18n("Change Stencil Font"), m_pActivePage, pStencil,pStencil->textFont(),  f);
 
             pStencil->setTextFont( f );
-
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
+
     }
     if ( createMacro )
         m_pDoc->addCommand( macro );
@@ -1104,10 +1131,10 @@ void KivioView::toggleFontItalics(bool b)
 
             pStencil->setTextFont( f );
 
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true ;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
     }
     if ( createMacro )
         m_pDoc->addCommand( macro );
@@ -1134,10 +1161,10 @@ void KivioView::toggleFontUnderline( bool b)
 
             pStencil->setTextFont( f );
 
-            pStencil = m_pActivePage->selectedStencils()->next();
             macro->addCommand( cmd );
             createMacro = true;
         }
+        pStencil = m_pActivePage->selectedStencils()->next();
     }
     if ( createMacro )
         m_pDoc->addCommand( macro );
