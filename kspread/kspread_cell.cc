@@ -733,7 +733,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       decimal_point = KGlobal::locale()->decimalSymbol()[0].latin1();
       // Hmm we should use QChar here and QString a lot more around
       // here... (David)
-      debug( "decimal_point is '%c'", decimal_point );
+      qDebug( "decimal_point is '%c'", decimal_point );
       // HACK
       if ( decimal_point == 0 )
 	  decimal_point = '.';

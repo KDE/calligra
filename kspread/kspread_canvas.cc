@@ -110,7 +110,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
     length_namecell = 0;
     m_chooseStartTable = 0;
     m_pEditor = 0;
-
+    m_bChoose = FALSE;
+    
     m_iMarkerColumn = 1;
     m_iMarkerRow = 1;
     m_iMarkerVisible = 1;
@@ -290,7 +291,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 	m_iMarkerRow = y;
 	activeTable()->setSelection( selection );
     }
-    
+
     // Perhaps the user is entering a value in the cell.
     // In this case we may not touch the EditWidget
     if ( !m_pEditor )
