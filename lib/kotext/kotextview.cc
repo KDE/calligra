@@ -30,6 +30,8 @@
 #include <krun.h>
 #include <kmessagebox.h>
 #include <koVariable.h>
+#include "KoTextViewIface.h"
+
 class KoTextView::KoTextViewPrivate
 {
 public:
@@ -50,7 +52,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     d = new KoTextViewPrivate;
     m_bReadWrite = true;
     m_textobj = textobj;
-
+    dcop=0;
     connect( m_textobj, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( m_textobj, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( m_textobj, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
@@ -88,6 +90,15 @@ KoTextView::~KoTextView()
 {
     delete m_cursor;
     delete d;
+    delete dcop;
+}
+
+KoTextViewIface* KoTextView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KoTextViewIface( this );
+
+    return dcop;
 }
 
 void KoTextView::terminate(bool removeselection)

@@ -37,6 +37,7 @@ class KAction;
 class KInstance;
 class KDataToolInfo;
 class KoLinkVariable;
+class KoTextViewIface;
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KoBorder;
@@ -57,6 +58,8 @@ public:
      */
     KoTextView( KoTextObject *textobj );
     virtual ~KoTextView();
+
+    virtual KoTextViewIface* dcopObject();
 
     /** Call this before deleting */
     /** don't remove selection when we made dnd between different frame*/
@@ -186,6 +189,8 @@ private slots:
     void setCursor( QTextCursor * _cursor ) { *m_cursor = *_cursor; }
     void tripleClickTimeout();
     void afterTripleClickTimeout();
+protected:
+    KoTextViewIface *dcop;
 private:
     enum CursorAction { // keep in sync with QTextEdit
         MoveBackward,

@@ -737,29 +737,28 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s, bool link, int *customI
 	int cpos = x + chr->x;
 	cw = chr->width; //s->string()->width( i );
 	if ( chr->isCustom() ) {
-	    if ( pos.x() >= cpos && pos.x() <= cpos + cw &&
-		 pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
+             if ( pos.x() >= cpos && pos.x() <= cpos + cw &&
+                  pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
                 if ( customItemIndex )
                     *customItemIndex = i;
-                curpos = i;
-
                 if ( chr->customItem()->isNested() )
                 {
-		    inCustom = TRUE;
-		    break;
+                    curpos = i;
+                    inCustom = TRUE;
+                    break;
                 }
 	    }
-	} else {
-	    if( chr->rightToLeft )
-		cpos += cw;
-	    int d = cpos - pos.x();
-	    bool dm = d < 0 ? !chr->rightToLeft : chr->rightToLeft;
-	    if ( QABS( d ) < dist || (dist == d && dm == TRUE ) ) {
-		dist = QABS( d );
-		if ( !link || pos.x() >= x + chr->x )
-		    curpos = i;
-	    }
 	}
+        if( chr->rightToLeft )
+            cpos += cw;
+        int d = cpos - pos.x();
+        bool dm = d < 0 ? !chr->rightToLeft : chr->rightToLeft;
+        if ( QABS( d ) < dist || (dist == d && dm == TRUE ) ) {
+            dist = QABS( d );
+            if ( !link || pos.x() >= x + chr->x ) {
+                curpos = i;
+            }
+        }
 	i++;
     }
     setIndex( curpos, FALSE );
