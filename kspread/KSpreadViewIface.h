@@ -102,6 +102,9 @@ k_dcop:
   virtual void increaseIndent();
   virtual void decreaseIndent();
 
+    void subtotals();
+
+
 private:
     KSpreadView* m_view;
     KSpreadCellProxy* m_proxy;

@@ -387,3 +387,8 @@ void KSpreadViewIface::decreaseIndent()
 {
   m_view->increaseIndent();
 }
+
+void KSpreadViewIface::subtotals()
+{
+    m_view->subtotals();
+}
