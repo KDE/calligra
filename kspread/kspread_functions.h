@@ -101,6 +101,7 @@ public:
     
     QStringList functionNames();
     QStringList functionNames( const QString& group );
+    QStringList regFunctionNames();
     
     const QStringList& groups() const { return m_groups; }
 

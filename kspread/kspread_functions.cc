@@ -367,6 +367,22 @@ QStringList KSpreadFunctionRepository::functionNames()
 {
     QStringList lst;
 
+    QDictIterator<KSpreadFunctionDescription> it( m_funcs );
+    for( ; it.current(); ++it )
+    {
+	lst.append( it.current()->name() );
+    }
+
+    lst.sort();
+
+    return lst;
+}
+
+// returns names of all registered functions (might be more)
+QStringList KSpreadFunctionRepository::regFunctionNames()
+{
+    QStringList lst;
+
     QDictIterator<KSpreadFunction> it( m_functions );
     for( ; it.current(); ++it )
     {

@@ -238,7 +238,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 
   // add all built-in functions
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
-  QStringList functionList = repo->functionNames();
+  QStringList functionList = repo->regFunctionNames();
   for( unsigned i = 0; i < functionList.count(); i++ )
   {
     QString name = functionList[i];
