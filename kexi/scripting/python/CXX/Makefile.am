@@ -17,8 +17,6 @@ SUBDIRS = .
 
 INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
 
-KDE_CXXFLAGS += $(USE_EXCEPTIONS)
-
 clean:
 	@rm -f *.o 2> /dev/null
 	@rm -f $(BIN) 2> /dev/null
