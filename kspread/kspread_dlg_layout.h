@@ -47,6 +47,26 @@ class KLineEdit;
 class QFrame;
 class QListBox;
 
+enum BorderType
+{
+  BorderType_Top = 0,
+  BorderType_Bottom,
+  BorderType_Left,
+  BorderType_Right,
+  BorderType_Vertical,
+  BorderType_Horizontal,
+  BorderType_FallingDiagonal,
+  BorderType_RisingDiagonal,
+  BorderType_END
+};
+
+enum BorderShortcutType
+{
+  BorderShortcutType_Remove = 0,
+  BorderShortcutType_All,
+  BorderShortcutType_Outline,
+  BorderShortcutType_END
+};
 class KSpreadPatternSelect : public QFrame
 {
     Q_OBJECT
@@ -342,35 +362,38 @@ public slots:
     void cutomize_chosen_slot();
 
 protected:
-    KSpreadBorderButton *top;
-    KSpreadBorderButton *bottom;
-    KSpreadBorderButton *left;
-    KSpreadBorderButton *right;
-    KSpreadBorderButton *vertical;
-    KSpreadBorderButton *horizontal;
-    KSpreadBorderButton *fallDiagonal;
-    KSpreadBorderButton *goUpDiagonal;
-    KSpreadBorderButton *remove;
-    KSpreadBorderButton *all;
-    KSpreadBorderButton *outline;
-    KSpreadPatternSelect* pattern1;
-    KSpreadPatternSelect* pattern2;
-    KSpreadPatternSelect* pattern3;
-    KSpreadPatternSelect* pattern4;
-    KSpreadPatternSelect* pattern5;
-    KSpreadPatternSelect* pattern6;
-    KSpreadPatternSelect* pattern7;
-    KSpreadPatternSelect* pattern8;
-    KSpreadPatternSelect* pattern9;
-    KSpreadPatternSelect* pattern10;
-    KSpreadPatternSelect* preview;
-    QComboBox* size;
-    QComboBox* style;
-    KColorButton* color;
-    QCheckBox* customize;
-    QColor currentColor;
-    KSpreadBorder *area;
-    CellLayoutDlg *dlg;
+
+
+  KSpreadBorderButton* borderButtons[BorderType_END];
+  KSpreadBorderButton* shortcutButtons[BorderShortcutType_END];
+#define NUM_BORDER_PATTERNS 10
+
+  /* the patterns to choose from */
+  KSpreadPatternSelect* pattern[NUM_BORDER_PATTERNS];
+
+  /* the pattern box that is the 'preview' of what is selected above. */
+  KSpreadPatternSelect* preview;
+  QComboBox* size;
+  QComboBox* style;
+  KColorButton* color;
+  QCheckBox* customize;
+  QColor currentColor;
+  KSpreadBorder *area;
+  CellLayoutDlg *dlg;
+private:
+
+  /*some helper functions to space some tasks apart */
+  void InitializeGrids();
+  void InitializeBorderButtons();
+  void InitializePatterns();
+  void SetConnections();
+  void applyTopOutline( int _left, int _top, int _right, int _bottom );
+  void applyBottomOutline( int _left, int _top, int _right, int _bottom );
+  void applyLeftOutline( int _left, int _top, int _right, int _bottom );
+  void applyRightOutline( int _left, int _top, int _right, int _bottom );
+  void applyVerticalOutline( int _left, int _top, int _right, int _bottom );
+  void applyHorizontalOutline( int _left, int _top, int _right, int _bottom );
+  void applyDiagonalOutline( int _left, int _top, int _right, int _bottom );
 };
 
 class KSpreadBrushSelect : public QFrame
@@ -448,6 +471,7 @@ protected:
     CellLayoutDlg *dlg;
 };
 
+
 /**
  */
 class CellLayoutDlg : public QObject
@@ -480,54 +504,20 @@ public:
 
     KLocale* locale(){return m_pView->doc()->locale();}
 
+    struct CellBorderLayout
+    {
+      int width;
+      bool bStyle;
+      QColor color;
+      bool bColor;
+      PenStyle style;
+    };
+
     // The layout of the selected area
-    PenStyle leftBorderStyle;
-    int leftBorderWidth;
-    bool bLeftBorderStyle;
-    QColor leftBorderColor;
-    bool bLeftBorderColor;
-    PenStyle rightBorderStyle;
-    int rightBorderWidth;
-    bool bRightBorderStyle;
-    QColor rightBorderColor;
-    bool bRightBorderColor;
-    PenStyle topBorderStyle;
-    int topBorderWidth;
-    bool bTopBorderStyle;
-    QColor topBorderColor;
-    bool bTopBorderColor;
-    PenStyle bottomBorderStyle;
-    int bottomBorderWidth;
-    bool bBottomBorderStyle;
-    QColor bottomBorderColor;
-    bool bBottomBorderColor;
+    CellBorderLayout borders[BorderType_END];
 
-    PenStyle verticalBorderStyle;
-    int verticalBorderWidth;
-    bool bVerticalBorderStyle;
-    QColor verticalBorderColor;
-    bool bVerticalBorderColor;
-
-    PenStyle horizontalBorderStyle;
-    int horizontalBorderWidth;
-    bool bHorizontalBorderStyle;
-    QColor horizontalBorderColor;
-    bool bHorizontalBorderColor;
-
-    PenStyle fallDiagonalStyle;
-    int fallDiagonalWidth;
-    bool bFallDiagonalStyle;
-    QColor fallDiagonalColor;
-    bool bfallDiagonalColor;
-
-    PenStyle goUpDiagonalStyle;
-    int goUpDiagonalWidth;
-    bool bGoUpDiagonalStyle;
-    QColor goUpDiagonalColor;
-    bool bGoUpDiagonalColor;
     BrushStyle brushStyle;
     QColor brushColor;
-
 
     bool oneCol;
     bool oneRow;

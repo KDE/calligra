@@ -104,8 +104,9 @@ void KSpreadPatternSelect::slotSelect()
     repaint();
 }
 
-CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top,
-                              int _right, int _bottom ) : QObject()
+CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
+                              int _left, int _top, int _right, int _bottom )
+  : QObject()
 {
     formatOnlyNegSignedPixmap = 0L;
     formatRedOnlyNegSignedPixmap = 0L;
@@ -118,7 +119,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     isRowSelected = table->isRowSelected();
     isColumnSelected = table->isColumnSelected();
 
-    //following values are the same as from table->selectionRect() 
+    //following values are the same as from table->selectionRect()
     //Do we really need them as arguments?
     left = _left;
     top = _top;
@@ -132,22 +133,11 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     m_bTime=false;
 
     // We assume, that all other objects have the same values
-    bLeftBorderStyle = TRUE;
-    bLeftBorderColor = TRUE;
-    bRightBorderStyle = TRUE;
-    bRightBorderColor = TRUE;
-    bTopBorderStyle = TRUE;
-    bTopBorderColor = TRUE;
-    bBottomBorderColor = TRUE;
-    bBottomBorderStyle = TRUE;
-    bVerticalBorderColor = TRUE;
-    bVerticalBorderStyle = TRUE;
-    bHorizontalBorderColor = TRUE;
-    bHorizontalBorderStyle = TRUE;
-    bFallDiagonalStyle = TRUE;
-    bfallDiagonalColor = TRUE;
-    bGoUpDiagonalStyle = TRUE;
-    bGoUpDiagonalColor = TRUE;
+    for (int i=0; i < BorderType_END; i++)
+    {
+      borders[i].bStyle = TRUE;
+      borders[i].bColor = TRUE;
+    }
     bFloatFormat = TRUE;
     bFloatColor = TRUE;
     bTextColor = TRUE;
@@ -176,76 +166,76 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     KSpreadCell *obj = table->cellAt( _left, _top );
     oneCell=false;
     if( left==right && top==bottom)
-        {
-        if(obj->extraXCells()!=0 ||obj->extraYCells()!=0)
-                isMerged=true;
-        else
-                {
-                oneCell=true;
-                isMerged=false;
-                }
-        }
+    {
+      if(obj->extraXCells()!=0 ||obj->extraYCells()!=0)
+        isMerged=true;
+      else
+      {
+        oneCell=true;
+        isMerged=false;
+      }
+    }
     else
         isMerged=false;
     // Initialize with the upper left object.
-    leftBorderStyle = obj->leftBorderStyle( _left, _top );
-    leftBorderWidth = obj->leftBorderWidth( _left, _top );
-    leftBorderColor = obj->leftBorderColor( _left, _top );
-    topBorderStyle = obj->topBorderStyle( _left, _top );
-    topBorderWidth = obj->topBorderWidth( _left, _top );
-    topBorderColor = obj->topBorderColor( _left, _top );
-    fallDiagonalStyle = obj->fallDiagonalStyle( _left, _top );
-    fallDiagonalWidth = obj->fallDiagonalWidth( _left, _top );
-    fallDiagonalColor = obj->fallDiagonalColor( _left, _top );
-    goUpDiagonalStyle = obj->goUpDiagonalStyle( _left, _top );
-    goUpDiagonalWidth = obj->goUpDiagonalWidth( _left, _top );
-    goUpDiagonalColor = obj->goUpDiagonalColor( _left, _top );
+    borders[BorderType_Left].style = obj->leftBorderStyle( _left, _top );
+    borders[BorderType_Left].width = obj->leftBorderWidth( _left, _top );
+    borders[BorderType_Left].color = obj->leftBorderColor( _left, _top );
+    borders[BorderType_Top].style = obj->topBorderStyle( _left, _top );
+    borders[BorderType_Top].width = obj->topBorderWidth( _left, _top );
+    borders[BorderType_Top].color = obj->topBorderColor( _left, _top );
+    borders[BorderType_FallingDiagonal].style =
+      obj->fallDiagonalStyle( _left, _top );
+    borders[BorderType_FallingDiagonal].width =
+      obj->fallDiagonalWidth( _left, _top );
+    borders[BorderType_FallingDiagonal].color =
+      obj->fallDiagonalColor( _left, _top );
+    borders[BorderType_RisingDiagonal].style =
+      obj->goUpDiagonalStyle( _left, _top );
+    borders[BorderType_RisingDiagonal].width =
+      obj->goUpDiagonalWidth( _left, _top );
+    borders[BorderType_RisingDiagonal].color =
+      obj->goUpDiagonalColor( _left, _top );
 
     // Look at the upper right one for the right border.
     obj = table->cellAt( _right, _top );
-    rightBorderStyle = obj->rightBorderStyle( _right, _top );
-    rightBorderWidth = obj->rightBorderWidth( _right, _top );
-    rightBorderColor = obj->rightBorderColor( _right, _top );
+    borders[BorderType_Right].style = obj->rightBorderStyle( _right, _top );
+    borders[BorderType_Right].width = obj->rightBorderWidth( _right, _top );
+    borders[BorderType_Right].color = obj->rightBorderColor( _right, _top );
 
     // Look at the bottom left cell for the bottom border.
     obj = table->cellAt( _left, _bottom );
-    bottomBorderStyle = obj->bottomBorderStyle( _left, _bottom );
-    bottomBorderWidth = obj->bottomBorderWidth( _left, _bottom );
-    bottomBorderColor = obj->bottomBorderColor( _left, _bottom );
+    borders[BorderType_Bottom].style = obj->bottomBorderStyle( _left, _bottom );
+    borders[BorderType_Bottom].width = obj->bottomBorderWidth( _left, _bottom );
+    borders[BorderType_Bottom].color = obj->bottomBorderColor( _left, _bottom );
 
     // Just an assumption
     obj = table->cellAt( _right, _top );
     if(obj->isObscuringForced())
-        {
-        int moveX=obj->obscuringCellsColumn();
-        int moveY=_top;
-        obj = table->cellAt( moveX,  moveY );
-        verticalBorderStyle = obj->leftBorderStyle( moveX,moveY );
-        verticalBorderWidth = obj->leftBorderWidth( moveX, moveY);
-        verticalBorderColor = obj->leftBorderColor( moveX, moveY );
-        }
-    else
-        {
-        verticalBorderStyle = obj->leftBorderStyle( _right, _top );
-        verticalBorderWidth = obj->leftBorderWidth( _right, _top );
-        verticalBorderColor = obj->leftBorderColor( _right, _top );
-        }
+    {
+      int moveX=obj->obscuringCellsColumn();
+      int moveY=_top;
+      int moveX2 = _right;
+      int moveY2 = obj->obscuringCellsRow();
+      obj = table->cellAt( moveX,  moveY );
+      borders[BorderType_Vertical].style = obj->leftBorderStyle( moveX, moveY );
+      borders[BorderType_Vertical].width = obj->leftBorderWidth( moveX, moveY );
+      borders[BorderType_Vertical].color = obj->leftBorderColor( moveX, moveY );
 
-    if(obj->isObscuringForced())
-        {
-        int moveX=_right;
-        int moveY=obj->obscuringCellsRow();
-        obj = table->cellAt( moveX,  moveY );
-        horizontalBorderStyle = obj->topBorderStyle( moveX, moveY );
-        horizontalBorderWidth = obj->topBorderWidth( moveX, moveY );
-        horizontalBorderColor = obj->topBorderColor( moveX, moveY );
-        }
+      obj = table->cellAt( moveX2,  moveY2 );
+      borders[BorderType_Horizontal].style = obj->topBorderStyle( moveX2, moveY2 );
+      borders[BorderType_Horizontal].width = obj->topBorderWidth( moveX2, moveY2 );
+      borders[BorderType_Horizontal].color = obj->topBorderColor( moveX2, moveY2 );
+    }
     else
-        {
-        horizontalBorderStyle = obj->topBorderStyle( _right, _bottom );
-        horizontalBorderWidth = obj->topBorderWidth( _right, _bottom );
-        horizontalBorderColor = obj->topBorderColor( _right, _bottom );
-        }
+    {
+      borders[BorderType_Vertical].style = obj->leftBorderStyle( _right, _top );
+      borders[BorderType_Vertical].width = obj->leftBorderWidth( _right, _top );
+      borders[BorderType_Vertical].color = obj->leftBorderColor( _right, _top );
+      borders[BorderType_Horizontal].style = obj->topBorderStyle(_right, _bottom);
+      borders[BorderType_Horizontal].width = obj->topBorderWidth(_right, _bottom);
+      borders[BorderType_Horizontal].color = obj->topBorderColor(_right, _bottom);
+    }
 
     obj = table->cellAt( _left, _top );
     prefix = obj->prefix( _left, _top );
@@ -282,20 +272,20 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     cellText=obj->text();
 
     if( obj->isNumeric() || obj->isBool())
-        {
-        m_bValue=true;
-        m_value=obj->valueDouble();
-        }
+    {
+      m_bValue=true;
+      m_value=obj->valueDouble();
+    }
     else if(obj->isDate())
-        {
-        m_bDate=true;
-        m_date=obj->valueDate();
-        }
+    {
+      m_bDate=true;
+      m_date=obj->valueDate();
+    }
     else if(obj->isTime())
-        {
-        m_bTime=true;
-        m_time=obj->valueTime();
-        }
+    {
+      m_bTime=true;
+      m_time=obj->valueTime();
+    }
 
     RowLayout *rl;
     ColumnLayout *cl;
@@ -303,143 +293,143 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     heigthSize = 0;
 
     if( !isRowSelected )
-        {
-        for ( int x = _left; x <= _right; x++ )
-                {
-                cl = m_pView->activeTable()->columnLayout( x );
-                widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
-                }
-        }
+    {
+      for ( int x = _left; x <= _right; x++ )
+      {
+        cl = m_pView->activeTable()->columnLayout( x );
+        widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
+      }
+    }
 
     if( !isColumnSelected )
-        {
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                rl = m_pView->activeTable()->rowLayout(y);
-                heigthSize = QMAX( rl->height( /* m_pView->canvasWidget() */ ),heigthSize );
-                }
-        }
+    {
+      for ( int y = _top; y <= _bottom; y++ )
+      {
+        rl = m_pView->activeTable()->rowLayout(y);
+        heigthSize = QMAX( rl->height(), heigthSize );
+      }
+    }
 
     //select column(s)
     if( isColumnSelected )
     {
       int y=1;
       for(int x=_left;x<=_right;x++)
-        {
-                ColumnLayout *obj=table->nonDefaultColumnLayout(x);
-                initParameters( obj,x,y);
-        }
+      {
+        ColumnLayout *obj=table->nonDefaultColumnLayout(x);
+        initParameters( obj,x,y);
+      }
       KSpreadCell* c = table->firstCell();
       for( ;c; c = c->nextCell() )
-        {
+      {
         int col = c->column();
         if ( _left <= col && _right >= col
-        &&!c->isObscuringForced())
-                {
-                initParameters( c ,col,c->row());
-                if ( eStyle != c->style() )
-                        eStyle = KSpreadCell::ST_Undef;
-                }
+             &&!c->isObscuringForced())
+        {
+          initParameters( c ,col,c->row());
+          if ( eStyle != c->style() )
+            eStyle = KSpreadCell::ST_Undef;
         }
+      }
 
     }
     else if( isRowSelected )
     {
       int x=1;
       for(int y=_top;y<=_bottom;y++)
-        {
-                RowLayout *obj=table->nonDefaultRowLayout(y);
-                initParameters( obj,x,y);
+      {
+        RowLayout *obj=table->nonDefaultRowLayout(y);
+        initParameters( obj,x,y);
 
-        }
+      }
 
       KSpreadCell* c = table->firstCell();
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
         if ( _top <= row && _bottom >= row
-        &&!c->isObscuringForced())
-                {
-                initParameters( c ,c->column(),row);
+             &&!c->isObscuringForced())
+        {
+          initParameters( c ,c->column(),row);
                 if ( eStyle != c->style() )
-                        eStyle = KSpreadCell::ST_Undef;
-                }
+                  eStyle = KSpreadCell::ST_Undef;
         }
+      }
     }
     else
     {
-    // Do the other objects have the same values ?
-    for ( int x = _left; x <= _right; x++ )
-    {
+      // Do the other objects have the same values ?
+      for ( int x = _left; x <= _right; x++ )
+      {
         for ( int y = _top; y <= _bottom; y++ )
         {
-            KSpreadCell *obj = table->cellAt( x, y );
-            if(!obj->isObscuringForced())
-                {
-                initParameters( obj,x,y);
-                if ( eStyle != obj->style() )
-                        eStyle = KSpreadCell::ST_Undef;
-                }
+          KSpreadCell *obj = table->cellAt( x, y );
+          if(!obj->isObscuringForced())
+          {
+            initParameters( obj,x,y);
+            if ( eStyle != obj->style() )
+              eStyle = KSpreadCell::ST_Undef;
+          }
         }
-    }
+      }
     }
     if( !bTextRotation )
-        textRotation = 0;
+      textRotation = 0;
 
     if( isColumnSelected )
     {
-     int y=1;
-     ColumnLayout *obj=table->nonDefaultColumnLayout(_left);
-     checkBorderLeft( obj,_left, y);
+      int y=1;
+      ColumnLayout *obj=table->nonDefaultColumnLayout(_left);
+      checkBorderLeft( obj,_left, y);
 
-     KSpreadCell* c = table->firstCell();
+      KSpreadCell* c = table->firstCell();
      for( ;c; c = c->nextCell() )
-        {
-        int col = c->column();
-        if ( _left == col &&!c->isObscuringForced())
-                checkBorderLeft( c,col,c->row());
-        }
+     {
+       int col = c->column();
+       if ( _left == col &&!c->isObscuringForced())
+         checkBorderLeft( c,col,c->row());
+     }
 
 
      obj=table->nonDefaultColumnLayout(_right);
      checkBorderRight(obj,_right,y);
      c = table->firstCell();
      for( ;c; c = c->nextCell() )
-        {
-        int col = c->column();
-        if ( _right == col &&!c->isObscuringForced())
-                checkBorderRight(c,col,c->row());
-        }
+     {
+       int col = c->column();
+       if ( _right == col &&!c->isObscuringForced())
+         checkBorderRight(c,col,c->row());
+     }
 
      bool once=false;
      for ( int x = _left; x <= _right; x++ )
-        {
-        KSpreadCell *obj = table->cellAt( x, _top );
-        if(!obj->isObscuringForced())
-                checkBorderTop(obj,x, _top);
-        }
-        once = false;
+     {
+       KSpreadCell *obj = table->cellAt( x, _top );
+       if(!obj->isObscuringForced())
+         checkBorderTop(obj,x, _top);
+     }
+     once = false;
      for ( int x = _left; x <= _right; x++ )
-        {
-        KSpreadCell *obj = table->cellAt( x, _bottom );
-        if(!obj->isObscuringForced())
-                checkBorderBottom(obj,x, _bottom);
-        else if( obj->isObscuringForced() && !once)
-                {
-                once=true;
-                int moveX=obj->obscuringCellsColumn();
-                int moveY=obj->obscuringCellsRow();
-                obj = table->nonDefaultCell( moveX,  moveY );
-                checkBorderBottom(obj,moveX,  moveY );
-                }
-        }
+     {
+       KSpreadCell *obj = table->cellAt( x, _bottom );
+       if(!obj->isObscuringForced())
+         checkBorderBottom(obj,x, _bottom);
+       else if( obj->isObscuringForced() && !once)
+       {
+         once=true;
+         int moveX=obj->obscuringCellsColumn();
+         int moveY=obj->obscuringCellsRow();
+         obj = table->nonDefaultCell( moveX,  moveY );
+         checkBorderBottom(obj,moveX,  moveY );
+       }
+     }
 
      for ( int x = _left+1; x <= _right; x++ )
-        {
-        obj=table->nonDefaultColumnLayout(x);
-        checkBorderHorizontal(obj,x, y);
-        checkBorderVertical(obj,x, y);
-        }
+     {
+       obj=table->nonDefaultColumnLayout(x);
+       checkBorderHorizontal(obj,x, y);
+       checkBorderVertical(obj,x, y);
+     }
 
     }
     else if( isRowSelected )
@@ -447,109 +437,109 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
       int x=1;
       bool once=false;
       for ( int y = _top; y <= _bottom; y++ )
-        {
+      {
         KSpreadCell *obj = table->cellAt( _right, y );
         if(!obj->isObscuringForced())
-                checkBorderRight(obj,_right,y);
+          checkBorderRight(obj,_right,y);
         else if( obj->isObscuringForced() && !once)
-                {
-                once=true;
-                int moveX=obj->obscuringCellsColumn();
-                int moveY=obj->obscuringCellsRow();
-                obj = table->nonDefaultCell( moveX,  moveY );
-                checkBorderRight(obj,moveX,  moveY);
-                }
-        }
-
-        for ( int y = _top; y <= _bottom; y++ )
         {
-                KSpreadCell *obj = table->cellAt( _left, y );
-                if(!obj->isObscuringForced())
-                        checkBorderLeft( obj,_left, y);
+          once=true;
+          int moveX=obj->obscuringCellsColumn();
+          int moveY=obj->obscuringCellsRow();
+          obj = table->nonDefaultCell( moveX,  moveY );
+          checkBorderRight(obj,moveX,  moveY);
         }
+      }
+
+      for ( int y = _top; y <= _bottom; y++ )
+      {
+        KSpreadCell *obj = table->cellAt( _left, y );
+        if(!obj->isObscuringForced())
+          checkBorderLeft( obj,_left, y);
+      }
 
 
-     RowLayout *obj=table->nonDefaultRowLayout(_top);
-     checkBorderTop(obj,x, _top);
-     obj=table->nonDefaultRowLayout(_bottom);
-     checkBorderBottom(obj,x, _bottom);
+      RowLayout *obj=table->nonDefaultRowLayout(_top);
+      checkBorderTop(obj,x, _top);
+      obj=table->nonDefaultRowLayout(_bottom);
+      checkBorderBottom(obj,x, _bottom);
 
-     for ( int y = _top+1; y <= _bottom; y++ )
-        {
+      for ( int y = _top+1; y <= _bottom; y++ )
+      {
         obj=table->nonDefaultRowLayout(y);
         checkBorderHorizontal(obj,x, y);
         checkBorderVertical(obj,x, y);
-        }
+      }
 
     }
     else
     {
-        for ( int y = _top; y <= _bottom; y++ )
-        {
-                KSpreadCell *obj = table->cellAt( _left, y );
-                if(!obj->isObscuringForced())
-                        checkBorderLeft( obj,_left, y);
-        }
+      for ( int y = _top; y <= _bottom; y++ )
+      {
+        KSpreadCell *obj = table->cellAt( _left, y );
+        if(!obj->isObscuringForced())
+          checkBorderLeft( obj,_left, y);
+      }
 
-        bool once=false;
-        for ( int y = _top; y <= _bottom; y++ )
-        {
+      bool once=false;
+      for ( int y = _top; y <= _bottom; y++ )
+      {
         KSpreadCell *obj = table->cellAt( _right, y );
         if(!obj->isObscuringForced())
-                checkBorderRight(obj,_right,y);
+          checkBorderRight(obj,_right,y);
         else if( obj->isObscuringForced() && !once)
-                {
-                once=true;
-                int moveX=obj->obscuringCellsColumn();
-                int moveY=obj->obscuringCellsRow();
-                obj = table->nonDefaultCell( moveX,  moveY );
-                checkBorderRight(obj,moveX,  moveY);
-                }
-        }
-
-        for ( int x = _left; x <= _right; x++ )
         {
+          once=true;
+          int moveX=obj->obscuringCellsColumn();
+          int moveY=obj->obscuringCellsRow();
+          obj = table->nonDefaultCell( moveX,  moveY );
+          checkBorderRight(obj,moveX,  moveY);
+        }
+      }
+
+      for ( int x = _left; x <= _right; x++ )
+      {
         KSpreadCell *obj = table->cellAt( x, _top );
         if(!obj->isObscuringForced())
-                checkBorderTop(obj,x, _top);
-        }
+          checkBorderTop(obj,x, _top);
+      }
 
         once = false;
         for ( int x = _left; x <= _right; x++ )
         {
-        KSpreadCell *obj = table->cellAt( x, _bottom );
-        if(!obj->isObscuringForced())
-                checkBorderBottom(obj,x, _bottom);
-        else if( obj->isObscuringForced() && !once)
-                {
-                once=true;
-                int moveX=obj->obscuringCellsColumn();
-                int moveY=obj->obscuringCellsRow();
-                obj = table->nonDefaultCell( moveX,  moveY );
-                checkBorderBottom(obj,moveX,  moveY );
-                }
+          KSpreadCell *obj = table->cellAt( x, _bottom );
+          if(!obj->isObscuringForced())
+            checkBorderBottom(obj,x, _bottom);
+          else if( obj->isObscuringForced() && !once)
+          {
+            once=true;
+            int moveX=obj->obscuringCellsColumn();
+            int moveY=obj->obscuringCellsRow();
+            obj = table->nonDefaultCell( moveX,  moveY );
+            checkBorderBottom(obj,moveX,  moveY );
+          }
         }
 
 
         // Look for the Outline
         for ( int x = _left; x <= _right; x++ )
         {
-                for ( int y = _top+1; y <= _bottom; y++ )
-                {
-                        KSpreadCell *obj = table->cellAt( x, y );
-                        if(!obj->isObscuringForced())
-                                checkBorderHorizontal(obj,x, y);
-                }
+          for ( int y = _top+1; y <= _bottom; y++ )
+          {
+            KSpreadCell *obj = table->cellAt( x, y );
+            if(!obj->isObscuringForced())
+              checkBorderHorizontal(obj,x, y);
+          }
         }
 
         for ( int x = _left+1; x <= _right; x++ )
         {
-                for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = table->cellAt( x, y );
-                if(!obj->isObscuringForced())
-                        checkBorderVertical(obj,x,y);
-                }
+          for ( int y = _top; y <= _bottom; y++ )
+          {
+            KSpreadCell *obj = table->cellAt( x, y );
+            if(!obj->isObscuringForced())
+              checkBorderVertical(obj,x,y);
+          }
         }
     }
     init();
@@ -566,113 +556,108 @@ CellLayoutDlg::~CellLayoutDlg()
 
 void CellLayoutDlg::checkBorderRight(KSpreadLayout *obj,int x,int y)
 {
-if ( rightBorderStyle != obj->rightBorderStyle( x, y ) )
-        bRightBorderStyle = FALSE;
-if ( rightBorderWidth != obj->rightBorderWidth( x, y ) )
-        bRightBorderStyle = FALSE;
-if ( rightBorderColor != obj->rightBorderColor( x, y ) )
-        bRightBorderColor = FALSE;
+  if ( borders[BorderType_Right].style != obj->rightBorderStyle( x, y ) ||
+       borders[BorderType_Right].width != obj->rightBorderWidth( x, y ) )
+    borders[BorderType_Right].bStyle = FALSE;
+  if ( borders[BorderType_Right].color != obj->rightBorderColor( x, y ) )
+    borders[BorderType_Right].bColor = FALSE;
 }
 
 void CellLayoutDlg::checkBorderLeft(KSpreadLayout *obj,int x,int y)
 {
-if ( leftBorderStyle != obj->leftBorderStyle( x, y ) )
-        bLeftBorderStyle = FALSE;
-if ( leftBorderWidth != obj->leftBorderWidth( x, y ) )
-        bLeftBorderStyle = FALSE;
-if ( leftBorderColor != obj->leftBorderColor( x, y ) )
-        bLeftBorderColor = FALSE;
+  if ( borders[BorderType_Left].style != obj->leftBorderStyle( x, y ) ||
+       borders[BorderType_Left].width != obj->leftBorderWidth( x, y ) )
+    borders[BorderType_Left].bStyle = FALSE;
+  if ( borders[BorderType_Left].color != obj->leftBorderColor( x, y ) )
+    borders[BorderType_Left].bColor = FALSE;
 }
 
 void CellLayoutDlg::checkBorderTop(KSpreadLayout *obj,int x,int y)
 {
-if (  topBorderStyle != obj->topBorderStyle( x, y ) )
-        bTopBorderStyle = FALSE;
-if ( topBorderWidth != obj->topBorderWidth( x, y ) )
-        bTopBorderStyle = FALSE;
-if ( topBorderColor != obj->topBorderColor( x, y ) )
-        bTopBorderColor = FALSE;
+  if ( borders[BorderType_Top].style != obj->topBorderStyle( x, y ) ||
+       borders[BorderType_Top].width != obj->topBorderWidth( x, y ) )
+    borders[BorderType_Top].bStyle = FALSE;
+  if ( borders[BorderType_Top].color != obj->topBorderColor( x, y ) )
+    borders[BorderType_Top].bColor = FALSE;
 }
 
 void CellLayoutDlg::checkBorderBottom(KSpreadLayout *obj,int x,int y)
 {
-if ( bottomBorderStyle != obj->bottomBorderStyle( x, y ) )
-        bBottomBorderStyle = FALSE;
-if ( bottomBorderWidth != obj->bottomBorderWidth( x,y ) )
-        bBottomBorderStyle = FALSE;
-if ( bottomBorderColor != obj->bottomBorderColor( x, y ) )
-        bBottomBorderColor = FALSE;
+  if ( borders[BorderType_Bottom].style != obj->bottomBorderStyle( x, y ) ||
+       borders[BorderType_Bottom].width != obj->bottomBorderWidth( x, y ) )
+    borders[BorderType_Bottom].bStyle = FALSE;
+  if ( borders[BorderType_Bottom].color != obj->bottomBorderColor( x, y ) )
+    borders[BorderType_Bottom].bColor = FALSE;
 }
 
 void CellLayoutDlg::checkBorderVertical(KSpreadLayout *obj,int x,int y)
 {
-if ( verticalBorderStyle != obj->leftBorderStyle( x, y ) )
-        bVerticalBorderStyle = FALSE;
-if ( verticalBorderWidth != obj->leftBorderWidth( x, y ) )
-        bVerticalBorderStyle = FALSE;
-if ( verticalBorderColor != obj->leftBorderColor( x, y ) )
-        bVerticalBorderColor = FALSE;
+  if (borders[BorderType_Vertical].style != obj->leftBorderStyle( x, y ) ||
+      borders[BorderType_Vertical].width != obj->leftBorderWidth( x, y ))
+    borders[BorderType_Vertical].bStyle = FALSE;
+  if ( borders[BorderType_Vertical].color != obj->leftBorderColor( x, y ) )
+    borders[BorderType_Vertical].bColor = FALSE;
 }
 
 void CellLayoutDlg::checkBorderHorizontal(KSpreadLayout *obj,int x,int y)
 {
-if ( horizontalBorderStyle != obj->topBorderStyle( x, y ) )
-        bHorizontalBorderStyle = FALSE;
-if ( horizontalBorderWidth != obj->topBorderWidth( x, y ) )
-        bHorizontalBorderStyle = FALSE;
-if ( horizontalBorderColor != obj->topBorderColor( x, y ) )
-        bHorizontalBorderColor = FALSE;
+  if ( borders[BorderType_Horizontal].style != obj->topBorderStyle( x, y ) ||
+       borders[BorderType_Horizontal].width != obj->topBorderWidth( x, y ) )
+    borders[BorderType_Horizontal].bStyle = FALSE;
+  if ( borders[BorderType_Horizontal].color != obj->topBorderColor( x, y ) )
+    borders[BorderType_Horizontal].bColor = FALSE;
 }
 
 
 void CellLayoutDlg::initParameters(KSpreadLayout *obj,int x,int y)
 {
-        if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
-                bFallDiagonalStyle = FALSE;
-        if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
-                bFallDiagonalStyle = FALSE;
-        if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
-                bfallDiagonalColor = FALSE;
-        if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
-                bGoUpDiagonalStyle = FALSE;
-        if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
-                bGoUpDiagonalStyle = FALSE;
-        if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
-                bGoUpDiagonalColor = FALSE;
-        if ( strike != obj->textFontStrike( x, y ) )
-                bStrike = FALSE;
-        if ( underline != obj->textFontUnderline( x, y ) )
-                bUnderline = FALSE;
-        if ( prefix != obj->prefix( x, y ) )
-                prefix = QString::null;
-        if ( postfix != obj->postfix( x, y ) )
-                postfix = QString::null;
-        if ( floatFormat != obj->floatFormat( x, y ) )
-                bFloatFormat = FALSE;
-        if ( floatColor != obj->floatColor( x, y ) )
-                bFloatColor = FALSE;
-        if ( textColor != obj->textColor( x, y ) )
-                bTextColor = FALSE;
-        if ( textFontFamily != obj->textFontFamily( x, y ) )
-                bTextFontFamily = FALSE;
-        if ( textFontSize != obj->textFontSize( x, y ) )
-                bTextFontSize = FALSE;
-        if ( textFontBold != obj->textFontBold( x, y ) )
-                bTextFontBold = FALSE;
-        if ( textFontItalic != obj->textFontItalic( x, y ) )
-                bTextFontItalic = FALSE;
-        if ( bgColor != obj->bgColor( x, y ) )
-                bBgColor = FALSE;
-        if( textRotation != obj->getAngle(left, top) )
-                bTextRotation = FALSE;
-        if( formatType != obj->getFormatType(left, top) )
-                bFormatType = FALSE;
-        if( bMultiRow != obj->multiRow( left, top ) )
-                bMultiRow = FALSE;
-        if( bVerticalText!=obj->verticalText( left, top ) )
-                bVerticalText = FALSE;
-	if(  bDontprintText!=obj->getDontprintText( left, top ) )
-	  bDontprintText= FALSE;
+  if (borders[BorderType_FallingDiagonal].style != obj->fallDiagonalStyle( x, y ))
+    borders[BorderType_FallingDiagonal].bStyle = FALSE;
+  if (borders[BorderType_FallingDiagonal].width != obj->fallDiagonalWidth( x, y ))
+    borders[BorderType_FallingDiagonal].bStyle = FALSE;
+  if (borders[BorderType_FallingDiagonal].color != obj->fallDiagonalColor( x, y ))
+    borders[BorderType_FallingDiagonal].bColor = FALSE;
+
+  if (borders[BorderType_RisingDiagonal].style != obj->goUpDiagonalStyle( x, y ))
+    borders[BorderType_RisingDiagonal].bStyle = FALSE;
+  if (borders[BorderType_RisingDiagonal].width != obj->goUpDiagonalWidth( x, y ))
+    borders[BorderType_RisingDiagonal].bStyle = FALSE;
+  if (borders[BorderType_RisingDiagonal].color != obj->goUpDiagonalColor( x, y ))
+    borders[BorderType_RisingDiagonal].bColor = FALSE;
+  if ( strike != obj->textFontStrike( x, y ) )
+    bStrike = FALSE;
+  if ( underline != obj->textFontUnderline( x, y ) )
+    bUnderline = FALSE;
+  if ( prefix != obj->prefix( x, y ) )
+    prefix = QString::null;
+  if ( postfix != obj->postfix( x, y ) )
+    postfix = QString::null;
+  if ( floatFormat != obj->floatFormat( x, y ) )
+    bFloatFormat = FALSE;
+  if ( floatColor != obj->floatColor( x, y ) )
+    bFloatColor = FALSE;
+  if ( textColor != obj->textColor( x, y ) )
+    bTextColor = FALSE;
+  if ( textFontFamily != obj->textFontFamily( x, y ) )
+    bTextFontFamily = FALSE;
+  if ( textFontSize != obj->textFontSize( x, y ) )
+    bTextFontSize = FALSE;
+  if ( textFontBold != obj->textFontBold( x, y ) )
+    bTextFontBold = FALSE;
+  if ( textFontItalic != obj->textFontItalic( x, y ) )
+    bTextFontItalic = FALSE;
+  if ( bgColor != obj->bgColor( x, y ) )
+    bBgColor = FALSE;
+  if( textRotation != obj->getAngle(left, top) )
+    bTextRotation = FALSE;
+  if( formatType != obj->getFormatType(left, top) )
+    bFormatType = FALSE;
+  if( bMultiRow != obj->multiRow( left, top ) )
+    bMultiRow = FALSE;
+  if( bVerticalText!=obj->verticalText( left, top ) )
+    bVerticalText = FALSE;
+  if(  bDontprintText!=obj->getDontprintText( left, top ) )
+    bDontprintText= FALSE;
 }
 
 void CellLayoutDlg::init()
@@ -743,6 +728,8 @@ int CellLayoutDlg::exec()
 
 void CellLayoutDlg::slotApply()
 {
+  KSpreadCell *cell = NULL;
+
     KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Layout") );
 
     if( isMerged!= positionPage->getMergedCellState())
@@ -794,8 +781,7 @@ void CellLayoutDlg::slotApply()
                 {
                     for(int i=left;i<=right;i++)
                     {
-		      KSpreadCell *cell = table->nonDefaultCell(i, rw->row(),
-								true);
+		      cell = table->nonDefaultCell(i, rw->row(), true);
                     }
                 }
             }
@@ -2800,58 +2786,78 @@ void KSpreadBorder::mousePressEvent( QMouseEvent* _ev )
   emit choosearea(_ev);
 }
 
-CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
+CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg )
+  : QWidget( parent )
 {
   dlg = _dlg;
 
-  QGridLayout *grid = new QGridLayout(this,5,2,15,15);
+  InitializeGrids();
+  InitializeBorderButtons();
+  InitializePatterns();
+  SetConnections();
 
-  QGroupBox* tmpQGroupBox;
+  preview->slotSelect();
+  pattern[2]->slotSelect();
+
+  style->setEnabled(false);
+  size->setEnabled(false);
+  preview->setPattern( black , 1, SolidLine );
+  this->resize( 400, 400 );
+}
+
+void CellLayoutPageBorder::InitializeGrids()
+{
+  QGridLayout *grid = new QGridLayout(this,5,2,15,15);
+  QGridLayout *grid2 = NULL;
+  QGroupBox* tmpQGroupBox = NULL;
+
+  /***********************/
+  /* here is the data to initialize all the border buttons with */
+  const char borderButtonNames[BorderType_END][20] =
+    {"top", "bottom", "left", "right", "vertical", "fall", "go", "horizontal"};
+
+  const char shortcutButtonNames[BorderShortcutType_END][20] =
+    {"remove", "all", "outline"};
+
+  QString borderButtonIconNames[BorderType_END] =
+    {"border_top", "border_bottom", "border_left", "border_right",
+     "border_vertical", "border_horizontal", "border_fall", "border_up"};
+
+  QString shortcutButtonIconNames[BorderShortcutType_END] =
+    { "border_remove", "", "border_outline"};
+
+  int borderButtonPositions[BorderType_END][2] =
+    {{0,2}, {4,2}, {2,0}, {2,4}, {4,4}, {4,0}, {0,0}, {0,4}};
+
+  int shortcutButtonPositions[BorderShortcutType_END][2] =
+    { {0,0}, {0,1},{0,2} };
+  /***********************/
+
+
+  /* set up a layout box for most of the border setting buttons */
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
   tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setTitle( i18n("Border") );
   tmpQGroupBox->setAlignment( 1 );
-
-  QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,5,5,15,7);
-
+  grid2 = new QGridLayout(tmpQGroupBox,5,5,15,7);
   area=new KSpreadBorder(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addMultiCellWidget(area,1,3,1,3);
   area->setBackgroundColor( colorGroup().base() );
 
-  top=new KSpreadBorderButton(tmpQGroupBox,"top");
-  loadIcon("border_top",top);
-  grid2->addWidget(top,0,2);
-
-  bottom=new KSpreadBorderButton(tmpQGroupBox,"bottom");
-  loadIcon("border_bottom",bottom);
-  grid2->addWidget(bottom,4,2);
-
-  left=new KSpreadBorderButton(tmpQGroupBox,"left");
-  loadIcon("border_left",left);
-  grid2->addWidget(left,2,0);
-
-  right=new KSpreadBorderButton(tmpQGroupBox,"right");
-  loadIcon("border_right",right);
-  grid2->addWidget(right,2,4);
-
-  fallDiagonal=new KSpreadBorderButton(tmpQGroupBox,"fall");
-  loadIcon("border_fall",fallDiagonal);
-  grid2->addWidget(fallDiagonal,0,0);
-
-  goUpDiagonal=new KSpreadBorderButton(tmpQGroupBox,"go");
-  loadIcon("border_up",goUpDiagonal);
-  grid2->addWidget(goUpDiagonal,0,4);
-
-  vertical=new KSpreadBorderButton(tmpQGroupBox,"vertical");
-  loadIcon("border_vertical",vertical);
-  grid2->addWidget(vertical,4,4);
-
-  horizontal=new KSpreadBorderButton(tmpQGroupBox,"horizontal");
-  loadIcon("border_horizontal",horizontal);
-  grid2->addWidget(horizontal,4,0);
+  /* initailize the buttons that are in this box */
+  for (int i=BorderType_Top; i < BorderType_END; i++)
+  {
+    borderButtons[i] = new KSpreadBorderButton(tmpQGroupBox,
+                                               borderButtonNames[i]);
+    loadIcon(borderButtonIconNames[i], borderButtons[i]);
+    grid2->addWidget(borderButtons[i], borderButtonPositions[i][0],
+                     borderButtonPositions[i][1]);
+  }
 
   grid->addMultiCellWidget(tmpQGroupBox,0,2,0,0);
 
+  /* the remove, all, and outline border buttons are in a second box down
+     below.*/
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
   tmpQGroupBox->setFrameStyle( 49 );
@@ -2860,36 +2866,38 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   grid2 = new QGridLayout(tmpQGroupBox,1,3,15,7);
 
-  outline=new KSpreadBorderButton(tmpQGroupBox,"outline");
-  loadIcon("border_outline",outline);
-  grid2->addWidget(outline,0,2);
-
-  remove=new KSpreadBorderButton(tmpQGroupBox,"remove");
-  loadIcon("border_remove",remove);
-  grid2->addWidget(remove,0,0);
-
-  all=new KSpreadBorderButton(tmpQGroupBox,"all");
-  grid2->addWidget(all,0,1);
-
+  /* the "all" button is different depending on what kind of region is currently
+     selected */
   if((dlg->oneRow==true)&&(dlg->oneCol==false))
-        {
-        loadIcon("border_vertical",all);
-        }
+  {
+    shortcutButtonIconNames[BorderShortcutType_All] = "border_vertical";
+  }
   else if((dlg->oneRow==false)&&(dlg->oneCol==true))
-        {
-        loadIcon("border_horizontal",all);
-        }
-  else if((dlg->oneRow==false)&&(dlg->oneCol==false))
-        {
-         loadIcon("border_inside",all);
-        }
+  {
+    shortcutButtonIconNames[BorderShortcutType_All] = "border_horizontal";
+  }
   else
-        {
-        loadIcon("border_inside",all);
-        all->setEnabled(false);
-        }
+  {
+    shortcutButtonIconNames[BorderShortcutType_All] = "border_inside";
+  }
+
+  for (int i=BorderShortcutType_Remove; i < BorderShortcutType_END; i++)
+  {
+    shortcutButtons[i] = new KSpreadBorderButton(tmpQGroupBox,
+                                                 shortcutButtonNames[i]);
+    loadIcon(shortcutButtonIconNames[i], shortcutButtons[i]);
+    grid2->addWidget(shortcutButtons[i], shortcutButtonPositions[i][0],
+                     shortcutButtonPositions[i][1]);
+  }
+
+  if (dlg->oneRow && dlg->oneCol)
+  {
+    shortcutButtons[BorderShortcutType_All]->setEnabled(false);
+  }
+
   grid->addMultiCellWidget(tmpQGroupBox,3,4,0,0);
 
+  /* now set up the group box with the pattern selector */
   tmpQGroupBox = new QGroupBox( this, "GroupBox_10" );
   tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setTitle( i18n("Pattern") );
@@ -2897,995 +2905,847 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   grid2 = new QGridLayout(tmpQGroupBox,6,2,15,7);
 
-  pattern1 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_1" );
-  pattern1->setFrameStyle( 50 );
-  grid2->addWidget(pattern1,0,0);
+  char name[] = "PatternXX";
+  Q_ASSERT(NUM_BORDER_PATTERNS < 100);
 
-  pattern2 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_2" );
-  pattern2->setFrameStyle( 50 );
-  grid2->addWidget(pattern2,1,0);
-
-  pattern3 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_3" );
-  pattern3->setFrameStyle( 50 );
-  grid2->addWidget(pattern3,2,0);
-
-  pattern4 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_4" );
-  pattern4->setFrameStyle( 50 );
-  grid2->addWidget(pattern4,0,1);
-
-  pattern5 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_5" );
-  pattern5->setFrameStyle( 50 );
-  grid2->addWidget(pattern5,1,1);
-
-  pattern6 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_6" );
-  pattern6->setFrameStyle( 50 );
-  grid2->addWidget(pattern6,2,1);
-
-  pattern7 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_7" );
-  pattern7->setFrameStyle( 50 );
-  grid2->addWidget(pattern7,3,1);
-
-  pattern8 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_8" );
-  pattern8->setFrameStyle( 50 );
-  grid2->addWidget(pattern8,4,1);
-
-  pattern9 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_9" );
-  pattern9->setFrameStyle( 50 );
-  grid2->addWidget(pattern9,3,0);
-
-  pattern10 = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_10" );
-  pattern10->setFrameStyle( 50 );
-  grid2->addWidget(pattern10,4,0);
-
-
-
-    color = new KColorButton (tmpQGroupBox, "PushButton_1" );
-    grid2->addWidget(color,6,1);
-
-    QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
-    tmpQLabel->setText( i18n("Color") );
-    grid2->addWidget(tmpQLabel,6,0);
-
-
-    QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
-    customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
-    grid3->addWidget(customize,0,0);
-    connect( customize, SIGNAL( clicked()),
-           SLOT(cutomize_chosen_slot()) );
-
-    size=new QComboBox(true,tmpQGroupBox);
-    grid3->addWidget(size,1,1);
-    size->setValidator(new KIntValidator( size ));
-    QString tmp;
-    for(int i=0;i<10;i++)
-        {
-        tmp=tmp.setNum(i);
-        size->insertItem(tmp);
-        }
-    size->setCurrentItem(1);
-
-    style=new QComboBox(tmpQGroupBox);
-    grid3->addWidget(style,1,0);
-    style->insertItem(paintFormatPixmap(DotLine),0 );
-    style->insertItem(paintFormatPixmap(DashLine) ,1);
-    style->insertItem(paintFormatPixmap(DashDotLine),2 );
-    style->insertItem(paintFormatPixmap(DashDotDotLine),3  );
-    style->insertItem(paintFormatPixmap(SolidLine),4);
-    style->setBackgroundColor( colorGroup().background() );
-
-    grid2->addMultiCell(grid3,5,5,0,1);
-    grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
-
-
-    tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
-    tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setTitle( i18n("Preview") );
-    tmpQGroupBox->setAlignment( 1 );
-
-    grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
-
-
-
-    preview = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_preview" );
-    preview->setFrameStyle( 50 );
-    grid2->addWidget(preview,0,0);
-
-    grid->addWidget(tmpQGroupBox,4,1);
-
- if(dlg->leftBorderStyle != Qt::NoPen || !dlg->bLeftBorderStyle )
-    {
-    if ( dlg->bLeftBorderColor && dlg->bLeftBorderStyle  )
-      {
-        left->setPenStyle(dlg->leftBorderStyle );
-        left->setPenWidth(dlg->leftBorderWidth);
-        left->setColor(dlg->leftBorderColor);
-        left->setOn(true);
-      }
-    else
-      {
-
-        left->setUndefined();
-      }
- }
- if(dlg->rightBorderStyle!=Qt::NoPen|| !dlg->bRightBorderStyle)
-    {
-    if ( dlg->bRightBorderColor && dlg->bRightBorderStyle && dlg->rightBorderStyle!=NoPen)
-      {
-        right->setPenStyle(dlg->rightBorderStyle );
-        right->setPenWidth(dlg->rightBorderWidth);
-        right->setColor(dlg->rightBorderColor);
-        right->setOn(true);
-      }
-    else
-      {
-
-        right->setUndefined();
-      }
-     }
-
-   if(  dlg->topBorderStyle!=Qt::NoPen || !dlg->bTopBorderStyle)
-    {
-    if ( dlg->bTopBorderColor && dlg->bTopBorderStyle)
-      {
-        top->setPenStyle(dlg->topBorderStyle );
-        top->setPenWidth(dlg->topBorderWidth);
-        top->setColor(dlg->topBorderColor);
-        top->setOn(true);
-      }
-    else
-      {
-
-        top->setUndefined();
-      }
-     }
-
- if(dlg->bottomBorderStyle != Qt::NoPen || !dlg->bBottomBorderStyle)
- {
-    if ( dlg->bBottomBorderColor && dlg->bBottomBorderStyle )
-
-      {
-        bottom->setPenStyle(dlg->bottomBorderStyle );
-        bottom->setPenWidth(dlg->bottomBorderWidth);
-        bottom->setColor(dlg->bottomBorderColor);
-        bottom->setOn(true);
-      }
-    else
-      {
-
-        bottom->setUndefined();
-      }
- }
-
-  if(dlg->oneRow==FALSE)
+  for (int i=0; i < NUM_BORDER_PATTERNS; i++)
   {
-   if(dlg->horizontalBorderStyle!=Qt::NoPen ||!dlg->bHorizontalBorderStyle)
-   {
-    if ( dlg->bHorizontalBorderColor && dlg->bHorizontalBorderStyle )
+    name[7] = '0' + (i+1) / 10;
+    name[8] = '0' + (i+1) % 10;
+    pattern[i] = new KSpreadPatternSelect( tmpQGroupBox, name );
+    pattern[i]->setFrameStyle( 50 );
+    grid2->addWidget(pattern[i], i % 5, i / 5);
+    /* this puts them in the pattern:
+       1  6
+       2  7
+       3  8
+       4  9
+       5  10
+    */
+  }
+
+  color = new KColorButton (tmpQGroupBox, "PushButton_1" );
+  grid2->addWidget(color,6,1);
+
+  QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
+  tmpQLabel->setText( i18n("Color") );
+  grid2->addWidget(tmpQLabel,6,0);
+
+  /* tack on the 'customize' border pattern selector */
+  QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
+  customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
+  grid3->addWidget(customize,0,0);
+  connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
+
+  size=new QComboBox(true,tmpQGroupBox);
+  grid3->addWidget(size,1,1);
+  size->setValidator(new KIntValidator( size ));
+  QString tmp;
+  for(int i=0;i<10;i++)
+  {
+    tmp=tmp.setNum(i);
+    size->insertItem(tmp);
+  }
+  size->setCurrentItem(1);
+
+  style=new QComboBox(tmpQGroupBox);
+  grid3->addWidget(style,1,0);
+  style->insertItem(paintFormatPixmap(DotLine),0 );
+  style->insertItem(paintFormatPixmap(DashLine) ,1);
+  style->insertItem(paintFormatPixmap(DashDotLine),2 );
+  style->insertItem(paintFormatPixmap(DashDotDotLine),3  );
+  style->insertItem(paintFormatPixmap(SolidLine),4);
+  style->setBackgroundColor( colorGroup().background() );
+
+  grid2->addMultiCell(grid3,5,5,0,1);
+  grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
+
+  /* Now the preview box is put together */
+  tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
+  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setTitle( i18n("Preview") );
+  tmpQGroupBox->setAlignment( 1 );
+
+  grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
+
+
+
+  preview = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_preview" );
+  preview->setFrameStyle( 50 );
+  grid2->addWidget(preview,0,0);
+
+  grid->addWidget(tmpQGroupBox,4,1);
+}
+
+void CellLayoutPageBorder::InitializeBorderButtons()
+{
+  for (int i=BorderType_Top; i < BorderType_END; i++)
+  {
+    if(dlg->borders[i].style != Qt::NoPen ||
+       !dlg->borders[i].bStyle )
+    {
+      /* the horozontil and vertical buttons might be disabled depending on what
+         kind of area is selected so check that first. */
+      if ((dlg->oneRow == TRUE && i == BorderType_Horizontal) ||
+          (dlg->oneCol == TRUE && i == BorderType_Vertical))
       {
-        horizontal->setPenStyle(dlg->horizontalBorderStyle );
-        horizontal->setPenWidth(dlg->horizontalBorderWidth);
-        horizontal->setColor(dlg->horizontalBorderColor);
-        horizontal->setOn(true);
-       }
-    else
-       {
-         horizontal->setUndefined();
-       }
+        borderButtons[i]->setEnabled(false);
+      }
+      else if ( dlg->borders[i].bColor && dlg->borders[i].bStyle  )
+      {
+        borderButtons[i]->setPenStyle(dlg->borders[i].style );
+        borderButtons[i]->setPenWidth(dlg->borders[i].width);
+        borderButtons[i]->setColor(dlg->borders[i].color);
+        borderButtons[i]->setOn(true);
+      }
+      else
+      {
+        borderButtons[i]->setUndefined();
+      }
     }
   }
-  else
-        horizontal->setEnabled(false);
 
-  if(dlg->oneCol==FALSE)
+
+}
+
+void CellLayoutPageBorder::InitializePatterns()
+{
+  pattern[0]->setPattern( black, 1, DotLine );
+  pattern[1]->setPattern( black, 1, DashLine );
+  pattern[2]->setPattern( black, 1, SolidLine );
+  pattern[3]->setPattern( black, 1, DashDotLine );
+  pattern[4]->setPattern( black, 1, DashDotDotLine );
+  pattern[5]->setPattern( black, 2, SolidLine );
+  pattern[6]->setPattern( black, 3, SolidLine );
+  pattern[7]->setPattern( black, 4, SolidLine );
+  pattern[8]->setPattern( black, 5, SolidLine );
+  pattern[9]->setPattern( black, 1, NoPen );
+
+  slotSetColorButton( black );
+}
+
+void CellLayoutPageBorder::SetConnections()
+{
+  connect( color, SIGNAL( changed( const QColor & ) ),
+           this, SLOT( slotSetColorButton( const QColor & ) ) );
+
+  for (int i=0; i < NUM_BORDER_PATTERNS; i++)
   {
-        if(dlg->verticalBorderStyle!=Qt::NoPen || !dlg->bVerticalBorderStyle)
-        {
-                if ( dlg->bVerticalBorderColor && dlg->bVerticalBorderStyle )
-                {
-                vertical->setPenStyle(dlg->verticalBorderStyle );
-                vertical->setPenWidth(dlg->verticalBorderWidth);
-                vertical->setColor(dlg->verticalBorderColor);
-                vertical->setOn(true);
-                }
-        else
-                {
-                vertical->setUndefined();
-                }
-         }
-   }
-   else
-        {
-        vertical->setEnabled(false);
-        }
+    connect( pattern[i], SIGNAL( clicked( KSpreadPatternSelect* ) ),
+             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
+  }
 
-  if(dlg->fallDiagonalStyle!=Qt::NoPen || !dlg->bFallDiagonalStyle)
+  for (int i = BorderType_Top; i < BorderType_END; i++)
   {
-    if ( dlg->bfallDiagonalColor && dlg->bFallDiagonalStyle  )
-      {
-        fallDiagonal->setPenStyle(dlg->fallDiagonalStyle );
-        fallDiagonal->setPenWidth(dlg->fallDiagonalWidth);
-        fallDiagonal->setColor(dlg->fallDiagonalColor);
-        fallDiagonal->setOn(true);
-      }
-    else
-      {
-        fallDiagonal->setUndefined();
-      }
-   }
+    connect( borderButtons[i], SIGNAL( clicked (KSpreadBorderButton *) ),
+             this, SLOT( changeState( KSpreadBorderButton *) ) );
+  }
 
- if(dlg->goUpDiagonalStyle!=Qt::NoPen || !dlg->bGoUpDiagonalStyle)
-    {
-    if ( dlg->bGoUpDiagonalColor && dlg->bGoUpDiagonalStyle )
-      {
-        goUpDiagonal->setPenStyle(dlg->goUpDiagonalStyle );
-        goUpDiagonal->setPenWidth(dlg->goUpDiagonalWidth);
-        goUpDiagonal->setColor(dlg->goUpDiagonalColor);
-        goUpDiagonal->setOn(true);
-      }
-    else
-      {
-        goUpDiagonal->setUndefined();
-      }
-    }
-
-
-    pattern1->setPattern( black, 1, DotLine );
-    pattern2->setPattern( black, 1, DashLine );
-    pattern3->setPattern( black, 1, SolidLine );
-    pattern4->setPattern( black, 2, SolidLine );
-    pattern5->setPattern( black, 3, SolidLine );
-    pattern6->setPattern( black, 4, SolidLine );
-    pattern7->setPattern( black, 5, SolidLine );
-    pattern8->setPattern( black, 1, NoPen );
-    pattern9->setPattern( black, 1, DashDotLine );
-    pattern10->setPattern( black, 1, DashDotDotLine );
-
-
-
-    slotSetColorButton( black );
-
-    connect( color, SIGNAL( changed( const QColor & ) ),
-             this, SLOT( slotSetColorButton( const QColor & ) ) );
-
-
-    connect( pattern1, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern2, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern3, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern4, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern5, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern6, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern7, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern8, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern9, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-    connect( pattern10, SIGNAL( clicked( KSpreadPatternSelect* ) ),
-             this, SLOT( slotUnselect2( KSpreadPatternSelect* ) ) );
-
-  connect( goUpDiagonal, SIGNAL( clicked (KSpreadBorderButton *) ),
-           this, SLOT( changeState( KSpreadBorderButton *) ) );
-  connect( top, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-  connect( right, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-
-  connect( fallDiagonal, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-
-  connect( bottom, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-  connect( left, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-  connect( horizontal, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-  connect( vertical, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( changeState(KSpreadBorderButton *) ) );
-
-  connect( all, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( preselect(KSpreadBorderButton *) ) );
-  connect( remove, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( preselect(KSpreadBorderButton *) ) );
-  connect( outline, SIGNAL( clicked(KSpreadBorderButton *) ),
-           this, SLOT( preselect(KSpreadBorderButton *) ) );
+  for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++)
+  {
+    connect( shortcutButtons[i], SIGNAL( clicked(KSpreadBorderButton *) ),
+             this, SLOT( preselect(KSpreadBorderButton *) ) );
+  }
 
   connect( area ,SIGNAL( redraw()),this,SLOT(draw()));
   connect( area ,SIGNAL( choosearea(QMouseEvent * )),
            this,SLOT( slotPressEvent(QMouseEvent *)));
 
-  connect( style ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
-  connect( size ,SIGNAL( textChanged(const QString &)),this,SLOT(slotChangeStyle(const QString &)));
-  connect( size ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
-  preview->slotSelect();
-  pattern3->slotSelect();
-  style->setEnabled(false);
-  size->setEnabled(false);
-  preview->setPattern( black , 1, SolidLine );
-  this->resize( 400, 400 );
+  connect( style, SIGNAL( activated(int)), this, SLOT(slotChangeStyle(int)));
+  connect( size, SIGNAL( textChanged(const QString &)),
+           this, SLOT(slotChangeStyle(const QString &)));
+  connect( size ,SIGNAL( activated(int)), this, SLOT(slotChangeStyle(int)));
 }
-
 
 void CellLayoutPageBorder::cutomize_chosen_slot()
 {
-        if(customize->isChecked())
-                {
-                style->setEnabled(true);
-                size->setEnabled(true);
-                slotUnselect2( preview );
-                }
-        else
-                {
-                style->setEnabled(false);
-                size->setEnabled(false);
-                pattern3->slotSelect();
-                preview->setPattern( black , 1, SolidLine );
-                }
+  if(customize->isChecked())
+  {
+    style->setEnabled(true);
+    size->setEnabled(true);
+    slotUnselect2( preview );
+  }
+  else
+  {
+    style->setEnabled(false);
+    size->setEnabled(false);
+    pattern[2]->slotSelect();
+    preview->setPattern( black , 1, SolidLine );
+  }
 }
 
 void CellLayoutPageBorder::slotChangeStyle(const QString &)
 {
-slotChangeStyle(0);
+  /* if they try putting text in the size box, then erase the line */
+  slotChangeStyle(0);
 }
 
 void CellLayoutPageBorder::slotChangeStyle(int)
 {
-  int index =style->currentItem();
+  int index = style->currentItem();
   QString tmp;
-  int penSize=size->currentText().toInt();
+  int penSize = size->currentText().toInt();
   if( !penSize)
-       preview->setPattern( preview->getColor(), penSize, NoPen );
+  {
+    preview->setPattern( preview->getColor(), penSize, NoPen );
+  }
   else
   {
-  switch(index)
-        {
-        case 0:
-                preview->setPattern( preview->getColor(), penSize, DotLine );
-                break;
-        case 1:
-                preview->setPattern( preview->getColor(), penSize, DashLine );
-                break;
-        case 2:
-                preview->setPattern( preview->getColor(), penSize, DashDotLine );
-                break;
-        case 3:
-                preview->setPattern( preview->getColor(), penSize, DashDotDotLine );
-                break;
-        case 4:
-                preview->setPattern( preview->getColor(), penSize, SolidLine );
-                break;
-        default:
-                kdDebug(36001)<<"Error in combobox\n";
-                break;
-        }
- }
- slotUnselect2(preview);
+    switch(index)
+    {
+    case 0:
+      preview->setPattern( preview->getColor(), penSize, DotLine );
+      break;
+    case 1:
+      preview->setPattern( preview->getColor(), penSize, DashLine );
+      break;
+    case 2:
+      preview->setPattern( preview->getColor(), penSize, DashDotLine );
+      break;
+    case 3:
+      preview->setPattern( preview->getColor(), penSize, DashDotDotLine );
+      break;
+    case 4:
+      preview->setPattern( preview->getColor(), penSize, SolidLine );
+      break;
+    default:
+      kdDebug(36001)<<"Error in combobox\n";
+      break;
+    }
+  }
+  slotUnselect2(preview);
 }
 
 QPixmap CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
 {
-    QPixmap pixmap( style->width(), 14 );
-    QPainter painter;
-    QPen pen;
-    pen=QPen( colorGroup().text(),1,_style);
-    painter.begin( &pixmap );
-    painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
-    painter.setPen( pen );
-    painter.drawLine( 0, 7, style->width(), 7 );
-    painter.end();
-    return pixmap;
+  QPixmap pixmap( style->width(), 14 );
+  QPainter painter;
+  QPen pen;
+  pen=QPen( colorGroup().text(),1,_style);
+  painter.begin( &pixmap );
+  painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
+  painter.setPen( pen );
+  painter.drawLine( 0, 7, style->width(), 7 );
+  painter.end();
+  return pixmap;
 }
 
-void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
+void CellLayoutPageBorder::loadIcon( QString _pix, KSpreadBorderButton *_button)
 {
-    _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
+  _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
 }
 
-void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _bottom )
+void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right,
+                                         int _bottom )
 {
-
-    if( horizontal->isChanged())
-    {
-        QPen tmpPen( horizontal->getColor(),horizontal->getPenWidth(),horizontal->getPenStyle());
-        if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int x = _left; x <= _right; x++ )
-                {
-                for ( int y = _top+1; y <= _bottom; y++ )
-                        {
-                        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
-                        if(!obj->isObscuringForced())
-                                obj->setTopBorderPen(tmpPen);
-                        }
-                }
-         }
-         else if( dlg->isColumnSelected )
-         {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                {
-                        int col = c->column();
-                        if ( dlg->left <= col && dlg->right >= col
-                        &&!c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PTopBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-                        }
-                }
-
-                for(int x=_left;x<=_right;x++)
-                {
-                        ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
-                        obj->setTopBorderPen(tmpPen);
-                }
-
-                RowLayout* rw =dlg->getTable()->firstRow();
-                for( ; rw; rw = rw->next() )
-                {
-		  if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PTopBorder)  ))
-		  {
-		    for(int i=dlg->left;i<=dlg->right;i++)
-		    {
-		      KSpreadCell *cell = 
-			dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
-		      cell->setTopBorderPen(tmpPen);
-		    }
-		  }
-                }
-         }
-         else if( dlg->isRowSelected )
-         {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                        {
-                        int row = c->row();
-                        if ( (dlg->top+1) <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced())
-                                {
-                                 c->clearProperty(KSpreadCell::PTopBorder);
-                                 c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-                                }
-                        }
-
-                for(int y=_top+1;y<=_bottom;y++)
-                        {
-                        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
-                        obj->setTopBorderPen(tmpPen);
-                        }
-        }
-    }
-    if( vertical->isChanged())
-    {
-    QPen tmpPen( vertical->getColor(),vertical->getPenWidth(),vertical->getPenStyle());
-    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int x = _left+1; x <= _right; x++ )
-                {
-                for ( int y = _top; y <= _bottom; y++ )
-                        {
-                        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
-                        if(!obj->isObscuringForced())
-                                obj->setLeftBorderPen( tmpPen );
-                        }
-                }
-        }
-        else if( dlg->isRowSelected )
-        {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                {
-                        int col = c->column();
-                        if ( dlg->left <= col && dlg->right >= col
-                        &&!c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PLeftBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-                        }
-                }
-
-                for(int x=_left+1;x<=_right;x++)
-                        {
-                        ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
-                        obj->setLeftBorderPen( tmpPen );
-                        }
-                RowLayout* rw =dlg->getTable()->firstRow();
-                for( ; rw; rw = rw->next() )
-                {
-                  if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
-		  {
-		    for(int i=dlg->left;i<=dlg->right;i++)
-		    {
-		      KSpreadCell *cell = 
-			dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
-		      cell->setLeftBorderPen( tmpPen );
-		    }
-		  }
-                }
-        }
-         else if( dlg->isColumnSelected )
-         {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                        {
-                        int row = c->row();
-                        if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced())
-                                {
-                                c->clearProperty(KSpreadCell::PLeftBorder);
-                                c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-                                }
-                        }
-
-                for(int y=_top;y<=_bottom;y++)
-                        {
-                        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
-                        obj->setLeftBorderPen( tmpPen );
-                        }
-
-         }
+  if (borderButtons[BorderType_Horizontal]->isChanged())
+  {
+    applyHorizontalOutline(_left, _top, _right, _bottom);
   }
- if ( left->isChanged() )
-    {
-    QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
-    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _left,y );
-                if(!obj->isObscuringForced())
-                        obj->setLeftBorderPen( tmpPen );
-                }
-        }
-    else if( dlg->isColumnSelected )
-        {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                {
-                        int col = c->column();
-                        if ( dlg->left == col && !c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PLeftBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-                        }
-                }
-                ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_left);
-                obj->setLeftBorderPen( tmpPen );
+  if(borderButtons[BorderType_Vertical]->isChanged())
+  {
+    applyVerticalOutline(_left, _top, _right, _bottom);
+  }
+  if ( borderButtons[BorderType_Left]->isChanged() )
+  {
+    applyLeftOutline(_left, _top, _right, _bottom);
+  }
+  if ( borderButtons[BorderType_Right]->isChanged() )
+  {
+    applyRightOutline(_left, _top, _right, _bottom);
+  }
 
-                RowLayout* rw =dlg->getTable()->firstRow();
-                for( ; rw; rw = rw->next() )
-                {
-		  if (rw->row()==_left&& !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
-		  {
-		    for(int i=dlg->left;i<=dlg->right;i++)
-		    {
-		      KSpreadCell *cell = 
-			dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
-		      cell->setLeftBorderPen( tmpPen );
-		    }
-		  }
-                }
-        }
-    else if( dlg->isRowSelected )
-        {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced() && c->column()==1)
-                        {
-                        c->clearProperty(KSpreadCell::PLeftBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-                        }
-                }
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( 1,y );
-                if(!obj->isObscuringForced())
-                        obj->setLeftBorderPen( tmpPen );
-                }
-        }
+  if ( borderButtons[BorderType_Top]->isChanged() )
+  {
+    applyTopOutline(_left, _top, _right, _bottom);
+  }
+
+  if ( borderButtons[BorderType_Bottom]->isChanged() )
+  {
+    applyBottomOutline(_left, _top, _right, _bottom);
+  }
+
+  if ( borderButtons[BorderType_RisingDiagonal]->isChanged() ||
+       borderButtons[BorderType_FallingDiagonal]->isChanged() )
+  {
+    applyDiagonalOutline(_left, _top, _right, _bottom);
+  }
+}
+
+void CellLayoutPageBorder::applyTopOutline( int _left, int _top, int _right,
+                                            int _bottom )
+{
+  KSpreadBorderButton* top = borderButtons[BorderType_Top];
+
+  QPen tmpPen( top->getColor(),top->getPenWidth(),top->getPenStyle());
+
+  /* if a column is selected then _top will just be row 1 so there's no special
+     handling */
+  if( !dlg->isRowSelected )
+  {
+    for ( int x = _left; x <= _right; x++ )
+    {
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
+      if(!obj->isObscuringForced())
+        obj->setTopBorderPen( tmpPen );
     }
- if ( right->isChanged() )
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
     {
-    bool once=false;
-    QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
-    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
-                if(!obj->isObscuringForced())
-                        obj->setRightBorderPen(tmpPen);
-                else if(obj->isObscuringForced() && !once )
-                        {
-                        once=true;
-                        int moveX=obj->obscuringCellsColumn();
-                        int moveY=obj->obscuringCellsRow();
-                        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                        obj->setRightBorderPen(tmpPen);
-                        }
-                }
-        }
-    else if(  dlg->isColumnSelected )
-        {
-                KSpreadCell*c= dlg->getTable()->firstCell();
-                for( ;c; c = c->nextCell() )
-                {
-                        int col = c->column();
-                        if ( dlg->right == col && !c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PRightBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-                        }
-                }
+      int row = c->row();
+      if ( _top <= row && _bottom >= row )
+      {
+        c->clearProperty(KSpreadCell::PTopBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+      }
+    }
 
-        ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_right);
+    RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_top-1);
+    obj->setBottomBorderPen( tmpPen );
+  }
+}
+
+void CellLayoutPageBorder::applyBottomOutline( int _left, int _top, int _right,
+                                               int _bottom )
+{
+  KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
+  bool once = false;
+  QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
+  if( !dlg->isRowSelected )
+  {
+    for ( int x = _left; x <= _right; x++ )
+    {
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
+      if(!obj->isObscuringForced())
+        obj->setBottomBorderPen( tmpPen );
+      else if(obj->isObscuringForced() && !once )
+      {
+        once = true;
+        int moveX=obj->obscuringCellsColumn();
+        int moveY=obj->obscuringCellsRow();
+        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
+        obj->setBottomBorderPen( tmpPen );
+      }
+    }
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( dlg->top <= row && dlg->bottom >= row
+           &&!c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PBottomBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+      }
+    }
+
+    RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_bottom);
+    obj->setBottomBorderPen( tmpPen );
+  }
+}
+
+void CellLayoutPageBorder::applyLeftOutline( int _left, int _top, int _right,
+                                             int _bottom )
+{
+  KSpreadBorderButton* left = borderButtons[BorderType_Left];
+  QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
+  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  {
+    for ( int y = _top; y <= _bottom; y++ )
+    {
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _left,y );
+      if(!obj->isObscuringForced())
+        obj->setLeftBorderPen( tmpPen );
+    }
+  }
+  else if( dlg->isColumnSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( dlg->left == col && !c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PLeftBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+    }
+    ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_left);
+    obj->setLeftBorderPen( tmpPen );
+
+    RowLayout* rw =dlg->getTable()->firstRow();
+    for( ; rw; rw = rw->next() )
+    {
+      if (rw->row()==_left&& !rw->isDefault() &&
+          (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
+      {
+        for(int i=dlg->left;i<=dlg->right;i++)
+        {
+          KSpreadCell *cell =
+            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+          cell->setLeftBorderPen( tmpPen );
+        }
+      }
+    }
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( dlg->top <= row && dlg->bottom >= row
+           &&!c->isObscuringForced() && c->column()==1)
+      {
+        c->clearProperty(KSpreadCell::PLeftBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+    }
+    for ( int y = _top; y <= _bottom; y++ )
+    {
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( 1,y );
+      if(!obj->isObscuringForced())
+          obj->setLeftBorderPen( tmpPen );
+    }
+  }
+}
+
+void CellLayoutPageBorder::applyRightOutline( int _left, int _top, int _right,
+                                              int _bottom )
+{
+  KSpreadBorderButton* right = borderButtons[BorderType_Right];
+  bool once=false;
+  QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
+  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  {
+    for ( int y = _top; y <= _bottom; y++ )
+    {
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
+      if(!obj->isObscuringForced())
         obj->setRightBorderPen(tmpPen);
+      else if(obj->isObscuringForced() && !once )
+      {
+        once=true;
+        int moveX=obj->obscuringCellsColumn();
+        int moveY=obj->obscuringCellsRow();
+        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
+        obj->setRightBorderPen(tmpPen);
+      }
+    }
+  }
+  else if(  dlg->isColumnSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( dlg->right == col && !c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PRightBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+      }
+    }
 
-        RowLayout* rw =dlg->getTable()->firstRow();
-                for( ; rw; rw = rw->next() )
-                {
-		  if (rw->row()==dlg->right&& !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)  ))
-		  {
-		    for(int i=dlg->left;i<=dlg->right;i++)
-		    {
-		      KSpreadCell *cell =
-			dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
-		      cell->setRightBorderPen(tmpPen);
-		    }
-		  }
-                }
-        }
-    else if(  dlg->isRowSelected )
+    ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_right);
+    obj->setRightBorderPen(tmpPen);
+
+    RowLayout* rw =dlg->getTable()->firstRow();
+    for( ; rw; rw = rw->next() )
+    {
+      if (rw->row()==dlg->right&& !rw->isDefault() &&
+          (rw->hasProperty(KSpreadCell::PRightBorder)  ))
+      {
+        for(int i=dlg->left;i<=dlg->right;i++)
         {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( dlg->top <= row && dlg->bottom >= row
-                                && !c->isObscuringForced()
+          KSpreadCell *cell =
+            dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
+          cell->setRightBorderPen(tmpPen);
+        }
+      }
+    }
+  }
+  else if(  dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( dlg->top <= row && dlg->bottom >= row
+           && !c->isObscuringForced()
 /* Dunno if this is necessary, isn't used for columns either (Philipp)
    therefore I commented it out:*/
-                             /* && c->column()==KS_colMax*/)
-                        {
-                        c->clearProperty(KSpreadCell::PRightBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-                        }
-                }
-
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
-                if(!obj->isObscuringForced())
-                        obj->setRightBorderPen(tmpPen);
-                else if(obj->isObscuringForced() && !once )
-                        {
-                        once=true;
-                        int moveX=obj->obscuringCellsColumn();
-                        int moveY=obj->obscuringCellsRow();
-                        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                        obj->setRightBorderPen(tmpPen);
-                        }
-                }
-        }
+           /* && c->column()==KS_colMax*/)
+      {
+        c->clearProperty(KSpreadCell::PRightBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+      }
     }
 
- if ( top->isChanged() )
+    for ( int y = _top; y <= _bottom; y++ )
     {
-    QPen tmpPen( top->getColor(),top->getPenWidth(),top->getPenStyle());
-    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int x = _left; x <= _right; x++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
-                if(!obj->isObscuringForced())
-                        obj->setTopBorderPen( tmpPen );
-                }
-        }
-    else if( dlg->isColumnSelected )
-        {
-         for ( int x = _left; x <= _right; x++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
-                if(!obj->isObscuringForced())
-                        obj->setTopBorderPen( tmpPen );
-                }
-        }
-    else if( dlg->isRowSelected )
-        {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PTopBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-                        }
-                }
-
-        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_top-1);
-        obj->setBottomBorderPen( tmpPen );
-        }
+      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
+      if(!obj->isObscuringForced())
+        obj->setRightBorderPen(tmpPen);
+      else if(obj->isObscuringForced() && !once )
+      {
+        once=true;
+        int moveX=obj->obscuringCellsColumn();
+        int moveY=obj->obscuringCellsRow();
+        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
+        obj->setRightBorderPen(tmpPen);
+      }
     }
-
- if ( bottom->isChanged() )
-    {
-    bool once = false;
-    QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
-    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-        {
-        for ( int x = _left; x <= _right; x++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
-                if(!obj->isObscuringForced())
-                        obj->setBottomBorderPen( tmpPen );
-                else if(obj->isObscuringForced() && !once )
-                        {
-                        once = true;
-                        int moveX=obj->obscuringCellsColumn();
-                        int moveY=obj->obscuringCellsRow();
-                        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                        obj->setBottomBorderPen( tmpPen );
-                        }
-                }
-        }
-    else if( dlg->isColumnSelected )
-        {
-        for ( int x = _left; x <= _right; x++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
-                if(!obj->isObscuringForced())
-                        obj->setBottomBorderPen( tmpPen );
-                else if(obj->isObscuringForced() && !once )
-                        {
-                        once = true;
-                        int moveX=obj->obscuringCellsColumn();
-                        int moveY=obj->obscuringCellsRow();
-                        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-                        obj->setBottomBorderPen( tmpPen );
-                        }
-                }
-        }
-    else if( dlg->isRowSelected )
-        {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced())
-                        {
-                        c->clearProperty(KSpreadCell::PBottomBorder);
-                        c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
-                        }
-                }
-
-        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_bottom);
-        obj->setBottomBorderPen( tmpPen );
-        }
-    }
-
- QPen tmpPenFall( fallDiagonal->getColor(),fallDiagonal->getPenWidth(),fallDiagonal->getPenStyle());
- QPen tmpPenGoUp( goUpDiagonal->getColor(),goUpDiagonal->getPenWidth(),goUpDiagonal->getPenStyle());
- if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
- {
-        for ( int x = _left; x <= _right; x++ )
-        {
-        for ( int y = _top; y <= _bottom; y++ )
-                {
-                KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
-                if(!obj->isObscuringForced())
-                        {
-                        if ( fallDiagonal->isChanged() )
-                                obj->setFallDiagonalPen( tmpPenFall );
-                        if ( goUpDiagonal->isChanged() )
-                                obj->setGoUpDiagonalPen( tmpPenGoUp );
-                        }
-                }
-        }
- }
- else if( dlg->isColumnSelected )
- {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int col = c->column();
-                if ( dlg->left <= col && dlg->right >= col
-                        &&!c->isObscuringForced())
-                        {
-                        if ( fallDiagonal->isChanged() )
-                                {
-                                c->clearProperty(KSpreadCell::PFallDiagonal);
-                                c->clearNoFallBackProperties( KSpreadCell::PFallDiagonal );
-                                }
-                        if ( goUpDiagonal->isChanged() )
-                                {
-                                c->clearProperty(KSpreadCell::PGoUpDiagonal);
-                                c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal);
-                                }
-                        }
-                }
-
- for ( int x = _left; x <= _right; x++ )
-        {
-        ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
-        if ( fallDiagonal->isChanged() )
-                obj->setFallDiagonalPen( tmpPenFall );
-        if ( goUpDiagonal->isChanged() )
-                obj->setGoUpDiagonalPen( tmpPenGoUp );
-        }
-
-        RowLayout* rw =dlg->getTable()->firstRow();
-        for( ; rw; rw = rw->next() )
-        {
-                if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFallDiagonal)
-                ||rw->hasProperty(KSpreadCell::PGoUpDiagonal) ))
-                {
-		  for(int i=dlg->left;i<=dlg->right;i++)
-		  {
-		    KSpreadCell *cell = 
-		      dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
-		    cell->setFallDiagonalPen( tmpPenFall );
-		    cell->setGoUpDiagonalPen( tmpPenGoUp );
-		  }
-                }
-        }
- }
- else if( dlg->isRowSelected )
- {
-        KSpreadCell*c= dlg->getTable()->firstCell();
-        for( ;c; c = c->nextCell() )
-                {
-                int row = c->row();
-                if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced())
-                        {
-                        if ( fallDiagonal->isChanged() )
-                                {
-                                c->clearProperty(KSpreadCell::PFallDiagonal);
-                                c->clearNoFallBackProperties( KSpreadCell::PFallDiagonal );
-                                }
-                        if ( goUpDiagonal->isChanged() )
-                                {
-                                c->clearProperty(KSpreadCell::PGoUpDiagonal);
-                                c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal);
-                                }
-                        }
-                }
-
-   for ( int y = _top; y <= _bottom; y++ )
-        {
-        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
-        if ( fallDiagonal->isChanged() )
-                obj->setFallDiagonalPen( tmpPenFall );
-        if ( goUpDiagonal->isChanged() )
-                obj->setGoUpDiagonalPen( tmpPenGoUp );
-        }
- }
+  }
 }
+
+void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right,
+                                               int _bottom )
+{
+  KSpreadBorderButton* fallDiagonal = borderButtons[BorderType_FallingDiagonal];
+  KSpreadBorderButton* goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
+  QPen tmpPenFall( fallDiagonal->getColor(), fallDiagonal->getPenWidth(),
+                   fallDiagonal->getPenStyle());
+  QPen tmpPenGoUp( goUpDiagonal->getColor(), goUpDiagonal->getPenWidth(),
+                   goUpDiagonal->getPenStyle());
+  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  {
+    for ( int x = _left; x <= _right; x++ )
+    {
+      for ( int y = _top; y <= _bottom; y++ )
+      {
+        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
+        if(!obj->isObscuringForced())
+        {
+          if ( fallDiagonal->isChanged() )
+            obj->setFallDiagonalPen( tmpPenFall );
+          if ( goUpDiagonal->isChanged() )
+            obj->setGoUpDiagonalPen( tmpPenGoUp );
+        }
+      }
+    }
+  }
+  else if( dlg->isColumnSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( dlg->left <= col && dlg->right >= col && !c->isObscuringForced())
+      {
+        if ( fallDiagonal->isChanged() )
+        {
+          c->clearProperty(KSpreadCell::PFallDiagonal);
+          c->clearNoFallBackProperties( KSpreadCell::PFallDiagonal );
+        }
+        if ( goUpDiagonal->isChanged() )
+        {
+          c->clearProperty(KSpreadCell::PGoUpDiagonal);
+          c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal);
+        }
+      }
+    }
+
+    for ( int x = _left; x <= _right; x++ )
+    {
+      ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
+      if ( fallDiagonal->isChanged() )
+        obj->setFallDiagonalPen( tmpPenFall );
+      if ( goUpDiagonal->isChanged() )
+        obj->setGoUpDiagonalPen( tmpPenGoUp );
+    }
+
+    RowLayout* rw =dlg->getTable()->firstRow();
+    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFallDiagonal)
+                                ||rw->hasProperty(KSpreadCell::PGoUpDiagonal) ))
+      {
+        for(int i=dlg->left;i<=dlg->right;i++)
+        {
+          KSpreadCell *cell =
+            dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
+          cell->setFallDiagonalPen( tmpPenFall );
+          cell->setGoUpDiagonalPen( tmpPenGoUp );
+        }
+      }
+    }
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( dlg->top <= row && dlg->bottom >= row
+           &&!c->isObscuringForced())
+      {
+        if ( fallDiagonal->isChanged() )
+        {
+          c->clearProperty(KSpreadCell::PFallDiagonal);
+          c->clearNoFallBackProperties( KSpreadCell::PFallDiagonal );
+        }
+        if ( goUpDiagonal->isChanged() )
+        {
+          c->clearProperty(KSpreadCell::PGoUpDiagonal);
+          c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal);
+        }
+      }
+    }
+
+    for ( int y = _top; y <= _bottom; y++ )
+    {
+      RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
+      if ( fallDiagonal->isChanged() )
+        obj->setFallDiagonalPen( tmpPenFall );
+      if ( goUpDiagonal->isChanged() )
+        obj->setGoUpDiagonalPen( tmpPenGoUp );
+    }
+  }
+}
+
+void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top, int _right,
+                                                   int _bottom )
+{
+  QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
+               borderButtons[BorderType_Horizontal]->getPenWidth(),
+               borderButtons[BorderType_Horizontal]->getPenStyle());
+  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  {
+    for ( int x = _left; x <= _right; x++ )
+    {
+      for ( int y = _top+1; y <= _bottom; y++ )
+      {
+        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
+        if(!obj->isObscuringForced())
+          obj->setTopBorderPen(tmpPen);
+      }
+    }
+  }
+  else if( dlg->isColumnSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( dlg->left <= col && dlg->right >= col
+           &&!c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PTopBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+      }
+    }
+
+    for(int x=_left;x<=_right;x++)
+    {
+      ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
+      obj->setTopBorderPen(tmpPen);
+    }
+
+    RowLayout* rw =dlg->getTable()->firstRow();
+    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PTopBorder)  ))
+      {
+        for(int i=dlg->left;i<=dlg->right;i++)
+        {
+          KSpreadCell *cell =
+            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+          cell->setTopBorderPen(tmpPen);
+        }
+      }
+    }
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( (dlg->top+1) <= row && dlg->bottom >= row
+           &&!c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PTopBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+      }
+    }
+
+    for(int y=_top+1;y<=_bottom;y++)
+    {
+      RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
+      obj->setTopBorderPen(tmpPen);
+    }
+  }
+}
+void CellLayoutPageBorder::applyVerticalOutline( int _left, int _top, int _right,
+                                                 int _bottom )
+{
+  KSpreadBorderButton* vertical = borderButtons[BorderType_Vertical];
+  QPen tmpPen( vertical->getColor(), vertical->getPenWidth(),
+               vertical->getPenStyle());
+  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  {
+    for ( int x = _left+1; x <= _right; x++ )
+    {
+      for ( int y = _top; y <= _bottom; y++ )
+      {
+        KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
+        if(!obj->isObscuringForced())
+          obj->setLeftBorderPen( tmpPen );
+      }
+    }
+  }
+  else if( dlg->isRowSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( dlg->left <= col && dlg->right >= col
+           &&!c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PLeftBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+    }
+
+    for(int x=_left+1;x<=_right;x++)
+    {
+      ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
+      obj->setLeftBorderPen( tmpPen );
+    }
+    RowLayout* rw =dlg->getTable()->firstRow();
+    for( ; rw; rw = rw->next() )
+    {
+      if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
+      {
+        for(int i=dlg->left;i<=dlg->right;i++)
+        {
+          KSpreadCell *cell =
+            dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
+          cell->setLeftBorderPen( tmpPen );
+        }
+      }
+    }
+  }
+  else if( dlg->isColumnSelected )
+  {
+    KSpreadCell*c= dlg->getTable()->firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( dlg->top <= row && dlg->bottom >= row
+           &&!c->isObscuringForced())
+      {
+        c->clearProperty(KSpreadCell::PLeftBorder);
+        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+      }
+    }
+
+    for(int y=_top;y<=_bottom;y++)
+    {
+      RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
+      obj->setLeftBorderPen( tmpPen );
+    }
+
+  }
+}
+
 
 void CellLayoutPageBorder::slotSetColorButton( const QColor &_color )
 {
     currentColor = _color;
 
-    pattern1->setColor( currentColor );
-    pattern2->setColor( currentColor );
-    pattern3->setColor( currentColor );
-    pattern4->setColor( currentColor );
-    pattern5->setColor( currentColor );
-    pattern6->setColor( currentColor );
-    pattern7->setColor( currentColor );
-    pattern8->setColor( currentColor );
-    pattern9->setColor( currentColor );
-    pattern10->setColor( currentColor );
+    for (int i = 0; i < NUM_BORDER_PATTERNS; i++)
+    {
+      pattern[i]->setColor( currentColor );
+    }
     preview->setColor( currentColor );
 
 }
 
 void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
 {
-    if ( pattern1 != _p )
-        pattern1->slotUnselect();
-    if ( pattern2 != _p )
-        pattern2->slotUnselect();
-    if ( pattern3 != _p )
-        pattern3->slotUnselect();
-    if ( pattern4 != _p )
-        pattern4->slotUnselect();
-    if ( pattern5 != _p )
-        pattern5->slotUnselect();
-    if ( pattern6 != _p )
-        pattern6->slotUnselect();
-    if ( pattern7 != _p )
-        pattern7->slotUnselect();
-    if ( pattern8 != _p )
-        pattern8->slotUnselect();
-    if ( pattern9 != _p )
-        pattern9->slotUnselect();
-    if ( pattern10 != _p )
-        pattern10->slotUnselect();
+    for (int i = 0; i < NUM_BORDER_PATTERNS; i++)
+    {
+      if (pattern[i] != _p)
+      {
+        pattern[i]->slotUnselect();
+      }
+    }
     preview->setPattern( _p->getColor(), _p->getPenWidth(), _p->getPenStyle() );
 }
 
 void CellLayoutPageBorder::preselect( KSpreadBorderButton *_p)
 {
+  KSpreadBorderButton* top = borderButtons[BorderType_Top];
+  KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
+  KSpreadBorderButton* left = borderButtons[BorderType_Left];
+  KSpreadBorderButton* right = borderButtons[BorderType_Right];
+  KSpreadBorderButton* vertical = borderButtons[BorderType_Vertical];
+  KSpreadBorderButton* horizontal = borderButtons[BorderType_Horizontal];
+  KSpreadBorderButton* remove = shortcutButtons[BorderShortcutType_Remove];
+  KSpreadBorderButton* outline = shortcutButtons[BorderShortcutType_Outline];
+  KSpreadBorderButton* all = shortcutButtons[BorderShortcutType_All];
+
   _p->setOn(false);
-  if(_p==remove)
-        {
-         if(left->isOn())
-                 left->unselect();
-
-         if(right->isOn())
-                 right->unselect();
-
-          if(top->isOn())
-                 top->unselect();
-
-          if(bottom->isOn())
-                 bottom->unselect();
-
-          if(fallDiagonal->isOn())
-                 fallDiagonal->unselect();
-
-         if(goUpDiagonal->isOn())
-                 goUpDiagonal->unselect();
-
-          if(vertical->isOn())
-                 vertical->unselect();
-
-          if(horizontal->isOn())
-                 horizontal->unselect();
-        }
+  if(_p == remove)
+  {
+    for (int i=BorderType_Top; i < BorderType_END; i++)
+    {
+      if (borderButtons[i]->isOn())
+      {
+        borderButtons[i]->unselect();
+      }
+    }
+  }
   if(_p==outline)
-        {
-        top->setOn(true);
-        top->setPenWidth(preview->getPenWidth());
-        top->setPenStyle(preview->getPenStyle());
-        top->setColor( currentColor );
-        top->setChanged(true);
-        bottom->setOn(true);
-        bottom->setPenWidth(preview->getPenWidth());
-        bottom->setPenStyle(preview->getPenStyle());
-        bottom->setColor( currentColor );
-        bottom->setChanged(true);
-        left->setOn(true);
-        left->setPenWidth(preview->getPenWidth());
-        left->setPenStyle(preview->getPenStyle());
-        left->setColor( currentColor );
-        left->setChanged(true);
-        right->setOn(true);
-        right->setPenWidth(preview->getPenWidth());
-        right->setPenStyle(preview->getPenStyle());
-        right->setColor( currentColor );
-        right->setChanged(true);
-        }
+  {
+    top->setOn(true);
+    top->setPenWidth(preview->getPenWidth());
+    top->setPenStyle(preview->getPenStyle());
+    top->setColor( currentColor );
+    top->setChanged(true);
+    bottom->setOn(true);
+    bottom->setPenWidth(preview->getPenWidth());
+    bottom->setPenStyle(preview->getPenStyle());
+    bottom->setColor( currentColor );
+    bottom->setChanged(true);
+    left->setOn(true);
+    left->setPenWidth(preview->getPenWidth());
+    left->setPenStyle(preview->getPenStyle());
+    left->setColor( currentColor );
+    left->setChanged(true);
+    right->setOn(true);
+    right->setPenWidth(preview->getPenWidth());
+    right->setPenStyle(preview->getPenStyle());
+    right->setColor( currentColor );
+    right->setChanged(true);
+  }
   if(_p==all)
-        {
-        if(dlg->oneRow==false)
-                {
-                horizontal->setOn(true);
-                horizontal->setPenWidth(preview->getPenWidth());
-                horizontal->setPenStyle(preview->getPenStyle());
-                horizontal->setColor( currentColor );
-                horizontal->setChanged(true);
-                }
-        if(dlg->oneCol==false)
-                {
-                vertical->setOn(true);
-                vertical->setPenWidth(preview->getPenWidth());
-                vertical->setPenStyle(preview->getPenStyle());
-                vertical->setColor( currentColor );
-                vertical->setChanged(true);
-                }
-        }
+  {
+    if(dlg->oneRow==false)
+    {
+      horizontal->setOn(true);
+      horizontal->setPenWidth(preview->getPenWidth());
+      horizontal->setPenStyle(preview->getPenStyle());
+      horizontal->setColor( currentColor );
+      horizontal->setChanged(true);
+    }
+    if(dlg->oneCol==false)
+    {
+      vertical->setOn(true);
+      vertical->setPenWidth(preview->getPenWidth());
+      vertical->setPenStyle(preview->getPenStyle());
+      vertical->setColor( currentColor );
+      vertical->setChanged(true);
+    }
+  }
   area->repaint();
 }
 
@@ -3893,166 +3753,203 @@ void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
 {
   _p->setChanged(true);
 
-      if(_p->isOn())
-        {
-          _p->setPenWidth(preview->getPenWidth());
-          _p->setPenStyle(preview->getPenStyle());
-          _p->setColor( currentColor );
-        }
-      else
-        {
-          _p->setPenWidth(1);
-          _p->setPenStyle(Qt::NoPen);
-          _p->setColor( colorGroup().text() );
-        }
+  if(_p->isOn())
+  {
+    _p->setPenWidth(preview->getPenWidth());
+    _p->setPenStyle(preview->getPenStyle());
+    _p->setColor( currentColor );
+  }
+  else
+  {
+    _p->setPenWidth(1);
+    _p->setPenStyle(Qt::NoPen);
+    _p->setColor( colorGroup().text() );
+  }
 
  area->repaint();
 }
 
 void CellLayoutPageBorder::draw()
 {
+  KSpreadBorderButton* top = borderButtons[BorderType_Top];
+  KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
+  KSpreadBorderButton* left = borderButtons[BorderType_Left];
+  KSpreadBorderButton* right = borderButtons[BorderType_Right];
+  KSpreadBorderButton* risingDiagonal = borderButtons[BorderType_RisingDiagonal];
+  KSpreadBorderButton* fallingDiagonal = borderButtons[BorderType_FallingDiagonal];
+  KSpreadBorderButton* vertical = borderButtons[BorderType_Vertical];
+  KSpreadBorderButton* horizontal = borderButtons[BorderType_Horizontal];
   QPen pen;
   QPainter painter;
   painter.begin( area );
 
   if((bottom->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( bottom->getColor(), bottom->getPenWidth(),bottom->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX, area->height()-OFFSETY, area->width()-OFFSETX , area->height()-OFFSETY );
-    }
+  {
+    pen=QPen( bottom->getColor(), bottom->getPenWidth(),bottom->getPenStyle());
+    painter.setPen( pen );
+    painter.drawLine( OFFSETX, area->height()-OFFSETY, area->width()-OFFSETX , area->height()-OFFSETY );
+  }
   if((top->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( top->getColor(), top->getPenWidth(),top->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX, OFFSETY, area->width() -OFFSETX, OFFSETY );
-    }
+  {
+    pen=QPen( top->getColor(), top->getPenWidth(),top->getPenStyle());
+    painter.setPen( pen );
+    painter.drawLine( OFFSETX, OFFSETY, area->width() -OFFSETX, OFFSETY );
+  }
  if((left->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( left->getColor(), left->getPenWidth(),left->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX, OFFSETY, OFFSETX , area->height()-OFFSETY );
-    }
+ {
+   pen=QPen( left->getColor(), left->getPenWidth(),left->getPenStyle());
+   painter.setPen( pen );
+   painter.drawLine( OFFSETX, OFFSETY, OFFSETX , area->height()-OFFSETY );
+ }
  if((right->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( right->getColor(), right->getPenWidth(),right->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( area->width()-OFFSETX, OFFSETY, area->width()-OFFSETX, area->height()-OFFSETY );
+ {
+   pen=QPen( right->getColor(), right->getPenWidth(),right->getPenStyle());
+   painter.setPen( pen );
+   painter.drawLine( area->width()-OFFSETX, OFFSETY, area->width()-OFFSETX,
+                     area->height()-OFFSETY );
 
-    }
- if((fallDiagonal->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( fallDiagonal->getColor(), fallDiagonal->getPenWidth(),fallDiagonal->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX, OFFSETY, area->width()-OFFSETX, area->height()-OFFSETY );
-      if(dlg->oneCol==false&& dlg->oneRow==false)
-        {
-        painter.drawLine( area->width()/2, OFFSETY, area->width()-OFFSETX, area->height()/2 );
-        painter.drawLine( OFFSETX,area->height()/2 , area->width()/2, area->height()-OFFSETY );
-        }
-    }
- if((goUpDiagonal->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( goUpDiagonal->getColor(), goUpDiagonal->getPenWidth(),goUpDiagonal->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX, area->height()-OFFSETY , area->width()-OFFSETX , OFFSETY );
-      if(dlg->oneCol==false&& dlg->oneRow==false)
-        {
-        painter.drawLine( area->width()/2, OFFSETY, OFFSETX, area->height()/2 );
-        painter.drawLine( area->width()/2,area->height()-OFFSETY , area->width()-OFFSETX, area->height()/2 );
-        }
+ }
+ if((fallingDiagonal->getPenStyle())!=Qt::NoPen)
+ {
+   pen=QPen( fallingDiagonal->getColor(), fallingDiagonal->getPenWidth(),
+             fallingDiagonal->getPenStyle());
+   painter.setPen( pen );
+   painter.drawLine( OFFSETX, OFFSETY, area->width()-OFFSETX,
+                     area->height()-OFFSETY );
+   if(dlg->oneCol==false&& dlg->oneRow==false)
+   {
+     painter.drawLine( area->width()/2, OFFSETY, area->width()-OFFSETX,
+                       area->height()/2 );
+     painter.drawLine( OFFSETX,area->height()/2 , area->width()/2,
+                       area->height()-OFFSETY );
+   }
+ }
+ if((risingDiagonal->getPenStyle())!=Qt::NoPen)
+ {
+   pen=QPen( risingDiagonal->getColor(), risingDiagonal->getPenWidth(),
+             risingDiagonal->getPenStyle());
+   painter.setPen( pen );
+   painter.drawLine( OFFSETX, area->height()-OFFSETY , area->width()-OFFSETX ,
+                     OFFSETY );
+   if(dlg->oneCol==false&& dlg->oneRow==false)
+   {
+     painter.drawLine( area->width()/2, OFFSETY, OFFSETX, area->height()/2 );
+     painter.drawLine( area->width()/2,area->height()-OFFSETY ,
+                       area->width()-OFFSETX, area->height()/2 );
+   }
 
-    }
+ }
  if((vertical->getPenStyle())!=Qt::NoPen)
     {
-      pen=QPen( vertical->getColor(), vertical->getPenWidth(),vertical->getPenStyle());
+      pen=QPen( vertical->getColor(), vertical->getPenWidth(),
+                vertical->getPenStyle());
       painter.setPen( pen );
       painter.drawLine( area->width()/2, 5 , area->width()/2 , area->height()-5 );
     }
-  if((horizontal->getPenStyle())!=Qt::NoPen)
-    {
-      pen=QPen( horizontal->getColor(), horizontal->getPenWidth(),horizontal->getPenStyle());
-      painter.setPen( pen );
-      painter.drawLine( OFFSETX,area->height()/2,area->width()-OFFSETX, area->height()/2 );
-    }
-  painter.end();
+ if((horizontal->getPenStyle())!=Qt::NoPen)
+ {
+   pen=QPen( horizontal->getColor(), horizontal->getPenWidth(),
+             horizontal->getPenStyle());
+   painter.setPen( pen );
+   painter.drawLine( OFFSETX,area->height()/2,area->width()-OFFSETX,
+                     area->height()/2 );
+ }
+ painter.end();
 }
 
 void CellLayoutPageBorder::invertState(KSpreadBorderButton *_p)
 {
   if(_p->isOn())
-        {
-        _p->unselect();
-        }
+  {
+    _p->unselect();
+  }
   else
-        {
-        _p->setOn(!_p->isOn());
-        _p->setPenWidth(preview->getPenWidth());
-        _p->setPenStyle(preview->getPenStyle());
-        _p->setColor( currentColor );
-        _p->setChanged(true);
-        }
+  {
+    _p->setOn(true);
+    _p->setPenWidth(preview->getPenWidth());
+    _p->setPenStyle(preview->getPenStyle());
+    _p->setColor( currentColor );
+    _p->setChanged(true);
+  }
 }
 
 void CellLayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
 {
+  KSpreadBorderButton* top = borderButtons[BorderType_Top];
+  KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
+  KSpreadBorderButton* left = borderButtons[BorderType_Left];
+  KSpreadBorderButton* right = borderButtons[BorderType_Right];
+  KSpreadBorderButton* vertical = borderButtons[BorderType_Vertical];
+  KSpreadBorderButton* horizontal = borderButtons[BorderType_Horizontal];
+
+
   QRect rect(OFFSETX,OFFSETY-8,area->width()-OFFSETX,OFFSETY+8);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
-        {
-        if(((top->getPenWidth()!=preview->getPenWidth()) ||(top->getColor()!=currentColor)
-        ||(top->getPenStyle()!=preview->getPenStyle()))&& top->isOn())
-                {
-                top->setPenWidth(preview->getPenWidth());
-                top->setPenStyle(preview->getPenStyle());
-                top->setColor( currentColor );
-                top->setChanged(true);
-                }
-        else
-                invertState(top);
-        }
-  rect.setCoords(OFFSETX,area->height()-OFFSETY-8,area->width()-OFFSETX,area->height()-OFFSETY+8);
+  {
+    if(((top->getPenWidth()!=preview->getPenWidth()) ||
+        (top->getColor()!=currentColor) ||
+        (top->getPenStyle()!=preview->getPenStyle()))
+       && top->isOn())
+    {
+      top->setPenWidth(preview->getPenWidth());
+      top->setPenStyle(preview->getPenStyle());
+      top->setColor( currentColor );
+      top->setChanged(true);
+    }
+    else
+      invertState(top);
+  }
+  rect.setCoords(OFFSETX,area->height()-OFFSETY-8,area->width()-OFFSETX,
+                 area->height()-OFFSETY+8);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
-        {
-         if(((bottom->getPenWidth()!=preview->getPenWidth()) ||(bottom->getColor()!=currentColor)
-        ||(bottom->getPenStyle()!=preview->getPenStyle()))&& bottom->isOn())
-                {
-                bottom->setPenWidth(preview->getPenWidth());
-                bottom->setPenStyle(preview->getPenStyle());
-                bottom->setColor( currentColor );
-                bottom->setChanged(true);
-                }
-        else
-                invertState(bottom);
-        }
+  {
+    if(((bottom->getPenWidth()!=preview->getPenWidth()) ||
+        (bottom->getColor()!=currentColor) ||
+        (bottom->getPenStyle()!=preview->getPenStyle()))
+       && bottom->isOn())
+    {
+      bottom->setPenWidth(preview->getPenWidth());
+      bottom->setPenStyle(preview->getPenStyle());
+      bottom->setColor( currentColor );
+      bottom->setChanged(true);
+    }
+    else
+      invertState(bottom);
+  }
 
   rect.setCoords(OFFSETX-8,OFFSETY,OFFSETX+8,area->height()-OFFSETY);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
-        {
-        if(((left->getPenWidth()!=preview->getPenWidth()) ||(left->getColor()!=currentColor)
-        ||(left->getPenStyle()!=preview->getPenStyle()))&& left->isOn())
-                {
-                left->setPenWidth(preview->getPenWidth());
-                left->setPenStyle(preview->getPenStyle());
-                left->setColor( currentColor );
+  {
+    if(((left->getPenWidth()!=preview->getPenWidth()) ||
+        (left->getColor()!=currentColor) ||
+        (left->getPenStyle()!=preview->getPenStyle()))
+       && left->isOn())
+    {
+      left->setPenWidth(preview->getPenWidth());
+      left->setPenStyle(preview->getPenStyle());
+      left->setColor( currentColor );
                 left->setChanged(true);
-                }
-        else
-                invertState(left);
-        }
-  rect.setCoords(area->width()-OFFSETX-8,OFFSETY,area->width()-OFFSETX+8,area->height()-OFFSETY);
- if(rect.contains(QPoint(_ev->x(),_ev->y())))
-        {
-        if(((right->getPenWidth()!=preview->getPenWidth()) ||(right->getColor()!=currentColor)
-        ||(right->getPenStyle()!=preview->getPenStyle()))&& right->isOn())
-                {
-                right->setPenWidth(preview->getPenWidth());
-                right->setPenStyle(preview->getPenStyle());
-                right->setColor( currentColor );
-                right->setChanged(true);
-                }
-        else
-                invertState(right);
-        }
+    }
+    else
+      invertState(left);
+  }
+  rect.setCoords(area->width()-OFFSETX-8,OFFSETY,area->width()-OFFSETX+8,
+                 area->height()-OFFSETY);
+  if(rect.contains(QPoint(_ev->x(),_ev->y())))
+  {
+    if(((right->getPenWidth()!=preview->getPenWidth()) ||
+        (right->getColor()!=currentColor) ||
+        (right->getPenStyle()!=preview->getPenStyle()))
+       && right->isOn())
+    {
+      right->setPenWidth(preview->getPenWidth());
+      right->setPenStyle(preview->getPenStyle());
+      right->setColor( currentColor );
+      right->setChanged(true);
+    }
+    else
+      invertState(right);
+  }
 
 //don't work because I don't know how create a rectangle
 //for diagonal
@@ -4067,43 +3964,49 @@ if(rect.contains(QPoint(_ev->x(),_ev->y())))
          invertState(goUpDiagonal);
         } */
 
- if(dlg->oneCol==false)
-        {
-         rect.setCoords(area->width()/2-8,OFFSETY,area->width()/2+8,area->height()-OFFSETY);
+  if(dlg->oneCol==false)
+  {
+    rect.setCoords(area->width()/2-8,OFFSETY,area->width()/2+8,
+                   area->height()-OFFSETY);
 
-        if(rect.contains(QPoint(_ev->x(),_ev->y())))
-                {
-                if(((vertical->getPenWidth()!=preview->getPenWidth()) ||(vertical->getColor()!=currentColor)
-                ||(vertical->getPenStyle()!=preview->getPenStyle()))&& vertical->isOn())
-                        {
-                        vertical->setPenWidth(preview->getPenWidth());
-                        vertical->setPenStyle(preview->getPenStyle());
-                        vertical->setColor( currentColor );
-                        vertical->setChanged(true);
-                        }
-                else
-                        invertState(vertical);
-                }
-        }
- if(dlg->oneRow==false)
-        {
-        rect.setCoords(OFFSETX,area->height()/2-8,area->width()-OFFSETX,area->height()/2+8);
-        if(rect.contains(QPoint(_ev->x(),_ev->y())))
-                {
-                if(((horizontal->getPenWidth()!=preview->getPenWidth()) ||(horizontal->getColor()!=currentColor)
-                ||(horizontal->getPenStyle()!=preview->getPenStyle()))&& horizontal->isOn())
-                        {
-                        horizontal->setPenWidth(preview->getPenWidth());
-                        horizontal->setPenStyle(preview->getPenStyle());
-                        horizontal->setColor( currentColor );
-                        horizontal->setChanged(true);
-                        }
-                else
-                        invertState(horizontal);
-                }
-        }
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+      if(((vertical->getPenWidth()!=preview->getPenWidth()) ||
+          (vertical->getColor()!=currentColor) ||
+          (vertical->getPenStyle()!=preview->getPenStyle()))
+         && vertical->isOn())
+      {
+        vertical->setPenWidth(preview->getPenWidth());
+        vertical->setPenStyle(preview->getPenStyle());
+        vertical->setColor( currentColor );
+        vertical->setChanged(true);
+      }
+      else
+        invertState(vertical);
+    }
+  }
+  if(dlg->oneRow==false)
+  {
+    rect.setCoords(OFFSETX,area->height()/2-8,area->width()-OFFSETX,
+                   area->height()/2+8);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+      if(((horizontal->getPenWidth()!=preview->getPenWidth()) ||
+          (horizontal->getColor()!=currentColor) ||
+          (horizontal->getPenStyle()!=preview->getPenStyle()))
+         && horizontal->isOn())
+      {
+        horizontal->setPenWidth(preview->getPenWidth());
+        horizontal->setPenStyle(preview->getPenStyle());
+        horizontal->setColor( currentColor );
+        horizontal->setChanged(true);
+      }
+      else
+        invertState(horizontal);
+    }
+  }
 
- area->repaint();
+  area->repaint();
 }
 
 KSpreadBrushSelect::KSpreadBrushSelect( QWidget *parent, const char * ) : QFrame( parent )
@@ -4520,7 +4423,7 @@ void CellLayoutPagePattern::apply( ColumnLayout *_obj )
 	  {
 	    for(int i=dlg->left;i<=dlg->right;i++)
 	    {
-	      KSpreadCell *cell = 
+	      KSpreadCell *cell =
 		dlg->getTable()->nonDefaultCell( i,  rw->row(), true);
 	      applyLayout(cell );
 	    }
