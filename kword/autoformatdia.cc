@@ -45,9 +45,9 @@
 /*================================================================*/
 KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
-      doc( _doc ), 
+      doc( _doc ),
       oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),
-      oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ), 
+      oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ),
       quotesChanged( false )
 {
     page = _page;
@@ -96,7 +96,7 @@ void KWAutoFormatDia::setupTab1()
 
     cbUpperUpper = new QCheckBox( tab1 );
     cbUpperUpper->setText( i18n( "Convert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
-                                 "( e.g. HAllo to Hallo )" ) );
+                                 "( e.g. HEllo to Hello )" ) );
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( doc->getAutoFormat().getConfigUpperUpper() );
 
