@@ -212,4 +212,18 @@ void FormulaEvalTester::run()
   // simple binary operation  
   CHECK_EVAL( "0+0", KSpreadValue(0) );
   CHECK_EVAL( "1+1", KSpreadValue(2) );
+  
+  // no parentheses, checking operator precendences
+  CHECK_EVAL( "14+3*77", KSpreadValue(245) );
+  CHECK_EVAL( "14-3*77", KSpreadValue(-217) );
+  CHECK_EVAL( "26*4+81", KSpreadValue(185) );
+  CHECK_EVAL( "26*4-81", KSpreadValue(23) );
+  CHECK_EVAL( "30-45/3", KSpreadValue(15) );
+  CHECK_EVAL( "45+45/3", KSpreadValue(60) );
+  CHECK_EVAL( "4+3*2-1", KSpreadValue(9) );
+  
+  // power operator is right associative
+  CHECK_EVAL( "2^3", KSpreadValue(8) );
+  CHECK_EVAL( "2^3^2", KSpreadValue(512) );
+  
 }
