@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
+#include <float.h>
 #include <kdebug.h>
 
 

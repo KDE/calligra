@@ -6,6 +6,7 @@
 #include "kglobal.h"
 #include <klocale.h>
 #include <math.h>
+#include <float.h>
 #include <kstddirs.h>
 #include <qapplication.h>
 KChartParameters::KChartParameters() :

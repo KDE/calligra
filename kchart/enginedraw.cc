@@ -1,6 +1,7 @@
 #include <stdlib.h>
 //#include <stdarg.h>
 #include <math.h>
+#include <float.h>
 //#include <stdio.h> //PENDING(kalle) Remove?
 #include <qcolor.h>
 #include <qpainter.h>

@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
+#include <float.h>
 #include <stdio.h> //PENDING(kalle) Remove?
 
 float pie_3D_rad = 0.;

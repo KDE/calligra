@@ -13,6 +13,8 @@
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <math.h>
+#include <float.h>
+
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 													  KChartPart* chart ) :
