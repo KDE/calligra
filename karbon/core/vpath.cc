@@ -325,8 +325,8 @@ VPath::boundingBox( const double zoomFactor ) const
 	return QRect(
 		qRound( zoomFactor * rect.left() ),
 		qRound( zoomFactor * rect.bottom() ),
-		qRound( zoomFactor * rect.right() ),
-		qRound( zoomFactor * rect.top() ) );
+		qRound( zoomFactor * ( rect.right() - rect.left() ) ),
+		qRound( zoomFactor * ( rect.top() - rect.bottom() ) ) );
 // TODO: swap bottom/top back when origin is bottom/left
 }
 

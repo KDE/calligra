@@ -24,12 +24,12 @@ VHandle::draw( QPainter& painter, const double zoomFactor )
 	if( !itr.current() )
 		return;
 	else
-		m_bbox = itr.current()->boundingBox();
+		m_bbox = itr.current()->boundingBox( zoomFactor );
 	++itr;
 
 	for ( ; itr.current() ; ++itr )
 	{
-		m_bbox = m_bbox.unite( itr.current()->boundingBox() );
+		m_bbox = m_bbox.unite( itr.current()->boundingBox( zoomFactor ) );
 	}
 
 	painter.setBrush( Qt::NoBrush );
@@ -37,7 +37,7 @@ VHandle::draw( QPainter& painter, const double zoomFactor )
 
 	// for now I think this is enough, maybe we need something else when
 	// handle is rotated ? Then again, this is just a simple rect.
-	painter.scale( zoomFactor, zoomFactor );
+	//painter.scale( zoomFactor, zoomFactor );
 
 	// Draw selection handle
 	painter.drawRect( m_bbox );

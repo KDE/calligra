@@ -28,7 +28,7 @@ public:
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	virtual QRect boundingBox() const { return QRect(); }
+	virtual QRect boundingBox( const double zoomFactor ) const { return QRect(); }
 
 	void setState( const VState state ) { m_state = state; }
 	VState state() const { return m_state; }

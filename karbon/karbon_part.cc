@@ -150,7 +150,20 @@ KarbonPart::selectObjects( const QRect &rect )
 	// select objects from all layers
 	QPtrListIterator<VLayer> itr( m_layers );
 	for ( ; itr.current() ; ++itr )
-		itr.current()->selectObjects( rect, list );
+	{
+		// select all objects within the rect coords
+		const QPtrList<VObject> objects = itr.current()->objects();
+		QPtrListIterator<VObject> oitr = objects;
+    	for ( ; oitr.current(); ++oitr )
+	    {
+	        if( oitr.current()->state() != VObject::deleted &&
+	            oitr.current()->boundingBox( 1 ).intersects( rect ) )
+			{
+				oitr.current()->setState( VObject::selected );
+				list.append( oitr.current() );
+			}
+		}
+	}
 
 	// now add the selected items to the handle
 	QPtrListIterator<VObject> oitr( list );

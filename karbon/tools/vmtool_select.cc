@@ -44,7 +44,7 @@ VMToolSelect::drawTemporaryObject(
 	QPoint p2 = view->canvasWidget()->contentsToViewport( p );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->handle()->objects().isEmpty() &&
-		part()->handle()->boundingBox().contains( p / view->zoomFactor() ) )
+		part()->handle()->boundingBox().contains( p /* view->zoomFactor() */ ) )
 	{
 		if( m_TransformState != Moving )
 			m_TransformState = Moving;

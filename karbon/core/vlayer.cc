@@ -53,7 +53,7 @@ VLayer::selectObjects( const QRect &rect, QPtrList<VObject> &list )
     for ( ; itr.current(); ++itr )
     {
 		if( itr.current()->state() != VObject::deleted &&
-			itr.current()->boundingBox().intersects( rect ) )
+			itr.current()->boundingBox( 1 ).intersects( rect ) )
 		{
 			itr.current()->setState( VObject::selected );
 			list.append( itr.current() );
