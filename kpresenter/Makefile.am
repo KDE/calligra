@@ -5,7 +5,7 @@ bin_SCRIPTS = kprconverter.pl
 
 ## The part
 kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = searchdia.cc notebar.cc backdia.cc webpresentation.cc kpresenter_view.cc \
+libkpresenterpart_la_SOURCES = searchdia.cc backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc  styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
@@ -28,7 +28,7 @@ libkpresenterpart_la_SOURCES = searchdia.cc notebar.cc backdia.cc webpresentatio
 	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kpfreehandobject.cc kppolylineobject.cc \
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
-	confpolygondia.cc kppolygonobject.cc
+	confpolygondia.cc kppolygonobject.cc notebar.cpp
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
