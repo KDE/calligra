@@ -312,7 +312,7 @@ public:
 
     void resetState();
     void addAnchor( const char *instance );
-    void addFormat( DomNode &node, KWFormat &format, RTFFormat *baseFormat );
+    void addFormat( DomNode &node, KWFormat &format, const RTFFormat* baseFormat );
     void addLayout( DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak );
     void addParagraph( DomNode &node, bool frameBreak );
     void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt=0);

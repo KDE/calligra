@@ -2047,7 +2047,7 @@ void RTFImport::addAnchor( const char *instance )
  * @param format the format information
  * @param baseFormat the format information is based on this format
  */
-void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseFormat )
+void RTFImport::addFormat( DomNode &node, KWFormat &format, const RTFFormat* baseFormat )
 {
     // Support both (\dn, \up) and (\sub, \super) for super/sub script
     int vertAlign  = format.fmt.vertAlign;
@@ -2432,20 +2432,20 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
       node.closeNode( "TEXT" );
 
     // Search for style in style sheet
-    QString name ( "Standard" );
-    RTFFormat *format = &state.format;
-    int s = state.layout.style;
+    QString name;
+    const RTFFormat* format = &state.format;
+    const int styleNum = state.layout.style;
 
-    // ### TODO: use ConstIterator
-    for (uint k=0; k < styleSheet.count(); k++)
+    const QValueList<RTFStyle>::ConstIterator endStyleSheet = styleSheet.end();
+    for ( QValueList<RTFStyle>::ConstIterator it=styleSheet.begin(); it!=endStyleSheet; ++it )
     {
-	if (styleSheet[k].layout.style == s)
+	if ( (*it).layout.style == styleNum )
 	{
-	    if (textState->length > 0)
+	    if ( textState->length > 0 )
 	    {
-		format = &styleSheet[k].format;
+		format = &(*it).format;
 	    }
-	    name = styleSheet[k].name;
+	    name = (*it).name;
 	    break;
 	}
     }
@@ -2454,6 +2454,12 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     kwFormat.pos = 0;
     kwFormat.len = textState->length;
 
+    if ( name.isEmpty() )
+    {
+        kdWarning(30515) << "Style name empty! Assuming Standard!" << endl;
+        name = "Standard";
+    }
+    
     // Insert character formatting
     bool hasFormats = false;
 
