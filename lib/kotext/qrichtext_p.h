@@ -1113,6 +1113,7 @@ public:
     QTextDocument *document() const;
 
     QRect rect() const;
+    void setRect( const QRect& rect ) { r = rect; }
     void setHeight( int h ) { r.setHeight( h ); }
     void setWidth( int w ) { r.setWidth( w ); }
     void show();
