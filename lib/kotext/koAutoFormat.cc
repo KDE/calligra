@@ -35,6 +35,8 @@
 #include <koDocument.h>
 #include "koVariable.h"
 #include "koparagcounter.h"
+#include <kcommand.h>
+#include <kotextformat.h>
 
 /******************************************************************/
 /* Class: KoAutoFormat						  */
@@ -73,6 +75,8 @@ void KoAutoFormat::readConfig()
     m_useBulletStyle = config.readBoolEntry("UseBulletStyle",false);
     QString tmp = config.readEntry( "BulletStyle", "" );
     bulletStyle = tmp[0];
+
+    m_autoChangeFormat = config.readBoolEntry( "AutoChangeFormat", false );
 
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
@@ -160,6 +164,8 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "UseBulletStyle", m_useBulletStyle);
     config.writeEntry( "BulletStyle", QString(bulletStyle));
 
+    config.writeEntry( "AutoChangeFormat", m_autoChangeFormat);
+
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
 
@@ -231,6 +237,21 @@ QString KoAutoFormat::getLastWord(KoTextParag *parag, int index)
     return lastWord;
 }
 
+QString KoAutoFormat::getWordAfterSpace(KoTextParag *parag, int index)
+{
+    QString word;
+    KoTextString *s = parag->string();
+    for ( int i = index - 1; i >= 0; --i )
+    {
+        QChar ch = s->at( i ).c;
+        if ( ch.isSpace() )
+            break;
+        word.prepend( ch );
+    }
+    return word;
+
+}
+
 void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch,KoTextObject *txtObj )
 {
     if ( !m_configRead )
@@ -243,17 +264,14 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
     if( ch.isSpace())
     {
+        QString word=getWordAfterSpace(parag,index);
+        if ( m_autoChangeFormat && index > 3)
+        {
+            doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
+
+        }
         if ( m_autoDetectUrl && index > 0 )
         {
-            QString word;
-            KoTextString *s = parag->string();
-            for ( int i = index - 1; i >= 0; --i )
-            {
-                QChar ch = s->at( i ).c;
-                if ( ch.isSpace() )
-                    break;
-                word.prepend( ch );
-            }
             doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
         }
     }
@@ -484,6 +502,51 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
 
 }
 
+void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+{
+    bool underline = (word.at(0)=='_' && word.at(word.length()-1)=='_');
+    bool bold = (word.at(0)=='*' && word.at(word.length()-1)=='*');
+    if( bold || underline)
+    {
+        QString replacement=word.mid(1,word.length()-2);
+        int start = index - word.length();
+        KoTextDocument * textdoc = parag->textDocument();
+        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection : change format."));
+        QTextCursor cursor( parag->document() );
+
+        cursor.setParag( parag );
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + word.length() );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        macro->addCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
+                                                           KoTextObject::HighlightSelection,
+                                                           i18n("Autocorrect word") ));
+
+        KoTextFormat * lastFormat = static_cast<KoTextFormat *>(parag->at( start )->format());
+        KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + word.length()-2 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+
+        if( bold)
+        {
+            newFormat->setBold(true);
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, lastFormat, newFormat, QTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
+        }
+        else if( underline )
+        {
+            newFormat->setUnderline(true);
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, lastFormat, newFormat, QTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
+        }
+        txtObj->emitNewCommand(macro);
+        txtObj->emitHideCursor();
+        textEditCursor->gotoRight();
+        txtObj->emitShowCursor();
+    }
+}
+
 void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextString *s = parag->string();
@@ -616,6 +679,11 @@ void KoAutoFormat::configUseBulletStyle( bool _ubs)
 void KoAutoFormat::configBulletStyle( QChar b )
 {
     bulletStyle = b;
+}
+
+void KoAutoFormat::configAutoChangeFormat( bool b)
+{
+    m_autoChangeFormat = b;
 }
 
 

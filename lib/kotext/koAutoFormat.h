@@ -83,6 +83,13 @@ public:
      */
     static QString getLastWord( KoTextParag *parag, int index );
 
+    /**
+     * Helper method, returns the last word before parag,index
+     * different from getLastWord, because we test just space character
+     * and not punctualtion character
+     */
+    static QString getWordAfterSpace( KoTextParag * parag, int index);
+
     // Config for the typographic quotes. Used by the dialog.
     struct TypographicQuotes
     {
@@ -101,6 +108,8 @@ public:
     void configUseBulletStyle( bool _ubs);
 
     void configBulletStyle( QChar b );
+
+    void configAutoChangeFormat( bool b);
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -124,6 +133,9 @@ public:
 
     QChar getConfigBulletStyle() const
     { return bulletStyle; }
+
+    bool getConfigAutoChangeFormat() const
+    { return m_autoChangeFormat;}
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -177,6 +189,7 @@ protected:
 
     void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
     void doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    void doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
 
 private:
     KoDocument *m_doc;
@@ -186,7 +199,7 @@ private:
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
-    bool m_useBulletStyle;
+    bool m_useBulletStyle, m_autoChangeFormat;
 
     QChar bulletStyle;
 

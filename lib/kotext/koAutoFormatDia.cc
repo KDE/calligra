@@ -216,6 +216,12 @@ void KoAutoFormatDia::setupTab1()
     cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
     ( void )new QWidget( tab1 );
 
+    cbAutoChangeFormat=new QCheckBox( tab1 );
+    cbAutoChangeFormat->setText( i18n( "Automatic *Bold* _Underline_" ) );
+    cbAutoChangeFormat->resize( cbAutoChangeFormat->sizeHint() );
+    cbAutoChangeFormat->setChecked( m_autoFormat.getConfigAutoChangeFormat());
+    ( void )new QWidget( tab1 );
+
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n( "Use bullet style - * " ) );
     cbUseBulletStyle->resize( cbUseBulletStyle->sizeHint() );
@@ -465,6 +471,7 @@ bool KoAutoFormatDia::applyConfig()
 
     m_docAutoFormat->configBulletStyle(pbBulletStyle->text()[ 0 ]);
 
+    m_docAutoFormat->configAutoChangeFormat( cbAutoChangeFormat->isChecked());
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
