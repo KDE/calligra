@@ -22,6 +22,8 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+ static const char * CURRENT_DTD_VERSION = "1.2";
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -113,10 +115,8 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument doc( "DOC" );
-	QDomElement me = doc.createElement( "DOC" );
-
-	doc.appendChild( me );
+	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
+	QDomElement me = doc.documentElement();
 
 	QDomElement paper = doc.createElement( "PAPER" );
 	paper.setAttribute( "width", m_pageLayout.ptWidth );
