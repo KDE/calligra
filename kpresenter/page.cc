@@ -2123,8 +2123,17 @@ void Page::drawObject(PageObjects *_objPtr,QPixmap *screen,int _x,int _y,int _w,
     {
     case OT_PICTURE:
       {
+	if (_w != 0 || _h != 0)
+	  {
+	    p.setClipping(true);
+	    p.setClipRect(_objPtr->ox - diffx() + _cx,_objPtr->oy - diffy() + _cy,_objPtr->ow - _w,_objPtr->oh - _h);
+	  }
+
 	p.drawPixmap(_objPtr->ox - diffx() + _x,_objPtr->oy - diffy() + _y,
 		     _objPtr->graphObj->getPix());
+
+	if (_w != 0 || _h != 0)
+	  p.setClipping(false);
       } break;
     case OT_TEXT:
       {
