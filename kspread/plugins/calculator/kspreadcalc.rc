@@ -5,7 +5,7 @@
   <Action name="kspreadcalc" />
  </Menu>
 </MenuBar>
-<ToolBar name="calcplugintoolbar"><Text>Calculator</Text>
+<ToolBar fullWidth="false" name="calcplugintoolbar"><Text>Calculator</Text>
  <Action name="kspreadcalc" />
 </ToolBar>
 </kpartgui>
