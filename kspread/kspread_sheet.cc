@@ -6773,6 +6773,7 @@ void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
     kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
+    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
     if ( !doc->initDoc() )
         return;
 
@@ -6799,6 +6800,7 @@ void KSpreadSheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
         kdDebug() << "Error inserting child!" << endl;
         return;
     }
+    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
     if ( !doc->initDoc() )
         return;
 

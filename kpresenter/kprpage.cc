@@ -1509,8 +1509,11 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_doc );
+    if ( !doc )
+        return NULL;
 
-    if ( !doc || !doc->initDoc() )
+    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
+    if ( !doc->initDoc() )
         return NULL;
 
     QRect r = QRect( (int)_rect.left(), (int)_rect.top(),

@@ -13,6 +13,7 @@ KSpreadAppIface::KSpreadAppIface()
 DCOPRef KSpreadAppIface::createDoc()
 {
     KSpreadDoc* doc = new KSpreadDoc();
+    doc->setInitDocFlags( KoDocument::InitDocFileNew );
     doc->initDoc();
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );

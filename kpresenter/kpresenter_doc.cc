@@ -1957,13 +1957,13 @@ void KPresenterDoc::updateHeaderFooterPosition( )
     repaint(_footer);
 }
 
-bool KPresenterDoc::insertNewTemplate( bool clean )
+bool KPresenterDoc::initDoc()
 {
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
 
     KoTemplateChooseDia::DialogType dlgtype;
-    if (KoApplication::isStarting())
+    if (initDocFlags() != InitDocFileNew)
             dlgtype = KoTemplateChooseDia::Everything;
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
@@ -1976,7 +1976,7 @@ bool KPresenterDoc::insertNewTemplate( bool clean )
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
-        _clean = clean;
+        _clean = true; //was a parameter called "clean", but unused
         bool ok = loadNativeFormat( fileName );
         objStartY = 0;
         _clean = true;
@@ -3349,6 +3349,5 @@ void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
     //FIXME
     //m_bgSpellCheck->setKSpellConfig(_kspell);
 }
-
 
 #include "kpresenter_doc.moc"

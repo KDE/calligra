@@ -578,7 +578,7 @@ bool KWDocument::initDoc()
     bool ok = FALSE;
 
     KoTemplateChooseDia::DialogType dlgtype;
-    if (KoApplication::isStarting())
+    if (initDocFlags() != KoDocument::InitDocFileNew )
 	    dlgtype = KoTemplateChooseDia::Everything;
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
@@ -2712,7 +2712,10 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
 void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( this );
-    if ( !doc || !doc->initDoc() )
+    if ( !doc )
+        return;
+    doc->setInitDocFlags( KoDocument::InitDocEmbedded );
+    if ( !doc->initDoc() )
         return;
 
     KWChild* ch = new KWChild( this, rect.toQRect(), doc );

@@ -138,7 +138,7 @@ class KPresenterDoc : public KoDocument
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
-    virtual bool initDoc() { return insertNewTemplate( true ); }
+    virtual bool initDoc();
     void initEmpty();
     virtual void setEmpty();
 
@@ -153,8 +153,6 @@ class KPresenterDoc : public KoDocument
     //header-footer
     void createHeaderFooter();
     void updateHeaderFooterPosition();
-
-    bool insertNewTemplate( bool clean=false );
 
     const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
 

@@ -152,7 +152,7 @@ bool KSpreadDoc::initDoc()
     KoTemplateChooseDia::ReturnType ret;
 
     KoTemplateChooseDia::DialogType dlgtype;
-    if (KoApplication::isStarting())
+    if (initDocFlags() != KoDocument::InitDocFileNew )
             dlgtype = KoTemplateChooseDia::Everything;
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
@@ -527,16 +527,16 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   {
     QString tagName( element.tagName() );
 
-    if ( tagName != "locale" && tagName != "map" && tagName != "styles" 
-         && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname" 
+    if ( tagName != "locale" && tagName != "map" && tagName != "styles"
+         && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname"
          && tagName != "paper" )
     {
       // belongs to a plugin, load it and save it for later use
       m_savedDocParts[ tagName ] = element;
     }
-    
+
     element = element.nextSibling().toElement();
-  }  
+  }
 
   emit sigProgress( 90 );
   initConfig();
@@ -972,7 +972,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   int regionLeft   = paintRegion.left();
   int regionTop    = paintRegion.top();
 
-  for ( int y = regionTop; 
+  for ( int y = regionTop;
         y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
         ++y )
   {
@@ -992,7 +992,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       bool paintBordersRight = false;
       bool paintBordersLeft = false;
       bool paintBordersTop = false;
-      
+
       QPen rightPen( cell->effRightBorderPen( x, y ) );
       QPen leftPen( cell->effLeftBorderPen( x, y ) );
       QPen topPen( cell->effTopBorderPen( x, y ) );
@@ -1505,7 +1505,7 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
     //ElapsedTime etm( "Updating active table..." );
     m_activeTable->updateCellArea( rect );
   }
-  
+
   //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
   for ( b = m_activeTable->firstCellBinding(); b != 0; b = m_activeTable->nextCellBinding() )
   {
@@ -1515,7 +1515,7 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
   KoDocument::emitEndOperation();
 
   QApplication::restoreOverrideCursor();
-  
+
   if ( m_numOperations == 0 )
   {
     /* do this after the parent class emitEndOperation because that allows updates
