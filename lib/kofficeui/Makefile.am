@@ -17,15 +17,16 @@ libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
-	koRect.cpp \
+	koRect.cpp koPictureFilePreview.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp
 
-include_HEADERS = koFind.h koReplace.h \
+include_HEADERS = koGlobal.h koFind.h koReplace.h \
         koPageLayoutDia.h \
 	koPartSelectDia.h koPartSelectAction.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
 	kcoloractions.h koToolBox.h koTemplates.h \
+	koRect.h koPictureFilePreview.h \
 	koGlobal.h tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h
 
 METASOURCES = AUTO
