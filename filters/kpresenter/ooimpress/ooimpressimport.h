@@ -65,6 +65,7 @@ private:
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
 	void createPresentationAnimation(const QDomElement& element);
+	QDomNode findAnimationByObjectID(const QString & id);
 
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );

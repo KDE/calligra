@@ -2054,18 +2054,39 @@ void OoImpressImport::createPresentationAnimation(const QDomElement& element)
     }
 }
 
+QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
+{
+    //kdDebug()<<"QDomNode OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
+    if (m_animations.isEmpty() )
+        return QDomNode();
+
+    QDomElement *animation = m_animations[id];
+    //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
+    if ( !animation )
+        return QDomNode();
+    for (QDomNode node = *animation; !node.isNull(); node = node.nextSibling())
+    {
+        QDomElement e = node.toElement();
+        //kdDebug()<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
+        if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
+            return node;
+    }
+
+    return QDomNode();
+}
+
+
 void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object,
                                          QDomElement& sound)
 {
-    if ( !object.hasAttribute("draw:id") )
-        return;
-    QDomElement *origEffect = m_animations[object.attribute("draw:id")];
-    if (!origEffect)
+    QDomElement origEffect = findAnimationByObjectID(object.attribute("draw:id")).toElement();
+
+    if (origEffect.isNull())
         return;
 
-    QString effect = origEffect->attribute("presentation:effect");
-    QString dir = origEffect->attribute("presentation:direction");
-    QString speed = origEffect->attribute("presentation:speed");
+    QString effect = origEffect.attribute("presentation:effect");
+    QString dir = origEffect.attribute("presentation:direction");
+    QString speed = origEffect.attribute("presentation:speed");
     kdDebug()<<"speed :"<<speed<<endl;
     //todo implement speed value.
 
@@ -2113,7 +2134,7 @@ void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, cons
     e.appendChild(effElem);
 
     // sound effect
-    QDomElement origSoundEff = origEffect->namedItem("presentation:sound").toElement();
+    QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
     if (!origSoundEff.isNull())
     {
         QString soundUrl = storeSound(origSoundEff, sound, doc);
