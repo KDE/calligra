@@ -108,6 +108,7 @@ public:
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
   void printContent( KivioPainter& painter );
+  void printSelected( KivioPainter& painter );
 
   bool isStencilSelected( KivioStencil * );
   void selectAllStencils();

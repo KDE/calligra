@@ -54,6 +54,7 @@
 #include "kivio_common.h"
 #include "kivio_connector_point.h"
 #include "kivio_group_stencil.h"
+#include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
 #include "kivio_painter.h"
 #include "kivio_point.h"
@@ -372,13 +373,43 @@ void KivioPage::printContent( KivioPainter& painter )
     KivioLayer *pLayer = m_lstLayers.first();
     while( pLayer )
     {
-//        if( pLayer->visible() )
+        if( pLayer->visible() )
         {
             pLayer->printContent( painter );
         }
 
         pLayer = m_lstLayers.next();
     }
+}
+
+void KivioPage::printSelected( KivioPainter& painter )
+{
+   KivioStencil *pStencil;
+   KivioIntraStencilData data;
+
+   data.painter = &painter;
+   data.scale = 1.0f;
+   data.printing = true;
+
+   KivioLayer *pLayer = m_lstLayers.first();
+   while( pLayer )
+   {
+      if( pLayer->visible()==true )
+      {
+	 pStencil = pLayer->firstStencil();
+	 while( pStencil )
+	 {
+	    if( isStencilSelected(pStencil)==true )
+	    {
+	       pStencil->paint(&data);
+	    }
+
+	    pStencil = pLayer->nextStencil();
+	 }
+      }
+
+      pLayer = m_lstLayers.next();
+   }
 }
 
 

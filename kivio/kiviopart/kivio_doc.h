@@ -25,6 +25,7 @@ class KivioMap;
 class KivioPage;
 class KivioOptions;
 
+class ExportPageDialog;
 class KivioGroupStencil;
 class KivioStencilSpawner;
 class KivioStencilSpawnerSet;
@@ -109,6 +110,7 @@ public:
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
 
   void printContent( QPrinter& prn );
+  bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
   static QList<KivioDoc>& documents();
 

@@ -36,6 +36,10 @@
 #include <qtoolbutton.h>
 #include <qtimer.h>
 
+#include <qstrlist.h>
+#include <qimage.h>
+#include <qfiledialog.h>
+
 #include <kdialogbase.h>
 #include <kaction.h>
 #include <kcolorbutton.h>
@@ -47,6 +51,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kformulaedit.h>
+#include <kdebug.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -86,6 +91,7 @@
 #include "kivio_viewmanager_panel.h"
 #include "kivio_layer_panel.h"
 #include "kivio_birdeye_panel.h"
+#include "export_page_dialog.h"
 
 #include "gridsetupdialog.h"
 #include "aligndialog.h"
@@ -381,6 +387,7 @@ void KivioView::setupActions()
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
   m_showPage = new KAction( i18n("Show Page..."),0 ,this,SLOT(showPage()), actionCollection(), "showPage" );
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
+  m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
   KToggleAction* showPageBorders = new KToggleAction( i18n("Show page borders"), "view_pageborder", CTRL+Key_B, actionCollection(), "showPageBorders" );
   connect( showPageBorders, SIGNAL(toggled(bool)), SLOT(togglePageBorders(bool)));
@@ -1368,5 +1375,44 @@ void KivioView::setupPrinter(QPrinter &p)
     p.setFromTo(1, m_pDoc->map()->pageList().count());
 }
 
+void KivioView::exportPage()
+{
+   // First build a filter list
+   QString extList = QString("Image Files: (");
+   char *pStr;
+   QStrList strList;
+   ExportPageDialog dlg(this, "Export Page Dialog");
+
+   strList = QImageIO::outputFormats();
+   pStr = (char *)strList.first();
+   while( pStr )
+   {
+      extList = extList + " *." + QString(pStr).lower();
+
+      pStr = (char *)strList.next();
+   }
+
+   extList = extList + ")";
+
+   QFileDialog fd( this, "Export To File", true );
+
+   QString fileName = QFileDialog::getSaveFileName( "", extList );
+   if( fileName.isNull()==true )
+   {
+      return;
+   }
+
+   if( dlg.exec()!=QDialog::Accepted ) {
+      return;
+   }
+
+   if( m_pDoc->exportPage( m_pActivePage, fileName, &dlg )==false )
+   {
+      kdDebug() << "KivioView::exportPage() failed\n";
+      return;
+   }
+
+   kdDebug() << "KivioView::exportPage() succeeded\n";
+}
 
 #include "kivio_view.moc"

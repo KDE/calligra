@@ -153,6 +153,7 @@ public slots:
   void removePage();
   void hidePage();
   void showPage();
+  void exportPage();
   void viewZoom(int);
 
   void groupStencils();
@@ -235,6 +236,7 @@ private:
   KAction* m_removePage;
   KAction* m_hidePage;
   KAction* m_showPage;
+  KAction* m_exportPage;
   ZoomAction* m_viewZoom;
   TKUnitsAction* m_unitAct;
 

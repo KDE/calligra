@@ -33,8 +33,11 @@
  </Menu> <Menu name="Page"><text>P&amp;age</text>
    <Action name="insertPage"/>
    <Action name="removePage"/>
+   <Separator/>
    <Action name="hidePage"/>
    <Action name="showPage"/>
+   <Separator/>
+   <Action name="exportPage"/>
  </Menu>
  <Menu name="Selection"><text>&amp;Selection</text>
    <Action name="selectAllStencils"/>

@@ -27,6 +27,7 @@
 #include "kivio_view.h"
 #include "kivio_factory.h"
 
+#include "export_page_dialog.h"
 #include "kivio_config.h"
 #include "kivio_common.h"
 #include "kivio_group_stencil.h"
@@ -56,6 +57,7 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qpixmap.h>
 
 #include <kstddirs.h>
 #include <kconfig.h>
@@ -420,10 +422,44 @@ void KivioDoc::printContent( QPrinter &prn )
             prn.newPage();
     }
     p.stop();
-
-
-//    pPage =
 }
+
+/* TODO:
+ *
+ * This entire function should probably be encapsulated in some sort of
+ * object or other class.
+ */
+bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDialog *dlg)
+{
+   QPixmap buffer( pPage->paperLayout().ptWidth() + dlg->border()*2,
+		   pPage->paperLayout().ptHeight() + dlg->border()*2 );
+
+   kdDebug() << "KivioDoc::exportCurPage() to " << fileName << "\n";
+
+   KivioScreenPainter p;
+
+   buffer.fill(Qt::white);
+
+   p.start( &buffer );
+   p.setTranslation( dlg->border(), dlg->border() );
+
+   if( dlg->fullPage()==true )
+   {
+      pPage->printContent(p);
+   }
+   else
+   {
+      pPage->printSelected(p);
+   }
+
+   p.stop();
+
+
+   QFileInfo finfo(fileName);
+
+   return buffer.save( fileName, finfo.extension(false).upper().latin1(), dlg->quality());
+}
+
 
 bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString name )
 {

@@ -179,3 +179,14 @@
 02/04/2001
     - Below 50% zoom, the targets are no longer drawn
     - Added a text handle to connector stencils
+
+(Dave Marotti)
+02/27/2001
+    - Starting a connector now snaps to nearby connector targets
+    - Zooming out with the minus-zoom tool now works more than once
+    - Parts of exporting to a file (gif/jpeg/etc) now work
+    - Printing now abides by visible layers
+
+(Dave Marotti)
+03/06/2001
+    - All but the crop abilities of export page work
