@@ -21,10 +21,13 @@ public:
 
 	int gradientRepeat() const;
 	int gradientType() const;
+	bool gradientFill() const;
 	void setGradientType( int value );
 	void setGradientRepeat( int value );
+	void setGradientFill( bool b );
 
 private:
+	QComboBox* m_gradientFill;
 	QComboBox* m_gradientRepeat;
 	QComboBox* m_gradientType;
 };

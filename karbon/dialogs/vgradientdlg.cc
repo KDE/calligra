@@ -31,6 +31,10 @@ VGradientDlg::VGradientDlg( QWidget* parent, const char* name )
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	outerbox->addWidget( group );
 
+	new QLabel( i18n( "Gradient target:" ), group );
+	m_gradientFill = new QComboBox( false,group );
+	m_gradientFill->insertItem( i18n( "Stroke" ), 0 );
+	m_gradientFill->insertItem( i18n( "Fill" ), 1 );
 	new QLabel( i18n( "Gradient repeat:" ), group );
 	m_gradientRepeat = new QComboBox( false,group );
 	m_gradientRepeat->insertItem( i18n( "None" ), 0 );
@@ -78,6 +82,12 @@ VGradientDlg::gradientType() const
 	return m_gradientType->currentItem();
 }
 
+bool
+VGradientDlg::gradientFill() const
+{
+	return m_gradientFill->currentItem() == 1l;
+}
+
 void
 VGradientDlg::setGradientRepeat( int type )
 {
@@ -88,6 +98,12 @@ void
 VGradientDlg::setGradientType( int type )
 {
 	m_gradientType->setCurrentItem( type );
+}
+
+void
+VGradientDlg::setGradientFill( bool b )
+{
+	m_gradientFill->setCurrentItem( b );
 }
 
 #include "vgradientdlg.moc"

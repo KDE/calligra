@@ -10,7 +10,7 @@
 #include "vgradienttool.h"
 #include "vgradientdlg.h"
 #include "vfillcmd.h"
-
+#include "vstrokecmd.h"
 
 VGradientTool* VGradientTool::s_instance = 0L;
 
@@ -20,6 +20,7 @@ VGradientTool::VGradientTool( KarbonPart* part )
 	m_dialog = new VGradientDlg();
 	m_dialog->setGradientRepeat( gradient_repeat_none );
 	m_dialog->setGradientType( gradient_linear );
+	m_dialog->setGradientFill( 1 );
 }
 
 VGradientTool::~VGradientTool()
@@ -82,15 +83,28 @@ VGradientTool::eventFilter( KarbonView* view, QEvent* event )
 		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
-		VFill fill;
-		fill.gradient().addStop( VColor( qRgba( 255, 0, 0, 255 ) ), 0.0, 0.5 );
-		fill.gradient().addStop( VColor( qRgba( 255, 255, 0, 255 ) ), 1.0, 0.5 );
-		fill.gradient().setOrigin( fp * ( 1.0 / view->zoom() ) );
-		fill.gradient().setVector( lp * ( 1.0 / view->zoom() ) );
-		fill.setType( fill_gradient );
-		fill.gradient().setType( (VGradientType)m_dialog->gradientType() );
-		fill.gradient().setRepeatMethod( (VGradientRepeatMethod)m_dialog->gradientRepeat() );
-		part()->addCommand( new VFillCmd( &part()->document(), fill ), true );
+		VGradient gradient;
+		gradient.addStop( VColor( qRgba( 255, 0, 0, 255 ) ), 0.0, 0.5 );
+		gradient.addStop( VColor( qRgba( 255, 255, 0, 255 ) ), 1.0, 0.5 );
+		gradient.setOrigin( fp * ( 1.0 / view->zoom() ) );
+		gradient.setVector( lp * ( 1.0 / view->zoom() ) );
+		gradient.setType( (VGradientType)m_dialog->gradientType() );
+		gradient.setRepeatMethod( (VGradientRepeatMethod)m_dialog->gradientRepeat() );
+
+		if( m_dialog->gradientFill() )
+		{
+			VFill fill;
+			fill.gradient() = gradient;
+			fill.setType( fill_gradient );
+			part()->addCommand( new VFillCmd( &part()->document(), fill ), true );
+		}
+		else
+		{
+			VStroke stroke;
+			stroke.gradient() = gradient;
+			stroke.setType( stroke_gradient );
+			part()->addCommand( new VStrokeCmd( &part()->document(), stroke ), true );
+		}
 
 		m_isDragging = false;
 

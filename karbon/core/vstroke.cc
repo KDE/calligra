@@ -146,6 +146,7 @@ VStroke::operator=( const VStroke& stroke )
 		m_miterLimit = stroke.m_miterLimit;
 		m_color = stroke.m_color;
 		m_dashPattern = stroke.m_dashPattern;
+		m_gradient = stroke.m_gradient;
 	}
 
 	return *this;
