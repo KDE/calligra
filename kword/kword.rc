@@ -112,13 +112,13 @@
   <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
+<ToolBar hidden="true" name="table_toolbar" position="top"><Text>Table</Text>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
   <Action name="table_delcol"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="insert_toolbar" position="left"><Text>Insert</Text>
+<ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
   <Separator/>
@@ -133,7 +133,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
+<ToolBar name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
   <Action name="format_style"/>
   <Separator/>
   <Action name="format_alignleft"/>
@@ -146,7 +146,7 @@
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
+<ToolBar name="format_toolbar" position="top"><Text>Format</Text>
   <Action name="format_fontfamily"/>
   <Action name="format_fontsize"/>
   <Separator/>
@@ -160,7 +160,7 @@
   <Separator/>
   <Action name="format_color"/>
 </ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
+<ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="border_outline"/>
   <Action name="border_left"/>
   <Action name="border_right"/>
@@ -171,7 +171,7 @@
   <Action name="border_color"/>
   <Action name="border_backgroundcolor"/>
 </ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
+<ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>
   <Action name="formula_addroot"/>
   <Action name="formula_addfrac"/>
