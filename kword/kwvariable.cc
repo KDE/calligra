@@ -153,9 +153,10 @@ KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableForma
     : KoVariable( textdoc, varFormat, varColl ),
       m_doc(doc),
       m_frameset( 0L ),
-      m_numberingType( Auto )
+      m_numberingType( Auto ),
+      m_pageNum( 0 )
 {
-    m_varValue = QVariant( QString("") );
+    m_varValue = QVariant( QString::null );
 }
 
 void KWFootNoteVariable::setNumberingType( Numbering _type )
@@ -307,17 +308,19 @@ void KWFootNoteVariable::move( int x, int y )
     int paragy = paragraph()->rect().y();
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
+    //kdDebug(32001) << "KWFootNoteVariable::move (LU) " << QPoint( x, paragy + y + height ) << endl;
     KWFrame* containingFrame = fs->internalToDocument( QPoint( x, paragy + y + height ), dPoint );
     if ( containingFrame )
     {
         // Ok, the (bottom of the) footnote variable is at dPoint.
+        m_pageNum = containingFrame->pageNum(); // and at page m_pageNum
+
         KWFrame* footNoteFrame = m_frameset->frame( 0 );
         int framePage = footNoteFrame->pageNum();
-        int varPage = containingFrame->pageNum();
-        if ( framePage != varPage )
+        if ( framePage != m_pageNum )
         {
-            kdDebug(32001) << "Footnote var at page " << varPage << ", footnote frame at page " << framePage << " -> recalcFrames()" << endl;
-            fs->kWordDocument()->recalcFrames( QMIN( varPage, framePage ), -1 );
+            kdDebug(32001) << "Footnote var at page " << m_pageNum << ", footnote frame at page " << framePage << " -> recalcFrames()" << endl;
+            fs->kWordDocument()->recalcFrames( QMIN( m_pageNum, framePage ), -1 );
         }
 
         // TODO handle the case where dPoint is too far down to be on top of the associated footnote.... somehow

@@ -135,6 +135,9 @@ public:
     // Called whenever this item is being moved by the text formatter
     virtual void move( int x, int y );
 
+    // The page this var is on
+    int pageNum() const { return m_pageNum; }
+
     virtual void setDeleted( bool del );
 
     void formatedNote();
@@ -148,6 +151,7 @@ private:
     Numbering m_numberingType;
     int m_num;
     int m_numDisplay;
+    int m_pageNum; // the current page this var is on
 };
 
 #endif

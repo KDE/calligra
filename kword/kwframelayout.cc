@@ -60,7 +60,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
             {
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                kdDebug(32002) << " KWFrameLayout::layout page " << pageNum << " adding frame " << frameNum << " from " << fs->getName() << endl;
+                kdDebug(32002) << " Page " << pageNum << ": adding frame " << frameNum << " from " << fs->getName() << endl;
 #endif
                 KoRect rect;
                 if ( fs->isAHeader() ) // add on top
@@ -102,7 +102,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
                              top, ptColumnWidth, bottom - top );
                 uint frameNum = pageNum * numColumns + col;
 #ifdef DEBUG_FRAMELAYOUT
-                kdDebug(32002) << " KWFrameLayout::layout page " << pageNum << " resizing main text frame " << frameNum << " to " << rect << endl;
+                kdDebug(32002) << " Page " << pageNum << ": resizing main text frame " << frameNum << " to " << rect << endl;
 #endif
                 if ( frameNum < mainTextFrameSet->getNumFrames() ) {
                     // Resize existing frame
@@ -123,12 +123,12 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
     {
         int lastFrame = it.current()->lastFrameNumber( doc->getPages() - 1 );
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "Final cleanup: frameset " << it.current()->m_frameset->getName() << ": lastFrame=" << lastFrame << endl;
+        kdDebug(32002) << " Final cleanup: frameset " << it.current()->m_frameset->getName() << ": lastFrame=" << lastFrame << endl;
 #endif
         KWTextFrameSet* fs = it.current()->m_frameset;
         while ( (int)fs->getNumFrames() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-            kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter deleting frame " << fs->getNumFrames() - 1 << " of " << fs->getName() << endl;
+            kdDebug(32002) << "  Deleting frame " << fs->getNumFrames() - 1 << " of " << fs->getName() << endl;
 #endif
             fs->delFrame( fs->getNumFrames() - 1 );
         }
