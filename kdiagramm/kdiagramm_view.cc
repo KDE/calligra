@@ -37,6 +37,8 @@ KDiagrammView::KDiagrammView( QWidget *_parent, const char *_name, KDiagrammDoc*
   m_pDoc = _doc;
 
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
+
+  widget()->setBackgroundColor(Qt::white);
 }
 
 void KDiagrammView::init()
@@ -144,6 +146,11 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
+  m_vToolBarEdit->enable(OpenPartsUI::Hide);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Floating);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
+  m_vToolBarEdit->enable(OpenPartsUI::Show);
+  
   return true;
 }
 

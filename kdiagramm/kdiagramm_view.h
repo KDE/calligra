@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kdiagramm_gui_h__
 #define __kdiagramm_gui_h__
@@ -33,7 +33,7 @@ class KDiagrammShell;
 
 #include <qlist.h>
 #include <qscrbar.h>
-#include <qlabel.h> 
+#include <qlabel.h>
 #include <qbutton.h>
 #include <qpoint.h>
 
@@ -52,7 +52,7 @@ public:
     ~KDiagrammView();
 
     KDiagrammDoc* doc() { return m_pDoc; }
-  
+
     /**
      * ToolBar
      */
@@ -74,7 +74,7 @@ public:
      * MenuBar
      */
     void editData();
-  
+
     /**
      * MenuBar
      */
@@ -88,7 +88,7 @@ public:
     virtual void cleanUp();
 
     CORBA::Boolean printDlg();
-  
+
 public slots:
     // Document signals
     void slotUpdateView();
@@ -101,11 +101,11 @@ protected:
     // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-    virtual bool mappingEventConfigured( KDiagramm::View::EventConfigured _event );
-  
+  //virtual bool mappingEventConfigured( KDiagramm::View::EventConfigured _event );
+
     virtual void newView();
     virtual void helpUsing();
-  
+
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Lines;
     CORBA::Long m_idButtonEdit_Areas;
@@ -124,8 +124,8 @@ protected:
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;
-    
-    KDiagrammDoc *m_pDoc;  
+
+    KDiagrammDoc *m_pDoc;
 };
 
 #endif
