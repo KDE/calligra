@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kstdguiitem.h>
+#include <kdeversion.h>
 
 #include "kexidatasourcewizard.h"
 #include "kexidswelcome.h"
@@ -57,7 +58,11 @@ KexiDSWelcome::KexiDSWelcome(KexiDataSourceWizard *parent)
 void
 KexiDSWelcome::setUseWizard(bool use)
 {
+#if KDE_IS_VERSION(3,1,9)
 	bool useIcons = KGlobalSettings::showIconsOnPushButtons();
+#else
+	bool useIcons = true;
+#endif
 	if(use)
 	{
 		KGuiItem forward = KStdGuiItem::forward(KStdGuiItem::UseRTL);
