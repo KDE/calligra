@@ -112,6 +112,9 @@ class SetBackCmd : public KNamedCommand
 public:
     SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
                 const KPBackGround::Settings &oldSettings,
+#if MASTERPAGE
+                bool useMasterBackground,
+#endif
                 bool takeGlobal, KPresenterDoc *doc, KPrPage *page );
 
     virtual void execute();
@@ -121,6 +124,10 @@ protected:
 
     KPBackGround::Settings m_settings;
     KPBackGround::Settings m_oldSettings;
+#if MASTERPAGE
+    bool m_useMasterBackground;
+    bool m_oldUseMasterBackground;
+#endif
     bool m_takeGlobal;
     KPresenterDoc *m_doc;
     KPrPage *m_page;

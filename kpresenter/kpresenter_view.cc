@@ -3284,6 +3284,9 @@ void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ),
                                              backDia->getBackGround(),
                                              page->background()->getBackGround(),
+#if MASTERPAGE
+                                             backDia->getUseMasterBackground(),
+#endif
                                              takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();
     m_pKPresenterDoc->addCommand( setBackCmd );

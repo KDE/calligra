@@ -155,10 +155,17 @@ void SetOptionsCmd::unexecute()
 
 SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
                         const KPBackGround::Settings &oldSettings,
+#if MASTERPAGE
+                        bool useMasterBackground,
+#endif
                         bool takeGlobal, KPresenterDoc *doc, KPrPage *page )
 : KNamedCommand( name )
 , m_settings( settings )
 , m_oldSettings( oldSettings )
+#if MASTERPAGE
+, m_useMasterBackground( useMasterBackground )
+, m_oldUseMasterBackground( page->getUseMasterBackground() )    
+#endif
 , m_takeGlobal( takeGlobal )
 , m_doc( doc )
 , m_page( page )
@@ -169,12 +176,18 @@ void SetBackCmd::execute()
 {
     if ( !m_takeGlobal ) {
         m_page->background()->setBackGround( m_settings );
+#if MASTERPAGE
+        m_page->setUseMasterBackground( m_useMasterBackground );
+#endif
         m_doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
             it.current()->background()->setBackGround( m_settings );
+#if MASTERPAGE
+            it.current()->setUseMasterBackground( m_useMasterBackground );
+#endif
             m_doc->restoreBackground(it.current());
         }
 
@@ -196,12 +209,18 @@ void SetBackCmd::unexecute()
 {
     if ( !m_takeGlobal ) {
         m_page->background()->setBackGround( m_oldSettings );
+#if MASTERPAGE
+        m_page->setUseMasterBackground( m_oldUseMasterBackground );
+#endif
         m_doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( m_doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
             it.current()->background()->setBackGround( m_oldSettings );
+#if MASTERPAGE
+            it.current()->setUseMasterBackground( m_oldUseMasterBackground );
+#endif
             m_doc->restoreBackground(it.current());
         }
     }

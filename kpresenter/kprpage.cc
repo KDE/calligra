@@ -83,6 +83,9 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_selectedSlides( true )
     , m_bHasHeader( false )
     , m_bHasFooter( false )
+#if MASTERPAGE 
+    , m_useMasterBackground( false )
+#endif
     , m_pageEffect( PEF_NONE )
     , m_pageEffectSpeed( ES_MEDIUM )
     , m_soundEffect( false )
@@ -3361,3 +3364,14 @@ void KPrPage::setFooter( bool b )
     m_doc->setFooter( b );
 }
 
+#if MASTERPAGE 
+void KPrPage::setUseMasterBackground( bool useMasterBackground )
+{
+    m_useMasterBackground = useMasterBackground;
+}
+
+bool KPrPage::getUseMasterBackground() const
+{
+    return m_useMasterBackground;
+}
+#endif
