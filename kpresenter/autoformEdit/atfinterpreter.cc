@@ -68,7 +68,7 @@ void ATFInterpreter::load(const QString & fileName)
         {
             ptA.readLine(cLine,256);
             line = simplify(QString(qstrdup(cLine)));
-            lines.append(qstrdup(line));
+            lines.append(qstrdup(line.latin1()));
         }
         ptA.close();
         delete cLine;
@@ -99,7 +99,7 @@ void ATFInterpreter::save(const QString & fileName)
             for (line = lines.first();i < lines.count();line = lines.next(),i++)
             {
                 line += "\n";
-                f.writeBlock(line,line.length());
+                f.writeBlock(line.latin1(),line.length());
             }
         }
     }
@@ -232,20 +232,20 @@ void ATFInterpreter::changeVar(int pnt,int structur,int var,QString str)
         {
             if (structur == 0) coord = pntPtr->x;
             else coord = pntPtr->y;
-            if (var == 0) coord.a = qstrdup(str);
-            else if (var == 1) coord.b = qstrdup(str);
-            else if (var == 2) coord.c = qstrdup(str);
-            else if (var == 3) coord.d = qstrdup(str);
-            else if (var == 4) coord.e = qstrdup(str);
-            else if (var == 5) coord.f = qstrdup(str);
-            else if (var == 6) coord.result = qstrdup(str);
+            if (var == 0) coord.a = qstrdup(str.latin1());
+            else if (var == 1) coord.b = qstrdup(str.latin1());
+            else if (var == 2) coord.c = qstrdup(str.latin1());
+            else if (var == 3) coord.d = qstrdup(str.latin1());
+            else if (var == 4) coord.e = qstrdup(str.latin1());
+            else if (var == 5) coord.f = qstrdup(str.latin1());
+            else if (var == 6) coord.result = qstrdup(str.latin1());
             if (structur == 0) pntPtr->x = coord;
             else pntPtr->y = coord;
         }
         else
         {
-            if (var == 0) pntPtr->attrib.isVariable = qstrdup(str);
-            else pntPtr->attrib.pwDiv = qstrdup(str);
+            if (var == 0) pntPtr->attrib.isVariable = qstrdup(str.latin1());
+            else pntPtr->attrib.pwDiv = qstrdup(str.latin1());
         }
         makeLines();
         coordList.clear();
@@ -381,7 +381,7 @@ void ATFInterpreter::interpret()
                     lPtr->l = LEVEL_ATTR;
                     level.push(lPtr);
                 }
-                else if (line = END)
+                else if (line.latin1() == END)
                 {
                     level.pop();
                     coordList.append(coordPtr);
@@ -394,49 +394,49 @@ void ATFInterpreter::interpret()
                 {
                 case VAR_1:
                 {
-                    coord.a = qstrdup(line);
+                    coord.a = qstrdup(line.latin1());
                     value.var1 = getVar(line.remove(0,1));
                 } break;
                 case VAR_2:
                 {
-                    coord.b = qstrdup(line);		
+                    coord.b = qstrdup(line.latin1());
                     value.var2 = getVar(line.remove(0,1));
                 } break;
                 case VAR_3:
                 {
-                    coord.c = qstrdup(line);		
+                    coord.c = qstrdup(line.latin1());
                     value.var3 = getVar(line.remove(0,1));
                 } break;
                 case VAR_4:
                 {
-                    coord.d = qstrdup(line);		
+                    coord.d = qstrdup(line.latin1());
                     value.var4 = getVar(line.remove(0,1));
                 } break;
                 case VAR_5:
                 {
-                    coord.e = qstrdup(line);		
+                    coord.e = qstrdup(line.latin1());
                     value.var5 = getVar(line.remove(0,1));
                 } break;
                 case VAR_6:
                 {
-                    coord.f = qstrdup(line);		
+                    coord.f = qstrdup(line.latin1());
                     value.var6 = getVar(line.remove(0,1));
                 } break;
                 case VAR_X: case VAR_Y:
                 {
-                    coord.result = qstrdup(line);		
+                    coord.result = qstrdup(line.latin1());
                     value.result = getVar(line.remove(0,1));
                 } break;
                 case VAR_VARIA:
                 {
                     if (line.at(2) == '0') v = false;
                     else v = true;
-                    attrib.isVariable = qstrdup(line);
+                    attrib.isVariable = qstrdup(line.latin1());
                 } break;
                 case VAR_PW:
                 {
                     pw = 1; pw = ((char)QChar(line.at(2))) - 48;
-                    attrib.pwDiv = qstrdup(line);
+                    attrib.pwDiv = qstrdup(line.latin1());
                 } break;
                 case '}':
                 {
@@ -606,7 +606,7 @@ void ATFInterpreter::makeLines()
         tmp = "# ";
         tmp += name();
         tmp += " Autoform";
-        lines.append(qstrdup(tmp));
+        lines.append(qstrdup(tmp.latin1()));
         lines.append("# Generated with KAutoformEdit");
         lines.append("# (c) by Reginald Stadlbauer 1998");
         lines.append("# E-Mail: reggie@kde.org");
@@ -619,80 +619,80 @@ void ATFInterpreter::makeLines()
             tmp2.setNum(i);
             tmp += tmp2;
             tmp +=". Point";
-            lines.append(qstrdup(tmp));
+            lines.append(qstrdup(tmp.latin1()));
             lines.append("");
             lines.append("POINT {");
             lines.append("");
             lines.append("  X {");
 
             if (!pntPtr->x.a.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.a)));
+                lines.append(qstrdup(stretch(pntPtr->x.a).latin1()));
             else
                 lines.append("    a = 0");
             if (!pntPtr->x.b.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.b)));
+                lines.append(qstrdup(stretch(pntPtr->x.b).latin1()));
             else
                 lines.append("    b = 0");
             if (!pntPtr->x.c.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.c)));
+                lines.append(qstrdup(stretch(pntPtr->x.c).latin1()));
             else
                 lines.append("    c = 0");
             if (!pntPtr->x.d.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.d)));
+                lines.append(qstrdup(stretch(pntPtr->x.d).latin1()));
             else
                 lines.append("    d = 0");
             if (!pntPtr->x.e.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.e)));
+                lines.append(qstrdup(stretch(pntPtr->x.e).latin1()));
             else
                 lines.append("    e = 0");
             if (!pntPtr->x.f.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.f)));
+                lines.append(qstrdup(stretch(pntPtr->x.f).latin1()));
             else
                 lines.append("    f = 0");
             if (!pntPtr->x.result.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->x.result)));
+                lines.append(qstrdup(stretch(pntPtr->x.result).latin1()));
             else
                 lines.append("    x = a");
             lines.append("  }");
             lines.append("");
             lines.append("  Y {");
             if (!pntPtr->y.a.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.a)));
+                lines.append(qstrdup(stretch(pntPtr->y.a).latin1()));
             else
                 lines.append("    a = 0");
             if (!pntPtr->y.b.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.b)));
+                lines.append(qstrdup(stretch(pntPtr->y.b).latin1()));
             else
                 lines.append("    b = 0");
             if (!pntPtr->y.c.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.c)));
+                lines.append(qstrdup(stretch(pntPtr->y.c).latin1()));
             else
                 lines.append("    c = 0");
             if (!pntPtr->y.d.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.d)));
+                lines.append(qstrdup(stretch(pntPtr->y.d).latin1()));
             else
                 lines.append("    d = 0");
             if (!pntPtr->y.e.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.e)));
+                lines.append(qstrdup(stretch(pntPtr->y.e).latin1()));
             else
                 lines.append("    e = 0");
             if (!pntPtr->y.f.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.f)));
+                lines.append(qstrdup(stretch(pntPtr->y.f).latin1()));
             else
                 lines.append("    f = 0");
             if (!pntPtr->y.result.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->y.result)));
+                lines.append(qstrdup(stretch(pntPtr->y.result).latin1()));
             else
                 lines.append("    y = a");
             lines.append("  }");
             lines.append("");
             lines.append("  ATTRIB {");
             if (!pntPtr->attrib.isVariable.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->attrib.isVariable)));
+                lines.append(qstrdup(stretch(pntPtr->attrib.isVariable).latin1()));
             else
                 lines.append("    v = 0");
             if (!pntPtr->attrib.pwDiv.isEmpty())
-                lines.append(qstrdup(stretch(pntPtr->attrib.pwDiv)));
+                lines.append(qstrdup(stretch(pntPtr->attrib.pwDiv).latin1()));
             else
                 lines.append("    p = 1");
             lines.append("  }");
