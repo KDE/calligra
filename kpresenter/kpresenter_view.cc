@@ -235,7 +235,7 @@ void KPresenterView_impl::insertObject()
   KoPartEntry* pe = KoPartSelectDia::selectPart();
   if (!pe) return;
   
-  m_pKPresenterDoc->insertObject(QRect(10,10,200,200),pe->name());
+  m_pKPresenterDoc->insertObject(QRect(10,10,150,150),pe->name());
   //  startRectSelection(pe->name());
 }
 

@@ -14,6 +14,7 @@
 /******************************************************************/
 
 #include <kfiledialog.h>
+#include <page.h>
 
 #include "backdia.h"
 #include "backdia.moc"
@@ -92,14 +93,34 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   color1Choose = new KColorButton(backColor1,grp1);
   color1Choose->move(10,10);
   color1Choose->resize(color1Choose->sizeHint());
+  connect(color1Choose,SIGNAL(changed(const QColor&)),this,SLOT(colChanged(const QColor&)));
 
   color2Choose = new KColorButton(backColor2,grp1);
   color2Choose->move(10,color1Choose->y()+color1Choose->height()+10);
   color2Choose->resize(color2Choose->sizeHint());
+  connect(color2Choose,SIGNAL(changed(const QColor&)),this,SLOT(colChanged(const QColor&)));
   
+  bcType = _bcType;
+  cType = new QComboBox(false,grp1);
+  cType->insertItem("Plain",-1);
+  cType->insertItem("Horizontal Gradient",-1);
+  cType->insertItem("Vertical Gradient",-1);
+  cType->resize(cType->sizeHint());
+  cType->move(10,color2Choose->y()+color2Choose->height()+20);
+  connect(cType,SIGNAL(activated(int)),this,SLOT(selectCType(int)));
 
-  grp1->resize(2*color1Choose->x()+color1Choose->width(),
-	       2*color1Choose->y()+20+color1Choose->height()+color2Choose->height());
+  colorPreview = new QLabel(grp1);
+  colorPreview->resize(cType->width(),cType->width());
+  colorPreview->move(10,cType->y()+cType->height()+20);
+  
+  cType->setCurrentItem(bcType);
+  selectCType(bcType);
+
+  color1Choose->resize(cType->width(),color1Choose->height());
+  color2Choose->resize(cType->width(),color2Choose->height());
+
+  grp1->resize(2*cType->x()+cType->width(),
+	       colorPreview->y()+colorPreview->height()+20);
 
   radioPic = new QRadioButton("Picture (Pixel-Graphic)",this,"radioPic");
   radioPic->move(grp1->x()+grp1->width()+20,radioColor->y());
@@ -262,6 +283,24 @@ BackView BackDia::getBPicView()
   if (vCenter->isChecked()) return BV_CENTER;
   if (vZoom->isChecked()) return BV_ZOOM;
   return BV_TILED;
+}
+
+/*==================== select color type =========================*/
+void BackDia::selectCType(int i)
+{
+  bcType = (BCType)i;
+
+  QPainter p;
+  printf("HALLO\n");
+  QPixmap pm(colorPreview->size());
+  
+  p.begin(&pm);
+  Page::_drawBackColor(color1Choose->color(),color2Choose->color(),bcType,
+		       QRect(0,0,colorPreview->width(),colorPreview->height()),&p,
+		       QRect(0,0,colorPreview->width(),colorPreview->height()));
+  p.end();
+
+  colorPreview->setPixmap(pm);
 }
 
 /*=================== choose a picture ===========================*/

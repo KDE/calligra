@@ -33,6 +33,7 @@
 #include <qevent.h>
 #include <qpicture.h>
 #include <qpainter.h>
+#include <qcombo.h>
 
 #include <kcolorbtn.h>
 
@@ -108,9 +109,10 @@ public:
 private:
 
   // dialog objects
-  QLabel *lPicName,*picPreview,*lClipName;        
+  QLabel *lPicName,*picPreview,*lClipName,*colorPreview;        
   QGroupBox *grp1,*grp2,*grp3;
   QRadioButton *radioColor,*radioPic,*vTiled,*vCenter,*vZoom,*radioClip;
+  QComboBox *cType;
   QPushButton *okBut,*applyBut,*applyGlobalBut,*cancelBut;
   QPushButton *picChoose,*clipChoose;
   QButtonGroup *buttGrp,*buttGrp2,*buttGrp3;
@@ -125,10 +127,12 @@ private:
 private slots:
 
   // dialog slots
+  void selectCType(int);
   void selectPic(); 
   void selectClip();
   void openPic(const char*);
   void openClip(const char*);
+  void colChanged(const QColor&) {selectCType(bcType);}
   void Ok() {emit backOk(false);} 
   void Apply() {emit backOk(false);} 
   void ApplyGlobal() {emit backOk(true);} 

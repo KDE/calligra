@@ -24,18 +24,22 @@
 Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
   : QWidget(parent,name)
 {
-  mousePressed = false;
-  modType = MT_NONE;
-  resizeObjNum = 0;
-  editNum = 0;
-  drawBack = true;
-  txtPtr = 0;
-  graphPtr = 0;
-  setupMenus();
-  setBackgroundColor(white);
-  view = _view;
-  setMouseTracking(true);
-  show();
+  if (parent)
+    {
+      mousePressed = false;
+      modType = MT_NONE;
+      resizeObjNum = 0;
+      editNum = 0;
+      drawBack = true;
+      txtPtr = 0;
+      graphPtr = 0;
+      setupMenus();
+      setBackgroundColor(white);
+      view = _view;
+      setMouseTracking(true);
+      show();
+    }
+  else hide();
 }
 
 /*======================== destructor ============================*/
@@ -981,8 +985,6 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,QRect rect,
 {
   int ncols = 4;
   int depth = QColor::numBitPlanes();
-
-  bcType = BCT_GHORZ;
 
   switch (bcType)
     {

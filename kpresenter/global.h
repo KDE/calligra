@@ -42,7 +42,7 @@ struct SpPageConfiguration
 };
 
 // page background
-enum BCType {BCT_PLAIN,BCT_GHORZ,BCT_GVERT};
+enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
 
 struct Background
 {

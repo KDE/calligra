@@ -76,6 +76,9 @@ public:
   void setTextAlign(TxtParagraph::HorzAlign);
   KTextObject* kTxtObj() {return txtPtr;}
 
+  static void _drawBackColor(QColor c1,QColor c2,BCType bct,QRect r1,QPainter* p,QRect r2)
+    {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,r1,p,r2); delete pg;}
+
 public slots:
 
   // public slots
@@ -107,7 +110,7 @@ protected:
   // setup popupmenus
   void setupMenus();
 
-  // get - set datas
+  // get - set data
   QList<Background> *pageList() {return view->KPresenterDoc()->pageList();}
   QList<PageObjects> *objList() {return view->KPresenterDoc()->objList();}
   unsigned int objNums() {return view->KPresenterDoc()->objNums();}
