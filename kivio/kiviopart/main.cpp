@@ -42,11 +42,13 @@ int main( int argc, char **argv )
 
     KCmdLineArgs::init( argc, argv, newKivioAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
+    KoApplication::addCmdLineOptions();
 
     KoApplication app;
 
     QLabel* splash = 0;
-    if ( bool showSplash = true ) {
+    bool showSplash = true;
+    if ( showSplash ) {
       QString icon;
       int h = QTime::currentTime().hour();
       if ( h >= 5 && h < 11 )
