@@ -474,7 +474,7 @@ void KWDocument::initConfig()
   if(undo!=-1)
       setUndoRedoLimit(undo);
 
-  setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+  setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 
   //text mode view is not a good default for a readonly document...
   if ( !isReadWrite() && m_lastViewMode =="ModeText" )
@@ -1197,7 +1197,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         // Now part of the app config
         //m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         //if(m_zoom!=100)
-        //    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+        //    setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY(), false, false );
 
 
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().

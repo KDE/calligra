@@ -5,6 +5,10 @@ Bugs:
 -----
 - textformatter: need to check for line-level breaking during the formatting of each line
 Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
+- solve problem with a change in the available width right in the middle of the
+character we're trying to place (e.g. and it needs to move down to where the width is bigger)
+Possible solution: let getMargins return a "valid for a height of ... only",
+and then kotextformatter needs to move down by that height if .... hmm done.
 - footnotes: check move to next page, endnotes
 - anything else that http://bugs.kde.org mentions ;)
 

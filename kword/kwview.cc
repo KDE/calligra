@@ -1637,14 +1637,14 @@ void KWView::print( KPrinter &prt )
 
     //int dpiX = metrics.logicalDpiX();
     //int dpiY = metrics.logicalDpiY();
-    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    int dpiX = doZoom ? 300 : KoGlobal::dpiX();
+    int dpiY = doZoom ? 300 : KoGlobal::dpiY();
     ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
     ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
     m_doc->setZoomAndResolution( 100, dpiX, dpiY );
     m_doc->newZoomAndResolution( false, true /* for printing*/ );
     //kdDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
-    //kdDebug() << "x11AppDPI: " << QPaintDevice::x11AppDpiX() << "," << QPaintDevice::x11AppDpiY() << endl;
+    //kdDebug() << "x11AppDPI: " << KoGlobal::dpiX() << "," << KoGlobal::dpiY() << endl;
 
     bool serialLetter = FALSE;
 
@@ -1747,7 +1747,7 @@ void KWView::print( KPrinter &prt )
             fit.current()->preparePrinting( 0L, 0L, processedParags );
 #endif
 
-    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_doc->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_doc->newZoomAndResolution( false, false );
     kdDebug() << "KWView::print zoom&res reset" << endl;
 
@@ -2972,7 +2972,7 @@ void KWView::viewZoom( const QString &s )
 
 void KWView::setZoom( int zoom, bool updateViews )
 {
-    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+    m_doc->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
     m_doc->newZoomAndResolution( updateViews, false );
     m_doc->updateZoomRuler();
 
@@ -3027,8 +3027,8 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
         QSize pixmapSize ( frameset->picture().getOriginalSize() );
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         // ### TODO/FIXME: is the qRound really necessary?
-        double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
-        double height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
+        double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) ) );
+        double height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( KoGlobal::dpiY() ) ) );
 
         frameset->setKeepAspectRatio( _keepRatio);
 

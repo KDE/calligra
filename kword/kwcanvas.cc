@@ -468,8 +468,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
         if ( !m_pixmapSize.isEmpty() )
         {
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) );
+            uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( KoGlobal::dpiY() ) );
             m_insRect.setWidth( m_doc->unzoomItX( width ) );
             m_insRect.setHeight( m_doc->unzoomItY( height ) );
             // Apply reasonable limits
