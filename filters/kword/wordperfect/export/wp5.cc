@@ -95,8 +95,8 @@ bool WPFiveWorker::doOpenDocument(void)
   Q_UINT8 file_type = 10;
   output << file_type;
 
-  // write version (TODO explain)
-  Q_UINT16 version = 0x0202;
+  // write version ( 1 = WordPerfect 5.x )
+  Q_UINT16 version = 0x0100;
   output << version;
 
   // write encryption flag ( 0 = not encrypted )
