@@ -254,7 +254,7 @@ void KChartView::updateGuiTypeOfChart()
 
 void KChartView::slotConfig()
 {
-    config(KChartConfigDialog::KC_COLORS);
+    config(KChartConfigDialog::KC_ALL);
 }
 
 void KChartView::config(int flags)
