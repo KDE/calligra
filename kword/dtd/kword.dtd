@@ -507,7 +507,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|FONTATTRIBUTE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|FONTATTRIBUTE|LANGUAGE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
 
 
 <!ATTLIST FORMAT
@@ -706,6 +706,15 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT FONTATTRIBUTE
     EMPTY>
 <!ATTLIST FONTATTRIBUTE
+    value CDATA #REQUIRED>
+
+<!-- LANGUAGE
+        The name of the language used by this text span.
+        This is usually a two letters code, or ll_CC where a country is specified.
+-->
+<!ELEMENT LANGUAGE
+    EMPTY>
+<!ATTLIST LANGUAGE
     value CDATA #REQUIRED>
 
 

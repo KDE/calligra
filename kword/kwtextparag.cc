@@ -386,7 +386,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     {
         elem = doc.createElement( "FONTATTRIBUTE" );
         formatElem.appendChild( elem );
-        elem.setAttribute( "value", KoTextFormat::attributeFontToString(curFormat->attributeFont() ));
+        elem.setAttribute( "value", KoTextFormat::attributeFontToString(curFormat->attributeFont()) );
+    }
+    if( !refFormat || curFormat->spellCheckingLanguage() != refFormat->spellCheckingLanguage())
+    {
+        elem = doc.createElement( "LANGUAGE" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", curFormat->spellCheckingLanguage() );
     }
     return formatElem;
 }
@@ -636,6 +642,10 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "FONTATTRIBUTE" ).toElement();
     if ( !elem.isNull() )
         format.setAttributeFont( KoTextFormat::stringToAttributeFont(elem.attribute("value")));
+
+    elem = formatElem.namedItem( "LANGUAGE" ).toElement();
+    if ( !elem.isNull() )
+        format.setSpellCheckingLanguage( elem.attribute("value") );
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;
