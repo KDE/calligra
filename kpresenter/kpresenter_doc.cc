@@ -305,15 +305,6 @@ KPresenterDoc::~KPresenterDoc()
     delete fCollection;
 }
 
-/*======================== draw contents as QPicture =============*/
-void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int /*_height*/,
-			  float /*_scale*/ )
-{
-    kdWarning() << "***********************************************"  << endl;
-    kdWarning() << "KPresenter doesn't support KoDocument::draw( ... ) now!" << endl;
-    kdWarning() <<  "***********************************************" << endl;
-}
-
 /*======================= make child list intern ================*/
 bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {

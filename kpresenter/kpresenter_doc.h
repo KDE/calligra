@@ -345,8 +345,6 @@ protected:
      */
     virtual bool saveChildren( KoStore* _store, const QString &_path );
 
-    virtual void draw( QPaintDevice*, long int, long int, float _scale );
-
     void saveBackground( QTextStream& );
     void saveObjects( QTextStream& );
     void loadBackground( KOMLParser&, QValueList<KOMLAttrib>& );
