@@ -22,7 +22,7 @@
 
 #define KWORD_VERSION "pre-Beta1"
 
-#include <iostream.h>
+#include <qtextstream.h>
 #include <qstring.h>
 #include <koGlobal.h>
 #include "kword_factory.h"
@@ -122,7 +122,7 @@ inline KWUnit &KWUnit::operator=( const KWUnit &unit )
     return *this;
 }
 
-inline ostream& operator<<( ostream &out, KWUnit &unit )
+inline QTextStream& operator<<( QTextStream&out, KWUnit &unit )
 {
     out << "pt=\"" << unit.pt() << "\" mm=\"" << unit.mm() << "\" inch=\"" << unit.inch() << "\"";
     return out;

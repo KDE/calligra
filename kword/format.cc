@@ -184,7 +184,7 @@ void KWFormat::incRef()
 }
 
 /*================================================================*/
-void KWFormat::save( ostream &out )
+void KWFormat::save( QTextStream&out )
 {
     out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
     out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ).latin1() << "\"/>" << endl;
@@ -206,13 +206,13 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 
     while ( parser.open( 0L, tag ) )
     {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// color
 	if ( name == "COLOR" )
 	{
 	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -237,7 +237,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// font
 	else if ( name == "FONT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -249,7 +249,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// font size
 	else if ( name == "SIZE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -261,7 +261,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// weight
 	else if ( name == "WEIGHT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -273,7 +273,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// italic
 	else if ( name == "ITALIC" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -285,7 +285,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// underline
 	else if ( name == "UNDERLINE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -297,7 +297,7 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 	// vertical alignment
 	else if ( name == "VERTALIGN" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {

@@ -27,7 +27,7 @@
 #include <qvbox.h>
 #include <qlistview.h>
 
-#include <iostream>
+#include <qtextstream.h>
 
 #include <koStream.h>
 
@@ -62,7 +62,7 @@ public:
 	return (int)db.count();
     }
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:

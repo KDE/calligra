@@ -603,7 +603,7 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-void KWFrameSet::save( ostream &out )
+void KWFrameSet::save( QTextStream&out )
 {
     KWFrame *frame;
 
@@ -927,7 +927,7 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 }
 
 /*================================================================*/
-void KWTextFrameSet::save( ostream &out )
+void KWTextFrameSet::save( QTextStream&out )
 {
     QString grp = "";
     if ( grpMgr ) {
@@ -972,11 +972,11 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     KWParag *last = 0L;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// paragraph
 	if ( name == "PARAGRAPH" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1018,7 +1018,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    b.ptWidth = 1;
 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
         if ( ( *it ).m_strName == "left" )
@@ -1327,7 +1327,7 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 }
 
 /*================================================================*/
-void KWPictureFrameSet::save( ostream &out )
+void KWPictureFrameSet::save( QTextStream&out )
 {
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() ) << "\" frameInfo=\""
 	<< static_cast<int>( frameInfo ) << "\">" << endl;
@@ -1348,10 +1348,10 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "IMAGE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1381,7 +1381,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    b.ptWidth = 1;
 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "left" )
@@ -1558,7 +1558,7 @@ void KWPartFrameSet::update()
 }
 
 /*================================================================*/
-void KWPartFrameSet::save( ostream &out )
+void KWPartFrameSet::save( QTextStream&out )
 {
     KWFrameSet::save( out );
 }
@@ -1570,7 +1570,7 @@ void KWPartFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "FRAME" ) {
 	    KWFrame rect;
@@ -1592,7 +1592,7 @@ void KWPartFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    b.ptWidth = 1;
 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "left" )
@@ -1855,7 +1855,7 @@ void KWFormulaFrameSet::update()
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::save( ostream &out )
+void KWFormulaFrameSet::save( QTextStream&out )
 {
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() ) << "\" frameInfo=\""
 	<< static_cast<int>( frameInfo ) << "\">" << endl;
@@ -1881,10 +1881,10 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tmp;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "FORMULA" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1920,7 +1920,7 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    b.ptWidth = 1;
 	    QColor c( Qt::white );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "left" )

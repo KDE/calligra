@@ -23,7 +23,7 @@
 #include <qimage.h>
 #include <qstring.h>
 
-#include <iostream>
+#include <qtextstream.h>
 #include <koStream.h>
 
 class KWordDocument;
@@ -55,7 +55,7 @@ public:
     QString getFilename()
     { return filename; }
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:

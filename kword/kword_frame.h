@@ -33,7 +33,7 @@
 #include "paraglayout.h"
 #include "defs.h"
 
-#include <iostream>
+#include <qtextstream.h>
 #include <koStream.h>
 
 #include <koMainWindow.h>
@@ -218,7 +218,7 @@ public:
     virtual void deSelectFrame( unsigned int mx, unsigned int my );
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
-    virtual void save( ostream &out );
+    virtual void save( QTextStream&out );
 
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
@@ -298,7 +298,7 @@ public:
     void insertParag( KWParag *_parag, InsertPos _pos );
     void splitParag( KWParag *_parag, unsigned int _pos );
 
-    virtual void save( ostream &out );
+    virtual void save( QTextStream&out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
     void updateCounters();
@@ -340,7 +340,7 @@ public:
     { return image; }
     QString getFileName() { return filename; }
 
-    virtual void save( ostream &out );
+    virtual void save( QTextStream&out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
@@ -373,7 +373,7 @@ public:
 
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
-    virtual void save( ostream &out );
+    virtual void save( QTextStream&out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
@@ -408,7 +408,7 @@ public:
 
     virtual void update();
 
-    virtual void save( ostream &out );
+    virtual void save( QTextStream&out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
     void insertChar( int c );

@@ -25,7 +25,7 @@
 #include "paraglayout.h"
 
 #include <assert.h>
-#include <iostream>
+#include <qtextstream.h>
 
 #include <koStream.h>
 #include <koRuler.h>
@@ -167,7 +167,7 @@ public:
     bool deleteText( unsigned int _pos, unsigned int _len = 1 );
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format, int flags = KWFormat::All );
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( KOMLParser&, vector<KOMLAttrib>& );
 
     int *getCounterData() { return counterData; }

@@ -25,7 +25,7 @@
 
 #include <koStream.h>
 
-#include <iostream>
+#include <qtextstream.h>
 #include <string>
 
 class KWFootNote;
@@ -62,7 +62,7 @@ public:
     NoteType getNoteType() { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
@@ -119,7 +119,7 @@ public:
 
     void destroy();
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst );
 
 protected:

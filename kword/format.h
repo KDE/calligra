@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 
-#include <iostream>
+#include <qtextstream.h>
 #include <koStream.h>
 
 class KWFormat;
@@ -199,7 +199,7 @@ public:
 
     KWordDocument *getDocument() { return doc; }
 
-    void save( ostream &out );
+    void save( QTextStream&out );
     void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:

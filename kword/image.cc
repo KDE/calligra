@@ -51,7 +51,7 @@ void KWImage::incRef()
 }
 
 /*================================================================*/
-void KWImage::save( ostream &out )
+void KWImage::save( QTextStream&out )
 {
     out << indent << "<FILENAME value=\"" << correctQString( filename ).latin1() << "\"/>" << endl;
 }
@@ -67,12 +67,12 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
 
     while ( parser.open( 0L, tag ) )
     {
-        KOMLParser::parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag.c_str(), name, lst );
 
         // filename
         if ( name == "FILENAME" )
         {
-            KOMLParser::parseTag( tag.c_str(), name, lst );
+            parser.parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
             for( ; it != lst.end(); it++ )
             {

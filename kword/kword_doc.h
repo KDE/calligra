@@ -33,7 +33,7 @@ class KWContents;
 #include <koPageLayoutDia.h>
 #include <koQueryTrader.h>
 
-#include <iostream>
+#include <qtextstream.h>
 
 #include "kword_view.h"
 #include "fc.h"
@@ -72,6 +72,9 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
+    bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+    bool save( QTextStream & out );
+
 protected:
     KWordDocument *m_pKWordDoc;
 
@@ -108,9 +111,9 @@ public:
     virtual bool initDoc();
     void initEmpty();
 
-    virtual bool loadXML( KOMLParser& parser, KoStore *_store );
+    virtual bool loadXML( const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
-    virtual bool save( ostream& out, const char* _format );
+    virtual bool saveToStream( QIODevice * dev );
     virtual bool completeSaving( KoStore *_store );
     KoMainWindow* createShell();
 
@@ -373,7 +376,7 @@ public:
     int getSyntaxVersion( ) const { return syntaxVersion; };
 
     void updateFrameSizes( int oldZoom );
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );

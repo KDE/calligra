@@ -23,7 +23,6 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
-#include <iostream>
 #include <koStream.h>
 
 #include <string>
@@ -197,8 +196,8 @@ public:
 
     virtual void recalc() {}
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     KWordDocument *doc;
@@ -231,8 +230,8 @@ public:
     virtual void recalc() { pgNum = pageNum; }
     long unsigned int getPgNum() const { return pgNum; }
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     long unsigned int pgNum;
@@ -264,8 +263,8 @@ public:
     QDate getDate() const { return date; }
     void setDate( QDate _date ) { date = _date; }
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     QDate date;
@@ -298,8 +297,8 @@ public:
     QTime getTime() const { return time; }
     void setTime( QTime _time ) { time = _time; }
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
     QTime time;
@@ -329,8 +328,8 @@ public:
 
     virtual void recalc();
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
 
     virtual QString getName() const;
     virtual QString getValue() const;
@@ -364,8 +363,8 @@ public:
 
     virtual void recalc();
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual void save( QTextStream&out );
+    virtual void load( KOMLParser&, string name, string tag, vector<KOMLAttrib>& lst );
 
     virtual QString getName() const;
     virtual QString getValue() const;

@@ -169,7 +169,7 @@ KWVariable::~KWVariable()
 }
 
 /*================================================================*/
-void KWVariable::save( ostream &out )
+void KWVariable::save( QTextStream&out )
 {
     out << indent << "<TYPE type=\"" << static_cast<int>( getType() ) << "\"/>" << endl;
     out << indent << "<POS frameSet=\"" << frameSetNum << "\" frame=\"" << frameNum
@@ -177,10 +177,10 @@ void KWVariable::save( ostream &out )
 }
 
 /*================================================================*/
-void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+void KWVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
 {
     if ( name == "POS" ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for ( ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "frameSet" )
@@ -198,19 +198,19 @@ void KWVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
 /******************************************************************/
 
 /*================================================================*/
-void KWPgNumVariable::save( ostream &out )
+void KWPgNumVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
     out << indent << "<PGNUM value=\"" << pgNum << "\"/>" << endl;
 }
 
 /*================================================================*/
-void KWPgNumVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+void KWPgNumVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
 {
-    KWVariable::load( name, tag, lst );
+    KWVariable::load( parser, name, tag, lst );
 
     if ( name == "PGNUM" ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for ( ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "value" )
@@ -241,7 +241,7 @@ void KWDateVariable::recalc()
 }
 
 /*================================================================*/
-void KWDateVariable::save( ostream &out )
+void KWDateVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
     out << indent << "<DATE year=\"" << date.year() << "\" month=\"" << date.month()
@@ -249,14 +249,14 @@ void KWDateVariable::save( ostream &out )
 }
 
 /*================================================================*/
-void KWDateVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+void KWDateVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
 {
-    KWVariable::load( name, tag, lst );
+    KWVariable::load( parser, name, tag, lst );
 
     int y, m, d;
 
     if ( name == "DATE" ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for ( ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "year" )
@@ -298,7 +298,7 @@ void KWTimeVariable::recalc()
 }
 
 /*================================================================*/
-void KWTimeVariable::save( ostream &out )
+void KWTimeVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
     out << indent << "<TIME hour=\"" << time.hour() << "\" minute=\"" << time.minute()
@@ -307,14 +307,14 @@ void KWTimeVariable::save( ostream &out )
 }
 
 /*================================================================*/
-void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
+void KWTimeVariable::load( KOMLParser& parser, string name, string tag, vector<KOMLAttrib>& lst )
 {
-    KWVariable::load( name, tag, lst );
+    KWVariable::load( parser, name, tag, lst );
 
     int h, m, s, ms;
 
     if ( name == "TIME" ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for( ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "hour" )
@@ -355,7 +355,7 @@ void KWCustomVariable::recalc()
 }
 
 /*================================================================*/
-void KWCustomVariable::save( ostream &out )
+void KWCustomVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
     out << indent << "<CUSTOM name=\"" << correctQString( name ).latin1() << "\" value=\""
@@ -363,14 +363,14 @@ void KWCustomVariable::save( ostream &out )
 }
 
 /*================================================================*/
-void KWCustomVariable::load( string name_, string tag, vector<KOMLAttrib>& lst )
+void KWCustomVariable::load( KOMLParser& parser, string name_, string tag, vector<KOMLAttrib>& lst )
 {
     doc->unregisterVariable( this );
     doc->registerVariable( this );
     recalc();
-    KWVariable::load( name_, tag, lst );
+    KWVariable::load( parser, name_, tag, lst );
     if ( name_ == "CUSTOM" ) {
-	KOMLParser::parseTag( tag.c_str(), name_, lst );
+	parser.parseTag( tag.c_str(), name_, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for(  ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "name" )
@@ -416,7 +416,7 @@ void KWSerialLetterVariable::recalc()
 }
 
 /*================================================================*/
-void KWSerialLetterVariable::save( ostream &out )
+void KWSerialLetterVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
     out << indent << "<SERIALLETTER name=\"" << correctQString( name ).latin1()
@@ -424,12 +424,12 @@ void KWSerialLetterVariable::save( ostream &out )
 }
 
 /*================================================================*/
-void KWSerialLetterVariable::load( string name_, string tag, vector<KOMLAttrib>& lst )
+void KWSerialLetterVariable::load( KOMLParser& parser, string name_, string tag, vector<KOMLAttrib>& lst )
 {
     recalc();
-    KWVariable::load( name_, tag, lst );
+    KWVariable::load( parser, name_, tag, lst );
     if ( name_ == "SERIALLETTER" ) {
-	KOMLParser::parseTag( tag.c_str(), name_, lst );
+	parser.parseTag( tag.c_str(), name_, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for (  ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "name" )

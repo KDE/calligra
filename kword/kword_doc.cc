@@ -37,6 +37,7 @@
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
 #include <koStoreStream.h>
+#include <koStoreDevice.h>
 #include <koMainWindow.h>
 
 #include <kurl.h>
@@ -45,8 +46,6 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 
-#include <strstream>
-#include <fstream>
 #include <unistd.h>
 #include <math.h>
 
@@ -90,6 +89,83 @@ KoDocument *KWordChild::hitTest( const QPoint &, const QWMatrix & )
 {
   return 0L;
 }
+
+bool KWordChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "url" )
+    {
+      m_tmpURL = (*it).m_strValue.c_str();
+    }
+    else if ( (*it).m_strName == "mime" )
+    {
+      m_tmpMimeType = (*it).m_strValue.c_str();
+    }
+    else
+      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName.c_str() << "'" << endl;
+  }
+
+  if ( m_tmpURL.isEmpty() )
+  {	
+    kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+    return false;
+  }
+  else if ( m_tmpMimeType.isEmpty() )
+  {
+    kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+    return false;
+  }
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+
+  bool brect = false;
+
+  // RECT
+  while( parser.open( 0L, tag ) )
+  {
+    parser.parseTag( tag.c_str(), name, lst );
+
+    if ( name == "RECT" )
+    {
+      brect = true;
+      m_tmpGeometry = tagToRect( lst );
+      setGeometry( m_tmpGeometry );
+    }
+    else
+      kdDebug(30003) << "Unknown tag '" << tag.c_str() << "' in OBJECT" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      kdDebug(30003) << "ERR: Closing Child in OBJECT" << endl;
+      return false;
+    }
+  }
+
+  if ( !brect )
+  {
+    kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+    return false;
+  }
+
+  return true;
+}
+
+bool KWordChild::save( QTextStream& out )
+{
+  assert( document() );
+  QString u = document()->url().url();
+  QString mime = document()->mimeType();
+
+  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
+      << geometry() << "</OBJECT>" << endl;
+
+  return true;
+}
+
 
 /******************************************************************/
 /* Class: KWordDocument					     */
@@ -657,7 +733,7 @@ bool KWordDocument::loadChildren( KoStore *_store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
+bool KWordDocument::loadXML( const QDomDocument & doc )
 {
     pixmapKeys.clear();
     pixmapNames.clear();
@@ -824,13 +900,15 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
 
 
+    KOMLParser parser( doc );
+
     // DOC
     if ( !parser.open( "DOC", tag ) ) {
 	kdError(32001) << "Missing DOC" << endl;
 	return FALSE;
     }
 
-    KOMLParser::parseTag( tag.c_str(), name, lst );
+    parser.parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
     for( ; it != lst.end(); it++ ) {
 	if ( ( *it ).m_strName == "mime" ) {
@@ -852,10 +930,10 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
     // PAPER
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "EMBEDDED" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -864,7 +942,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	    QRect r;
 
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "OBJECT" ) {
 		    ch->load( parser, lst );
 		    r = ch->geometry();
@@ -872,7 +950,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		    fs = new KWPartFrameSet( this, ch );
 		    frames.append( fs );
 		} else if ( name == "SETTINGS" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 		    }
@@ -886,7 +964,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		}
 	    }
 	} else if ( name == "PAPER" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "format" )
@@ -955,9 +1033,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
 	    // PAPERBORDERS, HEAD, FOOT
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "PAPERBORDERS" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "left" ) {
@@ -1016,7 +1094,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "ATTRIBUTES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "processing" )
@@ -1033,7 +1111,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "FOOTNOTEMGR" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1041,7 +1119,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "SERIALL" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1049,7 +1127,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "FRAMESETS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1057,7 +1135,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "STYLES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1065,7 +1143,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "PIXMAPS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1074,9 +1152,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		QString key;
 		QString n = QString::null;
 
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "key" )
@@ -1099,15 +1177,15 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	}
 
 	else if ( name == "CPARAGS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
 
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "PARAG" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "name" )
@@ -1319,10 +1397,10 @@ void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& 
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "STYLE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -1351,7 +1429,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     bool _visible = TRUE;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// paragraph
 	if ( name == "FRAMESET" ) {
@@ -1362,7 +1440,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    bool removeable = FALSE;
 	    QString fsname;
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "frameType" )
@@ -1477,15 +1555,21 @@ bool KWordDocument::completeLoading( KoStore *_store )
 	    QImage img;
 
 	    if ( _store->open( u ) ) {
-		istorestream in( _store );
-		in >> img;
+                KoStoreDevice dev(_store );
+                QImageIO io( &dev, 0 );
+                io.read( );
+                img = io.image();
+
 		_store->close();
 	    } else {
 		u.prepend( "file:" );
 		if ( _store->open( u ) ) {
-		    istorestream in( _store );
-		    in >> img;
-		    _store->close();
+                  KoStoreDevice dev(_store );
+                  QImageIO io( &dev, 0 );
+                  io.read( );
+                  img = io.image();
+
+                  _store->close();
 		}
 	    }
 
@@ -1512,8 +1596,9 @@ bool KWordDocument::completeLoading( KoStore *_store )
 }
 
 /*================================================================*/
-bool KWordDocument::save(ostream &out,const char* /* _format */)
+bool KWordDocument::saveToStream( QIODevice * dev )
 {
+    QTextStream out( dev );
     // For now, we always save documents using the current syntax version.
 
     syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -1666,9 +1751,12 @@ bool KWordDocument::completeSaving( KoStore *_store )
           u2.prepend( url().url() + "/" );
 
 	if ( _store->open( u2 ) ) {
-	    ostorestream out( _store );
-	    writeImageToStream( out, *it.current(), format );
-	    out.flush();
+            KoStoreDevice dev( _store );
+            QImageIO io;
+            io.setIODevice( &dev );
+            io.setImage( *it.current() );
+            io.setFormat( format );
+            io.write();
 	    _store->close();
 	}
 	keys.append( it.currentKey() );
@@ -1698,7 +1786,7 @@ bool KWordDocument::saveChildren( KoStore *_store, const char *_path )
     QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
+	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
           return FALSE;
     }
     return true;
@@ -2878,8 +2966,8 @@ void KWordDocument::copySelectedText()
 
     QClipboard *cb = QApplication::clipboard();
 
-    string clip_string;
-    tostrstream out( clip_string );
+    QString clip_string;
+    QTextStream out( &clip_string, IO_WriteOnly );
 
     parag2 = firstParag;
     out << otag << "<PARAGRAPHS>" << endl;
@@ -2894,7 +2982,7 @@ void KWordDocument::copySelectedText()
 
     KWordDrag *kd = new KWordDrag;
     kd->setPlain( clipString );
-    kd->setKWord( clip_string.c_str() );
+    kd->setKWord( clip_string.utf8() );
 
     cb->setData( kd );
 }
@@ -2970,12 +3058,11 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
 	    strList.append( QString( _string ) );
     } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
-	std::istrstream in( _string.ascii() );
-	if ( !in )
-	    return;
 
-	KOMLStreamFeed feed( in );
-	KOMLParser parser( &feed );
+        QDomDocument doc;
+        doc.setContent( _string );
+
+	KOMLParser parser( doc );
 
 	string tag;
 	vector<KOMLAttrib> lst;
@@ -2987,10 +3074,10 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 	}
 
 	while ( parser.open( 0L, tag ) ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 
 	    if ( name == "PARAGRAPH" ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		vector<KOMLAttrib>::const_iterator it = lst.begin();
 		for( ; it != lst.end(); it++ ) {
 		}

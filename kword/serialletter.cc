@@ -121,7 +121,7 @@ void KWSerialLetterDataBase::removeRecord( int i )
 }
 
 /*================================================================*/
-void KWSerialLetterDataBase::save( ostream &out )
+void KWSerialLetterDataBase::save( QTextStream&out )
 {
     out << otag << "<SAMPLE>" << endl;
 
@@ -156,17 +156,17 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "SAMPLE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "ENTRY" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "key" )
@@ -181,22 +181,22 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, vector<KOMLAttrib> &lst )
 		}
 	    }
 	} else if ( name == "DB" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "RECORD" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 		    }
 		    appendRecord();
 		    while ( parser.open( 0L, tag ) ) {
-			KOMLParser::parseTag( tag.c_str(), name, lst );
+			parser.parseTag( tag.c_str(), name, lst );
 			if ( name == "ENTRY" ) {
-			    KOMLParser::parseTag( tag.c_str(), name, lst );
+			    parser.parseTag( tag.c_str(), name, lst );
 			    vector<KOMLAttrib>::const_iterator it = lst.begin();
 			    QString key;
 			    for( ; it != lst.end(); it++ ) {

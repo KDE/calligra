@@ -81,7 +81,7 @@ void KWCharAnchor::setOrigin( QPoint _origin )
 }
 
 /*================================================================*/
-void KWCharAnchor::save( ostream &out )
+void KWCharAnchor::save( QTextStream &out )
 {
     out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ).latin1() <<
         "\" instance=\"" << correctQString( anchorInstance() ).latin1() <<
@@ -404,7 +404,7 @@ QString KWString::toString( unsigned int _pos, unsigned int _len, bool cached )
 }
 
 /*================================================================*/
-void KWString::saveFormat( ostream &out )
+void KWString::saveFormat( QTextStream&out )
 {
     unsigned int start = 0;
 
@@ -476,7 +476,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// format
 	if ( name == "FORMAT" ) {
@@ -487,7 +487,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 	    KWCharImage *_kwimage = 0L;
 	    KWCharFormat *_kwformat = 0L;
 	    KWCharTab *_kwtab = 0L;
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    bool _load = false;
 	    for ( ; it != lst.end(); it++ ) {
@@ -544,10 +544,10 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    KWCharVariable *v = 0L;
 
 		    while ( parser.open( 0L, tag ) ) {
-			KOMLParser::parseTag( tag.c_str(), name, lst );
+			parser.parseTag( tag.c_str(), name, lst );
 
 			if ( name == "TYPE" ) {
-			    KOMLParser::parseTag( tag.c_str(), name, lst );
+			    parser.parseTag( tag.c_str(), name, lst );
 			    vector<KOMLAttrib>::const_iterator it = lst.begin();
 			    for ( ; it != lst.end(); it++ ) {
 				if ( ( *it ).m_strName == "type" ) {
@@ -593,7 +593,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 			    _format = 0;
 			} else {
 			    if ( var )
-				var->load( name, tag, lst );
+				var->load( parser, name, tag, lst );
 			}
 			if ( !parser.close( tag ) ) {
 			    kdError(32001) << "Closing " << tag.c_str() << endl;
@@ -606,7 +606,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    KWCharFootNote *v = new KWCharFootNote( fn );
 
 		    while ( parser.open( 0L, tag ) ) {
-			KOMLParser::parseTag( tag.c_str(), name, lst );
+			parser.parseTag( tag.c_str(), name, lst );
 
 			if ( name == "FRMAT" && v ) {
 			    _format = new KWFormat();
@@ -637,9 +637,9 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    KWCharAnchor *anchor = NULL;
 
 		    while ( parser.open( 0L, tag ) ) {
-		    	KOMLParser::parseTag( tag.c_str(), name, lst );
+		    	parser.parseTag( tag.c_str(), name, lst );
 		    	if ( name == "ANCHOR" ) {
-			    KOMLParser::parseTag( tag.c_str(), name, lst );
+			    parser.parseTag( tag.c_str(), name, lst );
 			    vector<KOMLAttrib>::const_iterator it = lst.begin();
 			    for ( ; it != lst.end(); it++ ) {
 				attribute = it->m_strName;
@@ -1074,13 +1074,13 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 }
 
 /*================================================================*/
-ostream& operator<<( ostream &out, KWString &_string )
+QTextStream& operator<<( QTextStream &out, KWString &_string )
 {
     char c = 1;
 
     for ( unsigned int i = 0; i < _string.size(); i++ ) {
 	if ( _string.data()[ i ].c != KWSpecialChar )
-	    out << _string.data()[ i ].c;
+	    out << QString( _string.data()[ i ].c ).utf8();
 	else
 	    out << c;
     }

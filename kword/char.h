@@ -31,7 +31,7 @@
 #include <qregexp.h>
 #include <qcstring.h>
 
-#include <iostream>
+#include <qtextstream.h>
 
 class KWordDocument;
 class KWTextFrameSet;
@@ -65,7 +65,7 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib ) const
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
-    virtual void save( ostream & ) {}
+    virtual void save( QTextStream& ) {}
 
 protected:
     int classId;
@@ -92,7 +92,7 @@ public:
                  ( format ) && *format == *_attrib.format );
     }
 
-    virtual void save( ostream &out )
+    virtual void save( QTextStream&out )
     { format->save( out ); }
 
 protected:
@@ -115,7 +115,7 @@ public:
     { return image; }
     virtual void setImage( KWImage *_image )
     { image = _image; }
-    virtual void save( ostream &out )
+    virtual void save( QTextStream&out )
     { image->save( out ); }
 
 protected:
@@ -148,7 +148,7 @@ public:
 
     KWVariable *getVar() { return var; }
 
-    virtual void save( ostream &out ) {
+    virtual void save( QTextStream&out ) {
         var->save( out );
         out << otag << "<FRMAT>" << endl;
         KWCharFormat::save( out );
@@ -174,7 +174,7 @@ public:
 
     KWFootNote *getFootNote() { return fn; }
 
-    virtual void save( ostream &out ) {
+    virtual void save( QTextStream&out ) {
         fn->save( out );
         out << otag << "<FRMAT>" << endl;
         KWCharFormat::save( out );
@@ -213,7 +213,7 @@ public:
     // This base class function saves the anchor itself; the
     // deriving class will normally implement its own save() function
     // to save itself.
-    void save( ostream &out );
+    void save( QTextStream&out );
 
     // Override this function with logic to move the anchored object
     // when the origin of the anchor is changed.
@@ -285,7 +285,7 @@ public:
 
     QString toString( bool cached = FALSE );
     QString toString( unsigned int _pos, unsigned int _len, bool cached = FALSE );
-    void saveFormat( ostream &out );
+    void saveFormat( QTextStream&out );
     void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
@@ -312,10 +312,10 @@ protected:
     KWordDocument *doc;
     QString cache;
     bool allowRemoveFn;
-    
+
 };
 
 void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn = FALSE );
-ostream& operator<<( ostream &out, KWString &_string );
+QTextStream& operator<<( QTextStream&out, KWString &_string );
 
 #endif

@@ -135,7 +135,7 @@ void KWParagLayout::setFormat( const KWFormat &_f )
 }
 
 /*================================================================*/
-void KWParagLayout::save( ostream &out )
+void KWParagLayout::save( QTextStream&out )
 {
     out << indent << "<NAME value=\"" << correctQString( name ).latin1() << "\"/>" << endl;
     out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ).latin1() << "\"/>" << endl;
@@ -181,25 +181,25 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     float mm, inch;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), _name, lst );
+	parser.parseTag( tag.c_str(), _name, lst );
 
 	// name
 	if ( _name == "NAME" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    name = correctQString( ( *it ).m_strValue.c_str() );
 	    }
 	} else if ( _name == "FOLLOWING" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "name" )
 		    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
 	    }
 	} else if ( _name == "TABULATOR" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    KoTabulator *tab = new KoTabulator;
 	    bool noinch = true;
@@ -218,7 +218,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
 	    tabList.append( tab );
 	} else if ( _name == "FLOW" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
@@ -227,7 +227,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( _name == "OHEAD" ) {
 	    pt = 0;
 	    mm = inch = 0.0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "pt" )
@@ -241,7 +241,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( _name == "OFOOT" ) {
 	    pt = 0;
 	    mm = inch = 0.0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "pt" )
@@ -255,7 +255,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( _name == "IFIRST" ) {
 	    pt = 0;
 	    mm = inch = 0.0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "pt" )
@@ -269,7 +269,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( _name == "ILEFT" ) {
 	    pt = 0;
 	    mm = inch = 0.0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "pt" )
@@ -283,7 +283,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	} else if ( _name == "LINESPACE" ) {
 	    pt = 0;
 	    mm = inch = 0.0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "pt" )
@@ -295,7 +295,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	    lineSpacing.setPT_MM_INCH( pt, mm, inch );
 	} else if ( _name == "OFFSETS" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "head" )
@@ -304,7 +304,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    paragFootOffset.setMM( atof( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( _name == "INDENTS" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "first" )
@@ -313,14 +313,14 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    leftIndent.setMM( atof( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( _name == "LINESPACING" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    lineSpacing.setPT( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( _name == "COUNTER" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "type" )
@@ -350,7 +350,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	} else if ( _name == "LEFTBORDER" ) {
 	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "red" ) {
@@ -369,7 +369,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	} else if ( _name == "RIGHTBORDER" ) {
 	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "red" ) {
@@ -388,7 +388,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	} else if ( _name == "BOTTOMBORDER" ) {
 	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "red" ) {
@@ -407,7 +407,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    }
 	} else if ( _name == "TOPBORDER" ) {
 	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "red" ) {
@@ -425,7 +425,7 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
 	    }
 	} else if ( _name == "FORMAT" ) {
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
+	    parser.parseTag( tag.c_str(), _name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
