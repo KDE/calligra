@@ -121,7 +121,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     (void) new KAction( i18n( "Document Information..." ), 0,
 			this, SLOT( slotDocumentInfo() ),
 			actionCollection(), "file_documentinfo" );
-    
+
     (void) new KAction( i18n( "Configure &Keys..." ), 0, this,
       SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
 
@@ -281,6 +281,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                                                                     nativeFormatName(), TRUE );
 #else
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+        dialog->setCaption( i18n("Save document as") );
         KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
                                               _native_format, nativeFormatPattern(),
                                               nativeFormatName(), true);
@@ -412,6 +413,7 @@ void KoMainWindow::slotFileOpen()
 								nativeFormatName(), TRUE );
 #else
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+    dialog->setCaption( i18n("Open document") );
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
                                            KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
                                            nativeFormatName(), true);
@@ -457,12 +459,12 @@ void KoMainWindow::slotDocumentInfo()
 {
   if ( !d->m_rootDoc )
     return;
-  
+
   KoDocumentInfo *docInfo = d->m_rootDoc->documentInfo();
-  
+
   if ( !docInfo )
     return;
-  
+
   KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg( docInfo, this, "documentInfoDlg" );
   if ( dlg->exec() )
   {
@@ -471,7 +473,7 @@ void KoMainWindow::slotDocumentInfo()
   }
 
   delete dlg;
-} 
+}
 
 void KoMainWindow::slotFileClose()
 {
