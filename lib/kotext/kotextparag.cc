@@ -526,18 +526,6 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     painter.setFont( font );
 
     KoTextDocument* doc = document();
-#if 0
-    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
-        if ( doc->linkColor.isValid() )
-            painter.setPen( doc->linkColor );
-        else
-	painter.setPen( QPen( cg.link()  ) );
-	if ( doc->underlineLinks() ) {
-	    font.setUnderline( TRUE );
-	    painter.setFont( font );
-	}
-    }
-#endif
 
     if ( drawSelections ) {
 	const int nSels = doc ? doc->numSelections() : 1;
@@ -580,7 +568,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	    painter.restore();
 #endif
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-	    painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str, start, len, dir );
+	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 ), str, start, len, dir );
 	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
 	    painter.drawText( startX, lastY + baseLine + ( painter.fontMetrics().height() / 6 ), str, start, len, dir );
 	}
