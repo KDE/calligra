@@ -147,22 +147,31 @@ private:
 class ChartChild : public KSpreadChild
 {
 public:
-  ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
-  ~ChartChild();
+    ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
+    ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
+    ~ChartChild();
 
-  void setDataArea( const QRect& _data );
-  void update();
+    void setDataArea( const QRect& _data );
+    void update();
 
-  virtual bool loadDocument( KoStore* _store );
-  virtual bool save( QTextStream& out );
+    /**
+     * @reimp
+     */
+    bool load( const QDomElement& element );
+    /**
+     * @reimp
+     */
+    QDomElement save( QDomDocument& doc );
 
-  KChartPart* chart();
+    /**
+     * @reimp
+     */
+     bool loadDocument( KoStore* _store );
+
+    KChartPart* chart();
 
 private:
-    // bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst );
-
-  ChartBinding *m_pBinding;
-  KSpreadTable* m_table;
+    ChartBinding *m_pBinding;
 };
 
 /********************************************************************
@@ -688,7 +697,7 @@ public:
     const QPen& emptyPen() const { return m_emptyPen; }
     const QBrush& emptyBrush() const { return m_emptyBrush; }
     const QColor& emptyColor() const { return m_emptyColor; }
-    
+
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );

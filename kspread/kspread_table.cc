@@ -4159,87 +4159,88 @@ bool KSpreadTable::isLoading()
 
 bool KSpreadTable::loadXML( const QDomElement& table )
 {
-  bool ok=false;
-  m_strName = table.attribute( "name" );
-  if ( m_strName.isEmpty() )
-    return false;
-  if(table.hasAttribute("grid"))
-  {
-    m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
-  if(table.hasAttribute("hide"))
-  {
-    m_bTableHide = (int)table.attribute("hide").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
-  if(table.hasAttribute("formular"))
-  {
-    m_bShowFormular = (int)table.attribute("formular").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
-  if(table.hasAttribute("borders"))
-  {
-    m_bShowPageBorders = (int)table.attribute("borders").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
-  if(table.hasAttribute("lcmode"))
-  {
-    m_bLcMode = (int)table.attribute("lcmode").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
-  if(table.hasAttribute("columnnumber"))
-  {
-    m_bShowColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
-    // we just ignore 'ok' - if it didn't work, go on
-  }
+    bool ok = false;
+    m_strName = table.attribute( "name" );
+    if ( m_strName.isEmpty() )
+	return false;
 
-  QDomNode n = table.firstChild();
-  while( !n.isNull() )
-  {
-    QDomElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "cell" )
+    if( table.hasAttribute( "grid" ) )
     {
-      KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      if ( cell->load( e, 0, 0 ) )
-          insertCell( cell );
-      else
-          delete cell; // Allow error handling: just skip invalid cells
+	m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
     }
-    else if ( !e.isNull() && e.tagName() == "row" )
+    if( table.hasAttribute( "hide" ) )
     {
-      RowLayout *rl = new RowLayout( this, 0 );
-      if ( rl->load( e ) )
-          insertRowLayout( rl );
-      else
-          delete rl;
+	m_bTableHide = (int)table.attribute("hide").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
     }
-    else if ( !e.isNull() && e.tagName() == "column" )
+    if( table.hasAttribute( "formular" ) )
     {
-      ColumnLayout *cl = new ColumnLayout( this, 0 );
-      if ( cl->load( e ) )
-          insertColumnLayout( cl );
-      else
-          delete cl;
+	m_bShowFormular = (int)table.attribute("formular").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
     }
-    else if ( !e.isNull() && e.tagName() == "object" )
+    if( table.hasAttribute( "borders" ) )
     {
-      KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
-      if ( ch->load( e ) )
-          insertChild( ch );
-      else
-          delete ch;
+	m_bShowPageBorders = (int)table.attribute("borders").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
     }
-    else if ( !e.isNull() && e.tagName() == "chart" )
+    if( table.hasAttribute( "lcmode" ) )
     {
-	// ############ Torben
-	/*
-      ChartChild *ch = new ChartChild( m_pDoc, this );
-      if ( ch->load( e ) )
-	insertChild( ch );
-      else
-        delete ch;*/
+	m_bLcMode = (int)table.attribute("lcmode").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
     }
+    if( table.hasAttribute( "columnnumber" ) )
+    {
+	m_bShowColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
+	// we just ignore 'ok' - if it didn't work, go on
+    }
+
+    // Load the cells
+    QDomNode n = table.firstChild();
+    while( !n.isNull() )
+    {
+	QDomElement e = n.toElement();
+	if ( !e.isNull() && e.tagName() == "cell" )
+        {
+	    KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
+	    if ( cell->load( e, 0, 0 ) )
+		insertCell( cell );
+	    else
+		delete cell; // Allow error handling: just skip invalid cells
+	}
+	else if ( !e.isNull() && e.tagName() == "row" )
+        {
+	    RowLayout *rl = new RowLayout( this, 0 );
+	    if ( rl->load( e ) )
+		insertRowLayout( rl );
+	    else
+		delete rl;
+	}
+	else if ( !e.isNull() && e.tagName() == "column" )
+        {
+	    ColumnLayout *cl = new ColumnLayout( this, 0 );
+	    if ( cl->load( e ) )
+		insertColumnLayout( cl );
+	    else
+		delete cl;
+	}
+	else if ( !e.isNull() && e.tagName() == "object" )
+        {
+	    KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
+	    if ( ch->load( e ) )
+		insertChild( ch );
+	    else
+		delete ch;
+	}
+	else if ( !e.isNull() && e.tagName() == "chart" )
+        {
+	    ChartChild *ch = new ChartChild( m_pDoc, this );
+	    if ( ch->load( e ) )
+		insertChild( ch );
+	    else
+		delete ch;
+	}
+	
     n = n.nextSibling();
   }
 
@@ -4469,7 +4470,7 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
     // m_pDoc->insertChild( ch );
     insertChild( ch );
-    
+
     ch->chart()->showWizard();
 }
 
@@ -4610,31 +4611,30 @@ KSpreadChild::~KSpreadChild()
  *
  **********************************************************/
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect )
-  : KSpreadChild( _spread, _table, doc, _rect )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& geometry )
+  : KSpreadChild( _spread, _table, doc, geometry )
 {
-  m_pBinding = 0;
-  m_table = _table;
+    m_pBinding = 0;
 }
 
-/* ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table ) :
-  KSpreadChild( _spread, _table )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table )
+  : KSpreadChild( _spread, _table )
 {
-  m_pBinding = 0;
-  } */
+    m_pBinding = 0;
+}
 
 ChartChild::~ChartChild()
 {
-  if ( m_pBinding )
-    delete m_pBinding;
+    if ( m_pBinding )
+	delete m_pBinding;
 }
 
 void ChartChild::setDataArea( const QRect& _data )
 {
-  if ( m_pBinding == 0L )
-    m_pBinding = new ChartBinding( m_pTable, _data, this );
-  else
-    m_pBinding->setDataArea( _data );
+    if ( m_pBinding == 0L )
+	m_pBinding = new ChartBinding( m_pTable, _data, this );
+    else
+	m_pBinding->setDataArea( _data );
 }
 
 void ChartChild::update()
@@ -4643,74 +4643,42 @@ void ChartChild::update()
 	m_pBinding->cellChanged( 0 );
 }
 
-bool ChartChild::save( QTextStream& out )
+bool ChartChild::load( const QDomElement& element )
 {
-    QString u = document()->url().url();
-    QString mime = document()->mimeType();
+    if ( !KSpreadChild::load( element ) )
+	return false;
 
-    out << indent << "<CHART url=\"" << u.utf8().data() << "\" mime=\"" << mime.utf8().data() << "\">"
-	<< geometry();
-    if ( m_pBinding )
-	out << "<BINDING>" << m_pBinding->dataArea() << "</BINDING>";
-    out << "</CHART>" << endl;
+    QRect r;
+    r.setCoords( element.attribute( "left-cell" ).toInt(),
+		 element.attribute( "top-cell" ).toInt(),
+    		 element.attribute( "right-cell" ).toInt(),
+		 element.attribute( "bottom-cell" ).toInt() );
 
-    return true;
+    setDataArea( r );
 }
 
-/*
-// ############### Is this KOML stuff really needed ?
-bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst )
+QDomElement ChartChild::save( QDomDocument& doc )
 {
-    if ( tag == "BINDING" )
-    {
-	string tag2;
-	vector<KOMLAttrib> lst2;
-	string name2;
-	// RECT
-	while( parser.open( 0L, tag2 ) )
-	{
-	    parser.parseTag( tag2.c_str(), name2, lst2 );
+    QDomElement element = KSpreadChild::save( doc );
+    element.setTagName( "chart" );
 
-	    if ( name2 == "RECT" )
-		m_pBinding = new ChartBinding( m_table, tagToRect( lst2 ), this );
-	    else
-	    {
-		kdDebug(36001) << "Unknown tag '" << tag2.c_str() << "' in BINDING" << endl;
-		return FALSE;
-	    }
-	}
-	if ( !parser.close( (string &) tag ) )
-	{
-	    kdDebug(36001) << "ERR: Closing BINDING" << endl;
-	    return false;
-	}
+    element.setAttribute( "left-cell", m_pBinding->dataArea().left() );
+    element.setAttribute( "right-cell", m_pBinding->dataArea().right() );
+    element.setAttribute( "top-cell", m_pBinding->dataArea().top() );
+    element.setAttribute( "bottom-cell", m_pBinding->dataArea().bottom() );
 	
-	return TRUE;
-    }
-
-    return FALSE;
+    return element;
 }
-*/
 
 bool ChartChild::loadDocument( KoStore* _store )
 {
-    // Did we see the BINDING tag ?
-    if ( !m_pBinding )
-	return FALSE;
-
     bool res = KSpreadChild::loadDocument( _store );
     if ( !res )
 	return res;
 
-  // #### Torben: Check wether the document really supports
-  //      the chart interface
-  /* CORBA::Object_var obj = m_rDoc->getInterface( "IDL:Chart/SimpleChart:1.0" );
-  Chart::SimpleChart_var chart = Chart::SimpleChart::_narrow( obj );
-  if ( CORBA::is_nil( chart ) )
-  {
-    KMessageBox::error( 0L, i18n("Chart does not support the required interface"));
-    return false;
-    } */
+    // Did we see a cell rectangle ?
+    if ( !m_pBinding )
+	return;
 
     update();
 
