@@ -187,7 +187,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( topBorder.style==KoBorder::DOUBLE_LINE)
         {
             y = rect.top() - topBorderWidth + topBorderPenWidth/2;
-            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+            painter.drawLine( rect.left()- 2* leftBorderPenWidth, y, rect.right()+2*rightBorderPenWidth, y );
             y += topBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
         }
@@ -206,7 +206,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( bottomBorder.style==KoBorder::DOUBLE_LINE)
         {
             y = rect.bottom() + bottomBorderWidth - (bottomBorderPenWidth-1)/2;
-            painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
+            painter.drawLine( rect.left()-2*leftBorderPenWidth, y, rect.right()+2*rightBorderPenWidth, y );
             y-= bottomBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
 
@@ -224,7 +224,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( leftBorder.style==KoBorder::DOUBLE_LINE)
         {
             x = rect.left() - leftBorderWidth + leftBorderPenWidth/2;
-            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+            painter.drawLine( x, rect.top()-2*topBorderPenWidth, x, rect.bottom()+2*bottomBorderPenWidth );
             x+= leftBorderPenWidth + 1;
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
         }
@@ -241,7 +241,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         if ( rightBorder.style==KoBorder::DOUBLE_LINE)
         {
             x = rect.right() + rightBorderWidth - (rightBorderPenWidth-1)/2;
-            painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
+            painter.drawLine( x, rect.top()-2*topBorderPenWidth, x, rect.bottom()+2*bottomBorderPenWidth );
             x-= leftBorderPenWidth + 1;
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
 

@@ -117,13 +117,13 @@ public:
     KoBorderPreview( QWidget*, const char* = 0L );
     ~KoBorderPreview() {}
 
-    KoBorder leftBorder() { return m_leftBorder; }
+    KoBorder leftBorder()const { return m_leftBorder; }
     void setLeftBorder( KoBorder _leftBorder ) { m_leftBorder = _leftBorder; repaint( true ); }
-    KoBorder rightBorder() { return m_rightBorder; }
+    KoBorder rightBorder()const { return m_rightBorder; }
     void setRightBorder( KoBorder _rightBorder ) { m_rightBorder = _rightBorder; repaint( true ); }
-    KoBorder topBorder() { return m_topBorder; }
+    KoBorder topBorder()const { return m_topBorder; }
     void setTopBorder( KoBorder _topBorder ) { m_topBorder = _topBorder; repaint( true ); }
-    KoBorder bottomBorder() { return m_bottomBorder; }
+    KoBorder bottomBorder()const { return m_bottomBorder; }
     void setBottomBorder( KoBorder _bottomBorder ) { m_bottomBorder = _bottomBorder; repaint( true ); }
 
 protected:
