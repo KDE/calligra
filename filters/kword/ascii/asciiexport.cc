@@ -40,7 +40,7 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     }
     // read the whole file - at least I hope it does :)
     QByteArray array=in.read(0xffffffff);
-    QCString buf((const char*)array, array.size());
+    QString buf=QString::fromUtf8((const char*)array, array.size());
 
     QString str;
 
@@ -56,8 +56,6 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
         i = buf.find( "<TEXT>", j );
     }
 
-    QCString cstr=QCString(str.utf8());
-
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
         kdError(30502) << "Unable to open output file!" << endl;
@@ -65,7 +63,7 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
         out.close();
         return false;
     }
-    out.writeBlock((const char*)cstr, cstr.length());
+    out.writeBlock((const char*)str.local8Bit(), str.length());
 
     in.close();
     out.close();
