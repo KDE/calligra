@@ -55,9 +55,11 @@ private:
     void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false );
     void setLineGeometry( QDomElement & source, QDomElement & target );
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
-    void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target, QDomNode & picture );
+    void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target );
+    void createPictureList( QDomNode &pictures );
 
     QString rotateValue( double val );
+    QString pictureKey( QDomElement &element );
 
     int m_currentPage;
     float m_pageHeight;
@@ -67,6 +69,9 @@ private:
     QDomDocument m_maindoc;
     QDomDocument m_documentinfo;
     QMap<QString, QString> m_pictureLst;
+
+    //load from kpresenter file format
+    QMap<QString, QString> m_kpresenterPictureLst;
     int m_pictureIndex;
 };
 

@@ -21,6 +21,7 @@
 
 #include <qdom.h>
 #include <qfile.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -358,6 +359,55 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     docmanifest.appendChild( manifest );
 }
 
+QString OoImpressExport::pictureKey( QDomElement &elem )
+{
+    // Default date/time is the *nix epoch: 1970-01-01 00:00:00,000
+    int year=1970, month=1, day=1;
+    int hour=0, minute=0, second=0, msec=0; // We must initialize to zero, as not all compilers are C99-compliant
+    if ( elem.tagName() ==  "KEY" )
+    {
+        if( elem.hasAttribute( "year" ) )
+            year=elem.attribute( "year" ).toInt();
+        if( elem.hasAttribute( "month" ) )
+            month=elem.attribute( "month" ).toInt();
+        if( elem.hasAttribute( "day" ) )
+            day=elem.attribute( "day" ).toInt();
+        if( elem.hasAttribute( "hour" ) )
+            hour=elem.attribute( "hour" ).toInt();
+        if( elem.hasAttribute( "minute" ) )
+            minute=elem.attribute( "minute" ).toInt();
+        if( elem.hasAttribute( "second" ) )
+            second=elem.attribute( "second" ).toInt();
+        if( elem.hasAttribute( "msec" ) )
+            msec=elem.attribute( "msec" ).toInt();
+    }
+    QDateTime key;
+    key.setDate( QDate( year, month, day ) );
+    key.setTime( QTime( hour, minute, second, msec ) );
+    return key.toString();
+}
+
+void OoImpressExport::createPictureList( QDomNode &pictures )
+{
+    pictures = pictures.firstChild();
+    kdDebug()<<"void OoImpressExport::createPictureList( QDomNode &pictures ) :"<<pictures.isNull()<<endl;
+    for( ; !pictures.isNull(); pictures = pictures.nextSibling() )
+    {
+        if ( pictures.isElement() )
+        {
+            QDomElement element = pictures.toElement();
+            if ( element.tagName() ==  "KEY" )
+            {
+                kdDebug()<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
+            }
+            else
+                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+        }
+    }
+    kdDebug()<<" void OoImpressExport::createPictureList( QDomNode &pictures ) \n";
+}
+
 void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body )
 {
     QDomNode doc = m_maindoc.namedItem( "DOC" );
@@ -371,6 +421,8 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode pictures = doc.namedItem( "PICTURES" );
     QDomNode sounds = doc.namedItem( "SOUNDS" );
     QDomNode bgpage = background.firstChild();
+
+    createPictureList( pictures );
 
     // store the paper settings
     QDomElement p = paper.toElement();
@@ -413,7 +465,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             switch( o.attribute( "type" ).toInt() )
             {
             case 0: // image
-                appendPicture( doccontent, o, drawPage, pictures );
+                appendPicture( doccontent, o, drawPage );
                 break;
             case 1: // line
                 appendLine( doccontent, o, drawPage );
@@ -561,7 +613,7 @@ void OoImpressExport::appendText( QDomDocument & doc, QDomElement & source, QDom
     target.appendChild( textspan );
 }
 
-void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target, QDomNode & picture )
+void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QDomElement image = doc.createElement( "draw:image" );
 
@@ -578,10 +630,19 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
 
     // set the geometry
     set2DGeometry( source, image );
+    QDomElement key = source.namedItem( "KEY" ).toElement();
+    if ( !key.isNull() )
+    {
+        kdDebug()<<" Key tag exist\n";
+        QString str = pictureKey( key );
+        kdDebug()<<" key of picture : "<<str<<endl;
+        kdDebug()<<"name of picture :"<<m_kpresenterPictureLst[str]<<endl;
+    }
 
     target.appendChild( image );
 
     m_pictureLst.insert( pictureName , "image/png" );
+    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
 
     ++m_pictureIndex;
 }
