@@ -174,7 +174,7 @@ KarbonView::editPaste()
 	for ( ; itr.current() ; ++itr )
 	{
 		VObject *temp = itr.current()->clone();
-		temp->transform( QWMatrix().translate( Karbon::copyOffset, Karbon::copyOffset ) );
+		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}
 	m_part->document().deselectAllObjects();

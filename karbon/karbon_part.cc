@@ -16,6 +16,7 @@
 #include "vcommand.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
+#include "vglobal.h"
 
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
@@ -24,7 +25,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 {
 	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
-	m_maxRecentFiles = Karbon::maxRecentFiles;
+	m_maxRecentFiles = VGlobal::maxRecentFiles;
 	dcop = 0;
 
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -199,7 +200,7 @@ void KarbonPart::initConfig()
 	{
 		config->setGroup( "Interface" );
 		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", Karbon::maxRecentFiles );
+		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", VGlobal::maxRecentFiles );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 	}
 

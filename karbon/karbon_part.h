@@ -19,12 +19,6 @@ class VCommand;
 class VCommandHistory;
 class DCOPObject;
 
-namespace Karbon
-{
-	const short copyOffset = 10; 		/// the amount at which copied objects get offset in x and y direction
-	const short maxRecentFiles = 10;	/// default max. number of files shown in open recent menu item
-}
-
 /**
  * Keeps track of visual per document properties.
  * It manages actions performed on this object in a command history.
