@@ -47,17 +47,6 @@ public:
     KFormulaWidget(KFormulaContainer*, QWidget* parent=0, const char* name=0, WFlags f=0);
     ~KFormulaWidget();
 
-protected:
-
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void mouseDoubleClickEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void wheelEvent(QWheelEvent* event);
-
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
-
 public slots:
     
     void slotSelectAll();
@@ -71,11 +60,21 @@ public slots:
 
 protected slots:
 
-    void slotFormulaChanged();
+    void slotFormulaChanged(int width, int height);
     void slotFormulaLoaded(FormulaElement*);
     void slotElementWillVanish(BasicElement*);
 
 protected:
+
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void mouseDoubleClickEvent(QMouseEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+    virtual void wheelEvent(QWheelEvent* event);
+
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void focusInEvent(QFocusEvent* event);
 
     MoveFlag movementFlag(int state);
 

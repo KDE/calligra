@@ -47,11 +47,11 @@
 #include "textelement.h"
 
 
-KFormulaContainer::KFormulaContainer()
+KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
+        : history(_history)
 {
     rootElement = new FormulaElement(this);
-    dirty = true;
-    testDirty();
+    changed();
 }
 
 KFormulaContainer::~KFormulaContainer()
@@ -81,7 +81,8 @@ void KFormulaContainer::elementRemoval(BasicElement* child)
  */
 void KFormulaContainer::changed()
 {
-    dirty = true;
+    rootElement->calcSizes(context);
+    emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
 }
 
 
@@ -97,7 +98,7 @@ void KFormulaContainer::draw(QPainter& painter)
 void KFormulaContainer::addText(QChar ch)
 {
     removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd text"), this);
+    KFCAdd* command = new KFCAdd(i18n("Add text"), this);
     command->addElement(new TextElement(ch));
     execute(command);
 }
@@ -105,7 +106,7 @@ void KFormulaContainer::addText(QChar ch)
 void KFormulaContainer::addNumber(QChar ch)
 {
     removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd number"), this);
+    KFCAdd* command = new KFCAdd(i18n("Add number"), this);
     command->addElement(new NumberElement(ch));
     execute(command);
 }
@@ -113,21 +114,21 @@ void KFormulaContainer::addNumber(QChar ch)
 void KFormulaContainer::addOperator(QChar ch)
 {
     removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd operator"), this);
+    KFCAdd* command = new KFCAdd(i18n("Add operator"), this);
     command->addElement(new OperatorElement(ch));
     execute(command);
 }
 
 void KFormulaContainer::addBracket(char left, char right)
 {
-    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd bracket"), this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), this);
     command->setElement(new BracketElement(left, right));
     execute(command);
 }
 
 void KFormulaContainer::addFraction()
 {
-    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd fraction"), this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add fraction"), this);
     command->setElement(new FractionElement());
     execute(command);
 }
@@ -135,7 +136,7 @@ void KFormulaContainer::addFraction()
 
 void KFormulaContainer::addRoot()
 {
-    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd root"), this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add root"), this);
     command->setElement(new RootElement());
     execute(command);
 }
@@ -143,7 +144,7 @@ void KFormulaContainer::addRoot()
 
 void KFormulaContainer::addSymbol(Artwork::SymbolType type)
 {
-    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd symbol"), this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add symbol"), this);
     command->setElement(new SymbolElement(type));
     execute(command);
 }
@@ -312,7 +313,7 @@ void KFormulaContainer::paste()
         FormulaCursor* cursor = getActiveCursor();
         if (cursor->buildElementsFromDom(formula, list)) {
             removeSelection();
-            KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nPaste"), this);
+            KFCAdd* command = new KFCAdd(i18n("Paste"), this);
             uint count = list.count();
             for (uint i = 0; i < count; i++) {
                 command->addElement(list.take(0));
@@ -345,7 +346,6 @@ void KFormulaContainer::execute(KFormulaCommand* command)
     command->execute();
     if (!command->isSenseless()) {
         history.addCommand(command, false);
-        testDirty();
     }
     else {
         delete command;
@@ -366,14 +366,12 @@ void KFormulaContainer::removeSelection()
 void KFormulaContainer::undo()
 {
     history.undo();
-    testDirty();
 }
 
 
 void KFormulaContainer::redo()
 {
     history.redo();
-    testDirty();
 }
 
 
@@ -382,15 +380,6 @@ QRect KFormulaContainer::boundingRect()
     return QRect(0, 0, rootElement->getWidth(), rootElement->getHeight());
 }
 
-
-void KFormulaContainer::testDirty()
-{
-    if (dirty) {
-        dirty = false;
-        rootElement->calcSizes(context);
-        emit formulaChanged();
-    }
-}
 
 QDomDocument KFormulaContainer::domData()
 {
@@ -403,7 +392,7 @@ void KFormulaContainer::save(QString file)
 {
     QFile f(file);
     if(!f.open(IO_Truncate | IO_ReadWrite)) {
-        cerr << "Error" << endl;
+        cerr << "Error opening file " << file.latin1() << endl;
         return;
     }
     QCString data=domData().toCString();
@@ -413,6 +402,14 @@ void KFormulaContainer::save(QString file)
     domData().save(str,4);
     f.close();
 }	
+
+/**
+ * Saves the data into the document.
+ */
+void KFormulaContainer::save(QDomDocument doc)
+{
+    doc.appendChild(rootElement->getElementDom(doc));
+}
 
 void KFormulaContainer::load(QString file)
 {
@@ -426,22 +423,32 @@ void KFormulaContainer::load(QString file)
         f.close();
         return;
     }
+    if (load(doc)) {
+        history.clear();
+    }
+    f.close();
+}
+
+/**
+ * Loads a formula from the document.
+ */
+bool KFormulaContainer::load(QDomDocument doc)
+{
     QDomElement fe = doc.firstChild().toElement();
     if (!fe.isNull()) {
         FormulaElement* root = new FormulaElement(this);
         if (root->buildFromDom(fe)) {
             delete rootElement;
             rootElement = root;
-            dirty = true;
-            testDirty();
-            history.clear();
+            changed();
 
             emit formulaLoaded(rootElement);
+            return true;
         }
         else {
             delete root;
             cerr << "Error constructing element tree." << endl;
         }
     }
-    f.close();
+    return false;
 }

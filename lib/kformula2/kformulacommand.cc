@@ -106,7 +106,7 @@ void KFCAdd::unexecute()
 
 KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
                                        BasicElement::Direction direction)
-        : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
+        : KFormulaCommand(i18n("Remove selected text"), document),
           dir(direction)
 {
 }
@@ -128,7 +128,7 @@ void KFCRemoveSelection::unexecute()
 
 KFCRemove::KFCRemove(KFormulaContainer *document,
                      BasicElement::Direction direction)
-        : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
+        : KFormulaCommand(i18n("Remove selected text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
 }
@@ -169,7 +169,7 @@ void KFCRemove::unexecute()
 
 KFCRemoveEnclosing::KFCRemoveEnclosing(KFormulaContainer* document,
                                        BasicElement::Direction dir)
-        : KFormulaCommand(i18n("_:Undo descr.\nRemove enclosing element"), document),
+        : KFormulaCommand(i18n("Remove enclosing element"), document),
           element(0), direction(dir)
 {
 }
@@ -231,7 +231,7 @@ void KFCAddReplacing::unexecute()
 // ******  Add matrix command 
 
 KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
-        : KFCAdd(i18n("_:Undo descr.\nAdd a matrix"), document)
+        : KFCAdd(i18n("Add matrix"), document)
 {
     matrix = new MatrixElement(r, c);
     addElement(matrix);
@@ -247,7 +247,7 @@ void KFCAddMatrix::execute()
 // ******  Add index command
 
 KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document)
-        : KFCAdd(i18n("_:Undo descr.\nAdd index"), document)
+        : KFCAdd(i18n("Add index"), document)
 {
     addElement(new SequenceElement());
 }
@@ -255,7 +255,7 @@ KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document)
 
 KFCAddIndex::KFCAddIndex(KFormulaContainer* document,
                          IndexElement* element, ElementIndexPtr index)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd index"), document)
+        : KFCAddReplacing(i18n("Add index"), document)
 {
     setElement(element);
     index->setToIndex(getActiveCursor());

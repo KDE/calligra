@@ -41,19 +41,17 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
             this, SLOT(slotElementWillVanish(BasicElement*)));
     connect(document, SIGNAL(formulaLoaded(FormulaElement*)),
             this, SLOT(slotFormulaLoaded(FormulaElement*)));
-    connect(document, SIGNAL(formulaChanged()),
-            this, SLOT(slotFormulaChanged()));
+    connect(document, SIGNAL(formulaChanged(int, int)),
+            this, SLOT(slotFormulaChanged(int, int)));
 
     cursor = document->createCursor();
 
-//     accel = new KAccel(this);
-    
-//     (openFile = KStdAction::open(this, SLOT(slotOpen())))->plugAccel(accel);
-//     (saveFile = KStdAction::save(this, SLOT(slotSave())))->plugAccel(accel);
-//     (quitAction = KStdAction::quit(kapp, SLOT(quit())))->plugAccel(accel);
-//     (undoAction = KStdAction::undo(this, SLOT(slotUndo())))->plugAccel(accel);
-//     (redoAction = KStdAction::redo(this, SLOT(slotRedo())))->plugAccel(accel);
+    setFocusPolicy(QWidget::StrongFocus);
+    setBackgroundMode(QWidget::PaletteBase);
 
+    QRect rect = document->boundingRect();
+    slotFormulaChanged(rect.width(), rect.height());
+    
 //     (cutAction = KStdAction::cut(this, SLOT(slotCut())))->plugAccel(accel);
 //     (copyAction = KStdAction::copy(this, SLOT(slotCopy())))->plugAccel(accel);
 //     (pasteAction = KStdAction::paste(this, SLOT(slotPaste())))->plugAccel(accel);
@@ -129,6 +127,9 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             document->addLowerRightIndex();
             break;
         case ' ':
+        case '}':
+        case ']':
+        case ')':
             break;
         case '0':
         case '1':
@@ -185,12 +186,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_Underscore:
                     document->addLowerLeftIndex();
                     break;
-//                 case Qt::Key_D:
-//                     document->replaceElementWithMainChild(BasicElement::afterCursor);
-//                     break;
-//                 case Qt::Key_R:
-//                     document->replaceElementWithMainChild(BasicElement::beforeCursor);
-//                     break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;
@@ -198,6 +193,12 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             }
         }
     }
+}
+
+
+void KFormulaWidget::focusInEvent(QFocusEvent*)
+{
+    document->setActiveCursor(cursor);
 }
 
 
@@ -221,7 +222,7 @@ void KFormulaWidget::mouseReleaseEvent(QMouseEvent* event)
     showCursor();
 }
 
-void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent* event)
+void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
 }
 
@@ -235,7 +236,7 @@ void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
     showCursor();
 }
 
-void KFormulaWidget::wheelEvent(QWheelEvent* event)
+void KFormulaWidget::wheelEvent(QWheelEvent*)
 {
 }
 
@@ -251,8 +252,10 @@ void KFormulaWidget::slotElementWillVanish(BasicElement* element)
     cursor->elementWillVanish(element);
 }
 
-void KFormulaWidget::slotFormulaChanged()
+void KFormulaWidget::slotFormulaChanged(int width, int height)
 {
+    resize(width+5, height+5);
+    // repaint is needed even if the size doesn't change.
     update();
 }
 

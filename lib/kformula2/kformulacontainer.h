@@ -53,7 +53,14 @@ class KFormulaContainer : public QObject {
 
 public:
 
-    KFormulaContainer();
+    /**
+     * Construct a new formula.
+     * @param _history The undo stack we are to store our commands in.
+     *                 It must not deleted as long as we exist because
+     *                 we only store a reference to it.
+     */
+    KFormulaContainer(KCommandHistory& _history);
+    
     ~KFormulaContainer();
 
     /**
@@ -96,10 +103,20 @@ public:
     void save(QString file);
 
     /**
+     * Saves the data into the document.
+     */
+    void save(QDomDocument doc);
+
+    /**
      * Load function.
      * Load the formula from the specified file.
      */
     void load(QString file);
+
+    /**
+     * Loads a formula from the document.
+     */
+    bool load(QDomDocument doc);
 
     FormulaCursor* getActiveCursor() { return activeCursor; }
 
@@ -111,18 +128,14 @@ public:
      */
     void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
 
-    /**
-     * Emits a formulaChanged signal if we are dirty.
-     */
     QRect boundingRect();
-
     
 signals:
 
     /**
      * The formula has changed and needs to be redrawn.
      */
-    void formulaChanged();
+    void formulaChanged(int width, int height);
 
     /**
      * The element is going to leave the formula with and all its children.
@@ -200,11 +213,6 @@ public slots:
 
 private:
 
-    /**
-     * Emits a formulaChanged signal if we are dirty.
-     */
-    void testDirty();
-
     void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
 
     /**
@@ -229,20 +237,17 @@ private:
     ContextStyle context;
 
     /**
-     * If true we need to recalc the formula.
-     */
-    bool dirty;
-
-    /**
      * The active cursor is the one that triggered the last command.
      * We need to remember it so we can use the kdelib undo system.
      */
     FormulaCursor* activeCursor;
     
     /**
-     * Our undo stack.
+     * Our undo stack. We don't own it. The stack belongs to
+     * our parent and might contain not formula related commands
+     * as well.
      */
-    KCommandHistory history;
+    KCommandHistory& history;
 
     // debug
     friend class TestFormulaCursor;

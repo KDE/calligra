@@ -19,15 +19,19 @@
 */
 
 #include <iostream>
-#include "kformulamimesource.h"
-#include "kformulacontainer.h"
-#include "formulacursor.h"
+
 #include <qbuffer.h>
-#include <qpainter.h>
+#include <qcolor.h>
 #include <qimage.h>
+#include <qpainter.h>
 #include <qpixmap.h>
 
-#include <qcolor.h>
+#include <kcommand.h>
+
+#include "formulacursor.h"
+#include "kformulacontainer.h"
+#include "kformulamimesource.h"
+
 
 KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
 {
@@ -62,7 +66,8 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 	return document.toCString();
     else 
     if(QString(format)=="image/ppm") {
-        KFormulaContainer tmpContainer;
+        KCommandHistory history;
+        KFormulaContainer tmpContainer(history);
 	FormulaCursor *c=tmpContainer.createCursor();
         tmpContainer.setActiveCursor(c);
         tmpContainer.paste();

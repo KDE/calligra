@@ -12,6 +12,7 @@
 #include <kapp.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
+#include <kcommand.h>
 
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
@@ -86,7 +87,8 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    KFormulaContainer* container = new KFormulaContainer;
+    KCommandHistory* history = new KCommandHistory;
+    KFormulaContainer* container = new KFormulaContainer(*history);
     KFormulaWidget* mw1 = new TestWidget(container, 0, "test1");
     KFormulaWidget* mw2 = new TestWidget(container, 0, "test2");
 
@@ -106,6 +108,7 @@ int main(int argc, char** argv)
     int result = app.exec();
 
     delete container;
+    delete history;
     
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
