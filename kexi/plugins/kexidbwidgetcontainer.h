@@ -23,10 +23,18 @@
 #include "formeditor/widgetcontainer.h"
 #include "formeditor/container_frame.h"
 
+
+#include <kexiDB/kexidbrecord.h>
+
 /**
  * this class aims to be a replacement for KFormEditor's default widget container
  * which handles db-records with a specified db-source and give some nice scripting ;) options.
  */
+
+namespace KFormEditor
+{
+	class WidgetWatcher;
+};
 
 class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 {
@@ -45,8 +53,13 @@ class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 		QString		dataSource() const;
 		void		setDataSource(QString source);
 
+		void		setRecord(KexiDBRecord *rec);
+		void		setWidgetWatcher(KFormEditor::WidgetWatcher *ww) { m_ww = ww; }
+
 	protected:
 		QString		m_dataSource;
+		KexiDBRecord	*m_rec;
+		KFormEditor::WidgetWatcher	*m_ww;
 };
 
 #endif

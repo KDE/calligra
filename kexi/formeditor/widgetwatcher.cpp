@@ -82,15 +82,17 @@ WidgetWatcher::store(WidgetContainer *parentC)
 	parent.setAttribute("class", "QWidget");
 	uiElement.appendChild(parent);
 
-	parent.appendChild(property(&domDoc, "name", QVariant(parentC->className())));
-	parent.appendChild(property(&domDoc, "geometry", parentC->property("geometry")));
+	parent.appendChild(prop(&domDoc, "name", QVariant(parentC->className())));
+	parent.appendChild(prop(&domDoc, "geometry", parentC->property("geometry")));
+	parent.appendChild(prop(&domDoc, "dataSource", parentC->property("datasource")));
+
 
 	for(QMapIterator<char *, QObject *> it = begin(); it != end(); it++)
 	{
 		QDomElement tclass = domDoc.createElement("widget");
 		tclass.setAttribute("class", it.data()->className());
-		tclass.appendChild(property(&domDoc, "name", QVariant(it.data()->property("name"))));
-		tclass.appendChild(property(&domDoc, "geometry", QVariant(it.data()->property("geometry"))));
+		tclass.appendChild(prop(&domDoc, "name", QVariant(it.data()->property("name"))));
+		tclass.appendChild(prop(&domDoc, "geometry", QVariant(it.data()->property("geometry"))));
 
 		PropertyBufferItem *i;
 		for(i = m_buffer->first(); i; i = m_buffer->next())
@@ -99,7 +101,7 @@ WidgetWatcher::store(WidgetContainer *parentC)
 			if(i->object() == it.data())
 			{
 				if(i->name() != "name" && i->name() != "geometry")
-					tclass.appendChild(property(&domDoc, i->name(), i->value()));
+					tclass.appendChild(prop(&domDoc, i->name(), i->value()));
 			}
 		}
 
@@ -114,7 +116,7 @@ WidgetWatcher::store(WidgetContainer *parentC)
 }
 
 QDomElement
-WidgetWatcher::property(QDomDocument *parent, const QString &name, const QVariant &value)
+WidgetWatcher::prop(QDomDocument *parent, const QString &name, const QVariant &value)
 {
 	QDomElement propertyE = parent->createElement("property");
 	propertyE.setAttribute("name", name);
@@ -189,25 +191,26 @@ WidgetWatcher::load(WidgetContainer *p, WidgetProvider *wp, const QByteArray &da
 
 	QDomElement ui = inBuf.namedItem("UI").toElement();
 	QDomElement element = ui.namedItem("widget").toElement();
+	setUpWidget(p, wp, element, true);
 	for(QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QDomElement w = n.namedItem("widget").toElement();
 		kdDebug() << "WidgetWatcher::load(): tag " << n.toElement().tagName() << endl;
 		kdDebug() << "WidgetWatcher::load(): attr " << n.toElement().attribute("class", "<NONE>") << endl;
-//		if(n.toElement().tagName() == "class")
-//		{
-			kdDebug() << "WidgetWatcher::load(): finding details..." << endl;
-			setUpWidget(p, wp, n.toElement());
-//		}
+
+		kdDebug() << "WidgetWatcher::load(): finding details..." << endl;
+		setUpWidget(p, wp, n.toElement());
 	}
-//	setUpWidget();
 }
 
 void
-WidgetWatcher::setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElement &d)
+WidgetWatcher::setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElement &d, bool po)
 {
 	QWidget *item = w->create(d.attribute("class"), p, "null");
 	kdDebug() << "WidgetWatcher::setUpWidget(): item: " << item << endl;
+
+	if(po)
+		item = p;
 
 	if(!item)
 		return;
@@ -219,6 +222,8 @@ WidgetWatcher::setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElem
 		if(n.toElement().tagName() == "property")
 		{
 			QString name = n.toElement().attribute("name");
+			kdDebug() << "WidgetWatcher::setUpWidget(): pname: " << name << endl;
+
 			QDomNode sub = n.toElement().toElement().firstChild();
 			QDomElement tag = sub.toElement();
 			QString type = sub.toElement().tagName();

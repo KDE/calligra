@@ -71,6 +71,11 @@ class MySqlDB : public KexiDB
 		 * execute a query
 		 */
 		bool		query(QString statement);
+
+		/**
+		 * us that function if you don't want to catch exceptions :)
+		 */
+		bool		uhQuery(QString statement);
 //		int		realQuery(const char *statement, unsigned int length);
 
 		QString		escape(const QString &str);

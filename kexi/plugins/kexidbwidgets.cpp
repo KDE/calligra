@@ -44,6 +44,18 @@ KexiDBLineEdit::setDataSource(const QString &source)
 	m_source = source;
 }
 
+void
+KexiDBLineEdit::setContent(const QVariant &value)
+{
+	m_content = value;
+}
+
+QVariant
+KexiDBLineEdit::content() const
+{
+	return m_content;
+}
+
 KexiDBLineEdit::~KexiDBLineEdit()
 {
 }

@@ -46,6 +46,9 @@ class KexiQueryDesigner : public KexiDialogBase
 	signals:
 		void	queryExecuted(QString statement, bool succeed);
 
+	protected:
+		virtual void print(KPrinter &p);
+
 	protected slots:
 		void	viewChanged(QWidget *);
 

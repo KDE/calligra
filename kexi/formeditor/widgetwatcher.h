@@ -50,8 +50,8 @@ namespace KFormEditor
 			void		load(WidgetContainer *p, WidgetProvider *w, const QByteArray &data);
 
 		protected:
-			QDomElement property(QDomDocument *parent, const QString &name, const QVariant &value);
-			void		setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElement &d);
+			QDomElement prop(QDomDocument *parent, const QString &name, const QVariant &value);
+			void		setUpWidget(WidgetContainer *p, WidgetProvider *w, const QDomElement &d, bool po=false);
 
 		public slots:
 			void	slotNameChanged(QObject *, const char *);

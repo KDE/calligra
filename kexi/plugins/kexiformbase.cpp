@@ -110,6 +110,10 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_frame->disconnect(o);
 			m_tabWidget->disconnect(o);
 		}
+		void toggleMode(bool m)
+		{
+			m_formMode->setChecked(m);
+		}
 	private:
 	KToggleAction *m_formMode;
 
@@ -169,22 +173,23 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
 
-	resize( 250, 250 );
 
 	QVBoxLayout *l=new QVBoxLayout(this);
 	l->setAutoAdd(true);
 	if(!content)
 	{
+		resize( 250, 250 );
 		topLevelEditor=new KexiDBWidgetContainer(this,"foo","bar");
+		topLevelEditor->setDataSource(s);
 	}
 	else
 	{
 		topLevelEditor = static_cast<KexiDBWidgetContainer *>(content);
+		resize(content->width(), content->height());
 		content->reparent(this, QPoint(0, 0));
 	}
 //	topLevelEditor->setWidgetList(item->widgetList());
 	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
-	topLevelEditor->setDataSource(s);
 
 	QDockWindow *editorWindow = new QDockWindow(view->mainWindow(), "edoc");
 	editorWindow->setCaption(i18n("Properties"));
@@ -229,12 +234,16 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
+
+	registerAs(DocumentWindow);
+
 	if(content)
 	{
 		slotToggleFormMode(false);
+		if(m_editGUIClient)
+			m_editGUIClient->toggleMode(false);
 	}
 
-	registerAs(DocumentWindow);
 }
 
 
@@ -305,9 +314,13 @@ void KexiFormBase::slotToggleFormMode(bool state)
 	topLevelEditor->setEditMode(state);
 	if(!state)
 	{
-		kdDebug() << "KexiFormBase::slotToggleFormMode() source: " << m_source << endl;
-//		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
-//		KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+		QString source = topLevelEditor->property("dataSource").toString();
+		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
+		if(p && !source.isNull())
+		{
+			kdDebug() << "KexiFormBase::slotToggleFormMode() Psource: " << source << endl;
+			KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+		}
 	}
 }
 

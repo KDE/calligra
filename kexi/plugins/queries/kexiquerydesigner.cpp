@@ -121,6 +121,12 @@ KexiQueryDesigner::slotContextHelp(const QString &t, const QString &m)
 	setContextHelp(t, m);
 }
 
+void
+KexiQueryDesigner::print(KPrinter &p)
+{
+	m_view->print(p);
+}
+
 KexiQueryDesigner::~KexiQueryDesigner()
 {
 }

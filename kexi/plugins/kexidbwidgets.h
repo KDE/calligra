@@ -22,21 +22,26 @@
 
 #include <qlineedit.h>
 #include <qlabel.h>
+#include <qvariant.h>
 
 class KexiDBLineEdit : public QLineEdit
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+//	Q_PROPERTY(QVariant content READ content WRITE setContent)
 
 	public:
 		KexiDBLineEdit(QWidget *parent=0, const char *name=0);
 		~KexiDBLineEdit();
 
-		QString	dataSource() const;
-		void	setDataSource(const QString &source);
+		QString		dataSource() const;
+		QVariant	content() const;
+		void		setDataSource(const QString &source);
+		void		setContent(const QVariant &value);
 
 	protected:
-		QString	m_source;
+		QString		m_source;
+		QVariant	m_content;
 };
 
 

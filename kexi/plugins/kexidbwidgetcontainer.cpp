@@ -17,11 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+//#include "formeditor/widgetwatcher.h"
+
 #include "kexidbwidgetcontainer.h"
 
 KexiDBWidgetContainer::KexiDBWidgetContainer(QWidget *parent, const char *name, QString identifier)
  : KFormEditor::WidgetContainer(parent, name, identifier)
 {
+	m_ww = 0;
 }
 
 QString

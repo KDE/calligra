@@ -207,13 +207,23 @@ MySqlDB::query(QString statement)
 {
 //	if(!m_connected)
 //		return false;
+	if(!uhQuery(statement))
+	{
+		throw KexiDBError(0, mysql_error(m_mysql));
+		return false;
+	}
+}
+
+bool
+MySqlDB::uhQuery(QString statement)
+{
 	const char *query = statement.latin1();
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
 	{
 		if(mysql_errno(m_mysql) == 0)
 			return true;
 	}
-	throw KexiDBError(0, mysql_error(m_mysql));
+
 	return false;
 }
 
@@ -322,7 +332,7 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 		unsignedType, defaultVal);
 
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
-	return query(qstr);
+	return uhQuery(qstr);
 }
 
 bool
@@ -336,7 +346,7 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
 
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
-	return query(qstr);
+	return uhQuery(qstr);
 }
 
 QString
@@ -549,7 +559,7 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 		fields.at(index)->name() + " " + changedField.name();
 	qstr += " " + createDefinition(changedField, index, fields);
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
-	bool ok = query(qstr);
+	bool ok = uhQuery(qstr);
 
 	if(ok)
 	{
@@ -581,7 +591,7 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 	}
 
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
-	bool ok = query(qstr);
+	bool ok = uhQuery(qstr);
 
 	if(ok)
 	{
@@ -720,7 +730,7 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 	if(!noPrimary)
 	{
 		kdDebug() << "MySqlDB::changeKeys: Query: " << qstr << endl;
-		return query(qstr);
+		return uhQuery(qstr);
 	}
 
 	return true;
