@@ -23,6 +23,7 @@
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
+#include "vselection.h"
 #include "vvisitor.h"
 
 
@@ -38,37 +39,60 @@ void
 VVisitor::visitVDocument( VDocument& document )
 {
 	VLayerListIterator itr( document.layers() );
+
 	for( ; itr.current(); ++itr )
+	{
 		itr.current()->accept( *this );
+	}
 }
 
 void
 VVisitor::visitVGroup( VGroup& group )
 {
 	VObjectListIterator itr( group.objects() );
+
 	for( ; itr.current(); ++itr )
+	{
 		itr.current()->accept( *this );
+	}
 }
 
 void
 VVisitor::visitVLayer( VLayer& layer )
 {
 	VObjectListIterator itr( layer.objects() );
+
 	for( ; itr.current(); ++itr )
+	{
 		itr.current()->accept( *this );
+	}
 }
 
 void
 VVisitor::visitVComposite( VComposite& composite )
 {
 	VPathListIterator itr( composite.paths() );
+
 	for( ; itr.current(); ++itr )
+	{
 		itr.current()->accept( *this );
+	}
 }
 
 void
 VVisitor::visitVPath( VPath& /*path*/ )
 {
+}
+
+void
+VVisitor::visitVSelection( VSelection& selection )
+{
+	VObjectListIterator itr( selection.objects() );
+
+	for( ; itr.current() ; ++itr )
+	{
+		itr.current()->accept( *this );
+	}
 }
 
 void

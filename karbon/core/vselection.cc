@@ -18,12 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "vdocument.h"
+#include "vdrawselection.h"
 #include "vpainter.h"
 #include "vselection.h"
 #include "vselectnodes.h"
 #include "vselectobjects.h"
-#include "vdrawselection.h"
+#include "vvisitor.h"
 
 
 VSelection::VSelection( VObject* parent )
@@ -54,6 +56,12 @@ VSelection*
 VSelection::clone() const
 {
 	return new VSelection( *this );
+}
+
+void
+VSelection::accept( VVisitor& visitor )
+{
+	visitor.visitVSelection( *this );
 }
 
 void

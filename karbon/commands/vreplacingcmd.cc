@@ -84,6 +84,7 @@ VReplacingCmd::execute()
 	if( m_newObjects->objects().count() == 0 )
 		return;
 
+
 	VObjectListIterator itr( m_oldObjects->objects() );
 
 	// Hide old objects.
@@ -107,6 +108,7 @@ VReplacingCmd::unexecute()
 	// Nothing to do.
 	if( m_newObjects->objects().count() == 0 )
 		return;
+
 
 	VObjectListIterator itr( m_oldObjects->objects() );
 

@@ -22,17 +22,17 @@
 #define __VSELECTION_H__
 
 
-#include <koRect.h>
-
 #include <qptrlist.h>
+
+#include <koRect.h>
 
 #include "vobject.h"
 #include "vvisitor.h"
 
-
+class KoPoint;
 class QObject;
 class VPainter;
-class KoPoint;
+class VVisitor;
 
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
@@ -74,6 +74,7 @@ public:
 
 	virtual VSelection* clone() const;
 
+	virtual void accept( VVisitor& visitor );
 
 	/**
 	 * Removes the reference to the object, not the object itself.

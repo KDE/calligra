@@ -261,9 +261,10 @@ public:
 	double lengthParam( double len ) const;
 
 	/**
-	 * Calculates the parameter of the nearest point to the point p
-	 * on this segment. This function is pretty expensive.
+	 * Calculates the parameter of the nearest point on this segment
+	 * to the point p. This function is pretty expensive.
 	 */
+// TODO: isnt finished yet.
 	double nearestPointParam( const KoPoint& p ) const;
 
 

@@ -27,6 +27,7 @@ class VGroup;
 class VLayer;
 class VObject;
 class VPath;
+class VSelection;
 class VText;
 
 
@@ -45,10 +46,13 @@ public:
 	virtual void visitVGroup( VGroup& group );
 	virtual void visitVLayer( VLayer& layer );
 	virtual void visitVPath( VPath& path );
+	virtual void visitVSelection( VSelection& selection );
 	virtual void visitVText( VText& text );
 
 	bool success() const
-		{ return m_success; }
+	{
+		return m_success;
+	}
 
 protected:
 	/**
@@ -57,7 +61,9 @@ protected:
 	virtual ~VVisitor() {}
 
 	void setSuccess( bool success = true )
-		{ m_success = success; }
+	{
+		m_success = success;
+	}
 
 private:
 	bool m_success;
