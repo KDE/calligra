@@ -159,7 +159,9 @@ public:
         setFocusPolicy( ClickFocus );
     }
 
-    virtual ~KoViewWrapperWidget() {}
+    virtual ~KoViewWrapperWidget() {
+        setFocusProxy( 0 ); // to prevent a crash due to clearFocus (#53466)
+    }
 
     virtual void resizeEvent( QResizeEvent * )
     {
