@@ -82,7 +82,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_dcop = 0;
 	dcopObject(); // build it
 
-
 	// dialogs:
 	m_insertKnotsDlg = new VInsertKnotsDlg();
 
@@ -96,7 +95,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setAngle( 20.0 );
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
-
 	
 	// widgets:
 	m_canvas = new VCanvas( this, part );
@@ -115,7 +113,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_sinusTool = new VSinusTool( this );
 	m_spiralTool = new VSpiralTool( this );
 	m_starTool = new VStarTool( this );
-
 
 	// set up factory
 	m_painterFactory = new VPainterFactory;
@@ -149,6 +146,7 @@ KarbonView::~KarbonView()
 	delete( m_flattenDlg );
 	delete( m_roundCornersDlg );
 	delete( m_whirlPinchDlg );
+	delete( m_ColorManager );
 
 	// tools:
 	delete( m_ellipseTool );
@@ -164,14 +162,11 @@ KarbonView::~KarbonView()
 	delete( m_starTool );
 
 	// widgets:
-	//delete m_toolbox;
-//	delete m_status;
-	delete m_painterFactory;
-//	delete m_canvas;
-//	m_canvas = 0L;
-
-	//delete m_ColorManager;
-	delete m_dcop;
+	delete ( m_toolbox );
+	delete ( m_status );
+	delete ( m_painterFactory );
+        delete ( m_canvas );
+	delete ( m_dcop );
 }
 
 DCOPObject* KarbonView::dcopObject()
