@@ -12,10 +12,12 @@ libkexidb_la_SOURCES = drivermanager.cpp object.cpp field.cpp driver.cpp connect
  utils.cpp expression.cpp \
  connectiondata.cpp fieldlist.cpp tableschema.cpp cursor.cpp transaction.cpp  \
  indexschema.cpp queryschema.cpp schemadata.cpp global.cpp relationship.cpp \
- roweditbuffer.cpp parser/parser.cpp parser/sqlscanner.cpp parser/sqlparser.cpp
+ roweditbuffer.cpp
+ 
+#parser/parser.cpp parser/sqlscanner.cpp parser/sqlparser.cpp
 
 libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO)
-libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
+libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 kde_servicetypes_DATA = kexidb_driver.desktop
 
