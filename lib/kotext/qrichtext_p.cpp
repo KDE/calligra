@@ -289,63 +289,7 @@ void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 
 int KoTextParag::alignment() const
 {
-//    if ( align != -1 )
-	return align;
-#if 0
-    QStyleSheetItem *item = qstyle();
-    if ( !item )
-	return Qt::AlignAuto;
-    if ( mStyleSheetItemsVec ) {
-	for ( int i = 0; i < (int)mStyleSheetItemsVec->size(); ++i ) {
-	    item = (*mStyleSheetItemsVec)[ i ];
-	    if ( item->alignment() != QStyleSheetItem::Undefined )
-		return item->alignment();
-	}
-    }
-    return Qt::AlignAuto;
-#endif
-}
-
-QPtrVector<QStyleSheetItem> KoTextParag::styleSheetItems() const
-{
-    QPtrVector<QStyleSheetItem> vec;
-    if ( mStyleSheetItemsVec ) {
-	vec.resize( mStyleSheetItemsVec->size() );
-	for ( int i = 0; i < (int)vec.size(); ++i )
-	    vec.insert( i, (*mStyleSheetItemsVec)[ i ] );
-    }
-    return vec;
-}
-
-QStyleSheetItem *KoTextParag::qstyle() const
-{
-    if ( !mStyleSheetItemsVec || mStyleSheetItemsVec->size() == 0 )
-	return 0;
-    return (*mStyleSheetItemsVec)[ mStyleSheetItemsVec->size() - 1 ];
-}
-
-int KoTextParag::numberOfSubParagraph() const
-{
-    if ( list_val != -1 )
-	return list_val;
-    if ( numSubParag != -1 )
- 	return numSubParag;
-    int n = 0;
-    KoTextParag *p = (KoTextParag*)this;
-    while ( p && ( styleSheetItemsVec().size() >= p->styleSheetItemsVec().size() &&
-	    styleSheetItemsVec()[ (int)p->styleSheetItemsVec().size() - 1 ] == p->qstyle() ||
-		   p->styleSheetItemsVec().size() >= styleSheetItemsVec().size() &&
-		   p->styleSheetItemsVec()[ (int)styleSheetItemsVec().size() - 1 ] == qstyle() ) ) {
-	if ( p->qstyle() == qstyle() && listStyle() != p->listStyle()
-	     && p->styleSheetItemsVec().size() == styleSheetItemsVec().size() )
-	    break;
-	if ( p->qstyle()->displayMode() == QStyleSheetItem::DisplayListItem
-	     && p->qstyle() != qstyle() || styleSheetItemsVec().size() == p->styleSheetItemsVec().size() )
-	    ++n;
-	p = p->prev();
-    }
-    ( (KoTextParag*)this )->numSubParag = n;
-    return n;
+    return align;
 }
 
 void KoTextParag::setFormat( KoTextFormat *fm )
@@ -407,13 +351,6 @@ QMap<int, KoTextParagSelection> &KoTextParag::selections() const
     if ( !mSelections )
 	((KoTextParag *)this)->mSelections = new QMap<int, KoTextParagSelection>;
     return *mSelections;
-}
-
-QPtrVector<QStyleSheetItem> &KoTextParag::styleSheetItemsVec() const
-{
-    if ( !mStyleSheetItemsVec )
-	((KoTextParag *)this)->mStyleSheetItemsVec = new QPtrVector<QStyleSheetItem>;
-    return *mStyleSheetItemsVec;
 }
 
 QPtrList<KoTextCustomItem> &KoTextParag::floatingItems() const

@@ -990,7 +990,6 @@ class Q_EXPORT KoTextDocDeleteCommand : public KoTextDocCommand
 {
 public:
     KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-			const QValueList< QPtrVector<QStyleSheetItem> > &os,
 			const QValueList<QStyleSheetItem::ListStyle> &ols,
 			const QMemArray<int> &oas );
     KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str );
@@ -1004,7 +1003,6 @@ protected:
     int id, index;
     KoTextParag *parag;
     QMemArray<KoTextStringChar> text;
-    QValueList< QPtrVector<QStyleSheetItem> > oldStyles;
     QValueList<QStyleSheetItem::ListStyle> oldListStyles;
     QMemArray<int> oldAligns;
 
@@ -1014,10 +1012,9 @@ class Q_EXPORT KoTextDocInsertCommand : public KoTextDocDeleteCommand
 {
 public:
     KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-			const QValueList< QPtrVector<QStyleSheetItem> > &os,
 			const QValueList<QStyleSheetItem::ListStyle> &ols,
 			const QMemArray<int> &oas )
-	: KoTextDocDeleteCommand( d, i, idx, str, os, ols, oas ) {}
+	: KoTextDocDeleteCommand( d, i, idx, str, ols, oas ) {}
     KoTextDocInsertCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str )
 	: KoTextDocDeleteCommand( p, idx, str ) {}
     virtual ~KoTextDocInsertCommand() {}
@@ -1062,29 +1059,6 @@ private:
     QMemArray<int> oldAligns;
 
 };
-
-#if 0
-class Q_EXPORT KoTextParagTypeCommand : public KoTextDocCommand
-{
-public:
-    KoTextParagTypeCommand( KoTextDocument *d, int fParag, int lParag, bool l,
-			   QStyleSheetItem::ListStyle s, const QValueList< QPtrVector<QStyleSheetItem> > &os,
-			   const QValueList<QStyleSheetItem::ListStyle> &ols );
-    virtual ~KoTextParagTypeCommand() {}
-
-    Commands type() const { return ParagType; }
-    KoTextCursor *execute( KoTextCursor *c );
-    KoTextCursor *unexecute( KoTextCursor *c );
-
-private:
-    int firstParag, lastParag;
-    bool list;
-    QStyleSheetItem::ListStyle listStyle;
-    QValueList< QPtrVector<QStyleSheetItem> > oldStyles;
-    QValueList<QStyleSheetItem::ListStyle> oldListStyles;
-
-};
-#endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1268,10 +1242,6 @@ public:
     virtual void paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                        int clipx, int clipy, int clipw, int cliph ); // kotextparag.cc
 
-    void setStyleSheetItems( const QPtrVector<QStyleSheetItem> &vec );
-    QPtrVector<QStyleSheetItem> styleSheetItems() const;
-    // conflict with kotext method -> renamed from style to qstyle
-    QStyleSheetItem *qstyle() const;
 
     int topMargin() const;
     int bottomMargin() const;
@@ -1377,17 +1347,15 @@ private:
     uint breakable : 1;
     uint isBr : 1;
     uint movedDown : 1;
+    int align : 4;
     short int m_lineChanged;
-    QMap<int, KoTextParagSelection> *mSelections;
     int state, id;
     KoTextString *str;
-    int align;
-    QPtrVector<QStyleSheetItem> *mStyleSheetItemsVec;
-    QStyleSheetItem::ListStyle listS;
-    int numSubParag;
+    QMap<int, KoTextParagSelection> *mSelections;
+    QPtrList<KoTextCustomItem> *mFloatingItems;
+    QStyleSheetItem::ListStyle lstyle;
     int tm, bm, lm, rm, flm;
     KoTextFormat *defFormat;
-    QPtrList<KoTextCustomItem> *mFloatingItems;
 #ifdef QTEXTTABLE_AVAILABLE
     KoTextTableCell *tc;
 #endif
@@ -1397,10 +1365,10 @@ private:
     int *tArray;
     int tabStopWidth;
     KoTextParagData *eData;
-    QPainter *pntr;
-    KoTextDocCommandHistory *commandHistory;
     int list_val;
     QColor *bgcol;
+    QPainter *pntr;
+    KoTextDocCommandHistory *commandHistory;
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1601,6 +1569,7 @@ inline void KoTextCursor::setIndex( int i, bool restore )
     if ( i < 0 || i > string->length() ) {
 #if defined(QT_CHECK_RANGE)
 	qWarning( "KoTextCursor::setIndex: %d out of range", i );
+        //abort();
 #endif
 	i = i < 0 ? 0 : string->length() - 1;
     }
@@ -1986,13 +1955,13 @@ inline void KoTextParag::setAlignment( int a )
 
 inline void KoTextParag::setListStyle( QStyleSheetItem::ListStyle ls )
 {
-    listS = ls;
+    lstyle = ls;
     invalidate( 0 );
 }
 
 inline QStyleSheetItem::ListStyle KoTextParag::listStyle() const
 {
-    return listS;
+    return lstyle;
 }
 
 inline KoTextFormat *KoTextParag::paragFormat() const

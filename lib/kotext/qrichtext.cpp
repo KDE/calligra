@@ -146,10 +146,9 @@ bool KoTextDocCommandHistory::isRedoAvailable()
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
-					const QValueList< QPtrVector<QStyleSheetItem> > &os,
 					const QValueList<QStyleSheetItem::ListStyle> &ols,
 					const QMemArray<int> &oas)
-    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str ), oldStyles( os ), oldListStyles( ols ), oldAligns( oas )
+    : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str ), oldListStyles( ols ), oldAligns( oas )
 {
     for ( int j = 0; j < (int)text.size(); ++j ) {
 	if ( text[ j ].format() )
@@ -224,16 +223,11 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 	    c->gotoNextLetter();
     }
 
-    QValueList< QPtrVector<QStyleSheetItem> >::Iterator it = oldStyles.begin();
     QValueList<QStyleSheetItem::ListStyle>::Iterator lit = oldListStyles.begin();
     int i = 0;
     KoTextParag *p = s;
     bool end = FALSE;
     while ( p ) {
-	if ( it != oldStyles.end() )
-	    p->setStyleSheetItems( *it );
-	else
-	    end = TRUE;
 	if ( lit != oldListStyles.end() )
 	    p->setListStyle( *lit );
 	else
@@ -245,7 +239,6 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 	if ( end )
 	    break;
 	p = p->next();
-	++it;
 	++lit;
 	++i;
     }
@@ -388,49 +381,6 @@ KoTextCursor *KoTextAlignmentCommand::unexecute( KoTextCursor *c )
     return c;
 }
 
-#if 0
-KoTextParagTypeCommand::KoTextParagTypeCommand( KoTextDocument *d, int fParag, int lParag, bool l,
-					      QStyleSheetItem::ListStyle s, const QValueList< QPtrVector<QStyleSheetItem> > &os,
-					      const QValueList<QStyleSheetItem::ListStyle> &ols )
-    : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), list( l ), listStyle( s ), oldStyles( os ), oldListStyles( ols )
-{
-}
-
-KoTextCursor *KoTextParagTypeCommand::execute( KoTextCursor *c )
-{
-    KoTextParag *p = doc->paragAt( firstParag );
-    if ( !p )
-	return c;
-    while ( p ) {
-	p->setList( list, (int)listStyle );
-	if ( p->paragId() == lastParag )
-	    break;
-	p = p->next();
-    }
-    return c;
-}
-
-KoTextCursor *KoTextParagTypeCommand::unexecute( KoTextCursor *c )
-{
-    KoTextParag *p = doc->paragAt( firstParag );
-    if ( !p )
-	return c;
-    QValueList< QPtrVector<QStyleSheetItem> >::Iterator it = oldStyles.begin();
-    QValueList<QStyleSheetItem::ListStyle>::Iterator lit = oldListStyles.begin();
-    while ( p ) {
-	if ( it != oldStyles.end() )
-	    p->setStyleSheetItems( *it );
-	if ( lit != oldListStyles.end() )
-	    p->setListStyle( *lit );
-	if ( p->paragId() == lastParag )
-	    break;
-	p = p->next();
-	++it;
-	++lit;
-    }
-    return c;
-}
-#endif
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1975,71 +1925,10 @@ static QString direction_to_string( const QString &tag, int d )
     return "";
 }
 
-QString KoTextDocument::richText( KoTextParag *p ) const
+QString KoTextDocument::richText( KoTextParag * ) const
 {
     QString s;
-    if ( !p ) {
-	p = fParag;
-	QPtrVector<QStyleSheetItem> lastItems, items;
-	while ( p ) {
-	    items = p->styleSheetItems();
-	    if ( items.size() ) {
-		QStyleSheetItem *item = items[ items.size() - 1 ];
-		items.resize( items.size() - 1 );
-		if ( items.size() > lastItems.size() ) {
-		    for ( int i = lastItems.size(); i < (int)items.size(); ++i ) {
-			if ( items[ i ]->name().isEmpty() )
-			    continue;
-			if ( items[ i ]->name() == "li" && p->listValue() != -1 )
-			    s += "<li value=\"" + QString::number( p->listValue() ) + "\">";
-			else
-			    s += "<" + items[ i ]->name() + align_to_string( items[ i ]->name(), p->alignment() ) + ">";
-		    }
-		} else {
-		    QString end;
-		    for ( int i = items.size(); i < (int)lastItems.size(); ++i ) {
-			if ( lastItems[ i ]->name().isEmpty() )
-			    continue;
-			end.prepend( "</" + lastItems[ i ]->name() + ">" );
-		    }
-		    s += end;
-		}
-		lastItems = items;
-		if ( item->name() == "li" && p->listValue() != -1 ) {
-		    s += "<li value=\"" + QString::number( p->listValue() ) + "\">";
-		} else {
-		    QString ps = p->richText();
-		    if ( ps.isEmpty() && (!item->name().isEmpty() || p->next()) )
-			s += "<br>\n"; // empty paragraph, except the last one
-		    else if ( !item->name().isEmpty() )
-			s += "<" + item->name() + align_to_string( item->name(), p->alignment() )
-			     + direction_to_string( item->name(), p->direction() )  + ">" +
-			     ps + "</" + item->name() + ">\n";
-		    else
-			s += ps +"\n";
-		}
-	    } else {
-		QString end;
-		for ( int i = 0; i < (int)lastItems.size(); ++i ) {
-		    if ( lastItems[ i ]->name().isEmpty() )
-			continue;
-		    end.prepend( "</" + lastItems[ i ]->name() + ">" );
-		}
-		s += end;
-		QString ps = p->richText();
-		if ( ps.isEmpty() )
-		    s += "<br>\n"; // empty paragraph
-		else
-		    s += "<p" + align_to_string( "p", p->alignment() ) + direction_to_string( "p", p->direction() )
-			 + ">" + ps + "</p>\n";
-		lastItems = items;
-	    }
-	    p = p->next();
-	}
-    } else {
-	s = p->richText();
-    }
-
+    // TODO update from QRT if this code is needed
     return s;
 }
 
@@ -3583,9 +3472,9 @@ KoTextStringChar *KoTextStringChar::clone() const
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
-    : invalid( 0 ), p( pr ), n( nx ), doc( d ), mSelections( 0 ), align( 0 ),
-      mStyleSheetItemsVec( 0 ), listS( QStyleSheetItem::ListDisc ),
-      numSubParag( -1 ), tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ),
+    : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( 0 ), mSelections( 0 ),
+      lstyle( QStyleSheetItem::ListDisc ),
+      tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ),
       mFloatingItems( 0 ),
 #ifdef QTEXTTABLE_AVAILABLE
       tc( 0 ),
@@ -3650,7 +3539,6 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	KoTextParag *s = n;
 	while ( s ) {
 	    s->id = s->p->id + 1;
-	    s->numSubParag = -1;
 	    s->lm = s->rm = s->tm = s->bm = -1, s->flm = -1;
 	    s = s->n;
 	}
@@ -3683,7 +3571,6 @@ KoTextParag::~KoTextParag()
 	delete *it;
     if ( mSelections ) delete mSelections;
     if ( mFloatingItems ) delete mFloatingItems;
-    if ( mStyleSheetItemsVec ) delete mStyleSheetItemsVec;
 
     if (p)
        p->setNext(n);
@@ -4183,7 +4070,7 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
 
 void KoTextParag::indent( int *oldIndent, int *newIndent )
 {
-    if ( !doc || !doc->indent() || qstyle() && qstyle()->displayMode() != QStyleSheetItem::DisplayBlock ) {
+    if ( !doc || !doc->indent() /*|| isListItem() TODO*/ ) {
 	if ( oldIndent )
 	    *oldIndent = 0;
 	if ( newIndent )
@@ -4396,14 +4283,6 @@ void KoTextParag::drawCursorDefault( QPainter &painter, KoTextCursor *cursor, in
         }
     }
     painter.restore();
-}
-
-void KoTextParag::setStyleSheetItems( const QPtrVector<QStyleSheetItem> &vec )
-{
-    styleSheetItemsVec() = vec;
-    invalidate( 0 );
-    lm = rm = tm = bm = flm = -1;
-    numSubParag = -1;
 }
 
 #if 0
