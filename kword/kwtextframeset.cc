@@ -381,6 +381,9 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     bool drawCursor = edit!=0L;
     KoTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
 
+#define DEBUGBRUSH(b) "[ style:" << (b).style() << " color:" << (b).color().name() << " hasPixmap:" << (b).pixmap() << "]"
+
+    //kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(), // TODO view's zoom handler
@@ -411,7 +414,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
     // Blank area under the very last paragraph - QRT draws it up to textdoc->height,
     // we have to draw it from there up to the bottom of the last frame.
-    if ( lastFormatted == textDocument()->lastParag() /* && !onlyChanged BUG!*/ )
+    if ( !lastFormatted || lastFormatted == textDocument()->lastParag() )
     {
         // This is drawing code, so we convert everything to pixels
         //int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
