@@ -51,7 +51,7 @@ protected:
 private:
 
     QRect getDrawRect( QPointArray & points );
-    QPointArray zoomPointArray( QPointArray & drawPoints );
+    QPointArray zoomPointArray( QPointArray & points );
 
     int         lineThickness;
     int         lineOpacity;
