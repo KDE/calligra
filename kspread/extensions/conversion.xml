@@ -420,6 +420,23 @@
         <Syntax>ROMAN(Number)</Syntax>
         <Example>ROMAN(99) returns "XCIX"</Example>
         <Example>ROMAN(-55) returns "Err"</Example>
+        <Related>ARABIC</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ARABIC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Numeral</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The ARABIC() function converts roman numeral into number.</Text>
+        <Syntax>ARABIC(Numeral)</Syntax>
+        <Example>ARABIC("IV") returns 4</Example>
+        <Example>ARABIC("XCIX") returns 99</Example>
+        <Related>ROMAN</Related>
       </Help>
     </Function>
 

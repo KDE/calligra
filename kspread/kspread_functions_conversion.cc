@@ -459,6 +459,59 @@ bool kspreadfunc_roman( KSContext& context )
     return true;
 }
 
+// convert single roman character to deciman
+// return < 0 if invalid
+int kspreadfunc_arabic_helper( QChar c )
+{
+  switch( c.unicode() )
+  {
+    case 'M': return 1000;
+    case 'D': return 500;
+    case 'C': return 100;
+    case 'L': return 50;
+    case 'X': return 10;
+    case 'V': return 5;
+    case 'I': return 1;
+  }
+  return -1;
+}
+
+// Function: ARABIC
+bool kspreadfunc_arabic( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "ARABIC", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString roman = args[0]->stringValue();
+  if( roman.isEmpty() ) return false;
+
+  int val = 0;
+  int lastd = 0;
+  int d;
+
+  for( unsigned i=0; i < roman.length(); i++ )
+  {
+    d = kspreadfunc_arabic_helper( roman[i] );
+
+    if( d < 0 )  return false;
+
+    if( lastd < d ) val -= lastd;
+      else val += lastd;
+    lastd = d;
+  }
+  if( lastd < d ) val -= lastd;
+    else val += lastd;
+
+  context.setValue( new KSValue( val ) );
+  return true;
+}
+
+
 // Function: AsciiToChar
 bool kspreadfunc_AsciiToChar( KSContext& context )
 {

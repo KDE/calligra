@@ -201,6 +201,7 @@ bool kspreadfunc_cary( KSContext& context );
 bool kspreadfunc_decsex( KSContext& context );
 bool kspreadfunc_sexdec( KSContext& context );
 bool kspreadfunc_roman( KSContext& context );
+bool kspreadfunc_arabic( KSContext& context );
 bool kspreadfunc_AsciiToChar( KSContext& context );
 bool kspreadfunc_CharToAscii( KSContext& context );
 bool kspreadfunc_inttobool( KSContext & context );
@@ -568,6 +569,7 @@ static const functionEntry funcTab[] = {
   { "DECSEX", kspreadfunc_decsex },
   { "SEXDEC", kspreadfunc_sexdec },
   { "ROMAN", kspreadfunc_roman },
+  { "ARABIC", kspreadfunc_arabic },
   { "POLR", kspreadfunc_polr },
   { "POLA", kspreadfunc_pola },
   { "CARX", kspreadfunc_carx },
