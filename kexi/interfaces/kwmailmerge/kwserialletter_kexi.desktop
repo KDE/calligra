@@ -30,10 +30,12 @@ Name[ru]=Источник данных Kexi
 Name[sk]=Zdroj Kexi
 Name[sl]=Izvor Kexi
 Name[sr]=Kexi-јев извор
+Name[sr@Latn]=Kexi-jev izvor
 Name[sv]=Kexi-källfil
 Name[ta]=Kexi குறிமுறை 
 Name[tg]=Сарчашмаи Kexi
 Name[tr]=Kexi Kaynağı
+Name[uk]=Джерело Kexi
 Name[xx]=xxKexi Sourcexx
 Name[zh_CN]=Kexi 源
 
@@ -60,10 +62,12 @@ Comment[ru]=Этот источник данных позволяет выбра
 Comment[sk]=Tento zdroj dát umožňuje vybrať existujúci projekt Kexi
 Comment[sl]=Ta vir podatkov vam omogoča izbrati obstoječ projekt Kexi
 Comment[sr]=Овај тип извора података омогућава вам да изаберете постојећи Kexi-јев пројекат
+Comment[sr@Latn]=Ovaj tip izvora podataka omogućava vam da izaberete postojeći Kexi-jev projekat
 Comment[sv]=Den här datakällfilen låter dig välja ett befintligt Kexi-projekt
 Comment[ta]=This datasource type stores the  தளம் directly in the KWord file
 Comment[tg]=Ин манбаъи маълумот ба шумо иҷозат медиҳад барои интихоби баромадани проекти Kexi
 Comment[tr]=Bu veri kaynağı varolan bir Kexi projesi seçmenize imkan tanır.
+Comment[uk]=Цей тип джерела даних дозволяє вибрати існуючий проект Kexi
 Comment[xx]=xxThis datasource allows you to choose an existing Kexi projectxx
 Comment[zh_CN]=此数据源允许您选择一个现有的 Kexi 项目
 
