@@ -61,6 +61,7 @@
 #include <kurlrequesterdlg.h>
 #include <klistview.h>
 #include <kfiledialog.h>
+#include <koSpellConfig.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -380,89 +381,57 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
 {
   m_pView=_view;
   config = KPresenterFactory::global()->config();
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Spelling"));
 
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox, 5, 1, KDialog::marginHint(), KDialog::spacingHint());
-  grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
-  grid1->setRowStretch( 4, 10 );
-  _spellConfig = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kPresenterDoc()->getKSpellConfig(), false );
-  grid1->addWidget(_spellConfig,1,0);
-
-  _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
-  grid1->addWidget(_dontCheckUpperWord,2,0);
-
-  _dontCheckTilteCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
-  grid1->addWidget(_dontCheckTilteCase,3,0);
-
-  cbBackgroundSpellCheck=new QCheckBox(i18n("Show misspelled words in document"),tmpQGroupBox);
-  oldSpellCheck=m_pView->kPresenterDoc()->backgroundSpellCheckEnabled();
-  cbBackgroundSpellCheck->setChecked( oldSpellCheck );
-  grid1->addWidget(cbBackgroundSpellCheck,4,0);
-
-  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox);
-  grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
-  connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
+  m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKSpellConfig(), true);
 
   if( config->hasGroup("KSpell kpresenter") )
-    {
-        config->setGroup( "KSpell kpresenter" );
-        _dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-        _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
+  {
+      config->setGroup( "KSpell kpresenter" );
+        m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+        m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
 
-}
-
-void ConfigureSpellPage::slotClearIgnoreAllHistory()
-{
-    int ret = KMessageBox::warningContinueCancel(0L,
-                                                 i18n("Warning! You are about to erase the entire ignore word history."));
-    if (ret == KMessageBox::Continue)
-        m_pView->kPresenterDoc()->clearIgnoreWordAll();
+    m_spellConfigWidget->setBackgroundSpellCheck( m_pView->kPresenterDoc()->backgroundSpellCheckEnabled() );
+    m_spellConfigWidget->addIgnoreList( m_pView->kPresenterDoc()->spellListIgnoreAll() );
 }
 
 void ConfigureSpellPage::apply()
 {
-  config->setGroup( "KSpell kpresenter" );
-  config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
-  config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
-  config->writeEntry ("KSpell_Dictionary", _spellConfig->dictionary ());
-  config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
-  config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
-  config->writeEntry ("KSpell_Client",  _spellConfig->client());
-  KPresenterDoc *doc=m_pView->kPresenterDoc();
-  doc->setKSpellConfig(*_spellConfig);
 
-  bool state=_dontCheckUpperWord->isChecked();
-  config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
-  doc->setDontCheckUpperWord(state);
+    KSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
+    config->setGroup( "KSpell kpresenter" );
+    config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
+    config->writeEntry ("KSpell_RunTogether", (int) _spellConfig->runTogether ());
+    config->writeEntry ("KSpell_Dictionary", _spellConfig->dictionary ());
+    config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
+    config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
+    config->writeEntry ("KSpell_Client",  _spellConfig->client());
 
-  state=_dontCheckTilteCase->isChecked();
-  config->writeEntry("KSpell_dont_check_title_case",(int)state);
+    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    doc->setKSpellConfig(*_spellConfig);
 
-  config->writeEntry( "SpellCheck", cbBackgroundSpellCheck->isChecked() );
 
-  doc->setDontCheckTitleCase(state);
+    bool state=m_spellConfigWidget->dontCheckUpperWord();
+    config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
+    doc->setDontCheckUpperWord(state);
 
-  state = cbBackgroundSpellCheck->isChecked();
-  doc->reactivateBgSpellChecking(oldSpellCheck!=state);
-  //FIXME reactivate just if there is a changes.
-  if( oldSpellCheck!=state)
-      doc->enableBackgroundSpellCheck( state );
+    state=m_spellConfigWidget->dontCheckTitleCase();
+    config->writeEntry("KSpell_dont_check_title_case",(int)state);
+    doc->setDontCheckTitleCase(state);
 
+    state=m_spellConfigWidget->backgroundSpellCheck();
+    config->writeEntry( "SpellCheck", (int)state );
+
+    doc->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
+
+    doc->reactivateBgSpellChecking(state);
+    //FIXME reactivate just if there is a changes.
+    doc->enableBackgroundSpellCheck( state );
 }
 
 void ConfigureSpellPage::slotDefault()
 {
-    _spellConfig->setNoRootAffix( 0);
-    _spellConfig->setRunTogether(0);
-    _spellConfig->setDictionary( "");
-    _spellConfig->setDictFromList( FALSE);
-    _spellConfig->setEncoding (KS_E_ASCII);
-    _spellConfig->setClient (KS_CLIENT_ISPELL);
-    _dontCheckUpperWord->setChecked(false);
-    _dontCheckTilteCase->setChecked(false);
-    cbBackgroundSpellCheck->setChecked(false);
+    m_spellConfigWidget->setDefault();
 }
 
 ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *name )

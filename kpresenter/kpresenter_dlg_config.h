@@ -31,6 +31,7 @@ class KSpellConfig;
 class QCheckBox;
 class KLineEdit;
 class KDoubleNumInput;
+class KoSpellConfigWidget;
 
 class configureInterfacePage : public QWidget
 {
@@ -71,17 +72,10 @@ public:
     ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
-private slots:
-    void slotClearIgnoreAllHistory();
 private:
     KPresenterView* m_pView;
-    KSpellConfig *_spellConfig;
-    QCheckBox *_dontCheckUpperWord;
-    QCheckBox *_dontCheckTilteCase;
-    QCheckBox *cbBackgroundSpellCheck;
-    QPushButton * clearIgnoreAllHistory;
+    KoSpellConfigWidget *m_spellConfigWidget;
     KConfig* config;
-    bool oldSpellCheck;
 };
 
 class ConfigureMiscPage : public QObject

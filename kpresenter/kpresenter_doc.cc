@@ -2407,19 +2407,29 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 /*================================================================*/
 void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )
 {
+    kdDebug()<<"  void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, double zoomX, double zoomY )****************************\n";
+    kdDebug()<<" m_zoomHandler :"<<m_zoomHandler<<endl;
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    kdDebug()<<"d1111111111111111111111111111111\n";
     if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
     {
+            kdDebug()<<"d111111111111111111111111111111122222222222222222\n";
         zoomHandler()->setResolution( zoomX, zoomY );
+            kdDebug()<<"d1111111111111111111111111111111222222222233333333333\n";
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+            kdDebug()<<"d111111111111111111111111111111144444444444444444\n";
         newZoomAndResolution( false, forPrint );
     }
+        kdDebug()<<"d1111111111111111111111111111111555555555555555\n";
     KPrPage *page=m_pageList.first();
+        kdDebug()<<"d1111111111111111111111111111111666666666666666666\n";
     if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
         page=m_kpresenterView->getCanvas()->activePage();
     else if( m_initialActivePage )
         page=m_initialActivePage;
+    kdDebug()<<" page :"<<page<<endl;
     //draw background
+    kdDebug()<<" page->background() :"<<page->background()<<endl;
     page->background()->draw( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
     QPtrListIterator<KPObject> it( page->objectList() );
@@ -2435,7 +2445,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
             continue;
         it.current()->draw( &painter, zoomHandler(), SM_NONE );
     }
-
+    kdDebug()<<" out-************--***************\n";
 }
 
 QPixmap KPresenterDoc::generatePreview( const QSize& size )
