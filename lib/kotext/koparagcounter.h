@@ -152,9 +152,9 @@ public:
     static QString makeAlphaUpperNumber( int n );
     static QString makeAlphaLowerNumber( int n );
 
-    static int fromRomanNumber( const QString );
-    static int fromAlphaUpperNumber( const QString );
-    static int fromAlphaLowerNumber( const QString );
+    static int fromRomanNumber( const QString & );
+    static int fromAlphaUpperNumber( const QString & );
+    static int fromAlphaLowerNumber( const QString & );
 
 private:
 
