@@ -2213,7 +2213,8 @@ void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     if (afterText == "office:annotation") {
         QDomNode date = elem.namedItem( "dc:date" );
         m_createdNoteDate = QDate::fromString( date.toElement().text(), Qt::ISODate );
-        for ( QDomNode text = date.firstChild(); !text.isNull(); text = text.nextSibling() )
+        QDomNode text = elem.namedItem( "text:p" );
+        for ( ; !text.isNull(); text = text.nextSibling() )
         {
             QDomElement t = text.toElement();
             note += t.text() + "\n";
@@ -2228,13 +2229,13 @@ void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
     writer.startElement( "office:annotation" );
     writer.startElement( "dc:date" );
     writer.addTextNode( m_createdNoteDate.toString(Qt::ISODate) );
+    writer.endElement();
     QStringList text = QStringList::split( "\n", m_varValue.toString() );
     for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
         writer.startElement( "text:p" );
         writer.addTextNode( *it );
         writer.endElement();
     }
-    writer.endElement();
     writer.endElement();
 }
 
