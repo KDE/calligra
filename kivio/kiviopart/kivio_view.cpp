@@ -65,6 +65,7 @@
 #include <koRuler.h>
 #include <kozoomhandler.h>
 #include <koUnitWidgets.h>
+#include <koApplication.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -219,14 +220,14 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
-  vRuler->setMinimumWidth(20);
-  vRuler->setMaximumWidth(20);
+  vRuler->setMinimumWidth(34);
+  vRuler->setMaximumWidth(34);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, m_pDoc->config()
     ->defaultPageLayout(), KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
-  hRuler->setMinimumHeight(20);
-  hRuler->setMaximumHeight(20);
+  hRuler->setMinimumHeight(34);
+  hRuler->setMaximumHeight(34);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
   connect(horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
@@ -234,6 +235,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(hRuler, SIGNAL(unitChanged(QString)), SLOT(rulerChangedUnit(QString)));
   connect(vRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
   
   QGridLayout* layout = new QGridLayout(pRightSide);
   layout->addWidget(hRuler, 0, 1);
@@ -364,12 +366,7 @@ void KivioView::createProtectionDock()
 
 void KivioView::setupActions()
 {
-  //FixMe: Either remove this or port it to KoUnit
-/*  m_unitAct = new TKUnitsAction(actionCollection(),"units");
-  connect( m_unitAct, SIGNAL(activated(int)), m_pDoc, SLOT(setUnits(int)) );
-  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_unitAct, SLOT(setCurrentItem(int)) );*/
-
-
+  //FIXME: Port to KOffice!
   AddSpawnerSetAction* addSpSet =  new AddSpawnerSetAction( i18n("Add Stencil Set"), "open_stencilset", 0, actionCollection(), "addStencilSet" );
   connect(addSpSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
 
@@ -389,6 +386,7 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
   /* Create the fg color button */
+  //FIXME: Port to KOffice!
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
   m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
@@ -403,6 +401,7 @@ void KivioView::setupActions()
            this, SLOT( setFontSize(int ) ) );
 
 
+  //FIXME: Port to KOffice!
   m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 
@@ -415,21 +414,22 @@ void KivioView::setupActions()
   m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "font_under", 0, actionCollection(), "setFontUnderline" );
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
+  //FIXME: Port to KOffice!
   m_setHTextAlignment = new KivioParagraphAction( false, actionCollection(), "setHTextAlignment" );
   m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
   connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
   connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
   
-  m_setLineWidth = new KoUnitDoubleSpinBox(this, 0.0, 1000.0, 1.0, 1.0, m_pDoc->units(), 2);
-  new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
-  connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
-  /*m_setLineWidth = new TKUFloatSpinBoxAction(  i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
-  m_setLineWidth->setIconMode(TK::IconOnly);
-  m_setLineWidth->setDecimals(3);
-  m_setLineWidth->setMinValue(0.0);
-  m_setLineWidth->setLineStep(1.0);
-  connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );*/
-  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_setLineWidth, SLOT(setUnit(KoUnit::Unit)) );
+  QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
+  QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
+  lineWidthLbl->setPixmap(kapp->iconLoader()->loadIcon("linewidth", KIcon::Toolbar, 22));
+  m_setLineWidth = new KoUnitDoubleSpinBox(lineWidthWidget, 0.0, 1000.0, 1.0, 1.0, m_pDoc->units(), 2, "kde toolbar widget");
+  QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
+  lwl->addWidget(lineWidthLbl);
+  lwl->addWidget(m_setLineWidth);
+  (void*) new KWidgetAction(lineWidthWidget, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+  connect(m_setLineWidth, SIGNAL(valueChanged(double)), SLOT(setLineWidth()));
+  connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setLineWidthUnit(KoUnit::Unit)));
 
   m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
@@ -465,9 +465,10 @@ void KivioView::setupActions()
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
   //--
 
-  m_viewZoom = new ZoomAction(actionCollection(),"viewZoom");
-  m_viewZoom->setIcon("kivio_zoom");
-  connect( m_viewZoom, SIGNAL(zoomActivated(int)), SLOT(viewZoom(int)));
+  m_viewZoom = new KSelectAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom");
+  m_viewZoom->setEditable(true);
+  connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
+  changeZoomMenu();
 
   m_setEndArrow = new LineEndsAction( false, actionCollection(), "endArrowHead" );
   m_setStartArrow = new LineEndsAction( true, actionCollection(), "startArrowHead" );
@@ -475,7 +476,6 @@ void KivioView::setupActions()
   connect( m_setEndArrow, SIGNAL(activated(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setStartArrow, SIGNAL(activated(int)), SLOT(slotSetStartArrow(int)));
   
-  //FixMe: Port to KOffice!
   m_setEndArrowSize = new TKSizeAction(actionCollection(), "endArrowSize");
   m_setStartArrowSize = new TKSizeAction(actionCollection(), "startArrowSize");
 
@@ -810,20 +810,26 @@ void KivioView::viewZoom(int zoom)
 {
   zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
-  m_viewZoom->insertItem(zoomHandler()->zoom());
   m_pCanvas->update();
+  m_pCanvas->updateScrollBars();
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   KoPageLayout l = activePage()->paperLayout();
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  changeZoomMenu(zoom);
+  showZoom(zoom);
 }
 
 void KivioView::canvasZoomChanged()
 {
-  m_viewZoom->setEditZoom(zoomHandler()->zoom());
+  changeZoomMenu(zoomHandler()->zoom());
+  showZoom(zoomHandler()->zoom());
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
+  KoPageLayout l = activePage()->paperLayout();
+  vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
+  hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
 }
 
 KivioPage* KivioView::activePage()
@@ -1802,7 +1808,7 @@ void KivioView::setRulerVOffset(int v)
   }
 }
 
-void KivioView::rulerChangedUnit(const QString& u)
+void KivioView::rulerChangedUnit(QString u)
 {
   m_pDoc->setUnits(KoUnit::unit(u));
 }
@@ -1818,6 +1824,86 @@ void KivioView::setRulerPageLayout(const KoPageLayout& l)
   hRuler->setPageLayout(l);
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+}
+
+void KivioView::setLineWidthUnit(KoUnit::Unit u)
+{
+  m_setLineWidth->setUnit(u);
+}
+
+void KivioView::viewZoom(const QString& s)
+{
+  QString z(s);
+  z.replace(QRegExp("%"), "");
+  z.simplifyWhiteSpace();
+  bool ok = false;
+  int zoom = z.toInt(&ok);
+
+  if(!ok || zoom < 10) {
+    zoom = zoomHandler()->zoom();
+  }
+
+  if(zoom != zoomHandler()->zoom()) {
+    viewZoom(zoom);
+  }
+}
+
+void KivioView::changeZoomMenu(int z)
+{
+  QStringList zl;
+
+  if(z > 0) {
+    // This code is taken from KWords changeZoomMenu
+    QValueList<int> list;
+    QString zs;
+    int val;
+    bool ok;
+    QStringList itemsList = m_viewZoom->items();
+
+    for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+    {
+      zs = (*it).replace( QRegExp( "%" ), "" );
+      zs = zs.simplifyWhiteSpace();
+      val = zs.toInt(&ok);
+      //zoom : limit inferior=10
+      if(ok && val > 9  &&list.contains(val) == 0)
+        list.append( val );
+    }
+    //necessary at the beginning when we read config
+    //this value is not in combo list
+    if(list.contains(z) == 0) {
+      list.append( z );
+    }
+
+    qHeapSort( list );
+
+    for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it) {
+      zl.append( (QString::number(*it)+'%') );
+    }
+  } else {
+    zl << "33%"
+      << "50%"
+      << "75%"
+      << "100%"
+      << "125%"
+      << "150%"
+      << "200%"
+      << "250%"
+      << "300%"
+      << "350%"
+      << "400%"
+      << "450%"
+      << "500%";
+  }
+
+  m_viewZoom->setItems(zl);
+}
+
+void KivioView::showZoom(int z)
+{
+  QStringList list = m_viewZoom->items();
+  QString zoomStr = QString::number(z) + '%';
+  m_viewZoom->setCurrentItem(list.findIndex(zoomStr));
 }
 
 #include "kivio_view.moc"

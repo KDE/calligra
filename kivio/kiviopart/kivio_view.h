@@ -34,7 +34,6 @@ class KivioTabBar;
 class TKSelectColorAction;
 class StencilBarDockManager;
 namespace Kivio {
-class ZoomAction;
 class ToolController;
 class ToolDockBase;
 class ToolDockManager;
@@ -60,11 +59,8 @@ class KActionMenu;
 
 class LineEndsAction;
 
-//class TKUFloatSpinBoxAction;
 class TKSizeAction;
 class TKPositionAction;
-class TKUnitsAction;
-
 
 class QStringList;
 class QButton;
@@ -200,7 +196,7 @@ class KivioView : public KoView
 
     void slotPageHidden( KivioPage* page );
     void slotPageShown( KivioPage* page );
-    
+
     void setRulerPageLayout(const KoPageLayout& l);
 
   protected slots:
@@ -235,6 +231,7 @@ class KivioView : public KoView
     void slotChangeStencilSize(double, double);
 
     void canvasZoomChanged();
+    void viewZoom(const QString& s);
 
     void addSpawnerToStackBar( KivioStencilSpawnerSet * );
     void addStencilSet( const QString& );
@@ -243,8 +240,9 @@ class KivioView : public KoView
     void setRulerUnit(KoUnit::Unit);
     void setRulerHOffset(int h);
     void setRulerVOffset(int v);
-    void rulerChangedUnit(const QString& u);
+    void rulerChangedUnit(QString u);
 
+    void setLineWidthUnit(KoUnit::Unit u);
   protected:
     void setupActions();
     void initActions();
@@ -253,6 +251,8 @@ class KivioView : public KoView
 
     QButton* newIconButton( const char* file, bool kbutton = false, QWidget* parent = 0 );
 
+    void changeZoomMenu(int z = 0);
+    void showZoom(int z);
   private:
     KivioCanvas *m_pCanvas;
     QButton *m_pTabBarFirst;
@@ -268,8 +268,7 @@ class KivioView : public KoView
     KAction* m_hidePage;
     KAction* m_showPage;
     KAction* m_exportPage;
-    ZoomAction* m_viewZoom;
-  //  TKUnitsAction* m_unitAct;
+    KSelectAction* m_viewZoom;
 
     TKSelectColorAction *m_setFGColor;
     TKSelectColorAction *m_setBGColor;
@@ -287,7 +286,6 @@ class KivioView : public KoView
     LineEndsAction *m_setEndArrow;
 
     KoUnitDoubleSpinBox *m_setLineWidth;
-    //TKUFloatSpinBoxAction *m_setLineWidth;
 
     TKSizeAction *m_setEndArrowSize;
     TKSizeAction *m_setStartArrowSize;
