@@ -674,4 +674,9 @@ void KSpreadTabBar::addHiddenTab(const QString & text)
     tablehide.append( text );
 }
 
+void KSpreadTabBar::removeHiddenTab(const QString & text)
+{
+    tablehide.remove( text );
+}
+
 #include "kspread_tabbar.moc"

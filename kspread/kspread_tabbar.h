@@ -55,6 +55,7 @@ public:
      * @see KSpreadView::setActiveTable
      */
     void addHiddenTab( const QString & text );
+    void removeHiddenTab(const QString & text);
     /**
      * Removes the tab from the bar. If the tab was the active one then the one
      * left of it ( or if not available ) the one right of it will become active.

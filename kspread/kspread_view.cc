@@ -425,8 +425,22 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     if (tbl)
       setActiveTable(tbl);
     else
+    {
       //activate first table which is not hiding
-      setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
+      tbl = m_pDoc->map()->findTable(m_pTabBar->listshow().first());
+      if ( !tbl )
+      {
+        tbl = m_pDoc->map()->firstTable();
+        if ( tbl )
+        {
+          tbl->setHidden( false );
+          QString tabName = tbl->tableName();
+          m_pTabBar->addTab( tabName );
+          m_pTabBar->removeHiddenTab( tabName );
+        }
+      }
+      setActiveTable( tbl );
+    }
 
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
