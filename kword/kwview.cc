@@ -6945,7 +6945,7 @@ void KWView::insertHorizontalLine()
     {
         KWHorzLineFrameSet *horizontalLine = new KWHorzLineFrameSet( m_doc, QString::null /*automatic name*/ );
 
-        KWFrame *frame = new KWFrame(horizontalLine, 50, 50, m_doc->ptPaperWidth() - m_doc->ptLeftBorder() - m_doc->ptRightBorder(), 10 );
+        KWFrame *frame = new KWFrame(horizontalLine, 50, 50, edit->textFrameSet()->frame(0)->width(), 10 );
         horizontalLine->addFrame( frame );
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         m_doc->addFrameSet( horizontalLine, false );
