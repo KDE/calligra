@@ -357,29 +357,71 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     m_dataFormats.insert( styleName, format );
 }
 
+#define addTextNumber( text, elementWriter ) { \
+        if ( !text.isEmpty() ) \
+        { \
+            elementWriter.startElement( "number:text" ); \
+            elementWriter.addTextNode( text ); \
+            elementWriter.endElement(); \
+            text=""; \
+        } \
+}
+
+
 QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format )
 {
     kdDebug()<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
 
+    // Not supported into Qt: "era" "week-of-year" "quarter"
+
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_DATE );
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-    elementWriter.startElement( "number:date-style" );
     QString text;
     do
     {
-        //TODO "MM"
-        if ( format.startsWith( "dddd" ) )
+        if ( format.startsWith( "MMMM" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 4 );
+        }
+        else if ( format.startsWith( "MMM" ) )
+        {
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "true");
+            elementWriter.endElement();
+            format = format.remove( 0, 3 );
+        }
+        else if ( format.startsWith( "MM" ) )
+        {
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "long" );
+            elementWriter.addAttribute( "number:textual", "false"); //not necessary remove it
+            elementWriter.endElement();
+            format = format.remove( 0, 2 );
+        }
+        else if ( format.startsWith( "M" ) )
+        {
+            addTextNumber( text, elementWriter );
+            elementWriter.startElement( "number:month" );
+            elementWriter.addAttribute( "number:style", "short" );
+            elementWriter.addAttribute( "number:textual", "false");
+            elementWriter.endElement();
+            format = format.remove( 0, 1 );
+        }
+        else if ( format.startsWith( "dddd" ) )
+        {
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:day-of-week" );
             elementWriter.addAttribute( "number:style", "long" );
             elementWriter.endElement();
@@ -387,13 +429,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else if ( format.startsWith( "ddd" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:day-of-week" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.endElement();
@@ -401,13 +438,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else if ( format.startsWith( "dd" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:day" );
             elementWriter.addAttribute( "number:style", "long" );
             elementWriter.endElement();
@@ -415,13 +447,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else if ( format.startsWith( "d" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:day" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.endElement();
@@ -429,13 +456,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else if ( format.startsWith( "yyyy" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:year" );
             elementWriter.addAttribute( "number:style", "long" );
             elementWriter.endElement();
@@ -443,13 +465,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else if ( format.startsWith( "yy" ) )
         {
-            if ( !text.isEmpty() )
-            {
-                elementWriter.startElement( "number:text" );
-                elementWriter.addTextNode( text );
-                elementWriter.endElement();
-                text="";
-            }
+            addTextNumber( text, elementWriter );
+
             elementWriter.startElement( "number:year" );
             elementWriter.addAttribute( "number:style", "short" );
             elementWriter.endElement();
@@ -462,15 +479,8 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
     }
     while ( format.length() > 0 );
-    if ( !text.isEmpty() )
-    {
-        elementWriter.startElement( "number:text" );
-        elementWriter.addTextNode( text );
-        elementWriter.endElement();
-        text="";
-    }
+    addTextNumber( text, elementWriter );
 
-    elementWriter.endElement();
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentStyle, "N" );

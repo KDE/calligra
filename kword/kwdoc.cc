@@ -2707,6 +2707,11 @@ void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& 
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
     }
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
+    }
 
     contentWriter.endElement(); // office:automatic-styles
 }
