@@ -35,6 +35,9 @@
 #include <kstdaction.h>
 #include <kaction.h>
 #include <kmessagebox.h>
+#include <kseparator.h>
+#include <qvbox.h>
+#include <qspinbox.h>
 
 /******************************************************************
  *
@@ -356,10 +359,10 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     edit=new QPushButton(i18n("Edit Current..."),row1);
     create=new QPushButton(i18n("Create New..."),row1);
     open=new QPushButton(i18n("Open Existing..."),row1);
-    QFrame *Line1 = new QFrame( back, "Line1" );
-    layout->addWidget(Line1);
-    Line1->setFrameShape( QFrame::HLine );
-    Line1->setFrameShadow( QFrame::Sunken );
+
+    KSeparator *separator1 = new KSeparator(back);
+    layout->addWidget(separator1);
+
     l = new QLabel( i18n( "Merging:" ),back );
 	 layout->addWidget(l);
 //  l->setMaximumHeight( l->sizeHint().height() );
@@ -371,6 +374,9 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     document->hide();
     (void) new QWidget(row2);
     layout->addStretch();
+
+    KSeparator *separator2 = new KSeparator(back);
+    layout->addWidget(separator2);
 
     enableDisableEdit();
 
@@ -441,7 +447,10 @@ void KWMailMergeConfigDialog::slotPreviewClicked()
 }
 
 void KWMailMergeConfigDialog::slotDocumentClicked()
-{db_->action=KWSLMergeDocument;done(QDialog::Accepted);}
+{
+    db_->action=KWSLMergeDocument;
+    done(QDialog::Accepted);
+}
 
 KWMailMergeConfigDialog::~KWMailMergeConfigDialog()
 {

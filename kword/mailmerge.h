@@ -29,10 +29,6 @@
 #include <qmap.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvbox.h>
-#include <qlistview.h>
-#include <qspinbox.h>
-#include <qtoolbutton.h>
 #include <qdom.h>
 #include <qtextstream.h>
 
@@ -44,6 +40,7 @@ class QPushButton;
 class QLineEdit;
 class QSpinBox;
 class KWDocument;
+class QVBox;
 
 //class KWMailMergeDataBase;
 
