@@ -106,11 +106,12 @@ static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
 
 enum StackItemElementType{
     ElementTypeUnknown  = 0,
-    ElementTypeBottom   = 1, // Bottom of the stack
-    ElementTypeAbiWord  = 2, // <abiword>
-    ElementTypeSection  = 3, // <section>
-    ElementTypeParagraph= 4, // <p>
-    ElementTypeContent  = 5  // <c>
+    ElementTypeBottom,      // Bottom of the stack
+    ElementTypeIgnore,      // Element is known but ignored (e.g. empty elements)
+    ElementTypeAbiWord,     // <abiword>
+    ElementTypeSection,     // <section>
+    ElementTypeParagraph,   // <p>
+    ElementTypeContent      // <c>
 };
 
 class StackItem
@@ -579,6 +580,124 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
+// <pagesize>
+
+inline double MillimetersToPoints(const double d)
+{
+    return d * 72.0 / 2.54;
+}
+
+inline double InchesToPoints(const double d)
+{
+    return d * 72.0;
+}
+
+static bool StartElementPageSize(QDomElement& mainFramesetElement, const QXmlAttributes& attributes)
+{
+    return true; // FIXME: something is wrong here with finding <PAPER> in the output DOM!
+
+    if (attributes.value("page-scale").toDouble()!=1.0)
+    {
+        kdWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale") << endl;
+    }
+
+    int kwordOrientation;
+    QString strOrientation=attributes.value("orientation").stripWhiteSpace();
+
+    if (strOrientation=="portrait")
+    {
+        kwordOrientation=0;
+    }
+    else if (strOrientation=="landscape")
+    {
+        kwordOrientation=1;
+    }
+    else
+    {
+        kdWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! " << endl;
+        kwordOrientation=0;
+    }
+
+    double kwordHeight=0.0;
+    double kwordWidth=0.0;
+    int kwordFormat;
+
+    QString strPageType=attributes.value("pagetype").stripWhiteSpace();
+
+    // Do we know the page size or do we need to measure
+    // For page format we know, use our own values in case the values in the file would be wrong.
+
+    if (strPageType=="Custom")
+    {
+        // We have a Custom page.
+        // For now (CVS 2001-04-24), AbiWord cannot handle custom pages
+        //  and the height and width value are null, therefore useless.
+        // We prefer to set a A4 page size!
+        kwordHeight = MillimetersToPoints(29.7);
+        kwordWidth  = MillimetersToPoints(21.0);
+        kwordFormat = 6; // At least, say that we are a custom format!
+        kdWarning(30506) << "Custom page format found! Ignored!" << endl;
+    }
+    // The two most used formats first: A4 and Letter
+    else if (strPageType=="A4")
+    {
+        kwordHeight = MillimetersToPoints(29.7);
+        kwordWidth  = MillimetersToPoints(21.0);
+        kwordFormat = 1; // A4
+    }
+    else if (strPageType=="Letter")
+    {
+        kwordHeight = InchesToPoints(11.0);
+        kwordWidth  = InchesToPoints( 8.5);
+        kwordFormat = 3; // US Letter
+    }
+    // TODO: more formats that KWord knows
+    else
+        // We do not know the format, use the values in the attributes
+    {
+        kdWarning(30506) << "Unknown page format found: " << strPageType << endl;
+        // TODO: do a real implementation, for now it is only A4
+        kwordHeight = MillimetersToPoints(29.7);
+        kwordWidth  = MillimetersToPoints(21.0);
+        kwordFormat = 6; // At least, say that we are a custom format!
+    }
+
+
+    // Now that we have gathered all the data, put it in the right element!
+
+    QDomElement firstElement=mainFramesetElement.ownerDocument().documentElement();
+
+    if (firstElement.isNull())
+    {
+        kdError(30506) << "Panic: document element cannot be found! Aborting!" << endl;
+        return false;
+    }
+
+    QDomNodeList nodeList=firstElement.elementsByTagName("PAPER");
+
+    /*
+    if (!nodeList.count())
+    {
+        kdError(30506) << "Panic: <PAPER> element was not created! Aborting!" << endl;
+        return false;
+    }
+*/
+
+    QDomElement paperElement=nodeList.item(0).toElement();
+
+    if (paperElement.isNull())
+    {
+        kdError(30506) << "Panic: <PAPER> element cannot be found! Aborting!" << endl;
+        return false;
+    }
+
+    paperElement.setAttribute("format",kwordFormat);
+    paperElement.setAttribute("width",kwordWidth);
+    paperElement.setAttribute("height",kwordHeight);
+    paperElement.setAttribute("orientation",kwordOrientation);
+
+    return true;
+}
 
 // Parser for SAX2
 
@@ -615,6 +734,13 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         stackItem->elementType=ElementTypeSection;
         stackItem->stackNode=structureStack.current()->stackNode;
         success=true;
+    }
+    else if (name=="pagesize")
+        // Does only exists as lower case tag!
+    {
+        stackItem->elementType=ElementTypeIgnore; // It is in fact an empty element!
+        stackItem->stackNode=structureStack.current()->stackNode;
+        success=StartElementPageSize(mainFramesetElement,attributes);
     }
     else
     {
