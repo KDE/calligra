@@ -700,8 +700,7 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED>
 
 <!-- FONTATTRIBUTE
-        Value is either "none", "uppercase", or "lowercase"
-        (Future extension: smallcaps)
+        Value is either "none", "smallcaps", "uppercase", or "lowercase"
 -->
 <!ELEMENT FONTATTRIBUTE
     EMPTY>
