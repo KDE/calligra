@@ -4514,7 +4514,8 @@ void KWView::slotFrameSetEditChanged()
 
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
-    actionInsertFootEndNote->setEnabled( state );
+    QString mode=m_gui->canvasWidget()->viewMode()->type();
+    actionInsertFootEndNote->setEnabled( state && (mode!="ModeText"));
     slotUpdateRuler();
 }
 
@@ -5008,8 +5009,11 @@ void KWView::switchModeView()
     actionToolsCreatePart->setEnabled(state);
     actionInsertFormula->setEnabled(state);
     actionInsertTable->setEnabled(state);
-
+    actionInsertFootEndNote->setEnabled( state );
+    actionViewFooter->setEnabled( state );
+    actionViewHeader->setEnabled( state );
 }
+
 void KWView::configureFootEndNote()
 {
     KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc );
