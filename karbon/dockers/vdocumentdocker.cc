@@ -387,11 +387,21 @@ VLayerListViewItem::update()
 
 	setOn( m_layer->selected() );
 	setText( 0, m_layer->name() );
-	if( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "locked.png", KIcon::Small ) ) );
-	else
-		setPixmap( 1, QPixmap( KGlobal::iconLoader()->iconPath( "unlocked.png", KIcon::Small ) ) );
-	setPixmap( 2, QPixmap( KGlobal::iconLoader()->iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
+	QPixmap pm;
+	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	if( !QPixmapCache::find( s, pm ) )
+	{
+		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
+		QPixmapCache::insert( s, pm );
+	}
+	setPixmap( 1, pm );
+	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible.png" : "14_layer_novisible.png";
+	if( !QPixmapCache::find( s, pm ) )
+	{
+		pm = QPixmap( KGlobal::iconLoader()->iconPath( s, KIcon::Small ) );
+		QPixmapCache::insert( s, pm );
+	}
+	setPixmap( 2, pm );
 	setPixmap( 0, preview );
 } // VLayerListViewItem::update
 
