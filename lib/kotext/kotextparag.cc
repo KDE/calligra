@@ -496,7 +496,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ) /*+ QABS( format->shadowY( zh ) )*/ );
+        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ) );
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
