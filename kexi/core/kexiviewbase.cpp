@@ -78,10 +78,14 @@ KexiPropertyBuffer *KexiViewBase::propertyBuffer()
 
 void KexiViewBase::propertyBufferSwitched()
 {
-	KexiDialogBase *dlg = parentDialog();
+	if (parentDialog())
+		m_mainWin->propertyBufferSwitched( parentDialog(), false );
+}
 
-	if (dlg)
-		m_mainWin->propertyBufferSwitched( dlg );
+void KexiViewBase::propertyBufferReloaded()
+{
+	if (parentDialog())
+		m_mainWin->propertyBufferSwitched( parentDialog(), true );
 }
 
 void KexiViewBase::setDirty(bool set)

@@ -325,7 +325,18 @@ Table View
 	-Combo box editor: after new row selecting (not hightlighting) editing is accepted
 	-setFilteringEnabled() added
 Alter Table Dialog
-	-
+	-anyway, subtype property is always created (may be needed later)
+	-subtype is properly opdated on type (group) changing
+KexiDB::Field
+	-forgotten: Byte is numeric type, of course
+Properties
+	-fixed possible crash
+	-KexiProperty: now it's possible to change a list of values (in case 
+	 of property of type 'list')
+KexiViewBase
+	-propertyBufferReloaded() added -called whenever current 
+	 property buffer is changed that few properties are now visible 
+	 and/or few other are invisible
 	
 2004-03-09
 Main Window : some top level polishing

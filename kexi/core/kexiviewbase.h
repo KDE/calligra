@@ -100,6 +100,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 so property editor contents need to be completely replaced. */
 		void propertyBufferSwitched();
 
+		/*! Call this in your view's implementation whenever current property buffer 
+		 is changed that few properties are now visible and/or few other are invisible,
+		 so property editor operating on this buffer should be completely reloaded. */
+		void propertyBufferReloaded();
+
 		/*! Tells this dialog to create and store data of the new object
 		 pointed by \a sdata on the backend. 
 		 Called by KexiDialogBase::storeNewData().

@@ -287,7 +287,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
 
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg);
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false);
 
 		/*! Handles changes in 'dirty' flag for dialogs. */
 		void slotDirtyFlagChanged(KexiDialogBase*);

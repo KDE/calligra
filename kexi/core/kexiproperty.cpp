@@ -139,8 +139,8 @@ class KexiProperty::KexiPropertyListData
 
 KexiProperty::KexiProperty(const QCString &name, QVariant value, const QString &desc)
 {
+	m_list = 0;
 	m_name = name;
-//	m_value = value;
 	m_desc = desc;
 	init(value);
 }
@@ -150,19 +150,15 @@ KexiProperty::KexiProperty(const QCString &name, const QString &value,
  const QString &desc)
 {
 	m_name = name;
-//	m_value = value;
 	m_desc = desc;
 	init(value);
 	m_list = new KexiPropertyListData();
-	m_list->keys = key_list;
-	m_list->names = name_list;
-	//kdDebug() << "creating stringlist property" << endl;
+	setList(key_list, name_list);
 }
 
 KexiProperty::KexiProperty()
 {
-//	m_name="";
-//	m_value=QVariant();
+	m_list = 0;
 	init(QVariant());
 }
 
@@ -405,6 +401,12 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
 {
 	setValue(v, true, saveOldValue);
+}
+
+void KexiProperty::setList(const QStringList &key_list, const QStringList &name_list)
+{
+	m_list->keys = key_list;
+	m_list->names = name_list;
 }
 
 QVariant KexiProperty::value() const

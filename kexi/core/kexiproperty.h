@@ -65,7 +65,8 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty(const QCString &name, QVariant value, const QString &desc = QString::null);
 
 		/*! Creates a list property with \a name as name, \a value as value 
-		  and \a key_list as the list of all possible keys. Value must be one of the keys.
+		  and \a key_list as the list of all possible keys. Value must be 
+		  an element from \a key_list list.
 		  \a name_list is a list of i18n'ed names that will be visible ont he screen,
 		  instead of keys.
 		  The user will be able to choose a value from \a key_list.
@@ -120,6 +121,14 @@ class KEXICORE_EXPORT KexiProperty
 		 It the property has a parent property, the parent has set "changed" flag when needed.
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
+
+		/*! For property of type "list of values": 
+		 sets \a key_list as a new list of keys and \a name_list as a new list 
+		 of i18n'e names (corresponding to keys). Sometimes it's necessary to change
+		 the list. You should ensure yourself that current value is a string that 
+		 is one of a new \a key_list.
+		 \sa keys(), \a names() */
+		void setList(const QStringList &key_list, const QStringList &name_list);
 
 		/*! Resets this property value to its old value. 
 		 The property becames unchanged after that and old value becames null.
@@ -210,7 +219,6 @@ class KEXICORE_EXPORT KexiProperty
 		QVariant	m_oldValue;
 		class KexiPropertyListData;
 		KexiPropertyListData *m_list;
-//		QMap<QString,QString> *m_list;
 		KexiProperty* m_parent;
 		QGuardedPtr<KexiPropertyBuffer> m_buf;
 		KexiProperty::Dict* m_children_dict;

@@ -70,9 +70,12 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode) = 0;
 
-		/*! Received information from active view that \a dlg has switched its property buffer,
-		 so property editor contents should be reloaded. */
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg) = 0;
+		/*! Received information from active view that \a dlg has switched 
+		its property buffer, so property editor contents should be reloaded. 
+		 If \a force is true, property editor's data is reloaded even 
+		 if the currently pointed buffer is the same as before. */
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false) = 0;
+
 };
 
 

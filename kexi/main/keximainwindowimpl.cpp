@@ -2060,14 +2060,14 @@ int KexiMainWindowImpl::generatePrivateDocID()
 	return --d->privateDocIDCounter;
 }
 
-void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg)
+void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force)
 {
 	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;
 	if ((KexiDialogBase*)d->curDialog!=dlg)
 		return;
 	if (d->propEditor) {
 		KexiPropertyBuffer *newBuf = d->curDialog ? d->curDialog->propertyBuffer() : 0;
-		if (!newBuf || (KexiPropertyBuffer *)d->propBuffer != newBuf) {
+		if (!newBuf || (force || static_cast<KexiPropertyBuffer*>(d->propBuffer) != newBuf)) {
 			d->propBuffer = newBuf;
 			d->propEditor->editor()->setBuffer( d->propBuffer );
 		}
