@@ -1468,6 +1468,7 @@ bool KSpreadCell::makeFormula()
   // Did a syntax error occur ?
   if ( context.exception() )
   {
+    m_lstDepends.clear();
     clearFormula();
 
     setFlag(Flag_ParseError);
@@ -1540,12 +1541,13 @@ bool KSpreadCell::calc(bool delay)
     return true;
   }
 
-  setFlag(Flag_Progress);
 
   if (m_pCode == NULL)
   {
-    makeFormula();
+    // there was a parse error
+    return false;
   }
+  setFlag(Flag_Progress);
 
   KSpreadDependency *dep;
   for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
@@ -1576,27 +1578,29 @@ bool KSpreadCell::calc(bool delay)
   }
 
   KSContext& context = m_pTable->doc()->context();
-  if ( !m_pCode || !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
+  if ( !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
   {
     // If we got an error during evaluation ...
-    if ( m_pCode )
-      {
-// these should be set by the evaluate routine...
-//      setFlag(Flag_Error);
-//      m_strFormulaOut = "####";
-//      m_dataType = StringData; //correct?
-      setFlag(Flag_LayoutDirty);
-      DO_UPDATE;
-      // Print out exception if any
-      if ( context.exception() && m_pTable->doc()->getShowMessageError())
-      {
-        QString tmp(i18n("Error in cell %1\n\n"));
-        tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-        tmp += context.exception()->toString( context );
-        KMessageBox::error( (QWidget*)0L, tmp);
-      }
+    if (!hasError())
+    {
+      // if the error wasn't already set during the evaluation, it must
+      // be a parse error.
 
+      clearFormula();
+      setFlag(Flag_ParseError);
+      m_strFormulaOut = "####";
+      m_dataType = StringData; //correct?
     }
+    setFlag(Flag_LayoutDirty);
+    // Print out exception if any
+    if ( context.exception() && m_pTable->doc()->getShowMessageError())
+    {
+      QString tmp(i18n("Error in cell %1\n\n"));
+      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp += context.exception()->toString( context );
+      KMessageBox::error( (QWidget*)0L, tmp);
+    }
+
     // setFlag(Flag_LayoutDirty);
     clearFlag(Flag_Progress);
     clearFlag(Flag_CalcDirty);
@@ -1605,8 +1609,8 @@ bool KSpreadCell::calc(bool delay)
     {
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
         s->parse( m_strFormulaOut );
-        DO_UPDATE;
     }
+    DO_UPDATE;
     return false;
   }
   else if ( context.value()->type() == KSValue::DoubleType )
@@ -3306,7 +3310,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
       checkTextInput(); // is this necessary?
       // setFlag(Flag_LayoutDirty);
   }
-  setCalcDirtyFlag();
 
   /* those obscuring us need to redo their layout cause they can't obscure us
      now that we've got text.
@@ -3325,6 +3328,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
       }
     }
   }
+  setCalcDirtyFlag();
 
   if ( updateDepends )
       update();
