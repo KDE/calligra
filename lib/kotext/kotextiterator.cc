@@ -160,6 +160,7 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
     {
         operator++();
     }
+    kdDebug(32500) << "firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
 }
 
 // Go to next paragraph that we must iterate over
