@@ -72,9 +72,9 @@ enum Encoding {
 
 class KOSpellConfig : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /**
      * Constructs a KSpellConfig with default or custom settings.
      *
@@ -87,7 +87,7 @@ class KOSpellConfig : public QWidget
      *
      */
     KOSpellConfig( QWidget *parent=0, const char *name=0,
-		  KOSpellConfig *spellConfig=0, bool addHelpButton = true );
+                   KOSpellConfig *spellConfig=0, bool addHelpButton = true );
 
     KOSpellConfig (const KOSpellConfig &);
 
@@ -137,7 +137,8 @@ class KOSpellConfig : public QWidget
      */
     void setDictionary (const QString qs);
     void setDictFromList (bool dfl);
-    //void setPersonalDict (const char *s);
+
+    void setIgnoreCase ( bool b );
 
     /**
      *
@@ -151,7 +152,7 @@ class KOSpellConfig : public QWidget
     bool runTogether() const;
     const QString dictionary () const;
     bool dictFromList () const;
-    //QString personalDict () const;
+    bool ignoreCase () const;
     int encoding () const;
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
@@ -172,7 +173,7 @@ class KOSpellConfig : public QWidget
     static QString languageFromFileName( const QString &_lang );
 
 
-  protected:
+protected:
     void fillInDialog();
     bool readGlobalSettings();
 
@@ -188,7 +189,7 @@ class KOSpellConfig : public QWidget
     static bool interpret( QString &fname, QString &lname, QString &hname );
 
 
-  public slots:
+public slots:
     /**
      * Use this function to activate the help information for this
      * widget. The function is particulary useful if the help button is
@@ -200,7 +201,7 @@ class KOSpellConfig : public QWidget
     void activateHelp( void );
 
 
-  protected slots:
+protected slots:
     void sHelp();
     void sNoAff(bool);
     void sRunTogether(bool);
@@ -208,14 +209,16 @@ class KOSpellConfig : public QWidget
     void sPathDictionary(bool);
     void sSetDictionary (int);
     void sChangeEncoding (int);
+    void slotIgnoreCase(bool b);
 
-  protected:
+protected:
     // The options
     int enc;			//1 ==> -Tlatin1
     bool bnorootaffix;		// -m
     bool bruntogether;		// -B
     bool dictfromlist;
     bool nodialog;
+    bool m_bIgnoreCase;
     QString qsdict;		// -d [dict]
     QString qspdict;		// -p [dict]
     QStringList ignorelist;
@@ -225,7 +228,7 @@ class KOSpellConfig : public QWidget
     QCheckBox *cb1, *cb2;
     QLabel *dictlist;
     QComboBox *dictcombo, *encodingcombo, *clientcombo;
-
+    QCheckBox *cbIgnoreCase;
 signals:
     void configChanged();
 

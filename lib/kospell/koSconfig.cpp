@@ -52,15 +52,16 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
   , encodingcombo(0)
   , clientcombo(0)
 {
+    m_bIgnoreCase = false;
     d= new KOSpellConfigPrivate;
     setReplaceAllList( _ksc.replaceAllList ());
-  setNoRootAffix (_ksc.noRootAffix());
-  setRunTogether (_ksc.runTogether());
-  setDictionary  (_ksc.dictionary());
-  setDictFromList (_ksc.dictFromList());
-  //  setPersonalDict (_ksc.personalDict());
-  setIgnoreList (_ksc.ignoreList());
-  setEncoding (_ksc.encoding());
+    setNoRootAffix (_ksc.noRootAffix());
+    setRunTogether (_ksc.runTogether());
+    setDictionary  (_ksc.dictionary());
+    setDictFromList (_ksc.dictFromList());
+    setIgnoreCase ( _ksc.ignoreCase ());
+    setIgnoreList (_ksc.ignoreList());
+    setEncoding (_ksc.encoding());
 }
 
 
@@ -75,6 +76,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
   , encodingcombo(0)
   , clientcombo(0)
 {
+    m_bIgnoreCase = false;
     d= new KOSpellConfigPrivate;
     kc = KGlobal::config();
     if( _ksc == 0 )
@@ -89,6 +91,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
         setDictFromList (_ksc->dictFromList());
         setIgnoreList (_ksc->ignoreList());
         setEncoding (_ksc->encoding());
+        setIgnoreCase ( _ksc->ignoreCase ());
     }
 
     QGridLayout *glay = new QGridLayout (this, 6, 3, 0, KDialog::spacingHint() );
@@ -147,8 +150,13 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     {
         QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
         connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
-        glay->addWidget(pushButton, 5, 2);
+        glay->addWidget(pushButton, 6, 2);
     }
+
+    cbIgnoreCase = new QCheckBox(i18n("Ignore case when checking words"), this );
+    connect( cbIgnoreCase , SIGNAL(toggled(bool)), this, SLOT(slotIgnoreCase(bool)) );
+
+    glay->addMultiCellWidget( cbIgnoreCase, 5,5,0 ,2 );
 
     fillInDialog();
 }
@@ -164,8 +172,12 @@ KOSpellConfig::dictFromList () const
   return dictfromlist;
 }
 
-bool
-KOSpellConfig::readGlobalSettings ()
+bool KOSpellConfig::ignoreCase () const
+{
+    return m_bIgnoreCase;
+}
+
+bool KOSpellConfig::readGlobalSettings ()
 {
   KConfigGroupSaver cs(kc,"KSpell");
 
@@ -174,12 +186,11 @@ KOSpellConfig::readGlobalSettings ()
   setDictionary    (kc->readEntry ("KSpell_Dictionary", ""));
   setDictFromList  (kc->readNumEntry ("KSpell_DictFromList", FALSE));
   setEncoding (kc->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-
+  setIgnoreCase( kc->readNumEntry( "KSpell_IgnoreCase", 0));
   return TRUE;
 }
 
-bool
-KOSpellConfig::writeGlobalSettings ()
+bool KOSpellConfig::writeGlobalSettings ()
 {
   KConfigGroupSaver cs(kc,"KSpell");
   kc->writeEntry ("KSpell_NoRootAffix",(int) noRootAffix (), TRUE, TRUE);
@@ -188,22 +199,27 @@ KOSpellConfig::writeGlobalSettings ()
   kc->writeEntry ("KSpell_DictFromList",(int) dictFromList(), TRUE, TRUE);
   kc->writeEntry ("KSpell_Encoding", (int) encoding(),
 		  TRUE, TRUE);
+  kc->writeEntry ("KSpell_IgnoreCase",(int) ignoreCase(), TRUE, TRUE);
+
   kc->sync();
   return TRUE;
 }
 
-void
-KOSpellConfig::sChangeEncoding(int i)
+void KOSpellConfig::slotIgnoreCase(bool b)
+{
+    setIgnoreCase ( b );
+    emit configChanged();
+}
+
+void KOSpellConfig::sChangeEncoding(int i)
 {
     kdDebug(750) << "KOSpellConfig::sChangeEncoding(" << i << ")" << endl;
   setEncoding (i);
   emit configChanged();
 }
 
-bool
-KOSpellConfig::interpret (QString &fname, QString &lname,
+bool KOSpellConfig::interpret (QString &fname, QString &lname,
 			      QString &hname)
-
 {
 
   kdDebug(750) << "KOSpellConfig::interpret [" << fname << "]" << endl;
@@ -574,6 +590,12 @@ KOSpellConfig::replaceAllList () const
 {
   return d->replacelist;
 }
+
+void KOSpellConfig::setIgnoreCase ( bool b )
+{
+    m_bIgnoreCase=b;
+}
+
 
 QStringList KOSpellConfig::s_aspellLanguageList = QStringList();
 QStringList KOSpellConfig::s_aspellLanguageFileName = QStringList();

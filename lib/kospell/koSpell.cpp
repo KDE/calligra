@@ -179,6 +179,38 @@ bool KOSpell::initConfig()
     kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
     aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1());
+    switch (ksconfig->encoding())
+    {
+    case KS_E_LATIN1:
+	aspell_config_replace(config, "encoding", "latin1");
+	break;
+    case KS_E_LATIN2:
+        aspell_config_replace(config, "encoding", "latin2");
+	break;
+    case KS_E_LATIN3:
+	aspell_config_replace(config, "encoding", "latin3");
+        break;
+        // add the other charsets here
+    case KS_E_LATIN4:
+    case KS_E_LATIN5:
+    case KS_E_LATIN7:
+    case KS_E_LATIN8:
+    case KS_E_LATIN9:
+    case KS_E_LATIN13:
+    case KS_E_LATIN15:
+	// will work, if this is the default charset in the dictionary
+	kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
+	break;
+    case KS_E_UTF8:
+        aspell_config_replace(config, "encoding", "utf8");
+        break;
+    case KS_E_KOI8U:
+        //todo
+	break;
+    }
+
+    aspell_config_replace(config, "ignore-case", ksconfig->ignoreCase()?"true" : "false" );
+
     AspellCanHaveError * ret;
     ret = new_aspell_speller(config);
 
