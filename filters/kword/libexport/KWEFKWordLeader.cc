@@ -71,6 +71,7 @@ static FrameAnchor *findAnchor ( QString              &name,
         }
     }
 
+    kdWarning(30508) << "findAnchor returning NULL!" << endl;
     return NULL;
 }
 
@@ -126,14 +127,17 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
     QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "year",     NULL,      NULL         )
-                       << AttrProcessing ( "month",    NULL,      NULL         )
-                       << AttrProcessing ( "day",      NULL,      NULL         )
-                       << AttrProcessing ( "hour",     NULL,      NULL         )
-                       << AttrProcessing ( "minute",   NULL,      NULL         )
-                       << AttrProcessing ( "second",   NULL,      NULL         )
-                       << AttrProcessing ( "msec",     NULL,      NULL         )
-                       << AttrProcessing ( "filename", "QString", (void *) key );
+    attrProcessingList 
+        << AttrProcessing ( "year",     NULL,      NULL         )
+        << AttrProcessing ( "month",    NULL,      NULL         )
+        << AttrProcessing ( "day",      NULL,      NULL         )
+        << AttrProcessing ( "hour",     NULL,      NULL         )
+        << AttrProcessing ( "minute",   NULL,      NULL         )
+        << AttrProcessing ( "second",   NULL,      NULL         )
+        << AttrProcessing ( "msec",     NULL,      NULL         )
+        << AttrProcessing ( "filename", "QString", key          )
+        << AttrProcessing ( "name",     "NULL",    NULL         )
+        ;
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -162,9 +166,10 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 static void ProcessImageTag ( QDomNode         myNode,
                               void            *tagData,
                               KWEFKWordLeader *leader )
+// <IMAGE> and <CLIPART>
 {
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
+    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL ); // Not in <CLIPART>
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -208,7 +213,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
     switch ( frameType )
     {
-        case 1:
+    case 1:
             if ( grpMgr.isEmpty () )
             {
                 // As we do not support anything else than normal text, process only normal text.
@@ -269,8 +274,10 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             }
             break;
 
-        case 2:
-            {
+    case 2:
+    case 5:
+        // Note: we treat IMAGE (2) and CLIPART (5) the same
+        {
 #if 0
             kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
@@ -279,11 +286,14 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
             if ( frameAnchor )
             {
-                frameAnchor->type = 2;
+                frameAnchor->type = frameType;
 
                 QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList << TagProcessing ( "FRAME", ProcessFrameTag, frameAnchor )
-                                  << TagProcessing ( "IMAGE", ProcessImageTag, &frameAnchor->picture.key );
+                tagProcessingList
+                    << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
+                    << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
+                    << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
+                    ;
                 ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
@@ -294,14 +304,14 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             }
             else
             {
-                kdWarning (30508) << "ProcessFramesetTag (): Couldn't find anchor " << name << endl;
+                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << name << endl;
             }
 
-            }
             break;
+        }
 
-        default:
-            kdWarning (30508) << "Unexpected frametype " << frameType << "!" << endl;
+    default:
+            kdWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
     }
 
 #if 0
@@ -391,8 +401,8 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
                        << AttrProcessing ( "second",   NULL,      NULL               )
                        << AttrProcessing ( "month",    NULL,      NULL               )
                        << AttrProcessing ( "year",     NULL,      NULL               )
-                       << AttrProcessing ( "filename", "QString", (void *) &fileName )
-                       << AttrProcessing ( "name",     "QString", (void *) &name     );
+                       << AttrProcessing ( "filename", "QString", &fileName )
+                       << AttrProcessing ( "name",     "QString", &name     );
     ProcessAttributes (myNode, attrProcessingList);
 
 
@@ -496,17 +506,19 @@ static void ProcessDocTag ( QDomNode         myNode,
     QValueList<TagProcessing> tagProcessingList;
     QValueList<ParaData> paraList;
 
-    tagProcessingList << TagProcessing ( "PAPER",       NULL,                   NULL               ) // Already done
-                      << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL               )
-                      << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    (void *) &paraList )
-                      << TagProcessing ( "STYLES",      NULL,                   NULL               ) // Already done
-                      << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
-                      << TagProcessing ( "EMBEDDED",    NULL,                   NULL               )
-                      ;
+    tagProcessingList
+        << TagProcessing ( "PAPER",       NULL,                   NULL      ) // Already done
+        << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL      )
+        << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    &paraList )
+        << TagProcessing ( "STYLES",      NULL,                   NULL      ) // Already done
+        << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
+        << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
+        << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
+        ;
+        
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
     tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
     tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
-    tagProcessingList << TagProcessing ( "CLIPARTS",    NULL,                   NULL               );
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 
