@@ -1,3 +1,9 @@
+koffice (2.1-20010121-1) unstable; urgency=low
+ 
+  * more upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 21 Jan 2001 01:00:00 -0700
+
 koffice (2.1-20010115-1) unstable; urgency=low
  
   * more upstream fixes
