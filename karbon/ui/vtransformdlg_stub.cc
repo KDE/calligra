@@ -2,7 +2,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file './vtransformdlg_stub.ui'
 **
-** Created: Sun Jul 15 20:20:35 2001
+** Created: Thu Jul 19 20:14:22 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

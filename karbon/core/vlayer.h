@@ -19,11 +19,13 @@ public:
 
 	void draw( QPainter& painter, const QRect& rect, const double& zoomFactor );
 
+	void insertObject( const VObject* object );
+
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }
 
-	// sacrifying privacy, gaining transparent access:
-	QList<VObject>& objects() { return m_objects; }
+	// read-only access to objects:
+	const QList<VObject>& objects() const { return m_objects; }
 
 private:
 	QList<VObject> m_objects;

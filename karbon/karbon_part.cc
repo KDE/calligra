@@ -20,6 +20,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
+	m_activeLayer = m_layers.getLast();
 }
 
 KarbonPart::~KarbonPart()
@@ -63,11 +64,17 @@ KarbonPart::saveXML()
 }
 
 void
+KarbonPart::insertObject( const VObject* object )
+{
+	activeLayer()->insertObject( object );
+	setModified( true );
+}
+
+void
 KarbonPart::addCommand( VCommand* cmd )
 {
 	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;
 	m_commandHistory->addCommand( cmd );
-	setModified( true );
 }
 
 void

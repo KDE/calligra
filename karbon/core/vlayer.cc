@@ -25,3 +25,10 @@ VLayer::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 	for ( ; i.current() ; ++i )
 		i.current()->draw( painter, rect, zoomFactor );
 }
+
+void
+VLayer::insertObject( const VObject* object )
+{
+	// put new objects "on top" by appending them:
+	m_objects.append( object );
+}

@@ -28,7 +28,7 @@ public:
 		bool transparent = false );
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
-	
+
 	virtual VCanvas* canvas() { return m_canvas; }
 
 protected slots:

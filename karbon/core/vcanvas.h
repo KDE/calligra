@@ -10,7 +10,7 @@
 class KarbonPart;
 class KarbonView;
 
-// The karbon canvas is a QScrollView.
+// The canvas is a QScrollView.
 
 class VCanvas : public QScrollView
 {
@@ -18,7 +18,7 @@ class VCanvas : public QScrollView
 public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
-	const double& zoomFactor() { return m_zoomFactor; }
+	const double& zoomFactor() const { return m_zoomFactor; }
 
 protected:
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,

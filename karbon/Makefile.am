@@ -1,6 +1,6 @@
-INCLUDES  = -I$(srcdir)/core/ $(all_includes)
+INCLUDES  = -I$(srcdir) -I$(srcdir)/core -I$(srcdir)/tools $(all_includes)
 
-SUBDIRS = core ui . data pics
+SUBDIRS = core tools ui . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
@@ -11,10 +11,13 @@ libkarbonpart_la_SOURCES = \
 	karbon_part.cc \
 	karbon_view.cc \
 	karbon_factory.cc
+
 libkarbonpart_la_LDFLAGS = -module -avoid-version -no-undefined
 libkarbonpart_la_LIBADD = \
 	../../koffice/lib/kofficeui/libkofficeui.la \
+	$(srcdir)/tools/libkarbontools.la \
 	$(srcdir)/core/libkarboncore.la
+
 libkarbonpart_la_METASOURCES = AUTO
 
 karbon_la_SOURCES = main.cc
