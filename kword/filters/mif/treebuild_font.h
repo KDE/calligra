@@ -94,7 +94,7 @@ private:
 class FSize
 {
 public:
-	FSize ( double );
+	FSize ( double, const char* unit );
 
 private:
 	double _value;

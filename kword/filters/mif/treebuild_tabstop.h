@@ -14,7 +14,7 @@
 class TSX_
 {
 public:
-	TSX_( double );
+	TSX_( double, const char* unit );
 
 private:
 	double _value;

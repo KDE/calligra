@@ -15,7 +15,7 @@ int yyparse();
 void warning( char*s, char* t );
 %}
 
-%token <real> REAL INCHREAL PCREAL
+%token <real> REAL
 %token <integer> INTEGER
 %token <string> QSTRING ID SQSTRING COMMENT
 
@@ -735,6 +735,7 @@ VariableName* mif_variablename;
 %token <cmd> TSX
 %token <cmd> UNIQUE 
 %token <cmd> UNITS
+%token <cmd> UNIT_PC
 %token <cmd> UNIT_PT
 %token <cmd> VARIABLEDEF 
 %token <cmd> VARIABLEFORMAT 
@@ -1019,6 +1020,7 @@ VariableName* mif_variablename;
 %type <mif_pgf> tag_pgf
 %type <mif_pgfelementlist> pgf_elements
 %type <mif_textflow> tag_textflow
+%type <string> unit
 
 %left '+' '-' '*' '/' UMINUS
 
@@ -1332,30 +1334,24 @@ tag_pgfalignment:		'<' PGFALIGNMENT ID '>'
 						{ $$ = new PgfAlignment( $3 ); }
 					;
 
-tag_pgffindent:			'<' PGFFINDENT INCHREAL '>'
-						{ $$ = new PgfFIndent( $3 ); }
-                        | '<' PGFFINDENT PCREAL '>'
-						{ $$ = new PgfFIndent( $3 ); }
+tag_pgffindent:			'<' PGFFINDENT REAL unit '>'
+						{ $$ = new PgfFIndent( $3, $4 ); }
+;
+
+tag_pgflindent:			'<' PGFLINDENT REAL unit '>'
+						{ $$ = new PgfLIndent( $3, $4 ); }
 					;
 
-tag_pgflindent:			'<' PGFLINDENT INCHREAL '>'
-						{ $$ = new PgfLIndent( $3 ); }
-                        | '<' PGFLINDENT PCREAL '>'
-						{ $$ = new PgfLIndent( $3 ); }
-					;
-
-tag_pgfrindent:			'<' PGFRINDENT INCHREAL '>'
-						{ $$ = new PgfRIndent( $3 ); }
-                        | '<' PGFRINDENT PCREAL '>'
-						{ $$ = new PgfRIndent( $3 ); }
+tag_pgfrindent:			'<' PGFRINDENT REAL unit '>'
+						{ $$ = new PgfRIndent( $3, $4 ); }
 					;
 
 tag_pgffindentrelative:	'<' PGFFINDENTRELATIVE ID '>'
 						{ $$ = new PgfFIndentRelative( $3 ); }
 ;
 
-tag_pgffindentoffset:    '<' PGFFINDENTOFFSET PCREAL '>'
-						{ $$ = new PgfFIndentOffset( $3 ); }
+tag_pgffindentoffset:    '<' PGFFINDENTOFFSET REAL unit '>'
+						{ $$ = new PgfFIndentOffset( $3, $4 ); }
 ;
 
 tag_pgftopseparator:	'<' PGFTOPSEPARATOR SQSTRING '>'
@@ -1366,10 +1362,8 @@ tag_pgftopsepatindent:	'<' PGFTOPSEPATINDENT ID '>'
 						{ $$ = new PgfTopSepAtIndent( $3 ); }
 ;
 
-tag_pgftopsepoffset:	'<' PGFTOPSEPOFFSET INCHREAL '>'
-						{ $$ = new PgfTopSepOffset( $3 ); }
-						| '<' PGFTOPSEPOFFSET PCREAL '>'
-						{ $$ = new PgfTopSepOffset( $3 ); }
+tag_pgftopsepoffset:	'<' PGFTOPSEPOFFSET REAL unit '>'
+						{ $$ = new PgfTopSepOffset( $3, $4 ); }
 ;
 
 tag_pgfbotseparator:	'<' PGFBOTSEPARATOR SQSTRING '>'
@@ -1380,10 +1374,8 @@ tag_pgfbotsepatindent:	'<' PGFBOTSEPATINDENT ID '>'
 						{ $$ = new PgfBotSepAtIndent( $3 ); }
 ;
 
-tag_pgfbotsepoffset:	'<' PGFBOTSEPOFFSET INCHREAL '>'
-						{ $$ = new PgfBotSepOffset( $3 ); }
-				|		'<' PGFBOTSEPOFFSET PCREAL '>'
-						{ $$ = new PgfBotSepOffset( $3 ); }
+tag_pgfbotsepoffset:	'<' PGFBOTSEPOFFSET REAL unit '>'
+						{ $$ = new PgfBotSepOffset( $3, $4 ); }
 ;
 
 tag_pgfplacement:			'<' PGFPLACEMENT ID '>'
@@ -1399,11 +1391,11 @@ tag_pgfrunindefaultpunct:		'<'	PGFRUNINDEFAULTPUNCT SQSTRING '>'
 								;
 
 tag_pgfspbefore:		'<' PGFSPBEFORE REAL unit '>'
-						{ $$ = new PgfSpBefore( $3 ); }
+						{ $$ = new PgfSpBefore( $3, $4 ); }
 						;
 
 tag_pgfspafter:		'<' PGFSPAFTER REAL unit '>'
-						{ $$ = new PgfSpAfter( $3 ); }
+						{ $$ = new PgfSpAfter( $3, $4 ); }
 						;
 
 tag_pgfwithprev:	'<' PGFWITHPREV ID '>'
@@ -1427,7 +1419,7 @@ tag_pgflinespacing:		'<' PGFLINESPACING ID '>'
 						;
 
 tag_pgfleading:			'<'	PGFLEADING REAL unit '>'
-						{ $$ = new PgfLeading( $3 ); }
+						{ $$ = new PgfLeading( $3, $4 ); }
 						;
 
 tag_pgfautonum:			'<' PGFAUTONUM ID '>'
@@ -1491,7 +1483,7 @@ tag_pgfcellalignment:	'<' PGFCELLALIGNMENT ID '>'
 						;
 
 tag_pgfcellmargins:		'<' PGFCELLMARGINS REAL unit REAL unit REAL unit REAL unit '>'
-						{ $$ = new PgfCellMargins( $3, $5, $7, $9 ); }
+						{ $$ = new PgfCellMargins( $3, $4, $5, $6, $7, $8, $9, $10 ); }
 						;
 
 tag_pgfcelllmarginfixed:		'<' PGFCELLLMARGINFIXED ID '>'
@@ -1646,7 +1638,7 @@ tag_fencoding:	'<' FENCODING SQSTRING '>'
 				;
 
 tag_fsize:		'<' FSIZE REAL unit '>'
-						{ $$ = new FSize( $3 ); }
+						{ $$ = new FSize( $3, $4 ); }
 				;
 
 tag_funderlining:		'<' FUNDERLINING ID '>'
@@ -1743,10 +1735,8 @@ tabstop_element:		tag_tsx
 						{ $$ = new TabStopElement( $1 ); }
 					;
 
-tag_tsx:		'<' TSX INCHREAL  '>'
-				{ $$ = new TSX_( $3 ); }
-				| '<' TSX PCREAL  '>'
-				{ $$ = new TSX_( $3 ); }				;
+tag_tsx:		'<' TSX REAL unit  '>'
+				{ $$ = new TSX_( $3, $4 ); }
 
 tag_tstype:		'<' TSTYPE ID '>'
 				{ $$ = new TSType( $3 ); }
@@ -1979,12 +1969,10 @@ tag_tblcolumn:	'<' TBLCOLUMN tblcolumn_elements '>'
 tag_tblcellmargins:		'<' TBLCELLMARGINS REAL unit REAL unit REAL unit REAL unit '>'
 				;
 
-tag_tbllindent:	'<'	TBLLINDENT INCHREAL '>'
-				| '<' TBLLINDENT PCREAL '>'
+tag_tbllindent:	'<'	TBLLINDENT REAL unit '>'
 				;
 
-tag_tblrindent:	'<'	TBLRINDENT INCHREAL '>'
-				| '<' TBLRINDENT PCREAL '>'
+tag_tblrindent:	'<'	TBLRINDENT REAL unit '>'
 				;
 
 tag_tblalignment: '<' TBLALIGNMENT ID '>'
@@ -2118,8 +2106,7 @@ tblcolumn_element:		tag_tblcolumnnum
 tag_tblcolumnnum:		'<' TBLCOLUMNNUM INTEGER '>'
 						;
 
-tag_tblcolumnwidth:		'<' TBLCOLUMNWIDTH INCHREAL '>'
-						| '<' TBLCOLUMNWIDTH PCREAL '>'
+tag_tblcolumnwidth:		'<' TBLCOLUMNWIDTH REAL unit '>'
 						;
 
 tag_tblcolumnh:			'<' TBLCOLUMNH tblcolumnhfbody_elements '>'
@@ -2566,10 +2553,8 @@ tag_dchbarcolor:	'<' DCHBARCOLOR SQSTRING '>'
 	{ $$ = new DocumentChBarColor( $3 ); }
 ;
 
-tag_dchbargap:	'<' DCHBARGAP INCHREAL '>' 
-	{ $$ = new DocumentChBarGap( $3 ); }
-				| '<' DCHBARGAP PCREAL '>'
-	{ $$ = new DocumentChBarGap( $3 ); } 
+tag_dchbargap:	'<' DCHBARGAP REAL unit '>' 
+	{ $$ = new DocumentChBarGap( $3, $4 ); }
 ;
 
 tag_dchbarposition:	'<' DCHBARPOSITION ID '>' 
@@ -2577,7 +2562,7 @@ tag_dchbarposition:	'<' DCHBARPOSITION ID '>'
 ;
 
 tag_dchbarwidth:	'<' DCHBARWIDTH REAL unit '>'	
-	{ $$ = new DocumentChBarWidth( $3 ); }
+	{ $$ = new DocumentChBarWidth( $3, $4 ); }
 ;
 
 tag_dcurrentview:	'<' DCURRENTVIEW INTEGER '>' 
@@ -2604,10 +2589,8 @@ tag_dfnotelabels:	'<' DFNOTELABELS SQSTRING '>'
 	{ $$ = new DocumentFNoteLabels( $3 ); }
 ;
 
-tag_dfnotemaxh:	'<' DFNOTEMAXH INCHREAL '>'
-	{ $$ = new DocumentFNoteMaxH( $3 ); }
-				| '<' DFNOTEMAXH PCREAL '>'
-	{ $$ = new DocumentFNoteMaxH( $3 ); }
+tag_dfnotemaxh:	'<' DFNOTEMAXH REAL unit '>'
+	{ $$ = new DocumentFNoteMaxH( $3, $4 ); }
 ;
 
 tag_dfnotenumstyle:	'<' DFNOTENUMSTYLE ID '>' 
@@ -2691,59 +2674,59 @@ tag_dmathgreek:	'<' DMATHGREEK SQSTRING '>'
 ;
 
 tag_dmathlargehoriz:	'<' DMATHLARGEHORIZ REAL unit '>' 
-	{ $$ = new DocumentMathLargeHoriz( $3 ); }
+	{ $$ = new DocumentMathLargeHoriz( $3, $4 ); }
 ;
 
 tag_dmathlargeintegral:	'<' DMATHLARGEINTEGRAL REAL unit '>' 
-	{ $$ = new DocumentMathLargeIntegral( $3 ); }
+	{ $$ = new DocumentMathLargeIntegral( $3, $4 ); }
 ;
 
 tag_dmathlargelevel1:	'<' DMATHLARGELEVEL1 REAL unit '>' 
-	{ $$ = new DocumentMathLargeLevel1( $3 ); }
+	{ $$ = new DocumentMathLargeLevel1( $3, $4 ); }
 ;
 
 tag_dmathlargelevel2:	'<' DMATHLARGELEVEL2 REAL unit '>' 
-	{ $$ = new DocumentMathLargeLevel2( $3 ); }
+	{ $$ = new DocumentMathLargeLevel2( $3, $4 ); }
 ;
 
 tag_dmathlargelevel3:	'<' DMATHLARGELEVEL3 REAL unit '>' 
-	{ $$ = new DocumentMathLargeLevel3( $3 ); }
+	{ $$ = new DocumentMathLargeLevel3( $3, $4 ); }
 ;
 
 tag_dmathlargesigma:	'<' DMATHLARGESIGMA REAL unit '>' 
-	{ $$ = new DocumentMathLargeSigma( $3 ); }
+	{ $$ = new DocumentMathLargeSigma( $3, $4 ); }
 ;
 
 tag_dmathlargevert:	'<' DMATHLARGEVERT REAL unit '>' 
-	{ $$ = new DocumentMathLargeVert( $3 ); }
+	{ $$ = new DocumentMathLargeVert( $3, $4 ); }
 ;
 
 tag_dmathmediumhoriz:	'<' DMATHMEDIUMHORIZ REAL unit '>' 
-	{ $$ = new DocumentMathMediumHoriz( $3 ); }
+	{ $$ = new DocumentMathMediumHoriz( $3, $4 ); }
 ;
 
 tag_dmathmediumintegral:	'<' DMATHMEDIUMINTEGRAL REAL unit '>' 
-	{ $$ = new DocumentMathMediumIntegral( $3 ); }
+	{ $$ = new DocumentMathMediumIntegral( $3, $4 ); }
 ;
 
 tag_dmathmediumlevel1:	'<' DMATHMEDIUMLEVEL1 REAL unit '>' 
-	{ $$ = new DocumentMathMediumLevel1( $3 ); }
+	{ $$ = new DocumentMathMediumLevel1( $3, $4 ); }
 ;
 
 tag_dmathmediumlevel2:	'<' DMATHMEDIUMLEVEL2 REAL unit '>' 
-	{ $$ = new DocumentMathMediumLevel2( $3 ); }
+	{ $$ = new DocumentMathMediumLevel2( $3, $4 ); }
 ;
 
 tag_dmathmediumlevel3:	'<' DMATHMEDIUMLEVEL3 REAL unit '>' 
-	{ $$ = new DocumentMathMediumLevel3( $3 ); }
+	{ $$ = new DocumentMathMediumLevel3( $3, $4 ); }
 ;
 
 tag_dmathmediumsigma:	'<' DMATHMEDIUMSIGMA REAL unit '>' 
-	{ $$ = new DocumentMathMediumSigma( $3 ); }
+	{ $$ = new DocumentMathMediumSigma( $3, $4 ); }
 ;
 
 tag_dmathmediumvert:	'<' DMATHMEDIUMVERT REAL unit '>' 
-	{ $$ = new DocumentMathMediumVert( $3 ); }
+	{ $$ = new DocumentMathMediumVert( $3, $4 ); }
 ;
 
 tag_dmathnumbers:	'<' DMATHNUMBERS SQSTRING '>'
@@ -2755,31 +2738,31 @@ tag_dmathshowcustom:	'<' DMATHSHOWCUSTOM ID '>'
 ;
 
 tag_dmathsmallhoriz:	'<' DMATHSMALLHORIZ REAL unit '>' 
-	{ $$ = new DocumentMathSmallHoriz( $3 ); }
+	{ $$ = new DocumentMathSmallHoriz( $3, $4 ); }
 ;
 
 tag_dmathsmallintegral:	'<' DMATHSMALLINTEGRAL REAL unit '>' 
-	{ $$ = new DocumentMathSmallIntegral( $3 ); }
+	{ $$ = new DocumentMathSmallIntegral( $3, $4 ); }
 ;
 
 tag_dmathsmalllevel1:	'<' DMATHSMALLLEVEL1 REAL unit '>' 
-	{ $$ = new DocumentMathSmallLevel1( $3 ); }
+	{ $$ = new DocumentMathSmallLevel1( $3, $4 ); }
 ;
 
 tag_dmathsmalllevel2:	'<' DMATHSMALLLEVEL2 REAL unit '>' 
-	{ $$ = new DocumentMathSmallLevel2( $3 ); }
+	{ $$ = new DocumentMathSmallLevel2( $3, $4 ); }
 ;
 
 tag_dmathsmalllevel3:	'<' DMATHSMALLLEVEL3 REAL unit '>' 
-	{ $$ = new DocumentMathSmallLevel3( $3 ); }
+	{ $$ = new DocumentMathSmallLevel3( $3, $4 ); }
 ;
 
 tag_dmathsmallsigma:	'<' DMATHSMALLSIGMA REAL unit '>' 
-	{ $$ = new DocumentMathSmallSigma( $3 ); }
+	{ $$ = new DocumentMathSmallSigma( $3, $4 ); }
 ;
 
 tag_dmathsmallvert:	'<' DMATHSMALLVERT REAL unit '>' 
-	{ $$ = new DocumentMathSmallVert( $3 ); }
+	{ $$ = new DocumentMathSmallVert( $3, $4 ); }
 ;
 
 tag_dmathstrings:	'<' DMATHSTRINGS SQSTRING '>' 
@@ -2806,10 +2789,8 @@ tag_dnextunique:	'<' DNEXTUNIQUE INTEGER '>'
 	{ $$ = new DocumentNextUnique( $3 ); }
 ;
 
-tag_dpagegrid:	'<' DPAGEGRID INCHREAL '>' 
-	{ $$ = new DocumentPageGrid( $3 ); }
-				| '<' DPAGEGRID PCREAL '>' 
-	{ $$ = new DocumentPageGrid( $3 ); }
+tag_dpagegrid:	'<' DPAGEGRID REAL unit '>' 
+	{ $$ = new DocumentPageGrid( $3, $4 ); }
 ;
 
 tag_dpagenumstyle:	'<' DPAGENUMSTYLE ID '>' 
@@ -2830,11 +2811,10 @@ tag_dpagescrolling:	'<' DPAGESCROLLING VARIABLE '>'
 	{ $$ = new DocumentPageScrolling( $3 ); }
 ;
 
-tag_dpagesize:	'<' DPAGESIZE INCHREAL INCHREAL '>' 
-	{ $$ = new DocumentPageSize( $3, $4 ); }
-				| '<' DPAGESIZE PCREAL PCREAL '>' 
-	{ $$ = new DocumentPageSize( $3, $4 ); }
+tag_dpagesize:  '<' DPAGESIZE REAL unit REAL unit '>'
+{ $$ = new DocumentPageSize( $3, $4, $5, $6 ); }
 ;
+
 
 tag_dparity:	'<' DPARITY ID '>' 
 	{ $$ = new DocumentParity( $3 ); }
@@ -2888,10 +2868,8 @@ tag_dsmartspaceson:	'<' DSMARTSPACESON ID '>'
 	{ $$ = new DocumentSmartSpacesOn( $3 ); }
 ;
 
-tag_dsnapgrid:	'<' DSNAPGRID INCHREAL '>' 
-	{ $$ = new DocumentSnapGrid( $3 ); }
-				| '<' DSNAPGRID PCREAL '>' 
-	{ $$ = new DocumentSnapGrid( $3 ); }
+tag_dsnapgrid:	'<' DSNAPGRID REAL unit '>' 
+	{ $$ = new DocumentSnapGrid( $3, $4 ); }
 ;
 
 tag_dsnaprotation:	'<' DSNAPROTATION REAL '>' 
@@ -3235,23 +3213,19 @@ tag_runaroundgap:		'<' RUNAROUNDGAP REAL unit '>'
 tag_runaroundtype:		'<' RUNAROUNDTYPE ID '>'
 ;
 
-tag_shaperect:	'<' SHAPERECT INCHREAL INCHREAL INCHREAL INCHREAL '>'
-				| '<' SHAPERECT PCREAL PCREAL PCREAL PCREAL '>'
+tag_shaperect:	'<' SHAPERECT REAL unit REAL unit REAL unit REAL unit '>'
 ;
 
-tag_brect:	'<' BRECT INCHREAL INCHREAL INCHREAL INCHREAL '>'
-			| '<' BRECT PCREAL PCREAL PCREAL PCREAL '>'
+tag_brect:	'<' BRECT REAL unit REAL unit REAL unit REAL unit '>'
 ;
 
 tag_frametype:	'<' FRAMETYPE ID '>'
 ;
 
-tag_nsoffset:	'<' NSOFFSET INCHREAL '>'
-				| '<' NSOFFSET PCREAL '>'
+tag_nsoffset:	'<' NSOFFSET REAL unit '>'
 ;
 
-tag_bloffset:	'<' BLOFFSET INCHREAL '>'
-				| '<' BLOFFSET PCREAL '>'
+tag_bloffset:	'<' BLOFFSET REAL unit '>'
 ;
 
 tag_anchoralign:		'<' ANCHORALIGN ID '>'
@@ -3292,8 +3266,7 @@ tag_importobfile:		'<' IMPORTOBFILE SQSTRING '>'
 tag_fliplr:		'<' FLIPLR ID '>'
 ;
 
-tag_nativeorigin:		'<' NATIVEORIGIN INCHREAL INCHREAL '>'
-						| '<' NATIVEORIGIN PCREAL PCREAL '>'
+tag_nativeorigin:		'<' NATIVEORIGIN REAL unit REAL unit '>'
 ;
 
 
@@ -3320,12 +3293,10 @@ math_element:	tag_unique
 tag_mathfullform:		'<' MATHFULLFORM SQSTRING '>'
 ;
 
-tag_mathlinebreak:		'<' MATHLINEBREAK PCREAL '>'
-					|	'<' MATHLINEBREAK INCHREAL '>'
+tag_mathlinebreak:		'<' MATHLINEBREAK REAL unit '>'
 ;
 
-tag_mathorigin:			'<' MATHORIGIN PCREAL PCREAL '>'
-					|	'<' MATHORIGIN INCHREAL INCHREAL '>'
+tag_mathorigin:			'<' MATHORIGIN REAL unit REAL unit '>'
 ;
 
 tag_mathalignment:		'<' MATHALIGNMENT ID '>'
@@ -3418,16 +3389,13 @@ row_element:	tag_rowmaxheight
 		|		tag_cell
 ;
 
-tag_rowmaxheight:		'<' ROWMAXHEIGHT INCHREAL '>'
-						| '<' ROWMAXHEIGHT PCREAL '>'
+tag_rowmaxheight:		'<' ROWMAXHEIGHT REAL unit '>'
 ;
 
-tag_rowminheight:		'<' ROWMINHEIGHT INCHREAL '>'
-						| '<' ROWMINHEIGHT PCREAL '>'
+tag_rowminheight:		'<' ROWMINHEIGHT REAL unit '>'
 ;
 
-tag_rowheight:	'<' ROWHEIGHT INCHREAL '>'
-				| '<' ROWHEIGHT PCREAL '>'
+tag_rowheight:	'<' ROWHEIGHT REAL unit '>'
 ;
 
 tag_cell:		'<' CELL cell_elements '>'
@@ -3675,8 +3643,7 @@ tag_pagetype:	'<' PAGETYPE ID '>'
 tag_pagetag:	'<' PAGETAG SQSTRING '>'
 ;
 
-tag_pagesize:	'<'	PAGESIZE INCHREAL INCHREAL '>'
-				| '<'	PAGESIZE PCREAL PCREAL '>'
+tag_pagesize:	'<'	PAGESIZE REAL unit REAL unit '>'
 ;
 
 tag_pageorientation:	'<' PAGEORIENTATION ID '>'
@@ -3739,19 +3706,16 @@ textrect_element:		tag_frameid
 tag_trnumcolumns:		'<' TRNUMCOLUMNS INTEGER '>'
 ;
 
-tag_trcolumngap:		'<' TRCOLUMNGAP INCHREAL '>'
-						| '<' TRCOLUMNGAP PCREAL '>'
+tag_trcolumngap:		'<' TRCOLUMNGAP REAL unit '>'
 ;
 
 tag_trcolumnbalance:	'<' TRCOLUMNBALANCE ID '>'
 ;
 
-tag_trsideheadwidth:	'<' TRSIDEHEADWIDTH INCHREAL '>'
-						| '<' TRSIDEHEADWIDTH PCREAL '>'
+tag_trsideheadwidth:	'<' TRSIDEHEADWIDTH REAL unit '>'
 ;
 
-tag_trsideheadgap:		'<'	TRSIDEHEADGAP INCHREAL '>'
-						| '<'	TRSIDEHEADGAP PCREAL '>'
+tag_trsideheadgap:		'<'	TRSIDEHEADGAP REAL unit '>'
 ;
 
 tag_trsideheadplacement:		'<' TRSIDEHEADPLACEMENT ID '>'
@@ -3780,8 +3744,7 @@ textline_element:		tag_unique
 				|		tag_groupid
 ;
 
-tag_tlorigin:	'<' TLORIGIN INCHREAL INCHREAL '>'
-				| '<' TLORIGIN PCREAL PCREAL '>'
+tag_tlorigin:	'<' TLORIGIN REAL unit REAL unit '>'
 ;
 
 tag_tlalignment:		'<' TLALIGNMENT ID '>'
@@ -3852,8 +3815,7 @@ tag_scalefactor:		'<' SCALEFACTOR REAL unit '>'
 tag_numpoints:	'<' NUMPOINTS INTEGER '>'
 ;
 
-tag_point:		'<' POINT INCHREAL INCHREAL '>'
-				| '<' POINT PCREAL PCREAL '>'
+tag_point:		'<' POINT REAL unit REAL unit '>'
 ;
 
 tag_polygon:	'<' POLYGON polygon_elements '>'
@@ -3959,10 +3921,10 @@ tag_tfsynchronized:		'<' TFSYNCHRONIZED ID '>'
 ;
 
 tag_tflinespacing:		'<' TFLINESPACING REAL unit '>'
-						{ $$ = new TFLineSpacing( $3 ); }
+						{ $$ = new TFLineSpacing( $3, $4 ); }
 
 tag_tfminhangheight:	'<' TFMINHANGHEIGHT REAL unit '>'
-						{ $$ = new TFMinHangHeight( $3 ); }
+						{ $$ = new TFMinHangHeight( $3, $4 ); }
 ;
 
 
@@ -4054,6 +4016,9 @@ iexpr:		INTEGER
 
 /* Units */
 unit:	UNIT_PT
+		{ $$ = "pt"; }
+	|	UNIT_PC
+		{ $$ = "pc"; }
 		;
 
 %%

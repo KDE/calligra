@@ -6,6 +6,7 @@
  */
 
 #include "treebuild_font.h"
+#include "unitconv.h"
 
 FTag::FTag(char const *value)
 {
@@ -55,9 +56,9 @@ FEncoding::FEncoding(char const *value)
 }
 
 
-FSize::FSize(double value)
+FSize::FSize(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 

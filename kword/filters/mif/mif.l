@@ -12,8 +12,6 @@ extern "C" int keyword( char* string );
 %}
 
 ws				[ \t]+
-pcreal          -?[0-9]+\.[0-9]+\ pc
-inchreal		-?[0-9]+\.[0-9]+\"
 real			-?[0-9]+\.[0-9]+
 integer			-?[0-9]+
 comment			#.*$
@@ -28,10 +26,6 @@ nl				\n
 {ws}			;
 {real}			{ sscanf( yytext, "%lf", &yylval.real );
 			      return REAL; }
-{inchreal}		{ sscanf( yytext, "%lf\"", &yylval.real );
-			      return INCHREAL; }
-{pcreal}		{ sscanf( yytext, "%lf\"", &yylval.real );
-			      return PCREAL; }
 {integer}		{ sscanf( yytext, "%d", &yylval.integer );
                   return INTEGER; }
 {qstring}		{ yylval.string = yytext;

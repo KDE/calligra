@@ -13,6 +13,7 @@ PARSER = parser.cpp
 SOURCES =	$$PARSER \
 			backend.cpp	\
 			keyword.cpp \
+			unitconv.cpp \
 			treebuild_document.cpp \
 			treebuild_pgf.cpp \
 			treebuild_font.cpp \
@@ -25,9 +26,11 @@ SOURCES =	$$PARSER \
 			treebuild_para.cpp	\
 			treebuild_textflow.cpp	\
 			generate_xml.cpp	\
+			generate_xml_document.cpp \
 			generate_xml_textflow.cpp \
 			generate_xml_para.cpp
 HEADERS =	backend.h \
+			unitconv.h \
 			treebuild_document.h \
 			treebuild_pgf.h	\
 			treebuild_font.h	\
@@ -40,7 +43,8 @@ HEADERS =	backend.h \
 			treebuild_para.h	\
 			treebuild_textflow.h	\
 			generate_xml.h	\
+			generate_xml_document.h \
 			generate_xml_textflow.h \
-			generate_xml_para.h
+			generate_xml_para.h 
 #DEFINES = PARSERDEBUG
 

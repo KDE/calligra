@@ -6,6 +6,7 @@
  */
 
 #include "treebuild_textflow.h"
+#include "unitconv.h"
 
 /*********************************************************************
  * This is where the TextFlows are collected during tree construction.
@@ -80,15 +81,15 @@ TFAutoConnect::TFAutoConnect(char const * value)
 }
 
 
-TFLineSpacing::TFLineSpacing( double value )
+TFLineSpacing::TFLineSpacing( double value, const char* unit )
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
-TFMinHangHeight::TFMinHangHeight( double value )
+TFMinHangHeight::TFMinHangHeight( double value, const char* unit )
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 

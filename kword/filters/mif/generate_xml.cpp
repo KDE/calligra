@@ -7,6 +7,8 @@
 
 #include "generate_xml.h"
 #include "generate_xml_textflow.h"
+#include "generate_xml_document.h"
+#include "unitconv.h"
 #include <fstream>
 #include <algorithm>
 
@@ -24,9 +26,13 @@ void generate_xml( const char* outfile )
 	xmloutstr << "<?xml version=\"1.0\"?>\n";
 	xmloutstr << "<DOC author=\"Kalle Dalheimer\" email=\"kalle@kde.org\" editor=\"KWord/MIF-Filter\" mime=\"application/x-kword\">" << endl;
 	// PENDING(kalle) Don't hard-code those values
-	xmloutstr << " <PAPER format=\"1\" width=\"210\" height=\"297\" orientation=\"0\" columns=\"1\" columnspacing=\"3\">" << endl;
-	xmloutstr << "  <PAPERBORDERS left=\"10\" top=\"15\" right=\"10\" bottom=\"15\"/>" << endl;
-	xmloutstr << " </PAPER>" << endl;
+
+	xmloutstr << " <PAPER format=\"1\" width=\"";
+	xmloutstr << point2mm( generate_xml_document::paperWidth() );
+	xmloutstr << "\" height=\"";
+	xmloutstr << point2mm( generate_xml_document::paperHeight() );
+	xmloutstr << "\" orientation=\"0\" columns=\"1\" columnspacing=\"3\">" << endl;
+	xmloutstr << " </PAPER>";
 	xmloutstr << " <ATTRIBUTES processing=\"1\" standardpage=\"1\"/>"
 			  << endl;
 	indent += 2;

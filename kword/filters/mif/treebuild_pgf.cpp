@@ -6,6 +6,7 @@
  */
 
 #include "treebuild_pgf.h"
+#include "unitconv.h"
 
 Pgf::Pgf(PgfElementList * elements)
 {
@@ -442,9 +443,9 @@ PgfAlignment::PgfAlignment(char const * value)
 }
 
 
-PgfFIndent::PgfFIndent(double value)
+PgfFIndent::PgfFIndent(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -454,21 +455,21 @@ PgfFIndentRelative::PgfFIndentRelative(char const* value)
 }
 
 
-PgfFIndentOffset::PgfFIndentOffset(double value)
+PgfFIndentOffset::PgfFIndentOffset(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
-PgfLIndent::PgfLIndent(double value)
+PgfLIndent::PgfLIndent(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
-PgfRIndent::PgfRIndent(double value)
+PgfRIndent::PgfRIndent(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -484,9 +485,9 @@ PgfTopSepAtIndent::PgfTopSepAtIndent(char const * value)
 }
 
 
-PgfTopSepOffset::PgfTopSepOffset(double value)
+PgfTopSepOffset::PgfTopSepOffset(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -502,9 +503,9 @@ PgfBotSepAtIndent::PgfBotSepAtIndent(char const * value)
 }
 
 
-PgfBotSepOffset::PgfBotSepOffset(double value)
+PgfBotSepOffset::PgfBotSepOffset(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -526,15 +527,15 @@ PgfRunInDefaultPunct::PgfRunInDefaultPunct(char const * value)
 }
 
 
-PgfSpBefore::PgfSpBefore(double value)
+PgfSpBefore::PgfSpBefore(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
-PgfSpAfter::PgfSpAfter(double value)
+PgfSpAfter::PgfSpAfter(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -568,9 +569,9 @@ PgfLineSpacing::PgfLineSpacing(char const * value)
 }
 
 
-PgfLeading::PgfLeading(double value)
+PgfLeading::PgfLeading(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 
@@ -664,12 +665,15 @@ PgfCellAlignment::PgfCellAlignment(char const * value)
 }
 
 
-PgfCellMargins::PgfCellMargins(double value1, double value2, double value3, double value4)
+PgfCellMargins::PgfCellMargins(double value1, const char* unit1, 
+							   double value2, const char* unit2, 
+							   double value3, const char* unit3, 
+							   double value4, const char* unit4)
 {
-	_value1 = value1;
-	_value2 = value2;
-	_value3 = value3;
-	_value4 = value4;
+	_value1 = unitconversion( value1, unit1 );
+	_value2 = unitconversion( value2, unit2 );
+	_value3 = unitconversion( value3, unit3 );
+	_value4 = unitconversion( value4, unit4 );
 }
 
 

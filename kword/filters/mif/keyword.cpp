@@ -473,6 +473,7 @@ static struct keyword {
 	"XRefSrcFile", XREFSRCFILE, 11,
 	"XRefEnd", XREFEND, 7,
 	"XRefLastUpdate", XREFLASTUPDATE, 14,
+	"pc", UNIT_PC, 2,
 	"pt", UNIT_PT, 2,
 	(char*)0,   0,          0,
 };

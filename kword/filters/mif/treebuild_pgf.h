@@ -83,7 +83,7 @@ private:
 class PgfFIndent
 {
 public:
-	PgfFIndent( double );
+	PgfFIndent( double, const char* unit );
 
 private:
 	double _value;
@@ -93,7 +93,7 @@ private:
 class PgfFIndentOffset
 {
 public:
-	PgfFIndentOffset( double );
+	PgfFIndentOffset( double, const char* unit );
 
 private:
 	double _value;
@@ -113,7 +113,7 @@ private:
 class PgfLIndent
 {
 public:
-	PgfLIndent( double );
+	PgfLIndent( double, const char* unit );
 
 private:
 	double _value;
@@ -123,7 +123,7 @@ private:
 class PgfRIndent
 {
 public:
-	PgfRIndent( double );
+	PgfRIndent( double, const char* unit );
 
 private:
 	double _value;
@@ -153,7 +153,7 @@ private:
 class PgfTopSepOffset
 {
 public:
-	PgfTopSepOffset( double );
+	PgfTopSepOffset( double, const char* unit );
 
 private:
 	double _value;
@@ -183,7 +183,7 @@ private:
 class PgfBotSepOffset
 {
 public:
-	PgfBotSepOffset( double );
+	PgfBotSepOffset( double, const char* unit );
 
 private:
 	double _value;
@@ -223,7 +223,7 @@ private:
 class PgfSpBefore
 {
 public:
-	PgfSpBefore( double );
+	PgfSpBefore( double, const char* unit );
 
 private:
 	double _value;
@@ -233,7 +233,7 @@ private:
 class PgfSpAfter
 {
 public:
-	PgfSpAfter( double );
+	PgfSpAfter( double, const char* unit );
 
 private:
 	double _value;
@@ -372,7 +372,7 @@ private:
 class PgfLeading
 {
 public:
-	PgfLeading( double );
+	PgfLeading( double, const char* unit );
 
 private:
 	double _value;
@@ -622,7 +622,8 @@ private:
 class PgfCellMargins
 {
 public:
-	PgfCellMargins( double, double, double, double );
+	PgfCellMargins( double, const char* unit, double, const char* unit, 
+					double, const char* unit, double, const char* unit );
 
 private:
 	double _value1;

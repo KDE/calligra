@@ -6,7 +6,7 @@
  */
 
 #include "treebuild_tabstop.h"
-
+#include "unitconv.h"
 
 TabStop::TabStop(TabStopElementList * elements)
 {
@@ -42,9 +42,9 @@ TabStopElement::TabStopElement(TSDecimalChar * element)
 }
 
 
-TSX_::TSX_(double value)
+TSX_::TSX_(double value, const char* unit)
 {
-	_value = value;
+	_value = unitconversion( value, unit );
 }
 
 

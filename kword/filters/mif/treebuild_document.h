@@ -64,7 +64,7 @@ private:
 class DocumentChBarGap
 {
 public:
-	DocumentChBarGap( double );
+	DocumentChBarGap( double, const char* unit );
 	
 private:
 	double _value;
@@ -84,7 +84,7 @@ private:
 class DocumentChBarWidth
 {
 public:
-	DocumentChBarWidth( double );
+	DocumentChBarWidth( double, const char* unit );
 	
 private:
 	double _value;
@@ -174,7 +174,7 @@ private:
 class DocumentFNoteMaxH
 {
 public:
-	DocumentFNoteMaxH( double );
+	DocumentFNoteMaxH( double, const char* unit );
 	
 private:
 	double _value;
@@ -361,7 +361,7 @@ private:
 class DocumentMathLargeHoriz
 {
 public:
-	DocumentMathLargeHoriz( double );
+	DocumentMathLargeHoriz( double, const char* unit );
 	
 private:
 	double _value;
@@ -371,7 +371,7 @@ private:
 class DocumentMathLargeIntegral
 {
 public:
-	DocumentMathLargeIntegral( double );
+	DocumentMathLargeIntegral( double, const char* unit );
 	
 private:
 	double _value;
@@ -381,7 +381,7 @@ private:
 class DocumentMathLargeLevel1
 {
 public:
-	DocumentMathLargeLevel1( double );
+	DocumentMathLargeLevel1( double, const char* unit );
 	
 private:
 	double _value;
@@ -391,7 +391,7 @@ private:
 class DocumentMathLargeLevel2
 {
 public:
-	DocumentMathLargeLevel2( double );
+	DocumentMathLargeLevel2( double, const char* unit );
 	
 private:
 	double _value;
@@ -401,7 +401,7 @@ private:
 class DocumentMathLargeLevel3
 {
 public:
-	DocumentMathLargeLevel3( double );
+	DocumentMathLargeLevel3( double, const char* unit );
 	
 private:
 	double _value;
@@ -411,7 +411,7 @@ private:
 class DocumentMathLargeSigma
 {
 public:
-	DocumentMathLargeSigma( double );
+	DocumentMathLargeSigma( double, const char* unit );
 	
 private:
 	double _value;
@@ -421,7 +421,7 @@ private:
 class DocumentMathLargeVert
 {
 public:
-	DocumentMathLargeVert( double );
+	DocumentMathLargeVert( double, const char* unit );
 	
 private:
 	double _value;
@@ -431,7 +431,7 @@ private:
 class DocumentMathMediumHoriz
 {
 public:
-	DocumentMathMediumHoriz( double );
+	DocumentMathMediumHoriz( double, const char* unit );
 	
 private:
 	double _value;
@@ -441,7 +441,7 @@ private:
 class DocumentMathMediumIntegral
 {
 public:
-	DocumentMathMediumIntegral( double );
+	DocumentMathMediumIntegral( double, const char* unit );
 	
 private:
 	double _value;
@@ -451,7 +451,7 @@ private:
 class DocumentMathMediumLevel1
 {
 public:
-	DocumentMathMediumLevel1( double );
+	DocumentMathMediumLevel1( double, const char* unit );
 	
 private:
 	double _value;
@@ -461,7 +461,7 @@ private:
 class DocumentMathMediumLevel2
 {
 public:
-	DocumentMathMediumLevel2( double );
+	DocumentMathMediumLevel2( double, const char* unit );
 	
 private:
 	double _value;
@@ -471,7 +471,7 @@ private:
 class DocumentMathMediumLevel3
 {
 public:
-	DocumentMathMediumLevel3( double );
+	DocumentMathMediumLevel3( double, const char* unit );
 	
 private:
 	double _value;
@@ -481,7 +481,7 @@ private:
 class DocumentMathMediumSigma
 {
 public:
-	DocumentMathMediumSigma( double );
+	DocumentMathMediumSigma( double, const char* unit );
 	
 private:
 	double _value;
@@ -491,7 +491,7 @@ private:
 class DocumentMathMediumVert
 {
 public:
-	DocumentMathMediumVert( double );
+	DocumentMathMediumVert( double, const char* unit );
 	
 private:
 	double _value;
@@ -521,7 +521,7 @@ private:
 class DocumentMathSmallHoriz
 {
 public:
-	DocumentMathSmallHoriz( double );
+	DocumentMathSmallHoriz( double, const char* unit );
 	
 private:
 	double _value;
@@ -531,7 +531,7 @@ private:
 class DocumentMathSmallIntegral
 {
 public:
-	DocumentMathSmallIntegral( double );
+	DocumentMathSmallIntegral( double, const char* unit );
 	
 private:
 	double _value;
@@ -541,7 +541,7 @@ private:
 class DocumentMathSmallLevel1
 {
 public:
-	DocumentMathSmallLevel1( double );
+	DocumentMathSmallLevel1( double, const char* unit );
 	
 private:
 	double _value;
@@ -551,7 +551,7 @@ private:
 class DocumentMathSmallLevel2
 {
 public:
-	DocumentMathSmallLevel2( double );
+	DocumentMathSmallLevel2( double, const char* unit );
 	
 private:
 	double _value;
@@ -561,7 +561,7 @@ private:
 class DocumentMathSmallLevel3
 {
 public:
-	DocumentMathSmallLevel3( double );
+	DocumentMathSmallLevel3( double, const char* unit );
 	
 private:
 	double _value;
@@ -571,7 +571,7 @@ private:
 class DocumentMathSmallSigma
 {
 public:
-	DocumentMathSmallSigma( double );
+	DocumentMathSmallSigma( double, const char* unit );
 	
 private:
 	double _value;
@@ -581,7 +581,7 @@ private:
 class DocumentMathSmallVert
 {
 public:
-	DocumentMathSmallVert( double );
+	DocumentMathSmallVert( double, const char* unit );
 	
 private:
 	double _value;
@@ -651,7 +651,7 @@ private:
 class DocumentPageGrid
 {
 public:
-	DocumentPageGrid( double );
+	DocumentPageGrid( double, const char* unit );
 	
 private:
 	double _value;
@@ -706,8 +706,11 @@ private:
 class DocumentPageSize
 {
 public:
-	DocumentPageSize( double, double );
+	DocumentPageSize( double, const char* unit, double, const char* unit );
 	
+	double width() const { return _width; }
+	double height() const { return _height; }
+
 private:
 	double _width;
 	double _height;
@@ -847,7 +850,7 @@ private:
 class DocumentSnapGrid
 {
 public:
-	DocumentSnapGrid( double );
+	DocumentSnapGrid( double, const char* unit );
 	
 private:
 	double _value;
@@ -1306,12 +1309,12 @@ public:
 		T_DocumentTblFNoteAnchorPos,
 		T_DocumentTblFNoteAnchorPrefix,
 		T_DocumentTblFNoteAnchorSuffix,
-		T_DocumentTblFNoteNoteLabels,
-		T_DocumentTblFNoteNoteNumberPos,
-		T_DocumentTblFNoteNoteNumberPrefix,
-		T_DocumentTblFNoteNoteNumberSuffix,
-		T_DocumentTblFNoteNoteNumStyle,
-		T_DocumentTblFNoteNoteTag,
+		T_DocumentTblFNoteLabels,
+		T_DocumentTblFNoteNumberPos,
+		T_DocumentTblFNoteNumberPrefix,
+		T_DocumentTblFNoteNumberSuffix,
+		T_DocumentTblFNoteNumStyle,
+		T_DocumentTblFNoteTag,
 		T_DocumentTwoSides,
 		T_DocumentUpdateTextInsetsOnOpen,
 		T_DocumentUpdateXRefsOnOpen,
@@ -1451,6 +1454,8 @@ public:
 	DocumentElement( FNoteStartNum* element );
 
  	DocumentElementType type() const { return _type; }
+	DocumentPageSize* pageSize() const { return _type == T_DocumentPageSize ?
+											_documentpagesize : 0; }
 
 private:
  	DocumentElementType _type;
@@ -1551,12 +1556,12 @@ private:
 		DocumentTblFNoteAnchorPos* _documenttblfnoteanchorpos;
 		DocumentTblFNoteAnchorPrefix* _documenttblfnoteanchorprefix;
 		DocumentTblFNoteAnchorSuffix* _documenttblfnoteanchorsuffix;
-		DocumentTblFNoteLabels* _documenttblfnotenotelabels;
-		DocumentTblFNoteNumberPos* _documenttblfnotenotenumberpos;
-		DocumentTblFNoteNumberPrefix* _documenttblfnotenotenumberprefix;
-		DocumentTblFNoteNumberSuffix* _documenttblfnotenotenumbersuffix;
-		DocumentTblFNoteNumStyle* _documenttblfnotenotenumstyle;
-		DocumentTblFNoteTag* _documenttblfnotenotetag;
+		DocumentTblFNoteLabels* _documenttblfnotelabels;
+		DocumentTblFNoteNumberPos* _documenttblfnotenumberpos;
+		DocumentTblFNoteNumberPrefix* _documenttblfnotenumberprefix;
+		DocumentTblFNoteNumberSuffix* _documenttblfnotenumbersuffix;
+		DocumentTblFNoteNumStyle* _documenttblfnotenumstyle;
+		DocumentTblFNoteTag* _documenttblfnotetag;
 		DocumentTwoSides* _documenttwosides;
 		DocumentUpdateTextInsetsOnOpen* _documentupdatetextinsetsonopen;
 		DocumentUpdateXRefsOnOpen* _documentupdatexrefsonopen;

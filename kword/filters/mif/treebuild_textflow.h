@@ -36,7 +36,7 @@ private:
 class TFLineSpacing
 {
 public:
-	TFLineSpacing( double );
+	TFLineSpacing( double, const char* unit );
 
 private:
 	double _value;
@@ -56,7 +56,7 @@ private:
 class TFMinHangHeight
 {
 public:
-	TFMinHangHeight( double );
+	TFMinHangHeight( double, const char* unit );
 
 private:
 	double _value;
