@@ -133,19 +133,21 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
         if ( it.current()->haveAnimation() )
         {
             kdDebug()<<" it.current()->haveAnimation() \n";
-            listAnimation lst;
-            lst.obj = it.current();
-            lst.objIndex = indexObj;
+            listAnimation *lst = new listAnimation;
+            lst->obj = it.current();
+            lst->objIndex = indexObj;
             kdDebug()<<" indexObj :"<<indexObj<<endl;
             lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
             if ( tmp!= listObjectAnimation.end() )
             {
-                tmp.data().append( &lst );
+                kdDebug()<<" group already exist \n";
+                tmp.data().append( lst );
             }
             else
             {
+                kdDebug()<<" create new list \n";
                 QPtrList<listAnimation> tmp2;
-                tmp2.append( &lst );
+                tmp2.append( lst );
                 listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
             }
         }
