@@ -28,7 +28,7 @@ find . -name ".cvsignore" | xargs rm -f
 
 sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefile.am.new po/Makefile.am
 echo 'dist-hook:' >> Makefile.am
-echo "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
+echo -e "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
 echo "" >> Makefile.am
 echo "myown_dist = am_edit" >> Makefile.am
 aclocal
@@ -39,5 +39,5 @@ autoconf
 
 # if the following fails, try it by hand.
 ./configure
-gmake dist
+make dist
 
