@@ -101,11 +101,6 @@ bool DBase::load( const QString& filename )
   for (int foo = 0; foo < 20; ++foo)
     m_stream >> dummy;
 
-qDebug( "header length %d", m_headerLength );
-qDebug( "record length %d", m_recordLength );
-qDebug( "no rec %d", m_recordCount );
-
-
   // size of file must match
   if( filesize < m_headerLength + m_recordLength * m_recordCount )
     return false;
