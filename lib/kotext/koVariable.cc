@@ -509,10 +509,10 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGr
         p->setPen( QPen( textColor ) );
     }
 
-    KoTextParag::drawUnderlineDoubleUnderline( p, fmt, zh, font, textColor, x, bl, zh->layoutUnitToPixelX( width ), y, h );
-
     p->setFont( font ); // already done by KoTextCustomItem::draw but someone might
                         // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
+
+    KoTextParag::drawUnderlineDoubleUnderline( p, fmt, zh, font, textColor, x, bl, zh->layoutUnitToPixelX( width ), y, h );
 
     //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
