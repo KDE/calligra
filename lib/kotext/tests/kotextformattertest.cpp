@@ -106,6 +106,7 @@ void KoTextFormatterTest::noWidthEverTest()
     parag->append( "abcdefghi" );
     parag->format();
     assert( parag->lines() == 1 );
+    assert( parag->isValid() );
     doc->clear(false);
     doc->setFlow( new KoTextFlow ); // default
 }
