@@ -8,6 +8,7 @@
 #include "karbon_part.h"
 #include "vfilldlg.h"
 #include "vcolortab.h"
+#include "vselection.h"
 
 #include "vfillcmd.h"
 
@@ -18,7 +19,7 @@ VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
 	: KDialogBase ( parent, name, true, i18n( "Uniform Color" ),
 		KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
 {
-	m_colortab = new VColorTab( part, this, name );
+	m_colortab = new VColorTab( part->document().selection()->objects().getFirst()->fill()->color(), this, name );
 
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApplyButtonPressed() ) );
 

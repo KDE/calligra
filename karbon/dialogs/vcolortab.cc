@@ -10,9 +10,7 @@
 #include <kcolordialog.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kselect.h>
 
-#include "karbon_part.h"
 #include "vcolor.h"
 #include "vfillcmd.h"
 #include "vcolortab.h"
@@ -21,82 +19,80 @@
 #include <kdebug.h>
 
 
-VColorTab::VColorTab( KarbonPart *part, QWidget* parent, const char* name )
-	: QTabWidget( parent, name ), m_part( part )
+VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
+	: QTabWidget( parent, name )
 {
 	QGridLayout *mainLayout;
 
 	mRGBWidget = new QWidget( this );
-	mainLayout = new QGridLayout(mRGBWidget, 3, 3);
+	mainLayout = new QGridLayout( mRGBWidget, 3, 3 );
 	mColorSelector = new KHSSelector( mRGBWidget );
-	mColorSelector->setMinimumHeight(165);
-	mColorSelector->setMinimumWidth(165);
+	mColorSelector->setMinimumHeight( 165 );
+	mColorSelector->setMinimumWidth( 165 );
 	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
 	mainLayout->addMultiCellWidget (mColorSelector, 0, 2, 0, 0);
 
 	//Selector
 	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
-	mSelector->setMinimumWidth(12);
+	mSelector->setMinimumWidth( 12 );
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
 	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotVChanged( int ) ) );
-	mainLayout->addMultiCellWidget (mSelector, 0, 2, 1, 1);
+	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
 
 	//Reference
-	QGroupBox* groupbox = new QGroupBox(2, Vertical, i18n("Reference"), mRGBWidget);
-	QLabel *mOldText = new QLabel(i18n("Old:"), groupbox);
-	QLabel *mNewText = new QLabel(i18n("New:"), groupbox);
-	mOldColor = new KColorPatch(groupbox);
-	mColorPreview = new KColorPatch(groupbox);
+	QGroupBox* groupbox = new QGroupBox( 2, Vertical, i18n("Reference" ), mRGBWidget );
+	QLabel *mOldText = new QLabel( i18n("Old:"), groupbox );
+	QLabel *mNewText = new QLabel( i18n("New:"), groupbox );
+	mOldColor = new KColorPatch( groupbox );
+	mColorPreview = new KColorPatch( groupbox );
 	QColor color( "black" );
-	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the color of first selected object
-		color = part->document().selection()->objects().getFirst()->fill()->color().toQColor();
+	color = c.toQColor();
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
-	connect (mColorPreview, SIGNAL( colorChanged( QColor* )), this, SLOT (slotUpdate( QColor* )));
-	mainLayout->addWidget( groupbox, 0, 2);
+	connect( mColorPreview, SIGNAL( colorChanged( QColor* )), this, SLOT (slotUpdate( QColor* ) ) );
+	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
-	QGroupBox* cgroupbox = new QGroupBox(3, Vertical, i18n("Components"), mRGBWidget);
+	QGroupBox* cgroupbox = new QGroupBox( 3, Vertical, i18n("Components"), mRGBWidget );
 
 	//--->RGB
-	QLabel *mRedText = new QLabel(i18n("R:"), cgroupbox);
-	QLabel *mGreenText = new QLabel(i18n("G:"), cgroupbox);
-	QLabel *mBlueText = new QLabel(i18n("B:"), cgroupbox);
-	mRed = new QSpinBox( 0, 255, 1, cgroupbox);
-	mGreen = new QSpinBox( 0, 255, 1, cgroupbox);
-	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
+	QLabel *mRedText = new QLabel( i18n("R:"), cgroupbox );
+	QLabel *mGreenText = new QLabel( i18n("G:"), cgroupbox );
+	QLabel *mBlueText = new QLabel( i18n("B:"), cgroupbox );
+	mRed = new QSpinBox( 0, 255, 1, cgroupbox );
+	mGreen = new QSpinBox( 0, 255, 1, cgroupbox );
+	mBlue = new QSpinBox( 0, 255, 1, cgroupbox );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
-	QLabel *mHueText = new QLabel(i18n("H:"), cgroupbox);
-	QLabel *mSatText = new QLabel(i18n("S:"), cgroupbox);
-	QLabel *mBrText = new QLabel(i18n("V:"), cgroupbox);
-	mHue = new QSpinBox( 0, 359, 1, cgroupbox);
-	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox);
-	mValue = new QSpinBox( 0, 255, 1, cgroupbox);
+	QLabel *mHueText = new QLabel( i18n("H:"), cgroupbox );
+	QLabel *mSatText = new QLabel( i18n("S:"), cgroupbox );
+	QLabel *mBrText = new QLabel( i18n("V:"), cgroupbox );
+	mHue = new QSpinBox( 0, 359, 1, cgroupbox );
+	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox );
+	mValue = new QSpinBox( 0, 255, 1, cgroupbox );
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
-	mainLayout->addWidget( cgroupbox, 1, 2);
+	mainLayout->addWidget( cgroupbox, 1, 2 );
 
 	//--->Opacity
-	QGroupBox* ogroupBox = new QGroupBox(1, Vertical, i18n("Opacity"), mRGBWidget);
-	mOpacity = new KIntNumInput(100, ogroupBox);
-	mOpacity->setRange(0, 100, 1, true);
-	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the opacity of first selected object
-		mOpacity->setValue( static_cast<int>(part->document().selection()->objects().getFirst()->fill()->color().opacity() * 100.0) );
-	mainLayout->addWidget( ogroupBox, 2, 2);
+	QGroupBox* ogroupBox = new QGroupBox( 1, Vertical, i18n("Opacity"), mRGBWidget );
+	mOpacity = new KIntNumInput( 100, ogroupBox );
+	mOpacity->setRange( 0, 100, 1, true );
+	mOpacity->setValue( c.opacity() * 100.0 );
+	mainLayout->addWidget( ogroupBox, 2, 2 );
 
-	mainLayout->setSpacing(2);
-	mainLayout->setMargin(5);
+	mainLayout->setSpacing( 2 );
+	mainLayout->setMargin( 5 );
 
 	mainLayout->activate();
 
-	addTab(mRGBWidget, i18n("RGB"));
+	addTab( mRGBWidget, i18n("RGB") );
 
 	mRed->setValue( color.red() );
 	mGreen->setValue( color.green() );

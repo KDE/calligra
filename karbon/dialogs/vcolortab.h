@@ -13,15 +13,15 @@ class QSpinBox;
 class KHSSelector;
 class KGradientSelector;
 class KColorPatch;
-class KarbonPart;
 class KIntNumInput;
+class VColor;
 
 class VColorTab : public QTabWidget
 {
 	Q_OBJECT
 
 public:
-	VColorTab( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
+	VColorTab( const VColor &c, QWidget* parent = 0L, const char* name = 0L );
 
 	VColor getColor();
 
@@ -38,7 +38,6 @@ private:
 	KGradientSelector* mSelector;
 	KColorPatch* mOldColor;
 	KColorPatch* mColorPreview;
-	KarbonPart *m_part;
 
 private slots:
 	void slotUpdateFromRGBSpinBoxes();

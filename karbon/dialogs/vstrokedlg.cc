@@ -95,7 +95,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 
 	//setMainWidget( mainWidget );
 
-	m_colortab = new VColorTab( part, this);
+	m_colortab = new VColorTab( part->document().selection()->objects().getFirst()->stroke()->color(), this);
 	m_colortab->insertTab( mainWidget, i18n("Stroke"), 0 );
 	m_colortab->setCurrentPage( 0 );
 
