@@ -93,8 +93,10 @@ public:
 
     KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
-    void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 , double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
-    KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
+    void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 ,
+                    double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
+    KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,
+                            const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
     void copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & lst) const;
 
@@ -152,27 +154,38 @@ public:
     // insert an object
     virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
-    void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor );
+    void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
+                          const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY,
+                          bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
+    void insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
+                                const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
+    void insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
+                    const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len,
+                    LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
     KPTextObject* insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
     void insertLine( const KoRect &r, const QPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor );
+    void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
+                         FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName,
+                         bool unbalanced,int xfactor, int yfactor );
 
     void insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
     void insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
-    void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
-    void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
+    void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
+                                   const QPen &pen,LineEnd lb, LineEnd le );
+    void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
+                                 const QPen &pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
+                        FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced,
+                        int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
-    void insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2,
+    void insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
+                           FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
-
 
     KCommand *alignObjsLeft(const KoRect &rect = KoRect());
     KCommand *alignObjsCenterH(const KoRect &rect= KoRect());
@@ -185,7 +198,8 @@ public:
     KCommand* setPieSettings( PieType pieType, int angle, int len, int flags );
     KCommand* setRectSettings( int _rx, int _ry, int flags );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );
-    KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal, int _bright );
+    KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal,
+                                  int _bright );
     KCommand* setBrushColor( const QColor &c, bool fill, QPtrList<KPObject> list );
 
     void slotRepaintVariable();
@@ -237,7 +251,8 @@ public:
 
     void deSelectAllObj();
     void deSelectObj( KPObject *kpobject );
-    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage ) const;
+    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler,
+                             int saveOnlyPage ) const;
 
     bool oneObjectTextExist(bool forceAllTextObject = true) ;
     bool oneObjectTextSelected();

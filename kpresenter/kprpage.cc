@@ -57,10 +57,6 @@
 #include <qrichtext_p.h>
 #include <qbuffer.h>
 
-/******************************************************************/
-/* class KPrPage - KPrPage                                        */
-/******************************************************************/
-
 KPrPage::KPrPage(KPresenterDoc *_doc )
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;;
@@ -73,7 +69,6 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     m_noteText=QString::null;
     m_selectedSlides=true;
     //dcopObject();
-
 }
 
 KPrPage::~KPrPage()
@@ -89,7 +84,7 @@ KPrPage::~KPrPage()
 DCOPObject* KPrPage::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPresenterPageIface( this );
+        dcop = new KPresenterPageIface( this );
 
     return dcop;
 }
@@ -140,12 +135,12 @@ KCommand * KPrPage::deleteObjs( bool _add )
 
         if(it.current()->isSelected())
         {
-	    _objects.append( it.current() );
+            _objects.append( it.current() );
             it.current()->setSelected(false);
         }
     }
     if ( _add &&_objects.count() > 0 ) {
-        deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), _objects, m_doc,this );
+        deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), _objects, m_doc, this );
         deleteCmd->execute();
     }
     else
@@ -177,7 +172,8 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoP
     }
 }
 
-void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, double increaseX, double increaseY, double moveX, double moveY )
+void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
+                         double increaseX, double increaseY, double moveX, double moveY )
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
@@ -240,13 +236,9 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
         if ( i >= nbNewObject )
             mod++;
         if ( moveX != 0 || moveY != 0)
-        {
             _tempObj->moveBy( moveX*(double)mod,moveY*(double)mod);
-        }
         else
-        {
             _tempObj->moveBy( 20.0*(double)mod,20.0*(double)mod );
-        }
         _tempObj->setSelected( true );
         if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0))
             m_doc->repaint(_tempObj);
@@ -269,7 +261,8 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
         {
             if(it.current()->isSelected())
             {
-                KCommand *cmd =new ResizeCmd( i18n("Resize"), KoPoint(0, 0), KoSize(increaseX, increaseY), it.current(), m_doc );
+                KCommand *cmd =new ResizeCmd( i18n("Resize"), KoPoint(0, 0),
+                                              KoSize(increaseX, increaseY), it.current(), m_doc );
                 if ( cmd )
                 {
                     cmd->execute();
@@ -307,7 +300,6 @@ KPTextObject * KPrPage::textFrameSet ( unsigned int _num ) const
         }
     }
     return 0L;
-
 }
 
 int KPrPage::numSelected() const
@@ -379,7 +371,6 @@ KCommand * KPrPage::ungroupObjects()
     return 0L;
 }
 
-/*=============================================================*/
 QPen KPrPage::getPen( const QPen &pen ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -404,9 +395,9 @@ QPen KPrPage::getPen( const QPen &pen ) const
             case OT_CUBICBEZIERCURVE:
             case OT_POLYGON:
             case OT_CLOSED_LINE:
-                {
-                    return it.current()->getPen();
-                }
+            {
+                return it.current()->getPen();
+            }
             default:
                 break;
             }
@@ -416,160 +407,156 @@ QPen KPrPage::getPen( const QPen &pen ) const
     return pen;
 }
 
-/*========================= get line begin ========================*/
 LineEnd KPrPage::getLineBegin( LineEnd lb ) const
 {
 
-  QPtrListIterator<KPObject> it( m_objectList );
-  for ( ; it.current() ; ++it )
-  {
-      if(it.current()->isSelected())
-      {
-          switch ( it.current()->getType() )
-          {
-          case OT_LINE:
-	      {
-              KPLineObject*obj=dynamic_cast<KPLineObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          case OT_AUTOFORM:
-	      {
-              KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          case OT_PIE:
-	      {
-              KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          case OT_FREEHAND:
-	      {
-              KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          case OT_POLYLINE:
-	      {
-              KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          case OT_QUADRICBEZIERCURVE:
-	      {
-              KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+        {
+            switch ( it.current()->getType() )
+            {
+            case OT_LINE:
+            {
+                KPLineObject*obj=dynamic_cast<KPLineObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            case OT_AUTOFORM:
+            {
+                KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            case OT_PIE:
+            {
+                KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            case OT_FREEHAND:
+            {
+                KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            case OT_POLYLINE:
+            {
+                KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            case OT_QUADRICBEZIERCURVE:
+            {
+                KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
 
-	      break;
-          case OT_CUBICBEZIERCURVE:
-	      {
-              KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
-              if(obj)
-                  return obj->getLineBegin();
-	      }
-	      break;
-          default: break;
-          }
-      }
-  }
+            break;
+            case OT_CUBICBEZIERCURVE:
+            {
+                KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+                if(obj)
+                    return obj->getLineBegin();
+            }
+            break;
+            default: break;
+            }
+        }
+    }
 
-  return lb;
+    return lb;
 }
 
-/*========================= get line end =========================*/
 LineEnd KPrPage::getLineEnd( LineEnd le ) const
 {
 
-  QPtrListIterator<KPObject> it( m_objectList );
-  for ( ; it.current() ; ++it )
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
     {
-      if(it.current()->isSelected())
+        if(it.current()->isSelected())
         {
-	  switch ( it.current()->getType() ) {
-	  case OT_LINE:
-	    {
-	      KPLineObject* obj=dynamic_cast<KPLineObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  case OT_AUTOFORM:
-	    {
-	      KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
+            switch ( it.current()->getType() ) {
+            case OT_LINE:
+            {
+                KPLineObject* obj=dynamic_cast<KPLineObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            case OT_AUTOFORM:
+            {
+                KPAutoformObject*obj=dynamic_cast<KPAutoformObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
 
-	    break;
-	  case OT_PIE:
-	    {
-	      KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  case OT_FREEHAND:
-	    {
-	      KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  case OT_POLYLINE:
-	    {
-	      KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  case OT_QUADRICBEZIERCURVE:
-	    {
-	      KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  case OT_CUBICBEZIERCURVE:
-	    {
-	      KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
-	      if(obj)
-		return obj->getLineEnd();
-	    }
-	    break;
-	  default: break;
-	  }
-	}
+            break;
+            case OT_PIE:
+            {
+                KPPieObject*obj=dynamic_cast<KPPieObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            case OT_FREEHAND:
+            {
+                KPFreehandObject*obj=dynamic_cast<KPFreehandObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            case OT_POLYLINE:
+            {
+                KPPolylineObject*obj=dynamic_cast<KPPolylineObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            case OT_QUADRICBEZIERCURVE:
+            {
+                KPQuadricBezierCurveObject*obj=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            case OT_CUBICBEZIERCURVE:
+            {
+                KPCubicBezierCurveObject*obj=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+                if(obj)
+                    return obj->getLineEnd();
+            }
+            break;
+            default: break;
+            }
+        }
     }
 
-  return le;
+    return le;
 }
 
-/*========================= get brush =============================*/
 QBrush KPrPage::getBrush( const QBrush &brush )const
 {
-  QPtrListIterator<KPObject> it( m_objectList );
-  for ( ; it.current() ; ++it )
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
     {
-      if(it.current()->isSelected())
+        if(it.current()->isSelected())
         {
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getBrush();
-	}
+        }
     }
-  return brush;
+    return brush;
 }
 
-/*================================================================*/
 FillType KPrPage::getFillType( FillType ft ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -580,47 +567,44 @@ FillType KPrPage::getFillType( FillType ft ) const
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getFillType();
-	}
+        }
     }
 
     return ft;
 }
 
-/*================================================================*/
 QColor KPrPage::getGColor1( const QColor &g1 )const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-       if(it.current()->isSelected())
+        if(it.current()->isSelected())
         {
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getGColor1();
-	}
+        }
     }
 
     return g1;
 }
 
-/*================================================================*/
 QColor KPrPage::getGColor2( const QColor &g2 )const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-       if(it.current()->isSelected())
+        if(it.current()->isSelected())
         {
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getGColor2();
-	}
+        }
     }
 
     return g2;
 }
 
-/*================================================================*/
 BCType KPrPage::getGType( BCType gt )const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -631,13 +615,12 @@ BCType KPrPage::getGType( BCType gt )const
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getGType();
-	}
+        }
     }
 
     return gt;
 }
 
-/*================================================================*/
 bool KPrPage::getGUnbalanced( bool  unbalanced ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -654,7 +637,6 @@ bool KPrPage::getGUnbalanced( bool  unbalanced ) const
     return unbalanced;
 }
 
-/*================================================================*/
 int KPrPage::getGXFactor( int xfactor )const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -665,13 +647,12 @@ int KPrPage::getGXFactor( int xfactor )const
             KP2DObject *obj=dynamic_cast<KP2DObject*>(it.current() );
             if(obj)
                 return obj->getGXFactor();
-	}
+        }
     }
 
     return xfactor;
 }
 
-/*================================================================*/
 int KPrPage::getGYFactor( int yfactor )const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -688,7 +669,6 @@ int KPrPage::getGYFactor( int yfactor )const
     return yfactor;
 }
 
-/*================================================================*/
 PieType KPrPage::getPieType( PieType pieType ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -721,7 +701,6 @@ bool KPrPage::getSticky( bool s ) const
     return s;
 }
 
-/*================================================================*/
 int KPrPage::getPieLength( int pieLength ) const
 {
 
@@ -739,7 +718,6 @@ int KPrPage::getPieLength( int pieLength ) const
     return pieLength;
 }
 
-/*================================================================*/
 int KPrPage::getPieAngle( int pieAngle ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -756,7 +734,6 @@ int KPrPage::getPieAngle( int pieAngle ) const
     return pieAngle;
 }
 
-/*================================================================*/
 int KPrPage::getRndX( int _rx ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -777,7 +754,6 @@ int KPrPage::getRndX( int _rx ) const
     return _rx;
 }
 
-/*================================================================*/
 int KPrPage::getRndY( int _ry ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
@@ -942,7 +918,6 @@ QPixmap KPrPage::getPicturePixmap() const
     return QPixmap();
 }
 
-/*======================== lower objects =========================*/
 void KPrPage::lowerObjs(bool backward)
 {
     KPObject *kpobject = 0;
@@ -979,7 +954,6 @@ void KPrPage::lowerObjs(bool backward)
 
 }
 
-/*========================= raise object =========================*/
 void KPrPage::raiseObjs(bool forward)
 {
     KPObject *kpobject = 0;
@@ -1025,10 +999,8 @@ void KPrPage::insertLine( const KoRect &r, const QPen & pen, LineEnd lb, LineEnd
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, m_doc, this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
-
 }
 
-/*===================== insert a rectangle =======================*/
 void KPrPage::insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft,
                                const QColor &g1, const QColor &g2,
                                BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor )
@@ -1043,7 +1015,6 @@ void KPrPage::insertRectangle( const KoRect &r, const QPen & pen, const QBrush &
     m_doc->addCommand( insertCmd );
 }
 
-/*===================== insert a circle or ellipse ===============*/
 void KPrPage::insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush & brush, FillType ft,
                                      const QColor &g1, const QColor &g2,
                                      BCType gt, bool unbalanced, int xfactor, int yfactor )
@@ -1058,7 +1029,6 @@ void KPrPage::insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBr
     m_doc->addCommand( insertCmd );
 }
 
-/*================================================================*/
 void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
                          const QColor &g1, const QColor &g2,
                          BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
@@ -1074,7 +1044,6 @@ void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, 
     m_doc->addCommand( insertCmd );
 }
 
-/*===================== insert a textobject =====================*/
 KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
@@ -1098,7 +1067,6 @@ KPTextObject* KPrPage::insertTextObject( const KoRect& r, const QString& text, K
     return kptextobject;
 }
 
-/*======================= insert an autoform ====================*/
 void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,
                               const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,
                               int xfactor, int yfactor ){
@@ -1113,7 +1081,7 @@ void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &br
 }
 
 void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,
-                                    LineEnd lb, LineEnd le )
+                              LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
     KPFreehandObject *kpfreehandobject = new KPFreehandObject( points, size, pen, lb, le );
@@ -1126,7 +1094,7 @@ void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const
 }
 
 void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,
-                                    LineEnd lb, LineEnd le )
+                              LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
     KPPolylineObject *kppolylineobject = new KPPolylineObject( points, size, pen, lb, le );
@@ -1138,24 +1106,26 @@ void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const
     m_doc->addCommand( insertCmd );
 }
 
-/*================ insert a quadric bezier curve =================*/
-void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
-                                            LineEnd lb, LineEnd le )
+void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
+                                        const KoRect &r, const QPen &pen,
+                                        LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
 
-    KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject( points, allPoints, size, pen, lb, le );
+    KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject(
+        points, allPoints, size, pen, lb, le );
     kpQuadricBezierCurveObject->setOrig( r.x(), r.y() );
     kpQuadricBezierCurveObject->setSize( size );
     kpQuadricBezierCurveObject->setSelected( true );
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, m_doc,this );
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ),
+                                          kpQuadricBezierCurveObject, m_doc,this );
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
 }
 
-/*================= insert a cubic bezier curve ==================*/
-void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
-                                            LineEnd lb, LineEnd le )
+void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
+                                      const KoRect &r, const QPen &pen,
+                                      LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
 
@@ -1169,10 +1139,9 @@ void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointA
     m_doc->addCommand( insertCmd );
 }
 
-/*======================= insert polygon ===========================*/
 void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
-                                   const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
-                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+                             const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
+                             bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
     KoSize size( r.width(), r.height() );
 
@@ -1187,7 +1156,6 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
     m_doc->addCommand( insertCmd );
 }
 
-/*======================= insert closed line ===========================*/
 void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
                                 FillType ft,const QColor &g1, const QColor &g2,
                                 BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode )
@@ -1227,7 +1195,6 @@ void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, con
 }
 
 
-/*======================== align objects left ===================*/
 KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
@@ -1273,7 +1240,6 @@ KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
     return moveByCmd2;
 }
 
-/*==================== align objects center h ===================*/
 KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
@@ -1318,7 +1284,6 @@ KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
     return moveByCmd2;
 }
 
-/*==================== align objects right ======================*/
 KCommand * KPrPage::alignObjsRight(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
@@ -1360,7 +1325,6 @@ KCommand * KPrPage::alignObjsRight(const KoRect &rect)
     return moveByCmd2;
 }
 
-/*==================== align objects top ========================*/
 KCommand *KPrPage::alignObjsTop(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
@@ -1405,7 +1369,6 @@ KCommand *KPrPage::alignObjsTop(const KoRect &rect)
     return moveByCmd2;
 }
 
-/*==================== align objects center v ===================*/
 KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
 {
     MoveByCmd2 *moveByCmd2=0L;
@@ -1496,9 +1459,9 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_doc );
-    if ( !doc || !doc->initDoc() ) {
-	return NULL;
-    }
+
+    if ( !doc || !doc->initDoc() )
+        return NULL;
 
     QRect r = QRect( (int)_rect.left(), (int)_rect.top(),
                      (int)_rect.width(), (int)_rect.height() );
@@ -1563,18 +1526,14 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
             {
                 KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_ELLIPSE:
             {
                 KPEllipseObject *obj=dynamic_cast<KPEllipseObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_AUTOFORM:
@@ -1603,18 +1562,14 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
             {
                 KPPartObject *obj=dynamic_cast<KPPartObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_TEXT:
             {
                 KPTextObject *obj=dynamic_cast<KPTextObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_CLIPART:
@@ -1622,9 +1577,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
             {
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_FREEHAND:
@@ -1675,9 +1628,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
             {
                 KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
                 if(obj)
-                {
                     ptmp->pen = obj->getPen();
-                }
             }
             break;
             case OT_CLOSED_LINE: {
@@ -2094,7 +2045,7 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry, int flags )
     {
         if(it.current()->getType()==OT_RECT)
         {
-    	    if ( it.current()->isSelected() ) {
+            if ( it.current()->isSelected() ) {
                 KPRectObject *obj=dynamic_cast<KPRectObject*>( it.current() );
                 if(obj)
                 {
@@ -2215,7 +2166,8 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
     }
 
     if ( !_objects.isEmpty() && changed ) {
-        pictureSettingCmd = new PictureSettingCmd( i18n( "Change Picture Settings" ), _oldSettings, _newSettings, _objects, m_doc );
+        pictureSettingCmd = new PictureSettingCmd( i18n( "Change Picture Settings" ),
+                                                   _oldSettings, _newSettings, _objects, m_doc );
         pictureSettingCmd->execute();
     }
     else {
@@ -2527,7 +2479,7 @@ void KPrPage::deletePage( )
 }
 
 void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, BCType bcType,
-				  bool unbalanced, int xfactor, int yfactor )
+                           bool unbalanced, int xfactor, int yfactor )
 {
     kpbackground->setBackColor1( backColor1 );
     kpbackground->setBackColor2( backColor2 );
@@ -2703,7 +2655,6 @@ void KPrPage::completeLoadingForGroupObject( KPObject *_obj )
     }
 }
 
-/*====================== replace objects =========================*/
 KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _orastY,const QColor & _txtBackCol,
                                  const QColor & _otxtBackCol )
 {
@@ -2754,12 +2705,12 @@ QString KPrPage::pageTitle( const QString &_title ) const
 
     // Create list of text objects in page pgNum
 
-   QPtrListIterator<KPObject> it( m_objectList );
-   for ( ; it.current() ; ++it )
-   {
-       if(it.current()->getType()==OT_TEXT)
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
             objs.append( static_cast<KPTextObject*>( it.current() ) );
-   }
+    }
 
     if ( objs.isEmpty() )
         return QString( _title );
@@ -2816,19 +2767,17 @@ QString KPrPage::noteText(  )const
 
 void KPrPage::makeUsedPixmapList()
 {
-   QPtrListIterator<KPObject> it( m_objectList );
-   for ( ; it.current() ; ++it )
-   {
-       if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
-       {
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
             m_doc->insertPixmapKey(static_cast<KPPixmapObject*>( it.current() )->getKey() );
-       }
-       else if ( it.current()->getType() == OT_GROUP )
-           makeUsedPixmapListForGroupObject( it.current() );
-   }
+        else if ( it.current()->getType() == OT_GROUP )
+            makeUsedPixmapListForGroupObject( it.current() );
+    }
 
-   if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
-       m_doc->insertPixmapKey(kpbackground->getBackPictureKey());
+    if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
+        m_doc->insertPixmapKey(kpbackground->getBackPictureKey());
 }
 
 void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )
@@ -2864,8 +2813,8 @@ QValueList<int> KPrPage::reorderPage() const
                 for ( ; *it < oIt.current()->getPresNum() && it != orderList.end(); ++it );
                 orderList.insert( it, oIt.current()->getPresNum() );
             }
-	    }
-	    if ( oIt.current()->getDisappear() && orderList.find( oIt.current()->getDisappearNum() ) == orderList.end() )
+        }
+        if ( oIt.current()->getDisappear() && orderList.find( oIt.current()->getDisappearNum() ) == orderList.end() )
         {
             if ( orderList.isEmpty() )
                 orderList.append( oIt.current()->getDisappearNum() );
@@ -2875,7 +2824,7 @@ QValueList<int> KPrPage::reorderPage() const
                 for ( ; *it < oIt.current()->getDisappearNum() && it != orderList.end(); ++it );
                 orderList.insert( it, oIt.current()->getDisappearNum() );
             }
-	    }
+        }
     }
     return orderList;
 }
@@ -2915,7 +2864,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
         if ( oIt.current()==m_doc->header() || oIt.current()==m_doc->footer())
             continue;
         if ( oIt.current()->getType() == OT_PART )
-        continue;
+            continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
         bool _sticky = oIt.current()->isSticky();
@@ -3006,9 +2955,8 @@ KoRect KPrPage::getBoundingRect(const KoRect &rect) const
             continue;
 
         if(it.current()->isSelected() && !it.current()->isProtect())
-        {
             boundingRect|=it.current()->getBoundingRect();
-        }
+
     }
     return boundingRect;
 }
@@ -3117,11 +3065,11 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
         }
     }
 
-    if ( key && !_objects.isEmpty()) {
+    if ( key && !_objects.isEmpty())
         moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _move ),
                                    _objects, m_doc,this );
-    }
+
     return moveByCmd;
 
 }
@@ -3195,9 +3143,8 @@ KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
             continue;
 
-        if ( it.current()->isSelected() && it.current()->isSticky()!=_sticky) {
+        if ( it.current()->isSelected() && it.current()->isSticky()!=_sticky)
             _objects.append( it.current() );
-        }
     }
 
     if ( !_objects.isEmpty() )
@@ -3293,7 +3240,8 @@ KPObject * KPrPage::getCursor(const KoPoint &pos )
     return 0L;
 }
 
-KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize )
+KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bool &desel,
+                                      bool &_over, bool &_resize )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     KPObject *kpobject = it.toLast();

@@ -142,10 +142,10 @@ public:
 
 
     void setPartEntry( KoDocumentEntry& _e )
-    { partEntry = _e; }
+        { partEntry = _e; }
     void setToolEditMode( ToolEditMode _m, bool updateView = true );
     void setAutoForm( const QString &_autoform )
-    { autoform = _autoform; }
+        { autoform = _autoform; }
 
     void drawPageInPix( QPixmap&, int pgnum, int zoom, bool forceRealVariableValue = false );
 
@@ -363,11 +363,11 @@ protected:
 
     //draw all object : object in current page + object in sticky page
     void drawObjects( QPainter*, const QRect&, bool drawCursor,
-		      SelectionMode selectionMode, bool doSpecificEffects ) const;
+                      SelectionMode selectionMode, bool doSpecificEffects ) const;
 
     void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
-			   SelectionMode selectionMode, bool doSpecificEffects,
-			   const QPtrList<KPObject> & obj) const;
+                           SelectionMode selectionMode, bool doSpecificEffects,
+                           const QPtrList<KPObject> & obj) const;
 
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const;
 
