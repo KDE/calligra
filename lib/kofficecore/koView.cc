@@ -33,8 +33,6 @@
 #include <kstatusbar.h>
 #include <qapplication.h>
 
-#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
-
 class KoViewPrivate
 {
 public:
@@ -748,7 +746,7 @@ void KoViewChild::slotFrameGeometryChanged()
                         static_cast<int>( (double)borderLessRect.height() / zoom + 0.5 ) );
     kdDebug() << "KoViewChild::slotFrameGeometryChanged child geometry "
               << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
-              << DEBUGRECT( unzoomedRect ) << endl;
+              << unzoomedRect << endl;
 
     // We don't want to trigger slotDocGeometryChanged again
     lock();
@@ -771,7 +769,7 @@ void KoViewChild::slotDocGeometryChanged()
                     static_cast<int>( (double)geom.height() * zoom + 0.5 ) + m_frame->topBorder() + m_frame->bottomBorder() );
   kdDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
             << ( m_frame->geometry() == borderRect ? "already " : "set to " )
-            << DEBUGRECT( borderRect ) << endl;
+            << borderRect << endl;
 
   m_frame->setGeometry( borderRect );
 }
