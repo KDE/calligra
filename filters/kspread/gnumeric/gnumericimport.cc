@@ -1001,6 +1001,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 
       QDomNode style = style_region.namedItem( "gmr:Style" );
       QDomNode font = style.namedItem( "gmr:Font" );
+      QDomNode validation = style.namedItem( "gmr:Validation" );
       QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
       int startCol = e.attribute( "startCol" ).toInt() + 1;
       int endCol   = e.attribute( "endCol" ).toInt() + 1;
@@ -1282,7 +1283,17 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             QDomElement style_element = gmr_styleborder.toElement(); // try to convert the node to an element.
             ParseBorder( style_element, kspread_cell );
           }
-
+          if ( !validation.isNull() )
+          {
+              QDomElement validation_element = validation.toElement();
+              if ( !validation_element.isNull() )
+              {
+                  kdDebug(30521)<<" Cell validation \n";
+                  //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
+                  //<gmr:Expression0>745</gmr:Expression0>
+                  //<gmr:Expression1>4546</gmr:Expression1>
+              }
+          }
           if (!font.isNull())
           {
             QDomElement font_element = font.toElement();
