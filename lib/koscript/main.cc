@@ -18,7 +18,7 @@ static KCmdLineOptions options[] =
 
 int main( int argc, char** argv )
 {
-  const char *appName = (argc > 1) ? argv[1] : "kscript";
+  const char *appName = (argc > 1) ? argv[1] : "koscript";
   KCmdLineArgs::init(argc, argv, appName,
         I18N_NOOP("KOffice Script interpreter."),
         "2.0.0");
@@ -32,10 +32,8 @@ int main( int argc, char** argv )
   if (args->count() < 1)
   {
      fprintf(stderr, i18n("You must specify a script.\n").local8Bit());
-     exit(1);
+     ::exit(1);
   }
-
-  // kapp->dcopClient()->registerAs( args->arg(0) );
 
   qDebug("..... KScript started");
   {
@@ -52,4 +50,3 @@ int main( int argc, char** argv )
 
   return 0;
 }
-

@@ -328,7 +328,7 @@ static bool ksfunc_println( KSContext& context )
 
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
 {
-  KSModule::Ptr module = new KSModule( interp, "kscript" );
+  KSModule::Ptr module = new KSModule( interp, "koscript" );
 
   module->addObject( "time", new KSValue( new KSBuiltinFunction( module, "time", ksfunc_time ) ) );
   module->addObject( "date", new KSValue( new KSBuiltinFunction( module, "date", ksfunc_date ) ) );
