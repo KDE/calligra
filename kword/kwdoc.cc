@@ -610,6 +610,11 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
         m_pageHeaderFooter = _hf;
     }
 
+    // pages have a different size -> update framesInPage
+    // TODO: it would be better to move stuff so that text boxes remain in the same page...
+    // (page-number preservation instead of Y preservation)
+    updateAllFrames( KWFrameSet::UpdateFramesInPage );
+
     recalcFrames();
 
     updateAllFrames();
@@ -3570,7 +3575,7 @@ void KWDocument::afterRemovePages()
         emit newContentsSize();
 }
 
-void KWDocument::tryRemovingPages()
+bool KWDocument::tryRemovingPages()
 {
     int lastPage = numPages() - 1;
     bool removed = false;
@@ -3586,9 +3591,9 @@ void KWDocument::tryRemovingPages()
         removed = true;
         lastPage = m_pages - 1;
     }
-    // Do all the recalc in one go. Speeds up deleting many pages.
-    if ( removed )
-        afterRemovePages();
+    // Don't call afterRemovePages or recalcFrames from here, since this method is
+    // itself called from KWFrameLayout (#95047)
+    return removed;
 }
 
 
@@ -3996,7 +4001,7 @@ KWFrame *KWDocument::getFirstSelectedFrame() const
     return 0L;
 }
 
-void KWDocument::updateAllFrames()
+void KWDocument::updateAllFrames( int flags )
 {
 #ifdef DEBUG_SPEED
     QTime dt;
@@ -4004,10 +4009,10 @@ void KWDocument::updateAllFrames()
 #endif
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
-        fit.current()->updateFrames();
+        fit.current()->updateFrames( flags );
 
 #ifdef DEBUG_SPEED
-    kdDebug(32001) << "updateAllFrames took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    kdDebug(32001) << "updateAllFrames(" << flags << ") took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 #endif
 
     // TODO: check all calls to updateAllFrames, and fix them.

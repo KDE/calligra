@@ -2142,8 +2142,12 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             delFrame(frames.last(), true);
             m_doc->frameChanged( 0L );
         }
-        if ( m_doc->processingType() == KWDocument::WP )
-            m_doc->tryRemovingPages();
+        if ( m_doc->processingType() == KWDocument::WP ) {
+            bool removed = m_doc->tryRemovingPages();
+            // Do all the recalc in one go. Speeds up deleting many pages.
+            if ( removed )
+                m_doc->afterRemovePages();
+	}
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
@@ -2370,7 +2374,7 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * theFrame = frameIt.current();
-        //kdDebug() << "canRemovePage: looking at " << theFrame << endl;
+        //kdDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNum() << endl;
         Q_ASSERT( theFrame->pageNum() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
