@@ -31,9 +31,9 @@
 // commands:
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
+#include "vflattencmd.h"
 #include "vgroupcmd.h"
 #include "vinsertknotscmd.h"
-#include "vpolygonizecmd.h"
 #include "vstrokecmd.h"
 //#include "vtextcmd.h"
 #include "vwhirlpinchcmd.h"
@@ -42,8 +42,8 @@
 #include "vcolordlg.h"
 #include "vconfiguredlg.h"
 #include "vfilldlg.h"
+#include "vflattendlg.h"
 #include "vinsertknotsdlg.h"
-#include "vpolygonizedlg.h"
 #include "vstrokedlg.h"
 #include "vwhirlpinchdlg.h"
 
@@ -80,8 +80,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	// dialogs:
 	m_insertKnotsDlg = new VInsertKnotsDlg();
 
-	m_polygonizeDlg = new VPolygonizeDlg();
-	m_polygonizeDlg->setFlatness( 5.0 );
+	m_flattenDlg = new VFlattenDlg();
+	m_flattenDlg->setFlatness( 5.0 );
 
 	m_whirlPinchDlg = new VWhirlPinchDlg();
 	m_whirlPinchDlg->setAngle( 90.0 );
@@ -121,7 +121,7 @@ KarbonView::~KarbonView()
 {
 	// dialogs:
 	delete( m_insertKnotsDlg );
-	delete( m_polygonizeDlg );
+	delete( m_flattenDlg );
 	delete( m_whirlPinchDlg );
 
 	// widgets:
@@ -504,12 +504,12 @@ KarbonView::pathInsertKnots()
 }
 
 void
-KarbonView::pathPolygonize()
+KarbonView::pathFlatten()
 {
-	if( m_polygonizeDlg->exec() )
+	if( m_flattenDlg->exec() )
 	{
-		m_part->addCommand( new VPolygonizeCmd(
-			&m_part->document(), m_polygonizeDlg->flatness() ), true );
+		m_part->addCommand( new VFlattenCmd(
+			&m_part->document(), m_flattenDlg->flatness() ), true );
 	}
 }
 
@@ -769,8 +769,8 @@ KarbonView::initActions()
 		i18n( "&Insert Knots" ), 0, 0, this,
 		SLOT( pathInsertKnots() ), actionCollection(), "path_insert_knots" );
 	new KAction(
-		i18n( "&Polygonize" ), 0, 0, this,
-		SLOT( pathPolygonize() ), actionCollection(), "path_polygonize" );
+		i18n( "&Flatten" ), 0, 0, this,
+		SLOT( pathFlatten() ), actionCollection(), "path_flatten" );
 	new KAction(
 		i18n( "&Whirl/Pinch" ), 0, 0, this,
 		SLOT( pathWhirlPinch() ), actionCollection(), "path_whirlpinch" );

@@ -11,10 +11,10 @@ noinst_HEADERS = \
 	vdeletecmd.h \
 	vellipsecmd.h \
 	vfillcmd.h \
+	vflattencmd.h \
 	vgroupcmd.h \
 	vinsertknotscmd.h \
 	vpolygoncmd.h \
-	vpolygonizecmd.h \
 	vrectanglecmd.h \
 	vroundrectcmd.h \
 	vshapecmd.h \
@@ -30,10 +30,10 @@ libkarboncommands_la_SOURCES = \
 	vdeletecmd.cc \
 	vellipsecmd.cc \
 	vfillcmd.cc \
+	vflattencmd.cc \
 	vgroupcmd.cc \
 	vinsertknotscmd.cc \
 	vpolygoncmd.cc \
-	vpolygonizecmd.cc \
 	vrectanglecmd.cc \
 	vroundrectcmd.cc \
 	vshapecmd.cc \

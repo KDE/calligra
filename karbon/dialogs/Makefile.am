@@ -14,9 +14,9 @@ noinst_HEADERS = \
 	vconfiguredlg.h \
 	vellipsedlg.h \
 	vfilldlg.h \
+	vflattendlg.h \
 	vinsertknotsdlg.h \
 	vpolygondlg.h \
-	vpolygonizedlg.h \
 	vrectangledlg.h \
 	vroundrectdlg.h \
 	vsinusdlg.h \
@@ -31,9 +31,9 @@ libkarbondialogs_la_SOURCES = \
 	vconfiguredlg.cc \
 	vellipsedlg.cc \
 	vfilldlg.cc \
+	vflattendlg.cc \
 	vinsertknotsdlg.cc \
 	vpolygondlg.cc \
-	vpolygonizedlg.cc \
 	vrectangledlg.cc \
 	vroundrectdlg.cc \
 	vsinusdlg.cc \

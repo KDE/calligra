@@ -4,28 +4,28 @@
 
 #include <klocale.h>
 
-#include "vpolygonize.h"
-#include "vpolygonizecmd.h"
+#include "vflatten.h"
+#include "vflattencmd.h"
 #include "vselection.h"
 
 
-VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, double flatness )
-		: VCommand( doc, i18n( "Polygonize" ) )
+VFlattenCmd::VFlattenCmd( VDocument *doc, double flatness )
+		: VCommand( doc, i18n( "Flatten" ) )
 {
 	m_selection = m_doc->selection()->clone();
 
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
 }
 
-VPolygonizeCmd::~VPolygonizeCmd()
+VFlattenCmd::~VFlattenCmd()
 {
 	delete( m_selection );
 }
 
 void
-VPolygonizeCmd::execute()
+VFlattenCmd::execute()
 {
-	VPolygonize op( m_flatness );
+	VFlatten op( m_flatness );
 
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
@@ -33,7 +33,7 @@ VPolygonizeCmd::execute()
 }
 
 void
-VPolygonizeCmd::unexecute()
+VFlattenCmd::unexecute()
 {
 }
 

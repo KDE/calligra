@@ -2,16 +2,16 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VPOLYGONIZE_H__
-#define __VPOLYGONIZE_H__
+#ifndef __VFLATTEN_H__
+#define __VFLATTE_H__
 
 #include "vpath.h"
 #include "vvisitor.h"
 
-class VPolygonize : public VVisitor
+class VFlatten : public VVisitor
 {
 public:
-	VPolygonize( double flatness = 1.0 ) { m_flatness = flatness; }
+	VFlatten( double flatness = 1.0 ) { m_flatness = flatness; }
 
 	double flatness() const { return m_flatness; }
 	void setFlatness( double flatness );

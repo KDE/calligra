@@ -13,9 +13,10 @@
 
 #include <klocale.h>
 
-#include "vpolygonizedlg.h"
+#include "vflattendlg.h"
 
-VPolygonizeDlg::VPolygonizeDlg( QWidget* parent, const char* name )
+
+VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	: KDialog( parent, name, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
@@ -58,18 +59,18 @@ VPolygonizeDlg::VPolygonizeDlg( QWidget* parent, const char* name )
 }
 
 double
-VPolygonizeDlg::flatness() const
+VFlattenDlg::flatness() const
 {
 	return m_flatness->text().toDouble();
 }
 
 void
-VPolygonizeDlg::setFlatness( double value )
+VFlattenDlg::setFlatness( double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
 	m_flatness->setText( s );
 }
 
-#include "vpolygonizedlg.moc"
+#include "vflattendlg.moc"
 

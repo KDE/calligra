@@ -22,8 +22,8 @@ class KSelectColorAction;
 class KToggleAction;
 class QPaintEvent;
 class QLabel;
+class VFlattenDlg;
 class VInsertKnotsDlg;
-class VPolygonizeDlg;
 class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
@@ -111,7 +111,7 @@ protected slots:
 
 	// path:
 	void pathInsertKnots();
-	void pathPolygonize();
+	void pathFlatten();
 	void pathWhirlPinch();
 
 	// view:
@@ -174,7 +174,7 @@ private:
 
 	// dialogs:
 	VInsertKnotsDlg* m_insertKnotsDlg;
-	VPolygonizeDlg* m_polygonizeDlg;
+	VFlattenDlg* m_flattenDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
 	VColorDlg* m_ColorManager;
 

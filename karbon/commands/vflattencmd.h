@@ -2,8 +2,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VPOLYGONIZECMD_H__
-#define __VPOLYGONIZECMD_H__
+#ifndef __VFLATTENCMD_H__
+#define __VFLATTENCMD_H__
 
 #include "vcommand.h"
 
@@ -11,11 +11,11 @@
 class VSelection;
 
 
-class VPolygonizeCmd : public VCommand
+class VFlattenCmd : public VCommand
 {
 public:
-	VPolygonizeCmd( VDocument *doc, double flatness );
-	virtual ~VPolygonizeCmd();
+	VFlattenCmd( VDocument *doc, double flatness );
+	virtual ~VFlattenCmd();
 
 	virtual void execute();
 	virtual void unexecute();

@@ -4,20 +4,20 @@
 
 #include <qptrlist.h>
 
+#include "vflatten.h"
 #include "vpath.h"
-#include "vpolygonize.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
 void
-VPolygonize::setFlatness( double flatness )
+VFlatten::setFlatness( double flatness )
 {
 	if( flatness > 0.0 )
 		m_flatness = flatness;
 }
 
 void
-VPolygonize::visitVPath( VPath& path )
+VFlatten::visitVPath( VPath& path )
 {
 	QPtrListIterator<VSegmentList> itr( path.segmentLists() );
 	for( ; itr.current(); ++itr )
@@ -27,7 +27,7 @@ VPolygonize::visitVPath( VPath& path )
 }
 
 void
-VPolygonize::visitVSegmentList( VSegmentList& segmentList )
+VFlatten::visitVSegmentList( VSegmentList& segmentList )
 {
 	segmentList.first();
 
