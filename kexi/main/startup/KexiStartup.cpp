@@ -211,12 +211,17 @@ bool KexiStartupHandler::init(int argc, char **argv)
 //TODO: add option for non-gui; integrate with KWallet; 
 //      move to static KexiProject method
 	if (!fileDriverSelected && cdata.password.isEmpty()) {
+		QString msg = cdata.userName.isEmpty() ?
+			"<p>"+i18n("Please enter the password.")
+			: "<p>"+i18n("Please enter the password for user %1.").arg(cdata.userName);
+
+		QString srv = cdata.serverInfoString(false);
+		if (srv.isEmpty() || srv.lower()=="localhost")
+			srv = i18n("local database server");
+		msg += ("</p><p>"+i18n("Database server: %1.").arg(srv)+"</p>");
+
 		QCString pwd;
-		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd,
-			i18n("Please enter the password for user \"%1\" on \"%2\" database server.")
-			.arg(cdata.userName)
-			.arg(cdata.serverInfoString(false))) )
-		{
+		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
 			cdata.password = QString(pwd);
 		}
 		else {
