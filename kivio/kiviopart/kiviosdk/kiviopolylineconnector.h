@@ -23,6 +23,7 @@
 #include <qvaluelist.h>
 
 #include <koPoint.h>
+#include <koRect.h>
 
 #include "kivio_1d_stencil.h"
 #include "kivio_arrowhead.h"
@@ -70,6 +71,7 @@ namespace Kivio {
       virtual void setX(double x);
       virtual double y();
       virtual void setY(double y);
+      virtual KoRect rect();
 
       virtual void updateConnectorPoints(KivioConnectorPoint* cp, double /*oldX*/, double /*oldY*/);
       

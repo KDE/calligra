@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include <kozoomhandler.h>
+#include <koSize.h>
 
 #include "kivio_line_style.h"
 #include "kivio_painter.h"
@@ -282,5 +283,16 @@ namespace Kivio {
     } else if(cp == m_pEnd) {
       m_points[m_points.count() - 1] = m_pEnd->position();
     }
+  }
+
+  KoRect PolyLineConnector::rect()
+  {
+    KoPoint p(0, 0);
+    
+    if(m_points.count() > 0) {
+      p = m_points.first();
+    }
+    
+    return KoRect(p, KoSize(0, 0));
   }
 }
