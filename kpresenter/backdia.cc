@@ -311,7 +311,7 @@ void BackDia::updateConfiguration()
         preview->backGround()->setBackClipart( getBackClipFilename(), clipLastModified );
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
-        preview->backGround()->restore();
+        preview->backGround()->reload();
         preview->repaint( false );
     }
 

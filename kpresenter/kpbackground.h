@@ -111,7 +111,7 @@ public:
     void draw( QPainter *_painter, const QSize& ext,
                const QRect& crect, bool _drawBorders );
 
-    void restore();
+    void reload();
 
     QDomElement save( QDomDocument &doc );
     void load( const QDomElement &element );

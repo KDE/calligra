@@ -1948,7 +1948,7 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
 /*========================= restore background ==================*/
 void KPresenterDoc::restoreBackground( KPrPage *page )
 {
-    page->background()->restore();
+    page->background()->reload();
 }
 
 /*==================== load pasted objects ==============================*/
@@ -2392,7 +2392,7 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
 #endif
 #if 0
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-        m_pageList.at(i)->background()->restore();
+        m_pageList.at(i)->background()->reload();
     }
 #endif
     if ( updateViews )

@@ -2999,20 +2999,36 @@ QRect KPrPage::getZoomPageRect()const {
 
 void KPrPage::completeLoading( bool _clean, int lastObj )
 {
-    KPObject *kpobject = 0;
-    for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
         // Pictures and cliparts have been loaded from the store, we can now
         // get the pixmap/picture from the collection, and set it in the image/clipart object
-        if ( kpobject->getType() == OT_PICTURE ) {
-            if ( _clean || m_objectList.findRef( kpobject ) > lastObj )
-                dynamic_cast<KPPixmapObject*>( kpobject )->reload();
-        } else if ( kpobject->getType() == OT_CLIPART )
-            dynamic_cast<KPClipartObject*>( kpobject )->reload();
+        if ( it.current()->getType() == OT_PICTURE ) {
+            if ( _clean || m_objectList.findRef( it.current() ) > lastObj )
+            {
+                KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current());
+                if(obj)
+                    obj->reload();
+            }
+        }
+        else if ( it.current()->getType() == OT_CLIPART )
+        {
+            KPClipartObject*obj=dynamic_cast<KPClipartObject*>( it.current() );
+            if(obj)
+                obj->reload();
+        }
         else
-            if ( kpobject->getType() == OT_TEXT )
-                dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc,this );
+        {
+            if ( it.current()->getType() == OT_TEXT )
+            {
+                KPTextObject*obj=dynamic_cast<KPTextObject*>( it.current() );
+                if(obj)
+                    obj->recalcPageNum( m_doc,this );
+            }
+        }
     }
-    kpbackground->restore(); // TODO rename to e.g. reload
+    kpbackground->reload();
 }
 
 

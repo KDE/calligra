@@ -133,7 +133,7 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
     _painter->restore();
 }
 
-void KPBackGround::restore()
+void KPBackGround::reload()
 {
     if ( backType == BT_PICTURE )
         setBackPixmap( backImage.key().filename(), backImage.key().lastModified() );
