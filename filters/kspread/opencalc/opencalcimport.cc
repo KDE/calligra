@@ -455,7 +455,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         {
             if ( !cell )
                 cell = table->nonDefaultCell( columns, row );
-            kdDebug()<<" columns :"<<columns<<" row :"<<row<<endl;
+            kdDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
             cell->setComment( comment );
         }
     }
@@ -494,7 +494,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           QDomElement property = node.toElement();
           if ( !property.isNull() )
           {
-              kdDebug()<<"property.tagName() :"<<property.tagName()<<endl;
+              kdDebug(30518)<<"property.tagName() :"<<property.tagName()<<endl;
               if ( property.tagName()=="style:map" && !foundValidation)
               {
                   loadCondition( cell, property );
@@ -558,7 +558,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
     }
     if ( e.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kdDebug()<<" Celle has a validation :"<<e.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        kdDebug(30518)<<" Celle has a validation :"<<e.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
         loadOasisValidation( cell->getValidity(), e.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
     }
     if ( e.hasAttributeNS( KoXmlNS::table, "value-type" ) )
@@ -755,7 +755,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
 
 void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )
 {
-    kdDebug()<<"void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )*******\n";
+    kdDebug(30518)<<"void OpenCalcImport::loadCondition( KSpreadCell *cell,const QDomElement &property )*******\n";
     loadOasisCondition( cell, property );
 }
 
@@ -767,16 +767,16 @@ void OpenCalcImport::loadOasisCondition(KSpreadCell *cell,const QDomElement &pro
     QValueList<KSpreadConditional> cond;
     while ( !elementItem.isNull() )
     {
-        kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        kdDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
         if ( elementItem.tagName()== "style:map"  )
         {
             bool ok = true;
-            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
+            kdDebug(30518)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
             KSpreadConditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
+                kdDebug(30518)<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
                 newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
@@ -788,7 +788,7 @@ void OpenCalcImport::loadOasisCondition(KSpreadCell *cell,const QDomElement &pro
             if ( ok )
                 cond.append( newCondition );
             else
-                kdDebug() << "Error loading condition " << elementItem.nodeName()<< endl;
+                kdDebug(30518) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
         elementItem = elementItem.nextSibling().toElement();
     }
@@ -861,8 +861,8 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpreadConditio
         newCondition.cond = Equal;
     }
     else
-        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug()<<" value :"<<value<<endl;
+        kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug(30518)<<" value :"<<value<<endl;
     bool ok = false;
     newCondition.val1 = value.toDouble(&ok);
     if ( !ok )
@@ -871,7 +871,7 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpreadConditio
         if ( !ok )
         {
             newCondition.strVal1 = new QString( value );
-            kdDebug()<<" Try to parse this value :"<<value<<endl;
+            kdDebug(30518)<<" Try to parse this value :"<<value<<endl;
         }
 
     }
@@ -881,7 +881,7 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpreadConditio
 void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition )
 {
     bool ok = false;
-    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     newCondition.val1 = listVal[0].toDouble(&ok);
     if ( !ok )
@@ -890,7 +890,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, KSpre
         if ( !ok )
         {
             newCondition.strVal1 = new QString( listVal[0] );
-            kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+            kdDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
         }
     }
     ok=false;
@@ -901,7 +901,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, KSpre
         if ( !ok )
         {
             newCondition.strVal2 = new QString( listVal[1] );
-            kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+            kdDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
         }
     }
 }
@@ -1250,9 +1250,9 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
   if ( style->hasAttributeNS( KoXmlNS::style, "page-master-name" ) )
   {
       QString masterPageLayoutStyleName=style->attributeNS( KoXmlNS::style, "page-master-name", QString::null );
-      kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+      kdDebug(30518)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
       QDomElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
-      kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+      kdDebug(30518)<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
       if ( !masterLayoutStyle )
           return;
       KoStyleStack styleStack;
@@ -1301,7 +1301,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
-        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
+        kdDebug(30518)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-orientation" ) )
     {
@@ -1309,19 +1309,19 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "num-format" ) )
     {
-        kdDebug()<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
+        kdDebug(30518)<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
         //todo fixme
     }
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         //todo
-        kdDebug()<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
+        kdDebug(30518)<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print" ) )
     {
         //todo parsing
         QString str = styleStack.attributeNS( KoXmlNS::style, "print" );
-        kdDebug()<<" style:print :"<<str<<endl;
+        kdDebug(30518)<<" style:print :"<<str<<endl;
 
         if (str.contains( "headers" ) )
         {
@@ -1360,7 +1360,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
     {
         QString str = styleStack.attributeNS( KoXmlNS::style, "table-centering" );
         //not implemented into kspread
-        kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
+        kdDebug(30518)<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0
         if ( str == "horizontal" )
         {
@@ -1375,14 +1375,14 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
         {
         }
         else
-            kdDebug()<<" table-centering unknown :"<<str<<endl;
+            kdDebug(30518)<<" table-centering unknown :"<<str<<endl;
 #endif
     }
     format = QString( "%1x%2" ).arg( width ).arg( height );
-    kdDebug()<<" format : "<<format<<endl;
+    kdDebug(30518)<<" format : "<<format<<endl;
     table->print()->setPaperLayout( left, top, right, bottom, format, orientation );
 
-    kdDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
+    kdDebug(30518)<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
 //<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
 //          QString format = paper.attribute( "format" );
 //      QString orientation = paper.attribute( "orientation" );
@@ -1651,10 +1651,10 @@ void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
         for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
             if ( element.tagName() ==  "table:content-validation" ) {
                 m_validationList.insert( element.attributeNS( KoXmlNS::table, "name", QString::null ), element);
-                kdDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
+                kdDebug(30518)<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
             }
             else {
-                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+                kdDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
             }
         }
     }
@@ -2118,7 +2118,7 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
   }
   if (  property.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
   {
-      kdDebug()<<"margin-left :"<<KoUnit::parseValue( property.attributeNS( KoXmlNS::fo, "margin-left", QString::null ),0.0 )<<endl;
+      kdDebug(30518)<<"margin-left :"<<KoUnit::parseValue( property.attributeNS( KoXmlNS::fo, "margin-left", QString::null ),0.0 )<<endl;
       layout->setIndent( KoUnit::parseValue( property.attributeNS( KoXmlNS::fo, "margin-left", QString::null ),0.0 ) );
   }
   if ( property.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
@@ -2429,12 +2429,12 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
 void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& validationName )
 {
-    kdDebug()<<"validationName:"<<validationName<<endl;
+    kdDebug(30518)<<"validationName:"<<validationName<<endl;
     QDomElement element = m_validationList[validationName];
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
-        kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        kdDebug(30518)<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -2452,7 +2452,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
         {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("cell-content-text-length()" );
-            kdDebug()<<" valExpression = :"<<valExpression<<endl;
+            kdDebug(30518)<<" valExpression = :"<<valExpression<<endl;
             val->m_allow = Allow_TextLength;
 
             loadOasisValidationCondition( val, valExpression );
@@ -2463,7 +2463,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
             val->m_allow = Allow_TextLength;
             val->m_cond = Between;
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( val, listVal );
@@ -2473,9 +2473,9 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
             val->m_allow = Allow_TextLength;
             val->m_cond = Different;
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( val, listVal );
 
@@ -2503,7 +2503,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
                 val->m_allow = Allow_Time;
                 valExpression = valExpression.remove( "cell-content-is-time() and " );
             }
-            kdDebug()<<"valExpression :"<<valExpression<<endl;
+            kdDebug(30518)<<"valExpression :"<<valExpression<<endl;
 
             if ( valExpression.contains( "cell-content()" ) )
             {
@@ -2569,12 +2569,12 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
             else if ( str == "stop" )
                 val->m_action = Stop;
             else
-                kdDebug()<<"validation : message type unknown  :"<<str<<endl;
+                kdDebug(30518)<<"validation : message type unknown  :"<<str<<endl;
         }
 
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kdDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            kdDebug(30518)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             val->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
         QDomElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
@@ -2586,7 +2586,7 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
 void OpenCalcImport::loadOasisValidationValue( KSpreadValidity* val, const QStringList &listVal )
 {
     bool ok = false;
-    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     if ( val->m_allow == Allow_Date )
     {
@@ -2605,7 +2605,7 @@ void OpenCalcImport::loadOasisValidationValue( KSpreadValidity* val, const QStri
         {
             val->valMin = listVal[0].toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+                kdDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
@@ -2618,7 +2618,7 @@ void OpenCalcImport::loadOasisValidationValue( KSpreadValidity* val, const QStri
         {
             val->valMax = listVal[1].toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+                kdDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
@@ -2664,8 +2664,8 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
         val->m_cond = Equal;
     }
     else
-        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug()<<" value :"<<value<<endl;
+        kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug(30518)<<" value :"<<value<<endl;
     if ( val->m_allow == Allow_Date )
     {
         val->dateMin = QDate::fromString( value );
@@ -2682,7 +2682,7 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
         {
             val->valMin = value.toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<value<<endl;
+                kdDebug(30518)<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )

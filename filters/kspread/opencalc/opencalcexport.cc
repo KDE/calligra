@@ -519,7 +519,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
         QString range= convertRangeToRef( name, _printRange );
-        //kdDebug()<<" range : "<<range<<endl;
+        //kdDebug(30518)<<" range : "<<range<<endl;
         tabElem.setAttribute( "table:print-ranges", range );
     }
 
