@@ -133,10 +133,24 @@ void KSpreadresize2::slotChangeState()
 void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->activeTable()->selectionRect() );
+    QRect rect=selection;
+    if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+       || selection.right()==0)
+      {
+	switch(type)
+	  {
+	  case resize_row:
+	    rect.setCoords(1,m_pView->canvasWidget()->markerRow(),0x7FFF,m_pView->canvasWidget()->markerRow());
+	    break;
+	    case resize_column:
+	      rect.setCoords(m_pView->canvasWidget()->markerColumn(),1,m_pView->canvasWidget()->markerColumn(),0x7FFF);
+	      break;
+	  }
+      }
     int new_size=m_pSize2->value();
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
     {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , selection );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , rect );
         m_pView->doc()->undoBuffer()->appendUndo( undo );
     }
     if(m_pDefault->isChecked())
