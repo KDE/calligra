@@ -81,6 +81,7 @@ protected:
 	void parseColor( VColor &, const QString & );
 	QColor parseColor( const QString & );
 	double toPercentage( const QString & );
+	double fromPercentage( const QString & );
 	void setupTransform( const QDomElement & );
 	void addGraphicContext();
 	QDomDocument inpdoc;

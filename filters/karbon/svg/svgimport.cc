@@ -161,6 +161,15 @@ SvgImport::toPercentage( const QString &s )
 }
 
 double
+SvgImport::fromPercentage( const QString &s )
+{
+	if( s.endsWith( "%" ) )
+		return s.toDouble() / 100.0;
+	else
+		return s.toDouble();
+}
+
+double
 SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 {
 	// TODO : percentage?
@@ -468,13 +477,13 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 		gc->stroke.dashPattern().setOffset( params.toFloat() );
 	// handle opacity
 	else if( command == "stroke-opacity" )
-		strokecolor.setOpacity( params.toFloat() );
+		strokecolor.setOpacity( fromPercentage( params ) );
 	else if( command == "fill-opacity" )
-		fillcolor.setOpacity( params.toFloat() );
+		fillcolor.setOpacity( fromPercentage( params ) );
 	else if( command == "opacity" )
 	{
-		fillcolor.setOpacity( params.toFloat() );
-		strokecolor.setOpacity( params.toFloat() );
+		fillcolor.setOpacity( fromPercentage( params ) );
+		strokecolor.setOpacity( fromPercentage( params ) );
 	}
 	else if( command == "font-family" )
 	{
