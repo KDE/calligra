@@ -36,14 +36,14 @@ class KexiCreateProjectPage : public QWidget
 		KexiCreateProjectPage(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
 		~KexiCreateProjectPage();
 
-		QVariant data(QString property) const;
+		QVariant data(const QString &property) const;
 		void setProperty(QString property, QVariant data);
 
 		bool	m_loaded;
 
 	protected:
 		DataMap	m_data;
-		
+
 	signals:
 		void valueChanged(KexiCreateProjectPage *, QString &);
 };

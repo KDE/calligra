@@ -33,13 +33,13 @@ class KexiCreateProject;
 class KexiCreateProjectPageDB : public KexiCreateProjectPage
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
 		~KexiCreateProjectPageDB();
 
-		void		connectHost(QString driver, QString host, QString user, QString password,
-			QString socket, QString port, bool savePass);
+    void		connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
+			const QString &socket, const QString &port, bool savePass);
 		bool		connectDB();
 
 	protected:

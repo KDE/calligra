@@ -28,8 +28,9 @@
 #include "kexitableview.h"
 #include "kexiDB/kexidbrecord.h"
 #include "kexiapplication.h"
+#include "kexiproject.h"
 
-KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
+KexiAlterTable::KexiAlterTable(QWidget *parent, const QString &table, const char *name)
  : KexiDialogBase(parent, name)
 {
 	m_table = table;
@@ -39,18 +40,18 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	m_statusbar = new KStatusBar(this);
 	l->addWidget(m_view);
 	l->addWidget(m_statusbar);
-	
+
 	//Cols
 	kdDebug() << "KexiAlterTable::KexiAlterTable(...): Add the columns to the tableview" << endl;
 	m_view->addColumn(i18n("Field Name"), QVariant::String, true);
-	
+
 	QStringList strings;
-	
+
 	for(int i = 1; i < 18; i++)
 	{
 		strings.append(KexiDBField::typeName(static_cast<KexiDBField::ColumnType>(i)));
 	}
-	
+
 	m_view->addColumn(i18n("Datatype"), QVariant::StringList, true, QVariant(strings));
 	m_view->addColumn(i18n("Length"), QVariant::Int, true);
 	m_view->addColumn(i18n("Required"), QVariant::Bool, true);
@@ -70,7 +71,7 @@ void KexiAlterTable::initTable()
 	record->next();
 	m_fieldnames.clear();
 	int fc = 0;
-	
+
 	for(uint i = 0; i < record->fieldCount(); i++)
 	{
 		KexiTableItem *it = new KexiTableItem(m_view);
@@ -90,7 +91,7 @@ void KexiAlterTable::initTable()
 	insert->setValue(2, 1);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
-	
+
 	delete record;
 }
 
@@ -104,7 +105,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 			bool ok = kexi->project()->db()->createField(m_table, i->getValue(0).toString(),
 				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt() + 1), i->getValue(2).toInt(),
 				i->getValue(3).toBool(), i->getValue(4).toString(), i->getValue(5).toBool());
-			
+
 			if(ok)
 			{
 				kdDebug() << "New field created!" << endl;
@@ -126,7 +127,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt() + 1),
 			i->getValue(2).toInt(), i->getValue(3).toBool(), i->getValue(4).toString(),
 			i->getValue(5).toBool());
-		
+
 		if(ok)
 		{
 			m_fieldnames[field] = i->getValue(0).toString();

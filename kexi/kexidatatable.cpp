@@ -43,8 +43,9 @@
 
 #include "kexiapplication.h"
 
-#include "kexidatatable.h" 
- 
+#include "kexidatatable.h"
+#include "kexiproject.h"
+
 KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name, bool embedd)
 	: KexiDialogBase(parent, name)
 {
@@ -81,7 +82,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
 	m_record = kexi->project()->db()->queryRecord(queryStatement, false);
-	
+
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		if(!m_record->fieldInfo(i)->auto_increment())
@@ -131,7 +132,7 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 		i->setHint(QVariant(m_record->insert()));
 		m_record->update(i->getHint().toInt(), col, i->getValue(col));
 		m_record->commit(i->getHint().toInt(), true);
-		
+
 		for(uint f=0; f < m_record->fieldCount(); f++)
 		{
 			if(m_record->fieldInfo(f)->primary_key())
@@ -153,7 +154,7 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 			m_record->commit(i->getHint().toInt(), false);
 		}
 	}
-	
+
 }
 
 void

@@ -57,15 +57,15 @@ typedef QValueList<SourceConnection> ConnectionList;
 class KexiRelationView : public QScrollView
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiRelationView(QWidget *parent, const char *name=0);
 		~KexiRelationView();
 
-		void		addTable(QString table, QStringList columns);
+		void		addTable(const QString &table, QStringList columns);
 		void		addConnection(SourceConnection con);
 
-		ConnectionList	getConnections() { return m_connections; };
+		ConnectionList	getConnections()const { return m_connections; };
 
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
@@ -79,7 +79,7 @@ class KexiRelationView : public QScrollView
 
 	private:
 		int		m_tableCount;
-		
+
 		RelationSource	*m_floatingSource;
 		int		m_grabOffsetX;
 		int		m_grabOffsetY;
@@ -91,13 +91,13 @@ class KexiRelationView : public QScrollView
 class KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name=0);
 		~KexiRelationViewTable();
 
-		QString			table() { return m_table; };
-		int			globalY(QString item);
+		QString			table() const { return m_table; };
+		int			globalY(const QString &item);
 
 	protected:
 		QDragObject		*dragObject();
@@ -118,7 +118,7 @@ class KexiFieldMetaDrag : public QStoredDrag
 	public:
 		KexiFieldMetaDrag(QCString meta, QWidget *parent=0, const char *name=0);
 		~KexiFieldMetaDrag() { };
-		
+
 		static bool canDecode( QDragMoveEvent* e);
 		static bool decode( QDropEvent* e, QString& s);
 };

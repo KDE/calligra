@@ -35,6 +35,7 @@ Boston, MA 02111-1307, USA.
 #include "kexiproject.h"
 #include "kexitabbrowser.h"
 #include "kexicreateprojectpagedb.h"
+#include "keximainwindow.h"
 
 KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
@@ -48,7 +49,7 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	//default properties
 	setProperty("section", QVariant("RemoteDB"));
 	setProperty("caption", QVariant(i18n("Select Database")));
-		
+
 	//existing databases radiobutton
 	m_existingRBtn = new QRadioButton(i18n("Select from existing databases:"), this);
 	m_existingRBtn->setChecked(true);
@@ -58,35 +59,35 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	m_databases->addColumn(i18n("Database"));
 	connect(m_databases, SIGNAL(selectionChanged()), this, SLOT(slotDatabaseChanged()));
 	connect(m_existingRBtn, SIGNAL(toggled(bool)), m_databases, SLOT(setEnabled(bool)));
-	
+
 	//new database radiobutton
 	m_newRBtn = new QRadioButton(i18n("Create new database:"), this);
 	m_newRBtn->setChecked(false);
 	connect(m_newRBtn, SIGNAL(toggled(bool)), this, SLOT(slotModeChanged(bool)));
-	
+
 	//new database lineedit
 	m_newEdit = new KLineEdit(this);
 	m_newEdit->setEnabled(false);
 	connect(m_newRBtn, SIGNAL(toggled(bool)), m_newEdit, SLOT(setEnabled(bool)));
 	connect(m_newEdit, SIGNAL(textChanged(const QString&)), this, SLOT(slotDatabaseChanged()));
-	
+
 	//layout once again...
 	QHBoxLayout *g = new QHBoxLayout(this);
 	g->addWidget(lPic);
 	g->setSpacing(KDialog::spacingHint());
-	
+
 	//input widgets layout
 	QVBoxLayout *iv = new QVBoxLayout(g);
 	iv->addWidget(m_existingRBtn);
 	iv->addWidget(m_databases);
 	iv->setSpacing(KDialog::spacingHint());
-	
+
 	//new database layout
 	QHBoxLayout *nh = new QHBoxLayout(iv);
 	nh->addWidget(m_newRBtn);
 	nh->addWidget(m_newEdit);
 	nh->setSpacing(KDialog::spacingHint());
-	
+
 	//buttongroup
 	QButtonGroup* selectBGrp = new QButtonGroup(this);
 	selectBGrp->hide();
@@ -95,8 +96,8 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 }
 
 void
-KexiCreateProjectPageDB::connectHost(QString driver, QString host, QString user, QString password,
-	QString socket, QString port, bool savePass)
+KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host, const QString &user, const QString &password,
+	const QString &socket, const QString &port, bool savePass)
 {
 	m_cred.driver = driver;
 	m_cred.host = host;
@@ -144,7 +145,7 @@ KexiCreateProjectPageDB::slotDatabaseChanged()
 	else
 	{
 		setProperty("database", QVariant(m_newEdit->text()));
-		
+
 		if(m_newEdit->text().length() > 0)
 		{
 			setProperty("finish", QVariant(true));
@@ -160,11 +161,11 @@ void
 KexiCreateProjectPageDB::slotModeChanged(bool state)
 {
 	setProperty("create", QVariant(state));
-	
+
 	if(state)
 	{
 		setProperty("database", QVariant(m_newEdit->text()));
-		
+
 		if(m_newEdit->text().length() > 0)
 		{
 			setProperty("finish", QVariant(true));

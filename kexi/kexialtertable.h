@@ -34,8 +34,8 @@ class KexiAlterTable : public KexiDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiAlterTable(QWidget *parent, QString table, const char *name=0);
-		
+		KexiAlterTable(QWidget *parent, const QString &table, const char *name=0);
+
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 	protected:
 		void initTable();

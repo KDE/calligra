@@ -4,7 +4,7 @@
 #include "kexiworkspaceSDI.h"
 #include "keximainwindow.h"
 
-KexiWorkspaceSDI::KexiWorkspaceSDI(QWidget *parent, const char *name,KexiMainWindow *mw) 
+KexiWorkspaceSDI::KexiWorkspaceSDI(QWidget *parent, const char *name,KexiMainWindow *mw)
 	: KStatusBar(parent, name),KexiWorkspace()
 {
 	setSizeGripEnabled(true);
@@ -14,7 +14,7 @@ KexiWorkspaceSDI::KexiWorkspaceSDI(QWidget *parent, const char *name,KexiMainWin
 //	connect(this,SIGNAL(windowActivated(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
 }
 
-void KexiWorkspaceSDI::addItem(KexiDialogBase *newItem)
+void KexiWorkspaceSDI::addItem(KexiDialogBase */*newItem*/)
 {
 #if 0
 	no++;
@@ -23,7 +23,7 @@ void KexiWorkspaceSDI::addItem(KexiDialogBase *newItem)
 #endif
 }
 
-void KexiWorkspaceSDI::takeItem(KexiDialogBase *delItem)
+void KexiWorkspaceSDI::takeItem(KexiDialogBase */*delItem*/)
 {
 	no--;
 	kdDebug() << "took item; realnumber now" << no << endl;
@@ -51,7 +51,7 @@ void KexiWorkspaceSDI::slotWindowActivated(QWidget* w)
 			if (m_activeDialog->guiClient()!=olddialog->guiClient())
 			{
 				olddialog->deactivateActions();
-				m_mainwindow->guiFactory()->removeClient(olddialog->guiClient());			
+				m_mainwindow->guiFactory()->removeClient(olddialog->guiClient());
 				m_mainwindow->guiFactory()->addClient(m_activeDialog->guiClient());
 				m_activeDialog->activateActions();
 			}
@@ -61,7 +61,7 @@ void KexiWorkspaceSDI::slotWindowActivated(QWidget* w)
 				m_activeDialog->activateActions();
 			}
 		}
-	
+
 	}
 	else
 	if (!m_activeDialog.isNull())

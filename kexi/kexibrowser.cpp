@@ -42,6 +42,7 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 #include "kexiquerydesigner.h"
+#include "kexiproject.h"
 
 KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
@@ -52,13 +53,13 @@ KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListV
 
 	header()->hide();
 //	setRootIsDecorated(true);
-	
+
 	addColumn(i18n("Database Content"));
 	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
-	
+
 	connect(this, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate(QListViewItem *)));
 }
 
@@ -81,7 +82,7 @@ void KexiBrowser::generateView()
 
 	addTables(m_tables);
 	addQueries(m_queries);
-	
+
 	m_database->setPixmap(0, iconLoader->loadIcon("db", KIcon::Small));
 	m_tables->setPixmap(0, iconLoader->loadIcon("tables", KIcon::Small));
 	m_queries->setPixmap(0, iconLoader->loadIcon("queries", KIcon::Small));
@@ -125,7 +126,7 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 	// TODO: look up the type, wich we have to create
 	KexiBrowserItem *r = static_cast<KexiBrowserItem *>(i);
 	kdDebug() << "context menu requested..." << endl;
-		
+
 	if(i)
 	{
 		KPopupMenu *m = new KPopupMenu();
@@ -134,7 +135,7 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 			case KexiBrowserItem::Table:
 			{
 				m->insertItem(i18n("Create Table"), this, SLOT(slotCreateTable()));
-				
+
 				if ( r->type() == KexiBrowserItem::Child )
 				{
 					m->insertItem(i18n("Alter Table"), this, SLOT(slotAlterTable()));
@@ -178,7 +179,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 			if ( r->type() == KexiBrowserItem::Child)
 			{
 				kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
-					kexi->mainWindow()->workspaceWidget()); 
+					kexi->mainWindow()->workspaceWidget());
 
 //    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
 //			    kexi->mainWindow()->workspace()->addItem(fb);
@@ -199,7 +200,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 				else
 				{
 					delete kt;
-				} 
+				}
 			}
 			break;
 		}
@@ -216,7 +217,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 
 		default:
 		break;
-	}	
+	}
 }
 
 
@@ -226,8 +227,8 @@ void KexiBrowser::slotCreateNewForm()
 
 	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms,name,name);
 	item->setPixmap(0, iconLoader->loadIcon("form", KIcon::Small));
-	slotCreate(item);	
-	
+	slotCreate(item);
+
 }
 
 void KexiBrowser::slotDelete()
@@ -242,7 +243,7 @@ void KexiBrowser::slotCreateTable()
 {
 	bool ok = false;
 	QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, this);
-	
+
 	if(ok && name.length() > 0)
 	{
 		if(kexi->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
@@ -258,7 +259,7 @@ void KexiBrowser::slotCreateTable()
 void KexiBrowser::slotAlterTable()
 {
 	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-	
+
 	if ( r->type() == KexiBrowserItem::Child )
 	{
 		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "alterTable");
@@ -289,12 +290,12 @@ void KexiBrowser::slotCreateQuery()
 void KexiBrowser::slotDeleteTable()
 {
 	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-	
+
 	if ( r->type() == KexiBrowserItem::Child )
 	{
 		int ans = KMessageBox::questionYesNo(this,
 			i18n("Do you realy want to delete %1?").arg(r->text(0)), i18n("Delete Table?"));
-		
+
 		if(ans == KMessageBox::Yes)
 		{
 			if(kexi->project()->db()->query("DROP TABLE " + r->text(0)))

@@ -32,6 +32,7 @@
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexirelation.h"
+#include "kexiproject.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiQueryDesigner *myparent, const char *name)
  : QWidget(parent, name)
@@ -58,7 +59,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiQuer
 	m_designTable->addColumn(i18n("AND condition"), QVariant::String, true);
 	m_designTable->addColumn(i18n("OR condition"), QVariant::String, true);
 
-	
+
 	m_insertItem = new KexiTableItem(m_designTable);
 	m_insertItem->setValue(0, 0);
 	m_insertItem->setValue(2, true);
@@ -159,7 +160,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 			ivTable.involveCount = iCount + 1;
 			m_involvedTables.insert(table, ivTable, true);
 
-			
+
 			involvedFields.insert(table, field);
 
 			Condition condition;
@@ -195,7 +196,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 					if(itS.key() == it.key())
 					{
 						isSrcTable = true;
-					
+
 						maxTable = it.key();
 						maxCount = it.data().involveCount;
 					}
@@ -209,14 +210,14 @@ KexiQueryDesignerGuiEditor::getQuery()
 					if(itS.key() == it.key())
 					{
 						isSrcTable = false;
-						
+
 						JoinField jf;
 						jf.sourceField = (*itRel).rcvTable;
 						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
 						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
 						joinFields.append(jf);
 					}
-					
+
 					if(maxCount < 0)
 					{
 						maxTable = it.key();
@@ -237,8 +238,8 @@ KexiQueryDesignerGuiEditor::getQuery()
 		QStringList leftList = QStringList::split(".", (*itJ).eqLeft);
 		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): left: " << (*itJ).eqLeft << endl;
 		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): current master: " << leftList.first() << endl;
-		
-		
+
+
 		if(leftList.first() == maxTable)
 		{
 			query += " LEFT JOIN ";

@@ -30,6 +30,7 @@
 #include "kexiapplication.h"
 #include "kexitabbrowser.h"
 #include "kexicreateproject.h"
+#include "keximainwindow.h"
 
 KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
 {
@@ -101,7 +102,7 @@ KexiCreateProject::next()
 		QString user = m_pageAuth->data("user").toString();
 		QString pass = m_pageAuth->data("password").toString();
 		bool savePass = m_pageAuth->data("savePassword").toBool();
-		
+
 		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
 		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket,
 			port, savePass);

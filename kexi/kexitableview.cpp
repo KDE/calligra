@@ -17,7 +17,7 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
- 
+
    Original Author:  Till Busch <till@bux.at>
    Original Project: buX (www.bux.at)
 */
@@ -76,7 +76,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 
 	m_sortedColumn = -1;
 	m_sortOrder = true;
-	
+
 	m_pUpdateTimer = new QTimer(this);
 
 	m_pColumnTypes = new QMemArray<QVariant::Type>;
@@ -92,7 +92,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_pTopHeader->setOrientation(Horizontal);
 	m_pTopHeader->setTracking(false);
 	m_pTopHeader->setMovingEnabled(false);
-	
+
 /*	m_pVerticalHeader = new KexiTableRM(this);
 	m_pVerticalHeader->setCellHeight(m_rowHeight);
 	m_pVerticalHeader->setCurrentRow(-1);
@@ -105,7 +105,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_pVerticalHeader->setStretchEnabled(false);
 	m_pVerticalHeader->setResizeEnabled(false);
 	m_pVerticalHeader->setCurrentRow(false);
-	
+
 //	enableClipper(true);
 	setBackgroundMode(PaletteBackground);
 
@@ -127,7 +127,7 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 }
 
-void KexiTableView::addDropFilter(QString filter)
+void KexiTableView::addDropFilter(const QString &filter)
 {
 	m_dropFilters.append(filter);
 }
@@ -196,7 +196,7 @@ void KexiTableView::clear()
 {
 	editorCancel();
 	m_contents.clear();
-	
+
 	// Initialize variables
 	m_pEditor = 0;
 	m_numRows = 0;
@@ -327,7 +327,7 @@ int KexiTableView::findString(const QString &string)
 					row++;
 				}
 				break;
-					
+
 			default:
 				break;
 		}
@@ -343,9 +343,7 @@ KexiTableView::~KexiTableView()
 	delete m_pColumnTypes;
 	delete m_pColumnModes;
 	delete m_pColumnDefaults;
-
-	if(m_pBufferPm)
-		delete m_pBufferPm;
+        delete m_pBufferPm;
 }
 /*
 void KexiTableView::setColumn(int col, QString name, ColumnType type, bool changeable=false)
@@ -441,13 +439,13 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 
 //	qDebug("%3d %3d %3d %3d | %2d, %2d, %2d, %2d [%4d, %4d]", cx, cy, cw, ch,
 //													colfirst, rowfirst, collast, rowlast, tableSize().width(), tableSize().height());
-	
+
 	if (rowfirst == -1 || colfirst == -1)
 	{
 		paintEmptyArea(p, cx, cy, cw, ch);
 		return;
 	}
-	
+
 	createBuffer(cw, ch);
 	if(m_pBufferPm->isNull())
 		return;
@@ -468,7 +466,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	{
 		// get row position and height
 		int rowp = rowPos(r);
-	
+
 		// Go through the columns in the row r
 		// if we know from where to where, go through [colfirst, collast],
 		// else go through all of them
@@ -476,7 +474,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     	colp = 0;
     	int transly = rowp-cy;
     	int c;
-		
+
 		for(c = colfirst; c <= collast; c++)
 		{
 	    	// get position and width of column c
@@ -493,7 +491,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 		}
 
 	}
-	delete pb;	
+	delete pb;
 
 	p->drawPixmap(cx,cy,*m_pBufferPm, 0,0,cw,ch);
 }
@@ -518,7 +516,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 		p->setPen(originalPen);
 		p->setBrush(originalBrush);
-	} 
+	}
 
 	//	Draw our lines
 	QPen pen(p->pen());
@@ -527,7 +525,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->drawLine( x2, 0, x2, y2 );	// right
 	p->drawLine( 0, y2, x2, y2 );	// bottom
 	p->setPen(pen);
-	
+
 	//	If we are in the focus cell, draw indication
 	if (m_pCurrentItem == item && col == m_curCol)
 	{
@@ -604,7 +602,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		case QVariant::Date:
 		{
 			QString s = "";
-			
+
 			if(item->getValue(col).toDate().isValid())
 			{
 				#ifdef USE_KDE
@@ -664,7 +662,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
 	if(m_numRows == 0)
 		return;
-		
+
 
 	// get rid of editor
 	if (m_pEditor)
@@ -680,7 +678,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 
 	if(m_curRow == -1)
 		m_curRow = m_numRows-1;
-	
+
 	if(m_curCol == -1)
 		m_curCol = m_numCols-1;
 
@@ -696,7 +694,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		m_pCurrentItem = itemAt(m_curRow);
 		emit itemSelected(m_pCurrentItem);
 	}
-	
+
 	if(m_pContextMenu && e->button() == RightButton)
 	{
 		m_pContextMenu->exec(QCursor::pos());
@@ -761,7 +759,7 @@ void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *e)
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
 	kdDebug() << "KexiTableView::KeyPressEvent()" << endl;
-	
+
 	if(m_pCurrentItem == 0 && m_numRows > 0)
 	{
 		m_curCol = m_curRow = 0;
@@ -777,7 +775,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	{
 		return;
 	}
-	
+
 	// if a cell is just editing, do some special stuff
 	if(m_pEditor)
 	{
@@ -1222,8 +1220,9 @@ KexiTableView::DeletionPolicy KexiTableView::deletionPolicy()
 
 void KexiTableView::updateContextMenu()
 {
-	if(m_pContextMenu)
-		delete m_pContextMenu;
+    delete m_pContextMenu;
+    m_pContextMenu = 0L;
+
 	if(m_additionPolicy != NoAdd || m_deletionPolicy != NoDelete)
 	{
 		m_pContextMenu = new QPopupMenu(this);

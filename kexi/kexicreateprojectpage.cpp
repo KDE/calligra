@@ -29,7 +29,7 @@ KexiCreateProjectPage::KexiCreateProjectPage(KexiCreateProject *parent, QPixmap 
 }
 
 QVariant
-KexiCreateProjectPage::data(QString property) const
+KexiCreateProjectPage::data(const QString &property) const
 {
 	return m_data[property];
 }

@@ -31,6 +31,7 @@ Boston, MA 02111-1307, USA.
 
 #include "kexiapplication.h"
 #include "kexicreateprojectpageengine.h"
+#include "kexiproject.h"
 
 KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
@@ -41,12 +42,12 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
 
 	QLabel *lEngine = new QLabel(i18n("Driver: "), this);
-	
+
 	m_engine = new KComboBox(this);
 	connect(m_engine, SIGNAL(activated(const QString &)), this, SLOT(slotActivated(const QString &)));
 
 	m_summery = new KTextBrowser(this);
-	
+
 	QGridLayout *g = new QGridLayout(this);
 	g->addMultiCellWidget(lPic,	0,	1,	0,	0);
 	g->addWidget(lEngine,		0,	1);
@@ -83,7 +84,7 @@ KexiCreateProjectPageEngine::fillSummery()
 {
 	QString engineSummery = kexi->project()->db()->driverInfo(m_engine->currentText())->service()->comment();
 	QString userSummery = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummery);
-	
+
 
 	if(m_engine->currentText() != "")
 	{

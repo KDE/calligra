@@ -33,6 +33,7 @@
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexitabbrowser.h"
+#include "kexiproject.h"
 
 KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 	: KexiDialogBase(parent, name)

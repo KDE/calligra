@@ -42,12 +42,12 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	m_floatingSource = 0;
 	m_grabOffsetX = 0;
 	m_grabOffsetY = 0;
-	
+
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
 
 void
-KexiRelationView::addTable(QString table, QStringList columns)
+KexiRelationView::addTable(const QString &table, QStringList columns)
 {
 	if(m_tables.contains(table))
 		return;
@@ -65,10 +65,10 @@ KexiRelationView::addTable(QString table, QStringList columns)
 	}
 
 	s.geometry = QRect(widest + 20, 5, 100, 150);
-	
+
 	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
 	s.columnView = tableView;
-	
+
 	tableView->setFixedSize(s.geometry.width() - 5, s.geometry.height() - 19);
 	moveChild(tableView, s.geometry.x() + 2, s.geometry.y() + 16);
 
@@ -184,9 +184,9 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 			(*conn).geometry = QRect(rcvX + rcvW, srcY - 4, srcX, rcvY + 4);
 		}
 	}
-	
+
 //	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
-	
+
 }
 
 void
@@ -302,13 +302,13 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 		i->setDropEnabled(true);
 		order++;
 	}
-	
+
 //	setDragEnabled
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 }
 
 int
-KexiRelationViewTable::globalY(QString item)
+KexiRelationViewTable::globalY(const QString &item)
 {
 	QListViewItem *i = findItem(item, 1);
 	if(i)
@@ -351,7 +351,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 	if(recever)
 	{
 		KexiRelationViewTable *sourceTable = static_cast<KexiRelationViewTable *>(ev->source());
-		
+
 		QString srcTable = sourceTable->table();
 		QString srcField(ev->encodedData("kexi/field"));
 
