@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#if 0 // KWORD_HORIZONTAL_LINE
 #include <klocale.h>
 #include "kwdoc.h"
 #include <qvbox.h>
@@ -77,3 +77,4 @@ QString KWinsertHorizontalLineDia::horizontalLineName() const
 
 
 #include "kwinserthorizontallinedia.moc"
+#endif

@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#if 0 // KWORD_HORIZONTAL_LINE
 #include "KWordHorizontalLineFrameSetIface.h"
 #include "KWordPictureFrameSetIface.h"
 #include "kwframe.h"
@@ -37,4 +37,4 @@ bool KWHorizontalLineFrameSetIface::dummy()
     return true;
 }
 
-
+#endif

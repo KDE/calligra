@@ -1187,6 +1187,7 @@ void KWView::setupActions()
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
 
+#if 0 // KWORD_HORIZONTAL_LINE
     actionInsertHorizontalLine = new KAction( i18n( "Horizontal Line..." ), 0,
                                         this, SLOT( insertHorizontalLine() ),
                                         actionCollection(), "insert_horizontal_line" );
@@ -1194,6 +1195,7 @@ void KWView::setupActions()
     actionChangeHorizontalLine=new KAction( i18n( "Change Horizontal Line..." ),0,
                                             this, SLOT( changeHorizontalLine() ),
                                             actionCollection(), "change_horizontal_line" );
+#endif
 
     actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
@@ -5239,12 +5241,14 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(actionChangePicture);
                 actionList.append(actionSavePicture);
             }
+#if 0 // KWORD_HORIZONTAL_LINE
             else if ( frameSet->type() == FT_HORZLINE )
             {
                 actionList.append(separator);
                 actionList.append(actionChangeHorizontalLine);
                 actionList.append(actionSavePicture);
             }
+#endif
             else if ( frameSet->type() == FT_PART )
             {
                 KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frameSet);
@@ -5577,7 +5581,9 @@ void KWView::slotFrameSetEditChanged()
 
     //actionFormatIncreaseIndent->setEnabled(state);
     actionInsertLink->setEnabled(state);
+#if 0 // KWORD_HORIZONTAL_LINE
     actionInsertHorizontalLine->setEnabled( state);
+#endif
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     actionConvertToTextBox->setEnabled( state && hasSelection);
     actionAddPersonalExpression->setEnabled( state && hasSelection);
@@ -7113,6 +7119,7 @@ void KWView::addPersonalExpression()
     m_doc->refreshMenuExpression();
 }
 
+#if 0 // KWORD_HORIZONTAL_LINE
 void KWView::insertHorizontalLine()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
@@ -7160,6 +7167,7 @@ void KWView::changeHorizontalLine()
     }
     delete dia;
 }
+#endif
 
 void KWView::addWordToDictionary()
 {

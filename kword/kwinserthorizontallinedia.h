@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#if 0 // KWORD_HORIZONTAL_LINE
 #ifndef __KwInsertHorizontalLineDia__
 #define __KwInsertHorizontalLineDia__
 
@@ -34,4 +34,5 @@ protected:
     QStringList m_files;
 };
 
+#endif
 #endif

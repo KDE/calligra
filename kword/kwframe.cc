@@ -1954,7 +1954,7 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
 }
 #endif
 
-
+#if 0 // KWORD_HORIZONTAL_LINE
 /******************************************************************/
 /* Class: KWHorzLineFrameSet                                      */
 /******************************************************************/
@@ -2012,6 +2012,6 @@ void KWHorzLineFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, c
 
     }
 }
-
+#endif
 
 #include "kwframe.moc"

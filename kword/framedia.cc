@@ -212,7 +212,11 @@ void KWFrameDia::init() {
         if(! fs) // first creation
             showPage(2);
     }
-    else if(frameType == FT_PICTURE || frameType == FT_HORZLINE)
+    else if(frameType == FT_PICTURE
+#if 0 // KWORD_HORIZONTAL_LINE
+        || frameType == FT_HORZLINE
+#endif
+        )
     {
         setupTab1();
         if ( frameType == FT_PICTURE )
@@ -247,7 +251,11 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     //kdDebug() << "setup tab 1 Frame options"<<endl;
     tab1 = addPage( i18n("Options") );
     int columns = 0;
-    if(frameType == FT_FORMULA || frameType == FT_PICTURE || frameType == FT_HORZLINE )
+    if(frameType == FT_FORMULA || frameType == FT_PICTURE
+#if 0 // KWORD_HORIZONTAL_LINE
+        || frameType == FT_HORZLINE
+#endif
+        )
         columns = 1;
     else if(frameType == FT_TEXT)
         columns = 2;
@@ -288,7 +296,11 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     int column = 0;
 
     // Picture frame
-    if(frameType==FT_PICTURE || frameType == FT_HORZLINE)
+    if(frameType==FT_PICTURE
+#if 0 // KWORD_HORIZONTAL_LINE
+        || frameType == FT_HORZLINE
+#endif
+        )
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
         connect( cbAspectRatio, SIGNAL(toggled(bool)),
@@ -1707,7 +1719,11 @@ bool KWFrameDia::applyChanges()
                     f->setNewFrameBehavior(nfb);
 
         // aspect ratio
-        if ( cbAspectRatio && (frameType==FT_PICTURE || frameType == FT_HORZLINE))
+        if ( cbAspectRatio && (frameType==FT_PICTURE
+#if 0 // KWORD_HORIZONTAL_LINE
+            || frameType == FT_HORZLINE
+#endif
+            ))
         {
             if(frame) {
                 KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );

@@ -893,7 +893,8 @@ protected:
     bool m_finalSize;
 };
 
-
+#if 0 // KWORD_HORIZONTAL_LINE
+// MOC_SKIP_BEGIN
 /******************************************************************/
 /* Class: KWHorzLineFrameSet                                      */
 /******************************************************************/
@@ -915,5 +916,7 @@ public:
                             const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * );
 
 };
+// MOC_SKIP_END
+#endif
 
 #endif

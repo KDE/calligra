@@ -417,8 +417,12 @@ public slots:
 
     void slotAddIgnoreAllWord();
 
+#if 0 // KWORD_HORIZONTAL_LINE
+    // MOC_SKIP_BEGIN
     void insertHorizontalLine();
     void changeHorizontalLine();
+    // MOC_SKIP_END
+#endif
 
     void embeddedStoreInternal();
 
@@ -693,8 +697,12 @@ private:
 
     KAction *actionSpellIgnoreAll;
 
+#if 0 // KWORD_HORIZONTAL_LINE
+    // MOC_SKIP_BEGIN
     KAction *actionInsertHorizontalLine;
     KAction *actionChangeHorizontalLine;
+    // MOC_SKIP_END
+#endif
     KAction *actionEditFrameSetProperties;
     KToggleAction *actionEmbeddedStoreInternal;
 

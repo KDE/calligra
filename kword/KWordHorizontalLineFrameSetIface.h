@@ -16,7 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#if 0 // KWORD_HORIZONTAL_LINE
 #ifndef KWORD_HORZLINEFRAMESET_IFACE_H
 #define KWORD_HORZLINEFRAMESET_IFACE_H
 
@@ -40,4 +40,5 @@ private:
     KWHorzLineFrameSet *m_frameset;
 };
 
+#endif
 #endif
