@@ -36,8 +36,8 @@ extern "C" int kdemain(int argc,char **argv)
 	// Handle the command line.
 
 	static KCmdLineOptions options[] = {
-		{"d <data>", I18N_NOOP("The XML data file."),0},
-		{"r <reportURL>", I18N_NOOP("The XML template file URL."),0},
+		{"d <data>", I18N_NOOP("The XML data file"),0},
+		{"r <reportURL>", I18N_NOOP("The XML template file URL"),0},
 		KCmdLineLastOption
 	};
 
