@@ -36,6 +36,7 @@ protected:
 	virtual void mouseDragCtrlPressed( const KoPoint& current );
 	virtual void mouseDragShiftReleased( const KoPoint& current );
 	virtual void mouseDragCtrlReleased( const KoPoint& current );
+	virtual void mouseButtonPress( const KoPoint& current );
 
 	virtual void cancel();
 

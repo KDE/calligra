@@ -51,6 +51,12 @@ VShapeTool::draw()
 }
 
 void
+VShapeTool::mouseButtonPress( const KoPoint & )
+{
+	recalc();
+}
+
+void
 VShapeTool::mouseDrag( const KoPoint& current )
 {
 	// Erase old object:
@@ -66,7 +72,7 @@ void
 VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 {
 	// Erase old object:
-	draw();
+	//draw();
 
 	recalc();
 
