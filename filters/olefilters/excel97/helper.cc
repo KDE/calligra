@@ -692,7 +692,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "EXP",              21,   1 },
 	{ "LN",               22,   1 },
 	{ "LOG10",            23,   1 },
-	{ "FABS",             24,   1 },  /* EXCEL: ABS */
+	{ "ABS",              24,   1 },
 	{ "INT",              25,   1 },
 	{ "SIGN",             26,   1 },  /* EXCEL: PLUSMINUS */
 	{ "ROUND",            27,   2 },

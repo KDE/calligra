@@ -1190,7 +1190,6 @@ bool Worker::op_labelsst(Q_UINT32, QDataStream &body)
 
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(*(static_cast<QString *>(m_helper->queryDict(D_SST, isst)))));
-	
 	e.appendChild(text);
 	m_table->appendChild(e);
 	return true;
@@ -1285,7 +1284,7 @@ bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 		switch(xwork->ifmt)
 		{
 			case 0:
-				s = QString::number((int) value);
+				s = QString::number(value);
 				break;
 			case 14: // Dates
 			case 15:
