@@ -705,11 +705,17 @@ void KoMainWindow::slotFilePrintPreview()
     printer.setFromTo( printer.minPage(), printer.maxPage() );
     rootView()->setupPrinter( printer );
 
+    QString oldFileName = printer.outputFileName();
     printer.setOutputFileName(tmpFile.name());
-    printer.setOutputToFile( true ); // kdeprint bug - setOutputFileName is enough with QPrinter
+    int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
+
     rootView()->print(printer);
     KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
+
+    // Restore previous values
+    printer.setOutputFileName( oldFileName );
+    printer.setNumCopies( oldNumCopies );
 }
 
 void KoMainWindow::slotConfigureKeys()
