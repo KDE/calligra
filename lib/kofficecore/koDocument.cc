@@ -624,12 +624,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
     else if ( d->m_specialOutputFlag == SaveAsDirectoryStore )
     {
         backend = KoStore::Directory;
-	// Remove filename from path. A bit dirty, but KFileDialog doesn't support
-        // Changing modes depending on the selected filter....
-        int pos = file.findRev( '/' );
-        if ( pos != -1 && pos != (int)file.length()-1 )
-            file = file.left( pos );
-        kdDebug(30003) << "Saving as uncompressed XML, using directory store. Directory: " << file << endl;
+        kdDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
     }
 
     QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
@@ -845,21 +840,7 @@ bool KoDocument::openURL( const KURL & _url )
             }
         }
     }
-    bool ret = false;
-    if ( url.isLocalFile() )
-    {
-        // ReadOnlyPart::openURL does something wrong for local files: it emits completed
-        // even if openFile returned false :(
-        // So, fixing here:
-        m_url = url;
-        m_file = m_url.path();
-        //kdDebug(30003) << "openURL: m_file=" << m_file << endl;
-        ret = openFile();
-        if ( ret )
-            emit completed();
-    }
-    else
-        ret = KParts::ReadWritePart::openURL( url );
+    bool ret = KParts::ReadWritePart::openURL( url );
 
     if ( autosaveOpened )
         m_url = KURL(); // Force save to act like 'Save As'
@@ -898,6 +879,7 @@ bool KoDocument::openFile()
         Q_ASSERT( d->m_views.isEmpty() );
     }
 
+    d->m_specialOutputFlag = 0;
     QCString _native_format = nativeFormatMimeType();
 
     KURL u;
@@ -905,10 +887,10 @@ bool KoDocument::openFile()
     QString typeName = KMimeType::findByURL( u, 0, true )->name();
 
     // Special case for flat XML files (e.g. using directory store)
-    if ( u.fileName() == "maindoc.xml" )
+    if ( u.fileName() == "maindoc.xml" || typeName == "inode/directory" )
     {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
-        m_file = u.directory();
+        d->m_specialOutputFlag = SaveAsDirectoryStore;
         kdDebug() << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
     }
     kdDebug() << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
@@ -987,28 +969,32 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
-    QFile in(file);
-    if ( !in.open( IO_ReadOnly ) )
+    QFile in;
+    bool isRawXML = false;
+    if ( d->m_specialOutputFlag != SaveAsDirectoryStore ) // Don't try to open a directory ;)
     {
-        QApplication::restoreOverrideCursor();
-        d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)" );
-        return false;
+        in.setName(file);
+        if ( !in.open( IO_ReadOnly ) )
+        {
+            QApplication::restoreOverrideCursor();
+            d->lastErrorMessage = i18n( "Couldn't open the file for reading (check read permissions)" );
+            return false;
+        }
+
+        // Try to find out whether it is a mime multi part file
+        char buf[5];
+        if ( in.readBlock( buf, 4 ) < 4 )
+        {
+            QApplication::restoreOverrideCursor();
+            in.close();
+            d->lastErrorMessage = i18n( "Couldn't read the beginning of the file" );
+            return false;
+        }
+        isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
+        //kdDebug(30003) << "PATTERN=" << buf << endl;
     }
-
-    // Try to find out whether it is a mime multi part file
-    char buf[5];
-    if ( in.readBlock( buf, 4 ) < 4 )
-    {
-        QApplication::restoreOverrideCursor();
-        in.close();
-        d->lastErrorMessage = i18n( "Couldn't read the beginning of the file" );
-        return false;
-    }
-
-    //kdDebug(30003) << "PATTERN=" << buf << endl;
-
-    // Is it plain XML, and not a directory store ? (e.g. a template)
-    if ( strncasecmp( buf, "<?xm", 4 ) == 0 && d->m_specialOutputFlag != SaveAsDirectoryStore )
+    // Is it plain XML?
+    if ( isRawXML )
     {
         in.at(0);
         QString errorMsg;
@@ -1037,9 +1023,10 @@ bool KoDocument::loadNativeFormat( const QString & file )
         m_bEmpty = false;
         return res;
     } else
-    { // It's a koffice store (tar.gz, zip etc.)
+    { // It's a koffice store (tar.gz, zip, directory, etc.)
         in.close();
-        KoStore * store = KoStore::createStore( file, KoStore::Read );
+        KoStore::Backend backend = (d->m_specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
+        KoStore * store = KoStore::createStore( file, KoStore::Read, "", backend );
 
         if ( store->bad() )
         {
