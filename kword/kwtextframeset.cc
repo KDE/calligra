@@ -988,8 +988,12 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
 
 int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 {
+    KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     if ( !m_doc->viewMode()->shouldFormatVertically() )
+    {
+        fixParagRect( parag );
         return 0;
+    }
 
     QRect paragRect( _parag->rect() );
     int yp = paragRect.y();
@@ -1006,7 +1010,6 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     // But don't forget that formatVertically is called twice for every parag, since the formatting
     // is re-done after moving down.
 
-    KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     bool linesTogether = parag ? parag->linesTogether() : false;
     bool hardFrameBreak = parag ? parag->hardFrameBreakBefore() : false;
     if ( !hardFrameBreak && parag && parag->prev() )
@@ -1119,6 +1122,24 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     // ## TODO loop around those three methods until we don't move anymore ?
 
     // We also use verticalBreak as a hook into the formatting algo, to fix the parag rect if necessary.
+    fixParagRect( parag );
+
+    if ( hp != oldHeight )
+        parag->setHeight( hp );
+    if ( yp != oldY ) {
+        QRect r = parag->rect();
+        r.moveBy( 0, yp - oldY );
+        parag->setRect( r );
+        parag->setMovedDown( true );
+    }
+#ifdef DEBUG_FORMATVERTICALLY
+    kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
+#endif
+    return ( yp + hp ) - ( oldY + oldHeight );
+}
+
+void KWTextFrameSet::fixParagRect( KWTextParag* parag )
+{
     if ( parag && parag->hasBorder() )
     {
         parag->setWidth( textDocument()->width() - 1 );
@@ -1142,19 +1163,6 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
         }
     }
-
-    if ( hp != oldHeight )
-        parag->setHeight( hp );
-    if ( yp != oldY ) {
-        QRect r = parag->rect();
-        r.moveBy( 0, yp - oldY );
-        parag->setRect( r );
-        parag->setMovedDown( true );
-    }
-#ifdef DEBUG_FORMATVERTICALLY
-    kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
-#endif
-    return ( yp + hp ) - ( oldY + oldHeight );
 }
 
 KWTextFrameSet::~KWTextFrameSet()

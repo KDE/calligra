@@ -3461,9 +3461,19 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     delete m_viewMode;
     m_viewMode = newViewMode;
     m_lastViewMode = m_viewMode->type(); // remember for saving config
+
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->switchModeView();
+
+    emit newContentsSize();
     updateResizeHandles();
+
+    // Since the text layout depends on the view mode, we need to redo it
+    // But after telling the canvas about the new viewmode, otherwise stuff like
+    // slotNewContentsSize will crash.
+    layout();
+
+    repaintAllViews( true );
 }
 
 #include "kwdoc.moc"

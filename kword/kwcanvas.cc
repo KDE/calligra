@@ -293,8 +293,6 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 void KWCanvas::switchViewMode( KWViewMode * newViewMode )
 {
     m_viewMode = newViewMode;
-    slotNewContentsSize();
-    repaintAll( true );
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse press in edit-frame mode
