@@ -45,6 +45,7 @@ class ConnectionPrivate
 	public:
 		ConnectionPrivate() 
 		 : m_dont_remove_transactions(false)
+		 , m_skip_databaseExists_check_in_useDatabase(false)
 		{
 		}
 		~ConnectionPrivate() { }
@@ -56,7 +57,11 @@ class ConnectionPrivate
 		QValueList<Transaction> m_transactions;
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove 
 		//! the transaction object from m_transactions list; used by closeDatabase()
-		bool m_dont_remove_transactions; 
+		bool m_dont_remove_transactions : 1; 
+		
+		//! used to avoid endless recursion between useDatabase() and databaseExists()
+		//! when useTemporaryDatabaseIfNeeded() works
+		bool m_skip_databaseExists_check_in_useDatabase : 1;
 };
 
 }
@@ -228,8 +233,10 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 
 	QString tmpdbName;
 	//some engines need to have opened any database before executing "create database"
+	d->m_skip_databaseExists_check_in_useDatabase = true;
 	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
 		return false;
+	d->m_skip_databaseExists_check_in_useDatabase = false;
 
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
@@ -388,8 +395,10 @@ bool Connection::useDatabase( const QString &dbName )
 	if (m_usedDatabase == my_dbName)
 		return true; //already used
 
-	if (!databaseExists(my_dbName))
-		return false; //database must exist
+	if (!d->m_skip_databaseExists_check_in_useDatabase) {
+	 	if (!databaseExists(my_dbName))
+			return false; //database must exist
+	}
 
 	if (!m_usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
 		return false;
