@@ -544,7 +544,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles(o);
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 12);
-                appendPolylineGeometry(doc, e, o, (int)offset);
+                append2DGeometry(doc, e, o, (int)offset);
                 appendPoints(doc, e, o);
                 appendPen(doc, e);
                 appendBrush(doc, e);
@@ -555,7 +555,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 storeObjectStyles(o);
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 16);
-                appendPolylineGeometry(doc, e, o, (int)offset);
+                append2DGeometry(doc, e, o, (int)offset);
                 appendPoints(doc, e, o);
                 appendPen(doc, e);
                 appendBrush(doc, e);
@@ -1959,20 +1959,6 @@ QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &do
         element.setAttribute("whitespace", tmpText.length());
     element.appendChild(doc.createTextNode(tmpText));
     return element;
-}
-
-void OoImpressImport::appendPolylineGeometry(QDomDocument& doc, QDomElement& e,
-                                             const QDomElement& object, int offset)
-{
-    QDomElement orig = doc.createElement("ORIG" );
-    orig.setAttribute("x", toPoint(object.attribute("svg:x")));
-    orig.setAttribute("y", toPoint(object.attribute("svg:y")) + offset);
-    e.appendChild(orig);
-
-    QDomElement size = doc.createElement("SIZE");
-    size.setAttribute("width",  toPoint(object.attribute("svg:width")));
-    size.setAttribute("height", toPoint(object.attribute("svg:height")));
-    e.appendChild(size);
 }
 
 void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object)

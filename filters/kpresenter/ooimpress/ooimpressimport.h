@@ -143,7 +143,6 @@ private:
     void storeObjectStyles( const QDomElement& object );
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
-    void appendPolylineGeometry (QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset);
     void appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object);
     void appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object );
