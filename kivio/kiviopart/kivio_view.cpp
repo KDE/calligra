@@ -175,35 +175,35 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   hRuler = new KivioRuler(KivioRuler::Horizontal,pRightSide);
 
   // Tab Bar Button
-  m_pTabBarFirst = newIconButton("arrow_first", false, pRightSide);
+  m_pTabBarFirst = newIconButton("tab_first", false, pRightSide);
   connect( m_pTabBarFirst,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollFirst()));
 
-  m_pTabBarLeft = newIconButton("arrow_back", false, pRightSide);
+  m_pTabBarLeft = newIconButton("tab_left", false, pRightSide);
   connect( m_pTabBarLeft,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollLeft()));
 
-  m_pTabBarRight = newIconButton("arrow_forward", false, pRightSide);
+  m_pTabBarRight = newIconButton("tab_right", false, pRightSide);
   connect( m_pTabBarRight,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollRight()));
 
-  m_pTabBarLast = newIconButton("arrow_last", false, pRightSide);
+  m_pTabBarLast = newIconButton("tab_last", false, pRightSide);
   connect( m_pTabBarLast,
            SIGNAL(clicked()),
            m_pTabBar,
            SLOT(scrollLast()));
 
   QHBoxLayout* tabLayout = new QHBoxLayout();
-  tabLayout->addWidget(m_pTabBarLast);
+  tabLayout->addWidget(m_pTabBarFirst);
   tabLayout->addWidget(m_pTabBarLeft);
   tabLayout->addWidget(m_pTabBarRight);
-  tabLayout->addWidget(m_pTabBarFirst);
+  tabLayout->addWidget(m_pTabBarLast);
   tabLayout->addWidget(tabSplit);
 
   // The widget on which we display the page
