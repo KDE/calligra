@@ -39,6 +39,7 @@ KoBgSpellCheck::KoBgSpellCheck()
     m_bDontCheckTitleCase=false;
     m_bSpellCheckConfigure=false;
     m_bgSpell.currentTextObj=0L;
+    m_bgSpell.needsRepaint=false;
 }
 
 KoBgSpellCheck::~KoBgSpellCheck()
@@ -178,6 +179,15 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         m_bgSpell.currentParag = 0L;
         return;
     }
+
+    // repaint the textObject here if it requires it
+    // (perhaps there should be a way to repaint just a paragraph.... - JJ)
+    if(m_bgSpell.needsRepaint)
+    {
+         slotRepaintChanged( m_bgSpell.currentTextObj );
+         m_bgSpell.needsRepaint=false;
+    }
+    
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( parag && parag->string() && parag->string()->needsSpellCheck() )
     {
@@ -225,7 +235,6 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
 
 void KoBgSpellCheck::spellCheckNextParagraph()
 {
-    // TODO handle deletion of paragraphs.... signal from kotextobjects?
     //kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
 
     nextParagraphNeedingCheck();
@@ -274,9 +283,10 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
     KoTextFormat format( *ch->format() );
     format.setMisspelled( true );
     parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
+
+    // set the repaint flags
     parag->setChanged( true );
-    // TODO delay this, so that repaints are 'compressed'
-    slotRepaintChanged( m_bgSpell.currentTextObj );
+    m_bgSpell.needsRepaint=true;
 }
 
 void KoBgSpellCheck::spellCheckerDone()

@@ -82,6 +82,8 @@ protected:
         KoTextObject *currentTextObj;
         // The paragraph currently being checked
         KoTextParag *currentParag;
+	// Last parag was changed (word marked misspelled), we need to repaint it.
+	bool needsRepaint;
     };
     KoBGSpell m_bgSpell;
 
