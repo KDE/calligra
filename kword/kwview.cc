@@ -2600,15 +2600,17 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
 void KWView::updatePopupMenuChangeAction()
 {
     KWFrame *frame=doc->getFirstSelectedFrame();
+    // Warning, frame can be 0L !
+    
     // if a header/footer etc. Dont show the popup.
-    if(frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
+    if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
         return;
 
     // enable delete
     actionEditDelFrame->setEnabled(true && doc->getSelectedFrames().count()==1);
 
     // if text frame,
-    if(frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+    if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
         {
             // if frameset 0 disable delete
             if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0))
