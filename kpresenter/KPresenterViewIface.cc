@@ -617,3 +617,9 @@ void KPresenterViewIface::importStyle()
 {
     view->importStyle();
 }
+
+void KPresenterViewIface::backgroundPicture()
+{
+    view->backgroundPicture();
+}
+

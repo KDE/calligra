@@ -183,6 +183,7 @@ k_dcop:
     void savePicture();
     void insertFile();
     void importStyle();
+    void backgroundPicture();
 
 private:
     KPresenterView *view;
