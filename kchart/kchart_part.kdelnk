@@ -3,6 +3,7 @@
 Name=KChart
 Name[da]=Graf
 Name[no]=Graf
+Name[pt]=Gr·ficos
 Name[ro]=Chart
 Name[ru]=Á“¡∆…À…
 Exec=kchart.bin --server
@@ -12,6 +13,7 @@ Comment[da]=Kalles graf
 Comment[es]=El Renderizador de Tablas de Kalle
 Comment[fi]=Kallen kuvaajaohjelma
 Comment[no]=Kalles graf
+Comment[pt]=Ferramenta para fazer gr·ficos
 Comment[pt_BR]=Programa de desenho de fluxogramas
 Comment[ro]=Kchart
 Comment[ru]=Á“¡∆…À… Kalle
