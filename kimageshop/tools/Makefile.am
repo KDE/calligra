@@ -9,8 +9,7 @@ libkistools_la_SOURCES = kis_tool_move.cc kis_tool_zoom.cc \
   kis_tool_paste.cc kis_tool_fill.cc kis_tool_stamp.cc \
   kis_tool_line.cc kis_tool_rectangle.cc \
   kis_tool_ellipse.cc kis_tool_polyline.cc \
-  kis_tool_colorpicker.cc kis_tool_gradient.cc \
-  kis_tool_colorchanger.cc  
+  kis_tool_colorpicker.cc kis_tool_colorchanger.cc  
     
 libkistools_la_METASOURCES = AUTO
 

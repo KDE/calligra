@@ -21,8 +21,9 @@
 #include <qcolor.h>
 #include <qbitmap.h>
 #include <kdebug.h>
+#include <kapp.h>
 
-#include "kis_tool_brush.h"
+
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -30,15 +31,20 @@
 #include "kis_vec.h"
 #include "kis_cursor.h"
 #include "kis_util.h"
-#include "kapp.h"
+#include "kis_tool_brush.h"
+#include "kis_dlg_toolopts.h"
 
-//#define TEST_OPT_BRUSH
 
 BrushTool::BrushTool(KisDoc *doc, KisView *view, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
     m_dragdist = 0;
+    
+    usePattern = false;
+    useGradient = false;
+    opacity = 255;
+        
     setBrush(_brush);
 }
 
@@ -146,27 +152,6 @@ bool BrushTool::paintMonochrome(QPoint pos)
 
         for (int x = sx; x <= ex; x++)
 	    {
-
-#ifdef TEST_OPT_BRUSH
-
-	        r = lay->pixel(0, startx + x, starty + y);
-	        g = lay->pixel(1, startx + x, starty + y);
-	        b = lay->pixel(2, startx + x, starty + y);
-		  
-	        bv = *(sl + x);
-	        if (bv == 0) continue;
-		  
-	        invbv = 255 - bv;
-
-            b = (((blue+1)  * (bv+1)) + ((b+1) * (invbv+1))) >> 8; 
-            g = (((green+1) * (bv+1)) + ((g+1) * (invbv+1))) >> 8;                                   
-            r = (((red+1)   * (bv+1)) + ((r+1) * (invbv+1))) >> 8;
-
-	        lay->setPixel(0, startx + x, starty + y, r - 1);
-	        lay->setPixel(1, startx + x, starty + y, g - 1);
-	        lay->setPixel(2, startx + x, starty + y, b - 1);
-
-#else
 	        r = lay->pixel(0, startx + x, starty + y);
 	        g = lay->pixel(1, startx + x, starty + y);
 	        b = lay->pixel(2, startx + x, starty + y);
@@ -183,7 +168,7 @@ bool BrushTool::paintMonochrome(QPoint pos)
 	        lay->setPixel(0, startx + x, starty + y, r);
 	        lay->setPixel(1, startx + x, starty + y, g);
 	        lay->setPixel(2, startx + x, starty + y, b);
-#endif                       	  
+                      	  
             if (alpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
@@ -274,4 +259,25 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 bool BrushTool::paintColor(QPoint /*pos*/)
 {
     return true;
+}
+
+void BrushTool::optionsDialog()
+{
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.opacity          = opacity;
+
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_brushtool, ts);
+
+    pOptsDialog->exec();
+    
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    opacity   = pOptsDialog->brushToolTab()->opacity();
+    usePattern    = pOptsDialog->brushToolTab()->usePattern();
+    useGradient   = pOptsDialog->brushToolTab()->useGradient();
 }

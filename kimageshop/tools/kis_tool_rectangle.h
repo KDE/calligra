@@ -52,9 +52,11 @@ protected:
 
     int         lineThickness;
     int         lineOpacity;
+
     bool        fillSolid;
     bool        usePattern;
-            
+    bool        useGradient;
+                
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
  

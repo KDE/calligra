@@ -19,7 +19,7 @@
  */
 
 #include "qbitmap.h"
-#include "kis_tool_eraser.h"
+
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -28,12 +28,22 @@
 #include "kis_cursor.h"
 #include "kis_util.h"
 
+#include "kis_tool_eraser.h"
+#include "kis_dlg_toolopts.h"
+
 
 EraserTool::EraserTool(KisDoc *doc, KisView *view, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
     m_dragdist = 0;
+
+    usePattern  = false;
+    useGradient = false;
+    
+    lineThickness = 1;
+    lineOpacity = 255;
+    
     setBrush(_brush);
 }
 
@@ -256,5 +266,27 @@ void EraserTool::mouseRelease(QMouseEvent *e)
     m_dragging = false;
 }
 
+void EraserTool::optionsDialog()
+{
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.lineThickness    = lineThickness;
+    ts.lineOpacity      = lineOpacity;
 
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_erasertool, ts);
+
+    pOptsDialog->exec();
+    
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+    
+    lineThickness = pOptsDialog->eraserToolTab()->thickness();
+    lineOpacity   = pOptsDialog->eraserToolTab()->opacity();
+    usePattern    = pOptsDialog->eraserToolTab()->usePattern();
+    useGradient   = pOptsDialog->eraserToolTab()->useGradient();
+    
+}
 

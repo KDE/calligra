@@ -44,12 +44,16 @@ public slots:
     virtual void mousePress(QMouseEvent*); 
     virtual void mouseMove(QMouseEvent*);
     virtual void mouseRelease(QMouseEvent*);
-
+    virtual void optionsDialog();
+    
  protected:
+
+    KisBrush *m_pBrush;
+
     QPoint 	m_dragStart;
     bool   	m_dragging;
-    KisBrush *m_pBrush;
     float   m_dragdist;
+    
     int red, blue, green;
     int brushWidth, brushHeight;
     QSize brushSize;
@@ -57,6 +61,11 @@ public slots:
     int hotSpotX, hotSpotY;
     int spacing;
     bool alpha;
+    
+    // options - needs brush-secific members
+    bool usePattern;
+    bool useGradient;
+    int  opacity;
 };
 
 #endif //__brushtool_h__

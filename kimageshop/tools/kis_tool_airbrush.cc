@@ -21,13 +21,15 @@
 #include <kapp.h>
 #include <kdebug.h>
 
-#include "kis_tool_airbrush.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_vec.h"
 #include "kis_cursor.h"
 #include "kis_util.h"
+#include "kis_tool_airbrush.h"
+#include "kis_dlg_toolopts.h"
+
 
 
 AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
@@ -37,11 +39,16 @@ AirBrushTool::AirBrushTool(KisDoc *doc, KisView *view, KisBrush *brush)
     m_Cursor = KisCursor::brushCursor();
     m_dragdist = 0;
     density = 64;
+
+    opacity = 255;
+    usePattern = false;
+    useGradient = false;
+
     setBrush(brush);
     
     pos.setX(-1);
     pos.setY(-1);
-        
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
@@ -284,10 +291,14 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 	        QPoint p(step.x(), step.y());
             
 	        if (paint(p, false))
-               img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
-
+            {
+                img->markDirty(QRect(p - m_pBrush->hotSpot(), 
+                    m_pBrush->size()));
+            }
+            
  	        dist -= spacing;
 	    }
+        
         //save for next movevent
         if (dist > 0) m_dragdist = dist; 
         m_dragStart = pos;
@@ -308,6 +319,27 @@ void AirBrushTool::mouseRelease(QMouseEvent *e)
     nPoints = 0;
     
     m_dragging = false;
+}
+
+void AirBrushTool::optionsDialog()
+{
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.opacity          = opacity;
+
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_airbrushtool, ts);
+
+    pOptsDialog->exec();
+    
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    opacity       = pOptsDialog->airBrushToolTab()->opacity();
+    usePattern    = pOptsDialog->airBrushToolTab()->usePattern();
+    useGradient   = pOptsDialog->airBrushToolTab()->useGradient();
 }
 
 #include "kis_tool_airbrush.moc"

@@ -19,12 +19,13 @@
  */
 
 #include <kdebug.h>
-#include "kis_tool_fill.h"
+
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_framebuffer.h"
 #include "kis_cursor.h"
-#include "opts_fill_dlg.h"
+#include "kis_tool_fill.h"
+#include "kis_dlg_toolopts.h"
 
 
 FillTool::FillTool(KisDoc *doc, KisView *view)
@@ -123,8 +124,8 @@ void FillTool::flood_fill(struct fillinfo *info, int x, int y)
    (pdy) = sp->dy;\
 }
 
-   if ((x >= info->left) && (x < info->right) 
-   && (y >= info->top) && (y < info->bottom))
+   if ((x >= info->left) && (x <= info->right) 
+   && (y >= info->top) && (y <= info->bottom))
    {
         if((fLayer->pixel(0, x, y) == info->r)
         && (fLayer->pixel(1, x, y) == info->g)
@@ -146,7 +147,7 @@ void FillTool::flood_fill(struct fillinfo *info, int x, int y)
 	        x = x1 + 1;
 	        do
 	        {
-	            for (; (x < info->right) && is_old_pixel_value(info, x, y); x++)
+	            for (; (x <= info->right) && is_old_pixel_value(info, x, y); x++)
 	                set_new_pixel_value(info, x, y);
 	    
 	            PUSH(y, l, x - 1, dy);
@@ -284,22 +285,24 @@ void FillTool::mousePress(QMouseEvent *e)
 
 void FillTool::optionsDialog()
 {
-    FillOptionsDialog *pOptsDialog 
-        = new FillOptionsDialog(fillOpacity, 
-            usePattern, useGradient,
-            toleranceRed, toleranceGreen, toleranceBlue);
-            
-    pOptsDialog->exec();
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
 
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_filltool, ts);
+
+    pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    fillOpacity     = pOptsDialog->opacity();
+    fillOpacity     = pOptsDialog->fillToolTab()->opacity();
+    usePattern      = pOptsDialog->fillToolTab()->usePattern();
+    useGradient     = pOptsDialog->fillToolTab()->useGradient();
 
-    usePattern      = pOptsDialog->usePattern();
-    useGradient     = pOptsDialog->useGradient();
-
-    toleranceRed    = pOptsDialog->ToleranceRed();
-    toleranceGreen  = pOptsDialog->ToleranceGreen();    
-    toleranceBlue   = pOptsDialog->ToleranceBlue();    
+    //toleranceRed    = pOptsDialog->ToleranceRed();
+    //toleranceGreen  = pOptsDialog->ToleranceGreen();    
+    //toleranceBlue   = pOptsDialog->ToleranceBlue();    
 }

@@ -29,9 +29,10 @@
 #include "kis_framebuffer.h"
 #include "kis_cursor.h"
 #include "kis_tool_pen.h"
-#include "opts_pen_dlg.h"
+#include "kis_dlg_toolopts.h"
 
-PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *_brush)
+PenTool::PenTool(KisDoc *doc, KisView *view, 
+    KisCanvas *canvas, KisBrush *_brush)
   : KisTool(doc, view)
 {
     m_dragging = false;
@@ -40,8 +41,12 @@ PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisBrush *_brush
 
     penColorThreshold = 128;
     penOpacity        = 255;
-    penPattern        = false;
-    
+    usePattern        = false;
+    useGradient       = false;
+
+    lineThickness = 1;
+    lineOpacity = 1;
+        
     setBrush(_brush);
 }
 
@@ -157,7 +162,7 @@ bool PenTool::paint(QPoint pos)
             b   = blue;  
          
             // use foreround color  
-            if(!penPattern)
+            if(!usePattern)
             {
 	            lay->setPixel(0, startx + x, starty + y, r);
 	            lay->setPixel(1, startx + x, starty + y, g);
@@ -252,13 +257,23 @@ void PenTool::mouseRelease(QMouseEvent *e)
 
 void PenTool::optionsDialog()
 {
-    PenOptionsDialog *pOptsDialog 
-        = new PenOptionsDialog(penColorThreshold, penOpacity, penPattern);
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = usePattern;
+    ts.penThreshold     = penColorThreshold;
+    ts.opacity          = penOpacity;
+    
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_pentool, ts);
+
     pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    penColorThreshold = pOptsDialog->threshold();
-    penOpacity        = pOptsDialog->opacity();
-    penPattern        = pOptsDialog->pattern();   
+    usePattern          = pOptsDialog->penToolTab()->usePattern();
+    useGradient         = pOptsDialog->penToolTab()->useGradient();    
+    penColorThreshold   = pOptsDialog->penToolTab()->penThreshold();        
+    penOpacity          = pOptsDialog->penToolTab()->opacity();   
 }

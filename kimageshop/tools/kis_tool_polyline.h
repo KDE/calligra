@@ -55,7 +55,9 @@ private:
 
     int         lineThickness;
     int         lineOpacity;
+
     bool        usePattern;
+    bool        useGradient;
         
     QPoint      m_dragStart;
     QPoint      m_dragEnd;

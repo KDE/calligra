@@ -51,10 +51,6 @@ class PenTool : public KisTool
 
  protected:
 
-    int penColorThreshold;
-    int penOpacity;
-    bool penPattern;
-    
     QPoint 	        m_dragStart;
     bool   	        m_dragging;
     float           m_dragdist;
@@ -67,7 +63,17 @@ class PenTool : public KisTool
     QPen pen;
     int  penW;
     QPixmap *buffer;
-  
+    
+    // tool options
+    
+    bool usePattern;
+    bool useGradient;
+    int lineThickness;
+    int lineOpacity;
+    
+    int penColorThreshold;
+    int penOpacity;
+    bool penPattern;
 };
 
 #endif //__pentool_h__

@@ -50,7 +50,8 @@ class StampTool : public KisTool
     virtual void mousePress(QMouseEvent*); 
     virtual void mouseMove(QMouseEvent*);
     virtual void mouseRelease(QMouseEvent*);
-
+    virtual void optionsDialog();
+    
  protected:
  
     KisView     *m_pView;
@@ -69,6 +70,12 @@ class StampTool : public KisTool
     bool        m_dragging;
     float       m_dragdist;
     int         spacing;
+    
+    // options
+    int         opacity;
+    bool        useGradient;
+    bool        useBlend;
+    
 };
 
 #endif //__stamptool_h__

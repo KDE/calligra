@@ -27,7 +27,7 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_ellipse.h"
-#include "opts_line_dlg.h"
+#include "kis_dlg_toolopts.h"
 
 EllipseTool::EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
@@ -36,8 +36,10 @@ EllipseTool::EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
 {
     lineThickness = 4;
     lineOpacity = 255;
+
     fillSolid = false;
     usePattern = false;
+    useGradient = false;
 }
 
 EllipseTool::~EllipseTool()
@@ -119,18 +121,28 @@ void EllipseTool::drawEllipse( const QPoint & start, const QPoint &end )
 
 void EllipseTool::optionsDialog()
 {
-    LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(fillSolid, lineThickness, lineOpacity);
+    ToolOptsStruct ts;    
+    
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.lineThickness    = lineThickness;
+    ts.lineOpacity      = lineOpacity;
+    ts.fillShapes       = fillSolid;
+    ts.opacity          = lineOpacity;
         
-    pOptsDialog->exec();
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_linetool, ts);
 
+    pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    lineThickness = pOptsDialog->thickness();
-    lineOpacity   = pOptsDialog->opacity();
-    fillSolid     = pOptsDialog->solid();
-    usePattern    = pOptsDialog->usePattern();
+    lineThickness = pOptsDialog->lineToolTab()->thickness();
+    lineOpacity   = pOptsDialog->lineToolTab()->opacity();
+    usePattern    = pOptsDialog->lineToolTab()->usePattern();
+    fillSolid     = pOptsDialog->lineToolTab()->solid(); 
+    useGradient   = pOptsDialog->lineToolTab()->useGradient();
     
     KisPainter *p = m_pView->kisPainter();
     
@@ -138,6 +150,7 @@ void EllipseTool::optionsDialog()
     p->setLineOpacity(lineOpacity);
     p->setFilledEllipse(fillSolid); 
     p->setPatternFill(usePattern);     
+    p->setGradientFill(useGradient);     
 }
 
 

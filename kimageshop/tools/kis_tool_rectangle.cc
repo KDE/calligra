@@ -27,7 +27,7 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_rectangle.h"
-#include "opts_line_dlg.h"
+#include "kis_dlg_toolopts.h"
 
 RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
   : KisTool( _doc, _view )
@@ -36,8 +36,10 @@ RectangleTool::RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
 {
     lineThickness = 4;
     lineOpacity = 255;
+
     fillSolid = false;
     usePattern = false;
+    useGradient = false;
 }
 
 RectangleTool::~RectangleTool()
@@ -117,23 +119,34 @@ void RectangleTool::drawRectangle( const QPoint& start, const QPoint& end )
 
 void RectangleTool::optionsDialog()
 {
-    LineOptionsDialog *pOptsDialog 
-        = new LineOptionsDialog(fillSolid, usePattern,
-            lineThickness, lineOpacity);
-            
-    pOptsDialog->exec();
+    ToolOptsStruct ts;    
 
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.lineThickness    = lineThickness;
+    ts.lineOpacity      = lineOpacity;
+    ts.opacity          = lineOpacity;
+    ts.fillShapes       = fillSolid;
+
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_linetool, ts);
+
+    pOptsDialog->exec();
+    
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    lineThickness = pOptsDialog->thickness();
-    lineOpacity   = pOptsDialog->opacity();
-    fillSolid     = pOptsDialog->solid();
-    usePattern    = pOptsDialog->usePattern();
+    lineThickness = pOptsDialog->lineToolTab()->thickness();
+    lineOpacity   = pOptsDialog->lineToolTab()->opacity();
+    usePattern    = pOptsDialog->lineToolTab()->usePattern();
+    useGradient   = pOptsDialog->lineToolTab()->useGradient();
+    fillSolid     = pOptsDialog->lineToolTab()->solid();  
     
     KisPainter *p = m_pView->kisPainter();
+
     p->setLineThickness(lineThickness);
     p->setLineOpacity(lineOpacity);
     p->setFilledRectangle(fillSolid);
+    p->setGradientFill(useGradient);
     p->setPatternFill(usePattern);    
 }

@@ -30,15 +30,22 @@
 #include "kis_util.h"
 #include "kis_pattern.h"
 #include "kis_tool_stamp.h"
+#include "kis_dlg_toolopts.h"
 
-StampTool::StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisPattern *pattern)
+
+StampTool::StampTool(KisDoc *doc, KisView *view, 
+    KisCanvas *canvas, KisPattern *pattern)
   : KisTool(doc, view)
 {
     m_dragging = false;
     m_dragdist = 0;    
     m_pView = view;
     m_pCanvas = canvas;
-    
+
+    opacity = 255;
+    useGradient = false;
+    useBlend = false;
+            
     setPattern(pattern);
 }
 
@@ -443,6 +450,26 @@ void StampTool::mouseRelease(QMouseEvent *e)
         return;
         
     m_dragging = false;
+}
+
+
+void StampTool::optionsDialog()
+{
+    ToolOptsStruct ts;    
+    
+    ts.useGradient      = useGradient;
+    ts.opacity          = opacity;
+
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_stamptool, ts);
+
+    pOptsDialog->exec();
+    
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    opacity       = pOptsDialog->stampToolTab()->opacity();
+    useGradient   = pOptsDialog->stampToolTab()->useGradient();
 }
 
 

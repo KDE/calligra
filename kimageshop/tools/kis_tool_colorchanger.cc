@@ -24,7 +24,7 @@
 #include "kis_view.h"
 #include "kis_cursor.h"
 #include "kis_tool_colorchanger.h"
-#include "opts_fill_dlg.h"
+#include "kis_dlg_toolopts.h"
 
 
 ColorChangerTool::ColorChangerTool(KisDoc *doc, KisView *view)
@@ -83,9 +83,22 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     kdDebug() << "ur.left() " << ur.left() 
               << "ur.top() "  << ur.top() << endl;
 
-    // prepare painter for painting with pattern
+    // prepare for painting with gradient
+    if(useGradient)
+    {
+        KisColor startColor(m_pView->fgColor().R(),
+            m_pView->fgColor().G(), m_pView->fgColor().B());
+        KisColor endColor(m_pView->bgColor().R(),
+            m_pView->bgColor().G(), m_pView->bgColor().B());        
+            
+        m_pDoc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+    }
+        
+    // prepare for painting with pattern
     if(usePattern)
+    {
         m_pDoc->frameBuffer()->setPattern(m_pView->currentPattern());
+    }
         
     // this does the painting
     if(!m_pDoc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, fillOpacity), 
@@ -130,22 +143,53 @@ void ColorChangerTool::mousePress(QMouseEvent *e)
         changeColors(pos.x(), pos.y());
 }
 
+
 void ColorChangerTool::optionsDialog()
 {
-    FillOptionsDialog *pOptsDialog 
-        = new FillOptionsDialog(fillOpacity, 
-            usePattern, useGradient,
-            toleranceRed, toleranceGreen, toleranceBlue);
+    ToolOptsStruct ts;    
     
+    ts.usePattern       = usePattern;
+    ts.useGradient      = useGradient;
+    ts.opacity          = fillOpacity;
+
+    ToolOptionsDialog *pOptsDialog 
+        = new ToolOptionsDialog(tt_filltool, ts);
+
     pOptsDialog->exec();
     
     if(!pOptsDialog->result() == QDialog::Accepted)
         return;
 
-    fillOpacity     = pOptsDialog->opacity();
-    usePattern      = pOptsDialog->usePattern();
-    useGradient     = pOptsDialog->useGradient();
-    toleranceRed    = pOptsDialog->ToleranceRed();
-    toleranceGreen  = pOptsDialog->ToleranceGreen();    
-    toleranceBlue   = pOptsDialog->ToleranceBlue();    
+    /* the following values should be unique for each tool.
+    To change global tool options that will over-ride these
+    local ones for individual tools, we need a master tool
+    options tabbed dialog */
+    
+    fillOpacity     = pOptsDialog->fillToolTab()->opacity();
+    usePattern      = pOptsDialog->fillToolTab()->usePattern();
+    useGradient     = pOptsDialog->fillToolTab()->useGradient();
+    
+    // we need HSV tolerances even more
+    //toleranceRed    = pOptsDialog->ToleranceRed();
+    //toleranceGreen  = pOptsDialog->ToleranceGreen();    
+    //toleranceBlue   = pOptsDialog->ToleranceBlue();
+    
+    // note that gradients amd patterns are not associated with a
+    // particular tool, unlike the other options
+
+    // get current colors
+    KisColor startColor(m_pView->fgColor().R(),
+       m_pView->fgColor().G(), m_pView->fgColor().B());
+    KisColor endColor(m_pView->bgColor().R(),
+       m_pView->bgColor().G(), m_pView->bgColor().B());        
+            
+    // prepare for painting with pattern
+    if(usePattern)
+    {
+        m_pDoc->frameBuffer()->setPattern(m_pView->currentPattern());
+    }
+
+    // prepare for painting with gradient
+    m_pDoc->frameBuffer()->setGradientPaint(useGradient, 
+        startColor, endColor);        
 }
