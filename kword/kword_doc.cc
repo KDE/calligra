@@ -35,7 +35,6 @@
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
-#include <koStoreStream.h>
 #include <koStoreDevice.h>
 #include <koMainWindow.h>
 
