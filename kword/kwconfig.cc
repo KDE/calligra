@@ -399,7 +399,6 @@ void ConfigureMiscPage::apply()
     int newUndo=m_undoRedoLimit->value();
     if(newUndo!=m_oldNbRedo)
     {
-        config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
     }
