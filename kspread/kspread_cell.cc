@@ -1980,7 +1980,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	  }
       }
       else // Dependency to a single cell
-      {
+      { 
 	KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
 	if ( cell == 0L )
 	  return false;
@@ -2139,18 +2139,16 @@ bool KSpreadCell::calc( bool _makedepend )
         ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
         setFormatNumber(Number);
   }
-
   if ( m_style == ST_Select )
   {
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       s->parse( m_strFormularOut );
   }
-
+  m_bCalcDirtyFlag=false;
   m_bLayoutDirtyFlag = true;
   m_bProgressFlag = false;
 
   DO_UPDATE;
-
   return true;
 }
 
@@ -2270,7 +2268,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 
     // Need to recalculate ?
-    if ( m_bCalcDirtyFlag & !override_obscured )
+    if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
 	calc();
 
     bool old_layoutflag = m_bLayoutDirtyFlag;
