@@ -190,7 +190,7 @@ void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* s
   if(m_pPageLayout == Kivio::Config::defaultPageLayout()) {
     docWriter->addAttribute("draw:master-page-name", "Standard");
   } else {
-    KoGenStyle pageLayout = Kivio::savePageLayout(m_pPageLayout);
+    KoGenStyle pageLayout = m_pPageLayout.saveOasis();
     QString layoutName = styles->lookup(pageLayout, "PL");
     
     KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
@@ -320,36 +320,22 @@ bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
   QDomElement* masterPage = oasisStyles.masterPages()[page.attribute("draw:master-page-name")];
   
   if(!masterPage) {
+    kdDebug(430000) << "Couldn't find the master page! " << page.attribute("draw:master-page-name") << endl;
     return false;
   }
   
-  QDomElement *masterPageStyle = oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )];
+  QDomElement *pageLayout = oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )];
   
-  if(!masterPageStyle) {
+  if(!pageLayout) {
+    kdDebug(430000) << "Couldn't find the pagelayout!" << endl;
     return false;
   }
 
-  QDomElement properties(masterPageStyle->namedItem( "style:page-layout-properties" ).toElement());
-  double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
-  double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+  m_pPageLayout.loadOasis(*pageLayout);
   
-  if(width <= 1e-13 || height <= 1e-13) {
+  if(m_pPageLayout.ptWidth <= 1e-13 || m_pPageLayout.ptHeight <= 1e-13) {
+    kdDebug(430000) << "Non valid pagelayout!" << endl;
     return false;
-  }
-  
-  m_pPageLayout.orientation = ((properties.attribute("style:print-orientation") == "landscape") ? PG_LANDSCAPE : PG_PORTRAIT);
-  m_pPageLayout.ptWidth = width;
-  m_pPageLayout.ptHeight = height;
-  m_pPageLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
-  m_pPageLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
-  m_pPageLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
-  m_pPageLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
-  
-  // guessFormat takes millimeters
-  if (m_pPageLayout.orientation == PG_LANDSCAPE) {
-    m_pPageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(height), POINT_TO_MM(width));
-  } else {
-    m_pPageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(width), POINT_TO_MM(height));
   }
   
   return true;

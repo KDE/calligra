@@ -271,11 +271,11 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   KoStoreDevice storeDev(store);
   KoGenStyles styles;
   
-  KoGenStyle pageLayout = Kivio::savePageLayout(Kivio::Config::defaultPageLayout());
+  KoGenStyle pageLayout = Kivio::Config::defaultPageLayout().saveOasis();
   QString layoutName = styles.lookup(pageLayout, "PL");
   KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
   masterPage.addAttribute("style:page-layout-name", layoutName);
-  styles.lookup(masterPage, "Standard");
+  styles.lookup(masterPage, "Standard", false);
   
   if(!store->open("content.xml")) {
     return false;
