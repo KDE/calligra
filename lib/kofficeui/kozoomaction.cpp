@@ -45,12 +45,10 @@ void KoZoomAction::setZoom( const QString& text )
   bool ok = false;
   
   int zoom = text.toInt( &ok );
-  if( !ok ) return;
-  if( zoom < 10 ) return;
   
   // where we'll store sorted new zoom values
   QValueList<int> list;
-  list.append( zoom );
+  if( zoom > 10 ) list.append( zoom );
   
   // "Captured" non-empty sequence of digits
   QRegExp regexp("(\\d+)"); 
