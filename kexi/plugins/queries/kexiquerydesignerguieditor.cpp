@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
+#include <qsplitter.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
@@ -48,14 +49,16 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_view = view;
 	m_parent = myparent;
 
-	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(this, view);
+	QSplitter *hSplitter = new QSplitter(Vertical, this);
+	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(hSplitter, view);
+	QSplitter *vSplitter = new QSplitter(Horizontal, hSplitter);
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
-	m_paramList=new KexiParameterListEditor(this);
-	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
-	m_designTable = new KexiTableView(this);
+	m_designTable = new KexiTableView(vSplitter);
 	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
+	m_paramList=new KexiParameterListEditor(vSplitter);
+	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
 
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
@@ -76,10 +79,11 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_insertItem->setValue(2, true);
 	m_insertItem->setInsertItem(true);
 */
-	QGridLayout *g = new QGridLayout(this,2,1);
-	g->addMultiCellWidget(m_tables,		0,	0,	0,	1);
-	g->addWidget(m_designTable,		1,	0);
-	g->addWidget(m_paramList,		1,	1);
+	QGridLayout *g = new QGridLayout(this);
+	g->addWidget(hSplitter, 0, 0);
+//	g->addMultiCellWidget(m_tables,		0,	0,	0,	1);
+//	g->addWidget(m_designTable,		1,	0);
+//	g->addWidget(m_paramList,		1,	1);
 }
 
 void KexiQueryDesignerGuiEditor::clear()
@@ -236,7 +240,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	RelationList relations = m_view->project()->relationManager()->projectRelations();
 
-	QString maxTable;
+	QString maxTable = QString::null;
 	int maxCount = 0;
 	bool isSrcTable = false;
 	for(InvolvedTables::Iterator it = m_involvedTables.begin(); it != m_involvedTables.end(); it++)
@@ -285,9 +289,18 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	//get "forign" tables
 
+	if(maxTable == QString::null)
+	{
+		if(m_involvedTables.count() == 1)
+		{
+			maxTable = m_involvedTables.begin().key();
+		}
+	}
+
 	query += " FROM ";
 	query += maxTable;
 
+	QStringList joined;
 	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
 	{
 		QStringList leftList = QStringList::split(".", (*itJ).eqLeft);
@@ -295,7 +308,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 		kdDebug() << "KexiQueryDesignerGuiEditor::getQuery(): current master: " << leftList.first() << endl;
 
 
-		if(leftList.first() == maxTable)
+		if(leftList.first() == maxTable && joined.findIndex((*itJ).sourceField) == -1)
 		{
 			query += " LEFT JOIN ";
 			query += (*itJ).sourceField;
@@ -303,6 +316,8 @@ KexiQueryDesignerGuiEditor::getQuery()
 			query += (*itJ).eqLeft;
 			query += " = ";
 			query += (*itJ).eqRight;
+
+			joined.append((*itJ).sourceField);
 		}
 	}
 

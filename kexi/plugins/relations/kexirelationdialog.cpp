@@ -69,7 +69,7 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 			chooseTable((*it).srcTable);
 			chooseTable((*it).rcvTable);
 
-			m_view->addConnection((*it),false);
+			m_view->addConnection((*it),true);
 		}
 	}
 	QVBoxLayout *g = new QVBoxLayout(this);

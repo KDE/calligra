@@ -369,6 +369,20 @@ KexiQueryDesigner::slotTabActivated(int tab)
 		{
 			m_view->executeQuery(m_editor->getQuery());
 		}
+		else if(m_widgetStack->widget(tab) == m_view && m_widgetStack->widget(m_activeTab) == m_sqlView)
+		{
+			KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_sqlDoc);
+			m_view->executeQuery(eIface->text());
+		}
+		else if(m_widgetStack->widget(tab) == m_sqlView && m_widgetStack->widget(m_activeTab) == m_editor)
+		{
+			QString q = m_editor->getQuery();
+			if(q != "")
+			{
+				KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_sqlDoc);
+				eIface->setText(q);
+			}
+		}
 
 		m_activeTab = tab;
 		m_widgetStack->raiseWidget(m_activeTab);
