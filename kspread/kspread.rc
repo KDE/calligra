@@ -77,7 +77,6 @@
   <Action name="reloadScripts"/>
  </Menu>
  <Menu name="help"><text>Help</text>
-  <Action name="help"/>
  </Menu>
 </MenuBar>
 <ToolBar>

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,7 +65,7 @@ KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoi
   l_replace = new QLineEdit( this );
   lay2->addWidget(l_replace,3,0);
 
-
+  l_find->setFocus();
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 

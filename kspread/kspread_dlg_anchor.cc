@@ -64,9 +64,11 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   bold=new QCheckBox(i18n("Bold"),this);
 
   lay2->addWidget(bold);
+  
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
+  
   text->setFocus();
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -123,6 +125,7 @@ else
 
 QString KSpreadanchor::create_anchor()
 {
+QString end_anchor;
 QString anchor;
 anchor="!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
 if(bold->isChecked()&&!italic->isChecked())

@@ -1,2 +1,11 @@
-- Eine ganze Spalte selektieren. Dann Right-Click => Layout => Ok => Infinite-Loop
-- Undo/Redo fuer Operationen auf ganzen Zeilen/Spalten
+Big bugs
+-When you save an embedded component and you try to reload file, embedded
+component is not loading
+-Undo function doesn't work => kspread crash when you make :
+        -delete column or row
+        -undo
+
+
+"little" bug:
+-When you sort a column with number, number is not sorting
+=>number is considering as a string.

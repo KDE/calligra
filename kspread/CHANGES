@@ -346,3 +346,7 @@ Now I use knumvalidator for QLineEdit
 -----------------------------------------------------
 -Improved ReadWrite => when you load in konqueror a kspread file
 you can't resize column or row, you can't rename table etc...
+
+2000-03-10 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bug fix

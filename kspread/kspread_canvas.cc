@@ -66,7 +66,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Up:
     case Key_Return:
     case Key_Enter:
-	
+
 	slotDoneEdit();
 
 	QApplication::sendEvent( m_pView->canvasWidget(), _ev );
@@ -686,7 +686,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	  m_rctAutoFillSrc.setCoords( markerColumn(), markerRow(),
 				      markerColumn(), markerRow() );
 	}
-	
+
 	m_iMouseStartColumn = markerColumn();
 	m_iMouseStartRow = markerRow();
       }
@@ -926,7 +926,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
-  if ( m_pView->koDocument()->isReadWrite() ) 
+  if ( m_pView->koDocument()->isReadWrite() )
     createEditor();
 }
 
@@ -2206,9 +2206,9 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * _ev )
 	if(!m_pView->koDocument()->isReadWrite()) 
 		return;
 
-	int x = 0;
-	int col = table->leftColumn( 0, x, m_pCanvas );
-	
+	int x = 1;
+	int col = table->leftColumn( 1, x, m_pCanvas );
+
 	while ( x < width() )
 	{
 		int w = table->columnLayout( col )->width( m_pCanvas );

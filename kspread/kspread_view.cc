@@ -252,7 +252,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_createAnchor = new KAction( i18n("Create Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
-    m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
+    //m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
     m_insertChart = new KAction( i18n("InsertChart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
     m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
@@ -552,7 +552,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 
 	if ( !choose )
 	    updateEditWidget();
-	
+
 	break;
 
     case Key_Right:
@@ -688,21 +688,21 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_hideTable->setEnabled( true );
   m_newView->setEnabled( true );
   m_gotoCell->setEnabled( true );
-  m_help->setEnabled( true );
+//  m_help->setEnabled( true );
   m_oszi->setEnabled( true );
 }
 
 void KSpreadView::formulaPower()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::POWER );
 }
 
 void KSpreadView::formulaSubscript()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::SUB );
 }
 
@@ -772,7 +772,7 @@ void KSpreadView::formulaLeftSub()
 void KSpreadView::formulaSum()
 {
     activateFormulaEditor();
-	
+
     canvasWidget()->insertFormulaChar(Box::SUM );
 }
 
