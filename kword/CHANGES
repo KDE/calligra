@@ -1,4 +1,4 @@
-Main changes between KWord-0.8 (KOffice-1.0) and KWord-1.1 (KOffice-1.1)
+Main changes between KWord-0.8 (KOffice-1.0) and KWord-1.1-beta1
 ========================================================================
 
 New overall design and new formatting engine.
@@ -31,4 +31,31 @@ Fixes:
  - Copy/Paste and Drag-and-drop work as expected (instead of for full paragraphs only)
 
 When Qt3 is out, KWord will support bi-directional editing of text (for hebrew, arabic etc.).
+
+Changes between KWord-1.1-beta1 and KWord-1.1-beta2
+===================================================
+
+Copying frames has been implemented, fixing headers and footers.
+Implemented tabulators (left/right/center/decimal aligned).
+Implemented floating framesets, mainly for inline formulas and tables.
+KWord can now be embedded into another KOffice application.
+More precise coordinate system (especially for frames).
+Many improvements for tables (including splitting and merging cells).
+Highlight mispelled word during spell-checking, and spell-check all framesets.
+UI improvements, undo/redo fixes, font-size fix, border-drawing improved, etc.
+Fixed crash when embedding into Konqueror.
+Many new variables available.
+Redesigned style editor (stylist), now all in one dialog.
+When changing a style, only the changes are applied to existing paragraphs (not the whole style).
+Fixed drawing and printing of embedded objects.
+Respect user's color scheme.
+Improved visual appearance (page shape, with shadow).
+
+Changes between KWord-1.1-beta2 and KWord-1.1-beta3 (under development)
+===================================================
+
+New view mode: preview (multiple pages per row)
+Inline items (variables, images) are now correctly drawn as selected.
+Improved readonly mode, when embedding into konqueror (can now select and copy).
+...
 
