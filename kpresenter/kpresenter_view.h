@@ -803,6 +803,8 @@ protected:
 
     void spellCheckerRemoveHighlight();
 
+    void setEditMaster( bool editMaster );
+
 private:
     void clearSpellChecker(bool cancelSpellCheck = false);
 
@@ -908,6 +910,8 @@ private:
     KAction *actionEditDelete;
     KAction *actionEditSelectAll;
     KAction *actionEditDeSelectAll;
+    KAction *actionEditCopyPage;
+    KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
 
     KToggleAction *actionViewShowSideBar;

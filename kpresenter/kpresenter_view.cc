@@ -2336,12 +2336,12 @@ void KPresenterView::setupActions()
                                     actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
-    /*actionEditCopyPage = */new KAction( i18n( "Copy Slide" ), "editcopy",
-                                          0, this, SLOT( editCopyPage() ),
-                                          actionCollection(), "edit_copypage" );
-    /*actionEditDuplicatePage =*/ new KAction( i18n( "Duplicate Slide" ), "newslide",
-                                               0, this, SLOT( editDuplicatePage() ),
-                                               actionCollection(), "edit_duplicatepage" );
+    actionEditCopyPage = new KAction( i18n( "Copy Slide" ), "editcopy",
+                                      0, this, SLOT( editCopyPage() ),
+                                      actionCollection(), "edit_copypage" );
+    actionEditDuplicatePage = new KAction( i18n( "Duplicate Slide" ), "newslide",
+                                      0, this, SLOT( editDuplicatePage() ),
+                                      actionCollection(), "edit_duplicatepage" );
     actionEditDelPage = new KAction( i18n( "Delete Slide" ), "delslide", 0,
                                      this, SLOT( editDelPage() ),
                                      actionCollection(), "edit_delpage" );
@@ -4223,6 +4223,9 @@ void KPresenterView::setRanges()
 
 void KPresenterView::skipToPage( int num )
 {
+#if MASTERPAGE
+    setEditMaster( false );
+#endif
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || !m_canvas )
         return;
     m_canvas->exitEditMode();
@@ -4444,6 +4447,11 @@ bool KPresenterView::gotoPresPage( int pg )
 
 void KPresenterView::nextPage()
 {
+#if MASTERPAGE
+    // don't move when on master
+    if ( m_editMaster )
+        return;
+#endif
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
         return;
 
@@ -4453,6 +4461,11 @@ void KPresenterView::nextPage()
 
 void KPresenterView::prevPage()
 {
+#if MASTERPAGE
+    // don't move when on master
+    if ( m_editMaster )
+        return;
+#endif
     if ( currPg == 0 )
         return;
     skipToPage( currPg-1 );
@@ -4575,20 +4588,44 @@ void KPresenterView::viewShowNoteBar()
 void KPresenterView::viewSlideMaster()
 {
 #if MASTERPAGE
-    m_canvas->exitEditMode();
-    m_canvas->deSelectAllObj();
-    m_editMaster = !m_editMaster;
-    if ( m_editMaster )
-    {
-        m_canvas->setActivePage( m_pKPresenterDoc->masterPage() );
-    }
-    else
-    {
-        m_canvas->setActivePage( m_pKPresenterDoc->pageList().at( currPg ) );
-    }
-    m_canvas->repaint( false );
+    setEditMaster( actionViewSlideMaster->isChecked() );
 #endif
 }
+
+void KPresenterView::setEditMaster( bool editMaster )
+{
+    if ( m_editMaster != editMaster )
+    {
+        m_canvas->exitEditMode();
+        m_canvas->deSelectAllObj();
+        m_editMaster = editMaster;
+        if ( m_editMaster )
+        {
+            m_canvas->setActivePage( m_pKPresenterDoc->masterPage() );
+            pgPrev->setEnabled( false );
+            actionScreenFirst->setEnabled( false );
+            actionScreenPrev->setEnabled( false );
+            pgNext->setEnabled( false  );
+            actionScreenLast->setEnabled( false );
+            actionScreenNext->setEnabled( false );
+            actionEditCopyPage->setEnabled( false );
+            actionEditDuplicatePage->setEnabled( false );
+            actionEditDelPage->setEnabled( false );
+            actionViewSlideMaster->setChecked( true );
+        }
+        else
+        {
+            m_canvas->setActivePage( m_pKPresenterDoc->pageList().at( currPg ) );
+            actionEditCopyPage->setEnabled( true );
+            actionEditDuplicatePage->setEnabled( true );
+            actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
+            actionViewSlideMaster->setChecked( false );
+            refreshPageButton();
+        }
+        m_canvas->repaint( false );
+    }
+}
+
 void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
