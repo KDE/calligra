@@ -36,6 +36,7 @@
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
+#include <kservice.h>
 #include <qvbox.h>
 #include <qspinbox.h>
 
@@ -125,8 +126,7 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
 		KWMailMergeChoosePluginDialog *dia=new KWMailMergeChoosePluginDialog(pluginOffers);
 		if (dia->exec()==QDialog::Accepted)
 		{
-			ret=loadPlugin((*(pluginOffers.at(dia->
-			chooser->currentItem())))->library());
+			ret=loadPlugin((*(pluginOffers.at(dia->currentPlugin())))->library());
 		}
 
 	}
@@ -300,34 +300,48 @@ void KWMailMergeDataBase::load( const QDomElement& parentElem )
  *
  ******************************************************************/
 
-KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog(KTrader::OfferList pluginOffers)
-    : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Ok|Cancel, Ok, /*parent*/ 0, "", true )
+KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList offers )
+    : KDialogBase( Plain, i18n( "Mail Merge - Configuration" ), Ok | Cancel, Ok,
+      /*parent*/ 0, "", true ), pluginOffers( offers )
 {
-	QWidget *back = plainPage();
-	QVBoxLayout *layout=new QVBoxLayout(back);
-	layout->setSpacing( KDialog::spacingHint() );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setAutoAdd(true);
-	QLabel *l = new QLabel( i18n( "&Available sources:" ),back );
-   //l->setMaximumHeight( l->sizeHint().height() );
-	chooser=new QComboBox(back);
-	l->setBuddy(chooser);
-	chooser->setEditable(false);
-	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
-	{
-		chooser->insertItem((*it)->name());
-	}
-	l=new QLabel((*pluginOffers.at(0))->comment(),back);
-	l->setAlignment( WordBreak );
-	l->setFrameShape( QFrame::Box );
-	l->setFrameShadow( QFrame::Sunken );
-	l->setMinimumSize(l->sizeHint());
-   layout->addStretch();
+  QWidget *back = plainPage();
+  QVBoxLayout *layout = new QVBoxLayout( back, marginHint(), spacingHint() );
 
+  QLabel *label = new QLabel( i18n( "&Available sources:" ), back );
+  chooser = new QComboBox( false, back );
+  label->setBuddy( chooser );
+  for ( KTrader::OfferList::Iterator it = pluginOffers.begin(); *it; ++it )
+    chooser->insertItem( (*it)->name() );
+
+  connect( chooser, SIGNAL( activated( int ) ),
+           this, SLOT( pluginChanged( int ) ) );
+
+	descriptionLabel = new QLabel( back );
+	descriptionLabel->setAlignment( WordBreak );
+	descriptionLabel->setFrameShape( QFrame::Box );
+	descriptionLabel->setFrameShadow( QFrame::Sunken );
+	descriptionLabel->setMinimumSize( descriptionLabel->sizeHint() );
+
+  layout->addWidget( label );
+  layout->addWidget( chooser );
+  layout->addWidget( descriptionLabel );
+  layout->addStretch( 1 );
+
+  pluginChanged( 0 );
 }
 
 KWMailMergeChoosePluginDialog::~KWMailMergeChoosePluginDialog()
 {
+}
+
+int KWMailMergeChoosePluginDialog::currentPlugin() const
+{
+  return chooser->currentItem();
+}
+
+void KWMailMergeChoosePluginDialog::pluginChanged( int pos )
+{
+  descriptionLabel->setText( (*pluginOffers.at( pos ))->comment() );
 }
 
 /******************************************************************

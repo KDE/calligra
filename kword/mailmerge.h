@@ -89,11 +89,21 @@ protected:
 
 class KWMailMergeChoosePluginDialog : public KDialogBase
 {
-	Q_OBJECT
-public:
-	KWMailMergeChoosePluginDialog(KTrader::OfferList);
-	~KWMailMergeChoosePluginDialog();
-	class QComboBox *chooser;
+  Q_OBJECT
+
+  public:
+    KWMailMergeChoosePluginDialog( KTrader::OfferList );
+    ~KWMailMergeChoosePluginDialog();
+
+    int currentPlugin() const;    
+
+  private slots:
+    void pluginChanged( int pos );
+
+  private:
+    class QComboBox *chooser;
+    class QLabel *descriptionLabel;
+    KTrader::OfferList pluginOffers;
 };
 
 class KWMailMergeConfigDialog : public KDialogBase
