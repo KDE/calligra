@@ -133,11 +133,16 @@ namespace KoPageFormat
 /**
  * Header/Footer type.
  * 0 ... Header/Footer is the same on all pages
+ * 1 ... Header/Footer is different on first, even and odd pages (2&3)
  * 2 ... Header/Footer for the first page differs
  * 3 ... Header/Footer for even - odd pages are different
+ *
+ * Yes, this should have been a bitfield, but there was only 0,2,3 in koffice-1.0. Don't ask why.
+ * In the long run this should be replaced with a more flexible repetition/section concept.
  */
 enum KoHFType {
     HF_SAME = 0,
+    HF_FIRST_EO_DIFF = 1,
     HF_FIRST_DIFF = 2,
     HF_EO_DIFF = 3
 };
