@@ -536,14 +536,15 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     {
         if (src.top() != dest.bottom() )
             dest.setBottom(dest.bottom() - 1);
-        for ( int x = dest.left()/*src.left()*/; x <= src.right()/*dest.right()*/; x++ )
+        kdDebug()<<" dest.left() :"<<dest.left()<<" src.left() :"<<src.left()<<" src.right() :"<<src.right()<<" dest.right() :"<<dest.right()<<endl;
+        for ( int x = QMIN( dest.left(), src.left())/*src.left()*/; x <= QMAX(src.right(), dest.right())/*dest.right()*/; x++ )
         {
             int y;
             QPtrList<KSpreadCell> destList;
             for ( y = dest.top(); y < src.top(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<KSpreadCell> srcList;
-            for ( y = src.top(); y <= src.bottom(); ++y )
+            for ( y = dest.top(); y <= dest.bottom(); ++y )
             {
                 srcList.append( cellAt( x, y ) );
             }
