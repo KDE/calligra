@@ -203,7 +203,7 @@ void ElementType::output()
     kdDebug( DEBUGID ) << start() << " - " << end() << endl;
 }
 
-void ElementType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
+void ElementType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     for ( uint i = from; i < to; ++i ) {
         se->getChild( i )->writeMathML( doc, de, oasisFormat );
@@ -289,7 +289,7 @@ TextType::TextType( SequenceParser* parser )
 {
 }
 
-void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
+void TextType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     for ( uint i = start(); i < end(); ++i ) {
         QDomElement text = doc.createElement( oasisFormat ? "math:mi" : "mi" );
@@ -316,7 +316,7 @@ NameType::NameType( SequenceParser* parser )
 {
 }
 
-void NameType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
+void NameType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     se->getChild( start() )->writeMathML( doc, de, oasisFormat );
 
@@ -353,7 +353,7 @@ void NumberType::setUpPainter(const ContextStyle& context, QPainter& painter)
     painter.setPen(context.getNumberColor());
 }
 
-void NumberType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
+void NumberType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     QDomElement name = doc.createElement( oasisFormat ? "math:mn"  : "mn" );
     QString value;
@@ -382,7 +382,7 @@ AbstractOperatorType::AbstractOperatorType( SequenceParser* parser )
 {
 }
 
-void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de, bool oasisFormat )
+void AbstractOperatorType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )
 {
     QDomElement op = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     BasicElement* be = se->getChild( start() );

@@ -43,7 +43,7 @@ private:
 };
 
 
-void save( const QString &filename, QDomDocument doc )
+void save( const QString &filename, const QDomDocument& doc )
 {
     QFile f( filename );
     if(!f.open(IO_Truncate | IO_ReadWrite)) {

@@ -106,7 +106,7 @@ public:
      * Load a kformula DomDocument with all its formulas.
      * This must only be called on a virgin document.
      */
-    bool loadXML( QDomDocument doc );
+    bool loadXML( const QDomDocument& doc );
 
     /**
      * Load a OASIS content.xml DomDocument
@@ -127,7 +127,7 @@ public:
     /**
      * Save the document settings.
      */
-    QDomElement saveDocumentPart( QDomDocument doc );
+    QDomElement saveDocumentPart( QDomDocument& doc );
 
 
     /**

@@ -364,12 +364,12 @@ public:
      * children, and as attribute the attribute of this
      * element.
      */
-    QDomElement getElementDom(QDomDocument& doc);
+    QDomElement getElementDom( QDomDocument& doc);
 
     /**
      * Same as above, just MathML.
      */
-    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
     /**
      * Set this element attribute, build children and

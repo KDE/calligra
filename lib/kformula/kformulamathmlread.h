@@ -65,7 +65,7 @@ public:
 
 private:
 
-    bool processElement( QDomNode node, QDomDocument doc,
+    bool processElement( QDomNode node, QDomDocument& doc,
                          QDomNode docnode );
 
     QDomDocument origdoc;

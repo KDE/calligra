@@ -281,7 +281,7 @@ public:
     /**
      * Stores the given childrens dom in the element.
      */
-    void getChildrenDom(QDomDocument doc, QDomElement elem, uint from, uint to);
+    void getChildrenDom( QDomDocument& doc, QDomElement elem, uint from, uint to);
 
     /**
      * Builds elements from the given node and its siblings and
@@ -298,7 +298,7 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
     /**
      * @returns the child at position i.
@@ -531,7 +531,7 @@ public:
      */
     static bool isValidSelection( FormulaCursor* cursor );
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
 protected:
 

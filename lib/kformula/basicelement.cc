@@ -166,7 +166,7 @@ void BasicElement::normalize(FormulaCursor* cursor, Direction direction)
 }
 
 
-QDomElement BasicElement::getElementDom(QDomDocument& doc)
+QDomElement BasicElement::getElementDom( QDomDocument& doc)
 {
     QDomElement de = doc.createElement(getTagName());
     writeDom(de);
@@ -174,7 +174,7 @@ QDomElement BasicElement::getElementDom(QDomDocument& doc)
 }
 
 
-void BasicElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
+void BasicElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
 {
     parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
                                            .arg( getTagName() ) ) );

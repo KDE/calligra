@@ -635,7 +635,7 @@ bool FormulaCursor::isReadOnly() const
 /**
  * Stores the currently selected elements inside a dom.
  */
-void FormulaCursor::copy( QDomDocument doc )
+void FormulaCursor::copy( QDomDocument& doc )
 {
     if (isSelection()) {
         SequenceElement* sequence = normal();

@@ -127,7 +127,7 @@ int Document::formulaCount()
 }
 
 
-bool Document::loadXML( QDomDocument doc )
+bool Document::loadXML( const QDomDocument& doc )
 {
     //clear();
     QDomElement root = doc.documentElement();
@@ -188,7 +188,7 @@ QDomDocument Document::saveXML()
 }
 
 
-QDomElement Document::saveDocumentPart( QDomDocument doc )
+QDomElement Document::saveDocumentPart( QDomDocument& doc )
 {
     QDomElement settings = doc.createElement( "FORMULASETTINGS" );
     return settings;

@@ -184,7 +184,7 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 }
 
 
-QDomElement FormulaElement::emptyFormulaElement( QDomDocument doc )
+QDomElement FormulaElement::emptyFormulaElement( QDomDocument& doc )
 {
     QDomElement element = doc.createElement( getTagName() );
     /*
@@ -310,7 +310,7 @@ QString FormulaElement::toLatex()
     return inherited::toLatex();   //Consider $$ sorround
 }
 
-void FormulaElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
+void FormulaElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de;
     if ( !oasisFormat )

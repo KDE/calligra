@@ -40,7 +40,7 @@ class MathML2KFormulaPrivate
 public:
     MathML2KFormulaPrivate( MathML2KFormula* mml_filter,
                             const ContextStyle& contextStyle,
-                            QDomDocument formuladoc );
+                            const QDomDocument& formuladoc );
     ~MathML2KFormulaPrivate();
 
     void math( QDomElement element );
@@ -254,7 +254,7 @@ private:
     MathML2KFormula* filter;
 };
 
-MathML2KFormulaPrivate::MathML2KFormulaPrivate( MathML2KFormula* mml_filter, const ContextStyle& cs, QDomDocument formuladoc )
+MathML2KFormulaPrivate::MathML2KFormulaPrivate( MathML2KFormula* mml_filter, const ContextStyle& cs, const QDomDocument& formuladoc )
     : doc( formuladoc ), context( cs ), filter( mml_filter )
 {
 }
@@ -1000,8 +1000,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode, bool 
     docnode.appendChild( root );
 }
 
-void MathML2KFormulaPrivate::munderover( QDomElement element,
-                                         QDomNode docnode, bool oasisFormat )
+void MathML2KFormulaPrivate::munderover( QDomElement element, QDomNode docnode, bool oasisFormat )
 {
     bool accent;
     bool accentunder;
@@ -1185,8 +1184,7 @@ void MathML2KFormulaPrivate::msubsup( QDomElement element, QDomNode docnode )
     docnode.appendChild( root );
 }
 
-void MathML2KFormulaPrivate::createTextElements( QString text,
-                                                 QDomNode docnode )
+void MathML2KFormulaPrivate::createTextElements( QString text, QDomNode docnode )
 {
     for ( uint i = 0; i < text.length(); ++i ) {
         QDomElement textelement = doc.createElement( "TEXT" );
@@ -1359,8 +1357,7 @@ void MathML2KFormula::startConversion()
     done = true;
 }
 
-bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
-                                      QDomNode docnode )
+bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode docnode )
 {
 
     //QDomElement *element;

@@ -1281,7 +1281,7 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
 /**
  * Stores the given childrens dom in the element.
  */
-void SequenceElement::getChildrenDom(QDomDocument doc, QDomElement elem,
+void SequenceElement::getChildrenDom( QDomDocument& doc, QDomElement elem,
                                      uint from, uint to)
 {
     for (uint i = from; i < to; i++) {
@@ -1444,7 +1444,7 @@ QString SequenceElement::formulaString()
 }
 
 
-void SequenceElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
+void SequenceElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
 
@@ -1691,7 +1691,7 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
     return sequence->onlyTextSelected( cursor );
 }
 
-void NameSequence::writeMathML( QDomDocument doc, QDomNode parent,bool oasisFormat )
+void NameSequence::writeMathML( QDomDocument& doc, QDomNode parent,bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
     QString value;

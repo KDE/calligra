@@ -41,15 +41,15 @@ public:
 
 private:
 
-    QDomElement readSequence(QDomDocument doc);
-    QDomElement readMatrix(QDomDocument doc);
+    QDomElement readSequence(const QDomDocument& doc);
+    QDomElement readMatrix(const QDomDocument& doc);
 
     void appendToSequence(QDomElement sequence, QDomElement element, int leftIndexSeen);
 
-    void appendNextSequence(QDomDocument doc, QDomElement element);
-    QDomElement getLastSequence(QDomDocument doc, QDomElement sequence);
+    void appendNextSequence(const QDomDocument& doc, QDomElement element);
+    QDomElement getLastSequence(const QDomDocument& doc, QDomElement sequence);
 
-    QDomElement findIndexNode(QDomDocument doc, QDomElement sequence);
+    QDomElement findIndexNode(const QDomDocument& doc, QDomElement sequence);
 
     ushort nextToken() { return formulaString[pos++].unicode(); }
     ushort lookAhead(uint i) const { return formulaString[pos+i].unicode(); }

@@ -880,7 +880,7 @@ SequenceElement* MatrixElement::elementAt(uint row, uint column)
 }
 
 
-void MatrixElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
+void MatrixElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row;
@@ -962,7 +962,7 @@ public:
     /// Return the position of tab i.
     int tabPos( uint i );
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
 private:
 
@@ -1225,7 +1225,7 @@ int MultilineSequenceElement::tabPos( uint i )
 }
 
 
-void MultilineSequenceElement::writeMathML( QDomDocument doc,
+void MultilineSequenceElement::writeMathML( QDomDocument& doc,
                                             QDomNode parent, bool oasisFormat )
 {
     // parent is required to be a <mtr> tag
@@ -1703,7 +1703,7 @@ void MultilineElement::writeDom(QDomElement element)
     }
 }
 
-void MultilineElement::writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat )
+void MultilineElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row; QDomElement cell;

@@ -83,7 +83,7 @@ QDomDocument Compatibility::buildDOM(QString text)
 }
 
 
-void Compatibility::appendNextSequence(QDomDocument doc, QDomElement element)
+void Compatibility::appendNextSequence(const QDomDocument& doc, QDomElement element)
 {
     if (hasNext() && nextToken() == '{') {
         element.appendChild(readSequence(doc));
@@ -95,7 +95,7 @@ void Compatibility::appendNextSequence(QDomDocument doc, QDomElement element)
 }
 
 
-QDomElement Compatibility::getLastSequence(QDomDocument doc, QDomElement sequence)
+QDomElement Compatibility::getLastSequence(const QDomDocument& doc, QDomElement sequence)
 {
     if (sequence.lastChild().nodeName() == "SEQUENCE") {
         QDomNode child = sequence.removeChild(sequence.lastChild());
@@ -112,7 +112,7 @@ QDomElement Compatibility::getLastSequence(QDomDocument doc, QDomElement sequenc
 }
 
 
-QDomElement Compatibility::findIndexNode(QDomDocument doc, QDomElement sequence)
+QDomElement Compatibility::findIndexNode(const QDomDocument& doc, QDomElement sequence)
 {
     QDomElement element;
     if (sequence.lastChild().nodeName() == "INDEX") {
@@ -151,7 +151,7 @@ void Compatibility::appendToSequence(QDomElement sequence, QDomElement element, 
 }
 
 
-QDomElement Compatibility::readMatrix(QDomDocument doc)
+QDomElement Compatibility::readMatrix(const QDomDocument& doc)
 {
     QDomElement element = doc.createElement("MATRIX");
 
@@ -195,7 +195,7 @@ QDomElement Compatibility::readMatrix(QDomDocument doc)
 }
 
 
-QDomElement Compatibility::readSequence(QDomDocument doc)
+QDomElement Compatibility::readSequence(const QDomDocument& doc)
 {
     // matrizes start with something that isn't a sequence
     if ((tokenLeft() > 6) && (lookAhead(1) == OF_SEPARATOR)) {

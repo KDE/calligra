@@ -168,7 +168,7 @@ public:
 
     virtual KCommand* input( Container* container, QKeyEvent* event );
 
-    virtual void writeMathML( QDomDocument doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
 
     /**
      * Appends our attributes to the dom element.
@@ -178,7 +178,7 @@ public:
     /**
      * For copy&paste we need to create an empty XML element.
      */
-    QDomElement emptyFormulaElement( QDomDocument doc );
+    QDomElement emptyFormulaElement( QDomDocument& doc );
 
 protected:
 

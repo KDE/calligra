@@ -290,7 +290,7 @@ public:
     /**
      * Stores the currently selected elements inside a dom.
      */
-    void copy( QDomDocument doc );
+    void copy( QDomDocument& doc );
 
     /**
      * Inserts the elements that could be read from the dom into

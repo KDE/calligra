@@ -33,7 +33,7 @@ class FormulaElement;
 class MimeSource : public QMimeSource, public FormulaDocument
 {
 public:
-    MimeSource(Document* doc, QDomDocument formula);
+    MimeSource(Document* doc, const QDomDocument& formula);
     ~MimeSource();
 
     virtual const char* format ( int n = 0 ) const;

@@ -39,7 +39,7 @@ KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
-MimeSource::MimeSource(Document* doc, QDomDocument formula)
+MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
         : formulaDocument( doc ), document(formula)
 {
     // The query for text/plain comes very often. So make sure
