@@ -10,12 +10,12 @@ libkocryptexport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = libkocryptimport.la libkocryptexport.la
 
-libkocryptimport_la_SOURCES = kocryptimport.cc kocryptimport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc
-libkocryptexport_la_SOURCES = kocryptexport.cc kocryptexport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc
+libkocryptimport_la_SOURCES = kocryptimport.cc kocryptimport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc kocryptpwddlg.cc kocryptpwddlg_factory.cc
+libkocryptexport_la_SOURCES = kocryptexport.cc kocryptexport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc kocryptpwddlg.cc kocryptpwddlg_factory.cc
 
 noinst_HEADERS = kocryptimport.h kocryptimport_factory.h kocryptexport.h  \
 	kocryptexport_factory.h cbc.h blowfish.h blockcipher.h            \
-	blowfishtables.h hashbase.h
+	blowfishtables.h hashbase.h kocryptpwddlg.h kocryptpwddlg_factory.h
 
 METASOURCES = AUTO
 
