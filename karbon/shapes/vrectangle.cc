@@ -21,17 +21,29 @@
 
 #include "vrectangle.h"
 #include <klocale.h>
+#include <qdom.h>
+
+VRectangle::VRectangle( VObject* parent, VState state )
+	: VComposite( parent, state )
+{
+}
 
 VRectangle::VRectangle( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
-	: VComposite( parent )
+	: VComposite( parent ), m_topLeft( topLeft ), m_width( width), m_height( height )
 {
 	setDrawCenterNode();
 
-	moveTo( topLeft );
-	lineTo( KoPoint( topLeft.x(),         topLeft.y() - height ) );
-	lineTo( KoPoint( topLeft.x() + width, topLeft.y() - height ) );
-	lineTo( KoPoint( topLeft.x() + width, topLeft.y() ) );
+	init();
+}
+
+void
+VRectangle::init()
+{
+	moveTo( m_topLeft );
+	lineTo( KoPoint( m_topLeft.x(),         m_topLeft.y() - m_height ) );
+	lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
+	lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ) );
 	close();
 }
 
@@ -40,5 +52,39 @@ VRectangle::name() const
 {
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Rectangle" );
+}
+
+void
+VRectangle::save( QDomElement& element ) const
+{
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "RECT" );
+		element.appendChild( me );
+
+		VObject::save( me );
+
+		me.setAttribute( "x", m_topLeft.x() );
+		me.setAttribute( "y", m_topLeft.y() );
+
+		me.setAttribute( "width", m_width );
+		me.setAttribute( "height", m_height );
+	}
+}
+
+void
+VRectangle::load( const QDomElement& element )
+{
+	setState( normal );
+
+	VObject::load( element );
+
+	m_width  = element.attribute( "width" ).toDouble(),
+	m_height = element.attribute( "height" ).toDouble(),
+
+	m_topLeft.setX( element.attribute( "x" ).toDouble() );
+	m_topLeft.setY( element.attribute( "y" ).toDouble() );
+
+	init();
 }
 

@@ -28,6 +28,7 @@
 
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
+#include "shapes/vrectangle.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -189,6 +190,12 @@ VGroup::load( const QDomElement& element )
 				VEllipse* ellipse = new VEllipse( this );
 				ellipse->load( e );
 				append( ellipse );
+			}
+			else if( e.tagName() == "RECT" )
+			{
+				VRectangle* rectangle = new VRectangle( this );
+				rectangle->load( e );
+				append( rectangle );
 			}
 			else if( e.tagName() == "GROUP" )
 			{

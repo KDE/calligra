@@ -118,10 +118,6 @@ VEllipse::save( QDomElement& element ) const
 
 		VObject::save( me );
 
-		QString d;
-		saveSvgPath( d );
-		me.setAttribute( "d", d );
-
 		me.setAttribute( "cx", m_center.x() );
 		me.setAttribute( "cy", m_center.y() );
 
