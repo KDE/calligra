@@ -36,10 +36,10 @@ Powerpoint::~Powerpoint()
 
 void Powerpoint::invokeHandler(
     Header &op,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
-    typedef void (Powerpoint::*method)(Header &op, U32 bytes, QDataStream &operands);
+    typedef void (Powerpoint::*method)(Header &op, Q_UINT32 bytes, QDataStream &operands);
 
     typedef struct
     {
@@ -64,7 +64,7 @@ void Powerpoint::invokeHandler(
         { "COLORSCHEMEATOM",            2032,   &Powerpoint::opColorSchemeAtom },
         { "COREPICT",                   4037,   0 /* &Powerpoint::opCorePict */ },
         { "COREPICTATOM",               4038,   0 /* &Powerpoint::opCorePictAtom */ },
-        { "CSTRING",                    4026,   0 /* &Powerpoint::opCString */ },
+        { "CSTRING",                    4026,   &Powerpoint::opCString },
         { "CURRENTUSERATOM",            4086,   &Powerpoint::opCurrentUserAtom },
         { "DATETIMEMCATOM",             4087,   0 /* &Powerpoint::opDateTimeMCAtom */ },
         { "DEFAULTRULERATOM",           4011,   0 /* &Powerpoint::opDefaultRulerAtom */ },
@@ -80,8 +80,8 @@ void Powerpoint::invokeHandler(
         { "EXCDAUDIOATOM",              4114,   0 /* &Powerpoint::opExCDAudioAtom */ },
         { "EXCONTROL",                  4078,   0 /* &Powerpoint::opExControl */ },
         { "EXCONTROLATOM",              4091,   0 /* &Powerpoint::opExControlAtom */ },
-        { "EXEMBED",                    4044,   0 /* &Powerpoint::opExEmbed */ },
-        { "EXEMBEDATOM",                4045,   0 /* &Powerpoint::opExEmbedAtom */ },
+        { "EXEMBED",                    4044,   &Powerpoint::opExEmbed },
+        { "EXEMBEDATOM",                4045,   &Powerpoint::opExEmbedAtom },
         { "EXHYPERLINK",                4055,   0 /* &Powerpoint::opExHyperlink */ },
         { "EXHYPERLINKATOM",            4051,   0 /* &Powerpoint::opExHyperlinkAtom */ },
         { "EXLINK",                     4046,   0 /* &Powerpoint::opExLink */ },
@@ -90,12 +90,12 @@ void Powerpoint::invokeHandler(
         { "EXMCIMOVIE",                 4103,   0 /* &Powerpoint::opExMCIMovie */ },
         { "EXMEDIAATOM",                4100,   0 /* &Powerpoint::opExMediaAtom */ },
         { "EXMIDIAUDIO",                4109,   0 /* &Powerpoint::opExMIDIAudio */ },
-        { "EXOBJLIST",                  1033,   0 /* &Powerpoint::opExObjList */ },
-        { "EXOBJLISTATOM",              1034,   0 /* &Powerpoint::opExObjListAtom */ },
-        { "EXOBJREFATOM",               3009,   0 /* &Powerpoint::opExObjRefAtom */ },
-        { "EXOLEOBJ",                   4034,   0 /* &Powerpoint::opExOleObj */ },
-        { "EXOLEOBJATOM",               4035,   0 /* &Powerpoint::opExOleObjAtom */ },
-        { "EXOLEOBJSTG",                4113,   0 /* &Powerpoint::opExOleObjStg */ },
+        { "EXOBJLIST",                  1033,   &Powerpoint::opExObjList },
+        { "EXOBJLISTATOM",              1034,   &Powerpoint::opExObjListAtom },
+        { "EXOBJREFATOM",               3009,   &Powerpoint::opExObjRefAtom },
+        { "EXOLEOBJ",                   4034,   &Powerpoint::opExOleObj },
+        { "EXOLEOBJATOM",               4035,   &Powerpoint::opExOleObjAtom },
+        { "EXOLEOBJSTG",                4113,   &Powerpoint::opExOleObjStg },
         { "EXPLAIN",                    4053,   0 /* &Powerpoint::opExPlain */ },
         { "EXPLAINATOM",                4039,   0 /* &Powerpoint::opExPlainAtom */ },
         { "EXPLAINLINK",                4054,   0 /* &Powerpoint::opExPlainLink */ },
@@ -290,19 +290,19 @@ bool Powerpoint::parse(
 
 void Powerpoint::opColorSchemeAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U32 background;
-        U32 textAndLines;
-        U32 shadows;
-        U32 titleText;
-        U32 fills;
-        U32 accent;
-        U32 accentAndHyperlink;
-        U32 accentAndFollowedHyperlink;
+        Q_UINT32 background;
+        Q_UINT32 textAndLines;
+        Q_UINT32 shadows;
+        Q_UINT32 titleText;
+        Q_UINT32 fills;
+        Q_UINT32 accent;
+        Q_UINT32 accentAndHyperlink;
+        Q_UINT32 accentAndFollowedHyperlink;
     } data;
 
     operands >> data.background >> data.textAndLines >> data.shadows >>
@@ -311,24 +311,45 @@ void Powerpoint::opColorSchemeAtom(
     skip(bytes - sizeof(data), operands);
 }
 
+//
+// A Unicode String.
+//
+void Powerpoint::opCString(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    QString value;
+    unsigned i;
+
+    for (i = 0; i < bytes / 2; i++)
+    {
+        Q_UINT16 tmp;
+
+        operands >> tmp;
+        value += tmp;
+    }
+    kdDebug(s_area) << "value: " << value << endl;
+}
+
 void Powerpoint::opCurrentUserAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U32 size;
-        U32 magic;                  // Magic number to ensure this is a PowerPoint file.
-        U32 offsetToCurrentEdit;    // Offset in main stream to current edit field.
-        U16 lenUserName;
-        U16 docFileVersion;
-        U8 majorVersion;
-        U8 minorVersion;
+        Q_UINT32 size;
+        Q_UINT32 magic;                  // Magic number to ensure this is a PowerPoint file.
+        Q_UINT32 offsetToCurrentEdit;    // Offset in main stream to current edit field.
+        Q_UINT16 lenUserName;
+        Q_UINT16 docFileVersion;
+        Q_UINT8 majorVersion;
+        Q_UINT8 minorVersion;
     } data;
-    const U32 MAGIC_NUMBER = (U32)(-476987297);
+    const Q_UINT32 MAGIC_NUMBER = (Q_UINT32)(-476987297);
     QString userName;
-    U16 release;
+    Q_UINT16 release;
     unsigned i;
 
     operands >> data.size >> data.magic >> data.offsetToCurrentEdit >>
@@ -336,13 +357,13 @@ void Powerpoint::opCurrentUserAtom(
         data.minorVersion;
 
     // Skip what appears to be junk. TBD: these two bytes are documented to belong
-    // to a U32 "release" rather then the U16 release actually encountered.
+    // to a Q_UINT32 "release" rather then the Q_UINT16 release actually encountered.
 
-    U16 crap;
+    Q_UINT16 crap;
     operands >> crap;
     for (i = 0; i < data.lenUserName; i++)
     {
-        U8 tmp;
+        Q_UINT8 tmp;
 
         operands >> tmp;
         userName += tmp;
@@ -384,7 +405,7 @@ void Powerpoint::opCurrentUserAtom(
 
 void Powerpoint::opDocument(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -392,7 +413,7 @@ void Powerpoint::opDocument(
 
 void Powerpoint::opDocumentAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -400,7 +421,7 @@ void Powerpoint::opDocumentAtom(
 
 void Powerpoint::opEndDocument(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -408,15 +429,51 @@ void Powerpoint::opEndDocument(
 
 void Powerpoint::opEnvironment(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
+//
+// Contains an ExEmbedAtom and 3 CStrings (the menu name, the program id which
+// unqiuely identifies the type of object, and the "paste special" name).
+//
+void Powerpoint::opExEmbed(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+//
+// Information about an embedded object.
+//
+void Powerpoint::opExEmbedAtom(
+    Header & /* op */,
+    Q_UINT32,
+    QDataStream &operands)
+{
+    struct
+    {
+        Q_INT32 followColorScheme;
+        Q_UINT8 cantLockServerB;
+        Q_UINT8 noSizeToServerB;
+        Q_UINT8 isTable;
+        Q_INT8 junk;
+    } data;
+
+    operands >> data.followColorScheme;
+    operands >> data.cantLockServerB;
+    operands >> data.noSizeToServerB;
+    operands >> data.isTable;
+    operands >> data.junk;
+}
+
 void Powerpoint::opFontCollection(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -424,7 +481,7 @@ void Powerpoint::opFontCollection(
 
 void Powerpoint::opFontEntityAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -432,7 +489,7 @@ void Powerpoint::opFontEntityAtom(
 
 void Powerpoint::opHeadersFooters(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -440,7 +497,7 @@ void Powerpoint::opHeadersFooters(
 
 void Powerpoint::opHeadersFootersAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -448,7 +505,7 @@ void Powerpoint::opHeadersFootersAtom(
 
 void Powerpoint::opList(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -456,7 +513,7 @@ void Powerpoint::opList(
 
 void Powerpoint::opMainMaster(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -464,7 +521,7 @@ void Powerpoint::opMainMaster(
 
 void Powerpoint::opMsod(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     char *data;
@@ -486,7 +543,7 @@ kdError() <<"       drgid: "<< m_slide->persistentReference << endl;
 
 void Powerpoint::opNotes(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -494,22 +551,95 @@ void Powerpoint::opNotes(
 
 void Powerpoint::opNotesAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        S32 slideId;    // Id for the corresponding slide.
-        U16 flags;
+        Q_INT32 slideId;    // Id for the corresponding slide.
+        Q_UINT16 flags;
     } data;
 
     operands >> data.slideId >> data.flags;
     skip(bytes - 6, operands);
 }
 
+//
+// Contains an ExObjListAtom and a list of all objects in a document.
+//
+void Powerpoint::opExObjList(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+//
+// Get the next unique identifier for OLE objects.
+//
+void Powerpoint::opExObjListAtom(
+    Header & /* op */,
+    Q_UINT32,
+    QDataStream &operands)
+{
+    Q_UINT32 objectSeedId;
+
+    operands >> objectSeedId;
+    kdDebug(s_area) << "next OLE obj id: " << objectSeedId << endl;
+}
+
+void Powerpoint::opExObjRefAtom(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
+void Powerpoint::opExOleObj(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
+void Powerpoint::opExOleObjAtom(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        Q_UINT32 drawAspect;
+        Q_INT32 type;
+        Q_INT32 objID;
+        Q_INT32 subType;
+        Q_INT8 isBlank;
+    } data;
+
+    operands >> data.drawAspect;
+    operands >> data.type;
+    operands >> data.objID;
+    operands >> data.subType;
+    operands >> data.isBlank;
+    kdDebug(s_area) << ((data.type == 0) ? "embedded " : "linked ") <<
+	"OLE obj id: " << data.objID << endl;
+    skip(bytes - 17, operands);
+}
+
+void Powerpoint::opExOleObjStg(
+    Header & /* op */,
+    Q_UINT32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
 void Powerpoint::opOutlineViewInfo(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -517,23 +647,23 @@ void Powerpoint::opOutlineViewInfo(
 
 void Powerpoint::opPersistPtrIncrementalBlock(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
         union
         {
-            U32 info;
+            Q_UINT32 info;
             struct
             {
-                U32 offsetNumber: 20;
-                U32 offsetCount: 12;
+                Q_UINT32 offsetNumber: 20;
+                Q_UINT32 offsetCount: 12;
             } fields;
         } header;
-        U32 offset;
+        Q_UINT32 offset;
     } data;
-    U32 length = 0;
+    Q_UINT32 length = 0;
 
     while (length < bytes)
     {
@@ -564,7 +694,7 @@ void Powerpoint::opPersistPtrIncrementalBlock(
 
 void Powerpoint::opPPDrawing(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -572,7 +702,7 @@ void Powerpoint::opPPDrawing(
 
 void Powerpoint::opPPDrawingGroup(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -580,7 +710,7 @@ void Powerpoint::opPPDrawingGroup(
 
 void Powerpoint::opSlide(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -588,15 +718,15 @@ void Powerpoint::opSlide(
 
 void Powerpoint::opSlideAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U8 layout[12];  // Slide layout descriptor.
-        S32 masterId;   // Id of the master of the slide. Zero for a master slide.
-        S32 notesId;    // Id for the corresponding notes slide. Zero if slide has no notes.
-        U16 flags;
+        Q_UINT8 layout[12];  // Slide layout descriptor.
+        Q_INT32 masterId;   // Id of the master of the slide. Zero for a master slide.
+        Q_INT32 notesId;    // Id for the corresponding notes slide. Zero if slide has no notes.
+        Q_UINT16 flags;
     } data;
 
     Header tmp;
@@ -609,7 +739,7 @@ void Powerpoint::opSlideAtom(
 
 void Powerpoint::opSlideListWithText(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -617,16 +747,16 @@ void Powerpoint::opSlideListWithText(
 
 void Powerpoint::opSlidePersistAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U32 psrReference;   // Logical reference to the slide persist object.
-        U32 flags;          // If bit 3 set then slide contains shapes other than placeholders.
-        S32 numberTexts;    // Number of placeholder texts stored with the persist object.
-        S32 slideId;        // Unique slide identifier, used for OLE link monikers for example.
-        U32 reserved;
+        Q_UINT32 psrReference;   // Logical reference to the slide persist object.
+        Q_UINT32 flags;          // If bit 3 set then slide contains shapes other than placeholders.
+        Q_INT32 numberTexts;    // Number of placeholder texts stored with the persist object.
+        Q_INT32 slideId;        // Unique slide identifier, used for OLE link monikers for example.
+        Q_UINT32 reserved;
     } data;
 
     operands >> data.psrReference >> data.flags >> data.numberTexts >>
@@ -649,7 +779,7 @@ void Powerpoint::opSlidePersistAtom(
 
 void Powerpoint::opSlideViewInfo(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -657,7 +787,7 @@ void Powerpoint::opSlideViewInfo(
 
 void Powerpoint::opSrKinsoku(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
@@ -665,7 +795,7 @@ void Powerpoint::opSrKinsoku(
 
 void Powerpoint::opSSDocInfoAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -673,13 +803,13 @@ void Powerpoint::opSSDocInfoAtom(
 
 void Powerpoint::opSSSlideLayoutAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U32 geom;
-        U8 id[8];
+        Q_UINT32 geom;
+        Q_UINT8 id[8];
     } data;
     unsigned i;
 
@@ -693,7 +823,7 @@ void Powerpoint::opSSSlideLayoutAtom(
 
 void Powerpoint::opStyleTextPropAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -701,7 +831,7 @@ void Powerpoint::opStyleTextPropAtom(
 
 void Powerpoint::opTextBytesAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     QString data;
@@ -709,7 +839,7 @@ void Powerpoint::opTextBytesAtom(
 
     for (i = 0; i < bytes; i++)
     {
-        U8 tmp;
+        Q_UINT8 tmp;
 
         operands >> tmp;
         data += tmp;
@@ -731,7 +861,7 @@ void Powerpoint::opTextBytesAtom(
 
 void Powerpoint::opTextCharsAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     QString data;
@@ -739,7 +869,7 @@ void Powerpoint::opTextCharsAtom(
 
     for (i = 0; i < bytes / 2; i++)
     {
-        U16 tmp;
+        Q_UINT16 tmp;
 
         operands >> tmp;
         data += tmp;
@@ -761,12 +891,12 @@ void Powerpoint::opTextCharsAtom(
 
 void Powerpoint::opTextHeaderAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        U32 txType; // Type of text:
+        Q_UINT32 txType; // Type of text:
                     //
                     // 0 Title
                     // 1 Body
@@ -794,7 +924,7 @@ void Powerpoint::opTextHeaderAtom(
 
 void Powerpoint::opTextSpecInfoAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -802,7 +932,7 @@ void Powerpoint::opTextSpecInfoAtom(
 
 void Powerpoint::opTxMasterStyleAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -810,7 +940,7 @@ void Powerpoint::opTxMasterStyleAtom(
 
 void Powerpoint::opTxSIStyleAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     skip(bytes, operands);
@@ -822,18 +952,18 @@ void Powerpoint::opTxSIStyleAtom(
 //
 void Powerpoint::opUserEditAtom(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     struct
     {
-        S32 lastSlideID;
-        U32 version;
-        U32 offsetLastEdit;         // Offset of previous UserEditAtom. Zero for full save.
-        U32 offsetPersistDirectory; // Offset to persist pointers for this file version.
-        U32 documentRef;
-        U32 maxPersistWritten;
-        S16 lastViewType;
+        Q_INT32 lastSlideID;
+        Q_UINT32 version;
+        Q_UINT32 offsetLastEdit;         // Offset of previous UserEditAtom. Zero for full save.
+        Q_UINT32 offsetPersistDirectory; // Offset to persist pointers for this file version.
+        Q_UINT32 documentRef;
+        Q_UINT32 maxPersistWritten;
+        Q_INT16 lastViewType;
     } data;
 
     operands >> data.lastSlideID  >> data.version >> data.offsetLastEdit >>
@@ -870,13 +1000,13 @@ void Powerpoint::opUserEditAtom(
 
 void Powerpoint::opVBAInfo(
     Header & /* op */,
-    U32 bytes,
+    Q_UINT32 bytes,
     QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
-void Powerpoint::skip(U32 bytes, QDataStream &operands)
+void Powerpoint::skip(Q_UINT32 bytes, QDataStream &operands)
 {
     if ((int)bytes < 0)
     {
@@ -885,8 +1015,8 @@ void Powerpoint::skip(U32 bytes, QDataStream &operands)
     }
     if (bytes)
     {
-        U32 i;
-        U8 discard;
+        Q_UINT32 i;
+        Q_UINT8 discard;
 
         kdDebug(s_area) << "skip: " << bytes << endl;
         for (i = 0; i < bytes; i++)
@@ -896,10 +1026,13 @@ void Powerpoint::skip(U32 bytes, QDataStream &operands)
     }
 }
 
-void Powerpoint::walk(U32 bytes, QDataStream &operands)
+//
+// Handle a container record.
+//
+void Powerpoint::walk(Q_UINT32 bytes, QDataStream &operands)
 {
     Header op;
-    U32 length = 0;
+    Q_UINT32 length = 0;
 
     while (length < bytes)
     {
@@ -914,9 +1047,9 @@ void Powerpoint::walk(U32 bytes, QDataStream &operands)
     }
 }
 
-void Powerpoint::walk(U32 mainStreamOffset)
+void Powerpoint::walk(Q_UINT32 mainStreamOffset)
 {
-    U32 length = m_mainStream.length - mainStreamOffset;
+    Q_UINT32 length = m_mainStream.length - mainStreamOffset;
     QByteArray a;
 
     a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
@@ -926,11 +1059,11 @@ void Powerpoint::walk(U32 mainStreamOffset)
     a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
 }
 
-void Powerpoint::walkRecord(U32 mainStreamOffset)
+void Powerpoint::walkRecord(Q_UINT32 mainStreamOffset)
 {
     // First read what should be the next header using one stream.
 
-    U32 length = sizeof(Header);
+    Q_UINT32 length = sizeof(Header);
     QByteArray a;
     Header op;
 
@@ -950,7 +1083,7 @@ void Powerpoint::walkRecord(U32 mainStreamOffset)
     a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
 }
 
-void Powerpoint::walkReference(U32 reference)
+void Powerpoint::walkReference(Q_UINT32 reference)
 {
     if (m_persistentReferences.end() == m_persistentReferences.find(reference))
     {
