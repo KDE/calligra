@@ -754,7 +754,7 @@ KarbonView::rotateTool()
 
 	m_currentTool = m_rotateTool;
 
-	//m_currentTool->activateAll();
+	m_currentTool->activateAll();
 
 	m_canvas->repaintAll();
 }

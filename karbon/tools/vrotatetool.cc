@@ -54,8 +54,8 @@ VRotateTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Rotate" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
-
-	view()->part()->document().selection()->setState( VObject::edit );
+	view()->part()->document().selection()->setState( VObject::selected );
+	view()->part()->document().selection()->showHandle( false );
 }
 
 void

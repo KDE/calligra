@@ -30,6 +30,7 @@
 #include "vpainterfactory.h"
 #include "vshapecmd.h"
 #include "vshapetool.h"
+#include "vselection.h"
 
 
 VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
@@ -54,6 +55,7 @@ VShapeTool::activate()
 {
 	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->part()->document().selection()->showHandle( true );
 }
 
 void
