@@ -52,11 +52,11 @@ BasicElement::~BasicElement()
  * Returns the element the point is in.
  */
 BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
-                                     const LuPoint& point, const LuPoint& parentOrigin )
+                                     const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
-    double x = point.x() - (parentOrigin.x() + getX());
+    luPixel x = point.x() - (parentOrigin.x() + getX());
     if ((x >= 0) && (x < getWidth())) {
-        double y = point.y() - (parentOrigin.y() + getY());
+        luPixel y = point.y() - (parentOrigin.y() + getY());
         if ((y >= 0) && (y < getHeight())) {
             return this;
         }
@@ -67,15 +67,15 @@ BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
 /**
  * Returns our position inside the widget.
  */
-LuPoint BasicElement::widgetPos()
+LuPixelPoint BasicElement::widgetPos()
 {
-    lu x = 0;
-    lu y = 0;
+    luPixel x = 0;
+    luPixel y = 0;
     for (BasicElement* element = this; element != 0; element = element->parent) {
         x += element->getX();
         y += element->getY();
     }
-    return LuPoint(x, y);
+    return LuPixelPoint(x, y);
 }
 
 

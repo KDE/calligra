@@ -45,12 +45,12 @@ SymbolElement::~SymbolElement()
 
 
 BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                      const LuPoint& point, const LuPoint& parentOrigin )
+                                      const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                      parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
@@ -70,8 +70,8 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
         }
 
         // the positions after the indexes.
-        double dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dx = point.x() - myPos.x();
+        luPixel dy = point.y() - myPos.y();
         if (dy < symbol.getY()) {
             if (hasUpper() && (dx > upper->getX())) {
                 upper->moveLeft(cursor, this);
@@ -107,17 +107,17 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
 {
-    double mySize = style.getAdjustedSize( tstyle );
-    double distX = style.getThinSpace( tstyle );
-    double distY = style.getThinSpace( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle );
+    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
     symbol.calcSizes(style, tstyle, mySize);
     content->calcSizes(style, tstyle, istyle);
 
     //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
 
-    double upperWidth = 0;
-    double upperHeight = 0;
+    luPixel upperWidth = 0;
+    luPixel upperHeight = 0;
     if (hasUpper()) {
         upper->calcSizes(style, style.convertTextStyleIndex( tstyle ),
 			 style.convertIndexStyleUpper( istyle ) );
@@ -125,8 +125,8 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         upperHeight = upper->getHeight() + distY;
     }
 
-    double lowerWidth = 0;
-    double lowerHeight = 0;
+    luPixel lowerWidth = 0;
+    luPixel lowerHeight = 0;
     if (hasLower()) {
         lower->calcSizes(style, style.convertTextStyleIndex( tstyle ),
 			 style.convertIndexStyleLower( istyle ) );
@@ -135,7 +135,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     }
 
     // widths
-    double xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
+    luPixel xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
     if (style.getCenterSymbol()) {
         symbol.setX((xOffset - symbol.getWidth()) / 2);
     }
@@ -149,11 +149,11 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
-    double toMidline = QMAX(content->getMidline(),
-                            upperHeight + symbol.getHeight()/2);
+    luPixel toMidline = QMAX(content->getMidline(),
+                             upperHeight + symbol.getHeight()/2);
     //int fromMidline = QMAX(content->getHeight() / 2,
-    double fromMidline = QMAX(content->getHeight() - content->getMidline(),
-                              lowerHeight + symbol.getHeight()/2);
+    luPixel fromMidline = QMAX(content->getHeight() - content->getMidline(),
+                               lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
     setMidline(toMidline);
 
@@ -197,17 +197,17 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SymbolElement::draw( QPainter& painter, const LuRect& r,
+void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
                           const ContextStyle& style,
                           ContextStyle::TextStyle tstyle,
                           ContextStyle::IndexStyle istyle,
-                          const LuPoint& parentOrigin )
+                          const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
-    lu mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle );
     symbol.draw( painter, r, style, tstyle, mySize, myPos );
     content->draw( painter, r, style, tstyle, istyle, myPos );
     if ( hasUpper() ) {

@@ -44,12 +44,12 @@ FractionElement::~FractionElement()
 
 
 BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                        const LuPoint& point, const LuPoint& parentOrigin )
+                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                      parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
         e = numerator->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
             return e;
@@ -59,8 +59,8 @@ BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
             return e;
         }
 
-        double dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dx = point.x() - myPos.x();
+        luPixel dy = point.y() - myPos.y();
 
         // the positions after the numerator / denominator
         if ((dx > numerator->getX()) &&
@@ -93,7 +93,7 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     denominator->calcSizes(style, style.convertTextStyleFraction( tstyle ),
 			   style.convertIndexStyleLower( istyle ));
 
-    double distY = style.getThinSpace( tstyle );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
@@ -114,14 +114,14 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void FractionElement::draw( QPainter& painter, const LuRect& r,
+void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
                             const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            const LuPoint& parentOrigin )
+                            const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     numerator->draw(painter, r, style,

@@ -36,8 +36,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 /**
- * The type to be used for points. That's the unit the
- * user thinks with.
+ * The type to be used for points.
  */
 typedef double pt;
 typedef KoPoint PtPoint;
@@ -45,13 +44,26 @@ typedef KoRect PtRect;
 //typedef KoSize PtSize;
 
 /**
+ * Pixels. At any zoom level.
+ */
+typedef int pixel;
+typedef QPoint PixelPoint;
+typedef QRect PixelRect;
+typedef QSize PixelSize;
+
+/**
  * Layout Unit. That's the values we store to get
  * wysiwyg right.
  */
-typedef int lu;
-typedef QPoint LuPoint;
-typedef QRect LuRect;
-typedef QSize LuSize;
+typedef int luPt;
+typedef QPoint LuPtPoint;
+typedef QRect LuPtRect;
+typedef QSize LuPtSize;
+
+typedef int luPixel;
+typedef QPoint LuPixelPoint;
+typedef QRect LuPixelRect;
+typedef QSize LuPixelSize;
 
 /**
  * The symbols that are supported by our artwork.

@@ -140,9 +140,9 @@ public:
 
     // mouse selection
 
-    void mousePress( const LuPoint&, int flags );
-    void mouseMove( const LuPoint&, int flags );
-    void mouseRelease( const LuPoint&, int flags );
+    void mousePress( const LuPixelPoint&, int flags );
+    void mouseMove( const LuPixelPoint&, int flags );
+    void mouseRelease( const LuPixelPoint&, int flags );
 
     /**
      * Inserts the child at the current position.
@@ -346,13 +346,13 @@ public:
     /**
      * @returns the point inside the formula widget where the cursor is.
      */
-    const LuPoint& getCursorPoint() const { return cursorPoint; }
+    const LuPixelPoint& getCursorPoint() const { return cursorPoint; }
 
     /**
      * @returns the area the cursor is currently on.
      */
-    const LuRect& getCursorSize() const { return cursorSize; }
-    void addCursorSize( const LuRect& rect ) { cursorSize |= rect; }
+    const LuPixelRect& getCursorSize() const { return cursorSize; }
+    void addCursorSize( const LuPixelRect& rect ) { cursorSize |= rect; }
 
     /**
      * @returns whether we are allowed to alter the document.
@@ -432,19 +432,19 @@ private:
      * The point in the middle of the cursor. Gets updated
      * each time the cursor is drawn.
      */
-    LuPoint cursorPoint;
+    LuPixelPoint cursorPoint;
 
     /**
      * The area that is covered by the cursor. Gets updated
      * each time the cursor is drawn.
      */
-    LuRect cursorSize;
+    LuPixelRect cursorSize;
 
     /**
      * The area that gets inverted when the cursor is in selection
      * mode.
      */
-    LuRect selectionArea;
+    LuPixelRect selectionArea;
 
     /**
      * Tells whether the cursor has been changed. This is set

@@ -60,11 +60,11 @@ IndexElement::~IndexElement()
  * Returns the element the point is in.
  */
 BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                     const LuPoint& point, const LuPoint& parentOrigin )
+                                     const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+        LuPixelPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) return e;
 
@@ -93,8 +93,8 @@ BasicElement* IndexElement::goToPos( FormulaCursor* cursor, bool& handled,
             if (e != 0) return e;
         }
 
-        double dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dx = point.x() - myPos.x();
+        luPixel dy = point.y() - myPos.y();
 
         // the positions after the left indexes
         if (dx < content->getX()+content->getWidth()) {
@@ -178,11 +178,10 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
  */
 void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    //int distX = contextStyle.getDistanceX(tstyle);
-    lu distY = contextStyle.getThinSpace( tstyle );
+    luPixel distY = contextStyle.ptToPixelY( contextStyle.getThinSpace( tstyle ) );
 
     // get the indexes size
-    lu ulWidth = 0, ulHeight = 0, ulMidline = 0;
+    luPixel ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
         upperLeft->calcSizes(contextStyle,
 			     contextStyle.convertTextStyleIndex(tstyle),
@@ -192,7 +191,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         ulMidline = upperLeft->getMidline();
     }
 
-    lu umWidth = 0, umHeight = 0, umMidline = 0;
+    luPixel umWidth = 0, umHeight = 0, umMidline = 0;
     if (hasUpperMiddle()) {
 	upperMiddle->calcSizes(contextStyle,
 			       contextStyle.convertTextStyleIndex(tstyle),
@@ -202,7 +201,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         umMidline = upperMiddle->getMidline();
     }
 
-    lu urWidth = 0, urHeight = 0, urMidline = 0;
+    luPixel urWidth = 0, urHeight = 0, urMidline = 0;
     if (hasUpperRight()) {
         upperRight->calcSizes(contextStyle,
 			      contextStyle.convertTextStyleIndex(tstyle),
@@ -212,7 +211,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         urMidline = upperRight->getMidline();
     }
 
-    lu llWidth = 0, llHeight = 0, llMidline = 0;
+    luPixel llWidth = 0, llHeight = 0, llMidline = 0;
     if (hasLowerLeft()) {
         lowerLeft->calcSizes(contextStyle,
 			     contextStyle.convertTextStyleIndex(tstyle),
@@ -222,7 +221,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         llMidline = lowerLeft->getMidline();
     }
 
-    lu lmWidth = 0, lmHeight = 0, lmMidline = 0;
+    luPixel lmWidth = 0, lmHeight = 0, lmMidline = 0;
     if (hasLowerMiddle()) {
         lowerMiddle->calcSizes(contextStyle,
 			       contextStyle.convertTextStyleIndex(tstyle),
@@ -232,7 +231,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         lmMidline = lowerMiddle->getMidline();
     }
 
-    lu lrWidth = 0, lrHeight = 0, lrMidline = 0;
+    luPixel lrWidth = 0, lrHeight = 0, lrMidline = 0;
     if (hasLowerRight()) {
         lowerRight->calcSizes(contextStyle,
 			      contextStyle.convertTextStyleIndex(tstyle),
@@ -244,9 +243,9 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
 
     // get the contents size
     content->calcSizes(contextStyle, tstyle, istyle);
-    lu width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
-    lu toMidline = content->getMidline();
-    lu fromMidline = content->getHeight() - toMidline;
+    luPixel width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
+    luPixel toMidline = content->getMidline();
+    luPixel fromMidline = content->getHeight() - toMidline;
 
     // calculate the x offsets
     if (ulWidth > llWidth) {
@@ -277,19 +276,19 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
     width += QMAX(urWidth, lrWidth);
 
     // calculate the y offsets
-    lu ulOffset = 0;
-    lu urOffset = 0;
-    lu llOffset = 0;
-    lu lrOffset = 0;
+    luPixel ulOffset = 0;
+    luPixel urOffset = 0;
+    luPixel llOffset = 0;
+    luPixel lrOffset = 0;
     if (content->isTextOnly()) {
-        lu mySize = contextStyle.getAdjustedSize( tstyle );
+        luPt mySize = contextStyle.getAdjustedSize( tstyle );
         QFont font = contextStyle.getDefaultFont();
         font.setPointSize( mySize );
 
         QFontMetrics fm(font);
-        QRect bound = fm.boundingRect('x');
+        LuPixelRect bound = fm.boundingRect('x');
 
-        lu exBaseline = -bound.top();
+        luPixel exBaseline = -bound.top();
 
         // the upper half
         ulOffset = ulHeight + exBaseline - content->getBaseline();
@@ -308,7 +307,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
         llOffset = QMAX(content->getHeight()-llMidline, content->getMidline());
         lrOffset = QMAX(content->getHeight()-lrMidline, content->getMidline());
     }
-    lu height = QMAX(umHeight, QMAX(ulOffset, urOffset));
+    luPixel height = QMAX(umHeight, QMAX(ulOffset, urOffset));
 
     // the upper half
     content->setY(height);
@@ -354,14 +353,14 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, ContextStyle::Tex
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void IndexElement::draw( QPainter& painter, const LuRect& r,
+void IndexElement::draw( QPainter& painter, const LuPixelRect& r,
                          const ContextStyle& contextStyle,
                          ContextStyle::TextStyle tstyle,
                          ContextStyle::IndexStyle istyle,
-                         const LuPoint& parentOrigin )
+                         const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     content->draw(painter, r, contextStyle, tstyle, istyle, myPos);

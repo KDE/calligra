@@ -53,12 +53,12 @@ MatrixElement::~MatrixElement()
 
 
 BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                      const LuPoint& point, const LuPoint& parentOrigin )
+                                      const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
 
         uint rows = getRows();
         uint columns = getColumns();
@@ -74,8 +74,8 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
         }
 
         // We are in one of those gaps.
-        double dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dx = point.x() - myPos.x();
+        luPixel dy = point.y() - myPos.y();
 
         uint row = rows;
         for (uint r = 0; r < rows; r++) {
@@ -148,9 +148,9 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    QMemArray<double> toMidlines(getRows());
-    QMemArray<double> fromMidlines(getRows());
-    QMemArray<double> widths(getColumns());
+    QMemArray<luPixel> toMidlines(getRows());
+    QMemArray<luPixel> fromMidlines(getRows());
+    QMemArray<luPixel> widths(getColumns());
 
     toMidlines.fill(0);
     fromMidlines.fill(0);
@@ -172,13 +172,13 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         }
     }
 
-    double distX = style.getThinSpace( tstyle );
-    double distY = style.getThinSpace( tstyle );
+    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
-    double yPos = 0;
+    luPixel yPos = 0;
     for (uint r = 0; r < rows; r++) {
         QPtrList<SequenceElement>* list = content.at(r);
-        double xPos = 0;
+        luPixel xPos = 0;
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
@@ -199,8 +199,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         yPos += fromMidlines[r] + distY;
     }
 
-    double width = distX * (columns - 1);
-    double height = distY * (rows - 1);
+    luPixel width = distX * (columns - 1);
+    luPixel height = distY * (rows - 1);
 
     for (uint r = 0; r < rows; r++) height += toMidlines[r] + fromMidlines[r];
     for (uint c = 0; c < columns; c++) width += widths[c];
@@ -221,14 +221,14 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void MatrixElement::draw( QPainter& painter, const LuRect& rect,
+void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
                           const ContextStyle& style,
                           ContextStyle::TextStyle tstyle,
                           ContextStyle::IndexStyle istyle,
-                          const LuPoint& parentOrigin )
+                          const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
         return;
 
     uint rows = getRows();

@@ -37,65 +37,65 @@ public:
     Artwork(SymbolType type = Empty);
     ~Artwork() {}
 
-    void calcSizes( const ContextStyle& style, ContextStyle::TextStyle tstyle, lu parentSize );
+    void calcSizes( const ContextStyle& style, ContextStyle::TextStyle tstyle, luPt parentSize );
     void calcSizes( const ContextStyle& style, ContextStyle::TextStyle tstyle );
 
-    void draw( QPainter& painter, const LuRect& r,
+    void draw( QPainter& painter, const LuPixelRect& r,
                const ContextStyle& style, ContextStyle::TextStyle tstyle,
-               lu parentSize, const LuPoint& origin );
-    void draw( QPainter& painter, const LuRect& r,
+               luPt parentSize, const LuPixelPoint& origin );
+    void draw( QPainter& painter, const LuPixelRect& r,
                const ContextStyle& style, ContextStyle::TextStyle tstyle,
-               const LuPoint& parentOrigin );
+               const LuPixelPoint& parentOrigin );
 
-    lu getWidth() const { return size.width(); }
-    lu getHeight() const { return size.height(); }
+    luPixel getWidth() const { return size.width(); }
+    luPixel getHeight() const { return size.height(); }
 
-    void setWidth( lu width ) { size.setWidth(width); }
-    void setHeight( lu height ) { size.setHeight(height); }
+    void setWidth( luPixel width ) { size.setWidth(width); }
+    void setHeight( luPixel height ) { size.setHeight(height); }
 
-    lu getBaseline() const { return baseline; }
-    void setBaseline( lu line ) { baseline = line; }
+    luPixel getBaseline() const { return baseline; }
+    void setBaseline( luPixel line ) { baseline = line; }
 
-    lu getX() const { return point.x(); }
-    lu getY() const { return point.y(); }
+    luPixel getX() const { return point.x(); }
+    luPixel getY() const { return point.y(); }
 
-    void setX( lu x ) { point.setX( x ); }
-    void setY( lu y ) { point.setY( y ); }
+    void setX( luPixel x ) { point.setX( x ); }
+    void setY( luPixel y ) { point.setY( y ); }
 
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
 
 private:
 
-    void drawCharacter( QPainter& painter, const ContextStyle& style, lu x, lu y, lu height, QChar ch );
+    void drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y, luPt height, QChar ch );
 
-    void calcCharSize( const ContextStyle& style, lu height, QChar ch );
+    void calcCharSize( const ContextStyle& style, luPt height, QChar ch );
 
-    void calcRoundBracket(  const ContextStyle& style, const char chars[], lu height, lu charHeight );
-    void calcSquareBracket( const ContextStyle& style, const char chars[], lu height, lu charHeight );
-    void calcCurlyBracket(  const ContextStyle& style, const char chars[], lu height, lu charHeight );
+    void calcRoundBracket(  const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
+    void calcSquareBracket( const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
+    void calcCurlyBracket(  const ContextStyle& style, const char chars[], luPt height, luPt charHeight );
 
-    void drawLeftRoundBracket(   QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
-    void drawRightRoundBracket(  QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
+    void drawLeftRoundBracket(   QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
+    void drawRightRoundBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
 
-    void drawLeftSquareBracket(  QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
-    void drawRightSquareBracket( QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
+    void drawLeftSquareBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
+    void drawRightSquareBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
 
-    void drawLeftCurlyBracket(   QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
-    void drawRightCurlyBracket(  QPainter& p, const ContextStyle& style, lu x, lu y, lu height, lu charHeight );
+    void drawLeftCurlyBracket(   QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
+    void drawRightCurlyBracket(  QPainter& p, const ContextStyle& style, luPixel x, luPixel y, luPt height, luPt charHeight );
 
-    void drawSmallRoundBracket( QPainter& p, const ContextStyle& style, const char chars[], lu x, lu y, lu charHeight );
-    void drawBigRoundBracket(   QPainter& p, const ContextStyle& style, const char chars[], lu x, lu y, lu charHeight );
-    void drawSmallCurlyBracket( QPainter& p, const ContextStyle& style, const char chars[], lu x, lu y, lu charHeight );
-    void drawBigCurlyBracket(   QPainter& p, const ContextStyle& style, const char chars[], lu x, lu y, lu charHeight );
+    void drawSmallRoundBracket( QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigRoundBracket(   QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawSmallCurlyBracket( QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
+    void drawBigCurlyBracket(   QPainter& p, const ContextStyle& style, const char chars[], luPixel x, luPixel y, luPt charHeight );
 
-    LuSize size;
-    LuPoint point;
+    LuPixelSize size;
+    LuPixelPoint point;
 
     /**
      * Used if we are a character.
      */
-    lu baseline;
+    luPixel baseline;
 
     SymbolType type;
 

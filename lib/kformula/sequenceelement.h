@@ -54,7 +54,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPoint& point, const LuPoint& parentOrigin );
+                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     // drawing
     //
@@ -85,14 +85,14 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw( QPainter& painter, const LuRect& r,
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-                       const LuPoint& parentOrigin );
+                       const LuPixelPoint& parentOrigin );
 
     virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
-                                const LuPoint& upperLeft );
+                                const LuPixelPoint& upperLeft );
 
     virtual void calcCursorSize( const ContextStyle& context,
                                  FormulaCursor* cursor, bool smallCursor );
@@ -306,7 +306,7 @@ protected:
      *
      * @param child the child's number
      */
-    lu getChildPosition( const ContextStyle& context, uint child );
+    luPixel getChildPosition( const ContextStyle& context, uint child );
 
     /**
      * Parses the sequence and generates a new syntax tree.

@@ -78,14 +78,14 @@ public:
      * @returns the space to be left before each char
      * for the given style and font size.
      */
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
@@ -114,9 +114,9 @@ protected:
     void setStart( uint start ) { from = start; }
     void setEnd( uint end ) { to = end; }
 
-    lu thinSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    lu mediumSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    lu thickSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    luPt thinSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    luPt mediumSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    luPt thickSpaceIfNotScript( const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
 private:
 
@@ -169,10 +169,10 @@ class MultiElementType : public ElementType {
 public:
     MultiElementType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
@@ -255,11 +255,11 @@ class OperatorType : public SingleElementType {
 public:
     OperatorType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
@@ -277,11 +277,11 @@ class RelationType : public SingleElementType {
 public:
     RelationType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
@@ -299,13 +299,13 @@ class PunctuationType : public SingleElementType {
 public:
     PunctuationType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 
     /**
      * @returns the font to be used for this kind of element
@@ -323,10 +323,10 @@ class BracketType : public SingleElementType {
 public:
     BracketType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
@@ -335,10 +335,10 @@ public:
     ComplexElementType( SequenceParser* parser );
 
     // these spacings are equal to the ones from MultiElementType
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 
@@ -346,14 +346,14 @@ class InnerElementType : public SingleElementType {
 public:
     InnerElementType( SequenceParser* parser );
 
-    virtual lu getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
-    virtual lu getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceBefore( const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( MultiElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( OperatorType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( RelationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( PunctuationType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( BracketType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( ComplexElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
+    virtual luPt getSpaceAfter( InnerElementType* type, const ContextStyle& context, ContextStyle::TextStyle tstyle );
 };
 
 

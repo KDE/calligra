@@ -52,62 +52,62 @@ ElementType::~ElementType()
 }
 
 
-lu ElementType::getSpaceBefore( const ContextStyle&,
+luPt ElementType::getSpaceBefore( const ContextStyle&,
                                 ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( MultiElementType*,
+luPt ElementType::getSpaceAfter( MultiElementType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( OperatorType*,
+luPt ElementType::getSpaceAfter( OperatorType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( RelationType*,
+luPt ElementType::getSpaceAfter( RelationType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( PunctuationType*,
+luPt ElementType::getSpaceAfter( PunctuationType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( BracketType*,
+luPt ElementType::getSpaceAfter( BracketType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( ComplexElementType*,
+luPt ElementType::getSpaceAfter( ComplexElementType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::getSpaceAfter( InnerElementType*,
+luPt ElementType::getSpaceAfter( InnerElementType*,
                                const ContextStyle&,
                                ContextStyle::TextStyle )
 {
     return 0;
 }
 
-lu ElementType::thinSpaceIfNotScript( const ContextStyle& context,
+luPt ElementType::thinSpaceIfNotScript( const ContextStyle& context,
                                       ContextStyle::TextStyle tstyle )
 {
     if ( !context.isScript( tstyle ) ) {
@@ -116,7 +116,7 @@ lu ElementType::thinSpaceIfNotScript( const ContextStyle& context,
     return 0;
 }
 
-lu ElementType::mediumSpaceIfNotScript( const ContextStyle& context,
+luPt ElementType::mediumSpaceIfNotScript( const ContextStyle& context,
                                         ContextStyle::TextStyle tstyle )
 {
     if ( !context.isScript( tstyle ) ) {
@@ -125,7 +125,7 @@ lu ElementType::mediumSpaceIfNotScript( const ContextStyle& context,
     return 0;
 }
 
-lu ElementType::thickSpaceIfNotScript( const ContextStyle& context,
+luPt ElementType::thickSpaceIfNotScript( const ContextStyle& context,
                                        ContextStyle::TextStyle tstyle )
 {
     if ( !context.isScript( tstyle ) ) {
@@ -196,7 +196,7 @@ MultiElementType::MultiElementType( SequenceParser* parser )
     }
 }
 
-lu MultiElementType::getSpaceBefore( const ContextStyle& context,
+luPt MultiElementType::getSpaceBefore( const ContextStyle& context,
                                      ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -205,21 +205,21 @@ lu MultiElementType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu MultiElementType::getSpaceAfter( OperatorType*,
+luPt MultiElementType::getSpaceAfter( OperatorType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu MultiElementType::getSpaceAfter( RelationType*,
+luPt MultiElementType::getSpaceAfter( RelationType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu MultiElementType::getSpaceAfter( InnerElementType*,
+luPt MultiElementType::getSpaceAfter( InnerElementType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
@@ -278,7 +278,7 @@ OperatorType::OperatorType( SequenceParser* parser )
 {
 }
 
-lu OperatorType::getSpaceBefore( const ContextStyle& context,
+luPt OperatorType::getSpaceBefore( const ContextStyle& context,
                                  ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -287,28 +287,28 @@ lu OperatorType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu OperatorType::getSpaceAfter( MultiElementType*,
+luPt OperatorType::getSpaceAfter( MultiElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu OperatorType::getSpaceAfter( BracketType*,
+luPt OperatorType::getSpaceAfter( BracketType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu OperatorType::getSpaceAfter( ComplexElementType*,
+luPt OperatorType::getSpaceAfter( ComplexElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu OperatorType::getSpaceAfter( InnerElementType*,
+luPt OperatorType::getSpaceAfter( InnerElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
@@ -332,7 +332,7 @@ RelationType::RelationType( SequenceParser* parser )
 {
 }
 
-lu RelationType::getSpaceBefore( const ContextStyle& context,
+luPt RelationType::getSpaceBefore( const ContextStyle& context,
                                  ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -341,28 +341,28 @@ lu RelationType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu RelationType::getSpaceAfter( MultiElementType*,
+luPt RelationType::getSpaceAfter( MultiElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu RelationType::getSpaceAfter( BracketType*,
+luPt RelationType::getSpaceAfter( BracketType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu RelationType::getSpaceAfter( ComplexElementType*,
+luPt RelationType::getSpaceAfter( ComplexElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu RelationType::getSpaceAfter( InnerElementType*,
+luPt RelationType::getSpaceAfter( InnerElementType*,
                                 const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
@@ -386,7 +386,7 @@ PunctuationType::PunctuationType( SequenceParser* parser )
 {
 }
 
-lu PunctuationType::getSpaceBefore( const ContextStyle& context,
+luPt PunctuationType::getSpaceBefore( const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -395,42 +395,42 @@ lu PunctuationType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu PunctuationType::getSpaceAfter( MultiElementType*,
+luPt PunctuationType::getSpaceAfter( MultiElementType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu PunctuationType::getSpaceAfter( RelationType*,
+luPt PunctuationType::getSpaceAfter( RelationType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu PunctuationType::getSpaceAfter( PunctuationType*,
+luPt PunctuationType::getSpaceAfter( PunctuationType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu PunctuationType::getSpaceAfter( BracketType*,
+luPt PunctuationType::getSpaceAfter( BracketType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu PunctuationType::getSpaceAfter( ComplexElementType*,
+luPt PunctuationType::getSpaceAfter( ComplexElementType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu PunctuationType::getSpaceAfter( InnerElementType*,
+luPt PunctuationType::getSpaceAfter( InnerElementType*,
                                    const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle )
 {
@@ -453,7 +453,7 @@ BracketType::BracketType( SequenceParser* parser )
 {
 }
 
-lu BracketType::getSpaceBefore( const ContextStyle& context,
+luPt BracketType::getSpaceBefore( const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -462,21 +462,21 @@ lu BracketType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu BracketType::getSpaceAfter( OperatorType*,
+luPt BracketType::getSpaceAfter( OperatorType*,
                                const ContextStyle& context,
                                ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu BracketType::getSpaceAfter( RelationType*,
+luPt BracketType::getSpaceAfter( RelationType*,
                                const ContextStyle& context,
                                ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu BracketType::getSpaceAfter( InnerElementType*,
+luPt BracketType::getSpaceAfter( InnerElementType*,
                                const ContextStyle& context,
                                ContextStyle::TextStyle tstyle )
 {
@@ -489,7 +489,7 @@ ComplexElementType::ComplexElementType( SequenceParser* parser )
 {
 }
 
-lu ComplexElementType::getSpaceBefore( const ContextStyle& context,
+luPt ComplexElementType::getSpaceBefore( const ContextStyle& context,
                                        ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -498,21 +498,21 @@ lu ComplexElementType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu ComplexElementType::getSpaceAfter( OperatorType*,
+luPt ComplexElementType::getSpaceAfter( OperatorType*,
                                       const ContextStyle& context,
                                       ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu ComplexElementType::getSpaceAfter( RelationType*,
+luPt ComplexElementType::getSpaceAfter( RelationType*,
                                       const ContextStyle& context,
                                       ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu ComplexElementType::getSpaceAfter( InnerElementType*,
+luPt ComplexElementType::getSpaceAfter( InnerElementType*,
                                       const ContextStyle& context,
                                       ContextStyle::TextStyle tstyle )
 {
@@ -525,7 +525,7 @@ InnerElementType::InnerElementType( SequenceParser* parser )
 {
 }
 
-lu InnerElementType::getSpaceBefore( const ContextStyle& context,
+luPt InnerElementType::getSpaceBefore( const ContextStyle& context,
                                      ContextStyle::TextStyle tstyle )
 {
     if ( getPrev() != 0 ) {
@@ -534,49 +534,49 @@ lu InnerElementType::getSpaceBefore( const ContextStyle& context,
     return 0;
 }
 
-lu InnerElementType::getSpaceAfter( MultiElementType*,
+luPt InnerElementType::getSpaceAfter( MultiElementType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( OperatorType*,
+luPt InnerElementType::getSpaceAfter( OperatorType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return mediumSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( RelationType*,
+luPt InnerElementType::getSpaceAfter( RelationType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thickSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( PunctuationType*,
+luPt InnerElementType::getSpaceAfter( PunctuationType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( BracketType*,
+luPt InnerElementType::getSpaceAfter( BracketType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( ComplexElementType*,
+luPt InnerElementType::getSpaceAfter( ComplexElementType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {
     return thinSpaceIfNotScript( context, tstyle );
 }
 
-lu InnerElementType::getSpaceAfter( InnerElementType*,
+luPt InnerElementType::getSpaceAfter( InnerElementType*,
                                     const ContextStyle& context,
                                     ContextStyle::TextStyle tstyle )
 {

@@ -51,7 +51,7 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPoint& point, const LuPoint& parentOrigin );
+                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     /**
      * Calculates our width and height and
@@ -64,11 +64,11 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw( QPainter& painter, const LuRect& r,
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-                       const LuPoint& parentOrigin );
+                       const LuPixelPoint& parentOrigin );
 
     /**
      * Enters this element while moving to the left starting inside

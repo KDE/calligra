@@ -116,12 +116,12 @@ public:
      * is allowed to set the cursor.
      */
     virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
-                                   const LuPoint& point, const LuPoint& parentOrigin );
+                                   const LuPixelPoint& point, const LuPixelPoint& parentOrigin );
 
     /**
      * Returns our position inside the widget.
      */
-    LuPoint widgetPos();
+    LuPixelPoint widgetPos();
 
 
     // drawing
@@ -142,11 +142,11 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw( QPainter& painter, const LuRect& r,
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-                       const LuPoint& parentOrigin ) = 0;
+                       const LuPixelPoint& parentOrigin ) = 0;
 
 
     // navigation
@@ -281,24 +281,24 @@ public:
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
 
-    lu getX() const { return m_x; }
-    lu getY() const { return m_y; }
+    luPixel getX() const { return m_x; }
+    luPixel getY() const { return m_y; }
 
-    void setX( lu x ) { m_x = x; }
-    void setY( lu y ) { m_y = y; }
+    void setX( luPixel x ) { m_x = x; }
+    void setY( luPixel y ) { m_y = y; }
 
     //QSize getSize() { return size; }
 
-    lu getWidth() const { return m_width; }
-    lu getHeight() const { return m_height; }
+    luPixel getWidth() const { return m_width; }
+    luPixel getHeight() const { return m_height; }
 
     /**
      * Our position inside our parent.
      */
     //KoPoint getParentPosition() { return position; }
 
-    lu getBaseline() const { return m_baseline; }
-    lu getMidline() const { return m_axis; }
+    luPixel getBaseline() const { return m_baseline; }
+    luPixel getMidline() const { return m_axis; }
 
 
     /**
@@ -326,11 +326,11 @@ protected:
 
     //KoPoint getSize() { return KoPoint( m_width, m_height ); }
 
-    void setWidth( lu width )   { m_width = width; }
-    void setHeight( lu height ) { m_height = height; }
+    void setWidth( luPixel width )   { m_width = width; }
+    void setHeight( luPixel height ) { m_height = height; }
 
-    void setBaseline( lu line ) { m_baseline = line; }
-    void setMidline( lu axis ) { m_axis = axis; }
+    void setBaseline( luPixel line ) { m_baseline = line; }
+    void setMidline( luPixel axis ) { m_axis = axis; }
 
     /**
      * Calculates the base line. This is used by all elements
@@ -399,15 +399,15 @@ private:
      * This elements size.
      */
     //QSize size;
-    lu m_width;
-    lu m_height;
+    luPixel m_width;
+    luPixel m_height;
 
     /**
      * Our position relative to our parent.
      */
     //KoPoint position;
-    lu m_x;
-    lu m_y;
+    luPixel m_x;
+    luPixel m_y;
 
     /**
      * The position of our base line from
@@ -417,7 +417,7 @@ private:
      * There are elements (like matrix) that don't have a base line. It is
      * -1 in this case. The alignment is done using the middle line.
      */
-    lu m_baseline;
+    luPixel m_baseline;
 
     /**
      * The position of our middle line from
@@ -425,7 +425,7 @@ private:
      *
      * This will have to go. (?)
      */
-    lu m_axis;
+    luPixel m_axis;
 
     /**
      * The token that describes our type. Please note that we don't

@@ -71,11 +71,11 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw( QPainter& painter, const LuRect& r,
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-                       const LuPoint& parentOrigin );
+                       const LuPixelPoint& parentOrigin );
 
     /**
      * Moves the cursor away from the given child. The cursor is

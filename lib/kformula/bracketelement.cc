@@ -50,20 +50,20 @@ BracketElement::~BracketElement()
 
 
 BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                       const LuPoint& point, const LuPoint& parentOrigin )
+                                       const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
             return e;
         }
 
         // We are in one of those gaps.
-        double dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dx = point.x() - myPos.x();
+        luPixel dy = point.y() - myPos.y();
 
         if ((dx > content->getX()+content->getWidth()) ||
             (dy > content->getY()+content->getHeight())) {
@@ -102,8 +102,8 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
                             right->getY() + right->getHeight())));
     }
     else {
-        lu contentHeight = 2 * QMAX( content->getMidline(),
-                                     content->getHeight() - content->getMidline() );
+        luPixel contentHeight = 2 * QMAX( content->getMidline(),
+                                          content->getHeight() - content->getMidline() );
         left->calcSizes( style, tstyle, contentHeight );
         right->calcSizes( style, tstyle, contentHeight );
 
@@ -131,14 +131,14 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void BracketElement::draw( QPainter& painter, const LuRect& r,
+void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
                            const ContextStyle& style,
                            ContextStyle::TextStyle tstyle,
                            ContextStyle::IndexStyle istyle,
-                           const LuPoint& parentOrigin )
+                           const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     content->draw(painter, r, style, tstyle, istyle, myPos);
@@ -148,8 +148,8 @@ void BracketElement::draw( QPainter& painter, const LuRect& r,
         right->draw(painter, r, style, tstyle, myPos);
     }
     else {
-        lu contentHeight = 2 * QMAX(content->getMidline(),
-                                    content->getHeight() - content->getMidline());
+        luPixel contentHeight = 2 * QMAX(content->getMidline(),
+                                         content->getHeight() - content->getMidline());
         left->draw(painter, r, style, tstyle, contentHeight, myPos);
         right->draw(painter, r, style, tstyle, contentHeight, myPos);
     }

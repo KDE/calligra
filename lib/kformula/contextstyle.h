@@ -107,7 +107,7 @@ public:
 
     double getReductionFactor( TextStyle tstyle ) const;
 
-    lu getBaseSize() const;
+    luPt getBaseSize() const;
 
     // a hack! needs fix.
     void setBaseSize( pt pointSize );
@@ -119,24 +119,24 @@ public:
     /**
      * TeX like spacings.
      */
-    lu getSpace( TextStyle tstyle, SpaceWidths space ) const;
-    lu getThinSpace( TextStyle tstyle ) const;
-    lu getMediumSpace( TextStyle tstyle ) const;
-    lu getThickSpace( TextStyle tstyle ) const;
-    lu getQuadSpace( TextStyle tstyle ) const;
+    luPt getSpace( TextStyle tstyle, SpaceWidths space ) const;
+    luPt getThinSpace( TextStyle tstyle ) const;
+    luPt getMediumSpace( TextStyle tstyle ) const;
+    luPt getThickSpace( TextStyle tstyle ) const;
+    luPt getQuadSpace( TextStyle tstyle ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
      */
-    lu getAdjustedSize( TextStyle tstyle ) const;
+    luPt getAdjustedSize( TextStyle tstyle ) const;
 
     /**
      * All simple lines like the one that makes up a fraction.
      */
-    lu getLineWidth() const;
+    luPixel getLineWidth() const;
 
-    lu getEmptyRectWidth() const;
-    lu getEmptyRectHeight() const;
+    luPixel getEmptyRectWidth() const;
+    luPixel getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
 
@@ -189,15 +189,15 @@ private:
 
     struct TextStyleValues {
 
-        void setup( QFont font, lu baseSize, double reduction );
+        void setup( QFont font, luPt baseSize, double reduction );
 
-        lu thinSpace() const   { return static_cast<lu>( reductionFactor*static_cast<double>( quad )/6. ); }
-        lu mediumSpace() const { return static_cast<lu>( reductionFactor*static_cast<double>( quad )*2./9. ); }
-        lu thickSpace() const  { return static_cast<lu>( reductionFactor*static_cast<double>( quad )*5./18. ); }
-        lu quadSpace() const   { return quad; }
+        luPt thinSpace() const   { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )/6. ); }
+        luPt mediumSpace() const { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*2./9. ); }
+        luPt thickSpace() const  { return static_cast<luPt>( reductionFactor*static_cast<double>( quad )*5./18. ); }
+        luPt quadSpace() const   { return quad; }
 
         double reductionFactor;
-        lu quad;
+        luPt quad;
     };
 
     TextStyleValues textStyleValues[ 4 ];

@@ -29,7 +29,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 
 void ContextStyle::TextStyleValues::setup( QFont font,
-                                           lu baseSize,
+                                           luPt baseSize,
                                            double reduction )
 {
     reductionFactor = reduction;
@@ -143,12 +143,12 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
     return textStyleValues[ tstyle ].reductionFactor;
 }
 
-lu ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return ptToLayoutUnitPt( baseSize*getReductionFactor( tstyle ) );
+    return ptToLayoutUnitPt( static_cast<luPt>( baseSize*getReductionFactor( tstyle ) ) );
 }
 
-lu ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
+luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
 {
     switch ( space ) {
     case THIN:   return getThinSpace( tstyle );
@@ -159,35 +159,34 @@ lu ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
     return 0;
 }
 
-lu ContextStyle::getThinSpace( TextStyle tstyle ) const
+luPt ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
     return textStyleValues[ tstyle ].thinSpace();
 }
 
-lu ContextStyle::getMediumSpace( TextStyle tstyle ) const
+luPt ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
     return textStyleValues[ tstyle ].mediumSpace();
 }
 
-lu ContextStyle::getThickSpace( TextStyle tstyle ) const
+luPt ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
     return textStyleValues[ tstyle ].thickSpace();
 }
 
-lu ContextStyle::getQuadSpace( TextStyle tstyle ) const
+luPt ContextStyle::getQuadSpace( TextStyle tstyle ) const
 {
     return textStyleValues[ tstyle ].quadSpace();
 }
 
 
-lu ContextStyle::getBaseSize() const
+luPt ContextStyle::getBaseSize() const
 {
-    return ptToLayoutUnitPt( baseSize );
+    return static_cast<luPt>( ptToLayoutUnitPt( baseSize ) );
 }
 
 void ContextStyle::setBaseSize( pt size )
 {
-    //double newSize = unzoomItY( size );
     pt newSize = size;
     if ( newSize != baseSize ) {
         baseSize = newSize;
@@ -196,19 +195,19 @@ void ContextStyle::setBaseSize( pt size )
 }
 
 
-lu ContextStyle::getLineWidth() const
+luPixel ContextStyle::getLineWidth() const
 {
-    return ptToLayoutUnitPt( lineWidth );
+    return ptToLayoutUnitPixX( lineWidth );
 }
 
-lu ContextStyle::getEmptyRectWidth() const
+luPixel ContextStyle::getEmptyRectWidth() const
 {
-    return ptToLayoutUnitPt( emptyRectWidth );
+    return ptToLayoutUnitPixX( emptyRectWidth );
 }
 
-lu ContextStyle::getEmptyRectHeight() const
+luPixel ContextStyle::getEmptyRectHeight() const
 {
-    return ptToLayoutUnitPt( emptyRectHeight );
+    return ptToLayoutUnitPixX( emptyRectHeight );
 }
 
 
@@ -255,7 +254,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 void ContextStyle::setup()
 {
     //double size = getBaseSize();
-    lu size = ptToLayoutUnitPt( baseSize );
+    luPt size = static_cast<luPt>( ptToLayoutUnitPt( baseSize ) );
     textStyleValues[ displayStyle      ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ textStyle         ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ scriptStyle       ].setup( getSymbolFont(), size, .7 );

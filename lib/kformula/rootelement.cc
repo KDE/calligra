@@ -45,12 +45,12 @@ RootElement::~RootElement()
 
 
 BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                    const LuPoint& point, const LuPoint& parentOrigin)
+                                    const LuPixelPoint& point, const LuPixelPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
@@ -64,7 +64,7 @@ BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
         }
 
         //int dx = point.x() - myPos.x();
-        double dy = point.y() - myPos.y();
+        luPixel dy = point.y() - myPos.y();
 
         // the position after the index
         if (hasIndex()) {
@@ -90,8 +90,8 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
     content->calcSizes(style, tstyle,
 		       style.convertIndexStyleLower(istyle));
 
-    double indexWidth = 0;
-    double indexHeight = 0;
+    luPixel indexWidth = 0;
+    luPixel indexHeight = 0;
     if (hasIndex()) {
 	index->calcSizes(style,
 			 style.convertTextStyleIndex(tstyle),
@@ -100,9 +100,9 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
         indexHeight = index->getHeight();
     }
 
-    double distX = style.getThinSpace( tstyle );
-    double distY = style.getThinSpace( tstyle );
-    double unit = (content->getHeight() + distY)/ 3;
+    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    luPixel unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
         if (indexWidth > unit) {
@@ -141,14 +141,14 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void RootElement::draw( QPainter& painter, const LuRect& r,
+void RootElement::draw( QPainter& painter, const LuPixelRect& r,
                         const ContextStyle& style,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle istyle,
-                        const LuPoint& parentOrigin )
+                        const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     content->draw(painter, r, style, tstyle,
@@ -159,11 +159,11 @@ void RootElement::draw( QPainter& painter, const LuRect& r,
 		    style.convertIndexStyleUpper(istyle), myPos);
     }
 
-    lu x = myPos.x() + rootOffset.x();
-    lu y = myPos.y() + rootOffset.y();
+    luPixel x = myPos.x() + rootOffset.x();
+    luPixel y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
-    lu distY = style.getThinSpace( tstyle );
-    lu unit = (content->getHeight() + distY)/ 3;
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    luPixel unit = (content->getHeight() + distY)/ 3;
 
     painter.setPen( QPen( style.getDefaultColor(),
                           style.layoutUnitToPixelX( 2*style.getLineWidth() ) ) );

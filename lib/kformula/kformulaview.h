@@ -82,11 +82,11 @@ public:
     void wheelEvent( QWheelEvent* event, const PtPoint& pos );
 
     // the mouse event happened at a certain point
-    void mousePressEvent( QMouseEvent* event, const LuPoint& pos );
-    void mouseReleaseEvent( QMouseEvent* event, const LuPoint& pos );
-    void mouseDoubleClickEvent( QMouseEvent* event, const LuPoint& pos );
-    void mouseMoveEvent( QMouseEvent* event, const LuPoint& pos );
-    void wheelEvent( QWheelEvent* event, const LuPoint& pos );
+    void mousePressEvent( QMouseEvent* event, const LuPixelPoint& pos );
+    void mouseReleaseEvent( QMouseEvent* event, const LuPixelPoint& pos );
+    void mouseDoubleClickEvent( QMouseEvent* event, const LuPixelPoint& pos );
+    void mouseMoveEvent( QMouseEvent* event, const LuPixelPoint& pos );
+    void wheelEvent( QWheelEvent* event, const LuPixelPoint& pos );
 
     void keyPressEvent(QKeyEvent* event);
     void focusInEvent(QFocusEvent* event);

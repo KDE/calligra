@@ -64,12 +64,12 @@ SequenceElement::~SequenceElement()
  * Returns the element the point is in.
  */
 BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
-                                        const LuPoint& point, const LuPoint& parentOrigin )
+                                        const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        LuPoint myPos(parentOrigin.x() + getX(),
-                      parentOrigin.y() + getY());
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
 
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
@@ -89,7 +89,7 @@ BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
             }
         }
 
-        double dx = point.x() - myPos.x();
+        luPixel dx = point.x() - myPos.x();
         //int dy = point.y() - myPos.y();
 
         for (uint i = 0; i < count; i++) {
@@ -129,15 +129,15 @@ bool SequenceElement::isEmpty()
 void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
-        lu mySize = context.getAdjustedSize( tstyle );
-        lu width = 0;
-        lu toBaseline = 0;
-        lu fromBaseline = 0;
+        luPt mySize = context.getAdjustedSize( tstyle );
+        luPixel width = 0;
+        luPixel toBaseline = 0;
+        luPixel fromBaseline = 0;
 
         QFont font = context.getDefaultFont();
-        font.setPointSizeFloat(mySize);
+        font.setPointSize(mySize);
         QFontMetrics fm(font);
-        lu fromMidline = fm.strikeOutPos();
+        luPixel fromMidline = fm.strikeOutPos();
 
         //uint count = children.count();
 
@@ -146,9 +146,9 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 
-            lu spaceBefore = 0;
+            luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
-                spaceBefore = child->getElementType()->getSpaceBefore( context, tstyle );
+                spaceBefore = context.layoutUnitToPixelX( child->getElementType()->getSpaceBefore( context, tstyle ) );
             }
 
             if ( !child->isInvisible() ) {
@@ -189,8 +189,8 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         setChildrenPositions();
     }
     else {
-        lu w = context.getEmptyRectWidth();
-        lu h = context.getEmptyRectHeight();
+        luPixel w = context.getEmptyRectWidth();
+        luPixel h = context.getEmptyRectHeight();
         setWidth( w );
         setHeight( h );
         setBaseline( h );
@@ -219,14 +219,14 @@ void SequenceElement::setChildrenPositions()
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SequenceElement::draw( QPainter& painter, const LuRect& r,
+void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                             const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            const LuPoint& parentOrigin )
+                            const LuPixelPoint& parentOrigin )
 {
-    LuPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
-    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     if (!isEmpty()) {
@@ -248,7 +248,7 @@ void SequenceElement::draw( QPainter& painter, const LuRect& r,
 }
 
 void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
-                                     const LuPoint& upperLeft )
+                                     const LuPixelPoint& upperLeft )
 {
     if ( painter.device()->devType() != QInternal::Printer ) {
         painter.setBrush(Qt::NoBrush);
@@ -264,39 +264,40 @@ void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& cont
 void SequenceElement::calcCursorSize( const ContextStyle& context,
                                       FormulaCursor* cursor, bool smallCursor )
 {
-    LuPoint point = widgetPos();
+    LuPixelPoint point = widgetPos();
     uint pos = cursor->getPos();
 
-    lu posX = getChildPosition( context, pos );
-    lu height = getHeight();
+    luPixel posX = getChildPosition( context, pos );
+    luPixel height = getHeight();
 
-    lu unit = context.ptToLayoutUnitPt( 1 );
+    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
+    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
 
     // Here are those evil constants that describe the cursor size.
 
     if ( cursor->isSelection() ) {
         uint mark = cursor->getMark();
-        lu markX = getChildPosition( context, mark );
-        lu x = QMIN(posX, markX);
-        lu width = abs(posX - markX);
+        luPixel markX = getChildPosition( context, mark );
+        luPixel x = QMIN(posX, markX);
+        luPixel width = abs(posX - markX);
 
         if ( smallCursor ) {
             cursor->cursorSize.setRect( point.x()+x, point.y(), width, height );
         }
         else {
-            cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unit,
-                                        width + unit, height + 4*unit );
+            cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unitY,
+                                        width + unitX, height + 4*unitY );
         }
         cursor->selectionArea = cursor->cursorSize;
     }
     else {
         if ( smallCursor ) {
             cursor->cursorSize.setRect( point.x()+posX, point.y(),
-                                        unit, height );
+                                        unitX, height );
         }
         else {
-            cursor->cursorSize.setRect( point.x(), point.y() - 2*unit,
-                                        getWidth() + unit, height + 4*unit );
+            cursor->cursorSize.setRect( point.x(), point.y() - 2*unitY,
+                                        getWidth() + unitX, height + 4*unitY );
         }
     }
 
@@ -313,7 +314,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
 {
     painter.setRasterOp( Qt::XorROP );
     if ( cursor->isSelection() ) {
-        const LuRect& r = cursor->selectionArea;
+        const LuPixelRect& r = cursor->selectionArea;
         painter.fillRect( context.layoutUnitToPixelX( r.x() ),
                           context.layoutUnitToPixelY( r.y() ),
                           context.layoutUnitToPixelX( r.width() ),
@@ -323,8 +324,8 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
     else {
         painter.setPen( QPen( Qt::white,
                               context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-        const LuPoint& point = cursor->getCursorPoint();
-        const LuRect& size = cursor->getCursorSize();
+        const LuPixelPoint& point = cursor->getCursorPoint();
+        const LuPixelRect& size = cursor->getCursorSize();
         if ( smallCursor ) {
             painter.drawLine( context.layoutUnitToPixelX( point.x() ),
                               context.layoutUnitToPixelY( size.top() ),
@@ -347,7 +348,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
 }
 
 
-lu SequenceElement::getChildPosition( const ContextStyle& context, uint child )
+luPixel SequenceElement::getChildPosition( const ContextStyle& context, uint child )
 {
     if (child < children.count()) {
         return children.at(child)->getX();
@@ -357,7 +358,7 @@ lu SequenceElement::getChildPosition( const ContextStyle& context, uint child )
             return children.at(child-1)->getX() + children.at(child-1)->getWidth();
         }
         else {
-            return context.ptToLayoutUnitPt( 2 );
+            return context.ptToLayoutUnitPixX( 2 );
         }
     }
 }
@@ -1006,23 +1007,25 @@ void NameSequence::calcCursorSize( const ContextStyle& context,
                                    FormulaCursor* cursor, bool smallCursor )
 {
     inherited::calcCursorSize( context, cursor, smallCursor );
-    LuPoint point = widgetPos();
-    lu unit = context.ptToLayoutUnitPt( 1 );
-    cursor->addCursorSize( LuRect( point.x()-unit, point.y()-unit,
-                                   getWidth()+2*unit, getHeight()+2*unit ) );
+    LuPixelPoint point = widgetPos();
+    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
+    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
+    cursor->addCursorSize( LuPixelRect( point.x()-unitX, point.y()-unitY,
+                                        getWidth()+2*unitX, getHeight()+2*unitY ) );
 }
 
 void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
                                FormulaCursor* cursor, bool smallCursor )
 {
-    LuPoint point = widgetPos();
+    LuPixelPoint point = widgetPos();
     painter.setPen( QPen( context.getEmptyColor(),
                           context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-    lu unit = context.ptToLayoutUnitPt( 1 );
-    painter.drawRect( context.layoutUnitToPixelX( point.x()-unit ),
-                      context.layoutUnitToPixelY( point.y()-unit ),
-                      context.layoutUnitToPixelX( getWidth()+2*unit ),
-                      context.layoutUnitToPixelY( getHeight()+2*unit ) );
+    luPixel unitX = context.ptToLayoutUnitPixX( 1 );
+    luPixel unitY = context.ptToLayoutUnitPixY( 1 );
+    painter.drawRect( context.layoutUnitToPixelX( point.x()-unitX ),
+                      context.layoutUnitToPixelY( point.y()-unitY ),
+                      context.layoutUnitToPixelX( getWidth()+2*unitX ),
+                      context.layoutUnitToPixelY( getHeight()+2*unitY ) );
 
     inherited::drawCursor( painter, context, cursor, smallCursor );
 }
