@@ -330,8 +330,6 @@ public:
     //refresh obj when we active or disactive
     void reactivateBgSpellChecking(bool refreshTextObj=false);
     KPTextObject* nextTextFrameSet(KPTextObject *obj);
-    void changeBackGroundSpellCheckTextObject(KPTextObject *obj);
-
 
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }

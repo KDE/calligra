@@ -64,6 +64,7 @@ KPConfig::KPConfig( KPresenterView* parent )
 		KDialogBase::Ok)
 
 {
+    m_doc = parent->kPresenterDoc();
     QVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                         BarIcon("misc", KIcon::SizeMedium) );
     _interfacePage=new configureInterfacePage( parent, page );
@@ -110,12 +111,29 @@ void KPConfig::openPage(int flags)
 
 void KPConfig::slotApply()
 {
+    KMacroCommand *macro = new KMacroCommand(i18n("Change Config") );
+    bool createMacro = false;
     _interfacePage->apply();
     _colorBackground->apply();
     _spellPage->apply();
-    _miscPage->apply();
-    _defaultDocPage->apply();
+    KCommand *cmd = _miscPage->apply();
+    if ( cmd )
+    {
+        macro->addCommand( cmd );
+        createMacro = true;
+    }
+    cmd = _defaultDocPage->apply();
+    if ( cmd )
+    {
+        macro->addCommand( cmd );
+        createMacro = true;
+    }
+
     _toolsPage->apply();
+    if ( createMacro )
+        m_doc->addCommand( macro);
+    else
+        delete macro;
 }
 
 void KPConfig::slotDefault()
@@ -480,7 +498,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid->addWidget(resolutionY , 3,0);
 }
 
-void ConfigureMiscPage::apply()
+KCommand * ConfigureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     int newUndo=m_undoRedoLimit->value();
@@ -529,11 +547,10 @@ void ConfigureMiscPage::apply()
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
-    if(macroCmd)
-        doc->addCommand(macroCmd);
 
     doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ), KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
     doc->repaint( false );
+    return macroCmd;
 }
 
 void ConfigureMiscPage::slotDefault()
@@ -629,7 +646,7 @@ ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
     delete font;
 }
 
-void ConfigureDefaultDocPage::apply()
+KCommand *ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KPresenterDoc* doc = m_pView->kPresenterDoc();
@@ -642,22 +659,27 @@ void ConfigureDefaultDocPage::apply()
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
         oldAutoSaveValue=autoSaveVal;
     }
+    KMacroCommand *macro = 0L;
     int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
     {
+        macro = new KMacroCommand( i18n("Change Starting Page Number") );
         KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change Starting Page Number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
-        doc->addCommand(cmd);
+        macro->addCommand( cmd);
         m_oldStartingPage=newStartingPage;
     }
     double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
     if ( newTabStop != m_oldTabStopWidth)
     {
+        if ( !macro )
+            macro = new KMacroCommand( i18n("Change Tab Stop Value") );
         KPrChangeTabStopValueCommand *cmd = new KPrChangeTabStopValueCommand( i18n("Change Tab Stop Value"), m_oldTabStopWidth, newTabStop, doc);
         cmd->execute();
-        doc->addCommand( cmd );
+        macro->addCommand( cmd );
         m_oldTabStopWidth = newTabStop;
     }
+    return macro;
 }
 
 void ConfigureDefaultDocPage::slotDefault()

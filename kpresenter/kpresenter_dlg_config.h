@@ -23,6 +23,7 @@
 #include <kdialogbase.h>
 
 class KPresenterView;
+class KPresenterDoc;
 class KIntNumInput;
 class KColorButton;
 class KConfig;
@@ -88,7 +89,7 @@ class ConfigureMiscPage : public QObject
     Q_OBJECT
 public:
     ConfigureMiscPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
-    void apply();
+    KCommand *apply();
     void slotDefault();
 private:
     KPresenterView* m_pView;
@@ -107,7 +108,7 @@ class ConfigureDefaultDocPage : public QObject
 public:
     ConfigureDefaultDocPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
     ~ConfigureDefaultDocPage();
-    void apply();
+    KCommand *apply();
     void slotDefault();
 public slots:
     void selectNewDefaultFont();
@@ -162,6 +163,8 @@ private:
     ConfigureMiscPage *_miscPage;
     ConfigureDefaultDocPage *_defaultDocPage;
     ConfigureToolsPage *_toolsPage;
+    KPresenterDoc* m_doc;
+
 };
 
 #endif
