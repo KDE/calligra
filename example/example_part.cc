@@ -18,6 +18,7 @@
 */
 
 #include "example_part.h"
+#include "example_factory.h"
 #include "example_view.h"
 
 #include <qpainter.h>
