@@ -34,6 +34,8 @@ class QPixmap;
 
 class KPPixmapObject : public KPObject
 {
+    friend class Page;
+    
 public:
     KPPixmapObject( KPPixmapCollection *_pixmapCollection );
     KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );

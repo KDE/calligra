@@ -594,3 +594,6 @@ Reggie 12.12.1999:
 - When a header exists and a new page is inserted the header is not overwritten
   by the header of the new page (template), if no header already exists, the header
   of the template is used when inserting a new page. Same for footers.
+- Added to rmb menu of pixmaps a point so that you can say: Scale pixmap
+  so that it is shown 1:1 in presentation mode when the presentation is done in
+  AxB resolution where you can choose A and B

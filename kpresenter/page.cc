@@ -1346,7 +1346,19 @@ void Page::setupMenus()
     pieMenu->insertItem( BarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu5 );
     pieMenu->setMouseTracking( true );
 
-  // create right button picture menu
+    // pic-resize menu
+    QPopupMenu *picResizeMenu = new QPopupMenu();
+    picResizeMenu->insertItem( i18n( "640x480" ), this, SLOT( picViewOrig640x480() ) );
+    picResizeMenu->insertItem( i18n( "800x600" ), this, SLOT( picViewOrig800x600() ) );
+    picResizeMenu->insertItem( i18n( "1024x768" ), this, SLOT( picViewOrig1024x768() ) );
+    picResizeMenu->insertItem( i18n( "1280x1024" ), this, SLOT( picViewOrig1280x1024() ) );
+    picResizeMenu->insertItem( i18n( "1600x1200" ), this, SLOT( picViewOrig1600x1200() ) );
+#if 0
+    picResizeMenu->insertSeparator();
+    picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
+#endif
+
+    // create right button picture menu
     picMenu = new QPopupMenu();
     CHECK_PTR( picMenu );
     picMenu->insertItem( BarIcon( "editcut" ), i18n( "&Cut" ), this, SLOT( clipCut() ) );
@@ -1362,6 +1374,8 @@ void Page::setupMenus()
     picMenu->insertItem( BarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
     picMenu->insertSeparator();
     picMenu->insertItem( BarIcon( "alignobjs" ), i18n( "&Align objects" ), alignMenu2 );
+    picMenu->insertSeparator();
+    picMenu->insertItem( i18n( "&Scale to show the Picture 1:1 in" ), picResizeMenu );
     picMenu->setMouseTracking( true );
 
   // create right button clipart menu
@@ -1624,11 +1638,11 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     if ( zoom ) {
 	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) >
 			   0.0 ?
-			   static_cast<float>( width() ) / 
+			   static_cast<float>( width() ) /
 	    static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
 	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) >
 			   0.0 ?
-			   static_cast<float>( height() ) / 
+			   static_cast<float>( height() ) /
 	    static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
 			   1.0;
 	_presFakt = min(_presFaktW,_presFaktH);
@@ -3119,9 +3133,9 @@ void Page::editSelectedTextArea()
 
 		    kpobject->activate( this, diffx(), diffy() );
 		    kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
-		    connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+		    connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 			     this, SLOT( toFontChanged( QFont* ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+		    connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
 			     this, SLOT( toColorChanged( QColor* ) ) );
 		    connect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			     this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
@@ -3817,4 +3831,110 @@ void Page::exitEditMode()
 	    kptextobject->getKTextObject()->setShowCursor( false );
 	}
     }
+}
+
+/*================================================================*/
+QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
+{
+    obj = 0;
+    KPObject *kpobject = 0;
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	kpobject = objectList()->at( i );
+	if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
+	    KPPixmapObject *o = (KPPixmapObject*)kpobject;
+	    QImage *img = view->kPresenterDoc()->getPixmapCollection()->
+			  getPixmapDataCollection().findPixmapData( o->key.dataKey );
+	    if ( img ) {
+		obj = o;
+		return img->size();
+	    }
+	}
+    }
+    
+    return QSize( -1, -1 );
+}	    
+
+/*================================================================*/
+void Page::picViewOrig640x480()
+{
+    KPPixmapObject *obj = 0;
+    QSize origSize = getPixmapOrigSize( obj );
+    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize presSize( 640, 480 );
+    if ( origSize == QSize( -1, -1 ) || !obj )
+	return;
+    
+    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+}
+
+/*================================================================*/
+void Page::picViewOrig800x600()
+{
+    KPPixmapObject *obj = 0;
+    QSize origSize = getPixmapOrigSize( obj );
+    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize presSize( 800, 600 );
+    if ( origSize == QSize( -1, -1 ) || !obj )
+	return;
+    
+    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+}
+
+/*================================================================*/
+void Page::picViewOrig1024x768()
+{
+    KPPixmapObject *obj = 0;
+    QSize origSize = getPixmapOrigSize( obj );
+    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize presSize( 1024, 768 );
+    if ( origSize == QSize( -1, -1 ) || !obj )
+	return;
+    
+    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+}
+
+/*================================================================*/
+void Page::picViewOrig1280x1024()
+{
+    KPPixmapObject *obj = 0;
+    QSize origSize = getPixmapOrigSize( obj );
+    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize presSize( 1280, 1024 );
+    if ( origSize == QSize( -1, -1 ) || !obj )
+	return;
+    
+    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+}
+
+/*================================================================*/
+void Page::picViewOrig1600x1200()
+{
+    KPPixmapObject *obj = 0;
+    QSize origSize = getPixmapOrigSize( obj );
+    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize presSize( 1600, 1200 );
+    if ( origSize == QSize( -1, -1 ) || !obj )
+	return;
+    
+    scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
+}
+
+/*================================================================*/
+void Page::picViewOrigFactor()
+{
+}
+
+/*================================================================*/
+void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize, 
+				  const QSize &presSize, KPPixmapObject *obj )
+{
+    float fakt = (float)pgSize.width() / (float)presSize.width();
+    int w = (int)( (float)origSize.width() * fakt );
+    int h = (int)( (float)origSize.height() * fakt );
+    
+    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
+					  QPoint( 0, 0 ), QSize( w - origSize.width(), h - origSize.height() ),
+					  obj, view->kPresenterDoc() );
+    resizeCmd->execute();
+    view->kPresenterDoc()->commands()->addCommand( resizeCmd );
 }

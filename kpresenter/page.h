@@ -57,6 +57,7 @@ class QFocusEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QPainter;
+class KPPixmapObject;
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -213,6 +214,10 @@ protected:
     void selectNext();
     void selectPrev();
 
+    void scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize, 
+				const QSize &presSize, KPPixmapObject *obj );
+    QSize getPixmapOrigSize( KPPixmapObject *&obj );
+    
     // variables
     QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
     QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
@@ -247,8 +252,6 @@ public slots:
     void chClip();
 
 private slots:
-
-    // slots to react on changes
     void toFontChanged( QFont* font ) { emit fontChanged( font ); }
     void toColorChanged( QColor* color ) { emit colorChanged( color ); }
     void toAlignChanged( TxtParagraph::HorzAlign a ) { emit alignChanged( a ); }
@@ -278,6 +281,12 @@ private slots:
     void slotTextContents2Height();
     void slotTextObj2Contents();
     void exitEditMode();
+    void picViewOrig640x480();
+    void picViewOrig800x600();
+    void picViewOrig1024x768();
+    void picViewOrig1280x1024();
+    void picViewOrig1600x1200();
+    void picViewOrigFactor();
     
 signals:
 
