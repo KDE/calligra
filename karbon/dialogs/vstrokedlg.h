@@ -29,9 +29,18 @@ private:
 	QVButtonGroup *m_typeOption;
 	QVButtonGroup *m_capOption;
 	QVButtonGroup *m_joinOption;
+	int m_type;
+	int m_cap;
+	int m_join;
 
 signals:
 	void strokeChanged( const VStroke & );
+	
+private slots:
+	void slotTypeChanged( int ID );
+	void slotCapChanged( int ID );
+	void slotJoinChanged( int ID );
+	void slotOKClicked();
 
 };
 
