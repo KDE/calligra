@@ -38,6 +38,7 @@ public:
 
     void setUnit(const Graphite::Unit &unit);
     void setPageLayout(const Graphite::PageLayout &layout) { m_layout=layout; repaint(false); }
+    void setPageBorders(const Graphite::PageBorders &b) { m_layout.borders=b; repaint(false); }
 
     void showMousePos(bool showMPos);
     // Not zoomed - real pixel coords!
@@ -60,6 +61,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void resizeEvent(QResizeEvent *e);
 
     void drawContents(QPainter *p) { m_orientation==Qt::Horizontal ? drawHorizontal(p) : drawVertical(p); }
 
@@ -81,6 +83,7 @@ private:
     Graphite::PageLayout m_layout;
     double m_zoomedRes;
     double m_1_zoomedRes; // 1/m_zoomedRes
+    QPixmap m_buffer;
     Graphite::Unit m_unit;
     int m_dx, m_dy;
     int m_MX, m_MY;

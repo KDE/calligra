@@ -62,7 +62,7 @@ void GraphiteView::slotViewZoom(const QString &t) {
     // QString::toDouble() doesn't like colons
     if(text[start]==dot)
         comma=true;
-    if(text[start]==colon) {
+    else if(text[start]==colon) {
         text[start]=dot;
         comma=true;
     }
@@ -159,7 +159,20 @@ void GraphiteView::rulerUnitChanged(Graphite::Unit unit) {
 }
 
 void GraphiteView::openPageLayoutDia() {
-    m_doc->showPageLayoutDia(this);
+    if(m_doc->showPageLayoutDia(this)) {
+        m_vert->setPageBorders(m_doc->pageLayout().borders);
+        m_horiz->setPageBorders(m_doc->pageLayout().borders);
+    }
+}
+
+void GraphiteView::horizBorderChanged(const Graphite::PageBorders &b) {
+    m_vert->setPageBorders(b);
+    m_doc->setPageBorders(b);
+}
+
+void GraphiteView::vertBorderChanged(const Graphite::PageBorders &b) {
+    m_horiz->setPageBorders(b);
+    m_doc->setPageBorders(b);
 }
 
 void GraphiteView::resizeEvent(QResizeEvent *e) {
@@ -207,6 +220,8 @@ void GraphiteView::setupRulers() {
     connect(m_vert, SIGNAL(unitChanged(Graphite::Unit)), m_doc,
             SLOT(setUnit(Graphite::Unit)));
     connect(m_vert, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
+    connect(m_vert, SIGNAL(pageBordersChanged(const Graphite::PageBorders &)),
+            this, SLOT(vertBorderChanged(const Graphite::PageBorders &)));
 
     m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
                      m_doc->pageLayout(), global->zoomedResolution());
@@ -215,6 +230,8 @@ void GraphiteView::setupRulers() {
     connect(m_horiz, SIGNAL(unitChanged(Graphite::Unit)), m_doc,
             SLOT(setUnit(Graphite::Unit)));
     connect(m_horiz, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
+    connect(m_horiz, SIGNAL(pageBordersChanged(const Graphite::PageBorders &)),
+            this, SLOT(horizBorderChanged(const Graphite::PageBorders &)));
 
     m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,

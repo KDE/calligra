@@ -28,7 +28,7 @@ Ruler::Ruler(QWidget *parent, QWidget *canvas, Qt::Orientation orientation,
              const Graphite::PageLayout &layout, const double &zoomedRes) :
     QFrame(parent, "ruler", Qt::WResizeNoErase | Qt::WRepaintNoErase),
     m_canvas(canvas), m_orientation(orientation), m_layout(layout),
-    m_zoomedRes(zoomedRes), m_unit(Graphite::MM), m_dx(0),
+    m_zoomedRes(zoomedRes), m_buffer(1, 1), m_unit(Graphite::MM), m_dx(0),
     m_dy(0), m_MX(0), m_MY(0), m_oldMX(0), m_oldMY(0), m_action(A_NONE),
     m_mousePressed(false), m_showMPos(false), m_haveToDelete(false),
     m_movingFirstBorder(false), m_movingSecondBorder(false), m_editable(true) {
@@ -114,15 +114,16 @@ void Ruler::setZoomedRes(const double &zoomedRes) {
     repaint(false);
 }
 
-void Ruler::drawHorizontal(QPainter *p) {
+void Ruler::drawHorizontal(QPainter *painter) {
 
-    p->fillRect(0, 0, width(), height(), colorGroup().brush(QColorGroup::Background));
+    QPainter p(&m_buffer);
+    p.fillRect(0, 0, width(), height(), colorGroup().brush(QColorGroup::Background));
 
     double pw=m_layout.width()*m_zoomedRes;
     double zoom=m_zoomedRes/GraphiteGlobal::self()->resolution();
     int i_pw=Graphite::double2Int(pw);
 
-    p->setBrush(colorGroup().brush(QColorGroup::Light));
+    p.setBrush(colorGroup().brush(QColorGroup::Light));
 
     QRect r;
     if(!m_movingFirstBorder)
@@ -135,11 +136,11 @@ void Ruler::drawHorizontal(QPainter *p) {
     else
         r.setRight(m_oldMX);
     r.setBottom(height());
-    p->drawRect(r);
+    p.drawRect(r);
 
     QFont font=QFont(QString::fromLatin1("helvetica"), 7);
     QFontMetrics fm(font);
-    p->setFont(font);
+    p.setFont(font);
 
     double dist;
     if(m_unit==Graphite::Inch)
@@ -157,42 +158,46 @@ void Ruler::drawHorizontal(QPainter *p) {
             str+='0';
         if(m_unit==Graphite::Pt && j!=1) // x100
             str+=QString::fromLatin1("00");
-        p->drawText(Graphite::double2Int(i)-m_dx-Graphite::double2Int(fm.width(str)*0.5),
+        p.drawText(Graphite::double2Int(i)-m_dx-Graphite::double2Int(fm.width(str)*0.5),
                     Graphite::double2Int((height()-fm.height())*0.5),
                     fm.width(str), height(), AlignLeft | AlignTop, str);
     }
 
     for(double i=dist*0.5; i<=pw; i+=dist) {
         int ii=Graphite::double2Int(i);
-        p->drawLine(ii-m_dx, 5, ii-m_dx, height()-5);
+        p.drawLine(ii-m_dx, 5, ii-m_dx, height()-5);
     }
 
     for(double i=dist*0.25; i<=pw; i+=dist*0.5) {
         int ii=Graphite::double2Int(i);
-        p->drawLine(ii-m_dx, 7, ii-m_dx, height()-7);
+        p.drawLine(ii-m_dx, 7, ii-m_dx, height()-7);
     }
 
-    p->drawLine(i_pw-m_dx+1, 1, i_pw-m_dx+1, height()-1);
-    p->drawLine(-m_dx, 1, -m_dx, height()-1);
-    p->setPen(Qt::white);
-    p->drawLine(i_pw-m_dx, 1, i_pw-m_dx, height()-1);
-    p->drawLine(-m_dx-1, 1, -m_dx-1, height()-1);
-    p->setPen(Qt::black);
+    p.drawLine(i_pw-m_dx+1, 1, i_pw-m_dx+1, height()-1);
+    p.drawLine(-m_dx, 1, -m_dx, height()-1);
+    p.setPen(Qt::white);
+    p.drawLine(i_pw-m_dx, 1, i_pw-m_dx, height()-1);
+    p.drawLine(-m_dx-1, 1, -m_dx-1, height()-1);
+    p.setPen(Qt::black);
 
     if(m_action==A_NONE && m_showMPos)
-        p->drawLine(m_MX, 1, m_MX, height()-1);
+        p.drawLine(m_MX, 1, m_MX, height()-1);
     m_haveToDelete=false;
+
+    p.end();
+    painter->drawPixmap(0, 0, m_buffer);
 }
 
-void Ruler::drawVertical(QPainter *p) {
+void Ruler::drawVertical(QPainter *painter) {
 
-    p->fillRect(0, 0, width(), height(), QBrush(colorGroup().brush(QColorGroup::Background)));
+    QPainter p(&m_buffer);
+    p.fillRect(0, 0, width(), height(), QBrush(colorGroup().brush(QColorGroup::Background)));
 
     double ph=m_layout.height()*m_zoomedRes;
     double zoom=m_zoomedRes/GraphiteGlobal::self()->resolution();
     int i_ph=Graphite::double2Int(ph);
 
-    p->setBrush(colorGroup().brush(QColorGroup::Light));
+    p.setBrush(colorGroup().brush(QColorGroup::Light));
 
     QRect r;
     if(!m_movingFirstBorder)
@@ -205,11 +210,11 @@ void Ruler::drawVertical(QPainter *p) {
     else
         r.setBottom(m_oldMY);
     r.setRight(width());
-    p->drawRect(r);
+    p.drawRect(r);
 
     QFont font=QFont(QString::fromLatin1("helvetica"), 7);
     QFontMetrics fm(font);
-    p->setFont(font);
+    p.setFont(font);
 
     double dist;
     if(m_unit==Graphite::Inch)
@@ -227,31 +232,34 @@ void Ruler::drawVertical(QPainter *p) {
             str+='0';
         if(m_unit==Graphite::Pt && j!=1)  // x100
             str+=QString::fromLatin1("00");
-        p->drawText(Graphite::double2Int((width()-fm.width(str))*0.5),
+        p.drawText(Graphite::double2Int((width()-fm.width(str))*0.5),
                     Graphite::double2Int(i)-m_dy-Graphite::double2Int(fm.height()*0.5),
                     width(), fm.height(), AlignLeft | AlignTop, str);
     }
 
     for(double i=dist*0.5; i<=ph; i+=dist) {
         int ii=Graphite::double2Int(i);
-        p->drawLine(5, ii-m_dy, width()-5, ii-m_dy);
+        p.drawLine(5, ii-m_dy, width()-5, ii-m_dy);
     }
 
     for(double i=dist*0.25; i<=ph; i+=dist*0.5) {
         int ii=Graphite::double2Int(i);
-        p->drawLine(7, ii-m_dy, width()-7, ii-m_dy);
+        p.drawLine(7, ii-m_dy, width()-7, ii-m_dy);
     }
 
-    p->drawLine(1, i_ph-m_dy+1, width()-1, i_ph-m_dy+1);
-    p->drawLine(1, -m_dy, width()-1, -m_dy);
-    p->setPen(Qt::white);
-    p->drawLine(1, i_ph-m_dy, width()-1, i_ph-m_dy);
-    p->drawLine(1, -m_dy-1, width()-1, -m_dy-1);
-    p->setPen(Qt::black);
+    p.drawLine(1, i_ph-m_dy+1, width()-1, i_ph-m_dy+1);
+    p.drawLine(1, -m_dy, width()-1, -m_dy);
+    p.setPen(Qt::white);
+    p.drawLine(1, i_ph-m_dy, width()-1, i_ph-m_dy);
+    p.drawLine(1, -m_dy-1, width()-1, -m_dy-1);
+    p.setPen(Qt::black);
 
     if(m_action==A_NONE && m_showMPos)
-        p->drawLine(1, m_MY, width()-1, m_MY);
+        p.drawLine(1, m_MY, width()-1, m_MY);
     m_haveToDelete=false;
+
+    p.end();
+    painter->drawPixmap(0, 0, m_buffer);
 }
 
 void Ruler::mousePressEvent(QMouseEvent *e) {
@@ -458,6 +466,11 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 void Ruler::mouseDoubleClickEvent(QMouseEvent *) {
     if(m_editable)
         emit openPageLayoutDia();
+}
+
+void Ruler::resizeEvent(QResizeEvent *e) {
+    QFrame::resizeEvent(e);
+    m_buffer.resize(size());
 }
 
 #include <ruler.moc>

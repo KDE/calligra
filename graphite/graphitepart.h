@@ -60,7 +60,8 @@ public:
     void setPageBorders(const Graphite::PageBorders &pageBorders);
     const Graphite::PageLayout &pageLayout() const { return m_pageLayout; }
     // This method is used to shot the page layout dialog (e.g. on a dbl click on the ruler)
-    void showPageLayoutDia(QWidget *parent);
+    // returns true if the layout has been changed
+    bool showPageLayoutDia(QWidget *parent);
 
     // The unit is a document wide setting!
     const Graphite::Unit &unit() const { return m_unit; }

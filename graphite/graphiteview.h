@@ -49,6 +49,8 @@ protected slots:
     void recalcRulers(int x, int y);
     void rulerUnitChanged(Graphite::Unit);
     void openPageLayoutDia();
+    void horizBorderChanged(const Graphite::PageBorders &b);
+    void vertBorderChanged(const Graphite::PageBorders &b);
 
 protected:
     void resizeEvent(QResizeEvent *e);

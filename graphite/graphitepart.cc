@@ -54,9 +54,9 @@ GraphitePart::~GraphitePart() {
 }
 
 bool GraphitePart::initDoc() {
-    // If nothing is loaded, do initialize here (TODO)
-    // Show the "template" dia
-    //KConfig *config=KGlobal::config();
+    // ### If nothing is loaded, do initialize here
+    // Show the "template" dia?
+    m_pageLayout.loadDefaults();
     return true;
 }
 
@@ -118,8 +118,8 @@ void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
     // TODO -- update
 }
 
-void GraphitePart::showPageLayoutDia(QWidget *parent) {
-    PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent);
+bool GraphitePart::showPageLayoutDia(QWidget *parent) {
+    return PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent);
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {

@@ -13,7 +13,7 @@ libgraphitepart_la_SOURCES = graphitepart.cc \
     gcanvas.cc gobjectfactory.cc gline.cc \
     graphiteglobal.cc ggroup.cc gprimitivecmds.cc \
     gbackground.cc ruler.cc pagelayoutdia.ui \
-    pagelayoutdia_impl.cc
+    pagelayoutdia_impl.cc myspinbox.cc
 libgraphitepart_la_LDFLAGS = -module -avoid-version -no-undefined
 libgraphitepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libgraphitepart_la_METASOURCES = AUTO
@@ -33,7 +33,8 @@ noinst_HEADERS =  graphiteglobal.h \
     graphitepart.h graphiteview.h graphitefactory.h \
     gobject.h gcanvas.h gobjectfactory.h \
     gline.h ggroup.h gprimitivecmds.h \
-    gbackground.h ruler.h pagelayoutdia_impl.h
+    gbackground.h ruler.h pagelayoutdia_impl.h \
+    myspinbox.h
 
 kdelnk_DATA = graphite.desktop
 kdelnkdir = $(kde_appsdir)/Office

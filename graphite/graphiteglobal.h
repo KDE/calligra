@@ -135,6 +135,9 @@ struct PageLayout {
     void setHeight(const double &height);
     double height() const;
 
+    void saveDefaults();
+    void loadDefaults();
+
     QPrinter::Orientation orientation;
     enum { Norm, Custom } layout;
     QPrinter::PageSize size;

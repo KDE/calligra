@@ -21,7 +21,9 @@
 #define pagelayoutdia_impl_h
 
 #include <pagelayoutdia.h>
+#include <qvalidator.h>
 #include <graphiteglobal.h>
+
 
 class PreviewWidget : public QWidget {
 
@@ -41,6 +43,18 @@ private:
 };
 
 
+class GUnitValidator : public QValidator {
+
+    Q_OBJECT
+
+public:
+    GUnitValidator(QWidget *parent, const char *name=0);
+    virtual ~GUnitValidator() {}
+
+    virtual QValidator::State validate(QString &input, int &pos) const;
+};
+
+
 class GraphitePart;
 
 class PageLayoutDiaImpl : public PageLayoutDia {
@@ -52,7 +66,7 @@ public:
                       QWidget *parent=0, const char *name=0, bool modal=false, WFlags fl=0);
     ~PageLayoutDiaImpl() {}
 
-    static void pageLayoutDia(Graphite::PageLayout &layout, GraphitePart * const doc,
+    static bool pageLayoutDia(Graphite::PageLayout &layout, GraphitePart * const doc,
                               QWidget *parent=0);
 signals:
     void updatePreview();
@@ -61,16 +75,19 @@ private slots:
     void unitChanged(int);
     void formatChanged(int);
     void orientationChanged(int);
-    void heightChanged(double);
-    void widthChanged(double);
-    void topBorderChanged(double);
-    void leftBorderChanged(double);
-    void rightBorderChanged(double);
-    void bottomBorderChanged(double);
+    void heightChanged();
+    void widthChanged();
+    void topBorderChanged();
+    void leftBorderChanged();
+    void rightBorderChanged();
+    void bottomBorderChanged();
     void saveAsDefault();
     void restoreDefaults();
+    void okClicked();
 
 private:
+    void updateWH();
+    bool bordersOk();
     void correctBorders();
 
     Graphite::PageLayout &m_layout;

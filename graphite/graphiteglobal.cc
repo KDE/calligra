@@ -25,6 +25,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kconfig.h>
 #include <kstaticdeleter.h>
 
 #include <gobject.h>
@@ -236,6 +237,41 @@ double PageLayout::height() const {
         else
             return customWidth;
     }
+}
+
+void PageLayout::saveDefaults() {
+
+    KConfig *config=KGlobal::config();
+    config->setGroup(QString::fromLatin1("PageLayout"));
+    config->writeEntry(QString::fromLatin1("Orientation"), static_cast<int>(orientation));
+    config->writeEntry(QString::fromLatin1("Layout"), static_cast<int>(layout));
+    config->writeEntry(QString::fromLatin1("Size"), static_cast<int>(size));
+    config->writeEntry(QString::fromLatin1("CustomWidth"), customWidth);
+    config->writeEntry(QString::fromLatin1("CustomHeight"), customHeight);
+    config->writeEntry(QString::fromLatin1("TopBorder"), borders.top);
+    config->writeEntry(QString::fromLatin1("LeftBorder"), borders.left);
+    config->writeEntry(QString::fromLatin1("RightBorder"), borders.right);
+    config->writeEntry(QString::fromLatin1("BottomBorder"), borders.bottom);
+    config->sync();
+}
+
+void PageLayout::loadDefaults() {
+
+    KConfig *config=KGlobal::config();
+    config->setGroup(QString::fromLatin1("PageLayout"));
+    orientation=static_cast<QPrinter::Orientation>(config->readNumEntry(QString::fromLatin1("Orientation"), 0));
+    int layout=config->readNumEntry(QString::fromLatin1("Layout"), 0);
+    if(layout==0)
+        layout=Graphite::PageLayout::Norm;
+    else
+        layout=Graphite::PageLayout::Custom;
+    size=static_cast<QPrinter::PageSize>(config->readNumEntry(QString::fromLatin1("Size"), 0));
+    customWidth=config->readDoubleNumEntry(QString::fromLatin1("CustomWidth"), 210.0);
+    customHeight=config->readDoubleNumEntry(QString::fromLatin1("CustomHeight"), 297.0);
+    borders.top=config->readDoubleNumEntry(QString::fromLatin1("TopBorder"), 10.0);
+    borders.left=config->readDoubleNumEntry(QString::fromLatin1("LeftBorder"), 10.0);
+    borders.right=config->readDoubleNumEntry(QString::fromLatin1("RightBorder"), 10.0);
+    borders.bottom=config->readDoubleNumEntry(QString::fromLatin1("BottomBorder"), 10.0);
 }
 
 }; //namespace Graphite
