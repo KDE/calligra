@@ -698,15 +698,10 @@ void Outline::rebuildItems()
 // returns 0 upon stupid things (e.g. invalid page number)
 OutlineSlideItem* Outline::slideItem( int pageNumber )
 {
-    KPrPage* page = doc->pageList().at( pageNumber );
-    if( !page ) return 0;
-    
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it )
-    {
-        OutlineSlideItem *item = dynamic_cast<OutlineSlideItem*>( it.current() );
-        if( item ) if( item->page() == page )
-            return item;
+    QListViewItem* item = firstChild();
+    for( int index = 0; item; ++index, item = item->nextSibling() ) {
+        if( index == pageNumber )
+            return dynamic_cast<OutlineSlideItem*>( item );
     }
 
     return 0;
@@ -754,23 +749,17 @@ void Outline::moveItem( int oldPos, int newPos )
 void Outline::removeItem( int pos )
 {
     kdDebug(33001)<< "Outline::removeItem" << endl;
-    int page = 0;
-    bool update = false;
-
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it ) {
-        if ( page == pos ) {
-            kdDebug(33001) << "Page " << it.current()->text(0) << " removed" << endl;
-            if ( it.current()->nextSibling())
-                update = it.current()->nextSibling();
-            delete it.current();
-        }
-        if ( update ) {
-            KPrPage* newPage = doc->pageList().at(page);
-            OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(it.current());
-            if( slideItem ) slideItem->setPage( newPage );
-        }
-        page++;
+ 
+    OutlineSlideItem* item = slideItem( pos );
+    if( !item ) return;
+    OutlineSlideItem* temp = dynamic_cast<OutlineSlideItem*>(item->nextSibling());
+    
+    delete item;
+    
+    for( item = temp; item; ++pos ) {
+        KPrPage* newPage = doc->pageList().at( pos );
+        item->setPage( newPage );
+        item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
     }
 }
 
