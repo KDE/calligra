@@ -36,12 +36,13 @@ struct YS {
                    cos((double)(slice_angle[0][(i)])) ) )
 */
 
+
 #define CX( i, d ) ( cx + ((d)? xdepth_3D:0)+ \
-	(int)((double)(!params->explode.isNull()?params->explode[i]:0) * \
+	(int)((double)(!params->explode.isNull()?params->explode[params->offsetCol+i]:0) * \
                    sin((double)(slice_angle[0][(i)])) ) )
 
 #define CY( i, d ) ( cy - ((d)? ydepth_3D: 0) - \
-            (int)( (double)(!params->explode.isNull()?params->explode[i]:0) * \
+            (int)( (double)(!params->explode.isNull()?params->explode[params->offsetCol+i]:0) * \
                    cos((double)(slice_angle[0][(i)])) ) )
 
 

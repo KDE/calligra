@@ -62,10 +62,10 @@ bool KChartPart::initDoc()
   return TRUE;
 }
 
-void KChartPart::initRandomData() {
+void KChartPart::initRandomData() 
+{
      // fill cells
     int col,row;
-
     // initialize some data, if there is none
     if (currentData.rows() == 0) {
       cerr << "Initialize with some data!!!\n";
@@ -77,11 +77,8 @@ void KChartPart::initRandomData() {
 	  t.value.setValue((double)row+col);
 	  // cerr << "Set cell for " << row << "," << col << "\n";
 	  currentData.setCell(row,col,t);
-	 params()->explode=0;
-	 params()->missing=FALSE;
 	 }
     }
-    
     params()->legend+="KDE";
     params()->legend+="KOFFICE";
     params()->legend+="KCHART";
@@ -92,7 +89,16 @@ void KChartPart::initRandomData() {
     params()->xlbl+="Year 2002";
     params()->xlbl+="Year 2003";
 
+QArray<int> tmpExp(16);
+QArray<bool> tmpMissing(16);
 
+for(int i=0; i<16; ++i ) 
+  {
+  tmpExp[i]=0;
+  tmpMissing[i]=FALSE;
+  }
+  params()->missing=tmpMissing;
+  params()->explode=tmpExp;
 
 }
 
@@ -654,6 +660,11 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.20  2000/01/21 16:04:03  mlaurent
+ * Add legend and label
+ * Add new page for config font
+ * bug fix
+ *
  * Revision 1.19  2000/01/08 20:36:21  mlaurent
  * Now you can choose a "sub type chart"
  * Now there are a color for same think

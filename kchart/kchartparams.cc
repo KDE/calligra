@@ -76,6 +76,8 @@ KChartParameters::KChartParameters() :
 	hard_graphwidth = 0;
 	hard_xorig = 0;
 	hard_yorig = 0;
+	colPie=0; //first column select
+	offsetCol=0;
 }
 
 bool KChartParameters::do_vol() {

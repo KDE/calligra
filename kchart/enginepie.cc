@@ -73,6 +73,9 @@ pie_gif( short imagewidth,
          int  num_points,
          float val[] )	/* data */
 {
+    params->offsetCol=num_points*params->colPie; 
+    int offsetCol=params->offsetCol;
+    
     int	i;
     QColor BGColor, LineColor, PlotColor, EdgeColor, EdgeColorShd,
         SliceColor[num_points], SliceColorShd[num_points];
@@ -148,10 +151,10 @@ pie_gif( short imagewidth,
 	    /*if( (this_pct > min_grphable) ||*/	/* too small */
 	    /*(!GDCPIE_missing || !GDCPIE_missing[i]) ) {*/	/* still want angles */
 		if( (this_pct > min_grphable) ||	/* too small */
-                (params->missing.isNull() || !params->missing[i]) ) 
+                (params->missing.isNull() || !params->missing[offsetCol+i]) ) 
 		  {	/* still want angles */
 		//int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
-                int this_explode = !params->explode.isNull() ? params->explode[i]: 0;
+                int this_explode = !params->explode.isNull() ? params->explode[offsetCol+i]: 0;
 		
 		double	this_sin;
                 double	this_cos;
@@ -162,7 +165,7 @@ pie_gif( short imagewidth,
 		this_sin        = sin( (double)slice_angle[0][i] );
                 this_cos        = cos( (double)slice_angle[0][i] );
 		//if( (!GDCPIE_missing || !GDCPIE_missing[i]))
-                if( params->missing.isNull() || !params->missing[i] ) 
+                if( params->missing.isNull() || !params->missing[offsetCol+i] ) 
 		  {
                     short lbl_wdth,lbl_hgt;
                     float this_y_explode_limit,this_x_explode_limit;
@@ -358,7 +361,7 @@ pie_gif( short imagewidth,
             float	rad1 = rad;
             for( i=0; i<num_points; ++i )
 	      if( !(others[i]) &&
-		(params->missing.isNull() || !params->missing[i]) ) 
+		(params->missing.isNull() || !params->missing[offsetCol+i]) ) 
 		{
 		  /*if( !(others[i]) &&
 		    (!GDCPIE_missing || !GDCPIE_missing[i])){*/
@@ -447,7 +450,7 @@ pie_gif( short imagewidth,
 
             for( i=0; i<num_points; ++i )
 	      //if( !GDCPIE_missing || !GDCPIE_missing[i] )	{
-		 if( params->missing.isNull() || !params->missing[i] )      
+		 if( params->missing.isNull() || !params->missing[offsetCol+i] )      
 		   {
   
 		 if( RAD_DIST1(slice_angle[1][i]) < RAD_DIST2(slice_angle[0][i]) )
@@ -544,7 +547,7 @@ pie_gif( short imagewidth,
 		  /*if( !others[i] &&
 		    (!GDCPIE_missing || !GDCPIE_missing[i]) )*/ 
 		  if( !others[i] &&
-		   (params->missing.isNull() || !params->missing[i]) ) 
+		   (params->missing.isNull() || !params->missing[offsetCol+i]) ) 
 			  {
 				float	rad = rad1;
 
@@ -655,7 +658,7 @@ pie_gif( short imagewidth,
 		  /*if( !others[i] &&
 		    (!GDCPIE_missing || !GDCPIE_missing[i]) ) {*/
 		    if( !others[i] &&
-		     (params->missing.isNull() || !params->missing[i]) ) 
+		     (params->missing.isNull() || !params->missing[offsetCol+i]) ) 
 		     {
 				char pct_str[1+4+1+1];
 				int pct_wdth;

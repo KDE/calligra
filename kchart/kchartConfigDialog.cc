@@ -35,6 +35,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     	{
     	_parameterpiepage = new KChartParameterPieConfigPage(_params,this );
     	addTab( _parameterpiepage, i18n( "&Parameter" ) );
+    	
+    	_piepage = new KChartPieConfigPage(_params, this );
+    	addTab( _piepage, i18n( "&Pie" ) );
+
     	}
     	  
     _parameterfontpage = new KChartFontConfigPage(_params,this );
@@ -73,7 +77,10 @@ void KChartConfigDialog::apply()
     if(!_params->isPie())
     	_parameterpage->apply();
     else
+    	{
     	_parameterpiepage->apply();
+    	_piepage->apply();
+    	}
     _parameterfontpage->apply();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
@@ -101,9 +108,12 @@ void KChartConfigDialog::defaults()
     
     if(!_params->isPie())
     	_parameterpage->init();
-    else
-    	_parameterpiepage->init();
     	
+    else
+    	{
+    	_parameterpiepage->init();
+    	_piepage->init();
+    	}
     _parameterfontpage->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );

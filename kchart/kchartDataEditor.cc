@@ -67,10 +67,16 @@ for (int row = 0;row < _widget->rows();row++)
 
 void kchartDataEditor::getLegend(KChartParameters* params)
 {
-
+params->legend.clear();		  
 for (int row = 0;row < _widget->rows();row++)
-	params->legend[row]=_widget->getY(row);	
-	
+	{
+	if(! (row >= _widget->usedRows()) )
+		{
+		params->legend+=_widget->getY(row);	
+		}
+
+	}
+
 }
 
 void kchartDataEditor::setXLabel(QStringList xlbl)
@@ -87,9 +93,15 @@ for (int col = 0;col < _widget->cols();col++)
 
 void kchartDataEditor::getXLabel(KChartParameters* params)
 {
-
+  
+params->xlbl.clear();
 for (int col = 0;col < _widget->cols();col++)
-	params->xlbl[col]=_widget->getX(col);	
+	{
+	if(! (col >= _widget->usedCols()) )
+		{
+		params->xlbl+=_widget->getX(col);	
+		}
 	
+	}
 }
 

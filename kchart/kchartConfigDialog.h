@@ -13,6 +13,7 @@
 #include "kchartParameterPieConfigPage.h"
 #include "kchartGeometryConfigPage.h"
 #include "kchartFontConfigPage.h"
+#include "kchartPieConfigPage.h"
 #include "kchartparams.h"
 
 
@@ -31,6 +32,7 @@ protected:
     KChartParameterConfigPage*_parameterpage; 
     KChartParameterPieConfigPage*_parameterpiepage; 
     KChartFontConfigPage*_parameterfontpage; 
+    KChartPieConfigPage*_piepage; 
 protected slots:
     virtual void apply();
     virtual void defaults();

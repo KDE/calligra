@@ -398,6 +398,7 @@ void kchartEngine::drawXTicks()
 				  // no label stuff yet
 				  if( params->xaxis && params->hasxlabel ) 
 				  {
+				  cout <<"Nb point : "<<num_points<<"xi : "<<xi<<endl;
 				  // waiting for GDCImageStringUpNL()
 				  #define LBXH params->xAxisFontHeight()
 				  #define LBXW params->xAxisFontWidth()

@@ -57,3 +57,9 @@ But Pb for writing % in label for the moment it's not good
 -Now there are label and legend
 -Add new page for config font
 -Bug fix
+
+2000-01-22 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new page for config pie chart
+-Now you can choose pie chart
+-Bug fix

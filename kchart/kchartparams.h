@@ -189,6 +189,8 @@ struct KChartParameters
     bool label_line; // pies
     KChartType type;
     short other_threshold; // pies
+    int colPie; //pies
+    int offsetCol;
     bool hard_size;
     int hard_graphheight;
     int hard_graphwidth;

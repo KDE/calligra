@@ -57,8 +57,8 @@ void kchartEngine::drawData() {
     case KCHARTTYPE_3DPIE:
     case KCHARTTYPE_2DPIE:
     	cout <<"Not implemented\n";
-    	//qDebug("drawing pie");
-      	//drawPie();
+    	qDebug("drawing pie");
+      	drawPie();
     	break;
     }
 }
@@ -561,17 +561,14 @@ void kchartEngine::draw3DCombo() {
 /* this chart doesn't work for the moment */
 void kchartEngine::drawPie() 
 {
-  float val[num_points];
-  
-  for(int i=0; i<num_points; ++i ) 
+  float val[num_sets];
+    for(int i=0; i<num_sets; ++i ) 
   {
-  if( CELLEXISTS(i,1)) 
+  if( CELLEXISTS(i,params->colPie)) 
 	    {
-		val[i] = CELLVALUE(i,1);
+		val[i] = CELLVALUE(i,params->colPie);
 	    }
   }
-  
-  val[0]=5;
-  pie_gif(imagewidth,imageheight,p,params,num_points,val);   
+  pie_gif(imagewidth,imageheight,p,params,num_sets,val);   
 }
 
