@@ -23,6 +23,7 @@ public slots:
   void apply();
   void changeXLabelFont();
   void changeYLabelFont();
+  void changeYLabel2Font();
   void changeTitleFont();
   void changeLegendTitleFont();
   void changeLegendTextFont();
@@ -62,6 +63,7 @@ private:
 
   QFont xlabel;
   QFont ylabel;
+  QFont ylabel2;
   QFont title;
   QColor x_color;
   QColor y_color;

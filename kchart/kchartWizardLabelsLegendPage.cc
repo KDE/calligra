@@ -53,28 +53,34 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
 
     QLabel* xlabelLA = new QLabel( i18n( "X-title:" ), tmpQGroupBox );
+    xlabelLA->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xlabelLA,1,0);
 
     _xlabelED = new QLineEdit( tmpQGroupBox );
+    _xlabelED->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   _xlabelED->setText(_chart->params()->xtitle);
     grid2->addWidget(_xlabelED,1,1);
 
     xtitlefont = new QPushButton( tmpQGroupBox );
     xtitlefont->setText(i18n("Font"));
+    xtitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xtitlefont,1,2);
 
     xtitlecolor=new KColorButton(tmpQGroupBox);
     // PENDING(kalle) Put back in
     //  x_color=_chart->params()->XTitleColor;
     xtitlecolor->setColor( x_color );
+    xtitlecolor->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xtitlecolor,1,3);
 
 
     QLabel* ylabelLA = new QLabel( i18n( "Y-title:" ), tmpQGroupBox );
+    ylabelLA->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ylabelLA,2,0);
 
     _ylabelED = new QLineEdit( tmpQGroupBox );
+    _ylabelED->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   _ylabelED->setText(_chart->params()->ytitle);
     grid2->addWidget(_ylabelED,2,1);
@@ -82,9 +88,11 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     ytitlefont = new QPushButton( tmpQGroupBox);
     ytitlefont->setText(i18n("Font"));
+    ytitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ytitlefont,2,2);
 
     ytitlecolor=new KColorButton(tmpQGroupBox);
+    ytitlecolor->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   y_color=_chart->params()->YTitleColor;
     ytitlecolor->setColor( y_color );
@@ -92,18 +100,26 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     //ytitle2 doesn't work
     QLabel* ylabelLA2 = new QLabel( i18n( "Y-title 2:" ), tmpQGroupBox );
+    ylabelLA2->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ylabelLA2,3,0);
 
     _ylabel2ED = new QLineEdit( tmpQGroupBox );
+    _ylabel2ED->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   _ylabel2ED->setText(_chart->params()->ytitle2);
     grid2->addWidget(_ylabel2ED,3,1);
 
+    ytitle2font = new QPushButton( tmpQGroupBox);
+    ytitle2font->setText(i18n("Font"));
+    ytitle2font->setEnabled(false); //Not supported by kdChart yet
+    grid2->addWidget(ytitle2font,3,2);
+
     ytitle2color=new KColorButton(tmpQGroupBox);
+    ytitle2color->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   y_color2=_chart->params()->YTitle2Color;
     ytitle2color->setColor( y_color2 );
-    grid2->addWidget(ytitle2color,3,2);
+    grid2->addWidget(ytitle2color,3,3);
 
     // PENDING(kalle) Put back in
     //   xlabel=_chart->params()->xTitleFont();
@@ -147,6 +163,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     connect(xtitlefont,SIGNAL(clicked()),this,SLOT(changeXLabelFont()));
     connect(ytitlefont,SIGNAL(clicked()),this,SLOT(changeYLabelFont()));
+    connect(ytitle2font,SIGNAL(clicked()),this,SLOT(changeY2LabelFont()));
     connect(titlefont,SIGNAL(clicked()),this,SLOT(changeTitleFont()));
     connect(legendTitleFont,SIGNAL(clicked()),this,SLOT(changeLegendTitleFont()));
 
@@ -199,6 +216,14 @@ void KChartWizardLabelsLegendPage::changeYLabelFont()
         return;
 
 }
+
+void KChartWizardLabelsLegendPage::changeYLabel2Font()
+{
+    if (KFontDialog::getFont( ylabel2, false, this ) == QDialog::Rejected )
+        return;
+
+}
+
 void KChartWizardLabelsLegendPage::changeTitleFont()
 {
     if (KFontDialog::getFont( title ,false,this ) == QDialog::Rejected )
