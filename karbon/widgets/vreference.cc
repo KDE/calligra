@@ -34,9 +34,25 @@ VReference::VReference( QWidget *parent, const char *name ) : QFrame ( parent, n
 	radio = new QRadioButton ( mButtonGroup );
 	mButtonGroup->insert( radio, BottomRight );
 	
+	connect(
+		mButtonGroup, SIGNAL( clicked( int ) ),
+		this, SLOT( setReferencePoint( int ) ) );
+	
 	mButtonGroup->setButton( Center );
 	layout->addWidget( mButtonGroup );
 	layout->activate();
+	setReferencePoint( Center );
+}
+
+void VReference::setReferencePoint ( int i )
+{
+	m_referencePoint = i;
+	emit referencePointChanged( m_referencePoint );
+}
+
+int VReference::referencePoint()
+{
+	return( m_referencePoint );
 }
 
 #include "vreference.moc"

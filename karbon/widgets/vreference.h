@@ -31,9 +31,15 @@ class VReference : public QFrame
 	Q_OBJECT
 public:
 	VReference( QWidget *parent = 0L, const char *name = 0L );
+	int referencePoint();
+public slots:
+	virtual void setReferencePoint ( int );
 
 private:
+	int m_referencePoint;
 	QButtonGroup* mButtonGroup;
+signals:
+	void referencePointChanged( int referencePoint );
 };
 
 #endif
