@@ -2382,7 +2382,7 @@ void KSpreadView::initialPosition()
           d->tabBar->addTab( tabName );
         }
       }
-//      setActiveTable( tbl );
+      setActiveTable( tbl );
     }
 
     refreshView();
