@@ -146,6 +146,7 @@ public:
 
     void recalcText();
     void recalcWholeText( bool _cursor = false, bool _fast = false );
+    void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
     void drawBorders( QPainter &_painter, KRect v_area );
     void drawFrameSelection( QPainter &_painter, KWFrame *_frame );

@@ -1385,6 +1385,44 @@ void KWPage::recalcWholeText( bool _cursor, bool )
 }
 
 /*================================================================*/
+void KWPage::recalcWholeText( KWParag *start, unsigned int fs )
+{
+    bool blinking = blinkTimer.isActive();
+    if ( blinking )
+        stopBlinkCursor();
+
+    if ( recalcingText ) return;
+
+    QApplication::setOverrideCursor( waitCursor );
+    setCursor( waitCursor );
+
+    recalcingText = true;
+    QPainter painter;
+    painter.begin( this );
+
+    KWFormatContext _fc( doc, fs + 1 );
+    _fc.init( start, painter, true, false, false );
+
+    bool bend = false;
+
+    while ( !bend )
+    {
+        bend = !_fc.makeNextLineLayout( painter );
+        //if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > static_cast<int>(yOffset + height() + 20))
+        //bend = true;
+    }
+    
+    painter.end();
+    recalcingText = false;
+
+    QApplication::restoreOverrideCursor();
+    setCursor( ibeamCursor );
+
+    if ( blinking )
+        startBlinkCursor();
+}
+
+/*================================================================*/
 void KWPage::footerHeaderDisappeared()
 {
     if ( isAHeader( doc->getFrameSet( fc->getFrameSet() - 1 )->getFrameInfo() ) ||

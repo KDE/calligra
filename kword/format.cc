@@ -42,7 +42,7 @@ KWFormat::KWFormat( KWordDocument *_doc )
 }
 
 /*================================================================*/
-KWFormat::KWFormat( const KWFormat& _format )
+KWFormat::KWFormat( const KWFormat& )
 {
 }
 

@@ -1242,3 +1242,12 @@ Reggie. 1.6.1999:
 - Pixmaps are saved inline now (using koStore), but
   not loaded yet that way...
 - Some minor fixes
+
+Reggie, 3.6.1999:
+-----------------
+- When pasting/dropping text the new parags are calculated
+  correctly => correct painting. It's a bit slow now if you
+  paste/drop text at the beginning of a very long document,
+  but I'll optimize that one day too :-)
+
+

@@ -84,7 +84,7 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
     : formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
-      ret_pix( ICON( "return.xpm" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ), 
+      ret_pix( ICON( "return.xpm" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern()
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
@@ -1420,13 +1420,13 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << etag << "</STYLES>" << endl;
 
     out << otag << "<PIXMAPS>" << endl;
-    
+
     QDictIterator<KWImage> it = imageCollection.iterator();
     for ( ; it.current(); ++it )
         out << indent << "<KEY=\"" << it.currentKey().latin1() << "\"/>" << endl;
-    
+
     out << etag << "</PIXMAPS>" << endl;
-    
+
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
@@ -2674,7 +2674,7 @@ void KWordDocument::setFormat( KWFormat &_format )
 void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format, const QString &_mime )
 {
     QStrList strList;
-    KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L;
+    KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
     int index;
     QPainter painter;
 
@@ -2885,6 +2885,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                     str = QString( strList.at( i ) );
                     len = str.length();
                     p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this, p, 0L, defaultParagLayout );
+                    if ( !calcParag )
+                        calcParag = p;
                     p->insertText( 0, str );
                     p->setFormat( 0, len, *format );
                 }
@@ -2915,6 +2917,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 while ( parag )
                 {
                     p = new KWParag( *parag );
+                    if ( !calcParag )
+                        calcParag = p;
                     p->setPrev( prev );
                     prev->setNext( p );
                     p->setNext( 0L );
@@ -2926,6 +2930,13 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
             }
         }
     }
+
+    if ( !calcParag )
+        calcParag = _fc->getParag();
+    if ( calcParag->getPrev() )
+        calcParag = calcParag->getPrev();
+    
+    recalcWholeText( calcParag, _fc->getFrameSet() - 1 );
 }
 
 /*================================================================*/
@@ -3384,6 +3395,19 @@ void KWordDocument::recalcWholeText( bool _cursor, bool _fast )
         viewPtr = m_lstViews.first();
         if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
             viewPtr->getGUI()->getPaperWidget()->recalcWholeText( _cursor, _fast );
+    }
+}
+
+/*================================================================*/
+void KWordDocument::recalcWholeText( KWParag *start, unsigned int fs )
+{
+    KWordView *viewPtr;
+
+    if ( !m_lstViews.isEmpty() )
+    {
+        viewPtr = m_lstViews.first();
+        if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
+            viewPtr->getGUI()->getPaperWidget()->recalcWholeText( start, fs );
     }
 }
 
