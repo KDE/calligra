@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
     Copyright (C) 2000 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,12 +18,15 @@
 */
 
 #include <kcoloractions.h>
-#include <kcolordialog.h>
-#include <klocale.h>
-#include <kpopupmenu.h>
+
+#include <qpopupmenu.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
+
+#include <kapplication.h>
 #include <ktoolbar.h>
-#include <qdrawutil.h>
-#include <qpainter.h>
+#include <ktoolbarbutton.h>
+#include <kdebug.h>
 
 KColorAction::KColorAction( const QString& text, int accel,
 			    QObject* parent, const char* name )
@@ -211,215 +215,134 @@ void KColorAction::createPixmap()
     setIconSet( QIconSet( pixmap ) );
 }
 
-/////////////////
 
-// A KColorAction with a popupmenu for changing the color
 KSelectColorAction::KSelectColorAction( const QString& text, Type type,
-                                          int accel, QObject* parent, const char* name )
-  : KColorAction(text,type,accel,parent,name)
+                                        const QObject* receiver, const char* slot,
+                                        KActionCollection* parent, const char* name ) :
+    KAction( text, KShortcut(), receiver, slot, parent, name ), m_type( type ),
+    m_color( Qt::black )
 {
-  initPopup();
-}
-
-KSelectColorAction::KSelectColorAction( const QString& text, Type type, int accel,
-                    QObject* receiver, const char* slot, QObject* parent, const char* name )
-  : KColorAction(text,type,accel,receiver,slot,parent,name)
-{
-  initPopup();
 }
 
 KSelectColorAction::~KSelectColorAction()
 {
-  delete m_popup;
 }
 
-void KSelectColorAction::initPopup()
+int KSelectColorAction::plug( QWidget* w, int index )
 {
-  m_popup = new KPopupMenu();
-  // TODO: insert rectangular widgets of various colors in the popup
-  m_popup->insertItem(i18n("Other..."),this, SLOT( changeColor() ) );
-}
-
-void KSelectColorAction::changeColor()
-{
-  QColor col(color());
-  if ( KColorDialog::getColor( col ) )
-  {
-    setColor( col );
-    emit activated();
-  }
-}
-
-int KSelectColorAction::plug(QWidget* widget, int index)
-{
-  if ( widget->inherits( "KToolBar" ) )
-  {
-    KToolBar *bar = (KToolBar *)widget;
-
-    int id_ = KAction::getToolButtonID();
-    bar->insertButton( iconSet(KIcon::Small).pixmap(), id_, SIGNAL( clicked() ), this,
-                       SLOT( slotActivated() ), isEnabled(), plainText(),
-                       index );
-
-    addContainer( bar, id_ );
-
-    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    bar->setDelayedPopup( id_, popupMenu(), true );
-
-    return containerCount() - 1;
-  }
-  return KColorAction::plug( widget, index );
-}
-
-/////////////////
-
-KColorBar::KColorBar( const QValueList<QColor> &cols,
-		      QWidget *parent, const char *name )
-    : QWidget( parent, name ), colors( cols ), orient( Vertical )
-{
-    setMinimumSize( 20, colors.count() * 16 + 10 );
-    resize( minimumSize() );
-    show();
-}
-
-void KColorBar::mousePressEvent( QMouseEvent *e )
-{
-    if ( orientation() == Vertical ) {
-	int index = -1;
-	int x = ( width() - 12 ) / 2;
-	int y = 5;
-	QValueList<QColor>::Iterator it = colors.begin();
-	for ( int i = 0; it != colors.end(); ++it, ++i ) {
-	    if ( QRect( x, y, 12, 12 ).contains( e->pos() ) )
-		index = i;
-	    y += 16;
-	}
-
-	if ( index != -1 && index < (int)colors.count() ) {
-	    if ( e->button() == LeftButton )
-		emit leftClicked( colors[ index ] );
-	    else if ( e->button() == RightButton )
-		emit rightClicked( colors[ index ] );
-	}
-    } else {
-	int index = -1;
-	int y = ( height() - 12 ) / 2;
-	int x = 5;
-	QValueList<QColor>::Iterator it = colors.begin();
-	for ( int i = 0; it != colors.end(); ++it, ++i ) {
-	    if ( QRect( x, y, 12, 12 ).contains( e->pos() ) )
-		index = i;
-	    x += 16;
-	}
-
-	if ( index != -1 && index < (int)colors.count() ) {
-	    if ( e->button() == LeftButton )
-		emit leftClicked( colors[ index ] );
-	    else if ( e->button() == RightButton )
-		emit rightClicked( colors[ index ] );
-	}
+    if (w == 0) {
+	kdWarning() << "KSelectColorAction::plug called with 0 argument\n";
+ 	return -1;
     }
-}
+    if (kapp && !kapp->authorizeKAction(name()))
+        return -1;
 
-void KColorBar::orientationChanged( Orientation o )
-{
-    orient = o;
-    if ( orientation() == Vertical ) {
-	setMinimumSize( 20, colors.count() * 16 + 10 );
-    } else {
-	setMinimumSize( colors.count() * 16 + 10, 20 );
+    if ( w->inherits("QPopupMenu") )
+    {
+        QPopupMenu* menu = static_cast<QPopupMenu*>( w );
+        int id;
+
+        if ( hasIcon() )
+        {
+            /* ###### CHECK: We're not allowed to specify the instance in iconSet()
+            KInstance *instance;
+            if ( parentCollection() )
+                instance = parentCollection()->instance();
+            else
+                instance = KGlobal::instance();
+            */
+            id = menu->insertItem( iconSet( KIcon::Small, 0 ), text(), this,//dsweet
+                                   SLOT( slotActivated() ), 0, -1, index );
+        }
+        else
+            id = menu->insertItem( text(), this, SLOT( slotActivated() ),  //dsweet
+                                   0, -1, index );
+
+        updateShortcut( menu, id );
+
+        // call setItemEnabled only if the item really should be disabled,
+        // because that method is slow and the item is per default enabled
+        if ( !isEnabled() )
+            menu->setItemEnabled( id, false );
+
+        if ( !whatsThis().isEmpty() )
+            menu->setWhatsThis( id, whatsThisWithIcon() );
+
+        addContainer( menu, id );
+        connect( menu, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
+
+        if ( parentCollection() )
+            parentCollection()->connectHighlight( menu, this );
+
+        return containerCount() - 1;
     }
-    updateGeometry();
-    repaint( FALSE );
-}
+    else if ( w->inherits( "KToolBar" ) )
+    {
+        KToolBar *bar = static_cast<KToolBar *>( w );
 
-void KColorBar::paintEvent( QPaintEvent * )
-{
-    QPainter p;
-    p.begin( this );
-    if ( orientation() == Vertical ) {
-	int x = ( width() - 12 ) / 2;
-	int y = 5;
-	QValueList<QColor>::Iterator it = colors.begin();
-	for ( ; it != colors.end(); ++it ) {
-	    qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
-	    p.fillRect( x + 1, y + 1, 10, 10, *it );
-	    y += 16;
-	}
-    } else {
-	int y = ( height() - 12 ) / 2;
-	int x = 5;
-	QValueList<QColor>::Iterator it = colors.begin();
-	for ( ; it != colors.end(); ++it ) {
-	    qDrawShadePanel( &p, x, y, 12, 12, colorGroup(), true );
-	    p.fillRect( x + 1, y + 1, 10, 10, *it );
-	    x += 16;
-	}
-    }
-    p.end();
-}
+        int id_ = getToolButtonID();
+        KInstance *instance;
+        if ( parentCollection() )
+            instance = parentCollection()->instance();
+        else
+            instance = KGlobal::instance();
 
-////////////
+        if ( icon().isEmpty() ) // old code using QIconSet directly
+        {
+            bar->insertButton( iconSet( KIcon::Small ).pixmap(), id_, SIGNAL( clicked() ), this,
+                               SLOT( slotActivated() ),
+                               isEnabled(), plainText(), index );
+        }
+        else
+            bar->insertButton( icon(), id_, SIGNAL( clicked() ), this,
+                               SLOT( slotActivated() ),
+                               isEnabled(), plainText(), index, instance );
 
-KColorBarAction::KColorBarAction( const QString &text, int accel,
-				  QObject *r, const char *leftClickSlot_, const char *rightClickSlot_,
-				  const QValueList<QColor> &cols, QObject *parent, const char *name )
-  : KAction( text, accel, parent, name ), colors( cols ),
-    receiver( r ),
-    leftClickSlot ( leftClickSlot_ ),
-    rightClickSlot ( rightClickSlot_ )
-{
-}
+        bar->getButton( id_ )->setName( QCString("toolbutton_")+name() );
 
-int KColorBarAction::plug( QWidget *widget, int index )
-{
-    if ( widget && widget->inherits( "QToolBar" ) ) {
-	QToolBar* bar = (QToolBar*)widget;
-	KColorBar *b;
-	b = new KColorBar( colors, widget, "" );
-	b->resize( 100, 25 );
-	b->show();
-	connect( b, SIGNAL( leftClicked( const QColor & ) ),
-		 this, SIGNAL( leftClicked( const QColor & ) ) );
-	connect( b, SIGNAL( rightClicked( const QColor & ) ),
-		 this, SIGNAL( rightClicked( const QColor & ) ) );
-	connect( b, SIGNAL( leftClicked( const QColor & ) ),
-		 receiver, leftClickSlot );
-	connect( b, SIGNAL( rightClicked( const QColor & ) ),
-		 receiver, rightClickSlot );
-	connect( bar, SIGNAL( orientationChanged( Orientation ) ),
-		 b, SLOT( orientationChanged( Orientation ) ) );
-	addContainer( bar, b );
-	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-	b->orientationChanged( bar->orientation() );
-	return containerCount() - 1;
-    } else if ( widget && widget->inherits( "KToolBar" ) ) {
-	KToolBar* bar = (KToolBar*)widget;
-	KColorBar *b;
-	b = new KColorBar( colors, widget, "" );
-	bar->insertWidget( -1, b->width(), b, index );
-	b->resize( 100, 25 );
-	b->show();
-	connect( b, SIGNAL( leftClicked( const QColor & ) ),
-		 this, SIGNAL( leftClicked( const QColor & ) ) );
-	connect( b, SIGNAL( rightClicked( const QColor & ) ),
-		 this, SIGNAL( rightClicked( const QColor & ) ) );
-	connect( b, SIGNAL( leftClicked( const QColor & ) ),
-		 receiver, leftClickSlot );
-	connect( b, SIGNAL( rightClicked( const QColor & ) ),
-		 receiver, rightClickSlot );
-	connect( (QToolBar*)bar, SIGNAL( orientationChanged( Orientation ) ),
-		 b, SLOT( orientationChanged( Orientation ) ) );
+        if ( !whatsThis().isEmpty() )
+            QWhatsThis::add( bar->getButton(id_), whatsThisWithIcon() );
 
-	addContainer( bar, b );
-	connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
+        if ( !toolTip().isEmpty() )
+            QToolTip::add( bar->getButton(id_), toolTip() );
 
-	b->orientationChanged( bar->orientation() );
-	return containerCount() - 1;
+        addContainer( bar, id_ );
+
+        connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
+
+        if ( parentCollection() )
+            parentCollection()->connectHighlight( bar, this );
+
+        return containerCount() - 1;
     }
 
     return -1;
+}
+
+QColor KSelectColorAction::color() const
+{
+    return m_color;
+}
+
+KSelectColorAction::Type KSelectColorAction::type() const
+{
+    return m_type;
+}
+
+void KSelectColorAction::setColor( const QColor &c )
+{
+}
+
+void KSelectColorAction::setType( Type t )
+{
+}
+
+QString KSelectColorAction::whatsThisWithIcon() const
+{
+    QString text = whatsThis();
+    if (!icon().isEmpty())
+      return QString::fromLatin1("<img source=\"small|%1\"> %2").arg(icon()).arg(text);
+    return text;
 }
 
 #include <kcoloractions.moc>

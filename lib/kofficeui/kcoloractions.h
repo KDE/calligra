@@ -1,5 +1,6 @@
 /* This file is part of the KDE libraries
     Copyright (C) 2000 Reginald Stadlbauer <reggie@kde.org>
+    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,10 +21,6 @@
 #define kcoloractions_h
 
 #include <kaction.h>
-#include <qwidget.h>
-
-class QMouseEvent;
-class QPaintEvent;
 
 /**
  * An action whose pixmap is automatically generated from a color
@@ -64,104 +61,41 @@ private:
 
     QColor col;
     Type typ;
-
 };
 
-/**
- * An improved version of KColorAction, which also features a delayed popupmenu
- * for changing the color (make sure to test color() in your slot).
- */
-class KSelectColorAction : public KColorAction
+
+class KSelectColorAction : public KAction
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
+    enum Type {
+        TextColor,
+        LineColor,
+        FillColor
+    };
+
     KSelectColorAction( const QString& text, Type type,
-                        int accel = 0, QObject* parent = 0, const char* name = 0 );
-    KSelectColorAction( const QString& text, Type type, int accel,
-                        QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
+                        const QObject* receiver, const char* slot,
+                        KActionCollection* parent, const char* name );
+    virtual ~KSelectColorAction();
 
-    ~KSelectColorAction();
+    virtual int plug( QWidget* w, int index = -1 );
 
-    virtual int plug( QWidget* widget, int index = -1 );
-    KPopupMenu* popupMenu()    { return m_popup; }
-
-public slots:
-    /**
-     * Displays the color chooser dialog
-     */
-    void changeColor();
-
-protected:
-    void initPopup();
-
-private:
-    KPopupMenu *m_popup;
-};
-
-/**
- *  class KColorBar
- *
- *  Simple toolbar with little color buttons. This Bar can be placed like a normal toolbar.
- *
- *  @short Toolbar with color buttons.
- */
-class KColorBar : public QWidget
-{
-    Q_OBJECT
-
-public:
-    /**
-     *  Constructor.
-     *
-     *  Initializes the color bar with a list of colors.
-     */
-    KColorBar( const QValueList<QColor> &cols, QWidget *parent, const char *name );
-
-    Orientation orientation() const { return orient; }
+    QColor color() const;
+    Type type() const;
 
 public slots:
-    void orientationChanged( Orientation o );
-
-protected:
-    void mousePressEvent( QMouseEvent *e );
-    void paintEvent( QPaintEvent *e );
-
-private:
-    QValueList<QColor> colors;
-    Orientation orient;
+    virtual void setColor( const QColor &c );
+    virtual void setType( Type t );
 
 signals:
-    /**
-     *  This signal gets emitted when the left mouse button is clicked on a color button.
-     */
-    void leftClicked( const QColor &c );
-    /**
-     *  This signal gets emitted when the right mouse button is clicked on a color button.
-     */
-    void rightClicked( const QColor &c );
-
-};
-
-class KColorBarAction : public KAction
-{
-    Q_OBJECT
-
-public:
-    KColorBarAction( const QString &text, int accel,
-		     QObject *receiver, const char *leftClickSlot, const char *rightClickSlot,
-		     const QValueList<QColor> &cols, QObject *parent, const char *name );
-
-    int plug( QWidget*, int index = -1 );
-
-signals:
-    void leftClicked( const QColor &c );
-    void rightClicked( const QColor &c );
+    void colorSelected( const QColor& color );
 
 private:
-    QValueList<QColor> colors;
-    QObject *receiver;
-    QCString leftClickSlot;
-    QCString rightClickSlot;
+    QString whatsThisWithIcon() const; // duplicated, as it's private in kaction
+
+    Type m_type;
+    QColor m_color;
 };
 
 #endif
