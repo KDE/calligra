@@ -23,13 +23,23 @@
 #include <qstring.h>
 #include <qobjectlist.h>
 
+#include <kmessagebox.h>
+#include <kaction.h>
+#include <klocale.h>
+
 #include "kexi_global.h"
 
 //! displays information that feature "feature_name" is not availabe in the current application version
-#define KEXI_UNFINISHED(feature_name) KMessageBox::sorry(0, \
-	i18n("%1 for version %2 of %3 application.") \
-	.arg(QString(feature_name).isEmpty() ? i18n("This function is not available") : i18n("\"%1\" function is not available").arg(QString(feature_name).replace("&",""))) \
-	.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) )
+inline void KEXI_UNFINISHED(QString feature_name) {
+	QString msg;
+	if (feature_name.isEmpty())
+			msg = i18n("This function is not available");
+	else 
+			msg = i18n("\"%1\" function is not available").arg(feature_name.replace("&","")); 
+
+	KMessageBox::sorry(0, i18n("%1 for version %2 of %3 application.").arg(msg)
+		.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) );
+}
 
 //! like above - for use inside KExiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
