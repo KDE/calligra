@@ -246,13 +246,16 @@ public:
     ~KSpreadSheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
+    
+    /**
+     * Return the name of this sheet.
+     */
+    QString sheetName() const;
 
     /**
-     * @return the name of this table.
-     *
-     * @see #setTableName
+     * \deprecated Use sheetName().
      */
-    QString tableName()const { return m_strName; }
+    QString tableName() const { return sheetName(); }
 
     /**
      * Renames a table. This will automatically adapt all formulas
@@ -782,10 +785,10 @@ public:
     /**
      * For internal use only.
      */
-    void setMap( KSpreadMap* _map ) { m_pMap = _map; }
+    void setMap( KSpreadMap* _map );
 
-    KSpreadDoc* doc()const { return m_pDoc; }
-    KSpreadMap* map()const { return m_pMap; }
+    KSpreadDoc* doc()const ;
+    KSpreadMap* map()const ;
 
     /**
      * @return a painter for the hidden widget ( @ref #widget ).
@@ -1202,11 +1205,6 @@ protected:
     void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
     /**
-     * The name of the table. This name shows in the tab bar on the bottom of the window.
-     */
-    QString m_strName;
-
-    /**
      * Indicates whether the table should paint the page breaks.
      * Doing so costs some time, so by default it should be turned off.
      */
@@ -1225,12 +1223,6 @@ protected:
      * The label returned by @ref #columnLabel
      */
     char m_arrColumnLabel[20];
-
-    /**
-     * The map to which this table belongs.
-     */
-    KSpreadMap *m_pMap;
-    KSpreadDoc *m_pDoc;
 
     /**
      * Password for protecting this sheet
