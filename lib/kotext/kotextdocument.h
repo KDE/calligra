@@ -204,9 +204,7 @@ public:
     virtual KoTextParag * loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * _styleCol );
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
-    virtual void appendTOC( const QDomElement &/*e*/ ) {};
-    virtual void appendImage( KoOasisContext& /*context*/, const QDomElement& /*tag*/ ) { };
-    virtual void appendTextBox( KoOasisContext&  /*context*/,  const QDomElement& /*tag*/ ) { };
+
     void setAddMargins( bool b ) { addMargs = b; }
     int addMargins() const { return addMargs; }
 
@@ -330,6 +328,16 @@ signals:
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
                                   KoZoomHandler* zoomHandler, const QBrush *paper = 0 );
+
+    /**
+     * Called by loadOasisText. This allows to extend the loading mechanism
+     * for special tags no handled by kotext (images, textboxes, tables, etc.)
+     * @return true if @p tag was handled.
+     */
+    virtual bool loadOasisBodyTag( const QDomElement& /*tag*/, KoOasisContext& /*context*/,
+                                   KoTextParag* /*lastParagraph*/ ) {
+        return false;
+    }
 
     /**
      * Called by KoTextParag::loadOasisSpan. This allows to extend the loading mechanism

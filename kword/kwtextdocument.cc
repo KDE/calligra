@@ -65,6 +65,50 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
+bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
+                                       KoTextParag* /*lastParagraph*/ )
+{
+    const QCString tagName( tag.tagName().latin1() );
+    if ( tagName == "draw:frame" )
+    {
+        kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
+        // TODO draw:frame is an OASIS change
+        // IIRC this means moving draw:image and draw:text-box
+        // here, being the child element of the draw:frame
+        // and loading the frame attributes from the draw:frame element.
+        return false;
+    }
+    else if ( tagName == "draw:image" )
+    {
+        KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, context );
+        m_textfs->kWordDocument()->addFrameSet( fs, false );
+        return true;
+    }
+#if 0 // TODO OASIS table:table
+    else if ( tagName == "table:table" )
+    {
+        //todo
+        parseTable(tag, currentFramesetElement);
+        kdDebug(32002) << "Table found!" << endl;
+        return true;
+    }
+#endif
+#if 0 // TODO (OASIS text:table-of-content)
+    else if ( tagName == "text:table-of-content" )
+    {
+        appendTOC( e );
+        return true;
+    }
+#endif
+    else if ( tagName == "draw:text-box" )
+    {
+        kdDebug()<<" append text-box\n";
+        m_textfs->loadOasisTextBox( tag, context );
+        return true;
+    }
+    return false;
+}
+
 void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* endParag, int endPos, const QString& name )
 {
     // The OASIS format is cool. No need to store the bookmarks until end of loading (e.g. KWLoadingInfo)
@@ -206,21 +250,6 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
         }
     }
     return false;
-}
-
-void KWTextDocument::appendTOC( const QDomElement &e )
-{
-    m_textfs->appendTOC( e );
-}
-
-void KWTextDocument::appendImage( KoOasisContext& context, const QDomElement& tag )
-{
-    m_textfs->appendImage( context, tag );
-}
-
-void KWTextDocument::appendTextBox( KoOasisContext&  context,  const QDomElement& tag )
-{
-    m_textfs->appendTextBox( context, tag );
 }
 
 #include "kwtextdocument.moc"

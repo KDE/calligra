@@ -1459,12 +1459,10 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
         QDomElement tag = text.toElement();
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
-        kdDebug ()<<" textFoo : "<<textFoo<<endl;
-        kdDebug()<<" tagName :"<<tagName<<endl;
         if ( textFoo )
         {
             if ( tagName == "text:p" ) {  // text paragraph
-                kdDebug()<<" text paragraph \n";
+                kdDebug(32500)<<" text paragraph \n";
                 context.fillStyleStack( tag, "text:style-name" );
 
                 KoTextParag *parag = createParag( this, lastParagraph );
@@ -1477,7 +1475,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             }
             else if ( tagName == "text:h" ) // heading
             {
-                kdDebug()<<" heading \n";
+                kdDebug(32500)<<" heading \n";
                 context.fillStyleStack( tag, "text:style-name" );
                 int level = tag.attribute( "text:level" ).toInt();
                 bool listOK = false;
@@ -1510,14 +1508,14 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
             else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
                       || tagName == "text:list" )  // OASIS
             {
-                kdDebug ()<<" list \n";
+                kdDebug(32500)<<" list \n";
                 lastParagraph = loadList( tag, context, lastParagraph, _styleCol );
                 context.styleStack().restore();
                 continue;
             }
             else if ( tagName == "text:section" ) // Provisory support (###TODO)
             {
-                kdDebug(32002) << "Section found!" << endl;
+                kdDebug(32500) << "Section found!" << endl;
                 context.fillStyleStack( tag, "text:style-name" );
                 lastParagraph = loadOasisText( tag, context, lastParagraph, _styleCol );
             }
@@ -1526,44 +1524,10 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement &bodyElem, KoOasi
                 // We don't parse variable-decls since we ignore var types right now
                 // (and just storing a list of available var names wouldn't be much use)
             }
-#if 0 // TODO (OASIS text:table-of-content)
-            else if ( tagName == "text:table-of-content" )
-            {
-                appendTOC( e );
-            }
-#endif
         }
-        else // not text:
+        else if ( !loadOasisBodyTag( tag, context, lastParagraph ) )
         {
-            if ( tagName == "draw:frame" ) {
-                kdWarning(32001) << "Loading of OASIS element draw:frame not implemented yet! Please report this." << endl;
-                // TODO draw:frame is an OASIS change
-                // IIRC this means moving draw:image and draw:text-box
-                // here, being the child element of the draw:frame
-                // and loading the frame attributes from the draw:frame element.
-            }
-            else if ( tagName == "draw:image" )
-            {
-                kdDebug ()<<" append image \n";
-                appendImage( context, tag );
-            }
-#if 0 // TODO OASIS table:table
-            if ( tagName == "table:table" )
-            {
-                //todo
-                parseTable(tag, currentFramesetElement);
-                kdDebug(32002) << "Table found!" << endl;
-            }
-#endif
-            else if ( tagName == "draw:text-box" )
-            {
-                kdDebug()<<" append text-box\n";
-                appendTextBox( context,  tag );
-            }
-            else
-            {
-                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
-            }
+            kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list

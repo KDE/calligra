@@ -291,10 +291,7 @@ public:
     QString copyTextParag( QDomElement & elem, int selectionId );
     bool sortText(sortType type);
 
-    void appendTOC( const QDomElement &e );
-    void appendImage( KoOasisContext& context, const QDomElement& tag );
-    void appendTextBox( KoOasisContext&  context,  const QDomElement& tag );
-
+    void loadOasisTextBox( const QDomElement& tag, KoOasisContext& context );
 
 signals:
     /** Tell the Edit object that this frame got deleted */

@@ -1788,19 +1788,7 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     return framesetElem;
 }
 
-
-void KWTextFrameSet::appendTOC( const QDomElement &e )
-{
-    //todo
-}
-
-void KWTextFrameSet::appendImage( KoOasisContext& context, const QDomElement& tag )
-{
-    KWFrameSet* fs = new KWPictureFrameSet( m_doc, tag, context );
-    m_doc->addFrameSet( fs, false );
-}
-
-void KWTextFrameSet::appendTextBox( KoOasisContext&  context,  const QDomElement& tag )
+void KWTextFrameSet::loadOasisTextBox( const QDomElement& tag, KoOasisContext& context )
 {
     // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
     // we store 'B' -> A, so that when loading B we can add it to A's frameset.
@@ -1851,7 +1839,7 @@ void KWTextFrameSet::appendTextBox( KoOasisContext&  context,  const QDomElement
 
 KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KWTextParag* lastParagraph )
 {
-    return static_cast<KWTextParag *>(textDocument()->loadOasisText( bodyElem, context, lastParagraph,m_doc->styleCollection() ) );
+    return static_cast<KWTextParag *>(textDocument()->loadOasisText( bodyElem, context, lastParagraph, m_doc->styleCollection() ) );
 }
 
 void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context )
