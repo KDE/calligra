@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>KOffice filters status: ApplixSpread FILTER</title>
+   <title>KOffice filters status: Applix Spreadsheet FILTER</title>
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
 <A NAME="START">&nbsp;</A>
@@ -10,7 +10,7 @@
 <BR>
 <center>
  <h1>
-  KOffice filters status: &nbsp;&nbsp;<i>ApplixSpread FILTER</i>
+  KOffice filters status: &nbsp;&nbsp;<i>Applix Spreadsheet FILTER</i>
  </h1>
 </center>
 
@@ -35,7 +35,7 @@
      <td COLSPAN="2">
       <center><b><i><font size=+1>
        <BR>
-        Import ApplixSpread for kspread<BR>
+        Import Applix Spreadsheet for kspread<BR>
        <BR>
       </font></i></b></center>
      </td>
@@ -43,37 +43,209 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>11 feb 2001</td>
+     <td>03 mar 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>None yet</td>
+     <td>
+       - can import simple and complex Applix Spreadsheet documents<br>
+       - tests the headline of the document<br>
+       - converts &lt;, &gt;, &amp;, to &amp;lt; &amp;gt; &amp;amp;<br>
+       - converts all applix special characters<br>
+       - converts fontsize, fontcolor, horizontal and vertical alignment, bold, italic, underline<br>
+       - eats long text strings (more than one row in inputfile)<br>
+       - converts different tables inside of one document<br>
+       - cellformat: background color, brushstyles, brushcolor<br>
+       - cellframe: linewidth, linetype, linecolor<br>
+     </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
-     <td>Everything</td>
+     <td>
+       - row height and column width<br>
+       - converting the fontfamily (typeface table reading is done)<br>
+       - grouped row and column formats<br>
+       - add endoffile checking with dialog in do-while loops<br>
+       - correct loadcontrol emiting (procent)<br>
+       - detect valueline (can only do textlines)<br>
+       - convert a formular, date or something else<br>
+     </td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>10 mar 2001: Created skeleton
+      <td>
+       11 feb 2001: Written a filter that only can filter simple applix files<br>
+       24 feb 2001: Add &lt;, &gt;, &amp; and applix character convertation<br>
+       03 mar 2001: Reads the typefont and the colortable, converts cmyk to rgb, added some style information (cell and string)<br>
+      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
-     <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
-     <td><A HREF="mailto:david@mandrakesoft.com">David Faure</A></td>
+     <td VALIGN=TOP><b><font size=+1>Authors&nbsp;</font></b></td>
+     <td><A HREF="mailto:ebartels@nwn.de">Enno Bartels</A></td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td><A HREF="http://home.nordwest.net/ebartels/applixinfo/as/index.html">File-format discription</A></td>
+     <td><A HREF="http://home.nordwest.net/ebartels/applixinfo/as/index.html">My Fileformat discription</A></td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     <td>-</td>
+     <td><B><U><font size=+1>Fileformat:</font></U></B><BR>
+         <spacer size="10">The file has some different parts:<BR>
+         <spacer size="10">1. Header<BR>
+         <spacer size="10">2. Colortable<BR>
+         <spacer size="10">3. Fonttable<BR>
+         <spacer size="10">...<BR>
+         <spacer size="10">4. View 
+         <spacer size="10">...<BR>
+         <spacer size="10">5. Cellvalues<BR>
+         <spacer size="10">6. End<BR><BR><BR>  
+         
+
+         <B><U>1. Header</U></B><BR> 
+         <spacer size="10">The header looks like that:<BR>
+         <spacer size="10"><B><I>*BEGIN SPREADSHEETS VERSION=430/430 ENCODING=7BIT</I></B><BR><BR><BR>
+
+
+         <B><U>2. Colormap:</U></B><BR> 
+         <spacer size="10">The colormap begins with<BR> 
+         <spacer size="10"><B><I>COLORMAP</I></B><BR><BR> 
+
+         <spacer size="10">and ends with<BR> 
+         <spacer size="10"><B><I>END COLORMAP</I></B><BR><BR> 
+
+         <spacer size="10">a color line is describe like that<BR>
+         <spacer size="10"><B>Text 0 c m y k 0</B><BR><BR>  
+
+         <spacer size="10">
+         <TABLE CELLPADDING="0" BORDER="0">
+          <TR>
+           <TD>2.1.</TD>
+           <TD>Text</TD>
+           <TD>= Textstring</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>2.2.</TD>
+           <TD>0</TD>
+           <TD>= NULL</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>2.3.</TD>
+           <TD>c</TD>
+           <TD>= cyan</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.4.</TD>
+           <TD>m</TD>
+           <TD>= magenta</TD>
+           <TD>0-255</TD> 
+          </TR>
+          <TR>
+           <TD>2.5.</TD>
+           <TD>y</TD>
+           <TD>= yellow</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.6.</TD>
+           <TD>k</TD>
+           <TD>= black (key)</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.7.</TD>
+           <TD>0</TD>
+           <TD>= NULL</TD>
+           <TD>-</TD>
+          </TR>
+         </TABLE>
+         <BR><BR>
+
+         Color converting is very simple cmyk to rgb:<BR>
+         r = 255 - (c+k)<BR> 
+         g = 255 - (m+k)<BR> 
+         b = 255 - (y+k)<BR> 
+         if the value of r, g or b if less then 0 you must set it to 0 <BR><BR>
+         for examples inside koffice look a this files too<br>
+         <I>koffice/kimageshop/core/kis_color.cc and kis_color.h</I><BR>
+         <BR><BR>
+
+
+         <B><U>5. Cellvalue</U></B><BR> 
+         <spacer size="10">This is a cellvalue line<BR>
+         <spacer size="10"><B><I>('DN|B,I,U,TF1,P18|T4) A!D11: Hello everybody</I></B><BR> <BR> 
+         <spacer size="10">a cellvalue line has 3 parts:<BR> 
+        <spacer size="10"> 5.1. Formatpart <B>(*) </B><BR> 
+         <spacer size="10">5.2. Location part: <B>A!D11</B> : A=Table D11=Cellnumber: column:D - row:11<BR> 
+         <spacer size="10">5.3. Info String: <B>Hello everybody</B> <BR>
+         <spacer size="10">5.4. Formatsubparts: <B>(Part1|Part2|Part3)</B>  <BR> <BR><BR>
+         <B><U>Formatsubparts</U></B><BR> 
+         There are 3 Formatsubparts <BR>
+         5.1.1. Form<BR>
+         5.1.2. Char<BR>
+         5.1.3. Cell<BR><BR><BR> 
+
+
+         <B><U>5.1.1. Cellvalue Part1:</U></B><BR><BR><BR>  
+
+ 
+         <B><U>5.1.2. Cellvalue Part2:</U></B><BR><BR><BR>  
+         5.1.2.1. B = bold<BR>
+         5.1.2.2. I = italic<BR>
+         5.1.2.3. U = underline<BR>
+         5.1.2.4. TFx = fontfamily. x is the number in the fonttable<BR>
+         5.1.2.5. Px = fontsize. x is the fontsize<BR><BR><BR>
+        
+
+         <B><U>Cellvalue Part3:</U></B><BR><
+         5.1.3.1. Txy = Frame at top<BR>
+         5.1.3.2. Bxy = Frame at bottom<BR>
+         5.1.3.3. Lxy = Frame at left side<BR>
+         5.1.3.4. Rxy = Frame at right side<BR><BR>
+         y: example FG7 SH11FG18 SH11FG18BG4<BR>
+         it has max 3 Parts:<BR>
+         5.1.3.0.1. FGx = Foreground color. x is the number in the colortabl<BR>
+         5.1.3.0.2. SHx = Background shade type. x is the shadetypenumber<BR>
+         5.1.3.0.3. BGx = Background color. x is the number in the colortable<BR><BR><BR>
+         
+         
+
+         <B><U>3. Fonttable:</U></B><BR> 
+         The colormap begins with<BR> 
+         <B><I>TYPEFACE TABLE</I></B><BR> 
+         and ends with<BR> 
+         <B><I>END  TYPEFACE TABLE</I></B><BR> 
+         <B>Helvetica</B><BR><BR><BR> 
+          
+
+         <B><U>4. View:</U></B><BR>
+         Each table has its own view section:<br>
+         If there is a table with the name <B>A</B> then it starts with:  <br> 
+         <B><I>View Start, Name: ~A:~</I></B><br>
+         and it ends with:
+         <B><I>View End, Name: ~A:~</I></B><br><br>
+         
+         In the view of an table block is for example the width of a column:<br>
+         <B><I>4.1. View Column Widths: A:3 B:3 C:3 D:3 E:3 F:3 G:4 H:4</I></B><br>
+         or the heigth of a row<br>
+         <B><I>4.2. View Row Heights: 3:18 4:24 8:32804 </I></B><br>
+      
+
+         <B><U>6. End</U></B><BR> 
+         The end looks like that:<BR>
+         <B><I></I>*END SPREADSHEETS</B><BR>
+         <BR><BR>
+        
+
+    </td>
     </tr>
    </table>
   </td>
@@ -101,7 +273,7 @@
     <tr BGCOLOR="#FFDDDD">
      <td COLSPAN="2">
       <center><b><i><font size=+1>
-       <BR>Export kspread to ApplixSpread<BR><BR>
+       <BR>Export kspread to Applix Spreadsheet<BR><BR>
       </font></i></b></center>
      </td>
     </tr>

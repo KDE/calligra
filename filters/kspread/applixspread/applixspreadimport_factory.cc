@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <david@mandrakesoft.com>
+   Copyright (C) 2001 Enno Bartels <ebartels@nwn.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ KInstance* APPLIXSPREADImportFactory::s_global = 0;
 APPLIXSPREADImportFactory::APPLIXSPREADImportFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    s_global = new KInstance( "applixspreadimport" );
+    s_global = new KInstance ("applixspreadimport" );
 }
 
 APPLIXSPREADImportFactory::~APPLIXSPREADImportFactory()
@@ -46,7 +46,7 @@ APPLIXSPREADImportFactory::~APPLIXSPREADImportFactory()
     s_global = 0L;
 }
 
-QObject* APPLIXSPREADImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* APPLIXSPREADImportFactory::create (QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <david@mandrakesoft.com>
+   Copyright (C) 2001 Enno Bartels <ebartels@nwn.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,9 +23,29 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qobject.h>
+#include <qtextstream.h>
+#include <qlist.h> 
 
 #include <koFilter.h>
 #include <koStore.h>
+
+typedef struct 
+{
+  int r;
+  int g;
+  int b;
+
+  int c;
+  int m;
+  int y;
+  int k;
+} t_mycolor;
+
+typedef struct
+{
+  QStringList tabname;
+  QStringList rc;
+} t_rc;
 
 
 class APPLIXSPREADImport : public KoFilter {
@@ -33,12 +53,29 @@ class APPLIXSPREADImport : public KoFilter {
     Q_OBJECT
 
 public:
-    APPLIXSPREADImport(KoFilter *parent, const char *name);
+    APPLIXSPREADImport (KoFilter *parent, const char *name);
     virtual ~APPLIXSPREADImport() {}
     /** filtering :) */
     virtual const bool filter(const QString &fileIn, const QString &fileOut,
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
+
+    QChar   specCharfind       (QChar , QChar );
+    void    writePen           (QString &, int, int, QString);
+    QString writeColor         (t_mycolor *);
+    void    readTypefaceTable  (QTextStream &, QStringList &);
+    void    readColormap       (QTextStream &, QList<t_mycolor> &);
+    void    readView           (QTextStream &, QString, t_rc &);
+    void    filterSHFGBG       (QString, int *, int *, int *);
+    void    transPenFormat     (QString, int *, int *);
+
 };
 #endif // APPLIXSPREADIMPORT_H
+
+
+
+
+
+
+
 
