@@ -91,6 +91,12 @@ public:
 
     virtual KParts::PartManager *partManager();
 
+    /**
+     * Get hold of the label in the statusbar, to write messages to it.
+     * You can also insert other items in the status bar by using QStatusBar::addWidget.
+     */
+    QLabel * statusBarLabel() const;
+
 public slots:
 
     /**
