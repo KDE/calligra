@@ -141,13 +141,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		{
 			fill.setColor( ( ( ( x + y ) % 20 ) == 0 ) ? QColor( 153, 153, 153 ) : QColor( 102, 102, 102 ) );
 			m_painter->setBrush( fill );
-			m_painter->newPath();
-			m_painter->moveTo( KoPoint( x, y ) );
-			m_painter->lineTo( KoPoint( x + 10, y ) );
-			m_painter->lineTo( KoPoint( x + 10, y + 10 ) );
-			m_painter->lineTo( KoPoint( x, y + 10 ) );
-			m_painter->lineTo( KoPoint( x, y ) );
-			m_painter->fillPath();
+			m_painter->drawRect( x, y, 10, 10 );
 		}
 
 	VStroke stroke;
@@ -328,13 +322,9 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
 
-		m_painter->newPath();
-		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
-		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
-		m_painter->fillPath();
+		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
+										FILL_BOTTOMX - FILL_TOPX,
+										FILL_BOTTOMY - FILL_TOPY ) );
 	}
 
 	// show 3D outline of fill part
