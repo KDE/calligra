@@ -24,6 +24,7 @@
 #include <qdir.h>
 #include <qcombobox.h>
 
+#include <kapplication.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -53,6 +54,8 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QCString &format, QWidget*
 	_in = in;
 	_format = format;
 	setCaption(i18n("Export XSLT Configuration"));
+
+	kapp->restoreOverrideCursor();
 
 	/* Recent files */
 	_config = new KConfig("xsltdialog");
@@ -235,15 +238,16 @@ void XSLTExportDia::okSlot()
 	temp.setAutoDelete(true);
 	QFile* tempFile = temp.file();
 
-        const Q_LONG buflen = 4096;
-        char buffer[ buflen ];
-        Q_LONG readBytes = _in->readBlock( buffer, buflen );
+	const Q_LONG buflen = 4096;
+	char buffer[ buflen ];
+	Q_LONG readBytes = _in->readBlock( buffer, buflen );
 
-        while ( readBytes > 0 ) {
-            tempFile->writeBlock( buffer, readBytes );
-            readBytes = _in->readBlock( buffer, buflen );
-        }
-        temp.close();
+	while ( readBytes > 0 )
+	{
+		tempFile->writeBlock( buffer, readBytes );
+		readBytes = _in->readBlock( buffer, buflen );
+	}
+	temp.close();
 
 	kdDebug() << stylesheet << endl;
 	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut, stylesheet);
