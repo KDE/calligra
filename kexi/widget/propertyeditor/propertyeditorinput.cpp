@@ -21,7 +21,7 @@
 
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kpushbutton.h>
+#include <qtoolbutton.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -149,8 +149,10 @@ PropertyEditorDblSpin::valueChange(int)
 PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_toggle = new KPushButton(this);
+	m_toggle = new QToolButton(this);
 	m_toggle->setToggleButton(true);
+	m_toggle->setUsesTextLabel(true);
+	m_toggle->setTextPosition(QToolButton::BesideIcon);
 	m_toggle->resize(width(), height());
 	
 	connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(setState(bool)));
@@ -184,12 +186,12 @@ PropertyEditorBool::setState(bool state)
 	if(state)
 	{
 		m_toggle->setIconSet(QIconSet(SmallIcon("button_ok")));
-		m_toggle->setText(i18n("True"));
+		m_toggle->setTextLabel(i18n("True"));
 	}
 	else
 	{
 		m_toggle->setIconSet(QIconSet(SmallIcon("button_cancel")));
-		m_toggle->setText(i18n("False"));
+		m_toggle->setTextLabel(i18n("False"));
 	}
 
 	emit changed(this);

@@ -48,6 +48,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 	public slots:
 		void	slotClicked(QListViewItem *i);
 		void    resetItem();
+		void    clearEditor();
 
 	protected slots:
 		void	slotEditorAccept(KexiPropertySubEditor *editor);
@@ -55,6 +56,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		void	slotValueChanged(KexiPropertySubEditor *editor);
 
 		void	slotColumnSizeChanged(int section, int oldS, int newS);
+		void	slotColumnSizeChanged(int section);
 
 	protected:
 		void	createEditor(KexiPropertyEditorItem *i, const QRect &geometry);

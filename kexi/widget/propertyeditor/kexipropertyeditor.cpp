@@ -50,6 +50,8 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
+	connect(header(), SIGNAL(clicked(int)), this, SLOT(clearEditor()));
+	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
 
 	m_defaults = new KPushButton(this);
 	m_defaults->setPixmap(SmallIcon("reload"));
@@ -240,10 +242,26 @@ KexiPropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 }
 
 void
+KexiPropertyEditor::slotColumnSizeChanged(int section)
+{
+	setColumnWidth(1, viewport()->width() - columnWidth(0));
+	slotColumnSizeChanged(section, 0, header()->sectionSize(section));
+	if(m_currentEditor)
+	{
+		if(m_defaults->isVisible())
+			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
+		else
+			m_currentEditor->resize(columnWidth(1), m_currentEditor->height());
+	}
+}
+
+void
 KexiPropertyEditor::reset(bool editorOnly)
 {
 	delete m_currentEditor;
 	m_currentEditor = 0;
+	if(m_defaults->isVisible())
+		m_defaults->hide();
 
 	if(!editorOnly)
 	{
@@ -288,6 +306,12 @@ KexiPropertyEditor::resetItem()
 	else
 		m_editItem->setValue(m_editItem->oldValue());
 	}
+}
+
+void
+KexiPropertyEditor::clearEditor()
+{
+	reset(true);
 }
 
 void

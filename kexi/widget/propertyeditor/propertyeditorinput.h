@@ -26,7 +26,7 @@
 
 class QLineEdit;
 class KexiProperty;
-class KPushButton;
+class QToolButton;
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 {
@@ -121,7 +121,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public KexiPropertySubEdito
 		void			setState(bool state);
 		
 	protected:
-		KPushButton		*m_toggle;
+		QToolButton		*m_toggle;
 };
 
 #endif
