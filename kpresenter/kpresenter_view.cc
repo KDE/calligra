@@ -7121,8 +7121,8 @@ void KPresenterView::spellAddAutoCorrect (const QString & originalword, const QS
 
 QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
 {
-#if 0 //FIXME !!!!!!!!
-    KOSpell *tmpSpell = new KOSpell( m_pKPresenterDoc->getKOSpellConfig());
+//not perfect, improve API!!!!
+    KOSpell *tmpSpell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,m_pKPresenterDoc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
     QStringList lst = tmpSpell->resultCheckWord(word);
     delete tmpSpell;
     QPtrList<KAction> listAction=QPtrList<KAction>();
@@ -7140,9 +7140,6 @@ QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
         }
     }
     return listAction;
-#endif
-    Q_UNUSED(word);
-    return QPtrList<KAction>();
 }
 
 void KPresenterView::slotCorrectWord()
