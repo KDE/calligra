@@ -68,6 +68,9 @@ public:
     void setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t);
     void setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t);
 
+    void setShadowText( bool _b);
+    bool getShadowText()const;
+
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
@@ -81,6 +84,7 @@ protected slots:
     void slotUnderlineColor();
     void slotChangeUnderlineType( int );
     void slotChangeStrikeOutType( int );
+    void slotShadowClicked();
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -110,7 +114,9 @@ class KoFontDia : public KDialogBase
     Q_OBJECT
 public:
     KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-               bool _subscript, bool _superscript, const QColor & color,
+               bool _subscript, bool _superscript,
+               bool _shadowText,
+               const QColor & color,
 	       const QColor & backGroundColor,
                const QColor & underlineColor,
                KoTextFormat::UnderlineLineStyle _nbLine,
@@ -130,6 +136,8 @@ public:
 
     KoTextFormat::UnderlineLineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
     KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
+    bool getShadowText()const{ return m_chooser->getShadowText();}
+;
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -153,6 +161,7 @@ private:
     KoTextFormat::UnderlineLineStyle m_underlineLineStyle;
     KoTextFormat::StrikeOutLineStyle m_strikeOutLineStyle;
     KoTextFormat::StrikeOutLineType m_strikeOutType;
+    bool m_shadowText;
 };
 
 #endif

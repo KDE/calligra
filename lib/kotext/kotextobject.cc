@@ -2184,6 +2184,11 @@ bool KoTextFormatInterface::textSuperScript() const
     return (currentFormat()->vAlign()==KoTextFormat::AlignSuperScript);
 }
 
+bool KoTextFormatInterface::textShadow() const
+{
+    return (currentFormat()->shadowText());
+}
+
 KoTextFormat::UnderlineLineType KoTextFormatInterface::underlineLineType()const
 {
     return currentFormat()->underlineLineType();
@@ -2222,7 +2227,7 @@ QString KoTextFormatInterface::spellCheckingLanguage() const
     return currentFormat()->spellCheckingLanguage();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2233,7 +2238,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setUnderlineLineStyle (_underlineLineStyle);
     format.setStrikeOutLineStyle(_strikeOutStyle );
     format.setStrikeOutLineType ( _strikeOutType );
-
+    format.setShadowText( _shadowText);
     if(!_subscript)
     {
         if(!_superscript)

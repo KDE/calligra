@@ -30,12 +30,14 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 
 class KoFontChooser::KoFontChooserPrivate
 {
 public:
     QComboBox *m_strikeOut;
     QColor m_textColor;
+    QCheckBox *m_shadow;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -154,15 +156,26 @@ void KoFontChooser::setupTab2()
     grid->addWidget( m_strikeOutType, 3, 1);
     m_strikeOutType->insertStringList( lstType );
 
+    d->m_shadow= new QCheckBox( i18n("Shadow"), grp);
+    grid->addWidget( d->m_shadow, 4, 0);
 
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
-
+    connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
 }
 
+bool KoFontChooser::getShadowText()const
+{
+    return d->m_shadow->isChecked();
+}
+
+void KoFontChooser::setShadowText( bool _b)
+{
+    d->m_shadow->setChecked( _b);
+}
 
 void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
 {
@@ -230,6 +243,11 @@ void KoFontChooser::slotSuperScriptClicked()
     if(m_subScript->isChecked())
         m_subScript->setChecked(false);
     m_changedFlags |= KoTextFormat::VAlign;
+}
+
+void KoFontChooser::slotShadowClicked()
+{
+    m_changedFlags |= KoTextFormat::ShadowText;
 }
 
 void KoFontChooser::slotChangeColor()
@@ -480,7 +498,9 @@ void KoFontChooser::slotChangeStrikeOutType( int /*i*/ )
 }
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript, bool _superscript, const QColor & color,
+                      bool _subscript, bool _superscript,
+                      bool _shadowText,
+                      const QColor & color,
                       const QColor & backGroundColor ,
                       const QColor & underlineColor,
                       KoTextFormat::UnderlineLineStyle _underlineLine,
@@ -499,7 +519,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_underlineType( _underlineType ),
       m_underlineLineStyle( _underlineLine ),
       m_strikeOutLineStyle( _strikeOutLine ),
-      m_strikeOutType( _strikeOutType)
+      m_strikeOutType( _strikeOutType),
+      m_shadowText( _shadowText)
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -533,6 +554,7 @@ void KoFontDia::slotReset()
 
     m_chooser->setStrikeOutlineType( m_strikeOutType);
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
+    m_chooser->setShadowText( m_shadowText);
 }
 
 #include "koFontDia.moc"
