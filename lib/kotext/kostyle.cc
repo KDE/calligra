@@ -191,6 +191,7 @@ KoStyle::KoStyle( const KoStyle & rhs )
 
 void KoStyle::operator=( const KoStyle &rhs )
 {
+    KoCharStyle::operator=( rhs );
     m_paragLayout = rhs.m_paragLayout;
     m_name = rhs.m_name;
     m_shortCut_name = rhs.m_shortCut_name;
