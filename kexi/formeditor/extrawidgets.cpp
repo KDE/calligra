@@ -1109,7 +1109,7 @@ ConnectionDialog::removeItem()
 		return;
 
 	int confirm = KMessageBox::questionYesNo(parentWidget(), 
-		QString("<qt>")+i18n("Do you want to remove this connection ?")+</qt>);
+		QString("<qt>")+i18n("Do you want to remove this connection ?")+"</qt>");
 	if(confirm == KMessageBox::No)
 		return;
 

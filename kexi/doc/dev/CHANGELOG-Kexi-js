@@ -334,6 +334,9 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
 
+2004-07-16
+
+
 ===================== Kexi 0.1 Beta 4 =====================
 
 2004-07-15
