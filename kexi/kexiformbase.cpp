@@ -58,6 +58,8 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString datasource
 	
 	m_widgetRectRequested = false;
 	m_widgetRect = false;
+	m_activeWidget=0;
+	m_activeMoveWidget=0;
 }
 
 void KexiFormBase::initActions()
@@ -197,7 +199,7 @@ void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
 		m_widgetRectBY = 0;
 		m_widgetRectEX = 0;
 		m_widgetRectEY = 0;
-		
+		m_pendingWidget->installEventFilter(this);
 		m_widgetRect = false;
 		repaint();
 	}
@@ -217,6 +219,30 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 {
 	kdDebug() << "event!" << endl;
+	switch (ev->type())
+	{
+		case QEvent::MouseButtonPress:
+			m_activeWidget=static_cast<QWidget*>(obj);
+			m_activeMoveWidget=m_activeWidget;
+			m_moveBX=static_cast<QMouseEvent*>(ev)->x();
+			m_moveBY=static_cast<QMouseEvent*>(ev)->y();
+			return true;
+			break;
+		case QEvent::MouseButtonRelease:
+			m_activeMoveWidget=0;
+			return true;
+			break;
+		case QEvent::MouseMove:
+			if (m_activeMoveWidget)
+			{
+				m_activeMoveWidget->move(m_activeMoveWidget->x()+static_cast<QMouseEvent*>(ev)->x()-m_moveBX,
+					m_activeMoveWidget->y()+static_cast<QMouseEvent*>(ev)->y()-m_moveBY);
+			}
+			return true;
+			break;
+		default:
+			break;
+	}
 	switch( ev->type() )
 	{
 		case QEvent::MouseButtonPress:

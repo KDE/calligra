@@ -66,6 +66,12 @@ class KexiFormBase : public KexiDialogBase
 		int	m_widgetRectEX;
 		int	m_widgetRectEY;
 
+		int m_moveBX;
+		int m_moveBY;
+
+		QWidget *m_activeWidget;
+		QWidget *m_activeMoveWidget;
+
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
