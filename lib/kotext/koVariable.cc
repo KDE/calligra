@@ -1108,7 +1108,7 @@ void KoFieldVariable::recalc()
             QString file=m_doc->url().fileName();
             int pos=file.findRev(".");
             if(pos !=-1)
-                value=file.mid(0,file.length()-pos-1);
+                value=file.mid(0,pos);
             else
                 value=file;
         }
