@@ -1064,6 +1064,7 @@ void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* )
     {
         setSize( getRect().width(), m_doc->zoomHandler()->layoutUnitPtToPt(lastFormatted->rect().height())+getRect().height());
         m_textobj->setLastFormattedParag( 0 );
+        m_doc->updateRuler();
     }
 }
 
