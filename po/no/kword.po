@@ -1,0 +1,294 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KDE KOFFICE/kword\n"
+"POT-Creation-Date: 1998-10-10 17:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Hans Petter Bieker\n"
+"Language-Team: no <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kword_doc.cc:299 kword_shell.cc:94
+msgid "KWord Error"
+msgstr "KWord-feil"
+
+#: kword_doc.cc:299 kword_shell.cc:94
+msgid "Could not init"
+msgstr "Kunne ikke initialisere"
+
+#: kword_view.cc:323
+msgid ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw "
+"*.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+msgstr ""
+
+#: kword_view.cc:373
+msgid "KWord - Paragraph settings"
+msgstr ""
+
+#: kword_view.cc:435
+msgid ""
+"KWord 0.0.1 alpha\n"
+"\n"
+"(c) by Torben Weis <weis@kde.org> and \n"
+"Reginald Stadlbauer <reggie@kde.org> 1998\n"
+"\n"
+"KWord is under GNU GPL"
+msgstr ""
+
+#: kword_view.cc:624
+msgid "No Undo possible"
+msgstr ""
+
+#: kword_view.cc:630
+msgid "No Redo possible"
+msgstr ""
+
+#: kword_view.cc:651
+msgid "&Find..."
+msgstr ""
+
+#: kword_view.cc:653
+msgid "&Replace..."
+msgstr ""
+
+#: kword_view.cc:669
+msgid "&Picture..."
+msgstr ""
+
+#: kword_view.cc:675
+msgid "&Clipart..."
+msgstr ""
+
+#: kword_view.cc:681
+msgid "&Table..."
+msgstr ""
+
+#: kword_view.cc:687
+msgid "&Objects..."
+msgstr ""
+
+#: kword_view.cc:691
+msgid "&Format"
+msgstr ""
+
+#: kword_view.cc:692
+msgid "&Font..."
+msgstr ""
+
+#: kword_view.cc:694
+msgid "&Color..."
+msgstr ""
+
+#: kword_view.cc:696
+msgid "Paragraph..."
+msgstr ""
+
+#: kword_view.cc:698
+msgid "Page..."
+msgstr ""
+
+#: kword_view.cc:701
+msgid "Numbering..."
+msgstr ""
+
+#: kword_view.cc:703
+msgid "&Style..."
+msgstr ""
+
+#: kword_view.cc:707
+msgid "&Extra"
+msgstr ""
+
+#: kword_view.cc:708
+msgid "&Spelling..."
+msgstr ""
+
+#: kword_view.cc:710
+msgid "S&tylist..."
+msgstr ""
+
+#: kword_view.cc:713
+msgid "&Options..."
+msgstr ""
+
+#: kword_view.cc:721
+msgid "&About KWord..."
+msgstr ""
+
+#: kword_view.cc:723
+msgid "About K&Office..."
+msgstr "Om K&Office..."
+
+#: kword_view.cc:725
+msgid "About &KDE..."
+msgstr "Om &KDE..."
+
+#: kword_view.cc:795
+msgid "Insert Picture"
+msgstr "Sett inn bilde"
+
+#: kword_view.cc:803
+msgid "Insert Clipart"
+msgstr ""
+
+#: kword_view.cc:811
+msgid "Insert Table"
+msgstr ""
+
+#: kword_view.cc:818
+msgid "Insert Object"
+msgstr ""
+
+#: kword_view.cc:830
+msgid "Text"
+msgstr "Tekst"
+
+#: kword_view.cc:834
+msgid "Style"
+msgstr ""
+
+#: kword_view.cc:851
+msgid "Font List"
+msgstr ""
+
+#: kword_view.cc:864
+msgid "Bold"
+msgstr ""
+
+#: kword_view.cc:884
+msgid "Underline"
+msgstr ""
+
+#: kword_view.cc:891
+msgid "Color"
+msgstr "Farge"
+
+#: kword_view.cc:901
+msgid "Align Left"
+msgstr ""
+
+#: kword_view.cc:911
+msgid "Align Center"
+msgstr ""
+
+#: kword_view.cc:920
+msgid "Align Right"
+msgstr ""
+
+#: kword_view.cc:929
+msgid "Align Block"
+msgstr ""
+
+#: kword_view.cc:941
+msgid "Enumerated List"
+msgstr ""
+
+#: kword_view.cc:948
+msgid "Unsorted List"
+msgstr ""
+
+#: kword_view.cc:957
+msgid "Superscript"
+msgstr ""
+
+#: kword_view.cc:966
+msgid "Subscript"
+msgstr ""
+
+#: paragdia.cc:25 paragdia.cc:85
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+#: paragdia.cc:265
+msgid "Indent"
+msgstr "Innrykk"
+
+#: paragdia.cc:268
+msgid "Left (mm):"
+msgstr "Venstre (mm):"
+
+#: paragdia.cc:282
+msgid "Right (mm):"
+msgstr "Høyre (mm):"
+
+#: paragdia.cc:297
+msgid "First Line (mm):"
+msgstr "Første linje (mm):"
+
+#: paragdia.cc:329
+msgid "Line Spacing"
+msgstr "Linjemellomrom"
+
+#: paragdia.cc:333
+msgid "0.5 lines"
+msgstr "0.5 linjer"
+
+#: paragdia.cc:334
+msgid "1.0 line"
+msgstr "1.0 linjer"
+
+#: paragdia.cc:335
+msgid "1.5 lines"
+msgstr "1,5 linjer"
+
+#: paragdia.cc:336
+msgid "2.0 lines"
+msgstr "2,0 linjer"
+
+#: paragdia.cc:337
+msgid "Space (pt)"
+msgstr "Mellomrom (pt)"
+
+#: paragdia.cc:370
+msgid "Paragraph Space"
+msgstr "Avsnittsmellomrom"
+
+#: paragdia.cc:373
+msgid "Before (mm):"
+msgstr "Før (mm):"
+
+#: paragdia.cc:387
+msgid "After (mm):"
+msgstr "Etter (mm):"
+
+#: paragdia.cc:435
+msgid "Indent and Spacing"
+msgstr "Innrykk og mellomrom"
+
+#: paragdia.cc:445
+msgid "Flow:"
+msgstr ""
+
+#: paragdia.cc:449
+msgid "Left"
+msgstr "Venstre"
+
+#: paragdia.cc:454
+msgid "Center"
+msgstr "Senter"
+
+#: paragdia.cc:459
+msgid "Right"
+msgstr "Høyre"
+
+#: paragdia.cc:464
+msgid "Block"
+msgstr "Blokk"
+
+#: paragdia.cc:495
+msgid "Flows"
+msgstr ""
