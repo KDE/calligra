@@ -39,26 +39,26 @@ static inline int gif_next_y( int oldY, int h ) {
     int y = oldY;
     switch( y%8 ) {
     case 0:
-	y += 8;
-	if ( y >= h )
-	    y = 4;
-	break;
+        y += 8;
+        if ( y >= h )
+            y = 4;
+        break;
     case 4:
-	y += 8;
-	if ( y >= h )
-	    y = 2;
-	break;
+        y += 8;
+        if ( y >= h )
+            y = 2;
+        break;
     case 2: // FALL THROUGH
     case 6:
-	y += 4;
-	if ( y >= h )
-	    y = 1;
-	break;
+        y += 4;
+        if ( y >= h )
+            y = 1;
+        break;
     default:
-	y += 2;
-	if ( y >= h )
-	    y = -1;
-	break;
+        y += 2;
+        if ( y >= h )
+            y = -1;
+        break;
     }
     return y;
 }
@@ -69,7 +69,7 @@ static inline int gif_get_pixel( QImage& image, int& x, int& y ) {
     int color;
 
     if ( x == 0 )
-	p = image.scanLine( y );
+        p = image.scanLine( y );
 
     color = (int)*(p++);
     x++;
@@ -78,18 +78,18 @@ static inline int gif_get_pixel( QImage& image, int& x, int& y ) {
 
 
 static void gif_write_content( Q_UINT8 packet[], int& packetPointer,
-			       Q_UINT32 & accumulator,
-			       unsigned int & shift,
-			       QDataStream * s )
+                               Q_UINT32 & accumulator,
+                               unsigned int & shift,
+                               QDataStream * s )
 {
     while ( shift > 7 ) {
-	packet[packetPointer++] = (accumulator & 255);
-	accumulator = accumulator >> 8;
-	shift -= 8;
-	if ( packetPointer == 256 ) {
-	    s->device()->writeBlock( (char *)packet, 256 );
-	    packetPointer = 1;
-	}
+        packet[packetPointer++] = (accumulator & 255);
+        accumulator = accumulator >> 8;
+        shift -= 8;
+        if ( packetPointer == 256 ) {
+            s->device()->writeBlock( (char *)packet, 256 );
+            packetPointer = 1;
+        }
     }
 }
 
@@ -97,15 +97,15 @@ static void gif_write_content( Q_UINT8 packet[], int& packetPointer,
 extern "C" void write_gif_image( QImageIO * iio )
 {
     if ( iio )
-	iio->setStatus( 1 );
+        iio->setStatus( 1 );
     else
-	return;
+        return;
 
     QImage image;
     if ( iio->image().depth() != 8 )
-	image = iio->image().convertDepth( 8 );
+        image = iio->image().convertDepth( 8 );
     else
-	image = iio->image();
+        image = iio->image();
 
     int w = image.width(), h = image.height();
     int x, y;
@@ -114,41 +114,41 @@ extern "C" void write_gif_image( QImageIO * iio )
     int palette[256];
     int ncols = 0;
     for( i=0; i<256; i++ )
-	palette[i] = -1;
+        palette[i] = -1;
 
     bool need89 = FALSE;
     int transparentColor = 0;
     for( y=0; y<h; y++ ) {
-	uchar * yp = image.scanLine( y );
-	for( x=0; x<w; x++ ) {
-	    int color = (int)*(yp + x);
-	    if ( need89 && (image.color( color ) & ~RGB_MASK) == 0 ) {
-		palette[color] = transparentColor;
-	    } else if ( palette[color] < 0 ) {
-		if ( need89 == FALSE && image.hasAlphaBuffer() &&
-		     (image.color( color ) & ~RGB_MASK) != 0 ) {
-		    need89 = TRUE;
-		    transparentColor = ncols;
-		}
-		palette[color] = ncols++;
-	    }
-	}
+        uchar * yp = image.scanLine( y );
+        for( x=0; x<w; x++ ) {
+            int color = (int)*(yp + x);
+            if ( need89 && (image.color( color ) & ~RGB_MASK) == 0 ) {
+                palette[color] = transparentColor;
+            } else if ( palette[color] < 0 ) {
+                if ( need89 == FALSE && image.hasAlphaBuffer() &&
+                     (image.color( color ) & ~RGB_MASK) != 0 ) {
+                    need89 = TRUE;
+                    transparentColor = ncols;
+                }
+                palette[color] = ncols++;
+            }
+        }
     }
 
-    // I don't know why, but with ncols > 2 the GIF file is not 
+    // I don't know why, but with ncols > 2 the GIF file is not
     // corrupted anymore.
     if (ncols == 2) ncols = 3;
 
     int colorTableSize = 2;
     int colorTableCode = 1;
     while ( colorTableSize < ncols ) {
-	colorTableSize *= 2;
-	colorTableCode++;
+        colorTableSize *= 2;
+        colorTableCode++;
     }
     // write the file header
     QDataStream * s = new QDataStream( iio->ioDevice() );
     if ( s->device()->writeBlock( need89 ? "GIF89a" : "GIF87a", 6 ) < 6 )
-	return;
+        return;
 
     s->setByteOrder( QDataStream::LittleEndian );
     *s << (Q_UINT16)w
@@ -162,30 +162,30 @@ extern "C" void write_gif_image( QImageIO * iio )
     memset( globalColorTable, 0, 3*colorTableSize );
 
     for( i=0; i<256; i++ )
-	if ( palette[i] >= 0 ) {
-	    QRgb c = image.color( i );
-	    int p = 3*palette[i];
-	    globalColorTable[p++] = (unsigned char)(qRed(c));
-	    globalColorTable[p++] = (unsigned char)(qGreen(c));
-	    globalColorTable[p] = (unsigned char)(qBlue(c));
-	}
+        if ( palette[i] >= 0 ) {
+            QRgb c = image.color( i );
+            int p = 3*palette[i];
+            globalColorTable[p++] = (unsigned char)(qRed(c));
+            globalColorTable[p++] = (unsigned char)(qGreen(c));
+            globalColorTable[p] = (unsigned char)(qBlue(c));
+        }
 
     if ( s->device()->writeBlock( globalColorTable, 3*colorTableSize ) <
-	 3*colorTableSize )
-	return;
+         3*colorTableSize )
+        return;
 
     delete[]globalColorTable;
     globalColorTable = 0;
 
     // write transparent color index if there is one
     if ( need89 )
-	*s << (Q_UINT8) 0x21 // extension block
-	   << (Q_UINT8) 0xf9 // graphic control extension
-	   << (Q_UINT8) 4 // size
-	   << (Q_UINT8) 5 // no not dispose, transparent color follows
-	   << (Q_UINT16) 0 // no delay time
-	   << (Q_UINT8) transparentColor
-	   << (Q_UINT8) 0; // terminate the extension block
+        *s << (Q_UINT8) 0x21 // extension block
+           << (Q_UINT8) 0xf9 // graphic control extension
+           << (Q_UINT8) 4 // size
+           << (Q_UINT8) 5 // no not dispose, transparent color follows
+           << (Q_UINT16) 0 // no delay time
+           << (Q_UINT8) transparentColor
+           << (Q_UINT8) 0; // terminate the extension block
 
     *s << (Q_UINT8) 0x2C // image separator, constant
        << (Q_UINT16) 0 // x
@@ -198,16 +198,16 @@ extern "C" void write_gif_image( QImageIO * iio )
 
     unsigned int codeSize = colorTableCode;
     if ( codeSize < 2 )
-	codeSize = 2;
+        codeSize = 2;
 
     *s << (Q_UINT8) codeSize;
 
     // stuff for the compressor...
 
     struct {
-	unsigned int child : 12;
-	unsigned int sibling : 12;
-	unsigned int pixel : 8;
+        unsigned int child : 12;
+        unsigned int sibling : 12;
+        unsigned int pixel : 8;
     } codeTable[4096];
 
     Q_UINT8 packet[257]; // data sub-block and one byte for a hack below
@@ -222,11 +222,11 @@ extern "C" void write_gif_image( QImageIO * iio )
     codeTable[clear].child = clear;
 
     for( i=0; i<clear; i++ ) {
-	codeTable[i].child = clear; // meaning: invalid
-	codeTable[i].pixel = i;
+        codeTable[i].child = clear; // meaning: invalid
+        codeTable[i].pixel = i;
     }
 
-    UINT32 accumulator = 0;
+    unsigned int accumulator = 0;
     unsigned int shift = 0;
 
     x = 0;
@@ -234,65 +234,65 @@ extern "C" void write_gif_image( QImageIO * iio )
     unsigned int pixel, child;
 
     while( y >= 0 ) {
-	// output to make space, if necessary
-	if ( shift + codeSize > 30 )
-	    gif_write_content( packet, packetPointer, accumulator, shift, s );
+        // output to make space, if necessary
+        if ( shift + codeSize > 30 )
+            gif_write_content( packet, packetPointer, accumulator, shift, s );
 
-	pixel = palette[gif_get_pixel( image, x, y )];
-	if ( x >= w ) {
-	    y = gif_next_y( y, h );
-	    x = 0;
-	}
+        pixel = palette[gif_get_pixel( image, x, y )];
+        if ( x >= w ) {
+            y = gif_next_y( y, h );
+            x = 0;
+        }
 
-	// see whether entry+child exists in the dictionary
-	child = codeTable[entry].child;
-	while ( child != clear && codeTable[child].pixel != pixel )
-	    child = codeTable[child].sibling;
-	if ( child != clear ) {
-	    // yes, use that entry
-	    entry = child;
-	} else if ( ncodes < 4095 && entry != clear ) {
-	    // no, and entry is not 'clear', and there is space to add
-	    // entry+child to the dictionary
-	    child = ++ncodes;
-	    codeTable[child].child = clear;
-	    codeTable[child].pixel = pixel;
-	    codeTable[child].sibling = codeTable[entry].child;
-	    codeTable[entry].child = child;
-	    accumulator = accumulator | ( entry << shift );
-	    shift += codeSize;
-	    // may need to increase the code size
-	    if ( codeSize < 12 && ncodes >= (unsigned int)(1 << codeSize ) )
-		codeSize++;
-	    entry = pixel;
-	} else {
-	    // dictionary is full, so send the entry and then a clear
-	    // (unless the entry is the initial clear)
-	    accumulator = accumulator | ( entry << shift );
-	    shift += codeSize;
-	    // may need to make space in the accumulator
-	    if ( shift + codeSize > 30 )
-		gif_write_content( packet, packetPointer,
-				   accumulator, shift, s );
-	    if ( entry != clear ) {
-		for( i=0; i<clear; i++ ) {
-		    codeTable[i].child = clear; // meaning: invalid
-		    codeTable[i].pixel = i;
-		}
-		accumulator = accumulator | ( clear << shift );
-		shift += codeSize;
-	    }
-	    ncodes = clear+1;
-	    codeSize = colorTableCode+1;
-	    if ( codeSize < 2 )
-		codeSize = 2;
-	    entry = pixel;
-	}
+        // see whether entry+child exists in the dictionary
+        child = codeTable[entry].child;
+        while ( child != clear && codeTable[child].pixel != pixel )
+            child = codeTable[child].sibling;
+        if ( child != clear ) {
+            // yes, use that entry
+            entry = child;
+        } else if ( ncodes < 4095 && entry != clear ) {
+            // no, and entry is not 'clear', and there is space to add
+            // entry+child to the dictionary
+            child = ++ncodes;
+            codeTable[child].child = clear;
+            codeTable[child].pixel = pixel;
+            codeTable[child].sibling = codeTable[entry].child;
+            codeTable[entry].child = child;
+            accumulator = accumulator | ( entry << shift );
+            shift += codeSize;
+            // may need to increase the code size
+            if ( codeSize < 12 && ncodes >= (unsigned int)(1 << codeSize ) )
+                codeSize++;
+            entry = pixel;
+        } else {
+            // dictionary is full, so send the entry and then a clear
+            // (unless the entry is the initial clear)
+            accumulator = accumulator | ( entry << shift );
+            shift += codeSize;
+            // may need to make space in the accumulator
+            if ( shift + codeSize > 30 )
+                gif_write_content( packet, packetPointer,
+                                   accumulator, shift, s );
+            if ( entry != clear ) {
+                for( i=0; i<clear; i++ ) {
+                    codeTable[i].child = clear; // meaning: invalid
+                    codeTable[i].pixel = i;
+                }
+                accumulator = accumulator | ( clear << shift );
+                shift += codeSize;
+            }
+            ncodes = clear+1;
+            codeSize = colorTableCode+1;
+            if ( codeSize < 2 )
+                codeSize = 2;
+            entry = pixel;
+        }
     }
 
     // write the last entry
     if ( shift + codeSize > 30 )
-	gif_write_content( packet, packetPointer, accumulator, shift, s );
+        gif_write_content( packet, packetPointer, accumulator, shift, s );
     accumulator = accumulator | ( entry << shift );
     shift += codeSize;
 
@@ -304,11 +304,11 @@ extern "C" void write_gif_image( QImageIO * iio )
     // add the zero-length sub-block and gif trailer
     packet[0] = (Q_UINT8)(packetPointer-1);
     if ( packetPointer > 1 )
-	packet[packetPointer++] = (Q_UINT8) 0; // zero length sub-block
+        packet[packetPointer++] = (Q_UINT8) 0; // zero length sub-block
     packet[packetPointer++] = (Q_UINT8) 0x3B; // gif trailer
     if ( s->device()->writeBlock( (char *)packet,
-				  packetPointer ) < packetPointer )
-	return; // assumption: if this succeeds, all earlier writes succeeded
+                                  packetPointer ) < packetPointer )
+        return; // assumption: if this succeeds, all earlier writes succeeded
 
     iio->setStatus( 0 );
 }

@@ -73,7 +73,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     Rect r = rect->boundingBox ();
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    const char *u = unitToString (unit);
+    QString u = unitToString (unit);
     float xval, yval, wval, hval;
     xval = cvtPtToUnit (unit, r.x ());
     yval = cvtPtToUnit (unit, r.y ());

@@ -619,7 +619,7 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
             extension = lastExport.right (lastExport.length () - pos - 1);
         }
     }
-    QString filter = filterMgr->exportFilters (extension);
+    QString filter = filterMgr->exportFilters (extension.latin1());
 
     KFileDialog *dlg = new KFileDialog (lastExportDir,
                                         filter, this,
@@ -660,12 +660,12 @@ void KIllustratorView::slotImport()
             return;
 
         lastImportDir = finfo.dirPath ();
-        FilterInfo* filterInfo = filterMgr->findFilter (fname,
+        FilterInfo* filterInfo = filterMgr->findFilter (fname.latin1(),
                                                         FilterInfo::FKind_Import);
         if (filterInfo)
         {
             ImportFilter* filter = filterInfo->importFilter ();
-            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension().latin1()))
             {
                 filter->setInputFileName (fname);
                 filter->importFromFile (m_pDoc->gdoc());
@@ -691,13 +691,13 @@ void KIllustratorView::slotExport()
 
     if (! fname.isEmpty ())
     {
-        FilterInfo* filterInfo = filterMgr->findFilter (fname,
+        FilterInfo* filterInfo = filterMgr->findFilter (fname.latin1(),
                                                         FilterInfo::FKind_Export);
 
         if (filterInfo)
         {
             ExportFilter* filter = filterInfo->exportFilter ();
-            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ()))
+            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension ().latin1()))
             {
                 filter->setOutputFileName (fname);
                 filter->exportToFile (m_pDoc->gdoc());

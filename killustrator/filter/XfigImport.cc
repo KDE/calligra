@@ -157,7 +157,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
   int value;
   KoPageLayout layout;
 
-  ifstream fin (inputFileName ());
+  ifstream fin(inputFileName().latin1());
   if (! fin)
     return false;
 

@@ -301,7 +301,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     }
     else {
       GObject *sobj = doc->getSelection ().first();
-      msgbuf=i18n(sobj->typeName ());
+      msgbuf=sobj->typeName();
       msgbuf+=" [";
       msgbuf+=QString::number(x, 'f', 3);
       msgbuf+=QString(" ") + u + QString(", ");
@@ -873,7 +873,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     Rect box = doc->boundingBoxForSelection ();
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    const char *u = unitToString (unit);
+    QString u = unitToString (unit);
     float x, y, w, h;
     x = cvtPtToUnit (unit, box.x ());
     y = cvtPtToUnit (unit, box.y ());
@@ -893,7 +893,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     }
     else {
       GObject *sobj = doc->getSelection ().first();
-      msgbuf=i18n(sobj->typeName ());
+      msgbuf=sobj->typeName();
       msgbuf+=" [";
       msgbuf+=QString::number(x, 'f', 3);
       msgbuf+=QString(" ") + u + QString(", ");

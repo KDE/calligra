@@ -361,7 +361,7 @@ bool GDocument::findNearestObject (const QString &otype, int x, int y,
       const QList<GObject>& contents = (*li)->objects ();
       QListIterator<GObject> oi(contents);
       for ( ; oi.current(); ++oi) {
-        if (otype == 0L || (*oi)->isA (otype)) {
+        if (otype == 0L || (*oi)->isA(otype.latin1())) {
           if ((*oi)->findNearestPoint (p, max_dist, d, pidx, all) &&
               d < distance) {
             obj = *oi;

@@ -137,7 +137,7 @@ QString FilterManager::exportFilters (const char* defaultExt) {
       for (; iter.current (); ++iter) {
           FilterInfo *fi = iter.current ();
           if (fi->kind () == FilterInfo::FKind_Export &&
-              ::strcmp (fi->extension (), defaultExt) == 0) {
+              fi->extension ()==QString(defaultExt)) {
               QString buf="*.";
               buf+=fi->extension();
               buf+="|";
@@ -153,7 +153,7 @@ QString FilterManager::exportFilters (const char* defaultExt) {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Export) {
         if (defaultExt != 0L &&
-            ::strcmp (fi->extension (), defaultExt) == 0)
+            fi->extension()==QString(defaultExt))
             continue;
 
         QString buf="*.";
@@ -210,6 +210,6 @@ QStrList FilterManager::getInstalledFilters () {
   QStrList flist;
   QDictIterator<FilterInfo> iter (filters);
   for (; iter.current (); ++iter)
-    flist.append (iter.currentKey ());
+    flist.append(iter.currentKey().latin1());
   return flist;
 }

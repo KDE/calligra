@@ -42,7 +42,7 @@ void list_export_filters () {
     FilterInfo* finfo = fmgr->getFilterForType (fstr);
     assert (finfo != NULL);
     if (finfo->kind () == FilterInfo::FKind_Export) {
-      cout << fstr << "\t" << finfo->type () << endl;
+      cout << fstr << "\t" << finfo->type().latin1() << endl;
     }
     fstr = filters.next ();
   }

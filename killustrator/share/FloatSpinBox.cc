@@ -102,7 +102,7 @@ int FloatSpinBox::mapTextToValue (bool *ok) {
 QString FloatSpinBox::mapValueToText (int v) {
     float f = float (v) / 100.0;
     QString buf;
-    buf.sprintf ((const char *) format, f);
+    buf.sprintf(format.latin1(), f);
     return buf;
 }
 

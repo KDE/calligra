@@ -107,5 +107,5 @@ bool ImageExport::exportToFile (GDocument* doc) {
   delete pixmap;
 
   // and save the image in requested format
-  return img.save (outputFileName (), (const char *) format);
+  return img.save(outputFileName (), format.latin1());
 }

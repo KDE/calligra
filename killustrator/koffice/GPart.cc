@@ -43,7 +43,7 @@ GPart::GPart (const QDomElement &element) :
     GObject (element.namedItem("gobject").toElement()) {
 
     int x = 0, y = 0, w = 0, h = 0;
-    string url, mime;
+    QString url, mime;
 
     x = element.attribute("x").toInt();
     y = element.attribute("y").toInt();
