@@ -26,9 +26,12 @@
 class QToolButton;
 class QIntValidator;
 class QScrollView;
-class KLineEdit;
-class KexiRecordNavigatorPrivate;
 class QScrollBar;
+class QLabel;
+
+class KLineEdit;
+
+class KexiRecordNavigatorPrivate;
 
 //! \brief KexiRecordNavigator class provides a record navigator.
 /*! Record navigator is usually used for data tables (e.g. KexiTableView)
@@ -68,6 +71,9 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		/*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
 		void setInsertingEnabled(bool set);
 
+		/*! Sets visibility of "inserting" button. */
+		void setInsertingButtonVisible(bool set);
+
 		virtual void setEnabled( bool set );
 
 		/*! Sets current record number for this navigator, 
@@ -83,6 +89,10 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 
 		void updateGeometry(int leftMargin);
 
+		/*! Sets label text at the left of the for record navigator's button.
+		 By default this label contains translated "Row:" text. */
+		void setLabelText(const QString& text);
+
 	signals:
 		void prevButtonClicked();
 		void nextButtonClicked();
@@ -97,6 +107,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 	protected:
 		void updateButtons(uint recCnt);
 
+		QLabel *m_textLabel;
 		QToolButton *m_navBtnFirst;
 		QToolButton *m_navBtnPrev;
 		QToolButton *m_navBtnNext;

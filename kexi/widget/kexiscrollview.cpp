@@ -330,6 +330,11 @@ KexiScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 	}
 }
 
+KexiRecordNavigator*
+KexiScrollView::recordNavigator() const
+{
+	return m_navPanel;
+}
 
 #include "kexiscrollview.moc"
 

@@ -382,8 +382,13 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 --totals (sum, avg)
 -simple docs
 
-
 CCMAIL: dkite@shaw.ca
+
+2004-12-22
+Reports
+- data view mode: record navigator is now "page navigator"
+  (it has also [+] button hidden)
+
 2004-12-21
 Core
 - KexiProperty - added 'fixed' flag for 'list' types

@@ -17,6 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
+#include "kexireportview.h"
+
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
@@ -30,15 +33,18 @@
 #include <kexidb/connection.h>
 
 #include "kexireportform.h"
-#include "kexireportview.h"
+#include <utils/kexirecordnavigator.h>
 
 #define NO_DSWIZARD
 
 KexiReportScrollView::KexiReportScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
 {
-	if(preview)
+	if(preview) {
 		setRecordNavigatorVisible(true);
+		recordNavigator()->setLabelText(i18n("Page:"));
+		recordNavigator()->setInsertingButtonVisible(false);
+	}
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 }
 

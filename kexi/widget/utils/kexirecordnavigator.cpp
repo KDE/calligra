@@ -48,7 +48,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	setFrameStyle(QFrame::NoFrame);
 	QHBoxLayout *navPanelLyr = new QHBoxLayout(this,0,0,"nav_lyr");
 
-	navPanelLyr->addWidget( new QLabel(QString(" ")+i18n("Row:")+" ",this) );
+	m_textLabel = new QLabel(this);
+	navPanelLyr->addWidget( m_textLabel  );
+	setLabelText(i18n("Row:"));
 		
 	int bw = 6+SmallIcon("navigator_first").width(); //QMIN( horizontalScrollBar()->height(), 20);
 	QFont f = font();
@@ -158,7 +160,6 @@ void KexiRecordNavigator::setEnabled( bool set )
 		m_navBtnNew->setEnabled( false );
 }
 
-//void KexiRecordNavigator::slotRecordNumberReturnPressed(const QString& text)
 bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 {
 	if (o==m_navRecordNumber) {
@@ -319,6 +320,19 @@ void KexiRecordNavigator::updateGeometry(int leftMargin)
 void KexiRecordNavigator::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
 	hbar.setGeometry( x + width(), y, w - width(), h );
+}
+
+void KexiRecordNavigator::setLabelText(const QString& text)
+{
+	m_textLabel->setText(text.isEmpty() ? QString::null : (QString::fromLatin1(" ")+text+" "));
+}
+
+void KexiRecordNavigator::setInsertingButtonVisible(bool set)
+{
+	if (set)
+		m_navBtnNew->show();
+	else
+		m_navBtnNew->hide();
 }
 
 #include "kexirecordnavigator.moc"

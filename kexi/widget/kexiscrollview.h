@@ -44,10 +44,13 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 
 		void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
 		void setRecordNavigatorVisible(bool visible);
+
 		void setOuterAreaIndicatorVisible(bool visible)  { m_outerAreaVisible = visible; }
 
 		void refreshContentsSizeLater(bool horizontal, bool vertical);
 		void updateNavPanelGeometry();
+
+		KexiRecordNavigator* recordNavigator() const;
 
 	public slots:
 		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
