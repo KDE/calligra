@@ -178,11 +178,11 @@
 # define KEXI_FORMS_SUPPORT
 # define KEXI_REPORTS_SUPPORT
 # define KEXI_NO_MIGRATION
+# define KEXI_NO_CTXT_HELP
 #endif
 
 /* additional default options */
 # define KDE_CXXFLAGS
-# define KEXI_NO_CTXT_HELP
 
 
 #endif //KEXI_EXPORT_H

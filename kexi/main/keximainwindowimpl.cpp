@@ -87,7 +87,7 @@
 #endif
 
 //first fix the geometry
-#define KEXI_NO_CTXT_HELP 1
+//#define KEXI_NO_CTXT_HELP 1
 
 #ifndef KEXI_NO_CTXT_HELP
 #include "kexicontexthelp.h"
