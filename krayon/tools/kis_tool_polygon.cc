@@ -121,8 +121,8 @@ void PolyGonTool::drawPolygon( const QPoint& start, const QPoint& end )
     float zF = m_pView->zoomFactor();
 
     double angle = 2 * M_PI / cornersValue;
-    float dx = (float) fabs( start.x () - end.x () );
-    float dy = (float) fabs( start.y () - end.y () );
+    float dx = (float) ::fabs( start.x () - end.x () );
+    float dy = (float) ::fabs( start.y () - end.y () );
     float radius = (dx > dy ? dx / 2.0 : dy / 2.0);
     float xoff = start.x() + ( start.x() < end.x() ? radius : -radius )
                  + m_pView->xPaintOffset() - (int)( zF * m_pView->xScrollOffset() );
