@@ -609,9 +609,9 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
        if ((!pagePtr->backPix.isNull()) && (pagePtr->backPicView == BV_ZOOM))
 	 {
 	  QWMatrix m;
- 	  m.scale((float)getPageSize(pagePtr->pageNum,diffx,diffy).width()/pagePtr->backPix.width(),
- 		  (float)getPageSize(pagePtr->pageNum,diffx,diffy).height()/pagePtr->backPix.height());
- 	  pagePtr->backPix.operator=(pagePtr->backPix.xForm(m));
+ 	  m.scale((float)getPageSize(pagePtr->pageNum,diffx,diffy).width()/pagePtr->obackPix.width(),
+ 		  (float)getPageSize(pagePtr->pageNum,diffx,diffy).height()/pagePtr->obackPix.height());
+ 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
 	 }
        if (pagePtr->backType == BT_CLIP)
 	 {
@@ -685,6 +685,7 @@ void KPresenterDocument_impl::setBackPic(unsigned int pageNum,const char* backPi
 	{
 	  pagePtr->backPic = qstrdup(backPic);
 	  pagePtr->backPix.load(pagePtr->backPic);
+	  pagePtr->obackPix.load(pagePtr->backPic);
 	  emit restoreBackColor(pageNum-1);
 	  return;
 	}
@@ -718,9 +719,9 @@ void KPresenterDocument_impl::setBPicView(unsigned int pageNum,BackView picView)
 	  if ((picView == BV_ZOOM) && (!pagePtr->backPix.isNull()))
 	    {
 	      QWMatrix m;
-	      m.scale((float)getPageSize(pagePtr->pageNum,0,0).width()/pagePtr->backPix.width(),
-		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->backPix.height());
-	      pagePtr->backPix.operator=(pagePtr->backPix.xForm(m));
+	      m.scale((float)getPageSize(pagePtr->pageNum,0,0).width()/pagePtr->obackPix.width(),
+		      (float)getPageSize(pagePtr->pageNum,0,0).height()/pagePtr->obackPix.height());
+	      pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
 	    }
 	  emit restoreBackColor(pageNum-1);
 	  return;
@@ -1171,7 +1172,7 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy)
+QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0)
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1185,6 +1186,10 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy)
     (bl + br);
   ph = hei*(int)(MM_TO_POINT * 100) / 100 -
     (bt + bb);
+
+  pw = (int)((float)pw * fakt);
+  ph = (int)((float)ph * fakt);
+
   QRect rect(10 - diffx,(10 + ph * (num - 1) +
 			 (num - 1) * 10) - diffy,pw,ph);
   return rect;

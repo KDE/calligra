@@ -941,6 +941,36 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h)
   return &pic;
 }
 
+/*====================== zoom text ===============================*/
+void KTextObject::zoom(float _fakt)
+{
+  TxtObj *txtObj;
+  TxtLine *txtLine;
+  TxtParagraph *txtParagraph;
+  unsigned int i,j,k;
+  QFont font;
+
+  for (i = 0;i < paragraphs();i++)
+    {
+      txtParagraph = paragraphAt(i);
+
+      for (j = 0;j < txtParagraph->lines();j++)
+	{
+	  txtLine = txtParagraph->lineAt(j);
+
+	  for (k = 0;k < txtLine->items();k++)
+	    {
+	      txtObj = txtLine->itemAt(k);
+	      font.operator=(txtObj->font());
+	      font.setPointSize(((int)((float)font.pointSize() * _fakt)));
+	      txtObj->setFont(font);
+	    }
+	}
+    }
+  recalc();
+  repaint(false);
+}
+
 /*====================== paint cell ==============================*/
 void KTextObject::paintCell(class QPainter* p,int row,int)
 {

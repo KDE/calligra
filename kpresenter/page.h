@@ -139,7 +139,7 @@ protected:
   bool spInfinitLoop() {return view->KPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
   QList<SpPageConfiguration> *spPageConfig() {return view->KPresenterDoc()->spPageConfig();}
-  QRect getPageSize(unsigned int p) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy());}
+  QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);

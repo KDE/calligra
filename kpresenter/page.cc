@@ -40,6 +40,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       show();
       editMode = true;
       currPresPage = 1;
+      _presFakt = 1.0;
     }
   else 
     {
@@ -75,7 +76,10 @@ void Page::paintBackground(QPainter *painter,QRect rect)
   int i,j,pw,ph;
 
   painter->setPen(NoPen);
-  painter->setBrush(white);
+  if (editMode)
+    painter->setBrush(white);
+  else
+    painter->setBrush(black);
   painter->drawRect(0,0,width(),20);
   painter->drawRect(0,0,20,height());
   QRect r = painter->viewport();
@@ -84,21 +88,21 @@ void Page::paintBackground(QPainter *painter,QRect rect)
       painter->setViewport(r);
       painter->resetXForm();
       r = painter->viewport();
-      if ((rect.intersects(QRect(getPageSize(pagePtr->pageNum))) && editMode) ||
+      if ((rect.intersects(QRect(getPageSize(pagePtr->pageNum,_presFakt))) && editMode) ||
 	  (!editMode && currPresPage == pageList()->at()+1))
 	{
 	  switch (pagePtr->backType)
 	    {
 	    case BT_COLOR: /* background color */ 
 	      {
-		painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+		painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
 				    *pagePtr->cPix);
 		pagePtr->pic->hide();
 	      } break;
 	    case BT_PIC:  /* background picture */
 	      {
 		if (pagePtr->backPicView == BV_CENTER)
-		  painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+		  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
 				      *pagePtr->cPix);
 		pagePtr->pic->hide();
 		switch (pagePtr->backPicView)
@@ -106,23 +110,25 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 		  case BV_ZOOM:
 		    {
 		      if (!pagePtr->backPix.isNull())
-			painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+			painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),
 					    pagePtr->backPix);
 		    } break;
 		  case BV_CENTER:
 		    {
 		      if (!pagePtr->backPix.isNull())
 			{
-			  if (pagePtr->backPix.width() > getPageSize(pagePtr->pageNum).width())
-			    pagePtr->backPix.resize(getPageSize(pagePtr->pageNum).width(),
+			  if (pagePtr->backPix.width() > getPageSize(pagePtr->pageNum,_presFakt).width())
+			    pagePtr->backPix.resize(getPageSize(pagePtr->pageNum,_presFakt).width(),
 						    pagePtr->backPix.height());
-			  if (pagePtr->backPix.height() > getPageSize(pagePtr->pageNum).height())
+			  if (pagePtr->backPix.height() > getPageSize(pagePtr->pageNum,_presFakt).height())
 			    pagePtr->backPix.resize(pagePtr->backPix.width(),
-						    getPageSize(pagePtr->pageNum).height());
-			  painter->drawPixmap(getPageSize(pagePtr->pageNum).x()+(getPageSize(pagePtr->pageNum).width()-
+						    getPageSize(pagePtr->pageNum,_presFakt).height());
+			  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x()+
+					      (getPageSize(pagePtr->pageNum,_presFakt).width()-
 										 pagePtr->backPix.width())/2,
-					      getPageSize(pagePtr->pageNum).y()+(getPageSize(pagePtr->pageNum).height()-
-										 pagePtr->backPix.height())/2,
+					      getPageSize(pagePtr->pageNum,_presFakt).y()+
+					      (getPageSize(pagePtr->pageNum,_presFakt).height()-
+					       pagePtr->backPix.height())/2,
 					      pagePtr->backPix);
 			}
 		    } break;
@@ -130,18 +136,20 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 		    {
 		      if (!pagePtr->backPix.isNull())
 			{
-			  for (i=0;i<=getPageSize(pagePtr->pageNum).height()/pagePtr->backPix.height();i++)
+			  for (i=0;i<=getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->backPix.height();i++)
 			    {
 			      ph = -1;
-			      if (getPageSize(pagePtr->pageNum).height()-i*pagePtr->backPix.height() < pagePtr->backPix.height())
-				ph = getPageSize(pagePtr->pageNum).height()-i*pagePtr->backPix.height();
-			      for (j=0;j<=getPageSize(pagePtr->pageNum).width()/pagePtr->backPix.width();j++)
+			      if (getPageSize(pagePtr->pageNum,_presFakt).height()
+				  -i*pagePtr->backPix.height() < pagePtr->backPix.height())
+				ph = getPageSize(pagePtr->pageNum,_presFakt).height()-i*pagePtr->backPix.height();
+			      for (j=0;j<=getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->backPix.width();j++)
 				{
 				  pw = -1;
-				  if (getPageSize(pagePtr->pageNum).width()-j*pagePtr->backPix.width() < pagePtr->backPix.width())
-				    pw = getPageSize(pagePtr->pageNum).width()-j*pagePtr->backPix.width();
-				  painter->drawPixmap(getPageSize(pagePtr->pageNum).x()+j*pagePtr->backPix.width(),
-						      getPageSize(pagePtr->pageNum).y()+i*pagePtr->backPix.height(),
+				  if (getPageSize(pagePtr->pageNum,_presFakt).width()
+				      -j*pagePtr->backPix.width() < pagePtr->backPix.width())
+				    pw = getPageSize(pagePtr->pageNum,_presFakt).width()-j*pagePtr->backPix.width();
+				  painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x()+j*pagePtr->backPix.width(),
+						      getPageSize(pagePtr->pageNum,_presFakt).y()+i*pagePtr->backPix.height(),
 						      pagePtr->backPix,0,0,pw,ph);
 				}
 			    }
@@ -151,13 +159,13 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	      } break;
 	    case BT_CLIP: /* background clipart */ 
 	      {
-		painter->drawPixmap(getPageSize(pagePtr->pageNum).x(),getPageSize(pagePtr->pageNum).y(),
+		painter->drawPixmap(getPageSize(pagePtr->pageNum,_presFakt).x(),getPageSize(pagePtr->pageNum,_presFakt).y(),  
 				    *pagePtr->cPix);
 		r = painter->viewport();
-		painter->setViewport(getPageSize(pagePtr->pageNum).x(),
-				     getPageSize(pagePtr->pageNum).y(),
-				     getPageSize(pagePtr->pageNum).width(),
-				     getPageSize(pagePtr->pageNum).height());
+		painter->setViewport(getPageSize(pagePtr->pageNum,_presFakt).x(),
+				     getPageSize(pagePtr->pageNum,_presFakt).y(),
+				     getPageSize(pagePtr->pageNum,_presFakt).width(),
+				     getPageSize(pagePtr->pageNum,_presFakt).height());
 		QPicture *pic = pagePtr->pic->getPic();
 		pic->play(painter);
 		painter->setViewport(r);
@@ -169,26 +177,32 @@ void Page::paintBackground(QPainter *painter,QRect rect)
 	  r = painter->viewport();
 	}
       painter->setPen(NoPen);
-      painter->setBrush(white);
-      painter->drawRect(0,getPageSize(pagePtr->pageNum).y()+getPageSize(pagePtr->pageNum).height(),
+      if (editMode)
+	painter->setBrush(white);
+      else
+	painter->setBrush(black);
+      painter->drawRect(0,getPageSize(pagePtr->pageNum,_presFakt).y()+getPageSize(pagePtr->pageNum,_presFakt).height(),
 			width(),20);
       if (editMode)
 	{
 	  painter->setPen(QPen(red,1,SolidLine));
 	  painter->setBrush(NoBrush);
-	  painter->drawRect(getPageSize(pagePtr->pageNum));
+	  painter->drawRect(getPageSize(pagePtr->pageNum,_presFakt));
 	}
     }
   if (pageList() && !pageList()->isEmpty())
-      {
-	unsigned int num = pageList()->count();
-	painter->setPen(NoPen);
+    {
+      unsigned int num = pageList()->count();
+      painter->setPen(NoPen);
+      if (editMode)
 	painter->setBrush(white);
-	painter->drawRect(0,getPageSize(num).y()+getPageSize(num).height()+1,
-			  width(),height());
- 	painter->drawRect(getPageSize(num).x()+getPageSize(num).width(),0,
- 			  width(),height());
-      }
+      else
+	painter->setBrush(black);
+      painter->drawRect(0,getPageSize(num,_presFakt).y()+getPageSize(num,_presFakt).height()+1,
+			width(),height());
+      painter->drawRect(getPageSize(num,_presFakt).x()+getPageSize(num,_presFakt).width(),0,
+			width(),height());
+    }
 }
 
 /*====================== paint objects ==========================*/
@@ -205,10 +219,10 @@ void Page::paintObjects(QPainter *painter,QRect rect)
       if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
 				 objPtr->ow,objPtr->oh)) && editMode) ||
 	  (!editMode && QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-			      objPtr->ow,objPtr->oh).intersects(QRect((width() - getPageSize(currPresPage).width()) / 2 + 10,
-								      (height() - getPageSize(currPresPage).height()) / 2 + 10,
-								      getPageSize(currPresPage).width(),
-								      getPageSize(currPresPage).height()))))
+			      objPtr->ow,objPtr->oh).intersects(QRect((width() - getPageSize(currPresPage,_presFakt).width()) / 2 + 10,
+								      (height() - getPageSize(currPresPage,_presFakt).height()) / 2 + 10,
+								      getPageSize(currPresPage,_presFakt).width(),
+								      getPageSize(currPresPage,_presFakt).height()))))
 	{     
 	  switch (objPtr->objType)
 	    {
@@ -1017,11 +1031,52 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation()
 {
+  unsigned int i;
+
   float _presFaktW = (float)width() / (float)getPageSize(0).width() > 1.0 ? 
     (float)width() / (float)getPageSize(0).width() : 1.0;
   float _presFaktH = (float)height() / (float)getPageSize(0).height() > 1.0 ? 
     (float)height() / (float)getPageSize(0).height() : 1.0;
   _presFakt = min(_presFaktW,_presFaktH);
+
+  for (i = 0;i < pageList()->count();i++)
+    {
+      pagePtr = pageList()->at(i);
+      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_ZOOM)
+	{
+	  QWMatrix m;
+ 	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
+ 		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
+ 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+	}
+      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
+	{
+	  QWMatrix m;
+ 	  m.scale(_presFakt,_presFakt);
+ 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+	}
+      restoreBackColor(i);
+    }
+
+  for (i = 0;i < objList()->count();i++)
+    {
+      objPtr = objList()->at(i);
+      objPtr->oox = objPtr->ox;
+      objPtr->ooy = objPtr->oy;
+      objPtr->oow = objPtr->ow;
+      objPtr->ooh = objPtr->oh;
+      objPtr->ox = (int)((float)objPtr->ox * _presFakt);
+      objPtr->oy = (int)((float)objPtr->oy * _presFakt);
+      objPtr->ow = (int)((float)objPtr->ow * _presFakt);
+      objPtr->oh = (int)((float)objPtr->oh * _presFakt);
+      if (objPtr->objType != OT_TEXT)
+	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
+      else
+	{
+	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
+	  objPtr->textObj->zoom(_presFakt);
+	}
+    }
 
   currPresPage = 1;
   editMode = false;
@@ -1032,6 +1087,41 @@ void Page::startScreenPresentation()
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
+  unsigned int i;
+
+  for (i = 0;i < objList()->count();i++)
+    {
+      objPtr = objList()->at(i);
+      objPtr->ox = objPtr->oox;
+      objPtr->oy = objPtr->ooy;
+      objPtr->ow = objPtr->oow;
+      objPtr->oh = objPtr->ooh;
+      if (objPtr->objType != OT_TEXT)
+	objPtr->graphObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
+      else
+	{
+	  objPtr->textObj->setGeometry(objPtr->ox,objPtr->oy,objPtr->ow,objPtr->oh);
+	  objPtr->textObj->zoom(1.0/_presFakt);
+	}
+    }
+
+  _presFakt = 1.0;
+
+  for (i = 0;i < pageList()->count();i++)
+    {
+      pagePtr = pageList()->at(i);
+      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_ZOOM)
+	{
+	  QWMatrix m;
+ 	  m.scale((float)getPageSize(pagePtr->pageNum,_presFakt).width()/pagePtr->obackPix.width(),
+ 		  (float)getPageSize(pagePtr->pageNum,_presFakt).height()/pagePtr->obackPix.height());
+ 	  pagePtr->backPix.operator=(pagePtr->obackPix.xForm(m));
+	}
+      if (pagePtr->backType == BT_PIC && pagePtr->backPicView == BV_CENTER)
+	pagePtr->backPix.operator=(pagePtr->obackPix);
+      restoreBackColor(i);
+    }
+
   currPresPage = 1;
   editMode = true;
   drawBack = true;
@@ -1184,12 +1274,22 @@ void Page::drawBackColor(QColor cb,QColor ca,BCType bcType,
 /*======================== restore back color ====================*/
 void Page::restoreBackColor(unsigned int pgNum)
 {
-  QPainter p;
-  p.begin(pageList()->at(pgNum)->cPix);
+  QPainter *p = new QPainter();
+
+  if (_presFakt > 1.0)
+    {
+      delete pageList()->at(pgNum)->cPix;
+      pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum,_presFakt).width(),
+						getPageSize(pgNum,_presFakt).height());
+    }
+
+  p->begin(pageList()->at(pgNum)->cPix);
   drawBackColor(pageList()->at(pgNum)->backColor1,pageList()->at(pgNum)->backColor2,
- 		pageList()->at(pgNum)->bcType,
- 		&p,QSize(pageList()->at(pgNum)->cPix->width(),pageList()->at(pgNum)->cPix->height()));
-  p.end();
+   		pageList()->at(pgNum)->bcType,
+   		p,QSize((int)((float)pageList()->at(pgNum)->cPix->width()*_presFakt),
+  			(int)((float)pageList()->at(pgNum)->cPix->height()*_presFakt)));
+  p->end();
+  delete p;
 }
 
 

@@ -125,7 +125,7 @@ void KPresenterView_impl::newView()
 {
   assert((m_pKPresenterDoc != 0L));
 
-  KPresenterShell_impl* shell = new KPresenterShell_impl;
+  shell = new KPresenterShell_impl;
   shell->enableMenuBar();
   shell->PartShell_impl::enableStatusBar();
   shell->enableToolBars();
@@ -336,19 +336,31 @@ void KPresenterView_impl::screenStart()
     {
       page->deSelectAllObj();
       presStarted = true;
+      float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(0,0,0).width() > 1.0 ? 
+	(float)page->width() / (float)KPresenterDoc()->getPageSize(0,0,0).width() : 1.0;
+      float _presFaktH = (float)page->height() / (float)KPresenterDoc()->getPageSize(0,0,0).height() > 1.0 ? 
+	(float)page->height() / (float)KPresenterDoc()->getPageSize(0,0,0).height() : 1.0;
+      float _presFakt = min(_presFaktW,_presFaktH);
+      page->setPresFakt(_presFakt);
+
       //printf("%d %d\n",widget()->mapToGlobal(QPoint(x(),y())).x(),
       //     widget()->mapToGlobal(QPoint(x(),y())).y());
+
       _xOffset = xOffset;
       _yOffset = yOffset;
       xOffset = 0;
       yOffset = 0;
-      if (widget()->width() > KPresenterDoc()->getPageSize(0,0,0).width())
-	xOffset -= (widget()->width() - KPresenterDoc()->getPageSize(0,0,0).width()) / 2;
-      if (widget()->height() > KPresenterDoc()->getPageSize(0,0,0).height())
-	yOffset -= (widget()->height() - KPresenterDoc()->getPageSize(0,0,0).height()) / 2;
+      if (widget()->width() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width())
+	xOffset -= (widget()->width() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).width()) / 2;
+      if (widget()->height() > KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height())
+	yOffset -= (widget()->height() - KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()) / 2;
+      if (yOffset < 0) yOffset += 10; 
       page->startScreenPresentation();
       vert->setEnabled(false);
       horz->setEnabled(false);
+      m_bShowGUI = false;
+      resizeEvent(0L);
+      page->setBackgroundColor(black);
     }
 }
 
@@ -363,6 +375,9 @@ void KPresenterView_impl::screenStop()
       presStarted = false;
       vert->setEnabled(true);
       horz->setEnabled(true);
+      m_bShowGUI = true;
+      resizeEvent(0L);
+      page->setBackgroundColor(white);
     }
 }
 
@@ -383,7 +398,7 @@ void KPresenterView_impl::screenPrev()
     {
       if (page->pPrev(true))
 	{
-	  yOffset -= KPresenterDoc()->getPageSize(0,0,0).height()+10; 
+	  yOffset -= KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
 	  page->repaint(true);
 	}
     }
@@ -396,7 +411,7 @@ void KPresenterView_impl::screenNext()
     {
       if (page->pNext(true))
 	{
-	  yOffset += KPresenterDoc()->getPageSize(0,0,0).height()+10; 
+	  yOffset += KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
 	  page->repaint(true);
 	}
     }
@@ -1060,7 +1075,7 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
 {
   QWidget::resizeEvent(e);
 
-  if (m_bShowGUI)
+  if (m_bShowGUI && !presStarted)
     { 
       horz->show();
       vert->show();

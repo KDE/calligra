@@ -452,6 +452,9 @@ public:
   void resize(QSize s)
     {resize(s.width(),s.height());}
 
+  // zoom text
+  void zoom(float);
+
 signals:
 
   // sent current effects

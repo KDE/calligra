@@ -55,6 +55,7 @@ struct Background
   const char *backPic;
   const char *backClip; 
   QPixmap backPix;
+  QPixmap obackPix;
   BackPic *pic;
   QPixmap *cPix;
 };
@@ -66,6 +67,7 @@ struct PageObjects
   bool isSelected;
   unsigned int objNum;
   int ox,oy,ow,oh;
+  int oox,ooy,oow,ooh;
   KTextObject *textObj;
   GraphObj* graphObj;
   QPicture *objPic;

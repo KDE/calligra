@@ -101,8 +101,10 @@ private:
   int xRnd,yRnd;
   QString fileName;
   QPixmap pix;
+  QPixmap origPix;
   ATFInterpreter *atfInterp;
   QWinMetaFile wmf;
 
 };
 #endif //GRAPHOBJ_H
+

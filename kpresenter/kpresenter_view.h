@@ -16,6 +16,7 @@
 #define __kpresenter_view_h__
 
 class KPresenterView_impl;
+class KPresenterShell_impl;
 class KPresenterDocument_impl;
 class KPresenterChild;
 class BackDia;
@@ -59,6 +60,7 @@ class Page;
 #include "kpresenter.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_main.h"
+#include "kpresenter_shell.h"
 #include "global.h"
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
@@ -462,7 +464,8 @@ protected:
   QString m_strNewPart;
   bool m_bShowGUI;
   bool presStarted;
-  
+
+  KPresenterShell_impl* shell;
 };
 
 #endif

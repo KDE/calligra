@@ -242,7 +242,7 @@ public:
   QList<SpPageConfiguration> *spPageConfig() {return &_spPageConfig;}
 
   // size of page
-  QRect getPageSize(unsigned int,int,int);
+  QRect getPageSize(unsigned int,int,int,float fakt=1.0);
 
   // delete/rotate/rearrange/reorder obejcts
   void deleteObjs();

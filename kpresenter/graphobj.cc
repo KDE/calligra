@@ -63,6 +63,7 @@ QPicture* GraphObj::getPic(int,int,int,int)
 void GraphObj::loadPixmap()
 {
   pix.load(fileName);
+  origPix.load(fileName);
 }
 
 /*======================= load clipart ===========================*/
@@ -79,8 +80,8 @@ QPixmap GraphObj::getPix()
 
   if (width() != pix.width() || height() != pix.height())
     {
-      m.scale((float)width()/pix.width(),(float)height()/pix.height());
-      pix.operator=(pix.xForm(m));
+      m.scale((float)width()/origPix.width(),(float)height()/origPix.height());
+      pix.operator=(origPix.xForm(m));
     }
 
   return pix;
