@@ -34,8 +34,6 @@ public:
     KPresenterDocIface( KPresenterDoc *doc_ );
 
 k_dcop:
-    virtual DCOPRef firstView();
-    virtual DCOPRef nextView();
     virtual int getNumObjects();
     virtual DCOPRef getObject( int num );
     virtual int getNumPages();

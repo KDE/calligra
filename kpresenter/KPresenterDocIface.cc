@@ -31,18 +31,6 @@ KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
    doc = doc_;
 }
 
-DCOPRef KPresenterDocIface::firstView()
-{
-    return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->getFirstView()->dcopObject()->objId() );
-}
-
-DCOPRef KPresenterDocIface::nextView()
-{
-    return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->getNextView()->dcopObject()->objId() );
-}
-
 int KPresenterDocIface::getNumObjects()
 {
     return doc->objNums();

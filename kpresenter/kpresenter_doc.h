@@ -293,13 +293,6 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    KPresenterView *getFirstView() {
-        return (KPresenterView*)firstView();
-    }
-    KPresenterView *getNextView() {
-        return (KPresenterView*)nextView();
-    }
-
     void groupObjects();
     void ungroupObjects();
 

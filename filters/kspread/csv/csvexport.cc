@@ -54,7 +54,7 @@ CSVExport::CSVExport(KoFilter *parent, const char *name) :
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-bool CSVExport::E_filter(const QString &file, const KoDocument * const document,
+bool CSVExport::filterExport(const QString &file, KoDocument * document,
                          const QString &from, const QString &to,
                          const QString &config) {
 

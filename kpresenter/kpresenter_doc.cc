@@ -2975,11 +2975,11 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
 /*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
-    KoView* view = firstView();
-    for( ; view; view = nextView() ) {
+    QListIterator<KoView> it( views() );
+    for( ; it.current(); ++it ) {
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
-	((KPresenterView*)view)->repaint( erase );
+	((KPresenterView*)it.current())->repaint( erase );
     }
 }
 
@@ -2988,10 +2988,10 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
 {
     _pageLayout.unit = _unit;
 
-    KoView* view = firstView();
-    for( ; view; view = nextView() ) {
-	((KPresenterView*)view)->getHRuler()->setUnit( __unit );
-	((KPresenterView*)view)->getVRuler()->setUnit( __unit );
+    QListIterator<KoView> it( views() );
+    for( ; it.current(); ++it ) {
+	((KPresenterView*)it.current())->getHRuler()->setUnit( __unit );
+	((KPresenterView*)it.current())->getVRuler()->setUnit( __unit );
     }
 }
 
@@ -3000,15 +3000,15 @@ void KPresenterDoc::repaint( QRect rect )
 {
     QRect r;
 
-    KoView* view = firstView();
-    for( ; view; view = nextView() ) {
+    QListIterator<KoView> it( views() );
+    for( ; it.current(); ++it ) {
 	r = rect;
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
-			       r.y() - ((KPresenterView*)view)->getDiffY() ) );
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getDiffX(),
+			       r.y() - ((KPresenterView*)it.current())->getDiffY() ) );
 
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
-	((KPresenterView*)view)->repaint( r, false );
+	((KPresenterView*)it.current())->repaint( r, false );
     }
 }
 
@@ -3017,16 +3017,16 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 {
     QRect r;
 
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
+    QListIterator<KoView> it( views() );
+    for( ; it.current(); ++it )
     {
 	r = kpobject->getBoundingRect( 0, 0 );
-	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
-			       r.y() - ((KPresenterView*)view)->getDiffY() ) );
+	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getDiffX(),
+			       r.y() - ((KPresenterView*)it.current())->getDiffY() ) );
 
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
-	((KPresenterView*)view)->repaint( r, false );
+	((KPresenterView*)it.current())->repaint( r, false );
     }
 }
 
@@ -3163,9 +3163,9 @@ void KPresenterDoc::deletePage( int _page )
     ASSERT( _page < (int)m_selectedSlides.count() );
     m_selectedSlides.remove( m_selectedSlides.at( _page ) );
     // Update the sidebars
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
-        static_cast<KPresenterView*>(view)->updateSideBar();
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateSideBar();
 }
 
 /*================================================================*/
@@ -3222,9 +3222,9 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     else
         m_selectedSlides.append( true );
     // Update the sidebars
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
-        static_cast<KPresenterView*>(view)->updateSideBar();
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateSideBar();
     return _page;
 }
 
@@ -3400,9 +3400,9 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int )
 /*================= deselect all objs ===========================*/
 void KPresenterDoc::deSelectAllObj()
 {
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
-	((KPresenterView*)view)->getPage()->deSelectAllObj();
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->getPage()->deSelectAllObj();
 }
 
 /*======================== align objects left ===================*/
@@ -3562,11 +3562,10 @@ void KPresenterDoc::alignObjsBottom()
 /*================= undo redo changed ===========================*/
 void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
+    QListIterator<KoView> it( views() );
     {
-	((KPresenterView*)view)->changeUndo( _undo, !_undo.isEmpty() );
-	((KPresenterView*)view)->changeRedo( _redo, !_redo.isEmpty() );
+	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
+	((KPresenterView*)it.current())->changeRedo( _redo, !_redo.isEmpty() );
     }
     setModified(true);
 }
@@ -3840,9 +3839,9 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     kdDebug() << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
     // Update the views
-    KoView* view = firstView();
-    for( ; view; view = nextView() )
-        static_cast<KPresenterView*>(view)->updateSideBarItem( pgNum );
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
 }
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const

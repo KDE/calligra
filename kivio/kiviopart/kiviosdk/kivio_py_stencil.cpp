@@ -507,7 +507,7 @@ int KivioPyStencil::runPython(QString code)
 {
 
 
-    KivioView * view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->firstView());
+    KivioView * view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().getFirst());
     if ( view ) {
         page = view->activePage();
     }

@@ -35,7 +35,7 @@ CSVFilter::CSVFilter(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-bool CSVFilter::I_filter(const QString &file, KoDocument *document,
+bool CSVFilter::filterImport(const QString &file, KoDocument *document,
                          const QString &from, const QString &to,
                          const QString &config) {
     bool bSuccess=true;

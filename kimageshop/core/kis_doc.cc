@@ -594,6 +594,7 @@ bool KisDoc::isEmpty()
 */
 KisView *KisDoc::currentView()
 {
+/* ### what's this? (Simon
     KisView *v = 0L;
     for( v = (KisView*)firstView(); v != 0L; v = (KisView*)nextView() )
     {
@@ -602,6 +603,8 @@ KisView *KisDoc::currentView()
     }
 
     return v;
+*/
+    return dynamic_cast<KisView *>( views().getLast() );
 }
 
 
@@ -636,10 +639,12 @@ KisImage* KisDoc::current()
 void KisDoc::resetShells()
 {
     int shellCount = 0;
-    KoMainWindow * tmpKo = firstShell();
+    QListIterator<KoMainWindow> it( shells() );
 
-    for ( ; tmpKo ; tmpKo = nextShell() )
+    for ( ; it.current(); ++it )
     {
+        KoMainWindow *tmpKo = it.current();
+
         shellCount++;
 
         kdDebug() << "KisShell Number: " << shellCount << endl;
@@ -667,8 +672,7 @@ void KisDoc::resetShells()
 */
 KoMainWindow * KisDoc::currentShell()
 {
-    KoMainWindow * tmpKo = firstShell();
-    return tmpKo;
+    return shells().getFirst();
 }
 
 /*

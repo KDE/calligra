@@ -354,6 +354,8 @@ public:
   void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
   bool getShowStatusBar() { return  m_bShowStatusBar;}
 
+  void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".

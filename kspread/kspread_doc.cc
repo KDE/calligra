@@ -186,9 +186,9 @@ bool KSpreadDoc::saveChildren( KoStore* _store, const QString &_path )
 QDomDocument KSpreadDoc::saveXML()
 {
   //Terminate current cell edition, if any
-  KSpreadView *v;
-  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
-      v->deleteEditor( true );
+  QListIterator<KoView> it( views() );
+  for (; it.current(); ++it )
+      static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
 
   QDomDocument doc( "spreadsheet" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -429,9 +429,10 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 
   calcPaperSize();
 
-  KSpreadView *v;
-  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
+  QListIterator<KoView> it( views() );
+  for( ;it.current(); ++it )
   {
+        KSpreadView *v = static_cast<KSpreadView *>( it.current() );
         // We need to trigger the appropriate repaintings in the cells near the
         // border of the page. The easiest way for this is to turn the borders
         // off and on (or on and off if they were off).
@@ -775,16 +776,16 @@ void KSpreadDoc::redo()
 
 void KSpreadDoc::enableUndo( bool _b )
 {
-  KSpreadView *v;
-  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
-      v->enableUndo( _b );
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+      static_cast<KSpreadView *>( it.current() )->enableUndo( _b );
 }
 
 void KSpreadDoc::enableRedo( bool _b )
 {
-  KSpreadView *v;
-  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
-      v->enableRedo( _b );
+    QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+      static_cast<KSpreadView *>( it.current() )->enableRedo( _b );
 }
 
 void KSpreadDoc::paperLayoutDlg()
