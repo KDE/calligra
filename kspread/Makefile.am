@@ -107,8 +107,9 @@ parser:
 	bison -p dep -b dep -d yacc.dep.y
 
 messages: rc.cpp
-	perl extracti18n extensions/*.xml > xml_doc.cc
+	$(EXTRCACRC) --tag-group=koffice extensions/*.xml > xml_doc.cc
 	$(EXTRACTRC) *.ui >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h -o $(podir)/kspread.pot
 	-rm xml_doc.cc
+
 kde_services_DATA = kspreadpart.desktop
