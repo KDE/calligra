@@ -10,17 +10,35 @@
 #ifndef __layerdlg_h__
 #define __layerdlg_h__
 
-#include <qdialog.h>
+#include <qtabdialog.h>
 
 class KImageShopDoc;
 
-class LayerDialog : public QDialog
+class LayerTab : public QWidget
 {
   Q_OBJECT
 
 public:
 
-  LayerDialog(KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+  LayerTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+};
+
+class ChannelTab : public QWidget
+{
+  Q_OBJECT
+ 
+public:
+ 
+  ChannelTab( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+};
+
+class LayerDialog : public QTabDialog
+{
+  Q_OBJECT
+
+public:
+
+  LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 };
 
 #endif // __layerdlg_h__

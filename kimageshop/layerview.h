@@ -46,6 +46,8 @@ public slots:
   void slotRemoveLayer();
   void slotUpperLayer();
   void slotLowerLayer();
+  void slotFrontLayer();
+  void slotBackgroundLayer();
 
 protected:
 

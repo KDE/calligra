@@ -211,6 +211,12 @@ void LayerView::slotMenuAction( int _id )
     case LOWERLAYER:
       slotLowerLayer();
       break;
+    case FRONTLAYER:
+      slotFrontLayer();
+      break;
+    case BACKLAYER:
+      slotBackgroundLayer();
+      break;
     default:
       cerr << "Michael : unknown context menu action" << endl;
       break;
@@ -219,7 +225,7 @@ void LayerView::slotMenuAction( int _id )
 
 QSize LayerView::sizeHint() const
 {
-  return QSize( WIDTH, HEIGHT * MAXROWS );
+  return QSize( WIDTH, HEIGHT * 5 );
 }
 
 void LayerView::mousePressEvent( QMouseEvent* _event )
@@ -287,6 +293,9 @@ void LayerView::slotUpperLayer()
     m_doc->upperLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
+    m_selected = newpos;
+    updateCell( m_selected + 1, 0 );
+    updateCell( m_selected, 0 );
   }
 }
 
@@ -299,7 +308,20 @@ void LayerView::slotLowerLayer()
     m_doc->lowerLayer( m_selected );
     repaint();
     swapLayers( m_selected, newpos );
+    m_selected = newpos;
+    updateCell( m_selected - 1, 0 );
+    updateCell( m_selected, 0 );
   }
+}
+
+void LayerView::slotFrontLayer()
+{
+  cout << "Michael : make front layer" << endl; 
+}
+
+void LayerView::slotBackgroundLayer()
+{
+  cout << "Michael : make background layer" << endl;
 }
 
 #include "layerview.moc"

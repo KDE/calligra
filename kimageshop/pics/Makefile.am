@@ -1,7 +1,8 @@
 
 datadir = $(prefix)/share/apps/kimageshop/pics
 
-data_DATA = add_point.xpm airbrush.xpm areaselect.xpm centrejust.xpm \
+data_DATA = deletelayer.xpm lowerlayer.xpm newlayer.xpm raiselayer.xpm \
+            add_point.xpm airbrush.xpm areaselect.xpm centrejust.xpm \
 	    circle.xpm delete.xpm edit_point.xpm editcopy.xpm editcut.xpm \
             editpaste.xpm ellipse.xpm eraser.xpm exit.xpm filefloppy.xpm \
             filenew.xpm fileopen.xpm line.xpm pen.xpm rectangle.xpm redo.xpm \
