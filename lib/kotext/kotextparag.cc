@@ -146,7 +146,7 @@ int KoTextParag::counterWidth() const
 }
 
 // Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph.
-// This is called by KoTextParag::paintDefault.
+// This is called by KoTextParag::paint.
 void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*hLU*/, int baseLU, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
@@ -450,13 +450,13 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
     return rct;
 }
 
-// Reimplemented from KoTextParag, called by KoTextDocument::drawParagWYSIWYG
+// Paint this paragraph. This is called by KoTextDocument::drawParagWYSIWYG
 // (KoTextDocument::drawWithoutDoubleBuffer when printing)
 void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
 #ifdef DEBUG_PAINT
-    kdDebug(32500) << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
+    kdDebug(32500) << "KoTextParag::paint =====  id=" << paragId() << " clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
     kdDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 #endif
 
@@ -471,11 +471,10 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         drawLabel( &painter, xLabel, cy, 0, 0, baseLine, cg );
     }
 
-    //qDebug("KoTextParag::paint %p", this);
     paintLines( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     // Now draw paragraph border
-    if ( m_layout.hasBorder() &&!textDocument()->drawingShadow())
+    if ( m_layout.hasBorder() && !textDocument()->drawingShadow() )
     {
         KoZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
@@ -548,6 +547,9 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     if (line<0) line = 0;
 
     int numLines = lines();
+#ifdef DEBUG_PAINT
+    kdDebug(32500) << " paintLines: from line " << line << " to " << numLines-1 << endl;
+#endif
     for( ; line<numLines ; line++ )
     {
 	// get the start and length of the line
@@ -680,7 +682,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     }
 }
 
-// Called by KoTextParag::paintText
+// Called by KoTextParag::paintLines
 // Draw a set of characters with the same formattings.
 // Reimplemented here to convert coordinates first, and call @ref drawFormattingChars.
 void KoTextParag::drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
@@ -893,8 +895,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( start+len < length() && at( start+len )->lineStart )
     {
 #ifdef DEBUG_PAINT
-        kdDebug(32500) << "we are drawing the end of line " << line << endl;
-        kdDebug(32500) << "line is auto-hyphenated: " << lineHyphenated( line ) << endl;
+        //kdDebug(32500) << "we are drawing the end of line " << line << ". Auto-hyphenated: " << lineHyphenated( line ) << endl;
 #endif
         bool drawHyphen = at( start+len-1 )->c.unicode() == 0xad;
         drawHyphen = drawHyphen || lineHyphenated( line );

@@ -197,7 +197,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
                                        KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
 {
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
     m_drawingFlags = drawingFlags;
     int sx = 0, sy = 0;
@@ -213,11 +213,13 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     rect.rBottom() += QABS( sy);
 
     int offsetY = 0;
-    // Start painting from a given line number. Don't know how to make that work
-    // when the paragraph has a border though (see KoTextParag::paint).
-    if ( parag->lineChanged() > -1 && !parag->hasBorder() )
+    // Start painting from a given line number.
+    if ( parag->lineChanged() > -1 )
     {
         offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) - parag->topMargin() );
+#ifdef DEBUG_PAINTING
+        kdDebug(32500) << " Repainting from lineChanged=" << parag->lineChanged() << " -> adding " << offsetY << " to rect" << endl;
+#endif
         // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
         rect.rTop() += offsetY;
     }
@@ -322,12 +324,12 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 	delete painter;
 	painter = 0;
 	p->drawPixmap( ir.topLeft(), *doubleBuffer, QRect( QPoint( 0, 0 ), ir.size() ) );
-/* // for debug!
+#if 0 // for debug!
         p->save();
         p->setPen( Qt::blue );
         p->drawRect( ir.x(), ir.y(), ir.width(), ir.height() );
         p->restore();
-*/
+#endif
     } else {
         // undo previous translations, painter is 'p', i.e. will be used later on
         p->restore();
@@ -343,7 +345,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 #endif
         if ( rect.x() + rect.width() < docright ) {
 #ifdef DEBUG_PAINTING
-//            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
+            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
 #endif
             p->fillRect( rect.x() + rect.width(), rect.y(),
                          docright - ( rect.x() + rect.width() ),
@@ -392,8 +394,12 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
                  zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
                  pixelRect.y() );
         r &= crect;
-        if ( !r.isEmpty() )
+        if ( !r.isEmpty() ) {
+#ifdef DEBUG_PAINTING
+            kdDebug(32500) << "KoTextDocument::drawWYSIWYG space above first parag: " << r << " (pixels)" << endl;
             p->fillRect( r, cg.brush( QColorGroup::Base ) );
+#endif
+        }
     }
 
     while ( parag ) {
@@ -414,7 +420,12 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 			 nexty - ( ir.y() + ir.height() ) );
 		r &= crect;
 		if ( !r.isEmpty() )
+                {
+#ifdef DEBUG_PAINTING
+                    kdDebug(32500) << "KoTextDocument::drawWYSIWYG space between parag " << parag->paragId() << " and " << parag->next()->paragId() << " : " << r << " (pixels)" << endl;
+#endif
 		    p->fillRect( r, cg.brush( QColorGroup::Base ) );
+                }
 	    }
         }
 	if ( !ir.intersects( crect ) ) {
