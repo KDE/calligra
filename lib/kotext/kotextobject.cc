@@ -1361,4 +1361,26 @@ void KoTextObject::typingDone()
     changeIntervalTimer->start( 100, TRUE );
 }
 
+bool KoTextObject::textSelectedIsAnLink(QString & href)
+{
+    QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
+    QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
+    //a link should be in one parag.
+    if(c1.parag()!=c2.parag())
+        return false;
+
+    bool isAnchor=false;
+    for(int i = c1.index();i<= c2.index();i++)
+    {
+
+       QTextStringChar * ch = c1.parag()->at( i );
+       if(ch->format()->isAnchor())
+           isAnchor=true;
+       else
+           return false;
+       href=ch->format()->anchorHref();
+    }
+    return true;
+}
+
 #include "kotextobject.moc"
