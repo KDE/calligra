@@ -164,7 +164,7 @@ VText::draw( VPainter* painter, const KoRect& rect ) const
 }
 
 void
-VText::transform( const QWMatrix& m )
+VText::transform( const QWMatrix& m, bool /*selectedSubObjects*/ )
 {
 	VObjectListIterator itr = m_glyphs;
 	for ( ; itr.current() ; ++itr )

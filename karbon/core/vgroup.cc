@@ -63,12 +63,12 @@ VGroup::draw( VPainter* painter, const KoRect& rect ) const
 }
 
 void
-VGroup::transform( const QWMatrix& m )
+VGroup::transform( const QWMatrix& m, bool selectedSubObjects )
 {
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current() ; ++itr )
-		itr.current()->transform( m );
+		itr.current()->transform( m, selectedSubObjects );
 }
 
 const KoRect&

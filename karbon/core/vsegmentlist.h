@@ -62,7 +62,7 @@ public:
 	/**
 	 * Applies an affine transformation matrix to all segments.
 	 */
-	virtual void transform( const QWMatrix& m );
+	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
 
 	virtual const KoRect& boundingBox() const;
 

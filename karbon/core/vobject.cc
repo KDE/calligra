@@ -56,6 +56,11 @@ VObject::setFill( const VFill& fill )
 }
 
 void
+VObject::transform( const QWMatrix& /*m*/, bool /*selectedSubObjects*/ )
+{
+}
+
+void
 VObject::save( QDomElement& element ) const
 {
 	if( m_stroke )
