@@ -110,7 +110,8 @@ public:
 class LayoutData
 {
 public:
-    LayoutData() :indentFirst(0.0), indentLeft(0.0), indentRight(0.0)
+    LayoutData() :indentFirst(0.0), indentLeft(0.0), indentRight(0.0),
+     pageBreakBefore(false),pageBreakAfter(false)
      { }
 
     QString styleName;
@@ -118,6 +119,7 @@ public:
     CounterData counter;
     QString abiprops; // AbiWord properties
     double indentFirst, indentLeft, indentRight;
+    bool pageBreakBefore, pageBreakAfter;
 };
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &)
@@ -146,6 +148,24 @@ static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString & )
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "align", "QString", (void *) &layout->alignment ) );
     ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}
+
+static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString & )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    QString strBefore, strAfter;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "linesTogether", "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "hardFrameBreak", "QString", (void *) &strBefore) );
+    attrProcessingList.append ( AttrProcessing ( "hardFrameBreakAfter", "QString", (void *) &strAfter) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    layout->pageBreakBefore=(strBefore=="true");
+    layout->pageBreakAfter =(strAfter =="true");
 
     AllowNoSubtags (myNode);
 }
@@ -429,6 +449,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
+    tagProcessingList.append ( TagProcessing ("PAGEBREAKING",ProcessLineBreakingTag,(void *) layout ) );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
     layout->abiprops += formatData.abiprops;
@@ -465,21 +486,6 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
     AllowNoAttributes (myNode);
 
     AllowNoSubtags (myNode);
-}
-
-static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
-{   // <HRDBREAK> not documented!
-    bool *hardBreak = (bool *) tagData;
-
-    int frameBreak=0; // Break in frame or page (if I have understand well!) (Default: no page break)
-
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("frame", "int", (void*) frameBreak));
-    ProcessAttributes (myNode, attrProcessingList);
-
-    AllowNoSubtags (myNode);
-
-    *hardBreak=(1==frameBreak);
 }
 
 static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
@@ -591,14 +597,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
     tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
     tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
-    tagProcessingList.append ( TagProcessing ( "HARDBRK", ProcessHardBreakTag,  (void *) &hardbreak          ) ); // Not documented!
     ProcessSubtags (myNode, tagProcessingList, outputText);
-
-    if (hardbreak)
-    {
-        // Add an AbiWord page break
-        outputText+="<pbr/>\n";
-    }
 
     QString style; // Style attribute for <p> element
     QString props; // Props attribute for <p> element
@@ -647,7 +646,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     // Add all AbiWord properties collected in the <FORMAT> element
     props += paraLayout.abiprops;
 
-    outputText += "<p";  //Warning: No trailing white space or else it's in the text!!!
+    outputText += "<p";
     if (!style.isEmpty())
     {
         outputText += " style=\"";
@@ -670,7 +669,24 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         outputText += "\"";
     }
     outputText += ">";  //Warning: No trailing white space or else it's in the text!!!
+
+    // Before processing the text, test if we have a page break
+    if (paraLayout.pageBreakBefore)
+    {
+        // We have a page break before the paragraph
+        outputText += "<pbr/>";
+    }
+
+
     ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+
+    // Before closing the paragrapgh, test if we have a opage break
+    if (paraLayout.pageBreakAfter)
+    {
+        // We have a page break after the paragraph
+        outputText += "<pbr/>";
+    }
+
     outputText += "</p>\n";
 }
 
