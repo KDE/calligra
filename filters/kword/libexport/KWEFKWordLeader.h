@@ -32,7 +32,7 @@
 class KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void) : m_worker(NULL), m_chain(NULL) {}
+        KWEFKWordLeader(void) : m_worker(NULL), m_chain(NULL), m_hType(0), m_fType(0) {}
         KWEFKWordLeader(KWEFBaseWorker* newWorker) : m_worker(newWorker), m_chain(NULL)
         { if (newWorker) newWorker->registerKWordLeader(this); }
         virtual ~KWEFKWordLeader(void) {}
@@ -50,7 +50,6 @@ class KWEFKWordLeader
         bool doFullDocument (const QValueList<ParaData> &);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
-        bool doPageInfo(int,int);
         bool doOpenHead (void);
         bool doCloseHead (void);
         bool doOpenBody (void);
@@ -63,6 +62,11 @@ class KWEFKWordLeader
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
+
+        void setHeaderType(int hType) { m_hType = hType; }
+        void setFooterType(int fType) { m_fType = fType; }
+        int headerType() { return m_hType; }
+        int footerType() { return m_fType; }
     protected: // leader/worker functions
         bool doOpenFile (const QString& filenameOut, const QString& to);
         bool doCloseFile (void);
@@ -72,6 +76,7 @@ class KWEFKWordLeader
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;
+        int m_hType, m_fType;
 };
 
 #endif /* KWEF_KWORDLEADER_H */

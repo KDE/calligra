@@ -242,7 +242,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 {
                     // header for odd page (or all page, if hType=0)
                     HeaderData header;
-                    header.page = HeaderData::PAGE_ODD;
+                    header.page = (leader->headerType() != 0 ) ? HeaderData::PAGE_ODD : HeaderData::PAGE_ALL;
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
@@ -275,7 +275,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 {
                     // footer for odd page (or all page, if fType=0)
                     FooterData footer;
-                    footer.page = FooterData::PAGE_ODD;
+                    footer.page = (leader->footerType() != 0) ? FooterData::PAGE_ODD : FooterData::PAGE_ALL; 
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
@@ -459,9 +459,10 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "spFootBody",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
-    leader->doFullPaperFormat (format, width, height, orientation);
+    leader->setHeaderType( hType );
+    leader->setFooterType( fType );
 
-    leader->doPageInfo(hType,fType);
+    leader->doFullPaperFormat (format, width, height, orientation);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList
@@ -724,14 +725,6 @@ bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, c
 {
     if ( m_worker )
         return m_worker->doFullPaperBorders (top, left, bottom, right);
-
-    return false;
-}
-
-bool KWEFKWordLeader::doPageInfo( int headerType, int footerType )
-{
-    if ( m_worker )
-        return m_worker->doPageInfo( headerType, footerType );
 
     return false;
 }
