@@ -59,7 +59,7 @@ kdelnk_DATA = kplato.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 rcdir = $(kde_datadir)/kplato
-rc_DATA = kplato.rc
+rc_DATA = kplato.rc kplato_readonly.rc
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kptaboutdata.h -o $(podir)/kplato.pot
