@@ -32,7 +32,9 @@ KisChannel::KisChannel(cId id) : m_id( id )
 
 KisChannel::~KisChannel()
 {
-  // FIXME: delete data
+  for(uint y = 0; y < yTiles(); y++)
+      for(uint x = 0; x < xTiles(); x++)
+		delete m_tiles[y * xTiles() + x];
 }
 
 void KisChannel::setPixel(uint x, uint y, uchar pixel)

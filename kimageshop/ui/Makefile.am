@@ -7,7 +7,7 @@ libkisui_la_SOURCES = colorframe.cc colorslider.cc \
 	kis_dlg_gradient.cc kis_layerview.cc kis_channelview.cc \
 	kis_dlg_gradienteditor.cc gradientview.cc \
 	kis_dlg_new.cc kis_dlg_preferences.cc kis_dlg_new_layer.cc \
-	kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc \
+	kfloatingdialog.cc kfloatingtabdialog.cc \
 	kis_tabbar.cc kis_dlg_rename.cc kis_canvas.cc kis_sidebar.cc kis_brushwidget.cc \
 	kis_colorchooser.cc kis_framebutton.cc kis_patternwidget.cc kis_brushchooser.cc 
 
