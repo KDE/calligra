@@ -56,6 +56,12 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
   connect( fontButton, SIGNAL(clicked()), this, SLOT(changeLabelFont()));
   connect( listColor, SIGNAL(highlighted(int )), this, SLOT(changeIndex(int)));
   connect( list, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(changeLabelFont()));
+  connect( listColor, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(activeColorButton()));
+}
+
+void KChartFontConfigPage::activeColorButton()
+{
+    colorButton->animateClick();
 }
 
 void KChartFontConfigPage::initList()

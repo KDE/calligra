@@ -30,6 +30,7 @@ public:
 public slots:
     void changeIndex(int index);
     void changeLabelFont();
+    void activeColorButton();
 private:
     KChartParams* _params;
     QLineEdit *font;

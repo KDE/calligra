@@ -120,7 +120,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             actionCollection(), "page_layout" );
     // initialize the configuration
     //    loadConfig();
-
     // make sure there is always some test data
     createTempData();
     updateGuiTypeOfChart();
