@@ -236,6 +236,7 @@ KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoi
 #ifdef DEBUG_ITN
     kdDebug() << "KWTextFrameSet::internalToNormalWithHint hintNPoint: " << hintNPoint.x() << "," << hintNPoint.y() << endl;
 #endif
+    KWFrame *lastFrame = 0L;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -255,10 +256,17 @@ KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoi
 #ifdef DEBUG_ITN
             kdDebug() << "copy: " << frame->isCopy() << " hintNPoint.y()=" << hintNPoint.y() << " nPoint.y()=" << nPoint.y() << endl;
 #endif
-            if ( hintNPoint.isNull() || !frame->isCopy() || hintNPoint.y() <= nPoint.y() )
+            // No "hintNPoint" specified, go for the first match
+            if ( hintNPoint.isNull() )
                 return frame;
-            // The above test uses hintNPoint only if specified, and if this frame isn't a copy.
+            // hintNPoint specified, check if we are far enough
+            if ( hintNPoint.y() <= nPoint.y() )
+                return frame;
+            // Remember that this frame matched, in case we find no further frame that matches
+            lastFrame = frame;
         }
+        else if ( lastFrame )
+            return lastFrame;
     }
 
     // This happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
@@ -3924,14 +3932,14 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
-    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
+    kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor->parag()->paragId() << endl;
     QTextParag * parag = cursor->parag();
     textFrameSet()->ensureFormatted( parag );
     QTextStringChar *chr = parag->at( cursor->index() );
     int h = parag->lineHeightOfChar( cursor->index() );
     int x = parag->rect().x() + chr->x + cursor->offsetX();
-    //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
-    //          << " cursor->offsetX()=" << cursor->offsetX() << endl;
+    kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
+              << " cursor->offsetX()=" << cursor->offsetX() << endl;
     int y = 0; int dummy;
     parag->lineHeightOfChar( cursor->index(), &dummy, &y );
     y += parag->rect().y() + cursor->offsetY();
@@ -3941,7 +3949,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     if ( m_currentFrame )
         hintNPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
     KWFrame * frame = textFrameSet()->internalToNormalWithHint( QPoint(x, y), p, hintNPoint );
-    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
+    kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
