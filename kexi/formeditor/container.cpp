@@ -49,7 +49,7 @@ void installRecursiveEventFilter(QObject *object, QObject *container)
 {
 	if(!object->isWidgetType())
 		return;
-	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
+
 	object->installEventFilter(container);
 	if(((QWidget*)object)->ownCursor())
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
@@ -118,15 +118,16 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 : QObject(parent, name)
 {
 	m_container = container;
+	m_toplevel = toplevel;
 
 	m_moving = 0;
-	m_move = false;
-	m_inlineEditing = false;
+	//m_move = false;
+	//m_inlineEditing = false;
 	m_tree = 0;
-	m_form = m_toplevel ? m_toplevel->form() : 0;
+	m_form = toplevel ? toplevel->form() : 0;
 	m_layout = 0;
 	m_layType = NoLayout;
-	m_toplevel = toplevel;
+	m_state = DoingNothing;
 
 	QString classname = container->className();
 	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
@@ -137,10 +138,9 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	if(toplevel)
 	{
-		Container *pc = static_cast<Container *>(parent);
-
 		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), this, this);
 		setObjectTree(it);
+
 		if(parent->isWidgetType())
 		{
 			QString n = parent->name();
@@ -148,12 +148,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 			m_form->objectTree()->addChild(parent, it);
 		}
 		else
-		{
-			if(!pc)
-				m_form->objectTree()->addChild(it);
-			else
-				m_form->objectTree()->addChild(pc->tree(), it);
-		}
+				m_form->objectTree()->addChild(toplevel->tree(), it);
 	}
 
 	connect(toplevel, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
@@ -233,6 +228,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					else // the widget is the only selected, so it means we want to copy it
 					{
 						m_insertRect = m_moving->geometry();
+						m_state = CopyingWidget;
 						if(m_form->formWidget())
 							m_form->formWidget()->initRect();
 					}
@@ -271,6 +267,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_insertBegin = QPoint(tmpx, tmpy);
 				if(m_form->formWidget())
 					m_form->formWidget()->initRect();
+
+				if(!m_form->manager()->inserting())
+					m_state = DrawingSelectionRect;
 				return true;
 			}
 
@@ -325,7 +324,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 					for(w = list.next(); w; w = list.next())
 						setSelectedWidget(w, true);
 				}
+
 				m_insertRect = QRect();
+				//m_state = DoingNothing;
 				m_container->repaint();
 				return true;
 			}
@@ -338,6 +339,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_insertRect.isValid()))
 			{
+				m_state = DoingNothing;
 				// copying a widget by Ctrl+dragging
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
@@ -354,15 +356,21 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->setInteractiveMode(false);
 				// We simulate copy and paste
 				m_form->manager()->copyWidget();
-				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(mev->globalPos()));
+				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(mev->globalPos()) - m_grab);
 				m_form->manager()->pasteWidget();
 				m_form->setInteractiveMode(true);
+
+				m_insertRect = QRect();
+				m_initialPos = QPoint();
+				//m_state = DoingNothing;
 			}
-			else if(m_move) // one widget has been moved, so we need to update the layout
+			else if(/*m_move*/m_state == MovingWidget) // one widget has been moved, so we need to update the layout
 			{
 				reloadLayout();
-				m_move = false;
+				//m_move = false;
+				m_initialPos = QPoint();
 			}
+			m_state = DoingNothing;
 			return true; // eat
 		}
 		case QEvent::MouseMove:
@@ -419,7 +427,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->draggingConnection()) // draw the selection rect
 			{
-				if((mev->state() == RightButton) || m_inlineEditing)
+				if((mev->state() == RightButton) || /*m_inlineEditing*/ m_state == InlineEditing)
 					return true;
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
@@ -430,28 +438,55 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				if(m_form->formWidget())
 					m_form->formWidget()->drawRect(r, 1);
+
+				m_state = DoingNothing;
 				return true;
 			}
 			else if(mev->state() == (LeftButton|ControlButton)) // draw the insert rect for the copied widget
 			{
 				if((s == m_container) || (m_form->selectedWidgets()->count() > 1))
 					return true;
-				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()));
+
+				// We've been dragging a widget, but Ctrl was hold, so we start copy
+				if(m_state == MovingWidget)
+				{
+					m_moving->move(m_initialPos);
+					if(m_form->formWidget())
+					{
+						m_container->repaint();
+						m_form->formWidget()->initRect();
+					}
+					m_state = CopyingWidget;
+				}
+
+				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
 
 				if(m_form->formWidget())
-					m_form->formWidget()->drawRect(m_insertRect, 2);
+				{
+					QRect drawRect = QRect(m_container->mapTo(m_form->toplevelContainer()->widget(), m_insertRect.topLeft())
+						 , m_insertRect.size());
+					m_form->formWidget()->drawRect(drawRect, 2);
+				}
 				return true;
 			}
 			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 			  && !m_form->manager()->inserting()) // we are dragging the widget(s) to move it
 			{
-				QWidget *w = m_moving;
-				if(!m_toplevel && w == m_container) // no effect for form
+				//QWidget *w = m_moving;
+				if(!m_toplevel && m_moving == m_container) // no effect for form
 					return false;
 				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
 					return true;
 				int gridX = m_form->gridX();
 				int gridY = m_form->gridY();
+
+				if(m_form->selectedWidgets()->count() == 1)
+				{
+					if(m_initialPos.isNull())
+						m_initialPos = m_form->selectedWidgets()->first()->pos();
+					if(!m_insertRect.isValid())
+						m_insertRect = m_form->selectedWidgets()->first()->geometry();
+				}
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
@@ -481,7 +516,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int tmpy = (((m_moving->y()+mev->y()-m_grab.y()))/gridY)*gridY;
 				if((tmpx!=m_moving->x()) ||(tmpy!=m_moving->y()))
 					m_moving->move(tmpx,tmpy);*/
-				m_move = true;
+				//m_move = true;
+				m_state = MovingWidget;
 			}
 
 			return true; // eat
@@ -507,12 +543,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 					p.drawPoint(-1 + colcursor *gridX, -1 + rowcursor *gridY);
 				}
 			}
+
 			return false;
 		}
 		case QEvent::Resize: // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
 		{
 			if(m_form->interactiveMode())
-				m_move = true;
+				//m_move = true;
+				m_state = MovingWidget;
 			break;
 		}
 		case QEvent::MouseButtonDblClick: // editing
@@ -522,7 +560,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(!w)
 				return false;
 
-			m_inlineEditing = true;
+			//m_inlineEditing = true;
+			m_state = InlineEditing;
 			m_form->manager()->lib()->startEditing(w->className(), w, this);
 			return true;
 		}

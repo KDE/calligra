@@ -156,8 +156,11 @@ bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
 	// widget resize using resize handles
-	if((ev->type() == QEvent::Resize) && m_editor && (obj == m_widget))
+	if( ((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move) ) && m_editor && (obj == m_widget))
 		resizeEditor(m_widget, m_widget->className());
+	// paint event for container edited (eg button group)
+	else if((ev->type() == QEvent::Paint) && m_editor && (obj == m_widget))
+		return m_container->eventFilter(obj, ev);
 
 	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
 

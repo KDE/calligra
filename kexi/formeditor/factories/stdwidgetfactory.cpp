@@ -500,19 +500,31 @@ void
 StdWidgetFactory::resizeEditor(QWidget *widget, const QString classname)
 {
 	QSize s = widget->size();
-	if((classname == "QLabel") || (classname == "KPushButton") || (classname == "KLineEdit") || (classname == "QLabel"))
+	QPoint p = widget->pos();
+	QRect r;
+	//if((classname == "QLabel") || (classname == "KPushButton") || (classname == "KLineEdit") || (classname == "QLabel"))
 
 	if(classname == "QRadioButton")
-		s.setWidth(widget->style().subRect(QStyle::SR_RadioButtonContents, widget).width());
+	{
+		r = widget->style().subRect(QStyle::SR_RadioButtonContents, widget);
+		p += r.topLeft();
+		s.setWidth(r.width());
+	}
 	else if(classname == "QCheckBox")
-		s.setWidth(widget->style().subRect(QStyle::SR_CheckBoxContents, widget).width());
+	{
+		r = widget->style().subRect(QStyle::SR_CheckBoxContents, widget);
+		p += r.topLeft();
+		s.setWidth(r.width());
+	}
 	else if(classname == "KPushButton")
 	{
-		s.setHeight(widget->style().subRect(QStyle::SR_PushButtonContents, widget).height());
-		s.setWidth(widget->style().subRect(QStyle::SR_PushButtonContents, widget).width());
+		r = widget->style().subRect(QStyle::SR_PushButtonContents, widget);
+		p += r.topLeft();
+		s = r.size();
 	}
 
 	m_editor->resize(s);
+	m_editor->move(p);
 }
 
 void

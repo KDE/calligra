@@ -266,7 +266,7 @@ InsertWidgetCommand::execute()
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 
 	m_container->setSelectedWidget(w, false);
-	m_form->manager()->lib()->startEditing(w->className(), w, m_container); // we edit the widget on creation
+	m_form->manager()->lib()->startEditing(w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
 }
 

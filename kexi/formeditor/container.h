@@ -143,7 +143,13 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
 		void            setLayoutMargin(int margin) { m_margin = margin;}
 
-		void            stopInlineEditing() { m_inlineEditing = false; }
+		void            stopInlineEditing() {/* m_inlineEditing = false;*/ m_state = DoingNothing; }
+
+		/*! This is the main function of Container, which filters the event sent to the watched widget.\n
+		   It takes care of drawing the background and the insert rect, of creating the new child widgets, of moving the widgets and
+		   pop up a menu when right-clicking.
+		  */
+		virtual bool	eventFilter(QObject *o, QEvent *e);
 
 	public slots:
 		//! \return The watched widget.
@@ -174,11 +180,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void		widgetDeleted();
 
 	protected:
-		/*! This is the main function of Container, which filters the event sent to the watched widget.\n
-		   It takes care of drawing the background and the insert rect, of creating the new child widgets, of moving the widgets and
-		   pop up a menu when right-clicking.
-		  */
-		virtual bool	eventFilter(QObject *o, QEvent *e);
 		/*! Internal function to create a HBoxLayout or VBoxLayout for this container. \a list is a subclass of QObjectList that can sort widgets
 		   following their position (such as HorWidgetList or VerWidgetList).
 		  */
@@ -192,6 +193,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QGuardedPtr<QWidget> m_container;
 		QGuardedPtr<Container> m_toplevel;
 
+		int		m_state;
+		enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget, MovingWidget, InlineEditing };
+
 		// Layout
 		QLayout		*m_layout;
 		LayoutType	m_layType;
@@ -199,8 +203,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		// moving etc.
 		QPoint		m_grab;
+		QPoint		m_initialPos;
 		QGuardedPtr<QWidget>	m_moving;
-		bool		m_move;
+		//bool		m_move;
 
 		//inserting
 		QPoint		m_insertBegin;
@@ -208,7 +213,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		ObjectTreeItem	*m_tree;
 
 		QGuardedPtr<Form> m_form;
-		bool		m_inlineEditing;
+		//bool		m_inlineEditing;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;
