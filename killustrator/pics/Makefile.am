@@ -14,6 +14,8 @@ dbottom.png \
 dvcenter.png \
 dvdist.png \
 ellipsetool.png \
+insertpicture.png \
+insertclipart.png \
 linetool.png \
 freehandtool.png \
 recttool.png \
@@ -50,4 +52,5 @@ EXTRA_DIST = $(data_DATA)
 datadir = $(kde_datadir)/killustrator/pics
 
 KDE_ICON = killustrator
+
 
