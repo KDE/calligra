@@ -533,8 +533,16 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
 
 void KOMLParser::encode(string &_str)
 {
+  // When encoding the stored form of text to its run-time form,
+  // be sure to do the conversion for "&amp;" to "&" last to avoid
+  // accidentally converting user text into one of the other escape
+  // sequences.
+  //
+  // Note that the conversion for "&amp;" allows for coexistance
+  // with QDom-based input filters.
   QString str(_str.c_str());
   str.replace(QRegExp("&lt;"),"<");
   str.replace(QRegExp("&gt;"),">");
+  str.replace(QRegExp("&amp;"),"&");
   _str = str.ascii();
 }
