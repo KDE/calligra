@@ -116,8 +116,8 @@ don't put a </?xml...> at the end of the file!).
             columns:        the number of columns (only in wordprocessing
                             mode).
 
-	    pages:          the number of pages. This is saved for information purposes,
-	                    but not required nor used by KWord.
+            pages:          the number of pages. This is saved for information purposes,
+                            but not required nor used by KWord.
 
             columnspacing:  the gap (in pt) between the columns (only in
                             wordprocessing mode).
