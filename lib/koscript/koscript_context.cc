@@ -62,7 +62,7 @@ KSException::KSException( const KSValue::Ptr& _type, const KSValue::Ptr& _ptr, i
 
 void KSException::print( KSContext& context )
 {
-  printf("%s\n",toString( context ).ascii());
+  printf("%s\n",toString( context ).local8Bit().data());
 }
 
 QString KSException::toString( KSContext& context )
@@ -127,14 +127,14 @@ KSValue* KSScope::object( const QString& name, bool _insert )
     {
       KSValue *v = m_localScope->object( name, false );
       if ( v )
-	return v;
+        return v;
     }
 
     if ( m_moduleSpace )
     {
       KSNamespace::Iterator it = m_moduleSpace->find( name );
       if ( it != m_moduleSpace->end() )
-	return it.data();
+        return it.data();
     }
 
     KSNamespace::ConstIterator it = m_globalSpace->find( name );
@@ -199,13 +199,13 @@ KSValue::Ptr KSModule::member( KSContext& context, const QString& name )
   {
     if ( context.leftExpr() )
     {
-	this->ref();
-	KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
-	ptr->setMode( KSValue::LeftExpr );
-	return ptr;
-	// KSValue::Ptr ptr( new KSValue );
-	// ptr->setMode( KSValue::LeftExpr );
-	// return ptr;
+        this->ref();
+        KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
+        ptr->setMode( KSValue::LeftExpr );
+        return ptr;
+        // KSValue::Ptr ptr( new KSValue );
+        // ptr->setMode( KSValue::LeftExpr );
+        // return ptr;
     }
 
     QString tmp( "Unknown symbol '%1' in object of module '%2'" );
@@ -243,7 +243,7 @@ KSValue* KSModule::object( const QString& name )
 void KSModule::setCode( KSParseNode* node )
 {
     if ( m_code )
-	delete m_code;
+        delete m_code;
 
     m_code = node;
 }

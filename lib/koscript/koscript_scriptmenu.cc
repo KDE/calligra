@@ -10,7 +10,7 @@
 
 KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString& text, QObject* parent, const char* name )
     : KActionMenu( text, parent, name ), m_ref( ref ), m_instance( instance ), m_interpreter( 0 )
-{   
+{
     m_actions.setAutoDelete( TRUE );
     m_filenames.setAutoDelete( TRUE );
 
@@ -18,48 +18,48 @@ KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString
     QStringList::Iterator it = scripts.begin();
     for( ; it != scripts.end(); ++it )
     {
-	QString file = *it;
-	int pos = file.findRev( '.' );
-	if ( pos != -1 )
-	    file = file.left( pos );
-	
-	QString name = file;
-	pos = file.findRev( '/' );
-	name = file.mid( pos + 1 );
-	KAction* action = new KAction( name, 0, (QObject*)0, name.latin1() );
-	m_actions.append( action );
-	action->plug( popupMenu() );
-	connect( action, SIGNAL( activated() ), this, SLOT( slotActivated() ) );
-	
-	m_filenames.insert( action, new QString( *it ) );
+        QString file = *it;
+        int pos = file.findRev( '.' );
+        if ( pos != -1 )
+            file = file.left( pos );
+
+        QString name = file;
+        pos = file.findRev( '/' );
+        name = file.mid( pos + 1 );
+        KAction* action = new KAction( name, 0, (QObject*)0, name.latin1() );
+        m_actions.append( action );
+        action->plug( popupMenu() );
+        connect( action, SIGNAL( activated() ), this, SLOT( slotActivated() ) );
+
+        m_filenames.insert( action, new QString( *it ) );
     }
 }
 
 KScriptMenu::~KScriptMenu()
 {
     if ( m_interpreter )
-	delete m_interpreter;
+        delete m_interpreter;
 }
 
 void KScriptMenu::slotActivated()
 {
     QString* str = m_filenames[ (void*)sender() ];
     if ( !str )
-	return;
+        return;
 
-    qDebug("RUNNING %s", str->latin1() );
-    
+    kdDebug() << "Running " << str << endl;
+
     if ( !m_interpreter )
-	m_interpreter = new KSInterpreter();
-    
+        m_interpreter = new KSInterpreter();
+
     QStringList args;
     args.append( m_ref.app() );
     args.append( m_ref.object() );
-	
+
     QString ex = m_interpreter->runScript( *str, args );
     if ( !ex.isEmpty() )
     {
-	QMessageBox::critical( 0, i18n("KScript Error"), ex );
+        QMessageBox::critical( 0, i18n("KScript Error"), ex );
     }
 }
 

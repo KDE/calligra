@@ -13,6 +13,7 @@
 #include <qtextstream.h>
 
 #include <kglobal.h>
+#include <kdebug.h>
 #include <kstddirs.h>
 #include <klocale.h>
 
@@ -104,7 +105,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
         if ( ( stat( QFile::encodeName(f), &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
         {
           QStringList lst;
-          qDebug("RUN MODULE %s %s", name.latin1(), f.latin1() );
+          kdDebug() << "runModule " << name << " " << f << endl;
           return runModule( context, name, f, lst );
         }
       }
@@ -145,7 +146,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
   KSModule::Ptr module;
   // Create the parse tree.
   KSParser parser;
-  if ( !parser.parse( f, filename.ascii() ) )
+  if ( !parser.parse( f, QFile::encodeName( filename ) ) )
   {
       fclose( f );
       result.setException( new KSException( "SyntaxError", parser.errorMessage() ) );

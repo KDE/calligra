@@ -8,6 +8,7 @@
 #include "koscript_util.h"
 #include "koscript_property.h"
 #include "koscript_method.h"
+#include <kdebug.h>
 #include <stdio.h>
 
 #include <kregexp.h>
@@ -1779,9 +1780,9 @@ bool KSEval_t_match( KSParseNode* node , KSContext& context )
         return FALSE;
 
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent().latin1() ); //i18n problem? (Werner)
+    exp->compile( node->getIdent().latin1() ); // identifiers are a-zA-Z etc, so latin1 is ok. (David)
 
-    qDebug("Matching %s against %s",context.value()->stringValue().latin1(), node->getIdent().latin1() );
+    kdDebug() << "Matching " << context.value()->stringValue() << " against " << node->getIdent() << endl;
 
     context.setValue( new KSValue( exp->match( context.value()->stringValue().latin1() ) ) );
 
@@ -1808,9 +1809,9 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
     QString match = node->getIdent().left( pos );
     QString subst = node->getIdent().mid( pos + 1 );
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( match.latin1() ); // i18n problem? (Werner)
+    exp->compile( match.latin1() ); // identifiers are a-zA-Z etc, so latin1 is ok. (David)
 
-    qDebug("Matching %s against %s",l.value()->stringValue().latin1(), node->getIdent().latin1() );
+    kdDebug() << "Matching " << l.value()->stringValue() << " against " << node->getIdent() << endl;
 
     if ( !exp->match( l.value()->stringValue().latin1() ) )
     {
@@ -2456,7 +2457,7 @@ bool KSEval_t_match_line( KSParseNode* node, KSContext& context )
         return FALSE;
 
     KRegExp* exp = context.interpreter()->regexp();
-    exp->compile( node->getIdent().latin1() ); // i18n problem? (Werner)
+    exp->compile( node->getIdent().latin1() ); // regexps are a-zA-Z etc, so latin1 is ok. (David)
 
     context.setValue( new KSValue( exp->match( line->stringValue().latin1() ) ) );
 

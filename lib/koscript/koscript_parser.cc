@@ -31,7 +31,7 @@ KSParser::~KSParser()
 
 bool KSParser::parse( FILE *inp_file, const char *filename )
 {
-  idl_lexFile = toplevelFile = (char *) filename;
+  idl_lexFile = toplevelFile = const_cast<char *>(filename);
   yyin = inp_file;
 
   m_errorMessage = "";
@@ -67,7 +67,7 @@ KSParseNode *KSParser::getRootNode()
 void KSParser::parse_error( const char *file, const char *err, int line )
 {
   m_errorMessage = "%1:%2: %3 before '%4'";
-  m_errorMessage = m_errorMessage.arg( file ).arg( line).arg( err ).arg( yytext );
+  m_errorMessage = m_errorMessage.arg( file ).arg( line ).arg( err ).arg( yytext );
 }
 
 void KSParser::print( bool detailed )

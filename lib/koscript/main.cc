@@ -19,35 +19,35 @@ static KCmdLineOptions options[] =
 int main( int argc, char** argv )
 {
   const char *appName = (argc > 1) ? argv[1] : "kscript";
-  KCmdLineArgs::init(argc, argv, appName, 
-  	I18N_NOOP("KDE Script interpreter."),
-  	"2.0.0");
+  KCmdLineArgs::init(argc, argv, appName,
+        I18N_NOOP("KDE Script interpreter."),
+        "2.0.0");
 
   KCmdLineArgs::addCmdLineOptions(options);
 
   KApplication app;
 
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-  
+
   if (args->count() < 1)
   {
      fprintf(stderr, i18n("You must specify a script.\n").local8Bit());
      exit(1);
   }
-  
+
   kapp->dcopClient()->registerAs( args->arg(0) );
 
   qDebug("..... KScript started");
   {
       QStringList argList;
       for( int i = 1; i < args->count(); ++i )
-	  argList.append( args->arg(i) );
+          argList.append( args->arg(i) );
 
       KSInterpreter script;
       script.addSearchPath( QDir::currentDirPath() );
       QString ex = script.runScript( args->arg(0), argList );
       if ( !ex.isEmpty() )
-	  printf("%s\n",ex.ascii());
+          printf("%s\n",ex.local8Bit().data());
   }
 
   return 0;
