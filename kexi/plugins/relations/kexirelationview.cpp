@@ -61,19 +61,31 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	setFocusPolicy(StrongFocus);
 	setResizePolicy(Manual);
 
-	m_popup = new KPopupMenu(this, "m_popup");
-	plugSharedAction("edit_delete", m_popup);
-	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
-
-
-#if 0
 	//actions
-	m_openSelectedTableQueryAction = new KAction(i18n("&Open Selected Table/Query"), "", "",
-		this, SLOT(openSelectedTableQuery()), parent->actionCollection(), "relationsview_openSelectedTableQuery");
+	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
+	m_tableQueryPopup->insertTitle(i18n("Table/Query"));
+	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
+	m_connectionPopup->insertTitle(i18n("Connection"));
+	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
+	
+	
+	plugSharedAction("edit_delete",m_tableQueryPopup);
+	plugSharedAction("edit_delete",m_connectionPopup);
+	
+	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
+	
+#if 0
 	m_removeSelectedTableQueryAction = new KAction(i18n("&Hide Selected Table/Query"), "editdelete", "",
 		this, SLOT(removeSelectedTableQuery()), parent->actionCollection(), "relationsview_removeSelectedTableQuery");
 	m_removeSelectedConnectionAction = new KAction(i18n("&Remove Selected Relation"), "button_cancel", "",
 		this, SLOT(removeSelectedConnection()), parent->actionCollection(), "relationsview_removeSelectedConnection");
+	m_openSelectedTableQueryAction = new KAction(i18n("&Open Selected Table/Query"), "", "",
+		this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");
+#endif
+
+	invalidateActions();
+
+#if 0
 
 
 	m_popup = new KPopupMenu(this, "m_popup");
@@ -271,6 +283,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 	{
 		if(!cview->matchesPoint(ev->pos(), 3))
 			continue;
+		clearSelection();
 		cview->setSelected(true);
 		updateContents(cview->connectionRect());
 		m_selectedConnection = cview;
@@ -286,24 +299,27 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 		return;
 	}
 	//connection not found
+	clearSelection();
 	if(ev->button() == RightButton) {//show popup on view background area
 //		QPopupMenu m;
 //			m_removeSelectedConnectionAction->plug( &m );
 		executePopup(ev->globalPos());
 	}
-	else if(ev->button() == LeftButton) {//clear connection selection
-		if (m_selectedConnection) {
-			m_selectedConnection->setSelected(false);
-			updateContents(m_selectedConnection->connectionRect());
-			m_selectedConnection = 0;
-			invalidateActions();
-		}
-		if (m_focusedTableView) {
-			m_focusedTableView->unsetFocus();
-			m_focusedTableView = 0;
-			setFocus();
-			invalidateActions();
-		}
+}
+
+void KexiRelationView::clearSelection()
+{
+	if (m_selectedConnection) {
+		m_selectedConnection->setSelected(false);
+		updateContents(m_selectedConnection->connectionRect());
+		m_selectedConnection = 0;
+		invalidateActions();
+	}
+	if (m_focusedTableView) {
+		m_focusedTableView->unsetFocus();
+		m_focusedTableView = 0;
+		setFocus();
+		invalidateActions();
 	}
 }
 
@@ -412,8 +428,9 @@ void KexiRelationView::tableViewGotFocus()
 	if (m_focusedTableView == sender())
 		return;
 	kdDebug() << "GOT FOCUS!" <<endl;
-	if (m_focusedTableView)
-		m_focusedTableView->unsetFocus();
+	clearSelection();
+//	if (m_focusedTableView)
+//		m_focusedTableView->unsetFocus();
 	m_focusedTableView = (KexiRelationViewTableContainer*)sender();
 	invalidateActions();
 }
@@ -421,6 +438,7 @@ void KexiRelationView::tableViewGotFocus()
 //! Invalidates all actions availability
 void KexiRelationView::invalidateActions()
 {
+	setAvailable("m_selectedConnection", m_selectedConnection || m_focusedTableView);
 #if 0
 	m_openSelectedTableQueryAction->setEnabled( m_focusedTableView );
 	m_removeSelectedTableQueryAction->setEnabled( !m_readOnly && m_focusedTableView );
@@ -436,7 +454,10 @@ void KexiRelationView::executePopup( QPoint pos )
 	if (pos==QPoint(-1,-1)) {
 		pos = mapToGlobal( m_focusedTableView ? m_focusedTableView->pos() + m_focusedTableView->rect().center() : rect().center() );
 	}
-	m_popup->exec(pos);
+	if (m_focusedTableView)
+		m_tableQueryPopup->exec(pos);
+	else if (m_selectedConnection)
+		m_connectionPopup->exec(pos);
 }
 
 KexiRelationView::~KexiRelationView()

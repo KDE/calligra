@@ -92,6 +92,9 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 		void		stretchExpandSize();
 		void		invalidateActions();
 
+		//! Clears current selection - table/query or connection
+		void clearSelection();
+
 	private:
 		TableList		m_tables;
 //		RelationList		m_connections;
@@ -102,10 +105,12 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 
 		KexiRelationViewTableContainer *m_focusedTableView;
 
-		KPopupMenu *m_popup;
+		KPopupMenu *m_tableQueryPopup //over table/query
+			, *m_connectionPopup //over connection
+			, *m_areaPopup; //over outer area
 		KAction *m_openSelectedTableQueryAction;
-		KAction *m_removeSelectedTableQueryAction;
-		KAction *m_removeSelectedConnectionAction;
+//		KAction *m_removeSelectedTableQueryAction;
+//		KAction *m_removeSelectedConnectionAction;
 };
 
 #endif

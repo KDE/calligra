@@ -135,6 +135,10 @@ KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
 	}
 	setFocus();
 	QFrame::mousePressEvent(ev);
+	if (ev->button()==Qt::LeftButton || ev->button()==Qt::RightButton)
+		ev->accept();
+	if (ev->button()==Qt::RightButton)
+		m_parent->executePopup(ev->globalPos());
 }
 
 void
