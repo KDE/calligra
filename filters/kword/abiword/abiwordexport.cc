@@ -95,21 +95,21 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {
         // Compressed with gzip
-        kdDebug(30506) << "Compression: gzip" << endl;
         strMimeType="application/x-gzip";
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
-        kdDebug(30506) << "Compression: bzip2" << endl;
         strMimeType="application/x-bzip2";
     }
     else
     {
-        kdDebug(30506) << "No compression" << endl;
+        // No compression
         strMimeType="text/plain";
     }
+
+    kdDebug(30506) << "Compression: " << strMimeType << endl;
 
     m_ioDevice = KFilterDev::deviceForFile(filenameOut,strMimeType);
 
@@ -121,7 +121,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 
     if ( !m_ioDevice->open (IO_WriteOnly) )
     {
-        kdError(30506) << "Unable to open output file!" << endl;
+        kdError(30506) << "Unable to open output file! Aborting!" << endl;
         return false;
     }
 
@@ -248,8 +248,7 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatData) co
     strElement+="; ";
 
     const int size=formatData.fontSize;
-    if ((size>0)
-        && (size < 32767)) // PROVISORY/FIXME: we have a font size problem somewhere in processing styles
+    if (size>0)
     {
         // We use absolute font sizes.
         strElement+="font-size: ";
@@ -376,13 +375,10 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
 #else
     if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        const int depth = layout.counter.depth + 1;
-        // Note: .arg(strParaText) must remain last,
-        //  as strParaText may contain an unwanted % + number sequence
-        style = QString("Heading %1").arg(depth);
+        style = QString("Heading %1").arg(layout.counter.depth + 1);
     }
     else
-    {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
+    {// We don't know the layout, so assume it's "Standard"
         style = "Normal";
     }
 #endif
@@ -406,6 +402,8 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
         props += layout.tabulator;
         props += "; ";
     }
+
+    // FIXME/TODO: H'm, why is 0.0 not a valid value?
 
     if ( layout.indentLeft!=0.0 )
     {
