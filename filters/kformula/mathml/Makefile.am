@@ -21,6 +21,3 @@ METASOURCES = AUTO
 
 service_DATA = kformula_mathml_export.desktop kformula_mathml_import.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kformulamathmlfilter.pot

@@ -23,6 +23,3 @@ METASOURCES = AUTO
 
 service_DATA = kformula_latex_export.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kformulalatexfilter.pot

@@ -22,6 +22,3 @@ install-data-local: uninstall.desktop
 
 #service_DATA = ole_winword97_import.desktop
 #servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/olefilterswinword97filter.pot
