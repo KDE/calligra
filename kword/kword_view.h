@@ -273,8 +273,6 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
-    enum PType {TXT_COLOR, FRAME_COLOR, BACK_COLOR};
-    QString colorToPixString( QColor, PType _type );
     void getFonts();
     void setParagBorderValues();
 

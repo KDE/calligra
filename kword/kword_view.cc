@@ -59,6 +59,7 @@
 #include <koRuler.h>
 #include <koTabChooser.h>
 #include <koPartSelectDia.h>
+#include <koUIUtils.h>
 
 #include <kapp.h>
 #include <kfiledialog.h>
@@ -373,9 +374,8 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     {
 	if ( !CORBA::is_nil( m_vToolBarText ) )
 	{
-	    OpenPartsUI::Pixmap pix;
-	    pix.data = CORBA::string_dup( colorToPixString( _format.getColor(), TXT_COLOR ) );
-
+	    OpenPartsUI::Pixmap_var pix = 
+              KOUIUtils::colorPixmap( _format.getColor(), KOUIUtils::TXT_COLOR );
 	    m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	}
 	tbColor = QColor( _format.getColor() );
@@ -1402,9 +1402,7 @@ void KWordView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) )
     {
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( tbColor, TXT_COLOR ) );
-
+	OpenPartsUI::Pixmap_var pix = KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	format.setColor( tbColor );
 	gui->getPaperWidget()->formatChanged( format );
@@ -1556,8 +1554,8 @@ void KWordView::textBorderColor()
 {
     if ( KColorDialog::getColor( tmpBrd.color ) )
     {
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color, FRAME_COLOR ) );
+	OpenPartsUI::Pixmap_var pix =
+          KOUIUtils::colorPixmap( tmpBrd.color, KOUIUtils::FRAME_COLOR );
 	m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR, pix );
     }
 }
@@ -1614,8 +1612,8 @@ void KWordView::frameBorderColor()
 {
     if ( KColorDialog::getColor( frmBrd.color ) )
     {
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( frmBrd.color, FRAME_COLOR ) );
+	OpenPartsUI::Pixmap_var pix =
+          KOUIUtils::colorPixmap( frmBrd.color, KOUIUtils::FRAME_COLOR );
 	m_vToolBarFrame->setButtonPixmap( ID_FBORDER_COLOR, pix );
     }
 }
@@ -1650,8 +1648,8 @@ void KWordView::frameBackColor()
     if ( KColorDialog::getColor( c ) )
     {
 	backColor.setColor( c );
-	OpenPartsUI::Pixmap pix;
-	pix.data = CORBA::string_dup( colorToPixString( backColor.color(), BACK_COLOR ) );
+	OpenPartsUI::Pixmap_var pix =
+          KOUIUtils::colorPixmap( backColor.color(), KOUIUtils::BACK_COLOR );
 	m_vToolBarFrame->setButtonPixmap( ID_FBACK_COLOR, pix );
 	gui->getPaperWidget()->setFrameBackgroundColor( backColor );
     }
@@ -2269,9 +2267,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     // color
     tbColor = black;
-    OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
-    colpix->data = CORBA::string_dup( colorToPixString( tbColor, TXT_COLOR ) );
-    pix = colpix;
+    pix = KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
     toolTip = Q2C( i18n( "Text Color" ) );
     m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor",
 							  true, toolTip, -1 );
@@ -2397,9 +2393,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     // border color
     tmpBrd.color = black;
-    colpix = new OpenPartsUI::Pixmap;
-    colpix->data = CORBA::string_dup( colorToPixString( tmpBrd.color, FRAME_COLOR ) );
-    pix = colpix;
+    pix = KOUIUtils::colorPixmap( tmpBrd.color, KOUIUtils::FRAME_COLOR );
     toolTip = Q2C( i18n( "Paragraph Border Color" ) );
     m_idButtonText_BorderColor = m_vToolBarText->insertButton2( pix, ID_BORDER_COLOR, SIGNAL( clicked() ), this, "textBorderColor",
 								true, toolTip, -1 );
@@ -2471,10 +2465,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     m_vToolBarFrame->setButton( ID_FBRD_BOTTOM, false );
 
     // border color
-    tmpBrd.color = black;
-    colpix = new OpenPartsUI::Pixmap;
-    colpix->data = CORBA::string_dup( colorToPixString( frmBrd.color, FRAME_COLOR ) );
-    pix = colpix;
+    pix = KOUIUtils::colorPixmap( frmBrd.color, KOUIUtils::FRAME_COLOR ); 
     toolTip = Q2C( i18n( "Frame Border Color" ) );
     m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( pix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor",
 								  true, toolTip, -1 );
@@ -2491,9 +2482,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     // frame back color
     backColor.setColor( white );
-    colpix = new OpenPartsUI::Pixmap;
-    colpix->data = CORBA::string_dup( colorToPixString( backColor.color(), BACK_COLOR ) );
-    pix = colpix;
+    pix = KOUIUtils::colorPixmap( backColor.color(), KOUIUtils::BACK_COLOR ); 
     toolTip = Q2C( i18n( "Frame Background Color" ) );
     m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2( pix, ID_FBACK_COLOR, SIGNAL( clicked() ), this, "frameBackColor",
 								true, toolTip, -1 );
@@ -2510,123 +2499,6 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     gui->getPaperWidget()->repaintScreen( true );
 
     return true;
-}
-
-/*============== create a pixmapstring from a color ============*/
-QString KWordView::colorToPixString( QColor c, PType _type )
-{
-    int r, g, b;
-    QString pix;
-    QString line;
-
-    c.rgb( &r, &g, &b );
-
-    pix = "/* XPM */\n";
-
-    pix += "static char * text_xpm[] = {\n";
-
-    switch ( _type )
-    {
-    case TXT_COLOR:
-    {
-	pix += "\"20 20 11 1\",\n";
-	pix += "\"h c #c0c000\",\n";
-	pix += "\"g c #808000\",\n";
-	pix += "\"f c #c0c0ff\",\n";
-	pix += "\"a c #000000\",\n";
-	pix += "\"d c #ff8000\",\n";
-	pix += "\". c none\",\n";
-	pix += "\"e c #0000c0\",\n";
-	pix += "\"i c #ffff00\",\n";
-	line.sprintf( "\"# c #%02X%02X%02X \",\n", r, g, b );
-	pix += line.copy();
-	pix += "\"b c #c00000\",\n";
-	pix += "\"c c #ff0000\",\n";
-	pix += "\"....................\",\n";
-	pix += "\"....................\",\n";
-	pix += "\"....................\",\n";
-	pix += "\"........#...........\",\n";
-	pix += "\"........#a..........\",\n";
-	pix += "\".......###..........\",\n";
-	pix += "\".......###a.........\",\n";
-	pix += "\"......##aa#.........\",\n";
-	pix += "\"......##a.#a........\",\n";
-	pix += "\".....##a...#........\",\n";
-	pix += "\".....#######a.......\",\n";
-	pix += "\"....##aaaaaa#.......\",\n";
-	pix += "\"....##a.....aaaaaaaa\",\n";
-	pix += "\"...####....#abbccdda\",\n";
-	pix += "\"....aaaa....abbccdda\",\n";
-	pix += "\"............aee##ffa\",\n";
-	pix += "\"............aee##ffa\",\n";
-	pix += "\"............agghhiia\",\n";
-	pix += "\"............agghhiia\",\n";
-	pix += "\"............aaaaaaaa\"};\n";
-
-    } break;
-    case FRAME_COLOR:
-    {
-	pix += "\" 20 20 3 1 \",\n";
-
-	pix += "\"  c none \",\n";
-	pix += "\"+ c white \",\n";
-	line.sprintf( "\". c #%02X%02X%02X \",\n", r, g, b );
-	pix += line.copy();
-
-	pix += "\"                     \",\n";
-	pix += "\"                     \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ...++++++++++...  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"                     \",\n";
-	pix += "\"                     \";\n";
-    } break;
-    case BACK_COLOR:
-    {
-	pix += "\" 20 20 3 1 \",\n";
-
-	pix += "\"  c none \",\n";
-	pix += "\". c red \",\n";
-	line.sprintf( "\"+ c #%02X%02X%02X \",\n", r, g, b );
-	pix += line.copy();
-
-	pix += "\"                     \",\n";
-	pix += "\"                     \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ..++++++++++++..  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"  ................  \",\n";
-	pix += "\"                     \",\n";
-	pix += "\"                     \";\n";
-    } break;
-    }
-
-    return QString( pix );
 }
 
 /*===================== load not KDE installed fonts =============*/
@@ -2700,8 +2572,8 @@ void KWordView::setParagBorderValues()
     m_vToolBarText->setCurrentComboItem( ID_BRD_WIDTH, tmpBrd.ptWidth - 1 );
     m_vToolBarText->setCurrentComboItem( ID_BRD_STYLE, static_cast<int>( tmpBrd.style ) );
 
-    OpenPartsUI::Pixmap colpix;
-    colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color, FRAME_COLOR ) );
+    OpenPartsUI::Pixmap_var colpix =
+      KOUIUtils::colorPixmap( tmpBrd.color, KOUIUtils::FRAME_COLOR );
     m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR, colpix );
 }
 
