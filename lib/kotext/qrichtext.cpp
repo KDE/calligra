@@ -3984,26 +3984,38 @@ void KoTextParag::format( int start, bool doMove )
 	}
     }
 
+//#define DEBUG_CI_PLACEMENT
     if ( mFloatingItems ) {
+#ifdef DEBUG_CI_PLACEMENT
+        qDebug("%d lines", lineStarts.count());
+#endif
         // Place custom items - after the formatting is finished
         int len = length();
-        //int line = -1;
+        int line = -1;
         int lineY = 0; // the one called "cy" in other algos
         int baseLine = 0;
         QMap<int, KoTextParagLineStart*>::Iterator it = lineStarts.begin();
         for ( int i = 0 ; i < len; ++i ) {
             KoTextStringChar *chr = &str->at( i );
             if ( chr->lineStart ) {
-                //++line;
+                ++line;
+                if ( line > 0 )
+                    ++it;
                 lineY = (*it)->y;
                 baseLine = (*it)->baseLine;
+#ifdef DEBUG_CI_PLACEMENT
+                qDebug("New line (%d): lineStart=%p lineY=%d baseLine=%d height=%d", line, (*it), lineY, baseLine, (*it)->h);
+#endif
             }
             if ( chr->isCustom() ) {
                 int x = chr->x;
-                KoTextCustomItem* i = chr->customItem();
-                int y = lineY + baseLine - i->ascent();
-                i->move( x, y );
-                i->finalize();
+                KoTextCustomItem* item = chr->customItem();
+                int y = lineY + baseLine - item->ascent();
+#ifdef DEBUG_CI_PLACEMENT
+                qDebug("Custom item: i=%d x=%d lineY=%d baseLine=%d ascent=%d -> y=%d", i, x, lineY, baseLine, item->ascent(), y);
+#endif
+                item->move( x, y );
+                item->finalize();
             }
         }
     }
