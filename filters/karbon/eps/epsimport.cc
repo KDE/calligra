@@ -49,17 +49,21 @@ EpsImport::convert( const QCString& from, const QCString& to )
 	}
 
 	// initialize ghostscript:
-	KProcIO* proc = new KProcIO();
-	*proc
-		<< "/usr/bin/gs -q -dNOPAUSE -dSAFER -dNODISPLAY "
-		<< " ps2ai.ps " << m_chain->inputFile()
-		<< " >" << m_chain->outputFile();
+	//KProcIO* proc = new KProcIO();
+	//*proc
+	//	<< "/usr/bin/gs -q -dNOPAUSE -dSAFER -dNODISPLAY "
+	//	<< " ps2ai.ps " << m_chain->inputFile()
+	//	<< " >" << m_chain->outputFile();
 
 	// start ghostscript:
-	proc->start( KProcess::Block );
+	//proc->start( KProcess::Block );
 
 	// stop ghostview:
-	delete( proc );
+	//delete( proc );
+
+	// Do it ;)
+	QString command = QString( "gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).arg( m_chain->inputFile() ).arg( m_chain->outputFile() );
+	system( command.latin1() );
 
 	return KoFilter::OK;
 }
