@@ -68,11 +68,11 @@ FILES:
 
    commands:
       kwcommand.cc                        - base classes for undo / redo
-                                            _lots_ of handlers - core editing functionality?
+                                            (for core editing functionality)
       kwcommand.h                         -
 
    misc ui:
-      kwdrag.cc                           - drag & drop classes - encodedData(mime)
+      kwdrag.cc                           - drag & drop and clipboard support
       kwdrag.h                            -
 
       resizehandles.cc                    - ui helper - resize handles
@@ -82,31 +82,27 @@ FILES:
 
       app:
 
-         kwcanvas.cc                      - canvas event handler
-                                          & lots of helpers
+         kwcanvas.cc                      - canvas (drawing area, mouse event handlers)
          kwcanvas.h                       -
 
-         kwview.cc                        - actions / toolbars
-                                          & doc stats
+         kwview.cc                        - actions (menus, toolbars) and their implementation
          kwview.h                         -
 
       painting:
 
-         kwtextparag.cc                      - actual painting code 
-                                             & load and saving of xml
-                                             & paragraph formatting / layout
+         kwtextparag.cc                      - KWord's extension of KoTextParag
+                                               (e.g. for load and saving as xml)
          kwtextparag.h                       -
 
-         kwtextdocument.cc                   - KoTextDocument reimplimentation
+         kwtextdocument.cc                   - KoTextDocument reimplementation
          kwtextdocument.h                    -
 
-         kwanchor.cc                      - painting stuff?
+         kwanchor.cc                      - support for inline frames
          kwanchor.h                       -
-
          kwanchorpos.h                    -
 
       view mode:
-         kwviewmode.cc                       - "page mode" / "preview mode" 
+         kwviewmode.cc                       - "page mode" / "preview mode" etc.
          kwviewmode.h                        -
 
       doc outline:
@@ -114,13 +110,13 @@ FILES:
          docstruct.h                      -
 
       styles:
-         stylenames.cc                    -
+         stylenames.cc                    - contains builtin style names, for translation purposes
 
          stylist.cc                       - dialog
          stylist.h                        -
 
       tables:
-         kwtableframeset.cc               ­
+         kwtableframeset.cc               - table frameset
          kwtableframeset.h                -
 
          dialogs:
@@ -138,23 +134,27 @@ FILES:
             splitcellsdia.h                  -
 
       frames:
-         kwtextframeset.cc                -
+         kwtextframeset.cc                - text frameset
          kwtextframeset.h                 -
 
-         kwframe.cc                       -
+         kwframe.cc                       - frame, framesets (picture/formula/...), framesetedits
          kwframe.h                        -
 
-         framedia.cc                      - dialog
+         framedia.cc                      - frame dialog
          framedia.h                       -
 
       pics:
-         kwtextimage.cc                   -
+         kwtextimage.cc                   - old stuff
          kwtextimage.h                    -
 
-         kwinsertpicdia.cc                - dialog
+         kwinsertpicdia.cc                - insert picture dialog
          kwinsertpicdia.h                 -
 
    core features:
+
+      variables:
+         variable.cc                      - variables
+         variable.h                       -
 
       footnotes:
          footnote.cc                      -
@@ -167,15 +167,15 @@ FILES:
          kwbgspellcheck.cc                -
          kwbgspellcheck.h                 -
 
-      contents: (index?)
-         contents.cc                      - ??
+      contents:
+         contents.cc                      - Table Of Contents
          contents.h                       -
 
       search:
-         searchdia.cc                     -
+         searchdia.cc                     - Text Find and Replace
          searchdia.h                      -
 
-   esoteric features:
+   other features:
 
       mailmerge:
          mailmerge.cc                     -
@@ -196,11 +196,7 @@ FILES:
          kweditpersonnalexpressiondia.cc  -
          kweditpersonnalexpressiondia.h   -
 
-      variables:
-         variable.cc                      -
-         variable.h                       -
-
    misc wierd files: ;-)
-      kwstyle.h                           - 
-      dummy.cc                            - 
+      kwstyle.h                           - Forwarder to kostyle.h, they're the same thing now.
+      dummy.cc                            - To compile as a "kdeinit loadable module".
 
