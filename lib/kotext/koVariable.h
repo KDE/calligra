@@ -72,6 +72,13 @@ class KoVariableSettings
     QDate lastPrinting() const;
     void setLastPrint( const QDate & _date);
 
+    QDate createFile() const;
+    void setCreateFile( const QDate & _date);
+
+    QDate modifyFile() const;
+    void setModifyFile( const QDate & _date);
+
+
  private:
     int m_startingpage;
     bool m_displayLink;
@@ -374,7 +381,7 @@ public:
     virtual VariableType type() const
     { return VT_DATE; }
 
-    enum { VST_DATE_FIX = 0, VST_DATE_CURRENT = 1, VST_DATE_LAST_PRINTING = 2 };
+    enum { VST_DATE_FIX = 0, VST_DATE_CURRENT = 1, VST_DATE_LAST_PRINTING = 2, VST_DATE_CREATE_FILE = 3, VST_DATE_MODIFY_FILE =4 };
     static QStringList actionTexts();
 
     virtual void recalc();

@@ -43,8 +43,12 @@ public:
     KoVariableSettingPrivate()
         {
             m_lastPrinting = QDate();
+            m_createFile = QDate();
+            m_modifyFile = QDate();
         }
     QDate m_lastPrinting;
+    QDate m_createFile;
+    QDate m_modifyFile;
 };
 
 
@@ -74,6 +78,29 @@ void KoVariableSettings::setLastPrint( const QDate & _date)
     d->m_lastPrinting = _date;
 }
 
+QDate KoVariableSettings::createFile() const
+{
+    return d->m_createFile;
+}
+
+void KoVariableSettings::setCreateFile( const QDate & _date)
+{
+    if ( !d->m_createFile.isValid() )
+        d->m_createFile = _date;
+}
+
+QDate KoVariableSettings::modifyFile() const
+{
+    return d->m_modifyFile;
+}
+
+void KoVariableSettings::setModifyFile( const QDate & _date)
+{
+    if ( !d->m_modifyFile.isValid() )
+        d->m_modifyFile = _date;
+}
+
+
 void KoVariableSettings::save( QDomElement &parentElem )
 {
      QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
@@ -90,9 +117,24 @@ void KoVariableSettings::save( QDomElement &parentElem )
     if ( d->m_lastPrinting.isValid())
     {
         elem.setAttribute("lastPrintYear", d->m_lastPrinting.year());
-        elem.setAttribute("lastPrintMonth", d->m_lastPrinting.year());
-        elem.setAttribute("lastPrintDay", d->m_lastPrinting.year());
+        elem.setAttribute("lastPrintMonth", d->m_lastPrinting.month());
+        elem.setAttribute("lastPrintDay", d->m_lastPrinting.day());
     }
+
+    if ( d->m_createFile.isValid())
+    {
+        elem.setAttribute("createFileYear", d->m_createFile.year());
+        elem.setAttribute("createFileMonth", d->m_createFile.month());
+        elem.setAttribute("createFileDay", d->m_createFile.day());
+    }
+
+    if ( d->m_modifyFile.isValid())
+    {
+        elem.setAttribute("modifyFileYear", d->m_modifyFile.year());
+        elem.setAttribute("modifyFileMonth", d->m_modifyFile.month());
+        elem.setAttribute("modifyFileDay", d->m_modifyFile.day());
+    }
+
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -121,6 +163,30 @@ void KoVariableSettings::load( QDomElement &elem )
             days = e.attribute("lastPrintDay").toInt();
         if ( year!=0 && month !=0 && days!=0 )
             d->m_lastPrinting=QDate( year, month, days);
+
+        year = 0;
+        month = 0;
+        days = 0;
+        if (e.hasAttribute("createFileYear"))
+            year = e.attribute("createFileYear").toInt();
+        if (e.hasAttribute("createFileMonth"))
+            month = e.attribute("createFileMonth").toInt();
+        if (e.hasAttribute("createFileDay"))
+            days = e.attribute("createFileDay").toInt();
+        if ( year!=0 && month !=0 && days!=0 )
+            d->m_createFile=QDate( year, month, days);
+
+        year = 0;
+        month = 0;
+        days = 0;
+        if (e.hasAttribute("modifyFileYear"))
+            year = e.attribute("modifyFileYear").toInt();
+        if (e.hasAttribute("modifyFileMonth"))
+            month = e.attribute("modifyFileMonth").toInt();
+        if (e.hasAttribute("modifyFileDay"))
+            days = e.attribute("modifyFileDay").toInt();
+        if ( year!=0 && month !=0 && days!=0 )
+            d->m_modifyFile=QDate( year, month, days);
     }
 }
 
@@ -608,7 +674,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING )
+            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
                 varFormat = coll->format( KoDateVariable::formatStr(_correct) );
@@ -696,6 +762,10 @@ QString KoDateVariable::fieldCode()
         return i18n("Date");
     else if ( m_subtype == VST_DATE_LAST_PRINTING)
         return i18n("Last Printing");
+    else if ( m_subtype == VST_DATE_CREATE_FILE )
+        return i18n( "Created File");
+    else if ( m_subtype == VST_DATE_MODIFY_FILE )
+        return i18n( "Created File");
     else
         return i18n("Date");
 }
@@ -706,6 +776,10 @@ void KoDateVariable::recalc()
         m_varValue = QVariant(QDate::currentDate().addDays(m_correctDate));
     else if ( m_subtype == VST_DATE_LAST_PRINTING )
         m_varValue = QVariant(m_varColl->variableSetting()->lastPrinting());
+    else if ( m_subtype == VST_DATE_CREATE_FILE )
+        m_varValue = QVariant( m_varColl->variableSetting()->createFile() );
+    else if ( m_subtype == VST_DATE_MODIFY_FILE )
+        m_varValue = QVariant( m_varColl->variableSetting()->modifyFile() );
     else
     {
         // Only if never set before (i.e. upon insertion)
@@ -762,7 +836,8 @@ QStringList KoDateVariable::actionTexts()
     lst << i18n( "Current Date (fixed)" );
     lst << i18n( "Current Date (variable)" );
     lst << i18n( "Date Of Last Printing" );
-    // TODO add date created, date printed, date last modified( BR #24242 )
+    lst << i18n( "Date Of Create Of File" );
+    lst << i18n( "Date Of Modification Of File" );
     return lst;
 }
 
