@@ -26,6 +26,12 @@
 #include <kspread_table.h>
 #include <kspread_cell.h>
 
+/*
+ To generate a test CSV file:
+
+ perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
+*/
+
 CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
 }
