@@ -193,27 +193,27 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
         } break;
         case TextFrames: {
             setText( 0, i18n( "Text Frames/Frame Sets" ) );
-            setPixmap( 0, KWBarIcon( "tree_textframes" ) );
+            setPixmap( 0, KWBarIcon( "frame_text" ) );
         } break;
         case FormulaFrames: {
             setText( 0, i18n( "Formula Frames" ) );
-            setPixmap( 0, KWBarIcon( "tree_formulaframes" ) );
+            setPixmap( 0, KWBarIcon( "frame_formula" ) );
         }break;
         case Tables: {
             setText( 0, i18n( "Tables" ) );
-            setPixmap( 0, KWBarIcon( "tree_table" ) );
+            setPixmap( 0, KWBarIcon( "inline_table" ) );
         } break;
         case Pictures: {
             setText( 0, i18n( "Pictures" ) );
-            setPixmap( 0, KWBarIcon( "tree_picture" ) );
+            setPixmap( 0, KWBarIcon( "frame_image" ) );
         } break;
         case Cliparts: {
             setText( 0, i18n( "Cliparts" ) );
-            setPixmap( 0, KWBarIcon( "tree_clipart" ) );
+            setPixmap( 0, KWBarIcon( "frame_clipart" ) );
         } break;
         case Embedded: {
             setText( 0, i18n( "Embedded Objects" ) );
-            setPixmap( 0, KWBarIcon( "tree_embedded" ) );
+            setPixmap( 0, KWBarIcon( "frame_query" ) );
         } break;
     }
 }
