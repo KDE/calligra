@@ -75,7 +75,7 @@ KuDesignerApp::KuDesignerApp(QWidget* , const char* name):KMainWindow(0, name)
 
   disableDocumentActions();
 
-  resize(600, 440);
+//  resize(600, 440);
 }
 
 void KuDesignerApp::enableDocumentActions()
@@ -380,6 +380,8 @@ void KuDesignerApp::slotFileNew()
             }
           setCaption(doc->URL().fileName(), false);
           enableDocumentActions();
+          filePrint->setEnabled(true);
+          fileSaveAs->setEnabled(true);
       }
       else
       {
@@ -390,8 +392,6 @@ void KuDesignerApp::slotFileNew()
   }
 
   slotStatusMsg(i18n("Ready."));
-  filePrint->setEnabled(true);
-  fileSaveAs->setEnabled(true);
 }
 
 void KuDesignerApp::slotFileOpen()
@@ -406,7 +406,7 @@ void KuDesignerApp::slotFileOpen()
   else
   {	
     KURL url=KFileDialog::getOpenURL(QString::null,
-        i18n("*|All files"), this, i18n("Open File..."));
+        i18n("*.kut|Report template files (*.kut)"), this, i18n("Open File..."));
     if(!url.isEmpty())
     {
       if (!doc->openDocument(url)) return;
@@ -460,7 +460,7 @@ void KuDesignerApp::slotFileSaveAs()
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
   KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
-        i18n("*|All files"), this, i18n("Save as..."));
+        i18n("*|Report template files (*.kut)"), this, i18n("Save as..."));
   if(!url.isEmpty())
   {
     doc->saveDocument(url);
