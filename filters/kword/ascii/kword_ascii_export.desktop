@@ -1,7 +1,8 @@
 [Desktop Entry]
+Type=Service
 Name=KWordAsciiExportFilter
+Name[hu]=KWordAsciiExportSzûrõ
 Name[ja]=KWordAscii¥¨¥¯¥¹¥Ý¡¼¥È¥Õ¥£¥ë¥¿¡¼
-Name[sv]=OrdbehandlarAsciiExportFilter
 Comment=Reggie's KWord Ascii Filter
 Comment[ca]=Filtre ascii pel KWord de Reggie
 Comment[cs]=Reggieho ASCII filter pro KWord
@@ -11,15 +12,9 @@ Comment[eo]=ASCII-filtrilo por la programo Vorto
 Comment[es]=Filtro Ascii KWord de Reggie
 Comment[fi]=KWord ascii suodatin
 Comment[fr]=Filtre Ascii pour le KWord de Reggie
+Comment[hr]=Reggiev KWord Ascii Filter
+Comment[hu]=Reggie KWord Ascii Szûrõje
 Comment[is]=ASCII-sía fyrir ritvinnslu
-Comment[no]=Reggies KWord Ascii-filter
-Comment[pl]=Filtr KWorda dla plików ASCII (Reggiego)
-Comment[pt]=Filtro Ascii para KWord
-Comment[pt_BR]=Filtro do KWord
-Comment[ro]=Filtru Ascii de KWord
-Comment[ru]=æÉÌØÔÒ × ÔÅËÓÔ Reggie
-Comment[sk]=Reggieho KWord Ascii Filter
-Comment[sv]=Reggies KWord-Ascii-filter
 Export=text/plain
 ExportDescription=ASCII
 Import=application/x-kword
