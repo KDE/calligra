@@ -52,8 +52,7 @@ VTool::eventFilter( QEvent* event )
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 
-	QPoint canvasCoordinate = view()->canvasWidget()->toContents(
-		mouseEvent->pos() );
+	KoPoint canvasCoordinate = view()->canvasWidget()->toContents( KoPoint( mouseEvent->pos() ) );
 
 	m_lastPoint.setX( canvasCoordinate.x() );
 	m_lastPoint.setY( canvasCoordinate.y() );

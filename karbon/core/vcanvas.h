@@ -26,6 +26,7 @@
 class KarbonPart;
 class KarbonView;
 class KoRect;
+class KoPoint;
 
 // The canvas is a QScrollView.
 
@@ -39,7 +40,7 @@ public:
 	void repaintAll( bool drawVObjects = true );
 	void setYMirroring( bool edit );
 	void toContents( int vx, int vy, int x, int y ) const;
-	QPoint toContents( const QPoint & ) const;
+	KoPoint toContents( const KoPoint & ) const;
 
 	QPixmap *pixmap() { return m_pixmap; }
 

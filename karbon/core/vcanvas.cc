@@ -70,10 +70,10 @@ VCanvas::toContents( int vx, int vy, int x, int y ) const
 	//QScrollView::viewportToContents( vx, vy, x, y );
 }
 
-QPoint
-VCanvas::toContents( const QPoint &p ) const
+KoPoint
+VCanvas::toContents( const KoPoint &p ) const
 {
-	QPoint p2 = p;
+	KoPoint p2 = p;
 	//kdDebug() << p.y() << endl;
 	p2.setX( ( p.x() + contentsX() ) / m_view->zoom() );
 	//p2.setY( ( contentsHeight() / m_view->zoom() - ( p.y() + contentsY() / m_view->zoom() ) ) );
