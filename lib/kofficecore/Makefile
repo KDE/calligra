@@ -62,20 +62,24 @@ CPP = gcc -E
 CXX = g++
 GLINC = @GLINC@
 GLLIB = @GLLIB@
-GMSGFMT = @GMSGFMT@
+GMSGFMT = /usr/bin/msgfmt
 IDL = /usr/local/bin/idl
 KDE_EXTRA_RPATH = 
 KDE_INCLUDES = -I/opt/kde/include
 KDE_LDFLAGS = -L/opt/kde/lib
 KDE_RPATH = -rpath $(kde_libraries) -rpath $(x_libraries)
+KOFFICE_INCLUDES = -I /home/weis/kde/koffice2/lib/kofficeui -I /home/weis/kde/koffice2/lib/kofficecore -I /home/weis/kde/koffice2/lib/koml
+KOFFICE_LIBS = /home/weis/kde/koffice2/lib/kofficeui/libkofficeui.la /home/weis/kde/koffice2/lib/kofficecore/libkofficecore.la /home/weis/kde/koffice2/lib/koml/libkoml.la
 LD = /usr/local/lib/gcc-lib/i686-pc-linux-gnulibc1/egcs-2.90.27/ld
 LIBCOMPAT = 
 LIBCRYPT = 
-LIBDL = @LIBDL@
+LIBDL = -ldl
 LIBJPEG = @LIBJPEG@
 LIBMICO = -lmico2.0.7 -ldl
 LIBOBJS = @LIBOBJS@
+LIBPTHREAD = -lpthread
 LIBPYTHON = -lpython1.5
+LIBQIMGIO = 
 LIBSOCKET = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBUCB = 
@@ -84,7 +88,7 @@ MAKEINFO = makeinfo
 MICO_INCLUDES = -I/usr/local/include
 MICO_LDFLAGS = -L/usr/local/lib
 MOC = /usr/bin/moc
-MSGFMT = @MSGFMT@
+MSGFMT = /usr/bin/msgfmt
 NM = /usr/bin/nm -B
 PACKAGE = koffice
 PAMINC = @PAMINC@
@@ -95,9 +99,9 @@ PYTHONLIB = -L/usr/local/lib/python1.5/config
 QT_INCLUDES = -I/usr/lib/qt/include
 QT_LDFLAGS = 
 RANLIB = ranlib
-USE_NLS = @USE_NLS@
+USE_NLS = yes
 VERSION = 0.1
-XGETTEXT = @XGETTEXT@
+XGETTEXT = /usr/bin/xgettext
 XPMINC = @XPMINC@
 XPMLIB = @XPMLIB@
 X_EXTRA_LIBS = 
@@ -131,13 +135,13 @@ x_libraries = /usr/X11R6/lib
 INCLUDES= -I../koml -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
-	$(LIBMICO) -lXext -lX11 -ldl 
+	$(LIBMICO) -lXext -lX11
 
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la
-libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc
-include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h
+libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc koPrintExt.cc
+include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h
 
 SUFFICES = .h .moc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -152,7 +156,7 @@ LIBS =
 libkofficecore_la_LDFLAGS = 
 libkofficecore_la_LIBADD = 
 libkofficecore_la_OBJECTS =  koIMR.lo koScanParts.lo koStream.lo \
-koDocument.lo
+koDocument.lo koPrintExt.lo
 CXXFLAGS = -O2 -Wall
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
@@ -166,8 +170,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-DEP_FILES =  .deps/koDocument.P .deps/koIMR.P .deps/koScanParts.P \
-.deps/koStream.P
+DEP_FILES =  .deps/koDocument.P .deps/koIMR.P .deps/koPrintExt.P \
+.deps/koScanParts.P .deps/koStream.P
 CXXMKDEP = $(CXX) -M $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 SOURCES = $(libkofficecore_la_SOURCES)
 OBJECTS = $(libkofficecore_la_OBJECTS)

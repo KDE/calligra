@@ -1,4 +1,5 @@
 #include <fstream>
+#include <strstream>
 
 #include "koDocument.h"
 #include "koIMR.h"
@@ -13,6 +14,24 @@
 #include <kapp.h>
 
 #include <qmsgbox.h>
+#include <qpainter.h>
+#include <qcolor.h>
+#include <qpicture.h>
+
+/**********************************************************
+ *
+ * KoDocumentChildPicture
+ *
+ **********************************************************/
+
+KoDocumentChildPicture::KoDocumentChildPicture( KoDocumentChild *_child )
+{
+  m_pChild = _child;
+}
+
+KoDocumentChildPicture::~KoDocumentChildPicture()
+{
+}
 
 /**********************************************************
  *
@@ -26,11 +45,57 @@ KoDocumentChild::KoDocumentChild( const QRect& _rect, OPParts::Document_ptr _doc
   CORBA::String_var m = m_rDoc->mimeType();
   m_strMimeType = m;
   m_geometry = _rect;
+  m_pPicture = 0L;
+  m_bHasPrintingExtension = 0L;
 }
 
 KoDocumentChild::KoDocumentChild()
 {
 }
+
+void KoDocumentChild::setGeometry( const QRect& _rect )
+{
+  m_geometry = _rect;
+  if ( m_pPicture )
+  {
+    delete m_pPicture;
+    m_pPicture = 0L;
+  }
+}
+
+OPParts::View_ptr KoDocumentChild::createView( OPParts::PartShell_ptr _shell )
+{
+  OPParts::View_var v;
+
+  try
+  { 
+    v = m_rDoc->createView();
+    if( CORBA::is_nil( v ) )
+    {
+      cerr << "Shit! We did not get a view!!!" << endl;
+      exit(1);
+    }
+  }
+  catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
+  {
+    // HACK
+    cerr << "void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )" << endl;
+    cerr << "Could not create view" << endl;
+    return 0L;
+  }
+
+  if ( CORBA::is_nil( v ) )
+  {
+    cerr << "void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )" << endl;
+    cerr << "return value is 0L" << endl;
+    return 0L;
+  }
+
+  v->setMode( OPParts::Part::ChildMode );
+  v->setPartShell( _shell );
+
+  return OPParts::View::_duplicate( v );
+} 
 
 bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 {
@@ -185,6 +250,106 @@ bool KoDocumentChild::isStoredExtern()
   return true;
 }
 
+QPicture* KoDocumentChild::draw( bool _force )
+{
+  cout << "QPicture* KoDocumentChild::draw( bool _force )" << endl;
+  
+  if ( m_pPicture != 0L && !m_bHasPrintingExtension && !_force )
+    return 0L;
+
+  if ( m_pPicture != 0L )
+    return m_pPicture;
+  
+  cout << "Trying to fetch the QPicture stuff" << endl;
+  
+  CORBA::Object_var obj = m_rDoc->getInterface( "IDL:OPParts/Print:1.0" );
+  if ( CORBA::is_nil( obj ) )
+  {
+    if ( !_force )
+      return 0L;
+  
+    if ( m_pPicture == 0L )
+      m_pPicture = new QPicture;
+  
+    // Draw a white area instead
+    cout << "OPParts::Print not supported" << endl;
+    QPainter painter;
+    painter.begin( m_pPicture );
+    
+    painter.fillRect( 0, 0, m_geometry.width(), m_geometry.height(), white );
+    painter.end();
+    return m_pPicture;
+  }
+
+  OPParts::Print_var print = OPParts::Print::_narrow( m_rDoc );
+  if ( CORBA::is_nil( print ) )
+  {
+    if ( !_force )
+      return 0L;
+  
+    if ( m_pPicture == 0L )
+      m_pPicture = new QPicture;
+
+    // Draw a white area instead
+    cerr << "ERROR: Could not narrow to OPParts::Print" << endl;
+    QPainter painter;
+    painter.begin( m_pPicture );
+    
+    painter.fillRect( 0, 0, m_geometry.width(), m_geometry.height(), white );
+    painter.end();
+    return m_pPicture;
+  }
+  
+  cout << "Fetching data" << endl;
+  CORBA::String_var str( print->encodedMetaFile( m_geometry.width(), m_geometry.height() ) );
+  cout << "Fetched data" << endl;
+  
+  int inlen = strlen( str );
+
+  if ( inlen % 4 != 0 )
+  {
+    cerr << "ERROR: len of BASE64 not devideable by 4" << endl;
+
+    if ( !_force )
+      return 0L;
+
+    if ( m_pPicture == 0L )
+      m_pPicture = new QPicture;
+
+    QPainter painter;
+    painter.begin( m_pPicture );
+    
+    painter.fillRect( 0, 0, m_geometry.width(), m_geometry.height(), white );
+    painter.end();
+
+    return m_pPicture;
+  }
+
+  cout << "Base64 bytes are " << inlen << endl;
+  
+  Base64 b;
+  char *p = new char[ inlen * 3 / 4 + 10 ];
+  const char *src = static_cast<const char*>(str);
+  int anz = inlen / 4;
+  int got = 0;
+  for( int i = 0; i < anz; i++ )
+  {
+    got += b.decode( p + got, src[ 0 ], src[ 1 ], src[ 2 ], src[ 3 ] );
+    src += 4;
+  }
+  
+  cout << "GOT " << got << " bytes" << endl;
+
+  m_bHasPrintingExtension = true;
+
+  if ( m_pPicture == 0L )
+    m_pPicture = new QPicture;
+  
+  m_pPicture->setData( p, got );
+  delete p;
+  
+  return m_pPicture;
+}
 
 KoDocumentChild::~KoDocumentChild()
 {

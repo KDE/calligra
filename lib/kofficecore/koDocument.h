@@ -1,6 +1,9 @@
 #ifndef __kodocument_h__
 #define __kodocument_h__
 
+class KoDocumentChild;
+class KoDocumentChildPicture;
+
 #include <document_impl.h>
 
 #include <komlParser.h>
@@ -10,6 +13,8 @@
 #include <iostream.h>
 
 #include <qrect.h>
+#include <qpicture.h>
+
 
 /**
  * Holds an embedded object.
@@ -24,7 +29,7 @@ public:
   virtual OPParts::Document_ptr document() { return OPParts::Document::_duplicate( m_rDoc ); }
   virtual const char* source() { return m_strSource.c_str(); }
   virtual const QRect& geometry() { return m_geometry; }
-  virtual void setGeometry( const QRect& _rect ) { m_geometry = _rect; }
+  virtual void setGeometry( const QRect& _rect );
 
   /**
    * Writes the OBJECT tag, but does NOT write the content of the
@@ -42,6 +47,18 @@ public:
   virtual bool loadDocument( OPParts::MimeMultipartDict_ptr _dict );
 
   virtual bool isStoredExtern();
+  
+  /**
+   * @param _force may be set to true. In this case this function
+   *               always returns a valid QPicture even if the child does
+   *               not support the printing extension. This QPicture will only
+   *               paint a white rectangle instead of the childs content.
+   *               Otherwise 0L is returned if the child does not support the
+   *               printing Extension.
+   */
+  virtual QPicture* draw( bool _force = true );
+
+  virtual OPParts::View_ptr createView( OPParts::PartShell_ptr _shell );
   
 protected:
   /**
@@ -79,7 +96,27 @@ protected:
    */
   string m_strSource;
   string m_strMimeType;
+
+  QPicture* m_pPicture;
+  bool m_bHasPrintingExtension;
 };
+
+
+class KoDocumentChildPicture
+{
+public:
+  KoDocumentChildPicture( KoDocumentChild *_child );
+  virtual ~KoDocumentChildPicture();
+
+  virtual KoDocumentChild* child() { return m_pChild; }
+  virtual QPicture* picture() { return m_pChild->draw(); }
+  virtual const QRect& geometry() { return m_pChild->geometry(); }
+  
+protected:
+  KoDocumentChild* m_pChild;
+};
+
+
 
 class KoDocument : virtual public Document_impl
 {

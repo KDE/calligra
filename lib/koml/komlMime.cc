@@ -186,7 +186,10 @@ int Base64DecodeBuffer::underflow()
     }
 
     if ( m_in.eof() )
+    {
+      cerr << "Unexpected end of input" << endl;
       m_bEnd = true;
+    }
     
     if ( m_bEnd )
       return EOF;
@@ -215,6 +218,8 @@ int Base64DecodeBuffer::underflow()
       buf[ got ] = c;
       if ( c == '=' )
       {
+	cout << "END OF BASE64" << endl;
+	
 	if ( got % 4 == 2 )
 	{
 	  if ( m_in.eof() )
