@@ -368,6 +368,7 @@ VHistoryGroupItem::VHistoryGroupItem( VHistoryItem* item, QListView* parent, QLi
 	setText( 0, item->text( 0 ) );
 	parent->takeItem( item ); 
 	insertItem( item );
+	m_key = item->key( 0, true );
 } // VHistoryItem::VHistoryItem
 
 VHistoryGroupItem::~VHistoryGroupItem()
