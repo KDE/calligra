@@ -35,7 +35,7 @@
 
 KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
-    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
+    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
 {
 }
 
@@ -123,7 +123,10 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         else
         {
             if ( item == 0 ) // This paragraph existed, store its parag layout
-                m_oldParagLayout = parag->paragLayout();
+            {
+                delete m_oldParagLayout;
+                m_oldParagLayout = new KoParagLayout( parag->paragLayout() );
+            }
             parag->loadLayout( paragElem );
             // Last paragraph: some of the text might be from before the paste
             int len = (item == count-1) ? c->index() : parag->string()->length();
@@ -142,7 +145,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
     KWDocument * doc = textFs->kWordDocument();
     doc->processPictureRequests();
 
-    kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
+    //kdDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
     // In case of any inline frameset
     doc->pasteFrames( elem, 0,
                       true /*don't change footnote attribute*/ ,
@@ -197,6 +200,13 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
         return 0;
     }
+    Q_ASSERT( lastParag->document() );
+    // Get hold of the document before deleting the parag
+    KoTextDocument* textdoc = lastParag->document();
+
+    //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
+
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
     doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
@@ -206,12 +216,14 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(lastParag->document());
-    KWTextFrameSet * textFs = textdoc->textFrameSet();
+    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
 
     textFs->renumberFootNotes();
-    if ( m_idx == 0 )
-        firstParag->setParagLayout( m_oldParagLayout );
+    if ( m_idx == 0 ) {
+        Q_ASSERT( m_oldParagLayout );
+        if ( m_oldParagLayout )
+            firstParag->setParagLayout( *m_oldParagLayout );
+    }
     return c;
 }
 

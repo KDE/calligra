@@ -37,7 +37,7 @@ class KWTableStyle;
 class KWTableTemplate;
 class KWTableFrameSet;
 class RemovedRow;
-class RemovedColumn; 
+class RemovedColumn;
 class KWPartFrameSet;
 class KWDocument;
 class KoCustomVariable;
@@ -71,7 +71,7 @@ protected:
     // filled in by execute(), for unexecute()
     int m_lastParag;
     int m_lastIndex;
-    KoParagLayout m_oldParagLayout;
+    KoParagLayout* m_oldParagLayout;
 };
 
 struct ParagBookmark {
@@ -538,7 +538,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    RemovedRow *m_rr; 
+    RemovedRow *m_rr;
     uint m_rowPos;
 };
 
@@ -555,7 +555,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    RemovedColumn *m_rc; 
+    RemovedColumn *m_rc;
     uint m_colPos;
 };
 
