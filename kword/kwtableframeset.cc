@@ -762,32 +762,46 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 }
 
 /*================================================================*/
-void KWTableFrameSet::insertCol( unsigned int _idx )
+void KWTableFrameSet::insertCol( unsigned int col )
 {
-    unsigned int i = 0;
-    unsigned int _cols = m_cols;
-
-    QList<int> h;
-    h.setAutoDelete( true );
-    QRect r = boundingRect();
-
-    for ( i = 0; i < m_cells.count(); i++ ) {
-        Cell *cell = m_cells.at(i);
-        if ( cell->m_col == 0 )
-            for( int colspan=cell->m_rows; colspan>0; colspan--)
-                h.append( new int( cell->getFrame( 0 )->height() / cell->m_rows ) );
-        if ( cell->m_col >= _idx ) cell->m_col++;
+    int x=0, width = 60;
+    if(col < m_cols) {
+        // move others out of the way.
+        for(unsigned int i = 0; i < m_cells.count(); i++) {
+            Cell *cell = m_cells.at(i);
+            if(cell->m_col == col) x= cell->getFrame(0)->x();
+            if(cell->m_col >= col) cell->m_col++;
+        }
+    } else {
+        x = boundingRect().right() + tableCellSpacing;
     }
 
-    QList<KWTextFrameSet> nCells;
-    nCells.setAutoDelete( false );
-
-    int hh = 0;
-    for ( i = 0; i < getRows(); i++ ) {
-        Cell *_frameSet = new Cell( this, i, _idx );
-        KWFrame *frame = new KWFrame(_frameSet, r.x(), r.y() + hh, 60, *h.at( i ) );
+    for( unsigned int i = 0; i < getRows(); i++ ) {
+        int rows, height;
+        Cell *cell;
+        if(col > 0 ) {
+            cell = getCell(i, col-1);
+            if(cell->m_col + cell->m_cols > col) {
+                // cell overlaps the new column
+                cell->m_cols++;
+                cell->getFrame(0)->setWidth(cell->getFrame(0)->width() + width + tableCellSpacing - 1);
+                continue;
+            }
+            rows = cell->m_rows;
+            height = cell->getFrame(0)->height();
+        } else {
+            rows = 1;
+            cell = getCell(i, col+1);
+            height = cell->getFrame(0)->height();
+    }
+        Cell *newCell = new Cell( this, i, col );
+        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height );
         frame->setFrameBehaviour(AutoExtendFrame);
-        _frameSet->addFrame( frame );
+        newCell->addFrame( frame );
+        if(cell->m_rows >1) {
+            newCell->m_rows = cell->m_rows;
+            i+=cell->m_rows -1;
+        }
 
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
@@ -796,24 +810,12 @@ void KWTableFrameSet::insertCol( unsigned int _idx )
             frame->moveBy( -origin.x(), -origin.y() );
         }
 #endif
-
-        nCells.append( _frameSet );
-        hh += *h.at( i ) + 2;
     }
 
-    m_cols = ++_cols;
+    if(col < m_cols-1) m_cols++;
 
-    for ( i = 0; i < nCells.count(); i++ ) {
-        KWUnit u;
-        u.setMM( 1 );
-        KWFrame *frame = nCells.at( i )->getFrame( 0 );
-        frame->setBLeft( u );
-        frame->setBRight( u );
-        frame->setBTop( u );
-        frame->setBBottom( u );
-    }
-
-    recalcCols();
+    recalcCols(); 
+    finalize();
 }
 
 /*================================================================*/
@@ -1092,13 +1094,9 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(newRows>0) m_rows+= newRows;
     if(newCols>0) m_cols+= newCols;
-    recalcCols();
 
-    // select all frames.
-    firstFrame->setSelected(true);
-    selectUntil(getCell(row+intoRows-1, col+intoCols-1));
-    m_doc->updateAllFrames();
-    m_doc->repaintAllViews();
+    finalize();
+
     return true;
 }
 
@@ -1392,6 +1390,13 @@ void KWTableFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSp
         m_cells.at(i)->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
     }
 }
+
+void KWTableFrameSet::finalize( ) {
+    recalcRows();
+    recalcCols();
+    KWFrameSet::finalize();
+}
+
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )
