@@ -22,8 +22,8 @@
 **
 */
 
-#ifndef __KWORD_FOOTNOTE_H__
-#define __KWORD_FOOTNOTE_H__
+#ifndef __KWORD_LATEX_FOOTNOTE_H__
+#define __KWORD_LATEX_FOOTNOTE_H__
 
 #include <qstring.h>
 #include "format.h"
@@ -92,5 +92,5 @@ class Footnote: public Format
 };
 
 
-#endif /* __KWORD_FOOTNOTE_H__ */
+#endif /* __KWORD_LATEX_FOOTNOTE_H__ */
 

@@ -53,7 +53,7 @@ class Border
 		/**
 		 * Constructors
 		 *
-		 * Creates a new instances of Texte.
+		 * Creates a new instances of a Border of a text frame.
 		 *
 		 */
 		Border()

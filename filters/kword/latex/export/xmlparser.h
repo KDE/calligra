@@ -2,7 +2,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000-2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,77 +20,69 @@
 **
 */
 
-#ifndef __KILLU_XMLPARSER_H__
-#define __KILLU_XMLPARSER_H__
+#ifndef __LATEX_XMLPARSER_H__
+#define __LATEX_XMLPARSER_H__
 
 #include "qstring.h"
 #include "qdom.h"
+#include "config.h"
 
 class FileHeader;
 class Document;
 class KoStore;
 
+/**
+ * This class supply some convenients methods to access to a DOM tree.
+ * TODO: implement singleton.
+ * TODO: remove config in constructors, static variables.
+ * @author robert jacolin
+ */
 class XmlParser
 {
-	QString      _filename;
+	/** Latex output file */
+	QString _filename;
+	/** The Koffice app document stored in a XML DOM Tree. */
 	QDomDocument _document;
-	static KoStore*     _in;
-
-	/* OPTIONS */
-	static bool _useLatexStyle;
-	static bool _useLatin1;
-	static bool _useUnicode;
-	static QString _class;
+	/** The koffice document (maindoc, picture, ...). */
+	static KoStore* _in;
+	/** Configuration */
+	Config *_config;
 
 	protected:
 		/* All the inherit class must be have a link with
 		 * the header to specify to use special package
 		 */
-		static FileHeader *_fileHeader;
+		//static FileHeader *_fileHeader;
 		static Document   *_root;
 
 	public:
-		XmlParser(QString);
-                XmlParser(QByteArray);	/* deprecated */
-		XmlParser(const KoStore*);
+		XmlParser(Config*, QString);
+    XmlParser(Config*, QByteArray);	/* deprecated */
+		XmlParser(Config*, const KoStore*);
 		XmlParser();
 		virtual ~XmlParser();
 
-		bool        isKwordStyleUsed() const { return (_useLatexStyle == false); }
-		bool        mustUseUnicode  () const { return _useUnicode;          }
-		bool        mustUseLatin1   () const { return _useLatin1;           }
 		QString     getFilename     () const { return _filename;            }
 		QString     getDocument     () const { return _document.toString(); }
 		Document*   getRoot         () const { return _root;                }
-		FileHeader* getFileHeader   () const { return _fileHeader; }
-		QString     getClass        () const { return _class; }
+		//FileHeader* getFileHeader   () const { return _fileHeader; }
+		KoStore*    getStorage      () const { return _in; }
 		QString     getChildName(QDomNode, int);
 		QDomNode    getChild(QDomNode, QString);
 		QDomNode    getChild(QDomNode, QString, int);
 		QDomNode    getChild(QDomNode, int);
+		QString     getData(QDomNode, int);
 		int         getNbChild(QDomNode, QString);
 		int         getNbChild(QDomNode);
 		QString     getAttr(QDomNode, QString) const;
 		bool        isChild(QDomNode, QString);
 
-		void setFileHeader(FileHeader* h) { _fileHeader = h; }
+		//void setFileHeader(FileHeader* h) { _fileHeader = h; }
 		void setRoot      (Document*   r) { _root       = r; }
 
 		QDomNode init() { return _document.documentElement(); }
 
-		void        useUnicodeEnc   ()                 { _useUnicode    = true; _useLatin1 = false;  }
-		void        useLatin1Enc    ()                 { _useLatin1     = true; _useUnicode = false; }
-		void        useLatexStyle   ()                 { _useLatexStyle = true;  }
-		void        useKwordStyle   ()                 { _useLatexStyle = false; }
-		/** The class can be article, book, letter, report or slides. */
-		void        setClass        (QString classDoc) { _class = classDoc; }
-
-		/*void analyse(){};
-		void generate(){};*/
-
-	protected:
-
 };
 
-#endif /* __KILLU_XMLPARSER_H__ */
+#endif /* __LATEX_XMLPARSER_H__ */
 

@@ -27,7 +27,6 @@
 #include <qptrlist.h>
 #include "element.h"		/* Child class */
 #include "layout.h"		/* Cell flow   */
-#include "config.h"
 
 /***********************************************************************/
 /* Class: Table                                                        */
@@ -36,9 +35,9 @@
 /**
  * This class hold a table. That is a table of frame (text frame, picture
  * frame, ...). It use a special latex package.
- * The color table and the border of the tables is not yet supported.
+ * The color table of the tables is not yet supported.
  */
-class Table: public QPtrList<Element>, public Element, Config
+class Table: public QPtrList<Element>, public Element
 {
 	/* MARKUP DATA */
 	//QString _name;

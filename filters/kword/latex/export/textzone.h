@@ -5,7 +5,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000, 2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -23,13 +23,12 @@
 **
 */
 
-#ifndef __KWORD_TEXTZONE_H__
-#define __KWORD_TEXTZONE_H__
+#ifndef __KWORD_LATEX_TEXTZONE_H__
+#define __KWORD_LATEX_TEXTZONE_H__
 
 #include <qtextstream.h>
 #include <qstring.h>
 #include "textformat.h"
-#include "config.h"
 
 /***********************************************************************/
 /* Class: TextZone                                                     */
@@ -38,7 +37,7 @@
 /**
  * This class hold a zone of text with only one formating.
  */
-class TextZone: public TextFormat, Config
+class TextZone: public TextFormat
 {
 	/* TEXT MARKUP */
 	QString _texte;
@@ -113,4 +112,4 @@ class TextZone: public TextFormat, Config
 
 QString convertSpecialChar(int);
 
-#endif /* __KWORD_TEXTZONE_H__ */
+#endif /* __KWORD_LATEX_TEXTZONE_H__ */

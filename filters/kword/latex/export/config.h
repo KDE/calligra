@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __KWORD_CONFIG_H__
-#define __KWORD_CONFIG_H__
+#ifndef __KWORD_LATEX_CONFIG_H__
+#define __KWORD_LATEX_CONFIG_H__
 
 #include <qtextstream.h>
 
@@ -30,23 +30,26 @@
 
 /**
  * This class hold all parameters and configuration from a file or from
- * the configuration dialog box.
+ * the filter configuration dialog box. it's a singleton, so you may use
+ * the instance() method to get this instance.
  */
 class Config
 {
-	static int _tabSize;	/* Size of the para indentation. */
-	static int _tabulation;	/* Total size  of the indentation. */
+	int _tabSize;	/* Size of the para indentation. */
+	int _tabulation;	/* Total size  of the indentation. */
+	bool _useLatexStyle;
+	bool _useLatin1;
+	bool _useUnicode;
+	QString _class;
+	bool _isEmbeded;
 
 	public:
 
 		static const char SPACE_CHAR;
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Config.
-		 * Initialise param. at default value.
-		 */
-		Config();
+		
+		static Config* instance(void);
+		
+		Config(const Config&);
 
 		/* 
 		 * Destructor
@@ -61,8 +64,12 @@ class Config
 		 * Return the value of a tabulation.
 		 */
 		int getTabSize() const { return _tabSize; }
-
-		int getIndentation() { return _tabulation; }
+		int getIndentation() const { return _tabulation; }
+		bool isKwordStyleUsed() const { return (_useLatexStyle == false); }
+		bool mustUseUnicode() const { return _useUnicode; }
+		bool mustUseLatin1() const { return _useLatin1; }
+		QString getClass() const { return _class; }
+		bool isEmbeded() const { return _isEmbeded; }
 
 		/**
 		 * Modifiers
@@ -77,7 +84,16 @@ class Config
 			if(size >= 0)
 				_tabSize = size;
 		}
-
+		void setIndentation(int indent) { _tabulation = indent; }
+		void useUnicodeEnc() { _useUnicode    = true; _useLatin1 = false;  }
+		void useLatin1Enc () { _useLatin1     = true; _useUnicode = false; }
+		void useLatexStyle() { _useLatexStyle = true;  }
+		void useKwordStyle() { _useLatexStyle = false; }
+		/** The class can be article, book, letter, report or slides. It's the type of the
+		 * latex document. */
+		void setClass(QString classDoc) { _class = classDoc; }
+		void setEmbeded(bool emb) { _isEmbeded = emb; }
+		
 		/**
 		 * Helpfull functions
 		 */
@@ -86,8 +102,19 @@ class Config
 
 		void writeIndent(QTextStream& out);
 
+	protected:
+		/**
+		 * Constructors
+		 *
+		 * Creates a new instance of Config.
+		 * Initialise param. at default value.
+		 */
+		Config(); /* Ensure singleton */
+
+		static Config* _instance; /* Singleton */
+
 	private:
 
 };
 
-#endif /* __KWORD_CONFIG_H__ */
+#endif /* __KWORD_LATEX_CONFIG_H__ */

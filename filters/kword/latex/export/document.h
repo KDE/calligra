@@ -1,7 +1,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000-2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -19,22 +19,15 @@
 **
 */
 
-#ifndef __KWORD_DOCUMENT_H__
-#define __KWORD_DOCUMENT_H__
+#ifndef __KWORD_LATEX_DOCUMENT_H__
+#define __KWORD_LATEX_DOCUMENT_H__
 
 #include <qptrlist.h>
 #include <qtextstream.h>
 
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
-#include "config.h"
-//#include "pixmap.h"
+#include "key.h"
 
-enum EGenerate
-{
-	E_LATEX,
-	E_KWORD,
-	E_CONFIG
-};
 
 /***********************************************************************/
 /* Class: Document                                                     */
@@ -44,19 +37,23 @@ enum EGenerate
  * This class hold a whole document with its headers, footers, footnotes, endnotes,
  * content, ... It can generate a latex file.
  */
-class Document: public XmlParser, Config
+class Document: public XmlParser
 {
+	public:
+		enum EGenerate { E_LATEX, E_KWORD, E_CONFIG };
 
-	QPtrList<Element> _headers;
-	QPtrList<Element> _footers;
-	QPtrList<Element> _footnotes;
-	QPtrList<Element> _formulas;
-	QPtrList<Element> _corps;
-	QPtrList<Element> _pixmaps;
+	private:
+		QPtrList<Element> _headers;
+		QPtrList<Element> _footers;
+		QPtrList<Element> _footnotes;
+		QPtrList<Element> _formulas;
+		QPtrList<Element> _corps;
+		QPtrList<Element> _pixmaps;
+		QPtrList<Key> _keys;
 
-	ListTable      _tables;
-	//QPtrList<Element> _parts;
-	EGenerate     _generation;
+		ListTable      _tables;
+		//QPtrList<Element> _parts;
+		EGenerate     _generation;
 
 	public:
 		/**
@@ -90,6 +87,11 @@ class Document: public XmlParser, Config
 		void generate(QTextStream&, bool);
 		Element* searchAnchor(QString);
 		Element* searchFootnote(QString);
+		Key* searchKey(QString keyName);
+		/** Save the file in a temp file. */
+		QString extractData(QString key);
+		/** Build a DOM tree (e.g. a KOffice part) */
+		//QDomNode extractKoData(QString key);
 		//Pixmap*  searchPixmap(QString);
 
 	private:
@@ -108,4 +110,4 @@ class Document: public XmlParser, Config
 		void  generateTypeFooter(QTextStream&, Element*);
 };
 
-#endif /* __KWORD_DOCUMENT_H__ */
+#endif /* __KWORD_LATEX_DOCUMENT_H__ */

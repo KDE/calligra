@@ -23,17 +23,33 @@
 #include "config.h"
 
 /** Static variable */
-int Config::_tabSize = 4;
-int Config::_tabulation = 0;
-
 const char Config::SPACE_CHAR = ' ';
+Config* Config::_instance = 0;
 
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
 Config::Config()
 {
-	//_tabSize = 4;
+	_tabSize = 4;
+	_tabulation = 0;
+	_useUnicode = false;
+	_useLatin1 = true;
+	_useLatexStyle = true;
+	_isEmbeded = false;
+}
+
+Config::Config(const Config &config)
+{
+	setTabSize(config.getTabSize());
+	setIndentation(config.getIndentation());
+	kdDebug() << "class : " << config.getClass() << endl;
+	setClass(config.getClass());
+	setEmbeded(config.isEmbeded());
+
+	if(config.mustUseUnicode())	  useUnicodeEnc();
+	if(config.mustUseLatin1())    useLatin1Enc();
+	if(config.isKwordStyleUsed())	useKwordStyle();
 }
 
 /*******************************************/
@@ -71,3 +87,9 @@ void Config::writeIndent(QTextStream& out)
 	}
 }
 
+static Config* Config::instance()
+{
+	if(_instance == 0)
+		_instance = new Config();
+	return _instance;
+}

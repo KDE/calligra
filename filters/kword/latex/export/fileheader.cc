@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000, 2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 
 #include "fileheader.h"
 
+FileHeader* FileHeader::_instance = 0;
+
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
@@ -39,8 +41,7 @@ FileHeader::FileHeader()
 	_hasTable     = false;
 	_standardPage = 0;
 	_processing   = TP_NORMAL;
-	setFileHeader(this);		/* for xmlParser class. */
-	//_tabulationSize = 4;
+	//setFileHeader(this);		/* for xmlParser class. */
 }
 
 /*******************************************/
@@ -104,9 +105,9 @@ void FileHeader::analyseAttributs(const QDomNode balise)
 void FileHeader::generate(QTextStream &out)
 {
 	kdDebug() << "GENERATION OF THE FILE HEADER" << endl;
-	if(mustUseLatin1())
+	if(Config::instance()->mustUseLatin1())
 		generateLatinPreambule(out);
-	else if(mustUseUnicode())
+	else if(Config::instance()->mustUseUnicode())
 		generateUnicodePreambule(out);
 
 	generatePackage(out);
@@ -194,7 +195,8 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 			out << "";
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{article}" << endl;
+	out << "11pt]{";
+	out << Config::instance()->getClass() << "}" << endl;
 }
 
 /*******************************************/
@@ -258,7 +260,8 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 			out << "";
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{article}" << endl;
+	out << "11pt]{";
+	out << Config::instance()->getClass() << "}" << endl;
 }
 
 
@@ -268,7 +271,7 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 void FileHeader::generatePackage(QTextStream &out)
 {
 	out << "% Package(s) to include" << endl;
-	if(mustUseUnicode())
+	if(Config::instance()->mustUseUnicode())
 		out << "\\usepackage{omega}" << endl;
 	if(getFormat() == TF_A4)
 		out << "\\usepackage[a4paper]{geometry}" << endl;
@@ -291,3 +294,11 @@ void FileHeader::generatePackage(QTextStream &out)
 	out << endl;
 
 }
+
+FileHeader* FileHeader::instance()
+{
+	if(_instance == 0)
+		_instance = new FileHeader();
+	return _instance;
+}
+

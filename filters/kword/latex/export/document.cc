@@ -22,12 +22,16 @@
 #include <stdlib.h>		/* for atoi function    */
 
 #include <kdebug.h>
+#include <ktempfile.h>
+#include <koStore.h>
+
+#include <qdir.h>
 
 #include "fileheader.h"
 #include "document.h"
-#include "texte.h"
+#include "textFrame.h"
 #include "formula.h"
-#include "pixmap.h"
+#include "pixmapFrame.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -41,7 +45,7 @@ Document::Document()
 /*******************************************/
 Document::~Document()
 {
-	kdDebug() << "Corps Destructor" << endl;
+	kdDebug() << "Document destructor" << endl;
 }
 
 /*******************************************/
@@ -55,7 +59,6 @@ void Document::analyse(const QDomNode balise)
 	{
 		Element *elt = 0;
 		kdDebug() << "--------------------------------------------------" << endl;
-		kdDebug() << "NEW ELEMENT" << endl;
 		
 		kdDebug() << getChildName(balise, index) << endl;
 		switch(getTypeFrameset(getChild(balise, index)))
@@ -65,12 +68,12 @@ void Document::analyse(const QDomNode balise)
 				break;
 			case ST_TEXT: 
 				kdDebug() << "TEXT" << endl;
-				elt = new Texte;
+				elt = new TextFrame;
 				elt->analyse(getChild(balise, index));
 				break;
 			case ST_PICTURE:
 				kdDebug() << "PICTURE" << endl;
-				elt = new Pixmap;
+				elt = new PixmapFrame();
 				elt->analyse(getChild(balise, index));
 				break;
 			case ST_PART:
@@ -125,7 +128,8 @@ void Document::analyse(const QDomNode balise)
 									kdDebug() << " PIXMAP" <<endl;
 									_pixmaps.append(elt);
 								break;
-
+							default:
+									kdError() << "Element frame type no supported or type unexpected." << endl;
 						}
 					}
 					break;
@@ -136,8 +140,7 @@ void Document::analyse(const QDomNode balise)
 					 * la methode add. Une cellule est un element.
 					 */
 					_tables.add(elt);
-					if(_fileHeader!= 0)
-						_fileHeader->useTable();
+					FileHeader::instance()->useTable();
 					break;
 				case SS_FOOTNOTES: /* Just for the new kwd file version */
 						_footnotes.append(elt);
@@ -158,12 +161,12 @@ void Document::analysePixmaps(const QDomNode balise)
 	//QDomNode balise = getChild(balise_initial, "FRAMESET");
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		Pixmap *pic = 0;
+		Key *key = 0;
 		kdDebug() << "NEW PIXMAP" << endl;
 		
-		pic = new Pixmap();
-		pic->analyse(getChild(balise, "KEY"));
-		_pixmaps.append(pic);
+		key = new Key(Key::PIXMAP);
+		key->analyse(getChild(balise, "KEY"));
+		_keys.append(key);
 	}
 }
 
@@ -175,7 +178,6 @@ SType Document::getTypeFrameset(const QDomNode balise)
 	SType type = ST_NONE;
 
 	type = (SType) getAttr(balise, "frameType").toInt();
-	kdDebug() << "(end type analyse)" << endl;
 	return type;
 }
 
@@ -196,7 +198,7 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 	if(hasPreambule)
 	{
 		out << "\\begin{document}" << endl;
-		indent();
+		Config::instance()->indent();
 	}
 	if(_corps.getFirst() != 0)
 		_corps.getFirst()->generate(out);
@@ -208,8 +210,8 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		_formulas.getFirst()->generate(out);*/
 	if(hasPreambule)
 		out << "\\end{document}" << endl;
-	desindent();
-	if(getIndentation() != 0)
+	Config::instance()->desindent();
+	if(Config::instance()->getIndentation() != 0)
 			kdError() << "Error : indent != 0 at the end ! " << endl;
 }
 
@@ -222,7 +224,7 @@ void Document::generatePreambule(QTextStream &out)
 	Element* footer;
 
 	/* For each header */
-	if(getFileHeader()->hasHeader())
+	if(FileHeader::instance()->hasHeader())
 	{
 		kdDebug() << "header : " << _headers.count() << endl;
 
@@ -235,7 +237,7 @@ void Document::generatePreambule(QTextStream &out)
 	}
 	
 	/* For each footer */
-	if(getFileHeader()->hasFooter())
+	if(FileHeader::instance()->hasFooter())
 	{
 		kdDebug() << "footer : " << _footers.count() << endl;
 
@@ -247,7 +249,7 @@ void Document::generatePreambule(QTextStream &out)
 		}
 	}
 	/* Specify what header/footer style to use */
-	if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
+	if(FileHeader::instance()->hasHeader() || FileHeader::instance()->hasFooter())
 		out << "\\pagestyle{fancy}" << endl;
 	else
 	{
@@ -261,8 +263,8 @@ void Document::generatePreambule(QTextStream &out)
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
 	kdDebug() << "generate header" << endl;
-	if((_fileHeader->getHeadType() == TH_ALL ||
-		_fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
+	if((FileHeader::instance()->getHeadType() == FileHeader::TH_ALL ||
+		FileHeader::instance()->getHeadType() == FileHeader::TH_FIRST) && header->getInfo() == SI_EVEN)
 	{
 		out << "\\fancyhead[L]{}" << endl;
 		out << "\\fancyhead[C]{";
@@ -306,7 +308,8 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 /*******************************************/
 void Document::generateTypeFooter(QTextStream &out, Element *footer)
 {
-	if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
+	if(FileHeader::instance()->getFootType() == FileHeader::TH_ALL &&
+			footer->getInfo() == SI_EVEN)
 	{
 		out << "\\fancyfoot[L]{}" << endl;
 		out << "\\fancyfoot[C]{";
@@ -314,7 +317,7 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 		out << "}" << endl;
 		out << "\\fancyfoot[R]{}" << endl;
 	}
-	else if(_fileHeader->getFootType() == TH_EVODD)
+	else if(FileHeader::instance()->getFootType() == FileHeader::TH_EVODD)
 	{
 		switch(footer->getInfo())
 		{
@@ -333,7 +336,8 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 				break;
 		}
 	}
-	else if(_fileHeader->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
+	else if(FileHeader::instance()->getFootType() == FileHeader::TH_FIRST &&
+			footer->getInfo() == SI_FIRST)
 	{
 		out << "\\fanycfoot{";
 		footer->generate(out);
@@ -385,15 +389,53 @@ Element* Document::searchFootnote(QString footnote)
 
 }
 
-/*Pixmap* Document::searchPixmap(QString key)
+Key* Document::searchKey(QString keyName)
 {
-	Pixmap* pic = _pixmaps.first();
-	while(pic != 0)
+	Key* key = _keys.first();
+	while(key != 0)
 	{
-		if(pic->getKey().compare(key))
-			return pic;
-		pic = _pixmaps.next();
+		kdDebug() << "key " << key->getFilename() << endl;
+		if(key->getFilename() == keyName)
+			return key;
+		key = _keys.next();
 	}
 	return NULL;
-}*/
 
+}
+
+QString Document::extractData(QString key)
+{
+	QString data = searchKey(key)->getName();
+	kdDebug() << "Opening " << data << endl;
+	if(!getStorage()->isOpen())
+	{
+		if(!getStorage()->open(data))
+		{
+			kdError() << "Unable to open " << data << endl;
+			return QString("");
+		}
+	}
+
+	/* Temp file with the default name in the default temp dir */
+	KTempFile temp;
+	//temp.setAutoDelete(true);
+	QFile* tempFile = temp.file();
+
+	const Q_LONG buflen = 4096;
+	char buffer[ buflen ];
+	Q_LONG readBytes = getStorage()->read( buffer, buflen );
+
+	while ( readBytes > 0 )
+	{
+		tempFile->writeBlock( buffer, readBytes );
+		readBytes = getStorage()->read( buffer, buflen );
+	}
+	temp.close();
+	if(!getStorage()->close())
+	{
+		kdError() << "Unable to close " << data << endl;
+		return QString("");
+	}
+	kdDebug() << "temp filename : " << temp.name() << endl;
+	return temp.name();
+}

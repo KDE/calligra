@@ -22,8 +22,8 @@
 **
 */
 
-#ifndef __KWORD_ANCHOR_H__
-#define __KWORD_ANCHOR_H__
+#ifndef __KWORD_LATEX_ANCHOR_H__
+#define __KWORD_LATEX_ANCHOR_H__
 
 #include <qstring.h>
 #include "format.h"
@@ -86,5 +86,5 @@ class Anchor: public Format
 };
 
 
-#endif /* __KWORD_ANCHOR_H__ */
+#endif /* __KWORD_LATEX_ANCHOR_H__ */
 

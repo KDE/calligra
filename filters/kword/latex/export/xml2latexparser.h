@@ -1,8 +1,7 @@
-
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000, 2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -31,42 +30,29 @@
 
 class Xml2LatexParser : public XmlParser
 {
-	QFile       _file;
+	QFile _file;
 	QTextStream _out;
-	QString     _filename;
-	const KoStore*    _in;
+	/** Name of the latex file. */
+	QString  _filename;
+	/** The KWord document exported. */
+	const KoStore* _in;
 
-	FileHeader  _header;
+	/** KWord document header. */
+	//FileHeader  _header;
+	/** The root class which contains one kword document. */
 	Document    _document;
-
-	/* Options */
-	bool _isEmbeded;
 
 	public:
 		/**
-		 * @param in tar file.
+		 * @param in The document from kword.
 		 * @param fileOut Output latex filename.
 		 */
-		Xml2LatexParser(const KoStore*, QString);
+		Xml2LatexParser(const KoStore* in, QString fileOut, Config* config);
 
 		virtual ~Xml2LatexParser() {}
 
-		/* Accesors */
-		bool isEmbeded() const { return _isEmbeded; }
-
-		/* Modifiors */
-		void setEmbeded(bool emb) { _isEmbeded = emb; }
-		
-		/**
-		 * Get options from the options dialog box.
-		 * @deprecated use accesor methods
-		 */
-		void analyse_config(QString);
-
 		void analyse();
 		void generate();
-
-	private:
 
 };
 

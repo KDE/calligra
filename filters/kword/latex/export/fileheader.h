@@ -1,7 +1,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000, 2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -26,55 +26,6 @@
 
 #include "xmlparser.h"
 
-enum TFormat
-{
-	TF_A3,
-	TF_A4,
-	TF_A5,
-	TF_USLETTER,
-	TF_USLEGAL,
-	TF_SCREEN,
-	TF_CUSTOM,
-	TF_B3,
-	TF_USEXECUTIVE
-};
-
-enum TUnit
-{
-	TU_MM,
-	TU_CM,
-	TU_PT,
-	TU_INCH
-};
-
-enum TOrient
-{
-	TO_PORTRAIT,
-	TO_LANDSCAPE
-};
-
-enum TColonne
-{
-	TC_NONE,
-	TC_1,
-	TC_2,
-	TC_MORE
-};
-
-enum THeadfoot
-{
-	TH_ALL   = 0,		/* 0 */
-	TH_XXX   = 1,		/* 1 */
-	TH_FIRST = 2,		/* 2 */
-	TH_EVODD = 3		/* 3 */
-};
-
-enum TProcType
-{
-	TP_NORMAL,
-	TP_DTP
-};
-
 /***********************************************************************/
 /* Class: FileHeader                                                   */
 /***********************************************************************/
@@ -82,53 +33,61 @@ enum TProcType
 /**
  * This class hold all general information about the doc : does it use a color markup, ... ?
  * paper size, ... and generate the information about the doc (packages and extentions
- * to include, ...).
+ * to include, ...). It's the configuration latex file used to incldue the needed packages,
+ * define the paper format, ...
  */
 class FileHeader: public XmlParser
 {
-	/* PAPER */
-	TFormat   _format;
-	double    _width,
-		  _height;
-	TOrient   _orientation;
-	TColonne  _colonne;
-	double    _columnSpacing;
-	THeadfoot _headType;
-	THeadfoot _footType;
-	TProcType _processing;
-	int       _standardPage;
-	double    _footBody;
-	double    _headBody;
+	public:
+		enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN,
+			TF_CUSTOM, TF_B3, TF_USEXECUTIVE };
+		enum TUnit { TU_MM, TU_CM, TU_PT, TU_INCH };
+		enum TOrient { TO_PORTRAIT, TO_LANDSCAPE };
+		enum TColonne { TC_NONE, TC_1, TC_2, TC_MORE };
+		enum THeadfoot { TH_ALL = 0, TH_XXX = 1, TH_FIRST = 2, TH_EVODD = 3 };
+		enum TProcType { TP_NORMAL, TP_DTP };
 
-	/* PAPERBORDERS */
-	double    _leftBorder,
-		  _rightBorder,
-		  _bottomBorder,
-		  _topBorder;
+		static FileHeader* instance(void);
 
-	/* ATTRIBUTES */
-	TUnit    _unite;
-	bool     _hasHeader;
-	bool     _hasFooter;
-	bool     _hasTOC;
+	private:
+		/* PAPER */
+		TFormat   _format;
+		double    _width,
+				_height;
+		TOrient   _orientation;
+		TColonne  _colonne;
+		double    _columnSpacing;
+		THeadfoot _headType;
+		THeadfoot _footType;
+		TProcType _processing;
+		int       _standardPage;
+		double    _footBody;
+		double    _headBody;
 
-	/* FOOTNOTEMGR */
+		/* PAPERBORDERS */
+		double    _leftBorder,
+				_rightBorder,
+				_bottomBorder,
+				_topBorder;
 
-	/* DIVERSE */
-	/* for special packages to include */
-	bool     _hasColor;
-	bool     _hasUnderline;
-	bool     _hasEnumerate;
-	bool     _hasGraphics;
-	bool     _hasTable;
-	//int      _tabulationSize;
+		/* ATTRIBUTES */
+		TUnit    _unite;
+		bool     _hasHeader;
+		bool     _hasFooter;
+		bool     _hasTOC;
+
+		/* FOOTNOTEMGR */
+
+		/* DIVERSE */
+		/* for special packages to include */
+		bool     _hasColor;
+		bool     _hasUnderline;
+		bool     _hasEnumerate;
+		bool     _hasGraphics;
+		bool     _hasTable;
 
 	public:
-		/**
-		 * Constructor
-		 */
-		FileHeader();
-
+		
 		/**
 		 * Destructor
 		 */
@@ -153,7 +112,6 @@ class FileHeader: public XmlParser
 		bool      hasEnumerate     () const { return _hasEnumerate;   }
 		bool      hasGraphics      () const { return _hasGraphics;    }
 		bool      hasTable         () const { return _hasTable;       }
-		//int       getTabulationSize() const { return _tabulationSize; }
 
 		/**
 		 * Modifiors
@@ -175,12 +133,19 @@ class FileHeader: public XmlParser
 		void useEnumerate  ()           { _hasEnumerate = true;           }
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
-		//void setTabulationSize (int ts) { _tabulationSize = ts;           }
 
 		void analysePaper     (const QDomNode);
 		void analyseAttributs (const QDomNode);
 
 		void generate         (QTextStream &);
+
+	protected:
+		/**
+		 * Constructor
+		 */
+		FileHeader();		/* Ensure singleton */
+
+		static FileHeader* _instance; /* singleton */
 
 	private:
 

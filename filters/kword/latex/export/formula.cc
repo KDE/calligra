@@ -82,48 +82,44 @@ void Formula::analyse(const QDomNode balise)
 /*******************************************/
 void Formula::getFormula(QDomNode p, int indent)
 {
-/*	while( p.)
-	{*/
-		switch( p.nodeType() )
-		{
-			case QDomNode::TextNode:
-				_formula = _formula + QString(p.toText().data()) + " ";
-				break;
-		/*	case TT_Space:
-				_formula = _formula + p->zText;
-				//printf("%*s\"%s\"\n", indent, "", p->zText);
-				break;
-			case TT_EOL:
-				_formula = _formula + "\n";
-				//printf("%*s\n", indent, "");
-				break;*/
-			case QDomNode::ElementNode:
-				_formula = _formula + "<" + p.nodeName();
-				QDomNamedNodeMap attr = p.attributes();
-				for(unsigned int index = 0; index < attr.length(); index++)
-				{ // The attributes
-					_formula = _formula + " " + attr.item(index).nodeName();
-					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
-				}
-				if(p.childNodes().length() == 0)
-					_formula = _formula + "/>\n";
-				else
+	switch( p.nodeType() )
+	{
+		case QDomNode::TextNode:
+			_formula = _formula + QString(p.toText().data()) + " ";
+			break;
+	/*	case TT_Space:
+			_formula = _formula + p->zText;
+			//printf("%*s\"%s\"\n", indent, "", p->zText);
+			break;
+		case TT_EOL:
+			_formula = _formula + "\n";
+			//printf("%*s\n", indent, "");
+			break;*/
+		case QDomNode::ElementNode:
+			_formula = _formula + "<" + p.nodeName();
+			QDomNamedNodeMap attr = p.attributes();
+			for(unsigned int index = 0; index < attr.length(); index++)
+			{ // The attributes
+				_formula = _formula + " " + attr.item(index).nodeName();
+				_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
+			}
+			if(p.childNodes().length() == 0)
+				_formula = _formula + "/>\n";
+			else
+			{
+				_formula = _formula + ">\n";
+				QDomNodeList child = p.childNodes();
+				for(unsigned int index = 0; index < child.length(); index++)
 				{
-					_formula = _formula + ">\n";
-					QDomNodeList child = p.childNodes();
-					for(unsigned int index = 0; index < child.length(); index++)
-					{
-						getFormula(child.item(index), indent+3); // The child elements
-					}
-					_formula = _formula + "</" + p.nodeName() + ">\n";
+					getFormula(child.item(index), indent + 3); // The child elements
 				}
-				break;
-			/*default:
-				kdError() << "Can't happen" << endl;
-				break;*/
-		}
-	/*	p = p.nextSibling();
-	}*/
+				_formula = _formula + "</" + p.nodeName() + ">\n";
+			}
+			break;
+		/*default:
+			kdError() << "Can't happen" << endl;
+			break;*/
+	}
 }
 
 /*******************************************/

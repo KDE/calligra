@@ -70,7 +70,8 @@ class Format: public XmlParser
 		 *
 		 * @param Para the parent class of the format.
 		 */
-		Format(Para *para= 0): _id((EFormat) 0), _para(para) {}
+		Format(Para *para= 0): _id((EFormat) 0), _para(para)
+		{}
 
 		/* 
 		 * Destructor

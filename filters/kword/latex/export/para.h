@@ -1,7 +1,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000,2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 #include "layout.h"		/* set of informations about the paragraph style. */
 #include "element.h"		/* to use the father class. */
 #include "format.h"		/* child class */
-#include "config.h"
 
 enum EP_INFO
 {
@@ -45,7 +44,7 @@ enum EP_INFO
 	EP_NEXT
 };*/
 
-class Texte;
+class TextFrame;
 
 /***********************************************************************/
 /* Class: Para                                                         */
@@ -56,10 +55,10 @@ class Texte;
  * paragraph, its format, etc. The complete text is a list of Para instances.
  * A footnote is a list of paragraph instances (now but not in the "futur").
  */
-class Para: public Layout, Config
+class Para: public Layout
 {
 	/* MARKUP DATA */
-	QString        _texte;
+	QString        _text;
 	QString*       _name;
 	EP_INFO        _info;
 	//EP_HARDBRK     _hardbrk;
@@ -68,7 +67,7 @@ class Para: public Layout, Config
 	/* TO MANAGE THE LIST */
 
 	/* USEFULL DATA */
-	Texte*                	_element;		/* Father frame */
+	TextFrame*             	_element;		/* Father frame */
 	unsigned int          	_currentPos;	/* Begining of the text to use the good format */
 	static QPtrStack<EType> _historicList;	/* opened lists but not closed */
 	int                   	_nbLines;		/* Nb of lines in a cell (table) */
@@ -80,9 +79,9 @@ class Para: public Layout, Config
 		 *
 		 * Creates a new instance of Para.
 		 *
-		 * @param Texte the text this paragraph is belonging to.
+		 * @param Text The text frame this paragraph is belonging to.
 		 */
-		Para(Texte *texte = 0);
+		Para(TextFrame *textFrame = 0);
 
 		/* 
 		 * Destructor
@@ -116,7 +115,7 @@ class Para: public Layout, Config
 		/**
 		 * @return the frame the paragraph belonging to.
 		 */
-		Texte*   getTexte     () const { return _element;   }
+		TextFrame*   getFrame     () const { return _element;   }
 		/**
 		 * @return the frame type (Header, footer, body, footnote or table, ...).
 		 */
