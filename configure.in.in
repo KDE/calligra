@@ -23,6 +23,7 @@ if test -n "$MAGICK_CONFIG"; then
   if test -n "$vers" && test "$vers" -ge 5005002
   then
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
+     LIBMAGICK_LDFLAGS="`$MAGICK_CONFIG --ldflags`"
      LIBMAGICK_RPATH=
      for args in $LIBMAGICK_LIBS; do
 	  case $args in
@@ -44,6 +45,7 @@ if test ! "$USE_RPATH" = "yes"; then
 fi
 
 AC_SUBST(LIBMAGICK_LIBS)
+AC_SUBST(LIBMAGICK_LDFLAGS)
 AC_SUBST(LIBMAGICK_CPPFLAGS)
 AC_SUBST(LIBMAGICK_RPATH)
 
