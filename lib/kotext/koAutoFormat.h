@@ -50,6 +50,8 @@ public:
     KoAutoFormatEntry(const QString& replace = QString::null);
     ~KoAutoFormatEntry();
     QString replace() const { return m_replace; }
+    void  changeReplace(const QString & rep){ m_replace = rep; }
+
     KoSearchContext *formatEntryContext()const;
     void createNewEntryContext();
     void setFormatEntryContext( KoSearchContext * );

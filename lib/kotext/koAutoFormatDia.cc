@@ -108,7 +108,6 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
     cbAutoInclude->setChecked( _autoInclude );
 }
 
-
 void KoAutoFormatExceptionWidget::textChanged ( const QString &_text )
 {
     pbAddException->setEnabled(!_text.isEmpty());
@@ -185,6 +184,7 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       m_docAutoFormat( autoFormat )
 {
     noSignal=true;
+    newEntry = 0L;
     autocorrectionEntryChanged= false;
     setupTab1();
     setupTab2();
@@ -194,6 +194,11 @@ KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
     noSignal=false;
     changeLanguage = false;
+}
+
+KoAutoFormatDia::~KoAutoFormatDia()
+{
+    delete newEntry;
 }
 
 void KoAutoFormatDia::slotResetConf()
@@ -654,6 +659,8 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
         oDoubleBegin= m_docAutoFormat->getConfigTypographicDoubleQuotes().begin;
         oDoubleEnd= m_docAutoFormat->getConfigTypographicDoubleQuotes().end;
         bulletStyle= m_docAutoFormat->getConfigBulletStyle();
+        delete newEntry;
+        newEntry=0L;
         changeLanguage=false;
     }
 }
@@ -694,19 +701,39 @@ void KoAutoFormatDia::initTab4()
 
 void KoAutoFormatDia::slotClearTextFormatEntry()
 {
-    if ( m_pListView->currentItem() )
+    bool addNewEntry = (pbAdd->text() == i18n( "&Add" ));
+    if ( m_pListView->currentItem() || addNewEntry)
     {
-        KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
-        entry->clearFormatEntryContext( );
+        if ( addNewEntry )
+        {
+            if (newEntry)
+                newEntry->clearFormatEntryContext();
+        }
+        else
+        {
+            KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
+            entry->clearFormatEntryContext();
+        }
         autocorrectionEntryChanged= true;
     }
 }
 
 void KoAutoFormatDia::slotChangeTextFormatEntry()
 {
-    if ( m_pListView->currentItem() )
+    bool addNewEntry = (pbAdd->text() == i18n( "&Add" ));
+    if ( m_pListView->currentItem() || addNewEntry)
     {
-        KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
+        KoAutoFormatEntry *entry = 0L;
+        if ( addNewEntry )
+        {
+            if ( m_replace->text().isEmpty() )
+                return;
+            if ( !newEntry )
+                newEntry = new KoAutoFormatEntry( m_replace->text());
+            entry =newEntry;
+        }
+        else
+            entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
         KoSearchContext *tmpFormat = entry->formatEntryContext();
         bool createNewFormat = false;
 
@@ -770,8 +797,13 @@ void KoAutoFormatDia::slotfind2( const QString & )
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
     KoAutoFormatEntry * entry=m_docAutoFormat->findFormatEntry(m_find->text());
     pbRemove->setEnabled(state && entry);
-    pbChangeFormat->setEnabled(state && entry);
-    pbClearFormat->setEnabled(state && entry);
+    if ( state && entry )
+    {
+        delete newEntry;
+        newEntry = 0L;
+    }
+    pbChangeFormat->setEnabled(state);
+    pbClearFormat->setEnabled(state);
     pbAdd->setEnabled(state);
 }
 
@@ -828,7 +860,17 @@ void KoAutoFormatDia::slotAddEntry()
     KoAutoFormatEntry *tmp = new KoAutoFormatEntry( repl );
 
     if(pbAdd->text() == i18n( "&Add" ))
-        addEntryList(find, tmp);
+    {
+        if ( newEntry )
+        {
+            newEntry->changeReplace( m_replace->text());
+            addEntryList(find, newEntry);
+            delete tmp;
+            newEntry = 0L;
+        }
+        else
+            addEntryList(find, tmp);
+    }
     else
         editEntryList(find, find, tmp);
 
@@ -869,6 +911,8 @@ void KoAutoFormatDia::slotEditEntry()
 {
     if(m_pListView->currentItem()==0)
         return;
+    delete newEntry;
+    newEntry=0L;
     m_find->setText(m_pListView->currentItem()->text(0));
     m_replace->setText(m_pListView->currentItem()->text(1));
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();

@@ -89,6 +89,7 @@ class KoAutoFormatDia : public KDialogBase
 
 public:
     KoAutoFormatDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat );
+    ~KoAutoFormatDia();
     void addEntryList(const QString &key, KoAutoFormatEntry *_autoEntry);
     void editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry *_autoEntry);
 protected:
@@ -132,6 +133,9 @@ protected:
 
     KoAutoFormatExceptionWidget *abbreviation;
     KoAutoFormatExceptionWidget *twoUpperLetter;
+
+    KoAutoFormatEntry *newEntry;
+
     QString initialLanguage;
     bool noSignal;
     bool changeLanguage;
