@@ -406,26 +406,32 @@ void Document::createActions(KActionCollection* collection)
                                   collection, "formula_makegreek");
 
     impl->appendColumnAction = new KAction( i18n( "Append Column" ),
+                                            "inscol",
                                             0,
                                             this, SLOT( appendColumn() ),
                                             collection, "formula_appendcolumn" );
     impl->insertColumnAction = new KAction( i18n( "Insert Column" ),
+                                            "inscol",
                                             0,
                                             this, SLOT( insertColumn() ),
                                             collection, "formula_insertcolumn" );
     impl->removeColumnAction = new KAction( i18n( "Remove Column" ),
+                                            "remcol",
                                             0,
                                             this, SLOT( removeColumn() ),
                                             collection, "formula_removecolumn" );
     impl->appendRowAction = new KAction( i18n( "Append Row" ),
+                                         "insrow",
                                          0,
                                          this, SLOT( appendRow() ),
                                          collection, "formula_appendrow" );
     impl->insertRowAction = new KAction( i18n( "Insert Row" ),
+                                         "insrow",
                                          0,
                                          this, SLOT( insertRow() ),
                                          collection, "formula_insertrow" );
     impl->removeRowAction = new KAction( i18n( "Remove Row" ),
+                                         "remrow",
                                          0,
                                          this, SLOT( removeRow() ),
                                          collection, "formula_removerow" );

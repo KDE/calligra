@@ -128,11 +128,17 @@ Command* MatrixSequenceElement::buildCommand( Container* container, Request* req
                     case req_insertColumn:
                         return new KFCInsertColumn( i18n( "Insert Column" ), container, matrix, row, col );
                     case req_removeColumn:
-                        return new KFCRemoveColumn( i18n( "Remove Column" ), container, matrix, row, col );
+                        if ( matrix->getColumns() > 1 ) {
+                            return new KFCRemoveColumn( i18n( "Remove Column" ), container, matrix, row, col );
+                        }
+                        break;
                     case req_insertRow:
                         return new KFCInsertRow( i18n( "Insert Row" ), container, matrix, row, col );
                     case req_removeRow:
-                        return new KFCRemoveRow( i18n( "Remove Row" ), container, matrix, row, col );
+                        if ( matrix->getRows() > 1 ) {
+                            return new KFCRemoveRow( i18n( "Remove Row" ), container, matrix, row, col );
+                        }
+                        break;
                     default:
                         break;
                     }
