@@ -21,11 +21,14 @@
 #define KPTGANTTVIEW_H
 
 #include <qsplitter.h>
+#include <qcursor.h>
 
 class KPTView;
 class KPTNode;
 class KPTTask;
 class KPTProject;
+class KPTRelation;
+
 class QLayout;
 class QListViewItem;
 class QPoint;
@@ -64,7 +67,12 @@ class KPTGanttView : public QSplitter
     void print(KPrinter &printer);
 
     void addTaskLink(KDGanttViewTaskLink *link);
-        
+    void setLinkMode(bool mode);
+    bool linkMode() const { return m_linkMode; }
+signals:
+    void modifyRelation(KPTRelation *rel) ;
+    void addRelation(KPTNode *par, KPTNode *child);
+    
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 
@@ -72,6 +80,8 @@ private slots:
     void currentItemChanged(KDGanttViewItem *);
     void slotItemDoubleClicked(KDGanttViewItem*);
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
+    
+    void slotGvItemClicked(KDGanttViewItem*);
     
 private:
     KDGanttViewItem *findItem(KPTNode *node);
@@ -124,5 +134,11 @@ private:
     bool m_showSlack;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
+    KDGanttViewItem *m_linkParentItem;
+    bool m_linkMode;
+    QCursor m_linkCursor;
+    QColor m_parentColorStart, m_parentColorMiddle, m_parentColorEnd;
+    QColor m_itemColorStart, m_itemColorMiddle, m_itemColorEnd;
+    QColor m_selectColor;
 };
  #endif

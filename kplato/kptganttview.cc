@@ -29,6 +29,8 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kpttaskappointmentsview.h"
+#include "kptrelation.h"
+
 #include "KDGanttView.h"
 #include "KDGanttViewItem.h"
 #include "KDGanttViewTaskItem.h"
@@ -54,6 +56,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kprinter.h>
+#include <kmessagebox.h>
 
 KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     : QSplitter(parent, name),
@@ -61,11 +64,16 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 	m_currentItem(0),
     m_taskView(0),
     m_showSlack(true),
-    m_firstTime(true)
+    m_firstTime(true),
+    m_linkParentItem(0),
+    m_linkMode(false)
 {
 
     setOrientation(QSplitter::Vertical);
 
+    m_linkCursor = QCursor(CrossCursor);
+    m_selectColor = QColor(255, 221, 118);
+    
     m_gantt = new KDGanttView(this, "Gantt view");
     // For test, we need "slack functinallity" in KDGantt...
     m_gantt->addColumn("Earliest start");
@@ -89,6 +97,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
 
     connect(m_gantt, SIGNAL(lvItemRenamed(KDGanttViewItem*, int, const QString&)), SLOT(slotItemRenamed(KDGanttViewItem*, int, const QString&)));
+
+    connect(m_gantt, SIGNAL(gvItemLeftClicked(KDGanttViewItem*)), SLOT(slotGvItemClicked(KDGanttViewItem*)));
 
     m_taskLinks.setAutoDelete(true);
 }
@@ -681,6 +691,61 @@ void KPTGanttView::slotItemRenamed(KDGanttViewItem* item, int col, const QString
     if (col == 0) {
         m_mainview->renameNode(getNode(item), QString(str));
     }
+}
+
+void KPTGanttView::setLinkMode(bool state) {
+    m_linkMode = state; 
+    m_linkParentItem = 0;
+    if (state)
+        m_gantt->setCursor(m_linkCursor);
+    else
+        m_gantt->unsetCursor();
+}
+
+void KPTGanttView::slotGvItemClicked(KDGanttViewItem *item) {
+    kdDebug()<<k_funcinfo<<(item ? item->listViewText() : "null")<<endl;
+    if (!m_linkMode)
+        return;
+    if (!item) {
+        if (m_linkParentItem) {
+            m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
+            m_linkParentItem = 0;
+        }
+        return;
+    }
+    KPTNode *node = getNode(item);
+    if (!node) {
+        if (m_linkParentItem) {
+            m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
+            m_linkParentItem = 0;
+        }
+        return;
+    }
+    if (!m_linkParentItem) {
+        m_linkParentItem = item;
+        m_linkParentItem->colors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
+        m_linkParentItem->setColors(m_selectColor, m_selectColor, m_selectColor);
+        return;
+    }
+    if (node == getNode(m_linkParentItem)) {
+        m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
+        m_linkParentItem = 0;
+        return;
+    }
+    item->colors(m_itemColorStart, m_itemColorMiddle, m_itemColorEnd);
+    item->setColors(m_selectColor, m_selectColor, m_selectColor);
+    if (!getNode(m_linkParentItem)->legalToLink(node)) {
+        KMessageBox::sorry(this, i18n("Cannot link these nodes"));
+    } else {
+        KPTRelation *rel = node->findRelation(getNode(m_linkParentItem));
+        if (rel)
+            emit modifyRelation(rel);
+        else
+            emit addRelation(getNode(m_linkParentItem), node);
+    }
+    item->setColors(m_itemColorStart, m_itemColorMiddle, m_itemColorEnd);
+    m_linkParentItem->setColors(m_parentColorStart, m_parentColorMiddle, m_parentColorEnd);
+    m_linkParentItem = 0;
 }
 
 #include "kptganttview.moc"
