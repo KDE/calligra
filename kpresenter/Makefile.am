@@ -9,7 +9,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kpresenter_doc.cc \
 	page.cc ktextedit.cc styledia.cc \
 	qwmf.cc optiondia.cc pgconfdia.cc effectdia.cc \
-	kpresenter_utils.cc rotatedia.cc searchdia.cc \
+	kpresenter_utils.cc rotatedia.cc searchdia.ui \
 	shadowdia.cc presstructview.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
@@ -27,7 +27,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.cc sidebar.cc koStream.cc \
+	textdialog.ui sidebar.cc koStream.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
 	preview.h preview.cc
 
@@ -54,7 +54,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextedit.h styledia.h \
 		qwmf.h global.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
-		rotatedia.h searchdia.h shadowdia.h presstructview.h \
+		rotatedia.h shadowdia.h presstructview.h \
 		confpiedia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
@@ -68,7 +68,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h textdialog.h sidebar.h textcmd.h koStream.h
+		KPresenterBackgroundIface.h sidebar.h textcmd.h koStream.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

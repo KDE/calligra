@@ -1851,10 +1851,11 @@ void KPresenterView::setupActions()
 					actionCollection(), "text_alignright" );
     ( (KToggleAction*)actionTextAlignRight )->setExclusiveGroup( "align" );
 
+#if 0
     actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enumList", 0,
 					  this, SLOT( textEnumList() ),
 					  actionCollection(), "text_enumList" );
-
+#endif
     actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), "unsortedList",
 					    0, this, SLOT( textUnsortList() ),
 					    actionCollection(), "text_unsortedList" );
