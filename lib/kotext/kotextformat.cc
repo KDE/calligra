@@ -348,6 +348,21 @@ int KoTextFormat::height() const
     return d->m_refHeight;
 }
 
+QString KoTextFormat::displayedString( QString str )const
+{
+    if ( m_attributeFont== ATT_NONE)
+        return str;
+    else if ( m_attributeFont== ATT_UPPER)
+        return str.upper();
+    else if ( m_attributeFont== ATT_LOWER)
+        return str.lower();
+    else
+    {
+        kdDebug()<<" Error in AttributeStyle \n";
+        return str;
+    }
+}
+
 QChar KoTextFormat::displayedChar( QChar c )const
 {
     if ( m_attributeFont== ATT_NONE)

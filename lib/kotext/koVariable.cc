@@ -592,11 +592,7 @@ QString KoVariable::text(bool realValue)
     else
         str = m_varFormat->convert( m_varValue );
 
-    if ( fmt->attributeFont() == KoTextFormat::ATT_UPPER)
-        str = str.upper();
-    else if ( fmt->attributeFont() == KoTextFormat::ATT_LOWER)
-        str = str.lower();
-    return str;
+    return fmt->displayedString( str);
 }
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
