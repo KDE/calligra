@@ -621,7 +621,11 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         m_lastFormatted = m_lastFormatted->next();
     }
 #endif
-    ensureFormatted( cursor->parag() ); // call formatMore until necessary
+    // Call formatMore until necessary
+    // ## Note that it doesn't create new pages though - this is why all
+    // the code calling insert must (after possibly doing other things)
+    // call setLastFormattedParag and formatMore...
+    ensureFormatted( cursor->parag() );
 
     // Speed optimization: if we only type a char, only repaint from current line
     // (In fact the one before. When typing a space, a word could move up to the
@@ -686,7 +690,13 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
             t[ i ] = ' ';
     }
     if ( !t.isEmpty() )
+    {
+        KoTextCursor initialCursor = *cursor;
         insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected, i18n("Paste Text") );
+        setLastFormattedParag( initialCursor.parag() );
+        formatMore( 2 );
+        emit repaintChanged( this );
+    }
 }
 
 
