@@ -261,7 +261,11 @@ void KoTemplateChooseDia::setupDialog()
                 dir.setPath(url.directory(false));
                 QString dirurl = dir.isLocalFile() ? dir.path() : dir.prettyURL();
                 QString fname = KStringHandler::csqueeze(url.fileName(), 40); // Squeeze the filename as little as possible
-                QString squeezed = KStringHandler::csqueeze(dirurl, 40-fname.length()); // and the dir as much as possible :)
+                QString squeezed;
+                if ( 40-fname.length() > 3 )
+                    squeezed = KStringHandler::csqueeze(dirurl, 40-fname.length()); // and the dir as much as possible :)
+                else
+                    squeezed=".../"; // the filename is so long that there's no room for the dir.
                 squeezed += fname;
                 lst.append( squeezed );
                 d->recentFilesMap.insert(squeezed, url);
