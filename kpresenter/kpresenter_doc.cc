@@ -1518,7 +1518,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     bool allSlides = false;
     // clean
     if ( _clean ) {
-        __pgLayout = KoPageLayoutDia::standardLayout();
+        __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
         _spManualSwitch = true;
         _showPresentationDuration = false;
@@ -2148,9 +2148,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     bool allSlides = false;
     // clean
     if ( _clean ) {
-        //KoPageLayout __pgLayout;
-        __pgLayout = KoPageLayoutDia::standardLayout();
-        //__pgLayout.unit = KoUnit::U_MM;
+        __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
         _spManualSwitch = true;
         _showPresentationDuration = false;
