@@ -178,7 +178,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
   if ( !m_pCanvas->editor() )
       {
         // Start editing the current cell
-        m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
+        m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
       }
   KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
 
@@ -2040,7 +2040,7 @@ void KSpreadCanvas::createEditor()
       m_pEditor->setText(cell->text());
 }
 
-void KSpreadCanvas::createEditor( EditorType ed )
+void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
 {
   KSpreadTable *table = activeTable();
   if ( !m_pEditor )
@@ -2086,7 +2086,12 @@ void KSpreadCanvas::createEditor( EditorType ed )
     m_pEditor->setMinimumSize( QSize( min_w, min_h ) );
     m_pEditor->show();
     //kdDebug(36001) << "FOCUS1" << endl;
-    m_pEditor->setFocus();
+    //Laurent 2001-12-05
+    //Don't add focus when we create a new editor and
+    //we select text in edit widget otherwise we don't delete
+    //selected text.
+    if(addFocus)
+        m_pEditor->setFocus();
     //kdDebug(36001) << "FOCUS2" << endl;
   }
 }
