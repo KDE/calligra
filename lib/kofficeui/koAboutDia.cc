@@ -14,6 +14,8 @@
 #include "koAboutDia.h"
 #include <klocale.h>
 #include <koApplication.h>
+#include <kiconloader.h>
+#include <kglobal.h>
 
 /******************************************************************/
 /* class KoAboutDia                                               */
@@ -31,7 +33,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KPresenter: 
       {
 	setCaption(i18n("KPresenter - About")); 
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKPresenter.xpm");
+	pLogo = ICON("koKPresenter.xpm");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
 	add = i18n("WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>");
@@ -39,7 +41,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KSpread: 
       {
 	setCaption(i18n("KSpread - About")); 
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKSpread.xpm");
+	pLogo = ICON("koKSpread.xpm");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -47,7 +49,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KCharts: 
       {
 	setCaption(i18n("KCharts - About"));
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKCharts.xpm");
+	pLogo = ICON("koKCharts.xpm");
 	author = "Kalle Dalheimer and Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -55,7 +57,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KImage:
       {
 	setCaption(i18n("KImage - About"));
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKImage.xpm");
+	pLogo = ICON("koKImage.xpm");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -63,7 +65,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KAutoformEdit: 
       {
 	setCaption(i18n("KAutoformEdit - About"));
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKAutoformEdit.xpm");
+	pLogo = ICON("koKAutoformEdit.xpm");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
 	add = "";
@@ -71,7 +73,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KOffice: 
       {
 	setCaption(i18n("KOffice - About"));
-	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKOffice.xpm");
+	pLogo = ICON("koKOffice.xpm");
 	author = i18n("the KOffice Team");
 	email = i18n("<koffice@kde.org>");
 	add = "";

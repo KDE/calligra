@@ -37,6 +37,7 @@
 #include <kded_instance.h>
 #include <ktrader.h>
 #include <kactivator.h>
+#include <kstddirs.h>
 
 /**
  * Port to KActivator/KTrader (kded) by Simon Hausmann
@@ -261,14 +262,7 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
       }
       if ( !it.current()->entry()->m_strMiniIcon.isEmpty() )
       {
-	QString tmp = it.current()->entry()->m_strMiniIcon.ascii();
-	if ( tmp[0] != '/' )
-	{
-	  QString t2 = tmp;
-	  tmp = kapp->kde_datadir();
-	  tmp += "/koffice/toolbar/";
-	  tmp += t2;
-	}
+	QString tmp = locate("toolbar", it.current()->entry()->m_strMiniIcon);
 	OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
 	CORBA::WString_var toolTip = Q2C( it.current()->entry()->m_strName );
 	(void)m_vToolBar->insertButton2( pix, 1, SIGNAL( clicked() ), it.current(),

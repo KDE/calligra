@@ -32,7 +32,10 @@ KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
     , m_bWithGUI( true )
 {
   KGlobal::locale()->insertCatalogue("koffice");
-  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_data_relative() + "/koffice/toolbar/");
+  KGlobal::dirs()->addResourceType("toolbar", 
+	   KStandardDirs::kde_default("data") + "/koffice/toolbar/");
+  KGlobal::dirs()->addResourceType("toolbar", 
+	   KStandardDirs::kde_default("data") + "/koffice/pics/");
 
   // checking wether start the app as server or not
   QStringList::Iterator it;

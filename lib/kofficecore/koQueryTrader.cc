@@ -77,6 +77,8 @@ const KoComponentEntry& KoComponentEntry::operator=( const KoComponentEntry& e )
     reference = CORBA::Object::_duplicate( e.reference );
   else
     reference = 0;
+
+  return *this;
 }
 
 KoComponentEntry::~KoComponentEntry()
@@ -134,6 +136,7 @@ const KoDocumentEntry& KoDocumentEntry::operator=( const KoDocumentEntry& e )
 {
   KoComponentEntry::operator=( e );
   mimeTypes = e.mimeTypes;
+  return *this;
 }
 
 KOffice::Document_ptr KoDocumentEntry::createDoc()
@@ -281,7 +284,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
     // We need a virtual object reference
     f.reference = activator->activateService( (*it)->name(), repoId, tag );
-    printf("Created %x\n",f.reference);
+    printf("Created %p\n",f.reference);
 
     // Append converted offer
     lst.append( f );
