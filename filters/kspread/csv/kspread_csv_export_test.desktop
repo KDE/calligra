@@ -1,0 +1,19 @@
+[Desktop Entry]
+Type=Service
+Name=KSpredCSVExportFilterTest
+Comment=KSpread CSV Export Filter
+Comment[hu]=KSzámolótábla CSV Export szűrője
+Comment[no]=KSpread CSV eksportfilter
+Comment[no_NY]=KSpread CSV eksportfilter
+Comment[ro]=Filtru de export CVS pentru KSpread
+Comment[sl]=Filter za izvoz CSV iz KSpread
+Export=text/x-csv
+ExportDescription=CSV
+Import=application/x-kspread
+ImportDescription=KSpread
+Implemented=kodocument
+X-KDE-Library=libcsvexport_test
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
