@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -160,7 +160,7 @@ class KWFrameSet
 {
 public:
   KWFrameSet(KWordDocument *_doc);
-  virtual ~KWFrameSet() 
+  virtual ~KWFrameSet()
     {;}
 
   virtual FrameType getFrameType()
@@ -239,7 +239,7 @@ class KWTextFrameSet : public KWFrameSet
 {
 public:
   KWTextFrameSet(KWordDocument *_doc)
-    : KWFrameSet(_doc) 
+    : KWFrameSet(_doc)
     {;}
   ~KWTextFrameSet();
 
@@ -247,7 +247,7 @@ public:
     { return FT_TEXT; }
 
   virtual void update();
-  
+
   /**
    * If another parag becomes the first one it uses this function
    * to tell the document about it.
@@ -296,9 +296,9 @@ class KWPictureFrameSet : public KWFrameSet
 {
 public:
   KWPictureFrameSet(KWordDocument *_doc)
-    : KWFrameSet(_doc) 
+    : KWFrameSet(_doc)
     { image = 0L; }
-  virtual ~KWPictureFrameSet() 
+  virtual ~KWPictureFrameSet()
     {;}
 
   virtual FrameType getFrameType()
@@ -331,9 +331,9 @@ class KWPartFrameSet : public KWFrameSet
 {
 public:
   KWPartFrameSet(KWordDocument *_doc,KWordChild *_child)
-    : KWFrameSet(_doc) 
+    : KWFrameSet(_doc)
     { child = _child; _enableDrawing = true; }
-  virtual ~KWPartFrameSet() 
+  virtual ~KWPartFrameSet()
     {;}
 
   virtual FrameType getFrameType()
@@ -384,6 +384,8 @@ public:
   void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
   KWFrameSet *getFrameSet(unsigned int row,unsigned int col);
   bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
+
+  bool isTableHeader(KWFrameSet *fs);
   
   void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
   void init();
@@ -422,6 +424,8 @@ public:
   bool getShowHeaderOnAllPages()
     { return showHeaderOnAllPages; }
 
+  void updateTempHeaders();
+  
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

@@ -3,7 +3,7 @@ Reggie, 9.9.1998:
 - Attributes for writing text can be set with the
   toolbar now. So it's possible to write with defferent
   attributes now.
-  I only miss the attribute 'underlined' in KWFormat! 
+  I only miss the attribute 'underlined' in KWFormat!
   I'll implement that.
 - The attributes, which are shown in the toolbar, are
   automatically updated when moving the cursor.
@@ -21,15 +21,15 @@ Reggie, 9.9.1998:
 Reggie, 10.9.1998:
 ------------------
 - Introduced font attribute UNDERLINE.
-- Implemented 'bool KWString::remove(unsigned int _pos,unsigned int _len)', 
-  'void KWString::append(KWChar* _text,unsigned int _len) and 
+- Implemented 'bool KWString::remove(unsigned int _pos,unsigned int _len)',
+  'void KWString::append(KWChar* _text,unsigned int _len) and
   'KWChar* KWString::copy(KWChar *_data,unsigned int _len)'
-- Implemented 'bool KWParag::deleteText(pos,len)', 
+- Implemented 'bool KWParag::deleteText(pos,len)',
   'void KWParag::appendText(KWChar* _text,unsigned int _len)'.
 
 Reggie, 11.9.1998:
 ------------------
-- Implemented Key_Delete and Key_Backspace, and everything which 
+- Implemented Key_Delete and Key_Backspace, and everything which
   was needed for that. There are still lots of problems with that,
   especially with placing the cursor and redrawing.
 - Implemented Key_Return (== Key_Enter). It seems to work ok, but I'm sure
@@ -60,7 +60,7 @@ Reggie, 14.9.1998:
 - Bugfix in printLine
 - Bugfix in Key_Delete
 - Improoved speed of deleting/inserting text and scrolling the canvas
-  (now only the visible text is repainted) 
+  (now only the visible text is repainted)
 - Some bugfixes in the KWFormatContext and in printing lines
 
 Reggie, 15.9.1998:
@@ -98,12 +98,12 @@ Reggie, 20.9.1998:
 - Implemented configurable left indent and first line left indent
 - Fixed some bugs in cursor navigation
 - Fixed a bug in Key_Backspace
-- Automatically recalc/update of the cursor, if a new page/paragraph layout is set 
+- Automatically recalc/update of the cursor, if a new page/paragraph layout is set
 
 Reggie, 21.9.1998:
 ------------------
 - Using new interactive KoRuler (which I started writing today) instead of KRuler.
-- First trial of linespacing... 
+- First trial of linespacing...
 
 Reggie, 22.9.1998:
 ------------------
@@ -165,8 +165,8 @@ Reggie, 3.10.1998:
 - Implemented selection a word with a mouse double click
 - The flows CENTER and RIGHT work now => ALL flows work now :-)
 - Fixed a bug in cursor navigation
-- Automatical scrolling when selecting text 
-  (there are some redraw problems when selecting text now because of the 
+- Automatical scrolling when selecting text
+  (there are some redraw problems when selecting text now because of the
    automatical scrolling)
 - Some bugfixes in KWFormatContext
 
@@ -247,7 +247,7 @@ Reggie, 16.10.1998 - 19.10.1998
 - Fixed lots of speed problems in KWFormatContext when editing long textes. It was terribly slow.
   But it's possible that I introduced some bugs - if this is the case I'll, of course, fix them :-)
   What I did: KWFormatContext::init(..) is called quite often when navigating with the cursor (e.g
-  a line up, deleting/inserting text, etc.). 
+  a line up, deleting/inserting text, etc.).
   The implementation of this init methode started at the first parag of the text and went through
   _all_ paragraphs, until the needed one was reached. For long textes (I tested with 70 pages) this was
   damn slow when you were nearly at the end of the text. Now init doesn't go through all parags anymore
@@ -286,7 +286,7 @@ Reggie, 26.10.1998:
 -------------------
 - Implemented resizing frames
 - Added a new property for framesets, which allows the user to say,
-  if a frameset should automatically add frames when the text of 
+  if a frameset should automatically add frames when the text of
   the frameset doesn't fit into the frames anymore
 - Started writing a dialog for configuring frames and framesets. Currently
   it's possible to set the text run-around type for frames and the above
@@ -432,7 +432,7 @@ Reggie, 30.11.1998:
 Reggie, 1.12.1998:
 ------------------
 - More speed improvements
-- Selecting text is faster too now (There are still problems when selecting text with the mouse 
+- Selecting text is faster too now (There are still problems when selecting text with the mouse
   and scrolling - selcting text with keyboard + scrolling works quite fine)
 - Small fixes again
 
@@ -470,7 +470,7 @@ Reggie, 6.12.1998:
 
 Reggie, 7.12.1998:
 ------------------
-- More work on left aligned tabs, but there is still a bug 
+- More work on left aligned tabs, but there is still a bug
 
 Reggie, 8.12.1998:
 ------------------
@@ -644,7 +644,7 @@ Reggie, 12.1.1999:
   - Implemented internals for tables (a table consists of (rows * cols) framesets, each frameset has one frame)
   - Inserting tables works (I'll add a widget for choosing the number of rows and cols tomorrow)
   - Writing text in the tables and formatting works
-  - Moving tables works 
+  - Moving tables works
   - Resizing rows and cols works
   - Selecting cells works
 
@@ -660,7 +660,7 @@ Reggie, 14.1.1999:
 ------------------
 - Fixes
 - When inserting a new parag (after pressing return) and current paragLayout->name() == following paragLayout->name()
-  a copy of the current paragLayout is assigned to the new parag. 
+  a copy of the current paragLayout is assigned to the new parag.
 - Tables can flow over multiple pages now
 - Saving and Loading tabes works now
 - Destructor doesn't crash anymore :-)) (at least on my system)
@@ -677,7 +677,7 @@ Reggie, 17.1.1999:
 - Fix of a strange bug in KWordView::colorToPixString
 - Some other small fixes
 - Added menu switch for enabling/disabling showing of table grid
-- Selecting multiple frames (esp. table cells) is more comfortable now 
+- Selecting multiple frames (esp. table cells) is more comfortable now
 - It's possible to configure borders (color, width and style) for frames now => table cells can have these borders too
 - Implemented loading/saving frame borders
 - Implemented printing frame borders
@@ -833,7 +833,7 @@ Reggie, 11.2.1999:
 Reggie, 16.2.1999:
 ------------------
 - Undo/Redo starts working
-- Some fixes with formatting 
+- Some fixes with formatting
 
 Reggie, 17.2.1999:
 ------------------
@@ -846,3 +846,8 @@ Reggie, 18.2.1999:
   add the possibility to switch this on/off - now it's on by
   default. Only the automatically added headers are not up-to-date
   all the time currently - I'll fix that.
+
+Reggie, 24.2.1999:
+------------------
+- When a table flows over multiple pages and the table-header is copied to
+  each page, it is updated correctly now.

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -36,10 +36,10 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFrame::KWFrame() 
+KWFrame::KWFrame()
   : KRect(), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
-{ 
-  runAround = RA_NO; 
+{
+  runAround = RA_NO;
   intersections.setAutoDelete(true);
   selected = false;
   runAroundGap = 1;
@@ -61,59 +61,11 @@ KWFrame::KWFrame()
 }
 
 /*================================================================*/
-KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright) 
+KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   : KRect(topleft,bottomright), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
-{ 
-  runAround = RA_NO; 
-  intersections.setAutoDelete(true); 
-  selected = false;
-  mostRight = false;
-
-  backgroundColor = QBrush(white);
-  brd_left.color = getBackgroundColor().color();
-  brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor().color();
-  brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor().color();
-  brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor().color();
-  brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 1;
-} 
-
-/*================================================================*/
-KWFrame::KWFrame(const KPoint &topleft,const KSize &size) 
-  : KRect(topleft,size), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
-{ 
-  runAround = RA_NO; 
-  intersections.setAutoDelete(true); 
-  selected = false;
-  mostRight = false;
-
-  backgroundColor = QBrush(white);
-  brd_left.color = getBackgroundColor().color();
-  brd_left.style = KWParagLayout::SOLID;
-  brd_left.ptWidth = 1;
-  brd_right.color = getBackgroundColor().color();
-  brd_right.style = KWParagLayout::SOLID;
-  brd_right.ptWidth = 1;
-  brd_top.color = getBackgroundColor().color();
-  brd_top.style = KWParagLayout::SOLID;
-  brd_top.ptWidth = 1;
-  brd_bottom.color = getBackgroundColor().color();
-  brd_bottom.style = KWParagLayout::SOLID;
-  brd_bottom.ptWidth = 1;
-}    
-
-/*================================================================*/
-KWFrame::KWFrame(int left,int top,int width,int height) 
-  : KRect(left,top,width,height), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
-{ 
-  runAround = RA_NO; 
-  intersections.setAutoDelete(true); 
+{
+  runAround = RA_NO;
+  intersections.setAutoDelete(true);
   selected = false;
   mostRight = false;
 
@@ -133,11 +85,59 @@ KWFrame::KWFrame(int left,int top,int width,int height)
 }
 
 /*================================================================*/
-KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap) 
+KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
+  : KRect(topleft,size), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
+{
+  runAround = RA_NO;
+  intersections.setAutoDelete(true);
+  selected = false;
+  mostRight = false;
+
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor().color();
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor().color();
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor().color();
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 1;
+}
+
+/*================================================================*/
+KWFrame::KWFrame(int left,int top,int width,int height)
+  : KRect(left,top,width,height), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
+{
+  runAround = RA_NO;
+  intersections.setAutoDelete(true);
+  selected = false;
+  mostRight = false;
+
+  backgroundColor = QBrush(white);
+  brd_left.color = getBackgroundColor().color();
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 1;
+  brd_right.color = getBackgroundColor().color();
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 1;
+  brd_top.color = getBackgroundColor().color();
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 1;
+  brd_bottom.color = getBackgroundColor().color();
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 1;
+}
+
+/*================================================================*/
+KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap)
   : KRect(left,top,width,height), runAroundGap(_gap), intersections(), bleft(), bright(), btop(), bbottom()
-{ 
-  runAround = _ra; 
-  intersections.setAutoDelete(true); 
+{
+  runAround = _ra;
+  intersections.setAutoDelete(true);
   selected = false;
   mostRight = false;
 
@@ -160,8 +160,8 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap
 KWFrame::KWFrame(const QRect &_rect)
   : KRect(_rect), runAroundGap(1.0), intersections(), bleft(), bright(), btop(), bbottom()
 {
-  runAround = RA_NO; 
-  intersections.setAutoDelete(true); 
+  runAround = RA_NO;
+  intersections.setAutoDelete(true);
   selected = false;
   mostRight = false;
 
@@ -182,8 +182,8 @@ KWFrame::KWFrame(const QRect &_rect)
 
 /*================================================================*/
 void KWFrame::addIntersect(KRect &_r)
-{ 
-  intersections.append(new KRect(_r.x(),_r.y(),_r.width(),_r.height())); 
+{
+  intersections.append(new KRect(_r.x(),_r.y(),_r.width(),_r.height()));
 }
 
 /*================================================================*/
@@ -283,7 +283,7 @@ QCursor KWFrame::getMouseCursor(int mx,int my,bool table)
 	return sizeHorCursor;
       if (mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
 	return sizeFDiagCursor;
-      
+
       if (selected)
 	return sizeAllCursor;
     }
@@ -346,9 +346,9 @@ QString KWFrame::bottomBrd2String()
 /*================================================================*/
 KWFrameSet::KWFrameSet(KWordDocument *_doc)
   : frames(), removeableHeader(false)
-{ 
-  doc = _doc; 
-  frames.setAutoDelete(true); 
+{
+  doc = _doc;
+  frames.setAutoDelete(true);
   frameInfo = FI_BODY;
   current = 0;
   grpMgr = 0L;
@@ -464,20 +464,20 @@ void KWFrameSet::save(ostream &out)
     {
       frame = getFrame(i);
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
-	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
-	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
+	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom()
+	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround())
 	  << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
-	  << "\" runaGapMM=\"" << frame->getRunAroundGap().mm() 
-	  << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" " 
-	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
+	  << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
+	  << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
+	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String()
 	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
 	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
-	  << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm() 
-	  << "\" bleftinch=\"" << frame->getBLeft().inch()  
+	  << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
+	  << "\" bleftinch=\"" << frame->getBLeft().inch()
 
-	  << "\" brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm() 
-	  << "\" brightinch=\"" << frame->getBRight().inch() 
+	  << "\" brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm()
+	  << "\" brightinch=\"" << frame->getBRight().inch()
 
 	  << "\" btoppt=\"" << frame->getBTop().pt() << "\" btopmm=\"" << frame->getBTop().mm()
 	  << "\" btopinch=\"" << frame->getBTop().inch()
@@ -509,7 +509,7 @@ bool KWFrameSet::hasSelectedFrame()
       if (frames.at(i)->isSelected())
 	return true;
     }
-  
+
   return false;
 }
 
@@ -558,11 +558,11 @@ void KWTextFrameSet::assign(KWTextFrameSet *fs)
 
   p2->setNext(0L);
 
-  getFrame(0)->setBackgroundColor(fs->getFrame(0)->getBackgroundColor());  
-  getFrame(0)->setLeftBorder(fs->getFrame(0)->getLeftBorder2());  
-  getFrame(0)->setRightBorder(fs->getFrame(0)->getRightBorder2());  
-  getFrame(0)->setTopBorder(fs->getFrame(0)->getTopBorder2());  
-  getFrame(0)->setBottomBorder(fs->getFrame(0)->getBottomBorder2());  
+  getFrame(0)->setBackgroundColor(fs->getFrame(0)->getBackgroundColor());
+  getFrame(0)->setLeftBorder(fs->getFrame(0)->getLeftBorder2());
+  getFrame(0)->setRightBorder(fs->getFrame(0)->getRightBorder2());
+  getFrame(0)->setTopBorder(fs->getFrame(0)->getTopBorder2());
+  getFrame(0)->setBottomBorder(fs->getFrame(0)->getBottomBorder2());
   getFrame(0)->setBLeft(fs->getFrame(0)->getBLeft());
   getFrame(0)->setBRight(fs->getFrame(0)->getBRight());
   getFrame(0)->setBTop(fs->getFrame(0)->getBTop());
@@ -570,8 +570,8 @@ void KWTextFrameSet::assign(KWTextFrameSet *fs)
 }
 
 /*================================================================*/
-KWTextFrameSet::~KWTextFrameSet() 
-{ 
+KWTextFrameSet::~KWTextFrameSet()
+{
   KWParag *p = getLastParag();
 
   while (p != parags)
@@ -606,8 +606,8 @@ void KWTextFrameSet::update()
 	      frames.at(j)->setPageNum(i);
 	      l->append(frames.at(j));
 	    }
-	}  
-      
+	}
+
       if (!l->isEmpty())
 	{
 	  FrameList *ll = new FrameList();
@@ -618,8 +618,8 @@ void KWTextFrameSet::update()
 	    {
 	      bool inserted = false;
 	      for (m = 0;m < ll->count();m++)
-		{ 
-		  if (l->at(k)->y() < ll->at(m)->y()) 
+		{
+		  if (l->at(k)->y() < ll->at(m)->y())
 		    {
 		      inserted = true;
 		      ll->insert(m,l->at(k));
@@ -635,8 +635,8 @@ void KWTextFrameSet::update()
 	    {
 	      bool inserted = false;
 	      for (m = 0;m < l2->count();m++)
-		{ 
-		  if (ll->at(k)->x() < l2->at(m)->x()) 
+		{
+		  if (ll->at(k)->x() < l2->at(m)->x())
 		    {
 		      inserted = true;
 		      l2->insert(m,ll->at(k));
@@ -645,7 +645,7 @@ void KWTextFrameSet::update()
 		}
 	      if (!inserted) l2->append(ll->at(k));
 	    }
-	  
+	
 	  delete ll;
 	  delete l;
 	  l = l2;
@@ -680,13 +680,13 @@ void KWTextFrameSet::update()
 
 /*================================================================*/
 void KWTextFrameSet::setFirstParag(KWParag *_parag)
-{ 
+{
   parags = _parag;
 }
 
 /*================================================================*/
-KWParag* KWTextFrameSet::getFirstParag() 
-{ 
+KWParag* KWTextFrameSet::getFirstParag()
+{
   return parags;
 }
 
@@ -694,7 +694,7 @@ KWParag* KWTextFrameSet::getFirstParag()
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
   KWFrame *frame = getFrame(_frame);
-  return (static_cast<int>(_ypos) >= static_cast<int>(frame->top() + frame->getBTop().pt()) && 
+  return (static_cast<int>(_ypos) >= static_cast<int>(frame->top() + frame->getBTop().pt()) &&
 	  static_cast<int>(_ypos) <= static_cast<int>(frame->bottom() - frame->getBBottom().pt()));
 }
 
@@ -707,7 +707,7 @@ void KWTextFrameSet::deleteParag(KWParag *_parag)
 
   if (!_parag->getPrev())
     {
-      p = _parag->getNext(); 
+      p = _parag->getNext();
       p->setPrev(0L);
       setFirstParag(p);
       delete _parag;
@@ -776,12 +776,12 @@ void KWTextFrameSet::splitParag(KWParag *_parag,unsigned int _pos)
   KWParag *_new = 0L,*_next = 0L;
 
   if (_parag) _next = _parag->getNext();
-    
+
   unsigned int len = _parag->getTextLen() - _pos;
   KWChar* _string = _parag->getKWString()->split(_pos);
   _new = new KWParag(this,doc,_parag,_next,_parag->getParagLayout());
   if (_next) _next->setPrev(_new);
-  
+
   _new->appendText(_string,len);
 
   updateCounters();
@@ -803,8 +803,8 @@ void KWTextFrameSet::save(ostream &out)
       grp += tmp.copy();
     }
 
-  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) 
-      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" 
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType())
+      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
       << static_cast<int>(frameInfo) << grp << "\" removeable=\"" << static_cast<int>(removeableHeader)
       << "\">" << endl;
 
@@ -835,10 +835,10 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       // paragraph
       if (name == "PARAGRAPH")
-	{    
+	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -872,7 +872,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  KWParagLayout::Border l,r,t,b;
 	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
 	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
-	  
+	
 	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
@@ -886,7 +886,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
 	  QColor c(white);
-	  
+	
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -995,8 +995,8 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -1143,7 +1143,7 @@ KWParag *KWTextFrameSet::getLastParag()
 /*================================================================*/
 void KWPictureFrameSet::setFileName(QString _filename)
 {
-  if (image) 
+  if (image)
     {
       image->decRef();
       image = 0L;
@@ -1160,7 +1160,7 @@ void KWPictureFrameSet::setFileName(QString _filename)
 /*================================================================*/
 void KWPictureFrameSet::setFileName(QString _filename,KSize _imgSize)
 {
-  if (image) 
+  if (image)
     {
       image->decRef();
       image = 0L;
@@ -1185,7 +1185,7 @@ void KWPictureFrameSet::setSize(KSize _imgSize)
 /*================================================================*/
 void KWPictureFrameSet::save(ostream &out)
 {
-  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\" frameInfo=\"" 
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\" frameInfo=\""
       << static_cast<int>(frameInfo) << "\">" << endl;
 
   KWFrameSet::save(out);
@@ -1208,13 +1208,13 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
       KOMLParser::parseTag(tag.c_str(),name,lst);
 
       if (name == "IMAGE")
-	{    
+	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
 	    {
 	    }
-	  
+	
 	  KWImage *_image = new KWImage();
 	  _image->load(parser,lst,doc);
 	  setFileName(_image->getFilename());
@@ -1227,7 +1227,7 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  KWParagLayout::Border l,r,t,b;
 	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
 	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
-	  
+	
 	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
 	  l.ptWidth = 1;
@@ -1241,7 +1241,7 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
 	  QColor c(white);
-	  
+	
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -1350,8 +1350,8 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -1365,11 +1365,11 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /******************************************************************/
 
 /*================================================================*/
-QPicture *KWPartFrameSet::getPicture() 
-{ 
+QPicture *KWPartFrameSet::getPicture()
+{
   if (!_enableDrawing) return 0L;
 
-  return child->draw(1.0,false); 
+  return child->draw(1.0,false);
 }
 
 /*================================================================*/
@@ -1411,7 +1411,7 @@ void KWGroupManager::addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int co
       if (cells.at(i)->row * 10 + cells.at(i)->col > sum)
 	break;
     }
-  
+
   Cell *cell = new Cell;
   cell->frameSet = fs;
   cell->row = row;
@@ -1428,7 +1428,7 @@ KWFrameSet *KWGroupManager::getFrameSet(unsigned int row,unsigned int col)
       if (cells.at(i)->row == row && cells.at(i)->col == col)
 	return cells.at(i)->frameSet;
     }
-  
+
   return 0L;
 }
 
@@ -1444,10 +1444,22 @@ bool KWGroupManager::getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &
 	  return true;
 	}
     }
+
+  return false;
+}
+
+/*================================================================*/
+bool KWGroupManager::isTableHeader(KWFrameSet *fs)
+{
+  for (unsigned int i = 0;i < cols;i++)
+    {
+      if (cells.at(i)->frameSet == fs)
+	return true;
+    }
   
   return false;
 }
-  
+
 /*================================================================*/
 void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsigned int height)
 {
@@ -1509,7 +1521,7 @@ void KWGroupManager::recalcCols()
 	}
       if (wid != -1)
 	{
-	  if (getBoundingRect().x() + getBoundingRect().width() + (wid - _wid) > 
+	  if (getBoundingRect().x() + getBoundingRect().width() + (wid - _wid) >
 	      static_cast<int>(doc->getPTPaperWidth()))
 	    wid = _wid;
 	  for (j = 0;j < rows;j++)
@@ -1566,7 +1578,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	    getFrameSet(j,i)->getFrame(0)->setHeight(hei);
 	}
     }
-    
+
   unsigned int y = getFrameSet(0,0)->getFrame(0)->y();
   for (unsigned int j = 0;j < rows;j++)
     {
@@ -1575,7 +1587,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 
       if (doc->getProcessingType() == KWordDocument::DTP)
 	{
-	  if (j > 0 && y + getFrameSet(j,i)->getFrame(0)->height() > 
+	  if (j > 0 && y + getFrameSet(j,i)->getFrame(0)->height() >
 	      (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() - doc->getPTBottomBorder())
 	    {
 	      y = (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() + doc->getPTTopBorder();
@@ -1584,7 +1596,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	}
       else
 	{
-	  if (j > 0 && static_cast<int>(y + getFrameSet(j,i)->getFrame(0)->height()) > 
+	  if (j > 0 && static_cast<int>(y + getFrameSet(j,i)->getFrame(0)->height()) >
 	      static_cast<int>((doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0))->bottom())))
 	    {
 	      if (doc->getPages() < getFrameSet(j - 1,i)->getPageOfFrame(0) + 2)
@@ -1595,10 +1607,10 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 	      }
 	    }
 	}
-      
+
       if (_addRow && showHeaderOnAllPages)
 	insertRow(j,_painter,false,true);
-      
+
       for (i = 0;i < cols;i++)
 	{
 	  if (_addRow)
@@ -1617,7 +1629,7 @@ void KWGroupManager::recalcRows(QPainter &_painter)
       y = getFrameSet(j,0)->getFrame(0)->bottom() + 3;
     }
 
-  if (getBoundingRect().y() + getBoundingRect().height() > 
+  if (getBoundingRect().y() + getBoundingRect().height() >
       static_cast<int>(doc->getPTPaperHeight() * doc->getPages()))
     doc->appendPage(doc->getPages() - 1,_painter);
 }
@@ -1628,10 +1640,10 @@ KRect KWGroupManager::getBoundingRect()
   KRect r1,r2;
   KWFrame *first = getFrameSet(0,0)->getFrame(0);
   KWFrame *last = getFrameSet(rows - 1,cols - 1)->getFrame(0);
-  
+
   r1 = KRect(first->x(),first->y(),first->width(),first->height());
   r2 = KRect(last->x(),last->y(),last->width(),last->height());
-  
+
   r1 = r1.unite(r2);
   return KRect(r1);
 }
@@ -1644,7 +1656,7 @@ bool KWGroupManager::hasSelectedFrame()
       if (cells.at(i)->frameSet->getFrame(0)->isSelected())
 	return true;
     }
-  
+
   return false;
 }
 
@@ -1767,7 +1779,7 @@ void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter,bool _recalc
       nCells.append(_frameSet);
       ww += *w.at(i) + 2;
     }
-  
+
   rows = ++_rows;
 
   for (i = 0;i < nCells.count();i++)
@@ -1817,7 +1829,7 @@ void KWGroupManager::insertCol(unsigned int _idx)
       nCells.append(_frameSet);
       hh += *h.at(i) + 2;
     }
-  
+
   cols = ++_cols;
 
   for (i = 0;i < nCells.count();i++)
@@ -1840,7 +1852,7 @@ void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter,bool _recalc
 {
   for (unsigned int i = 0;i < cells.count();i++)
     {
-      if (cells.at(i)->row == _idx) 
+      if (cells.at(i)->row == _idx)
 	{
 	  doc->delFrameSet(cells.at(i)->frameSet);
 	  cells.at(i)->frameSet = 0L;
@@ -1862,7 +1874,7 @@ void KWGroupManager::deleteCol(unsigned int _idx)
 {
   for (unsigned int i = 0;i < cells.count();i++)
     {
-      if (cells.at(i)->col == _idx) 
+      if (cells.at(i)->col == _idx)
 	{
 	  doc->delFrameSet(cells.at(i)->frameSet);
 	  cells.at(i)->frameSet = 0L;
@@ -1879,15 +1891,25 @@ void KWGroupManager::deleteCol(unsigned int _idx)
 }
 
 /*================================================================*/
-bool isAHeader(FrameInfo fi) 
-{ 
-  return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER); 
+void KWGroupManager::updateTempHeaders()
+{
+  for (unsigned int i = 1;i < rows;i++)
+    {
+      for (unsigned int j = 0;j < cols;j++)
+	dynamic_cast<KWTextFrameSet*>(getFrameSet(i,j))->assign(dynamic_cast<KWTextFrameSet*>(getFrameSet(0,j)));
+    }
 }
 
 /*================================================================*/
-bool isAFooter(FrameInfo fi) 
-{ 
-  return (fi == FI_FIRST_FOOTER || fi == FI_EVEN_FOOTER || fi == FI_ODD_FOOTER); 
+bool isAHeader(FrameInfo fi)
+{
+  return (fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER);
+}
+
+/*================================================================*/
+bool isAFooter(FrameInfo fi)
+{
+  return (fi == FI_FIRST_FOOTER || fi == FI_EVEN_FOOTER || fi == FI_ODD_FOOTER);
 }
 
 /*================================================================*/
