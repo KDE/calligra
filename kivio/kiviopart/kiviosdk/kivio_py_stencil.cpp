@@ -232,7 +232,8 @@ void KivioPyStencil::updateGeometry()
         float x = getDoubleFromDict( target,"x");
         float y = getDoubleFromDict( target,"y");
 
-        pTarget->setPosition( x, y );
+        pTarget  ->setPosition( x, y );
+	pOriginal->setPosition( x, y );
 
         pTarget = m_pConnectorTargets->next();
         pOriginal = pOriginalTargets->next();
@@ -798,3 +799,4 @@ QString KivioPyStencil::text()
 
 
 #endif // HAVE_PYTHON
+
