@@ -520,7 +520,6 @@ void KWFrameDia::setupTab4Geometry()
 
 	KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
 	QString _x, _y, _w, _h;
-	y -= frms->getPageOfFrame( _num ) * doc->getPTPaperHeight();
 
 	switch ( KWUnit::unitType( doc->getUnit() ) ) {
 	case U_MM:
