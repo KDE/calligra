@@ -58,6 +58,7 @@
 #include "preview.h"
 
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
@@ -461,8 +462,20 @@ void KPresenterView::insertPicture()
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-        file = fd.selectedFile();
+        url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
 
     QCursor c = page->cursor();
@@ -489,8 +502,20 @@ void KPresenterView::insertClipart()
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+	url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
 
     if ( !file.isEmpty() )
@@ -885,17 +910,31 @@ void KPresenterView::extraWebPres()
     if ( !allowWebPres )
 	return;
 
+    KURL url;
     QString config = QString::null;
     if ( QMessageBox::information( this, i18n( "Create Web-Presentation" ),
 				   i18n( "Do you want to load a configuration which should be used for this\n"
 					 "Web-Presentation, which you have already saved earlier?" ),
 				   i18n( "&Yes" ), i18n( "&No" ), QString::null, 1, 1 ) == 0 )
+    {		   
 #ifdef USE_QFD
 	config = QFileDialog::getOpenFileName( QString::null, "KPresenter Web-Presentation (*.kpweb)" );
 #else
-	config = KFileDialog::getOpenFileName( QString::null, "*.kpweb|KPresenter Web-Presentation" );
+	url = KFileDialog::getOpenURL( QString::null, "*.kpweb|KPresenter Web-Presentation" );
+
+	if( url.isEmpty() )
+	  return;
+
+	if( !url.isLocalFile() )
+	{
+	  KMessageBox::sorry( 0L, i18n( "Only local files supprted yet." ) );
+	  return;
+	}
+
+	config = url.path();
 #endif
-	
+    }
+
     KPWebPresentationWizard::createWebPresentation( config, m_pKPresenterDoc, this );
 }
 
@@ -1994,7 +2033,7 @@ void KPresenterView::setupActions()
 					     actionCollection(), "screen_penwidth" );
     QStringList lst;
     lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
-    ( ( KSelectAction* )actionScreenPenWidth )->setItems( lst );
+    ( ( QSelectAction* )actionScreenPenWidth )->setItems( lst );
     connect( ( ( KSelectAction* )actionScreenPenWidth ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( screenPenWidth( const QString & ) ) );
 
@@ -2539,8 +2578,20 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+	url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
 
     if ( !file.isEmpty() ) m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
@@ -2564,8 +2615,20 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+	url = fd.selectedURL();
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    file = url.path();
 #endif
 
     if ( !file.isEmpty() )

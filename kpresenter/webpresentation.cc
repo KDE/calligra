@@ -58,6 +58,7 @@
 #include <klocale.h>
 #include <kcolorbtn.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
 #include <kimgio.h>
@@ -877,7 +878,18 @@ void KPWebPresentationCreateDialog::saveConfig()
 #ifdef USE_QFD
     filename = QFileDialog::getOpenFileName( filename, "KPresenter Web-Presentation (*.kpweb)" );
 #else
-    filename = KFileDialog::getOpenFileName( filename, "*.kpweb|KPresenter Web-Presentation" );
+    KURL url = KFileDialog::getOpenURL( filename, "*.kpweb|KPresenter Web-Presentation" );
+
+    if( url.isEmpty() )
+      return;
+
+    if( !url.isLocalFile() )
+    {
+      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      return;
+    }
+
+    filename = url.path();
 #endif
     
     if ( !filename.isEmpty() ) {
