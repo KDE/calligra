@@ -34,6 +34,7 @@
 TKFloatSpinBox::TKFloatSpinBox( QWidget * parent , const char *name )
 : QFrame( parent, name ), TKFloatRangeControl()
 {
+  flength = 0;
   m_decimal = 3;
   initSpinBox();
 }
@@ -166,6 +167,12 @@ bool TKFloatSpinBox::wrapping() const
   return wrap;
 }
 
+void TKFloatSpinBox::setFixedLength(int l)
+{
+  flength = l;
+  updateGeometry();
+}
+
 QSize TKFloatSpinBox::sizeHint() const
 {
   constPolish();
@@ -182,12 +189,18 @@ QSize TKFloatSpinBox::sizeHint() const
   	bw = (height()/2 - fw)*8/5;
 
   int w = 35; 	// minimum width for the value
-  int wx = fm.width( ' ' )*2;
   QString s;
-  s = prefix() + ( (TKFloatSpinBox*)this )->mapValueToText( minValue() ) + suffix();
-  w = QMAX( w, fm.width( s ) + wx);
-  s = prefix() + ( (TKFloatSpinBox*)this )->mapValueToText( maxValue() ) + suffix();
-  w = QMAX(w, fm.width( s ) + wx );
+  if (flength != 0) {
+    int wl = fm.width('0')*QABS(flength+1);
+    if (flength < 0)
+      s = prefix() + suffix();
+    w = QMAX( w, fm.width(s) + wl);
+  } else {
+    s = prefix() + ( (TKFloatSpinBox*)this )->mapValueToText( minValue() ) + suffix();
+    w = QMAX(w, fm.width(s));
+    s = prefix() + ( (TKFloatSpinBox*)this )->mapValueToText( maxValue() ) + suffix();
+    w = QMAX(w, fm.width(s));
+  }
 
   QSize r( bw + fw * 2 // buttons AND frame both sides - see resizeevent()
   + 6 // right/left margins
@@ -672,6 +685,7 @@ float TKFloatRangeControl::bound(float v) const
 TKUFloatSpinBox::TKUFloatSpinBox( QWidget* parent, const char* name)
 : TKFloatSpinBox(parent,name)
 {
+  hideSuffix = false;
   setUnit((int)UnitPoint);
 }
 
@@ -688,7 +702,7 @@ TKUFloatSpinBox::~TKUFloatSpinBox()
 void TKUFloatSpinBox::setUnit(int unit)
 {
   blockSignals(true);
-  setSuffix(unitToString(unit));
+  setSuffix(hideSuffix ? QString::null : unitToString(unit));
   float v = cvtPtToUnit(unit,cvtUnitToPt(m_unit,TKFloatSpinBox::value()));
   setMinValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,minValue())) );
   setMaxValue( cvtPtToUnit(unit,cvtUnitToPt(m_unit,maxValue())) );
@@ -707,4 +721,15 @@ void TKUFloatSpinBox::setValue(float value,int unit)
 {
   TKFloatSpinBox::setValue( cvtPtToUnit(m_unit,cvtUnitToPt(unit,value)) );
 }
+
+void TKUFloatSpinBox::setHideSuffix(bool f)
+{
+  if (f== hideSuffix)
+    return;
+
+  hideSuffix = f;
+  setSuffix(hideSuffix ? QString::null : unitToString(m_unit));
+  updateGeometry();
+}
+
 #include "tkfloatspinbox.moc"

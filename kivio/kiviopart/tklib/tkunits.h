@@ -42,12 +42,16 @@ public:
 
   int unit() { return m_unit; }
 
+  QSize sizeHint() const;
+
 public slots:
   void setUnit(int);
 
 private:
-  bool isLong;
   int m_unit;
+  bool isLong;
+  int maxlongw;
+  int maxw;
 };
 /**********************************************************************************************************/
 class TKUnitsBox : public TKComboBox

@@ -29,7 +29,9 @@ libui_la_SOURCES = \
 		kivio_birdeye_panel_base.ui\
 		kivio_layer_panel_base.ui\
 		kivio_layer_panel.cpp\
-		kivio_layer_panel.h
+		kivio_layer_panel.h\
+		pagesetupdialogbase.ui\
+		pagesetupdialog.cpp
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

@@ -1,0 +1,646 @@
+<!DOCTYPE UI><UI>
+<class>PageSetupDialogBase</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>PageSetupDialogBase</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>507</width>
+            <height>449</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>PageSetupDialogbase</string>
+    </property>
+    <property>
+        <name>layoutMargin</name>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <spacer row="1"  column="0" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget row="0"  column="0" >
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout4</cstring>
+            </property>
+            <property>
+                <name>layoutSpacing</name>
+            </property>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>3</number>
+                </property>
+                <widget row="5"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Margins:</string>
+                    </property>
+                </widget>
+                <widget row="8"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel8</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Right:</string>
+                    </property>
+                </widget>
+                <widget row="2"  column="2" >
+                    <class>TKUnitsBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>pUnit</cstring>
+                    </property>
+                </widget>
+                <widget row="10"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>mBottom</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="1"  column="1"  rowspan="1"  colspan="2" >
+                    <class>TKComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>format</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Format:</string>
+                    </property>
+                </widget>
+                <widget row="3"  column="2" >
+                    <class>TKUnitsLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>phLabel</cstring>
+                    </property>
+                </widget>
+                <widget row="2"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>pWidth</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="7"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>mLeft</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="3"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>pHeight</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="7"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel6</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Left:</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1"  rowspan="1"  colspan="2" >
+                    <class>TKComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>orientation</cstring>
+                    </property>
+                </widget>
+                <widget row="8"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>mRight</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="6"  column="0"  rowspan="1"  colspan="3" >
+                    <class>Line</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Line1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget row="9"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel10</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Top:</string>
+                    </property>
+                </widget>
+                <widget row="8"  column="2" >
+                    <class>TKUnitsLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TKUnitsLabel3</cstring>
+                    </property>
+                </widget>
+                <widget row="10"  column="2" >
+                    <class>TKUnitsLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TKUnitsLabel5</cstring>
+                    </property>
+                </widget>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Orientation:</string>
+                    </property>
+                </widget>
+                <widget row="7"  column="2" >
+                    <class>TKUnitsLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TKUnitsLabel2</cstring>
+                    </property>
+                </widget>
+                <widget row="9"  column="2" >
+                    <class>TKUnitsLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TKUnitsLabel4</cstring>
+                    </property>
+                </widget>
+                <widget row="2"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel3_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Width:</string>
+                    </property>
+                </widget>
+                <widget row="3"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel4_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Height:</string>
+                    </property>
+                </widget>
+                <widget row="10"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel11</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Bottom:</string>
+                    </property>
+                </widget>
+                <spacer row="4"  column="1" >
+                    <property>
+                        <name>name</name>
+                        <cstring>Spacer1_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Vertical</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Fixed</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>16</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget row="9"  column="1" >
+                    <class>TKUFloatSpinBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>mTop</cstring>
+                    </property>
+                    <property>
+                        <name>fixedLength</name>
+                        <number>6</number>
+                    </property>
+                    <property>
+                        <name>hideSuffix</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="0"  column="2" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer1</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget row="0"  column="1" >
+            <class>QFrame</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Frame3</cstring>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Sunken</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>Panel</enum>
+            </property>
+            <property>
+                <name>layoutMargin</name>
+            </property>
+            <property>
+                <name>layoutSpacing</name>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>2</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>0</number>
+                </property>
+                <widget>
+                    <class>TKVisualPage</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>vpage</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>TKComboBox</class>
+        <header location="local">tkcombobox.h</header>
+        <sizehint>
+            <width>50</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>activated(int)</signal>
+    </customwidget>
+    <customwidget>
+        <class>TKUFloatSpinBox</class>
+        <header location="local">tkfloatspinbox.h</header>
+        <sizehint>
+            <width>50</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>0</verdata>
+        </sizepolicy>
+        <pixmap>image1</pixmap>
+        <signal>valueChanged(float)</signal>
+        <signal>valueChanged(double)</signal>
+        <slot access="public">setUnit(int)</slot>
+        <slot access="public">setMaxValue(float)</slot>
+        <slot access="public">setValue( float )</slot>
+        <slot access="public">setMinValue( float )</slot>
+        <slot access="public">setDecimals( int )</slot>
+        <slot access="public">setWrapping( bool )</slot>
+        <slot access="public">setValue( double )</slot>
+        <slot access="public">setMinValue( double )</slot>
+        <slot access="public">setMaxValue( double )</slot>
+        <slot access="public">setLineStep( double )</slot>
+        <slot access="public">setPrefix( const QString &amp;text )</slot>
+        <slot access="public">setSuffix( const QString &amp;text )</slot>
+        <slot access="public">stepUp()</slot>
+        <slot access="public">stepDown()</slot>
+        <property type="Int">fixedLength</property>
+        <property type="Bool">hideSuffix</property>
+    </customwidget>
+    <customwidget>
+        <class>TKUnitsBox</class>
+        <header location="local">tkunits.h</header>
+        <sizehint>
+            <width>50</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+        </sizepolicy>
+        <pixmap>image2</pixmap>
+        <signal>activated(int)</signal>
+        <slot access="public">setUnit(int)</slot>
+    </customwidget>
+    <customwidget>
+        <class>TKUnitsLabel</class>
+        <header location="local">tkunits.h</header>
+        <sizehint>
+            <width>50</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+        </sizepolicy>
+        <pixmap>image3</pixmap>
+        <slot access="public">setUnit(int)</slot>
+    </customwidget>
+    <customwidget>
+        <class>TKVisualPage</class>
+        <header location="local">tkvisualpage.h</header>
+        <sizehint>
+            <width>20</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+        </sizepolicy>
+        <pixmap>image4</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image>
+        <name>image0</name>
+        <data format="XPM.GZ" length="830">789c6dd1cb6e82401480e13d4f4164679a2a6251d374a1aedb74d9a4e96298e13e78c56bd3772fffc134a6e1fc2ef84e248c38e8bb1fefaf6e7fe0ec6b55e7dad599dab97d73a8aacbe7d7cbb7d3f343b7f904beebf71e9cdea3abddb7f52ae6da36d79e1f10ace0684830138e09ae8421c13d0c86044fc211c1ab704ab0142a82291c1b821bf8e4139c0ba704b7424df008c327823b380908ae85323081d319c11ace4282055443824b6148d0c0c8103c433d21e809670463a10cbc40e31354421998c3784c70210c091e848a60244c086a984424ff66339e8ab48e94c775bb332a4ed22c4b935899dbcee4456965ca2237ed4e1595bd4d5528d9797169ffa68c3d397d62ef26694f95deef52398bceec6a6ded666bed6e6f337ddbd587e3e97cb9ce17cbdbaeb9f7ee7bedbd5dcfe83a4bd7993b7f5bd73bf8ffae7e9e9d5fe9b8d998</data>
+    </image>
+    <image>
+        <name>image1</name>
+        <data format="XPM.GZ" length="635">789c6dd0cb4ec3301005d07dbec26a7615a279348d23c4278058222116e3b19d7752415920c4bf933b4e5b0975260b9f2b3b9978b755af2f4f6abb8b3e4f746a5971431f6a6bbfc6f1fbedfdf127daa4078547ab7473176dee15abe77972580fcb3a4e96ca0ee0287489cb33b001d32ccdf202ecc18c32da135883b9cf7dc1e00c165c70b9073d58fad257f2aa0eac74a5a9048fa0d146730e5a90351a74c28a2b9b803168533448a0cbd1602bd468d0803e45832c346870124ac9552c1593613614631d324bced74d537b4776cd6cdbf58354dfb53664d48dc35a634792c56ed935ad61ef6219d70fd76cf07275a6966c3ecec86a198d1b644b1d91357ccdcefb42b69e5d2b9cbd7c4376866f8459a6f0c67596cbcccbbef3cc37ffedd61dfcbfabdf87e80f6ef2b0b6</data>
+    </image>
+    <image>
+        <name>image2</name>
+        <data format="XPM.GZ" length="1869">789c6dd4c76ee3301006e0bb9fc2086fc16222599558ec21bdf79ec51e241697f4c4a98b7df725ffa164c788c786f089bf2452c36461be7b71b0db9d5fe83c8fabf15075d5a07aeaceeb97dbdb8fdf7f7efdedccc579d77d8bb2db9bfbd1993b1c775577effece78907010113edea2ef1d17711ea7b0082ee20cf90c2e5de5f0252c5d15f0115cb5de0baee2125e81ebd64fc1752cf13cdbba820dac1ad363b03b033fc026d6c1f7b075a5e10fef9e4ad22c863fbd93d217bcea9d46bee06b38f6051fc0b92ff81dae322b315ff22f53e4b12ff80dae65662cfcea5d44d25af61d2c8b24c5f385f62ee3c2a4dc8fdb609b713f14bb8c33344fd4adb91f37ad793d45e39cd713b5e6f98e1a17b81f0d5bf3fbeb372e793deb303ef0122c7dc1cfde95f1059f79d7491dd5fcfc5358d5b2e6ebb7bd5df36ccdf917b62ff804ce9cf9fa3538972ae77e6ec14a4985fd25c85b273ad2d8af740e67baa7137813ce75aaf9fefbb0f405efc0952e34f73785b53bc3cf93b0d5b5e6f96e789bc825f8fa0bd8b78faf1fc052db52c1095c99dc70bfd12f634d5af27e38f4b691d1bc5f04f69fed995cf2fa4b38731b9ad7d383739b585e2ff68395c648de0fbb6c9b5af6226c6dc1fb558c5af3dfd372706d315f310c5692d71b071bdebf6210ec1e81f1aa7185f9898979dc36aef97de58d43bf4d6b1ebf6a1cfa77dc38bc5fddd8725eb5b6fccf6db6489098689269cefb2355544f729cc179451a474396faae06d3198c2b9c1fd288ae5dddd02dddd13d3dd0233d7dc9a86f6b3a73ed7ecf34a617777ca5377aa78f994c1ff7f9a4455afa7297655a99c9acd21aadbbe3066dd2166dd30eedd25ec868cc57d13e1de05993bb1cd251c81cbbcc686a6c8b4ee894cee89c2ee83264ae5c269a594f4c3d4a28a52c6472972966e65aba84742f557046542e73236aa1841646587a72b54797940921fa2133a0be188ad17497bef6d465ae5de6e6bbf1999e7e3b8eccbf9f9dffe29fb5df</data>
+    </image>
+    <image>
+        <name>image3</name>
+        <data format="XPM.GZ" length="3806">789c7597c9521d4b0e86f77e0ac2da393a746b383545472f18cc68e6c1988e5ea8262603060e60b8d1efde99ff9f95d01db74bf6e23b5265494a4999fcf165e1746f7be1cb1f9f1ee736bfec16ba0b7b58f8d23fdddcbcfef35ffff8f3d3e7b45ef0ff9a6421fbfcb74f9ff7e70bddc2ceddede0419f1cc82cf502def45c14d9988de06bf098bbc7b37cf35c6655d752bf066e9c94d06f83adecaa0efc0a1e1cf7b0ffedb9cad32ea5fe0d5c1455c1f7efc055e21ef03db82ebaa2f56c2db9ee8df60760735263fd39b87562d02f839d37814b70ef84eb21be6af402fdf1c435bfbfeab94e9d20793603675ec0466e8696f19d81f3b44db1be6e90bd60bd87c833e83b70913ac17a3fc9755957d093cbc412f86f5caf74027b7d8e8c7cd829b872c2f51f2243afeb91912f7b0b5cd70df8058c07fefe20b7458ffdb27d70e304fed96664e677056c5ea03f8cccfd26f75ec08c7fa813e65b7bf0981739e213f1dc24b11eaec975d1d0bf8aec84f5bb17386d98ef4b701aedbf072e1bf82f0acedc8aace7c7c01959cec86dd1b1beb0df4d3ef9afa8c7a6f41b0abe227b41fc5964ee27b9720943be753932eb6507dcb87a67be36c8f5d0c01f2bc9fe81fd1899f91f021b59cfc11699f1b7ee8bac8f5fe0ce0b18fdd7f4ae63391f5ec85ec0f791a1970bf0d064867ed021f010f4cccf9838817e97ec057cebd9d2344fb15f5a909bd2d80faf642fd0a781a7ef617f3d9105f563b917e8e19fcdbc405f834b2fd02f81abd83fe87f942fe7cb5164d60ffd352b5baef735b07bf03efd1fbc80abc8dc3ff4938d5ef0fdc4739b586fc8af1d90bd80312f5b3f4e10bf9c06ce5aee3fe693a32cac2713b7cc0fe6713b4bd204ef1be6775bbb01c9fc70bd2ef6d722d9f2500fe43e2913e603f3af1d9c707ece23b35ed17fede884f3e52232f3b31a99fe6e79eed2e9fb86fee9fcb8e77e9c804b279c77a887ae89f6d8bfcedc80e7fc380e6c1dfc13aedff6b31ef11ae665e79ee0cf1db96f7bd62bf2ddf5ee17d61fe6653774215ec1fceb4627cc17e6739f3a7bfab34776bf505f4466beb1ff7d3ef9af47e43eeb582f98d77dd1673deb6d2970c1f72d9db867bda37ffb321d78de18b9f2118051af7d3d1403dfcfc1bedc183ffaa7f7e69cff4713f79cef1278a4bda27efa31d6cb15d90d04da3f051e3bd633fa7d488624c483f936a48ef9bdb5c069c8f75964fabf1599f3e7061cf36798d7c36cc807be8ff9e6a22d06ce37d4cfe0c719fdc3fc1a2aa7673d6781abc0e8c7a11ef29efd8af3c9b56fda33bf4960e37a8afef7e51ff2bb1899f53b4666be311f075f503cff184fef98faedc88c9ffad109f38778c7c431fb2d27bb5f38af9b8947de4fe0df98465e09ec04f638ffc72cee674a767adaef4466fde2fc19f36108f12d93c76c60be307f477761e4fab21bb8e0fb82f3642c9d3df75f03cfc2fee0bcc2758ce733ee17a3bb10d05e70fe8eb1ff658dec84dfc37e63bc723e331f9d2b48ce7bcc7f5f9e23d71b034ffa3cf018f4a867472df32bcf138fecdf59e09ef1ebc1c4d4cb79e021bcbf3e71f0771e780cf9ad22d39fc3c8acb7fdc89cff2b91510ffbf3ff272a6ada6aa7fd7fdbe9a0a39eeb855e82aef45a7fea8ddeeadd473bfda5f7faa08f3ad7277dd617fdadaffaa68bbab43f7fb77356cbbaa25f7555d7745d377453b7f49b6eeb8ed74e76baab7bbaaf077aa8477aac27fa5d4fdd6a3ff44c93773b4d35d35c675a68a995d6da888a88492b1dbfc6f35e0619e55c2ee452aee45a7eca8ddcca9dfc927b5dff60f7208f32972767f5ecfe5fca8bfc96577993455992655989765f6555d664dd593dcb866cca967c936dd9915dd9937d3990c3c93f3992633981e57739951f722689a492492e3329a4946a8a576add705730357f4f68ddd1d4fbdb809ddb855dda955d7fc8df85fdb41bbbb53bfb65f7f6608fce6a6e4ff66c2ff6fbe37ed8abbdd9a22dd9b2ade8897db5555bb375db50f9b81fccb66dda967db36ddb7156bbb667fb76f0713fde2bc10eedc88eedc4be4b61a7f6e33d7fff534b2fee4fae33f727496a1b93d55fd9f98a7037b3dcddbe8af7dffeba4edd8d6c66d5c75f3efffbef9ffe0356568f93</data>
+    </image>
+    <image>
+        <name>image4</name>
+        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>pWidth</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>pHeight</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>phLabel</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>mLeft</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>mRight</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>mTop</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>mBottom</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>TKUnitsLabel2</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>TKUnitsLabel3</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>TKUnitsLabel4</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>pUnit</sender>
+        <signal>activated(int)</signal>
+        <receiver>TKUnitsLabel5</receiver>
+        <slot>setUnit(int)</slot>
+    </connection>
+    <connection>
+        <sender>orientation</sender>
+        <signal>activated(int)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>format</sender>
+        <signal>activated(int)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>pWidth</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>pHeight</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>mLeft</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>mRight</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>mTop</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>mBottom</sender>
+        <signal>valueChanged(float)</signal>
+        <receiver>PageSetupDialogBase</receiver>
+        <slot>update()</slot>
+    </connection>
+    <slot access="public">update()</slot>
+</connections>
+</UI>

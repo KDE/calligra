@@ -5,7 +5,12 @@
 
 noinst_LTLIBRARIES =libtklib.la
 
-INCLUDES = $(all_includes)
+
+
+INCLUDES = $(all_includes)\
+		-I$(top_srcdir)/kiviopart/stencils/TestStencil1
+CXXFLAGS = -g -O2 -Wall 
+DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libtklib_la_METASOURCES = AUTO
 libtklib_la_SOURCES = \
 		tkaction.cpp\
@@ -17,7 +22,8 @@ libtklib_la_SOURCES = \
 		tkunits.cpp\
 		tkunitsaction.cpp\
 		tkbuttongroupcontroller.cpp\
-		tkcoloractions.cpp
+		tkcoloractions.cpp\
+		tkvisualpage.cpp
 EXTRA_DIST = \
 		tkaction.cpp\
 		tkaction.h\
@@ -38,7 +44,9 @@ EXTRA_DIST = \
 		tkbuttongroupcontroller.cpp\
 		tkbuttongroupcontroller.h\
 		tkcoloractions.h\
-		tkcoloractions.cpp
+		tkcoloractions.cpp\
+		tkvisualpage.cpp\
+		tkvisualpage.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

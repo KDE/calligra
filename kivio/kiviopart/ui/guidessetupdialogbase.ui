@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>333</width>
-            <height>167</height>
+            <width>318</width>
+            <height>144</height>
         </rect>
     </property>
     <property stdset="1">
@@ -28,20 +28,20 @@
     <grid>
         <property stdset="1">
             <name>margin</name>
-            <number>6</number>
+            <number>11</number>
         </property>
         <property stdset="1">
             <name>spacing</name>
-            <number>6</number>
+            <number>3</number>
         </property>
-        <widget row="0"  column="3"  rowspan="2"  colspan="1" >
+        <widget row="0"  column="3" >
             <class>KColorButton</class>
             <property stdset="1">
                 <name>name</name>
                 <cstring>guidesColor</cstring>
             </property>
         </widget>
-        <widget row="1"  column="0"  rowspan="2"  colspan="1" >
+        <widget row="1"  column="0" >
             <class>QCheckBox</class>
             <property stdset="1">
                 <name>name</name>
@@ -74,14 +74,14 @@
                 <string>Guides color:</string>
             </property>
         </widget>
-        <widget row="2"  column="3" >
+        <widget row="1"  column="3" >
             <class>KColorButton</class>
             <property stdset="1">
                 <name>name</name>
                 <cstring>guidesSelectColor</cstring>
             </property>
         </widget>
-        <widget row="1"  column="2"  rowspan="2"  colspan="1" >
+        <widget row="1"  column="2" >
             <class>QLabel</class>
             <property stdset="1">
                 <name>name</name>
@@ -92,7 +92,7 @@
                 <string>Selected guides color:</string>
             </property>
         </widget>
-        <spacer row="3"  column="1" >
+        <spacer row="2"  column="1" >
             <property>
                 <name>name</name>
                 <cstring>Spacer1</cstring>
@@ -111,6 +111,41 @@
                     <width>20</width>
                     <height>20</height>
                 </size>
+            </property>
+        </spacer>
+        <spacer row="0"  column="1" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer1_2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="1"  column="1" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer2</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
             </property>
             <property>
                 <name>sizeHint</name>

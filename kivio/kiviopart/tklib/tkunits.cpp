@@ -17,16 +17,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "tkunits.h"
+
+#include <kdebug.h>
 #include <klocale.h>
+
+#include <qapplication.h>
 
 const char* unitNames[] = {
   I18N_NOOP("pt"),
   I18N_NOOP("mm"),
-  I18N_NOOP("inch"),
-  I18N_NOOP("pica"),
+  "\"",
+  I18N_NOOP("pi"),
   I18N_NOOP("cm"),
-  I18N_NOOP("didot"),
-  I18N_NOOP("cicero")
+  I18N_NOOP("dd"),
+  I18N_NOOP("cc")
 };
 
 const char* unitLongNames[] = {
@@ -40,9 +44,23 @@ const char* unitLongNames[] = {
 };
 /**********************************************************************************************************/
 TKUnitsLabel::TKUnitsLabel(QWidget* parent, const char* name)
-: QLabel(parent,name), isLong(true)
+: QLabel(parent,name)
 {
-  setText("");
+  isLong = true;
+
+  QFontMetrics fm(font());
+  QStringList list;
+  QStringList::Iterator it;
+
+  list = unitsLongNamesList();
+  maxlongw = 0;
+  for (it = list.begin(); it != list.end(); ++it)
+    maxlongw = QMAX(maxlongw, fm.width(*it));
+
+  list = unitsNamesList();
+  maxw = 0;
+  for (it = list.begin(); it != list.end(); ++it)
+    maxw = QMAX(maxw, fm.width(*it));
 }
 
 TKUnitsLabel::~TKUnitsLabel()
@@ -59,6 +77,17 @@ void TKUnitsLabel::useLongNames(bool b)
 {
   isLong = b;
   setUnit(m_unit);
+  updateGeometry();
+}
+
+QSize TKUnitsLabel::sizeHint() const
+{
+  constPolish();
+  QFontMetrics fm(font());
+  int w = 2*margin() + indent() + (isLong ? maxlongw:maxw);
+  int h = 2*margin() + fm.height();
+
+	return QSize(w, h).expandedTo(QApplication::globalStrut());
 }
 /**********************************************************************************************************/
 TKUnitsBox::TKUnitsBox(QWidget* parent, const char* name)
@@ -73,6 +102,7 @@ TKUnitsBox::~TKUnitsBox()
 
 void TKUnitsBox::useLongNames(bool b)
 {
+  // for store current item
   int k = unit();
 
   isLong = b;
@@ -80,6 +110,7 @@ void TKUnitsBox::useLongNames(bool b)
   insertStringList(isLong ? unitsLongNamesList() : unitsNamesList());
 
   setUnit(k);
+  updateGeometry();
 }
 
 void TKUnitsBox::setUnit(int u)

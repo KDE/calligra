@@ -7,6 +7,7 @@
 #include "guidessetupdialog.h"
 #include "gridsetupdialog.h"
 #include "gridsetupdialog.h"
+#include "pagesetupdialog.h"
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -43,7 +44,7 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
     }
 
     if (pname == "_pagesize_") {
-      page = new GuidesSetupDialog(m_pView, page, pname.ascii());
+      page = new PageSetupDialog(m_pView, page, pname.ascii());
     }
 
     if (pname == "_pagegrid_") {

@@ -86,12 +86,16 @@ inline float TKFloatRangeControl::pageStep() const
 
 class TKFloatSpinBox: public QFrame, public TKFloatRangeControl
 { Q_OBJECT
+  Q_PROPERTY( int fixedLength READ fixedLength WRITE setFixedLength )
 public:
   TKFloatSpinBox( QWidget* parent = 0, const char *name = 0 );
   TKFloatSpinBox( float minValue, float maxValue, float step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
   ~TKFloatSpinBox();
 
   enum ButtonSymbols { UpDownArrows, PlusMinus };
+
+  int fixedLength() const { return flength; }
+  void setFixedLength(int);
 
   QString text() const;
   QString cleanText() const;
@@ -174,10 +178,12 @@ private:
   bool wrap;
   bool edited;
   bool m_minimum;
+  int flength;
 };
 /***************************************************************************************/
 class TKUFloatSpinBox: public TKFloatSpinBox
 { Q_OBJECT
+  Q_PROPERTY( bool hideSuffix READ isHideSuffis WRITE setHideSuffix )
 public:
   TKUFloatSpinBox( QWidget* parent = 0, const char *name = 0 );
   TKUFloatSpinBox( float minValue, float maxValue, float step = 1.0, int decimal = 2, QWidget* parent = 0, const char* name = 0 );
@@ -188,11 +194,15 @@ public:
   float value(int unit = UnitPoint);
   void setValue(float,int unit = UnitPoint);
 
+  bool isHideSuffis() const { return hideSuffix; }
+  void setHideSuffix(bool);
+
 public slots:
   void setUnit(int);
 
 private:
   int m_unit;
+  bool hideSuffix;
 };
 
 #endif
