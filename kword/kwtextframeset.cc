@@ -132,6 +132,9 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
+        // Due to zooming problems (and to QRect's semantics), be tolerant for one more pixel
+        frameRect.rRight() += 1;
+        frameRect.rBottom() += 1;
         if ( frameRect.contains( nPoint ) ) // both r and p are in "normal coordinates"
         {
             // This translates the coordinates from the normal coord system
@@ -184,6 +187,11 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 return frame;
             }
         }
+#ifdef DEBUG_NTI
+        //else
+        //  kdDebug() << "NTI: " << DEBUGRECT(frameRect)
+        //            << " doesn't contain nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
+#endif
     }
     // Not found. This means either:
     // if mouseSelection == false : the mouse isn't over any frame, in the page pageNum.
@@ -533,7 +541,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         QRegExp re("\\s+");
         QStringList wordlist = QStringList::split(re, s);
         words += wordlist.count();
-       	re.setCaseSensitive(false);
+        re.setCaseSensitive(false);
         for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it ) {
             QString word = *it;
             if ( word.length() <= 3 ) {  // extension to the original algorithm
@@ -548,7 +556,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
             for ( QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it ) {
                 re.setPattern(*it);
                 if( word.contains(re) )
-	            word_syllables--;
+                    word_syllables--;
             }
             for ( QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it ) {
                 re.setPattern(*it);
@@ -556,19 +564,19 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
                     word_syllables++;
             }
             word_syllables += syls.count();
-	    if ( word_syllables == 0 )
+            if ( word_syllables == 0 )
                 word_syllables = 1;
-	    syllables += word_syllables;
-	}
+            syllables += word_syllables;
+        }
         re.setCaseSensitive(true);
 
         // Sentence count
         // Clean up for better result, destroys the original text but we only want to count
-	s = s.stripWhiteSpace();
+        s = s.stripWhiteSpace();
         QChar lastchar = s.at(s.length());
         if( ! s.isEmpty() && ! KWAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
             s = s + ".";
-	}
+        }
         re.setPattern("[.?!]+");         // count "..." as only one "."
         s.replace(re, ".");
         re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
@@ -588,9 +596,13 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 // Only interested in the body textframeset, not in header/footer
 #define kdDebugBody(area) if ( frameSetInfo() == FI_BODY ) kdDebug(area)
 
-// Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
-// paragLeftMargin is only used in the breakEnd case
-void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd, int paragLeftMargin )
+// Helper for adjust*. There are 3 ways to use this method.
+// marginLeft set -> determination of left margin for adjustLMargin
+// marginRight set -> determination of right margin for adjustRMargin
+// breakBegin, breakEnd, and paragLeftMargin set -> check whether we should jump over some frames
+//                                                  [when there is not enough space besides them]
+void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight,
+                                 int* breakBegin, int* breakEnd, int paragLeftMargin )
 {
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
@@ -598,90 +610,97 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                        << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
                        << " paragLeftMargin=" << paragLeftMargin
                        << endl;
+    // Both or none...
+    if (breakBegin) assert(breakEnd);
+    if (breakEnd) assert(breakBegin);
 #endif
-    QPoint p;
-    KWFrame * frame = internalToNormal( QPoint(0, yp), p );
-    if (!frame)
-    {
-#ifdef DEBUG_MARGINS
-        kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << " ->aborting with 0 margins" << endl;
-#endif
-        // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
-        // Abort then, no need to return precise values
-        if ( marginLeft )
-            *marginLeft = 0;
-        if ( marginRight )
-            *marginRight = 0;
-        if ( breakEnd )
-            *breakEnd = 0;
-        return;
-    }
-#ifdef DEBUG_MARGINS
-    else
-        kdDebugBody(32002) << "  getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
-                           << " and p=" << p.x() << "," << p.y() << endl;
-#endif
-    // Everything from there is in 'normal' coordinates.
-    int left = kWordDocument()->zoomItX( frame->left() );
+    // Note: it is very important that this method works in internal coordinates.
+    // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
+    // as still in one piece, and we miss the frames in the 2nd column.
+    int left = 0;
     int from = left;
-    int to = kWordDocument()->zoomItX( frame->right() );
-    int bottomSkip = 0;
+    int to = textdoc->width();
+    bool init = false;
 
 #ifdef DEBUG_MARGINS
-    kdDebugBody(32002) << "  getMargins: looking for frames between " << p.y() << " and " << p.y()+h << endl;
+    kdDebugBody(32002) << "  getMargins: looking for frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
 #endif
-    // For every frame on top at this height, we'll move from and to towards each other
-    // The text flows between 'from' and 'to'
+    // Principle: for every frame on top at this height, we'll move from and to
+    // towards each other. The text flows between 'from' and 'to'
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
     for ( ; fIt != m_framesOnTop.end() && from < to ; ++fIt )
     {
         if ( (*fIt).frame->runAround() == KWFrame::RA_BOUNDINGRECT )
         {
-            QRect frameRect = (*fIt).frame->outerRect();
+            QRect rectOnTop = m_doc->zoomRect( (*fIt).intersection );
 #ifdef DEBUG_MARGINS
-            kdDebugBody(32002) << "   getMargins found frame at " << DEBUGRECT(frameRect) << endl;
+            kdDebugBody(32002) << "   getMargins found rect-on-top at (normal coords) " << DEBUGRECT(rectOnTop) << endl;
 #endif
-            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
-            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
+            QPoint iTop, iBottom; // top and bottom of intersection in internal coordinates
+            if ( normalToInternal( rectOnTop.topLeft(), iTop ) &&
+                 iTop.y() <= yp + h && // optimization
+                 normalToInternal( rectOnTop.bottomRight(), iBottom ) )
             {
-                int availLeft = QMAX( 0, frameRect.left() - from );
-                int availRight = QMAX( 0, to - frameRect.right() );
 #ifdef DEBUG_MARGINS
-                kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
-                                   << " availRight=" << availRight << endl;
+                kdDebugBody(32002) << "      in internal coords: " << DEBUGRECT(QRect(iTop,iBottom)) << endl;
 #endif
-                if ( availLeft > availRight ) // choose the max
-                    // flow text at the left of the frame
-                    to = QMIN( to, from + availLeft );  // can only go left -> QMIN
-                else
-                    // flow text at the right of the frame
-                    from = QMAX( from, to - availRight ); // can only go right -> QMAX
-#ifdef DEBUG_MARGINS
-                kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
-#endif
-                if ( breakEnd )
+                // Look for intersection between p.y() -- p.y()+h  and iTop -- iBottom
+                if ( QMAX( yp, iTop.y() ) <= QMIN( yp+h, iBottom.y() ) )
                 {
-                    QPoint nPoint( left, frameRect.bottom() );
-                    QPoint iPoint;
-                    if ( normalToInternal( nPoint, iPoint ) )
-                        bottomSkip = QMAX( bottomSkip, iPoint.y() );
 #ifdef DEBUG_MARGINS
-                    kdDebugBody(32002) << "   getMargins iPoint.y=" << iPoint.y() << " frame's bottom=" << frameRect.bottom()
-                                       << " bottomSkip=" << bottomSkip << endl;
+                    kdDebugBody(32002) << "   getMargins iTop=" << iTop.x() << "," << iTop.y()
+                                       << " iBottom=" << iBottom.x() << "," << iBottom.y() << endl;
 #endif
-                }
-            }
+                    int availLeft = QMAX( 0, iTop.x() - from );
+                    int availRight = QMAX( 0, to - iBottom.x() );
+#ifdef DEBUG_MARGINS
+                    kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
+                                       << " availRight=" << availRight << endl;
+#endif
+                    if ( availLeft > availRight ) // choose the max [TODO: make it configurable]
+                        // flow text at the left of the frame
+                        to = QMIN( to, from + availLeft - 1 );  // can only go left -> QMIN
+                    else
+                        // flow text at the right of the frame
+                        from = QMAX( from, to - availRight + 1 ); // can only go right -> QMAX
+#ifdef DEBUG_MARGINS
+                    kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
+#endif
+                    // If the available space is too small, give up on it
+                    if ( to - from < kWordDocument()->zoomItX( 15 ) + paragLeftMargin )
+                        from = to;
+
+                    if ( breakEnd && from == to ) // no-space case
+                    {
+                        if ( !init ) // first time
+                        {
+                            init = true;
+                            *breakBegin = iTop.y();
+                            *breakEnd = iBottom.y();
+                        }
+                        else
+                        {
+                            *breakBegin = QMIN( *breakBegin, iTop.y() );
+                            *breakEnd = QMAX( *breakEnd, iBottom.y() );
+                        }
+#ifdef DEBUG_MARGINS
+                        kdDebugBody(32002) << "   getMargins iBottom.y=" << iBottom.y()
+                                           << " breakBegin=" << *breakBegin
+                                           << " breakEnd=" << *breakEnd << endl;
+#endif
+                    }
+                } // else no intersection
+            }// else we got a 0L, or the iTop.y()<=yp+h test didn't work - wrong debug output
+            // kdDebugBody(32002) << "   gerMargins: normalToInternal returned 0L" << endl;
         }
     }
-    // Back to the QRT coordinates
-    from -= left;
-    to -= left;
-
-    // If the available space is too small, give up on it
-    if ( to - from < kWordDocument()->zoomItX( 15 ) + paragLeftMargin )
-        from = to;
-    else
-        bottomSkip = 0; // nothing to skip
+#ifdef DEBUG_MARGINS
+    kdDebugBody(32002) << "   getMargins done. from=" << from << " to=" << to << endl;
+#endif
+    if ( from == to ) { // no-space case. Drop the margins we found - we'll reformat again.
+        from = 0;
+        to = textdoc->width();
+    }
 
     if ( marginLeft )
         *marginLeft = from;
@@ -690,19 +709,16 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #ifdef DEBUG_MARGINS
         kdDebug(32002) << "    getMargins " << getName()
                        << " textdoc's width=" << textdoc->width()
-                       << " frame's width=" << kWordDocument()->zoomItX( frame->width() )
                        << " to=" << to << endl;
 #endif
         *marginRight = textdoc->width() - to;
     }
-    if ( breakEnd )
-        *breakEnd = bottomSkip; // in internal coord already
 }
 
 int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
     int marginLeft;
-    getMargins( yp, h, &marginLeft, 0L, 0L );
+    getMargins( yp, h, &marginLeft, 0L, 0L, 0L );
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
@@ -712,7 +728,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     int marginRight;
-    getMargins( yp, h, 0L, &marginRight, 0L );
+    getMargins( yp, h, 0L, &marginRight, 0L, 0L );
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
@@ -720,7 +736,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 }
 
 // helper for adjustFlow
-bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
+bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
     // We need the "+1" here because when skipping a frame on top, we want to be _under_
     // its bottom. Without the +1, we hit the frame again on the next adjustLMargin call.
@@ -789,6 +805,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
 #ifdef DEBUG_FLOW
             kdDebug(32002) << "Paragraph height set to " << h+dy << endl;
 #endif
+            h += dy;
             return true;
         }
     }
@@ -820,12 +837,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                        << " h=" << h << endl;
 #endif
 
-    // This test is now obsolete, the h < frameHeight test below does it better
-#if 0
-    bool movedDown = (parag && parag->prev()) ? parag->prev()->isLastInFrame() : false;
-    if ( !movedDown ) // only once. If it doesn't fit on a page, we don't want to do this for ever....
-    {                 // Note that we can't use isMovedDown here, because line-level breaking sets it too.
-#endif
         int totalHeight = 0;
         QListIterator<KWFrame> frameIt( frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
@@ -838,6 +849,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
             if ( !check )
             {
                 // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
+                // Or cache the attribute ( e.g. "frame->hasCopy()" ).
                 QListIterator<KWFrame> nextFrame( frameIt );
                 while ( !check && !nextFrame.atLast() )
                 {
@@ -881,7 +893,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                 break; // we've been past the parag, so stop here
             totalHeight = bottom;
         }
-    //}
 
     // Another case for a vertical break is frames with the RA_SKIP flag
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
@@ -908,14 +919,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
 
     // And the last case for a vertical break is RA_BOUNDINGRECT frames that
     // leave no space by their side for any text (e.g. most tables)
+    int breakBegin = 0;
     int breakEnd = 0;
-    getMargins( yp, h, 0L, 0L, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
+    getMargins( yp, h, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
     if ( breakEnd )
     {
-        kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakEnd=" << breakEnd
-                       << " breakBegin=yp=" << yp << " h=" << h << endl;
-        ASSERT( yp <= breakEnd ); // given that yp is breakBegin, this should always be true !
-        if ( checkVerticalBreak( yp, h, parag, linesTogether, yp, breakEnd ) )
+        kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakBegin=" << breakBegin
+                       << " breakEnd=" << breakEnd << " h=" << h << endl;
+        ASSERT( breakBegin <= breakEnd );
+        if ( checkVerticalBreak( yp, h, parag, linesTogether, breakBegin, breakEnd ) )
         {
             breaked = true;
             //kdDebug(32002) << "checkVerticalBreak ok." << endl;
@@ -2220,7 +2232,7 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyPar
         //++lastIndex; // skip the '\n'.
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-	    undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
+            undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
             //kdDebug() << "KWTextFrameSet::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
                 copyCharFormatting( p, i, i + lastIndex, moveCustomItems );
@@ -2957,7 +2969,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         {
             posStart=0;
             posEnd=0;
-	    text = p->string()->toString().left( p->length() - 1 );
+            text = p->string()->toString().left( p->length() - 1 );
             for ( i = 0; i < p->length(); ++i )
             {
                 if( p->at(i)->isCustom())
@@ -3411,6 +3423,11 @@ void KWTextFrameSet::selectionChangedNotify( bool enableActions /* = true */)
 
 QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
 {
+    // ## Warning. Imagine a paragraph cut in two pieces (at the line-level),
+    // between two columns. A single rect in internal coords, but two rects in
+    // normal coords. QRect( topLeft, bottomRight ) is just plain wrong.
+    // Currently this method is only used for "ensure visible" so that's fine, but
+    // we shouldn't use it for more precise stuff.
     QPoint topLeft;
     (void)internalToNormal( parag->rect().topLeft(), topLeft );
     QPoint bottomRight;

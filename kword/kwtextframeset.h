@@ -269,8 +269,8 @@ protected:
     void copyCharFormatting( QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag );
-    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd, int paragLeftMargin = 0 );
-    bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
+    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
+    bool checkVerticalBreak( int & yp, int & h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     const QList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );
