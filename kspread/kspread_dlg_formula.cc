@@ -37,7 +37,7 @@
 #include <qpushbutton.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
-    : KDialogBase( parent, name,false,i18n("Math Expression"), Ok|Cancel )
+    : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
 {
     m_pView = parent;
     m_focus = 0;

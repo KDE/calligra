@@ -477,7 +477,7 @@ void KSpreadView::initializeCalcActions()
 void KSpreadView::initializeInsertActions()
 {
   KAction* tmpAction = NULL;
-  tmpAction = new KAction( i18n("&Math Expression..."), "funct", 0, this,
+  tmpAction = new KAction( i18n("&Function..."), "funct", 0, this,
                            SLOT( insertMathExpr() ), actionCollection(),
                            "insertMathExpr" );
   tmpAction->setToolTip(i18n("Insert math expression."));
@@ -635,7 +635,7 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
-  m_formulaSelection->setToolTip(i18n("Insert a formula."));
+  m_formulaSelection->setToolTip(i18n("Insert a function."));
   QStringList lst;
   lst.append( "SUM");
   lst.append( "AVERAGE");
@@ -2225,7 +2225,7 @@ void KSpreadView::insertMathExpr()
 {
     if ( m_pTable == 0L )
         return;
-    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor" );
+    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Function" );
     dlg->exec();
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
