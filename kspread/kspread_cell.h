@@ -159,7 +159,7 @@ public:
 
     /**
      * Tells whether this cell has any content.
-     * An cell has no content if is has no text and no formular.
+     * An cell has no content if is has no text and no formula.
      *
      * @return TRUE if there is no content.
      */
@@ -464,16 +464,16 @@ protected:
 
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
     /**
-     * Parses the formular.
-     * Fills @ref #dependList and @ref #formular.
+     * Parses the formula.
+     * Fills @ref #dependList and @ref #formula.
      * @return FALSE on error.
      */
     bool makeFormular();
 
     /**
-     * Cleans up formular stuff.
-     * Call this before you store a new formular or to delete the
-     * formular.
+     * Cleans up formula stuff.
+     * Call this before you store a new formula or to delete the
+     * formula.
      */
     void clearFormular();
 
@@ -540,7 +540,7 @@ protected:
     /**
      * Shows whether recalculation is neccessary.
      * If this cell must be recalculated for some reason, for example the user entered
-     * a new formular, then this flag is set. If @ref #bFormular is FALSE nothing will happen
+     * a new formula, then this flag is set. If @ref #bFormular is FALSE nothing will happen
      * at all.
      */
     bool m_bCalcDirtyFlag;
@@ -549,7 +549,7 @@ protected:
     /**
      * The value we got from calculation.
      * If @ref #isFormular is TRUE, @ref #makeLayout will use @ref #m_strFormularOut
-     * instead of @ref m_strText since m_strText stores the formular the user entered.
+     * instead of @ref m_strText since m_strText stores the formula the user entered.
      */
     QString m_strFormularOut;
 

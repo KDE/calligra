@@ -531,27 +531,27 @@ void makeRangeDepend2( const char *_str )
   cerr << "Depends on " << p << " " << x1 << "/" << y1 << " " << x2 << "/" << y2 << endl;
 }
 
-KSpreadValue evalFormular( const char *_formular, KSpreadTable* _table )
+KSpreadValue evalFormular( const char *_formula, KSpreadTable* _table )
 {
-  cerr << "Scanning" << _formular << endl;
+  cerr << "Scanning" << _formula << endl;
   
   g_pTable = _table;
   
   g_errno = 0;
-  mainParse( _formular );
+  mainParse( _formula );
   clearParser();
 
   return g_result;
 }
 
-bool makeDepend( const char* _formular, KSpreadTable* _table, QList<KSpreadDepend>* _list )
+bool makeDepend( const char* _formula, KSpreadTable* _table, QList<KSpreadDepend>* _list )
 {
   g_pTable = _table;
   g_pDepends = _list;
   g_pDepends->clear();
   
   g_errno = 0;
-  dependMainParse( _formular );
+  dependMainParse( _formula );
 
   clearParser();
 

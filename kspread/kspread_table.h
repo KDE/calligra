@@ -504,7 +504,7 @@ public:
     void enableScrollBarUpdates( bool _enable );
 
     /**
-     * @return a context that can be used for evaluating formulars.
+     * @return a context that can be used for evaluating formulas.
      *         This function does remove any exception from the context.
      */
     KSContext& context() { m_context.setException( 0 ); return m_context; }

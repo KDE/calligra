@@ -45,11 +45,11 @@ struct KSpreadValue
  * Calculates the formula and returns the result. Which can
  * be of type boolean or double currently.
  */
-KSpreadValue evalFormular( const char *_formular, KSpreadTable* _table );
+KSpreadValue evalFormular( const char *_formula, KSpreadTable* _table );
 /**
  * Creates a list of dependencies.
  */
-bool makeDepend( const char* _formular, KSpreadTable* _table, QList<KSpreadDepend>* _list );
+bool makeDepend( const char* _formula, KSpreadTable* _table, QList<KSpreadDepend>* _list );
 
 #include "kspread_calcerr.h"
 

@@ -2002,7 +2002,7 @@ void KSpreadCell::setText( const QString& _text )
     m_content = Text;
   }
 
-  // Do not update formulars and stuff here
+  // Do not update formulas and stuff here
   // if we are still loading
   if ( !m_pTable->isLoading() )
     update();
@@ -2028,7 +2028,7 @@ void KSpreadCell::setValue( double _d )
   m_bLayoutDirtyFlag = true;
   m_content = Text;
 
-  // Do not update formulars and stuff here
+  // Do not update formulas and stuff here
   if ( !m_pTable->isLoading() )
     update();
 }

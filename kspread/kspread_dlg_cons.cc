@@ -219,7 +219,7 @@ void KSpreadConsolidate::slotOk()
 	      assert( 0 );
 	  }
 	
-	  // Built formular
+	  // Built formula
 	  if ( f == F_SUM || f == F_AVERAGE )
 	  {
 	    if ( formel.length() > 2 )
@@ -329,7 +329,7 @@ void KSpreadConsolidate::slotOk()
 		  else
 		    assert( 0 );
 		}
-		// Create formular
+		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
 		{
 		  if ( formel != "=" )
@@ -442,7 +442,7 @@ void KSpreadConsolidate::slotOk()
 		  else
 		    assert( 0 );
 		}
-		// Create formular
+		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
 		{
 		  if ( formel != "=" )
@@ -612,7 +612,7 @@ void KSpreadConsolidate::slotOk()
 	      dbl += (*lit).cell->valueDouble();
 	    else
 	      assert( 0 );
-	    // Create formular
+	    // Create formula
 	    if ( f == F_SUM || f == F_AVERAGE )
 	    {
 	      if ( formel != "=" )

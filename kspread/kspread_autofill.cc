@@ -297,7 +297,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 {
     QString erg = "";
 
-    // Special handling for formulars
+    // Special handling for formulas
     if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULAR )
     {
 	QString f = dest->decodeFormular( sequence.first()->getString() ).data();
