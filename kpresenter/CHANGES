@@ -32,3 +32,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add support for dnd between "text object"
 - Add support for "keep ratio" in obj
 - Add "duplicate object" dialogbox
+- Add "Apply AutoFormat"

@@ -141,3 +141,6 @@ Triple click selects a paragraph.
 New "PageUp/PageDown moves the caret" option, which defaults to false.
  The new behaviour for PageUp/PageDown is to move the scrollbars, not the caret.
 
+Changes between KWord-1.2-beta1 and KWord-1.2-beta2
+===================================================
+- Add support for "Apply autoformat"
