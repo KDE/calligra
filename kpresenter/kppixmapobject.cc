@@ -555,28 +555,28 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 
     switch (m_effect) {
     case IE_CHANNEL_INTENSITY: {
-        KImageEffect::channelIntensity(_tmpImage, m_ie_par1.toDouble()/100.0,
-                                       static_cast<KImageEffect::RGBComponent>(m_ie_par2.toInt()));
+        _tmpImage = KImageEffect::channelIntensity(_tmpImage, m_ie_par1.toDouble()/100.0,
+                                                   static_cast<KImageEffect::RGBComponent>(m_ie_par2.toInt()));
         break;
     }
     case IE_FADE: {
-        KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toColor());
         break;
     }
     case IE_FLATTEN: {
-        KImageEffect::flatten(_tmpImage, m_ie_par1.toColor(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::flatten(_tmpImage, m_ie_par1.toColor(), m_ie_par2.toColor());
         break;
     }
     case IE_INTENSITY: {
-        KImageEffect::intensity(_tmpImage, m_ie_par1.toDouble()/100.0);
+        _tmpImage = KImageEffect::intensity(_tmpImage, m_ie_par1.toDouble()/100.0);
         break;
     }
     case IE_DESATURATE: {
-        KImageEffect::desaturate(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::desaturate(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_CONTRAST: {
-        KImageEffect::contrast(_tmpImage, m_ie_par1.toInt());
+        _tmpImage = KImageEffect::contrast(_tmpImage, m_ie_par1.toInt());
         break;
     }
     case IE_NORMALIZE: {
@@ -596,55 +596,55 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
         break;
     }
     case IE_EMBOSS: {
-        KImageEffect::emboss(_tmpImage);
+        _tmpImage = KImageEffect::emboss(_tmpImage);
         break;
     }
     case IE_DESPECKLE: {
-        KImageEffect::despeckle(_tmpImage);
+        _tmpImage = KImageEffect::despeckle(_tmpImage);
         break;
     }
     case IE_CHARCOAL: {
-        KImageEffect::charcoal(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::charcoal(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_NOISE: {
-        KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_ie_par1.toInt()));
+        _tmpImage = KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_ie_par1.toInt()));
         break;
     }
     case IE_BLUR: {
-        KImageEffect::blur(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::blur(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_EDGE: {
-        KImageEffect::edge(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::edge(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_IMPLODE: {
-        KImageEffect::implode(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::implode(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_OIL_PAINT: {
-        KImageEffect::oilPaint(_tmpImage, m_ie_par1.toInt());
+        _tmpImage = KImageEffect::oilPaint(_tmpImage, m_ie_par1.toInt());
         break;
     }
     case IE_SHARPEN: {
-        KImageEffect::sharpen(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::sharpen(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_SPREAD: {
-        KImageEffect::spread(_tmpImage, m_ie_par1.toInt());
+        _tmpImage = KImageEffect::spread(_tmpImage, m_ie_par1.toInt());
         break;
     }
     case IE_SHADE: {
-        KImageEffect::shade(_tmpImage, m_ie_par1.toBool(), m_ie_par2.toDouble(), m_ie_par3.toDouble());
+        _tmpImage = KImageEffect::shade(_tmpImage, m_ie_par1.toBool(), m_ie_par2.toDouble(), m_ie_par3.toDouble());
         break;
     }
     case IE_SWIRL: {
-        KImageEffect::swirl(_tmpImage, m_ie_par1.toDouble());
+        _tmpImage = KImageEffect::swirl(_tmpImage, m_ie_par1.toDouble());
         break;
     }
     case IE_WAVE: {
-        KImageEffect::wave(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toDouble());
+        _tmpImage = KImageEffect::wave(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toDouble());
         break;
     }
     case IE_NONE:

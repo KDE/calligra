@@ -66,10 +66,12 @@ protected:
 
 private slots:
     void effectChanged(int);
-    //void okClicked();
+    void okClicked();
+    void effectParamChanged();
 
 private:
     void updatePreview();
+    void setupSignals();
     QPixmap m_pix;
     ImageEffect m_effect;
     QVariant m_param1, m_param2, m_param3;

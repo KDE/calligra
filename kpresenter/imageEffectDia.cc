@@ -45,11 +45,13 @@ ImageEffectDia::ImageEffectDia(QWidget * parent, const char * name):
 
     setMainWidget(base);
 
+    setupSignals();
+
     connect((QWidget *)base->m_effectCombo, SIGNAL(activated(int)),
             this, SLOT(effectChanged(int)));
 
-    //connect(this, SIGNAL(okClicked()),
-    //        this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(okClicked()));
 }
 
 ImageEffectDia::~ImageEffectDia()
@@ -72,34 +74,35 @@ void ImageEffectDia::effectChanged(int eff)
     case IE_CHANNEL_INTENSITY: {
         m_param1 = QVariant(base->chanInt_value->value());
         m_param2 = QVariant(base->chanInt_component->currentItem());
-        KImageEffect::channelIntensity(_tmpImage, m_param1.toDouble()/100.0, static_cast<KImageEffect::RGBComponent>(m_param2.toInt()));
+        _tmpImage = KImageEffect::channelIntensity(_tmpImage, m_param1.toDouble()/100.0,
+                                                   static_cast<KImageEffect::RGBComponent>(m_param2.toInt()));
         break;
     }
     case IE_FADE: {
         m_param1 = QVariant(base->fade_value->value());
         m_param2 = QVariant(base->fade_color->color());
-        KImageEffect::fade(_tmpImage, m_param1.toDouble(), m_param2.toColor());
+        _tmpImage = KImageEffect::fade(_tmpImage, m_param1.toDouble(), m_param2.toColor());
         break;
     }
     case IE_FLATTEN: {
         m_param1 = QVariant(base->flatten_color1->color());
         m_param2 = QVariant(base->flatten_color2->color());
-        KImageEffect::flatten(_tmpImage, m_param1.toColor(), m_param2.toColor());
+        _tmpImage = KImageEffect::flatten(_tmpImage, m_param1.toColor(), m_param2.toColor());
         break;
     }
     case IE_INTENSITY: {
         m_param1 = QVariant(base->intensity_value->value());
-        KImageEffect::intensity(_tmpImage, m_param1.toDouble()/100.0);
+        _tmpImage = KImageEffect::intensity(_tmpImage, m_param1.toDouble()/100.0);
         break;
     }
     case IE_DESATURATE: {
         m_param1 = QVariant(base->desaturate_value->value());
-        KImageEffect::desaturate(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::desaturate(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_CONTRAST: {
         m_param1 = QVariant(base->contrast_value->value());
-        KImageEffect::contrast(_tmpImage, m_param1.toInt());
+        _tmpImage = KImageEffect::contrast(_tmpImage, m_param1.toInt());
         break;
     }
     case IE_NORMALIZE: {
@@ -121,69 +124,69 @@ void ImageEffectDia::effectChanged(int eff)
         break;
     }
     case IE_EMBOSS: {
-        KImageEffect::emboss(_tmpImage);
+        _tmpImage = KImageEffect::emboss(_tmpImage);
         break;
     }
     case IE_DESPECKLE: {
-        KImageEffect::despeckle(_tmpImage);
+        _tmpImage = KImageEffect::despeckle(_tmpImage);
         break;
     }
     case IE_CHARCOAL: {
         m_param1 = QVariant(base->charcoal_value->value());
-        KImageEffect::charcoal(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::charcoal(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_NOISE: {
         m_param1 = QVariant(base->noise_type->currentItem());
-        KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_param1.toInt()));
+        _tmpImage = KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_param1.toInt()));
         break;
     }
     case IE_BLUR: {
         m_param1 = QVariant(base->blur_value->value());
-        KImageEffect::blur(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::blur(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_EDGE: {
         m_param1 = QVariant(base->edge_value->value());
-        KImageEffect::edge(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::edge(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_IMPLODE: {
         m_param1 = QVariant(base->implode_value->value());
-        KImageEffect::implode(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::implode(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_OIL_PAINT: {
         m_param1 = QVariant(base->oilPaint_radius->value());
-        KImageEffect::oilPaint(_tmpImage, m_param1.toInt());
+        _tmpImage = KImageEffect::oilPaint(_tmpImage, m_param1.toInt());
         break;
     }
     case IE_SHARPEN: {
         m_param1 = QVariant(base->sharpen_value->value());
-        KImageEffect::sharpen(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::sharpen(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_SPREAD: {
         m_param1 = QVariant(base->spread_value->value());
-        KImageEffect::spread(_tmpImage, m_param1.toInt());
+        _tmpImage = KImageEffect::spread(_tmpImage, m_param1.toInt());
         break;
     }
     case IE_SHADE: {
         m_param1 = QVariant(base->shade_color->isChecked());
         m_param2 = QVariant(base->shade_azimuth->value());
         m_param3 = QVariant(base->shade_elevation->value());
-        KImageEffect::shade(_tmpImage, m_param1.toBool(), m_param2.toDouble(), m_param3.toDouble());
+        _tmpImage = KImageEffect::shade(_tmpImage, m_param1.toBool(), m_param2.toDouble(), m_param3.toDouble());
         break;
     }
     case IE_SWIRL: {
         m_param1 = QVariant(base->swirl_value->value());
-        KImageEffect::swirl(_tmpImage, m_param1.toDouble());
+        _tmpImage = KImageEffect::swirl(_tmpImage, m_param1.toDouble());
         break;
     }
     case IE_WAVE: {
         m_param1 = QVariant(base->wave_amplitude->value());
         m_param2 = QVariant(base->wave_length->value());
-        KImageEffect::wave(_tmpImage, m_param1.toDouble(), m_param2.toDouble());
+        _tmpImage = KImageEffect::wave(_tmpImage, m_param1.toDouble(), m_param2.toDouble());
         break;
     }
     case IE_NONE:
@@ -196,11 +199,11 @@ void ImageEffectDia::effectChanged(int eff)
     updatePreview();
 }
 
-/*void ImageEffectDia::okClicked()
+void ImageEffectDia::okClicked()
 {
     accept();
 }
-*/
+
 
 void ImageEffectDia::setPixmap(QPixmap pix)
 {
@@ -323,6 +326,83 @@ void ImageEffectDia::showEvent(QShowEvent * e)
 {
     KDialogBase::showEvent(e);
     effectChanged((int)m_effect);
+}
+
+void ImageEffectDia::setupSignals()
+{
+    connect((QWidget *)base->chanInt_value, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->chanInt_component, SIGNAL(activated(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->fade_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->fade_color, SIGNAL(changed(const QColor&)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->flatten_color1, SIGNAL(changed(const QColor&)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->flatten_color2, SIGNAL(changed(const QColor&)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->intensity_value, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->desaturate_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->contrast_value, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->threshold_value, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->solarize_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->charcoal_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->noise_type, SIGNAL(activated(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->blur_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->edge_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->implode_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->oilPaint_radius, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->sharpen_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->spread_value, SIGNAL(valueChanged(int)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->shade_color, SIGNAL(toggled(bool)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->shade_elevation, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->shade_azimuth, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->swirl_value, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+
+    connect((QWidget *)base->wave_amplitude, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+    connect((QWidget *)base->wave_length, SIGNAL(valueChanged(double)),
+            this, SLOT(effectParamChanged()));
+}
+
+void ImageEffectDia::effectParamChanged()
+{
+    effectChanged(base->m_effectCombo->currentItem());
 }
 
 #include "imageEffectDia.moc"
