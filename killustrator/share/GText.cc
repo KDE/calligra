@@ -148,14 +148,29 @@ void GText::writeToPS (ostream &os) {
         os << "\\)"; break;
       case '\\':
         os << "\\\\"; break;
+      case 'ä':
+        os << "\\203"; break;
+      case 'ö':
+        os << "\\204"; break;
+      case 'ü':
+        os << "\\205"; break;
+      case 'Ä':
+        os << "\\200"; break;
+      case 'Ö':
+        os << "\\201"; break;
+      case 'Ü':
+        os << "\\202"; break;
+      case 'ß':
+        os << "\\373"; break;
       default:
         os << s[i]; break;
       }
     }
     os << ")";
   }
-  os << " ] " << opos.x () << ' ' << opos.y () << ' '
-     << Canvas::getPSFont (font) << ' ' << font.pointSize () 
+  const char* fontName = Canvas::getPSFont (font);
+  os << " ] " << opos.x () << ' ' << opos.y () << " /_"
+     << &fontName[1] << ' ' << font.pointSize () 
      << " DrawText\n";
 }
 
