@@ -57,6 +57,7 @@
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
+#include "kspread_dlg_goto.h"
 
 /*****************************************************************************
  *
@@ -790,7 +791,9 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   // Data
   _menubar->insertMenu( ( wstr = Q2C( i18n( "D&ata" ) ) ), m_vMenuData, -1, -1 );
+  m_idMenuData_goto = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Goto cell" ) ) ), this, "gotocell", 0 );
 
+  m_vMenuData->insertSeparator( -1 );
   m_idMenuData_Consolidate = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Consolidate" ) ) ), this, "consolidate", 0 );
 
   // Folder
@@ -1337,6 +1340,13 @@ void KSpreadView::consolidate()
   dlg->show();
 }
 
+void KSpreadView::gotocell()
+{
+  KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
+  dlg->show();
+}
+
+
 void KSpreadView::newView()
 {
   assert( (m_pDoc != 0L) );
@@ -1792,9 +1802,7 @@ void KSpreadView::PopupMenuRow(const QPoint & _point )
 
 void KSpreadView::slotInsertRow()
 {
-
-
-    m_pTable->insertRow( m_pVBorderWidget->markerRow() );
+m_pTable->insertRow( m_pVBorderWidget->markerRow() );
 }
 
 void KSpreadView::slotRemoveRow()

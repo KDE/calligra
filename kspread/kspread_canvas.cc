@@ -224,12 +224,12 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
   if ( xpos < 0 || xpos > width() - 100 * zoom() )
   {
-    slotScrollHorz( xOffset() + xpos + width()/2 );
+    slotScrollHorz( xOffset() -220 + xpos + width()/2 );
   }
 
   if ( ypos < 0 || ypos > height() - 50 * zoom() )
   {
-    slotScrollVert( yOffset() + ypos + height()/2 );
+    slotScrollVert( yOffset() -60 + ypos + height()/2 );
   }
 
   setMarkerColumn( _cell.pos.x() );

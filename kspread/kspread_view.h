@@ -241,7 +241,10 @@ public:
      * Menu View->Show Page Borders
      */
     void togglePageBorders();
-
+    /**
+     * Menu Data
+     */
+     void gotocell();
     /**
      * Menu Data
      */
@@ -536,6 +539,7 @@ protected:
     CORBA::Long m_idMenuView_ShowPageBorders;
     OpenPartsUI::Menu_var m_vMenuData;
     CORBA::Long m_idMenuData_Consolidate;
+    CORBA::Long m_idMenuData_goto;
     OpenPartsUI::Menu_var m_vMenuFolder;
     CORBA::Long m_idMenuFolder_NewTable;
     OpenPartsUI::Menu_var m_vMenuFormat;
