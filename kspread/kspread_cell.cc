@@ -5130,7 +5130,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             setValue( text );
 	}
     }
-
+    if ( element.hasAttribute( "table:formula" ) )
+    {
+        kdDebug()<<" formula :"<<element.attribute( "table:formula" )<<endl;
+    }
     if( element.hasAttribute( "table:value-type" ) )
     {
         QString valuetype = element.attribute( "table:value-type" );

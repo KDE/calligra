@@ -6311,6 +6311,69 @@ void KSpreadSheet::checkContentDirection( QString const & name )
     emit sig_refreshView();
 }
 
+bool KSpreadSheet::loadTableStyleFormat( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
+{
+    QString hleft, hmiddle, hright;
+    QString fleft, fmiddle, fright;
+#if 0 //todo implement it.
+    QDomNode header = styleStack.namedItem( "style:header" );
+
+    if ( styleStack.hasAttribute( "style:header" ) )
+    {
+        kdDebug(30518) << "Header exists" << endl;
+        QDomNode part = header.namedItem( "style:region-left" );
+        if ( !part.isNull() )
+        {
+            hleft = getPart( part );
+            kdDebug(30518) << "Header left: " << hleft << endl;
+        }
+        else
+            kdDebug(30518) << "Style:region:left doesn't exist!" << endl;
+        part = header.namedItem( "style:region-center" );
+        if ( !part.isNull() )
+        {
+            hmiddle = getPart( part );
+            kdDebug(30518) << "Header middle: " << hmiddle << endl;
+        }
+        part = header.namedItem( "style:region-right" );
+        if ( !part.isNull() )
+        {
+            hright = getPart( part );
+            kdDebug(30518) << "Header right: " << hright << endl;
+        }
+    }
+
+    QDomNode footer = style->namedItem( "style:footer" );
+
+    if ( !footer.isNull() )
+    {
+        QDomNode part = footer.namedItem( "style:region-left" );
+        if ( !part.isNull() )
+        {
+            fleft = getPart( part );
+            kdDebug(30518) << "Footer left: " << fleft << endl;
+        }
+        part = footer.namedItem( "style:region-center" );
+        if ( !part.isNull() )
+        {
+            fmiddle = getPart( part );
+            kdDebug(30518) << "Footer middle: " << fmiddle << endl;
+        }
+        part = footer.namedItem( "style:region-right" );
+        if ( !part.isNull() )
+        {
+            fright = getPart( part );
+            kdDebug(30518) << "Footer right: " << fright << endl;
+        }
+    }
+
+    table->print()->setHeadFootLine( hleft, hmiddle, hright,
+                                     fleft, fmiddle, fright );
+#endif
+    //todo
+    return true;
+}
+
 bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
 {
     if ( tableElement.hasAttribute( "table:style-name" ) )
