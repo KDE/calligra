@@ -18,6 +18,7 @@
 
 class KWordDocument_impl;
 class KWPage;
+class QPrinter;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
@@ -277,6 +278,10 @@ public:
     { return processingType; }
   
   int getFrameSet(unsigned int mx,unsigned int my);
+
+  void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
+  
+  void updateAllFrames();
 
 signals:
   void sig_imageModified();

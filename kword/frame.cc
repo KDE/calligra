@@ -35,9 +35,9 @@ KWFrameSet::KWFrameSet(KWordDocument_impl *_doc)
 }
 
 /*================================================================*/
-void KWFrameSet::addFrame(QRect _rect)
+void KWFrameSet::addFrame(KWFrame _rect)
 {
-  frames.append(new QRect(_rect));
+  frames.append(new KWFrame(_rect));
   if (frames.count() == 1) init();
 }
 
@@ -58,13 +58,13 @@ int KWFrameSet::getFrame(int _x,int _y)
 }
 
 /*================================================================*/
-QRect KWFrameSet::getFrame(unsigned int _num)
+KWFrame KWFrameSet::getFrame(unsigned int _num)
 {
   return *frames.at(_num);
 }
 
 /*================================================================*/
-QRect *KWFrameSet::getFramePtr(unsigned int _num)
+KWFrame *KWFrameSet::getFramePtr(unsigned int _num)
 {
   return frames.at(_num);
 }
@@ -83,13 +83,14 @@ bool KWFrameSet::contains(unsigned int mx,unsigned int my)
 /*================================================================*/
 void KWFrameSet::save(ostream &out)
 {
-  QRect frame;
+  KWFrame frame;
 
   for (unsigned int i = 0;i < frames.count();i++)
     {
       frame = getFrame(i);
       out << indent << "<FRAME left=\"" << frame.left() << "\" top=\"" << frame.top()
-	  << "\" right=\"" << frame.right() << "\" bottom=\"" << frame.bottom() << "\"/>" << endl;
+	  << "\" right=\"" << frame.right() << "\" bottom=\"" << frame.bottom() 
+	  << "\" runaround=\"" << static_cast<int>(frame.getRunAround()) << "\"/>" << endl;
     }
 }
 
@@ -130,7 +131,7 @@ void KWTextFrameSet::update()
 /*================================================================*/
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
-  QRect frame = getFrame(_frame);
+  KWFrame frame = getFrame(_frame);
   return (static_cast<int>(_ypos) >= frame.top() && static_cast<int>(_ypos) <= frame.bottom());
 }
 
@@ -278,7 +279,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 
       else if (name == "FRAME")
 	{
-	  QRect rect;
+	  KWFrame rect;
 
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -292,8 +293,10 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		rect.setRight(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "bottom")
 		rect.setBottom(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "runaround")
+		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	    }
-	  frames.append(new QRect(rect));
+	  frames.append(new KWFrame(rect));
 	}
 
       else

@@ -29,6 +29,28 @@
 class KWordDocument_impl;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2};
+enum RunAround {RA_NO = 0,RA_BOUNDUNGRECT = 1,RA_CONTUR = 2};
+
+/******************************************************************/
+/* Class: KWFrame                                                 */
+/******************************************************************/
+
+class KWFrame : public QRect
+{
+public:
+  KWFrame() : QRect() { runAround = RA_NO; }
+  KWFrame(const QPoint &topleft,const QPoint &bottomright) : QRect(topleft,bottomright) { runAround = RA_NO; }     
+  KWFrame(const QPoint &topleft,const QSize &size) : QRect(topleft,size) { runAround = RA_NO; }    
+  KWFrame(int left,int top,int width,int height) : QRect(left,top,width,height) { runAround = RA_NO; }
+  KWFrame(int left,int top,int width,int height,RunAround _ra) : QRect(left,top,width,height) { runAround = _ra; }
+
+  void setRunAround(RunAround _ra) { runAround = _ra; }
+  RunAround getRunAround() { return runAround; }
+
+protected:
+  RunAround runAround;
+
+};
 
 /******************************************************************/
 /* Class: KWFrameSet                                              */
@@ -44,12 +66,12 @@ public:
   virtual FrameType getFrameType()
     { return FT_BASE; }
 
-  virtual void addFrame(QRect _rect);
+  virtual void addFrame(KWFrame _rect);
   virtual void delFrame(unsigned int _num);
 
   virtual int getFrame(int _x,int _y);
-  virtual QRect getFrame(unsigned int _num);
-  virtual QRect *getFramePtr(unsigned int _num);
+  virtual KWFrame getFrame(unsigned int _num);
+  virtual KWFrame *getFramePtr(unsigned int _num);
   virtual unsigned int getNumFrames()
     { return frames.count(); }
 
@@ -71,7 +93,7 @@ protected:
   KWordDocument_impl *doc;
 
   // frames
-  QList<QRect> frames;
+  QList<KWFrame> frames;
 
 };
 

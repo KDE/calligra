@@ -683,18 +683,32 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	unsigned int tmpTextPos = fc->getTextPos();
 
 	if (fc->isCursorAtParagEnd())
-	  frameSet->insertParag(fc->getParag(),I_AFTER);
+	  {
+	    frameSet->insertParag(fc->getParag(),I_AFTER);
+	    fc->setTextPos(0);
+	    fc->init(fc->getParag()->getNext(),painter);
+	    fc->cursorGotoLineStart(painter);
+	  }
 	else if (fc->isCursorAtParagStart())
 	  {
 	    frameSet->insertParag(fc->getParag(),I_BEFORE);
-	    fc->init(fc->getParag()->getPrev(),painter);
+	    fc->setTextPos(0);
+	    fc->init(fc->getParag(),painter);
+	    fc->cursorGotoLineStart(painter);
 	  }
 	else 
-	  frameSet->splitParag(fc->getParag(),tmpTextPos);
-
-	fc->makeLineLayout(painter);
-	fc->cursorGotoPos(tmpTextPos,painter);
-	fc->cursorGotoRight(painter);
+	  {
+	    bool _insert = fc->isCursorAtLineStart();
+	    frameSet->splitParag(fc->getParag(),tmpTextPos);
+	    fc->init(fc->getParag()->getNext(),painter);
+	    fc->cursorGotoLineStart(painter);
+	    if (_insert)
+	      {
+		frameSet->insertParag(fc->getParag(),I_BEFORE);
+		fc->init(fc->getParag(),painter);
+		fc->cursorGotoLineStart(painter);
+	      }
+	  }
 
 	painter.end();
 	draw_buffer = false;
@@ -750,7 +764,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    goNext = true;
 	    fc->cursorGotoPrevLine(painter);
-	    //fc->makeLineLayout(painter);
 	  }
 	else
 	  fc->makeLineLayout(painter);
@@ -758,10 +771,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	QRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				frameSet->getFrame(paintfc.getFrame() - 1).height());
+	KWFrame currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).width(),
+				    frameSet->getFrame(paintfc.getFrame() - 1).height());
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
 
 	while (!bend)
@@ -779,10 +792,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    if (paintfc.getFrame() - 1 != currFrameNum)
 	      {
 		drawBuffer(currFrame);
-		currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				  frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				  frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				  frameSet->getFrame(paintfc.getFrame() - 1).height());
+		currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).width(),
+				    frameSet->getFrame(paintfc.getFrame() - 1).height());
 		currFrameNum = paintfc.getFrame() - 1;
 	      }
 
@@ -879,7 +892,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    goNext = true;
 	    fc->cursorGotoPrevLine(painter);
-	    //fc->makeLineLayout(painter);
 	  }
 	else
 	  fc->makeLineLayout(painter);
@@ -887,10 +899,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	QRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				frameSet->getFrame(paintfc.getFrame() - 1).height());
+	KWFrame currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).width(),
+				    frameSet->getFrame(paintfc.getFrame() - 1).height());
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
 
 	while (!bend)
@@ -908,10 +920,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    if (paintfc.getFrame() - 1 != currFrameNum)
 	      {
 		drawBuffer(currFrame);
-		currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				  frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				  frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				  frameSet->getFrame(paintfc.getFrame() - 1).height());
+		currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+				    frameSet->getFrame(paintfc.getFrame() - 1).width(),
+				    frameSet->getFrame(paintfc.getFrame() - 1).height());
 		currFrameNum = paintfc.getFrame() - 1;
 	      }
 
@@ -991,10 +1003,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    paintfc = *fc;
 	    bool bend = false;
 	    
-	    QRect currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				    frameSet->getFrame(paintfc.getFrame() - 1).height());
+	    KWFrame currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+					frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+					frameSet->getFrame(paintfc.getFrame() - 1).width(),
+					frameSet->getFrame(paintfc.getFrame() - 1).height());
 	    unsigned int currFrameNum = paintfc.getFrame() - 1;
 	    
 	    while (!bend)
@@ -1012,10 +1024,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		if (paintfc.getFrame() - 1 != currFrameNum)
 		  {
 		    drawBuffer(currFrame);
-		    currFrame = QRect(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
-				      frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
-				      frameSet->getFrame(paintfc.getFrame() - 1).width(),
-				      frameSet->getFrame(paintfc.getFrame() - 1).height());
+		    currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1).x() - xOffset,
+					frameSet->getFrame(paintfc.getFrame() - 1).y() - yOffset,
+					frameSet->getFrame(paintfc.getFrame() - 1).width(),
+					frameSet->getFrame(paintfc.getFrame() - 1).height());
 		    currFrameNum = paintfc.getFrame() - 1;
 		  }
 		
@@ -1276,7 +1288,7 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
   _painter.setPen(lightGray);
 
   KWFrameSet *frameset = 0;
-  QRect tmp,frame;
+  KWFrame tmp,frame;
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
@@ -1284,7 +1296,7 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  tmp = frameset->getFrame(j);
-	  frame = QRect(tmp.x() - xOffset - 1,tmp.y() - yOffset - 1,tmp.width() + 2,tmp.height() + 2);
+	  frame = KWFrame(tmp.x() - xOffset - 1,tmp.y() - yOffset - 1,tmp.width() + 2,tmp.height() + 2);
 
 	  if (v_area.intersects(frame))
 	    _painter.drawRect(frame);
@@ -1295,22 +1307,23 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
 
   for (int k = 0;k < doc->getPages();k++)
     {
-      tmp = QRect(-xOffset,(k * doc->getPTPaperHeight()) - yOffset,doc->getPTPaperWidth(),doc->getPTPaperHeight());
-      if (v_area.intersects(tmp))
-	_painter.drawRect(tmp);
+      QRect tmp2 = QRect(-xOffset,(k * doc->getPTPaperHeight()) - yOffset,doc->getPTPaperWidth(),doc->getPTPaperHeight());
+      if (v_area.intersects(tmp2))
+	_painter.drawRect(tmp2);
     }
 
   _painter.restore();
 }
+
 /*================================================================*/
 void KWPage::frameSizeChanged(KoPageLayout _layout)
 {
-  QRect frame = doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1);
+  KWFrame frame = doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1);
 
   unsigned int page = 0;
   for (int i = 0;i < doc->getPages();i++)
     {
-      if (frame.intersects(QRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
+      if (frame.intersects(KWFrame(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
 	{
 	  page = i;
 	  break;
@@ -1332,12 +1345,12 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
   KoPageLayout _layout;
   KoColumns _cl;
   doc->getPageLayout(_layout,_cl);
-  QRect frame = doc->getFrameSet(_frameset)->getFrame(_frame);
+  KWFrame frame = doc->getFrameSet(_frameset)->getFrame(_frame);
 
   unsigned int page = 0;
   for (int i = 0;i < doc->getPages();i++)
     {
-      if (frame.intersects(QRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
+      if (frame.intersects(KWFrame(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
 	{
 	  page = i;
 	  break;

@@ -13,6 +13,7 @@
 /* Module: Document (header)                                      */
 /******************************************************************/
 
+#include <qprinter.h>
 #include "kword_doc.h"
 #include "kword_page.h"
 
@@ -111,6 +112,8 @@ CORBA::Boolean KWordDocument_impl::init()
   else
     debug("no template chosen");
 
+  updateAllFrames();
+
   return true;
 }
 
@@ -165,6 +168,7 @@ void KWordDocument_impl::setPageLayout(KoPageLayout _layout,KoColumns _cl)
     recalcFrames();
 
   updateAllCursors(); 
+  updateAllFrames();
 }
 
 /*================================================================*/
@@ -179,8 +183,8 @@ void KWordDocument_impl::recalcFrames()
     / pageColumns.columns;
  
   for (int i = 0;i < pageColumns.columns;i++)
-    frameset->addFrame(QRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),getPTTopBorder(),
-			     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
+    frameset->addFrame(KWFrame(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),getPTTopBorder(),
+			       ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder()));
   for (unsigned int j = 0;j < frms;j++)
     frameset->delFrame(0);
 }
@@ -1384,11 +1388,11 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
   pages++;
   QRect pageRect(0,_page * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
 
-  QList<QRect> frameList;
+  QList<KWFrame> frameList;
   frameList.setAutoDelete(false);
 
   KWFrameSet *frameSet = 0L;
-  QRect frame;
+  KWFrame frame;
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
@@ -1398,7 +1402,7 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
 	{
 	  frame = frameSet->getFrame(j);
 	  if (pageRect.intersects(frame))
-	    frameList.append(new QRect(frame.x(),frame.y() + getPTPaperHeight(),frame.width(),frame.height()));
+	    frameList.append(new KWFrame(frame.x(),frame.y() + getPTPaperHeight(),frame.width(),frame.height(),frame.getRunAround()));
 	}
 
       if (!frameList.isEmpty())
@@ -1411,6 +1415,7 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
     }
   updateAllRanges();
   drawAllBorders(&_painter);
+  updateAllFrames();
 }
 
 /*================================================================*/
@@ -1425,4 +1430,80 @@ int KWordDocument_impl::getFrameSet(unsigned int mx,unsigned int my)
     }
   
   return -1;
+}
+
+/*================================================================*/
+void KWordDocument_impl::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
+{
+  QList<KWFormatContext> fcList;
+  fcList.setAutoDelete(true);
+
+  KWFormatContext *fc = 0L;
+  unsigned int i = 0,j = 0;
+
+  for (i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->getFrameType() == FT_TEXT)
+	{
+	  fc = new KWFormatContext(this,i + 1);
+	  fc->init(dynamic_cast<KWTextFrameSet*>(frames.at(i))->getFirstParag(),*painter,false,true);
+	  fcList.append(fc);
+	}
+    }
+
+  for (i = 0;i < static_cast<unsigned int>(pages);i++)
+    {
+      if (i + 1> static_cast<unsigned int>(printer->fromPage())) printer->newPage();
+      for (j = 0;j < frames.count();j++)
+	{
+	  bool bend = false;
+	  fc = fcList.at(j);
+	  while (fc->getPage() == i + 1 && !bend)
+	    {
+	      if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
+		printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+	      bend = !fc->makeNextLineLayout(*painter);
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KWordDocument_impl::updateAllFrames()
+{
+  QList<KWFrame> _frames;
+  _frames.setAutoDelete(false);
+  unsigned int i = 0,j = 0;
+  KWFrameSet *frameset = 0L;
+  KWFrame frame1,frame2;
+
+  for (i = 0;i < frames.count();i++)
+    {
+      frameset = frames.at(i);
+      for (j = 0;j < frameset->getNumFrames();j++)
+	_frames.append(frameset->getFramePtr(j));
+    }
+
+  for (i = 0;i < _frames.count();i++)
+    {
+      frame1 = *_frames.at(i);
+      //debug("num: %d",i);
+      for (j = 0;j < _frames.count();j++)
+	{
+	  if (i == j) continue;
+
+	  frame2 = *_frames.at(j); 
+	  if (frame1.intersects(frame2))
+	    {
+	      QRect r = frame1.intersect(frame2);
+	      if (r.x() > frame1.x() || r.y() > frame1.y() || r.width() < frame1.width() || r.height() < frame1.height())
+		{
+		  r.setLeft(r.left() - frame1.left());
+		  r.setTop(r.top() - frame1.top());
+		  //debug("%d %d %d %d",r.x(),r.y(),r.width(),r.height());
+		}
+	    }
+	}
+      //debug("\n");
+    }
 }

@@ -258,3 +258,8 @@ Reggie, 20.10.1998:
 - Some cursor navigation and calculation fixes in KWFormatContext
 - Some small fixes in KWPage
 - Bugfix when loading files
+
+Reggie, 21.10.1998:
+-------------------
+- Implemented printing documents
+- fixed some cursor navigation bugs when pressing return

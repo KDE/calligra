@@ -206,7 +206,7 @@ CORBA::Boolean KWordView_impl::printDlg()
     {    
       QPainter painter;
       painter.begin(&prt);
-      //page->print(&painter,&prt,left_margin,top_margin);
+      m_pKWordDoc->print(&painter,&prt,left_margin,top_margin);
       painter.end();
     }
   return true;
