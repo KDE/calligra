@@ -24,13 +24,6 @@
 
 #include <kexidb/driver.h>
 
-//#include <kexidberror.h>
-//#include <qdict.h>
-
-//class MySqlRecordSet;
-//class MySqlResult;
-
-
 namespace KexiDB
 {
 
@@ -39,7 +32,6 @@ class DriverManager;
 class SQLiteDriverPrivate;
 
 //! SQLite database driver.
-
 class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 {
 	Q_OBJECT
@@ -70,109 +62,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 
-/*
-		virtual KexiDB::ConnectionInternal* createConnectionInternalObject( KexiDB::Connection& conn );
-		virtual bool connect( KexiDB::Connection& conn );
-		virtual bool disconnect( KexiDB::Connection& conn );
-		virtual void getDatabasesList( KexiDB::Connection& conn, QStringList &list );
-		virtual bool createDatabase( KexiDB::Connection& conn, const QString &dbName );
-		virtual bool useDatabase( KexiDB::Connection& conn, const QString &dbName );
-		virtual bool closeDatabase( KexiDB::Connection& conn );
-		virtual bool dropDatabase( KexiDB::Connection& conn, const QString &dbName );
-*/
 	SQLiteDriverPrivate *dp;
-/*
-	MySqlDB(QObject *parent=0, const char *name="mysq", const QStringList &args=QStringList());
-		~MySqlDB();
-
-		virtual KexiDBError *latestError();
-
-		//!
-		//  connect to mysql-database
-		//
-
-//		int		connect(const char *host, const char *user, const char *passwd,
-//					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
-		QString		driverName()   const;
-		QStringList	databases();
-		virtual bool isSystemDatabase(QString &dbName);
-		QStringList	tableNames();
-		unsigned long	affectedRows() const;
-		KexiDBTableStruct	structure(const QString& table) const;
-		QString	nativeDataType(const KexiDBField::ColumnType& t) const;
-
-	public slots:
-		KexiDBRecordSet	*queryRecord(const QString& querystatement, bool buffer=false);
-
-		bool		connect(const QString& host, const QString& user, const QString& password,
-										const QString& socket, const QString& port);
-		bool		connect(const QString& host, const QString& user, const QString& password,
-										const QString& socket, const QString& port,
-										const QString& db, bool create = false);
-
-		void		load(QString, bool) { }
-		const KexiDBTable* const table(const QString &name);
-
-		//!
-		// execute a query
-		//
-		bool		query(const QString& statement);
-*/
-		/*
-		// us that function if you don't want to catch exceptions :)
-		//
-		bool		uhQuery(const QString& statement);
-//		int		realQuery(const char *statement, unsigned int length);
-
-		QString		escape(const QString &str);
-		QString		escape(const QByteArray& str);
-		bool alterField(const KexiDBField& changedField,
-			unsigned int index, KexiDBTableStruct fields);
-		bool createField(const KexiDBField& newField,
-			KexiDBTableStruct fields, bool createTable = false);
-
-		///
-		//  friendy mode
-		//
-		MySqlResult	*getResult();
-
-		//!
-		// mysql_store_result
-		//
-		MySqlResult	*storeResult();
-		MySqlResult	*useResult();
-
-		unsigned long	lastAuto();
-
-		static KexiDBField::ColumnType getInternalDataType(int t);
-
-	protected:
-		int		reconnect();
-		void		initCheckUpdate();
-
-		MYSQL		*m_mysql;
-		bool		m_connected;
-		bool		m_connectedDB;
-		unsigned int    m_port;
-		QString		m_socket;
-		unsigned int	m_client_flag;
-
-		QString		m_host;
-		QString		m_user;
-		QString		m_password;
-
-	private:
-		QString createDefinition(const QString& field, KexiDBField::ColumnType dtype, int length, int precision,
-			KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType, const QString& defaultVal);
-		QString createDefinition(const KexiDBField& field,
-			int index, KexiDBTableStruct fields);
-		bool changeKeys(const KexiDBField& field,
-			int index, KexiDBTableStruct fields);
-
-		KexiDBTable * createTableDef(const QString& name);
-		KexiDBError m_error;
-
-		QDict<KexiDBTable> m_tableDefs;*/
 };
 
 };
