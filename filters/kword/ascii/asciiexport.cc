@@ -48,6 +48,9 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     emit sigProgress(0);
 
     QString str;
+    QRegExp amp("&amp;");
+    QRegExp lt("&lt;");
+    QRegExp gt("&gt;");
 
     int i = buf.find( "<TEXT>" );
     while ( i != -1 )
@@ -56,8 +59,10 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
         int j = buf.find( "</TEXT>", i );
         if ( j - ( i + 6 ) > 0 )
         {
-	    // FIXME: &lt; &gt; &amp; (Werner)
-            str += buf.mid( i + 6, j - ( i + 6 ) );
+            str += buf.mid( i + 6, j - ( i + 6 ) ).replace( amp, "&" )
+                                                  .replace( lt, "<" )
+                                                  .replace( gt, ">" )
+                                                  ;
             str += "\n";
         }
         i = buf.find( "<TEXT>", j );
