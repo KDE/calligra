@@ -239,11 +239,13 @@ class FormatData
         FormatData ()
         {}
         FormatData ( int p,
-                     int l  ) : pos (p), len (l)
+                     int l )
+                     : pos (p), len (l), realLen (l)
         {}
 
         int pos; // Start of text to which this format applies
-        int len; // Len of text to which this format applies
+        int len; // Length of text to which this format applies
+        int realLen; //Real length of text (in case "len" is not the truth!)
 
         QString abiprops; // Value of the "props" attribute
                           // of Abiword's "<c>"	tag
@@ -273,6 +275,16 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
         formatData.len = 0;
 
         kdError(30506) << "Missing formatting!" << endl;
+    }
+
+    if ( 6 == formatId )
+    {// <FORMAT id=6> have no length but has one character in <TEXT>
+        //TODO: verifiy that KWord 0.9 still does it!
+        formatData.realLen=1;
+    }
+    else
+    {
+        formatData.realLen=formatData.len;
     }
 
     QValueList<TagProcessing> tagProcessingList;
@@ -348,6 +360,31 @@ static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
     *hardBreak=(1==frameBreak);
 }
 
+static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+{
+    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+        if ((*paraFormatDataIt).pos>lastPos)
+        {
+            //We must add a FormatData
+            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if (paraText.length()>lastPos)
+    {
+        FormatData formatData(lastPos,paraText.length()-lastPos);
+        paraFormatDataList.append(formatData);
+    }
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -366,23 +403,10 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
     const QRegExp regExpApos("'");
     const QRegExp regExpQuot("\"");
 
-    if (paraFormatDataList.isEmpty())
+    if ( paraText.length () > 0 )
     {
-        // No <FORMAT> tags were found, it is just normal text!
-        if (!paraText.isEmpty())
-        {
-            QString str=paraText;
-            //Code all possible predefined XML entities
-            str.replace (regExpAmp , strAmp); //Must be the first!!
-            str.replace (regExpLt  , strLt);
-            str.replace (regExpGt  , strGt);
-            str.replace (regExpApos, strApos);
-            str.replace (regExpQuot, strQuot);
-            outputText += str;
-        }
-    }
-    else if ( paraText.length () > 0 )
-    {
+        CreateMissingFormatData(paraText,paraFormatDataList);
+
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
         QString partialText;
@@ -399,7 +423,6 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             partialText.replace (regExpGt  , strGt);
             partialText.replace (regExpApos, strApos);
             partialText.replace (regExpQuot, strQuot);
-            // TODO: AbiWord tries to be 7bit clean! (So may be other replacements are needed!)
 
             if ((*paraFormatDataIt).abiprops.isEmpty())
             {
