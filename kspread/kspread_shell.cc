@@ -89,7 +89,7 @@ void KSpreadShell::setDocument( KSpreadDoc *_doc )
 
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createSpreadView( getFrame() );
+  m_pView = _doc->createSpreadView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
@@ -127,7 +127,7 @@ bool KSpreadShell::newDocument()
     return false;
   }
 
-  m_pView = m_pDoc->createSpreadView( getFrame() );
+  m_pView = m_pDoc->createSpreadView( frame() );
 
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
@@ -178,7 +178,7 @@ bool KSpreadShell::openDocument( const char *_url, const char *_format )
     return false;
   }
 
-  m_pView = m_pDoc->createSpreadView( getFrame() );
+  m_pView = m_pDoc->createSpreadView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );

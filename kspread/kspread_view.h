@@ -40,6 +40,7 @@ class KSpreadVBorder;
 class KSpreadChild;
 class KSpreadCell;
 
+class KoDocumentEntry;
 class KoToolEntry;
 
 #include <koFrame.h>
@@ -48,7 +49,6 @@ class KoToolEntry;
 #include <opToolBar.h>
 #include <koFrame.h>
 #include <koScanPlugins.h>
-#include <koQueryTypes.h>
 #include <openparts_ui.h>
 #include <datatools.h>
 

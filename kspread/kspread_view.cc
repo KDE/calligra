@@ -45,7 +45,6 @@
 #include <koAboutDia.h>
 #include <koScanTools.h>
 #include <koQueryTypes.h>
-#include <koIMR.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -275,23 +274,26 @@ bool KSpreadView::mappingEventChartInserted( KSpread::EventChartInserted& _event
 {
   if ( m_pTable == 0L )
     return true;
+  
+  // Request the best matching document which supports the charting interface.
+  QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:Chart/SimpleChart:1.0' in RepoIds", 1 );
+  if ( vec.isEmpty() )
+  {
+    cerr << "Got no results" << endl;
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    return true;
+  }
 
   int xpos, ypos;
   xpos = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
   ypos = m_pTable->rowPos( m_pCanvas->markerRow(), m_pCanvas );
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoIds", 1 );
-  if ( vec.size() == 0 )
-  {
-    cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
-    return true;
-  }
-
   QRect r( xpos + _event.dx, ypos + _event.dy, _event.width, _event.height );
 
   cerr << "USING component " << vec[0].name << endl;
 
+  // Insert the document. This will lead to a signal and as response
+  // to that signal we will finally create a view and embed the chart visually.
   m_pTable->insertChart( r, vec[0], m_pTable->selectionRect() );
 
   return true;
@@ -1676,8 +1678,8 @@ void KSpreadView::percent()
 
 void KSpreadView::insertTable()
 {
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-  if ( vec.size() == 0 )
+  QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
+  if ( vec.isEmpty() )
   {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no spread sheet  component registered"),
@@ -1687,7 +1689,7 @@ void KSpreadView::insertTable()
 
   cerr << "USING component " << vec[0].name << endl;
 
-  // TODO m_pCanvas->setAction( KSpreadCanvas::InsertChild, vec[0] );
+  m_pCanvas->setAction( KSpreadCanvas::InsertChild, vec[0] );
 }
 
 void KSpreadView::insertImage()
@@ -1698,16 +1700,15 @@ void KSpreadView::insertImage()
 void KSpreadView::insertObject()
 {
   KoDocumentEntry e = KoPartSelectDia::selectPart();
-  if ( e.name.isEmpty() )
+  if ( e.isEmpty() )
     return;
 
-  // TODO m_pCanvas->setAction( KSpreadCanvas::InsertChild, e );
+  m_pCanvas->setAction( KSpreadCanvas::InsertChild, e );
 }
 
 void KSpreadView::insertChart()
 {
   m_pCanvas->setAction( KSpreadCanvas::InsertChart );
-  // m_pCanvas->setAction( KSpreadCanvas::Chart );
 }
 
 void KSpreadView::autoFill()

@@ -45,7 +45,6 @@
 #include "kspread_corba_util.h"
 #include "kspread_canvas.h"
 
-#include <koIMR.h>
 #include <koStream.h>
 
 #include <komlWriter.h>
@@ -2345,7 +2344,7 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 
 void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
-  KOffice::Document_var doc = imr_createDoc( _e );
+  KOffice::Document_var doc = _e.createDoc();
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;
@@ -2381,7 +2380,7 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
-  KOffice::Document_var doc = imr_createDoc( _e );
+  KOffice::Document_var doc = _e.createDoc();
   if ( CORBA::is_nil( doc ) )
     // Error message is already displayed, so just return
     return;

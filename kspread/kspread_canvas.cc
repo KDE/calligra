@@ -262,11 +262,11 @@ void KSpreadCanvas::setAction( Actions _act )
   m_eAction = _act;
 }
 
-/* void KSpreadCanvas::setAction( Actions _act, KoDocumentEntry& _e )
+void KSpreadCanvas::setAction( Actions _act, KoDocumentEntry& _e )
 {
   m_actionArgument = _e;
   setAction( _act );
-} */
+}
 
 void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 {
@@ -474,8 +474,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
     QRect r( x, y, w, h );
     if ( m_eAction == InsertChart )
       m_pView->insertChart( r );
-    // TODO else if ( m_eAction == InsertChild )
-    // m_pView->insertChild( r, m_actionArgument );
+    else if ( m_eAction == InsertChild )
+      m_pView->insertChild( r, m_actionArgument );
 	
     m_eMouseAction = NoAction;
     m_eAction = DefaultAction;

@@ -8,6 +8,8 @@
 #include <qstring.h>
 #include <qpen.h>
 
+#include <koQueryTypes.h>
+
 class KSpreadView;
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -46,6 +48,12 @@ protected:
 };
 
 /**
+ * The canvas builds a part of the GUI of KSpread.
+ * It contains the borders, scrollbars,
+ * editwidget and of course it displays the table.
+ * Especially most of the user interface logic is implemented here.
+ * That means that this class knows what to do when a key is pressed
+ * or if the mouse button was clicked.
  */
 class KSpreadCanvas : public QWidget
 {
@@ -55,11 +63,15 @@ class KSpreadCanvas : public QWidget
   
     Q_OBJECT
 public:
-    enum MouseActions { Mark = 1, ResizeCell = 2, NoAction = 0, AutoFill = 3, ChildGeometry = 4 };
+    /**
+     * The current action associated with the mouse.
+     * Default is 'NoAction'.
+     */
+    enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3, ChildGeometry = 4 };
     /**
      * The possible actions that we expect the user to do.
      * Usually this is 'Default' and tells us that the user may edit
-     * the table. If @ref #action is 'InsertChild' then the user must draw
+     * the table. If @ref #action is 'InsertChild' or 'InsertChart' then the user must draw
      * a rectangle in order of telling us where to insert the new child.
      */
     enum Actions { DefaultAction, InsertChild, InsertChart };
@@ -108,11 +120,14 @@ public:
      */
     void drawCell( KSpreadCell *_cell, int _col, int _row );
 
+    /**
+     * This is usually called with '_act' equal KSpreadCanvas::InsertChart.
+     */
     void setAction( Actions _act );
     /**
      * This is usually called with '_act' equal KSpreadCanvas::InsertChild.
      */
-  // void setAction( Actions _act, KoDocumentEntry& _entry );
+    void setAction( Actions _act, KoDocumentEntry& _entry );
   
     void updateCellRect( const QRect &_rect );
 
@@ -187,10 +202,10 @@ private:
      */
     Actions m_eAction;
     /**
-     * If the @ref m_eAction is InsertChild or InsertChart, then this record
+     * If the @ref m_eAction is InsertChild then this record
      * holds informations about which component we should use here.
      */
-  // KoDocumentEntry m_actionArgument;
+    KoDocumentEntry m_actionArgument;
   
     /**
      * Used to indicate wether the user started drawing a rubber band rectangle.

@@ -17,20 +17,11 @@
    Boston, MA 02111-1307, USA.
 */     
 
-// #include <qprinter.h>
-#include <qstringlist.h>
-
-#include <koQueryTypes.h>
-#include <koIMR.h>
-#include <koApplication.h>
 #include <koFactory.h>
-#include <koDocument.h>
 #include <opAutoLoader.h>
 
 #include "kspread_main.h"
-#include "kspread_shell.h"
 #include "kspread_doc.h"
-#include "kspread.h"
 
 // HACK: For KScript
 extern CORBA::ORB* orb()
