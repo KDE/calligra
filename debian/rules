@@ -89,7 +89,8 @@ binary-arch: build install
 	dh_perl -a
 	dh_compress -a
 	dh_fixperms -a
-	-chmod 644 debian/kpresenter/usr/bin/kprconverter.pl
+	-chmod 644 debian/kivio/usr/share/apps/kivio/autoloadStencils/*ksp \
+		debian/kpresenter/usr/bin/kprconverter.pl
 	dh_suidregister -a
 	dh_makeshlibs -a -V
 	dh_installdeb -a
