@@ -1478,12 +1478,12 @@ void KWTextFrameSet::updateFrames( int flags )
         theFrame->setInternalY( internalYpt );
 
         // Update availHeight with the internal height of this frame - unless it's a copy
-        if ( ! ( theFrame->isCopy() && !firstFrame ) )
+        if ( !theFrame->isCopy() || firstFrame )
         {
             lastRealFrameHeight = theFrame->innerHeight();
             availHeight += lastRealFrameHeight;
         }
-        firstFrame = true;
+        firstFrame = false;
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
@@ -2016,17 +2016,22 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         // the "break at end of frame" case in formatVertically (!!).
         int difference = availHeight - ( bottom + 2 );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame) difference=" << difference << endl;
+        kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << getName() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
 #endif
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug(32002) << "frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
+#endif
         if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
         {
             double wantedPosition = theFrame->top() + m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+            Q_ASSERT( wantedPosition < theFrame->bottom() );
             if ( wantedPosition != theFrame->top() )
             {
                 kdDebug() << "top= " << theFrame->top() << " setTop " << wantedPosition << endl;
                 theFrame->setTop( wantedPosition );
+                kdDebug() << " -> the footer is now " << *theFrame << endl;
                 frameResized( theFrame, true );
             }
         }
