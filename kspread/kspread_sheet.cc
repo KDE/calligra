@@ -2341,8 +2341,8 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
                                              undo);
     }
     refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadSheet::ColumnInsert);
-    recalc();
     refreshMergedCell();
+    recalc();
     emit sig_updateView( this );
 
     return res;
@@ -2379,8 +2379,8 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
                                              undo );
     }
     refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadSheet::RowInsert);
-    recalc();
     refreshMergedCell();
+    recalc();
     emit sig_updateView( this );
 
     return res;
@@ -2564,8 +2564,8 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
     d->print->removeColumn( col, nbCol );
 
     refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove );
-    recalc();
     refreshMergedCell();
+    recalc();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
@@ -2601,8 +2601,8 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
     d->print->removeRow( row, nbRow );
 
     refreshChart( QPoint( 1, row ), true, KSpreadSheet::RowRemove );
-    recalc();
     refreshMergedCell();
+    recalc();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
@@ -6280,7 +6280,7 @@ void KSpreadSheet::dissociateCell( const QPoint &cellRef )
     y = 1;
 
   cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
-  QRect selection( marker.x(), marker.y(), x, y );
+  QRect selection( marker.x() - 1, marker.y() - 1, x + 2, y + 2 );
   refreshMergedCell();
   emit sig_updateView( this, selection );
 }
