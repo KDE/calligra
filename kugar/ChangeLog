@@ -3,6 +3,7 @@
 	Qt only version of the designer and preliminary version of shell added to the repository.
 	Qt only versions aren't compiled with kde. They should be compiled by hand using
 	qmake kugar.pro
+	make -f Makefile.qt (on unix)
 	QMake and automake coexist normally;)
 	Qt only Kugar Designer and shell do not support KOffice zipped xml files
 	Preliminary qt-shell is written by Joris Marcillac <joris@marcillac.com>
