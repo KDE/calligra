@@ -1,13 +1,14 @@
 [Desktop Entry]
 Name=KChart
+Name[eo]=Kartoj
+Name[hu]=KGrafikon
+Comment=
 Exec=kchart
 X-KDE-Library=libkchart
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
-X-KDE-LibraryDependencies=libcutesti.so
-Comment=Kalle's KChart
-MimeType=application/x-kchart
+X-KDE-LibraryDependencies=
 Type=Application
 Icon=kchart.png
 MiniIcon=kchart.png
-ServiceTypes=KChart,KOfficePart,KPart
+ServiceTypes=application/x-kchart,KOfficePart,KPart
