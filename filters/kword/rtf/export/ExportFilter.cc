@@ -152,7 +152,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     if(pos!=-1) strExt = strImageName.mid(pos).lower();
 
     QString strTag;
-    if (strExt==".bmp" && false) // ### FIXME: there is a problem with BMPs
+    if (strExt==".bmp")
         strTag="\\wbitmap";
     else if (strExt==".png")
         strTag="\\pngblip";
