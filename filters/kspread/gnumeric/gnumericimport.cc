@@ -188,6 +188,42 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
   color->setRgb(red, green, blue);
 }
 
+
+void set_document_attributes( KSpreadDoc * ksdoc, QDomElement * docElem)
+{
+    //TODO fix kspread to not read config when we load it from this file
+    QDomNode attributes  = docElem->namedItem("gmr:Attributes");
+    QDomNode attributeItem = attributes.namedItem("gmr:Attribute");
+    while( !attributeItem.isNull() )
+    {
+        QDomNode gmr_name  = attributeItem.namedItem("gmr:name");
+        QDomNode gmr_value = attributeItem.namedItem("gmr:value");
+        if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar")
+        {
+            ksdoc->setShowHorizontalScrollBar( gmr_value.toElement().text().lower()=="true"? true : false );
+        }
+        else if ( gmr_name.toElement().text() == "WorkbookView::show_vertical_scrollbar")
+        {
+            ksdoc->setShowVerticalScrollBar( gmr_value.toElement().text().lower()=="true"? true : false );
+        }
+        else if ( gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs")
+        {
+            ksdoc->setShowTabBar(gmr_value.toElement().text().lower()=="true"? true : false );
+        }
+        else if ( gmr_name.toElement().text() == "WorkbookView::do_auto_completion")
+        {
+            ksdoc->setCompletionMode( KGlobalSettings::CompletionAuto);
+        }
+        else if ( gmr_name.toElement().text() == "WorkbookView::is_protected")
+        {
+            //TODO protect document ???
+            //ksdoc->map()->isProtected()
+        }
+
+        attributeItem = attributeItem.nextSibling();
+    }
+}
+
 /* This sets the documentation information from the information stored in
    the GNUmeric file. Particularly in the "gmr:Summary" subcategory.
 */
@@ -1398,6 +1434,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     /* This sets the Document information. */
     set_document_info( document, &docElem );
 
+    /* This sets the Document attributes */
+    set_document_attributes( ksdoc, &docElem );
     KSpreadSheet * table;
 
     // This is a mapping of exprID to expressions.
@@ -1425,17 +1463,32 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         table->enableScrollBarUpdates( false );
 
         //kdDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute( "DisplayFormulas" )<<endl;
+        QString tmp;
         if ( sheetElement.hasAttribute( "DisplayFormulas" ) )
-            table->setShowFormula(sheetElement.attribute( "DisplayFormulas")=="true" );
+        {
+            tmp=sheetElement.attribute( "DisplayFormulas");
+            table->setShowFormula( ( tmp=="true" )||( tmp=="1" ) );
+        }
         if ( sheetElement.hasAttribute( "HideZero" ) )
-            table->setHideZero( sheetElement.attribute( "HideZero" )=="true" );
+        {
+            tmp = sheetElement.attribute( "HideZero" );
+            table->setHideZero( ( tmp=="true" )||( tmp=="1" ) );
+        }
         if ( sheetElement.hasAttribute( "HideGrid" ) )
-            table->setShowGrid( sheetElement.attribute( "HideGrid" )=="false" );
+        {
+            tmp = sheetElement.attribute( "HideGrid" );
+            table->setShowGrid( ( tmp=="false" )||( tmp=="0" ) );
+        }
         if ( sheetElement.hasAttribute( "HideColHeader" ) )
-            ksdoc->setShowColumnHeader( sheetElement.attribute( "HideColHeader" )=="false" );
+        {
+            tmp = sheetElement.attribute( "HideColHeader" );
+            ksdoc->setShowColumnHeader( ( tmp=="false" )||( tmp=="0" ) );
+        }
         if ( sheetElement.hasAttribute( "HideRowHeader" ) )
-            ksdoc->setShowRowHeader( sheetElement.attribute( "HideRowHeader" )=="false" );
-
+        {
+            tmp =sheetElement.attribute( "HideRowHeader" );
+            ksdoc->setShowRowHeader( ( tmp=="false" )||( tmp=="0" ) );
+        }
 
 
 	setObjectInfo(&sheet, table);
