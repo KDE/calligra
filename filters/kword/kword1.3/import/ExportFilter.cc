@@ -1104,7 +1104,7 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray )
 {
     bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
     uint currentColumn = 0;
-    int tryingRow = 0; // We are trying the first row
+    int tryingRow = 0; // We are trying the first row  // ### FIXME: not always correct, e.g. RTF import filter
     QValueList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
@@ -1160,7 +1160,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
         itCell != table.cellList.end(); ++itCell )
     {
         kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
-        if ( (*itCell).row )
+        if ( (*itCell).row ) // ### FIXME: not always correct, e.g. RTF import filter
             break; // We have finished the first row
 
         int cols = (*itCell).m_cols;
