@@ -762,7 +762,7 @@ void KWFrameDia::runConturClicked()
 void KWFrameDia::setFrameBehaviourInputOn() {
     if ( tab4 && floating->isChecked() )
         return;
-    if( rAppendFrame && !rAppendFrame->isEnabled() ) {
+    if( rAppendFrame && rResizeFrame && rNoShow && !rAppendFrame->isEnabled() ) {
         if(frameBehaviour== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
         } else if (frameBehaviour== KWFrame::AutoCreateNewFrame) {
@@ -780,7 +780,7 @@ void KWFrameDia::setFrameBehaviourInputOn() {
 void KWFrameDia::setFrameBehaviourInputOff() {
     if ( tab4 && floating->isChecked() )
         return;
-    if( rAppendFrame && rAppendFrame->isEnabled() ) {
+    if( rAppendFrame && rResizeFrame && rNoShow && rAppendFrame->isEnabled() ) {
         if(rResizeFrame->isChecked()) {
             frameBehaviour=KWFrame::AutoExtendFrame;
         } else if ( rAppendFrame->isChecked()) {
@@ -800,7 +800,7 @@ void KWFrameDia::setFrameBehaviourInputOff() {
 void KWFrameDia::slotFloatingToggled(bool b)
 {
     grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
-    if (tab1) {
+    if (tab1 && rAppendFrame && rResizeFrame && rNoShow ) {
         cbCopy->setEnabled( !b ); // 'copy' irrelevant for floating frames.
         if ( rAppendFrame )
         {

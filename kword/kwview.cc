@@ -1958,7 +1958,6 @@ void KWView::formatPage()
         flags = flags | DISABLE_BORDERS;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
-
         if( !(tmpOldLayout._pgLayout==pgLayout)||
             tmpOldLayout._cl.columns!=cl.columns ||
             tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
