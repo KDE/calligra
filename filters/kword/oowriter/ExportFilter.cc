@@ -132,6 +132,76 @@ bool OOWriterWorker::zipWriteData(const QString& str)
     return zipWriteData(str.utf8());
 }
 
+void OOWriterWorker::writeStylesXml(void)
+{
+    if (!m_zip)
+        return;
+
+    zipPrepareWriting("styles.xml");    
+        
+    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    zipWriteData("<!DOCTYPE office:document-styles>\n");
+    zipWriteData("<office:document-styles>\n");
+
+    zipWriteData( " <office:fonts-decls>\n");
+    for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+    {
+        zipWriteData("  <style:font-decl style:name=\"");
+        zipWriteData(escapeOOText(*it));
+        zipWriteData("\" fo:font-family=\"");
+        zipWriteData(escapeOOText(*it));
+        // ### TODO: pitch
+        zipWriteData("\" />\n");
+    }
+    zipWriteData(" </office:fonts-decls>\n");
+    
+    zipWriteData(m_styles);
+
+    zipWriteData(" <style:automatic-styles>\n");
+    zipWriteData("  <style:page-master-name style:nmae=\"pm1\">\n");
+    
+    zipWriteData("   <style:properties ");
+
+    zipWriteData(" fo:page-width=\"");
+    zipWriteData(QString::number(m_paperWidth));
+    zipWriteData("pt\" fo:page-height=\"");
+    zipWriteData(QString::number(m_paperHeight));
+    zipWriteData("pt\" ");
+
+    zipWriteData("style:print-orientation=\"");
+    if (1==m_paperOrientation)
+    {
+        zipWriteData("landscape");
+    }
+    else
+    {
+        zipWriteData("portrait");
+    }
+    
+    zipWriteData(" fo:margin-top=\"");
+    zipWriteData(QString::number(m_paperBorderTop));
+    zipWriteData("pt\" fo:margin-bottom=\"");
+    zipWriteData(QString::number(m_paperBorderBottom));
+    zipWriteData("pt\" fo:margin-left=\"");
+    zipWriteData(QString::number(m_paperBorderLeft));
+    zipWriteData("pt\" fo:margin-right=\"");
+    zipWriteData(QString::number(m_paperBorderRight));
+    zipWriteData("pt\" ");
+    
+    
+    zipWriteData("  \"/>\n");
+    zipWriteData("  </style:page-master-name>\n");
+    zipWriteData(" </style:automatic-styles>\n");
+    
+    zipWriteData(" <style:master-styles>\n");
+    zipWriteData("  <style:master-page style:name=\"Standard>\" style:page-master-name=\"pm1\" />\n");
+    zipWriteData(" </style:master-styles>\n");
+        
+    zipWriteData( "</office:document-styles>\n" );
+    
+    zipDoneWriting();
+}
+
 void OOWriterWorker::writeContentXml(void)
 {
     if (!m_zip)
@@ -156,8 +226,8 @@ void OOWriterWorker::writeContentXml(void)
     }
     zipWriteData(" </office:fonts-decls>\n");
     
-    // TODO: styles
-
+    zipWriteData(m_styles);
+    
     zipWriteData(m_contentBody);
     
     zipWriteData( "</office:document-content>\n" );
@@ -171,6 +241,7 @@ bool OOWriterWorker::doCloseFile(void)
     if (m_zip)
     {
         writeContentXml();
+        writeStylesXml();
         m_zip->close();
     }
         
@@ -757,31 +828,10 @@ bool OOWriterWorker::doCloseStyles(void)
 bool OOWriterWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
-#if 0
-    QString outputText ("<style:page-master-name>\n");
-    
-    outputText += "<style:properties ";
-
-    outputText+=" fo:page-width=\"";
-    outputText+=QString::number(width);
-    outputText+="pt\" fo:page-height=\"";
-    outputText+=QString::number(height);
-    outputText+="pt\" ";
-
-    outputText += "style:print-orientation=\"";
-    if (1==orientation)
-    {
-        outputText += "landscape";
-    }
-    else
-    {
-        outputText += "portrait";
-    }
-    outputText += "\"/>\n";
-    outputText += "</style:page-master-name>\n";
-
-    m_pagesize=outputText;
-#endif
+    m_paperFormat=format;
+    m_paperWidth=width;
+    m_paperHeight=height;
+    m_paperOrientation=orientation;
     return true;
 }
 
@@ -852,3 +902,4 @@ void OOWriterWorker::declareFont(const QString& fontName)
         m_fontNames.append(fontName);
     }
 }
+

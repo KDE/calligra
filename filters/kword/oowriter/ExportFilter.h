@@ -93,6 +93,7 @@ private:
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void declareFont(const QString& fontName);
     void writeContentXml(void);
+    void writeStylesXml(void);
 private: // ZIP methids
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
@@ -102,7 +103,7 @@ private: // ZIP methids
     bool zipWriteData(const QString& str); // Assumes UTF-8
 private:
     QTextStream* m_streamOut;
-    QString m_pagesize; // Buffer for the <pagesize> tag
+    QString m_pagesize;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
     KWEFDocumentInfo m_docInfo; // document information
@@ -112,6 +113,9 @@ private:
     ulong m_pictureNumber; // Number of picture (increment *before* use)
     QString m_styles;
     uint m_size; // Size of ZIP entry
+    int m_paperFormat;
+    double m_paperWidth;
+    double m_paperHeight;
+    int m_paperOrientation;
 };
-
 #endif // _EXPORTFILTER_H
