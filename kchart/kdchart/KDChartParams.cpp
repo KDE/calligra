@@ -1134,7 +1134,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         for( QMap<int,QString>::ConstIterator it = _legendText.begin();
          it != _legendText.end(); ++it ) {
             QDomElement legendTextElement = doc.createElement( "LegendText" );
-            legendTextElement.appendChild( legendSettingsElement );
+            legendSettingsElement.appendChild( legendTextElement );
             legendTextElement.setAttribute( "Dataset", it.key() );
             legendTextElement.setAttribute( "Text", it.data() );
         }
@@ -1807,7 +1807,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             QString string;
                             if( readStringNode( element, string ) )
                                 _legendSource = KDChartParams::stringToLegendSource( string );
-                        } else if( tagName == "Text" ) {
+                        } else if( tagName == "LegendText" ) {
                             bool ok = true;
                             uint dataset;
                             QString text;
