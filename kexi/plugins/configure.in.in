@@ -29,14 +29,16 @@ else
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 ac_cxxflags_safe="$CXXFLAGS"
-CXXFLAGS="$CXXFLAGS -I$qsa_incdirs"
+CXXFLAGS="$CXXFLAGS -I$qsa_incdir"
 
 AC_TRY_LINK([
    #include <qsaglobal.h>
  ],
  [
- #ifndef QSA_VERSION_BETA
- #error "WRONG VERSION"
+ #if QSA_VERSION < 0x010000
+ # ifndef QSA_VERSION_BETA
+ #  error "WRONG VERSION"
+ # endif
  #endif
  ],
   compile_qsa_plugin="yes",
