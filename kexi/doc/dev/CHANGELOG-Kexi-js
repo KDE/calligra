@@ -405,7 +405,9 @@ Property Editor
 - fixed buffer switching (focus is not set)
 - focusing for combo box (list) editor fixed
 Table View Prop. Buffer
-- fixed memory leak
+- fixed memory leak and possible crash
+Table Designer
+- switching from design view to data view: it's now posible to discard changes
 
 2004-11-09
 Main

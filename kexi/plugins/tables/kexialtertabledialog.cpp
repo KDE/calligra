@@ -422,7 +422,8 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 	bool ok;
 	emptyTable = conn->isEmpty( *tempData()->table, ok ) && ok;
 	return i18n("Do you want to save the design now?")
-	+ ( emptyTable ? QString::null : QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
+	+ ( emptyTable ? QString::null : 
+		QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
 }
 
 tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
@@ -447,11 +448,15 @@ tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 
 //			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 			bool emptyTable;
-			if (KMessageBox::No == KMessageBox::questionYesNo(this, 
+			int r = KMessageBox::questionYesNoCancel(this, 
 				i18n("Saving changes for existing table design is now required.")
-				+"\n"+messageForSavingChanges(emptyTable)))
+				+"\n"+messageForSavingChanges(emptyTable), QString::null,
+				KStdGuiItem::save(), KStdGuiItem::discard());
+			if (r == KMessageBox::Cancel)
 				res = cancelled;
-			dontStore = ~res;
+			else
+				res = true;
+			dontStore = (r!=KMessageBox::Yes);
 			if (!dontStore)
 				d->dontAskOnStoreData = true;
 //			if (dontStore)
