@@ -33,7 +33,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>

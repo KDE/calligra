@@ -51,7 +51,6 @@
 #include "kexiworkspaceMDI.h"
 //#include "kexicreateproject.h"
 #include "kexiprojectproperties.h"
-#include "kexiproject.h"
 #include "KexiViewIface.h"
 
 #include "kexicontexthelp.h"

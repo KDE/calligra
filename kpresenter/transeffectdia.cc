@@ -46,7 +46,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kiconloader.h>
-#include <kurlrequester.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>

@@ -12,14 +12,14 @@
 
 #include <qwidget.h>
 #include <qcolor.h>
-#include <qpopmenu.h>
+#include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <kprinter.h>
-#include <qpushbt.h>
-#include <qradiobt.h>
-#include <qbttngrp.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qtooltip.h>
 
 #include <stdio.h>

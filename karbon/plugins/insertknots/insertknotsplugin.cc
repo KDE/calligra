@@ -28,7 +28,6 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 
-#include <klocale.h>
 #include <knuminput.h>
 
 typedef KGenericFactory<InsertKnotsPlugin, KarbonViewBase> InsertKnotsPluginFactory;

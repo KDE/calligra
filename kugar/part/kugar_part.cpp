@@ -18,7 +18,6 @@
 #include <qwidget.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
