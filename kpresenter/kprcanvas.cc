@@ -4417,6 +4417,7 @@ void KPrCanvas::deleteObjs()
         m_view->kPresenterDoc()->addCommand(macro);
     else
         delete macro;
+    emit objectSelectedChanged();
     setToolEditMode( toolEditMode );
 }
 
