@@ -69,7 +69,7 @@ RTFWorker::RTFWorker():
     m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false),
     m_paperOrientation(false), m_paperWidth(20), m_paperHeight(20),
     m_paperMarginTop(72), m_paperMarginLeft(72),
-    m_paperMarginBottom(72), m_paperMarginRight(72)
+    m_paperMarginBottom(72), m_paperMarginRight(72), m_startPageNumber(1)
 {
 }
 
@@ -818,6 +818,8 @@ bool RTFWorker::doCloseDocument(void)
     *m_streamOut << "\\margb" << int(m_paperMarginBottom);
     *m_streamOut << m_textPage;  // add page size, margins, etc.
     *m_streamOut << "\\widowctrl\\ftnbj\\aenddoc\\formshade \\fet0\\sectd\n";
+    if (m_startPageNumber >= 1)
+        *m_streamOut << "\\pgnstart" << m_startPageNumber << endl;
     //*m_streamOut << "\\linex0\\endnhere\\plain";
     *m_streamOut << "\\pard\\plain";
     *m_streamOut << m_textBody;
@@ -1040,6 +1042,7 @@ bool RTFWorker::doVariableSettings(const VariableSettingsData& vs)
     m_textDocInfo += writeDate("\\creatim",vs.creationTime);
     m_textDocInfo += writeDate("\\revtim", vs.modificationTime);
     m_textDocInfo += writeDate("\\printim",vs.printTime);
+    m_startPageNumber = vs.startingPageNumber;
 
     return true;
 }

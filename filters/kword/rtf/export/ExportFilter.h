@@ -100,6 +100,7 @@ protected:
     double m_paperWidth, m_paperHeight;
     double m_paperMarginTop, m_paperMarginLeft, m_paperMarginBottom, m_paperMarginRight;
     QString m_prefix;
+    int m_startPageNumber;
 };
 
 #endif /* EXPORTFILTERFULLPOWER_H */
