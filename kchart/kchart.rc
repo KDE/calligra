@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="5">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="6">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="wizard"/>
@@ -30,5 +30,7 @@
  <Action name="font_config"/>
  <Action name="back_config"/>
  <Action name="legend_config"/>
+ <Separator />
+ <Action name="edit"/>
 </Menu>
 </kpartgui>
