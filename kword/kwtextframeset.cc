@@ -1854,166 +1854,252 @@ void KWTextFrameSet::ensureFormatted( KoTextParag * parag, bool emitAfterFormatt
     m_textobj->ensureFormatted( parag, emitAfterFormatting );
 }
 
-void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort )
+void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort )
 {
     int availHeight = availableHeight();
-    if ( ( bottom > availHeight ) ||   // this parag is already off page
-         ( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) ) // or next parag will be off page
+#ifdef DEBUG_FORMAT_MORE
+    if(lastFormatted)
+        kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
+                       << " bottom=" << bottom + lastFormatted->rect().height()
+                       << " availHeight=" << availHeight << endl;
+    else
+        kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
+                       << " bottom2=" << bottom << " availHeight=" << availHeight << endl;
+#endif
+    if ( frames.isEmpty() )
     {
-#ifdef DEBUG_FORMAT_MORE
-        if(lastFormatted)
-            kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
-                           << " bottom=" << bottom + lastFormatted->rect().height()
-                           << " availHeight=" << availHeight << endl;
-        else
-            kdDebug(32002) << "slotAfterFormatting We need more space in " << getName()
-                           << " bottom2=" << bottom << " availHeight=" << availHeight << endl;
-#endif
-        if ( frames.isEmpty() )
-        {
-            kdWarning(32002) << "slotAfterFormatting no more space, but no frame !" << endl;
-            *abort = true;
-            return;
-        }
+        kdWarning(32002) << "slotAfterFormatting no more space, but no frame !" << endl;
+        *abort = true;
+        return;
+    }
 
-        double wantedPosition = 0;
-        KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
-        if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
+    double wantedPosition = 0;
+    KWFrame::FrameBehavior frmBehavior = frames.last()->frameBehavior();
+    if ( frmBehavior == KWFrame::AutoExtendFrame && isProtectSize())
+        frmBehavior = KWFrame::Ignore;
+    if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
+    {
+        KWFrame *theFrame = settingsFrame( frames.last() );
+        double minHeight = minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
+        if ( availHeight < minHeight )
             frmBehavior = KWFrame::Ignore;
-        if (  frmBehavior ==  KWFrame::AutoCreateNewFrame )
-        {
+    }
+
+    int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " availHeight=" << availHeight
+                   << " => difference = " << difference << endl;
+#endif
+    if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) {
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
+#endif
+        difference += lastFormatted->rect().height();
+    }
+
+    switch ( frmBehavior ) {
+    case KWFrame::AutoExtendFrame:
+    {
+        if(difference > 0) {
+            // There's no point in resizing a copy, so go back to the last non-copy frame
             KWFrame *theFrame = settingsFrame( frames.last() );
-            double minHeight = minFrameHeight + theFrame->bTop() + theFrame->bBottom()+5;
-            if ( availHeight < minHeight )
-                frmBehavior = KWFrame::Ignore;
-        }
 
-        int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
+            // Footers and footnotes go up
+            if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootNote() )
+            {
+                // The Y position doesn't matter much, recalcFrames will reposition the frame
+                // But the point of this code is set the correct height for the frame.
+                double maxFooterSize = footerHeaderSizeMax( theFrame );
+                double diffPt = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+                wantedPosition = theFrame->top() - diffPt;
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " availHeight=" << availHeight
-                       << " => difference = " << difference << endl;
+                kdDebug() << "  diffPt=" << diffPt << " -> wantedPosition=" << wantedPosition << endl;
 #endif
-        if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) {
-#ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
-#endif
-            difference += lastFormatted->rect().height();
-        }
-
-        switch ( frmBehavior ) {
-        case KWFrame::AutoExtendFrame:
-        {
-            if(difference > 0) {
-                // There's no point in resizing a copy, so go back to the last non-copy frame
-                KWFrame *theFrame = settingsFrame( frames.last() );
-
-                // Footers and footnotes go up
-                if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootNote() )
+                if ( wantedPosition < 0 )
                 {
-                    // The Y position doesn't matter much, recalcFrames will reposition the frame
-                    // But the point of this code is set the correct height for the frame.
-                    double maxFooterSize = footerHeaderSizeMax( theFrame );
-                    double diffPt = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
-                    wantedPosition = theFrame->top() - diffPt;
-#ifdef DEBUG_FORMAT_MORE
-                    kdDebug() << "  diffPt=" << diffPt << " -> wantedPosition=" << wantedPosition << endl;
-#endif
-                    if ( wantedPosition < 0 )
-                    {
-                        m_textobj->setLastFormattedParag( 0 );
-                        *abort = true;
-                        return;
-                    }
-
-                    if ( wantedPosition != theFrame->top() &&
-                         ( theFrame->frameSet()->isFootEndNote() ||
-                           theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
-                    {
-                        theFrame->setTop( wantedPosition);
-#ifdef DEBUG_FORMAT_MORE
-                        kdDebug() << "  ok: frame=" << *theFrame << " bottom=" << theFrame->bottom() << " height=" << theFrame->height() << endl;
-#endif
-                        frameResized( theFrame, true );
-                        // We only got room for the next paragraph, we still have to keep the formatting going...
-                        m_textobj->formatMore( 2 );
-                        *abort = true;
-                        return;
-                    }
-                    break;
-                }
-                // Other frames are resized by the bottom
-
-                wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
-                double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
-                pageBottom -= m_doc->ptBottomBorder();
-                double newPosition = QMIN( wantedPosition, pageBottom );
-
-                if ( theFrame->frameSet()->isAHeader() )
-                {
-                    double maxHeaderSize=footerHeaderSizeMax(  theFrame );
-                    newPosition = QMIN( newPosition, maxHeaderSize+theFrame->top() );
+                    m_textobj->setLastFormattedParag( 0 );
+                    *abort = true;
+                    return;
                 }
 
-                newPosition = QMAX( newPosition, theFrame->top() ); // avoid negative heights
-                bool resized = QABS( theFrame->bottom() - newPosition ) > 1E-10;
+                if ( wantedPosition != theFrame->top() &&
+                     ( theFrame->frameSet()->isFootEndNote() ||
+                       theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
+                {
+                    theFrame->setTop( wantedPosition );
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug() << "  ok: frame=" << *theFrame << " bottom=" << theFrame->bottom() << " height=" << theFrame->height() << endl;
+#endif
+                    frameResized( theFrame, true );
+                    // We only got room for the next paragraph, we still have to keep the formatting going...
+                    m_textobj->formatMore( 2 );
+                    *abort = true;
+                    return;
+                }
+                break;
+            }
+            // Other frames are resized by the bottom
+
+            wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
+            double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
+            pageBottom -= m_doc->ptBottomBorder();
+            double newPosition = QMIN( wantedPosition, pageBottom );
+
+            if ( theFrame->frameSet()->isAHeader() )
+            {
+                double maxHeaderSize=footerHeaderSizeMax( theFrame );
+                newPosition = QMIN( newPosition, maxHeaderSize + theFrame->top() );
+            }
+
+            newPosition = QMAX( newPosition, theFrame->top() ); // avoid negative heights
+
+            bool resized = false;
+            if(theFrame->frameSet()->getGroupManager()) {
+                KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
+#endif
+                double newMinFrameHeight = newPosition - theFrame->top();
+                resized = QABS( newMinFrameHeight - theFrame->minFrameHeight() ) > 1E-10;
+                if ( resized ) {
+                    theFrame->setMinFrameHeight( newMinFrameHeight );
+                    KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
+                    table->recalcCols(cell->m_col,cell->m_row);
+                    table->recalcRows(cell->m_col,cell->m_row);
+                }
+                *abort = false;
+                break;
+            } else {
+                resized = QABS( theFrame->bottom() - newPosition ) > 1E-10;
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug() << "  bottom=" << theFrame->bottom() << " new position:" << newPosition << " wantedPosition=" << wantedPosition << "  resized=" << resized << endl;
 #endif
 
                 if ( resized )
                 {
-                    if(theFrame->frameSet()->getGroupManager()) {
 #ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
+                    kdDebug(32002) << "slotAfterFormatting changing bottom from " << theFrame->bottom() << " to " << newPosition << endl;
 #endif
-                        theFrame->setMinFrameHeight(newPosition - theFrame->top());
-                        frameResized( theFrame, false );
-                    } else {
-#ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "slotAfterFormatting changing bottom from " << theFrame->bottom() << " to " << newPosition << endl;
-#endif
-                        theFrame->setBottom(newPosition);
-                        frameResized( theFrame, false );
-                    }
-                }
-
-                if(newPosition < wantedPosition &&
-                   (theFrame->newFrameBehavior() == KWFrame::Reconnect
-                    && !theFrame->frameSet()->isEndNote())) // end notes are handled by KWFrameLayout
-                {
-                    wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
-#ifdef DEBUG_FORMAT_MORE
-                    kdDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
-#endif
-
-                    // fall through to AutoCreateNewFrame
-                }
-                else if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
-                    if ( theFrame->frameSet()->isEndNote() ) // we'll need a new page
-                        m_doc->delayedRecalcFrames( theFrame->pageNum() );
-
-                    m_textobj->setLastFormattedParag( 0 );
-                    break;
-                } else {
-                    if ( resized ) // not sure why we have this test....
-                        *abort = false;
-                    break;
+                    theFrame->setBottom(newPosition);
+                    frameResized( theFrame, false );
                 }
             }
-        }
 
-        case KWFrame::AutoCreateNewFrame:
-            // We need a new frame in this frameset.
-            createNewPageAndNewFrame( lastFormatted, difference, wantedPosition, abort );
+            if(newPosition < wantedPosition &&
+               (theFrame->newFrameBehavior() == KWFrame::Reconnect
+                && !theFrame->frameSet()->isEndNote())) // end notes are handled by KWFrameLayout
+            {
+                wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
+#endif
+
+                // fall through to AutoCreateNewFrame
+            }
+            else if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
+                if ( theFrame->frameSet()->isEndNote() ) // we'll need a new page
+                    m_doc->delayedRecalcFrames( theFrame->pageNum() );
+
+                m_textobj->setLastFormattedParag( 0 );
+                break;
+            } else {
+                if ( resized ) // not sure why we have this test....
+                    *abort = false;
+                break;
+            }
+        }
+    }
+
+    case KWFrame::AutoCreateNewFrame:
+        // We need a new frame in this frameset.
+        createNewPageAndNewFrame( lastFormatted, difference, wantedPosition, abort );
         break;
 
-        case KWFrame::Ignore:
+    case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
+        kdDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
 #endif
-            m_textobj->setLastFormattedParag( 0 );
-            break;
+        m_textobj->setLastFormattedParag( 0 );
+        break;
+    }
+}
+
+void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
+{
+    int availHeight = availableHeight();
+    // The + 2 here leaves 2 pixels below the last line. Without it we hit
+    // the "break at end of frame" case in formatVertically (!!).
+    int difference = availHeight - ( bottom + 2 );
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << getName() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
+#endif
+    // There's no point in resizing a copy, so go back to the last non-copy frame
+    KWFrame *theFrame = settingsFrame( frames.last() );
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug(32002) << "   frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
+#endif
+    if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
+    {
+        double wantedPosition = theFrame->top() + m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+        Q_ASSERT( wantedPosition < theFrame->bottom() );
+        if ( wantedPosition != theFrame->top() )
+        {
+#ifdef DEBUG_FORMAT_MORE
+            kdDebug() << "   top= " << theFrame->top() << " setTop " << wantedPosition << endl;
+#endif
+            theFrame->setTop( wantedPosition );
+#ifdef DEBUG_FORMAT_MORE
+            kdDebug() << "    -> the frame is now " << *theFrame << endl;
+#endif
+            frameResized( theFrame, true );
         }
+    }
+    else // header or other frame: resize bottom
+    {
+        double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
+#endif
+        wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
+        if ( wantedPosition != theFrame->bottom()) {
+            if(theFrame->frameSet()->getGroupManager() ) {
+                KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
+                // When a frame can be smaller we don't rescale it if it is a table, since
+                // we don't have the full picture of the change.
+                // We will set the minFrameHeight to the correct value and let the tables code
+                // do the rescaling based on all the frames in the row. (see KWTableFrameSet::recalcRows())
+                if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "is table cell; only setting new minFrameHeight, recalcrows will do the rest" << endl;
+#endif
+                    theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
+                    KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
+                    table->recalcCols(cell->m_col,cell->m_row);
+                    table->recalcRows(cell->m_col,cell->m_row);
+                    *abort = false;
+                }
+            } else {
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug() << "    the frame was " << *theFrame << endl;
+                kdDebug() << "setBottom " << wantedPosition << endl;
+#endif
+                theFrame->setBottom( wantedPosition );
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug() << "    -> the frame is now " << *theFrame << endl;
+#endif
+                frameResized( theFrame, true );
+            }
+        }
+    }
+}
+
+void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort )
+{
+    int availHeight = availableHeight();
+    if ( ( bottom > availHeight ) ||   // this parag is already off page
+         ( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) ) // or next parag will be off page
+    {
+        slotAfterFormattingNeedMoreSpace( bottom, lastFormatted, abort );
     }
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
@@ -2035,67 +2121,9 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     else if ( !lastFormatted && bottom + 2 < availHeight &&
               (frames.last()->frameBehavior() == KWFrame::AutoExtendFrame&& !isProtectSize()) )
     {
-        // The + 2 here leaves 2 pixels below the last line. Without it we hit
-        // the "break at end of frame" case in formatVertically (!!).
-        int difference = availHeight - ( bottom + 2 );
-#ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << getName() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
-#endif
-        // There's no point in resizing a copy, so go back to the last non-copy frame
-        KWFrame *theFrame = settingsFrame( frames.last() );
-#ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "   frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
-#endif
-        if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
-        {
-            double wantedPosition = theFrame->top() + m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
-            Q_ASSERT( wantedPosition < theFrame->bottom() );
-            if ( wantedPosition != theFrame->top() )
-            {
-#ifdef DEBUG_FORMAT_MORE
-                kdDebug() << "   top= " << theFrame->top() << " setTop " << wantedPosition << endl;
-#endif
-                theFrame->setTop( wantedPosition );
-#ifdef DEBUG_FORMAT_MORE
-                kdDebug() << "    -> the frame is now " << *theFrame << endl;
-#endif
-                frameResized( theFrame, true );
-            }
-        }
-        else // header or other frame: resize bottom
-        {
-            double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
-#ifdef DEBUG_FORMAT_MORE
-            kdDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
-#endif
-            wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
-            if ( wantedPosition != theFrame->bottom()) {
-                if(theFrame->frameSet()->getGroupManager() ) {
-                    // When a frame can be smaller we don't rescale it if it is a table, since
-                    // we don't have the full picture of the change.
-                    // We will set the minFramHeight to the correct value and let the tables code
-                    // do the rescaling based on all the frames in the row. (see KWTableFrameSet::recalcRows())
-                    if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
-#ifdef DEBUG_FORMAT_MORE
-                        kdDebug(32002) << "is table cell; only setting new minFrameHeight, recalcrows will do the rest" << endl;
-#endif
-                        theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
-                        frameResized( theFrame, false );
-                    }
-                } else {
-#ifdef DEBUG_FORMAT_MORE
-                    kdDebug() << "    the frame was " << *theFrame << endl;
-                    kdDebug() << "setBottom " << wantedPosition << endl;
-#endif
-                    theFrame->setBottom( wantedPosition );
-#ifdef DEBUG_FORMAT_MORE
-                    kdDebug() << "    -> the frame is now " << *theFrame << endl;
-#endif
-                    frameResized( theFrame, true );
-                }
-            }
-        }
+        slotAfterFormattingTooMuchSpace( bottom, abort );
     }
+
     if ( m_doc->processingType() == KWDocument::WP
          && this == m_doc->frameSet( 0 ) )
     {
@@ -2250,13 +2278,6 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     fs->updateFrames(); // update e.g. available height
     m_doc->updateFramesOnTopOrBelow( theFrame->pageNum() );
 
-    KWTableFrameSet *table = fs->getGroupManager();
-    if ( table )
-    {
-        KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
-        table->recalcCols(cell->m_col,cell->m_row);
-        table->recalcRows(cell->m_col,cell->m_row);
-    }
     theFrame->updateRulerHandles();
 
     // Do a full KWFrameLayout if this will have influence on other frames, i.e.:

@@ -300,6 +300,8 @@ protected slots:
     void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
 
 protected:
+    void slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted, bool* abort );
+    void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     void fixParagWidth( KWTextParag* parag );
