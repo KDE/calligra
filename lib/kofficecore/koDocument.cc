@@ -553,12 +553,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     QDomDocument doc = d->m_docInfo->save();
     KoStoreDevice dev( store );
 
-    // ### Inefficient - TODO in QDom
-    QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
-    str << doc;
-
-    QCString s = buffer.utf8();
+    QCString s = doc.toCString(); // this is already Utf8!
 
     dev.writeBlock( s.data(), s.length() );
     store->close();
@@ -573,15 +568,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
 bool KoDocument::saveToStream( QIODevice * dev )
 {
   QDomDocument doc = saveXML();
-
   // Save to buffer
-  // ### Inefficient - TODO in QDom
-  QString buffer;
-  QTextStream str( &buffer, IO_WriteOnly );
-  str << doc;
-
-  QCString s = buffer.utf8();
-
+  QCString s = doc.toCString(); // utf8 already!!!
   return dev->writeBlock( s.data(), s.length() ) == (int)s.length();
 }
 
