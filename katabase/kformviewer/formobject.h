@@ -21,11 +21,17 @@
 #define __formobject_h__
 
 #include <qobject.h>
-#include <qpushbutton.h>
 
 class FormObject : public QObject
 {
 public:
+
+  enum Type { Label, Button, LineEdit, ListBox, Pixmap, ChechButton, Radiobutton };
+  
+  /**
+   *  Constructor.
+   */
+  FormObject();
  
   /**
    *  Constructor.
@@ -37,7 +43,13 @@ public:
    *  @param _sizex Horizontal size of the object.
    *  @param _sizey Vertical size of the object.
    */
-  FormObject( int _posx, int _posy, int _sizex, int _sizey );
+  FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey );
+  FormObject( Type _type, int _posx, int _posy, int _sizex, int _sizey, QString _text );
+
+  /**
+   *  copy-Constructor.
+   */
+  FormObject( const FormObject& _to_copy );
   
   /**
    *  Destructor.
@@ -60,6 +72,9 @@ public:
    */
   void resize( int _sizex, int _sizey );
 
+  int posx() { return m_posx; };
+  int posy() { return m_posy; };
+
   /**
    *  Creates a QT-object.
    *
@@ -68,30 +83,23 @@ public:
    *
    *  @return A Pointer to a widget.
    */
-  virtual QWidget* create( QWidget* _parent = 0L, const char* _name = 0L ) = 0;
+  QWidget* create( QWidget* _parent = 0L, const char* _name = 0L );
+
+  Type type();
+  QString action();
+  void setAction( QString _action );
 
 protected:
 
   void setGeometry( QWidget* _widget );
 
+  Type m_type;
   int m_posx;
   int m_posy;
   int m_sizex;
   int m_sizey;
-};
-
-class FormButton : public FormObject
-{
-public:
-
-  FormButton( int _posx, int _posy, int _sizex, int _sizey, QString _title );
-  ~FormButton();
-
-  virtual QWidget* create( QWidget* _parent = 0L, const char* _name = 0L );
-
-protected:
-
-  QString m_title;
+  QString m_text;
+  QString m_action;
 };
 
 #endif  // __formobject_h__

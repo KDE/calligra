@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<DOC author="Michael Koch" email="m_koch@bigfoot.de" editor="kformviewer" mime="application/x-kformviewer" >
+
+<FORM name="testform1" width="500" height="300">
+  <LABEL posx="20" posy="20" width="100" height="20" text="Label for Inputline"/>
+  <LINEEDIT posx="130" posy="20" width="350" height="20"/>
+
+  <LISTBOX posx="20" posy="60" width="460" height="170"/>
+
+  <BUTTON posx="140" posy="250" width="100" height="30" text="Quit" action="quit"/>
+  <BUTTON posx="260" posy="250" width="100" height="30" text="Apply" action="useraction"/>
+  <BUTTON posx="380" posy="250" width="100" height="30" text="Cancel" action="quit"/>
+</FORM>
+
+</DOC>

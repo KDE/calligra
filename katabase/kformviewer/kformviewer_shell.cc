@@ -177,7 +177,6 @@ bool KformViewerShell::openDocument( const char *_url, const char *_format )
   m_pDoc = new KformViewerDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
   {
-    debug( "oder hier" );
     return false;
   }
   m_pView = m_pDoc->createFormView( frame() );

@@ -63,8 +63,8 @@ public:
   bool saveDocument( const char* _filename, const char* _format = 0L );
   virtual bool hasToWriteMultipart() { return false; };
 
-  uint getFormWidth() { return 600; };
-  uint getFormHeight() { return 400; };
+  uint getFormWidth() { return m_FormWidth; };
+  uint getFormHeight() { return m_FormHeight; };
 
 signals:
 
@@ -84,10 +84,16 @@ protected:
    */
   QList<KformViewerView> m_lstViews;
 
+public:
   /**
    *  List of form objects.
    */
-  QList<FormObject> m_lstFormObjects;
+  QValueList<FormObject*> m_lstFormObjects;
+
+private:
+
+  int m_FormWidth;
+  int m_FormHeight;
 };
 
 #endif

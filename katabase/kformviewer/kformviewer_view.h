@@ -36,6 +36,7 @@ class KformViewerView : public QScrollView,
   Q_OBJECT
 
 public:
+
   KformViewerView( QWidget* , const char*, KformViewerDoc* );
   ~KformViewerView();
   KformViewerDoc* doc();
@@ -44,21 +45,21 @@ public:
   CORBA::Boolean printDlg();
 
 public slots:
-  // Document signals
+
   void slotUpdateView();
 
 protected:
+
   virtual void init();
   virtual bool event( const char* , const CORBA::Any& );
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr );
   virtual void newView();
   virtual void helpUsing();
-  virtual void resizeEvent( QResizeEvent* );
-//  virtual void paintEvent( QPaintEvent* );
-  void drawContentsOffset( QPainter* , int, int, int, int, int, int );
+  void resizeEvent( QResizeEvent* _event );
 
 private:
+
   KformViewerDoc* m_pDoc;  
 };
 

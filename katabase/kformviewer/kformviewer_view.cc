@@ -26,11 +26,14 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
+
+#include <komApplication.h>
 
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
@@ -39,6 +42,7 @@
 #include "kformviewer_doc.h"
 #include "kformviewer_view.h"
 #include "kformviewer_shell.h"
+#include "formobject.h"
 
 /*****************************************************************************
  *
@@ -58,17 +62,31 @@ KformViewerView::KformViewerView( QWidget* _parent, const char* _name, KformView
 
   m_pDoc = _doc;
 
-  resizeContents( 100, 100 );
-
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
-  QLabel* child1 = new QLabel( "CHILD", viewport() );
-  QScrollView::addChild( child1 );
+  // initialize Childs
+  QValueList<FormObject*>::Iterator it = m_pDoc->m_lstFormObjects.begin();
+  for( ; it != m_pDoc->m_lstFormObjects.end(); ++it )
+  {
+    cerr << "KFormViewer: Inserting child" << endl;
 
-  QPushButton* child2 = new QPushButton( this, "button" );
-  child2->setText( "Button" );
-  QScrollView::addChild( child2 );
- 
+    QWidget* obj = (*it)->create( this );
+    
+    if( obj )
+    {
+      QScrollView::addChild( obj );
+      QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
+
+      if( (*it)->type() == FormObject::Button )
+      {
+        if( (*it)->action() == "quit" )
+        {
+          QObject::connect( obj, SIGNAL( clicked() ), komapp, SLOT( quit() ) );
+        }
+      }
+    }
+  }
+
   slotUpdateView();
 }
 
@@ -212,6 +230,7 @@ void KformViewerView::newView()
 
 void KformViewerView::resizeEvent( QResizeEvent* )
 {
+  // TODO: remove this here. Why resize it every time ?
   resizeContents( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
 
   slotUpdateView();
@@ -228,6 +247,7 @@ void KformViewerView::slotUpdateView()
   QScrollView::update();
 }
 
+/*
 void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety, int , int , int , int )
 {
   if( m_pDoc && !m_pDoc->isEmpty() )
@@ -237,5 +257,6 @@ void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety
                   m_pDoc->getFormWidth() - 5 - offsetx, m_pDoc->getFormHeight() - 5 - offsety);
   }                                                                                                 
 }
+*/
 
 #include "kformviewer_view.moc"

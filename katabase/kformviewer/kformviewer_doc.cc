@@ -45,6 +45,9 @@ KformViewerDoc::KformViewerDoc()
 
   m_bEmpty = true;
   m_lstViews.setAutoDelete( false );
+
+  m_FormWidth = DEFAULT_WIDTH;
+  m_FormHeight = DEFAULT_HEIGHT;
 }
 
 KformViewerDoc::~KformViewerDoc()
@@ -115,24 +118,24 @@ int KformViewerDoc::viewCount()
   return m_lstViews.count();
 }
 
-bool KformViewerDoc::loadXML( KOMLParser& _parser, KOStore::Store_ptr _store )
+bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
   string tag;
   vector<KOMLAttrib> lst;
+  vector<KOMLAttrib>::const_iterator it;
   string name;
 
   // DOC
-  if ( !_parser.open( "DOC", tag ) )
+  if ( !parser.open( "DOC", tag ) )
   {
     kdebug( KDEBUG_INFO, 0, "Missing DOC" );
     return false;
   }
 
   KOMLParser::parseTag( tag.c_str(), name, lst );
-  vector<KOMLAttrib>::const_iterator it = lst.begin();
-  for( ; it != lst.end(); it++ )
+  for( it = lst.begin(); it != lst.end(); it++ )
   {
     if ( it->m_strName == "mime" )
     {
@@ -146,55 +149,210 @@ bool KformViewerDoc::loadXML( KOMLParser& _parser, KOStore::Store_ptr _store )
   }
 
   // FORM
-  while( _parser.open( "", tag ) )
+  if( !parser.open( "FORM", tag ) )
+  {
+    kdebug( KDEBUG_INFO, 0, "Unknown tag:'%s'", tag.c_str() );
+    return false;
+  }
+
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  for( it = lst.begin(); it != lst.end(); it++ )
+  {
+    if ( it->m_strName == "name" )
+    {
+      cout << "Form name = " + it->m_strValue << endl;
+    }
+    else if ( (*it).m_strName == "height" )
+    {
+      m_FormHeight = atoi( (*it).m_strValue.c_str() );
+    }
+    else if ( ( *it ).m_strName == "width" )
+    {
+      m_FormWidth = atoi( (*it).m_strValue.c_str() );
+    }                                                                                           
+    else kdebug( KDEBUG_INFO, 0, "Unknown attrib FORM:'%s'", (*it).m_strName.c_str() );
+  }
+
+  // BUTTON, LABEL, LINEEDIT, LISTBOX
+  while( parser.open( 0L, tag ) )
   {
     KOMLParser::parseTag( tag.c_str(), name, lst );
- 
-    if ( name == "SIZE" )
-    {
-      cout << "SIZE found" << endl;
 
-      KOMLParser::parseTag( tag.c_str(), name, lst );
-      vector<KOMLAttrib>::const_iterator it = lst.begin();
-      for( ; it != lst.end(); it++ )
-      {
-        if ( ( *it ).m_strName == "height" )
-        {
-          
-        }
-        else if ( ( *it ).m_strName == "width" )
-        {
- 
-        }
-        else kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'", ( *it ).m_strName.c_str() );
-      }
-    }
-
-    else if ( name == "BUTTON" )
+    // BUTTON
+    if ( name == "BUTTON" )
     {
+      int posx = 0;
+      int posy = 0;
+      int width = 100;
+      int height = 30;
+      QString text = "Button";
+      QString action = "quit";
+
       cout << "BUTTON found" << endl;
 
       KOMLParser::parseTag( tag.c_str(), name, lst );
-      vector<KOMLAttrib>::const_iterator it = lst.begin();
-      for( ; it != lst.end(); it++ )
+      for( it = lst.begin(); it != lst.end(); it++ )
       {
-        if ( ( *it ).m_strName == "height" )
+        if ( (*it).m_strName == "posx" )
         {
- 
+          posx = atoi( (*it).m_strValue.c_str() ); 
         }
-        else if ( ( *it ).m_strName == "width" )
+        else if ( (*it).m_strName == "posy" )
         {
- 
+           posy = atoi( (*it).m_strValue.c_str() );
         }
-        else kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'", ( *it ).m_strName.c_str() );
+        else if ( (*it).m_strName == "height" )
+        {
+           height = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "width" )
+        {
+          width = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "text" )
+        {
+           text = (*it).m_strValue.c_str();
+        }
+        else if ( (*it).m_strName == "action" )
+        {
+           action = (*it).m_strValue.c_str();
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib BUTTON:'%s'", ( *it ).m_strName.c_str() );
       }
+
+      FormObject* button = new FormObject( FormObject::Button, posx, posy, width, height, text );
+      button->setAction( action );
+      m_lstFormObjects.append( button );
     }
- 
-    else kdebug( KDEBUG_INFO, 0,  "Unknown tag '%s' in the DOCUMENT", tag.c_str() );
- 
-    if ( !_parser.close( tag ) )
+
+    // LABEL
+    else if ( name == "LABEL" )
     {
-      kdebug( KDEBUG_INFO, 0, "ERR: Closing Child" );
+      int posx = 0;
+      int posy = 0;
+      int width = 100;
+      int height = 30;
+      QString text = "Label";
+ 
+      cout << "LABEL found" << endl;
+ 
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      for( it = lst.begin(); it != lst.end(); it++ )
+      {
+        if ( (*it).m_strName == "posx" )
+        {
+          posx = atoi( (*it).m_strValue.c_str() );
+        }                                                                                           
+         else if ( (*it).m_strName == "posy" )
+        {
+           posy = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "height" )
+        {
+           height = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "width" )
+        {
+          width = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "text" )
+        {
+           text = (*it).m_strValue.c_str();
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib LABEL:'%s'", ( *it ).m_strName.c_str() );
+      }
+ 
+      FormObject* label = new FormObject( FormObject::Label, posx, posy, width, height, text );
+      m_lstFormObjects.append( label );
+    }                                                                                               
+
+    // LINEEDIT
+    else if ( name == "LINEEDIT" )
+    {
+      int posx = 0;
+      int posy = 0;
+      int width = 100;
+      int height = 30;
+      QString text = "Inputline";
+ 
+      cout << "LINEEDIT found" << endl;
+ 
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      for( it = lst.begin(); it != lst.end(); it++ )
+      {
+        if ( (*it).m_strName == "posx" )
+        {
+          posx = atoi( (*it).m_strValue.c_str() );
+        }
+         else if ( (*it).m_strName == "posy" )
+        {
+           posy = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "height" )
+        {
+           height = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "width" )
+        {
+          width = atoi( (*it).m_strValue.c_str() );
+        }                                                                                           
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib LINEEDIT:'%s'", ( *it ).m_strName.c_str() );
+      }
+ 
+      FormObject* lineedit = new FormObject( FormObject::LineEdit, posx, posy, width, height, text );
+      m_lstFormObjects.append( lineedit );
+    }                                                                                               
+
+    // LISTBOX
+    else if ( name == "LISTBOX" )
+    {
+      int posx = 0;
+      int posy = 0;
+      int width = 100;
+      int height = 30;
+      QString text = "Label";
+ 
+      cout << "LISTBOX found" << endl;
+ 
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      for( it = lst.begin(); it != lst.end(); it++ )
+      {
+        if ( (*it).m_strName == "posx" )
+        {
+          posx = atoi( (*it).m_strValue.c_str() );
+        }
+         else if ( (*it).m_strName == "posy" )
+        {
+           posy = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "height" )
+        {
+           height = atoi( (*it).m_strValue.c_str() );
+        }
+        else if ( (*it).m_strName == "width" )
+        {
+          width = atoi( (*it).m_strValue.c_str() );
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib LISTBOX:'%s'", ( *it ).m_strName.c_str() );
+      }
+ 
+      FormObject* label = new FormObject( FormObject::ListBox, posx, posy, width, height );
+      m_lstFormObjects.append( label );
+    }                                                                                               
+
+    else kdebug( KDEBUG_INFO, 0,  "Unknown tag '%s' in the DOCUMENT", tag.c_str() );
+
+    if ( !parser.close( tag ) )
+    {
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      if( name == "FORM" )
+      {
+        kdebug( KDEBUG_INFO, 0, "ERR: Only one form per file allowed" );
+      }
+      else
+      {
+        kdebug( KDEBUG_INFO, 0, "ERR: Closing FORM" );
+      }
       return false;
     }
   }

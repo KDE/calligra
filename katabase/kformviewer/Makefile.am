@@ -9,10 +9,10 @@ bin_PROGRAMS = kformviewer
 
 kformviewer_SOURCES = \
  kformviewer.idl \
- kformviewer_main.cc \
- kformviewer_shell.cc \
  kformviewer_doc.cc \
  kformviewer_view.cc \
+ kformviewer_main.cc \
+ kformviewer_shell.cc \
  formobject.cc
 
 noinst_HEADERS = \
