@@ -232,7 +232,7 @@ void TextTool::mouseRelease( QMouseEvent *e )
     m_pCanvas->repaint();
 }
 
-void TextTool::endRubberBanding(QMouseEvent *e)
+void TextTool::endRubberBanding(QMouseEvent */*e*/)
 {
     // End the rubber-band drawing
     m_pCanvas->endRectDraw();

@@ -8,6 +8,9 @@
 #include "kivio_line_style.h"
 #include "kivio_painter.h"
 #include "kivio_point.h"
+#include "kivio_stencil_spawner.h"
+#include "kivio_stencil_spawner_info.h"
+#include "kivio_stencil_spawner_set.h"
 #include "kivio_text_style.h"
 
 KivioBaseTargetStencil::KivioBaseTargetStencil()
@@ -195,14 +198,46 @@ void KivioBaseTargetStencil::paintConnectorTargets( KivioIntraStencilData *pData
 // File I/O
 //
 //////////////////////////////////////////////////////////////////////////////
-bool KivioBaseTargetStencil::loadXML( const QDomElement & )
+bool KivioBaseTargetStencil::loadXML( const QDomElement &e )
 {
-    return false;
+   QDomNode node;
+   QString name;
+
+   node = e.firstChild();
+   while( !node.isNull() )
+   {
+      name = node.nodeName();
+
+      if( name == "KivioStencilProperties" )
+      {
+	 loadProperties(node.toElement());
+      }
+
+      node = node.nextSibling();
+   }
+
+   updateGeometry();
+
+   return true;
+}
+
+QDomElement KivioBaseTargetStencil::createRootElement( QDomDocument &doc )
+{
+   QDomElement e = doc.createElement("KivioPluginStencil");
+
+   XmlWriteString( e, "title", m_pSpawner->info()->title() );
+   XmlWriteString( e, "setName", m_pSpawner->set()->name() );
+
+   return e;
 }
 
 QDomElement KivioBaseTargetStencil::saveXML( QDomDocument &doc )
 {
-    return doc.createElement("invalid");
+   QDomElement e = createRootElement( doc );
+
+   e.appendChild( saveProperties(doc) );
+
+   return e;
 }
 
 
@@ -222,8 +257,12 @@ QDomElement KivioBaseTargetStencil::saveProperties( QDomDocument &doc )
     baseE.appendChild( m_pTextStyle->saveXML(doc) );
     baseE.appendChild( saveTargets(doc) );
 
+    // Only save custom data if this returns true (means there is custom data)
     QDomElement customE = doc.createElement("CustomData");
-    baseE.appendChild( saveCustom(customE, doc) );
+    if( saveCustom( customE, doc )==true )
+    {
+       baseE.appendChild( customE );
+    }
 
     return baseE;
 }
@@ -274,12 +313,12 @@ bool KivioBaseTargetStencil::loadProperties( const QDomElement &e )
     return true;
 }
 
-QDomElement KivioBaseTargetStencil::saveCustom( QDomElement &e, QDomDocument &doc )
+bool KivioBaseTargetStencil::saveCustom( QDomElement &, QDomDocument & )
 {
-    return e;
+   return false;
 }
 
-bool KivioBaseTargetStencil::loadCustom( const QDomElement &e )
+bool KivioBaseTargetStencil::loadCustom( const QDomElement & )
 {
     return true;
 }

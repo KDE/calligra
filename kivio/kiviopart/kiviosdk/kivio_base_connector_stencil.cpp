@@ -186,7 +186,7 @@ void KivioBaseConnectorStencil::setStartPoint( float /*x*/, float /*y*/ )
 }
 
 
-void KivioBaseConnectorStencil::setEndPoint( float x, float y )
+void KivioBaseConnectorStencil::setEndPoint( float /*x*/, float /*y*/ )
 {
     /* Derived class must implement this function */
     // m_end.setPosition( x, y, false );
@@ -419,7 +419,7 @@ bool KivioBaseConnectorStencil::boolContainsFalse( bool *boolArray, int count )
 
 void KivioBaseConnectorStencil::searchForConnections( KivioPage *pPage )
 {
-    bool done[ m_pConnectorPoints->count() ];
+    bool *done = new bool[ m_pConnectorPoints->count() ];
 
     int i;
 
@@ -442,7 +442,10 @@ void KivioBaseConnectorStencil::searchForConnections( KivioPage *pPage )
 
     // No connections? BaiL!
     if( boolAllTrue( done, m_pConnectorPoints->count() ) )
-        return;
+    {
+       delete [] done;
+       return;
+    }
 
 
 
@@ -483,6 +486,8 @@ void KivioBaseConnectorStencil::searchForConnections( KivioPage *pPage )
 
         pLayer = pPage->nextLayer();
     }
+
+    delete [] done;
 }
 
 

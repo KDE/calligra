@@ -48,7 +48,9 @@ protected:
 
     QList<KivioConnectorTarget> *m_pTargets;
 
-    virtual QDomElement saveCustom( QDomElement &, QDomDocument & );
+    virtual QDomElement createRootElement( QDomDocument & );
+
+    virtual bool saveCustom( QDomElement &, QDomDocument & );
     virtual QDomElement saveProperties( QDomDocument & );
     virtual QDomElement saveTargets( QDomDocument & );
 

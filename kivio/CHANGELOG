@@ -106,3 +106,19 @@
 (Dave Marotti)
 11/26/2000
     - Added KivioLineStyle and KivioTextStyle.
+
+(Max Judin)
+11/??/2000
+    - Changed pixmaps in layer dock
+
+(Dave Marotti / David Faure)
+11/26/2000 - 12/15/2000
+    - Made the move to the KDE CVS and a few things were re-arranged.
+    - Removed many warnings
+    - #include'd moc files instead of compiling them separately
+    - Changed all debug() statements to kdDebug << etc...
+    - Makefile overhaul
+    - A few changes to the way saving and loading is handled in KivioBaseTargetStencil
+    - Added a parameter to drawContent() of the doc and page classes so you could
+      choose if you wanted targets and selection handles drawn.  This allows the
+      bird's eye view to be a bit more usable without those x's in the way.

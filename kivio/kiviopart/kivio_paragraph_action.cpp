@@ -30,7 +30,7 @@
 
 /**********************************************************************************************/
 
-static char * align_left_xpm[] = {
+static const char * align_left_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",
@@ -51,7 +51,7 @@ static char * align_left_xpm[] = {
 "                ",
 "                "};
 
-static char * align_center_xpm[] = {
+static const char * align_center_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",
@@ -72,7 +72,7 @@ static char * align_center_xpm[] = {
 "                ",
 "                "};
 
-static char * align_right_xpm[] = {
+static const char * align_right_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",
@@ -93,7 +93,7 @@ static char * align_right_xpm[] = {
 "                ",
 "                "};
 
-static char * align_bottom_xpm[] = {
+static const char * align_bottom_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",
@@ -114,7 +114,7 @@ static char * align_bottom_xpm[] = {
 " ............   ",
 "                "};
 
-static char * align_middle_xpm[] = {
+static const char * align_middle_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",
@@ -135,7 +135,7 @@ static char * align_middle_xpm[] = {
 "                ",
 "                "};
 
-static char * align_top_xpm[] = {
+static const char * align_top_xpm[] = {
 "16 16 2 1",
 " 	c None",
 ".	c #000000",

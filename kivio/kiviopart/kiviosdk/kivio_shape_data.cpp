@@ -31,7 +31,7 @@
  */
 struct KivioShapeTypeInfo
 {
-    char *name;
+    const char *name;
     KivioShapeData::KivioShapeType type;
 };
 

@@ -62,7 +62,7 @@ ToolDockBaseBorder::ToolDockBaseBorder( Position position, ToolDockBase* parent,
   }
 }
 
-void ToolDockBaseBorder::paintEvent( QPaintEvent* ev )
+void ToolDockBaseBorder::paintEvent( QPaintEvent* /*ev*/ )
 {
   if (!parent()->parent())
     return;
@@ -108,13 +108,13 @@ void ToolDockBaseBorder::paintEvent( QPaintEvent* ev )
   p.end();
 }
 
-void ToolDockBaseBorder::mousePressEvent( QMouseEvent* ev )
+void ToolDockBaseBorder::mousePressEvent( QMouseEvent* /*ev*/ )
 {
   ((ToolDockBase*)parentWidget())->activate();
   emit resizeStart();
 }
 
-void ToolDockBaseBorder::mouseReleaseEvent( QMouseEvent* ev )
+void ToolDockBaseBorder::mouseReleaseEvent( QMouseEvent* /*ev*/ )
 {
   emit resizeStop();
 }

@@ -62,7 +62,7 @@ KivioSMLStencilSpawner::~KivioSMLStencilSpawner()
         m_pTargets = NULL;
     }
 
-    kdDebug() << "* SMLStencilSpawner %s "<< m_pInfo->title() << " deleted" << endl;
+    kdDebug() << "* SMLStencilSpawner "<< m_pInfo->title() << " deleted" << endl;
 }
 
 QDomElement KivioSMLStencilSpawner::saveXML( QDomDocument &doc )

@@ -374,7 +374,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   kpainter.start( m_buffer );
   kpainter.painter()->translate( -m_iXOffset, -m_iYOffset );
   kpainter.painter()->translate( px0, py0 );
-  m_pDoc->paintContent(kpainter, rect, false, page, p0, m_pZoom);
+  m_pDoc->paintContent(kpainter, rect, false, page, p0, m_pZoom, true);
   kpainter.stop();
 
   paintGuides(false);

@@ -105,7 +105,7 @@ public:
 
   KoPageLayout paperLayout() { return m_pPageLayout; }
 
-  void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float );
+  void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
   void printContent( KivioPainter& painter );
 
   bool isStencilSelected( KivioStencil * );

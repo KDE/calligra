@@ -179,7 +179,7 @@ void KivioLayerPanel::upItem()
 //  debug("---------------------------");
   KivioPage* page = m_pView->activePage();
   KivioLayer* layer = page->firstLayer();
-  KivioLayerItem* ci = 0;
+//  KivioLayerItem* ci = 0;
 
   while (layer) {
   //  debug(layer->name());
@@ -232,7 +232,7 @@ void KivioLayerPanel::downItem()
 //  debug("---------------------------");
   KivioPage* page = m_pView->activePage();
   KivioLayer* layer = page->firstLayer();
-  KivioLayerItem* ci = 0;
+//  KivioLayerItem* ci = 0;
 
   while (layer) {
   //  debug(layer->name());

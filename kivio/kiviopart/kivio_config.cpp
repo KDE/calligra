@@ -20,7 +20,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-static char * connectorTarget_xpm[] = {
+static const char * connectorTarget_xpm[] = {
 "7 7 3 1",
 "       c None",
 ".      c #FFFFFF",

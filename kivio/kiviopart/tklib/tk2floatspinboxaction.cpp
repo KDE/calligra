@@ -116,7 +116,7 @@ void TK2UFloatSpinBoxAction::slotActivated2()
 TKSizeAction::TKSizeAction( QObject* parent, const char* name )
 : TK2UFloatSpinBoxAction(parent,name)
 {
-  static char* width_xpm[] = {
+  static const char* width_xpm[] = {
   "13 11 3 1",
   "  c Gray0",
   ". c #808080",
@@ -134,7 +134,7 @@ TKSizeAction::TKSizeAction( QObject* parent, const char* name )
   "XXXXXXXXXXXXX"
   };
 
-  static char* height_xpm[] = {
+  static const char* height_xpm[] = {
   "13 11 3 1",
   "  c Gray0",
   ". c #808080",
@@ -192,7 +192,7 @@ void TKSizeAction::setSize(float v1, float v2, int unit)
 TKPositionAction::TKPositionAction( QObject* parent, const char* name )
 : TK2UFloatSpinBoxAction(parent,name)
 {
-  static char* xpos_xpm[] = {
+  static const char* xpos_xpm[] = {
   "13 11 2 1",
   "  c Gray0",
   ". c None",
@@ -209,7 +209,7 @@ TKPositionAction::TKPositionAction( QObject* parent, const char* name )
   ".......     ."
   };
 
-  static char* ypos_xpm[] = {
+  static const char* ypos_xpm[] = {
   "13 11 2 1",
   "  c Gray0",
   ". c None",

@@ -129,11 +129,11 @@ void KivioPage::print( KivioPSPrinter *printer )
     }
 }
 
-void KivioPage::print( QPainter &painter, QPrinter *_printer )
+void KivioPage::print( QPainter &/*painter*/, QPrinter */*_printer*/ )
 {
 }
 
-void KivioPage::printPage( QPainter &_painter, const QRect& page_range, const QRect& view )
+void KivioPage::printPage( QPainter &/*_painter*/, const QRect& /*page_range*/, const QRect& /*view*/ )
 {
 }
 
@@ -350,7 +350,7 @@ void KivioPage::paperLayoutDlg()
  * An important note is that layers are drawn first to last.  So the last layer is the
  * most visible.
  */
-void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom )
+void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom, bool drawHandles )
 {
     KivioLayer *pLayer = m_lstLayers.first();
     while( pLayer )
@@ -366,24 +366,25 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
 
 
     // Now the second iteration - connection targets
-    m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-    /*
-    * FIXME: Make this only draw connection targets of those layers marked
-    * as Connectable
-    */
-
-    pLayer = m_lstLayers.first();
-    while( pLayer )
+    if( drawHandles )
     {
-        if( pLayer->connectable() )
-            pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
-
-        pLayer = m_lstLayers.next();
+       m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
+       pLayer = m_lstLayers.first();
+       while( pLayer )
+       {
+	  if( pLayer->connectable() )
+	     pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
+	  
+	  pLayer = m_lstLayers.next();
+       }
     }
 
 
     // Now the third iteration - selection handles
-    m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
+    if( drawHandles )
+    {
+       m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
+    }
     /*
     pLayer = m_lstLayers.first();
     while( pLayer )

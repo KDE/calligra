@@ -30,7 +30,7 @@ EXTRA_DIST = \
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/libstraight_connector.ksp;
+	$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
 
 uninstall-libLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)

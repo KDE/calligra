@@ -396,12 +396,12 @@ void KivioDoc::paintContent( QPainter&, const QRect&, bool )
 //  paintContent(painter,rect,transparent,page);
 }
 
-void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, float zoom )
+void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, float zoom, bool drawHandles )
 {
   if ( isLoading() )
     return;
 
-  page->paintContent(painter,rect,transparent,p0,zoom);
+  page->paintContent(painter,rect,transparent,p0,zoom, drawHandles);
 }
 
 void KivioDoc::printContent( QPrinter &prn )

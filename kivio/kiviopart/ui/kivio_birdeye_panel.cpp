@@ -205,7 +205,7 @@ void KivioBirdEyePanel::updateView()
   }
 
   kpainter.painter()->translate(px0, py0);
-  m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, zoom);
+  m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, zoom, false);
   kpainter.stop();
 
   updateVisibleArea();

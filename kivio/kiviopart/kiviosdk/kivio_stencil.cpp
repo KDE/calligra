@@ -78,7 +78,7 @@ QDomElement KivioStencil::saveXML( QDomDocument &doc )
     return doc.createElement("");
 }
 
-void KivioStencil::paint( KivioIntraStencilData *pData )
+void KivioStencil::paint( KivioIntraStencilData */*pData*/ )
 {
 }
 
@@ -134,7 +134,7 @@ KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, float )
     return kctNone;
 }
 
-void KivioStencil::addToGroup( KivioStencil *pStencil )
+void KivioStencil::addToGroup( KivioStencil */*pStencil*/ )
 {
 
 }
