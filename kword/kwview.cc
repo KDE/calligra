@@ -650,7 +650,6 @@ void KWView::setupActions()
     actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
                                             this, SLOT( inlineFrame() ),
                                             actionCollection(), "inline_frame" );
-
 }
 
 
@@ -3482,7 +3481,8 @@ void KWView::frameSelectedChanged()
         }
     }
 
-    actionBackgroundColor->setEnabled( frameDifferentOfPart);
+    if(  nbFrame >= 1)
+        actionBackgroundColor->setEnabled( frameDifferentOfPart);
 
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
