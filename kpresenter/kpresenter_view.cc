@@ -4862,7 +4862,7 @@ void KPresenterView::viewShowNoteBar()
 
 void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     QPtrList<KAction> actionList= QPtrList<KAction>();
     KActionSeparator *separator=new KActionSeparator();
@@ -4878,7 +4878,9 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     }
     if ( actionList.count()>0)
         plugActionList( "picture_action", actionList );
-    static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->exec(_point);
+    QPopupMenu* menu = dynamic_cast<QPopupMenu*>(factory()->container("menupage_popup",this));
+    if ( menu )
+        menu->exec(_point);
     unplugActionList( "picture_action" );
     delete separator;
 }
