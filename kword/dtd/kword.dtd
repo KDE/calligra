@@ -75,7 +75,7 @@ don't put a </?xml...> at the end of the file!).
             url:            ?
 -->
 <!ELEMENT DOC
-    (PAPER, ATTRIBUTES, FRAMESETS, STYLES)>  <!-- missing: EMBEDDED ->
+    (PAPER, ATTRIBUTES, FRAMESETS, STYLES, (EMBEDDED*))>
 <!ATTLIST DOC
     editor CDATA #IMPLIED
     mime CDATA "application/x-kword"
@@ -631,4 +631,38 @@ don't put a </?xml...> at the end of the file!).
     mmpos CDATA #REQUIRED
     ptpos CDATA #REQUIRED
     type CDATA #REQUIRED>
+
+<!--
+        Embedded object
+-->
+<!ELEMENT EMBEDDED
+    (OBJECT,SETTINGS)>
+
+<!--
+        Standard part of the embedded object (part, url and position)
+        mime    the mimetype, e.x. application/x-presenter
+        url     the url, either external or internal (tar:/N for partN/maindoc.xml)
+-->
+<!ELEMENT OBJECT
+    (RECT)>
+<!ATTLIST OBJECT
+    mime CDATA #REQUIRED
+    url CDATA #REQUIRED>
+<!--
+        Position of the embedded object
+-->
+<!ELEMENT RECT
+    EMPTY>
+<!ATTLIST RECT
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    w CDATA #REQUIRED
+    h CDATA #REQUIRED>
+
+<!--
+        Additionnal attributes of the embedded object.
+        In KWord's case, it's the definition of the frame around the object.
+-->
+<!ELEMENT SETTINGS
+    (FRAME)>
 
