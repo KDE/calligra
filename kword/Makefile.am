@@ -60,7 +60,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 
-SUBDIRS = . serialletter toolbar templates dtd pics expression autocorrect
+SUBDIRS = . serialletter toolbar templates dtd pics expression
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
