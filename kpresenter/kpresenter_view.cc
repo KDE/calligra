@@ -4117,8 +4117,8 @@ void KPresenterView::setupRulers()
     h_ruler->setGeometry( 20, 0, m_canvas->width(), 20 );
     v_ruler->setGeometry( 0, 20, 20, m_canvas->height() );
 
-    QObject::connect( h_ruler, SIGNAL( unitChanged( QString ) ),
-                      this, SLOT( unitChanged( QString ) ) );
+    QObject::connect( h_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
+                      this, SLOT( unitChanged( KoUnit::Unit ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
 
@@ -4134,8 +4134,8 @@ void KPresenterView::setupRulers()
     connect( h_ruler, SIGNAL( doubleClicked(double) ), this,
              SLOT( slotHRulerDoubleClicked(double) ) );
 
-    QObject::connect( v_ruler, SIGNAL( unitChanged( QString ) ),
-                      this, SLOT( unitChanged( QString ) ) );
+    QObject::connect( v_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
+                      this, SLOT( unitChanged( KoUnit::Unit ) ) );
     QObject::connect( v_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
@@ -4152,9 +4152,9 @@ void KPresenterView::setupRulers()
     connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
 }
 
-void KPresenterView::unitChanged( QString u )
+void KPresenterView::unitChanged( KoUnit::Unit u )
 {
-    m_pKPresenterDoc->setUnit(KoUnit::unit( u ) );
+    m_pKPresenterDoc->setUnit( u );
 }
 
 void KPresenterView::setRanges()
@@ -4484,8 +4484,8 @@ void KPresenterView::updateObjectStatusBarItem()
             KoSize size = obj->getSize();
             m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 - (width: %2; height: %3)(%4)" )
                                       .arg(obj->getTypeString())
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::ptToUnit( size.width(), m_pKPresenterDoc->getUnit())), 2)
-                                      .arg(KGlobal::locale()->formatNumber(KoUnit::ptToUnit( size.height(), m_pKPresenterDoc->getUnit())), 2)
+                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.width(), m_pKPresenterDoc->getUnit())), 2)
+                                      .arg(KGlobal::locale()->formatNumber(KoUnit::toUserValue( size.height(), m_pKPresenterDoc->getUnit())), 2)
                                       .arg(m_pKPresenterDoc->getUnitName())
                 );
         }
@@ -5181,7 +5181,7 @@ void KPresenterView::slotApplyParag()
             changed=true;
         }
 
-        h_ruler->setLeftIndent( KoUnit::ptToUnit( m_paragDlg->leftIndent(), m_pKPresenterDoc->getUnit() ) );
+        h_ruler->setLeftIndent( KoUnit::toUserValue( m_paragDlg->leftIndent(), m_pKPresenterDoc->getUnit() ) );
     }
 
     if(m_paragDlg->isRightMarginChanged())
@@ -5192,7 +5192,7 @@ void KPresenterView::slotApplyParag()
             macroCommand->addCommand(cmd);
             changed=true;
         }
-        h_ruler->setRightIndent( KoUnit::ptToUnit( m_paragDlg->rightIndent(), m_pKPresenterDoc->getUnit() ) );
+        h_ruler->setRightIndent( KoUnit::toUserValue( m_paragDlg->rightIndent(), m_pKPresenterDoc->getUnit() ) );
     }
     if(m_paragDlg->isSpaceBeforeChanged())
     {
@@ -5220,7 +5220,7 @@ void KPresenterView::slotApplyParag()
             macroCommand->addCommand(cmd);
             changed=true;
         }
-        h_ruler->setFirstIndent(KoUnit::ptToUnit( m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
+        h_ruler->setFirstIndent(KoUnit::toUserValue( m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
     }
 
     if(m_paragDlg->isAlignChanged())
@@ -5506,9 +5506,9 @@ void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, dou
     KoRuler * hRuler = getHRuler();
     if ( hRuler )
     {
-        hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine, m_pKPresenterDoc->getUnit() ) );
-        hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_pKPresenterDoc->getUnit() ) );
-        hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_pKPresenterDoc->getUnit() ) );
+        hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_pKPresenterDoc->getUnit() ) );
+        hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_pKPresenterDoc->getUnit() ) );
+        hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_pKPresenterDoc->getUnit() ) );
         hRuler->setDirection( rtl );
         actionTextDepthMinus->setEnabled( _leftMargin>0);
     }

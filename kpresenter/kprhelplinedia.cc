@@ -46,9 +46,9 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
     new QLabel(i18n("Position (%1):").arg(m_doc->getUnitName()), page);
     position= new KDoubleNumInput( page );
 
-    position->setValue( KoUnit::ptToUnit( QMAX(0.00, value), m_doc->getUnit() ) );
-    position->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitTop),m_doc->getUnit() ),
-                         KoUnit::ptToUnit(QMAX(0.00, limitBottom), m_doc->getUnit() ), 1, false);
+    position->setValue( KoUnit::toUserValue( QMAX(0.00, value), m_doc->getUnit() ) );
+    position->setRange ( KoUnit::toUserValue(QMAX(0.00, limitTop),m_doc->getUnit() ),
+                         KoUnit::toUserValue(QMAX(0.00, limitBottom), m_doc->getUnit() ), 1, false);
 
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpLine() ));
     resize( 300,100 );
@@ -62,7 +62,7 @@ void KPrMoveHelpLineDia::slotRemoveHelpLine()
 
 double KPrMoveHelpLineDia::newPosition() const
 {
-    return KoUnit::ptFromUnit(  position->value(), m_doc->getUnit() );
+    return KoUnit::fromUserValue(  position->value(), m_doc->getUnit() );
 }
 
 
@@ -86,9 +86,9 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
 
     position= new KDoubleNumInput( page );
 
-    position->setValue( KoUnit::ptToUnit(0.00, m_doc->getUnit() ) );
-    position->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
-                         KoUnit::ptToUnit(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
+    position->setValue( KoUnit::toUserValue(0.00, m_doc->getUnit() ) );
+    position->setRange ( KoUnit::toUserValue(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
+                         KoUnit::toUserValue(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
 
     m_rbHoriz->setChecked( true );
     resize( 300,100 );
@@ -96,7 +96,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
 
 double KPrInsertHelpLineDia::newPosition() const
 {
-    return KoUnit::ptFromUnit(  position->value(), m_doc->getUnit() );
+    return KoUnit::fromUserValue(  position->value(), m_doc->getUnit() );
 }
 
 bool KPrInsertHelpLineDia::addHorizontalHelpLine()
@@ -107,11 +107,11 @@ bool KPrInsertHelpLineDia::addHorizontalHelpLine()
 void KPrInsertHelpLineDia::slotRadioButtonClicked()
 {
     if ( m_rbHoriz->isChecked() )
-        position->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
-                             KoUnit::ptToUnit(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
+        position->setRange ( KoUnit::toUserValue(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
+                             KoUnit::toUserValue(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
     else if ( m_rbVert->isChecked() )
-        position->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitOfPage.left()),m_doc->getUnit() ),
-                             KoUnit::ptToUnit(QMAX(0.00, limitOfPage.right()), m_doc->getUnit() ), 1, false);
+        position->setRange ( KoUnit::toUserValue(QMAX(0.00, limitOfPage.left()),m_doc->getUnit() ),
+                             KoUnit::toUserValue(QMAX(0.00, limitOfPage.right()), m_doc->getUnit() ), 1, false);
 }
 
 
@@ -128,17 +128,17 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     QLabel *lab=new QLabel(i18n("X position (%1):").arg(m_doc->getUnitName()), page);
     positionX= new KDoubleNumInput( page );
 
-    positionX->setValue( KoUnit::ptToUnit( QMAX(0.00, posX), m_doc->getUnit() ) );
-    positionX->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitOfPage.left()),m_doc->getUnit() ),
-                          KoUnit::ptToUnit(QMAX(0.00, limitOfPage.right()), m_doc->getUnit() ), 1, false);
+    positionX->setValue( KoUnit::toUserValue( QMAX(0.00, posX), m_doc->getUnit() ) );
+    positionX->setRange ( KoUnit::toUserValue(QMAX(0.00, limitOfPage.left()),m_doc->getUnit() ),
+                          KoUnit::toUserValue(QMAX(0.00, limitOfPage.right()), m_doc->getUnit() ), 1, false);
 
 
     lab=new QLabel(i18n("Y position (%1):").arg(m_doc->getUnitName()), page);
     positionY= new KDoubleNumInput( page );
 
-    positionY->setValue( KoUnit::ptToUnit( QMAX(0.00, posY), m_doc->getUnit() ) );
-    positionY->setRange ( KoUnit::ptToUnit(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
-                          KoUnit::ptToUnit(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
+    positionY->setValue( KoUnit::toUserValue( QMAX(0.00, posY), m_doc->getUnit() ) );
+    positionY->setRange ( KoUnit::toUserValue(QMAX(0.00, limitOfPage.top()),m_doc->getUnit() ),
+                          KoUnit::toUserValue(QMAX(0.00, limitOfPage.bottom()), m_doc->getUnit() ), 1, false);
 
     showButton( KDialogBase::User1, (posX!=0.0 || posY!=0.0) );
 
@@ -149,8 +149,8 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
 
 KoPoint KPrInsertHelpPointDia::newPosition() const
 {
-    return KoPoint( KoUnit::ptFromUnit(  positionX->value(), m_doc->getUnit() ),
-                    KoUnit::ptFromUnit(  positionY->value(), m_doc->getUnit() ));
+    return KoPoint( KoUnit::fromUserValue(  positionX->value(), m_doc->getUnit() ),
+                    KoUnit::fromUserValue(  positionY->value(), m_doc->getUnit() ));
 }
 
 void KPrInsertHelpPointDia::slotRemoveHelpPoint()

@@ -984,10 +984,10 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         // Can't use frame->pageNum() here since frameset might be 0
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
 
-        sx->setValue( KoUnit::ptToUnit( frame->x(), doc->getUnit() ) );
-        sy->setValue( KoUnit::ptToUnit( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
-        sw->setValue( KoUnit::ptToUnit( frame->width(), doc->getUnit() ) );
-        sh->setValue( KoUnit::ptToUnit( frame->height(), doc->getUnit() ) );
+        sx->setValue( KoUnit::toUserValue( frame->x(), doc->getUnit() ) );
+        sy->setValue( KoUnit::toUserValue( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
+        sw->setValue( KoUnit::toUserValue( frame->width(), doc->getUnit() ) );
+        sh->setValue( KoUnit::toUserValue( frame->height(), doc->getUnit() ) );
 
         calcRatio();
 
@@ -1748,11 +1748,11 @@ bool KWFrameDia::applyChanges()
     double uBottom = 0.0;
     double uRight = 0.0;
     if(tab4 && frame) { // TAB Geometry
-        px = QMAX(0,KoUnit::ptFromUnit( sx->value(), doc->getUnit() ));
+        px = QMAX(0,KoUnit::fromUserValue( sx->value(), doc->getUnit() ));
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
-        py = QMAX(0, KoUnit::ptFromUnit(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
-        pw = QMAX(KoUnit::ptFromUnit( sw->value(), doc->getUnit() ),0);
-        ph = QMAX(KoUnit::ptFromUnit(sh->value(), doc->getUnit() ),0);
+        py = QMAX(0, KoUnit::fromUserValue(sy->value(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
+        pw = QMAX(KoUnit::fromUserValue( sw->value(), doc->getUnit() ),0);
+        ph = QMAX(KoUnit::fromUserValue(sh->value(), doc->getUnit() ),0);
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();
@@ -2027,10 +2027,10 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
 // Called right after the ctor, so m_synchronize can't be checked
 void KWFourSideConfigWidget::setValues( double left, double right, double top, double bottom )
 {
-    m_inputLeft->setValue( KoUnit::ptToUnit( left, doc->getUnit() ) );
-    m_inputRight->setValue( KoUnit::ptToUnit( right, doc->getUnit() ) );
-    m_inputTop->setValue( KoUnit::ptToUnit( top, doc->getUnit() ) );
-    m_inputBottom->setValue( KoUnit::ptToUnit( bottom, doc->getUnit() ) );
+    m_inputLeft->setValue( KoUnit::toUserValue( left, doc->getUnit() ) );
+    m_inputRight->setValue( KoUnit::toUserValue( right, doc->getUnit() ) );
+    m_inputTop->setValue( KoUnit::toUserValue( top, doc->getUnit() ) );
+    m_inputBottom->setValue( KoUnit::toUserValue( bottom, doc->getUnit() ) );
 }
 
 void KWFourSideConfigWidget::slotValueChanged( double val )
@@ -2049,22 +2049,22 @@ void KWFourSideConfigWidget::slotValueChanged( double val )
 
 double KWFourSideConfigWidget::leftValue() const
 {
-    return KoUnit::ptFromUnit( m_inputLeft->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputLeft->value(), doc->getUnit() );
 }
 
 double KWFourSideConfigWidget::rightValue() const
 {
-    return KoUnit::ptFromUnit( m_inputRight->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputRight->value(), doc->getUnit() );
 }
 
 double KWFourSideConfigWidget::topValue() const
 {
-    return KoUnit::ptFromUnit( m_inputTop->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputTop->value(), doc->getUnit() );
 }
 
 double KWFourSideConfigWidget::bottomValue() const
 {
-    return KoUnit::ptFromUnit( m_inputBottom->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputBottom->value(), doc->getUnit() );
 }
 
 // not needed, setEnabled does it

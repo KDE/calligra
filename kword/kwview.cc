@@ -1504,12 +1504,12 @@ void KWView::updateFrameStatusBarItem()
             KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
                                       .arg( frame->frameSet()->getName() )
-                                      .arg( KoUnit::userValue( frame->left(), unit ) )
-                                      .arg( KoUnit::userValue((frame->top() - (frame->pageNum() * m_doc->ptPaperHeight())), unit ) )
-                                      .arg( KoUnit::userValue( frame->right(), unit ) )
-                                      .arg( KoUnit::userValue( frame->bottom(), unit ) )
-                                      .arg( KoUnit::userValue( frame->width(), unit ) )
-                                      .arg( KoUnit::userValue( frame->height(), unit ) )
+                                      .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
+                                      .arg( KoUnit::toUserStringValue((frame->top() - (frame->pageNum() * m_doc->ptPaperHeight())), unit ) )
+                                      .arg( KoUnit::toUserStringValue( frame->right(), unit ) )
+                                      .arg( KoUnit::toUserStringValue( frame->bottom(), unit ) )
+                                      .arg( KoUnit::toUserStringValue( frame->width(), unit ) )
+                                      .arg( KoUnit::toUserStringValue( frame->height(), unit ) )
                                       .arg( unitName ) );
         } else
             m_sbFramesLabel->setText( i18n( "%1 frames selected" ).arg( nbFrame ) );
@@ -1807,9 +1807,9 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine, m_doc->getUnit() ) );
-      hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_doc->getUnit() ) );
-      hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_doc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_doc->getUnit() ) );
+      hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_doc->getUnit() ) );
+      hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_doc->getUnit() ) );
       hRuler->setDirection( rtl );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
@@ -3389,7 +3389,7 @@ void KWView::slotApplyParag()
                 macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
         }
-        m_gui->getHorzRuler()->setLeftIndent( KoUnit::ptToUnit( m_paragDlg->leftIndent(), m_doc->getUnit() ) );
+        m_gui->getHorzRuler()->setLeftIndent( KoUnit::toUserValue( m_paragDlg->leftIndent(), m_doc->getUnit() ) );
 
     }
 
@@ -3402,7 +3402,7 @@ void KWView::slotApplyParag()
                 macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
         }
-        m_gui->getHorzRuler()->setRightIndent( KoUnit::ptToUnit( m_paragDlg->rightIndent(), m_doc->getUnit() ) );
+        m_gui->getHorzRuler()->setRightIndent( KoUnit::toUserValue( m_paragDlg->rightIndent(), m_doc->getUnit() ) );
     }
     if(m_paragDlg->isSpaceBeforeChanged())
     {
@@ -3434,7 +3434,7 @@ void KWView::slotApplyParag()
             macroCommand->addCommand(cmd);
         }
         m_gui->getHorzRuler()->setFirstIndent(
-            KoUnit::ptToUnit( m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
+            KoUnit::toUserValue( m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
     }
 
     if(m_paragDlg->isAlignChanged())
@@ -7347,10 +7347,10 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
 
     connect( r_horz, SIGNAL( doubleClicked() ), view, SLOT( slotHRulerDoubleClicked() ) );
     connect( r_horz, SIGNAL( doubleClicked(double) ), view, SLOT( slotHRulerDoubleClicked(double) ) );
-    connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
+    connect( r_horz, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
     connect( r_vert, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
-    connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
+    connect( r_vert, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
 
     r_horz->hide();
     r_vert->hide();
@@ -7434,9 +7434,9 @@ void KWGUI::reorganize()
     r_vert->setGeometry( 0, space, space, left->height() - space );
 }
 
-void KWGUI::unitChanged( QString  u )
+void KWGUI::unitChanged( KoUnit::Unit u )
 {
-    view->kWordDocument()->setUnit( KoUnit::unit( u ) );
+    view->kWordDocument()->setUnit( u );
 }
 
 // Implementation of KWStatisticsDialog

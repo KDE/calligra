@@ -80,14 +80,14 @@ QString KarbonPartIface::unitName() const
 QString
 KarbonPartIface::widthInUnits()
 {
-	QString val = KoUnit::userValue( m_part->document().width(), m_part->unit() );
+	QString val = KoUnit::toUserStringValue( m_part->document().width(), m_part->unit() );
 	return QString( "%1%2" ).arg( val ).arg( m_part->unitName() );
 }
 
 QString
 KarbonPartIface::heightInUnits()
 {
-	QString val = KoUnit::userValue( m_part->document().height(), m_part->unit() );
+	QString val = KoUnit::toUserStringValue( m_part->document().height(), m_part->unit() );
 	return QString( "%1%2" ).arg( val ).arg( m_part->unitName() );
 }
 

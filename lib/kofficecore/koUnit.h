@@ -116,53 +116,40 @@ public:
 
     /**
      * This method is the one to use to display a value in a dialog
-     * \warning: as the number is multiplied by 10000, beware of overflow of bigger numbers
      * \return the value @p ptValue converted to @p unit and rounded, ready to be displayed
+     * Old name: ptToUnit
      */
-    static double ptToUnit( double ptValue, Unit unit );
-    
+    static double toUserValue( double ptValue, Unit unit );
+
     /**
      * Convert the value @p ptValue to a given unit @p unit
      * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
      * \return the converted value
+     * Old name: ptToUnitUnrounded
      */
-    static double ptToUnitUnrounded( const double ptValue, const Unit unit );
+    static double ptToUnit( const double ptValue, const Unit unit );
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted to @p unit and rounded, ready to be displayed
-    static QString userValue( double ptValue, Unit unit );
+    /// Old name: userValue
+    static QString toUserStringValue( double ptValue, Unit unit );
 
     /// This method is the one to use to read a value from a dialog
     /// @return the value in @p unit, converted to points for internal use
-    static double ptFromUnit( double value, Unit unit );
+    /// Old name: ptFromUnit
+    static double fromUserValue( double value, Unit unit );
 
     /// This method is the one to use to read a value from a dialog
+    /// @param ok if set, the pointed bool is set to true if the value could be
+    /// converted to a double, and to false otherwise.
     /// @return the value in @p unit, converted to points for internal use
-    static double fromUserValue( const QString& value, Unit unit );
+    static double fromUserValue( const QString& value, Unit unit, bool* ok = 0 );
 
     /// Convert a unit name into a Unit enum
-    static Unit unit( const QString &_unitName ) {
-        if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
-        if ( _unitName == QString::fromLatin1( "cm" ) ) return U_CM;
-        if ( _unitName == QString::fromLatin1( "dm" ) ) return U_DM;
-        if ( _unitName == QString::fromLatin1( "in" )
-            || _unitName == QString::fromLatin1("inch") /*compat*/ ) return U_INCH;
-        if ( _unitName == QString::fromLatin1( "pi" ) ) return U_PI;
-        if ( _unitName == QString::fromLatin1( "dd" ) ) return U_DD;
-        if ( _unitName == QString::fromLatin1( "cc" ) ) return U_CC;
-        return U_PT;
-    }
+    /// @param ok if set, it will be true if the unit was known, false if unknown
+    static Unit unit( const QString &_unitName, bool* ok = 0 );
     /// Get the name of a unit
-    static QString unitName( Unit _unit ) {
-        if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
-        if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
-        if ( _unit == U_DM ) return QString::fromLatin1( "dm" );
-        if ( _unit == U_INCH ) return QString::fromLatin1( "in" );
-        if ( _unit == U_PI ) return QString::fromLatin1( "pi" );
-        if ( _unit == U_DD ) return QString::fromLatin1( "dd" );
-        if ( _unit == U_CC ) return QString::fromLatin1( "cc" );
-        return QString::fromLatin1( "pt" );
-    }
+    static QString unitName( Unit _unit );
     /// Get the full (translated) description of a unit
     static QString unitDescription( Unit _unit );
     static QStringList listOfUnitName();

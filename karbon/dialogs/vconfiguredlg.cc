@@ -227,7 +227,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     grid->addWidget( m_unit, 1, 1 );
     m_oldUnit = KoUnit::unit( unitType );
     m_unit->setCurrentItem( m_oldUnit );
-	connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
+    connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
 }
 
 void VConfigMiscPage::apply()
@@ -303,10 +303,10 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	KarbonGridData &gd = view->part()->document().grid();
 	double pgw = view->part()->document().width();
 	double pgh = view->part()->document().height();
-	double fw = KoUnit::ptToUnit( gd.freq.width(), unit );
-	double fh = KoUnit::ptToUnit( gd.freq.height(), unit );
-	double sw = KoUnit::ptToUnit( gd.snap.width(), unit );
-	double sh = KoUnit::ptToUnit( gd.snap.height(), unit );
+	double fw = KoUnit::toUserValue( gd.freq.width(), unit );
+	double fh = KoUnit::toUserValue( gd.freq.height(), unit );
+	double sw = KoUnit::toUserValue( gd.snap.width(), unit );
+	double sh = KoUnit::toUserValue( gd.snap.height(), unit );
 
 	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), page );
 	m_gridChBox->setChecked( gd.isShow );
@@ -368,10 +368,10 @@ void VConfigGridPage::apply()
 {
 	KoUnit::Unit unit = m_view->part()->document().unit();
 	KarbonGridData &gd = m_view->part()->document().grid();
-	gd.freq.setWidth( KoUnit::ptFromUnit( m_spaceHorizUSpin->value(), unit ) );
-	gd.freq.setHeight( KoUnit::ptFromUnit( m_spaceVertUSpin->value(), unit ) );
-	gd.snap.setWidth( KoUnit::ptFromUnit( m_snapHorizUSpin->value(), unit ) );
-	gd.snap.setHeight( KoUnit::ptFromUnit( m_snapVertUSpin->value(), unit ) );
+	gd.freq.setWidth( KoUnit::fromUserValue( m_spaceHorizUSpin->value(), unit ) );
+	gd.freq.setHeight( KoUnit::fromUserValue( m_spaceVertUSpin->value(), unit ) );
+	gd.snap.setWidth( KoUnit::fromUserValue( m_snapHorizUSpin->value(), unit ) );
+	gd.snap.setHeight( KoUnit::fromUserValue( m_snapVertUSpin->value(), unit ) );
 	gd.isShow = m_gridChBox->isChecked();
 	gd.isSnap = m_snapChBox->isChecked();
 	gd.color = m_gridColorBtn->color();
@@ -381,10 +381,10 @@ void VConfigGridPage::apply()
 void VConfigGridPage::slotDefault()
 {
 	KoUnit::Unit unit = m_view->part()->document().unit();
-	m_spaceHorizUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
-	m_spaceVertUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
-	m_snapHorizUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
-	m_snapVertUSpin->setValue( KoUnit::ptToUnit( 20.0, unit ) );
+	m_spaceHorizUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
+	m_spaceVertUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
+	m_snapHorizUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
+	m_snapVertUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
 	m_gridChBox->setChecked( true );
 	m_snapChBox->setChecked( true );
 	m_gridColorBtn->setColor( QColor( 228, 228, 228 ) );

@@ -27,6 +27,7 @@
 #include <qframe.h>
 #include <qpixmap.h>
 
+#include <kdemacros.h>
 #include <koGlobal.h>
 #include <koTabChooser.h>
 
@@ -115,10 +116,10 @@ public:
 
     /**
      * Set the unit to be used. The unit is specified using text as defined in KoUnit, for
-	 * example "mm", "pt" or "inch".
-	 * You should use the KoUnit::Unit variant instead.
+     * example "mm", "pt" or "inch".
+     * @deprecated You should use the KoUnit::Unit variant instead.
      */
-    void setUnit( const QString& unit );
+    KDE_DEPRECATED void setUnit( const QString& unit );
     /**
      * Set the unit to be used.
      */
@@ -262,7 +263,7 @@ signals:
     void doubleClicked( double ptPos );
 
     void tabListChanged( const KoTabulatorList & );
-    void unitChanged( QString ); // TODO KoUnit::Unit instead ?
+    void unitChanged( KoUnit::Unit );
 
     void addHelpline(const QPoint &, bool );
     void moveHelpLines( const QPoint &, bool );

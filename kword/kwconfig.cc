@@ -318,10 +318,10 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QHBox* hbGridX = new QHBox( gbInterfaceGroup );
     QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
     gridX=new KoUnitDoubleSpinBox( hbGridX,
-                                   KoUnit::ptToUnit( 0.1, unit ),
-                                   KoUnit::ptToUnit( 50, unit ),
-                                   KoUnit::ptToUnit( 0.1, unit ),
-                                   KoUnit::ptToUnit( ptGridX, unit ),
+                                   KoUnit::toUserValue( 0.1, unit ),
+                                   KoUnit::toUserValue( 50, unit ),
+                                   KoUnit::toUserValue( 0.1, unit ),
+                                   KoUnit::toUserValue( ptGridX, unit ),
                                    unit );
     labelGridX->setBuddy( gridX );
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
@@ -330,10 +330,10 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QHBox* hbGridY = new QHBox( gbInterfaceGroup );
     QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
     gridY=new KoUnitDoubleSpinBox( hbGridY,
-                                   KoUnit::ptToUnit( 0.1, unit ),
-                                   KoUnit::ptToUnit( 50, unit ),
-                                   KoUnit::ptToUnit( 0.1, unit ),
-                                   KoUnit::ptToUnit( ptGridY, unit ),
+                                   KoUnit::toUserValue( 0.1, unit ),
+                                   KoUnit::toUserValue( 50, unit ),
+                                   KoUnit::toUserValue( 0.1, unit ),
+                                   KoUnit::toUserValue( ptGridY, unit ),
                                    unit );
     labelGridY->setBuddy( gridY );
 
@@ -342,11 +342,11 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     QHBox* hbIndent = new QHBox( gbInterfaceGroup );
     QLabel* labelIdent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
-    double val = KoUnit::ptToUnit( ptIndent, unit );
+    double val = KoUnit::toUserValue( ptIndent, unit );
     indent = new KoUnitDoubleSpinBox( hbIndent,
-                                      KoUnit::ptToUnit( 0.1, unit ),
-                                      KoUnit::ptToUnit( 50, unit ),
-                                      KoUnit::ptToUnit( 0.1, unit ),
+                                      KoUnit::toUserValue( 0.1, unit ),
+                                      KoUnit::toUserValue( 50, unit ),
+                                      KoUnit::toUserValue( 0.1, unit ),
                                       val,
                                       unit );
     labelIdent->setBuddy( indent );
@@ -369,8 +369,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 void ConfigureInterfacePage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    double valX=KoUnit::ptFromUnit( gridX->value(), doc->getUnit() );
-    double valY=KoUnit::ptFromUnit( gridY->value(), doc->getUnit() );
+    double valX=KoUnit::fromUserValue( gridX->value(), doc->getUnit() );
+    double valY=KoUnit::fromUserValue( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
 
     bool statusBar=showStatusBar->isChecked();
@@ -386,7 +386,7 @@ void ConfigureInterfacePage::apply()
         config->writeEntry( "GridY", QMAX( 0.1, valY), true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridY(valY);
     }
-    double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
     if( newIndent != doc->indentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -460,10 +460,10 @@ void ConfigureInterfacePage::slotDefault()
     KWDocument * doc = m_pView->kWordDocument();
     m_unitCombo->setCurrentItem( KoUnit::U_CM );
     emit unitChanged( m_unitCombo->currentItem() );
-    gridX->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
-    gridY->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
+    gridX->setValue( KoUnit::toUserValue( 10, doc->getUnit() ) );
+    gridY->setValue( KoUnit::toUserValue( 10, doc->getUnit() ) );
     m_nbPagePerRow->setValue(4);
-    double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), doc->getUnit() );
+    double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showStatusBar->setChecked(true);
@@ -680,10 +680,10 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QHBox* hbColumnSpacing = new QHBox( gbDocumentDefaults );
     QLabel* columnSpacingLabel = new QLabel( i18n("Default column spacing:"), hbColumnSpacing );
     m_columnSpacing = new KoUnitDoubleSpinBox( hbColumnSpacing,
-                                               KoUnit::ptToUnit( 0.1, unit ),
-                                               KoUnit::ptToUnit( 50, unit ),
-                                               KoUnit::ptToUnit( 0.1, unit ),
-                                               KoUnit::ptToUnit( ptColumnSpacing, unit ),
+                                               KoUnit::toUserValue( 0.1, unit ),
+                                               KoUnit::toUserValue( 50, unit ),
+                                               KoUnit::toUserValue( 0.1, unit ),
+                                               KoUnit::toUserValue( ptColumnSpacing, unit ),
                                                unit );
     columnSpacingLabel->setBuddy( m_columnSpacing );
     QWhatsThis::add( m_columnSpacing, i18n("When setting a document to use more than one column "
@@ -782,10 +782,10 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QHBox* hbTabStop = new QHBox( gbDocumentSettings );
     new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
-                                              KoUnit::ptToUnit( MM_TO_POINT(2), unit ),
-                                              KoUnit::ptToUnit( doc->ptPaperWidth(), unit ),
+                                              KoUnit::toUserValue( MM_TO_POINT(2), unit ),
+                                              KoUnit::toUserValue( doc->ptPaperWidth(), unit ),
                                               0.1,
-                                              KoUnit::ptToUnit( m_oldTabStopWidth, unit ),
+                                              KoUnit::toUserValue( m_oldTabStopWidth, unit ),
                                               unit );
     m_oldTabStopWidth = doc->tabStopValue();
 
@@ -804,7 +804,7 @@ KCommand *ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KWDocument * doc = m_pView->kWordDocument();
-    double colSpacing = KoUnit::ptFromUnit( m_columnSpacing->value(), doc->getUnit() );
+    double colSpacing = KoUnit::fromUserValue( m_columnSpacing->value(), doc->getUnit() );
     if ( colSpacing != doc->defaultColumnSpacing() )
     {
         config->writeEntry( "ColumnSpacing", colSpacing , true, false, 'g', DBL_DIG );
@@ -863,7 +863,7 @@ KCommand *ConfigureDefaultDocPage::apply()
         macroCmd->addCommand(cmd);
         m_oldStartingPage=newStartingPage;
     }
-    double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
+    double newTabStop = KoUnit::fromUserValue( m_tabStopWidth->value(), doc->getUnit() );
     if ( newTabStop != m_oldTabStopWidth)
     {
         if ( !macroCmd )
@@ -881,11 +881,11 @@ KCommand *ConfigureDefaultDocPage::apply()
 
 void ConfigureDefaultDocPage::slotDefault()
 {
-   m_columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
+   m_columnSpacing->setValue(KoUnit::toUserValue( 3, m_pView->kWordDocument()->getUnit() ));
    autoSave->setValue(KoDocument::defaultAutoSave()/60);
    m_variableNumberOffset->setValue(1);
    m_cursorInProtectedArea->setChecked(true);
-   m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
+   m_tabStopWidth->setValue(KoUnit::toUserValue( MM_TO_POINT(15), m_pView->kWordDocument()->getUnit()));
    m_createBackupFile->setChecked( true );
    m_directInsertCursor->setChecked( false );
    m_globalLanguage->setCurrentItem(KoGlobal::languageIndexFromTag(KGlobal::locale()->language()));

@@ -78,7 +78,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 }
 
 void KSpreadpreference::openPage(int flags)
-{    
+{
     if(flags & KS_LOCALE)
         showPage( 0 );
     else if(flags & KS_INTERFACE)
@@ -344,11 +344,11 @@ void configure::apply()
             m_pView->posWidget()->hide();
         doc->setShowFormulaBar(active);
     }
-    
+
     active=showStatusBar->isChecked();
     config->writeEntry( "Status bar",active);
     m_pView->showStatusBar( active );
-    
+
     int val=nbRecentFile->value();
     if( oldRecent!= val)
     {
@@ -411,11 +411,11 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
   valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( KoUnit::ptToUnit( 0.0, _view->doc()->getUnit() ),
-                       KoUnit::ptToUnit( 400.0, _view->doc()->getUnit() ),
-                       KoUnit::ptToUnit( 10.0, _view->doc()->getUnit()) );
+  valIndent->setRange( KoUnit::toUserValue( 0.0, _view->doc()->getUnit() ),
+                       KoUnit::toUserValue( 400.0, _view->doc()->getUnit() ),
+                       KoUnit::toUserValue( 10.0, _view->doc()->getUnit()) );
   valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( KoUnit::ptToUnit( _indent, _view->doc()->getUnit() ) );
+  valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->getUnit() ) );
   valIndent->setLabel(i18n("&Value of indent:"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
@@ -879,9 +879,9 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
     dontCheckUpperWord = new QCheckBox( i18n("Do not check upper word"),box);
     dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
-    
+
   QWidget* spacer = new QWidget( box );
-  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );  
+  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     if( config->hasGroup("KSpell kspread") )
     {

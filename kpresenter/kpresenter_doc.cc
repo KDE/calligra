@@ -1031,7 +1031,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             kdDebug()<<"load Object \n";
             QDomElement o = object.toElement();
             QString name = o.tagName();
-            int offset = dp.attribute( "draw:id" ).toInt();
 	    QDomElement * animationShow = 0L;
 
 	    if( o.hasAttribute("draw:id"))

@@ -79,10 +79,10 @@ class KoZoomAction;
 using namespace Kivio;
 
 class KivioView : public KoView
-{ 
+{
   Q_OBJECT
   friend class KivioCanvas;
-  
+
   public:
     KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
     ~KivioView();
@@ -138,14 +138,14 @@ class KivioView : public KoView
 
     KoRuler* horzRuler() { return hRuler; }
     KoRuler* vertRuler() { return vRuler; }
-    
+
     Kivio::PluginManager* pluginManager();
-    
+
     QPtrList<KAction> clipboardActionList();
     QPtrList<KAction> alignActionList();
     QPtrList<KAction> groupActionList();
     QPtrList<KAction> layerActionList();
-  
+
   signals:
     void zoomChanged();
 
@@ -208,11 +208,11 @@ class KivioView : public KoView
     void setRulerPageLayout(const KoPageLayout& l);
 
     void popupTabBarMenu( const QPoint& point );
-    
+
     void initStatusBarProgress();
     void setStatusBarProgress(int progress);
     void removeStatusBarProgress();
-    
+
   protected slots:
     void slotAddPage( KivioPage *_page );
     void slotPageRenamed( KivioPage* page, const QString& old_name );
@@ -228,7 +228,7 @@ class KivioView : public KoView
 
     void setLineWidth(double);
     void setLineStyle(int);
-    
+
     void toggleFontBold(bool);
     void toggleFontItalics(bool);
     void toggleFontUnderline(bool);
@@ -262,12 +262,12 @@ class KivioView : public KoView
     void setRulerUnit(KoUnit::Unit);
     void setRulerHOffset(int h);
     void setRulerVOffset(int v);
-    void rulerChangedUnit(QString u);
+    void rulerChangedUnit(KoUnit::Unit u);
 
     void textFormat();
     void stencilFormat();
     void arrowHeadFormat();
-    
+
     void clipboardDataChanged();
   protected:
     void setupActions();
@@ -348,9 +348,9 @@ class KivioView : public KoView
     KoZoomHandler* m_zoomHandler;
 
     KStatusBarLabel* m_coordSLbl;
-    
+
     Kivio::PluginManager* m_pluginManager;
-    
+
     KAction* m_groupAction;
     KAction* m_ungroupAction;
     KAction* m_stencilToFront;
@@ -358,7 +358,7 @@ class KivioView : public KoView
     KAction* m_alignAndDistribute;
     KoLineWidthAction* m_lineWidthAction;
     KoLineStyleAction* m_lineStyleAction;
-    
+
     QProgressBar* m_statusBarProgress;
 };
 

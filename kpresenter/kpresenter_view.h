@@ -685,7 +685,7 @@ protected slots:
     void setExtraPenWidth( unsigned int width );
 
     /**
-     * Restart the presenation from the first shown slide. 
+     * Restart the presenation from the first shown slide.
      * This only works in automatic presentation and infinite loop mode.
      */
     void restartPresentation() { m_autoPresRestart = true; }
@@ -697,7 +697,7 @@ protected slots:
 
     void newPageLayout( const KoPageLayout &_layout );
     void openPageLayoutDia() { extraLayout(); }
-    void unitChanged( QString );
+    void unitChanged( KoUnit::Unit );
 
     void doAutomaticScreenPres();
 
@@ -1126,7 +1126,7 @@ private:
 
     /// timer for duration of a page
     QTime m_duration;
-    /// list for saving the duration of the pages 
+    /// list for saving the duration of the pages
     QValueList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;

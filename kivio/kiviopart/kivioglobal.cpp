@@ -57,12 +57,12 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
     // Compatibility with Kivio <= 1.2.x
     kdDebug(43000) << "Compatibility mode..." << endl;
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
-    layout.ptWidth = KoUnit::ptFromUnit(XmlReadFloat(e, "width", 0.0), unit);
-    layout.ptHeight = KoUnit::ptFromUnit(XmlReadFloat(e, "height", 0.0), unit);
-    layout.ptLeft = KoUnit::ptFromUnit(XmlReadFloat(e, "marginLeft", 0.0), unit);
-    layout.ptRight = KoUnit::ptFromUnit(XmlReadFloat(e, "marginRight", 0.0), unit);
-    layout.ptTop = KoUnit::ptFromUnit(XmlReadFloat(e, "marginTop", 0.0), unit);
-    layout.ptBottom = KoUnit::ptFromUnit(XmlReadFloat(e, "marginBottom", 0.0), unit);
+    layout.ptWidth = KoUnit::fromUserValue(XmlReadFloat(e, "width", 0.0), unit);
+    layout.ptHeight = KoUnit::fromUserValue(XmlReadFloat(e, "height", 0.0), unit);
+    layout.ptLeft = KoUnit::fromUserValue(XmlReadFloat(e, "marginLeft", 0.0), unit);
+    layout.ptRight = KoUnit::fromUserValue(XmlReadFloat(e, "marginRight", 0.0), unit);
+    layout.ptTop = KoUnit::fromUserValue(XmlReadFloat(e, "marginTop", 0.0), unit);
+    layout.ptBottom = KoUnit::fromUserValue(XmlReadFloat(e, "marginBottom", 0.0), unit);
     Kivio::setFormatOrientation(layout);
     kdDebug(43000) << "Ready." << endl;
   } else {
@@ -157,8 +157,8 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
   layout.orientation = PG_PORTRAIT;
 
   while((sizeDef.unit != -2) && !found) {
-    width = KoUnit::ptFromUnit(sizeDef.width, static_cast<KoUnit::Unit>(sizeDef.unit));
-    height = KoUnit::ptFromUnit(sizeDef.height, static_cast<KoUnit::Unit>(sizeDef.unit));
+    width = KoUnit::fromUserValue(sizeDef.width, static_cast<KoUnit::Unit>(sizeDef.unit));
+    height = KoUnit::fromUserValue(sizeDef.height, static_cast<KoUnit::Unit>(sizeDef.unit));
 
     if((layout.ptWidth == width) && (layout.ptHeight == height)) {
       layout.format = KoPageFormat::formatFromString(sizeDef.title);
@@ -180,8 +180,8 @@ KoSize Kivio::loadSize(const QDomElement& e, const QString& name, const KoSize& 
   if(e.hasAttribute(name + "Unit")) {
     // Compatibility with Kivio <= 1.2.x
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, name + "Unit", 0));
-    size.setWidth(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Width", def.width()), unit));
-    size.setHeight(KoUnit::ptFromUnit(XmlReadFloat(e, name + "Height", def.height()), unit));
+    size.setWidth(KoUnit::fromUserValue(XmlReadFloat(e, name + "Width", def.width()), unit));
+    size.setHeight(KoUnit::fromUserValue(XmlReadFloat(e, name + "Height", def.height()), unit));
   } else {
     size.setWidth(XmlReadFloat(e, name + "Width", def.width()));
     size.setHeight(XmlReadFloat(e, name + "Height", def.height()));
@@ -199,7 +199,7 @@ void Kivio::saveSize(QDomElement& e, const QString& name, const KoSize& size)
 QString Kivio::pageSizeString(int pageSize)
 {
   QString psStr = "A4";
-  
+
   switch(pageSize) {
     case QPrinter::A0:
       psStr = "A0";
@@ -296,7 +296,7 @@ QString Kivio::pageSizeString(int pageSize)
       psStr = "A4";
       break;
   };
-  
+
   return psStr;
 }
 
@@ -1243,7 +1243,7 @@ QPixmap Kivio::connectorTargetPixmap()
   " .+.+. ",
   ".+. .+.",
   " .   . "};
-  
+
   return QPixmap(connectorTarget_xpm);
 }
 
@@ -1264,17 +1264,17 @@ QPixmap Kivio::lockPixmap()
   " .+....+. ",
   " .++++++. ",
   "  ......  "};
-  
+
   return QPixmap(lock_xpm);
 }
 
 QString Kivio::systemDefaultUnit()
 {
   QString defMS = "mm";
-  
+
   if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
     defMS = "in";
   }
-  
+
   return defMS;
 }

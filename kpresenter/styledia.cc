@@ -135,20 +135,20 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
       m_bColorChanged(false), m_bStyleChanged(false), m_bWidthChanged(false)
 {
     QVBoxLayout *clayout = new QVBoxLayout( this );
-    
+
     clayout->setMargin( KDialog::marginHint() );
     clayout->setSpacing( KDialog::spacingHint() );
-    
+
     QLabel *l = new QLabel( i18n( "Color:" ), this );
     clayout->addWidget(l);
-    
+
     choosePCol = new KColorButton( Qt::black,
                                    Qt::black,
                                    this );
     connect( choosePCol, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotColorChanged() ) );
     clayout->addWidget(choosePCol);
-    
+
     l = new QLabel( i18n( "Style:" ), this);
     clayout->addWidget(l);
 
@@ -162,10 +162,10 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( choosePStyle, SIGNAL( activated( int ) ),
              this, SLOT( slotStyleChanged() ) );
     clayout->addWidget(choosePStyle);
-    
+
     l = new QLabel( i18n( "Width:" ), this );
     clayout->addWidget(l);
-    
+
     choosePWidth = new KIntNumInput( 1, this );
     choosePWidth->setSuffix(" pt"); // TODO use unit here, make it use i18n at the same time.
     choosePWidth->setRange( 1, 10, 1 );
@@ -178,10 +178,10 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     grplayout->setMargin( KDialog::marginHint() );
     grplayout->setSpacing( KDialog::spacingHint() );
     clayout->addWidget(grp);
-    
+
     l = new QLabel( i18n( "Begin:" ), grp );
     grplayout->addWidget(l);
-       
+
     clineBegin = new KComboBox( false, grp, "lineBegin" );
     clineBegin->insertItem( i18n("Normal") );
     clineBegin->insertItem( i18n("Arrow") );
@@ -192,13 +192,13 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineBegin->insertItem( i18n("Double Arrow") );
     clineBegin->insertItem( i18n("Double Line Arrow") );
     grplayout->addWidget(clineBegin);
-    
+
     connect( clineBegin, SIGNAL( activated( int ) ),
              this, SLOT( slotLineBeginChanged() ) );
 
     l = new QLabel( i18n( "End:" ), grp );
     grplayout->addWidget(l);
-    
+
     clineEnd = new KComboBox( false, grp, "lineEnd" );
     clineEnd->insertItem( i18n("Normal") );
     clineEnd->insertItem( i18n("Arrow") );
@@ -211,7 +211,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     connect( clineEnd, SIGNAL( activated( int ) ),
              this, SLOT( slotLineEndChanged() ) );
     grplayout->addWidget(clineEnd);
-    
+
     if ( !(m_flags & StyleDia::SdEndBeginLine) )
         grp->setEnabled(false);
     penPrev = new PBPreview( this, "penPrev", PBPreview::Pen );
@@ -932,12 +932,12 @@ void StyleDia::setupTabGeneral()
     PageConfigGeneral *w = new PageConfigGeneral( this );
     sticky = w->checkboxSticky;
     objectName = w->objectName;
-    
+
     if ( ! oneObject ) {
         w->label->setEnabled( false );
         w->objectName->setEnabled( false );
     }
-    
+
     addTab( w, i18n( "&General" ) );
 }
 
@@ -1200,30 +1200,30 @@ void StyleDia::setMargins( double left, double right, double top, double bottom)
     oldTop = top;
     oldBottom = bottom;
     oldRight = right;
-    sml->setValue( KoUnit::ptToUnit( QMAX(0.00, left), m_doc->getUnit() ) );
-    smr->setValue( KoUnit::ptToUnit( QMAX(0.00, right), m_doc->getUnit() ) );
-    smt->setValue( KoUnit::ptToUnit( QMAX(0.00, top), m_doc->getUnit() ) );
-    smb->setValue( KoUnit::ptToUnit( QMAX(0.00, bottom), m_doc->getUnit() ) );
+    sml->setValue( KoUnit::toUserValue( QMAX(0.00, left), m_doc->getUnit() ) );
+    smr->setValue( KoUnit::toUserValue( QMAX(0.00, right), m_doc->getUnit() ) );
+    smt->setValue( KoUnit::toUserValue( QMAX(0.00, top), m_doc->getUnit() ) );
+    smb->setValue( KoUnit::toUserValue( QMAX(0.00, bottom), m_doc->getUnit() ) );
 }
 
 double StyleDia::marginsLeft()
 {
-    return QMAX(KoUnit::ptFromUnit( sml->value(), m_doc->getUnit() ),0);
+    return QMAX(KoUnit::fromUserValue( sml->value(), m_doc->getUnit() ),0);
 }
 
 double StyleDia::marginsRight()
 {
-    return QMAX(KoUnit::ptFromUnit( smr->value(), m_doc->getUnit() ),0);
+    return QMAX(KoUnit::fromUserValue( smr->value(), m_doc->getUnit() ),0);
 }
 
 double StyleDia::marginsBottom()
 {
-    return QMAX(KoUnit::ptFromUnit( smb->value(), m_doc->getUnit() ),0);
+    return QMAX(KoUnit::fromUserValue( smb->value(), m_doc->getUnit() ),0);
 }
 
 double StyleDia::marginsTop()
 {
-    return QMAX(KoUnit::ptFromUnit( smt->value(), m_doc->getUnit() ),0);
+    return QMAX(KoUnit::fromUserValue( smt->value(), m_doc->getUnit() ),0);
 }
 
 void StyleDia::setSticky( PropValue p )
@@ -1340,10 +1340,10 @@ bool StyleDia::isKeepRatio()const
 
 KoRect StyleDia::getNewSize() const
 {
-    double top=QMAX(0, KoUnit::ptFromUnit( m_lineTop->value(), m_doc->getUnit() ));
-    double left=QMAX(0, KoUnit::ptFromUnit( m_lineLeft->value(), m_doc->getUnit() ));
-    double width=QMAX(0, KoUnit::ptFromUnit( m_lineWidth->value(), m_doc->getUnit() ));
-    double height=QMAX(0, KoUnit::ptFromUnit( m_lineHeight->value(), m_doc->getUnit() ));
+    double top=QMAX(0, KoUnit::fromUserValue( m_lineTop->value(), m_doc->getUnit() ));
+    double left=QMAX(0, KoUnit::fromUserValue( m_lineLeft->value(), m_doc->getUnit() ));
+    double width=QMAX(0, KoUnit::fromUserValue( m_lineWidth->value(), m_doc->getUnit() ));
+    double height=QMAX(0, KoUnit::fromUserValue( m_lineHeight->value(), m_doc->getUnit() ));
 
     KoRect newRect = KoRect( left, top, width, height);
     return newRect;
@@ -1352,10 +1352,10 @@ KoRect StyleDia::getNewSize() const
 void StyleDia::setSize(const KoRect & _rect)
 {
     oldRect = _rect;
-    m_lineTop->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.top()), m_doc->getUnit() ));
-    m_lineLeft->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
-    m_lineWidth->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
-    m_lineHeight->setValue(KoUnit::ptToUnit( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
+    m_lineTop->setValue(KoUnit::toUserValue( QMAX(0.00, _rect.top()), m_doc->getUnit() ));
+    m_lineLeft->setValue(KoUnit::toUserValue( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
+    m_lineWidth->setValue(KoUnit::toUserValue( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
+    m_lineHeight->setValue(KoUnit::toUserValue( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
     heightByWidthRatio = m_lineHeight->value() / m_lineWidth->value();
 }
 

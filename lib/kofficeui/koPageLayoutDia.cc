@@ -252,7 +252,7 @@ KoHeadFoot KoPageLayoutDia::headFoot() const
 const KoColumns& KoPageLayoutDia::columns()
 {
     m_cl.columns = nColumns->value();
-    m_cl.ptColumnSpacing = KoUnit::ptFromUnit( nCSpacing->value(), m_unit  );
+    m_cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->value(), m_unit  );
     return m_cl;
 }
 
@@ -268,9 +268,9 @@ const KoKWHeaderFooter& KoPageLayoutDia::getKWHeaderFooter()
     else
         kwhf.header = HF_SAME;
 
-    kwhf.ptHeaderBodySpacing = KoUnit::ptFromUnit( nHSpacing->value(), m_unit );
-    kwhf.ptFooterBodySpacing = KoUnit::ptFromUnit( nFSpacing->value(), m_unit );
-    kwhf.ptFootNoteBodySpacing = KoUnit::ptFromUnit( nFNSpacing->value(), m_unit);
+    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->value(), m_unit );
+    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->value(), m_unit );
+    kwhf.ptFootNoteBodySpacing = KoUnit::fromUserValue( nFNSpacing->value(), m_unit);
     if ( rfFirst->isChecked() && rfEvenOdd->isChecked() )
         kwhf.footer = HF_FIRST_EO_DIFF;
     else if ( rfFirst->isChecked() )
@@ -464,27 +464,27 @@ void KoPageLayoutDia::setValuesTab1()
 
 void KoPageLayoutDia::setValuesTab1Helper()
 {
-    epgWidth->setValue( KoUnit::ptToUnit( m_layout.ptWidth, m_unit ) );
+    epgWidth->setValue( KoUnit::toUserValue( m_layout.ptWidth, m_unit ) );
     epgWidth->setSuffix( KoUnit::unitName( m_unit ) );
 
-    epgHeight->setValue( KoUnit::ptToUnit( m_layout.ptHeight, m_unit ) );
+    epgHeight->setValue( KoUnit::toUserValue( m_layout.ptHeight, m_unit ) );
     epgHeight->setSuffix( KoUnit::unitName( m_unit ) );
 
-    ebrLeft->setValue( KoUnit::ptToUnit( m_layout.ptLeft, m_unit ) );
+    ebrLeft->setValue( KoUnit::toUserValue( m_layout.ptLeft, m_unit ) );
     ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrLeft->setRange( 0, KoUnit::ptToUnit( m_layout.ptWidth, m_unit)  );
+    ebrLeft->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit)  );
 
-    ebrRight->setValue( KoUnit::ptToUnit( m_layout.ptRight, m_unit ) );
+    ebrRight->setValue( KoUnit::toUserValue( m_layout.ptRight, m_unit ) );
     ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrRight->setRange( 0, KoUnit::ptToUnit( m_layout.ptWidth, m_unit)  );
+    ebrRight->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit)  );
 
-    ebrTop->setValue( KoUnit::ptToUnit( m_layout.ptTop, m_unit ) );
+    ebrTop->setValue( KoUnit::toUserValue( m_layout.ptTop, m_unit ) );
     ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrTop->setRange( 0, KoUnit::ptToUnit( m_layout.ptHeight, m_unit)  );
+    ebrTop->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit)  );
 
-    ebrBottom->setValue( KoUnit::ptToUnit( m_layout.ptBottom, m_unit ) );
+    ebrBottom->setValue( KoUnit::toUserValue( m_layout.ptBottom, m_unit ) );
     ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrBottom->setRange( 0, KoUnit::ptToUnit( m_layout.ptHeight, m_unit)  );
+    ebrBottom->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit)  );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -594,7 +594,7 @@ void KoPageLayoutDia::setupTab3()
     lCSpacing->setBuddy( nCSpacing );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    nCSpacing->setValue( KoUnit::ptToUnit( m_cl.ptColumnSpacing, m_unit ) );
+    nCSpacing->setValue( KoUnit::toUserValue( m_cl.ptColumnSpacing, m_unit ) );
     connect( nCSpacing, SIGNAL( valueChanged(double) ),
              this, SLOT( nSpaceChanged( double ) ) );
 
@@ -652,7 +652,7 @@ void KoPageLayoutDia::setupTab4()
     nHSpacing = new KDoubleNumInput( gHeader, "" );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
-    nHSpacing->setValue( KoUnit::ptToUnit( kwhf.ptHeaderBodySpacing, m_unit ) );
+    nHSpacing->setValue( KoUnit::toUserValue( kwhf.ptHeaderBodySpacing, m_unit ) );
 
     headerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
@@ -682,7 +682,7 @@ void KoPageLayoutDia::setupTab4()
     nFSpacing = new KDoubleNumInput( gFooter, "" );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
-    nFSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFooterBodySpacing, m_unit ) );
+    nFSpacing->setValue(KoUnit::toUserValue( kwhf.ptFooterBodySpacing, m_unit ) );
 
     footerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
@@ -700,7 +700,7 @@ void KoPageLayoutDia::setupTab4()
     nFNSpacing = new KDoubleNumInput( gFootNote, "" );
     footNoteGrid->addWidget( nFNSpacing, 1, 1 );
 
-    nFNSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFootNoteBodySpacing, m_unit ) );
+    nFNSpacing->setValue(KoUnit::toUserValue( kwhf.ptFootNoteBodySpacing, m_unit ) );
 
     footNoteGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
@@ -750,8 +750,8 @@ void KoPageLayoutDia::formatChanged( int _format )
         m_layout.ptWidth = w;
         m_layout.ptHeight = h;
 
-        epgWidth->setValue( KoUnit::ptToUnit( m_layout.ptWidth, m_unit ) );
-        epgHeight->setValue( KoUnit::ptToUnit( m_layout.ptHeight, m_unit ) );
+        epgWidth->setValue( KoUnit::toUserValue( m_layout.ptWidth, m_unit ) );
+        epgHeight->setValue( KoUnit::toUserValue( m_layout.ptHeight, m_unit ) );
 
         updatePreview( m_layout );
     }
@@ -768,12 +768,12 @@ void KoPageLayoutDia::orientationChanged()
     // even though the orientation has not changed
     if (m_layout.orientation == oldOrientation) return;
 
-    m_layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
-    m_layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
-    m_layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );
-    m_layout.ptRight = KoUnit::ptFromUnit( ebrRight->value(), m_unit );
-    m_layout.ptTop = KoUnit::ptFromUnit( ebrTop->value(), m_unit );
-    m_layout.ptBottom = KoUnit::ptFromUnit( ebrBottom->value(), m_unit );
+    m_layout.ptWidth = KoUnit::fromUserValue( epgWidth->value(), m_unit );
+    m_layout.ptHeight = KoUnit::fromUserValue( epgHeight->value(), m_unit );
+    m_layout.ptLeft = KoUnit::fromUserValue( ebrLeft->value(), m_unit );
+    m_layout.ptRight = KoUnit::fromUserValue( ebrRight->value(), m_unit );
+    m_layout.ptTop = KoUnit::fromUserValue( ebrTop->value(), m_unit );
+    m_layout.ptBottom = KoUnit::fromUserValue( ebrBottom->value(), m_unit );
 
     // swap dimension and adjust margins
     qSwap( m_layout.ptWidth, m_layout.ptHeight );
@@ -793,7 +793,7 @@ void KoPageLayoutDia::changed(KDoubleNumInput *line, double &pt) {
         line->setValue( 0.0 );
     if ( line->value()<0)
         line->setValue( 0.0 );
-    pt = KoUnit::ptFromUnit( line->value(), m_unit );
+    pt = KoUnit::fromUserValue( line->value(), m_unit );
     retPressed = false;
 }
 
@@ -849,7 +849,7 @@ void KoPageLayoutDia::nColChanged( int _val )
 /*==================================================================*/
 void KoPageLayoutDia::nSpaceChanged( double _val )
 {
-    m_cl.ptColumnSpacing = KoUnit::ptFromUnit( _val, m_unit );
+    m_cl.ptColumnSpacing = KoUnit::fromUserValue( _val, m_unit );
     updatePreview( m_layout );
 }
 

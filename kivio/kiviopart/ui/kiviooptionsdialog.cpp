@@ -54,7 +54,7 @@ GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd
 {
   setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
     "guides_vertical":"guides_horizontal"));
-  QString s = KGlobal::_locale->formatNumber(KoUnit::ptToUnit(m_data->position(), u), 2);
+  QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
   s += " " + KoUnit::unitName(u);
   setText(1, s);
 }
@@ -66,14 +66,14 @@ GuidesListViewItem::~GuidesListViewItem()
 
 void GuidesListViewItem::setUnit(KoUnit::Unit u)
 {
-  QString s = KGlobal::_locale->formatNumber(KoUnit::ptToUnit(m_data->position(), u), 2);
+  QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
   s += " " + KoUnit::unitName(u);
   setText(1, s);
 }
 
 void GuidesListViewItem::setPosition(double p, KoUnit::Unit u)
 {
-  m_data->setPosition(KoUnit::ptFromUnit(p, u));
+  m_data->setPosition(KoUnit::fromUserValue(p, u));
   QString s = KGlobal::_locale->formatNumber(p, 2);
   s += " " + KoUnit::unitName(u);
   setText(1, s);
@@ -162,12 +162,12 @@ void KivioOptionsDialog::initGrid()
 
   KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
-  double pgw = KoUnit::ptToUnit(m_layout.ptWidth, unit);
-  double pgh = KoUnit::ptToUnit(m_layout.ptHeight, unit);
-  double fw = KoUnit::ptToUnit(d.freq.width(), unit);
-  double fh = KoUnit::ptToUnit(d.freq.height(), unit);
-  double sw = KoUnit::ptToUnit(d.snap.width(), unit);
-  double sh = KoUnit::ptToUnit(d.snap.height(), unit);
+  double pgw = KoUnit::toUserValue(m_layout.ptWidth, unit);
+  double pgh = KoUnit::toUserValue(m_layout.ptHeight, unit);
+  double fw = KoUnit::toUserValue(d.freq.width(), unit);
+  double fh = KoUnit::toUserValue(d.freq.height(), unit);
+  double sw = KoUnit::toUserValue(d.snap.width(), unit);
+  double sh = KoUnit::toUserValue(d.snap.height(), unit);
 
   m_gridChBox = new QCheckBox(i18n("Show &grid"), page);
   m_gridChBox->setChecked(d.isShow);
@@ -319,10 +319,10 @@ void KivioOptionsDialog::applyGrid()
 {
   KivioGridData d;
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  d.freq.setWidth(KoUnit::ptFromUnit(m_spaceHorizUSpin->value(), unit));
-  d.freq.setHeight(KoUnit::ptFromUnit(m_spaceVertUSpin->value(), unit));
-  d.snap.setWidth(KoUnit::ptFromUnit(m_snapHorizUSpin->value(), unit));
-  d.snap.setHeight(KoUnit::ptFromUnit(m_snapVertUSpin->value(), unit));
+  d.freq.setWidth(KoUnit::fromUserValue(m_spaceHorizUSpin->value(), unit));
+  d.freq.setHeight(KoUnit::fromUserValue(m_spaceVertUSpin->value(), unit));
+  d.snap.setWidth(KoUnit::fromUserValue(m_snapHorizUSpin->value(), unit));
+  d.snap.setHeight(KoUnit::fromUserValue(m_snapVertUSpin->value(), unit));
   d.isShow = m_gridChBox->isChecked();
   d.isSnap = m_snapChBox->isChecked();
   d.color = m_gridColorBtn->color();
@@ -367,10 +367,10 @@ void KivioOptionsDialog::defaultPage()
 void KivioOptionsDialog::defaultGrid()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  m_spaceHorizUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridXSpacing(), unit));
-  m_spaceVertUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridYSpacing(), unit));
-  m_snapHorizUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridXSnap(), unit));
-  m_snapVertUSpin->setValue(KoUnit::ptToUnit(Kivio::Config::gridYSnap(), unit));
+  m_spaceHorizUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
+  m_spaceVertUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
+  m_snapHorizUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
+  m_snapVertUSpin->setValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());
@@ -387,8 +387,8 @@ void KivioOptionsDialog::setLayoutText(const KoPageLayout& l)
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   QString txt = i18n("Format: %1, Width: %2 %4, Height: %3 %5").arg(
-    KoPageFormat::formatString(l.format)).arg(KoUnit::ptToUnit(l.ptWidth, unit))
-    .arg(KoUnit::ptToUnit(l.ptHeight, unit)).arg(KoUnit::unitName(unit)).arg(
+    KoPageFormat::formatString(l.format)).arg(KoUnit::toUserValue(l.ptWidth, unit))
+    .arg(KoUnit::toUserValue(l.ptHeight, unit)).arg(KoUnit::unitName(unit)).arg(
     KoUnit::unitName(unit));
   m_layoutTxtLbl->setText(txt);
 }
@@ -486,14 +486,14 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
   m_orientHorizRBtn->setChecked(data->orientation() == Qt::Horizontal);
   m_orientVertRBtn->setChecked(data->orientation() != Qt::Horizontal);
 
-  double max = KoUnit::ptToUnit(m_layout.ptWidth, unit);
+  double max = KoUnit::toUserValue(m_layout.ptWidth, unit);
 
   if(data->orientation() == Qt::Horizontal) {
-    max = KoUnit::ptToUnit(m_layout.ptHeight, unit);
+    max = KoUnit::toUserValue(m_layout.ptHeight, unit);
   }
 
   m_posUSpin->setMaxValue(max);
-  m_posUSpin->setValue(KoUnit::ptToUnit(data->position(), unit));
+  m_posUSpin->setValue(KoUnit::toUserValue(data->position(), unit));
 }
 
 void KivioOptionsDialog::changePos(double p)

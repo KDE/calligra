@@ -156,8 +156,8 @@ VEllipseTool::shape( bool interactive ) const
 {
 	if( interactive )
 	{
-		double d1 = KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ) / 2.0;
-		double d2 = KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ) / 2.0;
+		double d1 = KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ) / 2.0;
+		double d2 = KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ) / 2.0;
 		return
 			new VEllipse(
 				0L,
@@ -195,7 +195,7 @@ VEllipseTool::mouseMove()
 		if( m_startAngle < 0 )
 			m_startAngle += 360.0;
 	}
-	else 
+	else
 	{
 		m_endAngle = atan2( last().y() - m_center.y(), last().x() - m_center.x() );
 		m_endAngle = ( m_endAngle / VGlobal::pi_2 ) * 90.0;

@@ -61,7 +61,7 @@ QString KoUnit::unitDescription( Unit _unit )
     }
 }
 
-double KoUnit::ptToUnit( double ptValue, Unit unit )
+double KoUnit::toUserValue( double ptValue, Unit unit )
 {
     switch ( unit ) {
     case U_MM:
@@ -84,7 +84,7 @@ double KoUnit::ptToUnit( double ptValue, Unit unit )
     }
 }
 
-double KoUnit::ptToUnitUnrounded( const double ptValue, const Unit unit )
+double KoUnit::ptToUnit( const double ptValue, const Unit unit )
 {
     switch ( unit )
     {
@@ -108,12 +108,12 @@ double KoUnit::ptToUnitUnrounded( const double ptValue, const Unit unit )
     }
 }
 
-QString KoUnit::userValue( double ptValue, Unit unit )
+QString KoUnit::toUserStringValue( double ptValue, Unit unit )
 {
-    return KGlobal::locale()->formatNumber( ptToUnit( ptValue, unit ) );
+    return KGlobal::locale()->formatNumber( toUserValue( ptValue, unit ) );
 }
 
-double KoUnit::ptFromUnit( double value, Unit unit )
+double KoUnit::fromUserValue( double value, Unit unit )
 {
     switch ( unit ) {
     case U_MM:
@@ -136,10 +136,9 @@ double KoUnit::ptFromUnit( double value, Unit unit )
     }
 }
 
-double KoUnit::fromUserValue( const QString& value, Unit unit )
+double KoUnit::fromUserValue( const QString& value, Unit unit, bool* ok )
 {
-    bool ok; // TODO pass as parameter
-    return ptFromUnit( KGlobal::locale()->readNumber( value, &ok ), unit );
+    return fromUserValue( KGlobal::locale()->readNumber( value, ok ), unit );
 }
 
 double KoUnit::parseValue( QString value, double defaultVal )
@@ -161,16 +160,46 @@ double KoUnit::parseValue( QString value, double defaultVal )
     if ( unit == "pt" )
         return val;
 
-    Unit u = KoUnit::unit( unit );
-    if( u != U_PT )
-        return ptFromUnit( val, u );
+    bool ok;
+    Unit u = KoUnit::unit( unit, &ok );
+    if( ok )
+        return fromUserValue( val, u );
+
     if( unit == "m" )
-        return ptFromUnit( val * 10.0, U_DM );
+        return fromUserValue( val * 10.0, U_DM );
     else if( unit == "km" )
-        return ptFromUnit( val * 10000.0, U_DM );
+        return fromUserValue( val * 10000.0, U_DM );
     kdWarning() << "KoUnit::parseValue: Unit " << unit << " is not supported, please report." << endl;
 
     // TODO : add support for mi/ft ?
     return defaultVal;
 }
 
+KoUnit::Unit KoUnit::unit( const QString &_unitName, bool* ok )
+{
+    if ( ok )
+        *ok = true;
+    if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
+    if ( _unitName == QString::fromLatin1( "cm" ) ) return U_CM;
+    if ( _unitName == QString::fromLatin1( "dm" ) ) return U_DM;
+    if ( _unitName == QString::fromLatin1( "in" )
+         || _unitName == QString::fromLatin1("inch") /*compat*/ ) return U_INCH;
+    if ( _unitName == QString::fromLatin1( "pi" ) ) return U_PI;
+    if ( _unitName == QString::fromLatin1( "dd" ) ) return U_DD;
+    if ( _unitName == QString::fromLatin1( "cc" ) ) return U_CC;
+    if ( ok )
+        *ok = false;
+    return U_PT;
+}
+
+QString KoUnit::unitName( Unit _unit )
+{
+    if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
+    if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
+    if ( _unit == U_DM ) return QString::fromLatin1( "dm" );
+    if ( _unit == U_INCH ) return QString::fromLatin1( "in" );
+    if ( _unit == U_PI ) return QString::fromLatin1( "pi" );
+    if ( _unit == U_DD ) return QString::fromLatin1( "dd" );
+    if ( _unit == U_CC ) return QString::fromLatin1( "cc" );
+    return QString::fromLatin1( "pt" );
+}

@@ -109,8 +109,8 @@ KarbonPart::initDoc()
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
 										  "*.karbon", i18n( "Karbon14" ), dlgtype, "karbon_template" );
 	// set as default A4 paper
-	m_pageLayout.ptWidth	= KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
-	m_pageLayout.ptHeight	= KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );
+	m_pageLayout.ptWidth	= KoUnit::fromUserValue( PG_A4_WIDTH, KoUnit::U_MM );
+	m_pageLayout.ptHeight	= KoUnit::fromUserValue( PG_A4_HEIGHT, KoUnit::U_MM );
 	m_pageLayout.format		= PG_DIN_A4;
 	m_doc.setWidth( m_pageLayout.ptWidth );
 	m_doc.setHeight( m_pageLayout.ptHeight );

@@ -96,7 +96,7 @@ VStarOptionsWidget::setEdges( int v )
 		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
-void 
+void
 VStarOptionsWidget::setInnerRadius( double v )
 {
 	m_innerR->changeValue( v );
@@ -124,7 +124,7 @@ VStarOptionsWidget::edges() const
 	return m_edges->value();
 }
 
-double 
+double
 VStarOptionsWidget::innerRadius() const
 {
 	return m_innerR->value();
@@ -206,9 +206,9 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
-				m_optionsWidget->edges(), 0.0, m_optionsWidget->innerAngle(), 
+				KoUnit::fromUserValue( m_optionsWidget->outerRadius(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->innerRadius(), view()->part()->unit() ),
+				m_optionsWidget->edges(), 0.0, m_optionsWidget->innerAngle(),
 				m_optionsWidget->roundness(), (VStar::VStarType)m_optionsWidget->type() );
 	}
 	else

@@ -60,7 +60,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
 
     m_pHeight = new KDoubleNumInput( page );
     m_pHeight->setPrecision( 2 );
-    m_pHeight->setValue( KoUnit::ptToUnit( rowHeight,
+    m_pHeight->setValue( KoUnit::toUserValue( rowHeight,
                                            m_pView->doc()->getUnit() ) );
     m_pHeight->setSuffix( m_pView->doc()->getUnitName() );
     hLay->addWidget( m_pHeight );
@@ -76,13 +76,13 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     m_pHeight->setFocus();
 
     //store the visible value, for later check for changes
-    rowHeight = KoUnit::ptFromUnit( m_pHeight->value(), m_pView->doc()->getUnit() );
+    rowHeight = KoUnit::fromUserValue( m_pHeight->value(), m_pView->doc()->getUnit() );
 }
 
 void KSpreadResizeRow::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    double height = KoUnit::ptFromUnit( m_pHeight->value(), m_pView->doc()->getUnit() );
+    double height = KoUnit::fromUserValue( m_pHeight->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if ( fabs( height - rowHeight ) > DBL_EPSILON )
@@ -105,7 +105,7 @@ void KSpreadResizeRow::slotOk()
 
 void KSpreadResizeRow::slotDefault()
 {
-    double height = KoUnit::ptToUnit( heightOfRow,m_pView->doc()->getUnit() );
+    double height = KoUnit::toUserValue( heightOfRow,m_pView->doc()->getUnit() );
     m_pHeight->setValue( height );
 }
 
@@ -130,7 +130,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
 
     m_pWidth = new KDoubleNumInput( page );
     m_pWidth->setPrecision( 2 );
-    m_pWidth->setValue( KoUnit::ptToUnit( columnWidth, m_pView->doc()->getUnit() ) );
+    m_pWidth->setValue( KoUnit::toUserValue( columnWidth, m_pView->doc()->getUnit() ) );
     m_pWidth->setSuffix( m_pView->doc()->getUnitName() );
     hLay->addWidget( m_pWidth );
 
@@ -145,13 +145,13 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     m_pWidth->setFocus();
 
     //store the visible value, for later check for changes
-    columnWidth = KoUnit::ptFromUnit( m_pWidth->value(), m_pView->doc()->getUnit() );
+    columnWidth = KoUnit::fromUserValue( m_pWidth->value(), m_pView->doc()->getUnit() );
 }
 
 void KSpreadResizeColumn::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
-    double width = KoUnit::ptFromUnit( m_pWidth->value(), m_pView->doc()->getUnit() );
+    double width = KoUnit::fromUserValue( m_pWidth->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if ( fabs( width - columnWidth ) > DBL_EPSILON )
@@ -175,7 +175,7 @@ void KSpreadResizeColumn::slotOk()
 
 void KSpreadResizeColumn::slotDefault()
 {
-    double width = KoUnit::ptToUnit( colWidth, m_pView->doc()->getUnit() );
+    double width = KoUnit::toUserValue( colWidth, m_pView->doc()->getUnit() );
     m_pWidth->setValue( width );
 }
 

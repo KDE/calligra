@@ -127,8 +127,8 @@ VPolygonTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
 				m_optionsWidget->edges(), 0, 0, 0, VStar::polygon );
 	}
 	else

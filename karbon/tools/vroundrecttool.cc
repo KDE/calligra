@@ -138,10 +138,10 @@ VRoundRectTool::shape( bool interactive ) const
 			new VRectangle(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->roundx(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->roundy(), view()->part()->unit() ));
+				KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundx(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundy(), view()->part()->unit() ));
 	}
 	else
 		return
@@ -150,8 +150,8 @@ VRoundRectTool::shape( bool interactive ) const
 				m_p,
 				m_d1,
 				m_d2,
-				KoUnit::ptFromUnit( m_optionsWidget->roundx(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->roundy(), view()->part()->unit() ) );
+				KoUnit::fromUserValue( m_optionsWidget->roundx(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->roundy(), view()->part()->unit() ) );
 }
 
 bool

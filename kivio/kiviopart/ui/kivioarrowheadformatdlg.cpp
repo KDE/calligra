@@ -113,12 +113,12 @@ int KivioArrowHeadFormatDlg::startAHType()
 
 double KivioArrowHeadFormatDlg::startAHWidth()
 {
-  return KoUnit::ptFromUnit(m_startAHWidthUSBox->value(), m_unit);
+  return KoUnit::fromUserValue(m_startAHWidthUSBox->value(), m_unit);
 }
 
 double KivioArrowHeadFormatDlg::startAHHeight()
 {
-  return KoUnit::ptFromUnit(m_startAHHeightUSBox->value(), m_unit);
+  return KoUnit::fromUserValue(m_startAHHeightUSBox->value(), m_unit);
 }
 
 int KivioArrowHeadFormatDlg::endAHType()
@@ -128,12 +128,12 @@ int KivioArrowHeadFormatDlg::endAHType()
 
 double KivioArrowHeadFormatDlg::endAHWidth()
 {
-  return KoUnit::ptFromUnit(m_endAHWidthUSBox->value(), m_unit);
+  return KoUnit::fromUserValue(m_endAHWidthUSBox->value(), m_unit);
 }
 
 double KivioArrowHeadFormatDlg::endAHHeight()
 {
-  return KoUnit::ptFromUnit(m_endAHHeightUSBox->value(), m_unit);
+  return KoUnit::fromUserValue(m_endAHHeightUSBox->value(), m_unit);
 }
 
 void KivioArrowHeadFormatDlg::setUnit(KoUnit::Unit u)
@@ -152,12 +152,12 @@ void KivioArrowHeadFormatDlg::setStartAHType(int t)
 
 void KivioArrowHeadFormatDlg::setStartAHWidth(double w)
 {
-  m_startAHWidthUSBox->setValue(KoUnit::ptToUnit(w, m_unit));
+  m_startAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setStartAHHeight(double h)
 {
-  m_startAHHeightUSBox->setValue(KoUnit::ptToUnit(h, m_unit));
+  m_startAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setEndAHType(int t)
@@ -167,12 +167,12 @@ void KivioArrowHeadFormatDlg::setEndAHType(int t)
 
 void KivioArrowHeadFormatDlg::setEndAHWidth(double w)
 {
-  m_endAHWidthUSBox->setValue(KoUnit::ptToUnit(w, m_unit));
+  m_endAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setEndAHHeight(double h)
 {
-  m_endAHHeightUSBox->setValue(KoUnit::ptToUnit(h, m_unit));
+  m_endAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::slotDefault()

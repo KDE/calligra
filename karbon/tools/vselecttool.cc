@@ -47,10 +47,10 @@ VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
 	new QRadioButton( i18n( "Select in current layer" ), group );
 	new QRadioButton( i18n( "Select in visible layers" ), group );
 	new QRadioButton( i18n( "Select in selected layers" ), group );
-	
+
 	group->setRadioButtonExclusive( true );
 	group->setButton( part->document().selectionMode() );
-	
+
 	connect( group, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
 
 	group->setInsideMargin( 4 );
@@ -307,7 +307,7 @@ VSelectTool::updateStatusBar() const
 	{
 		KoRect rect = view()->part()->document().selection()->boundingBox();
 
-		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
+		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::toUserValue( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
 
 		VSelectionDescription selectionDesc;
 		selectionDesc.visit( *view()->part()->document().selection() );

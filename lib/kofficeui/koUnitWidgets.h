@@ -51,7 +51,7 @@ public:
 
 	void setValueInUnit( double value, KoUnit::Unit unit )
 	{
-		changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value, unit ), m_unit ) );
+		changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
 	}
 
 	void setPrecision( unsigned int precision ) { m_precision = precision; };

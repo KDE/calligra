@@ -231,20 +231,20 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw the numbers
     double dist = lineDistance();
     int maxwidth = 0;
-    
+
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
-        str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+        str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
         maxwidth = QMAX( maxwidth, textwidth );
     }
-    
+
     // Make sure that the ruler stays readable at lower zoom levels
     while( dist <= maxwidth ) {
         dist += lineDistance();
     }
-    
+
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
-        str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+        str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
         maxwidth = QMAX( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
@@ -397,21 +397,21 @@ void KoRuler::drawVertical( QPainter *_painter )
 
         // Draw the numbers
         double dist = lineDistance();
-        int maxheight = 0;        
-        
+        int maxheight = 0;
+
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
-            str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+            str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textwidth = fm.width( str );
             maxheight = QMAX( maxheight, textwidth );
         }
-        
+
         // Make sure that the ruler stays readable at lower zoom levels
         while( dist <= maxheight ) {
             dist += lineDistance();
         }
-        
+
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
-            str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
+            str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textheight = fm.height();
             int textwidth = fm.width( str );
             maxheight = QMAX( maxheight, textwidth );
@@ -422,7 +422,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             p.drawText( 0, 0, textwidth, textheight, AlignLeft | AlignTop, str );
             p.restore();
         }
-        
+
         // Draw the medium-sized lines
         if ( dist > maxheight + 2 )
         {
@@ -978,7 +978,7 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
 
 double KoRuler::makeIntern( double _v )
 {
-    return KoUnit::ptFromUnit( _v, m_unit );
+    return KoUnit::fromUserValue( _v, m_unit );
 }
 
 void KoRuler::setupMenu()
@@ -1148,7 +1148,7 @@ void KoRuler::slotMenuActivated( int i )
     {
         KoUnit::Unit unit = static_cast<KoUnit::Unit>(i);
         setUnit( unit );
-        emit unitChanged( KoUnit::unitName( unit ) );
+        emit unitChanged( unit );
     }
 }
 
@@ -1158,10 +1158,10 @@ QSize KoRuler::minimumSizeHint() const
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
     font.setPointSize( 8 );
     QFontMetrics fm( font );
-    
+
     size.setWidth( fm.height() + 4 );
     size.setHeight( fm.height() + 4 );
-    
+
     return size;
 }
 

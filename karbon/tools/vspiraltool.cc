@@ -55,7 +55,7 @@ VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidg
 	m_clockwise = new KComboBox( false, group );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
 	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
-	
+
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );
 
@@ -173,7 +173,7 @@ VSpiralTool::shape( bool interactive ) const
 			new VSpiral(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->radius(), view()->part()->unit() ),
 				m_optionsWidget->segments(),
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),

@@ -142,28 +142,28 @@ void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
 void KivioStencilGeometryPanel::xChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::ptFromUnit(d, m_unit), KoUnit::ptFromUnit(m_pY->value(), m_unit) );
+    emit positionChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pY->value(), m_unit) );
   }
 }
 
 void KivioStencilGeometryPanel::yChange( double d )
 {
   if(m_emitSignals) {
-    emit positionChanged( KoUnit::ptFromUnit(m_pX->value(), m_unit), KoUnit::ptFromUnit(d, m_unit) );
+    emit positionChanged( KoUnit::fromUserValue(m_pX->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
 void KivioStencilGeometryPanel::wChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::ptFromUnit(d, m_unit), KoUnit::ptFromUnit(m_pH->value(), m_unit) );
+    emit sizeChanged( KoUnit::fromUserValue(d, m_unit), KoUnit::fromUserValue(m_pH->value(), m_unit) );
   }
 }
 
 void KivioStencilGeometryPanel::hChange( double d )
 {
   if(m_emitSignals) {
-    emit sizeChanged( KoUnit::ptFromUnit(m_pW->value(), m_unit), KoUnit::ptFromUnit(d, m_unit) );
+    emit sizeChanged( KoUnit::fromUserValue(m_pW->value(), m_unit), KoUnit::fromUserValue(d, m_unit) );
   }
 }
 
@@ -176,20 +176,20 @@ void KivioStencilGeometryPanel::rotationChange(int d)
 
 void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
-  m_pX->setValue(KoUnit::ptToUnit(x, m_unit));
-  m_pY->setValue(KoUnit::ptToUnit(y, m_unit));
+  m_pX->setValue(KoUnit::toUserValue(x, m_unit));
+  m_pY->setValue(KoUnit::toUserValue(y, m_unit));
 }
 
 void KivioStencilGeometryPanel::setSize( double w, double h )
 {
-  m_pW->setValue(KoUnit::ptToUnit(w, m_unit));
-  m_pH->setValue(KoUnit::ptToUnit(h, m_unit));
+  m_pW->setValue(KoUnit::toUserValue(w, m_unit));
+  m_pH->setValue(KoUnit::toUserValue(h, m_unit));
 }
 
 void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)
 {
-  m_pX->setMaxValue(KoUnit::ptToUnit(l.ptWidth, m_unit));
-  m_pY->setMaxValue(KoUnit::ptToUnit(l.ptHeight, m_unit));
+  m_pX->setMaxValue(KoUnit::toUserValue(l.ptWidth, m_unit));
+  m_pY->setMaxValue(KoUnit::toUserValue(l.ptHeight, m_unit));
 }
 
 void KivioStencilGeometryPanel::setRotation(int d)

@@ -127,8 +127,8 @@ VSinusTool::shape( bool interactive ) const
 			new VSinus(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->width(), view()->part()->unit() ),
+				KoUnit::fromUserValue( m_optionsWidget->height(), view()->part()->unit() ),
 				m_optionsWidget->periods() );
 	else
 		return

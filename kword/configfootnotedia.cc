@@ -102,7 +102,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QGridLayout *layout = new QGridLayout( 0, 1, 1, 0, 6);
 
-    spWidth = new KDoubleNumInput( 1, page );
+    spWidth = new KDoubleNumInput( 1, page ); // TODO port to KoUnitWidgets
     spWidth->setPrecision (1);
     spWidth->setRange( 0, 5, 0.5 ,false );
     spWidth->setValue( m_doc->footNoteSeparatorLineWidth());

@@ -792,7 +792,7 @@ public slots:
     void reorganize();
 
 protected slots:
-    void unitChanged( QString  );
+    void unitChanged( KoUnit::Unit );
 
 protected:
     void resizeEvent( QResizeEvent *e );

@@ -4298,7 +4298,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     QString tmpSize;
     if ( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2").arg( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ),
+        tmpSize = i18n("Height: %1 %2").arg( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ),
                                                                m_pView->doc()->getUnit() ) )
                                        .arg( m_pView->doc()->getUnitName() );
     else
@@ -5037,7 +5037,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     QString tmpSize;
     if ( m_iResizePos != x )
         tmpSize = i18n("Width: %1 %2")
-                  .arg( KGlobal::locale()->formatNumber( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
+                  .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
                                                                            m_pView->doc()->getUnit() )))
                   .arg( m_pView->doc()->getUnitName() );
     else

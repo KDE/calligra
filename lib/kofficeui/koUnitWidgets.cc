@@ -39,45 +39,32 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
     const int res = regexp.search( s );
-   
+
     if ( res == -1 )
     {
         // Nothing like an unit? The user is probably editing the unit
-        kdDebug(30004) << "Intermediate (no unit)" << endl;    
+        kdDebug(30004) << "Intermediate (no unit)" << endl;
         return Intermediate;
     }
-        
+
     // ### TODO: are all the QString::stripWhiteSpace really necessary?
     const QString number ( s.left( res ).stripWhiteSpace() );
-    const QString unit ( regexp.cap( 1 ).stripWhiteSpace().lower() );
-    
-    kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
-    
+    const QString unitName ( regexp.cap( 1 ).stripWhiteSpace().lower() );
+
+    kdDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
+
     bool ok = false;
     const double value = m_base->toDouble( number, &ok );
     double newVal = 0.0;
     if( ok )
     {
-        if ( unit == "mm"  )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_MM );
-        else if( unit == "cm" ) 
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_CM );
-        else if( unit == "dm" ) 
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_DM );
-        else if( unit == "in" )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_INCH );
-        else if( unit == "pt" )
-            newVal = value;
-        else if( unit == "dd" )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_DD );
-        else if( unit == "cc" )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_CC );
-        else if( unit == "pi" )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_PI );
+        KoUnit::Unit unit = KoUnit::unit( unitName, &ok );
+        if ( ok )
+            newVal = KoUnit::fromUserValue( value, unit );
         else
         {
             // Probably the user is trying to edit the unit
-            kdDebug(30004) << "Intermediate (unknown unit)" << endl;    
+            kdDebug(30004) << "Intermediate (unknown unit)" << endl;
             return Intermediate;
         }
     }
@@ -87,11 +74,11 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
         return Invalid;
     }
 
-    newVal = KoUnit::ptToUnitUnrounded( newVal, m_base->m_unit );
-    
+    newVal = KoUnit::ptToUnit( newVal, m_base->m_unit );
+
     m_base->changeValue( newVal );
     s = m_base->getVisibleText( newVal );
-    
+
     return result;
 }
 
@@ -124,11 +111,11 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double 
     : KDoubleSpinBox( lower, upper, step, value, precision, parent, name ), KoUnitDoubleBase( unit, precision ),
     m_lowerInPoints( lower ), m_upperInPoints( upper ), m_stepInPoints( step )
 {
-	m_validator = new KoUnitDoubleValidator( this, this );
-	QSpinBox::setValidator( m_validator );
-	setAcceptLocalizedNumbers( true );
+    m_validator = new KoUnitDoubleValidator( this, this );
+    QSpinBox::setValidator( m_validator );
+    setAcceptLocalizedNumbers( true );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
+    changeValue( KoUnit::ptToUnit( value, unit ) );
 }
 
 void
@@ -140,18 +127,18 @@ KoUnitDoubleSpinBox::changeValue( double val )
 void
 KoUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-    double oldvalue = KoUnit::ptFromUnit( KDoubleSpinBox::value(), m_unit );
-    setMinValue( KoUnit::ptToUnit( m_lowerInPoints, unit ) );
-    setMaxValue( KoUnit::ptToUnit( m_upperInPoints, unit ) );
-    setLineStep( KoUnit::ptToUnit( m_stepInPoints, unit ) );
-    KDoubleSpinBox::setValue( KoUnit::ptToUnitUnrounded( oldvalue, unit ) );
+    double oldvalue = KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
+    setMinValue( KoUnit::toUserValue( m_lowerInPoints, unit ) );
+    setMaxValue( KoUnit::toUserValue( m_upperInPoints, unit ) );
+    setLineStep( KoUnit::toUserValue( m_stepInPoints, unit ) );
+    KDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     m_unit = unit;
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 
 double KoUnitDoubleSpinBox::value( void ) const
 {
-    return KoUnit::ptFromUnit( KDoubleSpinBox::value(), m_unit );
+    return KoUnit::fromUserValue( KDoubleSpinBox::value(), m_unit );
 }
 
 
@@ -164,7 +151,7 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, doubl
 	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
+    changeValue(  KoUnit::ptToUnit( value, unit ) );
 }
 
 void
@@ -179,9 +166,9 @@ KoUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
-    m_lower = KoUnit::ptToUnitUnrounded( m_lowerInPoints, unit );
-    m_upper = KoUnit::ptToUnitUnrounded( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnitUnrounded( KoUnit::ptFromUnit( m_value, old ), unit ) );
+    m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
+    m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
+	changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
 }
 
 bool
@@ -202,7 +189,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 
 double KoUnitDoubleLineEdit::value( void ) const
 {
-    return KoUnit::ptFromUnit( m_value, m_unit );
+    return KoUnit::fromUserValue( m_value, m_unit );
 }
 
 
@@ -215,7 +202,7 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, doubl
 	m_validator = new KoUnitDoubleValidator( this, this );
 	lineEdit()->setValidator( m_validator );
     setUnit( unit );
-    changeValue(  KoUnit::ptToUnitUnrounded( value, unit ) );
+    changeValue(  KoUnit::ptToUnit( value, unit ) );
 	connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
@@ -257,9 +244,9 @@ KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 {
 	KoUnit::Unit old = m_unit;
 	m_unit = unit;
-    m_lower = KoUnit::ptToUnitUnrounded( m_lowerInPoints, unit );
-    m_upper = KoUnit::ptToUnitUnrounded( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnitUnrounded( KoUnit::ptFromUnit( m_value, old ), unit ) );
+    m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
+    m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
+	changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
 }
 
 bool
@@ -280,11 +267,11 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 
 double KoUnitDoubleComboBox::value( void ) const
 {
-    return KoUnit::ptFromUnit( m_value, m_unit );
+    return KoUnit::fromUserValue( m_value, m_unit );
 }
 
 
-KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value,         
+KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value,
     KoUnit::Unit unit, unsigned int precision, const char *name )
     : QWidget( parent ), m_step( step )//, m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
@@ -303,7 +290,7 @@ KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lowe
 	layout->addWidget( down, 1, 0 );
 	connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
 
-	m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnitUnrounded( lower, unit ), KoUnit::ptToUnitUnrounded( upper, unit ), value, unit, precision, name );
+	m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( lower, unit ), KoUnit::ptToUnit( upper, unit ), value, unit, precision, name );
 	connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
 	layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
 }

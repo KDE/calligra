@@ -239,13 +239,13 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         {
             KoTabulatorList tabList;
             KoTabulator tab;
-            tab.ptPos = KoUnit::ptFromUnit( floor( KoUnit::toMM( fs->frame( 0 )->width() )  ), KoUnit::unit("mm") );
+            tab.ptPos = KoUnit::fromUserValue( floor( KoUnit::toMM( fs->frame( 0 )->width() )  ), KoUnit::unit("mm") );
             tab.type = T_RIGHT;
             tab.filling = TF_DOTS;
             tab.ptWidth = 0.5;
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
-            style->paragLayout().margins[QStyleSheetItem::MarginLeft] = KoUnit::ptFromUnit( (depth*4.5), KoUnit::unit("mm") );
+            style->paragLayout().margins[QStyleSheetItem::MarginLeft] = KoUnit::fromUserValue( (depth*4.5), KoUnit::unit("mm") );
         }
         style = fs->kWordDocument()->styleCollection()->addStyleTemplate( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
