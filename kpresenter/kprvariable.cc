@@ -31,7 +31,7 @@ KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
 {
 }
 
-KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat )
+KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc,  int _correct, bool _forceDefaultFormat )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
     switch(type) {
@@ -54,13 +54,13 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
-                QCString result = KoDateVariable::formatStr();
+                QCString result = KoDateVariable::formatStr(_correct);
                 if ( result == 0 )//we cancel insert variable
                     return 0L;
                 varFormat =  coll->format( result );
             }
         }
-        return new KPrDateVariable( textdoc, subtype, varFormat, this, m_doc );
+        return new KPrDateVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     case VT_TIME:
         if ( !varFormat )
         {
@@ -68,15 +68,15 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
                 varFormat = coll->format( KoTimeVariable::defaultFormat() );
             else
             {
-                QCString result = KoTimeVariable::formatStr();
+                QCString result = KoTimeVariable::formatStr(_correct);
                 if ( result == 0 )//we cancel insert variable
                     return 0L;
                 varFormat =  coll->format( result );
             }
         }
-        return new KPrTimeVariable( textdoc, subtype, varFormat, this, m_doc );
+        return new KPrTimeVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     default:
-        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );
+        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc, _correct, _forceDefaultFormat);
     }
 }
 
@@ -210,8 +210,8 @@ void KPrFieldVariable::slotChangeSubType()
     }
 }
 
-KPrDateVariable::KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc )
-    : KoDateVariable( textdoc, subtype, varFormat, _varColl ),
+KPrDateVariable::KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc, int _correct )
+    : KoDateVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 {
 }
@@ -314,8 +314,8 @@ void KPrDateVariable::slotChangeFormat()
     }
 }
 
-KPrTimeVariable::KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc )
-    : KoTimeVariable( textdoc, subtype, varFormat, _varColl ),
+KPrTimeVariable::KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc,int _correct )
+    : KoTimeVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 {
 }

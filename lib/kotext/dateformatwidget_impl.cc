@@ -11,6 +11,7 @@
 #include <klocale.h>
 #include <qlineedit.h>
 #include <kdebug.h>
+#include <knuminput.h>
 /*
  *  Constructs a DateFormatWidget which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'fl'
@@ -48,6 +49,7 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->setCurrentItem( 0 );
 
     combo1->insertStringList(listDateFormat);
+    label_correction->setText(i18n("Correct in Days"));
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
@@ -123,4 +125,9 @@ void DateFormatWidget::updateLabel()
 QString DateFormatWidget::resultString()
 {
     return combo1->currentText();
+}
+
+int DateFormatWidget::correctValue()
+{
+    return KIntNumInput1->value();
 }

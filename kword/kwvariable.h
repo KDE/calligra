@@ -58,7 +58,7 @@ class KWVariableCollection : public KoVariableCollection
 {
  public:
     KWVariableCollection(KWVariableSettings *_settings);
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat=false, bool loadFootNote= true );
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat=false, bool loadFootNote= true );
     QPtrList<KAction> variableActionList();
 
  private:
@@ -196,7 +196,7 @@ class KWDateVariable : public QObject, public KoDateVariable
 {
     Q_OBJECT
 public:
-    KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc );
+    KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc, int _correct );
 
     QPtrList<KAction> actionList();
 
@@ -217,7 +217,7 @@ class KWTimeVariable : public QObject, public KoTimeVariable
 
     Q_OBJECT
 public:
-    KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc );
+    KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KWDocument *_doc, int _correct );
 
     QPtrList<KAction> actionList();
 

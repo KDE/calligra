@@ -721,10 +721,13 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             QDomElement typeElem = varElem.namedItem( "TYPE" ).toElement();
             int type = typeElem.attribute( "type" ).toInt();
             QString key = typeElem.attribute( "key" );
+            int correct = 0;
+            if (typeElem.hasAttribute( "correct" ))
+                correct = typeElem.attribute("correct").toInt();
             kdDebug(33001) << "loadKTextObject variable type=" << type << " key=" << key << endl;
             KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
             // If varFormat is 0 (no key specified), the default format will be used.
-            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc, true/* force default format for date/time*/ );
+            KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(), varFormat, lastParag->textDocument(),m_doc, correct, true/* force default format for date/time*/ );
             if ( var )
             {
                 var->load( varElem );
@@ -1952,7 +1955,7 @@ void KPTextView::insertVariable( int type, int subtype )
         }
     }
     else
-        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
+        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc, 0);
     if ( var )
     {
         insertVariable( var , 0L, true,refreshCustomMenu);

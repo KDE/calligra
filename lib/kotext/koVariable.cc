@@ -543,6 +543,8 @@ void KoVariable::save( QDomElement &parentElem )
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
     typeElem.setAttribute( "key", m_varFormat->key() );
     typeElem.setAttribute( "text", text(true) );
+    if ( correctValue() != 0)
+        typeElem.setAttribute( "correct", correctValue() );
     saveVariable( variableElem );
 }
 
@@ -550,7 +552,7 @@ void KoVariable::load( QDomElement & )
 {
 }
 
-KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat )
+KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
 {
     QCString string;
     QStringList stringList;
@@ -564,7 +566,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             if ( _forceDefaultFormat )
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
-                varFormat = coll->format( KoDateVariable::formatStr() );
+                varFormat = coll->format( KoDateVariable::formatStr(_correct) );
         }
         case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
@@ -572,7 +574,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             if ( _forceDefaultFormat )
                 varFormat = coll->format( KoTimeVariable::defaultFormat() );
             else
-                varFormat = coll->format( KoTimeVariable::formatStr() );
+                varFormat = coll->format( KoTimeVariable::formatStr(_correct) );
         }
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );
@@ -597,11 +599,11 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     switch ( type ) {
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
-            var = new KoDateVariable( textdoc, subtype, varFormat,this );
+            var = new KoDateVariable( textdoc, subtype, varFormat,this,_correct );
             break;
         case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
-            var = new KoTimeVariable( textdoc, subtype, varFormat, this );
+            var = new KoTimeVariable( textdoc, subtype, varFormat, this, _correct );
             break;
         case VT_PGNUM:
             kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
@@ -636,8 +638,8 @@ void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
 /******************************************************************/
 /* Class: KoDateVariable                                          */
 /******************************************************************/
-KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat, KoVariableCollection *_varColl)
-    : KoVariable( textdoc, _varFormat,_varColl ), m_subtype( subtype )
+KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat, KoVariableCollection *_varColl, int _correctDate)
+    : KoVariable( textdoc, _varFormat,_varColl ), m_subtype( subtype ), m_correctDate( _correctDate)
 {
 }
 
@@ -649,12 +651,12 @@ QString KoDateVariable::fieldCode()
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
-        m_varValue = QVariant(QDate::currentDate());
+        m_varValue = QVariant(QDate::currentDate().addDays(m_correctDate));
     else
     {
         // Only if never set before (i.e. upon insertion)
         if ( m_varValue.toDate().isNull() )
-            m_varValue= QVariant(QDate::currentDate());
+            m_varValue= QVariant(QDate::currentDate().addDays(m_correctDate));
     }
     resize();
 }
@@ -664,10 +666,12 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
     QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
     varElem.appendChild( elem );
     QDate date = m_varValue.toDate();
+    date = date.addDays( (-1*m_correctDate) );//remove correctDate value otherwise value stored is bad
     elem.setAttribute( "year", date.year() );
     elem.setAttribute( "month", date.month() );
     elem.setAttribute( "day", date.day() );
     elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // to be extended
+    elem.setAttribute( "correct", m_correctDate);
 }
 
 void KoDateVariable::load( QDomElement& elem )
@@ -681,10 +685,13 @@ void KoDateVariable::load( QDomElement& elem )
         int m = e.attribute("month").toInt();
         int d = e.attribute("day").toInt();
         bool fix = e.attribute("fix").toInt() == 1;
+        if ( e.hasAttribute("correct"))
+            m_correctDate = e.attribute("correct").toInt();
         if ( fix )
         {
             QDate date;
             date.setYMD( y, m, d );
+            date = date.addDays( m_correctDate );
             m_varValue = QVariant( date );
         }
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
@@ -731,7 +738,7 @@ QCString KoDateVariable::defaultFormat()
                     + QCString("locale"));
 }
 
-QCString KoDateVariable::formatStr()
+QCString KoDateVariable::formatStr(int & correct)
 {
     QCString string;
     QStringList stringList;
@@ -782,6 +789,7 @@ QCString KoDateVariable::formatStr()
             string = "locale"; // untranslated form
         else
             string=widget->resultString().utf8();
+        correct = widget->correctValue();
     }
     else
     {
@@ -805,8 +813,8 @@ QCString KoDateVariable::formatStr()
 /******************************************************************/
 /* Class: KoTimeVariable                                          */
 /******************************************************************/
-KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl)
-    : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype )
+KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, int _correct)
+    : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype ), m_correctTime( _correct)
 {
 }
 
@@ -819,12 +827,12 @@ QString KoTimeVariable::fieldCode()
 void KoTimeVariable::recalc()
 {
     if ( m_subtype == VST_TIME_CURRENT )
-        m_varValue = QVariant( QTime::currentTime());
+        m_varValue = QVariant( QTime::currentTime().addSecs(m_correctTime));
     else
     {
         // Only if never set before (i.e. upon insertion)
         if ( m_varValue.toTime().isNull() )
-            m_varValue = QVariant( QTime::currentTime());
+            m_varValue = QVariant( QTime::currentTime().addSecs(m_correctTime));
     }
     resize();
 }
@@ -835,11 +843,13 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
     QTime time = m_varValue.toTime();
+    time = time.addSecs(1*m_correctTime);
     elem.setAttribute( "hour", time.hour() );
     elem.setAttribute( "minute", time.minute() );
     elem.setAttribute( "second", time.second() );
 //    elem.setAttribute( "msecond", m_time.msec() );
     elem.setAttribute( "fix", m_subtype == VST_TIME_FIX );
+    elem.setAttribute( "correct", m_correctTime );
 }
 
 void KoTimeVariable::load( QDomElement& elem )
@@ -853,14 +863,20 @@ void KoTimeVariable::load( QDomElement& elem )
         int m = e.attribute("minute").toInt();
         int s = e.attribute("second").toInt();
         int ms = e.attribute("msecond").toInt();
+        int correct = 0;
+        if ( e.hasAttribute("correct"))
+            correct=e.attribute("correct").toInt();
         bool fix = static_cast<bool>( e.attribute("fix").toInt() );
         if ( fix )
         {
             QTime time;
             time.setHMS( h, m, s, ms );
+            time = time.addSecs( m_correctTime );
             m_varValue = QVariant( time);
+
         }
         m_subtype = fix ? VST_TIME_FIX : VST_TIME_CURRENT;
+        m_correctTime = correct;
     }
 }
 
@@ -890,7 +906,7 @@ QStringList KoTimeVariable::subTypeFormat()
     return listTimeFormat;
 }
 
-QCString KoTimeVariable::formatStr()
+QCString KoTimeVariable::formatStr(int & _correct)
 {
     QCString string;
     QStringList stringList;
@@ -933,13 +949,13 @@ QCString KoTimeVariable::formatStr()
         QComboBox *combo= widget->combo1;
         combo->setCurrentItem(combo->count() -1);
     }
-
     if(dialog->exec()==QDialog::Accepted)
     {
         if ( widget->resultString() == i18n("Locale") )
             string = "locale"; // untranslated form
         else
             string=widget->resultString().utf8();
+        _correct = widget->correctValue();
     }
     else
     {

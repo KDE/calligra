@@ -3,13 +3,14 @@
 #include "timedateformatwidget.h"
 
 class TimeFormatWidget : public TimeDateFormatWidgetPrototype
-{ 
+{
     Q_OBJECT
 
 public:
     TimeFormatWidget( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
     ~TimeFormatWidget();
     QString resultString();
+    int correctValue();
 public slots:
     void updateLabel();
     void comboActivated();

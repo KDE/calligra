@@ -221,12 +221,12 @@ public:
 
     bool customVariableExist(const QString &varname)const ;
 
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat=false );
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct , bool _forceDefaultFormat=false );
 
-    KoVariableSettings *variableSetting(){return m_variableSettings;}
+    KoVariableSettings *variableSetting()const {return m_variableSettings;}
 
     void setVariableSelected(KoVariable * var);
-    KoVariable *selectedVariable() {return m_varSelected;}
+    KoVariable *selectedVariable()const {return m_varSelected;}
 
     virtual QPtrList<KAction> variableActionList();
 
@@ -338,6 +338,7 @@ public:
 protected:
     /** Variable should reimplement this to implement saving. */
     virtual void saveVariable( QDomElement &parentElem ) = 0;
+    virtual int correctValue() const { return 0;}
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
     QVariant m_varValue;
@@ -365,7 +366,7 @@ protected:
 class KoDateVariable : public KoVariable
 {
 public:
-    KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat,KoVariableCollection *_varColl );
+    KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat,KoVariableCollection *_varColl , int _correctDate = 0);
 
     virtual VariableType type() const
     { return VT_DATE; }
@@ -379,6 +380,7 @@ public:
     void setDate( const QDate & _date ) { m_varValue = QVariant(_date); }
 
     virtual void saveVariable( QDomElement &parentElem );
+    virtual int correctValue() const { return m_correctDate;}
     virtual void load( QDomElement &elem );
     virtual QStringList subTypeText();
     virtual QStringList subTypeFormat();
@@ -386,7 +388,7 @@ public:
     /**
      * Returns the date format string with prefix "DATE"
      */
-    static QCString formatStr();
+    static QCString formatStr( int & correct);
     /**
      * Return the default date format for old file.
      */
@@ -394,6 +396,7 @@ public:
 
 protected:
     short int m_subtype;
+    int m_correctDate;
 };
 
 /**
@@ -402,7 +405,7 @@ protected:
 class KoTimeVariable : public KoVariable
 {
 public:
-    KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl);
+    KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl,  int _correct);
 
     virtual VariableType type() const
     { return VT_TIME; }
@@ -416,6 +419,7 @@ public:
     void setTime( const QTime & _time ) { m_varValue = QVariant(_time); }
 
     virtual void saveVariable( QDomElement &parentElem );
+    virtual int correctValue() const { return m_correctTime;}
     virtual void load( QDomElement &elem );
 
     virtual QStringList subTypeText();
@@ -424,7 +428,7 @@ public:
     /**
      * Returns the time format string with prefix "TIME"
      */
-    static QCString formatStr();
+    static QCString formatStr(int & _correct);
     /**
      * Return the default date format for old file.
      */
@@ -432,6 +436,7 @@ public:
 
 protected:
     short int m_subtype;
+    int m_correctTime;
 };
 
 

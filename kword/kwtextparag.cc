@@ -754,7 +754,10 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
                         KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
-                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, true , loadFootNote);
+                        int correct = 0;
+                        if (typeElem.hasAttribute( "correct" ))
+                            correct = typeElem.attribute("correct").toInt();
+                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, correct, true , loadFootNote);
                         if ( var )
                         {
                             var->load( varElem );

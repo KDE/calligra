@@ -78,7 +78,7 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting)
 }
 
 
-KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, bool _forceDefaultFormat, bool loadFootNote )
+KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct,bool _forceDefaultFormat, bool loadFootNote )
 {
     KWDocument *m_doc = static_cast<KWDocument *>(doc);
     switch(type) {
@@ -106,13 +106,14 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
-                QCString result = KoDateVariable::formatStr();
+                QCString result = KoDateVariable::formatStr(_correct);
                 if ( result == 0 )//we cancel insert variable
                     return 0L;
                 varFormat =  coll->format( result );
             }
         }
-        return new KWDateVariable( textdoc, subtype, varFormat, this, m_doc );
+        kdDebug()<<" _correct :"<<_correct<<endl;
+        return new KWDateVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     case VT_TIME:
     case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
         if ( !varFormat )
@@ -121,15 +122,15 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
-                QCString result = KoTimeVariable::formatStr();
+                QCString result = KoTimeVariable::formatStr(_correct);
                 if ( result == 0 )//we cancel insert variable
                     return 0L;
                 varFormat =  coll->format( result );
             }
         }
-        return new KWTimeVariable( textdoc, subtype, varFormat, this, m_doc );
+        return new KWTimeVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     default:
-        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc, _forceDefaultFormat );
+        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc, _correct, _forceDefaultFormat );
     }
 }
 
@@ -606,8 +607,8 @@ void KWFieldVariable::slotChangeSubType()
 /******************************************************************/
 /* Class: KWDateVariable                                         */
 /******************************************************************/
-KWDateVariable::KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc )
-    : KoDateVariable( textdoc, subtype, varFormat, _varColl ),
+KWDateVariable::KWDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc, int _correct )
+    : KoDateVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 
 {
@@ -712,8 +713,8 @@ void KWDateVariable::slotChangeFormat()
 /******************************************************************/
 /* Class: KWTimeVariable                                         */
 /******************************************************************/
-KWTimeVariable::KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc )
-    : KoTimeVariable( textdoc, subtype, varFormat, _varColl ),
+KWTimeVariable::KWTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *_doc,int _correct )
+    : KoTimeVariable( textdoc, subtype, varFormat, _varColl,_correct ),
       m_doc(_doc)
 
 {

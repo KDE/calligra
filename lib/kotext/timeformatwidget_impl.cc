@@ -10,6 +10,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qlineedit.h>
+#include <knuminput.h>
 
 /*
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the
@@ -40,7 +41,7 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->setCurrentItem( 0 );
 
     combo1->insertStringList(listTimeFormat);
-
+    label_correction->setText(i18n("Correct in Minutes"));
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
     slotPersonalizeChanged(false);
@@ -113,4 +114,9 @@ void TimeFormatWidget::updateLabel()
 QString TimeFormatWidget::resultString()
 {
     return combo1->currentText();
+}
+
+int TimeFormatWidget::correctValue()
+{
+    return KIntNumInput1->value();
 }

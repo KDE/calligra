@@ -3371,7 +3371,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         }
     }
     else
-        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc);
+        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc, 0);
     if ( var)
         insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
 }
