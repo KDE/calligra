@@ -1792,77 +1792,6 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     invalidate( 0 );
 }
 
-void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) const
-{
-    uint len = text.length();
-    int nrSpaces = 0; // number of consecutive spaces
-    QString str;
-    str.reserve( len );
-    // Accumulate chars either in str or in nrSpaces (for spaces).
-    // Flush str when writing a subelement (for spaces or for another reason)
-    // Flush nrSpaces when encountering two or more consecutive spaces
-    for ( uint i = 0; i < len ; ++i ) {
-        QChar ch = text[i];
-        if ( ch != ' ' ) {
-            if ( nrSpaces > 0 ) {
-                // For the first space we use ' '.
-                // "it is good practice to use (text:s) for the second and all following SPACE characters in a sequence."
-                str += ' ';
-                --nrSpaces;
-                if ( nrSpaces > 0 ) { // there are more spaces
-                    if ( !str.isEmpty() )
-                        writer.addTextNode( str );
-                    str = QString::null;
-                    writer.startElement( "text:s" );
-                    if ( nrSpaces > 1 ) // it's 1 by default
-                        writer.addAttribute( "text:c", nrSpaces );
-                    writer.endElement();
-                }
-            }
-            nrSpaces = 0;
-        }
-        switch ( ch.unicode() ) {
-        case '\t':
-            if ( !str.isEmpty() )
-                writer.addTextNode( str );
-            str = QString::null;
-            writer.startElement( "text:tab" );
-            if ( m_tabCache.contains( i ) )
-                writer.addAttribute( "text:tab-ref", m_tabCache[i] + 1 );
-            writer.endElement();
-            break;
-        case '\n':
-            if ( !str.isEmpty() )
-                writer.addTextNode( str );
-            str = QString::null;
-            writer.startElement( "text:line-break" );
-            writer.endElement();
-            break;
-        case ' ':
-            ++nrSpaces;
-            break;
-        default:
-            str += text[i];
-            break;
-        }
-    }
-    // either we still have text in str or we have spaces in nrSpaces
-    if ( nrSpaces > 0 ) {
-        str += ' ';
-        --nrSpaces;
-    }
-    if ( !str.isEmpty() ) {
-        writer.addTextNode( str );
-    }
-    if ( nrSpaces > 0 ) { // there are more spaces
-        Q_ASSERT( str.isEmpty() );
-        writer.startElement( "text:s" );
-        if ( nrSpaces > 1 ) // it's 1 by default
-            writer.addAttribute( "text:c", nrSpaces );
-        writer.endElement();
-    }
-}
-
 void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
                              int from /* default 0 */, int to /* default -1 i.e. length()-2 */,
                              bool saveAnchorsFramesets /* default false */ ) const
@@ -1922,14 +1851,14 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) { \
         if ( curFormat == paragFormat() ) {                             \
-            writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+            writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
         } else {                                                        \
             KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
             curFormat->save( gs );                                      \
             QString autoStyleName = mainStyles.lookup( gs, "T" );       \
             writer.startElement( "text:span" );                         \
             writer.addAttribute( "text:style-name", autoStyleName );    \
-            writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+            writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
             writer.endElement();                                        \
         }                                                               \
     }

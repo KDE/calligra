@@ -199,4 +199,3 @@ protected:
 
 private:
     KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );
-    void writeSpanText( KoXmlWriter& writer, const QString& text ) const;
