@@ -33,7 +33,6 @@ METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_editors.moc
 
 idl_DATA = kspread.idl
-idl_HEADERS = kspread.h chart.h
 
 # DISTCLEANFILES = KOStore.py KOffice.py KSpread.py OpenPartsUI.py OpenParts.py KOM.py 
 

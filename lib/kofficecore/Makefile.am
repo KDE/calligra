@@ -22,11 +22,10 @@ include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc koApplication.moc
 
 idl_DATA = koffice.idl
-idl_HEADERS =  koffice.h
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
-koffice.idl: $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl 
+koffice.idl: $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl $(top_srcdir)/lib/store/koStoreif.idl
 
 koDocument.cc: koffice.h
 koView: koffice.h

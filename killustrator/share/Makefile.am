@@ -101,7 +101,5 @@ METASOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		EllipseConfigDialog.moc MyTabCtl.moc \
 		HelplineDialog.moc GCurve.moc BlendDialog.moc
 
-DISTCLEANFILES = $(METASOURCES)
-
 
 

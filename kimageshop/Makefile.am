@@ -35,9 +35,6 @@ METASOURCES = \
  zoomfactordlg.moc
 
 idl_DATA = kimageshop.idl
-idl_HEADERS = kimageshop.h
-
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

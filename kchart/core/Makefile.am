@@ -18,8 +18,6 @@ libkchartcore_la_LIBADD =  $(LIB_KDECORE)
 libkchartcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h KChartWidget.h
 
-DISTCLEANFILES = $(METASOURCES)
-
 noinst_PROGRAMS = test test2 test3 test4 test5 test6 test7 test10 test11 test14
 noinst_HEADERS = KChartAreaPainter.h KChartAxesPainter.h KChartBarsPainter.h \
 	KChartLinesPainter.h KChartLinesPointsPainter.h KChartPointsPainter.h \

@@ -19,7 +19,6 @@ METASOURCES =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 		sheet.moc sheetdlg.moc table.moc
 
 idl_DATA = kchart.idl
-idl_HEADERS = kchart.h chart.h
 
 kdelnk_DATA = kchart_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk

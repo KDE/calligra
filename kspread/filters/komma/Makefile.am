@@ -14,11 +14,6 @@ noinst_HEADERS = main.h
 
 METASOURCES = main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
-idl_DATA = 
-idl_HEADERS =  
-
 service_DATA = kspread_filter_import.desktop
 servicedir = $(kde_servicesdir)
 

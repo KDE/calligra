@@ -26,7 +26,6 @@ METASOURCES = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
 	kohtmljob.moc openurldlg.moc
 
 idl_DATA = kohtml.idl
-idl_HEADERS =  kohtml.h
 
 kdelnk_DATA = kohtml.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

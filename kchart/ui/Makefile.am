@@ -18,8 +18,6 @@ libkchartui_la_LIBADD  = $(LIB_KDECORE)
 libkchartui_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
 include_HEADERS = KChartWizard.h
 
-DISTCLEANFILES = $(METASOURCES)
-
 noinst_PROGRAMS = test
 noinst_HEADERS = KChartWizardLabelsLegendPage.h KChartWizardSelectDataPage.h \
 	KChartWizardSelectChartSubTypePage.h KChartWizardSelectChartTypePage.h \

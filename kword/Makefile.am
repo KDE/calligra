@@ -29,7 +29,6 @@ METASOURCES =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragd
 		clipbrd_dnd.moc footnotedia.moc autoformatdia.moc
 
 idl_DATA = kword.idl
-idl_HEADERS =  kword.h
 
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
