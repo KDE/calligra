@@ -465,19 +465,19 @@ void KoPageLayoutDia::setValuesTab1Helper()
 
     ebrLeft->setValue( KoUnit::ptToUnit( layout.ptLeft, m_unit ) );
     ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrLeft->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
+    ebrLeft->setRange( 0, KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
 
     ebrRight->setValue( KoUnit::ptToUnit( layout.ptRight, m_unit ) );
     ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrRight->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
+    ebrRight->setRange( 0, KoUnit::ptToUnit( layout.ptWidth, m_unit)  );
 
     ebrTop->setValue( KoUnit::ptToUnit( layout.ptTop, m_unit ) );
     ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrTop->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
+    ebrTop->setRange( 0, KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
 
     ebrBottom->setValue( KoUnit::ptToUnit( layout.ptBottom, m_unit ) );
     ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrBottom->setRange( 0, 0.5 * KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
+    ebrBottom->setRange( 0, KoUnit::ptToUnit( layout.ptHeight, m_unit)  );
 }
 
 /*================ setup header and footer tab ===================*/
@@ -747,24 +747,13 @@ void KoPageLayoutDia::orientationChanged()
     layout.ptTop = KoUnit::ptFromUnit( ebrTop->value(), m_unit );
     layout.ptBottom = KoUnit::ptFromUnit( ebrBottom->value(), m_unit );
 
+    // swap dimension and adjust margins
     qSwap( layout.ptWidth, layout.ptHeight );
-
-    if( layout.orientation == PG_PORTRAIT )
-    {
-       double tmp = layout.ptTop;
-       layout.ptTop = layout.ptRight;
-       layout.ptRight = layout.ptBottom;
-       layout.ptBottom = layout.ptLeft;
-       layout.ptLeft = tmp;
-    }
-    else
-    {
-       double tmp = layout.ptTop;
-       layout.ptTop = layout.ptRight;
-       layout.ptRight = layout.ptBottom;
-       layout.ptBottom = layout.ptLeft;
-       layout.ptLeft = tmp;
-    }
+    double tmp = layout.ptTop;
+    layout.ptTop = layout.ptRight;
+    layout.ptRight = layout.ptBottom;
+    layout.ptBottom = layout.ptLeft;
+    layout.ptLeft = tmp;
 
     setValuesTab1();
     updatePreview( layout );
