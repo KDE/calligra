@@ -104,11 +104,11 @@ QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
 
   xpos = m_pView->activeTable()->columnPos( column, canvas );
   ypos = m_pView->activeTable()->rowPos( row, canvas );
-  width = cell->width( column, canvas );
-  height = cell->height( row, canvas );
-
-  QRect handle( (xpos + width - 2), (ypos + height - 1),
-                (int) (5 * canvas->zoom()), (int) (5 * canvas->zoom()) );
+  width = cell->width( column, canvas ) + 1;
+  height = cell->height( row, canvas ) + 1; //+1, due to rounding issue at default height at 100% zoom
+  
+  QRect handle( (xpos + width - (int)(2.0 * canvas->zoom())), (ypos + height - (int)(2.0 * canvas->zoom())),
+                (int) (5.0 * canvas->zoom()), (int)(5.0 * canvas->zoom()) );
   return handle;
 }
 
