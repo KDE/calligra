@@ -1471,6 +1471,7 @@ void KWTableFrameSet::finalize( ) {
     KWFrameSet::finalize();
 }
 
+#ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * frame )
 {
     KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>( frame->getFrameSet() );
@@ -1482,7 +1483,7 @@ void KWTableFrameSet::printDebug( KWFrame * frame )
         kdDebug() << " |  +- cols:" << cell->m_cols << endl;
     }
 }
-
+#endif
 
 /////
 
