@@ -521,7 +521,6 @@ bool KoDocument::isAutoErrorHandlingEnabled() const
 
 void KoDocument::slotAutoSave()
 {
-    //kdDebug(30003)<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
     if ( isModified() && d->modifiedAfterAutosave )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
@@ -529,8 +528,10 @@ void KoDocument::slotAutoSave()
         d->m_autosaving = true;
         bool ret = saveNativeFormat( autoSaveFile( m_file ) );
         setModified( true );
-        if ( ret )
-            d->modifiedAfterAutosave=false;
+        if ( ret ) {
+            d->modifiedAfterAutosave = false;
+            d->m_autoSaveTimer.stop(); // until the next change
+        }
         d->m_autosaving = false;
         emit sigClearStatusBarMessage();
         disconnect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
@@ -1761,12 +1762,18 @@ bool KoDocument::isStoredExtern()
 
 void KoDocument::setModified( bool mod )
 {
+    if ( isAutosaving() ) // ignore setModified calls due to autosaving
+        return;
+
     //kdDebug(30003)<<k_funcinfo<<" url:" << m_url.path() << endl;
     //kdDebug(30003)<<k_funcinfo<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified()<<endl;
 
-    d->modifiedAfterAutosave=mod;
-    if ( isAutosaving() ) // ignore setModified calls due to autosaving
-        return;
+    if ( mod && !d->modifiedAfterAutosave ) {
+        // First change since last autosave -> start the autosave timer
+        setAutoSave( d->m_autoSaveDelay );
+    }
+    d->modifiedAfterAutosave = mod;
+
     if ( mod == KParts::ReadWritePart::isModified() )
         return;
 
