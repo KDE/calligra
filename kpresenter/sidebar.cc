@@ -125,9 +125,6 @@ void SideBar::currentChanged(QWidget *tab)
     if (tab == _thb) {
         if (!_thb->uptodate && _thb->isVisible())
             _thb->rebuildItems();
-        else
-            _thb->arrangeItemsInGrid(QSize(130, 120), true);
-        //TODO set position to current slide
     }
 }
 
@@ -151,6 +148,19 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 ThumbBar::~ThumbBar()
 {
     delete thumbTip;
+}
+
+void ThumbBar::setCurrentPage( int pg )
+{
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
+    {
+        if ( it->text().toInt() - 1 == pg ) {
+            setCurrentItem( it );
+            setSelected( it, FALSE ); // to avoid the blue "selected"-mark
+            ensureItemVisible(it);
+        }
+    }
+
 }
 
 QRect ThumbBar::tip(const QPoint &pos, QString &title)
@@ -335,6 +345,7 @@ void Outline::setCurrentPage( int pg )
         if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
             setCurrentItem( it.current() );
             setSelected( it.current(), TRUE );
+            ensureItemVisible(it.current());
         }
     }
 }

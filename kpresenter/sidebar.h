@@ -44,6 +44,7 @@ class ThumbBar : public KIconView
 public:
   ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
   ~ThumbBar();
+  void setCurrentPage( int pg );
   QRect tip(const QPoint &pos, QString &title);
 
   bool uptodate;
@@ -116,7 +117,10 @@ class SideBar: public QTabWidget
 
 public:
   SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
-  void setCurrentPage( int pg ) { _outline->setCurrentPage(pg); };
+  void setCurrentPage( int pg ) {
+      _outline->setCurrentPage(pg);
+      _thb->setCurrentPage(pg);
+  };
   void setOn( int pg, bool on ) { _outline->setOn(pg, on); };
   //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
   void updateItem( int pagenr ) { _outline->updateItem(pagenr); };
