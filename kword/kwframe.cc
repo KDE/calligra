@@ -765,7 +765,9 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     QRect rc = painter->xForm( kWordDocument()->zoomRect( *frame ) );
     rc &= painter->xForm( crect ); // intersect
-    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << " rc.isEmpty()=" << rc.isEmpty() << endl;
+    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
+    //          << " clip region rect=" << DEBUGRECT(rc)
+    //          << " rc.isEmpty()=" << rc.isEmpty() << endl;
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );
@@ -773,7 +775,8 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         for ( ; fIt.current() ; ++fIt )
         {
             QRect r = painter->xForm( kWordDocument()->zoomRect( *fIt.current() ) );
-            r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
+            // ### plan for a one-pixel border. Maybe we should use the real border width
+            r = QRect( r.x() - 1, r.y() - 1,
                        r.width() + 2, r.height() + 2 );
             //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract

@@ -1520,7 +1520,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement paper = doc.createElement( "PAPER" );
     kwdoc.appendChild( paper );
     paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
-    paper.setAttribute( "width", m_pageLayout.ptWidth ); // ## the DTD says mm but the loading code says pt (!)
+    paper.setAttribute( "width", m_pageLayout.ptWidth );
     paper.setAttribute( "height", m_pageLayout.ptHeight );
     paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
     paper.setAttribute( "columns", m_pageColumns.columns );
@@ -2201,74 +2201,6 @@ void KWDocument::updateAllFrames()
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();
-
-    // Not needed anymore, since the intersects stuff has been replaced
-    // with the clipregion/adjustLRMargin stuff... But doing stuff here
-    // (to cache some info) isn't a bad idea, maybe.
-#if 0
-    QList<KWFrame> _frames;
-    QList<KWGroupManager> mgrs;
-    QList<KWFrame> del;
-    _frames.setAutoDelete( FALSE );
-    mgrs.setAutoDelete( FALSE );
-    del.setAutoDelete( TRUE );
-    unsigned int i = 0, j = 0;
-    KWFrameSet *frameset = 0L;
-    KWFrame *frame1, *frame2;
-    KWFrame *framePtr = 0L;
-
-    for ( i = 0; i < frames.count(); i++ ) {// loop over all known frameSets
-        frameset = frames.at( i );
-        if ( frameset->isAHeader() || frameset->isAFooter() || !frameset->isVisible() )
-            continue;
-        if ( frameset->getGroupManager() ) {
-            if ( mgrs.findRef( frameset->getGroupManager() ) == -1 ) {
-                QRect r = frameset->getGroupManager()->getBoundingRect();
-                KWFrame *frm = new KWFrame(0L, r.x(), r.y(), r.width(), r.height() );
-                _frames.append( frm );
-                del.append( frm );
-                mgrs.append( frameset->getGroupManager() );
-            }
-            for ( j = 0; j < frameset->getNumFrames(); ++j )
-                frameset->getFrame( j )->clearIntersects();
-        } else {
-            for ( j = 0; j < frameset->getNumFrames(); j++ ) {
-                _frames.append( frameset->getFrame( j ) );
-                frameset->getFrame( j )->clearIntersects();
-            }
-        }
-    }
-
-    for ( i = 0; i < _frames.count(); i++ ) {
-        framePtr = _frames.at( i );
-        frame1 = _frames.at( i );
-        _frames.at( i )->clearIntersects();
-
-        for ( j = 0; j < _frames.count(); j++ ) {
-            if ( i == j ) continue;
-
-            frame2 = _frames.at( j );
-            if ( frame1->intersects( QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() ) ) ) {
-                QRect r = QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() );
-                if ( r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() ||
-                     r.bottom() < frame1->bottom() ) {
-                    if ( r.left() < frame1->left() ) r.setLeft( frame1->left() );
-                    if ( r.top() < frame1->top() ) r.setTop( frame1->top() );
-                    if ( r.right() > frame1->right() ) r.setRight( frame1->right() );
-                    if ( r.bottom() > frame1->bottom() ) r.setBottom( frame1->bottom() );
-                    if ( r.left() - frame1->left() > frame1->right() - r.right() )
-                        r.setRight( frame1->right() );
-                    else
-                        r.setLeft( frame1->left() );
-
-                    framePtr->addIntersect( r );
-                }
-            }
-        }
-    }
-
-    del.clear();
-#endif
 }
 
 // Tell this method when a frame is moved / resized / created / deleted

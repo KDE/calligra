@@ -310,7 +310,10 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
                  ( frameRect.left() - p.x() < middle ) ) // adjust the left margin only
                 // for frames which are in the left half
+            {
                 newMargin = QMAX( newMargin, ( frameRect.right() - p.x() ) + space );
+                kdDebug() << "KWTextFrameSet::adjustLMargin newMargin=" << newMargin << endl;
+            }
         }
     }
 
