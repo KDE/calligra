@@ -538,10 +538,10 @@ void KSpreadSortDlg::slotOk()
   accept();
 }
 
-void KSpreadSortDlg::sortKey2textChanged( int )
+void KSpreadSortDlg::sortKey2textChanged( int i )
 {
-  m_sortKey3->setEnabled( true );
-  m_sortOrder3->setEnabled( true );
+  m_sortKey3->setEnabled( ( i!=0 ) );
+  m_sortOrder3->setEnabled( ( i!=0 ) );
 }
 
 void KSpreadSortDlg::useCustomListsStateChanged( int state )
