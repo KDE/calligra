@@ -7035,7 +7035,7 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
 
         xmlWriter.startElement( "style:region-right" );
         xmlWriter.startElement( "text:p" );
-        convertPart( footerLeft, xmlWriter );
+        convertPart( footerRight, xmlWriter );
         xmlWriter.endElement();
         xmlWriter.endElement();
     }
@@ -7178,6 +7178,12 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
         }
         ++i;
     }
+    if ( !text.isEmpty() || !var.isEmpty() )
+    {
+        //we don't have var at the end =>store it
+        addText( text+var, xmlWriter );
+    }
+    kdDebug()<<" text end :"<<text<<" var :"<<var<<endl;
 }
 
 
