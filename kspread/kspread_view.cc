@@ -988,7 +988,7 @@ void ViewPrivate::initActions()
       view, SLOT( insertObject() ), ac, "insertPart");
   actions->insertPart->setToolTip(i18n("Insert an object from another program."));
 
-  actions->insertChartFrame = new KAction( i18n("&Chart"), "frame_chart",
+  actions->insertChartFrame = new KAction( i18n("&Chart"), "insert_chart",
       0, view, SLOT( insertChart() ), ac, "insertChart" );
   actions->insertChartFrame->setToolTip(i18n("Insert a chart."));
 
