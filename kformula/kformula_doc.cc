@@ -73,6 +73,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
     connect(history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
+    dcopObject();
 }
 
 
