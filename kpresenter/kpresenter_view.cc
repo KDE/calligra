@@ -1226,7 +1226,7 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.wmf *.WMF|Windows Metafiles"),0);
+  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changeClipart((const char*)file,xOffset,yOffset);
 }

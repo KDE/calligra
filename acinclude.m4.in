@@ -1605,13 +1605,23 @@ AC_DEFUN(AC_PATH_PAM,
   LIBS="$kde_save_LIBS"
 
  AC_MSG_CHECKING(for PAM)
- AC_ARG_WITH(pam, [  --with-pam              disable Pluggable Authentication Modules],
+ AC_ARG_WITH(pam, 
+[  --with-pam[=ARG]        enable support for PAM: ARG=[yes|no|service name]],
   [
     if test "x$withval" = "xyes"; then
       no_pam=
-    else
+      default_pam=yes
+    elif test "x$withval" = "xno"; then
       no_pam=yes
-    fi
+    else
+      no_pam=
+      pam_service="$withval"
+        if test -z "$pam_service"; then
+        default_pam=yes
+        else
+        default_pam=
+        fi 
+      fi
   ], no_pam=yes
  )
 
@@ -1653,6 +1663,12 @@ AC_DEFUN(AC_PATH_PAM,
    test "x$pam_includes" = xNONE && pam_includes=$ac_pam_includes
    test "x$pam_libraries" = xNONE && pam_libraries=$ac_pam_libraries
    AC_MSG_RESULT([libraries $pam_libraries, headers $pam_includes])
+ if test "$default_pam" = yes; then
+   AC_MSG_RESULT(["default pam service name will be used"])
+ else
+   AC_DEFINE_UNQUOTED(KDE_PAM_SERVICE,"$pam_service")
+   AC_MSG_RESULT(["pam service name will be: " $pam_service])
+ fi
  fi
  
  if test "x$pam_libraries" != x && test "x$pam_libraries" != xNONE ; then
@@ -1905,7 +1921,7 @@ AC_CACHE_VAL(kde_cv_try_link_python_$1,
 kde_save_cxxflags="$CXXFLAGS"
 CXXFLAGS="$CXXFLAGS $PYTHONINC"
 kde_save_libs="$LIBS"
-LIBS="$LIBS $LIBPYTHON $2 $LIBDL"
+LIBS="$LIBS $LIBPYTHON $2 $LIBDL $LIBSOCKET"
 kde_save_ldflags="$LDFLAGS"
 LDFLAGS="$LDFLAGS $PYTHONLIB"
 
