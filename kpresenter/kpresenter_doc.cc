@@ -1329,12 +1329,12 @@ void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTm
         contentTmpWriter.startElement( "presentation:show" );
         contentTmpWriter.addAttribute( "presentation:name", it.key() );
         QString tmp;
-        QPtrListIterator<KPrPage> itPage( it.data() );
-        for( ; itPage.current(); ++itPage )
+        QValueListIterator<KPrPage*> itPage ;
+        for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
         {
-            int posPage = m_pageList.find(itPage.current() );
+            int posPage = m_pageList.find(*itPage );
             if ( posPage != -1 )
-                tmp+=itPage.current()->oasisNamePage(posPage+1)+",";
+                tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
         }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
@@ -3734,10 +3734,11 @@ QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-ba
     else
     {
         kdDebug()<<" KPresenterDoc::displaySelectedSlide m_presentationName : "<<m_presentationName<<endl;
-        QPtrListIterator<KPrPage> itPage( m_customListSlideShow[m_presentationName] );
-        for( ; itPage.current(); ++itPage )
+        QValueListIterator<KPrPage*> itPage;
+        QValueListIterator<KPrPage*> itPageEnd = m_customListSlideShow[m_presentationName].end();
+        for( itPage =  m_customListSlideShow[m_presentationName].begin() ; itPage != itPageEnd; ++itPage )
         {
-            int pageNum = m_pageList.find(itPage.current() );
+            int pageNum = m_pageList.find(*itPage );
             if ( pageNum != -1 )
             {
                 kdDebug()<<" KPresenterDoc::displaySelectedSlide : add slide number :"<<pageNum<<endl;
@@ -4469,12 +4470,13 @@ CustomListMap KPresenterDoc::customListSlideShow()
         for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
         {
             QStringList tmp;
-            QPtrListIterator<KPrPage> itPage( it.data() );
-            for( ; itPage.current(); ++itPage )
-                if ( m_pageList.find(itPage.current() ) != -1 )
+            QValueListIterator<KPrPage*> itPage;
+            QValueListIterator<KPrPage*> itPageEnd = ( *it ).end();
+            for( itPage = ( *it ).begin() ; itPage != itPageEnd ; ++itPage )
+                if ( m_pageList.find(*itPage ) != -1 )
                 {
                     //kdDebug()<<" add page :"<<itPage.current()->pageTitle()<<endl;
-                    tmp.append( itPage.current()->pageTitle() );
+                    tmp.append( ( *itPage )->pageTitle() );
                 }
             listMap.insert( it.key(), tmp);
         }
@@ -4488,7 +4490,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOas
     CustomListMap::Iterator it;
     for ( it = map.begin(); it != map.end(); ++it ) {
         QStringList tmp( it.data() );
-        QPtrList<KPrPage> tmpDict;
+        QValueList <KPrPage *> tmpValueList;
         for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
         {
             for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
@@ -4498,7 +4500,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOas
                 {
                     if ( m_pageList.at( i )->oasisNamePage(i+1)== ( *itList ) )
                     {
-                        tmpDict.append(  m_pageList.at( i ) );
+                        tmpValueList.append(  m_pageList.at( i ) );
                         //kdDebug()<<" really insert\n";
                         break;
                     }
@@ -4507,7 +4509,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOas
                 {
                     if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
                     {
-                        tmpDict.append( m_pageList.at( i ) );
+                        tmpValueList.append( m_pageList.at( i ) );
                         //kdDebug()<<" really insert\n";
                         break;
                     }
@@ -4515,7 +4517,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOas
 
             }
         }
-        m_customListSlideShow.insert( it.key(), tmpDict );
+        m_customListSlideShow.insert( it.key(), tmpValueList );
     }
     setModified( true );
 }
