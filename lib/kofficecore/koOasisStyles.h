@@ -69,8 +69,8 @@ public:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
-    static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format );
-    
+    static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
+
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );

@@ -369,12 +369,6 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         } \
 }
 
-bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
-{
-    //TODO
-    return false;
-}
-
 void KoOasisStyles::parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text )
 {
     kdDebug()<<"parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text ) :"<<format<<endl;
@@ -389,6 +383,75 @@ void KoOasisStyles::parseOasisTimeKlocale(KoXmlWriter &elementWriter, QString & 
     while ( format.length() > 0 );
     addTextNumber( text, elementWriter );
 }
+
+bool KoOasisStyles::saveOasisKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
+{
+    bool changed = false;
+    if ( format.startsWith( "%H" ) ) //hh
+    {
+        //hour in 24h
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:hours" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "%k" ) )//h
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:hours" );
+        elementWriter.addAttribute( "number:style", "short" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "%I" ) )// ?????
+    {
+        //todo hour in 12h
+        changed = true;
+    }
+    else if ( format.startsWith( "%l" ) )
+    {
+        //todo hour in 12h with 1 digit
+        changed = true;
+    }
+    else if ( format.startsWith( "%M" ) )// mm
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:minutes" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+
+    }
+    else if ( format.startsWith( "%S" ) ) //ss
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:seconds" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "%p" ) )
+    {
+        //todo am or pm
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:am-pm" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    return changed;
+}
+
 
 bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
 {
@@ -466,7 +529,7 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
     return changed;
 }
 
-QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format )
+QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
 {
     kdDebug()<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -475,17 +538,23 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
-    do
+    if ( klocaleFormat )
     {
-        if ( !saveOasisTimeFormat( elementWriter, format, text ) )
-        {
-            text += format[0];
-            format = format.remove( 0, 1 );
-        }
+        parseOasisTimeKlocale( elementWriter, format, text );
     }
-    while ( format.length() > 0 );
-    addTextNumber( text, elementWriter );
-
+    else
+    {
+        do
+        {
+            if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+            {
+                text += format[0];
+                format = format.remove( 0, 1 );
+            }
+        }
+        while ( format.length() > 0 );
+        addTextNumber( text, elementWriter );
+    }
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     currentStyle.addChildElement( "number", elementContents );
     return mainStyles.lookup( currentStyle, "N" );

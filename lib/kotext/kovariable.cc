@@ -1352,7 +1352,15 @@ void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
         writer.addAttribute( "text:fixed", "true" );
         writer.addAttribute( "text:time-value", m_varValue.toTime().toString( Qt::ISODate ) );
     }
-    writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisTimeStyle(context.mainStyles(), m_varFormat->formatProperties() ) );
+
+    QString value(  m_varFormat->formatProperties() );
+    bool klocaleFormat = false;
+    if ( value.lower() == "locale" )
+    {
+        value = KGlobal::locale()->timeFormat();
+        klocaleFormat = true;
+    }
+    writer.addAttribute( "style:data-style-name", KoOasisStyles::saveOasisTimeStyle(context.mainStyles(), m_varFormat->formatProperties(), klocaleFormat ) );
 
     //TODO save text value
     //<text:time style:data-style-name="N43" text:time-value="2004-11-11T14:42:19" text:fixed="true">02:42:19 PM</text:time>
