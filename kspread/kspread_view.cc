@@ -6436,10 +6436,17 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
         m_transformToolBox->setDocumentChild( ch );
     }
   }
+
+  m_pDoc->emitBeginOperation( false );
+  m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  m_pDoc->emitEndOperation();
+  paintUpdates();
 }
 
 void KSpreadView::slotChildUnselected( KoDocumentChild* )
 {
+  if ( m_pTable && !m_pTable->isProtected() )
+  {
     m_transform->setEnabled( FALSE );
 
     if ( !m_transformToolBox.isNull() )
@@ -6447,6 +6454,12 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
         m_transformToolBox->setEnabled( FALSE );
     }
     deleteEditor( true );
+  }
+
+  m_pDoc->emitBeginOperation( false );
+  m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  m_pDoc->emitEndOperation();
+  paintUpdates();
 }
 
 
