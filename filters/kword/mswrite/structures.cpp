@@ -257,8 +257,30 @@ namespace MSWrite
 	#ifdef DEBUG_CHAR
 		m_device->debug ("\nFormatCharProperty::writeToDevice, #bytes=", getNumDataBytes ());
 	#endif
-		
+
 		return FormatCharPropertyGenerated::writeToDevice ();
+	}
+	
+	bool FormatCharProperty::updateFont (void)
+	{
+		Font *fontPtr = m_fontTable->getFont (getFontCode ());
+		if (!fontPtr)
+			ErrorAndQuit (Error::InvalidFormat, "fontCode out of range\n");
+
+		m_font = *fontPtr;
+		return true;
+	}
+
+	bool FormatCharProperty::updateFontCode (void)
+	{
+		DWord code = m_fontTable->addFont (&m_font);
+		if (code == 0xFFFFFFFF)
+			return false;
+		else
+		{
+			setFontCode (code);
+			return true;
+		}
 	}
 
 

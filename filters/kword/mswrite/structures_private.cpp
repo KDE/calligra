@@ -228,6 +228,16 @@ namespace MSWrite
 	{
 	}
 
+	FontTable &FontTable::operator= (const FontTable &rhs)
+	{
+		FontTableGenerated::operator= (rhs);
+		NeedsHeader::operator= (rhs);
+
+		m_fontList = rhs.m_fontList;
+
+		return *this;
+	}
+
 	bool FontTable::readFromDevice (void)
 	{
 	CHECK_DEVICE;

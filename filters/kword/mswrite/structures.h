@@ -218,7 +218,7 @@ namespace MSWrite
 	};
 
 
-	class FontTable;
+	class FontTable;	// from structures_private.h
 	class FormatCharProperty : public FormatCharPropertyGenerated
 	{
 	private:
@@ -279,28 +279,9 @@ namespace MSWrite
 		}
 
 		// [PRIVATE] called by FormatCharProperty::readFromDevice and other places too
-		bool updateFont (void)
-		{
-			Font *fontPtr = m_fontTable->getFont (getFontCode ());
-			if (!fontPtr)
-			   ErrorAndQuit (Error::InvalidFormat, "fontCode out of range\n");
-			
-			m_font = *fontPtr;
-			return true;
-		}
-		
+		bool updateFont (void);
 		// [PRIVATE] called by FormatInfoPage::add
-		bool updateFontCode (void)
-		{
-			DWord code = m_fontTable->addFont (&m_font);
-			if (code == 0xFFFFFFFF)
-				return false;
-			else
-			{
-				setFontCode (code);
-				return true;
-			}
-		}
+		bool updateFontCode (void);
 
 		Byte getFontSizeHalfPoints (void) const	{	return m_fontSize;	}
 		void setFontSizeHalfPoints (const Byte val)

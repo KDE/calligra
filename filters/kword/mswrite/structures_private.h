@@ -115,15 +115,7 @@ namespace MSWrite
 		FontTable ();
 		~FontTable ();
 
-		FontTable &operator= (const FontTable &rhs)
-		{
-			FontTableGenerated::operator= (rhs);
-			NeedsHeader::operator= (rhs);
-
-			m_fontList = rhs.m_fontList;
-
-			return *this;
-		}
+		FontTable &operator= (const FontTable &rhs);
 
 		Font *getFont (const DWord fontCode) const;
 		DWord findFont (const Font *want) const;
