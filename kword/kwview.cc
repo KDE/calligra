@@ -5113,9 +5113,9 @@ void KWView::switchModeView()
     actionViewHeader->setEnabled( state );
     actionShowDocStruct->setEnabled(state);
     if ( m_gui->getHorzRuler())
-        m_gui->getHorzRuler()->displayLayoutMenuItem(state );
-    if (m_gui->getVertRuler() )
-        m_gui->getVertRuler()->displayLayoutMenuItem(state );
+        m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );
+    if ( m_gui->getVertRuler() )
+        m_gui->getVertRuler()->setPageLayoutMenuItemEnabled( state );
 
     if ( !state )
     {
