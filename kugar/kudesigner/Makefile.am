@@ -2,11 +2,12 @@ SUBDIRS = toolbar pics templates
 
 INCLUDES = -I$(srcdir)/../kudesigner_lib -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
+bin_PROGRAMS =
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
+lib_LTLIBRARIES = libkudesignercore.la
 libkudesignercore_la_SOURCES = kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp
-libkudesignercore_la_LDFLAGS = -avoid-version -module $(all_libraries) $(KDE_RPATH)
+libkudesignercore_la_LDFLAGS = -avoid-version $(all_libraries) $(KDE_RPATH) -no-undefined
 libkudesignercore_la_LIBADD = ../kudesigner_lib/libkudesignercommon.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 
 ## The part
@@ -15,19 +16,10 @@ libkudesignerpart_la_SOURCES = kudesigner_part.cpp
 libkudesignerpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(KDE_RPATH)
 libkudesignerpart_la_LIBADD = libkudesignercore.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE)
 
-## The kdeinit loadable module
+kdeinit_LTLIBRARIES = kudesigner.la
 kudesigner_la_SOURCES = main.cpp
 kudesigner_la_LDFLAGS = $(all_libraries) -module -avoid-version
 kudesigner_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
-bin_PROGRAMS = kudesigner
-kudesigner_SOURCES = dummy.cc
-kudesigner_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kudesigner_LDADD = kudesigner.la
-
-dummy.cc:
-	echo > dummy.cc
 
 appsdir = $(kde_appsdir)/Office
 apps_DATA = kudesigner.desktop

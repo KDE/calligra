@@ -16,7 +16,7 @@
 #include "report.h"
 
 
-int main(int argc,char **argv)
+extern "C" int kdemain(int argc,char **argv)
 {
 	KAboutData about("kugar", I18N_NOOP("Kugar"), VERSION,
 		I18N_NOOP("A template driven report viewer for XML data."),

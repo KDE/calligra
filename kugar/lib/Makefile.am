@@ -2,13 +2,15 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
 
-libkugar_la_LIBADD = $(LIB_QT) $(LIB_KDEPRINT)
+libkugarlib_la_LIBADD = $(LIB_QT) $(LIB_KDEPRINT)
 
-libkugar_la_LDFLAGS = $(all_libraries) -version-info 1:2 -no-undefined
+libkugarlib_la_LDFLAGS = $(all_libraries) -version-info 1:2 -no-undefined
 
-lib_LTLIBRARIES = libkugar.la
+# libkugar.la is already reserved for the kdeinit module for kugar (on some platforms),
+# so we have to call the lib differently, e.g. libkugarlib
+lib_LTLIBRARIES = libkugarlib.la
 
-libkugar_la_SOURCES = \
+libkugarlib_la_SOURCES = \
 	mcalcobject.cpp \
 	mfieldobject.cpp \
 	mlabelobject.cpp \
@@ -45,5 +47,3 @@ include_HEADERS = \
 	mutil.h \
 	mdatabasereportengine.h \
 	sqlcursor.h
-
-CLEANFILES = libkugar_la_meta_unload.cpp

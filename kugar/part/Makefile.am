@@ -4,7 +4,7 @@ lib_LTLIBRARIES =
 kde_module_LTLIBRARIES = libkugarpart.la
 libkugarpart_la_SOURCES = kugar_part.cpp kugar_factory.cpp kugar_view.cpp
 libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
-libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT) $(LIB_KOFFICECORE)
+libkugarpart_la_LIBADD = ../lib/libkugarlib.la $(LIB_KPARTS) $(LIB_KDEPRINT) $(LIB_KOFFICECORE)
 
 libkugarpart_la_METASOURCES = AUTO
 

@@ -4,10 +4,14 @@
 
 INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
-bin_PROGRAMS = kugar
-kugar_SOURCES = main.cpp report.cpp
-kugar_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kugar_LDADD = ../lib/libkugar.la $(LIB_KIO) $(LIB_KDEPRINT)
+bin_PROGRAMS =
+lib_LTLIBRARIES =
+
+kdeinit_LTLIBRARIES = kugar.la
+
+kugar_la_SOURCES = main.cpp report.cpp
+kugar_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
+kugar_la_LIBADD = ../lib/libkugar.la $(LIB_KIO) $(LIB_KDEPRINT)
 
 kugar_METASOURCES = AUTO
 
