@@ -28,12 +28,8 @@ noinst_HEADERS = \
 libkarbonsvgexport_la_SOURCES = \
 	svgexport.cc
 
-libkarbonsvgexport_la_METASOURCES = \
-	AUTO
+METASOURCES = AUTO
 
 libkarbonsvgimport_la_SOURCES = \
 	svgimport.cc
-
-libkarbonsvgimport_la_METASOURCES = \
-	AUTO
 
