@@ -176,7 +176,7 @@ void KoTemplateChooseDia::setupDialog()
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
         grid->addWidget( line, 0, 0 );
 
-        d->m_rbTemplates = new QRadioButton( i18n( "Create new document from a &Template" ), d->m_mainwidget );
+        d->m_rbTemplates = new QRadioButton( i18n( "Create new document from a &template" ), d->m_mainwidget );
         connect( d->m_rbTemplates, SIGNAL( clicked() ), this, SLOT( openTemplate() ) );
         grid->addWidget( d->m_rbTemplates, 1, 0 );
     }
