@@ -90,4 +90,18 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
                                      // was successfull
 }
 
+void KontourImport::convert()
+{
+    QDomElement docElem = inpdoc.documentElement();
+    QDomElement paper = docElem.namedItem( "layout" ).toElement();
+    int ptPageHeight = paper.attribute( "width" ).toInt();
+    int ptPageWidth = paper.attribute( "height" ).toInt();
+
+    QDomElement outPaper = outdoc.createElement( "PAPER" );
+    docElem.appendChild( outPaper );
+    outPaper.setAttribute( "width", ptPageWidth );
+    outPaper.setAttribute( "height", ptPageHeight );
+    outPaper.setAttribute( "unit", KoUnit::unitName(KoUnit::U_PT) );
+}
+
 #include <kontourimport.moc>
