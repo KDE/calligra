@@ -353,7 +353,7 @@ public:
      *  Initializes an empty document (display the template dialog!).
      *  You have to overload this method to initialize all your document variables.
      */
-    virtual bool initDoc() = 0;
+    virtual bool initDoc() = 0; // BCI: pass a QWidget* parentWidget, to pass to KoTemplateChooseDia
 
     // Who calls initDoc?
     enum InitDocFlags { InitDocAppStarting, InitDocFileNew, InitDocFileClose, InitDocEmbedded };
