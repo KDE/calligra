@@ -7,7 +7,8 @@
 
 #include "gradientdlg.h"
 #include "kimageshop_doc.h"
-#include "integerwidget.h"
+#include <integerwidget.h>
+#include <blendchooser.h>
 
 GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name )
   : KFloatingDialog( _parent, _name )
@@ -42,22 +43,7 @@ GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const cha
   label->setBackgroundColor( yellow );
   layout->addWidget( label, 1, 0 );
 
-  QComboBox *mode = new QComboBox( false, area );
-  mode->insertItem( i18n( "Normal" ) );
-  mode->insertItem( i18n( "Dissolve" ) );
-  mode->insertItem( i18n( "Behind" ) );
-  mode->insertItem( i18n( "Multiply" ) );
-  mode->insertItem( i18n( "Screen" ) );
-  mode->insertItem( i18n( "Overlay" ) );
-  mode->insertItem( i18n( "Difference" ) );
-  mode->insertItem( i18n( "Addition" ) );
-  mode->insertItem( i18n( "Subtract" ) );
-  mode->insertItem( i18n( "Darken only" ) );
-  mode->insertItem( i18n( "Lighten only" ) );
-  mode->insertItem( i18n( "Hue" ) );
-  mode->insertItem( i18n( "Saturation" ) );
-  mode->insertItem( i18n( "Color" ) );
-  mode->insertItem( i18n( "Value" ) );
+  BlendChooser *mode = new BlendChooser( area );
   layout->addWidget( mode, 2, 1 );
 
   label = new QLabel( mode, i18n( "Mode" ), area );

@@ -1,3 +1,25 @@
+Tue Aug 31 13:08:53 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
+
+	* kimageshop_config.cc,h:
+	cleaned up some stuff,
+	
+	added type Blending, an enumeration of all available blendings (should
+	this go into some kisglobal.h?)
+	
+	* widgets/blendchooser.cc,h: 
+	Added class BlendChooser, a QComboBox offering all available blendings
+	of KIS.
+
+	* dialogs/gradientdlg.cc (GradientDialog): 
+	make use of the new BlendChooser
+
+	* dialogs/newdialog.cc (NewDialog): 
+	made OK be the defaultButton
+	removed two warnings
+
+	* ../config.h (HAVE_MMX)
+	added configure check for MMX - can be used for our math libs
+	
 Wed Aug 25 23:46:20 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
 
 	* kimageshop_config.cc (getNewConfig): 

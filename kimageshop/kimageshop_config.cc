@@ -1,7 +1,7 @@
 /*
  *  kimageshop_config.cc - part of KImageShop
  *
- *  A global configuration class for KImageShop
+ *  Global configuration classes for KImageShop
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
@@ -23,16 +23,18 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include "kimageshop_config.h"
 
 
-// define static members
+// define static attributes and members
 bool 			KImageShopConfig::doInit 	= true;
 KConfig *		KImageShopConfig::kc 		= 0L;
 QList<KImageShopConfig>	KImageShopConfig::instanceList;
 QFont 			KImageShopConfig::m_smallFont;
 QFont 			KImageShopConfig::m_tinyFont;
+QStringList 		KImageShopConfig::m_blendList;
 
 
 KImageShopConfig * KImageShopConfig::getNewConfig()
@@ -40,10 +42,9 @@ KImageShopConfig * KImageShopConfig::getNewConfig()
   if ( doInit ) {
     return ( new KImageShopConfig() );
   }
-  
+
   else {
     if ( instanceList.count() == 0 ) {
-      debug("oups, KImageShopConfig is already initialized, but instanceList is empty?!?!");
       return ( new KImageShopConfig() );
     }
 
@@ -54,14 +55,9 @@ KImageShopConfig * KImageShopConfig::getNewConfig()
 
 KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 {
-  kc = KGlobal::config();
-
   // load and init global settings only once
   if ( doInit ) {
-    instanceList.clear();
-    loadGlobalSettings();
-
-    doInit = false;
+    initStatic();
   }
 
   instanceList.append( this );
@@ -79,7 +75,7 @@ KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 }
 
 
-KImageShopConfig::KImageShopConfig( const KImageShopConfig& config ) 
+KImageShopConfig::KImageShopConfig( const KImageShopConfig& config )
   : QObject()
 {
   instanceList.append( this );
@@ -110,6 +106,35 @@ KImageShopConfig::~KImageShopConfig()
 }
 
 
+void KImageShopConfig::initStatic()
+{
+  kc = KGlobal::config();
+
+  instanceList.clear();
+  instanceList.setAutoDelete( false );
+
+  loadGlobalSettings();
+  
+  (void) m_blendList.append( i18n("Normal") );
+  (void) m_blendList.append( i18n("Dissolve") );
+  (void) m_blendList.append( i18n("Behind") );
+  (void) m_blendList.append( i18n("Multiply") );
+  (void) m_blendList.append( i18n("Screen") );
+  (void) m_blendList.append( i18n("Overlay") );
+  (void) m_blendList.append( i18n("Difference") );
+  (void) m_blendList.append( i18n("Addition") );
+  (void) m_blendList.append( i18n("Subtract") );
+  (void) m_blendList.append( i18n("Darken only") );
+  (void) m_blendList.append( i18n("Lighten only") );
+  (void) m_blendList.append( i18n("Hue") );
+  (void) m_blendList.append( i18n("Saturation") );
+  (void) m_blendList.append( i18n("Color") );
+  (void) m_blendList.append( i18n("Value") );
+
+  doInit = false;
+}
+
+
 // a convenience method - load all document specific configuration
 void KImageShopConfig::loadConfig()
 {
@@ -129,7 +154,7 @@ void KImageShopConfig::saveConfig()
 void KImageShopConfig::saveAll()
 {
   KImageShopConfig *config = 0L;
-  for ( config = instanceList.first(); config = instanceList.next(); config ) {
+  for ( config = instanceList.first(); config; config = instanceList.next() ) {
     config->saveConfig();
   }
 
@@ -185,6 +210,13 @@ void KImageShopConfig::saveDialogSettings()
 }
 
 
+const QStringList& KImageShopConfig::blendings()
+{
+  if ( doInit )
+    KImageShopConfig::initStatic();
+  return KImageShopConfig::m_blendList;
+}
+
 // The base configuration class
 
 
@@ -203,7 +235,7 @@ void BaseKFDConfig::saveConfig( KConfig *_config )
   _config->writeEntry( "Docked", false );
   _config->writeEntry( "PositionX", 50 );
   _config->writeEntry( "PositionY", 50 );
-  
+
   _config->sync();
 }
 

@@ -1,7 +1,7 @@
 /*
  *  kimageshop_config.h - part of KImageShop
  *
- *  A global configuration class for KImageShop
+ *  Global configuration classes for KImageShop
  *
  *  Copyright (c) 1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
@@ -28,6 +28,8 @@
 
 
 class QFont;
+
+class KConfig;
 
 class LayerDlgConfig;
 class BrushDlgConfig;
@@ -63,6 +65,7 @@ public:
   /**
    * A factory for config objects. Use it to create a new config object for
    * each new KImageShopView instance
+   * Notice: make sure you delete the object when you don't need it anymore!
    */
   static KImageShopConfig *getNewConfig();
 
@@ -95,17 +98,34 @@ public:
   void 	loadDialogSettings();
   void 	saveDialogSettings();
 
-  static QFont smallFont() { return m_smallFont; }
-  static QFont tinyFont() { return m_tinyFont; }
+  
+  // accessors for config entries
+  
+  static QFont smallFont() 			{ return m_smallFont; }
+  static QFont tinyFont()  			{ return m_tinyFont;  }
+  static const  QStringList& blendings();
+  // many more to come...
 
+  
+  typedef enum { Normal = 0,
+		 Dissolve,
+		 Behind,
+		 Multiply,
+		 Screen,
+		 Overlay,
+		 Difference,
+		 Addition,
+		 Subtract,
+		 DarkenOnly,
+		 LightenOnly,
+		 Hue,
+		 Saturation,
+		 Color,
+		 Value
+  } Blending;
 
+  
 protected:
-
-  /**
-   * loads the global settings - called only once from the constructor of the
-   * first instance
-   */
-  void 	loadGlobalSettings();
 
   /**
    * This constructor creates the first KImageShopConfig object and loads
@@ -122,6 +142,12 @@ protected:
    */
   KImageShopConfig( const KImageShopConfig& );
 
+  /**
+   * This method initializes all static members
+   * called only once from the very first constructor
+   */
+  static void 	initStatic();
+
 
 signals:
   void 	globalConfigChanged();
@@ -129,6 +155,11 @@ signals:
 
 private:
 
+  // loads the global settings - called only once from the constructor of the
+  // first instance
+  static void 	loadGlobalSettings();
+
+  
   // static objects - global items that are the same for _all_
   // KImageShopDoc objects
   static KConfig 	*kc;
@@ -137,6 +168,7 @@ private:
 
   static QFont 		m_smallFont;
   static QFont		m_tinyFont;
+  static QStringList 	m_blendList;
 
 
   // document specific configuration (non-static)
@@ -261,7 +293,12 @@ public:
 
 private:
 
+
 };
 
+
+
+// other configuration classes
+// ...
 
 #endif // KIMAGESHOP_CONFIG_H

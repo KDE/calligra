@@ -89,6 +89,7 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 
     QPushButton *ok, *cancel;
     ok = new QPushButton( "&OK", this );
+    ok->setDefault( true );
     ok->setMinimumSize( ok->sizeHint() );
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     buttons->addWidget( ok );
@@ -108,6 +109,7 @@ NewDialog::background()
     if( bground[FOREGROUND]->isChecked() ) return FOREGROUND;
     if( bground[TRANSPARENT]->isChecked() ) return TRANSPARENT;
     if( bground[WHITE]->isChecked() ) return WHITE;
+    else return TRANSPARENT;
 }
 
 int
@@ -117,6 +119,7 @@ NewDialog::colorModel()
     if( cmodel[CMYK]->isChecked() ) return CMYK;
     if( cmodel[LAB]->isChecked() ) return LAB;
     if( cmodel[GREYSCALE]->isChecked() ) return GREYSCALE;
+    else return RGB;
 }
 
 #include "newdialog.moc"

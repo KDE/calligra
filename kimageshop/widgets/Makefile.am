@@ -5,10 +5,10 @@ libkiswidgets_la_LDFLAGS = $(all_libraries) -version-info 1:0
 #libkiswidgets_la_LIBADD =
 
 libkiswidgets_la_SOURCES = colorframe.cc colorslider.cc \
-	iconchooser.cc integerwidget.cc
+	iconchooser.cc integerwidget.cc blendchooser.cc
 
 libkiswidgets_la_METASOURCES = colorframe.moc colorslider.moc \
-	iconchooser.moc integerwidget.moc
+	iconchooser.moc integerwidget.moc blendchooser.moc
 
 #include_HEADERS =
 
