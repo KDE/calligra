@@ -1,0 +1,7 @@
+[KDE Desktop Entry]
+Name=KThesaurus
+Type=Application
+Icon=kthesaurus
+Exec=kthesaurus
+Comment=Related words
+X-KDE-StartupNotify=true

@@ -7,3 +7,5 @@ kthesaurus_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kthesaurus_SOURCES = main.cc
 kthesaurus_LDADD = $(LIB_KSYCOCA)
  
+appsdir = $(kde_appsdir)/Office
+apps_DATA = KThesaurus.desktop
