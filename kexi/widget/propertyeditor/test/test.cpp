@@ -8,6 +8,7 @@
 #include <kdebug.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
+#include <qdatetimeedit.h>
 
 #include <kexipropertybuffer.h>
 #include <kexiproperty.h>
@@ -38,6 +39,10 @@ test::test()
 	
 	bool boolean=false;
 	m_buffer->insert("bool", KexiProperty("bool", QVariant(boolean, 4)));
+	
+	m_buffer->insert("date", KexiProperty("date", QDate::currentDate()));
+	m_buffer->insert("time", KexiProperty("time", QTime::currentTime()));
+	m_buffer->insert("datetime", KexiProperty("datetime", QDateTime::currentDateTime()));
 	
 	KexiPropertyEditor *edit = new KexiPropertyEditor(this,true);
 	setCentralWidget(edit);

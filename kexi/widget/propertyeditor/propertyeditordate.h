@@ -17,58 +17,74 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYEDITORFILE_H
-#define PROPERTYEDITORFILE_H
+#ifndef PROPERTYEDITORDATE_H
+#define PROPERTYEDITORDATE_H
 
 #include "kexipropertysubeditor.h"
-#include <kurl.h>
 
-class KLineEdit;
-class KPushButton;
-class QResizeEvent;
 class KexiProperty;
+class QDateEdit;
+class QTimeEdit;
+class QDateTimeEdit;
+class QDate;
+class QTime;
+class QDateTime;
 
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEditor
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDate : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
 	public:
-		PropertyEditorFile(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorFile() {;}
+		PropertyEditorDate(QWidget *parent, KexiProperty *property, const char *name=0);
+		~PropertyEditorDate() {;}
 
 		virtual QVariant	getValue();
 		virtual	void 		setValue(const QVariant &value);
-		
-		void setFilter(QString filter, bool add);
-		void resizeEvent(QResizeEvent *ev);
 
 	protected slots:
-		void selectFile();
+		void			valueChanged(const QDate&);
 
 	protected:
-		KLineEdit	*m_lineedit;
-		KPushButton	*m_button;
-		KURL		m_url;
-		QString 	m_filter;
+		QDateEdit	*m_dateedit;
 };
 
 
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public PropertyEditorFile
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorTime : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
 	public:
-		PropertyEditorPixmap(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorPixmap() {;}
+		PropertyEditorTime(QWidget *parent, KexiProperty *property, const char *name=0);
+		~PropertyEditorTime() {;}
 
 		virtual QVariant	getValue();
 		virtual	void 		setValue(const QVariant &value);
 
-	private:
-		KexiProperty	*m_property;
-		QPixmap		m_pixmap;
+	protected slots:
+		void			valueChanged(const QTime&);
+
+	protected:
+		QTimeEdit	*m_timeedit;
 };
 
+
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDateTime : public KexiPropertySubEditor
+{
+	Q_OBJECT
+
+	public:
+		PropertyEditorDateTime(QWidget *parent, KexiProperty *property, const char *name=0);
+		~PropertyEditorDateTime() {;}
+
+		virtual QVariant	getValue();
+		virtual	void 		setValue(const QVariant &value);
+
+	protected slots:
+		void			valueChanged(const QDateTime&);
+
+	protected:
+		QDateTimeEdit	*m_datetime;
+};
 
 #endif
 

@@ -50,6 +50,13 @@ PropertyEditorList::getValue()
 }
 
 void
+PropertyEditorList::setValue(const QVariant &value)
+{
+	m_combo->setCurrentText(value.toString());
+	emit changed(this);
+}
+
+void
 PropertyEditorList::setList(QStringList l)
 {
 	m_combo->insertStringList(l);

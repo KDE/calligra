@@ -39,6 +39,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 		~PropertyEditorList() {;}
 
 		virtual QVariant	getValue();
+		virtual	void 		setValue(const QVariant &value);
 		
 		void setList(QStringList l);
 

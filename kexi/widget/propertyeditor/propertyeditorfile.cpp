@@ -58,6 +58,14 @@ PropertyEditorFile::getValue()
 }
 
 void
+PropertyEditorFile::setValue(const QVariant &value)
+{
+	m_url = value.toString();
+	m_lineedit->setText(m_url.filename());
+}
+
+
+void
 PropertyEditorFile::selectFile()
 {
 	m_url = KFileDialog::getOpenFileName(QString::null, m_filter, this, i18n("Choose a file"));
@@ -90,6 +98,7 @@ PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *proper
  {
 	setFilter(i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"), false);
 	m_property = property;
+	m_pixmap = QPixmap();
  }
  
  
@@ -103,10 +112,27 @@ PropertyEditorPixmap::getValue()
 	}
 	else
 	{
+		if(!(m_pixmap.isNull()))
+		{
+			QVariant p = QVariant(m_pixmap);
+			m_pixmap = QPixmap();
+			return p;
+		}
 		QVariant p = m_property->value();
 		return p;
 	}
 }
+
+void
+PropertyEditorPixmap::setValue(const QVariant &value)
+{
+	m_url = KURL();
+	kdDebug() << value.toPixmap().width() << endl;
+	m_pixmap = value.toPixmap();
+	m_lineedit->setText("");
+	emit changed(this);
+}
+
 
 #include "propertyeditorfile.moc"
 

@@ -61,6 +61,14 @@ PropertyEditorFont::getValue()
 }
 
 void
+PropertyEditorFont::setValue(const QVariant &value)
+{
+	m_font = value.toFont();
+	m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()));
+	emit changed(this);
+}
+
+void
 PropertyEditorFont::selectFont()
 {
 	int result = KFontDialog::getFont(m_font, false, this);
@@ -98,6 +106,12 @@ PropertyEditorColor::PropertyEditorColor(QWidget *parent, KexiProperty *property
 PropertyEditorColor::getValue()
 {
 	return m_button->color();
+}
+
+void
+PropertyEditorColor::setValue(const QVariant &value)
+{
+	m_button->setColor(value.toColor());
 }
 
 void

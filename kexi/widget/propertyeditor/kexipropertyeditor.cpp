@@ -32,6 +32,7 @@
 #include "propertyeditorinput.h"
 #include "propertyeditorfile.h"
 #include "propertyeditorfont.h"
+#include "propertyeditordate.h"
 
 #include "kexipropertyeditor.h"
 
@@ -125,6 +126,18 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 		case QVariant::Color:
 			editor = new PropertyEditorColor(viewport(), i->property());
 			break;
+			
+		case QVariant::Date:
+			editor = new PropertyEditorDate(viewport(), i->property());
+			break;
+		
+		case QVariant::Time:
+			editor = new PropertyEditorTime(viewport(), i->property());
+			break;
+
+		case QVariant::DateTime:
+			editor = new PropertyEditorDateTime(viewport(), i->property());
+			break;
 
 		default:
 			m_currentEditor = 0;
@@ -150,7 +163,6 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 	}
 	else
 	{
-	kdDebug() << "modified editor" << endl;
 	m_defaults->resize(geometry.height(), geometry.height());
 	QPoint p = viewport()->mapTo(this, QPoint(geometry.x() + geometry.width() - m_defaults->width(), geometry.y()));
 	m_defaults->move(p.x(), p.y());
@@ -171,11 +183,12 @@ void
 KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 {
 	if(m_currentEditor) {
-		m_editItem->setValue(m_currentEditor->getValue());
+		QVariant value = m_currentEditor->getValue();
+		m_editItem->setValue(value);
 		if(m_buffer)
 		{
 		if(!m_editItem->parent())
-			m_buffer->changeProperty(m_editItem->name().latin1(), editor->getValue());
+			m_buffer->changeProperty(m_editItem->name().latin1(), value);
 		else
 		{
 			KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
@@ -264,7 +277,12 @@ void
 KexiPropertyEditor::resetItem()
 {
 	if(m_editItem)
+	{
+	if(m_currentEditor)
+		m_currentEditor->setValue(m_editItem->oldValue());
+	else
 		m_editItem->setValue(m_editItem->oldValue());
+	}
 }
 
 

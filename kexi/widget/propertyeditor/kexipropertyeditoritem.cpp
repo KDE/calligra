@@ -137,7 +137,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			case QVariant::Pixmap:
 			{
 				p->eraseRect(0,0,width,height());
-				p->drawPixmap(1, 1, m_value.toPixmap());
+				p->drawPixmap(1, 1, m_property->value().toPixmap());
 				break;
 			}
 			case QVariant::Color:

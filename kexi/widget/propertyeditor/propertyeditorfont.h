@@ -37,6 +37,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFont : public KexiPropertySubEdito
 		~PropertyEditorFont() {;}
 
 		virtual QVariant	getValue();
+		virtual	void 		setValue(const QVariant &value);
 		
 		void resizeEvent(QResizeEvent *ev);
 
@@ -59,6 +60,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorColor : public KexiPropertySubEdit
 		~PropertyEditorColor() {;}
 
 		virtual QVariant	getValue();
+		virtual	void 		setValue(const QVariant &value);
 		
 	protected slots:
 		void valueChanged(const QColor &color);

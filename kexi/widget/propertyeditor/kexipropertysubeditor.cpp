@@ -69,6 +69,12 @@ KexiPropertySubEditor::getValue()
 	return QVariant("");
 }
 
+void
+KexiPropertySubEditor::setValue(const QVariant &value)
+{
+	return;
+}
+
 KexiPropertySubEditor::~KexiPropertySubEditor()
 {
 }

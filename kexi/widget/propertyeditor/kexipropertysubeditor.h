@@ -34,6 +34,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 
 		virtual bool		eventFilter(QObject* watched, QEvent* e);
 		virtual QVariant	getValue();
+		virtual void		setValue(const QVariant &value);
 
 		void			setWidget(QWidget *w);
 

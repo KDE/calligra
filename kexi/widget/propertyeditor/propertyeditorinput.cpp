@@ -56,6 +56,12 @@ PropertyEditorInput::getValue()
 	return QVariant(m_lineedit->text());
 }
 
+void
+PropertyEditorInput::setValue(const QVariant &value)
+{
+	m_lineedit->setText(value.toString());
+}
+
 //INT
 
 PropIntSpinBox::PropIntSpinBox(int lower, int upper, int step, int value, int base=10, QWidget *parent=0, const char *name=0) 
@@ -81,6 +87,12 @@ QVariant
 PropertyEditorSpin::getValue()
 {
 	return QVariant(m_spinBox->value());
+}
+
+void
+PropertyEditorSpin::setValue(const QVariant &value)
+{
+	m_spinBox->setValue(value.toInt());
 }
 
 void
@@ -114,6 +126,12 @@ QVariant
 PropertyEditorDblSpin::getValue()
 {
 	return QVariant(m_spinBox->value());
+}
+
+void
+PropertyEditorDblSpin::setValue(const QVariant &value)
+{
+	m_spinBox->setValue(value.toDouble());
 }
 
 void
@@ -151,6 +169,12 @@ QVariant
 PropertyEditorBool::getValue()
 {
 	return QVariant(m_toggle->isOn(), 3);
+}
+
+void
+PropertyEditorBool::setValue(const QVariant &value)
+{
+	m_toggle->setOn(value.toBool());
 }
 
 void
