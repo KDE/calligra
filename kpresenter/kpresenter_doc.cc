@@ -1658,12 +1658,16 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
 void KPresenterDoc::updateHeaderFooterPosition( )
 {
     KoRect pageRect=m_stickyPage->getPageRect();
+    QRect oldBoundingRect=zoomHandler()->zoomRect(_header->getBoundingRect(zoomHandler()));
     _header->setOrig(pageRect.topLeft ());
     _header->setSize(pageRect.width(),_header->getSize().height());
+    repaint( oldBoundingRect );
     repaint(_header);
 
+    oldBoundingRect=zoomHandler()->zoomRect(_footer->getBoundingRect(zoomHandler()));
     _footer->setOrig(pageRect.left(),pageRect.bottom()-_footer->getSize().height());
     _footer->setSize(pageRect.width(),_footer->getSize().height());
+    repaint(oldBoundingRect);
     repaint(_footer);
 }
 
