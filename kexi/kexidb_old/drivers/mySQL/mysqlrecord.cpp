@@ -33,7 +33,11 @@ MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool 
 {
 	m_db = db;
 	m_lastItem = 0;
-	m_readOnly = findKey();
+//(js)	m_readOnly = findKey();
+  //TODO(js): get readonly flag from the database
+  findKey();
+  m_readOnly = false;
+
 	m_insertList.setAutoDelete(true);
 }
 
