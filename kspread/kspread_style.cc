@@ -499,7 +499,78 @@ FormatType KSpreadStyle::formatType( const QString &_format )
         return fraction_two_digits;
     else if ( _format == "# \?\?\?/\?\?\?" )
         return fraction_three_digits;
-    else Number_format;
+    else if ( _format == "dd-MMM-yy" )
+        return date_format1;
+    else if ( _format == "dd-MMM-yyyy" )
+        return date_format2;
+    else if ( _format == "d-MM" )
+        return date_format3;
+    else if ( _format == "dd-MM" ) //TODO ???????
+        return date_format4;
+    else if ( _format == "dd/MM/yy" )
+        return date_format5;
+    else if ( _format == "dd/MM/yyyy" )
+        return date_format6;
+    else if ( _format == "MMM-yy" )
+        return date_format7;
+    else if ( _format == "MMMM-yyyy" )
+        return date_format9;
+    else if ( _format == "MMMMM-yy" )
+        return date_format10;
+    else if ( _format == "dd/MMM" )
+        return date_format11;
+    else if ( _format == "dd/MM" )
+        return date_format12;
+    else if ( _format == "dd/MMM/yyyy" )
+        return date_format13;
+    else if ( _format == "yyyy/MMM/dd" )
+        return date_format14;
+    else if ( _format == "yyyy-MMM-dd" )
+        return date_format15;
+    else if ( _format == "yyyy/MM/dd" )
+        return date_format16;
+    else if ( _format == "d MMMM yyyy" )
+        return date_format17;
+    else if ( _format == "MM/dd/yyyy" )
+        return date_format18;
+    else if ( _format == "MM/dd/yy" )
+        return date_format19;
+    else if ( _format == "MMM/dd/yy" )
+        return date_format20;
+    else if ( _format == "MMM/dd/yyyy" )
+        return date_format21;
+    else if ( _format == "MMM-yyyy" )
+        return date_format22;
+    else if ( _format == "yyyy" )
+        return date_format23;
+    else if ( _format == "yy" )
+        return date_format24;
+    else if ( _format == "yyyy/MM/dd" )
+        return date_format25;
+    else if ( _format == "yyyy/MMM/dd" )
+        return date_format26;
+    else if ( _format == KGlobal::locale()->dateFormatShort() ) //TODO FIXME
+        return ShortDate_format;
+    else if ( _format == KGlobal::locale()->dateFormat() ) //TODO FIXME
+        return TextDate_format;
+    else if ( _format == "h:mm AP" )
+        return Time_format1;
+    else if ( _format == "h:mm:ss AP" )
+        return Time_format2;
+    else if ( _format == "hh \\h mm \\m\\i\\n ss \\s" )
+        return Time_format3;
+    else if ( _format == "hh:mm" )
+        return Time_format4;
+    else if ( _format == "hh:mm:ss" )
+        return Time_format5;
+    else if ( _format == "m:ss" )
+        return Time_format6;
+    else if ( _format == "h:mm:ss" )
+        return Time_format7;
+    else if ( _format == "h:mm" )
+        return Time_format8;
+    else
+        return Number_format;
 }
 
 QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix )
@@ -646,7 +717,7 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatT
         format = "dd-MMM-yyyy";
         break;
     case date_format3:
-        format = "dd-MM";
+        format = "dd-M";
         break;
     case date_format4:
         format = "dd-MM";
@@ -757,10 +828,10 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format
     bool locale = false;
     switch( _style )
     {
-    case Time_format:
+    case Time_format: //TODO FIXME
         //format = ;
         break;
-    case SecondeTime_format:
+    case SecondeTime_format: //TODO FIXME
         //format = ;
         break;
     case Time_format1:
