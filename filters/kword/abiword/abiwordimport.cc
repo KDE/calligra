@@ -100,7 +100,8 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
+        kdError(30506) << "parse error <c> tag not nested neither in <p> nor in <c> but in "
+            << stackCurrent->itemName << endl;
         return false;
     }
     return true;
@@ -327,7 +328,8 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXml
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "Abiword Import: parse error <field> tag not nested in neither a <p>" << endl;
+        kdError(30506) << "parse error <field> tag not nested in <p> but in "
+            << stackCurrent->itemName << endl;
         return false;
     }
     return true;
@@ -625,6 +627,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         return false;
     }
 
+    stackItem->itemName=name;
+
     bool success=false;
 
     if ((name=="c")||(name=="C"))
@@ -657,7 +661,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else
         {
-            kdError(30506) << "Forced line break found out of turn! Aborting!" <<endl;
+            kdError(30506) << "Forced line break found out of turn! Aborting! Parent: "
+                << stackCurrent->itemName <<endl;
             success=false;
         }
     }
@@ -678,7 +683,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else
         {
-            kdError(30506) << "Forced column break found out of turn! Aborting!" <<endl;
+            kdError(30506) << "Forced column break found out of turn! Aborting! Parent: "
+                << stackCurrent->itemName <<endl;
             success=false;
         }
     }
@@ -697,7 +703,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else
         {
-            kdError(30506) << "Forced page break found out of turn! Aborting!" <<endl;
+            kdError(30506) << "Forced page break found out of turn! Aborting! Parent: "
+                << stackCurrent->itemName <<endl;
             success=false;
         }
     }
@@ -764,7 +771,12 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         success=true; // No problem, so authorisation to continue parsing
     }
-    // Do nothing yet
+    if (!success)
+    {
+        // If we have no success, then it was surely a tag mismatch. Help debugging!
+        kdDebug(30506) << "Found tag name: " << name
+            << " expected: " << stackItem->itemName << endl;
+    }
     delete stackItem;
     return success;
 }
@@ -809,7 +821,8 @@ bool StructureParser :: characters ( const QString & ch )
         if (!success)
         {
             // We have a parsing error, so abort!
-            kdError(30506) << "Empty element is not empty! Aborting! (in StructureParser::characters)" << endl;
+            kdError(30506) << "Empty element "<< stackItem->itemName
+                <<" is not empty! Aborting! (in StructureParser::characters)" << endl;
         }
     }
     else
@@ -825,7 +838,7 @@ bool StructureParser::startDocument(void)
     indent = QString::null;  //DEBUG
     // Add KWord's default style sheet
     styleDataMap.defineNewStyle("Standard",-1,QString::null);
-    // Add a few of AbiWord predefined style sheets 
+    // Add a few of AbiWord predefined style sheets
     // TODO: use the properties that AbiWord uses
     // TODO: other predefined style sheets
     styleDataMap.defineNewStyle("Normal",-1,QString::null);
@@ -896,7 +909,8 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
         default:
             {
                 // Something has gone wrong!
-                kdError(30506) << "Cannot clear this element!" << endl;
+                kdError(30506) << "Cannot clear this element: "
+                    << item->itemName << endl;
                 return false;
             }
         }
@@ -992,6 +1006,10 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
+
+        // It seems that bzip2-compressed AbiWord files were planned
+        //   but AbiWord CVS 2001-12-15 does not have export and import filters for them anymore.
+        //   We leave this code but leave the .desktop file without bzip2 files
         strMime="application/x-bzip2";
         kdDebug(30506) << "Compression: bzip2" << endl;
     }
@@ -1012,6 +1030,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     if (!reader.parse( source ))
     {
         kdError(30506) << "Import (COMPRESSED): Parsing unsuccessful. Aborting!" << endl;
+        // TODO: try to give line and column number like the QDom parser does.
         delete in;
         return false;
     }
@@ -1026,7 +1045,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     }
 
     //Write the document!
-    QCString strOut=qDomDocumentOut.toCString();
+    QCString strOut=qDomDocumentOut.toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out.write(strOut,strOut.length());
     out.close();

@@ -54,6 +54,7 @@ public:
     StackItem();
     ~StackItem();
 public:
+    QString itemName;   // Name of the tag (only for error purposes)
     StackItemElementType elementType;
     QDomElement stackElementParagraph; // <PARAGRAPH>
     QDomElement stackElementText; // <TEXT>
