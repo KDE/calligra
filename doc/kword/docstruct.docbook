@@ -38,7 +38,7 @@ has the ability to toggle the document structure window on and off.</para>
 
 <varlistentry>
 <term><guilabel>Text Frame/Framesets</guilabel></term>
-<listitem><para>Within this category, is a list of all framesets.  Below each frameset, each frame is listed.</para></listitem>
+<listitem><para>Within this category, is a list of all text framesets.  Below each frameset, each frame is listed.</para></listitem>
 </varlistentry>
 </variablelist>
 

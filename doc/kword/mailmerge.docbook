@@ -13,9 +13,14 @@ SQL database for your data source.</para></listitem>
 
 <para>For answers to these questions, other documentation is available on the internet that is specific to the software you have chosen.</para>
 
+<para>If you want to use the internal database of &kword;, click <link linkend="mail-merge-internal">here</link>.</para>
+
 <sect2 id="mail-merge-sql">
 <title>Using an outside database (SQL) to create documents</title>
 <para>&kword; has the ability to use several of the most popular open source databases as a source of data for personalized documents.</para>
+<note><para>In order to access an outside database using SQL, your machine needs to have the appropriate database module compiled 
+into your copy of QT.</para>
+<para>For more information see the <link linkend="installation">installation section of this documentation</link>.</para></note>
 <para>The database can be located on the same machine as &kword;, or on any computer which is accessable through your computer 
 network or the internet.</para>
 <para>In order to use the database, you must know the following information:</para>
@@ -32,7 +37,7 @@ network or the internet.</para>
 <orderedlist>
 <listitem><para><link linkend="mail-merge-sql-data">Connect to the database and select your query.</link></para></listitem>
 <listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
-what data goes where in the documents</para></listitem>
+where to insert the database information</para></listitem>
 <listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
 </orderedlist>
 
@@ -50,7 +55,7 @@ the menubar. A dialog box will appear.</para>
 </screenshot>
 
 <para>Click on <guibutton>Open Existing...</guibutton>.  Another small dialog will appear.</para>
-<para>There is currently only one option in this dialog box <guilabel>QT-SQL source</guilabel>. Click on
+<para>There is currently only one option in this dialog box (<guilabel>QT-SQL source</guilabel>). Click on
 <guibutton>OK</guibutton>.  A new dialog box will appear.<anchor id="mail-merge-login"/></para>
 
 <screenshot>
@@ -92,10 +97,11 @@ the password in the text box, and click <guibutton>OK</guibutton>.</para>
 </screenshot>
 
 <para>This dialog is designed to help you enter and test your database query.  The dialog is divided into three
-sections:  Database information, query information and query line.</para>
+sections:  Database information, Query information and Query line.</para>
 <para>The database information section is labeled <guilabel>Information</guilabel> and consists of two combo boxes.  The
 left combo box (<guilabel>Available tables</guilabel>) gives you a list of all available tables within the current database.
-Select the desired table from the list.  A list of all available fields from that table will appear in the right combo box.</para>
+Select the desired table from the list by clicking on the table name with the &LMB;.  
+A list of all available fields from that table will appear in the right combo box.</para>
 <para>The query line is a text box located near the bottom of the dialog labeled <guilabel>Query</guilabel>.  Simply type your 
 SQL query into this text box and click <guibutton>Execute</guibutton>.  &kword; will query the database and return the specified query
 in tabular format in the <guilabel>Query result</guilabel> box.  You can alter, or edit your query on the query line and each time you 
@@ -137,7 +143,7 @@ structure can then be used to create documents with this data inserted at predef
 <orderedlist>
 <listitem><para><link linkend="mail-merge-internal-data">Enter the data</link> into &kword;</para></listitem>
 <listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
-what data goes where in the documents</para></listitem>
+where to insert the database information</para></listitem>
 <listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
 </orderedlist>
 <para>After the data has been created once, you can go back and change the data as needed, and produce another set of
@@ -246,6 +252,8 @@ value of the entry for that individual record.</para>
 <guimenuitem>Mail Merge...</guimenuitem></menuchoice> from
 the menubar.  A list of available entries will appear.  Select the desired entry, and click <guibutton>OK</guibutton>.</para>
 <para>The merge field is inserted at the current cursor location.  The merge field is surrounded by brackets.</para>
+<para>You can place the cursor in a new location in the document and insert another placeholder.  When you are done inserting placeholders, 
+you can proceed to printing your document.</para>
 </sect4>
 
 <sect4 id="mail-merge-field-delete">

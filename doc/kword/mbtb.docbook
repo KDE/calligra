@@ -1,7 +1,7 @@
 <!-- <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
 
-To work on this document standalone, uncomment the prolog.  
+To work on this document standalone, uncomment the prolog.
 Comment it out again when you are done -->
 	
 <chapter id="menu-items">
@@ -55,7 +55,7 @@ the toolbars or you can temporarily flatten the toolbars.</para>
 
 <para>Each toolbar has a striped area to the left (or on top) of the
 toolbar buttons.  By clicking on this area, the toolbar will be
-minimized.</para>
+minimized (flattened).</para>
 
 <mediaobject>
 <imageobject>
@@ -74,14 +74,14 @@ menubar.</para>
 size.</para>
 
 <note>
-<para>Alternatively place the cursor over on the toolbar you want to
+<para>Alternatively place the mouse pointer over on the toolbar you want to
 flatten, and click with the &RMB;.</para>
 
-<para>A small menu will appear at the mouse cursor.  Select
+<para>A small menu will appear at the mouse pointer.  Select
 <guimenuitem>Flat</guimenuitem>.</para>
 
 <para>To restore this menu to its original size and position, place
-the mouse cursor over the stippled area near the menu bar, and click
+the mouse pointer over the stripped area near the menubar, and click
 with the &LMB;.</para>
 </note>
 
@@ -144,7 +144,7 @@ toolbar will be inserted there.</para>
 </listitem>
 
 <listitem>
-<para>Click on the striped area of the toolbar with the &RMB;. A
+<para>Click on the toolbar with the &RMB;. A
 sub-menu will appear.  Select
 <guimenuitem>Orientation</guimenuitem>. Another small submenu will
 appear.  Select <guimenuitem>Top</guimenuitem>,
@@ -338,14 +338,14 @@ Document</guimenuitem>
 <listitem>
 <para><action>Allows you to save your file as a template, to use as a
 starting point for future documents.</action> For more details, see
-<link linkend="template-creation">Creating a new template.</link>.</para>
+<link linkend="template-creation">Creating a new template</link>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="menu-statistics">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Statistics</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Statistics...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -359,7 +359,7 @@ written in English.</para>
 
 <para>The <guilabel>Flesch reading ease</guilabel> score is a number
 between 0 and 100 which estimates how readable a text is. The higher
-the number, the easier the text can be read. Texts with a score of
+the number, the easier the text can be read. Text with a score of
 70-80 have a fairly good readability.</para>
 
 <para>The Flesch formula uses the number of words per sentences and
@@ -383,7 +383,7 @@ window.</para>
 <menuchoice>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>P</keycap></keycombo></shortcut>
-<guimenu>File</guimenu><guimenuitem>Print</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
 <listitem>
 <para><action>Print the file.</action>  For an overview of printing
@@ -400,7 +400,7 @@ the menubar.</para>
 <varlistentry>
 <term id="menu-print-preview">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Print Preview...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -411,7 +411,7 @@ you use.  Refer to the help files for your viewer for
 help.</action></para> 
 
 <para>Clicking <inlinemediaobject><imageobject>
-<imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject> are equivalent to using
+<imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -419,13 +419,13 @@ the menubar.</para>
 <varlistentry>
 <term id="menu-doc-info">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Opens a window that lets you enter information related to
-the document</action> (such as Authors name, Addresses, Phone numbers,
-Abstract, &etc;). This information is saved with the document for later
+the document</action> (such as author's name, address, phone numbers,
+document abstract, &etc;). This information is saved with the document for later
 classification.</para> 
 <para>For more information, see <link linkend="documentinfo">Document Information</link>.</para>
 </listitem>
@@ -434,7 +434,7 @@ classification.</para>
 <varlistentry>
 <term id="menu-send-file">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Send File</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Send File...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -545,7 +545,7 @@ equivalent to using the menubar.</para>
 <listitem>
 <para><action>Deletes the highlighted text from the document, and places
 a copy in the clipboard.</action>  For a more complete directions on
-Cutting and Pasting, and a full description of the clipboard, <link
+cutting and pasting, and a full description of the clipboard, <link
 linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
@@ -569,7 +569,7 @@ action="simul">&Ctrl;<keycap>X</keycap></keycombo> or clicking
 <listitem>
 <para><action>Places a copy of the highlighted text in the clipboard,
 without changing the text in the document.</action>  For a more complete
-directions on Cutting and Pasting, and a full description of the
+directions on cutting and pasting, and a full description of the
 clipboard, <link linkend="clipboard">click here</link>.</para>
  
 <para>Typing <keycombo
@@ -592,8 +592,8 @@ the menubar.</para>
 <para><action>Inserts a copy of the clipboard into the current cursor
 position.</action> If there is highlighted text, &kword; replaces
 replaces all highlighted text with the contents of the clipboard.  The
-clipboard is not altered.  For a more complete directions on Cutting
-and Pasting, and a full description of the clipboard, <link
+clipboard is not altered.  For a more complete directions on cutting and pasting, 
+and a full description of the clipboard, <link
 linkend="clipboard">click here</link>.</para>
 
 <para>Typing <keycombo
@@ -651,8 +651,8 @@ using the menubar.</para></listitem></varlistentry>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to replace for a series of characters with
-others.</action>  The find and replace features of &kword; are covered
+<para><action>Allows you to replace one or more characters with
+another set of characters.</action>  The find and replace features of &kword; are covered
 in more detail under <link linkend="replace">Replacing
 Text</link>.</para>
 <para>Typing <keycombo

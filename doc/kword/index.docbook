@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-16</date>
+<date>2002-07-18</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -450,6 +450,8 @@ If any document variables were changed, &kword; will update their values through
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
+<para>The sections that are included in this chapter are for advanced users.  The instructions for these sections 
+will assume you are familiar with the basic operation of &kword;.</para>
 &struct;
 <!--<sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>-->
 &mmerge;
@@ -496,7 +498,7 @@ from the menubar.</para></listitem>
 <listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
 <listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
 <listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
-<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para><guilabel>Cell Widths</guilabel>: Manual</para></listitem>
 <listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
 </itemizedlist>
 <para>Then click <guibutton>OK</guibutton>.</para>
@@ -523,7 +525,7 @@ on the toolbar.</para></listitem>
 <listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
 <listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
 <listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
-<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para><guilabel>Cell Widths</guilabel>: Manual</para></listitem>
 <listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
 </itemizedlist>
 <para>Then click <guibutton>OK</guibutton>.</para>
