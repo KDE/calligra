@@ -583,8 +583,9 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     m_currentPage = 1;
 
     // parse all pages
-    for ( QDomNode title = titles.firstChild(); !title.isNull();
-          title = title.nextSibling() )
+    QDomNode note = notes.firstChild();
+    for ( QDomNode title = titles.firstChild(); !title.isNull() && !note.isNull();
+          title = title.nextSibling(), note = note.nextSibling() )
     {
         // create the page style and ignore the fact that there may
         // be less backgrounds than pages
@@ -663,7 +664,8 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             }
             ++m_objectIndex;
         }
-
+        QDomElement noteElement = note.toElement();
+        appendNote( doccontent, noteElement, drawPage );
         body.appendChild( drawPage );
         m_currentPage++;
     }
@@ -680,11 +682,20 @@ void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & sourc
 
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
-    kdDebug()<<" note not implemented \n";
-#if 0
+    QString noteText = source.attribute("note");
+    kdDebug()<<"noteText :"<<noteText<<endl;
+    if ( noteText.isEmpty() )
+        return;
     QDomElement noteElement = doc.createElement( "presentation:notes" );
+    QDomElement noteTextBox = doc.createElement( "draw:text-box" );
+    QStringList text = QStringList::split( "\n", noteText );
+    for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
+        QDomElement tmp = doc.createElement( "text:p" );
+        tmp.appendChild( doc.createTextNode( *it ) );
+        noteTextBox.appendChild( tmp );
+    }
+    noteElement.appendChild( noteTextBox );
     target.appendChild( noteElement );
-#endif
 }
 
 void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target )
