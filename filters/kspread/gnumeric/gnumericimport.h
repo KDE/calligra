@@ -28,7 +28,7 @@
 class KSpreadCell;
 class KSpreadSheet;
 
-class GNUMERICFilter : public KoFilter 
+class GNUMERICFilter : public KoFilter
 {
     Q_OBJECT
  public:
@@ -37,7 +37,7 @@ class GNUMERICFilter : public KoFilter
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
-
+enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
  private:
   class GnumericDate : public QDate
   {
@@ -55,5 +55,8 @@ class GNUMERICFilter : public KoFilter
   void setStyleInfo(QDomNode * sheet, KSpreadSheet * table);
   bool setType( KSpreadCell * kspread_cell, QString const & formatString, QString & cell_content );
   void convertFormula( QString & formula ) const;
+    void importBorder( QDomElement  border, borderStyle _style,  KSpreadCell *cell);
+    void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell );
+
 };
 #endif // GNUMERICFILTER_H

@@ -448,7 +448,7 @@ void convertToPen( QPen & pen, int style )
   }
 }
 
-void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
+void GNUMERICFilter::ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
 {
   QDomNode gmr_diagonal = gmr_styleborder.namedItem("gmr:Diagonal");
   QDomNode gmr_rev_diagonal = gmr_styleborder.namedItem("gmr:Rev-Diagonal");
@@ -469,141 +469,112 @@ void ParseBorder( QDomElement & gmr_styleborder, KSpreadCell * kspread_cell )
   if ( !gmr_left.isNull() )
   {
     QDomElement e = gmr_left.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-
-      QPen pen;
-      convertToPen( pen, style );
-
-      if ( style > 0 )
-        kspread_cell->setLeftBorderPen( pen ); // check if this is really GoUp
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setLeftBorderColor( color );
-      }
-    }
-  }
+    importBorder( e, Left, kspread_cell);
+   }
 
   if ( !gmr_right.isNull() )
   {
     QDomElement e = gmr_right.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-
-      QPen pen;
-      convertToPen( pen, style );
-
-      if ( style > 0 )
-        kspread_cell->setRightBorderPen( pen ); // check if this is really GoUp
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setRightBorderColor( color );
-      }
-    }
+    importBorder( e, Right, kspread_cell);
   }
 
   if ( !gmr_top.isNull() )
   {
     QDomElement e = gmr_top.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-
-      QPen pen;
-      convertToPen( pen, style );
-
-      if ( style > 0 )
-        kspread_cell->setTopBorderPen( pen ); // check if this is really GoUp
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setTopBorderColor( color );
-      }
-    }
+    importBorder( e, Top,  kspread_cell);
   }
 
   if ( !gmr_bottom.isNull() )
   {
     QDomElement e = gmr_bottom.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-      QPen pen;
-      convertToPen( pen, style );
-
-      if ( style > 0 )
-        kspread_cell->setBottomBorderPen( pen ); // check if this is really GoUp
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setBottomBorderColor( color );
-      }
-    }
+    importBorder( e, Bottom, kspread_cell);
   }
 
   if ( !gmr_diagonal.isNull() )
   {
     QDomElement e = gmr_diagonal.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-      QPen pen;
-      convertToPen( pen, style );
-
-      if ( style > 0 )
-        kspread_cell->setFallDiagonalPen( pen ); // check if this is really GoUp
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setFallDiagonalColor( color );
-      }
-    }
+    importBorder( e, Diagonal, kspread_cell);
   }
 
   if ( !gmr_rev_diagonal.isNull() )
   {
     QDomElement e = gmr_rev_diagonal.toElement(); // try to convert the node to an element.
-    if ( e.hasAttribute( "Style" ) )
-    {
-      int style = e.attribute( "Style" ).toInt();
-
-      QPen pen;
-      convertToPen( pen, style );
-      if ( style > 0 )
-        kspread_cell->setGoUpDiagonalPen( pen );
-
-      if ( e.hasAttribute( "Color" ) )
-      {
-        QColor color;
-        QString colorString = e.attribute( "Color" );
-        convert_string_to_qcolor( colorString, &color );
-        kspread_cell->setGoUpDiagonalColor( color );
-      }
-    }
+    importBorder( e, Revdiagonal, kspread_cell);
   }
 
   //  QDomElement gmr_styleborder_element = gmr_styleborder.toElement();
 }
 
+
+void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  KSpreadCell *cell)
+{
+    if ( !border.isNull() )
+    {
+        QDomElement e = border.toElement(); // try to convert the node to an element.
+        if ( e.hasAttribute( "Style" ) )
+        {
+            int style = e.attribute( "Style" ).toInt();
+
+            QPen pen;
+            convertToPen( pen, style );
+
+            if ( style > 0 )
+            {
+                switch( _style )
+                {
+                case Left:
+                    cell->setLeftBorderPen( pen ); // check if this is really GoUp
+                    break;
+                case Right:
+                    cell->setRightBorderPen( pen ); // check if this is really GoUp
+                    break;
+                case Top:
+                    cell->setTopBorderPen( pen ); // check if this is really GoUp
+                    break;
+                case Bottom:
+                    cell->setBottomBorderPen( pen ); // check if this is really GoUp
+                    break;
+                case Diagonal:
+                    cell->setFallDiagonalPen( pen ); // check if this is really GoUp
+                    break;
+                case Revdiagonal:
+                    cell->setGoUpDiagonalPen( pen ); // check if this is really GoUp
+                    break;
+                }
+            }
+            if ( e.hasAttribute( "Color" ) )
+            {
+                QColor color;
+                QString colorString = e.attribute( "Color" );
+                convert_string_to_qcolor( colorString, &color );
+                {
+                    switch( _style )
+                    {
+                    case Left:
+                        cell->setLeftBorderColor( color );
+                        break;
+                    case Right:
+                        cell->setRightBorderColor( color );
+                        break;
+                    case Top:
+                        cell->setTopBorderColor( color );
+                        break;
+                    case Bottom:
+                        cell->setBottomBorderColor( color );
+                        break;
+                    case Diagonal:
+                        cell->setFallDiagonalColor( color );
+                        break;
+                    case Revdiagonal:
+                        cell->setGoUpDiagonalPen( color );
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 bool GNUMERICFilter::setType( KSpreadCell * kspread_cell,
                               QString const & formatString,
@@ -1487,6 +1458,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		row    = e.attribute( "Row" ).toInt() + 1;
 
 		QString cell_content( content.text() );
+                kdDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content<<endl;
                 if ( cell_content[0] == '=' )
                   convertFormula( cell_content );
 
