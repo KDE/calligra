@@ -9,13 +9,31 @@
 #ifndef VREFERENCE_H
 #define VREFERENCE_H
 
-#include <qwidget.h>
+#include <qframe.h>
 
-class VReference : public QWidget
+class QButtonGroup;
+
+enum Choice
+{
+	TopLeft,
+	Left,
+	BottomLeft,
+	Top,
+	Center,
+	Bottom,
+	TopRight,
+	Right,
+	BottomRight
+};
+
+class VReference : public QFrame
 {
 	Q_OBJECT
 public:
-	VReference( QWidget* parent = 0L );
+	VReference( QWidget *parent = 0L, const char *name = 0L );
+
+private:
+	QButtonGroup* mButtonGroup;
 };
 
 #endif
