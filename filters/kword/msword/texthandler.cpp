@@ -659,7 +659,6 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
 void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
 {
     const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
-    Q_ASSERT( listInfo );
     if ( !listInfo )
         return;
 
