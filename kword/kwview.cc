@@ -20,6 +20,7 @@
 
 #include "kwcanvas.h"
 #undef Unsorted
+#include <kaccel.h>
 #include <kmessagebox.h>
 #include <qclipboard.h>
 #include <qregexp.h>
