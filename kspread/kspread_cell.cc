@@ -433,8 +433,8 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                     int row = 0;
                     if ( pos != oldPos )
                         row = m_strText.mid(oldPos, pos-oldPos).toInt();
-                    // Is it a table
-                    if ( m_strText[pos] == '!' )
+                    // Is it a table name || is it a function name like DEC2HEX
+                    if ( ( m_strText[pos] == '!' ) || m_strText[pos].isLetter() )
                     {
                         erg += tmp;
                         fix1 = fix2 = FALSE;
