@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <klistview.h>
-#include <klistviewlineedit.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kimageeffect.h>
