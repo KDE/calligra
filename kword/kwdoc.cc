@@ -683,6 +683,7 @@ void KWDocument::recalcFrames()
             }
         }
         m_pages = static_cast<int>((height / ptPaperHeight()) + 0.5);
+        if(m_pages < 1) m_pages=1;
     }
 
     if ( isHeaderVisible() ) {
