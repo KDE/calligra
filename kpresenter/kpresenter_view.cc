@@ -2858,11 +2858,11 @@ void KPresenterView::setupActions()
             actionFormatNumber->insert( act );
     }
 
-    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "format_increaseindent",
+    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::reverseLayout() ?"format_decreaseindent" : "format_increaseindent",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
 				       actionCollection(), "text_depthPlus" );
 
-    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), "format_decreaseindent",
+    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::reverseLayout() ?"format_increaseindent" : "format_decreaseindent",
 					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
 					actionCollection(), "text_depthMinus" );
 
