@@ -1216,20 +1216,14 @@ void KexiDataAwareObjectInterface::reloadData()
 
 int KexiDataAwareObjectInterface::columnType(int col)
 {
-	return (m_data && col>=0 && col<columns()) 
-//		? m_data->column(col)->field()->type() 
-		? column(col)->field()->type() 
-		: KexiDB::Field::InvalidType;
+    KexiTableViewColumn* c = m_data ? column(col) : 0;
+    return c ? c->field()->type() : KexiDB::Field::InvalidType;
 }
 
 bool KexiDataAwareObjectInterface::columnEditable(int col)
 {
-//	KexiTableViewColumn * c = m_data->column(col);
-//	bool ro = c->readOnly();
-	return (m_data && col>=0 && col<columns()) 
-//		? !m_data->column(col)->readOnly() 
-		? !column(col)->readOnly() 
-		: false;
+    KexiTableViewColumn* c = m_data ? column(col) : 0;
+    return c ? (! c->readOnly()) : false;
 }
 
 int KexiDataAwareObjectInterface::rows() const
