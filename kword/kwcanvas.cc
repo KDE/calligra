@@ -91,6 +91,7 @@ KWCanvas::~KWCanvas()
 
 void KWCanvas::repaintChanged()
 {
+    kdDebug() << "KWCanvas::repaintChanged" << endl;
     drawAll = FALSE;
     viewport()->repaint( FALSE );
     drawAll = TRUE;
@@ -98,6 +99,7 @@ void KWCanvas::repaintChanged()
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
+    kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -114,7 +116,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
     bool focus = hasFocus() || viewport()->hasFocus();
 #if 0
-    // Can't see what this is good for
+    // Can't see what this is good for - if we need it it should be moved to KWTextFrameSet
     if ( contentsY() == 0 ) {
         QColorGroup g = colorGroup();
 	painter->fillRect( contentsX(), contentsY(), visibleWidth(), m_currentFrameSet->textDocument()->y(),
@@ -124,16 +126,9 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     painter->setBrushOrigin( -contentsX(), -contentsY() );
     // Note: this is drawContents. The painter is already translated correctly.
 
-    // Looks like this excludes one pixel on the left and one on the right
     QRect crect( cx, cy, cw, ch );
-    QRegion cr( crect );
-    QRegion r = cr;
-    if ( contentsX() == 0 ) {
-        r = QRegion( QRect( 1, 0, doc->ptPaperWidth() - 2, visibleHeight() ) );
-        r = r.intersect( cr );
-    }
     bool _erase = drawAll; // ### To be checked. Old KWord had stuff like if (_scrolled) erase=true; etc.
-    drawBorders( painter, crect, _erase, &r );
+    drawBorders( painter, crect, _erase, crect );
 
     // Draw all framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
@@ -152,17 +147,12 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
                 frameset->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
         }
     }
-
-#if 0
-    if ( contentsHeight() < visibleHeight() && ( !m_currentFrameSet->textDocument()->lastParag() ||
-						 m_currentFrameSet->textDocument()->lastParag()->isValid() ) && drawAll )
-	painter->fillRect( 0, contentsHeight(), visibleWidth(),
-                           visibleHeight() - contentsHeight(), colorGroup().brush( QColorGroup::Base ) );
-#endif
 }
 
-void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QRegion *region )
+void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, const QRect &crect )
 {
+    bool clearEmptySpace = true; // we might want to make this a parameter
+    QRegion region( crect );
     painter->save();
     painter->setBrush( NoBrush );
 
@@ -198,8 +188,8 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
                 should_draw = FALSE;
 
             if ( v_area.intersects( frameRect ) && should_draw && !frameset->getGroupManager() ) {
-                if ( region )
-                    *region = region->subtract( frameRect );
+                if ( clearEmptySpace )
+                    region = region.subtract( frameRect );
                 //if ( redrawOnlyCurrFrameset && m_currentFrameSet != frameset )
                 //    ;
                 /*else*/ {
@@ -211,8 +201,8 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
 
             painter->setBrush( Qt::NoBrush );
             if ( v_area.intersects( frameRect ) && frameset->getGroupManager() ) {
-                if ( region )
-                    *region = region->subtract( frameRect );
+                if ( clearEmptySpace )
+                    region = region.subtract( frameRect );
                 //if ( redrawOnlyCurrFrameset && m_currentFrameSet != frameset )
                 //    ;
                 /*else*/ {
@@ -279,23 +269,33 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
         }
     }
 
-    if ( region ) {
-        // clear empty space
-        painter->save();
-        painter->setClipRegion( *region );
-        painter->fillRect( region->boundingRect(), Qt::white );
-        painter->restore();
-    }
-
     // Draw page borders (red)
     painter->setPen( red );
     painter->setBrush( Qt::NoBrush );
+
+    QRegion pageContentsReg;
 
     for ( int k = 0; k < doc->getPages(); k++ ) {
         QRect pageRect( 0, ( k * doc->ptPaperHeight() ),
                         doc->ptPaperWidth(), doc->ptPaperHeight() );
         if ( v_area.intersects( pageRect ) )
             painter->drawRect( pageRect );
+        // Exclude red border line
+        pageRect.rLeft() += 1;
+        pageRect.rTop() += 1;
+        pageRect.rRight() -= 2;
+        pageRect.rBottom() -= 2;
+        pageContentsReg += pageRect; // unite
+    }
+
+    if ( clearEmptySpace ) {
+        // clear empty space
+        painter->save();
+
+        region &= pageContentsReg; // intersect
+        painter->setClipRegion( region );
+        painter->fillRect( region.boundingRect(), Qt::white );
+        painter->restore();
     }
 
     painter->restore();

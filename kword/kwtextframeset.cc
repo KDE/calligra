@@ -30,6 +30,8 @@
 
 #include <kdebug.h>
 
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )
 {
@@ -143,19 +145,21 @@ QPoint KWTextFrameSet::internalToContents( QPoint p ) const
     return p;
 }
 
-
+// This determines where to clip the painter to draw the contents of a given frame
+// It clips to the frame, and clips out any "on top" frame.
 QRegion KWTextFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame )
 {
     QRect rc = painter->xForm( *frame );
-    //kdDebug() << "KWTextFrameSet::frameClipRegion initial rect=" << frame->x() << "," << frame->y() << " " << frame->width() << "," << frame->height()
-    //          << " clip region rect=" << rc.x() << "," << rc.y() << " " << rc.width() << "," << rc.height() << endl;
-    QRegion reg( rc ); // The initial clipping rect is the frame (translated correctly)
+    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << endl;
+    QRegion reg( rc );
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
     {
         QRect r = painter->xForm( *fIt.current() );
-        //kdDebug() << "KWTextFrameSet::frameClipRegion for frame " << frame << " subtracting rectangle " << r.x() << "," << r.y() << " " << r.width() << "," << r.height() << endl;
-        reg.subtract( r );
+        r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
+                   r.width() + 2, r.height() + 2 );
+        //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+        reg -= r; // subtract
     }
     return reg;
 }
@@ -195,13 +199,13 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
             m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
 
             // Blank area under the last paragraph
-            if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted))
+            if ( (m_lastFormatted == text->lastParag() || !m_lastFormatted) && !onlyChanged /*VERY IMPORTANT*/)
             {
-                //kdDebug() << "KWTextFrameSet::drawContents drawing blank area onlyChanged=" << onlyChanged << endl;
                 int docHeight = text->height();
                 QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
-                //kdDebug() << this << " Blank area: " << blank.x() << "," << blank.y() << " " << blank.width() << "x" << blank.height() << endl;
+                //kdDebug() << this << " Blank area: " << DEBUGRECT(blank) << endl;
                 p->fillRect( blank, gb.brush( QColorGroup::Base ) );
+                // for debugging :) p->setPen( QPen(Qt::yellow, 1, DashLine) );  p->drawRect( blank );
             }
             p->restore();
         }
@@ -227,25 +231,34 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             continue;
 
         // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
-        QRect r( *frame );
-        r.moveBy( -frame->left(), -frame->top() + totalHeight );
-        r = r.intersect( cursor->topParag()->rect() );
-        if ( !r.isEmpty() )
+        QRect rf( *frame );
+        rf.moveBy( -frame->left(), -frame->top() + totalHeight );
+        rf = rf.intersect( cursor->topParag()->rect() );
+        if ( !rf.isEmpty() )
         {
             p->save();
-            p->setClipRegion( frameClipRegion( p, frame ) );
-            //p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
-            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
             // Hmmm... This probably concentrates on the parag rect itself ? Or ?
             //p->translate( cursor->totalOffsetX(), cursor->totalOffsetY() );
             //r.moveBy( -cursor->totalOffsetX(), -cursor->totalOffsetY() );
 
+            QPoint topLeft = cursor->topParag()->rect().topLeft();                    // in QRT coords
+            int h = cursor->parag()->lineHeightOfChar( cursor->index() );             //
+            QPoint real = p->xForm( internalToContents( topLeft ) );                  // From QRT to contents to viewport
+            QRect clip( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h );
+
+            //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << "  real=(" << real.x() << "," << real.y() << ")" << endl;
+            //kdDebug() << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
+
+            p->setClipRegion( frameClipRegion( p, frame ).intersect( clip ) );
+
+            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+
             QPixmap *pix = 0;
-            // cursor->parag()->document()->nextDoubleBuffered = TRUE; ################ we need that only if we have nested items/documents
             QColorGroup cg = QApplication::palette().active();
             cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
-            text->drawParag( p, cursor->parag(), r.x(), r.y(), r.width(), r.height(),
+            text->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
+                             topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
                              pix, cg, cursorVisible, cursor );
             p->restore();
             drawn = true;
@@ -279,6 +292,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
     //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
     QPoint p = internalToContents( QPoint(0, yp) );
     int middle = m_width / 2;
+    int newMargin = 0;
 
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
@@ -288,16 +302,17 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
              ( frame->left() - p.x() < middle ) ) // adjust the left margin only
                                                   // for frames which are in the
                                                   // left half
-            margin = QMAX( margin, ( frame->right() - p.x() ) + space );
+            newMargin = QMAX( newMargin, ( frame->right() - p.x() ) + space );
     }
 
-    return QTextFlow::adjustLMargin( yp, margin, space );
+    return QTextFlow::adjustLMargin( yp, margin + newMargin, space );
 }
 
 int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
 {
     QPoint p = internalToContents( QPoint(0, yp) );
     int middle = m_width / 2;
+    int newMargin = 0;
 
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
@@ -307,10 +322,10 @@ int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
              frame->left() - p.x() >= middle ) // adjust the right margin only
                                                // for frames which are in the
                                                // right half
-                margin = QMAX( margin, m_width - ( frame->x() - p.x() ) - space );
+                newMargin = QMAX( newMargin, m_width - ( frame->x() - p.x() ) - space );
     }
 
-    return QTextFlow::adjustRMargin( yp, margin, space );
+    return QTextFlow::adjustRMargin( yp, margin + newMargin, space );
 }
 
 void KWTextFrameSet::adjustFlow( int &yp, int w, int h, bool /*pages*/ )

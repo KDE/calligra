@@ -132,7 +132,7 @@ protected:
     void setFormat( QTextFormat *, int flags);
 
     void drawContents( QPainter *p, int cx, int cy, int cw, int ch );
-    void drawBorders( QPainter *painter, QRect v_area, bool drawBack, QRegion *region );
+    void drawBorders( QPainter *painter, QRect v_area, bool drawBack, const QRect &crect );
 
     void keyPressEvent( QKeyEvent *e );
     void contentsMousePressEvent( QMouseEvent *e );
