@@ -83,6 +83,7 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
 
 void KPPieObject::loadOasis(const QDomElement &element)
 {
+    kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
     KP2DObject::loadOasis(element);
 }
 

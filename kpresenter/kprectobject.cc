@@ -75,6 +75,7 @@ void KPRectObject::loadOasis(const QDomElement &element)
 {
     kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";
     KP2DObject::loadOasis(element);
+    //I don't think that RNDS exist into openoffice
 }
 
 double KPRectObject::load(const QDomElement &element)

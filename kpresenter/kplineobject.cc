@@ -82,6 +82,7 @@ void KPLineObject::loadOasis(const QDomElement &element)
     double x2 = KoUnit::parseValue( element.attribute( "svg:x2" ) );
     double y2 = KoUnit::parseValue( element.attribute( "svg:y2" ) );
 
+    kdDebug()<<" KPLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
     double x = QMIN( x1, x2 );
     double y = QMIN( y1, y2 );
 
@@ -91,6 +92,7 @@ void KPLineObject::loadOasis(const QDomElement &element)
     ext.setWidth( fabs( x1 - x2 ) );
     ext.setHeight( fabs( y1 - y2 ) );
 
+    kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<x<<" y "<<y<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
 #if 0
     QDomElement linetype = doc.createElement( "LINETYPE" );
     if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )

@@ -215,6 +215,7 @@ void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &st
         bleft = KoUnit::parseValue( styleStack.attribute( "fo:padding-left" ) );
     if( styleStack.hasAttribute( "fo:padding-right" ) )
         bright = KoUnit::parseValue( styleStack.attribute( "fo:padding-right" ) );
+    kdDebug()<<" KPTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
     // vertical alignment
     if ( styleStack.hasAttribute( "draw:textarea-vertical-align" ) )
     {
@@ -226,6 +227,7 @@ void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &st
         else if ( alignment == "bottom" )
             m_textVertAlign= KP_BOTTOM;
     }
+    kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
 
 }
 
