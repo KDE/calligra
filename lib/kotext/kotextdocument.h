@@ -109,7 +109,7 @@ public:
     bool drawingMissingSpellLine() const { return (m_drawingFlags & DrawMisspelledLine); }
 
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
-    bool drawingNoteVariable() const { return (m_drawingFlags & DontDrawNoteVariable); }
+    bool dontDrawingNoteVariable() const { return (m_drawingFlags & DontDrawNoteVariable); }
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
