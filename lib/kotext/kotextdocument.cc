@@ -387,7 +387,7 @@ Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int c
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
             drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
-                              zoomHandler, drawCursor, cursor, resetChanged, drawFormattingChars );
+                              zoomHandler, drawCursor, cursor, resetChanged, drawFormattingChars  );
         }
 
 	parag = static_cast<KoTextParag *>( parag->next() );

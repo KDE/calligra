@@ -463,7 +463,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
         }
     }
 
-    if ( textDocument()->drawFormattingChars() )
+    if ( textDocument()->drawFormattingChars() && !textDocument()->drawingShadow())
         drawFormattingChars( painter, s, start, len,
                              startX, lastY, baseLine, h,
                              startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
