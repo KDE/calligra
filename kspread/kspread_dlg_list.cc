@@ -123,7 +123,7 @@ void KSpreadList::init()
     smonth+=i18n("Jan")+", ";
     smonth+=i18n("Feb")+", ";
     smonth+=i18n("Mar") +", ";
-    smonth+=i18n("Aprl")+", ";
+    smonth+=i18n("Apr")+", ";
     smonth+=i18n("May")+", ";
     smonth+=i18n("Jun")+", ";
     smonth+=i18n("Jul")+", ";
