@@ -556,7 +556,7 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *pa
     KoTextString *s = parag->string();
     QChar ch = s->at( 0 ).c;
 
-    if( m_useBulletStyle && ch =='*' && (s->at(1).c).isSpace())
+    if( m_useBulletStyle && (ch =='*' || ch == '-' || ch =='+') && (s->at(1).c).isSpace())
     {
         KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use bullet style)"));
         cursor.setParag( parag );
@@ -578,7 +578,7 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *pa
 
 
         KoParagCounter c;
-        if( bulletStyle.isNull())
+        if( bulletStyle.isNull() && ch == '*' )
         {
             c.setNumbering( KoParagCounter::NUM_LIST );
             c.setStyle( KoParagCounter::STYLE_DISCBULLET );
@@ -587,7 +587,13 @@ void KoAutoFormat::doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *pa
         {
             c.setNumbering( KoParagCounter::NUM_LIST );
             c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
-            c.setCustomBulletCharacter( bulletStyle );
+            if( ch == '*')
+                c.setCustomBulletCharacter( bulletStyle );
+            else if ( ch == '+')
+                c.setCustomBulletCharacter( '+' );
+            else if ( ch == '-' )
+                c.setCustomBulletCharacter( '-' );
+
         }
         cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
         if( cmd)
