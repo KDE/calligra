@@ -31,7 +31,7 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
 			  KPresenterDoc *_doc )
     : Command( _name ), objects( _objects )
 {
-    objects.setAutoDelete( FALSE );
+    objects.setAutoDelete( false );
     doc = _doc;
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->incCmdRef();
@@ -55,40 +55,40 @@ void GroupObjCmd::execute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
-	obj->setSelected( FALSE );
+	obj->setSelected( false );
 	doc->objectList()->take( doc->objectList()->findRef( obj ) );
 	obj->removeFromObjList();
 	r = r.unite( obj->getBoundingRect( 0, 0 ) );
     }
 
-    grpObj->setUpdateObjects( FALSE );
+    grpObj->setUpdateObjects( false );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     doc->objectList()->append( grpObj );
     grpObj->addToObjList();
-    grpObj->setUpdateObjects( TRUE );
-    grpObj->setSelected( TRUE );
+    grpObj->setUpdateObjects( true );
+    grpObj->setSelected( true );
 
-    doc->repaint( FALSE );
+    doc->repaint( false );
 }
 
 /*==============================================================*/
 void GroupObjCmd::unexecute()
 {
-    grpObj->setUpdateObjects( FALSE );
+    grpObj->setUpdateObjects( false );
     KPObject *obj = 0;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
 	doc->objectList()->append( obj );
 	obj->addToObjList();
-	obj->setSelected( TRUE );
+	obj->setSelected( true );
     }
 
     doc->objectList()->take( doc->objectList()->findRef( grpObj ) );
     grpObj->removeFromObjList();
 
-    doc->repaint( FALSE );
+    doc->repaint( false );
 }
 
 /******************************************************************/
@@ -101,7 +101,7 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 			  KPresenterDoc *_doc )
     : Command( _name ), objects( grpObj_->getObjects() )
 {
-    objects.setAutoDelete( FALSE );
+    objects.setAutoDelete( false );
     doc = _doc;
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->incCmdRef();
@@ -121,19 +121,19 @@ UnGroupObjCmd::~UnGroupObjCmd()
 void UnGroupObjCmd::execute()
 {
     KPObject *obj = 0;
-    grpObj->setUpdateObjects( FALSE );
+    grpObj->setUpdateObjects( false );
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
 	doc->objectList()->append( obj );
 	obj->addToObjList();
-	obj->setSelected( TRUE );
+	obj->setSelected( true );
     }
 
     doc->objectList()->take( doc->objectList()->findRef( grpObj ) );
     grpObj->removeFromObjList();
 
-    doc->repaint( FALSE );
+    doc->repaint( false );
 }
 
 /*==============================================================*/
@@ -145,19 +145,19 @@ void UnGroupObjCmd::unexecute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
-	obj->setSelected( FALSE );
+	obj->setSelected( false );
 	doc->objectList()->take( doc->objectList()->findRef( obj ) );
 	obj->removeFromObjList();
 	r = r.unite( obj->getBoundingRect( 0, 0 ) );
     }
 
-    grpObj->setUpdateObjects( FALSE );
+    grpObj->setUpdateObjects( false );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     doc->objectList()->append( grpObj );
     grpObj->addToObjList();
-    grpObj->setUpdateObjects( TRUE );
-    grpObj->setSelected( TRUE );
+    grpObj->setUpdateObjects( true );
+    grpObj->setSelected( true );
 
-    doc->repaint( FALSE );
+    doc->repaint( false );
 }

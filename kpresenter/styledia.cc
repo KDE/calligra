@@ -124,10 +124,10 @@ void PBPreview::drawContents( QPainter *painter )
 StyleDia::StyleDia( QWidget* parent, const char* name, int flags_ )
     : QTabDialog( parent, name, true ), flags( flags_ )
 {
-    lockUpdate = TRUE;
+    lockUpdate = true;
     setupTab1();
     setupTab2();
-    lockUpdate = FALSE;
+    lockUpdate = false;
 
     if ( flags & SdPen )
 	updatePenConfiguration();
@@ -171,7 +171,7 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Pen Style:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
-    choosePStyle = new QComboBox( FALSE, left, "PStyle" );
+    choosePStyle = new QComboBox( false, left, "PStyle" );
     choosePStyle->insertItem( i18n( "Solid Line" ) );
     choosePStyle->insertItem( i18n( "Dash Line ( ---- )" ) );
     choosePStyle->insertItem( i18n( "Dot Line ( **** )" ) );
@@ -191,7 +191,7 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Line Begin:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineBegin = new QComboBox( FALSE, right, "lineBegin" );
+    clineBegin = new QComboBox( false, right, "lineBegin" );
     clineBegin->insertItem( "Normal" );
     clineBegin->insertItem( "Arrow" );
     clineBegin->insertItem( "Square" );
@@ -202,7 +202,7 @@ void StyleDia::setupTab1()
     l = new QLabel( i18n( "Line End:" ), right );
     l->setFixedHeight( l->sizeHint().height() );
 
-    clineEnd = new QComboBox( FALSE, right, "lineEnd" );
+    clineEnd = new QComboBox( false, right, "lineEnd" );
     clineEnd->insertItem( "Normal" );
     clineEnd->insertItem( "Arrow" );
     clineEnd->insertItem( "Square" );
@@ -245,7 +245,7 @@ void StyleDia::setupTab2()
     QLabel *l = new QLabel( i18n( "Fill with:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
-    cFillType = new QComboBox( FALSE, left );
+    cFillType = new QComboBox( false, left );
     cFillType->insertItem( i18n( "Brush" ) );
     cFillType->insertItem( i18n( "Gradient" ) );
 
@@ -272,7 +272,7 @@ void StyleDia::setupTab2()
     l = new QLabel( i18n( "Brush Style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
-    chooseBStyle = new QComboBox( FALSE, brushConfig, "BStyle" );
+    chooseBStyle = new QComboBox( false, brushConfig, "BStyle" );
     chooseBStyle->insertItem( i18n( "100% fill Pattern" ) );
     chooseBStyle->insertItem( i18n( "94% fill Pattern" ) );
     chooseBStyle->insertItem( i18n( "88% fill Pattern" ) );
@@ -310,7 +310,7 @@ void StyleDia::setupTab2()
     l = new QLabel( i18n( "Gradient Style:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
-    gradients = new QComboBox( FALSE, gradientConfig );
+    gradients = new QComboBox( false, gradientConfig );
     gradients->insertItem( i18n( "Horizontal Gradient" ), -1 );
     gradients->insertItem( i18n( "Vertical Gradient" ), -1 );
     gradients->insertItem( i18n( "Diagonal Gradient 1" ), -1 );
@@ -341,7 +341,7 @@ void StyleDia::setupTab2()
 	     this, SLOT( updateBrushConfiguration() ) );
 
     gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
-			       FALSE, 100, 100 );
+			       false, 100, 100 );
 
     (void)new QWidget( gradientConfig );
     (void)new QWidget( left );
@@ -384,17 +384,17 @@ void StyleDia::updateBrushConfiguration()
 	return;
 
     if ( !unbalanced->isChecked() ) {
-	xfactor->setEnabled( FALSE );
-	yfactor->setEnabled( FALSE );
+	xfactor->setEnabled( false );
+	yfactor->setEnabled( false );
     } else {
-	xfactor->setEnabled( TRUE );
-	yfactor->setEnabled( TRUE );
+	xfactor->setEnabled( true );
+	yfactor->setEnabled( true );
     }
 
     if ( getFillType() == FT_BRUSH ) {
 	brushPrev->setPaintType( PBPreview::Brush );
 	brushPrev->setBrush( getBrush() );
-	brushPrev->repaint( TRUE );
+	brushPrev->repaint( true );
     } else {
 	brushPrev->setPaintType( PBPreview::Gradient );
 	gradient->setColor1( getGColor1() );
@@ -403,7 +403,7 @@ void StyleDia::updateBrushConfiguration()
 	gradient->setUnbalanced( getGUnbalanced() );
 	gradient->setXFactor( getGXFactor() );
 	gradient->setYFactor( getGYFactor() );
-	brushPrev->repaint( FALSE );
+	brushPrev->repaint( false );
     }
 }
 

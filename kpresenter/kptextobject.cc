@@ -50,7 +50,7 @@ KPTextObject::KPTextObject()
     gColor2 = Qt::green;
     drawEditRect = true;
     drawEmpty = true;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }
@@ -67,7 +67,7 @@ void KPTextObject::setSize( int _width, int _height )
 //     if ( QSize( _width, _height ) == ext )
 // 	return;
 
-    ktextobject.toggleModified( TRUE );
+    ktextobject.toggleModified( true );
     KPObject::setSize( _width, _height );
     if ( move ) return;
     ktextobject.resize( ext );
@@ -79,7 +79,7 @@ void KPTextObject::setSize( int _width, int _height )
 /*======================= set size ===============================*/
 void KPTextObject::resizeBy( int _dx, int _dy )
 {
-    ktextobject.toggleModified( TRUE );
+    ktextobject.toggleModified( true );
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
     ktextobject.resize( ext );

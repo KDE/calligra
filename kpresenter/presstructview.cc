@@ -179,7 +179,7 @@ int KPPresStructObjectItem::getPageNum()
 /*================================================================*/
 KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
                                     KPresenterDoc *_doc, KPresenterView *_view )
-    : QDialog( parent, name, FALSE ), doc( _doc ), view( _view )
+    : QDialog( parent, name, false ), doc( _doc ), view( _view )
 {
     hsplit = new QSplitter( this );
     setupSlideList();
@@ -194,9 +194,9 @@ void KPPresStructView::setupSlideList()
     slides = new QListView( hsplit );
     slides->addColumn( i18n( "Slide Nr." ) );
     slides->addColumn( i18n( "Slide Title" ) );
-    slides->header()->setMovingEnabled( FALSE );
-    slides->setAllColumnsShowFocus( TRUE );
-    slides->setRootIsDecorated( TRUE );
+    slides->header()->setMovingEnabled( false );
+    slides->setAllColumnsShowFocus( true );
+    slides->setRootIsDecorated( true );
     slides->setSorting( -1 );
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
@@ -222,9 +222,9 @@ void KPPresStructView::setupPagePreview()
     box->setSpacing( 5 );
 
     showPreview = new QCheckBox( i18n( "&Show Preview" ), box );
-    showPreview->setChecked( TRUE );
+    showPreview->setChecked( true );
     // #### for now
-    showPreview->setEnabled( FALSE );
+    showPreview->setEnabled( false );
 
     slidePreview = new KPSlidePreview( box, doc, view );
     connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
@@ -262,7 +262,7 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
 	int obj = s.toInt() - 1;
 	KPObject *kpobject = doc->objectList()->at( obj );
 	QRect rect( kpobject->getBoundingRect( 0, 0 ) );
-	kpobject->setSelected( TRUE );
+	kpobject->setSelected( true );
 	doc->repaint( kpobject );
 	rect.setLeft( rect.left() - 20 );
 	rect.setTop( rect.top() - 20 );

@@ -160,7 +160,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     gColor1 = red;
     gColor2 = green;
     gType = BCT_GHORZ;
-    gUnbalanced = FALSE;
+    gUnbalanced = false;
     gXFactor = 100;
     gYFactor = 100;
     fillType = FT_BRUSH;
@@ -458,16 +458,16 @@ void KPresenterView::insertPicture()
 
     QString file;
 #ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
+    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, true );
+    fd.setPreviewMode( false, true );
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Insert Picture"));
-    //fd.setPreviewMode( FALSE, TRUE );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
@@ -499,16 +499,16 @@ void KPresenterView::insertClipart()
     page->deSelectAllObj();
     QString file;
 #ifdef USE_QFD
-    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
+    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
+    fd.setPreviewMode( false, true );
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
-    //fd.setPreviewMode( FALSE, TRUE );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
@@ -536,7 +536,7 @@ void KPresenterView::toolsMouse()
 {
     if ( !( (KToggleAction*)actionToolsMouse )->isChecked() )
 	return;
-    page->setToolEditMode( TEM_MOUSE, FALSE );
+    page->setToolEditMode( TEM_MOUSE, false );
     //page->deSelectAllObj();
 }
 
@@ -545,7 +545,7 @@ void KPresenterView::toolsLine()
 {
     if ( !( (KToggleAction*)actionToolsLine )->isChecked() )
 	return;
-    page->setToolEditMode( INS_LINE, FALSE );
+    page->setToolEditMode( INS_LINE, false );
     page->deSelectAllObj();
 }
 
@@ -555,7 +555,7 @@ void KPresenterView::toolsRectangle()
     if ( !( (KToggleAction*)actionToolsRectangle )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_RECT, FALSE );
+    page->setToolEditMode( INS_RECT, false );
 }
 
 /*===================== insert circle or ellipse ================*/
@@ -564,7 +564,7 @@ void KPresenterView::toolsCircleOrEllipse()
     if ( !( (KToggleAction*)actionToolsCircleOrEllipse )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_ELLIPSE, FALSE );
+    page->setToolEditMode( INS_ELLIPSE, false );
 }
 
 /*==============================================================*/
@@ -573,7 +573,7 @@ void KPresenterView::toolsPie()
     if ( !( (KToggleAction*)actionToolsPie )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_PIE, FALSE );
+    page->setToolEditMode( INS_PIE, false );
 }
 
 /*==============================================================*/
@@ -582,7 +582,7 @@ void KPresenterView::toolsDiagramm()
     if ( !( (KToggleAction*)actionToolsDiagramm )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_DIAGRAMM, FALSE );
+    page->setToolEditMode( INS_DIAGRAMM, false );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
     if (entry.isEmpty())
@@ -600,7 +600,7 @@ void KPresenterView::toolsTable()
     if ( !( (KToggleAction*)actionToolsTable )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_TABLE, FALSE );
+    page->setToolEditMode( INS_TABLE, false );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
     if (entry.isEmpty())
@@ -618,7 +618,7 @@ void KPresenterView::toolsFormula()
     if ( !( (KToggleAction*)actionToolsFormula )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_FORMULA, FALSE );
+    page->setToolEditMode( INS_FORMULA, false );
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
     if (entry.isEmpty())
@@ -636,7 +636,7 @@ void KPresenterView::toolsText()
     if ( !( (KToggleAction*)actionToolsText )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( INS_TEXT, FALSE );
+    page->setToolEditMode( INS_TEXT, false );
 }
 
 /*===============================================================*/
@@ -645,7 +645,7 @@ void KPresenterView::toolsAutoform()
     if ( !( (KToggleAction*)actionToolsAutoform )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( TEM_MOUSE, FALSE );
+    page->setToolEditMode( TEM_MOUSE, false );
     if ( afChoose ) {
 	QObject::disconnect( afChoose, SIGNAL( formChosen( const QString & ) ),
 			     this, SLOT( afChooseOk( const QString & ) ) );
@@ -667,7 +667,7 @@ void KPresenterView::toolsObject()
     if ( !( (KToggleAction*)actionToolsObject )->isChecked() )
 	return;
     page->deSelectAllObj();
-    page->setToolEditMode( TEM_MOUSE, FALSE );
+    page->setToolEditMode( TEM_MOUSE, false );
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart();
     if ( pe.isEmpty() )
@@ -1283,9 +1283,9 @@ void KPresenterView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) ) {
 	page->setTextColor( &tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( FALSE );
+	( (KColorAction*)actionTextColor )->blockSignals( false );
     }
 }
 
@@ -1325,12 +1325,12 @@ void KPresenterView::mtextFont()
 	fontChanged( &tmpFont );
 	tbFont = tmpFont;
 	page->setTextFont( &tbFont );
- 	( (KFontAction*)actionTextFontFamily )->blockSignals( TRUE );
+ 	( (KFontAction*)actionTextFontFamily )->blockSignals( true );
  	( (KFontAction*)actionTextFontFamily )->setFont( tbFont.family() );
- 	( (KFontAction*)actionTextFontFamily )->blockSignals( FALSE );
- 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( TRUE );
+ 	( (KFontAction*)actionTextFontFamily )->blockSignals( false );
+ 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( true );
  	( (KFontSizeAction*)actionTextFontSize )->setFontSize( tbFont.pointSize() );
- 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( FALSE );
+ 	( (KFontSizeAction*)actionTextFontSize )->blockSignals( false );
     }
 }
 
@@ -1362,7 +1362,7 @@ void KPresenterView::textEnumList()
 	txtObj->setObjType( KTextObject::ENUM_LIST );
 
 	if ( !page->kTxtObj() )
-	    page->repaint( FALSE );
+	    page->repaint( false );
     }
 }
 
@@ -1388,7 +1388,7 @@ void KPresenterView::textUnsortList()
 	txtObj->setObjType( KTextObject::UNSORT_LIST );
 
 	if ( !page->kTxtObj() )
-	    page->repaint( FALSE );
+	    page->repaint( false );
     }
 }
 
@@ -1401,7 +1401,7 @@ void KPresenterView::textNormalText()
     if ( txtObj ) {
 	txtObj->setObjType( KTextObject::PLAIN );
 	if ( !page->kTxtObj() )
-	    page->repaint( FALSE );
+	    page->repaint( false );
     }
 }
 
@@ -1414,7 +1414,7 @@ void KPresenterView::textDepthPlus()
     if ( txtObj ) {
 	txtObj->incDepth();
 	if ( !page->kTxtObj() )
-	    page->repaint( FALSE );
+	    page->repaint( false );
     }
 }
 
@@ -1427,7 +1427,7 @@ void KPresenterView::textDepthMinus()
     if ( txtObj ) {
 	txtObj->decDepth();
 	if ( !page->kTxtObj() )
-	    page->repaint( FALSE );
+	    page->repaint( false );
 	
     }
 }
@@ -1476,7 +1476,7 @@ void KPresenterView::textContentsToHeight()
     if ( page->haveASelectedTextObj() )
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
-	txtObj->repaint( TRUE );
+	txtObj->repaint( true );
 }
 
 /*===============================================================*/
@@ -1495,14 +1495,14 @@ void KPresenterView::textObjectToContents()
     if ( page->haveASelectedKPTextObj() )
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
-	txtObj->getKTextObject()->repaint( TRUE );
+	txtObj->getKTextObject()->repaint( true );
 }
 
 /*===============================================================*/
 void KPresenterView::penChosen( const QColor &c )
 {
     if ( !page->kTxtObj() ) {
-	bool fill = TRUE;
+	bool fill = true;
 
 	if ( !m_pKPresenterDoc->setPenColor( c, fill ) ) {
 	    if ( fill )
@@ -1513,9 +1513,9 @@ void KPresenterView::penChosen( const QColor &c )
     } else {
 	tbColor = c;
 	page->setTextColor( &tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( FALSE );
+	( (KColorAction*)actionTextColor )->blockSignals( false );
     }
 }
 
@@ -1523,7 +1523,7 @@ void KPresenterView::penChosen( const QColor &c )
 void KPresenterView::brushChosen( const QColor &c )
 {
     if ( !page->kTxtObj() ) {
-	bool fill = TRUE;
+	bool fill = true;
 
 	if ( !m_pKPresenterDoc->setBrushColor( c, fill ) ) {
 	    if ( fill )
@@ -1534,9 +1534,9 @@ void KPresenterView::brushChosen( const QColor &c )
     } else {
 	tbColor = c;
 	page->setTextColor( &tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
-	( (KColorAction*)actionTextColor )->blockSignals( FALSE );
+	( (KColorAction*)actionTextColor )->blockSignals( false );
     }
 }
 
@@ -1675,8 +1675,8 @@ void KPresenterView::initGui()
     ( (KColorAction*)actionTextColor )->setColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
-    actionEditUndo->setEnabled( FALSE );
-    actionEditRedo->setEnabled( FALSE );
+    actionEditUndo->setEnabled( false );
+    actionEditRedo->setEnabled( false );
 }
 
 /*====================== construct ==============================*/
@@ -1748,7 +1748,7 @@ void KPresenterView::setupActions()
 					  this, SLOT( toolsMouse() ),
 					  actionCollection(), "tools_mouse" );
     ( (KToggleAction*)actionToolsMouse )->setExclusiveGroup( "tools" );
-    ( (KToggleAction*)actionToolsMouse )->setChecked( TRUE );
+    ( (KToggleAction*)actionToolsMouse )->setChecked( true );
 
     actionToolsLine = new KToggleAction( i18n( "&Line" ), KPBarIcon("line"), Key_F6,
 					 this, SLOT( toolsLine() ),
@@ -1832,7 +1832,7 @@ void KPresenterView::setupActions()
 				       this, SLOT( textAlignLeft() ),
 				       actionCollection(), "text_alignleft" );
     ( (KToggleAction*)actionTextAlignLeft )->setExclusiveGroup( "align" );
-    ( (KToggleAction*)actionTextAlignLeft )->setChecked( TRUE );
+    ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
 
     actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "alignCenter", ALT + Key_C,
 					 this, SLOT( textAlignCenter() ),
@@ -2365,21 +2365,21 @@ void KPresenterView::fontChanged( QFont* font )
 	tbFont.setItalic( font->italic() );
 	tbFont.setUnderline( font->underline() );
 	tbFont.setPointSize( font->pointSize() );
-	( (KToggleAction*) actionTextFontFamily )->blockSignals( TRUE );
+	( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
  	( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
-	( (KToggleAction*) actionTextFontFamily )->blockSignals( FALSE );
-	( (KToggleAction*) actionTextFontSize )->blockSignals( TRUE );
+	( (KToggleAction*) actionTextFontFamily )->blockSignals( false );
+	( (KToggleAction*) actionTextFontSize )->blockSignals( true );
  	( (KFontSizeAction*) actionTextFontSize )->setFontSize( tbFont.pointSize() );
-	( (KToggleAction*) actionTextFontSize )->blockSignals( FALSE );
-	( (KToggleAction*) actionTextBold )->blockSignals( TRUE );
+	( (KToggleAction*) actionTextFontSize )->blockSignals( false );
+	( (KToggleAction*) actionTextBold )->blockSignals( true );
 	( (KToggleAction*) actionTextBold )->setChecked( tbFont.bold() );
-	( (KToggleAction*) actionTextBold )->blockSignals( FALSE );
-	( (KToggleAction*) actionTextItalic )->blockSignals( TRUE );
+	( (KToggleAction*) actionTextBold )->blockSignals( false );
+	( (KToggleAction*) actionTextItalic )->blockSignals( true );
 	( (KToggleAction*) actionTextItalic )->setChecked( tbFont.italic() );
-	( (KToggleAction*) actionTextItalic )->blockSignals( FALSE );
-	( (KToggleAction*) actionTextUnderline )->blockSignals( TRUE );
+	( (KToggleAction*) actionTextItalic )->blockSignals( false );
+	( (KToggleAction*) actionTextUnderline )->blockSignals( true );
 	( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
-	( (KToggleAction*) actionTextUnderline )->blockSignals( FALSE );
+	( (KToggleAction*) actionTextUnderline )->blockSignals( false );
     }
 }
 
@@ -2388,9 +2388,9 @@ void KPresenterView::colorChanged( QColor* color )
 {
     if ( color->operator!=( tbColor ) ) {
 	tbColor.setRgb( color->rgb() );
-	( (KColorAction*) actionTextColor )->blockSignals( TRUE );
+	( (KColorAction*) actionTextColor )->blockSignals( true );
 	( (KColorAction*) actionTextColor )->setColor( tbColor );
-	( (KColorAction*) actionTextColor )->blockSignals( FALSE );
+	( (KColorAction*) actionTextColor )->blockSignals( false );
     }
 }
 
@@ -2401,19 +2401,19 @@ void KPresenterView::alignChanged( TxtParagraph::HorzAlign align )
 	tbAlign = align;
 	switch ( tbAlign ) {
 	case TxtParagraph::LEFT:
-	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionTextAlignLeft )->setChecked( TRUE );
-	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( FALSE );
+	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( true );
+	    ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
+	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( false );
 	    break;
 	case TxtParagraph::CENTER:
-	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionTextAlignCenter )->setChecked( TRUE );
-	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( FALSE );
+	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( true );
+	    ( (KToggleAction*)actionTextAlignCenter )->setChecked( true );
+	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( false );
 	    break;
 	case TxtParagraph::RIGHT:
-	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionTextAlignRight )->setChecked( TRUE );
-	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( FALSE );
+	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( true );
+	    ( (KToggleAction*)actionTextAlignRight )->setChecked( true );
+	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( false );
 	    break;
 	default: break;
 	}
@@ -2437,9 +2437,9 @@ void KPresenterView::screenPenColor()
 	QPen p = kPresenterDoc()->presPen();
 	p.setColor( c );
 	kPresenterDoc()->setPresPen( p );
-	( (KColorAction*)actionScreenPenColor )->blockSignals( TRUE );
+	( (KColorAction*)actionScreenPenColor )->blockSignals( true );
 	( (KColorAction*)actionScreenPenColor )->setColor( c );
-	( (KColorAction*)actionScreenPenColor )->blockSignals( FALSE );
+	( (KColorAction*)actionScreenPenColor )->blockSignals( false );
     }
 }
 
@@ -2566,16 +2566,16 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
 
     QString file;
 #ifdef USE_QFD
-    QFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
+    QFileDialog fd( filename, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, true );
+    fd.setPreviewMode( false, true );
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
-    //fd.setPreviewMode( FALSE, TRUE );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
@@ -2604,16 +2604,16 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     QString file;
 
 #ifdef USE_QFD
-    QFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
-    fd.setPreviewMode( FALSE, TRUE );
+    QFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
+    fd.setPreviewMode( false, true );
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
 	file = fd.selectedFile();
 #else
-    KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
-    //fd.setPreviewMode( FALSE, TRUE );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
@@ -2733,12 +2733,12 @@ void KPresenterView::updateReadWrite( bool /*readwrite*/ )
 void KPresenterView::changeUndo( QString _text, bool _enable )
 {
     if ( _enable ) {
-	actionEditUndo->setEnabled( TRUE );
+	actionEditUndo->setEnabled( true );
 	QString str;
 	str.sprintf( i18n( "Undo: %s" ), _text.data() );
 	actionEditUndo->setText( str );
     } else {
-	actionEditUndo->setEnabled( FALSE );
+	actionEditUndo->setEnabled( false );
 	actionEditUndo->setText( i18n( "No Undo possible" ) );
     }
 }
@@ -2747,12 +2747,12 @@ void KPresenterView::changeUndo( QString _text, bool _enable )
 void KPresenterView::changeRedo( QString _text, bool _enable )
 {
     if ( _enable ) {
-	actionEditRedo->setEnabled( TRUE );
+	actionEditRedo->setEnabled( true );
 	QString str;
 	str.sprintf( i18n( "Redo: %s" ), _text.data() );
 	actionEditRedo->setText( str );
     } else {
-	actionEditRedo->setEnabled( FALSE );
+	actionEditRedo->setEnabled( false );
 	actionEditRedo->setText( i18n( "No Redo possible" ) );
     }
 }
@@ -2933,37 +2933,37 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 {
     switch ( toolEditMode ) {
     case TEM_MOUSE:
-	( (KToggleAction*)actionToolsMouse )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsMouse )->setChecked( true );
 	break;
     case INS_LINE:
-	( (KToggleAction*)actionToolsLine )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsLine )->setChecked( true );
 	break;
     case INS_RECT:
-	( (KToggleAction*)actionToolsRectangle )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsRectangle )->setChecked( true );
 	break;
     case INS_ELLIPSE:
-	( (KToggleAction*)actionToolsCircleOrEllipse )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsCircleOrEllipse )->setChecked( true );
 	break;
     case INS_PIE:
-	( (KToggleAction*)actionToolsPie )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsPie )->setChecked( true );
 	break;
     case INS_OBJECT:
-	( (KToggleAction*)actionToolsObject )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsObject )->setChecked( true );
 	break;
     case INS_DIAGRAMM:
-	( (KToggleAction*)actionToolsDiagramm )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsDiagramm )->setChecked( true );
 	break;
     case INS_TABLE:
-	( (KToggleAction*)actionToolsTable )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsTable )->setChecked( true );
 	break;
     case INS_FORMULA:
-	( (KToggleAction*)actionToolsFormula )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsFormula )->setChecked( true );
 	break;
     case INS_TEXT:
-	( (KToggleAction*)actionToolsText )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsText )->setChecked( true );
 	break;
     case INS_AUTOFORM:
-	( (KToggleAction*)actionToolsAutoform )->setChecked( TRUE );
+	( (KToggleAction*)actionToolsAutoform )->setChecked( true );
 	break;
     }
 }
@@ -3000,7 +3000,7 @@ void KPresenterView::enableWebPres()
 /*================================================================*/
 bool KPresenterView::doubleClickActivation() const
 {
-    return TRUE;
+    return true;
 }
 
 /*================================================================*/
@@ -3070,8 +3070,8 @@ float KPresenterView::getCurrentFaktor()
 bool KPresenterView::gotoPresPage( int pg )
 {
     if ( !presStarted )
-	return FALSE;
+	return false;
 
     page->gotoPage( pg );
-    return TRUE;
+    return true;
 }

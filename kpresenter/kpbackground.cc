@@ -59,7 +59,7 @@ KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCol
     backColor2 = Qt::white;
     bcType = BCT_PLAIN;
     pageEffect = PEF_NONE;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 
@@ -544,7 +544,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	QPoint pnt( doc->header()->getKTextObject()->x(), doc->header()->getKTextObject()->y() );
 
 	// #### Reggie: not very efficient but ok for now
-	if ( TRUE /*doc->header()->getKTextObject()->isModified()*/ ) {
+	if ( true /*doc->header()->getKTextObject()->isModified()*/ ) {
 	    doc->header()->setSize( ext.width(), 10 );
 	    //qDebug( "resize h" );
 	}
@@ -578,7 +578,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	QPoint pnt( doc->footer()->getKTextObject()->x(), doc->footer()->getKTextObject()->y() );
 
 	// #### Reggie: not very efficient but ok for now
-	if ( TRUE ) { //doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
+	if ( true ) { //doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
 	    doc->footer()->setSize( ext.width(), 10 );
 
 	    int h = 0;

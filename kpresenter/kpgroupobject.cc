@@ -37,16 +37,16 @@
 
 /*================================================================*/
 KPGroupObject::KPGroupObject()
-    : KPObject(), objects(), updateObjs( FALSE )
+    : KPObject(), objects(), updateObjs( false )
 {
-    objects.setAutoDelete( FALSE );
+    objects.setAutoDelete( false );
 }
 
 /*================================================================*/
 KPGroupObject::KPGroupObject( const QList<KPObject> &objs )
-    : KPObject(), objects( objs ), updateObjs( FALSE )
+    : KPObject(), objects( objs ), updateObjs( false )
 {
-    objects.setAutoDelete( FALSE );
+    objects.setAutoDelete( false );
 }
 
 /*================================================================*/
@@ -141,7 +141,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
     string tag;
     string name;
 
-    updateObjs = FALSE;
+    updateObjs = false;
     
     while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -266,7 +266,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 	}
     }
     
-    updateObjs = TRUE;
+    updateObjs = true;
 }
 
 /*================================================================*/

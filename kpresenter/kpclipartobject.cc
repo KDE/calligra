@@ -42,7 +42,7 @@ KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection )
     gColor2 = Qt::green;
     clipartCollection = _clipartCollection;
     picture = 0L;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }
@@ -60,7 +60,7 @@ KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection, const
     gColor1 = Qt::red;
     gColor2 = Qt::green;
     clipartCollection = _clipartCollection;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 

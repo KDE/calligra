@@ -45,7 +45,7 @@
 
 /*================================================================*/
 EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& _objs, KPresenterView *_view )
-    : QDialog( parent, name, TRUE ), objs( _objs )
+    : QDialog( parent, name, true ), objs( _objs )
 {
     view = _view;
     KPObject *obj = objs.at( 0 );

@@ -701,7 +701,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 
 	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
-	    bool cursorAlreadySet = FALSE;
+	    bool cursorAlreadySet = false;
 	    if ( (int)objectList()->count() - 1 >= 0 ) {
 		for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 		    kpobject = objectList()->at( i );
@@ -711,7 +711,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			 contains( QPoint( e->x(), e->y() ) ) ) {
 			if ( kpobject->isSelected() ) {
 			    setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), diffy(), modType ) );
-			    cursorAlreadySet = TRUE;
+			    cursorAlreadySet = true;
 			    break;
 			}
 		    }
@@ -3040,7 +3040,7 @@ void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int 
 /*======================== print =================================*/
 void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin )
 {
-    printer->setFullPage( TRUE );
+    printer->setFullPage( true );
     int i = 0;
 
     repaint( false );

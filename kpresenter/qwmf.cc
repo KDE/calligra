@@ -28,7 +28,7 @@
 #include <config.h>
 #endif
 
-bool qwmfDebug = FALSE;
+bool qwmfDebug = false;
 
 #include "qwmf.h"
 #include "wmfstruct.h"
@@ -93,10 +93,10 @@ void WinObjPenHandle::apply( QPainter& p )
 //-----------------------------------------------------------------------------
 QWinMetaFile::QWinMetaFile(): mPainter(), mPoints()
 {
-    mIsPlaceable = FALSE;
-    mIsEnhanced  = FALSE;
+    mIsPlaceable = false;
+    mIsEnhanced  = false;
     mFirstCmd    = NULL;
-    mSingleStep  = FALSE;
+    mSingleStep  = false;
     mObjHandleTab = NULL;
 }
 
@@ -174,7 +174,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> pheader.reserved;
         st >> pheader.checksum;
         checksum = calcCheckSum( &pheader );
-        if ( pheader.checksum!=checksum ) mIsPlaceable = FALSE;
+        if ( pheader.checksum!=checksum ) mIsPlaceable = false;
 
         if ( mSingleStep )
         {
@@ -286,12 +286,12 @@ bool QWinMetaFile::load( QBuffer &buffer )
         if ( i<rdSize )
         {
             //debug( "file truncated: %s", aFileName.ascii() );
-            return FALSE;
+            return false;
         }
     }
 
     buffer.close();
-    return TRUE;
+    return true;
 }
 
 
@@ -332,7 +332,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
     char dummy[ 16 ];
 
     assert( aTarget!=NULL );
-    if ( mPainter.isActive() ) return FALSE;
+    if ( mPainter.isActive() ) return false;
 
     if ( mObjHandleTab ) delete[] mObjHandleTab;
     mObjHandleTab = new WinObjHandle* [ MAX_OBJHANDLE ];
@@ -340,7 +340,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
         mObjHandleTab[ i ] = NULL;
 
     mPainter.resetXForm();
-    mWinding = FALSE;
+    mWinding = false;
 
     mPainter.begin( aTarget );
     for ( cmd=mFirstCmd; cmd; cmd=cmd->next )
@@ -372,7 +372,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
         }
     }
     mPainter.end();
-    return TRUE;
+    return true;
 }
 
 

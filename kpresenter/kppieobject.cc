@@ -43,7 +43,7 @@ KPPieObject::KPPieObject()
     p_len = 90 * 16;
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }

@@ -118,9 +118,9 @@ private slots:
     void selectClip();
     void updateConfiguration();
 
-    void Ok() { emit backOk( FALSE ); }
-    void Apply() { emit backOk( FALSE ); }
-    void ApplyGlobal() { emit backOk( TRUE ); }
+    void Ok() { emit backOk( false ); }
+    void Apply() { emit backOk( false ); }
+    void ApplyGlobal() { emit backOk( true ); }
 
 signals:
     void backOk( bool );

@@ -3219,7 +3219,7 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
 
     redrawSelection( *_startCursor, *_stopCursor );
 
-    recalc( TRUE );
+    recalc( true );
 
     int pos = txtCursor->positionAbs();
     txtCursor->setPositionAbs( pos );
@@ -3228,7 +3228,7 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
     pos = _stopCursor->positionAbs();
     _stopCursor->setPositionAbs( pos );
 
-    repaint( FALSE );
+    repaint( false );
 }
 
 /*=============== changen alignment of the region ================*/
@@ -4082,9 +4082,9 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 			}
 		    }
 		    insertChar( QChar( ' ' ) );
-		    cursorChanged = TRUE;
-		    drawFullPara = TRUE;
-		    drawAbove = TRUE;
+		    cursorChanged = true;
+		    drawFullPara = true;
+		    drawAbove = true;
 		}
 		txtCursor->calcPos();
 		doDelete = false;
@@ -4224,11 +4224,11 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(),
 						     paragraphAt( txtCursor->positionParagraph() )->
 						     lineAt( txtCursor->positionLine() )->lineLength()-1  );
-		    cursorChanged = TRUE;
+		    cursorChanged = true;
 		    break;
 		case Key_A:
 		    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
-		    cursorChanged = TRUE;
+		    cursorChanged = true;
 		    break;
 		}
 	    }
@@ -4419,7 +4419,7 @@ void KTextObject::mouseDoubleClickEvent( QMouseEvent * )
 	drawSelection = true;
 
     recalc();
-    repaint( FALSE );
+    repaint( false );
     redrawSelection( startCursor, stopCursor );
 
     delete c1;
@@ -4482,7 +4482,7 @@ void KTextObject::recalc( bool breakAllLines )
     txtCursor->calcPos();
     changedParagraphs.clear();
 
-    _modified = TRUE;
+    _modified = true;
 }
 
 /*====================== split paragraph =========================*/
@@ -5677,7 +5677,7 @@ void KTextObject::selectAll()
 	drawSelection = true;
 
     recalc();
-    repaint( FALSE );
+    repaint( false );
     redrawSelection( startCursor, stopCursor );
 
     delete c1;
@@ -5688,7 +5688,7 @@ void KTextObject::selectAll()
 void KTextObject::home()
 {
     txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
-    repaint( FALSE );
+    repaint( false );
 }
 
 /*================================================================*/
@@ -5697,5 +5697,5 @@ void KTextObject::end()
     txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(),
 				     paragraphAt( txtCursor->positionParagraph() )->
 				     lineAt( txtCursor->positionLine() )->lineLength()-1  );
-    repaint( FALSE );
+    repaint( false );
 }

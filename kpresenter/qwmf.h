@@ -41,23 +41,23 @@ public:
     QWinMetaFile();
     virtual ~QWinMetaFile();
 
-    /** Load WMF file. Returns TRUE on success. */
+    /** Load WMF file. Returns true on success. */
     virtual bool load( const QString &fileName );
     virtual bool load( QBuffer &buffer );
 
-    /** Paint metafile to given paint-device. Returns TRUE on success. */
+    /** Paint metafile to given paint-device. Returns true on success. */
     virtual bool paint( const QPaintDevice* target );
 
-    /** Returns TRUE if the metafile is placeable. */
+    /** Returns true if the metafile is placeable. */
     bool isPlaceable( void ) const { return mIsPlaceable; }
 
-    /** Returns TRUE if the metafile is enhanced. */
+    /** Returns true if the metafile is enhanced. */
     bool isEnhanced( void ) const { return mIsEnhanced; }
 
     /** Set single-step mode. */
     virtual void singleStep( bool ss );
 
-    /** Returns bounding rectangle if isPlaceable()==TRUE,
+    /** Returns bounding rectangle if isPlaceable()==true,
         otherwise unspecified result. */
     QRect bbox( void ) const { return mBBox; }
 

@@ -61,7 +61,7 @@ void KPresenterShell::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageOnly | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
 					  kapp->caption(),
-					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
+					  KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
     dia->setTitle( "KPresenter" );
     dia->setProduct( "", KPRESENTER_VERSION, "Reginald Stadlbauer <reggie@kde.org>", "1998-1999" );
     dia->setImage( locate( "data", "koffice/pics/koffice-logo.png", KPresenterFactory::global() ) );

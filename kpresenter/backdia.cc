@@ -71,7 +71,7 @@ void BackPreview::drawContents( QPainter *p )
     QFrame::drawContents( p );
     p->save();
     p->translate( contentsRect().x(), contentsRect().y() );
-    back->draw( p, QPoint( 0, 0 ), FALSE );
+    back->draw( p, QPoint( 0, 0 ), false );
     p->restore();
 }
 
@@ -99,7 +99,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 		  int _xfactor, int _yfactor, KPresenterDoc *doc )
     : QDialog( parent, name, true ), picLastModified( picLM ), clipLastModified( clipLM )
 {
-    lockUpdate = TRUE;
+    lockUpdate = true;
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( 5 );
     layout->setSpacing( 5 );
@@ -110,7 +110,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     vbox->addWidget( new QLabel( i18n( "Background Type:" ), this ) );
 
-    backCombo = new QComboBox( FALSE, this );
+    backCombo = new QComboBox( false, this );
     backCombo->insertItem( i18n( "Color/Gradient" ) );
     backCombo->insertItem( i18n( "Picture" ) );
     backCombo->insertItem( i18n( "Clipart" ) );
@@ -137,7 +137,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( color2Choose, SIGNAL( changed( const QColor& ) ),
 	     this, SLOT( updateConfiguration() ) );
 
-    cType = new QComboBox( FALSE, colorTab );
+    cType = new QComboBox( false, colorTab );
     cType->insertItem( i18n( "Plain" ), -1 );
     cType->insertItem( i18n( "Horizontal Gradient" ), -1 );
     cType->insertItem( i18n( "Vertical Gradient" ), -1 );
@@ -181,7 +181,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     QLabel *l = new QLabel( i18n( "View Mode:" ), picTab );
     l->setFixedHeight( l->sizeHint().height() );
 
-    picView = new QComboBox( FALSE, picTab );
+    picView = new QComboBox( false, picTab );
     picView->insertItem( i18n( "Zoomed" ) );
     picView->insertItem( i18n( "Centered" ) );
     picView->insertItem( i18n( "Tiled" ) );
@@ -265,8 +265,8 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     layout->addWidget( bb );
 
-    picChanged = clipChanged = TRUE;
-    lockUpdate = FALSE;
+    picChanged = clipChanged = true;
+    lockUpdate = false;
     updateConfiguration();
 }
 
@@ -274,7 +274,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 void BackDia::showEvent( QShowEvent *e )
 {
     QDialog::showEvent( e );
-    lockUpdate = FALSE;
+    lockUpdate = false;
     updateConfiguration();
 }
 
@@ -285,20 +285,20 @@ void BackDia::updateConfiguration()
 	return;
 
     if ( getBackColorType() == BCT_PLAIN ) {
-	unbalanced->setEnabled( FALSE );
-	xfactor->setEnabled( FALSE );
-	yfactor->setEnabled( FALSE );
-	color2Choose->setEnabled( FALSE );
+	unbalanced->setEnabled( false );
+	xfactor->setEnabled( false );
+	yfactor->setEnabled( false );
+	color2Choose->setEnabled( false );
     } else {
-	unbalanced->setEnabled( TRUE );
+	unbalanced->setEnabled( true );
 	if ( unbalanced->isChecked() ) {
-	    xfactor->setEnabled( TRUE );
-	    yfactor->setEnabled( TRUE );
+	    xfactor->setEnabled( true );
+	    yfactor->setEnabled( true );
 	} else {
-	    xfactor->setEnabled( FALSE );
-	    yfactor->setEnabled( FALSE );
+	    xfactor->setEnabled( false );
+	    yfactor->setEnabled( false );
 	}
-	color2Choose->setEnabled( TRUE );
+	color2Choose->setEnabled( true );
     }
 
     picChanged = getBackType() == BT_PICTURE;
@@ -318,10 +318,10 @@ void BackDia::updateConfiguration()
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
 	preview->backGround()->restore();
-	preview->repaint( FALSE );
+	preview->repaint( false );
     }
 
-    picChanged = clipChanged = FALSE;
+    picChanged = clipChanged = false;
 }
 
 /*=============================================================*/
@@ -391,8 +391,8 @@ void BackDia::selectPic()
     KURL url;
     KFileDialog fd( QString::null, 
   //i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" )
-    KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
-    //fd.setPreviewMode( FALSE, TRUE );
+    KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
@@ -411,7 +411,7 @@ void BackDia::selectPic()
           return;
 	lPicName->setText( url.prettyURL() );
 	backCombo->setCurrentItem( 1 );
-	picChanged = TRUE;
+	picChanged = true;
 	picLastModified = QDateTime();
 	updateConfiguration();
         // Problem : when to remove the temp file ?
@@ -422,8 +422,8 @@ void BackDia::selectPic()
 void BackDia::selectClip()
 {
     KURL url;
-    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
-    //fd.setPreviewMode( FALSE, TRUE );
+    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
+    //fd.setPreviewMode( false, true );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
@@ -434,7 +434,7 @@ void BackDia::selectClip()
           return;
         lClipName->setText( url.prettyURL() );
 	backCombo->setCurrentItem( 2 );
-	clipChanged = TRUE;
+	clipChanged = true;
 	clipLastModified = QDateTime();
 	updateConfiguration();
         // Problem : when to remove the temp file ?

@@ -78,7 +78,7 @@ public:
     };
 
     KPPixmapDataCollection()
-	: allowChangeRef( TRUE )
+	: allowChangeRef( true )
     {}
     ~KPPixmapDataCollection();
 
@@ -155,7 +155,7 @@ public:
     };
 
     KPPixmapCollection()
-	: allowChangeRef( TRUE )
+	: allowChangeRef( true )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
     ~KPPixmapCollection();
 

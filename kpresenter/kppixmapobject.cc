@@ -42,7 +42,7 @@ KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection )
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }
@@ -69,7 +69,7 @@ KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QSt
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 

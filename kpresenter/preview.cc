@@ -86,7 +86,7 @@ public:
     void setPixmap( const QPixmap &pix ) {
 	pixmap = pix;
 	resizeContents( pixmap.size().width(), pixmap.size().height() );
-	viewport()->repaint( FALSE );
+	viewport()->repaint( false );
     }
 
     void setClipart( const QString &s ) {
@@ -111,7 +111,7 @@ public:
 	    p.setViewport( vPort );
 	    p.end();
 	    resizeContents( pixmap.size().width(), pixmap.size().height() );
-	    viewport()->repaint( FALSE );
+	    viewport()->repaint( false );
 	}
     }
 

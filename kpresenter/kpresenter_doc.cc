@@ -133,7 +133,7 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name, bool singleView
     setInstance( KPresenterFactory::global() );
 
     dcop = 0;
-    docAlreadyOpen = FALSE;
+    docAlreadyOpen = false;
     _clean = true;
     _objectList = new QList<KPObject>;
     _objectList->setAutoDelete( false );
@@ -538,7 +538,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	}
     }
 
-    docAlreadyOpen = FALSE;
+    docAlreadyOpen = false;
 
     // PAPER
     while ( parser.open( 0L, tag ) ) {
@@ -1228,7 +1228,7 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     KPresenterChild* ch = new KPresenterChild( this, doc, _rect, _diffx, _diffy );
 
     insertChild( ch );
-    setModified( TRUE );
+    setModified( true );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
     kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
@@ -2182,7 +2182,7 @@ bool KPresenterDoc::getBackUnbalanced( unsigned int pageNum )
     if ( pageNum < _backgroundList.count() )
 	return backgroundList()->at( pageNum )->getBackUnbalanced();
 
-    return FALSE;
+    return false;
 }
 
 /*=============================================================*/
@@ -2810,7 +2810,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 	int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
 	int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
 	kppixmapobject->setSize( w, h );
-	repaint( FALSE );
+	repaint( false );
     }
 
     setModified(true);
@@ -3418,18 +3418,18 @@ void KPresenterDoc::loadStream( istream &in, int currPage )
 	return;
     }
 
-    bool insertPage = FALSE;
-    bool ok = FALSE;
+    bool insertPage = false;
+    bool ok = false;
 
     KOMLParser::parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
     for( ; it != lst.end(); it++ ) {
 	if ( ( *it ).m_strName == "mime" ) {
 	    if ( ( *it ).m_strValue == "application/x-kpresenter-selection" ) {
-		ok = TRUE;
+		ok = true;
 	    } else if ( ( *it ).m_strValue == "application/x-kpresenter-page-selection" ) {
-		ok = TRUE;
-		insertPage = TRUE;
+		ok = true;
+		insertPage = true;
 	    }
 	}
     }
@@ -3461,16 +3461,16 @@ void KPresenterDoc::loadStream( istream &in, int currPage )
 
 	    if ( _insPos == IP_BEFORE )
 		_page++;
-	    pasting = FALSE;
-	    _clean = FALSE;
+	    pasting = false;
+	    _clean = false;
 
 	    if ( _insPos == IP_AFTER )
 		_page++;
 	    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
-	    docAlreadyOpen = TRUE;
+	    docAlreadyOpen = true;
 	    loadXML( parser, 0 );
 	    objStartY = 0;
-	    _clean = TRUE;
+	    _clean = true;
 	    KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );	
 	    _backgroundList.take( _backgroundList.count() - 1 );
 	    _backgroundList.insert( _page, kpbackground );
@@ -3887,7 +3887,7 @@ QStringList KPresenterDoc::getRecentryOpenedList()
 void KPresenterDoc::groupObjects()
 {
     QList<KPObject> objs;
-    objs.setAutoDelete( FALSE );
+    objs.setAutoDelete( false );
     KPObject *kpobject;
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
 	if ( kpobject->isSelected() )

@@ -187,17 +187,17 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
-    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0, 1.0, FALSE ).width(),
-			doc->getPageSize( 0, 0, 0, 1.0, FALSE ).height() ) );
+    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0, 1.0, false ).width(),
+			doc->getPageSize( 0, 0, 0, 1.0, false ).height() ) );
     QString filename;
     QString format = imageFormat( imgFormat );
     int p;
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-	pix.resize( QSize( doc->getPageSize( 0, 0, 0, 1.0, FALSE ).width(),
-			   doc->getPageSize( 0, 0, 0, 1.0, FALSE ).height() ) );
+	pix.resize( QSize( doc->getPageSize( 0, 0, 0, 1.0, false ).width(),
+			   doc->getPageSize( 0, 0, 0, 1.0, false ).height() ) );
 	pix.fill( Qt::white );
-	view->getPage()->drawPageInPix2( pix, i * doc->getPageSize( 0, 0, 0, 1.0, FALSE ).height(), i );
+	view->getPage()->drawPageInPix2( pix, i * doc->getPageSize( 0, 0, 0, 1.0, false ).height(), i );
 	filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
 	if ( zoom != 100 ) {
 	    QWMatrix m;
@@ -398,7 +398,7 @@ void KPWebPresentation::init()
 /*================================================================*/
 KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc,
 						  KPresenterView *_view )
-    : QWizard( 0, "", FALSE ), config( _config ), webPres( config, _doc, _view )
+    : QWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
 {
     doc = _doc;
     view = _view;
@@ -551,7 +551,7 @@ void KPWebPresentationWizard::setupPage2()
     textColor = new KColorButton( webPres.getTextColor(), row1 );
     titleColor = new KColorButton( webPres.getTitleColor(), row2 );
     backColor = new KColorButton( webPres.getBackColor(), row3 );
-    format = new QComboBox( FALSE, row4 );
+    format = new QComboBox( false, row4 );
     format->insertItem( "BMP", -1 );
     format->insertItem( "PNG", -1 );
     if ( KImageIO::canWrite( "JPEG" ) )
@@ -602,7 +602,7 @@ void KPWebPresentationWizard::setupPage3()
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
 	     SLOT( slideTitleChanged( QListViewItem * ) ) );
     slideTitles->setSorting( -1 );
-    slideTitles->header()->setMovingEnabled( FALSE );
+    slideTitles->header()->setMovingEnabled( false );
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
 	QListViewItem *item = new QListViewItem( slideTitles );
@@ -612,7 +612,7 @@ void KPWebPresentationWizard::setupPage3()
     }
 
     addPage( page3, i18n( "Slide Titles" ) );
-    setFinish( page3, TRUE );
+    setFinish( page3, true );
 }
 
 
@@ -664,9 +664,9 @@ bool KPWebPresentationWizard::isPathValid()
     QFileInfo fi( path->text() );
 
     if ( fi.exists() && fi.isDir() )
-	return TRUE;
+	return true;
 
-    return FALSE;
+    return false;
 }
 
 /*================================================================*/
@@ -682,7 +682,7 @@ void KPWebPresentationWizard::pageChanged()
 	    path->setFocus();
 	}
     } else
-	finishButton()->setEnabled( TRUE );
+	finishButton()->setEnabled( true );
 }
 
 /*================================================================*/
@@ -715,7 +715,7 @@ void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
 /*================================================================*/
 KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
 							      const KPWebPresentation &_webPres )
-    : QDialog( 0, "", FALSE ), webPres( _webPres )
+    : QDialog( 0, "", false ), webPres( _webPres )
 {
     doc = _doc;
     view = _view;
@@ -751,15 +751,15 @@ void KPWebPresentationCreateDialog::start()
     createMainPage();
     setCursor( arrowCursor );
 
-    bDone->setEnabled( TRUE );
-    bSave->setEnabled( TRUE );
+    bDone->setEnabled( true );
+    bSave->setEnabled( true );
 }
 
 /*================================================================*/
 void KPWebPresentationCreateDialog::initCreation()
 {
     QFont f = step1->font(), f2 = step1->font();
-    f.setBold( TRUE );
+    f.setBold( true );
     step1->setFont( f );
 
     progressBar->setValue( 0 );
@@ -775,7 +775,7 @@ void KPWebPresentationCreateDialog::initCreation()
 void KPWebPresentationCreateDialog::createSlidesPictures()
 {
     QFont f = step2->font(), f2 = step2->font();
-    f.setBold( TRUE );
+    f.setBold( true );
     step2->setFont( f );
 
     progressBar->setValue( 0 );
@@ -791,7 +791,7 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
 void KPWebPresentationCreateDialog::createSlidesHTML()
 {
     QFont f = step3->font(), f2 = step3->font();
-    f.setBold( TRUE );
+    f.setBold( true );
     step3->setFont( f );
 
     progressBar->setValue( 0 );
@@ -807,7 +807,7 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
 void KPWebPresentationCreateDialog::createMainPage()
 {
     QFont f = step4->font(), f2 = step4->font();
-    f.setBold( TRUE );
+    f.setBold( true );
     step4->setFont( f );
 
     progressBar->setValue( 0 );
@@ -851,8 +851,8 @@ void KPWebPresentationCreateDialog::setupGUI()
     bb->addStretch();
     bDone = bb->addButton( i18n( "Done" ) );
 
-    bSave->setEnabled( FALSE );
-    bDone->setEnabled( FALSE );
+    bSave->setEnabled( false );
+    bDone->setEnabled( false );
 
     connect( bDone, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( bSave, SIGNAL( clicked() ), this, SLOT( saveConfig() ) );

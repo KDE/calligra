@@ -38,7 +38,7 @@ KPRectObject::KPRectObject()
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
     drawShadow = false;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }

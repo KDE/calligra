@@ -48,7 +48,7 @@ KPAutoformObject::KPAutoformObject()
     gType = BCT_GHORZ;
     drawShadow = false;
     redrawPix = false;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }

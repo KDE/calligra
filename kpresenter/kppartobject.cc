@@ -44,7 +44,7 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     gColor1 = Qt::red;
     gColor2 = Qt::green;
     _enableDrawing = true;
-    unbalanced = FALSE;
+    unbalanced = false;
     xfactor = 100;
     yfactor = 100;
 }
@@ -227,7 +227,7 @@ void KPPartObject::paint( QPainter *_painter )
 
     // ######### Torben: Care about zooming
     if ( child && child->document() )
-	child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), TRUE, 0 );
+	child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ), getSize() ), true, 0 );
 }
 
 /*================================================================*/

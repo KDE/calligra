@@ -76,7 +76,7 @@ public:
     };
 
     KPClipartCollection()
-	: allowChangeRef( TRUE )
+	: allowChangeRef( true )
     { date = QDate::currentDate(); time = QTime::currentTime(); }
     ~KPClipartCollection();
 

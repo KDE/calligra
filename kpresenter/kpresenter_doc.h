@@ -102,7 +102,7 @@ public:
     KoView* createView( QWidget* parent, const char* name );
 
     // Drawing
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
 
     // save
     virtual bool save( ostream&, const char *_format );
@@ -112,7 +112,7 @@ public:
     virtual bool loadXML( KOMLParser&, KoStore* );
     virtual bool loadChildren( KoStore* _store );
 
-    virtual bool initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
+    virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
     void initEmpty();
 
     // get mime type
