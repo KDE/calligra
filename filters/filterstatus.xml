@@ -290,8 +290,9 @@
                 <stat import="threestars" export="none"/>
             </filter>
             <filter id="kpresenter_ooimpress">
+                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/ooimpress"/>
                 <title xml:lang="en_us">OpenOffice Impress</title>
-                <stat import="onestar" export="none"/>
+                <stat import="twostars" export="none"/>
             </filter>
             <filter id="kpresenter_powerpoint">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/powerpoint97"/>
