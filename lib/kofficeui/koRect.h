@@ -42,7 +42,9 @@ public:
     ~KoRect() {}
 
     bool isNull() const { return m_tl == m_br; }
-    bool isEmpty() const { return m_tl.x() > m_br.x() || m_tl.y() > m_br.y(); }
+    // Like QRect, a null KoRect is empty.
+    bool isEmpty() const { return m_tl.x() > m_br.x() || m_tl.y() > m_br.y() || isNull(); }
+    // Unlike QRect, a null KoRect is valid (0-sized).
     bool isValid() const { return m_tl.x() <= m_br.x() && m_tl.y() <= m_br.y(); }
     KoRect normalize() const;
 

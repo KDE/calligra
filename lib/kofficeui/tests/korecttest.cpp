@@ -39,10 +39,13 @@ int main(int argc, char *argv[])
 
   KoRect emptyRect;
   check( "KoRect() is null", emptyRect.isNull(), true );
+  check( "KoRect() is empty", emptyRect.isEmpty(), true );
   KoRect rect( 1, 15, 250, 156.14 );
   check( "KoRect(...) is not null", rect.isNull(), false );
+  check( "KoRect(...) is not empty", rect.isEmpty(), false );
   KoRect unionRect = rect | emptyRect;
   check( "Union is not null", unionRect.isNull(), false );
+  check( "Union is not empty", unionRect.isEmpty(), false );
   kdDebug() << unionRect << endl;
 
   printf("\nTest OK !\n");
