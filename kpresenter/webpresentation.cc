@@ -256,14 +256,15 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
     int p;
-
-    QDir( path ).mkdir( path + "/html" );
+    KURL str(  path + "/html"  );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QDir( path ).mkdir( path + "/pics" );
+    str = path + "/pics";
+    KIO::NetAccess::mkdir( str,( QWidget* )0L );
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );

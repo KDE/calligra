@@ -82,7 +82,9 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     // be in a file under DCIM/, and they start at 101MSPJP, so
     // we create the DCIM file, and then iterate through looking
     // for the next "available" directory slot
-    QDir (path).mkdir( path + "/DCIM" );
+    KURL str(  path + "/DCIM"  );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
+
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
@@ -91,7 +93,7 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     for (int dirNum = 101; dirNum < 999; dirNum++) {
         slidePath = QString("/DCIM/%1MSPJP").arg(dirNum);
         dirPath = QDir( path + slidePath );
-        if (! dirPath.exists())
+        if (! KIO::NetAccess::exists(( path + slidePath), true, ( QWidget* )0L) )
             break;
     }
 
@@ -99,17 +101,23 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QDir (path).mkdir( path + slidePath );
+    str = (  path + slidePath );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
     // now do the SPP file directory
-    QDir (path).mkdir( path + "/MSSONY" );
+    str = (  path + "/MSSONY" );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
+
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
-    QDir (path).mkdir( path + "/MSSONY/PJ" );
+    str = (  path + "/MSSONY/PJ" );
+    KIO::NetAccess::mkdir( str,( QWidget* )0L  );
+
+
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
