@@ -1092,14 +1092,6 @@ supported.</para>
 <ulink url="http://www.koffice.org/filters/1.2/kword/latex.phtml">LaTeX filter table</ulink></para>
 </sect2>
 
-<sect2 id="filters-mif"><title>MIF</title>
-
-<para>&kword; can only import and export the text of a MIF document.  All formatting is lost in the translation.</para>
-
-<para> For more detailed information see the 
-<ulink url="http://www.koffice.org/filters/1.2/kword/mif.phtml">MIF filter table</ulink></para>
-</sect2>
-
 <sect2 id="filters-msword97"><title>Microsoft Word 97/2000</title>
 
 <para>&kword; can read all text from Microsoft Word files.  Basic text formatting 
