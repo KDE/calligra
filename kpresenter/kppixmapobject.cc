@@ -141,7 +141,6 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     KP2DObject::loadOasis( element, context, animation );
-    //todo load file picture
     const QString href( element.attribute("xlink:href") );
     kdDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() && href[0] == '#' )
@@ -166,7 +165,7 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         }
         imageCollection->insertPicture( key, image );
     }
-
+//todo load picture settings.
 }
 
 
