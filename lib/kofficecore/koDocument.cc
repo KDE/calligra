@@ -1393,7 +1393,7 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
 
     if (!store->open(filename))
     {
-        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        kdWarning(30003) << "Entry " << filename << " not found!" << endl;
         d->lastErrorMessage = i18n( "Could not find %1" ).arg( filename );
         return false;
     }

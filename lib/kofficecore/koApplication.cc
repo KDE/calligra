@@ -177,7 +177,7 @@ bool KoApplication::start()
 		  if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).path()) )
 		  {
 		    paths << QString(args->url(i).path());
-		    kdDebug(3003) << "using full path..." << endl;
+		    kdDebug(30003) << "using full path..." << endl;
 		  } else {
 		     QString desktopName(args->arg(i));
 		     QString appName = KGlobal::instance()->instanceName();
@@ -207,7 +207,7 @@ bool KoApplication::start()
 		       doc->resetURL();
 		       doc->setEmpty();
                        doc->setTitleModified();
-		       kdDebug(3003) << "Template loaded..." << endl;
+		       kdDebug(30003) << "Template loaded..." << endl;
 		       n++;
 		     } else {
 		        KMessageBox::error(0L, i18n("Template %1 failed to load.").arg(templateURL.prettyURL()) );
