@@ -659,8 +659,20 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sw->setText( QString::number( oldW ) );
         sh->setText( QString::number( oldH ) );
 
-        bool f = theFrame->getFrameSet()->isFloating();
+
+
+        KWFrameSet * fs = theFrame->getFrameSet();
+        KWTableFrameSet *table = fs->getGroupManager();
+        bool f = false;
+        if(table)
+        {
+            f=table->isFloating();
+            floating->setEnabled( false );
+        }
+        else
+            f = theFrame->getFrameSet()->isFloating();
         floating->setChecked( f );
+
         slotFloatingToggled( f );
 
         // Can't change geometry of main WP frame
