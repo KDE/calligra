@@ -389,15 +389,14 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
 	QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
-	
 	if(vec[i].implemented.lower()=="file")
 	    tmpFileNeeded=true;
 	else if(vec[i].implemented.lower()=="kodocument") {
 	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), d->config);
 	    // if(ok)
 	    //	document->changedByFilter();
+	    const_cast<KoDocument*>(document)->slotProgress(-1);
 	}
-	const_cast<KoDocument*>(document)->slotProgress(-1);
 	QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
         delete filter;
         ++i;
