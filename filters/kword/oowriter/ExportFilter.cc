@@ -65,6 +65,99 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
+
+QString OOWriterWorker::escapeOOSpan(const QString& strText) const
+// We need not only to escape the classical XML stuff but also take care of spaces and tabs.
+{
+    QString strReturn;
+    QChar ch;
+    int spaceNumber=-1; // How many spaces are *still* to write (-1 == none; 0 == we had just one space, not any further needed)
+
+    for (uint i=0; i<strText.length(); i++)
+    {
+        ch=strText[i];
+
+        if (ch!=' ')
+        {
+            // The next character is not a space anymore
+            if (spaceNumber>1)
+            {
+                strReturn+="<text:s text:c=\"";
+                strReturn+=QString::number(spaceNumber);
+                strReturn+="\"/>";
+            }
+            spaceNumber=-1;
+        }
+
+        switch (ch.unicode())
+        {
+        case 9: // Tab
+            {
+                strReturn+="<text:tab-stop/>";
+                break;
+            }
+        case 10: // Line-feed
+            {
+                strReturn+="<text:line-break/>";
+                break;
+            }
+        case 32: // Space
+            {
+                if (spaceNumber>=0)
+                {
+                    spaceNumber++;
+                }
+                else
+                {
+                    strReturn+=' '; // The first one has to be written
+                    spaceNumber=0;
+                }
+                break;
+            }
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                strReturn+="&quot;";
+                break;
+            }
+        case 39: // '
+            {
+                strReturn+="&apos;";
+                break;
+            }
+        default:
+            {
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
+
+    if (spaceNumber>1)
+    {
+        // The last characters were spaces
+        strReturn+="<text:s text:c=\"";
+        strReturn+=QString::number(spaceNumber);
+        strReturn+="\"/>";
+    }
+
+    return strReturn;
+}
+
 bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
     kdDebug(30518) << "Opening file: " << filenameOut
@@ -625,15 +718,8 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
 {
-    // Retrieve text and escape it
-    QString partialText=escapeOOText(paraText.mid(formatData.pos,formatData.len));
-
-    // Replace line feeds by line breaks
-    int pos;
-    while ((pos=partialText.find(QChar(10)))>-1)
-    {
-        partialText.replace(pos,1,"<text:line-break/>");
-    }
+    // Retrieve text and escape it (and necessary space, atbs and line-break tags)
+    QString partialText(escapeOOSpan(paraText.mid(formatData.pos,formatData.len)));
 
     if (formatData.text.missing)
     {
