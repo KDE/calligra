@@ -24,6 +24,9 @@
 #include <qwidget.h>
 #include <kxmlguiclient.h>
 #include <qptrlist.h>
+
+class KexiMainWindow;
+
 class KexiDialogBase : public QWidget
 {
 	Q_OBJECT
@@ -36,6 +39,7 @@ class KexiDialogBase : public QWidget
 		virtual KXMLGUIClient *guiClient()=0;
 		virtual void activateActions();
 		virtual void deactivateActions();
+		KexiMainWindow *mainWindow(){return m_mainWindow;};
 	signals:
 		void closing(KexiDialogBase *);
 	

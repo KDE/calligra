@@ -36,10 +36,10 @@
 #include <qtimer.h>
 #include <kurlrequester.h>
 
-
 #include <qobjectlist.h>
 
 #include "kexiformbase.h"
+#include "keximainwindow.h"
 
 
 class KexiFormBase::EditGUIClient: public KXMLGUIClient
@@ -289,7 +289,9 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier
 	m_activeWidget=0;
 	m_activeMoveWidget=0;
 	m_resizeHandleSet=0;
-	
+
+	mainWindow()->guiFactory()->addClient(guiClient());
+	activateActions();
 	registerAs(DocumentWindow);
 }
 
