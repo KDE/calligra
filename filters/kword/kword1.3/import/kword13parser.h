@@ -38,7 +38,7 @@ class KWord13Format;
  *
  * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
-enum KWord13StackItemKWord13Type
+enum KWord13StackItemType
 {
     KWord13TypeUnknown  = 0,
     KWord13TypeBottom,      ///< Bottom of the stack
@@ -65,7 +65,7 @@ public:
     ~KWord13StackItem();
 public:
     QString itemName;   ///< Name of the tag (only for error purposes)
-    KWord13StackItemKWord13Type elementType;
+    KWord13StackItemType elementType;
     KWord13Frameset* m_currentFrameset;
 };
 
@@ -110,7 +110,7 @@ protected:
     bool startElementFrameset( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
-        KWord13StackItem *stackItem, const KWord13StackItemKWord13Type& allowedParentType, const KWord13StackItemKWord13Type& newType );
+        KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType );
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *

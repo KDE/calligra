@@ -376,7 +376,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
 
 
 bool KWord13Parser::startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem,
-     const KWord13StackItemKWord13Type& allowedParentType, const KWord13StackItemKWord13Type& newType )
+     const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType )
 {
     if ( parserStack.current()->elementType == allowedParentType )
     {
