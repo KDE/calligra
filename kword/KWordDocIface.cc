@@ -769,6 +769,11 @@ QStringList KWordDocIface::personalExpressionPath()const
     return doc->personalExpressionPath();
 }
 
+QStringList KWordDocIface::horizontalLinePath() const
+{
+    return doc->horizontalLinePath();
+}
+
 QString KWordDocIface::picturePath()const
 {
     return doc->picturePath();

@@ -231,6 +231,8 @@ k_dcop:
     QString globalLanguage()const;
     void setGlobalLanguage( const QString & _lang );
 
+    QStringList horizontalLinePath() const;
+
 private:
     KWDocument *doc;
 

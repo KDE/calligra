@@ -299,3 +299,4 @@ Changes after KWord-1.2
 - Now we can add directly a personal expression
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Add horizontal line
+- Now we can select specific horizontal line

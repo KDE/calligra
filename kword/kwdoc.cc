@@ -214,6 +214,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_personalExpressionPath = KWFactory::global()->dirs()->resourceDirs("expression");
     m_picturePath= KGlobalSettings::documentPath();
 
+    m_horizontalLinePath = KWFactory::global()->dirs()->resourceDirs("horizontalLine");
+
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10.0;
@@ -4715,5 +4717,11 @@ void KWDocument::setInsertDirectCursor(bool _b)
     config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
 }
+
+void KWDocument::setHorizontalLinePath( const QStringList & lst)
+{
+    m_horizontalLinePath = lst;
+}
+
 
 #include "kwdoc.moc"

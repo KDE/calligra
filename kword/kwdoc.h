@@ -757,6 +757,10 @@ public:
     QStringList personalExpressionPath() const { return m_personalExpressionPath;}
     void setPersonalExpressionPath( const QStringList & );
 
+    QStringList horizontalLinePath() const { return m_horizontalLinePath;}
+    void setHorizontalLinePath( const QStringList & );
+
+
     QString picturePath()const { return m_picturePath; }
     void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
 
@@ -962,6 +966,7 @@ private:
     QStringList m_personalExpressionPath;
     QString m_picturePath;
     QString m_globalLanguage;
+    QStringList m_horizontalLinePath;
 };
 
 

@@ -95,6 +95,7 @@
 #include "kwimportstyledia.h"
 #include "kwframe.h"
 #include "kwanchor.h"
+#include "kwinserthorizontallinedia.h"
 
 #undef Bool
 #include <kspell.h>
@@ -6943,15 +6944,21 @@ void KWView::insertHorizontalLine()
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit && edit->textFrameSet() && !edit->textFrameSet()->textObject()->protectContent() )
     {
-        KWHorzLineFrameSet *horizontalLine = new KWHorzLineFrameSet( m_doc, QString::null /*automatic name*/ );
+        KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
+        if ( dia->exec() )
+        {
+            KWHorzLineFrameSet *horizontalLine = new KWHorzLineFrameSet( m_doc, QString::null /*automatic name*/ );
 
-        KWFrame *frame = new KWFrame(horizontalLine, 50, 50, edit->textFrameSet()->frame(0)->width(), 10 );
-        horizontalLine->addFrame( frame );
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
-        m_doc->addFrameSet( horizontalLine, false );
-        edit->insertFloatingFrameSet( horizontalLine, i18n("Insert Horizontal Line") );
+            KWFrame *frame = new KWFrame(horizontalLine, 50, 50, edit->textFrameSet()->frame(0)->width(), 10 );
+            horizontalLine->addFrame( frame );
+            frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+            m_doc->addFrameSet( horizontalLine, false );
+            horizontalLine->loadPicture( dia->horizontalLineName() );
+            edit->insertFloatingFrameSet( horizontalLine, i18n("Insert Horizontal Line") );
 
-        m_doc->updateAllFrames();
+            m_doc->updateAllFrames();
+        }
+        delete dia;
     }
 }
 
