@@ -558,3 +558,50 @@ void KivioChangeBeginEndSizeArrowCommand::unexecute()
     m_page->doc()->updateView(m_page);
     m_page->doc()->slotSelectionChanged();
 }
+
+KivioChangeStencilProtectCommand::KivioChangeStencilProtectCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, bool _state, KVP_TYPE _type)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     type( _type),
+     m_bValue( _state)
+{
+}
+
+void KivioChangeStencilProtectCommand::execute()
+{
+    changeValue( m_bValue );
+}
+
+void KivioChangeStencilProtectCommand::unexecute()
+{
+    changeValue( !m_bValue );
+}
+
+void KivioChangeStencilProtectCommand::changeValue( bool b )
+{
+    switch( type )
+    {
+    case KV_POSX:
+	 m_stencil->protection()->setBit( kpX, b );
+        break;
+    case KV_POSY:
+	 m_stencil->protection()->setBit( kpY, b );
+        break;
+    case KV_WIDTH:
+	 m_stencil->protection()->setBit( kpWidth, b );
+        break;
+    case KV_HEIGHT:
+        m_stencil->protection()->setBit( kpHeight, b );
+        break;
+    case KV_ASPECT:
+        m_stencil->protection()->setBit( kpAspect, b );
+        break;
+    case KV_DELETE:
+	 m_stencil->protection()->setBit( kpDeletion, b);
+        break;
+    default:
+        break;
+    }
+}
+

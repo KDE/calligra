@@ -6,11 +6,13 @@
 #include "kivio_page.h"
 #include "kivio_stencil.h"
 #include "kivio_view.h"
+#include "kivio_command.h"
 
 #include <qbitarray.h>
 #include <qcheckbox.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 KivioProtectionPanel::KivioProtectionPanel( KivioView *view, QWidget *parent, const char *name )
    : KivioProtectionPanelBase(parent, name), m_pView(view)
@@ -29,123 +31,199 @@ KivioProtectionPanel::~KivioProtectionPanel()
 
 void KivioProtectionPanel::togWidth(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpWidth)==true )
-      {
-	 pStencil->protection()->setBit( kpWidth, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set width-protection of a stencil which does not support it.\n";
-      }
-
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpWidth)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_WIDTH);
+            macro->addCommand( cmd );
+            createMacro=true;
+        }
+        else
+        {
+            kdDebug() << "Attempt to set width-protection of a stencil which does not support it.\n";
+        }
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
 }
 
 void KivioProtectionPanel::togHeight(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpHeight)==true )
-      {
-	 pStencil->protection()->setBit( kpHeight, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
-      }
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
 
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpHeight)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_HEIGHT);
+            macro->addCommand( cmd );
+            createMacro=true;
+
+        }
+        else
+        {
+            kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
+        }
+
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 
 void KivioProtectionPanel::togAspect(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpAspect)==true )
-      {
-	 pStencil->protection()->setBit( kpAspect, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
-      }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpAspect)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_ASPECT);
+            macro->addCommand( cmd );
+            createMacro=true;
 
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+        }
+        else
+        {
+            kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
+        }
+
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 
 void KivioProtectionPanel::togDelete(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpDeletion)==true )
-      {
-	 pStencil->protection()->setBit( kpDeletion, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set delete-protection of a stencil which does not support it.\n";
-      }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpDeletion)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_DELETE);
+            macro->addCommand( cmd );
+            createMacro=true;
 
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+        }
+        else
+        {
+            kdDebug() << "Attempt to set delete-protection of a stencil which does not support it.\n";
+        }
+
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 
 void KivioProtectionPanel::togX(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpX)==true )
-      {
-	 pStencil->protection()->setBit( kpX, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set X-protection of a stencil which does not support it.\n";
-      }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpX)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_POSX);
+            macro->addCommand( cmd );
+            createMacro=true;
 
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+        }
+        else
+        {
+            kdDebug() << "Attempt to set X-protection of a stencil which does not support it.\n";
+        }
+
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 
 
 void KivioProtectionPanel::togY(bool on)
 {
-   KivioStencil *pStencil;
+    KivioStencil *pStencil;
+    KMacroCommand * macro = new KMacroCommand(i18n("Change Protection Attribute"));
+    bool createMacro=false;
 
-   pStencil = m_pView->activePage()->selectedStencils()->first();
-   while( pStencil )
-   {
-      if( pStencil->canProtect()->at(kpY)==true )
-      {
-	 pStencil->protection()->setBit( kpY, on );
-      }
-      else
-      {
-	 kdDebug() << "Attempt to set Y-protection of a stencil which does not support it.\n";
-      }
+    pStencil = m_pView->activePage()->selectedStencils()->first();
+    while( pStencil )
+    {
+        if( pStencil->canProtect()->at(kpY)==true )
+        {
+            KivioChangeStencilProtectCommand* cmd = new KivioChangeStencilProtectCommand(i18n("Change Protection Attribute") , m_pView->activePage(), pStencil, on, KivioChangeStencilProtectCommand::KV_POSY);
+            macro->addCommand( cmd );
+            createMacro=true;
 
-      pStencil = m_pView->activePage()->selectedStencils()->next();
-   }
+        }
+        else
+        {
+            kdDebug() << "Attempt to set Y-protection of a stencil which does not support it.\n";
+        }
+
+        pStencil = m_pView->activePage()->selectedStencils()->next();
+    }
+    if (createMacro )
+    {
+        macro->execute();
+        m_pView->doc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 
 void KivioProtectionPanel::updateCheckBoxes()

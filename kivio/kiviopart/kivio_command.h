@@ -345,5 +345,25 @@ protected:
     bool beginArrow;
 };
 
+class KivioChangeStencilProtectCommand : public KNamedCommand
+{
+public:
+    enum KVP_TYPE {KV_POSX, KV_POSY,KV_WIDTH, KV_HEIGHT, KV_ASPECT, KV_DELETE};
+    KivioChangeStencilProtectCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, bool _state, KVP_TYPE _type);
+
+    ~KivioChangeStencilProtectCommand(){};
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    void changeValue( bool b );
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    KVP_TYPE type;
+    bool m_bValue;
+};
+
+
 #endif
 
