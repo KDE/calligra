@@ -589,15 +589,20 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
         if ( listInfo )
         {
             QDomElement counterElement = m_mainDocument.createElement( "COUNTER" );
-            // simplelist -> 'list numbering', otherwise 'chapter numbering'
-            counterElement.setAttribute( "numberingtype", listInfo->isSimpleList() ? "0" : "1" );
+            counterElement.setAttribute( "numberingtype", listInfo->prev() ? "1" : "0" );
             counterElement.setAttribute( "start", listInfo->startAt() );
+            int depth = pap.ilvl; /*both are 0 based*/
+            // Heading styles don't set the ilvl, but must have a depth coming
+            // from their heading level (the style's STI)
+            if ( depth == 0 && m_paragStyle && m_paragStyle->sti() >= 1 && m_paragStyle->sti() <= 9 )
+                depth = m_paragStyle->sti() - 1;
+            counterElement.setAttribute( "depth", depth );
+
             // Now we need to parse the text, to try and convert msword's powerful list template
             // stuff, into what KWord can do right now.
-            int depth = pap.ilvl; /*both are 0 based*/
-            counterElement.setAttribute( "depth", depth );
             wvWare::UString text = listInfo->text().text;
 #ifndef NDEBUG
+            kdDebug() << "  depth=" << depth << endl;
             listInfo->dump();
 #endif
             QString prefix, suffix;
@@ -609,9 +614,9 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
                 short ch = text[i].unicode();
                 //kdDebug() << i << ":" << ch << endl;
                 if ( ch < 10 ) { // List level place holder
-                    if ( ch == depth ) {
+                    if ( ch == pap.ilvl ) {
                         if ( depthFound )
-                            kdWarning() << "Depth " << depth << " found twice in listInfo text..." << endl;
+                            kdWarning() << "ilvl " << pap.ilvl << " found twice in listInfo text..." << endl;
                         else
                             depthFound = true;
                         suffix = QString::null;
@@ -653,8 +658,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             }
             // listInfo->alignment() is not supported in KWord
             // listInfo->isLegal() hmm
-            // listInfo->notRestarted() hmm
-            // listInfo->prev() is assumed to be true for paragraph numbering.... :}
+            // listInfo->notRestarted() [by higher level of lists] not supported
             // listInfo->followingchar() ignored, it's always a space in KWord currently
             parentElement.appendChild( counterElement );
         }
