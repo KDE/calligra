@@ -1,6 +1,6 @@
 ####### General stuff
 
-SUBDIRS = tests
+SUBDIRS = . tests
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= $(KSTORE_INCLUDES) $(KWMF_INCLUDES) $(all_includes)
 libkofficecore_la_LIBADD  = $(LIB_KSTORE) $(LIB_KWMF) $(LIB_KPARTS) \
