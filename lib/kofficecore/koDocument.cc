@@ -295,11 +295,11 @@ bool KoDocument::saveFile()
     }
   }
 
+  QApplication::restoreOverrideCursor();
   if ( !ret )
   {
     KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
   }
-  QApplication::restoreOverrideCursor();
   return ret;
 }
 
@@ -614,6 +614,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
   // Save childen first since they might get a new url
   if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
   {
+    kdDebug(30003) << "store->bad()=" << store->bad() << "   aborting saving !" << endl;
     delete store;
     return false;
   }
