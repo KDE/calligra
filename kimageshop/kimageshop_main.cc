@@ -50,12 +50,12 @@ int main(int argc, char** argv)
 {
   kimgioRegister();
 
+  KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
+  KImageShopApp app(argc, argv);
+
   KGlobal::locale()->insertCatalogue("libkistools");
   KGlobal::locale()->insertCatalogue("libkiswidgets");
   KGlobal::locale()->insertCatalogue("libkisdialogs");
-
-  KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
-  KImageShopApp app(argc, argv);
   
   app.exec();
 
