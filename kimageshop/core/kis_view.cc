@@ -835,11 +835,9 @@ void KisView::insert_layer_image()
 {
   debug("KisView::insert_layer_image");
 
-  QString fileName;
+  KURL url = KFileDialog::getOpenURL( getenv("HOME"),KisCore::readFilters(),0,i18n("Image file for layer") );
 
-  fileName = KFileDialog::getOpenFileName( getenv("HOME"),KisCore::readFilters(),0,i18n("Image file for layer") );
-
-  if( !fileName.isEmpty() )
+  if( !url.isEmpty() )
   {
     // TODO : insert layer
   }
