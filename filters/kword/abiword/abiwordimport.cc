@@ -451,7 +451,7 @@ static bool EndElementD (StackItem* stackItem, KoFilterChain* chain,
         return false;
     }
 
-    QString strStoreName="picture/picture";
+    QString strStoreName="pictures/picture";
     strStoreName+=QString::number(++pictureNumber);
 
     if (stackItem->strMimeType=="image/png")
