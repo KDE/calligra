@@ -10,6 +10,7 @@ Fixes:
 - Fixed aligning of rotated lines and line with pen.width() > 1
 - Fixed that the width/height of an rotated object could be negative
 - Fixed copy and paste when one pic is in the copied objects
+- Fixed crash in history of group/ungroup commands
 
 Changes:
 - Group objects: The grouped object is now in the z-order of the upperst

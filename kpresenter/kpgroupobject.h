@@ -95,6 +95,10 @@ public:
     virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force=false );
 
     virtual void flip( bool horizontal );
+    virtual void removeFromObjList();
+    virtual void addToObjList();
+    virtual void incCmdRef();
+    virtual void decCmdRef();
 
 protected:
     void updateSizes( double fx, double fy );

@@ -227,7 +227,7 @@ public:
     void rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler);
 
     virtual void removeFromObjList()
-        { inObjList = false; doDelete(); }
+        { inObjList = false; }
     virtual void addToObjList()
         { inObjList = true; }
     virtual void incCmdRef()

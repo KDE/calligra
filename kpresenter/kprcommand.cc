@@ -493,18 +493,12 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
 , m_doc( _doc )
 , m_page( _page )
 {
-    QPtrListIterator<KPObject> it( m_oldObjectList );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
     m_groupObject = new KPGroupObject( m_objectsToGroup );
     m_groupObject->incCmdRef();
 }
 
 GroupObjCmd::~GroupObjCmd()
 {
-    QPtrListIterator<KPObject> it( m_oldObjectList );
-    for ( ; it.current() ; ++it )
-        it.current()->decCmdRef();
     m_groupObject->decCmdRef();
 }
 
@@ -517,7 +511,6 @@ void GroupObjCmd::execute()
     {
         it.current()->setSelected( false );
         position = m_page->takeObject(it.current() );
-        it.current()->removeFromObjList();
         r |= it.current()->getBoundingRect();
     }
 
@@ -564,20 +557,14 @@ UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 : KNamedCommand( _name )
 , m_groupedObjects( grpObj_->getObjects() )
 , m_doc( _doc )
+, m_groupObject( grpObj_ )
 , m_page( _page )
 {
-    QPtrListIterator<KPObject> it( m_groupedObjects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
-    m_groupObject = grpObj_;
     m_groupObject->incCmdRef();
 }
 
 UnGroupObjCmd::~UnGroupObjCmd()
 {
-    QPtrListIterator<KPObject> it( m_groupedObjects );
-    for ( ; it.current() ; ++it )
-        it.current()->decCmdRef();
     m_groupObject->decCmdRef();
 }
 
@@ -613,7 +600,6 @@ void UnGroupObjCmd::unexecute()
     {
         it.current()->setSelected( false );
         position = m_page->takeObject( it.current() );
-        it.current()->removeFromObjList();
         r |= it.current()->getBoundingRect();
     }
 

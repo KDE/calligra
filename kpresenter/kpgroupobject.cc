@@ -601,3 +601,38 @@ void KPGroupObject::flip( bool horizontal ) {
         it.current()->moveBy( mx, my );
     }
 }
+
+void KPGroupObject::removeFromObjList()
+{
+    inObjList = false; 
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) 
+        it.current()->removeFromObjList();
+}
+
+void KPGroupObject::addToObjList()
+{ 
+    inObjList = true; 
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) 
+        it.current()->addToObjList();
+}
+
+void KPGroupObject::incCmdRef()
+{ 
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) 
+        it.current()->incCmdRef();
+
+    cmds++; 
+}
+
+void KPGroupObject::decCmdRef()
+{ 
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) 
+        it.current()->decCmdRef();
+
+    cmds--; 
+    doDelete(); 
+}
