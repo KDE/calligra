@@ -12,8 +12,8 @@
 <para>When you startup &kword;, all the available toolbars are visible.  If you don't think you will need a toolbar, and want to reclaim that desktop space, 
 you "minimize" the toolbar.</para>
 <para>There are two ways to acomplish this task</para>
-<informaltable frame="none">
-<tgroup cols="2" align="left">
+<informaltable>
+<tgroup cols="2">
 <tbody>
 <row><entry align="center">
 Option 1</entry></row><row><entry></entry></row><row><entry></entry><entry>
@@ -682,7 +682,41 @@ is equivilent to using the menubar. </para>
 </variablelist></sect2>
 </sect1>
 
-<sect1 id="FileToolbar"><title>File Toolbar</title>
+<sect1 id="charformattoolbar"><title>Character Formatting ToolBar</title>
+<para>The Character Formatting Toolbar consists of 23 "elements".  Each "element" performs a task from the menubar.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="cftb" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Character Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Character Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Font Face</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Bold Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Italics Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Underline Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Text Color Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Right Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Center Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Left Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Justify Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lspcbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Line Spacing</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Numbered Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bultxtbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Bulleted Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Superscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Subscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Left Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Right Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Top Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Bottom Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle border colors</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Style</entry></row>
+
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="filetoolbar"><title>File Toolbar</title>
 <para>The File Toolbar consists of 5 buttons.  Each button performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="filetb.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <informaltable frame="none">
@@ -716,6 +750,12 @@ is equivilent to using the menubar. </para>
 </tbody></tgroup>
 </informaltable>
 </sect1>
+
+<sect1 id="insertoolbar"><title>Insert Toolbar</title>
+<para></para>
+</sect1>
+
+
 <sect1 id="basicedittoolbar"><title>Edit Toolbar</title>
 <para>The Basic Editing Toolbar consists of 8 buttons.  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="edittb.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
@@ -766,38 +806,7 @@ is equivilent to using the menubar. </para>
 </informaltable>
 </sect1>
 
-<sect1 id="TableEditToolbar"><title>Table ToolBar</title>
-<para>The Table Edit Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
-<screenshot><mediaobject><imageobject><imagedata fileref="tedittb.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<informaltable frame="none">
-<tgroup cols="2">
-<tbody>
-<row><entry>
-<link linkend="MenuInsRow"><inlinemediaobject><imageobject><imagedata fileref="rowin.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
-</entry><entry valign="middle">
-<link linkend="MenuInsRow">Insert Row</link>
-</entry></row>
-<row><entry>
-<link linkend="MenuInsCol"><inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
-</entry><entry valign="middle">
-<link linkend="MenuInsCol">Insert Column</link>
-</entry></row>
-<row><entry>
-<link linkend="MenuDelRow"><inlinemediaobject><imageobject><imagedata fileref="rowout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
-</entry><entry valign="middle">
-<link linkend="MenuDelRow">Delete Row</link>
-</entry></row>
-<row><entry>
-<link linkend="MenuDelCol"><inlinemediaobject><imageobject><imagedata fileref="colout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
-</entry><entry valign="middle">
-<link linkend="MenuDelCol">Delete Column</link>
-</entry></row>
-</tbody></tgroup>
-</informaltable>
-</sect1>
-
-
-<sect1 id="InsertToolBar"><title>Insert Toolbar</title>
+<sect1 id="paragraphtoolbar"><title>Paragraph Toolbar</title>
 <para>The Insert Toolbar consists of 8 buttons.  Each button performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="instb.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <informaltable frame="none">
@@ -843,12 +852,50 @@ is equivilent to using the menubar. </para>
 </entry><entry valign="middle">
 <link linkend="MenuInsPict">Insert Object Frame</link>
 </entry></row>
-
-
 </tbody></tgroup>
 </informaltable>
 </sect1>
-<sect1 id="FrameCreateToolbar"><title>Frame Edit/Create ToolBar</title>
+
+<sect1 id="TableEditToolbar"><title>Table ToolBar</title>
+<para>The Table Edit Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
+<screenshot><mediaobject><imageobject><imagedata fileref="tedittb.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<informaltable frame="none">
+<tgroup cols="2">
+<tbody>
+<row><entry>
+<link linkend="MenuInsRow"><inlinemediaobject><imageobject><imagedata fileref="rowin.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
+</entry><entry valign="middle">
+<link linkend="MenuInsRow">Insert Row</link>
+</entry></row>
+<row><entry>
+<link linkend="MenuInsCol"><inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
+</entry><entry valign="middle">
+<link linkend="MenuInsCol">Insert Column</link>
+</entry></row>
+<row><entry>
+<link linkend="MenuDelRow"><inlinemediaobject><imageobject><imagedata fileref="rowout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
+</entry><entry valign="middle">
+<link linkend="MenuDelRow">Delete Row</link>
+</entry></row>
+<row><entry>
+<link linkend="MenuDelCol"><inlinemediaobject><imageobject><imagedata fileref="colout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
+</entry><entry valign="middle">
+<link linkend="MenuDelCol">Delete Column</link>
+</entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="bordertoolbar"><title>Border Toolbar</title>
+<para></para>
+</sect1>
+<sect1 id="formulatoolbar"><title>Formula Toolbar</title>
+<para></para>
+</sect1>
+
+
+
+<sect1 id="FrameCreateToolbar"><title>Frame Edit/Create ToolBar-Renamed</title>
 <para>The Frame Edit/Create Toolbar consists of 9 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 
 <screenshot><mediaobject><imageobject><imagedata fileref="fcrtb" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
@@ -895,40 +942,7 @@ is equivilent to using the menubar. </para>
 </tbody></tgroup>
 </informaltable>
 </sect1>
-<sect1 id="CharFormatToolbar"><title>Character Formatting ToolBar</title>
-<para>The Character Formatting Toolbar consists of 23 "elements".  Each "element" performs a task from the menubar.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="cftb" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<informaltable frame="none">
-<tgroup cols="2" align="left">
-<tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Character Style</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Character Size</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Font Face</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Bold Text</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Italics Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Underline Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Text Color Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Right Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Center Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Left Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Justify Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="lspcbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Line Spacing</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Numbered Text paragraphs</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bultxtbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Bulleted Text paragraphs</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Superscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Subscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Left Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Right Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Top Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Bottom Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle border colors</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Size</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Style</entry></row>
 
-</tbody></tgroup>
-</informaltable>
-</sect1>
 <sect1 id="FileDlg"><title>Navigating with the File Dialog.</title><para></para></sect1>
 <sect1 id="SelColor"><title>Selecting Colors from a Color dialog</title><para></para></sect1>
-
-</chapter>   
+</chapter>

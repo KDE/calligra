@@ -15,19 +15,8 @@
 <screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
 <para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
-<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
-<itemizedlist>
-<listitem><para>DIN A3</para></listitem>
-<listitem><para>DIN A4</para></listitem>
-<listitem><para>DIN A5</para></listitem>
-<listitem><para>DIN B5</para></listitem>
-<listitem><para>US Letter</para></listitem>
-<listitem><para>US Legal</para></listitem>
-<listitem><para>US Exective</para></listitem>
-<listitem><para>Screen</para></listitem>
-<listitem><para>Custom</para></listitem>
-</itemizedlist>
-<para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
+<para>Below that, you can determine the paper format you will eventually print to.  &kword; provides many common paper sizes predefined.</para>
+<para>In addition to standard paper sizes, there are two selections that deserve special mention.</para>
 <para><guilabel>Screen</guilabel> is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
 <para>If you select the <guilabel>Custom</guilabel> paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
 <para>Next to the paper format, in the dropdown box labeled <guilabel>Orientation</guilabel> you can select either <guilabel><link linkend="defportrait">Portrait</link></guilabel> or <guilabel><link linkend="deflandscape">Landscape</link></guilabel> layout for your document. </para>
@@ -70,18 +59,8 @@
 <screenshot><mediaobject><imageobject><imagedata fileref="dtpfmtpg1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>First you will notice, that a preview box appears on the right half of this dialog.  This will <emphasis>approximate</emphasis> the final look of your document.  It is updated with each change, and should be used as a guide for your changes. </para>
 <para>On the left, the dialog first informs you what unit of measurement it is using.  This unit of measurement is the same unit of measurement you have set for your rulers. (In this example, we are using inches.)</para>
-<para>Below that, you can determine the paper format you will eventually print to.  Your choices are:</para>
-<itemizedlist>
-<listitem><para>DIN A3</para></listitem>
-<listitem><para>DIN A4</para></listitem>
-<listitem><para>DIN A5</para></listitem>
-<listitem><para>DIN B5</para></listitem>
-<listitem><para>US Letter</para></listitem>
-<listitem><para>US Legal</para></listitem>
-<listitem><para>US Exective</para></listitem>
-<listitem><para>Screen</para></listitem>
-<listitem><para>Custom</para></listitem>
-</itemizedlist>
+<para>Below that, you can determine the paper format you will eventually print to.  &kword; provides many common paper sizes predefined.</para>
+<para>In addition to standard paper sizes, there are two selections that deserve special mention.</para>
 <para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
 <para><guilabel>Screen</guilabel> is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
 <para>If you select the <guilabel>Custom</guilabel> paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
@@ -324,9 +303,15 @@
 <para>The "Preview" window will show you how your paragraph borders will look.</para>
 </sect2>
 <sect2 id="fpara4"><title>Bullets and Numbering</title>
-<para>!!!!!!!!!!Still needs work before writing!!!!!!!!!</para>
+<para>A very common element of a document, is a list of items.  The list contains several elements.  These elements may be numberd, for easy reference.  Alternativly, the list elements may be simply set off from the rest of the text with a special character.  These special characters are called bullets.</para>
+<para>You can use this dialog box to define your bullets or the numbering method of your list.</para>
 <screenshot><mediaobject><imageobject><imagedata fileref="fpara4.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-
+<para>The first thing you may notice about this dialog box, is the large preview window on the right side of the box.  This can be used to <emphasis>approximate</emphasis> the final look of your list.</para>
+<para>Along the left side, the top section of the dialog box is divided has three options.  </para>
+<para></para>
+<para></para>
+<para></para>
+<para></para>
 </sect2>
 <sect2 id="fpara5"><title>Tabulators</title>
 <screenshot><mediaobject><imageobject><imagedata fileref="fpara5.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>

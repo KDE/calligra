@@ -8,7 +8,7 @@
 Beneath each step, is text in <emphasis>italics</emphasis>. This text
 will explain what the previous step in the tutorial acomplished.</para>
 
-<para>Also, you will notice a red rectangle on each screenshot. This
+<para>Also, you will notice a red rectangle on many screenshots. This
 rectangle outlines the next object you will need to push/change/click/etc.
 Obviously a red rectangle will not appear when you are running
 &kword;.</para></note>
@@ -28,19 +28,19 @@ document</link> after KWord is running), a dialog appears.</para>
 
 <para>For your first document:</para>
 
-<para>Step 1: Click on the Page Layout tab.</para>
+<para>Step 1: Click on the <guilabel>Page Layout</guilabel> tab.</para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut1.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
 
-<para><emphasis>This will list the Desktop Publishing icons available on your system.</emphasis></para>
+<para><emphasis>This will list the Page Layout templates available on your system.</emphasis></para>
 
-<para>Step 2: Now select the "Simple Layout" icon by clicking once with the left button of your mouse.</para>
+<para>Step 2: Now select the <guilabel>Simple Layout</guilabel> icon by clicking once with the left button of your mouse.</para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut2.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
 
 <para><emphasis>This is the template we will use for the tutorial</emphasis></para>
 
-<para>Step 3: Now confirm your selection by clicking on "OK" </para>
+<para>Step 3: Now confirm your selection by clicking on <guibutton>OK</guibutton> </para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut3.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
 
@@ -61,10 +61,10 @@ separate frame.</emphasis></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut4.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>This selects a frame.  You can tell this is the current frame because a cursor appears in the upper left corner. </emphasis></para>
-<para>Step 6: Enter the following text into the keyboard: KWord Press Release.</para>
+<para>Step 6: Enter the following text into the keyboard: <emphasis>KWord Press Release</emphasis>.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut6.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>This is some sample text for our newsletter.</emphasis></para>
-<para>Step 7: Select KWord Press Release by left clicking and holding down to the left of the text, and draging to the right.  Selected text will be white text on black background.</para>
+<para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing the mouse cursor on the left end of the text.  Click once with the left mouse button and drag the mouse cursor to the right.  Selected text will be white text on dark background.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut7.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 
 <para>Step 8: Click inside the text size drop down box.  Change this number to 36.</para>
@@ -74,14 +74,10 @@ separate frame.</emphasis></para>
 </sect1>
 <sect1 id="ResizeFrame"> <title>Changing the size of a frame</title>
 <para><emphasis>Now that we have entered some text, we can see that the frame is too large for the text. </emphasis></para>
-<para>Step 9: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the menubar.</para>
-<para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut9.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para><emphasis>This will switch us into Frame Edit Mode.</emphasis></para>
-<para>Step 10: Click once in the upper-left frame</para>
-<para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut10.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para><emphasis>This will select this frame for editing.</emphasis></para>
+<para>Step 9: Place the mouse cursor over the frame border, and click once.</para>
+<para><emphasis>This will select this frame, so it can be reshaped.</emphasis></para>
 <para><emphasis>You will now notice the frame is outlined in black, with 8 black squares on the outline.  These squares are used for resizing the frame.</emphasis></para>
-<para>Step 11: Place the mouse cursor over the black square in the lower right corner of the frame. Click with the left mouse button and hold it down. Drage the mouse up and to the left.</para>
+<para>Step 10: Place the mouse cursor over the black square in the lower right corner of the frame. Click with the left mouse button and hold it down. Drage the mouse up and to the left.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut11a.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>Notice how the frame changes shape.  Adjust the size and shape of the frame until it looks like this:</emphasis></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut11b.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
@@ -89,54 +85,50 @@ separate frame.</emphasis></para>
 </sect1>
 <sect1 id="MoveFrame"> <title>Moving a frame on the page</title>
 <para>Now that we have created a title block, we will center it at the top of the page.</para>
-<para>Step 12: Place the mouse cursor over the frame.</para>
+<para>Step 11: Place the mouse cursor over the border of the frame (but not on any of the black squares).</para>
 
 <para><emphasis>The cursor will now change to a "4 way arrow".  This indicates KWord is ready to move the frame on the page.</emphasis></para>
-<para>Step 13: Click and hold with the left mouse button. Drag the mouse, and the frame will follow it.  Position the frame in the center of the page near the top.</para>
+<para>Step 12: Click and hold with the left mouse button. Drag the mouse, and the frame will follow it.  Position the frame in the center of the page near the top. When you are satisfied with its final location, release the mouse button.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut13.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 </sect1>
 <sect1 id="AddFrame"> <title>Adding a new frame/Making text flow between two frames</title>
-<para>Step 14: Begin by selecting <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem></menuchoice></para>
+<para>Step 13: Begin by selecting <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem></menuchoice></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut14.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para><emphasis>The cursor will now change to cross-hairs.  You can now "draw" your new text box.  Start by placing the cursor at one corner.  Click and hold
+<para><emphasis>The cursor has changed to cross-hairs.  You can "draw" your new text box with this cursor.  Start by placing the cursor at one corner.  Click and hold
 the left mouse button.  Drag the mouse diagonally.  An outline will appear which represents your new text frame.  When you have a text frame of reasonable size, release the left mouse button.</emphasis></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut14a.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>It is not important if your text box does not resemble the example for the purposes of this tutorial.</emphasis></para>
-<para>When you release the left mouse button, a new dialog box appears.</para>
+<para><emphasis>When you release the left mouse button, a new dialog box appears.</emphasis></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut15.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para>This dialog box lists all the current framesets.  The default value is highlighted.  By selecting the default value, you will create a new framset (text will not flow from any other frame into this frame)</para>
-<para>Step 15: For the purposes of this tutorial, select "Frameset 2"</para>
+<para><emphasis>This dialog box lists all the current framesets.  The default value is highlighted.  By selecting the default value, you will create a new framset (text will not flow from any other frame into this frame)</emphasis></para>
+<para>Step 14: For the purposes of this tutorial, select <guilabel>Frameset 2</guilabel></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut15a.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para>Step 16: Select "OK"</para>
+<para>Step 15: Select <guibutton>OK</guibutton></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut16.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>What you have just done, is connect frameset 2 to your new text frame.  To test this:</emphasis></para>
-<para>Step 17: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Edit Text</guimenuitem></menuchoice></para>
-<para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut17.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para>Step 18: Click once inside the new frame.</para>  
+<para>Step 16: Click once inside the new frame.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut18.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para>Notice that your cursor immediatly jumps to the frame below the newly created text frame.  That is because that lower left frame is the first frame in the current frame set.</para>
-<para>Step 19: Begin typing.  You will need to type quite a bit, but keep typing.  When you run out of space in the text frame, you will see your new text is moved immediatly into your new text frame.</para>
+<para>Notice that your cursor immediatly jumps to the frame below the newly created text frame.  That is because that lower left frame is the first frame in the current frameset.</para>
+<para>Step 17: Begin typing.  You will need to type quite a bit, but keep typing.  When you run out of space in the text frame, you will see your new text is moved immediatly into your new text frame.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut19.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para></para></sect1>
 <sect1 id="DelFrame"> <title>Deleting a frame</title>
 <para>Now we will delete an unneeded frame. (Yes I know, we just created a new frame, but &kword; will forgive you being fickle).  We will delete the long text frame on the right side of the page.</para>
-<para>Step 20: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice></para>
-<para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut20.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
-<para><emphasis>This will switch us into Frame Edit Mode.</emphasis></para>
-<para>Step 21: Place the mouse cursor over the right hand text column, and click with the left mouse button.</para>
+<para>Step 18: Place the mouse cursor over the frame border of the right hand text frame, and click with the left mouse button.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut21.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>This selects the frame.</emphasis></para>
-<para>Step 22: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice></para>
+<para>Step 19: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice></para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut22.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><emphasis>This deletes the frame.</emphasis></para>
+</sect1>
+<sect1 id="tutsummary"><title>Summary</title>
 <para>Hopefully this tutorial has introduced you to the basics of using frames in KWord.</para>
-<para>At this point, you should be confortable with:</para>
+<para>At this point, you have been introduced to:</para>
 <itemizedlist>
-<listitem><para>Switching between Text Edit Mode and Frame Edit Mode.</para></listitem>
 <listitem><para>Adding Text to a frame.</para></listitem>
 <listitem><para>Creating, moving, resizing and deleting frames.</para></listitem>
 <listitem><para>and Resizing text.</para></listitem>
 </itemizedlist>
-<para>Now you should feel more comfortable with the basics of &kword;.</para>
+<para>Now you should begin to feel more comfortable with the basics of &kword;.</para>
 </sect1>
 </chapter>

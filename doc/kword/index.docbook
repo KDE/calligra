@@ -10,13 +10,9 @@
   <!ENTITY guides3 SYSTEM "kwordguides3.docbook">
   <!ENTITY styles SYSTEM "kwordguides3b.docbook">
   <!ENTITY tabls SYSTEM "kwordguides3c.docbook">
-  
   <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
   <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
-
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
-  
-  
 ]>
 
 <book lang="&language;">
@@ -57,7 +53,7 @@ is part of the KOffice suite of utilities.
 <title>Current status of this manual</title>
 
 <warning><para>This manual is out of date in many areas. Over the past
-two months, KOffice has continued to evolve into the start of a powerful
+year, KOffice has continued to evolve into the start of a powerful
 office suite.  During that time, however, my time has been short for
 updating the documentation for KWord because of the tremendous need to
 document all of the new and updated applications in KDE 2.0.  Because of
@@ -74,7 +70,8 @@ be corrected ASAP.</para>
 documentation team, please feel free to send me a message at
 <email>mpmcbride7@yahoo.com</email></para>
 
-<para>Sincerely Mike</para>
+<para>Sincerely,</para>
+<para>Mike</para>
 </warning>
 
 <sect1 id="todo1">
@@ -83,7 +80,7 @@ documentation team, please feel free to send me a message at
 <sect2 id="done">
 <title>What is done</title>
 
-<para>Sections 1-7 have been reviewed, snapshots updated, icons
+<para> 2001-09-06:  Sections 1-75 have been reviewed, snapshots updated, icons
 correct, etc.  These sections are up to date. Any comments anyone has
 on these sections of the manual, would be greatly appreciated.</para>
 
@@ -99,7 +96,7 @@ work in this manual:</para>
 <listitem><para>Continue to review previously written sections.</para></listitem>
 <listitem><para>Write "Character Formatting Toolbars"</para></listitem>
 <listitem><para>Write Kword Options</para></listitem>
-<listitem><para>Write Zoom</para></listitem>
+
 <listitem><para>Finish Detailed Guides</para></listitem>
 <listitem><para>Write Answers to Questions in Q and A</para></listitem>
 <listitem><para>Add to Glossary where needed. Some terms are
@@ -115,6 +112,8 @@ table by subject</para></listitem>
 <listitem><para>Variables editor not working on first pass through.</para></listitem>
 <listitem><para>Determine if "Side Head" dialog works under Frames->Frameset->Options.</para></listitem>
 <listitem><para>Determine if "Line Spacing" dropdown box works under Format->Paragraph->Indents and Spacing.</para></listitem>
+<listitem><para>Re-evaluate the need for the section on "Text Edit vs Frame Edit Modes".</para></listitem>
+<listitem><para>Rework all chapters to account for the elimination of text edit/frame edit mode buttons.</para></listitem>
 
 </itemizedlist>
 
@@ -174,8 +173,8 @@ Environment.  Other applications in KOffice include</para>
 <member><application>KIllustrator</application> (A vector drawing program.)</member>
 <member><application>Krayon</application> (A bitmap image editor)</member>
 <member><application>Kivio</application> (A flowchart creater.)</member>
-<member>and <application>Kugar</application> (A report generation tool.)  </member>
-<member>All of this can be done within a simple integrated office desktop.</member>
+<member><application>Kugar</application> (A report generation tool.)  </member>
+<member>and a simple integrated office desktop, to help organize your work.</member>
 
 </simplelist>
 
@@ -188,16 +187,16 @@ advanced features you expect from todays desktop environment.</para>
 can work either as a traditional word processor, or as a simple
 but powerful desktop publishing application. This is possible
 because <application>KWord</application> is a frame oriented word
-processor, not a Page Layout word processor (<application>Microsoft
+processor, not a page oriented word processor (<application>Microsoft
 Word</application>, <application>Word Perfect</application> and
-<application>Applixware</application> are all Page Layout word
+<application>Applixware</application> are all page oriented word
 processors).</para>
 
 <para>Frame oriented word processors work by creating one or more "frames"
 per page. Each frame acts as a boundry (like a frame which surrounds
 a photograph), which limits the text to the boundries of the frame.
 You can move and reshape these boundries, to define exactly where on the
-page the text will be placed.  As you resize frames, the Text Oriented is
+page the text will be placed.  As you resize frames, the text is
 reworked to fit within these frames.</para>
 
 <inlinemediaobject><imageobject><imagedata format="PNG" fileref="intro1.png" align="center"/> </imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
@@ -216,9 +215,9 @@ easy to edit.</para>
 
 <para>Kword users also benefit from the auto wrap featurs in KWord. When
 you place one frame on top of part of another frame, the text from the
-"lowest" frame can be automatically wrapped around the newly created
+<emphasis>lowest</emphasis> frame can be automatically wrapped around the newly created
 frame. This reformating all occurs in a WYSIWYG Graphical User Interface,
-and occurs as you edit.</para>
+and happens automatically while you edit.</para>
 
 <inlinemediaobject><imageobject><imagedata format="PNG" fileref="intro3.png" align="center"/> </imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
 
@@ -247,7 +246,7 @@ document.</para></listitem>
 <listitem><para>Edit headers and footers for your documents.  You can
 have different headers for even and odd pages, or the same headers
 throughout.</para></listitem>
-<listitem><para>Search through you document for text.  You can further
+<listitem><para>Search through your document for text.  You can further
 refine your search by specifying font, format, font size and many other
 features of the text. By adding wildcards to your search, the search
 and replace functions can become very powerful.</para></listitem>
@@ -277,6 +276,7 @@ to the most complex document you might need to work on.</para>
 
 </sect1>
 
+<!--
 <sect1 id="Conventions">
 <title>Conventions Used Throughout this User Guide</title>
 
@@ -289,6 +289,8 @@ to the most complex document you might need to work on.</para>
 
 </sect1>
 
+Currently commented out, will probably be removed eventually -->
+
 <sect1 id="WhoReads">
 <title>What parts of this guide should I read?</title>
 
@@ -296,7 +298,7 @@ to the most complex document you might need to work on.</para>
 to the conclusion that reading this manual from cover to cover, is an
 unreasonable (and fortunately unecessary) task.</para>
 
-<para>Since different users will have different needs, each section of this manual is self-contained.  You are not expected to have read all of the previous sections of the manual to find a section useful.</para>
+<para>Since different users will have different needs, each section of this manual is self-contained.  You are not expected to have read all of the previous sections of the manual to find the instructions useful.</para>
 
 <para>This user guide is designed to be helpful to a wide variety of
 users, from the very experienced, to the novice user.  Each user will
@@ -336,13 +338,13 @@ easy.</para>
 </tbody></tgroup>
 </informaltable>
 
-<para>Obviously this will not cover everyones needs.  What it should do,
-however, is help you figure out which parts of the manual you need to
+<para>Obviously this will not cover everyones needs.  What I hope it will do,
+however, is help you determine which parts of the manual you need to
 read before you begin using <application>KWord</application>.</para>
 
-<para>These sections will help you get started. You can then refer
-to the other parts of this manual as you need to help you with specific
-situations.</para>
+<para>These sections will help you get started initially. You can then refer
+to the other parts of this manual as needed to help you with specific
+questions or situations.</para>
 
 </sect1>
 </chapter> 
@@ -806,22 +808,39 @@ dicer-toaster daemon first, or KApp won't work !</para>
 </appendix>
 <appendix id="kwordrc"><title>kword.rc:</title><para></para></appendix>
 <appendix id="Keys"><title>Key Bindings Summary</title><para>
-<table><title>Key Bindings for KWord</title><tgroup cols="2">
-<thead><row><entry>Command</entry><entry>Key Combination</entry></row></thead>
-<tbody>
+<table><title>Working with Documents</title><tgroup cols="2"><tbody>
 <row><entry align="center"><link linkend="MenuNew">Start New Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuOpen">Open Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuSave">Save Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuPrint">Print Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuClose">Close Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuQuit">Quit KWord</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry></row>
+</tbody></tgroup></table>
+<table><title>Character Selection</title><tgroup cols="2"><tbody>
+<row><entry align="center">Move selection one character to the left.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Move selection one character to the Right.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="menuselectall">Select All</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>
+</tbody></tgroup></table>
+<table><title>Character Formatting</title><tgroup cols="2"><tbody>
+<row><entry align="center">Toggle Boldface On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="center">Toggle Italics On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="center">Toggle Underline On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="FormatFont">Format Font</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="FormatColor">Format Character Color</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
+</tbody></tgroup></table>
+<table><title>Basic Editing Functions and Search and Replace</title><tgroup cols="2"><tbody>
 <row><entry align="center"><link linkend="MenuUndo">Undo</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuCopy">Copy</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuCut">Cut</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuPaste">Paste</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="menufind">Find</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="lreplace">Replace</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo></entry></row>
-<row><entry align="center"><link linkend="menuselectall">Select All</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>
+</tbody></tgroup></table>
+<table><title>Inserting</title><tgroup cols="2"><tbody>
 <row><entry align="center"><link linkend="MenuInsPict">Insert Picture</link></entry><entry><keycombo><keycap>F2</keycap></keycombo></entry></row>
 <row><entry align="center">Insert Clipart</entry><entry><keycombo><keycap>F3</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuInsSC">Insert Special Character</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
@@ -831,107 +850,95 @@ dicer-toaster daemon first, or KApp won't work !</para>
 <row><entry align="center"><link linkend="menucrtf">Create Text Frame</link></entry><entry><keycombo><keycap>F6</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="MenuCrPF">Create Picture Frame</link></entry><entry><keycombo><keycap>F7</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="menucrtbl">Create Table</link></entry><entry><keycombo><keycap>F9</keycap></keycombo></entry></row>
-
 <row><entry align="center"><link linkend="menucrform">Create Formula Frame</link></entry><entry><keycombo><keycap>F11</keycap></keycombo></entry></row>
 <row><entry align="center"><link linkend="menucrpart">Create Parts Frame</link></entry><entry><keycombo><keycap>F12</keycap></keycombo></entry></row>
-<row><entry align="center"><link linkend="FormatFont">Format Font</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
-<row><entry align="center"><link linkend="FormatColor">Format Character Color</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
-<row><entry align="center">Move selection one character to the left.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry></row>
-<row><entry align="center">Move selection one character to the Right.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry></row>
-<row><entry align="center">Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry></row>
-<row><entry align="center">Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
-<row><entry align="center">Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
-<row><entry align="center">Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
-<row><entry align="center">Toggle Boldface On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
-<row><entry align="center">Toggle Italics On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
-<row><entry align="center">Toggle Underline On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
-</tbody></tgroup></table></para>
-</appendix>  
+</tbody></tgroup></table>
+</para>
+</appendix>
 
-     
-<!-- **************************************************************************************************** -->   
+
+<!-- **************************************************************************************************** -->
 
 <glossary id="Glossary">
 <title>Glossary</title>
 
 <glossentry id="defascii">
 <glossterm>ASCII</glossterm>
-<glossdef><para>Stands for "American standard code for information
-interchange". This is what many people mean when they say
-"plain text". KWord can read and write documents in ASCII
+<glossdef><para>Stands for <emphasis>American standard code for information
+interchange</emphasis>. This is what many people mean when they say
+<emphasis>plain text</emphasis>. KWord can read and write documents in ASCII
 format.</para></glossdef>
 </glossentry>
 
 <glossentry id="defaspectratio">
 <glossterm>Aspect Ratio</glossterm>
-<glossdef><para></para></glossdef>
+<glossdef><para>This is the ration of the measurement of a screen or document horizontally compared to the verticle measurement.  All standard computer monitors have the same aspect ratio, reguardless of their resolution. Any &kword; document that conforms to the standard screen aspect ratio, will look good on any monitor.</para></glossdef>
 </glossentry>
 
 <glossentry id="defbinarycode">
 <glossterm>Binary code</glossterm>
 <glossdef><para>Binary code is the actual instructions for the
-computer. So if we refer to "binaries" we mean the executable &kword;
-program.</para></glossdef>
+computer. So if we refer to <emphasis>binaries</emphasis> we mean the executable &kword;
+program.  While computers have no difficulties reading binary files, they are not easily understood by people.  Compare to <link linkend="defsourcecode">Source Code</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defbitmap">
 <glossterm>Bitmap Image</glossterm>
 <glossdef><para>Bit mapped images are composed of individual
-dots. The filenames of such pictures often end in jpeg, png or
-gif.</para></glossdef>
+dots.  This type of file is very good for photographs and complex drawings. The downside of using bitmap images, is that when you change the size of the image on the page, there is a loss of detail. The filenames of such pictures often end in jpeg, png or
+gif. Compare to <link linkend="defclipart">Clipart</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defcell">
 <glossterm>Cells</glossterm>
-<glossdef><para></para></glossdef>
+<glossdef><para>Tables are made up of rows and columns of cells.  Each cell is defined by a combination of the row and column of a heading.</para></glossdef>
 </glossentry>
 
 <glossentry id="defclipart">
 <glossterm>Clipart</glossterm>
-<glossdef><para>Clip art refers to vector based graphics.</para></glossdef>
+<glossdef><para>Clip art refers to vector based graphics. These graphic files describe the picture as a collection of lines, curves and dots.  These file formats are preferable to bitmapped images, because their size can be made larger or smaller, without any loss in quality. The downside of vector formats, is that it can be quite difficlt to describe certain types of photographs using only lines and curves.  This results in large, complicated files and most of the benefits of vector formats are lost.  Compare to <link linkend="defbitmap">Bitmap images</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defclipboard">
 <glossterm>Clipboard</glossterm>
-<glossdef><para>The clipboard is where you're cut or copied selection
-is stored, so it later can be "pasted".</para></glossdef>
+<glossdef><para>The clipboard is a temporary storage area in memory.  Whenever you use the <guimenuitem>Cut</guimenuitem> or <guimenuitem>Copy</guimenuitem> command, you are placing the object that was selected into this memory location.  Then when you use the <guimenuitem>Paste</guimenuitem> command, you remove the information from the clipboard.  For more information see the section on <link linkend="Clipboard">Cut/Copy/Paste</link>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defcompiling">
 <glossterm>Compiling</glossterm>
 <glossdef><para>When you compile a program, you are converting it from
 a source file (which is easily edited by a programmer) into a binary
-file (which the computer uses). If you are planning on compiling KWord,
+file (which the computer uses). If you are planning on compiling &kword;,
 please try to find a binary verison of KOffice first. Compiling programs
-is not for the beginner.</para></glossdef>
+is not for the beginner. For more information on compiling &kword;, see the section entitled <link linkend="installation">Installation</link></para></glossdef>
 </glossentry>
 
 <glossentry id="defcustomvariables">
 <glossterm>Custom Variables</glossterm>
 <glossdef><para>Using custom variables you can store certain values
 (e.g. numbers or text) for later use in your document or in a script.
-If you want to find out more about custom variables, see STUFF (link
+If you want to find out more about custom variables, see <link linkend="variables">Inserting Variables</link>. (link
 to manual).</para></glossdef>
 </glossentry>
 
 <glossentry id="defdeb">
 <glossterm>DEB</glossterm>
-<glossdef><para></para></glossdef>
+<glossdef><para>This is a binary file format that is used by Debian and Debain based distributions.  This will be the suffix of a file specifically for these distributions.  An example would be <filename>koffice-1.1.deb</filename>. For more information on installing these files, refer to the <ulink url="http://www.debian.org">Debian Web Site</ulink>.</para></glossdef>
 </glossentry>
 
 <glossentry id="defdialogbox">
 <glossterm>Dialog Box</glossterm>
-<glossdef><para>A dialog box is a window where you </para></glossdef>
+<glossdef><para>A dialog box is a small window that appears on top of your working document.  This window usually has questions, information or configuration options related to the task you are performing.  When you are finished with the dialog box, it will disappear and return you to your document (possibly after making some changes to the document).</para></glossdef>
 </glossentry>
 
 <glossentry id="defdtp">
 <glossterm>DTP</glossterm>
-<glossdef><para>Stands for DeskTop Publishing.</para></glossdef>
+<glossdef><para>Stands for <emphasis>DeskTop Publishing</emphasis>.</para></glossdef>
 </glossentry>
 
 <glossentry id="deffaq">
 <glossterm>FAQ</glossterm>
-<glossdef><para>Stands for "Frequently Asked Questions" and normally
+<glossdef><para>Stands for <emphasis>Frequently Asked Questions</emphasis> and normally
 means a document, where those questions are answered. If you have
 a question to the developers of KOffice, you should always have
 a look at the FAQ first. You'll find the latest version <ulink
@@ -940,12 +947,13 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <glossentry id="deffilemask">
 <glossterm>File Mask</glossterm>
-<glossdef><para></para></glossdef>
+<glossdef><para>A file mask can be thought of as a strainer for you.  One the average computer, there are hundreds of thousands of files. These files are sorted into subdirectories, but it is not uncommon for many users to have 100's of data files in a single subdirectory.</para>
+<para>Fortunately for us, most applications use a suffix to their filenames.  By applying a file mask, &kword; will only show you the files which are not filterd out by the mask. (That is to say they fit through the strainer).  This can be helpful if you have many files from many different applications. The file mask is incorporated in the <guilabel>File Type</guilabel> line of the save and load dialog boxes.</para></glossdef>
 </glossentry>
 
 <glossentry id="deffilter">
 <glossterm>Filter</glossterm>
-<glossdef><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef>
+<glossdef><para>A filter takes a document file from one program (Microsoft Word), and <emphasis>filters</emphasis> out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef>
 </glossentry>
 
 <glossentry id="deffooter">

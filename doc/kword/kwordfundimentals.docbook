@@ -32,7 +32,7 @@ KWord can be started one of four ways:
     <guimenu>K-Button</guimenu><guimenuitem>Office</guimenuitem>
   <guimenuitem>KWord</guimenuitem>
 </menuchoice>.</para> </listitem>
-<listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
+<listitem><para>If you are in a terminal program (<application>Konsole</application>, <application>Xterm</application>, etc), you can type:
 <screen><prompt>$</prompt> <command>kword &amp;</command></screen></para>
 <para>Or</para>
 <para><screen><prompt>$</prompt> <command>kword <replaceable>filename</replaceable> &amp;</command></screen></para></listitem>
@@ -48,18 +48,18 @@ KWord can be started one of four ways:
 <para>OK, so the first question you may have is:</para>
 
 <para><emphasis>Why do I need to use a frames based word processor, when
-I am perfectly happy writing my letters on my current, Page Layout,
+I am perfectly happy writing my letters on my current, page layout,
 word processor? </emphasis></para>
 
 <para>Well the good news is, adjusting to a frames based word processor
 is easy and once you select a template, <application>KWord</application>
-will act just like the Page Layout wordprocessor you are used to.
+can act just like the page layout wordprocessor you are used to.
 There are templates available for simple correspondance and day to day
 use.</para>
 
 <para>When you need to generate a more complex document (newsletters,
-posters, etc), however, you will not need to switch to a different program
-to generate these special documents. There are templates which will help
+posters, etc), however, you will not need to switch to a different application
+to generate these special documents. There are templates in &kword; which will help
 you generate your newsletters or other more complicated documents.</para>
 
 <para>OK. So now that you are willing to give this a try, we should talk
@@ -68,8 +68,9 @@ you work with templates.</para>
 
 <para><emphasis>What are templates and what can they do for me</emphasis></para>
 
-<para>A template can be thought of as an initial mold for your document.
-When we sit down to write a document, we already have an idea of what the
+<para>A template can be thought of as an initial mold for your document.</para>
+
+<para>When we sit down to write a document, we already have an idea of what the
 final product will look like. If you are writing a letter to a business,
 you want a document with only one column, which goes all the way accross
 the page, and from top to bottom of the page.
@@ -78,7 +79,7 @@ however, you may want a large title accross the top, and several columns
 for quick news articles.</para>
 
 <para>With &kword;, you can use this preplanned notion of how your
-document should look and using a template, you can create a set of
+document should look too make your work easier.  By using a template, you can create a set of
 frames to approximate this final layout. For your business letter,
 you can select one large frame that covers the page from top to bottom
 and side to side (excluding margins of course). For that newsletter,
