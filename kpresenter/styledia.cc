@@ -153,7 +153,7 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clayout->addWidget(l);
 
     choosePStyle = new KComboBox( false, this, "PStyle" );
-    choosePStyle->insertItem( i18n( "No Pen" ) );
+    choosePStyle->insertItem( i18n( "No Outline" ) );
     choosePStyle->insertItem( i18n( "Solid Line" ) );
     choosePStyle->insertItem( i18n( "Dash Line ( ---- )" ) );
     choosePStyle->insertItem( i18n( "Dot Line ( **** )" ) );
@@ -380,7 +380,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     l->setFixedHeight( l->sizeHint().height() );
 
     cFillType = new KComboBox( false, left );
-    cFillType->insertItem( i18n( "Brush" ) );
+    cFillType->insertItem( i18n( "Fill" ) );
     if(m_flags & StyleDia::SdGradient)
         cFillType->insertItem( i18n( "Gradient" ) );
 
@@ -397,7 +397,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     brushConfig->setSpacing( KDialog::spacingHint() );
     stack->addWidget( brushConfig, 0 );
 
-    l = new QLabel( i18n( "Brush color:" ), brushConfig );
+    l = new QLabel( i18n( "Fill color:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBCol = new KColorButton( Qt::white,
@@ -406,7 +406,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     connect( chooseBCol, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotBrushColorChanged() ) );
 
-    l = new QLabel( i18n( "Brush style:" ), brushConfig );
+    l = new QLabel( i18n( "Fill style:" ), brushConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBStyle = new KComboBox( false, brushConfig, "BStyle" );
@@ -908,7 +908,7 @@ void StyleDia::setupTabPen()
     m_confPenDia->setLineEnd(m_canvas->getLineEnd(m_doc->firstView()->getLineEnd()));
     m_confPenDia->resetConfigChangedValues();
 
-    addTab( m_confPenDia, i18n( "&Pen" ) );
+    addTab( m_confPenDia, i18n( "Out&line" ) );
 }
 
 void StyleDia::setupTabBrush()
@@ -924,7 +924,7 @@ void StyleDia::setupTabBrush()
                                 m_canvas->getGYFactor(m_doc->firstView()->getGYFactor()));
     m_confBrushDia->resetConfigChangedValues();
 
-    addTab( m_confBrushDia, i18n( "&Brush" ) );
+    addTab( m_confBrushDia, i18n( "&Fill" ) );
 }
 
 void StyleDia::setupTabGeneral()

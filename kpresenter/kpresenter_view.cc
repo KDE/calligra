@@ -1840,7 +1840,7 @@ void KPresenterView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-        KCommand * cmd( getPenCmd( i18n( "Change Pen Color" ), QPen(c),
+        KCommand * cmd( getPenCmd( i18n( "Change Outline Color" ), QPen(c),
                                    L_NORMAL, L_NORMAL, PenCmd::Color ) );
         if( cmd )
             m_pKPresenterDoc->addCommand( cmd );
@@ -1870,7 +1870,7 @@ void KPresenterView::brushChosen()
         if( cmd )
         {
             if ( !macro )
-                macro = new KMacroCommand( i18n( "Change Brush Color" ) );
+                macro = new KMacroCommand( i18n( "Change Fill Color" ) );
             macro->addCommand( cmd );
         }
 
@@ -1880,7 +1880,7 @@ void KPresenterView::brushChosen()
         if( cmd )
         {
             if ( !macro )
-                macro = new KMacroCommand( i18n( "Change Brush Color" ) );
+                macro = new KMacroCommand( i18n( "Change Fill Color" ) );
             macro->addCommand(cmd);
         }
 
@@ -2058,7 +2058,7 @@ void KPresenterView::extraPenStyleNoPen()
 
 void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
 {
-    KCommand * cmd( getPenCmd( i18n("Change Pen Style"), QPen(style),
+    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), QPen(style),
                                L_NORMAL, L_NORMAL, PenCmd::Style ) );
 
     if( cmd )
@@ -2121,7 +2121,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
 {
     QPen tmpPen;
     tmpPen.setWidth( width );
-    KCommand * cmd( getPenCmd( i18n("Change Pen Width"), tmpPen,
+    KCommand * cmd( getPenCmd( i18n("Change Outline Width"), tmpPen,
                                L_NORMAL, L_NORMAL, PenCmd::Width ) );
 
     if( cmd )
@@ -2719,11 +2719,11 @@ void KPresenterView::setupActions()
                                       this, SLOT( extraLineEnd() ),
                                       actionCollection(), "extra_lineend" );
 
-    actionExtraPenStyle = new KAction( i18n("Pen Style"), "pen_style", 0,
+    actionExtraPenStyle = new KAction( i18n("Outline Style"), "pen_style", 0,
                                        this, SLOT( extraPenStyle() ),
                                        actionCollection(), "extra_penstyle" );
 
-    actionExtraPenWidth = new KAction( i18n("Pen Width"), "pen_width", 0,
+    actionExtraPenWidth = new KAction( i18n("Outline Width"), "pen_width", 0,
                                        this, SLOT( extraPenWidth() ),
                                        actionCollection(), "extra_penwidth" );
 
@@ -2790,12 +2790,12 @@ void KPresenterView::setupActions()
 
     // ----------------- colorbar(Brush and Pen) action
 
-    actionBrushColor = new TKSelectColorAction( i18n( "Brush Color..." ), TKSelectColorAction::FillColor,
+    actionBrushColor = new TKSelectColorAction( i18n( "Fill Color..." ), TKSelectColorAction::FillColor,
                                                 actionCollection(), "brush_color" ,true);
     connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
     actionBrushColor->setDefaultColor(QColor());
 
-    actionPenColor = new TKSelectColorAction( i18n( "Pen Color..." ), TKSelectColorAction::LineColor,
+    actionPenColor = new TKSelectColorAction( i18n( "Outline Color..." ), TKSelectColorAction::LineColor,
                                               actionCollection(), "pen_color" );
     connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
     actionPenColor->setDefaultColor(QColor());
