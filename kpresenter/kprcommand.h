@@ -34,6 +34,8 @@
 #include <koparaglayout.h>
 #include <kocommand.h>
 #include <koPoint.h>
+#include <koSize.h>
+
 class KPresenterDoc;
 class KPTextObject;
 class KPObject;
