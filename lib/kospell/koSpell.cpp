@@ -254,13 +254,17 @@ KOSpell::setUpDialog (bool reallyuseprogressbar)
 
 bool KOSpell::addPersonal (const QString & word)
 {
-    int ret = aspell_speller_add_to_personal(speller, word.latin1(), word.length());
-    kdDebug()<<" ret :"<<ret<<endl;
+    //add to aspell internal.
+    aspell_speller_add_to_personal(speller, word.latin1(), word.length());
+    //save directly into personnal dictionary.
+    writePersonalDictionary();
     return true;
 }
 
 bool KOSpell::writePersonalDictionary ()
 {
+    aspell_speller_save_all_word_lists(speller);
+    kdDebug()<<"aspell_speller_error_message(speller) :"<<aspell_speller_error_message(speller)<<endl;
     return true;
 }
 
@@ -274,7 +278,6 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
 {
     if (_word.isEmpty())
         return QStringList();
-    AspellCanHaveError * ret;
 
     kdDebug()<<" aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
     QStringList result;
@@ -305,18 +308,41 @@ void KOSpell::spellWord( const QString &_word )
 
 void KOSpell::nextWord()
 {
+    bool searchAgain =false;
     QString word;
-    int i =0;
-    for ( i = lastpos; i<origbuffer.length();i++)
+    do
     {
-        QChar ch = origbuffer[i];
-        if ( ch.isSpace() || ch.isPunct() )
+        searchAgain =false;
+        int i =0;
+        for ( i = lastpos; i<origbuffer.length();i++)
         {
-            break;
+            QChar ch = origbuffer[i];
+            if ( ch.isSpace() || ch.isPunct() )
+            {
+                break;
+            }
+            word.append(ch);
         }
-        word.append(ch);
+        lastpos = i+1;
+
+
+        if(d->m_bIgnoreTitleCase && word==word.upper())
+            searchAgain = true;
+
+        if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
+        {
+            QString text=word[0]+word.right(word.length()-1).lower();
+            if(text==word)
+                searchAgain = true;
+        }
+
+        //We don't take advantage of ispell's ignore function because
+        //we can't interrupt ispell's output (when checking a large
+        //buffer) to add a word to _it's_ ignore-list.
+        if (ignorelist.findIndex(word.lower())!=-1)
+            searchAgain = true;
     }
-    lastpos = i+1;
+    while ( searchAgain && (lastpos < origbuffer.length()-1));
 
     spellWord( word );
 }
