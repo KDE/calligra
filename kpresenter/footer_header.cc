@@ -34,10 +34,10 @@
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <qstrlist.h>
-#include <qcombobox.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <kcombobox.h>
 #include <kapp.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
