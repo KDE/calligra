@@ -19,6 +19,10 @@ if compile_filter_KSPREAD
 KSPREADDIR = kspread
 endif
 
+if compile_filter_KCHART
+KCHARTDIR = kchart
+endif
+
 if compile_filter_KFORMULA
 KFORMULADIR = kformula
 endif
@@ -32,7 +36,7 @@ KRITADIR = krita
 endif
 
 
-SUBDIRS = generic_wrapper liboofilter $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
+SUBDIRS = generic_wrapper liboofilter $(KSPREADDIR) $(KCHARTDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
 
 messages:
 	$(EXTRACTRC) `find . -name \*.ui` > rc.cpp
