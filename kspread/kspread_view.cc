@@ -119,6 +119,8 @@
 #include "digest.h"
 #include "damages.h"
 
+#include "testrunner.h"
+
 #include "KSpreadViewIface.h"
 #include "kspread_dlg_paperlayout.h"
 
@@ -557,6 +559,7 @@ public:
     KAction* insertChartFrame;
     KAction* customList;
     KAction* spellChecking;
+    KAction* internalTests;
 
     // settings
     KoZoomAction* viewZoom;
@@ -1246,6 +1249,10 @@ void ViewPrivate::initActions()
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
 
+  // -- special action, only for developers --
+
+  actions->internalTests = new KAction( i18n("Run Internal Tests..."), "internalTests", 
+		  0, view, SLOT( runInternalTests() ), ac, "internalTests" );
 }
 
 void ViewPrivate::adjustActions( bool mode )
@@ -6663,6 +6670,15 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
         
     }
 }
+
+void KSpreadView::runInternalTests()
+{
+    // run various tests, only for developers	
+    KSpread::TestRunner* runner = new KSpread::TestRunner();
+    runner->exec();
+    delete runner;
+}
+
 
 
 #include "kspread_view.moc"

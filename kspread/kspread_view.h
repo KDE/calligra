@@ -488,6 +488,8 @@ public slots:
     
     void handleDamages( const QValueList<KSpread::Damage*>& damages );
 
+    void runInternalTests();
+
 protected slots:
     /**
      * Popup menu
