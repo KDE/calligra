@@ -1762,136 +1762,16 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
             btmp = new BrushCmd::Brush;
             switch ( kpobject->getType() ) {
             case OT_RECT:
-            {
-                KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_ELLIPSE:
-            {
-                KPEllipseObject *obj=dynamic_cast<KPEllipseObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = obj->getBrush();
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_AUTOFORM:
-            {
-                KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_PIE:
-            {
-                KPPieObject *obj=dynamic_cast<KPPieObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_PART:
-            {
-                KPPartObject *obj=dynamic_cast<KPPartObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_TEXT:
-            {
-                KPTextObject *obj=dynamic_cast<KPTextObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_CLIPART:
             case OT_PICTURE:
-            {
-                KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_POLYGON:
-            {
-                KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = obj->getBrush();
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            }
-            break;
             case OT_CLOSED_LINE: {
-                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+                KP2DObject * obj = dynamic_cast<KP2DObject *>( kpobject );
                 if( obj ) {
                     btmp->brush = obj->getBrush();
                     btmp->fillType = obj->getFillType();

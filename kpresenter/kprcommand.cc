@@ -1061,44 +1061,37 @@ BrushCmd::~BrushCmd()
 
 void BrushCmd::execute()
 {
-    Brush tmpBrush = newBrush;
-
     for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
     {
-        if (!(flags & BrushColor))
-            if (newBrush.brush != Qt::NoBrush)
-                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), newBrush.brush.style());
-            else
-                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), Qt::NoBrush);
+        Brush tmpBrush = *oldBrush.at( i );
 
-        if (!(flags & BrushStyle))
-            if (newBrush.brush != Qt::NoBrush)
-                newBrush.brush = QBrush(newBrush.brush.color(), oldBrush.at( i )->brush.style());
-            else
-                newBrush.brush = QBrush(oldBrush.at( i )->brush.color(), Qt::NoBrush);
+        if ( flags & BrushColor )
+            tmpBrush.brush.setColor( newBrush.brush.color() );
 
-        if (!(flags & BrushGradientSelect))
-            newBrush.fillType = oldBrush.at( i )->fillType;
+        if ( flags & BrushStyle )
+            tmpBrush.brush.setStyle( newBrush.brush.style() );
 
-        if (!(flags & GradientColor1))
-            newBrush.gColor1 = oldBrush.at( i )->gColor1;
+        if ( flags & BrushGradientSelect )
+            tmpBrush.fillType = newBrush.fillType;
 
-        if (!(flags & GradientColor2))
-            newBrush.gColor2 = oldBrush.at( i )->gColor2;
+        if ( flags & GradientColor1 )
+            tmpBrush.gColor1 = newBrush.gColor1;
 
-        if (!(flags & GradientType))
-            newBrush.gType = oldBrush.at( i )->gType;
+        if ( flags & GradientColor2 )
+            tmpBrush.gColor2 = newBrush.gColor2;
 
-        if (!(flags & GradientBalanced))
+        if ( flags & GradientType )
+            tmpBrush.gType = newBrush.gType;
+
+        if ( flags & GradientBalanced )
         {
-            newBrush.unbalanced = oldBrush.at( i )->unbalanced;
-            newBrush.xfactor = oldBrush.at( i )->xfactor;
-            newBrush.yfactor = oldBrush.at( i )->yfactor;
+            tmpBrush.unbalanced = newBrush.unbalanced;
+            tmpBrush.xfactor = newBrush.xfactor;
+            tmpBrush.yfactor = newBrush.yfactor;
         }
 
-        applyBrush(objects.at( i ), &newBrush);
+        applyBrush( objects.at( i ), &tmpBrush );
     }
-    newBrush = tmpBrush;
 
     int pos=doc->pageList().findRef(m_page);
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
@@ -1106,143 +1099,18 @@ void BrushCmd::execute()
 
 void BrushCmd::applyBrush(KPObject *kpobject, Brush *tmpBrush)
 {
-    switch (kpobject->getType()) {
-    case OT_RECT: {
-        KPRectObject* obj=dynamic_cast<KPRectObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_ELLIPSE: {
-        KPEllipseObject* obj=dynamic_cast<KPEllipseObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_AUTOFORM: {
-        KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_PIE: {
-        KPPieObject* obj=dynamic_cast<KPPieObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_PART: {
-        KPPartObject* obj=dynamic_cast<KPPartObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_TEXT: {
-        KPTextObject* obj=dynamic_cast<KPTextObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_CLIPART:
-    case OT_PICTURE: {
-        KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_POLYGON: {
-        KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
-        if(obj)
-        {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    case OT_CLOSED_LINE: {
-        KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
-        if( obj ) {
-            obj->setBrush( tmpBrush->brush );
-            obj->setFillType( tmpBrush->fillType );
-            obj->setGColor1( tmpBrush->gColor1 );
-            obj->setGColor2( tmpBrush->gColor2 );
-            obj->setGType( tmpBrush->gType );
-            obj->setGUnbalanced( tmpBrush->unbalanced );
-            obj->setGXFactor( tmpBrush->xfactor );
-            obj->setGYFactor( tmpBrush->yfactor );
-            doc->repaint( obj );
-        }
-    } break;
-    default: break;
+    KP2DObject * obj = dynamic_cast<KP2DObject *>( kpobject );
+    if( obj )
+    {
+        obj->setBrush( tmpBrush->brush );
+        obj->setFillType( tmpBrush->fillType );
+        obj->setGColor1( tmpBrush->gColor1 );
+        obj->setGColor2( tmpBrush->gColor2 );
+        obj->setGType( tmpBrush->gType );
+        obj->setGUnbalanced( tmpBrush->unbalanced );
+        obj->setGXFactor( tmpBrush->xfactor );
+        obj->setGYFactor( tmpBrush->yfactor );
+        doc->repaint( obj );
     }
 }
 
