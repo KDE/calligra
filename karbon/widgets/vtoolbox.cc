@@ -78,6 +78,12 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 }
 
 void
+VToolBox::slotPressButton( int id )
+{
+	buttonGroup->setButton( id );
+}
+
+void
 VToolBox::slotButtonPressed( int id )
 {
 	int shapestart = m_manipulationtools.count();

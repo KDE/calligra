@@ -47,6 +47,7 @@ signals:
 public slots:
 	virtual void setOrientation ( Orientation o );
 	void slotButtonPressed( int id );
+	void slotPressButton( int id );
 
 private:
 	KarbonPart			*m_part;

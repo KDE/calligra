@@ -221,7 +221,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			m_toolOptionsDocker = new VToolOptionsDocker( this );
 			m_toolOptionsDocker->show();
 			// set selectTool by default
-			m_toolbox->slotButtonPressed( 0 );
+			m_toolbox->slotPressButton( 0 );
 		}
 
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
