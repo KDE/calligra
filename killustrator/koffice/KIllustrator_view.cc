@@ -705,6 +705,8 @@ void KIllustratorView::slotImport()
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
 #else
     KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
+    if ( url.isEmpty() )
+        return;
     if (!url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
