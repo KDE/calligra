@@ -72,7 +72,7 @@ public:
 
     QString m_family;
     QColor m_color;
-    QColor m_backGroungColor;
+    QColor m_backGroundColor;
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
     KoTextFormat::UnderlineLineType m_underline;

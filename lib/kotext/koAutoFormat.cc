@@ -482,7 +482,7 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
         tmp->createNewEntryContext();
         tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::BgColor;
         QColor col( nl.attribute("TEXTBGCOLOR" ));
-        tmp->formatEntryContext()->m_backGroungColor = col;
+        tmp->formatEntryContext()->m_backGroundColor = col;
     }
     m_entries.insert( nl.attribute("find"), tmp );
 }
@@ -694,7 +694,7 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
         }
         if ( tmp->m_optionsMask & KoSearchContext::BgColor )
         {
-            data.setAttribute( "TEXTBGCOLOR", tmp->m_backGroungColor.name());
+            data.setAttribute( "TEXTBGCOLOR", tmp->m_backGroundColor.name());
         }
     }
     return data;
@@ -1908,7 +1908,7 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::BgColor)
         {
-            format->setTextBackgroundColor(formatOptions->m_backGroungColor);
+            format->setTextBackgroundColor(formatOptions->m_backGroundColor);
             flags |=KoTextFormat::TextBackgroundColor;
         }
 

@@ -40,7 +40,7 @@ KoSearchContext::KoSearchContext()
 {
     m_family = "times";
     m_color = Qt::black;
-    m_backGroungColor = Qt::black;
+    m_backGroundColor = Qt::black;
 
     m_size = 12;
     m_vertAlign = KoTextFormat::AlignNormal;
@@ -429,7 +429,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::BgColor)
     {
-        newFormat->setTextBackgroundColor(m_replaceContext->m_backGroungColor);
+        newFormat->setTextBackgroundColor(m_replaceContext->m_backGroundColor);
         flags |=KoTextFormat::TextBackgroundColor;
     }
 
@@ -567,7 +567,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_colorItem->setColor( m_ctx->m_color );
 
     m_bgColorItem = new KColorButton( page );
-    m_bgColorItem->setColor( m_ctx->m_backGroungColor);
+    m_bgColorItem->setColor( m_ctx->m_backGroundColor);
 
 
 
@@ -721,7 +721,7 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_family = m_familyItem->currentText();
     m_ctx->m_size = m_sizeItem->cleanText().toInt();
     m_ctx->m_color = m_colorItem->color();
-    m_ctx->m_backGroungColor = m_bgColorItem->color();
+    m_ctx->m_backGroundColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
     m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
@@ -762,7 +762,7 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         }
         if ( searchContext->m_optionsMask & KoSearchContext::BgColor)
         {
-            if (format->textBackgroundColor() != searchContext->m_backGroungColor)
+            if (format->textBackgroundColor() != searchContext->m_backGroundColor)
                 return false;
         }
 
