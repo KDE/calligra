@@ -16,6 +16,7 @@ noinst_HEADERS = \
 	vinsertknotscmd.h \
 	vpolygoncmd.h \
 	vrectanglecmd.h \
+	vroundcornerscmd.h \
 	vroundrectcmd.h \
 	vshapecmd.h \
 	vsinuscmd.h \
@@ -35,6 +36,7 @@ libkarboncommands_la_SOURCES = \
 	vinsertknotscmd.cc \
 	vpolygoncmd.cc \
 	vrectanglecmd.cc \
+	vroundcornerscmd.cc \
 	vroundrectcmd.cc \
 	vshapecmd.cc \
 	vsinuscmd.cc \

@@ -36,6 +36,7 @@
 #include "vflattencmd.h"
 #include "vgroupcmd.h"
 #include "vinsertknotscmd.h"
+#include "vroundcornerscmd.h"
 #include "vstrokecmd.h"
 //#include "vtextcmd.h"
 #include "vwhirlpinchcmd.h"
@@ -46,6 +47,7 @@
 #include "vfilldlg.h"
 #include "vflattendlg.h"
 #include "vinsertknotsdlg.h"
+#include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
 #include "vwhirlpinchdlg.h"
 
@@ -87,6 +89,9 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	m_flattenDlg = new VFlattenDlg();
 	m_flattenDlg->setFlatness( 5.0 );
+
+	m_roundCornersDlg = new VRoundCornersDlg();
+	m_roundCornersDlg->setRadius( 10.0 );
 
 	m_whirlPinchDlg = new VWhirlPinchDlg();
 	m_whirlPinchDlg->setAngle( 20.0 );
@@ -144,6 +149,7 @@ KarbonView::~KarbonView()
 	// dialogs:
 	delete( m_insertKnotsDlg );
 	delete( m_flattenDlg );
+	delete( m_roundCornersDlg );
 	delete( m_whirlPinchDlg );
 
 	// tools:
@@ -597,6 +603,16 @@ KarbonView::pathFlatten()
 }
 
 void
+KarbonView::pathRoundCorners()
+{
+	if( m_roundCornersDlg->exec() )
+	{
+		m_part->addCommand( new VRoundCornersCmd(
+			&m_part->document(), m_roundCornersDlg->radius() ), true );
+	}
+}
+
+void
 KarbonView::pathWhirlPinch()
 {
 	if( m_whirlPinchDlg->exec() )
@@ -876,6 +892,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Flatten" ), 0, 0, this,
 		SLOT( pathFlatten() ), actionCollection(), "path_flatten" );
+	new KAction(
+		i18n( "&Round Corners" ), 0, 0, this,
+		SLOT( pathRoundCorners() ), actionCollection(), "path_round_corners" );
 	new KAction(
 		i18n( "&Whirl/Pinch" ), 0, 0, this,
 		SLOT( pathWhirlPinch() ), actionCollection(), "path_whirlpinch" );

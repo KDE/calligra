@@ -30,6 +30,7 @@ class VGradientTool;
 class VInsertKnotsDlg;
 class VPolygonTool;
 class VRectangleTool;
+class VRoundCornersDlg;
 class VRoundRectTool;
 class VRotateTool;
 class VScaleTool;
@@ -127,6 +128,7 @@ protected slots:
 	// path:
 	void pathInsertKnots();
 	void pathFlatten();
+	void pathRoundCorners();
 	void pathWhirlPinch();
 
 	// view:
@@ -208,6 +210,7 @@ private:
 	// dialogs:
 	VInsertKnotsDlg* m_insertKnotsDlg;
 	VFlattenDlg* m_flattenDlg;
+	VRoundCornersDlg* m_roundCornersDlg;
 	VWhirlPinchDlg* m_whirlPinchDlg;
 	VColorDlg* m_ColorManager;
 

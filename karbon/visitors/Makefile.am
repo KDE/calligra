@@ -12,6 +12,7 @@ noinst_HEADERS = \
 	vboolean.h \
 	vflatten.h \
 	vinsertknots.h \
+	vroundcorners.h \
 	vvisitor.h \
 	vwhirlpinch.h
 
@@ -19,6 +20,7 @@ libkarbonvisitors_la_SOURCES = \
 	vboolean.cc \
 	vflatten.cc \
 	vinsertknots.cc \
+	vroundcorners.cc \
 	vvisitor.cc \
 	vwhirlpinch.cc
 

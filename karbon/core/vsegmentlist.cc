@@ -124,19 +124,7 @@ VSegmentList::VSegmentList( VObject* parent )
 VSegmentList::VSegmentList( const VSegmentList& list )
 	: VObject( list )
 {
-	m_isClosed = list.m_isClosed;
-
-	m_first = m_last = m_current = 0L;
-	m_number = 0;
-	m_currentIndex = -1;
-	m_iteratorList = 0L;
-
-	VSegment* segment = list.m_first;
-	while( segment )
-	{
-		append( new VSegment( *segment ) );
-		segment = segment->m_next;
-	}
+	*this = list;
 }
 
 VSegmentList::~VSegmentList()
@@ -257,8 +245,8 @@ VSegmentList::arcTo(
 	double dsqT12 = t12.x() * t12.x() + t12.y() * t12.y();
 
 	// we now calculate tan(a/2) where a is the angle between T10 and T12.
-	// we benefit from the facts T10*T12 = t10*t12*cos(a), |T10xT12| = t10*t12*sin(a)
-	// (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
+	// we benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
+	// |T10xT12| = |T10|*|T12|*sin(a) (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
 	double num   = t10.x() * t12.y() - t10.y() * t12.x();
 	double denom =
 		sqrt( dsqT10 * dsqT12 )
@@ -379,12 +367,13 @@ VSegmentList::save( QDomElement& element ) const
 	if( m_isClosed )
 		me.setAttribute( "isClosed", m_isClosed );
 
-// TODO: optimize this since we have direct access now:
 	// save segments:
-	VSegmentListIterator itr( *this );
-	for( ; itr.current() ; ++itr )
+	VSegment* segment = m_first;
+	while( segment )
 	{
-		itr.current()->save( me );
+		segment->save( me );
+
+		segment = segment->m_next;
 	}
 }
 
@@ -392,8 +381,6 @@ void
 VSegmentList::load( const QDomElement& element )
 {
 	clear();	// we already have a "begin".
-
-	m_isClosed = element.attribute( "isClosed" ) == 0 ? false : true;
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
@@ -408,7 +395,9 @@ VSegmentList::load( const QDomElement& element )
 		}
 	}
 
-	// "end"s do not get saved:
+	m_isClosed = element.attribute( "isClosed" ) == 0 ? false : true;
+
+	// "end"s are never saved:
 	if( m_isClosed )
 		close();
 }
@@ -426,19 +415,19 @@ VSegmentList::operator=( const VSegmentList& list )
 	if( &list == this )
 		return *this;
 
-	clear();
-	if( list.count() > 0 )
-	{
-		VSegment* segment = list.m_first;
-		while ( segment )
-		{
-			append( segment );
-			segment = segment->m_next;
-		}
+	m_isClosed = list.m_isClosed;
 
-		m_current = m_first;
-		m_currentIndex = 0;
+	clear();
+
+	VSegment* segment = list.m_first;
+	while ( segment )
+	{
+		append( new VSegment( *segment ) );
+		segment = segment->m_next;
 	}
+
+	m_current = m_first;
+	m_currentIndex = 0;
 
 	return *this;
 }
@@ -524,6 +513,8 @@ VSegmentList::prepend( const VSegment* segment )
 void
 VSegmentList::append( const VSegment* segment )
 {
+	if( isClosed() ) return;
+
 	VSegment* s = const_cast<VSegment*>( segment );
 
 	s->m_next = 0L;
@@ -537,6 +528,9 @@ VSegmentList::append( const VSegment* segment )
 
 	m_currentIndex = m_number;
 	++m_number;
+
+	if( s->type() == segment_end )
+		close();
 
 	invalidateBoundingBox();
 }

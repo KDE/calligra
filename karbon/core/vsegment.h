@@ -55,6 +55,9 @@ public:
 	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
 	void setKnot2( const KoPoint& p ) { m_point[2] = p; }
 
+	const VSegment* prev() const { return m_prev; }
+	const VSegment* next() const { return m_next; }
+
 	/// Returns true if segment is flat.
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
