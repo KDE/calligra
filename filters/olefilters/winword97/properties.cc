@@ -922,7 +922,7 @@ void Properties::apply(const MsWord::U16 style)
 
     // Copy the given style, then restore the style index.
 
-    m_pap = m_document.m_styles[style]->m_pap;
+    m_pap = m_document.m_styles.data[style]->m_pap;
     m_pap.istd = originalStyle;
 }
 

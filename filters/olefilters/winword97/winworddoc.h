@@ -85,7 +85,7 @@ private:
 
     void encode(QString &text);
 
-    QString colourType(
+    QString colour(
         unsigned colour,
         const char *red,
         const char *green,
@@ -94,10 +94,11 @@ private:
 
     // Convert from Word number format codes to our own number format.
 
-    char numberingType(unsigned nfc) const;
+    char numbering(unsigned nfc) const;
 
     // Convert from Word character format to our own format.
-
+    QString generateFormat(
+        const CHP *chp);
     void generateFormats(
         Attributes &attributes);
 
@@ -112,6 +113,9 @@ private:
     virtual void gotListParagraph(
         const QString &text,
         Attributes &style);
+    virtual void gotStyle(
+        const QString &name,
+        const Properties &style);
     virtual void gotTableBegin(
         unsigned tableNumber);
     virtual void gotTableEnd(
@@ -172,4 +176,3 @@ private:
     static const unsigned s_vMargin = 42; // Vertical margin.
 };
 #endif // WINWORDDOC_H
-

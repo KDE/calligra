@@ -63,9 +63,9 @@ public:
 
     // Get the properties.
 
-    const MsWord::PAP *getPap(void) { return &m_pap; }
-    const MsWord::CHP *getChp(void) { return &m_chp; }
-    const MsWord::TAP *getTap(void) { return &m_tap; }
+    const MsWord::PAP *getPap(void) const { return &m_pap; }
+    const MsWord::CHP *getChp(void) const { return &m_chp; }
+    const MsWord::TAP *getTap(void) const { return &m_tap; }
 private:
     friend class MsWord;
 

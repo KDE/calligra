@@ -410,57 +410,9 @@ void MsWord::Fkp<T1, T2>::startIteration(const U8 *fkp)
     m_i = 0;
 }
 
-//
-// Get various strings which are associated with the document.
-//
-void MsWord::getAssociatedStrings()
+const MsWordGenerated::FIB &MsWord::fib() const
 {
-    typedef enum
-    {
-        ibstAssocFileNext,      // unused.
-        ibstAssocDot,           // filename of associated template.
-        ibstAssocTitle,         // title of document.
-        ibstAssocSubject,       // subject of document.
-        ibstAssocKeyWords,      // keywords of document.
-        ibstAssocComments,      // comments of document.
-        ibstAssocAuthor,        // author of document.
-        ibstAssocLastRevBy,     // name of person who last revised the
-                                // document.
-        ibstAssocDataDoc,       // filename of data document.
-        ibstAssocHeaderDoc,     // filename of header document.
-        ibstAssocCriteria1,     // packed strings used by print merge record
-        ibstAssocCriteria2,     // selection.
-        ibstAssocCriteria3,
-        ibstAssocCriteria4,
-        ibstAssocCriteria5,
-        ibstAssocCriteria6,
-        ibstAssocCriteria7
-    } ibst;
-
-    const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
-
-    kdDebug(s_area) << "MsWord::getAssociatedStrings" << endl;
-
-    // Failsafe for simple documents.
-
-    if (!m_fib.lcbSttbfAssoc)
-    {
-        kdDebug(s_area) << "MsWord::getAssociatedStrings: no data " << endl;
-        return;
-    }
-
-    STTBF data;
-    ptr += read(ptr, &data);
-
-    if (data.stringCount < ibstAssocCriteria1)
-    {
-        kdError(s_area) << "MsWord::getAssociatedStrings: insufficient data " << endl;
-        return;
-    }
-    m_title = data.strings[ibstAssocTitle];
-    m_subject = data.strings[ibstAssocSubject];
-    m_author = data.strings[ibstAssocAuthor];
-    m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
+    return m_fib;
 }
 
 // Get the character property exceptions for a range of file positions by
@@ -923,156 +875,13 @@ bool MsWord::getPicture(
     return (*pictureLength > 0);
 }
 
-// Create a cache of information about lists.
-//
-//    m_listStyles: an array of arrays of pointers to LVLFs for each list style in the
-//    LST array. The entries must be looked up using the list id and list level.
-
-void MsWord::getListStyles()
-{
-    const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
-    const U8 *ptr2;
-    U16 lstfCount;
-
-    kdDebug(s_area) << "MsWord::getListStyles" << endl;
-
-    // Failsafe for simple documents.
-
-    m_listStyles = NULL;
-    if (!m_fib.lcbPlcfLst)
-    {
-        kdDebug(s_area) << "MsWord::getListStyles: no data " << endl;
-        return;
-    }
-
-    // Find the number of LSTFs.
-
-    ptr += MsWordGenerated::read(ptr, &lstfCount);
-    ptr2 = ptr + lstfCount * sizeof(LSTF);
-
-    // Construct the array of styles, and then walk the array reading in the style definitions.
-
-    m_listStyles = new LVLF **[lstfCount];
-    for (unsigned i = 0; i < lstfCount; i++)
-    {
-        LSTF data;
-        unsigned levelCount;
-
-        ptr += MsWordGenerated::read(ptr, &data);
-        if (data.fSimpleList)
-            levelCount = 1;
-        else
-            levelCount = 9;
-
-        // Create an array of LVLF pointers, one for each level in the list.
-
-        m_listStyles[i] = new LVLF *[levelCount];
-        for (unsigned j = 0; j < levelCount; j++)
-        {
-            m_listStyles[i][j] = (LVLF *)ptr2;
-
-            // Skip the variable length parts.
-
-            LVLF level;
-            U16 numberTextLength;
-            QString numberText;
-
-            ptr2 += MsWordGenerated::read(ptr2, &level);
-            ptr2 += level.cbGrpprlPapx;
-            ptr2 += level.cbGrpprlChpx;
-            ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
-        }
-    }
-}
-
-// Create a cache of information about built-in styles.
-//
-// The cache consists of:
-//
-//    m_styles: an array of fully-decoded PAPs for each built in style
-//    indexed by istd.
+// Walk the list of styles, outputting each in turn.
 
 void MsWord::getStyles()
 {
-    const U8 *ptr = m_tableStream + m_fib.fcStshf;
-    U16 cbStshi;
-    STSHI stshi;
-
-    kdDebug(s_area) << "MsWord::getStyles" << endl;
-
-    // Failsafe for simple documents.
-
-    m_styles = NULL;
-    if (!m_fib.lcbStshf)
+    for (unsigned i = 0; i < m_styles.count; i++)
     {
-        kdError(s_area) << "MsWord::getStyles: no data " << endl;
-        return;
-    }
-
-    // Fetch the STSHI.
-
-    ptr += MsWordGenerated::read(ptr, &cbStshi);
-    if (cbStshi > sizeof(stshi))
-    {
-        // We simply discard parts of the STSHI we do not understand.
-
-        kdDebug(s_area) << "MsWord::getStyles: unsupported STSHI size " <<
-            cbStshi << endl;
-        if (cbStshi >= 20)
-        {
-            kdWarning(s_area) << "MsWord::getStyles: assuming Word 2000" <<
-                endl;
-
-            // Flip ourselves into unsupported territory!
-
-            m_fib.nFib = s_maxWord7Version + 1;
-            kdError(s_area) << "Word 2000 is not fully supported" <<
-                endl;
-        }
-        MsWordGenerated::read(ptr, &stshi);
-        ptr += cbStshi;
-    }
-    else
-    {
-        // We know that older/smaller STSHIs can simply be zero extended into
-        // out STSHI. So, we overwrite anything that is not valid with zeros.
-
-        ptr += MsWordGenerated::read(ptr, &stshi);
-        memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
-        ptr -= sizeof(stshi) - cbStshi;
-    }
-
-    // Construct the array of styles, and then walk the array reading in the
-    // style definitions.
-
-    m_styles = new Properties *[stshi.cstd];
-    for (unsigned i = 0; i < stshi.cstd; i++)
-    {
-        U16 cbStd;
-        STD std;
-
-        ptr += MsWordGenerated::read(ptr, &cbStd);
-        if (cbStd)
-        {
-            read(ptr, stshi.cbSTDBaseInFile, &std);
-            kdDebug(s_area) << "MsWord::getStyles: style: " << std.xstzName <<
-                ", types: " << std.cupx <<
-                endl;
-
-            // Fill the paragraph with its characteristics.
-
-            m_styles[i] = new Properties(*this);
-            m_styles[i]->apply(std);
-        }
-        else
-        {
-            // Set the style to be the same as stiNormal. This is a purely
-            // defensive thing...and relies on a viable 0th entry.
-
-            m_styles[i] = m_styles[0];
-        }
-        ptr += cbStd;
+        gotStyle(m_styles.names[i], *m_styles.data[i]);
     }
 }
 
@@ -1114,7 +923,6 @@ MsWord::MsWord(
     // being present until we are destroyed.
 
     m_mainStream = mainStream.data;
-kdDebug(s_area) << "MsWord::MsWord: mainStream.data"<< (const char*)m_mainStream << endl;
     if (table0Stream.data && table1Stream.data)
     {
         // If and only if both table streams are present, the FIB tells us which
@@ -1147,12 +955,12 @@ kdDebug(s_area) << "MsWord::MsWord: mainStream.data"<< (const char*)m_mainStream
         m_dataStream = m_mainStream;
     }
 
-    // We must call getStyles() first, as we use the STSHI size to detect
+    // We must call readStyles() first, as we use the STSHI size to detect
     // Word 2000.
 
-    getStyles();
-    //getAssociatedStrings();
-    getListStyles();
+    readStyles();
+    //readAssociatedStrings();
+    readListStyles();
 }
 
 MsWord::~MsWord()
@@ -1325,6 +1133,211 @@ void MsWord::parse()
     }
 }
 
+//
+// Get various strings which are associated with the document.
+//
+void MsWord::readAssociatedStrings()
+{
+    typedef enum
+    {
+        ibstAssocFileNext,      // unused.
+        ibstAssocDot,           // filename of associated template.
+        ibstAssocTitle,         // title of document.
+        ibstAssocSubject,       // subject of document.
+        ibstAssocKeyWords,      // keywords of document.
+        ibstAssocComments,      // comments of document.
+        ibstAssocAuthor,        // author of document.
+        ibstAssocLastRevBy,     // name of person who last revised the
+                                // document.
+        ibstAssocDataDoc,       // filename of data document.
+        ibstAssocHeaderDoc,     // filename of header document.
+        ibstAssocCriteria1,     // packed strings used by print merge record
+        ibstAssocCriteria2,     // selection.
+        ibstAssocCriteria3,
+        ibstAssocCriteria4,
+        ibstAssocCriteria5,
+        ibstAssocCriteria6,
+        ibstAssocCriteria7
+    } ibst;
+
+    const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
+
+    kdDebug(s_area) << "MsWord::getAssociatedStrings" << endl;
+
+    // Failsafe for simple documents.
+
+    if (!m_fib.lcbSttbfAssoc)
+    {
+        kdDebug(s_area) << "MsWord::getAssociatedStrings: no data " << endl;
+        return;
+    }
+
+    STTBF data;
+    ptr += read(ptr, &data);
+
+    if (data.stringCount < ibstAssocCriteria1)
+    {
+        kdError(s_area) << "MsWord::getAssociatedStrings: insufficient data " << endl;
+        return;
+    }
+    m_title = data.strings[ibstAssocTitle];
+    m_subject = data.strings[ibstAssocSubject];
+    m_author = data.strings[ibstAssocAuthor];
+    m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
+}
+
+// Create a cache of information about lists.
+//
+//    m_listStyles: an array of arrays of pointers to LVLFs for each list style in the
+//    LST array. The entries must be looked up using the list id and list level.
+
+void MsWord::readListStyles()
+{
+    const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
+    const U8 *ptr2;
+    U16 lstfCount;
+
+    kdDebug(s_area) << "MsWord::readListStyles" << endl;
+
+    // Failsafe for simple documents.
+
+    m_listStyles = NULL;
+    if (!m_fib.lcbPlcfLst)
+    {
+        kdDebug(s_area) << "MsWord::readListStyles: no data " << endl;
+        return;
+    }
+
+    // Find the number of LSTFs.
+
+    ptr += MsWordGenerated::read(ptr, &lstfCount);
+    ptr2 = ptr + lstfCount * sizeof(LSTF);
+
+    // Construct the array of styles, and then walk the array reading in the style definitions.
+
+    m_listStyles = new LVLF **[lstfCount];
+    for (unsigned i = 0; i < lstfCount; i++)
+    {
+        LSTF data;
+        unsigned levelCount;
+
+        ptr += MsWordGenerated::read(ptr, &data);
+        if (data.fSimpleList)
+            levelCount = 1;
+        else
+            levelCount = 9;
+
+        // Create an array of LVLF pointers, one for each level in the list.
+
+        m_listStyles[i] = new LVLF *[levelCount];
+        for (unsigned j = 0; j < levelCount; j++)
+        {
+            m_listStyles[i][j] = (LVLF *)ptr2;
+
+            // Skip the variable length parts.
+
+            LVLF level;
+            U16 numberTextLength;
+            QString numberText;
+
+            ptr2 += MsWordGenerated::read(ptr2, &level);
+            ptr2 += level.cbGrpprlPapx;
+            ptr2 += level.cbGrpprlChpx;
+            ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+            ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
+        }
+    }
+}
+
+// Create a cache of information about built-in styles.
+//
+// The cache consists of:
+//
+//    m_styles: an array of fully-decoded PAPs for each built in style
+//    indexed by istd.
+
+void MsWord::readStyles()
+{
+    const U8 *ptr = m_tableStream + m_fib.fcStshf;
+    U16 cbStshi;
+    STSHI stshi;
+
+    // Failsafe for simple documents.
+
+    m_styles.data = 0L;
+    m_styles.names = 0L;
+    if (!m_fib.lcbStshf)
+    {
+        return;
+    }
+
+    // Fetch the STSHI.
+
+    ptr += MsWordGenerated::read(ptr, &cbStshi);
+    if (cbStshi > sizeof(stshi))
+    {
+        // We simply discard parts of the STSHI we do not understand.
+
+        kdError(s_area) << "MsWord::readStyles: unsupported STSHI size " <<
+            cbStshi << endl;
+        if (cbStshi >= 20)
+        {
+            kdWarning(s_area) << "MsWord::readStyles: assuming Word 2000" <<
+                endl;
+
+            // Flip ourselves into unsupported territory!
+
+            m_fib.nFib = s_maxWord7Version + 1;
+            kdError(s_area) << "Word 2000 is not fully supported" <<
+                endl;
+        }
+        MsWordGenerated::read(ptr, &stshi);
+        ptr += cbStshi;
+    }
+    else
+    {
+        // We know that older/smaller STSHIs can simply be zero extended into
+        // out STSHI. So, we overwrite anything that is not valid with zeros.
+
+        ptr += MsWordGenerated::read(ptr, &stshi);
+        memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
+        ptr -= sizeof(stshi) - cbStshi;
+    }
+
+    // Construct the array of styles, and then walk the array reading in the
+    // style definitions.
+
+    m_styles.count = stshi.cstd;
+    m_styles.data = new Properties *[m_styles.count];
+    m_styles.names = new QString[m_styles.count];
+    for (unsigned i = 0; i < m_styles.count; i++)
+    {
+        U16 cbStd;
+        STD std;
+
+        ptr += MsWordGenerated::read(ptr, &cbStd);
+        if (cbStd)
+        {
+            read(ptr, stshi.cbSTDBaseInFile, &std);
+
+            // Fill the paragraph with its characteristics.
+
+            m_styles.data[i] = new Properties(*this);
+            m_styles.data[i]->apply(std);
+            m_styles.names[i] = std.xstzName;
+        }
+        else
+        {
+            // Set the style to be the same as stiNormal. This is a purely
+            // defensive thing...and relies on a viable 0th entry.
+
+            m_styles.data[i] = m_styles.data[0];
+            m_styles.names[i] = m_styles.names[0];
+        }
+        ptr += cbStd;
+    }
+}
+
 template <class T, int word6Size>
 MsWord::Plex<T, word6Size>::Plex(MsWord *document) :
     m_document(document)
@@ -1359,7 +1372,7 @@ void MsWord::Plex<T, word6Size>::startIteration(const U8 *plex, const U32 byteCo
 
     if (m_byteCount > sizeof(startFc))
     {
-        if (m_document->m_fib.nFib > s_maxWord6Version)
+        if (m_document->fib().nFib > s_maxWord6Version)
             m_crun = (m_byteCount - sizeof(startFc)) / (sizeof(T) + sizeof(startFc));
         else
             m_crun = (m_byteCount - sizeof(startFc)) / (word6Size + sizeof(startFc));

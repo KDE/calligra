@@ -130,16 +130,16 @@ const bool WinWordDoc::convert()
     {
         m_body = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
             "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
-            " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
-            "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"");
+            " <PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\" hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\">\n"
+            "  <PAPERBORDERS left=\"");
         m_body.append(QString::number(s_hMargin));
-        m_body.append("\" ptTop=\"");
+        m_body.append("\" top=\"");
         m_body.append(QString::number(s_vMargin));
-        m_body.append("\" ptRight=\"");
+        m_body.append("\" right=\"");
         m_body.append(QString::number(s_hMargin));
-        m_body.append("\" ptBottom=\"");
+        m_body.append("\" bottom=\"");
         m_body.append(QString::number(s_vMargin));
-        m_body.append("\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
+        m_body.append("\"/>\n"
             " </PAPER>\n"
             " <ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n"
             " <FOOTNOTEMGR>\n"
@@ -158,14 +158,22 @@ const bool WinWordDoc::convert()
         m_body.append(QString::number(s_width - s_hMargin));
         m_body.append("\" bottom=\"");
         m_body.append(QString::number(s_height - s_vMargin));
-        m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-        m_body.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n");
+        m_body.append("\" runaround=\"1\" runaGap=\"2\" lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\"");
+        m_body.append(" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n");
         parse();
         m_body.append(
             "  </FRAMESET>\n");
         m_body.append(m_tables);
         m_body.append(
             " </FRAMESETS>\n");
+
+        // Output styles.
+
+        m_body.append(
+            " <STYLES>\n");
+        getStyles();
+        m_body.append(
+            " </STYLES>\n");
 
         // Do we have any images?
 
@@ -213,6 +221,44 @@ void WinWordDoc::encode(QString &text)
   text.replace(QRegExp("'"), "&apos;");
 }
 
+QString WinWordDoc::generateFormat(
+    const CHP *chp)
+{
+    QString formatDef;
+
+    formatDef.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
+    formatDef.append("<FONT name=\"times\"/>\n");
+    formatDef.append("<SIZE value=\"");
+    // TBD: where should we really get the size?
+    formatDef.append(QString::number(chp->hps / 2));
+    //formatDef.append(QString::number(12));
+    formatDef.append("\"/>\n");
+    if (chp->fBold)
+        formatDef.append("<WEIGHT value=\"75\"/>\n");
+    else
+        formatDef.append("<WEIGHT value=\"50\"/>\n");
+    if (chp->fItalic)
+        formatDef.append("<ITALIC value=\"1\"/>\n");
+    else
+        formatDef.append("<ITALIC value=\"0\"/>\n");
+    if (chp->kul != 0)
+        formatDef.append("<UNDERLINE value=\"1\"/>\n");
+    else
+        formatDef.append("<UNDERLINE value=\"0\"/>\n");
+    if (chp->iss != 0)
+    {
+        if (chp->iss == 1)
+            formatDef.append("<VERTALIGN value=\"2\"/>\n");
+        else
+            formatDef.append("<VERTALIGN value=\"1\"/>\n");
+    }
+    else
+    {
+        formatDef.append("<VERTALIGN value=\"0\"/>\n");
+    }
+    return formatDef;
+}
+
 void WinWordDoc::generateFormats(
     Attributes &attributes)
 {
@@ -232,36 +278,7 @@ void WinWordDoc::generateFormats(
             formats.append("\" len=\"");
             formats.append(QString::number(run->end - run->start));
             formats.append("\">\n");
-            formats.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
-            formats.append("<FONT name=\"times\"/>\n");
-            formats.append("<SIZE value=\"");
-            // TBD: where should we really get the size?
-            //formats.append(QString::number(chp->hps / 2));
-            formats.append(QString::number(12));
-            formats.append("\"/>\n");
-            if (chp->fBold)
-                formats.append("<WEIGHT value=\"75\"/>\n");
-            else
-                formats.append("<WEIGHT value=\"50\"/>\n");
-            if (chp->fItalic)
-                formats.append("<ITALIC value=\"1\"/>\n");
-            else
-                formats.append("<ITALIC value=\"0\"/>\n");
-            if (chp->kul != 0)
-                formats.append("<UNDERLINE value=\"1\"/>\n");
-            else
-                formats.append("<UNDERLINE value=\"0\"/>\n");
-            if (chp->iss != 0)
-            {
-                if (chp->iss == 1)
-                    formats.append("<VERTALIGN value=\"2\"/>\n");
-                else
-                    formats.append("<VERTALIGN value=\"1\"/>\n");
-            }
-            else
-            {
-                formats.append("<VERTALIGN value=\"0\"/>\n");
-            }
+            formats.append(generateFormat(chp));
             formats.append("</FORMAT>\n");
         }
         else
@@ -418,7 +435,7 @@ void WinWordDoc::gotHeadingParagraph(
         "  <NAME value=\"Head ");
     m_body.append(QString::number((int)styles.baseStyle.istd));
     m_body.append("\"/>\n  <COUNTER type=\"");
-    m_body.append(numberingType(styles.baseStyle.anld.nfc));
+    m_body.append(numbering(styles.baseStyle.anld.nfc));
     m_body.append("\" depth=\"");
     m_body.append(QString::number(styles.baseStyle.istd - 1));
     m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
@@ -455,7 +472,7 @@ void WinWordDoc::gotListParagraph(
     m_body.append(listStyle[styles.baseStyle.anld.nfc]);
     m_body.append("\"/>\n"
         "  <COUNTER type=\"");
-    m_body.append(numberingType(styles.baseStyle.anld.nfc));
+    m_body.append(numbering(styles.baseStyle.anld.nfc));
     m_body.append("\" depth=\"");
     m_body.append(QString::number((int)styles.baseStyle.ilvl));
     m_body.append("\" bullet=\"183\" start=\"");
@@ -464,6 +481,110 @@ void WinWordDoc::gotListParagraph(
         " </LAYOUT>\n");
     generateFormats(styles);
     m_body.append("</PARAGRAPH>\n");
+}
+
+// Create a <STYLE>.
+void WinWordDoc::gotStyle(
+    const QString &name,
+    const Properties &style)
+{
+#define stiNormal       0
+#define stiLev1         1
+#define stiLev9         9
+#define stiLevFirst     stiLev1
+#define stiLevLast      stiLev9
+
+#define stiList         47
+#define stiListBullet   48
+#define stiListNumber   49
+#define stiList2        50
+#define stiList5        53
+#define stiListBullet2  54
+#define stiListBullet5  57
+#define stiListNumber2  58
+#define stiListNumber5  61
+#define stiListCont     68
+#define stiListCont5    72
+
+#define isHeading(istd) \
+    ((istd >= stiLev1) && (istd <= stiLev9))
+#define isListAlpha(istd) \
+    ((istd == stiList) || ((istd >= stiList2) && (istd <= stiList5)))
+#define isListBullet(istd) \
+    ((istd == stiListBullet) || ((istd >= stiListBullet2) && (istd <= stiListBullet5)))
+#define isListNumber(istd) \
+    ((istd == stiListNumber) || ((istd >= stiListNumber2) && (istd <= stiListNumber5)))
+#define isListContination(istd) \
+    ((istd >= stiListCont) && (istd <= stiListCont5))
+
+    QString styleDef;
+    int styleIndex;
+
+    styleDef.append(
+        "  <STYLE>\n");
+    styleDef.append(
+        "   <NAME value=\"");
+    styleDef.append(name);
+    styleDef.append("\" />\n");
+    styleDef.append(
+        "   <FLOW align=\"left\" />\n");
+    styleIndex = style.getPap()->istd;
+    if (isHeading(styleIndex))
+    {
+        // Headings are followed by normal text.
+        styleDef.append(
+            "   <FOLLOWING name=\"");
+        styleDef.append(m_styles.names[stiNormal]);
+        styleDef.append("\"/>\n");
+        styleDef.append(
+            "   <COUNTER numberingtype=\"0\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
+        styleDef.append(QString::number(styleIndex - stiLev1));
+        styleDef.append("\" customdef=\"\"/>\n");
+    }
+    else
+    if (isListAlpha(styleIndex) || isListBullet(styleIndex) || isListNumber(styleIndex) || isListContination(styleIndex))
+    {
+        unsigned i;
+        ANLD anld;
+
+        // List entries are followed by more of the same.
+        anld = style.getPap()->anld;
+        styleDef.append(
+            "   <FOLLOWING name=\"");
+        styleDef.append(name);
+        styleDef.append("\"/>\n");
+        styleDef.append(
+            "   <COUNTER numberingtype=\"1\" type=\"");
+        styleDef.append(numbering(anld.nfc));
+        styleDef.append("\" bullet=\"45\" lefttext=\"");
+        for (i = 0; i < anld.cxchTextBefore; i++)
+            styleDef.append(anld.rgxch[i]);
+        styleDef.append("\" bulletfont=\"\" righttext=\"");
+        for (i = anld.cxchTextBefore; i < anld.cxchTextAfter; i++)
+            styleDef.append(anld.rgxch[i]);
+        styleDef.append("\" start=\"1\" depth=\"");
+        styleDef.append(QString::number(style.getPap()->ilvl - 1));
+        styleDef.append("\" customdef=\"\"/>\n");
+    }
+    else
+    {
+        // Unnumbered text is followed by normal text.
+        styleDef.append(
+            "   <FOLLOWING name=\"");
+        styleDef.append(m_styles.names[stiNormal]);
+        styleDef.append("\"/>\n");
+//        styleDef.append(
+//            "   <COUNTER numberingtype=\"2\" type=\"0\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\"\" start=\"1\" depth=\"0\" customdef=\"\"/>\n");
+    }
+    styleDef.append(
+        "   <FORMAT>\n");
+    styleDef.append(generateFormat(style.getChp()));
+    styleDef.append(
+        "   </FORMAT>\n");
+    styleDef.append(
+        "  </STYLE>\n");
+//    kdDebug() << styleDef<<endl;
+    m_body.append(styleDef);
 }
 
 void WinWordDoc::gotTableBegin(
@@ -539,18 +660,18 @@ void WinWordDoc::gotTableEnd(
             cell.append("\" bottom=\"");
             cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
             cell.append(
-                "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "
+                "\" runaround=\"1\" runaGap=\"2\" "
                 "lWidth=\"1\" lStyle=\"0\" " +
-                colourType(row.rgtc[x].brcLeft.ico, "lRed", "lGreen", "lBlue") +
+                colour(row.rgtc[x].brcLeft.ico, "lRed", "lGreen", "lBlue") +
                 "rWidth=\"1\" rStyle=\"0\" " +
-                colourType(row.rgtc[x].brcRight.ico, "rRed", "rGreen", "rBlue") +
+                colour(row.rgtc[x].brcRight.ico, "rRed", "rGreen", "rBlue") +
                 "tWidth=\"1\" tStyle=\"0\" " +
-                colourType(row.rgtc[x].brcTop.ico, "tRed", "tGreen", "tBlue") +
+                colour(row.rgtc[x].brcTop.ico, "tRed", "tGreen", "tBlue") +
                 "bWidth=\"1\" bStyle=\"0\" " +
-                colourType(row.rgtc[x].brcBottom.ico, "bRed", "bGreen", "bBlue") +
-                colourType(row.rgshd[x].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
-                "bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-            cell.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
+                colour(row.rgtc[x].brcBottom.ico, "bRed", "bGreen", "bBlue") +
+                colour(row.rgshd[x].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
+                "bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\"");
+            cell.append(" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = m_table[y]->m_texts[x];
             encode(xml_friendly);
@@ -584,7 +705,7 @@ void WinWordDoc::gotTableRow(
     m_table.insert(i, newRow);
 }
 
-QString WinWordDoc::colourType(
+QString WinWordDoc::colour(
     unsigned colour,
     const char *red,
     const char *green,
@@ -656,7 +777,7 @@ QString WinWordDoc::colourType(
     return result;
 }
 
-char WinWordDoc::numberingType(unsigned nfc) const
+char WinWordDoc::numbering(unsigned nfc) const
 {
     // Word number formats are:
     //

@@ -57,11 +57,16 @@ public:
     QString m_subject;
     QString m_author;
     QString m_lastRevisedBy;
+    const FIB &fib() const;
 
     // Call the parse() function to process the document. The callbacks return
     // the text along with any relevant attributes.
 
     void parse();
+
+    // Fetch the styles in the style sheet. Callbacks return the data.
+
+    void getStyles();
 
 // TBD: this will be not remain public once I figure out how the nested classes
 // can be made to work (as friends?).
@@ -171,24 +176,6 @@ public:
     unsigned read(const U8 *in, PCD *out);
     unsigned read(const U8 *in, PHE *out);
 
-    // Some fundamental data structures. We keep pointers to our streams,
-    // and a copy of the FIB.
-
-    const U8 *m_mainStream;
-    const U8 *m_tableStream;
-    const U8 *m_dataStream;
-    FIB m_fib;
-
-    // Cache for styles in stylesheet. This is an array of fully "decoded"
-    // PAPs - that will help performance with lots of paragraphs.
-
-    Properties **m_styles;
-
-    // Cache for list styles. This is an array of LVLF pointersfully "decoded"
-    // PAPs - that will help performance with lots of paragraphs.
-
-    LVLF ***m_listStyles;
-
     // This class allows standardised treatment of plexes of different types.
     // It is designed to be instantiated locally, once for each plex we are
     // interested in.
@@ -286,6 +273,9 @@ protected:
         const QString &text,
         const PAP &pap,
         const CHPXarray &chpxs) = 0;
+    virtual void gotStyle(
+        const QString &name,
+        const Properties &style) = 0;
     virtual void gotTableBegin() = 0;
     virtual void gotTableEnd() = 0;
     virtual void gotTableRow(
@@ -325,6 +315,16 @@ protected:
         U32 *pictureLength,
         const U8 **pictureData);
 
+    // Cache for styles in stylesheet. This is an array of fully "decoded"
+    // PAPs - that will help performance with lots of paragraphs.
+
+    struct
+    {
+        unsigned count;
+        Properties **data;
+        QString *names;
+    } m_styles;
+
 private:
     friend class Properties;
     myFile mainStream;
@@ -340,6 +340,14 @@ private:
     static const unsigned s_minWordVersion = 100;
     static const unsigned s_maxWord6Version = 105;
     static const unsigned s_maxWord7Version = 193;
+
+    // Some fundamental data structures. We keep pointers to our streams,
+    // and a copy of the FIB.
+
+    const U8 *m_mainStream;
+    const U8 *m_tableStream;
+    const U8 *m_dataStream;
+    FIB m_fib;
 
     // Character property handling.
 
@@ -385,14 +393,16 @@ private:
 
     // Get the metadata for the file.
 
-    void getAssociatedStrings();
+    void readAssociatedStrings();
 
-    // Fetch the styles in the style sheet.
+    // Get the styles in the style sheet into the cache.
 
-    void getStyles();
+    void readStyles();
 
-    // Fetch the list styles.
+    // Cache for list styles. This is an array of LVLF pointers fully "decoded"
+    // PAPs - that will help performance with lots of paragraphs.
 
-    void getListStyles();
+    LVLF ***m_listStyles;
+    void readListStyles();  // Fetch the list styles.
 };
 #endif
