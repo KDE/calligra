@@ -26,7 +26,6 @@
 // class KoParagVisitor;
 // class KoTextFormatter;
 // class KoTextParag;
-
 public:
     /**
      * Construct a text document, i.e. a set of paragraphs
@@ -110,6 +109,8 @@ public:
 
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
     bool dontDrawingNoteVariable() const { return (m_drawingFlags & DontDrawNoteVariable); }
+
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,

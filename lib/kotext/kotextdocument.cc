@@ -21,6 +21,7 @@
 #include "kotextformatter.h"
 #include <kdebug.h>
 #include <kdebugclasses.h>
+#include "kocommand.h"
 
 //#define DEBUG_PAINTING
 
@@ -422,4 +423,10 @@ floating:
     //tmpCursor = 0;
     return lastFormatted;
 }
+
+KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+{
+    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
 // SYNC end - end of modified copies of KoTextDocument methods

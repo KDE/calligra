@@ -2320,8 +2320,7 @@ KCommand *KoTextFormatInterface::setSpellCheckingLanguage(const QString &_lang)
 
 KoTextDocCommand *KoTextFormatInterface::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
 {
-    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
-
+    return textdoc->deleteTextCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
 #include "kotextobject.moc"

@@ -101,7 +101,11 @@ class KCommand;
 class QDomElement;
 class KoZoomHandler;
 class KoTextFormatter;
-class KoParagVisitor;
+//class KoParagVisitor;
+class KoTextDocCommand;
+#include <qmemarray.h>
+#include "koparaglayout.h"
+#include "korichtext.h"
 ////
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2210,6 +2214,6 @@ inline int KoTextStringChar::descent() const
     return !isCustom() ? format()->descent() : 0;
 }
 
-#include "korichtext.h"
+//#include "korichtext.h"
 
 #endif
