@@ -52,25 +52,34 @@ class KDownArrowPushButton : public KPushButton
 
 			KPushButton::drawButton(p);
 
+			QRect r = rect();
+			r.setHeight(r.height()+m_fixForHeight);
 			if (m_drawComplexControl) {
 //				style().drawControl(QStyle::CE_PushButton, p, this, rect(), colorGroup(), flags);
-				style().drawComplexControl( QStyle::CC_ComboBox, p, this, rect(), colorGroup(),
+				style().drawComplexControl( QStyle::CC_ComboBox, p, this, r, colorGroup(),
 				    flags, (uint)(QStyle::SC_ComboBoxArrow /*| QStyle::SC_ComboBoxFrame*/), //QStyle::SC_All ^ QStyle::SC_ComboBoxFrame,
 				     /*QStyle::SC_ComboBoxArrow */ QStyle::SC_None );
 			}
 			else {
-				QRect r = rect();
 				r.setWidth(r.width()+2);
 				style().drawPrimitive( QStyle::PE_ArrowDown, p, r, colorGroup(), flags);
 			}
 		}
 		virtual void styleChange( QStyle & oldStyle ) {
+			//<hack>
+		  if (qstricmp(style().name(),"thinkeramik")==0) {
+				m_fixForHeight = 3;
+			}
+			else
+				m_fixForHeight = 0;
+			//</hack>
 			m_drawComplexControl = style().inherits("KStyle") || qstricmp(style().name(),"platinum")==0;
 			setFixedWidth( style().querySubControlMetrics( QStyle::CC_ComboBox, 
 				this, QStyle::SC_ComboBoxArrow ).width() +1 );
 			KPushButton::styleChange(oldStyle);
 		}
 
+		int m_fixForHeight;
 		bool m_drawComplexControl : 1;
 };
 
