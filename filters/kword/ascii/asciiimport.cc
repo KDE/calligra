@@ -34,6 +34,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdom.h>
+#include <qfont.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -138,18 +139,26 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
     QDomElement elementFormat=mainDocument.createElement("FORMAT");
     elementStyleStandard.appendChild(elementFormat);
 
+    QFont defaultFont=KoGlobal::defaultFont();
     element=mainDocument.createElement("FONT");
-    element.setAttribute("name","Helvetica"); // PROVISORY TODO: use KControl's default font
+    element.setAttribute("name",defaultFont.family());
     elementFormat.appendChild(element);
 
+    int size=defaultFont.pointSize();
+    if (-1==size)
+    {
+        // I am sick of this problem: QFont::pointSize() == -1
+        //   So I am lazy and do not do any conversion (TODO)
+        size=defaultFont.pixelSize();
+    }
     element=mainDocument.createElement("SIZE");
-    element.setAttribute("value",12); // PROVISORY TODO: use KControl's default font size
+    element.setAttribute("value",size);
     elementFormat.appendChild(element);
 
     element=mainDocument.createElement("ITALIC");
     element.setAttribute("value",0);
     elementFormat.appendChild(element);
-        
+
     element=mainDocument.createElement("WEIGHT");
     element.setAttribute("value",50);
     elementFormat.appendChild(element);
