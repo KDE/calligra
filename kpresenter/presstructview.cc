@@ -28,34 +28,61 @@ PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDocument_impl *_doc)
   : QTableView(parent)
 {
   doc = _doc;
-  setCellWidth(100);
-  setCellHeight(30);
+
+  QFontMetrics fm(font());
+
+  unsigned int wid = 0;
+  for (unsigned int i = 0;i < NUM_OBJ_TYPES;i++)
+    wid = max(static_cast<int>(wid),fm.width(i18n(ObjName[i])) + fm.width("999"));
+
+  wid += wid / 2;
+
+  setCellWidth(wid);
+  setCellHeight(fm.height() * 2 + fm.height() / 2);
+
   setBackgroundColor(kapp->windowColor);
   setNumCols(0);
   setNumRows(0);
   page = -1;
 
   setTableFlags(tableFlags() | Tbl_autoVScrollBar | Tbl_autoHScrollBar | Tbl_clipCellPainting);
+
+  objList.setAutoDelete(false);
 }
 
 /*================================================================*/
 void PVTimeTable::setPageNum(int _num)
 { 
+  objList.setAutoDelete(false);
+  objList.clear();
+  objList.setAutoDelete(false);
   page = _num; 
 
-  QList<int> intList = doc->reorderPage(page + 1,0,0,1.0);
-  setNumCols(intList.count() + 1);
+  QList<int> intList;
+  intList.setAutoDelete(false);
+  intList = doc->reorderPage(page + 1,0,0,1.0);
 
   unsigned int objs = 0;
   for (unsigned int i = 0;i < doc->objectList()->count();i++)
     {
       if (doc->getPageOfObj(i,0,0,1.0) == page + 1)
-	objs++;
+	{
+	  objs++;
+	  objList.append(doc->objectList()->at(i));
+	}
     }
   objs++;
-  setNumRows(objs);
 
-  repaint(true); 
+  setNumRows(objs);
+  setNumCols(intList.count() + 1);
+
+  if (objs < 2)
+    {
+      setNumCols(0);
+      setNumRows(0);
+    }
+
+  repaint(true);
 }
 
 
@@ -69,6 +96,45 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
       if (row == 0 || col == 0)
 	painter->fillRect(0,0,cellWidth(),cellHeight(),kapp->backgroundColor);
 
+      painter->setPen(kapp->textColor);
+      QFontMetrics fm(font());
+      QString obj_name;
+
+      if (row == 0 && col == 0)
+	{
+	  painter->drawText(cellWidth() - fm.width(i18n("Step")) - 3,fm.ascent() + 3,i18n("Step"));
+	  painter->drawText(3,cellHeight() - 3 - fm.descent(),i18n("Object"));
+	  painter->drawLine(0,0,cellWidth(),cellHeight());
+	}
+      if (row == 0 && col > 0)
+	{
+	  QString str;
+	  str.sprintf("%d",col);
+
+	  unsigned int wid = fm.width(str);
+	  unsigned int hei = fm.height();
+
+	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),str);	  
+	}
+      else if (col == 0 && row > 0)
+	{
+	  obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(objList.at(row - 1)->getType())]),
+			   doc->objectList()->find(objList.at(row - 1)) + 1);
+	  unsigned int wid = fm.width(obj_name);
+	  unsigned int hei = fm.height();
+
+	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),obj_name);	  
+	}
+      else if (col > 0 && row > 0)
+	{
+	  KPObject *kpobject = objList.at(row - 1);
+	  if (kpobject->getPresNum() == col)
+	    painter->fillRect(0,5,cellWidth(),cellHeight() - 10,green);
+	  else if (kpobject->getPresNum() < col)
+	    painter->fillRect(0,5,cellWidth(),cellHeight() - 10,red);
+	}
+
+      painter->setPen(black);
       painter->drawLine(cellWidth() - 1,0,cellWidth() - 1,cellHeight());
       painter->drawLine(0,cellHeight() - 1,cellWidth(),cellHeight() - 1);
       if (row == 0)

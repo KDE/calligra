@@ -23,6 +23,7 @@
 #define POINT_TO_MM 0.3527772388    
 
 #define MAX_UNDO_REDO 100
+#define NUM_OBJ_TYPES 8
 
 // types
 enum BackType {BT_COLOR = 0,BT_PICTURE = 1,BT_CLIPART = 2};

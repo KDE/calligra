@@ -33,6 +33,8 @@
 #include <qcolor.h>
 #include <qpen.h>
 #include <qbrush.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
@@ -42,6 +44,13 @@
 
 #include "kpobject.h"
 #include "kpbackground.h"
+
+#ifndef min
+#define min(a,b) ((a)<(b)?(a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
 
 class KPresenterDocument_impl;
 class KPresenterView_impl;
@@ -87,6 +96,8 @@ protected:
 
   int page;
   KPresenterDocument_impl *doc;
+
+  QList<KPObject> objList;
 
 };
 
