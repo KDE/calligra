@@ -316,8 +316,10 @@ TODO: fix lucijan's hack, with part loading (29 feb)
                  friend class KexiProject;
 +                friend class KexiMainWindowImpl;
 
-
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
+
+CC_MAIL: dkite@shaw.ca
+
 
 2004-03-09
 Main Window : some top level polishing
@@ -328,9 +330,18 @@ Main Window : some top level polishing
 	-KMainWindow::queryExit() and queryClose() impelmented instad of closeEvent()
 	-"Create" menu is disabled when no project is loaded
 	-On last dialog closing, guiclient is removed (so dead toolbar are hidden now)
-
 	-Main Window: dock windows are disabled on project closing, for sanity
 	-some fixes for mime data (QString -> QCString)
+	-part manager's part lookup can be called only once now 
+	  (refreshing will be impl. one day)
+	-dock windows (navigator and propeditor) are properly handled on closing/reopening projects
+	-opening project after closing fixed
+	-caption is updated on dialog data saving; after saving brand new data, 
+	 item is added to the navigator
+Property Editor
+	-fixed crash on changing invisible properties
+Alter Table Dialog
+	-creating new tables works partially
 
 2004-03-08
 Table View
