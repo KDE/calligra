@@ -84,6 +84,7 @@
   <Menu name="tools" noMerge="1">
     <text>&amp;Tools</text>
     <MergeLocal/>
+    <Action name="tools_data_migration"/>
   </Menu>
 
   <Menu name="window" noMerge="0">
