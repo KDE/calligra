@@ -493,6 +493,9 @@ void tableNotFoundError(const QString& tableName)
 	setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
 }
 
+/* this is better than assert() */
+#define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
+
 bool parseData(KexiDB::Parser *p, const char *data)
 {
 /* todo: remove dummy */
@@ -559,7 +562,8 @@ bool parseData(KexiDB::Parser *p, const char *data)
 /* Adds \a column to \a querySchema. \a column can be in a form of
  table.field, tableAlias.field or field
 */
-bool addColumn( QuerySchema *querySchema, BaseExpr* column )
+bool addColumn( QuerySchema *querySchema, BaseExpr* column, 
+	const QDict< QValueList<int> > &repeatedTablesAndAliases )
 {
 	VariableExpr *v_e = dynamic_cast<VariableExpr*>(column);
 	if (column->exprClass() != KexiDBExpr_Variable || !v_e) {
@@ -578,7 +582,8 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 	if (tableName.isEmpty()) {//fieldname only
 		fieldName = varName;
 		if (fieldName=="*") {
-			querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+//			querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+			querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema) );
 		}
 		else {
 			//find first table that has this field
@@ -598,14 +603,14 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 						return false;
 					}
 				}
-				if (!firstField) {
-						setError(i18n("Field not found"), 
-							i18n("Table containing \"%1\" field not found").arg(fieldName));
-						return false;
-				}
-				//ok
-				querySchema->addField(firstField);
 			}
+			if (!firstField) {
+					setError(i18n("Field not found"), 
+						i18n("Table containing \"%1\" field not found").arg(fieldName));
+					return false;
+			}
+			//ok
+			querySchema->addField(firstField);
 		}
 	}
 	else {//table.fieldname or tableAlias.fieldname
@@ -641,15 +646,44 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 					kdDebug() << " --it's a tableAlias.name" << endl;
 			}
 		}
-		
+
+
 		if (ts) {
+			QValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
+			if (!positionsList) {
+				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
+				return false;
+			}
+
 			if (fieldName=="*") {
-				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+				if (positionsList->count()>1) {
+					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
+						i18n("More than one \"%1\" table or alias defined").arg(tableName));
+					return false;
+				}
+//				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+				querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema, ts) );
 			}
 			else {
 				kdDebug() << " --it's a table.name" << endl;
 				KexiDB::Field *realField = ts->field(fieldName);
 				if (realField) {
+					// check if table or alias is used twice and both have the same column
+					// (so the column is ambiguous)
+					int numberOfTheSameFields = 0;
+					for (QValueList<int>::iterator it = positionsList->begin();
+						it!=positionsList->end();++it)
+					{
+						KexiDB::TableSchema *otherTS = querySchema->tables()->at(*it);
+						if (otherTS->field(fieldName))
+							numberOfTheSameFields++;
+						if (numberOfTheSameFields>1) {
+							setError(i18n("Ambiguous \"%1.%2\" expression").arg(tableName).arg(fieldName),
+								i18n("More than one \"%1\" table or alias defined containing \"%2\" field").arg(tableName).arg(fieldName));
+							return false;
+						}
+					}
+
 					querySchema->addField(realField, tablePosition);
 				}
 				else {
@@ -907,8 +941,11 @@ Select ColViews
 /*TODO: use this later if there are columns that use database fields, 
         e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
 	//used to collect information about first repeated table name or alias:
-	QDict<char> tableNamesAndTableAliases(997, false);
-	QString repeatedTableNameOrTableAlias;
+//	QDict<char> tableNamesAndTableAliases(997, false);
+//	QString repeatedTableNameOrTableAlias;
+	//collects positions of tables/aliases with the same names
+	QDict< QValueList<int> > repeatedTablesAndAliases(997, false);
+	repeatedTablesAndAliases.setAutoDelete(true);
 	
 	for (int i=0; i<tablesList->args(); i++, columnNum++) {
 		BaseExpr *e = tablesList->arg(i);
@@ -935,9 +972,28 @@ Select ColViews
 //			yyerror("fieldlisterror");
 			return 0;
 		}
+		QCString tableOrAliasName;
+		if (!aliasString.isEmpty()) {
+			tableOrAliasName = aliasString;
+			kdDebug() << "- add alias for table: " << aliasString << endl;
+		} else {
+			tableOrAliasName = tname;
+		}
 		// 1. collect information about first repeated table name or alias
 		//    (potential ambiguity)
-		if (repeatedTableNameOrTableAlias.isEmpty()) {
+		QValueList<int> *list = repeatedTablesAndAliases[tableOrAliasName];
+		if (list) {
+			//another table/alias with the same name
+			list->append( i );
+			kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
+		}
+		else {
+			list = new QValueList<int>();
+			list->append( i );
+			repeatedTablesAndAliases.insert( tableOrAliasName, list );
+			kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
+		}
+/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
 			if (tableNamesAndTableAliases[tname])
 				repeatedTableNameOrTableAlias=tname;
 			else
@@ -954,7 +1010,7 @@ Select ColViews
 				else
 					tableNamesAndTableAliases.insert(aliasString, (const char*)1);
 			}
-		}
+		}*/
 		kdDebug() << "addTable: " << tname << endl;
 		querySchema->addTable( s, aliasString );
 	}
@@ -962,7 +1018,7 @@ Select ColViews
 	/* set parent table if there's only one */
 //	if (parser->select()->tables()->count()==1)
 	if (querySchema->tables()->count()==1)
-			querySchema->setParentTable(querySchema->tables()->first());
+		querySchema->setParentTable(querySchema->tables()->first());
 
 	//-------add fields
 	KexiDB::BaseExpr *e;
@@ -980,7 +1036,8 @@ Select ColViews
 			setError(i18n("Invalid column definition")); //ok?
 			return 0;
 		}
-		if (!addColumn( querySchema, columnVariable ))
+
+		if (!addColumn( querySchema, columnVariable, repeatedTablesAndAliases ))
 			return 0;
 		
 		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)

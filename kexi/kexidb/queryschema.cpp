@@ -556,9 +556,7 @@ QValueList<int> QuerySchema::tablePositions(const QString& tableName) const
 	QValueList<int> result;
 	const QString& tableNameLower = tableName.lower();
 	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
-kdDebug() << "::: " << it.current()->name() << endl;
 		if (it.current()->name().lower()==tableNameLower) {
-kdDebug() << "ok" <<endl;
 			result += num;
 		}
 	}

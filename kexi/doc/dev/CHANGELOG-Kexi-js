@@ -316,6 +316,11 @@ KexiDB Drivers
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-09-27
+SQL Parser
+- ER102, ER103, OK104 SQL Issues resolved (see statements.txt)
+- several bugfixes
+
 2004-09-17
 KexiDB 
 - Connection::selectStatement(): alias is used insetead of table name, 

@@ -432,6 +432,9 @@ void tableNotFoundError(const QString& tableName)
 	setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
 }
 
+/* this is better than assert() */
+#define IMPL_ERROR(errmsg) setError("Implementation error", errmsg)
+
 bool parseData(KexiDB::Parser *p, const char *data)
 {
 /* todo: remove dummy */
@@ -498,7 +501,8 @@ bool parseData(KexiDB::Parser *p, const char *data)
 /* Adds \a column to \a querySchema. \a column can be in a form of
  table.field, tableAlias.field or field
 */
-bool addColumn( QuerySchema *querySchema, BaseExpr* column )
+bool addColumn( QuerySchema *querySchema, BaseExpr* column, 
+	const QDict< QValueList<int> > &repeatedTablesAndAliases )
 {
 	VariableExpr *v_e = dynamic_cast<VariableExpr*>(column);
 	if (column->exprClass() != KexiDBExpr_Variable || !v_e) {
@@ -517,7 +521,8 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 	if (tableName.isEmpty()) {//fieldname only
 		fieldName = varName;
 		if (fieldName=="*") {
-			querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+//			querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select()) );
+			querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema) );
 		}
 		else {
 			//find first table that has this field
@@ -537,14 +542,14 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 						return false;
 					}
 				}
-				if (!firstField) {
-						setError(i18n("Field not found"), 
-							i18n("Table containing \"%1\" field not found").arg(fieldName));
-						return false;
-				}
-				//ok
-				querySchema->addField(firstField);
 			}
+			if (!firstField) {
+					setError(i18n("Field not found"), 
+						i18n("Table containing \"%1\" field not found").arg(fieldName));
+					return false;
+			}
+			//ok
+			querySchema->addField(firstField);
 		}
 	}
 	else {//table.fieldname or tableAlias.fieldname
@@ -580,15 +585,44 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 					kdDebug() << " --it's a tableAlias.name" << endl;
 			}
 		}
-		
+
+
 		if (ts) {
+			QValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
+			if (!positionsList) {
+				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
+				return false;
+			}
+
 			if (fieldName=="*") {
-				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+				if (positionsList->count()>1) {
+					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
+						i18n("More than one \"%1\" table or alias defined").arg(tableName));
+					return false;
+				}
+//				querySchema->addAsterisk( new KexiDB::QueryAsterisk(parser->select(), ts) );
+				querySchema->addAsterisk( new KexiDB::QueryAsterisk(querySchema, ts) );
 			}
 			else {
 				kdDebug() << " --it's a table.name" << endl;
 				KexiDB::Field *realField = ts->field(fieldName);
 				if (realField) {
+					// check if table or alias is used twice and both have the same column
+					// (so the column is ambiguous)
+					int numberOfTheSameFields = 0;
+					for (QValueList<int>::iterator it = positionsList->begin();
+						it!=positionsList->end();++it)
+					{
+						KexiDB::TableSchema *otherTS = querySchema->tables()->at(*it);
+						if (otherTS->field(fieldName))
+							numberOfTheSameFields++;
+						if (numberOfTheSameFields>1) {
+							setError(i18n("Ambiguous \"%1.%2\" expression").arg(tableName).arg(fieldName),
+								i18n("More than one \"%1\" table or alias defined containing \"%2\" field").arg(tableName).arg(fieldName));
+							return false;
+						}
+					}
+
 					querySchema->addField(realField, tablePosition);
 				}
 				else {
@@ -624,7 +658,7 @@ bool addColumn( QuerySchema *querySchema, BaseExpr* column )
 	}
 #endif
 
-#line 689 "sqlparser.y"
+#line 723 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
@@ -754,13 +788,13 @@ static const short yyrhs[] = {   356,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   748,   758,   763,   764,   773,   778,   784,   790,   793,   794,
-   799,   809,   823,   824,   829,   835,   840,   847,   853,   860,
-   866,   874,   895,  1006,  1010,  1014,  1020,  1030,  1041,  1047,
-  1052,  1057,  1061,  1065,  1069,  1073,  1077,  1081,  1085,  1089,
-  1093,  1097,  1101,  1105,  1110,  1124,  1135,  1142,  1150,  1158,
-  1163,  1170,  1176,  1182,  1223,  1229,  1236,  1272,  1281,  1294,
-  1301,  1309,  1319,  1324,  1336,  1350,  1389,  1397,  1407
+   782,   792,   797,   798,   807,   812,   818,   824,   827,   828,
+   833,   843,   857,   858,   863,   869,   874,   881,   887,   894,
+   900,   908,   929,  1063,  1067,  1071,  1077,  1087,  1098,  1104,
+  1109,  1114,  1118,  1122,  1126,  1130,  1134,  1138,  1142,  1146,
+  1150,  1154,  1158,  1162,  1167,  1181,  1192,  1199,  1207,  1215,
+  1220,  1227,  1233,  1239,  1280,  1286,  1293,  1329,  1338,  1351,
+  1358,  1366,  1376,  1381,  1393,  1407,  1446,  1454,  1464
 };
 #endif
 
@@ -1502,7 +1536,7 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 750 "sqlparser.y"
+#line 784 "sqlparser.y"
 {
 //todo: multiple statements
 //todo: not only "select" statements
@@ -1511,43 +1545,43 @@ case 1:
 ;
     break;}
 case 2:
-#line 760 "sqlparser.y"
+#line 794 "sqlparser.y"
 {
 //todo: multiple statements
 ;
     break;}
 case 4:
-#line 765 "sqlparser.y"
+#line 799 "sqlparser.y"
 {
 	yyval.querySchema = yyvsp[-1].querySchema;
 ;
     break;}
 case 5:
-#line 775 "sqlparser.y"
+#line 809 "sqlparser.y"
 {
 YYACCEPT;
 ;
     break;}
 case 6:
-#line 779 "sqlparser.y"
+#line 813 "sqlparser.y"
 {
 	yyval.querySchema = yyvsp[0].querySchema;
 ;
     break;}
 case 7:
-#line 786 "sqlparser.y"
+#line 820 "sqlparser.y"
 {
 	parser->setOperation(KexiDB::Parser::OP_CreateTable);
 	parser->createTable(yyvsp[0].stringValue);
 ;
     break;}
 case 10:
-#line 795 "sqlparser.y"
+#line 829 "sqlparser.y"
 {
 ;
     break;}
 case 11:
-#line 801 "sqlparser.y"
+#line 835 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
@@ -1558,7 +1592,7 @@ case 11:
 ;
     break;}
 case 12:
-#line 810 "sqlparser.y"
+#line 844 "sqlparser.y"
 {
 	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
@@ -1572,40 +1606,40 @@ case 12:
 ;
     break;}
 case 14:
-#line 825 "sqlparser.y"
+#line 859 "sqlparser.y"
 {
 ;
     break;}
 case 15:
-#line 831 "sqlparser.y"
+#line 865 "sqlparser.y"
 {
 	field->setPrimaryKey(true);
 	kdDebug() << "primary" << endl;
 ;
     break;}
 case 16:
-#line 836 "sqlparser.y"
+#line 870 "sqlparser.y"
 {
 	field->setNotNull(true);
 	kdDebug() << "not_null" << endl;
 ;
     break;}
 case 17:
-#line 841 "sqlparser.y"
+#line 875 "sqlparser.y"
 {
 	field->setAutoIncrement(true);
 	kdDebug() << "ainc" << endl;
 ;
     break;}
 case 18:
-#line 849 "sqlparser.y"
+#line 883 "sqlparser.y"
 {
 	field = new KexiDB::Field();
 	field->setType(yyvsp[0].colType);
 ;
     break;}
 case 19:
-#line 854 "sqlparser.y"
+#line 888 "sqlparser.y"
 {
 	kdDebug() << "sql + length" << endl;
 	field = new KexiDB::Field();
@@ -1614,7 +1648,7 @@ case 19:
 ;
     break;}
 case 20:
-#line 861 "sqlparser.y"
+#line 895 "sqlparser.y"
 {
 	field = new KexiDB::Field();
 	field->setPrecision(yyvsp[-1].integerValue);
@@ -1622,7 +1656,7 @@ case 20:
 ;
     break;}
 case 21:
-#line 867 "sqlparser.y"
+#line 901 "sqlparser.y"
 {
 	// SQLITE compatibillity
 	field = new KexiDB::Field();
@@ -1630,7 +1664,7 @@ case 21:
 ;
     break;}
 case 22:
-#line 876 "sqlparser.y"
+#line 910 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
 	
@@ -1652,7 +1686,7 @@ case 22:
 ;
     break;}
 case 23:
-#line 896 "sqlparser.y"
+#line 930 "sqlparser.y"
 {
 //TODO: move this to all SELECT versions
 	
@@ -1667,8 +1701,11 @@ case 23:
 /*TODO: use this later if there are columns that use database fields, 
         e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
 	//used to collect information about first repeated table name or alias:
-	QDict<char> tableNamesAndTableAliases(997, false);
-	QString repeatedTableNameOrTableAlias;
+//	QDict<char> tableNamesAndTableAliases(997, false);
+//	QString repeatedTableNameOrTableAlias;
+	//collects positions of tables/aliases with the same names
+	QDict< QValueList<int> > repeatedTablesAndAliases(997, false);
+	repeatedTablesAndAliases.setAutoDelete(true);
 	
 	for (int i=0; i<tablesList->args(); i++, columnNum++) {
 		BaseExpr *e = tablesList->arg(i);
@@ -1695,9 +1732,28 @@ case 23:
 //			yyerror("fieldlisterror");
 			return 0;
 		}
+		QCString tableOrAliasName;
+		if (!aliasString.isEmpty()) {
+			tableOrAliasName = aliasString;
+			kdDebug() << "- add alias for table: " << aliasString << endl;
+		} else {
+			tableOrAliasName = tname;
+		}
 		// 1. collect information about first repeated table name or alias
 		//    (potential ambiguity)
-		if (repeatedTableNameOrTableAlias.isEmpty()) {
+		QValueList<int> *list = repeatedTablesAndAliases[tableOrAliasName];
+		if (list) {
+			//another table/alias with the same name
+			list->append( i );
+			kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
+		}
+		else {
+			list = new QValueList<int>();
+			list->append( i );
+			repeatedTablesAndAliases.insert( tableOrAliasName, list );
+			kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
+		}
+/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
 			if (tableNamesAndTableAliases[tname])
 				repeatedTableNameOrTableAlias=tname;
 			else
@@ -1714,7 +1770,7 @@ case 23:
 				else
 					tableNamesAndTableAliases.insert(aliasString, (const char*)1);
 			}
-		}
+		}*/
 		kdDebug() << "addTable: " << tname << endl;
 		querySchema->addTable( s, aliasString );
 	}
@@ -1722,7 +1778,7 @@ case 23:
 	/* set parent table if there's only one */
 //	if (parser->select()->tables()->count()==1)
 	if (querySchema->tables()->count()==1)
-			querySchema->setParentTable(querySchema->tables()->first());
+		querySchema->setParentTable(querySchema->tables()->first());
 
 	//-------add fields
 	KexiDB::BaseExpr *e;
@@ -1740,7 +1796,8 @@ case 23:
 			setError(i18n("Invalid column definition")); //ok?
 			return 0;
 		}
-		if (!addColumn( querySchema, columnVariable ))
+
+		if (!addColumn( querySchema, columnVariable, repeatedTablesAndAliases ))
 			return 0;
 		
 		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
@@ -1765,25 +1822,25 @@ case 23:
 ;
     break;}
 case 24:
-#line 1007 "sqlparser.y"
+#line 1064 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables" << endl;
 ;
     break;}
 case 25:
-#line 1011 "sqlparser.y"
+#line 1068 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Conditions" << endl;
 ;
     break;}
 case 26:
-#line 1015 "sqlparser.y"
+#line 1072 "sqlparser.y"
 {
 	kdDebug() << "Select ColViews Tables Conditions" << endl;
 ;
     break;}
 case 27:
-#line 1022 "sqlparser.y"
+#line 1079 "sqlparser.y"
 {
 	kdDebug() << "SELECT" << endl;
 //	parser->createSelect();
@@ -1792,113 +1849,113 @@ case 27:
 ;
     break;}
 case 28:
-#line 1032 "sqlparser.y"
+#line 1089 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 ;
     break;}
 case 29:
-#line 1043 "sqlparser.y"
+#line 1100 "sqlparser.y"
 {
 //	kdDebug() << "AND " << $3.debugString() << endl;
 	yyval.expr = new KexiDB::BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
 ;
     break;}
 case 30:
-#line 1048 "sqlparser.y"
+#line 1105 "sqlparser.y"
 {
 //	kdDebug() << "OR " << $3 << endl;
 	yyval.expr = new KexiDB::BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
 ;
     break;}
 case 31:
-#line 1053 "sqlparser.y"
+#line 1110 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::UnaryExpr( NOT, yyvsp[0].expr );
 //	$$->setName($1->name() + " NOT " + $3->name());
 ;
     break;}
 case 32:
-#line 1058 "sqlparser.y"
+#line 1115 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
 ;
     break;}
 case 33:
-#line 1062 "sqlparser.y"
+#line 1119 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
 ;
     break;}
 case 34:
-#line 1066 "sqlparser.y"
+#line 1123 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
 ;
     break;}
 case 35:
-#line 1070 "sqlparser.y"
+#line 1127 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
 ;
     break;}
 case 36:
-#line 1074 "sqlparser.y"
+#line 1131 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
 ;
     break;}
 case 37:
-#line 1078 "sqlparser.y"
+#line 1135 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 38:
-#line 1082 "sqlparser.y"
+#line 1139 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_THAN, yyvsp[0].expr);
 ;
     break;}
 case 39:
-#line 1086 "sqlparser.y"
+#line 1143 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 40:
-#line 1090 "sqlparser.y"
+#line 1147 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_THAN, yyvsp[0].expr);
 ;
     break;}
 case 41:
-#line 1094 "sqlparser.y"
+#line 1151 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
 ;
     break;}
 case 42:
-#line 1098 "sqlparser.y"
+#line 1155 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
 ;
     break;}
 case 43:
-#line 1102 "sqlparser.y"
+#line 1159 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
 ;
     break;}
 case 44:
-#line 1106 "sqlparser.y"
+#line 1163 "sqlparser.y"
 {
 	kdDebug() << "  + function: " << yyvsp[-3].stringValue << "(" << yyvsp[-1].exprList->debugString() << ")" << endl;
 	yyval.expr = new KexiDB::FunctionExpr(yyvsp[-3].stringValue, yyvsp[-1].exprList);
 ;
     break;}
 case 45:
-#line 1111 "sqlparser.y"
+#line 1168 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::VariableExpr( QString::fromLatin1(yyvsp[0].stringValue) );
 	
@@ -1913,7 +1970,7 @@ case 45:
 ;
     break;}
 case 46:
-#line 1125 "sqlparser.y"
+#line 1182 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::VariableExpr( QString::fromLatin1(yyvsp[-2].stringValue) + "." + QString::fromLatin1(yyvsp[0].stringValue) );
 	kdDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
@@ -1926,7 +1983,7 @@ case 46:
 ;
     break;}
 case 47:
-#line 1136 "sqlparser.y"
+#line 1193 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::ConstExpr( SQL_NULL, QVariant() );
 	kdDebug() << "  + NULL" << endl;
@@ -1935,7 +1992,7 @@ case 47:
 ;
     break;}
 case 48:
-#line 1143 "sqlparser.y"
+#line 1200 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::ConstExpr( CHARACTER_STRING_LITERAL, yyvsp[0].stringValue );
 //	$$ = new KexiDB::Field();
@@ -1945,7 +2002,7 @@ case 48:
 ;
     break;}
 case 49:
-#line 1151 "sqlparser.y"
+#line 1208 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::ConstExpr( INTEGER_CONST, yyvsp[0].integerValue );
 //	$$ = new KexiDB::Field();
@@ -1955,54 +2012,54 @@ case 49:
 ;
     break;}
 case 50:
-#line 1159 "sqlparser.y"
+#line 1216 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
 	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 ;
     break;}
 case 51:
-#line 1164 "sqlparser.y"
+#line 1221 "sqlparser.y"
 {
 	kdDebug() << "(expr)" << endl;
 	yyval.expr = yyvsp[-1].expr;
 ;
     break;}
 case 52:
-#line 1172 "sqlparser.y"
+#line 1229 "sqlparser.y"
 {
 	yyvsp[-2].exprList->add( yyvsp[0].expr );
 	yyval.exprList = yyvsp[-2].exprList;
 ;
     break;}
 case 53:
-#line 1177 "sqlparser.y"
+#line 1234 "sqlparser.y"
 {
 	yyval.exprList = new KexiDB::NArgExpr(0, 0/*unknown*/);
 ;
     break;}
 case 54:
-#line 1184 "sqlparser.y"
+#line 1241 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[0].exprList;
 ;
     break;}
 case 55:
-#line 1225 "sqlparser.y"
+#line 1282 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
 case 56:
-#line 1230 "sqlparser.y"
+#line 1287 "sqlparser.y"
 {
 	yyval.exprList = new KexiDB::NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
 	yyval.exprList->add(yyvsp[0].expr);
 ;
     break;}
 case 57:
-#line 1238 "sqlparser.y"
+#line 1295 "sqlparser.y"
 {
 	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
@@ -2039,7 +2096,7 @@ case 57:
 ;
     break;}
 case 58:
-#line 1273 "sqlparser.y"
+#line 1330 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new KexiDB::BinaryExpr(
@@ -2050,7 +2107,7 @@ case 58:
 ;
     break;}
 case 59:
-#line 1282 "sqlparser.y"
+#line 1339 "sqlparser.y"
 {
 	//table + alias
 	yyval.expr = new KexiDB::BinaryExpr(
@@ -2061,7 +2118,7 @@ case 59:
 ;
     break;}
 case 60:
-#line 1296 "sqlparser.y"
+#line 1353 "sqlparser.y"
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add( yyvsp[0].expr );
@@ -2069,7 +2126,7 @@ case 60:
 ;
     break;}
 case 61:
-#line 1302 "sqlparser.y"
+#line 1359 "sqlparser.y"
 {
 	yyval.exprList = new KexiDB::NArgExpr(0,0);
 	yyval.exprList->add( yyvsp[0].expr );
@@ -2077,7 +2134,7 @@ case 61:
 ;
     break;}
 case 62:
-#line 1311 "sqlparser.y"
+#line 1368 "sqlparser.y"
 {
 //	$$ = new KexiDB::Field();
 //	dummy->addField($$);
@@ -2088,14 +2145,14 @@ case 62:
 ;
     break;}
 case 63:
-#line 1320 "sqlparser.y"
+#line 1377 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
 case 64:
-#line 1325 "sqlparser.y"
+#line 1382 "sqlparser.y"
 {
 //	$$ = new KexiDB::Field();
 //	$$->setExpression( $1 );
@@ -2109,7 +2166,7 @@ case 64:
 ;
     break;}
 case 65:
-#line 1337 "sqlparser.y"
+#line 1394 "sqlparser.y"
 {
 //	$$ = new KexiDB::Field();
 //	$$->setExpression( $1 );
@@ -2123,13 +2180,13 @@ case 65:
 ;
     break;}
 case 66:
-#line 1352 "sqlparser.y"
+#line 1409 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
 ;
     break;}
 case 67:
-#line 1390 "sqlparser.y"
+#line 1447 "sqlparser.y"
 {
 	yyval.expr = yyvsp[-1].expr;
 //TODO
@@ -2137,7 +2194,7 @@ case 67:
 ;
     break;}
 case 68:
-#line 1399 "sqlparser.y"
+#line 1456 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::VariableExpr("*");
 	kdDebug() << "all columns" << endl;
@@ -2148,7 +2205,7 @@ case 68:
 ;
     break;}
 case 69:
-#line 1408 "sqlparser.y"
+#line 1465 "sqlparser.y"
 {
 	yyval.expr = new KexiDB::VariableExpr(QString::fromLatin1(yyvsp[0].stringValue));
 	kdDebug() << "  + all columns from " << yyvsp[0].stringValue << endl;
@@ -2379,6 +2436,6 @@ yyerrhandle:
     }
   return 1;
 }
-#line 1423 "sqlparser.y"
+#line 1480 "sqlparser.y"
 
 
