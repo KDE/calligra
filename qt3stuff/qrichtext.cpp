@@ -972,7 +972,6 @@ void QTextCursor::gotoEnd()
     if ( doc )
 	string = doc->lastParag();
     idx = string->length() - 1;
-    qDebug("gotoEnd: going to parag %d, index %d",string->paragId(),idx);
 }
 
 void QTextCursor::gotoPageUp( int visibleHeight )
@@ -3454,7 +3453,7 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    qDebug("QTextParag::format id=%d invalid, formatting", paragId());
+    //qDebug("QTextParag::format id=%d invalid, formatting", paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
@@ -4889,7 +4888,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int len = parag->length();
 
     int initialHeight = h + c->height(); // remember what adjustLMargin was called with
-    qDebug( "QTextFormatterBreakWords::format initialHeight = %d", initialHeight );
+    //qDebug( "QTextFormatterBreakWords::format initialHeight = %d", initialHeight );
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4 );
     int initialLMargin = x;	      // and remember the resulting adjustement we got
@@ -5102,10 +5101,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
 		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
 		initialHeight = h;
-		qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
+		//qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
 		if ( newLMargin != initialLMargin || newRMargin != initialRMargin )
 		{
-		    qDebug("formatting again");
+		    //qDebug("formatting again");
 		    i = (firstChar - &string->at(0));
 		    x = newLMargin;
 		    w = dw - newRMargin;
@@ -5120,7 +5119,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		    curLeft = x;
 		    lastBreak = -1;
 		    col = 0;
-		    qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
+		    //qDebug("Restarting with i=%d x=%d y=%d h=%d initialHeight=%d initialLMargin=%d initialRMargin=%d y=%d",i,x,y,h,initialHeight,initialLMargin,initialRMargin,y);
 		    if ( c->c.unicode() >= 32 || c->isCustom() )
 			ww = string->width( i );
 		    else if ( parag->isNewLinesAllowed() && firstChar->c == '\t' ) {
