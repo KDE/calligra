@@ -72,6 +72,8 @@ MySqlDB::connect(QString host, QString user, QString password, QString db)
 		//simple change to db:
 		query("use "+db);
 		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
+		if(mysql_errno(m_mysql) != 0)
+			return false;
 		m_connectedDB = true;
 		return true;
 	}
@@ -101,6 +103,7 @@ MySqlDB::databases()
 	if(!result)
 		return s;
 
+	kdDebug() << "field name: " << result->fieldInfo(0)->name() << endl;
 	while(result->next())
 	{
 		s.append(result->value(0).toString());

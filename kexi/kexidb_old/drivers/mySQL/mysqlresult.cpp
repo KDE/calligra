@@ -22,23 +22,28 @@ Boston, MA 02111-1307, USA.
 #include <kdebug.h>
 
 #include "mysqlresult.h"
+#include "mysqlfield.h"
 
 MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(parent)
 {
 	//various initialisations...
 	m_result = result;
-//	m_row = new MYSQL_ROW;
 	m_row = 0;
+	m_field = 0;
 	m_currentRecord = 0;
-//	m_fieldNames = 0;
 	m_numFields = mysql_num_fields(m_result);
 	
 	//creating field-index
-	MYSQL_FIELD *field;
 	int i=0;
-	while((field = mysql_fetch_field(m_result)))
+	while((m_field = mysql_fetch_field(m_result)))
 	{
-		m_fieldNames.insert(QString::fromLatin1(field->name), i);
+		//field name...
+		m_fieldNames.insert(QString::fromLatin1(m_field->name), i);
+		//field infos...
+		MySqlField *f = new MySqlField(m_field, i);
+		m_fields.insert(i, f);
+		
+		//incrementing...
 		i++;
 	}
 }
@@ -72,8 +77,21 @@ MySqlResult::value(QString field)
 {
 	FieldNames::Iterator it;
 	it = m_fieldNames.find(field);
-	QVariant v((m_row)[it.data()]);
-	return v;
+	return value(it.data());
+}
+
+KexiDBField*
+MySqlResult::fieldInfo(unsigned int field)
+{
+	return m_fields[field];
+}
+
+KexiDBField*
+MySqlResult::fieldInfo(QString field)
+{
+	FieldNames::Iterator it;
+	it = m_fieldNames.find(field);
+	return fieldInfo(it.data());
 }
 
 MySqlResult::~MySqlResult()

@@ -20,20 +20,49 @@
 
 #include "kexidbfield.h"
 
-KexiDBField::KexiDBField(QString table, unsigned int field)
+KexiDBField::KexiDBField(QString, unsigned int)
 {
+}
+
+QVariant::Type
+KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
+{
+	switch(sqltype)
+	{
+		case SQLInvalid:
+			return QVariant::Invalid;
+		case SQLLongVarChar:
+		case SQLVarchar:
+			return QVariant::String;
+		case SQLInteger:
+		case SQLSmallInt:
+		case SQLTinyInt:
+		case SQLNumeric:
+			return QVariant::Int;
+		case SQLDouble:
+		case SQLBigInt:
+		case SQLDecimal:
+		case SQLFloat:
+			return QVariant::Double;
+		case SQLBinary:
+		case SQLLongVarBinary:
+		case SQLVarBinary:
+			return QVariant::CString;
+		case SQlDate:
+			return QVariant::Date;
+		case SQLTime:
+			return QVariant::Time;
+		case SQLTimeStamp:
+			return QVariant::DateTime;
+		case SQLBit:
+			return QVariant::Bool;
+	}
 }
 
 QString
 KexiDBField::name() const
 {
 	return QString::null;
-}
-
-Keys
-KexiDBField::keys()
-{
-	return NoKey;
 }
 
 bool
@@ -55,12 +84,12 @@ KexiDBField::forign_key()
 }
 
 QVariant::Type
-KexiDBField::qtType()
+KexiDBField::type()
 {
 	return QVariant::Invalid;
 }
 
-ColumnType
+KexiDBField::ColumnType
 KexiDBField::sqlType()
 {
 	return SQLInvalid;

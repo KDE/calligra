@@ -24,52 +24,45 @@
 #include <qvariant.h>
 #include <qstring.h>
 
-enum ColumnType
-{
-	SQLInvalid,
-	SQLBigInt,
-	SQLBinary,
-	SQLBit,
-	SQlDate,
-	SQLDecimal,
-	SQLDouble,
-	SQLFloat,
-	SQLInteger,
-	SQLLongVarBinary,
-	SQLLongVarChar,
-	SQLNumeric,
-	SQLSmallInt,
-	SQLTime,
-	SQLTimeStamp,
-	SQLTinyInt,
-	SQLVarBinary,
-	SQLVarchar
-};
-
-enum Keys
-{
-	NoKey,
-	PrimaryKey,
-	UniqueKey,
-	ForignKey
-};
-
 class KexiDBField
 {
 
 	public:
+		enum ColumnType
+		{
+			SQLInvalid,
+			SQLBigInt,
+			SQLBinary,
+			SQLBit,
+			SQlDate,
+			SQLDecimal,
+			SQLDouble,
+			SQLFloat,
+			SQLInteger,
+			SQLLongVarBinary,
+			SQLLongVarChar,
+			SQLNumeric,
+			SQLSmallInt,
+			SQLTime,
+			SQLTimeStamp,
+			SQLTinyInt,
+			SQLVarBinary,
+			SQLVarchar
+		};
+
 		KexiDBField(QString table, unsigned int field);
-		~KexiDBField();
+		virtual ~KexiDBField();
+
+		QVariant::Type sql2qt(ColumnType sqltype);
 
 		virtual QString		name() const;
 		
 		//key section
-		virtual Keys		keys();
 		virtual	bool		primary_key();
 		virtual bool		unique_key();
 		virtual bool		forign_key();
 		
-		virtual QVariant::Type	qtType();
+		virtual QVariant::Type	type();
 		virtual ColumnType	sqlType();
 };
 

@@ -27,11 +27,21 @@ Boston, MA 02111-1307, USA.
 class MySqlField : public KexiDBField
 {
 	public:
-		MySqlField(MYSQL_FIELD *field, QString table, unsigned int column);
+		MySqlField(MYSQL_FIELD *field, unsigned int column);
 		~MySqlField();
+
+		QString				name() const;
 		
+		//key section
+		bool				primary_key();
+		bool				unique_key();
+		bool				forign_key();
+		
+		QVariant::Type			type();
+		KexiDBField::ColumnType		sqlType();
+
 	protected:
-		MYSQL_FIELD *field;
+		MYSQL_FIELD *m_field;
 
 };
 

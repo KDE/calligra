@@ -23,10 +23,15 @@ Boston, MA 02111-1307, USA.
 #include <mysql/mysql.h>
 
 #include <qmap.h>
+#include <qintdict.h>
 
 #include "../../kexiDB/kexidbresult.h"
+#include "../../kexiDB/kexidbfield.h"
+
+#include "mysqlfield.h"
 
 typedef QMap<QString, int> FieldNames;
+typedef QIntDict<KexiDBField> FieldInfo;
 
 class MySqlResult : public KexiDBResult
 {
@@ -42,14 +47,19 @@ class MySqlResult : public KexiDBResult
 		bool		next();
 
 		unsigned int	numRows();
+		
+		KexiDBField	*fieldInfo(unsigned int field);
+		KexiDBField	*fieldInfo(QString field);
+
 	protected:
 		// mysql specific
 		MYSQL_RES	*m_result;
 	        MYSQL_ROW	m_row;
-		MYSQL_FIELD	*m_fields;
+		MYSQL_FIELD	*m_field;
 		unsigned int	m_numFields;
 
 		FieldNames	m_fieldNames;
+		FieldInfo	m_fields;
 
 		unsigned int	m_currentRecord;
 };
