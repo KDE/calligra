@@ -173,7 +173,7 @@ void KWFrameDia::setupTab2TextFrame()
     runGrid->addWidget( rRunBounding, 2, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
-    rRunContur = new QRadioButton( i18n( "&Don´t run around other frames" ), runGroup );
+    rRunContur = new QRadioButton( i18n( "&Don't run around other frames" ), runGroup );
     rRunContur->resize( rRunContur->sizeHint() );
     runGrid->addWidget( rRunContur, 3, 1 );
     connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
