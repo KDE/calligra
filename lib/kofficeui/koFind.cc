@@ -146,6 +146,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_placeholders = 0L;
 
     // signals and slots connections
+    connect(m_selectedText, SIGNAL(toggled(bool)), this, SLOT(slotSelectedTextToggled(bool)));
     connect(m_regExp, SIGNAL(toggled(bool)), m_regExpItem, SLOT(setEnabled(bool)));
     connect(m_backRef, SIGNAL(toggled(bool)), m_backRefItem, SLOT(setEnabled(bool)));
     connect(m_regExpItem, SIGNAL(pressed()), this, SLOT(showPatterns()));
@@ -213,8 +214,18 @@ void KoFindDialog::setFindHistory(const QStringList &strings)
 void KoFindDialog::setHasSelection(bool hasSelection)
 {
     m_selectedText->setEnabled( hasSelection );
-    if (!hasSelection)
-        m_selectedText->setChecked(false);
+    // If we have a selection, we make 'find in selection' default
+    // and if we don't, then the option has to be unchecked, obviously.
+    m_selectedText->setChecked( hasSelection );
+    slotSelectedTextToggled( hasSelection );
+}
+
+void KoFindDialog::slotSelectedTextToggled(bool selec)
+{
+    // From cursor doesn't make sense if we have a selection
+    m_fromCursor->setEnabled( !selec );
+    if ( selec ) // uncheck if disabled
+        m_fromCursor->setChecked( false );
 }
 
 void KoFindDialog::setOptions(long options)

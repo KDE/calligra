@@ -162,6 +162,7 @@ signals:
 protected slots:
 
     void slotOk();
+    void slotSelectedTextToggled(bool);
     void showPatterns();
     void showPlaceholders();
 
