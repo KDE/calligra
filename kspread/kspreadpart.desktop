@@ -1,6 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
+Name[cy]=Cydran Taenlen KOffice 
+Name[da]=KOffice regnearkkomponent
+Name[es]=Componente de hoja de cálculo de KOffice
+Name[et]=KOffice'i tabeltöötluse komponent
+Name[hu]=KOffice táblázatkezelő komponens
+Name[ru]=Компонент электронных таблиц KOffice
+Name[sv]=Koffice-kalkylarkskomponent
 X-KDE-Library=libkspreadpart
 MimeType=application/x-kspread;application/msexcel;text/x-csv;application/x-kspread-crypt;application/x-quattropro
 Type=Service

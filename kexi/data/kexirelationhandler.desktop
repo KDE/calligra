@@ -4,6 +4,13 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Relations
+Name[cy]=Perthnasau
+Name[da]=Relationer
+Name[es]=Relaciones
+Name[et]=Sõltuvused
+Name[hu]=Relációk
+Name[ru]=Связи
+Name[sv]=Förhållanden
 X-KDE-Library=kexihandler_relation
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1

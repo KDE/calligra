@@ -1,6 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Formula Component
+Name[cy]=Cydran Fformiwla KOffice 
+Name[da]=KOffice formelkomponent
+Name[es]=Componente de fórmula de KOffice
+Name[et]=KOffice'i valemikomponent
+Name[hu]=KOffice képletszerkesztő komponens
+Name[ru]=Компонент формул KOffice
+Name[sv]=Koffice-formelkomponent
 X-KDE-Library=libkformulapart
 MimeType=application/x-kformula
 Type=Service
