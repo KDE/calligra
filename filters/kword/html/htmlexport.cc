@@ -325,12 +325,16 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
 
     *layout = "";
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag, (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",    NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",      NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag, (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",     NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",      NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",        NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                 NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                 NULL            ) );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
@@ -351,9 +355,7 @@ class FormatData
 
         int  weight;
         int  fontSize;
-        int  colourRed;
-        int  colourGreen;
-        int  colourBlue;
+        QColor colour;
         int  verticalAlignment;
 
         bool italic;
@@ -368,9 +370,7 @@ class FormatData
             // (initiate all variables, even those to 0!)
             weight=0;
             fontSize=-1;
-            colourRed=0;
-            colourGreen=0;
-            colourBlue=0;
+            colour=QColor();
             verticalAlignment=0;
             italic=false;
             underline=false;
@@ -480,9 +480,7 @@ static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, Cl
     attrProcessingList.append ( AttrProcessing ("blue"  , "int", (void *)&blue  ) );
     ProcessAttributes (myNode, attrProcessingList);
 
-    formatData->colourRed=red;
-    formatData->colourGreen=green;
-    formatData->colourBlue=blue;
+    formatData->colour.setRgb(red, green, blue);
 }
 
 static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
@@ -633,7 +631,7 @@ static void CreateMissingFormatData(QString &paraText, ValueListFormatData &para
         paraFormatDataIt++; // To the next one, please!
     }
     // Add the last one if needed
-    if (paraText.length()>lastPos)
+    if ((int)paraText.length()>lastPos)
     {
         FormatData formatData(lastPos,paraText.length()-lastPos);
         formatData.missing=true;
@@ -978,19 +976,16 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
                     outputText+="\"";
                 }
             }
-            // Give colour
-            outputText+=" color=\"#";
-            //We must have two hex digits for each colour channel!
-            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
-            outputText+="\">";
+            if ( (*paraFormatDataIt).colour.isValid() )
+            {
+                // Give colour
+                outputText+=" color=\"";
+                // QColor::name() does all the job :)
+                outputText+=(*paraFormatDataIt).colour.name();
+                outputText+="\"";
+            }
             // end of <font> tag
+            outputText+=">";
             if ( (*paraFormatDataIt).weight >= 75 )
             {
                 outputText+="<b>";
@@ -1290,18 +1285,14 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
                 outputText+="pt; ";
             }
 
-            // Give colour
-            outputText+="color: #";
-            //We must have two hex digits for each colour channel!
-            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
-
-            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
-            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
-            outputText+="; ";
+            if ( (*paraFormatDataIt).colour.isValid() )
+            {
+                // Give colour
+                outputText+="color: ";
+                // QColor::name() does all the job :)
+                outputText+=(*paraFormatDataIt).colour.name();
+                outputText+="; ";
+            }
 
             outputText+="text-decoration: ";
             if ( (*paraFormatDataIt).underline )
