@@ -40,7 +40,7 @@
 #include "objecttree.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
-#include "spacer.h"
+#include "spring.h"
 #include "pixmapcollection.h"
 #include "events.h"
 
@@ -749,10 +749,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if (!item)
 		return;
 	bool savedAlignment = false;
-	// we let Spacer class handle saving itself
-	if(item->className() == "Spacer")
+	// we let Spring class handle saving itself
+	if(item->className() == "Spring")
 	{
-		Spacer::saveSpacer(item, parent, domDoc, insideGridLayout);
+		Spring::saveSpring(item, parent, domDoc, insideGridLayout);
 		return;
 	}
 
@@ -900,7 +900,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
-		classname = "Spacer";
+		classname = "Spring";
 	else if(el.attribute("class") == "QLayoutWidget")
 	{
 		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
@@ -976,9 +976,9 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
 		tree->addModProperty(*it, w->property((*it).latin1()));
 
-	// Spacer needs to do some other loading, so we call it
+	// Spring needs to do some other loading, so we call it
 	if(el.tagName() == "spacer")
-		Spacer::loadSpacer(w, el);
+		Spring::loadSpring(w, el);
 }
 
 void

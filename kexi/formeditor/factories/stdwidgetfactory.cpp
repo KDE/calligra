@@ -45,7 +45,7 @@
 # include <kdatetimewidget.h>
 #endif
 
-#include "spacer.h"
+#include "spring.h"
 #include "formIO.h"
 #include "form.h"
 #include "stdwidgetfactory.h"
@@ -124,12 +124,12 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
 
-	KFormDesigner::Widget *wSpacer = new KFormDesigner::Widget(this);
-	wSpacer->setPixmap("spacer");
-	wSpacer->setClassName("Spacer");
-	wSpacer->setName(i18n("Spring"));
-	wSpacer->setDescription(i18n("A spring to place between widgets"));
-	m_classes.append(wSpacer);
+	KFormDesigner::Widget *wSpring = new KFormDesigner::Widget(this);
+	wSpring->setPixmap("spring");
+	wSpring->setClassName("Spring");
+	wSpring->setName(i18n("Spring"));
+	wSpring->setDescription(i18n("A spring to place between widgets"));
+	m_classes.append(wSpring);
 
 	KFormDesigner::Widget *wPushButton = new KFormDesigner::Widget(this);
 	wPushButton->setPixmap("button");
@@ -331,8 +331,8 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "Line")
 		w= new Line(Line::Horizontal, p, n);
 
-	else if(c == "Spacer")
-		w = new Spacer(p, n);
+	else if(c == "Spring")
+		w = new Spring(p, n);
 
 	if(w)
 		return w;
@@ -346,8 +346,8 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 void
 StdWidgetFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *)
 {
-	if(classname == "Spacer")
-		((Spacer*)widget)->setPreviewMode();
+	if(classname == "Spring")
+		((Spring*)widget)->setPreviewMode();
 }
 
 bool
@@ -685,9 +685,9 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 bool
 StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
 {
-	if(classname == "Spacer")
+	if(classname == "Spring")
 	{
-		return Spacer::showProperty(property);
+		return Spring::showProperty(property);
 	}
 	else if(classname == "MyPicLabel")
 	{
@@ -732,7 +732,7 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 		l << "date";
 	else if(classname == "KDateTimeWidget")
 		l << "dateTime";
-	else if(classname == "Spacer")
+	else if(classname == "Spring")
 		l << "sizeType" << "orientation";
 	else if(classname == "KTextEdit")
 		l << "textFormat" << "text";

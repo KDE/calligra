@@ -1108,7 +1108,7 @@ ConnectionDialog::removeItem()
 	if(m_table->currentRow() == -1)
 		return;
 
-	int confirm = KMessageBox::questionYesNo(parentWidget(), 
+	int confirm = KMessageBox::questionYesNo(parentWidget(),
 		QString("<qt>")+i18n("Do you want to remove this connection ?")+"</qt>");
 	if(confirm == KMessageBox::No)
 		return;

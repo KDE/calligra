@@ -6,7 +6,7 @@ lib_LTLIBRARIES =  libkformeditor.la
 libkformeditor_la_LDFLAGS = -no-undefined $(all_libraries)
 libkformeditor_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp objpropbuffer.cpp \
 	 widgetlibrary.cpp libactionwidget.cpp form.cpp objecttree.cpp formIO.cpp formmanager.cpp \
-	 objecttreeview.cpp spacer.cpp commands.cpp extrawidgets.cpp events.cpp
+	 objecttreeview.cpp spring.cpp commands.cpp extrawidgets.cpp events.cpp
 
 METASOURCES = AUTO
 libkformeditor_la_LIBADD = $(top_builddir)/kexi/widget/propertyeditor/libkexipropertyeditor.la \

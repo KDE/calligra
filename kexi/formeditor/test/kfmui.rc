@@ -40,7 +40,7 @@
    <Action name="library_widget_KDateWidget"/>
    <Action name="library_widget_KDateTimeWidget"/>
    <Action name="library_widget_Line"/>
-   <Action name="library_widget_Spacer"/>
+   <Action name="library_widget_Spring"/>
   </Menu>
   <Menu name="Debug">
    <text>&amp;Debug</text>
@@ -78,7 +78,7 @@
    <Action name="library_widget_KDateWidget"/>
    <Action name="library_widget_KDateTimeWidget"/>
    <Action name="library_widget_Line"/>
-   <Action name="library_widget_Spacer"/>
+   <Action name="library_widget_Spring"/>
    <ActionList name="undo_actions" />
 </ToolBar>
 <ToolBar name="tools" fullWidth="false">

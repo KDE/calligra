@@ -31,7 +31,7 @@
 #include "form.h"
 #include "container.h"
 #include "formmanager.h"
-#include "spacer.h"
+#include "spring.h"
 #include "widgetlibrary.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"

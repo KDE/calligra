@@ -143,7 +143,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
 		/*! This function is called just before the Form is previewed. It allows widgets to make changes before switching
-		 (ie for a Spacer, hiding the cross) */
+		 (ie for a Spring, hiding the cross) */
 		virtual void		previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
 
 		/*! This function is called when FormIO finds a property, at save time, that it cannot handle (ie not a normal property).
