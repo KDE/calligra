@@ -3105,7 +3105,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     for (; oIt.current(); ++oIt )
          tmpObjs.append( oIt.current() );
 
-    // add all selected slides, starting from curPgNum
+    // add all selected slides
     slideList.clear();
     QValueList<int> selected = doc->selectedSlides();
     for ( QValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
@@ -3113,17 +3113,23 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
        // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
        // and here we want 1-based numbers !
        int slideno = *it + 1;
-
-       if( slideno < curPgNum ) continue;
        slideList.append( slideno );
     }
     Q_ASSERT( slideList.count() );
-
-    slideListIterator = slideList.begin();
+    
+    // find first selected slide after curPgNum
+    unsigned slide = -1;
+    for( unsigned i = 0; i<slideList.count(); i++ )
+        if( slideList[i] >= curPgNum )
+        {
+            slide = slideList[i];
+            break;
+        }
+    
     setCursor( blankCursor );
 
     currPresPage = (unsigned int) -1; // force gotoPage to do something
-    gotoPage( *slideListIterator );
+    gotoPage( slide );
     kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 
