@@ -17,11 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qapplication.h>
 #include <qtooltip.h>
 #include <qpainter.h>
 #include <qstyle.h>
 
 #include <kotoolbutton.h>
+#include <kcolordrag.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -34,6 +36,7 @@ KoColorPanel::KoColorPanel( QWidget* parent, const char* name ) :
     QWidget( parent, name, WStaticContents | WRepaintNoErase | WResizeNoErase )
 {
     setMouseTracking( true );
+    setAcceptDrops( true );
     init();
 }
 
@@ -248,17 +251,26 @@ void KoColorPanel::insertDefaultColors()
     repaint( 0, currentRow << 4, COLS << 4, 16 );
 }
 
-void KoColorPanel::mousePressEvent( QMouseEvent* )
+void KoColorPanel::mousePressEvent( QMouseEvent* e )
 {
-}
-
-void KoColorPanel::mouseReleaseEvent( QMouseEvent* )
-{
+    if ( e->button() == Qt::LeftButton )
+        m_pressedPos = e->pos();
 }
 
 void KoColorPanel::mouseMoveEvent( QMouseEvent* e )
 {
-    updateFocusPosition( mapToPosition( e->pos() ) );
+    if ( e->state() & Qt::LeftButton ) {
+        QPoint p = m_pressedPos - e->pos();
+        if ( p.manhattanLength() > QApplication::startDragDistance() ) {
+            QColor color( mapToColor( m_pressedPos ) );
+            if ( color.isValid() ) {
+                KColorDrag *drag = new KColorDrag( color, this, name() );
+                drag->dragCopy();
+            }
+        }
+    }
+    else
+        updateFocusPosition( mapToPosition( e->pos() ) );
 }
 
 void KoColorPanel::paintEvent( QPaintEvent* e )
@@ -369,6 +381,18 @@ void KoColorPanel::focusInEvent( QFocusEvent* e )
     QWidget::focusInEvent( e );
 }
 
+void KoColorPanel::dragEnterEvent( QDragEnterEvent* e )
+{
+    e->accept( KColorDrag::canDecode( e ) );
+}
+
+void KoColorPanel::dropEvent( QDropEvent* e )
+{
+    QColor color;
+    if ( KColorDrag::decode( e, color ) )
+        insertColor( color );
+}
+
 void KoColorPanel::finalizeInsertion( const Position& pos )
 {
     paint( pos );
@@ -425,6 +449,14 @@ KoColorPanel::Position KoColorPanel::mapToPosition( const QPoint& point ) const
     return Position( point.x() >> 4, point.y() >> 4 );
 }
 
+QColor KoColorPanel::mapToColor( const QPoint& point ) const
+{
+    QMap<Position, QColor>::ConstIterator it = m_colorMap.find( mapToPosition( point ) );
+    if ( it != m_colorMap.end() )
+        return it.data();
+    return QColor();
+}
+
 QRect KoColorPanel::mapFromPosition( const KoColorPanel::Position& position ) const
 {
     return QRect( position.x << 4, position.y << 4, TILESIZE, TILESIZE );
@@ -474,12 +506,8 @@ void KoColorPanel::updateFocusPosition( const Position& newPosition )
     QPainter p( this );
 
     // restore the old tile where we had the focus before
-    if ( m_focusPosition.x != -1 && m_focusPosition.y != -1 ) {
-        erase( mapFromPosition( m_focusPosition ) );
-        QMap<Position, QColor>::ConstIterator it = m_colorMap.find( m_focusPosition );
-        if ( it != m_colorMap.end() )
-            p.fillRect( ( m_focusPosition.x << 4 ) + 2, ( m_focusPosition.y << 4 ) + 2, 12, 12, it.data() );
-    }
+    if ( m_focusPosition.x != -1 && m_focusPosition.y != -1 )
+        paint( m_focusPosition );
 
     m_focusPosition = newPosition;
 

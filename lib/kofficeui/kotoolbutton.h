@@ -22,6 +22,7 @@
 
 #include <ktoolbarbutton.h>
 #include <qmap.h>
+#include <qpoint.h>
 
 class KoColorPanel : public QWidget
 {
@@ -53,11 +54,12 @@ signals:
 
 protected:
     virtual void mousePressEvent( QMouseEvent* e );
-    virtual void mouseReleaseEvent( QMouseEvent* e );
     virtual void mouseMoveEvent( QMouseEvent* e );
     virtual void paintEvent( QPaintEvent* e );
     virtual void keyPressEvent( QKeyEvent* e );
     virtual void focusInEvent( QFocusEvent* e );
+    virtual void dragEnterEvent( QDragEnterEvent* e );
+    virtual void dropEvent( QDropEvent* e );
 
 private:
     void finalizeInsertion( const Position& pos );
@@ -66,6 +68,7 @@ private:
     bool isAvailable( const QColor& color );
 
     Position mapToPosition( const QPoint& point ) const;
+    QColor mapToColor( const QPoint& point ) const;
     QRect mapFromPosition( const Position& position ) const;
     Position validPosition( const Position& position );
 
@@ -77,6 +80,7 @@ private:
 
     Position m_nextPosition, m_focusPosition;
     QMap<Position, QColor> m_colorMap;
+    QPoint m_pressedPos;
     bool m_defaultsAdded;
 };
 
