@@ -194,8 +194,7 @@ bool KPresenterView::printDlg()
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     bool makeLandscape = false;
 
-    switch ( m_pKPresenterDoc->pageLayout().format )
-    {
+    switch ( m_pKPresenterDoc->pageLayout().format ) {
     case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
 	break;
     case PG_DIN_A4: prt.setPageSize( QPrinter::A4 );
@@ -210,21 +209,18 @@ bool KPresenterView::printDlg()
 	break;
     case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
 	break;
-    case PG_SCREEN:
-    {
+    case PG_SCREEN: {
 	warning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
 	prt.setPageSize( QPrinter::A4 );
 	makeLandscape = true;
     }	break;
-    default:
-    {
+    default: {
 	warning( i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) );
 	prt.setPageSize( QPrinter::A4 );
     } break;
     }
 
-    switch ( m_pKPresenterDoc->pageLayout().orientation )
-    {
+    switch ( m_pKPresenterDoc->pageLayout().orientation ) {
     case PG_PORTRAIT: prt.setOrientation( QPrinter::Portrait );
 	break;
     case PG_LANDSCAPE: prt.setOrientation( QPrinter::Landscape );
@@ -234,15 +230,13 @@ bool KPresenterView::printDlg()
     float left_margin = 0.0;
     float top_margin = 0.0;
 
-    if ( makeLandscape )
-    {
+    if ( makeLandscape ) {
 	prt.setOrientation( QPrinter::Landscape );
 	left_margin = 28.5;
 	top_margin = 15.0;
     }
 
-    if ( prt.setup( this ) )
-    {
+    if ( prt.setup( this ) ) {
 	page->deSelectAllObj();
 	QPainter painter;
 	painter.begin( &prt );
@@ -715,8 +709,7 @@ void KPresenterView::extraRotate()
 	rotateDia = 0;
     }
 
-    if ( m_pKPresenterDoc->numSelected() > 0 )
-    {
+    if ( m_pKPresenterDoc->numSelected() > 0 ) {
 	rotateDia = new RotateDia( this, "Rotate" );
 	rotateDia->setMaximumSize( rotateDia->width(), rotateDia->height() );
 	rotateDia->setMinimumSize( rotateDia->width(), rotateDia->height() );

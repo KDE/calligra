@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Rotate Dialog                                          */
+/* Module: Rotate Dialog					  */
 /******************************************************************/
 
 #include "rotatedia.h"
@@ -37,7 +37,7 @@
 #include <stdlib.h>
 
 /******************************************************************/
-/* class RotatePreview                                            */
+/* class RotatePreview						  */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -83,7 +83,7 @@ void RotatePreview::drawContents( QPainter* painter )
 }
 
 /******************************************************************/
-/* class RotateDia                                                */
+/* class RotateDia						  */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -150,7 +150,7 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     okBut->setDefault( true );
 
     int butW = max(cancelBut->sizeHint().width(),
-                   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+		   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );
@@ -190,13 +190,12 @@ void RotateDia::setAngle( float __angle )
     else if ( _angle == 90.0 ) deg90->setChecked( true );
     else if ( _angle == 180.0 ) deg180->setChecked( true );
     else if ( _angle == 270.0 ) deg270->setChecked( true );
-    else
-    {
-        degCustom->setChecked( true );
-        custom->setEnabled( true );
-        QString str;
-        str.sprintf( "%g", _angle );
-        custom->setText( str );
+    else {
+	degCustom->setChecked( true );
+	custom->setEnabled( true );
+	QString str;
+	str.sprintf( "%g", _angle );
+	custom->setText( str );
     }
 
     rPreview->setAngle( _angle );
