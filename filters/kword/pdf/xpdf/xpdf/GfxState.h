@@ -419,7 +419,7 @@ private:
     *names[gfxColorMaxComps];
   GfxColorSpace *alt;		// alternate color space
   Function *func;		// tint transform (into alternate color space)
-  
+
 };
 
 //------------------------------------------------------------------------

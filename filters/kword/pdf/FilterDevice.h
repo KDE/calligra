@@ -19,7 +19,7 @@
 #ifndef FILTERDEVICE_H
 #define FILTERDEVICE_H
 
-#include <qdom.h>
+#include <qvaluevector.h>
 
 class Object;
 class Stream;
@@ -28,12 +28,14 @@ class Stream;
 #include "OutputDev.h"
 
 class FilterPage;
+class FilterData;
+class QImage;
 
 
 class FilterDevice : public OutputDev
 {
  public:
-    FilterDevice(QDomDocument &, QDomElement &mainFrameset);
+    FilterDevice(FilterData &data);
     ~FilterDevice();
 
     virtual GBool upsideDown() { return gTrue; }
@@ -55,10 +57,26 @@ class FilterDevice : public OutputDev
 
     virtual void drawLink(Link* link, Catalog *cat);
 
+    virtual void drawImageMask(GfxState *, Object *ref, Stream *,
+                               int width, int height, GBool invert,
+                               GBool inlineImg);
+    virtual void drawImage(GfxState *, Object *ref, Stream *,
+                           int width, int height, GfxImageColorMap *colorMap,
+                           int *maskColors, GBool inlineImg);
+
  private:
-    QDomDocument  _document;
-    QDomElement   _mainFrameset;
-    FilterPage   *_page;
+    FilterData &_data;
+    FilterPage *_page;
+
+    struct Image {
+        QImage *ptr;
+        double left, right, top, bottom;
+    };
+    Image               _image;
+    QValueVector<Image> _images;
+
+    static void computeGeometry(GfxState *, Image &);
+    void addImage();
 };
 
 #endif

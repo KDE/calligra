@@ -30,6 +30,7 @@ class Object;
 class BaseStream;
 class PDFDoc;
 class FilterDevice;
+class FilterData;
 
 class PdfDocument
 {
@@ -44,7 +45,7 @@ class PdfDocument
     QSize paperSize(KoFormat &format) const;
     bool isEncrypted() const;
 
-    void initDevice(QDomDocument &, QDomElement &mainFrameset);
+    void initDevice(FilterData &data);
     void treatPage(uint i);
 
  private:
@@ -53,6 +54,7 @@ class PdfDocument
     BaseStream   *_fileStream;
     PDFDoc       *_document;
     FilterDevice *_device;
+    uint          _imageIndex;
 };
 
 #endif

@@ -18,6 +18,7 @@
 
 #include "misc.h"
 
+#include <math.h>
 #include <kglobal.h>
 
 #include "Link.h"
@@ -27,6 +28,11 @@
 double toPoint(double mm)
 {
     return mm * 72 / 25.4;
+}
+
+bool equal(double d1, double d2, double delta)
+{
+    return ( fabs(d1 - d2)<delta );
 }
 
 //-----------------------------------------------------------------------------

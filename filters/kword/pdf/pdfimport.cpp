@@ -89,119 +89,126 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     delete dialog;
 
     // document information
-    QDomDocument docinfo("document-info");
-    docinfo.appendChild(
-        docinfo.createProcessingInstruction(
+    QDomDocument infoDocument("document-info");
+    infoDocument.appendChild(
+        infoDocument.createProcessingInstruction(
             "xml", "version=\"1.0\" encoding=\"UTF-8\""));
-    QDomElement infodoc = docinfo.createElement( "document-info" );
-	docinfo.appendChild(infodoc);
+    QDomElement infoElement = infoDocument.createElement( "document-info" );
+	infoDocument.appendChild(infoElement);
 
-	QDomElement aboutTag = docinfo.createElement("about");
-    infodoc.appendChild(aboutTag);
+	QDomElement aboutTag = infoDocument.createElement("about");
+    infoElement.appendChild(aboutTag);
 
-    QDomElement authorTag = docinfo.createElement("author");
-    QDomElement fullNameTag = docinfo.createElement("full-name");
-	QDomText authorText = docinfo.createTextNode( doc->info("Author") );
+    QDomElement authorTag = infoDocument.createElement("author");
+    infoElement.appendChild(authorTag);
+    QDomElement fullNameTag = infoDocument.createElement("full-name");
+    authorTag.appendChild(fullNameTag);
+	QDomText authorText = infoDocument.createTextNode( doc->info("Author") );
 	fullNameTag.appendChild(authorText);
-	authorTag.appendChild(fullNameTag);
-    infodoc.appendChild(authorTag);
 
-	QDomElement titleTag = docinfo.createElement("title");
-    QDomText titleText = docinfo.createTextNode( doc->info("Title") );
+    QDomElement titleTag = infoDocument.createElement("title");
+    aboutTag.appendChild(titleTag);
+    QDomText titleText = infoDocument.createTextNode( doc->info("Title") );
 	titleTag.appendChild(titleText);
-	aboutTag.appendChild(titleTag);
 
     // document
-    QDomDocument mainDocument("DOC");
-    mainDocument.appendChild(
-        mainDocument.createProcessingInstruction(
+    FilterData data;
+    data.chain = m_chain;
+    data.document = QDomDocument("DOC");
+    data.document.appendChild(
+        data.document.createProcessingInstruction(
             "xml","version=\"1.0\" encoding=\"UTF-8\""));
 
-    QDomElement elementDoc = mainDocument.createElement("DOC");
-    elementDoc.setAttribute("editor", "KWord's PDF Import Filter");
-    elementDoc.setAttribute("mime", "application/x-kword");
-    elementDoc.setAttribute("syntaxVersion", 2);
-    mainDocument.appendChild(elementDoc);
+    data.mainElement = data.document.createElement("DOC");
+    data.mainElement.setAttribute("editor", "KWord's PDF Import Filter");
+    data.mainElement.setAttribute("mime", "application/x-kword");
+    data.mainElement.setAttribute("syntaxVersion", 2);
+    data.document.appendChild(data.mainElement);
 
-    QDomElement element = mainDocument.createElement("ATTRIBUTES");
+    QDomElement element = data.document.createElement("ATTRIBUTES");
     element.setAttribute("processing", 0);
     element.setAttribute("hasHeader", 0);
     element.setAttribute("hasFooter", 0);
     element.setAttribute("unit", "mm");
-    elementDoc.appendChild(element);
+    data.mainElement.appendChild(element);
 
     KoFormat format;
     QSize size = doc->paperSize(format);
+    data.pageHeight = size.height();
 
-    QDomElement elementPaper = mainDocument.createElement("PAPER");
-    elementPaper.setAttribute("format", format);
-    elementPaper.setAttribute("width", size.width());
-    elementPaper.setAttribute("height", size.height());
-    elementPaper.setAttribute("orientation", doc->paperOrientation());
-    elementPaper.setAttribute("columns", 1);
-    elementPaper.setAttribute("pages", doc->nbPages());
-    elementPaper.setAttribute("columnspacing", 2);
-    elementPaper.setAttribute("hType", 0);
-    elementPaper.setAttribute("fType", 0);
-    elementPaper.setAttribute("spHeadBody", 9);
-    elementPaper.setAttribute("spFootBody", 9);
-    elementPaper.setAttribute("zoom", 100);
-    elementDoc.appendChild(elementPaper);
+    QDomElement paper = data.document.createElement("PAPER");
+    paper.setAttribute("format", format);
+    paper.setAttribute("width", size.width());
+    paper.setAttribute("height", size.height());
+    paper.setAttribute("orientation", doc->paperOrientation());
+    paper.setAttribute("columns", 1);
+    paper.setAttribute("pages", doc->nbPages());
+    paper.setAttribute("columnspacing", 2);
+    paper.setAttribute("hType", 0);
+    paper.setAttribute("fType", 0);
+    paper.setAttribute("spHeadBody", 9);
+    paper.setAttribute("spFootBody", 9);
+    paper.setAttribute("zoom", 100);
+    data.mainElement.appendChild(paper);
 
-    // #### FIXME ?
-    element = mainDocument.createElement("PAPERBORDERS");
+    element = data.document.createElement("PAPERBORDERS");
     element.setAttribute("left", 0);
     element.setAttribute("top", 0);
     element.setAttribute("right", 0);
     element.setAttribute("bottom", 0);
-    elementPaper.appendChild(element);
+    paper.appendChild(element);
 
-    QDomElement framesetsPluralElementOut =
-        mainDocument.createElement("FRAMESETS");
-    mainDocument.documentElement().appendChild(framesetsPluralElementOut);
+    data.framesets = data.document.createElement("FRAMESETS");
+    data.mainElement.appendChild(data.framesets);
 
-    QDomElement mainFramesetElement = mainDocument.createElement("FRAMESET");
-    mainFramesetElement.setAttribute("name", "Text Frameset 1");
-    mainFramesetElement.setAttribute("frameType", 1);
-    mainFramesetElement.setAttribute("frameInfo", 0);
-    mainFramesetElement.setAttribute("autoCreateNewFrame", 1);
-    mainFramesetElement.setAttribute("removable", 0);
-    framesetsPluralElementOut.appendChild(mainFramesetElement);
+    // Text frameset
+    data.textFrameset = data.document.createElement("FRAMESET");
+    data.textFrameset.setAttribute("name", "Text Frameset 1");
+    data.textFrameset.setAttribute("frameType", 1);
+    data.textFrameset.setAttribute("frameInfo", 0);
+    data.textFrameset.setAttribute("autoCreateNewFrame", 1);
+    data.textFrameset.setAttribute("removable", 0);
+    data.framesets.appendChild(data.textFrameset);
 
-    // #### FIXME ?
-    QDomElement frameElementOut = mainDocument.createElement("FRAME");
-    frameElementOut.setAttribute("left", 0);
-    frameElementOut.setAttribute("top", 0);
-    frameElementOut.setAttribute("bottom", size.width());
-    frameElementOut.setAttribute("right", size.height());
-    frameElementOut.setAttribute("runaround", 1);
-    mainFramesetElement.appendChild(frameElementOut);
+    QDomElement frame = data.document.createElement("FRAME");
+    frame.setAttribute("left", 0);
+    frame.setAttribute("top", 0);
+    frame.setAttribute("bottom", size.width());
+    frame.setAttribute("right", size.height());
+    frame.setAttribute("runaround", 1);
+    data.textFrameset.appendChild(frame);
 
-    QDomElement elementStylesPlural = mainDocument.createElement("STYLES");
-    elementDoc.appendChild(elementStylesPlural);
+    // standard style
+    QDomElement styles = data.document.createElement("STYLES");
+    data.mainElement.appendChild(styles);
 
-    QDomElement elementStyleStandard = mainDocument.createElement("STYLE");
-    elementStylesPlural.appendChild(elementStyleStandard);
+    QDomElement style = data.document.createElement("STYLE");
+    styles.appendChild(style);
 
-    element = mainDocument.createElement("FORMAT");
-    FilterFont::defaultFont->format(mainDocument, element, 0, 0, true);
-    elementStyleStandard.appendChild(element);
+    element = data.document.createElement("FORMAT");
+    FilterFont::defaultFont->format(data.document, element, 0, 0, true);
+    style.appendChild(element);
 
-    element = mainDocument.createElement("NAME");
+    element = data.document.createElement("NAME");
     element.setAttribute("value","Standard");
-    elementStyleStandard.appendChild(element);
+    style.appendChild(element);
 
-    element = mainDocument.createElement("FOLLOWING");
+    element = data.document.createElement("FOLLOWING");
     element.setAttribute("name","Standard");
-    elementStyleStandard.appendChild(element);
+    style.appendChild(element);
+
+    // pictures
+    data.pictures = data.document.createElement("PICTURES");
+    data.mainElement.appendChild(data.pictures);
 
     // treat pages
-    QDomElement bookmarks = mainDocument.createElement("BOOKMARKS");
-    doc->initDevice(mainDocument, mainFramesetElement);
+    QDomElement bookmarks = data.document.createElement("BOOKMARKS");
+    data.mainElement.appendChild(bookmarks);
+    doc->initDevice(data);
     for (uint i=1; i<=doc->nbPages(); i++) {
         if ( !range.inside(i) ) continue;
         doc->treatPage(i);
-        element = mainDocument.createElement("BOOKMARKITEM");
+        element = data.document.createElement("BOOKMARKITEM");
         element.setAttribute("name", QString("page%1").arg(i));
         element.setAttribute("cursorIndexStart", 0); // ?
         element.setAttribute("cursorIndexEnd", 0); // ?
@@ -210,18 +217,17 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
         element.setAttribute("endparag", 0); // ?
         bookmarks.appendChild(element);
     }
-    elementDoc.appendChild(bookmarks);
 
     // clean up
     delete doc;
 
     // save output
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
     if( !out ) {
         kdError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstr = mainDocument.toCString();
+    QCString cstr = data.document.toCString();
     out->writeBlock(cstr,cstr.length());
     out->close();
 
@@ -229,7 +235,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     if ( !out ) {
 		qWarning("WARNING: unable to write out doc info. continuing anyway");
 	} else {
-		cstr = docinfo.toCString();
+		cstr = infoDocument.toCString();
 		out->writeBlock(cstr, cstr.length());
 		out->close();
 	}

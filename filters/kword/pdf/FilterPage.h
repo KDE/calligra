@@ -21,8 +21,8 @@
 
 #include "TextOutputDev.h"
 
-#include <qdom.h>
 #include <qvaluevector.h>
+#include <qdom.h>
 
 
 class FilterFont;
@@ -71,10 +71,12 @@ class FilterString : public TextString
 };
 
 //-----------------------------------------------------------------------------
+class FilterData;
+
 class FilterPage : public TextPage
 {
  public:
-    FilterPage(QDomDocument &, QDomElement &mainFrameset);
+    FilterPage(FilterData &data);
     ~FilterPage();
 
     void beginString(GfxState *, double x0, double y0);
@@ -83,8 +85,7 @@ class FilterPage : public TextPage
     void addLink(FilterLink *link) { _links.append(link); }
 
  private:
-    QDomDocument _document;
-    QDomElement  _mainFrameset;
+    FilterData &_data;
 
     QValueVector<FilterParagraph> _pars;
     QValueVector<FilterLink *>    _links;

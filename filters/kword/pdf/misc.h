@@ -25,6 +25,22 @@
 
 
 double toPoint(double mm);
+bool equal(double d1, double d2, double delta = 0.1);
+
+//-----------------------------------------------------------------------------
+class KoFilterChain;
+
+class FilterData
+{
+ public:
+    FilterData() : pageIndex(1), imageIndex(1) {}
+
+    KoFilterChain *chain;
+    QDomDocument   document;
+    QDomElement    mainElement, framesets, textFrameset, pictures;
+    uint           pageIndex, imageIndex;
+    double         pageHeight;
+};
 
 //-----------------------------------------------------------------------------
 class FilterFont

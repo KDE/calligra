@@ -20,6 +20,7 @@ Files renamed :
 
 Files removed :
 - all "configure/make" files
+- all vms related files
 - xpdf/*.xbm
 - xpdf/*.xpm
 

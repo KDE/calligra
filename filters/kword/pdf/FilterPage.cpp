@@ -66,8 +66,8 @@ FilterString::~FilterString()
 }
 
 //-----------------------------------------------------------------------------
-FilterPage::FilterPage(QDomDocument &document, QDomElement &mainFrameset)
-    : TextPage(false), _document(document), _mainFrameset(mainFrameset)
+FilterPage::FilterPage(FilterData &data)
+    : TextPage(false), _data(data)
 {}
 
 FilterPage::~FilterPage()
@@ -91,23 +91,23 @@ void FilterPage::createParagraph(const QString &text,
                                  const QValueVector<QDomElement> &layouts,
                                  const QValueVector<QDomElement> &formats)
 {
-    QDomElement paragraph = _document.createElement("PARAGRAPH");
-    _mainFrameset.appendChild(paragraph);
+    QDomElement paragraph = _data.document.createElement("PARAGRAPH");
+    _data.textFrameset.appendChild(paragraph);
 
-    QDomElement textElement = _document.createElement("TEXT");
-    textElement.appendChild( _document.createTextNode(text) );
+    QDomElement textElement = _data.document.createElement("TEXT");
+    textElement.appendChild( _data.document.createTextNode(text) );
     paragraph.appendChild(textElement);
 
-    QDomElement layout = _document.createElement("LAYOUT");
+    QDomElement layout = _data.document.createElement("LAYOUT");
     paragraph.appendChild(layout);
-    QDomElement element = _document.createElement("NAME");
+    QDomElement element = _data.document.createElement("NAME");
     element.setAttribute("value", "Standard");
     layout.appendChild(element);
     for (uint i=0; i<layouts.count(); i++)
         layout.appendChild(layouts[i]);
 
     if ( formats.count() ) {
-        QDomElement format = _document.createElement("FORMATS");
+        QDomElement format = _data.document.createElement("FORMATS");
         for (uint i=0; i<formats.count(); i++)
             format.appendChild(formats[i]);
         paragraph.appendChild(format);
@@ -246,6 +246,18 @@ void FilterPage::prepare()
         }
         _pars[i].blocks = blocks;
     }
+
+    // if no paragraph : add an empty one
+    if ( _pars.size()==0 ) {
+        par.firstIndent = 0;
+        par.leftIndent = 0;
+        FilterBlock b;
+        b.font = FilterFont::defaultFont;
+        b.pos = 0;
+        b.text = "";
+        par.blocks.append(b);
+        _pars.append(par);
+    }
 }
 
 void FilterPage::dump()
@@ -257,7 +269,7 @@ void FilterPage::dump()
 
         // tabulations
         for (uint k=0; k<_pars[i].tabs.size(); k++) {
-            QDomElement element = _document.createElement("TABULATOR");
+            QDomElement element = _data.document.createElement("TABULATOR");
             element.setAttribute("type", 0);
             element.setAttribute("ptpos", _pars[i].tabs[k]);
             element.setAttribute("width", 0);
@@ -266,7 +278,7 @@ void FilterPage::dump()
         }
 
         // indents
-        QDomElement element = _document.createElement("INDENTS");
+        QDomElement element = _data.document.createElement("INDENTS");
         element.setAttribute("left", _pars[i].leftIndent);
         double dx = _pars[i].firstIndent - _pars[i].leftIndent;
         if ( dx!=0 ) element.setAttribute("first", dx);
@@ -274,14 +286,14 @@ void FilterPage::dump()
 
         // offset before
         if ( _pars[i].offset>0 ) {
-            QDomElement element = _document.createElement("OFFSETS");
+            QDomElement element = _data.document.createElement("OFFSETS");
             element.setAttribute("before", _pars[i].offset);
             layouts.append(element);
         }
 
         // page break
         if ( (i+1)==_pars.size() ) {
-            QDomElement element = _document.createElement("PAGEBREAKING");
+            QDomElement element = _data.document.createElement("PAGEBREAKING");
             element.setAttribute("hardFrameBreakAfter", "true");
             layouts.append(element);
         }
@@ -291,10 +303,11 @@ void FilterPage::dump()
         for (uint k=0; k<_pars[i].blocks.size(); k++) {
             const FilterBlock &b = _pars[i].blocks[k];
             text += b.text;
-            QDomElement element = _document.createElement("FORMAT");
-            bool r =
-                b.font->format(_document, element, b.pos, b.text.length());
-            if (b.link) b.link->format(_document, element, b.pos, b.linkText);
+            QDomElement element = _data.document.createElement("FORMAT");
+            bool r = b.font->format(_data.document, element, b.pos,
+                                    b.text.length());
+            if (b.link)
+                b.link->format(_data.document, element, b.pos, b.linkText);
             if ( r || b.link ) formats.append(element);
         }
 

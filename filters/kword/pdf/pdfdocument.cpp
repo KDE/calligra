@@ -32,7 +32,7 @@
 
 PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
                const QString &userPassword, KoFilter::ConversionStatus &result)
-    : _object(0), _fileStream(0), _document(0), _device(0)
+    : _object(0), _fileStream(0), _document(0), _device(0), _imageIndex(1)
 {
     _file = new QFile(name);
     if( !_file->open(IO_ReadOnly) ) {
@@ -166,10 +166,10 @@ QSize PdfDocument::paperSize(KoFormat &format) const
     return QSize(qRound(width), qRound(height));
 }
 
-void PdfDocument::initDevice(QDomDocument &document, QDomElement &mainFrameset)
+void PdfDocument::initDevice(FilterData &data)
 {
     Q_ASSERT( _device==0 );
-    _device = new FilterDevice(document, mainFrameset);
+    _device = new FilterDevice(data);
 }
 
 void PdfDocument::treatPage(uint i)
