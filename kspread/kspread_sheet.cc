@@ -6785,6 +6785,7 @@ QString KSpreadSheet::getPart( const QDomNode & part )
 
 bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyles& oasisStyles )
 {
+    d->layoutDirection = LeftToRight;
     if ( tableElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = tableElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
