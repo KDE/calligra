@@ -1013,7 +1013,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int xpos, ypos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
     int col = table->leftColumn( _ev->pos().x(), xpos, this );
-    
+
     //you can move marker when col >26*26 or row >0x7fff
     if(col>26*26 || row>0x7FFF)
 	return;
@@ -1412,19 +1412,19 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
- bool make_select = m_pView->koDocument()->isReadWrite() && 
+ bool make_select = m_pView->koDocument()->isReadWrite() &&
      ((( _ev->state() & ShiftButton ) == ShiftButton ||(( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton)  && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
     ColumnLayout *cl;
     RowLayout *rl;
     int moveHide=0;
-    
+
     if( !((( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton) && (_ev->state() != Qt::ControlButton) )
 	{
 	    MoveTo tmpMoveTo=m_pView->doc()->getMoveToValue();
 	    //if shift Button clicked inverse move direction
 	    if(_ev->state()==Qt::ShiftButton)
 		{
-		    switch( tmpMoveTo)	  
+		    switch( tmpMoveTo)
 			{
 			case Bottom:
 			    tmpMoveTo=Top;
@@ -1437,7 +1437,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			    break;
 			case Right:
 			    tmpMoveTo=Left;
-			}		 
+			}
 		}
 //if( _ev->state() != Qt::ControlButton ){
       switch( _ev->key() )
@@ -1497,7 +1497,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 					  gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,true ,true);
 				      else if( markerRow()==selection.top() && markerColumn()<=selection.right())
 					  gotoLocation( markerColumn()-1, QMAX( 1, selection.bottom() ), 0, make_select,true, true );
-				      
+
 				  }
 			  }
 		      return;
@@ -1508,7 +1508,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			return;*/
 		      if ( m_bChoose && chooseMarkerColumn() == 1 )
 			  return;
-		      
+
 		      if ( m_bChoose )
 			  chooseGotoLocation( QMAX(chooseMarkerColumn()-1,1),  chooseMarkerRow() , 0, make_select );
 		      else
@@ -1528,7 +1528,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 					  gotoLocation( markerColumn(),QMAX( markerRow()-1,1), 0, make_select,true ,true);
 				      else if( markerColumn()==selection.left() && markerRow()<=selection.bottom())
 					  gotoLocation( selection.right(),QMAX( 1, markerRow()-1 ) , 0, make_select,true, true );
-				      
+
 				  }
 			  }
 		      return;
@@ -1717,16 +1717,16 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if( m_bChoose && chooseMarkerRow() == 0x7FFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 10 ), 0, make_select );
 	  else
 	      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 10 ), 0, make_select,false,true );
-	  
+
 	  return;
-	  
+
       case Key_Delete:
-	  
+
 	  activeTable()->clearTextSelection( QPoint( markerColumn(), markerRow() ) );
 	  m_pView->editWidget()->setText( "" );
 	  return;
@@ -1737,7 +1737,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  m_pView->editWidget()->cursorRight(false);
 	  return;
       default:
-	  
+
 
 	  // No null character ...
 	  if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
@@ -1809,13 +1809,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
 	  else{
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
-	      
+
               // HELP! This is by far to slow and inefficent!
 	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty())
 		  {
@@ -1827,7 +1827,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
 		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF  )
 			  {
-			      y ++;		  
+			      y ++;
 			  }
 		      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
 		      }
@@ -1837,7 +1837,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			  {
 			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
 			      {
-				  y ++;		  
+				  y ++;
 			      }
 			  gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
 			  }
@@ -1847,11 +1847,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			      {
 			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF )
 				  {
-				      y ++;		
+				      y ++;
 				  }
-			      
+
 			      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
-			      
+
 			      }
 			  }
 		      }
@@ -1866,7 +1866,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
 	  else
@@ -1874,7 +1874,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 	      x = x0 =  markerColumn();
 	      y = y0 =  markerRow();
-	      
+
 	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty())
 		  {
 		  gotoLocation( x+1, markerRow()  , 0, make_select,true,true  );
@@ -1887,7 +1887,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <26*26  )
 			  {
-			  x ++;		  
+			  x ++;
 			  }
 		      gotoLocation( x, markerRow() , 0, make_select,true,true  );
 		      }
@@ -1897,7 +1897,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			      {
 				  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x < 26*26)
 				      {
-					  x ++;		  
+					  x ++;
 				      }
 				  gotoLocation( x, markerRow(), 0, make_select,true,true  );
 			      }
@@ -1905,14 +1905,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			      {
 				  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty()))
 				      {
-					  
+
 					  while (( activeTable()->cellAt( x +1,y ))->isEmpty() && x < 26*26 )
 					      {
-						  
+
 						  x ++;
 					      }
 					  gotoLocation( x, markerRow(), 0, make_select,true,true  );
-					  
+
 				      }
 			      }
 		      }
@@ -1927,7 +1927,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      return;
 	  if ( m_bChoose && chooseMarkerColumn() == 1 )
 	      return;
-	  
+
 	  if ( m_bChoose )
 	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
 	  else{
@@ -1963,7 +1963,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       }
-	  
+
   }
 
   /**
@@ -2194,7 +2194,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
                          old_sel.right() + 1, old_sel.bottom() + 1 );*/
     old_outer.setCoords( QMAX( 1, i_left-2  ), QMAX( 1, i_top-2  ),
                          i_right+2 , i_bottom+2 );
-    
+
     // Which cells are located next to the new selection ?
     // QRect new_outer;
     // outer.setCoords( new_sel.left() - 1, new_sel.top() - 1, new_sel.right() + 1, new_sel.bottom() + 1 );
@@ -2438,7 +2438,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 			}
 		    else
 			cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-		    
+
                 }
                 else
 		    cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
@@ -2785,7 +2785,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     int h = table->rowLayout( row )->height( m_pCanvas );
     row++;
-    if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1 
+    if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
 	&& !(table->rowLayout( row )->isHide()&&row==1) )
       m_bResize = TRUE;
     y += h;
@@ -2800,7 +2800,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     // Determine row to resize
     int tmp;
     m_iResizedRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
-    
+
     paintSizeIndicator( _ev->pos().y(), true );
   }
   else
@@ -2863,23 +2863,39 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
                 rect=selection;
             }
         }
-        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
-            m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
-        }
+
         int height = 0;
         int y = table->rowPos( m_iResizedRow, m_pCanvas );
-        if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (2.0* m_pCanvas->zoom()))
-            height = (int)(2.0* m_pCanvas->zoom());
+        if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) <=0 /*(2.0* m_pCanvas->zoom())*/)
+            height = 0 /*(int)(2.0* m_pCanvas->zoom())*/;
         else
             height = _ev->pos().y() - y;
+
+        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        {
+            if(height!=0)
+            {
+                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+                m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+            }
+            else
+            {
+                //hide row
+                KSpreadUndoHideRow *undo = new KSpreadUndoHideRow( m_pCanvas->doc(),m_pCanvas->activeTable() ,  rect.top(),(rect.bottom()-rect.top()) );
+                m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+            }
+        }
 
         for(int i = start; i <= end; i++ )
         {
             RowLayout *rl = table->nonDefaultRowLayout( i );
-	    if(!rl->isHide())
-		rl->setHeight( height, m_pCanvas );
+            if(height!=0)
+            {
+                if(!rl->isHide())
+                    rl->setHeight( height, m_pCanvas );
+            }
+            else
+                rl->setHide(true );
         }
 
         delete m_lSize;
@@ -3049,10 +3065,10 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int h = table->rowLayout( row )->height( m_pCanvas );
       row++;
- 
+
       if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
 	   &&!(table->rowLayout(tmpRow)->isHide()&&tmpRow==1))
-      {   
+      {
         setCursor(splitVCursor);
         return;
       }
@@ -3092,15 +3108,20 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     m_iResizePos = mouseY;
     // Dont make the row have a height < 2 pixel.
-    int twenty = (int)( 2.0 * m_pCanvas->zoom() );
+    //int twenty = (int)( 2.0 * m_pCanvas->zoom() );
     int y = table->rowPos( m_iResizedRow, m_pCanvas );
-    if ( m_iResizePos < y + twenty )
-      m_iResizePos = y + twenty;
+    if ( m_iResizePos < y /*+ twenty*/ )
+        m_iResizePos = y /*+ twenty*/;
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
 
     painter.end();
 
-    QString tmpSize=i18n("Height: %1").arg((int)((m_iResizePos-y)/m_pCanvas->zoom()));
+    QString tmpSize;
+    if(m_iResizePos!=y)
+        tmpSize=i18n("Height: %1").arg((int)((m_iResizePos-y)/m_pCanvas->zoom()));
+    else
+        tmpSize=i18n("Hide Row");
+
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
@@ -3272,7 +3293,6 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     m_bSelection = TRUE;
 
-    //table->unselect();
     int tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
     if(hit_col>26*26)
@@ -3299,58 +3319,75 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
-  assert( table );
-  if(!m_pView->koDocument()->isReadWrite())
-    return;
+    KSpreadTable *table = m_pCanvas->activeTable();
+    assert( table );
+    if(!m_pView->koDocument()->isReadWrite())
+        return;
 
-  if ( m_bResize )
-  {
-    // Remove size indicator painted by paintSizeIndicator
-    QPainter painter;
-    painter.begin( m_pCanvas );
-    painter.setRasterOp( NotROP );
-    painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
-    painter.end();
-
-    int start=m_iResizedColumn;
-    int end=m_iResizedColumn;
-    QRect selection = m_pCanvas->activeTable()->selectionRect();
-    QRect rect;
-    rect.setCoords(m_iResizedColumn,1,m_iResizedColumn,0x7FFF);
-    if(selection.left()!=0 && selection.bottom()==0x7FFF)
+    if ( m_bResize )
     {
-        if(selection.contains(QPoint(m_iResizedColumn,1)))
-                {
+        // Remove size indicator painted by paintSizeIndicator
+        QPainter painter;
+        painter.begin( m_pCanvas );
+        painter.setRasterOp( NotROP );
+        painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
+        painter.end();
+
+        int start=m_iResizedColumn;
+        int end=m_iResizedColumn;
+        QRect selection = m_pCanvas->activeTable()->selectionRect();
+        QRect rect;
+        rect.setCoords(m_iResizedColumn,1,m_iResizedColumn,0x7FFF);
+        if(selection.left()!=0 && selection.bottom()==0x7FFF)
+        {
+            if(selection.contains(QPoint(m_iResizedColumn,1)))
+            {
                 start=selection.left();
                 end=selection.right();
                 rect=selection;
-                }
-    }
-    if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
-        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
-    }
-    int width=0;
-    int x = table->columnPos( m_iResizedColumn, m_pCanvas );
-    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < (2.0* m_pCanvas->zoom()))
-        width= (int)(2.0* m_pCanvas->zoom());
-    else
-        width=_ev->pos().x() - x;
-    for(int i=start;i<=end;i++)
-        {
-        ColumnLayout *cl = table->nonDefaultColumnLayout( i );
-	if(!cl->isHide())
-	    cl->setWidth( width, m_pCanvas );
+            }
         }
-    delete m_lSize;
-    m_lSize=0;
-    m_pView->koDocument()->setModified(true);
-  }
 
-  m_bSelection = FALSE;
-  m_bResize = FALSE;
+        int width=0;
+        int x = table->columnPos( m_iResizedColumn, m_pCanvas );
+        if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) <=0.0 )
+            width= 0 ; /*(int)(2.0* m_pCanvas->zoom());*/
+        else
+            width=_ev->pos().x() - x;
+
+        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        {
+            //juste resize
+            if(width!=0)
+            {
+                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+                m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+            }
+            else
+            {//hide column
+                KSpreadUndoHideColumn *undo = new KSpreadUndoHideColumn( m_pCanvas->doc(), m_pCanvas->activeTable(),rect.left(),(rect.right()-rect.left()));
+                m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+            }
+        }
+
+        for(int i=start;i<=end;i++)
+        {
+            ColumnLayout *cl = table->nonDefaultColumnLayout( i );
+            if( width!=0)
+            {
+                if(!cl->isHide())
+                    cl->setWidth( width, m_pCanvas );
+            }
+            else
+                cl->setHide(true);
+        }
+        delete m_lSize;
+        m_lSize=0;
+        m_pView->koDocument()->setModified(true);
+    }
+
+    m_bSelection = FALSE;
+    m_bResize = FALSE;
 }
 
 void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
@@ -3526,7 +3563,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     //you mustn't resize it.
     int tmp2;
     int tmpCol=table->leftColumn( _ev->pos().x() - 1, tmp2, m_pCanvas );
- 
+
     while ( x < width() )
     {
       int w = table->columnLayout( col )->width( m_pCanvas );
@@ -3564,12 +3601,15 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     int twenty = (int)( 2.0 * m_pCanvas->zoom() );
     // Dont make the column have a width < 2 pixels.
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
-    if ( m_iResizePos < x + twenty )
-      m_iResizePos = x + twenty;
+    if ( m_iResizePos <= x /*+ twenty*/ )
+        m_iResizePos = x /*+ twenty*/;
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
-
-    QString tmpSize=i18n("Width: %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
+    QString tmpSize;
+    if(m_iResizePos !=x)
+        tmpSize=i18n("Width: %1").arg((int)((m_iResizePos-x)/m_pCanvas->zoom()));
+    else
+        tmpSize=i18n("Hide Column");
     painter.begin(this);
     int len = painter.fontMetrics().width(tmpSize );
     int hei = painter.fontMetrics().height( );
