@@ -66,7 +66,7 @@ public:
 
     virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
     /** Never called since we reimplement draw */
-    virtual void drawCustomItem(QPainter*, int, int, int, int, int, int, const QColorGroup&, bool, const int) { }
+    virtual void drawCustomItem(QPainter*, int, int, int, int, int, int, int, int, const QColorGroup&, bool, const int) { }
 
     virtual KCommand * createCommand();
     virtual KCommand * deleteCommand();

@@ -392,7 +392,7 @@ QString KWFootNoteVariable::fieldCode()
     return (noteType()==FootNote) ?i18n("Footnote"):i18n("Endnote");
 }
 
-void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
+void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
@@ -410,7 +410,7 @@ void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, 
     }
 
     QColor textColor( fmt->color() );
-    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
+    drawCustomItemHelper( p, x, y, wpix, hpix, cg, selected, offset, fmt, font, textColor );
 }
 
 void KWFootNoteVariable::finalize()

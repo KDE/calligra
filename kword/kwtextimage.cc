@@ -64,9 +64,10 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const int /*offset*/)
+void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const int /*offset*/)
 {
     // (x,y) is the position of the inline item (in pixels)
+    // (wpix,hpix) is the size of the inline item (in pixels)
     // (cx,cy,cw,ch) is the rectangle to be painted, in pixels too
     if ( m_image.isNull() ) {
         kdDebug() << "KWTextImage::draw null image!" << endl;
@@ -75,7 +76,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int
     }
 
     KoZoomHandler *zh = textDocument()->paintingZoomHandler();
-    QSize imgSize( zh->layoutUnitToPixelX( width ), zh->layoutUnitToPixelY( height ) );
+    QSize imgSize( wpix, hpix );
 
     QRect rect( QPoint(x, y), imgSize );
     if ( !rect.intersects( QRect( cx, cy, cw, ch ) ) )

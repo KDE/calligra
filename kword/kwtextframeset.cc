@@ -664,12 +664,12 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 #endif
         // from now on, iPoint will be in pixels
         iPoint = m_doc->layoutUnitToPixel( iPoint );
-        int xadj = cursor->parag()->at( cursor->index() )->pixelxadj;
+        //int xadj = cursor->parag()->at( cursor->index() )->pixelxadj;
 #ifdef DEBUG_CURSOR
-        kdDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << "     will add xadj=" << xadj << endl;
+        //kdDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << "     will add xadj=" << xadj << endl;
 #endif
-        iPoint.rx() += xadj;
-        vPoint.rx() += xadj;
+        //iPoint.rx() += xadj;
+        //vPoint.rx() += xadj;
         // very small clipping around the cursor
         QRect clip( vPoint.x() - 5, vPoint.y(), 10, cursorHeight );
 
