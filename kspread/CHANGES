@@ -1,3 +1,7 @@
+1.3.2 to 1.3.3
+==============
+- fix "Expense Report" template (#86732)
+
 after 1.3
 =========
 - undo not working after deleting multiple cells (#77844)
