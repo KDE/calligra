@@ -1004,7 +1004,7 @@ void KoRuler::setZoom( const double& zoom )
 
 bool KoRuler::willRemoveTab( int y ) const
 {
-    return (y < -50 || y > height() + 50) && d->currTab.type != T_INVALID;
+    return (y < -50 || y > height() + 25) && d->currTab.type != T_INVALID;
 }
 
 void KoRuler::rbRemoveTab() {
