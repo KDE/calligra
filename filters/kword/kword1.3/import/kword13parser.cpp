@@ -168,6 +168,11 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         stackItem->elementType = ElementTypeLayoutFormatOne;
         return true; // Everything is done directly on the layout
     }
+    else if ( stackItem->elementType != ElementTypeFormatsPlural )
+    {
+        kdError(30520) << "<FORMAT> is child neither of <FORMATS> nor of <LAYOUT> nor of <STYLE>! Aborting!" << endl;
+        return false; // Assume parsing error!
+    }
         
     stackItem->elementType = ElementTypeFormat;
     
@@ -436,6 +441,18 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     else if ( name == "NAME" )
     {
         success = startElementName( name, attributes, stackItem );
+    }
+    else if ( name == "FORMATS" )
+    {
+        if ( stackItem->elementType == ElementTypeParagraph && m_currentParagraph )
+        {
+            stackItem->elementType = ElementTypeFormatsPlural;
+        }
+        else
+        {
+            stackItem->elementType = ElementTypeIgnore;
+        }
+        success = true;
     }
     else if ( name == "PARAGRAPH" )
     {
