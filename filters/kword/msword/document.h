@@ -37,7 +37,8 @@ public:
 private:
     QString getFont(unsigned fc) const;
     void writeOutParagraph( const QString& styleName, const QString& text );
-    QColor colorForNumber(int number, int defaultcolor, bool defaultWhite = false);
+    static QColor colorForNumber(int number, int defaultcolor, bool defaultWhite = false);
+    static void encodeText(QString &text);
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;

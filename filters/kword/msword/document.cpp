@@ -7,6 +7,7 @@
 #include <parserfactory.h>
 #include <qfont.h>
 #include <qfontinfo.h>
+#include <qregexp.h>
 
 
 wvWare::U8 KWordCharacterHandler::hardLineBreak()
@@ -61,10 +62,13 @@ void Document::paragraphEnd()
 
 void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
-    QConstString newText( reinterpret_cast<const QChar*>( text.data() ), text.length() );
-    m_paragraph += newText.string();
+    QConstString newTextStr( reinterpret_cast<const QChar*>( text.data() ), text.length() );
+    QString newText = newTextStr.string();
+    kdDebug() << "runOfText: " << newText << endl;
+    encodeText( newText );
 
-    kdDebug() << "runOfText: " << newText.string() << endl;
+    m_paragraph += newText;
+
 
     QDomElement format( m_mainDocument.createElement( "FORMAT" ) );
     format.setAttribute( "id", 1 );
@@ -144,6 +148,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         format.appendChild( underline );
     }
     if ( chp->fStrike || chp->fDStrike ) {
+        kdDebug() << "fStrike=" << chp->fStrike << " chp->fDStrike=" << chp->fDStrike << endl;
         QDomElement strikeout( m_mainDocument.createElement( "STRIKEOUT" ) );
         if ( chp->fDStrike ) // double strikethrough
         {
@@ -167,7 +172,9 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
         vertAlign.setAttribute( "value", kwordVAlign );
         format.appendChild( vertAlign );
     }
+
     // TODO: TEXTBACKGROUNDCOLOR - what's the msword name for it? Can't find it in the CHP.
+
     // ## Problem with fShadow. Char property in MSWord, parag property in KWord at the moment....
 
     if ( !format.firstChild().isNull() ) // Don't save an empty format tag
@@ -286,6 +293,27 @@ QColor Document::colorForNumber(int number, int defaultcolor, bool defaultWhite)
 	    else
 		return colorForNumber(defaultcolor, -1);
     }
+}
+
+void Document::encodeText( QString &text )
+{
+    // When encoding the stored form of text to its run-time form,
+    // be sure to do the conversion for "&amp;" to "&" first to avoid
+    // accidentally converting user text into one of the other escape
+    // sequences.
+
+    text.replace(QRegExp("&"), "&amp;");
+    text.replace(QRegExp("<"), "&lt;");
+
+    // Strictly, there is no need to encode >, but we do so to for safety.
+
+    text.replace(QRegExp(">"), "&gt;");
+
+    // Strictly, there is no need to encode " or ', but we do so to allow
+    // them to co-exist!
+
+    text.replace(QRegExp("\""), "&quot;");
+    text.replace(QRegExp("'"), "&apos;");
 }
 
 void Document::pageBreak()
