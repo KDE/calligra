@@ -38,10 +38,11 @@ KAboutData * newKChartAboutData()
                                            I18N_NOOP("(c) 1998-2004, Kalle Dalheimer and Klarälvdalens Datakonsult AB"),
                                            I18N_NOOP("The drawing engine which forms the base of KChart\nis also available as a commercial product\nfrom Klarälvdalens Datakonsult AB.\nContact info@klaralvdalens-datakonsult.se\nfor more information."),
 					   "http://www.koffice.org/kchart/");
-    aboutData->addAuthor("Kalle Dalheimer",   0, "kalle@kde.org");
-    aboutData->addAuthor("Laurent Montel",    0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Kalle Dalheimer", 0, "kalle@kde.org");
+    aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
     aboutData->addAuthor("Karl-Heinz Zimmer", 0, "khz@kde.org");
-    aboutData->addAuthor("Inge Wallin",       0, "inge@lysator.liu.se");
+    aboutData->addAuthor("Inge Wallin", 0, "inge@lysator.liu.se");
+    aboutData->addCredit("Danny Allen", I18N_NOOP("Created chart preview images, toolbar icons"), "danny@dannyallen.co.uk");
     return aboutData;
 }
 
