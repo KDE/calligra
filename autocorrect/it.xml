@@ -1,0 +1,54 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="Http://" replace="http://" />
+  <item find="htp://" replace="http://" />
+  <item find="htpp://" replace="http://" />
+  <item find="http:/" replace="http://" />
+  <item find="http:\\" replace="http://" />
+  <item find="Thorvalds" replace="Torvalds" />
+  <item find="Torvald" replace="Torvalds" />
+  <item find="X Windows" replace="X Window" />
+ </items>
+ <UpperCaseExceptions>
+  <word exception="es." />
+  <word exception="op." />
+  <word exception="cit." />
+  <word exception="pag." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+  <word exception="KByte" />
+  <word exception="MByte" />
+  <word exception="GByte" />
+  <word exception="TByte" />
+ </TwoUpperLetterExceptions>
+ <SuperScript>
+  <superscript super="o" find="1o" />
+  <superscript super="a" find="1a" />
+ </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="&#201C;" end="&#201D;" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="&#2018;" end="&#2019;" />
+ </SimpleQuote>
+</Word>
