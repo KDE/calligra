@@ -2,8 +2,10 @@ koffice (1:1.2.90-1) unstable; urgency=low
 
   * New upstream release.
   * Binary package kontour no longer exists.
+  * Build-Conflicts with python2.3-dev to ensure we build against python2.2.
+  * Thanks to orth for helping with this build.
 
- -- Ben Burton <bab@debian.org>  Sat, 12 Apr 2003 15:21:35 +1000
+ -- Ben Burton <bab@debian.org>  Thu,  1 May 2003 16:06:13 +1000
 
 koffice (1:1.2.1-5) unstable; urgency=low
 
