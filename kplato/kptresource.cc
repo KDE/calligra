@@ -328,6 +328,9 @@ bool KPTResource::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
+    m_initials = element.attribute("initials");
+    m_email = element.attribute("email");
+    setType(element.attribute("type"));
     m_calendar = findCalendar(element.attribute("calendar-id"));
     return true;
 }
@@ -343,12 +346,7 @@ void KPTResource::save(QDomElement &element) {
     me.setAttribute("name", m_name);
     me.setAttribute("initials", m_initials);
     me.setAttribute("email", m_email);
-
-/* We save these after tasks...
-    QPtrListIterator<KPTAppointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        it.current()->save(me);
-    }*/
+    me.setAttribute("type", typeToString());
 }
 
 bool KPTResource::isAvailable(KPTTask *task) {
