@@ -142,7 +142,7 @@ void VStrokeDocker::slotJoinChanged( int ID )
 
 void VStrokeDocker::updateDocker()
 {
-	disconnect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( widthChanged() ) ); 
+	disconnect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	disconnect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	disconnect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
@@ -168,7 +168,7 @@ void VStrokeDocker::updateDocker()
 	
 	m_setLineWidth->setValue( m_stroke.lineWidth() );
 	
-	connect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( widthChanged() ) ); 
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 }
