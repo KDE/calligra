@@ -7,7 +7,7 @@ LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
 
 bin_PROGRAMS = kpresenter
 
-kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
+kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc kpresenter_main.cc \
 	kpresenter_doc.cc kpresenter_shell.cc kpresenter.idl \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
 	qwmf.cc kenumlistdia.cc \
@@ -24,8 +24,7 @@ kpresenter_SOURCES = kpresenter_view.cc kpresenter_main.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	commandhistory.cc preview.cc gotopage.cc webpresentation.cc \
-	footer_header.cc
+	commandhistory.cc preview.cc gotopage.cc footer_header.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
