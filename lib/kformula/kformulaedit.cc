@@ -1182,20 +1182,21 @@ void KFormulaEdit::keyPressEvent(QKeyEvent *e)
   //NORMAL KEY:
   //remove the selection and insert what the user types and
   //perhaps some curly braces
-  if(!(e->state() & (ControlButton | AltButton))  && e->ascii() >= 32 &&
-     !strchr("{})]#", e->ascii())) {
     // the {}])# are chars that can't be typed
-    if(QChar(e->ascii()).isLetter() && nextGreek) 
-      insertChar(QChar(e->ascii() + SYMBOL_ABOVE));
+    if(!(e->state() & (ControlButton | AltButton)) && !(e->text().isEmpty()) &&
+       !(e->text().contains("{})]#")) ) {
+        
+    if(e->text().unicode()[0].isLetter() && nextGreek) 
+      insertChar(e->text()[0].unicode() + SYMBOL_ABOVE);	//lukas: ugly, but works fine for non-ascii :-)
     else 
-      insertChar(QChar(e->ascii()));
+      insertChar(e->text()[0].unicode());			//lukas: here too...
 
     MODIFIED
     redraw();
     UPDATE_SIZE
     return;
   }
-  else if(strchr("{})]#", e->ascii()))
+  else if(e->text().contains("{})]#"))
   {
     return;
   }
@@ -1384,7 +1385,7 @@ void KFormulaEdit::insertChar(QChar c)
 
   if(restricted) { // we need to limit to only those things
                    // which can be evaluated.
-    if(!isalnum((char)c) && !isspace((char)c) && (char)c != '.' && !IS_REFERENCE(c.unicode()) &&
+    if(!c.isLetterOrNumber() && !c.isSpace() && !c.isPunct()  && !IS_REFERENCE(c.unicode()) &&
        !(KFormula::eval()).contains(c) && (extraChars.isNull() || !extraChars.contains(c))) return;
   }
 
