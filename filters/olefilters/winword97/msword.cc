@@ -86,14 +86,14 @@ QString MsWord::char2unicode(unsigned lid, char c)
     // convert the containing hex values to dec values
     // and use CHAR_DEBUG to find out the unicode value of
     // the wrong char and replace them (Niko) 
-    if(result[0].unicode() == 8222)
+    if(result[0].unicode() == 8222 || result[0].unicode() == 8221)
 	result[0] = QChar(8220);
 
     if(result[0].unicode() == 8217)
 	result[0] = QChar(39);
 
 #ifdef CHAR_DEBUG
-    kdDebug() << "text: " << c << endl;
+    kdDebug() << "text: " << result << endl;
     kdDebug() << "unicode value: " << result[0].unicode() << endl;
 #endif    
 
