@@ -306,7 +306,7 @@ protected:
  * content.
  * The different types of content are implemented in the different
  * types of frameSet implementations (see below)
- * @see KWTextFrameSet, KWPartFramSet, KWPictureFrameSet,
+ * @see KWTextFrameSet, KWPartFrameSet, KWPictureFrameSet,
  *      KWPartFrameSet, KWFormulaFrameSet
  */
 class KWFrameSet : public QObject
