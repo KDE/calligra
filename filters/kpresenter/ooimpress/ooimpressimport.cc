@@ -488,6 +488,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendImage( doc, e, pictureElement, o );
                 appendObjectEffect(doc, e, o, soundElement);
             }
+            else if ( name == "draw:object" )
+            {
+                //todo add part object
+            }
+            else if ( name == "draw:g" )
+            {
+                 //todo add group object
+            }
             else if ( name == "presentation:notes" ) // notes
             {
                 QDomNode textBox = o.namedItem( "draw:text-box" );

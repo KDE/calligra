@@ -421,8 +421,23 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             case 4: // textbox
                 appendTextbox( doccontent, o, drawPage );
                 break;
+            case 5:
+                kdDebug()<<" autoform not implemented\n";
+                break;
+            case 6:
+                kdDebug()<<" clipart not implemented\n";
+                break;
             case 8: // pie, chord, arc
                 appendEllipse( doccontent, o, drawPage, true );
+                break;
+            case 9: //part
+                kdDebug()<<" part object not implemented \n";
+                break;
+            case 10:
+                kdDebug()<<" group not implemented \n";
+                break;
+            case 11:
+                kdDebug()<<" free hand not implemented\n";
                 break;
             case 12: // polyline
                 appendPolyline( doccontent, o, drawPage );
