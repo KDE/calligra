@@ -5582,10 +5582,6 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
     }
     else
     {
-        QRect r( m_rctSelection );
-        if ( !selected )
-            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-
         for ( int x = r.left(); x <= r.right(); x++ )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
@@ -5748,9 +5744,6 @@ void KSpreadTable::setValidity(const QPoint &_marker,KSpreadValidity tmp )
     }
     else
     {
-        QRect r( m_rctSelection );
-        if ( !selected )
-            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
         for ( int x = r.left(); x <= r.right(); x++ )
             for ( int y = r.top(); y <= r.bottom(); y++ )
@@ -6724,7 +6717,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
         painter.translate( - MM_TO_POINT ( m_pDoc->leftBorder()),
                            - MM_TO_POINT ( m_pDoc->topBorder() ));
 
-        if ( pagenr < page_list.count() )
+        if ( pagenr < (int)page_list.count() )
             _printer->newPage();
     }
 
