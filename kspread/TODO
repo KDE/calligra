@@ -27,3 +27,5 @@ Torbens TODO-List:
 - Copy/Paste of complete rows/cols
 - Hide the grid
 - Write-Protect cells
+- Select a region. Then right click -> "Spell Checking".
+  All selected cells should be spell checked

@@ -187,9 +187,9 @@ public:
     void startChoose();
     void endChoose();
     /**
-    * Ajust a area in height and width
+    * Adjust a area in height and width
     */
-    void ajustArea();
+    void adjustArea();
 	
 public slots:
     void slotScrollVert( int _value );
@@ -354,9 +354,11 @@ class KSpreadHBorder : public QWidget
     Q_OBJECT
 public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
-    int markerColumn(){return  m_iSelectionAnchor;}
-    void resizeColumn(int resize,int nb=-1);
-    void ajustColumn(int _col=-1);
+    
+    int markerColumn() { return  m_iSelectionAnchor; }
+    void resizeColumn( int resize, int nb = -1 );
+    void adjustColumn( int _col = -1 );
+    
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -406,9 +408,11 @@ class KSpreadVBorder : public QWidget
     Q_OBJECT
 public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
-    int markerRow(){return  m_iSelectionAnchor;}
-    void resizeRow(int resize,int nb=-1);
-    void ajustRow(int _row=-1);
+    
+    int markerRow() { return  m_iSelectionAnchor; }
+    void resizeRow( int resize, int nb = -1 );
+    void adjustRow( int _row = -1 );
+    
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );

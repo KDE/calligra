@@ -29,6 +29,7 @@
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 #include <qdom.h>
+#include <qstyle.h>
 
 #include "kspread_table.h"
 #include "kspread_canvas.h"
@@ -68,9 +69,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_bError = false;
 
   m_lstDepends.setAutoDelete( TRUE );
-
-  // if ( _text != 0L )
-  // m_strText = _text;
 
   m_bLayoutDirtyFlag= FALSE;
 
@@ -852,13 +850,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   {
     for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
     {
-	qDebug("x=%i", x );
 	for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
         {
-	    qDebug("y=%i", y );
 	    if ( x != m_iColumn || y != m_iRow )
 	    {
-		qDebug("Unobscure x=%i y=%i", x, y );
 		KSpreadCell *cell = m_pTable->cellAt( x, y );
 		cell->unobscure();
 	    }
@@ -1199,6 +1194,7 @@ void KSpreadCell::clearFormular()
 
 bool KSpreadCell::calc( bool _makedepend )
 {
+    qDebug("CALC r=%i c=%i", m_iRow, m_iColumn );
   if ( m_bProgressFlag )
   {
     printf("ERROR: Circle\n");
@@ -1453,14 +1449,15 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
    */
   if ( m_style == KSpreadCell::ST_Button )
   {
-    qDrawShadePanel( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, 1, &fill );
+      QApplication::style().drawButton( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, &fill );
+      // qDrawShadePanel( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, 1, &fill );
   }
   /**
    * Modification for drawing the combo box
    */
   else if ( m_style == KSpreadCell::ST_Select )
   {
-    qDrawShadePanel( &_painter, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g, selected, 1, &fill );
+      /* qDrawShadePanel( &_painter, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g, selected, 1, &fill );
     QPointArray a;
     // qDrawArrow( &_painter, DownArrow, WindowsStyle, selected, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g );
     int aw = 16;
@@ -1471,7 +1468,8 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     a.translate( ax+aw/2, ay+ah/2 );
     _painter.setPen( Qt::black );
     _painter.drawLineSegments( a, 0, 3 );
-    _painter.drawPoint( a[6] );
+    _painter.drawPoint( a[6] ); */
+      QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, TRUE/*, &fill*/ );
   }
 
   /**
@@ -2074,8 +2072,8 @@ void KSpreadCell::setText( const QString& _text )
   /**
    *  Special handling for selection boxes
    */
-  if ( m_style == ST_Select )
-  {
+  if ( m_style == ST_Select && !m_pTable->isLoading() )
+  {      
       if ( m_bCalcDirtyFlag )
 	  calc();
       if ( m_bLayoutDirtyFlag )
@@ -2128,86 +2126,51 @@ void KSpreadCell::update()
 {
     if ( m_pObscuringCell )
     {
-	qDebug("---------------------> Obscuring");
 	m_pObscuringCell->setLayoutDirtyFlag();
 	m_pObscuringCell->setDisplayDirtyFlag();
 	m_pTable->emit_updateCell( m_pObscuringCell, m_pObscuringCell->column(), m_pObscuringCell->row() );
     }
 
-    if ( m_pObscuringCell )
-	qDebug("------- Is obscured");
+    bool b_update_begin = m_bDisplayDirtyFlag;
+    m_bDisplayDirtyFlag = true;
 
-  cerr << "C=" << m_iColumn << " R=" << m_iRow << endl;
+    updateDepending();
 
-  bool b_update_begin = m_bDisplayDirtyFlag;
-  m_bDisplayDirtyFlag = true;
-
-  // UPDATE_BEGIN;
-
-  /* m_lstDepends.clear();
-
-  if ( !m_strText.isEmpty() && m_strText[0] == '=' )
-  {
-    m_bCalcDirtyFlag = TRUE;
-    m_bLayoutDirtyFlag= TRUE;
-    m_bFormular = TRUE;
-
-    if ( !makeFormular() )
-      printf("ERROR: Syntax ERROR\n");
-	// A Hack!!!! For testing only
-	// QString ret = encodeFormular( column, row );
-	// decodeFormular( ret, column, row );
-  }
-  else
-  {
-    if ( m_bFormular )
-      clearFormular();
-
-    checkValue();
-		
-    m_bLayoutDirtyFlag= TRUE;
-    m_bFormular = FALSE;
-  } */
-
-  updateDepending();
-
-  if ( !b_update_begin && m_bDisplayDirtyFlag )
-      m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
-
-  cerr << "END C=" << m_iColumn << " R=" << m_iRow << endl;
+    if ( !b_update_begin && m_bDisplayDirtyFlag )
+	m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
 }
 
 void KSpreadCell::updateDepending()
 {
-  // Every cell that references us must set its calc dirty flag
-  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
-  for( ; it.current(); ++it )
-  {
-    QIntDictIterator<KSpreadCell> it3( it.current()->m_dctCells );
-    for ( ; it3.current(); ++it3 )
-      if ( it3.current() != this )
-	it3.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
-  }
-
-  // Recalculate every cell with calc dirty flag
-  QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
-  for( ; it2.current(); ++it2 )
-  {
-    QIntDictIterator<KSpreadCell> it4( it2.current()->m_dctCells );
-    for ( ; it4.current(); ++it4 )
-      it4.current()->calc( TRUE );
-  }
-
-  // Update a chart for example if it depends on this cell.
-  if ( m_iRow != 0 && m_iColumn != 0 )
-  {
-    CellBinding *bind;
-    for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
+    // Every cell that references us must set its calc dirty flag
+    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    for( ; it.current(); ++it )
     {
-      if ( bind->contains( m_iColumn, m_iRow ) )
-	bind->cellChanged( this );
+	QIntDictIterator<KSpreadCell> it3( it.current()->m_dctCells );
+	for ( ; it3.current(); ++it3 )
+	    if ( it3.current() != this )
+		it3.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
-  }
+
+    // Recalculate every cell with calc dirty flag
+    QListIterator<KSpreadTable> it2( m_pTable->map()->tableList() );
+    for( ; it2.current(); ++it2 )
+    {
+	QIntDictIterator<KSpreadCell> it4( it2.current()->m_dctCells );
+	for ( ; it4.current(); ++it4 )
+	    it4.current()->calc( TRUE );
+    }
+
+    // Update a chart for example if it depends on this cell.
+    if ( m_iRow != 0 && m_iColumn != 0 )
+    {
+	CellBinding *bind;
+	for ( bind = m_pTable->firstCellBinding(); bind != 0L; bind = m_pTable->nextCellBinding() )
+        {
+	    if ( bind->contains( m_iColumn, m_iRow ) )
+		bind->cellChanged( this );
+	}
+    }
 }
 
 void KSpreadCell::checkValue()
@@ -2559,7 +2522,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
 {
     if ( op == OverWrite )
 	return new_text;
-    
+
     QString tmp_op;
     QString tmp;
     QString old;
@@ -2585,7 +2548,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
     bool b1, b2;
     tmp.toDouble( &b1 );
     old.toDouble( &b2 );
-    
+
     if( b1 && b2 )
     {
 	switch( op )
@@ -2644,9 +2607,6 @@ void KSpreadCell::setStyle( Style _s )
   if ( m_pPrivate )
     delete m_pPrivate;
 
-  /* if ( isFormular() )
-     clearFormular(); */
-
   if ( _s != ST_Select )
     return;
 
@@ -2659,7 +2619,9 @@ void KSpreadCell::setStyle( Style _s )
       s->parse( m_strText );
   checkValue();
   m_bLayoutDirtyFlag = true;
-  update();
+  
+  if ( !m_pTable->isLoading() )
+      update();
 }
 
 QString KSpreadCell::testAnchor( int _x, int _y, QWidget* _w )
@@ -2697,8 +2659,6 @@ KSpreadCell::~KSpreadCell()
 
 void SelectPrivate::parse( const char* _text )
 {
-    qDebug("PARSE=%s", _text );
-
   m_lstItems.clear();
 
   if ( !_text )

@@ -343,7 +343,7 @@ public:
 
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
-    
+
     void deleteSelection( const QPoint &_marker );
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
@@ -364,8 +364,8 @@ public:
     void insertBottomCell(const QPoint &_marker);
     void removeLeftCell(const QPoint &_marker);
     void removeTopCell(const QPoint &_marker);
-    int ajustColumn(const QPoint &_marker,int _col=-1);
-    int ajustRow(const QPoint &_marker,int _row=-1);
+    int adjustColumn(const QPoint &_marker,int _col=-1);
+    int adjustRow(const QPoint &_marker,int _row=-1);
 
     /**
     * Install borders
@@ -508,7 +508,7 @@ public:
      * @see #copy
      */
     QDomDocument saveCellRect( const QRect& );
-    
+
     /**
      * @see #paste
      */

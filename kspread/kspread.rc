@@ -9,6 +9,8 @@
   <Action name="paste"/>
   <Action name="specialPaste"/>
   <Action name="replace"/>
+  <Action name="clear"/>
+  <Action name="delete"/>
   <Separator/>
   <Action name="insertColumn"/>
   <Action name="insertRow"/>
@@ -44,6 +46,8 @@
   <Separator/>
   <Action name="cellLayout"/>
   <Action name="paperLayout"/>
+  <Separator/>
+  <Action name="adjust"/>
  </Menu>
  <Menu name="View"><text>View</text>
   <Action name="newView"/>

@@ -135,213 +135,59 @@ public:
 
 public slots:
     /**
-     * Action
+     * Actions
      */
     void transformPart();
-    /**
-     * Menu Edit->Copy
-     */
     void copySelection();
-    /**
-     * Menu Edit->Cut
-     */
     void cutSelection();
-    /**
-     * Menu Edit->Patse
-     */
+    void deleteSelection();
+    void clearSelection();
     void paste();
-    /**
-     * Menu Edit->Special Paste
-     */
     void specialPaste();
-
-    /**
-     * Menu Edit->Cell
-     */
     void editCell();
-    /**
-     * Menu Edit->Undo
-     */
     void undo();
-    /**
-     * Menu Edit->Redo
-     */
     void redo();
-    /**
-     * Menu Edit->Page Layout
-     */
+    void adjust();
     void paperLayoutDlg();
-    /**
-     * Menu Edit->Insert->Object
-     */
     void insertObject();
-
-
-    /**
-     * Menu Scripts->Edit Global Scripts
-     */
     void editGlobalScripts();
-    /**
-     * Menu Scripts->Edit Local Script
-     */
     void editLocalScripts();
-    /**
-     * Menu Scripts->Reload Scripts
-     */
     void reloadScripts();
-    /**
-     * Menu Scripts->Run Local Script
-     */
     void runLocalScript();
-
-    /**
-     * Menu View->New View
-     */
     void newView();
-    /**
-     * Menu View->Show Page Borders
-     */
     void togglePageBorders();
-    /**
-     * Menu Data
-     */
-     void gotoCell();
-    /**
-     * Menu Data
-     */
-     void replace();
-    /**
-     * Menu Data
-     */
-      void sort();
-    /**
-     * Menu Data
-     */
-      void createAnchor();
-    /**
-     * Menu Data
-     */
+    void gotoCell();
+    void replace();
+    void sort();
+    void createAnchor();
     void consolidate();
-
-    /**
-     * Menu Folder
-     */
     void insertTable();
-     /**
-     * Menu Folder
-     */
-     void removeTable();
-     /**
-     * Menu Folder
-     */
-     void hideTable();
-     /**
-     * Menu Folder
-     */
-     void showTable();
-    /**
-     * Menu for help menu
-     */
+    void removeTable();
+    void hideTable();
+    void showTable();
     void helpUsing();
-
-    /**
-     * ToolBar
-     */
-    // void print();
-    /**
-     * ToolBar
-     */
     void insertChart();
-
-    /**
-     * ToolBar
-     */
-  // void zoomMinus();
-    /**
-     * ToolBar
-     */
-  // void zoomPlus();
-
-    /**
-     * ToolBar
-     */
     void moneyFormat();
-
-    /**
-     * ToolBar
-     */
     void alignLeft( bool b );
-    /**
-     * ToolBar
-     */
     void alignRight( bool b );
-    /**
-     * ToolBar
-     */
     void alignCenter( bool b );
-    /**
-     * ToolBar
-     */
     void multiRow( bool b );
-
-    /**
-     * ToolBar
-     */
     void precisionMinus();
-    /**
-     * ToolBar
-     */
     void precisionPlus();
-
-    /**
-     * ToolBar
-     */
     void percent();
-
-    /**
-     * ToolBar
-     */
     void fontSelected( const QString &_font );
-    /**
-     * ToolBar
-     */
     void fontSizeSelected( int size );
-    /**
-     * ToolBar
-     */
     void bold( bool b );
-    /**
-     * ToolBar
-     */
     void italic( bool b );
-
-    /**
-     * ToolBar
-     */
     void deleteColumn();
-    /**
-     * ToolBar
-     */
     void deleteRow();
-    /**
-     * ToolBar
-     */
     void insertColumn();
-    /**
-     * ToolBar
-     */
     void insertRow();
-    /**
-     *Toolbar
-     */
-
     void formulaSelection( const QString &_math );
-
     void changeTextColor();
     void changeBackgroundColor();
     void sortInc();
     void sortDec();
-
     void layoutDlg();
     void funct();
     void formulaPower();
@@ -365,6 +211,10 @@ public slots:
     void borderAll();
     void borderRemove();
     void changeBorderColor();
+    void slotInsertRow();
+    void slotRemoveRow();
+    void slotInsertColumn();
+    void slotRemoveColumn();
 
     /**
      * @ref #tabBar is connected to this slot.
@@ -379,42 +229,17 @@ protected slots:
      * Popup menu
      */
     void slotActivateTool( int _id );
+    void slotInsert();
+    void slotRemove();
+
     /**
-     * Popup menu
+     * Border popup menu
      */
-    void slotCopy();
-    /**
-     * Popup menu
-     */
-    void slotCut();
-    /**
-     * Popup menu
-     */
-    void slotPaste();
-    /**
-     * Popup menu
-     */
-     void slotSpecialPaste();
-    /**
-     * Popup menu
-     */
-    void slotDelete();
-    /**
-     * Popup menu
-     */
-    void slotAjust();
-    /**
-     * Popup menu
-     */
-     void slotClear();
-     /**
-     * Popup menu
-     */
-     void slotInsert();
-     /**
-     * Popup menu
-     */
-     void slotRemove();
+    void slotResizeColumn();
+    void slotResizeRow();
+    void slotAdjustColumn();
+    void slotAdjustRow();
+
     /**
      * Scroll @ref #tabBar.
      */
@@ -431,19 +256,6 @@ protected slots:
      * Scroll @ref #tabBar.
      */
     void slotScrollToLastTable();
-
-    void slotInsertRow();
-
-    void slotRemoveRow();
-
-    void slotInsertColumn();
-
-    void slotRemoveColumn();
-
-    void slotResizeColumn();
-    void slotResizeRow();
-    void slotAjustColumn() ;
-    void slotAjustRow();
 
 protected slots:
     void repaintPolygon( const QPointArray& );
@@ -524,6 +336,9 @@ private:
     KAction* m_paste;
     KAction* m_cut;
     KAction* m_specialPaste;
+    KAction* m_delete;
+    KAction* m_clear;
+    KAction* m_adjust;
     KAction* m_editCell;
     KAction* m_undo;
     KAction* m_redo;

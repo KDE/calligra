@@ -791,7 +791,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     QPoint br = m.map( _ev->rect().bottomRight() );
 
     qDebug("Mapped topleft to %i:%i", tl.x(), tl.y() );
-    
+
     painter.save();
 
     // Clip away children
@@ -979,7 +979,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	    deleteEditor();
 	    m_pView->setText( t );
 	}
-   
+
 	if( markerRow() == 0x7FFF )
 	    return;
 
@@ -1383,32 +1383,42 @@ void KSpreadCanvas::drawCell( KSpreadCell *_cell, int _col, int _row )
     paintEvent( &event );
 }
 
-void KSpreadCanvas::ajustArea()
+void KSpreadCanvas::adjustArea()
 {
     QRect selection( activeTable()->selectionRect() );
+    // Columns selected
     if( selection.left() != 0 && selection.bottom() == 0x7FFF )
     {
-	hBorderWidget()->ajustColumn();
+	for (int x=selection.left(); x <= selection.right(); x++ )
+        {
+	    hBorderWidget()->adjustColumn(x);
+	}
     }
+    // Rows selected
     else if(selection.left() != 0 && selection.right() == 0x7FFF )
     {
-	vBorderWidget()->ajustRow();
+	for(int y = selection.top(); y <= selection.bottom(); y++ )
+        {
+	    vBorderWidget()->adjustRow(y);
+	}
     }
+    // No selection
     else if( selection.left() == 0 || selection.top() == 0 ||
 	     selection.bottom() == 0 || selection.right() == 0 )
     {
-	vBorderWidget()->ajustRow(markerRow());
-	hBorderWidget()->ajustColumn(markerColumn());
+	vBorderWidget()->adjustRow(markerRow());
+	hBorderWidget()->adjustColumn(markerColumn());
     }
+    // Selection of a rectangualar area
     else
     {
 	for (int x=selection.left(); x <= selection.right(); x++ )
         {
-	    hBorderWidget()->ajustColumn(x);
+	    hBorderWidget()->adjustColumn(x);
 	}
 	for(int y = selection.top(); y <= selection.bottom(); y++ )
         {
-	    vBorderWidget()->ajustRow(y);
+	    vBorderWidget()->adjustRow(y);
 	}
     }
 }
@@ -1516,27 +1526,27 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadVBorder::ajustRow(int _row)
+void KSpreadVBorder::adjustRow(int _row)
 {
-int ajust;
+int adjust;
 int select;
 if(_row==-1)
 	{
-	ajust=m_pCanvas->activeTable()->ajustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+	adjust=m_pCanvas->activeTable()->adjustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
 	select=m_iSelectionAnchor;
 	}
 else
 	{
-	ajust=m_pCanvas->activeTable()->ajustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_row);
+	adjust=m_pCanvas->activeTable()->adjustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_row);
 	select=_row;
 	}
-if(ajust!=-1)
+if(adjust!=-1)
 	{
 	KSpreadTable *table = m_pCanvas->activeTable();
 	assert( table );
 	RowLayout *rl = table->nonDefaultRowLayout( select );
-	ajust=QMAX(20,ajust);
-	rl->setHeight(ajust,m_pCanvas);
+	adjust=QMAX(20,adjust);
+	rl->setHeight(adjust,m_pCanvas);
 	}
 }
 
@@ -1808,30 +1818,30 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadHBorder::ajustColumn(int _col)
+void KSpreadHBorder::adjustColumn(int _col)
 {
-int ajust;
-int select;
-if(_col==-1)
-	{
-	ajust=m_pCanvas->activeTable()->ajustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    int adjust;
+    int select;
+    if( _col==-1 )
+    {
+	adjust = m_pCanvas->activeTable()->adjustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
 	select=m_iSelectionAnchor;
-	}
-else
-	{
-	ajust=m_pCanvas->activeTable()->ajustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_col);
+    }
+    else
+    {
+	adjust=m_pCanvas->activeTable()->adjustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_col);
 	select=_col;
-	}
+    }
 
-if(ajust!=-1)
-	{
+    if(adjust!=-1)
+    {
 	KSpreadTable *table = m_pCanvas->activeTable();
 	assert( table );
 	ColumnLayout *cl = table->nonDefaultColumnLayout( select );
 	
-	ajust = QMAX( 20, ajust );
-    	cl->setWidth( ajust, m_pCanvas );
-	}
+	adjust = QMAX( 20, adjust );
+    	cl->setWidth( adjust, m_pCanvas );
+    }
 }
 
 
@@ -1839,35 +1849,35 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
 {
     KSpreadTable *table = m_pCanvas->activeTable();
     ASSERT( table );
-if(nb==-1)
-	{
+    if( nb == -1 )
+    {
     	ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
 	resize = QMAX( 20, resize );
     	cl->setWidth( resize, m_pCanvas );
-	}
-else
-	{
+    }
+    else
+    {
 	QRect selection( table->selectionRect() );
-	if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
-	|| selection.right()==0)
-		{
-		ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
+	if( selection.bottom() == 0 || selection.top() == 0 || selection.left() == 0 ||
+	    selection.right() == 0 )
+        {
+	    ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
 		
-		resize = QMAX( 20, resize );
-    		cl->setWidth( resize, m_pCanvas );
-		}
-	else
-		{
-		ColumnLayout *cl;
-		for (int i=selection.left();i<=selection.right();i++)
-			{
-			cl= table->nonDefaultColumnLayout( i );
-			
-			resize = QMAX( 20, resize );
-    			cl->setWidth( resize, m_pCanvas );
-			}
-		}
+	    resize = QMAX( 20, resize );
+	    cl->setWidth( resize, m_pCanvas );
 	}
+	else
+        {
+	    ColumnLayout *cl;
+	    for (int i=selection.left();i<=selection.right();i++)
+	    {
+		cl= table->nonDefaultColumnLayout( i );
+			
+		resize = QMAX( 20, resize );
+		cl->setWidth( resize, m_pCanvas );
+	    }
+	}
+    }
 }
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
