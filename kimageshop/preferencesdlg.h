@@ -21,14 +21,59 @@
 #ifndef __preferencesdlg_h__
 #define __preferencesdlg_h__
 
-#include <qlineedit.h>
+#include <qwidget.h>
+#include <qtabdialog.h>
 
-#include <kdialog.h>
+class QLineEdit;
+class QCheckBox;
+
+/**
+ *  "General"-tab for preferences dialog
+ */
+class GeneralTab : public QWidget
+{
+  Q_OBJECT
+
+public:
+
+  GeneralTab( QWidget *_parent = 0, const char *_name = 0 );
+
+  bool saveOnExit();
+
+private:
+
+  QCheckBox *m_saveOnExit;
+};
+
+/**
+ *  "Directories"-tab for preferences dialog
+ */
+class DirectoriesTab : public QWidget
+{
+  Q_OBJECT
+
+public:
+
+  DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
+
+private:
+
+	QLineEdit *m_pLineEdit;
+};
+
+class UndoRedoTab : public QWidget
+{
+  Q_OBJECT
+
+public:
+
+  UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 );
+};
 
 /**
  *  Preferences dialog of KImageShop
  */
-class PreferencesDialog : public KDialog
+class PreferencesDialog : public QTabDialog
 {
   Q_OBJECT
 
@@ -43,7 +88,9 @@ protected:
 
 private:
 
-	QLineEdit *m_pLineEdit;
+  GeneralTab     *m_general;
+  DirectoriesTab *m_directories;
+  UndoRedoTab    *m_undoRedo;
 };
 
 #endif
