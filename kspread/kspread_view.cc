@@ -1371,7 +1371,15 @@ void KSpreadView::mergeCell()
 {
     if ( !m_pTable )
         return;
-    m_pTable->mergeCell( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    QRect rect( activeTable()-> selectionRect() );
+    if((rect.right()==0x7FFF) ||(rect.bottom()==0x7FFF))
+        {
+        KMessageBox::error( this, i18n("Area too large!"));
+        }
+  else
+        {
+        m_pTable->mergeCell( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        }
 }
 
 void KSpreadView::dissociateCell()
