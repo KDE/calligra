@@ -778,6 +778,9 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         else
          {
             m_singleWord = false;
+            //laurent : don't try to search thesaurus when we have a customItemChar.
+            if( text.find(KoTextObject::customItemChar())!=-1)
+                text = QString::null;
         }
     }
     else // No selection -> get word under cursor
