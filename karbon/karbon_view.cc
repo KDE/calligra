@@ -52,6 +52,7 @@
 #include "vstartool.h"
 #include "vpolylinetool.h"
 #include "vcliparttool.h"
+#include "vtexttool.h"
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -64,7 +65,6 @@
 #include "vinsertknotscmd.h"
 #include "vroundcornerscmd.h"
 #include "vstrokecmd.h"
-//#include "vtextcmd.h"
 #include "vwhirlpinchcmd.h"
 
 // Dialogs.
@@ -97,7 +97,6 @@
 #include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-//#include "vtext.h"
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
 #include <kdeversion.h>
@@ -170,6 +169,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_starTool = new VStarTool( this );
 	m_polylineTool = new VPolylineTool( this );
 	m_clipartTool = new VClipartTool( this );
+	m_textTool = new VTextTool( this );
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -244,6 +244,7 @@ KarbonView::~KarbonView()
 	delete( m_starTool );
 	delete( m_polylineTool );
 	delete( m_clipartTool );
+	delete( m_textTool );
 
 	// widgets:
 	delete( m_status );
@@ -272,6 +273,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 		connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 		connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
+		connect( m_toolbox, SIGNAL( textToolActivated() ),		this, SLOT( textTool() ) );
 		if( shell() )
 		{
 			m_strokeFillPreview = m_toolbox->strokeFillPreview();
@@ -666,16 +668,14 @@ KarbonView::rotateTool()
 void
 KarbonView::textTool()
 {
-    /*kdDebug() << "KarbonView::textTool()" << endl;
-	QFont f;
-
-	f.setFamily( m_setFontFamily->font() );
-	f.setPointSize( m_setFontSize->fontSize() );
-	f.setBold( m_setFontBold->isChecked() );
-	f.setItalic( m_setFontItalic->isChecked() );
-
-	// TODO : find a way to edit the text, no predefined strings
-	part()->addCommand( new VTextCmd( part(), f, "KARBON" ), true );*/
+	if( m_currentTool == m_textTool )
+			m_toolOptionsDocker->show();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_textTool;
+		m_currentTool->activateAll();
+	}
 }
 
 void

@@ -28,7 +28,7 @@
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vobject.h"
-//#include "vtext.h"
+#include "vtext.h"
 #include "vvisitor.h"
 #include "vlayer_iface.h"
 #include <kdebug.h>
@@ -170,9 +170,9 @@ VLayer::load( const QDomElement& element )
 			}
 			else if( e.tagName() == "TEXT" )
 			{
-				/*VText* text = new VText( this );
+				VText* text = new VText( this );
 				text->load( e );
-				append( text );*/
+				append( text );
 			}
 		}
 	}
@@ -188,12 +188,6 @@ VLayer::clone() const
 void
 VLayer::accept( VVisitor& visitor )
 {
-	VDocument* doc = (VDocument*)parent();
-	if ( ( state() != deleted ) &&
-	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
-	       ( doc->selectionMode() == VDocument::VisibleLayers && ( state() == normal || state() == normal_locked ) ) ||
-	       ( doc->selectionMode() == VDocument::SelectedLayers && selected() ) ||
-	       ( doc->selectionMode() == VDocument::ActiveLayer && doc->activeLayer() == this ) ) )
-		visitor.visitVLayer( *this );
+	visitor.visitVLayer( *this );
 }
 

@@ -75,6 +75,7 @@ class VStateButton;
 class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
+class VTextTool;
 class VTool;
 class VToolBox;
 class VTransformDlg;
@@ -231,6 +232,7 @@ private:
 	VGradientTool* m_gradTool;
 	VPolylineTool* m_polylineTool;
 	VClipartTool* m_clipartTool;
+	VTextTool* m_textTool;
 
 	// text:
 	KFontAction *m_setFontFamily;

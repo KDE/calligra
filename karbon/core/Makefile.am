@@ -26,8 +26,8 @@ noinst_HEADERS = \
 	vselection.h \
 	vstroke.h \
 	vvisitor.h \
-        vlayer_iface.h 
-#	vtext.h
+	vlayer_iface.h \
+	vtext.h
 
 libkarboncore_la_SOURCES = \
 	vcanvas.cc \
@@ -46,9 +46,9 @@ libkarboncore_la_SOURCES = \
 	vselection.cc \
 	vstroke.cc \
 	vvisitor.cc \
-        vlayer_iface.cc \
-        vlayer_iface.skel
-#	vtext.cc
+	vlayer_iface.cc \
+	vlayer_iface.skel \
+	vtext.cc
 
 libkarboncore_la_METASOURCES = \
 	AUTO

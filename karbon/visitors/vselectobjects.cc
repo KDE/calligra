@@ -19,6 +19,8 @@
 
 
 #include "vselectobjects.h"
+#include "vlayer.h"
+#include "vdocument.h"
 
 
 void
@@ -65,3 +67,18 @@ VSelectObjects::visitVObject( VObject& object )
 	}
 }
 
+void
+VSelectObjects::visitVLayer( VLayer& layer )
+{
+	VDocument* doc = (VDocument*)layer.parent();
+	if ( ( layer.state() != VObject::deleted ) &&
+	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
+	       ( doc->selectionMode() == VDocument::VisibleLayers && ( layer.state() == VObject::normal || layer.state() == VObject::normal_locked ) ) ||
+	       ( doc->selectionMode() == VDocument::SelectedLayers && layer.selected() ) ||
+	       ( doc->selectionMode() == VDocument::ActiveLayer && doc->activeLayer() == &layer ) ) )
+	{
+		VObjectListIterator itr( layer.objects() );
+		for( ; itr.current(); ++itr )
+			itr.current()->accept( *this );
+	}
+}

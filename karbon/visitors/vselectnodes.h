@@ -41,6 +41,7 @@ public:
 	}
 
 	virtual void visitVPath( VPath& path );
+	virtual void visitVLayer( VLayer& layer );
 
 private:
 	bool m_select;

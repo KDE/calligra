@@ -28,46 +28,68 @@
 #include <qstring.h>
 #include <qfont.h>
 
-#include "vobjectlist.h"
+#include "vpath.h"
+#include "vcomposite.h"
+#include "vpainter.h"
 
 class KarbonView;
+
+typedef QPtrList<VComposite> VCompositeList;
+typedef QPtrListIterator<VComposite> VCompositeListIterator;
 
 class VText : public VObject
 {
 public:
-	VText( VObject* parent, VState state = state_normal );
-	VText( KarbonView *view, const QFont &font );
-	VText( KarbonView *view, const QFont &font, const QString& text );
+	enum Position {
+		Above,
+		On,
+		Under
+	};
+
+	VText( VObject* parent, VState state = normal );
+	VText( const QFont &font, const VPath& basePath, Position position, const QString& text );
 	VText( const VText& text );
 	virtual ~VText();
 
+	virtual void setText( const QString& text ) { m_text = text; }
+	virtual const QString& text() { return m_text; }
+	virtual void setFont( const QFont& font ) { m_font = font; }
+	virtual const QFont& font() { return m_font; }
+	virtual void setBasePath( const VPath& path ) { m_basePath = path; }
+	virtual VPath& basePath() { return m_basePath; }
+	virtual void setPosition( Position position ) { m_position = position; }
+	virtual Position position() { return m_position; }
+	
 	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
 
-	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
+	virtual void transform( const QWMatrix& m );
 
-	virtual const KoRect& boundingBox() const
-		{ return m_glyphs.boundingBox(); }
-
-	virtual bool isInside( const KoRect& rect ) const;
+	virtual const KoRect& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
 	virtual VText* clone() const;
 
+	virtual void setState( const VState state );
+	
 	virtual void accept( VVisitor& visitor );
 	
-	void setState( const VState state );
-
-private:
 #ifdef HAVE_FREETYPE
-	void traceText( const QString &text );
+	void traceText( const KarbonView* view );
 #endif // HAVE_FREETYPE
 
-	QString m_text;
-	VObjectList m_glyphs;
-	const KarbonView *m_view;
-	QFont m_font;
+private:
+		// The font to use to draw the text.
+	QFont       m_font;
+		// The base path. Doesn't belong to the document.
+	VPath       m_basePath;
+		// The text position 
+	Position    m_position;
+		// The text to draw
+	QString     m_text;
+		// The glyphs (allow to keep a font even if not present on the computer. works as long as you don't edit the text.)
+	VCompositeList   m_glyphs;
 };
 
 #endif

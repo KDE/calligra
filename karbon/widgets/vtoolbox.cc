@@ -106,6 +106,9 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_clipart", i18n( "Insert clipart" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
 
+	button = addButton( "14_text", i18n( "Insert text" ) );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
+
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 }
 
