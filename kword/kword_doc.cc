@@ -1009,6 +1009,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   char buffer[200];
   int i = 0;
   unsigned int tmpPTPos = 0;
+  unsigned int lastPTPos = 0;
   while ( !_fc.isCursorAtLineEnd() )
     {
       // Init position
@@ -1089,6 +1090,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	  
 	  // Test next character.
 	  i++;
+	  //lastPTPos = _fc.getPTPos();
 	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
 	    {
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
@@ -1100,6 +1102,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all - but we have to underline it in some cases
+	      lastPTPos = _fc.getPTPos();
 	      if (text[_fc.getTextPos()].c == ' ')
 		{
 		  bool goneForward = false;
@@ -1128,6 +1131,12 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			  
 		    }
 		  if (!goneForward) _fc.cursorGotoNextChar(_painter);
+// 		  QPen _pen = QPen(_painter.pen());
+// 		  _painter.setPen(QPen(blue,1,SolidLine));
+// 		  _painter.drawLine(lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender() - 1,
+// 				    lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender());
+// 		  _painter.setPen(_pen);
+// 		  lastPTPos = _fc.getPTPos();
 		}
 	    }
 	}

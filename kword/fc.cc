@@ -555,6 +555,12 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 			  case T_LEFT:
 			    ptPos = tabPos;
 			    break;
+			  case T_RIGHT:
+			    {
+			      //if (!_checkTabs) break;
+			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
+				ptPos += tabPos - (ptPos + (ptTextLen - (ptPos - ptStartPos)));
+ 			    } break;
 			  default: break;
 			  }
 		      }
@@ -699,6 +705,12 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 		      case T_LEFT:
 			ptPos = tabPos;
 			break;
+		      case T_RIGHT:
+			{
+			  //if (!_checkTabs) break;
+			  if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
+			    ptPos += tabPos - (ptPos + (ptTextLen - (ptPos - ptStartPos)));
+			} break;
 		      default: break;
 		      }
 		  }
@@ -786,8 +798,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     int _left = 0,_right = 0;
 
     // Reggie: DAMN SLOW HACK !!!!!!! 
-//     if (parag->getParagLayout()->hasSpecialTabs())
-//       makeLineLayout(_painter,true,false);
+    if (parag->getParagLayout()->hasSpecialTabs() && _checkTabs && _checkIntersects)
+      makeLineLayout(_painter,true,false);
 
     if (_checkIntersects)
       {
@@ -867,28 +879,16 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     ptPos = 0;
     
     // Calculate the first characters position in screen coordinates
-//     if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
-//       ptPos = xShift + left;
-//     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
     ptPos = xShift + left;
 
     //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
 
     ptStartPos = ptPos;
 
-    // Assume the counter to have the maximum ascender/descender
-    //ptMaxAscender = ptCounterAscender;
-    //ptMaxDescender = ptCounterDescender;
-
     // Calculate the counter position
     // Is the counter fixed to the left side ?
     ptCounterPos = ptStartPos - ptCounterWidth;
     
-    // Get the correct font
-//     tmpFormat.apply( *this );
-//     KWDisplayFont *font = tmpFormat.loadFont( document );
-//     displayFont = font;
-
     apply(*this);
 
     // Get ascender/descender of the font we are starting with
@@ -964,7 +964,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	      } break;
 	    case ID_KWCharTab:
 	      {
-		if (!_checkTabs) break;
+		//if (!_checkTabs) { textPos++; break; }
 		unsigned int tabPos = 0;
 		KoTabulators tabType;
 		if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left(),
@@ -978,10 +978,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 			  case T_LEFT:
 			    ptPos = tabPos;
 			    break;
-// 			  case T_RIGHT:
-// 			    {
-// 			      if ((ptStartPos + ptWidth) - ptPos) < tabPos 
-// 			    }
+			  case T_RIGHT:
+			    {
+			      if (!_checkTabs) break;
+			      if (ptPos + (ptTextLen - (ptPos - ptStartPos)) < tabPos)
+				ptPos += tabPos - (ptPos + (ptTextLen - (ptPos - ptStartPos)));
+			    } break;
 			  default: break;
 			  }
 		      }
@@ -1029,7 +1031,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
       {
-	ptPos = xShift + ( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - left - right - ptTextLen - _right) / 2;
+	ptPos = xShift + ( document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - 
+			   indent - left - right - ptTextLen - _right) / 2;
 	ptStartPos = ptPos;
       }
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
