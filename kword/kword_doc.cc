@@ -1334,7 +1334,7 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
+bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* )
 {
     QDomDocument doc( "DOC" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );

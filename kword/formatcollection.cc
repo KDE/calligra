@@ -152,6 +152,7 @@ KWFormat* KWFormatCollection::getFormat( int id )
     QMap< int, KWFormat* >::Iterator it = reverseIndexMap.find( id );
     if ( it == reverseIndexMap.end() )
 	return -1;
+    it.data()->incRef();
     return it.data();
 }
 

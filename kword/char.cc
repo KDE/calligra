@@ -334,9 +334,37 @@ QDomElement KWString::save( QDomDocument& d )
 }
 
 /*================================================================*/
-bool KWString::load( const QDomElement &e )
+bool KWString::load( const QDomElement &element, KWordDocument* doc )
 {
-    insert( 0, "A woooooooooooooonsinn!" );
+    QDomElement t = element.firstChild().toElement();
+    for( ; !t.isNull(); t = t.nextSibling().toElement() )
+    {
+	if ( t.tagName() == "STYLE" )
+        {
+	    if ( !KWCharFormat::load( t, doc, this ) )
+		return FALSE;
+	}
+	else if ( t.tagName() == "VARIABLE" )
+        {
+	    // ####todo
+	}
+	else if ( t.tagName() == "FOOTNOTE" )
+        {
+	    // ####todo
+	}
+	else if ( t.tagName() == "TAB" )
+        {
+	    // ####todo
+	}
+	else if ( t.tagName() == "IMAGE" )
+        {
+	    // ####todo
+	}
+	else
+	    ASSERT( 0 );
+    }
+    
+    // insert( 0, "A woooooooooooooonsinn!" );
     return TRUE;
 }
 
@@ -889,27 +917,28 @@ int KWString::findRev( QRegExp /*_regexp*/, KWSearchDia::KWSearchEntry */*_forma
 void freeChar( KWChar& _char, KWordDocument *_doc )
 {
     if ( _char.attrib )
- {
-     switch( _char.attrib->getClassId() )
- {
- case ID_KWCharFormat:
- case ID_KWCharImage:
- case ID_KWCharTab:
- case ID_KWCharVariable:
-     delete _char.attrib;
-     break;
- case ID_KWCharFootNote:
-     {
-	 _doc->getFootNoteManager().removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
-	 delete _char.attrib;
-     } break;
- default: ; //assert( 0 );
- }
-     _char.attrib = 0L;
-     if ( _char.autoformat )
-	 delete _char.autoformat;
-     _char.autoformat = 0L;
- }
+    {
+	switch( _char.attrib->getClassId() )
+        {
+	case ID_KWCharFormat:
+	case ID_KWCharImage:
+	case ID_KWCharTab:
+	case ID_KWCharVariable:
+	    delete _char.attrib;
+	    break;
+	case ID_KWCharFootNote:
+	{
+	    _doc->getFootNoteManager().removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+	    delete _char.attrib;
+	}
+	break;
+	default: ; //assert( 0 );
+	}
+	_char.attrib = 0L;
+	if ( _char.autoformat )
+	    delete _char.autoformat;
+	_char.autoformat = 0L;
+    }
 }
 
 /*================================================================*/
@@ -922,9 +951,27 @@ QDomElement KWCharFormat::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc )
+bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc, KWString* text )
 {
-    return format->load( element, doc );
+    if ( !element.hasAttribute( "id" ) )
+	return FALSE;
+
+    KWFormat* format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
+    
+    // Load the text
+    QString t = element.text();
+    text->insert( 0, t );
+    
+    uint len = t.length();
+    KWChar* p = text->data();
+    for( uint i = 0; i < len; ++i )
+    {
+	format->incRef();
+	p[i].attrib = new KWCharFormat( format );
+    }
+    format->decRef();
+    
+    return TRUE;
 }
 
 /*================================================================*/
@@ -957,50 +1004,42 @@ bool KWCharTab::load( const QDomElement&, KWordDocument* )
 /*================================================================*/
 QDomElement KWCharVariable::save( QDomDocument& doc )
 {
-    QDomElement e = KWCharFormat::save( doc );
-    if ( e.isNull() )
-	return e;
-
     QDomElement v = var->save( doc );
     if ( v.isNull() )
-	return v;
-    e.appendChild( v );
+	return v;    
+    v.setAttribute( "id", format->getId() );
 
-    return e;
+    return v;
 }
 
 /*================================================================*/
-bool KWCharVariable::load( const QDomElement& element, KWordDocument* _doc )
-{
-    QDomElement e = element.namedItem( "FORMAT" ).toElement();
-    if ( !e.isNull() )
-	return KWCharFormat::load( e, _doc );
-
-    QDomElement v = e.namedItem( "VARIABLE" ).toElement();
-    if ( v.isNull() )
-	return FALSE;
-    
-    int vart = v.attribute( "type" ).toInt();
+bool KWCharVariable::load( const QDomElement& element, KWordDocument* doc )
+{ 
+    if ( format )
+	format->decRef();
+    format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
+	
+    int vart = element.attribute( "type" ).toInt();
     switch ( vart )
     {
     case VT_DATE_FIX:
-	var = new KWDateVariable( _doc );
+	var = new KWDateVariable( doc );
 	break;
     case VT_DATE_VAR:
-	var = new KWDateVariable( _doc );
+	var = new KWDateVariable( doc );
 	break;
     case VT_TIME_FIX:
-	var = new KWTimeVariable( _doc );
+	var = new KWTimeVariable( doc );
 	break;
     case VT_TIME_VAR:
-	var = new KWTimeVariable( _doc );
+	var = new KWTimeVariable( doc );
 	break;
     case VT_PGNUM:
-	var = new KWPgNumVariable( _doc );
+	var = new KWPgNumVariable( doc );
 	break;
     default: break;
     }
-    var->setVariableFormat( _doc->getVarFormats().find( (int)vart ) );
+    var->setVariableFormat( doc->getVarFormats().find( (int)vart ) );
 
     if ( !var->load( element ) )
 	return false;
@@ -1015,10 +1054,7 @@ QDomElement KWCharFootNote::save( QDomDocument& doc )
     if ( e.isNull() )
 	return e;
 
-    QDomElement f = KWCharFormat::save( doc );
-    if ( f.isNull() )
-	return f;
-    e.appendChild( f );
+    e.setAttribute( "id", format->getId() );
 
     return e;
 }
@@ -1029,27 +1065,11 @@ bool KWCharFootNote::load( const QDomElement& element, KWordDocument* doc )
     if ( !fn->load( element ) )
 	return false;
 
-    QDomElement e = element.namedItem( "FORMAT" ).toElement();
-    if ( !e.isNull() )
-	return KWCharFormat::load( e, doc );
+    if ( format )
+	format->decRef();
+    format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
 
     return true;
 }
-
-/*================================================================*/
-// ostream& operator<<( ostream &out, KWString &_string )
-// {
-//     char c = 1;
-
-//     for ( unsigned int i = 0; i < _string.size(); i++ )
-//     {
-//	   if ( _string.data()[ i ].c != KWSpecialChar )
-//	       out << _string.data()[ i ].c;
-//	   else
-//	       out << c;
-//     }
-
-//     return out;
-// }
 
 					

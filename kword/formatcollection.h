@@ -38,8 +38,14 @@ public:
     /**
       * Uses the @ref reverseIndexMap to map an id to
       * a loaded KWFormat. This is only useful during loading.
+      * The function increases the reference count of the returned
+      * format.
       */
     KWFormat *getFormat( int id );
+    /**
+      * The function increases the reference count of the returned
+      * format.
+      */
     KWFormat *getFormat( const KWFormat &_format );
     void removeFormat( KWFormat *_format );
 

@@ -321,7 +321,7 @@ bool KWParag::load( const QDomElement& element )
     if ( !paragLayout->load( element.namedItem( "PARAGLAYOUT" ).toElement() ) )
 	return FALSE;
 
-    if ( !text.load( element.namedItem( "TEXT" ).toElement() ) )
+    if ( !text.load( element.namedItem( "TEXT" ).toElement(), document ) )
 	return FALSE;
 
     // #### replace with something better later

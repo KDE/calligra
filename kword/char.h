@@ -15,6 +15,7 @@
 
 class KWordDocument;
 class KWTextFrameSet;
+class KWString;
 
 enum ClassIDs {ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3, ID_KWCharVariable = 4,
                ID_KWCharFootNote = 5};
@@ -35,7 +36,7 @@ public:
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
     virtual QDomElement save( QDomDocument& ) { return QDomElement(); }
-    virtual bool load( const QDomElement&, KWordDocument* ) { return false; }
+    // virtual bool load( const QDomElement&, KWordDocument* ) { return FALSE; }
 
     /**
       * Poor mans RTTI.
@@ -71,9 +72,11 @@ public:
     }
 
     virtual QDomElement save( QDomDocument& );
-    virtual bool load( const QDomElement&, KWordDocument* );
+    // virtual bool load( const QDomElement&, KWordDocument* );
 
     virtual isCharFormat() { return TRUE; }
+    
+    static bool load( const QDomElement&, KWordDocument*, KWString* );
     
 protected:
     KWFormat *format;
@@ -161,6 +164,10 @@ protected:
 
 };
 
+/******************************************************************/
+/* Struct: KWChar                                                 */
+/******************************************************************/
+
 // Torben: Be prepared for unicode
 // Reggie: Now we support unicode :- ) )
 #define kwchar QChar
@@ -215,7 +222,7 @@ public:
     QString toString( unsigned int _pos, unsigned int _len );
 
     QDomElement save( QDomDocument& doc );
-    bool load( const QDomElement& element );
+    bool load( const QDomElement& element, KWordDocument* );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
     int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
