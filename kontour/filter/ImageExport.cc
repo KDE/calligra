@@ -22,6 +22,8 @@
 
 */
 
+#include "ImageExport.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -32,29 +34,33 @@
 #include <kimageio.h>
 #include <kdebug.h>
 
-#include "ImageExport.h"
 #include "GDocument.h"
 #include "GPage.h"
 
 #define RESOLUTION 72.0
 
-ImageExport::ImageExport () {
+ImageExport::ImageExport ()
+{
 // #ifdef HAVE_QIMGIO
 //   qInitImageIO ();
 // #endif
 }
 
-ImageExport::~ImageExport () {
+ImageExport::~ImageExport ()
+{
 }
 
-bool ImageExport::setup (GDocument *, const char* fmt) {
+bool ImageExport::setup (GDocument *, const char* fmt)
+{
   bool formatSupported = false;
 
   QStrList formats = QImageIO::outputFormats ();
   char* str = formats.first ();
   format = QString ();
-  while (str) {
-    if (strcasecmp (str, fmt) == 0) {
+  while (str)
+  {
+    if (strcasecmp (str, fmt) == 0)
+    {
       format = fmt;
       format = format.upper ();
       formatSupported = true;
@@ -65,7 +71,8 @@ bool ImageExport::setup (GDocument *, const char* fmt) {
   return formatSupported;
 }
 
-bool ImageExport::exportToFile (GDocument* doc) {
+bool ImageExport::exportToFile (GDocument* doc)
+{
   if (format.isNull ())
     return false;
 
@@ -78,10 +85,10 @@ bool ImageExport::exportToFile (GDocument* doc) {
   if (buffer == 0L)
     return false;
 
-  buffer->fill (Qt::white);
+  buffer->fill (doc->activePage()->bgColor());
   QPainter p;
   p.begin (buffer);
-  p.setBackgroundColor (Qt::white);
+  p.setBackgroundColor (doc->activePage()->bgColor());
   p.eraseRect (0, 0, w, h);
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
@@ -90,27 +97,10 @@ bool ImageExport::exportToFile (GDocument* doc) {
 
   p.end ();
 
-  // compute the bounding box
-  Rect box = doc->activePage()->boundingBoxForAllObjects ();
-  // and copy the affected area to the new pixmap
-  //the +1 fixes bug #20361, Alex
-  QPixmap *pixmap = new QPixmap (qRound (box.width ())+1,
-                                 qRound (box.height ())+1);
-  //kdDebug()<<"export: box.w=="<<box.width()<<" box.h=="<<box.height()<<endl;
-  if (pixmap == 0L)
-    return false;
-  int sx=qRound (box.x ());
-  int sy=qRound (box.y ());
-  if (sx>0) sx--;
-  if (sy>0) sy--;
-  bitBlt (pixmap, 0, 0, buffer, sx, sy,
-          qRound (box.width ())+1, qRound (box.height ())+1);
-  delete buffer;
-
   // now create an image
-  QImage img  = pixmap->convertToImage ();
+  QImage img  = buffer->convertToImage ();
   img.setAlphaBuffer (true);
-  delete pixmap;
+  delete buffer;
 
   // and save the image in requested format
   return img.save(outputFileName (), format.latin1());

@@ -623,14 +623,11 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
           //
           // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
           //
-          if (doc->activePage()->selectionCount () == 1) {
+          if (doc->activePage()->selectionCount () == 1)
+	  {
             GObject* selObj = doc->activePage()->getSelection ().first();
-            if (selObj->isA ("GClipart")) {
-              // the selected object is a clipart,
-              // so don't show rotation handles
-              return;
-            }
-            else if (selObj->isA ("GPart")) {
+            if (selObj->isA ("GPart"))
+	    {
               kdDebug(38000) << "activate part !!!" << endl;
               state = S_Inactive;
               m_toolController->emitPartSelected (m_id,selObj);
@@ -645,14 +642,16 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
           else
             state = S_Intermediate1;
         }
-        else {
+        else
+	{
           if (!shiftFlag)
             doc->activePage()->unselectAllObjects ();
           // add the object to the selection
           doc->activePage()->selectObject (obj);
         }
       }
-      else {
+      else
+      {
         // nothing selected
         // unselect all
         doc->activePage()->unselectAllObjects ();

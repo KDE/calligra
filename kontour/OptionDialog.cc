@@ -153,15 +153,10 @@ void OptionDialog::createBGWidget(QWidget* parent)
   QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
   QLabel* clabel = new QLabel(i18n("Background Color"), parent);
   bgbutton = new KColorButton(parent);
-  connect (bgbutton, SIGNAL(changed (const QColor&)), this, SLOT(colorChanged(const QColor&)));
+  connect (bgbutton, SIGNAL(changed (const QColor&)), this, SLOT(slotSetModified()));
   bgbutton->setColor(doc->activePage()->bgColor());
   layout->addWidget(clabel);
   layout->addWidget(bgbutton);
-}
-
-void OptionDialog::colorChanged(const QColor&)
-{
-  modified = true;
 }
 
 /*Grid*/
@@ -183,6 +178,7 @@ void OptionDialog::createGridWidget (QWidget* parent)
   hspinbox->setFormatString ("%-3.3f");
   hspinbox->setEditable (true);
   hspinbox->setRange (0, 1000);
+  connect (hspinbox, SIGNAL(valueChanged (float)), this, SLOT(slotSetModified()));
   grid->addWidget(hspinbox, 0, 1);
 
   label = new QLabel(i18n("Vertically"), box);
@@ -192,6 +188,7 @@ void OptionDialog::createGridWidget (QWidget* parent)
   vspinbox->setFormatString ("%-3.3f");
   vspinbox->setEditable (true);
   vspinbox->setRange (0, 1000);
+  connect (vspinbox, SIGNAL(valueChanged (float)), this, SLOT(slotSetModified()));
   grid->addWidget(vspinbox, 1, 1);
 
   hspinbox->setValue(doc->horizGridDistance());
@@ -199,15 +196,18 @@ void OptionDialog::createGridWidget (QWidget* parent)
 
   gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
   gbutton->setDown(doc->snapToGrid());
+  connect (gbutton, SIGNAL(stateChanged (int)), this, SLOT(slotSetModified()));
   layout->addWidget(gbutton, 1, 0);
 
   sbutton = new QCheckBox(i18n("Show Grid"), parent);
   sbutton->setDown(doc->showGrid());
+  connect (sbutton, SIGNAL(stateChanged (int)), this, SLOT(slotSetModified()));
   layout->addWidget(sbutton, 1, 1);
 
   cbutton = new KColorButton(parent);
   cbutton->setColor(doc->gridColor());
   QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
+  connect (cbutton, SIGNAL(changed (const QColor&)), this, SLOT(slotSetModified()));
   layout->addWidget(cbutton, 2, 1);
   layout->addWidget(clabel, 2, 0);
 }
@@ -435,6 +435,11 @@ void OptionDialog::vertLineSelected(int idx)
 }
 
 /**/
+void OptionDialog::slotSetModified()
+{
+  modified = true;
+}
+
 void OptionDialog::slotApply()
 {
   /*Document settings*/
@@ -451,7 +456,10 @@ void OptionDialog::slotApply()
   doc->setVertHelplines(vertLines);
 
   if(modified)
+  {
     doc->setModified();
+    modified = false;
+  }
 
   doc->emitChanged();
 }

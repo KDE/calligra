@@ -56,7 +56,7 @@ protected slots:
   void slotApply();
   void slotOk();
 
-  void colorChanged(const QColor&);
+  void slotSetModified();
 
   void addHorizLine ();
   void updateHorizLine ();

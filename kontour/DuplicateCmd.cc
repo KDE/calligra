@@ -39,8 +39,11 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
   : Command(i18n("Duplicate"))
 {
   document = doc;
-  for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+  for (QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+  {
     GObject* o = *it;
+    if(o->isA("GPart"))
+      continue;
     o->ref ();
     objects.append(o);
   }

@@ -30,7 +30,8 @@
 /** 
  * An export filter for image formats.
  */
-class ImageExport : public ExportFilter {
+class ImageExport : public ExportFilter
+{
 public:
   ImageExport ();
   ~ImageExport ();

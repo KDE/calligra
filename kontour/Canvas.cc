@@ -617,22 +617,54 @@ void Canvas::updateRegion (const Rect& reg)
 
 void Canvas::setupPrinter( KPrinter &printer )
 {
-  printer.setDocName (document->fileName ());
-  printer.setCreator ("KIllustrator");
-  KoFormat pageFormat = document->activePage()->pageLayout().format;
-  printer.setPageSize (static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
-  printer.setOrientation (document->activePage()->pageLayout ().orientation == PG_PORTRAIT ?
-                          KPrinter::Portrait : KPrinter::Landscape);
-  printer.setFullPage(true);
+#ifdef HAVE_KDEPRINT
+  printer.setPageSelection( KPrinter::ApplicationSide );
+  printer.setCurrentPage( 1 + document->getPages().at() );
+#endif
+  printer.setMinMax( 1, document->getPages().count() );
+
+  KoPageLayout pgLayout = document->activePage()->pageLayout();
+
+  printer.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pgLayout.format ) ) );
+
+  if ( pgLayout.orientation == PG_LANDSCAPE || pgLayout.format == PG_SCREEN )
+    printer.setOrientation( KPrinter::Landscape );
+  else
+    printer.setOrientation( KPrinter::Portrait );
 }
 
 void Canvas::print( KPrinter &printer )
 {
-    QPainter paint;
-    paint.begin (&printer);
+  QPainter paint;
+  paint.begin (&printer);
+  QValueList<int> pageList;
+#ifndef HAVE_KDEPRINT
+  int from = printer.fromPage();
+  int to = printer.toPage();
+  if( !from && !to )
+  {
+    from = printer.minPage();
+    to = printer.maxPage();
+  }
+  for ( int i = from; i <= to; i++ )
+    pageList.append( i );
+#else
+  pageList = printer.pageList();
+#endif
+  QValueList<int>::Iterator it = pageList.begin();
+  for ( ; it != pageList.end(); ++it )
+  {
+    if ( it != pageList.begin() )
+      printer.newPage();
+
+    int pgNum = (*it) - 1;
+    QRect pageRect (0,0,document->pageForIndex(pgNum)->getPaperWidth(), document->pageForIndex(pgNum)->getPaperHeight());
+    paint.fillRect( pageRect, document->pageForIndex(pgNum)->bgColor());
+
     paint.setClipping (false);
-    document->activePage()->drawContents (paint);
-    paint.end ();
+    document->pageForIndex(pgNum)->drawContents (paint);
+  }
+  paint.end ();
 }
 
 /*************************[GRID]*************************/

@@ -929,16 +929,20 @@ void KIllustratorView::slotShowRuler( bool b )
 void KIllustratorView::slotShowGrid( bool b )
 {
   if (b!=activeDocument()->showGrid())
-     activeDocument()->showGrid( b );
+  {
+    activeDocument()->showGrid( b );
+    activeDocument()->setModified();
+  }
   canvas->update();
 }
 
 void KIllustratorView::slotShowHelplines( bool b )
 {
-   if (b!=activeDocument()->showHelplines())
-   {
-      activeDocument()->showHelplines( b );
-   }
+  if (b!=activeDocument()->showHelplines())
+  {
+    activeDocument()->showHelplines( b );
+    activeDocument()->setModified();
+  }
    canvas->update();
 }
 
@@ -953,14 +957,20 @@ void KIllustratorView::slotPage()
 
 void KIllustratorView::slotAlignToGrid( bool b )
 {
-   if (b!=activeDocument()->snapToGrid())
-      activeDocument()->snapToGrid( b );
+  if (b!=activeDocument()->snapToGrid())
+  {
+    activeDocument()->snapToGrid( b );
+    activeDocument()->setModified();
+  }
 }
 
 void KIllustratorView::slotAlignToHelplines( bool b )
 {
-   if (b!=activeDocument()->alignToHelplines())
+  if (b!=activeDocument()->alignToHelplines())
+  {
      activeDocument()->alignToHelplines( b );
+     activeDocument()->setModified();
+  }
 }
 
 void KIllustratorView::slotTransformPosition()
