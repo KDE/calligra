@@ -678,7 +678,7 @@ public:
         U8 fBold:1;
 
         // italic when 1, not italic when 0
-        U8 FItalic:1;
+        U8 fItalic:1;
 
         // when 1, text has been deleted and will be displayed with 
         // strikethrough when revision marked text is to be displayed
@@ -830,7 +830,7 @@ public:
 
         // super/subscript position in half points; positive means text is 
         // raised; negative means text is lowered.
-        U16 hpScript;
+        S16 hpScript;
 
         // LID language identification code (no longer stored here, see rglid 
         // below): 

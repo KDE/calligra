@@ -543,7 +543,7 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
         bytes += read(in + bytes, &shifterU8);
         out->fBold = shifterU8;
         shifterU8 >>= 1;
-        out->FItalic = shifterU8;
+        out->fItalic = shifterU8;
         shifterU8 >>= 1;
         out->fRMarkDel = shifterU8;
         shifterU8 >>= 1;
