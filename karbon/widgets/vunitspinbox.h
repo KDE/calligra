@@ -34,11 +34,7 @@ public:
 
 	virtual	QValidator::State validate( QString &, int & ) const;
 
-	void setUnit( KoUnit::Unit unit ) { m_unit = unit; }
-	KoUnit::Unit unit() const { return m_unit; }
-
 private:
-	KoUnit::Unit	m_unit;
 	VUnitDoubleBase	*m_base;
 };
 
@@ -49,10 +45,12 @@ public:
 	virtual ~VUnitDoubleBase() {}
 
 	virtual void changeValue( double ) = 0;
+	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
 
 protected:
 	friend class KoUnitDoubleValidator;
 	unsigned int m_precision;
+	KoUnit::Unit m_unit;
 };
 
 class VUnitDoubleSpinBox : public KDoubleSpinBox, public VUnitDoubleBase
@@ -62,9 +60,9 @@ public:
 					 unsigned int precision = 2, const char *name = 0 );
 
 	virtual void setValidator( const QValidator * );
-	void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 	virtual void changeValue( double );
+	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 private:
 	KoUnitDoubleValidator *m_validator;
@@ -76,9 +74,10 @@ public:
 	VUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void setValidator( const QValidator * );
-	void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 	virtual void changeValue( double );
+	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+
 	void setValue( double value ) { m_value = value; }
 	double value() { return m_value; }
 

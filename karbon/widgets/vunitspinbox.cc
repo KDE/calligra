@@ -37,13 +37,13 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	if( !ok )
 	{
 		if( s.endsWith( "mm" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_MM ), m_unit );
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_MM ), m_base->m_unit );
 		else if( s.endsWith( "cm" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CM ), m_unit );
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_CM ), m_base->m_unit );
 		else if( s.endsWith( "in" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_unit );
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_INCH ), m_base->m_unit );
 		else if( s.endsWith( "pt" ) )
-			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_unit );
+			newVal = KoUnit::ptToUnit( KoUnit::ptFromUnit( value, KoUnit::U_PT ), m_base->m_unit );
 		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "c" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
 			result = Intermediate;
 		else
@@ -52,7 +52,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 	if( newVal >= 0.0 )
 	{
 		m_base->changeValue( newVal );
-		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_base->m_precision ) ).arg( KoUnit::unitName( m_unit ) );
+		s = QString( "%1%2").arg( KGlobal::locale()->formatNumber( newVal, m_base->m_precision ) ).arg( KoUnit::unitName( m_base->m_unit ) );
 	}
 	return result;
 }
@@ -80,8 +80,8 @@ VUnitDoubleSpinBox::changeValue( double val )
 void
 VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_validator->unit() ), unit ) );
-	m_validator->setUnit( unit );
+	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_unit ), unit ) );
+	m_unit = unit;
 	setSuffix( KoUnit::unitName( unit ) );
 }
 
@@ -105,14 +105,14 @@ void
 VUnitDoubleLineEdit::changeValue( double value )
 {
 	setValue( value );
-	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_validator->unit() ) ) );
+	setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
 }
 
 void
 VUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
-	KoUnit::Unit old = m_validator->unit();
-	m_validator->setUnit( unit );
+	KoUnit::Unit old = m_unit;
+	m_unit = unit;
 	changeValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( m_value, old ), unit ) );
 }
 
