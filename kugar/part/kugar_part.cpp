@@ -14,6 +14,7 @@
 #include <kio/netaccess.h>
 #include <qfile.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -49,6 +50,9 @@ KInstance* KugarFactory::global()
     if ( !s_instance )
     {
         s_instance = new KInstance(aboutData());
+        s_instance->iconLoader()->addAppDir("koffice");
+        s_instance->iconLoader()->addAppDir("kugar");
+
     }
     return s_instance;
 }
@@ -108,7 +112,6 @@ KugarPart::KugarPart(QWidget *parent,const char *name,const QString &forcedUserT
 
 	m_extension = new KugarBrowserExtension(this);
 
-	setXMLFile("kugarpart.rc");
 
 	// Define the actions.
 
@@ -116,6 +119,9 @@ KugarPart::KugarPart(QWidget *parent,const char *name,const QString &forcedUserT
 	KStdAction::next(view,SLOT(slotNextPage()),actionCollection(),"kuNextPage");
 	KStdAction::firstPage(view,SLOT(slotFirstPage()),actionCollection(),"kuFirstPage");
 	KStdAction::lastPage(view,SLOT(slotLastPage()),actionCollection(),"kuLastPage");
+
+	setXMLFile("kugarpart.rc");
+
 }
 
 
