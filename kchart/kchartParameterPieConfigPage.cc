@@ -26,7 +26,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
 
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
 
-    QButtonGroup* gb = new QButtonGroup( i18n( "Labels position" ), this );
+    QButtonGroup* gb = new QButtonGroup( i18n( "Label's position" ), this );
 
     QGridLayout *grid2 = new QGridLayout(gb,6,1,15,7);
 
@@ -94,7 +94,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage(KChartParameters* par
     lineLabel->resize( lineLabel->sizeHint() );
     grid3->addWidget( lineLabel,1,0 );
 
-    QLabel* label2 = new QLabel( i18n( "Lenght of line" ), gb2 );
+    QLabel* label2 = new QLabel( i18n( "Length of line" ), gb2 );
     label2->resize( label2->sizeHint() );
     label2->setAlignment(Qt::AlignCenter);
     grid3->addWidget( label2,2,0 );
