@@ -763,14 +763,14 @@ Tokens Formula::scan( const QString& expr )
        }
        break;
 
-    case Bad: // bad bad bad
-      tokens.setValid( false );
-      break;
-
+    case Bad:
     default:
        break;
     };
   };
+  
+  if( state == Bad ) 
+    tokens.setValid( false );
 
   return tokens;
 }
