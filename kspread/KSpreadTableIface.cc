@@ -73,6 +73,7 @@ KSpreadTableIface::KSpreadTableIface( KSpreadTable* t )
     QCString str = objId();
     str += "/";
     m_proxy = new KSpreadCellProxy( t, str );
+
 }
 
 KSpreadTableIface::~KSpreadTableIface()
@@ -127,16 +128,6 @@ DCOPRef KSpreadTableIface::row( int _row )
 }
 
 
-QRect KSpreadTableIface::selection() const
-{
-    return m_table->selection();
-}
-
-void KSpreadTableIface::setSelection( const QRect& selection )
-{
-    m_table->setSelection( selection );
-}
-
 QString KSpreadTableIface::name() const
 {
     return m_table->tableName();
@@ -184,107 +175,6 @@ bool KSpreadTableIface::setTableName( const QString & name)
     return m_table->setTableName( name);
 }
 
-void KSpreadTableIface::setSelectionMoneyFormat( bool b )
-{
-    m_table->setSelectionMoneyFormat(m_table->marker(), b);
-}
-
-void KSpreadTableIface::setSelectionPrecision( int _delta )
-{
-    m_table->setSelectionPrecision(m_table->marker(), _delta);
-}
-
-void KSpreadTableIface::setSelectionPercent( bool b )
-{
-    m_table->setSelectionPercent(m_table->marker(), b);
-}
-
-void KSpreadTableIface::setSelectionMultiRow( bool enable )
-{
-    m_table->setSelectionMultiRow(m_table->marker(), enable);
-}
-
-void KSpreadTableIface::setSelectionSize(int _size )
-{
-    m_table->setSelectionSize(m_table->marker(), _size);
-}
-
-void KSpreadTableIface::setSelectionUpperLower( int _type )
-{
-    m_table->setSelectionUpperLower(m_table->marker(), _type);
-}
-
-void KSpreadTableIface::setSelectionfirstLetterUpper( )
-{
-    m_table->setSelectionfirstLetterUpper(m_table->marker());
-}
-
-void KSpreadTableIface::setSelectionVerticalText( bool b)
-{
-    m_table->setSelectionVerticalText(m_table->marker(), b);
-}
-
-void KSpreadTableIface::setSelectionComment( const QString &_comment)
-{
-    m_table->setSelectionComment(m_table->marker(), _comment);
-}
-
-void KSpreadTableIface::setSelectionRemoveComment()
-{
-    m_table->setSelectionRemoveComment(m_table->marker());
-}
-
-void KSpreadTableIface::setSelectionAngle(int _value)
-{
-    m_table->setSelectionAngle(m_table->marker(), _value);
-}
-
-void KSpreadTableIface::setSelectionTextColor( const QColor &tbColor )
-{
-    m_table->setSelectionTextColor(m_table->marker(), tbColor);
-}
-
-void KSpreadTableIface::setSelectionbgColor( const QColor &bg_Color )
-{
-    m_table->setSelectionbgColor(m_table->marker(), bg_Color);
-}
-
-void KSpreadTableIface::setSelectionBorderColor(const QColor &bd_Color )
-{
-    m_table->setSelectionBorderColor(m_table->marker(), bd_Color);
-}
-
-void KSpreadTableIface::deleteSelection()
-{
-    m_table->deleteSelection(m_table->marker());
-}
-
-void KSpreadTableIface::copySelection()
-{
-    m_table->copySelection(m_table->marker());
-}
-
-void KSpreadTableIface::cutSelection()
-{
-    m_table->cutSelection(m_table->marker());
-}
-
-void KSpreadTableIface::clearTextSelection()
-{
-    m_table->clearTextSelection(m_table->marker());
-}
-
-void KSpreadTableIface::clearValiditySelection()
-{
-    m_table->clearValiditySelection(m_table->marker());
-}
-
-void KSpreadTableIface::clearConditionalSelection()
-{
-    m_table->clearConditionalSelection(m_table->marker());
-}
-
-
 bool KSpreadTableIface::insertColumn( int col,int nbCol )
 {
     return m_table->insertColumn(col,nbCol);
@@ -305,55 +195,12 @@ void KSpreadTableIface::removeRow( int row,int nbRow )
     m_table->removeRow( row,nbRow );
 }
 
-void KSpreadTableIface::borderLeft(const QColor &_color )
-{
-    m_table->borderLeft(m_table->marker(), _color);
-}
-
-void KSpreadTableIface::borderTop( const QColor &_color )
-{
-    m_table->borderTop(m_table->marker(), _color);
-}
-
-void KSpreadTableIface::borderOutline( const QColor &_color )
-{
-    m_table->borderOutline(m_table->marker(), _color);
-}
-
-void KSpreadTableIface::borderAll( const QColor &_color )
-{
-    m_table->borderAll(m_table->marker(), _color );
-}
-
-void KSpreadTableIface::borderRemove( )
-{
-    m_table->borderRemove(m_table->marker());
-}
-
-void KSpreadTableIface::borderBottom(const QColor &_color )
-{
-    m_table->borderBottom(m_table->marker(), _color);
-}
-
-void KSpreadTableIface::borderRight( const QColor &_color )
-{
-    m_table->borderRight( m_table->marker(), _color );
-}
 
 bool KSpreadTableIface::isHidden()const
 {
     return m_table->isHidden();
 }
 
-void KSpreadTableIface::increaseIndent()
-{
-    m_table->increaseIndent(m_table->marker());
-}
-
-void KSpreadTableIface::decreaseIndent()
-{
-    m_table->decreaseIndent(m_table->marker());
-}
 
 bool KSpreadTableIface::showGrid() const
 {
@@ -388,11 +235,6 @@ bool KSpreadTableIface::hideZero() const
 bool KSpreadTableIface::firstLetterUpper() const
 {
     return m_table->getFirstLetterUpper();
-}
-
-void KSpreadTableIface::copyAsText()
-{
-    m_table->copyAsText(m_table->marker());
 }
 
 void KSpreadTableIface::setShowPageBorders( bool b )

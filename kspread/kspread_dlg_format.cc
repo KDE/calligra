@@ -130,7 +130,7 @@ void KSpreadFormatDlg::slotOk()
 	return;
     }
 
-    QRect r = m_view->activeTable()->selection();
+    QRect r = m_view->selection();
 
     if ( !m_view->doc()->undoBuffer()->isLocked() )
     {
@@ -284,7 +284,8 @@ void KSpreadFormatDlg::slotOk()
         }
     }
 
-    m_view->activeTable()->setSelection( QRect(), r.topLeft() );
+    m_view->selectionInfo()->setSelection( QRect(), r.topLeft(),
+                                           m_view->activeTable() );
     m_view->doc()->setModified( true );
     accept();
 }

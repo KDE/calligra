@@ -40,6 +40,10 @@ Until beta2:
 - new function category: Engineering
 - added support with templates
 - added support for changing row/col and table of named areas
+- Multiple views work for spreadsheets (can change tables, select different
+  parts of the sheet independantly in each open view or embedded object)
+- DCOP interface for a table has changed.  Many of the operations have been
+  moved to the 'view' class.  Current DCOP scripts will need to be updated
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,

@@ -153,7 +153,7 @@ void KSpreadreference::slotRemove()
     m_list->removeItem(m_list->currentItem());
 
     KSpreadTable *tbl;
-    
+
     for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
     {
       tbl->refreshRemoveAreaName(textRemove);
@@ -190,13 +190,13 @@ void KSpreadreference::slotOk()
     {
       KSpreadTable *table = m_pView->doc()->map()->findTable(area[ index ].table_name);
       if (table)
-        table->setActiveTable();
+        m_pView->setActiveTable(table);
     }
 
     m_pView->canvasWidget()->gotoLocation(KSpreadPoint( m_pView->activeTable()->tableName()
                                                         + "!"+util_cellName(area[ index ].rect.left(), area[ index ].rect.top()  ), m_pView->doc()->map() ) );
-    m_pView->activeTable()->setSelection(area[ index ].rect ,
-                                         m_pView->canvasWidget() );
+    m_pView->selectionInfo()->setSelection(area[ index ].rect ,
+                                           m_pView->activeTable() );
   }
   accept();
 }

@@ -162,6 +162,9 @@ public:
    * @param viewRect the document coordinates showing what is actually visible in
    *                 the screen
    *
+   * @param view the view of the region -- may be NULL but no selection markers
+   *        can be passed in that case.
+   *
    * @param cellRegions a list of rectangles indicating the cell ranges needing
    *                    painted.
    *
@@ -170,7 +173,7 @@ public:
    * @param drawCursor whether or not to draw the selection rectangle and the choose
    *                   marker
    */
-  void paintCellRegions(QPainter& painter, QRect viewRect,
+  void paintCellRegions(QPainter& painter, QRect viewRect, KSpreadView* view,
                         QValueList<QRect> cellRegions, KSpreadTable* table,
                         bool drawCursor);
 
@@ -500,10 +503,12 @@ protected:
 private:
 
   /* helper functions for painting */
-  void PaintRegion(QPainter& painter, QRect viewRegion, QRect paintRegion,
-                   KSpreadTable* table);
-  void PaintChooseRect(QPainter& painter, QRect viewRect, KSpreadTable* table);
-  void PaintNormalMarker(QPainter& painter, QRect viewRect, KSpreadTable* table);
+  void PaintRegion(QPainter& painter, QRect viewRegion, KSpreadView* view,
+                   QRect paintRegion, KSpreadTable* table);
+  void PaintChooseRect(QPainter& painter, QRect viewRect, KSpreadTable* table,
+                       QRect chooseRect);
+  void PaintNormalMarker(QPainter& painter, QRect viewRect, KSpreadTable* table,
+                         QRect selection);
 
   /**
    * helper function in drawing the marker and choose marker.

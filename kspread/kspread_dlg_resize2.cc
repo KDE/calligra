@@ -49,7 +49,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
   ColumnLayout *cl;
   bool equals = true;
   int i;
-  QRect selection( m_pView->activeTable()->selection() );
+  QRect selection( m_pView->selection() );
   switch(type)
   {
 	case resize_row:
@@ -120,7 +120,7 @@ void KSpreadresize2::slotChangeState()
 
 void KSpreadresize2::slotOk()
 {
-    QRect selection( m_pView->activeTable()->selection() );
+    QRect selection( m_pView->selection() );
 
     double new_size = KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
     if ( int( size ) != int( new_size ) )

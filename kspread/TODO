@@ -64,10 +64,12 @@ John
 =======
 
 - Pulling the cell 'result' into it's own class for future enhancements to 
-  calculation precision, new datatypes (matrix?), and cleaner code (KSpreadCell
-  is absolutely HUGE)
+  calculation precision, new datatypes (matrix?), and cleaner code
   -- I've started on this now since we pushed the beta back, but I'm probably
      not going to finish it by then anyway since I'm moving.
+- Let me know about problems after the multiple views change -- I'm sure I 
+  introduced a bunch of bugs with that because I touched code on virtually 
+  every user operation.
 
 Philipp
 =======

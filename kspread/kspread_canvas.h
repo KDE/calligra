@@ -8,6 +8,7 @@
 #include <koQueryTrader.h>
 #include <kspread_view.h>
 #include <kspread_doc.h>
+#include "kspread_selection.h"
 
 class KSpreadEditWidget;
 class KSpreadCanvas;
@@ -121,6 +122,8 @@ public:
      */
     int chooseTextLen() const { return length_namecell; }
 
+    KSpreadSelection* selectionInfo() {return m_pView->selectionInfo();}
+    QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
     int markerRow() const;

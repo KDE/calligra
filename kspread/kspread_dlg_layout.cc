@@ -116,11 +116,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
     table = _table;
 
     //We need both conditions quite often, so store the condition here too
-    isRowSelected = table->isRowSelected();
-    isColumnSelected = table->isColumnSelected();
+    isRowSelected = util_isRowSelected(_view->selection());
+    isColumnSelected = util_isColumnSelected(_view->selection());
 
-    //following values are the same as from table->selection()
-    //Do we really need them as arguments?
+    //Do we really need these as arguments? (_view->selection())
     left = _left;
     top = _top;
     right = _right;
@@ -656,7 +655,7 @@ void CellLayoutDlg::slotApply()
             macroUndo->addCommand(undo);
 
             //merge cell doesn't create undo
-            table->mergeCell(QPoint(left,top),false);
+            table->mergeCells(m_pView->selection(), false);
             right=left;
             bottom=top;
         }

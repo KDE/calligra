@@ -560,3 +560,13 @@ double util_fact( double val, double end )
   else
     return (val*util_fact((double)(val-1),end));
 }
+
+bool util_isColumnSelected(QRect selection)
+{
+  return ( (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
+}
+
+bool util_isRowSelected(QRect selection)
+{
+  return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
+}

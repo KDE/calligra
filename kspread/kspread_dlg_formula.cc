@@ -280,11 +280,12 @@ void KSpreadDlgFormula::slotOk()
     {
         KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
         if( table)
-	    table->setActiveTable();
+	    m_pView->setActiveTable(table);
     }
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
+    m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
+                                         m_pView->activeTable());
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
@@ -314,12 +315,14 @@ void KSpreadDlgFormula::slotClose()
         KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
         if( !table )
 	    return;
-	table->setActiveTable();
+	m_pView->setActiveTable(table);
     }
 
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
+    m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
+                                         m_pView->activeTable() );
+
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.
     if( m_pView->canvasWidget()->editor() != 0 )
@@ -671,7 +674,7 @@ void KSpreadDlgFormula::slotShowFunction( const QString& function )
     slotActivated( category );
 
     // select the function
-    QListBoxItem* item = functions->findItem( function, 
+    QListBoxItem* item = functions->findItem( function,
       Qt::ExactMatch | Qt::CaseSensitive );
     if( item ) functions->setCurrentItem( item );
 

@@ -62,7 +62,8 @@ void KSpreadComment::slotTextChanged()
 
 void KSpreadComment::slotOk()
 {
-    m_pView->activeTable()->setSelectionComment(marker,multiLine->text().stripWhiteSpace() );
+    m_pView->activeTable()->setSelectionComment(m_pView->selectionInfo(),
+                                                multiLine->text().stripWhiteSpace() );
     accept();
 }
 

@@ -129,4 +129,6 @@ QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
 
 double util_fact( double val, double end );
 
+bool util_isColumnSelected(QRect selection);
+bool util_isRowSelected(QRect selection);
 #endif

@@ -21,7 +21,7 @@
 #include "kspread_undo.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-
+#include "kspread_util.h"
 
 /****************************************************************************
  *
@@ -207,7 +207,8 @@ void KSpreadUndoRemoveColumn::undo()
 
     table->insertColumn( m_iColumn,m_iNbCol);
 
-    table->paste( m_data, QPoint( m_iColumn, 1 ) );
+    QPoint pastePoint( m_iColumn, 1 );
+    table->paste( m_data, QRect( pastePoint, pastePoint ) );
     if(table->getAutoCalc()) table->recalc();
 
     table->setPrintRange( m_printRange );
@@ -327,7 +328,8 @@ void KSpreadUndoRemoveRow::undo()
 
     table->insertRow( m_iRow,m_iNbRow );
 
-    table->paste( m_data, QPoint( 1, m_iRow ) );
+    QPoint pastePoint( 1, m_iRow );
+    table->paste( m_data, QRect(pastePoint, pastePoint) );
 
     table->setPrintRange( m_printRange );
     table->setPrintRepeatRows( m_printRepeatRows );
@@ -901,7 +903,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
   int bottom = m_rctRect.bottom();
   int right  = m_rctRect.right();
 
-  if ( table->isColumnSelected( m_rctRect ) )
+  if ( util_isColumnSelected( m_rctRect ) )
   {
     /* Don't need to go through the loop twice...
       for (int i = m_rctRect.left(); i <= right; ++i)
@@ -958,7 +960,7 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
       }
     */
   }
-  else if (table->isRowSelected( m_rctRect ) )
+  else if (util_isRowSelected( m_rctRect ) )
   {
     for ( int row = m_rctRect.top(); row <= bottom; ++row )
     {
@@ -1036,7 +1038,7 @@ void KSpreadUndoCellLayout::undo()
   doc()->undoBuffer()->lock();
 
   copyLayout( m_lstRedoLayouts, m_lstRedoColLayouts, m_lstRedoRowLayouts, table );
-  if( table->isColumnSelected( m_rctRect ) )
+  if( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColLayouts.begin(); it2 != m_lstColLayouts.end(); ++it2 )
@@ -1045,7 +1047,7 @@ void KSpreadUndoCellLayout::undo()
       col->copy( *(*it2).l );
     }
   }
-  else if( table->isRowSelected( m_rctRect ) )
+  else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowLayouts.begin(); it2 != m_lstRowLayouts.end(); ++it2 )
@@ -1077,7 +1079,7 @@ void KSpreadUndoCellLayout::redo()
 
   doc()->undoBuffer()->lock();
 
-  if ( table->isColumnSelected( m_rctRect ) )
+  if ( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstRedoColLayouts.begin(); it2 != m_lstRedoColLayouts.end(); ++it2 )
@@ -1086,7 +1088,7 @@ void KSpreadUndoCellLayout::redo()
       col->copy( *(*it2).l );
     }
   }
-  else if( table->isRowSelected( m_rctRect ) )
+  else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRedoRowLayouts.begin(); it2 != m_lstRedoRowLayouts.end(); ++it2 )
@@ -1131,7 +1133,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
 {
   list.clear();
 
-  if ( table->isColumnSelected( m_rctRect ) )
+  if ( util_isColumnSelected( m_rctRect ) )
   {
     KSpreadCell * c;
     for (int col = m_rctRect.left(); col <= m_rctRect.right(); ++col)
@@ -1160,7 +1162,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
       }
     }
   }
-  else if ( table->isRowSelected( m_rctRect ) )
+  else if ( util_isRowSelected( m_rctRect ) )
   {
     KSpreadCell * c;
     for ( int row = m_rctRect.top(); row <= m_rctRect.bottom(); ++row)
@@ -1226,7 +1228,7 @@ void KSpreadUndoSort::undo()
   copyAll( m_lstRedoLayouts, m_lstRedoColLayouts,
            m_lstRedoRowLayouts, table );
 
-  if ( table->isColumnSelected( m_rctRect ) )
+  if ( util_isColumnSelected( m_rctRect ) )
   {
     QValueList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColLayouts.begin(); it2 != m_lstColLayouts.end(); ++it2 )
@@ -1235,7 +1237,7 @@ void KSpreadUndoSort::undo()
       col->copy( *(*it2).l );
     }
   }
-  else if( table->isRowSelected( m_rctRect ) )
+  else if( util_isRowSelected( m_rctRect ) )
   {
     QValueList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowLayouts.begin(); it2 != m_lstRowLayouts.end(); ++it2 )
@@ -1275,7 +1277,7 @@ void KSpreadUndoSort::redo()
 
     doc()->undoBuffer()->lock();
 
-    if( table->isColumnSelected( m_rctRect ) )
+    if( util_isColumnSelected( m_rctRect ) )
     {
       QValueList<layoutColumn>::Iterator it2;
       for ( it2 = m_lstRedoColLayouts.begin(); it2 != m_lstRedoColLayouts.end(); ++it2 )
@@ -1284,7 +1286,7 @@ void KSpreadUndoSort::redo()
         col->copy( *(*it2).l );
       }
     }
-    else if( table->isRowSelected( m_rctRect ) )
+    else if( util_isRowSelected( m_rctRect ) )
     {
       QValueList<layoutRow>::Iterator it2;
       for ( it2 = m_lstRedoRowLayouts.begin(); it2 != m_lstRedoRowLayouts.end(); ++it2 )
@@ -1342,7 +1344,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
     listRow.clear();
     listCol.clear();
     //copy a column(s)
-    if( table->isColumnSelected( m_selection ) )
+    if( util_isColumnSelected( m_selection ) )
     {
         for( int y =m_selection.left() ; y <=m_selection.right() ; ++y )
         {
@@ -1357,7 +1359,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
         }
     }
     //copy a row(s)
-    else if( table->isRowSelected( m_selection ) )
+    else if( util_isRowSelected( m_selection ) )
     {
         //save size of row(s)
         for( int y =m_selection.top() ; y <=m_selection.bottom() ; ++y )
@@ -1402,7 +1404,7 @@ void KSpreadUndoDelete::undo()
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
     doc()->undoBuffer()->lock();
-    if( table->isColumnSelected( m_selection ) )
+    if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -1411,7 +1413,7 @@ void KSpreadUndoDelete::undo()
            cl->setWidth(int((*it2).columnWidth));
         }
     }
-    else if( table->isRowSelected( m_selection ) )
+    else if( util_isRowSelected( m_selection ) )
     {
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
@@ -1422,7 +1424,7 @@ void KSpreadUndoDelete::undo()
     }
 
     table->deleteCells( m_selection );
-    table->paste( m_data, m_selection.topLeft() );
+    table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -1436,7 +1438,7 @@ void KSpreadUndoDelete::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    if( table->isColumnSelected( m_selection ) )
+    if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -1445,7 +1447,7 @@ void KSpreadUndoDelete::redo()
            cl->setWidth(int((*it2).columnWidth));
         }
     }
-    else if( table->isRowSelected( m_selection ) )
+    else if( util_isRowSelected( m_selection ) )
     {
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -1459,7 +1461,7 @@ void KSpreadUndoDelete::redo()
     //because I must know what is the real rect
     //that I must refresh, when there is cell Merged
 
-    table->paste( m_dataRedo, m_selection.topLeft() );
+    table->paste( m_dataRedo, m_selection );
     //table->deleteCells( m_selection );
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
@@ -1487,7 +1489,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     listCol.clear();
     listRow.clear();
 
-    if( table->isColumnSelected( m_rctRect ) ) // entire column(s)
+    if( util_isColumnSelected( m_rctRect ) ) // entire column(s)
     {
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
@@ -1501,7 +1503,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     }
         }
     }
-    else if( table->isRowSelected( m_rctRect ) ) // entire row(s)
+    else if( util_isRowSelected( m_rctRect ) ) // entire row(s)
     {
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
@@ -1557,7 +1559,7 @@ void KSpreadUndoResizeColRow::undo()
 
     createList( m_lstRedoColumn,m_lstRedoRow, table );
 
-    if( table->isColumnSelected( m_rctRect ) ) // complete column(s)
+    if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -1566,7 +1568,7 @@ void KSpreadUndoResizeColRow::undo()
            cl->setWidth((*it2).columnWidth);
         }
     }
-    else if( table->isRowSelected( m_rctRect ) ) // complete row(s)
+    else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
     {
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
@@ -1601,7 +1603,7 @@ void KSpreadUndoResizeColRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    if( table->isColumnSelected( m_rctRect ) ) // complete column(s)
+    if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -1610,7 +1612,7 @@ void KSpreadUndoResizeColRow::redo()
            cl->setWidth((*it2).columnWidth);
         }
     }
-    else if( table->isRowSelected( m_rctRect ) ) // complete row(s)
+    else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
     {
     QValueList<rowSize>::Iterator it2;
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -1662,7 +1664,7 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
     int right  = m_rctRect.right();
     list.clear();
 
-    if( table->isColumnSelected( m_rctRect ) )
+    if( util_isColumnSelected( m_rctRect ) )
     {
       KSpreadCell * c;
       for ( int col = m_rctRect.left(); col <= right; ++col )
@@ -1682,7 +1684,7 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
         }
       }
     }
-    else if ( table->isRowSelected( m_rctRect ) )
+    else if ( util_isRowSelected( m_rctRect ) )
     {
       KSpreadCell * c;
       for ( int row = m_rctRect.top(); row <= bottom; ++row )
@@ -1880,7 +1882,7 @@ void KSpreadUndoAutofill::undo()
 
     doc()->undoBuffer()->lock();
     table->deleteCells( m_selection );
-    table->paste( m_data, m_selection.topLeft() );
+    table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -1896,7 +1898,7 @@ void KSpreadUndoAutofill::redo()
 
     table->deleteCells( m_selection );
     doc()->undoBuffer()->lock();
-    table->paste( m_dataRedo, m_selection.topLeft() );
+    table->paste( m_dataRedo, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -2027,7 +2029,7 @@ void KSpreadUndoRemoveCellRow::undo()
 
     doc()->undoBuffer()->lock();
     table->shiftRow( m_rect );
-    table->paste( m_data, QPoint(m_rect.left(),m_rect.top()) );
+    table->paste( m_data, m_rect );
     doc()->undoBuffer()->unlock();
 }
 
@@ -2084,7 +2086,7 @@ void KSpreadUndoRemoveCellCol::undo()
 
     doc()->undoBuffer()->lock();
     table->shiftColumn( m_rect );
-    table->paste( m_data, QPoint(m_rect.left(),m_rect.top()) );
+    table->paste( m_data, m_rect );
     doc()->undoBuffer()->unlock();
 }
 
@@ -2148,7 +2150,7 @@ void KSpreadUndoConditional::undo()
     createListCell( m_dataRedo, table );
 
     doc()->undoBuffer()->lock();
-    table->paste( m_data, m_selection.topLeft() );
+    table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -2163,7 +2165,7 @@ void KSpreadUndoConditional::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->paste( m_dataRedo, m_selection.topLeft() );
+    table->paste( m_dataRedo, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -2395,7 +2397,8 @@ void KSpreadUndoCellPaste::undo()
                 QRect rect;
                 rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
                 table->deleteCells( rect );
-                table->paste( m_data, QPoint(xshift,1) );
+                QPoint pastePoint(xshift, 1);
+                table->paste( m_data, QRect(pastePoint, pastePoint) );
                 QValueList<columnSize>::Iterator it2;
                 for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
                         {
@@ -2415,7 +2418,9 @@ void KSpreadUndoCellPaste::undo()
                 QRect rect;
                 rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
                 table->deleteCells( rect );
-                table->paste( m_data, QPoint(1,yshift) );
+
+                QPoint pastePoint(1, yshift);
+                table->paste( m_data, QRect(pastePoint, pastePoint) );
                 QValueList<rowSize>::Iterator it2;
                 for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
                         {
@@ -2433,7 +2438,7 @@ void KSpreadUndoCellPaste::undo()
     if(!b_insert)
         {
         table->deleteCells( m_selection );
-        table->paste( m_data,m_selection.topLeft());
+        table->paste( m_data, m_selection );
         }
     else
         {
@@ -2465,7 +2470,8 @@ void KSpreadUndoCellPaste::redo()
         QRect rect;
         rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
         table->deleteCells( rect );
-        table->paste( m_dataRedo, QPoint(xshift,1) );
+        QPoint pastePoint(xshift, 1);
+        table->paste( m_dataRedo, QRect(pastePoint, pastePoint) );
         QValueList<columnSize>::Iterator it2;
          for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
                 {
@@ -2484,7 +2490,9 @@ void KSpreadUndoCellPaste::redo()
         QRect rect;
         rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
         table->deleteCells( rect );
-        table->paste( m_dataRedo, QPoint(1,yshift) );
+
+        QPoint pastePoint(1, yshift);
+        table->paste( m_dataRedo, QRect(pastePoint, pastePoint) );
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
                 {
@@ -2503,7 +2511,7 @@ void KSpreadUndoCellPaste::redo()
 
         }
     table->deleteCells( m_selection );
-    table->paste( m_dataRedo,m_selection.topLeft());
+    table->paste( m_dataRedo,m_selection );
     }
     if(table->getAutoCalc())
         table->recalc();
@@ -2537,7 +2545,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
 {
   int bottom = m_selection.bottom();
   int right  = m_selection.right();
-  if ( table->isColumnSelected( m_selection ) )
+  if ( util_isColumnSelected( m_selection ) )
   {
     KSpreadCell * c;
     for ( int col = m_selection.left(); col <= right; ++ col )
@@ -2558,7 +2566,7 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
       }
     }
   }
-  else if ( table->isRowSelected( m_selection ) )
+  else if ( util_isRowSelected( m_selection ) )
   {
     KSpreadCell * c;
     for ( int row = m_selection.top(); row <= bottom; ++row )

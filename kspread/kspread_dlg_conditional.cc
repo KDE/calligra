@@ -259,7 +259,7 @@ Conditional KSpreadWidgetconditional::typeOfCondition()
    case 1 :
     result=Equal;
     break;
-    
+
    case 2 :
     result=Superior;
     break;
@@ -282,7 +282,7 @@ Conditional KSpreadWidgetconditional::typeOfCondition()
     kdDebug(36001) << "Error in list" << endl;
     break;
   }
-  
+
   return result;
 }
 
@@ -321,12 +321,12 @@ void KSpreadconditional::init()
 
   QValueList<KSpreadConditional>::iterator it1;
   QValueList<KSpreadConditional>::iterator it2;
-      
-  KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(), 
+
+  KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(),
 						     marker.top() );
 
-  conditionList = obj->GetConditionList(); 
-  /* this is the list, but only display the conditions common to all selected 
+  conditionList = obj->GetConditionList();
+  /* this is the list, but only display the conditions common to all selected
      cells*/
 
   for ( int x = marker.left(); x <= marker.right(); x++ )
@@ -335,7 +335,7 @@ void KSpreadconditional::init()
     {
       KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
       otherList = obj2->GetConditionList();
-      
+
       it1 = conditionList.begin();
       while(it1 != conditionList.end())
       {
@@ -348,7 +348,7 @@ void KSpreadconditional::init()
 		   (*it1).fontcond == (*it2).fontcond &&
 		   (*it1).m_cond == (*it2).m_cond);
 	}
-	
+
 	if (!found)  /* if it's not here, don't display this condition */
 	{
 	  it1 = conditionList.remove(it1);
@@ -362,8 +362,8 @@ void KSpreadconditional::init()
   }
 
   numCondition = 0;
-  for (it1 = conditionList.begin(); 
-       numCondition < KSPREAD_NUM_CONDITIONALS && it1 != conditionList.end(); 
+  for (it1 = conditionList.begin();
+       numCondition < KSPREAD_NUM_CONDITIONALS && it1 != conditionList.end();
        it1++)
   {
     conditionals[numCondition]->init(*it1);
@@ -406,7 +406,7 @@ void KSpreadconditional::slotOk()
   }
   kdDebug() << "Condition list created " << endl;
 
-  m_pView->activeTable()->setConditional(marker, newList);
+  m_pView->activeTable()->setConditional(m_pView->selectionInfo(), newList);
 
   kdDebug() << "Update done" << endl;
 

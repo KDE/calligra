@@ -1732,7 +1732,7 @@ QString KSpreadCell::valueString() const
   return m_strText;
 }
 
-void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
+void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
                              QPoint corner, QPoint cellRef, bool drawCursor )
 {
   static int paintingObscured = 0;
@@ -1758,13 +1758,25 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
-  QRect selection = m_pTable->selection();
 
-  bool selected = selection.contains(cellRef);
-  // Dont draw any selection when printing.
-  if ( painter.device()->isExtDev() || !drawCursor)
-    selected = false;
+  bool selected = false;
 
+  if (view != NULL)
+  {
+    selected = view->selection().contains(cellRef);
+
+    /* but the cell doesn't look selected if this is the marker cell */
+    KSpreadCell* cell = m_pTable->cellAt(view->marker());
+    QPoint bottomRight(view->marker().x() + cell->extraXCells(),
+                       view->marker().y() + cell->extraYCells());
+    QRect markerArea(view->marker(), bottomRight);
+    selected = selected && !(markerArea.contains(cellRef));
+
+
+    // Dont draw any selection when printing.
+    if ( painter.device()->isExtDev() || !drawCursor)
+      selected = false;
+  }
   calc();
 
   // Need to make a new layout ?
@@ -1785,7 +1797,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
   /* paint all the cells that this one obscures */
   paintingObscured++;
-  paintObscuredCells(rect, painter, corner, cellRef);
+  paintObscuredCells(rect, painter, view, corner, cellRef);
   paintingObscured--;
 
   /* now print content, if this cell isn't obscured */
@@ -1844,7 +1856,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
                                m_pTable->rowPos(obscuringCell->row()));
       painter.save();
 
-      obscuringCell->paintCell( rect, painter, obscuringCellLoc,
+      obscuringCell->paintCell( rect, painter, view, obscuringCellLoc,
                                 obscuringCellRef);
       painter.restore();
     }
@@ -1883,6 +1895,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
 
 void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
+                                     KSpreadView* view,
                                      QPoint corner, QPoint cellRef)
 {
   // This cell is obscuring other ones? Then we redraw their
@@ -1903,7 +1916,7 @@ void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
           KSpreadCell* cell = m_pTable->cellAt( cellRef.x() + x,
                                                 cellRef.y() + y );
 
-          cell->paintCell( rect, painter, QPoint(xpos, ypos),
+          cell->paintCell( rect, painter, view, QPoint(xpos, ypos),
                            QPoint(cellRef.x() + x, cellRef.y() + y));
         }
         xpos += cl->width();
@@ -1919,17 +1932,13 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
                                   QPoint cellRef, bool selected)
 {
   QColorGroup defaultColorGroup = QApplication::palette().active();
-  QPoint marker = m_pTable->marker();
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
   int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
-  KSpreadCell* cell = m_pTable->cellAt(marker);
-  QPoint bottomRight(marker.x() + cell->extraXCells(),
-                     marker.y() + cell->extraYCells());
-  QRect markerArea(marker, bottomRight);
+
   // Determine the correct background color
-  if ( selected && !markerArea.contains(cellRef))
+  if ( selected )
   {
     painter.setBackgroundColor( defaultColorGroup.highlight() );
   }
@@ -1994,16 +2003,16 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   bool paintRight;
   KSpreadCell *cell = NULL;
 
-  paintLeft = ( left_pen.style() == Qt::NoPen && 
+  paintLeft = ( left_pen.style() == Qt::NoPen &&
                 table()->getShowGrid() );
   paintRight = ( painter.device()->isExtDev() && // Only on printout
-                 right_pen.style() == Qt::NoPen && 
+                 right_pen.style() == Qt::NoPen &&
                  table()->getShowGrid() &&
                  table()->isOnNewPageX( cellRef.x() + 1 ) );  //Only when last cell on page
-  paintTop = ( top_pen.style() == Qt::NoPen && 
+  paintTop = ( top_pen.style() == Qt::NoPen &&
                table()->getShowGrid() );
   paintBottom = ( painter.device()->isExtDev() &&  // Only on printout
-                  bottom_pen.style() == Qt::NoPen && 
+                  bottom_pen.style() == Qt::NoPen &&
                   table()->getShowGrid() &&
                   table()->isOnNewPageY( cellRef.y() + 1 ) ); //Only when last cell on page
 
@@ -2033,7 +2042,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x(), corner.y() + dt, 
+    painter.drawLine( corner.x(), corner.y() + dt,
                       corner.x(), corner.y() + height - db - dt );
   }
 
@@ -2055,7 +2064,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + width, corner.y() + dt, 
+    painter.drawLine( corner.x() + width, corner.y() + dt,
                       corner.x() + width, corner.y() + height - db - dt );
   }
 
@@ -2075,7 +2084,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
         dr = r.width() / 2;
     }
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,              corner.y(), 
+    painter.drawLine( corner.x() + dl,              corner.y(),
                       corner.x() + width - dr - dl, corner.y() );
   }
 
@@ -2095,7 +2104,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
         dr = r.width() / 2;
     }
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,              corner.y() + height, 
+    painter.drawLine( corner.x() + dl,              corner.y() + height,
                       corner.x() + width - dr - dl, corner.y() + height );
   }
 }
@@ -2109,10 +2118,10 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
 
-  if( !comment(cellRef.x(),cellRef.y()).isEmpty() && 
+  if( !comment(cellRef.x(),cellRef.y()).isEmpty() &&
       rowLayout->height() > 2 &&
       colLayout->width() > 10 &&
-      ( table()->getPrintCommentIndicator() ||  
+      ( table()->getPrintCommentIndicator() ||
         ( !painter.device()->isExtDev() && table()->doc()->getShowCommentIndicator() ) ) )
   {
     QPointArray point( 3 );
@@ -2399,7 +2408,7 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
 
   // Draw page borders
-  if ( m_pTable->isShowPageBorders() && 
+  if ( m_pTable->isShowPageBorders() &&
        //Check for the print range
        cellRef.x() >= table()->printRange().left() &&
        cellRef.x() <= table()->printRange().right()+1 &&

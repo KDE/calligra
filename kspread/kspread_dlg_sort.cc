@@ -298,14 +298,14 @@ void KSpreadSortDlg::init()
   }
   m_outputTable->setCurrentText( m_pView->activeTable()->tableName() );
 
-  QRect r = m_pView->activeTable()-> selection();
+  QRect r = m_pView->selection();
   QString cellArea;
   cellArea += util_encodeColumnLabelText(r.left());
   cellArea += QString::number( r.top() );
   m_outputCell->setText( cellArea );
 
   // Entire columns selected ?
-  if ( m_pView->activeTable()->isColumnSelected() )
+  if ( util_isColumnSelected(r) )
   {
     m_sortRow->setEnabled(false);
     m_sortColumn->setChecked(true);
@@ -315,7 +315,7 @@ void KSpreadSortDlg::init()
       m_listColumn += i18n("Column %1").arg(util_encodeColumnLabelText(i));
   }
   // Entire rows selected ?
-  else if ( m_pView->activeTable()->isRowSelected() )
+  else if ( util_isRowSelected(r) )
   {
     m_sortColumn->setEnabled(false);
     m_sortRow->setChecked(true);
@@ -431,7 +431,7 @@ void KSpreadSortDlg::slotOk()
   }
   outputPoint.table = table;
 
-  QRect r = m_pView->activeTable()-> selection();
+  QRect r = m_pView->selection();
   if ( r.topLeft() != outputPoint.pos )
   {
     int h = outputPoint.pos.y() + r.height();
@@ -526,7 +526,7 @@ void KSpreadSortDlg::slotOk()
 
   if ( m_sortRow->isChecked() )
   {
-    m_pView->activeTable()->sortByRow( key1, key2, key3,
+    m_pView->activeTable()->sortByRow( m_pView->selection(), key1, key2, key3,
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
                                        m_firstRowHeader->isChecked(),
@@ -534,7 +534,7 @@ void KSpreadSortDlg::slotOk()
   }
   else if (m_sortColumn->isChecked())
   {
-    m_pView->activeTable()->sortByColumn( key1, key2, key3,
+    m_pView->activeTable()->sortByColumn( m_pView->selection(), key1, key2, key3,
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
                                           m_firstRowHeader->isChecked(),

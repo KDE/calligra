@@ -1,3 +1,4 @@
+
 #ifndef KSPREAD_VIEW_IFACE_H
 #define KSPREAD_VIEW_IFACE_H
 
@@ -5,6 +6,7 @@
 
 #include <qstring.h>
 #include <qrect.h>
+#include <qcolor.h>
 
 class KSpreadView;
 class KSpreadCellProxy;
@@ -26,6 +28,7 @@ k_dcop:
     virtual void hide();
     virtual void show();
 
+    virtual void setSelection(QRect selection);
     virtual void find();
     virtual void replace();
     virtual void conditional();
@@ -69,6 +72,35 @@ k_dcop:
     virtual void textToColumns();
     virtual void copyAsText();
 
+  virtual void setSelectionMoneyFormat( bool b );
+  virtual void setSelectionPrecision( int delta );
+  virtual void setSelectionPercent( bool b );
+  virtual void setSelectionMultiRow( bool enable );
+  virtual void setSelectionSize(int size);
+  virtual void setSelectionUpper();
+  virtual void setSelectionLower();
+  virtual void setSelectionFirstLetterUpper();
+  virtual void setSelectionVerticalText(bool enable);
+  virtual void setSelectionComment(QString comment);
+  virtual void setSelectionAngle(int value);
+  virtual void setSelectionTextColor(QColor txtColor );
+  virtual void setSelectionBgColor(QColor bgColor );
+  virtual void setSelectionBorderColor(QColor bdColor );
+
+  virtual void deleteSelection();
+  virtual void copySelection();
+  virtual void cutSelection();
+
+  virtual void setLeftBorderColor(QColor color);
+  virtual void setTopBorderColor(QColor color);
+  virtual void setRightBorderColor(QColor color);
+  virtual void setBottomBorderColor(QColor color);
+  virtual void setAllBorderColor(QColor color);
+  virtual void setOutlineBorderColor(QColor color);
+  virtual void removeBorder();
+
+  virtual void increaseIndent();
+  virtual void decreaseIndent();
 
 private:
     KSpreadView* m_view;

@@ -57,6 +57,7 @@ class KPrinter;
 #include "kspread_cell.h"
 #include "kspread_global.h"
 #include "kspread_cluster.h"
+#include "kspread_selection.h"
 
 /********************************************************************
  *
@@ -341,6 +342,8 @@ public:
      * @return a non default KSpreadCell for the position.
      */
     KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false );
+    KSpreadCell* nonDefaultCell( QPoint cellRef, bool scroll = false )
+      { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
     KSpreadCell* defaultCell()const { return m_pDefaultCell; }
 
@@ -422,172 +425,118 @@ public:
     void setText( int row, int column, const QString& text, bool updateDepends = true );
 
 
-  /**
-   * @return the marker point of the table.  Usually is the selected cell, or if
-   * a region is selected it is the one point in the region where text would be
-   * entered if the user started typing
-   */
-  QPoint marker() const;
 
-  /**
-   * @return the selection rectangle.  Note that this should now NEVER be
-   * (0, 0, 0, 0).  Whether the selection is one cell or many this will give
-   * the region.
-   */
-  QRect selection() const;
-
-  /**
-   * @return a boolean indicator of whether a single cell is selected or not
-   */
-  bool singleCellSelection() const;
-
-  /**
-   * @return the area that the 'handle' of the selection is located in painting coordinates.
-   */
-  QRect getSelectionHandleArea(KSpreadCanvas* canvas);
-
-  void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
-  void setSelection( QRect _rect, QPoint marker,
-                     KSpreadCanvas *_canvas = 0L );
-
-  void setMarker( QPoint _point, KSpreadCanvas *_canvas = 0L );
-
-  /**
-   * @return the 'anchor' point of the selection -- i.e. the fixed corner
-   */
-   QPoint selectionAnchor();
-
-  /**
-   * The 'cursor position' is used to keep track of where on the spreadsheet the
-   * user is with the arrow keys.  It's basically the same as the marker, except
-   * when the selection moves into a merged area.  If we use the down arrow key to
-   * enter a merged area 3 columns over, we want to come out the bottom 3 columns
-   * over if we keep pressing the down arrow.
-   *
-   * If the given position is not within the merged cell area of the marker, this
-   * function call will be ignored.
-   *
-   * @return true if the position was valid, false if it wasn't.  In other words,
-   *         true if something changed, false if there is no change.
-   */
-  bool setCursorPosition(const QPoint &position);
-
-  /**
-   * @see setCursorPosition for a description of what the cursor position is
-   *
-   * You are probably wanting to use marker(), not this function
-   */
-  QPoint getCursorPosition()const;
-
-
-  void setChooseAnchor(const QPoint &chooseAnchor) { m_chooseAnchor = chooseAnchor; }
-  void setChooseMarker(const QPoint &chooseMarker) { m_chooseMarker = chooseMarker; }
-  void setChooseCursor(const QPoint &chooseCursor) { m_chooseCursor = chooseCursor; }
-
-  QRect getChooseRect()const;
-  QPoint getChooseCursor()const { return m_chooseCursor; }
-  QPoint getChooseMarker()const { return m_chooseMarker; }
-  QPoint getChooseAnchor()const { return m_chooseAnchor; }
-
-
-    void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
-                           signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
+    void setSelectionFont( KSpreadSelection* selectionInfo,
+                           const char *_font = 0L, int _size = -1,
+                           signed char _bold = -1, signed char _italic = -1,
+                           signed char _underline = -1,
                            signed char _strike = -1 );
-    void setSelectionMoneyFormat( const QPoint &_marker,bool b );
-    void setSelectionAlign( const QPoint &_marker, KSpreadLayout::Align _align );
-    void setSelectionAlignY( const QPoint &_marker, KSpreadLayout::AlignY _alignY );
-    void setSelectionPrecision( const QPoint &_marker, int _delta );
-    void setSelectionPercent( const QPoint &_marker, bool b );
-    void setSelectionMultiRow( const QPoint &_marker, bool enable );
+
+    void setSelectionMoneyFormat( KSpreadSelection* selectionInfo, bool b );
+    void setSelectionAlign( KSpreadSelection* selectionInfo,
+                            KSpreadLayout::Align _align );
+    void setSelectionAlignY( KSpreadSelection* selectionInfo,
+                             KSpreadLayout::AlignY _alignY );
+    void setSelectionPrecision( KSpreadSelection* selectionInfo, int _delta );
+    void setSelectionPercent( KSpreadSelection* selectionInfo, bool b );
+    void setSelectionMultiRow( KSpreadSelection* selectionInfo, bool enable );
 
     /**
     * setSelectionSize increase or decrease font size
     */
-    void setSelectionSize( const QPoint &_marker,int _size );
+    void setSelectionSize( KSpreadSelection* selectionInfo, int _size );
 
     /**
      *change string to upper case if _type equals 1
      * or change string to lower if _type equals -1
      */
-    void setSelectionUpperLower( const QPoint &_marker,int _type );
+    void setSelectionUpperLower( KSpreadSelection* selectionInfo, int _type );
 
-    void setSelectionfirstLetterUpper( const QPoint &_marker);
+    void setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo);
 
-    void setSelectionVerticalText( const QPoint &_marker,bool _b);
+    void setSelectionVerticalText( KSpreadSelection* selectionInfo, bool _b);
 
-    void setSelectionComment( const QPoint &_marker,const QString &_comment);
-    void setSelectionRemoveComment( const QPoint &_marker);
+    void setSelectionComment( KSpreadSelection* selectionInfo,
+                              const QString &_comment);
+    void setSelectionRemoveComment(KSpreadSelection* selectionInfo);
 
-    void setSelectionAngle( const QPoint &_marker,int _value);
+    void setSelectionAngle(KSpreadSelection* selectionInfo, int _value);
 
-    void setSelectionTextColor( const QPoint &_marker, const QColor &tbColor );
-    void setSelectionbgColor( const QPoint &_marker, const QColor &bg_Color );
-    void setSelectionBorderColor( const QPoint &_marker, const QColor &bd_Color );
+    void setSelectionTextColor( KSpreadSelection* selectionInfo,
+                                const QColor &tbColor );
+    void setSelectionbgColor( KSpreadSelection* selectionInfo,
+                              const QColor &bg_Color );
+    void setSelectionBorderColor( KSpreadSelection* selectionInfo,
+                                  const QColor &bd_Color );
 
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be deleted.
      */
-    void deleteSelection( const QPoint &_marker );
+    void deleteSelection( KSpreadSelection* selectionInfo );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be copied.
      */
-    void copySelection( const QPoint &_marker );
+    void copySelection( KSpreadSelection* selectionInfo );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be cut.
      */
-    void cutSelection( const QPoint &_marker );
+    void cutSelection( KSpreadSelection* selectionInfo );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be cleared.
      */
-    void clearTextSelection(const QPoint &_marker );
+    void clearTextSelection( KSpreadSelection* selectionInfo );
 
-    void clearValiditySelection(const QPoint &_marker );
+    void clearValiditySelection(KSpreadSelection* selectionInfo );
 
-    void clearConditionalSelection(const QPoint &_marker );
+    void clearConditionalSelection(KSpreadSelection* selectionInfo );
 
 
-    void setWordSpelling(const QPoint &_marker,const QString _listWord );
+    void setWordSpelling(KSpreadSelection* selectionInfo,const QString _listWord );
 
-    QString getWordSpelling(const QPoint &_marker );
+    QString getWordSpelling(KSpreadSelection* selectionInfo );
 
     /**
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite,bool insert=false,int insertTo=0 );
-    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,bool insert=false,int insertTo=0 );
-    void defaultSelection( const QPoint &_marker );
+    void paste( QRect pasteArea, bool makeUndo=true, PasteMode=Normal,
+                Operation=OverWrite,bool insert=false,int insertTo=0 );
+    void paste( const QByteArray& data, QRect pasteArea,
+                bool makeUndo=false, PasteMode=Normal, Operation=OverWrite,
+                bool insert=false, int insertTo=0 );
+    void defaultSelection( KSpreadSelection* selectionInfo );
 
     /**
      * A function which allows to paste a text plain from the clipboard
      */
-    void pasteTextPlain( QString &_text, const QPoint &_marker);
+    void pasteTextPlain( QString &_text, QRect pasteArea);
 
     /**
      * Find support.
      */
-    void find( const QPoint &_marker, QString _find, long options, KSpreadCanvas *canvas );
+    void find( QString _find, long options, KSpreadCanvas *canvas );
 
     /**
      * Find'n'Replace support.
      */
-    void replace( const QPoint &_marker, QString _find, QString _replace, long options, KSpreadCanvas *canvas );
+    void replace( QString _find, QString _replace, long options,
+                  KSpreadCanvas *canvas );
 
-    void sortByRow( int ref_row, SortingOrder );
-    void sortByRow( int key1, int key2, int key3,
+    void sortByRow( QRect area, int ref_row, SortingOrder );
+    void sortByRow( QRect area, int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
                     QStringList const * firstKey, bool copyLayout, bool headerRow,
                     KSpreadPoint const & outputPoint );
-    void sortByColumn( int ref_column, SortingOrder );
-    void sortByColumn( int key1, int key2, int key3,
+    void sortByColumn( QRect area, int ref_column, SortingOrder );
+    void sortByColumn( QRect area, int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
                        QStringList const * firstKey, bool copyLayout, bool headerRow,
                        KSpreadPoint const & outputPoint );
@@ -598,8 +547,8 @@ public:
      * @param x2, y2: values from target cell
      * @param cpLayout: if true: cell layout (format) gets copied, too
      */
-    void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
-    void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
+  void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
+    void setSeries( QPoint _marker, double start, double end, double step, Series mode, Series type );
 
     /**
      * Moves all cells of the row _marker.y() which are in
@@ -651,42 +600,24 @@ public:
     void emitHideColumn();
     void showColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
 
-    int adjustColumn( const QPoint &_marker, int _col = -1 );
-    int adjustRow( const QPoint &_marker, int _row = -1 );
-
-    /**
-    * Check wether an entire row is selected in the current selection
-    */
-    bool isRowSelected ()const;
-    /**
-    * Check wether an entire row is selected in the selection rect of the argument
-    */
-    bool isRowSelected (const QRect &_rect)const;
-    /**
-    * Check wether an entire column is selected in the current selection
-    */
-    bool isColumnSelected ()const;
-    /**
-    * Check wether the entire column is selected in the selection rect of the argument
-    */
-    bool isColumnSelected (const QRect &_rect)const;
-
+    int adjustColumn( KSpreadSelection* selectionInfo, int _col = -1 );
+    int adjustRow( KSpreadSelection* selectionInfo, int _row = -1 );
 
     /**
      * Install borders
      */
-    void borderLeft( const QPoint &_marker,const QColor &_color );
-    void borderTop( const QPoint &_marker,const QColor &_color );
-    void borderOutline( const QPoint &_marker,const QColor &_color );
-    void borderAll( const QPoint &_marker,const QColor &_color );
-    void borderRemove( const QPoint &_marker );
-    void borderBottom( const QPoint &_marker,const QColor &_color );
-    void borderRight( const QPoint &_marker,const QColor &_color );
+    void borderLeft( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderTop( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderOutline( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderAll( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderRemove( KSpreadSelection* selectionInfo );
+    void borderBottom( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderRight( KSpreadSelection* selectionInfo, const QColor &_color );
 
-    void setConditional( const QRect &_marker,
+    void setConditional( KSpreadSelection* selectionInfo,
 			 QValueList<KSpreadConditional> const & newConditions );
 
-    void setValidity( const QPoint &_marker,KSpreadValidity tmp );
+    void setValidity( KSpreadSelection* selectionInfo,KSpreadValidity tmp );
 
     /**
      * Returns, if the grid shall be shown on the screen
@@ -733,30 +664,20 @@ public:
 
     void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
 
-    void mergeCell( const QPoint &_marker, bool makeUndo=true );
-    void dissociateCell( const QPoint &_marker, bool makeUndo=true );
+    void mergeCells( QRect area, bool makeUndo=true );
+    void dissociateCell( QPoint cellRef, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
-    void increaseIndent( const QPoint &_marker );
-    void decreaseIndent( const QPoint &_marker );
+    void increaseIndent( KSpreadSelection* selectionInfo );
+    void decreaseIndent( KSpreadSelection* selectionInfo );
 
-    bool areaIsEmpty();
+    bool areaIsEmpty(QRect area) ;
 
     void refreshPreference() ;
 
     void hideTable(bool _hide);
 
     void removeTable();
-
-    void setActiveTable();
-
-    int getScrollPosX()const {return m_iScrollPosX;}
-    void setScrollPosX( int _scrollX) { m_iScrollPosX=_scrollX;}
-
-    int getScrollPosY()const {return m_iScrollPosY;}
-    void setScrollPosY( int _scrollY) { m_iScrollPosY=_scrollY;}
-
-
 
     QRect selectionCellMerged(const QRect &_sel);
     /**
@@ -803,11 +724,6 @@ public:
      * Hides or shows this tables
      */
     void setHidden( bool hidden ) { m_bTableHide=hidden; }
-
-    /**
-     * Unselects all selected columns/rows/cells and redraws these cells.
-     */
-    void unselect();
 
     /**
      * For internal use only.
@@ -909,9 +825,10 @@ public:
     * insertTo used just for insert/paste an area
      * @see #paste
      */
-    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
+    bool loadSelection( const QDomDocument& doc, QRect pasteArea, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite,bool insert=false,int insertTo=0 );
 
-    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert,int insertTo);
+    void loadSelectionUndo( const QDomDocument & doc, QRect loadArea,
+                            int _xshift, int _yshift,bool insert,int insertTo);
 
     /**
     *  Used when you insert and paste cell
@@ -937,12 +854,12 @@ public:
      * Return TRUE if there are text value in cell
      * so you can create list selection
      */
-    bool testListChoose(const QPoint &_marker);
+    bool testListChoose(KSpreadSelection* selectionInfo);
 
     /**
      * returns the text to be copied to the clipboard
      */
-    QString copyAsText(const QPoint &_marker);
+    QString copyAsText(KSpreadSelection* selection);
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the
@@ -1156,11 +1073,8 @@ public:
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );
-    void sig_unselect( KSpreadTable *_table, const QRect& );
     void sig_updateHBorder( KSpreadTable *_table );
     void sig_updateVBorder( KSpreadTable *_table );
-    void sig_changeSelection( KSpreadTable *_table, const QRect &oldSelection,
-                              const QPoint&_oldMarker );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
@@ -1220,19 +1134,6 @@ protected:
      * The name of the table. This name shows in the tab bar on the bottom of the window.
      */
     QString m_strName;
-
-    /**
-     * The rectangular area that is currently selected.
-     * If complete columns are selected, then selection.bottom() == KS_rowMax and selection.top()=1.
-     * If complete rows are selected, then selection.right() == KS_colMax and selection.left()=1.
-     */
-    QRect m_rctSelection;
-    QPoint m_marker;
-    QPoint m_cursorPosition;
-
-    QPoint m_chooseMarker;
-    QPoint m_chooseAnchor;
-    QPoint m_chooseCursor;
 
     /**
      * Indicates whether the table should paint the page breaks.
@@ -1547,7 +1448,7 @@ public slots:
     /**
      * Define the print range with the current selection
      */
-    void definePrintRange();
+    void definePrintRange(KSpreadSelection* selectionInfo);
     /**
      * Reset the print range to the standard definition (whole sheet)
      */
@@ -1723,7 +1624,8 @@ public:
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
 
-    SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );
+    SelectionType workOnCells( KSpreadSelection* selectionInfo,
+                               CellWorker& worker );
 
 private:
     bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList,

@@ -63,9 +63,10 @@ void KSpreadAngle::slotChangeState()
 void KSpreadAngle::slotOk()
 {
     if(!m_pDefault->isChecked())
-        m_pView->activeTable()->setSelectionAngle(marker,-m_pSize2->value());
+        m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(),
+                                                  -m_pSize2->value());
     else
-        m_pView->activeTable()->setSelectionAngle(marker,0);
+        m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), 0);
     accept();
 }
 

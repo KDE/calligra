@@ -54,9 +54,11 @@ KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,co
 void KSpreadpasteinsert::slotOk()
 {
     if( rb1->isChecked() )
-        m_pView->activeTable()->paste( QPoint( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() ) ,true, Normal,OverWrite,true,-1);
+        m_pView->activeTable()->paste( m_pView->selection() ,
+                                       true, Normal,OverWrite,true,-1);
     else if( rb2->isChecked() )
-        m_pView->activeTable()->paste( QPoint( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() ) ,true, Normal,OverWrite,true,+1);
+        m_pView->activeTable()->paste( m_pView->selection() ,
+                                       true, Normal,OverWrite,true,+1);
 
     accept();
 }

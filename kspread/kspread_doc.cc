@@ -649,10 +649,11 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     cellAreaList.append(QRect(left_col, top_row, right_col - left_col + 1,
                               bottom_row - top_row + 1));
 
-    paintCellRegions(painter, rect, cellAreaList, table, drawCursor);
+    paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
 
 void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
+                                  KSpreadView* view,
                                   QValueList<QRect> cellRegions,
                                   KSpreadTable* table, bool drawCursor)
 {
@@ -682,17 +683,25 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
   {
     cellRegion = cellRegions[i];
 
-    PaintRegion(painter, viewRect, cellRegion, table);
+    PaintRegion(painter, viewRect, view, cellRegion, table);
   }
 
-  if (drawCursor && !(painter.device()->isExtDev()))
+  if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
   {
-    PaintNormalMarker(painter, viewRect, table);
-    PaintChooseRect(painter, viewRect, table);
+    if (view->activeTable() == table)
+    {
+      PaintNormalMarker(painter, viewRect, table, view->selection());
+    }
+
+    if (view->selectionInfo()->getChooseTable() == table)
+    {
+      PaintChooseRect(painter, viewRect, table, view->selectionInfo()->getChooseRect());
+    }
   }
 }
 
 void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
+                             KSpreadView* view,
                              QRect paintRegion, KSpreadTable* table)
 {
   /* paint region has cell coordinates (col,row) while viewRegion has world
@@ -725,7 +734,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
       KSpreadCell *cell = table->cellAt( x, y );
 
       QPoint cellCoordinate( x, y );
-      cell->paintCell( viewRegion, painter, currentCellPos, cellCoordinate);
+      cell->paintCell( viewRegion, painter, view, currentCellPos, cellCoordinate);
 
       currentCellPos.setX(currentCellPos.x() + col_lay->width());
     }
@@ -734,9 +743,8 @@ void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
 }
 
 void KSpreadDoc::PaintChooseRect(QPainter& painter, QRect viewRect,
-                                 KSpreadTable* table)
+                                 KSpreadTable* table, QRect chooseRect)
 {
-  QRect chooseRect = table->getChooseRect();
   int positions[4];
   bool paintSides[4];
 
@@ -786,9 +794,8 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, QRect viewRect,
 }
 
 void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
-                                   KSpreadTable* table)
+                                   KSpreadTable* table, QRect marker)
 {
-  QRect marker = table->selection();
   int positions[4];
   bool paintSides[4];
 

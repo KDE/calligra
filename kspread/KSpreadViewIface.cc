@@ -251,3 +251,138 @@ void KSpreadViewIface::copyAsText()
 {
     m_view->copyAsText();
 }
+
+void KSpreadViewIface::setSelection(QRect selection)
+{
+  m_view->selectionInfo()->setSelection(selection, m_view->activeTable());
+}
+
+void KSpreadViewIface::setSelectionMoneyFormat( bool b )
+{
+  m_view->moneyFormat(b);
+}
+
+void KSpreadViewIface::setSelectionPrecision( int delta )
+{
+  m_view->setSelectionPrecision(delta);
+}
+
+void KSpreadViewIface::setSelectionPercent( bool b )
+{
+  m_view->percent(b);
+}
+
+void KSpreadViewIface::setSelectionMultiRow( bool enable )
+{
+  m_view->multiRow(enable);
+}
+
+void KSpreadViewIface::setSelectionSize(int size)
+{
+  m_view->setSelectionFontSize(size);
+}
+
+void KSpreadViewIface::setSelectionUpper()
+{
+  m_view->upper();
+}
+
+void KSpreadViewIface::setSelectionLower()
+{
+  m_view->lower();
+}
+
+void KSpreadViewIface::setSelectionFirstLetterUpper()
+{
+  m_view->firstLetterUpper();
+}
+
+void KSpreadViewIface::setSelectionVerticalText(bool enable)
+{
+  m_view->verticalText(enable);
+}
+
+void KSpreadViewIface::setSelectionComment(QString comment)
+{
+  m_view->setSelectionComment(comment);
+}
+
+void KSpreadViewIface::setSelectionAngle(int value)
+{
+  m_view->setSelectionAngle(value);
+}
+
+void KSpreadViewIface::setSelectionTextColor( QColor txtColor )
+{
+  m_view->setSelectionTextColor(txtColor);
+}
+
+void KSpreadViewIface::setSelectionBgColor( QColor bgColor )
+{
+  m_view->setSelectionBackgroundColor(bgColor);
+}
+
+void KSpreadViewIface::setSelectionBorderColor( QColor bdColor )
+{
+  m_view->setSelectionBorderColor(bdColor);
+}
+
+void KSpreadViewIface::deleteSelection()
+{
+  m_view->clearTextSelection();
+}
+
+void KSpreadViewIface::copySelection()
+{
+  m_view->copySelection();
+}
+
+void KSpreadViewIface::cutSelection()
+{
+  m_view->cutSelection();
+}
+
+void KSpreadViewIface::setLeftBorderColor(QColor color)
+{
+  m_view->setSelectionLeftBorderColor(color);
+}
+
+void KSpreadViewIface::setTopBorderColor(QColor color)
+{
+  m_view->setSelectionTopBorderColor(color);
+}
+
+void KSpreadViewIface::setRightBorderColor(QColor color)
+{
+  m_view->setSelectionRightBorderColor(color);
+}
+
+void KSpreadViewIface::setBottomBorderColor(QColor color)
+{
+  m_view->setSelectionBottomBorderColor(color);
+}
+
+void KSpreadViewIface::setAllBorderColor(QColor color)
+{
+  m_view->setSelectionAllBorderColor(color);
+}
+
+void KSpreadViewIface::setOutlineBorderColor(QColor color)
+{
+  m_view->setSelectionOutlineBorderColor(color);
+}
+
+void KSpreadViewIface::removeBorder()
+{
+  m_view->borderRemove();
+}
+
+void KSpreadViewIface::increaseIndent()
+{
+  m_view->increaseIndent();
+}
+
+void KSpreadViewIface::decreaseIndent()
+{
+  m_view->increaseIndent();
+}

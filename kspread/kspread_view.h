@@ -71,6 +71,7 @@ class DCOPObject;
 #include <kdatatool.h>
 #include <kglobalsettings.h>
 
+#include "kspread_selection.h"
 /**
  */
 class KSpreadView : public KoView
@@ -185,6 +186,9 @@ public:
     void insertTable( KSpreadTable* table );
     QColor borderColor() const;
 
+  KSpreadSelection* selectionInfo() { return m_selectionInfo; }
+  QRect selection() { return selectionInfo()->selection(); }
+  QPoint marker() { return selectionInfo()->marker(); }
 public slots:
     void initialPosition();
     /**
@@ -248,6 +252,7 @@ public slots:
     void multiRow( bool b );
     void precisionMinus();
     void precisionPlus();
+    void setSelectionPrecision(int delta);
     void percent(bool b);
     void fontSelected( const QString &_font );
     void fontSizeSelected( int size );
@@ -287,6 +292,19 @@ public slots:
     void resizeColumn();
     void increaseFontSize();
     void decreaseFontSize();
+    void setSelectionFontSize(int size);
+
+    void setSelectionTextColor(QColor txtColor);
+    void setSelectionBackgroundColor(QColor bgColor);
+    void setSelectionBorderColor(QColor bdColor);
+
+    void setSelectionLeftBorderColor(QColor color);
+    void setSelectionRightBorderColor(QColor color);
+    void setSelectionTopBorderColor(QColor color);
+    void setSelectionBottomBorderColor(QColor color);
+    void setSelectionAllBorderColor(QColor color);
+    void setSelectionOutlineBorderColor(QColor color);
+
     void upper();
     void lower();
     void equalizeColumn();
@@ -295,8 +313,11 @@ public slots:
     void firstLetterUpper();
     void verticalText(bool );
     void addModifyComment();
+    void setSelectionComment(QString comment);
     void removeComment();
     void changeAngle();
+    void setSelectionAngle(int angle);
+
     void mergeCell();
     void dissociateCell();
     void gotoCell();
@@ -372,7 +393,6 @@ protected slots:
 
 public slots:
     // Document signals
-    void slotUnselect( KSpreadTable *_table, const QRect& _old );
     void slotUpdateView( KSpreadTable *_table );
     void slotUpdateView( KSpreadTable *_table, const QRect& );
     void slotUpdateHBorder( KSpreadTable *_table );
@@ -386,7 +406,6 @@ public slots:
     void slotTableHidden( KSpreadTable*_table );
     void slotTableShown( KSpreadTable*_table );
     void slotTableRemoved( KSpreadTable*_table );
-    void slotTableActivated( KSpreadTable* table );
     void slotRefreshView( );
     void slotRefreshLocale();
     void extraSpelling();
@@ -686,6 +705,10 @@ private:
     QStringList m_replaceStrings;
 
     KStatusBarLabel* m_sbCalcLabel;
+
+  KSpreadSelection* m_selectionInfo;
+  QMap<KSpreadTable*, QRect> savedSelections;
+  QMap<KSpreadTable*, QPoint> savedMarkers;
 
   /* helper functions */
     void initializeCalcActions();

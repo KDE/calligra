@@ -288,6 +288,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     dcopObject(); // build it
     m_bLoading =false;
 
+    m_selectionInfo = new KSpreadSelection(this);
+
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     m_pVertScrollBar->setRange( 0, 4096 );
@@ -677,8 +679,8 @@ void KSpreadView::initializeGlobalOperationActions()
                                    "resetPrintRange" );
   m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
 
-  m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this, 
-                                  SLOT( createTemplate() ), actionCollection(), "createTemplate" ); 
+  m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this,
+                                  SLOT( createTemplate() ), actionCollection(), "createTemplate" );
 }
 
 
@@ -1163,6 +1165,10 @@ KSpreadView::~KSpreadView()
         disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
         }*/
+    if (m_selectionInfo)
+    {
+      delete m_selectionInfo;
+    }
 
     if(m_spell.kspell)
     {
@@ -1336,10 +1342,10 @@ void KSpreadView::extraSpelling()
   m_spell.firstSpellTable    = m_pTable;
   m_spell.currentSpellTable  = m_spell.firstSpellTable;
 
-  QRect selection = m_pTable->selection();
+  QRect selection = m_selectionInfo->selection();
 
   // if nothing is selected, check every cell
-  if (selection.left() == 0)
+  if (m_selectionInfo->singleCellSelection())
   {
     m_spell.spellStartCellX = 0;
     m_spell.spellStartCellY = 0;
@@ -1870,15 +1876,15 @@ void KSpreadView::createTemplate()
   int width = 60;
   int height = 60;
   QPixmap pix = m_pDoc->generatePreview(QSize(width, height));
-   
+
   KTempFile tempFile( QString::null, ".kst" );
   tempFile.setAutoDelete(true);
-   
+
   m_pDoc->saveNativeFormat( tempFile.name() );
-   
+
   KoTemplateCreateDia::createTemplate( "kspread_template", KSpreadFactory::global(),
                                            tempFile.name(), pix, this );
-   
+
   KSpreadFactory::global()->dirs()->addResourceType("kspread_template",
                                                        KStandardDirs::kde_default( "data" ) +
                                                        "kspread/templates/");
@@ -1950,9 +1956,15 @@ void KSpreadView::changeTextColor()
 {
   if ( m_pTable != 0L )
   {
-    int col = m_pCanvas->markerColumn();
-    int row = m_pCanvas->markerRow();
-    m_pTable->setSelectionTextColor( QPoint( col, row ), m_textColor->color() );
+    m_pTable->setSelectionTextColor( selectionInfo(), m_textColor->color() );
+  }
+}
+
+void KSpreadView::setSelectionTextColor(QColor txtColor)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionTextColor( selectionInfo(), txtColor );
   }
 }
 
@@ -1960,7 +1972,15 @@ void KSpreadView::changeBackgroundColor()
 {
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionbgColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), m_bgColor->color() );
+    m_pTable->setSelectionbgColor( selectionInfo(), m_bgColor->color() );
+  }
+}
+
+void KSpreadView::setSelectionBackgroundColor(QColor bgColor)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionbgColor( selectionInfo(), bgColor );
   }
 }
 
@@ -1968,7 +1988,15 @@ void KSpreadView::changeBorderColor()
 {
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionBorderColor( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), m_borderColor->color() );
+    m_pTable->setSelectionBorderColor( selectionInfo(), m_borderColor->color() );
+  }
+}
+
+void KSpreadView::setSelectionBorderColor(QColor bdColor)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionBorderColor( selectionInfo(), bdColor );
   }
 }
 
@@ -2026,30 +2054,32 @@ void KSpreadView::deleteColumn()
     if ( !m_pTable )
         return;
 
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
 
     m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
 
     updateEditWidget();
-    m_pTable->setSelection(QRect(m_pTable->marker(), m_pTable->marker()));
+    m_selectionInfo->setSelection(QRect(m_selectionInfo->marker(),
+                                        m_selectionInfo->marker()), m_pTable);
 }
 
 void KSpreadView::deleteRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
-    m_pTable->setSelection(QRect(m_pTable->marker(), m_pTable->marker()));
+    m_selectionInfo->setSelection(QRect(m_selectionInfo->marker(),
+                                        m_selectionInfo->marker()), m_pTable);
 }
 
 void KSpreadView::insertColumn()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     m_pTable->insertColumn( r.left(),(r.right()-r.left()) );
 
 
@@ -2060,7 +2090,7 @@ void KSpreadView::hideColumn()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     m_pTable->hideColumn( r.left(),(r.right()-r.left()) );
 }
 
@@ -2078,7 +2108,7 @@ void KSpreadView::showSelColumns()
         return;
 
     int i;
-    QRect rect = activeTable()->selection();
+    QRect rect = m_selectionInfo->selection();
     ColumnLayout * col;
     QValueList<int>hiddenCols;
 
@@ -2108,7 +2138,7 @@ void KSpreadView::insertRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     m_pTable->insertRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
@@ -2118,7 +2148,7 @@ void KSpreadView::hideRow()
 {
     if ( !m_pTable )
         return;
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     m_pTable->hideRow( r.top(),(r.bottom()-r.top()) );
 }
 
@@ -2136,7 +2166,7 @@ void KSpreadView::showSelRows()
         return;
 
     int i;
-    QRect rect = activeTable()->selection();
+    QRect rect = m_selectionInfo->selection();
     RowLayout * row;
     QValueList<int>hiddenRows;
 
@@ -2168,12 +2198,12 @@ void KSpreadView::fontSelected( const QString &_font )
         return;
 
     if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), _font.latin1() );
+      m_pTable->setSelectionFont( m_selectionInfo, _font.latin1() );
 
     // Dont leave the focus in the toolbars combo box ...
     if ( m_pCanvas->editor() )
     {
-      KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+      KSpreadCell * cell = m_pTable->cellAt(m_selectionInfo->marker());
       m_pCanvas->editor()->setEditorFont(cell->textFont(cell->column(), cell->row()), true);
       m_pCanvas->editor()->setFocus();
     }
@@ -2183,25 +2213,27 @@ void KSpreadView::fontSelected( const QString &_font )
 
 void KSpreadView::decreaseFontSize()
 {
-    if( !m_pTable  )
-        return;
-    m_pTable->setSelectionSize( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
-    updateEditWidget();
+  setSelectionFontSize(-1);
 }
 
 void KSpreadView::increaseFontSize()
 {
-    if( !m_pTable  )
-        return;
-    m_pTable->setSelectionSize( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 1 );
-    updateEditWidget();
+  setSelectionFontSize(1);
+}
+
+void KSpreadView::setSelectionFontSize(int size)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionSize(selectionInfo(), size);
+  }
 }
 
 void KSpreadView::lower()
 {
     if( !m_pTable  )
         return;
-    m_pTable->setSelectionUpperLower( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
+    m_pTable->setSelectionUpperLower( selectionInfo(), -1 );
     updateEditWidget();
 }
 
@@ -2209,7 +2241,7 @@ void KSpreadView::upper()
 {
     if( !m_pTable  )
         return;
-    m_pTable->setSelectionUpperLower( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 1 );
+    m_pTable->setSelectionUpperLower( selectionInfo(), 1 );
     updateEditWidget();
 }
 
@@ -2217,7 +2249,7 @@ void KSpreadView::firstLetterUpper()
 {
     if( !m_pTable  )
         return;
-    m_pTable->setSelectionfirstLetterUpper( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->setSelectionfirstLetterUpper( selectionInfo() );
     updateEditWidget();
 }
 
@@ -2225,8 +2257,8 @@ void KSpreadView::verticalText(bool b)
 {
     if( !m_pTable  )
         return;
-    m_pTable->setSelectionVerticalText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
-    if( activeTable()->isRowSelected() == FALSE && activeTable()->isColumnSelected() == FALSE )
+    m_pTable->setSelectionVerticalText( selectionInfo(), b );
+    if( util_isRowSelected(selection()) == FALSE && util_isColumnSelected(selection()) == FALSE )
         m_pCanvas->adjustArea(false);
     updateEditWidget();
 }
@@ -2261,12 +2293,12 @@ void KSpreadView::fontSizeSelected( int _size )
     if ( m_toolbarLock )
         return;
     if ( m_pTable != 0L )
-        m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, _size );
+        m_pTable->setSelectionFont( selectionInfo(), 0L, _size );
 
     // Dont leave the focus in the toolbars combo box ...
     if ( m_pCanvas->editor() )
     {
-        KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        KSpreadCell * cell = m_pTable->cellAt( m_selectionInfo->marker() );
         m_pCanvas->editor()->setEditorFont(cell->textFont(m_pCanvas->markerColumn(), m_pCanvas->markerRow()), true);
         m_pCanvas->editor()->setFocus();
     }
@@ -2283,7 +2315,7 @@ void KSpreadView::bold( bool b )
 
     int col = m_pCanvas->markerColumn();
     int row = m_pCanvas->markerRow();
-    m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, b );
+    m_pTable->setSelectionFont( selectionInfo(), 0L, -1, b );
 
     if ( m_pCanvas->editor() )
     {
@@ -2302,7 +2334,7 @@ void KSpreadView::underline( bool b )
     int col = m_pCanvas->markerColumn();
     int row = m_pCanvas->markerRow();
 
-    m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, -1 ,b );
+    m_pTable->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,b );
     if ( m_pCanvas->editor() )
     {
         KSpreadCell * cell = m_pTable->cellAt( col, row );
@@ -2320,7 +2352,7 @@ void KSpreadView::strikeOut( bool b )
     int col = m_pCanvas->markerColumn();
     int row = m_pCanvas->markerRow();
 
-    m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, -1 ,-1,b );
+    m_pTable->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,-1,b );
     if ( m_pCanvas->editor() )
     {
         KSpreadCell * cell = m_pTable->cellAt( col, row );
@@ -2339,7 +2371,7 @@ void KSpreadView::italic( bool b )
     int col = m_pCanvas->markerColumn();
     int row = m_pCanvas->markerRow();
 
-    m_pTable->setSelectionFont( QPoint( col, row ), 0L, -1, -1, b );
+    m_pTable->setSelectionFont( selectionInfo(), 0L, -1, -1, b );
     if ( m_pCanvas->editor() )
     {
         KSpreadCell * cell = m_pTable->cellAt( col, row );
@@ -2349,35 +2381,35 @@ void KSpreadView::italic( bool b )
 
 void KSpreadView::sortInc()
 {
-    QRect r( activeTable()-> selection() );
-    if ( activeTable()->singleCellSelection() )
+    QRect r( m_selectionInfo->selection() );
+    if ( m_selectionInfo->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
     }
 
     // Entire row(s) selected ? Or just one row ?
-    if( activeTable()->isRowSelected() || r.top() == r.bottom() )
-        activeTable()->sortByRow( r.top(), KSpreadTable::Increase );
+    if( util_isRowSelected(selection()) || r.top() == r.bottom() )
+        activeTable()->sortByRow( selection(), r.top(), KSpreadTable::Increase );
     else
-        activeTable()->sortByColumn( r.left(), KSpreadTable::Increase );
+        activeTable()->sortByColumn( selection(), r.left(), KSpreadTable::Increase );
     updateEditWidget();
 }
 
 void KSpreadView::sortDec()
 {
-    QRect r( activeTable()-> selection() );
-    if ( activeTable()->singleCellSelection() )
+    QRect r( m_selectionInfo->selection() );
+    if ( m_selectionInfo->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
     }
 
     // Entire row(s) selected ? Or just one row ?
-    if( activeTable()->isRowSelected() || r.top() == r.bottom() )
-        activeTable()->sortByRow( r.top(), KSpreadTable::Decrease );
+    if( util_isRowSelected(selection()) || r.top() == r.bottom() )
+        activeTable()->sortByRow( selection(), r.top(), KSpreadTable::Decrease );
     else
-        activeTable()->sortByColumn( r.left(), KSpreadTable::Decrease );
+        activeTable()->sortByColumn( selection(), r.left(), KSpreadTable::Decrease );
     updateEditWidget();
 }
 
@@ -2412,43 +2444,91 @@ void KSpreadView::editLocalScripts()
 void KSpreadView::borderBottom()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderBottom( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+      m_pTable->borderBottom( m_selectionInfo, m_borderColor->color());
+}
+
+void KSpreadView::setSelectionBottomBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderBottom( selectionInfo(), color );
+  }
 }
 
 void KSpreadView::borderRight()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderRight( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+      m_pTable->borderRight( m_selectionInfo, m_borderColor->color());
+}
+
+void KSpreadView::setSelectionRightBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderRight( selectionInfo(), color );
+  }
 }
 
 void KSpreadView::borderLeft()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderLeft( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+      m_pTable->borderLeft( m_selectionInfo, m_borderColor->color() );
+}
+
+void KSpreadView::setSelectionLeftBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderLeft( selectionInfo(), color );
+  }
 }
 
 void KSpreadView::borderTop()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderTop( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+      m_pTable->borderTop( m_selectionInfo, m_borderColor->color() );
+}
+
+void KSpreadView::setSelectionTopBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderTop(selectionInfo(), color);
+  }
 }
 
 void KSpreadView::borderOutline()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderOutline( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+      m_pTable->borderOutline( m_selectionInfo, m_borderColor->color());
+}
+
+void KSpreadView::setSelectionOutlineBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderOutline(selectionInfo(), color);
+  }
 }
 
 void KSpreadView::borderAll()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderAll( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+      m_pTable->borderAll( m_selectionInfo, m_borderColor->color() );
+}
+
+void KSpreadView::setSelectionAllBorderColor(QColor color)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->borderAll( selectionInfo(), color );
+  }
 }
 
 void KSpreadView::borderRemove()
 {
   if ( m_pTable != 0L )
-      m_pTable->borderRemove( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->borderRemove( m_selectionInfo );
 }
 
 void KSpreadView::addTable( KSpreadTable *_t )
@@ -2459,14 +2539,10 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
                       SLOT( slotUpdateView( KSpreadTable*, const QRect& ) ) );
-    QObject::connect( _t, SIGNAL( sig_unselect( KSpreadTable *, const QRect& ) ),
-                      SLOT( slotUnselect( KSpreadTable *, const QRect& ) ) );
     QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadTable * ) ),
                       SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
                       SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QPoint & ) ),
-                      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QPoint & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
                       this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
     QObject::connect( _t, SIGNAL( sig_TableHidden( KSpreadTable* ) ),
@@ -2475,8 +2551,6 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       this, SLOT( slotTableShown( KSpreadTable* ) ) );
     QObject::connect( _t, SIGNAL( sig_TableRemoved( KSpreadTable* ) ),
                       this, SLOT( slotTableRemoved( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_TableActivated( KSpreadTable* ) ),
-                      this, SLOT( slotTableActivated( KSpreadTable* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -2517,8 +2591,6 @@ void KSpreadView::slotTableRemoved( KSpreadTable *_t )
 	      }
 	  }
   }
-  m_pHorzScrollBar->setValue(activeTable()->getScrollPosX());
-  m_pVertScrollBar->setValue(activeTable()->getScrollPosY());
 
 }
 
@@ -2534,7 +2606,15 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   if ( _t == m_pTable )
     return;
 
+  /* save the current selection on this table */
+  if (m_pTable != NULL)
+  {
+    savedSelections.replace(m_pTable, selectionInfo()->selection());
+    savedMarkers.replace(m_pTable, selectionInfo()->marker());
+  }
+
   m_pTable = _t;
+
   if ( m_pTable == 0L )
     return;
   if(updateTable)
@@ -2546,17 +2626,22 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
+
+  /* see if there was a previous selection on this other table */
+  QMapIterator<KSpreadTable*, QRect> it = savedSelections.find(m_pTable);
+  QMapIterator<KSpreadTable*, QPoint> it2 = savedMarkers.find(m_pTable);
+
+  QRect newSelection = (it == savedSelections.end()) ? QRect(1,1,1,1) : *it;
+  QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
+  selectionInfo()->setSelection(newSelection, newMarker, m_pTable);
+
+  m_pCanvas->scrollToCell(newMarker);
   resultOfCalc();
 }
 
 void KSpreadView::slotRefreshView(  )
 {
   refreshView();
-}
-
-void KSpreadView::slotTableActivated( KSpreadTable* table )
-{
-  m_pTabBar->setActiveTab( table->tableName() );
 }
 
 void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name )
@@ -2585,15 +2670,9 @@ void KSpreadView::changeTable( const QString& _name )
         return;
     }
     m_pCanvas->closeEditor();
-    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
 
-    t->setActiveTable();
-
     updateEditWidget();
-    m_pHorzScrollBar->setValue(t->getScrollPosX());
-    m_pVertScrollBar->setValue(t->getScrollPosY());
     //refresh toggle button
     updateBorderButton();
 }
@@ -2622,15 +2701,12 @@ void KSpreadView::slotScrollToLastTable()
 void KSpreadView::insertTable()
 {
   m_pCanvas->closeEditor();
-  activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-  activeTable()->setScrollPosY(m_pVertScrollBar->value());
   KSpreadTable *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
-  m_pHorzScrollBar->setValue(t->getScrollPosX());
-  m_pVertScrollBar->setValue(t->getScrollPosY());
   updateEditWidget();
   KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(m_pDoc, t);
   m_pDoc->undoBuffer()->appendUndo( undo );
+  setActiveTable( t );
 }
 
 void KSpreadView::hideTable()
@@ -2654,7 +2730,7 @@ void KSpreadView::copySelection()
         return;
     if(!m_pCanvas->editor())
     {
-        m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        m_pTable->copySelection( selectionInfo() );
 
         updateEditWidget();
     }
@@ -2666,7 +2742,7 @@ void KSpreadView::copyAsText()
 {
     if ( !m_pTable )
         return;
-    m_pTable->copyAsText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->copyAsText( selectionInfo() );
 }
 
 
@@ -2677,7 +2753,7 @@ void KSpreadView::cutSelection()
     //don't used this function when we edit a cell.
     if( !m_pCanvas->editor())
     {
-        m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        m_pTable->cutSelection( selectionInfo() );
         resultOfCalc();
         updateEditWidget();
     }
@@ -2691,8 +2767,8 @@ void KSpreadView::paste()
         return;
     if( !m_pCanvas->editor() )
     {
-        QRect r( activeTable()-> selection() );
-        m_pTable->paste( QPoint( r.left(), r.top() ) );
+
+        m_pTable->paste( selection() );
         if( m_pTable->getAutoCalc() )
             m_pTable->calc();
         resultOfCalc();
@@ -2723,7 +2799,7 @@ void KSpreadView::removeComment()
 {
   if ( !m_pTable )
         return;
-  m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  m_pTable->setSelectionRemoveComment( selectionInfo() );
   updateEditWidget();
 }
 
@@ -2735,22 +2811,37 @@ void KSpreadView::changeAngle()
   KSpreadAngle dlg( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   if(dlg.exec())
         {
-        if( (activeTable()->isRowSelected() == FALSE) && (activeTable()->isColumnSelected() == FALSE) )
+        if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
                 m_pCanvas->adjustArea(false);
         }
+}
+
+void KSpreadView::setSelectionAngle(int angle)
+{
+
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionAngle(selectionInfo(), angle);
+
+    if (util_isRowSelected(selection()) == false &&
+        util_isColumnSelected(selection()) == false)
+    {
+      m_pCanvas->adjustArea(false);
+    }
+  }
 }
 
 void KSpreadView::mergeCell()
 {
     if ( !m_pTable )
         return;
-    if((activeTable()->isRowSelected()) ||(activeTable()->isColumnSelected()))
+    if((util_isRowSelected(selection())) ||(util_isColumnSelected(selection())))
     {
         KMessageBox::error( this, i18n("Area too large!"));
     }
     else
     {
-        m_pTable->mergeCell( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        m_pTable->mergeCells( selection() );
     }
 }
 
@@ -2766,7 +2857,7 @@ void KSpreadView::increaseIndent()
 {
   if ( !m_pTable )
         return;
-  m_pTable->increaseIndent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  m_pTable->increaseIndent( m_selectionInfo );
   updateEditWidget();
 }
 
@@ -2777,7 +2868,7 @@ void KSpreadView::decreaseIndent()
   int column=m_pCanvas->markerColumn();
   int row=m_pCanvas->markerRow();
 
-  m_pTable->decreaseIndent( QPoint( column, row ) );
+  m_pTable->decreaseIndent( m_selectionInfo );
   KSpreadCell* cell = m_pTable->cellAt( column, row );
   if(cell)
       m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
@@ -2802,13 +2893,13 @@ void KSpreadView::textToColumns()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  if (activeTable()->selection().width() > 1)
+  if (m_selectionInfo->selection().width() > 1)
   {
     KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
     return;
   }
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::Column );
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Column );
   dialog.exec();
 }
 
@@ -2848,8 +2939,7 @@ void KSpreadView::find()
     m_findStrings = dlg.findHistory();
 
     // Do the finding!
-    QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    activeTable()->find( m_marker, dlg.pattern(), dlg.options(), m_pCanvas );
+    activeTable()->find( dlg.pattern(), dlg.options(), m_pCanvas );
 }
 
 void KSpreadView::replace()
@@ -2864,8 +2954,8 @@ void KSpreadView::replace()
     m_replaceStrings = dlg.replacementHistory();
 
     // Do the replacement.
-    QPoint m_marker=QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    activeTable()->replace( m_marker, dlg.pattern(), dlg.replacement(), dlg.options(), m_pCanvas );
+    activeTable()->replace( dlg.pattern(), dlg.replacement(), dlg.options(),
+                            m_pCanvas );
 
     // Refresh the editWidget
     KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(),
@@ -2878,9 +2968,9 @@ void KSpreadView::replace()
 
 void KSpreadView::conditional()
 {
-  QRect rect( activeTable()-> selection() );
+  QRect rect( m_selectionInfo->selection() );
 
-  if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
+  if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
     KMessageBox::error( this, i18n("Area too large!"));
   }
@@ -2893,9 +2983,9 @@ void KSpreadView::conditional()
 
 void KSpreadView::validity()
 {
-  QRect rect( activeTable()-> selection() );
+  QRect rect( m_selectionInfo->selection() );
 
-  if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
+  if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
     KMessageBox::error( this, i18n("Area too large!"));
   }
@@ -2915,7 +3005,7 @@ void KSpreadView::insertSeries()
 
 void KSpreadView::sort()
 {
-    if( m_pTable->singleCellSelection() )
+    if( m_selectionInfo->singleCellSelection() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells") );
         return;
@@ -2938,7 +3028,7 @@ void KSpreadView::insertFromDatabase()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  QRect rect = activeTable()->selection();
+  QRect rect = m_selectionInfo->selection();
 
   KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
   dlg.exec();
@@ -2951,7 +3041,9 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::File );
+  KMessageBox::information( this, "Not implemented yet, work in progress...");
+
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
   dialog.exec();
 }
 
@@ -2962,7 +3054,7 @@ void KSpreadView::insertFromClipboard()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::Clipboard );
+  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
   dialog.exec();
 }
 
@@ -3021,7 +3113,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
     QPoint br = m.map( _geometry.bottomRight() );
-    if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
+    if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
       KMessageBox::error( this, i18n("Area too large!"));
       m_pTable->insertChart( QRect( tl, br ), _e, QRect( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),1,1) );
@@ -3029,7 +3121,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     else
     {
       // Insert the new child in the active table.
-      m_pTable->insertChart( QRect( tl, br ), _e, m_pTable->selection() );
+      m_pTable->insertChart( QRect( tl, br ), _e, m_selectionInfo->selection() );
     }
 }
 
@@ -3111,6 +3203,15 @@ void KSpreadView::addModifyComment()
         updateEditWidget();
 }
 
+void KSpreadView::setSelectionComment(QString comment)
+{
+  if (m_pTable != NULL)
+  {
+    m_pTable->setSelectionComment( selectionInfo(), comment.stripWhiteSpace() );
+    updateEditWidget();
+  }
+}
+
 void KSpreadView::editCell()
 {
     if ( m_pCanvas->editor() )
@@ -3128,11 +3229,7 @@ void KSpreadView::nextTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
-
-    t->setActiveTable();
 
 }
 
@@ -3145,12 +3242,7 @@ void KSpreadView::previousTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
-
-    t->setActiveTable();
-
 
 }
 void KSpreadView::firstTable(){
@@ -3162,11 +3254,7 @@ void KSpreadView::firstTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
-
-    t->setActiveTable();
 
 }
 void KSpreadView::lastTable(){
@@ -3178,11 +3266,7 @@ void KSpreadView::lastTable(){
         return;
     }
     m_pCanvas->closeEditor();
-    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
-    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
-
-    t->setActiveTable();
 
 }
 
@@ -3460,7 +3544,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn->insertSeparator();
     m_default->plug( m_pPopupColumn );
     // If there is no selection
-    if((activeTable()->isRowSelected() == FALSE) && (activeTable()->isColumnSelected() == FALSE) )
+    if((util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
     {
       m_areaName->plug( m_pPopupColumn );
     }
@@ -3476,7 +3560,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     int i;
     ColumnLayout * col;
-    QRect rect = activeTable()->selection();
+    QRect rect = m_selectionInfo->selection();
     kdDebug(36001) << "Column: L: " << rect.left() << endl;
     for ( i = rect.left(); i <= rect.right(); ++i )
     {
@@ -3535,7 +3619,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_pPopupRow->insertSeparator();
     m_default->plug( m_pPopupRow );
     // If there is no selection
-    if( (activeTable()->isRowSelected() == FALSE) && (activeTable()->isColumnSelected() == FALSE) )
+    if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
       {
 	m_areaName->plug( m_pPopupRow );
       }
@@ -3551,7 +3635,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     int i;
     RowLayout * row;
-    QRect rect = activeTable()->selection();
+    QRect rect = m_selectionInfo->selection();
     for ( i = rect.top(); i <= rect.bottom(); ++i )
     {
       kdDebug(36001) << "popupRow: " << rect.top() << endl;
@@ -3598,7 +3682,7 @@ void KSpreadView::slotListChoosePopupMenu( )
 
  m_popupListChoose = new QPopupMenu();
  int id = 0;
- QRect selection( m_pTable->selection() );
+ QRect selection( m_selectionInfo->selection() );
  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
  QString tmp=cell->text();
  QStringList itemList;
@@ -3707,7 +3791,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_default->plug( m_pPopupMenu );
 
     // If there is no selection
-    if( (activeTable()->isRowSelected() == FALSE) && (activeTable()->isColumnSelected() == FALSE) )
+    if( (util_isRowSelected(selection()) == FALSE) && (util_isColumnSelected(selection()) == FALSE) )
     {
       m_areaName->plug( m_pPopupMenu );
       m_pPopupMenu->insertSeparator();
@@ -3726,7 +3810,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     }
 
 
-    if(activeTable()->testListChoose(QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow())))
+    if(activeTable()->testListChoose(selectionInfo()))
       {
 	m_pPopupMenu->insertSeparator();
 	m_pPopupMenu->insertItem( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
@@ -3736,7 +3820,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
-    if(!activeTable()->getWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() )).isEmpty())
+    if(!activeTable()->getWordSpelling( selectionInfo() ))
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
@@ -3790,11 +3874,11 @@ void KSpreadView::slotActivateTool( int _id )
   }
 
 
-  QString text = activeTable()->getWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  QString text = activeTable()->getWordSpelling( selectionInfo() );
 
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
   {
-      activeTable()->setWordSpelling( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),text);
+      activeTable()->setWordSpelling( selectionInfo(), text);
 
       KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
       editWidget()->setText( cell->text() );
@@ -3805,14 +3889,14 @@ void KSpreadView::deleteSelection()
 {
     Q_ASSERT( m_pTable );
 
-    m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->deleteSelection( selectionInfo() );
     resultOfCalc();
     updateEditWidget();
 }
 
 void KSpreadView::adjust()
 {
-    if( (activeTable()->isRowSelected()) || (activeTable()->isColumnSelected()) )
+    if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
         KMessageBox::error( this, i18n("Area too large!"));
     }
@@ -3825,7 +3909,7 @@ void KSpreadView::adjust()
 void KSpreadView::clearTextSelection()
 {
     Q_ASSERT( m_pTable );
-    m_pTable->clearTextSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->clearTextSelection( selectionInfo() );
 
     updateEditWidget();
 }
@@ -3833,7 +3917,7 @@ void KSpreadView::clearTextSelection()
 void KSpreadView::clearCommentSelection()
 {
     Q_ASSERT( m_pTable );
-    m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->setSelectionRemoveComment( selectionInfo() );
 
     updateEditWidget();
 }
@@ -3841,7 +3925,7 @@ void KSpreadView::clearCommentSelection()
 void KSpreadView::clearValiditySelection()
 {
     Q_ASSERT( m_pTable );
-    m_pTable->clearValiditySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->clearValiditySelection( selectionInfo() );
 
     updateEditWidget();
 }
@@ -3849,7 +3933,7 @@ void KSpreadView::clearValiditySelection()
 void KSpreadView::clearConditionalSelection()
 {
     Q_ASSERT( m_pTable );
-    m_pTable->clearConditionalSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->clearConditionalSelection( selectionInfo() );
 
     updateEditWidget();
 }
@@ -3858,21 +3942,21 @@ void KSpreadView::clearConditionalSelection()
 void KSpreadView::defaultSelection()
 {
   Q_ASSERT( m_pTable );
-  m_pTable->defaultSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+  m_pTable->defaultSelection( selectionInfo() );
 
   updateEditWidget();
 }
 
 void KSpreadView::slotInsert()
 {
-    QRect r( activeTable()-> selection() );
+    QRect r( selection() );
     KSpreadinsert dlg( this, "Insert", r,KSpreadinsert::Insert );
     dlg.exec();
 }
 
 void KSpreadView::slotRemove()
 {
-    QRect r( activeTable()-> selection() );
+    QRect r( m_selectionInfo->selection() );
     KSpreadinsert dlg( this, "Remove", r,KSpreadinsert::Remove );
     dlg.exec();
 }
@@ -3882,12 +3966,11 @@ void KSpreadView::slotInsertCellCopy()
   if ( !m_pTable )
     return;
 
-  QRect r(activeTable()->selection());
   if( !m_pTable->testAreaPasteInsert())
-    m_pTable->paste( QPoint( r.topLeft() ) ,true, Normal,OverWrite,true);
+    m_pTable->paste( selection(), true, Normal, OverWrite, true);
   else
   {
-    KSpreadpasteinsert dlg( this, "Remove", r );
+    KSpreadpasteinsert dlg( this, "Remove", selection() );
     dlg.exec();
   }
   if(m_pTable->getAutoCalc())
@@ -3909,7 +3992,7 @@ void KSpreadView::showAreaName()
 
 void KSpreadView::resizeRow()
 {
-    if( activeTable()->isColumnSelected() )
+    if( util_isColumnSelected(selection()) )
         KMessageBox::error( this, i18n("Area too large!"));
     else
     {
@@ -3920,7 +4003,7 @@ void KSpreadView::resizeRow()
 
 void KSpreadView::resizeColumn()
 {
-    if( activeTable()->isRowSelected() )
+    if( util_isRowSelected(selection()) )
         KMessageBox::error( this, i18n("Area too large!"));
     else
         {
@@ -3931,7 +4014,7 @@ void KSpreadView::resizeColumn()
 
 void KSpreadView::equalizeRow()
 {
-    if( activeTable()->isColumnSelected() )
+    if( util_isColumnSelected(selection()) )
         KMessageBox::error( this, i18n("Area too large!"));
     else
         canvasWidget()->equalizeRow();
@@ -3939,7 +4022,7 @@ void KSpreadView::equalizeRow()
 
 void KSpreadView::equalizeColumn()
 {
-    if( activeTable()->isRowSelected() )
+    if( util_isRowSelected(selection()) )
         KMessageBox::error( this, i18n("Area too large!"));
     else
         canvasWidget()->equalizeColumn();
@@ -3948,15 +4031,9 @@ void KSpreadView::equalizeColumn()
 
 void KSpreadView::layoutDlg()
 {
-  QRect selection( m_pTable->selection() );
-  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
-                       selection.right(), selection.bottom() );
-  else
-  {
-    kdDebug(36001) << "error: selection doesn't contain marker." << endl;
-    // CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  }
+  QRect selection( m_selectionInfo->selection() );
+  CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+                     selection.right(), selection.bottom() );
 }
 
 void KSpreadView::paperLayoutDlg()
@@ -3966,7 +4043,7 @@ void KSpreadView::paperLayoutDlg()
 
 void KSpreadView::definePrintRange()
 {
-    m_pTable->definePrintRange();
+    m_pTable->definePrintRange(selectionInfo());
 }
 
 void KSpreadView::resetPrintRange()
@@ -3980,111 +4057,118 @@ void KSpreadView::multiRow( bool b )
         return;
 
     if ( m_pTable != 0L )
-        m_pTable->setSelectionMultiRow( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), b );
+        m_pTable->setSelectionMultiRow( selectionInfo(), b );
 }
 
 void KSpreadView::alignLeft( bool b )
 {
-    if ( m_toolbarLock )
-        return;
-    if ( m_pTable != 0L )
-        {
-        if ( !b )
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
-        else
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Left );
-        }
+  if ( m_toolbarLock )
+    return;
+  if ( m_pTable != 0L )
+  {
+    if ( !b )
+      m_pTable->setSelectionAlign( selectionInfo(),
+                                   KSpreadLayout::Undefined );
+    else
+      m_pTable->setSelectionAlign( selectionInfo(),
+                                   KSpreadLayout::Left );
+  }
 }
 
 void KSpreadView::alignRight( bool b )
 {
-    if ( m_toolbarLock )
-        return;
-    if ( m_pTable != 0L )
-        {
-        if ( !b )
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
-        else
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Right );
-        }
+  if ( m_toolbarLock )
+    return;
+  if ( m_pTable != 0L )
+  {
+    if ( !b )
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Undefined );
+    else
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Right );
+  }
 }
 
 void KSpreadView::alignCenter( bool b )
 {
-    if ( m_toolbarLock )
-        return;
+  if ( m_toolbarLock )
+    return;
 
-    if ( m_pTable != 0L )
-        {
-        if ( !b )
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
-        else
-                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
-        }
+  if ( m_pTable != 0L )
+  {
+    if ( !b )
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Undefined );
+    else
+      m_pTable->setSelectionAlign( selectionInfo(), KSpreadLayout::Center );
+  }
 }
 
 void KSpreadView::alignTop( bool b )
 {
-    if ( m_toolbarLock )
-        return;
-    if ( !b )
-        return;
+  if ( m_toolbarLock )
+    return;
+  if ( !b )
+    return;
 
-    if ( m_pTable != 0L )
-        m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Top );
+  if ( m_pTable != 0L )
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Top );
 }
 
 void KSpreadView::alignBottom( bool b )
 {
-    if ( m_toolbarLock )
-        return;
-    if ( !b )
-        return;
+  if ( m_toolbarLock )
+    return;
+  if ( !b )
+    return;
 
-    if ( m_pTable != 0L )
-      m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Bottom );
+  if ( m_pTable != 0L )
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Bottom );
 }
 
 void KSpreadView::alignMiddle( bool b )
 {
-    if ( m_toolbarLock )
-        return;
-    if ( !b )
-        return;
+  if ( m_toolbarLock )
+    return;
+  if ( !b )
+    return;
 
-    if ( m_pTable != 0L )
-        m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Middle );
+  if ( m_pTable != 0L )
+    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadLayout::Middle );
 }
 
 
 void KSpreadView::moneyFormat(bool b)
 {
-    if ( m_toolbarLock )
-        return;
-    if ( m_pTable != 0L )
-        m_pTable->setSelectionMoneyFormat( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
-    updateEditWidget();
+  if ( m_toolbarLock )
+    return;
+  if ( m_pTable != 0L )
+    m_pTable->setSelectionMoneyFormat( selectionInfo(), b );
+  updateEditWidget();
 }
 
 void KSpreadView::precisionPlus()
 {
-  if ( m_pTable != 0L )
-    m_pTable->setSelectionPrecision( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 1 );
+  setSelectionPrecision(1);
 }
 
 void KSpreadView::precisionMinus()
 {
-  if ( m_pTable != 0L )
-    m_pTable->setSelectionPrecision( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
+  setSelectionPrecision(-1);
 }
 
+void KSpreadView::setSelectionPrecision(int delta)
+{
+  if (m_pTable != NULL )
+  {
+    m_pTable->setSelectionPrecision( selectionInfo(), delta );
+  }
+}
 
 void KSpreadView::percent( bool b)
 {
    if ( m_toolbarLock )
         return;
   if ( m_pTable != 0L )
-    m_pTable->setSelectionPercent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,b );
+    m_pTable->setSelectionPercent( selectionInfo() ,b );
   updateEditWidget();
 }
 
@@ -4099,7 +4183,7 @@ void KSpreadView::insertObject()
 
 void KSpreadView::insertChart()
 {
-    if( activeTable()->isColumnSelected() || activeTable()->isRowSelected() )
+    if( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
     {
         KMessageBox::error( this, i18n("Area too large!"));
         return;
@@ -4250,16 +4334,15 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
                                        const QRect &oldSelection,
                                        const QPoint& oldMarker )
 {
-    QRect newSelection = _table->selection();
+    QRect newSelection = m_selectionInfo->selection();
 
     // Emit a signal for internal use
     emit sig_selectionChanged( _table, newSelection );
 
     // Empty selection ?
-    // Activate or deactivate some actions. This code is duplicated
-    // in KSpreadView::slotUnselect
-    if ( _table->singleCellSelection() ||
-         _table->isRowSelected() || _table->isColumnSelected() )
+    // Activate or deactivate some actions.
+    if ( m_selectionInfo->singleCellSelection() ||
+         util_isRowSelected(selection()) || util_isColumnSelected(selection()) )
     {
         m_tableFormat->setEnabled( FALSE );
         m_mergeCell->setEnabled(false);
@@ -4272,7 +4355,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
         m_insertChartFrame->setEnabled(true);
     }
 
-    if( _table->isColumnSelected() )
+    if( util_isColumnSelected(selection()) )
         {
         m_resizeRow->setEnabled(false);
         m_equalizeRow->setEnabled(false);
@@ -4283,7 +4366,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
         m_equalizeRow->setEnabled(true);
         }
 
-    if( _table->isRowSelected() )
+    if( util_isRowSelected(selection()) )
         {
         m_resizeColumn->setEnabled(false);
         m_equalizeColumn->setEnabled(false);
@@ -4315,11 +4398,11 @@ void KSpreadView::resultOfCalc()
     KSpreadTable * table = activeTable();
     double result = 0.0;
     int nbCell = 0;
-    QRect tmpRect(table->selection());
+    QRect tmpRect(m_selectionInfo->selection());
     MethodOfCalc tmpMethod = m_pDoc->getTypeOfCalc() ;
     if ( tmpMethod != NoneCalc )
     {
-        if ( table->isColumnSelected() )
+        if ( util_isColumnSelected(selection()) )
         {
           for ( int col = tmpRect.left(); col <= tmpRect.right(); ++col )
           {
@@ -4364,7 +4447,7 @@ void KSpreadView::resultOfCalc()
             }
           }
         }
-        else if ( table->isRowSelected() )
+        else if ( util_isRowSelected(selection()) )
         {
           for ( int row = tmpRect.top(); row <= tmpRect.bottom(); ++row )
           {
@@ -4517,23 +4600,6 @@ void KSpreadView::menuCalc(bool)
     resultOfCalc();
 }
 
-void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
-{
-    // Do we display this table ?
-    if ( _table != m_pTable )
-        return;
-
-    // Unselect the action which only works on a selection
-    // with mutiple cells.
-    m_tableFormat->setEnabled( FALSE );
-    m_mergeCell->setEnabled(false);
-    m_insertChartFrame->setEnabled(false);
-
-    m_pCanvas->updateSelection( _old, _table->marker() );
-    m_pVBorderWidget->update();
-    m_pHBorderWidget->update();
-}
-
 void KSpreadView::repaintPolygon( const QPointArray& polygon )
 {
     QPointArray arr = polygon;
@@ -4667,12 +4733,14 @@ void KSpreadView::removeTable( KSpreadTable *_t )
 
 void KSpreadView::insertTable( KSpreadTable* table )
 {
-    QString tabName = table->tableName();
-    if( !table->isHidden() ) {
+  QString tabName = table->tableName();
+  if( !table->isHidden() )
+  {
     m_pTabBar->addTab(tabName);
-    setActiveTable(table);
-  } else {
-      m_pTabBar->addHiddenTab(tabName);
+  }
+  else
+  {
+    m_pTabBar->addHiddenTab(tabName);
   }
 }
 

@@ -103,8 +103,7 @@ void KSpreadspecial::slotOk()
     if( rb9->isChecked() )
 	op = Div;
 
-    m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),
-					    m_pView->canvasWidget()->markerRow() ),true, sp, op );
+    m_pView->activeTable()->paste( m_pView->selection(), true, sp, op );
     accept();
 }
 

@@ -36,7 +36,10 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
 	KSpreadViewIface.skel KSpreadViewIface.cc \
 	kspread_cluster.cc kspread_depend.cc kspread_condition.cc \
-	KSpreadLayoutIface.skel KSpreadLayoutIface.cc KSpreadColumnIface.skel KSpreadColumnIface.cc KSpreadRowIface.skel KSpreadRowIface.cc
+	KSpreadLayoutIface.skel KSpreadLayoutIface.cc \
+        KSpreadColumnIface.skel KSpreadColumnIface.cc \
+	KSpreadRowIface.skel KSpreadRowIface.cc \
+	kspread_selection.cc
 	
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -79,7 +82,8 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_dlg_show.h kspread_dlg_insert.h kspread_dlg_pasteinsert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h kspread_dlg_format.h kspread_aboutdata.h \
-	kspread_depend.h kspread_condition.h KSpreadLayoutIface.h KSpreadColumnIface.h KSpreadRowIface.h
+	kspread_depend.h kspread_condition.h KSpreadLayoutIface.h \
+	KSpreadColumnIface.h KSpreadRowIface.h kspread_selection.h
 
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office

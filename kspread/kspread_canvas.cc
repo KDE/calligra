@@ -92,7 +92,7 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
                 }
                 if ( !point.isValid() && validName)
                 {
-                    QRect rect( m_pView->activeTable()->selection() );
+                    QRect rect( m_pView->selection() );
                     KSpreadTable * t = m_pView->activeTable();
                     // set area name on current selection/cell
 
@@ -112,15 +112,15 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     // Escape pressed, restore original value
     case Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
-        if ( m_pView->activeTable()->singleCellSelection() ) {
+        if ( m_pView->selectionInfo()->singleCellSelection() ) {
             setText( util_encodeColumnLabelText( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( util_encodeColumnLabelText( m_pView->activeTable()->selection().left() )
-                     + QString::number( m_pView->activeTable()->selection().top() )
+            setText( util_encodeColumnLabelText( m_pView->selection().left() )
+                     + QString::number( m_pView->selection().top() )
                      + ":"
-                     + util_encodeColumnLabelText( m_pView->activeTable()->selection().right() )
-                     + QString::number( m_pView->activeTable()->selection().bottom() ) );
+                     + util_encodeColumnLabelText( m_pView->selection().right() )
+                     + QString::number( m_pView->selection().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();
         _ev->accept();
@@ -350,19 +350,24 @@ bool KSpreadCanvas::focusNextPrevChild( bool )
     return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
+QRect KSpreadCanvas::selection() const
+{
+  return m_pView->selectionInfo()->selection();
+}
+
 QPoint KSpreadCanvas::marker() const
 {
-    return activeTable()->marker();
+    return m_pView->selectionInfo()->marker();
 }
 
 int KSpreadCanvas::markerColumn() const
 {
-    return activeTable()->marker().x();
+    return m_pView->selectionInfo()->marker().x();
 }
 
 int KSpreadCanvas::markerRow() const
 {
-    return activeTable()->marker().y();
+    return m_pView->selectionInfo()->marker().y();
 }
 
 void KSpreadCanvas::startChoose()
@@ -398,7 +403,7 @@ void KSpreadCanvas::endChoose()
 
   KSpreadTable *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
   if(table)
-        table->setActiveTable();
+        m_pView->setActiveTable(table);
 
   length_namecell = 0;
   m_bChoose = FALSE;
@@ -485,7 +490,7 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
                                   bool extendSelection)
 {
   if ( table && (table != activeTable() ))
-    table->setActiveTable();
+    m_pView->setActiveTable(table);
   else
     table = activeTable();
 
@@ -514,7 +519,7 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
     }
     else
     {
-      table->setSelection(newSelection, location, this);
+      selectionInfo()->setSelection(newSelection, location, table);
     }
   }
 
@@ -719,7 +724,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  QRect selectionHandle = table->getSelectionHandleArea(this);
+  QRect selectionHandle = m_pView->selectionInfo()->getSelectionHandleArea(this);
 
   // Test whether the mouse is over some anchor
   {
@@ -763,18 +768,19 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   if ( !table )
     return;
 
-  QRect selection( table->selection() );
+  KSpreadSelection* selectionInfo = m_pView->selectionInfo();
+  QRect selection( selection() );
 
-  if (table->singleCellSelection())
+  if (selectionInfo->singleCellSelection())
   {
-    KSpreadCell* cell = table->cellAt(table->marker());
+    KSpreadCell* cell = table->cellAt(selectionInfo->marker());
     cell->clicked(this);
   }
 
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    QPoint selectionAnchor = table->selectionAnchor();
+    QPoint selectionAnchor = selectionInfo->selectionAnchor();
     int x = selectionAnchor.x();
     int y = selectionAnchor.y();
     if( x > selection.left())
@@ -796,7 +802,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   }
   else if ( m_eMouseAction == AutoFill )
   {
-    QRect dest = table->selection();
+    QRect dest = selection;
     table->autofill( m_rctAutoFillSrc, dest );
 
     m_pView->updateEditWidget();
@@ -813,18 +819,15 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
 void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
 {
-  KSpreadTable *table = activeTable();
-  QRect selection = table->selection();
-
   // Auto fill ? That is done using the left mouse button.
   if ( event->button() == LeftButton )
   {
     m_eMouseAction = AutoFill;
-    m_rctAutoFillSrc = selection;
+    m_rctAutoFillSrc = selection();
   }
   // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
-  else if ( event->button() == MidButton && table->singleCellSelection())
+  else if ( event->button() == MidButton && selectionInfo()->singleCellSelection())
   {
     m_eMouseAction = ResizeCell;
   }
@@ -836,7 +839,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadTable* table = activeTable();
   QPoint selectionAnchor;
-  QPoint chooseAnchor = table->getChooseAnchor();
+  QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
 
   if (m_bChoose)
   {
@@ -851,7 +854,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   }
   else
   {
-    selectionAnchor = table->selectionAnchor();
+    selectionAnchor = selectionInfo()->selectionAnchor();
 
     /* the selection simply becomes a box with the anchor and given cell as
        opposite corners
@@ -863,7 +866,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
     bottom = QMAX(selectionAnchor.y(), cell.y());
     QRect newSelection(QPoint(left, top), QPoint(right, bottom));
 
-    table->setSelection(newSelection, cell, this);
+    selectionInfo()->setSelection(newSelection, cell, table);
   }
 }
 
@@ -921,10 +924,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   m_scrollTimer->start( 50 );
 
   // Remember current values.
-  QRect selection( table->selection() );
+  QRect selection( selection() );
 
   // Did we click in the lower right corner of the marker/marked-area ?
-  if (table->getSelectionHandleArea(this).contains(_ev->pos()))
+  if (selectionInfo()->getSelectionHandleArea(this).contains(_ev->pos()))
   {
     processClickSelectionHandle(_ev);
     return;
@@ -940,11 +943,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
     return;
   }
-
-  // Unselect a selection ?
-  if ( (_ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
-       && !(_ev->state() & ShiftButton))
-    table->unselect();
 
   // Extending an existing selection with the shift button ?
   if ( m_pView->koDocument()->isReadWrite() && selection.right() != KS_colMax &&
@@ -977,16 +975,15 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   else if ( _ev->button() == RightButton )
   {
     // No selection or the mouse press was outside of an existing selection ?
-    if ( !selection.contains( QPoint(col, row )) )
-      table->setMarker( QPoint( col, row ) );
+    gotoLocation(QPoint(col, row), activeTable(), false);
   }
 
   // Paste operation with the middle button ?
   if( _ev->button() == MidButton )
   {
-    table->setMarker( QPoint( col, row ) );
-    table->paste( QPoint( markerColumn(), markerRow() ) );
-    table->cellAt( markerColumn(), markerRow() )->update();
+    selectionInfo()->setMarker( QPoint( col, row ), table );
+    table->paste( QRect(marker(), marker()) );
+    table->cellAt( marker() )->update();
   }
 
   // Update the edit box
@@ -1021,7 +1018,7 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  QPoint chooseMarker = table->getChooseMarker();
+  QPoint chooseMarker = selectionInfo()->getChooseMarker();
 
   // Nothing changed ?
   if (row == chooseMarker.y() && col == chooseMarker.x())
@@ -1055,7 +1052,8 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-  bool extend = ( ( (!table->isColumnSelected()) && (!table->isRowSelected())) &&
+  bool extend = ( ( (!util_isColumnSelected(selection())) &&
+                    (!util_isRowSelected(selection()))) &&
                   ( _ev->state() & ShiftButton ) );
 
   gotoLocation(QPoint(col, row), activeTable(), extend);
@@ -1190,20 +1188,19 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
 {
   QPoint destination;
   QPoint cursor;
-  KSpreadTable* table = activeTable();
 
   if (m_bChoose)
   {
-    cursor = table->getChooseCursor();
+    cursor = selectionInfo()->getChooseCursor();
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
     {
-      cursor = activeTable()->getCursorPosition();
+      cursor = selectionInfo()->getCursorPosition();
     }
   }
   else
   {
-    cursor = activeTable()->getCursorPosition();
+    cursor = selectionInfo()->getCursorPosition();
   }
 
   QPoint cellCorner = cursor;
@@ -1275,11 +1272,11 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
   gotoLocation(destination, activeTable(), extendSelection);
   if (m_bChoose)
   {
-    table->setChooseCursor(destination);
+    selectionInfo()->setChooseCursor(destination);
   }
   else
   {
-    activeTable()->setCursorPosition(destination);
+    selectionInfo()->setCursorPosition(destination);
   }
 }
 
@@ -1403,7 +1400,8 @@ void KSpreadCanvas::processHomeKey(QKeyEvent* event)
     }
     else
     {
-      QPoint marker = m_bChoose ? table->getChooseMarker() : table->marker();
+      QPoint marker = m_bChoose ?
+        selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
       cell = table->getFirstCellRow(marker.y());
       while (cell != NULL && cell->column() < marker.x() && cell->isEmpty())
@@ -1439,7 +1437,8 @@ void KSpreadCanvas::processEndKey( QKeyEvent *event )
   }
   else
   {
-    QPoint marker = m_bChoose ? table->getChooseMarker() : table->marker();
+    QPoint marker = m_bChoose ?
+      selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
     int col = 1;
 
@@ -1458,13 +1457,13 @@ void KSpreadCanvas::processEndKey( QKeyEvent *event )
 void KSpreadCanvas::processPriorKey(QKeyEvent *event)
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadTable* table = activeTable();
   if (!m_bChoose)
   {
     deleteEditor( true );
   }
 
-  QPoint marker = m_bChoose ? table->getChooseMarker() : table->marker();
+  QPoint marker = m_bChoose ?
+    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
   QPoint destination(marker.x(), QMAX(1, marker.y() - 10));
 
@@ -1476,14 +1475,14 @@ void KSpreadCanvas::processPriorKey(QKeyEvent *event)
 void KSpreadCanvas::processNextKey(QKeyEvent *event)
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadTable* table = activeTable();
 
   if (!m_bChoose)
   {
     deleteEditor( true /*save changes*/ );
   }
 
-  QPoint marker = m_bChoose ? table->getChooseMarker() : table->marker();
+  QPoint marker = m_bChoose ?
+    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
   QPoint destination(marker.x(), QMAX(1, marker.y() + 10));
 
   gotoLocation(destination, activeTable(), makingSelection);
@@ -1493,7 +1492,7 @@ void KSpreadCanvas::processNextKey(QKeyEvent *event)
 
 void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
 {
-  activeTable()->clearTextSelection( QPoint( markerColumn(), markerRow() ) );
+  activeTable()->clearTextSelection( selectionInfo() );
   m_pView->editWidget()->setText( "" );
   return;
 }
@@ -1551,10 +1550,9 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   ColumnLayout* cl = NULL;
   RowLayout* rl = NULL;
 
-  if(!makingSelection)
-    table->unselect();
 
-  QPoint marker = m_bChoose ? table->getChooseMarker() : table->marker();
+  QPoint marker = m_bChoose ?
+    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
   /* here, we want to move to the next cell in the given direction that is
      actually being used.  Ignore empty cells and cells on hidden rows/columns */
@@ -1819,7 +1817,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
   KSpreadCell  * cell = 0L;
   KSpreadTable * table = activeTable();
-  QRect rect = table->selection();
+  QRect rect = selection();
 
   int right  = rect.right();
   int bottom = rect.bottom();
@@ -1831,7 +1829,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     m_pDoc->undoBuffer()->appendUndo( undo );
   }
 
-  if ( table->isRowSelected() )
+  if ( util_isRowSelected(selection()) )
   {
     for ( int r = rect.top(); r <= bottom; ++r )
     {
@@ -1952,7 +1950,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     return true;
   }
 
-  if ( table->isColumnSelected() )
+  if ( util_isColumnSelected(selection()) )
   {
     for ( int c = rect.left(); c <= right; ++c )
     {
@@ -2310,10 +2308,10 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
 {
   KSpreadTable* table = activeTable();
 
-  QPoint oldAnchor = table->getChooseAnchor();
-  QPoint oldMarker = table->getChooseMarker();
-  QPoint chooseCursor = table->getChooseCursor();
-  QRect oldChooseRect = table->getChooseRect();
+  QPoint oldAnchor = selectionInfo()->getChooseAnchor();
+  QPoint oldMarker = selectionInfo()->getChooseMarker();
+  QPoint chooseCursor = selectionInfo()->getChooseCursor();
+  QRect oldChooseRect = selectionInfo()->getChooseRect();
 
 
   if (newMarker == oldMarker && newAnchor == oldAnchor)
@@ -2321,19 +2319,19 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
     return;
   }
 
-  table->setChooseMarker(newMarker);
-  table->setChooseAnchor(newAnchor);
+  selectionInfo()->setChooseMarker(newMarker);
+  selectionInfo()->setChooseAnchor(newAnchor);
 
-  QRect newChooseRect = table->getChooseRect();
+  QRect newChooseRect = selectionInfo()->getChooseRect();
 
   /* keep the choose cursor updated.  If you don't know what the 'cursor' is
      supposed to represent, check the comments of the regular selection cursor
-     in kspread_table.h (KSpreadTable::m_cursorPosition).  It's the same thing
-     here except for the choose selection.
+     in kspread_selection.h (KSpreadSelection::m_cursorPosition).  It's the
+     same thing here except for the choose selection.
   */
   if ( !newChooseRect.contains(chooseCursor))
   {
-    table->setChooseCursor(newMarker);
+    selectionInfo()->setChooseCursor(newMarker);
   }
 
   /* make sure the old selection was valid before we try to paint it */
@@ -2402,18 +2400,14 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-    updateSelection( _rect, activeTable()->marker() );
+    updateSelection( _rect, marker() );
 }
 
 void KSpreadCanvas::updateSelection( const QRect & oldSelection,
                                      const QPoint& /*oldMarker*/ )
   /* for now oldMarker is unused.  Maybe we can just remove it? */
 {
-  KSpreadTable *table = activeTable();
-  if ( !table )
-    return;
-
-  paintSelectionChange(oldSelection, table->selection());
+  paintSelectionChange(oldSelection, selection());
 }
 
 void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
@@ -2450,7 +2444,7 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   cellRegions.append(area1);
   cellRegions.append(area2);
 
-  m_pDoc->paintCellRegions(painter, view, cellRegions, table, true);
+  m_pDoc->paintCellRegions(painter, view, m_pView, cellRegions, table, true);
 
   // Draw children
   QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
@@ -2531,11 +2525,10 @@ void KSpreadCanvas::ExtendRectBorder(QRect& area)
 
 void KSpreadCanvas::updatePosWidget()
 {
-    QRect selection = m_pView->activeTable()->selection();
     QString buffer;
     QString tmp;
     // No selection, or only one cell merged selected
-    if ( activeTable()->singleCellSelection() )
+    if ( selectionInfo()->singleCellSelection() )
     {
         if(activeTable()->getLcMode())
         {
@@ -2552,22 +2545,22 @@ void KSpreadCanvas::updatePosWidget()
   {
         if(activeTable()->getLcMode())
         {
-            buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
-            if( activeTable()->isRowSelected( selection ) )
-                buffer+=tmp.setNum((KS_colMax-selection.left()+1))+"C";
+            buffer=tmp.setNum( (selection().bottom()-selection().top()+1) )+"Lx";
+            if( util_isRowSelected( selection() ) )
+                buffer+=tmp.setNum((KS_colMax-selection().left()+1))+"C";
             else
-                buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
+                buffer+=tmp.setNum((selection().right()-selection().left()+1))+"C";
         }
         else
         {
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=util_encodeColumnLabelText( selection.left() );
-                buffer+=tmp.setNum(selection.top());
+                buffer=util_encodeColumnLabelText( selection().left() );
+                buffer+=tmp.setNum(selection().top());
                 buffer+=":";
-                buffer+=util_encodeColumnLabelText( QMIN( KS_colMax, selection.right() ) );
-                buffer+=tmp.setNum(selection.bottom());
+                buffer+=util_encodeColumnLabelText( QMIN( KS_colMax, selection().right() ) );
+                buffer+=tmp.setNum(selection().bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
         }
@@ -2582,8 +2575,8 @@ void KSpreadCanvas::updatePosWidget()
 
 void KSpreadCanvas::adjustArea(bool makeUndo)
 {
-  QRect selection( activeTable()->selection() );
-  if(activeTable()->areaIsEmpty())
+  QRect selection( selection() );
+  if(activeTable()->areaIsEmpty(selection))
         return;
 
   if(makeUndo)
@@ -2595,7 +2588,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
         }
   }
   // Columns selected
-  if( activeTable()->isColumnSelected() )
+  if( util_isColumnSelected(selection) )
   {
     for (int x=selection.left(); x <= selection.right(); x++ )
     {
@@ -2603,7 +2596,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
     }
   }
   // Rows selected
-  else if( activeTable()->isRowSelected() )
+  else if( util_isRowSelected(selection) )
   {
     for(int y = selection.top(); y <= selection.bottom(); y++ )
     {
@@ -2627,14 +2620,18 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
 
 void KSpreadCanvas::equalizeRow()
 {
-  QRect selection( activeTable()->selection() );
+  QRect selection( selection() );
   RowLayout *rl;
   int size;
 
   rl = m_pView->activeTable()->rowLayout(selection.top());
   size=rl->height(this);
   for(int i=selection.top()+1;i<=selection.bottom();i++)
-  {
+  {  KSpreadTable *table = activeTable();
+  if ( !table )
+    return;
+
+
     size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
   }
   m_pView->vBorderWidget()->equalizeRow(size);
@@ -2643,7 +2640,7 @@ void KSpreadCanvas::equalizeRow()
 void KSpreadCanvas::equalizeColumn()
 {
   ColumnLayout *cl;
-  QRect selection( activeTable()->selection() );
+  QRect selection( selection() );
   int size;
 
   cl = m_pView->activeTable()->columnLayout(selection.left());
@@ -2729,13 +2726,14 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
     m_iSelectionAnchor = hit_row;
 
-    QRect rect = m_pCanvas->activeTable()->selection();
-    QRect selection;
+    QRect rect = m_pView->selection();
     if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton)
-                || (!m_pCanvas->activeTable()->isRowSelected()) )
+                || (!util_isRowSelected(rect)) )
         {
-        selection.setCoords( 1, hit_row, KS_colMax, hit_row );
-        table->setSelection( selection, m_pCanvas );
+          QRect newSelection;
+          newSelection.setCoords( 1, hit_row, KS_colMax, hit_row );
+          m_pView->selectionInfo()->setSelection( newSelection,
+                                                  m_pView->activeTable() );
         }
 
     if ( _ev->button() == RightButton )
@@ -2766,16 +2764,15 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         int start = m_iResizedRow;
         int end = m_iResizedRow;
-        QRect selection = m_pCanvas->activeTable()->selection();
         QRect rect;
         rect.setCoords( 1, m_iResizedRow, KS_colMax, m_iResizedRow );
-        if( m_pCanvas->activeTable()->isRowSelected() )
+        if( util_isRowSelected(m_pView->selection()) )
         {
-            if( selection.contains( QPoint( 1, m_iResizedRow ) ) )
+            if( m_pView->selection().contains( QPoint( 1, m_iResizedRow ) ) )
             {
-                start=selection.top();
-                end=selection.bottom();
-                rect=selection;
+                start=m_pView->selection().top();
+                end=m_pView->selection().bottom();
+                rect=m_pView->selection();
             }
         }
 
@@ -2821,7 +2818,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if (m_bSelection)
     {
-        QRect rect = table->selection();
+        QRect rect = m_pView->selection();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -2858,12 +2855,12 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
   int select;
   if(_row==-1)
   {
-    adjust=m_pCanvas->activeTable()->adjustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    adjust=m_pCanvas->activeTable()->adjustRow(m_pView->selectionInfo());
     select=m_iSelectionAnchor;
   }
   else
   {
-    adjust=m_pCanvas->activeTable()->adjustRow(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_row);
+    adjust=m_pCanvas->activeTable()->adjustRow(m_pView->selectionInfo(),_row);
     select=_row;
   }
   if(adjust!=-1)
@@ -2887,7 +2884,7 @@ void KSpreadVBorder::equalizeRow( int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
-  QRect selection( table->selection() );
+  QRect selection( m_pView->selection() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
   {
      KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
@@ -2921,8 +2918,8 @@ void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
   }
   else
   {
-    QRect selection( table->selection() );
-    if( table->singleCellSelection() )
+    QRect selection( m_pView->selection() );
+    if( m_pView->selectionInfo()->singleCellSelection() )
     {
       if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
@@ -2972,19 +2969,19 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     int row = table->topRow( _ev->pos().y(), y, m_pCanvas );
     if( row > KS_rowMax )
 	return;
-    QRect selection = table->selection();
+    QRect newSelection = m_pView->selection();
 
     if ( row < m_iSelectionAnchor )
     {
-      selection.setTop( row );
-      selection.setBottom( m_iSelectionAnchor );
+      newSelection.setTop( row );
+      newSelection.setBottom( m_iSelectionAnchor );
     }
     else
     {
-      selection.setBottom( row );
-      selection.setTop( m_iSelectionAnchor );
+      newSelection.setBottom( row );
+      newSelection.setTop( m_iSelectionAnchor );
     }
-    table->setSelection( selection, m_pCanvas );
+    m_pView->selectionInfo()->setSelection( newSelection, m_pView->activeTable() );
 
     if ( _ev->pos().y() < 0 )
       m_pCanvas->vertScrollBar()->setValue( m_pCanvas->yOffset() + y );
@@ -3125,20 +3122,20 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   double dblYpos = (double)ypos;
   int height = 0;
 
-  QRect selection( table->selection() );
 
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 
-  //  several cells selected but not just a cell merged
-  bool area = !(table->singleCellSelection());
+  //several cells selected but not just a cell merged
+  bool area= !(m_pView->selectionInfo()->singleCellSelection());
 
   for ( int y = top_row; y <= bottom_row; y++ )
   {
-    bool highlighted = ( area && y >= selection.top() && y <= selection.bottom() );
-    bool selected = ( highlighted && (table->isRowSelected()) );
-    bool current  = ( !highlighted && y == selection.top() );
+    bool highlighted = (area && y >= m_pView->selection().top() &&
+                        y <= m_pView->selection().bottom() );
+    bool selected = ( highlighted && (util_isRowSelected(m_pView->selection())) );
+    bool current  = ( !highlighted && y == m_pView->selection().top() );
 
     RowLayout *row_lay = table->rowLayout( y );
 
@@ -3243,7 +3240,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   if ( table->columnLayout(tmpCol  )->isHide() && tmpCol == 1)
       m_bResize = false;
 
-  QRect rect = table->selection();
+  QRect rect = m_pView->selection();
   if ( m_bResize )
   {
     // Determine the column to resize
@@ -3270,10 +3267,10 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
     QRect r;
     if(!rect.contains( QPoint(hit_col,1)) || !(_ev->button() == RightButton)
-                                          || !(table->isRowSelected()) )
+                                          || !(util_isRowSelected(m_pView->selection())) )
     {
         r.setCoords( hit_col, 1, hit_col, KS_rowMax );
-        table->setSelection( r, m_pCanvas );
+        m_pView->selectionInfo()->setSelection( r, m_pView->activeTable() );
     }
     if ( _ev->button() == RightButton )
     {
@@ -3303,16 +3300,15 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
         int start=m_iResizedColumn;
         int end=m_iResizedColumn;
-        QRect selection = m_pCanvas->activeTable()->selection();
         QRect rect;
         rect.setCoords( m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax );
-        if( m_pCanvas->activeTable()->isColumnSelected() )
+        if( util_isColumnSelected(m_pView->selection()) )
         {
-            if(selection.contains(QPoint(m_iResizedColumn,1)))
+            if(m_pView->selection().contains(QPoint(m_iResizedColumn,1)))
             {
-                start=selection.left();
-                end=selection.right();
-                rect=selection;
+                start=m_pView->selection().left();
+                end=m_pView->selection().right();
+                rect=m_pView->selection();
             }
         }
 
@@ -3358,7 +3354,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if (m_bSelection)
     {
-        QRect rect = table->selection();
+        QRect rect = m_pView->selection();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -3391,16 +3387,16 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
 {
-  int adjust;
+  int adjust = -1;
   int select;
   if( _col==-1 )
   {
-    adjust = m_pCanvas->activeTable()->adjustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    adjust = m_pCanvas->activeTable()->adjustColumn(m_pView->selectionInfo());
     select=m_iSelectionAnchor;
   }
   else
   {
-    adjust=m_pCanvas->activeTable()->adjustColumn(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),_col);
+    adjust = m_pCanvas->activeTable()->adjustColumn(m_pView->selectionInfo() ,_col);
     select=_col;
   }
 
@@ -3428,7 +3424,7 @@ void KSpreadHBorder::equalizeColumn( int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
-  QRect selection( table->selection() );
+  QRect selection( m_pView->selection() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
   {
       KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
@@ -3464,8 +3460,8 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
   }
   else
   {
-    QRect selection( table->selection() );
-    if( table->singleCellSelection() )
+    QRect selection( m_pView->selection() );
+    if( m_pView->selectionInfo()->singleCellSelection() )
     {
       if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
@@ -3525,7 +3521,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     int col = table->leftColumn( _ev->pos().x(), x, m_pCanvas );
     if( col > KS_colMax )
 	return;
-    QRect r = table->selection();
+    QRect r = m_pView->selection();
 
     if ( col < m_iSelectionAnchor )
     {
@@ -3537,7 +3533,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       r.setRight( col );
       r.setLeft( m_iSelectionAnchor );
     }
-    table->setSelection( r, m_pCanvas );
+    m_pView->selectionInfo()->setSelection( r, m_pView->activeTable() );
 
     if ( _ev->pos().x() < 0 )
       m_pCanvas->horzScrollBar()->setValue( m_pCanvas->xOffset() + x );
@@ -3669,24 +3665,26 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   double dblXpos = (double)xpos;
   int width = 0;
 
-  QRect selection( table->selection() );
 
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
-  KSpreadCell *cell=table->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  KSpreadCell *cell=table->cellAt( m_pView->marker() );
   QRect extraCell;
   extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
   m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());
 
-  // several cells selected but not just a cell merged
-  bool area = ( selection.left()!=0 && extraCell!=selection );
+  //several cells selected but not just a cell merged
+  bool area=( m_pView->selection().left()!=0 &&
+              extraCell != m_pView->selection() );
 
   for ( int x = left_col; x <= right_col; x++ )
   {
-    bool highlighted = ( area && x >= selection.left() && x <= selection.right());
-    bool selected = ( highlighted && table->isColumnSelected() && (!table->isRowSelected()) );
-    bool current = ( !highlighted && x == selection.left() );
+    bool highlighted = ( area && x >= m_pView->selection().left() &&
+                         x <= m_pView->selection().right());
+    bool selected = ( highlighted && util_isColumnSelected(m_pView->selection()) &&
+                      (!util_isRowSelected(m_pView->selection())) );
+    bool current = ( !highlighted && x == m_pView->selection().left() );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
@@ -3696,7 +3694,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     if ( selected )
     {
       QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT, 
+      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT,
                        colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )

@@ -661,8 +661,7 @@ else
 
         }
 
-m_pView->activeTable()->setValidity( QPoint(  m_pView->canvasWidget()->markerColumn(),
-                                                  m_pView->canvasWidget()->markerRow() ),  result);
+m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);
 accept();
 }
 
