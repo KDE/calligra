@@ -18,7 +18,7 @@
 */
 
 #include "imagecollection.h"
-#include "kword_doc.h"
+#include "kwdoc.h"
 
 #include <qfont.h>
 #include <qcolor.h>
@@ -28,7 +28,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWImageCollection::KWImageCollection( KWordDocument *_doc )
+KWImageCollection::KWImageCollection( KWDocument *_doc )
     : images( 1999, true )
 {
     images.setAutoDelete( true );

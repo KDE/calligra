@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_page.h"
+#include "kwdoc.h"
+#include "kwcanvas.h"
 #include "tabledia.h"
 #include "tabledia.moc"
 
@@ -73,11 +73,11 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 /******************************************************************/
 
 /*================================================================*/
-KWTableDia::KWTableDia( QWidget* parent, const char* name, KWPage *_page, KWordDocument *_doc,
+KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
 			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
     : KDialogBase( Tabbed, i18n("Table settings"), Ok | Cancel, Ok, parent, name, true)
 {
-    page = _page;
+    canvas = _canvas;
     doc = _doc;
 
     setupTab1( rows, cols, wid, hei );
@@ -186,7 +186,7 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
 void KWTableDia::setupTab2()
 {
     readTableStyles();
-  
+
     tab2 = addPage( i18n("Properties"));
     QGridLayout *grid = new QGridLayout( tab2, 4, 3, 15, 7 );
 
@@ -253,11 +253,12 @@ void KWTableDia::readTableStyles()
 /*================================================================*/
 bool KWTableDia::insertTable()
 {
-    page->setTableConfig( nRows->value(), nCols->value(),
+    canvas->setTableConfig( nRows->value(), nCols->value(),
 			  (KWTblCellSize)cWid->currentItem(),
 			  (KWTblCellSize)cHei->currentItem(),
                           cbIsFloating->isChecked() );
-    page->mmTable();
+    canvas->setMouseMode( MM_CREATE_TABLE );
+
     return true;
 }
 

@@ -17,9 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_frame.h"
-#include "kword_page.h"
+#include "kwdoc.h"
+#include "kwframe.h"
+#include "kwgroupmanager.h"
+#include "kwcanvas.h"
 #include "insdia.h"
 #include "insdia.moc"
 
@@ -38,13 +39,13 @@
 /******************************************************************/
 
 /*================================================================*/
-KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, InsertType _type, KWPage *_page )
+KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, InsertType _type, KWCanvas *_canvas )
     : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     type = _type;
     grpMgr = _grpMgr;
     doc = _doc;
-    page = _page;
+    canvas = _canvas;
 
     setupTab1();
 
@@ -121,7 +122,10 @@ bool KWInsertDia::doInsert()
     doc->recalcFrames();
     doc->updateAllFrames();
     doc->updateAllViews( 0L );
-    page->recalcCursor();
+    canvas->repaintAll();
+#if 0
+    canvas->recalcCursor();
+#endif
     return true;
 }
 

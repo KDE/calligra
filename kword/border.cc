@@ -19,6 +19,7 @@
 
 #include "border.h"
 #include <klocale.h>
+#include <qdom.h>
 
 Border::Border()
     : color( Qt::black ), style( SOLID ), ptWidth( 1 ) { }
@@ -29,6 +30,52 @@ bool Border::operator==( const Border _brd ) const {
 
 bool Border::operator!=( const Border _brd ) const {
     return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
+}
+
+/*================================================================*/
+QPen Border::borderPen( const Border & _brd )
+{
+    QPen pen( _brd.color, _brd.ptWidth );
+    switch ( _brd.style ) {
+    case Border::SOLID:
+        pen.setStyle( SolidLine );
+        break;
+    case Border::DASH:
+        pen.setStyle( DashLine );
+        break;
+    case Border::DOT:
+        pen.setStyle( DotLine );
+        break;
+    case Border::DASH_DOT:
+        pen.setStyle( DashDotLine );
+        break;
+    case Border::DASH_DOT_DOT:
+        pen.setStyle( DashDotDotLine );
+        break;
+    }
+
+    return pen;
+}
+
+Border Border::loadBorder( const QDomElement & elem )
+{
+    int r = elem.attribute("red").toInt();
+    int g = elem.attribute("green").toInt();
+    int b = elem.attribute("blue").toInt();
+    Border bd;
+    bd.color.setRgb( r, g, b );
+    bd.style = static_cast<BorderStyle>( elem.attribute("style").toInt() );
+    bd.ptWidth = elem.attribute("width").toInt();
+    return bd;
+}
+
+void Border::save( QDomElement & elem )
+{
+    elem.setAttribute("red", color.red());
+    elem.setAttribute("green", color.green());
+    elem.setAttribute("blue", color.blue());
+    elem.setAttribute("style", static_cast<int>( style ));
+    elem.setAttribute("width", ptWidth);
 }
 
 Border::BorderStyle Border::getStyle(const QString &style) {
@@ -44,4 +91,3 @@ Border::BorderStyle Border::getStyle(const QString &style) {
     // default
     return Border::SOLID;
 }
-

@@ -17,15 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_utils.h"
+#include "kwutils.h"
 
-/*================================================================*/
+const QCString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+const QCString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+const QCString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+const QCString RNThousands[] = {"", "m", "mm", "mmm"};
+
 QString makeRomanNumber( int n )
 {
-    return QString( RNThousands[ ( n / 1000 ) ] +
-                    RNHundreds[ ( n / 100 ) % 10 ] +
-                    RNTens[ ( n / 10 ) % 10 ] +
-                    RNUnits[ ( n ) % 10 ] );
+    return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
+                                RNHundreds[ ( n / 100 ) % 10 ] +
+                                RNTens[ ( n / 10 ) % 10 ] +
+                                RNUnits[ ( n ) % 10 ] );
 }
 
 /*================================================================*/

@@ -18,9 +18,9 @@
 */
 
 #include "image.h"
-#include "kword_doc.h"
+#include "kwdoc.h"
 #include "defs.h"
-#include "kword_utils.h"
+#include "kwutils.h"
 
 #include <kdebug.h>
 #include <strstream>
@@ -51,46 +51,28 @@ void KWImage::incRef()
 }
 
 /*================================================================*/
-void KWImage::save( QTextStream&out )
+void KWImage::save( QDomElement& parentElem )
 {
-    out << indent << "<FILENAME value=\"" << correctQString( filename ) << "\"/>" << endl;
+    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+    parentElem.appendChild( elem );
+    elem.setAttribute( "value", correctQString( filename ) );
 }
 
 /*================================================================*/
-void KWImage::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KWordDocument *_doc )
+void KWImage::load( QDomElement &attributes, KWDocument *_doc )
 {
     doc = _doc;
     ref = 0;
 
-    QString tag;
-    QString name;
-
-    while ( parser.open( QString::null, tag ) )
+    // <FILENAME>
+    QDomElement filenameElement = attributes.namedItem( "FILENAME" ).toElement();
+    if ( !filenameElement.isNull() )
     {
-        parser.parseTag( tag, name, lst );
-
-        // filename
-        if ( name == "FILENAME" )
-        {
-            parser.parseTag( tag, name, lst );
-            QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
-            for( ; it != lst.end(); ++it )
-            {
-                if ( ( *it ).m_strName == "value" )
-                {
-                    filename = correctQString( ( *it ).m_strValue );
-                    QImage::load( filename );
-                }
-            }
-        }
-
-        else
-            kdError(32001) << "Unknown tag '" << tag << "' in IMAGE" << endl;
-
-        if ( !parser.close( tag ) )
-        {
-            kdError(32001) << "Closing " << tag << endl;
-            return;
-        }
+        filename = correctQString( filenameElement.attribute( "value" ) );
+        QImage::load( filename );
+    }
+    else
+    {
+        kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
     }
 }

@@ -19,46 +19,45 @@
 
 #include "clipbrd_dnd.h"
 #include "clipbrd_dnd.moc"
-#include "parag.h"
 #include "defs.h"
 
 static const char *MimeTypes[2] = { MIME_TYPE, "text/html" };
 
 /******************************************************************/
-/* Class: KWordDrag                                               */
+/* Class: KWDrag                                               */
 /******************************************************************/
 
 /*================================================================*/
-KWordDrag::KWordDrag( QWidget *dragSource, const char *name )
+KWDrag::KWDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )
 {
 }
 
 /*================================================================*/
-void KWordDrag::setPlain( const QString &_plain )
+void KWDrag::setPlain( const QString &_plain )
 {
     setText(_plain);
     plain = _plain;
 }
 
 /*================================================================*/
-void KWordDrag::setKWord( const QString &_kword )
+void KWDrag::setKWord( const QString &_kword )
 {
     kword = _kword;
 }
 
 /*================================================================*/
-void KWordDrag::setHTML( const QString &_html )
+void KWDrag::setHTML( const QString &_html )
 {
     html = _html;
 }
 
 /*================================================================*/
-QByteArray KWordDrag::encodedData( const char *mime ) const
+QByteArray KWDrag::encodedData( const char *mime ) const
 {
     if ( strcmp(mime, MimeTypes[ 1 ]) == 0 )
     {
-        KWordDrag *non_const_this = const_cast<KWordDrag *>(this);
+        KWDrag *non_const_this = const_cast<KWDrag *>(this);
         non_const_this->setText(html);
     }
     else if ( strcmp( mime, MimeTypes[ 0 ]) == 0 )
@@ -68,7 +67,7 @@ QByteArray KWordDrag::encodedData( const char *mime ) const
     }
     else
     {
-        KWordDrag *non_const_this = const_cast<KWordDrag *>(this);
+        KWDrag *non_const_this = const_cast<KWDrag *>(this);
         non_const_this->setText(plain);
     }
 
@@ -76,7 +75,7 @@ QByteArray KWordDrag::encodedData( const char *mime ) const
 }
 
 /*================================================================*/
-bool KWordDrag::canDecode( QMimeSource* e )
+bool KWDrag::canDecode( QMimeSource* e )
 {
     if ( e->provides( MimeTypes[ 0 ] ) )
        return true;
@@ -84,7 +83,7 @@ bool KWordDrag::canDecode( QMimeSource* e )
 }
 
 /*================================================================*/
-bool KWordDrag::decode( QMimeSource* e, QString& s )
+bool KWDrag::decode( QMimeSource* e, QString& s )
 {
     QByteArray ba = e->encodedData( MimeTypes[ 0 ] );
     if ( ba.size() )

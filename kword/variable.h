@@ -25,7 +25,7 @@
 
 #include <koStream.h>
 
-class KWordDocument;
+class KWDocument;
 class KWVariable;
 class KWParag;
 
@@ -168,7 +168,7 @@ public:
 class KWVariable
 {
 public:
-    KWVariable( KWordDocument *_doc );
+    KWVariable( KWDocument *_doc );
     virtual ~KWVariable();
 
     virtual KWVariable *copy() {
@@ -198,7 +198,7 @@ public:
     virtual void load( KOMLParser& parser, QString name, const QString &tag, QValueList<KOMLAttrib>& lst );
 
 protected:
-    KWordDocument *doc;
+    KWDocument *doc;
     KWVariableFormat *varFormat;
     QString text;
     int frameSetNum, frameNum, pageNum;
@@ -213,7 +213,7 @@ protected:
 class KWPgNumVariable : public KWVariable
 {
 public:
-    KWPgNumVariable( KWordDocument *_doc ) : KWVariable( _doc ) { pgNum = 0; }
+    KWPgNumVariable( KWDocument *_doc ) : KWVariable( _doc ) { pgNum = 0; }
 
     virtual KWVariable *copy() {
         KWPgNumVariable *var = new KWPgNumVariable( doc );
@@ -243,8 +243,8 @@ protected:
 class KWDateVariable : public KWVariable
 {
 public:
-    KWDateVariable( KWordDocument *_doc, bool _fix, QDate _date );
-    KWDateVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
+    KWDateVariable( KWDocument *_doc, bool _fix, QDate _date );
+    KWDateVariable( KWDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
         KWDateVariable *var = new KWDateVariable( doc, fix, date );
@@ -277,8 +277,8 @@ protected:
 class KWTimeVariable : public KWVariable
 {
 public:
-    KWTimeVariable( KWordDocument *_doc, bool _fix, QTime _time );
-    KWTimeVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
+    KWTimeVariable( KWDocument *_doc, bool _fix, QTime _time );
+    KWTimeVariable( KWDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
         KWTimeVariable *var = new KWTimeVariable( doc, fix, time );
@@ -311,8 +311,8 @@ protected:
 class KWCustomVariable : public KWVariable
 {
 public:
-    KWCustomVariable( KWordDocument *_doc, const QString &name_ );
-    KWCustomVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
+    KWCustomVariable( KWDocument *_doc, const QString &name_ );
+    KWCustomVariable( KWDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
         KWCustomVariable *var = new KWCustomVariable( doc, name );
@@ -346,8 +346,8 @@ protected:
 class KWSerialLetterVariable : public KWVariable
 {
 public:
-    KWSerialLetterVariable( KWordDocument *_doc, const QString &name_ );
-    KWSerialLetterVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
+    KWSerialLetterVariable( KWDocument *_doc, const QString &name_ );
+    KWSerialLetterVariable( KWDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
         KWSerialLetterVariable *var = new KWSerialLetterVariable( doc, name );

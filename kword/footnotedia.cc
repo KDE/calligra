@@ -17,14 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_page.h"
+#include "kwdoc.h"
+#include "kwcanvas.h"
 #include "footnotedia.h"
 #include "footnotedia.moc"
 #include "footnote.h"
 
 #include <qlist.h>
 #include <qwidget.h>
+#include <qlabel.h>
 
 #include <klocale.h>
 
@@ -33,23 +34,23 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start, bool _footnote )
+KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas, int _start, bool _footnote )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true),
     start( _start ), footnote( _footnote)
 {
     doc = _doc;
-    page = _page;
+    canvas = _canvas;
 
     setupTab1();
-    
-    setButtonOKText(i18n("&Insert"), 
+
+    setButtonOKText(i18n("&Insert"),
                     footnote ? i18n("Insert a footnote") :
                     i18n("Insert an endnote"));
 
     setCaption( footnote ?
                 i18n("Insert Footnote") :
                 i18n("Insert Endnote"));
-    
+
     setInitialSize( QSize(300, 250) );
 }
 
@@ -66,7 +67,7 @@ void KWFootNoteDia::setupTab1()
     else
        l = new QLabel( i18n( "Currently there is nothing to configure for\n"
                              "endnotes." ), tab1 );
-    
+
     l->resize( l->sizeHint() );
     l->move( 5, 5 );
 }
@@ -87,7 +88,9 @@ bool KWFootNoteDia::insertFootNote()
     fn->setBefore( "[ " );
     fn->setAfter( " ]" );
 
-    page->insertFootNote( fn );
+#if 0
+    canvas->insertFootNote( fn );
+#endif
     return true;
 }
 

@@ -17,18 +17,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef kword_utils_h
-#define kword_utils_h
+#ifndef KWORD_FACTORY_H
+#define KWORD_FACTORY_H
 
-#include <qstring.h>
+#include <koFactory.h>
 
-const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const QString RNThousands[] = {"", "m", "mm", "mmm"};
+class KAboutData;
 
-QString makeRomanNumber( int n );
-QString correctQString( const QString &str );
-QString correctQString( const char *str );
+class KWFactory : public KoFactory
+{
+    Q_OBJECT
+public:
+    KWFactory( QObject* parent = 0, const char* name = 0 );
+    ~KWFactory();
+
+    virtual KParts::Part* createPart( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
+
+    static KInstance* global();
+
+    // _Creates_ a KAboutData but doesn't keep ownership
+    static KAboutData* aboutData();
+
+private:
+    static KInstance* s_global;
+    static KAboutData* s_aboutData;
+};
 
 #endif

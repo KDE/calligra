@@ -18,13 +18,10 @@
 */
 
 #include "footnote.h"
-#include "kword_doc.h"
-#include "fc.h"
-#include "kword_frame.h"
-#include "parag.h"
-#include "char.h"
+#include "kwdoc.h"
+#include "kwframe.h"
 #include "defs.h"
-#include "kword_utils.h"
+#include "kwutils.h"
 
 #include <klocale.h>
 
@@ -38,7 +35,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFootNoteManager::KWFootNoteManager( KWordDocument *_doc )
+KWFootNoteManager::KWFootNoteManager( KWDocument *_doc )
     : start( 1 ), superscript( true ), firstParag()
 {
     noteType = EndNotes;
@@ -249,7 +246,7 @@ void KWFootNoteManager::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
         }
 
         else
-            kdError(32001) << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
+            kdError(32001) << "Unknown tag '" << name << "' in FOOTNOTEMGR" << endl;
 
         if ( !parser.close( tag ) ) {
             kdError(32001) << "Closing " << tag << endl;
@@ -263,7 +260,7 @@ void KWFootNoteManager::load( KOMLParser &parser, QValueList<KOMLAttrib> &lst )
 /******************************************************************/
 
 /*================================================================*/
-KWFootNote::KWFootNote( KWordDocument *_doc, QList<KWFootNoteInternal> *_parts )
+KWFootNote::KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts )
     : start( 1 ), end( 1 )
 {
     doc = _doc;
@@ -477,7 +474,7 @@ void KWFootNote::load( QString name, QString tag, KOMLParser &parser, QValueList
                 }
                 parts.append( part );
             } else
-                kdError(32001) << "Unknown tag '" << tag << "' in INTERNAL" << endl;
+                kdError(32001) << "Unknown tag '" << name << "' in INTERNAL" << endl;
 
             if ( !parser.close( tag ) ) {
                 kdError(32001) << "Closing " << tag << endl;

@@ -36,7 +36,7 @@ class QListBox;
 class QPushButton;
 class QLineEdit;
 class QSpinBox;
-class KWordDocument;
+class KWDocument;
 
 /******************************************************************
  *
@@ -47,7 +47,7 @@ class KWordDocument;
 class KWSerialLetterDataBase
 {
 public:
-    KWSerialLetterDataBase( KWordDocument *doc_ );
+    KWSerialLetterDataBase( KWDocument *doc_ );
 
     QString getValue( const QString &name, int record = -1 ) const;
     void setValue( const QString &name, const QString &value, int record = -1 );
@@ -70,7 +70,7 @@ protected:
     typedef QMap< QString, QString > DbRecord;
     typedef QValueList< DbRecord > Db;
 
-    KWordDocument *doc;
+    KWDocument *doc;
     Db db;
     DbRecord sampleRecord;
 

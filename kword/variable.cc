@@ -18,10 +18,9 @@
 */
 
 #include "variable.h"
-#include "parag.h"
 #include "defs.h"
-#include "kword_doc.h"
-#include "kword_utils.h"
+#include "kwdoc.h"
+#include "kwutils.h"
 #include "serialletter.h"
 
 #include <klocale.h>
@@ -153,7 +152,7 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 /******************************************************************/
 
 /*================================================================*/
-KWVariable::KWVariable( KWordDocument *_doc )
+KWVariable::KWVariable( KWDocument *_doc )
     : text()
 {
     varFormat = 0L;
@@ -223,7 +222,7 @@ void KWPgNumVariable::load( KOMLParser& parser, QString name, const QString &tag
 /******************************************************************/
 
 /*================================================================*/
-KWDateVariable::KWDateVariable( KWordDocument *_doc, bool _fix, QDate _date )
+KWDateVariable::KWDateVariable( KWDocument *_doc, bool _fix, QDate _date )
     : KWVariable( _doc ), fix( _fix )
 {
     if ( !fix )
@@ -280,7 +279,7 @@ void KWDateVariable::load( KOMLParser& parser, QString name, const QString &tag,
 /******************************************************************/
 
 /*================================================================*/
-KWTimeVariable::KWTimeVariable( KWordDocument *_doc, bool _fix, QTime _time )
+KWTimeVariable::KWTimeVariable( KWDocument *_doc, bool _fix, QTime _time )
     : KWVariable( _doc ), fix( _fix )
 {
     if ( !fix )
@@ -340,7 +339,7 @@ void KWTimeVariable::load( KOMLParser& parser, QString name, const QString &tag,
 /******************************************************************/
 
 /*================================================================*/
-KWCustomVariable::KWCustomVariable( KWordDocument *_doc, const QString &name_ )
+KWCustomVariable::KWCustomVariable( KWDocument *_doc, const QString &name_ )
     : KWVariable( _doc ), name( name_ )
 {
     doc->unregisterVariable( this );
@@ -403,7 +402,7 @@ void KWCustomVariable::setValue( const QString &v )
 /******************************************************************/
 
 /*================================================================*/
-KWSerialLetterVariable::KWSerialLetterVariable( KWordDocument *_doc, const QString &name_ )
+KWSerialLetterVariable::KWSerialLetterVariable( KWDocument *_doc, const QString &name_ )
     : KWVariable( _doc ), name( name_ )
 {
     recalc();

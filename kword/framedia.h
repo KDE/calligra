@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 class KWFrame;
-class KWordDocument;
+class KWDocument;
 class KWPage;
 class QWidget;
 class QGridLayout;
@@ -44,11 +44,11 @@ class KWFrameDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWFrameDia( QWidget *parent, KWFrame *_frame,KWordDocument *_doc,FrameType _ft);
+    KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
-    //KWFrameDia( QWidget *parent, KWPage *_page);
+    //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
-    //void setPage(KWPage *_page) {page =_page;}
+    //void setCanvas(KWCanvas *_canvas) {canvas =_canvas;}
 
 protected:
     void init();
@@ -83,7 +83,7 @@ protected:
     QLineEdit *eFrameSetName;
     QLabel *lFrameSet;
     QListView *lFrameSList;
-    
+
 
     // TAB 4:
     QWidget *tab4;
@@ -93,8 +93,8 @@ protected:
     QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
 
     KWFrame *frame;
-    KWordDocument *doc;
-    //KWPage *page;
+    KWDocument *doc;
+    //KWCanvas *canvas;
     FrameType frameType;
 
     float oldX, oldY, oldW, oldH;

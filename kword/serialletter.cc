@@ -32,11 +32,11 @@
 #include <kbuttonbox.h>
 #include <kiconloader.h>
 
-#include "kword_doc.h"
+#include "kwdoc.h"
 #include "serialletter.h"
 #include "serialletter.moc"
 #include "variabledlgs.h"
-#include "kword_utils.h"
+#include "kwutils.h"
 
 #include <strstream>
 #include <fstream>
@@ -52,7 +52,7 @@
  ******************************************************************/
 
 /*================================================================*/
-KWSerialLetterDataBase::KWSerialLetterDataBase( KWordDocument *doc_ )
+KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
     : doc( doc_ )
 {
 }
@@ -168,7 +168,7 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
                             addEntry( ( *it ).m_strValue );
                     }
                 } else
-                    kdError(32001) << "Unknown tag '" << tag << "' in SAMPLE" << endl;
+                    kdError(32001) << "Unknown tag '" << name << "' in SAMPLE" << endl;
 
                 if ( !parser.close( tag ) ) {
                     kdError(32001) << "Closing " << tag << endl;
@@ -195,7 +195,7 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
                                     setValue( key, ( *it ).m_strValue, db.count() - 1 );
                             }
                         } else
-                            kdError(32001) << "Unknown tag '" << tag << "' in RECORD" << endl;
+                            kdError(32001) << "Unknown tag '" << name << "' in RECORD" << endl;
 
                         if ( !parser.close( tag ) ) {
                             kdError(32001) << "Closing " << tag << endl;
@@ -203,7 +203,7 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
                         }
                     }
                 } else
-                    kdError(32001) << "Unknown tag '" << tag << "' in DB" << endl;
+                    kdError(32001) << "Unknown tag '" << name << "' in DB" << endl;
 
                 if ( !parser.close( tag ) ) {
                     kdError(32001) << "Closing " << tag << endl;
@@ -211,7 +211,7 @@ void KWSerialLetterDataBase::load( KOMLParser &parser, QValueList<KOMLAttrib> &l
                 }
             }
         } else
-            kdError(32001) << "Unknown tag '" << tag << "' in SERIALL" << endl;
+            kdError(32001) << "Unknown tag '" << name << "' in SERIALL" << endl;
 
         if ( !parser.close( tag ) ) {
             kdError(32001) << "Closing " << tag << endl;

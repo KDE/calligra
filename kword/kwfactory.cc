@@ -17,9 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_factory.h"
-#include "kword_doc.h"
-#include "preview.h"
+#include "kwfactory.h"
+#include "kwdoc.h"
 
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -31,22 +30,23 @@
 
 #include <qstringlist.h>
 
-static const char* description=I18N_NOOP("KOffice Word Processor");
+static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
 // First official public release Oct 2000 version 0.8
-static const char* version="0.8";
+static const char* KWORD_VERSION="0.9-devel";
 
 extern "C"
 {
     void* init_libkwordpart()
     {
-	return new KWordFactory;
+	return new KWFactory;
     }
 };
 
 
-KInstance* KWordFactory::s_global = 0;
+KInstance* KWFactory::s_global = 0;
+KAboutData* KWFactory::s_aboutData = 0;
 
-KWordFactory::KWordFactory( QObject* parent, const char* name )
+KWFactory::KWFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
   // Create our instance, so that it becomes KGlobal::instance if the
@@ -54,21 +54,19 @@ KWordFactory::KWordFactory( QObject* parent, const char* name )
   (void) global();
 }
 
-KWordFactory::~KWordFactory()
+KWFactory::~KWFactory()
 {
-    if ( s_global )
-    {
-      delete s_global->aboutData();
-      delete s_global;
-      s_global = 0L;
-    }
+    delete s_aboutData;
+    s_aboutData=0;
+    delete s_global;
+    s_global=0L;
 }
 
-KParts::Part* KWordFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KWFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KWordDocument *doc = new KWordDocument( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KWDocument *doc = new KWDocument( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       doc->setReadWrite( false );
@@ -77,17 +75,21 @@ KParts::Part* KWordFactory::createPart( QWidget *parentWidget, const char *widge
     return doc;
 }
 
-KAboutData* KWordFactory::aboutData()
+KAboutData* KWFactory::aboutData()
 {
-      KAboutData *aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
-                                version, description, KAboutData::License_GPL,
-                                "(c) 1998-2000, Reginald Stadlbauer");
-      aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
-      aboutData->addAuthor("Thomas Zander",0, "zander@earthling.net");
-      return aboutData;
+    if(!s_aboutData) {
+        s_aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
+                                    KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_GPL,
+                                    "(c) 1998-2000, Reginald Stadlbauer");
+        s_aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
+        s_aboutData->addAuthor("Thomas Zander", 0, "zander@earthling.net");
+        s_aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
+        s_aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
+    }
+    return s_aboutData;
 }
 
-KInstance* KWordFactory::global()
+KInstance* KWFactory::global()
 {
     if ( !s_global )
     {
@@ -104,4 +106,4 @@ KInstance* KWordFactory::global()
     return s_global;
 }
 
-#include "kword_factory.moc"
+#include "kwfactory.moc"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C)  2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,29 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KWORD_FACTORY_H
-#define KWORD_FACTORY_H
+#ifndef __kwconfig__
+#define __kwconfig__
 
-#include <koFactory.h>
+#include <qdialog.h>
+#include <qpushbutton.h>
+#include <kdialogbase.h>
+#include <kconfig.h>
+#include <kspell.h>
 
-class KAboutData;
+class KWView;
 
-class KWordFactory : public KoFactory
+class configureSpellPage : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    KWordFactory( QObject* parent = 0, const char* name = 0 );
-    ~KWordFactory();
-
-    virtual KParts::Part* createPart( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
-
-    static KInstance* global();
-
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
-
+  configureSpellPage( KWView *_view,QWidget *parent = 0, char *name = 0 );
+  void apply();
 private:
-    static KInstance* s_global;
+  KWView* m_pView;
+  KSpellConfig *_spellConfig;
+  KConfig* config;
+} ;
+
+class KWConfig : public KDialogBase
+{
+  Q_OBJECT
+public:
+  KWConfig(  KWView* parent, const char* name=0);
+public slots:
+  void slotApply();
+  void slotDefault();
+private :
+ configureSpellPage *_spellPage;
 };
+
+
 
 #endif

@@ -23,12 +23,10 @@
 #include <kdialogbase.h>
 #include <qlist.h>
 
-#include "paraglayout.h"
-#include "format.h"
 #include "defs.h"
 
-class KWPage;
-class KWordDocument;
+class KWCanvas;
+class KWDocument;
 class QGridLayout;
 class QLabel;
 class QListBox;
@@ -68,7 +66,7 @@ class KWTableDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWTableDia( QWidget *parent, const char *name, KWPage *_page, KWordDocument *_doc,
+    KWTableDia( QWidget *parent, const char *name, KWCanvas *_canvas, KWDocument *_doc,
 		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
 
 protected:
@@ -103,14 +101,12 @@ protected:
         QBrush frBack;
         Border bTop, bBottom, bRigbt, bLeft;
         QBrush bBack;
-
-        KWFormat header, firstRow, Body;
     };
 
     QList<TableStyle> tableStyles;
 
-    KWPage *page;
-    KWordDocument *doc;
+    KWCanvas *canvas;
+    KWDocument *doc;
 
 protected slots:
     void rowsChanged( int );

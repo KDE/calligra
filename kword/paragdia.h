@@ -23,10 +23,13 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 #include <qlist.h>
+#include <qgroupbox.h>
+#include <koRuler.h>
 
-#include "paraglayout.h"
+#include "kwtextparag.h"
+#include "kwunit.h"
 
-class KWordDocument;
+class KWDocument;
 class QWidget;
 class QGridLayout;
 class QLabel;
@@ -41,6 +44,7 @@ class QSpinBox;
 class QButtonGroup;
 class QListBox;
 class QLineEdit;
+class KWParagLayout;
 
 /******************************************************************/
 /* class KWPagePreview                                            */
@@ -51,7 +55,7 @@ class KWPagePreview : public QGroupBox
     Q_OBJECT
 
 public:
-    KWPagePreview( QWidget*, const char* );
+    KWPagePreview( QWidget*, const char* = 0L );
     ~KWPagePreview() {}
 
     void setLeft( float _left )
@@ -83,16 +87,16 @@ class KWPagePreview2 : public QGroupBox
     Q_OBJECT
 
 public:
-    KWPagePreview2( QWidget*, const char* );
+    KWPagePreview2( QWidget*, const char* = 0L );
     ~KWPagePreview2() {}
 
-    void setFlow( KWParagLayout::Flow _flow )
-    { flow = _flow; repaint( false ); }
+    void setAlign( int _align )
+    { align = _align; repaint( false ); }
 
 protected:
     void drawContents( QPainter* );
 
-    KWParagLayout::Flow flow;
+    int align;
 
 };
 
@@ -105,7 +109,7 @@ class KWBorderPreview : public QGroupBox
     Q_OBJECT
 
 public:
-    KWBorderPreview( QWidget*, const char* );
+    KWBorderPreview( QWidget*, const char* = 0L );
     ~KWBorderPreview() {}
 
     Border getLeftBorder() { return leftBorder; }
@@ -134,15 +138,15 @@ class KWNumPreview : public QGroupBox
     Q_OBJECT
 
 public:
-    KWNumPreview( QWidget*, const char* );
+    KWNumPreview( QWidget*, const char* = 0L );
     ~KWNumPreview() {}
 
-    void setCounter( KWParagLayout::Counter _counter ) { counter = _counter; repaint( true ); }
+    void setCounter( Counter _counter ) { counter = _counter; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
 
-    KWParagLayout::Counter counter;
+    Counter counter;
 
 };
 
@@ -156,45 +160,69 @@ class KWParagDia : public KDialogBase
 
 public:
     static const int PD_SPACING = 1;
-    static const int PD_FLOW = 2;
+    static const int PD_ALIGN = 2;
     static const int PD_BORDERS = 4;
     static const int PD_NUMBERING = 8;
     static const int PD_TABS = 16;
 
-    KWParagDia( QWidget*, const char*, QStringList _fontList, int _flags, KWordDocument *_doc );
+    KWParagDia( QWidget*, const char*, QStringList _fontList, int _flags, KWDocument *_doc );
     ~KWParagDia();
 
     int getFlags() { return flags; }
 
     void setLeftIndent( KWUnit _left );
+    void setRightIndent( KWUnit _right );
     void setFirstLineIndent( KWUnit _first );
     void setSpaceAfterParag( KWUnit _after );
     void setSpaceBeforeParag( KWUnit _before );
     void setLineSpacing( KWUnit _spacing );
 
-    void setFlow( KWParagLayout::Flow _flow );
+    void setAlign( int align );
 
-    void setTabList( const QList<KoTabulator> *tabList );
+    //void setTabList( const QList<KoTabulator> *tabList );
 
-    KWUnit getLeftIndent();
-    KWUnit getFirstLineIndent();
-    KWUnit getSpaceBeforeParag();
-    KWUnit getSpaceAfterParag();
-    KWUnit getLineSpacing();
+    KWUnit leftIndent() const;
+    KWUnit rightIndent() const;
+    KWUnit firstLineIndent() const;
+    KWUnit spaceBeforeParag() const;
+    KWUnit spaceAfterParag() const;
+    KWUnit lineSpacing() const;
 
-    KWParagLayout::Flow getFlow();
+    int align() const;
 
-    Border getLeftBorder() { return leftBorder; }
-    void setLeftBorder( Border _leftBorder ) { leftBorder = _leftBorder; updateBorders(); }
-    Border getRightBorder() { return rightBorder; }
-    void setRightBorder( Border _rightBorder ) { rightBorder = _rightBorder; updateBorders(); }
-    Border getTopBorder() { return topBorder; }
-    void setTopBorder( Border _topBorder ) { topBorder = _topBorder; updateBorders(); }
-    Border getBottomBorder() { return bottomBorder; }
-    void setBottomBorder( Border _bottomBorder ) { bottomBorder = _bottomBorder; updateBorders(); }
+    Border leftBorder() const { return m_leftBorder; }
+    void setLeftBorder( Border _leftBorder ) { m_leftBorder = _leftBorder; updateBorders(); }
+    Border rightBorder() const { return m_rightBorder; }
+    void setRightBorder( Border _rightBorder ) { m_rightBorder = _rightBorder; updateBorders(); }
+    Border topBorder() const { return m_topBorder; }
+    void setTopBorder( Border _topBorder ) { m_topBorder = _topBorder; updateBorders(); }
+    Border bottomBorder() const { return m_bottomBorder; }
+    void setBottomBorder( Border _bottomBorder ) { m_bottomBorder = _bottomBorder; updateBorders(); }
 
-    void setCounter( KWParagLayout::Counter _counter );
-    KWParagLayout::Counter getCounter() { return counter; }
+    void setCounter( Counter _counter );
+    Counter counter() const { return m_counter; }
+
+    void setParagLayout( const KWParagLayout & lay );
+
+    const QList<KoTabulator>* tabListTabulator() const {return &_tabList;}
+
+
+    bool isAlignChanged() const {return oldLayout.alignment!=align();}
+    //bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
+    bool isLineSpacingChanged() const {return oldLayout.lineSpacing.pt()!=lineSpacing().pt();}
+    bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft].pt()!=leftIndent().pt(); }
+    bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight].pt()!=rightIndent().pt();}
+    bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine].pt()!=firstLineIndent().pt();}
+    bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop].pt()!=spaceBeforeParag().pt();}
+    bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom].pt()!=spaceAfterParag() .pt();}
+    bool isBulletChanged() const {return !(oldLayout.counter==counter());}
+
+    bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||
+					 oldLayout.rightBorder!=rightBorder() ||
+					 oldLayout.topBorder!=topBorder() ||
+					 oldLayout.bottomBorder!=bottomBorder() ); }
+    //necessary when you used just border dialog
+    void setAfterInitBorder(bool _b){m_bAfterInitBorder=_b;}
 
 protected:
     void setupTab1();
@@ -202,23 +230,25 @@ protected:
     void setupTab3();
     void setupTab4();
     void setupTab5();
-    void clearFlows();
+    void clearAligns();
     void updateBorders();
+    void setActifItem(double value);
+    bool findExistingValue(double val);
+    void enableUIForCounterType();
 
     QWidget *tab1, *tab2, *tab3, *tab4, *tab5;
     QGridLayout *grid1, *grid2, *grid3, *grid4, *grid5, *indentGrid, *spacingGrid,
         *pSpaceGrid, *tgrid, *txtgrid, *ogrid, *tabGrid;
     QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
-    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lFlow, *lStyle, *lWidth, *lColor, *lDepth, *lcLeft, *lcRight, *lStart;
+    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor, *lDepth, *lcLeft, *lcRight, *lStart;
     QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gType, *gText, *gOther;
     QComboBox *cSpacing, *cStyle, *cWidth;
-    QRadioButton *rLeft, *rCenter, *rRight, *rBlock, *rANums, *rLRNums,
-        *rURNums, *rLAlph, *rUAlph, *rBullets, *rCustom, *rList, *rChapter, *rNone;
+    QRadioButton *rLeft, *rCenter, *rRight, *rJustify, *rANums, *rLRNums,
+        *rURNums, *rLAlph, *rUAlph, *rDiscBullet, *rSquareBullet, *rCircleBullet, *rBullets, *rCustom,
+        *rList, *rChapter, *rNone;
     QLineEdit *eCustomNum;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;
-    KButtonBox *bbTabs;
-    QButtonGroup *bb;
     QPushButton *bLeft, *bRight, *bTop, *bBottom, *bBullets, *bFont, *bAdd, *bDel, *bModify;
     KWBorderPreview *prev3;
     KColorButton *bColor;
@@ -231,11 +261,16 @@ protected:
     QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
 
 
-    Border leftBorder, rightBorder, topBorder, bottomBorder;
+    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     int flags;
-    KWParagLayout::Counter counter;
+    Counter m_counter;
     QStringList fontList;
-    KWordDocument *doc;
+    KWDocument *doc;
+    QList<KoTabulator> _tabList;
+    KWUnits unit;
+    KWParagLayout oldLayout;
+
+    bool m_bAfterInitBorder;
 
 protected slots:
     void leftChanged( const QString & );
@@ -245,10 +280,10 @@ protected slots:
     void spacingChanged( const QString & );
     void beforeChanged( const QString & );
     void afterChanged( const QString & );
-    void flowLeft();
-    void flowCenter();
-    void flowRight();
-    void flowBlock();
+    void alignLeft();
+    void alignCenter();
+    void alignRight();
+    void alignJustify();
     void brdLeftToggled( bool );
     void brdRightToggled( bool );
     void brdTopToggled( bool );
@@ -264,6 +299,11 @@ protected slots:
     void rightTextChanged( const QString & );
     void startChanged( const QString & );
     void depthChanged( int );
+
+    void addClicked();
+    void modifyClicked();
+    void delClicked();
+    void slotDoubleClicked( QListBoxItem * );
 };
 
 #endif

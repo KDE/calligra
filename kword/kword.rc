@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="4">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="6">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -9,6 +9,7 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="edit_find"/>
+  <Action name="edit_replace"/>
   <Separator/>
   <Action name="edit_selectall"/>
   <Separator/>
@@ -18,6 +19,9 @@
   <Action name="edit_customvars"/>
  </Menu>
  <Menu name="View"><text>&amp;View</text>
+ <!-- REMOVE THOSE TWO LATER -->
+    <Action name="printdebug" />
+    <Action name="printrtdebug" />
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>
@@ -69,6 +73,7 @@
   <Action name="format_paragraph"/>
   <Action name="format_frameset"/>
   <Action name="format_page"/>
+  <Action name="format_stylist"/>
   <Separator/>
   <Action name="format_style"/>
  </Menu>
@@ -79,6 +84,7 @@
   <Action name="table_delcol"/>
   <Separator/>
   <Action name="table_joincells"/>
+  <Action name="table_splitcells"/>
   <Action name="table_ungroup"/>
   <Separator/>
   <Action name="table_delete"/>
@@ -86,10 +92,12 @@
  <Menu name="Extra"><text>E&amp;xtra</text>
   <Action name="extra_spellcheck"/>
   <Action name="extra_autocorrection"/>
-  <Action name="extra_stylist"/>
   <Separator/>
   <Action name="extra_template"/>
  </Menu>
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="configure" group="settings_configure"/>
+ </Menu>	
 </MenuBar>
 <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
   <Action name="edit_undo"/>
@@ -143,8 +151,6 @@
   <Action name="format_alignright"/>
   <Action name="format_alignblock"/>
   <Separator/>
-  <Action name="format_linespacing"/>
-  <Separator/>
   <Action name="format_enumlist"/>
   <Action name="format_unsortlist"/>
   <Separator/>
@@ -152,6 +158,7 @@
   <Action name="format_sub"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
+  <Action name="format_brdoutline"/>
   <Action name="format_brdleft"/>
   <Action name="format_brdright"/>
   <Action name="format_brdtop"/>
@@ -161,6 +168,7 @@
   <Action name="format_brdstyle"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="frame_toolbar" position="top"><Text>Frame</Text>
+  <Action name="frame_brdoutline"/>
   <Action name="frame_brdleft"/>
   <Action name="frame_brdright"/>
   <Action name="frame_brdtop"/>
@@ -185,4 +193,23 @@
   <Action name="formula_product"/>
   <Action name="formula_sum"/>
 </ToolBar>
+<Menu name="text_popup">
+ <Action name="format_paragraph"/>
+</Menu>
+<Menu name="action_popup">
+  <Action name="tools_edit"/>
+  <Action name="tools_editframes"/>
+  <Separator/>
+  <Action name="tools_createtext"/>
+  <Action name="tools_createpix"/>
+  <Action name="tools_table"/>
+  <Action name="tools_kspreadtable"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_part"/>
+</Menu>
+<Menu name="frame_popup">
+ <Action name="format_frameset"/>
+ <Action name="edit_delframe"/>
+ <Action name="edit_reconnect"/>
+</Menu>
 </kpartgui>

@@ -18,10 +18,7 @@
 */
 
 #include "autoformat.h"
-#include "kword_doc.h"
-#include "fc.h"
-#include "char.h"
-#include "parag.h"
+#include "kwdoc.h"
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
@@ -238,7 +235,7 @@ bool KWAutoFormatEntry::getVertAlign() const
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormat::KWAutoFormat( KWordDocument *_doc )
+KWAutoFormat::KWAutoFormat( KWDocument *_doc )
     : typographicQuotes(), enabled( false ), lastWasDotSpace( false ),
       convertUpperCase( FALSE ), lastWasUpper( false ), convertUpperUpper( false ),
       maxlen( 0 )

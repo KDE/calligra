@@ -22,8 +22,8 @@
 
 #include <kdialogbase.h>
 
-class KWordDocument;
-class KWPage;
+class KWDocument;
+class KWCanvas;
 class QWidget;
 
 /******************************************************************/
@@ -35,7 +35,7 @@ class KWFootNoteDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start, 
+    KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas, int _start,
     	bool _footnote );
 
 protected:
@@ -44,8 +44,8 @@ protected:
 
     QWidget *tab1;
 
-    KWordDocument *doc;
-    KWPage *page;
+    KWDocument *doc;
+    KWCanvas *canvas;
     int start;
     bool footnote;
 

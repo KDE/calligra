@@ -17,14 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
+#include "kwdoc.h"
 
 #include <koApplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include "kword_factory.h"
-
+#include "kwfactory.h"
+#include <qfile.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -34,10 +34,17 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, KWordFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, KWFactory::aboutData());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
+
+    // #### this has to disappear
+    if ( QFile::exists( "bidi.txt" ) ) {
+	QFont fnt( app.font() );
+	fnt.setCharSet( QFont::Unicode );
+	app.setFont( fnt );
+    }
 
     if (!app.start()) {
 	return 1;

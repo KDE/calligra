@@ -23,8 +23,8 @@
 #include <qlistview.h>
 #include <qwidget.h>
 
-class KWordDocument;
-class KWordGUI;
+class KWDocument;
+class KWGUI;
 class QWidget;
 class KWFrame;
 class KWFrameSet;
@@ -40,15 +40,15 @@ class KWDocStructParagItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructParagItem( QListViewItem *_parent, QString _text, KWParag *_parag, KWordGUI *__parent );
-    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWParag *_parag, KWordGUI*__parent );
+    KWDocStructParagItem( QListViewItem *_parent, QString _text, KWParag *_parag, KWGUI *__parent );
+    KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, QString _text, KWParag *_parag, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
     KWParag *parag;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -62,7 +62,7 @@ class KWDocStructFrameItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWordGUI *__parent );
+    KWDocStructFrameItem( QListViewItem *_parent, QString _text, KWFrameSet *_frameset, KWFrame *_frame, KWGUI *__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
@@ -70,7 +70,7 @@ public slots:
 protected:
     KWFrame *frame;
     KWFrameSet *frameset;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -84,14 +84,14 @@ class KWDocStructTableItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructTableItem( QListViewItem *_parent, QString _text, KWGroupManager *_table, KWordGUI*__parent );
+    KWDocStructTableItem( QListViewItem *_parent, QString _text, KWGroupManager *_table, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
     KWGroupManager *table;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -105,14 +105,14 @@ class KWDocStructPictureItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWordGUI*__parent );
+    KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
     KWPictureFrameSet *pic;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -126,14 +126,14 @@ class KWDocStructPartItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWordGUI*__parent );
+    KWDocStructPartItem( QListViewItem *_parent, QString _text, KWPartFrameSet *_part, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
     KWPartFrameSet *part;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -146,7 +146,7 @@ class KWDocStructRootItem : public QListViewItem
 public:
     enum Type {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded};
 
-    KWDocStructRootItem( QListView *_parent, KWordDocument *_doc, Type _type, KWordGUI*__parent );
+    KWDocStructRootItem( QListView *_parent, KWDocument *_doc, Type _type, KWGUI*__parent );
 
     void setupArrangement();
     void setupTextFrames();
@@ -158,9 +158,9 @@ public:
     virtual void setOpen( bool o );
 
 protected:
-    KWordDocument *doc;
+    KWDocument *doc;
     Type type;
-    KWordGUI *gui;
+    KWGUI *gui;
 
 };
 
@@ -173,7 +173,7 @@ class KWDocStructTree : public QListView
     Q_OBJECT
 
 public:
-    KWDocStructTree( QWidget *_parent, KWordDocument *_doc, KWordGUI*__parent );
+    KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
 
     void setup();
     QSize	minimumSizeHint() const {
@@ -181,8 +181,8 @@ public:
     }
 
 protected:
-    KWordDocument *doc;
-    KWordGUI *gui;
+    KWDocument *doc;
+    KWGUI *gui;
 
     KWDocStructRootItem *arrangement, *tables, *pictures, *cliparts, *textfrms, *embedded;
 
@@ -197,14 +197,14 @@ class KWDocStruct : public QWidget
     Q_OBJECT
 
 public:
-    KWDocStruct( QWidget *_parent, KWordDocument *_doc, KWordGUI*__parent );
+    KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
 
 protected:
     KWDocStructTree *tree;
     QGridLayout *layout;
 
-    KWordDocument *doc;
-    KWordGUI *parent;
+    KWDocument *doc;
+    KWGUI *parent;
 
 };
 

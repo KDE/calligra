@@ -23,8 +23,8 @@
 #include <kdialogbase.h>
 
 class KWGroupManager;
-class KWordDocument;
-class KWPage;
+class KWDocument;
+class KWCanvas;
 class QWidget;
 class QGridLayout;
 class QLabel;
@@ -40,7 +40,7 @@ class KWDeleteDia : public KDialogBase
 
 public:
     enum DeleteType {ROW, COL};
-    KWDeleteDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, DeleteType _type, KWPage *_page );
+    KWDeleteDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas );
 
 protected:
     void setupTab1();
@@ -52,9 +52,9 @@ protected:
     QSpinBox *value;
 
     KWGroupManager *grpMgr;
-    KWordDocument *doc;
+    KWDocument *doc;
     DeleteType type;
-    KWPage *page;
+    KWCanvas *canvas;
 
 protected slots:
     virtual void slotOk();

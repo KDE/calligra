@@ -20,26 +20,21 @@
 #ifndef defs_h
 #define defs_h
 
-#define KWORD_VERSION "pre-Beta1"
-
 #include <qtextstream.h>
 #include <qstring.h>
 #include <koGlobal.h>
-#include "kword_factory.h"
+#include "kwfactory.h"
 
 #define MIME_TYPE "application/x-kword"
-#define STANDARD_COLUMN_SPACING 3
 
 enum MouseMode {
     MM_EDIT = 0,
     MM_EDIT_FRAME = 1,
     MM_CREATE_TEXT = 2,
     MM_CREATE_PIX = 3,
-    MM_CREATE_CLIPART = 4,
     MM_CREATE_TABLE = 5,
     MM_CREATE_FORMULA = 6,
-    MM_CREATE_PART = 7,
-    MM_CREATE_KSPREAD_TABLE = 8
+    MM_CREATE_PART = 7
 };
 
 enum EditMode {
@@ -56,11 +51,6 @@ enum InsertPos {
     I_AFTER
 };
 
-enum KWUnits {
-    U_MM, U_PT,
-    U_INCH
-};
-
 enum KWTblCellSize {
     TblAuto = 0,
     TblManual
@@ -68,71 +58,52 @@ enum KWTblCellSize {
 
 const QChar KWSpecialChar( static_cast<char>( 0 ) );
 
-#define KWBarIcon( x ) BarIcon( x, KWordFactory::global() )
+#define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 
-class KWUnit
-{
-public:
-    KWUnit() { _pt = 0.0; _mm = 0.0; _inch = 0.0; }
-    KWUnit( double __pt, double ___mm, double __inch )
-    { _pt = __pt; _mm = ___mm; _inch = __inch; }
-    KWUnit( double ___mm )
-    { setMM( ___mm ); }
-    KWUnit( const KWUnit &unit ) {
-        _pt = unit._pt;
-        _mm = unit._mm;
-        _inch = unit._inch;
-    }
+const unsigned int minFrameWidth=18;
+const unsigned int minFrameHeight=20;
+const unsigned int tableCellSpacing=3;
 
-    inline void setPT( double __pt )
-    { _pt = __pt; _mm = POINT_TO_MM( _pt ); _inch = POINT_TO_INCH( _pt ); }
-    inline void setMM( double ___mm )
-    { _mm = ___mm; _pt = MM_TO_POINT( _mm ); _inch = MM_TO_INCH( _mm ); }
-    inline void setINCH( double __inch )
-    { _inch = __inch; _mm = INCH_TO_MM( _inch ); _pt = INCH_TO_POINT( _inch ); }
-    inline void setPT_MM( double __pt, double ___mm )
-    { _pt = __pt; _mm = ___mm; _inch = MM_TO_INCH( _mm ); }
-    inline void setPT_INCH( double __pt, double __inch )
-    { _pt = __pt; _inch = __inch; _mm = INCH_TO_MM( _inch ); }
-    inline void setMM_INCH( double ___mm, double __inch )
-    { _mm = ___mm; _inch = __inch; _pt = MM_TO_POINT( _mm ); }
-    inline void setPT_MM_INCH( double __pt, double ___mm, double __inch )
-    { _pt = __pt; _mm = ___mm; _inch = __inch; }
+/** Runaround types
+* RA_NO = No run around, all text is just printed.
+* RA_BOUNDINGRECT = run around the square of this frame.
+* RA_SKIP = stop running text on the whole horizontal space this frame occupies.
+*/
+enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 
-    inline const double pt() { return _pt; }
-    inline const double mm() { return _mm; }
-    inline const double inch() { return _inch; }
+/** what should happen when the frame is full */
+enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    KWUnit &operator=( const KWUnit &unit );
+/** types of behaviours for creating a followup frame on new page */
+enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
 
-    static const KWUnits unitType( const QString _unit );
+/** This frame will only be copied to:
+*   AnySide, OddSide or EvenSide
+*/
+enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 
-protected:
-    double _pt;
-    double _mm;
-    double _inch;
+/** The different types of framesets
+* FT_BASE = unused <br>
+* FT_TEXT = text only, this is the only frameset that can have multiple frames. <br>
+* FT_PICTURE = One frame with a picture<br>
+* FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
+* FT_FORMULA = one frame with an embedded formula frame. This is semi-native
+*/
+enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
 
-};
+/** The different types of textFramesets (that TEXT is important here!)
+* FI_BODY = normal text frames.<br>
+* FI_FIRST_HEADER = Header on page 1<br>
+* FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
+* FI_EVEN_HEADER = header on any even page<br>
+* FI_FIRST_FOOTER = footer on page 1<br>
+* FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
+* FI_EVEN_FOOTER = footer on any even page<br>
+* FI_FOOTNOTE = a footnote frame.
+*/
+enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
+                 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
+                 FI_FOOTNOTE = 7 };
 
-inline KWUnit &KWUnit::operator=( const KWUnit &unit )
-{
-    _pt = unit._pt;
-    _mm = unit._mm;
-    _inch = unit._inch;
-    return *this;
-}
-
-inline QTextStream& operator<<( QTextStream&out, KWUnit &unit )
-{
-    out << "pt=\"" << unit.pt() << "\" mm=\"" << unit.mm() << "\" inch=\"" << unit.inch() << "\"";
-    return out;
-}
-
-inline const KWUnits KWUnit::unitType( const QString _unit )
-{
-    if ( _unit == "mm" ) return U_MM;
-    if ( _unit == "inch" ) return U_INCH;
-    return U_PT;
-}
 
 #endif

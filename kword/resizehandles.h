@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2000 Thomas Zander <zander@earthling.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,39 +17,49 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef formatcollection_h
-#define formatcollection_h
+#ifndef resizehandles_h
+#define resizehandles_h
 
-#include "format.h"
+#include <qwidget.h>
 
-#include <qdict.h>
-#include <qstring.h>
-
-class KWordDocument;
+class KWCanvas;
+class KWFrame;
 
 /******************************************************************/
-/* Class: KWFormatCollection                                      */
+/* Class: KWResizeHandle                                          */
 /******************************************************************/
 
-class KWFormatCollection
+class KWResizeHandle : public QWidget
 {
+    Q_OBJECT
+
 public:
-    KWFormatCollection( KWordDocument *_doc );
-    ~KWFormatCollection();
+    enum Direction {
+        LeftUp = 0,
+        Up,
+        RightUp,
+        Right,
+        RightDown,
+        Down,
+        LeftDown,
+        Left
+    };
 
-    KWFormat *getFormat( const KWFormat &_format );
-    void removeFormat( KWFormat *_format );
-
-    QString generateKey( KWFormat *_format )
-    { return generateKey( *_format ); }
+    KWResizeHandle( KWCanvas *p, Direction d, KWFrame *frm );
+    void updateGeometry();
+    KWCanvas *getCanvas() const { return m_canvas; }
 
 protected:
-    QString generateKey( const KWFormat &_format );
-    KWFormat *findFormat( QString _key );
-    KWFormat *insertFormat( QString _key, const KWFormat &_format );
+    void mouseMoveEvent( QMouseEvent *e );
+    void mousePressEvent( QMouseEvent *e );
+    void mouseReleaseEvent( QMouseEvent *e );
 
-    QDict<KWFormat> formats;
-    KWordDocument *doc;
+private:
+    bool mousePressed;
+    int oldX, oldY;
+    KWCanvas *m_canvas;
+    Direction direction;
+    KWFrame *frame;
 };
 
 #endif

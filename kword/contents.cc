@@ -22,11 +22,10 @@
 #include <koRuler.h>
 
 #include "contents.h"
-#include "kword_doc.h"
-#include "parag.h"
-#include "kword_frame.h"
-#include "format.h"
-#include "paraglayout.h"
+#include "kwdoc.h"
+#include "kwframe.h"
+
+#include <klocale.h>
 
 /******************************************************************
  *
@@ -35,7 +34,7 @@
  ******************************************************************/
 
 /*================================================================*/
-KWContents::KWContents( KWordDocument *doc_ )
+KWContents::KWContents( KWDocument *doc_ )
     : doc( doc_ ), end( 0 )
 {
 }
@@ -43,6 +42,7 @@ KWContents::KWContents( KWordDocument *doc_ )
 /*================================================================*/
 void KWContents::createContents()
 {
+#if 0
     int dec = 0;
     KWTextFrameSet *fs = (KWTextFrameSet*)doc->getFrameSet( 0 );
 
@@ -123,4 +123,5 @@ void KWContents::createContents()
     if ( parag->getNext() )
         parag->getNext()->setHardBreak( TRUE );
     end = parag;
+#endif
 }

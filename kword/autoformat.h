@@ -25,9 +25,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-#include "format.h"
-
-class KWordDocument;
+class KWDocument;
 class KWFormatContext;
 class KWParag;
 class KWString;
@@ -127,7 +125,7 @@ public:
 	AutoformatType type;
     };
 
-    KWAutoFormat( KWordDocument *_doc );
+    KWAutoFormat( KWDocument *_doc );
 
     void startAutoFormat( KWParag *parag, KWFormatContext *fc );
     bool doAutoFormat( KWParag *parag, KWFormatContext *fc );
@@ -177,7 +175,7 @@ public:
 protected:
     void buildMaxLen();
 
-    KWordDocument *doc;
+    KWDocument *doc;
     TypographicQuotes typographicQuotes;
     bool enabled;
     KWString *tmpBuffer;

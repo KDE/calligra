@@ -30,7 +30,7 @@
 class KWFootNote;
 class KWFormatContext;
 class KWParag;
-class KWordDocument;
+class KWDocument;
 
 /******************************************************************/
 /* Class: KWFootNoteManager                                       */
@@ -41,7 +41,7 @@ class KWFootNoteManager
 public:
     enum NoteType {FootNotes, EndNotes};
 
-    KWFootNoteManager( KWordDocument *_doc );
+    KWFootNoteManager( KWDocument *_doc );
 
     int getStart() const { return start; }
     void setStart( int s ) { start = s; recalc(); }
@@ -67,7 +67,7 @@ public:
 protected:
     void addFootNoteText( KWFootNote *fn );
 
-    KWordDocument *doc;
+    KWDocument *doc;
     int start;
     QList<KWFootNote> footNotes;
     bool superscript;
@@ -92,7 +92,7 @@ public:
         QString space;
     };
 
-    KWFootNote( KWordDocument *_doc, QList<KWFootNoteInternal> *_parts );
+    KWFootNote( KWDocument *_doc, QList<KWFootNoteInternal> *_parts );
 
     KWFootNote *copy();
 
@@ -124,7 +124,7 @@ public:
 protected:
     void makeText();
 
-    KWordDocument *doc;
+    KWDocument *doc;
     int start, end;
     QList<KWFootNoteInternal> parts;
     QString before, after, text;

@@ -25,7 +25,7 @@
 
 #include "paragdia.h"
 
-class KWordDocument;
+class KWDocument;
 class KWStyleEditor;
 class QWidget;
 class QGridLayout;
@@ -46,7 +46,7 @@ class KWStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStringList _fontList );
+    KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList _fontList );
 
 protected:
     void setupTab1();
@@ -61,7 +61,7 @@ protected:
     QComboBox *cFont, *cColor, *cBorder, *cIndent, *cAlign, *cNumbering, *cTabs;
     QCheckBox *cSmart;
 
-    KWordDocument *doc;
+    KWDocument *doc;
     KWStyleEditor *editor;
     QStringList fontList;
 
@@ -70,6 +70,9 @@ protected slots:
     void editStyle();
     void editStyle( int ) { editStyle(); }
     void addStyle();
+    void copyStyle();
+    void upStyle();
+    void downStyle();
     void deleteStyle();
     void updateStyleList();
     void updateButtons( const QString & );
@@ -85,13 +88,13 @@ class KWStylePreview : public QGroupBox
     Q_OBJECT
 
 public:
-    KWStylePreview( const QString &title, QWidget *parent, KWParagLayout *_style ) : QGroupBox( title, parent, "" )
+    KWStylePreview( const QString &title, QWidget *parent, KWStyle *_style ) : QGroupBox( title, parent, "" )
     { style = _style; }
 
 protected:
     void drawContents( QPainter *painter );
 
-    KWParagLayout *style;
+    KWStyle *style;
 
 };
 
@@ -104,7 +107,7 @@ class KWStyleEditor : public KDialogBase
     Q_OBJECT
 
 public:
-    KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStringList _fontList );
+    KWStyleEditor( QWidget *_parent, KWStyle *_style, KWDocument *_doc, QStringList _fontList );
     ~KWStyleEditor() { delete style; }
 
 protected:
@@ -120,8 +123,8 @@ protected:
     QLineEdit *eName;
     QComboBox *cFollowing;
 
-    KWParagLayout *style, *ostyle;
-    KWordDocument *doc;
+    KWStyle *style, *ostyle;
+    KWDocument *doc;
     KWParagDia *paragDia;
     QStringList fontList;
 
@@ -138,7 +141,7 @@ protected slots:
     void changeNumbering();
     void changeTabulators();
     void paragDiaOk();
-    void fplChanged( const QString & n ) { style->setFollowingParagLayout( QString( n ) ); }
+    //void fplChanged( const QString & n ) { style->setFollowingParagLayout( QString( n ) ); }
 };
 
 #endif

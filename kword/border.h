@@ -17,24 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KWBorder
-#define KWBorder
+#ifndef KWBorder_h
+#define KWBorder_h
 
 #include <qcolor.h>
+#include <qpen.h>
+class QDomElement;
 
-
-class Border {
+class Border : public Qt {
 
 public:
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
     Border();
-
     QColor color;
     BorderStyle style;
     unsigned int ptWidth;
     bool operator==( const Border _brd ) const;
     bool operator!=( const Border _brd ) const;
 
+    static Border loadBorder( const QDomElement & elem );
+    void save( QDomElement & elem );
+    static QPen borderPen( const Border & _brd );
     static BorderStyle getStyle(const QString &style);
 };
 

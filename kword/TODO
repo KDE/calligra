@@ -15,6 +15,8 @@ Bugs; in order or importance:
 - Type 1 line. Press enter after first character, 
   press backspace, press enter again. Press backspace again. 
   Rest of text is gone until you press enter gain.
+- numbering type list should only be reset when a non-numbering paragraph has been displayed.
+  We now reset the numbering everytime the style is changes.
 
 Missing or incomplete stuff:
 ----------------------------------------
@@ -43,6 +45,7 @@ cleanup:
   I would suggest using pointers there, and only storing the frame, since the frameset can be 
   retrieved with frame->getFrameSet();
 - groupmanager variable active is used to 'Deactivate' a groupmanager. Deleting would be a better option ;)
+- Border has to be moved to the frame. 
 
 The whole images thing needs to be rethought:
 -----------------------------------------

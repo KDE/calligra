@@ -26,7 +26,7 @@
 #include <qtextstream.h>
 #include <koStream.h>
 
-class KWordDocument;
+class KWDocument;
 
 /******************************************************************/
 /* Class: KWImage                                                 */
@@ -35,16 +35,16 @@ class KWordDocument;
 class KWImage : public QImage
 {
 public:
-    KWImage( KWordDocument *_doc, QString _filename ) : QImage( _filename )
+    KWImage( KWDocument *_doc, QString _filename ) : QImage( _filename )
     { ref = 0; doc = _doc; filename = _filename; }
-    KWImage( KWordDocument *_doc, KWImage _image ) : QImage( ( QImage )_image )
+    KWImage( KWDocument *_doc, KWImage _image ) : QImage( ( QImage )_image )
     { ref = 0; filename = _image.getFilename(); doc = _doc; }
-    KWImage( KWordDocument *_doc, QImage _image, QString _filename ) : QImage( _image )
+    KWImage( KWDocument *_doc, QImage _image, QString _filename ) : QImage( _image )
     { ref = 0; filename = _filename; doc = _doc; }
     KWImage() : QImage()
     { ref = 0; doc = 0L; }
 
-    void setDocument( KWordDocument *_doc )
+    void setDocument( KWDocument *_doc )
     { doc = _doc; }
 
     void incRef();
@@ -55,12 +55,12 @@ public:
     QString getFilename()
     { return filename; }
 
-    void save( QTextStream&out );
-    void load( KOMLParser&, QValueList<KOMLAttrib>&, KWordDocument* );
+    void save( QDomElement &parentElem );
+    void load( QDomElement &attributes, KWDocument* );
 
 protected:
     int ref;
-    KWordDocument *doc;
+    KWDocument *doc;
     QString filename;
 
 };

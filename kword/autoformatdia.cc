@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_page.h"
+#include "kwdoc.h"
+#include "kwcanvas.h"
 #include "autoformatdia.h"
 #include "autoformatdia.moc"
 #include "autoformat.h"
@@ -43,7 +43,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page )
+KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWPage *_page )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       doc( _doc ),
       oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),

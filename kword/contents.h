@@ -22,13 +22,13 @@
 
 #include <qstringlist.h>
 
-class KWordDocument;
+class KWDocument;
 class KWParag;
 
 class KWContents
 {
 public:
-    KWContents( KWordDocument *doc_ );
+    KWContents( KWDocument *doc_ );
 
     void createContents();
     void addParagName( const QString &n ) {
@@ -51,7 +51,7 @@ public:
     }
 
 protected:
-    KWordDocument *doc;
+    KWDocument *doc;
     KWParag *end;
     QStringList parags;
 

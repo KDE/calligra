@@ -27,7 +27,7 @@
 
 #include <qsize.h>
 
-class KWordDocument;
+class KWDocument;
 
 /******************************************************************/
 /* Class: KWImageCollection                                       */
@@ -36,7 +36,7 @@ class KWordDocument;
 class KWImageCollection
 {
 public:
-    KWImageCollection( KWordDocument *_doc );
+    KWImageCollection( KWDocument *_doc );
     ~KWImageCollection();
 
     KWImage *getImage( KWImage &_image, QString &key );
@@ -60,7 +60,7 @@ protected:
     KWImage *insertImage( QString _key, KWImage &_image, QSize _imgSize );
 
     QDict<KWImage> images;
-    KWordDocument *doc;
+    KWDocument *doc;
 
 };
 

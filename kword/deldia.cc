@@ -17,9 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_frame.h"
-#include "kword_page.h"
+#include "kwdoc.h"
+#include "kwframe.h"
+#include "kwcanvas.h"
+#include "kwgroupmanager.h"
 #include "deldia.h"
 #include "deldia.moc"
 
@@ -42,13 +43,13 @@
 /******************************************************************/
 
 /*================================================================*/
-KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, DeleteType _type, KWPage *_page )
+KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas )
     : KDialogBase( Plain, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     type = _type;
     grpMgr = _grpMgr;
     doc = _doc;
-    page = _page;
+    canvas = _canvas;
 
     setupTab1();
     setButtonOKText(i18n("&Delete"), type == ROW ?
@@ -89,25 +90,35 @@ void KWDeleteDia::setupTab1()
 /*================================================================*/
 bool KWDeleteDia::doDelete()
 {
+
+     if ( type == ROW )
+        grpMgr->deleteRow( value->value() - 1 );
+    else
+        grpMgr->deleteCol( value->value() - 1 );
+#if 0
     QPainter p;
-    p.begin( page );
+    p.begin( canvas );
 
     if ( type == ROW )
         grpMgr->deleteRow( value->value() - 1 );
     else
         grpMgr->deleteCol( value->value() - 1 );
 
-    page->getCursor()->setFrameSet( doc->getFrameSetNum( grpMgr->getFrameSet( 0, 0 ) ) + 1 );
-    doc->drawMarker( *page->getCursor(), &p, page->contentsX(), page->contentsY() );
-    page->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( page->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), true );
-    page->getCursor()->gotoStartOfParag();
-    page->getCursor()->cursorGotoLineStart();
+    canvas->getCursor()->setFrameSet( doc->getFrameSetNum( grpMgr->getFrameSet( 0, 0 ) ) + 1 );
+    doc->drawMarker( *canvas->getCursor(), &p, canvas->contentsX(), canvas->contentsY() );
+    canvas->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( canvas->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), true );
+    canvas->getCursor()->gotoStartOfParag();
+    canvas->getCursor()->cursorGotoLineStart();
     p.end();
+
+    canvas->recalcCursor();
+#endif
 
     doc->recalcFrames();
     doc->updateAllFrames();
     doc->updateAllViews( 0L );
-    page->recalcCursor();
+
+    canvas->repaintAll();
     return true;
 }
 

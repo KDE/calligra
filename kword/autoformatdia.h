@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-class KWordDocument;
+class KWDocument;
 class KWPage;
 class QPushButton;
 class QCheckBox;
@@ -40,7 +40,7 @@ class KWAutoFormatDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page );
+    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWPage *_page );
 
 protected:
     bool applyConfig();
@@ -54,7 +54,7 @@ protected:
     KCharSelect *charselect;
     QListView *entries;
 
-    KWordDocument *doc;
+    KWDocument *doc;
     QChar oBegin, oEnd;
     bool quotesChanged;
 

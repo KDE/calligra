@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kword_doc.h"
-#include "kword_page.h"
-#include "kword_frame.h"
+#include "kwdoc.h"
+#include "kwframe.h"
+#include "kwtextframeset.h"
 #include "framedia.h"
 #include "framedia.moc"
 #include "defs.h"
@@ -81,7 +81,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 }
 
 /* Contructor when the dialog is used on creation of frame */
-KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame,KWordDocument *_doc,FrameType _ft)
+KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame,KWDocument *_doc,FrameType _ft)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frameType=_ft;
@@ -96,12 +96,12 @@ void KWFrameDia::init() {
         QRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
         if(!doc && frame->getFrameSet())
-            doc=frame->getFrameSet()->getDocument();
+            doc=frame->getFrameSet()->kWordDocument();
         if(!doc) {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
         }
-        if(doc->getProcessingType() != KWordDocument::DTP &&
+        if(doc->processingType() != KWDocument::DTP &&
               frame->getFrameSet() == doc->getFrameSet(0)) {
             setupTab2();
             setupTab4();
@@ -468,7 +468,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     int numTxtFrameSets=0;
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
+        if ( i == 0 && doc->processingType() == KWDocument::WP )
             continue;
         if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
              dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
@@ -768,8 +768,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     }
 
 
-    if (doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                           ( doc->getProcessingType() == KWordDocument::WP &&
+    if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
+                                           ( doc->processingType() == KWDocument::WP &&
                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
         unsigned int x, y, w, h, _num;
 
@@ -988,8 +988,8 @@ bool KWFrameDia::applyChanges()
     }
 
     if ( frame ) {
-        if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                                ( doc->getProcessingType() == KWordDocument::WP &&
+        if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
+                                                ( doc->processingType() == KWDocument::WP &&
                                                   doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
             if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
                 unsigned int px, py, pw, ph;
