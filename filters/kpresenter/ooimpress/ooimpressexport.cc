@@ -631,11 +631,8 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
 
     if ( !key.isNull() )
     {
-        kdDebug()<<" Key tag exist\n";
         QString str = pictureKey( key );
-        kdDebug()<<" key of picture : "<<str<<endl;
         QString returnstr = m_kpresenterPictureLst[str];
-        kdDebug()<<"name of picture :"<<returnstr<<endl;
         const int pos=returnstr.findRev('.');
         if (pos!=-1)
         {
@@ -647,7 +644,11 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
         {
             if ( m_storeout->open( pictureName ) )
             {
-                m_storeout->write( m_storeinp->read( m_storeinp->size() ) );
+                QByteArray data(8*1024);
+                uint total = 0;
+                for ( int block = 0; ( block = m_storeinp->read(data.data(), data.size()) ) > 0;
+                      total += block )
+                    m_storeout->write(data.data(), data.size());
                 m_storeout->close();
                 m_storeinp->close();
             }
