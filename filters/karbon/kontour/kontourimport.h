@@ -22,6 +22,10 @@
 
 #include <koFilter.h>
 #include <qdom.h>
+#include <shapes/vellipse.h>
+#include <shapes/vrectangle.h>
+#include <core/vdocument.h>
+
 
 class KontourImport : public KoFilter
 {
@@ -36,7 +40,8 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
-	void importRectangle( QDomElement base, QDomElement lay );
+private:
+	VDocument m_document;
 };
 
 #endif // __KONTOURIMPORT_H__

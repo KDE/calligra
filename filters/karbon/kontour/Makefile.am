@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/karbon -I$(top_srcdir)/karbon/core $(all_includes)
 
 ####### Files
 # Obviously you have to change "foo" (and maybe "import") to
@@ -11,7 +11,7 @@ kde_module_LTLIBRARIES = libkarbonkontourimport.la
 
 libkarbonkontourimport_la_SOURCES = kontourimport.cpp
 libkarbonkontourimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkarbonkontourimport_la_LIBADD = $(KOFFICE_LIBS)
+libkarbonkontourimport_la_LIBADD = $(KOFFICE_LIBS) ../../../karbon/libkarbonpart.la
 
 METASOURCES = AUTO
 
