@@ -122,7 +122,6 @@ private:
     QString escapeAbiWordText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
     bool makePicture(const FrameAnchor& anchor);
-    bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void writePictureData(const QString& koStoreName, const QString& keyName);
     QString transformToTextDate(const QDateTime& dt);
