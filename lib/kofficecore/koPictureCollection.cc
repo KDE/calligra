@@ -25,6 +25,7 @@
 #include <kurl.h>
 
 #include <koStoreDevice.h>
+#include <koxmlwriter.h>
 
 #include "koPicture.h"
 #include "koPictureCollection.h"
@@ -147,6 +148,14 @@ QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, K
     return storeURL;
 }
 
+QString KoPictureCollection::getOasisFileName(KoPicture& picture)
+{
+    QString storeURL( "Pictures/");
+    storeURL+=picture.getKey().toString();
+    storeURL+='.';
+    storeURL+=picture.getExtensionAsKOffice1Dot1();
+    return storeURL;
+}
 
 bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11)
 {
@@ -180,6 +189,31 @@ bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
                 }
                 if ( !store->close() )
                     return false; // e.g. disk full
+            }
+        }
+    }
+    return true;
+}
+
+bool KoPictureCollection::saveOasisToStore( KoStore *store, QValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter )
+{
+    QValueList<KoPictureKey>::Iterator it = keys.begin();
+    for ( ; it != keys.end(); ++it )
+    {
+        KoPicture c = findPicture( *it );
+        if (c.isNull())
+            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+        else
+        {
+            QString storeURL( getOasisFileName(c) );
+            if (store->open(storeURL))
+            {
+                KoStoreDevice dev(store);
+                if ( ! c.save(&dev) )
+                    return false; // e.g. bad image?
+                if ( !store->close() )
+                    return false; // e.g. disk full
+                manifestWriter->addManifestEntry( storeURL, c.getMimeType() );
             }
         }
     }

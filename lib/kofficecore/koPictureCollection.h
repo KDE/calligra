@@ -31,7 +31,7 @@
 class KURL;
 
 class KoStore;
-
+class KoXmlWriter;
 
 /**
  * A collection of pictures (a key and the picture itself).
@@ -115,6 +115,9 @@ public:
 
     void saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& parent, QValueList<KoPictureKey> keys);
 
+    bool saveOasisToStore( KoStore *store, QValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter );
+
+
     typedef QMap<KoPictureKey, QString> StoreMap;
     /**
      * Read the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, and save the result (key<->store-filename associations)
@@ -148,6 +151,13 @@ public:
      * Formerly, an invalid date/time meant to read the file from disk. This is not the case anymore.
      */
     KoPicture findOrLoad(const QString& fileName, const QDateTime& dateTime);
+
+    /**
+     * Return filename as url for picture
+     *
+     */
+    QString getOasisFileName(KoPicture& picture);
+
 
 private:
     /**
