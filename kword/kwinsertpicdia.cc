@@ -168,7 +168,7 @@ int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QStrin
         mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     KFileDialog fd( _path, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Choose Image")); // ### TODO: rename to "Choose Picture"
+    fd.setCaption(i18n("Choose Image")); // ### TODO: rename to "Choose Picture..."
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
     {

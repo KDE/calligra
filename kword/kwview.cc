@@ -1124,7 +1124,7 @@ void KWView::setupActions()
                                             this, SLOT( importStyle() ),
                                             actionCollection(), "import_style" );
 
-    actionCreateFrameStyle = new KAction( i18n( "&Create Framestyle from frame" ), 0,
+    actionCreateFrameStyle = new KAction( i18n( "&Create Framestyle from frame" ), 0, // ## TODO, should be "&Create Framestyle From Frame"
                                         this, SLOT( createFrameStyle()),
                                         actionCollection(), "create_framestyle" );
     actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the currently selected frame." ) );
