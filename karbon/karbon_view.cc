@@ -299,8 +299,6 @@ KarbonView::dropEvent( QDropEvent *e )
 
 		if( part() )
 			part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
-
-		selectionChanged();
 	}
 	else if( KarbonDrag::decode( e, selection, m_part->document() ) )
 	{
@@ -314,8 +312,6 @@ KarbonView::dropEvent( QDropEvent *e )
 		VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
 
 		m_part->addCommand( cmd, true );
-
-		selectionChanged();
 	}
 }
 
@@ -551,14 +547,12 @@ void
 KarbonView::groupSelection()
 {
 	part()->addCommand( new VGroupCmd( &part()->document() ), true );
-	selectionChanged();
 }
 
 void
 KarbonView::ungroupSelection()
 {
 	part()->addCommand( new VUnGroupCmd( &part()->document() ), true );
-	selectionChanged();
 }
 
 // TODO: remove this one someday:
