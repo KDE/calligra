@@ -1155,7 +1155,7 @@ void KWView::setupActions()
     actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the currently selected frame." ) );
     actionCreateFrameStyle->setWhatsThis( i18n( "Create a new framestyle based on the currently selected frame." ) );
 
-    actionInsertDirectCursor = new KToggleAction( i18n( "Insert Direct Cursor" ), 0,
+    actionInsertDirectCursor = new KToggleAction( i18n( "Type Anywhere Cursor" ), 0,
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 
