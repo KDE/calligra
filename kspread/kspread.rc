@@ -1,5 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="5">
 <MenuBar>
+ <Menu name="file" noMerge="1"><text>&amp;File</text>
+        <Separator/>
+        <Action name="paperLayout"/>
+ </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
@@ -49,7 +53,6 @@
   <Action name="multiRow"/>
   <Separator/>
   <Action name="cellLayout"/>
-  <Action name="paperLayout"/>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>

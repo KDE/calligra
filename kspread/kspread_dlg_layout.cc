@@ -3220,10 +3220,10 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   connect( size ,SIGNAL( textChanged(const QString &)),this,SLOT(slotChangeStyle(const QString &)));
   connect( size ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
   preview->slotSelect();
-  pattern1->slotSelect();
+  pattern3->slotSelect();
   style->setEnabled(false);
   size->setEnabled(false);
-  preview->setPattern( black , 1, DotLine );
+  preview->setPattern( black , 1, SolidLine );
   this->resize( 400, 400 );
 }
 

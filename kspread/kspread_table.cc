@@ -2759,7 +2759,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-    QPen pen( _color,2,SolidLine);
+    QPen pen( _color,1,SolidLine);
 
         // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -2822,7 +2822,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
 
-    QPen pen( _color,2,SolidLine);
+    QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -2921,7 +2921,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
 
-    QPen pen( _color,2,SolidLine);
+    QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -3029,7 +3029,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
     QString title=i18n("Change border");
-    QPen pen( _color,2,SolidLine);
+    QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -3110,7 +3110,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
-    QPen pen( _color,2,SolidLine);
+    QPen pen( _color,1,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -3294,7 +3294,7 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
       for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
         RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( _color,2,SolidLine);
+        QPen pen( _color,1,SolidLine);
         rw->setTopBorderPen(pen);
         rw->setRightBorderPen(pen);
         rw->setLeftBorderPen(pen);
@@ -3324,7 +3324,7 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
           c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
       }
-      QPen pen( _color,2,SolidLine);
+      QPen pen( _color,1,SolidLine);
       for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
@@ -3373,7 +3373,7 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
                                 cell = new KSpreadCell( this, x, y );
                                 m_cells.insert( cell, x, y );
                                 }
-                        QPen pen( _color,2,SolidLine);
+                        QPen pen( _color,1,SolidLine);
                         cell->setTopBorderPen(pen);
                         cell->setRightBorderPen(pen);
                         cell->setLeftBorderPen(pen);
