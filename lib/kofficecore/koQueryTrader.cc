@@ -140,6 +140,8 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
+    kdDebug(3003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+                  << "   library=" << (*it)->library() << endl;
     KoFilterEntry f( *it );
     // Append converted offer
     lst.append( f );
