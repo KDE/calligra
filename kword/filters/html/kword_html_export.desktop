@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=KWordHTMLFilter
+Name=KWordHTMLExportFilter
 Exec=foo
 CORBAExec=kword_html --server
 Comment=Reggie's KWord HTML Filter
