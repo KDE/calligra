@@ -28,6 +28,8 @@
 #include <kotoolbutton.h>
 #include <coloraction_test.h>
 
+#include <stdlib.h>
+#include <time.h>
 
 TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, name )
 {
@@ -39,7 +41,7 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     QBoxLayout* l = new QHBoxLayout( w, 10 );
     QGroupBox* b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 1" ), w );
     panel = new KoColorPanel( b1, "panel1" );
-    panel->insertDefaultColors();
+    //panel->insertDefaultColors();
     l->addWidget( b1 );
 
     b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 2" ), w );
@@ -57,27 +59,41 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     sub->insertSeparator();
     sub->insertItem( new KoColorPanel( sub ) );
     sub->insertSeparator();
-    sub->insertItem( "Test", this, SLOT( test() ), CTRL+Key_T );
+    sub->insertItem( "Default Colors", this, SLOT( defaultColors() ), CTRL+Key_D );
+    sub->insertItem( "Insert Random Color", this, SLOT( insertRandomColor() ), CTRL+Key_R );
+    sub->insertSeparator();
+    sub->insertItem( "Clear", this, SLOT( clearColors() ), CTRL+Key_C );
 
     file->insertItem( "&Foo", sub );
     file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
 }
 
-void TopLevel::test()
+void TopLevel::insertRandomColor()
 {
-    kdDebug() << "test" << endl;
-    //panel->insertDefaultColors();
-    panel->insertColor( qRgb( 20, 20, 20 ) );
+    panel->insertColor( qRgb( rand() % 256, rand() % 256, rand() % 256 ) );
 }
+
+void TopLevel::defaultColors()
+{
+    panel->insertDefaultColors();
+}
+
+void TopLevel::clearColors()
+{
+    panel->clear();
+}
+
 
 int main( int argc, char ** argv )
 {
-    KApplication *a = new KApplication ( argc, argv, "KColorAction Test" );
+    srand( time( 0 ) );
+
+    KApplication a( argc, argv, "KColorAction Test" );
     TopLevel *toplevel = new TopLevel( 0, "coloractiontest" );
-    a->setMainWidget( toplevel );
+    a.setMainWidget( toplevel );
     toplevel->show();
-    a->exec();
+    return a.exec();
 }
 
 #include <coloraction_test.moc>

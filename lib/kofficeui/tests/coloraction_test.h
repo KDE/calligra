@@ -32,7 +32,9 @@ public:
     TopLevel( QWidget* parent = 0, const char* name = 0 );
 
 public slots:
-    void test();
+    void insertRandomColor();
+    void defaultColors();
+    void clearColors();
 
 private:
     KoColorPanel* panel;

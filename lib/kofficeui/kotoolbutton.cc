@@ -52,9 +52,11 @@ QSize KoColorPanel::minimumSizeHint() const
 
 void KoColorPanel::clear()
 {
+    QSize area( minimumSizeHint() );
     m_colorMap.clear();
     init();
-    // ###### repaint (resize? most probably)
+    updateGeometry();
+    erase( 0, 0, area.width(), area.height() );
 }
 
 void KoColorPanel::insertColor( const QColor& color )
@@ -78,6 +80,8 @@ void KoColorPanel::insertDefaultColors()
     if ( m_defaultsAdded )
         return;
     m_defaultsAdded = true;
+
+    int currentRow = m_nextPosition.y; // we have to repaint this row below
 
     // For all i18n gurus: I don't think we can translate these color names, can we? (Werner)
     // Note: No checking for duplicates, so take care when you modify that list
@@ -227,8 +231,11 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb(   0 ,     0 ,   205 ),  "Medium Blue", false);
     insertColor(qRgb(   0 ,     0 ,   128 ),  "Navy", false);
 
-    resize( minimumSizeHint() );
     finalizeInsertion();
+    updateGeometry();
+    // we have to repaint the "old" current row explicitly due
+    // to WStaticContents
+    repaint( 0, currentRow << 4, COLUMNS << 4, 16 );
 }
 
 void KoColorPanel::mousePressEvent( QMouseEvent* )
@@ -369,7 +376,9 @@ void KoColorPanel::finalizeInsertion()
 {
     if ( !isFocusEnabled() )
         setFocusPolicy( QWidget::StrongFocus );
-    // ###### resize when a new row has been added (->m_nextPosition.x == 0)
+    // Did we start a new row?
+    if ( m_nextPosition.x == 1 )
+        updateGeometry();
 }
 
 bool KoColorPanel::insertColor( const QColor& color, const QString& toolTip, bool checking )
