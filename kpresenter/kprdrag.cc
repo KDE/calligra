@@ -75,7 +75,7 @@ int KPrTextDrag::decodeTextObjectNumber( QMimeSource *e )
 {
     QByteArray a =  e->encodedData("application/x-kpresenter-textobjectnumber");
     if(!a.isEmpty())
-        return QCString(a).toInt();
+        return QCString(a, a.count()+1).toInt();
     else
         return -1;
 }
