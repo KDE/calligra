@@ -95,9 +95,17 @@ class RGBWidget : public QWidget
   void slotGSliderChanged(int);
   void slotBSliderChanged(int);
 
+  void slotHSliderChanged(int);
+  void slotSSliderChanged(int);
+  void slotVSliderChanged(int);
+
   void slotRInChanged(int);
   void slotGInChanged(int);
   void slotBInChanged(int);
+
+  void slotHInChanged(int);
+  void slotSInChanged(int);
+  void slotVInChanged(int);
 
  signals:
   void colorChanged(const KisColor&);
@@ -107,8 +115,11 @@ class RGBWidget : public QWidget
 
  protected:
   ColorSlider *m_pRSlider, *m_pGSlider, *m_pBSlider;
+  ColorSlider *m_pHSlider, *m_pSSlider, *m_pVSlider;
   QLabel      *m_pRLabel, *m_pGLabel, *m_pBLabel;
+  QLabel      *m_pHLabel, *m_pSLabel, *m_pVLabel;
   QSpinBox    *m_pRIn, *m_pGIn, *m_pBIn;
+  QSpinBox    *m_pHIn, *m_pSIn, *m_pVIn;
   KisColor     m_c;
 };
 

@@ -30,6 +30,8 @@
 #include "kis_krayonwidget.h"
 #include "kis_brushwidget.h"
 #include "kis_patternwidget.h"
+#include "kis_gradientwidget.h"
+#include "kis_previewwidget.h"
 #include "kis_colorchooser.h"
 #include "kis_framebutton.h"
 
@@ -89,9 +91,7 @@ void KisSideBar::resizeEvent ( QResizeEvent * )
     int topTitleHeight = 20;
     int controlHeight = 42;    
     int topHeight = 20;
-    int chooserHeight = 0;
-    if(m_pChooserFrame->isVisible())  
-        chooserHeight = 138;
+    int chooserHeight = m_pChooserFrame->isVisible() ? 152 : 0;  
 
     int total = 0;
     
@@ -543,7 +543,9 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
     m_pColorButton = new KDualColorButton(this);
     m_pBrushWidget = new KisBrushWidget(this);
     m_pPatternWidget = new KisPatternWidget(this, defaultPattern.latin1()); 
-    
+    m_pGradientWidget = new KisGradientWidget(this);
+    m_pPreviewWidget = new KisPreviewWidget(this);
+        
     connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	    SLOT(slotFGColorSelected(const QColor &)));
 
@@ -587,9 +589,18 @@ void ControlFrame::slotSetPattern(const KisPattern& b)
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
 {
-    m_pColorButton->setGeometry( 4, 4, 34, 34 );
-    m_pBrushWidget->setGeometry( 42, 4, 34, 34 );
-    m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); 
+    int sp = (width() - 34 * 5)/6;
+    int x = sp;
+    
+    m_pColorButton->setGeometry( x, 4, 34, 34 );
+    x += (sp + 34);
+    m_pBrushWidget->setGeometry( x, 4, 34, 34 );
+    x += (sp + 34);    
+    m_pPatternWidget->setGeometry(x, 4, 34, 34 ); 
+    x += (sp + 34);
+    m_pGradientWidget->setGeometry(x, 4, 34, 34 ); 
+    x += (sp + 34);
+    m_pPreviewWidget->setGeometry(x, 4, 34, 34 ); 
 }
 
 void ControlFrame::slotSetFGColor(const KisColor& c)

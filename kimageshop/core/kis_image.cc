@@ -309,7 +309,8 @@ void KisImage::setUpVisual()
 void KisImage::addLayer(const QRect& rect, const KisColor& c, 
     bool tr, const QString& name)
 {
-kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
+
+    kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
 
     KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
     kdDebug(0) << "KisImage::addLayer(): new allocated" << endl; 
@@ -324,8 +325,69 @@ kdDebug(0) << "KisImage::addLayer(): entering" << endl;
     kdDebug(0) << "KisImage::addLayer(): returned from m_layers->append()" << endl;             
     
     m_pCurrentLay=lay;
+
+    /*##########################################################
+        We need to get updated info about tiles adding new layer 
+        that is larger than existing imageExtents() - jwc
+    ############################################################*/
     
-kdDebug(0) << "KisImage::addLayer(): leaving" << endl;     
+    int tmpXTiles = lay->xTiles();
+    int tmpYTiles = lay->yTiles();
+   
+    if(tmpXTiles > m_xTiles || tmpYTiles > m_yTiles)
+    {
+        m_pUpdateTimer->stop();
+        
+        int old_m_xTiles = m_xTiles;
+        int old_m_yTiles = m_yTiles;
+                
+        if(tmpXTiles > m_xTiles) m_xTiles = tmpXTiles; 	
+        if(tmpYTiles > m_yTiles) m_yTiles = tmpYTiles; 
+        
+        if(rect.width()  > m_width)  m_width  = rect.width();
+        if(rect.height() > m_height) m_height = rect.height();
+        
+        // setup dirty flag array
+        m_dirty.resize (m_xTiles * m_yTiles);
+    
+        // mark everything dirty so all layers are redrawn
+        // after the timer is restarted
+        for(int y = 0; y < m_yTiles; y++)
+            for(int x = 0; x < m_xTiles; x++)
+	            m_dirty[y * m_xTiles + x] = true;
+
+        // delete pixmaps for each tile
+        for( int y = 0; y < old_m_yTiles; y++)
+        {
+            for( int x = 0; x < old_m_xTiles; x++) 
+            {
+                delete m_ptiles[y * old_m_xTiles + x];
+            }
+        }
+        
+        // delete pointer to array of pixmaps
+        delete m_ptiles;
+
+        // reallocate pointer to array of pixmaps
+        m_ptiles = new QPixmap* [m_xTiles*m_yTiles]; 
+        
+        // reallocate pixmaps for each tile
+        for( int y = 0; y < m_yTiles; y++)
+        {
+            for( int x = 0; x < m_xTiles; x++) 
+            {
+                m_ptiles[y * m_xTiles + x] = new QPixmap(TILE_SIZE, TILE_SIZE);
+                m_ptiles[y * m_xTiles + x]->fill();
+            }
+        }
+
+        compositeImage(QRect()); 
+
+        // restart update timer
+        m_pUpdateTimer->start(1);
+    }
+    
+    kdDebug(0) << "KisImage::addLayer(): leaving" << endl;  
 }
 
 

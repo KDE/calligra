@@ -35,6 +35,8 @@ class KDualColorButton;
 class KisKrayonWidget;
 class KisBrushWidget;
 class KisPatternWidget;
+class KisGradientWidget;
+class KisPreviewWidget;
 class KisKrayon;
 class KisBrush;
 class KisPattern;
@@ -164,6 +166,8 @@ class ControlFrame : public QFrame
   KisKrayonWidget   *m_pKrayonWidget;  
   KisBrushWidget    *m_pBrushWidget;
   KisPatternWidget  *m_pPatternWidget;
+  KisGradientWidget *m_pGradientWidget;  
+  KisPreviewWidget  *m_pPreviewWidget;  
 };
 
 class DockFrame : public QFrame

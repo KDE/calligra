@@ -35,6 +35,7 @@
 
 #include "kis_colorchooser.h"
 
+const int lh = 18;
 
 KisColorChooser::KisColorChooser(QWidget *parent) : QWidget(parent)
 {
@@ -156,10 +157,10 @@ void KisColorChooser::resizeEvent(QResizeEvent *)
     int w = width();
     int h = height();
 
-    m_pColorFrame->setGeometry(2, h-22, w-4, 20);
 
-    m_pRGBWidget->setGeometry(2, 2, w-4, h-24);
-    m_pGreyWidget->setGeometry(2, 2, w-4, h-24);
+    m_pRGBWidget->setGeometry( 2, 2,     w-4,  h-16);
+    m_pGreyWidget->setGeometry(2, 2,     w-4,  h/2);
+    m_pColorFrame->setGeometry(2, h-14,  w-4,  12);    
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
@@ -167,95 +168,166 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
     // init with defaults
     m_c = KisColor::white();
 
-    // setup color sliders
+    // setup RGB color sliders
     m_pRSlider = new ColorSlider(this);
-    m_pRSlider->setMaximumHeight(20);
+    m_pRSlider->setMaximumHeight(lh);
     m_pRSlider->slotSetRange(0, 255);
 
     m_pGSlider = new ColorSlider(this);
-    m_pGSlider->setMaximumHeight(20);
+    m_pGSlider->setMaximumHeight(lh);
     m_pGSlider->slotSetRange(0, 255);
 
     m_pBSlider = new ColorSlider(this);
-    m_pBSlider->setMaximumHeight(20);
+    m_pBSlider->setMaximumHeight(lh);
     m_pBSlider->slotSetRange(0, 255);
  
-  // setup slider labels
-  m_pRLabel = new QLabel("R", this);
-  m_pRLabel->setFixedWidth(16);
-  m_pRLabel->setFixedHeight(20);
-  m_pGLabel = new QLabel("G", this);
-  m_pGLabel->setFixedWidth(16);
-  m_pGLabel->setFixedHeight(20);
-  m_pBLabel = new QLabel("B", this);
-  m_pBLabel->setFixedWidth(16);
-  m_pBLabel->setFixedHeight(20);
- 
-  // setup spin box
-  m_pRIn = new QSpinBox(0, 255, 1, this);
-  m_pRIn->setFixedWidth(42);
-  m_pRIn->setFixedHeight(20);
-  m_pGIn = new QSpinBox(0, 255, 1, this);
-  m_pGIn->setFixedWidth(42);
-  m_pGIn->setFixedHeight(20);
-  m_pBIn = new QSpinBox(0, 255, 1, this);
-  m_pBIn->setFixedWidth(42);
-  m_pBIn->setFixedHeight(20);
+    // setup HSV color sliders
+    m_pHSlider = new ColorSlider(this);
+    m_pHSlider->setMaximumHeight(lh);
+    m_pHSlider->slotSetRange(0, 255);
 
-  // connect color sliders
-  connect(m_pRSlider, SIGNAL(valueChanged(int)), this,
+    m_pSSlider = new ColorSlider(this);
+    m_pSSlider->setMaximumHeight(lh);
+    m_pSSlider->slotSetRange(0, 255);
+
+    m_pVSlider = new ColorSlider(this);
+    m_pVSlider->setMaximumHeight(lh);
+    m_pVSlider->slotSetRange(0, 255);
+
+    // setup RGB slider labels
+    m_pRLabel = new QLabel("R", this);
+    m_pRLabel->setFixedWidth(16);
+    m_pRLabel->setFixedHeight(lh);
+    m_pGLabel = new QLabel("G", this);
+    m_pGLabel->setFixedWidth(16);
+    m_pGLabel->setFixedHeight(lh);
+    m_pBLabel = new QLabel("B", this);
+    m_pBLabel->setFixedWidth(16);
+    m_pBLabel->setFixedHeight(lh);
+ 
+    // setup HSV slider labels
+    m_pHLabel = new QLabel("H", this);
+    m_pHLabel->setFixedWidth(16);
+    m_pHLabel->setFixedHeight(lh);
+    m_pSLabel = new QLabel("S", this);
+    m_pSLabel->setFixedWidth(16);
+    m_pSLabel->setFixedHeight(lh);
+    m_pVLabel = new QLabel("B", this);
+    m_pVLabel->setFixedWidth(16);
+    m_pVLabel->setFixedHeight(lh);
+
+    // setup RGB spin box
+    m_pRIn = new QSpinBox(0, 255, 1, this);
+    m_pRIn->setFixedWidth(42);
+    m_pRIn->setFixedHeight(lh);
+    m_pGIn = new QSpinBox(0, 255, 1, this);
+    m_pGIn->setFixedWidth(42);
+    m_pGIn->setFixedHeight(lh);
+    m_pBIn = new QSpinBox(0, 255, 1, this);
+    m_pBIn->setFixedWidth(42);
+    m_pBIn->setFixedHeight(lh);
+
+    // setup HSV spin box
+    m_pHIn = new QSpinBox(0, 255, 1, this);
+    m_pHIn->setFixedWidth(42);
+    m_pHIn->setFixedHeight(lh);
+    m_pSIn = new QSpinBox(0, 255, 1, this);
+    m_pSIn->setFixedWidth(42);
+    m_pSIn->setFixedHeight(lh);
+    m_pVIn = new QSpinBox(0, 255, 1, this);
+    m_pVIn->setFixedWidth(42);
+    m_pVIn->setFixedHeight(lh);
+
+    // RGB complementary sliders & spins
+
+    // connect color sliders
+    connect(m_pRSlider, SIGNAL(valueChanged(int)), this,
 		  SLOT(slotRSliderChanged(int)));
-  connect(m_pGSlider, SIGNAL(valueChanged(int)), this,
+    connect(m_pGSlider, SIGNAL(valueChanged(int)), this,
 		  SLOT(slotGSliderChanged(int)));
-  connect(m_pBSlider, SIGNAL(valueChanged(int)), this,
+    connect(m_pBSlider, SIGNAL(valueChanged(int)), this,
 		  SLOT(slotBSliderChanged(int)));
 
-  // connect spin box
-  connect(m_pRIn, SIGNAL(valueChanged (int)), this,
+    // connect spin box
+    connect(m_pRIn, SIGNAL(valueChanged (int)), this,
 		  SLOT(slotRInChanged(int)));
-  connect(m_pGIn, SIGNAL(valueChanged (int)), this,
+    connect(m_pGIn, SIGNAL(valueChanged (int)), this,
 		  SLOT(slotGInChanged(int)));
-  connect(m_pBIn, SIGNAL(valueChanged (int)), this,
+    connect(m_pBIn, SIGNAL(valueChanged (int)), this,
 		  SLOT(slotBInChanged(int)));
+
+    // HSV complementary sliders & spins
+
+    // connect color sliders
+    connect(m_pHSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotHSliderChanged(int)));
+    connect(m_pSSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotSSliderChanged(int)));
+    connect(m_pVSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotVSliderChanged(int)));
+
+    // connect spin box
+    connect(m_pHIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotHInChanged(int)));
+    connect(m_pSIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotSInChanged(int)));
+    connect(m_pVIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotVInChanged(int)));
 }
 
 void RGBWidget::resizeEvent(QResizeEvent *)
 {
-  // I know a QGridLayout would look nicer,
-  // but it does not use the space as good as I want it to.
+    // I know a QGridLayout would look nicer,
+    // but it does not use the space as good as I want it to.
 
-  int y1 = height()/3;
-  int y2 = 2 * y1;
+    // ############# RGB section ############
+    
+    int halfheight = height()/2;
+    int middle = halfheight/2;   
+    int sliderheight = m_pRSlider->height();
+    
+    m_pRLabel->move(2, 2);
+    m_pGLabel->move(2, middle - m_pRLabel->height()/2);
+    m_pBLabel->move(2, halfheight - 2 - m_pRLabel->height());
 
-  int labelY =(y1 - m_pRLabel->height())/2 - 4;
-  if (labelY < 0) 
-	labelY = 0;
+    int x1 = m_pRLabel->pos().x() + m_pRLabel->width();
 
-  m_pRLabel->move(2, 0 + labelY);
-  m_pGLabel->move(2, y1 + labelY);
-  m_pBLabel->move(2, y2 + labelY);
+    m_pRIn->move(width() - m_pRIn->width(),  2);
+    m_pGIn->move(width() - m_pRIn->width(), middle - m_pRIn->height()/2 );
+    m_pBIn->move(width() - m_pRIn->width(), halfheight - 2 - m_pRIn->height());
 
-  int x1 = m_pRLabel->pos().x() + m_pRLabel->width();
+    int x2 = width() - m_pRIn->width() - 2;
 
-  int inY =(y1 - m_pRIn->height())/2 - 4;
-  if (inY < 0) 
-	inY = 0;
+    m_pRSlider->resize(QSize(x2 - x1, sliderheight));
+    m_pGSlider->resize(QSize(x2 - x1, sliderheight));
+    m_pBSlider->resize(QSize(x2 - x1, sliderheight));
 
-  m_pRIn->move(width() - m_pRIn->width(), 0 + inY);
-  m_pGIn->move(width() - m_pRIn->width(), y1 + inY);
-  m_pBIn->move(width() - m_pRIn->width(), y2 + inY);
+    m_pRSlider->move(x1,  2 );
+    m_pGSlider->move(x1, middle - m_pRSlider->height()/2);
+    m_pBSlider->move(x1, halfheight - m_pRSlider->height() - 2);
+    
+    // ############# HSV section ############
 
-  int x2 = width() - m_pRIn->width() - 2;
+    int yHSV = height()/2; 
 
-  m_pRSlider->resize(QSize(x2 - x1, y1));
-  m_pGSlider->resize(QSize(x2 - x1, y1));
-  m_pBSlider->resize(QSize(x2 - x1, y1));
+    m_pHLabel->move(2, 2 + yHSV);
+    m_pSLabel->move(2, middle - m_pRLabel->height()/2 + yHSV);
+    m_pVLabel->move(2, halfheight - 2 - m_pRLabel->height() + yHSV);
 
-  m_pRSlider->move(x1, 0 + (y1 - m_pRSlider->height())/2);
-  m_pGSlider->move(x1, y1 + (y1 - m_pRSlider->height())/2);
-  m_pBSlider->move(x1, y2 + (y1 - m_pRSlider->height())/2);
+    m_pHIn->move(width() - m_pRIn->width(),  2 + yHSV);
+    m_pSIn->move(width() - m_pRIn->width(), middle - m_pRIn->height()/2 + yHSV);
+    m_pVIn->move(width() - m_pRIn->width(), halfheight - 2 - m_pRIn->height() + yHSV);
+
+    m_pHSlider->resize(QSize(x2 - x1, sliderheight));
+    m_pSSlider->resize(QSize(x2 - x1, sliderheight));
+    m_pVSlider->resize(QSize(x2 - x1, sliderheight));
+
+    m_pHSlider->move(x1,  2 + yHSV);
+    m_pSSlider->move(x1, middle - m_pRSlider->height()/2 + yHSV);
+    m_pVSlider->move(x1, halfheight - m_pRSlider->height() - 2 + yHSV);
 }
 
+// set Color for both RGB and HSV widgets
 void RGBWidget::slotSetColor(const KisColor&c)
 {
   m_c = c;
@@ -279,6 +351,8 @@ void RGBWidget::slotSetColor(const KisColor&c)
   m_pBIn->setValue( b );
 }
   
+// RGB slider slots
+
 void RGBWidget::slotRSliderChanged(int r)
 {
   int g = m_c.G();
@@ -332,6 +406,21 @@ void RGBWidget::slotBSliderChanged(int b)
 
   emit colorChanged(m_c);
 }
+
+// HSV Slider slots
+
+void RGBWidget::slotHSliderChanged(int h)
+{
+}
+
+void RGBWidget::slotSSliderChanged(int s)
+{
+}
+
+void RGBWidget::slotVSliderChanged(int v)
+{
+}
+
 
 void RGBWidget::slotRInChanged(int r)
 {
@@ -387,6 +476,18 @@ void RGBWidget::slotBInChanged(int b)
   emit colorChanged(m_c);
 }
 
+void RGBWidget::slotHInChanged(int h)
+{
+}
+
+void RGBWidget::slotSInChanged(int b)
+{
+}
+
+void RGBWidget::slotVInChanged(int b)
+{
+}
+
 GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
 {
   // init with defaults
@@ -401,7 +502,7 @@ GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
  
   // setup slider label
   m_pVLabel = new QLabel("K", this);
-  m_pVLabel->setFixedWidth(16);
+  m_pVLabel->setFixedWidth(lh);
   m_pVLabel->setFixedHeight(20);
   
   // setup spin box
@@ -425,7 +526,7 @@ void GreyWidget::resizeEvent(QResizeEvent *)
 
   int y = height()/2;
 
-  int labelY =y - m_pVLabel->height()/2 - 4;
+  int labelY = y - m_pVLabel->height()/2 - 4;
   if (labelY < 0) 
 	labelY = 0;
 
