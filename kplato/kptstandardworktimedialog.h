@@ -63,6 +63,14 @@ private slots:
     void slotStateSaturdayActivated(int);
     void slotStateSundayActivated(int);
     
+    void slotMondayTimeChanged(const QTime& time);
+    void slotTuesdayTimeChanged(const QTime& time);
+    void slotWednesdayTimeChanged(const QTime& time);
+    void slotThursdayTimeChanged(const QTime& time);
+    void slotFridayTimeChanged(const QTime& time);
+    void slotSaturdayTimeChanged(const QTime& time);
+    void slotSundayTimeTimeChanged(const QTime& time);
+
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);

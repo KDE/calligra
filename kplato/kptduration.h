@@ -33,8 +33,9 @@ class KPTDuration {
          * DayTime  = d hh:mm:ss.sss
          * Day      = d.ddd
          * Hour     = hh:mm
+         * HourFraction = h.fraction of an hour
          */
-        enum Format { Format_DayTime, Format_Day, Format_Hour };
+        enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction };
 
         KPTDuration();
         KPTDuration(const KPTDuration &d);

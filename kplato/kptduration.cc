@@ -106,6 +106,7 @@ QString KPTDuration::toString(Format format) const {
     unsigned hours;
     unsigned minutes;
     unsigned seconds;
+    double f;
     QString result;
 
     switch (format) {
@@ -131,6 +132,10 @@ QString KPTDuration::toString(Format format) const {
             seconds = ms / (1000);
             ms -= seconds * (1000);
             result.sprintf("%u %02u:%02u:%02u.%u", (unsigned)days, hours, minutes, seconds, (unsigned)ms);
+            break;
+        case Format_HourFraction:
+            f = (double)m_ms;
+            result = QString("%1").arg(f/(1000 * 60 * 60), 0, 'f', 2);
             break;
         default:
             kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
