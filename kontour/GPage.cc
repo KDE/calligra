@@ -42,24 +42,20 @@ GPage::GPage(GDocument *aGDoc):
 mHandle(this)
 {
   mGDoc = aGDoc;
-  mPageLayout.format = PG_DIN_A4;
-  mPageLayout.orientation = PG_PORTRAIT;
-  mPageLayout.mmWidth = PG_A4_WIDTH;
-  mPageLayout.mmHeight = PG_A4_HEIGHT;
-  mPageLayout.mmLeft = 0;
-  mPageLayout.mmRight = 0;
-  mPageLayout.mmTop = 0;
-  mPageLayout.mmBottom = 0;
-  mPageLayout.unit = KoUnit::U_MM;
+  mPageLayout = KoPageLayoutDia::standardLayout();
+  // No margins
+  mPageLayout.ptLeft = 0;
+  mPageLayout.ptRight = 0;
+  mPageLayout.ptTop = 0;
+  mPageLayout.ptBottom = 0;
+  // in pt !!
+  mPaperWidth = (int)mPageLayout.ptWidth;
+  mPaperHeight = (int)mPageLayout.ptHeight;
 
   mBGColor = white;
 
   mConvertibleCount = 0;
   mCurLayerNum = 1;
-
-  // in pt !!
-  mPaperWidth = static_cast<int>(cvtMmToPt(mPageLayout.mmWidth));
-  mPaperHeight = static_cast<int>(cvtMmToPt(mPageLayout.mmHeight));
 
   selection.clear();
   layers.setAutoDelete(true);
@@ -96,21 +92,8 @@ void GPage::setPaperSize(int width, int height)
 void GPage::pageLayout(const KoPageLayout &layout)
 {
   mPageLayout = layout;
-  switch(layout.unit)
-  {
-  case KoUnit::U_MM:
-    mPaperWidth = static_cast<int>(cvtMmToPt(mPageLayout.mmWidth));
-    mPaperHeight = static_cast<int>(cvtMmToPt(mPageLayout.mmHeight));
-    break;
-  case KoUnit::U_PT:
-    mPaperWidth = static_cast<int>(mPageLayout.ptWidth);
-    mPaperHeight = static_cast<int>(mPageLayout.ptHeight);
-    break;
-  case KoUnit::U_INCH:
-    mPaperWidth = static_cast<int>(cvtInchToPt(mPageLayout.inchWidth));
-    mPaperHeight = static_cast<int>(cvtInchToPt(mPageLayout.inchHeight));
-    break;
-  }
+  mPaperWidth = static_cast<int>(mPageLayout.ptWidth);
+  mPaperHeight = static_cast<int>(mPageLayout.ptHeight);
 //  setModified();
 //  emit sizeChanged ();
 }
