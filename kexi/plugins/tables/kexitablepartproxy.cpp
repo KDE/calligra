@@ -96,9 +96,10 @@ KexiTablePartProxy::slotCreate()
 			return;
 		}
 		KexiProjectHandlerItem *new_item = new KexiProjectHandlerItem(part(), name, "kexi/table",  name);
-		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, false);
+		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, true);
 //		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
-		kat->show();
+//		kat->show();
+		kat->setIcon( new_item->handler()->itemPixmap() );
 		list->insert(new_item->fullIdentifier(), new_item);
 		emit m_tablePart->itemListChanged(part());
 	}
