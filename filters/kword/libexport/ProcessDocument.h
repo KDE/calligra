@@ -27,9 +27,21 @@
 
 class KWEFKWordLeader;
 
+/**
+ * @internal
+ */
 void ProcessLayoutTag       ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
+/**
+ * @internal
+ */
 void ProcessFormatsTag      ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
+/**
+ * @internal
+ */
 void ProcessTextTag         ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
+/**
+ * @internal
+ */
 void ProcessDocumentInfoTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
 
 #endif /* PROCESS_DOCUMENT_H */

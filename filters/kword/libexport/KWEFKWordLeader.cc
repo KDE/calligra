@@ -127,7 +127,7 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
     QString *key = (QString *) tagData;   // the name where the picture came from used as the identifier
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList 
+    attrProcessingList
         << AttrProcessing ( "year",     NULL,      NULL         )
         << AttrProcessing ( "month",    NULL,      NULL         )
         << AttrProcessing ( "day",      NULL,      NULL         )
@@ -136,7 +136,7 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
         << AttrProcessing ( "second",   NULL,      NULL         )
         << AttrProcessing ( "msec",     NULL,      NULL         )
         << AttrProcessing ( "filename", "QString", key          )
-        << AttrProcessing ( "name",     "NULL",    NULL         )
+        << AttrProcessing ( "name",     NULL,    NULL         )
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -358,6 +358,28 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, KWEFKWordLeader *le
 }
 
 
+static void ProcessPaperBordersTag (QDomNode myNode, void*, KWEFKWordLeader* leader)
+{
+
+    double left   = 0.0;
+    double right  = 0.0;
+    double top    = 0.0;
+    double bottom = 0.0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "left",   "double", &left )
+        << AttrProcessing ( "right",  "double", &right )
+        << AttrProcessing ( "top",    "double", &top )
+        << AttrProcessing ( "bottom", "double", &bottom )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    leader->doFullPaperBorders(top, left, bottom, right);
+
+    AllowNoSubtags (myNode, leader);
+}
+
 static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 {
 
@@ -379,9 +401,14 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "spFootBody",      "",       NULL                  );
     ProcessAttributes (myNode, attrProcessingList);
 
-    AllowNoSubtags (myNode, leader);
-
     leader->doFullPaperFormat (format, width, height, orientation);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList
+        << TagProcessing ( "PAPERBORDERS", ProcessPaperBordersTag, NULL )
+        ;
+
+    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
@@ -515,7 +542,7 @@ static void ProcessDocTag ( QDomNode         myNode,
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
         ;
-        
+
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
     tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
     tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
@@ -606,6 +633,14 @@ bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, 
 {
     if ( m_worker )
         return m_worker->doFullPaperFormat (format, width, height, orientation);
+
+    return false;
+}
+
+bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, const double bottom, const double right)
+{
+    if ( m_worker )
+        return m_worker->doFullPaperBorders (top, left, bottom, right);
 
     return false;
 }

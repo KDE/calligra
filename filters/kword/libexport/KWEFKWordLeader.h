@@ -49,6 +49,7 @@ class KWEFKWordLeader
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         bool doFullDocument (const QValueList<ParaData> &);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
+        bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
         bool doOpenHead (void);
         bool doCloseHead (void);
         bool doOpenBody (void);

@@ -56,6 +56,8 @@ class KWEFBaseWorker
             const ValueListFormatData& paraFormatDataList);
         virtual bool doFullPaperFormat (const int format,
             const double width, const double height, const int orientation); // Like AbiWord's <papersize>
+        virtual bool doFullPaperBorders (const double top, const double left,
+            const double bottom, const double right); // Like KWord's <PAPERBORDERS>
         virtual bool doOpenHead (void); // Like HTML's <HEAD>
         virtual bool doCloseHead (void); // Like HTML's </HEAD>
         virtual bool doOpenBody (void); // Like HTML's <BODY>

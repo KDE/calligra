@@ -127,6 +127,7 @@ DO_FALSE_DEFINITION (doFullParagraph(const QString&, const LayoutData&, const Va
 
 DO_TRUE_DEFINITION (doFullDocumentInfo (const KWEFDocumentInfo& docInfo))
 DO_TRUE_DEFINITION (doFullPaperFormat (const int format, const double width, const double height, const int orientation))
+DO_TRUE_DEFINITION (doFullPaperBorders (const double top, const double left, const double bottom, const double right))
 DO_TRUE_DEFINITION (doOpenHead (void))
 DO_TRUE_DEFINITION (doCloseHead (void))
 DO_TRUE_DEFINITION (doOpenBody (void))
