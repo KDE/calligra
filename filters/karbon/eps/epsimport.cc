@@ -64,7 +64,7 @@ EpsImport::convert( const QCString& from, const QCString& to )
 			arg( input ).arg( m_chain->outputFile() );
 
 	// Execute it:
-	if( system( command.latin1() ) )
+	if( !system( command.latin1() ) )
 		return KoFilter::OK;
 	else
 		return KoFilter::StupidError;
