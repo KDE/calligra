@@ -44,7 +44,7 @@ noinst_HEADERS =	KDChart.h 		\
 			KDXMLTools.h
 METASOURCES = AUTO
 
-INCLUDES  = -I../include $(all_includes)
+INCLUDES  = -I$(srcdir)/.. -I$(srcdir) $(all_includes)
 
 include_HEADERS =	KDChartData.h		\
 			KDChartTableBase.h	\
