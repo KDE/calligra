@@ -132,9 +132,9 @@ public:
    * @ref KoFrame uses this border information. If an embedded document becomes active
    * then it is resized so that it has enough space to display the borders and to
    * display the same content as before the activation.
-   * So if for example all of your borders are 20 pixel, then activating the embedded
-   * document causes the KoView to move 20 pixel up/left and the size and width increas
-   * by 20+20 pixel each.
+   * So if for example all of your borders are 20 pixels, then activating the embedded
+   * document causes the KoView to move 20 pixels up/left and the size and width increases
+   * by 20+20 pixels each.
    *
    * The default border is 0.
    */
@@ -195,7 +195,7 @@ public:
   virtual int canvasYOffset() const;
 
   /**
-   * Overload this function if You need to perform some actions
+   * Overload this function if you need to perform some actions
    * after KoView (the part widget) is inserted into canvas.
    * You should call for example addChild(QWidget*) method
    * of QScrollView here, if canvas is a viewport of QScrollView.
@@ -229,7 +229,7 @@ public:
 
   /**
    * Returns the matrix which is used by the view to transform the content.
-   * Currently only sclaing is supported.
+   * Currently only scaling is supported.
    *
    * The matrix changes when calling @ref #setZoom.
    */
@@ -249,7 +249,7 @@ public:
 
   /**
    * Return a DCOP interface for this view
-   * KOffice Application are strongly recommended to reimplement this method,
+   * KOffice Applications are strongly recommended to reimplement this method,
    * so that their dcop interface provides more functionality than the basic KoViewIface
    */
   virtual DCOPObject * dcopObject();

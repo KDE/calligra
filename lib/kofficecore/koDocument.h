@@ -61,7 +61,7 @@ public:
 
     /**
      *  Constructor.
-     * The first 4  arguments are the same as the ones passed to KParts::Factory::createPart.
+     * The first 4 arguments are the same as the ones passed to KParts::Factory::createPart.
      *
      * @param parentWidget the parent widget, in case we create a wrapper widget
      *        (in single view mode).
@@ -236,14 +236,14 @@ public:
 
     /**
      *  Find the most nested child document which contains the
-     *  questionable point. The point is in the coordinate system
+     *  requested point. The point is in the coordinate system
      *  of this part. If no child document contains this point, then
      *  a pointer to this document is returned.
      *
      *  This function has to be overloaded if the document features child documents.
      *
      *  @param matrix transforms points from the documents coordinate system
-     *         to the coordinate system of the questionable point.
+     *         to the coordinate system of the requested point.
      *  @param pos is in some unknown coordinate system, but the matrix can
      *         be used to transform a point of this parts coordinate system
      *         to the coordinate system of p.
@@ -315,7 +315,7 @@ public:
 
     /**
      *  Initializes an empty document (display the template dialog!).
-     *  You have to overload this method to initalize all your document variables.
+     *  You have to overload this method to initialize all your document variables.
      */
     virtual bool initDoc() = 0;
 
