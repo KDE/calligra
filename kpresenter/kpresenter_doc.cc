@@ -918,17 +918,11 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     //add manifest line for content.xml
-    manifestWriter->startElement( "manifest:file-entry" );
-    manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
-    manifestWriter->addAttribute( "manifest:full-path", "content.xml" );
-    manifestWriter->endElement();
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
     //todo add manifest line for style.xml
 #if 0
-    manifestWriter->startElement( "manifest:file-entry" );
-    manifestWriter->addAttribute( "manifest:media-type", "text/xml" );
-    manifestWriter->addAttribute( "manifest:full-path", "style.xml" );
-    manifestWriter->endElement();
+    manifestWriter->addManifestEntry( "style.xml", "text/xml" );
 #endif
     if ( saveOnlyPage == -1 )
         emit sigProgress( 90 );
