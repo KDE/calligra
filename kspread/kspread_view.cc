@@ -684,7 +684,6 @@ void KSpreadView::initializeGlobalOperationActions()
 
 
   m_viewZoom->setEditable(true);
-  //m_viewZoom->setEditable(false);
 
   QStringList lst1;
   lst1 << "33%";
@@ -702,7 +701,6 @@ void KSpreadView::initializeGlobalOperationActions()
   lst1 << "500%";
 
   m_viewZoom->setItems( lst1 );
-  //m_viewZoom->setCurrentItem( 4 );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
@@ -3639,9 +3637,10 @@ void KSpreadView::viewZoom( const QString & s )
   if( newZoom != oldZoom )
   {
     m_pDoc->emitBeginOperation(false);
-//    double d = (double) newZoom / 100 ;
-    setZoom( newZoom, true );
+
     m_pCanvas->closeEditor();
+    setZoom( newZoom, true );
+
     m_pDoc->emitEndOperation();
   }
 }
@@ -3654,8 +3653,8 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 //   m_pDoc->setZoom( zoom );
 //   m_pDoc->newZoom();
 
-  KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ );
   m_pDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  KoView::setZoom( m_pDoc->zoomedResolutionY() /* KoView only supports one zoom */ );
 
 //  m_pDoc->newZoomAndResolution( updateViews, false )
 
