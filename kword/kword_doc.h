@@ -206,7 +206,8 @@ public:
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
 
     bool printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h,
-		    bool _viewFormattingChars = false, bool _drawVarBack = true );
+		    bool _viewFormattingChars = false, bool _drawVarBack = true, int dbx = -1, int dby = -1,
+		    int dbw = -1, int dbh = -1, const QBrush &dbback = Qt::NoBrush );
     void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
     void drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset );
@@ -371,7 +372,7 @@ public:
     KWSerialLetterDataBase *getSerialLetterDataBase() const;
     int getSerialLetterRecord() const;
     void setSerialLetterRecord( int r );
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );

@@ -1504,3 +1504,17 @@ Reggie, 18.9.1999:
   - It's possible to navigate through the records
   - It's possible to edit entries in a record
   - Adding new records works
+
+Reggie, 10.9.1999:
+------------------
+- Ooops, internally KWord used QChar for unicode stuff since quite
+  some time, but for printing/painting it was converted to char all 
+  the time. Fixed that now.
+- More work on flicker freeness and fixes
+- When creating a formula frame, libkformula is used now
+- Editing formula frames works now (with double click on it)
+  (the current way of using the kformula-toolbar is just temporary,
+  I'll make a better solution for this (use a real toolbar :-) )
+- Saving/loading formulas works
+- Focus handling for editing formulas works well now
+

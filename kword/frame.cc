@@ -524,8 +524,7 @@ void KWFrameSet::save( ostream &out )
 {
     KWFrame *frame;
 
-    for ( unsigned int i = 0; i < frames.count(); i++ )
-    {
+    for ( unsigned int i = 0; i < frames.count(); i++ ) {
         frame = getFrame( i );
         out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
             << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom()
@@ -535,8 +534,10 @@ void KWFrameSet::save( ostream &out )
             << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
             << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
             << correctQString( frame->topBrd2String() ).latin1()
-            << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" << frame->getBackgroundColor().color().red()
-            << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
+            << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" 
+	    << frame->getBackgroundColor().color().red()
+            << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() 
+	    << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
             << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
             << "\" bleftinch=\"" << frame->getBLeft().inch()
@@ -874,8 +875,7 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 void KWTextFrameSet::save( ostream &out )
 {
     QString grp = "";
-    if ( grpMgr )
-    {
+    if ( grpMgr ) {
         grp = "\" grpMgr=\"";
         grp += correctQString( grpMgr->getName() );
 
@@ -889,15 +889,15 @@ void KWTextFrameSet::save( ostream &out )
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" << static_cast<int>( removeableHeader )
+        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" 
+	<< static_cast<int>( removeableHeader )
         << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
         << "\">" << endl;
 
     KWFrameSet::save( out );
 
     KWParag *parag = getFirstParag();
-    while ( parag )
-    {
+    while ( parag ) {
         out << otag << "<PARAGRAPH>" << endl;
         parag->save( out );
         parag = parag->getNext();
@@ -917,25 +917,20 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     KWParag *last = 0L;
 
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
         KOMLParser::parseTag( tag.c_str(), name, lst );
 
         // paragraph
-        if ( name == "PARAGRAPH" )
-        {
+        if ( name == "PARAGRAPH" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
 
-            if ( !last )
-            {
+            if ( !last ) {
                 delete parags;
                 parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
-                if ( doc->getNumFrameSets() == 0 )
-                {
+                if ( doc->getNumFrameSets() == 0 ) {
                     parags->insertText( 0, " " );
                     KWFormat *format = new KWFormat( doc );
                     format->setDefaults( doc );
@@ -943,16 +938,11 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 }
                 parags->load( parser, lst );
                 last = parags;
-            }
-            else
-            {
+            } else {
                 last = new KWParag( this, doc, last, 0L, doc->getDefaultParagLayout() );
                 last->load( parser, lst );
             }
-        }
-
-        else if ( name == "FRAME" )
-        {
+        } else if ( name == "FRAME" ) {
             KWFrame rect;
             KWParagLayout::Border l, r, t, b;
             float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
@@ -974,8 +964,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
                 if ( ( *it ).m_strName == "left" )
                     rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "top" )
@@ -1077,13 +1066,10 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
             _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
             frames.append( _frame );
-        }
-
-        else
+        } else
             cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
 
-        if ( !parser.close( tag ) )
-        {
+        if ( !parser.close( tag ) ) {
             cerr << "ERR: Closing Child" << endl;
             return;
         }
@@ -1317,16 +1303,13 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
 
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-        if ( name == "IMAGE" )
-        {
+        if ( name == "IMAGE" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
 
             KWImage *_image = new KWImage();
@@ -1334,10 +1317,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             //setFileName( _image->getFilename() );
             doc->addImageRequest( _image->getFilename(), this );
             delete _image;
-        }
-
-        else if ( name == "FRAME" )
-        {
+        } else if ( name == "FRAME" ) {
             KWFrame rect;
             KWParagLayout::Border l, r, t, b;
             float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
@@ -1359,8 +1339,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
                 if ( ( *it ).m_strName == "left" )
                     rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "top" )
@@ -1462,13 +1441,10 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
             _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
             frames.append( _frame );
-        }
-
-        else
+        } else
             cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
 
-        if ( !parser.close( tag ) )
-        {
+        if ( !parser.close( tag ) ) {
             cerr << "ERR: Closing Child" << endl;
             return;
         }
@@ -1491,8 +1467,7 @@ KWPartFrameSet::KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
 /*================================================================*/
 KWPartFrameSet::~KWPartFrameSet()
 {
-    if ( frame )
-    {
+    if ( frame ) {
         frame->detach();
         delete frame;
     }
@@ -1518,7 +1493,7 @@ void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffx
                         frames.at( 0 )->width(), frames.at( 0 )->height() );
     frame->view()->mainWindow()->setActivePart( frame->view()->id() );
     frame->setFocus();
-    
+
     parentID = dynamic_cast<KWordView*>( _widget )->getID();
 }
 
@@ -1538,6 +1513,282 @@ void KWPartFrameSet::update()
     child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
 			       frames.at( 0 )->width(), frames.at( 0 )->height() ) );
 }
+
+#include <kformulaedit.h>
+#include <kformulatoolbar.h>
+
+/******************************************************************/
+/* Class: KWFormulaFrameSet                                       */
+/******************************************************************/
+
+/*================================================================*/
+KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent )
+    : KWFrameSet( _doc ), pic( 0 )
+{
+    formulaEdit = new KFormulaEdit( parent );
+    if ( pic )
+	delete pic;
+    pic = new QPicture;
+    QPainter p;
+    p.begin( pic );
+    formulaEdit->getFormula()->redraw( p );
+    p.end();
+    formulaEdit->hide();
+    
+    toolbar = new KFormulaToolBar;
+    toolbar->connectToFormula( formulaEdit );
+    toolbar->hide();
+}
+
+/*================================================================*/
+KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc )
+    : KWFrameSet( _doc ), formulaEdit( 0 ), pic( 0 )
+{
+}
+
+/*================================================================*/
+KWFormulaFrameSet::~KWFormulaFrameSet()
+{
+    //delete formulaEdit;
+    delete toolbar;
+}
+
+/*================================================================*/
+QPicture *KWFormulaFrameSet::getPicture()
+{
+    return pic;
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*diffxx*/ )
+{
+    if ( formulaEdit->parent() != _widget )
+	formulaEdit->reparent( _widget, 0, QPoint( 0, 0 ), FALSE );
+    formulaEdit->setGeometry( QRect( frames.at( 0 )->x() - diffx, frames.at( 0 )->y() - diffy,
+				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    toolbar->show();
+    formulaEdit->show();
+    _widget->setFocusProxy( formulaEdit );
+    ( ( QWidget* )_widget->parent() )->setFocusProxy( formulaEdit );
+    formulaEdit->setFocus();
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::deactivate()
+{
+    formulaEdit->hide();
+    toolbar->hide();
+    
+    if ( pic )
+	delete pic;
+    pic = new QPicture;
+    QPainter p;
+    p.begin( pic );
+    formulaEdit->getFormula()->redraw( p );
+    p.end();
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::create( QWidget *parent )
+{
+    if ( formulaEdit ) {
+	update();
+	return;
+    }
+    
+    formulaEdit = new KFormulaEdit( parent );
+    formulaEdit->hide();
+    formulaEdit->setText( text );
+    update();
+
+    toolbar = new KFormulaToolBar;
+    toolbar->connectToFormula( formulaEdit );
+    toolbar->hide();
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::update()
+{
+    if ( !formulaEdit )
+	return;
+    formulaEdit->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
+				     frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    formulaEdit->getFormula()->setPos( formulaEdit->width() / 2, formulaEdit->height() / 2 );
+    if ( pic )
+	delete pic;
+    pic = new QPicture;
+    QPainter p;
+    p.begin( pic );
+    formulaEdit->getFormula()->redraw( p );
+    p.end();
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::save( ostream &out )
+{
+    out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() ) << "\" frameInfo=\""
+        << static_cast<int>( frameInfo ) << "\">" << endl;
+
+    KWFrameSet::save( out );
+
+    out << otag << "<FORMULA>" << endl;
+    out << formulaEdit->text().utf8().data() << endl;
+    out << etag << "</FORMULA>" << endl;
+
+    out << etag << "</FRAMESET>" << endl;
+}
+
+/*================================================================*/
+void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+{
+    string tag;
+    string name;
+    string tmp;
+    
+    while ( parser.open( 0L, tag ) ) {
+        KOMLParser::parseTag( tag.c_str(), name, lst );
+
+        if ( name == "FORMULA" ) {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+            }
+	    parser.readText( tmp );
+	    text = QString::fromUtf8( tmp.c_str() );
+	    text = text.stripWhiteSpace();
+        } else if ( name == "FRAME" ) {
+            KWFrame rect;
+            KWParagLayout::Border l, r, t, b;
+            float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
+            unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
+
+            l.color = Qt::white;
+            l.style = KWParagLayout::SOLID;
+            l.ptWidth = 1;
+            r.color = Qt::white;
+            r.style = KWParagLayout::SOLID;
+            r.ptWidth = 1;
+            t.color = Qt::white;
+            t.style = KWParagLayout::SOLID;
+            t.ptWidth = 1;
+            b.color = Qt::white;
+            b.style = KWParagLayout::SOLID;
+            b.ptWidth = 1;
+            QColor c( Qt::white );
+
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ ) {
+                if ( ( *it ).m_strName == "left" )
+                    rect.setLeft( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "top" )
+                    rect.setTop( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "right" )
+                    rect.setRight( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bottom" )
+                    rect.setBottom( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "runaround" )
+                    rect.setRunAround( static_cast<RunAround>( atoi( ( *it ).m_strValue.c_str() ) ) );
+                else if ( ( *it ).m_strName == "runaroundGap" )
+                    rect.setRunAroundGap( KWUnit( atof( ( *it ).m_strValue.c_str() ) ) );
+                else if ( ( *it ).m_strName == "runaGapPT" )
+                    rapt = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "runaGapMM" )
+                    ramm = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "runaGapINCH" )
+                    rainch = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "lWidth" )
+                    l.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "rWidth" )
+                    r.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "tWidth" )
+                    t.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bWidth" )
+                    b.ptWidth = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "lRed" )
+                    l.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), l.color.green(), l.color.blue() );
+                else if ( ( *it ).m_strName == "rRed" )
+                    r.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), r.color.green(), r.color.blue() );
+                else if ( ( *it ).m_strName == "tRed" )
+                    t.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), t.color.green(), t.color.blue() );
+                else if ( ( *it ).m_strName == "bRed" )
+                    b.color.setRgb( atoi( ( *it ).m_strValue.c_str() ), b.color.green(), b.color.blue() );
+                else if ( ( *it ).m_strName == "lGreen" )
+                    l.color.setRgb( l.color.red(), atoi( ( *it ).m_strValue.c_str() ), l.color.blue() );
+                else if ( ( *it ).m_strName == "rGreen" )
+                    r.color.setRgb( r.color.red(), atoi( ( *it ).m_strValue.c_str() ), r.color.blue() );
+                else if ( ( *it ).m_strName == "tGreen" )
+                    t.color.setRgb( t.color.red(), atoi( ( *it ).m_strValue.c_str() ), t.color.blue() );
+                else if ( ( *it ).m_strName == "bGreen" )
+                    b.color.setRgb( b.color.red(), atoi( ( *it ).m_strValue.c_str() ), b.color.blue() );
+                else if ( ( *it ).m_strName == "lBlue" )
+                    l.color.setRgb( l.color.red(), l.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "rBlue" )
+                    r.color.setRgb( r.color.red(), r.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "tBlue" )
+                    t.color.setRgb( t.color.red(), t.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bBlue" )
+                    b.color.setRgb( b.color.red(), b.color.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "lStyle" )
+                    l.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "rStyle" )
+                    r.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "tStyle" )
+                    t.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bStyle" )
+                    b.style = static_cast<KWParagLayout::BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bkRed" )
+                    c.setRgb( atoi( ( *it ).m_strValue.c_str() ), c.green(), c.blue() );
+                else if ( ( *it ).m_strName == "bkGreen" )
+                    c.setRgb( c.red(), atoi( ( *it ).m_strValue.c_str() ), c.blue() );
+                else if ( ( *it ).m_strName == "bkBlue" )
+                    c.setRgb( c.red(), c.green(), atoi( ( *it ).m_strValue.c_str() ) );
+                else if ( ( *it ).m_strName == "bleftpt" )
+                    lpt = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "brightpt" )
+                    rpt = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "btoppt" )
+                    tpt = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bbottompt" )
+                    bpt = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bleftmm" )
+                    lmm = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "brightmm" )
+                    rmm = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "btopmm" )
+                    tmm = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bbottommm" )
+                    bmm = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "bleftinch" )
+                    linch = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "brightinch" )
+                    rinch = atof( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "btopinch" )
+                    tinch = atof( ( *it ).m_strValue.c_str() );
+                else if ((*it).m_strName == "bbottominch")
+                    binch = atof( ( *it ).m_strValue.c_str() );
+            } KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+					     rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
+            _frame->setLeftBorder( l );
+            _frame->setRightBorder( r );
+            _frame->setTopBorder( t );
+            _frame->setBottomBorder( b );
+            _frame->setBackgroundColor( QBrush( c ) );
+            _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+            _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+            _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+            _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+            frames.append( _frame );
+        } else
+            cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;
+
+        if ( !parser.close( tag ) ) {
+            cerr << "ERR: Closing Child" << endl;
+            return;
+        }
+    }
+}
+
 
 /******************************************************************/
 /* Class: KWGroupManager                                          */

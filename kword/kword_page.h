@@ -293,12 +293,14 @@ protected:
     void vmrCreateText();
     void vmrCreatePixmap();
     void vmrCreatePartAnSoOn();
+    void vmrCreateFormula();
     void vmrCreateTable();
     void vmdEdit( int mx, int my );
     void vmdEditFrame( int mx, int my );
 
     void paintPicture( QPainter &painter, int i );
     void paintPart( QPainter &painter, int i );
+    void paintFormula( QPainter &painter, int i );
     void paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPaintEvent *e );
     void finishPainting( QPaintEvent *e, QPainter &painter );
 
@@ -375,7 +377,7 @@ protected:
     QByteArray pasteLaterData;
     QString pasteLaterMimeType;
     QRect scrollClipRect;
-    
+
 };
 
 #endif

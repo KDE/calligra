@@ -193,12 +193,13 @@ void KWordView::init()
 	gui->getPaperWidget()->formatChanged( format );
 
     KWFrameSet *frameset;
-    for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ )
-    {
+    for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
 	frameset = m_pKWordDoc->getFrameSet( i );
 	if ( frameset->getFrameType() == FT_PART )
 	    slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
 			      dynamic_cast<KWPartFrameSet*>( frameset ) );
+	else if ( frameset->getFrameType() == FT_FORMULA )
+	    dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->getPaperWidget()->viewport() );
     }
 }
 
@@ -213,13 +214,10 @@ KWordView::~KWordView()
 /*================================================================*/
 void KWordView::clipboardDataChanged()
 {
-    if ( kapp->clipboard()->text().isEmpty() )
-    {
+    if ( kapp->clipboard()->text().isEmpty() ) {
 	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, FALSE );
 	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, FALSE );
-    }
-    else
-    {
+    } else {
 	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, TRUE );
 	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, TRUE );
     }
@@ -1172,15 +1170,15 @@ void KWordView::toolsFormula()
 {
     gui->getPaperWidget()->mmFormula();
 
-    QValueList<KoDocumentEntry>
-	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-    if ( vec.isEmpty() )
-    {
-	cout << "Got no results" << endl;
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
-	return;
-    }
-    gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
+//     QValueList<KoDocumentEntry>
+// 	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
+//     if ( vec.isEmpty() )
+//     {
+// 	cout << "Got no results" << endl;
+// 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
+// 	return;
+//     }
+//     gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
 }
 
 /*===============================================================*/

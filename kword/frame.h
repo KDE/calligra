@@ -38,11 +38,14 @@ class KWordDocument;
 class KWordChild;
 class KWordFrame;
 class KWGroupManager;
+class KFormulaEdit;
+class KFormulaToolBar;
 
-enum FrameType {FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART};
-enum FrameInfo {FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6, \
-                FI_FOOTNOTE = 7};
-enum RunAround {RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2};
+enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
+enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, 
+		 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
+		 FI_FOOTNOTE = 7 };
+enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -359,6 +362,40 @@ protected:
 
     bool _enableDrawing;
 
+};
+
+/******************************************************************/
+/* Class: KWFormulaFrameSet                                       */
+/******************************************************************/
+
+class KWFormulaFrameSet : public KWFrameSet
+{
+public:
+    KWFormulaFrameSet( KWordDocument *_doc );
+    KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent );
+    virtual ~KWFormulaFrameSet();
+
+    void create( QWidget *parent );
+    
+    virtual FrameType getFrameType()
+    { return FT_FORMULA; }
+
+    virtual QPicture *getPicture();
+
+    virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx );
+    virtual void deactivate();
+
+    virtual void update();
+
+    virtual void save( ostream &out );
+    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+
+protected:
+    KFormulaEdit *formulaEdit;
+    KFormulaToolBar *toolbar;
+    QPicture *pic;
+    QString text;
+    
 };
 
 /******************************************************************/
