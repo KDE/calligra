@@ -3,3 +3,7 @@
 	- suppotr all the pattern with \newpsstyle (p. 31, pst-user2).
 	- support all the gradient with gradangle=angle and
 		gradmidpoint=num between 0 and 1
+	- FIRST : voir filtre svg pour travailler sur le tableau de
+	  byteArray et non pas sur un fichier (évite d'avoir recours
+	  à un fichier temporaire).
+

@@ -32,7 +32,7 @@ bool TEXGRAPHExport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
                          const QString &) {
 
-    if(to != "text/x-latex" || from != "application/x-kontour")
+    if(to != "text/x-tex" || from != "application/x-kontour")
         return false;
 
     KoStore in = KoStore(QString(fileIn), KoStore::Read);
@@ -52,7 +52,7 @@ bool TEXGRAPHExport::filter(const QString &fileIn, const QString &fileOut,
     if(tempIn.open(IO_WriteOnly))
     {
         QTextStream tempStream(&tempIn);
-	tempStream.setEncoding(QTextStream::Unicode);
+	tempStream.setEncoding(QTextStream::UnicodeUTF8);
 	tempStream << buf;
     }
     tempIn.close();

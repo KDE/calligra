@@ -26,7 +26,7 @@
 
 extern "C"
 {
-    void* init_libpstricksexport()
+    void* init_libtexgraphexport()
     {
         return new TEXGRAPHExportFactory;
     }

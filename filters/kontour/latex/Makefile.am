@@ -39,7 +39,7 @@ texlauncher_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
-service_DATA = killustrator_latex_export.desktop
+service_DATA = kontour_latex_export.desktop
 servicedir = $(kde_servicesdir)
 #data_DATA = x-latex.desktop
 datadir = $(kde_mimedir)/image
