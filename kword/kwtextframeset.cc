@@ -2927,16 +2927,21 @@ KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNo
 MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& dPoint )
 {
     if (m_doc->variableCollection()->variableSetting()->displayLink()
-        && m_doc->variableCollection()->variableSetting()->underlineLink() )
-    {
-        QPoint iPoint;
-        if ( documentToInternal( dPoint, iPoint ) ) {
-            KoLinkVariable* linkVariable = dynamic_cast<KoLinkVariable *>( textObject()->variableAtPoint( iPoint ) );
-            if ( linkVariable )
-                return MEANING_MOUSE_OVER_LINK;
-        }
-    }
+        && m_doc->variableCollection()->variableSetting()->underlineLink()
+        && linkVariableUnderMouse( dPoint ) )
+      return MEANING_MOUSE_OVER_LINK;
     return MEANING_MOUSE_INSIDE_TEXT;
+}
+
+KoLinkVariable* KWTextFrameSet::linkVariableUnderMouse( const KoPoint& dPoint )
+{
+    QPoint iPoint;
+    if ( documentToInternal( dPoint, iPoint ) )
+    {
+        KoLinkVariable* linkVariable = dynamic_cast<KoLinkVariable *>( textObject()->variableAtPoint( iPoint ) );
+        return linkVariable;
+    }
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

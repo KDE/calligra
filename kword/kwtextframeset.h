@@ -303,6 +303,8 @@ public:
     QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
     bool sortText(sortType type);
 
+    KoLinkVariable* linkVariableUnderMouse( const KoPoint& dPoint );
+
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );

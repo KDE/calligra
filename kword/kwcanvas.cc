@@ -96,6 +96,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_printing = false;
     m_deleteMovingRect = false;
     m_resizedFrameInitialMinHeight = 0;
+    m_temporaryStatusBarTextShown = false;
 
     viewport()->setBackgroundMode( PaletteBase );
     viewport()->setAcceptDrops( TRUE );
@@ -1223,7 +1224,28 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
         }
     } else {
         if ( m_mouseMode == MM_EDIT )
+        {
+            MouseMeaning meaning = m_doc->getMouseMeaning( normalPoint, e->state() );
+            switch ( meaning ) {
+            case MEANING_MOUSE_OVER_LINK:
+            {
+                KWFrame* frame = m_doc->frameUnderMouse( normalPoint );
+                KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+                if (fs && fs->type() == FT_TEXT)
+                {
+                    KWTextFrameSet *frameset = static_cast<KWTextFrameSet *>(fs);
+                    //show the link target in the status bar
+                    gui()->getView()->setTemporaryStatusBarText( frameset->linkVariableUnderMouse(docPoint)->url() );
+                    m_temporaryStatusBarTextShown = true;
+                }
+                break;
+            }
+            default:
+                resetStatusBarText();
+                break;
+            }
             viewport()->setCursor( m_doc->getMouseCursor( normalPoint, e->state() ) );
+        }
     }
 }
 
@@ -2732,6 +2754,15 @@ void KWCanvas::viewportScroll( bool up )
         setContentsPos( contentsX(), contentsY() - visibleHeight() );
     else
         setContentsPos( contentsX(), contentsY() + visibleHeight() );
+}
+
+void KWCanvas::resetStatusBarText()
+{
+    if ( m_temporaryStatusBarTextShown )
+    {
+        gui()->getView()->updateFrameStatusBarItem();
+        m_temporaryStatusBarTextShown = false;
+    }
 }
 
 #include "kwcanvas.moc"

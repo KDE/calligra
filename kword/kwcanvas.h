@@ -215,6 +215,9 @@ public:
     // or directly called by pgup/pgdown if not using 'moves caret' feature.
     void viewportScroll( bool up );
 
+    /// Resets the status bar text
+    void resetStatusBarText();
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
@@ -324,6 +327,7 @@ private:
     bool m_keepRatio;//when inserting a picture
     KoDocumentEntry m_partEntry; // when inserting a part
     int m_rowColResized; // when resizing a row or column
+    bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings

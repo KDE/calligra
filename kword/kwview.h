@@ -350,6 +350,7 @@ public slots:
 
     void updatePageInfo();
     void updateFrameStatusBarItem();
+    void setTemporaryStatusBarText(const QString &text);
 
     void slotSpecialChar(QChar , const QString &);
     void slotFrameSetEditChanged();

@@ -1568,6 +1568,21 @@ void KWView::updateFrameStatusBarItem()
     }
 }
 
+void KWView::setTemporaryStatusBarText(const QString &text)
+{
+  KStatusBar * sb = statusBar();
+  if (sb )
+  {
+    if ( !m_sbFramesLabel )
+    {
+      m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+      addStatusBarItem( m_sbFramesLabel );
+    }
+    if(m_sbFramesLabel)
+      m_sbFramesLabel->setText(text);
+  }
+}
+
 void KWView::clipboardDataChanged()
 {
     if ( !m_gui || !m_doc->isReadWrite() )
