@@ -115,6 +115,7 @@ VImage::save( QDomElement& element ) const
 void
 VImage::load( const QDomElement& element )
 {
+	setState( normal );
 	m_fname = element.attribute( "fname" );
 	m_matrix.setMatrix( element.attribute( "m11", "1.0" ).toDouble(),
 						element.attribute( "m12", "0.0" ).toDouble(),
