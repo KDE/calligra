@@ -223,7 +223,7 @@ void KWStyleManager::switchStyle() {
         save();
 
     m_currentStyle = 0L;
-    int num = m_stylesList->currentItem();
+    int num = getStyleByName(m_stylesList->currentText());
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
         m_currentStyle = new KWStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
@@ -246,7 +246,7 @@ void KWStyleManager::switchTabs()
 int KWStyleManager::getStyleByName(const QString & name) {
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
 
-kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << m_changedStyles.at(i) << ") with following: " << m_changedStyles.at(i)->followingStyle()->name() << " (" << m_changedStyles.at(i)->followingStyle() << ")" << endl;
+        if(m_changedStyles.at(i) == NULL) continue;
         if(m_changedStyles.at(i)->name() == name)
             return i;
     }
