@@ -41,6 +41,11 @@ KoView* KoUnavailPart::createViewInstance( QWidget* parent, const char* name )
     return new KoUnavailView( this, parent, name );
 }
 
+bool KoUnavailPart::loadOasis( const QDomDocument&, KoOasisStyles& )
+{
+    return true;
+}
+
 bool KoUnavailPart::loadXML( QIODevice *, const QDomDocument &doc )
 {
     // Simply keep a copy of the whole document ;)
