@@ -1,4 +1,4 @@
-Last updated: 29 Oct 2004
+Last updated: 30 Oct 2004
 
 Status      Description
 ------------------------------------------------------------------
@@ -109,4 +109,10 @@ Done        Plain
               * use PMXML - http://www.projectoffice.com/xml/xml.asp
               * or find a better suited "standard" format
                   http://proj.chbs.dk/specifications/
+
+-           Use KPlato namespace for all KPlato classes
+
               
+For FIXME entries in kplato files, execute "grep grep -A 4 -B 4 -n FIXME *"
+For TODO entries in kplato files, execute "grep grep -A 4 -B 4 -n TODO *"
+
