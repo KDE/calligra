@@ -5091,25 +5091,25 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = element.namedItem( "text:p" ).toElement();
     if ( !textP.isNull() )
     {
-      QDomElement subText = textP.firstChild().toElement();
-      if ( !subText.isNull() )
+        QDomElement subText = textP.firstChild().toElement();
+        if ( !subText.isNull() )
 	{
-	  // something in <text:p>, e.g. links
-	  text = subText.text();
+            // something in <text:p>, e.g. links
+            text = subText.text();
 
-	  if ( subText.hasAttribute( "xlink:href" ) )
+            if ( subText.hasAttribute( "xlink:href" ) )
 	    {
-	      QString link = subText.attribute( "xlink:href" );
-	      text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
-	      d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
-	      d->strText = text;
+                QString link = subText.attribute( "xlink:href" );
+                text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
+                d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
+                d->strText = text;
 	    }
 	}
-      else
+        else
 	{
-	  text = textP.text(); // our text, could contain formating for value or result of formul
-	  setCellText( text );
-	  setValue( text );
+            text = textP.text(); // our text, could contain formating for value or result of formul
+            setCellText( text );
+            setValue( text );
 	}
     }
     if( element.hasAttribute( "table:value-type" ) )
@@ -5126,7 +5126,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             }
         }
 
-    // integer and floating-point value
+        // integer and floating-point value
         else if( valuetype == "float" )
         {
             bool ok = false;
@@ -5156,6 +5156,89 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 setFormatType( KSpreadFormat::Percentage );
             }
         }
+        else if ( valuetype == "date" )
+        {
+            QString value = element.attribute( "table:value" );
+            if ( value.isEmpty() )
+                value = element.attribute( "table:date-value" );
+            kdDebug() << "Type: date, value: " << value << endl;
+
+            // "1980-10-15"
+            int year, month, day;
+            bool ok = false;
+
+            int p1 = value.find( '-' );
+            if ( p1 > 0 )
+                year  = value.left( p1 ).toInt( &ok );
+
+            kdDebug() << "year: " << value.left( p1 ) << endl;
+
+            int p2 = value.find( '-', ++p1 );
+
+            if ( ok )
+                month = value.mid( p1, p2 - p1  ).toInt( &ok );
+
+            kdDebug() << "month: " << value.mid( p1, p2 - p1 ) << endl;
+
+            if ( ok )
+                day = value.right( value.length() - p2 - 1 ).toInt( &ok );
+
+            kdDebug() << "day: " << value.right( value.length() - p2 ) << endl;
+
+            if ( ok )
+            {
+                QDateTime dt( QDate( year, month, day ) );
+                //            KSpreadValue kval( dt );
+                setValue( QDate( year, month, day ) );
+                kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
+            }
+
+        }
+        else if ( valuetype == "time" )
+        {
+            QString value = element.attribute( "table:value" );
+            if ( value.isEmpty() )
+                value = element.attribute( "table:time-value" );
+            kdDebug() << "Type: time: " << value << endl;
+            // "PT15H10M12S"
+            int hours, minutes, seconds;
+            int l = value.length();
+            QString num;
+            bool ok = false;
+            for ( int i = 0; i < l; ++i )
+            {
+                if ( value[i].isNumber() )
+                {
+                    num += value[i];
+                    continue;
+                }
+                else if ( value[i] == 'H' )
+                    hours   = num.toInt( &ok );
+                else if ( value[i] == 'M' )
+                    minutes = num.toInt( &ok );
+                else if ( value[i] == 'S' )
+                    seconds = num.toInt( &ok );
+                else
+                    continue;
+
+                kdDebug() << "Num: " << num << endl;
+
+                num = "";
+                if ( !ok )
+                    break;
+            }
+            kdDebug() << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
+
+            if ( ok )
+            {
+                // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
+                // cell->setValue( kval );
+                setValue( QTime( hours % 24, minutes, seconds ) );
+                setFormatType( KSpreadFormat::Custom );
+            }
+        }
+        else
+            kdDebug()<<" type of value found : "<<valuetype<<endl;
     }
     // merged cells ?
     int colSpan = 1;
