@@ -444,7 +444,7 @@ void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView
 
 void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view )
 {
-  QRegion rgn = painter.clipRegion();
+    // QRegion rgn = painter.clipRegion();
 
   child->transform( painter );
   child->document()->paintEverything( painter, child->contentRect(), child->isTransparent(), view );
@@ -462,8 +462,9 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 	 ( manager->activePart() == (KParts::Part *)child->document() &&
 	   manager->activeWidget() == (QWidget *)view ) )
         {
-	  painter.setClipRegion( rgn );
-
+	    // painter.setClipRegion( rgn );
+	  painter.setClipping( FALSE );
+	    
 	  painter.setPen( black );
 	  painter.fillRect( -5, -5, w + 10, 5, white );
 	  painter.fillRect( -5, h, w + 10, 5, white );
@@ -491,6 +492,8 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
 	    painter.fillRect( -5, h / 2 - 3, 5, 5, color );
 	    painter.fillRect( w, h / 2 - 3, 5, 5, color );
 	  }
+	  
+	  painter.setClipping( TRUE );
       }
   }
 }
