@@ -216,6 +216,8 @@ public:
 
 private:
 
+  void emitSignals();
+
   KoCommandList m_history;
   int m_current;
   uint m_maxUndoRedo;

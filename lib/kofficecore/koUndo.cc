@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// only for debug
+#include <iostream.h>
+
 #include "koUndo.h"
 
 KoCommandHistory::KoCommandHistory( int _number, int _maxundoredo )
@@ -55,7 +58,7 @@ void KoCommandHistory::addCommand( KoCommand* _command )
   else
     m_current++;
 
-  emit undoRedoChanged( getUndoName(), getRedoName() );
+  emitSignals();
 }
 
 void KoCommandHistory::undo()
@@ -65,7 +68,7 @@ void KoCommandHistory::undo()
     m_history.at( m_current )->unexecute();
     m_current--;
 
-    emit undoRedoChanged( getUndoName(), getRedoName() );
+    emitSignals();
   }
 }
 
@@ -78,7 +81,7 @@ void KoCommandHistory::redo()
       m_current++;
       m_history.at( m_current )->execute();
 
-      emit undoRedoChanged( getUndoName(), getRedoName() );
+      emitSignals();
     }
   }
   else
@@ -88,7 +91,7 @@ void KoCommandHistory::redo()
       m_current++;
       m_history.at( m_current )->execute();
  
-      emit undoRedoChanged( getUndoName(), getRedoName() );
+      emitSignals();
     }
   }
 }
@@ -121,14 +124,44 @@ QString KoCommandHistory::getRedoName()
 
 QStringList KoCommandHistory::getUndoList()
 {
+  int i;
+  int item;
+  QString tmp;
   QStringList list;
+
+  for( i = 0; i < m_maxUndoRedo; i++ )
+  {
+    item = m_current - i;
+    if( item >= 0 )
+    {
+      tmp = m_history.at( item )->name();
+      list.append( tmp );
+    }
+  }
+
+  cout << "UNDO-Items : " << list.count() << endl;
 
   return list;
 }
 
 QStringList KoCommandHistory::getRedoList()
 {
+  int i;
+  int item;
+  QString tmp;
   QStringList list;
+
+  for( i = 0; i < m_maxUndoRedo; i++ )
+  {
+    item = m_current + i + 1;
+    if( item < m_history.count() )
+    {
+      tmp = m_history.at( item )->name();
+      list.append( tmp );
+    }
+  }
+
+  cout << "REDO-Items : " << list.count() << endl;
  
   return list;
 }
@@ -157,7 +190,13 @@ void KoCommandHistory::setNumToolbarItems( int _number )
 {
   m_numToolbarItems = _number;
 
+  emitSignals();
+}
+
+void KoCommandHistory::emitSignals()
+{
   emit undoRedoChanged( getUndoName(), getRedoName() );
+  emit undoRedoChanged( getUndoList(), getRedoList() );
 }
 
 #include "koUndo.moc"
