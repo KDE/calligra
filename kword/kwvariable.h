@@ -171,7 +171,7 @@ class KWStatisticVariable : public KoVariable
 {
 public:
     KWStatisticVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
-    enum { VST_STATISTIC_NB_FRAME = 0, VST_STATISTIC_NB_PICTURE = 1, VST_STATISTIC_NB_TABLE = 2, VST_STATISTIC_NB_EMBEDDED = 3, VST_STATISTIC_NB_WORD = 4, VST_STATISTIC_NB_SENTENCE = 5, VST_STATISTIC_NB_LINES = 6 };
+    enum { VST_STATISTIC_NB_FRAME = 0, VST_STATISTIC_NB_PICTURE = 1, VST_STATISTIC_NB_TABLE = 2, VST_STATISTIC_NB_EMBEDDED = 3, VST_STATISTIC_NB_WORD = 4, VST_STATISTIC_NB_SENTENCE = 5, VST_STATISTIC_NB_LINES = 6, VST_STATISTIC_NB_CHARACTERE = 7 };
 
     virtual VariableType type() const
     { return VT_STATISTIC; }

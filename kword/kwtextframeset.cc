@@ -881,11 +881,14 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
     KoTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
-        progress->setProgress(progress->progress()+1);
-        // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
-        kapp->processEvents();
-        if ( progress->wasCancelled() )
-            return false;
+        if (  progress )
+        {
+            progress->setProgress(progress->progress()+1);
+            // MA: resizing if KWStatisticsDialog does not work correct with this enabled, don't know why
+            kapp->processEvents();
+            if ( progress->wasCancelled() )
+                return false;
+        }
         // start of a table
 /*        if ( parag->at(0)->isCustom())
         {

@@ -106,7 +106,8 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
                   localName == "object-count"  ||
                   localName == "image-count"  ||
                   localName == "paragraph-count"  ||
-                  localName == "word-count"  )
+                  localName == "word-count"  ||
+                  localName == "character-count")
         {
             QString key = "NUMBER";
             int type = VT_STATISTIC;
@@ -593,7 +594,7 @@ QStringList KWStatisticVariable::actionTexts()
     lst << i18n( "Number of Word" );
     lst << i18n( "Number of Sentence" );
     lst << i18n( "Number of Lines" );
-
+    lst << i18n( "Number of Characteres" );
     return lst;
 }
 
@@ -641,6 +642,11 @@ void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
         m_subtype = VST_STATISTIC_NB_WORD;
         m_varValue = QVariant( elem.text().toInt() );
     }
+    else if ( localName == "character-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_CHARACTERE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
     //TODO other copy
 }
 
@@ -673,6 +679,11 @@ void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
         break;
     case VST_STATISTIC_NB_SENTENCE:
         //TODO
+        break;
+    case VST_STATISTIC_NB_CHARACTERE:
+        writer.startElement( "text:character-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
         break;
     case VST_STATISTIC_NB_LINES:
         //TODO
@@ -710,6 +721,10 @@ QString KWStatisticVariable::fieldCode()
     {
         return i18n( "Number of Lines" );
     }
+    else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
+    {
+        return i18n( "Number of Characteres" );
+    }
     else
         return i18n( "Number of Frame" );
 }
@@ -725,6 +740,16 @@ void KWStatisticVariable::recalc()
         return;
     }
     int nb = 0;
+    ulong charsWithSpace = 0L;
+    ulong charsWithoutSpace = 0L;
+    ulong words = 0L;
+    ulong sentences = 0L;
+    ulong lines = 0L;
+    ulong syllables = 0L;
+    bool frameInfo = ( m_subtype == VST_STATISTIC_NB_WORD ||
+                        m_subtype == VST_STATISTIC_NB_SENTENCE ||
+                        m_subtype == VST_STATISTIC_NB_LINES ||
+                        m_subtype == VST_STATISTIC_NB_CHARACTERE);
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
     {
@@ -745,23 +770,33 @@ void KWStatisticVariable::recalc()
             {
                 ++nb;
             }
+            if ( frameInfo )
+            {
+            if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
+                frameSet->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
+            }
         }
-#if 0
-        else if( m_subtype == VST_STATISTIC_NB_WORD )
+        if ( frameInfo )
         {
-            return i18n( "Number of Word" );
+            if( m_subtype == VST_STATISTIC_NB_WORD )
+            {
+                nb = words;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+            {
+                nb = sentences;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_LINES )
+            {
+                nb = lines;
+            }
+            else if ( m_subtype == VST_STATISTIC_NB_CHARACTERE )
+            {
+                nb = charsWithSpace;
+            }
+            else
+                nb = 0;
         }
-        else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
-        {
-            return i18n( "Number of Sentence" );
-        }
-        else if( m_subtype == VST_STATISTIC_NB_LINES )
-        {
-            return i18n( "Number of Lines" );
-        }
-        else
-            return i18n( "Number of Frame" );
-#endif
     }
     m_varValue = QVariant(nb);
     resize();
