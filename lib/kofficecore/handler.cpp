@@ -253,7 +253,7 @@ bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
 					     d->m_geometryDragStart.width(), d->m_geometryDragStart.height() ) );
 	d->m_dragChild->setRotationPoint( QPoint( d->m_rotationDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
 					       d->m_rotationDragStart.y() + pos.y() - d->m_mouseDragStart.y() ) );
-	((QWidget*)target())->repaint( bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, true ) ) );
+	((QWidget*)target())->repaint( bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, false ) ) );
 
 	return true;
     }
