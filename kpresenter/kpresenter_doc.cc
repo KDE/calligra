@@ -1004,13 +1004,18 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
     QDomElement page=element.firstChild().toElement();
     int i=0;
     while(!page.isNull()) {
-        //test if there is a page at this index
-        //=> don't add new page if there is again a page
-        if(i>(m_pageList.count()-1))
-            m_pageList.append(new KPrPage(this));
-        m_pageList.at(i)->background()->load(page);
-        page=page.nextSibling().toElement();
-        i++;
+        if(m_pageWhereLoadObject)
+            m_pageWhereLoadObject->background()->load(page);
+        else
+        {
+            //test if there is a page at this index
+            //=> don't add new page if there is again a page
+            if(i>(m_pageList.count()-1))
+                m_pageList.append(new KPrPage(this));
+            m_pageList.at(i)->background()->load(page);
+            i++;
+        }
+         page=page.nextSibling().toElement();
     }
 }
 
