@@ -764,10 +764,12 @@ void KWTextParag::printRTDebug( int info )
       }*/
     kdDebug() << "  Style: " << styleName() << endl;
     kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
-    if ( counter() )
-        kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
-
-    if ( info == 1 )
+    if ( info == 0 ) // paragraph info
+    {
+        if ( counter() )
+            kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
+        kdDebug() << "rect() : " << DEBUGRECT( rect() ) << endl;
+    } else if ( info == 1 ) // formatting info
     {
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
                   << " fontsize:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
@@ -959,6 +961,9 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
 void KWParagLayout::initialise()
 {
     alignment = Qt::AlignLeft;
+    for ( int i = 0 ; i < 5 ; ++i ) // use memset ?
+        margins[i] = 0;
+    lineSpacing = 0;
     counter = 0L;
     leftBorder.ptWidth = 0;
     rightBorder.ptWidth = 0;
