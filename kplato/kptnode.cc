@@ -56,6 +56,7 @@ void KPTNode::init() {
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
+    m_schedulingError = false;
     m_visitedForward = false;
     m_visitedBackward = false;
 }
@@ -428,6 +429,7 @@ void KPTNode::initiateCalculation() {
     m_visitedBackward = false;
     m_resourceError = false;
     m_resourceOverbooked = false;
+    m_schedulingError = false;
     clearProxyRelations();
     QPtrListIterator<KPTNode> it = m_nodes;
     for (; it.current(); ++it) {

@@ -64,7 +64,7 @@ class KPTNode {
     friend class KPTProject;
 
 public:
-    enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn, MustFinishOn, FixedInterval };
+    enum ConstraintType { ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval };
 
     KPTNode(KPTNode *parent = 0);
 
@@ -263,8 +263,10 @@ public:
     bool resourceError() const { return m_resourceError; }
 
     virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
-    virtual bool resourceOverbooked() { return m_resourceOverbooked; }
+    virtual bool resourceOverbooked() const { return m_resourceOverbooked; }
 
+    virtual bool schedulingError() const { return m_schedulingError; }
+    
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
@@ -401,6 +403,7 @@ protected:
     //TODO: better error indications
     bool m_resourceError;
     bool m_resourceOverbooked;
+    bool m_schedulingError;
 
     QString m_id; // unique id
     

@@ -207,10 +207,15 @@ bool KPTProject::load(QDomElement &element) {
     m_description = element.attribute("description");
     // Allow for both numeric and text
     bool ok = false;
-    QString constraint = element.attribute("scheduling","0");
-    m_constraint = (KPTNode::ConstraintType)constraint.toInt(&ok);
+    QString c = element.attribute("scheduling","0");
+    m_constraint = (KPTNode::ConstraintType)c.toInt(&ok);
     if (!ok)
-        KPTNode::setConstraint(constraint); // hmmm, why do I need KPTNode::?
+        KPTNode::setConstraint(c); // hmmm, why do I need KPTNode::?
+    if (m_constraint != KPTNode::MustStartOn ||
+        m_constraint != KPTNode::MustFinishOn) {
+        kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
+        setConstraint(KPTNode::MustStartOn);
+    }
 
     KPTDateTime dt( QDateTime::currentDateTime() );
     dt = dt.fromString( element.attribute("project-start", dt.toString()) );
@@ -315,7 +320,7 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());
     me.setAttribute("scheduling",constraintToString());
-
+    
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);
     for (; calit.current(); ++calit) {

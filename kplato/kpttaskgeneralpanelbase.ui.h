@@ -191,3 +191,23 @@ void KPTTaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
 {
     estimate->setFieldUnit(field, unit);
 }
+
+
+void KPTTaskGeneralPanelBase::startTimeChanged( const QDateTime &dt )
+{
+    if (dt > endTime()) {
+ scheduleEndTime->blockSignals(true);
+        setEndTime(dt);
+ scheduleEndTime->blockSignals(false);
+    }
+}
+
+
+void KPTTaskGeneralPanelBase::endTimeChanged( const QDateTime &dt )
+{
+    if (dt < startTime()) {
+ scheduleStartTime->blockSignals(true);
+ setStartTime(dt);
+        scheduleStartTime->blockSignals(false);
+    }
+}

@@ -406,11 +406,6 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         dur.addSeconds(1); // avoid bug in KDGannt
     item->setStartTime(time);
     item->setEndTime(task->endTime());
-    if (task->resourceOverbooked() || task->resourceError()) {
-        QColor c(yellow);
-        item->setColors(c,c,c);
-        //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
-    }
     //item->setOpen(true);
     if (m_showSlack) { // Test
         item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
@@ -420,8 +415,10 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     }
     item->setText(task->name());
     //TODO i18n
-    QString w="Task: " + task->name() + '\n';
-    w += "Float: " ;
+    QString w="Name: " + task->name();
+    w += "\nStart: " + task->startTime().toString();
+    w += "\nEnd  : " + task->endTime().toString();
+    w += "\nFloat: ";
     if (task->getEarliestStart() != task->startTime())
         w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
     else if (task->getLatestFinish() != task->endTime())
@@ -429,6 +426,28 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     else
         w+= "0h";
 
+    QString sts;
+    bool ok = true;
+    if (task->resourceError()) {
+        sts += "\nNo resource assigned";
+        ok = false;
+    }
+    if (task->resourceOverbooked()) {
+        sts += "\nResource overbooked";
+        ok = false;
+    }
+    if (task->schedulingError()) {
+        sts += "\nScheduling conflict";
+        ok = false;
+    }
+    if (ok) {
+        QColor c(green);
+        item->setColors(c,c,c);
+    } else {
+        w += sts;
+        QColor c(yellow);
+        item->setColors(c,c,c);
+    }
     item->setTooltipText(w);
     setDrawn(item, true);
 }
@@ -446,6 +465,30 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
     item->setText(task->name());
+    //TODO i18n
+    QString w="Name: " + task->name();
+    w += "\nTime: " + task->startTime().toString();
+    w += "\nFloat: ";
+    if (task->getEarliestStart() != task->startTime())
+        w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
+    else if (task->getLatestFinish() != task->endTime())
+        w += QString("%1h").arg((double)(task->endTime().secsTo(task->getLatestFinish()))/(double(2600)), 0, 'f', 1);
+    else
+        w+= "0h";
+
+    bool ok = true;
+    if (task->schedulingError()) {
+        w += "\nScheduling conflict";
+        ok = false;
+    }
+    if (ok) {
+        QColor c(green);
+        item->setColors(c,c,c);
+    } else {
+        QColor c(yellow);
+        item->setColors(c,c,c);
+    }
+    item->setTooltipText(w);
     setDrawn(item, true);
 }
 

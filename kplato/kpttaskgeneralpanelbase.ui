@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>693</width>
+            <width>658</width>
             <height>397</height>
         </rect>
     </property>
@@ -139,58 +139,6 @@
                 <property name="margin">
                     <number>4</number>
                 </property>
-                <widget class="QLayoutWidget" row="3" column="1">
-                    <property name="name">
-                        <cstring>layout14</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Optimistic</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>optimisticValueoptimisticValue</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>optimisticValue</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>0</number>
-                            </property>
-                            <property name="minValue">
-                                <number>-99</number>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer3_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>40</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
-                </widget>
                 <widget class="KComboBox" row="2" column="1">
                     <item>
                         <property name="text">
@@ -225,23 +173,6 @@
                     <property name="sizeHint">
                         <size>
                             <width>207</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <spacer row="1" column="0">
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>88</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -313,14 +244,6 @@
                         <string>Estimate</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Uncertainty</string>
-                    </property>
-                </widget>
                 <widget class="KDateTimeWidget" row="1" column="2">
                     <property name="name">
                         <cstring>scheduleEndTime</cstring>
@@ -329,57 +252,136 @@
                         <string>End time or Latest finish</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="3" column="2">
-                    <property name="name">
-                        <cstring>layout18</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Pessimistic</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>201</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
-                </widget>
                 <widget class="KPTDurationWidget" row="2" column="2">
                     <property name="name">
                         <cstring>estimate</cstring>
                     </property>
                 </widget>
+                <widget class="QLayoutWidget" row="3" column="2">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout14</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Optimistic</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>optimisticValueoptimisticValue</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>optimisticValue</cstring>
+                                    </property>
+                                    <property name="suffix">
+                                        <string>%</string>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>-99</number>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout18</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Pessimistic</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>pessimisticValue</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QSpinBox">
+                                    <property name="name">
+                                        <cstring>pessimisticValue</cstring>
+                                    </property>
+                                    <property name="suffix">
+                                        <string>%</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer row="3" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>110</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="1" column="0">
+                    <property name="name">
+                        <cstring>spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>88</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="3" column="0">
+                    <property name="name">
+                        <cstring>spacer4_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>88</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </grid>
         </widget>
         <widget class="QLayoutWidget">
@@ -544,6 +546,18 @@
         <receiver>KPTTaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
+    <connection>
+        <sender>scheduleStartTime</sender>
+        <signal>valueChanged(const QDateTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>startTimeChanged(const QDateTime&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>scheduleEndTime</sender>
+        <signal>valueChanged(const QDateTime&amp;)</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>endTimeChanged(const QDateTime&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>chooseLeader</tabstop>
@@ -582,6 +596,8 @@
     <slot>setEstimateFields( int mask )</slot>
     <slot>setEstimateScales( int day )</slot>
     <slot>setEstimateFieldUnit( int field, QString unit )</slot>
+    <slot>startTimeChanged( const QDateTime &amp; dt )</slot>
+    <slot>endTimeChanged( const QDateTime &amp; dt )</slot>
 </slots>
 <functions>
     <function returnType="int">schedulingType() const</function>
