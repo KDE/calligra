@@ -3581,4 +3581,11 @@ KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num )
 
 }
 
+void KWDocument::updateTextFrameSetEdit()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->slotFrameSetEditChanged();
+
+}
+
 #include "kwdoc.moc"

@@ -4454,6 +4454,8 @@ void KWView::slotFrameSetEditChanged()
     bool hasSelection = false;
     if ( edit ) {
         hasSelection = edit->textFrameSet()->hasSelection();
+        if ( edit->textFrameSet()->textObject()->protectContent())
+            rw = false;
     }
     else {
         KWFrameSetEdit * e = m_gui->canvasWidget()->currentFrameSetEdit();

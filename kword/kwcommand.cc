@@ -1317,10 +1317,12 @@ KWProtectContentCommand::KWProtectContentCommand( const QString &name, KWTextFra
 void KWProtectContentCommand::execute()
 {
     m_pFrameSet->textObject()->setProtectContent(m_bProtect);
+    m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
 }
 
 void KWProtectContentCommand::unexecute()
 {
     m_pFrameSet->textObject()->setProtectContent(!m_bProtect);
+    m_pFrameSet->kWordDocument()->updateTextFrameSetEdit();
 }
 

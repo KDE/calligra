@@ -549,7 +549,7 @@ public:
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
-
+    void updateTextFrameSetEdit();
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();
