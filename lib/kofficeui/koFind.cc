@@ -271,12 +271,13 @@ void KoFindDialog::showPatterns()
         { I18N_NOOP("Optional"),                      "?",        0 },
         { I18N_NOOP("Escape"),                        "\\",       0 },
         { I18N_NOOP("TAB"),                           "\\t",      0 },
-        { I18N_NOOP("NL"),                            "\\n",      0 },
-        { I18N_NOOP("CR"),                            "\\r",      0 },
+        { I18N_NOOP("Newline"),                       "\\n",      0 },
+        { I18N_NOOP("Carriage Return"),               "\\r",      0 },
         { I18N_NOOP("White Space"),                   "\\s",      0 },
         { I18N_NOOP("Digit"),                         "\\d",      0 },
-        { I18N_NOOP("Unicode point"),                 "\x0000",   0 },
-        { I18N_NOOP("ASCII/Latin-1 character"),       "\000",     0 }
+        // Those don't work
+        //{ I18N_NOOP("Unicode point"),               "\x0000",   0 },
+        //{ I18N_NOOP("ASCII/Latin-1 character"),       "\000",     0 }
     };
     int i;
 
