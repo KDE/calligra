@@ -446,7 +446,7 @@ QDomDocument FormulaStringParser::parse()
     head = parseAssign();
     //head->output( cout );
     if ( !eol() ) {
-        error( QString( i18n( "abouted parsing at %1:%2" ) ).arg( line ).arg( column ) );
+        error( QString( i18n( "Aborted parsing at %1:%2" ) ).arg( line ).arg( column ) );
     }
 
     QDomDocument doc("KFORMULA");
@@ -613,10 +613,10 @@ ParserNode* FormulaStringParser::parsePrimary()
         expect( RB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "]" ) );
         MatrixNode* node = new MatrixNode( rows );
         if ( node->columns() == 0 ) {
-            error( QString( i18n( "null columns in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
+            error( QString( i18n( "Null columns in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
         }
         if ( node->rows() == 0 ) {
-            error( QString( i18n( "null rows in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
+            error( QString( i18n( "Null rows in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
         }
         return node;
     }
