@@ -23,11 +23,17 @@
 #include <qstringlist.h>
 #include <qdom.h>
 #include <qtextstream.h>
+#include <qpixmap.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 
+#include <kozoomhandler.h>
+
 #include "kivio_layer.h"
 #include "kivio_page.h"
+#include "kivio_screen_painter.h"
+#include "kivio_intra_stencil_data.h"
 
 KivioDragObject::KivioDragObject(QWidget* dragSource, const char* name)
   : QDragObject(dragSource, name)
@@ -43,6 +49,9 @@ const char* KivioDragObject::format(int i) const
 {
   if(i < NumEncodeFormats) {
     return m_encodeMimeList[i];
+  } else {
+    QImageDrag id;
+    return id.format(i - NumEncodeFormats);
   }
 
   return 0;
@@ -50,11 +59,15 @@ const char* KivioDragObject::format(int i) const
 
 QByteArray KivioDragObject::encodedData(const char* mimetype) const
 {
+  kdDebug() << "KivioDragObject: mimetype = " << mimetype << endl;
+
   if((m_encodeMimeList[0] == mimetype) ||
     (m_encodeMimeList[1] == mimetype) ||
     (m_encodeMimeList[2] == mimetype))
   {
     return kivioEncoded();
+  } else if(qstrnicmp(mimetype, "image/", 6) == 0) {
+    return imageEncoded(mimetype);
   }
 
   return QByteArray();
@@ -103,6 +116,11 @@ void KivioDragObject::setStencilList(QPtrList<KivioStencil> l)
   }
 }
 
+void KivioDragObject::setStencilRect(KivioRect r)
+{
+  m_stencilRect = r;
+}
+
 QByteArray KivioDragObject::kivioEncoded() const
 {
   if(m_stencilList.count() <= 0)
@@ -123,6 +141,35 @@ QByteArray KivioDragObject::kivioEncoded() const
   ts << elem;
 
   return result;
+}
+
+QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
+{
+  kdDebug() << "Encoding..." << endl;
+  KoZoomHandler zoomHandler;
+  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  QPixmap buffer(zoomHandler.zoomItX(m_stencilRect.w()), zoomHandler.zoomItY(m_stencilRect.h()));
+  buffer.fill(Qt::white);
+  KivioScreenPainter p;
+  p.start( &buffer );
+  KivioIntraStencilData data;
+  data.painter = &p;
+  data.zoomHandler = &zoomHandler;
+  data.printing = true;
+  KivioStencil *stencil = 0;
+  QPtrListIterator<KivioStencil> it(m_stencilList);
+
+  while((stencil = it.current()) != 0) {
+    ++it;
+    stencil->paint(&data);
+  }
+
+  p.stop();
+
+  QImageDrag id;
+  id.setImage(buffer.convertToImage());
+  kdDebug() << "Encoding ready!" << endl;
+  return id.encodedData(mimetype);
 }
 
 #include "kiviodragobject.moc"

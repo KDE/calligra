@@ -390,7 +390,6 @@ void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
   KivioStencil *pStencil;
   KivioIntraStencilData data;
   KoZoomHandler zoomHandler;
-  // FIXME: Hmmm... resolution sucks ;)
   zoomHandler.setZoomAndResolution(100, xdpi, ydpi);
 
   data.painter = &painter;
@@ -941,113 +940,49 @@ void KivioPage::copy()
   // push to clipbaord
   KivioDragObject* kdo = new KivioDragObject();
   kdo->setStencilList(m_lstSelection);
+  kdo->setStencilRect(getRectForAllSelectedStencils());
   QApplication::clipboard()->setData(kdo);
 }
 
 void KivioPage::cut()
 {
-    KivioGroupStencil *pGroup = new KivioGroupStencil();
-    KivioStencil *pStencil;
-    KivioLayer *pLayer;
-    bool safe=true;
+  KivioStencil *pStencil;
+  KivioLayer *pLayer;
+  bool safe=true;
 
-    if( m_lstSelection.count() <= 0 )
-        return;
+  if( m_lstSelection.count() <= 0 )
+      return;
 
-    pLayer = m_pCurLayer;
+  pLayer = m_pCurLayer;
 
-    // Make sure none of them are protected from deletion
-    pStencil = pLayer->firstStencil();
-    while( pStencil )
+  // Make sure none of them are protected from deletion
+  pStencil = pLayer->firstStencil();
+  while( pStencil )
+  {
+    if( isStencilSelected( pStencil )==true )
     {
-        if( isStencilSelected( pStencil )==true )
-        {
-	   if( pStencil->protection()->at(kpDeletion)==true )
-	   {
-	      safe=false;
-	   }
-        }
-
-        pStencil = pLayer->nextStencil();
-    }
-    if( safe==false )
-    {
-       KMessageBox::information(NULL, i18n("One of the stencils has protection from deletion. You cannot cut or delete this stencil."), i18n("Protection From Delete") );
-
-       return;
+      if( pStencil->protection()->at(kpDeletion)==true )
+      {
+	safe=false;
+      }
     }
 
+    pStencil = pLayer->nextStencil();
+  }
 
-    pStencil = pLayer->firstStencil();
-    while( pStencil )
-    {
-        if( isStencilSelected( pStencil )==true )
-        {
-            pGroup->addToGroup( pStencil->duplicate() );
-        }
+  if( safe==false )
+  {
+    KMessageBox::information(NULL, i18n("One of the stencils has protection from deletion. You cannot cut or delete this stencil."), i18n("Protection From Delete") );
 
-        pStencil = pLayer->nextStencil();
-    }
+    return;
+  }
 
-    deleteSelectedStencils();
-
-    m_pDoc->setClipboard( pGroup );
+  copy();
+  deleteSelectedStencils();
 }
 
 void KivioPage::paste(KoZoomHandler* zoom)
 {
-/*  KivioStencil *pGroup;
-  KivioStencil *pStencil, *pDup;
-  QPtrList<KivioStencil> *pList;
-  QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
-
-  pSelectThese->setAutoDelete(false);
-
-  pGroup = m_pDoc->clipboard();
-
-  if( !pGroup )
-  {
-    delete pSelectThese;
-    return;
-  }
-
-  // If there is a list, it is a group stencil
-  pList = pGroup->groupList();
-
-  if( pList )
-  {
-    pStencil = pList->first();
-
-    while( pStencil )
-    {
-      pDup = pStencil->duplicate();
-      // FIXME: Make this offset configurable
-      pDup->setPosition( pDup->x() + 10.0f, pDup->y() + 10.0f );
-      addStencil( pDup );
-      pSelectThese->append( pDup );
-      pStencil = pList->next();
-    }
-  }
-
-  unselectAllStencils();
-
-  // Now iterate through the selectThese list and select
-  // those stencils
-  pStencil = pSelectThese->first();
-
-  while( pStencil )
-  {
-    if(pStencil->type() == kstConnector) {
-      pStencil->searchForConnections(this, zoom->unzoomItY(4));
-    }
-
-    selectStencil( pStencil );
-    pStencil = pSelectThese->next();
-  }
-
-
-  delete pSelectThese;
-*/
   QPtrList<KivioStencil> list;
   list.setAutoDelete(false);
   KivioDragObject kdo;
@@ -1072,7 +1007,7 @@ void KivioPage::paste(KoZoomHandler* zoom)
       selectStencil(stencil);
       stencil = list.next();
     }
-}
+  }
 }
 
 int KivioPage::generateStencilIds(int next)
