@@ -9,6 +9,10 @@ lib_LTLIBRARIES =libstraight_connector.la
 
 libstraight_connector_la_LDFLAGS = -version-info 1
 
+# Hack to make it work (dave m)
+libstraight_connector_la_LIBADD = \
+    $(top_builddir)/kivio/kiviopart/libkiviopart.la
+
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tklib\
