@@ -52,7 +52,6 @@ public:
     KPTPart *getPart()const;
 
     QPopupMenu *popupMenu( const QString& name );
-	void updateViews();
 
 public slots:
 
@@ -80,10 +79,10 @@ protected slots:
 #ifndef NDEBUG
     void slotPrintDebug();
 #endif
-	void timerDone(); //HACK
-	
+
 protected:
     virtual void updateReadWrite(bool readwrite);
+	KPTNode *currentNode();
 
 private:
     KPTGanttView *m_ganttview;

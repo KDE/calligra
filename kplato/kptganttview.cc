@@ -31,7 +31,6 @@
 #include "KDGanttViewTaskItem.h"
 #include "KDGanttViewSummaryItem.h"
 #include "KDGanttViewEventItem.h"
-#include "itemAttributeDialog.h"
 
 #include <kdebug.h>
 
@@ -48,7 +47,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
 	m_currentItem(0)
 {
     setScale(KDGanttView::Day);
-	draw(view->getPart()->getProject());
+	//draw(view->getPart()->getProject());
     
 	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
@@ -65,7 +64,7 @@ void KPTGanttView::zoom(double zoom)
 
 void KPTGanttView::clear()
 {
-	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator()); 
+	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator());
 	for ( ; nit.current(); ++nit )
 	{
 		nit.current()->setGanttItem(0);
@@ -73,7 +72,7 @@ void KPTGanttView::clear()
 	KDGanttView::clear();
 }
 
-void KPTGanttView::draw(KPTNode &node) 
+void KPTGanttView::draw(KPTNode &node)
 {
     kdDebug()<<k_funcinfo<<endl;
 	clear();
@@ -81,7 +80,7 @@ void KPTGanttView::draw(KPTNode &node)
 	KPTDuration *dur;
 
 	if (node.type() == KPTProject::TYPE)
-    {	
+    {
 	    KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(this, node);
 		time = node.getStartTime();
 		dur = node.getExpectedDuration();
@@ -92,14 +91,14 @@ void KPTGanttView::draw(KPTNode &node)
 		node.setGanttItem(item);
 		delete time;
 		delete dur;
-	
+
 	    drawChildren(item, node);
-    }		
+    }
 	else
 		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
-	
+
 	// Relations
-	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator()); 
+	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator());
 	for ( ; nit.current(); ++nit )
 	{
 		KPTNode *n = nit.current();
@@ -110,7 +109,7 @@ void KPTGanttView::draw(KPTNode &node)
 			{
     			kdDebug()<<k_funcinfo<<"Relations for node="<<n->name()<<" to "<<rel->child()->name()<<endl;
 				//KDGanttViewTaskLink *link = KDGanttViewTaskLink(n->ganttItem(), rel->child()->ganttItem());
-				
+
 			}
 		}
 	}
@@ -120,7 +119,7 @@ void KPTGanttView::draw(KPTNode &node)
 
 void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &parentNode)
 {
-	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator()); 
+	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator());
 	for ( nit.toLast(); nit.current(); --nit )
 	{
 		KPTNode *n = nit.current();
@@ -237,8 +236,5 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
 
 void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* item)
 {
-/*    itemAttributeDialog *dia = new itemAttributeDialog();
-	dia->exec();
-	delete dia;*/
 }
 #include "kptganttview.moc"

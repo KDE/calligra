@@ -84,6 +84,12 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 	m_pertview = new KPTPertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
 
+	// HACK: Avoid crash
+	// If gantt view is shown first, we have a crash...
+	m_tab->raiseWidget(m_pertview);
+
+    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
+
 	// The menu items
     // ------ Edit
     actionEditCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
@@ -144,22 +150,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 #endif
 #endif
 
-
-    // If I do this, QBoxLayout::setGeometry() crashes. Please try and report (it could be my system)
-    //m_ganttview->draw(getPart()->getProject());
-    //connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
-    // HACK: so I do this instead...
-    QTimer *t = new QTimer(this);
-	connect( t, SIGNAL(timeout()), this, SLOT(timerDone()) );
-	t->start( 1000, TRUE );
-
-}
-
-// HACK
-void KPTView::timerDone()
-{
-    slotUpdate(false);
-    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
 }
 
 void KPTView::setZoom(double zoom) {
@@ -182,6 +172,7 @@ void KPTView::slotEditPaste() {
 
 void KPTView::slotViewGantt() {
     kdDebug()<<k_funcinfo<<endl;
+	m_ganttview->draw(getPart()->getProject());
     m_tab->raiseWidget(m_ganttview);
 }
 
@@ -195,8 +186,8 @@ void KPTView::slotViewResources() {
 }
 
 void KPTView::slotProjectEdit() {
-    getPart()->editProject();
-    slotViewGantt();
+    if (getPart()->getProject().openDialog())
+	    slotUpdate(true);
 }
 
 void KPTView::slotProjectCalculate() {
@@ -207,9 +198,9 @@ void KPTView::slotProjectCalculate() {
 
 
 void KPTView::slotAddSubProject() {
-    KPTProject *node = new KPTProject(m_ganttview->currentNode());
+    KPTProject *node = new KPTProject(currentNode());
     if (node->openDialog()) {
-		KPTNode *currNode = m_ganttview->currentNode();
+		KPTNode *currNode = currentNode();
 		if (currNode)
         {
 			currNode->addChildNode(node);
@@ -224,9 +215,9 @@ void KPTView::slotAddSubProject() {
 
 
 void KPTView::slotAddTask() {
-    KPTTask *node = new KPTTask(m_ganttview->currentNode());
+    KPTTask *node = new KPTTask(currentNode());
     if (node->openDialog()) {
-		KPTNode *currNode = m_ganttview->currentNode();
+		KPTNode *currNode = currentNode();
 		if (currNode)
         {
 			currNode->addChildNode(node);
@@ -240,11 +231,11 @@ void KPTView::slotAddTask() {
 }
 
 void KPTView::slotAddMilestone() {
-    KPTMilestone *node = new KPTMilestone(m_ganttview->currentNode());
+    KPTMilestone *node = new KPTMilestone(currentNode());
     node->setName(i18n("Milestone"));
 
     if (node->openDialog()) {
-		KPTNode *currNode = m_ganttview->currentNode();
+		KPTNode *currNode = currentNode();
 		if (currNode)
         {
 			currNode->addChildNode(node);
@@ -259,6 +250,19 @@ void KPTView::slotAddMilestone() {
 
  void KPTView::slotConfigure() {
 
+}
+
+KPTNode *KPTView::currentNode()
+{
+    KPTNode *n = 0;
+	if (m_tab->visibleWidget() == m_ganttview)
+	    n = m_ganttview->currentNode();
+	else if (m_tab->visibleWidget() == m_pertview)
+	    n = m_pertview->currentNode();
+
+	if (!n)
+	    n = &(getPart()->getProject());
+	return n;
 }
 
 void KPTView::slotOpenNode() {
@@ -320,7 +324,7 @@ void KPTView::slotUpdate(bool calculate)
 	    slotProjectCalculate();
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
-	    m_ganttview->hide();
+	    //m_ganttview->hide();
     	m_ganttview->draw(getPart()->getProject());
 	    m_ganttview->show();
 	}

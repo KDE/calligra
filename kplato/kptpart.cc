@@ -96,7 +96,6 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
 	delete m_projectDialog;
 	m_projectDialog = 0;
     }
-
     return m_view;
 }
 

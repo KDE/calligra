@@ -35,7 +35,8 @@
 
  KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
     : QWidget( parent, "Pert view" ),
-    m_mainview( view )
+    m_mainview( view ),
+	m_node( 0 )
  {
     init(layout);
 }

@@ -23,6 +23,7 @@
 #include <koDocument.h>
 
 class KoView;
+class KPTView;
 class KCommandHistory;
 class KPTProject;
 class KPTProjectDialog;
@@ -56,6 +57,7 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
 
+
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -65,7 +67,7 @@ protected slots:
 private:
     KPTProject *m_project;
     KPTProjectDialog *m_projectDialog;
-    KoView *m_view;
+    KPTView *m_view;
     KCommandHistory *m_commandHistory;
 };
 
