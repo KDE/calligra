@@ -61,7 +61,7 @@
 #include "kspread_canvas.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
-
+#include "ksploadinginfo.h"
 #include "KSpreadTableIface.h"
 
 #include <kdebug.h>
@@ -7503,6 +7503,7 @@ void KSpreadSheet::loadOasisSettings( const KoOasisSettings &settings )
     int cursorX = settings.parseConfigItemInt( "CursorPositionX", d->name );
     int cursorY = settings.parseConfigItemInt( "CursorPositionY", d->name );
 
+    d->doc->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 }
 

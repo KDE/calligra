@@ -20,6 +20,8 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
+class KSpreadSheet;
+
 /// Temporary information used only during loading
 class KSPLoadingInfo
 {
@@ -30,9 +32,13 @@ public:
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
     QDomElement validation( const QString &name) { return m_validationList[name];}
+
+    void addMarkerSelection( KSpreadSheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
+
 private:
     QStringList m_areaNamed;
     QMap<QString,QDomElement> m_validationList;
+    QMap<KSpreadSheet*, QPoint> m_markerSelection;
 };
 
 #endif /* KPRLOADINGINFO_H */
