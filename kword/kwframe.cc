@@ -2012,26 +2012,46 @@ void KWFormulaFrameSet::drawFrameContents( KWFrame* /*frame*/, QPainter* painter
         if ( resetChanged )
             m_changed = false;
 
-        QPainter p( &buffer );
+        QPainter bufferPainter( &buffer );
+        bool printing = painter->device()->devType() == QInternal::Printer;
+        bool clipping = true;
+        QPainter *p;
+        if ( printing ) {
+            p = painter;
+            clipping = painter->hasClipping();
+
+            // That's unfortunate for formulas wider than the page.
+            // However it helps a lot with ordinary formulas.
+            painter->setClipping( false );
+        }
+        else {
+            p = &bufferPainter;
+        }
+
         if ( edit )
         {
             KWFormulaFrameSetEdit * formulaEdit = static_cast<KWFormulaFrameSetEdit *>(edit);
             if ( formulaEdit->getFormulaView() ) {
-                formulaEdit->getFormulaView()->draw( p, crect, cg );
+                formulaEdit->getFormulaView()->draw( *p, crect, cg );
             }
             else {
-                formula->draw( p, crect, cg );
+                formula->draw( *p, crect, cg );
             }
         }
         else
         {
             //kdDebug(32001) << "KWFormulaFrameSet::drawFrame drawing (without edit) crect=" << crect << endl;
-            formula->draw( p, crect, cg );
+            formula->draw( *p, crect, cg );
         }
-        painter->drawPixmap( crect.x(), crect.y(),
-                             buffer,
-                             crect.x(), crect.y(),
-                             crect.width(), crect.height() );
+        if ( !printing ) {
+            painter->drawPixmap( crect.x(), crect.y(),
+                                 buffer,
+                                 crect.x(), crect.y(),
+                                 crect.width(), crect.height() );
+        }
+        else {
+            painter->setClipping( clipping );
+        }
     }
 }
 
