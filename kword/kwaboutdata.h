@@ -33,7 +33,7 @@ KAboutData * newKWordAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
                                              KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_GPL,
-                                             "(c) 1998-2000, Reginald Stadlbauer");
+                                             "(c) 1998-2001, Reginald Stadlbauer");
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
     aboutData->addAuthor("Thomas Zander", 0, "zander@earthling.net");
     aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
