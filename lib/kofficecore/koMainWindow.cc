@@ -813,8 +813,7 @@ void KoMainWindow::slotFileQuit()
         close(); // queryClose will also be called in this method but won't do anything because isModified==false.
 }
 
-void KoMainWindow::slotFilePrint()
-{
+void KoMainWindow::print(bool quick) {
     if ( !rootView() )
     {
         kdDebug(30003) << "KoMainWindow::slotFilePrint : No root view!" << endl;
@@ -842,9 +841,15 @@ void KoMainWindow::slotFilePrint()
     // ### TODO: apply global koffice settings here
 
     rootView()->setupPrinter( printer );
-
-    if ( printer.setup( this ) )
+    
+    if ( quick ||  printer.setup( this ) )
         rootView()->print( printer );
+}
+
+
+void KoMainWindow::slotFilePrint()
+{
+	print(false);
 }
 
 void KoMainWindow::slotFilePrintPreview()

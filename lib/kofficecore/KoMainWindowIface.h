@@ -38,6 +38,7 @@ k_dcop:
     DCOPRef action( const QCString &name );
     QCStringList actions();
     QMap<QCString,DCOPRef> actionMap();
+    ASYNC print(bool quick);
 
 protected:
     KoMainWindow *m_pMainWindow;

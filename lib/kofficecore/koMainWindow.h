@@ -83,6 +83,13 @@ public:
     virtual KParts::PartManager *partManager();
 
     /**
+     * Prints the document
+     * @p quick wether the print  setup dialog is to be displayed
+     **/
+    void print(bool quick);
+     
+     
+    /**
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */

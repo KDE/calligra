@@ -59,3 +59,7 @@ QMap<QCString,DCOPRef> KoMainWindowIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }
+
+ASYNC KoMainWindowIface::print(bool quick) {
+	m_pMainWindow->print(quick);
+}
