@@ -171,13 +171,13 @@ void VTextTool::activate()
 
 	VSelection* selection = view()->part()->document().selection();
 	kdDebug() << "Nb objects selected: " << selection->objects().count() << endl;
-	if ( selection->objects().count() == 1 )
+	if( selection->objects().count() == 1 )
 		visit( *selection->objects().getFirst() );
 } // VTextTool::activate
 
 void VTextTool::deactivate()
 {
-	if ( m_creating )
+	if( m_creating )
 		delete m_text;
 } // VTextTool::deactivate()
 
@@ -236,7 +236,7 @@ void VTextTool::mouseDragRelease()
 {
 	drawPathCreation();
 	
-	if ( m_creating && m_editedText )
+	if( m_creating && m_editedText )
 	{
 		drawEditedText();
 		delete m_editedText;
@@ -257,7 +257,7 @@ void VTextTool::mouseDragRelease()
 
 void VTextTool::textChanged()
 {
-	if ( !m_editedText )
+	if( !m_editedText )
 		return;
 
 	drawEditedText();
@@ -272,7 +272,7 @@ void VTextTool::textChanged()
 
 void VTextTool::accept()
 {
-	if ( m_text )
+	if( m_text )
 	{
 		m_text->setFont( m_editedText->font() );
 		m_text->setBasePath( m_editedText->basePath() );
@@ -316,7 +316,7 @@ void VTextTool::editBasePath()
 
 void VTextTool::visitVComposite( VComposite& composite )
 {
-	if ( composite.paths().count() == 0 )
+	if( composite.paths().count() == 0 )
 		return;
 
 	m_text = 0L; 
@@ -389,7 +389,7 @@ void VTextTool::VTextCmd::execute()
 	if( !m_text )
 		return;
 	
-	if ( !m_textModifications )
+	if( !m_textModifications )
 	{
 		if( m_text->state() == VObject::deleted )
 			m_text->setState( VObject::normal );
@@ -418,7 +418,7 @@ void VTextTool::VTextCmd::unexecute()
 	if( !m_text )
 		return;
 	
-	if ( !m_textModifications )
+	if( !m_textModifications )
 	{
 		document()->selection()->take( *m_text );
 		m_text->setState( VObject::deleted );
