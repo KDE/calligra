@@ -66,7 +66,8 @@ libkspreadcommon_la_SOURCES =  \
         KSpreadTableIface.cc \
         KSpreadTableIface.skel \
         KSpreadViewIface.skel \
-        KSpreadViewIface.cc
+        KSpreadViewIface.cc \
+	kspread_genvalidationstyle.cc
 
 libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
