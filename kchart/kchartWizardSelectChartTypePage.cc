@@ -28,7 +28,7 @@ void kchartWizardSelectChartTypePage::addButton(QString name,
   pushbutton->resize( buttonframe->contentsRect().width(),
 		      buttonframe->contentsRect().height() );
   _typeBG->insert( pushbutton, type );
-  pushbutton->setPixmap( KGlobal::iconLoader()->loadIcon( icon_name ) );
+  pushbutton->setPixmap( BarIcon( icon_name ) );
 
   QLabel* label = new QLabel( i18n( name ), this );
   label->setGeometry( 10+pos1*xstep, 
