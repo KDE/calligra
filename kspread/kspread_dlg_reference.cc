@@ -27,6 +27,7 @@
 #include "kspread_table.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
+#include "kspread_map.h"
 #include <kapp.h>
 #include <klocale.h>
 #include <qstringlist.h>
@@ -116,7 +117,11 @@ void KSpreadreference::slotOk()
         QValueList<Reference> area=m_pView->doc()->listArea();
 
         if(m_pView->activeTable()->tableName()!=area[ index ].table_name)
-                m_pView->changeTable(area[ index ].table_name);
+                {
+                KSpreadTable *table=m_pView->doc()->map()->findTable(area[ index ].table_name);
+                if(table)
+                        table->setActiveTable();
+                }
 
         m_pView->canvasWidget()->gotoLocation(KSpreadPoint( m_pView->activeTable()->tableName()
                 +"!"+util_cellName(area[ index ].rect.left() ,area[ index ].rect.top()  ), m_pView->doc()->map() ) );

@@ -944,3 +944,10 @@ Montel laurent <montell@club-internet.fr>
 * Fix bug when you used "Split view"
 -"Remove table" works
 -"change table" works
+
+2000-08-72-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Fix bug when you changed table in "Split view" mode
+-when you used kspread_dlg_formula
+-when you used kspread_dlg_reference
+*Fix bug when you moved on hyperlink

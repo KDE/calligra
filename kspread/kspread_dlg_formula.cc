@@ -27,6 +27,7 @@
 #include "kspread_table.h"
 #include "kspread_editors.h"
 #include "kspread_doc.h"
+#include "kspread_map.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -243,7 +244,11 @@ void KSpreadDlgFormula::slotOk()
     m_pView->canvasWidget()->endChoose();
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
-        m_pView->changeTable( m_tableName );
+        {
+        KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
+        if( table)
+                table->setActiveTable();
+        }
 
     // Revert the marker to its original position
     m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
@@ -269,7 +274,12 @@ void KSpreadDlgFormula::slotClose()
 
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
-        m_pView->changeTable( m_tableName );
+        {
+        KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
+        if(table)
+                table->setActiveTable();
+        }
+
 
     // Revert the marker to its original position
     m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );

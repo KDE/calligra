@@ -297,7 +297,11 @@ void KSpreadCanvas::endChoose()
     return;
 
   activeTable()->setChooseRect( QRect( 0, 0, 0, 0 ) );
-  m_pView->setActiveTable( m_chooseStartTable );
+  //m_pView->setActiveTable( m_chooseStartTable );
+  KSpreadTable *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
+  if(table)
+        table->setActiveTable();
+
   kdDebug(36001) << "endChoose len=0" << endl;
   length_namecell = 0;
   m_bChoose = FALSE;
@@ -390,7 +394,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
   //  " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
   if ( table )
-    m_pView->setActiveTable( table );
+    table->setActiveTable();
   else
     table = activeTable();
 
@@ -484,7 +488,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
 void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
 {
   if ( table )
-    m_pView->setActiveTable( table );
+    table->setActiveTable( );
   else
     table = activeTable();
 
@@ -644,6 +648,16 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
         int h = ( y2 - y ) + th;
 
         corner = QRect( x + w - 2, y + h -1, 5, 5 );
+    }
+
+    // Test whether the mouse is over some anchor
+    {
+        KSpreadCell *cell = table->visibleCellAt( col, row );
+        QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
+                                           _ev->pos().y() - ypos, this );
+        if ( !anchor.isEmpty() && anchor != m_strAnchor )
+            setCursor( KCursor::handCursor() );
+        m_strAnchor = anchor;
     }
 
     //
@@ -930,15 +944,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
         cell = table->cellAt( col, row );
     }
 
-    // Test whether the mouse is over some anchor
-    {
-        KSpreadCell *cell = table->visibleCellAt( col, row );
-        QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
-                                           _ev->pos().y() - ypos, this );
-        if ( !anchor.isEmpty() && anchor != m_strAnchor )
-            setCursor( KCursor::handCursor() );
-        m_strAnchor = anchor;
-    }
 
     // Start a marking action ?
     if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )

@@ -1216,7 +1216,7 @@ void KSpreadView::removeAllTables()
   setActiveTable( 0L );
 }
 
-void KSpreadView::setActiveTable( KSpreadTable *_t )
+void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
 {
   if ( _t == m_pTable )
     return;
@@ -1224,13 +1224,15 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   m_pTable = _t;
   if ( m_pTable == 0L )
     return;
-
+  if(updateTable)
+  {
   m_pTabBar->setActiveTab( _t->tableName() );
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvas->repaint();
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+  }
 
 }
 void KSpreadView::slotTableActivated( KSpreadTable* table )
@@ -1263,8 +1265,10 @@ void KSpreadView::changeTable( const QString& _name )
         kdDebug(36001) << "Unknown table " << _name << endl;
         return;
     }
+
+    setActiveTable( t,false );
+
     t->setActiveTable();
-    setActiveTable( t );
 
     updateEditWidget();
 

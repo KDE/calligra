@@ -91,7 +91,7 @@ public:
     void addTable( KSpreadTable *_t );
     //void removeTable( KSpreadTable *_t );
     void removeAllTables();
-    void setActiveTable( KSpreadTable *_t );
+    void setActiveTable( KSpreadTable *_t,bool updateTable=true );
 
     const KSpreadTable* activeTable() const { return m_pTable; }
     KSpreadTable* activeTable() { return m_pTable; }
