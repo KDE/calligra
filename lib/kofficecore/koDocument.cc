@@ -924,7 +924,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QCString mimeType = d->outputMimeType;
-    bool oasis = mimeType == nativeOasisMimeType();
+    bool oasis = !mimeType.isEmpty() && mimeType == nativeOasisMimeType();
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
     KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
