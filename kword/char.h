@@ -37,7 +37,7 @@ class KWordDocument;
 class KWTextFrameSet;
 
 enum ClassIDs { ID_KWCharNone = 0, ID_KWCharFormat = 1, ID_KWCharImage = 2, ID_KWCharTab = 3,
-		ID_KWCharVariable = 4, ID_KWCharFootNote = 5};
+		ID_KWCharVariable = 4, ID_KWCharFootNote = 5, ID_KWCharAnchor = 6};
 
 /******************************************************************/
 /* Class: KWCharAttribute                                         */
@@ -175,6 +175,49 @@ protected:
 
 };
 
+/******************************************************************/
+/* Class: KWCharAnchor                                            */
+/*                                                                */
+/* An instance of this class acts as the anchor for a floating    */
+/* object. In practice, the object is derived from this class in  */
+/* order to provide implementations for the pure virtual logic    */
+/* required.                                                      */
+/*                                                                */
+/* The anchor is enabled by a call to setAnchored().              */
+/******************************************************************/
+
+class KWCharAnchor : public KWCharAttribute
+{
+public:
+    KWCharAnchor();
+    virtual ~KWCharAnchor() {}
+
+    // Is the anchoring logic enabled at this time?
+    bool isAnchored() { return anchored; }
+    void setAnchored( bool _anchored );
+
+    // Set or change the location of the anchor.
+    QPoint &getOrigin() { return origin; }
+    void setOrigin( QPoint _origin );
+
+    // This base class function saves the anchor itself; the
+    // deriving class will normally implement its own save() function
+    // to save itself.
+    void save( ostream &out );
+
+    // Override this function with logic to move the anchored object
+    // when the origin of the anchor is changed.
+    virtual void moveBy( unsigned int dx, unsigned int dy ) = 0;
+
+    // Override this function to return the text required to identify
+    // the anchored object.
+    virtual QString anchorFor() = 0;
+
+protected:
+    QPoint origin;
+    bool anchored;
+};
+
 // Torben: Be prepared for unicode
 // Reggie: Now we support unicode :- ) )
 #define kwchar QChar
@@ -218,6 +261,7 @@ public:
     void insert( unsigned int _pos, KWCharTab *_tab );
     void insert( unsigned int _pos, KWCharVariable *_var );
     void insert( unsigned int _pos, KWCharFootNote *_fn );
+    void insert( unsigned int _pos, KWCharAnchor *_anchor );
     void resize( unsigned int _size, bool del = true );
     bool remove( unsigned int _pos, unsigned int _len = 1 );
     KWChar* split( unsigned int _pos );
