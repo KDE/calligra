@@ -37,7 +37,10 @@ GPolyline::GPolyline () {
   connect (this, SIGNAL(propertiesChanged (GObject::Property, int)), this,
            SLOT(updateProperties (GObject::Property, int)));
   points.setAutoDelete (true);
-  sArrow = eArrow = 0L;
+  sArrow = (outlineInfo.startArrowId > 0 ?
+            Arrow::getArrow (outlineInfo.startArrowId) : 0L);
+  eArrow = (outlineInfo.endArrowId > 0 ?
+            Arrow::getArrow (outlineInfo.endArrowId) : 0L);
   sAngle = eAngle = 0;
   sdx = sdy = 0;
   edx = edy = 0;

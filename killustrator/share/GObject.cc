@@ -89,7 +89,6 @@ GObject::GObject () {
     OutlineInfo::Width | OutlineInfo::Custom;
   outlineInfo.roundness = 0;
   outlineInfo.shape = OutlineInfo::DefaultShape;
-  outlineInfo.startArrowId = outlineInfo.endArrowId = 0;
 
   fillInfo = defaultFillInfo;
   fillInfo.mask = FillInfo::Color | FillInfo::FillStyle;
