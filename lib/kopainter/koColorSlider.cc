@@ -21,7 +21,6 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <qpainter.h>
 #include <qpen.h>
 
 #include <kdebug.h>
@@ -52,7 +51,7 @@ const QColor KoColorFrame::colorAt(const QPoint &p)
 
   if(p.x() >= mPixmap.width() || p.y() >= mPixmap.height())
     return QColor(255,255,255);
-  
+
   return QColor(mImage.pixel(p.x(), p.y()));
 }
 
@@ -74,7 +73,7 @@ void KoColorFrame::slotSetColor2(const QColor &c)
 void KoColorFrame::drawContents(QPainter *p)
 {
   QRect r = contentsRect();
-  
+
   if((mPixmap.size() != r.size()) || mColorChanged)
   {
     mPixmap.resize(r.width() + 1, r.height() + 1);
@@ -82,7 +81,7 @@ void KoColorFrame::drawContents(QPainter *p)
     mColorChanged = false;
     mPixChanged = true;
   }
-  
+
   p->drawPixmap(r.left(), r.top(), mPixmap);
 }
 
@@ -132,7 +131,7 @@ void KoColorFrame::mouseMoveEvent(QMouseEvent *e)
     int right = contentsRect().left() + contentsRect().width();
     int top = contentsRect().top();
     int bottom =  contentsRect().top() + contentsRect().height();
-	  
+
     if(x < left)
     {
       x = left;
@@ -153,12 +152,12 @@ void KoColorFrame::mouseMoveEvent(QMouseEvent *e)
       y = bottom;
       set = true;
     }
-	  
+
 //    if(set)
 //      QCursor::setPos(mapToGlobal(QPoint(x,y)));
-	  
+
     QPoint pos = QPoint(x - contentsRect().left(), y - contentsRect().top());
-	  
+
     QColor c = colorAt(pos);
     emit colorSelected(c);
   }
@@ -216,12 +215,12 @@ void KoSliderWidget::mouseMoveEvent(QMouseEvent *e)
 
     if(!p)
       return;
-	  
+
     QPoint newPos = p->mapFromGlobal(QCursor::pos()) - mPos;
-	  
+
     /* don't drag vertically */
     newPos.setY(pos().y());
-	  
+
     if(newPos.x() < 0)
       newPos.setX(0);
     if(newPos.x() > p->width() - width())
@@ -278,7 +277,7 @@ void KoColorSlider::slotSetRange(int min, int max)
 void KoColorSlider::resizeEvent(QResizeEvent *e)
 {
   QWidget::resizeEvent(e);
-  // m_pSlider->width()/2 * 2 seems stupid but is not because for example 
+  // m_pSlider->width()/2 * 2 seems stupid but is not because for example
   // m_pSlider->width() == 11 I get 10.
   mColorFrame->setGeometry(mSlider->width() / 2, 0, width() - mSlider->width() / 2 * 2, height() - mSlider->height());
   slotSetValue(mValue);
@@ -335,7 +334,7 @@ void KoColorSlider::slotFrameClicked(const QPoint &p)
 {
   QPoint local = mColorFrame->mapToParent(p);
   QPoint pos = QPoint(local.x() - mSlider->width() / 2, height() - mSlider->height());
-  
+
   if(pos.x() < 0)
     pos.setX(0);
   else if(pos.x() > width() - mSlider->width())
