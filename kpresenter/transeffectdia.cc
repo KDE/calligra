@@ -188,7 +188,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     // workaround, because Random Effect is always negative
     if( pageEffect == PEF_RANDOM )
-        effectList->setCurrentItem( effectList->count() );
+        effectList->setCurrentItem( effectList->count()-1 );
 
     connect( effectList, SIGNAL(highlighted(int)), this, SLOT(effectChanged(int)) );
     connect( effectList, SIGNAL( doubleClicked ( QListBoxItem *) ), this, SLOT( effectChanged()) );
