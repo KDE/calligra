@@ -1358,6 +1358,8 @@ KPTDuration KPTResourceRequestCollection::duration(const KPTDateTime &time, cons
         units = 100; //hmmmm
     QPtrListIterator<KPTResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
+        if (it.current()->isEmpty())
+            continue;
         if (it.current()->group()->type() == KPTResourceGroup::Type_Work) {
             KPTDuration d = it.current()->duration(time, (effort*it.current()->workUnits())/units, backward);
             if (d > dur)
