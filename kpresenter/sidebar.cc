@@ -68,7 +68,6 @@ public:
 protected:
     void maybeTip( const QPoint &pos )
     {
-        return; // FIXME always crash ! (ariya)
         QString title;
         Outline* outline = dynamic_cast<Outline*>(parentWidget());
         QRect r( outline->tip(pos, title) );
@@ -727,19 +726,17 @@ void Outline::moveItem( int oldPos, int newPos )
 
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
+	
+    // update, for all between lowPage & highPage
     QListViewItemIterator it( this );
-    // Recreate all Titles and pagenumbers between lowPage & highPage
     for ( ; it.current(); ++it ) {
         if ( page >= lowPage && page <= highPage) {
-            QString title = doc->pageList().at(page)->pageTitle( i18n( "Slide %1" ).arg( page + 1 ) );
-            if (title.length() > 12) // restrict to a maximum of 12 characters
-                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
-            else
-                it.current()->setText( 0, title );
-
-            it.current()->setText( 1, QString::number( page + 1 ) ); // page number
-            if ( page == highPage )
-                return;
+            OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(it.current());
+                if( slideItem ) {
+            	    KPrPage* newPage = doc->pageList().at(page);
+				    slideItem->setPage( newPage );
+                    if ( page == highPage ) return;
+				}
         }
         page++;
     }
@@ -778,8 +775,10 @@ QRect Outline::tip(const QPoint &pos, QString &title)
     if (!item)
         return QRect(0, 0, -1, -1);
 
-    int pagenr = item->text(1).toInt() - 1;
-    title = doc->pageList().at(pagenr)->pageTitle(i18n("Slide %1").arg(pagenr + 1));
+    OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
+    if( !slideItem )
+        return QRect(0, 0, -1, -1);
+	title = slideItem->text( 0 );
 
     return itemRect(item);
 }
@@ -823,10 +822,6 @@ void Outline::setCurrentPage( int pg )
             ensureItemVisible(it.current());
         }
     }
-}
-
-void Outline::setOn( int , bool )
-{
 }
 
 void Outline::contentsDropEvent( QDropEvent *e )

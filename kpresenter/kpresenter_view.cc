@@ -2683,7 +2683,7 @@ void KPresenterView::setupActions()
 
     // ----------------- tools actions
 
-    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", 0,
+    actionToolsMouse = new KToggleAction( i18n( "Select" ), "select", 0,
                                           this, SLOT( toolsMouse() ),
                                           actionCollection(), "tools_mouse" );
     actionToolsMouse->setExclusiveGroup( "tools" );

@@ -85,14 +85,11 @@ public:
     Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v );
     ~Outline();
     void setCurrentPage( int pg );
-    void setOn( int pg, bool on );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
     void updateItem( int pagenr );
     void addItem( int pos );
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
-    // Called by OutlineItem
-    void itemStateChange( OutlineItem * item, bool state );
     QRect tip(const QPoint &pos, QString &title);
 
 protected:
@@ -121,8 +118,6 @@ private:
     OutlineToolTip *outlineTip;
 };
 
-
-
 class SideBar: public QTabWidget
 {
   Q_OBJECT
@@ -133,7 +128,7 @@ public:
       _outline->setCurrentPage(pg);
       _thb->setCurrentPage(pg);
   };
-  void setOn( int pg, bool on ) { _outline->setOn(pg, on); };
+  void setOn( int pg, bool on ) { };
   //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
   void updateItem( int pagenr, bool sticky = false);
   void addItem( int pos );
