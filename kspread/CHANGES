@@ -419,3 +419,10 @@ and zero when it's null
 and atan2
 -Start to create help for kspread_dlg_formula
 -Improved kspread_dlg_conditionnal
+
+2000-04-30 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now remove AreaName when table target is removed
+-Now "Show page Border" is saved
+-Now init toggle button in initialPosition() because used QTimer::singleShot
+=> all is init before change state of button.

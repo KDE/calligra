@@ -3832,6 +3832,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   table.setAttribute( "grid", (int)showGrid);
   table.setAttribute( "hide", (int)m_tableHide);
   table.setAttribute( "formular", (int)showFormular);
+  table.setAttribute( "borders", (int)m_bShowPageBorders);
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -3907,6 +3908,11 @@ bool KSpreadTable::loadXML( const QDomElement& table )
   if(table.hasAttribute("formular"))
   {
     showFormular = (int)table.attribute("formular").toInt( &ok );
+    // we just ignore 'ok' - if it didn't work, go on
+  }
+  if(table.hasAttribute("borders"))
+  {
+    m_bShowPageBorders = (int)table.attribute("borders").toInt( &ok );
     // we just ignore 'ok' - if it didn't work, go on
   }
 

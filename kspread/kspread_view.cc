@@ -372,6 +372,11 @@ void KSpreadView::initialPosition()
     int row = m_pDoc->map()->initialMarkerRow();
     if ( row <= 0 ) row = 1;
     m_pCanvas->gotoLocation( col, row );
+    
+    //init toggle button
+    m_hideGrid->setChecked( !m_pTable->getShowGrid() );
+    m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
+    m_showFormular->setChecked(m_pTable->getShowFormular());
 }
 
 /*
@@ -1383,11 +1388,22 @@ void KSpreadView::addTable( KSpreadTable *_t )
 
 void KSpreadView::removeTable( KSpreadTable *_t )
 {
+  QString m_tableName=_t->tableName();
   m_pTabBar->removeTab( _t->tableName() );
   if(m_pDoc->map()->findTable( m_pTabBar->listshow().first()))
     setActiveTable( m_pDoc->map()->findTable( m_pTabBar->listshow().first() ));
   else
     m_pTable = 0L;
+
+  QValueList<Reference>::Iterator it;
+  QValueList<Reference> area=doc()->listArea();
+  for ( it = area.begin(); it != area.end(); ++it )
+  {
+  	//remove Area Name when table target is removed
+  	if((*it).table_name==m_tableName)
+ 	   	doc()->removeArea((*it).ref_name);
+  }  
+
 }
 
 void KSpreadView::removeAllTables()
