@@ -30,8 +30,8 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pCanvas, SIGNAL(zoomChanges(int)), SLOT(canvasZoomChanged(int)));
 
-  KAction* act1 = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
-  KAction* act2 = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
+  zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
+  zoomOut = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
   KToggleAction* act3 = new KToggleAction( i18n("Show Page Border"), "view_pageborder", 0, this, "pageBorder" );
   KToggleAction* act4 = new KToggleAction( i18n("View Only Page"), "view_page", 0, this, "pageOnly" );
   KAction* act5 = new KAction( i18n("Auto Resize"), "window_nofullscreen", 0, this, SLOT(doAutoResizeMin()), this, "autoResizeMin" );
@@ -40,8 +40,8 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   connect( act3, SIGNAL(toggled(bool)), SLOT(togglePageBorder(bool)));
   connect( act4, SIGNAL(toggled(bool)), SLOT(togglePageOnly(bool)));
 
-  act1->plug(bar);
-  act2->plug(bar);
+  zoomIn->plug(bar);
+  zoomOut->plug(bar);
   act3->plug(bar);
   act4->plug(bar);
   act5->plug(bar);
@@ -75,6 +75,15 @@ void KivioBirdEyePanel::zoomPlus()
 
 void KivioBirdEyePanel::canvasZoomChanged(int z)
 {
+  if(z<=5)
+        zoomOut->setEnabled(false);
+  else
+        zoomOut->setEnabled(true);
+  if(z>=10000)
+        zoomIn->setEnabled(false);
+  else
+        zoomIn->setEnabled(true);
+
   slider->blockSignals(true);
   slider->setMaxValue(QMAX(z,500));
   slider->setValue(z);

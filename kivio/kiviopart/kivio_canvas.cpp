@@ -426,7 +426,7 @@ int KivioCanvas::zoom()
 }
 
 void KivioCanvas::setZoom( int zoom )
-{
+{  
   m_pZoom = QMAX(5,QMIN(10000,zoom));
 
   updateScrollBars();

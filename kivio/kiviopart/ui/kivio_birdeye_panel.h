@@ -8,6 +8,7 @@ class KivioView;
 class KivioCanvas;
 class KivioDoc;
 class KivioPage;
+class KAction;
 
 class KivioBirdEyePanel : public KivioBirdEyePanelBase
 { Q_OBJECT
@@ -40,6 +41,8 @@ private:
   KivioCanvas* m_pCanvas;
   KivioDoc* m_pDoc;
 
+  KAction* zoomIn;
+  KAction* zoomOut;
   QPixmap* m_buffer;
   bool m_bShowPageBorders;
   bool m_bPageOnly;

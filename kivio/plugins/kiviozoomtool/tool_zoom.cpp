@@ -226,6 +226,16 @@ void ZoomTool::zoomPlus()
 {
   setOverride();
   m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
+  if(m_pCanvas->zoom()>=10000)
+        {
+        m_pPlus->setEnabled(false);
+        m_pMinus->setEnabled(true);
+        }
+  else
+        {
+        m_pPlus->setEnabled(true);
+        m_pMinus->setEnabled(true);
+        }
   removeOverride();
 }
 
@@ -233,6 +243,16 @@ void ZoomTool::zoomMinus()
 {
   setOverride();
   m_pCanvas->zoomOut(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
+    if(m_pCanvas->zoom()<=5)
+        {
+        m_pMinus->setEnabled(false);
+        m_pPlus->setEnabled(true);
+        }
+  else
+        {
+        m_pMinus->setEnabled(true);
+        m_pPlus->setEnabled(true);
+        }
   removeOverride();
 }
 

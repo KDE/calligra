@@ -702,7 +702,7 @@ void KivioView::print(QPrinter& ptr)
 }
 
 void KivioView::viewZoom( int zoom )
-{
+{                                   
   m_pCanvas->setZoom(zoom);
   m_viewZoom->insertItem(m_pCanvas->zoom());
 }
