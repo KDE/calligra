@@ -28,7 +28,7 @@
 KDiagrammDoc::KDiagrammDoc()
 {
   ADD_INTERFACE( "IDL:Chart/SimpleChart:1.0" );
-  ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
+  ADD_INTERFACE("IDL:OPParts/Print:1.0");
 
   m_bEmpty = true;
   m_bModified = FALSE;
