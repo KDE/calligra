@@ -31,6 +31,7 @@
 #include <qwidgetstack.h>
 
 #include <kiconloader.h>
+#include <kdebug.h>
 
 using namespace KexiPart;
 
@@ -40,6 +41,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 {
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
+	m_mainWin = 0;
 }
 
 Part::~Part()
@@ -48,18 +50,19 @@ Part::~Part()
 
 void Part::createGUIClients(KexiMainWindow *win)
 {
+	m_mainWin = win;
 	if (!m_guiClient) {
 		//create part's gui client
-		m_guiClient = new GUIClient(win, this, false);
+		m_guiClient = new GUIClient(m_mainWin, this, false);
 		//default actions for part's gui client:
 		KAction *act = new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
 			SLOT(slotCreate()), this, (info()->objectName()+"part_create").latin1());
-		act->plug( win->findPopupMenu("create") );
+		act->plug( m_mainWin->findPopupMenu("create") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
 //		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
 		//let init specific actions for parts
-		initPartActions( m_guiClient->actionCollection() );
-		win->guiFactory()->addClient(m_guiClient); //this client is added permanently
+//		initPartActions( m_guiClient->actionCollection() );
+		m_mainWin->guiFactory()->addClient(m_guiClient); //this client is added permanently
 
 		//create part instance's gui client
 //		m_instanceGuiClient = new GUIClient(win, this, true);
@@ -69,24 +72,59 @@ void Part::createGUIClients(KexiMainWindow *win)
 		//let init specific actions for part instances
 		for (int mode = 1; mode <= 0x01000; mode <<= 1) {
 			if (m_supportedViewModes & mode) {
-				GUIClient *instanceGuiClient = new GUIClient(win, this, true);
+				GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true);
 				m_instanceGuiClients.insert(mode, instanceGuiClient);
-				initInstanceActions( mode, instanceGuiClient->actionCollection() );
+//				initInstanceActions( mode, instanceGuiClient->actionCollection() );
 			}
 		}
 		// also add an instance common for all modes (mode==0)
-		GUIClient *instanceGuiClient = new GUIClient(win, this, true);
+		GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true);
 		m_instanceGuiClients.insert(Kexi::AllViewModes, instanceGuiClient);
-		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
+//		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
+
+//todo
+		initActions();
 	}
 }
 
-/*void Part::removeGUIClient(KexiMainWindow *win)
+KActionCollection* Part::actionCollectionForMode(int viewMode)
 {
-	if (m_guiClient
-	i.current()->removeClient(win->guiFactory());
-}*/
+	KXMLGUIClient *cli = m_instanceGuiClients[viewMode];
+	return cli ? cli->actionCollection() : 0;
+}
 
+KAction* Part::createSharedAction(int mode, const QString &text, 
+	const QString &pix_name, const KShortcut &cut, const char *name)
+{
+	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];
+	if (!instanceGuiClient) {
+		kdDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		return 0;
+	}
+	return m_mainWin->createSharedAction(text, pix_name, cut, name, instanceGuiClient->actionCollection());
+}
+
+KAction* Part::createSharedPartAction(const QString &text, 
+	const QString &pix_name, const KShortcut &cut, const char *name)
+{
+	if (!m_guiClient)
+		return 0;
+	return m_mainWin->createSharedAction(text, pix_name, cut, name, m_guiClient->actionCollection());
+}
+
+void Part::setActionAvailable(const char *action_name, bool avail)
+{
+	QIntDictIterator<GUIClient> it( m_instanceGuiClients );
+	for (;it.current();++it) {
+		KAction *act = it.current()->actionCollection()->action(action_name);
+		if (act) {
+			act->setEnabled(avail);
+			return;
+		}
+	}
+
+	m_mainWin->setActionAvailable(action_name, avail);
+}
 
 KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
 {
@@ -145,7 +183,6 @@ void Part::slotCreate()
 {
 	emit newObjectRequest( m_info );
 }
-
 
 //-------------------------------------------------------------------------
 

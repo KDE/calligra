@@ -34,6 +34,10 @@ class KMainWindow;
 class KexiActionProxy;
 class KexiSharedActionHostPrivate;
 
+namespace KexiPart {
+	class Part;
+}
+
 //! Acts as application-wide host that offers shared actions.
 /*!
  You can inherit this class together with KMainWindow (or any KMainWindow).
@@ -106,11 +110,11 @@ class KEXICORE_EXPORT KexiSharedActionHost
 
 		/*! Creates shared action. Action's data is owned by the main window. */
 		KAction* createSharedAction(const QString &text, const QString &pix_name, 
-			const KShortcut &cut, const char *name);
+			const KShortcut &cut, const char *name, KActionCollection* col = 0);
 
 		/*! Like above - creates shared action, but from standard action identified by \a id. 
 		 Action's data is owned by the main window. */
-		KAction* createSharedAction( KStdAction::StdAction id, const char *name);
+		KAction* createSharedAction( KStdAction::StdAction id, const char *name, KActionCollection* col = 0);
 
 		/*! \return action proxy for object \a o, or NULL if this object has no plugged shared actions. */
 		KexiActionProxy* actionProxyFor(QObject *o) const;
@@ -126,6 +130,9 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		KexiSharedActionHostPrivate *d;
 
 	friend class KexiActionProxy;
+	friend class KexiPart::Part;
+	friend class KexiViewBase;
+	friend class KexiDialogBase;
 };
 
 #endif

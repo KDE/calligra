@@ -111,17 +111,19 @@ KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QStrin
 	return alt_act;
 }
 
-bool KexiActionProxy::activateSharedAction(const char *action_name)
+bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoCheckInChildren)
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p || !p->second) {
 		//try in children...
-		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
-		for( ; it.current(); ++it ) {
-			if (it.current()->activateSharedAction( action_name ))
-				return true;
+		if (alsoCheckInChildren) {
+			QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+			for( ; it.current(); ++it ) {
+				if (it.current()->activateSharedAction( action_name, alsoCheckInChildren ))
+					return true;
+			}
 		}
-		return false;
+		return m_actionProxyParent ? m_actionProxyParent->activateSharedAction(action_name, false) : false; //last chance: parent
 	}
 	//activate in this proxy...
 	p->first->activate();
@@ -150,19 +152,21 @@ bool KexiActionProxy::isSupported(const char* action_name) const
 	return p != 0;
 }
 
-bool KexiActionProxy::isAvailable(const char* action_name) const
+bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChildren) const
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		//not supported explicity - try in children...
-		if (m_focusedChild)
-			return m_focusedChild->isAvailable(action_name);
-		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
-		for( ; it.current(); ++it ) {
-			if (it.current()->isSupported(action_name))
-				return it.current()->isAvailable(action_name);
+		if (alsoCheckInChildren) {
+			if (m_focusedChild)
+				return m_focusedChild->isAvailable(action_name, alsoCheckInChildren);
+			QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+			for( ; it.current(); ++it ) {
+				if (it.current()->isSupported(action_name))
+					return it.current()->isAvailable(action_name, alsoCheckInChildren);
+			}
 		}
-		return false; //not suported
+		return m_actionProxyParent ? m_actionProxyParent->isAvailable(action_name, false) : false; //last chance: parent
 	}
 	//supported explicity:
 	return p->second != 0;

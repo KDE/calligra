@@ -53,7 +53,7 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		/*! Activates  action named \a action_name for this proxy. If the action is executed
 		 (accepted), true is returned. */
-		bool activateSharedAction(const char *action_name);
+		bool activateSharedAction(const char *action_name, bool alsoCheckInChildren = true);
 
 		/*! Sets host to \a host; rerely used. */
 		void setSharedActionHost(KexiSharedActionHost& host) { m_host = &host; }
@@ -61,7 +61,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		/*! \return true, if action named \a action_name is enabled within the proxy.
 		 False is returned either if the action is not available or is not supported.
 		 \ sa isSupported() */
-		bool isAvailable(const char* action_name) const;
+		bool isAvailable(const char* action_name, bool alsoCheckInChildren = true) const;
 
 		/*! \return true, if action named \a action_name is supported by the proxy. */
 		bool isSupported(const char* action_name) const;

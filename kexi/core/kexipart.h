@@ -30,6 +30,8 @@ class KexiMainWindow;
 class KActionCollection;
 class KexiDialogBase;
 class KexiViewBase;
+class KAction;
+class KShortcut;
 
 namespace KexiPart
 {
@@ -94,6 +96,7 @@ class KEXICORE_EXPORT Part : public QObject
 		//! This method is called from KexiMainWindow
 		void createGUIClients(KexiMainWindow *win);
 
+#if 0
 		/*! For reimplementation. Create here all part actions (KAction or similar). 
 		 "Part action" is an action that is bound to given part, not for dialogs 
 		 created with this part, eg. "Open external project" action for Form part.
@@ -114,6 +117,19 @@ class KEXICORE_EXPORT Part : public QObject
 		 Default implementation does nothing.
 		*/
 		virtual void initInstanceActions( int mode, KActionCollection *col ) {};
+#endif
+
+		virtual void initActions() {};
+
+		KAction* createSharedAction(int mode, const QString &text, 
+			const QString &pix_name, const KShortcut &cut, const char *name);
+
+		KAction* createSharedPartAction(const QString &text, 
+			const QString &pix_name, const KShortcut &cut, const char *name);
+
+		KActionCollection* actionCollectionForMode(int viewMode);
+
+		void setActionAvailable(const char *action_name, bool avail);
 
 		inline void setInfo(Info *info) { m_info = info; }
 
@@ -131,11 +147,11 @@ class KEXICORE_EXPORT Part : public QObject
 		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
 		int m_supportedViewModes;
 
-	private:
 		Info *m_info;
 		GUIClient *m_guiClient;
 //		GUIClient *m_instanceGuiClient;
 		QIntDict<GUIClient> m_instanceGuiClients;
+		KexiMainWindow* m_mainWin;
 
 	friend class Manager;
 	friend class KexiMainWindow;

@@ -195,6 +195,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 			if (e->type()==QEvent::FocusIn && m_actionProxyParent) {
 				m_actionProxyParent->m_focusedChild = this;
 			}
+//			m_mainWin->invalidateSharedActions(this);
 		}
 	}
 	return false;
@@ -207,6 +208,7 @@ void KexiViewBase::setViewWidget(QWidget* w)
 	m_viewWidget = w;
 	if (m_viewWidget) {
 		m_viewWidget->installEventFilter(this);
+//		setFocusProxy(m_viewWidget);
 	}
 }
 
@@ -228,6 +230,7 @@ void KexiViewBase::setFocus()
 	}
 	else
 		QWidget::setFocus();
+	m_mainWin->invalidateSharedActions(this);
 }
 
 

@@ -88,9 +88,9 @@ KexiSharedActionHost::~KexiSharedActionHost()
 void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avail)
 {
 	KAction *act = d->mainWin->actionCollection()->action(action_name);
-	if (!act)
-		return;
-	act->setEnabled(avail);
+	if (act) {
+		act->setEnabled(avail);
+	}
 }
 
 void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool avail, QObject *obj)
@@ -106,6 +106,7 @@ void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool a
 
 void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 {
+	kdDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
 	d->actionProxies.insert( proxy->receiver(), proxy );
 }
 
@@ -139,8 +140,9 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 				}
 			}
 		}
-		a->setEnabled(p && p->isAvailable(a->name()));
-		kdDebug() << "Action " << (*it)->name() << (p && p->isAvailable((*it)->name()) ? " enabled." : " disabled.") << endl;
+//		a->setEnabled(p && p->isAvailable(a->name()));
+		a->setEnabled(avail);
+		kdDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
 	}
 }
 
@@ -191,18 +193,20 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 };*/
 
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name, 
-	const KShortcut &cut, const char *name)
+	const KShortcut &cut, const char *name, KActionCollection* col)
 {
 	return createSharedActionInternal( 
-		new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)),
-		cut, 0/*receiver*/, 0/*slot*/, d->mainWin->actionCollection(), name)
+//		new KAction(text, (pix_name.isEmpty() ? QIconSet() : SmallIconSet(pix_name)),
+		new KAction(text, pix_name,
+		cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
 	);
 }
 
-KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name)
+KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name, 
+	KActionCollection* col)
 {
 	return createSharedActionInternal( 
-		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, d->mainWin->actionCollection() )
+		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
 	);
 }
 

@@ -275,6 +275,8 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	addActionProxyChild( newView ); //new proxy child
 	m_stack->raiseWidget( newView );
 	newView->propertyBufferSwitched();
+	m_parentWindow->invalidateSharedActions( newView );
+//	setFocus();
 	return true;
 }
 
