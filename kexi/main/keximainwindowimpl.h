@@ -125,8 +125,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual tristate saveObject( KexiDialogBase *dlg, 
 			const QString& messageWhenAskingForName = QString::null );
 
-		void slotMigrationWizard();
-
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database 
 		 and loads the specified part.
@@ -294,6 +292,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotProjectRelations();
+		void slotImportProject();
 		void slotQuit();
 
 		void slotTipOfTheDay();

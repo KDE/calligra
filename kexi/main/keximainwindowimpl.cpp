@@ -105,9 +105,9 @@
 #include <kdockwidget_private.h>
 #endif
 
-#ifndef KEXI_NO_MIGRATION
-#include "migration/importwizard.h"
-#endif
+//#ifndef KEXI_NO_MIGRATION
+//#include "migration/importwizard.h"
+//#endif
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
@@ -532,13 +532,16 @@ KexiMainWindowImpl::initActions()
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
 
-	new KAction(i18n("From File..."), "fileopen", 0,
-		this, SLOT(slotImportFile()), actionCollection(), "import_file");
-	new KAction(i18n("From Server..."), "server", 0,
-		this, SLOT(slotImportServer()), actionCollection(), "import_server");
+//TODO	new KAction(i18n("From File..."), "fileopen", 0,
+//TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
+//TODO	new KAction(i18n("From Server..."), "server", 0,
+//TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 #else
 	d->action_project_relations = d->dummy_action;
 #endif
+#ifndef KEXI_NO_MIGRATION
+	d->action_tools_data_migration = new KAction(i18n("Project..."), "", 0, this, SLOT(slotImportProject()), actionCollection(), "project_import_project");
+#endif	
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -635,9 +638,6 @@ KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
 
 	//TOOLS MENU
-#ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration = new KAction(i18n("Import Data..."), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
-#endif	
 
 	//additional 'Window' menu items
 	d->action_window_next = new KAction( i18n("&Next Window"), "", 
@@ -1959,7 +1959,7 @@ void KexiMainWindowImpl::slotProjectRelations()
 {
 	if (!d->prj)
 		return;
-	KexiDialogBase *d = KexiInternalPart::createDialogInstance("relation", this);
+	KexiDialogBase *d = KexiInternalPart::createKexiDialogInstance("relation", this, this);
 	activateWindow(d);
 /*	KexiRelationPart *p = relationPart();
 	if(!p)
@@ -2976,12 +2976,16 @@ KexiMainWindowImpl::initUserActions()
 */
 }
 
-void KexiMainWindowImpl::slotMigrationWizard()
+void KexiMainWindowImpl::slotImportProject()
 {
 #ifndef KEXI_NO_MIGRATION
-	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
-	iw->setGeometry(300,300,400,300);
-	iw->show();
+	QDialog *d = KexiInternalPart::createModalDialogInstance("migration", this, this);
+	if (!d)
+		return;
+	d->exec();
+//	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
+//	iw->setGeometry(300,300,400,300);
+//	iw->show();
 #endif
 }
 
