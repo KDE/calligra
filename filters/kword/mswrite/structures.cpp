@@ -33,7 +33,6 @@ namespace MSWrite
 {
 	PageLayout::PageLayout () : m_numModified (0)
 	{
-		m_numModified = 0;
 	}
 
 	PageLayout::~PageLayout ()
@@ -481,26 +480,26 @@ namespace MSWrite
 			//
 			// get image dimensions
 			//
-			
+
 			if (m_bmh->getWidth () || m_bmh->getHeight ())
 				m_device->error (Error::Warn, "m_bmh structure should be 0 for WMFs\n");
 
 			m_originalWidth = Milli2Twip (double (m_MFP_width) / 100.0) * 4.0/3.0;
 			m_originalHeight = Milli2Twip (double (m_MFP_height) / 100.0) * 4.0/3.0;
-			
+
 			m_displayedWidth = double (m_width);
 			m_displayedHeight = double (m_height);
-			
+
 			if (m_horizontalScalingRel1000 != 1000)
 				m_device->error (Error::Warn, "horizontal scaling should not be set for WMFs\n");
 			if (m_verticalScalingRel1000 != 1000)
 				m_device->error (Error::Warn, "vertical scaling should not be set for WMFs\n");
-				
+
 
 			//
 			// read image
 			//
-			
+
 			m_externalImage = new Byte [m_externalImageSize = getNumDataBytes ()];
 			if (!m_externalImage)
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for external WMF image\n");
@@ -514,8 +513,10 @@ namespace MSWrite
 				wmfHeader.setDevice (m_device);
 				if (!wmfHeader.readFromDevice ())
 					return false;
-				if (wmfHeader.getFileSize () * sizeof (Word) != m_numDataBytes)
-   	   		m_device->error (Error::Warn, "wmfHeader.fileSize != numDataBytes\n");
+
+				// TODO: fix this incorrect check (see wmf.cpp)
+				//if (wmfHeader.getFileSize () * sizeof (Word) != m_numDataBytes)
+				//	m_device->error (Error::Warn, "wmfHeader.fileSize != numDataBytes\n");
 			m_device->setCache (NULL);
 		}
 		else	//	if (getIsBMP ())
@@ -523,15 +524,15 @@ namespace MSWrite
 			//
 			// get image dimensions
 			//
-			
+
 			m_originalWidth = Point2Twip (DWord (m_bmh->getWidth ()));
 			m_originalHeight = Point2Twip (DWord (m_bmh->getHeight ()));
-			
+
 			m_displayedWidth = m_originalWidth / 1.38889 * m_horizontalScalingRel1000 / 1000;
 			m_displayedHeight = m_originalHeight / 1.38889 * m_verticalScalingRel1000 / 1000;
 
 #define MSWrite_fabs(val) (((val)>=0)?(val):(-(val)))
-			
+
 			if (MSWrite_fabs (m_MFP_width / double (m_bmh->getWidth ()) - 2.64) > .3)
 				m_device->error (Error::Warn, "m_MFP_width != m_bmh->getWidth() * 2.64\n");
 			if (MSWrite_fabs (m_MFP_height / double (m_bmh->getHeight ()) - 2.64) > .3)
@@ -684,29 +685,30 @@ namespace MSWrite
 			m_device->setCache (m_externalImage);
 				wmfHeader.setDevice (m_device);
 				if (!wmfHeader.readFromDevice ()) return false;
-			
-				if (wmfHeader.getFileSize () * sizeof (Word) != m_numDataBytes)
-      			m_device->error (Error::Warn, "wmfHeader.fileSize != numDataBytes\n");
+
+				// TODO: fix this incorrect check (see wmf.cpp)
+				//if (wmfHeader.getFileSize () * sizeof (Word) != m_externalImageSize)
+				//	m_device->error (Error::Warn, "wmfHeader.fileSize != externalImageSize\n");
 			m_device->setCache (NULL);
 
 
 			//
 			// set image dimensions
 			//
-			
+
 			// entire BitmapHeader is unused with WMFs
 			m_bmh->setWidth (0);
 			m_bmh->setHeight (0);
 			m_bmh->setWidthBytes (0);
 			m_bmh->setNumPlanes (0);
 			m_bmh->setBitsPerPixel (0);
-			
+
 			m_MFP_width = Word (Twip2Milli (m_originalWidth * 0.75) * 100.0);
 			m_MFP_height = Word (Twip2Milli (m_originalHeight * 0.75) * 100.0);
-			
+
 			m_width = Word (m_displayedWidth);
 			m_height = Word (m_displayedHeight);
-			
+
 			// not used by WMFs
 			m_horizontalScalingRel1000 = m_verticalScalingRel1000 = 1000;
 			
