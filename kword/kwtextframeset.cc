@@ -614,12 +614,29 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     if (breakBegin) assert(breakEnd);
     if (breakEnd) assert(breakBegin);
 #endif
+
+    QPoint p;
+    KWFrame * frame = internalToNormal( QPoint(0, yp), p );
+    if (!frame)
+    {
+#ifdef DEBUG_MARGINS
+        kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << " ->aborting with 0 margins" << endl;
+#endif
+        // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
+        // Abort then, no need to return precise values
+        if ( marginLeft )
+            *marginLeft = 0;
+        if ( marginRight )
+            *marginRight = 0;
+        return;
+    }
+
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
     int left = 0;
     int from = left;
-    int to = textdoc->width();
+    int to = kWordDocument()->zoomItX( frame->width() );
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -699,7 +716,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     if ( from == to ) { // no-space case. Drop the margins we found - we'll reformat again.
         from = 0;
-        to = textdoc->width();
+        to = kWordDocument()->zoomItX( frame->width() );
     }
 
     if ( marginLeft )
@@ -837,62 +854,62 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                        << " h=" << h << endl;
 #endif
 
-        int totalHeight = 0;
-        QListIterator<KWFrame> frameIt( frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
+    int totalHeight = 0;
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
+        int bottom = totalHeight + frameHeight;
+        // Only skip bottom of frame if there is a next one or if there'll be another one created.
+        // ( Not for header/footer, for instance. )
+        bool check = frameIt.atLast() && frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame;
+        if ( !check )
         {
-            int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
-            int bottom = totalHeight + frameHeight;
-            // Only skip bottom of frame if there is a next one or if there'll be another one created.
-            // ( Not for header/footer, for instance. )
-            bool check = frameIt.atLast() && frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame;
-            if ( !check )
+            // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
+            // Or cache the attribute ( e.g. "frame->hasCopy()" ).
+            QListIterator<KWFrame> nextFrame( frameIt );
+            while ( !check && !nextFrame.atLast() )
             {
-                // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
-                // Or cache the attribute ( e.g. "frame->hasCopy()" ).
-                QListIterator<KWFrame> nextFrame( frameIt );
-                while ( !check && !nextFrame.atLast() )
-                {
-                    ++nextFrame;
-                    if ( !nextFrame.current()->isCopy() )
-                        check = true; // Found a frame after us that isn't a copy => we have somewhere for our overflow
-                }
+                ++nextFrame;
+                if ( !nextFrame.current()->isCopy() )
+                    check = true; // Found a frame after us that isn't a copy => we have somewhere for our overflow
             }
-
-            if ( check )
-            {
-                if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
-                {
-                    // The paragraph wants a frame break before it, and is in the current frame
-                    // The last check is for whether we did the frame break already
-                    // (adjustFlow is called twice for each paragraph, if a break was done)
-                    yp = bottom /*+ 2*/;
-#ifdef DEBUG_FLOW
-                    kdDebug(32002) << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
-                    kdDebug(32002) << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
-#endif
-                    break;
-                }
-
-#ifdef DEBUG_FLOW
-                kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
-#endif
-                // don't move down parags that are bigger than the page (e.g. floating tables)
-                if ( h < frameHeight )
-                {
-
-                    // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-                    breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-                }
-                // Some people write a single paragraph over 3 frames! So we have to keep looking...
-                //if ( breaked )
-                //    break;
-
-            }
-            if ( yp+h < bottom )
-                break; // we've been past the parag, so stop here
-            totalHeight = bottom;
         }
+
+        if ( check )
+        {
+            if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
+            {
+                // The paragraph wants a frame break before it, and is in the current frame
+                // The last check is for whether we did the frame break already
+                // (adjustFlow is called twice for each paragraph, if a break was done)
+                yp = bottom /*+ 2*/;
+#ifdef DEBUG_FLOW
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
+#endif
+                break;
+            }
+
+#ifdef DEBUG_FLOW
+            kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+#endif
+            // don't move down parags that are bigger than the page (e.g. floating tables)
+            if ( h < frameHeight )
+            {
+
+                // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
+                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+            }
+            // Some people write a single paragraph over 3 frames! So we have to keep looking...
+            //if ( breaked )
+            //    break;
+
+        }
+        if ( yp+h < bottom )
+            break; // we've been past the parag, so stop here
+        totalHeight = bottom;
+    }
 
     // Another case for a vertical break is frames with the RA_SKIP flag
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();

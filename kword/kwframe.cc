@@ -214,10 +214,15 @@ QRect KWFrame::outerRect() const
 KoRect KWFrame::outerKoRect() const
 {
     KoRect outerRect = *this;
-    outerRect.rLeft() -= brd_left.ptWidth;
+    KWDocument *doc = getFrameSet()->kWordDocument();
+/*    outerRect.rLeft() -= brd_left.ptWidth;
     outerRect.rTop() -= brd_top.ptWidth;
     outerRect.rRight() += brd_right.ptWidth;
-    outerRect.rBottom() += brd_bottom.ptWidth;
+    outerRect.rBottom() += brd_bottom.ptWidth;*/
+    outerRect.rLeft() -= Border::zoomWidthX( brd_left.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rTop() -= Border::zoomWidthY( brd_top.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rRight() += Border::zoomWidthX( brd_right.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rBottom() += Border::zoomWidthY( brd_bottom.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
     return outerRect;
 }
 
@@ -810,8 +815,6 @@ void KWFrameSet::updateFrames()
                     //kdDebug() << "KWFrameSet::updateFrames adding frame on top " << DEBUGRECT(intersect)
                     //          << " (zoomed: " << DEBUGRECT( kWordDocument()->zoomRect( intersect ) ) << endl;
                     m_framesOnTop.append( FrameOnTop( intersect, frameOnTop ) );
-                    // ## We could also store which frame (frameOnTop) this is upon, to make lookups faster !
-                    // In fact this means moving framesontop to KWFrame (TODO)
                 }
             }
         }
