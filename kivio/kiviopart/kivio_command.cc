@@ -195,14 +195,17 @@ KivioAddLayerCommand::~KivioAddLayerCommand()
 
 void KivioAddLayerCommand::execute()
 {
-    m_page->insertLayer( layerPos, m_layer );
+    m_page->insertLayer( layerPos-1, m_layer );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->resetLayerPanel();
+
 }
 
 void KivioAddLayerCommand::unexecute()
 {
     m_page->takeLayer( m_layer );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->resetLayerPanel();
 }
 
 

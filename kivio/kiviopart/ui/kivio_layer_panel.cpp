@@ -102,6 +102,9 @@ void KivioLayerPanel::addItem()
 
   m_pView->doc()->updateView(page);
 
+  KivioAddLayerCommand * cmd = new KivioAddLayerCommand( i18n("Add Layer"), page, layer, id );
+  m_pView->doc()->addCommand(cmd );
+
   KivioLayerItem* item = new KivioLayerItem(list, layer, id++);
   list->sort();
   list->setCurrentItem(item);

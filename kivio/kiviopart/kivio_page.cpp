@@ -1140,13 +1140,14 @@ bool KivioPage::removeCurrentLayer()
 
     KivioRemoveLayerCommand * cmd = new KivioRemoveLayerCommand( i18n("Remove layer"), this , m_pCurLayer , m_lstLayers.findRef(m_pCurLayer) );
     doc()->addCommand( cmd );
-
+    takeLayer( m_pCurLayer );
+/*
     if( m_lstLayers.remove( m_pCurLayer )==false )
     {
        kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!" << endl;
         return false;
     }
-
+*/
     m_pCurLayer = pLayer;
 
 
