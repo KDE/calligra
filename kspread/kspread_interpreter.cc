@@ -1213,12 +1213,12 @@ static bool kspreadfunc_day( KSContext& context )
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
-  if(KGlobal::locale()->WeekDayName(args[0]->intValue()).isNull())
+  if(KGlobal::locale()->weekDayName(args[0]->intValue()).isNull())
         tmp="Err";
   else
-        tmp= KGlobal::locale()->WeekDayName(args[0]->intValue());
+        tmp= KGlobal::locale()->weekDayName(args[0]->intValue());
 
-  //context.setValue( new KSValue(KGlobal::locale()->WeekDayName(args[0]->intValue())));
+  //context.setValue( new KSValue(KGlobal::locale()->weekDayName(args[0]->intValue())));
   context.setValue( new KSValue(tmp));
   return true;
 }
@@ -1233,13 +1233,13 @@ static bool kspreadfunc_month( KSContext& context )
   if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
     return false;
 
-  if(KGlobal::locale()->MonthName(args[0]->intValue()).isNull())
+  if(KGlobal::locale()->monthName(args[0]->intValue()).isNull())
         tmp="Err";
   else
-        tmp=KGlobal::locale()->MonthName(args[0]->intValue());
+        tmp=KGlobal::locale()->monthName(args[0]->intValue());
 
   context.setValue( new KSValue(tmp));
-  //context.setValue( new KSValue(KGlobal::locale()->MonthName(args[0]->intValue())));
+  //context.setValue( new KSValue(KGlobal::locale()->monthName(args[0]->intValue())));
 
   return true;
 }
