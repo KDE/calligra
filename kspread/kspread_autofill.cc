@@ -2,6 +2,7 @@
 #include "kspread_cell.h"
 #include "kspread_table.h"
 
+#include <kapp.h>
 #include <math.h>
 
 QStrList *AutoFillSequenceItem::month = 0L;
