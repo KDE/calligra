@@ -22,6 +22,7 @@
 
 #include <CORBA.h>
 #include <koDocument.h>
+#include <opIMR.h>
 
 #include <qstrlist.h>
 
