@@ -5566,7 +5566,7 @@ KCommand *KPrCanvas::setKeepRatioObj( bool p )
     }
     if ( lst.isEmpty())
         return 0L;
-    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Keep Ratio"), listKeepRatio, lst, p, m_view->kPresenterDoc(),
+    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Keep Ratio"), listKeepRatio, lst, p,
                                                      KPrGeometryPropertiesCommand::KeepRatio);
     cmd->execute();
     return cmd;
@@ -5587,7 +5587,7 @@ KCommand *KPrCanvas::setProtectSizeObj(bool protect)
     if ( lst.isEmpty())
         return 0L;
     KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Protect Object"), listProt, lst, protect,
-                                                     m_view->kPresenterDoc(),KPrGeometryPropertiesCommand::ProtectSize );
+                                                     KPrGeometryPropertiesCommand::ProtectSize );
     cmd->execute();
     return cmd;
 

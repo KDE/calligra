@@ -2121,49 +2121,67 @@ void KPrFlipObjectCommand::flipObjects()
     m_doc->updateSideBarItem( m_page );
 }
 
-KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_lst,
-                                                            QPtrList<KPObject> &_objects, bool _newValue,
-                                                            KPresenterDoc *_doc, KgpType _type):
-    KNamedCommand( _name ),
-    list( _lst),
-    objects( _objects ),
-    newValue( _newValue ),
-    doc(_doc),
-    m_type( _type )
+
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
+                                                            bool newValue, KgpType type )
+: KNamedCommand( name )
+, m_objects( objects )
+, m_newValue( newValue )
+, m_type( type )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->incCmdRef();
+        if ( m_type == ProtectSize )
+            m_oldValue.append( it.current()->isProtect() );
+        else if ( m_type == KeepRatio)
+            m_oldValue.append( it.current()->isKeepRatio() );
+    }
+}
+
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
+                                                            QPtrList<KPObject> &objects, bool newValue,
+                                                            KgpType type)
+: KNamedCommand( name )
+, m_oldValue( lst )
+, m_objects( objects )
+, m_newValue( newValue )
+, m_type( type )
+{
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 KPrGeometryPropertiesCommand::~KPrGeometryPropertiesCommand()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void KPrGeometryPropertiesCommand::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         if ( m_type == ProtectSize )
-            it.current()->setProtect( newValue );
+            it.current()->setProtect( m_newValue );
         else if ( m_type == KeepRatio)
-            it.current()->setKeepRatio( newValue );
+            it.current()->setKeepRatio( m_newValue );
     }
 }
 
 void KPrGeometryPropertiesCommand::unexecute()
 {
     KPObject *obj = 0;
-    for ( unsigned int i = 0; i < objects.count(); ++i ) {
-        obj = objects.at( i );
+    for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
+        obj = m_objects.at( i );
         if ( m_type == ProtectSize )
-            obj->setProtect( *list.at(i) );
+            obj->setProtect( *m_oldValue.at(i) );
         else if ( m_type == KeepRatio)
-            obj->setKeepRatio( *list.at(i) );
+            obj->setKeepRatio( *m_oldValue.at(i) );
     }
 }
 
