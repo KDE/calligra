@@ -2,41 +2,8 @@
 <html>
 <h3>Kexi - Database Creation for Everyone</h3>
 
-
 <h3>Welcome</h3>
-<p>Kexi is under active development. This document is to keep you informed about the state of the project.</p>
+<p>Kexi is under active development.</p>
 <p>Current Kexi version is <b>Beta3 Pre1</b>.</p>
-
-
-<h3>What's new </h3>
-<p>Changes since Beta2:
-<ul>
-<li>Table designer improved</li>
-<li>Properties window added (now used for table designer, more to come)
-<li>Consistent window closing, data saving, removing, editing, consistent questions</li>
-<li>Table/query designs (and other types in the future) are now saved only when needed, on demand</li>
-<li>&quot;Data&quot; menu added, with possibility of saving current table row</li>
-</ul>
-</p>
-
-
-<h3>Restrictions in this version</h3>
-<p>
-<ul>
-<li>Only file-based projects are supported</li>
-<li>Table designer works only for new designs, altering existing table not available</li>
-</ul>
-</p>
-
-<!-- h2>Notes</h2 -->
-<p>
-</p>
-
-<p>
-For contact information, use Help-&gt;About menu.
-</p>
-
-<i>Kexi Team</i>
-
 </html>
 </tip>
