@@ -24,6 +24,7 @@
 #include "vselection.h"
 #include "vvisitor.h"
 #include "vpainter.h"
+#include "vlayer.h"
 
 #include <kdebug.h>
 

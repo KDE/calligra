@@ -24,6 +24,7 @@
 #include "vungroupcmd.h"
 #include "vselection.h"
 #include "vdocument.h"
+#include "vlayer.h"
 
 VUnGroupCmd::VUnGroupCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Ungroup Objects" ), "14_ungroup" )

@@ -26,13 +26,12 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
-#include "vlayer.h"
 #include "vobject.h"
 
 class QDomDocument;
 class QDomElement;
 class VSelection;
-
+class VLayer;
 
 typedef QPtrList<VLayer> VLayerList;
 typedef QPtrListIterator<VLayer> VLayerListIterator;
