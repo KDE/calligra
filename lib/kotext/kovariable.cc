@@ -1059,6 +1059,7 @@ void KoDateVariable::load( QDomElement& elem )
 
 void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
+    //TODO use "style:data-style-name" for date style
     switch( m_subtype )
     {
     case VST_DATE_FIX:
