@@ -435,9 +435,23 @@ public:
      */
     void setChooseRect( const QRect& rect );
 
+  /**
+   * @return the marker point of the table.  Usually is the selected cell, or if
+   * a region is selected it is the one point in the region where text would be
+   * entered if the user started typing
+   */
   QPoint marker() const;
+
+  /**
+   * @return the selection rectangle.  Note that this should now NEVER be
+   * (0, 0, 0, 0).  Whether the selection is one cell or many this will give
+   * the region.
+   */
   QRect selection() const;
 
+  /**
+   * @return a boolean indicator of whether a single cell is selected or not
+   */
   bool singleCellSelection() const;
 
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
