@@ -297,6 +297,8 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
+    // Add entry to recent documents list (doing here makes it work with cmd line too etc.)
+    m_recent->addURL( doc->url() );
   }
 
   bool enable = d->m_rootDoc != 0 ? true : false;
@@ -381,7 +383,6 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
-    m_recent->addURL( url );
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
     d->m_firstTime=true;
