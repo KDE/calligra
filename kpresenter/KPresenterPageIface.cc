@@ -216,3 +216,24 @@ QSize KPresenterPageIface::getSize()const
 {
     return m_page->background()->getSize();
 }
+
+bool KPresenterPageIface::setRectSettings( int _rx, int _ry )
+{
+    return m_page->setRectSettings(_rx,_ry);
+}
+
+QString KPresenterPageIface::getPageSoundFileName()const
+{
+    return m_page->getPageSoundFileName();
+}
+
+int KPresenterPageIface::getPieAngle( int pieAngle )const
+{
+    return m_page->getPieAngle(pieAngle);
+}
+
+int KPresenterPageIface::getPieLength( int pieLength )const
+{
+    return m_page->getPieLength(pieLength);
+}
+

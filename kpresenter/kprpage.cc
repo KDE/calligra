@@ -387,7 +387,7 @@ LineEnd KPrPage::getLineEnd( LineEnd le )
 }
 
 /*========================= get brush =============================*/
-QBrush KPrPage::getBrush( const QBrush &brush )
+QBrush KPrPage::getBrush( const QBrush &brush )const
 {
     KPObject *kpobject = 0;
 
@@ -480,7 +480,7 @@ FillType KPrPage::getFillType( FillType ft )
 }
 
 /*================================================================*/
-QColor KPrPage::getGColor1( const QColor &g1 )
+QColor KPrPage::getGColor1( const QColor &g1 )const
 {
     KPObject *kpobject = 0;
 
@@ -527,7 +527,7 @@ QColor KPrPage::getGColor1( const QColor &g1 )
 }
 
 /*================================================================*/
-QColor KPrPage::getGColor2( const QColor &g2 )
+QColor KPrPage::getGColor2( const QColor &g2 )const
 {
     KPObject *kpobject = 0;
 
@@ -574,7 +574,7 @@ QColor KPrPage::getGColor2( const QColor &g2 )
 }
 
 /*================================================================*/
-BCType KPrPage::getGType( BCType gt )
+BCType KPrPage::getGType( BCType gt )const
 {
     KPObject *kpobject = 0;
 
@@ -668,7 +668,7 @@ bool KPrPage::getGUnbalanced( bool  unbalanced )
 }
 
 /*================================================================*/
-int KPrPage::getGXFactor( int xfactor )
+int KPrPage::getGXFactor( int xfactor )const
 {
     KPObject *kpobject = 0;
 
@@ -715,7 +715,7 @@ int KPrPage::getGXFactor( int xfactor )
 }
 
 /*================================================================*/
-int KPrPage::getGYFactor( int yfactor )
+int KPrPage::getGYFactor( int yfactor )const
 {
     KPObject *kpobject = 0;
 
@@ -1727,7 +1727,7 @@ bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, Lin
     return ret;
 }
 
-int KPrPage::getPenBrushFlags()
+int KPrPage::getPenBrushFlags() const
 {
     int flags = 0;
 

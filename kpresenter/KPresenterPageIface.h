@@ -62,6 +62,7 @@ k_dcop:
     virtual void setPageTimer(  int pageTimer );
     virtual void setPageSoundEffect(  bool soundEffect );
     virtual void setPageSoundFileName(  const QString &fileName );
+    virtual QString getPageSoundFileName()const;
 
     virtual bool getPageSoundEffect() const;
     virtual int getPageTimer() const;
@@ -78,6 +79,11 @@ k_dcop:
     virtual int getPageEffect()const;
     virtual bool getBackUnbalanced()const ;
     virtual QSize getSize()const;
+
+    virtual bool setRectSettings( int _rx, int _ry );
+
+    virtual int getPieAngle( int pieAngle )const;
+    virtual int getPieLength( int pieLength )const;
 
 private:
     KPrPage *m_page;

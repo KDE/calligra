@@ -95,15 +95,15 @@ public:
     int getPieLength( int pieLength );
     bool getSticky( bool s );
     PieType getPieType( PieType pieType );
-    int getGYFactor( int yfactor );
-    int getGXFactor( int xfactor );
+    int getGYFactor( int yfactor )const;
+    int getGXFactor( int xfactor )const;
     bool getGUnbalanced( bool  unbalanced );
     bool getBackUnbalanced( unsigned int );
-    BCType getGType( BCType gt );
-    QColor getGColor2( const QColor &g2 );
-    QColor getGColor1( const QColor & g1 );
+    BCType getGType( BCType gt )const;
+    QColor getGColor2( const QColor &g2 ) const;
+    QColor getGColor1( const QColor & g1)const;
     FillType getFillType( FillType ft );
-    QBrush getBrush( const QBrush &brush );
+    QBrush getBrush( const QBrush &brush )const;
     LineEnd getLineEnd( LineEnd le );
     LineEnd getLineBegin( LineEnd lb );
     bool setLineEnd( LineEnd le );
@@ -143,7 +143,7 @@ public:
     void alignObjsCenterV();
     void alignObjsBottom();
 
-    int getPenBrushFlags();
+    int getPenBrushFlags()const;
     bool setPieSettings( PieType pieType, int angle, int len );
     bool setRectSettings( int _rx, int _ry );
     bool setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
