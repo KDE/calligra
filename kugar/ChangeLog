@@ -17,7 +17,7 @@
 	* kudesigner:
 	Undo/Redo for report items works now without crashes if their parent section was undone.
 
-2003-05-01 Joris Marcillac <Joris@marcillac.com>
+2003-05-01 Joris Marcillac <joris@marcillac.org>
 	* lib:
 	Direct database support. Databases and queries can be specified withing template
 	file and then the data file can be generated
@@ -47,9 +47,9 @@
 	make -f Makefile.qt (on unix)
 	QMake and automake coexist normally;)
 	Qt only Kugar Designer and shell do not support KOffice zipped xml files
-	Preliminary qt-shell is written by Joris Marcillac <joris@marcillac.com>
+	Preliminary qt-shell is written by Joris Marcillac <joris@marcillac.org>
 	* lib:
-	Fixes for qt-only compilation, thanks to Joris Marcillac <joris@marcillac.com>
+	Fixes for qt-only compilation, thanks to Joris Marcillac <joris@marcillac.org>
 
 2003-03-16 Alexander Dymo <cloudtemple@mksat.net>
 	* kudesigner:

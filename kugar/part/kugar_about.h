@@ -39,7 +39,7 @@ KAboutData *newKugarAboutData()
         	I18N_NOOP("Smaller fixes and Kexi integration"), "jowenn@kde.org",
 	        "");
 	aboutData->addAuthor("Joris Marcillac",
-        	I18N_NOOP("Direct database support"), "joris@marcillac.com",
+        	I18N_NOOP("Direct database support"), "joris@marcillac.org",
 	        "");
 	aboutData->addAuthor("Phil Thompson",
         	I18N_NOOP("Former maintainer"), "phil@river-bank.demon.co.uk",
