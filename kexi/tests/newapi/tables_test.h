@@ -47,6 +47,8 @@ int tablesTest()
 
 	KexiDB::TableSchema *t_cars = new KexiDB::TableSchema("cars");
 	t_cars->setCaption("Cars owned by persons");
+	t_cars->addField( f=new KexiDB::Field("id", KexiDB::Field::Integer, KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned) );
+	f->setCaption("ID");
 	t_cars->addField( f=new KexiDB::Field("owner", KexiDB::Field::Integer, 0, KexiDB::Field::Unsigned) );
 	f->setCaption("Car owner");
 	t_cars->addField( f=new KexiDB::Field("model", KexiDB::Field::Text) );
@@ -56,11 +58,11 @@ int tablesTest()
 		return 1;
 	}
 	kdDebug() << "-- CARS created --" << endl;
-	if (!conn->insertRecord(*t_cars, QVariant(1), QVariant("Fiat"))
-		||!conn->insertRecord(*t_cars, QVariant(2), QVariant("Syrena"))
-		||!conn->insertRecord(*t_cars, QVariant(3), QVariant("Chrysler"))
-		||!conn->insertRecord(*t_cars, QVariant(3), QVariant("BMW"))
-		||!conn->insertRecord(*t_cars, QVariant(4), QVariant("Volvo"))
+	if (!conn->insertRecord(*t_cars, QVariant(1), QVariant(1), QVariant("Fiat"))
+		||!conn->insertRecord(*t_cars, QVariant(2), QVariant(2), QVariant("Syrena"))
+		||!conn->insertRecord(*t_cars, QVariant(3), QVariant(3), QVariant("Chrysler"))
+		||!conn->insertRecord(*t_cars, QVariant(4), QVariant(3), QVariant("BMW"))
+		||!conn->insertRecord(*t_cars, QVariant(5), QVariant(4), QVariant("Volvo"))
 		)
 	{
 		kdDebug() << "-- CARS data err. --" << endl;

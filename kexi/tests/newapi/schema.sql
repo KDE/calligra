@@ -27,11 +27,12 @@ insert into kexi__fields values (1, 11, 'name',    30, 0, 16, 0, 2, null, null);
 insert into kexi__fields values (1, 11, 'surname', 30, 0, 16, 0, 3, null, null);
 
 insert into kexi__objects values (2, 1, 'cars', 'Cars', 'Cars owned by persons');
-insert into kexi__fields values (2, 3, 'owner',    0, 0, 16, 0, 0, null, null);
-insert into kexi__fields values (2, 11, 'model',   30, 0, 16, 0, 1, null, null);
+insert into kexi__fields values (2, 3, 'id',    0, 0, 16, 0, 0, null, null);
+insert into kexi__fields values (2, 3, 'owner',    0, 0, 16, 0, 1, null, null);
+insert into kexi__fields values (2, 11, 'model',   30, 0, 16, 0, 2, null, null);
 
 insert into kexi__db values ('kexidb_major_ver', '1');
-insert into kexi__db values ('kexidb_minor_ver', '0');
+insert into kexi__db values ('kexidb_minor_ver', '2');
 
 commit;
 
