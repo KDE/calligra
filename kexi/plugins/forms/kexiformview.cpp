@@ -329,11 +329,12 @@ void KexiFormView::initDataSource()
 		ok = cursor!=0;
 	}
 //			delete m_data;
+	if (ok) {
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
-	KexiTableViewData* data = new KexiTableViewData(cursor);
-	data->preloadAllRows();
-	conn->deleteCursor(cursor);
+		KexiTableViewData* data = new KexiTableViewData(cursor);
+		data->preloadAllRows();
+		conn->deleteCursor(cursor);
 
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //			int resultCount = -1;
@@ -344,7 +345,8 @@ void KexiFormView::initDataSource()
 //			if (ok)
 //				ok = ! (!m_cursor->moveFirst() && m_cursor->error());
 
-	m_scrollView->setData( data, true /*owner*/ );
+		m_scrollView->setData( data, true /*owner*/ );
+	}
 /*moved
 		if (ok) {
 			m_scrollView->recordNavigator()->setRecordCount(data->count());
