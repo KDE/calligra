@@ -109,7 +109,7 @@ protected slots:
  * This dialog allows to set the value of the custom variables.
  ******************************************************************/
 
-class KoCustomVariablesDia : public QDialog
+class KoCustomVariablesDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -119,9 +119,6 @@ protected slots:
     void slotOk();
 
 protected:
-    void resizeEvent( QResizeEvent *e );
-    //void closeEvent( QCloseEvent *e );
-
     QVBox *back;
     KoCustomVariablesList *list;
 

@@ -191,13 +191,10 @@ void KoCustomVariablesList::updateItems()
  ******************************************************************/
 
 KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVariable> &variables )
-    : QDialog( parent, "", TRUE )
+    : KDialogBase( parent, "", TRUE,i18n( "Variable Value Editor" ), Ok|Cancel )
 {
-    setCaption( i18n( "Variable Value Editor" ) );
 
-    back = new QVBox( this );
-    back->setSpacing( 5 );
-    back->setMargin( 5 );
+    back = makeVBoxMainWidget();
 
     list = new KoCustomVariablesList( back );
 
@@ -215,27 +212,15 @@ KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVa
         }
     }
 
-    KButtonBox *bb = new KButtonBox( back );
-    bb->addStretch();
-    QPushButton *ok = bb->addButton( i18n( "&OK"  ) );
-    ok->setDefault( TRUE );
-    QPushButton *cancel = bb->addButton( i18n( "&Cancel"  ) );
-    bb->layout();
 
-    connect( ok, SIGNAL( clicked() ),
+    connect( this, SIGNAL( okClicked() ),
              this, SLOT( slotOk() ) );
-    connect( cancel, SIGNAL( clicked() ),
+    connect( this, SIGNAL( cancelClicked() ),
              this, SLOT( reject() ) );
-    ok->setEnabled(lst.count()>0);
+    showButtonOK(lst.count()>0);
 
     resize( 600, 400 );
     list->updateItems();
-}
-
-void KoCustomVariablesDia::resizeEvent( QResizeEvent *e )
-{
-    QDialog::resizeEvent( e );
-    back->resize( size() );
 }
 
 void KoCustomVariablesDia::slotOk()
