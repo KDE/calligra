@@ -10,13 +10,14 @@
 
 class KDoubleNumInput;
 class QSpinBox;
+class KarbonPart;
 
 class VStarDlg : public KDialog
 {
 	Q_OBJECT
 
 public:
-	VStarDlg( QWidget* parent = 0L, const char* name = 0L );
+	VStarDlg( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
 
 	double innerR() const;
 	double outerR() const;
@@ -29,6 +30,7 @@ private:
 	KDoubleNumInput* m_innerR;
 	KDoubleNumInput* m_outerR;
 	QSpinBox* m_edges;
+    KarbonPart*m_part;
 };
 
 #endif

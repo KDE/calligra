@@ -18,7 +18,7 @@ VStarTool::VStarTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Star" ), true )
 {
 	// create config dialog:
-	m_dialog = new VStarDlg();
+	m_dialog = new VStarDlg(view->part());
 	m_dialog->setOuterR( 100.0 );
 	m_dialog->setInnerR( 50.0 );
 	m_dialog->setEdges( 5 );

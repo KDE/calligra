@@ -17,10 +17,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include "vsinusdlg.h"
+#include "karbon_part.h"
 
-VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
+VSinusDlg::VSinusDlg( KarbonPart *part,QWidget* parent, const char* name )
 	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+                   WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title ),
+          m_part(part)
 {
 	setCaption( i18n( "Insert Sinus" ) );
 
@@ -31,9 +33,9 @@ VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	// add width/height-input:
-	new QLabel( i18n( "Width:" ), group );
+	new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
 	m_width = new KDoubleNumInput( 0, group );
-	new QLabel( i18n( "Height:" ), group );
+	new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
 	m_height = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Periods:" ), group );
 	m_periods = new QSpinBox( group );
@@ -66,13 +68,13 @@ VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
 double
 VSinusDlg::width() const
 {
-	return m_width->value();
+    	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
 }
 
 double
 VSinusDlg::height() const
 {
-	return m_height->value();
+       return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
 }
 
 uint
@@ -84,13 +86,13 @@ VSinusDlg::periods() const
 void
 VSinusDlg::setWidth( double value )
 {
-    m_width->setValue( value );
+        m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
 }
 
 void
 VSinusDlg::setHeight( double value )
 {
-    m_height->setValue( value );
+    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void

@@ -9,13 +9,14 @@
 #include <kdialog.h>
 
 class KDoubleNumInput;
+class KarbonPart;
 
 class VEllipseDlg : public KDialog
 {
 	Q_OBJECT
 
 public:
-	VEllipseDlg( QWidget* parent = 0L, const char* name = 0L );
+	VEllipseDlg( KarbonPart*part,QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;
@@ -25,6 +26,7 @@ public:
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
+    KarbonPart*m_part;
 };
 
 #endif

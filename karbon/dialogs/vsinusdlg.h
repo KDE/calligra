@@ -10,13 +10,13 @@
 
 class KDoubleNumInput;
 class QSpinBox;
-
+class KarbonPart;
 class VSinusDlg : public KDialog
 {
 	Q_OBJECT
 
 public:
-	VSinusDlg( QWidget* parent = 0L, const char* name = 0L );
+	VSinusDlg(KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;
@@ -29,6 +29,7 @@ private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
 	QSpinBox* m_periods;
+    KarbonPart*m_part;
 };
 
 #endif

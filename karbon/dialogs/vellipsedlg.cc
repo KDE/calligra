@@ -16,10 +16,13 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include "vellipsedlg.h"
+#include <koUnit.h>
+#include "karbon_part.h"
 
-VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
+VEllipseDlg::VEllipseDlg( KarbonPart*part, QWidget* parent, const char* name )
 	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title ),
+          m_part(part)
 {
 	setCaption( i18n( "Insert Ellipse" ) );
 
@@ -31,9 +34,9 @@ VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	// add width/height-input:
-	new QLabel( i18n( "Width:" ), group );
+	new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
 	m_width = new KDoubleNumInput( 0, group );
-	new QLabel( i18n( "Height:" ), group );
+	new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
 	m_height = new KDoubleNumInput( 0, group );
 
 	outerbox->addSpacing( 2 );
@@ -64,25 +67,25 @@ VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
 double
 VEllipseDlg::width() const
 {
-	return m_width->value();
+	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
 }
 
 double
 VEllipseDlg::height() const
 {
-	return m_height->value();
+	return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
 }
 
 void
 VEllipseDlg::setWidth( double value )
 {
-    m_width->setValue(value);
+    m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
 }
 
 void
 VEllipseDlg::setHeight( double value )
 {
-    m_height->setValue( value );
+    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 #include "vellipsedlg.moc"

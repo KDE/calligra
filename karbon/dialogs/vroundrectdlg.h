@@ -9,13 +9,14 @@
 #include <kdialog.h>
 
 class KDoubleNumInput;
+class KarbonPart;
 
 class VRoundRectDlg : public KDialog
 {
 	Q_OBJECT
 
 public:
-	VRoundRectDlg( QWidget* parent = 0L, const char* name = 0L );
+	VRoundRectDlg( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;
@@ -28,6 +29,7 @@ private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
 	KDoubleNumInput* m_round;
+    KarbonPart*m_part;
 };
 
 #endif

@@ -18,7 +18,7 @@ VSinusTool::VSinusTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Sinus" ) )
 {
 	// create config dialog:
-	m_dialog = new VSinusDlg();
+	m_dialog = new VSinusDlg(view->part());
 	m_dialog->setWidth( 100.0 );
 	m_dialog->setHeight( 100.0 );
 	m_dialog->setPeriods( 1 );

@@ -16,10 +16,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include "vroundrectdlg.h"
+#include "karbon_part.h"
 
-VRoundRectDlg::VRoundRectDlg( QWidget* parent, const char* name )
+VRoundRectDlg::VRoundRectDlg( KarbonPart*part,QWidget* parent, const char* name )
 	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title ),
+          m_part( part)
 {
 	setCaption( i18n( "Insert Round Rectangle" ) );
 
@@ -31,9 +33,9 @@ VRoundRectDlg::VRoundRectDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	// add width/height-input:
-	new QLabel( i18n( "Width:" ), group );
+	new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
 	m_width = new KDoubleNumInput( 0, group );
-	new QLabel( i18n( "Height:" ), group );
+	new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
 	m_height = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Edge Radius:" ), group );
 	m_round = new KDoubleNumInput( 0, group );
@@ -66,13 +68,13 @@ VRoundRectDlg::VRoundRectDlg( QWidget* parent, const char* name )
 double
 VRoundRectDlg::width() const
 {
-	return m_width->value();
+	return KoUnit::ptFromUnit(m_width->value(),m_part->getUnit()) ;
 }
 
 double
 VRoundRectDlg::height() const
 {
-	return m_height->value();
+       return KoUnit::ptFromUnit(m_height->value(),m_part->getUnit()) ;
 }
 
 double
@@ -84,13 +86,13 @@ VRoundRectDlg::round() const
 void
 VRoundRectDlg::setWidth( double value )
 {
-    m_width->setValue( value );
+    m_width->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
 }
 
 void
 VRoundRectDlg::setHeight( double value )
 {
-    m_height->setValue(value);
+    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void

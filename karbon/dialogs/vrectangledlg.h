@@ -9,12 +9,13 @@
 #include <kdialog.h>
 
 class KDoubleNumInput;
+class KarbonPart;
 class VRectangleDlg : public KDialog
 {
 	Q_OBJECT
 
 public:
-	VRectangleDlg( QWidget* parent = 0L, const char* name = 0L );
+	VRectangleDlg( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;
@@ -24,6 +25,7 @@ public:
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
+    KarbonPart*m_part;
 };
 
 #endif

@@ -9,6 +9,7 @@
 #include <klocale.h>
 
 #include "karbon_view.h"
+#include "karbon_part.h"
 #include "vellipse.h"
 #include "vellipsedlg.h"
 #include "vellipsetool.h"
@@ -18,7 +19,7 @@ VEllipseTool::VEllipseTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Ellipse" ) )
 {
 	// create config dialog:
-	m_dialog = new VEllipseDlg();
+	m_dialog = new VEllipseDlg(view->part());
 	m_dialog->setWidth( 100.0 );
 	m_dialog->setHeight( 100.0 );
 }
@@ -45,7 +46,7 @@ VEllipseTool::shape( bool decide ) const
 				new VEllipse(
 					0L,
 					m_p,
-					m_dialog->width(), 
+					m_dialog->width(),
 					m_dialog->height() );
 		else
 			return 0L;

@@ -17,10 +17,12 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include "vstardlg.h"
+#include "karbon_part.h"
 
-VStarDlg::VStarDlg( QWidget* parent, const char* name )
+VStarDlg::VStarDlg( KarbonPart*part, QWidget* parent, const char* name )
 	: KDialog( parent, name, true, Qt::WStyle_Customize |
-	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+                   WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title ),
+          m_part(part)
 {
 	setCaption( i18n( "Insert Star" ) );
 
@@ -31,9 +33,9 @@ VStarDlg::VStarDlg( QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	// add width/height-input:
-	new QLabel( i18n( "Outer Radius:" ), group );
+	new QLabel( i18n( "Outer Radius(%1):" ).arg(m_part->getUnitName()), group );
 	m_outerR = new KDoubleNumInput( 0, group );
-	new QLabel( i18n( "Inner Radius:" ), group );
+	new QLabel( i18n( "Inner Radius(%1):" ).arg(m_part->getUnitName()), group );
 	m_innerR = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new QSpinBox( group );
@@ -67,13 +69,14 @@ VStarDlg::VStarDlg( QWidget* parent, const char* name )
 double
 VStarDlg::innerR() const
 {
-	return m_innerR->value();
+    	return KoUnit::ptFromUnit(m_innerR->value(),m_part->getUnit()) ;
+
 }
 
 double
 VStarDlg::outerR() const
 {
-	return m_outerR->value();
+    	return KoUnit::ptFromUnit(m_outerR->value(),m_part->getUnit()) ;
 }
 
 uint
@@ -85,13 +88,14 @@ VStarDlg::edges() const
 void
 VStarDlg::setInnerR( double value )
 {
-    m_innerR->setValue( value );
+    m_innerR->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
+
 }
 
 void
 VStarDlg::setOuterR( double value )
 {
-    m_outerR->setValue( value);
+    m_outerR->setValue(KoUnit::ptToUnit( value, m_part->getUnit() ));
 }
 
 void

@@ -18,7 +18,7 @@ VRectangleTool::VRectangleTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Rectangle" ) )
 {
 	// create config dialog:
-	m_dialog = new VRectangleDlg();
+	m_dialog = new VRectangleDlg(view->part());
 	m_dialog->setWidth( 100.0 );
 	m_dialog->setHeight( 100.0 );
 }
