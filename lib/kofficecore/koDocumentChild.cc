@@ -31,10 +31,10 @@
 #include <assert.h>
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store:" but KURL didn't like it,
-// so let's simply make it "tar:" !
-#define STORE_PROTOCOL "tar:"
-#define STORE_PROTOCOL_LENGTH 4
+// This used to "store" but KURL didn't like it,
+// so let's simply make it "tar" !
+#define STORE_PROTOCOL "tar"
+#define STORE_PROTOCOL_LENGTH 3
 // Warning, keep it sync in koStore.cc
 
 /**********************************************************

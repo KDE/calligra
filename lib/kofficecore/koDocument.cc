@@ -52,10 +52,10 @@
 #include <qtimer.h>
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store:" but KURL didn't like it,
-// so let's simply make it "tar:" !
-#define STORE_PROTOCOL "tar:"
-#define STORE_PROTOCOL_LENGTH 4
+// This used to "store" but KURL didn't like it,
+// so let's simply make it "tar" !
+#define STORE_PROTOCOL "tar"
+#define STORE_PROTOCOL_LENGTH 3
 // Warning, keep it sync in koStore.cc
 
 QList<KoDocument> *KoDocument::s_documentList=0L;
@@ -631,7 +631,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
   KoStore* store = new KoStore( file, KoStore::Write, appIdentification );
 
   // Save childen first since they might get a new url
-  if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
+  if ( store->bad() || !saveChildren( store, QString(STORE_PROTOCOL) + ':' ) )
   {
     kdDebug(30003) << "store->bad()=" << store->bad() << "   aborting saving !" << endl;
     delete store;
