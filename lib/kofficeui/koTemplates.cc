@@ -150,7 +150,7 @@ void KoTemplateTree::writeTemplateTree() {
                 //kdDebug() << "hidden" << endl;
                 if(group->dirs().count()==1 && !group->dirs().grep(localDir).isEmpty()) {
                     //kdDebug() << "local only" << endl;
-                    KIO::NetAccess::del(group->dirs().first());
+                    KIO::NetAccess::del(group->dirs().first(), 0);
                     //kdDebug() << "removing: " << group->dirs().first() << endl;
                 }
                 else {
