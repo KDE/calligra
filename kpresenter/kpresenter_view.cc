@@ -5039,16 +5039,6 @@ void KPresenterView::spellCheckerFinished()
 #endif
 }
 
-void KPresenterView::configureSpellChecker()
-{
-    KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
-                                  "Please make sure you have ISpell properly configured and in your PATH."));
-
-    KPConfig configDia( this );
-    configDia.openPage( KPConfig::KP_KSPELL);
-    configDia.exec();
-}
-
 void KPresenterView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");

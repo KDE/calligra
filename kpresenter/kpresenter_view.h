@@ -157,7 +157,6 @@ public:
     void savePicture( KPPixmapObject* obj );
 
     void insertFile(const QString &path);
-    void configureSpellChecker();
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
     QPtrList<KAction> listOfResultOfCheckWord( const QString &word );

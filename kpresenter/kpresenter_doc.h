@@ -455,7 +455,6 @@ class KPresenterDoc : public KoDocument
     void insertFile(const QString & file );
 
     void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
-    void configureSpellChecker();
 
     void loadPictureMap ( const QDomElement& domElement );
     void updateRulerInProtectContentMode();
