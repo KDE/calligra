@@ -43,8 +43,6 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
 
 void TKSelectColorAction::init()
 {
-  iconColorRect = QRect(0,12,16,4);
-
   m_pStandardColor = new TKColorPanel();
   m_pRecentColor = new TKColorPanel();
 
@@ -116,9 +114,22 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
 
   QPixmap* pix = (QPixmap*)b->pixmap();
   QPainter p(pix);
-  p.fillRect(iconColorRect,m_pCurrentColor);
+  switch (m_type) {
+    case TextColor:
+      p.fillRect(QRect(0,12,16,5), m_pCurrentColor);
+      break;
+    case LineColor:
+      p.fillRect(QRect(0,13,16,5), m_pCurrentColor);
+      p.fillRect(QRect(3,12,1,1), m_pCurrentColor);
+      break;
+    case FillColor:
+      p.fillRect(QRect(0,13,16,5), m_pCurrentColor);
+      p.fillRect(QRect(1,10,5,3), m_pCurrentColor);
+      break;
+    case Color:
+      break;
+  }
   p.end();
-
   b->setPixmap(*pix);
 }
 

@@ -72,7 +72,6 @@ protected:
   int m_type;
 
   QColor m_pCurrentColor;
-  QRect iconColorRect;
 
 private:
   class TKSelectColorActionPrivate;
