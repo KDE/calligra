@@ -75,10 +75,12 @@ VCToolRectangle::recalcCoords()
 
 	if ( m_isCentered )
 	{
-		m_tl.setX( qRound( m_fp.x() - width*0.5 ) );
-		m_tl.setY( qRound( m_fp.y() + height*0.5 ) );
-		m_br.setX( qRound( m_fp.x() + width*0.5 ) );
-		m_br.setY( qRound( m_fp.y() - height*0.5 ) );
+		// Centering without halving the width/height seems more natural
+		// and allows for bigger rectangles.
+		m_tl.setX( qRound( m_fp.x() - width /* *0.5 ) */ ) );
+		m_tl.setY( qRound( m_fp.y() + height /* *0.5 */ ) );
+		m_br.setX( qRound( m_fp.x() + width /* *0.5 */ ) );
+		m_br.setY( qRound( m_fp.y() - height /* *0.5 */ ) );
 	}
 	else
 	{
