@@ -311,7 +311,7 @@ public:
      * @reimp
      */
     const QBrush& backGroundBrush( int col, int row ) const;
-    
+
     ////////////////////////////////
     //
     // Methods for setting layout stuff.
@@ -337,7 +337,7 @@ public:
      * @reimp
      */
     void setBottomBorderPen( const QPen& p );
-    
+
     //////////////////////
     //
     // Other stuff
@@ -644,7 +644,6 @@ protected:
     QString createFractionFormat( double value );
     QString createDateFormat( );
     QString createTimeFormat( );
-    void checkFormat( bool formular = false );
 
     /**
      * When you insert a cell at bottom or right
@@ -687,6 +686,12 @@ protected:
      * If @ref #m_bValue is set, a new value for @ref m_dValue is calculated.
       */
     void checkValue();
+
+    /**
+     * Automatically chooses between a number format and
+     * a scientific format (if the number is too big)
+     */
+    void checkNumberFormat();
 
     /**
      * This cells row.

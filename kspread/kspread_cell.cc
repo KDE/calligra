@@ -2055,12 +2055,11 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate =false;
     m_bTime=false;
-    // m_strFormularOut.sprintf( "%f", m_dValue );
-    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-        setFormatNumber(Number);
+    //m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+
+    checkNumberFormat(); // auto-chooses number or scientific
+    // Format the result appropriately
+    m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -2070,12 +2069,11 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bBool = false;
     m_bDate = false;
     m_bTime=false;
-    // m_strFormularOut.sprintf( "%f", m_dValue );
-    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-        setFormatNumber(Number);
+    //m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
+
+    checkNumberFormat(); // auto-chooses number or scientific
+    // Format the result appropriately
+    m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
@@ -2087,10 +2085,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-        setFormatNumber(Number);
+    setFormatNumber(Number);
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
@@ -2139,10 +2134,7 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bDate=false;
     m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-        setFormatNumber(Number);
+    setFormatNumber(Number);
   }
   if ( m_style == ST_Select )
   {
@@ -3319,7 +3311,9 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
     m_bLayoutDirtyFlag= true;
     m_content = Formula;
 
-    checkFormat(true);
+    // David: don't change what the user typed !
+    //checkFormat(true);
+
     if ( !m_pTable->isLoading() )
         if ( !makeFormular() )
             kdError(36002) << "ERROR: Syntax ERROR" << endl;
@@ -3507,28 +3501,26 @@ void KSpreadCell::checkValue()
     }
 
     // Get the text that we actually display
-    // FIXME (Werner)
-    const char *p = m_strText.latin1();
+    QString p = m_strText;
     if ( m_style == ST_Select )
-      p = ((SelectPrivate*)m_pPrivate)->text().latin1();
+      p = ((SelectPrivate*)m_pPrivate)->text();
     else if ( isFormular() )
-      p = m_strFormularOut.latin1();
-    const char *ptext = p;
+        p = m_strFormularOut; // this should never happen
 
     // If the output is empty, we dont have a value
-    if ( p == 0L )
+    if ( p.isEmpty() )
     {
       return;
     }
 
     // Test for boolean
-    if ( strcasecmp( p, "true") == 0 )
+    if ( p == "true" )
     {
       m_dValue = 1.0;
       m_bBool = true;
       return;
     }
-    else if ( strcasecmp( p, "false" ) == 0 )
+    else if ( p == "false" )
     {
       m_dValue = 0.0;
       m_bBool = true;
@@ -3538,38 +3530,51 @@ void KSpreadCell::checkValue()
 
     // Test whether it is a numeric value
     m_bValue = TRUE;
-    bool point = FALSE;
-    if ( *p == '+' || *p == '-' )
-        p++;
-    while ( *p != 0 && m_bValue )
-    {
-        if ( *p == ',' || *p == '.' || *p == decimal_point )
-        {
-            // Only one decimal point is allowed
-            if ( point )
-              m_bValue = FALSE;
-            else
-              point = TRUE;
-        }
-        else if ( !isdigit( *p ) )
-          m_bValue = FALSE;
-        p++;
-    }
+
+    // First try to understand the number using the locale
+    double value = KGlobal::locale()->readNumber(p, &m_bValue);
+    // If not, try with the '.' as decimal separator
+    if (!m_bValue)
+        value = p.toDouble(&m_bValue);
 
     if ( m_bValue )
-        {
-        m_dValue = atof( ptext );
-        if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-                setFormatNumber(Number);
+    {
+        m_dValue = value;
+        if ( m_strText.contains('E') || m_strText.contains('e') )
+            setFormatNumber(Scientific);
+        else
+            setFormatNumber(Number);
         return;
+    }
+
+    QString str = m_strText.stripWhiteSpace();
+    //test if text is a percent value
+    if(str.at(str.length()-1)=='%')
+    {
+        str=str.left(str.length()-1);
+        // First try to understand the number using the locale
+        double value = KGlobal::locale()->readNumber(p, &m_bValue);
+        // If not, try with the '.' as decimal separator
+        if (!m_bValue)
+            value = p.toDouble(&m_bValue);
+
+        if (m_bValue)
+        {
+            m_dValue=value/100.0;
+            setFormatNumber(Percentage);
+            setFaktor(100.0);
+            setPrecision(0);
+            return;
         }
+    }
+
+/*
     QString tmp;
     QString tmpCurrency=KGlobal::locale()->currencySymbol();
     int pos=0;
     bool ok=false;
     double val=0;
+    // TODO: why not use KLocale here too ?
     if((pos=m_strText.find(tmpCurrency))!=-1)
         {
         if(pos==0) // example $ 154.545
@@ -3605,10 +3610,23 @@ void KSpreadCell::checkValue()
                         }
                 }
         }
+        */
+    double money = KGlobal::locale()->readMoney(m_strText, &m_bValue);
+    if (m_bValue)
+    {
+        m_dValue=money;
+        setFormatNumber(Money);
+        //m_strText=tmp.setNum(m_dValue); ?
+        setFaktor(1.0);
+        setPrecision(2);
+        return;
+    }
 
+    QString tmp;
     QTime tmpTime;
     QString stringPm=i18n("pm");
     QString stringAm=i18n("am");
+    int pos=0;
     bool valid=false;
     if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
         {
@@ -3644,7 +3662,7 @@ void KSpreadCell::checkValue()
         }
     }
     if(valid)
-        {
+    {
         m_bTime = true;
         m_dValue = 0;
         if( m_eFormatNumber!=SecondeTime)
@@ -3652,11 +3670,11 @@ void KSpreadCell::checkValue()
         m_Time=tmpTime;
         m_strText=KGlobal::locale()->formatTime(m_Time,true);
         return;
-        }
+    }
 
     QDate tmpDate;
     if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
-        {
+    {
         m_bDate = true;
         m_dValue = 0;
         if( m_eFormatNumber!=TextDate &&
@@ -3665,80 +3683,20 @@ void KSpreadCell::checkValue()
         m_Date=tmpDate;
         m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
         return;
-        }
-    checkFormat();
-    //make default format
-    if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
-        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
-        setFormatNumber(Number);
-    /* if ( old_value != bValue )
-        displayDirtyFlag = TRUE; */
+    }
+
+    //default format
+    setFormatNumber(Number);
 }
 
-void KSpreadCell::checkFormat(bool _formular)
+void KSpreadCell::checkNumberFormat()
 {
-   QString tmpText=m_strText;
-   double val=0;
-   bool ok=false;
-   QString tmp;
-   if(_formular)
-        tmpText=tmpText.right(tmpText.length()-1);
-   //test if text is a percent value
-    if(tmpText.at(tmpText.length()-1)=='%')
-        {
-        tmp=tmpText.left(tmpText.length()-1);
-        tmp=tmp.simplifyWhiteSpace();
-        val=tmp.toDouble(&ok);
-        if(ok)
-                {
-                m_bValue=true;
-                m_dValue=val;
-                setFormatNumber(Percentage);
-                m_dValue/=100.0;
-                m_strText=tmp.setNum(m_dValue);
-                setFaktor(100.0);
-                setPrecision(0);
-                if(_formular)
-                        m_strText="="+m_strText;
-                return;
-                }
-
-        }
-
-    val=tmpText.toDouble(&ok);
-    if(ok)
-        {
-        if(tmpText.contains('E')||tmpText.contains('e'))
-                {
-                m_dValue=val;
-                m_bValue = true;
-                setFormatNumber(Scientific);
-                m_strText= QString::number(val, 'f',8);
-
-                int i = m_strText.length();
-                bool bFinished = FALSE;
-                while ( !bFinished && i > 0 )
-                {
-                QChar ch = m_strText[ i - 1 ];
-                if ( ch == '0' )
-                    m_strText.truncate( --i );
-                else
-                {
-                    bFinished = TRUE;
-                    if ( ch == '.' )
-                        m_strText.truncate( --i );
-                }
-                }
-                setFaktor(1.0);
-                if(_formular)
-                        m_strText="="+m_strText;
-                return;
-                }
-        }
-
+    if ( m_bValue )
+        if ( m_dValue > 1e+10 )
+            setFormatNumber( Scientific );
+        else
+            setFormatNumber( Number );
 }
-
 
 void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row )
 {
@@ -4384,3 +4342,4 @@ KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
 
 
 #include "kspread_cell.moc"
+
