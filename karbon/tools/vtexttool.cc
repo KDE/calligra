@@ -312,7 +312,7 @@ ShadowWidget::updatePreview()
 }
 
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
-	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel ), m_tool( tool )
+	: KDialogBase( parent, "", true, i18n( "Text" ), Ok | Cancel ), m_tool( tool )
 {
 	//setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 	//setFrameStyle( Box | Sunken );

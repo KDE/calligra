@@ -51,7 +51,7 @@ VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 	group->setRadioButtonExclusive( true );
 	group->setButton( m_view->part()->document().selectionMode() );
 	
-	connect( this, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
+	connect( group, SIGNAL( clicked( int ) ), this, SLOT( modeChange( int ) ) );
 
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );

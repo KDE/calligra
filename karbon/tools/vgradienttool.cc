@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradient )
-	: KDialogBase( 0L, "", true, i18n( "" ), Ok | Cancel )
+	: KDialogBase( 0L, "", true, i18n( "Edit Gradient" ), Ok | Cancel )
 {
 	m_gradientWidget = new VGradientTabWidget( *gradient, KarbonFactory::rServer(), this );
 	setMainWidget( m_gradientWidget );

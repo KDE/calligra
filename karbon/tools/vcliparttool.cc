@@ -42,7 +42,7 @@
 #include <render/vpainter.h>
 
 VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
-	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel ), m_view( view )
+	: KDialogBase( parent, "", true, i18n( "Insert Clipart" ), Ok | Cancel ), m_view( view )
 {
 	KIconLoader il;
 

@@ -38,7 +38,7 @@ VCanvas::pageOffsetX() const
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
 	if( zoomedWidth < viewport()->width() )
 	{
-		kdDebug() << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
+		//kdDebug() << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
 		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
 	}
 	else
@@ -51,7 +51,7 @@ VCanvas::pageOffsetY() const
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
 	if( zoomedHeight < viewport()->height() )
 	{
-		kdDebug() << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
+		//kdDebug() << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
 		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
 	}
 	else
@@ -172,7 +172,7 @@ void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
 	setYMirroring( m_view->painterFactory()->editpainter() );
-	kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
+	//kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	viewport()->setUpdatesEnabled( false );
 	KoRect rect( e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height() );
 	VPainter *p = m_view->painterFactory()->painter();

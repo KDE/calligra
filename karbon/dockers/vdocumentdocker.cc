@@ -243,7 +243,6 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
-	connect( view, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view, SIGNAL( pageLayoutChanged() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view->canvasWidget(), SIGNAL( viewportChanged() ), this, SLOT( slotViewportChanged() ) );
 

@@ -41,7 +41,7 @@
 #include <commands/vfillcmd.h>
 
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
-	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel )
+	: KDialogBase( parent, "", true, i18n( "Choose pattern" ), Ok | Cancel )
 {
 	KIconLoader il;
 

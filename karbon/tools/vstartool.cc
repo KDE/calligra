@@ -34,7 +34,7 @@
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert star" ), Ok | Cancel ), m_part( part )
 {
-	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "" ), this );
+	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Type:" ), group );
 	m_type = new KComboBox( false, group );
 	m_type->insertItem( i18n( "Star Outline" ), VStar::star_outline );
