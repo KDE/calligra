@@ -42,7 +42,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 
 SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \
-		page.moc ktextobject.mocbackdia.moc styledia.moc \
+		page.moc ktextobject.moc backdia.moc styledia.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
