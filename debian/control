@@ -34,6 +34,16 @@ Description: KDE Office Suite - KChart
  .
  A Graphical Chart program based on QT and KDE
 
+Package: kformula
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Suggests: kdebase
+Description: KDE Office Suite - KFormula
+ KDE Office Suite - KFormula
+ .
+ A Graphical Formula program based on QT and KDE
+
 Package: kspread
 Architecture: any
 Section: x11
@@ -83,7 +93,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-libs (<< 2.0-final-7)
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
-Recommends: kchart, kword, kspread, killustrator, kpresenter, kivio
+Recommends: kchart, kformula, kword, kspread, killustrator, kpresenter, kivio
 Suggests: kdebase
 Description: KDE Office Workspace
  KDE Office Workspace
@@ -93,11 +103,11 @@ Description: KDE Office Workspace
 Package: task-koffice
 Architecture: all
 Section: x11
-Depends: koffice-libs, kchart, kword, kspread, killustrator, kpresenter, koshell, kdelibs3, kdebase-libs, libqt2.2
+Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kdelibs3, kdebase-libs, libqt2.2
 Suggests: kdebase, kivio
 Description: KDE Office Suite
  KDE Office Suite
  .
  This Task depends on each of the following KOffice components:
  .
- kchart, kspread, killustrator, kpresenter, and kword
+ kchart, kformula, koshell, kspread, killustrator, kpresenter, and kword

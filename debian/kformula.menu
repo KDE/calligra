@@ -1,0 +1,7 @@
+?package(kformula):\
+	needs=x11\
+	section=Apps/Tools\
+	hints="KDE"\
+	title="KFormula"\
+	command=kformula
+
