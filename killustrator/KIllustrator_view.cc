@@ -1343,24 +1343,17 @@ void KIllustratorView::slotViewResize()
 
 QButton* KIllustratorView::newIconButton( const char* file, bool kbutton, QWidget* parent )
 {
-  kdDebug(0) << "BP0" << endl;
   if (!parent)
     parent = this;
-  kdDebug(0) << "BP1" << endl;
   QPixmap *pixmap = new QPixmap(BarIcon(file));
-  kdDebug(0) << "BP2" << endl;
   QButton *pb;
   if (!kbutton)
     pb = new QPushButton(parent);
-  kdDebug(0) << "BP3" << endl;
 //  else
 //    pb = new QToolButton(parent);
-  kdDebug(0) << "BP4" << endl;
   if (pixmap)
     pb->setPixmap(*pixmap);
-  kdDebug(0) << "BP5" << endl;
   pb->setFixedSize(16,16);
-  kdDebug(0) << "BP6" << endl;
   return pb;
 }
 
