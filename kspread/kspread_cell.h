@@ -103,9 +103,9 @@ public:
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
-    virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0 );
+    virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0,QString name=0  );
 
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL,QString name=0);
     virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
     /**
      * Copyies the layout from the cell at the position (_column|_row).

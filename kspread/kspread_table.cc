@@ -1041,6 +1041,7 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 		cell->setPostfix( "%" );
 		cell->setPrefix( "" );
 		cell->clearDisplayDirtyFlag();
+		//cout <<"value : "<<cell->text().ascii()<<endl;
 	    }
 	
 	emit sig_updateView( this, r );
@@ -1813,7 +1814,7 @@ void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
   }
 
   istrstream in( data.c_str() );
-  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp );
+  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp);
 
   m_pDoc->setModified( true );
   emit sig_updateView( this );
@@ -1896,7 +1897,7 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
     if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( parser, lst, _xshift, _yshift,sp_cell );
+      cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName );
       insertCell( cell );
     }
     else
@@ -2255,7 +2256,7 @@ bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
     {
       QPoint p( it.current()->column(), it.current()->row() );
       if ( _rect.contains( p ) )
-	it.current()->save( out, _rect.left() - 1, _rect.top() - 1 );
+	it.current()->save( out, _rect.left() - 1, _rect.top() - 1,name());
     }
   }
 

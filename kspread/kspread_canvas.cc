@@ -1297,7 +1297,7 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   m_pPosWidget->setText(buffer);
 }
 
-//laurent
+
 void KSpreadCanvas::choose_drawMarker( )
 {
 

@@ -1,3 +1,9 @@
+1999-09-05 - Montel laurent <montell@club-internet.fr>
+Improved Special paste now you can paste with link between different tables
+(Now link : Table2!A7 if you change table)
+Now copy all border (right and bottom)
+
+
 1999-08-31 - Montel laurent <montell@club-internet.fr>
 ------------------------------------------------------
 Now when you write "=" in cell and you click on the table

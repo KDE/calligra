@@ -58,6 +58,7 @@
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_goto.h"
+#include "kspread_dlg_replace.h"
 
 /*****************************************************************************
  *
@@ -794,6 +795,9 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuData_goto = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Goto cell" ) ) ), this, "gotocell", 0 );
 
   m_vMenuData->insertSeparator( -1 );
+  m_idMenuData_replace = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Replace" ) ) ), this, "replace", 0 );
+
+  m_vMenuData->insertSeparator( -1 );
   m_idMenuData_Consolidate = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Consolidate" ) ) ), this, "consolidate", 0 );
 
   // Folder
@@ -1258,6 +1262,11 @@ void KSpreadView::slotChangeTable( const QString& _name )
     if ( QString::compare( _name, t->name() ) == 0 )
     {
       setActiveTable( t );
+      KSpreadCell *cell = activeTable()->cellAt( canvasWidget()->markerColumn(), canvasWidget()->markerRow() );
+	if ( cell->text() != 0L )
+		editWidget()->setText( cell->text() );
+	 else
+		editWidget()->setText( "" );
       return;
     }
   }
@@ -1344,6 +1353,12 @@ void KSpreadView::gotocell()
 {
   KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
   dlg->show();
+}
+
+void KSpreadView::replace()
+{
+  //KSpreadreplace* dlg = new KSpreadreplace( this, "Replace" );
+  //dlg->show();
 }
 
 

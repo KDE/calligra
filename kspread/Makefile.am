@@ -16,7 +16,7 @@ kspread_SOURCES = kspread.idl kspread_canvas.cc kspread_main.cc \
 	kspread_dlg_cons.cc datatools.idl kspread_util.cc \
 	kspread_corba_util.cc kspread_editors.cc kspread_dlg_tabname.cc \
 	kspread_dlg_formula.cc kspread_dlg_assistant.cc \
-	kspread_dlg_special.cc kspread_dlg_goto.cc 
+	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc
 
 noinst_HEADERS = kspread_main.h \
 	kspread_shell.h kspread_doc.h \
@@ -27,14 +27,14 @@ noinst_HEADERS = kspread_main.h \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
 	datatools.h kspread_util.h kspread_corba_util.h kspread_canvas.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \
-	kspread_dlg_assistant.h kspread_dlg_special.h kspread_dlg_goto.h
+	kspread_dlg_assistant.h kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_replace.h
 
 METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc kspread_canvas.moc \
 	kspread_table.moc kspread_dlg_layout.moc kspread_cell.moc \
 	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc \
 	kspread_editors.moc kspread_dlg_tabname.moc kspread_dlg_formula.moc \
-	kspread_dlg_assistant.moc kspread_dlg_special.moc kspread_dlg_goto.moc
+	kspread_dlg_assistant.moc kspread_dlg_special.moc kspread_dlg_goto.moc kspread_dlg_replace.moc
 
 idl_DATA = kspread.idl
 

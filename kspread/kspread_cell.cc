@@ -2192,14 +2192,14 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
   }
 }
 
-bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
+bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset,QString name )
 {
   out << otag << "<CELL row=\"" << m_iRow - _y_offset
       << "\" column=\"" << m_iColumn - _x_offset << "\">" << endl;
 
-
-  //l
+  out << indent << "<TABLE name=\"" << name.ascii() <<"\"" <<"\"/>" <<endl;
   out << indent << "<START row=\"" << m_iRow <<"\" column=\""<<m_iColumn<<"\"" <<"\"/>" <<endl;
+
   out << indent << "<FORMAT align=\"" << (unsigned int)m_eAlign << '"';
 
   if ( m_bgColor != Qt::white )
@@ -2219,6 +2219,7 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   out << " float=\"" << (unsigned int)floatFormat() << "\" floatcolor=\"" << (unsigned int)floatColor()
       << "\" faktor=\"" << m_dFaktor << "\"/>" << endl;
 
+
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
     out << indent << m_textFont << endl;
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
@@ -2228,7 +2229,18 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
     out << indent << "<LEFTBORDER>" << m_leftBorderPen << "</LEFTBORDER>" << endl;
   if ( m_topBorderPen != m_pTable->defaultCell()->topBorderPen() )
     out << indent << "<TOPBORDER>" << m_topBorderPen << "</TOPBORDER>" << endl;
-
+  if(rightBorderStyle( column(), row() )!=0)
+  	{
+  	out << indent << "<RIGHTBORDER style=\"" << rightBorderStyle( column(), row() ) << '"';
+  	out << " width=\"" << rightBorderWidth( column(),row()) << '"';
+  	out << " color=\"" << rightBorderColor( column(),row()) << "\"/>"<<endl;
+  	}
+  if( bottomBorderStyle( column(), row() )!=0)
+  	{
+  	out << indent << "<BOTTOMBORDER style=\"" << bottomBorderStyle( column(), row() ) << '"';
+  	out << " width=\"" << bottomBorderWidth( column(),row()) << '"';
+  	out << " color=\"" << bottomBorderColor( column(),row()) << "\"/>"<<endl;
+        }
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
@@ -2246,7 +2258,7 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   return true;
 }
 
-bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift,Special_paste sp )
+bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift,Special_paste sp,QString tname )
 {
 
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
@@ -2300,6 +2312,7 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   b1=false;
   b2=false;
   bool res;
+  QString name_table;
 
   // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
   do
@@ -2431,6 +2444,21 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
         {
 	  setTextFont( tagToFont( lst ) );
 	}
+	else if ( name == "TABLE" &&(sp==Link||sp==Link_trans))
+	{
+	vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "name" )
+	    {
+	    name_table=(*it).m_strValue.c_str();
+	    }
+	    else
+	    {
+	    cout <<"Err in TABLE\n";
+	    }
+	  }
+	}
 	else if ( name == "START" && (sp==Link || sp==Link_trans) )
         {
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -2451,12 +2479,19 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	  	{
 	  	char buffer[ 20 ];
 	    	char *p2 = buffer;
+	    	
+	    		
 	    	QString buf="";
 		if ( icolumn > 26 )
 			*p2++ = 'A' + ( icolumn / 26 ) - 1;
 	    	*p2++ = 'A' + ( icolumn % 26 ) - 1;
 	    	*p2 = 0;
 	  	buf+="=";
+	  	if(tname!=name_table)
+	    		{
+	    		buf+=name_table;
+	    		buf+="!";
+	    		}
 	  	buf+="$";
 	  	buf+=buffer;
 	  	buf+="$";
@@ -2509,6 +2544,46 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    }
 	  }
 	}
+	
+	else if ( name == "RIGHTBORDER" &&(sp==ALL ||sp==Format ||sp==ALL_trans ||sp==Format_trans))
+	{
+	vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "style" )
+	    {
+	      setRightBorderStyle( (Qt::PenStyle)atoi( (*it).m_strValue.c_str() ));
+	    }
+	    else if ( (*it).m_strName == "width" )
+	    {
+	     setRightBorderWidth( atoi( (*it).m_strValue.c_str() ));
+	    }
+	    else if ( (*it).m_strName == "color" )
+	    {
+	     setRightBorderColor( strToColor( (*it).m_strValue.c_str() ) );
+	    }
+	  }
+	}
+	else if ( name == "BOTTOMBORDER" &&(sp==ALL ||sp==Format ||sp==ALL_trans ||sp==Format_trans))
+	{
+	vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "style" )
+	    {
+	      setBottomBorderStyle( (Qt::PenStyle)atoi( (*it).m_strValue.c_str() ));
+	    }
+	    else if ( (*it).m_strName == "width" )
+	    {
+	     setBottomBorderWidth( atoi( (*it).m_strValue.c_str() ));
+	    }
+	    else if ( (*it).m_strName == "color" )
+	    {
+	     setBottomBorderColor( strToColor( (*it).m_strValue.c_str() ) );
+	    }
+	  }
+	}
+	
 	else
 	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;
 	
