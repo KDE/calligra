@@ -300,14 +300,15 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
+    virtual void resizeEvent( QResizeEvent * _ev );
 
 private:
     virtual void chooseMousePressEvent( QMouseEvent* _ev );
     virtual void chooseMouseReleaseEvent( QMouseEvent* _ev );
     virtual void chooseMouseMoveEvent( QMouseEvent* _ev );
-    
+
     virtual bool eventFilter( QObject *o, QEvent *e );
-    
+
     KSpreadHBorder* hBorderWidget();
     KSpreadVBorder* vBorderWidget();
     QScrollBar* horzScrollBar();

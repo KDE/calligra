@@ -541,7 +541,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   //do we need to scroll right
   else if ( xpos > maxX ) {
     int horzScrollBarValue;
-    int horzScrollBarValueMax = table->columnRangeMax() - width();
+    const int horzScrollBarValueMax = table->columnRangeMax() - width();
 
     horzScrollBarValue = xOffset() + xpos - maxX;
 
@@ -559,7 +559,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   // do we need to scroll down
   else if ( ypos > maxY ) {
     int vertScrollBarValue;
-    int vertScrollBarValueMax = table->rowRangeMax() - height();
+    const int vertScrollBarValueMax = table->rowRangeMax() - height();
     vertScrollBarValue = yOffset() + ypos - maxY;
 
     //We don't want to display any area > KS_rowMax value
@@ -780,8 +780,9 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
   int xpos = activeTable()->columnPos( QMIN( KS_colMax, _max_column + 10 ), this );
 
   //Don't go beyond the maximum column range (KS_colMax)
-  if ( ( xOffset() + xpos ) > ( activeTable()->columnRangeMax() - width() ) )
-    xpos = activeTable()->columnRangeMax() - width() - xOffset();
+  const int _columnRangeMax = activeTable()->columnRangeMax();
+  if ( ( xOffset() + xpos ) > ( _columnRangeMax - width() ) )
+    xpos = _columnRangeMax - width() - xOffset();
 
   horzScrollBar()->setRange( 0, xpos + xOffset() );
 }
@@ -791,8 +792,9 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   int ypos = activeTable()->rowPos( QMIN( KS_rowMax, _max_row + 10 ), this );
 
   //Don't go beyond the maximum row range (KS_rowMax)
-  if ( ( yOffset() + ypos ) > ( activeTable()->rowRangeMax() - height() ) )
-    ypos = activeTable()->rowRangeMax() - height() - yOffset();
+  const int _rowRangeMax = activeTable()->rowRangeMax();
+  if ( ( yOffset() + ypos ) > ( _rowRangeMax - height() ) )
+    ypos = _rowRangeMax - height() - yOffset();
 
   vertScrollBar()->setRange( 0, ypos + yOffset() );
 }
@@ -1504,6 +1506,24 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
 
 void KSpreadCanvas::focusOutEvent( QFocusEvent* )
 {
+}
+
+void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
+{
+    // If we rise horizontally, then check if we are still within the valid area (KS_colMax)
+    if ( _ev->size().width() > _ev->oldSize().width() ){
+	const int _columnRangeMax = activeTable()->columnRangeMax();
+	if ( ( xOffset() + _ev->size().width() ) > _columnRangeMax )
+	    horzScrollBar()->setValue( _columnRangeMax - _ev->size().width() );
+    }
+
+    // If we rise vertically, then check if we are still within the valid area (KS_rowMax)
+    if ( _ev->size().height() > _ev->oldSize().height() ){
+	const int _rowRangeMax = activeTable()->rowRangeMax();
+	if ( ( yOffset() + _ev->size().height() ) > _rowRangeMax )
+	    vertScrollBar()->setValue( _rowRangeMax - _ev->size().height() );
+
+  }
 }
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
