@@ -60,19 +60,19 @@ VEllipse::init()
 	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
 	moveTo( KoPoint( start.x(), start.y() ) );
 	KoPoint current;
-	double midAngle = -startAngle - VGlobal::pi_2 / 2.0;
+	double midAngle = startAngle - VGlobal::pi_2 / 2.0;
 	for( int i = 0;i < nsegs;i++ )
 	{
 		current = KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) );
 		currentAngle -= VGlobal::pi_2;
 		midAngle -= VGlobal::pi_2;
-		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ),
-						-sin( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
-	/*kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ) << endl;
-	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ) << endl;
+		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ),
+						-sin( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
+	kdDebug() << "ctrl x : " << cos( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) << endl;
+	kdDebug() << "ctrl y : " << -sin( midAngle ) * ( 0.5 / cos( -VGlobal::pi_2 / 2.0 ) ) << endl;
 	kdDebug() << "current : " << current << endl;
 	kdDebug() << "currentAngle : " << currentAngle << endl;
-	kdDebug() << "midAngle : " << midAngle << endl;*/
+	kdDebug() << "midAngle : " << midAngle << endl;
 	}
 	//currentAngle += VGlobal::pi_2;
 	double rest = (int)origEndAngle % 90;
@@ -103,6 +103,8 @@ VEllipse::init()
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
+
+	m_matrix.reset();
 }
 
 QString
@@ -139,6 +141,8 @@ VEllipse::save( QDomElement& element ) const
 			me.setAttribute( "kind", "arc" );
 		else
 			me.setAttribute( "kind", "full" );
+
+		writeTransform( me );
 	}
 }
 
@@ -168,5 +172,9 @@ VEllipse::load( const QDomElement& element )
 		m_type = full;
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 

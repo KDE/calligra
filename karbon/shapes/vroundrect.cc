@@ -92,6 +92,8 @@ VRoundRect::save( QDomElement& element ) const
 		me.setAttribute( "height", m_height );
 
 		me.setAttribute( "corner-radius", m_edgeRadius );
+
+		writeTransform( me );
 	}
 }
 
@@ -111,5 +113,9 @@ VRoundRect::load( const QDomElement& element )
 	m_edgeRadius  = element.attribute( "corner-radius" ).toDouble(),
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 

@@ -94,6 +94,8 @@ VSpiral::init()
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
+
+	m_matrix.reset();
 }
 
 QString
@@ -125,6 +127,8 @@ VSpiral::save( QDomElement& element ) const
 		me.setAttribute( "clockwise", m_clockwise );
 
 		me.setAttribute( "type", m_type );
+
+		writeTransform( me );
 	}
 }
 
@@ -149,6 +153,10 @@ VSpiral::load( const QDomElement& element )
 	m_type = element.attribute( "type" ).toInt();
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 
 

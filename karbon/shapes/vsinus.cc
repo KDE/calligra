@@ -123,6 +123,8 @@ VSinus::init()
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
+
+	m_matrix.reset();
 }
 
 QString
@@ -149,6 +151,8 @@ VSinus::save( QDomElement& element ) const
 		me.setAttribute( "height", m_height );
 
 		me.setAttribute( "periods", m_periods );
+
+		writeTransform( me );
 	}
 }
 
@@ -168,6 +172,10 @@ VSinus::load( const QDomElement& element )
 	m_periods  = element.attribute( "periods" ).toUInt(),
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 
 

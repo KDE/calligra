@@ -22,6 +22,7 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdatetime.h>
+#include <qregexp.h>
 
 #include <koPoint.h>
 #include <koRect.h>
@@ -34,6 +35,7 @@
 #include "vstroke.h"
 #include "vvisitor.h"
 #include "vpath.h"
+#include "commands/vtransformcmd.h"
 
 #include <kdebug.h>
 
@@ -425,5 +427,87 @@ void
 VComposite::accept( VVisitor& visitor )
 {
 	visitor.visitVComposite( *this );
+}
+
+QWMatrix
+VComposite::transform( const QString &transform )
+{
+	QWMatrix result;
+
+	// Split string for handling 1 transform statement at a time
+	QStringList subtransforms = QStringList::split(')', transform);
+	QStringList::ConstIterator it = subtransforms.begin();
+	QStringList::ConstIterator end = subtransforms.end();
+	for(; it != end; ++it)
+	{
+		QStringList subtransform = QStringList::split('(', (*it));
+
+		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
+		subtransform[1] = subtransform[1].simplifyWhiteSpace();
+		QRegExp reg("[,( ]");
+		QStringList params = QStringList::split(reg, subtransform[1]);
+
+		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
+			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
+
+		if(subtransform[0] == "rotate")
+		{
+			if(params.count() == 3)
+			{
+				double x = params[1].toDouble();
+				double y = params[2].toDouble();
+
+				result.translate(x, y);
+				result.rotate(params[0].toDouble());
+				result.translate(-x, -y);
+			}
+			else
+				result.rotate(params[0].toDouble());
+		}
+		else if(subtransform[0] == "translate")
+		{
+			if(params.count() == 2)
+				result.translate(params[0].toDouble(), params[1].toDouble());
+			else    // Spec : if only one param given, assume 2nd param to be 0
+				result.translate(params[0].toDouble() , 0);
+		}
+		else if(subtransform[0] == "scale")
+		{
+			if(params.count() == 2)
+				result.scale(params[0].toDouble(), params[1].toDouble());
+			else    // Spec : if only one param given, assume uniform scaling
+				result.scale(params[0].toDouble(), params[0].toDouble());
+		}
+		else if(subtransform[0] == "skewx")
+			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(0.0F, tan(params[0].toDouble() * VGlobal::pi_180));
+		else if(subtransform[0] == "matrix")
+		{
+			if(params.count() >= 6)
+				result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), params[4].toDouble(), params[5].toDouble());
+		}
+	}
+
+	VTransformCmd cmd( 0L, result );
+	cmd.visitVComposite( *this );
+	return result;
+}
+
+void
+VComposite::writeTransform( QDomElement &me ) const
+{
+	if( !m_matrix.isIdentity() )
+	{
+		QString transform = QString("matrix(%1, %2, %3, %4, %5, %6)").arg( m_matrix.m11() )
+																	.arg( m_matrix.m12() )
+																	.arg( m_matrix.m21() )
+																	.arg( m_matrix.m22() )
+																	.arg( m_matrix.dx() )
+																	.arg( m_matrix.dy() );
+		me.setAttribute( "transform", transform );
+	}
 }
 

@@ -222,6 +222,8 @@ VStar::init()
 	cmd.visit( *this );
 
 	setFillRule( evenOdd );
+
+	m_matrix.reset();
 }
 
 double
@@ -283,6 +285,8 @@ VStar::save( QDomElement& element ) const
 		me.setAttribute( "roundness", m_roundness );
 
 		me.setAttribute( "type", m_type );
+
+		writeTransform( me );
 	}
 }
 
@@ -308,6 +312,10 @@ VStar::load( const QDomElement& element )
 	m_type = element.attribute( "type" ).toInt();
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 
 

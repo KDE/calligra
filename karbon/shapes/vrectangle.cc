@@ -68,6 +68,8 @@ VRectangle::save( QDomElement& element ) const
 
 		me.setAttribute( "width", m_width );
 		me.setAttribute( "height", m_height );
+
+		writeTransform( me );
 	}
 }
 
@@ -85,5 +87,9 @@ VRectangle::load( const QDomElement& element )
 	m_topLeft.setY( element.attribute( "y" ).toDouble() );
 
 	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 }
 

@@ -204,6 +204,19 @@ public:
 	void loadSvgPath( const QString & );
 	void saveSvgPath( QString & ) const;
 
+	QWMatrix transform( const QString &transform );
+
+	void transform( const QWMatrix &mat )
+	{
+		m_matrix *= mat;
+	}
+
+protected:
+	void writeTransform( QDomElement & ) const;
+
+protected:
+	QWMatrix m_matrix;
+
 private:
 	/**
 	 * List of subpaths.
