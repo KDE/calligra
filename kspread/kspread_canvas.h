@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
 
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
+   Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2001,2003 David Faure <faure@kde.org>
-   Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2000-2001 Werner Trobin <trobin@kde.org>
@@ -102,7 +102,8 @@ public:
      */
     void init();
 
-    KSpreadCellEditor* editor() const { return m_pEditor ; }
+    KSpreadEditWidget* editWidget() const;
+    KSpreadCellEditor* editor() const;
 
 
   /**
@@ -122,18 +123,18 @@ public:
     void updateCellRect( const QRect &_rect );
     void updateSelection( const QRect& oldSelection, const QPoint& oldMarker );
 
-    const QPen& defaultGridPen() const { return m_defaultGridPen; }
+    const QPen& defaultGridPen() const;
 
     double zoom() const;
 
     /**
      * Returns the width of the columns before the current screen
      */
-    double xOffset() const { return m_dXOffset; }
+    double xOffset() const;
     /**
      * Returns the height of the rows before the current screen
      */
-    double yOffset() const { return m_dYOffset; }
+    double yOffset() const;
 
     /**
      * Return a rect indicating which cell range is currently visible onscreen
@@ -214,7 +215,7 @@ public:
      * But somehow KSpreadCanvas must know whether the EditWidget or the CellEditor
      * lost the focus when the user clicked on the canvas.
      */
-    void setLastEditorWithFocus( EditorType type ) { m_focusEditorType = type; }
+    void setLastEditorWithFocus( EditorType type );
 
     /**
      * Switches to choose mode and sets the initial selection to the
@@ -227,7 +228,7 @@ public:
     void startChoose( const QRect& selection );
     void endChoose();
 
-    bool chooseMode(){ return m_bChoose; }
+    bool chooseMode() const;
 
     /**
     * Adjust a area in height and width
@@ -243,13 +244,13 @@ public:
 
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.
-    void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }
+    void setEditWidget( KSpreadEditWidget * ew );
 
     KSpreadView* view() const;
 
     virtual bool focusNextPrevChild( bool );
 
-    bool chooseFormulaArea() const { return m_bChoose;}
+    bool chooseFormulaArea() const { return chooseMode();}
 
     /**
      * Depending on the offset in "zoomed" screen pixels
@@ -302,7 +303,6 @@ private:
     KSpreadVBorder* vBorderWidget() const;
     QScrollBar* horzScrollBar() const;
     QScrollBar* vertScrollBar() const;
-    KSpreadEditWidget* editWidget() const { return m_pEditWidget; }
 
     void drawChooseMarker( );
     void drawChooseMarker( const QRect& );
@@ -320,7 +320,7 @@ private:
     /**
      * @see #setLastEditorWithFocus
      */
-    EditorType lastEditorWithFocus() const { return m_focusEditorType; }
+    EditorType lastEditorWithFocus() const;
 
     /**
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
@@ -330,77 +330,6 @@ private:
     // void showMarker( QPainter& );
 
     // void drawMarker( QPainter * _painter = 0L );
-
-    /**
-     * If the user is dragging around with the mouse then this tells us what he is doing.
-     * The user may want to mark cells or he started in the lower right corner
-     * of the marker which is something special. The values for the 2 above
-     * methods are called 'Mark' and 'ResizeCell' or 'AutoFill' depending
-     * on the mouse button used. By default this variable holds
-     * the value 'NoAction'.
-     */
-    MouseActions m_eMouseAction;
-
-    /**
-     * Used to indicate whether the user started drawing a rubber band rectangle.
-     */
-    bool m_bGeometryStarted;
-    QPoint m_ptGeometryStart;
-    QPoint m_ptGeometryEnd;
-
-
-    /**
-     * True when the mouse button is pressed
-     */
-    bool m_bMousePressed;
-
-    /**
-     * If we use the lower right corner of the marker to start autofilling, then this
-     * rectangle conatins all cells that were already marker when the user started
-     * to mark the rectangle which he wants to become autofilled.
-     *
-     * @see #mousePressEvent
-     * @see #mouseReleeaseEvent
-     */
-    QRect m_rctAutoFillSrc;
-
-    /**
-     * If the mouse is over some anchor ( in the sense of HTML anchors )
-     * then this one is stored here.
-     */
-    QString m_strAnchor;
-
-    /**
-     * Non visible range left from current screen
-     * Example:
-     * If the first visible column is 'E', then m_dXOffset stores
-     * the width of the invisible columns 'A' to 'D'.
-     */
-    double m_dXOffset;
-
-    /**
-     * Non visible range on top of the current screen
-     * Example:
-     * If the first visible row is '5', then m_dYOffset stores
-     * the height of the invisible rows '1' to '4'.
-     */
-    double m_dYOffset;
-
-    /**
-     * Start coordinates for drag and drop
-     */
-    QPoint m_dragStart;
-    bool   m_dragging;
-
-    KSpreadComboboxLocationEditWidget *m_pPosWidget;
-    KSpreadEditWidget *m_pEditWidget;
-    KSpreadCellEditor *m_pEditor;
-
-    /**
-     * Used to draw the grey grid that is usually only visible on the
-     * screen, but not by printing on paper.
-     */
-    QPen m_defaultGridPen;
 
     // int m_iMarkerColumn;
     // int m_iMarkerRow;
@@ -413,28 +342,6 @@ private:
      */
     // int m_iMarkerVisible;
 
-
-    /**
-     * Is true if the user is to choose a cell.
-     *
-     * @see #startChoose
-     * @see #endChoose
-     * @see KSpreadAssistant2
-     */
-    bool m_bChoose;
-    /**
-     * If a choose selection is started (@ref #startChoose) the current
-     * sheet is saved here.
-     */
-    KSpreadSheet* m_chooseStartSheet;
-
-    /**
-     * @see #setLastEditorWithFocus
-     * @see #lastEditorWithFocus
-     */
-    EditorType m_focusEditorType;
-
-    QLabel *m_validationInfo;
 
 private:
 
