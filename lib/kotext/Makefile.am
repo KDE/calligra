@@ -1,4 +1,4 @@
-INCLUDES= $(all_includes) $(KOFFICEUI_INCLUDES)
+INCLUDES= $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
