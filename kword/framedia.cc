@@ -775,6 +775,8 @@ void KWFrameDia::selectNewFrameset(bool on) {
     if(!on) return;
 
     QListViewItem *frameSetItem  = lFrameSList->selectedItem();
+    if ( !frameSetItem)
+        return;
     QString str = frameSetItem->text( 0 );
     KWFrameSet *fs = doc->frameSet(str.toInt() - 1);
 
@@ -785,6 +787,8 @@ void KWFrameDia::textNameFrameChanged ( const QString &text )
 {
     if(rExistingFrameset->isChecked()) {
         QListViewItem *item = lFrameSList->selectedItem();
+        if ( !item )
+            return;
         item->setText(1, text );
     }
     if(rNewFrameset->isChecked() || rExistingFrameset->isChecked()) //when one of both is clicked.
