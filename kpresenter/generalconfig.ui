@@ -34,22 +34,6 @@
     </spacer>
     <widget class="QCheckBox">
         <property name="name">
-            <cstring>checkboxprotect</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>180</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Protect Size and Position</string>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
             <cstring>checkboxSticky</cstring>
         </property>
         <property name="geometry">

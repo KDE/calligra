@@ -25,7 +25,7 @@
 #include <qtabdialog.h>
 #include <qframe.h>
 #include <qpen.h>
-
+#include <koRect.h>
 class QPainter;
 class KColorButton;
 class KComboBox;
@@ -37,6 +37,9 @@ class QResizeEvent;
 class QWidgetStack;
 class QLabel;
 class KoZoomHandler;
+class QLineEdit;
+class KPresenterDoc;
+
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -92,7 +95,7 @@ public:
         SdAll = SdPen | SdBrush | SdGradient | SdEndBeginLine
     };
 
-    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll, bool _noStickyObj = true );
+    StyleDia( QWidget* parent = 0, const char* name = 0, KPresenterDoc *_doc = 0, int flags = SdAll, bool _noStickyObj = true, bool _oneObject=true );
     ~StyleDia();
 
     void setPen( const QPen &_pen );
@@ -117,14 +120,18 @@ public:
     int getGYFactor() const;
     bool isSticky()const;
 
+    bool isOneObject() {return oneObject;}
     void setProtected( bool p );
     bool isProtected()const;
 
+    KoRect getNewSize() const;
+    void setSize(const KoRect &);
 
 private:
     void setupTab1();
     void setupTab2();
     void setupTab3();
+    void setupTab4();
 
     QWidgetStack *stack;
     KColorButton *choosePCol, *chooseBCol;
@@ -140,6 +147,9 @@ private:
     bool lockUpdate, stickyObj;
     int flags;
 
+    QLineEdit *m_lineTop, *m_lineLeft, *m_lineWidth, *m_lineHeight;
+    KPresenterDoc *m_doc;
+
     QPen oldPen;
     QBrush oldBrush;
     LineEnd oldLb;
@@ -148,14 +158,17 @@ private:
     QColor oldC1, oldC2;
     BCType oldBCType;
     bool oldUnbalanced;
+    bool oneObject;
     bool oldSticky,  oldProtect;
     int oldXfactor, oldYfactor;
+    KoRect oldRect;
 
 private slots:
     void slotReset();
     void styleDone() { emit styleOk(); }
     void updatePenConfiguration();
     void updateBrushConfiguration();
+    void protectChanged();
 
 signals:
     void styleOk();

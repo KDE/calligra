@@ -38,6 +38,10 @@
 #include <kozoomhandler.h>
 #include <kpresenter_utils.h>
 #include <kpgradient.h>
+#include <qgroupbox.h>
+#include "kpresenter_doc.h"
+#include <koUnit.h>
+#include <knumvalidator.h>
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -129,15 +133,20 @@ void PBPreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 /*==============================================================*/
-StyleDia::StyleDia( QWidget* parent, const char* name, int flags_, bool _stickyObj )
+StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, int flags_, bool _stickyObj, bool _oneObject )
     : QTabDialog( parent, name, true ), flags( flags_ )
 {
+    m_doc=_doc;
     lockUpdate = true;
     stickyObj = _stickyObj;
+    oneObject = _oneObject;
     setupTab1();
     setupTab2();
     if (stickyObj)
         setupTab3();
+
+    setupTab4();
+
     lockUpdate = false;
 
 
@@ -162,6 +171,7 @@ void StyleDia::slotReset()
     setGradient( oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor );
     setSticky( oldSticky );
     setProtected( oldProtect );
+    setSize( oldRect);
 }
 
 /*==============================================================*/
@@ -262,7 +272,6 @@ void StyleDia::setupTab3()
 {
     PageConfigGeneral *w = new PageConfigGeneral( this );
     sticky = w->checkboxSticky;
-    protect = w->checkboxprotect;
     addTab( w , i18n( "&General" ) );
 }
 
@@ -402,6 +411,72 @@ void StyleDia::setupTab2()
 	addTab( tab, i18n( "&Brush Configuration" ) );
     else
 	tab->hide();
+}
+
+void StyleDia::setupTab4()
+{
+    QWidget *tab = new QWidget( this );
+    QVBoxLayout *layout = new QVBoxLayout( tab );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+
+    protect= new QCheckBox( i18n("Protect Size and Position"), tab);
+    layout->addWidget(protect);
+    connect( protect, SIGNAL(clicked ()), this, SLOT(protectChanged()));
+
+    QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
+    layout->addWidget( grp1 );
+    QGridLayout *pGrid = new QGridLayout( grp1, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel * lab = new QLabel( i18n( "Left:" ), grp1 );
+    lab->resize( lab->sizeHint() );
+    pGrid->addWidget( lab, 1, 0 );
+
+    m_lineLeft=new QLineEdit( grp1);
+    pGrid->addWidget( m_lineLeft, 2, 0 );
+
+    m_lineLeft->setValidator( new KFloatValidator( 0,9999,true,m_lineLeft ) );
+
+    lab = new QLabel( i18n( "Width:" ), grp1 );
+    lab->resize( lab->sizeHint() );
+    pGrid->addWidget( lab, 3, 0 );
+
+    m_lineWidth=new QLineEdit( grp1);
+    pGrid->addWidget( m_lineWidth, 4, 0 );
+    m_lineWidth->setValidator( new KFloatValidator( 0,9999,true,m_lineWidth ) );
+
+
+    lab = new QLabel( i18n( "Top:" ), grp1 );
+    lab->resize( lab->sizeHint() );
+    pGrid->addWidget( lab, 1, 1 );
+
+    m_lineTop=new QLineEdit( grp1);
+    pGrid->addWidget( m_lineTop, 2, 1 );
+    m_lineTop->setValidator( new KFloatValidator( 0,9999,true,m_lineTop ) );
+
+
+    lab = new QLabel( i18n( "Height:" ), grp1 );
+    lab->resize( lab->sizeHint() );
+    pGrid->addWidget( lab, 3, 1 );
+
+    m_lineHeight=new QLineEdit( grp1);
+    pGrid->addWidget( m_lineHeight, 4, 1 );
+    m_lineHeight->setValidator( new KFloatValidator( 0,9999,true,m_lineHeight ) );
+
+
+    addTab( tab, i18n( "&Geometry" ) );
+}
+
+void StyleDia::protectChanged()
+{
+    if ( lockUpdate )
+	return;
+    bool state=!(protect->isChecked())&&oneObject;
+    m_lineTop->setEnabled( state);
+    m_lineLeft->setEnabled( state);
+    m_lineWidth->setEnabled( state);
+    m_lineHeight->setEnabled( state);
+
 }
 
 /*==============================================================*/
@@ -713,16 +788,28 @@ bool StyleDia::isSticky() const
 void StyleDia::setProtected( bool p )
 {
     oldProtect=p;
-    if( stickyObj)
-        protect->setChecked( p );
+    protect->setChecked( p );
+    protectChanged();
 }
 
 bool StyleDia::isProtected() const
 {
-    if (protect )
-        return protect->isChecked();
-    else
-        return false;
+    return protect->isChecked();
+}
+
+
+KoRect StyleDia::getNewSize() const
+{
+    return KoRect();
+}
+
+void StyleDia::setSize(const KoRect & _rect)
+{
+    oldRect = _rect;
+    m_lineTop->setText(KoUnit::userValue( QMAX(0.00, _rect.top()), m_doc->getUnit() ));
+    m_lineLeft->setText(KoUnit::userValue( QMAX(0.00, _rect.left()), m_doc->getUnit() ));
+    m_lineWidth->setText(KoUnit::userValue( QMAX(0.00, _rect.width()), m_doc->getUnit() ));
+    m_lineHeight->setText(KoUnit::userValue( QMAX(0.00, _rect.height()), m_doc->getUnit() ));
 }
 
 

@@ -940,7 +940,8 @@ void KPresenterView::extraPenBrush()
     }
     KPrPage * page=m_canvas->activePage();
     bool canHaveStickyObj = true;
-    if(m_canvas->numberOfObjectSelected()==1)
+    bool state = (m_canvas->numberOfObjectSelected()==1);
+    if(state)
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
@@ -950,7 +951,7 @@ void KPresenterView::extraPenBrush()
         }
     }
 
-    styleDia = new StyleDia( this, "StyleDia", m_canvas->getPenBrushFlags(),canHaveStickyObj );
+    styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, m_canvas->getPenBrushFlags(),canHaveStickyObj, state );
     styleDia->setPen( page->getPen( pen ) );
     styleDia->setBrush( page->getBrush( brush ) );
     styleDia->setLineBegin( page->getLineBegin( lineBegin ) );
@@ -962,6 +963,10 @@ void KPresenterView::extraPenBrush()
 			   page->getGUnbalanced( gUnbalanced ),
 			   page->getGXFactor( gXFactor ),
 			   page->getGYFactor( gYFactor ) );
+    if ( state )
+    {
+        styleDia->setSize( m_canvas->getSelectedObj()->getRect());
+    }
 
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
