@@ -369,18 +369,23 @@ void KWStyleManager::apply() {
 void KWStyleManager::renameStyle(const QString &theText) {
     if(noSignals) return;
     noSignals=true;
-
+    QStringList listNameStyle;
+    bool found=false;
     // rename only in the GUI, not even in the underlying objects.
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_stylesList->currentText() ) {
-            m_styleCombo->changeItem(theText, i);
-            break;
+        if ( m_styleCombo->text( i ) == m_stylesList->currentText() && !found) {
+            {
+                //change just first style name
+                m_styleCombo->changeItem(theText, i);
+                found=true;
+            }
         }
+        listNameStyle<<m_styleCombo->text( i );
     }
     m_stylesList->changeItem(theText, m_stylesList->currentItem());
     noSignals=false;
-    bool state=!theText.isEmpty();
-    enableButtonOK(state);
+    bool state=!theText.isEmpty() && !(listNameStyle.contains(theText)>1);
+    enableButtonOK(state );
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
