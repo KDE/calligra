@@ -63,7 +63,7 @@ QString KWQTSQLSerialDataSource::getValue( const QString &name, int record ) con
         return (myquery->value(name)).toString();
 }
 
-void KWQTSQLSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
+void KWQTSQLSerialDataSource::save( QDomDocument & /*doc*/, QDomElement & /*parent*/)
 {
 /*
 	QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
@@ -91,7 +91,7 @@ void KWQTSQLSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
 */
 }
 
-void KWQTSQLSerialDataSource::load( QDomElement& parentElem )
+void KWQTSQLSerialDataSource::load( QDomElement& /*parentElem*/ )
 {
 /*
 	db.clear();
