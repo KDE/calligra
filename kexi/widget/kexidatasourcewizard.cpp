@@ -43,7 +43,7 @@ KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent,
 	m_fields = 0;
 	m_used = true;
 
-	if (KexiDataSourceWizard_pic.pic)
+	if(!KexiDataSourceWizard_pic.pic)
 		KexiDataSourceWizard_pic.pic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
 
 	addPage(new KexiDSWelcome(this), "Form Wizard");

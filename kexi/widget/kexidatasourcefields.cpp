@@ -64,6 +64,9 @@ KexiDataSourceFields::KexiDataSourceFields(KexiProject *project, QWidget *parent
 void
 KexiDataSourceFields::setDataSource(KexiPart::DataSource *ds, const KexiPart::Item &it)
 {
+	if(!ds)
+		return;
+
 	kdDebug() << "KexiDataSourceFields::setDataSource()" << endl;
 	m_avail->clear();
 	m_used->clear();
