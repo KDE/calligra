@@ -104,7 +104,7 @@ private:
     void processVariable ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
-    void processPicture ( const QString& paraText,
+    void processAnchor ( const QString& paraText,
         const TextFormatting& formatLayout,
         const FormatData& formatData);
     QString textFormatToAbiProps(const TextFormatting& formatOrigin,
@@ -368,11 +368,13 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
             << " mime=\"" << strMime << "\">\n"
             << "<![CDATA["; // Open CDATA section
         // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
+        // TODO/FIXME. aarrgg, we cannot have a XML declaration at all!
 
         // Save picture as SVG
 
         // Not sure what is better: call the QIODevice directly or through QTextStream::device()?
         // QPicture::save saves in UTF-8, so we have no problem!
+        // TODO/FIXME. aarrgg, we cannot have a XML declaration at all!
         if (!picture.save(m_streamOut->device(),"svg"))
         {
             kdWarning(30506) << "Could not save clipart: "  << koStoreName << endl;
@@ -718,7 +720,7 @@ void AbiWordWorker::processVariable ( const QString&,
     }
 }
 
-void AbiWordWorker::processPicture ( const QString&,
+void AbiWordWorker::processAnchor ( const QString&,
     const TextFormatting& /*formatLayout*/, //TODO
     const FormatData& formatData)
 {
@@ -761,7 +763,7 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                processPicture(paraText, formatLayout, (*paraFormatDataIt));
+                processAnchor(paraText, formatLayout, (*paraFormatDataIt));
             }
         }
     }
