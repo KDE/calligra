@@ -41,7 +41,7 @@ public:
 
 	virtual QString name() { return i18n( "Image Tool" ); }
 	virtual QString contextHelp();
-	virtual QString icon() { return "frame_image"; }
+	virtual QString icon() { return "14_image"; }
 	virtual QString statusText();
 
 protected:
