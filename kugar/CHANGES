@@ -5,9 +5,15 @@ VERSION 1.3
 Changes:
 
  1. Kugar and Kugar Designer are now pure KOffice applications.
-    Partification was made and KOffice zipped xml format is used
+    Partification was made and KOffice zipped xml format is used.
     
  2. Kugar and Kugar Designer are available in Qt-only versions.
+    They are included in the source tree but not compiled by default.
+    To compile run:
+    qmake kugar.pro
+    make -f Makefile.qt
+ 
+ 3. Undo/Redo functionality.
 
 
 *************************

@@ -1,3 +1,18 @@
+2003-04-05 Alexander Dymo <cloudtemple@mksat.net>
+	* kudesigner:
+	Undo/Redo implemented for all insert actions
+	
+2003-04-01 Per Winkvist <per.winkvist@cellnetwork.com>
+	* kudesigner:
+	Add check in DoubleClickEvent that we used LeftButton
+	Allow + and - keys to be used to change FontSize
+	Allow Del key to be used to delete an item
+
+2003-03-31 Alexander Dymo <cloudtemple@mksat.net>
+	* kudesigner:
+	Applied patch from Per Winkvist <per.winkvist@cellnetwork.com>: 
+	Fast property editing (name, fieldname) like in Qt Designer
+
 2003-03-22 Alexander Dymo <cloudtemple@mksat.net>
 	* kugar:
 	Qt only version of the designer and preliminary version of shell added to the repository.
