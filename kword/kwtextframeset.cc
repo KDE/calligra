@@ -1420,7 +1420,7 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
         textDocument()->setLastParag( lastParagraph );
 
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
+    kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
 
 void KWTextFrameSet::zoom( bool forPrint )

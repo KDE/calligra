@@ -348,10 +348,10 @@ void KWView::setupActions()
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
-    
+
     (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
                     this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
-    
+
 //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert mailmerge var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
     // -------------- Frame menu
@@ -424,10 +424,6 @@ void KWView::setupActions()
     actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
                                              this, SLOT( viewFootNotes() ),
                                           actionCollection(), "view_footnotes" );
-
-    actionAllowAutoFormat = new KToggleAction( i18n( "Allow AutoFormat" ), 0,
-                                             this, SLOT( slotAllowAutoFormat() ),
-                                          actionCollection(), "view_allowAutoFormat" );
 
     actionViewFootNotes->setEnabled( false ); // #### TODO
     actionViewFootNotes->setExclusiveGroup( "notes" );
@@ -806,9 +802,13 @@ void KWView::setupActions()
     // ---------------------- Tools menu
 
 
+    actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
+                                             this, SLOT( slotAllowAutoFormat() ),
+                                          actionCollection(), "enable_autocorrection" );
+
     actionAutoFormat = new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
-                        actionCollection(), "extra_autocorrection" );
+                        actionCollection(), "configure_autocorrection" );
     actionAutoFormat->setToolTip( i18n( "Change autocorrection options." ) );
     actionAutoFormat->setWhatsThis( i18n( "Change autocorrection options including:<p> <UL><LI><P>exceptions to autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> <LI><P>and basic autocorrection options</P>." ) );
 

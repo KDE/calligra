@@ -30,8 +30,6 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Separator/>
-  <Action name="view_allowAutoFormat"/>
-  <Separator/>
   <Action name="view_header"/>
   <Action name="view_footer"/>
   <!--<Separator/>
@@ -110,7 +108,8 @@
  <Menu name="tools"><text>&amp;Tools</text>
   <Action name="extra_spellcheck"/>
   <Separator/>
-  <Action name="extra_autocorrection"/>
+  <Action name="enable_autocorrection"/>
+  <Action name="configure_autocorrection"/>
   <Action name="change_case"/>
   <Action name="personal_expr"/>
   <ActionList name="datatools"/>

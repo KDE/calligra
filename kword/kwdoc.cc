@@ -211,7 +211,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
-    kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
+    //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
     standardStyle->format().setFont( m_defaultFont );
     m_styleColl->addStyleTemplate( standardStyle );
 
@@ -1458,9 +1458,8 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     QValueList<QString> followingStyles;
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        kdDebug() << "KWDocument::loadStyleTemplates looking for Standard, to delete it" << endl;
         KWStyle *s = m_styleColl->findStyle("Standard");
-        Q_ASSERT(s);
+        //kdDebug() << "KWDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
         if(s) // delete the standard style.
             m_styleColl->removeStyleTemplate(s);
     }
@@ -1478,7 +1477,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         if ( !nameElem.isNull() )
         {
             sty->setName( nameElem.attribute("value") );
-            kdDebug() << "KWStyle created  name=" << sty->name() << endl;
+            //kdDebug() << "KWStyle created  name=" << sty->name() << endl;
         } else
             kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
@@ -2838,7 +2837,8 @@ void KWDocument::printStyleDebug()
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
-        // ...
+        kdDebug() << "   following style: " << p->followingStyle() << " "
+                  << ( p->followingStyle() ? p->followingStyle()->name() : QString::null ) << endl;
     }
 }
 
