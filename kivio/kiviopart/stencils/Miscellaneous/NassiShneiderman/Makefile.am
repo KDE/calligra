@@ -22,4 +22,8 @@ headloop.png \
 headloop.sml \
 icon.png \
 statement.png \
-statement.sml
+statement.sml \
+conditional-head1.png \
+conditional-head1.sml \
+conditional-head2.png \
+conditional-head2.sml
