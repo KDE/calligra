@@ -133,13 +133,12 @@ QString KoSpell::getMoreText()
              << endl;
 #endif
 
+    if ( d->needsIncrement && d->itr && !d->itr->atEnd() )
+        ++( *d->itr );
+
     bool iteratorAtEnd = d->itr && d->itr->atEnd();
 
-    if ( d->needsIncrement && !iteratorAtEnd ) {
-        ++( *d->itr );
-    }
-
-    if ( !d->dialog && ( !d->itr || d->itr->atEnd() ) ) {
+    if ( !d->dialog && ( !d->itr || iteratorAtEnd ) ) {
         QString str = paragToText( d->parag );
         if ( !str.isEmpty() )
             emit aboutToFeedText();
