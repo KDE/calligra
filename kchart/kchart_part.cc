@@ -178,7 +178,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 	cerr << "Row " << row << "\n";
 	KChartValue t = currentData.cell(row, col);
 	QDomElement e = doc.createElement("cell");
-	e.setAttribute("value", t.value.doubleValue());
+	e.setAttribute("value", t.value.toDouble());
 	  /*
 	  if ( e.isNull() )
 	      return e;
@@ -296,6 +296,10 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.11  1999/11/29 21:26:14  wtrobin
+ * - fixed some ugly warnings
+ * - made kchart compile with --enable-final
+ *
  * Revision 1.10  1999/11/21 20:26:45  boloni
  * -multidocument view works - but it still freezes at load and new. But this
  * time it is probably my fault somewhere

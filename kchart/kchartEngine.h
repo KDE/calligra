@@ -61,7 +61,7 @@ public:
     return  data->cell(row,col).exists;
   };
   inline double CELLVALUE(int row, int col) {
-    return data->cell(row,col).value.doubleValue();
+    return data->cell(row,col).value.toDouble();
   }
   
 private:

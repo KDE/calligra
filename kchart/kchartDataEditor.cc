@@ -22,7 +22,7 @@ void kchartDataEditor::setData(KChartData* dat) {
       if (t.exists) {
 	switch(t.value.type()) {
 	case QVariant::Double:
-	  _widget->fillCell(row, col, t.value.doubleValue());
+	  _widget->fillCell(row, col, t.value.toDouble());
 	  break;
 	case QVariant::String:
 	  cerr << "A string in the table I cannot handle this yet\n";
