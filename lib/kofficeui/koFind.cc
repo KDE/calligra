@@ -639,7 +639,10 @@ bool KoFind::shouldRestart( bool forceAsking ) const
     message += i18n("Do you want to restart search at the beginning?");
 
     int ret = KMessageBox::questionYesNo( parentWidget(), message );
-    return( ret == KMessageBox::Yes );
+    bool yes = ( ret == KMessageBox::Yes );
+    if ( yes )
+        const_cast<KoFind*>(this)->m_options &= ~KoFindDialog::FromCursor; // clear FromCursor option
+    return yes;
 }
 
 #include "koFind.moc"
