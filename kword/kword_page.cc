@@ -1017,7 +1017,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
 			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		      break;
-		    doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height());
+		    doc->printLine(*paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
 		    bend = !paintfc->makeNextLineLayout(painter);
 		    if (paintfc->getPage() > lastVisiblePage)
 		      bend = true; 
@@ -1053,7 +1053,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 		   _wid - frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()) -
 		   frameSet->getFrame(_fc.getFrame() - 1)->getRightIndent(_fc.getPTY(),_fc.getLineHeight()),
 		   _fc.getLineHeight(),QBrush(white));
-  doc->printLine(_fc,painter,xOffset,yOffset,width(),height());
+  doc->printLine(_fc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars());
 
   if (doc->has_selection()) doc->drawSelection(painter,xOffset,yOffset);
   
@@ -1475,7 +1475,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 			     paintfc.getLineHeight(),QBrush(white));
-	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				 paintfc.getPTY() - yOffset,
@@ -1622,7 +1622,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 			     paintfc.getLineHeight(),QBrush(white));
-	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				 paintfc.getPTY() - yOffset,
@@ -1721,7 +1721,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 			     paintfc.getLineHeight(),QBrush(white));
-	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 	      {
 		drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				 paintfc.getPTY() - yOffset,
@@ -1799,7 +1799,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				 paintfc.getLineHeight(),QBrush(white));
-		if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+		if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height(),gui->getView()->getViewFormattingChars()))
 		  {
 		    drawBuffer(KRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				     paintfc.getPTY() - yOffset,
@@ -2099,33 +2099,36 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
   KWFrame *tmp;
   KRect frame;
 
-  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+  if (gui->getView()->getViewFrameBorders())
     {
-      _painter.setPen(lightGray);
-      if (static_cast<int>(i) == hiliteFrameSet)
-	_painter.setPen(blue);
-
-      frameset = doc->getFrameSet(i);
-      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
 	{
-	  tmp = frameset->getFrame(j);
-	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
-
-	  if (v_area.intersects(frame))
-	    _painter.drawRect(frame);
-	  if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
+	  _painter.setPen(lightGray);
+	  if (static_cast<int>(i) == hiliteFrameSet)
+	    _painter.setPen(blue);
+	  
+	  frameset = doc->getFrameSet(i);
+	  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	    {
-	      _painter.save();
-	      _painter.setRasterOp(NotROP);
-	      _painter.fillRect(frame.x(),frame.y(),6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
-	      _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
-	      _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
-	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
-	      _painter.restore();
+	      tmp = frameset->getFrame(j);
+	      frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
+	      
+	      if (v_area.intersects(frame))
+		_painter.drawRect(frame);
+	      if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
+		{
+		  _painter.save();
+		  _painter.setRasterOp(NotROP);
+		  _painter.fillRect(frame.x(),frame.y(),6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
+		  _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
+		  _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
+		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
+		  _painter.restore();
+		}
 	    }
 	}
     }

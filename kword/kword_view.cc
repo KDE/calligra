@@ -84,6 +84,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   tmpBrd.color = white;
   tmpBrd.style = KWParagLayout::SOLID;
   tmpBrd.ptWidth = 0;
+  _viewFormattingChars = true;
+  _viewFrameBorders = true;
 
   m_pKWordDoc = _doc;
 
@@ -91,6 +93,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 		   this,SLOT(slotInsertObject(KWordChild*)));
   QObject::connect(m_pKWordDoc,SIGNAL(sig_updateChildGeometry(KWordChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KWordChild*)));
+
 }
 
 /*================================================================*/
@@ -589,6 +592,22 @@ void KWordView::newView()
   KWordShell* shell = new KWordShell;
   shell->show();
   shell->setDocument( m_pKWordDoc );
+}
+
+/*===============================================================*/
+void KWordView::viewFormattingChars()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,!m_vMenuView->isItemChecked(m_idMenuView_FormattingChars));
+  _viewFormattingChars = m_vMenuView->isItemChecked(m_idMenuView_FormattingChars);
+  gui->getPaperWidget()->repaint(false);
+}
+
+/*===============================================================*/
+void KWordView::viewFrameBorders()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,!m_vMenuView->isItemChecked(m_idMenuView_FrameBorders));
+  _viewFrameBorders = m_vMenuView->isItemChecked(m_idMenuView_FrameBorders);
+  gui->getPaperWidget()->repaint(false);
 }
 
 /*===============================================================*/
@@ -1168,6 +1187,13 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
 
   m_idMenuView_NewView = m_vMenuView->insertItem4( i18n("&New View"), this, "newView", 0, -1, -1 );
+  m_vMenuView->insertSeparator(-1);
+  m_idMenuView_FormattingChars = m_vMenuView->insertItem4( i18n("&Formatting Chars"), this, "viewFormattingChars", 0, -1, -1 );
+  m_idMenuView_FrameBorders = m_vMenuView->insertItem4( i18n("Frame &Borders"), this, "viewFrameBorders", 0, -1, -1 );
+
+  m_vMenuView->setCheckable(true);
+  m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);
+  m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
 
   // insert menu
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );

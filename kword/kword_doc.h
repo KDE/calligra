@@ -254,7 +254,7 @@ public:
    */
   bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
   
-  bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
+  bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false);
   
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
@@ -413,6 +413,8 @@ protected:
   QStrList changedStyles;
 
   bool _loaded;
+
+  QPixmap ret_pix;
   
 };
 

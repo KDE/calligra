@@ -100,6 +100,8 @@ public:
   virtual void editFindReplace();
 
   virtual void newView();
+  virtual void viewFormattingChars();
+  virtual void viewFrameBorders();
 
   virtual void insertPicture();
   virtual void insertClipart();
@@ -170,6 +172,9 @@ public:
   void updateStyle(QString _styleName,bool _updateFormat = true);
   void updateStyleList();
 
+  bool getViewFormattingChars() { return _viewFormattingChars; }
+  bool getViewFrameBorders() { return _viewFrameBorders; }
+
 public slots:
   void slotInsertObject(KWordChild *_child);
   void slotUpdateChildGeometry(KWordChild *_child);
@@ -220,6 +225,8 @@ protected:
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
+  CORBA::Long m_idMenuView_FormattingChars;
+  CORBA::Long m_idMenuView_FrameBorders;
  
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
@@ -316,6 +323,7 @@ protected:
 
   KWordGUI *gui;
   bool m_bShowGUI;
+  bool _viewFormattingChars,_viewFrameBorders;
 
   KWFormat format;
   KWParagLayout::Flow flow;

@@ -19,6 +19,8 @@ module KWord
       slot void editFindReplace();
       
       slot void newView();
+      slot void viewFormattingChars();
+      slot void viewFrameBorders();
       
       slot void insertPicture();
       slot void insertClipart();

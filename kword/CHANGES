@@ -498,3 +498,8 @@ Reggie, 13.12.1998:
 -------------------
 - More work on right aligned tabs (still not working well...)
 - Some fixes
+
+Reggie, 14.12.1998:
+-------------------
+- Implemented showing of formatting chars
+- Showing formatting chars / frame borders is configurable now

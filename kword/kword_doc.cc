@@ -65,7 +65,8 @@ KWordChild::~KWordChild()
 
 /*================================================================*/
 KWordDocument::KWordDocument()
-  : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1)
+  : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1),
+    ret_pix(ICON("return.xpm"))
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -891,9 +892,10 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 }
 
 /*================================================================*/
-bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
+bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false)
 {
   _painter.save();
+  //_painter.setRasterOp(CopyROP);
 
   unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left();
 
@@ -1052,7 +1054,14 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	      } break;
 	    case ID_KWCharTab:
 	      {
+		lastPTPos = _fc.getPTPos();
 		_fc.cursorGotoNextChar( _painter );
+		QPen _pen = QPen(_painter.pen());
+		_painter.setPen(QPen(blue,1,DotLine));
+		if (_viewFormattingChars)
+		  _painter.drawLine(lastPTPos,_fc.getPTY() + _fc.getPTMaxAscender(),
+				    _fc.getPTPos(),_fc.getPTY() + _fc.getPTMaxAscender());
+		_painter.setPen(_pen);
 	      } break;
 	    }
 	}
@@ -1102,7 +1111,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all - but we have to underline it in some cases
-	      lastPTPos = _fc.getPTPos();
+	      //lastPTPos = _fc.getPTPos();
 	      if (text[_fc.getTextPos()].c == ' ')
 		{
 		  bool goneForward = false;
@@ -1130,17 +1139,22 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 			}
 			  
 		    }
+		  lastPTPos = _fc.getPTPos();
 		  if (!goneForward) _fc.cursorGotoNextChar(_painter);
-// 		  QPen _pen = QPen(_painter.pen());
-// 		  _painter.setPen(QPen(blue,1,SolidLine));
-// 		  _painter.drawLine(lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender() - 1,
-// 				    lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender());
-// 		  _painter.setPen(_pen);
-// 		  lastPTPos = _fc.getPTPos();
+		  QPen _pen = QPen(_painter.pen());
+		  _painter.setPen(QPen(blue,1,SolidLine));
+		  if (_viewFormattingChars)
+		    _painter.drawLine(lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender() - 1,
+				      lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender());
+		  _painter.setPen(_pen);
+		  //lastPTPos = _fc.getPTPos();
 		}
 	    }
 	}
     }
+
+  if (_viewFormattingChars && _fc.isCursorAtParagEnd()) { _painter.drawPixmap(_fc.getPTPos() + 3,_fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(),ret_pix);
+  debug("draw f, %d, %d",_fc.getPTPos() + 3,_fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height()); }
 
   _painter.restore();
   return true;
