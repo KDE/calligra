@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2002 Robert JACOLIN <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 #include "xsltexportdia.moc"
 
 #include <stdio.h>
+
+#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
@@ -42,6 +44,16 @@ XSLTExportDia::XSLTExportDia(const KoStore& in, const QCString &format, QWidget*
 	_in = new KoStore(in);
 	_format = format;
 	setCaption(i18n("Export XSLT Configuration"));
+	_config = kapp->sessionConfig();
+	KEntryKey key;
+	KEntry value;
+	for(int i = 0; i < 10; i++)
+	{
+		key.mGroup = new QCString("XSLT filter");
+		key.mKey = new QCString("Recent" + i);
+		value = _config->lookupData(key);
+		_recentList.add(value.mValue);
+	}
 }
 
 /*  
@@ -49,7 +61,8 @@ XSLTExportDia::XSLTExportDia(const KoStore& in, const QCString &format, QWidget*
  */
 XSLTExportDia::~XSLTExportDia()
 {
-    // no need to delete child widgets, Qt does it all for us
+	delete _in;
+	delete _config;
 }
 
 void XSLTExportDia::cancelSlot()

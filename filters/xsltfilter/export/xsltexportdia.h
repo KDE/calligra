@@ -20,6 +20,7 @@
 #ifndef __XSLTEXPORTDIA_H__
 #define __XSLTEXPORTDIA_H__
 
+#include "kapplication.h"
 #include <kfiledialog.h>
 #include <koStore.h>
 #include "xsltdialog.h"
@@ -34,6 +35,8 @@ class XSLTExportDia : public XSLTDialog
 	KoStore* _in;
 	KURL _currentFile;
 	QCString _format;
+	KConfig* _config;
+	QStringList _recentList;
 
 public:
     XSLTExportDia( const KoStore&, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );

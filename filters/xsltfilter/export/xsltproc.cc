@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2002 Robert JACOLIN <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -178,7 +178,7 @@ int XSLTProc::parse()
 
     LIBXML_TEST_VERSION
 
-    xmlLineNumbersDefault(1);
+    //xmlLineNumbersDefault(1);
 
     if (novalid == 0)
         xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
