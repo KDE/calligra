@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,31 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 #include <klocale.h>
-#include <dcopclient.h>
-#include "example_aboutdata.h"
 
 
-static const KCmdLineOptions options[]=
+static const char* description=I18N_NOOP("Example KOffice Program");
+static const char* version="0.1";
+
+KAboutData * newExampleAboutData()
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
-};
-
-int main( int argc, char **argv )
-{
-    KCmdLineArgs::init( argc, argv, newExampleAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication app;
-
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "example" );
-
-    if (!app.start()) // parses command line args, create initial docs and shells
-	return 1;
-    return app.exec();
+    KAboutData * aboutData=new KAboutData( "example", I18N_NOOP("Example"),
+                                           version, description, KAboutData::License_GPL,
+                                           "(c) 1998-2000, Torben Weis");
+    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    return aboutData;
 }

@@ -19,7 +19,7 @@
 
 #include <example_factory.h>
 #include <example_part.h>
-#include <kaboutdata.h>
+#include <example_aboutdata.h>
 #include <kinstance.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -33,9 +33,6 @@ extern "C"
     }
 };
 
-static const char* description=I18N_NOOP("Example KOffice Program");
-static const char* version="0.1";
-
 KInstance* ExampleFactory::s_global = 0L;
 KAboutData* ExampleFactory::s_aboutData = 0L;
 
@@ -47,16 +44,10 @@ ExampleFactory::ExampleFactory( QObject* parent, const char* name )
 
 ExampleFactory::~ExampleFactory()
 {
-    if ( s_aboutData )
-    {
-      delete s_aboutData;
-      s_aboutData = 0L;
-    }
-    if ( s_global )
-    {
-      delete s_global;
-      s_global = 0L;
-    }
+    delete s_aboutData;
+    s_aboutData = 0L;
+    delete s_global;
+    s_global = 0L;
 }
 
 KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
