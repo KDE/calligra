@@ -2,8 +2,8 @@ Source: koffice
 Section: x11
 Priority: optional
 Maintainer: Ben Burton <bab@debian.org>
-Build-Depends: automake1.7, debhelper (>= 4.0.0), flex, g++-3.2, kdelibs4-dev, libxslt1-dev, python2.2-dev
-Standards-Version: 3.5.7.0
+Build-Depends: automake1.7, debhelper (>= 4.0.0), flex, kdelibs4-dev, libxslt1-dev, python2.2-dev
+Standards-Version: 3.5.8.0
 
 Package: koffice
 Architecture: all
