@@ -1,121 +1,103 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
+<TITLE>The KIllustrator Handbook: Installation</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="killustrator documentation">
-<META NAME="description" CONTENT="English documentation for killustrator">
-<TITLE>KIllustrator Handbook: Installation</TITLE>
+<META NAME="keywords" CONTENT="KIllustrator">
+<META NAME="description" CONTENT="Documentation of KIllustrator">
 </HEAD>
-
-<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000"> 
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
-<A HREF="http://www.kde.org"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment" WIDTH=102 HEIGHT=27></A>
-
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
 <HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
 
+ 
 <P ALIGN="RIGHT">
-<A HREF="killustrator-3.html">next</A> <A HREF="killustrator-1.html">previous</A> <A HREF="index.html">table of contents</A>
 
-<H3><A NAME="s2">2.  Installation</A></H3>
+<A HREF="killustrator-3.html">Next</A>
+ <A HREF="killustrator-1.html">Previous</A>
+ <A HREF="index.html#toc2">Table of Contents</A>
+</P>
+<H3><A NAME="s2">2. Installation</A></H3>
 
 <P>
+<P>
+<H3><A NAME="ss2.1">2.1 How to obtain KIllustrator</A>
+</H3>
 
-<H3><A NAME="ss2.1">2.1 How to obtain KIllustrator</A></H3>
+<P>The most current version of KIllustrator is in the CVS repository at the
+<A HREF="http://www.kde.org">KDE Internet site</A> .
+Official releases are recommended for non-developers which are available from the 
+<A HREF="http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator">KIllustrator home page</A>; binary packages for the Linux distributions S.u.S.E., Red Hat, and Debian are also available. 
+<P>
+<H3><A NAME="ss2.2">2.2 System Requirements</A>
+</H3>
 
-The most current version of KIllustrator is in the CVS repository
-at the KDE Internet site (<A HREF="http://www.kde.org/">http://www.kde.org</a>). Official
-releases are recommended for non-developers which are available from the 
-KIllustrator home page
-(<A HREF="http://wwwiti.cs.uni.magdeburg.de/~sattler/killustrator.html">
-http://wwwiti.cs.uni.magdeburg.de/~sattler/killustrator</A>); binary packages for
-the Linux distributions S.u.S.E., Red Hat, and Debian are also available.
+<P>KIllustrator is still strongly in the development phase, and often utilises the latest package versons. The required software packages themselves require some set of minimum hardware which is not repeated here.
+<P>For installation the prerequisite packages are: 
+<P>
+<UL>
+<LI>KDE 1.1</LI>
+<LI>QT 1.41</LI>
+<LI>gcc 2.8.x or egcs 1.x</LI>
+</UL>
+<P>
+<H3><A NAME="ss2.3">2.3 Compilation and installation</A>
+</H3>
 
-
-<H3><A NAME="ss2.2">2.2 System Requirements</A></H3>
-
-KIllustrator is still strongly in the development phase, and often utilises the 
-latest package versons.
-The required software packages themselves require some set of minimum hardware 
-which is not repeated here.<BR>
-<p>
-For installation the prerequisite packages are:
-
-<ul>
-<li> KDE 1.1
-<li> QT 1.41
-<li> GCC 2.8.x or egcs 1.x
-</ul>
-
-<H3><A NAME="ss2.3">2.3 Compilation and installation</A></H3>
-
-To compile the source code for KIllustrator,
-proceeds as follows:
-
-<ol>
-<li>Unpack the tar archives <code>tar xfvz killustrator.tar.gz</code></li>
-<li>Change to the source code directory <code>cd killustrator</code></li>
-<li>Check for required packages and create the Makefiles <code>/.configure</code></li>
-<li>Compile the source code <code>make all</code></li> 
-</ol>
-
-If the installing user has ROOT priviliges, installing KIllustrator into the KDE directory tree
-is done by <code>make install</code>.
-
+<P>To compile the source code for KIllustrator, proceeds as follows: 
+<P>
+<OL>
+<LI>Unpack the tar archives <CODE>tar xfvz killustrator.tar.gz</CODE></LI>
+<LI>Change to the source code directory <CODE>cd killustrator</CODE></LI>
+<LI>Check for required packages and create the Makefiles <CODE>./configure</CODE></LI>
+<LI>Compile the source code <CODE>make all</CODE></LI>
+</OL>
+<P>If the installing user has ROOT privileges, installing KIllustrator into the KDE directory tree is done by <CODE>make install</CODE>.
 <P>The following platforms were successfully tested:
-
 <P>
-<table cellpadding="10">
-<TR><TD><FONT FACE="Helvetica"><u>Linux Distribution</U><BR>
-  Red Hat 5.1<BR>
-  Red Hat 5.2<BR>
-  SuSE 6.0<BR>
-  SuSE 6.1 Beta<BR>
-  SuSE 6.1</FONT></TD>
-
-<TD><FONT FACE="Helvetica"><u>Tested by</U><BR>
-  Hagen Hoepfner<BR>
-  Hagen Hoepfner<BR>
-  Hagen Hoepfner<BR>
-  Hagen Hoepfner<BR>
-  Hagen Hoepfner</FONT></TD></TR>
-</table>
-
-<P>
+<UL>
+<LI>RedHat 5.1 (Hagen Höpfner)</LI>
+<LI>RedHat 5.2 (Hagen Höpfner)</LI>
+<LI>SuSE 6.0 (Hagen Höpfner) </LI>
+<LI>SuSE 6.1 Cebit Beta (Hagen Höpfner)</LI>
+<LI>SuSE 6.1 (Hagen Höpfner)</LI>
+<LI>SuSE 6.2 (Joachim Ansorg) </LI>
+</UL>
 <P>If you encounter problems, please direct them to Hagen.
 <P>
+<H3><A NAME="ss2.4">2.4 Installation of binary packages</A>
+</H3>
 
-<H3><A NAME="ss2.4">2.4 Installation of binary packages</A></H3>
+<P>The installation of precompiled packages under Linux depends on the package format used. KIllustrator is available in rpm and deb package formats. For a successful installation be sure to select the package for your system. First, some definitions: 
+<P>
+<UL>
+<LI><CODE>FILENAME</CODE> = name of the package file (e.g.: <CODE>killustrator_0.6.5-1_i386.deb</CODE>)</LI>
+<LI><CODE>PACKAGENAME</CODE> = the created package name (usually  <CODE>killustrator</CODE>)</LI>
+</UL>
+<P>
+<H4>rpm</H4>
 
-The installation of precompiled packages under Linux depends on the package format used. 
-KIllustrator is available in <code>rpm</code> and <code>deb</code> package formats. For a successful installation
-be sure to select the package for your system.  First, some definitions: 
+<P>To install an <CODE>rpm</CODE> package use the command <CODE>rpm -i
+FILENAME</CODE>.The package may be deleted later using the command <CODE>rpm -e PACKAGENAME</CODE>.
+<P>
+<H4>deb</H4>
 
-<ul>
-<li><code>FILENAME</code> = name of the package file (eg: 
-    <code>killustrator_0.6.5-1_i386.deb</code>)</li>
-<li><code>PACKAGENAME</code> = the created package name (usually killustrator)</li> 
-</ul>
-
-<p>
-<code>rpm</code> <p>
-
-To install an <code>rpm</code> package use the command <code>rpm -i FILENAME</code>.
-The package may be deleted later using the command <code>rpm -e PACKAGENAME</code>. 
-
-<p>
-<code>deb</code> <p> 
-
-Similarly for <code>deb</code> packages, the installation command is 
-<code>dpkg -i FILENAME</code> and to remove the package <code>dpkg -r PACKAGENAME</code>.
-
-<p>
-In both cases ROOT priviledges will almost certainly be required to de/install the packages.
-
+<P>Similarly for <CODE>deb</CODE> packages, the installation command is <CODE>dpkg -i FILENAME</CODE> and to remove the package <CODE>dpkg -r PACKAGE_NAME</CODE>.
+<P>In both cases ROOT privileges will almost certainly be required to install or uninstall the packages.
+<P>
 <P>
 <P ALIGN="RIGHT">
-<A HREF="killustrator-3.html">next</A> <A HREF="killustrator-1.html">previous</A> <A HREF="index.html">table of contents</A>
-<p>
-<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>   
+
+<A HREF="killustrator-3.html">Next</A>
+ <A HREF="killustrator-1.html">Previous</A>
+ <A HREF="index.html#toc2">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
 </FONT>
+
+ 
 </BODY>
 </HTML>
