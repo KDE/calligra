@@ -598,6 +598,13 @@ Parser::parseDocWP6 (const QString & filename, int start)
       // WP default extended international characters ?
       else if ((code >= 1) && (code <= 32))
         {
+          // flush previous text first
+          if (!text.isEmpty ())
+            {
+              tokens.append (new Token (text));
+              text = "";
+            }
+
           int xlate[] = {
             35, 34, 7, 36, 31, 30, 27, 33, 29, 77, 76, 39, 38, 45, 41, 40,
             47, 43, 49, 57, 56, 81, 80, 83, 82, 63, 62, 71, 70, 67, 73, 23
