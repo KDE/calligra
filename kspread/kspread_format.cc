@@ -1511,7 +1511,7 @@ const QColor& KSpreadFormat::goUpDiagonalColor( int col, int row ) const
 
 uint KSpreadFormat::bottomBorderValue( int col, int row ) const
 {
-  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  if ( !hasProperty( PBottomBorder, false ) && !hasNoFallBackProperties( PBottomBorder ) )
   {
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )
@@ -1525,7 +1525,7 @@ uint KSpreadFormat::bottomBorderValue( int col, int row ) const
 
 uint KSpreadFormat::rightBorderValue( int col, int row ) const
 {
-  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  if ( !hasProperty( PRightBorder, false ) && !hasNoFallBackProperties( PRightBorder ) )
   {
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )
@@ -1553,7 +1553,7 @@ uint KSpreadFormat::leftBorderValue( int col, int row ) const
 
 uint KSpreadFormat::topBorderValue( int col, int row ) const
 {
-  if ( !hasProperty( PLeftBorder, false ) && !hasNoFallBackProperties( PLeftBorder ) )
+  if ( !hasProperty( PTopBorder, false ) && !hasNoFallBackProperties( PTopBorder ) )
   {
     const KSpreadFormat * l = fallbackFormat( col, row );
     if ( l )

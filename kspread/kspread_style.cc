@@ -55,8 +55,6 @@ KSpreadStyle::KSpreadStyle()
     m_factor( 1.0 ),
     m_properties( 0 )
 {
-  kdDebug() << "Style constructor I" << endl;
-
   QFont f( KoGlobal::defaultFont() );
   m_fontFamily = f.family();
   m_fontSize = f.pointSize();
@@ -105,13 +103,10 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
     m_factor( style->m_factor ),
     m_properties( style->m_properties )
 {
-  kdDebug() << "Style constructor II" << endl;
-  kdDebug() << "This: " << this << " - " <<  m_parent << ", style type: " << style->m_type << endl;
 }
 
 KSpreadStyle::~KSpreadStyle()
 {
-  kdDebug() << "Style destructor" << endl;
 }
 
 void KSpreadStyle::saveXML( QDomDocument & doc, QDomElement & format ) const
@@ -548,7 +543,6 @@ bool KSpreadStyle::loadXML( QDomElement & format )
 
 void KSpreadStyle::setParent( KSpreadCustomStyle * parent )
 {
-  kdDebug() << "This: " << this << " - " << parent << endl;
   m_parent = parent;
   if ( m_parent )
     m_parentName = m_parent->name();
@@ -1418,7 +1412,6 @@ KSpreadCustomStyle::KSpreadCustomStyle()
   : KSpreadStyle(),
     m_name( "Default" )
 {
-  kdDebug() << "CustomStyle constructor I" << endl;
   m_parent = 0;
 }
 
@@ -1476,8 +1469,6 @@ KSpreadCustomStyle::KSpreadCustomStyle( QString const & name, KSpreadCustomStyle
   : KSpreadStyle(),
     m_name( name )
 {
-  kdDebug() << "CustomStyle constructor II" << endl;
-  kdDebug() << "This: " << this << " - " << parent << endl;
   m_parent = parent;
   if ( m_parent )
     m_parentName = m_parent->name();
@@ -1485,7 +1476,6 @@ KSpreadCustomStyle::KSpreadCustomStyle( QString const & name, KSpreadCustomStyle
 
 KSpreadCustomStyle::~KSpreadCustomStyle()
 {
-  kdDebug() << "CustomStyle destructor" << endl;
 }
 
 void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )
