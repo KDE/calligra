@@ -939,9 +939,13 @@ void ConfigurePathPage::apply()
     QListViewItem * item = m_pPathView->findItem(i18n("Picture path"), 0);
     if ( item )
     {
-        config->setGroup( "Kpresenter Path" );
-        m_pView->kPresenterDoc()->setPicturePath( item->text(1) );
-        config->writeEntry( "picture path",item->text(1) );
+        QString res = item->text(1);
+        if ( res !=m_pView->kPresenterDoc()->picturePath())
+        {
+            config->setGroup( "Kpresenter Path" );
+            m_pView->kPresenterDoc()->setPicturePath( res );
+            config->writeEntry( "picture path",res );
+        }
     }
 }
 
