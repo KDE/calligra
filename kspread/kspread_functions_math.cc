@@ -34,6 +34,7 @@
 #include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_functions_helper.h>
 #include <kspread_map.h>
 #include <kspread_table.h>
 #include <kspread_util.h>
@@ -52,6 +53,7 @@ bool kspreadfunc_ceil( KSContext& context );
 bool kspreadfunc_ceiling( KSContext& context );
 bool kspreadfunc_count( KSContext& context );
 bool kspreadfunc_counta( KSContext& context );
+bool kspreadfunc_countblank( KSContext& context );
 bool kspreadfunc_countif( KSContext& context );
 bool kspreadfunc_cur( KSContext& context );
 bool kspreadfunc_div( KSContext& context );
@@ -98,13 +100,14 @@ bool kspreadfunc_roundup( KSContext& context );
 bool kspreadfunc_sign( KSContext& context );
 bool kspreadfunc_sqrt( KSContext& context );
 bool kspreadfunc_sqrtpi( KSContext& context );
+bool kspreadfunc_subtotal( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
+bool kspreadfunc_suma( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
 bool kspreadfunc_trunc( KSContext& context );
 
 
 bool kspreadfunc_multipleOP( KSContext& context );
-bool kspreadfunc_subtotal( KSContext& context );
 
 // registers all math functions
 void KSpreadRegisterMathFunctions()
@@ -114,13 +117,13 @@ void KSpreadRegisterMathFunctions()
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
   repo->registerFunction( "MULTIPLEOPERATIONS", kspreadfunc_multipleOP );
-  repo->registerFunction( "SUBTOTAL",    kspreadfunc_subtotal );
 
   repo->registerFunction( "ABS",           kspreadfunc_abs );
   repo->registerFunction( "CEIL",          kspreadfunc_ceil );
   repo->registerFunction( "CEILING",       kspreadfunc_ceiling );
   repo->registerFunction( "COUNT",         kspreadfunc_count );
   repo->registerFunction( "COUNTA",        kspreadfunc_counta );
+  repo->registerFunction( "COUNTBLANK",    kspreadfunc_countblank );
   repo->registerFunction( "COUNTIF",       kspreadfunc_countif );
   repo->registerFunction( "CUR",           kspreadfunc_cur );
   repo->registerFunction( "DIV",           kspreadfunc_div );
@@ -170,24 +173,11 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "SIGN",          kspreadfunc_sign );
   repo->registerFunction( "SQRT",          kspreadfunc_sqrt );
   repo->registerFunction( "SQRTPI",        kspreadfunc_sqrtpi );
+  repo->registerFunction( "SUBTOTAL",      kspreadfunc_subtotal );
   repo->registerFunction( "SUM",           kspreadfunc_sum );
+  repo->registerFunction( "SUMA",          kspreadfunc_suma );
   repo->registerFunction( "SUMSQ",         kspreadfunc_sumsq );
   repo->registerFunction( "TRUNC",         kspreadfunc_trunc );
-}
-
-/*********************************************************************
- *
- * Helper function to avoid problems with rounding floating point
- * values. Idea for this kind of solution taken from Openoffice.
- *
- *********************************************************************/
-
-static bool approx_equal (double a, double b)
-{
-  if ( a == b )
-    return TRUE;
-  double x = a - b;
-  return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
 }
 
 // Function: SQRT
@@ -509,7 +499,8 @@ bool kspreadfunc_log( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
+static bool kspreadfunc_sum_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                    double & result, bool aMode )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -518,25 +509,47 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result, aMode ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
+    {
       result += (*it)->doubleValue();
+    }
+    else if ( aMode )
+    {
+      if ( KSUtil::checkType( context, *it, KSValue::StringType, false ) )
+      {
+        // TODO: needed?
       }
-    /*else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;*/
+      else
+      if ( KSUtil::checkType( context, *it, KSValue::BoolType, false ) )
+      {
+        result += ( (*it)->boolValue() ? 1.0 : 0.0 );
+      }      
+    }
   }
 
   return true;
 }
 
 // Function: sum
-bool kspreadfunc_sum( KSContext& context )
+bool kspreadfunc_sum( KSContext & context )
 {
   double result = 0.0;
-  bool b = kspreadfunc_sum_helper( context, context.value()->listValue(), result );
+  bool b = kspreadfunc_sum_helper( context, context.value()->listValue(), result, false );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: suma
+bool kspreadfunc_suma( KSContext & context )
+{
+  double result = 0.0;
+  bool b = kspreadfunc_sum_helper( context, context.value()->listValue(), result, true );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -660,13 +673,13 @@ static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Pt
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_sum_helper( context, (*it)->listValue(), result, false ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
+    {
       result += ((*it)->doubleValue()*(*it)->doubleValue());
-      }
+    }
     else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
@@ -1753,7 +1766,6 @@ static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::P
   QValueList<KSValue::Ptr>::Iterator eend = extra.end();
 
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
 
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
   KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
@@ -1838,6 +1850,92 @@ bool kspreadfunc_counta( KSContext& context )
 
   if ( b )
     context.setValue( new KSValue( resultA ) );
+
+  return b;
+}
+
+static bool kspreadfunc_countblank_helper( KSContext& context, QValueList<KSValue::Ptr> & args, 
+                                           int & result )
+{
+  KSpreadMap   * map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadCell  * cell  = 0;
+  KSpreadSheet * t     = 0;
+
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  kdDebug() << "Result: " << result << endl;
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::StringType, false ) )
+    {
+      kdDebug() << "S:" << (*it)->stringValue() << endl;
+      int right, left, bottom, top;
+
+      KSpreadRange range( (*it)->stringValue(), map );
+      if ( range.range.left() <= 0 || range.range.right() <= 0 )
+      {
+        KSpreadPoint point( (*it)->stringValue(), map );
+
+        if ( point.pos.x() <= 0 || point.pos.y() <= 0 )
+          continue; // not blank, whatever it is...
+
+        right  = point.pos.x();
+        bottom = point.pos.y();
+        left   = right;
+        top    = top;
+
+        if ( !point.isTableKnown() )
+          t = sheet;
+        else
+          t = point.table;
+      }
+      else
+      {
+        right  = range.range.right();
+        bottom = range.range.bottom();
+        left   = range.range.left();
+        top    = range.range.top();
+
+        if ( !range.isTableKnown() )
+          t = sheet;
+        else
+          t = range.table;
+      }
+
+      for ( int x = left; x <= right; ++x )
+      {
+        for ( int y = top; y <= bottom; ++y )
+        {
+          kdDebug() << "Cell: " << x << ", " << y << endl;
+          cell = t->cellAt( x, y );
+          if ( cell->isDefault() || cell->isEmpty() || cell->strOutText().isEmpty() )
+          {            
+            ++result;
+          }
+        }
+      }
+    }
+  }
+
+  kdDebug() << "Result 2: " << result << endl;
+
+  return true;
+}
+
+// Function: COUNTBLANK
+bool kspreadfunc_countblank( KSContext& context )
+{
+  int result = 0;
+
+  kdDebug() << "Countblank: " << endl;
+
+  bool b = kspreadfunc_countblank_helper( context, context.extraData()->listValue(), result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
 
   return b;
 }
@@ -2016,71 +2114,6 @@ bool kspreadfunc_multipleOP( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result,int & number)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_average_helper( context, (*it)->listValue(), result, number) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += (*it)->doubleValue();
-      number++;
-    }
-  }
-
-  return true;
-}
-
-static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result, double avera)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_variance_helper( context, (*it)->listValue(), result ,avera) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
-      }
-  }
-
-  return true;
-}
-
-static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
-        return false;
-
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
-    }
-  }
-
-  return true;
-}
-
 // Function: SUBTOTAL:
 bool kspreadfunc_subtotal( KSContext & context )
 {
@@ -2196,22 +2229,22 @@ bool kspreadfunc_subtotal( KSContext & context )
     context.setValue( new KSValue( sum ) );
     break;
    case 7: // StDev
-    kspreadfunc_stddev_helper( context, *list, result, average );
+    kspreadfunc_stddev_helper( context, *list, result, average, false );
     context.setValue( new KSValue( sqrt( result / ((double) (countA - 1) ) ) ) );
     break;
    case 8: // StDevP
-    kspreadfunc_stddev_helper( context, *list, result, average );
+    kspreadfunc_stddev_helper( context, *list, result, average, false );
     context.setValue( new KSValue( sqrt( result / countA ) ) );
     break;
    case 9: // Sum
     context.setValue( new KSValue( sum ) );
     break;
    case 10: // Var
-    kspreadfunc_variance_helper( context, *list, result, average );
+    kspreadfunc_variance_helper( context, *list, result, average, false );
     context.setValue( new KSValue( (double)(result / (countA - 1)) ) );
     break;
    case 11: // VarP
-    kspreadfunc_variance_helper( context, *list, result, average );
+    kspreadfunc_variance_helper( context, *list, result, average, false );
     context.setValue( new KSValue( (double)(result / countA) ) );
     break;
    default:

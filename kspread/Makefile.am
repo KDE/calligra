@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkspreadpart.la
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \
 	kspread_functions.cc kspread_dlg_csv.cc \
-	kspread_canvas.cc \
+	kspread_canvas.cc kspread_functions_helper.cc \
 	kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \
@@ -65,7 +65,7 @@ kspread_LDADD = kspread.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS = kspread_doc.h kspread_functions.h \
+noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_undo.h kspread_view.h kspread_tabbar.h \
 	kspread_autofill.h kspread_interpreter.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \

@@ -35,6 +35,7 @@
 
 #include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_functions_helper.h>
 #include <kspread_table.h>
 #include <kspread_util.h>
 
@@ -68,16 +69,21 @@ bool kspreadfunc_large(KSContext& context );
 bool kspreadfunc_loginv(KSContext& context );
 bool kspreadfunc_lognormdist(KSContext& context );
 bool kspreadfunc_median( KSContext& context );
+bool kspreadfunc_mode( KSContext& context );
 bool kspreadfunc_negbinomdist( KSContext & context );
 bool kspreadfunc_normdist(KSContext& context );
 bool kspreadfunc_norminv( KSContext& context );
 bool kspreadfunc_normsinv( KSContext& context );
 bool kspreadfunc_phi(KSContext& context);
 bool kspreadfunc_poisson( KSContext& context );
+bool kspreadfunc_skew_est(KSContext& context );
+bool kspreadfunc_skew_pop(KSContext& context );
 bool kspreadfunc_small(KSContext& context );
 bool kspreadfunc_standardize( KSContext & context );
 bool kspreadfunc_stddev( KSContext& context );
+bool kspreadfunc_stddeva( KSContext& context );
 bool kspreadfunc_stddevp( KSContext& context );
+bool kspreadfunc_stddevpa( KSContext& context );
 bool kspreadfunc_stdnormdist(KSContext& context );
 bool kspreadfunc_sumproduct( KSContext& context );
 bool kspreadfunc_sumx2py2( KSContext& context );
@@ -85,13 +91,10 @@ bool kspreadfunc_sumx2my2( KSContext& context );
 bool kspreadfunc_sumxmy2( KSContext& context );
 bool kspreadfunc_tdist( KSContext& context );
 bool kspreadfunc_variance( KSContext& context );
+bool kspreadfunc_variancea( KSContext& context );
 bool kspreadfunc_variancep( KSContext& context );
+bool kspreadfunc_variancepa( KSContext& context );
 bool kspreadfunc_weibull( KSContext& context );
-
-static bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
-                                        double & result,int & number );
-static bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
-                                       double & result, double & avera );
 
 typedef QValueList<double> List;
 
@@ -129,18 +132,24 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "KURT", kspreadfunc_kurtosis_est );
   repo->registerFunction( "KURTP", kspreadfunc_kurtosis_pop );
   repo->registerFunction( "MEDIAN", kspreadfunc_median );
+  repo->registerFunction( "MODE", kspreadfunc_mode );
   repo->registerFunction( "NEGBINOMDIST", kspreadfunc_negbinomdist );
   repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
   repo->registerFunction( "NORMINV", kspreadfunc_norminv );
   repo->registerFunction( "NORMSDIST", kspreadfunc_stdnormdist );
   repo->registerFunction( "NORMSINV", kspreadfunc_normsinv );
+  repo->registerFunction( "PEARSON", kspreadfunc_correl_pop );
   repo->registerFunction( "PERMUT", kspreadfunc_arrang );
   repo->registerFunction( "PHI", kspreadfunc_phi );
   repo->registerFunction( "POISSON", kspreadfunc_poisson );
+  repo->registerFunction( "SKEW", kspreadfunc_skew_est );
+  repo->registerFunction( "SKEWP", kspreadfunc_skew_pop );
   repo->registerFunction( "SMALL", kspreadfunc_small );
   repo->registerFunction( "STANDARDIZE", kspreadfunc_standardize );
   repo->registerFunction( "STDEV", kspreadfunc_stddev );
+  repo->registerFunction( "STDEVA", kspreadfunc_stddeva );
   repo->registerFunction( "STDEVP", kspreadfunc_stddevp );
+  repo->registerFunction( "STDEVPA", kspreadfunc_stddevpa );
   repo->registerFunction( "SUM2XMY", kspreadfunc_sumxmy2 );
   repo->registerFunction( "SUMPRODUCT", kspreadfunc_sumproduct );
   repo->registerFunction( "SUMX2PY2", kspreadfunc_sumx2py2 );
@@ -149,50 +158,176 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "VARIANCE", kspreadfunc_variance );
   repo->registerFunction( "VAR", kspreadfunc_variance );
   repo->registerFunction( "VARP", kspreadfunc_variancep );
-  repo->registerFunction( "VARA", kspreadfunc_variance );
-  repo->registerFunction( "VARPA", kspreadfunc_variancep );
+  repo->registerFunction( "VARA", kspreadfunc_variancea );
+  repo->registerFunction( "VARPA", kspreadfunc_variancepa );
   repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
 }
 
-double fact(int n)
+bool kspreadfunc_skew_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, 
+                              double avg, double stdev )
 {
-  return ( n != 0 ? n * fact(n - 1) : 1 );
-}
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
 
-double combin(int n, int k)
-{
-  if (n >= 15) 
+  for( ; it != end; ++it )
   {
-    double result = exp(lgamma (n + 1) - lgamma (k + 1) - lgamma (n - k + 1));
-    return floor(result + 0.5);
-  } 
-  else 
-  {
-    double result = fact( n ) / fact( k ) / fact( n - k );
-    return result;
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_skew_helper( context, (*it)->listValue(), result, avg, stdev ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double d = ( (*it)->doubleValue() - avg ) / stdev;
+      result += d * d * d;
+    }
   }
+
+  return true;
 }
 
-static double gaussinv_helper (double x) 
+bool kspreadfunc_skew_est( KSContext & context )
 {
-  double c0, c1, c2, d1, d2, d3, q, t, z;
-  c0 = 2.515517;
-  c1 = 0.802853;
-  c2 = 0.010328;
-  d1 = 1.432788;
-  d2 = 0.189269;
-  d3 = 0.001308;
-  if (x < 0.5)
-    q = x;
-  else
-    q = 1.0-x;
-  t = sqrt(-log(q*q));
-  z = t - (c0 + t*(c1 + t*c2)) / (1.0 + t*(d1 + t*(d2 + t*d3)));
-  if (x < 0.5)
-    z *= -1.0;
-  return z;
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double tskew = 0.0;
+
+  int number = 0;
+  double res = 0.0;
+
+  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
+    return false;
+
+  if ( number < 3 )
+    return false;
+
+  double avg = res / (double) number;
+
+  res = 0.0;
+
+  kdDebug() << "Average: " << avg << endl;
+
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
+    return false;
+
+  kdDebug() << "Stdev: " << res << endl;
+
+  res = sqrt( res / ((double)(number - 1) ) );
+
+  kdDebug() << "Stdev: " << res << endl;
+
+  if ( res == 0.0 )
+    return false;
+
+  if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
+    return false;
+
+  kdDebug() << "Skew: " << tskew << endl;
+  
+  res = ( ( tskew * number ) / ( number - 1 ) ) / ( number - 2 );
+
+  context.setValue( new KSValue( res ) );
+  return true;
 }
 
+bool kspreadfunc_skew_pop( KSContext & context )
+{
+  // from gnumeric, thanks to the gnumeric developers!
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double tskew = 0.0;
+
+  int number = 0;
+  double res = 0.0;
+
+  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
+    return false;
+
+  if ( number < 1 )
+    return false;
+
+  double avg = res / (double) number;
+
+  kdDebug() << "Average: " << avg << endl;
+  res = 0.0;
+
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
+    return false;
+
+  res = sqrt( res / number );
+
+  kdDebug() << "Stdevp: " << res << endl;
+
+  if ( res == 0.0 )
+    return false;
+
+  if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
+    return false;
+
+  kdDebug() << "Skew: " << tskew << endl;
+  
+  res = tskew / number;
+
+  context.setValue( new KSValue( res ) );
+  return true;
+}
+
+class ContentTable : public QMap<double, int> {};
+
+bool kspreadfunc_mode_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                              ContentTable & table, double & number, int & value )
+{
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  ContentTable::Iterator iter;
+
+  for ( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, true ) )
+    {
+      if ( !kspreadfunc_mode_helper( context, (*it)->listValue(), table, number, value ) )
+        return false;
+    }
+    else
+    if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) ) 
+    {
+      double d = (*it)->doubleValue();
+
+      iter = table.find( d );
+      if ( iter != table.end() )
+        table[d] = ++(iter.data());
+      else
+      {
+        table[d] = 1;
+        iter = table.find( d );
+      }
+
+      if ( iter.data() > value )
+      {
+        value  = iter.data();
+        number = d;
+      }
+    }
+  }
+  
+  return true;
+}
+
+bool kspreadfunc_mode( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double number = 0.0;
+  int    value  = 1;
+  ContentTable table;
+
+  if ( !kspreadfunc_mode_helper( context, args, table, number, value ) )
+    return false;
+
+  context.setValue( new KSValue( number ) );
+  return true;
+}
 
 bool kspreadfunc_covar_helper( KSContext & context, QValueList<KSValue::Ptr> & args1, 
                                QValueList<KSValue::Ptr> & args2, 
@@ -245,7 +380,7 @@ bool kspreadfunc_correl_pop( KSContext & context )
   int number = 0;
   int number2 = 0;
 
-  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number) )
+  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number, false ) )
     return false;
 
   if ( number <= 0 )
@@ -253,7 +388,7 @@ bool kspreadfunc_correl_pop( KSContext & context )
 
   double avg1 = res1 / (double) number;
 
-  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2) )
+  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2, false ) )
     return false;
 
   if ( number2 <= 0 || number2 != number )
@@ -261,9 +396,9 @@ bool kspreadfunc_correl_pop( KSContext & context )
 
   double avg2 = res2 / (double) number;
 
-  if ( !kspreadfunc_stddev_helper( context, args[0]->listValue(), stdevp1, avg1 ) )
+  if ( !kspreadfunc_stddev_helper( context, args[0]->listValue(), stdevp1, avg1, false ) )
     return false;
-  if ( !kspreadfunc_stddev_helper( context, args[1]->listValue(), stdevp2, avg2 ) )
+  if ( !kspreadfunc_stddev_helper( context, args[1]->listValue(), stdevp2, avg2, false ) )
     return false;
 
   stdevp1 = sqrt( stdevp1 / number );
@@ -302,7 +437,7 @@ bool kspreadfunc_covar( KSContext & context )
   int number = 0;
   int number2 = 0;
 
-  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number) )
+  if ( !kspreadfunc_average_helper( context, args[0]->listValue(), res1, number, false ) )
     return false;
 
   if ( number <= 0 )
@@ -310,7 +445,7 @@ bool kspreadfunc_covar( KSContext & context )
 
   double avg1 = res1 / (double) number;
 
-  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2) )
+  if ( !kspreadfunc_average_helper( context, args[1]->listValue(), res2, number2, false ) )
     return false;
 
   if ( number2 <= 0 || number2 != number )
@@ -633,7 +768,7 @@ bool kspreadfunc_devsq( KSContext & context )
   int number = 0;
 
   kdDebug() << "DevSQ" << endl;
-  if ( !kspreadfunc_average_helper( context, args, res, number) )
+  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
     return false;
 
   kdDebug() << "DevSQ: " << number << " - " << res << endl;
@@ -689,7 +824,7 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
   int number = 0;
   double res = 0.0;
 
-  if ( !kspreadfunc_average_helper( context, args, res, number) )
+  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
     return false;
 
   if ( number < 4 )
@@ -699,7 +834,7 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 
   kdDebug() << "Average: " << avg << endl;
 
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
     return false;
 
   kdDebug() << "Stdev: " << res << endl;
@@ -727,17 +862,17 @@ bool kspreadfunc_kurtosis_pop( KSContext & context )
   int number = 0;
   double res = 0.0;
 
-  if ( !kspreadfunc_average_helper( context, args, res, number) )
+  if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
     return false;
 
-  if ( number < 4 )
+  if ( number < 1 )
     return false;
 
   double avg = res / (double) number;
 
   kdDebug() << "Average: " << avg << endl;
 
-  if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
     return false;
 
   kdDebug() << "Stdev: " << res << endl;
@@ -888,35 +1023,13 @@ bool kspreadfunc_arrang( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& number)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_average_helper( context, (*it)->listValue(), result ,number) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += (*it)->doubleValue();
-      ++number;
-    }
-  }
-
-  return true;
-}
-
 // Function: average
 bool kspreadfunc_average( KSContext & context )
 {
   double result = 0.0;
 
   int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number );
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
 
   if ( number == 0 )
   {
@@ -1003,34 +1116,13 @@ bool kspreadfunc_median( KSContext& context )
   return worked;
 }
 
-static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result, double avera)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_variance_helper( context, (*it)->listValue(), result ,avera) )
-        return false;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
-      result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
-      }
-  }
-
-  return true;
-}
-
 // Function: variance
 bool kspreadfunc_variance( KSContext& context )
 {
   double result = 0.0;
   double avera = 0.0;
   int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
 
   if ( number == 0 )
       return false;
@@ -1039,7 +1131,7 @@ bool kspreadfunc_variance( KSContext& context )
   {
     avera = result / (double)number;
     result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, false );
     if(b)
       context.setValue( new KSValue(result / (double)(number - 1) ) );
   }
@@ -1053,7 +1145,7 @@ bool kspreadfunc_variancep( KSContext& context )
   double result = 0.0;
   double avera = 0.0;
   int number = 0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
 
   if ( number == 0 )
       return false;
@@ -1062,7 +1154,7 @@ bool kspreadfunc_variancep( KSContext& context )
   {
     avera = result / (double)number;
     result = 0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, false );
     if(b)
       context.setValue( new KSValue(result / (double)number ) );
   }
@@ -1070,46 +1162,102 @@ bool kspreadfunc_variancep( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
-{
-  QValueList<KSValue::Ptr>::Iterator it = args.begin();
-  QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-  for( ; it != end; ++it )
-  {
-    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
-    {
-      if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
-        return false;
-
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-    {
-      result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
-    }
-  }
-
-  return true;
-}
-
-// Function: stddev
-bool kspreadfunc_stddev( KSContext& context )
+// Function: vara
+bool kspreadfunc_variancea( KSContext& context )
 {
   double result = 0.0;
   double avera = 0.0;
-  int number=0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+  int number = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
 
   if ( number == 0 )
       return false;
 
   if ( b )
   {
-    avera=result/number;
-    result=0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result,avera );
+    avera = result / (double) number;
+    result = 0.0;
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, true );
     if(b)
-      context.setValue( new KSValue(sqrt(result/((double)(number - 1)) )) );
+      context.setValue( new KSValue( result / (double)(number - 1) ) );
+  }
+
+  return b;
+}
+
+// Function: varpa
+bool kspreadfunc_variancepa( KSContext& context )
+{
+  double result = 0.0;
+  double avera = 0.0;
+  int number = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
+
+  if ( number == 0 )
+      return false;
+
+  if ( b )
+  {
+    avera = result / (double)number;
+    result = 0.0;
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera, true );
+    if(b)
+      context.setValue( new KSValue(result / (double)number ) );
+  }
+
+  return b;
+}
+
+// Function: stddev
+bool kspreadfunc_stddev( KSContext& context )
+{
+  double result = 0.0;
+  double avera  = 0.0;
+  int number    = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
+
+  if ( number == 0 )
+      return false;
+
+  kdDebug() << "STDEV: Number: " << number << ", result: " << result << endl;
+
+  if ( b )
+  {
+    avera  = result / number;
+    result = 0.0;
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, false );
+
+    kdDebug() << "STDEV: result: " << result << endl;
+    if (b)
+      context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );
+  }
+
+  return b;
+}
+
+// Function: stdeva
+bool kspreadfunc_stddeva( KSContext & context )
+{
+  double result = 0.0;
+  double avera  = 0.0;
+  int number    = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
+
+  if ( number == 0 )
+      return false;
+
+  kdDebug() << "STDEVA: Number: " << number << ", result: " << result << endl;
+
+  if ( b )
+  {
+    avera  = result / number;
+    result = 0.0;
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, true );
+
+    kdDebug() << "STDEVA: result: " << result << endl;
+
+    if (b)
+      context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );
   }
 
   return b;
@@ -1119,9 +1267,32 @@ bool kspreadfunc_stddev( KSContext& context )
 bool kspreadfunc_stddevp( KSContext& context )
 {
   double result = 0.0;
-  double avera = 0.0;
-  int number=0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number );
+  double avera  = 0.0;
+  int number    = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, false );
+
+  if ( number == 0 )
+      return false;
+
+  if ( b )
+  {
+    avera  = result / number;
+    result = 0.0;
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, false );
+    if ( b )
+      context.setValue( new KSValue( sqrt(result / number) ) );
+  }
+
+  return b;
+}
+
+// Function: stdevpa
+bool kspreadfunc_stddevpa( KSContext& context )
+{
+  double result = 0.0;
+  double avera  = 0.0;
+  int number    = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
 
   if ( number == 0 )
       return false;
@@ -1130,7 +1301,7 @@ bool kspreadfunc_stddevp( KSContext& context )
   {
     avera = result / number;
     result = 0.0;
-    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera );
+    bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, true );
     if ( b )
       context.setValue( new KSValue( sqrt(result / number) ) );
   }
@@ -2290,7 +2461,7 @@ bool kspreadfunc_avedev(KSContext &context)
 	int number = 0;
 
 	// First sum the range into one double
-	bool b = kspreadfunc_average_helper(context, context.value()->listValue(), temp, number);
+	bool b = kspreadfunc_average_helper(context, context.value()->listValue(), temp, number, false );
 
 	if(number == 0)
 	{
@@ -2317,64 +2488,23 @@ bool kspreadfunc_avedev(KSContext &context)
 	return b;
 }
 
-static bool kspreadfunc_averagea_helper(KSContext &context, QValueList<KSValue::Ptr> &args, double &result, int &number)
-{
-	QValueList<KSValue::Ptr>::Iterator it = args.begin();
-	QValueList<KSValue::Ptr>::Iterator end = args.end();
-
-	for(; it != end; ++it)
-	{
-		if(KSUtil::checkType(context, *it, KSValue::ListType, false))
-		{
-			if(!kspreadfunc_averagea_helper(context, (*it)->listValue(), result, number))
-				return false;
-		}
-		else if(!KSUtil::checkType(context, *it, KSValue::Empty, false))
-		{
-			if(KSUtil::checkType(context, *it, KSValue::StringType, false))
-				number++;
-			else if(KSUtil::checkType(context, *it, KSValue::DoubleType, false))
-			{
-				// Empty cells are not empty but are double...0
-				if((*it)->doubleValue() != 0)
-				{
-					result += (*it)->doubleValue();
-					number++;
-				}
-			}
-			else if(KSUtil::checkType(context, *it, KSValue::BoolType, false))
-			{
-				result += ((*it)->boolValue() ? 1 : 0);
-				number++;
-			}
-		}
-	}
-
-	return true;
-}
-
 // Function: averagea
-bool kspreadfunc_averagea(KSContext &context)
+bool kspreadfunc_averagea( KSContext & context )
 {
-	double result = 0.0;
-	int number = 0;
+  double result = 0.0;
 
-	// First sum the range into one double
-	bool b = kspreadfunc_averagea_helper(context, context.value()->listValue(), result, number);
+  int number = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number, true );
 
-	if(number == 0)
-	{
-		context.setValue(new KSValue(0));
-		return true;
-	}
+  if ( number == 0 )
+  {
+    context.setValue( new KSValue( i18n("#DIV/0") ) );
+    return true;
+  }
 
-	if(!b)
-		return false;
+  if ( b )
+    context.setValue( new KSValue( result / (double) number ) );
 
-	// Devide by the number of values
-	result /= number;
-
-	context.setValue(new KSValue(result));
-
-	return b;
+  return b;
 }
+

@@ -5,6 +5,26 @@
     <GroupName>Logical</GroupName>
 
     <Function>
+      <Name>FALSE</Name>
+      <Type>Boolean</Type>
+      <Help>
+	<Text>The FALSE() function returns the boolean value FALSE.</Text>
+	<Syntax>FALSE()</Syntax>
+	<Example>FALSE() returns FALSE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TRUE</Name>
+      <Type>Boolean</Type>
+      <Help>
+	<Text>The TRUE() function returns the boolean value TRUE.</Text>
+	<Syntax>TRUE()</Syntax>
+	<Example>TRUE() returns TRUE</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>AND</Name>
       <Type>Boolean</Type>
       <Parameter optional="true">

@@ -351,6 +351,8 @@ public:
 
     QString getCurrencySymbol() const { return m_currency.symbol; }
 
+  QFont font() { return m_textFont; }
+
 protected:
     virtual const QPen& rightBorderPen() const;
     virtual const QPen& bottomBorderPen() const;

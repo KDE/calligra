@@ -63,17 +63,17 @@
     </Function>
 
     <Function>
-      <Name>ISNUM</Name>
+      <Name>ISNUMBER</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>Any value</Comment>
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISNUM() function returns True if the parameter is a numerical value. Otherwise it returns False.</Text>
-	<Syntax>ISNUM(x)</Syntax>
-	<Example>ISNUM(12) returns True</Example>
-	<Example>ISNUM(hello) returns False</Example>
+	<Text>The ISNUMBER() function returns True if the parameter is a numerical value. Otherwise it returns False.</Text>
+	<Syntax>ISNUMBER(x)</Syntax>
+	<Example>ISNUMBER(12) returns True</Example>
+	<Example>ISNUMBER(hello) returns False</Example>
       </Help>
     </Function>
 
@@ -138,17 +138,17 @@
     </Function>
 
     <Function>
-      <Name>ISNOTTEXT</Name>
+      <Name>ISNONTEXT</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>Any value</Comment>
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISNOTTEXT() function returns True if the parameter is not a string. Otherwise it returns False</Text>
-	<Syntax>ISNOTTEXT(x)</Syntax>
-	<Example>ISNOTTEXT(12) returns True</Example>
-	<Example>ISNOTTEXT("hello") returns False</Example>
+	<Text>The ISNONTEXT() function returns True if the parameter is not a string. Otherwise it returns False</Text>
+	<Syntax>ISNONTEXT(x)</Syntax>
+	<Example>ISNONTEXT(12) returns True</Example>
+	<Example>ISNONTEXT("hello") returns False</Example>
       </Help>
     </Function>
 

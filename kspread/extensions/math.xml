@@ -312,6 +312,23 @@
     </Function>
 
     <Function>
+      <Name>COUNTBLANK</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Cell range</Comment>
+	<Type range="true">Range</Type>
+      </Parameter>
+      <Help>
+	<Text>This function returns the count of all empty cells within the range.</Text>
+	<Syntax>COUNTBLANK(range)</Syntax>
+	<Example>COUNTBLANK(A1:B5)</Example>
+	<Related>COUNT</Related>
+	<Related>COUNTA</Related>
+	<Related>COUNTIF</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>COUNTIF</Name>
       <Type>Int</Type>
       <Parameter>
@@ -388,6 +405,40 @@
 	<Syntax>SUM(value;value;...)</Syntax>
 	<Example>SUM(12;5;7) equals 24</Example>
 	<Example>SUM(12.5;2) equals 14.5</Example>
+	<Related>SUMA</Related>
+	<Related>SUMSQ</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMA() function calculates the sum of all the values given as parameters. You can calculate the sum of a range SUMA(A1:B5) or a list of values like SUMA(12;5;12.5). If a parameter contains text or the boolean value FALSE it is counted as 0, if a parameter evaluates to TRUE it is counted as 1.</Text>
+	<Syntax>SUM(value;value;...)</Syntax>
+	<Example>SUMA(12;5; 7) equals 24</Example>
+	<Example>SUMA(12.5; 2; TRUE) equals 15.5</Example>
+	<Related>SUM</Related>
 	<Related>SUMSQ</Related>
       </Help>
     </Function>

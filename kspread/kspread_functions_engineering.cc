@@ -49,6 +49,7 @@ bool kspreadfunc_dec2hex( KSContext& context );
 bool kspreadfunc_dec2oct( KSContext& context );
 bool kspreadfunc_dec2bin( KSContext& context );
 bool kspreadfunc_delta( KSContext& context );
+bool kspreadfunc_gestep( KSContext& context );
 bool kspreadfunc_hex2dec( KSContext& context );
 bool kspreadfunc_hex2bin( KSContext& context );
 bool kspreadfunc_hex2oct( KSContext& context );
@@ -82,6 +83,8 @@ void KSpreadRegisterEngineeringFunctions()
   repo->registerFunction( "DEC2HEX",     kspreadfunc_dec2hex );
   repo->registerFunction( "DEC2BIN",     kspreadfunc_dec2bin );
   repo->registerFunction( "DEC2OCT",     kspreadfunc_dec2oct );
+  repo->registerFunction( "DELTA",       kspreadfunc_delta );
+  repo->registerFunction( "GESTEP",      kspreadfunc_gestep );
   repo->registerFunction( "HEX2BIN",     kspreadfunc_hex2bin );
   repo->registerFunction( "HEX2DEC",     kspreadfunc_hex2dec );
   repo->registerFunction( "HEX2OCT",     kspreadfunc_hex2oct );
@@ -1362,20 +1365,97 @@ static bool approx_equal_delta (double a, double b)
 // Function: DELTA
 bool kspreadfunc_delta( KSContext& context )
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  short result;
-  if ( !KSUtil::checkArgumentsCount( context,2, "DELTA",true ) )
-    return false;
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if(approx_equal_delta(args[0]->doubleValue(), args[1]->doubleValue()))
-        result=1;
+  short result;
+  double val1 = 0.0;
+  double val2 = 0.0;
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "DELTA", false ) )
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 1, "DELTA", true ) )
+      return false;
+  }
   else
-        result=0;
-  context.setValue( new KSValue(result));
+  {
+    kdDebug() << "Here2" << endl;
+
+    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+    {
+      if ( !KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
+        return false;
+      val2 = ( args[1]->boolValue() ? 1.0 : 0.0 );
+    }
+    else
+      val2 = args[1]->doubleValue();
+  }
+
+  kdDebug() << "Here1" << endl;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+  {
+    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+      return false;
+    val1 = ( args[0]->boolValue() ? 1.0 : 0.0 );
+  }
+  else
+    val1 = args[0]->doubleValue();
+
+  kdDebug() << "Here3" << endl;
+
+  if ( approx_equal_delta( val1, val2 ) )
+    result = 1;
+  else
+    result = 0;
+
+  kdDebug() << "Here4" << endl;
+  context.setValue( new KSValue( result ) );
 
   return true;
 }
+
+// Function: GESTEP
+bool kspreadfunc_gestep( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  short result;
+  double val1 = 0.0;
+  double val2 = 0.0;
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "GESTEP", false ) )
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 1, "GESTEP", true ) )    
+      return false;
+  }
+  else
+  {
+    if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+    {
+      if ( !KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
+        return false;
+      val2 = ( args[1]->boolValue() ? 1.0 : 0.0 );
+    }
+    else
+      val2 = args[1]->doubleValue();
+  }
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+  {
+    if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+      return false;
+    val1 = ( args[0]->boolValue() ? 1.0 : 0.0 );
+  }
+  else
+    val1 = args[0]->doubleValue();
+
+  if ( ( val1 > val2 ) || approx_equal_delta( val1, val2 ) )
+    result = 1;
+  else
+    result = 0;
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+

@@ -44,7 +44,8 @@ Other things: (please add the things you are working on!)
 - background spell check
 - links to cells in other kspread files
 - much more formulas (financial, database...)
-        String2Int, CurrentMonth, CurrentYear, CurrentDay,
+        String2Int, CurrentMonth, CurrentYear, CurrentDay
+        See list below
 - Insert pictures
 - Insert basic drawings, autoforms        
 - Insert widgets like buttons, drop down lists,... + having the possibily to
@@ -131,6 +132,153 @@ OpenCalc - filter
 - for formulas: fit precision so the result fits in the cell or resize the cell
 - save m_strOutText in file => no parsing on load  (Norbert)
 - save formula results etc in a certain way in the cell (Norbert)
+
+
+Missing formulas (compared with XL)
+===================================
+
+Statistical:
+
+BETAINV
+BINOMDIST
+CHIINV
+CHITEST
+COUNTIF
+CRITBINOM
+FINV
+FORECAST
+GAMMAINV
+GROWTH
+INTERCEPT
+LINEST
+LOGEST
+PEARSON
+PERCENTILE
+PERCENTRANK
+PROB
+QUARTILE
+RANK
+RSQ
+SLOPE
+STEYX
+TREND
+TRIMEAN
+TTEST
+ZTEST
+
+
+Lookup:
+
+HLOOKUP
+LOOKUP
+GETPIVOTDATA
+HYPERLINK
+INDEX
+MATCH
+OFFSET
+TRANSPOSE
+VLOOKUP
+
+
+Logic:
+
++ FALSE
++ TRUE
+
+
+Information:
+
+CELL
+INFO
+ISERR
+ISERROR
+ISNA
+NA
+
+EXPRESSION
+GETENV
+SELECTION
+
+
+Engineering:
+
+BESSELI
+BESSELJ
+BESSELK
+BESSELY
+CONVERT
+ERF
+ERFC
+FACTDOUBLE
+IMABS
+IMAGINARY
+IMARGUMENT
+IMCONJUGATE
+IMLOG2
+IMLOG10
+
+
+Date & Time:
+
+NETWORKDAYS
+WEEKNUM
+WORKDAY
+YEARFRAC
+DATEDIF
+ISOWEEKNUM
+UNIX2DATE
+DATE2UNIX
+
+
+Math:
+
+COMBIN
+MDETERM
+MINVERSE
+MMULT
+SERIESSUM
+SUMIF (not XL compatible)
+SUMX2MY2
+SUMXMY2
+
+
+Financial:
+
+AMORDEGRC
+AMORLINC
+COUPDAYBC
+COUPDAYS
+COUPDAYSNC
+COUPNCD
+COUPPCD
+CUMIPMT
+CUMPRINC
+FVSCHEDULE
+MDURATION
+MIRR
+ODDFPRICE
+ODDFYIELD
+ODDLPRICE
+ODDLYIELD
+PRICE
+PRICEDISC
+PRICEMAT
+RATE
+VDB
+XIRR
+XNPV
+YIELD
+YIELDDISC
+YIELDMAT
+
+EURO
+IRR
+NPV
+
+
+Trig:
+
+IMTAN
 
 
 ***************************************************************************************

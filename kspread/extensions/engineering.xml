@@ -508,15 +508,37 @@
 	<Comment>Floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
-      <Parameter>
+      <Parameter optional="true">
 	<Comment>Floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0.</Text>
-	<Syntax>DELTA(value;value)</Syntax>
-	<Example>DELTA(1.2;3.4) returns 0</Example>
-	<Example>DELTA(3;3) returns 1</Example>
+	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0. y defaults to 0.</Text>
+	<Syntax>DELTA(x; y)</Syntax>
+	<Example>DELTA(1.2; 3.4) returns 0</Example>
+	<Example>DELTA(3; 3) returns 1</Example>
+	<Example>DELTA(1; TRUE) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GESTEP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The GESTEP() function returns 1 if x greater or equals y, otherwise returns 0. y defaults to 0.</Text>
+	<Syntax>GESTEP(x; y)</Syntax>
+	<Example>GESTEP(1.2; 3.4) returns 0</Example>
+	<Example>GESTEP(3; 3) returns 1</Example>
+	<Example>GESTEP(0.4; TRUE) returns 0</Example>
+	<Example>GESTEP(4; 3) returns 1</Example>
       </Help>
     </Function>
 

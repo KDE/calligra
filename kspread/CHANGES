@@ -28,26 +28,39 @@ Date/Time (14):
 - EDATE, EOMONTH, DAYS360, WEEKDAY, TIMEVALUE, DATEVALUE, YEAR,
   MONTH, DAY, HOUR, MINUTE, SECOND, DAYNAME, MONTHNAME
 
-Math (15):
+Math (16):
 - SUBTOTAL, POWER, TRUNC, CEILING, PRODUCT (now Excel compatible), 
   KPRODUCT, RANDEXP, RANDBINOM, RANDNEGBINOM, RANDBERNOULLI,
-  RANDPOISSON, MROUND, COUNTA, MINA, MAXA
+  RANDPOISSON, MROUND, COUNTA, MINA, MAXA, SUMA
 
-Statistical (17):
+Statistical (24):
 - VARP, STDEV, VAR, STDEVP, GEOMEAN, HARMEAN, 
   KURT, LOGINV, DEVSQ, STANDARDIZE, HYPGEOMDIST,
   NEGBINOMDIST, KURTP, CORREL, COVAR, SMALL, LARGE
+  STDEVA, STDEVPA, VARA, VARPA, SKEW, SKEWP, MODE
 
-Financial (7):
-- PPMT, DDB, DURATION, PMT, NPER, ISPMT, IPMT
+Financial (19):
+- PPMT, DDB, DURATION, PMT, NPER, 
+  ISPMT, IPMT, TBILLEQ, TBILLPRICE, TBILLYIELD,
+  ACCRINT, ACCRINTM, COUPNUM, DOLLARDE, DOLLARFR,
+  DISC, EFFECT, INTRATE, RECEIVED
 
 Database (12):
 - DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN,
   DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
 
 Reference & Lookup (8):
-- ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, INDIRECT,
-  ROW, ROWS
+- ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, 
+  INDIRECT, ROW, ROWS
+
+Engineering (2):
+- DELTA, GESTEP
+
+Logical (2):
+- FALSE, TRUE
+
+Information (2):
+- ISNONTEXT, ISNUMBER
 
 Obsolete formulas 
 - stddev (was stddevp in fact)
@@ -55,7 +68,7 @@ Obsolete formulas
 - month (is monthname now)
 
 Obsolete but still usable formulas (do not show up in dialog )
-- variance, pow
+- variance, pow, isnottext, isnum, effective
 
     
 =====================================================    

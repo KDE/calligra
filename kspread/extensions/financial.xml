@@ -5,6 +5,305 @@
     <GroupName>Financial</GroupName>
 
     <Function>
+      <Name>RECEIVED</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Investment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RECEIVED function returns the amount received at the maturity date for a invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365. The settlement date must be before maturity date.</Text>
+	<Syntax>RECEIVED(settlement; maturity; investment; discount; basis)</Syntax>
+	<Example>RECEIVED("2/28/2001"; "8/31/2001"; 1000; 0,05; 0)
+returns 1,025.787</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLEQ</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLEQ functions returns the bond equivalent for a treasury bill. The maturity date must be after the settlement date but within 365 days.</Text>
+	<Syntax>TBILLEQ(settlement; maturity; discount)</Syntax>
+	<Example>TBILLEQ("2/28/2001"; "8/31/2001"; 0.1) returns 0.1068</Example>
+        <Related>TBILLPRICE</Related>
+        <Related>TBILLYIELD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLPRICE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLPRICE functions returns the price per $100 value for a treasury bill. The maturity date must be after the settlement date but within 365 days. The discount rate must be positive.</Text>
+	<Syntax>TBILLPRICE(settlement; maturity; discount)</Syntax>
+	<Example>TBILLPRICE("2/28/2001"; "8/31/2001"; 200) returns -10122.22</Example>
+        <Related>TBILLEQ</Related>
+        <Related>TBILLYIELD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLYIELD</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Price per $100 face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLYIELD functions returns the yield for a treasury bill. The maturity date must be after the settlement date but within 365 days. The price must be positive.</Text>
+	<Syntax>TBILLYIELD(settlement; maturity; price)</Syntax>
+	<Example>TBILLYIELD("2/28/2001"; "8/31/2001"; 600) returns -1.63</Example>
+        <Related>TBILLEQ</Related>
+        <Related>TBILLPRICE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACCRINT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Issue date</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>First interest</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Annual rate of security</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Par value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of payments per year</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACCRINT function returns accrued interest for a security which pays periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>ACCRINT(issue; first interest; settlement; rate; par; frequency; basis)</Syntax>
+	<Example>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1;
+1000; 2; 0) returns 16,944</Example>
+        <Related>ACCRINTM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACCRINTM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Issue date</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Annual rate of security</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Par value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACCRINTM function returns accrued interest for a security which pays interests at maturity date. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>ACCRINTM(issue; settlement; rate; par; basis)</Syntax>
+	<Example>ACCRINTM("2/28/2001"; "8/31/2001"; 0.1; 100) returns 5.0278</Example>
+        <Related>ACCRINT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INTRATE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Investment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Redemption</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The INTRATE function returns the interest rate for a fully invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>INTRATE(settlement; maturity; investment; redemption; basis)</Syntax>
+	<Example>INTRATE("2/28/2001"; "8/31/2001"; 1000000; 2000000;
+1) returns 1.98</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DISC</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Price per $100 face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Redemption</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DISC function returns the discount rate for a security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>DISC(settlement; maturity; par; redemption; basis)</Syntax>
+	<Example>DISC("2/28/2001"; "8/31/2001"; 12; 14) returns 0.2841</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DOLLARDE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Fractional Dollar</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Fraction</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DOLLARDE() function returns a dollar price expressed as a decimal number. The fractional dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
+	<Syntax>DOLLARDE(fractional dollar; fraction)</Syntax>
+	<Example>DOLLARDE(1.02; 16) - stands for 1 and 2/16 - returns 1.125</Example>
+        <Related>DOLLARFR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DOLLARFR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Decimal Dollar</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Fraction</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DOLLARFR() function returns a dollar price expressed as a fraction. The decimal dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
+	<Syntax>DOLLARDE(fractional dollar; fraction)</Syntax>
+	<Example>DOLLARDE</Example>
+        <Related>DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COUPNUM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Frequency</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The COUPNUM function returns the number of coupons to be paid between the settlement and the maturity. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>COUPNUM(settlement, maturity, frequency, basis)</Syntax>
+	<Example>COUPNUM("2/28/2001"; "8/31/2001"; 2; 0) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>FV</Name>
       <Type>Float</Type>
       <Parameter>
@@ -353,7 +652,7 @@ The example shows the interest to pay in the last year of a three year loan. The
     </Function>
 
     <Function>
-      <Name>EFFECTIVE</Name>
+      <Name>EFFECT</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Nominal interest rate</Comment>
@@ -364,9 +663,9 @@ The example shows the interest to pay in the last year of a three year loan. The
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The EFFECTIVE() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of EFFECTIVE(.08;12) or 8.3%.</Text>
-	<Syntax>EFFECTIVE(nominal;periods)</Syntax>
-	<Example>EFFECTIVE(0.08;12) equals 0.083</Example>
+	<Text>The EFFECT() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of EFFECT(.08;12) or 8.3%.</Text>
+	<Syntax>EFFECT(nominal;periods)</Syntax>
+	<Example>EFFECT(0.08;12) equals 0.083</Example>
       </Help>
     </Function>
 

@@ -41,7 +41,7 @@
 #include <kspread_util.h>
 
 // prototypes (sort alphabetically)
-bool kspreadfunc_countblank( KSContext & context );
+//bool kspreadfunc_countblank( KSContext & context );
 bool kspreadfunc_filename( KSContext & context );
 bool kspreadfunc_info( KSContext& context );
 bool kspreadfunc_isblank( KSContext& context );
@@ -63,21 +63,23 @@ void KSpreadRegisterInformationFunctions()
 {
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
-  repo->registerFunction( "COUNTBLANK", kspreadfunc_countblank );
-  repo->registerFunction( "FILENAME", kspreadfunc_filename );
-  repo->registerFunction( "INFO", kspreadfunc_info );
-  repo->registerFunction( "ISBLANK", kspreadfunc_isblank );
-  repo->registerFunction( "ISDATE", kspreadfunc_isdate );
-  repo->registerFunction( "ISEVEN", kspreadfunc_iseven );
-  repo->registerFunction( "ISLOGICAL", kspreadfunc_islogical );
-  repo->registerFunction( "ISNOTTEXT", kspreadfunc_isnottext );
-  repo->registerFunction( "ISNUM", kspreadfunc_isnum );
-  repo->registerFunction( "ISODD", kspreadfunc_isodd );
-  repo->registerFunction( "ISREF", kspreadfunc_isref );
-  repo->registerFunction( "ISTEXT", kspreadfunc_istext );
-  repo->registerFunction( "ISTIME", kspreadfunc_istime );
-  repo->registerFunction( "N", kspreadfunc_n );
-  repo->registerFunction( "TYPE", kspreadfunc_type );
+  //  repo->registerFunction( "COUNTBLANK", kspreadfunc_countblank );
+  repo->registerFunction( "FILENAME",   kspreadfunc_filename );
+  repo->registerFunction( "INFO",       kspreadfunc_info );
+  repo->registerFunction( "ISBLANK",    kspreadfunc_isblank );
+  repo->registerFunction( "ISDATE",     kspreadfunc_isdate );
+  repo->registerFunction( "ISEVEN",     kspreadfunc_iseven );
+  repo->registerFunction( "ISLOGICAL",  kspreadfunc_islogical );
+  repo->registerFunction( "ISNONTEXT",  kspreadfunc_isnottext );
+  repo->registerFunction( "ISNOTTEXT",  kspreadfunc_isnottext );
+  repo->registerFunction( "ISNUM",      kspreadfunc_isnum );
+  repo->registerFunction( "ISNUMBER",   kspreadfunc_isnum );
+  repo->registerFunction( "ISODD",      kspreadfunc_isodd );
+  repo->registerFunction( "ISREF",      kspreadfunc_isref );
+  repo->registerFunction( "ISTEXT",     kspreadfunc_istext );
+  repo->registerFunction( "ISTIME",     kspreadfunc_istime );
+  repo->registerFunction( "N",          kspreadfunc_n );
+  repo->registerFunction( "TYPE",       kspreadfunc_type );
 }
 
 // Function: INFO
@@ -351,6 +353,7 @@ bool kspreadfunc_iseven( KSContext& context )
   return true;
 }
 
+/*
 static bool kspreadfunc_countblank_helper( KSContext & context, 
                                            QValueList<KSValue::Ptr> & args, 
                                            int & result)
@@ -401,6 +404,7 @@ bool kspreadfunc_countblank( KSContext & context )
 
   return b;
 }
+*/
 
 // Function: TYPE
 bool kspreadfunc_type( KSContext & context )

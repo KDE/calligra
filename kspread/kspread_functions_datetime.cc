@@ -33,15 +33,9 @@
 
 #include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_functions_helper.h>
 #include <kspread_table.h>
 #include <kspread_util.h>
-
-#define SECSPERDAY 86400
-#define HALFSEC (0.5 / SECSPERDAY)
-// copied from gnumeric: src/format.c:
-static const int g_dateSerial_19000228 = 59;
-/* One less that the Julian day number of 19000101.  */
-static int g_dateOrigin = 0;
 
 // prototypes
 bool kspreadfunc_currentDate( KSContext& context );
@@ -118,141 +112,6 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
   repo->registerFunction( "YEAR",   kspreadfunc_year );
   repo->registerFunction( "YEARS",  kspreadfunc_years );
-}
-
-class EDate : public QDate
-{
- public:
-  static uint greg2jul( int y, int m, int d )
-  {
-    return QDate::gregorianToJulian( y, m, d ) - g_dateOrigin;
-  }
-
-  static uint greg2jul( QDate const & date )
-  {
-    // reference is 31 Dec, 1899 midnight
-    QDate refDate = QDate( 1899, 12, 31 );
-
-    return refDate.daysTo( date ) + 1;
-  }
-
-  static void jul2greg( double num, int & y, int & m, int & d )
-  {
-    kdDebug() << "Here" << endl;
-
-    QDate date = QDate( 1899, 12, 31 );
-
-    date = date.addDays( (int) num );
-
-    y = date.year();
-    m = date.month();
-    d = date.day();
-
-    return;
-
-    if ( g_dateOrigin == 0 )
-      g_dateOrigin = EDate::greg2jul( 1900, 1, 1 ) - 1;
-
-    int i = (int) floor( num + HALFSEC );
-    if (i > g_dateSerial_19000228)
-      --i;
-    else if (i == g_dateSerial_19000228 + 1)
-      kdWarning() << "Request for date 02/29/1900." << endl;
-    
-    kdDebug() << "num: " << num << ", i: " << i << " - " << i + g_dateOrigin << endl;
-
-    QDate::julianToGregorian( i + g_dateOrigin, y, m, d );
-  }
-};
-
-static bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date )
-{
-  kdDebug() << "Here" << endl;
-  if ( !KSUtil::checkType( context, arg, KSValue::DateType, true ) )
-  {
-    kdDebug() << "Here1" << endl;
-    if ( !KSUtil::checkType( context, arg, KSValue::StringType, true ) )
-    {
-      kdDebug() << "Here2" << endl;
-      if ( !KSUtil::checkType( context, arg, KSValue::DoubleType, true ) )
-        return false;
-
-      kdDebug() << "Here3" << endl;
-      double d = arg->doubleValue();
-
-      int y = 0; 
-      int m = 0; 
-      int day = 0;
-      kdDebug() << "D: " << d << endl;
-      EDate::jul2greg( d, y, m, day );
-      kdDebug() << "Alive" << endl;
-      date.setYMD( y, m, day );
-      kdDebug() << "Alive2" << endl;
-
-      return true;
-    }
-    else
-    {
-      kdDebug() << "Here4" << endl;
-      QString s = arg->stringValue();
-      bool valid = false;
-      kdDebug() << "S: " << s << endl;
-      date = KGlobal::locale()->readDate( s, &valid );
-      if ( !valid )
-        return false;
-
-      kdDebug() << "Here end s" << endl;
-      return true;
-    }
-  }
-  else 
-  {
-    kdDebug() << "Here5" << endl;
-    date = arg->dateValue();
-    return true;
-  }
-
-  return false;
-}
-
-static void addMonths( QDate & date, int months )
-{
-  int d = date.day();
-  int m = date.month() + months;
-  int y = date.year();
-
-  if ( m > 12 )
-  {
-    y += (int) ( m / 12 );
-    m %= 12;
-  }
-
-  // e.g. 31 Feb: decrease day...
-  while ( !QDate::isValid( y, m, d ) && d > 0 )
-    --d;
-
-  date.setYMD( y, m, d );
-}
-
-static void subMonths( QDate & date, int months )
-{
-  kdDebug() << "Subtract: " << months << endl;
-  
-  int d = date.day();
-  int m = date.month() - months;
-  int y = date.year();
-
-  while ( m < 1 )
-  {
-    m += 12;
-    y -= 1;
-  }
-
-  // e.g. 31 Feb: decrease day
-  while ( !QDate::isValid( y, m, d ) && d > 0 )
-    --d;
-
-  date.setYMD( y, m, d );
 }
 
 // Function: EDATE

@@ -5,6 +5,89 @@
     <GroupName>Statistical</GroupName>
 
     <Function>
+      <Name>SKEW</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SKEW function returns an estimate for skewness of a distribution</Text>
+	<Syntax>SKEW(number; number2; ...)</Syntax>
+	<Syntax>SKEW(range)</Syntax>
+	<Example>SKEW(11,4; 17,3; 21,3; 25,9; 40,1) returns 0,9768</Example>
+        <Related>SKEWP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SKEWP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SKEWP function returns the population skewness of a distribution</Text>
+	<Syntax>SKEWP(number; number2; ...)</Syntax>
+	<Syntax>SKEWP(range)</Syntax>
+	<Example>SKEWP(11,4; 17,3; 21,3; 25,9; 40,1) returns 0,6552</Example>
+        <Related>SKEW</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MODE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The MODE function returns the most frequently occuring value in the data set.</Text>
+	<Syntax>MODE(number; number2; ...)</Syntax>
+	<Syntax>MODE(range)</Syntax>
+	<Example>MODE(12; 14; 12; 15) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>CORREL</Name>
       <Type>Float</Type>
       <Parameter>
@@ -696,7 +779,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The VARPA() function calculates the variance based on an entire population.</Text>
+	<Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that avaluate to TRUE are counted as 1.</Text>
 	<Syntax>VARPA(value;value;...)</Syntax>
 	<Example>VARPA(12;5;7) equals 8.666...</Example>
 	<Example>VARPA(15;80;3) equals 1144.22...</Example>
@@ -737,6 +820,39 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
     </Function>
     
     <Function>
+      <Name>STDEVA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Estimates standard deviation based on a sample. The standard deviation is a measure of how widely values are dispersed from the average value. If a referenced cell contains text or contains the boolean value FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1.</Text>
+	<Syntax>STDEVA(value;value;...)</Syntax>
+	<Example>STDEVA(6; 7; A1; 8) equals 1, if A1 is empty</Example>
+	<Example>STDEVA(6; 7; A1; 8) equals 3.109, if A1 is TRUE</Example>
+	<Related>STDEV</Related> 
+	<Related>STDEVP</Related> 
+      </Help>
+    </Function>
+
+    <Function>
       <Name>STDEVP</Name>
       <Type>Float</Type>
       <Parameter optional="true">
@@ -767,6 +883,40 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       </Help>
     </Function>
     
+    <Function>
+      <Name>STDEVPA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Calculates standard deviation based on an entire population. If a referenced cell contains text or contains the boolean value FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1.</Text>
+	<Syntax>STDEVPA(value;value;...)</Syntax>
+	<Example>STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty</Example>
+	<Example>STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE</Example>
+	<Example>STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE</Example>
+	<Related>STDEV</Related> 
+	<Related>STDEVP</Related> 
+      </Help>
+    </Function>
+
     <Function>
       <Name>GAUSS</Name>
       <Type>Float</Type>

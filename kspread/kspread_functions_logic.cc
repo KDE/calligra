@@ -36,11 +36,13 @@
 
 // prototypes (sorted alphabetically)
 bool kspreadfunc_and( KSContext& context );
+bool kspreadfunc_false( KSContext& context );
 bool kspreadfunc_if( KSContext& context );
 bool kspreadfunc_nand( KSContext& context );
 bool kspreadfunc_nor( KSContext& context );
 bool kspreadfunc_not( KSContext& context );
 bool kspreadfunc_or( KSContext& context );
+bool kspreadfunc_true( KSContext& context );
 bool kspreadfunc_xor( KSContext& context );
 
 // registers all logic functions
@@ -48,13 +50,29 @@ void KSpreadRegisterLogicFunctions()
 {
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
-  repo->registerFunction( "AND",  kspreadfunc_and );   
-  repo->registerFunction( "IF",   kspreadfunc_if );    
-  repo->registerFunction( "NAND", kspreadfunc_nand );  // KSpread-specific
-  repo->registerFunction( "NOR",  kspreadfunc_nor );   // KSpread-specific
-  repo->registerFunction( "NOT",  kspreadfunc_not );   
-  repo->registerFunction( "OR",   kspreadfunc_or );   
-  repo->registerFunction( "XOR",  kspreadfunc_xor );   // KSpread-specific
+  repo->registerFunction( "AND",   kspreadfunc_and );   
+  repo->registerFunction( "FALSE", kspreadfunc_false );   
+  repo->registerFunction( "IF",    kspreadfunc_if );    
+  repo->registerFunction( "NAND",  kspreadfunc_nand );  // KSpread-specific
+  repo->registerFunction( "NOR",   kspreadfunc_nor );   // KSpread-specific
+  repo->registerFunction( "NOT",   kspreadfunc_not );   
+  repo->registerFunction( "OR",    kspreadfunc_or );   
+  repo->registerFunction( "TRUE",  kspreadfunc_true );   
+  repo->registerFunction( "XOR",   kspreadfunc_xor );   // KSpread-specific
+}
+
+// Function: FALSE
+bool kspreadfunc_false( KSContext & context )
+{
+  context.setValue( new KSValue( FALSE ) );
+  return true;  
+}
+
+// Function: TRUE
+bool kspreadfunc_true( KSContext & context )
+{
+  context.setValue( new KSValue( TRUE ) );
+  return true;  
 }
 
 // Function: NOT
