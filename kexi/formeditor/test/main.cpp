@@ -22,7 +22,7 @@
 static const char *description =
     I18N_NOOP("KFormDesigner");
 
-static const char *version = "0.1";
+static const char *version = "0.2";
 
 static KCmdLineOptions options[] =
 {
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 {
     KAboutData about("kformdesigner", I18N_NOOP("KFormDesigner"), version, description,
                      KAboutData::License_LGPL, "(C) 2003-2004 Kexi Team", 0, 0);
-    about.addAuthor( "Lucijan Busch", 0, "lucijan@kde.org" );
+    about.addCredit( "Lucijan Busch", "Original author", 0, "lucijan@kde.org" );
     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
     about.addCredit( "Jaroslaw Staniek", "Win32 version, some other little changes and lots of ideas", "js@iidea.pl", 0);
     KCmdLineArgs::init(argc, argv, &about);

@@ -317,9 +317,8 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		tab->setTabReorderingEnabled(true);
 #endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
-		KFormDesigner::EventEater *eater = new KFormDesigner::EventEater(tab, container);
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
-		        container->form()->manager()->lib()->displayName(c), n, tab, eater));
+		        container->form()->manager()->lib()->displayName(c), n, tab, container));
 		m_manager = container->form()->manager();
 
 		if(container->form()->interactiveMode())
@@ -356,9 +355,8 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-		KFormDesigner::EventEater *eater = new KFormDesigner::EventEater(stack, container);
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
-		     container->form()->manager()->lib()->displayName(c), n, stack, eater));
+		     container->form()->manager()->lib()->displayName(c), n, stack, container));
 
 		if(container->form()->interactiveMode())
 		{

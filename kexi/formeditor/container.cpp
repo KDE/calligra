@@ -141,8 +141,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 		m_form = toplevel->form();
 
-		EventEater *eater = new EventEater(container, this);
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), eater, this);
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), this, this);
 		setObjectTree(it);
 		if(parent->isWidgetType())
 		{
@@ -221,7 +220,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) && (!m_form->manager()->inserting())) // multiple selection mode
 			{
-				if(m_selected.findRef(m_moving) != -1) // widget is already selected
+				if(m_form->selectedWidgets()->findRef(m_moving) != -1) // widget is already selected
 				{
 					if(m_form->selectedWidgets()->count() > 1) // we remove it from selection
 						unSelectWidget(m_moving);
@@ -235,9 +234,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 				else // the widget is not yet selected, we add it
 					setSelectedWidget(m_moving, true);
 			}
-			else if((m_selected.count() > 1))//&& (!m_form->manager()->inserting())) // more than one widget selected
+			else if((m_form->selectedWidgets()->count() > 1))//&& (!m_form->manager()->inserting())) // more than one widget selected
 			{
-				if(m_selected.findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
+				if(m_form->selectedWidgets()->findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
 					setSelectedWidget(m_moving, false);
 				// If the widget is already selected, we do nothing (to ease widget moving, etc.)
 			}
@@ -330,8 +329,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_form->formWidget()->clearRect();
 				if(s == m_container) // should have no effect on form
 					return true;
-				//m_container->repaint();
-				if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
+
+				//if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
+				if(mev->pos() == m_grab)
 				{
 					kdDebug() << "The widget has not been moved. No copying" << endl;
 					return true;
@@ -486,6 +486,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			QWidget *w = static_cast<QWidget*>(s);
 			if(!w)
 				return false;
+
 			m_inlineEditing = true;
 			m_form->manager()->lib()->startEditing(w->className(), w, this);
 			return true;
@@ -512,37 +513,13 @@ Container::setSelectedWidget(QWidget *w, bool add)
 	if (w)
 		kdDebug() << "slotSelectionChanged " << w->name()<< endl;
 
-	//raise selected widget and all possible parents
-	QWidget *wtmp = w;
-	wtmp->raise();
-	while (wtmp && wtmp->parentWidget() && static_cast<QObject*>(wtmp)!=m_form && !wtmp->inherits("KFormDesigner::FormWidget")
-		&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form)
+	if(!w)
 	{
-		wtmp = wtmp->parentWidget();
-		wtmp->raise();
+		m_form->setSelectedWidget(m_container);
+		return;
 	}
 
-	if (wtmp)
-	{
-		wtmp->setFocus();
-	}
-
-	if(add && w)
-	{
-		m_selected.append(w);
-		m_form->addSelectedWidget(w);
-	}
-	else if(w)
-	{
-		m_selected.clear();
-		m_selected.append(w);
-		m_form->setCurrentWidget(w);
-	}
-	else
-	{
-		m_selected.clear();
-		m_form->setCurrentWidget(m_container);
-	}
+	m_form->setSelectedWidget(w, add);
 }
 
 void
@@ -551,7 +528,6 @@ Container::unSelectWidget(QWidget *w)
 	if(!w)
 		return;
 
-	m_selected.remove(w);
 	m_form->unSelectWidget(w);
 }
 
@@ -565,21 +541,15 @@ Container::toplevel()
 }
 
 void
-Container::deleteItem()
+Container::deleteWidget(QWidget *w)
 {
-	if(!m_selected.isEmpty())
-	{
-		QWidget *w;
-		for(w = m_selected.first(); w; w = m_selected.next())
-		{
-			kdDebug() << "deleting item : " << w->name() << endl;
-			form()->objectTree()->removeChild(w->name());
-			//delete w;
-			form()->manager()->deleteWidgetLater( w );
-		}
-		m_selected.clear();
-		m_form->setCurrentWidget(m_container);
-	}
+	if(!w)
+		return;
+
+	kdDebug() << "Deleting a widget: " << w->name() << endl;
+	m_form->objectTree()->removeChild(w->name());
+	m_form->manager()->deleteWidgetLater( w );
+	m_form->setSelectedWidget(m_container);
 }
 
 void

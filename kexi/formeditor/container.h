@@ -156,15 +156,16 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		Form		*form() const { return m_form; }
 
 		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
-		void		deleteItem();
+		//void		deleteItem();
 
 		/*! Sets \a selected to be the selected widget of this container (and so of the Form). If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
 		 */
 		void		setSelectedWidget(QWidget *selected, bool add);
-
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
+		void		deleteWidget(QWidget *w);
+
 		/*! Recreates the Container layout. Calls this when a widget has been moved or added to update the layout. */
 		void		reloadLayout();
 
@@ -195,9 +196,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QLayout		*m_layout;
 		LayoutType	m_layType;
 		int		m_margin, m_spacing;
-
-		// selection
-		QPtrList<QWidget> m_selected;
 
 		// moving etc.
 		QPoint		m_grab;

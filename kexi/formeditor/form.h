@@ -107,15 +107,14 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*!
 		 * \return the toplevel Container or 0 if there isn't any.
 		 */
-		Container			*toplevelContainer() const { return m_toplevel; }
+		Container		*toplevelContainer() const { return m_toplevel; }
 
 		FormWidget*		formWidget() { return m_formWidget; }
 		//! \return a pointer to this form's ObjectTree.
 		ObjectTree		*objectTree() const { return m_topTree; }
 		//! \return the FormManager parent of this form.
 		FormManager*		manager() const { return m_manager; }
-		//! \return the widget currently selected in this form, or 0 if there is not.
-		QtWidgetList* 		selectedWidgets() {return &m_selected;}
+
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
 		 */
@@ -124,15 +123,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    a simple widget, but unlike this function it will also return the parent Container if the widget itself is a Container.
 		 */
 		Container*		parentContainer(QWidget *w=0);
-		/*! This function is used by child Container to tell Form which widget is selected. The ResizeHandleSet is changed accordingly,
-		   and the PropertyBuffer and ObjectTreeView are updated.
-		 */
-		void			setCurrentWidget(QWidget *w);
-		/*! Adds the widget \a w to the Form 's list of selected widgets. The widget gets ResizeHandles, and the ObjectPropertyBuffer is
-		  modified. */
-		void			addSelectedWidget(QWidget *w);
+
+		//! \return the widget currently selected in this form, or 0 if there is not.
+		QtWidgetList* 		selectedWidgets() {return &m_selected;}
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
+		void			resetSelection();
+
 		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
 		 */
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
@@ -202,9 +199,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		  associated to this widget.
 		 */
 		void			changeName(const QString &oldname, const QString &newname);
-		/*! Sets \a w to be the selected widget in this Form.
+		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
+		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
 		 */
-		void			setSelWidget(QWidget *w);
+		void		setSelectedWidget(QWidget *selected, bool add=false);
 
 	protected slots:
 		/*! This slot is called when the toplevel widget of this Form is deleted (ie the window closed) so that the Form gets deleted
@@ -216,9 +214,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.
 		   \a w is the newly selected widget.
 		  */
-		void			selectionChanged(QWidget *w);
+		void			selectionChanged(QWidget *w, bool add);
 		/*! This signal is emitted when the widget \a w is added to the list of selected widgets. */
-		void			addedSelectedWidget(QWidget *w);
+		//void			addedSelectedWidget(QWidget *w);
 		/*! This signal is emitted when a new widget is created, to update ObjectTreeView.
 		 \a it is the ObjectTreeItem representing this new widget.
 		 */

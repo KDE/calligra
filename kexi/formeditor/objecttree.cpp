@@ -35,14 +35,14 @@ namespace KFormDesigner
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, EventEater *eater, Container *container)
+ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, Container *parentContainer, Container *container)
  : m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
 {
 	m_className = classn;
 	m_name = name;
 	m_widget = widget;
 	m_container = container;
-	m_eater = eater;
+	m_eater = new EventEater(widget, parentContainer);
 	m_parent = 0;
 }
 
@@ -127,8 +127,8 @@ ObjectTreeItem::~ObjectTreeItem()
 ///                      ObjectTree                                             /////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget, EventEater *eater, Container *container)
- : ObjectTreeItem(classn, name, widget, eater, container)
+ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget, Container *container)
+ : ObjectTreeItem(classn, name, widget, container, container)
 {
 }
 

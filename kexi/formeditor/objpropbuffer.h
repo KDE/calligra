@@ -49,10 +49,6 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name=0);
 		~ObjectPropertyBuffer();
 
-		/*! This function filters the event of the sselected widget to automatically updates the "geometry" property
-		  when the widget is moved or resized in the Form.
-		 */
-		bool    eventFilter(QObject *o, QEvent *ev);
 		/*! This function is called before changing widget. It stores all the modified properties into ObjectTreeItem so
 		  they are saved later (using ObjectTreeItem::addMofProperty() ).
 		 */
@@ -66,14 +62,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		FormManager*    manager()  { return m_manager; }
 
 	public slots:
-		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
-		  checkModifiedProp() is called before doing this.
-		 */
-		void	setWidget(QWidget *obj);
-		/*! Adds the QWidget \a w to the list of widgets managed by this buffer. The properties shown are filtered
-		  to show only properties common to all the widgets.
-		 */
-		void    addWidget(QWidget *w);
+		void    setSelectedWidget(QWidget *w, bool add=false);
 		/*!  This function is called every time a property is modifed.  It takes care of saving set and enum
 		 properties.
 		*/
@@ -96,6 +85,22 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void	propertyChanged(QWidget *widg, const QString &property, const QVariant &v);
 
 	protected:
+		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
+		  checkModifiedProp() is called before doing this.
+		 */
+		void	setWidget(QWidget *obj);
+		/*! Adds the QWidget \a w to the list of widgets managed by this buffer. The properties shown are filtered
+		  to show only properties common to all the widgets.
+		 */
+		void    addWidget(QWidget *w);
+		void    resetBuffer();
+
+
+		/*! This function filters the event of the sselected widget to automatically updates the "geometry" property
+		  when the widget is moved or resized in the Form.
+		 */
+		bool    eventFilter(QObject *o, QEvent *ev);
+
 		/*! This function is used to filter the properties to be shown (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.
 		 */
@@ -121,7 +126,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void   updateOldValue(ObjectTreeItem *tree, const char *property);
 
 	private:
-		QGuardedPtr<QWidget> m_widget;
+		//QGuardedPtr<QWidget> m_widget;
 		QStringList	m_properties;
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;

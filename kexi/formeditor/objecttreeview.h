@@ -76,26 +76,21 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		QString  pixmapForClass(const QString &classname);
 
 	public slots:
-		void slotColumnSizeChanged(int);
-		/*! Sets the widget \a w as selected item, so it will be written bold. */
-		void setSelWidget(QWidget *w);
-		void  addSelWidget(QWidget *w);
+		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
+		void  setSelectedWidget(QWidget *w, bool add=false);
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
 		void addItem(ObjectTreeItem *item);
 		/*! Removess the ObjectTreeItem \a item from the list. */
 		void removeItem(ObjectTreeItem *item);
-		/*! The selected list item has changed, so we emit a signal to update the Form. */
-		void emitSelChanged();
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QString &oldname, const QString &newname);
-		/*! This lot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
-		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
 
-	signals:
-		/*! This signal is emitted when the user changes the list item selected, so that the Form and the Property
-		  Editor gets updated.
-		 */
-		void selectionChanged(QWidget *w);
+	private slots:
+		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
+		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
+		void slotColumnSizeChanged(int);
+		/*! The selected list item has changed, so we emit a signal to update the Form. */
+		void slotSelectionChanged();
 
 	protected:
 		//! Internal function to fill the list.

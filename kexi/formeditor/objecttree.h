@@ -49,7 +49,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 {
 
 	public:
-		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, EventEater *eater, Container *container=0);
+		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container=0);
 		virtual ~ObjectTreeItem();
 
 		QString		name() const { return m_name; }
@@ -106,7 +106,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0, EventEater *eater=0, Container *container=0);
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget=0, Container *container=0);
 		virtual ~ObjectTree();
 
 		/**

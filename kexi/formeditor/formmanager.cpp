@@ -111,11 +111,7 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 		editor->setBuffer(m_buffer);
 
 	if(treeview)
-	{
-		connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
-		connect(treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
 		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
-	}
 }
 
 Actions
@@ -317,6 +313,9 @@ FormManager::windowChanged(QWidget *w)
 	if(!w)
 	{
 		m_active = 0;
+		if(m_treeview)
+			m_treeview->setForm(0);
+		showPropertyBuffer(0);
 		return;
 	}
 
@@ -391,13 +390,13 @@ FormManager::deleteForm(Form *form)
 		showPropertyBuffer(0);
 	}
 }
-
+/*
 void
-FormManager::setSelWidget(QWidget *w)
+FormManager::setSelectedWidget(QWidget *w)
 {
 	if(activeForm())
-		activeForm()->setSelWidget(w);
-}
+		activeForm()->setSelectedWidget(w);
+}*/
 
 void
 FormManager::createBlankForm()
@@ -487,17 +486,14 @@ FormManager::initForm(Form *form)
 	m_active = form;
 	m_count++;
 
-	m_buffer->setWidget(form->toplevelContainer()->widget());
+	m_buffer->setSelectedWidget(form->toplevelContainer()->widget());
 
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
-	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_buffer, SLOT(addWidget(QWidget*)));
+	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_buffer, SLOT(setSelectedWidget(QWidget*, bool)));
 	if(m_treeview)
 	{
-		connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
-		connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_treeview, SLOT(addSelWidget(QWidget*)));
+		connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
-		connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 	}
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
 
@@ -709,7 +705,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	m_popup->setItemEnabled(MenuGrid, enableLayout);
 
 	// We create the buddy menu
-	int subid;
+	int subid = 0;
 	if(w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
 	{
 		KPopupMenu *sub = new KPopupMenu(w);

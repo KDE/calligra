@@ -933,8 +933,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		EventEater *eater = new EventEater(w, container); // to filter events
-		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, eater);
+		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
 		if(parent)
 		{
 			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());

@@ -179,7 +179,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
 		void debugTree();
 		/*! Sets \a w as the selected widget in the active Form. (called by ObjectTreeView) */
-		void setSelWidget(QWidget *w);
+		//void setSelectedWidget(QWidget *w);
 
 		/*! Calls this slot when the window activated changes (eg connect to QWorkspace::windowActivated(QWidget*)). You <b>need</b> to connect
 		   to this slot, it will crash otherwise.

@@ -234,48 +234,46 @@ ObjectTreeView::findItem(const QString &name)
 }
 
 void
-ObjectTreeView::setSelWidget(QWidget *w)
+ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
 {
 	if(!w)
+	{
+		clearSelection();
 		return;
+	}
 
-	clearSelection();
+	if(selectedItems().count() == 0)
+		add = false;
 
-	QListViewItem *item = (QListViewItem*) findItem(w->name());
+	if(!add)
+		clearSelection();
+
 	blockSignals(true); // to avoid recursion
-	setCurrentItem(item);
-	setSelectionAnchor(item);
-	setSelected(item, true);
+	QListViewItem *item = (QListViewItem*) findItem(w->name());
+	if(!add)
+	{
+		setCurrentItem(item);
+		setSelectionAnchor(item);
+		setSelected(item, true);
+	}
+	else
+		setSelected(item, true);
+
 	blockSignals(false);
 }
 
 void
-ObjectTreeView::addSelWidget(QWidget *w)
-{
-	if(!w)
-		return;
-
-	QListViewItem *item = (QListViewItem*) findItem(w->name());
-	setSelected(item, true);
-}
-
-void
-ObjectTreeView::emitSelChanged()
+ObjectTreeView::slotSelectionChanged()
 {
 	QPtrList<QListViewItem> list = selectedItems();
-	if(list.count() == 1) // only one widget selected
-	{
-		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(list.first());
-		emit selectionChanged(it->objectTree()->widget());
-		return;
-	}
 
+	m_form->resetSelection();
 	for(QListViewItem *item = list.first(); item; item = list.next())
 	{
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
 		QWidget *w = it->objectTree()->widget();
 		if(w && (m_form->selectedWidgets()->findRef(w) == -1))
-			m_form->parentContainer(w)->setSelectedWidget(w, true);
+			m_form->setSelectedWidget(w, true);
 	}
 }
 
@@ -319,6 +317,9 @@ ObjectTreeView::setForm(Form *form)
 	m_form = form;
 	clear();
 
+	if(!form)
+		return;
+
 	// Creates the hidden top Item
 	m_topItem = new ObjectTreeViewItem(this);
 	m_topItem->setSelectable(false);
@@ -328,9 +329,9 @@ ObjectTreeView::setForm(Form *form)
 	loadTree(tree, m_topItem);
 
 	if(!form->selectedWidgets()->isEmpty())
-		setSelWidget(form->selectedWidgets()->last());
+		setSelectedWidget(form->selectedWidgets()->first());
 	else
-		setSelWidget(form->toplevelContainer()->widget());
+		setSelectedWidget(form->toplevelContainer()->widget());
 }
 
 ObjectTreeViewItem*

@@ -93,11 +93,11 @@ namespace KFormDesigner {
 
 	bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
 	{
-		/*if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
+		if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
 		{
-			QTimer::singleShot(0,this,SLOT(updatePos()));
-		}*/
-		updatePos();
+			//QTimer::singleShot(0,this,SLOT(updatePos()));
+			updatePos();
+		}
 		return false;
 	}
 
