@@ -1289,22 +1289,22 @@
     </Function>
 
     <Function>
-      <Name>not</Name>
+      <Name>NOT</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>Boolean value</Comment>
 	<Type>Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The not() function returns True if the value is False and returns False if the value is True.</Text>
-	<Syntax>not( bool )</Syntax>
-	<Example>not(False) returns True</Example>
-	<Example>not(True) returns False</Example>
+	<Text>The NOT() function returns True if the value is False and returns False if the value is True.</Text>
+	<Syntax>NOT( bool )</Syntax>
+	<Example>NOT(False) returns True</Example>
+	<Example>NOT(True) returns False</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>if</Name>
+      <Name>IF</Name>
       <Type>Any</Type>
       <Parameter>
 	<Comment>Condition</Comment>
@@ -1319,9 +1319,9 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The if() function is a conditional function. This function returns the second parameter if the condition is True, otherwise it returns the third parameter.</Text>
-	<Syntax>if( condition; if_true; if_false )</Syntax>
-	<Example>A1=4; A2=6; if(A1>A2;5;3) returns 3</Example>
+	<Text>The IF() function is a conditional function. This function returns the second parameter if the condition is True, otherwise it returns the third parameter.</Text>
+	<Syntax>IF( condition; if_true; if_false )</Syntax>
+	<Example>A1=4; A2=6; IF(A1>A2;5;3) returns 3</Example>
       </Help>
     </Function>
 

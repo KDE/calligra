@@ -802,7 +802,7 @@ static bool kspreadfunc_not( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "not", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "NOT", true ) || !KSUtil::checkArgumentsCount( context, 1, "not", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
@@ -906,7 +906,7 @@ static bool kspreadfunc_if( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    if ( !KSUtil::checkArgumentsCount( context, 3, "if", true ) )
+    if ( !KSUtil::checkArgumentsCount( context, 3, "if", true ) || !KSUtil::checkArgumentsCount( context, 3, "IF", true ))
       return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
@@ -2394,8 +2394,12 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 
   module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
   module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );
+  //compatibility with kspread1.0
   module->addObject( "not", new KSValue( new KSBuiltinFunction( module, "not", kspreadfunc_not) ) );
+  module->addObject( "NOT", new KSValue( new KSBuiltinFunction( module, "NOT", kspreadfunc_not) ) );
+  //compatibility with kspread1.0
   module->addObject( "if", new KSValue( new KSBuiltinFunction( module, "if", kspreadfunc_if) ) );
+  module->addObject( "IF", new KSValue( new KSBuiltinFunction( module, "IF", kspreadfunc_if) ) );
   module->addObject( "left", new KSValue( new KSBuiltinFunction( module, "left", kspreadfunc_left) ) );
   module->addObject( "right", new KSValue( new KSBuiltinFunction( module, "right", kspreadfunc_right) ) );
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );

@@ -3330,13 +3330,14 @@ void CellLayoutPageBorder::cutomize_chosen_slot()
                 {
                 style->setEnabled(true);
                 size->setEnabled(true);
+                slotUnselect2( preview );
                 }
         else
                 {
                 style->setEnabled(false);
                 size->setEnabled(false);
-                pattern1->slotSelect();
-                preview->setPattern( black , 1, DotLine );
+                pattern3->slotSelect();
+                preview->setPattern( black , 1, SolidLine );
                 }
 }
 
