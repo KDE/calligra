@@ -1,0 +1,179 @@
+/*
+ *  color.h - part of KImageShop
+ *
+ *  Copyright (c) 1999 Matthias Elter <me@kde.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#ifndef __ko_color_h__
+#define __ko_color_h__
+
+#include <qcolor.h>
+
+class KoColor
+{
+ public:
+  
+  enum cSpace { cs_Indexed, cs_RGB, cs_HSV, cs_CMYK, cs_Lab };
+
+  KoColor();
+  KoColor(int a, int b, int c,  cSpace m = cs_RGB);
+  KoColor(int c, int m, int y,  int k);
+  KoColor(const QColor&);
+
+  void setRGB (int R, int G, int B);
+  void setHSV (int H, int S, int V);
+  void setLAB (int L, int a, int b);
+  void setCMYK (int C, int M, int Y, int K);
+  void setColor(const QColor&);
+
+  void rgb (int *R, int *G, int *B) const;
+  void hsv (int *H, int *S, int *V) const;
+  void lab (int *L, int *a, int *b) const;
+  void cmyk (int *C, int *M, int *Y, int *K) const;
+  QColor color() const;
+
+  cSpace native() const { return m_native; }
+
+  int R() const;
+  int G() const;
+  int B() const;
+  int h() const;
+  int s() const;
+  int v() const;
+  int l() const;
+  int a() const;
+  int b() const;
+  int c() const;
+  int m() const;
+  int y() const;
+  int k() const;
+  
+  static void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
+  static void RGBtoLAB(int R, int G, int B, int *L, int *a, int *b);
+  static void RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K);
+
+  static void HSVtoRGB(int H, int S, int V, int *R, int *G, int *B);
+  static void HSVtoLAB(int H, int S, int V, int *L, int *a, int *b);
+  static void HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K);
+
+  static void LABtoRGB(int L, int a, int b, int *R, int *G, int *B);
+  static void LABtoHSV(int L, int a, int b, int *H, int *S, int *V);
+  static void LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K);
+
+  static void CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B);
+  static void CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V);
+  static void CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b);
+
+  static const KoColor black();
+  static const KoColor white();
+  static const KoColor gray();
+  static const KoColor lightGray();
+  static const KoColor darkGray();
+  static const KoColor red();
+  static const KoColor darkRed();
+  static const KoColor green();
+  static const KoColor darkGreen();
+  static const KoColor blue();
+  static const KoColor darkBlue();
+  static const KoColor cyan();
+  static const KoColor darkCyan();
+  static const KoColor magenta();
+  static const KoColor darkMagenta();
+  static const KoColor yellow();
+  static const KoColor darkYellow();
+
+ protected:
+  void calcRGB() const;
+  void calcHSV() const;
+  void calcCMYK() const;
+  void calcLAB() const;
+
+  void rgbChanged() const;
+  void hsvChanged() const;
+  void cmykChanged() const;
+  void labChanged() const;
+
+ private:
+  /*
+   * Mutable to make it possible for const objects to transform the native cModel
+   * in functions like KoColor::rgb(...) to the requested.
+   */
+  mutable int m_R, m_G, m_B;      // RGB
+  mutable int m_C, m_M, m_Y, m_K; // CMYK
+  mutable int m_H, m_S, m_V;      // HSV
+  mutable int m_L, m_a, m_b;      // LAB
+
+  mutable bool m_RGBvalid;
+  mutable bool m_HSVvalid;
+  mutable bool m_CMYKvalid;
+  mutable bool m_LABvalid;
+
+  cSpace m_native; 
+};
+
+inline const KoColor KoColor::white()
+{ return KoColor(255,255,255,cs_RGB); }
+
+inline const KoColor KoColor::black()
+{ return KoColor(0,0,0,cs_RGB); }
+
+inline const KoColor KoColor::gray()
+{ return KoColor(160,160,164,cs_RGB); }
+
+inline const KoColor KoColor::lightGray()
+{ return KoColor(192,192,192,cs_RGB); }
+
+inline const KoColor KoColor::darkGray()
+{ return KoColor(128,128,128,cs_RGB); }
+
+inline const KoColor KoColor::red()
+{ return KoColor(255,0,0,cs_RGB); }
+
+inline const KoColor KoColor::darkRed()
+{ return KoColor(128,0,0,cs_RGB); }
+
+inline const KoColor KoColor::green()
+{ return KoColor(0,255,0,cs_RGB); }
+
+inline const KoColor KoColor::darkGreen()
+{ return KoColor(0,128,0,cs_RGB); }
+
+inline const KoColor KoColor::blue()
+{ return KoColor(0,0,255,cs_RGB); }
+
+inline const KoColor KoColor::darkBlue()
+{ return KoColor(0,0,128,cs_RGB); }
+
+inline const KoColor KoColor::cyan()
+{ return KoColor(0,255,255,cs_RGB); }
+
+inline const KoColor KoColor::darkCyan()
+{ return KoColor(0,128,128,cs_RGB); }
+
+inline const KoColor KoColor::magenta()
+{ return KoColor(255,0,255,cs_RGB); }
+
+inline const KoColor KoColor::darkMagenta()
+{ return KoColor(128,0,128,cs_RGB); }
+
+inline const KoColor KoColor::yellow()
+{ return KoColor(255,255,0,cs_RGB); }
+
+inline const KoColor KoColor::darkYellow()
+{ return KoColor(128,128,0,cs_RGB); }
+
+#endif
