@@ -213,7 +213,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        if ( e->state() & (ShiftButton|ControlButton) == 0 )
+        if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
         {
             if ( textObject()->hasSelection() )
                 textObject()->removeSelectedText( m_cursor );
