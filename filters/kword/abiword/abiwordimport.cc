@@ -60,7 +60,7 @@ class StructureParser : public QXmlDefaultHandler
 {
 public:
     StructureParser(QDomDocument& doc, KoFilterChain* chain)
-        : mainDocument("DOC"), m_chain(chain), m_pictureNumber(0), m_clipartNumber(0), m_pictureFrameNumber(0)
+        : mainDocument("DOC"), m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0)
     {
         createDocument();
         doc=mainDocument;
@@ -101,17 +101,14 @@ private:
     QDomDocument mainDocument;
     QDomElement framesetsPluralElement; // <FRAMESETS>
     QDomElement mainFramesetElement;    // The main <FRAMESET> where the body text will be under.
-    QDomElement pixmapsElement;         // <PIXMAPS>
-    QDomElement clipartsElement;        // <CLIPARTS>
+    QDomElement m_picturesElement;      // <PICTURES>
     QDomElement m_paperElement;         // <PAPER>
     QDomElement m_paperBordersElement;  // <PAPERBORDER>
     QDomElement m_ignoreWordsElement;    // <SPELLCHECKIGNORELIST>
     StyleDataMap styleDataMap;
     KoFilterChain* m_chain;
     uint m_pictureNumber;                   // unique: increment *before* use
-    uint m_clipartNumber;                   // unique: increment *before* use
     uint m_pictureFrameNumber;              // unique: increment *before* use
-    QMap<QString,QDomElement> m_pictureMap; // Map of the <IMAGE> or <CLIPART> elements in any <FRAMSET>
 };
 
 // Element <c>
@@ -452,7 +449,7 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
         QString strLevel=attributes.value("level");
         int level;
         if (strLevel.isEmpty())
-            level=-1; //TODO/FIXME: might be wrong if the style is base on another
+            level=-1; //TODO/FIXME: might be wrong if the style is based on another
         else
             level=strLevel.toInt();
         QString strBasedOn=attributes.value("basedon").simplifyWhiteSpace();
@@ -521,9 +518,22 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     // TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
 
-    // <KEY>, <IMAGE> and <CLIPART> are added when processing <d>
-    //   Therefore we need to store data for further processing later
-    m_pictureMap.insert(strDataId,framesetElement,false); // false means that we want duplicate entries!
+    QDomElement element=mainDocument.createElement("PICTURE");
+    element.setAttribute("keepAspectRatio","true"); // Cliparts will be always false in KWord 1.2
+    framesetElement.setAttribute("frameType",2); // Picture
+    framesetElement.appendChild(element);
+
+    QDomElement key=mainDocument.createElement("KEY");
+    key.setAttribute("filename",strDataId);
+    //As we have no date to set, set to the *nix epoch
+    key.setAttribute("year",1970);
+    key.setAttribute("month",1);
+    key.setAttribute("day",1);
+    key.setAttribute("hour",0);
+    key.setAttribute("minute",0);
+    key.setAttribute("second",0);
+    key.setAttribute("msec",0);
+    element.appendChild(key);
 
     // Now use the image's frame set
     QDomElement elementText=stackItem->stackElementText;
@@ -604,29 +614,22 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         return false;
     }
 
-    bool isImage=true; // Image ?
     bool isSvg=false;  // SVG ?
-    QString strStoreName;
+
+    QString extension;
 
     // stackItem->strTemp1 contains the mime type
     if (stackItem->strTemp1=="image/png")
     {
-        strStoreName="pictures/picture";
-        strStoreName+=QString::number(++m_pictureNumber);
-        strStoreName+=".png";
+        extension=".png";
     }
     else if (stackItem->strTemp1=="image/jpeg")
     {
-        strStoreName="pictures/picture";
-        strStoreName+=QString::number(++m_pictureNumber);
-        strStoreName+=".jpeg";
+        extension=".jpeg";
     }
     else if (stackItem->strTemp1=="image/svg-xml") //Yes it is - not +
     {
-        strStoreName="cliparts/clipart";
-        strStoreName+=QString::number(++m_clipartNumber);
-        strStoreName+=".svg";
-        isImage=false;
+        extension=".svg";
         isSvg=true;
     }
     else
@@ -635,6 +638,11 @@ bool StructureParser::EndElementD (StackItem* stackItem)
             << stackItem->strTemp1 << endl;
         return true;
     }
+
+    QString strStoreName;
+    strStoreName="pictures/picture";
+    strStoreName+=QString::number(++m_pictureNumber);
+    strStoreName+=extension;
 
     QString strDataId=stackItem->fontName;  // AbiWord's data id
     QDomElement key=mainDocument.createElement("KEY");
@@ -647,45 +655,8 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     key.setAttribute("minute",0);
     key.setAttribute("second",0);
     key.setAttribute("msec",0);
-
-    // Now we need to add <IMAGE> or <CLIPART> where the image or clipart is used.
-    QMap<QString,QDomElement>::Iterator it; // cannot be ConstIterator
-    while ((it=m_pictureMap.find(strDataId))!=m_pictureMap.end())
-    {
-        QDomElement element=mainDocument.createElement("dummy_name");
-        if (isImage)
-        {
-            element.setTagName("IMAGE");
-            element.setAttribute("keepAspectRatio","true");
-            it.data().setAttribute("frameType",2); // Image
-        }
-        else
-        {
-            element.setTagName("CLIPART");
-            it.data().setAttribute("frameType",5); // Clipart
-        }
-        it.data().appendChild(element);
-        element.appendChild(key);
-        m_pictureMap.erase(it);
-    }
-
-    // We need a second <KEY> element, so clone it first!
-    QDomElement secondKeyElement=key.cloneNode(false).toElement();
-    if (secondKeyElement.isNull())
-    {
-        kdError(30506)<<"Cannot clone <KEY>! Aborting!"<<endl;
-        return false;
-    }
-
-    secondKeyElement.setAttribute("name",strStoreName);
-    if (isImage)
-    {
-        pixmapsElement.appendChild(secondKeyElement);
-    }
-    else
-    {
-        clipartsElement.appendChild(secondKeyElement);
-    }
+    key.setAttribute("name",strStoreName);
+    m_picturesElement.appendChild(key);
 
     KoStoreDevice* out=m_chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
@@ -1281,7 +1252,7 @@ bool StructureParser::endDocument(void)
 {
     // TODO: put styles in the KWord document.
     QDomElement stylesPluralElement=mainDocument.createElement("STYLES");
-    mainDocument.documentElement().insertBefore(stylesPluralElement,pixmapsElement);
+    mainDocument.documentElement().insertBefore(stylesPluralElement,m_picturesElement);
 
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
@@ -1291,7 +1262,7 @@ bool StructureParser::endDocument(void)
         kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
-        // insert before <PIXMAPS>, as <PIXMAPS> must remain last.
+        // insert before <PICTURES>, as <PICTURES> must remain last.
         stylesPluralElement.appendChild(styleElement);
 
         AddStyle(styleElement, it.key(),it.data(),mainDocument);
@@ -1305,7 +1276,7 @@ void StructureParser :: createDocument(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("DOC",
-        "-//KDE//DTD kword 1.1//EN", "http://www.koffice.org/DTD/kword-1.1.dtd"));
+        "-//KDE//DTD kword 1.2//EN", "http://www.koffice.org/DTD/kword-1.2.dtd"));
 
     mainDocument=doc;
 
@@ -1376,10 +1347,8 @@ void StructureParser :: createDocument(void)
     // As we are manipulating the document, create a few particular elements
     m_ignoreWordsElement=mainDocument.createElement("SPELLCHECKIGNORELIST");
     mainDocument.documentElement().appendChild(m_ignoreWordsElement);
-    pixmapsElement=mainDocument.createElement("PIXMAPS");
-    mainDocument.documentElement().appendChild(pixmapsElement);
-    clipartsElement=mainDocument.createElement("CLIPARTS");
-    mainDocument.documentElement().appendChild(clipartsElement);
+    m_picturesElement=mainDocument.createElement("PICTURES");
+    mainDocument.documentElement().appendChild(m_picturesElement);
 }
 
 bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
