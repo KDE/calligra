@@ -95,13 +95,6 @@ rc_DATA = kchart.rc
 kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-# linktest - from dfaure
-
-check_PROGRAMS = linktest
-linktest_SOURCES = $(libkchartpart_la_SOURCES)
-linktest_LDADD = $(lib_LTLIBRARIES)
-linktest_LDFLAGS = $(libkchartpart_la_LDFLAGS)
-
 # SUBDIRS =  . plugins pics dtd toolbar
 SUBDIRS =  kdchart . toolbar pics
 
