@@ -119,7 +119,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     int lastBottom = doc->pageTop( doc->getPages() );
     if ( crect.bottom() > lastBottom )
     {
-        QRect bottomArea( 0, lastBottom, crect.width(), crect.bottom() - lastBottom + 1 );
+        QRect bottomArea( 0, lastBottom, crect.right() + 1, crect.bottom() - lastBottom + 1 );
         QRect repaintRect = bottomArea.intersect( crect );
         if ( !repaintRect.isEmpty() )
         {
