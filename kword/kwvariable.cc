@@ -96,17 +96,17 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     if ( isTextNS )
     {
-        if ( localName.endsWith( "note" ))
+        if ( localName ==  "note" )
         {
             QString key = "STRING";
             int type = VT_FOOTNOTE;
             return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
         }
-        else if ( localName.endsWith("table-count" ) ||
-                  localName.endsWith("object-count" ) ||
-                  localName.endsWith("image-count" ) ||
-                  localName.endsWith("paragraph-count" ) ||
-                  localName.endsWith("word-count" ) )
+        else if ( localName == "table-count"  ||
+                  localName == "object-count"  ||
+                  localName == "image-count"  ||
+                  localName == "paragraph-count"  ||
+                  localName == "word-count"  )
         {
             QString key = "NUMBER";
             int type = VT_STATISTIC;
