@@ -8,9 +8,9 @@ libmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 kde_module_LTLIBRARIES = libmsodimport.la
 
-libmsodimport_la_SOURCES = msodimport.cc msodimport_factory.cc msod.cc
+libmsodimport_la_SOURCES = msodimport.cc msod.cc
 
-noinst_HEADERS = msodimport.h msodimport_factory.h msod.h
+noinst_HEADERS = msodimport.h msod.h
 
 METASOURCES = AUTO
 

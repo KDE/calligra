@@ -23,14 +23,20 @@ DESCRIPTION
 #include <config.h>
 #include <kdebug.h>
 #include <koStore.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 #include <qpointarray.h>
 #include <wmfimport.h>
 #include <wmfimport.moc>
 
+typedef KGenericFactory<WMFImport, KoFilter> WMFImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "wmfimport" ) );
+
 WMFImport::WMFImport(
-    KoFilter *parent,
-    const char *name) :
-        KoFilter(parent, name), KWmf(100)
+    KoFilter *,
+    const char *,
+    const QStringList&) :
+        KoFilter(), KWmf(100)
 {
 }
 
@@ -38,15 +44,10 @@ WMFImport::~WMFImport()
 {
 }
 
-bool WMFImport::filter(
-    const QString &fileIn,
-    const QString &fileOut,
-    const QString &from,
-    const QString &to,
-    const QString &)
+KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCString& to )
 {
     if (to != "application/x-kontour" || from != "image/x-wmf")
-        return false;
+        return KoFilter::NotImplemented;
 
     m_text = "";
     m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -61,24 +62,23 @@ bool WMFImport::filter(
     m_text += "  <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
     m_text += "  <layer>\n";
 
-    if (!parse(fileIn))
-        return false;
+    if (!parse(m_chain->inputFile()))
+        return KoFilter::WrongFormat;
     m_text += "  </layer>\n";
     m_text += " </page>\n";
     m_text += "</kontour>\n";
 
     emit sigProgress(100);
 
-    KoStore out = KoStore(fileOut, KoStore::Write);
-    if (!out.open("root"))
+    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+    if (!out)
     {
-        kdError(s_area) << "Unable to open output file " << fileOut << endl;
-        return false;
+        kdError(s_area) << "Unable to open output stream" << endl;
+        return KoFilter::StorageCreationError;
     }
     QCString cstring = m_text.utf8();
-    out.write((const char*)cstring, cstring.length());
-    out.close();
-    return true;
+    out->writeBlock((const char*)cstring, cstring.length());
+    return KoFilter::OK;
 }
 
 void WMFImport::gotEllipse(

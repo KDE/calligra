@@ -37,17 +37,11 @@ class MSODImport :
 public:
     MSODImport(
         KoFilter *parent,
-        const char *name);
+        const char *name,
+        const QStringList&);
     virtual ~MSODImport();
 
-    virtual bool filter(
-        const QString &fileIn,
-        const QString &fileOut,
-        const QString &prefixOut,
-        const QString &from,
-        const QString &to,
-        const QString &config);
-    virtual bool supportsEmbedding() { return true; }
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 protected:
 

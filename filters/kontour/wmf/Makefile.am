@@ -8,9 +8,9 @@ libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 kde_module_LTLIBRARIES = libwmfimport.la
 
-libwmfimport_la_SOURCES = wmfimport.cc wmfimport_factory.cc
+libwmfimport_la_SOURCES = wmfimport.cc
 
-noinst_HEADERS = wmfimport.h wmfimport_factory.h
+noinst_HEADERS = wmfimport.h
 
 METASOURCES = AUTO
 

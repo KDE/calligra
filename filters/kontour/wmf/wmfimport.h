@@ -36,15 +36,11 @@ class WMFImport :
 public:
     WMFImport(
         KoFilter *parent,
-        const char *name);
+        const char *name,
+        const QStringList&);
     virtual ~WMFImport();
 
-    virtual bool filter(
-        const QString &fileIn,
-        const QString &fileOut,
-        const QString &from,
-        const QString &to,
-        const QString &config = QString::null);
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 protected:
 

@@ -22,6 +22,7 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <koFilterManager.h>
+#include <kgenericfactory.h>
 #include <koQueryTrader.h>
 #include <koStore.h>
 #include <ktempfile.h>
@@ -31,10 +32,14 @@ DESCRIPTION
 #include <qpointarray.h>
 #include <unistd.h>
 
+typedef KGenericFactory<MSODImport, KoFilter> MSODImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "msodimport" ) );
+
 MSODImport::MSODImport(
-    KoFilter *parent,
-    const char *name) :
-        KoFilter(parent, name), Msod(100)
+    KoFilter *,
+    const char *,
+    const QStringList&) :
+        KoFilter(), Msod(100)
 {
 }
 
@@ -42,21 +47,16 @@ MSODImport::~MSODImport()
 {
 }
 
-bool MSODImport::filter(
-    const QString &fileIn,
-    const QString &fileOut,
-    const QString &prefixOut,
-    const QString &from,
-    const QString &to,
-    const QString &config)
+KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCString& to )
 {
     if (to != "application/x-kontour" || from != "image/x-msod")
-        return false;
+        return KoFilter::NotImplemented;
 
     // Get configuration data: the shape id, and any delay stream that we were given.
 
     unsigned shapeId = (unsigned)-1;
     const char *delayStream = 0L;
+    QString config = ""; // ###### FIXME: We aren't able to pass config data right now
     QStringList args = QStringList::split(";", config);
     unsigned i;
 
@@ -75,9 +75,10 @@ bool MSODImport::filter(
         else
         {
             kdError(s_area) << "Invalid argument: " << args[i] << endl;
-            return false;
+            return KoFilter::StupidError;
         }
     }
+    QString prefixOut = ""; // ###### FIXME: No prefix yet
     m_prefixOut = prefixOut;
     m_nextPart = 0;
 
@@ -94,19 +95,19 @@ bool MSODImport::filter(
     m_text += "  <layout width=\"210\" lmargin=\"0\" format=\"a4\" bmargin=\"0\" height=\"297\" rmargin=\"0\" tmargin=\"0\" orientation=\"portrait\"/>\n";
     m_text += "  <layer>\n";
 
-    if (!parse(shapeId, fileIn, delayStream))
-        return false;
+    if (!parse(shapeId, m_chain->inputFile(), delayStream))
+        return KoFilter::WrongFormat;
     m_text += "  </layer>\n";
     m_text += " </page>\n";
     m_text += "</kontour>\n";
 
     emit sigProgress(100);
 
-    KoStore out = KoStore(fileOut, KoStore::Write);
+    KoStore out = KoStore(m_chain->outputFile(), KoStore::Write);
     if (!out.open("root"))
     {
-        kdError(s_area) << "Cannot open output file " << fileOut << endl;
-        return false;
+        kdError(s_area) << "Cannot open output file" << endl;
+        return KoFilter::StorageCreationError;
     }
     QCString cstring = m_text.utf8();
     out.write((const char*)cstring, cstring.length());
@@ -125,7 +126,7 @@ bool MSODImport::filter(
             kdError(s_area) << "Could not embed in KoStore!" << endl;
         unlink(it.data().file.local8Bit());
     }
-    return true;
+    return KoFilter::OK;
 }
 
 void MSODImport::gotEllipse(
@@ -180,8 +181,6 @@ void MSODImport::gotPicture(
         }
         else
         {
-            KoFilterManager *mgr = KoFilterManager::self();
-
             // It's not here, so let's generate one.
 
             part.fullName = m_prefixOut + '/' + QString::number(m_nextPart);
@@ -190,7 +189,18 @@ void MSODImport::gotPicture(
             // Save the data supplied into a temporary file, then run the filter
             // on it.
 
-            part.file = mgr->import(tempFile.name(), part.mimeType, "", part.fullName.mid(sizeof("tar:") - 1));
+            KoFilterManager *mgr = new KoFilterManager( tempFile.name() );
+            KTempFile tempFileOut(QString::null, "." + extension);
+
+            QCString mime( part.mimeType.latin1() );
+            KoFilter::ConversionStatus status = mgr->exp0rt( tempFileOut.name(), mime );
+            delete mgr;
+            //part.file = mgr->import(tempFile.name(), part.mimeType, "", part.fullName.mid(sizeof("tar:") - 1));
+            if ( status == KoFilter::OK )
+                part.file = tempFileOut.name();
+            else
+                part.file = QString::null;
+
             if (part.file != QString::null)
             {
                 m_parts.insert(key, part);
