@@ -17,6 +17,7 @@ public:
 k_dcop:
 
     virtual bool isDefault() const;
+    virtual bool isEmpty() const;
     virtual QString text() const;
     virtual void setText( const QString& text );
     virtual void setValue( int value );

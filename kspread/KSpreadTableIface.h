@@ -43,6 +43,8 @@ k_dcop:
     virtual void removeRow( int row,int nbRow );
 
     virtual bool isHidden()const;
+    virtual bool areaHasNoContent(QRect area) const ;
+    virtual bool areaHasNoComments(QRect area) const ;
 
     virtual bool showGrid() const;
     virtual bool showFormula() const;

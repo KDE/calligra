@@ -20,6 +20,13 @@ bool KSpreadCellIface::isDefault() const
     return cell->isDefault();
 }
 
+bool KSpreadCellIface::isEmpty() const
+{
+	if (!m_table) return true;
+	KSpreadCell *cell=m_table->cellAt(m_point);
+	return cell->isEmpty();
+}
+
 QString KSpreadCellIface::text() const
 {
     if( !m_table ) return QString::null;

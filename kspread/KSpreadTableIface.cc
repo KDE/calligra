@@ -182,6 +182,17 @@ int KSpreadSheetIface::maxColumn() const
 
 }
 
+bool KSpreadSheetIface::areaHasNoContent(QRect area) const
+{
+	kdDebug(36001) << "KSpreadSheetIface::areaHasNoContent("<<area<<");"<<endl;
+	return m_table->areaIsEmpty(area);
+}
+
+bool KSpreadSheetIface::areaHasNoComments(QRect area) const
+{
+	return m_table->areaIsEmpty(area,KSpreadSheet::Comment);
+}
+
 int KSpreadSheetIface::maxRow() const
 {
     return m_table->maxRow();
