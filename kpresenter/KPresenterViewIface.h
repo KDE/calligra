@@ -50,6 +50,9 @@ k_dcop:
     virtual void newView();
     virtual void viewShowSideBar();
     virtual void viewShowNoteBar();
+    virtual void viewSlideMaster();
+    virtual void viewFooter();
+    virtual void viewHeader();
 
     // insert menu
     virtual void insertPage();
@@ -225,6 +228,8 @@ k_dcop:
 
     void flipHorizontal();
     void flipVertical();
+
+
 
 private:
     KPresenterView *view;

@@ -505,6 +505,12 @@ void KPresenterViewIface::viewShowNoteBar()
     view->viewShowNoteBar();
 }
 
+void KPresenterViewIface::viewSlideMaster()
+{
+    view->viewSlideMaster();
+}
+
+
 void KPresenterViewIface::formatParagraph()
 {
     view->formatParagraph();
@@ -588,6 +594,17 @@ void KPresenterViewIface::savePicture()
 {
     view->savePicture();
 }
+
+void KPresenterViewIface::viewFooter()
+{
+    view->viewFooter();
+}
+
+void KPresenterViewIface::viewHeader()
+{
+    view->viewHeader();
+}
+
 
 // note: _nPage is the user visible 1-based page number
 // if 0 < _verbose exportPage() returns the title and notes of the page
