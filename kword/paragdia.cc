@@ -851,7 +851,7 @@ KWParagBorderWidget::KWParagBorderWidget( QWidget * parent, const char * name )
     QLabel * lColor = new QLabel( i18n( "Color:" ), this );
     grid->addWidget( lColor, 4, 0 );
 
-    bColor = new KColorButton( this );
+    bColor = new KColorButton( black,this );
     grid->addWidget( bColor, 5, 0 );
     //connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
 
