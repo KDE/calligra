@@ -1081,487 +1081,729 @@ void GNUMERICFilter::convertFormula( QString & formula ) const
 
 void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 {
-  kdDebug(30521) << "SetStyleInfo entered " << endl;
+    kdDebug(30521) << "SetStyleInfo entered " << endl;
 
-  int row, column;
-  QDomNode styles =  sheet->namedItem( "gmr:Styles" );
-  if ( !styles.isNull() )
-  {
-    // Get a style region within that sheet.
-    QDomNode style_region =  styles.namedItem( "gmr:StyleRegion" );
-
-    while ( !style_region.isNull() )
+    int row, column;
+    QDomNode styles =  sheet->namedItem( "gmr:Styles" );
+    if ( !styles.isNull() )
     {
-      QDomElement e = style_region.toElement(); // try to convert the node to an element.
+        // Get a style region within that sheet.
+        QDomNode style_region =  styles.namedItem( "gmr:StyleRegion" );
 
-      QDomNode style = style_region.namedItem( "gmr:Style" );
-      QDomNode font = style.namedItem( "gmr:Font" );
-      QDomNode validation = style.namedItem( "gmr:Validation" );
-      QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
-      QDomNode hyperlink = style.namedItem( "gmr:HyperLink" );
-      int startCol = e.attribute( "startCol" ).toInt() + 1;
-      int endCol   = e.attribute( "endCol" ).toInt() + 1;
-      int startRow = e.attribute( "startRow" ).toInt() + 1;
-      int endRow   = e.attribute( "endRow" ).toInt() + 1;
-
-      kdDebug(30521) << "------Style: " << startCol << ", "
-                << startRow << " - " << endCol << ", " << endRow << endl;
-
-      if ( endCol - startCol > 200 || endRow - startRow > 200 )
-      {
-        style_region = style_region.nextSibling();
-        continue;
-      }
-
-      for ( column = startCol; column <= endCol; ++column )
-      {
-        for ( row = startRow; row <= endRow; ++row )
+        while ( !style_region.isNull() )
         {
-          kdDebug(30521) << "Cell: " << column << ", " << row << endl;
-          KSpreadCell * kspread_cell = table->cellAt( column, row, false );
+            QDomElement e = style_region.toElement(); // try to convert the node to an element.
 
-          // don't create new cells -> don't apply format on empty cells, if bigger region
-          if ( ( kspread_cell->isDefault() || kspread_cell->isEmpty() )
-               && ( ( endCol - startCol > 2 ) || ( endRow - startRow > 2 ) ) )
-          {
-            kdDebug(30521) << "CELL EMPTY OR RANGE TOO BIG " << endl;
-            continue;
-          }
+            QDomNode style = style_region.namedItem( "gmr:Style" );
+            QDomNode font = style.namedItem( "gmr:Font" );
+            QDomNode validation = style.namedItem( "gmr:Validation" );
+            QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
+            QDomNode hyperlink = style.namedItem( "gmr:HyperLink" );
+            int startCol = e.attribute( "startCol" ).toInt() + 1;
+            int endCol   = e.attribute( "endCol" ).toInt() + 1;
+            int startRow = e.attribute( "startRow" ).toInt() + 1;
+            int endRow   = e.attribute( "endRow" ).toInt() + 1;
 
-          QDomElement style_element = style.toElement(); // try to convert the node to an element.
+            kdDebug(30521) << "------Style: " << startCol << ", "
+                           << startRow << " - " << endCol << ", " << endRow << endl;
 
-          kdDebug(30521) << "Style valid for kspread" << endl;
-          kspread_cell = table->nonDefaultCell( column, row, false );
-
-          if (style_element.hasAttribute("Fore"))
-          {
-            QString color_string = style_element.attribute("Fore");
-            QColor color;
-            convert_string_to_qcolor(color_string, &color);
-            kspread_cell->setTextColor(color);
-          }
-
-          if (style_element.hasAttribute("Back"))
-          {
-            QString color_string = style_element.attribute("Back");
-            QColor color;
-            convert_string_to_qcolor(color_string, &color);
-            kspread_cell->setBgColor(color);
-          }
-
-          if (style_element.hasAttribute("PatternColor"))
-          {
-            QString color_string = style_element.attribute("PatternColor");
-            QColor color;
-            convert_string_to_qcolor(color_string, &color);
-            kspread_cell->setBackGroundBrushColor( color );
-          }
-
-          if (style_element.hasAttribute("Shade"))
-          {
-            /* Pattern's taken from: gnumeric's pattern.c */
-            /* if "TODO" added: doesn't match exactly the gnumeric one */
-
-            QString shade = style_element.attribute("Shade");
-            if (shade == "0")
+            if ( endCol - startCol > 200 || endRow - startRow > 200 )
             {
-              // nothing to do
-            }
-            else if (shade == "1")
-            {
-              /* 1 Solid */
-              //kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
-                //This is as empty
-              /* What should this be? */
-
-            }
-            else if (shade == "2")
-            {
-              /* 2 75% */
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense2Pattern);
-            }
-            else if (shade == "3")
-            {
-              /* 3 50% */
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense4Pattern);
-            }
-            else if (shade == "4")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense5Pattern);
-              /* This should be 25%... All qt has is 37% */
-
-              /* 4 25% */
-            }
-            else if (shade == "5")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense6Pattern);
-              /* 5 12.5% */
-            }
-            else if (shade == "6")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense7Pattern);
-              /* 6 6.25% */
-
-            }
-            else if (shade == "7")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::HorPattern);
-              /* 7 Horizontal Stripe */
-            }
-            else if (shade == "8")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::VerPattern);
-              /* 8 Vertical Stripe */
-            }
-            else if (shade == "9")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::BDiagPattern);
-              /* 9 Reverse Diagonal Stripe */
-            }
-            else if (shade == "10")
-            {
-              /* 10 Diagonal Stripe */
-              kspread_cell->setBackGroundBrushStyle(Qt::FDiagPattern);
-            }
-            else if (shade == "11")
-            {
-              /* 11 Diagonal Crosshatch */
-              kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
-            }
-            else if (shade == "12")
-            {
-              /* 12 Thick Diagonal Crosshatch TODO!*/
-              kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
-            }
-            else if (shade == "13")
-            {
-              /* 13 Thin Horizontal Stripe TODO: wrong: this is thick!*/
-              kspread_cell->setBackGroundBrushStyle(Qt::HorPattern);
-            }
-            else if (shade == "14")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::VerPattern);
-            }
-            else if (shade == "15")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::FDiagPattern);
-            }
-            else if (shade == "16")
-            {
-              /* 16 Thick Reverse Stripe TODO:*/
-              kspread_cell->setBackGroundBrushStyle(Qt::BDiagPattern);
-            }
-            else if (shade == "17")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
-            }
-            else if (shade == "18")
-            {
-              kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
-            }
-            else if (shade == "19")
-            {
-              /* 19 Applix small circle */
-            }
-            else if (shade == "20")
-            {
-              /* 20 Applix semicircle */
-            }
-            else if (shade == "21")
-            {
-              /* 21 Applix small thatch */
-            }
-            else if (shade == "22")
-            {
-              /* 22 Applix round thatch */
-            }
-            else if (shade == "23")
-            {
-              /* 23 Applix Brick */
-            }
-            else if (shade == "24")
-            {
-              /* 24 100% */
-              kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
-            }
-            else if (shade == "25")
-            {
-              /* 25 87.5% */
-              kspread_cell->setBackGroundBrushStyle(Qt::Dense2Pattern);
-            }
-          }
-
-          if ( style_element.hasAttribute( "Rotation" ) )
-          {
-              int rot = style_element.attribute( "Rotation" ).toInt();
-              kspread_cell->setAngle( -1* rot );
-          }
-          if (style_element.hasAttribute("Indent"))
-          {
-            double indent = style_element.attribute("Indent").toDouble();
-            // gnumeric saves indent in characters, we in points:
-            kspread_cell->setIndent( indent * 10.0 );
-          }
-
-          if (style_element.hasAttribute("HAlign"))
-          {
-            QString halign_string=style_element.attribute("HAlign");
-
-            if (halign_string == "1")
-            {
-              /* General: No equivalent in Kspread. */
-            }
-            else if (halign_string == "2")
-            {
-              kspread_cell->setAlign(KSpreadCell::Left);
-            }
-            else if (halign_string == "4")
-            {
-              kspread_cell->setAlign(KSpreadCell::Right);
-            }
-            else if (halign_string == "8")
-            {
-              kspread_cell->setAlign(KSpreadCell::Center);
-            }
-            else if (halign_string == "16")
-            {
-              /* Fill: No equivalent in Kspread. */
-            }
-            else if (halign_string == "32")
-            {
-              /* Justify: No equivalent in Kspread */
-            }
-            else if (halign_string == "64")
-            {
-              /* Centered across selection*/
+                style_region = style_region.nextSibling();
+                continue;
             }
 
-          }
-
-          if (style_element.hasAttribute("VAlign"))
-          {
-            QString valign_string=style_element.attribute("VAlign");
-
-            if (valign_string == "1")
+            for ( column = startCol; column <= endCol; ++column )
             {
-              /* General: No equivalent in Kspread. */
-              kspread_cell->setAlignY(KSpreadCell::Top);
-            }
-            else if (valign_string == "2")
-            {
-              kspread_cell->setAlignY(KSpreadCell::Bottom);
-            }
-            else if (valign_string == "4")
-            {
-              kspread_cell->setAlignY(KSpreadCell::Middle);
-            }
-            else if (valign_string == "8")
-            {
-              /* Justify: No equivalent in Kspread */
-            }
-          }
-
-          if (style_element.hasAttribute("WrapText"))
-          {
-            QString multiRow = style_element.attribute("WrapText");
-
-            if ( multiRow == "1" )
-              kspread_cell->setMultiRow( true );
-          }
-
-          if (style_element.hasAttribute("Format"))
-          {
-            QString formatString = style_element.attribute("Format");
-
-            kdDebug(30521) << "Format: " << formatString << endl;
-            ParseFormat(formatString, kspread_cell);
-
-          } // End "Format"
-
-          if (!gmr_styleborder.isNull())
-          {
-            QDomElement style_element = gmr_styleborder.toElement(); // try to convert the node to an element.
-            ParseBorder( style_element, kspread_cell );
-          }
-          if ( !validation.isNull() )
-          {
-              QDomElement validation_element = validation.toElement();
-              if ( !validation_element.isNull() )
-              {
-                  kdDebug(30521)<<" Cell validation \n";
-                  KSpreadValidity* kspread_validity = kspread_cell->getValidity();
-                  if ( validation_element.hasAttribute( "AllowBlank" ) && validation_element.attribute( "AllowBlank" )=="true" )
-                  {
-                      kspread_validity->allowEmptyCell=true;
-                  }
-                  if ( validation_element.hasAttribute( "Title" ))
-                  {
-                      kspread_validity->title=validation_element.attribute( "Title" );
-                  }
-                  if ( validation_element.hasAttribute( "Message" ))
-                  {
-                      kspread_validity->message=validation_element.attribute( "Message" );
-                  }
-                  if ( validation_element.hasAttribute( "Style" ) )
-                  {
-                      int value = validation_element.attribute( "Style" ).toInt();
-                      switch( value )
-                      {
-                      case 0:
-                          kspread_validity->displayMessage=false;
-                          break;
-                      case 1:
-                          kspread_validity->m_action=Stop;
-                          break;
-                      case 2:
-                          kspread_validity->m_action=Warning;
-                          break;
-                      case 3:
-                          kspread_validity->m_action=Information;
-                          break;
-                      default:
-                          kdDebug()<<" Error in validation style :"<<value<<endl;
-                          break;
-                      }
-                  }
-                  if ( validation_element.hasAttribute( "Operator" ) )
-                  {
-                      int value = validation_element.attribute( "Operator" ).toInt();
-                      switch( value )
-                      {
-                      case 0:
-                          kspread_validity->m_cond=Between;
-                          break;
-                      case 1:
-                          kspread_validity->m_cond=DifferentTo;
-                          break;
-                      case 2:
-                          kspread_validity->m_cond=Equal;
-                          break;
-                      case 3:
-                          kspread_validity->m_cond=Different;
-                          break;
-                      case 4:
-                          kspread_validity->m_cond=Superior;
-                          break;
-                      case 5:
-                          kspread_validity->m_cond=Inferior;
-                          break;
-                      case 6:
-                          kspread_validity->m_cond=SuperiorEqual;
-                          break;
-                      case 7:
-                          kspread_validity->m_cond=InferiorEqual;
-                          break;
-                      default:
-                          kdDebug()<<" Error in validation Operator :"<<value<<endl;
-                          break;
-                      }
-                  }
-                  if ( validation_element.hasAttribute( "Type" ) )
-                  {
-                      int value = validation_element.attribute( "Operator" ).toInt();
-                      switch( value )
-                      {
-                      case 0:
-                          kspread_validity->m_allow=Allow_All;
-                          break;
-                      case 1:
-                          kspread_validity->m_allow=Allow_Integer;
-                          break;
-                      case 2:
-                          kspread_validity->m_allow=Allow_Number;
-                          break;
-                      case 3:
-                          kspread_validity->m_allow=Allow_List;
-                          break;
-                      case 4:
-                          kspread_validity->m_allow=Allow_Date;
-                          break;
-                      case 5:
-                          kspread_validity->m_allow=Allow_Time;
-                          break;
-                      case 6:
-                          kspread_validity->m_allow=Allow_TextLength;
-                          break;
-                      default:
-                          kdDebug()<<" Error in Type element : "<<value<<endl;
-                      }
-
-                  }
-                  //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
-                  //<gmr:Expression0>745</gmr:Expression0>
-                  //<gmr:Expression1>4546</gmr:Expression1>
-              }
-          }
-          if (!font.isNull())
-          {
-            QDomElement font_element = font.toElement();
-
-            kspread_cell->setTextFontFamily( font_element.text() );
-
-            if (!font_element.isNull())
-            {
-              if (font_element.attribute("Italic") == "1")
-              { kspread_cell->setTextFontItalic(true); }
-
-              if (font_element.attribute("Bold") == "1")
-              { kspread_cell->setTextFontBold(true); }
-
-              if (font_element.hasAttribute("Underline") && ( font_element.attribute("Underline") != "0") )
-              { kspread_cell->setTextFontUnderline(true); }
-
-              if (font_element.hasAttribute("StrikeThrough" ) && ( font_element.attribute("StrikeThrough") != "0") )
-              { kspread_cell->setTextFontStrike(true); }
-
-              if (font_element.hasAttribute("Unit"))
-              { kspread_cell->setTextFontSize(font_element.attribute("Unit").toInt()); }
-
-            }
-            if ( !hyperlink.isNull() )
-            {
-                //<gmr:HyperLink type="GnmHLinkURL" target="www.kde.org"/>
-                if ( hyperlink.toElement().hasAttribute( "type" ) )
+                for ( row = startRow; row <= endRow; ++row )
                 {
-                    QString linkType= hyperlink.toElement().attribute( "type" );
-                    QString target = hyperlink.toElement().attribute( "target" );
-                    QString tip = hyperlink.toElement().attribute( "tip" );
-                    if ( !tip.isEmpty() )
-                        kspread_cell->setCellText( tip );
-                    if ( linkType=="GnmHLinkURL" )
-                    {
-                        if ( !target.startsWith( "http://" ) )
-                            target="http://"+target;
-                        kspread_cell->setLink( target );
-                    }
-                    else if ( linkType=="GnmHLinkEMail" )
-                    {
-                        if ( !target.startsWith( "mailto:/" ) )
-                            target="mailto:/"+target;
-                        kspread_cell->setLink( target );
-                    }
-                    else if ( linkType=="GnmHLinkExternal" )
-                    {
-                        if ( !target.startsWith( "file://" ) )
-                            target="file://"+target;
+                    kdDebug(30521) << "Cell: " << column << ", " << row << endl;
+                    KSpreadCell * kspread_cell = table->cellAt( column, row, false );
 
-                        kspread_cell->setLink( target );
-                    }
-                    else if ( linkType=="GnmHLinkCurWB" )
+                    // don't create new cells -> don't apply format on empty cells, if bigger region
+                    if ( ( kspread_cell->isDefault() || kspread_cell->isEmpty() )
+                         && ( ( endCol - startCol > 2 ) || ( endRow - startRow > 2 ) ) )
                     {
-                        kspread_cell->setLink( target );
+                        kdDebug(30521) << "CELL EMPTY OR RANGE TOO BIG " << endl;
+                        continue;
                     }
-                    else
-                        kdDebug()<<" linkType not defined : "<<linkType<<endl;
+
+                    QDomElement style_element = style.toElement(); // try to convert the node to an element.
+
+                    kdDebug(30521) << "Style valid for kspread" << endl;
+                    kspread_cell = table->nonDefaultCell( column, row, false );
+
+                    if (style_element.hasAttribute("Fore"))
+                    {
+                        QString color_string = style_element.attribute("Fore");
+                        QColor color;
+                        convert_string_to_qcolor(color_string, &color);
+                        kspread_cell->setTextColor(color);
+                    }
+
+                    if (style_element.hasAttribute("Back"))
+                    {
+                        QString color_string = style_element.attribute("Back");
+                        QColor color;
+                        convert_string_to_qcolor(color_string, &color);
+                        kspread_cell->setBgColor(color);
+                    }
+
+                    if (style_element.hasAttribute("PatternColor"))
+                    {
+                        QString color_string = style_element.attribute("PatternColor");
+                        QColor color;
+                        convert_string_to_qcolor(color_string, &color);
+                        kspread_cell->setBackGroundBrushColor( color );
+                    }
+
+                    if (style_element.hasAttribute("Shade"))
+                    {
+                        /* Pattern's taken from: gnumeric's pattern.c */
+                        /* if "TODO" added: doesn't match exactly the gnumeric one */
+
+                        QString shade = style_element.attribute("Shade");
+                        if (shade == "0")
+                        {
+                            // nothing to do
+                        }
+                        else if (shade == "1")
+                        {
+                            /* 1 Solid */
+                            //kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
+                            //This is as empty
+                            /* What should this be? */
+
+                        }
+                        else if (shade == "2")
+                        {
+                            /* 2 75% */
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense2Pattern);
+                        }
+                        else if (shade == "3")
+                        {
+                            /* 3 50% */
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense4Pattern);
+                        }
+                        else if (shade == "4")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense5Pattern);
+                            /* This should be 25%... All qt has is 37% */
+
+                            /* 4 25% */
+                        }
+                        else if (shade == "5")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense6Pattern);
+                            /* 5 12.5% */
+                        }
+                        else if (shade == "6")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense7Pattern);
+                            /* 6 6.25% */
+
+                        }
+                        else if (shade == "7")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::HorPattern);
+                            /* 7 Horizontal Stripe */
+                        }
+                        else if (shade == "8")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::VerPattern);
+                            /* 8 Vertical Stripe */
+                        }
+                        else if (shade == "9")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::BDiagPattern);
+                            /* 9 Reverse Diagonal Stripe */
+                        }
+                        else if (shade == "10")
+                        {
+                            /* 10 Diagonal Stripe */
+                            kspread_cell->setBackGroundBrushStyle(Qt::FDiagPattern);
+                        }
+                        else if (shade == "11")
+                        {
+                            /* 11 Diagonal Crosshatch */
+                            kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                        }
+                        else if (shade == "12")
+                        {
+                            /* 12 Thick Diagonal Crosshatch TODO!*/
+                            kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                        }
+                        else if (shade == "13")
+                        {
+                            /* 13 Thin Horizontal Stripe TODO: wrong: this is thick!*/
+                            kspread_cell->setBackGroundBrushStyle(Qt::HorPattern);
+                        }
+                        else if (shade == "14")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::VerPattern);
+                        }
+                        else if (shade == "15")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::FDiagPattern);
+                        }
+                        else if (shade == "16")
+                        {
+                            /* 16 Thick Reverse Stripe TODO:*/
+                            kspread_cell->setBackGroundBrushStyle(Qt::BDiagPattern);
+                        }
+                        else if (shade == "17")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                        }
+                        else if (shade == "18")
+                        {
+                            kspread_cell->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                        }
+                        else if (shade == "19")
+                        {
+                            /* 19 Applix small circle */
+                        }
+                        else if (shade == "20")
+                        {
+                            /* 20 Applix semicircle */
+                        }
+                        else if (shade == "21")
+                        {
+                            /* 21 Applix small thatch */
+                        }
+                        else if (shade == "22")
+                        {
+                            /* 22 Applix round thatch */
+                        }
+                        else if (shade == "23")
+                        {
+                            /* 23 Applix Brick */
+                        }
+                        else if (shade == "24")
+                        {
+                            /* 24 100% */
+                            kspread_cell->setBackGroundBrushStyle(Qt::SolidPattern);
+                        }
+                        else if (shade == "25")
+                        {
+                            /* 25 87.5% */
+                            kspread_cell->setBackGroundBrushStyle(Qt::Dense2Pattern);
+                        }
+                    }
+
+                    if ( style_element.hasAttribute( "Rotation" ) )
+                    {
+                        int rot = style_element.attribute( "Rotation" ).toInt();
+                        kspread_cell->setAngle( -1* rot );
+                    }
+                    if (style_element.hasAttribute("Indent"))
+                    {
+                        double indent = style_element.attribute("Indent").toDouble();
+                        // gnumeric saves indent in characters, we in points:
+                        kspread_cell->setIndent( indent * 10.0 );
+                    }
+
+                    if (style_element.hasAttribute("HAlign"))
+                    {
+                        QString halign_string=style_element.attribute("HAlign");
+
+                        if (halign_string == "1")
+                        {
+                            /* General: No equivalent in Kspread. */
+                        }
+                        else if (halign_string == "2")
+                        {
+                            kspread_cell->setAlign(KSpreadCell::Left);
+                        }
+                        else if (halign_string == "4")
+                        {
+                            kspread_cell->setAlign(KSpreadCell::Right);
+                        }
+                        else if (halign_string == "8")
+                        {
+                            kspread_cell->setAlign(KSpreadCell::Center);
+                        }
+                        else if (halign_string == "16")
+                        {
+                            /* Fill: No equivalent in Kspread. */
+                        }
+                        else if (halign_string == "32")
+                        {
+                            /* Justify: No equivalent in Kspread */
+                        }
+                        else if (halign_string == "64")
+                        {
+                            /* Centered across selection*/
+                        }
+
+                    }
+
+                    if (style_element.hasAttribute("VAlign"))
+                    {
+                        QString valign_string=style_element.attribute("VAlign");
+
+                        if (valign_string == "1")
+                        {
+                            /* General: No equivalent in Kspread. */
+                            kspread_cell->setAlignY(KSpreadCell::Top);
+                        }
+                        else if (valign_string == "2")
+                        {
+                            kspread_cell->setAlignY(KSpreadCell::Bottom);
+                        }
+                        else if (valign_string == "4")
+                        {
+                            kspread_cell->setAlignY(KSpreadCell::Middle);
+                        }
+                        else if (valign_string == "8")
+                        {
+                            /* Justify: No equivalent in Kspread */
+                        }
+                    }
+
+                    if (style_element.hasAttribute("WrapText"))
+                    {
+                        QString multiRow = style_element.attribute("WrapText");
+
+                        if ( multiRow == "1" )
+                            kspread_cell->setMultiRow( true );
+                    }
+
+                    if (style_element.hasAttribute("Format"))
+                    {
+                        QString formatString = style_element.attribute("Format");
+
+                        kdDebug(30521) << "Format: " << formatString << endl;
+                        ParseFormat(formatString, kspread_cell);
+
+                    } // End "Format"
+
+                    if (!gmr_styleborder.isNull())
+                    {
+                        QDomElement style_element = gmr_styleborder.toElement(); // try to convert the node to an element.
+                        ParseBorder( style_element, kspread_cell );
+                    }
+                    if ( !validation.isNull() )
+                    {
+                        QDomElement validation_element = validation.toElement();
+                        if ( !validation_element.isNull() )
+                        {
+                            kdDebug(30521)<<" Cell validation \n";
+                            KSpreadValidity* kspread_validity = kspread_cell->getValidity();
+                            if ( validation_element.hasAttribute( "AllowBlank" ) && validation_element.attribute( "AllowBlank" )=="true" )
+                            {
+                                kspread_validity->allowEmptyCell=true;
+                            }
+                            if ( validation_element.hasAttribute( "Title" ))
+                            {
+                                kspread_validity->title=validation_element.attribute( "Title" );
+                            }
+                            if ( validation_element.hasAttribute( "Message" ))
+                            {
+                                kspread_validity->message=validation_element.attribute( "Message" );
+                            }
+                            if ( validation_element.hasAttribute( "Style" ) )
+                            {
+                                int value = validation_element.attribute( "Style" ).toInt();
+                                switch( value )
+                                {
+                                case 0:
+                                    kspread_validity->displayMessage=false;
+                                    break;
+                                case 1:
+                                    kspread_validity->m_action=Stop;
+                                    break;
+                                case 2:
+                                    kspread_validity->m_action=Warning;
+                                    break;
+                                case 3:
+                                    kspread_validity->m_action=Information;
+                                    break;
+                                default:
+                                    kdDebug()<<" Error in validation style :"<<value<<endl;
+                                    break;
+                                }
+                            }
+                            QDomNode expression0 = validation_element.namedItem( "gmr:Expression0" );
+                            QDomNode expression1 = validation_element.namedItem( "gmr:Expression1" );
+                            //kdDebug()<<" expression0.isNull() "<<expression0.isNull()<<endl;
+                            //kdDebug()<<" expression1.isNull() "<<expression1.isNull()<<endl;
+                            if ( validation_element.hasAttribute( "Type" ) )
+                            {
+                                int valueOp = validation_element.attribute( "Operator" ).toInt();
+                                switch( valueOp )
+                                {
+                                case 0:
+                                    kspread_validity->m_allow=Allow_All;
+                                    break;
+                                case 1:
+                                {
+                                    kspread_validity->m_allow=Allow_Integer;
+                                    if ( validation_element.hasAttribute( "Operator" ) )
+                                    {
+                                        int value = validation_element.attribute( "Operator" ).toInt();
+
+                                        switch( value )
+                                        {
+                                        case 0:
+                                            kspread_validity->m_cond=Between;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 1:
+                                            kspread_validity->m_cond=DifferentTo;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 2:
+                                            kspread_validity->m_cond=Equal;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 3:
+                                            kspread_validity->m_cond=Different;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 4:
+                                            kspread_validity->m_cond=Superior;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 5:
+                                            kspread_validity->m_cond=Inferior;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 6:
+                                            kspread_validity->m_cond=SuperiorEqual;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 7:
+                                            kspread_validity->m_cond=InferiorEqual;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        default:
+                                            kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                                case 2:
+                                    kspread_validity->m_allow=Allow_Number;
+                                    if ( validation_element.hasAttribute( "Operator" ) )
+                                    {
+                                        int value = validation_element.attribute( "Operator" ).toInt();
+                                        switch( value )
+                                        {
+                                        case 0:
+                                            kspread_validity->m_cond=Between;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 1:
+                                            kspread_validity->m_cond=DifferentTo;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 2:
+                                            kspread_validity->m_cond=Equal;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 3:
+                                            kspread_validity->m_cond=Different;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 4:
+                                            kspread_validity->m_cond=Superior;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 5:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            kspread_validity->m_cond=Inferior;
+                                            break;
+                                        case 6:
+                                            kspread_validity->m_cond=SuperiorEqual;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 7:
+                                            kspread_validity->m_cond=InferiorEqual;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        default:
+                                            kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case 3:
+                                    kspread_validity->m_allow=Allow_List;
+                                    break;
+                                case 4:
+                                    kspread_validity->m_allow=Allow_Date;
+                                    if ( validation_element.hasAttribute( "Operator" ) )
+                                    {
+                                        int value = validation_element.attribute( "Operator" ).toInt();
+                                        switch( value )
+                                        {
+                                        case 0:
+                                            kspread_validity->m_cond=Between;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->dateMax=QDate::fromString( expression1.toElement().text() );
+
+                                            break;
+                                        case 1:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->dateMax=QDate::fromString( expression1.toElement().text() );
+                                            kspread_validity->m_cond=DifferentTo;
+                                            break;
+                                        case 2:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Equal;
+                                            break;
+                                        case 3:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Different;
+                                            break;
+                                        case 4:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Superior;
+                                            break;
+                                        case 5:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Inferior;
+                                            break;
+                                        case 6:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=SuperiorEqual;
+                                            break;
+                                        case 7:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->dateMin=QDate::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=InferiorEqual;
+                                            break;
+                                        default:
+                                            kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case 5:
+                                    kspread_validity->m_allow=Allow_Time;
+                                    if ( validation_element.hasAttribute( "Operator" ) )
+                                    {
+                                        int value = validation_element.attribute( "Operator" ).toInt();
+                                        switch( value )
+                                        {
+                                        case 0:
+                                            kspread_validity->m_cond=Between;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->timeMax=QTime::fromString( expression1.toElement().text() );
+                                            break;
+                                        case 1:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->timeMax=QTime::fromString( expression1.toElement().text() );
+                                            kspread_validity->m_cond=DifferentTo;
+                                            break;
+                                        case 2:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Equal;
+                                            break;
+                                        case 3:
+                                            kspread_validity->m_cond=Different;
+                                            break;
+                                        case 4:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=Superior;
+                                            break;
+                                        case 5:
+                                            kspread_validity->m_cond=Inferior;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            break;
+                                        case 6:
+                                            kspread_validity->m_cond=SuperiorEqual;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            break;
+                                        case 7:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->timeMin=QTime::fromString( expression0.toElement().text() );
+                                            kspread_validity->m_cond=InferiorEqual;
+                                            break;
+                                        default:
+                                            kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case 6:
+                                    kspread_validity->m_allow=Allow_TextLength;
+                                    if ( validation_element.hasAttribute( "Operator" ) )
+                                    {
+                                        int value = validation_element.attribute( "Operator" ).toInt();
+                                        switch( value )
+                                        {
+                                        case 0:
+                                            kspread_validity->m_cond=Between;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 1:
+                                            kspread_validity->m_cond=DifferentTo;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            if ( !expression1.isNull() )
+                                                kspread_validity->valMax=expression1.toElement().text().toInt();
+                                            break;
+                                        case 2:
+                                            kspread_validity->m_cond=Equal;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 3:
+                                            kspread_validity->m_cond=Different;
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            break;
+                                        case 4:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            kspread_validity->m_cond=Superior;
+                                            break;
+                                        case 5:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            kspread_validity->m_cond=Inferior;
+                                            break;
+                                        case 6:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            kspread_validity->m_cond=SuperiorEqual;
+                                            break;
+                                        case 7:
+                                            if ( !expression0.isNull() )
+                                                kspread_validity->valMin=expression0.toElement().text().toInt();
+                                            kspread_validity->m_cond=InferiorEqual;
+                                            break;
+                                        default:
+                                            kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    kdDebug()<<" Error in Type element : "<<valueOp<<endl;
+                                }
+
+                            }
+                            //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
+                            //<gmr:Expression0>745</gmr:Expression0>
+                            //<gmr:Expression1>4546</gmr:Expression1>
+                        }
+                    }
+                    if (!font.isNull())
+                    {
+                        QDomElement font_element = font.toElement();
+
+                        kspread_cell->setTextFontFamily( font_element.text() );
+
+                        if (!font_element.isNull())
+                        {
+                            if (font_element.attribute("Italic") == "1")
+                            { kspread_cell->setTextFontItalic(true); }
+
+                            if (font_element.attribute("Bold") == "1")
+                            { kspread_cell->setTextFontBold(true); }
+
+                            if (font_element.hasAttribute("Underline") && ( font_element.attribute("Underline") != "0") )
+                            { kspread_cell->setTextFontUnderline(true); }
+
+                            if (font_element.hasAttribute("StrikeThrough" ) && ( font_element.attribute("StrikeThrough") != "0") )
+                            { kspread_cell->setTextFontStrike(true); }
+
+                            if (font_element.hasAttribute("Unit"))
+                            { kspread_cell->setTextFontSize(font_element.attribute("Unit").toInt()); }
+
+                        }
+                        if ( !hyperlink.isNull() )
+                        {
+                            //<gmr:HyperLink type="GnmHLinkURL" target="www.kde.org"/>
+                            if ( hyperlink.toElement().hasAttribute( "type" ) )
+                            {
+                                QString linkType= hyperlink.toElement().attribute( "type" );
+                                QString target = hyperlink.toElement().attribute( "target" );
+                                QString tip = hyperlink.toElement().attribute( "tip" );
+                                if ( !tip.isEmpty() )
+                                    kspread_cell->setCellText( tip );
+                                if ( linkType=="GnmHLinkURL" )
+                                {
+                                    if ( !target.startsWith( "http://" ) )
+                                        target="http://"+target;
+                                    kspread_cell->setLink( target );
+                                }
+                                else if ( linkType=="GnmHLinkEMail" )
+                                {
+                                    if ( !target.startsWith( "mailto:/" ) )
+                                        target="mailto:/"+target;
+                                    kspread_cell->setLink( target );
+                                }
+                                else if ( linkType=="GnmHLinkExternal" )
+                                {
+                                    if ( !target.startsWith( "file://" ) )
+                                        target="file://"+target;
+
+                                    kspread_cell->setLink( target );
+                                }
+                                else if ( linkType=="GnmHLinkCurWB" )
+                                {
+                                    kspread_cell->setLink( target );
+                                }
+                                else
+                                    kdDebug()<<" linkType not defined : "<<linkType<<endl;
+                            }
+                        }
+                    }
                 }
             }
-          }
+            style_region = style_region.nextSibling();
         }
-      }
-      style_region = style_region.nextSibling();
-    }
 
-  }
+    }
 }
 
 /* NOTE: As of now everything is in a single huge function.  This is
