@@ -524,20 +524,22 @@ KPTDateTime KPTTask::schedulePredeccessors(const QPtrList<KPTRelation> &list, in
         }
         // schedule the predecessors
         KPTDateTime earliest = it.current()->parent()->getEarliestStart();
-        time = it.current()->parent()->scheduleForward(earliest, use);
+        KPTDateTime t = it.current()->parent()->scheduleForward(earliest, use);
         switch (it.current()->timingRelation()) {
             case START_START:
-                time = it.current()->parent()->startTime() + it.current()->lag();
+                t = it.current()->parent()->startTime() + it.current()->lag();
                 break;
             case FINISH_FINISH:
                 // I can't end before my predecessor, so
                 // I can't start before it's endtime - my duration
-                time -= duration(time + it.current()->lag(), use, true);
+                t -= duration(t + it.current()->lag(), use, true);
                 break;
             default:
                 time += it.current()->lag();
                 break;
         }
+        if (!time.isValid() || t > time)
+            time = t;
     }
     kdDebug()<<time.toString()<<" "<<m_name<<" schedulePredeccessors()"<<endl;
     return time;
@@ -627,20 +629,22 @@ KPTDateTime KPTTask::scheduleSuccessors(const QPtrList<KPTRelation> &list, int u
         }
         // get the successors starttime
         KPTDateTime latest = it.current()->child()->getLatestFinish();
-        time = it.current()->child()->scheduleBackward(latest, use);
+        KPTDateTime t = it.current()->child()->scheduleBackward(latest, use);
         switch (it.current()->timingRelation()) {
             case START_START:
                 // I can't start before my successor, so
                 // I can't finish later than it's starttime + my duration
-                time += duration(time - it.current()->lag(), use, false);
+                t += duration(t - it.current()->lag(), use, false);
                 break;
             case FINISH_FINISH:
-                time = it.current()->child()->endTime() - it.current()->lag();
+                t = it.current()->child()->endTime() - it.current()->lag();
                 break;
             default:
-                time -= it.current()->lag();
+                t -= it.current()->lag();
                 break;
         }
+        if (!time.isValid() || t < time)
+            time = t;
    }
    return time;
 }
