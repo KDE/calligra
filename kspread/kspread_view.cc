@@ -296,9 +296,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_selectFont, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
     m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0, actionCollection(), "selectFontSize" );
     connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( fontSizeSelected( int ) ) );
-    m_deleteColumn = new KAction( i18n("Delete Column"), "colout", 0, this, SLOT( deleteColumn() ),
+    m_deleteColumn = new KAction( i18n("Delete Column"), "delete_table_col", 0, this, SLOT( deleteColumn() ),
 				  actionCollection(), "deleteColumn" );
-    m_deleteRow = new KAction( i18n("Delete Row"), "rowout", 0, this, SLOT( deleteRow() ),
+    m_deleteRow = new KAction( i18n("Delete Row"), "delete_table_row", 0, this, SLOT( deleteRow() ),
 			       actionCollection(), "deleteRow" );
     m_insertColumn = new KAction( i18n("Insert Column"), "insert_table_col" , 0, this, SLOT( insertColumn() ),
 				  actionCollection(), "insertColumn" );
@@ -1955,7 +1955,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn= new QPopupMenu();
 
     m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
-    m_pPopupColumn->insertItem( KSBarIcon("colout"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
     m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotPopupResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
@@ -2017,7 +2017,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_pPopupRow= new QPopupMenu();
 
     m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
-    m_pPopupRow->insertItem( KSBarIcon("rowout"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );
     m_pPopupRow->insertItem( KSBarIcon("resizerow"),i18n("Resize..."), this, SLOT( slotPopupResizeRow() ) );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
 
