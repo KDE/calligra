@@ -64,7 +64,7 @@ class SequenceElement;
  *
  * To build a tree an element must own children. If there are children
  * there must be a main child. This is the child that might be used to
- * replace the element. See @ref getMainChild and @ref setMainChild .
+ * replace the element. See @ref getMainChild().
  *
  * If there can be children you might want to @ref insert and @ref remove
  * them. After a removal the element might be senseless.
