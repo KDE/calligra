@@ -1,4 +1,5 @@
 Bug-List
+========
 
 See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
 ------------------------------------
@@ -12,22 +13,18 @@ Bugs from above bug page:
 ------------------------------------
 
 * Keyword/Comment support (see GDocument and DocumentInfo) doesn't work yet
+  (Problem: readFromXml doesn't work, yet)
 
-* Right mouse button menu is not available in the KO version
+* KO: View: Grid and Helpline are initialy unchecked, despite their status
 
 * statusbar for the Koffice version, or is this lack a feature?
-
-* The menu entries should obey the standard that a ... follows commands which
-  exec a dialog(ue), what should appear when a flowing window is open (something
-  like "Layer") "..." as with "Layer..." or "" as in Arrange|Transform|* ?
 
 * Available menu commands and toolbar arrangement differ between
   the standardalone version and the koffice version.
   - Extras|Options is not available in the koffice version
   - The toolbar with filenew and copy is in fact two toolbars in the koffice
-    version
+    version (maybe put it in one line as in KWord)
   - Recent files don't appear in ko, whereas no icons are shown in the s-alone
-  - KO: No checkmarks appear in the view menu
   - Page dialog:
     - draw area right: ok in KO, some line draw and orientation change gliches
     - Unit menu: KO: greyed out, SO: enabled
@@ -44,7 +41,7 @@ Bugs from above bug page:
   (it doesn't appear)
 
 * Disableing of the ruler doesn't work (everything is painted in the colour of
-  the ruler background)
+  the ruler background) (This is Qt cvs post 2.0.2, pre 2.1.x; KO+SO)
 
 * undo/redo for layers
   Presently delated layers disappear in the nirvana
@@ -61,8 +58,6 @@ Bugs from above bug page:
 * Translation (not moving)
   Objectname Rectangle and Square are no translatable (at least they are not in
   de.po)
-
-* Default name of Layers ("Layer #1") should be i18n-able
 
 * When alternating the page orientation (menu Layout|Page),
   after the first Landscape <-> Portait change the displayed

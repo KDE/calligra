@@ -290,29 +290,32 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   // Menu: View
   text = i18n ("&View") ;
   menubar->insertMenu (text, m_vMenuView, -1, -1);
+  m_vMenuView->setCheckable (true);
+  
   text = i18n ("Outline") ;
   m_idMenuView_Outline =
-    m_vMenuView->insertItem (text, this, "viewOutline", 0);
-  m_vMenuView->setCheckable (true);
+    m_vMenuView->insertItem4 (text, this, "viewOutline", 0,-1,-1);
+  m_vMenuView->setItemChecked (m_idMenuView_Outline, false); 
   text = i18n ("Normal") ;
   m_idMenuView_Normal =
-    m_vMenuView->insertItem (text, this, "viewNormal", 0);
+    m_vMenuView->insertItem4 (text, this, "viewNormal", 0,-1,-1);
+  m_vMenuView->setItemChecked (m_idMenuView_Normal, true);
   m_vMenuView->insertSeparator (-1);
   text = i18n ("Layers...") ;
   m_idMenuView_Layers =
-    m_vMenuView->insertItem (text, this, "editLayers", 0);
+    m_vMenuView->insertItem4 (text, this, "editLayers", 0,-1,-1);
   m_vMenuView->insertSeparator (-1);
   text = i18n ("Ruler") ;
   m_idMenuView_Ruler =
-    m_vMenuView->insertItem (text, this, "toggleRuler", 0);
+    m_vMenuView->insertItem4 (text, this, "toggleRuler", 0,-1,-1);
   m_vMenuView->setItemChecked (m_idMenuView_Ruler, m_bShowRulers);
   text = i18n ("Grid") ;
   m_idMenuView_Grid =
-    m_vMenuView->insertItem (text, this, "toggleGrid", 0);
+    m_vMenuView->insertItem4 (text, this, "toggleGrid", 0,-1,-1);
   m_vMenuView->setItemChecked (m_idMenuView_Grid, false);
   text = i18n ("Helplines") ;
   m_idMenuView_Helplines =
-    m_vMenuView->insertItem (text, this, "toggleHelplines", 0);
+    m_vMenuView->insertItem4 (text, this, "toggleHelplines", 0,-1,-1);
   m_vMenuView->setItemChecked (m_idMenuView_Helplines, false);
 
   // Menu: Layout
@@ -1047,13 +1050,13 @@ void KIllustratorView::transformMirror () {
 void KIllustratorView::toggleGrid () {
   bool gridIsShown = ! canvas->showGrid ();
   canvas->showGrid (gridIsShown);
-  m_vMenuLayout->setItemChecked (m_idMenuView_Grid, gridIsShown);
+  m_vMenuView->setItemChecked (m_idMenuView_Grid, gridIsShown);
 }
 
 void KIllustratorView::toggleHelplines () {
   bool linesAreShown = ! canvas->showHelplines ();
   canvas->showHelplines (linesAreShown);
-  m_vMenuLayout->setItemChecked (m_idMenuView_Helplines, linesAreShown);
+  m_vMenuView->setItemChecked (m_idMenuView_Helplines, linesAreShown);
 }
 
 void KIllustratorView::setupGrid () {
