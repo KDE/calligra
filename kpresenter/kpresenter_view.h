@@ -223,6 +223,11 @@ public slots:
     void nextPage();
     void prevPage();
 
+    /**
+     * Update a given item in the sidebar
+     */
+    void updateSideBarItem( int pagenr );
+
 public:
     // create GUI
     virtual void createGUI();
@@ -314,10 +319,6 @@ public:
      * Rebuild the whole sidebar
      */
     void updateSideBar();
-    /**
-     * Update a given item in the sidebar
-     */
-    void updateSideBarItem( int pagenr );
 
 protected slots:
     // dialog slots

@@ -302,6 +302,7 @@ signals:
     void fontChanged( const QFont & );
     void colorChanged( const QColor & );
     void alignChanged( int );
+    void updateSideBarItem( int );
     void stopPres();
 
 };

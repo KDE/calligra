@@ -234,6 +234,7 @@ KPresenterView::~KPresenterView()
     delete rb_lbegin;
     delete rb_lend;
     delete dcop;
+    delete page; // it's a child widget, but it emits a signal on destruction
 }
 
 /*=========================== file print =======================*/
@@ -1630,6 +1631,8 @@ void KPresenterView::createGUI()
 		      this, SLOT( colorChanged( const QColor & ) ) );
     QObject::connect( page, SIGNAL( alignChanged( int ) ),
 		      this, SLOT( alignChanged( int ) ) );
+    QObject::connect( page, SIGNAL( updateSideBarItem( int ) ),
+                      this, SLOT( updateSideBarItem( int ) ) );
 
     // This sucks when resizing the window
     //splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );

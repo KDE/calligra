@@ -3963,7 +3963,7 @@ void Page::exitEditMode()
 
             //kdDebug() << "Page::exitEditMode page=" << currPgNum()-1 << endl;
             // Title of slide may have changed
-            view->updateSideBarItem( currPgNum()-1 );
+            emit updateSideBarItem( currPgNum()-1 );
 
         } else if ( kpobject->getType() == OT_PART ) {
             kpobject->deactivate();
