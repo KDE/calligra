@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 #include "kpresenter_view.h"
 #include "kpresenter_factory.h"
 #include <kstddirs.h>
+#include <kaboutdialog.h>
 
 KPresenterShell::KPresenterShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
@@ -54,6 +55,18 @@ void KPresenterShell::setRootPart( Part *part )
 void KPresenterShell::slotFilePrint()
 {
     ( (KPresenterView*)rootView() )->printDlg();
+}
+
+void KPresenterShell::slotHelpAbout()
+{
+    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageLeft | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
+					  kapp->caption(),
+					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
+    dia->setTitle( "KOffice - the KDE Office Suite" );
+    dia->setProduct( "KPresenter", KPRESENTER_VERSION, "Reginald Stadlbauer <reggie@kde.org>", "1998-1999" );
+    dia->setImage( locate( "toolbar", "koffice-logo", KPresenterFactory::global() ) );
+    dia->exec();
+    delete dia;
 }
 
 #include "kpresenter_shell.moc"

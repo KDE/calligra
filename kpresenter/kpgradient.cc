@@ -1,17 +1,21 @@
-/******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
-/* Version: 0.1.0						  */
-/* Author: Reginald Stadlbauer					  */
-/* E-Mail: reggie@kde.org					  */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
-/* needs OpenParts and Kom (weis@kde.org)			  */
-/* License: GNU GPL						  */
-/******************************************************************/
-/* Module: Gradients						  */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kpgradient.h"
 
@@ -65,56 +69,56 @@ void KPGradient::paint()
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient,
 					       xFactor, yFactor );
     } break;
     case BCT_GVERT: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient,
 					       xFactor, yFactor );
     } break;
     case BCT_GDIAGONAL1: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient,
 					       xFactor, yFactor );
     } break;
     case BCT_GDIAGONAL2: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::CrossDiagonalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2,
 					       KPixmapEffect::CrossDiagonalGradient,  xFactor, yFactor );
     } break;
     case BCT_GCIRCLE: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::EllipticGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2,
 					       KPixmapEffect::EllipticGradient, xFactor, yFactor );
     } break;
     case BCT_GRECT: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::RectangleGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2,
 					       KPixmapEffect::RectangleGradient, xFactor, yFactor );
     } break;
     case BCT_GPIPECROSS: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::PipeCrossGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2,
 					       KPixmapEffect::PipeCrossGradient, xFactor, yFactor );
     } break;
     case BCT_GPYRAMID: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::PyramidGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2,
 					       KPixmapEffect::PyramidGradient, xFactor, yFactor );
     } break;
     }

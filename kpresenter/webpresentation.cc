@@ -1,17 +1,21 @@
-/******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1999		  */
-/* Version: 0.1.0						  */
-/* Author: Reginald Stadlbauer					  */
-/* E-Mail: reggie@kde.org					  */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
-/* needs OpenParts and Kom (weis@kde.org)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* License: GNU GPL						  */
-/******************************************************************/
-/* Module: KPWebPresentation					  */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "webpresentation.h"
 #include "webpresentation.moc"
@@ -389,7 +393,7 @@ void KPWebPresentation::init()
 /******************************************************************/
 
 /*================================================================*/
-KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc, 
+KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc,
 						  KPresenterView *_view )
     : QWizard( 0, "", FALSE ), config( _config ), webPres( config, _doc, _view )
 {
@@ -412,7 +416,7 @@ KPWebPresentationWizard::~KPWebPresentationWizard()
 }
 
 /*================================================================*/
-void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPresenterDoc *_doc, 
+void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPresenterDoc *_doc,
 						     KPresenterView *_view )
 {
     KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
@@ -428,7 +432,7 @@ void KPWebPresentationWizard::setupPage1()
     page1 = new QHBox( this );
     page1->setSpacing( 5 );
     page1->setMargin( 5 );
-    
+
     QLabel *helptext = new QLabel( page1 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
@@ -586,13 +590,13 @@ void KPWebPresentationWizard::setupPage3()
     label->setMaximumWidth( label->sizeHint().width() );
 
     slideTitle = new QLineEdit( row );
-    connect( slideTitle, SIGNAL( textChanged( const QString & ) ), this, 
+    connect( slideTitle, SIGNAL( textChanged( const QString & ) ), this,
 	     SLOT( slideTitleChanged( const QString & ) ) );
 
     slideTitles = new QListView( canvas );
     slideTitles->addColumn( i18n( "Slide Nr." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
-    connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this, 
+    connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
 	     SLOT( slideTitleChanged( QListViewItem * ) ) );
     slideTitles->setSorting( -1 );
     slideTitles->header()->setMovingEnabled( FALSE );
@@ -663,7 +667,7 @@ void KPWebPresentationWizard::pageChanged()
 {
     if ( currentPage() != page3 ) {
 	if ( !isPathValid() ) {
-	    QMessageBox::critical( 0, i18n( "Invalid Path" ), 
+	    QMessageBox::critical( 0, i18n( "Invalid Path" ),
 				   i18n( "The path you entered is not a valid directory!\n"
 					 "Please correct this." ),
 				   i18n( "OK" ) );
@@ -702,7 +706,7 @@ void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
 /******************************************************************/
 
 /*================================================================*/
-KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view, 
+KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
 							      const KPWebPresentation &_webPres )
     : QDialog( 0, "", FALSE ), webPres( _webPres )
 {
@@ -719,7 +723,7 @@ KPWebPresentationCreateDialog::~KPWebPresentationCreateDialog()
 }
 
 /*================================================================*/
-void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view, 
+void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view,
 							   const KPWebPresentation &_webPres )
 {
     KPWebPresentationCreateDialog *dlg = new KPWebPresentationCreateDialog( _doc, _view, _webPres );

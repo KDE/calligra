@@ -91,9 +91,6 @@ k_dcop:
     virtual void screenPenColor();
     virtual void screenPenWidth( const QString &w );
 
-    // help menu
-    virtual void helpContents();
-
     // text toolbar
     virtual void sizeSelected();
     virtual void fontSelected();

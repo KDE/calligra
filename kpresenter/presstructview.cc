@@ -1,17 +1,21 @@
-/******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
-/******************************************************************/
-/* Module: Presentation Structure Viewer (header)                 */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "presstructview.h"
 #include "presstructview.moc"
@@ -44,13 +48,13 @@ KPSlidePreview::KPSlidePreview( QWidget *parent, KPresenterDoc *_doc, KPresenter
 {
     setFrameStyle( StyledPanel | Sunken );
 }
- 
+
 /*================================================================*/
 void KPSlidePreview::setPage( QListViewItem *item )
 {
     if ( !item )
 	return;
-    
+
     QPixmap pix( QSize( doc->getPageSize( 0, 0, 0 ).width(), doc->getPageSize( 0, 0, 0 ).height() ) );
     pix.fill( Qt::white );
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
@@ -59,7 +63,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
     float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).width() );
     float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).height() );
     float fakt = QMIN( faktW, faktH );
-    
+
     QWMatrix m;
     m.scale( fakt, fakt );
     pix = pix.xForm( m );
@@ -78,7 +82,7 @@ KPPresStructObjectItem::KPPresStructObjectItem( QListView *parent )
     : QListViewItem( parent ), page( 0 ), object( 0 )
 {
 }
-    
+
 /*================================================================*/
 KPPresStructObjectItem::KPPresStructObjectItem( QListViewItem *parent )
     : QListViewItem( parent ), page( 0 ), object( 0 )
@@ -175,7 +179,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
     hsplit = new QSplitter( this );
     setupSlideList();
     setupPagePreview();
-    
+
     resize( 600, 400 );
 }
 
@@ -189,7 +193,7 @@ void KPPresStructView::setupSlideList()
     slides->setAllColumnsShowFocus( TRUE );
     slides->setRootIsDecorated( TRUE );
     slides->setSorting( -1 );
-    
+
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
 	item->setPage( doc->backgroundList()->at( i ), i );
@@ -216,7 +220,7 @@ void KPPresStructView::setupPagePreview()
     showPreview->setChecked( TRUE );
     // #### for now
     showPreview->setEnabled( FALSE );
-    
+
     slidePreview = new KPSlidePreview( box, doc, view );
     connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     slidePreview, SLOT( setPage( QListViewItem * ) ) );

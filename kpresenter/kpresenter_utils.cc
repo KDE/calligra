@@ -1,16 +1,21 @@
-/******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1998                   */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* KPresenter is under GNU GPL                                    */
-/******************************************************************/
-/* Module: KPresenter Utilities                                   */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kpresenter_utils.h"
 
@@ -55,7 +60,7 @@ void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, 
         pArray.setPoint( 0, p1 );
         pArray.setPoint( 1, p2 );
         pArray.setPoint( 2, p3 );
-    
+
         painter->save();
         painter->translate( coord.x(), coord.y() );
         painter->rotate( angle );

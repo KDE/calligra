@@ -1,14 +1,21 @@
-/******************************************************************/
-/* KTextObject - (c) by Reginald Stadlbauer 1998		  */
-/* Version: 0.0.4						  */
-/* Author: Reginald Stadlbauer					  */
-/* E-Mail: reggie@kde.org					  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* KTextObject is under GNU GPL					  */
-/******************************************************************/
-/* Module: Main Widget						  */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "ktextobject.h"
 #include "ktextobject.moc"
@@ -4600,7 +4607,7 @@ void KTextObject::splitParagraph()
 	for ( i = 0; i <= lin->getAfterObj( inLine ); i++ )
 	    para1->append( lin->itemAt( i ) );
 
-	para1->append( new TxtObj( " ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR ) ); 
+	para1->append( new TxtObj( " ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR ) );
 	
 	// insert the objects, which are after the cursor, into the second paragraph
 	for ( i = lin->getBeforeObj( inLine ); i < static_cast<int>( lin->items() ); i++ )
@@ -4621,7 +4628,7 @@ void KTextObject::splitParagraph()
 	delete para3;
 
 	// if the remembered object ( type ) is not a separator -> move cursor one position forward
-	if ( obj && obj->type() != TxtObj::SEPARATOR ) 
+	if ( obj && obj->type() != TxtObj::SEPARATOR )
 	    txtCursor->charForward();
     }
 
@@ -4842,7 +4849,7 @@ bool KTextObject::insertChar( QChar c )
 
     switch ( c ) {
     case ' ': {
-	if ( lin->getInObj( inLine ) != -1 ) 
+	if ( lin->getInObj( inLine ) != -1 )
 	    lin->splitObj( inLine );
 	if ( lin->getAfterObj( inLine ) != -1 )
 	    objPos = lin->getAfterObj( inLine )+1;
