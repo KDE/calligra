@@ -254,6 +254,7 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(h4,NAME,value,h4);
 	_PL(h5,NAME,value,h5);
 	_PL(h6,NAME,value,h6);
+	return false;
 }
 
 

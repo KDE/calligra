@@ -141,7 +141,7 @@ void KWDWriter::createDocInfo(QString author, QString title) {
 }
 
 
-QDomElement KWDWriter::createInline(QDomElement paragraph, QDomElement toInline) {
+void KWDWriter::createInline(QDomElement paragraph, QDomElement toInline) {
  if (toInline.tagName() == "FRAMESET") {
      formatAttribute(paragraph,"ANCHOR","type","frameset");
      // fixme: support other kinds of inlines.
