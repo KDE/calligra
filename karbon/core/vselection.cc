@@ -109,8 +109,8 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 
 	if( selectObjects )
 	{
+		m_objects.clear();
 		VSelectObjects op( m_objects, rect );
-
 		if( op.visit( *static_cast<VDocument*>( parent() ) ) )
 		{
 			selectNodes();
@@ -153,8 +153,8 @@ VSelection::clear()
 	{
 		op.visit( *itr.current() );
 
-		if( itr.current()->state() != deleted )
-			itr.current()->setState( normal );
+		//if( itr.current()->state() != deleted )
+		//	itr.current()->setState( normal );
 	}
 
 	m_objects.clear();
