@@ -173,6 +173,7 @@ void KPTextObject::setSize( double _width, double _height )
     {
         KPObject::setSize( _width, _height );
         resizeTextDocument();
+        recalcVerticalAlignment();
     }
 }
 
@@ -181,6 +182,7 @@ void KPTextObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     resizeTextDocument();
+    recalcVerticalAlignment();
 }
 
 /*========================= save =================================*/
