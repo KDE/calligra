@@ -1925,7 +1925,6 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 
 	bool noSelectionAnymore = hadOldStart && hadOldEnd && leftSelection && !inSelection && !c.parag()->hasSelection( id ) && c.atParagEnd();
 
-	/* if ( !c.parag()->hasChanged() ) */ {
 	    c.parag()->removeSelection( id );
 	    if ( inSelection ) {
 		if ( c.parag() == start.parag() && start.parag() == end.parag() ) {
@@ -1942,7 +1941,6 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 		    c.parag()->setSelection( id, 0, c.parag()->length() - 1 );
 		}
 	    }
-	}
 
 	if ( leftSelection )
 	    inSelection = FALSE;
