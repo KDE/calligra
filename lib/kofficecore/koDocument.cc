@@ -384,7 +384,7 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
 
     CORBA::String_var mime = mimeType();
     store.open( "root", mime.in() );
-    
+
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     if ( !save( &buffer, &store, _format ) )
@@ -392,8 +392,10 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
       store.close();
       return false;
     }
+    buffer.close();
+    store.write( buffer.buffer().data(), buffer.size() );
     store.close();
-
+    
     kdebug( KDEBUG_INFO, 30003, "Saving children" );
 
     // Lets write all direct and indirect children
@@ -542,7 +544,7 @@ CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char 
   {
     KOStore::Data_var data = _store->read( size );
     CORBA::ULong len = data->length();
-    
+
     char* p = buffer.data();
     for( CORBA::ULong i = 0; i < len; ++i )
       *p++ = data[ i ];
