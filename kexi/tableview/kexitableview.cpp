@@ -2060,12 +2060,13 @@ void KexiTableView::acceptEditor()
 		}
 	}
 
+	if (!setNull && !d->pEditor->valueChanged()
+		|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
+		kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
+		removeEditor();
+		return;
+	}
 	if (!setNull) {//get new value 
-		if (!d->pEditor->valueChanged()) {
-			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
-			removeEditor();
-			return;
-		}
 		bool ok;
 		newval = d->pEditor->value(ok);
 		if (!ok) {

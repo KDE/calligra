@@ -402,7 +402,9 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		KexiDB::Field *f = m_fieldsExpanded->at(i);
 		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
-		if (f->isTextType())
+		if (!*col)
+			data[i] = QVariant();
+		else if (f->isTextType())
 			data[i] = QVariant( *col );
 		else if (f->isNumericType())
 			data[i] = QVariant( QCString(*col).toInt() );
