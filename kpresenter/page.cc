@@ -1494,7 +1494,7 @@ void Page::setupMenus()
     pageMenu = new QPopupMenu();
     CHECK_PTR( pageMenu );
     pageMenu->insertItem( i18n( "Pa&ge Layout..." ), this, SLOT( pageLayout() ) );
-    pageMenu->insertItem( i18n( "Page &Background..." ), this, SLOT( pageBackground() ) );
+    pageMenu->insertItem( SmallIcon("background"), i18n( "Page &Background..." ), this, SLOT( pageBackground() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "&Configure pages..." ), this, SLOT( configPages() ) );
     pageMenu->insertItem( i18n( "&Open presentation structure viewer..." ), this, SLOT( presStructView() ) );
