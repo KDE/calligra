@@ -46,7 +46,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   list->setSelectionMode(QListBox::Multi);
   QString text;
   QStringList::Iterator it;
-  QStringList tabsList=m_pView->tabBar()->listhide();
+  QStringList tabsList=m_pView->tabBar()->hiddenTabs();
   for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     	{
     	text=*it;

@@ -38,6 +38,49 @@
 #include "kspread_undo.h"
 #include <kdebug.h>
 
+
+namespace KSpread
+{
+
+class TabBarPrivate
+{
+public:
+    // the view (also the parent)
+    KSpreadView* view;
+
+    // list of visible tabs, in order of appearance
+    QStringList visibleTabs;
+
+    // list of hidden tabs
+    QStringList hiddenTabs;
+
+    // timer that causes the tabbar to scroll when the user drag a tab.
+    QTimer* autoScrollTimer;
+
+    // the first visible tab on the left of the bar.
+    int leftTab;
+
+    // the last fully visible tab on the right of the bar.
+    int rightTab;
+
+    // the active tab in the range form 1..n.
+    // if this value is 0, that means that no tab is active.
+    int activeTab;
+
+    // number of the tab being moved using the mouse.
+    // if no tab is being moved this value is 0.
+    int moveTab;
+
+    // whether a tab is being moved using the mouse and in which direction
+    int moveTabFlag;
+
+    // indicates the direction the tabs are scrolled to.
+    int autoScroll;
+};
+
+
+};
+
 using namespace KSpread;
 
 static int tabbar_text_width( QPainter& painter, const QString& text )
@@ -56,88 +99,107 @@ static int tabbar_text_width( QPainter& painter, const QString& text )
     return width;
 }
 
-TabBar::TabBar( KSpreadView *_parent )
-    : QWidget( (QWidget *)_parent )
+// creates a new tabbar
+TabBar::TabBar( KSpreadView *view )
+    : QWidget( view )
 {
-    m_pView = _parent;
+    d = new TabBarPrivate;
+    d->view = view;
+    d->leftTab = 1;
+    d->rightTab = 0;
+    d->activeTab = 0;
+    d->moveTab = 0;
 
-    m_pAutoScrollTimer = new QTimer(this);
-    connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
-
-    leftTab = 1;
-    m_rightTab = 0;
-    activeTab = 0;
-    m_moveTab = 0;
-    m_autoScroll = 0;
+    d->autoScroll = 0;
+    d->autoScrollTimer = new QTimer(this);
+    connect( d->autoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
 }
 
+// destroys the tabbar
 TabBar::~TabBar()
 {
+    delete d;
 }
 
-void TabBar::addTab( const QString& _text )
+// adds a new visible tab
+void TabBar::addTab( const QString& text )
 {
-    tabsList.append( _text );
+    d->visibleTabs.append( text );
 
     update();
 }
 
-void TabBar::removeTab( const QString& _text )
+// removes a tab
+void TabBar::removeTab( const QString& text )
 {
-    int i = tabsList.findIndex( _text );
+    int i = d->visibleTabs.findIndex( text );
     if ( i == -1 )
     {
-        kdError(36001) << "ERROR: KSpreadSheet '" << _text << "' not found" << endl;
+        kdError(36001) << "ERROR: KSpreadSheet '" << text << "' not found" << endl;
         return;
     }
 
-    if ( activeTab == i + 1 )
-        activeTab = i;
+    if ( d->activeTab == i + 1 )
+        d->activeTab = i;
 
-    if ( activeTab == 0 )
-        leftTab = 1;
-    else if ( leftTab > activeTab )
-        leftTab = activeTab;
+    if ( d->activeTab == 0 )
+        d->leftTab = 1;
+    else if ( d->leftTab > d->activeTab )
+        d->leftTab = d->activeTab;
 
-    tabsList.remove( _text );
+    d->visibleTabs.remove( text );
 
     update();
 }
 
+// removes all tabs
 void TabBar::removeAllTabs()
 {
-    tabsList.clear();
-    tablehide.clear();
-    activeTab = 0;
-    leftTab = 1;
+    d->visibleTabs.clear();
+    d->hiddenTabs.clear();
+    d->activeTab = 0;
+    d->leftTab = 1;
 
     update();
 }
 
-void TabBar::moveTab( int _from, int _to, bool _before )
+// returns list of visible tabs
+QStringList TabBar::visibleTabs()
+{
+    return d->visibleTabs;
+}
+
+// returns list of hidden tabs
+QStringList TabBar::hiddenTabs()
+{
+    return d->hiddenTabs;
+}
+
+// moves a tab to another position
+void TabBar::moveTab( int from, int to, bool before )
 {
     QStringList::Iterator it;
 
-    it = tabsList.at( _from );
+    it = d->visibleTabs.at( from );
     const QString tabname = *it;
 
-    if ( !_before )
-        ++_to;
+    if ( !before )
+        ++to;
 
-    if ( _to > (int)tabsList.count() )
+    if ( to > (int)d->visibleTabs.count() )
     {
-        tabsList.append( tabname );
-        tabsList.remove( it );
+        d->visibleTabs.append( tabname );
+        d->visibleTabs.remove( it );
     }
-    else if ( _from < _to )
+    else if ( from < to )
     {
-        tabsList.insert( tabsList.at( _to ), tabname );
-        tabsList.remove( it );
+        d->visibleTabs.insert( d->visibleTabs.at( to ), tabname );
+        d->visibleTabs.remove( it );
     }
     else
     {
-        tabsList.remove( it );
-        tabsList.insert( tabsList.at( _to ), tabname );
+        d->visibleTabs.remove( it );
+        d->visibleTabs.insert( d->visibleTabs.at( to ), tabname );
     }
 
     repaint();
@@ -145,10 +207,10 @@ void TabBar::moveTab( int _from, int _to, bool _before )
 
 bool TabBar::canScrollLeft() const
 {
-    if ( tabsList.count() == 0 )
+    if ( d->visibleTabs.count() == 0 )
         return false;
 
-    if ( leftTab == 1 )
+    if ( d->leftTab == 1 )
         return false;
 
     return true;
@@ -156,13 +218,13 @@ bool TabBar::canScrollLeft() const
 
 bool TabBar::canScrollRight() const
 {
-    if ( tabsList.count() == 0 )
+    if ( d->visibleTabs.count() == 0 )
         return false;
 
-    if ( m_rightTab == (int)tabsList.count() )
+    if ( d->rightTab == (int)d->visibleTabs.count() )
         return false;
 
-    if ( (unsigned int )leftTab == tabsList.count() )
+    if ( (unsigned int )d->leftTab == d->visibleTabs.count() )
         return false;
 
     return true;
@@ -173,7 +235,7 @@ void TabBar::scrollLeft()
     if ( !canScrollLeft() )
         return;
 
-    leftTab--;
+    d->leftTab--;
     repaint( false );
 }
 
@@ -182,7 +244,7 @@ void TabBar::scrollRight()
     if ( !canScrollRight() )
         return;
 
-    leftTab++;
+    d->leftTab++;
     repaint( false );
 }
 
@@ -191,7 +253,7 @@ void TabBar::scrollFirst()
     if ( !canScrollLeft() )
         return;
 
-    leftTab = 1;
+    d->leftTab = 1;
     repaint( false );
 }
 
@@ -200,9 +262,9 @@ void TabBar::scrollLast()
     if ( !canScrollRight() )
         return;
 
-    int i = tabsList.count();
+    int i = d->visibleTabs.count();
     int x = 0;
-    QStringList::Iterator it = tabsList.end();
+    QStringList::Iterator it = d->visibleTabs.end();
     QPainter painter( this );
     do
     {
@@ -210,44 +272,43 @@ void TabBar::scrollLast()
       x += 10 + tabbar_text_width( painter, *it );
       if ( x > width() )
       {
-        leftTab = i + 1;
+        d->leftTab = i + 1;
         break;
       }
       --i;
-    } while ( it != tabsList.begin() );
+    } while ( it != d->visibleTabs.begin() );
 
     painter.end();
 
     repaint( false );
 }
 
-void TabBar::setActiveTab( const QString& _text )
+void TabBar::setActiveTab( const QString& text )
 {
-    int i = tabsList.findIndex( _text );
+    int i = d->visibleTabs.findIndex( text );
     if ( i == -1 )
         return;
 
-    if ( i + 1 == activeTab )
+    if ( i + 1 == d->activeTab )
         return;
 
-    activeTab = i + 1;
+    d->activeTab = i + 1;
     repaint( false );
 
-    emit tabChanged( _text );
+    emit tabChanged( text );
 }
 
 
 void TabBar::slotAdd()
 {
-    m_pView->insertTable();
-    m_pView->editWidget()->setText("");
-    m_pView->activeTable()->setHidden(false);
+    d->view->insertTable();
+    d->view->editWidget()->setText( "" );
+    d->view->activeTable()->setHidden( false );
 }
 
 void TabBar::paintEvent( QPaintEvent* )
 {
-
-   if ( tabsList.count() == 0 )
+    if ( d->visibleTabs.count() == 0 )
     {
         erase();
         return;
@@ -262,7 +323,7 @@ void TabBar::paintEvent( QPaintEvent* )
     qDrawShadePanel( &painter, 0, 0, width(),
                      height(), colorGroup(), FALSE, 1, &fill );
 
-    if ( leftTab > 1 )
+    if ( d->leftTab > 1 )
         paintTab( painter, -10, QString(""), 0, 0, FALSE );
 
     int i = 1;
@@ -275,19 +336,19 @@ void TabBar::paintEvent( QPaintEvent* )
     bool paint_active = false;
 
     QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+    for ( it = d->visibleTabs.begin(); it != d->visibleTabs.end(); ++it )
     {
         text = *it;
         int text_width = tabbar_text_width( painter, text );
         QFontMetrics fm = painter.fontMetrics();
         int text_y = ( height() - fm.ascent() - fm.descent() ) / 2 + fm.ascent();
 
-        if ( i >= leftTab )
+        if ( i >= d->leftTab )
         {
             // the tab is visible
-            if( i != activeTab )
+            if( i != d->activeTab )
             {
-                if ( m_moveTab == i )
+                if ( d->moveTab == i )
                     paintTab( painter, x, text, text_width, text_y, false, true );
                 else
                     paintTab( painter, x, text, text_width, text_y, false );
@@ -307,7 +368,7 @@ void TabBar::paintEvent( QPaintEvent* )
         }
 
         if ( x - 10 < width() )
-                m_rightTab = i;
+                d->rightTab = i;
         i++;
     }
 
@@ -341,7 +402,7 @@ void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_
         painter.drawLine( x, 0, x + 20 + text_width, 0 );
     if ( ismovemarked )
     {
-            if ( m_moveTabFlag == moveTabBefore )
+            if ( d->moveTabFlag == moveTabBefore )
             {
                 QPointArray movmark;
                 movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
@@ -377,14 +438,14 @@ void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_
 
 void TabBar::openPopupMenu( const QPoint &_global )
 {
-    if ( !m_pView->koDocument()->isReadWrite() )
+    if ( !d->view->koDocument()->isReadWrite() )
       return;
-    m_pView->openPopupMenuMenuPage( _global );
+    d->view->openPopupMenuMenuPage( _global );
 }
 
 void TabBar::renameTab( const QString& old_name, const QString& new_name )
 {
-    QStringList::Iterator it = tabsList.find( old_name );
+    QStringList::Iterator it = d->visibleTabs.find( old_name );
     (*it) = new_name;
 
     update();
@@ -393,7 +454,7 @@ void TabBar::renameTab( const QString& old_name, const QString& new_name )
 void TabBar::slotRename()
 {
     // Store the current name of the active table
-    KSpreadSheet * table = m_pView->activeTable();
+    KSpreadSheet * table = d->view->activeTable();
 
     bool ok;
     QString activeName = table->tableName();
@@ -452,17 +513,17 @@ void TabBar::rename( KSpreadSheet * table, QString newName, QString const & acti
                 return;
             }
 
-            m_pView->updateEditWidget();
-            m_pView->doc()->setModified( true );
+            d->view->updateEditWidget();
+            d->view->doc()->setModified( true );
         }
     }
 }
 
 void TabBar::mousePressEvent( QMouseEvent* _ev )
 {
-    int old_active = activeTab;
+    int old_active = d->activeTab;
 
-    if ( tabsList.count() == 0 )
+    if ( d->visibleTabs.count() == 0 )
     {
         erase();
         return;
@@ -478,16 +539,16 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
     QString active_text = 0L;
 
     QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+    for ( it = d->visibleTabs.begin(); it != d->visibleTabs.end(); ++it )
     {
         text = *it;
         int text_width = tabbar_text_width( painter, text );
 
-        if ( i >= leftTab )
+        if ( i >= d->leftTab )
         {
             if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
             {
-                activeTab = i;
+                d->activeTab = i;
                 active_text = text ;//text.latin1();
             }
 
@@ -498,7 +559,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     painter.end();
 
-    if ( activeTab != old_active )
+    if ( d->activeTab != old_active )
     {
         repaint( false );
         emit tabChanged( active_text );
@@ -506,7 +567,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     if ( _ev->button() == LeftButton )
     {
-        m_moveTabFlag = moveTabBefore;
+        d->moveTabFlag = moveTabBefore;
     }
     else if ( _ev->button() == RightButton )
     {
@@ -518,46 +579,46 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
 
-    if ( !m_pView->koDocument()->isReadWrite())
+    if ( !d->view->koDocument()->isReadWrite())
         return;
 
-    if ( _ev->button() == LeftButton && m_moveTab != 0 )
+    if ( _ev->button() == LeftButton && d->moveTab != 0 )
     {
-        if ( m_autoScroll != 0 )
+        if ( d->autoScroll != 0 )
         {
-            m_pAutoScrollTimer->stop();
-            m_autoScroll = 0;
+            d->autoScrollTimer->stop();
+            d->autoScroll = 0;
         }
-        m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )),
-                                          (*tabsList.at( m_moveTab - 1 )),
-                                          m_moveTabFlag == moveTabBefore );
-        moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
+        d->view->doc()->map()->moveTable( (*d->visibleTabs.at( d->activeTab - 1 )),
+                                          (*d->visibleTabs.at( d->moveTab - 1 )),
+                                          d->moveTabFlag == moveTabBefore );
+        moveTab( d->activeTab - 1, d->moveTab - 1, d->moveTabFlag == moveTabBefore );
 
-        m_moveTabFlag = moveTabNo;
-        if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
-            m_moveTab--;
-        activeTab = m_moveTab;
+        d->moveTabFlag = moveTabNo;
+        if ( d->activeTab < d->moveTab && d->moveTabFlag == moveTabBefore )
+            d->moveTab--;
+        d->activeTab = d->moveTab;
 
-        m_moveTab = 0;
+        d->moveTab = 0;
         repaint( false );
     }
 }
 
 void TabBar::slotAutoScroll( )
 {
-    if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
+    if ( d->autoScroll == autoScrollLeft && d->leftTab > 1 )
     {
-        m_moveTab = leftTab - 1;
+        d->moveTab = d->leftTab - 1;
         scrollLeft();
     }
-    else if ( m_autoScroll == autoScrollRight )
+    else if ( d->autoScroll == autoScrollRight )
     {
         scrollRight();
     }
-    if ( leftTab <= 1 )
+    if ( d->leftTab <= 1 )
     {
-        m_pAutoScrollTimer->stop();
-        m_autoScroll = 0;
+        d->autoScrollTimer->stop();
+        d->autoScroll = 0;
     }
 }
 
@@ -565,36 +626,36 @@ void TabBar::slotAutoScroll( )
 void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
 
-  if ( !m_pView->koDocument()->isReadWrite() )
+  if ( !d->view->koDocument()->isReadWrite() )
          return;
-    if ( m_moveTabFlag == 0)
+    if ( d->moveTabFlag == 0)
         return;
 
     QPainter painter;
     painter.begin( this );
 
-    if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
+    if ( _ev->pos().x() < 0 && d->leftTab > 1 && d->autoScroll == 0 )
     {
-        m_autoScroll = autoScrollLeft;
-        m_moveTab = leftTab - 1;
+        d->autoScroll = autoScrollLeft;
+        d->moveTab = d->leftTab - 1;
         scrollLeft();
-        m_pAutoScrollTimer->start( 400 );
+        d->autoScrollTimer->start( 400 );
     }
     else if ( _ev->pos().x() > size().width() )
     {
-        int i = tabsList.count();
-        if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
+        int i = d->visibleTabs.count();
+        if ( d->activeTab != i && d->moveTab != i && d->activeTab != i - 1 )
         {
-            m_moveTabFlag = moveTabAfter;
-            m_moveTab = tabsList.count();
+            d->moveTabFlag = moveTabAfter;
+            d->moveTab = d->visibleTabs.count();
             repaint( false );
         }
-        if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
+        if ( d->rightTab != (int)d->visibleTabs.count() && d->autoScroll == 0 )
         {
-            m_autoScroll = autoScrollRight;
-            m_moveTab = leftTab;
+            d->autoScroll = autoScrollRight;
+            d->moveTab = d->leftTab;
             scrollRight();
-            m_pAutoScrollTimer->start( 400 );
+            d->autoScrollTimer->start( 400 );
         }
     }
     else // ftf
@@ -603,29 +664,29 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
             int x = 0;
 
         QStringList::Iterator it;
-            for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+            for ( it = d->visibleTabs.begin(); it != d->visibleTabs.end(); ++it )
         {
             int text_width = tabbar_text_width( painter, *it );
 
-            if ( i >= leftTab )
+            if ( i >= d->leftTab )
             {
                 if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
                 {
-                    if ( m_autoScroll != 0 )
+                    if ( d->autoScroll != 0 )
                     {
-                        m_pAutoScrollTimer->stop();
-                        m_autoScroll = 0;
+                        d->autoScrollTimer->stop();
+                        d->autoScroll = 0;
                     }
 
-                    if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
+                    if ( ( d->activeTab != i && d->activeTab != i - 1 && d->moveTab != i ) || d->moveTabFlag == moveTabAfter )
                     {
-                        m_moveTabFlag = moveTabBefore;
-                        m_moveTab = i;
+                        d->moveTabFlag = moveTabBefore;
+                        d->moveTab = i;
                         repaint( false );
                     }
-                    else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
+                    else if ( (d->moveTab != i && d->moveTab != 0) || (d->activeTab == i - 1 && d->moveTab != 0) )
                     {
-                        m_moveTab = 0;
+                        d->moveTab = 0;
                         repaint( false );
                     }
                 }
@@ -637,10 +698,10 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
         if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
         {
-            if ( activeTab != i && m_moveTabFlag != moveTabAfter )
+            if ( d->activeTab != i && d->moveTabFlag != moveTabAfter )
             {
-                m_moveTabFlag = moveTabAfter;
-                m_moveTab = i;
+                d->moveTabFlag = moveTabAfter;
+                d->moveTab = i;
                 repaint( false );
             }
         }
@@ -650,45 +711,45 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
 void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
-  if ( !m_pView->koDocument()->isReadWrite()|| !m_pView->doc()->getShowTabBar() || m_pView->activeTable()->isProtected())
+  if ( !d->view->koDocument()->isReadWrite()|| !d->view->doc()->getShowTabBar() || d->view->activeTable()->isProtected())
         return;
     slotRename();
 }
 
 void TabBar::hideTable()
 {
-    if ( tabsList.count() ==  1)
+    if ( d->visibleTabs.count() ==  1)
     {
         KMessageBox::error( this, i18n("You cannot hide the last visible table.") );
         return;
     }
     else
     {
-        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        if ( !d->view->doc()->undoBuffer()->isLocked() )
         {
-                KSpreadUndoHideTable* undo = new KSpreadUndoHideTable( m_pView->doc(), m_pView->activeTable() );
-                m_pView->doc()->undoBuffer()->appendUndo( undo );
+                KSpreadUndoHideTable* undo = new KSpreadUndoHideTable( d->view->doc(), d->view->activeTable() );
+                d->view->doc()->undoBuffer()->appendUndo( undo );
         }
-        m_pView->activeTable()->hideTable(true);
+        d->view->activeTable()->hideTable(true);
     }
 }
 
 void TabBar::hideTable(const QString& tableName )
 {
   removeTab( tableName );
-  tablehide.append( tableName );
-  emit tabChanged( tabsList.first() );
+  d->hiddenTabs.append( tableName );
+  emit tabChanged( d->visibleTabs.first() );
 }
 
 
 void TabBar::showTable(const QString& text)
 {
     KSpreadSheet *table;
-    table=m_pView->doc()->map()->findTable( text);
-    if ( !m_pView->doc()->undoBuffer()->isLocked() )
+    table=d->view->doc()->map()->findTable( text);
+    if ( !d->view->doc()->undoBuffer()->isLocked() )
     {
-        KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
-        m_pView->doc()->undoBuffer()->appendUndo( undo );
+        KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( d->view->doc(), table );
+        d->view->doc()->undoBuffer()->appendUndo( undo );
     }
     table->hideTable(false);
 }
@@ -698,35 +759,36 @@ void TabBar::showTable(QStringList list)
     if ( list.count()==0 )
         return;
     KSpreadSheet *table;
-    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( d->view->doc(),i18n("Show Table"));
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {
-        table=m_pView->doc()->map()->findTable( *it );
-        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        table=d->view->doc()->map()->findTable( *it );
+        if ( !d->view->doc()->undoBuffer()->isLocked() )
         {
-            KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
+            KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( d->view->doc(), table );
             macroUndo->addCommand( undo );
         }
         table->hideTable(false);
     }
-    m_pView->doc()->undoBuffer()->appendUndo( macroUndo );
+    d->view->doc()->undoBuffer()->appendUndo( macroUndo );
 }
 
 
 void TabBar::displayTable(const QString& text)
 {
-    tablehide.remove( text );
+    d->hiddenTabs.remove( text );
     addTab( text );
     emit tabChanged( text );
 }
-void TabBar::addHiddenTab(const QString & text)
+
+void TabBar::addHiddenTab(const QString& text)
 {
-    tablehide.append( text );
+    d->hiddenTabs.append( text );
 }
 
-void TabBar::removeHiddenTab(const QString & text)
+void TabBar::removeHiddenTab(const QString& text)
 {
-    tablehide.remove( text );
+    d->hiddenTabs.remove( text );
 }
 
 #include "kspread_tabbar.moc"

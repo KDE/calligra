@@ -32,6 +32,7 @@
 namespace KSpread
 {
 
+class TabBarPrivate;
 
 /**
  * This tab bar is used by @ref KSpreadView. It is used to choose between all
@@ -49,7 +50,15 @@ class TabBar : public QWidget
 {
     Q_OBJECT
 public:
-    TabBar( KSpreadView *_parent );
+
+    /**
+     * Creates a new tabbar.
+     */
+    TabBar( KSpreadView *view );
+
+    /**
+     * Destroy the tabbar.
+     */
     virtual ~TabBar();
 
     /**
@@ -57,13 +66,21 @@ public:
      * call @ref #setActiveTab to do so.
      */
     void addTab( const QString& _text );
+
     /**
      * Adds a hidden tab.
      *
      * @see KSpreadView::setActiveTable
      */
     void addHiddenTab( const QString & text );
+
+    /**
+     * Removes a hidden tab.
+     *
+     * @see KSpreadView::setActiveTable
+     */
     void removeHiddenTab(const QString & text);
+
     /**
      * Removes the tab from the bar. If the tab was the active one then the one
      * left of it ( or if not available ) the one right of it will become active.
@@ -79,10 +96,11 @@ public:
     void rename( KSpreadSheet * table, QString name, QString const & activeName, bool ok );
 
     /**
-     * Moves the tab with number _from befor tab number _to if @param _before is
-     * true _from is inserted before _to. If false it is inserted after.
+     * Moves the tab with number @param from before tab number @param to
+     * if @param before is true from is inserted before to.
+     * If false it is inserted after.
      */
-    void moveTab( int _from, int _to, bool _before = true );
+    void moveTab( int from, int to, bool before = true );
 
     /**
      * Removes all tabs from the bar and repaints the widget.
@@ -129,11 +147,12 @@ public:
     /**
      * @return the name of all visible tables.
      */
-    QStringList listshow()const{return  tabsList;}
+    QStringList visibleTabs();
+
     /**
      * @return the name of all hidden tables.
      */
-    QStringList listhide()const{return  tablehide;}
+    QStringList hiddenTabs();
 
 
 signals:
@@ -151,7 +170,7 @@ protected slots:
      * Opens a dialog to rename active tab.
      */
     void slotAdd();
-    void slotAutoScroll( );
+    void slotAutoScroll();
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -164,63 +183,11 @@ protected:
 
     void openPopupMenu( QPoint &_global );
 
-    KSpreadView* m_pView;
-
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
 
-    /**
-     * List with the names of all tabs. The order in this list determines the
-     * order of appearance.
-     */
-    QStringList tabsList;
-     /*
-    * list which contain names of table hide
-    */
-    QStringList tablehide;
-    /**
-     * Timer that causes the tabbar to scroll when the user drag a tab.
-     */
-    QTimer* m_pAutoScrollTimer;
-
-    /**
-     * This is the first visible tab on the left of the bar.
-     */
-    int leftTab;
-
-    /**
-     * This is the last fully visible tab on the right of the bar.
-     */
-    int m_rightTab;
-
-    /**
-     * The active tab in the range form 1..n.
-     * If this value is 0, that means that no tab is active.
-     */
-    int activeTab;
-
-    /**
-     * Indicates whether a tab may be scrolled while moving a table.
-     * Used to provide a timeout.
-     */
-    bool m_mayScroll;
-
-    /**
-     * The number of the tab being moved using the mouse.
-     * If no tab is being moved this value is 0.
-     */
-    int m_moveTab;
-
-    /**
-     * Indicates whether a tab is being moved using the mouse and in which
-     * direction.
-     */
-    int m_moveTabFlag;
-
-    /**
-     * Indicates the direction the tabs are scrolled to.
-     */
-    int m_autoScroll;
+private:
+    TabBarPrivate *d;
 };
 
 };
