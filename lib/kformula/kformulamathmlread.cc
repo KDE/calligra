@@ -342,7 +342,7 @@ void MathML2KFormulaPrivate::mtext( QDomElement element, QDomNode docnode )
             filter->processElement( n, doc, docnode );
         }
         else {
-            kdDebug( DEBUGID ) << "<mtext> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mtext> child: " << n.nodeName() << endl;
         }
 
         n = n.nextSibling();
@@ -464,7 +464,7 @@ void MathML2KFormulaPrivate::mrow( QDomElement element, QDomNode docnode )
             filter->processElement( e, doc, docnode );
         }
         else {
-            kdDebug( DEBUGID ) << "<mrow> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mrow> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -505,7 +505,7 @@ void MathML2KFormulaPrivate::mfrac( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mfrac> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mfrac> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -549,7 +549,7 @@ void MathML2KFormulaPrivate::mroot( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mroot> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mroot> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -571,7 +571,7 @@ void MathML2KFormulaPrivate::msqrt( QDomElement element, QDomNode docnode )
             filter->processElement( n.toElement(), doc, sequence );
         }
         else {
-            kdDebug( DEBUGID ) << "<msqrt> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<msqrt> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -701,7 +701,7 @@ void MathML2KFormulaPrivate::mfenced( QDomElement element, QDomNode docnode )
             filter->processElement( e, doc, sequence );
         }
         else {
-            kdDebug( DEBUGID ) << "<mfenced> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mfenced> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -751,7 +751,7 @@ void MathML2KFormulaPrivate::mtable( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mtable> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<mtable> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -837,7 +837,7 @@ void MathML2KFormulaPrivate::msub_msup( QDomElement element, QDomNode docnode )
         }
         else {
             kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
-                               << n.nodeType() << endl;
+                               << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -914,7 +914,7 @@ void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode, bool
         }
         else {
             kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
-                               << n.nodeType() << endl;
+                               << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -992,7 +992,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode, bool 
         }
         else {
             kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
-                               << n.nodeType() << endl;
+                               << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -1122,7 +1122,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element,
         }
         else {
             kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
-                               << n.nodeType() << endl;
+                               << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -1178,7 +1178,7 @@ void MathML2KFormulaPrivate::msubsup( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<msubsup> child: " << n.nodeType() << endl;
+            kdDebug( DEBUGID ) << "<msubsup> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -1327,7 +1327,7 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node, bool oasisFormat )
 
 
 MathML2KFormula::MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
-    : m_error( false ), origdoc( mmldoc ), context( contextStyle ),  oasisFormat( _oasisFormat )
+    : m_error( false ), origdoc( mmldoc ), oasisFormat( _oasisFormat ), context( contextStyle )
 {
     done = false;
 }
@@ -1755,7 +1755,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
     }
 
     if ( type == UNKNOWN && node.nodeType() != QDomNode::AttributeNode ) {
-        kdDebug() << "Not an element: " << node.nodeType() << endl;
+        kdDebug() << "Not an element: " << node.nodeName() << endl;
 	QDomNode n = node.firstChild();
 	while ( !n.isNull() ) {
 	    processElement( n, doc, docnode );
