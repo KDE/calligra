@@ -110,6 +110,7 @@ public:
     void setManualString( const QString & _str ) { m_varValue=QVariant(_str);}
     QString manualString() const { return m_varValue.toString();}
 
+    virtual void resize();
     virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
     /** The frameset that contains the text for this footnote */
@@ -123,10 +124,11 @@ public:
     // Nothing to do here. Numbering done by KWTextFrameSet::renumberFootNotes
     virtual void recalc() { }
 
-    // Important: we need a sequence number, to order footnotes.
-    // Don't remove this when implementing the QVariant-based solution ;)
+    // This is a sequence number, to order footnotes. It is always set, and different for all footnotes.
     void setNum( int _num ) { m_num = _num; }
     int num() const { return m_num; }
+
+    // The number being displayed - for auto-numbered footnotes only.
     void setNumDisplay( int val );
     int numDisplay() const { return m_numDisplay; }
 

@@ -31,6 +31,8 @@
 
 KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
+    m_footNoteCounter.setSuffix( QString::null );
+    m_endNoteCounter.setSuffix( QString::null );
 }
 
 void KWVariableSettings::changeFootNoteCounter( KoParagCounter _c )
@@ -206,7 +208,8 @@ void KWFootNoteVariable::formatedNote()
 
 QString KWFootNoteVariable::applyStyle(  )
 {
-    KoParagCounter tmpCounter = (m_noteType == FootNote ) ?  static_cast<KWVariableSettings*>(m_varColl->variableSetting())->footNoteCounter() : static_cast<KWVariableSettings*>(m_varColl->variableSetting())->endNoteCounter();
+    KWVariableSettings* settings = static_cast<KWVariableSettings*>(m_varColl->variableSetting());
+    KoParagCounter tmpCounter = (m_noteType == FootNote) ? settings->footNoteCounter() : settings->endNoteCounter();
 
     QString tmp;
     int val = m_numDisplay;
@@ -304,6 +307,28 @@ void KWFootNoteVariable::move( int x, int y )
         // This can happen if the page hasn't been created yet
         //kdDebug(32001) << "KWFootNoteVariable::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
     }
+}
+
+void KWFootNoteVariable::resize()
+{
+    if ( m_deleted )
+        return;
+    KoTextFormat *fmt = format();
+    QFont font( fmt->screenFont( 0, false ) ); // font at 100%
+    if ( fmt->vAlign() == KoTextFormat::AlignNormal ) // if it's still normal...
+    {
+        int pointSize = ( ( font.pointSize() * 2 ) / 3 ); // ...force superscript
+        font.setPointSize( pointSize );
+    }
+    QFontMetrics fm( font );
+    QString txt = text();
+    width = 0;
+    for ( int i = 0 ; i < (int)txt.length() ; ++i )
+        width += fm.charWidth( txt, i ); // size at 100%
+    // zoom to LU
+    width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
+    height = fmt->height();
+    //kdDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << endl;
 }
 
 void KWFootNoteVariable::setDeleted( bool del )

@@ -2190,7 +2190,7 @@ void KWTextFrameSet::renumberFootNotes()
     }
     lst.sort();
     short int varNumber = 0; // absolute order number [internal, not saved nor displayed]
-    short int varNb = 1; // the number being displayed
+    short int numDisplay = 1; // the number being displayed
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
     for ( ; vit.current() ; ++vit, ++varNumber )
@@ -2205,17 +2205,18 @@ void KWTextFrameSet::renumberFootNotes()
         }
         if ( var->numberingType()==KWFootNoteVariable::Auto )
         {
-            if ( varNb != var->numDisplay() )
+            if ( numDisplay != var->numDisplay() )
             {
                 changed = true;
-                var->setNumDisplay(varNb );
+                var->setNumDisplay( numDisplay );
             }
-            varNb++;
+            numDisplay++;
         }
         if ( changed )
         {
             if ( var->frameSet() ) //safety
                 var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
+            var->resize();
             var->paragraph()->invalidate(0);
             var->paragraph()->setChanged( true );
             needRepaint = true;
