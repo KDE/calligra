@@ -3,12 +3,12 @@ struct Struct
 	var a,b,c;
 	func( inout this )
 	{
-		print( this.a, this.b, this.c );
+		println( this.a, this.b, this.c );
 		this.a = 333;
 	}
 	fun()
 	{
-		print("FUN");
+		println("FUN");
 	}
 };
 
@@ -16,7 +16,7 @@ class my2
 {
 	func( inout this )
 	{
-		print("Hello");
+		println("Hello");
 	}	
 };
 
@@ -24,7 +24,7 @@ class my
 {
 	func( inout this )
 	{
-		print("Hello stupid!");
+		println("Hello stupid!");
 		this = my2();
 	}
 };
@@ -38,7 +38,7 @@ class super
 
 	over( in this )
 	{
-		print( this.a, "Super");
+		println( this.a, "Super");
 	}
 };
 
@@ -51,7 +51,7 @@ class derived : super
 
 	over( in this )
 	{
-		print( this.a, "Derived" );
+		println( this.a, "Derived" );
 		super.over( this );
 	}
 
@@ -63,28 +63,28 @@ main
 	m = my();
 	m.func();
 	m.func();
-	print("-------------1");
+	println("-------------1");
 	s = Struct();
-	print("-------------2");
+	println("-------------2");
 	s.a = 100;
-	print( s.a, "-------------3");
+	println( s.a, "-------------3");
 	s.b = 200;
-	print( s.a, "-------------4");
+	println( s.a, "-------------4");
 	s.c = 300;
-	print( s.func, "-------------5");
-	print( s );
-	print("-------------6");
+	println( s.func, "-------------5");
+	println( s );
+	println("-------------6");
 	s.func();
-	print( s.a, "-------------7");
+	println( s.a, "-------------7");
 	x = s;
 	x.a = 400;
-	print( s, x );
+	println( s, x );
 	x.a = x.b = x.c = 111;
-	print( x );
+	println( x );
 	m.call = x.func;
 	m.call();
 	Struct.fun();
 	d = derived();
 	d.over();
-	print( derived.x );
+	println( derived.x );
 }

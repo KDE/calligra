@@ -2,7 +2,7 @@ main
 {
 	while( ( str = <> ) )
 	{
-		print( str );
+		println( str );
 	}
 
 	println("I am done");

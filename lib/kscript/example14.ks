@@ -1,7 +1,7 @@
 main
 {
 	a = QApplication();
-	print( "---- Application ----" );
+	println( "---- Application ----" );
 	w = QWidget();
 	dlg = QDialog( w );
 	l = QLineEdit( w );
@@ -40,9 +40,9 @@ main
 	layout2.addWidget( combo );
 	w.show();
 	w.caption = "KScript Test";
-	print( w.caption );
+	println( w.caption );
 	w.name = "Hello";
-	print( w.name );
+	println( w.name );
 	connect( l.textChanged, p.setText );
 	connect( combo.activated, p.setText );
 	connect( p.clicked, dlg.show );

@@ -1,8 +1,8 @@
 main
 {
-	print("-------1");
+	println("-------1");
 	app = findApplication( "kspread", "Application" );
-	print("-------2");
+	println("-------2");
 	docs = app.documents();
-	print( docs );
+	println( docs );
 }

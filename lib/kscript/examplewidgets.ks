@@ -19,7 +19,7 @@ main
 	w4 = QCheckBox();
 	w.geometry = r;
 	w.text = "KScript Test";
-	print( w.text );
+	println( w.text );
 	w.show();
 	w2.show();
 	w3.show();

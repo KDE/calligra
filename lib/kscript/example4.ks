@@ -2,27 +2,27 @@ class MyClass
 {
 	MyClass( in this )
 	{
-		print("Constructor");
+		println("Constructor");
 		this.a = 100;
 	}
-	print( in this )
+	println( in this )
 	{
-		print("Output", this.a );
+		println("Output", this.a );
 	}
 	delete( in this )
 	{
-		print("MyClass destructor");
+		println("MyClass destructor");
 	}
 	const answer = 42;
 };
 
 main
 {
-	print("Hallo Welt");
+	println("Hallo Welt");
 	m = MyClass();
-	print("Hallo Welt 2");	
+	println("Hallo Welt 2");	
 	m.print();
-	print("Hallo Welt 3", m.a );
+	println("Hallo Welt 3", m.a );
 	MyClass().print();
-	print( MyClass() );
+	println( MyClass() );
 }

@@ -2,7 +2,7 @@ main( in input, in input2 )
 {
 	while( <> )
 	{
-		print( $_ );
+		println( $_ );
 	}
 
 	$_ = "Hallo";

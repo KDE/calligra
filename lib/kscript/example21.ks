@@ -6,7 +6,7 @@ class MyClass
 
 	clicked( in this )
 	{
-		print( "Yeah, click me, faster, harder ....." );
+		println( "Yeah, click me, faster, harder ....." );
 	}
 };
 
@@ -23,16 +23,16 @@ main
 	w5.frameshape = "Panel";
 	w5.frameshadow = "Sunken";
 	w5.show();
-	print( w5.isA() );
-	print( w5.inherits( "qt:QObject" ) );
-	print( w5.inherits( "qt:QWidget" ) );
-	print( w5.inherits( "qt:QFrame" ) );
-	print( w5.inherits( "qt:QApplication" ) );
-	print( w5.inherits( "MyClass" ) );
-	print( "-----------------------" );
+	println( w5.isA() );
+	println( w5.inherits( "qt:QObject" ) );
+	println( w5.inherits( "qt:QWidget" ) );
+	println( w5.inherits( "qt:QFrame" ) );
+	println( w5.inherits( "qt:QApplication" ) );
+	println( w5.inherits( "MyClass" ) );
+	println( "-----------------------" );
 	m = MyClass();
-	print( m.isA() );
-	print( m.inherits( "MyClass" ) );
+	println( m.isA() );
+	println( m.inherits( "MyClass" ) );
 
 	b = QPushButton();
 	b.text = "Click me";

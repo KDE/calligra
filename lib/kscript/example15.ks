@@ -1,21 +1,21 @@
 main
 {
-	print("-------1");
+	println("-------1");
 	app = findApplication( "kspread*" );
         doc = app.getDocuments() [0];
-	print("-------2");
+	println("-------2");
 	map = doc.map();
 	//	count = app.documentCount();
-	// 	print( count );
+	// 	println( count );
 	// 	doc = app.document( 0 );
-	print("-------3");
+	println("-------3");
 	tcount = map.tableCount();
-	print( tcount );
+	println( tcount );
 	table = map.table( 0 );
-	print("--------4");
+	println("--------4");
 	name = table.name();
-	print( name );
-	print( map.tableNames() );
+	println( name );
+	println( map.tableNames() );
 	r = QRect();
 	r.left = 2;
 	r.left = 2;

@@ -1,16 +1,16 @@
 main
 {
 	a = QApplication();
-	print( "---- Application ----" );
+	println( "---- Application ----" );
 	x = QWidget();
 	x.show();
-	print( "--------" );
+	println( "--------" );
 	y = QLabel( x );
-	print( "--------" );
+	println( "--------" );
 	y = 0;
-	print( "---- Visible ----" );
+	println( "---- Visible ----" );
 	x.destroy();
-	print( "---- Destroy ----" );
+	println( "---- Destroy ----" );
 	x = 0;
 	a.exec();
 }

@@ -13,12 +13,12 @@ class MyClass
 	MyClass( in this, in text )
 	{
 		this.text = text;
-		print("Constructor", this.text );
+		println("Constructor", this.text );
 	}
 
 	delete( in this )
 	{
-		print("Destructor", this.text );
+		println("Destructor", this.text );
 	}
 };
 
@@ -32,14 +32,14 @@ func2()
 {
 	m = MyClass( "IN_FUNC_2" );
 
-	print( "---- exceptions -----" );
+	println( "---- exceptions -----" );
 	m = MyClass( "IN_EXCEPTION" );
 	err = MyError2();
 	err.text = "Ein Fehler :-)";
 //	raise "Hallo", err;
 	raise MyError, err;
 //	raise MyError2, err;
-	print( "---- No no no -----" );
+	println( "---- No no no -----" );
 }
 
 func3()
@@ -49,31 +49,31 @@ func3()
 	{
 		m = MyClass( "IN_FUNC_3 B" );	
 		return;
-		print( "1 ---- No no no -----" );
+		println( "1 ---- No no no -----" );
 	}
-	print( "2 ---- No no no -----" );
+	println( "2 ---- No no no -----" );
 }
 
 main
 {
-	print("---------- start -------" );
+	println("---------- start -------" );
 	try
 	{
 		func1();
 	}
 	catch( MyError, exc )
 	{
-		print( "------ catched MyError -------" );
-		print( exc );
+		println( "------ catched MyError -------" );
+		println( exc );
 		return;
 	}
 	default( type, exc )
 	{
-		print( "------ catched default ------", type, exc );
+		println( "------ catched default ------", type, exc );
 		return;
 	}
 
 	func3();
 
-	print( "---- end -----" );
+	println( "---- end -----" );
 }

@@ -2,7 +2,7 @@ import module1;
 
 func( in a )
 {
-	print( a );
+	println( a );
 }
 
 class my
@@ -13,11 +13,11 @@ class my
 		this.call = "Claudia";
 	}
 
-	print( in this )
+	println( in this )
 	{
-		print("-----------------");
-		print( this );
-		print("-----------------");
+		println("-----------------");
+		println( this );
+		println("-----------------");
 	}
 };
 
@@ -29,35 +29,35 @@ class my2 : my
 		this.title = "Student";
 	}
 
-	print( in this )
+	println( in this )
 	{
-		print("=================");
-		print( this );
-		print("=================");
+		println("=================");
+		println( this );
+		println("=================");
 	}
 };
 
 func2( in this )
 {
-	print("*****************");
-	print( this );
-	print("*****************");
+	println("*****************");
+	println( this );
+	println("*****************");
 }
 
 func3()
 {
-	print("*****************");
+	println("*****************");
 	y = module1.my();
-	print("*****************");
+	println("*****************");
 	y.func();
 }
 
 main
 {
-	print("Hello");
+	println("Hello");
 	a = 100;
 	func( "Torben" );
-	print( a );
+	println( a );
 	m = my();
 	m.print();
 	m2 = my2();

@@ -2,12 +2,12 @@ class MyWidget
 {
 	MyWidget( in this )
 	{
-		print("MyWidget");
+		println("MyWidget");
 	}
 
 	delete( in this )
 	{
-		print("Destruct MyWidget");
+		println("Destruct MyWidget");
 	}
 
 	signal hello( in str );
@@ -17,17 +17,17 @@ class Receiver
 {
 	Receiver( in this )
 	{
-		print("Receiver");
+		println("Receiver");
 	}
 
 	talk( in this, in str )
 	{
-		print( str );
+		println( str );
 	}
 
 	delete( in this )
 	{
-		print("Destruct Receiver");
+		println("Destruct Receiver");
 	}
 };
 
@@ -35,7 +35,7 @@ class Derived : Receiver, MyWidget
 {
 	delete( in this )
 	{
-		print("Destruct Derived");
+		println("Destruct Derived");
 	}
 };
 
@@ -50,22 +50,22 @@ testme( in sender )
 
 main
 {
-	print("Hallo Welt");
+	println("Hallo Welt");
 	m = MyWidget();
 	testme( m );
-	print("---------------");
+	println("---------------");
 	r = Receiver();
 	connect( m.hello, r.talk );
-	print("Emit");
+	println("Emit");
 	m.hello( "Torben" );
 	m.disconnect( "hello", r.talk );
-	print("---------------");
+	println("---------------");
 	d = Derived();
 	d.talk("Ok");
-	print( d.isA() );
-	print( d.inherits( "Derived" ) );
-	print( d.inherits( "MyWidget" ) );
-	print( d.inherits( "Receiver" ) );
-	print( d.inherits( "Dummy" ) );
-	print("Bye");
+	println( d.isA() );
+	println( d.inherits( "Derived" ) );
+	println( d.inherits( "MyWidget" ) );
+	println( d.inherits( "Receiver" ) );
+	println( d.inherits( "Dummy" ) );
+	println("Bye");
 }

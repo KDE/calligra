@@ -4,7 +4,7 @@ main
 {
 	b = a = 5;
 	b = 6;
-	c = a * b;
+ 	c = a * b;
 	d = [ 100, 200, 300 ];
 	e = { ( "Weis", 8 ), ( "Linzbach", 10 ) };
 	x = d[ 1 ];
@@ -17,6 +17,6 @@ main
 	name = "Torben";
 	g = name[ 2 ];
 	name[0] = 't';
-	print("Hallo Welt!", "Wie gehst es Dir", 42, e );
-	print( hallo );
+	println("Hallo Welt!", "Wie gehst es Dir", 42, e );
+	println( hallo );
 }

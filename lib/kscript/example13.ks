@@ -6,7 +6,7 @@ class MyClass
 
 	clicked( in this )
 	{
-		print( "Yeah, click me, faster, harder ....." );
+		println( "Yeah, click me, faster, harder ....." );
 	}
 };
 
@@ -15,7 +15,7 @@ main
 	m = MyClass();
 
 	a = QApplication();
-	print( "---- Application ----" );
+	println( "---- Application ----" );
 	w = QWidget();
 	l = QLineEdit( w );
 	l.text = "Edit me";
@@ -53,9 +53,9 @@ main
 	layout.addWidget( combo );
 	w.show();
 	w.caption = "KScript Test";
-	print( w.caption );
+	println( w.caption );
 	w.name = "Hello";
-	print( w.name );
+	println( w.name );
 	connect( l.textChanged, p.setText );
 	connect( combo.activated, p.setText );
 	connect( p.clicked, m.clicked );

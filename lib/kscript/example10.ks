@@ -12,24 +12,24 @@ class MyClass
 {
 	MyClass( in this )
 	{
-		print("Constructor");
+		println("Constructor");
 	}
 
 	delete( in this )
 	{
-		print("Destructor");
+		println("Destructor");
 	}
 };
 
 main
 {
-	print( "---- start -----" );
+	println( "---- start -----" );
 	{
-		print( "1---");
+		println( "1---");
 		m = MyClass();
-		print( "2---");
+		println( "2---");
 	}
-	print( "---- exceptions -----" );
+	println( "---- exceptions -----" );
 	try
 	{
 		err = MyError();
@@ -38,13 +38,13 @@ main
 	}
 	catch( MyError, exc )
 	{
-		print( "------ catched MyError -------" );
-		print( exc );
+		println( "------ catched MyError -------" );
+		println( exc );
 	}
 	default( type, exc )
 	{
-		print( "------ catched default -------", type );
-		print( exc );
+		println( "------ catched default -------", type );
+		println( exc );
 	}
-	print( "---- end -----" );
+	println( "---- end -----" );
 }

@@ -4,7 +4,7 @@ main( in input )
 	{
 		if ( /Torben/ )
 		{
-			print( $_ );
+			println( $_ );
 		}
 	}
 

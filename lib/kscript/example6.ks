@@ -2,12 +2,12 @@ class MyWidget
 {
 	MyWidget( in this )
 	{
-		print("MyWidget");
+		println("MyWidget");
 	}
 
 	delete( in this )
 	{
-		print("Destruct MyWidget");
+		println("Destruct MyWidget");
 	}
 };
 
