@@ -21,6 +21,11 @@
 #define KPTCANVASITEM_H
 
 #include "kptnode.h"
+#include "KDGanttView.h"
+#include "KDGanttViewItem.h"
+#include "KDGanttViewSummaryItem.h"
+#include "KDGanttViewTaskItem.h"
+#include "KDGanttViewEventItem.h"
 
 #include <qcanvas.h>
 #include <qrect.h>
@@ -107,6 +112,48 @@ private:
     void printDebug( int );
 #endif
 
+};
+
+/////////////////   KPTGanttViewSummaryItem   ////////////////////
+
+class KPTGanttViewSummaryItem : public KDGanttViewSummaryItem
+{
+public:
+    KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode &node);
+    KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode &node);
+	
+	KPTNode &getNode() { return m_node; }
+	
+protected:
+    KPTNode & m_node;
+};
+
+/////////////////   KPTGanttViewTaskItem   ////////////////////
+
+class KPTGanttViewTaskItem : public KDGanttViewTaskItem
+{
+public:
+    KPTGanttViewTaskItem(KDGanttView *parent, KPTNode &node);
+    KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTNode &node);
+	
+	KPTNode &getNode() { return m_node; }
+	
+protected:
+    KPTNode & m_node;
+};
+
+/////////////////   KPTGanttViewEventItem   ////////////////////
+
+class KPTGanttViewEventItem : public KDGanttViewEventItem
+{
+public:
+    KPTGanttViewEventItem(KDGanttView *parent, KPTNode &node);
+    KPTGanttViewEventItem(KDGanttViewItem *parent, KPTNode &node);
+	
+	KPTNode &getNode() { return m_node; }
+	
+protected:
+    KPTNode & m_node;
 };
 
 #endif

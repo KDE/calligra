@@ -23,9 +23,18 @@
 #include "kptprojectlist.h"
 #include "kptview.h"
 #include "kptganttcanvas.h"
+#include "kptcanvasitem.h"
+#include "kptnode.h"
 #include "kptnodeitem.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kpttask.h"
+#include "kptmilestone.h"
+
+#include "KDGanttViewItem.h"
+#include "KDGanttViewTaskItem.h"
+#include "KDGanttViewSummaryItem.h"
+#include "KDGanttViewEventItem.h"
 
 #include <kdebug.h>
 
@@ -36,103 +45,161 @@
 #include <qheader.h>
 #include <qpopupmenu.h>
 
- KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, QLayout *layout )
-    : QSplitter( parent, "Gantt view" ),
-    m_mainview( view )
- {
-    init(layout);
-    kdDebug()<<k_funcinfo<<" end"<<endl;
-}
-
-void KPTGanttView::init(QLayout *layout)
+KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
+    : KDGanttView( parent, "Gantt view" ),
+    m_mainview( view ),
+	m_currentItem(0)
 {
-    // Split the right side into a listview and data presentation view (for gantt, pert, etc)
+    setScale(KDGanttView::Day);
     
-    m_projectlist = new KPTProjectList( m_mainview, this );
-
-    QVBox *g = new QVBox( this, "Gantt QVBox" );
-    QGridLayout *gl = new QGridLayout( g, 2, 1, -1, -1, "Gantt QGridLayout");
-    
-    m_timescale = new KPTTimeScale(g, m_mainview->getPart()->getProject().getEarliestStart(), 
-                                                            m_mainview->getPart()->getProject().getLatestFinish(), 
-                                                            m_projectlist->header()->height());
-    gl->addWidget(m_timescale,0,0);
-	m_timescale->setCanvasBackgroundColor(m_projectlist->header()->paletteBackgroundColor());
-
-    m_canvasview = new KPTGanttCanvas(g);
-    gl->addWidget(m_canvasview,1,0);
-    draw();
-
-    // Use m_canvasview's vert. scrollbar for the projectlist also (They should have the same height)
-    connect(m_canvasview, SIGNAL(contentsMoving(int,int)), m_projectlist, SLOT(slotSetContentsPos(int,int)));
-    //  Use m_canvasview's hor. scrollbar for the timescale also
-    connect(m_canvasview, SIGNAL(contentsMoving(int,int)), m_timescale, SLOT(slotSetContents(int,int)));
-    
-    connect(m_projectlist, SIGNAL(doubleClicked(QListViewItem *)), this, SLOT(slotOpen(QListViewItem *)));
-    
-    connect(m_projectlist, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)), this, SLOT(slotRMBPressed(QListViewItem *,const QPoint &, int)));
-    
-	connect(m_canvasview, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)), this, SLOT(slotRMBPressed(QListViewItem *,const QPoint &, int)));
-    connect(m_canvasview, SIGNAL(updateView(bool)), m_mainview, SLOT(slotUpdate(bool)));
+	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
+	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 	
-    // Save the un-zoomed font size
-	m_defaultFontSize = m_projectlist->font().pointSize();
-}    
+	connect(this, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
+	
+}
 
 void KPTGanttView::zoom(double zoom)
 {
-    QFont f = m_projectlist->font();
-    f.setPointSize(qRound(m_defaultFontSize * zoom));
-    m_projectlist->setFont(f);
 }
 
-void KPTGanttView::draw() 
+void KPTGanttView::draw(KPTNode &node) 
 {
     kdDebug()<<k_funcinfo<<endl;
-    m_timescale->draw(m_mainview->getPart()->getProject().getEarliestStart(), 
-                                 m_mainview->getPart()->getProject().getLatestFinish(), 
-                                 m_projectlist->header()->height());
-                                 
-    m_canvasview->draw( m_projectlist, m_timescale );
-    m_canvasview->show();
-    m_projectlist->show();
+	clear();
+	KPTDuration *time;
+	KPTDuration *dur;
+
+	if (node.type() == KPTProject::TYPE)
+    {	
+	    KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(this, node);
+		time = node.getStartTime();
+		dur = node.getExpectedDuration();
+	    item->setStartTime(time->dateTime());
+		time->add(dur);
+	    item->setEndTime(time->dateTime());
+		item->setOpen(true);
+		delete time;
+		delete dur;
+	
+	    drawChildren(item, node);
+    }		
+	else
+		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
+	
 }
 
-KPTNodeItem *KPTGanttView::currentItem()
+void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &parentNode)
 {
-    return (KPTNodeItem *)m_projectlist->currentItem();
+	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator()); 
+	for ( nit.toLast(); nit.current(); --nit )
+	{
+		KPTNode *n = nit.current();
+		if (n->type() == KPTProject::TYPE)
+	        drawProject(parentItem, *n);
+		else if (n->type() == KPTTask::TYPE)
+		    drawTask(parentItem, *n);
+		else if (n->type() == KPTMilestone::TYPE)
+			drawMilestone(parentItem, *n);
+		else
+		    kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
+			
+	}
 }
 
-KPTNodeItem *KPTGanttView::selectedItem()
+void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 {
-    return (KPTNodeItem *)m_projectlist->selectedItem();
+	KPTDuration *time = node.getStartTime();
+	KPTDuration *dur = node.getExpectedDuration();
+	KPTGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(parentItem, node);
+	item->setStartTime(time->dateTime());
+	time->add(dur);
+	item->setEndTime(time->dateTime());
+	item->setOpen(true);
+	delete time;
+	delete dur;
+	
+	drawChildren(item, node);
 }
 
-void KPTGanttView::slotOpen(QListViewItem *item) 
+void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 {
-    if (item)
-    {
-        static_cast<KPTNodeItem *>(item)->openDialog();
-    }
+	KPTDuration *time = node.getStartTime();
+	KPTDuration *dur = node.getExpectedDuration();
+	if (node.numChildren() > 0)
+    {	
+		KPTGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(parentItem, node);
+		item->setStartTime(time->dateTime());
+		time->add(dur);
+		item->setEndTime(time->dateTime());
+		item->setOpen(true);
+    	
+		drawChildren(item, node);
+	}
+	else
+	{
+		KPTGanttViewTaskItem *item = new KPTGanttViewTaskItem(parentItem, node);
+		item->setStartTime(time->dateTime());
+		time->add(dur);
+		item->setEndTime(time->dateTime());
+		item->setOpen(true);
+	}
+	delete time;
+	delete dur;
 }
 
-void KPTGanttView::slotRMBPressed(QListViewItem *item, const QPoint & point, int col)
+void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 {
-    kdDebug()<<k_funcinfo<<endl;
-    if (item)
-    {
-        m_projectlist->clearSelection();
-        m_projectlist->setSelected(item,true);
-        m_projectlist->setCurrentItem(item);
-        QPopupMenu *menu = m_mainview->popupMenu("node_popup");
-        if (menu)
-        {
-            int id = menu->exec(point);
-            kdDebug()<<k_funcinfo<<"id="<<id<<endl;
-        }
-        else
-            kdDebug()<<k_funcinfo<<"No menu!"<<endl;
-    }
+	KPTDuration *time = node.getStartTime();
+	KPTGanttViewEventItem *item = new KPTGanttViewEventItem(parentItem, node);
+	item->setStartTime(time->dateTime());
+	item->setLeadTime(time->dateTime().addDays(1));
+	item->setOpen(true);
+	delete time;
+}
+
+void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
+{
+    m_currentItem = item;
+}
+
+KPTNode *KPTGanttView::currentNode()
+{
+    KDGanttViewItem *curr = m_currentItem;
+	if (!curr)
+		curr = firstChild();
+	if (curr->type() == KDGanttViewItem::Summary)
+	{
+	    KPTGanttViewSummaryItem *item = (KPTGanttViewSummaryItem *)curr;
+		kdDebug()<<k_funcinfo<<"Summary item="<<item<<endl;
+		return &(item->getNode());
+	}
+	else if (curr->type() == KDGanttViewItem::Task)
+	{
+		KPTGanttViewTaskItem *item = (KPTGanttViewTaskItem *)curr;
+		kdDebug()<<k_funcinfo<<"Task item="<<item<<endl;
+		return &(item->getNode());
+	}
+	else if (curr->type() == KDGanttViewItem::Event)
+	{
+		KPTGanttViewEventItem *item = (KPTGanttViewEventItem *)curr;
+		kdDebug()<<k_funcinfo<<"Event item="<<item<<endl;
+		return &(item->getNode());
+	}
+	kdDebug()<<k_funcinfo<<"No item="<<endl;
+	return 0;
+}
+
+void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int)
+{
+	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+	if (menu)
+	{
+		int id = menu->exec(pos);
+		kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+	}
+	else
+		kdDebug()<<k_funcinfo<<"No menu!"<<endl;
 }
 
 #include "kptganttview.moc"

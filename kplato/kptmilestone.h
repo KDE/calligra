@@ -37,6 +37,9 @@ class KPTMilestone : public KPTNode {
         KPTMilestone(KPTNode *parent = 0);
         ~KPTMilestone();
 
+        virtual int type() const;
+        static int TYPE;
+	
         // no children permitted.
         void addChildNode( KPTNode *) {}
         void addResource( KPTResourceGroup *) {}

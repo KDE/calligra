@@ -65,6 +65,17 @@ public:
     // Declare the class abstract
     virtual ~KPTNode() = 0;
 
+    enum NodeTypes {
+        Type_Node = 0,
+        Type_Project = 1,
+        Type_Task = 2,
+        Type_Milestone = 3,
+        Type_Periodic = 4
+    };
+
+    virtual int type() const;
+    static int TYPE;
+	
     // The load and save methods
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element) const = 0;

@@ -41,6 +41,10 @@ KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependPar
 KPTNode::~KPTNode() {
 }
 
+int KPTNode::type() const { return TYPE; }
+int KPTNode::TYPE = KPTNode::Type_Node;
+
+
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)

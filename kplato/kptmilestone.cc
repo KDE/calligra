@@ -34,6 +34,9 @@ KPTMilestone::KPTMilestone(KPTNode *parent) : KPTNode(parent) {
 KPTMilestone::~KPTMilestone() {
 }
 
+int KPTMilestone::type() const { return TYPE; }
+int KPTMilestone::TYPE = KPTNode::Type_Milestone;
+
 bool KPTMilestone::load(QDomElement &element) {
     kdDebug()<<k_funcinfo<<endl;
     m_name = element.attribute("name");

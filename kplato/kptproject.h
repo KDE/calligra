@@ -46,6 +46,9 @@ public:
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
+    virtual int type() const;
+    static int TYPE;
+	
     /**
      * Calculate the whole project
      */

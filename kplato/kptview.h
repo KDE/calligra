@@ -26,6 +26,8 @@ class QListViewItem;
 class QPopupMenu;
 class QHBoxLayout;
 class QTabWidget;
+class QWidgetStack;
+
 class KListView;
 
 class KPTGanttView;
@@ -34,6 +36,7 @@ class KPTPart;
 class KPTNode;
 class KPTNodeItem;
 
+class KDGanttView;
 
 class KPTView : public KoView {
     Q_OBJECT
@@ -78,7 +81,8 @@ protected slots:
 #ifndef NDEBUG
     void slotPrintDebug();
 #endif
-
+	void timerDone(); //HACK
+	
 protected:
     virtual void updateReadWrite(bool readwrite);
 
@@ -87,7 +91,8 @@ private:
     QHBoxLayout *m_ganttlayout;
     KPTPertView *m_pertview;
     QHBoxLayout *m_pertlayout;
-	QTabWidget *m_tab;
+	QWidgetStack *m_tab;
+	KDGanttView *m_resourceview;
 
     int m_viewGrp;
     int m_defaultFontSize;

@@ -20,7 +20,7 @@
 #ifndef KPTGANTTVIEW_H
 #define KPTGANTTVIEW_H
 
-#include <qsplitter.h>
+#include <KDGanttView.h>
 
 class KPTView;
 class KPTProjectList;
@@ -30,35 +30,43 @@ class KPTNodeItem;
 class KPTNode;
 class QLayout;
 class QListViewItem;
+class QPoint;
 
- class KPTGanttView : public QSplitter
+class KDGanttViewSummaryItem;
+class KDGanttViewItem;
+
+ class KPTGanttView : public KDGanttView
 {
     Q_OBJECT
     
  public:
  
-    KPTGanttView( KPTView *view, QWidget *parent, QLayout *layout );
+    KPTGanttView( KPTView *view, QWidget *parent );
 
     //~KPTGanttView();
     
 	void zoom(double zoom);
     
-    void draw();
+    void draw(KPTNode &node);
     KPTView *mainView();
-    KPTNodeItem *currentItem();
-    KPTNodeItem *selectedItem();
 
- public slots:
-    void slotOpen(QListViewItem *item);
-    void slotRMBPressed(QListViewItem *item, const QPoint & point, int col);
-    
+	KPTNode *currentNode();
+
+public slots:
+    void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
+	
+private slots:
+    void currentItemChanged(KDGanttViewItem *);
+	
 private:
-    void init(QLayout *layout);
-    
+    void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
+    void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+    void drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+
+private:    
 	KPTView *m_mainview;
-    KPTProjectList *m_projectlist;
-    KPTTimeScale *m_timescale;
-    KPTGanttCanvas *m_canvasview;
     int m_defaultFontSize;
+	KDGanttViewItem *m_currentItem;
 };
  #endif

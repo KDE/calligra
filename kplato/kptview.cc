@@ -27,6 +27,11 @@
 #include "kptganttview.h"
 #include "kptpertview.h"
 
+#include "kptcanvasitem.h"
+
+#include "KDGanttView.h"
+#include "KDGanttViewTaskItem.h"
+
 #include <koKoolBar.h>
 #include <koRect.h>
 
@@ -45,6 +50,8 @@
 #include <qheader.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qwidgetstack.h>
+#include <qtimer.h>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -68,17 +75,15 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     setInstance(KPTFactory::global());
     setXMLFile("kplato.rc");
 
-	m_tab = new QTabWidget(this, "Main QTabWidget");
+	m_tab = new QWidgetStack(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->add(m_tab);
 
+	m_ganttview = new KPTGanttView( this, m_tab);
+	m_tab->addWidget(m_ganttview);
+
 	m_pertview = new KPTPertView( this, m_tab, layout );
-    m_tab->addTab(m_pertview, "Pert");
-
-	m_ganttview = new KPTGanttView( this, m_tab, layout );
-	m_tab->addTab(m_ganttview, "Gantt");
-
-    connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(slotChanged(QWidget *)));
+    m_tab->addWidget(m_pertview);
 
 	// The menu items
     // ------ Edit
@@ -108,8 +113,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
 
     // ------ Tools
-    new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
-		SLOT(slotEditResource()), actionCollection(), "edit_resource");
+    //new KAction(i18n("Resource Editor..."), "edit_resource", 0, this,
+	//	SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
     // ------ Settings
     new KAction(i18n("Configure..."), "configure", 0, this,
@@ -122,8 +127,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG
-    KAction* actDebugLayout = new KAction( i18n( "Debug Layout" ), CTRL+SHIFT+Key_L,
-                        this, SLOT( debugLayout() ), actionCollection(), "debug_layout" );
     KAction* actPrintDebug = new KAction( i18n( "Print Debug" ), CTRL+SHIFT+Key_P,
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
 #endif
@@ -133,19 +136,32 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 #if KDE_VERSION < 305
     KAccel * accel = new KAccel( this );
 #ifndef NDEBUG
-    actDebugLayout->plugAccel( accel );
     actPrintDebug->plugAccel( accel );
 #endif
 #else
     // Stupid compilers ;)
 #ifndef NDEBUG
-    Q_UNUSED( actDebugLayout );
     Q_UNUSED( actPrintDebug );
 #endif
 #endif
 
+
+    // If I do this, QBoxLayout::setGeometry() crashes. Please try and report (it could be my system)
+    //m_ganttview->draw(getPart()->getProject());
+    //connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
+    // HACK: so I do this instead...
+    QTimer *t = new QTimer(this);
+	connect( t, SIGNAL(timeout()), this, SLOT(timerDone()) );
+	t->start( 1000, TRUE );
+
 }
 
+// HACK
+void KPTView::timerDone()
+{
+    slotUpdate(false);
+    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
+}
 
 void KPTView::setZoom(double zoom) {
     m_ganttview->zoom(zoom);
@@ -167,12 +183,12 @@ void KPTView::slotEditPaste() {
 
 void KPTView::slotViewGantt() {
     kdDebug()<<k_funcinfo<<endl;
-    m_tab->showPage(m_ganttview);
+    m_tab->raiseWidget(m_ganttview);
 }
 
 void KPTView::slotViewPert() {
     kdDebug()<<k_funcinfo<<endl;
-    m_tab->showPage(m_pertview);
+    m_tab->raiseWidget(m_pertview);
 }
 
 void KPTView::slotViewResources() {
@@ -192,85 +208,54 @@ void KPTView::slotProjectCalculate() {
 
 
 void KPTView::slotAddSubProject() {
-    KPTProject *proj = new KPTProject();
-    if (proj->openDialog()) {
-        KPTNodeItem *curr = m_ganttview->currentItem();
-        // find last
-        QListViewItem *last = curr->lastChild();
-        KPTNodeItem *newItem;
-        if (last) {
-            newItem = new KPTNodeItem(curr, last, (KPTNode *)proj);
-            kdDebug(42000) << "Added item '" << newItem->text(0) << "' after '"<< last->text(0)<< "' to parent '" << last->parent()->text(0) << "'"<< endl;
-        } else {
-            newItem = new KPTNodeItem(curr, (KPTNode *)proj);
-        }
-        newItem->setOpen(true);
-
-        KPTNode &currNode = curr->getNode();
-        currNode.addChildNode(proj);
-
-        int n = currNode.numChildren();
-        if (n > 1) {
-            KPTNode &prev = currNode.getChildNode(n-2);
-            kdDebug(42000) << "Added node[" << n-1 << "] '" << proj->name() <<  "' after '" << prev.name() << "' to '" << currNode.name().latin1() << "'" << endl;
-        } else
-            kdDebug(42000) << "Added node[" << n-1 << "] '" << proj->name() << "' to '" << currNode.name().latin1() << "'" << endl;
-
-		slotUpdate(true);
-
-    } else
-        delete proj;
+    KPTProject *node = new KPTProject();
+    if (node->openDialog()) {
+		KPTNode *currNode = m_ganttview->currentNode();
+		if (currNode)
+        {
+			currNode->addChildNode(node);
+    		slotUpdate(true);
+			return;
+	    }
+		else
+		    kdDebug()<<k_funcinfo<<"Cannot insert new project. Hmm, no current node!?"<<endl;
+	}
+    delete node;
 }
 
 
 void KPTView::slotAddTask() {
-    KPTTask *task = new KPTTask();
-    if (task->openDialog()) {
-        KPTNodeItem *curr = m_ganttview->currentItem();
-        // find last
-        QListViewItem *last = curr->lastChild();
-        KPTNodeItem *newItem;
-        if (last) {
-            newItem = new KPTNodeItem(curr, last, (KPTNode *)task);
-            kdDebug(42000) << "Added '" << newItem->text(0) << "' after '"<< last->text(0)<< "' to parent '" << last->parent()->text(0) << "'"<< endl;
-        } else {
-            newItem = new KPTNodeItem(curr, (KPTNode *)task);
-        }
-        newItem->setOpen(true);
-
-        KPTNode &currNode = curr->getNode();
-        kdDebug(42000) << "Adding '" << task->name() << "' to '" << currNode.name().latin1() << "'"<< endl;
-        currNode.addChildNode(task);
-
-		slotUpdate(true);
-    } else
-        delete task;
+    KPTTask *node = new KPTTask();
+    if (node->openDialog()) {
+		KPTNode *currNode = m_ganttview->currentNode();
+		if (currNode)
+        {
+			currNode->addChildNode(node);
+    		slotUpdate(true);
+			return;
+	    }
+		else
+		    kdDebug()<<k_funcinfo<<"Cannot insert new task. Hmm, no current node!?"<<endl;
+	}
+    delete node;
 }
 
 void KPTView::slotAddMilestone() {
-    KPTMilestone *ms = new KPTMilestone();
-    ms->setName(i18n("Milestone"));
+    KPTMilestone *node = new KPTMilestone();
+    node->setName(i18n("Milestone"));
 
-    if (ms->openDialog()) {
-        KPTNodeItem *curr = m_ganttview->currentItem();
-        // find last
-        QListViewItem *last = curr->lastChild();
-        KPTNodeItem *newItem;
-        if (last) {
-            newItem = new KPTNodeItem(curr, last, (KPTNode *)ms);
-            kdDebug(42000) << "Added '" << newItem->text(0) << "' after '"<< last->text(0)<< "' to parent '" << last->parent()->text(0) << "'"<< endl;
-        } else {
-            newItem = new KPTNodeItem(curr, (KPTNode *)ms);
-        }
-        newItem->setOpen(true);
-
-        KPTNode &currNode = curr->getNode();
-        kdDebug(42000) << "Adding '" << ms->name() << "' to '" << currNode.name().latin1() << "'"<< endl;
-        currNode.addChildNode(ms);
-
-		slotUpdate(true);
-	} else
-        delete ms;
+    if (node->openDialog()) {
+		KPTNode *currNode = m_ganttview->currentNode();
+		if (currNode)
+        {
+			currNode->addChildNode(node);
+    		slotUpdate(true);
+			return;
+	    }
+		else
+		    kdDebug()<<k_funcinfo<<"Cannot insert new milestone. Hmm, no current node!?"<<endl;
+	}
+    delete node;
 }
 
  void KPTView::slotConfigure() {
@@ -279,13 +264,14 @@ void KPTView::slotAddMilestone() {
 
 void KPTView::slotOpenNode() {
     kdDebug()<<k_funcinfo<<endl;
-	if (m_tab->currentPage() == m_ganttview)
+	if (m_tab->visibleWidget() == m_ganttview)
 	{
-        KPTNodeItem *item = m_ganttview->currentItem();
-        slotOpen(item);
+        KPTNode *node = m_ganttview->currentNode();
+        if (node)
+		    node->openDialog();
 		return;
 	}
-	if (m_tab->currentPage() == m_pertview)
+	if (m_tab->visibleWidget() == m_pertview)
 	{
 	    m_pertview->currentNode()->openDialog();
 		return;
@@ -308,10 +294,10 @@ KPTPart *KPTView::getPart()const {
 
 void KPTView::slotConnectNode() {
     kdDebug()<<k_funcinfo<<endl;
-    KPTNodeItem *curr = m_ganttview->currentItem();
+/*    KPTNodeItem *curr = m_ganttview->currentItem();
     if (curr) {
         kdDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
-    }
+    }*/
 }
 
 QPopupMenu * KPTView::popupMenu( const QString& name )
@@ -340,12 +326,13 @@ void KPTView::slotUpdate(bool calculate)
     kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
 	    slotProjectCalculate();
-	if (m_tab->currentPage() == m_ganttview)
+	if (m_tab->visibleWidget() == m_ganttview)
 	{
-    	m_ganttview->draw();
+	    m_ganttview->hide();
+    	m_ganttview->draw(getPart()->getProject());
 	    m_ganttview->show();
 	}
-	else if (m_tab->currentPage() == m_pertview)
+	else if (m_tab->visibleWidget() == m_pertview)
 	{
     	m_pertview->draw();
 	    m_pertview->show();
@@ -354,12 +341,12 @@ void KPTView::slotUpdate(bool calculate)
 
 #ifndef NDEBUG
 void KPTView::slotPrintDebug() {
-    KPTNodeItem *curr = m_ganttview->currentItem();
+    kdDebug()<<"-------- Debug printout: Node list" <<endl;
+    KPTNode *curr = m_ganttview->currentNode();
     if (curr) {
-        kdDebug()<<"-------- Debug printout: Node list" <<endl;
-        curr->getNode().printDebug(true,"");
+        curr->printDebug(true,"");
     } else
-        kdDebug()<<"-------- Debug printout: No current node"<<endl;
+        getPart()->getProject().printDebug(true, "");
 }
 #endif
 #include "kptview.moc"

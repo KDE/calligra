@@ -45,6 +45,9 @@ KPTTask::~KPTTask() {
     delete m_effort;
 }
 
+int KPTTask::type() const { return TYPE; }
+int KPTTask::TYPE = KPTNode::Type_Task;
+
 
 KPTDuration *KPTTask::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;

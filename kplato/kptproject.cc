@@ -58,6 +58,8 @@ KPTProject::~KPTProject() {
     m_resourceGroups.clear();
 }
 
+int KPTProject::type() const { return TYPE; }
+int KPTProject::TYPE = KPTNode::Type_Project;
 
 void KPTProject::calculate() {
     kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;

@@ -517,3 +517,44 @@ void KPTRelationCanvasItem::printDebug( int /*info*/ )
 {
 }
 #endif
+
+
+////////////////////   KPTGanttViewSummaryItem   //////////////////////////
+
+
+KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode &node)
+    : KDGanttViewSummaryItem(parent, node.name()),
+	m_node(node)
+{}
+
+KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode &node)
+    : KDGanttViewSummaryItem(parent, node.name()),
+	m_node(node)
+{}
+
+////////////////////   KPTGanttViewTaskItem   //////////////////////////
+
+
+KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTNode &node)
+    : KDGanttViewTaskItem(parent, node.name()),
+	m_node(node)
+{}
+
+KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTNode &node)
+    : KDGanttViewTaskItem(parent, node.name()),
+	m_node(node)
+{}
+
+////////////////////   KPTGanttViewEventItem   //////////////////////////
+
+
+KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTNode &node)
+    : KDGanttViewEventItem(parent, node.name()),
+	m_node(node)
+{}
+
+KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTNode &node)
+    : KDGanttViewEventItem(parent, node.name()),
+	m_node(node)
+{}
+

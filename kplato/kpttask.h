@@ -40,6 +40,9 @@ public:
     KPTTask(KPTNode *parent = 0);
     ~KPTTask();
 
+    virtual int type() const;
+    static int TYPE;
+	
     /**
      * The expected Duration is the expected time to complete a Task, Project,
      * etc. For an individual Task, this will calculate the expected duration
