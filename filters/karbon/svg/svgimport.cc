@@ -229,95 +229,11 @@ SvgImport::parseGradient( const QDomElement &e )
 }
 
 void
-SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &params )
 {
-	GraphicsContext *gc = new GraphicsContext;
-	// set as default
-	if( m_gc.current() )
-		*gc = *( m_gc.current() );
+	VColor fillcolor = gc->fill.color();
+	VColor strokecolor = gc->stroke.color();
 
-	VColor strokecolor	= gc->stroke.color();
-	VColor fillcolor	= gc->fill.color();
-
-	// try normal PA
-	if( !e.attribute( "fill" ).isEmpty() )
-	{
-		if( e.attribute( "fill" ) == "none" )
-			gc->fill.setType( VFill::none );
-		else
-		{
-			fillcolor = parseColor( e.attribute( "fill" ) );
-			gc->fill.setType( VFill::solid );
-		}
-	}
-	if( !e.attribute( "fill-rule" ).isEmpty() )
-		if( e.attribute( "fill-rule" ) == "nonzero" )
-			gc->fill.setFillRule( VFill::winding );
-		else if( e.attribute( "fill-rule" ) == "evenodd" )
-			gc->fill.setFillRule( VFill::evenOdd );
-
-	if( !e.attribute( "stroke" ).isEmpty() )
-	{
-		if( e.attribute( "stroke" ) == "none" )
-			gc->stroke.setType( VStroke::none );
-		else
-		{
-			strokecolor = parseColor( e.attribute( "stroke" ) );
-			gc->stroke.setType( VStroke::solid );
-		}
-	}
-	if( !e.attribute( "stroke-width" ).isEmpty() )
-		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
-	if( !e.attribute( "stroke-linestyle" ).isEmpty() )
-	{
-		if( e.attribute( "stroke-linestyle" ) == "miter" )
-			gc->stroke.setLineJoin( VStroke::joinMiter );
-		else if( e.attribute( "stroke-linestyle" ) == "round" )
-			gc->stroke.setLineJoin( VStroke::joinRound );
-		else if( e.attribute( "stroke-linestyle" ) == "bevel" )
-			gc->stroke.setLineJoin( VStroke::joinBevel );
-	}
-	if( !e.attribute( "stroke-linecap" ).isEmpty() )
-	{
-		if( e.attribute( "stroke-linecap" ) == "butt" )
-			gc->stroke.setLineCap( VStroke::capButt );
-		else if( e.attribute( "stroke-linecap" ) == "round" )
-			gc->stroke.setLineCap( VStroke::capRound );
-		else if( e.attribute( "stroke-linecap" ) == "square" )
-			gc->stroke.setLineCap( VStroke::capSquare );
-	}
-	if( !e.attribute( "stroke-dasharray" ).isEmpty() )
-	{
-		QString dasharray = e.attribute( "stroke-dasharray" );
-		QStringList dashes = QStringList::split( ' ', dasharray );
-		QValueList<float> array;
-	    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
-			array.append( (*it).toFloat() );
-
-		gc->stroke.dashPattern().setArray( array );
-	}
-	if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
-		gc->stroke.dashPattern().setOffset( e.attribute( "stroke-dashoffset" ).toFloat() );
-
-	// handle opacity
-	if( !e.attribute( "stroke-opacity" ).isEmpty() )
-		strokecolor.setOpacity( e.attribute( "stroke-opacity" ).toFloat() );
-	else if( !e.attribute( "fill-opacity" ).isEmpty() )
-		fillcolor.setOpacity( e.attribute( "fill-opacity" ).toFloat() );
-	if( !e.attribute( "opacity" ).isEmpty() )
-	{
-		fillcolor.setOpacity( e.attribute( "opacity" ).toFloat() );
-		strokecolor.setOpacity( e.attribute( "opacity" ).toFloat() );
-	}
-
-	// try style attr
-	QString style = e.attribute( "style" ).simplifyWhiteSpace();
-	QStringList substyles = QStringList::split( ';', style );
-    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
-	{
-		QStringList substyle = QStringList::split( ':', (*it) );
-		QString command	= substyle[0].stripWhiteSpace();
-		QString params	= substyle[1].stripWhiteSpace();
 		if( command == "fill" )
 		{
 			if( params == "none" )
@@ -386,21 +302,65 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 			gc->stroke.dashPattern().setOffset( params.toFloat() );
 
 		// handle opacity
-		else if( command == "stroke-opacity" )
+		if( command == "stroke-opacity" )
 			strokecolor.setOpacity( params.toFloat() );
-		else if( command == "fill-opacity" )
+		if( command == "fill-opacity" )
 			fillcolor.setOpacity( params.toFloat() );
-		else if( command == "opacity" )
+		if( command == "opacity" )
 		{
 			fillcolor.setOpacity( params.toFloat() );
 			strokecolor.setOpacity( params.toFloat() );
 		}
-	}
 
 	if( gc->fill.type() == VFill::solid )
 		gc->fill.setColor( fillcolor );
 	if( gc->stroke.type() == VStroke::solid )
 		gc->stroke.setColor( strokecolor );
+}
+
+void
+SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+{
+	GraphicsContext *gc = new GraphicsContext;
+	// set as default
+	if( m_gc.current() )
+		*gc = *( m_gc.current() );
+
+	// try normal PA
+	if( !e.attribute( "fill" ).isEmpty() )
+		parsePA( gc, "fill", e.attribute( "fill" ) );
+	if( !e.attribute( "fill-rule" ).isEmpty() )
+		parsePA( gc, "fill-rule", e.attribute( "fill-rule" ) );
+	if( !e.attribute( "stroke" ).isEmpty() )
+		parsePA( gc, "stroke", e.attribute( "stroke" ) );
+	if( !e.attribute( "stroke-width" ).isEmpty() )
+		parsePA( gc, "stroke-width", e.attribute( "stroke-width" ) );
+	if( !e.attribute( "stroke-linestyle" ).isEmpty() )
+		parsePA( gc, "stroke-linestyle", e.attribute( "stroke-linestyle" ) );
+	if( !e.attribute( "stroke-linecap" ).isEmpty() )
+		parsePA( gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
+	if( !e.attribute( "stroke-dasharray" ).isEmpty() )
+		parsePA( gc, "stroke-dasharray", e.attribute( "stroke-dasharray" ) );
+	if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
+		parsePA( gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
+	if( !e.attribute( "stroke-opacity" ).isEmpty() )
+		parsePA( gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
+	if( !e.attribute( "fill-opacity" ).isEmpty() )
+		parsePA( gc, "fill-opacity", e.attribute( "fill-opacity" ) );
+	if( !e.attribute( "opacity" ).isEmpty() )
+		parsePA( gc, "opacity", e.attribute( "opacity" ) );
+
+	// try style attr
+	QString style = e.attribute( "style" ).simplifyWhiteSpace();
+	QStringList substyles = QStringList::split( ';', style );
+    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+	{
+		QStringList substyle = QStringList::split( ':', (*it) );
+		QString command	= substyle[0].stripWhiteSpace();
+		QString params	= substyle[1].stripWhiteSpace();
+		parsePA( gc, command, params );
+	}
+
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
 	obj->transform( gc->matrix );

@@ -57,6 +57,7 @@ protected:
 	void parsePath( VComposite *, const QDomElement & );
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
+	void parsePA( GraphicsContext *, const QString &, const QString & );
 	void parseGradient( const QDomElement & );
 	void parseColorStops( VGradient *, const QDomElement & );
 	VColor parseColor( const QString & );
