@@ -181,6 +181,7 @@ private slots:
     void slotConfigureEllipse();
     void slotAddHelpline(int x, int y, bool d);
     void slotZoomFactorChanged(float factor);
+    void slotSettingsChanged();
 
 protected:
     KIllustratorDocument *m_pDoc;

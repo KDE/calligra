@@ -307,8 +307,10 @@ void KIllustratorView::setupCanvas()
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
     hRuler->setGeometry(30, 0, width()-30, 30);
+    hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler = new Ruler (Ruler::Vertical, mu, this);
     vRuler->setGeometry(0, 30, 30, height()-30);
+    vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 
     scrollview = new QScrollView(this);
     scrollview->setGeometry(30, 30, width()-30, height()-30);
@@ -336,6 +338,7 @@ void KIllustratorView::setupCanvas()
                       vRuler, SLOT(updatePointer(int, int)));
     QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
                       this, SLOT(popupForSelection (int, int)));
+    connect(PStateManager::instance(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
@@ -1176,6 +1179,11 @@ void KIllustratorView::slotZoomFactorChanged(float factor) {
             break;
         }
     }
+}
+
+void KIllustratorView::slotSettingsChanged() {
+    hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
+    vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 }
 
 #include <KIllustrator_view.moc>
