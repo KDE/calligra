@@ -71,7 +71,7 @@ DomNode::DomNode( const char *doctype )
     hasAttributes	= false;
     str += "<?xml version = '1.0' encoding = 'UTF-8'?><!DOCTYPE " ;
     str += doctype;
-    str += " ><";
+    str += " >\n<";
     str += doctype;
 }
 
@@ -272,10 +272,6 @@ void DomNode::closeNode( const char *name )
 {
     if (!hasChildren)
     {
-        if (hasAttributes)
-        {
-            str += ' ';
-        }
         str += '/';
     }
     else
@@ -285,7 +281,8 @@ void DomNode::closeNode( const char *name )
     }
     str += ">\n";
 
-    for (int i=--documentLevel; i > 1; i--)
+    --documentLevel;
+    for (int i=1; i<documentLevel; i++)
     {
         str += ' ';
     }
@@ -300,17 +297,13 @@ void DomNode::closeTag( bool nl )
 {
     if (!hasChildren)
     {
-        if (hasAttributes)
-        {
-            str += ' ';
-        }
         str += '>';
 
         if (nl)
         {
             str += '\n';
 
-            for (int i=0; i<documentLevel; i++)
+            for (int i=1; i<documentLevel; i++)
             {
                 str += ' ';
             }
