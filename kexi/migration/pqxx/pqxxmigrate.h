@@ -82,13 +82,16 @@ namespace KexiMigration
 			virtual bool drv_disconnect();
 			
 //TODO: move this somewhere to low level class (MIGRATION?)
-			virtual bool drv_getTablesList( QStringList &list );
+			//virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
-			virtual bool drv_containsTable( const QString &tableName );
+			//virtual bool drv_containsTable( const QString &tableName );
 		public:
 			~pqxxMigrate();
 			//Constructor
 			pqxxMigrate();
+			pqxxMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
+			virtual int versionMajor() const;
+			virtual int versionMinor() const;
 			
 	};
 }

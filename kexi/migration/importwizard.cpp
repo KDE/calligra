@@ -221,10 +221,12 @@ void importWizard::accept()
     KexiDB::ConnectionData *cdata;
     QString dbname;
     
+    kdDebug() << "Creating managers..." << endl;
     //Start with a driver manager
     KexiDB::DriverManager manager;
     MigrateManager mmanager;
     
+    kdDebug() << "Creating destiniation driver..." << endl;
     //get a driver to the destination database
     KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
     
@@ -232,12 +234,14 @@ void importWizard::accept()
     //Check for errors
     if (!driver || manager.error())
     {
+      	kdDebug() << "Manager error..." << endl;
         manager.debugError();
     }
     
     if (!dstConn->selectedConnectionData() == 0)
     {
         //server-based project
+      	kdDebug() << "Server destiniation..." << endl;
         cdata = dstConn->selectedConnectionData();
         dbname = dstNewDBName->text();
         
@@ -245,11 +249,15 @@ void importWizard::accept()
     else if (dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
     {
         //file-based project
+      	kdDebug() << "File Destination..." << endl;
         cdata = new KexiDB::ConnectionData;
         cdata->connName = dstNewDBName->text();
         cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
         cdata->setFileName( dstConn->m_fileDlg->currentFileName() );
-        dbname = dstConn->m_fileDlg->currentFileName();
+	
+	kdDebug() << "Current file name: " << dstConn->m_fileDlg->currentFileName() << endl;
+	
+	dbname = dstConn->m_fileDlg->currentFileName();
     }
     else
     {
@@ -259,13 +267,17 @@ void importWizard::accept()
     }
 
     
+    kdDebug() << "Creating connection to destination..." << endl;
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
+    kdDebug() << "Creating source driver..." << endl;
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
     
+    kdDebug() << "Setting import data.." << endl;
     import->setData(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
 
+    kdDebug() << "Performing import..." << endl;
     if (import->performImport())
     {
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));

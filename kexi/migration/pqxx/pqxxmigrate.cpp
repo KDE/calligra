@@ -35,6 +35,8 @@ to compile, let alone work.  This is meant as an example of
 what the system might be and is a work in progress
 */
 
+KEXIMIGRATE_DRIVER_INFO( pqxxMigrate, pqxx );
+
 //==================================================================================
 //Constructor
 pqxxMigrate::pqxxMigrate()
@@ -44,6 +46,13 @@ m_trans=0;
 m_conn=0;
 }
 
+pqxxMigrate::pqxxMigrate(QObject *parent, const char *name, const QStringList &args) :
+  KexiMigrate(parent, name, args)
+{
+m_res=0;
+m_trans=0;
+m_conn=0;
+}
 //==================================================================================
 //Destructor
 pqxxMigrate::~pqxxMigrate()

@@ -36,6 +36,10 @@ KexiMigrate::KexiMigrate()
 {
   
 }
+KexiMigrate::KexiMigrate(QObject *parent, const char *name, 
+	const QStringList &args) : QObject( parent, name )
+{
+}
 
 //==================================================================================
 //Data setup

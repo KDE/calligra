@@ -49,6 +49,7 @@ namespace KexiMigration
 			
 			//Constructor
 			KexiMigrate();
+			KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
 			
 			//Data Setup.  Requires two connection objects, a name and a bool
 			void setData(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data);
@@ -59,6 +60,8 @@ namespace KexiMigration
 			//Perform an export operation
 			bool performExport();
 			
+			virtual int versionMajor() const = 0;
+			virtual int versionMinor() const = 0;
 		protected:
 			
 					
@@ -107,5 +110,12 @@ namespace KexiMigration
 
 } //namespace KexiMigration
 
+#include <kgenericfactory.h>
+#define KEXIMIGRATE_DRIVER_INFO( class_name, internal_name ) \
+	int class_name::versionMajor() const { return 0; } \
+	int class_name::versionMinor() const { return 0; } \
+	K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name ## migrate, \
+	  KGenericFactory<KexiMigration::class_name>( "keximigrate_" #internal_name ))
+    
 #endif
 
