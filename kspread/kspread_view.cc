@@ -1020,7 +1020,7 @@ void KSpreadView::initializeTextPropertyActions()
 
 void KSpreadView::initializeTableActions()
 {
-  m_insertTable = new KAction( i18n("Sheet"),"inserttable", 0, this,
+  m_insertTable = new KAction( i18n("Insert Sheet..."),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "insertTable" );
   m_insertTable->setToolTip(i18n("Insert a new sheet."));
