@@ -18,17 +18,17 @@
     </Function>
 
     <Function>
-      <Name>ISLOGIC</Name>
+      <Name>ISLOGICAL</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>Any value</Comment>
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISLOGIC() function returns True if the parameter is a boolean value. Otherwise it returns False.</Text>
-	<Syntax>ISLOGIC(x)</Syntax>
-	<Example>ISLOGIC(A1>A2) returns True</Example>
-	<Example>ISLOGIC(12) returns False</Example>
+	<Text>The ISLOGICAL() function returns True if the parameter is a boolean value. Otherwise it returns False.</Text>
+	<Syntax>ISLOGICAL(x)</Syntax>
+	<Example>ISLOGICAL(A1>A2) returns True</Example>
+	<Example>ISLOGICAL(12) returns False</Example>
       </Help>
     </Function>
 

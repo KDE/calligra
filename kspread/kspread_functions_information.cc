@@ -101,12 +101,12 @@ bool kspreadfunc_isblank( KSContext& context )
   return true;
 }
 
-// Function: ISLOGIC
-bool kspreadfunc_islogic( KSContext& context )
+// Function: ISLOGICAL
+bool kspreadfunc_islogical( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ISLOGIC", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISLOGICAL", true ) )
     return false;
 
   bool logic = KSUtil::checkType( context, args[0], KSValue::BoolType, true );

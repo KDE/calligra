@@ -138,7 +138,7 @@ bool kspreadfunc_if( KSContext& context );
 // defined in kspread_functions_information.cc
 bool kspreadfunc_info( KSContext& context );
 bool kspreadfunc_isblank( KSContext& context );
-bool kspreadfunc_islogic( KSContext& context );
+bool kspreadfunc_islogical( KSContext& context );
 bool kspreadfunc_istext( KSContext& context );
 bool kspreadfunc_isnottext( KSContext& context );
 bool kspreadfunc_isnum( KSContext& context );
@@ -583,7 +583,7 @@ static const functionEntry funcTab[] = {
   // information
   { "INFO", kspreadfunc_info },
   { "ISBLANK", kspreadfunc_isblank },
-  { "ISLOGIC", kspreadfunc_islogic },
+  { "ISLOGICAL", kspreadfunc_islogical },
   { "ISTEXT", kspreadfunc_istext },
   { "ISNUM", kspreadfunc_isnum },
   { "ISNOTTEXT", kspreadfunc_isnottext },
@@ -684,6 +684,7 @@ static const functionEntry funcTab[] = {
   { "DECHEX", kspreadfunc_dec2hex },
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
+  { "ISLOGIC", kspreadfunc_islogical }, // obsolete, use ISLOGICAL
 
   // end  marker
   { NULL, NULL }
