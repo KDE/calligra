@@ -1,22 +1,22 @@
 // $Header$
 
-/*
-   This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include <config.h>
@@ -31,9 +31,10 @@
 #include <qxml.h>
 #include <qdom.h>
 #include <qstack.h>
-#include <zlib.h>
 #include <ktempfile.h>
+
 #include "processors.h"
+#include "kqiodevicegzip.h"
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
@@ -49,7 +50,7 @@ public:
     void* value;
 };
 
-// Treat the "props" attribute of AbiWord's tags and split it in spearates names and values
+// Treat the "props" attribute of AbiWord's tags and split it in separates names and values
 static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
 {
     if (strProps.isEmpty())
@@ -324,7 +325,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if ((name=="p")||(name=="P"))
     {
-        //We use mainFramesetElement here to be not dependant that <section> has happend before
+        //We use mainFramesetElement here to be not dependant that <section> has happened before
         QDomElement paragraphElementOut=mainFramesetElement.ownerDocument().createElement("PARAGRAPH");
         mainFramesetElement.appendChild(paragraphElementOut);
         QDomElement textElementOut=mainFramesetElement.ownerDocument().createElement("TEXT");
@@ -522,14 +523,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return false;
 
-
-    //The warning is serious!! (KWord crashes if it does not find a few things in its XML code)
-    kdDebug(30506)<<"WARNING: AbiWord to KWord Import filter can crash KWord!!"<<endl;
-
-    QString fileToParseName(fileIn); //Name of the file to parse
-    bool otherFile=false; //Do we have an intermediary file;
-
-    //Test if the file is gzipped
+    kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
     //At first, find the last extension
     QString strExt;
@@ -539,65 +533,7 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         strExt=fileIn.mid(result);
     }
 
-    kdDebug(30506) << "AbiWord Filter: -" << strExt << "-" << endl;
-
-    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
-        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
-    {   //The input file is compressed, so we cannot treat it directly
-
-        const int bufferSize=1024;
-        char buffer[bufferSize];
-
-        //Open another temporary file (in the method of KoFilterManager::import)
-        KTempFile tempFileIn;
-        if (tempFileIn.status())
-        { //An error has occured, so abort!
-            return false;
-        }
-        QString tempFileInName=tempFileIn.name();
-        gzFile gzfile=gzopen(fileIn.local8Bit(),"rb");
-        if (!gzfile)
-        {
-            kdError(30506) << "Could not open gzipped file! Aborting!" << endl;
-            return false;
-        }
-        for (;;)
-        {
-            const int result=gzread(gzfile,buffer,bufferSize);
-            if (result>0)
-            {
-                const int result2=tempFileIn.file()->writeBlock(buffer,result);
-                if (result==result2)
-                {
-                    continue;
-                }
-                else
-                {
-                    // error!
-                    kdError(30506) << "Cannot write temp file! Aborting!" << endl;
-                    gzclose(gzfile);
-                    return false;
-                }
-            }
-            else if (!result)
-            {
-                // end of file
-                break;
-            }
-            else
-            {
-                // error!
-                kdError(30506) << "Error reading gzipped file! Aborting!" << endl;
-                gzclose(gzfile);
-                return false;
-            }
-        }
-        gzclose(gzfile);
-        kdDebug(30506)<< "Gzipped file uncompressed!" << endl;
-
-        fileToParseName=tempFileIn.name();
-        otherFile=true;
-    }
+    kdDebug(30506) << "File extension: -" << strExt << "-" << endl;
 
     //Initiate QDomDocument (TODO: is there are better way?)
     QString strHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -617,28 +553,42 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
 
-
     StructureParser handler(createMainFramesetElement(qDomDocumentOut));
 
     //For now, we arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
-    // The input file is now uncompressed, so we may handle it directly
-    QFile in(fileToParseName);
-    QXmlInputSource source(in);
-    if (!reader.parse( source ))
-    {
-        kdError(30506) << "AbiWord Import: Parsing unsuccessful. Aborting!" << endl;
-        return false;
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {   //The input file is compressed
+        KQIODeviceGZip in(fileIn);
+        if (!in.open(IO_ReadOnly))
+        {
+            kdError(30506) << "Cannot open KQIODeviceGzip. Aborting!" << endl;
+            return false;
+        }
+        QTextStream inStream(&in);
+        QXmlInputSource source(inStream);
+        in.close();
+        kdDebug(30506) << source.data() << endl;
+        if (!reader.parse( source ))
+        {
+            kdError(30506) << "Import (GZIP): Parsing unsuccessful. Aborting!" << endl;
+            return false;
+        }
     }
-
-    if (otherFile)
+    else
     {
-        // Unlink the intermediary file (Note: file is not deleted if there was a parsing error!)
-        in.remove();
+        // The input file is now uncompressed, so we may handle it directly
+        QFile in(fileIn);
+        QXmlInputSource source(in);
+        if (!reader.parse( source ))
+        {
+            kdError(30506) << "Import (UNCOMPRESSED): Parsing unsuccessful. Aborting!" << endl;
+            return false;
+        }
     }
-
 
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))

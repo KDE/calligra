@@ -1,22 +1,22 @@
 // $Header$
 
-/*
-   This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
-  
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-  
-   This program is distributed in the hope that it will be useful,
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-  
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 /*
@@ -36,8 +36,9 @@
 #include <abiwordexport.moc>
 #include <kdebug.h>
 #include <qdom.h>
-#include <zlib.h>
+
 #include "processors.h"
+#include "kqiodevicegzip.h"
 
 ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -403,7 +404,6 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             if ((*paraFormatDataIt).abiprops.isEmpty())
             {
                 //It's just normal text, so there is no "props" attribute
-                //Should rarely happen, as we have always the font name and size
                 //Note: you must use a <c> tag!
                 outputText += "<c>";
             }
@@ -579,12 +579,9 @@ static bool writeOutputFileUncompressed(const QString& filename, const QCString&
 
     if ( !fileOut.open (IO_WriteOnly) )
     {
-        fileOut.close ();
-
         kdError(30506) << "Unable to open output file!" << endl;
         return false;
     }
-
 
     //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
     // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
@@ -597,30 +594,19 @@ static bool writeOutputFileUncompressed(const QString& filename, const QCString&
 static bool writeOutputFileGZipped(const QString& filename, const QCString& strOut)
 {
     //Now all is ready to write to a file
-    gzFile fileOut;
+    KQIODeviceGZip fileOut (filename);
 
-    QCString name(filename.local8Bit());
-    fileOut=gzopen(name,"wb9"); //Use maximal compression
-
-    if (!fileOut)
+    if ( !fileOut.open (IO_WriteOnly) )
     {
-        //Nothing to close
-
-        kdError(30506) << "Unable to open gzipped output file!" << endl;
+        kdError(30506) << "Unable to open output file!" << endl;
         return false;
     }
 
-    const char *out=(const char *)strOut;
-    int num=gzwrite(fileOut,(void *) out, strOut.length() ); //Write the file
-    
-    if (num != int(strOut.length()))
-    { //We have a problem
-    	gzclose (fileOut); //Close the file
-        kdError(30506) << "Unable to write gzipped output file! " << num << " bytes written instead of " << strOut.length() << " bytes!" << endl;
-    	return false;
-    }
+    //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
+    // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
+    fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
 
-    gzclose (fileOut);
+    fileOut.close (); //Really close the file
     return true;
 }
 
