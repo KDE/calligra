@@ -21,6 +21,7 @@
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kozoomhandler.h>
 
 /******************************************************************/

@@ -20,6 +20,7 @@
 #include "kozoomhandler.h"
 #include "kotextformatter.h"
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include "kocommand.h"
 
 //#define DEBUG_PAINTING

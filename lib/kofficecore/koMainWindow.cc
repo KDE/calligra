@@ -40,6 +40,7 @@
 #include <kedittoolbar.h>
 #include <kprogress.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <ktempfile.h>
 #include <krecentdocument.h>
 

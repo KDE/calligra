@@ -42,6 +42,7 @@
 #include <stdlib.h>
 #include "koparagcounter.h" //// kotext
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kglobal.h>
 #include <klocale.h>
 

@@ -42,6 +42,7 @@
 #include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kmessagebox.h>
 
 #include <qfile.h>
