@@ -1,6 +1,6 @@
 SUBDIRS = pics templates
 
-INCLUDES  = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(srcdir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(LIBART_CFLAGS) $(KOPAINTER_INCLUDES) -I$(srcdir) $(all_includes)
 
 messages: rc.cpp
 	$(XGETTEXT) -kI18N -kSI18N rc.cpp *.cc kontour_about.h -o $(podir)/kontour.pot
