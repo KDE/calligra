@@ -556,7 +556,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 }
 
 void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
-                                             Canvas* canvas) {
+                                             Canvas* /*canvas*/) {
   int hmask;
   GObject *obj = 0L;
 
@@ -722,7 +722,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 void SelectionTool::translate (GDocument* doc, Canvas* canvas,
                                float dx, float dy, bool snap,
                                bool permanent) {
-   
+
   if (snap) {
     const Rect& obox = origbox;
     Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
@@ -962,7 +962,7 @@ void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
 void SelectionTool::activate (GDocument* doc, Canvas *canvas)
 {
    canvas->setCursor(Qt::arrowCursor);
- 
+
    dragHorizHelpline = dragVertHelpline = -1;
 
     doc->activePage()->handle ().show (true);

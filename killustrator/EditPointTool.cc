@@ -133,7 +133,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       // if no currently selected object was found at the mouse position ...
       if (obj == 0L)
       {
-         if ((obj = doc->activePage()->findContainingObject (xpos, ypos)) != 0L)
+         if ((obj = doc->activePage()->findContainingObject (qRound (xpos), qRound (ypos))) != 0L)
          {
             // select and edit this object
             doc->activePage()->unselectAllObjects ();

@@ -16,7 +16,7 @@ kchartDataEditor::kchartDataEditor() :
 }
 
 void kchartDataEditor::setData(KoChart::Data* dat) {
-  int rowsCount, colsCount;
+  unsigned int rowsCount, colsCount;
   if ( dat->usedRows() == 0 && dat->usedCols() == 0) { // Data from KSpread
     rowsCount = dat->rows();
     colsCount = dat->cols();

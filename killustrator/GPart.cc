@@ -79,10 +79,10 @@ void GPart::activate(KIllustratorView *view)
 
 void GPart::deactivate()
  {
-  
+
  }
 
-void GPart::draw (QPainter& p, bool withBasePoints, bool outline)
+void GPart::draw (QPainter& p, bool /*withBasePoints*/, bool outline)
  {
   p.save ();
   QRect r = child->geometry ();
@@ -110,7 +110,7 @@ void GPart::draw (QPainter& p, bool withBasePoints, bool outline)
 //    p.setViewport (vPort);
 //    p.setWindow (win);
    }
-  p.restore (); 
+  p.restore ();
  }
 
 void GPart::calcBoundingBox ()

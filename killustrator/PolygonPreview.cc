@@ -48,12 +48,12 @@ void PolygonPreview::paintEvent (QPaintEvent *) {
     double radius=diameter * 0.5;
 
     p.begin(this);
-    p.setWindow (-radius, -radius, diameter, diameter);
+    p.setWindow (qRound (-radius), qRound (-radius), qRound (diameter), qRound (diameter));
     p.setViewport (5, 5, width() - 10, height() - 10);
     p.setPen(colorGroup().text());
 
     QPointArray points(isConcave ? nCorners * 2 : nCorners);
-    points.setPoint(0, 0, -radius);
+    points.setPoint(0, 0, qRound (-radius));
 
     if (isConcave) {
         angle = angle / 2.0;

@@ -157,7 +157,7 @@ void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
   }
 }
 
-void GPage::drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
+void GPage::drawContentsInRegion (QPainter& p, const Rect& /*r*/, const Rect& rr,
                                       bool withBasePoints, bool outline)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
@@ -705,7 +705,7 @@ bool GPage::readFromXml (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
- 
+
 // update page layout
   setPageLayout (pLayout);
 
@@ -720,7 +720,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
 {
   setAutoUpdate (false);
   QDomElement head=page.namedItem("head").toElement();
-  
+
   QDomElement layout=head.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
@@ -758,7 +758,7 @@ bool GPage::readFromXmlV2 (const QDomElement &page)
   pLayout.mmRight=layout.attribute("rmargin").toFloat();
   pLayout.mmBottom=layout.attribute("bmargin").toFloat();
   pLayout.mmTop=layout.attribute("tmargin").toFloat();
- 
+
 // update page layout
   setPageLayout (pLayout);
 

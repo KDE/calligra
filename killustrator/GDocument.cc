@@ -85,7 +85,7 @@ void GDocument::initialize ()
   active_page = addPage();
   active_page->setName(i18n("Page %1").arg(1));
   curPageNum = 2;
-  
+
   autoUpdate = true;
   emit changed ();
   emit sizeChanged();
@@ -155,7 +155,7 @@ void GDocument::movePage( int from, int to, bool before )
   if ( !before )
     ++to;
 
-  if ( to > pages.count() )
+  if ( to > static_cast<int>(pages.count()) )
   {
    kdDebug(0) << "?" <<endl;
   }
@@ -312,7 +312,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
   {
     QDomElement head=killustrator.namedItem("head").toElement();
     setAutoUpdate (false);
-    
+
     QDomElement grid=head.namedItem("grid").toElement();
     gridx=grid.attribute("dx").toFloat();
     gridy=grid.attribute("dy").toFloat();
@@ -332,18 +332,18 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     }
 
     pages.clear ();
-    
+
     GPage *page = addPage();
     page->readFromXmlV2(killustrator);
-    
+
     page->setName(i18n("Page %1").arg(1));
     curPageNum = 2;
-    
+
     setModified (false);
     emit gridChanged ();
     return true;
   }
-  
+
   kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
   return false;
 }

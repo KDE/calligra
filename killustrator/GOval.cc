@@ -467,16 +467,16 @@ void GOval::getPath (QValueList<Coord>& path) {
   // we should reimplement this !!
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    parray.makeArc (sPoint.x (), sPoint.y (),
-                    ePoint.x () - sPoint.x (),
-                    ePoint.y () - sPoint.y (),
+    parray.makeArc (qRound (sPoint.x ()), qRound (sPoint.y ()),
+                    qRound (ePoint.x () - sPoint.x ()),
+                    qRound (ePoint.y () - sPoint.y ()),
                     -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    parray.makeArc (sPoint.x (), sPoint.y (),
-                    ePoint.x () - sPoint.x (),
-                    ePoint.y () - sPoint.y (), -eAngle * 16,
-                    -alen * 16);
+    parray.makeArc (qRound (sPoint.x ()), qRound (sPoint.y ()),
+                    qRound (ePoint.x () - sPoint.x ()),
+                    qRound (ePoint.y () - sPoint.y ()), qRound (-eAngle * 16),
+                    qRound (-alen * 16));
   }
   unsigned int num = parray.size ();
   for (unsigned int i = 0; i < num; i++) {
@@ -491,16 +491,16 @@ GCurve* GOval::convertToCurve () const {
   // we should reimplement this !!
   QPointArray parray;
   if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    parray.makeArc (sPoint.x (), sPoint.y (),
-                    ePoint.x () - sPoint.x (),
-                    ePoint.y () - sPoint.y (),
+    parray.makeArc (qRound (sPoint.x ()), qRound (sPoint.y ()),
+                    qRound (ePoint.x () - sPoint.x ()),
+                    qRound (ePoint.y () - sPoint.y ()),
                     -180 * 16, -360 * 16);
   else {
     float alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    parray.makeArc (sPoint.x (), sPoint.y (),
-                    ePoint.x () - sPoint.x (),
-                    ePoint.y () - sPoint.y (), -eAngle * 16,
-                    -alen * 16);
+    parray.makeArc (qRound (sPoint.x ()), qRound (sPoint.y ()),
+                    qRound (ePoint.x () - sPoint.x ()),
+                    qRound (ePoint.y () - sPoint.y ()), qRound (-eAngle * 16),
+                    qRound (-alen * 16));
   }
   unsigned int num = parray.size ();
   GCurve* curve = new GCurve (m_gdoc);

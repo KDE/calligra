@@ -54,7 +54,7 @@ bool KChartParameters::threeD() {
   return val;
 }
 
-bool KChartParameters::isPie() 
+bool KChartParameters::isPie()
 {
   bool val = ( type == KCHARTTYPE_2DPIE ||
 	  	type == KCHARTTYPE_3DPIE );
@@ -73,7 +73,7 @@ bool KChartParameters::has_hlc_sets() {
  return val;
 }
 
-bool KChartParameters::has_yaxis2() 
+bool KChartParameters::has_yaxis2()
 {
   bool val =
 		( type == KCHARTTYPE_COMBO_HLC_BAR   ||
@@ -223,9 +223,9 @@ void KChartParameters::loadConfig(KConfig *conf) {
   ylabel2_fmt = conf->readEntry("ylabel2_fmt", ylabel2_fmt);
   xlabel_spacing = conf->readNumEntry("xlabel_spacing");
   ylabel_density = conf->readNumEntry("ylabel_density", ylabel_density);
-  requested_ymin = conf->readNumEntry("requested_ymin", requested_ymin);
-  requested_ymax = conf->readNumEntry("requested_ymax", requested_ymax );
-  requested_yinterval = conf->readNumEntry("requested_yinterval",
+  requested_ymin = conf->readDoubleNumEntry("requested_ymin", requested_ymin);
+  requested_ymax = conf->readDoubleNumEntry("requested_ymax", requested_ymax );
+  requested_yinterval = conf->readDoubleNumEntry("requested_yinterval",
 					   requested_yinterval);
   shelf = conf->readBoolEntry("shelf", shelf);
   grid = conf->readBoolEntry("grid", grid);

@@ -227,10 +227,10 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
       const Coord& p1 = *(points.at (0));
       const Coord& p2 = *(points.at (2));
       if (Roundness != 0)
-         p.drawRoundRect (p1.x (), p1.y (),
+         p.drawRoundRect (qRound (p1.x ()), qRound (p1.y ()),
                           qRound (p2.x () - p1.x ()/* + xcorr*/),
                           qRound (p2.y () - p1.y () /*+ ycorr*/),
-                          Roundness, Roundness);
+                          qRound (Roundness), qRound (Roundness));
       else
       {
          Painter::drawRect (p, p1.x (), p1.y (),
@@ -552,13 +552,13 @@ void GPolygon::updateGradientShape (QPainter& p)
      float xrad = nrect.width () * Roundness / 200.0;
      float yrad = nrect.height () * Roundness / 200.0;
 
-     QRect trect (nrect.x (), nrect.y () + yrad,
-                  nrect.width (), nrect.height () - 2 * yrad);
+     QRect trect (nrect.x (), qRound (nrect.y () + yrad),
+                  nrect.width (), qRound (nrect.height () - 2 * yrad));
      QPointArray tarray (trect, true);
      QPointArray clip1 = matrix.map (tarray);
 
-     trect = QRect (nrect.x () + xrad, nrect.y (),
-                    nrect.width () - 2 * xrad, nrect.height ());
+     trect = QRect (qRound (nrect.x () + xrad), nrect.y (),
+                    qRound (nrect.width () - 2 * xrad), nrect.height ());
      tarray = QPointArray (trect, true);
      QPointArray clip2 = matrix.map (tarray);
 
@@ -566,19 +566,19 @@ void GPolygon::updateGradientShape (QPainter& p)
      QRegion region (clip1);
      region = region.unite (QRegion (clip2));
 
-     tarray.makeEllipse (nrect.x (), nrect.y (), xrad * 2 , yrad * 2);
+     tarray.makeEllipse (nrect.x (), nrect.y (), qRound (xrad * 2) , qRound (yrad * 2));
      region = region.unite (matrix.map (tarray));
 
-     tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (),
-                         xrad * 2, yrad * 2);
+     tarray.makeEllipse (nrect.right () - qRound ((2 * xrad)), nrect.y (),
+                         qRound (xrad * 2), qRound (yrad * 2));
      region = region.unite (matrix.map (tarray));
 
-     tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad),
-                         xrad * 2, yrad * 2);
+     tarray.makeEllipse (nrect.x (), nrect.bottom () - qRound ((2 * yrad)),
+                         qRound (xrad * 2), qRound (yrad * 2));
      region = region.unite (matrix.map (tarray));
 
-     tarray.makeEllipse (nrect.right () - (2 * xrad),
-                         nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
+     tarray.makeEllipse (nrect.right () - qRound ((2 * xrad)),
+                         nrect.bottom () - qRound ((2 * yrad)), qRound (xrad * 2), qRound (yrad * 2));
      region = region.unite (matrix.map (tarray));
 
      gShape.setRegion (region);

@@ -102,18 +102,18 @@ void GPixmap::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
   p.setWorldMatrix (tmpMatrix, true);
   if (outline) {
     p.setPen (black);
-    p.drawRect (0, 0, width, height);
-    float w5 = qRound (width / 5.0);
-    float h5 = qRound (height / 5.0);
+    p.drawRect (0, 0, qRound (width), qRound (height));
+    int w5 = qRound (width / 5.0);
+    int h5 = qRound (height / 5.0);
     p.drawLine (0, w5, w5, 0);
-    p.drawLine (width - w5, height, width, height - h5);
+    p.drawLine (qRound (width) - w5, qRound (height), qRound (width), qRound (height) - h5);
   }
   else {
     if (pix != 0L)
       p.drawPixmap (0, 0, *pix);
     else {
       p.setPen (gray);
-      p.fillRect (0, 0, width, height, gray);
+      p.fillRect (0, 0, qRound (width), qRound (height), gray);
     }
   }
   p.restore ();

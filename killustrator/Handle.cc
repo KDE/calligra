@@ -83,8 +83,8 @@ void Handle::draw (QPainter& p) {
                    10, 10);
 
     p.setBrush (brush);
-    p.drawLine (pos[1].x () - 4, pos[1].y (),
-                pos[1].x () + 4, pos[1].y ());
+    p.drawLine (static_cast<int>(pos[1].x ()) - 4, static_cast<int>(pos[1].y ()),
+                static_cast<int>(pos[1].x ()) + 4, static_cast<int>(pos[1].y ()));
     drawArrow (p, (int) pos[1].x () - 4, (int) pos[1].y (), Arrow_Left);
     drawArrow (p, (int) pos[1].x () + 4, (int) pos[1].y (), Arrow_Right);
 

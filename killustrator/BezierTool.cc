@@ -146,7 +146,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 // magnetic mode
                 GObject *o = 0L;
                 int idx = -1;
-                if (doc->activePage()->findNearestObject ("GBezier", xpos, ypos,
+                if (doc->activePage()->findNearestObject ("GBezier", qRound (xpos), qRound (ypos),
                                             80, o, idx)) {
                     curve = (GBezier *) o;
                     last = idx;
@@ -159,7 +159,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
                 QList<GObject> olist;
                 // look for existing bezier curves with an
                 // end point near the mouse pointer
-                if (doc->activePage()->findContainingObjects (xpos, ypos, olist)) {
+                if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist)) {
                     QListIterator<GObject> it (olist);
                     while (it.current ()) {
                         if (it.current ()->isA ("GBezier")) {

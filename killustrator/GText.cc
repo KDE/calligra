@@ -182,7 +182,7 @@ void GText::drawSimpleText (QPainter& p) {
       x1 += -ws;
 
     p.setPen (black);
-    p.drawLine (x1, y1, x1, y2);
+    p.drawLine (qRound (x1), qRound (y1), qRound (x1), qRound (y2));
   }
 }
 

@@ -62,7 +62,7 @@ void InsertPartTool::setPartEntry (KoDocumentEntry& entry)
   validEntry = true;
  }
 
-void InsertPartTool::processEvent (QEvent* e, GDocument *_doc, Canvas* _canvas)
+void InsertPartTool::processEvent (QEvent* e, GDocument */*_doc*/, Canvas* /*_canvas*/)
  {
   if (e->type () == QEvent::MouseButtonRelease)
    {
@@ -97,7 +97,7 @@ void InsertPartTool::processButtonPressEvent (QMouseEvent* e)
     selPoint[1].y(e->y());
    }
  }
- 
+
 void InsertPartTool::processMouseMoveEvent (QMouseEvent* e)
  {
   if (state == S_Rubberband)
@@ -120,8 +120,8 @@ void InsertPartTool::processMouseMoveEvent (QMouseEvent* e)
     return;
    }
  }
- 
-void InsertPartTool::processButtonReleaseEvent (QMouseEvent* e)
+
+void InsertPartTool::processButtonReleaseEvent (QMouseEvent* /*e*/)
  {
   if (state == S_Rubberband)
    {
@@ -129,17 +129,19 @@ void InsertPartTool::processButtonReleaseEvent (QMouseEvent* e)
        KIllustratorDocument *kdoc = doc->document();
        if(selPoint[0].x() > selPoint[1].x())
         {
-	 int s = selPoint[0].x();
+	 float s = selPoint[0].x();
 	 selPoint[0].x(selPoint[1].x());
 	 selPoint[1].x(s);
 	}
        if(selPoint[0].y() > selPoint[1].y())
         {
-	 int s = selPoint[0].y();
+	 float s = selPoint[0].y();
 	 selPoint[0].y(selPoint[1].y());
 	 selPoint[1].y(s);
 	}
-       kdoc->insertPart (QRect (selPoint[0].x(), selPoint[0].y(), selPoint[1].x() - selPoint[0].x(), selPoint[1].y() - selPoint[0].y()), docEntry);
+       kdoc->insertPart (QRect (static_cast<int>(selPoint[0].x()), static_cast<int>(selPoint[0].y()),
+                                static_cast<int>(selPoint[1].x() - selPoint[0].x()),
+                                static_cast<int>(selPoint[1].y() - selPoint[0].y())), docEntry);
     }
     canvas->repaint ();
     m_toolController->emitOperationDone (m_id);

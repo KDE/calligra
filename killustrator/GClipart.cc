@@ -83,13 +83,13 @@ void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   if (outline) {
     p.setPen (black);
-    p.drawRect (box.x (), box.y (), box.width (), box.height ());
+    p.drawRect (qRound (box.x ()), qRound (box.y ()), qRound (box.width ()), qRound (box.height ()));
   }
   else {
     if (! url.isMalformed ()) {
       p.setWorldMatrix (tmpMatrix, true);
       QWMatrix mx = p.worldMatrix ();
-      QRect mr = mx.map (QRect (0, 0, width, height));
+      QRect mr = mx.map (QRect (0, 0, qRound (width), qRound (height)));
       QRect oldWin = p.window ();
       QRect vPort = p.viewport ();
       p.setViewport (mr);
@@ -100,7 +100,7 @@ void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
     }
     else {
       p.setPen (gray);
-      p.fillRect (box.x (), box.y (), box.width (), box.height (),
+      p.fillRect (qRound (box.x ()), qRound (box.y ()), qRound (box.width ()), qRound (box.height ()),
                   gray);
     }
   }

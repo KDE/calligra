@@ -124,7 +124,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             // magnetic mode
             GObject *o = 0L;
             int idx = -1;
-            if (doc->activePage()->findNearestObject ("GPolyline", xpos, ypos,
+            if (doc->activePage()->findNearestObject ("GPolyline", qRound (xpos), qRound (ypos),
                                         10, o, idx))
             {
                line = (GPolyline *) o;
@@ -137,7 +137,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             // look for existing polylines with a point near the mouse pointer
             QList<GObject> olist;
 
-            if (doc->activePage()->findContainingObjects (xpos, ypos, olist))
+            if (doc->activePage()->findContainingObjects (qRound (xpos), qRound (ypos), olist))
             {
                QListIterator<GObject> it (olist);
                while (it.current ())

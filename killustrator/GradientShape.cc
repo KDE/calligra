@@ -53,13 +53,13 @@ void GradientShape::draw (QPainter& p)
    p.save ();
    p.setClipRegion (region);
    p.setClipping (true);
-   p.drawPixmap (box.left (), box.top (), pixmap);
+   p.drawPixmap (qRound (box.left ()), qRound (box.top ()), pixmap);
    p.restore ();
 }
 
 void GradientShape::updatePixmap () {
   if (!region.isEmpty () && !box.empty ()) {
     isValid = true;
-    pixmap = gradient.createPixmap (box.width (), box.height ());
+    pixmap = gradient.createPixmap (qRound (box.width ()), qRound (box.height ()));
   }
 }

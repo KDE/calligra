@@ -138,7 +138,7 @@ XfigImport::XfigImport () {
 XfigImport::~XfigImport () {
 }
 
-bool XfigImport::setup (GDocument* doc, const char* /*format*/) {
+bool XfigImport::setup (GDocument*/*doc*/, const char* /*format*/) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
@@ -549,7 +549,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* doc)
       oinfo.startArrowId = 4;
     fin.ignore (INT_MAX, '\n');
   }
-  
+
   // points line
   for (int i = 0; i < npoints; i++) {
     int x, y;
@@ -685,7 +685,7 @@ void XfigImport::parseText (istream& fin, GDocument* doc)
   objList.append( GObjectListItem( depth, obj ) );
 }
 
-void XfigImport::parseCompoundObject (istream& fin, GDocument* doc) {
+void XfigImport::parseCompoundObject (istream& fin, GDocument* /*doc*/) {
   int upperright_x, upperright_y, lowerleft_x, lowerleft_y;
 
   fin >> upperright_x >> upperright_y >> lowerleft_x >> lowerleft_y;

@@ -106,9 +106,11 @@ void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
    {
       kdDebug()<<"processButtonReleaseEvent() rubberband" <<endl;
       if (e->state()==Qt::MidButton)
-         zoomOutRegion(selPoint[0].x(), selPoint[0].y(), selPoint[1].x(), selPoint[1].y());
+          zoomOutRegion(qRound (selPoint[0].x()), qRound (selPoint[0].y()),
+                        qRound (selPoint[1].x()), qRound (selPoint[1].y()));
       else
-         zoomInRegion(selPoint[0].x(), selPoint[0].y(), selPoint[1].x(), selPoint[1].y());
+          zoomInRegion(qRound (selPoint[0].x()), qRound (selPoint[0].y()),
+                       qRound (selPoint[1].x()), qRound (selPoint[1].y()));
 
       canvas->repaint ();
       state = S_Init;
@@ -147,10 +149,10 @@ void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
 
    int tmp;
 
-   x1*=canvas->getZoomFactor();
-   x2*=canvas->getZoomFactor();
-   y1*=canvas->getZoomFactor();
-   y2*=canvas->getZoomFactor();
+   x1=qRound (x1*canvas->getZoomFactor());
+   x2=qRound (x2*canvas->getZoomFactor());
+   y1=qRound (y1*canvas->getZoomFactor());
+   y2=qRound (y2*canvas->getZoomFactor());
 
    if (x2<x1)
    {
@@ -198,10 +200,10 @@ void ZoomTool::zoomOutRegion(int x1, int y1, int x2, int y2)
 {
    int tmp;
 
-   x1*=canvas->getZoomFactor();
-   x2*=canvas->getZoomFactor();
-   y1*=canvas->getZoomFactor();
-   y2*=canvas->getZoomFactor();
+   x1=qRound (x1*canvas->getZoomFactor());
+   x2=qRound (x2*canvas->getZoomFactor());
+   y1=qRound (y1*canvas->getZoomFactor());
+   y2=qRound (y2*canvas->getZoomFactor());
    if (x2<x1)
    {
       tmp=x2;

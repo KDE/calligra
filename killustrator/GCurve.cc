@@ -131,7 +131,7 @@ void GSegment::setPoint (int i, const Coord& c) {
                      (skind == sk_Line && i < 2)));
   points[i] = c;
   if (skind == sk_Bezier) {
-    bpoints.setPoint (i, c.x (), c.y ());
+    bpoints.setPoint (i, qRound (c.x ()), qRound (c.y ()));
   }
 }
 
@@ -227,7 +227,7 @@ void GSegment::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   points[idx].x (points[idx].x () + dx);
   points[idx].y (points[idx].y () + dy);
   if (skind == sk_Bezier) {
-    bpoints.setPoint (idx, points[idx].x (), points[idx].y ());
+    bpoints.setPoint (idx, qRound (points[idx].x ()), qRound (points[idx].y ()));
   }
 }
 

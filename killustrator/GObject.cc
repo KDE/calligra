@@ -578,6 +578,7 @@ GObject *KIllustrator::objectFactory(const QDomElement &element, KIllustratorDoc
             kdDebug(38000) << "invalid object type: " << element.tagName() << endl;
         return obj;
     }*/
+    return 0;
 }
 
 #include <GObject.moc>

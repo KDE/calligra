@@ -78,7 +78,7 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 
   vBar->setPageStep(50);
   hBar->setPageStep(50);
-  
+
   //these connections shall only work when caused by the user
   connect(vBar, SIGNAL(valueChanged(int)), SLOT(scroll()));
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scroll()));
@@ -92,12 +92,12 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
-  
+
   mGridColor = blue;
 
   readGridProperties ();
   updateGridInfos ();
-  
+
   setFocusPolicy (StrongFocus);
   setMouseTracking (true);
   setBackgroundMode (NoBackground);
@@ -109,7 +109,7 @@ Canvas::~Canvas()
     delete buffer;
  }
 
-void Canvas::resizeEvent(QResizeEvent *e)
+void Canvas::resizeEvent(QResizeEvent */*e*/)
 {
    if (!guiActive) return;
    //kdDebug()<<"Canvas::resizeEvent() width() "<<width()<<"  height(): "<<height()<<endl;
@@ -338,7 +338,7 @@ void Canvas::paintEvent (QPaintEvent* e)
    // draw the grid
    if(gridIsOn)
       drawGrid (p);
-  
+
    p.save();
 
    int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
@@ -360,7 +360,7 @@ void Canvas::paintEvent (QPaintEvent* e)
    // and finally the handle
   if (! document->activePage()->selectionIsEmpty ())
    document->activePage()->handle ().draw (p);
-  
+
   p.restore();
 
   // draw the help lines
@@ -407,7 +407,7 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
   QPoint new_pos (qRound (float(e->x() + m_visibleArea.left()) / zoomFactor),
                   qRound (float(e->y() + m_visibleArea.top()) / zoomFactor));
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
-  
+
   emit mousePositionChanged (e->x(), e->y());
 
   // ensure visibility
@@ -475,7 +475,7 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
    return QWidget::eventFilter(o, e);
 }
 
-void Canvas::moveEvent(QMoveEvent *e)
+void Canvas::moveEvent(QMoveEvent */*e*/)
 {
    //kdDebug()<<"Canvas::moveEvent() ****************"<<endl;
    emit visibleAreaChanged(m_visibleArea);
@@ -537,13 +537,13 @@ void Canvas::updateRegion (const Rect& reg)
 
   // compute the clipping region
   QWMatrix m;
-  
+
   QRect clip = m.map (QRect (int (r.left ()*zoomFactor + m_relativePaperArea.left()), int (r.top ()*zoomFactor + m_relativePaperArea.top()),
                              int (r.width ()), int (r.height ())));
-   
+
   //kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
 
-  
+
 
   // setup the clip region
   if (clip.x () <= 1) clip.setX (1);
@@ -565,12 +565,12 @@ void Canvas::updateRegion (const Rect& reg)
   p.setClipRect (clip);
 
   p.eraseRect (rr.left (), rr.top (), rr.width (), rr.height ());
-  
+
 //  p.fillRect(rr.left (), rr.top (), rr.width (), rr.height (),red);
-  
+
   if(gridIsOn)
    drawGrid (p);
-   
+
   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
   p.setPen(Qt::black);
@@ -585,10 +585,10 @@ void Canvas::updateRegion (const Rect& reg)
   // clear the canvas
   p.scale (s, s);
   //  p.translate (1, 1);
-  
+
 
   // draw the grid
-  
+
 
   // draw the help lines
 //  if (helplinesAreOn)
@@ -843,7 +843,7 @@ void Canvas::drawGrid (QPainter& p)
 
     top=-49
     -> v=9 = -40- (-49)  */
-  
+
    tmp=m_visibleArea.top()/(int)vd;
    if (m_visibleArea.top()>0) tmp++;
    v=tmp*int(vd)-m_visibleArea.top();
@@ -897,7 +897,7 @@ void Canvas::saveGridProperties ()
   //kdDebug()<<"gridSnapIsOn: "<<int(gridSnapIsOn)<<endl;
   //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
   //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
-  
+
   config->setGroup ("Helplines");
   config->writeEntry ("showHelplines", helplinesAreOn);
   config->writeEntry ("snapToHelplines", helplinesSnapIsOn);

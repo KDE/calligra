@@ -77,7 +77,7 @@ void TabBar::scrollLeft()
 
 void TabBar::scrollRight()
 {
-  if ( m_rightTab == doc->getPages().count() )
+  if ( m_rightTab == static_cast<int>(doc->getPages().count()) )
     return;
 
   if ( (unsigned int )leftTab == doc->getPages().count() )
@@ -232,7 +232,7 @@ void TabBar::openPopupMenu( const QPoint &_global )
 {
   if(!doc->document()->isReadWrite())
     return;
-  
+
   if ( m_pPopupMenu != 0L )
     delete m_pPopupMenu;
   m_pPopupMenu = new QPopupMenu();

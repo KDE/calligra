@@ -274,10 +274,10 @@ void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
       for (unsigned int i = 1; i + 3 < num; i += 3) {
         if (points.at (i + 1)->x () == FLT_MAX ||
                   points.at (i + 2)->x () == FLT_MAX) {
-                p.drawLine (points.at (i)->x () + ((i==1) ? sdx : 0),
-                            points.at (i)->y () + ((i==1) ? sdy : 0),
-                            points.at (i + 3)->x () + ((i==num-2) ? edx : 0),
-                            points.at (i + 3)->y () + ((i==num-2) ? edy : 0));
+                p.drawLine (qRound (points.at (i)->x () + ((i==1) ? sdx : 0)),
+                            qRound (points.at (i)->y () + ((i==1) ? sdy : 0)),
+                            qRound (points.at (i + 3)->x () + ((i==num-2) ? edx : 0)),
+                            qRound (points.at (i + 3)->y () + ((i==num-2) ? edy : 0)));
               }
               else {
                 QPointArray bpoints (4);
@@ -590,8 +590,8 @@ void GBezier::computePPoints () {
         points.at (i + 2)->x () == FLT_MAX) {
       if (ppoints.size () < idx + 2)
         ppoints.resize (ppoints.size () + 2);
-      ppoints.setPoint (idx++, points.at (i)->x (), points.at (i)->y ());
-      ppoints.setPoint (idx++, points.at (i+3)->x (), points.at (i+3)->y ());
+      ppoints.setPoint (idx++, qRound (points.at (i)->x ()), qRound (points.at (i)->y ()));
+      ppoints.setPoint (idx++, qRound (points.at (i+3)->x ()), qRound (points.at (i+3)->y ()));
     }
     else
       idx = createPolyline (i, idx);
@@ -631,7 +631,7 @@ int GBezier::createPolyline (int index, int pidx) {
   double y3 = points.at (index+3)->y();
 
   if (ppoints.size () - pidx < ((points.count ())/ DELTA / 3))
-    ppoints.resize ((points.count ()) /DELTA / 3 + pidx);
+    ppoints.resize ((static_cast<int>(points.count ()) /DELTA / 3) + pidx);
 
   for (t = 0; t < 1.01; t += DELTA) {
     t2 = t * t;

@@ -236,10 +236,10 @@ void Ruler::drawRuler ()
    QPainter p;
    int start, pos, step;
    bool s1, s2, s3;
-  
+
    if (! buffer)
       return;
-  
+
    p.begin (buffer);
    p.setBackgroundColor (colorGroup ().background ());
    p.setPen (black);
@@ -252,7 +252,7 @@ void Ruler::drawRuler ()
       s1 = cvtInchToPt(10.0) * zoom > 3.0;
       s2 = cvtInchToPt(50.0) * zoom > 3.0;
       s3 = cvtInchToPt(100.0) * zoom > 3.0;
-      step = 30 / (100.0 * zoom);
+      step = qRound (30.0 / (100.0 * zoom));
       if(step == 0)
          step = 1;
       start = (int)(zeroPoint / zoom);
@@ -261,7 +261,7 @@ void Ruler::drawRuler ()
       s1 = cvtInchToPt(0.1) * zoom > 3.0;
       s2 = cvtInchToPt(0.5) * zoom > 3.0;
       s3 = cvtInchToPt(1.0) * zoom > 3.0;
-      step = 24 / (cvtInchToPt(1.0) * zoom);
+      step = qRound (24.0 / (cvtInchToPt(1.0) * zoom));
       if(step == 0)
          step = 1;
       start = 10*(int)(cvtPtToInch(zeroPoint) / zoom);
@@ -271,7 +271,7 @@ void Ruler::drawRuler ()
       s1 = cvtMmToPt(1.0) * zoom > 3.0;
       s2 = cvtMmToPt(5.0) * zoom > 3.0;
       s3 = cvtMmToPt(10.0) * zoom > 3.0;
-      step = 30 / (cvtMmToPt(10.0) * zoom);
+      step = qRound (30.0 / (cvtMmToPt(10.0) * zoom));
       if(step == 0)
          step = 1;
       start = (int)(cvtPtToMm(zeroPoint) / zoom);
@@ -280,7 +280,7 @@ void Ruler::drawRuler ()
       s1 = cvtPicaToPt(1.0) * zoom > 3.0;
       s2 = cvtPicaToPt(5.0) * zoom > 3.0;
       s3 = cvtPicaToPt(10.0) * zoom > 3.0;
-      step = 30 / (cvtPicaToPt(10.0) * zoom);
+      step = qRound (30.0 / (cvtPicaToPt(10.0) * zoom));
       if(step == 0)
          step = 1;
       start = (int)(cvtPtToPica(zeroPoint) / zoom);
@@ -289,7 +289,7 @@ void Ruler::drawRuler ()
       s1 = cvtDidotToPt(10.0) * zoom > 3.0;
       s2 = cvtDidotToPt(50.0) * zoom > 3.0;
       s3 = cvtDidotToPt(100.0) * zoom > 3.0;
-      step = 30 / (cvtDidotToPt(100.0) * zoom);
+      step = qRound (30.0 / (cvtDidotToPt(100.0) * zoom));
       if(step == 0)
          step = 1;
       start = (int)(cvtPtToDidot(zeroPoint) / zoom);
@@ -298,7 +298,7 @@ void Ruler::drawRuler ()
       s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
       s2 = cvtCiceroToPt(5.0) * zoom > 3.0;
       s3 = cvtCiceroToPt(10.0) * zoom > 3.0;
-      step = 30 / (cvtCiceroToPt(10.0) * zoom);
+      step = qRound (30.0 / (cvtCiceroToPt(10.0) * zoom));
       if(step == 0)
          step = 1;
       start = (int)(cvtPtToCicero(zeroPoint) / zoom);
