@@ -36,6 +36,8 @@
 using namespace std;
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <koStore.h>
+#include <koStoreDevice.h>
 
 KPBackGround::KPBackGround( KPrPage *_page )
     // : footerHeight( 0 )
@@ -215,6 +217,51 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
+        }
+        else if ( fill == "bitmap" )
+        {
+            QString style = styleStack.attribute( "draw:fill-image-name" );
+            QDomElement* draw =context.oasisStyles().drawStyles()[style];
+
+            const QString href( draw->attribute("xlink:href") );
+            kdDebug()<<" href: "<<href<<endl;
+            if ( !href.isEmpty() && href[0] == '#' )
+            {
+                QString strExtension;
+                const int result=href.findRev(".");
+                if (result>=0)
+                {
+                    strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+                }
+                QString filename(href.mid(1));
+                const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+                backPicture.setKey(key);
+
+                KoStore* store = context.store();
+                if ( store->open( filename ) )
+                {
+                    KoStoreDevice dev(store);
+                    if ( !backPicture.load( &dev, strExtension ) )
+                        kdWarning() << "Cannot load picture: " << filename << " " << href << endl;
+                    store->close();
+                }
+                pictureCollection()->insertPicture( key, backPicture );
+            }
+
+            if ( styleStack.hasAttribute( "style:repeat" ) )
+            {
+                QString repeat = styleStack.attribute( "style:repeat" );
+                if ( repeat == "stretch" )
+                    setBackView( BV_ZOOM );
+                else if ( repeat == "no-repeat" )
+                    setBackView( BV_CENTER );
+                else
+                    setBackView( BV_TILED );
+            }
+            else
+                setBackView( BV_TILED );; // use tiled as default
+
+            setBackType(BT_PICTURE);
         }
         else if ( fill == "gradient" )
         {
