@@ -81,19 +81,6 @@
 	</ToolBar>
 	<ToolBar name="Toolbox" position="left">
 		<Text>Toolbox</Text>
-		<Action name="tool_select"/>
-		<Action name="tool_selectnodes"/>
-		<Action name="tool_rotate"/>
-		<Action name="tool_shear"/>
-		<Action name="tool_ellipse"/>
-		<Action name="tool_rectangle"/>
-		<Action name="tool_roundrect"/>
-		<Action name="tool_polygon"/>
-		<Action name="tool_star"/>
-		<Action name="tool_sinus"/>
-		<Action name="tool_spiral"/>
-		<Action name="tool_polyline"/>
-		<Action name="tool_grad"/>
 		<Action name="preview"/>
 	</ToolBar>
 </kpartgui>
