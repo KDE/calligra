@@ -34,7 +34,8 @@
 
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f), cursorVisible(false), cursorHasChanged(true), document(doc)
+    : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
+      cursorVisible(false), cursorHasChanged(true), document(doc)
 {
     leftBracket = '(';
     rightBracket = ')';
@@ -70,19 +71,18 @@ QPoint KFormulaWidget::getCursorPoint() const
 }
 
 
-void KFormulaWidget::paintEvent(QPaintEvent*)
+void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
-    // we need this if we optimize the painting one day.
-    //hideCursor();
+    //cerr << "void KFormulaWidget::paintEvent(QPaintEvent*)\n";
+    hideCursor();
     
     QPainter painter;
     painter.begin(this);
+    painter.fillRect(event->rect(), backgroundColor());
     document->draw(painter);
     painter.end();
 
-    cursorVisible = false;
     showCursor();
-
     emitCursorChanged();
 }
 
@@ -195,6 +195,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
+    //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*)\n";
     document->setActiveCursor(cursor);
     showCursor();
     cursorHasChanged = true;
@@ -203,6 +204,7 @@ void KFormulaWidget::focusInEvent(QFocusEvent*)
 
 void KFormulaWidget::focusOutEvent(QFocusEvent*)
 {
+    //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*)\n";
     hideCursor();
     cursorHasChanged = true;
     emitCursorChanged();
@@ -351,6 +353,7 @@ MoveFlag KFormulaWidget::movementFlag(int state)
 void KFormulaWidget::hideCursor()
 {
     if (cursorVisible) {
+        //cerr << "void KFormulaWidget::hideCursor()\n";
         cursorVisible = false;
 
         QPainter painter;
@@ -366,7 +369,8 @@ void KFormulaWidget::showCursor()
         return;
     }
     
-    if (!cursorVisible && hasFocus()) {
+    if ((!cursorVisible) && hasFocus()) {
+        //cerr << "void KFormulaWidget::showCursor()\n";
         cursorVisible = true;
 
         QPainter painter;

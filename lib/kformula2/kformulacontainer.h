@@ -43,6 +43,7 @@ class KFormulaCommand;
 class KFormulaWidget;
 class QKeyEvent;
 class QPainter;
+class QPrinter;
 class QWidget;
 
 
@@ -119,6 +120,12 @@ public:
      */
     bool load(QDomDocument doc);
 
+    /**
+     * Prints the formula.
+     */
+    void print(QPrinter& printer);
+
+    
     FormulaCursor* getActiveCursor() { return activeCursor; }
 
     /**
