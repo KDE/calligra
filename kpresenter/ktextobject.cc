@@ -4312,8 +4312,9 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		  else
 		    p->setPen(allColor);
 
-		  p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr)-objPtr->ascent(),w,linePtr->height(paragraphPtr),
-			      AlignLeft,objPtr->text());
+		  //debug("%d",x);
+		  p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr)/*-objPtr->ascent()*/,/*w,linePtr->height(paragraphPtr),
+										    AlignLeft,*/objPtr->text());
 
 		  // draw Cursor
 		  if (drawCursor) 
