@@ -11,7 +11,7 @@
 #include <qlayout.h>
 #include <kcolordialog.h>
 #include <qlabel.h>
-#include <qspinbox.h>
+#include <knuminput.h>
 #include <qgroupbox.h>
 #include <kselect.h>
 
@@ -26,18 +26,18 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	QGridLayout *mainLayout;
 
 	mRGBWidget = new QWidget( this );
-	mainLayout = new QGridLayout(mRGBWidget, 3, 2);
+	mainLayout = new QGridLayout(mRGBWidget, 3, 3);
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight(165);
 	mColorSelector->setMinimumWidth(165);
-	mainLayout->addMultiCellWidget (mColorSelector, 0, 1, 0, 0);
+	mainLayout->addMultiCellWidget (mColorSelector, 0, 2, 0, 0);
 
 	//Selector
 	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
 	mSelector->setMinimumWidth(12);
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
-	mainLayout->addMultiCellWidget (mSelector, 0, 1, 1, 1);
+	mainLayout->addMultiCellWidget (mSelector, 0, 2, 1, 1);
 
 	//Reference
 	QGroupBox* groupbox = new QGroupBox(2, Vertical, i18n("Reference"), mRGBWidget);
@@ -81,12 +81,19 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
+	mainLayout->addWidget( cgroupbox, 1, 2);
+	
+	//--->Opacity
+	QGroupBox* ogroupBox = new QGroupBox(1, Vertical, i18n("Opacity"), mRGBWidget);
+	mOpacity = new KIntNumInput(100, ogroupBox);
+	mOpacity->setRange(0, 100, 1, true);
+	mainLayout->addWidget( ogroupBox, 2, 2);
+
+	mainLayout->setSpacing(2);
+	mainLayout->setMargin(5);
 
 	connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotApplyButtonPressed() ) );
 
-	mainLayout->addWidget( cgroupbox, 1, 2);
-	mainLayout->setSpacing(2);
-	mainLayout->setMargin(5);
 	mainLayout->activate();
 	addTab(mRGBWidget, i18n("RGB"));
 	setFixedSize(baseSize());
@@ -108,7 +115,9 @@ void VMDlgSolidFill::slotApplyButtonPressed()
 {
 	VColor color;
 	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
+	float op = mOpacity->value() / 100.0;
 	color.setValues( &r, &g, &b, 0L );
+	color.setOpacity( op );
 
 	if( m_part )
 		m_part->addCommand( new VMCmdFill( m_part, color ), true );

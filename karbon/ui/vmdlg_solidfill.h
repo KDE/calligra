@@ -14,6 +14,7 @@ class KHSSelector;
 class KGradientSelector;
 class KColorPatch;
 class KarbonPart;
+class KIntNumInput;
 
 class VMDlgSolidFill : public QTabDialog
 {
@@ -30,6 +31,7 @@ private:
 	QSpinBox* mHue;
 	QSpinBox* mSaturation;
 	QSpinBox* mValue;
+	KIntNumInput* mOpacity;
 	KGradientSelector* mSelector;
 	KColorPatch* mOldColor;
 	KColorPatch* mColorPreview;
