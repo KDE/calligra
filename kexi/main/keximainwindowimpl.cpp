@@ -1096,11 +1096,11 @@ void KexiMainWindowImpl::initPropertyEditor()
 		//this gives:
 		// -2/3 of base font size (6 point minimum)
 		// if the current screen width is > 1100, +1 point is added to every 100 points greater than 1300
-		// for resolutions below 1100 in width, 7 is the minimum
+		// for resolutions below 1160 in width, 7 is the minimum
 		// maximum size is the base size
 		const int wdth = KGlobalSettings::desktopGeometry(this).width();
 		size = QMAX( 6 + QMAX(0, wdth - 1100) / 100 , f.pointSize()*2/3 );
-		if (wdth<1100)
+		if (wdth<1160)
 			size = QMAX( size, 7 );
 		size = QMIN( size, f.pointSize() );
 	}
