@@ -727,7 +727,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
     init( _p, false );
 
     bool found = false;
-    //unsigned int pg = page;
+    unsigned int pg = page;
     while ( makeNextLineLayout() )
     {
         if ( ptY <= my && ptY + getLineHeight() >= my &&
@@ -736,7 +736,7 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
             found = true;
             break;
         }
-        if ( ptY > my + 20 )
+        if ( ptY > my + 20 && pg != page )
             break;
     }
 
