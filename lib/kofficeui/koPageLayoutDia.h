@@ -87,6 +87,9 @@ const int KW_HEADER_AND_FOOTER = 16;
 const int DISABLE_UNIT = 32;
 const int USE_NEW_STUFF = 64;
 
+/**
+ *  Represents the paper format a document shall be printed on.
+ */
 enum KoFormat {
     PG_DIN_A3 = 0, 
     PG_DIN_A4 = 1, 
@@ -98,15 +101,25 @@ enum KoFormat {
     PG_DIN_B5 = 7, 
     PG_US_EXECUTIVE = 8
 };
+
+/**
+ *  Represents the orientation of a printed document.
+ */
 enum KoOrientation {
     PG_PORTRAIT = 0, 
     PG_LANDSCAPE = 1
 };
+
+/**
+ *  Represents the length unit that is used by an app.
+ *  Possible values are for millimeter, points and inches.
+ */
 enum KoUnit {
     PG_MM = 0, 
     PG_PT = 1, 
     PG_INCH = 2
 };
+
 enum KoHFType {
     HF_SAME = 0, 
     HF_FIRST_DIFF = 2, 
