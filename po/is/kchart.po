@@ -1,0 +1,218 @@
+# Icelandic translation of kchart.po
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Thorarinn R. Einarsson <thori@mindspring.com>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kchart\n"
+"POT-Creation-Date: 1998-10-04 15:30+0200\n"
+"PO-Revision-Date: 1999-01-19 19:22-0500\n"
+"Last-Translator: Thorarinn R. Einarsson <thori@mindspring.com>\n"
+"Language-Team: is <kde-isl@mmedia.is>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kchart_doc.cc:55
+msgid "A Simple Bar Chart"
+msgstr "Einfalt súlurit"
+
+#: kchart_doc.cc:56
+msgid "X Label"
+msgstr "Nafn á X ás"
+
+#: kchart_doc.cc:57
+msgid "Y Label"
+msgstr "Nafn á Y ás"
+
+#: kchart_shell.cc:40
+msgid "KChart Error"
+msgstr "KSúlur - Villa"
+
+#: kchart_shell.cc:40
+msgid "Could not init"
+msgstr "Gat ekki ræst"
+
+#: kchart_view.cc:106
+msgid "&Edit data..."
+msgstr "&Breyta gögnum..."
+
+#: kchart_view.cc:118 ui/KChartWizardSelectChartTypePage.cpp:34
+msgid "Bars"
+msgstr "Súlur"
+
+#: kchart_view.cc:123
+msgid "Area"
+msgstr "Svæði"
+
+#: kchart_view.cc:128 ui/KChartWizardSelectChartTypePage.cpp:49
+msgid "Lines"
+msgstr "Línur"
+
+#: ui/KChartWizard.cpp:32
+msgid "Select data"
+msgstr "Veldu gögn"
+
+#: ui/KChartWizard.cpp:41
+msgid "Select chart type"
+msgstr "Veldu gerð myndar"
+
+#: ui/KChartWizard.cpp:49
+msgid "Select chart subtype"
+msgstr "Veldu gerð undirmyndar"
+
+#: ui/KChartWizard.cpp:58
+msgid "Data setup"
+msgstr "Gagnauppsetning"
+
+#: ui/KChartWizard.cpp:66
+msgid "Labels and legend"
+msgstr "Ásar og yfirskrift"
+
+#: ui/KChartWizard.cpp:74
+msgid "Setup axes"
+msgstr "Stilla ása"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:19
+msgid "X-Label:"
+msgstr "X-ás:"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:27
+msgid "Y-Label:"
+msgstr "Y-ás:"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:35
+msgid "Title:"
+msgstr "Yfirskrift:"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:43
+msgid "Legend placement"
+msgstr "Staðsetning yfirskriftar"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:47
+msgid "Right/Top"
+msgstr "Efst til hægri"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:51
+msgid "Right/Center"
+msgstr "Hægri miðja"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:55
+msgid "Right/Bottom"
+msgstr "Neðst til hægri"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:59
+msgid "Bottom/Left"
+msgstr "Neðst til vinstri"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:63
+msgid "Bottom/Center"
+msgstr "Neðst í miðju"
+
+#: ui/KChartWizardLabelsLegendPage.cpp:67
+msgid "Bottom/Right"
+msgstr "Neðst til hægri"
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:85
+msgid "Normal"
+msgstr "Venjulegt"
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:103
+msgid "On Top"
+msgstr "Ofan á"
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:121
+msgid "In Front"
+msgstr "Fyrir framan"
+
+#: ui/KChartWizardSelectChartSubTypePage.cpp:132
+msgid "There are no subtypes for this chart type"
+msgstr "Það eru engar undirgerðir fyrir þessa gerð"
+
+#: ui/KChartWizardSelectChartTypePage.cpp:64
+msgid "Points"
+msgstr "Punktar"
+
+#: ui/KChartWizardSelectChartTypePage.cpp:79
+msgid "Lines and Points"
+msgstr "Línur og punktar"
+
+#: ui/KChartWizardSelectChartTypePage.cpp:94
+msgid "Areas"
+msgstr "Svæði"
+
+#: ui/KChartWizardSelectChartTypePage.cpp:109
+msgid "Pie"
+msgstr "Kaka"
+
+#: ui/KChartWizardSelectChartTypePage.cpp:124
+msgid "3D Pie"
+msgstr "3-víð kaka"
+
+#: ui/KChartWizardSetupAxesPage.cpp:33
+msgid "Use two Y axes"
+msgstr "Nota tvo Y ása"
+
+#: ui/KChartWizardSetupAxesPage.cpp:41
+msgid "Tick settings"
+msgstr "Viltu hök?"
+
+#: ui/KChartWizardSetupAxesPage.cpp:44
+msgid "Show full grid"
+msgstr "Sýna netið"
+
+#: ui/KChartWizardSetupAxesPage.cpp:50
+msgid "Show ticks on X axis"
+msgstr "Sýna hök á X ás"
+
+#: ui/KChartWizardSetupAxesPage.cpp:57
+msgid "Tick length:"
+msgstr "Lengd haka:"
+
+#: ui/KChartWizardSetupAxesPage.cpp:66
+msgid "Number of ticks on Y axis:"
+msgstr "Fjöldi haka á Y ás:"
+
+#: ui/KChartWizardSetupAxesPage.cpp:76
+msgid "Axes labelling"
+msgstr "Nöfn ása"
+
+#: ui/KChartWizardSetupAxesPage.cpp:79
+msgid "Show values on X axis"
+msgstr "Sýna gildi á X ás"
+
+#: ui/KChartWizardSetupAxesPage.cpp:86 ui/KChartWizardSetupAxesPage.cpp:106
+msgid "Show every"
+msgstr "Sýna öll"
+
+#: ui/KChartWizardSetupAxesPage.cpp:95
+msgid ". value on X axis"
+msgstr ". gildi á X ás"
+
+#: ui/KChartWizardSetupAxesPage.cpp:98
+msgid "Show values on Y axis"
+msgstr "Sýna gildi á Y ás"
+
+#: ui/KChartWizardSetupAxesPage.cpp:115
+msgid ". value on Y axis"
+msgstr ". gildi á Y ás"
+
+#: ui/KChartWizardSetupDataPage.cpp:27
+msgid "Rows"
+msgstr "röðum"
+
+#: ui/KChartWizardSetupDataPage.cpp:34
+msgid "Columns"
+msgstr "dálkum"
+
+#: ui/KChartWizardSetupDataPage.cpp:43
+msgid "Data is in:"
+msgstr "Gögn eru í:"
+
+#: ui/KChartWizardSetupDataPage.cpp:57
+msgid "Use first row as description"
+msgstr "Nota fyrstu röð sem útskýringu"
+
+#: ui/KChartWizardSetupDataPage.cpp:69
+msgid "Use first column as description"
+msgstr "Nota fyrsta dálk sem útskýringu"
