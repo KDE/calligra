@@ -501,6 +501,27 @@ VPath::clone() const
 }
 
 void
+VPath::saveSvgPath( QString &d ) const
+{
+	// save segments:
+	VSegment* segment = m_first;
+	while( segment )
+	{
+		switch( segment->type() )
+		{
+			case VSegment::begin: d += QString("M%1 %2").arg(segment->point(0).x()).arg(segment->point(0).y());
+								  break;
+			case VSegment::line:  d += QString("L%1 %2").arg(segment->point(0).x()).arg(segment->point(0).y());
+								  break;
+			case VSegment::curve: d += QString("C%1 %2 %3 %4 %5 %6").arg(segment->point(0).x()).arg(segment->point(0).y()).arg(segment->point(1).x()).arg(segment->point(1).y()).arg(segment->point(2).x()).arg(segment->point(2).y());
+		}
+
+		segment = segment->m_next;
+	}
+	if( isClosed() ) d += "Z";
+}
+
+void
 VPath::save( QDomElement& element ) const
 {
 	// Don't save if the list is "empty".

@@ -21,6 +21,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qdatetime.h>
 
 #include <koPoint.h>
 #include <koRect.h>
@@ -51,7 +52,7 @@ VComposite::VComposite( VObject* parent, VState state )
 }
 
 VComposite::VComposite( const VComposite& composite )
-	: VObject( composite )
+	: VObject( composite ), SVGPathParser()
 {
 	m_paths.setAutoDelete( true );
 
@@ -302,21 +303,23 @@ VComposite::save( QDomElement& element ) const
 
 		VObject::save( me );
 
-		// save paths:
-		VPathListIterator itr( m_paths );
-		for( itr.toFirst(); itr.current(); ++itr )
-		{
-			itr.current()->save( me );
-		}
+		QString d;
+		saveSvgPath( d );
+		me.setAttribute( "d", d );
 	}
 }
+
 
 void
 VComposite::load( const QDomElement& element )
 {
-	m_paths.clear();
 	setState( normal );
 
+	QString data = element.attribute ("d");
+	if( data.length() > 0 )
+	{
+		loadSvgPath( data );
+	}
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -337,6 +340,49 @@ VComposite::load( const QDomElement& element )
 			}
 		}
 	}
+}
+
+void
+VComposite::loadSvgPath( const QString &d )
+{
+	QTime s;s.start();
+	parseSVG( d );
+	kdDebug() << "Parsing time : " << s.elapsed() << endl;
+}
+
+void
+VComposite::saveSvgPath( QString &d ) const
+{
+	// save paths to svg:
+	VPathListIterator itr( m_paths );
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		itr.current()->saveSvgPath( d );
+	}
+}
+
+void
+VComposite::svgMoveTo( const KoPoint &p )
+{
+	moveTo( p );
+}
+
+void
+VComposite::svgLineTo( const KoPoint &p )
+{
+	lineTo( p );
+}
+
+void
+VComposite::svgCurveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
+{
+	curveTo( p1, p2, p3 );
+}
+
+void
+VComposite::svgClosePath()
+{
+	close();
 }
 
 void

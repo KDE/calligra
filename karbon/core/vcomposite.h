@@ -28,6 +28,7 @@
 
 #include "vobject.h"
 #include "vpath.h"
+#include "svgpathparser.h"
 
 
 class QDomElement;
@@ -45,7 +46,7 @@ typedef QPtrListIterator<VPath> VPathListIterator;
  * A composite path consists of one or many subpaths.
  */
 
-class VComposite : public VObject
+class VComposite : public VObject, SVGPathParser
 {
 public:
 	VComposite( VObject* parent, VState state = normal );
@@ -156,6 +157,15 @@ public:
 	void setDrawCenterNode( bool drawCenterNode = true )
 		{ m_drawCenterNode = drawCenterNode; }
 
+	/// For svg path data parsing
+	virtual void svgMoveTo( const KoPoint & );
+	virtual void svgLineTo( const KoPoint & );
+	virtual void svgCurveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+	virtual void svgClosePath();
+
+	void loadSvgPath( const QString & );
+	void saveSvgPath( QString & ) const;
+
 private:
 	VPathList m_paths;		// list of paths
 
@@ -164,4 +174,3 @@ private:
 };
 
 #endif
-

@@ -85,6 +85,7 @@ public:
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
+	void saveSvgPath( QString & ) const;
 
 	virtual VPath* clone() const;
 
