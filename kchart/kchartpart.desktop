@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Chart Component
+Name[cy]=Cydran Siart KOffice 
+Name[da]=KOffice diagramkomponent
+Name[es]=Componente de gráfica de KOffice
+Name[et]=KOffice'i diagrammikomponent
+Name[hu]=KOffice grafikonkészítő komponens
+Name[ru]=Компонент диаграмм KOffice
+Name[sv]=Koffice-diagramkomponent
+X-KDE-Library=libkchartpart
+Type=Service
+MimeType=application/x-kchart
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,KOfficeChart
+X-KDE-NativeMimeType=application/x-kchart
