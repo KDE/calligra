@@ -132,7 +132,7 @@ CORBA::Boolean KWordDocument::init()
   QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
   QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kword/templates/";
 
-  KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,false,false);
+  KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(_globalTemplatePath,_personalTemplatePath,_template,true,false);
   if (ret == KoTemplateChooseDia::Template)
     {
       QFileInfo fileInfo(_template);
@@ -152,7 +152,7 @@ CORBA::Boolean KWordDocument::init()
       loadTemplate(fileName.data());
     }
   else
-    debug("no template chosen");
+    return false;
 
   return true;
 }
