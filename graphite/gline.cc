@@ -174,7 +174,7 @@ void GLine::resize(const QRect &/*boundingRect*/) {
 }
 
 
-GLineM9r::GLineM9r(GLine *line, const Mode &mode) : GObjectM9r(mode), m_line(line) {
+GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(mode), m_line(line) {
 
     QApplication::setOverrideCursor(Qt::crossCursor);
     m_line->setState(GObject::Handles);

@@ -56,9 +56,6 @@ public:
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
     virtual void resize(const QRect &boundingRect);
 
-    // Do we need this for lines?
-    //virtual KDialogBase *createPropertyDialog(QWidget *parent);
-
     const QPoint &a() const { return m_a; }
     void setA(const QPoint &a) { m_a=a; }
     const QPoint &b() const { return m_b; }
@@ -70,7 +67,7 @@ private:
 };
 
 
-class GLineM9r : public GObjectM9r {
+class GLineM9r : public G1DObjectM9r {
 
     Q_OBJECT
 public:
@@ -95,6 +92,11 @@ public:
 				       QRect &dirty);
 
     virtual GObject *gobject() { return m_line; }
+
+public slots: // TODO
+    virtual void setPenStyle(const Qt::PenStyle &/*style*/) {}
+    virtual void setPenWidth(const int &/*width*/) {}
+    virtual void setPenColor(const QColor &/*color*/) {}
 
 private:
     GLineM9r(const GLineM9r &rhs);

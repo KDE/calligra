@@ -62,7 +62,6 @@ class GraphiteView;
 // General rule: simple M9rs support Create, complex ones do not :)
 class GObjectM9r : public QObject {
 
-    Q_OBJECT
 public:
     enum Mode { Create, Manipulate };
 
@@ -93,12 +92,43 @@ public:
 protected:
     GObjectM9r(const Mode &mode) : QObject(), m_mode(mode) {}
 
-    // TODO - Whenever an object is deleted its Status should be
-    // set correctly form the M9r handler. Check this in the
-    // DTOR and react accordingly!
+    // This menthod creates a property dialog for an object. It
+    // creates an empty KDialogBase (IconList mode!).
+    // If you decide to override this method make sure that the first
+    // thing you do in your implementation is calling this method of
+    // your parent. Then add your pages to the returned dialog.
+    // Note: This dialog is modal and it has an "Apply" button. The
+    // user is able to change the properties and see the result after
+    // pressing 'Apply'.
+    // Don't forget to call delayedDestruct() on closing!!!
+    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+
+    // TODO - Whenever an object is deleted,... its Status should be
+    // set correctly form the M9r. Check this in the DTOR and react
+    // accordingly!
     Mode m_mode;
 };
 
+
+// Provides a dialog with a "pen" page
+class G1DObjectM9r : public GObjectM9r {
+
+    Q_OBJECT
+public:
+    virtual ~G1DObjectM9r() {}
+
+public slots:
+    virtual void setPenStyle(const Qt::PenStyle &/*style*/) {}
+    virtual void setPenWidth(const int &/*width*/) {}
+    virtual void setPenColor(const QColor &/*color*/) {}
+
+protected:
+    G1DObjectM9r(const Mode &mode) : GObjectM9r(mode) {}
+    
+    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+};
+
+// TODO G2DObjectM9r - with a gradient/brush page
 
 // The abstract base classes for all graphic objects. This class is
 // implemented as a composite (pattern) - sort of :)
@@ -185,20 +215,6 @@ public:
     virtual void setGradient(const Gradient &gradient) { m_gradient=gradient; }
     const QPen &pen() const { return m_pen; }               // Pen for the lines
     virtual void setPen(const QPen &pen) { m_pen=pen; }
-
-    // This menthod creates a property dialog for a gobject. It
-    // creates a KDialogBase and adds a few pages (IconList mode!).
-    // If you decide to override this method make sure that the first
-    // thing you do in your implementation is calling this method.
-    // Then add your pages to the returned dialog.
-    // Note: This dialog is modal and it has an "Apply" button. The
-    // user is able to change the properties and see the result after
-    // pressing 'Apply'. Create this via a M9r on DC and add
-    // a 'Properties...' entry to the context-menu.
-    // All the dialog management (changing values, closing,...)
-    // is done in the M9r class.
-    // Don't forget to call delayedDestruct()!!!
-    virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
 protected:
     GObject(const QString &name=QString::null);

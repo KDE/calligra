@@ -27,6 +27,26 @@
 #include <graphitefactory.h>
 
 
+KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
+    return new KDialogBase(KDialogBase::IconList,
+			   i18n("Change Properties"),
+			   KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+			   KDialogBase::Ok, parent, "property dia", true, true);
+}
+
+KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
+
+    KDialogBase *dia=GObjectM9r::createPropertyDialog(parent);
+    if(!dia)
+	return 0L;
+
+    // TODO - add "pen" page and connect the SLOTs...
+    /*QFrame *frame=*/dia->addPage(i18n("Pen"), i18n("Pen Settings"),
+			       BarIcon("exec", GraphiteFactory::global()));
+    return dia;
+}
+
+
 QDomElement GObject::save(QDomDocument &doc) const {
 
     // A GObject is saved to a node which is stored inside
@@ -61,20 +81,6 @@ void GObject::setParent(GObject *parent) {
 
     if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
 	m_parent=parent;
-}
-
-KDialogBase *GObject::createPropertyDialog(QWidget *parent) {
-
-    KDialogBase *dia=new KDialogBase(KDialogBase::IconList,
-				     i18n("Change Properties"),
-				     KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
-				     KDialogBase::Ok, parent, "property dia", true, true);
-    /*QFrame *frame=*/dia->addPage(i18n("Pen"), i18n("Pen Settings"),
-				   DesktopIcon("configure", GraphiteFactory::global()));
-    
-    // TODO - add all the remaining pages (fill style=brush/gradient)
-    // and draw some nice icons (or ask the artists :)
-    return dia;
 }
 
 GObject::GObject(const QString &name) : m_name(name) {

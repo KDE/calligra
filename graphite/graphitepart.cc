@@ -30,10 +30,6 @@
 #include <graphitepart.h>
 #include <gcommand.h>
 
-// test
-#include <gline.h>
-#include <kdialogbase.h>
-
 
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
@@ -61,12 +57,8 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     //kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
 }
 
-void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
+void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
-
-    // test
-    GLine *line=new GLine("foo");
-    line->createPropertyDialog((QWidget*)view)->show();
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {
