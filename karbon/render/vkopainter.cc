@@ -486,7 +486,6 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 	VGradient gradient = fill ? m_fill->gradient() : m_stroke->gradient();
 
-	// TODO : for radials as well
 	if( gradient.type() == gradient_linear )
 	{
 		ArtGradientLinear *linear = new ArtGradientLinear();
@@ -501,8 +500,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
-		double dx = ( gradient.vector().x() - m_fill->gradient().origin().x() ) * m_zoomFactor;
-		double dy = ( gradient.vector().y() - m_fill->gradient().origin().y() ) * m_zoomFactor;
+		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
+		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
@@ -527,6 +526,8 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	}
 	else if( gradient.type() == gradient_radial )
 	{
+		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
+		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
 		ArtGradientRadial *radial = new ArtGradientRadial();
 
 		radial->affine[0] = m_matrix.m11();
