@@ -44,7 +44,7 @@ bool WMFImport::filter(
     const QString &to,
     const QString &)
 {
-    if (to != "application/x-killustrator" || from != "image/x-wmf")
+    if (to != "application/x-kontour" || from != "image/x-wmf")
         return false;
 
     m_text = "";
