@@ -47,6 +47,7 @@
 #include <qmap.h>
 #include <qcolor.h>
 #include <qdom.h>
+#include <qdatetime.h>
 
 #include <koPictureKey.h>
 
@@ -474,6 +475,9 @@ public:
     bool underlinelink;
     bool displaycomment;
     bool displayfieldcode;
+    QDateTime creationTime;
+    QDateTime modificationTime;
+    QDateTime printTime;
 };
 
 class KWEFDocumentInfo

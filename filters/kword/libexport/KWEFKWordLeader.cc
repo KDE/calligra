@@ -557,6 +557,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 {
     VariableSettingsData vs;
+    QString print, creation, modification; // Dates
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "startingPageNumber",
@@ -575,15 +576,22 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
                                            "bool",
                                            (void *) &vs.displayfieldcode )
                        << AttrProcessing ( "lastPrintingDate",
-                                           "",
-                                           NULL )
+                                           "QString",
+                                           &print )
                        << AttrProcessing ( "creationDate",
-                                           "",
-                                           NULL )
+                                           "QString",
+                                           &creation )
                        << AttrProcessing ( "modificationDate",
-                                           "",
-                                           NULL );
+                                           "QString",
+                                           &modification );
     ProcessAttributes (myNode, attrProcessingList);
+
+    if (!creation.isEmpty())
+        vs.creationTime=QDateTime::fromString(creation, Qt::ISODate);
+    if (!modification.isEmpty())
+        vs.modificationTime=QDateTime::fromString(modification, Qt::ISODate);
+    if (!print.isEmpty())
+        vs.printTime=QDateTime::fromString(print, Qt::ISODate);
 
     leader->doVariableSettings (vs);
 }
