@@ -3379,7 +3379,10 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       }
 
 #ifdef SWINDER_XLS2RAW
-      printf( "Record %04x ", record->rtti() );
+      std::cout << "Record 0x";
+      std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
+      std::cout << " ";
+      std::cout << std::dec;
       record->dump( std::cout );
       std::cout << std::endl;
 #endif
@@ -3387,12 +3390,16 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       delete record;
     }
     
+#ifdef SWINDER_XLS2RAW
     if( !record )
     {
-      printf( "Record %04x ", type );
+      std::cout << "Record 0x";
+      std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
+      std::cout << std::dec;
       std::cout << std::endl;
       std::cout << std::endl;
     }
+#endif
 
   }
 
