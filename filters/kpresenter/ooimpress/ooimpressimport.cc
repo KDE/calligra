@@ -67,10 +67,23 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
         return KoFilter::NotImplemented;
     }
 
+    m_zip = new KZip( m_chain->inputFile() );
+
+    if ( !m_zip->open( IO_ReadOnly ) )
+    {
+        kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
+        delete m_zip;
+        return KoFilter::FileNotFound;
+    }
+
     KoFilter::ConversionStatus preStatus = openFile();
 
     if ( preStatus != KoFilter::OK )
+    {
+        m_zip->close();
+        delete m_zip;
         return preStatus;
+    }
 
     QDomDocument docinfo;
     createDocumentInfo( docinfo );
@@ -97,6 +110,9 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
         out->writeBlock( content , content.length() );
     }
 
+    m_zip->close();
+    delete m_zip;
+
     kdDebug(30518) << "######################## OoImpressImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
@@ -104,64 +120,64 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
 // Very related to OoWriterImport::openFile()
 KoFilter::ConversionStatus OoImpressImport::openFile()
 {
-    KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
-
-    if ( !store )
+    KoFilter::ConversionStatus status = loadAndParse( "content.xml", m_content );
+    if ( status != KoFilter::OK )
     {
-        kdWarning(30518) << "Couldn't open the requested file." << endl;
-        return KoFilter::FileNotFound;
+        kdError(30518) << "Content.xml could not be parsed correctly! Aborting!" << endl;
+        return status;
     }
 
-    if ( !store->open( "content.xml" ) )
-    {
-        kdWarning(30518) << "This file doesn't seem to be a valid OoImpress file" << endl;
-        delete store;
-        return KoFilter::WrongFormat;
-    }
-
+    // We do not stop if the following calls fail.
     QDomDocument styles;
-
-    m_content.setContent( store->device() );
-    store->close();
-
-    //kdDebug(30518) << "m_content.toCString() :" << m_content.toCString() << endl;
-    kdDebug(30518) << "File containing content loaded " << endl;
-
-    if ( store->open( "styles.xml" ) )
-    {
-        styles.setContent( store->device() );
-        store->close();
-
-        //kdDebug(30518) << "styles.toCString() :" << styles.toCString() << endl;
-        kdDebug(30518) << "File containing styles loaded" << endl;
-    }
-    else
-        kdWarning(30518) << "Style definitions do not exist!" << endl;
-
-    if ( store->open( "meta.xml" ) )
-    {
-        m_meta.setContent( store->device() );
-        store->close();
-
-        kdDebug(30518) << "File containing meta definitions loaded" << endl;
-    }
-    else
-        kdWarning(30518) << "Meta definitions do not exist!" << endl;
-
-    if ( store->open( "settings.xml" ) )
-    {
-        m_settings.setContent( store->device() );
-        store->close();
-
-        kdDebug(30518) << "File containing settings loaded" << endl;
-    }
-    else
-        kdWarning(30518) << "Settings do not exist!" << endl;
-
-    delete store;
+    loadAndParse( "styles.xml", styles );
+    loadAndParse( "meta.xml", m_meta );
+    loadAndParse( "settings.xml", m_settings );
 
     emit sigProgress( 10 );
     createStyleMap( styles );
+
+    return KoFilter::OK;
+}
+
+KoFilter::ConversionStatus OoImpressImport::loadAndParse(const QString& filename, QDomDocument& doc)
+{
+    kdDebug(30518) << "Trying to open " << filename << endl;
+
+    if (!m_zip)
+    {
+        kdError(30518) << "No ZIP file!" << endl;
+        return KoFilter::CreationError; // Should not happen
+    }
+
+    const KArchiveEntry* entry = m_zip->directory()->entry( filename );
+    if (!entry)
+    {
+        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        return KoFilter::FileNotFound;
+    }
+    if (entry->isDirectory())
+    {
+        kdWarning(30518) << "Entry " << filename << " is a directory!" << endl;
+        return KoFilter::WrongFormat;
+    }
+    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
+    QIODevice* io=f->device();
+    kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
+
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
+    {
+        kdError(30518) << "Parsing error in " << filename << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        delete io;
+        return KoFilter::ParsingError;
+    }
+    delete io;
+
+    kdDebug(30518) << "File " << filename << " loaded and parsed!" << endl;
 
     return KoFilter::OK;
 }
@@ -1630,11 +1646,8 @@ void OoImpressImport::addStyles( const QDomElement* style )
 QString OoImpressImport::storeImage( const QDomElement& object )
 {
     // store the picture
-    KZip inputFile = KZip( m_chain->inputFile() );
-    inputFile.open( IO_ReadOnly );
-
     QString url = object.attribute( "xlink:href" ).remove( '#' );
-    KArchiveFile* file = (KArchiveFile*) inputFile.directory()->entry( url );
+    KArchiveFile* file = (KArchiveFile*) m_zip->directory()->entry( url );
 
     QString extension = url.mid( url.find( '.' ) );
     QString fileName = QString( "picture%1" ).arg( m_numPicture++ ) + extension;
@@ -1646,7 +1659,6 @@ QString OoImpressImport::storeImage( const QDomElement& object )
         out->writeBlock( buffer.data(), buffer.size() );
     }
 
-    inputFile.close();
     return fileName;
 }
 

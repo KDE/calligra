@@ -30,6 +30,8 @@
 #include <qcolor.h>
 #include <stylestack.h>
 
+class KZip;
+
 class OoImpressImport : public KoFilter
 {
     Q_OBJECT
@@ -74,6 +76,7 @@ private:
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
                              QDomElement& outputParagraph, uint& pos);
     KoFilter::ConversionStatus openFile();
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
 
     int m_numPicture;
     int m_numSound;
@@ -82,6 +85,7 @@ private:
     QDomDocument    m_settings;
     QDict<QDomElement> m_styles, m_draws;
     QDomElement m_animations;
+    KZip * m_zip;
     StyleStack m_styleStack;
 };
 
