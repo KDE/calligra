@@ -20,8 +20,8 @@
 #include <qpushbt.h>
 #include <qstring.h>
 #include <qvalidator.h>
+#include <qlineedit.h>
 
-#include <krestrictedline.h>
 #include <kapp.h>
 #include <klocale.h>
 

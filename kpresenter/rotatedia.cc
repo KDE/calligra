@@ -27,10 +27,10 @@
 #include <qfontmet.h>
 #include <qwmatrix.h>
 #include <qvalidator.h>
+#include <qlineedit.h>
 
 #include <qpoint.h>
 #include <qrect.h>
-#include <krestrictedline.h>
 #include <kapp.h>
 #include <klocale.h>
 

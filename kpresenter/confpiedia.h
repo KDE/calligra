@@ -21,17 +21,15 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcombobox.h>
+#include <qlineedit.h>
 
 #include "global.h"
-
-#include "krestrictedline.h"
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
 class QLabel;
-class QLineEdit;
 class QGroupBox;
 class QPushButton;
 class QComboBox;

@@ -23,9 +23,9 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qvalidator.h>
+#include <qlineedit.h>
 
 #include <klocale.h>
-#include <krestrictedline.h>
 #include <kapp.h>
 
 #include <stdlib.h>

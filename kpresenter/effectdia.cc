@@ -28,8 +28,8 @@
 #include <qcheckbox.h>
 #include <qhbox.h>
 #include <qvbox.h>
+#include <qlineedit.h>
 
-#include <krestrictedline.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
