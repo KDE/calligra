@@ -86,6 +86,7 @@ class VCommandHistory : public QObject
 		void redo( VCommand* command );
 		void undoAllTo( VCommand* command );
 		void redoAllTo( VCommand* command );
+		void documentSaved();
 
 	signals:
 		void historyCleared();
@@ -94,18 +95,20 @@ class VCommandHistory : public QObject
 		void commandAdded( VCommand* );
 		void firstCommandRemoved();
 		void lastCommandRemoved();
+		void documentRestored();
 		
 	private:
 			// helpers
 		void clipCommands();
 		void updateActions();
 	
-		KarbonPart			*m_part;
-		unsigned int		m_undoLimit;
-		unsigned int		m_redoLimit;
-		KAction				*m_undo;
-		KAction				*m_redo;
-		QPtrList<VCommand>	m_commands;
+		KarbonPart         *m_part;
+		unsigned int        m_undoLimit;
+		unsigned int        m_redoLimit;
+		KAction            *m_undo;
+		KAction            *m_redo;
+		QPtrList<VCommand>  m_commands;
+		int                 m_savedPos;
 }; // VCommandHistory
 
 #endif

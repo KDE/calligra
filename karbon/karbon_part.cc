@@ -49,11 +49,11 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
       m_unit( KoUnit::U_MM )
 {
 	setInstance( KarbonFactory::instance(), false );
-	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
 	m_maxRecentFiles = VGlobal::maxRecentFiles;
 	dcop = 0L;
 
+	m_commandHistory = new VCommandHistory( this );
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 

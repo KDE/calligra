@@ -208,8 +208,11 @@ void VGradientTabWidget::setupUI()
 	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
 	addTab( m_editGroup, i18n( "Edit" ) );
 
-	QGroupBox* predefGroup  = new QGroupBox( 1, Qt::Horizontal, i18n( "Predefined Gradients" ) );
+	QGroupBox* predefGroup  = new QGroupBox( i18n( "Predefined Gradients" ) );
 	QGridLayout* predefLayout = new QGridLayout( predefGroup );
+	predefLayout->setSpacing( 3 );
+	predefLayout->setMargin( 6 );
+	predefLayout->addRowSpacing( 0, 12 );
 	predefLayout->addMultiCellWidget( m_predefGradientsView = new KListBox( predefGroup ), 0, 0, 0, 1 );
 	predefLayout->addWidget( m_predefDelete = new QPushButton( i18n( "&Delete" ), predefGroup ), 1, 0 );
 	predefLayout->addWidget( m_predefImport = new QPushButton( i18n( "&Import" ), predefGroup ), 1, 1 );

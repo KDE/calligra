@@ -86,7 +86,7 @@ void ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 	else
 	{
 		float r = acos( dx / fd );
-		a = ( dy <= 0 ? r : 6.2832 - r ) / 6.2832 * 360.;
+		a = int( ( dy <= 0 ? r : 6.2832 - r ) / 6.2832 * 360. );
 	}
 
 	emit changed( a, (int)fd, m_parent->isTranslucent() );
@@ -97,7 +97,7 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	int w = width() - 4;
 	int h = height() - 4;
 	int d = m_parent->shadowDistance();
-	int a = 6.2832 - m_parent->shadowAngle();
+	int a = 360 - m_parent->shadowAngle();
 
 	QPixmap pm( w, h );
 	VKoPainter p( &pm, w, h );
@@ -132,7 +132,7 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	}
 	p.setPen( VStroke( color ) );
 	p.setBrush( VFill( color ) );
-	traceShape( &p, w / 4 + d * cos( a / 360. * 6.2832 ), h / 4 + d * sin( a / 360. * 6.2832 ), w / 2, h / 2 );
+	traceShape( &p, int( w / 4 + d * cos( a / 360. * 6.2832 ) ), int( h / 4 + d * sin( a / 360. * 6.2832 ) ), int( w / 2 ), int( h / 2 ) );
 	p.strokePath();
 	p.fillPath();
 	
@@ -185,20 +185,22 @@ ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int di
 		: QGroupBox( parent, name )
 {
 	setTitle( i18n( "Shadow" ) );
+	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 
 	QGridLayout* layout = new QGridLayout( this );
 	layout->addRowSpacing( 0, 12 );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->addMultiCellWidget( m_preview = new ShadowPreview( this ), 1, 3, 0, 1 );
-	layout->addWidget( new QLabel( i18n( "Angle:" ), this ), 1, 2 );
-	layout->addWidget( m_angle = new KIntNumInput( this ), 1, 3 );
-	layout->addWidget( new QLabel( i18n( "Distance:" ), this ), 2, 2 );
-	layout->addWidget( m_distance = new KIntNumInput( this ), 2, 3 );
-	QHBoxLayout* cbLayout = new QHBoxLayout( layout );
-	layout->addMultiCell( cbLayout, 3, 3, 2, 3 );
-	cbLayout->add( m_translucent = new QCheckBox( i18n( "Draw translucent shadow" ), this ) );
-	cbLayout->add( m_useShadow = new QCheckBox( i18n( "Shadow" ), this ) );
+	layout->setColStretch( 0, 1 );
+	layout->setColStretch( 1, 0 );
+	layout->setColStretch( 2, 2 );
+	layout->addMultiCellWidget( m_preview = new ShadowPreview( this ), 1, 3, 0, 0 );
+	layout->addWidget( new QLabel( i18n( "Angle:" ), this ), 1, 1 );
+	layout->addWidget( m_angle = new KIntNumInput( this ), 1, 2 );
+	layout->addWidget( new QLabel( i18n( "Distance:" ), this ), 2, 1 );
+	layout->addWidget( m_distance = new KIntNumInput( this ), 2, 2 );
+	layout->addWidget( m_useShadow = new QCheckBox( i18n( "Shadow" ), this ), 3, 1 );
+	layout->addWidget( m_translucent = new QCheckBox( i18n( "Draw translucent shadow" ), this ), 3, 2 );
 	m_distance->setRange( 1, 37, 1, true );
 	m_angle->setRange( 0, 360, 10, true );
 	m_angle->setValue( angle );
@@ -286,6 +288,7 @@ void ShadowWidget::updatePreview()
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 		: QFrame( parent, "TextOptionsWidget" ), m_tool( tool )
 {
+	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 	setFrameStyle( Box | Sunken );
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	mainLayout->setMargin( 3 );
@@ -304,16 +307,20 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	m_tabWidget->addTab( textWidget, i18n( "Text" ) );
 	
 	QWidget* fxWidget = new QWidget( m_tabWidget );
-	QGridLayout* fxLayout = new QGridLayout( fxWidget );
+	QVBoxLayout* fxLayout = new QVBoxLayout( fxWidget );
 	fxLayout->setMargin( 3 );
 	fxLayout->setSpacing( 2 );
-	fxLayout->addMultiCellWidget( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ), 0, 0, 0, 3 );
-	fxLayout->addWidget( new QLabel( i18n( "Alignment:" ), fxWidget ), 1, 0 );
-	fxLayout->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
-	fxLayout->addWidget( new QLabel( i18n( "Position:" ), fxWidget ), 1, 2 );
-	fxLayout->addWidget( m_textPosition = new QComboBox( fxWidget ), 1, 3 );
-	fxLayout->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit base path" ), fxWidget ), 2, 2, 0, 1 );
-	fxLayout->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), fxWidget ), 2, 2, 2, 3 );
+	fxLayout->add( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
+	QGridLayout* fxLayout2 = new QGridLayout( fxLayout );
+	fxLayout2->setSpacing( 2 );
+	fxLayout2->addWidget( new QLabel( i18n( "Alignment:" ), fxWidget ), 1, 0 );
+	fxLayout2->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
+	fxLayout2->addWidget( new QLabel( i18n( "Position:" ), fxWidget ), 1, 2 );
+	fxLayout2->addWidget( m_textPosition = new QComboBox( fxWidget ), 1, 3 );
+	fxLayout2->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit base path" ), fxWidget ), 2, 2, 0, 1 );
+	fxLayout2->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), fxWidget ), 2, 2, 2, 3 );
+	fxLayout2->setColStretch( 1, 1 );
+	fxLayout2->setColStretch( 3, 1 );
 	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
 	
 	m_fontCombo->setCurrentText( "Helvetica" );
@@ -607,7 +614,7 @@ void VTextTool::accept()
 	{
 		cmd = new VTextCmd(
 			&view()->part()->document(),
-			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
+			i18n( "Change text" ),
 			m_text,
 			m_editedText->font(),
 			m_editedText->basePath(),
@@ -626,7 +633,7 @@ void VTextTool::accept()
 		m_text->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
 		cmd = new VTextCmd(
 			&view()->part()->document(),
-			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
+			i18n( "Insert text" ),
 			m_text );
 	} 
 	
@@ -647,6 +654,7 @@ void VTextTool::editBasePath()
 		return;
 	view()->part()->document().selection()->clear();
 	view()->part()->document().selection()->append( &m_editedText->basePath() );
+	view()->part()->repaintAllViews();
 } // VTextTool::editBasePath
 
 void VTextTool::convertToShapes()

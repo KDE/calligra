@@ -24,12 +24,12 @@
 #include "vcommand.h"
 
 VCommandHistory::VCommandHistory( KarbonPart* part )
-		: m_part( part ), m_undoLimit( 50 ), m_redoLimit( 30 )
+		: m_part( part ), m_undoLimit( 50 ), m_redoLimit( 30 ), m_savedPos( 0 )
 {
 	m_commands.setAutoDelete( true );
 
-	m_undo = KStdAction::undo( this, SLOT( undo() ), m_part->actionCollection() );
-	m_redo = KStdAction::redo( this, SLOT( redo() ), m_part->actionCollection() );
+	m_undo = KStdAction::undo( this, SLOT( undo() ), m_part->actionCollection(), "edit_undo" );
+	m_redo = KStdAction::redo( this, SLOT( redo() ), m_part->actionCollection(), "edit_redo" );
 
 	clear();
 } // VCommandHistory::VCommandHistory
@@ -40,6 +40,10 @@ VCommandHistory::~VCommandHistory()
 
 void VCommandHistory::clear()
 {
+	if( m_savedPos != int( m_commands.count() - 1 ) )
+		m_savedPos = -1;
+	else
+		m_savedPos = 0;
 	m_commands.clear();
 	emit historyCleared();
 	if ( m_undo != 0 ) {
@@ -58,13 +62,13 @@ void VCommandHistory::addCommand( VCommand* command, bool execute )
 		return;
 
 	if ( !m_commands.isEmpty() )
-        {
+	{
 		while ( m_commands.last() && !m_commands.last()->isExecuted() )
 		{
 			m_commands.removeLast();
 			emit lastCommandRemoved();
 		}
-        }
+	}
 	m_commands.append( command );
 	kdDebug() << "History: new command: " << m_commands.findRef( command ) << endl;
 	if ( execute )
@@ -202,11 +206,24 @@ void VCommandHistory::redoAllTo( VCommand* command )
 	m_part->repaintAllViews();
 } // VCommandHistory::redoAllTo
 
+void VCommandHistory::documentSaved()
+{
+	// I don't know how to make this work... This is a temporary hack...
+	// Maybe remove all undone commands before the current one ?
+	int i = m_commands.count() - 1;
+
+	while ( ( i >= 0 ) && !( m_commands.at( i )->isExecuted() ) )
+		i--;
+	i++;
+
+	m_savedPos = i;
+} // VCommandHistory::documentSaved
+
 void VCommandHistory::clipCommands()
 {
 	while ( m_commands.count() > m_undoLimit )
 		if ( m_commands.removeFirst() )
-			emit firstCommandRemoved();
+			m_savedPos--, emit firstCommandRemoved();
 
 	int i = 0;
 	int c = m_commands.count();
@@ -263,6 +280,16 @@ void VCommandHistory::updateActions()
 			m_redo->setText( i18n( "&Redo: " ) + m_commands.at( i )->name() );
 		}
 
+	if( m_savedPos >= 0 )
+	{
+		for( i = 0; i < m_savedPos; i++ )
+			if( !m_commands.at( i )->isExecuted() )
+				return;
+		for( i = m_savedPos; i < int( m_commands.count() ); i++ )
+			if( m_commands.at( i )->isExecuted() )
+				return;
+		emit documentRestored();
+	}
 } // VCommandHistory::updateActions()
 
 #include "vcommand.moc"
