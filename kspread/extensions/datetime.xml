@@ -458,7 +458,7 @@
      <Name>MINUTES</Name>
       <Type>Int</Type>
       <Parameter>
-	<Comment>T	ime</Comment>
+	<Comment>Time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
@@ -528,8 +528,7 @@
       <Type>DATE</Type>
       <Help>
 	<Text>The TODAY() function returns the current date formatted
-with local parameters. It is similar to  SHORTCURRENTDATE except that
-it returns a date.</Text>
+with local parameters. It is similar to  SHORTCURRENTDATE except that it returns a date.</Text>
 	<Syntax>TODAY()</Syntax>
 	<Example>TODAY() returns "Saturday 13 April 2002"</Example>
         <Related>CURRENTTIME</Related>
