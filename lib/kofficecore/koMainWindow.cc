@@ -369,7 +369,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 {
     KoDocument* pDoc = rootDocument();
     if(!pDoc)
-        return;
+        return true;
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     QCString _native_format = pDoc->nativeFormatMimeType();
