@@ -521,6 +521,18 @@ void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVIt
 	accept();
 }
 
+
+void KexiStartupDialog::slotOk() {
+	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;
+	if (activePageIndex()==d->pageOpenExistingID) {
+		if (d->openExistingFileDlg) {
+			d->openExistingFileDlg->okButton()->animateClick();
+			return;
+		}
+	}
+	KDialogBase::slotOk();
+}
+
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
 	kdDebug() << "simple" << endl;

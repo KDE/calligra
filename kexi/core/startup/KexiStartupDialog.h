@@ -147,6 +147,7 @@ public slots:
 protected slots:
 	virtual void done(int r);
 	virtual void reject();
+	virtual void slotOk();
 	
 	//! slot activated when one of page in templates window is shown
 	void templatesPageShown(QWidget *page);
