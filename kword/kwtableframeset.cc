@@ -222,6 +222,22 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
 {
     if ( row < m_rowArray.size() )
         return (*m_rowArray[row])[col];
+    // Emulate the old behaviour of this method: go up or left until
+    // finding a merged cell which covers (row,col). Some methods rely
+    // on this, but it also makes some other methods look at the same cell
+    // several times.... Maybe a bool would help...
+
+    if ( row > 0 ) {
+        Cell* cellAbove = getCell( row - 1, col ); // recursive call. Might go up, or left, until finding it...
+        if ( cellAbove && cellAbove->m_row == row && cellAbove->m_col == col )
+            return cellAbove;
+    }
+    if ( col > 0 ) {
+        Cell* cellLeft = getCell( row, col - 1 );  // recursive call. Might go up, or left, until finding it...
+        if ( cellLeft && cellLeft->m_row == row && cellLeft->m_col == col )
+            return cellLeft;
+    }
+
     return 0L;
 #if 0
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
@@ -335,14 +351,14 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         unsigned int rowSpan=activeCell->m_rows;
         unsigned int startRow=activeCell->m_row;
         int colCount=0;
-        do {
+        do { // for each column
             unsigned int rowCount=startRow;
             double thisColHeight=0;     // the total height of this column
             double thisColActiveRow=0;  // the total height of all cells in this col, completely in the
                                         // row of the activeCell
-            do {
+            do { // for each row (under startRow)
                 Cell *thisCell=getCell(rowCount,colCount);
-                if(thisCell->m_row < startRow) {
+                if(thisCell->m_row < startRow) { // above -> set startRow and restart
                     rowSpan+=startRow-thisCell->m_row;
                     startRow=thisCell->m_row;
                     colCount=-1;
