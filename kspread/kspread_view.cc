@@ -25,6 +25,7 @@
 
 #include <qtoolbutton.h>
 #include <qtimer.h>
+#include <qcursor.h>
 
 #include <kstdaction.h>
 #include <kmessagebox.h>

@@ -26,6 +26,7 @@
 #include "SelectTool.h"
 
 #include <qpainter.h>
+#include <qcursor.h>
 
 #include <kaction.h>
 #include <klocale.h>
