@@ -78,9 +78,9 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 void KexiFormPart::initInstanceActions( KActionCollection *col )
 {
 	m_manager->createActions(col, 0);
-
+	new KAction(i18n("Edit tab order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), col, "taborder");
+	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), m_manager, SLOT(ajustWidgetSize()), col, "adjust");
 	//TODO
-//	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
@@ -96,7 +96,9 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiDB::FieldList *fields = 0;
 	if(it.form())
 	{
-		form = it.form();
+		// The form has been deleted, we need to create a new one
+		form = new KFormDesigner::Form(m_manager);
+		it.setForm(form);
 		kdDebug() << "KexiFormPart::createView(): using existing form: [" << item.identifier() << "] " << it.form() << endl;
 	}
 	else
@@ -133,34 +135,17 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	}
 
 	KexiDBForm *view = 0;
-	if(viewMode == Kexi::DesignViewMode)
+	KFormDesigner::ObjectTreeView *tree = new KFormDesigner::ObjectTreeView(0, "tree");
+	view = new KexiDBForm(this, it, win, parent, item.name().latin1(), win->project()->dbConnection(), (viewMode == Kexi::DataViewMode));
+	m_manager->setEditors(0, tree);
+	view->initForm();
+
+	if(fields)
 	{
-		KFormDesigner::ObjectTreeView *tree = new KFormDesigner::ObjectTreeView(0, "tree");
-		view = new KexiDBForm(this, it, win, parent, item.name().latin1(), win->project()->dbConnection());
-		form->createToplevel(view);
-
-		m_manager->setEditors(0, tree);
-		m_manager->importForm(view, form);
-
-		view->initForm();
-
-		if(fields)
-		{
-			QDomDocument dom;
-			generateForm(fields, dom);
-			KFormDesigner::FormIO::loadFormFromDom(form, view, dom);
-		}
+		QDomDocument dom;
+		generateForm(fields, dom);
+		KFormDesigner::FormIO::loadFormFromDom(form, view, dom);
 	}
-	else
-	{
-		view = new KexiDBForm(this, it, win, parent, item.name().latin1(), win->project()->dbConnection());
-		form->createToplevel(view);
-		view->initForm();
-		form->setDesignMode(false);
-		//view->preview();
-	}
-
-	dialog->resize(400, 300);
 
 	return view;
 }

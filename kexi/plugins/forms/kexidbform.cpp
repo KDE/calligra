@@ -33,13 +33,20 @@
 #include "kexiformpart.h"
 #include "kexidbform.h"
 
-KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn)
+KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview)
  : KexiViewBase(win, parent, name)
 {
 	m_part = m;
 	m_conn = conn;
 	m_item = i;
-	m_preview = 0;
+	if(preview)
+	{
+		m_preview = new QWidget(this);
+		QHBoxLayout *l = new QHBoxLayout(this);
+		l->addWidget(m_preview);
+	}
+	else
+		m_preview = 0;
 	m_buffer = 0;
 	m_id = i.item().identifier();
 
@@ -51,13 +58,28 @@ KexiDBForm::KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win
 void
 KexiDBForm::initForm()
 {
+	if(!m_preview)
+		m_item.form()->createToplevel(this);
+	else
+	{
+		m_item.form()->createToplevel(m_preview);
+		m_preview->show();
+	}
+	loadForm();
+	m_part->manager()->importForm(this, m_item.form(), m_preview);
+	m_part->addForm(m_id, m_item);
+}
+
+void
+KexiDBForm::loadForm()
+{
+	kdDebug() << "KexiDBForm::loadForm() Loading the form with id : " << m_id << endl;
 	QString data;
 	loadDataBlock(data, QString::number(m_id));
 	QByteArray raw;
 	raw = data.utf8();
 	raw.truncate(raw.size() - 1);
 	KFormDesigner::FormIO::loadFormData(m_item.form(), this, raw);
-	m_part->addForm(m_id, m_item);
 }
 
 void
@@ -71,23 +93,9 @@ KexiDBForm::managerPropertyChanged(KexiPropertyBuffer *b)
 bool
 KexiDBForm::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
-	kdDebug() << "KexiDBForm::beforeSwitchTo(): " << mode << " using " << m_item.form() <<  endl;
-	if (m_item.form()->objectTree())
-		m_item.form()->objectTree()->debug();
-	QByteArray data;
-	KFormDesigner::FormIO::saveForm(m_item.form(), data);
-	kdDebug() << "KexiDBForm::beforeSwitchTo(): data follows:\n" << QString(data) << endl;
-
-/*
-	if(mode == Kexi::DataViewMode) //save and prepare preview
-	{
-		QByteArray fd;
-		KFormDesigner::FormIO::saveForm(m_part->manager()->activeForm(), fd);
-		kdDebug() << "KexiDBForm::beforeSwitchTo(): data: \n" << QString(fd) << endl;
-
-		m_part->saveForm(m_conn, m_item.item(), fd);
-	}
-*/
+	// tmp !! We currently save the form in the database when switching to preview, until KexiDialogTempData is ok
+	if(dirty() && mode == Kexi::DataViewMode && m_item.form()->objectTree())
+		storeData();
 
 	return true;
 }
@@ -97,32 +105,18 @@ KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
 {
 	if(mode == Kexi::DesignViewMode)
 	{
-		preview();
+		// The form may has been modified, so we must recreate the preview
+		delete m_preview;
+		m_preview = new QWidget(this);
+		m_item.setForm(new KFormDesigner::Form(m_part->manager()));
+		m_item.form()->createToplevel(m_preview);
+		loadForm();
+		m_part->manager()->importForm(m_preview, m_item.form(), true);
+		m_preview->show();
+		this->layout()->add(m_preview);
 	}
 
 	return true;
-}
-
-void
-KexiDBForm::preview()
-{
-	delete m_preview;
-	m_preview = new QWidget(this);
-//		QHBoxLayout *l = new QHBoxLayout(this);
-//		l->addWidget(m_preview);
-	m_part->manager()->previewForm(m_item.form(), m_preview);
-	if (m_item.form()->objectTree())
-		m_item.form()->objectTree()->debug();
-
-	kdDebug() << "KexiDBForm::afterSwitchFrom(): preview!: using " << m_item.form() << endl;
-
-	m_preview->show();
-
-	QLayout *l = layout();
-	if(!l)
-		l = new QHBoxLayout(this);
-
-	l->add(m_preview);
 }
 
 void

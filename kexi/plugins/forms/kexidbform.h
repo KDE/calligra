@@ -49,7 +49,7 @@ class KexiDBForm : public KexiViewBase
 	Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
 
 	public:
-		KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
+		KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview);
 		~KexiDBForm();
 
 		QString datasource() const { return m_ds; }
@@ -58,8 +58,8 @@ class KexiDBForm : public KexiViewBase
 		void showRecordNavigator(bool s) { m_nav = s; }
 
 		void initForm();
-		void preview();
-	
+		void loadForm();
+
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
 		void slotDirty(KFormDesigner::Form *f);

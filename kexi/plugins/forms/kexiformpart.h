@@ -47,6 +47,7 @@ class KexiFormPartItem
 		KexiFormPartItem(KexiPart::Item &it, KFormDesigner::Form *f);
 		~KexiFormPartItem();
 
+		void  setForm(KFormDesigner::Form *form) { m_form = form; }
 		KFormDesigner::Form *form() { return m_form; }
 		KexiPart::Item item() { return m_item; }
 
@@ -67,7 +68,7 @@ class KexiFormPart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		KFormDesigner::FormManager *manager() { return m_manager; }
