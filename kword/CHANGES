@@ -43,7 +43,6 @@ More precise coordinate system (especially for frames).
 Many improvements for tables (including splitting and merging cells).
 Highlight mispelled word during spell-checking, and spell-check all framesets.
 UI improvements, undo/redo fixes, font-size fix, border-drawing improved, etc.
-Fixed crash when embedding into Konqueror.
 Many new variables available.
 Redesigned style editor (stylist), now all in one dialog.
 When changing a style, only the changes are applied to existing paragraphs (not the whole style).
@@ -55,7 +54,13 @@ Changes between KWord-1.1-beta2 and KWord-1.1-beta3 (under development)
 ===================================================
 
 New view mode: preview (multiple pages per row)
-Inline items (variables, images) are now correctly drawn as selected.
+Inline items (variables, images, frames) are now correctly drawn as selected.
 Improved readonly mode, when embedding into konqueror (can now select and copy).
-...
+Insert Frame/Page Break feature added (also as part of styles).
+Apply button added to the stylist.
+Zoom value can be set arbitrarily by the user (editable combobox).
 
+Fixed recalculation of "page number" variable in header or footer.
+Painting and run-around-frame fixes (e.g. in multi-columns mode).
+Fixes for the creation and removal of pages.
+Fixed crash when embedding into Konqueror.
