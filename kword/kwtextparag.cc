@@ -130,7 +130,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
 
                     int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj + availWidth / 2;
                     int size = QMIN( availWidth,zh->layoutUnitToPixelX(ch.format()->width('W')) ) / 2 ; // actually the half size
-                    int y = lastY + baseLine - zh->layoutUnitToPixelY( ch.ascent()/2 );
+                    int y = lastY_pix + baseLine_pix - zh->layoutUnitToPixelY( ch.ascent()/2 );
                     int arrowsize = zh->zoomItY( 2 );
                     painter.drawLine( x + size, y, x - size, y );
                     painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
