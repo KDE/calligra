@@ -1445,7 +1445,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     ButtonGroup1Layout->addWidget( rAlignLeft );
 
     rAlignCentre = new QRadioButton( bgAlign );
-    rAlignCentre->setText( i18n( "Centre" ) );
+    rAlignCentre->setText( i18n( "Center" ) );
     ButtonGroup1Layout->addWidget( rAlignCentre );
 
     rAlignRight = new QRadioButton( bgAlign );
