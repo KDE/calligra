@@ -10,4 +10,4 @@ bin_PROGRAMS = kplato
 kplato_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
                 kptrelation.cc kptresource.cc kpttask.cc \
                 main.cc
-kplato_LDADD =  $(all_libraries) $(LIB_KDEUI)
+kplato_LDADD =  $(all_libraries) $(LIB_KDECORE)

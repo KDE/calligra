@@ -28,7 +28,7 @@ class KPTNode;
 class KPTRelation {
     public:
 
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime *lag);
+        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, QDateTime lag);
         KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
         ~KPTRelation();
 
@@ -41,12 +41,12 @@ class KPTRelation {
          *  The lag of a relation is the time it takes between the parent starting/stopping
          *  and the start of the child.
          */
-        QDateTime *lag() { return m_lag; }
+        const QDateTime &lag() const { return m_lag; }
 
         enum Result {
           SUCCESS = 0l,
           HASCHILDREN = 1l,
-          NOTIMPL = 2l,
+          NOTIMPL = 2l
         };
 
         
@@ -55,6 +55,6 @@ class KPTRelation {
         KPTNode *m_child;
         TimingType m_timingType;
         TimingRelation m_timingRelation;
-        QDateTime *m_lag;
+        QDateTime m_lag;
 };
 #endif

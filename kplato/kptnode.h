@@ -66,7 +66,7 @@ class KPTNode {
 
         int numDependChildNodes() const { return m_dependChildNodes.count(); }
         virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag);
+        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag);
         virtual void insertDependChildNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependChildNode( KPTNode *node, bool remove=false);
         void delDependChildNode( int number, bool remove=false);
@@ -74,19 +74,19 @@ class KPTNode {
 
         int numDependParentNodes() const { return m_dependParentNodes.count(); }
         virtual void addDependParentNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag);
+        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime lag);
         virtual void insertDependParentNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependParentNode( KPTNode *node, bool remove=false);
         void delDependParentNode( int number, bool remove=false);
         KPTRelation *getDependParentNode( int number) { return m_dependParentNodes.at(number); } 
 
-        void setStartTime(QDateTime *startTime) { m_startTime=startTime; }
-        QDateTime *startTime() { return m_startTime; }
-        void setEndTime(QDateTime *endTime) { m_endTime=endTime; }
-        QDateTime *endTime() { return m_endTime; }
+        void setStartTime(QDateTime startTime) { m_startTime=startTime; }
+        const QDateTime &startTime() const { return m_startTime; }
+        void setEndTime(QDateTime endTime) { m_endTime=endTime; }
+        const QDateTime &endTime() const { return m_endTime; }
 
 
-        void addEffort(KPTEffort* e) { m_effort = e; }
+        void setEffort(KPTEffort* e) { m_effort = e; }
         KPTEffort* effort() { return m_effort; }
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
@@ -126,7 +126,7 @@ class KPTNode {
         NodeType m_nodeType;
         QString m_name;
 
-        QDateTime *m_startTime, *m_endTime; // both entered during the project, not at the initial calculation.
+        QDateTime m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
         KPTEffort* m_effort;
 };
@@ -134,12 +134,12 @@ class KPTNode {
 class KPTEffort {
 
     public:
-        KPTEffort ( QDateTime e = QDateTime(), QDateTime p = QDateTime(), QDateTime o = QDateTime() );
+        KPTEffort ( QDateTime e = QDateTime(QDate(0,1,1)), QDateTime p = QDateTime(QDate(0,1,1)), QDateTime o = QDateTime(QDate(0,1,1)) );
         ~KPTEffort();
 
-        QDateTime& optimistic() {return m_optimisticDuration;}
-        QDateTime& pessimistic() {return m_pessimisticDuration;}
-        QDateTime& expected() {return m_expectedDuration;}
+        const QDateTime& optimistic() {return m_optimisticDuration;}
+        const QDateTime& pessimistic() {return m_pessimisticDuration;}
+        const QDateTime& expected() {return m_expectedDuration;}
 
     private:
        QDateTime m_optimisticDuration;

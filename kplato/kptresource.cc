@@ -27,21 +27,15 @@ KPTResourceGroup::KPTResourceGroup() {
 KPTResourceGroup::~KPTResourceGroup() {
 }
 
-	
-void KPTResourceGroup::setName(QString) {
-}
-
-QString &KPTResourceGroup::name() {
-}
-	
-	
 void KPTResourceGroup::addResource(KPTResource*, KPTRisk*) {
 }
 
 KPTResource* KPTResourceGroup::getResource(int) {
+    return 0L;
 }
 
 KPTRisk* KPTResourceGroup::getRisk(int) {
+    return 0L;
 }
 
 void KPTResourceGroup::removeResource(int) {
@@ -51,6 +45,7 @@ void KPTResourceGroup::addRequiredResource(KPTResourceGroup*) {
 }
 
 KPTResourceGroup* KPTResourceGroup::getRequiredResource(int) {
+    return 0L;
 }
 
 void KPTResourceGroup::removeRequiredResource(int) {
@@ -65,47 +60,34 @@ KPTResource::~KPTResource() {
 void KPTResource::setName(QString) {
 }
 
-QString &KPTResource::name() {
+void KPTResource::addWorkingHour(QDateTime from, QDateTime until) {
 }
 
-void KPTResource::setAvailableFrom(QDateTime *af) {
+QDateTime *KPTResource::getFirstAvailableTime(QDateTime after) {
+    return 0L;
 }
 
-QDateTime *KPTResource::availableFrom() {
-}
-
-void KPTResource::setAvailableUntil(QDateTime *au) {
-}
-
-QDateTime *KPTResource::availableUntil() {
-}
-
-void KPTResource::addWorkingHour(QDateTime *from, QDateTime *until) {
-}
-
-QDateTime *KPTResource::getFirstAvailableTime(QDateTime *after) {
-}
-
-QDateTime *KPTResource::getBestAvailableTime(QDateTime *duration) {
+QDateTime *KPTResource::getBestAvailableTime(QDateTime duration) {
+    return 0L;
 }
 
 
-KPTAppointment::KPTAppointment(QDateTime *startTime, QDateTime *duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
+KPTAppointment::KPTAppointment(QDateTime startTime, QDateTime duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;
     m_duration=duration;
     m_task=taskNode;
     m_resource=resource;
-    //m_repeatInterval=new QDateTime(0);
+    m_repeatInterval=QDateTime(QDate(0,1,1));
     m_repeatCount=0;
 }
 
 KPTAppointment::~KPTAppointment() {
 }
 
-void KPTAppointment::deleteAppointmentFromRepeatList(QDateTime *time) {
+void KPTAppointment::deleteAppointmentFromRepeatList(QDateTime time) {
 }
 
-void KPTAppointment::addAppointmentToRepeatList(QDateTime *time) {
+void KPTAppointment::addAppointmentToRepeatList(QDateTime time) {
 }
 
 

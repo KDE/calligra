@@ -42,8 +42,8 @@ class KPTResourceGroup {
 	      KPTResourceGroup();
 	      ~KPTResourceGroup();
 	
-	      void setName(QString);
-	      QString &name();
+	      void setName(QString n) {m_name=n;}
+	      const QString &name() const {return m_name;}
 	
 	      /** Manage the resources in this list
 	        * At some point we will have to look at not mixing types of resources
@@ -87,54 +87,54 @@ class KPTResource {
         void setName(QString);
         QString &name();
 
-        void setAvailableFrom(QDateTime *af);
-        QDateTime *availableFrom();
-        void setAvailableUntil(QDateTime *au);
-        QDateTime *availableUntil();
+        void setAvailableFrom(QDateTime af) {m_availableFrom=af;}
+        const QDateTime &availableFrom() const {return m_availableFrom;}
+        void setAvailableUntil(QDateTime au) {m_availableUntil=au;}
+        const QDateTime &availableUntil() const {return m_availableUntil;}
 
-        void addWorkingHour(QDateTime *from, QDateTime *until);
+        void addWorkingHour(QDateTime from, QDateTime until);
 
-        QDateTime *getFirstAvailableTime(QDateTime *after=0);
-        QDateTime *getBestAvailableTime(QDateTime *duration);
+        QDateTime *getFirstAvailableTime(QDateTime after = QDateTime(QDate(0,1,1)));
+        QDateTime *getBestAvailableTime(QDateTime duration);
 
     private:
         QList<KPTAppointment> m_appointments;
         QString m_name;
-        QDateTime *m_availableFrom;
-        QDateTime *m_availableUntil;
+        QDateTime m_availableFrom;
+        QDateTime m_availableUntil;
         QList<QDateTime> m_workingHours;
 };
 
 class KPTAppointment {
     public:
-        KPTAppointment(QDateTime *startTime, QDateTime *duration, KPTResource *resource, KPTTask *taskNode=0);
+        KPTAppointment(QDateTime startTime, QDateTime duration, KPTResource *resource, KPTTask *taskNode=0);
         ~KPTAppointment();
 
         // get/set member values.
-        QDateTime *startTime() { return m_startTime; }
-        void setStartTime(QDateTime *st) { m_startTime=st; }
+        const QDateTime &startTime() const { return m_startTime; }
+        void setStartTime(QDateTime st) { m_startTime=st; }
 
-        QDateTime *duration() { return m_duration; }
-        void setDuration(QDateTime *d) { m_duration=d; }
+        const QDateTime &duration() const { return m_duration; }
+        void setDuration(QDateTime d) { m_duration=d; }
 
         KPTTask *task() { return m_task; }
         void setTask(KPTTask *t) { m_task = t; }
 
-        QDateTime *repeatInterval() {return m_repeatInterval;}
-        void setRepeatInterval(QDateTime *ri) {m_repeatInterval=ri;}
+        const QDateTime &repeatInterval() const {return m_repeatInterval;}
+        void setRepeatInterval(QDateTime ri) {m_repeatInterval=ri;}
 
         int repeatCount() { return m_repeatCount; }
         void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-        void deleteAppointmentFromRepeatList(QDateTime *time);
-        void addAppointmentToRepeatList(QDateTime *time);
+        void deleteAppointmentFromRepeatList(QDateTime time);
+        void addAppointmentToRepeatList(QDateTime time);
 
     private:
-        QDateTime *m_startTime;
-        QDateTime *m_duration;
+        QDateTime m_startTime;
+        QDateTime m_duration;
         KPTTask *m_task;
         KPTResource *m_resource;
-        QDateTime *m_repeatInterval;
+        QDateTime m_repeatInterval;
         int m_repeatCount;
         QList<QDateTime> m_extraRepeats;
         QList<QDateTime> m_skipRepeats;

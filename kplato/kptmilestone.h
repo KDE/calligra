@@ -56,7 +56,7 @@ class KPTMilestone : public KPTNode {
          *  will have to be calculated. For a Project or Subproject, the expected Duration is 
          *  calculated by PERT/CPM. 
          */
-        QDateTime *getExpectedDuration() { return new QDateTime(*(new QDate(0,1,1))); }
+        QDateTime *getExpectedDuration() { return new QDateTime(QDate(0,1,1)); }
 
         /** Instead of using the expected duration, generate a random value using the Distribution of 
          *  each Task. This can be used for Monte-Carlo estimation of Project duration.
