@@ -60,17 +60,15 @@ SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPres
     int w = m_pixmap.width();
     int h = m_pixmap.height();
 
-    if ( w > h ) {
-      w = 300;
-      h = 225;
+    if ( w > h )
+    {
+        h = 300 * h / w;
+        w = 300;
     }
-    else if ( w < h ) {
-      w = 225;
-      h = 300;
-    }
-    else if ( w == h ) {
-      w = 225;
-      h = 225;
+    else
+    {
+        w = 300 * w / h;
+        h = 300;
     }
 
     const QImage img(m_pixmap.convertToImage().smoothScale( w, h, QImage::ScaleMin ));

@@ -820,6 +820,7 @@ void KPBackGround::load( const QDomElement &element )
         if(e.hasAttribute("value"))
             tmp=e.attribute("value").toInt();
         setPageEffect(static_cast<PageEffect>(tmp));
+        tmp = (int)ES_MEDIUM;
         if(e.hasAttribute("speed"))
             tmp=e.attribute("speed").toInt();
         setPageEffectSpeed( static_cast<EffectSpeed>(tmp) );

@@ -90,7 +90,6 @@
  </OBJECTS>
  <INFINITLOOP value="0"/>
  <MANUALSWITCH value="1"/>
- <PRESSPEED value="1"/>
  <PRESSLIDES value="0"/>
  <SELSLIDES>
   <SLIDE nr="0" show="1"/>
