@@ -259,7 +259,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 	    file = QFileDialog::getSaveFileName( QString::null, filter );
 #else
             if(dialog->exec()==QDialog::Accepted)
-                file=dialog->selectedFile();
+                file=dialog->selectedURL().url();
             else
                 return false;
 
