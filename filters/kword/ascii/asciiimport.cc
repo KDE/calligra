@@ -1,4 +1,4 @@
-// $Id$
+// 
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
