@@ -273,8 +273,9 @@ bool StarWriterImport::parseText(QByteArray n)
     QByteArray s;
     Q_UINT16 len;
     QString text;
-    Q_UINT16 attributeStart, attributeLength;
-    QString parAttributes, charAttributes1, charAttributes2;
+    //Q_UINT16 attributeStart, attributeEnd, formatPos, formatLen;
+    //QString pAttributes, cAttributes, tempCAttributes;
+    //QValueList<Q_UINT16, Q_UINT16, QString> cAttributesList;
 
     // Retrieve the paragraph (text-only)
     len = readU16(n, 0x09);
@@ -284,15 +285,33 @@ bool StarWriterImport::parseText(QByteArray n)
 
     /*
     // Retrieve paragraph and character attributes
-    // FIXME: parse 'S' sections
-    // FIXME: parse 'A' sections
+    // FIXME: parse 'S' sections and write to pAttributes
+    // FIXME: parse 'A' sections and fill cAttributesList
+    // Parse list
+    while ((!cAttributesList.isEmpty()) || (formatPos < len)) {
+        formatLen = 65535;
+        // FIXME: point to first list item
+        while (FIXME: current list item < last list item) {
+            // FIXME: get item members
+            if ((attributeStart <= formatPos) && (formatPos <= attributeEnd)) {   // this attribute has to be considered
+                // FIXME: write attribute to tempCAttributes
+                formatLen = min(formatLen, (attributeStart - attributeEnd));
+            }
+            else if (attributeLen < formatPos) [   // this attribute has to be removed
+                // FIXME: remove list item
+            }
+            // FIXME: point to next list item
+        }
+        // FIXME: copy tempCAttributes to cAttributes
+        formatPos += formatLen;
+    }
     */
 
     // Write everything to the variable
     text = convertToKWordString(s);
     bodyStuff.append("  <PARAGRAPH>\n");
     bodyStuff.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
-    // FIXME: add FORMATS
+    // FIXME: add FORMATS for pAttributes and cAttributes
     bodyStuff.append("  </PARAGRAPH>\n");
 
     return true;
