@@ -17,5 +17,6 @@ noinst_HEADERS = wpimport.h wpimport_factory.h wpexport.h wpexport_factory.h
 
 METASOURCES = AUTO
 
-service_DATA = kword_wp_import.desktop kword_wp_export.desktop
+# better not install the .desktop file for the export filter as it's still empty
+service_DATA = kword_wp_import.desktop # kword_wp_export.desktop
 servicedir = $(kde_servicesdir)
