@@ -237,6 +237,8 @@ SvgExport::getGradient( const VGradient& grad )
 		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
 		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
 		*m_defs << "cy=\"" << grad.origin().y() << "\" ";
+		*m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
+		*m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
 		double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
 		*m_defs << "r=\"" << QString().setNum( r ) << "\" ";
 		if( grad.repeatMethod() == VGradient::reflect )

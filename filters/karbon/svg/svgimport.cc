@@ -352,10 +352,12 @@ SvgImport::parseGradient( const QDomElement &e )
 			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ), toPercentage( e.attribute( "cy", "50%" ) ) ) );
 			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ) + toPercentage( e.attribute( "r", "50%" ) ),
 													toPercentage( e.attribute( "cy", "50%" ) ) ) );
+			gradhelper.gradient.setFocalPoint( KoPoint( toPercentage( e.attribute( "fx", "50%" ) ), toPercentage( e.attribute( "fy", "50%" ) ) ) );
 		}
 		else
 		{
 			gradhelper.gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+			gradhelper.gradient.setFocalPoint( KoPoint( e.attribute( "fx" ).toDouble(), e.attribute( "fy" ).toDouble() ) );
 			gradhelper.gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
 		}
 		gradhelper.gradient.setType( VGradient::radial );
@@ -402,6 +404,9 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().x() ), true, false, bbox );
+				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().y() ), false, true, bbox );
+				gc->fill.gradient().setFocalPoint( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
 				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 				gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
