@@ -57,6 +57,8 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kstatusbar.h>
+#include <kinputdialog.h>
+#include <knotifyclient.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -585,7 +587,37 @@ void KivioView::removePage( KivioPage *_t )
 
 void KivioView::renamePage()
 {
-    m_pTabBar->slotRename();
+    bool ok;
+    QString activeName = m_pActivePage->pageName();
+    QString newName = KInputDialog::getText( i18n("Rename Page"), 
+        i18n("Enter page name:"), activeName, &ok, this );
+
+    // Have a different name ?
+    if ( ok ) // User pushed an OK button.
+    {
+        if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
+        {
+            KNotifyClient::beep();
+            KMessageBox::information( this, i18n("Page name cannot be empty."),
+                i18n("Change Page Name") );
+            // Recursion
+            renamePage();
+        }
+        else if ( newName != activeName ) // Page name changed.
+        {
+             // Is the name already used
+             if ( !m_pActivePage->setPageName( newName ) )
+             {
+                KNotifyClient::beep();
+                KMessageBox::information( this, i18n("This name is already used."),
+                    i18n("Change Page Name") );
+                // Recursion
+                renamePage();
+             }
+             KivioChangePageNameCommand *cmd = new KivioChangePageNameCommand(i18n("Rename Page"), activeName, newName, m_pActivePage);
+             m_pDoc->addCommand( cmd );
+        }
+    }
 }
 
 void KivioView::setActivePage( KivioPage* page )

@@ -125,7 +125,6 @@ public slots:
     void scrollRight();
     void scrollFirst();
     void scrollLast();
-    void slotRename( );
 
 protected slots:
     void slotAutoScroll( );

@@ -343,41 +343,6 @@ void KivioTabBar::renameTab( const QString& old_name, const QString& new_name )
     update();
 }
 
-void KivioTabBar::slotRename()
-{
-    // Store the current name of the active page
-    KivioPage* page = m_pView->activePage();
-
-    bool ok;
-    QString activeName = page->pageName();
-    QString newName = KInputDialog::getText( i18n("Rename Page"), i18n("Enter page name:"), activeName, &ok, this );
-
-    // Have a different name ?
-    if ( ok ) // User pushed an OK button.
-    {
-        if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
-        {
-            KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change Page Name") );
-            // Recursion
-            slotRename();
-        }
-        else if ( newName != activeName ) // Page name changed.
-        {
-             // Is the name already used
-             if ( !page->setPageName( newName ) )
-             {
-                KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Page Name") );
-                 // Recursion
-                 slotRename();
-             }
-             KivioChangePageNameCommand *cmd = new KivioChangePageNameCommand(i18n("Rename Page"), activeName, newName, page);
-             m_pView->doc()->addCommand( cmd );
-        }
-    }
-}
-
 void KivioTabBar::mousePressEvent( QMouseEvent* _ev )
 {
     int old_active = activeTab;
