@@ -43,11 +43,13 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted() { return m_executed; }
 
 private:
 	VSelection* m_selection;
 	VColor* m_color;
 	QValueVector<VColor> m_oldcolors;
+	bool m_executed;
 };
 
 class VStrokeLineWidthCmd : public VCommand
@@ -58,11 +60,13 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted() { return m_executed; }
 
 private:
 	VSelection* m_selection;
 	double m_width;
 	QValueVector<double> m_oldwidths;
+	bool m_executed;
 };
 
 class VStrokeCmd : public VCommand
@@ -75,6 +79,7 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted() { return m_executed; }
 
 protected:
 	VSelection* m_selection;
@@ -84,6 +89,7 @@ protected:
 	VPattern *m_pattern;
 
 	QValueVector<VStroke> m_oldcolors;
+	bool m_executed;
 };
 
 #endif

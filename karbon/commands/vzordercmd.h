@@ -42,6 +42,7 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted() { return true; }
 
 protected:
 	VSelection* m_selection;

@@ -240,7 +240,7 @@ VGradientListItem::~VGradientListItem()
 
 int VGradientListItem::width( const QListBox* lb ) const
 {
-	return lb->width() - 30;
+	return lb->width() - 25;
 } // VGradientListItem::width
 
 void VGradientListItem::paint( QPainter* painter )
@@ -248,7 +248,6 @@ void VGradientListItem::paint( QPainter* painter )
 	painter->save();
 	painter->setRasterOp( Qt::CopyROP );
 	QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
-	painter->fillRect( r, Qt::red );
 	painter->scale( ( (float)( width( listBox() ) ) ) / 200., 1. );
 	painter->drawPixmap( 0, 0, m_pixmap );
 	painter->restore();

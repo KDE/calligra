@@ -26,7 +26,7 @@
 
 
 VGroupCmd::VGroupCmd( VDocument *doc )
-	: VCommand( doc, i18n( "Group Objects" ) )
+	: VCommand( doc, i18n( "Group Objects" ), "14_group" ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();
 
@@ -54,6 +54,8 @@ VGroupCmd::execute()
 	document()->append( m_group );
 	document()->selection()->clear();
 	document()->selection()->append( m_group );
+	
+	m_executed = true;
 }
 
 void
@@ -85,4 +87,12 @@ VGroupCmd::unexecute()
 	
 	delete m_group;
 	m_group = 0L;
+	
+	m_executed = false;
+}
+
+bool 
+VGroupCmd::isExecuted()
+{
+	return m_executed;
 }

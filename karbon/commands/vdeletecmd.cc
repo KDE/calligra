@@ -25,7 +25,7 @@
 
 
 VDeleteCmd::VDeleteCmd( VDocument* doc )
-	: VCommand( doc, i18n( "Delete Objects" ) )
+	: VCommand( doc, i18n( "Delete Objects" ) ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();
 	document()->selection()->clear();
@@ -47,6 +47,7 @@ VDeleteCmd::execute()
 	{
 		itr.current()->setState( VObject::deleted );
 	}
+	m_executed = true;
 }
 
 void
@@ -57,5 +58,11 @@ VDeleteCmd::unexecute()
 	{
 		itr.current()->setState( VObject::normal );
 	}
+	m_executed = false;
 }
 
+bool
+VDeleteCmd::isExecuted()
+{
+	return m_executed;
+}

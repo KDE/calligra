@@ -71,6 +71,9 @@ public:
 
 	// Clear history.
 	void clearHistory();
+	
+	/// access the command history:
+	VCommandHistory* commandHistory() { return m_commandHistory; }
 
 	bool showStatusBar() const { return m_bShowStatusBar; }
 	void setShowStatusBar( bool b );

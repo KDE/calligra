@@ -42,11 +42,13 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted();
 
 protected:
 	VSelection* m_selection;
 
 	VFill m_fill;
+	bool  m_executed;
 
 	QValueVector<VFill> m_oldcolors;
 };

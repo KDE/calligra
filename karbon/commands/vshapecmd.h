@@ -32,15 +32,17 @@ class VComposite;
 class VShapeCmd : public VCommand
 {
 public:
-	VShapeCmd( VDocument* doc, const QString& name, VComposite* shape );
+	VShapeCmd( VDocument* doc, const QString& name, VComposite* shape, const QString& icon = "14_polygon" );
 	virtual ~VShapeCmd() {}
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted();
 
 protected:
 	/// Pointer to the created shape.
 	VComposite* m_shape;
+	bool m_executed;
 };
 
 #endif

@@ -110,9 +110,11 @@ class VClipartTool : public VTool
 
 				virtual void execute();
 				virtual void unexecute();
+				virtual bool isExecuted() { return m_executed; }
 
-			protected:
+			private:
 				VObject* m_clipart;
+				bool     m_executed;
 		}; // VClipartCmd
 
 		VObject*        m_clipart;

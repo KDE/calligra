@@ -61,6 +61,7 @@
 	<Action name="view_tool_options"/>
 	<Action name="view_context_help"/>
 	<Action name="view_stroke_docker"/>
+	<Action name="view_history_docker"/>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>
 		<Separator/>

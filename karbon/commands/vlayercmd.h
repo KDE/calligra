@@ -48,11 +48,13 @@ public:
 	
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted();
 
 protected:
 	VLayer* m_layer;
 	VLayerCmdType m_cmdType;
 	VObject::VState m_oldState;
+	bool m_executed;
 };
 
 #endif

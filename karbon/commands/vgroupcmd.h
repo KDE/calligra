@@ -39,9 +39,11 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted();
 
 protected:
 	VSelection* m_selection;
+	bool        m_executed;
 
 	VGroup* m_group;
 };

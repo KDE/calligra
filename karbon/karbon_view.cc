@@ -84,6 +84,7 @@
 #include "vlayersdocker.h"
 #include "vtooloptionsdocker.h"
 #include "vcontexthelpdocker.h"
+#include "vhistorydocker.h"
 
 // The rest.
 #include "karbon_factory.h"
@@ -145,6 +146,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_contextHelpDocker = new VContextHelpDocker( this );
 	if( shell() )
 		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
+	m_historyDocker = new VHistoryDocker( this );
+	if( shell() )
+		mainWindow()->addDockWindow( m_historyDocker, DockRight );
 	m_toolOptionsDocker = new VToolOptionsDocker( this );
 	m_toolOptionsDocker->show();
 	
@@ -986,6 +990,16 @@ KarbonView::viewContextHelp()
 	}
 }
 
+void 
+KarbonView::viewHistory()
+{
+	if( m_historyDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_historyDocker, DockRight );
+		m_historyDocker->show();
+	}
+}
+
 void
 KarbonView::initActions()
 {
@@ -1130,6 +1144,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
+	new KAction(
+		i18n( "H&istory" ), "historydocker", 0, this,
+		SLOT( viewHistory() ), actionCollection(), "view_history_docker" );
 	// view <-----
 
 	// line width

@@ -59,6 +59,13 @@ VBooleanCmd::unexecute()
 {
 }
 
+bool 
+VBooleanCmd::isExecuted()
+{
+		// TODO: make the proper check when unexecute will be implemented correctly.
+	return true;
+}
+
 bool
 VBooleanCmd::visit( VObject& object1, VObject& object2 )
 {

@@ -17,7 +17,8 @@ noinst_HEADERS = \
 	vlayersdocker.h \
 	vcontexthelpdocker.h \
 	vstrokedocker.h \
-	vtooloptionsdocker.h
+	vtooloptionsdocker.h \
+	vhistorydocker.h
 
 libkarbondockers_la_SOURCES = \
 	dummy.cc \
@@ -26,7 +27,8 @@ libkarbondockers_la_SOURCES = \
 	vlayersdocker.cc \
 	vcontexthelpdocker.cc \
 	vstrokedocker.cc \
-	vtooloptionsdocker.cc
+	vtooloptionsdocker.cc \
+	vhistorydocker.cc
 
 libkarbondockers_la_METASOURCES = AUTO
 

@@ -23,7 +23,7 @@
 
 
 VReplacingCmd::VReplacingCmd( VDocument* doc, const QString& name )
-	: VCommand( doc, name )
+	: VCommand( doc, name ), m_executed( false )
 {
 	// Set members.
 	m_oldObjects = document()->selection()->clone();
@@ -99,6 +99,7 @@ VReplacingCmd::execute()
 		itr.current()->setState( VObject::normal );
 		document()->selection()->append( itr.current() );
 	}
+	m_executed = true;
 }
 
 void
@@ -123,4 +124,11 @@ VReplacingCmd::unexecute()
 		document()->selection()->take( *itr.current() );
 		itr.current()->setState( VObject::deleted );
 	}
+	m_executed = false;
 }
+
+bool
+VReplacingCmd::isExecuted()
+{
+	return m_executed;
+} 

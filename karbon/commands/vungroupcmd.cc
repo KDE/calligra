@@ -26,7 +26,7 @@
 
 
 VUnGroupCmd::VUnGroupCmd( VDocument *doc )
-	: VCommand( doc, i18n( "Ungroup Objects" ) )
+	: VCommand( doc, i18n( "Ungroup Objects" ), "14_ungroup" ), m_executed( true )
 {
 	m_group = dynamic_cast<VGroup *>( document()->selection()->objects().getFirst() );
 	if( m_group )
@@ -70,6 +70,7 @@ VUnGroupCmd::execute()
 	
 	//delete m_group;
 	//m_group = 0L;
+	m_executed = true;
 }
 
 void
@@ -89,5 +90,7 @@ VUnGroupCmd::unexecute()
 	document()->append( m_group );
 	document()->selection()->clear();
 	document()->selection()->append( m_group );
+	
+	m_executed = false;
 }
 

@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE project          é
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
@@ -39,6 +39,7 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
+	virtual bool isExecuted() { return m_executed; }
 
 protected:
 	VTransformCmd( VDocument *doc, const QString& name );
@@ -46,6 +47,7 @@ protected:
 	VSelection* m_selection;
 
 	QWMatrix m_mat;
+	bool m_executed;
 };
 
 class VTranslateCmd : public VTransformCmd

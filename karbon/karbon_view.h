@@ -46,8 +46,11 @@ class TKUFloatSpinBoxAction;
 
 class VColorDocker;
 class VLayersDocker;
-class VClipartTool;
 class VContextHelpDocker;
+class VHistoryDocker;
+class VToolOptionsDocker;
+
+class VClipartTool;
 class VEllipseTool;
 class VFill;
 class VFlattenDlg;
@@ -73,7 +76,6 @@ class VStrokeDocker;
 class VStrokeFillPreview;
 class VTool;
 class VToolBox;
-class VToolOptionsDocker;
 class VTransformDlg;
 class VWhirlPinchDlg;
 
@@ -183,6 +185,7 @@ protected slots:
 	void viewToolOptions();
 	void viewStrokeDocker();
 	void viewContextHelp();
+	void viewHistory();
 
 	// Toolbox dialogs.
 	void solidFillClicked();
@@ -266,6 +269,7 @@ private:
 	VContextHelpDocker* m_contextHelpDocker;
 	VToolOptionsDocker* m_toolOptionsDocker;
 	VStrokeDocker* m_strokeDocker;
+	VHistoryDocker* m_historyDocker;
 	
 	//toolbox
 	DCOPObject* m_dcop;

@@ -118,7 +118,8 @@ VPolylineTool::deactivate()
 		VShapeCmd* cmd = new VShapeCmd(
 			&view()->part()->document(),
 			i18n( "Polyline" ),
-			polyline );
+			polyline,
+			"14_polyline" );
 
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();

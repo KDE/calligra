@@ -278,7 +278,7 @@ void VClipartTool::cancel()
 } // VClipartTool::cancel
 
 VClipartTool::VClipartCmd::VClipartCmd( VDocument* doc, const QString& name, VObject* clipart )
-		: VCommand( doc, name ), m_clipart( clipart->clone() )
+		: VCommand( doc, name ), m_clipart( clipart->clone() ), m_executed( false )
 {
 } // VClipartTool::VClipartCmd::VClipartCmd
 
@@ -296,6 +296,7 @@ void VClipartTool::VClipartCmd::execute()
 		document()->selection()->clear();
 		document()->selection()->append( m_clipart );
 	}
+	m_executed = true;
 } // VClipartTool::VClipartCmd::execute
 
 void VClipartTool::VClipartCmd::unexecute()
@@ -305,6 +306,8 @@ void VClipartTool::VClipartCmd::unexecute()
 
 	document()->selection()->take( *m_clipart );
 	m_clipart->setState( VObject::deleted );
+	
+	m_executed = false;
 } // VClipartTool::VClipartCmd::unexecute
 
 #include "vcliparttool.moc"
