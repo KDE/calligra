@@ -464,17 +464,22 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
     QString paper( _paper );
     if ( paper[0].isDigit() ) // Custom format
     {
-      m_paperWidth = 0.0;
-      m_paperHeight = 0.0;
-      f = PG_CUSTOM;
-      m_paperWidth = atof( _paper );
-      int i = paper.find( 'x' );
-      if ( i != -1 )
-        m_paperHeight = paper.toDouble() + i + 1;
-      if ( m_paperWidth < 10.0 )
-        m_paperWidth = PG_A4_WIDTH;
-      if ( m_paperHeight < 10.0 )
-        m_paperWidth = PG_A4_HEIGHT;
+        const int i = paper.find( 'x' );
+        if ( i < 0 )
+        {
+            // We have nothing useful, so assume ISO A4
+            f = PG_DIN_A4;
+        }
+        else
+        {
+            f = PG_CUSTOM;
+            m_paperWidth  = paper.left(i).toFloat();
+            m_paperHeight = paper.mid(i+1).toFloat();
+            if ( m_paperWidth < 10.0 )
+                m_paperWidth = PG_A4_WIDTH;
+            if ( m_paperHeight < 10.0 )
+                m_paperWidth = PG_A4_HEIGHT;
+        }
     }
     else
     {
