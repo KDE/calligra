@@ -496,7 +496,7 @@ KivioConnectorTarget *KivioLayer::connectPointToTarget( KivioConnectorPoint *p, 
 
 KoPoint KivioLayer::snapToTarget( const KoPoint& p, double thresh, bool& hit )
 {
-    KoPoint retVal;
+    KoPoint retVal = p;
     KivioStencil *pStencil = m_pStencilList->last();
 
     while( pStencil && !hit)
