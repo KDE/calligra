@@ -47,6 +47,13 @@ VPath::VPath( const VPath& path )
 		list->setParent( this );
 		m_segmentLists.append( list );
 	}
+
+	if ( path.stroke() )
+		setStroke( *path.stroke() );
+
+	if ( path.fill() )
+		setFill( *path.fill() );
+
 }
 
 VPath::~VPath()
