@@ -200,12 +200,6 @@ k_dcop:
     QStringList spellListIgnoreAll() const;
 
 
-    QColor gridColor() const;
-    void setGridColor( const QColor & _col );
-
-    QColor txtBackCol() const;
-    void setTxtBackCol( const QColor &c );
-
     bool displayFieldCode()const;
     void setDisplayFieldCode( bool b);
     QString configAutoFormatLanguage( )const;

@@ -114,6 +114,8 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
     Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
     Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
+    Q_PROPERTY( QColor gridColor READ gridColor WRITE setGridColor )
+    Q_PROPERTY( QColor txtBackCol READ txtBackCol WRITE setTxtBackCol )
 
 
 public:

@@ -678,26 +678,6 @@ QStringList KPresenterDocIface::spellListIgnoreAll() const
     return doc->spellListIgnoreAll();
 }
 
-QColor KPresenterDocIface::gridColor() const
-{
-    return doc->gridColor();
-}
-
-void KPresenterDocIface::setGridColor( const QColor & _col )
-{
-    doc->setGridColor( _col );
-}
-
-QColor KPresenterDocIface::txtBackCol() const
-{
-    return doc->txtBackCol();
-}
-
-void KPresenterDocIface::setTxtBackCol( const QColor &c )
-{
-    doc->setTxtBackCol( c );
-}
-
 bool KPresenterDocIface::displayFieldCode()const
 {
     return doc->getVariableCollection()->variableSetting()->displayFiedCode();
