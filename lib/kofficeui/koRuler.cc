@@ -830,6 +830,8 @@ void KoRuler::resizeEvent( QResizeEvent *e )
 /*================================================================*/
 void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 {
+    if(!d->m_bReadWrite)
+        return;
     if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab ) {
         d->tabList.remove( d->tabList.count() - 1 );
         emit tabListChanged( &d->tabList );
