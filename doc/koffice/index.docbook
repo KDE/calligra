@@ -249,7 +249,7 @@ try inserting other parts or even parts in parts.
 <chapter id="customization">
 <title>Customizing &KOffice;</title>
 <para>This chapter shows you how to customize KOffice to suit your needs.</para>
-<sect1><title>Customizing the &KOffice; GUI</title>
+<sect1 id="customgui"><title>Customizing the &KOffice; GUI</title>
 <para>
 While &KOffice; will come out of the box with a GUI that should suit most people's needs,
  there are good reasons why you may want to change its looks. My mother, for example, is
@@ -426,7 +426,7 @@ the KDE-2.0 libraries. See <ulink url="http://www.kde.org">http://www.kde.org</u
 </glossentry>
 <glossentry id="glosskparts"><glossterm>KParts</glossterm>
 <glossdef>
-<para>KParts is a technology that allows the embedding of components in
+<para>KParts is a technology that allows the embedding of components ("<link linkend="glosspart">parts</link>") in
 an application. This way, you can create compound documents in &KOffice;,
 where e.g. a &KWord; document contains a &KSpread; table.</para>
 </glossdef>
@@ -440,9 +440,20 @@ where e.g. a &KWord; document contains a &KSpread; table.</para>
 </glossdiv>
 <glossdiv><title>O</title><para></para>
 </glossdiv>
-<glossdiv><title>P</title><para></para>
+<glossdiv><title>P</title>
+<glossentry id="glosspart"><glossterm>Part</glossterm>
+<glossdef>
+<para>A part is an application which can be embedded into other <link linkend="glosskparts">KParts</link> applications.</para>
+</glossdef>
+</glossentry>
 </glossdiv>
-<glossdiv><title>Q</title><para></para>
+<glossdiv><title>Q</title>
+<glossentry id="glossqt"><glossterm>Qt</glossterm>
+<glossdef>
+<para>Qt is the underlying toolkit that was used for KDE and &KOffice;.
+ See <ulink url="http://www.troll.no">http://www.troll.no</ulink> for details.</para>
+</glossdef>
+</glossentry>
 </glossdiv>
 <glossdiv><title>R</title><para></para>
 </glossdiv>
