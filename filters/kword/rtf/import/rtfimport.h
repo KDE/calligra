@@ -293,7 +293,7 @@ public:
     QCString codepage;
 
     // Field support
-    QString fldinst, fldrslt;
+    QCString fldinst, fldrslt;
     RTFFormat fldfmt;
     int flddst; // support for recursive fields
 };

@@ -198,14 +198,8 @@ void RTFTokenizer::next()
 		}
 		ch = *fileBufferPtr++;
 	    }
-
-	    // If delimiter is a space, it's part of the control word
-	    if (ch != ' ')
-	    {
 		--fileBufferPtr;
 	    }
-	    
-	}
 	else
 	{
 	    type = RTFTokenizer::ControlWord;

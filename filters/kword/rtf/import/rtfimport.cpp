@@ -1316,7 +1316,7 @@ void RTFImport::parseField( RTFProperty * )
 		}
 
 		node.addNode( "LINK" );
-		node.setAttribute( "linkName", fldrslt.utf8() );
+		node.setAttribute( "linkName", fldrslt );
 		node.setAttribute( "hrefName", hrefName.utf8() );
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
@@ -1594,13 +1594,14 @@ void RTFImport::parseRichText( RTFProperty * )
 	    // Check and store format changes
 	    if (textState->formats.count() == 0 ||
 		memcmp( &textState->formats.last().fmt,
-			&state.format, sizeof(RTFFormat) ))
+			&state.format, sizeof(RTFFormat) )||textState->formats.last().xmldata.count())
 	    {
 		kwFormat.fmt = state.format;
 		kwFormat.id  = 1;
 		kwFormat.pos = textState->length;
 		kwFormat.len = len;
 		textState->formats << kwFormat;
+		kwFormat.xmldata.resize(0);
 	    }
 	    else
 	    {
@@ -1745,10 +1746,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
     {
 	// Add pos and len if this is not a style sheet definition
 	node.setAttribute( "pos", (int)format.pos );
-	if(format.id !=4) //if somebody knows what to do with this hack please correct
 	node.setAttribute( "len", (int)format.len );
-	else
-	    node.setAttribute( "len", 1);
     }
     if ((format.id == 1)||(format.id == 4))
     {
