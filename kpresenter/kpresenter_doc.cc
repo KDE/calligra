@@ -3478,7 +3478,11 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     QListIterator<KPObject> oIt( *_objectList );
     for (; oIt.current(); ++oIt )
         if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
+        {
+            oIt.current()->drawSelection( false );
             oIt.current()->draw( &painter, 0, 0 );
+            oIt.current()->drawSelection( true );
+        }
 
 }
 
