@@ -4988,6 +4988,8 @@ void KSpreadView::refreshView()
       d->tabBar->show();
     else
       d->tabBar->hide();
+      
+    d->tabBar->setReverseLayout( true );
   }
 
 }
