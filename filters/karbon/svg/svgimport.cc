@@ -254,9 +254,9 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		}
 		else if( command == "fill-rule" )
 		{
-			if( params == "fill-rule" )
+			if( params == "nonzero" )
 				gc->fill.setFillRule( VFill::winding );
-			else if( params == "fill-rule" )
+			else if( params == "evenodd" )
 				gc->fill.setFillRule( VFill::evenOdd );
 		}
 		else if( command == "stroke" )
