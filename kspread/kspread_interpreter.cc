@@ -1984,6 +1984,24 @@ static double phi_helper(double x)
   return 0.39894228040143268 * exp(-(x * x) / 2.0);
 }
 
+static bool kspreadfunc_phi(KSContext& context)
+{
+  //distribution function for a standard normal distribution
+  
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "PHI", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+
+  context.setValue( new KSValue(phi_helper(x)) );
+ 
+  return true;
+}
 
 static double taylor_helper (double* pPolynom, uint nMax, double x)
 {
@@ -1994,10 +2012,9 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
   return nVal;
 }
 
-
 static bool kspreadfunc_gauss(KSContext& context)
 {
-  //Returns the standard normal cumulative distribution.
+  //returns the integral values of the standard normal cumulative distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "GAUSS", true ) )
@@ -4540,7 +4557,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
   module->addObject( "trim", new KSValue( new KSBuiltinFunction( module, "trim", kspreadfunc_trim) ) );
+  
+  //statistical stuff
   module->addObject( "GAUSS", new KSValue( new KSBuiltinFunction( module, "GAUSS", kspreadfunc_gauss) ) );
+  module->addObject( "PHI", new KSValue( new KSBuiltinFunction( module, "PHI", kspreadfunc_phi) ) );
 
   return module;
 }

@@ -2462,14 +2462,28 @@
       <Name>GAUSS</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>The number for which the integral value of standard normal distribution is to be
-        computed.</Comment>
+        <Comment>The number for which the integral value of standard normal distribution is to be calculated.</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
         <Text>This function returns the integral values for the standard normal cumulative distribution.</Text>
         <Syntax>GAUSS(value)</Syntax>
         <Example>GAUSS(0.25) equals 0.098706</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PHI</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>The number for which the standard normal distribution is to be calculated.</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>This function returns value of the distribution function for
+          a standard normal distribution.</Text>
+        <Syntax>PHI(value)</Syntax>
+        <Example>PHI(0.25) equals 0.386668</Example>
       </Help>
     </Function>
 
