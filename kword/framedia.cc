@@ -597,13 +597,13 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
     QGridLayout *runSideLayout = new QGridLayout( runSideGroup->layout() );
     runSideLayout->setAlignment( Qt::AlignTop );
 
-    rRunLeft = new QRadioButton( i18n( "&Left" ), runSideGroup );
+    rRunLeft = new QRadioButton( i18n( "Run Around", "&Left" ), runSideGroup );
     runSideLayout->addWidget( rRunLeft, 0, 0 /*1*/ );
 
-    rRunRight = new QRadioButton( i18n( "&Right" ), runSideGroup );
+    rRunRight = new QRadioButton( i18n( "Run Around", "&Right" ), runSideGroup );
     runSideLayout->addWidget( rRunRight, 1, 0 /*1*/ );
 
-    rRunBiggest = new QRadioButton( i18n( "Lon&gest side" ), runSideGroup );
+    rRunBiggest = new QRadioButton( i18n( "Run Around", "Lon&gest side" ), runSideGroup );
     runSideLayout->addWidget( rRunBiggest, 2, 0 /*1*/ );
 
 #if 0 // TODO icons!
