@@ -68,7 +68,7 @@ KImageDoc::KImageDoc()
   m_lstViews.setAutoDelete( false );
 }
 
-CORBA::Boolean KImageDoc::init()
+CORBA::Boolean KImageDoc::initDoc()
 {
   return true;
 }

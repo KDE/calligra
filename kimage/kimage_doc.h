@@ -57,7 +57,7 @@ public:
   // C++
   virtual KImageView* createImageView( QWidget* _parent = 0 );
 
-  virtual CORBA::Boolean init();
+  virtual CORBA::Boolean initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   /**

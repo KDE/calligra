@@ -124,7 +124,7 @@ bool KImageShell::newDocument()
   }
 
   m_pDoc = new KImageDoc;
-  if ( !m_pDoc->init() )
+  if ( !m_pDoc->initDoc() )
   {
     releaseDocument();
     kdebug( KDEBUG_FATAL, 0, "ERROR: Could not initialize document" );
