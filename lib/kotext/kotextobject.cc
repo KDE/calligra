@@ -89,21 +89,6 @@ int KoTextObject::zoomedFontSize( int docFontSize ) const
     return textdoc->zoomHandler()->ptToLayoutUnit( docFontSize );
 }
 
-// This used to mean "adapt the font to the zoom setting",
-// but it now means "adapt the font to the layout units [internal resolution]"
-KoTextFormat * KoTextObject::zoomFormatFont( const KoTextFormat * f )
-{
-    KoTextFormat format = *f;
-    int origFontSize = format.font().pointSize();
-    format.setPointSize( zoomedFontSize( origFontSize ) );                  // zoom it
-    kdDebug() << "zoomFormatFont size zoomed from " << origFontSize << " to " << format.pointSizeFloat() << endl;
-    QTextFormat * fcf = textDocument()->formatCollection()->format( &format );   // find it in the collection
-#ifdef DEBUG_FORMATS
-    kdDebug() << "zoomFormatFont new format is " << fcf << " " << fcf->key() << endl;
-#endif
-    return static_cast<KoTextFormat *>(fcf);
-}
-
 void KoTextObject::slotAfterUndoRedo()
 {
     formatMore();

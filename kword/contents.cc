@@ -116,8 +116,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
         KWStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
         parag->setParagLayout( tocStyle->paragLayout() );
-        KWTextFormat * newFormat = fs->textObject()->zoomFormatFont( & tocStyle->format() );
-        parag->setFormat( 0, parag->string()->length(), newFormat );
+        parag->setFormat( 0, parag->string()->length(), & tocStyle->format() );
     }
     // The setParagLayout ruined it, so here it is again :)
     prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );

@@ -161,8 +161,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
             ASSERT( textfs );
             if ( textfs )
             {
-                QTextFormat * format = textfs->textObject()->zoomFormatFont( &newStyle->format() );
-                setFormat( format );
+                setFormat( &newStyle->format() );
                 format->addRef();
                 string()->setFormat( 0, format, true ); // prepare format for text insertion
             }

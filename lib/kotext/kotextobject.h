@@ -162,9 +162,6 @@ public:
     int docFontSize( QTextFormat * format ) const;
     /** Return the font size in LU, for this user-visible font size in pt */
     int zoomedFontSize( int docFontSize ) const;
-    /** Return a modified version of @p f where the font size has been adapted
-        to layout units (using @ref zoomedFontSize) */
-    KoTextFormat * zoomFormatFont( const KoTextFormat * f );
 
     /** Set the bottom of the view - in LU */
     void setViewArea( QWidget* w, int maxY );
