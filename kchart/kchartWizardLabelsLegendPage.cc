@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include "kchartWizardLabelsLegendPage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
@@ -104,7 +102,8 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     // PENDING(kalle) Put back in
     //   xlabel=_chart->params()->xTitleFont();
     //   ylabel=_chart->params()->yTitleFont();
-    //   title=_chart->params()->titleFont();
+
+    title=_chart->params()->header1Font();
     grid1->addWidget(tmpQGroupBox,0,0);
 
     connect(xtitlefont,SIGNAL(clicked()),this,SLOT(changeXLabelFont()));
@@ -188,7 +187,6 @@ void KChartWizardLabelsLegendPage::apply(  )
     // PENDING(kalle) Put back in
     //    _chart->params()->setXTitleFont(xlabel);
     //    _chart->params()->setYTitleFont(ylabel);
-    //    _chart->params()->setTitleFont(title);
     //    _chart->params()->xtitle= _xlabelED->text();
     //    _chart->params()->ytitle= _ylabelED->text();
     //    _chart->params()->XTitleColor=x_color;
@@ -196,6 +194,7 @@ void KChartWizardLabelsLegendPage::apply(  )
     //    _chart->params()->TitleColor=title_color;
     //    _chart->params()->YTitle2Color=y_color2;
     //    _chart->params()->ytitle2=_ylabel2ED->text();
+    _chart->params()->setHeader1Font(title);
 }
 
 
