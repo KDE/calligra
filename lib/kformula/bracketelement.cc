@@ -58,6 +58,12 @@ SingleContentElement::~SingleContentElement()
 
 QChar SingleContentElement::getCharacter() const
 {
+    // This is meant to make the SingleContentElement text only.
+    // This "fixes" the parenthesis problem (parenthesis too large).
+    // I'm not sure if we really want this. There should be better ways.
+    if ( content->isTextOnly() ) {
+        return '\\';
+    }
     return content->getCharacter();
 }
 
@@ -502,7 +508,7 @@ void OverlineElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     setWidth( content->getWidth() );
-    setHeight( content->getHeight() + distY*2 );
+    setHeight( content->getHeight() + distY );
 
     content->setX( 0 );
     content->setY( distY );
@@ -602,7 +608,7 @@ void UnderlineElement::calcSizes(const ContextStyle& style,
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     setWidth( content->getWidth() );
-    setHeight( content->getHeight() + distY*2 );
+    setHeight( content->getHeight() + distY );
 
     content->setX( 0 );
     content->setY( 0 );
@@ -626,16 +632,16 @@ void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
     luPixel x = myPos.x();
     luPixel y = myPos.y();
     //int distX = style.getDistanceX(tstyle);
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     painter.setPen( QPen( style.getDefaultColor(),
                           style.layoutUnitToPixelY( style.getLineWidth() ) ) );
 
     painter.drawLine( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+getHeight()-distY ),
+                      style.layoutUnitToPixelY( y+getHeight()-style.getLineWidth() ),
                       style.layoutUnitToPixelX( x+content->getWidth() ),
-                      style.layoutUnitToPixelY( y+getHeight()-distY ) );
+                      style.layoutUnitToPixelY( y+getHeight()-style.getLineWidth() ) );
 }
 
 
