@@ -612,35 +612,152 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            strElement+="fo:background-color=\"";
+            strElement+="style:text-background-color=\"";  // ### what is fo:background-color ?
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
             key+=formatData.bgColor.name();
         }
     }
 
-    key += ",";
+    key += ';'; // Another separator
 
-    if (force || (formatOrigin.underline!=formatData.underline)
-        || (formatOrigin.strikeout!=formatData.strikeout))
+    if ( force || ( formatOrigin.underline != formatData.underline )
+        || ( formatOrigin.underlineColor != formatData.underlineColor )
+        || ( formatOrigin.underlineValue != formatData.underlineValue )
+        || ( formatOrigin.underlineStyle != formatData.underlineStyle ) )
     {
-        strElement+="fo:text-decoration=\"";
+        strElement+="style:text-underline=\"";
         if ( formatData.underline )
         {
-            strElement+="underline";
-            key+='U';
-        }
-        else if ( formatData.strikeout )
-        {
-            strElement+="line-through";
-            key+='T';
+            QString underlineValue ( formatData.underlineValue );
+            QString underlineStyle ( formatData.underlineStyle );
+
+            if ( underlineStyle.isEmpty() )
+                underlineStyle = "solid";
+            if  ( underlineValue == "1" )
+                underlineValue = "single";
+
+            if ( underlineValue == "single" )
+            {
+                if ( underlineStyle == "dash" )
+                {
+                    strElement += "dash";
+                    key += "DA";
+                }
+                else if ( underlineStyle == "dot" )
+                {
+                    strElement += "dotted";
+                    key += "DO";
+                }
+                else if ( underlineStyle == "dashdot" )
+                {
+                    strElement += "dot-dash";
+                    key += "DDA";
+                }
+                else if ( underlineStyle == "dashdotdot" )
+                {
+                    strElement += "dot-dot-dash";
+                    key += "DDDA";
+                }
+                else
+                {
+                    strElement += "single";
+                    key += "1";
+                }
+            }
+            else if ( underlineValue == "double" )
+            {
+                strElement += "double";
+                key += "2";
+            }
+            else if ( underlineValue == "single-bold" )
+            {
+                strElement += "bold";
+                key += "BL";
+            }
+            else if ( underlineValue == "wave" )
+            {
+                strElement += "wave";
+                key += "WV";
+            }
+            else
+            {
+                strElement += "single";
+                key += "?";
+            }
         }
         else
         {
             strElement+="none";
-            key+='N';
+            key += 'N';
+        }
+        strElement += "\" ";
+
+        if ( formatData.underline && formatData.underlineColor.isValid() )
+        {
+            const QString colorName( formatData.underlineColor.name() );
+            strElement += "style:text-underline-color=\"";
+            strElement += colorName;
+            strElement += "\" ";
+            key += colorName;
+        }
+
+    }
+
+    key += ',';
+
+    if ( force
+        || (formatOrigin.strikeout != formatData.strikeout )
+        || (formatOrigin.strikeoutType != formatData.strikeoutType ) )
+    {
+        // OOWriter can only do single, double, thick (and slash and X that KWord cannot do.)
+        //  So no dash, dot and friends.
+
+        strElement+="style:text-crossing-out=\"";
+        if ( ( formatData.strikeoutType == "single" ) || ( formatData.strikeoutType == "1" ) )
+        {
+            strElement+="single-line";
+            key += "1";
+        }
+        else if ( formatData.strikeoutType == "double" )
+        {
+            strElement+="double-line";
+            key += "2";
+        }
+        else if ( formatData.strikeoutType == "single-bold" )
+        {
+            strElement+="thick";
+            key += "T";
+        }
+        else
+        {
+            strElement+="none";
+            key += 'N';
         }
         strElement+="\" ";
+    }
+
+    key += ',';
+
+    // It seems that OOWriter 1.1 does have problems with word-by-word (OO Issue #11873, #25187)
+    // It is supposed to be fixed in development versions of OO
+    if (force || ( formatOrigin.underlineWord != formatData.underlineWord )
+        || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
+    {
+        // Strikeout and underline can only have one word-by-word behaviour in OO
+        // (OO Issue #????? ; will not be changed.)
+        strElement+="fo:score-spaces=\""; // Are space processed?
+        if ( formatData.underlineWord || formatData.strikeoutWord )
+        {
+            strElement += "false";
+            key += 'W';
+        }
+        else
+        {
+            strElement += "true";
+            key += 'N';
+        }
+        strElement += "\" ";
     }
 
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
