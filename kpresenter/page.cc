@@ -467,23 +467,13 @@ void Page::mousePressEvent( QMouseEvent *e )
         }
 
         if ( e->button() == RightButton && toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
-            m_drawPolyline = false;
             m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                        ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
             m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
             ++m_indexPointArray;
+            endDrawPolyline();
 
-            insertPolyline( m_pointArray );
-
-            emit objectSelectedChanged();
-            if ( toolEditMode != TEM_MOUSE && editMode )
-                repaint( false );
-            mousePressed = false;
-            modType = MT_NONE;
-            resizeObjNum = -1;
             mouseMoveEvent( e );
-            ratio = 0.0;
-            keepRatio = false;
 
             return;
         }
@@ -783,7 +773,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList()->at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
                                                       kpobject, view->kPresenterDoc() );
-                kpobject->setMove( false ); 
+                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->addCommand( resizeCmd );
@@ -1111,7 +1101,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
-                p.drawLine( m_dragStartPoint, m_dragEndPoint ); // 
+                p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
                 m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                          ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint );
@@ -3432,6 +3422,11 @@ void Page::insertPolyline( const QPointArray &_pointArray )
 /*================================================================*/
 void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 {
+    //store m_pointArray if !m_pointArray.isNull()
+    if(!m_pointArray.isNull())
+    {
+        endDrawPolyline();
+    }
     exitEditMode();
     toolEditMode = _m;
 
@@ -3450,6 +3445,21 @@ void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 
     if ( updateView )
         view->setTool( toolEditMode );
+}
+
+
+void Page::endDrawPolyline()
+{
+    m_drawPolyline = false;
+    insertPolyline( m_pointArray );
+    emit objectSelectedChanged();
+    if ( toolEditMode != TEM_MOUSE && editMode )
+        repaint( false );
+    mousePressed = false;
+    modType = MT_NONE;
+    resizeObjNum = -1;
+    ratio = 0.0;
+    keepRatio = false;
 }
 
 /*================================================================*/

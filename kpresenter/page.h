@@ -283,6 +283,8 @@ protected:
     virtual bool eventFilter( QObject *o, QEvent *e );
     virtual bool focusNextPrevChild( bool );
 
+    void endDrawPolyline();
+
 private:
     // variables
     QPopupMenu *presMenu;
