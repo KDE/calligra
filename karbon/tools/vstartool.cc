@@ -48,6 +48,7 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
 	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	connect( m_outerR, SIGNAL( valueChanged( double ) ), this, SLOT( setOuterRadius( double ) ) );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
 	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
@@ -57,6 +58,7 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	new QLabel( i18n( "Edges:" ), this );
 	m_edges = new KIntSpinBox( this );
 	m_edges->setMinValue( 3 );
+	connect( m_edges, SIGNAL( valueChanged( int ) ), this, SLOT( setEdges( int ) ) );
 
 	new QLabel( i18n( "Inner angle:" ), this );
 	m_innerAngle = new KIntSpinBox( this );
@@ -84,6 +86,10 @@ void
 VStarOptionsWidget::setEdges( int v )
 {
 	m_edges->setValue( v );
+
+	// set optimal inner radius
+	if( type() == VStar::star )
+		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
 void 
@@ -96,6 +102,10 @@ void
 VStarOptionsWidget::setOuterRadius( double v )
 {
 	m_outerR->changeValue( v );
+
+	// set optimal inner radius
+	if( type() == VStar::star )
+		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
 double
@@ -137,8 +147,12 @@ VStarOptionsWidget::innerAngle() const
 void
 VStarOptionsWidget::typeChanged( int type )
 {
-	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star || type == VStar::gear );
+	m_innerR->setEnabled( type == VStar::star || type == VStar::star_outline || type == VStar::framed_star || type == VStar::gear );
 	m_innerAngle->setEnabled( type == VStar::star || type == VStar::star_outline || type == VStar::framed_star || type == VStar::gear );
+
+	// set optimal inner radius
+	if( type == VStar::star )
+		m_innerR->setValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
 VStarTool::VStarTool( KarbonView* view )

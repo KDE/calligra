@@ -57,33 +57,12 @@ VStar::VStar( VObject* parent,
 	if( m_type == star || m_type == framed_star )
 	{
 		int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
-		// get two well chosen lines of the star
-		KoPoint p1 = p;
-		int jumpto = ( j ) % edges;
-		double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
-		KoPoint p2( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
-
-		nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges;
-		KoPoint p3( outerRadius * cos( nextOuterAngle ),
-					outerRadius * sin( nextOuterAngle ) );
-		jumpto = ( edges - j + 1 ) % edges;
-		nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
-		KoPoint p4( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
-
-		// calc (x, y) -> intersection point
-		double b1 = ( p2.y() - p1.y() ) / ( p2.x() - p1.x() );
-		double b2 = ( p4.y() - p3.y() ) / ( p4.x() - p3.x() );
-		double a1 = p1.y() - b1 * p1.x();
-		double a2 = p3.y() - b2 * p3.x();
-		double x = -( a1 - a2 ) / ( b1 - b2 );
-		double y = a1 + b1 * x;
-		// calc inner radius from intersection point and center
-		innerRadius = sqrt( x * x + y * y );//0.4 * outerRadius;
-		jumpto = 0;
+		//innerRadius = getOptimalInnerRadius( outerRadius, edges, innerAngle );
+		int jumpto = 0;
 		bool discontinueous = ( edges % 4 == 2 );
 
-		double innerRoundness = ( VGlobal::twopi * innerRadius * roundness ) / edges;
 		double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+		double nextOuterAngle;
 
 		for ( uint i = 1; i < edges + 1; ++i )
 		{
@@ -227,6 +206,35 @@ VStar::VStar( VObject* parent,
 	cmd.visit( *this );
 
 	setFillRule( evenOdd );
+}
+
+double
+VStar::getOptimalInnerRadius( uint edges, double outerRadius, uint innerAngle )
+{
+	int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
+
+	// get two well chosen lines of the star
+	KoPoint p1( outerRadius * cos( VGlobal::pi_2 ), outerRadius * sin( VGlobal::pi_2 ) );
+	int jumpto = ( j ) % edges;
+	double nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+	KoPoint p2( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+
+	nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges;
+	KoPoint p3( outerRadius * cos( nextOuterAngle ),
+				outerRadius * sin( nextOuterAngle ) );
+	jumpto = ( edges - j + 1 ) % edges;
+	nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+	KoPoint p4( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+
+	// calc (x, y) -> intersection point
+	double b1 = ( p2.y() - p1.y() ) / ( p2.x() - p1.x() );
+	double b2 = ( p4.y() - p3.y() ) / ( p4.x() - p3.x() );
+	double a1 = p1.y() - b1 * p1.x();
+	double a2 = p3.y() - b2 * p3.x();
+	double x = -( a1 - a2 ) / ( b1 - b2 );
+	double y = a1 + b1 * x;
+	// calc inner radius from intersection point and center
+	return sqrt( x * x + y * y );
 }
 
 QString

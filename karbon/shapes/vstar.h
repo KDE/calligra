@@ -41,6 +41,8 @@ public:
 		uint edges, double angle = 0.0, uint innerAngle = 0,
 		double roundness = 0.0, VStarType type = star_outline );
 
+	static double getOptimalInnerRadius( uint edges, double outerRadius, uint innerAngle );
+
 	virtual QString name() const;
 
 private:

@@ -47,12 +47,12 @@ public:
 	double roundness() const;
 	uint type() const;
 	uint innerAngle() const;
-	void setEdges( int );
 	void setInnerRadius( double );
-	void setOuterRadius( double );
 
 public slots:
 	void typeChanged( int );
+	void setEdges( int );
+	void setOuterRadius( double );
 
 private:
 	KoUnitDoubleSpinBox	*m_innerR;
