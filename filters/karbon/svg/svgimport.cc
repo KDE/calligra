@@ -27,6 +27,7 @@
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>
 #include <core/vsegment.h>
+#include <core/vtext.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -488,6 +489,19 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			VComposite *path = new VComposite( &m_document );
 			parsePath( path, b );
 			obj = path;
+		}
+		else if( b.tagName() == "text" )
+		{
+			VText *text = new VText( &m_document );
+			text->setText( b.text() );
+			QFont font;
+			//font.setFamily( b.attribute( "" ) );
+			text->setFont( font );
+			VPath base( 0L );
+			base.moveTo( KoPoint( 100, 100 ) );
+			base.lineTo( KoPoint( 200, 100 ) );
+			text->setBasePath( base );
+			obj = text;
 		}
 		if( !obj ) continue;
 		parseStyle( obj, b );
