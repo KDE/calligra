@@ -1,14 +1,12 @@
 /*
- * $Id$
- *
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #ifndef __KCHARTPARAMETERCONFIGPAGE_H__
 #define __KCHARTPARAMETERCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 
 class QSpinBox;
 class QCheckBox;

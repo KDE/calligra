@@ -1,5 +1,4 @@
 /*
- * $Id$
  *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
@@ -8,7 +7,7 @@
 
 #include "kchartGeometryConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 
 
 KChartGeometryConfigPage::KChartGeometryConfigPage( QWidget* parent ) :

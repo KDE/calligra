@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 2000 by Matthias Kalle Dalheimer, released under Artistic License.
  */
 
@@ -9,7 +7,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>

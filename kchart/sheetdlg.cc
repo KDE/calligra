@@ -1,5 +1,4 @@
 /****************************************************************************
-** $Id$
 **
 ** Copyright (C) 1992-1998 Troll Tech AS.  All rights reserved.
 **
@@ -15,7 +14,7 @@
 #include "sheet.h"
 #include "sheetdlg.h"
 #include "sheetdlg.moc"
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 #include <qpushbutton.h>
@@ -25,15 +24,15 @@
 SheetDlg::SheetDlg( QWidget *parent, const char *name )
     :QWidget( parent, name )
 {
-  t = new Sheet(this,"Sheet",TABLE_SIZE); 
+  t = new Sheet(this,"Sheet",TABLE_SIZE);
   t->move(0,0);
-  
+
   cancel = new QPushButton(i18n("Cancel"),this);
   cancel->resize(cancel->sizeHint());
 
   ok = new QPushButton(i18n("OK"),this);
   ok->resize(cancel->sizeHint());
-  
+
   usedrowsLA = new QLabel( i18n("# Rows: " ), this );
   usedrowsLA->resize( usedrowsLA->sizeHint() );
   usedrowsSB = new QSpinBox( this );

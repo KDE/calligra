@@ -2,14 +2,7 @@
 #define _kchartWIZARDSETUPAXESPAGE_H
 
 #include <qwidget.h>
-#include <kcolorbtn.h>
-//#include <qstring.h>
-//#include <qcheckbox.h>
-//#include <qlineedit.h>
-//#include <qspinbox.h>
-//#include <qpushbutton.h>
-//#include <qcolor.h>
-
+#include <kcolorbutton.h>
 
 class QColor;
 class QLineEdit;

@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
@@ -8,7 +6,7 @@
 #define __KCHARTCOLORCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 
 // PENDING(kalle) Make this dynamic.
 #define NUMDATACOLORS 6

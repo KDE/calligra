@@ -1,13 +1,11 @@
 /*
- * $Id$
- *
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartComboConfigPage.h"
 #include "kchartComboConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qlayout.h>

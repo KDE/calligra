@@ -1,13 +1,11 @@
 /*
- * $Id$
- *
  * Copyright 2000 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartParameter3dConfigPage.h"
 #include "kchartParameter3dConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>

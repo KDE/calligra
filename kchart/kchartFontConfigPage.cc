@@ -1,12 +1,12 @@
 /*
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartFontConfigPage.h"
 
 #include "kchartFontConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>

@@ -7,7 +7,7 @@
 #include "kchartSubTypeChartPage.h"
 #include "kchartSubTypeChartPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>

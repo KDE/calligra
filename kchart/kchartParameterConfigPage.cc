@@ -5,7 +5,7 @@
 #include "kchartParameterConfigPage.h"
 #include "kchartParameterConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>

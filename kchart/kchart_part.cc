@@ -10,7 +10,7 @@
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchartWizard.h"
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <kglobal.h>
 #include <kdebug.h> // "ported" to kdDebug(35001)

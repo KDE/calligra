@@ -6,7 +6,7 @@
 
 #include "kchartParameterPieConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 

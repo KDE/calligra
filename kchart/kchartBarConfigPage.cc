@@ -1,5 +1,4 @@
 /*
- * $Id$
  *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
@@ -15,7 +14,7 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 

@@ -1,5 +1,4 @@
 /****************************************************************************
-** $Id$
 **
 ** Copyright (C) 1992-1998 Troll Tech AS.  All rights reserved.
 **
@@ -19,7 +18,7 @@
 #include "table.h"
 #include "table.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 
 SheetTable::SheetTable( int cols, int rows, QWidget *parent,
                           int flags, const char *name, bool _editable)
@@ -70,10 +69,10 @@ SheetTable::~SheetTable()
 void SheetTable::setText( int row, int col, QString s, bool paint )
 {
   //table[index(row,col)].operator=( s.copy() );
-  
+
   table.remove(table.at(index(row,col)));
   table.insert(table.at(index(row,col)), s);
-  
+
   int x,y;
     if ( paint && rowYPos( row, &y ) && colXPos( col, &x ))
         repaint( x,y, cellWidth(col), cellHeight(row));
@@ -145,7 +144,7 @@ void SheetTable::nextInput()
     inCol_inRow_initialization = FALSE;
     moveInput( r, c );
 }
-  
+
 void SheetTable::moveInput( int row, int col )
 {
     if ( col < 0 || row < 0 )

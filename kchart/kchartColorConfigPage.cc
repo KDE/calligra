@@ -1,15 +1,13 @@
 /*
- * $Id$
- *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
 #include "kchartColorConfigPage.h"
 #include "kchartColorConfigPage.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>

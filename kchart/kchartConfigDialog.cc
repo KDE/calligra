@@ -18,7 +18,7 @@
 #include "kchartParameter3dConfigPage.h"
 #include "kchartLegendConfigPage.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 

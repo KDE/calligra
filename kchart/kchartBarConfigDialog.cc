@@ -8,7 +8,7 @@
 
 #include "kchartBarConfigDialog.moc"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 
 #include "kdchart/KDChartParams.h"

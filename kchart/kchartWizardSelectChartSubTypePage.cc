@@ -1,4 +1,3 @@
-/* $Id$ */
 
 #include "kchartWizardSelectChartSubTypePage.h"
 #include "kchart_view.h"
@@ -7,7 +6,7 @@
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlabel.h>
-#include <qcollection.h>
+#include <qptrcollection.h>
 #include <qobjectlist.h>
 #include <qlayout.h>
 

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include "kchartWizardSetupAxesPage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
