@@ -1018,7 +1018,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
     {
         if ( !wordArray[i].isEmpty())
         {
-            KoAutoFormatEntry* it = m_entries[wordArray[i].lower()];
+            KoAutoFormatEntry* it = m_entries[ wordArray[i] ];
             if ( wordArray[i]!=0  && it )
             {
                 unsigned int length = wordArray[i].length();
