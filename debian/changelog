@@ -1,6 +1,13 @@
-koffice-cvs (2.0-20000512-1.0) experimental; urgency=low
+koffice-cvs (2.0-20000520-1.0) experimental; urgency=low
+ 
+  * more upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 20 May 2000 04:15:00 -0700
+
+koffice-cvs (2.0-20000512-1.2) experimental; urgency=low
 
   * new upstream beta version
+  * Turning on debugging
 
  -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 12 May 2000 22:30:00 -0700
 

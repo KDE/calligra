@@ -49,8 +49,15 @@ binary-arch: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
+	-rm -f debian/undocumented
 	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules
+	for i in `find debian/tmp/$(kde_bindir) | sed -e 's#^debian/tmp/$(kde_bindir)/##'  | grep -v "debian/tmp"`; do \
+	  echo "$$i.1" >> debian/undocumented ;\
+	done
+	for i in `cat debian/undocumented.in | grep -v "#"`; do \
+	  echo "$$i.1" >> debian/undocumented ; \
+	done                                              
 	dh_movefiles -pkoffice-dev-cvs $(kde_libdir)/lib*.so $(kde_libdir)/lib*.a $(kde_includedir)
 	-mv `find debian/koffice-dev-cvs/$(kde_libdir) -type f -name "*.so"` debian/tmp/$(kde_libdir)/
 	dh_undocumented
