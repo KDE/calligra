@@ -459,7 +459,7 @@ bool kspreadfunc_log2( KSContext& context )
   if ( d <= 0 )
     return false;
 
-  context.setValue( new KSValue( log( d ) /log( 10 ) ) );
+  context.setValue( new KSValue( log( d ) /log( 2.0 ) ) );
   return true;
 }
 
@@ -479,7 +479,7 @@ bool kspreadfunc_log10( KSContext& context )
   if ( d <= 0 )
     return false;
 
-  context.setValue( new KSValue( log( d ) / log( 10 ) ) );
+  context.setValue( new KSValue( log10( d ) ) );
   return true;
 }
 
@@ -1101,8 +1101,8 @@ bool kspreadfunc_randbinom( KSContext & context )
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
   double i = 0;
-  
-  while (r > t) 
+
+  while (r > t)
   {
     x *= (((tr - i) * d) / ((1 + i) * (1 - d)));
     i += 1;
@@ -1139,14 +1139,14 @@ bool kspreadfunc_randnegbinom( KSContext & context )
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
   double i = 0;
-  
-  while (r > t) 
+
+  while (r > t)
   {
     x *= ( ( ( f + i ) * ( 1 - d ) ) / (1 + i) ) ;
     i += 1;
     t += x;
   }
-  
+
   context.setValue( new KSValue( i ) );
   return true;
 }
@@ -1164,7 +1164,7 @@ bool kspreadfunc_randbernoulli( KSContext & context )
   double d = args[0]->doubleValue();
   if ( d < 0 || d > 1 )
     return false;
-  
+
   // taken from Gnumeric
   double r = (double) rand() / ( RAND_MAX + 1.0 );
 
@@ -1192,7 +1192,7 @@ bool kspreadfunc_randpoisson( KSContext & context )
   double t = x;
   double i = 0;
 
-  while ( r > t ) 
+  while ( r > t )
   {
     x *= d / ( i + 1 );
     i += 1;
@@ -1430,7 +1430,7 @@ bool kspreadfunc_mround( KSContext& context )
 
   int sign = 1;
 
-  if ( d < 0 ) 
+  if ( d < 0 )
   {
     sign = -1;
     d = -d;
