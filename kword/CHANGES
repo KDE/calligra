@@ -851,3 +851,9 @@ Reggie, 24.2.1999:
 ------------------
 - When a table flows over multiple pages and the table-header is copied to
   each page, it is updated correctly now.
+
+Reggie, 25.2.1999:
+------------------
+- Fixed some segfaulting code
+- Fixed some memory leaking code
+- Table headers get really updated correctly now - there is only a repaint problem there now... 

@@ -534,7 +534,9 @@ void KWTextFrameSet::init()
 /*================================================================*/
 void KWTextFrameSet::assign(KWTextFrameSet *fs)
 {
-  parags = fs->getFirstParag();
+  if (parags) delete parags;
+  
+  //parags = fs->getFirstParag();
 
   parags = new KWParag(*fs->getFirstParag());
   parags->setFrameSet(this);
@@ -558,6 +560,19 @@ void KWTextFrameSet::assign(KWTextFrameSet *fs)
 
   p2->setNext(0L);
 
+//   QPainter p;
+//   QPicture pic;
+//   p.begin(&pic);
+
+//   KWFormatContext fc(doc,doc->getFrameSetNum(this) + 1);
+//   fc.init(parags,p,true,true);
+  
+//   bool bend = false;
+//   while (!bend)
+//     bend = !fc.makeNextLineLayout(p);
+  
+//   p.end();
+  
   getFrame(0)->setBackgroundColor(fs->getFrame(0)->getBackgroundColor());
   getFrame(0)->setLeftBorder(fs->getFrame(0)->getLeftBorder2());
   getFrame(0)->setRightBorder(fs->getFrame(0)->getRightBorder2());
@@ -1456,7 +1471,7 @@ bool KWGroupManager::isTableHeader(KWFrameSet *fs)
       if (cells.at(i)->frameSet == fs)
 	return true;
     }
-  
+
   return false;
 }
 
@@ -1891,12 +1906,38 @@ void KWGroupManager::deleteCol(unsigned int _idx)
 }
 
 /*================================================================*/
-void KWGroupManager::updateTempHeaders()
+void KWGroupManager::updateTempHeaders(QPixmap &_buffer,unsigned int xOffset,unsigned int yOffset,QWidget *page)
 {
   for (unsigned int i = 1;i < rows;i++)
     {
       for (unsigned int j = 0;j < cols;j++)
-	dynamic_cast<KWTextFrameSet*>(getFrameSet(i,j))->assign(dynamic_cast<KWTextFrameSet*>(getFrameSet(0,j)));
+	{
+	  KWFrameSet *fs = getFrameSet(i,j);
+	  if (fs->isRemoveableHeader())
+	    {
+	      dynamic_cast<KWTextFrameSet*>(fs)->assign(dynamic_cast<KWTextFrameSet*>(getFrameSet(0,j)));
+	      QPainter p;
+	      p.begin(&_buffer);
+
+	      KWFrame *f = fs->getFrame(0);
+	      
+	      p.eraseRect(f->x() - xOffset,f->y() - yOffset,f->width(),f->height());
+	      
+	      KWFormatContext fc(doc,doc->getFrameSetNum(fs) + 1);
+	      fc.init(dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag(),p,true,true);
+  
+	      bool bend = false;
+	      while (!bend)
+		{
+		  doc->printLine(fc,p,xOffset,yOffset,f->width(),f->height(),true);
+		  bend = !fc.makeNextLineLayout(p);
+		}
+  
+	      p.end();
+	      
+	      bitBlt(page,f->x() - xOffset,f->y() - yOffset,&_buffer,f->x() - xOffset,f->y() - yOffset,f->width(),f->height());
+	    }
+	}
     }
 }
 

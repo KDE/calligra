@@ -26,6 +26,8 @@
 #include <qpicture.h>
 #include <qregion.h>
 #include <qpainter.h>
+#include <qwidget.h>
+#include <qpixmap.h>
 
 #include "image.h"
 #include "parag.h"
@@ -386,7 +388,7 @@ public:
   bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
 
   bool isTableHeader(KWFrameSet *fs);
-  
+
   void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
   void init();
   void recalcCols();
@@ -424,8 +426,8 @@ public:
   bool getShowHeaderOnAllPages()
     { return showHeaderOnAllPages; }
 
-  void updateTempHeaders();
-  
+  void updateTempHeaders(QPixmap &_buffer,unsigned int xOffset,unsigned int yOffset,QWidget *page);
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

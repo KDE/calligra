@@ -3750,12 +3750,15 @@ void KWPage::setRulerLeftIndent(KoRuler *ruler,KWUnit _value)
 /*================================================================*/
 bool KWPage::editModeChanged(QKeyEvent *e)
 {
-  KWFrameSet *fs = doc->getFrameSet(fc->getFrameSet());
+  KWFrameSet *fs = doc->getFrameSet(fc->getFrameSet() - 1);
   KWGroupManager *grpMgr = fs->getGroupManager();
-  
+
   if (grpMgr && grpMgr->isTableHeader(fs))
-    grpMgr->updateTempHeaders();
-  
+    {
+      grpMgr->updateTempHeaders(buffer,xOffset,yOffset,this);
+      KRect r = grpMgr->getBoundingRect();
+    }
+      
   switch (e->key())
     {
     case Key_Delete:
