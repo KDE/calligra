@@ -215,6 +215,7 @@ void KuKexi::newCanvasBox(int type, CanvasBox *cb) {
 	switch (type) {
 		case KuDesignerRttiDetail:
 			cb->props["Datasource"] = *(new PropPtr(new Property(1024, "Datasource", i18n("Datasource"), "0")));
+			cb->props["DatasourceParameter"]= *(new PropPtr(new Property(1025,"DatasourceParameter", i18n("Parameter"),"0")));
 			break;
 		default:
 			break;

@@ -30,6 +30,7 @@ class KAction;
 class KexiProject;
 class KoDocument;
 class KoView;
+class KexiKugarHandlerItem;
 
 namespace KParts {
 	class ReadOnlyPart;
@@ -41,16 +42,19 @@ class KexiKugarDesignerWrapper : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiKugarDesignerWrapper(KexiView *view, QWidget *parent=0, const char *name=0, QString identifier=QString::null, bool newrep=false);
+		KexiKugarDesignerWrapper(KexiView *view, QWidget *parent=0, const char *name=0, KexiKugarHandlerItem *item=0, bool newrep=false);
 		~KexiKugarDesignerWrapper();
 		
                 virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
 
+	public slots:
+                void getPath(QString &path);
 	private:
 		KoDocument *m_doc; //kuDoc
 		KoView *m_view;
+		KexiKugarHandlerItem *m_item;
 };
 
 #endif

@@ -30,19 +30,20 @@ class KexiProjectHandlerItem : public QObject
 
 	public:
 		KexiProjectHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
-				const QString& identifier);
+				const QString& shortIdentifier);
 		~KexiProjectHandlerItem();
 
 		KexiProjectHandler	*projectPart();
 		QString		name();
 		QString		mime();
 		QString		identifier();
+		QString		shortIdentifier();
 
 	private:
 		KexiProjectHandler	*m_parent;
 		QString 	m_name;
 		QString 	m_mime;
-		QString 	m_identifier;
+		QString 	m_shortIdentifier;
 };
 
 #endif

@@ -20,13 +20,13 @@
 #include "kexiprojecthandleritem.h"
 
 KexiProjectHandlerItem::KexiProjectHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
-	const QString& identifier)
- : QObject(parent, identifier.latin1())
+	const QString& shortIdentifier)
+ : QObject(parent, shortIdentifier.latin1())
 {
 	m_parent = parent;
 	m_name = name;
 	m_mime = mime;
-	m_identifier = identifier;
+	m_shortIdentifier = shortIdentifier;
 }
 
 KexiProjectHandler *
@@ -50,8 +50,15 @@ KexiProjectHandlerItem::mime()
 QString
 KexiProjectHandlerItem::identifier()
 {
-	return m_identifier;
+	return m_mime+"/"+m_shortIdentifier;
 }
+
+QString
+KexiProjectHandlerItem::shortIdentifier()
+{
+	return m_shortIdentifier;
+}
+
 
 KexiProjectHandlerItem::~KexiProjectHandlerItem()
 {

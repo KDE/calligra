@@ -1,10 +1,25 @@
 #include <kexikugarhandleritem.h>
+#include <kexikugarhandler.h>
 #include <kexikugarhandleritem.moc>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <qfile.h>
+#include <kdebug.h>
 
-KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime,
+KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QString& name, const QString& mime,
                                 const QString& identifier):KexiProjectHandlerItem(parent,name,mime,identifier) {
 	m_storedDataSets.resize(51);
 	m_storedDataSets.setAutoDelete(true);
+	QString tmpPath=parent->tempPath();
+	if (!tmpPath.isEmpty()) {
+		m_tempPath=tmpPath+identifier;
+		kdDebug()<<"KexiKugarHandlerItem::creating directory: "<<m_tempPath<<endl;
+		if (mkdir(QFile::encodeName(m_tempPath),0700)!=0) {
+			kdDebug()<<"FAILED"<<endl;
+			m_tempPath="";
+		}
+		else m_tempPath+="/";
+	}
 }
 
 KexiKugarHandlerItem::~KexiKugarHandlerItem() {}
@@ -38,10 +53,3 @@ const QString &KexiKugarHandlerItem::storedDataset(const QString &datasetName) c
 	return tmp?*tmp:QString::null;
 }
 
-const QString& KexiKugarHandlerItem::dataSource() const {
-	return m_sourceIdentifier;
-}
-
-void KexiKugarHandlerItem::setDataSource(const QString &identifier) {
-	m_sourceIdentifier=identifier;
-}

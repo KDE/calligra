@@ -93,7 +93,7 @@ KexiTablePart::getTables()
 	for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		list->insert("kexi/table/" + (*it), new KexiProjectHandlerItem(this, (*it), "kexi/table", "kexi/table/" + (*it)));
+		list->insert("kexi/table/" + (*it), new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
 	}
 
 

@@ -21,6 +21,7 @@
 #define KEXIKUGARHANDLER_H
 
 class QPixmap;
+class KexiTempDir;
 
 #include "kexiprojecthandler.h"
 
@@ -30,6 +31,7 @@ class KexiKugarHandler : public KexiProjectHandler
 
 	public:
 		KexiKugarHandler(QObject *project,const char *,const QStringList &);
+		virtual ~KexiKugarHandler();
 
 		virtual QString				name();
 		virtual QString				mime();
@@ -47,9 +49,11 @@ class KexiKugarHandler : public KexiProjectHandler
 
 		void createReport(KexiView*);
 		void view(KexiView*,const QString &identifier);	
+		QString tempPath();
 	private:
 		QString nextFreeID;
 		QString nextID();
+		KexiTempDir *m_tempDir;
 	protected:
 		friend class KexiKugarHandlerProxy;
 		void				 getQueries();

@@ -27,17 +27,26 @@
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
+#include <kstandarddirs.h>
 #include "kexikugarhandler.h"
 #include "kexikugarhandleritem.h"
 #include "kexikugarhandlerproxy.h"
 #include "kexikugarwrapper.h"
 #include "kexikugardesignerwrapper.h"
+#include "kexitempdir.h"
 
 KexiKugarHandler::KexiKugarHandler(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project))
 {
+	m_tempDir=new KexiTempDir(locateLocal("tmp", KGlobal::instance()->instanceName()+"reports"));
+	m_tempDir->setAutoDelete(true);
 	nextFreeID="A";
 	kdDebug() << "KexiKugarHandler::KexiQueryPart()" << endl;
+}
+
+KexiKugarHandler::~KexiKugarHandler()
+{
+	delete m_tempDir;
 }
 
 QString
@@ -102,10 +111,11 @@ void KexiKugarHandler::createReport(KexiView *view)
         if(ok && name.length() > 0)
         {
 		QString id=nextID();
-                items()->insert(id,new KexiKugarHandlerItem(this, name, "kexi/reports", id));
+		KexiKugarHandlerItem *item;
+                items()->insert(id,item=new KexiKugarHandlerItem(this, name, "kexi/reports", id));
                 emit itemListChanged(this);
 //              project()->addFileReference("/query/" + name + ".query");
-		KexiKugarDesignerWrapper *kw=new KexiKugarDesignerWrapper(view,0,"identifier","kugar_editview",true);
+		KexiKugarDesignerWrapper *kw=new KexiKugarDesignerWrapper(view,0,"kugar_editview",item,true);
                 kexiProject()->setModified(true);
         }
 
@@ -119,6 +129,11 @@ void KexiKugarHandler::view(KexiView *view, const QString &identifier)
 {
         KexiKugarWrapper *kw = new KexiKugarWrapper(view, 0, "identifier", "kugar_view");
 
+}
+
+QString KexiKugarHandler::tempPath()
+{
+	return m_tempDir->name();
 }
 
 

@@ -17,6 +17,8 @@
 
 
 #include "kexikugardesignerwrapper.h"
+#include "kexikugarhandleritem.h"
+#include "kexikugarhandler.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -31,10 +33,10 @@
 #include <qapplication.h>
 #include <kexiview.h>
 
-KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *parent, const char *name, QString identifier,bool newrep)
-	: KexiDialogBase(view,parent,name),m_doc(0),m_view(0)
+KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *parent, const char *name, KexiKugarHandlerItem *item,bool newrep)
+	: KexiDialogBase(view,parent,name),m_doc(0),m_view(0),m_item(item)
 {
-	setCaption(i18n("Edit Report %1").arg(identifier));
+	setCaption(i18n("Edit Report %1").arg(m_item->identifier()));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));
@@ -55,6 +57,13 @@ KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *pare
 
 KexiKugarDesignerWrapper::~KexiKugarDesignerWrapper(){}
 
+
+void KexiKugarDesignerWrapper::getPath(QString &path) {
+	KexiKugarHandler *kkh=dynamic_cast<KexiKugarHandler*>(m_item->projectPart());
+	QString tempPath=kkh->tempPath();
+	if (!tempPath.isEmpty()) tempPath=tempPath+m_item->shortIdentifier()+"/";
+	path=tempPath;
+}
 
 KXMLGUIClient *KexiKugarDesignerWrapper::guiClient()
 {
@@ -83,6 +92,5 @@ void KexiKugarDesignerWrapper::activateActions()
 void KexiKugarDesignerWrapper::deactivateActions()
 {
 }
-
 
 #include "kexikugardesignerwrapper.moc"
