@@ -708,11 +708,12 @@ public:
       Flag_UpdatingDeps          = 0x00080000,
       Flag_DisplayDirty          = 0x00100000,
       Flag_ForceExtra            = 0x00200000,
-      Flag_CellTooShort          = 0x00400000,
-      Flag_ParseError            = 0x00800000,
-      Flag_CircularCalculation   = 0x01000000,
-      Flag_DependancyError       = 0x02000000,
-      Flag_PaintingCell          = 0x04000000
+      Flag_CellTooShortX         = 0x00400000,
+      Flag_CellTooShortY         = 0x00800000,
+      Flag_ParseError            = 0x01000000,
+      Flag_CircularCalculation   = 0x02000000,
+      Flag_DependancyError       = 0x04000000,
+      Flag_PaintingCell          = 0x08000000
     };
 
     void clearFlag( CellFlags flag );

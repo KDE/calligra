@@ -691,7 +691,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       return;
 
     m_nbLines = 0;
-    clearFlag( Flag_CellTooShort );
+    clearFlag( Flag_CellTooShortX );
+    clearFlag( Flag_CellTooShortY );
 
     freeAllObscuredCells();
     /* but reobscure the ones that are forced obscuring */
@@ -963,7 +964,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
        if( m_dOutTextHeight >= rl->dblHeight() )
        {
-         setFlag( Flag_CellTooShort );
+         setFlag( Flag_CellTooShortX );
        }
     }
 
@@ -1016,17 +1017,17 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
           //Not enough space
           if( end == -1 )
           {
-            setFlag( Flag_CellTooShort );
+            setFlag( Flag_CellTooShortX );
           }
         }
         else
         {
-          setFlag( Flag_CellTooShort );
+          setFlag( Flag_CellTooShortX );
         }
       }
       else
       {
-        setFlag( Flag_CellTooShort );
+        setFlag( Flag_CellTooShortX );
       }
     }
 
@@ -1072,12 +1073,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         //Not enough space
         if( end == -1 )
         {
-//          setFlag( Flag_CellTooShort );
+          setFlag( Flag_CellTooShortY );
         }
       }
       else
       {
-//        setFlag( Flag_CellTooShort );
+        setFlag( Flag_CellTooShortY );
       }
     }
 
@@ -2426,7 +2427,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
   //show  a red triangle when it's not possible to write all text in cell
   //don't print the red triangle if we're printing
 
-  if( testFlag( Flag_CellTooShort ) &&
+  if( testFlag( Flag_CellTooShortX ) &&
       !painter.device()->isExtDev() &&
       cellRect.height() > 4.0  &&
       cellRect.width() > 4.0 )
@@ -2522,7 +2523,7 @@ void KSpreadCell::paintText( QPainter& painter,
   QString tmpText = m_strOutText;
   double tmpHeight = m_dOutTextHeight;
   double tmpWidth = m_dOutTextWidth;
-  if( testFlag( Flag_CellTooShort ) )
+  if( testFlag( Flag_CellTooShortX ) )
   {
     m_strOutText = textDisplaying( painter );
   }
@@ -2552,7 +2553,7 @@ void KSpreadCell::paintText( QPainter& painter,
   }
 
   //made an offset, otherwise ### is under red triangle
-  if( a == KSpreadCell::Right && !isEmpty() && testFlag( Flag_CellTooShort ) )
+  if( a == KSpreadCell::Right && !isEmpty() && testFlag( Flag_CellTooShortX ) )
   {
     offsetCellTooShort = m_pTable->doc()->unzoomItX( 4 );
   }
@@ -2660,7 +2661,7 @@ void KSpreadCell::paintText( QPainter& painter,
     while ( i != len );
   }
 
-  if( testFlag(Flag_CellTooShort) )
+  if( testFlag( Flag_CellTooShortX ) )
   {
     m_strOutText = tmpText;
     m_dOutTextHeight = tmpHeight;

@@ -655,6 +655,9 @@ private:
     bool m_bMousePressed;
 };
 
+/*
+ * Tooltip, which displays the comment and cell content, when it's too short
+ */
 class KSpreadToolTip : public QToolTip
 {
 public:

@@ -4458,6 +4458,14 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   }
 }
 
+
+void KSpreadHBorder::focusOutEvent( QFocusEvent* )
+{
+    if ( m_scrollTimer->isActive() )
+        m_scrollTimer->stop();
+    m_bMousePressed = false;
+}
+
 /****************************************************************
  *
  * KSpreadToolTip
@@ -4489,6 +4497,25 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     // Get the comment
     QString comment = cell->comment( col, row );
 
+    //If the cell is too short, get the content
+    QString content;
+    if( cell->testFlag( KSpreadCell::Flag_CellTooShortX ) ||
+        cell->testFlag( KSpreadCell::Flag_CellTooShortY ) )
+        content = cell->strOutText();
+
+    if( content.isEmpty() && comment.isEmpty() )
+        return;
+
+    //Append the content text
+    if( !content.isEmpty() )
+    {
+        //Add 2 extra lines and a text, when both should be in the tooltip
+        if( !comment.isEmpty() )
+            comment = "\n\n" + i18n("Comment:") + "\n" + comment;
+
+        comment = content + comment;
+    }
+
     // Determine position and width of the current cell.
     cell = table->cellAt( col, row );
     double u = cell->dblWidth( col );
@@ -4508,8 +4535,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
       ypos = table->dblRowPos( moveY );
     }
 
-    // Is the cursor over the comment marker (if there is any) then
-    // show the comment.
+    // Get the cell dimensions
     KoRect unzoomedMarker( xpos - m_canvas->xOffset(),
                            ypos - m_canvas->yOffset(),
                            u,
@@ -4521,14 +4547,5 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
         tip( marker, comment );
     }
 }
-
-
-void KSpreadHBorder::focusOutEvent( QFocusEvent* )
-{
-    if ( m_scrollTimer->isActive() )
-        m_scrollTimer->stop();
-    m_bMousePressed = false;
-}
-
 
 #include "kspread_canvas.moc"
