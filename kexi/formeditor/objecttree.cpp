@@ -16,11 +16,13 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <iostream>
+
 #include <kdebug.h>
 #include <qwidget.h>
 #include <qstringlist.h>
 
+#include "form.h"
+#include "container.h"
 #include "objecttree.h"
 
 
@@ -115,7 +117,10 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
 ObjectTreeItem*
 ObjectTree::lookup(const QString &name)
 {
-	return m_treeDict[name];
+	if(name == this->name())
+		return this;
+	else
+		return m_treeDict[name];
 }
 
 void
@@ -134,6 +139,7 @@ ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 		c->setParent(parent);
 	}
 	kdDebug() << "ObjectTree::addChild(): adding " << c->name() << " to " << parent->name() << endl;
+	m_container->form()->emitChildAdded(c);
 }
 
 void

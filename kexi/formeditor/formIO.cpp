@@ -36,6 +36,7 @@
 #include "objpropbuffer.h"
 #include "objecttree.h"
 #include "formmanager.h"
+#include "widgetlibrary.h"
 
 #include "formIO.h"
 
@@ -510,8 +511,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	
 	if(!item->children()->isEmpty())
 	{
-	for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
-		saveWidget(objIt, tclass, domDoc);
+		for(ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
+			saveWidget(objIt, tclass, domDoc);
 	}
 }
 

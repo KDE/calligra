@@ -50,7 +50,7 @@ FormManager::FormManager(QWorkspace *workspace, QObject *parent=0, const char *n
 	m_editor = 0;
 	m_inserting = false;
 
-	m_domDoc.appendChild(m_domDoc.createElement("Copy"));
+	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
 	m_popup->insertItem(i18n("Copy"), this, SLOT(copyWidget()));
@@ -199,8 +199,8 @@ FormManager::isTopLevel(QWidget *w)
 void
 FormManager::deleteWidget()
 {
-	if (activeForm() && activeForm()->activeContainer())
-		activeForm()->activeContainer()->deleteItem();
+	if (activeForm() && activeForm()->parentContainer())
+		activeForm()->parentContainer()->deleteItem();
 }
 
 void
@@ -210,27 +210,31 @@ FormManager::copyWidget()
 		return;
 	QWidget *w = activeForm()->selectedWidget();
 	ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
+
 	if (!it)
 		return;
-	if(!m_domDoc.firstChild().isNull())
-		m_domDoc.removeChild(m_domDoc.firstChild());
-	QDomElement parent = m_domDoc.toElement();
+
+	QDomElement parent = m_domDoc.namedItem("UI").toElement();
+	if(!parent.firstChild().isNull())
+		parent.removeChild(parent.firstChild());
+
 	FormIO::saveWidget(it, parent, m_domDoc);
 }
 
 void
 FormManager::cutWidget()
 {
-	deleteWidget();
 	copyWidget();
+	deleteWidget();
 }
 
 void
 FormManager::pasteWidget()
 {
-	QDomElement widg = m_domDoc.firstChild().toElement();
+	QDomElement widg = m_domDoc.firstChild().firstChild().toElement();
 	if(widg.isNull())
 		return;
+
 	if(m_insertPoint.isNull())
 		activeForm()->pasteWidget(widg);
 	else

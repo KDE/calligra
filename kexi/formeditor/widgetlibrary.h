@@ -22,15 +22,12 @@
 
 #include <qobject.h>
 #include <qdict.h>
-#include <qptrlist.h>
-#include <qpopupmenu.h>
 
+template<class type> class QPtrList;
 class KActionCollection;
-
-class QRegExp;
 class KAction;
 class QWidget;
-
+class QPopupMenu;
 
 namespace KFormDesigner {
 /**

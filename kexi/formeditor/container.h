@@ -20,13 +20,10 @@
 #ifndef FORMEDITORCONTAINER_H
 #define FORMEDITORCONTAINER_H
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#include <qobject.h>
 
-#include "resizehandle.h"
-
-class QPixmap;
-class QPoint;
+class QEvent;
+class QWidget;
 
 namespace KFormDesigner {
 /**
@@ -34,7 +31,6 @@ namespace KFormDesigner {
  * Lucijan Busch
  **/
 class Container;
-//class ResizeHandleSet;
 class WidgetLibrary;
 class ObjectTreeItem;
 class Form;

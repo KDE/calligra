@@ -22,9 +22,6 @@
 
 
 #include <qobject.h>
-#include "objecttree.h"
-#include "widgetlibrary.h"
-#include "resizehandle.h"
 
 class QWidget;
 class QDomElement;
@@ -34,6 +31,9 @@ namespace KFormDesigner {
 class Container;
 class ObjectPropertyBuffer;
 class FormManager;
+class ResizeHandleSet;
+class ObjectTree;
+class ObjectTreeItem;
 
 /**
  * This class provides the base for accessing KFormDesigner over an "forign" api
@@ -86,6 +86,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		
 		QWidget*		selectedWidget()  {return m_selWidget;}
 		Container*		activeContainer();
+		Container*		parentContainer();
 		void			setCurrentWidget(QWidget *w);
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
 
@@ -96,14 +97,18 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		
 		void			pasteWidget(QDomElement &widg, QPoint pos=QPoint());
 
+		void			emitChildAdded(ObjectTreeItem *item);
+
+
 	public slots:
 		void			changeName(const char *oldname, const QString &newname);
 
 	signals:
 		void			selectionChanged(QWidget *w);
+		void			childAdded(ObjectTreeItem *it);
 
 	protected:
-		void  fixPos(QDomElement el, QPoint newpos);
+		QDomElement  fixPos(QDomElement el, QPoint newpos);
 		void  fixNames(QDomElement el);
 
 	private:

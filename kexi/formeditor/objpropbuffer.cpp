@@ -23,11 +23,13 @@
 #include <qmetaobject.h>
 #include <qvariant.h>
 
-#include "objpropbuffer.h"
+#include "objecttree.h"
 #include "form.h"
 #include "formmanager.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
+
+#include "objpropbuffer.h"
 
 namespace KFormDesigner {
 

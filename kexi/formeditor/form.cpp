@@ -22,11 +22,15 @@
 
 #include <kdebug.h>
 
-#include "form.h"
 #include "container.h"
+#include "objecttree.h"
 #include "objpropbuffer.h"
 #include "formIO.h"
 #include "formmanager.h"
+#include "widgetlibrary.h"
+#include "resizehandle.h"
+
+#include "form.h"
 
 namespace KFormDesigner {
 
@@ -47,7 +51,7 @@ Form::createToplevel(QWidget *container)
 	kdDebug() << "Form::createToplevel()" << endl;
 
 	m_toplevel = new Container(0, container, this, "form1");
-	m_topTree = new ObjectTree(container->className(), container->name(), container);
+	m_topTree = new ObjectTree(container->className(), container->name(), container, m_toplevel);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
 	
@@ -86,24 +90,38 @@ Form::setCurrentWidget(QWidget *w)
 {
 	m_selWidget = w;
 
-	if(w != toplevelContainer()->widget() && w)
+	if(w->parentWidget()->inherits("QWidgetStack"))
+	{
+		w = w->parentWidget()->parentWidget();
+	}
+
+	if(w != m_toplevel->widget() && w)
 	{
 		if(!m_resizeHandles)
 			m_resizeHandles = new ResizeHandleSet(w);
 		else
 			m_resizeHandles->setWidget(w);
 	}
-	if(w)
+	else
 	{
-		emit selectionChanged(w);
-		kdDebug() << "emitting signal" << endl;
+		delete m_resizeHandles;
+		m_resizeHandles = 0;
 	}
+	if(w)
+		emit selectionChanged(w);
+	
 }
 
 void
 Form::changeName(const char *oldname, const QString &newname)
 {
 	m_topTree->rename(oldname, newname);
+}
+
+void
+Form::emitChildAdded(ObjectTreeItem *item)
+{
+	emit childAdded(item);
 }
 
 Container*
@@ -118,6 +136,17 @@ Form::activeContainer()
 		return it->parent()->container();
 }
 
+Container*
+Form::parentContainer()
+{
+	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
+	if(it->parent()->container())
+		return it->parent()->container();
+	else
+		return it->parent()->parent()->container();
+}
+
+
 void
 Form::pasteWidget(QDomElement &widg, QPoint pos)
 {
@@ -125,8 +154,10 @@ Form::pasteWidget(QDomElement &widg, QPoint pos)
 		return;
 	fixNames(widg);
 	if(!pos.isNull())
-		fixPos(widg, pos);
+		widg = fixPos(widg, pos);
+	m_inter = false;
 	FormIO::loadWidget(activeContainer(), m_manager->lib(), widg);
+	m_inter = true;
 }
 
 void
@@ -151,7 +182,7 @@ Form::fixNames(QDomElement el)
 				QDomElement type = el.ownerDocument().createElement("string");
 				QDomText valueE = el.ownerDocument().createTextNode(wname);
 				type.appendChild(valueE);
-				el.appendChild(type);
+				n.toElement().appendChild(type);
 			}
 			
 		}
@@ -163,9 +194,10 @@ Form::fixNames(QDomElement el)
 	
 }
 
-void
-Form::fixPos(QDomElement el, QPoint newpos)
+QDomElement
+Form::fixPos(QDomElement widg, QPoint newpos)
 {
+	QDomElement el = widg.cloneNode(true).toElement();
 	QDomElement rect;
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
@@ -184,6 +216,8 @@ Form::fixPos(QDomElement el, QPoint newpos)
 	y.removeChild(y.firstChild());
 	QDomText valueY = el.ownerDocument().createTextNode(QString::number(newpos.y()));
 	y.appendChild(valueY);
+
+	return el;
 }
 
 Form::~Form()

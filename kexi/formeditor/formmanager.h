@@ -21,14 +21,14 @@
 #define FORMMANAGER_H
 
 #include <qobject.h>
-#include <qstring.h>
-#include <qptrlist.h>
 #include <qdom.h>
 
+template<class type> class QPtrList;
 class QWidget;
 class QWorkspace;
 class KPopupMenu;
 class KexiPropertyEditor;
+class KActionCollection;
 class KAction;
 
 namespace KFormDesigner {

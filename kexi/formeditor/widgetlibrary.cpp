@@ -18,9 +18,6 @@
 */
 
 #include <qdom.h>
-#include <qpixmap.h>
-#include <qiconset.h>
-#include <qwidget.h>
 
 #include <kdebug.h>
 #include <klibloader.h>

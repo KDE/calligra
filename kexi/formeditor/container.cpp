@@ -89,11 +89,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
-			if(m_moving->parent()->inherits("QWidgetStack"))
+			/*if(m_moving->parent()->inherits("QWidgetStack"))
 			{
 				m_moving = m_moving->parentWidget()->parentWidget();
 				kdDebug() << "composed widget  " << m_moving->name() << endl; 
-			}
+			}*/
 
 			setSelectedWidget(m_moving);
 
@@ -127,7 +127,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(!w)
 					return true;
 
-				w->setGeometry(m_insertRect);
+				w->move(m_insertRect.x(), m_insertRect.y());
+				w->resize(m_insertRect.width()-1, m_insertRect.height()-1);
 				w->show();
 				m_container->repaint();
 
@@ -150,7 +151,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_form->manager()->lib()->createMenuActions(n,w,p,this);
 				int id = parent->insertItem(n,p);
 
-				m_form->manager()->setInsertPoint(QCursor::pos());
+				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(QCursor::pos()));
 				parent->exec(QCursor::pos());
 				m_form->manager()->setInsertPoint(QPoint());
 
@@ -245,33 +246,6 @@ Container::setForm(Form *form)
 {
 	m_form = form;
 }
-/*
-void
-Container::updateBackground()
-{
-	int gridX = Form::gridX();
-	int gridY = Form::gridY();
-
-	QPainter p(m_container);
-	p.setPen( QPen(m_container->paletteForegroundColor(), 1) );
-	int cols = m_container->width() / gridX;
-	int rows = m_container->height() / gridY;
-
-	for(int rowcursor = 1; rowcursor < rows; ++rowcursor)
-	{
-		for(int colcursor = 1; colcursor < cols; ++colcursor)
-		{
-			p.drawPoint(colcursor *gridX, rowcursor *gridY);
-		}
-	}
-
-	if(m_form->manager()->inserting() && m_insertRect.isValid())
-	{
-		p.setBrush(QBrush::NoBrush);
-		p.setPen(QPen(m_container->paletteForegroundColor(), 2));
-		p.drawRect(m_insertRect);
-	}
-}*/
 
 void
 Container::setSelectedWidget(QWidget *w)
@@ -326,76 +300,7 @@ Container::widgetDeleted()
 	kdDebug() << "Deleting container : " << m_tree->name() << endl;
 	delete this;
 }
-/*
-void
-Container::copyWidget()
-{
-	if(m_selected)
-	{
-	kdDebug() << "Copied Widget : " << m_selected->name() << endl;
-	form()->preparePaste(m_selected, false);
-	}
-	else
-		form()->preparePaste(0,false);
-}
 
-void
-Container::cutWidget()
-{
-	if(m_selected)
-	{
-	kdDebug() << "Cut Widget : " << m_selected->name() << endl;
-	form()->preparePaste(m_selected, true);
-	}
-	else
-		form()->preparePaste(0,true);
-}
-
-void
-Container::pasteWidget()
-{
-	kdDebug() << "....pasting...." << endl;
-	QWidget *copiedw = form()->copiedWidget();
-	bool cut = form()->isCutting();
-
-	if(copiedw)
-	{
-	kdDebug() << "Pasted Widget : " << copiedw->name() << endl;
-	if(copiedw == m_container)  { return;}
-	if(copiedw->child(m_container->name()))  {return ;}  //exit if the we are a child of the copied widget 
-		
-		if(!cut)
-		{
-		QString name = form()->objectTree()->genName(copiedw->className());
-		const QString classname = copiedw->className();
-		
-		if(!m_lib)  { return;}
-		QWidget *w = m_lib->createWidget(classname, m_container, name.latin1(), this); 
-		if(!w)  { return;}
-		
-		QPoint p = m_container->mapFromGlobal(m_insertBegin);
-		QRect rect(p.x(), p.y(), copiedw->width(), copiedw->height());
-		w->setGeometry(r);
-		w->show();
-		
-		if (!form()->objectTree()->lookup(name))
-			form()->objectTree()->addChild(m_tree, new ObjectTreeItem(copiedw->className(), name, w));
-		}
-		
-		else
-		{
-		QPoint p = m_container->mapFromGlobal(m_insertBegin);
-		copiedw->reparent(m_container, p, true);
-		ObjectTreeItem *it = form()->objectTree()->lookup(copiedw->name());
-		it->parent()->remChild(it);
-		tree()->addChild(it);
-		it->setParent(tree());
-		
-		form()->preparePaste(copiedw, false);
-		}
-	}
-}
-*/
 Container::~Container()
 {
 }

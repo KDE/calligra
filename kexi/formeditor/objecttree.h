@@ -20,11 +20,13 @@
 #ifndef KFORMDESIGNEROBJECTTREE_H
 #define KFORMDESIGNEROBJECTTREE_H
 
-#include <qobject.h>
 #include <qptrlist.h>
 #include <qmap.h>
-#include <qvariant.h>
 #include <qdict.h>
+
+class QString;
+class QWidget;
+class QVariant;
 
 namespace KFormDesigner {
 
@@ -70,7 +72,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		*/
 		void		addModProperty(const QString &property);
 
-	private:
+	protected:
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
@@ -82,7 +84,6 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
-	
 	public:
 		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0, Container *container=0);
 		virtual ~ObjectTree();
