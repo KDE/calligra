@@ -78,6 +78,9 @@ public:
 
     KoTextDocument *textDocument() const;
 
+public slots:
+    void slotCurrentParagraphDeleted();
+
 signals:
     /**
      * Emitted after a paragraph has been checked.

@@ -210,6 +210,7 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
     if ( parag == m_currentParag )
     {
         operator++();
+        emit currentParagraphDeleted();
     }
 #ifdef DEBUG_ITERATOR
     kdDebug(32500) << "firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;

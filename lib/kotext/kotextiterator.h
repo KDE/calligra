@@ -112,6 +112,12 @@ signals:
      */
     void currentParagraphModified( int modifyType, int pos, int length );
 
+    /**
+     * Emitted when the current paragraph has been deleted by the user.
+     * When this happens, the iterator automatically moves to the next paragraph (if any).
+     */
+    void currentParagraphDeleted();
+
 protected:
     void connectTextObjects();
     void nextTextObject();

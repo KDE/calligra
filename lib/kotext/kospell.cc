@@ -86,6 +86,7 @@ bool KoSpell::check( KoTextIterator *itr, bool dialog )
         return ret;
 
     d->itr = itr;
+    connect( d->itr, SIGNAL( currentParagraphDeleted() ), SLOT( slotCurrentParagraphDeleted() ) );
     d->lastTxtDocument = d->itr->currentTextObject()->textDocument();
     d->needsIncrement = false;
     ret = !d->itr->atEnd();
@@ -207,6 +208,18 @@ int KoSpell::currentStartIndex() const
     return 0;
 }
 
+void KoSpell::slotCurrentParagraphDeleted()
+{
+    stop();
+    if ( d->itr ) {
+        d->needsIncrement = false;
+        d->parag = d->itr->currentParag();
+        start();
+    } else {
+        d->parag = 0;
+    }
+}
+
 bool KoSpell::checking() const
 {
 #ifdef DEBUG_SPELL
@@ -231,5 +244,4 @@ KoTextDocument * KoSpell::textDocument() const
 }
 
 #include "kospell.moc"
-
 #endif
