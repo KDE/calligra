@@ -278,7 +278,7 @@
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/opencalc"/>
                 <title xml:lang="en_us">OpenCalc</title>
                 <contact href="mailto:nandres@web.de">Norbert Andres</contact>
-                <stat import="twostars" export="planned"/>
+                <stat import="twostars" export="onestar"/>
             </filter>
         </application>
 
