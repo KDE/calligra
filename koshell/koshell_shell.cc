@@ -36,6 +36,7 @@
 #include <koView.h>
 
 KoShellWindow::KoShellWindow()
+  : m_documentEntry( 0L )
 {
   m_activePage = m_lstPages.end();
 
@@ -73,7 +74,7 @@ KoShellWindow::KoShellWindow()
 
 KoShellWindow::~KoShellWindow()
 {
-//  cleanUp();
+  //kdDebug() << "KoShellWindow::~KoShellWindow()" << endl;
 }
 
 QString KoShellWindow::nativeFormatName() const
@@ -84,18 +85,17 @@ QString KoShellWindow::nativeFormatName() const
 QString KoShellWindow::nativeFormatPattern() const
 {
   // TODO get this from the desktop files
+  // KoDocumentEntry::query(), then get hold of the service pointers
   return "*.kwd *.ksp *.kpr";
 }
 
 KoDocument * KoShellWindow::createDoc()
 {
-  if ( m_mimeType.isEmpty() )
+  if ( !m_documentEntry )
     ;// TODO use part chooser dialog
   else
   {
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( m_mimeType.latin1() );
-    m_mimeType = QString::null; // reset
-    return entry.createDoc();
+    return m_documentEntry->createDoc();
   }
   return 0L;
 }
@@ -103,19 +103,116 @@ KoDocument * KoShellWindow::createDoc()
 bool KoShellWindow::openDocument( const KURL & url )
 {
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
-  m_mimeType = mimeType->name();
-  // This one will call createDoc, that's why we saved the mimetype first
-  return KoMainWindow::openDocument( url ); 
+  m_documentEntry = new KoDocumentEntry(
+    KoDocumentEntry::queryByMimeType( mimeType->name().latin1() ) );
+
+  // This one will call createDoc, that's why we saved the document entry first
+  bool ret = KoMainWindow::openDocument( url );
+
+  delete m_documentEntry;
+  m_documentEntry = 0L;
+  return ret;
+}
+
+bool KoShellWindow::closeDocument()
+{
+  // No docs at all ?
+  if ( m_lstPages.count() == 0 )
+    return true; // ok to close the window
+
+  // Set the root document to the current one - so that closeDocument closes it
+  setRootDocumentDirect( (*m_activePage).m_pDoc );
+  kdDebug() << "KoShellWindow::closeDocument() : rootDocument is " << rootDocument() << endl;
+
+  // KoMainWindow deals with only one root document... but we have many.
+  // Semantic problem: are we here to close ONE doc (file/close)
+  // or all docs (queryClose) ? We'll assume the first for now
+  // (which introduces the bug: closing the window only closes one doc)
+
+  // First do the standard queryClose
+  if ( KoMainWindow::queryClose() )
+  {
+    m_pKoolBar->removeItem( m_grpDocuments, (*m_activePage).m_id );
+    (*m_activePage).m_pDoc->removeShell(this);
+    delete (*m_activePage).m_pView;
+    if ( (*m_activePage).m_pDoc->viewCount() <= 1 )
+      delete (*m_activePage).m_pDoc;
+    m_lstPages.remove( m_activePage );
+
+    if ( m_lstPages.count() > 0 )
+    {
+      // Activate the document behind
+      slotKoolBar( m_grpDocuments, m_lstPages.last().m_id );
+    }
+    else
+    {
+      // Revert to initial state (no docs)
+      setRootDocument( 0L );
+      partManager()->setActivePart( 0L, 0L );
+    }
+  }
+  kdDebug() << "m_lastPages has " << m_lstPages.count() << " documents" << endl;
+  return false; // don't close the window !
+}
+
+void KoShellWindow::setRootDocument( KoDocument * doc )
+{
+  kdDebug() << "KoShellWindow::setRootDocument this=" << this << " doc=" << doc << endl;
+  // We do things quite differently from KoMainWindow::setRootDocument
+  // This one is called with doc != 0 when a new doc is created
+  // and with 0L after they have all been removed.
+  // We use setRootDocumentDirect to switch the 'root doc' known by KoMainWindow.
+
+  setRootDocumentDirect( doc );
+  updateCaption();
+
+  if ( m_activePage != m_lstPages.end() )
+    (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
+
+  if ( doc )
+  {
+    doc->addShell( this );
+    KoView *v = doc->createView( m_pFrame );
+    v->show();
+    m_pFrame->setView( v );
+    v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
+    kdDebug() << " setRootDocumentDirect: setting active part to " << doc << endl;
+    partManager()->setActivePart( doc, v );
+
+    // Create a new page for this doc
+    Page page;
+    page.m_pDoc = doc;
+    page.m_pView = v;
+    assert( m_documentEntry ); // we need it right below
+    page.m_id = m_pKoolBar->insertItem( m_grpDocuments, DesktopIcon( m_documentEntry->icon ),
+                                        i18n("No name"), // TODO
+                                        this, SLOT( slotKoolBar( int, int ) ) );
+    kdDebug() << " New page has id " << page.m_id << " doc is " << doc << endl;
+
+    m_lstPages.append( page );
+    m_activePage = m_lstPages.fromLast();
+    assert( (*m_activePage).m_id == page.m_id );
+  } else
+    m_activePage = m_lstPages.end();
 }
 
 void KoShellWindow::slotKoolBar( int _grp, int _item )
 {
+  kdDebug() << "KoShellWindow::slotKoolBar "  << _grp << " " << _item << endl;
   if ( _grp == m_grpFile )
   {
-    newPage( *(m_mapComponents[ _item ]) );
+    // Create new document from a KoDocumentEntry
+    if ( m_documentEntry )
+      delete m_documentEntry;
+    m_documentEntry = m_mapComponents[ _item ];
+    KoDocument *doc = m_documentEntry->createDoc();
+    doc->initDoc();
+    setRootDocument( doc );
+    m_documentEntry = 0L;
   }
   else if ( _grp == m_grpDocuments )
   {
+    // Switch to an existing document
     if ( m_activePage != m_lstPages.end() &&
          (*m_activePage).m_id == _item )
       return;
@@ -126,17 +223,28 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
       if ( (*it).m_id == _item )
       {
         KoView * v = (*m_activePage).m_pView;
+        assert( v->koDocument() == (*m_activePage).m_pDoc );
         v->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
 	m_activePage = it;
         v->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
 	m_pFrame->setView( v );
-	partManager()->setActivePart( v->koDocument(), v );
+        kdDebug() << " setting active part to " << (*m_activePage).m_pDoc << endl;
+	partManager()->setActivePart( (*m_activePage).m_pDoc, v );
 	return;
       }
       ++it;
     }
   }
 }
+
+/*
+void KoShellWindow::slotFileClose()
+{
+    // reimplemented to avoid closing the window
+    (void) closeDocument();
+}
+*/
+
 /*
 bool KoShellWindow::isModified()
 {
@@ -162,47 +270,6 @@ bool KoShellWindow::requestClose()
   return false;
 }
 
-void KoShellWindow::cleanUp()
-{
-  releasePages();
-
-  KoMainWindow::cleanUp();
-}
-*/
-
-bool KoShellWindow::newPage( KoDocumentEntry& _e )
-{
-  // Create document
-  KoDocument *doc = _e.createDoc();
-
-  doc->initDoc();
-
-  KoView *v;
-
-  if ( m_activePage != m_lstPages.end() )
-    (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
-
-  v = doc->createView( m_pFrame );
-  v->setGeometry( 0, 0, width(), height() );
-  partManager()->setActivePart( doc, v );
-  v->show();
-  m_pFrame->setView( v );
-
-  // Create a new page
-  Page page;
-  page.m_pDoc = doc;
-  page.m_pView = v;
-  page.m_id = m_pKoolBar->insertItem( m_grpDocuments, _e.icon, i18n("No name"), this,
-				      SLOT( slotKoolBar( int, int ) ) );
-
-  m_lstPages.append( page );
-  m_activePage = m_lstPages.end();
-  m_activePage--;
-  return true;
-}
-
-
-/*
 bool KoShellWindow::saveAllPages()
 {
   // TODO
@@ -240,14 +307,6 @@ QString KoShellWindow::configFile() const
 }
 
 /*
-void KoShellWindow::slotFileSave()
-{
-}
-
-void KoShellWindow::slotFileSaveAs()
-{
-}
-
 void KoShellWindow::slotFilePrint()
 {
   printDlg();

@@ -42,31 +42,25 @@ public:
   virtual ~KoShellWindow();
 
   virtual bool openDocument( const KURL & url );
+  virtual bool closeDocument();
+  virtual void setRootDocument( KoDocument *doc );
 
   virtual QString configFile() const;
 
   virtual QString nativeFormatPattern() const;
   virtual QString nativeFormatName() const;
 
-  bool newPage( KoDocumentEntry& _e );
-
 /*
   bool saveAllPages();
   void releasePages();
-*/  
+*/
 
 protected slots:
-/*
-  void slotFileNew();
-  void slotFileOpen();
-  void slotFileSave();
-  void slotFileSaveAs();
-  void slotFilePrint();
-  void slotFileClose();
-  void slotFileQuit();
-*/
+
+  //virtual void slotFileClose();
+
   void slotKoolBar( int _grp, int _item );
-  
+
 protected:
 
   virtual KoDocument* createDoc();
@@ -77,7 +71,7 @@ protected:
     KoView *m_pView;
     int m_id;
   };
-  
+
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
@@ -85,12 +79,12 @@ protected:
 
   int m_grpFile;
   int m_grpDocuments;
-  
+
   QValueList<KoDocumentEntry> m_lstComponents;
   QMap<int,KoDocumentEntry*> m_mapComponents;
 
   // Saved between openDocument and createDoc
-  QString m_mimeType;
+  KoDocumentEntry * m_documentEntry;
 
   KoShellFrame *m_pFrame;
 
@@ -102,12 +96,12 @@ class KoShellFrame : public QWidget
   Q_OBJECT
 public:
   KoShellFrame( QWidget *parent );
-  
+
   void setView( KoView *view );
-  
+
 protected:
   virtual void resizeEvent( QResizeEvent * );
-  
+
 private:
   KoView *m_pView;
 };
