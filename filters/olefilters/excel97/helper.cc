@@ -678,7 +678,13 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 			refRow -= row;
 
 		if( colRelative )
+                {
+			// column is int8 in shared, i.e 128 to 255 becomes  -128 to -1
+			if( shared ) 
+                            refColumn = (refColumn<128) ? refColumn : refColumn-256;
+                        else
 			refColumn -= column;
+                }
 	}
 	else
 	{
@@ -1185,7 +1191,6 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				index &= 0x7FFF;
 
 				excelFunc = ExcelFunction(index);
-qDebug("index %d, function %s", index, excelFunc ? excelFunc->name : "??");
 
 				if(excelFunc)
 				{
