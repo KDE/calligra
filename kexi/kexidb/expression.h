@@ -275,7 +275,7 @@ class KEXI_DB_EXPORT Expression
 		 If it is not valid expression (no field is assigned), Field::InvalidType is returned. */
 		int type();
 
-		//! owner of this expression: the filed that uses expression
+		//! owner of this expression: the field that uses expression
 		KexiDB::Field* field();
 	protected:
 		ExpressionPrivate *d; //unused

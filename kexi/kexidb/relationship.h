@@ -120,8 +120,8 @@ class KEXI_DB_EXPORT Relationship
 		 Notes: 
 		 - both indices must contain the same number of fields
 		 - both indices must not be owned by the same table, and table (owner) must be not null.
-		 - corresponding filed types must be the same
-		 - corresponding filed types' signedness must be the same
+		 - corresponding field types must be the same
+		 - corresponding field types' signedness must be the same
 		 If above rules are not fulfilled, information about this relationship is cleared. 
 		 On success, this Relationship object is detached from previous IndexSchema objects that were
 		 assigned before, and new are attached.
