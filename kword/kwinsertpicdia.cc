@@ -18,10 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwinsertpicdia.h"
-#include "kwdoc.h"
-#include <klocale.h>
-#include <kfiledialog.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qbitmap.h>
@@ -29,12 +25,17 @@
 #include <qcheckbox.h>
 #include <qscrollview.h>
 
+#include <kdebug.h>
+#include <klocale.h>
+#include <kfiledialog.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
-#include <kdebug.h>
 
 #include <koPicture.h>
 #include <koPictureFilePreview.h>
+
+#include "kwdoc.h"
+#include "kwinsertpicdia.h"
 
 /**
  * This is the preview that appears on the right of the "Insert picture" dialog.
@@ -53,12 +54,9 @@ public:
 
     virtual ~KWInsertPicPreview() {}
 
-    QSize size() const { return m_size; }
-
-    bool setPicture( const QString & filename )
+    bool setPicture( const KoPicture & picture )
     {
-        KoPicture picture;
-        if (picture.loadFromFile( filename ))
+        if (!picture.isNull())
         {
             m_size = picture.getOriginalSize();
             m_picture = picture;
@@ -132,16 +130,17 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    m_filename = KWInsertPicDia::selectPictureDia( m_doc->picturePath() );
-    if ( m_filename.isEmpty() && m_bFirst)
+    m_picture = KWInsertPicDia::selectPictureDia( m_doc->picturePath() ) ;
+    if ( m_picture.isNull() && m_bFirst)
     {
+        kdDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
         KDialogBase::close();
     }
-    enableButtonOK ( m_preview->setPicture( m_filename ) );
+    enableButtonOK ( m_preview->setPicture( m_picture ) );
     m_bFirst = false;
 }
 
-QString KWInsertPicDia::selectPictureDia( const QString & _path )
+KoPicture KWInsertPicDia::selectPictureDia( const QString & _path )
 {
     QStringList mimetypes ( KImageIO::mimeTypes( KImageIO::Reading ) );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
@@ -149,29 +148,28 @@ QString KWInsertPicDia::selectPictureDia( const QString & _path )
     KFileDialog fd( _path, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
-    QString file = selectPicture( fd );
-    return file;
+    return selectPicture( fd );
 }
 
-QString KWInsertPicDia::selectPicture( KFileDialog & fd )
+KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd )
 {
+    KoPicture picture;
+
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
-    if( url.isEmpty() )
-      return QString::null;
+    if( !url.isEmpty() )
+        picture.setKeyAndDownloadPicture( url );
 
-    QString chosen = QString::null;
-    if (!KIO::NetAccess::download( url, chosen ))
-        return QString::null;
-    return chosen;
+    return picture;
 }
 
-QSize KWInsertPicDia::pixmapSize() const
+KoPicture KWInsertPicDia::picture ( void ) const
 {
-    return m_preview->size();
+    kdDebug() << m_picture.getKey().toString() << " selected in KWInsertPicDia" << endl;
+    return m_picture;
 }
 
 #include "kwinsertpicdia.moc"

@@ -155,9 +155,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     else
         setXMLFile( "kword.rc" );
 
-    QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
-                      this, SLOT( slotEmbedImage( const QString & ) ) );
-
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
 
@@ -2974,9 +2971,9 @@ void KWView::insertPicture()
     if ( actionToolsCreatePix->isChecked() )
     {
         KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio(),m_doc );
-        if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
+        if ( dia.exec() == QDialog::Accepted && !dia.picture().isNull() )
         {
-            insertPicture( dia.filename(), dia.makeInline(), dia.pixmapSize(), dia.keepRatio() );
+            insertPicture( dia.picture(), dia.makeInline(), dia.keepRatio() );
             m_gui->canvasWidget()->setPictureInline( dia.makeInline());
             m_gui->canvasWidget()->setPictureKeepRatio( dia.keepRatio() );
         }
@@ -2990,13 +2987,7 @@ void KWView::insertPicture()
     }
 }
 
-void KWView::slotEmbedImage( const QString &filename )
-{
-    insertPicture( filename, false, QSize(),true );
-}
-
-void KWView::insertPicture( const QString &filename,
-                            bool makeInline, QSize pixmapSize, bool _keepRatio )
+void KWView::insertPicture( const KoPicture& picture, const bool makeInline, const bool _keepRatio )
 {
     if ( makeInline )
     {
@@ -3005,9 +2996,9 @@ void KWView::insertPicture( const QString &filename,
         fsInline = 0L;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
-        frameset->loadPicture( filename );
-        if ( pixmapSize.isEmpty() )
-            pixmapSize = frameset->picture().getOriginalSize();
+        frameset->insertPicture( picture );
+
+        QSize pixmapSize ( frameset->picture().getOriginalSize() );
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         // ### TODO/FIXME: is the qRound really necessary?
         double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
@@ -3064,12 +3055,7 @@ void KWView::insertPicture( const QString &filename,
     }
     else
     {
-        KoPictureKey key;
-        key.setKeyFromFile( filename );
-        KoPicture picture;
-        picture.setKey( key );
-        picture.loadFromFile( filename );
-        m_gui->canvasWidget()->insertPicture( picture , pixmapSize, _keepRatio );
+        m_gui->canvasWidget()->insertPicture( picture , picture.getOriginalSize(), _keepRatio );
     }
 }
 
@@ -5735,20 +5721,17 @@ void KWView::changePicture()
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
-    QString file ( KWInsertPicDia::selectPictureDia ( oldFile ) );
-    if ( !file.isEmpty() )
+    KoPicture picture ( KWInsertPicDia::selectPictureDia ( oldFile ) );
+    if ( !picture.isNull() )
     {
-        KoPictureKey key;
-        key.setKeyFromFile ( file );
-        KoPicture picture;
-        picture.setKey ( key );
-        picture.loadFromFile ( file );
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldKey, picture.getKey() ) ;
 
         frameset->insertPicture( picture );
         m_doc->frameChanged( frame );
         m_doc->addCommand(cmd);
     }
+    else
+        kdDebug() << "KWView::changePicture cancelled" << endl;
 }
 
 void KWView::savePicture()

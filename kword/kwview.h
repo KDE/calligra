@@ -32,6 +32,7 @@
 #include <kshortcut.h>
 class DCOPObject;
 
+class KoPicture;
 class KWDocStruct;
 class KoRuler;
 class KWCanvas;
@@ -323,7 +324,6 @@ public slots:
     void editPersonalExpr();
 
     void slotUpdateRuler();
-    void slotEmbedImage( const QString &filename );
 
     void insertCustomVariable();
     void insertNewCustomVariable();
@@ -425,7 +425,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar );
 
-    void insertPicture( const QString &filename, bool makeInline, QSize pixmapSize, bool _keepRatio );
+    void insertPicture( const KoPicture& picture, const bool makeInline, const bool _keepRatio );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 

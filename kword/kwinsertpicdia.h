@@ -32,32 +32,31 @@ class KWInsertPicDia : public KDialogBase
 public:
     KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name = 0 );
 
-    QString filename() const { return m_filename; }
     bool makeInline() const;
-
-    // For pixmaps only
-    QSize pixmapSize() const;
 
     bool keepRatio() const;
 
     /**
      * @param _path the name of the old file
-     * @return the selected file name (QString::null if cancelled)
+     * @return the loaded picture (Picture is null if cancelled.)
      */
-    static QString selectPictureDia( const QString & _path = QString::null );
+    static KoPicture selectPictureDia( const QString & _path = QString::null );
+    
+    KoPicture picture ( void ) const;
 
 protected slots:
     void slotChooseImage();
 
 protected:
-    static QString selectPicture( KFileDialog & fd );
+    static KoPicture selectPicture( KFileDialog & fd );
 
 private:
-    QString m_filename;
+
     bool m_bFirst;
     QCheckBox *m_cbInline, *m_cbKeepRatio;
     KWInsertPicPreview *m_preview;
     KWDocument *m_doc;
+    KoPicture m_picture;
 };
 
 #endif
