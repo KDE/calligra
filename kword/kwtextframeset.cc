@@ -62,7 +62,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_availableHeight = -1;
     m_currentViewMode = 0L;
     //m_currentDrawnFrame = 0L;
-    m_origFontSizes.setAutoDelete(true);
+    m_origFontSizes.setAutoDelete( true );
+    m_framesInPage.setAutoDelete( true );
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     QTextFormatter * formatter = new QTextFormatterBreakWords;
     formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
@@ -117,10 +118,9 @@ int KWTextFrameSet::availableHeight() const
 
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
-    int totalHeight = 0;
-    KWFrame * lastRealFrame = 0L;
-    int lastRealFrameTop = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    // Find the frame that contains nPoint. To go fast, we look them up by page number.
+    int pageNum = nPoint.y() / m_doc->paperHeight();
+    QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -130,13 +130,10 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             // This translates the coordinates from the normal coord system
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
-            int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
-
-            iPoint.setX( nPoint.x() - offsetX );
-            iPoint.setY( nPoint.y() - offsetY );
+            iPoint.setX( nPoint.x() - frameRect.left() );
+            iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
             /*kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                      << " totalHeight=" << totalHeight << " because r: " << DEBUGRECT(r)
+                      << " internalY=" << frame->internalY() << " because r: " << DEBUGRECT(r)
                       << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;*/
             return frame;
         }
@@ -147,9 +144,8 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             if ( openLeftRect.contains( nPoint ) )
             {
                 // We are at the left of this frame (and not in any other frame of this frameset)
-                int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
                 iPoint.setX( 0 );
-                iPoint.setY( nPoint.y() - offsetY );
+                iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
                 return frame;
             }
             QRect openTopRect( frameRect );
@@ -162,13 +158,6 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 return frame;
             }
         }
-
-        if ( !lastRealFrame || !frame->isCopy() )
-        {
-            lastRealFrame = frame;
-            lastRealFrameTop = totalHeight;
-        }
-        totalHeight += frameRect.height();
     }
 
     return 0;
@@ -176,32 +165,23 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
 
 KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
 {
-    int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * lastRealFrame = 0L;
-    int lastRealFrameTop = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
         int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
+        int offsetY = frameRect.top() - frame->internalY();
         QRect r( frameRect );
         r.moveBy( -offsetX, -offsetY );   // frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
             nPoint.setX( iPoint.x() + offsetX );
             nPoint.setY( iPoint.y() + offsetY );
-            if ( hintNPoint.isNull() || frame->getNewFrameBehaviour() != Copy || hintNPoint.y() <= nPoint.y() )
+            if ( hintNPoint.isNull() || !frame->isCopy() || hintNPoint.y() <= nPoint.y() )
                 return frame;
-            // The above test uses hintNPoint only if specified, and if this frame isn't copied.
+            // The above test uses hintNPoint only if specified, and if this frame isn't a copy.
         }
-        if ( !lastRealFrame || !frame->isCopy() )
-        {
-            lastRealFrame = frame;
-            lastRealFrameTop = totalHeight;
-        }
-        totalHeight += frameRect.height();
     }
 
     // This happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
@@ -275,11 +255,13 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     {
         int docHeight = textdoc->height();
         QRect frameRect = m_currentViewMode->normalToView( kWordDocument()->zoomRect( *frame ) );
-        // Hmm, we have to calculate the totalHeight here again.... pass from drawContents if slow
-        QListIterator<KWFrame> frameIt( frameIterator() );
-        int totalHeight = 0;
-        for ( ; frameIt.current() && frameIt.current() != frame; ++frameIt )
-            totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
+
+        //QListIterator<KWFrame> frameIt( frameIterator() );
+        //int totalHeight = 0;
+        //for ( ; frameIt.current() && frameIt.current() != frame; ++frameIt )
+        //    totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
+        int totalHeight = frames.last()->internalY()
+                          + m_doc->zoomItY( frames.last()->height() );
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
@@ -761,19 +743,15 @@ void KWTextFrameSet::updateFrames()
     if ( !isVisible() )
         return;
 
-    if ( !frames.isEmpty() )
-    {
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
-        //               << " setWidth=" << frames.first()->width() << endl;
-        int width = kWordDocument()->zoomItX( frames.first()->width() );
-        // ## we need support for variable width.... (could be done in adjustRMargin in fact)
-        if ( width != textdoc->width() )
-            textdoc->setWidth( width );
-    } else
-    {
-        //kdDebug(32002) << "KWTextFrameSet::update no frames" << endl;
+    if ( frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
-    }
+
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
+    //               << " setWidth=" << frames.first()->width() << endl;
+    int width = kWordDocument()->zoomItX( frames.first()->width() );
+    // TODO ####### we need support for variable width.... (could be done in adjustRMargin in fact)
+    if ( width != textdoc->width() )
+        textdoc->setWidth( width );
 
     //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
@@ -781,26 +759,51 @@ void KWTextFrameSet::updateFrames()
 
     QValueList<FrameStruct> sortedFrames;
 
+    double pageHeight = m_doc->ptPaperHeight();
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
+        // Set the page number while we're at it
+        frameIt.current()->setPageNum( static_cast<int>( frameIt.current()->y() / pageHeight ) );
+
         FrameStruct str;
         str.frame = frameIt.current();
         sortedFrames.append( str );
     }
     qHeapSort( sortedFrames );
 
+    // Prepare the m_framesInPage structure
+    m_firstPage = sortedFrames.first().frame->pageNum();
+    int lastPage = sortedFrames.last().frame->pageNum();
+    int oldSize = m_framesInPage.size();
+    m_framesInPage.resize( lastPage - m_firstPage + 1 );
+    // Clear the old elements
+    int oldElements = QMIN( oldSize, m_framesInPage.size() );
+    for ( int i = 0 ; i < oldElements ; ++i )
+        m_framesInPage[i]->clear();
+    // Initialize the new elements.
+    for ( int i = oldElements ; i < m_framesInPage.size() ; ++i )
+        m_framesInPage.insert( i, new QList<KWFrame>() );
+
+    // Re-fill the frames list with the frames in the right order,
+    // and re-fill m_framesInPage at the same time.
     frames.setAutoDelete( false );
     frames.clear();
     m_availableHeight = 0;
-    double pageHeight = m_doc->ptPaperHeight();
     QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
     for ( ; it != sortedFrames.end() ; ++it )
     {
         KWFrame * frame = (*it).frame;
         frames.append( frame );
-        frame->setPageNum( static_cast<int>( frame->y() / pageHeight ) );
-        m_availableHeight += kWordDocument()->zoomItY( frame->height() );
+
+        ASSERT( frame->pageNum() <= lastPage );
+        m_framesInPage[frame->pageNum() - m_firstPage]->append( frame );
+
+        frame->setInternalY( m_availableHeight );
+
+        // Update m_availableHeight with the internal height of this frame - unless it's a copy
+        if ( ! ( frame->isCopy() && it != sortedFrames.begin() ) )
+            m_availableHeight += m_doc->zoomItY( frame->height() );
     }
 
     //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
@@ -808,6 +811,30 @@ void KWTextFrameSet::updateFrames()
 
     KWFrameSet::updateFrames();
 }
+
+const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
+{
+    if ( pageNum >= m_framesInPage.size() + m_firstPage )
+    {
+        kdWarning() << "framesInPage called for pageNum=" << pageNum << ". Max value:" << m_framesInPage.size() + m_firstPage - 1 << endl;
+        return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
+    }
+    return * m_framesInPage[pageNum - m_firstPage];
+}
+
+#ifndef NDEBUG
+void KWTextFrameSet::printDebug()
+{
+    KWFrameSet::printDebug();
+    kdDebug() << " -- Frames in page array -- " << endl;
+    for ( int i = 0 ; i < m_framesInPage.size() ; ++i )
+    {
+        QListIterator<KWFrame> it( *m_framesInPage[i] );
+        for ( ; it.current() ; ++it )
+            kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() ) << endl;
+    }
+}
+#endif
 
 void KWTextFrameSet::save( QDomElement &parentElem )
 {
@@ -1477,14 +1504,10 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
     QTextParag * lastParag = textdoc->lastParag();
     ensureFormatted( lastParag );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
-    int totalHeight = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
-    for ( ; frameIt.current(); ++frameIt )
-    {
-        if ( frameIt.current() == frame )
-            return bottom < totalHeight;
-        totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
-    }
+
+    if ( frame->getFrameSet() == this ) // safety check
+        return bottom < frame->internalY();
+
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
     if ( frame->getFrameSet() )
         kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->getFrameSet()->name() << endl;
@@ -1493,22 +1516,20 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
-    QListIterator<KWFrame> frameIt( frameIterator() );
+    QListIterator<KWFrame> frameIt( framesInPage( num ) );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
-        if ( frame->pageNum() == num )
-        {
-            bool isEmpty = isFrameEmpty( frame );
+        ASSERT ( frame->pageNum() == num );
+        bool isEmpty = isFrameEmpty( frame );
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
-                      << " found a frame on page " << num << " empty:" << isEmpty << endl;
+        kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
+                  << " found a frame on page " << num << " empty:" << isEmpty << endl;
 #endif
-            // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
-            bool isCopy = frame->isCopy() && frameIt.current() != frames.first();
-            if ( !isCopy && !isEmpty )
-                return false;
-        }
+        // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
+        bool isCopy = frame->isCopy() && frameIt.current() != frames.first();
+        if ( !isCopy && !isEmpty )
+            return false;
     }
     return true;
 }
@@ -1527,14 +1548,21 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
                      << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
 #endif
 
-    // Convert to internal qtextdoc coordinates
-    QPoint iPoint;
-    int maxY;
-    if ( normalToInternal( nPointBottom, iPoint ) )
-        maxY = iPoint.y();
-    else // not found, assume worse
+    // Find last page that is visible
+    int maxPage = ( nPointBottom.y() + m_doc->paperHeight() /*equiv. to ceil()*/ ) / m_doc->paperHeight();
+    int maxY = 0;
+    if ( maxPage >= m_framesInPage.size() + m_firstPage )
         maxY = m_availableHeight;
-
+    else
+    {
+        // Find frames on that page, and keep the max bottom, in internal coordinates
+        QListIterator<KWFrame> frameIt( framesInPage( maxPage ) );
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            maxY = QMAX( maxY, frameIt.current()->internalY()
+                         + m_doc->zoomItY( frameIt.current()->height() ) );
+        }
+    }
 #ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
 #endif

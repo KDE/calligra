@@ -192,6 +192,7 @@ public:
 
 #ifndef NDEBUG
     void printRTDebug( int );
+    virtual void printDebug();
 #endif
 
     // Invalidate all paragraphs (causes a re-flow of the text upon next redraw)
@@ -250,6 +251,7 @@ protected:
     void setLastFormattedParag( QTextParag *parag );
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
+    const QList<KWFrame> & framesInPage( int pageNum ) const;
 
 private:
     /**
@@ -297,6 +299,12 @@ private:
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
     KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
     //KWFrame * m_currentDrawnFrame;           // The frame currently being drawn.
+
+    // Cached info for optimization
+    QVector< QList<KWFrame> > m_framesInPage; // provides a direct access to the frames on page N
+    int m_firstPage; // always equal to m_framesInPage[0].first()->pageNum() :)
+    QList<KWFrame> m_emptyList; // always empty, for convenience in framesInPage
+
 #ifdef TIMING_FORMAT
     QTime m_time;
 #endif

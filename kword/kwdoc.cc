@@ -2095,7 +2095,7 @@ bool KWDocument::canRemovePage( int num )
         KWFrameSet * frameSet = fit.current();
         if ( frameSet->getFrameInfo() != FI_BODY ) // if header/footer/footnote
             continue;
-        if ( !frameSet->canRemovePage( num ) )
+        if ( frameSet->isVisible() && !frameSet->canRemovePage( num ) )
             return false;
     }
     kdDebug(32002) << "KWDocument::canRemovePage " << num << "-> TRUE" << endl;

@@ -50,6 +50,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_bCopy( false ),
       selected( false ),
       m_pageNum( 0 ),
+      m_internalY( 0 ),
       backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), Border::SOLID, 0 ),
       brd_right( QColor(), Border::SOLID, 0 ),

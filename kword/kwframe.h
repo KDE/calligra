@@ -146,6 +146,10 @@ public:
     QBrush getBackgroundColor() const { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
+    // For text frames only
+    void setInternalY( int y ) { m_internalY = y; }
+    int internalY() const { return m_internalY; }
+
     /** set left margin size */
     void setBLeft( double b ) { bleft = b; }
     /** set right margin size */
@@ -173,20 +177,20 @@ private:
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
     double runAroundGap;
+    double bleft, bright, btop, bbottom; // margins
+
     bool m_bCopy;
     bool selected;
     int m_pageNum;
+    int m_internalY; // for text frames only
 
     QBrush backgroundColor;
     Border brd_left, brd_right, brd_top, brd_bottom;
 
-    double bleft, bright, btop, bbottom; // margins
-
     QList<KWResizeHandle> handles;
     KWFrameSet *frameSet;
 
-    //KWAnchor *m_anchor;
-
+    // Prevent operator= and copy constructor
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
 };

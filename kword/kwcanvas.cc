@@ -1700,7 +1700,8 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 {
     //QPoint nPointTop = m_viewMode->viewToNormal( QPoint( cx, cy ) );
     QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
-    //kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
+    kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy
+              << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
