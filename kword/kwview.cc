@@ -117,6 +117,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
     m_findReplace = 0L;
+    m_fontDlg = 0L;
+
     m_actionList.setAutoDelete( true );
     m_variableActionList.setAutoDelete( true );
     // Default values.
@@ -226,6 +228,8 @@ KWView::~KWView()
     delete m_sbPageLabel;
     delete fsInline;
     delete dcop;
+    delete m_fontDlg;
+    delete m_specialCharDlg;
 }
 
 DCOPObject* KWView::dcopObject()
@@ -2626,32 +2630,49 @@ void KWView::formatFont()
     QColor col=lst.first()->textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
     bool doubleUnderline = lst.first()->currentFormat()->doubleUnderline();
-    KoFontDia *fontDia = new KoFontDia( this, "", lst.first()->textFont(),
+
+    if( m_fontDlg )
+    {
+        delete m_fontDlg;
+        m_fontDlg = 0L;
+    }
+    m_fontDlg = new KoFontDia( this, "", lst.first()->textFont(),
                                         actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
 					doubleUnderline, lst.first()->textColor(), col );
-    if (fontDia->exec() )
-    {
-        int flags = fontDia->changedFlags();
-        if ( flags )
-        {
-            KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font"));
-            for ( ; it.current() ; ++it )
-            {
-                KCommand *cmd = it.current()->setFontCommand(fontDia->getNewFont(),
-                                                             fontDia->getSubScript(), fontDia->getSuperScript(),
-							     fontDia->getDoubleUnderline(),
-                                                             fontDia->color(),fontDia->backGroundColor(),
-                                                             flags);
-                if (cmd)
-                    globalCmd->addCommand(cmd);
-            }
-            m_doc->addCommand(globalCmd);
-            m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
-        }
-    }
-    delete fontDia;
+
+    connect( m_fontDlg, SIGNAL( apply() ),
+                 this, SLOT( slotApplyFont() ) );
+
+    m_fontDlg->exec();
+    delete m_fontDlg;
+    m_fontDlg=0L;
 
     m_gui->canvasWidget()->setFocus();
+}
+
+void KWView::slotApplyFont()
+{
+    int flags = m_fontDlg->changedFlags();
+    if ( flags )
+    {
+        KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font"));
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        for ( ; it.current() ; ++it )
+        {
+            KCommand *cmd = it.current()->setFontCommand(m_fontDlg->getNewFont(),
+                                                         m_fontDlg->getSubScript(),
+                                                         m_fontDlg->getSuperScript(),
+                                                         m_fontDlg->getDoubleUnderline(),
+                                                         m_fontDlg->color(),m_fontDlg->backGroundColor(),
+                                                         flags);
+            if (cmd)
+                globalCmd->addCommand(cmd);
+        }
+        m_doc->addCommand(globalCmd);
+        m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
+    }
+
 }
 
 void KWView::formatParagraph()

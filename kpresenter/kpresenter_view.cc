@@ -272,6 +272,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_findReplace = 0L;
     m_searchPage=-1;
 
+    m_fontDlg=0L;
+
     m_pKPresenterDoc = _doc;
 
     createGUI();
@@ -388,6 +390,7 @@ KPresenterView::~KPresenterView()
     delete rb_pwidth;
     delete afChoose;
     delete confPictureDia;
+    delete m_fontDlg;
 }
 
 /*=========================== file print =======================*/
@@ -1740,30 +1743,45 @@ void KPresenterView::textInsertPageNum()
 void KPresenterView::mtextFont()
 {
     KoTextFormatInterface* textIface = m_canvas->applicableTextInterfaces().first();
-
     QColor col;
     if (textIface)
         col = textIface->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
     bool doubleUnderline = textIface->currentFormat()->doubleUnderline();
-    KoFontDia *fontDia = new KoFontDia( this, "", textIface->textFont(),
-                                        actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                        doubleUnderline, textIface->textColor(), col );
-    if ( fontDia->exec() )
+
+    if( m_fontDlg )
     {
-        int flags = fontDia->changedFlags();
-        if ( flags )
-        {
-            // The "change all the format" call
-            m_canvas->setFont(fontDia->getNewFont(),
-                              fontDia->getSubScript(), fontDia->getSuperScript(),
-			      fontDia->getDoubleUnderline(),
-                              fontDia->color(), fontDia->backGroundColor(),
-                              flags);
-        }
+        delete m_fontDlg;
+        m_fontDlg = 0L;
+    }
+    m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
+                               actionFormatSub->isChecked(),
+                               actionFormatSuper->isChecked(),
+                               doubleUnderline,
+                               textIface->textColor(), col );
+    connect( m_fontDlg, SIGNAL( apply() ),
+             this, SLOT( slotApplyFont() ) );
+    m_fontDlg->exec();
+
+    delete m_fontDlg;
+    m_fontDlg=0L;
+}
+
+void KPresenterView::slotApplyFont()
+{
+    int flags = m_fontDlg->changedFlags();
+    if ( flags )
+    {
+        // The "change all the format" call
+        m_canvas->setFont(m_fontDlg->getNewFont(),
+                          m_fontDlg->getSubScript(),
+                          m_fontDlg->getSuperScript(),
+                          m_fontDlg->getDoubleUnderline(),
+                          m_fontDlg->color(),
+                          m_fontDlg->backGroundColor(),
+                          flags);
     }
 
-    delete fontDia;
 }
 
 void KPresenterView::slotCounterStyleSelected()
