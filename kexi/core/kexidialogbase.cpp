@@ -28,8 +28,9 @@
 #include <kiconloader.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
- : KMdiChildView(caption, parent, "KexiDialogBase"),m_isRegistered(false)
+ : KMdiChildView(caption, parent, "KexiDialogBase")
  , KexiActionProxy(this, parent)
+ , m_isRegistered(false)
 {
 	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;

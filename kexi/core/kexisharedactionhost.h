@@ -52,7 +52,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! Constructs host for main window \a mainWin. */
 		KexiSharedActionHost(KMainWindow* mainWin);
 
-		~KexiSharedActionHost();
+		virtual ~KexiSharedActionHost();
 
 		/*! \return true if \a w can accept shared actions. 
 		 This method is used by focusWindow() to look up widgets hierarchy 

@@ -75,8 +75,8 @@ class KEXICORE_EXPORT Part : public QObject
 		//! This method is called from KexiMainWindow
 		void createGUIClient(KexiMainWindow *win);
 
-		virtual void initPartActions( KActionCollection *col ) {};
-		virtual void initInstanceActions( KActionCollection *col ) {};
+		virtual void initPartActions( KActionCollection * ) {};
+		virtual void initInstanceActions( KActionCollection * ) {};
 
 		inline void setInfo(Info *info) { m_info = info; }
 

@@ -134,7 +134,7 @@ KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
 	return 0;
 }
 
-bool KexiSharedActionHost::acceptsSharedActions(QObject *o)
+bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 {
 	return false;
 }

@@ -134,7 +134,8 @@ KexiBrowser::addItem(KexiPart::Item *item)
 		return;
 	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
 //	KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
-	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), item);
+	
+	(void)new KexiBrowserItem(parent, parent->info(), item);
 //	bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 }
 
@@ -153,7 +154,7 @@ KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 }
 
 void
-KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint &pos)
+KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPoint &pos)
 {
 	if(!item)
 		return;

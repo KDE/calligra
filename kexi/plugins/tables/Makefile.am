@@ -9,9 +9,10 @@ kexihandler_table_la_LIBADD = ../../core/libkexicore.la ../../tableview/libkexid
 
 #temoporary disabled:   ../../formeditor/libkformeditor.la
 
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
-		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/tableview \
-		-I$(top_srcdir)/kexi/kexidb $(all_includes)
+INCLUDES= $(KOFFICE_INCLUDES) \
+	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
+	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/tableview \
+	-I$(top_srcdir)/kexi/kexidb $(all_includes)
 
 METASOURCES = AUTO
 

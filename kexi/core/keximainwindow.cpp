@@ -62,7 +62,7 @@
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
 
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
 #else
 # include <kuser.h>
@@ -420,7 +420,7 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 			conndata->connName = "Local pgsql connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 			conndata->userName = getlogin(); //-- temporary e.g."jarek"
 #else
 			conndata->userName = KUser().loginName(); //-- temporary e.g."jarek"
@@ -1215,7 +1215,7 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 //	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
-void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomaticResize)
+void KexiMainWindow::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAutomaticResize)
 {
 	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
 	// update icon - from large to small

@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 lib_LTLIBRARIES = libkexicore.la
 libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexiactionproxy.cpp kexisharedactionhost.cpp \
@@ -31,4 +33,3 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 
 METASOURCES = AUTO
 
-include $(top_srcdir)/kexi/Makefile.global
