@@ -25,6 +25,7 @@
 #include "XfigImport.h"
 #include "GGroup.h"
 #include "GPolyline.h"
+#include <cassert>
 #include "GOval.h"
 #include "GPolygon.h"
 #include "GText.h"
@@ -32,6 +33,8 @@
 #include <limits.h>
 #include <math.h>
 #include <algorithm>
+
+using namespace std;
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -107,11 +110,6 @@ struct PSFont {
   { "zapfchancery", QFont::Normal, false }, // Zapf Chancery Medium Italic
   { "zapfdingbats", QFont::Normal, false }, // Zapf Dingbats
 };
-
-bool greater_than (const pair<int, GObject*>& x,
-		const pair<int, GObject*>& y) {
-  return x.first > y.first;
-}
 
 int hexstrToInt (const char *str) {
     const int fak[] = { 16, 1 };
@@ -694,7 +692,10 @@ void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
  */
 void XfigImport::buildDocument (GDocument *doc) {
   doc->setAutoUpdate (false);
-  objList.sort (greater_than);
+  // the following operation is surely slower than sort(greater), but
+  // unfortunatly this feature of STL is not as portable ;(
+  objList.sort();
+  objList.reverse();
   list<pair<int, GObject*> >::iterator i = objList.begin ();
   for (; i != objList.end (); i++) {
     GObject* obj = i->second;

@@ -57,7 +57,7 @@ private:
   int version;
   QIntDict<QColor> colorTable;
   
-  list<pair<int, GObject*> > objList;
+  list<std::pair<int, GObject*> > objList;
 };
   
 #endif
