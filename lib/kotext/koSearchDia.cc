@@ -238,8 +238,8 @@ bool KoFindReplace::findNext()
         else
             res = m_replace->replace();
 
-        if ( res == KFind::NoMatch ) {
-                ++m_textIterator;
+        if ( res == KFind::NoMatch || needData() ) {
+            ++m_textIterator;
         }
     }
 
@@ -254,6 +254,7 @@ bool KoFindReplace::findNext()
         m_macroCmd = 0L;
         removeHighlight();
         if ( shouldRestart() ) {
+            m_textIterator.setOptions( m_textIterator.options() & ~KFindDialog::FromCursor );
             m_textIterator.restart();
             if ( m_find )
                 m_find->resetCounts();

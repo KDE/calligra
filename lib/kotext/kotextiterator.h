@@ -57,6 +57,11 @@ public:
     void setOptions( int options );
 
     /**
+     * Return the options currently used by the iterator.
+     */
+    int options() const { return m_options; }
+
+    /**
      * Go to next paragraph that we must iterate over
      */
     void operator++();

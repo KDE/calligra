@@ -22,6 +22,16 @@
 #include <kdebug.h>
 #include <assert.h>
 
+//#define DEBUG_ITERATOR
+
+/**
+ * The search direction (forward or backward) is handled in a bit of a tricky way.
+ * m_firstParag/m_firstIndex is where the search starts, whichever the direction
+ * m_lastParag/m_lastIndex is where the search ends, whichever the direction
+ * But the list of textobjects is as given (we assume document order).
+ * So we go from the first to the last textobject, or from the last to the first textobject.
+ */
+
 void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options )
 {
     Q_ASSERT( !lstObjects.isEmpty() );
@@ -69,13 +79,29 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
         m_lstObjects = lstObjects;
         if ( textView && (options & KFindDialog::FromCursor) )
         {
-            // textView->textObject() should be first in m_lstObjects!
-            // Let's ensure this is the case.
-            if( m_lstObjects.first() != textView->textObject() ) {
-                uint nr = m_lstObjects.remove( textView->textObject() );
-                if ( nr != 1 )
-                    kdWarning(32500) << "Didn't manage to remove textobject " << textView->textObject() << " nr=" << nr << endl;
-                m_lstObjects.prepend( textView->textObject() );
+            KoTextObject* initialFirst = m_lstObjects.first();
+            // textView->textObject() should be first in m_lstObjects (last when going backwards) !
+            // Let's ensure this is the case, but without changing the order of the objects.
+            if ( forw ) {
+                while( m_lstObjects.first() != textView->textObject() ) {
+                    KoTextObject* textobj = m_lstObjects.front();
+                    m_lstObjects.pop_front();
+                    m_lstObjects.push_back( textobj );
+                    if ( m_lstObjects.first() == initialFirst ) { // safety
+                        kdWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!" << endl;
+                        break;
+                    }
+                }
+            } else {
+                while( m_lstObjects.last() != textView->textObject() ) {
+                    KoTextObject* textobj = m_lstObjects.back();
+                    m_lstObjects.pop_back();
+                    m_lstObjects.push_front( textobj );
+                    if ( m_lstObjects.first() == initialFirst ) { // safety
+                        kdWarning(32500) << "Didn't manage to find " << textView->textObject() << " in the list of textobjects!!!" << endl;
+                        break;
+                    }
+                }
             }
         }
 
@@ -83,27 +109,15 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
         int firstIndex = 0;
         KoTextParag* lastParag = m_lstObjects.last()->textDocument()->lastParag();
         int lastIndex = lastParag->length()-1;
-        if ( m_firstParag )
-        {
-            // from cursor. So we have to start from the textview's object, even when going backwards
-            m_currentTextObj = m_lstObjects.begin();
-            // so we end at the last textobject's end - which end depends on the direction
-            if ( forw ) {
-                m_lastParag = lastParag;
-                m_lastIndex = lastIndex;
-            } else {
-                m_lastParag = m_lstObjects.last()->textDocument()->firstParag();
-                m_lastIndex = 0;
-            }
-        }
-        else // not from cursor.
+        if ( !m_firstParag ) // only set this when not 'from cursor'.
         {
             m_firstParag = forw ? firstParag : lastParag;
             m_firstIndex = forw ? firstIndex : lastIndex;
-            m_lastParag = forw ? lastParag : firstParag;
-            m_lastIndex = forw ? lastIndex : firstIndex;
-            m_currentTextObj = forw ? m_lstObjects.begin() : m_lstObjects.fromLast();
         }
+        // always set the ending point
+        m_lastParag = forw ? lastParag : firstParag;
+        m_lastIndex = forw ? lastIndex : firstIndex;
+        m_currentTextObj = forw ? m_lstObjects.begin() : m_lstObjects.fromLast();
     }
 
     assert( *m_currentTextObj ); // all branches set it
@@ -111,7 +125,14 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
     assert( m_lastParag );
     Q_ASSERT( (*m_currentTextObj)->isVisible() );
     m_currentParag = m_firstParag;
+#ifdef DEBUG_ITERATOR
     kdDebug(32500) << "KoTextIterator::init from(" << *m_currentTextObj << "," << m_firstParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
+    QValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
+    for( ; it != m_lstObjects.end(); ++it )
+        kdDebug(32500) << (*it) << " " << (*it)->name() << endl;
+#endif
+    Q_ASSERT( (*m_currentTextObj)->textDocument() == m_currentParag->textDocument() );
+    Q_ASSERT( (forw?m_lstObjects.last():m_lstObjects.first())->textDocument() == m_lastParag->textDocument() );
 
     connectTextObjects();
 }
@@ -122,12 +143,19 @@ void KoTextIterator::restart()
         return;
     m_currentParag = m_firstParag;
     bool forw = ! ( m_options & KFindDialog::FindBackwards );
+    Q_ASSERT( ! (m_options & KFindDialog::FromCursor) ); // doesn't make much sense to keep it, right?
     if ( (m_options & KFindDialog::FromCursor) || forw )
         m_currentTextObj = m_lstObjects.begin();
     else
         m_currentTextObj = m_lstObjects.fromLast();
     if ( !(*m_currentTextObj)->isVisible() )
         nextTextObject();
+#ifdef DEBUG_ITERATOR
+    if ( m_currentParag )
+        kdDebug(32500) << "KoTextIterator::restart from(" << *m_currentTextObj << "," << m_currentParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
+    else
+        kdDebug(32500) << "KoTextIterator::restart - nowhere to go!" << endl;
+#endif
 }
 
 void KoTextIterator::connectTextObjects()
@@ -150,7 +178,9 @@ void KoTextIterator::connectTextObjects()
 
 void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 {
-    kdDebug() << "slotParagraphDeleted " << parag << endl;
+#ifdef DEBUG_ITERATOR
+    kdDebug(32500) << "slotParagraphDeleted " << parag << endl;
+#endif
     // Note that the direction doesn't matter here. A begin/end
     // at end of parag N or at beginning of parag N+1 is the same,
     // and m_firstIndex/m_lastIndex becomes irrelevant, anyway.
@@ -178,7 +208,9 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
     {
         operator++();
     }
+#ifdef DEBUG_ITERATOR
     kdDebug(32500) << "firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
+#endif
 }
 
 // Hmm, for undo/redo purposes, we never really delete textdocuments nor textobjects
@@ -187,7 +219,7 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 #if 0
 void KoTextIterator::slotTextObjectDeleted()
 {
-    kdDebug() << k_funcinfo << this << endl;
+    kdDebug(32500) << k_funcinfo << this << endl;
     const QObject* textobj = sender();
     if ( *m_currentTextObj == textobj )
         nextTextObject(); // also takes care of m_currentParag
@@ -198,7 +230,7 @@ void KoTextIterator::slotTextObjectDeleted()
 
 void KoTextIterator::slotTextDocumentDeleted()
 {
-    kdDebug() << k_funcinfo << this << endl;
+    kdDebug(32500) << k_funcinfo << this << endl;
     const QObject* textdoc = sender();
     if ( m_lastParag && m_lastParag->textDocument() == textdoc ) {
         m_lastParag = 0L; // i.e. never stop (!)
@@ -215,11 +247,14 @@ void KoTextIterator::slotTextDocumentDeleted()
 void KoTextIterator::operator++()
 {
     if ( !m_currentParag ) {
-        kdDebug() << k_funcinfo << " called past the end" << endl;
+        kdDebug(32500) << k_funcinfo << " called past the end" << endl;
         return;
     }
     if ( m_currentParag == m_lastParag ) {
         m_currentParag = 0L;
+#ifdef DEBUG_ITERATOR
+        kdDebug(32500) << "KoTextIterator++: done, after last parag " << m_lastParag << endl;
+#endif
         return;
     }
     bool forw = ! ( m_options & KFindDialog::FindBackwards );
@@ -232,8 +267,10 @@ void KoTextIterator::operator++()
     {
         nextTextObject();
     }
+#ifdef DEBUG_ITERATOR
     kdDebug(32500) << "KoTextIterator++ (" << *m_currentTextObj << "," <<
         (m_currentParag ? m_currentParag->paragId() : 0) << ")" << endl;
+#endif
 }
 
 void KoTextIterator::nextTextObject()
@@ -258,6 +295,9 @@ void KoTextIterator::nextTextObject()
     }
     // loop in case this new textobject is not visible
     while ( m_currentParag && !(*m_currentTextObj)->isVisible() );
+#ifdef DEBUG_ITERATOR
+    kdDebug(32500) << k_funcinfo << " m_currentTextObj=" << (*m_currentTextObj) << endl;
+#endif
 }
 
 bool KoTextIterator::atEnd() const
@@ -331,8 +371,34 @@ void KoTextIterator::setOptions( int options )
             qSwap( m_firstIndex, m_lastIndex );
             if ( m_currentParag == 0 ) // done? -> reinit
             {
-                kdDebug() << k_funcinfo << "was done -> reinit" << endl;
+#ifdef DEBUG_ITERATOR
+                kdDebug(32500) << k_funcinfo << "was done -> reinit" << endl;
+#endif
                 restart();
+            }
+        }
+        bool wasFromCursor = (m_options & KFindDialog::FromCursor);
+        bool isFromCursor = (options & KFindDialog::FromCursor);
+        // We can only handle the case where fromcursor got removed.
+        // If it got added, then we need a textview to take the cursor position from...
+        if ( wasFromCursor && !isFromCursor )
+        {
+            // We also can't handle the "selected text" option here
+            // It's very hard to have a cursor that's not at the beginning
+            // or end of the selection, anyway.
+            if ( ! (options & KFindDialog::SelectedText ) )
+            {
+                // Set m_firstParag/m_firstIndex to the beginning of the first object
+                // (end of last object when going backwards)
+                KoTextParag* firstParag = m_lstObjects.first()->textDocument()->firstParag();
+                int firstIndex = 0;
+                KoTextParag* lastParag = m_lstObjects.last()->textDocument()->lastParag();
+                int lastIndex = lastParag->length()-1;
+                m_firstParag = (!isBack) ? firstParag : lastParag;
+                m_firstIndex = (!isBack) ? firstIndex : lastIndex;
+#ifdef DEBUG_ITERATOR
+                kdDebug(32500) << "setOptions: FromCursor removed. New m_firstParag=" << m_firstParag << " (" << m_firstParag->paragId() << ") isBack=" << isBack << endl;
+#endif
             }
         }
         m_options = options;
