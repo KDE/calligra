@@ -1,0 +1,286 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::KPTMainProjectPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KPTMainProjectPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>477</width>
+            <height>383</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KPTProjectPanelBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>frame3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Project n&amp;ame</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Project &amp;id</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Project &amp;leader</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>leaderfield</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>namefield</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>idfield</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="2" column="1">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>leaderfield</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>chooseLeader</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Choose...</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>schedulingGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Scheduling</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout22</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>bStartDate</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Start date</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>bEndDate</cstring>
+                            </property>
+                            <property name="text">
+                                <string>End date</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout23</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KDateTimeWidget">
+                            <property name="name">
+                                <cstring>startDateTime</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KDateTimeWidget">
+                            <property name="name">
+                                <cstring>endDateTime</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Project notes and summary:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>descriptionfield</cstring>
+            </property>
+        </widget>
+        <widget class="KTextEdit">
+            <property name="name">
+                <cstring>descriptionfield</cstring>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>bStartDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotStartDateClicked()</slot>
+    </connection>
+    <connection>
+        <sender>bEndDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotEndDateClicked()</slot>
+    </connection>
+    <connection>
+        <sender>chooseLeader</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotChooseLeader()</slot>
+    </connection>
+    <connection>
+        <sender>endDateTime</sender>
+        <signal>valueChanged(const QDateTime&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>startDateTime</sender>
+        <signal>valueChanged(const QDateTime&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>bStartDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>bEndDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>descriptionfield</sender>
+        <signal>textChanged()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>namefield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>idfield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>leaderfield</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
+    <include location="local" impldecl="in implementation">kabc/addressee.h</include>
+    <include location="local" impldecl="in implementation">kptmainprojectpanelbase.ui.h</include>
+</includes>
+<signals>
+    <signal>obligatedFieldsFilled(bool)</signal>
+    <signal>changed()</signal>
+</signals>
+<slots>
+    <slot>slotCheckAllFieldsFilled()</slot>
+    <slot>slotChooseLeader()</slot>
+    <slot>slotStartDateClicked()</slot>
+    <slot>slotEndDateClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>
