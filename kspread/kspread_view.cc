@@ -1160,15 +1160,15 @@ QRect r( activeTable()-> selectionRect() );
 if ( r.left() == 0 || r.top() == 0 ||
        r.right() == 0 || r.bottom() == 0 )
   	{
-  	KMessageBox::error( 0L, i18n("One cell was selected!") );
+  	KMessageBox::error( this, i18n("One cell was selected!") );
 	}
 else if( r.right() ==0x7FFF)
 	{
-	 KMessageBox::error( 0L, i18n("Area too large!") );
+	 KMessageBox::error( this, i18n("Area too large!") );
 	}
 else if(r.bottom()==0x7FFF)
 	{
-	 KMessageBox::error( 0L, i18n("Area too large!") );
+	 KMessageBox::error( this, i18n("Area too large!") );
 	}
 else
 	{
@@ -1183,15 +1183,15 @@ void KSpreadView::sortDec()
     if ( r.left() == 0 || r.top() == 0 ||
 	 r.right() == 0 || r.bottom() == 0 )
     {
-  	KMessageBox::error( 0L, i18n("One cell was selected!") );
+  	KMessageBox::error( this, i18n("One cell was selected!") );
     }
     else if( r.right() ==0x7FFF)
     {
-	KMessageBox::error( 0L, i18n("Area too large!") );
+	KMessageBox::error( this, i18n("Area too large!") );
     }
     else if(r.bottom()==0x7FFF)
     {
-	KMessageBox::error( 0L, i18n("Area too large!") );
+	KMessageBox::error( this, i18n("Area too large!") );
     }
     else
     {
@@ -1244,7 +1244,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1259,7 +1259,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1274,7 +1274,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1289,7 +1289,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1304,7 +1304,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1319,7 +1319,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1335,7 +1335,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		KMessageBox::error( 0L, i18n("Area too large!") );
+		KMessageBox::error( this, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1586,11 +1586,11 @@ void KSpreadView::sort()
   QRect selection( m_pTable->selectionRect() );
   if(selection.left()==0)
     {
-    KMessageBox::error( 0L, i18n("One cell was selected!") );
+    KMessageBox::error( this, i18n("One cell was selected!") );
     }
   else if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
   	{
-  	KMessageBox::error( 0L, i18n("Area too large!"));
+  	KMessageBox::error( this, i18n("Area too large!"));
 	}
    else
         {
@@ -2236,7 +2236,7 @@ void KSpreadView::insertChart()
     QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes", 1 );
     if ( vec.isEmpty() )
     {
-	KMessageBox::error( 0L, i18n("Sorry, no charting component registered") );
+	KMessageBox::error( this, i18n("Sorry, no charting component registered") );
 	return;
     }
 

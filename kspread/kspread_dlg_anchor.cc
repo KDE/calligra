@@ -88,11 +88,11 @@ void KSpreadanchor::slotOk()
 KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
 if(l_cell->text().isEmpty()||text->text().isEmpty())
 	{
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Area Text or cell is empty!"),i18n("Ok") );
+	QMessageBox::warning( this, i18n("Error"), i18n("Area Text or cell is empty!"),i18n("Ok") );
 	}
 else if(!cell->isDefault())
 	{
-	int ret = QMessageBox::warning( this, i18n("Create anchor"), i18n("Cell is not empty.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
+	int ret = QMessageBox::warning( this, i18n("Warning"), i18n("Cell is not empty.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
  	if ( ret == 0 )
  		{
  		QString tmp;

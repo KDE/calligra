@@ -76,21 +76,21 @@ void KSpreadreplace::slotOk()
 {
 if(l_replace->text()==l_find->text())
 	{
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Text find and text replace are same"),
+	QMessageBox::warning( this, i18n("Error"), i18n("Text find and text replace are same"),
 			   i18n("Ok") );
 	l_find->setText("");
 	l_replace->setText("");
 	}
 else if(l_replace->text().isEmpty() || l_find->text().isEmpty())
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("A Qlineedit is empty"),
+	 QMessageBox::warning( this, i18n("Error"), i18n("A Qlineedit is empty"),
 			   i18n("Ok") );
 	}
 else
 	{
 	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text())))
 		{
-		 QMessageBox::warning( 0L, i18n("Error"), i18n("Not any text replaces"),
+		 QMessageBox::warning( this, i18n("Error"), i18n("Not any text replaces"),
 			   i18n("Ok") );
 	        }
 	 else

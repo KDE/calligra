@@ -118,7 +118,9 @@ KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint
   grid1->addRowSpacing(1,gb->height());
 
   grid1->activate();
-
+  
+  start->setFocus();
+  
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }
@@ -145,7 +147,7 @@ else if(geometric->isChecked())
 
 if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
 	{
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Area text is empty!"),
+	QMessageBox::warning( this, i18n("Error"), i18n("Area text is empty!"),
 			   i18n("Ok") );
 	}
 else
@@ -165,7 +167,7 @@ else
 		}
 	else
 		{
-	 	QMessageBox::warning( 0L, i18n("Error"), i18n("Step is negative !"),
+	 	QMessageBox::warning( this, i18n("Error"), i18n("Step is negative !"),
 			   i18n("Ok") );
 		}
 	}

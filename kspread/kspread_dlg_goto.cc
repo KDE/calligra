@@ -79,7 +79,7 @@ void KSpreadgoto::slotOk()
         }
     else
         {
-        QMessageBox::warning( 0L, i18n("Error"), i18n("Area Text is empty!"),
+        QMessageBox::warning( this, i18n("Error"), i18n("Area Text is empty!"),
 			   i18n("Ok") );
         }
 }

@@ -154,7 +154,7 @@ void KSpreadConsolidate::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    QMessageBox::critical( 0L, i18n("Error"), i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ), i18n("OK"));
+    QMessageBox::critical( this, i18n("Error"), i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ), i18n("OK"));
     return;
   }
 
@@ -169,7 +169,7 @@ void KSpreadConsolidate::slotOk()
 	 ( desc == D_COL && w != w2 ) )
     {
       QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( *( r.begin() ) ).arg( r[i] );
-      QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK"));
+      QMessageBox::critical( this, i18n("Error"), tmp, i18n("OK"));
       return;
     }
   }
@@ -190,7 +190,7 @@ void KSpreadConsolidate::slotOk()
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
-	QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK"));
+	QMessageBox::critical( this, i18n("Error"), tmp, i18n("OK"));
 	return;
       }
     }
@@ -287,7 +287,7 @@ void KSpreadConsolidate::slotOk()
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
-	QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK"));
+	QMessageBox::critical( this, i18n("Error"), tmp, i18n("OK"));
 	return;
       }
     }
@@ -399,7 +399,7 @@ void KSpreadConsolidate::slotOk()
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
-	QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK"));
+	QMessageBox::critical( this, i18n("Error"), tmp, i18n("OK"));
 	return;
       }
     }
@@ -532,7 +532,7 @@ void KSpreadConsolidate::slotOk()
       if ( t == table && r.intersects( dest ) )
       {
 	QString tmp( i18n("The source tables intersect with the destination table") );
-	QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK"));
+	QMessageBox::critical( this, i18n("Error"), tmp, i18n("OK"));
 	return;
       }
     }
@@ -703,7 +703,7 @@ void KSpreadConsolidate::slotReturnPressed()
   KSpreadRange r( txt, m_pView->doc()->map() );
   if ( !r.isValid() )
   {
-    QMessageBox::critical( 0L, i18n("Error"), i18n("The range\n%1\n is malformed").arg( txt ), i18n("OK"));
+    QMessageBox::critical( this, i18n("Error"), i18n("The range\n%1\n is malformed").arg( txt ), i18n("OK"));
     return;
   }
 
