@@ -1,0 +1,45 @@
+
+INCLUDES = $(PYTHONINC) $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+LDFLAGS	= $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDADD = ../../../lib/kofficecore/libkofficecore.la \
+	../../../lib/koml/libkoml.la ../../../lib/store/libkstore.la -lkparts -lkpartsui -lkom $(LIB_KIMGIO) \
+	-lkdeutil $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
+
+####### Files
+
+bin_PROGRAMS = kspread_filter
+
+kspread_filter_SOURCES = main.cc
+
+noinst_HEADERS = main.h
+
+SRCMETA =	main.moc
+
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+
+idl_DATA = 
+idl_HEADERS =  
+
+kdelnk_DATA = kspread_filter_import.kdelnk
+kdelnkdir = $(kde_datadir)/koffice/filterlnk
+
+datasdir = $(kde_datadir)/koffice/filter
+datas_DATA = komma.py
+
+####### Implicit rules
+
+SUFFIXES = .h .moc
+
+.h.moc:
+	$(MOC) $< -o $@      
+
+####### Build rules
+
+install-exec-local:
+	$(INSTALL_SCRIPT) kspread_filter $(bindir)/kspread_filter
+
+messages: 
+#	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot
+
+main.cc: main.h main.moc
+

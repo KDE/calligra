@@ -1,0 +1,13 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KSpreadFilter
+Exec=kspread_filter --server
+Comment=Torben's KSpread Filter
+Import=application/x-kspread,
+Export=text/plain
+Patterns=*.txt,
+RepoID=IDL:KOffice/FilterFactory:1.0,
+ActivationMode=shared
+Type=KOfficeFilter
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
