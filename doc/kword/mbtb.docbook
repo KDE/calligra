@@ -1411,17 +1411,12 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-framestylist">
 <menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo>
-</shortcut>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to edit the frame styles.</action> For more information see the section entitled
 <link linkend="framestyles">Using frame styles</link>.</para>
-<para>Typing <keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
-using the menubar. </para>
 </listitem>
 </varlistentry>
 
