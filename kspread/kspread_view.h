@@ -200,6 +200,7 @@ public slots:
     void deleteRow();
     void insertColumn();
     void insertRow();
+    void insertFormula();
     void formulaSelection( const QString &_math );
     void changeTextColor();
     void changeBackgroundColor();
@@ -294,7 +295,6 @@ public slots:
     void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
-    void slotInsertChild( KSpreadChild *_child );
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
     void slotTableRenamed( KSpreadTable* table, const QString& old_name );
@@ -356,7 +356,6 @@ private:
     KToggleAction* m_alignLeft;
     KToggleAction* m_alignCenter;
     KToggleAction* m_alignRight;
-    KAction* m_insertPart;
     KAction* m_transform;
     KAction* m_copy;
     KAction* m_paste;
@@ -378,12 +377,9 @@ private:
     KAction* m_gotoCell;
     KAction* m_replace;
     KAction* m_conditional;
-    KAction* m_series;
     KAction* m_sort;
-    KAction* m_createAnchor;
     KAction* m_consolidate;
     KAction* m_help;
-    KAction* m_insertChart;
     KToggleAction* m_multiRow;
     KFontAction* m_selectFont;
     KFontSizeAction* m_selectFontSize;

@@ -12,22 +12,9 @@
   <Action name="clear"/>
   <Action name="delete"/>
   <Separator/>
-  <Action name="insertColumn"/>
-  <Action name="insertRow"/>
-  <Action name="deleteColumn"/>
-  <Action name="deleteRow"/>
-  <Separator/>
-  <Action name="sort"/>
-  <Action name="sortInc"/>
-  <Action name="sortDec"/>
-  <Separator/>
-  <Action name="createAnchor"/>
   <Action name="conditional"/>
-  <Action name="series"/>
   <Action name="editCell"/>
   <Separator/>
-  <Action name="insertChart"/>
-  <Action name="insert_part"/>
   <Action name="transform"/>
  </Menu>
  <Menu name="Format"><text>Format</text>
@@ -53,6 +40,13 @@
   <Action name="adjust"/>
   <Action name="tableFormat"/>
  </Menu>
+ <Menu name="Insert"><text>Insert</text>
+  <Action name="insertFormula"/>
+  <Action name="series"/>
+  <Action name="createAnchor"/>
+  <Action name="insertPart"/>
+  <Action name="insertChart"/>
+ </Menu>
  <Menu name="View"><text>View</text>
   <Action name="newView"/>
   <Action name="gotoCell"/>
@@ -66,6 +60,15 @@
   <Action name="hideGrid"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
+  <Action name="sort"/>
+  <Action name="sortInc"/>
+  <Action name="sortDec"/>
+  <Separator/>
+  <Action name="insertColumn"/>
+  <Action name="insertRow"/>
+  <Action name="deleteColumn"/>
+  <Action name="deleteRow"/>
+  <Separator/>
   <Action name="consolidate"/>
   <Action name="oszi"/>
  </Menu>
@@ -156,7 +159,7 @@
   <Menu name="View"><text>View</text>
    <Action name="newView"/>
   </Menu>
-  <Menu name="Extra"><text>Extra</text>
+  <Menu name="Extra"><text>Extraww</text>
    <PluginAction name="qcalc_show" plugin="qcalc" major="1" minor="0"/>
   </Menu>
   <Menu name="Help"><text>Help</text>

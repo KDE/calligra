@@ -422,7 +422,7 @@ public:
     bool getShowGrid() {return showGrid;}
 
     void setShowGrid(bool _showGrid) {showGrid=_showGrid;}
-    
+
     // ########### Nameing error
     QString Currency(){return currency;}
 
@@ -618,7 +618,6 @@ signals:
     void sig_updateVBorder( KSpreadTable *_table );
     void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void sig_changeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
-    void sig_insertChild( KSpreadChild *_child );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
@@ -640,7 +639,7 @@ protected:
      * for all cell which refere to Table1, this function changes the name.
      */
     void changeCellTabName(QString old_name,QString new_name);
-    
+
     void insertChild( KSpreadChild *_child );
 
     /**

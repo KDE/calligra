@@ -492,7 +492,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text )
 	undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row );
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    
+
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setText( _text );
 }
@@ -2707,7 +2707,7 @@ void KSpreadTable::insertRow( unsigned long int _row )
     /**
      * Shift the cells to the right
      */
-    
+
     // Find the last row and create a list
     // of all cells
     kauto_array<KSpreadCell*> list(m_dctCells.count());
@@ -4199,14 +4199,12 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
     m_pDoc->insertChild( ch );
 
     insertChild( ch );
-    // emit sig_insertChild( _child );
 }
 
 void KSpreadTable::insertChild( KSpreadChild *_child )
 {
   m_lstChildren.append( _child );
 
-  // emit sig_insertChild( _child );
   emit sig_polygonInvalidated( _child->framePointArray() );
 }
 
@@ -4284,17 +4282,17 @@ bool KSpreadTable::setTableName( const QString& name, bool init )
 	
     if ( m_strName == name )
 	return TRUE;
-    
+
     QString old_name = m_strName;
     m_strName = name;
 
     if ( init )
 	return TRUE;
-    
+
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
 	it.current()->changeCellTabName( old_name, name );
-    
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
 	KSpreadUndoAction* undo = new KSpreadUndoSetTableName( doc(), this, old_name );
@@ -4302,7 +4300,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init )
     }
 
     emit sig_nameChanged( this, old_name );
-    
+
     return TRUE;
 }
 

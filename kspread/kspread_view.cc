@@ -215,9 +215,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_alignRight = new KToggleAction( i18n("Align right"), KSBarIcon("right"), 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
-    m_insertPart = new KAction( i18n("Insert part"), KSBarIcon("parts"), 0, this, SLOT( insertObject() ),
-			    actionCollection(), "insert_part");
-    m_transform = new KAction( i18n("Transform part..."), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
+    m_transform = new KAction( i18n("Transform object..."), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
@@ -252,12 +250,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Replace..."), 0, this, SLOT( replace() ), actionCollection(), "replace" );
     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
-    m_series = new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
-    m_createAnchor = new KAction( i18n("Create Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     //m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
-    m_insertChart = new KAction( i18n("InsertChart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
     m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
     m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(), "selectFont" );
@@ -309,12 +304,22 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     ((KSelectAction*) m_formulaSelection)->setItems( lst );
     connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
 	     this, SLOT( formulaSelection( const QString& ) ) );
+
+    // Insert menu
+    (void) new KAction( i18n("Formula..."), KSBarIcon("sum"), 0, this, SLOT( insertFormula() ),
+                        actionCollection(), "insertFormula" );
+    (void) new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
+    (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
+    (void) new KAction( i18n("Object..."), KSBarIcon("parts"), 0, this, SLOT( insertObject() ),
+                        actionCollection(), "insertPart");
+    (void) new KAction( i18n("Chart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+
     m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
-				    actionCollection(), "autoSum" );
+                             actionCollection(), "autoSum" );
     m_sortDec = new KAction( i18n("Sort descreasing"), KSBarIcon("sort_decrease"), 0, this, SLOT( sortDec() ),
-				    actionCollection(), "sortDec" );
+                             actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), KSBarIcon("sort_incr"), 0, this, SLOT( sortInc() ),
-				    actionCollection(), "sortInc" );
+                             actionCollection(), "sortInc" );
     m_textColor = new KColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
 			       actionCollection(), "textColor" );
     m_bgColor = new KColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
@@ -1034,6 +1039,16 @@ void KSpreadView::fontSelected( const QString &_font )
 	m_pCanvas->setFocus();
 }
 
+void KSpreadView::insertFormula()
+{
+  // Old formula dialog
+  //KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula Editor" );
+  // Laurent's new formula dialog
+  KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
+  dlg->show();
+  // Is the dialog deleted when it's closed ? (David)
+}
+
 void KSpreadView::formulaSelection( const QString &_math )
 {
     if ( m_pTable == 0 )
@@ -1041,11 +1056,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     if( _math == i18n("Others...") )
     {
-        // Old formula dialog
-	//KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula Editor" );
-        // Laurent's new formula dialog
-	KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
-	dlg->show();
+        insertFormula();
 	return;
     }
 
@@ -1340,7 +1351,6 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
-    QObject::connect( _t, SIGNAL( sig_insertChild( KSpreadChild* ) ), SLOT( slotInsertChild( KSpreadChild* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
 		      SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
     QObject::connect( _t, SIGNAL( sig_removeChild( KSpreadChild* ) ), SLOT( slotRemoveChild( KSpreadChild* ) ) );
@@ -1598,42 +1608,6 @@ void KSpreadView::slotRemoveChild( KSpreadChild *_child )
     return;
 
   // TODO
-}
-
-
-// ########## Torben: I think this function is no longer needed
-void KSpreadView::slotInsertChild( KSpreadChild *_child )
-{
-    // ############# TODO
-    /*
-  if ( _child->table() != m_pTable )
-    return;
-
-  KSpreadChildFrame *p = new KSpreadChildFrame( this, _child );
-  p->setGeometry( _child->geometry() );
-  m_lstFrames.append( p );
-
-  OpenParts::View_var v = _child->createView( m_vKoMainWindow );
-  if ( !CORBA::is_nil( v ) )
-  {
-    KOffice::View_var kv = KOffice::View::_narrow( v );
-    kv->setMode( KOffice::View::ChildMode );
-    assert( !CORBA::is_nil( kv ) );
-    p->attachView( kv );
-
-    KOffice::View::EventNewPart event;
-    event.view = KOffice::View::_duplicate( kv );
-    cerr << "------------------ newPart -----------" << endl;
-    EMIT_EVENT( this, KOffice::View::eventNewPart, event );
-  }
-
-  QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
-		    this, SLOT( slotChildGeometryEnd( KoFrame* ) ) );
-  QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
-		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );
-
-  p->show();
-    */
 }
 
 void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
