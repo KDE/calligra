@@ -524,7 +524,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
         kdDebug(30506) << "Image: " << strDataId << endl;
     }
 
-    QString strPictureFrameName(i18n("Framset name","Picture %1").arg(++m_pictureFrameNumber));
+    QString strPictureFrameName(i18n("Frameset name","Picture %1").arg(++m_pictureFrameNumber));
 
     // Create the frame set of the image
 
@@ -1633,7 +1633,7 @@ void StructureParser :: createDocument(void)
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("visible",1);
-    mainFramesetElement.setAttribute("name",i18n("Framset name","Main Text Frameset"));
+    mainFramesetElement.setAttribute("name",i18n("Frameset name","Main Text Frameset"));
     framesetsPluralElement.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
