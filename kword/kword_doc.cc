@@ -767,7 +767,7 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       frameSet = getFrameSet(i);
-      if (frameSet->getFrameType() != FT_PART)
+      if (frameSet->getFrameType() != FT_PART && frameSet->getFrameInfo() != FI_HEADER && frameSet->getFrameInfo() != FI_FOOTER)
 	frameSet->save(out);
     }
 
