@@ -33,7 +33,11 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #ifdef unix
-#include <values.h>
+#if defined(__FreeBSD__)
+#include <float.h>
+#else
+# include <values.h>
+#endif
 #else
 #include <float.h>
 #endif

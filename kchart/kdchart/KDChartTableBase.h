@@ -43,6 +43,7 @@
 #else
 #if defined(__FreeBSD__)
 #include <float.h>
+#define MAXDOUBLE DBL_MAX
 #else
 #include <values.h>
 #endif
