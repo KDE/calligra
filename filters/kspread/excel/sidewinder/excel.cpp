@@ -2214,7 +2214,7 @@ void PaletteRecord::dump( std::ostream& out ) const
 
 // ========== RIGHTMARGIN ========== 
 
-const unsigned int RightMarginRecord::id = 0x0026;
+const unsigned int RightMarginRecord::id = 0x0027;
 
 class RightMarginRecord::Private
 {
@@ -3265,6 +3265,7 @@ void ExcelReader::handleRecord( Record* record )
 {
   if( !record ) return;
 
+  handleBottomMargin( dynamic_cast<BottomMarginRecord*>( record ) );
   handleBoundSheet( dynamic_cast<BoundSheetRecord*>( record ) );
   handleBOF( dynamic_cast<BOFRecord*>( record ) );
   handleBoolErr( dynamic_cast<BoolErrRecord*>( record ) );
@@ -3274,18 +3275,31 @@ void ExcelReader::handleRecord( Record* record )
   handleFont( dynamic_cast<FontRecord*>( record ) );
   handleLabel( dynamic_cast<LabelRecord*>( record ) );
   handleLabelSST( dynamic_cast<LabelSSTRecord*>( record ) );
+  handleLeftMargin( dynamic_cast<LeftMarginRecord*>( record ) );
   handleMergedCells( dynamic_cast<MergedCellsRecord*>( record ) );
   handleMulBlank( dynamic_cast<MulBlankRecord*>( record ) );
   handleMulRK( dynamic_cast<MulRKRecord*>( record ) );
   handleNumber( dynamic_cast<NumberRecord*>( record ) );
   handlePalette( dynamic_cast<PaletteRecord*>( record ) );
+  handleRightMargin( dynamic_cast<RightMarginRecord*>( record ) );
   handleRK( dynamic_cast<RKRecord*>( record ) );
   handleRow( dynamic_cast<RowRecord*>( record ) );
   handleRString( dynamic_cast<RStringRecord*>( record ) );
   handleSST( dynamic_cast<SSTRecord*>( record ) );
+  handleTopMargin( dynamic_cast<TopMarginRecord*>( record ) );
   handleXF( dynamic_cast<XFRecord*>( record ) );
 }
 
+void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
+{
+  if( !record ) return;
+  
+  if( !d->activeSheet ) return;
+  
+  // convert from inches to points
+  double margin = record->bottomMargin() * 72.0;
+  d->activeSheet->setBottomMargin( margin );  
+}
 
 // FIXME does the order of sheet follow BOUNDSHEET of BOF(Worksheet) ?
 // for now, assume BOUNDSHEET, hence we should create the sheet here
@@ -3441,6 +3455,18 @@ void ExcelReader::handleLabel( LabelRecord* record )
   }
 }
 
+void ExcelReader::handleLeftMargin( LeftMarginRecord* record )
+{
+  if( !record ) return;
+  
+  if( !d->activeSheet ) return;
+  
+  // convert from inches to points
+  double margin = record->leftMargin() * 72.0;
+  d->activeSheet->setLeftMargin( margin );  
+}
+
+
 void ExcelReader::handleFormat( FormatRecord* record )
 {
   if( !record ) return;
@@ -3580,6 +3606,17 @@ void ExcelReader::handlePalette( PaletteRecord* record )
     d->colorTable.push_back( record->color( i ) );
 }
   
+void ExcelReader::handleRightMargin( RightMarginRecord* record )
+{
+  if( !record ) return;
+  
+  if( !d->activeSheet ) return;
+  
+  // convert from inches to points
+  double margin = record->rightMargin() * 72.0;
+  d->activeSheet->setRightMargin( margin );  
+}
+
 void ExcelReader::handleRK( RKRecord* record )
 {
   if( !record ) return;
@@ -3655,6 +3692,17 @@ void ExcelReader::handleSST( SSTRecord* record )
     d->stringTable.push_back( str );
   }
   
+}
+
+void ExcelReader::handleTopMargin( TopMarginRecord* record )
+{
+  if( !record ) return;
+  
+  if( !d->activeSheet ) return;
+  
+  // convert from inches to points
+  double margin = record->topMargin() * 72.0;
+  d->activeSheet->setTopMargin( margin );  
 }
 
 FormatFont ExcelReader::convertFont( unsigned fontIndex )

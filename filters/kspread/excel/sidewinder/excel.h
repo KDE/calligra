@@ -2689,6 +2689,7 @@ private:
   void handleBoundSheet( BoundSheetRecord* record );
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
+  void handleBottomMargin( BottomMarginRecord* record );
   void handleBlank( BlankRecord* record );
   void handleCalcMode( CalcModeRecord* record );
   void handleColInfo( ColInfoRecord* record );
@@ -2698,15 +2699,18 @@ private:
   void handleFont( FontRecord* record );
   void handleLabel( LabelRecord* record );
   void handleLabelSST( LabelSSTRecord* record );
+  void handleLeftMargin( LeftMarginRecord* record );
   void handleMergedCells( MergedCellsRecord* record );
   void handleMulBlank( MulBlankRecord* record );
   void handleMulRK( MulRKRecord* record );
   void handleNumber( NumberRecord* record );
   void handlePalette( PaletteRecord* record );
+  void handleRightMargin( RightMarginRecord* record );
   void handleRString( RStringRecord* record );
   void handleRK( RKRecord* record );
   void handleRow( RowRecord* record );
   void handleSST( SSTRecord* record );
+  void handleTopMargin( TopMarginRecord* record );
   void handleXF( XFRecord* record );    
   
   Color convertColor( unsigned colorIndex );
