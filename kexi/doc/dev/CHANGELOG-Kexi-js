@@ -3,10 +3,10 @@
  From js's Point of View
  
  Also includes: win32 porting and multiplatform 
-  features improving details
+  features, planning, improving ideas, details
  
- Copyright (C) 2003 Jaroslaw Staniek js at iidea dot pl
- (C) OpenOffice Polska 2003
+ Copyright (C) 2003-2005 Jaroslaw Staniek js at iidea dot pl
+ (C) OpenOffice Polska 2003-2005
  Kexi home page: http://www.kexi-project.org/
 ---------------------------------------------------
 
@@ -376,17 +376,37 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 ** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
    format without opening database
 
-=== 2004 LT TODO ===
--improve sql parser
--improve sql gui designer
+=== 2005 PRO TODO ===
+-greatly improve sql parser
+-greatly improve sql gui designer
 --totals (sum, avg)
--simple docs
+-more docs
+-finish db-aware forms
+-add simple reporting
+-finish server support
+--connection creator
+--fix permission problems
 
 CCMAIL: dkite@shaw.ca
+
+TODO: add a small btn at the left of record navigator 
+      to indicate 'editing' status for forms without record markers
+TODO: fix lineedit's borders
+
+2005-01-26
+Widgets
+- fixed focusing-out record navigator's line edit
+
+2005-01-20
+Core
+- On failed plugins loading, proper error message is associated with KexiPart::Info 
+	and available later; instead of only assigning it globally to KexiPart::Manager.
 
 2005-01-17
 SQL Editor
 - focus is correctly to editor widget
+API, Utils
+- KexiDataAwareView, KexiDataAwareObjectInterface introduced
 
 2005-01-14
 General

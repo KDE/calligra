@@ -369,7 +369,9 @@ KexiFormView::afterSwitchFrom(int mode)
 		//reset position
 		m_scrollView->setContentsPos(0,0);
 		m_dbform->move(0,0);
+	}
 
+	if(viewMode()==Kexi::DataViewMode) {
 //TMP!!
 		//init data source
 		QString dataSourceString = m_dbform->dataSource();
@@ -406,12 +408,12 @@ KexiFormView::afterSwitchFrom(int mode)
 				cursor = m_conn->executeQuery( *m_query );//, KexiDB::Cursor::Buffered );
 				ok = cursor!=0;
 			}
-			delete m_data;
+			if (ok) {
+				delete m_data;
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
-			m_data = new KexiTableViewData(cursor);
-			m_data->preloadAllRows();
-
+				m_data = new KexiTableViewData(cursor);
+				m_data->preloadAllRows();
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //			int resultCount = -1;
 //			if (ok) {
@@ -420,7 +422,6 @@ KexiFormView::afterSwitchFrom(int mode)
 //			}
 //			if (ok)
 //				ok = ! (!m_cursor->moveFirst() && m_cursor->error());
-			if (ok) {
 				m_scrollView->recordNavigator()->setRecordCount(m_data->count());
 				m_currentRow = m_data->first();
 				if (m_currentRow) {
@@ -430,14 +431,12 @@ KexiFormView::afterSwitchFrom(int mode)
 				}
 //				m_provider->fillDataItems(*m_cursor);
 //				m_cursor->moveNext();
-			}
-			m_conn->deleteCursor(cursor);
-			if (!ok) {
+				m_conn->deleteCursor(cursor);
 				//! @todo err message: error opening cursor
 //				m_conn->deleteCursor(m_cursor);
 //				m_cursor = 0;
-				delete m_data;
-				m_data = 0;
+//				delete m_data;
+	//			m_data = 0;
 				delete m_query;
 				m_query = 0;
 			}
