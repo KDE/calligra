@@ -1091,52 +1091,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
   if ( body.isNull() )
     return false;
 
-  QDomNode namedAreas = body.namedItem( "table:named-expressions" );
-  if ( !namedAreas.isNull() )
-  {
-    QDomNode area = namedAreas.firstChild();
-    while ( !area.isNull() )
-    {
-      QDomElement e = area.toElement();
-      if ( e.isNull() || !e.hasAttribute( "table:name" ) || !e.hasAttribute( "table:cell-range-address" ) )
-      {
-        kdDebug(30518) << "Reading in named area failed" << endl;
-        area = area.nextSibling();
-        continue;
-      }
-
-      // TODO: what is: table:base-cell-address
-      QString name  = e.attribute( "table:name" );
-      QString areaPoint = e.attribute( "table:cell-range-address" );
-
-      m_namedAreas.append( name );
-      kdDebug(30518) << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
-
-      OpenCalcPoint point( areaPoint );
-      kdDebug(30518) << "Area: " << point.translation << endl;
-
-      QString range( point.translation );
-
-      if ( point.translation.find( ':' ) == -1 )
-      {
-        KSpreadPoint p( point.translation );
-
-        int n = range.find( '!' );
-        if ( n > 0 )
-          range = range + ":" + range.right( range.length() - n - 1);
-
-        kdDebug(30518) << "=> Area: " << range << endl;
-      }
-
-      KSpreadRange p( range );
-
-      m_doc->addAreaName( p.range, name, p.tableName );
-      kdDebug(30518) << "Area range: " << p.tableName << endl;
-
-      area = area.nextSibling();
-    }
-  }
-
+  loadOasisAreaName( body.toElement() );
   loadOasisCellValidation( body.toElement() );
 
   KSpreadSheet * table;
@@ -1325,6 +1280,56 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
     m_styles.insert( name, new QDomElement( e ) );
 
     n = n.nextSibling();
+  }
+}
+
+
+void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
+{
+  QDomNode namedAreas = body.namedItem( "table:named-expressions" );
+  if ( !namedAreas.isNull() )
+  {
+    QDomNode area = namedAreas.firstChild();
+    while ( !area.isNull() )
+    {
+      QDomElement e = area.toElement();
+      if ( e.isNull() || !e.hasAttribute( "table:name" ) || !e.hasAttribute( "table:cell-range-address" ) )
+      {
+        kdDebug(30518) << "Reading in named area failed" << endl;
+        area = area.nextSibling();
+        continue;
+      }
+
+      // TODO: what is: table:base-cell-address
+      QString name  = e.attribute( "table:name" );
+      QString areaPoint = e.attribute( "table:cell-range-address" );
+
+      m_namedAreas.append( name );
+      kdDebug(30518) << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
+
+      OpenCalcPoint point( areaPoint );
+      kdDebug(30518) << "Area: " << point.translation << endl;
+
+      QString range( point.translation );
+
+      if ( point.translation.find( ':' ) == -1 )
+      {
+        KSpreadPoint p( point.translation );
+
+        int n = range.find( '!' );
+        if ( n > 0 )
+          range = range + ":" + range.right( range.length() - n - 1);
+
+        kdDebug(30518) << "=> Area: " << range << endl;
+      }
+
+      KSpreadRange p( range );
+
+      m_doc->addAreaName( p.range, name, p.tableName );
+      kdDebug(30518) << "Area range: " << p.tableName << endl;
+
+      area = area.nextSibling();
+    }
   }
 }
 
