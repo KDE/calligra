@@ -323,6 +323,10 @@ void KDChartBarPainter::paintData( QPainter* painter,
 
                     else
                         barHeight = pixelsPerUnit * cellValue;
+                    // This little adjustment avoids a crash when trying
+                    // to retrieve the bounding rect of a zero size region...
+                    if( 0 == barHeight )
+                        barHeight = 1; // makes sense to have a min size anyway
 
 
                     // draw only the bars belonging to the axis
