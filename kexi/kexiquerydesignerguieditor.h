@@ -45,13 +45,20 @@ struct InvolvedTable
 struct JoinField
 {
 	QString		sourceField;
-//	QString		targetField;
 	QString		eqLeft;
 	QString		eqRight;
 };
 
+struct Condition
+{
+	QString		field;
+	QString		orCondition;
+	QString		andCondition;
+};
+
 typedef QMap<QString, InvolvedTable> InvolvedTables;
 typedef QValueList<JoinField> JoinFields;
+typedef QValueList<Condition> ConditionList;
 
 class KexiQueryDesignerGuiEditor : public QWidget
 {
@@ -78,6 +85,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 
 		KexiTableItem		*m_insertItem;
 		QStringList		m_sourceList;
+		ConditionList		m_conditions;
 
 		InvolvedTables		m_involvedTables;
 };

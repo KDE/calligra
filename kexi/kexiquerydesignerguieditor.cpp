@@ -169,6 +169,13 @@ KexiQueryDesignerGuiEditor::getQuery()
 			
 			involvedFields.insert(table, field);
 
+			Condition condition;
+			condition.field = field;
+			condition.andCondition = cItem->getValue(3).toString();
+			condition.orCondition = cItem->getValue(4).toString();
+
+			m_conditions.append(condition);
+
 			if(mI != m_designTable->rows() - 2)
 				query += ", ";
 
@@ -241,6 +248,33 @@ KexiQueryDesignerGuiEditor::getQuery()
 		query += " = ";
 		query += (*itJ).eqRight;
 	}
+
+	int conditionCount = 0;
+	for(ConditionList::Iterator itC = m_conditions.begin(); itC != m_conditions.end(); itC++)
+	{
+		if((*itC).orCondition == "" && (*itC).andCondition == "")
+		{
+			conditionCount--;
+		}
+		else if((*itC).andCondition != "")
+		{
+			if(conditionCount != 0)
+				query += " AND ";
+			else
+				query += " WHERE ";
+
+			query += (*itC).field + " " + (*itC).andCondition;
+		}
+		if((*itC).orCondition != "")
+		{
+			query += " OR " + (*itC).field + " " + (*itC).orCondition;
+		}
+
+		conditionCount++;
+	}
+
+	//ok, we are trying to get the conditions
+
 
 	kdDebug() << "KexiQueryDesignerGuiEditor::getQuery() query: " << query << endl;
 
