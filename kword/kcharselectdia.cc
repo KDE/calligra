@@ -54,7 +54,7 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString
 
 }
 
-void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool _enableFont)
+void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*_enableFont*/)
 {
    QWidget *page = plainPage();
 

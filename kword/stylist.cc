@@ -423,8 +423,8 @@ void KWStylePreview::drawContents( QPainter *painter )
     fm = QFontMetrics( f );
     int y = height() / 2 - fm.height() / 2;
 
-    painter->drawText( 20 + style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
-                          + style->paragLayout().margins[QStyleSheetItem::MarginLeft],
+    painter->drawText( 20 + (int)( style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
+                                   + style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
                        y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ),
                        fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
 }

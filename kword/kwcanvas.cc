@@ -1727,7 +1727,7 @@ void KWCanvas::scrollToOffset( int _x, int _y )
         stopBlinkCursor();
 #endif
 
-    setContentsPos( _x*doc->zoomedResolutionX(), _y*doc->zoomedResolutionY() );
+    setContentsPos( doc->zoomItX( _x ), doc->zoomItY( _y ) );
 
 #if 0
     if ( blinking )

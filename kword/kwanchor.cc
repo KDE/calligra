@@ -21,13 +21,12 @@
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
+#include <kdebug.h>
 
 KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
     : QTextCustomItem( textdoc ), m_frame( frame )
 {
-    QSize s = size();
-    width = s.width();
-    height = s.height();
+    resize();
 }
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
@@ -37,12 +36,25 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         y = ypos;
     }
 
+    int paragy = paragraph()->rect().y();
+    kdDebug() << "KWAnchor::draw " << x << "," << y << "  paragy=" << paragy << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
     KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
-    // Move the frame to position x,y.
-    m_frame->moveTopLeft( QPoint( x / doc->zoomedResolutionX(), y / doc->zoomedResolutionY() ) );
-
+    KWTextFrameSet * fs = textDocument()->textFrameSet();
+    QPoint cPoint;
+    if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
+    {
+        // Move the frame to position x,y.
+        m_frame->moveTopLeft( QPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
+    }
     QColorGroup cg2( cg );
-    m_frame->getFrameSet()->drawContents( p, QRect( cx, cy, cw, ch ), cg2, false /*?*/, false /*?*/ );
+    // Determine crect in contents coords
+    QRect crect( cx, cy+paragy, cw, ch );
+    if ( fs->internalToContents( crect.topLeft(), cPoint ) )
+        crect.moveTopLeft( cPoint );
+    // Draw the frame
+    p->translate( 0, -paragy ); // undo what the caller did
+    m_frame->getFrameSet()->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
+    p->translate( 0, paragy );
 }
 
 QSize KWAnchor::size() const
@@ -50,3 +62,17 @@ QSize KWAnchor::size() const
     KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
     return QSize( doc->zoomItX( m_frame->width() ), doc->zoomItY( m_frame->height() ) );
 }
+
+void KWAnchor::resize()
+{
+    QSize s = size();
+    width = s.width();
+    height = s.height();
+    kdDebug() << "KWAnchor::resize " << width << "x" << height << endl;
+}
+
+KWTextDocument * KWAnchor::textDocument() const
+{
+    return static_cast<KWTextDocument *>( parent );
+}
+

@@ -25,6 +25,7 @@
 class KWView;
 class QCheckBox;
 class KIntNumInput;
+class KDoubleNumInput;
 class KSpellConfig;
 class KConfig;
 
@@ -51,7 +52,7 @@ public:
 private:
     KWView* m_pView;
     KIntNumInput* gridX,*gridY;
-    KIntNumInput* indent;
+    KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
     KIntNumInput* autoSave;
     QCheckBox *showRuler;

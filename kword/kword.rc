@@ -37,6 +37,7 @@
   <!-- Non-frames -->
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
+  <Action name="tools_formula"/>
   <Action name="insert_specialchar"/>
   <Action name="insert_framebreak"/>
   <Action name="insert_footendnote"/>
@@ -57,7 +58,6 @@
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
   <Action name="tools_kspreadtable"/>
-  <Action name="tools_formula"/>
   <Action name="tools_part"/>
   <Separator/>
  </Menu>

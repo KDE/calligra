@@ -345,6 +345,10 @@ void KWView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
 
+    actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", 0,
+                                       this, SLOT( toolsFormula() ),
+                                       actionCollection(), "tools_formula" );
+
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
@@ -367,10 +371,6 @@ void KWView::setupActions()
                                               this, SLOT( toolsCreatePix() ),
                                               actionCollection(), "tools_createpix" );
     actionToolsCreatePix->setExclusiveGroup( "tools" );
-    actionToolsCreateFormula = new KToggleAction( i18n( "For&mula Frame" ), "frame_formula", Key_F11,
-                                                  this, SLOT( toolsFormula() ),
-                                                  actionCollection(), "tools_formula" );
-    actionToolsCreateFormula->setExclusiveGroup( "tools" );
     actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query", Key_F12,
                                                this, SLOT( toolsPart() ),
                                                actionCollection(), "tools_part" );
@@ -657,13 +657,10 @@ void KWView::createKWGUI()
     gui->setGeometry( 0, 0, width(), height() );
     gui->show();
 
+    // hack
     KWFrameSet *frameset;
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
         frameset = doc->getFrameSet( i );
-        /*if ( frameset->getFrameType() == FT_PART )
-            slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
-                              dynamic_cast<KWPartFrameSet*>( frameset ) );
-        else */
         if ( frameset->getFrameType() == FT_FORMULA )
             dynamic_cast<KWFormulaFrameSet*>( frameset )->create();
     }
@@ -1004,9 +1001,6 @@ void KWView::setTool( MouseMode _mouseMode )
         break;
     case MM_CREATE_TABLE:
         // no such tool
-        break;
-    case MM_CREATE_FORMULA:
-        actionToolsCreateFormula->setChecked( TRUE );
         break;
     case MM_CREATE_PART:
         actionToolsCreatePart->setChecked( TRUE );
@@ -1389,7 +1383,6 @@ void KWView::insertPicture()
 
     file = url.path();
 #endif
-    // TODO disable this action if currentframeset not a text frameset
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertPicture( file );
@@ -1538,7 +1531,7 @@ void KWView::formatFont()
 {
     //kdDebug(32002) << "KWView::formatFont" << endl;
     KWTextFrameSetEdit *edit = currentTextEdit();
-    if (edit) // TODO disable action if not text frameset
+    if (edit)
     {
         KWFontDia *fontDia = new KWFontDia( this, "",edit->textFont(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
         fontDia->show();
@@ -1551,9 +1544,8 @@ void KWView::formatFont()
 /*===============================================================*/
 void KWView::formatParagraph()
 {
-
     KWTextFrameSetEdit *edit = currentTextEdit();
-    if (edit) // TODO disable action if not text frameset
+    if (edit)
     {
         KWParagDia *paragDia = new KWParagDia( this, "", doc->fontList(),
                                                KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
@@ -1820,10 +1812,17 @@ void KWView::insertTable()
 /*===============================================================*/
 void KWView::toolsFormula()
 {
-    if ( actionToolsCreateFormula->isChecked() )
-        gui->canvasWidget()->setMouseMode( MM_CREATE_FORMULA );
-    else
-        actionToolsCreateFormula->setChecked( true ); // always one has to be checked !
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if (edit)
+    {
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
+        KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
+        frameset->addFrame( frame, false );
+        doc->addFrameSet( frameset );
+        KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Insert Formula"), doc, frame);
+        doc->addCommand(cmd);
+        edit->insertFloatingFrameSet( frameset );
+    }
 }
 
 /*===============================================================*/
@@ -2573,7 +2572,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 /*================================================================*/
 void KWView::borderShowValues()
 {
-    actionBorderWidth->setCurrentItem( m_border.common.ptWidth - 1 );
+    actionBorderWidth->setCurrentItem( (int)m_border.common.ptWidth - 1 );
     actionBorderStyle->setCurrentItem( (int)m_border.common.style );
 }
 
@@ -2858,6 +2857,7 @@ void KWView::updateButtons()
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
     actionInsertPicture->setEnabled(state);
+    actionInsertFormula->setEnabled(state);
 
     actionInsertVarDateFix->setEnabled(state);
     actionInsertVarDate->setEnabled(state);

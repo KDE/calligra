@@ -381,12 +381,12 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         KWFrame *frame = frameIt.current();
         QRect frameRect( m_doc->zoomRect( *frame ) );
         QRect outerRect( frame->outerRect() );
-        //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-        kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
+        //kdDebug(32002) << "KWFrameSet::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
+        //kdDebug(32002) << "KWFrameSet::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
 
         if ( !crect.intersects( outerRect ) )
         {
-            kdDebug() << "KWFrameSet::drawBorders no interesection with " << DEBUGRECT(crect) << endl;
+            //kdDebug() << "KWFrameSet::drawBorders no intersection with " << DEBUGRECT(crect) << endl;
             continue;
         }
 
@@ -515,6 +515,7 @@ void KWFrameSet::updateAnchors()
             KWAnchor * anchor = new KWAnchor( m_anchorTextFs->textDocument(), frameIt.current() );
             m_anchorParag->insert( index, QChar('@') /*whatever*/ );
             m_anchorParag->setCustomItem( index, anchor, 0 );
+            frameIt.current()->setAnchor( anchor );
         }
     }
 }
@@ -566,7 +567,7 @@ void KWFrameSet::updateFrames()
             continue;
         }
 
-        if ( !foundThis || !frameSet->isVisible() )
+        if ( !foundThis || !frameSet->isVisible() || frameSet->isFloating() )
             continue;
 
         kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
@@ -588,6 +589,18 @@ void KWFrameSet::updateFrames()
     }
     kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
                    << m_framesOnTop.count() << endl;
+
+    if ( isFloating() )
+    { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights
+        m_anchorParag->invalidate( 0 );
+        QListIterator<KWFrame> frameIt = frameIterator();
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            kdDebug() << "KWFrameSet::updateFrames anchor=" << frameIt.current()->anchor() << endl;
+            if ( frameIt.current()->anchor() )
+                frameIt.current()->anchor()->resize();
+        }
+    }
 }
 
 /*================================================================*/

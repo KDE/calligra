@@ -304,13 +304,13 @@ protected:
     KAction *actionInsertVarFileName;
     KAction *actionInsertVarCustom;
     KAction *actionInsertVarSerialLetter;
+    KAction *actionInsertFormula;
 
     KToggleAction *actionToolsEdit;
     KToggleAction *actionToolsEditFrames;
     KToggleAction *actionToolsCreateText;
     KToggleAction *actionToolsCreatePix;
     KToggleAction *actionToolsCreateClip;
-    KToggleAction *actionToolsCreateFormula;
     KToggleAction *actionToolsCreatePart;
 
     KAction *actionFormatFont;

@@ -147,6 +147,8 @@ public:
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
     KWAnchor *anchor() const { return m_anchor; }
+    // Called by KWFrameSet::updateAnchors
+    void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; }
     void deleteAnchor();
 
     bool isMostRight() { return mostRight; }

@@ -296,6 +296,7 @@ public:
     void insertPicture( const QString & file );
     void insertVariable( int type );
     void insertSpecialChar(QChar _c);
+    void insertFloatingFrameSet( KWFrameSet * fs );
 
     void setBold(bool on);
     void setItalic(bool on);

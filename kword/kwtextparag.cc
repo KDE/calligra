@@ -27,6 +27,7 @@
 #include "counter.h"
 #include <kdebug.h>
 #include <qdom.h>
+#include <qtl.h>
 
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
@@ -392,17 +393,22 @@ void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextForma
 
 void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
+    // TODO support for centered tabs, right-aligned tabs etc.
     m_layout.setTabList( tabList );
-#if 0 // needs a change in QRT
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
-    int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
-    KoTabulatorList::Iterator it = tabList.begin();
+    KoTabulatorList::ConstIterator it = tabList.begin();
+    QValueList<int> sortedTabs;
     for ( int i = 0; it != tabList.end() ; ++it, ++i )
-        tabs[i] = doc->zoomItX( (*it).ptPos );
+        sortedTabs.append( (int)doc->zoomItX( (*it).ptPos ) );
+    qHeapSort( sortedTabs );
+    int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
+    QValueList<int>::Iterator it2 = sortedTabs.begin();
+    for ( int i = 0; it2 != sortedTabs.end() ; ++it2, ++i )
+        tabs[i] = *it2;
     delete [] tabArray();
     setTabArray( tabs );
-#endif
+    invalidate( 0 );
 }
 
 //static

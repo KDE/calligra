@@ -2570,7 +2570,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
         //for ( int i = 1; i < textdoc->numSelections(); ++i )
         //    redraw = textdoc->removeSelection( i ) || redraw;
 
-        kdDebug() << "KWTextFrameSetEdit::mousePressEvent redraw=" << redraw << endl;
+        //kdDebug() << "KWTextFrameSetEdit::mousePressEvent redraw=" << redraw << endl;
         if ( !redraw ) {
             emit showCursor();
         } else {
@@ -2918,19 +2918,22 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
 }
 
-/*===============================================================*/
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
     textFrameSet()->insert( cursor, currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
-/*===============================================================*/
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );
     cursor->parag()->insert( cursor->index(), QChar('@') /*whatever*/ );
     static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, currentFormat );
     // TODO undo/redo support
+}
+
+void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs )
+{
+    fs->setAnchored( textFrameSet(), static_cast<KWTextParag *>(cursor->parag()), cursor->index() );
 }
 
 void KWTextFrameSetEdit::insertVariable( int type )

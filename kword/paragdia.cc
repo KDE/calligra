@@ -315,7 +315,7 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 {
     QPen pen( black, 1, SolidLine );
 
-    pen.setWidth( _brd.ptWidth );
+    pen.setWidth( static_cast<int>( _brd.ptWidth ) );
     pen.setColor( _brd.color );
 
     switch ( _brd.style ) {

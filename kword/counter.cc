@@ -389,7 +389,6 @@ QString Counter::text( const KWTextParag *paragraph )
 
     // Now convert to text.
     QString tmp;
-    int n;
     switch ( style() )
     {
     case STYLE_NONE:

@@ -1017,18 +1017,16 @@ bool KWFrameDia::applyChanges()
 void KWFrameDia::updateFrames()
 {
     QList<KWFrame> frames=doc->getSelectedFrames();
+
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+
     if(frames.count()==1)
     {
         KWFrame *theFrame = frames.first();
-        doc->frameChanged(theFrame);
         if(theFrame->isSelected())
             theFrame->setSelected(true);
-    }
-    else
-    {
-        doc->updateAllFrames();
-        doc->layout();
-        doc->repaintAllViews();
     }
 }
 
