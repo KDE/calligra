@@ -53,7 +53,6 @@ AC_OUTPUT(Makefile \
 	kpresenter/toolbar/Makefile \
 	kchart/Makefile	\
 	kchart/core/Makefile \
-	kchart/pics/Makefile \
 	kchart/ui/Makefile
 	kchart/pics/Makefile
  )
