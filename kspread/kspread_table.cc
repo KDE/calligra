@@ -1632,22 +1632,30 @@ int posy=0;
 for ( int incr=start;incr<=end; )
         {
         KSpreadCell *cell = cellAt( x+posx, y+posy );
-
+        if(cell->isObscuringForced())
+                {
+                cell = cellAt( cell->obscuringCellsColumn(), cell->obscuringCellsRow());
+                }
         if ( cell == m_pDefaultCell )
                 {
                 cell = new KSpreadCell( this, x+posx, y+posy );
                 m_cells.insert( cell, x + posx, y + posy );
                 }
+
         QString tmp;
         cell->setCellText(tmp.setNum(incr));
-
         if(mode==Column)
-            posy++;
+                if(cell->isForceExtraCells())
+                        posy+=cell->extraYCells()+1;
+                else
+                        posy++;
         else if(mode==Row)
-            posx++;
+                if(cell->isForceExtraCells())
+                        posx+=cell->extraXCells()+1;
+                else
+                        posx++;
         else
-            kdDebug(36001) << "Error in Series::mode" << endl;
-
+                kdDebug(36001) << "Error in Series::mode" << endl;
         if(type==Linear)
             incr=incr+step;
         else if(type==Geometric)
@@ -2568,7 +2576,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
             int col = c->column();
 
             // Is the cell in the selected columns ?
-            if ( !c->isEmpty() && row >= r.top() && row <= r.bottom() )
+            if ( !c->isEmpty() && row >= r.top() && row <= r.bottom())
             {
                 if ( col > r.right() )
                     r.rRight() = col;
@@ -2650,7 +2658,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
             int col = c->column();
 
             // Is the cell in the selected columns ?
-            if ( !c->isEmpty() && col >= r.left() && col <= r.right() )
+            if ( !c->isEmpty() && col >= r.left() && col <= r.right())
             {
                 if ( row > r.bottom() )
                     r.rBottom() = row;

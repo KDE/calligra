@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="3">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
@@ -11,6 +11,8 @@
   <Action name="replace"/>
   <Action name="clear"/>
   <Action name="delete"/>
+  <Action name="mergecell"/>
+  <Action name="dissociatecell"/>
   <Separator/>
   <Action name="conditional"/>
   <Action name="editCell"/>
