@@ -212,7 +212,7 @@ public:
 
     void deSelectAllObj();
     void deSelectObj( KPObject *kpobject );
-    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, int yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage );
+    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage );
 
     bool oneObjectTextExist();
     bool isOneObjectSelected();

@@ -74,7 +74,7 @@ KPPolygonObject &KPPolygonObject::operator=( const KPPolygonObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KP2DObject::save( doc, offset );
 
@@ -104,9 +104,9 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPPolygonObject::load( const QDomElement &element )
+double KPPolygonObject::load( const QDomElement &element )
 {
-    int offset=KP2DObject::load( element );
+    double offset=KP2DObject::load( element );
 
     QDomElement e = element.namedItem( "SETTINGS" ).toElement();
     if ( !e.isNull() ) {

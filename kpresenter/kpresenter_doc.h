@@ -127,7 +127,7 @@ public:
     void appendPixmapKey( KPImageKey key);
     void appendClipartKey(KPClipartKey key);
 
-    void insertObjectInPage(int offset, KPObject *_obj);
+    void insertObjectInPage(double offset, KPObject *_obj);
 
     // get - set raster
     unsigned int rastX() const { return _rastX; }

@@ -57,7 +57,7 @@ KPRectObject &KPRectObject::operator=( const KPRectObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPRectObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     if (xRnd!=0 || yRnd!=0) {
@@ -70,9 +70,9 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPRectObject::load(const QDomElement &element)
+double KPRectObject::load(const QDomElement &element)
 {
-    int offset=KP2DObject::load(element);
+    double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("RNDS").toElement();
     if(!e.isNull()) {
         int tmp=0;

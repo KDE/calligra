@@ -52,8 +52,8 @@ public:
     QString getFileName() const
     { return m_clipart.key().filename(); }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
-    virtual int load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 

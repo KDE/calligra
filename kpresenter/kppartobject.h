@@ -44,8 +44,8 @@ public:
 
     KPPartObject &operator=( const KPPartObject & );
 
-    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
-    virtual int load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element);
 
     virtual void rotate( float _angle );
     virtual void setSize( double _width, double _height );

@@ -63,7 +63,7 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KPObject::save( doc, offset );
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
@@ -91,9 +91,9 @@ QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, int of
 }
 
 /*========================== load ================================*/
-int KPQuadricBezierCurveObject::load(const QDomElement &element)
+double KPQuadricBezierCurveObject::load(const QDomElement &element)
 {
-    int offset=KPObject::load( element );
+    double offset=KPObject::load( element );
     QDomElement e = element.namedItem( "PEN" ).toElement();
     if ( !e.isNull() )
         setPen( KPObject::toPen( e ) );

@@ -67,8 +67,8 @@ public:
     virtual QString getTypeString() const
     { return i18n("Group"); }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
-    virtual int load(const QDomElement &element, KPresenterDoc *doc);
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element, KPresenterDoc *doc);
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
 

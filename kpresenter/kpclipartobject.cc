@@ -77,7 +77,7 @@ void KPClipartObject::setClipart( const KPClipartKey & key )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPClipartObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPClipartObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
@@ -87,9 +87,9 @@ QDomDocumentFragment KPClipartObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPClipartObject::load(const QDomElement &element)
+double KPClipartObject::load(const QDomElement &element)
 {
-    int offset=KP2DObject::load(element);
+    double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KPClipartKey key;

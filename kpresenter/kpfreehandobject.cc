@@ -59,7 +59,7 @@ KPFreehandObject &KPFreehandObject::operator=( const KPFreehandObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,int offset )
+QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment = KPObject::save( doc, offset );
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
@@ -87,9 +87,9 @@ QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,int offset )
 }
 
 /*========================== load ================================*/
-int KPFreehandObject::load( const QDomElement &element )
+double KPFreehandObject::load( const QDomElement &element )
 {
-    int offset=KPObject::load( element );
+    double offset=KPObject::load( element );
     QDomElement e = element.namedItem( "PEN" ).toElement();
     if ( !e.isNull() )
         setPen( KPObject::toPen( e ) );

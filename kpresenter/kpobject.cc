@@ -108,7 +108,7 @@ KPObject::~KPObject()
 {
 }
 
-QDomDocumentFragment KPObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement(tagORIG);
@@ -168,9 +168,9 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, int offset )
     return fragment;
 }
 
-int KPObject::load(const QDomElement &element) {
+double KPObject::load(const QDomElement &element) {
 
-    int offset=0;
+    double offset=0;
     QDomElement e=element.namedItem(tagORIG).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrX))
@@ -725,7 +725,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
 }
 
-QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
+QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
     if(fillType!=FT_BRUSH)
@@ -740,9 +740,9 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
     return fragment;
 }
 
-int KP2DObject::load(const QDomElement &element)
+double KP2DObject::load(const QDomElement &element)
 {
-    int offset=KPObject::load(element);
+    double offset=KPObject::load(element);
     QDomElement e=element.namedItem(tagPEN).toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));

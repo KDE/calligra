@@ -56,7 +56,7 @@ KPLineObject &KPLineObject::operator=( const KPLineObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPLineObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
     fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
@@ -70,9 +70,9 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPLineObject::load(const QDomElement &element)
+double KPLineObject::load(const QDomElement &element)
 {
-    int offset=KPObject::load(element);
+    double offset=KPObject::load(element);
     QDomElement e=element.namedItem("PEN").toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));

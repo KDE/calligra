@@ -482,7 +482,7 @@ QDomDocument KPresenterDoc::saveXML()
             QPtrListIterator<KPObject> oIt(m_pageList.at(i)->objectList());
             for (; oIt.current(); ++oIt )
             {
-                int offset=i*m_pageList.at(i)->getPageRect().height();
+                double offset=i*m_pageList.at(i)->getPageRect().height();
                 if ( oIt.current()->getType() == OT_PART &&
                      dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl.current() )
                 {
@@ -545,7 +545,7 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
     QDomElement objects=doc.createElement("OBJECTS");
-    int yoffset=0;
+    double yoffset=0.0;
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && saveOnlyPage!=i)
             continue;
@@ -1014,7 +1014,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             if(obj.hasAttribute("sticky"))
                 tmp=obj.attribute("sticky").toInt();
             sticky=static_cast<bool>(tmp);
-            int offset=0;
+            double offset=0;
             switch ( t ) {
             case OT_LINE: {
                 KPLineObject *kplineobject = new KPLineObject();
@@ -2091,10 +2091,10 @@ void KPresenterDoc::recalcPageNum()
         page->recalcPageNum();
 }
 
-void KPresenterDoc::insertObjectInPage(int offset, KPObject *_obj)
+void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 {
-    int page = offset/__pgLayout.ptHeight;
-    int newPos=(offset-page*__pgLayout.ptHeight);
+    int page = (int)(offset/__pgLayout.ptHeight);
+    int newPos=(int)(offset-page*__pgLayout.ptHeight);
     if( page > (m_pageList.count()-1))
     {
         for (int i=(m_pageList.count()-1); i<page;i++)

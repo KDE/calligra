@@ -112,8 +112,8 @@ public:
     virtual void setDisappearSoundEffectFileName( const QString &_d_fileName )
     { d_fileName = _d_fileName; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
-    virtual int load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element);
 
     virtual ObjType getType() const
     { return OT_UNDEFINED; }
@@ -325,8 +325,8 @@ public:
     virtual int getGYFactor() const
     { return yfactor; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
-    virtual int load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
+    virtual double load(const QDomElement &element);
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 

@@ -129,7 +129,7 @@ void KPGroupObject::resizeBy( double _dx, double _dy )
 }
 
 /*================================================================*/
-QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
     QDomElement objs=doc.createElement("OBJECTS");
@@ -148,10 +148,10 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, int offset )
 }
 
 /*================================================================*/
-int KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
+double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 {
     //FIXME
-    int offset=KPObject::load(element);
+    double offset=KPObject::load(element);
     updateObjs = false;
     QDomElement group=element.namedItem("OBJECTS").toElement();
     if(!group.isNull()) {

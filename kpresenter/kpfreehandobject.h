@@ -52,8 +52,8 @@ public:
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc,int offset );
-    virtual int load( const QDomElement &element );
+    virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
+    virtual double load( const QDomElement &element );
 
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 

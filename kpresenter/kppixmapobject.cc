@@ -71,7 +71,7 @@ void KPPixmapObject::setPixmap( const KPImageKey & key )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
@@ -81,9 +81,9 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPPixmapObject::load(const QDomElement &element)
+double KPPixmapObject::load(const QDomElement &element)
 {
-    int offset=KP2DObject::load(element);
+    double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KPImageKey key;

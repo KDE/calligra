@@ -171,7 +171,7 @@ void KPTextObject::resizeBy( double _dx, double _dy )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPTextObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     fragment.appendChild(saveKTextObject( doc ));
@@ -179,9 +179,9 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPTextObject::load(const QDomElement &element)
+double KPTextObject::load(const QDomElement &element)
 {
-    int offset=KP2DObject::load(element);
+    double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
 

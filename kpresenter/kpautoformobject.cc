@@ -100,7 +100,7 @@ void KPAutoformObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     if (lineBegin!=L_NORMAL)
@@ -127,9 +127,9 @@ QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPAutoformObject::load(const QDomElement &element)
+double KPAutoformObject::load(const QDomElement &element)
 {
-    int offset=KP2DObject::load(element);
+    double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("LINEBEGIN").toElement();
     if(!e.isNull()) {
         int tmp=0;

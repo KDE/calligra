@@ -211,7 +211,7 @@ void KPPartObject::deactivate()
 }
 
 /*================================================================*/
-QDomDocumentFragment KPPartObject::save( QDomDocument& doc, int offset )
+QDomDocumentFragment KPPartObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement("EFFECTS");
@@ -236,9 +236,9 @@ QDomDocumentFragment KPPartObject::save( QDomDocument& doc, int offset )
 }
 
 /*========================== load ================================*/
-int KPPartObject::load(const QDomElement &element)
+double KPPartObject::load(const QDomElement &element)
 {
-    int offset=KPObject::load(element);
+    double offset=KPObject::load(element);
     QDomElement e=element.namedItem("PEN").toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));
