@@ -182,7 +182,7 @@ public:
      * Sets the print range.
      * Set it to ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) to undefine it
      */
-    void setPrintRange( QRect _printRange );
+    void setPrintRange( const QRect &_printRange );
 
     /**
      * Return the page limit in X direction.

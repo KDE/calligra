@@ -1229,7 +1229,7 @@ QString KSpreadSheetPrint::completeHeading( const QString &_data, int _page, con
     return tmp;
 }
 
-void KSpreadSheetPrint::setPrintRange( QRect _printRange )
+void KSpreadSheetPrint::setPrintRange( const QRect &_printRange )
 {
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
