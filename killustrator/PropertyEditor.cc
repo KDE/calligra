@@ -115,6 +115,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
          if ((o->isA("GBezier")) || (o->isA("GPolyline")))
          {
             haveArrows=true;
+            haveFillObjects=false;
          };
          if (o->inherits("GOval"))
             haveEllipseObjects = true;
