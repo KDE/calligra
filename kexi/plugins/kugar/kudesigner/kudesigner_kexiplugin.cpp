@@ -72,8 +72,68 @@ QString KuKexiDataSourceComboBox::value() const {
 	return globalIdentifier();
 }
 
-
 //END KuKexiDataSourceComboBox
+
+//BEGIN KuKexiFieldComboBox
+
+KuKexiFieldComboBox::KuKexiFieldComboBox ( const PropertyEditor *editor,
+	 QString pname, QString value, KuKexi *kukexi, int level, QWidget * parent,
+		const char * name) :
+	 	KComboBox(parent,name),
+		m_level(level),
+		m_kukexi(kukexi) {
+	setPName(pname);
+	setValue(value);
+	fill();
+  	connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+	connect(this, SIGNAL(propertyChanged(QString, QString)),
+		editor, SLOT(emitPropertyChange(QString, QString)));
+}
+
+KuKexiFieldComboBox::~KuKexiFieldComboBox(){}
+
+void KuKexiFieldComboBox::fill() {
+	kdDebug()<<"KuKexiFieldComboBox::fill"<<endl;
+	for (int i=m_level;i>=0;i--) {
+		KuKexi::SectionMap::const_iterator sit=m_kukexi->m_sectionMap.find(i);
+		if (sit!=m_kukexi->m_sectionMap.end()) {
+			KuKexi::FieldMap::const_iterator fit=m_kukexi->m_fieldMap.find(sit.data());
+			if (fit!=m_kukexi->m_fieldMap.end()) {
+				QString prefix=i18n("Detail %1.").arg(i);
+				for (QStringList::const_iterator it=fit.data().begin();it!=fit.data().end();++it) {
+					insertItem(prefix+(*it));
+				}
+			}
+		}
+	}
+}
+
+
+void KuKexiFieldComboBox::setValue(const QString value, bool emitChange)
+{
+    if (!value.isNull())
+    {
+//fixme        selectGlobalIdentifier(value);
+        if (emitChange) {
+            emit propertyChanged(pname(), value);
+	}
+    }
+}
+
+void KuKexiFieldComboBox::updateProperty(int val)
+{
+//    emit propertyChanged(pname(), globalIdentifier());
+//    emit propertyChanged(m_level,val);
+}
+
+QString KuKexiFieldComboBox::value() const {
+	return "";
+//fixme	return globalIdentifier();
+}
+
+//END KuKexiFieldComboBox
+
+
 
 KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDesignerPlugin(parent,name,args) {
 	m_kugar=(KudesignerDoc*)parent;
@@ -98,7 +158,9 @@ void KuKexi::createPluggedInEditor(QWidget *& retVal,PropertyEditor *editor,
 		if ((cb->rtti()==KuDesignerRttiCanvasField) && (p->type()==FieldName)) {
 			if (((CanvasReportItem*)cb)->section()->rtti()==KuDesignerRttiDetail)
 //				PKexiStringListCombo(
-				retVal = new PSpinBox(editor, p->name(), p->value(), 0, 10000, 1, 0);
+//				retVal = new PSpinBox(editor, p->name(), p->value(), 0, 10000, 1, 0);
+				retVal = new KuKexiFieldComboBox(editor,p->name(),p->value(),
+					this,cb->props["Level"]->value().toInt());
 			else
 				retVal = new QLabel(i18n("Unsupported"),editor);
 		}
@@ -121,9 +183,13 @@ void KuKexi::slotDataSourceSelected(int level, int value)
 
 	kdDebug()<<"Need to insert new field list into map"<<endl;	
 	KexiDataSourceComboBox::Item item=*m_sourceMapping.at(value);
+	item.pixmap.detach();
 	KexiProjectHandler *h=m_kexi->handlerForMime(item.mime);
-	KexiDataProvider *dp=(KexiDataProvider*)h;
-	m_fieldMap[value]=dp->fields(item.identifier);	
+	KexiDataProvider *dp=static_cast<KexiDataProvider*>(h->qt_cast("KexiDataProvider"));
+	QStringList l=dp->fields(item.identifier);	
+	for (QStringList::const_iterator strit=l.begin();strit!=l.end();++strit)
+		kdDebug()<<"Field "<<(*strit)<<" added to cache"<<endl;
+	m_fieldMap[value]=l;
 	m_sectionMap[level]=value;
 }
 

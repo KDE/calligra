@@ -40,10 +40,11 @@ KexiKugarDesignerWrapper::KexiKugarDesignerWrapper(KexiView *view, QWidget *pare
 	setIcon(iloader->loadIcon("form", KIcon::Small));
 
 	(new QVBoxLayout(this))->setAutoAdd(true);
-	QStringList plugins;
-	plugins<<"plugin=kudesigner_kexiplugin";
+	QStringList config;
+	config<<"plugin=kudesigner_kexiplugin";
+	config<<"forcePropertyEditorPosition=left";
 	m_doc=KParts::ComponentFactory::createPartInstanceFromLibrary<KoDocument>(QFile::encodeName("libkudesignerpart"),
-			this,0,this,0,plugins);
+			this,0,this,0,config);
 	if(newrep) m_doc->initDoc();
 //	m_part->openURL("/usr/src/kde3/koffice/kugar/samples/sample1.kud");
 //	part->widget()->show();

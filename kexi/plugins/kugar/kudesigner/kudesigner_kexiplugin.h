@@ -30,6 +30,31 @@ class KexiDialogBase;
 class KexiProject;
 class KudesignerDoc;
 
+class KuKexi: public KuDesignerPlugin {
+	Q_OBJECT
+public:
+        KuKexi(QObject *parent, const char* name, const QStringList& args);
+        virtual ~KuKexi();
+	virtual void createPluggedInEditor(QWidget *&retVal, PropertyEditor *editor,
+        	Property*,CanvasBox *cb);
+	virtual bool acceptsDrops(){kdDebug()<<"****ACCEPT DROPS"<<endl; return true;}
+        virtual bool dragMove(QDragMoveEvent *,CanvasBox *) {return true;}
+	virtual void newCanvasBox(int type, CanvasBox *cb);
+protected slots:
+	void slotDataSourceSelected(int level, int value);
+private:
+	friend class KuKexiFieldComboBox;
+	KexiDialogBase* m_dialog;
+	KexiProject* m_kexi;
+	KudesignerDoc* m_kugar;
+	KexiDataSourceComboBox::ItemList m_sourceMapping;
+	void updateSourceList();
+	typedef QMap<int,QStringList> FieldMap;
+	FieldMap m_fieldMap;
+	typedef QMap<int,int> SectionMap;
+	SectionMap m_sectionMap;
+};
+
 class KuKexiDataSourceComboBox: public KexiDataSourceComboBox, public PropertyWidget {
 	Q_OBJECT
 public:
@@ -45,31 +70,32 @@ signals:
     void propertyChanged(int level, int value);
 private slots:
     void updateProperty(int val);
+private:
     int m_level;
 };
 
-class KuKexi: public KuDesignerPlugin {
+class KuKexiFieldComboBox: public KComboBox, public PropertyWidget {
 	Q_OBJECT
 public:
-        KuKexi(QObject *parent, const char* name, const QStringList& args);
-        virtual ~KuKexi();
-	virtual void createPluggedInEditor(QWidget *&retVal, PropertyEditor *editor,
-        	Property*,CanvasBox *cb);
-	virtual bool acceptsDrops(){kdDebug()<<"****ACCEPT DROPS"<<endl; return true;}
-        virtual bool dragMove(QDragMoveEvent *,CanvasBox *) {return true;}
-	virtual void newCanvasBox(int type, CanvasBox *cb);
-protected slots:
-	void slotDataSourceSelected(int level, int value);
+	KuKexiFieldComboBox ( const PropertyEditor *editor, QString name,
+		QString value,  KuKexi *kukexi, int level,
+		QWidget * parent=0, const char * name = 0 );
+	virtual ~KuKexiFieldComboBox();
+
+	virtual QString value() const;
+	virtual void setValue(const QString value, bool emitChange=true);
+signals:
+    void propertyChanged(QString name, QString newValue);
+    void propertyChanged(int level, int value);
+private slots:
+    void updateProperty(int val);
 private:
-	KexiDialogBase* m_dialog;
-	KexiProject* m_kexi;
-	KudesignerDoc* m_kugar;
-	KexiDataSourceComboBox::ItemList m_sourceMapping;
-	void updateSourceList();
-	typedef QMap<int,QStringList> FieldMap;
-	FieldMap m_fieldMap;
-	typedef QMap<int,int> SectionMap;
-	SectionMap m_sectionMap;
+    int m_level;
+    KuKexi *m_kukexi;
+    void fill();
 };
+
+
+
 
 #endif

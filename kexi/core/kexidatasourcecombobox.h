@@ -7,6 +7,7 @@
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qpixmap.h>
+#include <kdebug.h>
 
 class KexiProject;
 
@@ -26,6 +27,7 @@ public:
 			identifier=identifier_;
 			pixmap=pixm;
 		}
+
 		QString name;
 		QString globalIdentifier;
 		QString mime;
