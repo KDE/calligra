@@ -3067,21 +3067,24 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     CustomItemsMap customItemsMap;
     QString placeHolders;
     // TODO support for multiple floating items (like multiple-page tables)
+    int frameNumber = 0;
+    int index = 0;
     { // the loop will start here :)
-        KWAnchor * anchor = new KWAnchor( textFrameSet()->textDocument(), fs, 0 /*frame number*/ );
-        customItemsMap.insert( 0, anchor );
+        KWAnchor * anchor = new KWAnchor( textFrameSet()->textDocument(), fs, frameNumber );
+        if ( frameNumber == 0 && anchor->ownLine() && cursor->index() > 0 ) // enforce start of line [for tables] - hack?
+        {
+            placeHolders += QChar('\n');
+            index++;
+        }
         placeHolders += QChar('@');
-        fs->getFrame(0)->setAnchor( anchor );
+        customItemsMap.insert( index, anchor );
+        fs->getFrame(frameNumber)->setAnchor( anchor );
     }
     textFrameSet()->insert( cursor, m_currentFormat, placeHolders,
                             false, false, commandName,
                             customItemsMap );
-    // ## do we still need this ?
-    KWAnchorPosition pos;
-    pos.textfs = textFrameSet();
-    pos.parag = static_cast<KWTextParag *>(cursor->parag());
-    pos.index = cursor->index();
-    fs->setAnchorPos( pos );
+    // Grab anchor position and store it
+    fs->findFirstAnchor();
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )

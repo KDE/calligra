@@ -98,8 +98,6 @@ public:
     Cell *getCell( unsigned int row, unsigned int col );
     Cell *getCellByPos( int mx, int my ); // bad naming
 
-    virtual QList<KWFrame> allFrames();
-
     /** first row and auto-added rows are the table headers.
     * @returns if this frameset is either one.
     */
@@ -215,6 +213,10 @@ public:
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual KoPoint floatingFrameSize( int frameNum );
     virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
+
+#ifndef NDEBUG
+    virtual void printDebug( KWFrame * frame );
+#endif
 
 protected:
     virtual void deleteAnchors();

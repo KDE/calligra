@@ -335,13 +335,6 @@ public:
     /* Get number of child frames */
     unsigned int getNumFrames() { return frames.count(); }
 
-    /* Returns the list of ALL the child frames, recursively.
-       This is usually the same as frameIterator [which you should
-       prefer using when possible] but for tables this returns the
-       frames of the cells as well.
-       Usage note: make a copy of the returned value, it's a temporary ! */
-    virtual QList<KWFrame> allFrames() { return frames; }
-
     /** Create a framesetedit object to edit this frameset in @p canvas */
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }
 
@@ -421,8 +414,8 @@ public:
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
     void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
     void setAnchored( KWAnchorPosition & pos, bool placeHolderExists = false );
-    /** Note that this frameset has been made floating */
-    void setAnchorPos( KWAnchorPosition & pos ) { m_anchorPos = pos; }
+    /** Note that this frameset has been made floating, store anchor position */
+    void findFirstAnchor();
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
@@ -470,6 +463,11 @@ public:
     QString getName() const { return m_name; }
     void setName( const QString &_name ) { m_name = _name; }
 
+#ifndef NDEBUG
+    void printDebug();
+    virtual void printDebug( KWFrame * );
+#endif
+
 signals:
 
     // Emitted when something has changed in this frameset,
@@ -485,7 +483,6 @@ protected:
 
     virtual void deleteAnchors();
     virtual void updateAnchors( bool placeHolderExists = false );
-    void findFirstAnchor();
 
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames

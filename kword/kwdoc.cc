@@ -2453,13 +2453,6 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
 #ifndef NDEBUG
 void KWDocument::printDebug() {
 
-    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "table","ERROR" };
-    static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
-                                           "first footer", "odd footers", "even footers", "footnote", "ERROR" };
-    static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
-    static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
-
     kdDebug() << "----------------------------------------"<<endl;
     kdDebug() << "                 Debug info"<<endl;
     kdDebug() << "Document:" << this <<endl;
@@ -2469,36 +2462,13 @@ void KWDocument::printDebug() {
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << getUnit() <<endl;
     kdDebug() << "# Framesets: " << getNumFrameSets() <<endl;
-    for (unsigned int iFrameset = 0; iFrameset < getNumFrameSets(); iFrameset++ ) {
-        KWFrameSet * frameset = getFrameSet(iFrameset);
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( unsigned int iFrameset = 0; fit.current() ; ++fit, iFrameset++ )
+    {
+        KWFrameSet * frameset = fit.current();
         kdDebug() << "Frameset " << iFrameset << ": '" <<
             frameset->getName() << "' (" << frameset << ")" <<endl;
-        kdDebug() << " |  Visible: " << frameset->isVisible() << endl;
-        kdDebug() << " |  Type: " << typeFrameset[ frameset->getFrameType() ] << endl;
-        kdDebug() << " |  Info: " << infoFrameset[ frameset->getFrameInfo() ] << endl;
-
-        QListIterator<KWFrame> frameIt = frameset->frameIterator();
-        for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
-            KWFrame * frame = frameIt.current();
-            KWFrameSet * fs = frame->getFrameSet();
-            if(fs != frameset) {
-                KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
-                kdDebug() << " |  |- row :" << cell->m_row << endl;
-                kdDebug() << " |  |- col :" << cell->m_col << endl;
-                kdDebug() << " |  |- rows:" << cell->m_rows << endl;
-                kdDebug() << " |  +- cols:" << cell->m_cols << endl;
-            }
-            kdDebug() << " +-- Frame " << j << " of "<< frameset->getNumFrames() << "    (" << frame << ")" << endl;
-            kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
-            kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
-            kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
-            kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
-            kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
-            if(frame->isSelected())
-                kdDebug() << " *   Page "<< frame->pageNum() << endl;
-            else
-                kdDebug() << "     Page "<< frame->pageNum() << endl;
-        }
+        frameset->printDebug();
     }
     /*
     kdDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;

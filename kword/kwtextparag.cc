@@ -909,12 +909,18 @@ void KWTextParag::printRTDebug( int info )
         for ( int i = 0 ; i < s->length() ; ++i )
         {
             QTextStringChar & ch = s->at(i);
-            kdDebug() << i << ": '" << QString(ch.c) << "'" << ch.format()
-                      << " " << ch.format()->key()
+            kdDebug() << i << ": '" << QString(ch.c) << "' format=" << ch.format()
+                      << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KWTextFormat *>(ch.format())->pointSizeFloat()
                       << endl;
             if ( ch.isCustom() )
-                kdDebug() << " - custom item " << ch.customItem() << endl;
+            {
+                QTextCustomItem * item = ch.customItem();
+                kdDebug() << " - custom item " << item
+                          << " ownline=" << item->ownLine()
+                          << " size=" << item->width << "x" << item->height
+                          << endl;
+            }
         }
     }
 }

@@ -199,18 +199,6 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
     return 0L;
 }
 
-QList<KWFrame> KWTableFrameSet::allFrames()
-{
-    QList<KWFrame> lst;
-    for ( unsigned int i = 0; i < m_cells.count(); i++ )
-    {
-        Cell *cell = m_cells.at( i );
-        lst.append( cell->getFrame( 0 ) );
-    }
-    //kdDebug() << "KWTableFrameSet::allFrames returning " << lst.count() << " frames" << endl;
-    return lst;
-}
-
 /*================================================================*/
 KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( int mx, int my )
 {
@@ -1417,6 +1405,8 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
         QColorGroup & cg, bool onlyChanged, bool resetChanged )
 {
+    QRegion reg;
+    drawBorders( painter, crect, reg );
     for (unsigned int i=0; i < m_cells.count() ; i++)
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
 
@@ -1447,6 +1437,20 @@ void KWTableFrameSet::finalize( ) {
     KWFrameSet::finalize();
 }
 
+void KWTableFrameSet::printDebug( KWFrame * frame )
+{
+    KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>( frame->getFrameSet() );
+    ASSERT( cell );
+    if ( cell ) {
+        kdDebug() << " |  |- row :" << cell->m_row << endl;
+        kdDebug() << " |  |- col :" << cell->m_col << endl;
+        kdDebug() << " |  |- rows:" << cell->m_rows << endl;
+        kdDebug() << " |  +- cols:" << cell->m_cols << endl;
+    }
+}
+
+
+/////
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )

@@ -603,14 +603,13 @@ void KWFrameSet::updateFrames()
         if ( !foundThis || !frameSet->isVisible() )
             continue;
 
-        // Only consider floating frames which we host
-        if ( frameSet->isFloating() && frameSet->anchorFrameset() != this )
+        // Floating frames are not "on top", they are "inside".
+        if ( frameSet->isFloating() )
             continue;
 
         //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
 
-        QList<KWFrame> allFrames = frameSet->allFrames();
-        QListIterator<KWFrame> frameIt( allFrames );
+        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
@@ -980,6 +979,44 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         return reg;
     } else return QRegion();
 }
+
+#ifndef NDEBUG
+void KWFrameSet::printDebug()
+{
+    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "table","ERROR" };
+    static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
+                                           "first footer", "odd footers", "even footers", "footnote", "ERROR" };
+    static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
+    static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
+    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
+
+    kdDebug() << " |  Visible: " << isVisible() << endl;
+    kdDebug() << " |  Type: " << typeFrameset[ getFrameType() ] << endl;
+    kdDebug() << " |  Info: " << infoFrameset[ getFrameInfo() ] << endl;
+    kdDebug() << " |  Number of frames on top: " << m_framesOnTop.count() << endl;
+
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
+        KWFrame * frame = frameIt.current();
+        printDebug( frame );
+        kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")" << endl;
+        kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
+        kdDebug() << "     RunAround: "<< runaround[ frame->getRunAround() ] << endl;
+        kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
+        kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
+        kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
+        if(frame->isSelected())
+            kdDebug() << " *   Page "<< frame->pageNum() << endl;
+        else
+            kdDebug() << "     Page "<< frame->pageNum() << endl;
+    }
+}
+
+void KWFrameSet::printDebug( KWFrame * )
+{
+}
+
+#endif
 
 KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
      : m_fs(fs), m_canvas(canvas), m_currentFrame( fs->getFrame(0) )
