@@ -35,6 +35,7 @@
 #include <limits.h>
 #include <math.h>
 #include <signal.h>
+#include <klocale.h>
 
 #include "kcalc.h"
 

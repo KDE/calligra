@@ -25,6 +25,7 @@
 #include "configdlg.h"
 #include "fontdlg.h"
 #include "version.h"
+#include <klocale.h>
 
 // What's that?!? (Werner)
 //#define i18n( x ) x

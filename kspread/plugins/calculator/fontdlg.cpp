@@ -28,6 +28,7 @@
 #include "fontdlg.h"
 
 #include <qfontdialog.h>
+#include <klocale.h>
 
 // ??? (Werner)
 //#define i18n( x ) x
