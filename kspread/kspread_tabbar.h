@@ -34,14 +34,25 @@ namespace KSpread
 class TabBarPrivate;
 
 /**
- * This tab bar is used by @ref KSpreadView. It is used to choose between all
- * available tables.
+ * The TabBar class provides a tab bar, for use to switch active
+ * sheet in a document.
  *
- * Adding, removing or renaming of tabs does not automatically add, rename or
- * remove KSpreadSheet objects. The tabbar is just a GUI element.
+ * The tab bar is used by KSpreadView. It is the small widget on the left
+ * corner of the main view. Sheets are displayed as tabs, clicking on
+ * one of the tab will activate the corresponding sheet (this is actually
+ * done in KSpreadView). Current active sheet is marked by bold text.
  *
- * But activating a tab emits a signal which in turn will show this table
- * in the associated KSpreadView.
+ * The tab bar supports the sheet reorder by dragging a certain tab
+ * and move it to another location. KSpreadView would handle the necessary
+ * action to perform the actual reorder.
+ *
+ * There are four scroll buttons available in the tab bar. They are used
+ * to shift the tabs in left and right direction, for example when there
+ * are more tabs than the space available to display all tabs.
+ *
+ * Since a sheet can be hidden, the tab bar only shows the visible sheet.
+ * When a hidden sheet is shown again, it will be on the same position as
+ * before it was hidden.
  *
  * @short A bar with tabs and scroll buttons.
  */
