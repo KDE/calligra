@@ -30,6 +30,8 @@
 #ifndef __KDDRAWTEXT_H__
 #define __KDDRAWTEXT_H__
 
+#include <limits.h>
+
 #include <qpainter.h>
 
 
