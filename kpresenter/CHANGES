@@ -100,3 +100,5 @@ Changes between KPresenter-1.2-RC1 and KPresenter-1.2
 =====================================================
 Bugfixes:
 - Fix undo/redo move object.
+- Fix #45966 kpresenter refuses to update image with same name
+- Fix #45991: problems w.r.t. font color and bullets
