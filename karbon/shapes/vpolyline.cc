@@ -19,7 +19,6 @@
 
 
 #include "vpolyline.h"
-#include <qregexp.h>
 #include <qdom.h>
 
 #include "vglobal.h"
@@ -48,9 +47,9 @@ VPolyline::init()
 	bool bFirst = true;
 
 	QString points = m_points.simplifyWhiteSpace();
-	points.replace( QRegExp( "," ), " " );
-	points.replace( QRegExp( "\r" ), "" );
-	points.replace( QRegExp( "\n" ), "" );
+	points.remove( ',' );
+	points.remove( '\r' );
+	points.remove( '\n' );
 	QStringList pointList = QStringList::split( ' ', points );
 	for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
 	{
