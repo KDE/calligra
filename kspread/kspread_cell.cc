@@ -1540,8 +1540,18 @@ bool KSpreadCell::calc(bool delay)
 
   if (m_pCode == NULL)
   {
+    if (testFlag(Flag_ParseError))
     // there was a parse error
-    return false;
+    {
+      return false;
+    }
+    else
+    {
+      /* we were probably at a "isLoading() = true" state when we originally
+         parsed
+      */
+      makeFormula();
+    }
   }
   setFlag(Flag_Progress);
 
@@ -3530,6 +3540,10 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
+  if (m_pTable->isLoading())
+  {
+    return;
+  }
   kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
   QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
   QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
