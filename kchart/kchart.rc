@@ -2,7 +2,16 @@
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit"/>
-  <Action name="config"/>
+  <Menu name="action_popup"><text>&amp;Chart</text>
+   <Action name="config"/>
+   <Separator />
+   <Action name="color_config"/>
+   <Action name="font_config"/>
+   <Action name="back_config"/>
+   <Action name="legend_config"/>
+   <Action name="headerfooter_subtype"/>
+   <Action name="legend_subtype"/>
+  </Menu>
   <Separator />
   <Action name="page_layout"/>
  </Menu>

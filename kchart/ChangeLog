@@ -1,3 +1,11 @@
+2004-11-05  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 90904: edit/configure is confusingly named 
+	* kchart.rc: Add a sub menu for editing only one aspect of the
+	chart.
+	* kchart_view.cc: Change shortcut for Edit Data
+	* kchart_view.cc: Change string for Configure Chart
+
 2004-10-07  Inge Wallin  <inge@lysator.liu.se>
 
 	* Cleanup of the following files.  Made the code more readable,

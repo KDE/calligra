@@ -47,10 +47,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             "wizard", 0,
                             this, SLOT( wizard() ),
                             actionCollection(), "wizard");
-    m_edit = new KAction( i18n("&Edit Data..."), "edit", 0,
+    m_edit = new KAction( i18n("Edit &Data..."), "edit", 0,
                           this, SLOT( edit() ),
                           actionCollection(), "edit");
-    m_config = new KAction( i18n( "&Configure..." ), "configure", 0,
+    m_config = new KAction( i18n( "&Configure Chart..." ), "configure", 0,
                             this, SLOT( slotConfig() ),
                             actionCollection(), "config" );
     m_loadconfig = new KAction( i18n("&Load Config"),
