@@ -255,6 +255,33 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     }
 }
 
+static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    TextFormatting* text=(TextFormatting*) tagData;
+    QString type, linestyle;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ("value" , "QString", (void *) &type );
+    attrProcessingList << AttrProcessing ("styleline" , "QString", (void *) &linestyle );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if( type.isEmpty() )
+        text->strikeout = false;
+    else if( type == "0" )
+        text->strikeout = false;
+    else 
+    {
+        text->strikeout = true;
+        text->strikeoutType = type;
+        text->strikeoutLineStyle = linestyle;
+        if( text->strikeoutType == "1" )
+            text->strikeoutType = "single";
+        if( text->strikeoutLineStyle.isEmpty() )
+            text->strikeoutLineStyle = "solid";
+    }
+}
+
+
 void ProcessAnchorTag ( QDomNode       myNode,
                         void          *tagData,
                         KWEFKWordLeader *leader )
@@ -352,7 +379,7 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     &formatData.text.weight            )
         << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, &formatData.text.italic            )
         << TagProcessing ( "UNDERLINE",           ProcessUnderlineTag,    &formatData.text                   )
-        << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, &formatData.text.strikeout         )
+        << TagProcessing ( "STRIKEOUT",           ProcessStrikeoutTag,    &formatData.text                   )
         << TagProcessing ( "CHARSET",             NULL,                   NULL                               )
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )

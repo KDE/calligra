@@ -56,12 +56,12 @@
 class TextFormatting
 {
     public:
-        TextFormatting(): italic (false), underline (false), 
-            strikeout (false), underlineWord(false),
+        TextFormatting(): italic (false), underline (false), underlineWord(false),
+            strikeout (false), 
             weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
 
         TextFormatting(const bool newMissing) : italic (false),
-            underline (false), strikeout (false), underlineWord(false),
+            underline (false), underlineWord(false), strikeout (false),
             weight (50), fontSize (0), verticalAlignment (0),
             missing (newMissing) {}
 
@@ -74,8 +74,8 @@ class TextFormatting
                          QColor  fg,
                          QColor  bg,
                          int     v) :
-            fontName (f), italic (i), underline (u), 
-            strikeout(s), underlineWord(false), 
+            fontName (f), italic (i), underline (u), underlineWord(false),
+            strikeout(s), 
             weight (w), fontSize (sz), fgColor (fg),
             bgColor (bg), verticalAlignment (v), missing (false) {}
 
@@ -87,13 +87,16 @@ class TextFormatting
         // First with "underline", we check if an underline is wanted or not.
         // Then with "underValue", we check the type of the underline (simple, double...)
         bool    underline;       // underline? (If true, we do not know if simple or double or what else)
-        bool    strikeout;
 
         QString    underlineValue; // "value" of the underline: single, double, bold-single...
         QString    underlineStyle; // underline style: solid, dash, dot dash, ....
         bool       underlineWord;  // true if word-by-word (i.e spaces aren't underlined)
         QColor     underlineColor; // color of the line
         
+        bool    strikeout;             // true if strikeout
+        QString strikeoutType;         // single, bold, double
+        QString strikeoutLineStyle;    // solid, dash, dot, ....
+
         int     weight;
         int     fontSize;
         QColor  fgColor;
