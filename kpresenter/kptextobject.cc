@@ -113,7 +113,7 @@ void KPTextObject::setSize( int _width, int _height )
     // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
 
-    //QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+    QApplication::sendPostedEvents( textObjectView() , QEvent::Resize );
 
 
 
@@ -132,7 +132,7 @@ void KPTextObject::resizeBy( int _dx, int _dy )
         return;
 
 //ktextobject.resize( ext );
-    //QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+    QApplication::sendPostedEvents( textObjectView() , QEvent::Resize );
 
     //qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
@@ -357,33 +357,6 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->restore();
     KPObject::draw( _painter, _diffx, _diffy );
     kdDebug()<<"End draw( QPainter *_painter, int _diffx, int _diffy )\n";
-}
-
-/*========================== activate ============================*/
-void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
-{
-    kdDebug()<<"activate( QWidget *_widget, int diffx, int diffy )\n";
-#if 0
-    ktextobject.reparent( _widget, 0, QPoint( orig.x() - diffx, orig.y() - diffy ), false );
-    ktextobject.resize( ext.width(), ext.height() );
-    ktextobject.show();
-    ktextobject.setCursor( Qt::ibeamCursor );
-#endif
-    textObjectView()->showCursor();
-    kdDebug()<<"End activate( QWidget *_widget, int diffx, int diffy )\n";
-}
-
-/*========================== deactivate ==========================*/
-void KPTextObject::deactivate( KPresenterDoc *doc )
-{
-    kdDebug()<<" KPTextObject::deactivate( KPresenterDoc *doc )\n";
-    recalcPageNum( doc );
-    textObjectView()->hideCursor();
-#if 0
-    ktextobject.reparent( 0, 0, QPoint( 0, 0 ), false );
-    ktextobject.hide();
-#endif
-    kdDebug()<<"End KPTextObject::deactivate( KPresenterDoc *doc )\n";
 }
 
 /*========================= zoom =================================*/
@@ -686,4 +659,44 @@ void KPTextView::pgDownKeyPressed()
 {
     kdDebug()<<"KPTextView::pgDownKeyPressed()\n";
     //todo
+}
+
+void KPTextView::keyPressEvent( QKeyEvent *e )
+{
+    kdDebug()<<"KPTextView::keyPressEvent( QKeyEvent *e )\n";
+    handleKeyPressEvent( e );
+}
+
+void KPTextView::mousePressEvent( QMouseEvent *e)
+{
+    kdDebug()<<"KPTextView::mousePressEvent( QMouseEvent *e)\n";
+}
+
+void KPTextView::mouseMoveEvent( QMouseEvent *, const QPoint & )
+{
+    kdDebug()<<"KPTextView::mouseMoveEvent( QMouseEvent *, const QPoint & )\n";
+}
+
+void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
+{
+    kdDebug()<<"KPTextView::mouseReleaseEvent \n";
+}
+
+void KPTextView::mouseDoubleClickEvent( QMouseEvent *, const QPoint &)
+{
+    kdDebug()<<" KPTextView::mouseDoubleClickEvent\n";
+}
+
+void KPTextView::dragEnterEvent( QDragEnterEvent * )
+{
+    kdDebug()<<"KPTextView::dragEnterEvent( QDragEnterEvent * )\n";
+}
+void KPTextView::dragMoveEvent( QDragMoveEvent *, const QPoint & )
+{
+    kdDebug()<<"KPTextView::dragMoveEvent\n";
+}
+
+void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
+{
+    kdDebug()<<"KPTextView::dragLeaveEvent\n";
 }

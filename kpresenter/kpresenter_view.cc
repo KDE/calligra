@@ -1434,6 +1434,11 @@ void KPresenterView::textDepthMinus()
 /*===============================================================*/
 void KPresenterView::textSettings()
 {
+#ifdef __GNUC__
+#warning Fixme textSettings()
+#endif
+
+
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();

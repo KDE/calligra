@@ -75,9 +75,6 @@ public:
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
-    virtual void activate( QWidget *_widget, int diffx, int diffy );
-    virtual void deactivate( KPresenterDoc *doc );
-
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
 
@@ -136,6 +133,17 @@ public:
     KPTextView( KPTextObject * txtObj );
     virtual ~KPTextView(){};
     KoTextView * textView() { return this; }
+
+    void keyPressEvent( QKeyEvent * );
+    void mousePressEvent( QMouseEvent *);	
+
+    void mouseMoveEvent( QMouseEvent *, const QPoint & ); 
+    void mouseReleaseEvent( QMouseEvent *, const QPoint & );
+    void mouseDoubleClickEvent( QMouseEvent *, const QPoint &);
+    void dragEnterEvent( QDragEnterEvent * );
+    void dragMoveEvent( QDragMoveEvent *, const QPoint & );
+    void dragLeaveEvent( QDragLeaveEvent * );
+
 public slots:
     void cut();
     void copy();
@@ -143,6 +151,7 @@ public slots:
     // Reimplemented from KoTextView
     virtual void updateUI( bool updateFormat, bool force = false );
     virtual void ensureCursorVisible();
+
 
 protected slots:
     virtual void startDrag();

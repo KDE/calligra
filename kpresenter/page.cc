@@ -1105,7 +1105,11 @@ void Page::keyPressEvent( QKeyEvent *e )
 	if ( e->key() == Key_Escape ) {
             exitEditMode();
 	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
-	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
+        {
+            dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->keyPressEvent( e );
+                //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
+            kdDebug()<<"sendEvent( ********** *****************:"<<editNum << " pointer :"<<dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()<<endl;
+        }
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
 	    switch ( e->key() ) {
@@ -3150,7 +3154,7 @@ void Page::editSelectedTextArea()
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
-		    kpobject->activate( this, diffx(), diffy() );
+		    //kpobject->activate( this, diffx(), diffy() );
 		    setTextBackground( kptextobject );
 #if 0
 		    connect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
@@ -3720,7 +3724,7 @@ void Page::exitEditMode()
         editNum = -1;
         if ( kpobject->getType() == OT_TEXT ) {
             KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            kptextobject->deactivate( view->kPresenterDoc() );
+            //kptextobject->deactivate( view->kPresenterDoc() );
             //kptextobject->textObjectView()->clearFocus();
 #if 0
             disconnect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
@@ -3737,7 +3741,7 @@ void Page::exitEditMode()
             emit updateSideBarItem( currPgNum()-1 );
 
         } else if ( kpobject->getType() == OT_PART ) {
-            kpobject->deactivate();
+            //kpobject->deactivate();
             _repaint( kpobject );
             return;
         }
