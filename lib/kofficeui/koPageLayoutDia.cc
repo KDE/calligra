@@ -41,6 +41,11 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
+#include <qhbox.h>
+#include <qvgroupbox.h>
+#include <qhbuttongroup.h>
+#include <qvbuttongroup.h>
+
 /******************************************************************/
 /* class KoPagePreview                                            */
 /******************************************************************/
@@ -314,97 +319,95 @@ void KoPageLayoutDia::setupTab1()
     }
 
     // -------------- page size -----------------
-    QGroupBox *formatFrame = new QGroupBox( i18n( "Page Size" ), tab1 );
+    QVGroupBox *formatFrame = new QVGroupBox( i18n( "Page Size" ), tab1 );
     grid1->addWidget( formatFrame, 1, 0 );
-    QGridLayout *formatGrid = new QGridLayout( formatFrame, 3, 2,
-       2*KDialog::marginHint(), KDialog::spacingHint() );
-    formatGrid->setColStretch( 1, 1 );
+
+    QHBox *formatPageSize = new QHBox( formatFrame );
+    formatPageSize->setSpacing( KDialog::spacingHint() );
 
     // label page size
-    QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatFrame );
-    formatGrid->addWidget( lpgFormat, 0, 0, Qt::AlignRight | Qt::AlignVCenter );
+    QLabel *lpgFormat = new QLabel( i18n( "&Size:" ), formatPageSize );
 
     // combo size
-    cpgFormat = new QComboBox( false, formatFrame, "cpgFormat" );
+    cpgFormat = new QComboBox( false, formatPageSize, "cpgFormat" );
     cpgFormat->insertStringList( KoPageFormat::allFormats() );
     lpgFormat->setBuddy( cpgFormat );
-    formatGrid->addWidget( cpgFormat, 0, 1, Qt::AlignLeft | Qt::AlignVCenter );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
+    // spacer
+    formatPageSize->setStretchFactor( new QWidget( formatPageSize ), 10 );
+
+    QHBox *formatCustomSize = new QHBox( formatFrame );
+    formatCustomSize->setSpacing( KDialog::spacingHint() );
+
     // label width
-    QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatFrame );
-    formatGrid->addWidget( lpgWidth, 1, 0, Qt::AlignRight | Qt::AlignVCenter );
+    QLabel *lpgWidth = new QLabel( i18n( "&Width:" ), formatCustomSize );
 
     // linedit width
-    epgWidth = new KDoubleNumInput( formatFrame, "Width" );
+    epgWidth = new KDoubleNumInput( formatCustomSize, "Width" );
     lpgWidth->setBuddy( epgWidth );
-    formatGrid->addWidget( epgWidth, 1, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( m_layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
     connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
     // label height
-    QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatFrame );
-    formatGrid->addWidget( lpgHeight, 2, 0, Qt::AlignRight | Qt::AlignVCenter );
+    QLabel *lpgHeight = new QLabel( i18n( "&Height:" ), formatCustomSize );
 
     // linedit height
-    epgHeight = new KDoubleNumInput( formatFrame, "Height" );
+    epgHeight = new KDoubleNumInput( formatCustomSize, "Height" );
     lpgHeight->setBuddy( epgHeight );
-    formatGrid->addWidget( epgHeight, 2, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( m_layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
     connect( epgHeight, SIGNAL( valueChanged(double ) ), this, SLOT( heightChanged() ) );
 
     // --------------- orientation ---------------
-    QButtonGroup *orientFrame = new QButtonGroup( i18n( "Orientation" ), tab1 );
+    QHButtonGroup *orientFrame = new QHButtonGroup( i18n( "Orientation" ), tab1 );
+    orientFrame->setInsideSpacing( KDialog::spacingHint() );
     grid1->addWidget( orientFrame, 2, 0 );
-    QGridLayout *orientLayout = new QGridLayout( orientFrame, 1, 4,
-       2*KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel* lbPortrait = new QLabel( orientFrame );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
     lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
-    orientLayout->addWidget(lbPortrait, 0, 0);
     rbPortrait = new QRadioButton( i18n("&Portrait"), orientFrame );
-    orientLayout->addWidget(rbPortrait, 0, 1);
 
     QLabel* lbLandscape = new QLabel( orientFrame );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
-    orientLayout->addWidget(lbLandscape, 0, 2);
     rbLandscape = new QRadioButton( i18n("La&ndscape"), orientFrame );
-    orientLayout->addWidget(rbLandscape, 0, 3);
 
 
     connect( rbPortrait, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
     connect( rbLandscape, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
 
     // --------------- page margins ---------------
-    QButtonGroup *marginsFrame = new QButtonGroup( i18n( "Margins" ), tab1 );
+    QVGroupBox *marginsFrame = new QVGroupBox( i18n( "Margins" ), tab1 );
     grid1->addWidget( marginsFrame, 3, 0 );
-    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 3, 3,
-       2*KDialog::marginHint(), KDialog::spacingHint() );
+    
+    QWidget *dummyWidget = new QWidget( marginsFrame );
+    
+    QGridLayout *marginsLayout = new QGridLayout( dummyWidget, 3, 3,
+       KDialog::marginHint(), KDialog::spacingHint() );
 
     // left margin
-    ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
+    ebrLeft = new KDoubleNumInput( dummyWidget, "Left" );
     marginsLayout->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
+    ebrRight = new KDoubleNumInput( dummyWidget, "Right" );
     marginsLayout->addWidget( ebrRight, 1, 2 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
+    ebrTop = new KDoubleNumInput( dummyWidget, "Top" );
     marginsLayout->addWidget( ebrTop, 0, 1 , Qt::AlignCenter );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
+    ebrBottom = new KDoubleNumInput( dummyWidget, "Bottom" );
     marginsLayout->addWidget( ebrBottom, 2, 1, Qt::AlignCenter );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
