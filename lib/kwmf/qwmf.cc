@@ -726,7 +726,7 @@ void QWinMetaFile::setTextAlign( long, short* parm )
 void QWinMetaFile::textOut( long num, short* parm )
 {
 
-    short copyParm[ num + 1 ];
+    short *copyParm = new short[ num + 1 ];
 
     // re-order parameters
     int idxOffset = (parm[ 0 ] / 2) + 1 + (parm[ 0 ] & 1);
@@ -737,6 +737,7 @@ void QWinMetaFile::textOut( long num, short* parm )
     memcpy( &copyParm[ 4 ], &parm[ 1 ], parm[ 0 ] );
 
     extTextOut( num + 1, copyParm );
+    delete [] copyParm;
 }
 
 
