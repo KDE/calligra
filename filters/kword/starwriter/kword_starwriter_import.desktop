@@ -2,6 +2,12 @@
 Encoding=UTF-8
 Icon=
 Name=KWord StarWriter 5.x Import Filter
+Name[es]=Filtro de importación de StarWriter 5.x para KWord
+Name[it]=Filtro di importazione StarWriter 5.x per KWord
+Name[pt]=Filtro de Importação do StarWriter 5.x para o KWord
+Name[pt_BR]=Filtro de Importação do StarWriter 5.x para o KWord
+Name[ru]=Фильтр импорта документов StarWriter 5.x в КWord
+Name[sv]=Kword-importfilter för StarWriter 5.x
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kword
