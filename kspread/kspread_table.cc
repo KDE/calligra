@@ -4182,12 +4182,17 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
 {
 if(m_rctSelection.left() == 0)
         return;
-KSpreadCell *cell = nonDefaultCell(_marker.x() ,_marker.y()  );
 int x=_marker.x();
 int y=_marker.y();
+if(_marker.x()>m_rctSelection.left())
+        x=m_rctSelection.left();
+if(_marker.y()>m_rctSelection.top())
+        y=m_rctSelection.top();
+KSpreadCell *cell = nonDefaultCell(x ,y  );
+
 cell->forceExtraCells( x ,y,
-                           m_rctSelection.right() -m_rctSelection.left(),
-                           m_rctSelection.bottom() - m_rctSelection.top() );
+                           abs(m_rctSelection.right() -m_rctSelection.left()),
+                           abs(m_rctSelection.bottom() - m_rctSelection.top()));
 emit sig_updateView( this, m_rctSelection );
 }
 

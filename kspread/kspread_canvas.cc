@@ -352,8 +352,20 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   KSpreadCell* cell = table->cellAt( x, y );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
-    y = cell->obscuringCellsRow();
-    x = cell->obscuringCellsColumn();
+    int moveX=cell->obscuringCellsColumn();
+    int moveY=cell->obscuringCellsRow();
+    cell = table->cellAt( moveX, moveY );
+    QRect extraCell;
+    extraCell.setCoords(moveX,moveY,moveX+cell->extraXCells(),moveY+cell->extraYCells());
+    if( (x-markerColumn())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
+        x=cell->extraXCells()+x;
+    else if((y-markerRow())!=0 && extraCell.contains(QPoint(markerColumn(),markerRow())))
+        y=cell->extraYCells()+y;
+    else
+        {
+        y = moveY;
+        x = moveX;
+        }
   }
 
   int xpos = table->columnPos( x, this );
