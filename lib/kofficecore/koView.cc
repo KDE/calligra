@@ -669,7 +669,7 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   parentView()->canvasAddChild( this );
 
 
-  /**
+  /*
    KoViewChild has basically three geometries to keep in sync.
    - The KoDocumentChild geometry (i.e. the embedded object's geometry, unzoomed)
    - Its own geometry (used for hit-test etc.)
