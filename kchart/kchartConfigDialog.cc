@@ -124,6 +124,17 @@ void KChartConfigDialog::apply()
     //     _params->PlotColor = _colorpage->plotColor();
     //_params->EdgeColor = _colorpage->edgeColor();
     //     _params->VolColor = _colorpage->volColor();
+
+    // set the color for Header, Header2 and Footer
+    // (this will be rerplaced for KOffice 1.2 to support
+    //  the enhanced header/footer handling of KDChart 1.1
+    _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader,
+            _colorpage->hdFtColor( KDChartParams::HdFtPosHeader  ) );
+    _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader2,
+            _colorpage->hdFtColor( KDChartParams::HdFtPosHeader2 ) );
+    _params->setHeaderFooterColor( KDChartParams::HdFtPosFooter,
+            _colorpage->hdFtColor( KDChartParams::HdFtPosFooter  ) );
+
     KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
     leftparams.setAxisGridColor( _colorpage->gridColor() );
     _params->setOutlineDataColor( _colorpage->lineColor() );
@@ -131,16 +142,10 @@ void KChartConfigDialog::apply()
     KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
     if( _colorpage->xTitleColor().isValid() )
         bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
-    else
-        bottomparams.setAxisLineColor( _colorpage->titleColor() );
     if( _colorpage->yTitleColor().isValid() )
         leftparams.setAxisLineColor( _colorpage->yTitleColor() );
-    else
-        leftparams.setAxisLineColor( _colorpage->titleColor() );
     if( _colorpage->yTitle2Color().isValid() )
         rightparams.setAxisLineColor( _colorpage->yTitle2Color() );
-    else
-        rightparams.setAxisLineColor( _colorpage->titleColor() );
     bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
     leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
     rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
@@ -183,12 +188,18 @@ void KChartConfigDialog::apply()
 void KChartConfigDialog::defaults()
 {
     // color page
+    _colorpage->setHdFtColor(     KDChartParams::HdFtPosHeader,
+      _params->headerFooterColor( KDChartParams::HdFtPosHeader ) );
+    _colorpage->setHdFtColor(     KDChartParams::HdFtPosHeader2,
+      _params->headerFooterColor( KDChartParams::HdFtPosHeader2 ) );
+    _colorpage->setHdFtColor(     KDChartParams::HdFtPosFooter,
+      _params->headerFooterColor( KDChartParams::HdFtPosFooter ) );
+
     _colorpage->setLineColor( _params->outlineDataColor() );
     KDChartAxisParams leftparams( _params->axisParams( KDChartAxisParams::AxisPosLeft ) );
     KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );
     KDChartAxisParams bottomparams( _params->axisParams( KDChartAxisParams::AxisPosBottom ) );
     _colorpage->setGridColor( leftparams.axisGridColor() );
-    _colorpage->setTitleColor( QColor() );
     _colorpage->setXTitleColor( bottomparams.axisLineColor() );
     _colorpage->setYTitleColor( leftparams.axisLineColor() );
     _colorpage->setYTitle2Color( rightparams.axisLineColor() );

@@ -83,17 +83,49 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
 	QWhatsThis::add( volLA, wtstr );
 	QWhatsThis::add( _volCB, wtstr );
 
+
+
     QLabel* titleLA = new QLabel( i18n( "&Title color" ), gb );
     titleLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( titleLA, 2, 2 );
-    _titleCB = new KColorButton( gb );
-	titleLA->setBuddy( _titleCB );
-    grid->addWidget( _titleCB, 2, 3 );
-	wtstr = i18n( "This color is used for displaying titles for the axes. "
-				  "This setting can be overridden by the settings for the "
-				  "individual axes." );
-	QWhatsThis::add( titleLA, wtstr );
-	QWhatsThis::add( _titleCB, wtstr );
+
+
+
+
+    _headerCB = new KColorButton( gb );
+	titleLA->setBuddy( _headerCB );
+    _header2CB = new KColorButton( gb );
+    _footerCB = new KColorButton( gb );
+
+    // NOTE: The reason for this being a QGridLayout (instead of just
+    //       taking a QHBoxLayout) is that there will be 18(sic!)
+    //       color buttons for chart Headers (or Footers, resp.)
+    //       in KOffice 1.2.
+    //
+    QGridLayout* colorGrid = new QGridLayout( gb,1, 3, 0,4);
+    grid->addLayout( colorGrid, 2, 3 );
+    colorGrid->addWidget( _headerCB, 0, 0 );
+    colorGrid->addWidget( _header2CB, 0, 1 );
+    colorGrid->addWidget( _footerCB, 0, 2 );
+
+
+// I am very sorry for this but I must disable the QWhatsThis text here.
+// The 'Title color' is needed for the Chart's title, subtitle and footertext.
+// Due to this the What's this text is wrong now but unfortunately i18n is
+// done allready.
+// So we better live without this text than with a wrong text.
+// (No, using another name instead of 'Title color' is not possible since
+//  the other configuration tab pages also use the term 'Title' for the Chart
+//  title.  The former inconsistency in kchart has been removed now.)
+//                                                           (khz, 9.12.2001)
+//
+//	wtstr = i18n( "This color is used for displaying titles for the axes. "
+//                    "This setting can be overridden by the settings for the "
+//                    "individual axes." );
+//	QWhatsThis::add( titleLA, wtstr );
+//	QWhatsThis::add( _titleCB, wtstr );
+
+
 
     QLabel* xtitleLA = new QLabel( i18n("&X title color" ), gb );
     xtitleLA->setAlignment( AlignRight | AlignVCenter );

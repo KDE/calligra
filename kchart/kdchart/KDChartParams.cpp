@@ -1777,6 +1777,8 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                                  _hdFtParams[hf]._font,
                                  _hdFtParams[hf]._fontUseRelSize,
                                  _hdFtParams[hf]._fontRelSize );
+            KDXML::createColorNode( doc, hfSettingsElement, "Color",
+                                    _hdFtParams[hf]._color );
         }
     }
 
@@ -2716,9 +2718,12 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                                hfSettings->_font,
                                                hfSettings->_fontUseRelSize,
                                                hfSettings->_fontRelSize );
+                        } else if( tagName == "Color" ) {
+                            QColor color;
+                            if( KDXML::readColorNode( element, color ) )
+                                hfSettings->_color = color;
                         } else {
                             qDebug( "Unknown subelement of HeaderFooterSettings found: %s", tagName.latin1() );
-                            return false;
                         }
                     }
                     node = node.nextSibling();
