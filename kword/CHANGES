@@ -794,3 +794,12 @@ Reggie, 3.2.1999:
   close and open the "Arrangement" branch to update it
 - Added a demo document with some chapters and different depths to demonstrate
   the document structure viewer
+
+Reggie, 4.2.1999:
+-----------------
+- Double click on a paragraph branch in the arrangement branch of the document
+  structur viewer sets the cursor to this paragraph in the text view
+- Text frames and text frame sets are listed in the docu structure viewer
+- Tables are listed in the docu structure viewer
+- Pictures are listed in the docu structure viewer
+- Embedded objects are listed in the docu structure viewer

@@ -30,6 +30,113 @@ class KWordDocument;
 class KWordGUI;
 
 /******************************************************************/
+/* Class: KWDocStructParagItem                                    */
+/******************************************************************/
+
+class KWDocStructParagItem : public QObject,
+			     virtual public QListViewItem
+{
+  Q_OBJECT
+
+public:
+  KWDocStructParagItem(QListViewItem *_parent,QString _text,KWParag *_parag,KWordGUI*__parent);
+  KWDocStructParagItem(QListViewItem *_parent,QListViewItem *_after,QString _text,KWParag *_parag,KWordGUI*__parent);
+
+public slots:
+  void slotDoubleClicked(QListViewItem *_item);
+
+protected:
+  KWParag *parag;
+  KWordGUI *gui;
+
+};
+
+/******************************************************************/
+/* Class: KWDocStructFrameItem                                    */
+/******************************************************************/
+
+class KWDocStructFrameItem : public QObject,
+			     virtual public QListViewItem
+{
+  Q_OBJECT
+
+public:
+  KWDocStructFrameItem(QListViewItem *_parent,QString _text,KWFrameSet *_frameset,KWFrame *_frame,KWordGUI*__parent);
+
+public slots:
+  void slotDoubleClicked(QListViewItem *_item);
+
+protected:
+  KWFrame *frame;
+  KWFrameSet *frameset;
+  KWordGUI *gui;
+
+};
+
+/******************************************************************/
+/* Class: KWDocStructTableItem                                    */
+/******************************************************************/
+
+class KWDocStructTableItem : public QObject,
+			     virtual public QListViewItem
+{
+  Q_OBJECT
+
+public:
+  KWDocStructTableItem(QListViewItem *_parent,QString _text,KWGroupManager *_table,KWordGUI*__parent);
+
+public slots:
+  void slotDoubleClicked(QListViewItem *_item);
+
+protected:
+  KWGroupManager *table;
+  KWordGUI *gui;
+
+};
+
+/******************************************************************/
+/* Class: KWDocStructPictureItem                                  */
+/******************************************************************/
+
+class KWDocStructPictureItem : public QObject,
+			       virtual public QListViewItem
+{
+  Q_OBJECT
+
+public:
+  KWDocStructPictureItem(QListViewItem *_parent,QString _text,KWPictureFrameSet *_pic,KWordGUI*__parent);
+
+public slots:
+  void slotDoubleClicked(QListViewItem *_item);
+
+protected:
+  KWPictureFrameSet *pic;
+  KWordGUI *gui;
+
+};
+
+/******************************************************************/
+/* Class: KWDocStructPartItem                                     */
+/******************************************************************/
+
+class KWDocStructPartItem : public QObject,
+			    virtual public QListViewItem
+{
+  Q_OBJECT
+
+public:
+  KWDocStructPartItem(QListViewItem *_parent,QString _text,KWPartFrameSet *_part,KWordGUI*__parent);
+
+public slots:
+  void slotDoubleClicked(QListViewItem *_item);
+
+protected:
+  KWPartFrameSet *part;
+  KWordGUI *gui;
+
+};
+
+/******************************************************************/
 /* Class: KWDocStructRootItem                                     */
 /******************************************************************/
 
@@ -38,7 +145,7 @@ class KWDocStructRootItem : public QListViewItem
 public:
   enum Type {Arrangement,Tables,Pictures,Cliparts,TextFrames,Embedded};
 
-  KWDocStructRootItem(QListView *_parent,KWordDocument *_doc,Type _type);
+  KWDocStructRootItem(QListView *_parent,KWordDocument *_doc,Type _type,KWordGUI*__parent);
 
   void setupArrangement();
   void setupTextFrames();
@@ -52,6 +159,7 @@ public:
 protected:
   KWordDocument *doc;
   Type type;
+  KWordGUI *gui;
 
 };
 
@@ -64,12 +172,13 @@ class KWDocStructTree : public QListView
   Q_OBJECT
 
 public:
-  KWDocStructTree(QWidget *_parent,KWordDocument *_doc);
+  KWDocStructTree(QWidget *_parent,KWordDocument *_doc,KWordGUI*__parent);
 
   void setup();
 
 protected:
   KWordDocument *doc;
+  KWordGUI *gui;
 
   KWDocStructRootItem *arrangement,*tables,*pictures,*cliparts,*textfrms,*embedded;
 

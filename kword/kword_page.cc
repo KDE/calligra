@@ -2381,6 +2381,25 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
 }
 
 /*================================================================*/
+void KWPage::scrollToParag(KWParag *_parag)
+{
+  QPainter p;
+  p.begin(this);
+
+  doc->drawMarker(*fc,&p,xOffset,yOffset);
+  fc->init(_parag,p,true,true);
+  fc->gotoStartOfParag(p);
+  fc->cursorGotoLineStart(p);
+  p.end();
+
+  scrollToCursor(*fc);
+
+  p.begin(this);
+  doc->drawMarker(*fc,&p,xOffset,yOffset);
+  p.end();
+}
+
+/*================================================================*/
 void KWPage::scrollToOffset(int _x,int _y,KWFormatContext &_fc)
 {
   QPainter painter;

@@ -89,6 +89,7 @@ public:
   int isCursorXVisible(KWFormatContext &_fc);
   
   void scrollToCursor(KWFormatContext &_fc);
+  void scrollToParag(KWParag *_parag);
   void scrollToOffset(int _x,int _y,KWFormatContext &_fc);
  
   void setXOffset(int _x)

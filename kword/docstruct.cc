@@ -20,15 +20,120 @@
 #include "docstruct.moc"
 
 /******************************************************************/
+/* Class: KWDocStructParagItem                                    */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructParagItem::KWDocStructParagItem(QListViewItem *_parent,QString _text,KWParag *_parag,KWordGUI*__parent)
+  : QListViewItem(_parent,_text)
+{
+  parag = _parag;
+  gui = __parent;
+}
+
+/*================================================================*/
+KWDocStructParagItem::KWDocStructParagItem(QListViewItem *_parent,QListViewItem *_after,QString _text,KWParag *_parag,KWordGUI*__parent)
+  : QListViewItem(_parent,_after,_text)
+{
+  parag = _parag;
+  gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructParagItem::slotDoubleClicked(QListViewItem *_item)
+{
+  if (_item == this)
+    gui->getPaperWidget()->scrollToParag(parag);
+}
+
+/******************************************************************/
+/* Class: KWDocStructFrameItem                                    */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructFrameItem::KWDocStructFrameItem(QListViewItem *_parent,QString _text,KWFrameSet *_frameset,KWFrame *_frame,KWordGUI*__parent)
+  : QListViewItem(_parent,_text)
+{
+  frame = _frame;
+  frameset = _frameset;
+  gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructFrameItem::slotDoubleClicked(QListViewItem *_item)
+{
+  if (_item == this)
+    ;
+}
+
+/******************************************************************/
+/* Class: KWDocStructTableItem                                    */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructTableItem::KWDocStructTableItem(QListViewItem *_parent,QString _text,KWGroupManager *_table,KWordGUI*__parent)
+  : QListViewItem(_parent,_text)
+{
+  table = _table;
+  gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructTableItem::slotDoubleClicked(QListViewItem *_item)
+{
+  if (_item == this)
+    ;
+}
+
+/******************************************************************/
+/* Class: KWDocStructPictureItem                                  */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructPictureItem::KWDocStructPictureItem(QListViewItem *_parent,QString _text,KWPictureFrameSet *_pic,KWordGUI*__parent)
+  : QListViewItem(_parent,_text)
+{
+  pic = _pic;
+  gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructPictureItem::slotDoubleClicked(QListViewItem *_item)
+{
+  if (_item == this)
+    ;
+}
+
+/******************************************************************/
+/* Class: KWDocStructPartItem                                     */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructPartItem::KWDocStructPartItem(QListViewItem *_parent,QString _text,KWPartFrameSet *_part,KWordGUI*__parent)
+  : QListViewItem(_parent,_text)
+{
+  part = _part;
+  gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructPartItem::slotDoubleClicked(QListViewItem *_item)
+{
+  if (_item == this)
+    ;
+}
+
+/******************************************************************/
 /* Class: KWDocStructRootItem                                     */
 /******************************************************************/
 
 /*================================================================*/
-KWDocStructRootItem::KWDocStructRootItem(QListView *_parent,KWordDocument *_doc,Type _type)
+KWDocStructRootItem::KWDocStructRootItem(QListView *_parent,KWordDocument *_doc,Type _type,KWordGUI*__parent)
   : QListViewItem(_parent)
 {
   doc = _doc;
   type = _type;
+  gui = __parent;
 
   switch (type)
     {
@@ -110,7 +215,7 @@ void KWDocStructRootItem::setupArrangement()
 	}
     }
 
-  QIntDict<QListViewItem> parags;
+  QIntDict<KWDocStructParagItem> parags;
   parags.setAutoDelete(false);
 
   KWFrameSet *frameset = 0L;
@@ -118,12 +223,14 @@ void KWDocStructRootItem::setupArrangement()
   KWParagLayout *pLayout = 0L;
   QListViewItem *item = 0L;
   QString _name;
+
+  int j = 0;
   for (int i = doc->getNumFrameSets() - 1;i >= 0;i--)
     {
       frameset = doc->getFrameSet(i);
       if (frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager())
 	{
-	  _name.sprintf(i18n("Frameset %d"),i);
+	  _name.sprintf(i18n("Frameset %d"),++j);
 	  item = new QListViewItem(this,_name); 
 
 	  parag = dynamic_cast<KWTextFrameSet*>(frameset)->getFirstParag();
@@ -136,44 +243,152 @@ void KWDocStructRootItem::setupArrangement()
 		  if (_depth == 0)
 		    {
 		      if (item->childCount() == 0)
-			parags.replace(_depth,new QListViewItem(item,QString(parag->getCounterText() + "  " +
-									     parag->getKWString()->toString(0,parag->getKWString()->size()))));
+			parags.replace(_depth,new KWDocStructParagItem(item,
+								       QString(parag->getCounterText() + "  " +
+									       parag->getKWString()->toString(0,parag->getKWString()->size())),
+								       parag,gui));
 		      else
-			parags.replace(_depth,new QListViewItem(item,parags[_depth],
-								QString(parag->getCounterText() + "  " +
-									parag->getKWString()->toString(0,parag->getKWString()->size()))));
+			parags.replace(_depth,new KWDocStructParagItem(item,parags[_depth],
+								       QString(parag->getCounterText() + "  " +
+									       parag->getKWString()->toString(0,parag->getKWString()->size())),
+								       parag,gui));
 		    }
 		  else
 		    {
 		      if (parags[_depth - 1]->childCount() == 0)
-			parags.replace(_depth,new QListViewItem(parags[_depth - 1],
-								QString(parag->getCounterText() + "  " +
-									parag->getKWString()->toString(0,parag->getKWString()->size()))));
+			parags.replace(_depth,new KWDocStructParagItem(parags[_depth - 1],
+								       QString(parag->getCounterText() + "  " +
+									       parag->getKWString()->toString(0,parag->getKWString()->size())),
+								       parag,gui));
 		      else
-			parags.replace(_depth,new QListViewItem(parags[_depth - 1],parags[_depth],
-								QString(parag->getCounterText() + "  " +
-									parag->getKWString()->toString(0,parag->getKWString()->size()))));
+			parags.replace(_depth,new KWDocStructParagItem(parags[_depth - 1],parags[_depth],
+								       QString(parag->getCounterText() + "  " +
+									       parag->getKWString()->toString(0,parag->getKWString()->size())),
+								       parag,gui));
 		    }
+		  QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),parags[_depth],SLOT(slotDoubleClicked(QListViewItem*)));
 		}
 	      parag = parag->getNext();
 	    }
 	}
     } 
+
+  if (childCount() == 0)
+    (void)new QListViewItem(this,i18n("Empty"));
 }
 
 /*================================================================*/
 void KWDocStructRootItem::setupTextFrames()
 {
+  if (childCount() > 0)
+    {
+      QListViewItem *child = firstChild(),*delChild;
+      
+      while(child) 
+	{
+	  delChild = child;
+	  child = child->nextSibling();
+	  delete delChild;
+	}
+    }
+  
+  KWFrameSet *frameset = 0L;
+  QListViewItem *item = 0L;
+  QString _name;
+  KWDocStructFrameItem *child;
+
+  int k = 0;
+  for (int i = doc->getNumFrameSets() - 1;i >= 0;i--)
+    {
+      frameset = doc->getFrameSet(i);
+      if (frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager())
+	{
+	  _name.sprintf(i18n("Frameset %d"),++k);
+	  item = new QListViewItem(this,_name); 
+	  
+	  for (int j = frameset->getNumFrames() - 1;j >= 0;j--)
+	    {
+	      if (i == 0 && doc->getProcessingType() == KWordDocument::WP)
+		{
+		  if (doc->getColumns() == 1)
+		    _name.sprintf(i18n("Page %d"),j + 1);
+		  else
+		    _name.sprintf(i18n("Column %d"),j + 1);
+		}
+	      else
+		_name.sprintf(i18n("Text Frame %d"),j + 1);
+	      child = new KWDocStructFrameItem(item,_name,frameset,frameset->getFrame(j),gui);
+	      QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),child,SLOT(slotDoubleClicked(QListViewItem*)));
+	    }
+	}
+    }
+
+  if (childCount() == 0)
+    (void)new QListViewItem(this,i18n("Empty"));
 }
 
 /*================================================================*/
 void KWDocStructRootItem::setupTables()
 {
+  if (childCount() > 0)
+    {
+      QListViewItem *child = firstChild(),*delChild;
+      
+      while(child) 
+	{
+	  delChild = child;
+	  child = child->nextSibling();
+	  delete delChild;
+	}
+    }
+  
+  QString _name;
+  KWDocStructTableItem *child;
+
+  for (int i = doc->getNumGroupManagers() - 1;i >= 0;i--)
+    {
+      _name.sprintf(i18n("Table %d"),i + 1);
+      child = new KWDocStructTableItem(this,_name,doc->getGroupManager(i),gui);
+      QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),child,SLOT(slotDoubleClicked(QListViewItem*)));
+    }
+
+  if (childCount() == 0)
+    (void)new QListViewItem(this,i18n("Empty"));
 }
 
 /*================================================================*/
 void KWDocStructRootItem::setupPictures()
 {
+  if (childCount() > 0)
+    {
+      QListViewItem *child = firstChild(),*delChild;
+      
+      while(child) 
+	{
+	  delChild = child;
+	  child = child->nextSibling();
+	  delete delChild;
+	}
+    }
+  
+  KWFrameSet *frameset = 0L;
+  QString _name;
+  KWDocStructPictureItem *child;
+
+  int j = 0;
+  for (int i = doc->getNumFrameSets() - 1;i >= 0;i--)
+    {
+      frameset = doc->getFrameSet(i);
+      if (frameset->getFrameType() == FT_PICTURE)
+	{
+	  _name.sprintf(i18n("Picture (%s) %d"),dynamic_cast<KWPictureFrameSet*>(frameset)->getFileName().data(),++j);
+	  child = new KWDocStructPictureItem(this,_name,dynamic_cast<KWPictureFrameSet*>(frameset),gui);
+	  QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),child,SLOT(slotDoubleClicked(QListViewItem*)));
+	}
+    }
+
+  if (childCount() == 0)
+    (void)new QListViewItem(this,i18n("Empty"));
 }
 
 /*================================================================*/
@@ -184,6 +399,36 @@ void KWDocStructRootItem::setupCliparts()
 /*================================================================*/
 void KWDocStructRootItem::setupEmbedded()
 {
+  if (childCount() > 0)
+    {
+      QListViewItem *child = firstChild(),*delChild;
+      
+      while(child) 
+	{
+	  delChild = child;
+	  child = child->nextSibling();
+	  delete delChild;
+	}
+    }
+  
+  KWFrameSet *frameset = 0L;
+  QString _name;
+  KWDocStructPartItem *child;
+
+  int j = 0;
+  for (int i = doc->getNumFrameSets() - 1;i >= 0;i--)
+    {
+      frameset = doc->getFrameSet(i);
+      if (frameset->getFrameType() == FT_PART)
+	{
+	  _name.sprintf(i18n("Embedded Object %d"),++j);
+	  child = new KWDocStructPartItem(this,_name,dynamic_cast<KWPartFrameSet*>(frameset),gui);
+	  QObject::connect(listView(),SIGNAL(doubleClicked(QListViewItem*)),child,SLOT(slotDoubleClicked(QListViewItem*)));
+	}
+    }
+
+  if (childCount() == 0)
+    (void)new QListViewItem(this,i18n("Empty"));
 }
 
 /******************************************************************/
@@ -191,10 +436,12 @@ void KWDocStructRootItem::setupEmbedded()
 /******************************************************************/
 
 /*================================================================*/
-KWDocStructTree::KWDocStructTree(QWidget *_parent,KWordDocument *_doc)
+KWDocStructTree::KWDocStructTree(QWidget *_parent,KWordDocument *_doc,KWordGUI*__parent)
   : QListView(_parent)
 {
   doc = _doc;
+  gui = __parent;
+
   addColumn(i18n("Document Structure"));
   //addColumn(i18n("Additional Info"));
   //setColumnWidthMode(0,Manual);
@@ -207,23 +454,23 @@ void KWDocStructTree::setup()
   setRootIsDecorated(true);
   setSorting(-1);
 
-  embedded = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Embedded);
-  QListViewItem *item = new QListViewItem(embedded,"Test5"); 
+  embedded = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Embedded,gui);
+  QListViewItem *item = new QListViewItem(embedded,"Empty"); 
 
-  cliparts = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Cliparts);
-  item = new QListViewItem(cliparts,"Test4");
+  cliparts = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Cliparts,gui);
+  item = new QListViewItem(cliparts,"Empty");
 
-  pictures = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Pictures);
-  item = new QListViewItem(pictures,"Test3");
+  pictures = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Pictures,gui);
+  item = new QListViewItem(pictures,"Empty");
 
-  tables = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Tables);
-  item = new QListViewItem(tables,"Test2");
+  tables = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Tables,gui);
+  item = new QListViewItem(tables,"Empty");
 
-  textfrms = new KWDocStructRootItem(this,doc,KWDocStructRootItem::TextFrames);
-  item = new QListViewItem(textfrms,"Test1");
+  textfrms = new KWDocStructRootItem(this,doc,KWDocStructRootItem::TextFrames,gui);
+  item = new QListViewItem(textfrms,"Empty");
 
-  arrangement = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Arrangement);
-  item = new QListViewItem(arrangement,i18n("Nothing"));
+  arrangement = new KWDocStructRootItem(this,doc,KWDocStructRootItem::Arrangement,gui);
+  item = new QListViewItem(arrangement,i18n("Empty"));
 }
 
 /******************************************************************/
@@ -239,7 +486,7 @@ KWDocStruct::KWDocStruct(QWidget *_parent,KWordDocument *_doc,KWordGUI*__parent)
 
   layout = new QGridLayout(this,1,1,0,0);
 
-  tree = new KWDocStructTree(this,doc);
+  tree = new KWDocStructTree(this,doc,__parent);
   tree->resize(tree->sizeHint());
   layout->addWidget(tree,0,0);
   layout->addColSpacing(0,0);
