@@ -146,8 +146,6 @@ class KWDocStructPictureItem : public KWDocListViewItem
 public:
     KWDocStructPictureItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
-    virtual void editFrameSet();
-
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
     void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
@@ -169,7 +167,6 @@ class KWDocStructClipartItem : public KWDocListViewItem
 public:
     KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
     virtual void selectFrameSet();
-    virtual void editFrameSet();
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );

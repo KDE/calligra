@@ -158,7 +158,8 @@ void KWDocStructTableItem::selectFrameSet()
 
 void KWDocStructTableItem::editFrameSet()
 {
-    gui->canvasWidget()->editTextFrameSet( table, 0L, 0 );
+    //active the first cell
+    gui->canvasWidget()->editTextFrameSet( table->getCell(0), 0L, 0 );
 }
 
 /******************************************************************/
@@ -192,10 +193,6 @@ void KWDocStructPictureItem::selectFrameSet()
 
 }
 
-void KWDocStructPictureItem::editFrameSet()
-{
-    //todo
-}
 
 
 /******************************************************************/
@@ -228,10 +225,6 @@ void KWDocStructClipartItem::selectFrameSet()
     gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
-void KWDocStructClipartItem::editFrameSet()
-{
-    //todo
-}
 
 /******************************************************************/
 /* Class: KWDocStructFormulaItem                                  */
