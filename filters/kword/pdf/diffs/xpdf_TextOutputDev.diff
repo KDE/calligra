@@ -1,0 +1,141 @@
+diff -u /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.cc xpdf/TextOutputDev.cc
+--- /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.cc	Thu Nov 14 04:41:00 2002
++++ xpdf/TextOutputDev.cc	Sat Nov 23 21:01:14 2002
+@@ -46,26 +46,6 @@
+ // TextBlock
+ //------------------------------------------------------------------------
+ 
+-class TextBlock {
+-public:
+-
+-  TextBlock();
+-  ~TextBlock();
+-
+-  double xMin, xMax;
+-  double yMin, yMax;
+-  TextString *strings;		// list of strings in the block
+-  TextBlock *next;		// next block in line
+-  TextBlock *xyNext;		// next block on xyBlocks list
+-  Unicode *text;		// Unicode text of the block, including
+-				//   spaces between strings
+-  double *xRight;		// right-hand x coord of each char
+-  int len;			// total number of Unicode characters
+-  int convertedLen;		// total number of converted characters
+-  int *col;			// starting column number for each
+-				//   Unicode character
+-};
+-
+ TextBlock::TextBlock() {
+   strings = NULL;
+   next = NULL;
+@@ -90,17 +70,6 @@
+ //------------------------------------------------------------------------
+ // TextLine
+ //------------------------------------------------------------------------
+-
+-class TextLine {
+-public:
+-
+-  TextLine();
+-  ~TextLine();
+-
+-  TextBlock *blocks;
+-  TextLine *next;
+-  double yMin, yMax;
+-};
+ 
+ TextLine::TextLine() {
+   blocks = NULL;
+diff -u /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.h xpdf/TextOutputDev.h
+--- /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.h	Sun Nov  3 23:15:37 2002
++++ xpdf/TextOutputDev.h	Sat Nov 23 20:59:43 2002
+@@ -24,6 +24,7 @@
+ class GString;
+ class TextBlock;
+ class TextLine;
++class FilterPage;
+ 
+ #undef TEXTOUT_DO_SYMBOLS
+ 
+@@ -45,7 +46,7 @@
+ 
+ 
+   // Destructor.
+-  ~TextString();
++  virtual ~TextString();
+ 
+   // Add a character to the string.
+   void addChar(GfxState *state, double x, double y,
+@@ -67,6 +68,47 @@
+ 
+   friend class TextPage;
+   friend class TextBlock;
++  friend class FilterPage;
++};
++
++
++//------------------------------------------------------------------------
++// TextBlock
++//------------------------------------------------------------------------
++
++class TextBlock {
++public:
++
++  TextBlock();
++  ~TextBlock();
++
++  double xMin, xMax;
++  double yMin, yMax;
++  TextString *strings;		// list of strings in the block
++  TextBlock *next;		// next block in line
++  TextBlock *xyNext;		// next block on xyBlocks list
++  Unicode *text;		// Unicode text of the block, including
++				//   spaces between strings
++  double *xRight;		// right-hand x coord of each char
++  int len;			// total number of Unicode characters
++  int convertedLen;		// total number of converted characters
++  int *col;			// starting column number for each
++				//   Unicode character
++};
++
++//------------------------------------------------------------------------
++// TextLine
++//------------------------------------------------------------------------
++
++class TextLine {
++public:
++
++  TextLine();
++  ~TextLine();
++
++  TextBlock *blocks;
++  TextLine *next;
++  double yMin, yMax;
+ };
+ 
+ //------------------------------------------------------------------------
+@@ -80,14 +122,14 @@
+   TextPage(GBool rawOrderA);
+ 
+   // Destructor.
+-  ~TextPage();
++  virtual ~TextPage();
+ 
+   // Update the current font.
+   void updateFont(GfxState *state);
+ 
+ 
+   // Begin a new string.
+-  void beginString(GfxState *state, double x0, double y0);
++  virtual void beginString(GfxState *state, double x0, double y0);
+ 
+   // Add a character to the current string.
+   void addChar(GfxState *state, double x, double y,
+@@ -144,6 +186,7 @@
+ 
+   int nTinyChars;		// number of "tiny" chars seen so far
+ 
++  friend class FilterPage;
+ };
+ 
+ //------------------------------------------------------------------------

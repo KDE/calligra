@@ -1,0 +1,48 @@
+diff -u /home/azhyd/xpdf-2.00/xpdf/Error.h xpdf/Error.h
+--- /home/azhyd/xpdf-2.00/xpdf/Error.h	Sun Nov  3 23:15:37 2002
++++ xpdf/Error.h	Wed Nov 20 07:30:34 2002
+@@ -16,7 +16,7 @@
+ #endif
+ 
+ #include <stdio.h>
+-#include "config.h"
++#include "xpdf_config.h"
+ 
+ extern void CDECL error(int pos, char *msg, ...);
+ 
+diff -u /home/azhyd/xpdf-2.00/xpdf/PDFDoc.cc xpdf/PDFDoc.cc
+--- /home/azhyd/xpdf-2.00/xpdf/PDFDoc.cc	Sun Nov  3 23:15:36 2002
++++ xpdf/PDFDoc.cc	Wed Nov 20 07:30:55 2002
+@@ -17,7 +17,7 @@
+ #include <stddef.h>
+ #include <string.h>
+ #include "GString.h"
+-#include "config.h"
++#include "xpdf_config.h"
+ #include "GlobalParams.h"
+ #include "Page.h"
+ #include "Catalog.h"
+diff -u /home/azhyd/xpdf-2.00/xpdf/Stream.cc xpdf/Stream.cc
+--- /home/azhyd/xpdf-2.00/xpdf/Stream.cc	Sun Nov  3 23:15:37 2002
++++ xpdf/Stream.cc	Wed Nov 20 07:31:33 2002
+@@ -22,7 +22,7 @@
+ #include <ctype.h>
+ #include "gmem.h"
+ #include "gfile.h"
+-#include "config.h"
++#include "xpdf_config.h"
+ #include "Error.h"
+ #include "Object.h"
+ #ifndef NO_DECRYPTION
+diff -u /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.cc xpdf/TextOutputDev.cc
+--- /home/azhyd/xpdf-2.00/xpdf/TextOutputDev.cc	Thu Nov 14 04:41:00 2002
++++ xpdf/TextOutputDev.cc	Wed Nov 20 07:31:41 2002
+@@ -19,7 +19,7 @@
+ #include <ctype.h>
+ #include "GString.h"
+ #include "gmem.h"
+-#include "config.h"
++#include "xpdf_config.h"
+ #include "Error.h"
+ #include "GlobalParams.h"
+ #include "UnicodeMap.h"
