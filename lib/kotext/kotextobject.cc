@@ -88,8 +88,8 @@ void KoTextObject::init()
     connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
              this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
 
-    connect( this, SIGNAL(paragraphModified( KoTextParag* )),
-             this, SLOT(slotParagraphModified(KoTextParag *)));
+    connect( this, SIGNAL(paragraphModified( KoTextParag*, KoTextParag::ParagModifyType, int , int ) ),
+             this, SLOT(slotParagraphModified(KoTextParag *, KoTextParag::ParagModifyType, int , int)));
     connect( this, SIGNAL(paragraphCreated( KoTextParag* )),
              this, SLOT(slotParagraphCreated(KoTextParag *)));
 
@@ -113,8 +113,10 @@ int KoTextObject::availableHeight() const
     return m_availableHeight;
 }
 
-void KoTextObject::slotParagraphModified(KoTextParag *parag)
+void KoTextObject::slotParagraphModified(KoTextParag *parag, KoTextParag::ParagModifyType _type, int , int)
 {
+    if ( _type == KoTextParag::ChangeFormat)
+        return;
     m_needsSpellCheck = true;
     if (parag )
         parag->string()->setNeedsSpellCheck( true );
@@ -277,7 +279,7 @@ void KoTextObject::UndoRedoInfo::clear()
             case Delete:
             case RemoveSelected:
             {
-                KoTextDocCommand * cmd = new KoTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                KoTextDocCommand * cmd = textobj->deleteTextCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 Q_ASSERT( placeHolderCmd );
                 placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
@@ -299,6 +301,12 @@ void KoTextObject::UndoRedoInfo::clear()
     customItemsMap.clear();
     placeHolderCmd = 0L;
 }
+
+KoTextDocCommand *KoTextObject::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+{
+    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
 
 void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
 {
@@ -433,7 +441,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             undoRedoInfo.text += "\n";
             undoRedoInfo.oldParagLayouts << paragLayout;
         } else
-            emit paragraphModified( old );
+            emit paragraphModified( old, KoTextParag::RemoveChar, cursor->index(), 1 );
     } break;
     case ActionBackspace: {
         // Remove counter
@@ -469,7 +477,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 undoRedoInfo.id = cursor->parag()->paragId();
                 undoRedoInfo.oldParagLayouts.prepend( paragLayout );
             } else
-                emit paragraphModified( cursor->parag() );
+                emit paragraphModified( cursor->parag(), KoTextParag::RemoveChar, cursor->index(),1 );
             m_lastFormatted = cursor->parag();
         }
     } break;
@@ -528,7 +536,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
                     copyCharFormatting( cursor->parag(), i, oldLen + i - cursor->index(), true );
                 cursor->killLine();
-                emit paragraphModified( cursor->parag() );
+                emit paragraphModified( cursor->parag(),KoTextParag::RemoveChar, cursor->index(), cursor->parag()->length()-cursor->index() );
             }
         }
         break;
@@ -635,7 +643,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         clearUndoRedoInfo();
 
     // Notifications
-    emit paragraphModified( oldCursor.parag() );
+    emit paragraphModified( oldCursor.parag(), KoTextParag::AddChar, cursor->index(), txt.length());
     // TODO
     // if (checkNewLine)
     //     emit paragraphCreated for every paragraph from oldCursor->parag()->next() until cursor->parag()
@@ -1390,7 +1398,7 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 
     KMacroCommand *macroCmd = new KMacroCommand( i18n("Remove Selected Text") );
 
-    KoTextDocCommand *cmd = new KoTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
+    KoTextDocCommand *cmd = deleteTextCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                  undoRedoInfo.text.rawData(),
                                                  undoRedoInfo.customItemsMap,
                                                  undoRedoInfo.oldParagLayouts );

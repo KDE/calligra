@@ -38,7 +38,7 @@
  * This also implements WYSIWYG text drawing.
  */
 public:
-
+    enum ParagModifyType{ AddChar = 0, RemoveChar = 1, ChangeFormat = 2};
     KoTextDocument * textDocument() const { return document(); }
 
     KoTextFormat * paragraphFormat() const

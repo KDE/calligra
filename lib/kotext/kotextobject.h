@@ -189,6 +189,9 @@ public:
     }
     /** returns true if the given selection has any custom item in it */
     bool selectionHasCustomItems( int selectionId = KoTextDocument::Standard ) const;
+    /** necessary to make it virtual used in kword */
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+
 
     /**
      * The main "insert" method, including undo/redo creation/update.
@@ -393,7 +396,7 @@ signals:
 
     // Keeping track of text modifications - not emitted during loading/closing.
     void paragraphCreated( KoTextParag* parag );
-    void paragraphModified( KoTextParag* parag ); // add more args if necessary
+    void paragraphModified( KoTextParag* parag, KoTextParag::ParagModifyType, int pos, int length ); // add more args if necessary
     void paragraphDeleted( KoTextParag* parag );
 
 public slots:
@@ -460,7 +463,7 @@ private slots:
      * in the case of undoing a floating-frame insertion, we need to delete
      * the frame first) */
     void slotAfterUndoRedo();
-    void slotParagraphModified(KoTextParag *);
+    void slotParagraphModified(KoTextParag *, KoTextParag::ParagModifyType, int , int);
     void slotParagraphCreated(KoTextParag *);
     void slotParagraphDeleted(KoTextParag *);
 private:
