@@ -336,3 +336,23 @@ void KoXmlWriter::addConfigItem( const QString & configName, double value )
     addTextNode( QString::number( value ) );
     endElement();
 }
+
+void KoXmlWriter::addConfigItem( const QString & configName, long value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type", "long" );
+    addTextNode( QString::number( value ) );
+    endElement();
+}
+
+void KoXmlWriter::addConfigItem( const QString & configName, short value )
+{
+    startElement( "config:config-item" );
+    addAttribute( "config:name", configName );
+    addAttribute( "config:type", "short" );
+    addTextNode( QString::number( value ) );
+    endElement();
+}
+
+//todo <value>datetime</value> and <value>base64Binary</value>

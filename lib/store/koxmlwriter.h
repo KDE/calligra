@@ -181,6 +181,9 @@ public:
 
     void addConfigItem( const QString & configName, double value );
 
+    void addConfigItem( const QString & configName, long value );
+
+    void addConfigItem( const QString & configName, short value );
 
 
     /**
