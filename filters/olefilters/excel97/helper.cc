@@ -755,7 +755,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "VLOOKUP",          102,  0 },
 	{ "ISREF",            105,  1 },
 	{ "LOG",              109,  0 },
-	{ "AsciiToChar",      111,  1 },  /* EXCEL: CHAR */
+	{ "CHAR",             111,  1 },
 	{ "LOWER",            112,  1 },
 	{ "UPPER",            113,  1 },
 	{ "PROPPER",          114,  1 },
@@ -765,7 +765,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "TRIM",             118,  1 },
 	{ "REPLACE",          119,  4 },
 	{ "SUBSTITUTE",       120,  0 },
-	{ "CharToAscii",      121,  1 },  /* EXCEL: CODE */
+	{ "CODE",             121,  1 },
 	{ "FIND",             124,  0 },
 	{ "CELL",             125,  0 },
 	{ "ISERR",            126,  1 },
@@ -881,7 +881,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "MODALVALUE",       330,  0 },
 	{ "TRIMMEAN",         331,  2 },
 	{ "TINV",             332,  2 },
-	{ "join",             336,  0 },  /* EXCEL: CONCAT */
+	{ "CONCAT",           336,  0 },
 	{ "POW",              337,  2 },  /* EXCEL: POWER */
 	{ "RADIAN",           342,  1 },  /* EXCEL: RAD */
 	{ "DEGREE",           343,  1 },  /* EXCEL: DEG */
@@ -1034,7 +1034,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				concatValues(&parsedFormula, 2, "^"); // Hmmm, not supported by kspread.
 				break;
 			case 0x08:  // ptgConcat
-				concatValues(&parsedFormula, 2, "&");
+				concatValues(&parsedFormula, 2, "+"); // Was & first, testing...
 				break;
 			case 0x09:  // ptgLT
 				concatValues(&parsedFormula, 2, "<");
