@@ -821,16 +821,16 @@
       <Name>find</Name>
       <Type>Boolean</Type>
       <Parameter>
-	<Comment>Haystack</Comment>
+	<Comment>Needle</Comment>
 	<Type>String</Type>
       </Parameter>
       <Parameter>
-	<Comment>Needle</Comment>
+	<Comment>Haystack</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
 	<Text>The find() function searches a substring. This function returns True if this substring exists. Otherwise, it returns False.</Text>
-	<Syntax>find(haystack;needle)</Syntax>
+	<Syntax>find(needle,haystack)</Syntax>
 	<Example>find("KOf";"KOffice") returns True</Example>
 	<Example>find("KSpread";"KOffice") returns False</Example>
       </Help>

@@ -1183,7 +1183,8 @@ static bool kspreadfunc_find( KSContext& context )
 
     QString string_find = args[0]->stringValue();
     QString string = args[1]->stringValue();
-    context.setValue( new KSValue( string.find(string_find) ) );
+    bool exist=(string.find(string_find)!=-1)?true:false;
+    context.setValue( new KSValue( exist ) );
     return true;
 }
 
