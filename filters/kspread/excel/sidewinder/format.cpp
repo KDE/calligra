@@ -41,14 +41,14 @@ public:
 FormatFont::FormatFont()
 {
   d = new FormatFont::Private();
-  d->null = true;
-  d->fontFamily = "Arial";
-  d->fontSize = 11;
-  d->bold = false;
-  d->italic  = false;
-  d->underline = false;
-  d->strikeout = false;
-  d->subscript = false;
+  d->null        = true;
+  d->fontFamily  = "Arial";
+  d->fontSize    = 11;
+  d->bold        = false;
+  d->italic      = false;
+  d->underline   = false;
+  d->strikeout   = false;
+  d->subscript   = false;
   d->superscript = false;
 }
 
@@ -70,14 +70,14 @@ FormatFont& FormatFont::operator=( const FormatFont& f )
 
 FormatFont& FormatFont::assign( const FormatFont& f )
 {
-  d->null = false;
-  d->fontFamily = f.fontFamily();
-  d->fontSize = f.fontSize();
-  d->bold = f.bold();
-  d->italic = f.italic();
-  d->underline = f.underline();
-  d->strikeout = f.strikeout();
-  d->subscript = f.subscript();
+  d->null        = f.isNull();
+  d->fontFamily  = f.fontFamily();
+  d->fontSize    = f.fontSize();
+  d->bold        = f.bold();
+  d->italic      = f.italic();
+  d->underline   = f.underline();
+  d->strikeout   = f.strikeout();
+  d->subscript   = f.subscript();
   d->superscript = f.superscript();
   
   return *this;
@@ -194,10 +194,10 @@ public:
 
 FormatAlignment::FormatAlignment()
 {
-  d = new FormatAlignment::Private;
-  d->null = true;
+  d         = new FormatAlignment::Private;
+  d->null   = true;
   d->alignX = Format::Left;
-  d->alignY = Format::Center;
+  d->alignY = Format::Middle;
 }
 
 // destructor
@@ -222,7 +222,7 @@ FormatAlignment& FormatAlignment::operator=( const FormatAlignment& align )
 // assign from another alignment
 FormatAlignment& FormatAlignment::assign( const FormatAlignment& align )
 {
-  d->null = false;
+  d->null   = align.isNull();
   d->alignX = align.alignX();
   d->alignY = align.alignY();
   return *this;
@@ -290,6 +290,11 @@ Format& Format::assign( const Format& f )
   d->font = f.font();
   d->alignment = f.alignment();
   return *this;
+}
+
+bool FormatAlignment::isNull() const
+{
+  return d->null;
 }
 
 FormatFont& Format::font()

@@ -280,12 +280,24 @@ public:
    */
   Format& assign( const Format& f );
   
+  /** 
+   * Returns a reference to the formatting information of this format.
+   */
   FormatFont& font();
   
+  /** 
+   * Returns a constant reference to the formatting information of this format.
+   */
   FormatFont& font() const;
   
+  /** 
+   * Returns a reference to the alignment information of this format.
+   */
   FormatAlignment& alignment();
   
+  /** 
+   * Returns a constant reference to the alignment information of this format.
+   */
   FormatAlignment& alignment() const;
   
   enum { Left, Center, Right };
