@@ -23,6 +23,7 @@ noinst_HEADERS = \
 	vspiraldlg.h \
 	vstardlg.h \
 	vstrokedlg.h \
+	vgradientdlg.h \
 	vwhirlpinchdlg.h
 
 libkarbondialogs_la_SOURCES = \
@@ -40,6 +41,7 @@ libkarbondialogs_la_SOURCES = \
 	vspiraldlg.cc \
 	vstardlg.cc \
 	vstrokedlg.cc \
+	vgradientdlg.cc \
 	vwhirlpinchdlg.cc
 
 libkarbondialogs_la_METASOURCES = \

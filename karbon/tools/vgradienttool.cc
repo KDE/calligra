@@ -8,6 +8,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vgradienttool.h"
+#include "vgradientdlg.h"
 #include "vfillcmd.h"
 
 
@@ -16,10 +17,14 @@ VGradientTool* VGradientTool::s_instance = 0L;
 VGradientTool::VGradientTool( KarbonPart* part )
 	: VTool( part ), m_isDragging( false )
 {
+	m_dialog = new VGradientDlg();
+	m_dialog->setGradientRepeat( 0 );
+	m_dialog->setGradientType( 0 );
 }
 
 VGradientTool::~VGradientTool()
 {
+	delete m_dialog;
 }
 
 VGradientTool*
@@ -80,9 +85,11 @@ VGradientTool::eventFilter( KarbonView* view, QEvent* event )
 		VFill fill;
 		fill.gradient().addStop( VColor( qRgba( 255, 0, 0, 255 ) ), 0.0, 0.5 );
 		fill.gradient().addStop( VColor( qRgba( 255, 255, 0, 255 ) ), 1.0, 0.5 );
-		fill.gradient().setOrigin( m_lp );
-		fill.gradient().setVector( m_fp );
+		fill.gradient().setOrigin( m_fp );
+		fill.gradient().setVector( m_lp );
 		fill.setType( fill_gradient );
+		fill.gradient().setType( (VGradientType)m_dialog->gradientType() );
+		fill.gradient().setRepeatMethod( (VGradientRepeatMethod)m_dialog->gradientRepeat() );
 		part()->addCommand( new VFillCmd( &part()->document(), fill ), true );
 
 		m_isDragging = false;
@@ -126,4 +133,11 @@ VGradientTool::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
+
+void
+VGradientTool::showDialog() const
+{
+	m_dialog->exec();
+}
+
 

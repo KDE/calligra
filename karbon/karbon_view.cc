@@ -523,13 +523,13 @@ KarbonView::gradTool()
 {
 	if( shell()->rootView() == this )
 	{
-//		if( m_currentTool == VGradientTool::instance( m_part ) )
-//			( (VGradientTool *) m_currentTool )->showDialog();
-//		else
-//		{
+		if( m_currentTool == VGradientTool::instance( m_part ) )
+			( (VGradientTool *) m_currentTool )->showDialog();
+		else
+		{
 			m_currentTool = VGradientTool::instance( m_part );
 			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
-//		}
+		}
 	}
 }
 

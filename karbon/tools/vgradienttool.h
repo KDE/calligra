@@ -10,6 +10,7 @@
 
 class KarbonPart;
 class KarbonView;
+class VGradientDlg;
 
 // A singleton state to scale object(s)
 
@@ -24,11 +25,15 @@ public:
 	// draw the object while it is edited:
 	void drawTemporaryObject( KarbonView* view );
 
+	virtual void showDialog() const;
+
 protected:
 	VGradientTool( KarbonPart* part );
 
 private:
 	static VGradientTool* s_instance;
+
+	VGradientDlg* m_dialog;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
