@@ -6311,6 +6311,8 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
     }
     m_tmpVertHelpline = -1;
     m_tmpHorizHelpline = -1;
+    tmpHelpLinePosX = -1;
+    tmpHelpLinePosY = -1;
 }
 
 void KPrCanvas::tmpDrawMoveHelpLine( const QPoint & newPos, bool _horizontal )
