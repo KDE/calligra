@@ -27,7 +27,7 @@
 
 
 SymbolElement::SymbolElement(Artwork::SymbolType type, BasicElement* parent)
-    : BasicElement(parent), symbol(type)
+    : ComplexElement(parent), symbol(type)
 {
     content = new SequenceElement(this);
     upper = new SequenceElement(this);
@@ -52,10 +52,7 @@ void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
     symbol.calcSizes(style, mySize);
     content->calcSizes(style, mySize);
 
-    // scale the symbol so that it is slightly higher that the content
-    int contentHeight = QMAX(content->getMidline(),
-                             content->getHeight()-content->getMidline()) * 2;
-    symbol.scale(((double)contentHeight)/symbol.getHeight()*1.1);
+    symbol.scale(((double)parentSize)/symbol.getHeight()*2);
     
     int upperWidth = 0;
     int upperHeight = 0;
@@ -74,27 +71,40 @@ void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
     }
 
     // widths
-    int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth))/2;
-    symbol.setX(xOffset - symbol.getWidth()/2);
-    content->setX(symbol.getX()+symbol.getWidth());
+    int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
+    symbol.setX(xOffset - symbol.getWidth());
+    content->setX(xOffset);
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
     
     // heights
-    setHeight(upperHeight + symbol.getHeight() + lowerHeight);
-    setMidline(upperHeight + symbol.getHeight() / 2);
+    int toMidline = QMAX(content->getMidline(), upperHeight + symbol.getHeight()/2);
+    int fromMidline = QMAX(content->getHeight() - content->getMidline(),
+                           lowerHeight + symbol.getHeight()/2);
+    setHeight(toMidline + fromMidline);
+    setMidline(toMidline);
 
-    symbol.setY(upperHeight);
-    content->setY(getMidline() - content->getMidline());
+    symbol.setY(toMidline - symbol.getHeight()/2);
+    content->setY(toMidline - content->getMidline());
 
     if (hasUpper()) {
-        upper->setX(xOffset - upper->getWidth()/2);
-        upper->setY(0);
+        if (upperWidth < symbol.getWidth()) {
+            upper->setX(symbol.getX() + (symbol.getWidth() - upperWidth) / 2);
+        }
+        else {
+            upper->setX(xOffset - upperWidth);
+        }
+        upper->setY(toMidline - upperHeight - symbol.getHeight()/2);
     }
     if (hasLower()) {
-        lower->setX(xOffset - lower->getWidth()/2);
-        lower->setY(upperHeight + symbol.getHeight());
+        if (lowerWidth < symbol.getWidth()) {
+            lower->setX(symbol.getX() + (symbol.getWidth() - lowerWidth) / 2);
+        }
+        else {
+            lower->setX(xOffset - lowerWidth);
+        }
+        lower->setY(toMidline + symbol.getHeight()/2);
     }
 }
 
@@ -422,4 +432,29 @@ void SymbolElement::setToLower(FormulaCursor* cursor)
 void SymbolElement::setToContent(FormulaCursor* cursor)
 {
     cursor->setTo(this, contentPos);
+}
+
+
+void SymbolElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
+{
+    if (hasUpper()) {
+        if (direction == beforeCursor) {
+            upper->moveLeft(cursor, this);
+        }
+        else {
+            upper->moveRight(cursor, this);
+        }
+    }
+}
+
+void SymbolElement::moveToLowerIndex(FormulaCursor* cursor, Direction direction)
+{
+    if (hasLower()) {
+        if (direction == beforeCursor) {
+            lower->moveLeft(cursor, this);
+        }
+        else {
+            lower->moveRight(cursor, this);
+        }
+    }
 }

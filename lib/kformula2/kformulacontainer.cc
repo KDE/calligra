@@ -23,6 +23,7 @@
 #include <qstring.h>
 
 #include "bracketelement.h"
+#include "complexelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -174,39 +175,39 @@ void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 
 void KFormulaContainer::addLowerRightIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
+    ComplexElement* element = cursor->getActiveIndexedElement();
+    if ((element == 0) || !element->mightHaveLowerIndex()) {
         element = new IndexElement;
         cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
 
-    if (!element->hasLowerRight()) {
+    if (!element->hasLowerIndex()) {
         SequenceElement* index = new SequenceElement;
-        element->setToLowerRight(cursor);
+        element->setToLowerIndex(cursor);
         cursor->insert(index);
         //cursor->goInsideElement(index);
     }
     else {
-        element->moveToLowerRight(cursor, BasicElement::afterCursor);
+        element->moveToLowerIndex(cursor, BasicElement::afterCursor);
     }
 }
 
 void KFormulaContainer::addUpperRightIndex(FormulaCursor* cursor)
 {
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
+    ComplexElement* element = cursor->getActiveIndexedElement();
+    if ((element == 0) || !element->mightHaveUpperIndex()) {
         element = new IndexElement;
         cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
     }
 
-    if (!element->hasUpperRight()) {
+    if (!element->hasUpperIndex()) {
         SequenceElement* index = new SequenceElement;
-        element->setToUpperRight(cursor);
+        element->setToUpperIndex(cursor);
         cursor->insert(index);
         //cursor->goInsideElement(index);
     }
     else {
-        element->moveToUpperRight(cursor, BasicElement::afterCursor);
+        element->moveToUpperIndex(cursor, BasicElement::afterCursor);
     }
 }
 
@@ -220,7 +221,8 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
         BasicElement* element = cursor->replaceByMainChildContent();
         delete element;
     }
-    cursor->normalize(direction);
+    //cursor->normalize(direction);
+    cursor->normalize();
 }
 
 

@@ -34,6 +34,7 @@
 // Formula include
 #include "contextstyle.h"
 
+class ComplexElement;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
@@ -58,6 +59,12 @@ public:
      * Provide fast access to the rootElement for each child.
      */
     virtual FormulaElement* formula() { return parent->formula(); }
+
+    /**
+     * Returns this if we are a complex element that knows how to
+     * handle indexes.
+     */
+    virtual ComplexElement* getComplexElement() { return 0; }
     
     /**
      * Returns the element the point is in.

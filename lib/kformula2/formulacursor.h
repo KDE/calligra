@@ -25,8 +25,8 @@
 
 #include "basicelement.h"
 
+class ComplexElement;
 class FormulaElement;
-class IndexElement;
 
 
 /**
@@ -196,10 +196,10 @@ public:
 
     
     /**
-     * Returns the IndexElement the cursor is on or 0
+     * Returns the ComplexElement the cursor is on or 0
      * if there is non.
      */
-    IndexElement* getActiveIndexElement();
+    ComplexElement* getActiveIndexedElement();
 
     // undo/redo support
     

@@ -28,7 +28,7 @@
 
 
 RootElement::RootElement(BasicElement* parent)
-    : BasicElement(parent)
+    : ComplexElement(parent)
 {
     content = new SequenceElement(this);
     //index = 0;
@@ -54,7 +54,7 @@ void RootElement::calcSizes(ContextStyle& style, int parentSize)
     
     int indexWidth = 0;
     int indexHeight = 0;
-    if (index != 0) {
+    if (hasIndex()) {
         index->calcSizes(style, mySize);
         indexWidth = index->getWidth();
         indexHeight = index->getHeight();
@@ -63,7 +63,7 @@ void RootElement::calcSizes(ContextStyle& style, int parentSize)
     int dist = style.getDistance();
     int unit = (content->getHeight() + dist)/ 3;
 
-    if (index != 0) {
+    if (hasIndex()) {
         if (indexWidth > unit) {
             index->setX(0);
             rootOffset.setX(indexWidth - unit);
@@ -106,7 +106,7 @@ void RootElement::draw(QPainter& painter, ContextStyle& style,
     int mySize = parentSize + getRelativeSize();
 
     content->draw(painter, style, mySize, myPos);
-    if (index != 0) {
+    if (hasIndex()) {
         index->draw(painter, style, mySize, myPos);
     }
 
@@ -141,7 +141,7 @@ void RootElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             content->moveLeft(cursor, this);
         }
         else if (from == content) {
-            if (index != 0) {
+            if (hasIndex()) {
                 index->moveLeft(cursor, this);
             }
             else {
@@ -166,7 +166,7 @@ void RootElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == getParent()) {
-            if (index != 0) {
+            if (hasIndex()) {
                 index->moveRight(cursor, this);
             }
             else {
@@ -197,7 +197,7 @@ void RootElement::moveUp(FormulaCursor* cursor, BasicElement* from)
             content->moveRight(cursor, this);
         }
         else if (from == content) {
-            if (index != 0) {
+            if (hasIndex()) {
                 index->moveRight(cursor, this);
             }
             else {
@@ -222,7 +222,7 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == getParent()) {
-            if (index != 0) {
+            if (hasIndex()) {
                 index->moveRight(cursor, this);
             }
             else {
@@ -331,4 +331,22 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     else if (child == index) {
         cursor->setTo(this, indexPos);
     }
+}
+
+
+void RootElement::moveToUpperIndex(FormulaCursor* cursor, Direction direction)
+{
+    if (hasIndex()) {
+        if (direction == beforeCursor) {
+            index->moveLeft(cursor, this);
+        }
+        else {
+            index->moveRight(cursor, this);
+        }
+    }
+}
+
+void RootElement::setToUpperIndex(FormulaCursor* cursor)
+{
+    cursor->setTo(this, indexPos);
 }

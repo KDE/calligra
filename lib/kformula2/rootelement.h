@@ -23,7 +23,7 @@
 
 #include <qpoint.h>
 
-#include "basicelement.h"
+#include "complexelement.h"
 
 class SequenceElement;
 
@@ -31,7 +31,7 @@ class SequenceElement;
 /**
  * A nice graphical root.
  */
-class RootElement : public BasicElement {
+class RootElement : public ComplexElement {
 public:
 
     enum { contentPos, indexPos };
@@ -115,6 +115,28 @@ public:
      * the position behind it.
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
+
+    bool hasIndex() const { return index != 0; }
+    
+    // ComplexElement
+    
+    // Moves the cursor inside the index. The index has to exist.
+    virtual void moveToUpperIndex(FormulaCursor*, Direction);
+    virtual void moveToLowerIndex(FormulaCursor*, Direction) {}
+
+    // Sets the cursor to point to the place where the index normaly
+    // is. These functions are only used if there is no such index and
+    // we want to insert them.
+    virtual void setToUpperIndex(FormulaCursor*);
+    virtual void setToLowerIndex(FormulaCursor*) {}
+
+    // Tells whether we own those indexes
+    virtual bool hasUpperIndex() const { return hasIndex(); }
+    virtual bool hasLowerIndex() const { return false; }
+
+    // Tells whether we are allowed to own them.
+    // A root will never have a lower index!
+    virtual bool mightHaveLowerIndex() const { return false; }
     
 private:
 

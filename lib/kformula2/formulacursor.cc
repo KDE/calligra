@@ -20,9 +20,9 @@
 
 #include <qpainter.h>
 
+#include "complexelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
-#include "indexelement.h"
 #include "sequenceelement.h"
 
 
@@ -293,7 +293,7 @@ BasicElement* FormulaCursor::getActiveChild(BasicElement::Direction direction)
  * Returns the IndexElement the cursor is on or 0
  * if there is non.
  */
-IndexElement* FormulaCursor::getActiveIndexElement()
+ComplexElement* FormulaCursor::getActiveIndexedElement()
 {
     if (isSelection()) {
         if ((getSelectionEnd() - getSelectionStart()) > 1) {
@@ -302,16 +302,20 @@ IndexElement* FormulaCursor::getActiveIndexElement()
         BasicElement* child = getActiveChild((getPos() > getMark()) ?
                                              BasicElement::beforeCursor :
                                              BasicElement::afterCursor);
-        return dynamic_cast<IndexElement*>(child);
+        return child->getComplexElement();
     }
     else {
         BasicElement* child = getActiveChild(BasicElement::beforeCursor);
-        IndexElement* element = 0;
+        ComplexElement* element = 0;
         if (child != 0) {
-            element = dynamic_cast<IndexElement*>(child);
+            element = child->getComplexElement();
         }
         if (element == 0) {
-            element = dynamic_cast<IndexElement*>(getElement()->getParent());
+            BasicElement* parent = getElement()->getParent();
+            if (parent == 0) {
+                return 0;
+            }
+            element = parent->getComplexElement();
             if (element != 0) {
                 SequenceElement* mainChild = element->getMainChild();
                 if ((getElement() != mainChild) ||

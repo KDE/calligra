@@ -21,14 +21,14 @@
 #ifndef __SYMBOLELEMENT_H
 #define __SYMBOLELEMENT_H
 
-#include "basicelement.h"
 #include "artwork.h"
+#include "complexelement.h"
 
 
 /**
  * A symbol is simply a piece of art.
  */
-class SymbolElement : public BasicElement {
+class SymbolElement : public ComplexElement {
 public:
 
     enum { contentPos, upperPos, lowerPos };
@@ -164,6 +164,22 @@ public:
     
     void setToUpper(FormulaCursor* cursor);
     void setToLower(FormulaCursor* cursor);
+
+    // ComplexElement
+    
+    // Moves the cursor inside the index. The index has to exist.
+    virtual void moveToUpperIndex(FormulaCursor*, Direction);
+    virtual void moveToLowerIndex(FormulaCursor*, Direction);
+
+    // Sets the cursor to point to the place where the index normaly
+    // is. These functions are only used if there is no such index and
+    // we want to insert them.
+    virtual void setToUpperIndex(FormulaCursor* cursor) { setToUpper(cursor); }
+    virtual void setToLowerIndex(FormulaCursor* cursor) { setToLower(cursor); }
+
+    // Tells whether we own those indexes
+    virtual bool hasUpperIndex() const { return hasUpper(); }
+    virtual bool hasLowerIndex() const { return hasLower(); }
     
 private:
 

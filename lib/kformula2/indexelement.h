@@ -22,7 +22,7 @@
 #define __INDEXELEMENT_H
 
 // Formula include
-#include "basicelement.h"
+#include "complexelement.h"
 
 class SequenceElement;
 
@@ -30,7 +30,7 @@ class SequenceElement;
 /**
  * The element with up to four indexes in the four corners.
  */
-class IndexElement : public BasicElement {
+class IndexElement : public ComplexElement {
 public:
 
     // each index has its own number.
@@ -198,6 +198,26 @@ public:
     void moveToLowerLeft(FormulaCursor* cursor, Direction direction);
     void moveToLowerRight(FormulaCursor* cursor, Direction direction);
 
+
+    // ComplexElement
+    
+    // Moves the cursor inside the index. The index has to exist.
+    virtual void moveToUpperIndex(FormulaCursor* cursor, Direction direction)
+        { moveToUpperRight(cursor, direction); }
+    virtual void moveToLowerIndex(FormulaCursor* cursor, Direction direction)
+        { moveToLowerRight(cursor, direction); }
+    
+    // Sets the cursor to point to the place where the index normaly
+    // is. These functions are only used if there is no such index and
+    // we want to insert them.
+    virtual void setToUpperIndex(FormulaCursor* cursor) { setToUpperRight(cursor); }
+    virtual void setToLowerIndex(FormulaCursor* cursor) { setToLowerRight(cursor); }
+
+    // Tells whether we own those indexes
+    virtual bool hasUpperIndex() const { return hasUpperRight(); }
+    virtual bool hasLowerIndex() const { return hasLowerRight(); }
+
+    
     // debug
     virtual ostream& output(ostream&);
 

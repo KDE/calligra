@@ -25,7 +25,7 @@
 
 
 IndexElement::IndexElement(BasicElement* parent)
-    : BasicElement(parent)
+    : ComplexElement(parent)
 {
     content = new SequenceElement(this);
 
