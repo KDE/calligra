@@ -27,7 +27,6 @@ public slots:
     void active3DPie(bool b);
 private:
     KChartParams* _params;
-    QLineEdit *title;
     QCheckBox *pie3d;
     QSpinBox *depth,*angle;
 };
