@@ -641,18 +641,19 @@ void KoMainWindow::slotSetOrientation() {
 
 void KoMainWindow::slotProgress(int value) {
 
-    kdDebug() << "progress:" << value << endl;
     if(value==-1) {
+	statusBar()->removeWidget(d->m_progress);
 	delete d->m_progress;
 	d->m_progress=0L;
 	return;
     }
     if(d->m_firstTime) {
+	statusBar()->removeWidget(d->m_progress);
 	delete d->m_progress;
 	d->m_progress=0L;
-	kdDebug() << "first time" << endl;
+	statusBar()->setMaximumHeight(statusBar()->height());
 	d->m_progress=new KProgress(statusBar());
-	d->m_progress->setMaximumHeight(statusBar()->height()-4);
+	//d->m_progress->setMaximumHeight(statusBar()->height());
 	statusBar()->addWidget( d->m_progress, 0, true );
 	d->m_progress->show();
 	// single shot, 1.5s :)
