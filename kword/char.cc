@@ -342,72 +342,15 @@ bool KWString::formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 )
 {
     if ( !a1 || !a2 )
 	return TRUE;
-    
+
     if ( a1->getClassId() != a2->getClassId() )
 	return TRUE;
-    
+
     if ( a1->getClassId() == ID_KWCharFormat )
 	return *(KWCharFormat*)a1 != *(KWCharFormat*)a2;
 
     return TRUE;
 }
-
-//		   out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-//		       << "\" len=\"" << i - start << "\">" << endl;
-//		   _data_[ start ].attrib->save( out );
-//		   out << etag << "</FORMAT>" << endl;
-//	       }
-//	       switch ( _data_[ i ].attrib->getClassId() )
-//	       {
-//	       case ID_KWCharImage:
-//	       {
-//		   out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-//		   _data_[ i ].attrib->save( out );
-//		   out << etag << "</FORMAT>" << endl;
-//	       } break;
-//	       case ID_KWCharTab:
-//	       {
-//		   out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-//		   out << etag << "</FORMAT>" << endl;
-//	       } break;
-//	       case ID_KWCharVariable:
-//	       {
-//		   out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-//		   _data_[ i ].attrib->save( out );
-//		   out << etag << "</FORMAT>" << endl;
-//	       } break;
-//	       case ID_KWCharFootNote:
-//	       {
-//		   out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
-//		   _data_[ i ].attrib->save( out );
-//		   out << etag << "</FORMAT>" << endl;
-//	       } break;
-//	       default: break;
-//	       }
-//	       start = i + 1;
-//	   }
-//	   else if ( i > 0 && _data_[ i ].attrib->getClassId() == ID_KWCharFormat &&
-//		     !( *( ( KWCharFormat* )_data_[ i ].attrib ) == *( ( KWCharFormat* )_data_[ i - 1 ].attrib ) ) )
-//	   {
-//	       if ( start < i )
-//	       {
-//		   out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-//		       << "\" len=\"" << i - start << "\">" << endl;
-//		   _data_[ start ].attrib->save( out );
-//		   out << etag << "</FORMAT>" << endl;
-//	       }
-//	       start = i;
-//	   }
-//     }
-
-//     if ( start < _len_ )
-//     {
-//	   out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
-//	       << "\" len=\"" << _len_ - start << "\">" << endl;
-//	   _data_[ start ].attrib->save( out );
-//	   out << etag << "</FORMAT>" << endl;
-//     }
-// }
 
 /*================================================================*/
 // #### todo
@@ -982,4 +925,4 @@ bool KWString::formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 )
 //     return out;
 // }
 
-					    
+					
