@@ -796,6 +796,20 @@ bool KSEval_t_less_or_equal( KSParseNode* node, KSContext& context )
         context.value()->setValue( result );
         return true;
       }
+    case KSValue::DateType:
+      {
+	KScript::Boolean result = l.value()->dateValue() <= r.value()->dateValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+    case KSValue::TimeType:
+      {
+	KScript::Boolean result = l.value()->timeValue() <= r.value()->timeValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
     default:
       QString tmp( i18n("Operator <= not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -839,6 +853,20 @@ bool KSEval_t_greater_or_equal( KSParseNode* node, KSContext& context )
     case KSValue::CharType:
       {
         KScript::Boolean result = l.value()->charValue() >= r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+    case KSValue::DateType:
+      {
+        KScript::Boolean result = l.value()->dateValue() >= r.value()->dateValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+    case KSValue::TimeType:
+      {
+        KScript::Boolean result = l.value()->timeValue() >= r.value()->timeValue();
         FILL_VALUE( context, l, r );
         context.value()->setValue( result );
         return true;
@@ -1623,6 +1651,20 @@ bool KSEval_t_less( KSParseNode* node, KSContext& context )
         context.value()->setValue( result );
         return true;
       }
+    case KSValue::DateType:
+      {
+        KScript::Boolean result = l.value()->dateValue() < r.value()->dateValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+    case KSValue::TimeType:
+      {
+        KScript::Boolean result = l.value()->timeValue() < r.value()->timeValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
     case KSValue::CharType:
       {
         KScript::Boolean result = l.value()->charValue() < r.value()->charValue();
@@ -1673,6 +1715,20 @@ bool KSEval_t_greater( KSParseNode* node, KSContext& context )
     case KSValue::CharType:
       {
         KScript::Boolean result = l.value()->charValue() > r.value()->charValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+   case KSValue::DateType:
+      {
+        KScript::Boolean result = l.value()->dateValue() > r.value()->dateValue();
+        FILL_VALUE( context, l, r );
+        context.value()->setValue( result );
+        return true;
+      }
+    case KSValue::TimeType:
+      {
+        KScript::Boolean result = l.value()->timeValue() > r.value()->timeValue();
         FILL_VALUE( context, l, r );
         context.value()->setValue( result );
         return true;
