@@ -408,6 +408,14 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    p.end();
 	}
     } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
+	int pw = static_cast<int>( layout.ptWidth );
+	int left = static_cast<int>( layout.ptLeft );
+	left -= diffx;
+        int right = static_cast<int>( layout.ptRight );
+	right = pw - right - diffx;
+	
+	if( e->x()-left < 0 || right-e->x() < 0 )
+	    return;
 	KoTabulator *_tab = new KoTabulator;
 	switch ( d->tabChooser->getCurrTabType() ) {
 	case KoTabChooser::TAB_LEFT:
@@ -544,10 +552,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int ip_first = i_first;
 
     int mx = e->x();
-    mx = mx < 0 ? 0 : mx;
+    mx = mx+diffx < 0 ? 0 : mx;
     int my = e->y();
-    my = my < 0 ? 0 : my;
-    my = my > ph ? ph : my;
+    my = my+diffy < 0 ? 0 : my;
 
     switch ( orientation ) {
 	case Qt::Horizontal: {
@@ -593,7 +600,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		// page is too small! (Werner)
 		switch ( d->action ) {
 		    case A_BR_LEFT: {
-			if ( d->canvas && mx < right-10 ) {
+			if ( d->canvas && mx+diffx < right-10 ) {
 			    QPainter p;
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
@@ -620,7 +627,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			}
 		    } break;
 		    case A_BR_RIGHT: {
-			if ( d->canvas && mx > left+10 && mx <= pw) {
+			if ( d->canvas && mx+diffx > left+10 && mx+diffx <= pw) {
 			    QPainter p;
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
@@ -689,7 +696,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			}
 		    } break;
 		    case A_TAB: {
-			if ( d->canvas ) {
+			if ( d->canvas && mx-left >= 0 && right-mx >= 0) {
 			    QPainter p;
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
@@ -715,7 +722,6 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		    } break;
 		    default: break;
 		}
-		// in the else branch
 	    }
 	} break;
 	case Qt::Vertical: {
@@ -732,7 +738,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 	    } else {
 		switch ( d->action ) {
 		    case A_BR_TOP: {
-			if ( d->canvas && my < bottom-20 ) {
+			if ( d->canvas && my+diffy < bottom-20 ) {
 			    QPainter p;
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
@@ -749,7 +755,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			}
 		    } break;
 		    case A_BR_BOTTOM: {
-			if ( d->canvas && my > top+20 && my < ph-2) {
+			if ( d->canvas && my+diffy > top+20 && my+diffy < ph-2) {
 			    QPainter p;
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
