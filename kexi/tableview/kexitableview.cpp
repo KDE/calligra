@@ -663,7 +663,7 @@ int KexiTableView::findString(const QString &string)
 
 void KexiTableView::slotUpdate()
 {
-	kdDebug(44021) << " KexiTableView::slotUpdate() -- " << endl;
+//	kdDebug(44021) << " KexiTableView::slotUpdate() -- " << endl;
 //	QSize s(tableSize());
 //	viewport()->setUpdatesEnabled(false);
 ///	resizeContents(s.width(), s.height());
@@ -814,7 +814,7 @@ QSize KexiTableView::sizeHint() const
 	w = QMIN( w, qApp->desktop()->width()*3/4 ); //stretch
 	h = QMIN( h, qApp->desktop()->height()*3/4 ); //stretch
 
-	kdDebug() << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
+//	kdDebug() << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
 
 	return QSize(w, h);
 		/*QSize(
@@ -907,7 +907,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		if (rowfirst == -1) {
 			if (rowAt(cy - d->rowHeight) != -1) {
 				paintOnlyInsertRow = true;
-				kdDebug(44021) << "-- paintOnlyInsertRow --" << endl;
+//				kdDebug(44021) << "-- paintOnlyInsertRow --" << endl;
 			}
 		}
 	}
@@ -969,7 +969,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 
 void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print)
 {
-	kdDebug() <<"KexiTableView::paintCell(col=" << col <<"row="<<row<<")"<<endl;
+//	kdDebug() <<"KexiTableView::paintCell(col=" << col <<"row="<<row<<")"<<endl;
 	Q_UNUSED(print);
 	int w = cr.width();
 	int h = cr.height();
@@ -1201,7 +1201,7 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 
 void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
-	kdDebug(44021) << "KexiTableView::contentsMouseDoubleClickEvent()" << endl;
+//	kdDebug(44021) << "KexiTableView::contentsMouseDoubleClickEvent()" << endl;
 	d->contentsMousePressEvent_dblClick = true;
 	contentsMousePressEvent(e);
 	d->contentsMousePressEvent_dblClick = false;
@@ -1221,7 +1221,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
-	kdDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
+//	kdDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
 	if(m_data->count()==0 && !isInsertingEnabled())
 		return;
 
@@ -1296,7 +1296,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 
 void KexiTableView::contentsMouseReleaseEvent( QMouseEvent* e )
 {
-	kdDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
+//	kdDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
 	if(m_data->count()==0 && !isInsertingEnabled())
 		return;
 
@@ -1985,7 +1985,7 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 	
 	if (d->navPanel) {
 		QRect g = d->navPanel->geometry();
-		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
+//		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
 		d->navPanel->setGeometry(
 			frameWidth(),
 			height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
@@ -2048,7 +2048,7 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 
 void KexiTableView::updateCell(int row, int col)
 {
-	kdDebug(44021) << "updateCell("<<row<<", "<<col<<")"<<endl;
+//	kdDebug(44021) << "updateCell("<<row<<", "<<col<<")"<<endl;
 	updateContents(cellGeometry(row, col));
 /*	QRect r = cellGeometry(row, col);
 	r.setHeight(r.height()+6);
@@ -2058,7 +2058,7 @@ void KexiTableView::updateCell(int row, int col)
 
 void KexiTableView::updateRow(int row)
 {
-	kdDebug(44021) << "updateRow("<<row<<")"<<endl;
+//	kdDebug(44021) << "updateRow("<<row<<")"<<endl;
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 //	int rightcol = d->pTopHeader->sectionAt( clipper()->width() );
 	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
@@ -2146,12 +2146,12 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 QSize KexiTableView::tableSize() const
 {
 	if (rows() > 0 && columns() > 0) {
-		kdDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
+/*		kdDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
 			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 //			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
 			+ (d->navPanel->isVisible() ? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
 			+ margin() << endl;
-
+*/
 		kdDebug()<< d->navPanel->isVisible() <<" "<<d->navPanel->height()<<" "
 		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
