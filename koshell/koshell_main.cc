@@ -21,24 +21,12 @@
 #include <koApplication.h>
 
 #include <kdebug.h>
-#include <kregistry.h>
-#include <kregfactories.h>
-#include <kded_instance.h>
-
-#include <CORBA.h>
 
 #include "koshell_shell.h"
 
 int main( int argc, char **argv )
 {
   KoApplication app( argc, argv, "KoShell" );
-  
-  CORBA::ORB_var orb = CORBA::ORB_init( argc, argv, "mico-local-orb" );
-  KdedInstance kded( argc, argv, orb );
-  
-  KRegistry::self()->load();
-  KRegistry::self()->addFactory( new KServiceTypeFactory );
-  KRegistry::self()->addFactory( new KServiceFactory );
   
   KoShellWindow *shell = new KoShellWindow;
   

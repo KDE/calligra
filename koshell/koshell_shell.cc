@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <kactivator.h>
+
 #include <qprinter.h>
 #include <qmsgbox.h>
 #include <qhbox.h>
@@ -34,7 +34,7 @@
 #include <koQueryTypes.h>
 #include <koKoolBar.h>
 #include <koDocument.h>
-#include <koTrader.h>
+#include <kservice.h>
 #include <view.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
@@ -368,14 +368,13 @@ void KoShellWindow::releaseDocument()
   m_pDoc = 0L;
 }
 */
-/*
+#if 0
 void KoShellWindow::slotFileNew()
 {
   /*  if ( !newDocument() )
       QMessageBox::critical( this, i18n("KImage Error"), i18n("Could not create new document"), i18n("OK") ); */
 /*
 }
-*/
 //void KoShellWindow::slotFileOpen()
 //{
   /* QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
@@ -390,6 +389,7 @@ void KoShellWindow::slotFileNew()
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     } */
 //}
+#endif
 
 void KoShellWindow::slotFileOpen()
 {
@@ -407,7 +407,7 @@ void KoShellWindow::slotFileOpen()
     return;
   }
 
-  KService::Ptr service = KoTrader::self()->serviceByName( "Konqueror" );
+  KService::Ptr service = KService::service( "Konqueror" );
 
   if ( !service )
     return;
