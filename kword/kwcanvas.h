@@ -89,7 +89,6 @@ public:
     void setRightFrameBorder( KoBorder newBorder, bool on );
     void setTopFrameBorder( KoBorder newBorder, bool on );
     void setBottomFrameBorder( KoBorder newBorder, bool on );
-    void setOutlineFrameBorder( KoBorder newBorder, bool on );
 
     void setFrameBackgroundColor( const QBrush &backColor );
 

@@ -545,7 +545,6 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     unsigned int cols=0;
     for(QPtrListIterator<Cell> c(m_cells); c.current();  ++c) 
         cols=QMAX(cols, c.current()->m_col + c.current()->m_cols);
-kdDebug() << "cols: " << cols << endl;
     double colWidth = rect.width() / cols;
     if ( widthMode == TblAuto ) {
         rect.setLeft( m_doc->ptLeftBorder() );
@@ -555,7 +554,6 @@ kdDebug() << "cols: " << cols << endl;
     for(unsigned int i=0; i <= cols;i++) {
         m_colPositions.append(rect.x() + colWidth * i);
     }
-kdDebug() << "cols: " << getCols() << endl;
 
     // Row positions..
     m_rowPositions.clear();
@@ -1668,6 +1666,63 @@ void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst )
     }
 }
 
+void KWTableFrameSet::setLeftBorder(KoBorder newBorder) {
+    QPtrListIterator<Cell> it( m_cells );
+    Cell *cell;
+    while ( (cell = it.current()) != 0 ) {
+        ++it;
+        if (cell->frame( 0 )->isSelected()) {
+            Cell *cellLeft= getCell(cell->m_row, cell->m_col-1);
+            if(!(cellLeft && cellLeft->frame(0)->isSelected())) {
+                cell->setLeftBorder(newBorder);
+            }
+        }
+    }
+}
+
+void KWTableFrameSet::setTopBorder(KoBorder newBorder) {
+    QPtrListIterator<Cell> it( m_cells );
+    Cell *cell;
+    while ( (cell = it.current()) != 0 ) {
+        ++it;
+        if (cell->frame( 0 )->isSelected()) {
+            Cell *otherCell= getCell(cell->m_row-1, cell->m_col);
+            if(!(otherCell && otherCell->frame(0)->isSelected())) {
+                cell->setTopBorder(newBorder);
+            }
+        }
+    }
+}
+
+void KWTableFrameSet::setBottomBorder(KoBorder newBorder) {
+    QPtrListIterator<Cell> it( m_cells );
+    Cell *cell;
+    while ( (cell = it.current()) != 0 ) {
+        ++it;
+        if (cell->frame( 0 )->isSelected()) {
+            Cell *otherCell= getCell(cell->m_row+1, cell->m_col);
+            if(!(otherCell && otherCell->frame(0)->isSelected())) {
+                cell->setBottomBorder(newBorder);
+            }
+        }
+    }
+}
+
+void KWTableFrameSet::setRightBorder(KoBorder newBorder) {
+    QPtrListIterator<Cell> it( m_cells );
+    Cell *cell;
+    while ( (cell = it.current()) != 0 ) {
+        ++it;
+        if (cell->frame( 0 )->isSelected()) {
+            Cell *otherCell= getCell(cell->m_row, cell->m_col+1);
+            if(!(otherCell && otherCell->frame(0)->isSelected())) {
+                cell->setRightBorder(newBorder);
+            }
+        }
+    }
+}
+
+
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * theFrame )
 {
@@ -1757,6 +1812,7 @@ double KWTableFrameSet::Cell::bottomBorder() {
 }
 
 void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
+kdDebug() << "KWTableFrameSet::Cell::leftBorder (" << m_row << "," << m_col << endl;
     KWFrame *f = frame(0);
     double diff = f->leftBorder().ptWidth - newBorder.ptWidth;
     f->setLeftBorder(newBorder);

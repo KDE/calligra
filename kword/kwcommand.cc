@@ -229,20 +229,33 @@ void KWFrameBorderCommand::execute()
         KWFrameSet *frameSet =tmp->m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
         switch( tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
-                frame->setLeftBorder(m_newBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setLeftBorder(m_newBorder);
+                else
+                    frame->setLeftBorder(m_newBorder);
                 break;
             case FBRight:
-                frame->setRightBorder(m_newBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setRightBorder(m_newBorder);
+                else
+                    frame->setRightBorder(m_newBorder);
                 break;
             case FBTop:
-                frame->setTopBorder(m_newBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setTopBorder(m_newBorder);
+                else
+                    frame->setTopBorder(m_newBorder);
                 break;
             case FBBottom:
-                frame->setBottomBorder(m_newBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setBottomBorder(m_newBorder);
+                else
+                    frame->setBottomBorder(m_newBorder);
                 break;
             default:
                 break;
@@ -264,20 +277,33 @@ void KWFrameBorderCommand::unexecute()
         KWFrameSet *frameSet =tmp->m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
         switch(tmpFrameStruct->m_EFrameType)
         {
             case  FBLeft:
-                frame->setLeftBorder(tmpFrameStruct->m_OldBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setLeftBorder(tmpFrameStruct->m_OldBorder);
+                else
+                    frame->setLeftBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBRight:
-                frame->setRightBorder(tmpFrameStruct->m_OldBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setRightBorder(tmpFrameStruct->m_OldBorder);
+                else
+                    frame->setRightBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBTop:
-                frame->setTopBorder(tmpFrameStruct->m_OldBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setTopBorder(tmpFrameStruct->m_OldBorder);
+                else
+                    frame->setTopBorder(tmpFrameStruct->m_OldBorder);
                 break;
             case FBBottom:
-                frame->setBottomBorder(tmpFrameStruct->m_OldBorder);
+                if(cell!=0L) // is a table cell
+                    cell->setBottomBorder(tmpFrameStruct->m_OldBorder);
+                else
+                    frame->setBottomBorder(tmpFrameStruct->m_OldBorder);
                 break;
             default:
                 break;

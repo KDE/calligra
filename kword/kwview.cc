@@ -3100,20 +3100,10 @@ void KWView::borderSet()
     }
     else
     {
-        if ( (actionBorderLeft->isChecked() && actionBorderRight->isChecked()
-              && actionBorderBottom->isChecked() && actionBorderTop->isChecked())
-             || (!actionBorderLeft->isChecked() && !actionBorderRight->isChecked()
-                 && !actionBorderBottom->isChecked() && !actionBorderTop->isChecked()))
-        {
-            m_gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
-        }
-        else
-        {
-            m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
-            m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
-            m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
-            m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
-        }
+        m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+        m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
+        m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+        m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
     }
 }
 
