@@ -199,7 +199,7 @@ void ToolDockBaseCaptionManager::setView( ToolDockPosition pos )
   m_pLeft->hide();
   m_pRight->hide();
   m_pTop->hide();
-  m_pBottom->hide();;
+  m_pBottom->hide();
 
   switch (pos) {
     case ToolDockLeft:
@@ -220,7 +220,7 @@ void ToolDockBaseCaptionManager::setView( ToolDockPosition pos )
       m_pTop->show();
       break;
     case ToolDockBottom:
-      m_pBottom->show();;
+      m_pBottom->show();
       break;
     default:
       break;

@@ -3297,7 +3297,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
              e->action() == QDropEvent::Move ) {
             int numberFrameSet=-1;
             numberFrameSet=KWTextDrag::decodeFrameSetNumber( e );
-            //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
+            //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
             //KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
             KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex( numberFrameSet, false );
             KWTextFrameSet *tmp=dynamic_cast<KWTextFrameSet*>(frameset);

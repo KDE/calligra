@@ -59,14 +59,14 @@ void Document::analyse(const QDomNode balise)
 	{
 		Element *elt = 0;
 		kdDebug() << "--------------------------------------------------" << endl;
-		
+
 		kdDebug() << getChildName(balise, index) << endl;
 		switch(getTypeFrameset(getChild(balise, index)))
 		{
-			case ST_NONE: 
+			case ST_NONE:
 				kdDebug() << "NONE" << endl;
 				break;
-			case ST_TEXT: 
+			case ST_TEXT:
 				kdDebug() << "TEXT" << endl;
 				elt = new TextFrame;
 				elt->analyse(getChild(balise, index));
@@ -97,7 +97,7 @@ void Document::analyse(const QDomNode balise)
 			default:
 				kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
 		}
-			
+
 		/* 3. Add the Element in one of the lists */
 		if(elt != 0)
 		{
@@ -166,7 +166,7 @@ void Document::analysePixmaps(const QDomNode balise)
 	{
 		Key *key = 0;
 		kdDebug() << "NEW PIXMAP" << endl;
-		
+
 		key = new Key(Key::PIXMAP);
 		key->analyse(getChild(balise, "KEY"));
 		_keys.append(key);
@@ -189,7 +189,7 @@ SType Document::getTypeFrameset(const QDomNode balise)
 void Document::generate(QTextStream &out, bool hasPreambule)
 {
 	kdDebug() << "DOC. GENERATION." << endl;
-	
+
 	if(hasPreambule)
 		generatePreambule(out);
 	kdDebug() << "preambule : " << hasPreambule << endl;
@@ -203,8 +203,8 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		Config::instance()->indent();
 	}
 	QString dir = "";
-	if(Config::instance()->getPicturesDir() != "" && 
-			Config::instance()->getPicturesDir() != NULL && 
+	if(Config::instance()->getPicturesDir() != "" &&
+			Config::instance()->getPicturesDir() != NULL &&
 			FileHeader::instance()->hasGraphics())
 	{
 		out << endl << "\\graphicspath{{" << Config::instance()->getPicturesDir() << "}}" << endl;
@@ -245,7 +245,7 @@ void Document::generatePreambule(QTextStream &out)
 			generateTypeHeader(out, header);
 		}
 	}
-	
+
 	/* For each footer */
 	if(FileHeader::instance()->hasFooter())
 	{
@@ -303,7 +303,7 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 			out << "\\fancyhead[LE]{}" << endl;
 			break;
 	}
-	
+
 	if(header->getInfo() == SI_FIRST)
 	{
 		out << "\\fancyhead{";
@@ -337,7 +337,7 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 			case SI_ODD:
 				out << "\\fancyfoot[CO]{";
 				footer->generate(out);
-				out << "}";;
+				out << "}";
 				break;
 			case SI_EVEN:
 				out << "\\fancyfoot[CE]{";

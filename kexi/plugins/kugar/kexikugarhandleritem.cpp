@@ -32,7 +32,7 @@
 #include <qfile.h>
 #include <kexikugarwrapper.h>
 
-KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QString& ident, 
+KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QString& ident,
 	const QString& mime, const QString& title)
  : KexiProjectHandlerItem(handler, ident, mime, title)
 	, m_designer(0)
@@ -189,7 +189,7 @@ kdDebug() << "templateInfo='" <<m_tempPath+"template.kukexi"<<endl;
 		kdDebug()<<"provider plugin name has been decoded: "<<providerName<<endl;
 
 		KexiDataProvider *prov=KEXIDATAPROVIDER((handler()->kexiProject()->handlerForMime(providerName)));
-		if (!prov) break;;
+		if (!prov) break;
 		kdDebug()<<"Provider found"<<endl;
 
 		QString levelStr=QString("%1").arg(level);

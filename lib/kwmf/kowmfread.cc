@@ -96,6 +96,6 @@ int KoWmfRead::defaultDpi( void ) const {
 
 
 void KoWmfRead::setDebug( int nbrFunc ) {
-    mKwmf->mNbrFunc = nbrFunc;;
+    mKwmf->mNbrFunc = nbrFunc;
 }
 

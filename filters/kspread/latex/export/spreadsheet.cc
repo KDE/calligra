@@ -53,7 +53,7 @@ void Spreadsheet::analyse(const QDomNode balise)
 	_map.analyse(getChild(balise, "map"));
 	//_locale.analyse(getChild(balise, "locale"));
 	//_areaname.analyse(getChild(balise, "areaname"));
-	
+
 	kdDebug() << "SPREADSHEET END" << endl;
 }
 
@@ -62,7 +62,7 @@ void Spreadsheet::analyse(const QDomNode balise)
 /*******************************************/
 void Spreadsheet::analyse_attr(const QDomNode balise)
 {
-	
+
 }
 
 /*******************************************/
@@ -71,7 +71,7 @@ void Spreadsheet::analyse_attr(const QDomNode balise)
 void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 {
 	kdDebug() << "DOC. GENERATION." << endl;
-	
+
 	if(!Config::instance()->isEmbeded())
 		generatePreambule(out);
 	kdDebug() << "preambule : " << hasPreambule << endl;
@@ -82,9 +82,9 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 		out << "\\begin{document}" << endl;
 		indent();
 	}
-	
+
 	_map.generate(out);
-	
+
 	if(hasPreambule)
 		out << "\\end{document}" << endl;
 	desindent();
@@ -110,7 +110,7 @@ void Spreadsheet::generatePreambule(QTextStream &out)
 	//		generateTypeHeader(out, header);
 	//	}
 	//}
-	
+
 	/* For each footer */
 	/*if(getFileHeader()->hasFooter())
 	{
@@ -168,7 +168,7 @@ void Spreadsheet::generateTypeHeader(QTextStream &out)
 			out << "\\fancyhead[LE]{}" << endl;
 			break;
 	}
-	
+
 	if(header->getInfo() == SI_FIRST)
 	{
 		out << "\\fancyhead{";
@@ -201,7 +201,7 @@ void Spreadsheet::generateTypeFooter(QTextStream &out)
 			case SI_ODD:
 				out << "\\fancyfoot[CO]{";
 				footer->generate(out);
-				out << "}";;
+				out << "}";
 				break;
 			case SI_EVEN:
 				out << "\\fancyfoot[CE]{";

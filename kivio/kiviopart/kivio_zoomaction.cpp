@@ -72,7 +72,7 @@ void ZoomAction::insertItem( int item )
     }
     i.sort();
     for( it = i.begin(); it != i.end(); ++it ) {
-      (*it) = (*it).simplifyWhiteSpace();;
+      (*it) = (*it).simplifyWhiteSpace();
     }
   }
   setItems(i);

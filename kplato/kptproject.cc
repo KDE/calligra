@@ -35,7 +35,7 @@
 
 
 
-KPTProject::KPTProject(KPTNode *parent) 
+KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent), startNode( this ), endNode( this )
 
 {
@@ -65,13 +65,13 @@ void KPTProject::calculate() {
     initialize_arcs();
     set_up_arcs();
     set_unvisited_values();
-    
+
     pert_cpm();
     if (m_constraint != KPTNode::MustStartOn)
         setStartTime(startNode.getEarliestStart());
     setEndTime(endNode.getLatestFinish());
-    
-    QPtrListIterator<KPTNode> nit(m_nodes); 
+
+    QPtrListIterator<KPTNode> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->setStartTime(start_node()->getEarliestStart());
         nit.current()->setEndTime(end_node()->getLatestFinish());
@@ -195,7 +195,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
     /* Propagate (start) value of first node in list to all nodes in project */
     /* First find the first node with no successor values */
     std::list<KPTNode*>::iterator curNode;
-    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors ) ); 
+    curNode = find_if( nodelist.begin(), nodelist.end(), no_unvisited( &KPTNode::successors ) );
     while(curNode != nodelist.end()) {
         /* at this point curNode will contain the first node from
         * which we can search: refer to node as currentNode and earliest
@@ -203,7 +203,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
 
 #ifdef DEBUGPERT
         for( std::list<KPTNode*>::const_iterator k = nodelist.begin(); k != nodelist.end(); ++k ) {
-            kdDebug() << (*k)->name().latin1() << " (" << (*k)->successors.unvisited << ")" << endl;;
+            kdDebug() << (*k)->name().latin1() << " (" << (*k)->successors.unvisited << ")" << endl;
         }
         kdDebug() << endl;
 #endif
@@ -266,17 +266,17 @@ bool KPTProject::load(QDomElement &element) {
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
-    
+
     QDateTime dt( QDateTime::currentDateTime() );
     dt = dt.fromString( element.attribute("project-start", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
     setStartTime(KPTDuration(dt));
-    
-    // Use project-start as default    
+
+    // Use project-start as default
     dt = dt.fromString( element.attribute("project-end", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"End="<<dt.toString()<<endl;
     setEndTime(KPTDuration(dt));
-    
+
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -336,7 +336,7 @@ void KPTProject::save(QDomElement &element) const {
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
-    
+
     me.setAttribute("project-start",startTime().dateTime().toString());
     me.setAttribute("project-end",endTime().dateTime().toString());
 
@@ -346,7 +346,7 @@ void KPTProject::save(QDomElement &element) const {
     e = me.ownerDocument().createElement("endnode");
     me.appendChild(e);
     endNode.save(e);
-    // Only save parent relations    
+    // Only save parent relations
     QPtrListIterator<KPTRelation> it(m_dependParentNodes);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
@@ -393,10 +393,10 @@ void KPTProject::setStartTime(KPTDuration startTime) {
 }
 
 void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
-    kdDebug()<<k_funcinfo<<endl;	
+    kdDebug()<<k_funcinfo<<endl;
 	if (!m_drawn) {
 	    if (numDependChildNodes() == 0 &&
-		    numDependParentNodes() == 0) 
+		    numDependParentNodes() == 0)
 		{
 			int col = view->summaryColumn();
 			m_pertItem = new KPTPertProjectItem(view, *this, 0, col);
@@ -441,7 +441,7 @@ void KPTProject::insertResourceGroup( unsigned int /* index */,
 }
 
 QPtrList<KPTResourceGroup> &KPTProject::resourceGroups() {
-     return m_resourceGroups; 
+     return m_resourceGroups;
 }
 
 #ifndef NDEBUG
@@ -452,7 +452,7 @@ void KPTProject::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<" Start node: "<<endl;
     startNode.printDebug(false, indent);
     kdDebug()<<indent<<" End node: "<<endl;
-    endNode.printDebug(false, indent); 
+    endNode.printDebug(false, indent);
     QPtrListIterator<KPTResourceGroup> it(resourceGroups());
     for ( ; it.current(); ++it)
         it.current()->printDebug(indent);

@@ -409,7 +409,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
@@ -417,14 +417,14 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
-        streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
         streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
 
         streamOut << "    <a href=\"../index.html\">";
-        streamOut << "<img src=\"../pics/home.png\" border=\"0\" alt=\"Home\" title=\"Home\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/home.png\" border=\"0\" alt=\"Home\" title=\"Home\"" << ( isXML() ?" /":"") << ">";
         streamOut << "</a>\n";
 
         streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n"; // ### TODO: is noshade W3C?

@@ -58,7 +58,7 @@ void DRect::unite(const DRect &r)
 {
     if ( !r.isValid() ) return;
     if ( !isValid() ) {
-        *this = r;;
+        *this = r;
         return;
     }
     _left = kMin(_left, r._left);

@@ -1939,9 +1939,9 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
     sTabPos->setValue( KoUnit::ptToUnit(selectedTab->ptPos, m_unit));
     bDelete->setEnabled(true);
     bDeleteAll->setEnabled(true);
-    gPosition->setEnabled(true);;
-    bgAlign->setEnabled(true);;
-    gTabLeader->setEnabled(true);;
+    gPosition->setEnabled(true);
+    bgAlign->setEnabled(true);
+    gTabLeader->setEnabled(true);
     noSignals=false;
 }
 

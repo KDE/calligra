@@ -268,7 +268,7 @@ void KWPartFrameSet::storeInternal()
     {
         KWFramePartExternalCommand* cmd =new KWFramePartExternalCommand( i18n("Make Document External"), this );
         m_doc->addCommand(cmd);
-        getChild()->document()->setStoreInternal(false);;
+        getChild()->document()->setStoreInternal(false);
     }
     else
     {

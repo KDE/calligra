@@ -55,7 +55,7 @@ class KFORMEDITOR_EXPORT PropertyEditorSpin : public PropertyEditorEditor
 		virtual QVariant	getValue();
 
 	protected:
-		QSpinBox		*m_spinBox;;
+		QSpinBox		*m_spinBox;
 };
 
 

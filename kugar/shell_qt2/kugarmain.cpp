@@ -120,3 +120,5 @@ void KugarMain::slotPreferredTemplate( const QString & tpl )
     }
 }
 
+
+#include "kugarmain.moc"

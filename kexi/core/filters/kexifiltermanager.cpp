@@ -109,7 +109,7 @@ bool KexiFilterManager::doImport(const QString& lib, const KURL &url, unsigned l
 {
 	int err=0;
 	QStringList l;
-	l<<"IMPORT";;
+	l<<"IMPORT";
 	KexiFilter *f=KParts::ComponentFactory::createInstanceFromLibrary<KexiFilter> (lib.utf8(),this,"import filter",l,&err);
 	if (err!=0) {
 #ifdef __GNUC__

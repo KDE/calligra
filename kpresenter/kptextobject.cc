@@ -2244,7 +2244,7 @@ void KPTextView::dropEvent( QDropEvent * e )
 
         if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move ) {
-            //kdDebug(33001)<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
+            //kdDebug(33001)<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
             int objTextNum=-1;
             objTextNum=KPrTextDrag::decodeTextObjectNumber( e );
             KPTextObject * obj = m_canvas->textObjectByPos( objTextNum );

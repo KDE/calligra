@@ -5594,7 +5594,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled( rw );
     actionFormatAlignBlock->setEnabled( rw );
 
-    actionBorderLeft->setEnabled( rw );;
+    actionBorderLeft->setEnabled( rw );
     actionBorderRight->setEnabled( rw );
     actionBorderTop->setEnabled( rw );
     actionBorderBottom->setEnabled( rw );

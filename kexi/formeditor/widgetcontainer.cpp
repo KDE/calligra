@@ -372,7 +372,7 @@ namespace KFormEditor {
 		if (m_pendingWidget) return false;
 		QWidget *sh;
 
-		QWidget *tmp=static_cast<QWidget*>(obj->qt_cast("QWidget"));;
+		QWidget *tmp=static_cast<QWidget*>(obj->qt_cast("QWidget"));
 		while (!(tmp->parentWidget(true)==this))
 			tmp=tmp->parentWidget();
 		containerIface *cif=static_cast<containerIface*>(tmp->qt_cast("KFormEditor::containerIface"));

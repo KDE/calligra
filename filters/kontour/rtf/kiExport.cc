@@ -2,22 +2,22 @@
  * This file is part of the KDE project
  *
  * Copyright 2001 Michael Johnson <mikej@xnet.com>
- * 
- * 
- * This library is free software; you can redistribute it and/or modify it 
+ *
+ *
+ * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Library General Public License as published
  * by the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Library General Public
  * License along with this library; see the file COPYING.LIB.  If not,
  * write to the Free Software Foundation, Inc., 59 Temple Place - Suite
- * 330, Boston, MA 02111-1307, USA. 
+ * 330, Boston, MA 02111-1307, USA.
  */
 
 #include <kiExport.h>
@@ -358,7 +358,7 @@ void ProcessPolygonTag(QDomNode myNode, void *, QString & outputText)
 // Gets the attributes and subtags of the polygon tag
 // called by ProcessdocTag() or ProcessGroupTag()
 {
-    Polyline        polygon;;
+    Polyline        polygon;
 
     AllowNoAttributes(myNode);
 
@@ -531,7 +531,7 @@ void kiProcessFontTag(QDomNode myNode, void *tagData, QString &)
 
     QValueList < AttrProcessing > attrProcessingList;
     attrProcessingList
-        << AttrProcessing("weight", "int", (void *) &font->weight) 
+        << AttrProcessing("weight", "int", (void *) &font->weight)
         << AttrProcessing("face", "QString", (void *) &font->face)
         << AttrProcessing("italic", "int", (void *) &font->italic)
         << AttrProcessing("point-size", "int", (void *) &font->pointSize);
@@ -653,7 +653,7 @@ void ProcessGroupTag(QDomNode myNode, void *tagData, QString & outputText)
 
     isPolyLine = true;
     QValueList < TagProcessing > tagProcessingList;
-    tagProcessingList 
+    tagProcessingList
         << TagProcessing("gobject", ProcessGobjectTag, (void *) &group->gobject)
         << TagProcessing("polyline", ProcessPolylineTag, NULL)
         << TagProcessing("rectangle", ProcessRectangleTag, NULL)

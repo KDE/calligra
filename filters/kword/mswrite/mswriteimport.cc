@@ -1093,7 +1093,7 @@ public:
 
 		m_formatOutput += "<FONT name=\"";
 			m_formatOutput += (const char *) (charProperty->getFont ()->getName ());
-			m_formatOutput += "\"/>";;
+			m_formatOutput += "\"/>";
 			m_formatOutput += "<SIZE value=\"";
 			m_formatOutput += QString::number (charProperty->getFontSize ());
 			m_formatOutput += "\"/>";
