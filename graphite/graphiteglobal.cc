@@ -281,6 +281,27 @@ void PageLayout::loadDefaults() {
     borders.bottom=config->readDoubleNumEntry(QString::fromLatin1("BottomBorder"), 10.0);
 }
 
+bool operator==(const PageLayout &lhs, const PageLayout &rhs) {
+
+    if(lhs.orientation!=rhs.orientation)
+        return false;
+    if(lhs.layout!=rhs.layout)
+        return false;
+    if(lhs.size!=rhs.size)
+        return false;
+    if(lhs.borders!=rhs.borders)
+        return false;
+    if(lhs.width()!=rhs.width())
+        return false;
+    if(lhs.height()!=rhs.height())
+        return false;
+    return true;
+}
+
+bool operator!=(const PageLayout &lhs, const PageLayout &rhs) {
+    return !(lhs==rhs);
+}
+
 }; //namespace Graphite
 
 

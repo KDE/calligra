@@ -114,16 +114,30 @@ void GraphitePart::setPageOrientation(const QPrinter::Orientation &orientation) 
     // TODO -- update
 }
 
-void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
+void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders, bool addCommand) {
     if(m_pageLayout.borders!=pageBorders) {
+        if(addCommand)
+            m_history.addCommand(new GBordersCmd(this, i18n("Changing Page Borders"),
+                                                 m_pageLayout.borders, pageBorders), false);
         m_pageLayout.borders=pageBorders;
         emit layoutChanged();
     }
 }
 
-void GraphitePart::showPageLayoutDia(QWidget *parent) {
-    if(PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent))
+void GraphitePart::setPageLayout(const Graphite::PageLayout &pageLayout, bool addCommand) {
+    if(m_pageLayout!=pageLayout) {
+        if(addCommand)
+            m_history.addCommand(new GLayoutCmd(this, i18n("Changing Page Layout"),
+                                                m_pageLayout, pageLayout), false);
+        m_pageLayout=pageLayout;
         emit layoutChanged();
+    }
+}
+
+void GraphitePart::showPageLayoutDia(QWidget *parent) {
+    Graphite::PageLayout layout(m_pageLayout);
+    if(PageLayoutDiaImpl::pageLayoutDia(layout, this, parent))
+        setPageLayout(layout);
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
@@ -207,6 +221,44 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
         return;
     GraphiteGlobal::self()->setZoom(zoom);
     // nodeZero->setDirty();
+}
+
+
+GLayoutCmd::GLayoutCmd(GraphitePart *doc, const QString &name) : KCommand(name), m_doc(doc) {
+}
+
+GLayoutCmd::GLayoutCmd(GraphitePart *doc, const QString &name,
+                       const Graphite::PageLayout &oldLayout, const Graphite::PageLayout &newLayout) :
+    KCommand(name), m_doc(doc), m_oldLayout(oldLayout), m_newLayout(newLayout) {
+}
+
+void GLayoutCmd::execute() {
+    if(m_doc)
+        m_doc->setPageLayout(m_newLayout, false);
+}
+
+void GLayoutCmd::unexecute() {
+    if(m_doc)
+        m_doc->setPageLayout(m_oldLayout, false);
+}
+
+
+GBordersCmd::GBordersCmd(GraphitePart *doc, const QString &name) : KCommand(name), m_doc(doc) {
+}
+
+GBordersCmd::GBordersCmd(GraphitePart *doc, const QString &name,
+            const Graphite::PageBorders &oldBorders, const Graphite::PageBorders &newBorders) :
+    KCommand(name), m_doc(doc), m_oldBorders(oldBorders), m_newBorders(newBorders) {
+}
+
+void GBordersCmd::execute() {
+    if(m_doc)
+        m_doc->setPageBorders(m_newBorders, false);
+}
+
+void GBordersCmd::unexecute() {
+    if(m_doc)
+        m_doc->setPageBorders(m_oldBorders, false);
 }
 
 #include <graphitepart.moc>

@@ -216,16 +216,13 @@ PageLayoutDiaImpl::PageLayoutDiaImpl(Graphite::PageLayout &layout, const Graphit
 bool PageLayoutDiaImpl::pageLayoutDia(Graphite::PageLayout &layout, GraphitePart * const doc,
                                       QWidget *parent) {
 
-    Graphite::PageLayout tmp=layout;  // store in case of a Cancel operation
     PageLayoutDiaImpl dia(layout, doc, parent, "pagelayoutdiaimpl", true);
     if(dia.exec()==QDialog::Accepted) {
         doc->setUnit(static_cast<Graphite::Unit>(dia.unit->currentItem()));
         return true;
     }
-    else {
-        layout=tmp;  // The user cancelled -> restore the original state
+    else
         return false;
-    }
 }
 
 void PageLayoutDiaImpl::unitChanged(int u) {

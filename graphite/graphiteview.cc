@@ -50,8 +50,8 @@ GraphiteView::~GraphiteView() {
 }
 
 void GraphiteView::layoutChanged() {
-    m_vert->setPageBorders(m_doc->pageLayout().borders);
-    m_horiz->setPageBorders(m_doc->pageLayout().borders);
+    m_vert->setPageLayout(m_doc->pageLayout());
+    m_horiz->setPageLayout(m_doc->pageLayout());
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {

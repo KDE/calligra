@@ -148,6 +148,9 @@ struct PageLayout {
     PageBorders borders;
 };
 
+bool operator==(const PageLayout &lhs, const PageLayout &rhs);
+bool operator!=(const PageLayout &lhs, const PageLayout &rhs);
+
 }; //namespace Graphite
 
 

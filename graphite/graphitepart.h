@@ -55,11 +55,17 @@ public:
     void pageSize(double &width, double &height) const;
     void setPageSize(const QPrinter::PageSize &pageSize); // implies Norm
     void setPageSize(const double &width, const double &height); // implies Custom
+
     QPrinter::Orientation pageOrientation() const { return m_pageLayout.orientation; }
     void setPageOrientation(const QPrinter::Orientation &orientation);
+
     Graphite::PageBorders pageBorders() const { return m_pageLayout.borders; }
-    void setPageBorders(const Graphite::PageBorders &pageBorders);
+    // note: only commands should use addCommand==false
+    void setPageBorders(const Graphite::PageBorders &pageBorders, bool addCommand=true);
+
     const Graphite::PageLayout &pageLayout() const { return m_pageLayout; }
+    // note: only commands should use addCommand==false
+    void setPageLayout(const Graphite::PageLayout &pageLayout, bool addCommand=true);
     // This method is used to shot the page layout dialog (e.g. on a dbl click on the ruler)
     // emits layoutChanged if the layout has been changed :)
     void showPageLayoutDia(QWidget *parent);
@@ -109,6 +115,50 @@ private:
     // TODO: Do we need isLoading() like in KSpread?
     Graphite::PageLayout m_pageLayout;
     Graphite::Unit m_unit;
+};
+
+
+class GLayoutCmd : public KCommand {
+
+public:
+    GLayoutCmd(GraphitePart *doc, const QString &name);
+    GLayoutCmd(GraphitePart *doc, const QString &name,
+               const Graphite::PageLayout &oldLayout, const Graphite::PageLayout &newLayout);
+    virtual ~GLayoutCmd() {}
+
+    virtual void execute();
+    virtual void unexecute();
+
+    void setOldLayout(const Graphite::PageLayout &layout) { m_oldLayout=layout; }
+    const Graphite::PageLayout &oldLayout() const { return m_oldLayout; }
+    void setNewLayout(const Graphite::PageLayout &layout) { m_newLayout=layout; }
+    const Graphite::PageLayout &newLayout() const { return m_newLayout; }
+
+private:
+    GraphitePart *m_doc;
+    Graphite::PageLayout m_oldLayout, m_newLayout;
+};
+
+
+class GBordersCmd : public KCommand {
+
+public:
+    GBordersCmd(GraphitePart *doc, const QString &name);
+    GBordersCmd(GraphitePart *doc, const QString &name,
+                const Graphite::PageBorders &oldBorders, const Graphite::PageBorders &newBorders);
+    virtual ~GBordersCmd() {}
+
+    virtual void execute();
+    virtual void unexecute();
+
+    void setOldBorders(const Graphite::PageBorders &borders) { m_oldBorders=borders; }
+    const Graphite::PageBorders &oldBorders() const { return m_oldBorders; }
+    void setNewBorders(const Graphite::PageBorders &borders) { m_newBorders=borders; }
+    const Graphite::PageBorders &newBorders() const { return m_newBorders; }
+
+private:
+    GraphitePart *m_doc;
+    Graphite::PageBorders m_oldBorders, m_newBorders;
 };
 
 #endif
