@@ -2326,10 +2326,10 @@ void KWView::editFind()
 {
     if (!m_searchEntry)
         m_searchEntry = new KoSearchContext();
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
-    bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
-    KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry,hasSelection );
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    bool hasSelection = edit && edit->textFrameSet()->hasSelection();
 
+    KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry, hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
@@ -2345,10 +2345,10 @@ void KWView::editReplace()
     if (!m_replaceEntry)
         m_replaceEntry = new KoSearchContext();
 
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
-    bool hasSelection=edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection();
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    bool hasSelection = edit && edit->textFrameSet()->hasSelection();
 
-    KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry,hasSelection );
+    KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry, hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
@@ -2361,20 +2361,14 @@ void KWView::editFindNext()
 {
     if ( !m_findReplace ) // shouldn't be called before find or replace is activated
         return;
-    bool ret = m_findReplace->findNext();
-    kdDebug() << k_funcinfo << "ret=" << ret << endl;
-    actionEditFindNext->setEnabled( ret ); // true except when completely done
-    actionEditFindPrevious->setEnabled( true );
+    (void) m_findReplace->findNext();
 }
 
 void KWView::editFindPrevious()
 {
     if ( !m_findReplace ) // shouldn't be called before find or replace is activated
         return;
-    bool ret = m_findReplace->findPrevious();
-    kdDebug() << k_funcinfo << "ret=" << ret << endl;
-    actionEditFindPrevious->setEnabled( ret ); // true except when completely done
-    actionEditFindNext->setEnabled( true );
+    (void) m_findReplace->findPrevious();
 }
 
 void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
