@@ -39,6 +39,7 @@
 #include "autoformat.h"
 #include <qclipboard.h>
 #include <qdragobject.h>
+#include <qtl.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <koDataTool.h>
@@ -47,7 +48,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -595,8 +596,9 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     {
         int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
         int bottom = totalHeight + frameHeight;
-        // Only skip bottom of frame if there'll be another one. Not for header/footer, for instance.
-        if ( frameIt.current()->getFrameBehaviour() == AutoCreateNewFrame )
+        // Only skip bottom of frame if there is a next one or if there'll be another one created.
+        // ( Not for header/footer, for instance. )
+        if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == AutoCreateNewFrame )
         {
             //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
@@ -703,6 +705,25 @@ KWTextFrameSet::~KWTextFrameSet()
     m_doc = 0L;
 }
 
+// This struct is used for sorting frames.
+// Since pages are one below the other, simply sorting on (y, x) does what we want.
+struct FrameStruct
+{
+    KWFrame * frame;
+    bool operator < ( const FrameStruct & t ) const {
+        return frame->y() < t.frame->y() ||
+            ( frame->y() == t.frame->y() && frame->x() < t.frame->x() );
+    }
+    bool operator <= ( const FrameStruct & t ) const {
+        return frame->y() < t.frame->y() ||
+            ( frame->y() == t.frame->y() && frame->x() <= t.frame->x() );
+    }
+    bool operator > ( const FrameStruct & t ) const {
+        return frame->y() > t.frame->y() ||
+            ( frame->y() == t.frame->y() && frame->x() > t.frame->x() );
+    }
+};
+
 void KWTextFrameSet::updateFrames()
 {
     // Not visible ? Don't bother then.
@@ -724,100 +745,33 @@ void KWTextFrameSet::updateFrames()
     }
 
     //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
-    typedef QList<KWFrame> FrameList;
-    QList<FrameList> frameList;
-    frameList.setAutoDelete( true );
-    frames.setAutoDelete( false );
 
-    // sort frames of this frameset into l2 on (page, y coord, x coord)
-    KoRect pageRect;
-    for ( unsigned int i = 0; i < static_cast<unsigned int>( m_doc->getPages() + 1 ); i++ ) {
-        //kdDebug(32002) << "Considering page " << i << endl;
-        pageRect = KoRect( 0, i * m_doc->ptPaperHeight(), m_doc->ptPaperWidth(), m_doc->ptPaperHeight() );
-        FrameList *l = new FrameList();
-        l->setAutoDelete( false );
-        for ( unsigned int j = 0; j < frames.count(); j++ ) {
-            if ( frames.at( j )->intersects( pageRect ) ) {
-                frames.at( j )->setPageNum( i );
-                //kdDebug(32002) << "KWTextFrameSet::update appending frame " << frames.at(j) << endl;
-                l->append( frames.at( j ) );
-                //kdDebug(32002) << "KWTextFrameSet::update removing frame " << j << endl;
-                frames.remove(j--);
-            }
-        }
+    // Sort frames of this frameset on (page, y coord, x coord)
 
+    QValueList<FrameStruct> sortedFrames;
 
-        if ( !l->isEmpty() ) {
-            FrameList *ll = new FrameList();
-            ll->setAutoDelete( false );
-            ll->append( l->first() );
-            unsigned int k = 0, m = 0;
-            for ( k = 1; k < l->count(); k++ ) {
-                bool inserted = false;
-                for ( m = 0; m < ll->count(); m++ ) {
-                    if ( l->at( k )->y() < ll->at( m )->y() ) {
-                        inserted = true;
-                        ll->insert( m, l->at( k ) );
-                        break;
-                    }
-                }
-                if ( !inserted ) ll->append( l->at( k ) );
-            }
-            FrameList *l2 = new FrameList();
-            l2->setAutoDelete( false );
-            l2->append( ll->first() );
-            for ( k = 1; k < ll->count(); k++ ) {
-                bool inserted = false;
-                for ( m = 0; m < l2->count(); m++ ) {
-                    if ( ll->at( k )->x() < l2->at( m )->x() ) {
-                        inserted = true;
-                        l2->insert( m, ll->at( k ) );
-                        break;
-                    }
-                }
-                if ( !inserted ) l2->append( ll->at( k ) );
-            }
-
-            delete ll;
-            delete l;
-            l = l2;
-        }
-
-        if(! l->isEmpty())
-            frameList.append( l );
-        else
-            delete l;
-    }
-
-    // Rebuild the <frames> list and set the "most right" flag for each frame
-
-    ASSERT( frames.isEmpty() ); // let's see
-    m_availableHeight = 0;
-    //int rm = 0;
-    QListIterator<FrameList> frameListIt = QListIterator<FrameList>(frameList);
-    for ( ; frameListIt.current(); ++frameListIt )
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
     {
-        QListIterator<KWFrame> frameIt = QListIterator<KWFrame>(*frameListIt.current());
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame * frame = frameIt.current();
-            //kdDebugBody(32002) << "KWTextFrameSet::updateFrames adding frame " << frame
-            //        << " height:" << frame->height()
-            //        << " zoomed height:" << kWordDocument()->zoomItY( frame->height() ) << endl;
-            ASSERT( !frames.contains(frame) );
-            frames.append( frame );
-            m_availableHeight += kWordDocument()->zoomItY( frame->height() );
-#if 0 // What was that setMostRight stuff for ?
-            frames.at( frames.count() - 1 )->setMostRight( false );
-            if ( frames.count() > 1 ) {
-                if ( frames.at( frames.count() - 2 )->right() > frames.at( frames.count() - 1 )->right() ) {
-                    frames.at( frames.count() - 2 )->setMostRight( true );
-                    //rm++;
-                }
-            }
-#endif
-        }
+        FrameStruct str;
+        str.frame = frameIt.current();
+        sortedFrames.append( str );
     }
+    qHeapSort( sortedFrames );
+
+    frames.setAutoDelete( false );
+    frames.clear();
+    m_availableHeight = 0;
+    double pageHeight = m_doc->ptPaperHeight();
+    QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
+    for ( ; it != sortedFrames.end() ; ++it )
+    {
+        KWFrame * frame = (*it).frame;
+        frames.append( frame );
+        frame->setPageNum( static_cast<int>( frame->y() / pageHeight ) );
+        m_availableHeight += kWordDocument()->zoomItY( frame->height() );
+    }
+
     //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
@@ -1446,7 +1400,6 @@ void KWTextFrameSet::formatMore()
 #endif
             int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
-            // Second try, without hacks :)
             while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
             {
                 m_doc->removePage( lastPage );

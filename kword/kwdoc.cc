@@ -480,13 +480,16 @@ void KWDocument::recalcFrames()
             {
                 for (int n = fs->getNumFrames()-1; n >= 0 ; n--) {
                     //if ( n == fs->getNumFrames()-1 )
-                    //    kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
+                    //kdDebug(32002) << "KWDocument::recalcFrames frameset " << m << " " << fs->getName()
+                    //               << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                     maxBottom = QMAX(maxBottom, fs->getFrame(n)->bottom());
                 }
             }
         }
         int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
-        //kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
+        /*kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2
+                       << " (coming from maxBottom=" << maxBottom << " and ptPaperHeight=" << ptPaperHeight() << ")"
+                       << endl;*/
 
         m_pages = QMAX( pages2, m_pages );
         if ( m_pages != oldPages )
@@ -2010,14 +2013,17 @@ void KWDocument::removePage( int num )
         {
             KWFrame * frm = frameIt.current();
             if ( frm->pageNum() == num )
+            {
+                kdDebug() << "KWDocument::removePage deleting frame " << frm << " (from frameset " << frameSet->getName() << ")" << endl;
                 toDelete.append( frm ); // Can't remove the frame here, it screws up the iterator -> toDelete
+            }
         }
         QListIterator<KWFrame> delIt( toDelete );
         for ( ; delIt.current(); ++delIt )
             frameSet->delFrame( delIt.current(), true );
     }
     m_pages--;
-    //kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;
+    kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;
     emit pageNumChanged();
     recalcVariables( VT_PGNUM );
     recalcFrames();
