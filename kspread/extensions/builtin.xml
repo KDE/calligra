@@ -348,11 +348,11 @@
     </Function>
 
     <Function>
-      <Name>currentTimeDate</Name>
+      <Name>currentDateTime</Name>
       <Type>String</Type>
       <Help>
 	<Text>The currentDateTime() function returns the current date and time formatted with local parameters.</Text>
-	<Syntax>currentTimeDate()</Syntax>
+	<Syntax>currentDateTime()</Syntax>
 	<Example>currentDateTime() returns "Saturday 15 July 2000 19:12:01"</Example>
       </Help>
     </Function>
