@@ -188,10 +188,15 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	}
 	else
 	{
-		//kdDebug() << "before ; " << value << endl;
 		if( m_gc.current() )
-			value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
-		//kdDebug() << "after ; " << value << endl;
+		{
+			if( horiz && vert )
+				value *= sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
+			else if( horiz )
+				value *= m_gc.current()->matrix.m11();
+			else if( vert )
+				value *= m_gc.current()->matrix.m22();
+		}
 	}
 	return value;
 }
@@ -410,7 +415,7 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 		}
 	}
 	else if( command == "stroke-width" )
-		gc->stroke.setLineWidth( parseUnit( params ) );
+		gc->stroke.setLineWidth( parseUnit( params, true, true ) );
 	else if( command == "stroke-linejoin" )
 	{
 		if( params == "miter" )
@@ -561,8 +566,8 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		{
 			double x		= parseUnit( b.attribute( "x" ) );
 			double y		= parseUnit( b.attribute( "y" ) );
-			double width	= parseUnit( b.attribute( "width" ) );
-			double height	= parseUnit( b.attribute( "height" ) );
+			double width	= parseUnit( b.attribute( "width" ), true, false );
+			double height	= parseUnit( b.attribute( "height" ), false, true );
 			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 		}
 		else if( b.tagName() == "ellipse" )
