@@ -31,7 +31,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	sheet.cc \
 	sheetdlg.cc \
 	table.cc qttableview.cpp KChartViewIface.skel KChartViewIface.cc \
-        kchartLineSubTypeChartPage.cc
+        kchartLineSubTypeChartPage.cc kchartHiloSubTypeChartPage.cc
 
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -84,7 +84,7 @@ noinst_HEADERS =  kchart_part.h \
 		table.h \
 		kchart_aboutdata.h	\
 		kchartcolorarray.h KChartViewIface.h \
-		kchartLineSubTypeChartPage.h
+		kchartLineSubTypeChartPage.h kchartHiloSubTypeChartPage.h
 
 METASOURCES = AUTO
 

@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
@@ -21,6 +19,7 @@ KAboutData * newKChartAboutData()
                                            I18N_NOOP("The drawing engine which forms the base of KChart\nis also available as a commercial product\nfrom Klaralvdalens Datakonsult AB,\nplease contact info@klaralvdalens-datakonsult.se\nfor more information!"), 
 					   "http://www.koffice.org/kchart/");
     aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
+    aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
     return aboutData;
 }
 

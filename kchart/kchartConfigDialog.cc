@@ -10,6 +10,7 @@
 #include "kchartBackgroundPixmapConfigPage.h"
 #include "kchartBarSubTypeChartPage.h"
 #include "kchartLineSubTypeChartPage.h"
+#include "kchartHiloSubTypeChartPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"
@@ -77,6 +78,10 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         break;
     case KDChartParams::Line:
         _subTypePage = new KChartLineSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
+    case KDChartParams::HiLo:
+        _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
         addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
     default:
