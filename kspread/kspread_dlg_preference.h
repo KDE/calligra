@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999, 2000 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +74,7 @@ protected:
   QCheckBox *showColHeader;
   QCheckBox *showRowHeader;
   QCheckBox *showTabBar;
+  QCheckBox *showFormulaBar;
   KConfig* config;
 } ;
 
@@ -125,8 +126,8 @@ protected:
   QComboBox *defaultSizePage;
   
   //store old config
-  unsigned int paper;
-  unsigned int orientation;
+  int paper;
+  int orientation;
   
   KConfig* config;
 } ;

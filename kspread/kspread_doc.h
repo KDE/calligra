@@ -326,7 +326,13 @@ public:
    */
   void setShowCommentIndicator(bool _indic) {  m_bShowCommentIndicator=_indic;}
   bool getShowCommentIndicator() { return  m_bShowCommentIndicator;}
-  
+
+  /**
+   * show/hide formula bar
+   */
+  void setShowFormularBar(bool _formulaBar) {  m_bShowFormularBar=_formulaBar;}
+  bool getShowFormularBar() { return  m_bShowFormularBar;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -568,7 +574,7 @@ protected:
   bool m_bShowTabBar;
 
   bool m_bShowCommentIndicator;
-
+  bool m_bShowFormularBar;
 };
 
 #endif

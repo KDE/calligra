@@ -38,10 +38,9 @@
 #include <qgrid.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
-	: KDialogBase(KDialogBase::IconList,
-                                    i18n("Configure Kspread") ,
-                                    KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
-                                    KDialogBase::Ok)
+  : KDialogBase(KDialogBase::IconList,i18n("Configure Kspread") ,
+		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
+		KDialogBase::Ok)
 
 {
   m_pView=parent;
@@ -51,7 +50,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
   page=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
-  parameterLocale *_ParamLocal = new  parameterLocale(parent,page );
+  parameterLocale *_ParamLocal=new parameterLocale(parent,page );
   page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("colorize", KIcon::SizeMedium) );
   _configure = new  configure(parent,page );
   page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
@@ -207,6 +206,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   bool rowHeader=true;
   bool colHeader=true;
   bool tabbar=true;
+  bool formulaBar=true;
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
   box->setSpacing( 10 );
@@ -227,6 +227,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         colHeader=config->readBoolEntry("Column Header",true);
         rowHeader=config->readBoolEntry("Row Header",true);
 	tabbar=config->readBoolEntry("Tabbar",true);
+	formulaBar=config->readBoolEntry("Formula bar",true);
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -253,7 +254,9 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showTabBar);
   showTabBar->setChecked(tabbar);
 
-
+  showFormulaBar =new QCheckBox(i18n("Show formula bar"),tmpQGroupBox);
+  lay1->addWidget(showFormulaBar);
+  showFormulaBar->setChecked(formulaBar);
   box->addWidget( tmpQGroupBox);
 
 }
@@ -266,6 +269,7 @@ void configure::slotDefault()
   showVScrollBar->setChecked(true);
   showColHeader->setChecked(true);
   showTabBar->setChecked(true);
+  showFormulaBar->setChecked(true);
   nbPage->setValue(1);
 }
 
@@ -324,6 +328,19 @@ if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
        m_pView->tabBar()->hide();
      m_pView->doc()->setShowTabBar(showTabBar->isChecked());
    }
+
+if(m_pView->posWidget()->isVisible()!=showFormulaBar->isChecked())
+   {
+     config->writeEntry( "Formula bar",showFormulaBar ->isChecked());
+     bool active=showFormulaBar->isChecked();
+     m_pView->editWidget()->showEditWidget(active);
+     if(active)
+       m_pView->posWidget()->show();
+     else
+       m_pView->posWidget()->hide();
+     m_pView->doc()->setShowFormularBar(showFormulaBar->isChecked());
+   }
+
 }
 
 
@@ -651,14 +668,16 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
 
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Default parameters"));
-  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
+  /*QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
   lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );
+  lay1->setSpacing( 10 );*/
   config = KSpreadFactory::global()->config();
 
   QLabel *label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default size page:"));
-  lay1->addWidget(label);
+  //lay1->addWidget(label);
+  grid1->addWidget(label,0,0);
   
   defaultSizePage=new QComboBox( tmpQGroupBox);
   QStringList listType;
@@ -673,11 +692,13 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   listType+=i18n( "US Executive" );
   defaultSizePage->insertStringList(listType);
   defaultSizePage->setCurrentItem(1);
-  lay1->addWidget(defaultSizePage);
+  //lay1->addWidget(defaultSizePage);
+  grid1->addWidget(defaultSizePage,1,0);
   
   label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page orientation:"));
-  lay1->addWidget(label);
+  //lay1->addWidget(label);
+  grid1->addWidget(label,2,0);
   
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
   listType.clear();
@@ -685,7 +706,8 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertStringList(listType);
   defaultOrientationPage->setCurrentItem(0);
-  lay1->addWidget(defaultOrientationPage);
+  //lay1->addWidget(defaultOrientationPage);
+  grid1->addWidget(defaultOrientationPage,3,0);
   initCombo();
   box->addWidget( tmpQGroupBox);
 

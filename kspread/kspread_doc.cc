@@ -128,6 +128,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_EMethodOfCalc=Sum;
   m_bShowCommentIndicator=true;
   m_bShowTabBar=true;
+  m_bShowFormularBar=true;
 }
 
 bool KSpreadDoc::initDoc()

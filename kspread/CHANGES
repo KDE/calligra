@@ -1156,3 +1156,8 @@ SEXDEC( converts time value to decimal)
 2001-01-24-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 now you can define "Default page layout parameters" (size and orientation)
+
+2001-01-28-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now you can hide/show formula bar (editWidget and posWidget)
+Fix layout in kspread_dlg_preference

@@ -496,6 +496,8 @@ if( config->hasGroup("Parameters" ))
 
 	m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
 	m_pDoc->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
+	
+	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
 	}
 }
 
@@ -553,7 +555,7 @@ void KSpreadView::updateEditWidget()
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
     m_alignRight->setEnabled(!active); 
-
+    
     m_toolbarLock = TRUE;
 
     KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -1949,11 +1951,22 @@ void KSpreadView::refreshView()
     m_alignLeft->setEnabled(!active);
     m_alignCenter->setEnabled(!active);
     m_alignRight->setEnabled(!active); 
+    active=m_pDoc->getShowFormularBar();
+    editWidget()->showEditWidget(active);
+    int posFrame=30;
+    if(active)
+      posWidget()->show();
+    else
+      {
+      posWidget()->hide();
+      posFrame=0;
+      }
+    
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.
-    m_pToolWidget->setGeometry( 0, 0, width(), 30 );
-    int top = 30;
+    m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
+    int top = /*30*/posFrame;
 
     
 

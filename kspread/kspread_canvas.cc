@@ -137,6 +137,23 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
   setEditMode( false ); // disable buttons
 }
 
+
+void KSpreadEditWidget::showEditWidget(bool _show)
+{
+    if(_show)
+	{
+	    m_pCancelButton->show();
+	    m_pOkButton->show();
+	    show();
+	}
+    else
+	{
+	    m_pCancelButton->hide();
+	    m_pOkButton->hide();
+	    hide();
+	}
+}
+
 void KSpreadEditWidget::slotAbortEdit()
 {
     m_pCanvas->deleteEditor( false /*discard changes*/ );

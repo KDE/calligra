@@ -64,7 +64,8 @@ public:
 
     // Go into edit mode (enable the buttons)
     void setEditMode( bool mode );
-
+    
+    void showEditWidget(bool _show);
 public slots:
     void slotAbortEdit();
     void slotDoneEdit();
