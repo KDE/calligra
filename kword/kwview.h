@@ -335,6 +335,9 @@ protected slots:
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
     void spellCheckerIgnoreAll( const QString &);
+#if KDE_VERSION >= 305
+    void spellCheckerReplaceAll( const QString &,  const QString &);
+#endif
     void slotApplyFont();
     void slotApplyParag();
 
@@ -543,6 +546,9 @@ private:
 	int spellCurrFrameSetNum;
 	QPtrList<KWTextFrameSet> textFramesets;
 	KMacroCommand * macroCmdSpellCheck;
+#if KDE_VERSION >= 305
+        QStringList replaceAll;
+#endif
      } m_spell;
 
     KWFrameSet *fsInline;

@@ -2915,7 +2915,9 @@ void KWView::extraSpelling()
     m_doc->setReadWrite(false); // prevent editing text
     m_spell.spellCurrFrameSetNum = -1;
     m_spell.macroCmdSpellCheck=0L;
-
+#if KDE_VERSION >= 305
+    m_spell.replaceAll.clear();
+#endif
     m_spell.textFramesets.clear();
     // Ask each frameset to complete the list of text framesets.
     // This way table cells are checked too.
@@ -4099,7 +4101,12 @@ void KWView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_doc->getKSpellConfig())
+    {
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
+#if KDE_VERSION >= 305
+        m_doc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+#endif
+    }
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
 
@@ -4116,6 +4123,10 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+
+#if KDE_VERSION >= 305
+    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+#endif
 
 }
 
@@ -4223,6 +4234,9 @@ void KWView::spellCheckerDone( const QString & )
     {
         m_doc->setReadWrite(true);
         m_spell.textFramesets.clear();
+#if KDE_VERSION >= 305
+        m_spell.replaceAll.clear();
+#endif
         if(m_spell.macroCmdSpellCheck)
             m_doc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -4255,6 +4269,9 @@ void KWView::spellCheckerFinished()
     }
     m_doc->setReadWrite(true);
     m_spell.textFramesets.clear();
+#if KDE_VERSION >= 305
+    m_spell.replaceAll.clear();
+#endif
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
@@ -4275,6 +4292,13 @@ void KWView::spellCheckerIgnoreAll( const QString & word)
     m_doc->addIgnoreWordAll( word );
 }
 
+#if KDE_VERSION >= 305
+void KWView::spellCheckerReplaceAll( const QString & origword ,  const QString & replacement)
+{
+    m_spell.replaceAll.append( origword );
+    m_spell.replaceAll.append( replacement );
+}
+#endif
 
 void KWView::configure()
 {
