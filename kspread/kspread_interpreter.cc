@@ -1329,7 +1329,9 @@ static bool kspreadfunc_randbetween( KSContext& context )
         context.setValue( new KSValue(i18n("Err")));
         return true;
         }
-    context.setValue( new KSValue((double)(((double)args[1]->intValue())*rand()/(RAND_MAX+((double)args[0]->intValue())))));
+
+    context.setValue( new KSValue((double)(((double)args[1]->intValue()-(double)args[0]->intValue())*rand()/RAND_MAX+((double)args[0]->intValue()))));
+
     return true;
 }
 
