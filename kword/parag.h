@@ -156,31 +156,33 @@ public:
     void tabListChanged( QList<KoTabulator>* );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
-    int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
+    int find( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, 
+	      bool _wildcard = false );
     int findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
-    int findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, bool _wildcard = false );
+    int findRev( QRegExp _regexp, KWSearchDia::KWSearchEntry *_format, int _index, int &_len, bool _cs, 
+		 bool _wildcard = false );
     void replace( int _pos, int _len, QString _text, KWFormat &_format );
 
     void setHardBreak( bool hb ) { hardBreak = hb; }
     bool hasHardBreak() { return hardBreak; }
 
     QString getParagName() { return paragName; }
-    void setParagName( const QString &name ) 
+    void setParagName( const QString &name )
     { paragName = name; }
 
-    void setFrameSet( KWTextFrameSet *_fs ) 
+    void setFrameSet( KWTextFrameSet *_fs )
     { frameSet = _fs; }
 
-    void setDocument( KWordDocument *_doc ) 
+    void setDocument( KWordDocument *_doc )
     { document = _doc; }
-    
+
     Info getInfo() { return info; }
     void setInfo( Info _info ) { info = _info; }
 
     static void correctFormat( KWParag *newParag, KWParag *oldParag );
 
     KWordDocument* getDocument() { return document; }
-    
+
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.

@@ -673,7 +673,8 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
 {
     styleList.find( _styleName );
 
-    if ( styleList.at() == -1 ) return;
+    if ( styleList.at() == -1 ) 
+	return;
 
     if ( !CORBA::is_nil( m_vToolBarText ) )
 	m_vToolBarText->setCurrentComboItem( ID_STYLE_LIST, styleList.at() );
@@ -1392,7 +1393,7 @@ void KWordView::textStyleSelected( const CORBA::WChar *_style )
     QString style = C2Q( _style );
     gui->getPaperWidget()->applyStyle( style );
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
-    gui->getPaperWidget()->formatChanged( format );
+    gui->getPaperWidget()->formatChanged( format, FALSE );
     updateStyle( style, FALSE );
 }
 

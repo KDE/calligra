@@ -98,7 +98,8 @@ public:
     static const int U_FONT_FAMILY_ALL_SIZE = 128;
     static const int U_FONT_ALL_ALL_SIZE = 256;
     static const int U_TABS = 512;
-
+    static const int U_SMART = 1024;
+    
 protected:
     virtual bool hasToWriteMultipart();
 

@@ -259,7 +259,7 @@ bool KWParag::deleteText( unsigned int _pos, unsigned int _len )
 /*================================================================*/
 void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_format )
 {
-    if ( text.size() == 0 ) 
+    if ( text.size() == 0 )
 	return;
 
     if ( _pos >= text.size() ) {
@@ -432,46 +432,85 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 void KWParag::applyStyle( QString _style )
 {
     KWParagLayout *tmp = document->findParagLayout( _style );
+    if ( !tmp )
+	return;
+    
+    KWParagLayout *pl = new KWParagLayout( document, false );
+    *pl = *tmp;
 
-    if ( tmp )
-    {
-	KWParagLayout *pl = new KWParagLayout( document, false );
-	*pl = *tmp;
+    if ( !document->getApplyStyleTemplate() & KWordDocument::U_INDENT ) {
+	pl->setFirstLineLeftIndent( paragLayout->getFirstLineLeftIndent() );
+	pl->setLeftIndent( paragLayout->getLeftIndent() );
+	pl->setParagFootOffset( paragLayout->getParagFootOffset() );
+	pl->setParagHeadOffset( paragLayout->getParagHeadOffset() );
+	pl->setLineSpacing( paragLayout->getLineSpacing() );
+    }
 
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_INDENT )
-	{
-	    pl->setFirstLineLeftIndent( paragLayout->getFirstLineLeftIndent() );
-	    pl->setLeftIndent( paragLayout->getLeftIndent() );
-	    pl->setParagFootOffset( paragLayout->getParagFootOffset() );
-	    pl->setParagHeadOffset( paragLayout->getParagHeadOffset() );
-	    pl->setLineSpacing( paragLayout->getLineSpacing() );
+    if ( !document->getApplyStyleTemplate() & KWordDocument::U_BORDER ) {
+	pl->setLeftBorder( paragLayout->getLeftBorder() );
+	pl->setRightBorder( paragLayout->getRightBorder() );
+	pl->setTopBorder( paragLayout->getTopBorder() );
+	pl->setBottomBorder( paragLayout->getBottomBorder() );
+    }
+
+    if ( !document->getApplyStyleTemplate() & KWordDocument::U_NUMBERING )
+	pl->setCounter( paragLayout->getCounter() );
+
+    if ( !document->getApplyStyleTemplate() & KWordDocument::U_ALIGN )
+	pl->setFlow( paragLayout->getFlow() );
+
+    if ( document->getApplyStyleTemplate() & KWordDocument::U_SMART ) {
+	KWFormat nf( document );
+	nf = pl->getFormat(); 
+	KWFormat of( document );
+	of = paragLayout->getFormat(); 
+	KWFormat f( document );
+	KWFormat *f2;
+
+	for ( unsigned int i = 0; i < getTextLen(); i++ ) {
+	    f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
+		
+	    f = nf;
+	    bool forgetIt = FALSE;
+	    if ( f2->getUserFont()->getFontName() != of.getUserFont()->getFontName() ) {
+		f.setUserFont( document->findUserFont( f2->getUserFont()->getFontName() ) );
+		forgetIt = TRUE;
+	    }
+	    if ( f2->getColor() != of.getColor() || forgetIt )
+		f.setColor( f2->getColor() );
+	    if ( f2->getPTFontSize() != of.getPTFontSize() ) {
+		if ( !forgetIt ) {
+		    int op = of.getPTFontSize();
+		    int cp = f2->getPTFontSize();
+		    int np = nf.getPTFontSize();
+		    int p = ( 100 * cp ) / op;
+		    f.setPTFontSize( ( p * np ) / 100 );
+		} else
+		    f.setPTFontSize( f2->getPTFontSize() );
+	    }
+	    if ( f2->getWeight() != of.getWeight() )
+		f.setWeight( f2->getWeight() );
+	    if ( f2->getUnderline() != of.getUnderline() )
+		f.setUnderline( f2->getUnderline() );
+	    if ( f2->getVertAlign() != of.getVertAlign() )
+		f.setVertAlign( f2->getVertAlign() );
+	    if ( f2->getItalic() != of.getItalic() )
+		f.setItalic( f2->getItalic() );
+		
+	    freeChar( text.data()[ i ], document );
+	    KWFormat *format = document->getFormatCollection()->getFormat( f );
+	    KWCharFormat *fm = new KWCharFormat( format );
+	    text.data()[ i ].attrib = fm;
 	}
-
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_BORDER )
-	{
-	    pl->setLeftBorder( paragLayout->getLeftBorder() );
-	    pl->setRightBorder( paragLayout->getRightBorder() );
-	    pl->setTopBorder( paragLayout->getTopBorder() );
-	    pl->setBottomBorder( paragLayout->getBottomBorder() );
-	}
-
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_NUMBERING )
-	    pl->setCounter( paragLayout->getCounter() );
-
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_ALIGN )
-	    pl->setFlow( paragLayout->getFlow() );
-
-	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_SAME_SIZE )
-	{
+    } else {
+	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_SAME_SIZE ) {
 	    KWFormat f( document );
 	    KWFormat *f2;
 
-	    for ( unsigned int i = 0; i < getTextLen(); i++ )
-	    {
+	    for ( unsigned int i = 0; i < getTextLen(); i++ ) {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
 		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
-		{
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() ) {
 		    f = *f2;
 		    f.setUserFont( pl->getFormat().getUserFont() );
 		    freeChar( text.data()[ i ], document );
@@ -482,16 +521,13 @@ void KWParag::applyStyle( QString _style )
 	    }
 	}
 
-	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_ALL_SIZE )
-	{
+	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_ALL_SIZE ) {
 	    KWFormat f( document );
 	    KWFormat *f2;
 
-	    for ( unsigned int i = 0; i < getTextLen(); i++ )
-	    {
+	    for ( unsigned int i = 0; i < getTextLen(); i++ ) {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
-		{
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() ) {
 		    f = *f2;
 		    f.setUserFont( pl->getFormat().getUserFont() );
 		    freeChar( text.data()[ i ], document );
@@ -502,17 +538,14 @@ void KWParag::applyStyle( QString _style )
 	    }
 	}
 
-	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE )
-	{
+	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE ) {
 	    KWFormat f( document );
 	    KWFormat *f2;
 
-	    for ( unsigned int i = 0; i < getTextLen(); i++ )
-	    {
+	    for ( unsigned int i = 0; i < getTextLen(); i++ ) {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
 		if ( f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
-		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
-		{
+		     f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() ) {
 		    QColor c = paragLayout->getFormat().getColor();
 		    f = pl->getFormat();
 		    f.setColor( c );
@@ -524,16 +557,13 @@ void KWParag::applyStyle( QString _style )
 	    }
 	}
 
-	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_ALL_SIZE )
-	{
+	if ( document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_ALL_SIZE ) {
 	    KWFormat f( document );
 	    KWFormat *f2;
 
-	    for ( unsigned int i = 0; i < getTextLen(); i++ )
-	    {
+	    for ( unsigned int i = 0; i < getTextLen(); i++ ) {
 		f2 = ( ( KWCharFormat* )text.data()[ i ].attrib )->getFormat();
-		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() )
-		{
+		if ( f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName() ) {
 		    QColor c = paragLayout->getFormat().getColor();
 		    f = pl->getFormat();
 		    f.setColor( c );
@@ -545,23 +575,20 @@ void KWParag::applyStyle( QString _style )
 	    }
 	}
 
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_COLOR )
-	{
+	if ( !document->getApplyStyleTemplate() & KWordDocument::U_COLOR ) {
 	    QColor c = paragLayout->getFormat().getColor();
 	    pl->getFormat().setColor( c );
-	}
-	else
-	{
+	} else {
 	    QColor c = tmp->getFormat().getColor();
 	    pl->getFormat().setColor( c );
 	}
-
-	if ( !document->getApplyStyleTemplate() & KWordDocument::U_TABS )
-	    pl->setTabList( paragLayout->getTabList() );
-
-	delete paragLayout;
-	paragLayout = pl;
     }
+    
+    if ( !document->getApplyStyleTemplate() & KWordDocument::U_TABS )
+	pl->setTabList( paragLayout->getTabList() );
+
+    delete paragLayout;
+    paragLayout = pl;
 }
 
 /*================================================================*/

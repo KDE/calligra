@@ -105,7 +105,7 @@ KWordDocument::KWordDocument()
     m_bEmpty = TRUE;
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
-			 U_NUMBERING | U_ALIGN | U_TABS;
+			 U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
     _loaded = FALSE;
     _header = FALSE;
     _footer = FALSE;

@@ -1528,3 +1528,12 @@ Reggie, 20.9.1999:
   - A KWord toolbar for furmula editing is now shown/hidden when 
     activating/deactivating a formula frame
   - Formatting (font, color, etc.) for formulas works now
+
+Reggie, 21.9.1999:
+------------------
+- Improved and fixes in updating styles (paragraph layouts):
+  - KWord can be much smarter there now
+  - It's possible to choose now in the stylist if KWord
+    should be smart when updating styles or if the user
+    wants to set the options for updating itself
+- Code cleanups

@@ -3448,11 +3448,9 @@ void KWPage::applyStyle( QString _style )
 {
     if ( !doc->has_selection() )
 	fc->getParag()->applyStyle( _style );
-    else
-    {
+    else {
 	KWParag *p = doc->getSelStart()->getParag();
-	while ( p && p != doc->getSelEnd()->getParag()->getNext() )
-	{
+	while ( p && p != doc->getSelEnd()->getParag()->getNext() ) {
 	    p->applyStyle( _style );
 	    p = p->getNext();
 	}
@@ -3480,7 +3478,7 @@ void KWPage::setCounter( KWParagLayout::Counter _counter )
 void KWPage::setEnumList()
 {
     int f = doc->getApplyStyleTemplate();
-    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING );
+    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING | KWordDocument::U_SMART );
 
     applyStyle( "Enumerated List" );
 
@@ -3499,7 +3497,7 @@ void KWPage::setEnumList()
 void KWPage::setBulletList()
 {
     int f = doc->getApplyStyleTemplate();
-    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING );
+    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING | KWordDocument::U_SMART );
 
     applyStyle( "Bullet List" );
 
@@ -3518,7 +3516,7 @@ void KWPage::setBulletList()
 void KWPage::setNormalText()
 {
     int f = doc->getApplyStyleTemplate();
-    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING );
+    doc->setApplyStyleTemplate( KWordDocument::U_NUMBERING | KWordDocument::U_SMART );
 
     applyStyle( "Standard" );
 

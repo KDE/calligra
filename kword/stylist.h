@@ -31,6 +31,7 @@ class KButtonBox;
 class QComboBox;
 class QLineEdit;
 class QLabel;
+class QCheckBox;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */
@@ -53,7 +54,8 @@ protected:
     QPushButton *bEdit, *bDelete, *bAdd, *bUp, *bDown, *bCopy;
     KButtonBox *bButtonBox;
     QComboBox *cFont, *cColor, *cBorder, *cIndent, *cAlign, *cNumbering, *cTabs;
-
+    QCheckBox *cSmart;
+    
     KWordDocument *doc;
     KWStyleEditor *editor;
     QStringList fontList;
@@ -66,7 +68,8 @@ protected slots:
     void deleteStyle();
     void updateStyleList();
     void updateButtons( const QString & );
-
+    void smartClicked();
+    
 };
 
 /******************************************************************/
