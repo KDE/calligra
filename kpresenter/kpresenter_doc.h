@@ -209,15 +209,6 @@ public:
     PresSpeed getPresSpeed() const { return presSpeed; }
     void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }
 
-    void setPageTimer( unsigned int, int );
-    int getPageTimer( unsigned int );
-
-    void setPageSoundEffect( unsigned int, bool );
-    void setPageSoundFileName( unsigned int, const QString& );
-
-    bool getPageSoundEffect( unsigned int );
-    QString getPageSoundFileName( unsigned int );
-
     int getLeftBorder() const;
     int getTopBorder() const;
     int getBottomBorder() const;
@@ -382,10 +373,10 @@ public:
     void updateHelpLineButton();
     void updateGridButton();
 
-    double getGridX() { return m_gridX; }
+    double getGridX()const { return m_gridX; }
     void setGridX(double _x) { m_gridX=_x; }
 
-    double getGridY() { return m_gridY; }
+    double getGridY()const { return m_gridY; }
     void setGridY(double _y) { m_gridY=_y; }
 
 
@@ -394,6 +385,9 @@ public:
 
     bool helpLineToFront() const { return m_bHelplinesToFront; }
     void setHelpLineToFront( bool _front ) { m_bHelplinesToFront = _front; }
+
+    QColor gridColor() const { return m_gridColor; }
+    void setGridColor( const QColor & _col ) { m_gridColor = _col; }
 
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
     void addIgnoreWordAll( const QString & );
@@ -542,7 +536,7 @@ protected:
 
     KoVariableFormatCollection *m_varFormatCollection;
     KPrVariableCollection *m_varColl;
-
+    QColor m_gridColor;
 private:
     QValueList<double> m_horizHelplines;
     QValueList<double> m_vertHelplines;

@@ -290,42 +290,64 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     config = KPresenterFactory::global()->config();
 
     oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
-
+    oldGridColor = m_pView->kPresenterDoc()->gridColor();
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
 
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n("Objects in Editing Mode") );
+    tmpQGroupBox->setTitle( i18n("Colors") );
     QGridLayout *grid1 = new QGridLayout( tmpQGroupBox, 5, 1, 15, 7);
     QLabel *lab = new QLabel( tmpQGroupBox, "label20" );
-    lab->setText( i18n( "Background color:" ) );
+    lab->setText( i18n( "Background color of objects in Editing Mode:" ) );
     grid1->addWidget( lab, 0, 0 );
 
     bgColor = new KColorButton( tmpQGroupBox );
     bgColor->setColor( oldBgColor );
     grid1->addWidget( bgColor, 1, 0 );
 
+
+    lab = new QLabel( tmpQGroupBox, "label20" );
+    lab->setText( i18n( "Grid Color:" ) );
+    grid1->addWidget( lab, 2, 0 );
+
+    gridColor = new KColorButton( tmpQGroupBox );
+    gridColor->setColor( oldGridColor );
+    grid1->addWidget( gridColor, 3, 0 );
+
     box->addWidget( tmpQGroupBox );
 }
 
 void configureColorBackground::apply()
 {
-    QColor _col = bgColor->color();
     KPresenterDoc * doc = m_pView->kPresenterDoc();
+    bool repaintNeeded = false;
+    QColor _col = bgColor->color();
     if( oldBgColor != _col ) {
         config->setGroup( "KPresenter Color" );
         config->writeEntry( "BackgroundColor", _col );
         doc->setTxtBackCol( _col );
         doc->replaceObjs();
-        doc->repaint( false );
         oldBgColor=_col;
+        repaintNeeded = true;
     }
+    _col = gridColor->color();
+    if( oldGridColor != _col ) {
+        config->setGroup( "KPresenter Color" );
+        config->writeEntry( "GridColor", _col );
+        doc->repaint( false );
+        doc->setGridColor( _col );
+        oldGridColor=_col;
+        repaintNeeded = true;
+    }
+    if (repaintNeeded)
+        doc->repaint( false );
 }
 
 void configureColorBackground::slotDefault()
 {
     bgColor->setColor( Qt::white );
+    gridColor->setColor( Qt::black );
 }
 
 

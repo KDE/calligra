@@ -60,8 +60,10 @@ public:
 protected:
     KPresenterView* m_pView;
     KColorButton* bgColor;
+    KColorButton* gridColor;
     KConfig* config;
     QColor oldBgColor;
+    QColor oldGridColor;
 } ;
 
 class ConfigureSpellPage : public QObject

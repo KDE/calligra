@@ -443,7 +443,7 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
 
     if(!doc->isReadWrite())
         return;
-    QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
+    QPen _pen = QPen( doc->gridColor(), 6, Qt::DotLine );
     painter->save();
     painter->setPen( _pen );
     QRect pageRect=activePage()->getZoomPageRect();

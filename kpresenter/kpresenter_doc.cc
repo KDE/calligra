@@ -127,9 +127,13 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      _gradientCollection(), _hasHeader( false ), _hasFooter( false ),
-      m_pixmapMap( NULL ), m_clipartMap( NULL ), m_unit( KoUnit::U_MM )
+    : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
+      _gradientCollection(),
+      _hasHeader( false ),
+      _hasFooter( false ),
+      m_pixmapMap( NULL ),
+      m_clipartMap( NULL ),
+      m_unit( KoUnit::U_MM )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -219,10 +223,12 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_indent = MM_TO_POINT( 10.0 );
     m_gridX = MM_TO_POINT( 10.0 );
     m_gridY = MM_TO_POINT( 10.0 );
+
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
     m_stickyPage=new KPrPage(this);
+
     objStartY = 0;
     setPageLayout( m_pageLayout );
     _presPen = QPen( red, 3, SolidLine );
@@ -230,6 +236,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     ignoreSticky = TRUE;
     m_pixmapMap = 0L;
     raiseAndLowerObject = false;
+
+    m_gridColor=Qt::black;
 
     _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
@@ -254,6 +262,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
+
     if ( name )
 	dcopObject();
 }
@@ -326,9 +335,11 @@ void KPresenterDoc::initConfig()
         zoom=100;
 
     QColor oldBgColor = Qt::white;
+    QColor oldGridColor = Qt::black;
     if(  config->hasGroup( "KPresenter Color" ) ) {
         config->setGroup( "KPresenter Color" );
         setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
+        setGridColor(config->readColorEntry( "GridColor", &oldGridColor ));
     }
 
     KSpellConfig ksconfig;

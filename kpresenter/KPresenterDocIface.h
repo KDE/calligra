@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qcolor.h>
 class KPresenterDoc;
 
 class KPresenterDocIface : virtual public KoDocumentIface
@@ -222,6 +223,12 @@ k_dcop:
 
     QStringList spellListIgnoreAll() const;
 
+
+    QColor gridColor() const;
+    void setGridColor( const QColor & _col );
+
+    QColor txtBackCol() const;
+    void setTxtBackCol( const QColor &c );
 
 private:
     KPresenterDoc *doc;
