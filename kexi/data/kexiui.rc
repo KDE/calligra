@@ -106,7 +106,7 @@
   
   <Menu name="help" noMerge="0">
     <text>&amp;Help</text>
-    <Action name="help_show_important_info"/ noMerge="0"/>
+    <Action name="help_show_important_info" noMerge="0"/>
     <!-- not yet needed: Menu name="help_licenses" noMerge="0">
     <text>Other &amp;Licenses</text>
       <Merge />
