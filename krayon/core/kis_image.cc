@@ -149,7 +149,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 */
 KisImage::~KisImage()
 {
-    qDebug("~KisImage()");
+    kdDebug()<<"~KisImage()\n";
 
     for( int y = 0; y < m_yTiles; y++)
         for( int x = 0; x < m_xTiles; x++)
@@ -338,7 +338,7 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
     int r = area.right();
     int b = area.bottom();
 
-    //qDebug("KisImage::paintPixmap l: %d; t: %d; r: %d; b: %d", l, t, r, b);
+    //kdDebug()<<"KisImage::paintPixmap l: "<<l <<"; t: "<<t<<"; r: "<< r<<"; b: "<< b<<endl;
 
     for(int y=0; y < m_yTiles; y++)
     {
@@ -349,7 +349,7 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 	        int xt = x*TILE_SIZE;
 	        int yt = y*TILE_SIZE;
 
-	        //qDebug("tile: %d", y*m_xTiles+x);
+	        //kdDebug()<<"tile: "<< (y*m_xTiles+x)<<endl;
 
 	        if (tileRect.intersects(QRect(0, 0, m_width, m_height))
             && tileRect.intersects(area))
@@ -388,8 +388,8 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 	            if (clipY <= 0)
 		            clipY = -1;
 
-	            //qDebug("clipX %d clipY %d", clipX, clipY);
-	            //qDebug("pixX %d pixY %d", pixX, pixY);
+	            //kdDebug()<<"clipX "<<clipX<<" clipY "<< clipY<<endl;
+	            //kdDebug()<<"pixX :"<<pixX <<" pixY "<< pixY<<endl;
 
 	            p->drawPixmap(startX, startY, *m_ptiles[y*m_xTiles+x],
                     pixX, pixY, clipX, clipY);

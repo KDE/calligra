@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2000 Matthias Elter <elter@kde.org>
  *                2001 John Califf
- *  
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -39,7 +39,7 @@ KisPattern::KisPattern(QString file)
 {
     m_valid    = false;
     m_spacing  = 4;
-    m_hotSpot = QPoint(0, 0);            
+    m_hotSpot = QPoint(0, 0);
 
     loadViaQImage(file);
 
@@ -50,7 +50,7 @@ KisPattern::KisPattern(QString file)
         m_spacing  = meanSize / 4;
         if(m_spacing < 1)  m_spacing = 1;
         if(m_spacing > 20) m_spacing = 20;
-    
+
         // default hotspot
         m_hotSpot = QPoint(width()/2, height()/2);
 
@@ -60,7 +60,7 @@ KisPattern::KisPattern(QString file)
         fi.setFile(file);
         if (fi.exists() && fi.isFile())
             readPatternInfo(file);
-    }                
+    }
 }
 
 
@@ -69,7 +69,7 @@ KisPattern::KisPattern(int formula)
 {
     m_valid = false;
     validThumb = false;
-    m_spacing  = 3;    
+    m_spacing  = 3;
     loadViaFormula(formula);
 }
 
@@ -86,15 +86,15 @@ void KisPattern::loadViaQImage(QString file)
     // load via QImage
     m_pImage = new QImage(file);
     m_pImage->setAlphaBuffer(true);
-    
+
     if (m_pImage->isNull())
     {
         m_valid = false;
-        qDebug("Failed to load pattern: %s", file.latin1());
+        kdDebug()<<"Failed to load pattern: "<< file.latin1()<<endl;
     }
 
     *m_pImage = m_pImage->convertDepth(32);
-    
+
     // create pixmap for preview dialog
     m_pPixmap = new QPixmap;
     QImage img = *m_pImage;
@@ -106,14 +106,14 @@ void KisPattern::loadViaQImage(QString file)
         QPixmap filePixmap;
         filePixmap.load(file);
         QImage fileImage = filePixmap.convertToImage();
-        
+
         m_pThumbPixmap = new QPixmap;
-    
+
         int xsize = THUMB_SIZE;
         int ysize = THUMB_SIZE;
         int picW  = fileImage.width();
-        int picH  = fileImage.height(); 
-        
+        int picH  = fileImage.height();
+
         if(picW > picH)
         {
             float yFactor = (float)((float)(float)picH/(float)picW);
@@ -125,32 +125,32 @@ void KisPattern::loadViaQImage(QString file)
         {
             float xFactor = (float)((float)picW/(float)picH);
             xsize = (int)(xFactor * (float)THUMB_SIZE);
-            //kdDebug() << "xsize is " << xsize << endl;            
-            if(xsize > 30) xsize = 30;            
+            //kdDebug() << "xsize is " << xsize << endl;
+            if(xsize > 30) xsize = 30;
         }
-        
+
         QImage thumbImg = fileImage.smoothScale(xsize, ysize);
-        
+
         if(!thumbImg.isNull())
         {
             m_pThumbPixmap->convertFromImage(thumbImg);
             if(!m_pThumbPixmap->isNull())
             {
                 validThumb = true;
-            }    
+            }
         }
-    } 
-       
+    }
+
     m_w = m_pImage->width();
     m_h = m_pImage->height();
- 
+
     m_valid = true;
-    //qDebug("Loading pattern: %s",file.latin1());
+    //kdDebug()<<"Loading pattern: "<<file.latin1()<<endl;
 }
 
 /*
     load pattern from a formula or algorithm - these will
-    algorithms and/or predefined Qt patterns 
+    algorithms and/or predefined Qt patterns
 
     Formulas for patterns should come from plugins which
     could be written in almost any language to generate
@@ -164,7 +164,7 @@ void KisPattern::loadViaFormula(int formula)
     if (m_pImage->isNull())
     {
         m_valid = false;
-        qDebug("Failed to load pattern: %d", formula);
+        kdDebug()<<"Failed to load pattern: "<< formula<<endl;
     }
 
     // create pixmap for preview dialog
@@ -174,15 +174,15 @@ void KisPattern::loadViaFormula(int formula)
     switch(formula)
     {
         default:
-            m_pPixmap->fill(Qt::white);        
-            break;    
+            m_pPixmap->fill(Qt::white);
+            break;
     }
 
     m_w = m_pImage->width();
     m_h = m_pImage->height();
- 
+
     m_valid = true;
-    //qDebug("Loading pattern: %d", formula);
+    //kdDebug()<<"Loading pattern: "<< formula<<endl;
 }
 
 void KisPattern::readPatternInfo(QString file)
@@ -193,7 +193,7 @@ void KisPattern::readPatternInfo(QString file)
     int spacing = config.readNumEntry("Spacing", m_spacing);
     int hotspotX = config.readNumEntry("hotspotX", m_hotSpot.x());
     int hotspotY = config.readNumEntry("hotspotY", m_hotSpot.y());
-    
+
     if(spacing > 0) m_spacing = spacing;
     if(hotspotX > 0 && hotspotY > 0) m_hotSpot = QPoint(hotspotX, hotspotY);
 }

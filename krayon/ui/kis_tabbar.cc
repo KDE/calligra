@@ -31,9 +31,11 @@
 #include <kmessagebox.h>
 #include <knotifyclient.h>
 #include <klineeditdlg.h>
+#include <kdebug.h>
 
 #include <kis_view.h>
 #include <kis_doc.h>
+
 
 #include "kis_tabbar.h"
 
@@ -178,21 +180,21 @@ void KisTabBar::setActiveTab( const QString& _text )
 */
 void KisTabBar::slotRemove( )
 {
-    int ret = KMessageBox::warningContinueCancel( this, 
+    int ret = KMessageBox::warningContinueCancel( this,
 				  i18n("You are going to remove the active image.\nDo you want to continue?"),
 				  i18n("Remove image"), i18n("&Remove"));
-                  
+
     if ( ret == KMessageBox::Continue )
     {
         int i = 1;
         QStringList::Iterator it;
-        
+
         for ( it = tabsList.begin(); it != tabsList.end(); ++it )
 	    {
 	        if (i == activeTab)
 	        {
 	            QString img = *it;
-	            qDebug("Removing: %s", img.latin1());
+	            kdDebug()<<"Removing: "<<img.latin1()<<endl;
 	            m_pDoc->slotRemoveImage(img);
 
                     m_pDoc->setModified( true );
@@ -221,11 +223,11 @@ void KisTabBar::slotImageListUpdated()
         for ( it = lst.begin(); it != lst.end(); ++it )
 	        addTab(*it);
     }
-    
+
     // set active if there is a current image
-    // note that current() is the image pointer 
+    // note that current() is the image pointer
     // and currentImage() is the name of that image
-    
+
     if(m_pDoc->current())
         setActiveTab(m_pDoc->currentImage());
 }
@@ -283,7 +285,7 @@ void KisTabBar::paintEvent( QPaintEvent* )
 	        active_x = x;
 	        active_y = text_y;
 	        active_width = text_width;
-	
+
 	        if ( i >= leftTab )  x += 10 + text_width;
 	    }
         else if ( i >= leftTab )
@@ -291,13 +293,13 @@ void KisTabBar::paintEvent( QPaintEvent* )
 	        paintTab( painter, x, text, text_width, text_y, false);
 	        x += 10 + text_width;
 	    }
-        
+
         if ( x - 10 < width() ) m_rightTab = i;
-        
+
         i++;
     }
 
-    // if ( active_text != 0L ) 
+    // if ( active_text != 0L )
     paintTab( painter, active_x, active_text, active_width, active_y, true);
 
     painter.end();
@@ -305,11 +307,11 @@ void KisTabBar::paintEvent( QPaintEvent* )
 }
 
 
-void KisTabBar::paintTab( QPainter & painter, int x, const QString& text, 
+void KisTabBar::paintTab( QPainter & painter, int x, const QString& text,
     int text_width, int text_y, bool isactive )
 {
     QPointArray parr;
-    parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, 
+    parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1,
         x+20+text_width,0 );
     QRegion reg( parr );
     painter.setClipping( TRUE );
@@ -348,7 +350,7 @@ void KisTabBar::renameTab()
     QString imgName;
 
     QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         if (i == activeTab)
 	        imgName = *it;
@@ -415,7 +417,7 @@ void KisTabBar::mousePressEvent( QMouseEvent* _ev )
         text = *it;
 	    QFontMetrics fm = painter.fontMetrics();
 	    int text_width = fm.width( text );
-	
+
 	    if ( i >= leftTab )
 	    {
 	        if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
@@ -423,7 +425,7 @@ void KisTabBar::mousePressEvent( QMouseEvent* _ev )
 		        activeTab = i;
 		        active_text = text;
 	        }
-	
+
 	        x += 10 + text_width;
 	    }
 	    i++;
@@ -454,7 +456,7 @@ void KisTabBar::slotAutoScroll( )
     {
         slotScrollRight();
     }
-    
+
     if ( leftTab <= 1 )
     {
         m_pAutoScrollTimer->stop();

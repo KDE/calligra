@@ -22,6 +22,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kimageio.h>
+#include <kdebug.h>
 
 #include "kis_global.h"
 #include "kis_util.h"
@@ -33,20 +34,19 @@ const long BIGNUM = (TILE_SIZE*10000);
 
 void KisUtil::printRect( const QRect& r, const QString& name )
 {
-  qDebug("%s:: l:%d t:%d r:%d b:%d w:%d h:%d", name.latin1(), r.left(), r.top(), r.right(),
-	 r.bottom(), r.width(), r.height());
+    kdDebug()<<name.latin1()<<":: l:"<<r.left()<<" t:"<< r.top()<<" r:"<<r.right()<<" b:"<<r.bottom()<<" w:"<<r.width()<<" h: "<< r.height()<<endl;
 }
 
 void KisUtil::printPoint( const QPoint& p, const QString& name )
 {
-  qDebug("%s:: x:%d y:%d", name.latin1(), p.x(), p.y()); 
+    kdDebug()<< name.latin1() <<" :: x:"<<p.x()<<" y:"<<p.y()<<endl;
 }
 
 void KisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
 {
   if (r.contains(p))
     {
-      qDebug("KisUtil::enlargeRectToContainPoint: point already contained\n");	
+        kdDebug()<<"KisUtil::enlargeRectToContainPoint: point already contained\n";
       return;
     }
   if (p.x()<r.left())   r.setLeft(p.x());
@@ -125,7 +125,7 @@ QString KisUtil::writeFilters()
 /*
     roughScaleQImage - scale a qimage keeping palette, no anti-aliasing
     or color blending based on surrounding pixel values
-    
+
     based on:
         libfbx-stretch.c -- Surface Stretching Functions
         (C)opyright 2000 U4X Labs - LGPL licensing
@@ -137,15 +137,15 @@ QImage KisUtil::roughScaleQImage(QImage & src, int width, int height)
     QImage dest(width, height, src.depth());
 
     int xpos, ypos;
-    int x1, y1;    
+    int x1, y1;
     int x = 0, y = 0;
-    
+
     float ratio_x = (float)src.width() / (float)width;
     float ratio_y = (float)src.height() / (float)height;
-    
+
     for (ypos = y; ypos < y + height; ypos++)
     {
-        for (xpos = x; xpos < x + width; xpos++) 
+        for (xpos = x; xpos < x + width; xpos++)
         {
             x1 = (int)((xpos - x) * ratio_x);
             y1 = (int)((ypos - y) * ratio_y);
@@ -154,7 +154,7 @@ QImage KisUtil::roughScaleQImage(QImage & src, int width, int height)
             dest.setPixel(xpos, ypos, value);
         }
     }
-    
+
     return dest;
 }
 

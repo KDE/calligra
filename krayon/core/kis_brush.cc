@@ -2,7 +2,7 @@
  *  kis_brush.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
- *                2001 John Califf 
+ *                2001 John Califf
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,9 +42,9 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
     m_valid     = false;
     validThumb  = false;
     validPixmap = false;
-    
+
     m_spacing = 4;
-    m_hotSpot = QPoint( 0, 0 );        
+    m_hotSpot = QPoint( 0, 0 );
 
     // load the brush image data
     loadViaQImage(file, monochrome);
@@ -56,12 +56,12 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
         m_spacing  = meanSize / 4;
         if(m_spacing < 1)  m_spacing = 1;
         if(m_spacing > 20) m_spacing = 20;
-    
+
         // default hotspot
         if(!special)
             m_hotSpot = QPoint(width()/2, height()/2);
         else
-            m_hotSpot = QPoint(0, 0);        
+            m_hotSpot = QPoint(0, 0);
 
         // search and load the brushinfo file
         if(!special)
@@ -72,7 +72,7 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
             if (fi.exists() && fi.isFile())
                 readBrushInfo(file);
         }
-    }                
+    }
 }
 
 
@@ -82,12 +82,12 @@ KisBrush::~KisBrush()
     {
         delete [] m_pData;
         delete m_pPixmap;
-    }    
+    }
 
     if(hasValidThumb())
     {
         delete m_pThumbPixmap;
-    }    
+    }
 }
 
 
@@ -116,7 +116,7 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
     if (img.isNull())
     {
         m_valid = false;
-        qDebug("Failed to load brush: %s", file.latin1());
+        kdDebug()<<"Failed to load brush: "<< file.latin1()<<endl;
     }
 
     // scale a pixmap for iconview cell to size of cell
@@ -125,14 +125,14 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         QPixmap filePixmap;
         filePixmap.load(file);
         QImage fileImage = filePixmap.convertToImage();
-        
+
         m_pThumbPixmap = new QPixmap;
-    
+
         int xsize = THUMB_SIZE;
         int ysize = THUMB_SIZE;
         int picW  = fileImage.width();
-        int picH  = fileImage.height(); 
-        
+        int picH  = fileImage.height();
+
         if(picW > picH)
         {
             float yFactor = (float)((float)(float)picH/(float)picW);
@@ -144,29 +144,29 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         {
             float xFactor = (float)((float)picW/(float)picH);
             xsize = (int)(xFactor * (float)THUMB_SIZE);
-            //kdDebug() << "xsize is " << xsize << endl;            
-            if(xsize > 30) xsize = 30;            
+            //kdDebug() << "xsize is " << xsize << endl;
+            if(xsize > 30) xsize = 30;
         }
 
         QImage thumbImg = fileImage.smoothScale(xsize, ysize);
-        
+
         if(!thumbImg.isNull())
         {
             m_pThumbPixmap->convertFromImage(thumbImg);
             if(!m_pThumbPixmap->isNull())
             {
                 validThumb = true;
-            }    
+            }
         }
-    } 
-   
+    }
+
     img = img.convertDepth(32);
-    if(monochrome) img = KImageEffect::toGray(img, true); 
-        
+    if(monochrome) img = KImageEffect::toGray(img, true);
+
     // create pixmap for preview
     m_pPixmap = new QPixmap;
     m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
-    
+
     m_w = img.width();
     m_h = img.height();
 
@@ -176,22 +176,22 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
     for (int h = 0; h < m_h; h++)
     {
         p = (QRgb*)img.scanLine(h);
-        
+
         for (int w = 0; w < m_w; w++)
 	    {
-	        // no need to use qGray here, we have 
-            // converted the image to grayscale already 
+	        // no need to use qGray here, we have
+            // converted the image to grayscale already
             if(monochrome)
-	            m_pData[m_w * h + w] = 255 - qRed(*(p+w)); 
-            else    
-	            m_pData[m_w * h + w] = *(p+w);             
-	    }      
+	            m_pData[m_w * h + w] = 255 - qRed(*(p+w));
+            else
+	            m_pData[m_w * h + w] = *(p+w);
+	    }
     }
- 
+
     m_valid = true;
     validPixmap = true;
-    
-    // qDebug("Loading brush: %s",file.latin1());
+
+    // kdDebug()<<"Loading brush: "<<file.latin1()<<endl;
 }
 
 
@@ -206,7 +206,7 @@ void KisBrush::setHotSpot(QPoint pt)
 
     if (y < 0) y = 0;
     else if (y >= m_h) y = m_h-1;
-  
+
     m_hotSpot = QPoint(x,y);
 }
 
@@ -221,7 +221,7 @@ uchar* KisBrush::scanline(int i) const
 {
     if (i < 0) i = 0;
     if (i >= m_h) i = m_h-1;
-        
+
     return (m_pData + m_w * i);
 }
 
@@ -232,14 +232,14 @@ uchar* KisBrush::bits() const
 
 void KisBrush::dump() const
 {
-    qDebug("KisBrush data:\n");
+    kdDebug()<<"KisBrush data:\n";
 
-    for (int h = 0; h < m_h; h++) 
+    for (int h = 0; h < m_h; h++)
     {
-        for (int w = 0; w < m_w; w++) 
+        for (int w = 0; w < m_w; w++)
         {
-	        qDebug("%d", m_pData[m_w * h + w]);
-	    }
+            kdDebug()<<" :"<< m_pData[m_w * h + w]<<endl;
+        }
     }
 }
 

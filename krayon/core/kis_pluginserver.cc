@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <kinstance.h>
+#include <kdebug.h>
 
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
@@ -46,8 +47,8 @@ KisPluginServer::KisPluginServer()
     *   Find plugin dirs. For example ~/.kde/share/apps/krayon/plugins or
     *   $KDEDIR/share/apps/krayon/plugins
     */
-   
-    QStringList pluginDirs 
+
+    QStringList pluginDirs
         = KisFactory::global()->dirs()->resourceDirs("kis_plugins");
 
     if (!pluginDirs.isEmpty())
@@ -56,14 +57,14 @@ KisPluginServer::KisPluginServer()
 
         for ( it = pluginDirs.begin(); it != pluginDirs.end(); ++it )
 	    {
-	        qDebug("Searching plugins in: %s", (*it).latin1());
+	        kdDebug()<<"Searching plugins in: "<<(*it).latin1()<<endl;
 	        findPlugins(*it);
 	    }
     }
     else
     {
-        qDebug("Warning: No plugin directories found.");
-    }    
+        kdDebug()<<"Warning: No plugin directories found.\n";
+    }
 }
 
 KisPluginServer::~KisPluginServer()
@@ -79,7 +80,7 @@ void KisPluginServer::findPlugins( const QString &directory )
 
     QDir dir(directory, "*.kisplugin");
     if (!dir.exists()) return;
-  
+
     const QFileInfoList *list = dir.entryInfoList();
     QFileInfoListIterator it(*list);
     QFileInfo *fi;
@@ -90,27 +91,26 @@ void KisPluginServer::findPlugins( const QString &directory )
 
         config.setGroup("General");
         pname = config.readEntry("Name", fi->baseName());
-        pcomment = config.readEntry("Comment", 
+        pcomment = config.readEntry("Comment",
             i18n("No description available."));
         pdir = directory + config.readEntry("Subdir", fi->baseName());
-        plib = config.readEntry("Library", 
+        plib = config.readEntry("Library",
             QString("libkray_") + fi->baseName());
         pcategory = config.readEntry("Category", "General");
         ptype = config.readEntry("Type", "Filter");
-        qDebug("Plugin category is %s", pcategory.latin1());
+        kdDebug()<<"Plugin category is "<< pcategory.latin1()<<endl;
 
         if ( ptype == "Filter" )
 	        type = PLUGIN_FILTER;
         else if (ptype == "Tool" )
 	        type = PLUGIN_TOOL;
         else
-	        qDebug("Warning: %s is not a valid Krayon plugin type.", 
-                ptype.latin1()); 
-      
-        PluginInfo *pi = new PluginInfo(pname, pcomment, 
+            kdDebug()<<"Warning: "<<ptype.latin1()<<" is not a valid Krayon plugin type.\n";
+
+        PluginInfo *pi = new PluginInfo(pname, pcomment,
             pdir, plib, pcategory, type);
         m_plugins.append(pi);
-     
+
         ++it;
     }
 }
@@ -141,11 +141,11 @@ void KisPluginServer::buildFilterMenu( QPopupMenu *menu )
     {
         if ((*it) == "General")
 	        continue;
-      
-        qDebug("hallo");
+
+        kdDebug()<<"hallo\n";
         QPopupMenu *submenu = new QPopupMenu( menu );
 
-        for (PluginInfo *pi = m_plugins.first(); pi != 0; 
+        for (PluginInfo *pi = m_plugins.first(); pi != 0;
         pi = m_plugins.next())
 	    {
 	        if (!pi->type() == PLUGIN_FILTER)
@@ -153,14 +153,14 @@ void KisPluginServer::buildFilterMenu( QPopupMenu *menu )
 
 	        if (pi->category() == (*it))
 	        {
-	            qDebug("hallo2");
+	            kdDebug()<<"hallo2\n";
 	            int id = ++m_count;
 	            id = submenu->insertItem(pi->name(), id);
 	            pi->setId(id);
 	        }
 	    }
-        
-        qDebug("hallo3");
+
+        kdDebug()<<"hallo3\n";
         menu->insertItem((*it), submenu);
     }
 

@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include "kis_color.h"
+#include <kdebug.h>
 
 KisColor::KisColor()
 {
@@ -29,7 +30,7 @@ KisColor::KisColor()
     // "black" and can be regarded as different views of the same color
     // the same applies to any other color
     m_native = cs_RGB;
-  
+
     // rgb
     m_R = m_G = m_B = 0;
 
@@ -88,7 +89,7 @@ KisColor::KisColor(int a, int b, int c, cSpace m)
 	        m_native = cs_RGB;
 	        rgbChanged();
 	        break;
-      
+
 	    case cs_HSV:
 	        m_H = a;
 	        m_S = b;
@@ -96,7 +97,7 @@ KisColor::KisColor(int a, int b, int c, cSpace m)
 	        m_native = cs_HSV;
 	        hsvChanged();
 	        break;
-      
+
 	    case cs_Lab:
 	        m_L = a;
 	        m_a = b;
@@ -119,9 +120,9 @@ KisColor::KisColor(uint color, cSpace m)
     int a, b, c;
 
     a = (int)((color & 0xff0000) >> 16);
-    b = (int)((color & 0x00ff00) >>  8);    
+    b = (int)((color & 0x00ff00) >>  8);
     c = (int) (color & 0xff);
-    
+
     switch (m)
 	{
 	    case cs_RGB:
@@ -131,7 +132,7 @@ KisColor::KisColor(uint color, cSpace m)
 	        m_native = cs_RGB;
 	        rgbChanged();
 	        break;
-	
+
         case cs_HSV:
 	        m_H = a;
 	        m_S = b;
@@ -139,7 +140,7 @@ KisColor::KisColor(uint color, cSpace m)
 	        m_native = cs_HSV;
 	        hsvChanged();
 	        break;
-	
+
         case cs_Lab:
 	        m_L = a;
 	        m_a = b;
@@ -147,12 +148,12 @@ KisColor::KisColor(uint color, cSpace m)
 	        m_native = cs_Lab;
 	        labChanged();
 	        break;
-	
+
         default:
 	        m_R = m_G = m_B = 0;
 	        m_native = cs_RGB;
 	        rgbChanged();
-	        break; 
+	        break;
 	}
 }
 
@@ -163,7 +164,7 @@ KisColor::KisColor(int c, int m, int y, int k)
     m_M = m;
     m_Y = y;
     m_K = k;
-  
+
     m_native = cs_CMYK;
     cmykChanged();
 }
@@ -173,7 +174,7 @@ KisColor::KisColor(const QColor& c)
     m_R = c.red();
     m_G = c.green();
     m_B = c.blue();
-  
+
     m_native = cs_RGB;
     rgbChanged();
 }
@@ -183,7 +184,7 @@ void KisColor::setRGB (int R, int G, int B)
     m_R = R;
     m_G = G;
     m_B = B;
-  
+
     m_native = cs_RGB;
     rgbChanged();
 }
@@ -193,7 +194,7 @@ void KisColor::setHSV (int H, int S, int V)
     m_H = H;
     m_S = S;
     m_V = V;
-  
+
     m_native = cs_HSV;
     hsvChanged();
 }
@@ -203,7 +204,7 @@ void KisColor::setLAB (int L, int a, int b)
     m_L = L;
     m_a = a;
     m_b = b;
-  
+
     m_native = cs_Lab;
     labChanged();
 }
@@ -214,7 +215,7 @@ void KisColor::setCMYK (int C, int M, int Y, int K)
     m_M = M;
     m_Y = Y;
     m_K = K;
-  
+
     m_native = cs_CMYK;
     cmykChanged();
 }
@@ -224,7 +225,7 @@ void KisColor::setColor (const QColor& c)
     m_R = c.red();
     m_G = c.green();
     m_B = c.blue();
-  
+
     m_native = cs_RGB;
     rgbChanged();
 }
@@ -232,7 +233,7 @@ void KisColor::setColor (const QColor& c)
 void KisColor::rgb (int *R, int *G, int *B) const
 {
     if ( !m_RGBvalid ) calcRGB();
-  
+
     *R = m_R;
     *G = m_G;
     *B = m_B;
@@ -241,7 +242,7 @@ void KisColor::rgb (int *R, int *G, int *B) const
 void KisColor::hsv (int *H, int *S, int *V) const
 {
     if ( !m_HSVvalid ) calcHSV();
-  
+
     *H = m_H;
     *S = m_S;
     *V = m_V;
@@ -250,7 +251,7 @@ void KisColor::hsv (int *H, int *S, int *V) const
 void KisColor::lab (int *L, int *a, int *b) const
 {
     if ( !m_LABvalid ) calcLAB();
-  
+
     *L = m_L;
     *a = m_a;
     *b = m_b;
@@ -259,7 +260,7 @@ void KisColor::lab (int *L, int *a, int *b) const
 void KisColor::cmyk (int *C, int *M, int *Y, int *K) const
 {
     if ( !m_CMYKvalid )  calcCMYK();
-  
+
     *C = m_C;
     *M = m_M;
     *Y = m_Y;
@@ -270,7 +271,7 @@ void KisColor::cmyk (int *C, int *M, int *Y, int *K) const
 QColor KisColor::color() const
 {
     if ( !m_RGBvalid) calcRGB();
-        
+
     return QColor(m_R, m_G, m_B);
 }
 
@@ -278,7 +279,7 @@ QColor KisColor::color() const
 void KisColor::calcRGB() const
 {
     if ( m_RGBvalid ) return;
-  
+
     switch ( m_native )
     {
         case cs_HSV:
@@ -295,7 +296,7 @@ void KisColor::calcRGB() const
             m_R = m_G = m_B = 0;
             break;
     }
-  
+
     m_RGBvalid = true;
 }
 
@@ -304,7 +305,7 @@ void KisColor::calcRGB() const
 void KisColor::calcHSV() const
 {
     if( m_HSVvalid) return;
-  
+
     switch ( m_native )
     {
         case cs_RGB:
@@ -322,7 +323,7 @@ void KisColor::calcHSV() const
             m_V = 100;
             break;
     }
-  
+
     m_HSVvalid = true;
 }
 
@@ -330,7 +331,7 @@ void KisColor::calcHSV() const
 void KisColor::calcLAB() const
 {
     if( m_LABvalid ) return;
-  
+
     switch ( m_native )
     {
         case cs_RGB:
@@ -348,7 +349,7 @@ void KisColor::calcLAB() const
             m_a = m_b = 0;
             break;
     }
-  
+
     m_LABvalid = true;
 }
 
@@ -356,7 +357,7 @@ void KisColor::calcLAB() const
 void KisColor::calcCMYK() const
 {
     if( m_CMYKvalid) return;
-  
+
     switch ( m_native )
     {
         case cs_RGB:
@@ -379,26 +380,26 @@ void KisColor::calcCMYK() const
 
 void KisColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
 {
-    qDebug("KisColor::RGBtoHSV");
+    kdDebug()<<"KisColor::RGBtoHSV\n";
     unsigned int max = R;
     unsigned int min = R;
     unsigned char maxValue = 0; // r=0, g=1, b=2
-  
+
     // find maximum and minimum RGB values
     if (static_cast<unsigned int>(G) > max) { max = G; maxValue = 1; }
     if (static_cast<unsigned int>(B) > max) { max = B; maxValue = 2; }
-  
+
     if (static_cast<unsigned int>(G) < min) min = G;
     if (static_cast<unsigned int>(B) < min ) min = B;
-  
+
     int delta = max - min;
     *V = max; // value
     *S = max ? (510*delta+max)/(2*max) : 0; // saturation
-  
+
     // calc hue
     if (*S == 0)
 	    *H = -1; // undefined hue
-    else 
+    else
 	{
 	    switch (maxValue)
 		{
@@ -429,21 +430,21 @@ void KisColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
 
 void KisColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 {
-    qDebug("KisColor::RGBtoLAB");
+    kdDebug()<<"KisColor::RGBtoLAB\n";
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
     // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
-  
+
     double X, Y, Z, fX, fY, fZ;
-  
+
     X = 0.412453*R + 0.357580*G + 0.180423*B;
     Y = 0.212671*R + 0.715160*G + 0.072169*B;
     Z = 0.019334*R + 0.119193*G + 0.950227*B;
-  
+
     X /= (255 * 0.950456);
     Y /=  255;
     Z /= (255 * 1.088754);
-  
+
     if (Y > 0.008856)
 	{
 	    fY = pow(Y, 1.0/3.0);
@@ -454,17 +455,17 @@ void KisColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 	    fY = 7.787*Y + 16.0/116.0;
 	    *L = static_cast<int>(903.3*Y + 0.5);
 	}
-  
+
     if (X > 0.008856)
 	    fX = pow(X, 1.0/3.0);
     else
 	    fX = 7.787*X + 16.0/116.0;
-  
+
     if (Z > 0.008856)
 	    fZ = pow(Z, 1.0/3.0);
     else
 	    fZ = 7.787*Z + 16.0/116.0;
-  
+
     *a = static_cast<int>(500.0*(fX - fY) + 0.5);
     *b = static_cast<int>(200.0*(fY - fZ) + 0.5);
 }
@@ -472,10 +473,10 @@ void KisColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 
 void KisColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
-    qDebug("KisColor::RGBtoCMYK");
+    kdDebug()<<"KisColor::RGBtoCMYK\n";
     int min = (R < G) ? R : G;
     *K = (min < B) ? min : B;
-  
+
     *C = 255-(R - *K);
     *M = 255-(G - *K);
     *Y = 255-(B - *K);
@@ -483,38 +484,38 @@ void KisColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 
 void KisColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 {
-    qDebug("KisColor::HSVtoRGB");
+    kdDebug()<<"KisColor::HSVtoRGB\n";
     *R = *G = *B = V;
-  
+
     if (S != 0 && H != -1) // chromatic
 	{
 	    if (H >= 360) // angle > 360
 		    H %= 360;
-	  
+
 	    unsigned int f = H % 60;
 	    H /= 60;
 	    unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
 	    unsigned int q, t;
-	  
+
 	    if (H&1)
 		{
 		    q = static_cast<unsigned int>(2*V*(15300-S*f)+15300)/30600;
 		    switch(H)
 			{
-			    case 1: 
-                    *R=static_cast<int>(q); 
-                    *G=static_cast<int>(V), 
-                    *B=static_cast<int>(p); 
+			    case 1:
+                    *R=static_cast<int>(q);
+                    *G=static_cast<int>(V),
+                    *B=static_cast<int>(p);
                     break;
-			    case 3: 
-                    *R=static_cast<int>(p); 
-                    *G=static_cast<int>(q), 
-                    *B=static_cast<int>(V); 
+			    case 3:
+                    *R=static_cast<int>(p);
+                    *G=static_cast<int>(q),
+                    *B=static_cast<int>(V);
                     break;
-			    case 5: 
-                    *R=static_cast<int>(V); 
-                    *G=static_cast<int>(p), 
-                    *B=static_cast<int>(q); 
+			    case 5:
+                    *R=static_cast<int>(V);
+                    *G=static_cast<int>(p),
+                    *B=static_cast<int>(q);
                     break;
 			}
 		}
@@ -523,22 +524,22 @@ void KisColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 		    t = static_cast<unsigned int>(2*V*(15300-(S*(60-f)))+15300)/30600;
 		    switch(H)
 			{
-			    case 0: 
-                    *R=static_cast<int>(V); 
-                    *G=static_cast<int>(t), 
-                    *B=static_cast<int>(p); 
+			    case 0:
+                    *R=static_cast<int>(V);
+                    *G=static_cast<int>(t),
+                    *B=static_cast<int>(p);
                     break;
-                    
-			    case 2: 
-                    *R=static_cast<int>(p); 
-                    *G=static_cast<int>(V), 
-                    *B=static_cast<int>(t); 
+
+			    case 2:
+                    *R=static_cast<int>(p);
+                    *G=static_cast<int>(V),
+                    *B=static_cast<int>(t);
                     break;
-                    
-			    case 4: 
-                    *R=static_cast<int>(t); 
-                    *G=static_cast<int>(p), 
-                    *B=static_cast<int>(V); 
+
+			    case 4:
+                    *R=static_cast<int>(t);
+                    *G=static_cast<int>(p),
+                    *B=static_cast<int>(V);
                     break;
 			}
 		}
@@ -563,44 +564,44 @@ void KisColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
 
 void KisColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
 {
-    qDebug("KisColor::LABtoRGB");
+    kdDebug()<<"KisColor::LABtoRGB\n";
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
     // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
-  
+
     double X, Y, Z, fX, fY, fZ;
     int RR, GG, BB;
-  
+
     fY = pow((L + 16.0) / 116.0, 3.0);
     if (fY < 0.008856)
 	    fY = L / 903.3;
     Y = fY;
-  
+
     if (fY > 0.008856)
 	    fY = pow(fY, 1.0/3.0);
     else
 	    fY = 7.787 * fY + 16.0/116.0;
-  
-    fX = a / 500.0 + fY;          
+
+    fX = a / 500.0 + fY;
     if (fX > 0.206893)
 	    X = pow(fX, 3.0);
     else
 	    X = (fX - 16.0/116.0) / 7.787;
-  
-    fZ = fY - b /200.0;          
+
+    fZ = fY - b /200.0;
     if (fZ > 0.206893)
 	    Z = pow(fZ, 3.0);
     else
 	    Z = (fZ - 16.0/116.0) / 7.787;
-  
+
     X *= (0.950456 * 255);
     Y *= 255;
     Z *= (1.088754 * 255);
-  
+
     RR = static_cast<int>(3.240479*X - 1.537150*Y - 0.498535*Z + 0.5);
     GG = static_cast<int>(-0.969256*X + 1.875992*Y + 0.041556*Z + 0.5);
     BB = static_cast<int>(0.055648*X - 0.204043*Y + 1.057311*Z + 0.5);
-  
+
     *R = RR < 0 ? 0 : RR > 255 ? 255 : RR;
     *G = GG < 0 ? 0 : GG > 255 ? 255 : GG;
     *B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
@@ -622,7 +623,7 @@ void KisColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
 
 void KisColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
 {
-    qDebug("KisColor::CMYKtoRGB");
+    kdDebug()<<"KisColor::CMYKtoRGB\n";
     *R = 255-(C+K);
     *G = 255-(M+K);
     *B = 255-(Y+K);

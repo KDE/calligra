@@ -19,75 +19,76 @@
  */
 
 #include <kis_color.h>
+#include <kdebug.h>
 
 void dumpColor(const KisColor& k)
 {
-  qDebug(" rgb : %3d %3d %3d", k.R(), k.G(), k.B());
-  qDebug(" hsv : %3d %3d %3d", k.h(), k.s(), k.v());
-  qDebug(" lab : %3d %3d %3d", k.l(), k.a(), k.b());
-  qDebug(" cmyk: %3d %3d %3d %3d", k.c(), k.m(), k.y(), k.k());
-  
+    kdDebug()<<" rgb : "<< k.R()<<" "<< k.G() <<" "<< k.B()<<endl;
+    kdDebug()<<" hsv : "<< k.h()<<" "<<k.s() <<" "<< k.v()<<endl;
+    kdDebug()<<" lab : "<<  k.l()<<" "<< k.a()<<" "<< k.b()<<endl;
+    kdDebug()<<" cmyk: "<< k.c()<<" "<< k.m()<<" "<< k.y()<<" "<< k.k()<<endl;
+
   switch (k.native())
     {
     case RGB:
-      qDebug(" RGB is native color space.");
+        kdDebug()<<" RGB is native color space.\n";
       break;
     case HSV:
-      qDebug(" HSV is native color space.");
+        kdDebug()<<" HSV is native color space.\n";
       break;
     case LAB:
-      qDebug(" Lab is native color space.");
+        kdDebug()<<" Lab is native color space.\n";
       break;
     case CMYK:
-      qDebug(" CMYK is native color space.");
+        kdDebug()<<" CMYK is native color space.\n";
       break;
     default:
-      qDebug(" Warning: No native color space.");
+        kdDebug()<<" Warning: No native color space.\n";
       break;
     }
 }
 int main( int argc, char **argv )
 {
-  qDebug("\n--> KColor a;");
+    kdDebug()<<"\n--> KColor a;\n";
   KisColor a;
-  qDebug("Dump a:");
+  kdDebug()<<"Dump a:\n";
   dumpColor(a);
 
-  qDebug("\n--> KisColor b(0, 0, 255);");
+  kdDebug()<<"\n--> KisColor b(0, 0, 255);\n";
   KisColor b(0, 0, 255);
-  qDebug("Dump b:");
+  kdDebug()<<"Dump b:\n";
   dumpColor(b);
 
-  qDebug("\n--> KisColor c(0, 255, 255, 0);");
+  kdDebug()<<"\n--> KisColor c(0, 255, 255, 0);\n";
   KisColor c(0, 255, 255, 0);
-  qDebug("Dump c:");
+  kdDebug()<<"Dump c:\n";
   dumpColor(c);
 
-  qDebug("\n--> a = c;");
+  kdDebug()<<"\n--> a = c;\n";
   a = c;
-  qDebug("Dump a:");
+  kdDebug()<<"Dump a:\n";
   dumpColor(a);
 
-  qDebug("\n--> a = KisColor::red();");
+  kdDebug()<<"\n--> a = KisColor::red();\n";
   a = KisColor::red();
-  qDebug("Dump a:");
+  kdDebug()<<"Dump a:\n";
   dumpColor(a);
 
-  qDebug("\n--> KisColor d = KisColor::darkBlue();");
+  kdDebug()<<"\n--> KisColor d = KisColor::darkBlue();\n";
   KisColor d = KisColor::darkBlue();
-  qDebug("Dump d:");
+  kdDebug()<<"Dump d:\n";
   dumpColor(d);
 
-  qDebug("\n--> KisColor e = KisColor(QColor(0, 255, 0));");
+  kdDebug()<<"\n--> KisColor e = KisColor(QColor(0, 255, 0));\n";
   KisColor e = KisColor(QColor(0, 255, 0));
-  qDebug("Dump e:");
+  kdDebug()<<"Dump e:\n";
   dumpColor(e);
-  qDebug("Dump e again:");
+  kdDebug()<<"Dump e again:\n";
   dumpColor(e);
 
-  qDebug("\n--> e.setCMYK(255, 0, 0, 0);");
+  kdDebug()<<"\n--> e.setCMYK(255, 0, 0, 0);\n";
   e.setCMYK(255, 0, 0, 0);
-  qDebug("Dump e:");
+  kdDebug()<<"Dump e:\n";
   dumpColor(e);
 
   return 0;
