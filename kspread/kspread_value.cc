@@ -173,7 +173,7 @@ KSpreadValue::Type KSpreadValue::type() const
 }
 
 // set the value to boolean
-void KSpreadValue::setValue( bool b ) 
+void KSpreadValue::setValue( bool b )
 {
   detach();
   d->type = Boolean;
@@ -241,7 +241,7 @@ double KSpreadValue::asFloat() const
 }
 
 // set the value as string
-void KSpreadValue::setValue( const QString& s ) 
+void KSpreadValue::setValue( const QString& s )
 {
   detach();
   d->type = String;
@@ -287,7 +287,7 @@ void KSpreadValue::setValue( const QDateTime& dt )
   QDate refDate = QDate( 1899, 12, 31 );
   QTime refTime = QTime( 0, 0 );
 
-  double f = refDate.daysTo( dt.date() ) + 1;
+  double f = refDate.daysTo( dt.date() );
   f += refTime.secsTo( dt.time() ) / 86400.0;
 
   setValue( f );
@@ -306,7 +306,7 @@ void KSpreadValue::setValue( const QDate& date )
 {
   // reference date is 31 Dec, 1899
   QDate refDate = QDate( 1899, 12, 31 );
-  double f = refDate.daysTo( date ) + 1;
+  double f = refDate.daysTo( date );
 
   setValue( f );
 }
