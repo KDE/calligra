@@ -209,155 +209,125 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
 void KSpreadDlgValidity::changeIndexType(int _index)
 {
-  switch(_index)
-  {
-   case 0:
-    edit1->setText("");
-    edit2->setText("");
-    message->setEnabled(false);
-    title->setEnabled(false);
-    val_max->setEnabled(false);
-    val_min->setEnabled(false);
-    edit1->setEnabled(false);
-    edit2->setEnabled(false);
-    choose->setEnabled(false);
-    chooseAction->setEnabled(false);
-    displayHelp->setEnabled(false);
-    messageHelp->setEnabled(false);
-    titleHelp->setEnabled(false);
-    break;
-   case 1:
-    val_min->setEnabled(true);
-    edit1->setEnabled(true);
-    choose->setEnabled(true);
-    message->setEnabled(true);
-    title->setEnabled(true);
-    chooseAction->setEnabled(true);
-    displayHelp->setEnabled(true);
-    messageHelp->setEnabled( true);
-    titleHelp->setEnabled(true);
-    val_min->setValidator( new KFloatValidator( val_min ) );
-    val_max->setValidator( new KFloatValidator( val_max ) );
-    if( choose->currentItem()<=4)
+    bool activate = ( _index!=0 );
+    message->setEnabled(activate);
+    title->setEnabled(activate);
+    chooseAction->setEnabled( activate );
+    displayHelp->setEnabled(activate);
+    messageHelp->setEnabled(activate);
+    titleHelp->setEnabled(activate);
+    switch(_index)
     {
-      edit1->setText(i18n("Number:"));
-      edit2->setText("");
-      edit2->setEnabled(false);
-      val_max->setEnabled(false);
-    }
-    else
-    {
-      edit1->setText(i18n("Minimum:" ));
-      edit2->setText(i18n("Maximum:" ));
-      edit2->setEnabled(true);
-      val_max->setEnabled(true);
-    }
-    break;
-   case 2:
-   case 6:
-    val_min->setEnabled(true);
-    edit1->setEnabled(true);
-    choose->setEnabled(true);
-    message->setEnabled(true);
-    title->setEnabled(true);
-    chooseAction->setEnabled(true);
-    displayHelp->setEnabled(true);
-    messageHelp->setEnabled( true);
-    titleHelp->setEnabled(true);
-    val_min->setValidator( new KIntValidator( val_min ) );
-    val_max->setValidator( new KIntValidator( val_max ) );
-    if( choose->currentItem()<=4)
-    {
-      edit1->setText(i18n("Number:"));
-      edit2->setText("");
-      edit2->setEnabled(false);
-      val_max->setEnabled(false);
-    }
-    else
-    {
-      edit1->setText(i18n("Minimum:" ));
-      edit2->setText(i18n("Maximum:" ));
-      edit2->setEnabled(true);
-      val_max->setEnabled(true);
-    }
-    break;
+    case 0:
+        edit1->setText("");
+        edit2->setText("");
+        val_max->setEnabled(false);
+        val_min->setEnabled(false);
+        edit1->setEnabled(false);
+        edit2->setEnabled(false);
+        choose->setEnabled(false);
+        break;
+    case 1:
+        val_min->setEnabled(true);
+        edit1->setEnabled(true);
+        choose->setEnabled(true);
+        val_min->setValidator( new KFloatValidator( val_min ) );
+        val_max->setValidator( new KFloatValidator( val_max ) );
+        if( choose->currentItem()<=4)
+        {
+            edit1->setText(i18n("Number:"));
+            edit2->setText("");
+            edit2->setEnabled(false);
+            val_max->setEnabled(false);
+        }
+        else
+        {
+            edit1->setText(i18n("Minimum:" ));
+            edit2->setText(i18n("Maximum:" ));
+            edit2->setEnabled(true);
+            val_max->setEnabled(true);
+        }
+        break;
+    case 2:
+    case 6:
+        val_min->setEnabled(true);
+        edit1->setEnabled(true);
+        choose->setEnabled(true);
+        val_min->setValidator( new KIntValidator( val_min ) );
+        val_max->setValidator( new KIntValidator( val_max ) );
+        if( choose->currentItem()<=4)
+        {
+            edit1->setText(i18n("Number:"));
+            edit2->setText("");
+            edit2->setEnabled(false);
+            val_max->setEnabled(false);
+        }
+        else
+        {
+            edit1->setText(i18n("Minimum:" ));
+            edit2->setText(i18n("Maximum:" ));
+            edit2->setEnabled(true);
+            val_max->setEnabled(true);
+        }
+        break;
 
-   case 3:
-    edit1->setText("");
-    edit2->setText("");
-    val_max->setEnabled(false);
-    val_min->setEnabled(false);
-    choose->setEnabled(false);
-    edit1->setEnabled(false);
-    edit2->setEnabled(false);
-    displayHelp->setEnabled(true);
-    messageHelp->setEnabled( true);
-    titleHelp->setEnabled(true);
-    message->setEnabled(true);
-    title->setEnabled(true);
-    chooseAction->setEnabled( true );
-    break;
-   case 4:
-    edit1->setText(i18n("Date:"));
-    edit2->setText("");
-    val_min->setEnabled(true);
-    edit1->setEnabled(true);
-    choose->setEnabled(true);
-    message->setEnabled(true);
-    title->setEnabled(true);
-    chooseAction->setEnabled(true);
-    displayHelp->setEnabled(true);
-    messageHelp->setEnabled( true);
-    titleHelp->setEnabled(true);
+    case 3:
+        edit1->setText("");
+        edit2->setText("");
+        val_max->setEnabled(false);
+        val_min->setEnabled(false);
+        choose->setEnabled(false);
+        edit1->setEnabled(false);
+        edit2->setEnabled(false);
+        break;
+    case 4:
+        edit1->setText(i18n("Date:"));
+        edit2->setText("");
+        val_min->setEnabled(true);
+        edit1->setEnabled(true);
+        choose->setEnabled(true);
 
-    val_min->clearValidator();
-    val_max->clearValidator();
-    if( choose->currentItem()<=4)
-    {
-      edit1->setText(i18n("Date:"));
-      edit2->setText("");
-      edit2->setEnabled(false);
-      val_max->setEnabled(false);
+        val_min->clearValidator();
+        val_max->clearValidator();
+        if( choose->currentItem()<=4)
+        {
+            edit1->setText(i18n("Date:"));
+            edit2->setText("");
+            edit2->setEnabled(false);
+            val_max->setEnabled(false);
+        }
+        else
+        {
+            edit1->setText(i18n("Date minimum:"));
+            edit2->setText(i18n("Date maximum:"));
+            edit2->setEnabled(true);
+            val_max->setEnabled(true);
+        }
+        break;
+    case 5:
+        val_min->setEnabled(true);
+        edit1->setEnabled(true);
+        choose->setEnabled(true);
+        val_min->clearValidator();
+        val_max->clearValidator();
+        if( choose->currentItem()<=4)
+        {
+            edit1->setText(i18n("Time:"));
+            edit2->setText("");
+            edit2->setEnabled(false);
+            val_max->setEnabled(false);
+        }
+        else
+        {
+            edit1->setText(i18n("Time minimum:"));
+            edit2->setText(i18n("Time maximum:"));
+            edit2->setEnabled(true);
+            val_max->setEnabled(true);
+        }
+        break;
     }
-    else
-    {
-      edit1->setText(i18n("Date minimum:"));
-      edit2->setText(i18n("Date maximum:"));
-      edit2->setEnabled(true);
-      val_max->setEnabled(true);
-    }
-    break;
-   case 5:
-    val_min->setEnabled(true);
-    edit1->setEnabled(true);
-    choose->setEnabled(true);
-    message->setEnabled(true);
-    title->setEnabled(true);
-    chooseAction->setEnabled(true);
-    val_min->clearValidator();
-    val_max->clearValidator();
-    displayHelp->setEnabled(true);
-    messageHelp->setEnabled( true);
-    titleHelp->setEnabled(true);
-
-    if( choose->currentItem()<=4)
-    {
-      edit1->setText(i18n("Time:"));
-      edit2->setText("");
-      edit2->setEnabled(false);
-      val_max->setEnabled(false);
-    }
-    else
-    {
-      edit1->setText(i18n("Time minimum:"));
-      edit2->setText(i18n("Time maximum:"));
-      edit2->setEnabled(true);
-      val_max->setEnabled(true);
-    }
-    break;
-  }
-  if ( width() < sizeHint().width() )
-    resize( sizeHint() );
+    if ( width() < sizeHint().width() )
+        resize( sizeHint() );
 }
 
 void KSpreadDlgValidity::changeIndexCond(int _index)
