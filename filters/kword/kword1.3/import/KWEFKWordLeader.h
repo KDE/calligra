@@ -103,6 +103,7 @@ class KWEFKWordLeader
         /// List of bookmarks
         QValueList<Bookmark> m_bookmarkList;
         QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG)
+        QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors
 
     private:
         KoFilterChain* m_chain;

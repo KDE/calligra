@@ -327,6 +327,24 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 }
 
 
+static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameAnchor* frameAnchor, const int frameType )
+{
+    frameAnchor->type = frameType;
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList
+        << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
+        << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
+        << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
+        << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
+        ;
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    kdDebug (30520) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
+
+    frameAnchor->key = frameAnchor->picture.key;
+}
+
 static void ProcessFramesetTag ( QDomNode        myNode,
                                 void            *tagData,
                                 KWEFKWordLeader *leader )
@@ -499,27 +517,16 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
             if ( frameAnchor )
             {
-                frameAnchor->type = frameType;
-
-                QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList
-                    << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
-                    << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
-                    << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
-                    << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
-                    ;
-                ProcessSubtags (myNode, tagProcessingList, leader);
-
-#if 0
-                kdDebug (30508) << "DEBUG: FRAMESET PICTURE KEY filename of picture is " << frameAnchor->picture.key << endl;
-#endif
-
-                frameAnchor->key = frameAnchor->picture.key;
+                ProcessPictureAnchor( myNode, leader, frameAnchor, frameType );
             }
             else
             {
-                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
-                leader->m_unanchoredFramesets.append( leader->m_currentFramesetName );
+                // No anchor found, so the picture is not inlined
+                kdDebug (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
+                FrameAnchor anchor;
+                ProcessPictureAnchor( myNode, leader, &anchor, frameType );
+                leader->m_nonInlinedPictureAnchors << anchor;
+                leader->m_unanchoredFramesets.append( leader->m_currentFramesetName ); // DEBUG
             }
 
             break;
@@ -792,6 +799,10 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 
     kdDebug(30508) << "search anchors: " << key.toString() << endl;
     bool found = false;
+    
+    // NOTE: we must always search in both inlined and non-inlined pictures. A picture can be used in both ways and a few times in each!
+    
+    // Process inlined pictures
     QValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList->begin(); paraIt != paraList->end(); paraIt++ )
@@ -805,13 +816,25 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
             if ( ( ( (*formattingIt).id == 6 ) || ( (*formattingIt).id == 2 ) )
                  && (*formattingIt).frameAnchor.key == key )
             {
-                kdDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
+                kdDebug(30520) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
                 (*formattingIt).frameAnchor.picture.koStoreName = name;
                 found = true;
             }
         }
     }
-
+    
+    // Process non-inline pictures
+    QValueList<FrameAnchor>::Iterator it;
+    for ( it = leader->m_nonInlinedPictureAnchors.begin(); it !=  leader->m_nonInlinedPictureAnchors.end(); ++it )
+    {
+        if ( (*it).key == key )
+        {
+            kdDebug(30520) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
+            (*it).picture.koStoreName = name;
+            found = true;
+        }
+    }
+    
     if ( !found )
     {
         kdWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
