@@ -526,39 +526,42 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 {
     if(!m_pDoc->isReadWrite())
         return;
-  lastPoint = e->pos();
-  TKPoint p = mapFromScreen(e->pos());
-  KivioGuideLines* gl = activePage()->guideLines();
+    if(m_pView->isShowGuides())
+    {
+        lastPoint = e->pos();
+        TKPoint p = mapFromScreen(e->pos());
+        KivioGuideLines* gl = activePage()->guideLines();
 
-  bool unselectAllGuideLines = true;
-  pressGuideline = 0;
+        bool unselectAllGuideLines = true;
+        pressGuideline = 0;
 
-  if ((e->state() & ~ShiftButton) == NoButton) {
-    KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
-    if (gd) {
-      pressGuideline = gd;
-      if ((e->button() == RightButton) || ((e->button() & ShiftButton) == ShiftButton)) {
-        if (gd->isSelected())
-          gl->unselect(gd);
-        else
-          gl->select(gd);
-      } else {
-        if (!gd->isSelected()) {
-          gl->unselectAll();
-          gl->select(gd);
+        if ((e->state() & ~ShiftButton) == NoButton) {
+            KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
+            if (gd) {
+                pressGuideline = gd;
+                if ((e->button() == RightButton) || ((e->button() & ShiftButton) == ShiftButton)) {
+                    if (gd->isSelected())
+                        gl->unselect(gd);
+                    else
+                        gl->select(gd);
+                } else {
+                    if (!gd->isSelected()) {
+                        gl->unselectAll();
+                        gl->select(gd);
+                    }
+                }
+                unselectAllGuideLines = false;
+                delegateThisEvent = false;
+                updateGuides();
+                m_guideLinesTimer->start(500,true);
+            }
         }
-      }
-      unselectAllGuideLines = false;
-      delegateThisEvent = false;
-      updateGuides();
-      m_guideLinesTimer->start(500,true);
-    }
-  }
 
-  if (unselectAllGuideLines && gl->hasSelected()) {
-    gl->unselectAll();
-    updateGuides();
-  }
+        if (unselectAllGuideLines && gl->hasSelected()) {
+            gl->unselectAll();
+            updateGuides();
+        }
+    }
 }
 
 void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
@@ -582,46 +585,49 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
 
 void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
 {
-   if(!m_pDoc->isReadWrite())
+    if(!m_pDoc->isReadWrite())
         return;
-    m_pVRuler->updatePointer(e->pos().x(),e->pos().y());
-  m_pHRuler->updatePointer(e->pos().x(),e->pos().y());
+    if(m_pView->isShowGuides())
+    {
+        m_pVRuler->updatePointer(e->pos().x(),e->pos().y());
+        m_pHRuler->updatePointer(e->pos().x(),e->pos().y());
 
-  TKPoint p = mapFromScreen(e->pos());
-  KivioGuideLines* gl = activePage()->guideLines();
+        TKPoint p = mapFromScreen(e->pos());
+        KivioGuideLines* gl = activePage()->guideLines();
 
-  if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
-    if (m_guideLinesTimer->isActive()) {
-      m_guideLinesTimer->stop();
-      guideLinesTimerTimeout();
+        if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
+            if (m_guideLinesTimer->isActive()) {
+                m_guideLinesTimer->stop();
+                guideLinesTimerTimeout();
+            }
+            delegateThisEvent = false;
+            eraseGuides();
+            QPoint p = e->pos();
+            p -= lastPoint;
+            if (p.x() != 0)
+                gl->moveSelectedByX(p.x()/m_pZoom);
+            if (p.y() != 0)
+                gl->moveSelectedByY(p.y()/m_pZoom);
+            paintGuides();
+        } else {
+            if ((e->state() & ~ShiftButton) == NoButton) {
+                KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
+                if (gd) {
+                    delegateThisEvent = false;
+                    if (!storedCursor)
+                        storedCursor = new QCursor(cursor());
+                    setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
+                } else {
+                    updateGuidesCursor();
+                }
+            }
+        }
     }
-    delegateThisEvent = false;
-    eraseGuides();
-    QPoint p = e->pos();
-    p -= lastPoint;
-    if (p.x() != 0)
-      gl->moveSelectedByX(p.x()/m_pZoom);
-    if (p.y() != 0)
-      gl->moveSelectedByY(p.y()/m_pZoom);
-    paintGuides();
-  } else {
-    if ((e->state() & ~ShiftButton) == NoButton) {
-      KivioGuideLineData* gd = gl->find(p.x,p.y,2.0/m_pZoom);
-      if (gd) {
-        delegateThisEvent = false;
-        if (!storedCursor)
-          storedCursor = new QCursor(cursor());
-        setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-      } else {
-        updateGuidesCursor();
-      }
-    }
-  }
 //  float xf = p.xToUnit(UnitMillimeter);
 //  float yf = p.yToUnit(UnitMillimeter);
 
 //  debug("%s %s",(const char*)QString::number(xf,'f',2),(const char*)QString::number(yf,'f',2));
-  lastPoint = e->pos();
+    lastPoint = e->pos();
 }
 
 QPoint KivioCanvas::mapToScreen( TKPoint pos )
