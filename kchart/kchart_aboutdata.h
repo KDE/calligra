@@ -41,6 +41,7 @@ KAboutData * newKChartAboutData()
     aboutData->addAuthor("Kalle Dalheimer",   0, "kalle@kde.org");
     aboutData->addAuthor("Laurent Montel",    0, "lmontel@mandrakesoft.com");
     aboutData->addAuthor("Karl-Heinz Zimmer", 0, "khz@kde.org");
+    aboutData->addAuthor("Inge Wallin",       0, "inge@lysator.liu.se");
     return aboutData;
 }
 

@@ -1,4 +1,8 @@
-2005-03-05    <ingwa@dhcp-254-144.lkpg.cendio.se>
+2005-03-05  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Ego stroking:
+	* kchart_aboutdata.h (newKChartAboutData): Add Inge Wallin as an
+	author.
 
 	Continue with the new data editor.
 	* kchartDataEditor.cc (setLegend): Always initialize the row
