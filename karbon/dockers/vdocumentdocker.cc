@@ -473,7 +473,7 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 
 			if( col == 1 )
 			{
-				obj->setState( obj->state() == VObject::normal || obj->state() == VObject::normal_locked ? VObject::hidden : VObject::normal );
+				obj->setState( obj->state() == VObject::hidden ? VObject::normal : VObject::hidden );
 				objectItem->update();
 				m_view->part()->repaintAllViews();
 			}
@@ -486,7 +486,7 @@ VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 {
 	if ( ( item ) && col == 2 )
 	{
-		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
+		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
 		if( !layerItem ) return;
 		bool ok = true;
 		QString name = QInputDialog::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
