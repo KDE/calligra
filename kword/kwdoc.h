@@ -275,8 +275,6 @@ public:
 
     //QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
-    long int getPageNum( int bottom );
-
 //    KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }

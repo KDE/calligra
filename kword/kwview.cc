@@ -631,7 +631,7 @@ void KWView::showFormulaToolbar( bool show )
   doc->getFormulaDocument()->getAddGenericUpperAction()->setEnabled( show );
   doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
   doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
-  
+
   QWidget *tb = factory()->container( "formula_toolbar", this );
   if( !tb )
     return;
@@ -647,7 +647,7 @@ void KWView::updatePageInfo()
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
     {
-        int pgNum = edit->currentFrame()->getPageNum() + 1;
+        int pgNum = edit->currentFrame()->pageNum() + 1;
         statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgNum).arg(doc->getPages())+' ', statusPage );
         gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
     }
@@ -707,7 +707,7 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
-    if (shell()) shell()->setCursor( waitCursor );
+    gui->canvasWidget()->viewport()->setCursor( waitCursor );
 
     prt.setFullPage( true );
 
@@ -777,7 +777,6 @@ void KWView::print( KPrinter &prt )
 
     doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
 
-    if (shell()) shell()->setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
 }
 

@@ -44,11 +44,6 @@ class QSize;
 class QCursor;
 class QRegion;
 class QPainter;
-class QTextStream;
-namespace Qt3 {
-class QTextCursor;
-}
-using namespace Qt3;
 class KWTextDocument;
 
 class KWDocument;
@@ -155,8 +150,8 @@ public:
     bool isMostRight() { return mostRight; }
     void setMostRight( bool _mr ) { mostRight = _mr; }
 
-    void setPageNum( int i ) { pageNum = i; }
-    int getPageNum() { return pageNum; }
+    void setPageNum( int i ) { m_pageNum = i; }
+    int pageNum() { return m_pageNum; }
 
     /* All borders can be custum drawn with their own colors etc. */
     Border &getLeftBorder() { return brd_left; }
@@ -214,7 +209,7 @@ protected:
     bool selected;
     KWUnit runAroundGap;
     bool mostRight;
-    int pageNum;
+    int m_pageNum;
 
     QList<QRect> intersections;
     QRegion emptyRegion;
@@ -357,7 +352,7 @@ public:
 
     int getNext( QRect _rect );
     /** returns page number of the numbered frame */
-    int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
+    int getPageOfFrame( int i ) { return frames.at( i )->pageNum(); }
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom() {}

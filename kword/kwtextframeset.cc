@@ -137,6 +137,7 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
 {
+    //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << endl;
     //if ( !cursorVisible )
     //drawCur = FALSE;
     if ( !text->firstParag() )
@@ -155,9 +156,9 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 
         QRect r(crect);
         QRect frameRect( kWordDocument()->zoomRect( *frame ) );
-        //kdDebug() << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
+        //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " cr=" << DEBUGRECT(r) << endl;
         r = r.intersect( frameRect );
-        //kdDebug() << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
+        //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
         {
             // This translates the coordinates in the document contents
@@ -611,12 +612,12 @@ void KWTextFrameSet::zoom()
         unzoom();
     QTextFormatCollection * coll = text->formatCollection();
     double factor = kWordDocument()->zoomedResolutionY();
-    //kdDebug() << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
+    //kdDebug(32002) << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
         QTextFormat * format = it.current();
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-        //kdDebug() << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
+        //kdDebug(32002) << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
         format->setPointSize( static_cast<int>( static_cast<float>( format->font().pointSize() ) * factor ) );
     }
 
@@ -928,10 +929,29 @@ void KWTextFrameSet::formatMore()
                     // TODO
                     break;
                 case AutoCreateNewFrame:
-                    doc->appendPage();
+                {
+                    // We need a new frame in this frameset.
+
+                    uint oldCount = frames.count();
+                    // First create a new page for it if necessary
+                    if ( frames.last()->pageNum() == doc->getPages() - 1 )
+                        doc->appendPage();
+
+                    // Maybe this created the frame, then we're done
+                    if ( frames.count() == oldCount )
+                    {
+                        // Otherwise, create a new frame on next page
+                        KWFrame *frame = frames.last();
+                        KWFrame *frm = frame->getCopy();
+                        frm->moveBy( 0, doc->ptPaperHeight() );
+                        frm->setPageNum( frame->pageNum()+1 );
+                        addFrame( frm );
+                    }
+
                     if ( lastFormatted )
                         interval = 0;
-                    break;
+                }
+                break;
                 case Ignore:
                     break;
             }
@@ -1537,11 +1557,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
     emit showCursor();
     undoRedoInfo.text += txt;
 
-    // ### There's a bug in this loop (coming from QTextView)
     for ( int i = 0; i < (int)txt.length(); ++i ) {
-        if ( txt[ i ] == '\n' )
-            continue;
-        if ( c2.parag()->at( c2.index() )->format() ) {
+        if ( txt[ i ] != '\n' && c2.parag()->at( c2.index() )->format() ) {
             c2.parag()->at( c2.index() )->format()->addRef();
             undoRedoInfo.text.setFormat( oldLen + i, c2.parag()->at( c2.index() )->format(), TRUE );
         }

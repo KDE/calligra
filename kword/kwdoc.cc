@@ -1979,10 +1979,10 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->getPageNum()=" << frame->getPageNum() << endl;
+            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
             //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
-            if ( (frame->getPageNum() == thisPageNum ||
-                  (frame->getPageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
+            if ( (frame->pageNum() == thisPageNum ||
+                  (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
                  (frame->getNewFrameBehaviour()==Reconnect ||
                   frame->getNewFrameBehaviour()==Copy) ) {
 
@@ -1990,12 +1990,9 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                     case FT_TEXT:  {
                         //kdDebug() << "KWDocument::appendPage, copying text frame" << endl;
                         // make a new frame.
-                        KWFrame *frm = new KWFrame(frame->getFrameSet(), frame->x(), frame->y() + ptPaperHeight(), frame->width(), frame->height(), frame->getRunAround(), frame->getRunAroundGap() );
-                        frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );
-                        frm->setNewFrameBehaviour(frame->getNewFrameBehaviour());
-                        frm->setPageNum( frame->getPageNum()+1 );
-                        frm->setFrameBehaviour(frame->getFrameBehaviour());
-                        frm->setSheetSide(frame->getSheetSide());
+                        KWFrame *frm = frame->getCopy();
+                        frm->moveBy( 0, ptPaperHeight() );
+                        frm->setPageNum( frame->pageNum()+1 );
                         newFrames.append( frm );
                         } break;
                     case FT_PICTURE:  { // can not be copied at the moment.
@@ -2035,7 +2032,7 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frm = frameIt.current();
-            if ( frm != f && frm->getPageNum() == num )
+            if ( frm != f && frm->pageNum() == num )
                 return FALSE;
         }
     }
@@ -2054,7 +2051,7 @@ void KWDocument::removePage( int num )
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frm = frameIt.current();
-            if ( frm->getPageNum() == num )
+            if ( frm->pageNum() == num )
                 frameSet->delFrame( frm, true );
         }
     }
@@ -2644,20 +2641,6 @@ void KWDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )
 }
 
 /*================================================================*/
-long int KWDocument::getPageNum( int bottom )
-{ // this can be done better (TZ)
-    int num = 0;
-    while ( TRUE ) {
-        if ( bottom < ( num + 1 ) * static_cast<int>( ptPaperHeight() ) )
-            return num;
-
-        num++;
-    }
-
-    return num;
-}
-
-/*================================================================*/
 #if 0
 void KWDocument::addImageRequest( const QString &filename, KWCharImage *img )
 {
@@ -2880,9 +2863,9 @@ void KWDocument::printDebug() {
             kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
             kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
             if(frame->isSelected())
-                kdDebug() << " *   Page "<< frame->getPageNum() << endl;
+                kdDebug() << " *   Page "<< frame->pageNum() << endl;
             else
-                kdDebug() << "     Page "<< frame->getPageNum() << endl;
+                kdDebug() << "     Page "<< frame->pageNum() << endl;
         }
     }
     /*

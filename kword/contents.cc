@@ -131,7 +131,7 @@ void KWContents::createContents()
         if ( frame ) // let's be safe
         {
             parag->append( "         " ); // HACK, should be a tab
-            parag->append( QString::number( frame->getPageNum() ) );
+            parag->append( QString::number( frame->pageNum() ) );
         }
 
         // Apply style

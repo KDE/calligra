@@ -72,7 +72,7 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
     frameSet = fs;
     runAround = _ra;
     runAroundGap = _gap;
-    pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
+    m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
     handles.setAutoDelete(true);
     intersections.setAutoDelete( true );
     selected = false;
@@ -259,13 +259,12 @@ FrameType KWFrame::getFrameType()
 /*================================================================*/
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
-    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(),width(), height(), getRunAround(), getRunAroundGap() );
+    KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), getRunAround(), getRunAroundGap() );
     frm->setBackgroundColor( QBrush( getBackgroundColor() ) );
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
-    frm->setPageNum(getPageNum());
-
+    frm->setPageNum(pageNum());
     return frm;
 }
 
@@ -1092,17 +1091,17 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     // Did I tell you that assignment to parameters is evil?
     width = static_cast<int>( width / kWordDocument()->zoomedResolutionX() ) + 5;
     height = static_cast<int>( height / kWordDocument()->zoomedResolutionY() ) + 5;
-    
+
     int oldWidth = frames.first()->width();
     int oldHeight = frames.first()->height();
-    
+
     frames.first()->setWidth( width );
     frames.first()->setHeight( height );
 
     if ( ( oldWidth > width ) || ( oldHeight > height ) ) {
         kWordDocument()->repaintAllViews( true );
     }
-    
+
     updateFrames();
     emit repaintChanged( this );
 }

@@ -95,7 +95,7 @@ KWCanvas::~KWCanvas()
 
 void KWCanvas::repaintChanged( KWFrameSet * fs )
 {
-    kdDebug() << "KWCanvas::repaintChanged " << fs << endl;
+    //kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
@@ -198,9 +198,11 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            QRect frameRect( frame->x() - 1, frame->y() - 1,
-                             frame->width() + 2, frame->height() + 2 );
-            frameRect = doc->zoomRect( frameRect );
+            QRect frameRect( doc->zoomRect(  *frame ) );
+            frameRect.rLeft() -= 1;
+            frameRect.rTop() -= 1;
+            frameRect.rRight() += 1;
+            frameRect.rBottom() += 1;
             if ( !crect.intersects( frameRect ) )
                 continue;
 
@@ -603,8 +605,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
             move=false;
         if (newBottom-y < (int)(minFrameHeight+5))
             y=newBottom-minFrameHeight-5;
-        if (y < static_cast<int>( frame->getPageNum() * doc->ptPaperHeight()))
-            y = static_cast<int>( frame->getPageNum() * doc->ptPaperHeight() );
+        if (y < static_cast<int>( frame->pageNum() * doc->ptPaperHeight()))
+            y = static_cast<int>( frame->pageNum() * doc->ptPaperHeight() );
 
         if (move) newTop=y;
     } else if (bottom && newBottom != y) {
@@ -613,9 +615,9 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
             move=false;
         if (y-newTop < (int)(minFrameHeight+5))
             y=newTop+minFrameHeight+5;
-        if (y >= static_cast<int>((frame->getPageNum()+1) * doc->ptPaperHeight()))
+        if (y >= static_cast<int>((frame->pageNum()+1) * doc->ptPaperHeight()))
         {
-            y = static_cast<int>((frame->getPageNum()+1) * doc->ptPaperHeight());
+            y = static_cast<int>((frame->pageNum()+1) * doc->ptPaperHeight());
         }
 
         if (move) newBottom=y;
@@ -646,8 +648,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     }
 
     // Keep copy of old rectangle, for repaint()
-    QRect oldRect( frame->x() - 1, frame->y() - 1,
-                   frame->width() + 2, frame->height() + 2 );
+    QRect oldRect( *frame );
 
     frame->setLeft(newLeft);
     frame->setTop(newTop);
@@ -676,11 +677,18 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     // Move resize handles to new position
     frame->updateResizeHandles();
     // Calculate new rectangle for this frame
-    QRect newRect( frame->x() - 1, frame->y() - 1,
-                   frame->width() + 2, frame->height() + 2 );
+    QRect newRect( *frame );
     // Repaing only the changed rects (oldRect U newRect)
     oldRect = doc->zoomRect(oldRect);
+    oldRect.rLeft() -= 1;
+    oldRect.rTop() -= 1;
+    oldRect.rRight() += 1;
+    oldRect.rBottom() += 1;
     newRect = doc->zoomRect(newRect);
+    newRect.rLeft() -= 1;
+    newRect.rTop() -= 1;
+    newRect.rRight() += 1;
+    newRect.rBottom() += 1;
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
 
     oldMy = my;
@@ -713,22 +721,27 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                         if ( updates.findRef( frameset->getGroupManager() ) == -1 )
                             updates.append( frameset->getGroupManager() );
                     } else {
-                        QRect oldRect( frame->x() - 1, frame->y() - 1,
-                                       frame->width() + 2, frame->height() + 2 );
-                        QRect oldFrame( *frame );
+                        QRect oldRect( *frame );
                         int page = doc->getPageOfRect( *frame );
                         // Move the frame
                         frame->moveBy( static_cast<int>((mx - oldMx) / doc->zoomedResolutionX()),
                                        static_cast<int>((my - oldMy) / doc->zoomedResolutionY()) );
                         // But not out of the page it was on initially
                         if ( doc->isOutOfPage( *frame, page ) )
-                            frame->setRect( oldFrame.x(), oldFrame.y(), oldFrame.width(), oldFrame.height() );
+                            frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
                         // Calculate new rectangle for this frame
-                        QRect newRect( frame->x() - 1, frame->y() - 1,
-                                       frame->width() + 2, frame->height() + 2 );
+                        QRect newRect( *frame );
                         // Repaing only the changed rects (oldRect U newRect)
                         oldRect = doc->zoomRect(oldRect);
+                        oldRect.rLeft() -= 1;
+                        oldRect.rTop() -= 1;
+                        oldRect.rRight() += 1;
+                        oldRect.rBottom() += 1;
                         newRect = doc->zoomRect(newRect);
+                        newRect.rLeft() -= 1;
+                        newRect.rTop() -= 1;
+                        newRect.rRight() += 1;
+                        newRect.rBottom() += 1;
                         repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                     }
                     // Move resize handles to new position
@@ -743,19 +756,25 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                 KWGroupManager *grpMgr = updates.at( i );
                 for ( unsigned k = 0; k < grpMgr->getNumCells(); k++ ) {
                     KWFrame * frame = grpMgr->getCell( k )->frameSet->getFrame( 0 );
-                    QRect oldRect( frame->x() - 1, frame->y() - 1,
-                                   frame->width() + 2, frame->height() + 2 );
+                    QRect oldRect( *frame );
                     frame->moveBy( mx - oldMx, my - oldMy );
                     if ( frame->x() < 0 || frame->right() > static_cast<int>( doc->paperWidth() ) || frame->y() < 0 ) {
                         if ( undos.findRef( grpMgr ) == -1 )
                             undos.append( grpMgr );
                     }
                     // Calculate new rectangle for this frame
-                    QRect newRect( frame->x() - 1, frame->y() - 1,
-                                   frame->width() + 2, frame->height() + 2 );
+                    QRect newRect( *frame );
                     // Repaing only the changed rects (oldRect U newRect)
                     oldRect = doc->zoomRect(oldRect);
+                    oldRect.rLeft() -= 1;
+                    oldRect.rTop() -= 1;
+                    oldRect.rRight() += 1;
+                    oldRect.rBottom() += 1;
                     newRect = doc->zoomRect(newRect);
+                    newRect.rLeft() -= 1;
+                    newRect.rTop() -= 1;
+                    newRect.rRight() += 1;
+                    newRect.rBottom() += 1;
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                     // Move resize handles to new position
                     frame->updateResizeHandles();
@@ -1791,7 +1810,7 @@ int KWCanvas::getVertRulerPos(int y)
 {
     int pageNum=1;
     if( m_currentFrameSetEdit )
-        pageNum=m_currentFrameSetEdit->currentFrame()->getPageNum() + 1;
+        pageNum=m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
     return ( -(y==-1 ? contentsY() : y) + (pageNum - 1) * doc->paperHeight() );
 }
 
