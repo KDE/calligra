@@ -33,7 +33,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-05-06</date>
+<date>2002-05-26</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 
@@ -157,7 +157,7 @@ see the effect of a 50 percent reduction in the amount of methane. </para>
 <sect1 id="selecting">
 <title>Selecting Cells</title>
 <para>You can select a single cell or a rectangular area of cells in the 
-spreadsheet table. The selected cell(s) are displayed with a thick black border
+spreadsheet. The selected cell(s) are displayed with a thick black border
 .</para>
 <para>To select a single cell <mousebutton>left</mousebutton> click on it 
 or enter the cell reference (for example <userinput>B5</userinput>) into the 
@@ -186,7 +186,7 @@ corner of the wanted area then holding the &Shift; key down while using the
 opposite corner.</para>
 
 <para>To select a complete row or column of cells <mousebutton>left
-</mousebutton> click on the row number at the left of the table or on the 
+</mousebutton> click on the row number at the left of the worksheet or on the 
 column letters at the top. To select adjacent rows or columns drag the mouse 
 pointer over the appropriate row numbers or column letters with the 
 <mousebutton>left</mousebutton> button held down.</para>
@@ -316,9 +316,9 @@ The items in the bottom part of this dialog box allow you do do simple
 <link linkend="sumspecialpaste">arithmetic on an area of cells</link>.
 </para>
 <para><guimenuitem>Paste with Insertion...</guimenuitem> inserts the copied 
-cell(s) into the table by moving the cells that would otherwise be overwritten 
+cell(s) into the sheet by moving the cells that would otherwise be overwritten 
 a suitable number of rows of columns down or to the right. It can also be used 
-to insert complete copied row(s) or column(s) into the table.</para>
+to insert complete copied row(s) or column(s) into the worksheet.</para>
 </sect2>
 
 </sect1>
@@ -336,13 +336,13 @@ including comments and special formatting, use <keycombo action="simul">
 </guimenuitem> option from the <guimenu>Edit</guimenu> menu or from the pop 
 up menu you get when you <mousebutton>right</mousebutton> click on a selection.
 </para>
-<para>To remove selected cell(s), row(s) or column(s) completely 
-from the table, use the <guimenuitem>Remove Cell(s)...</guimenuitem>, 
+<para>To remove selected cell(s), row(s) or column(s) completely , use the 
+<guimenuitem>Remove Cell(s)...</guimenuitem>, 
 <guimenuitem>Delete Row(s)...</guimenuitem> or <guimenuitem>Delete Column(s)...
 </guimenuitem> options from the <mousebutton>right</mousebutton> mouse button 
 pop up menu.</para>
 <para>If you want to insert new, blank, row(s), column(s) or cell(s) into the 
-table, select the area, row(s) or column(s) where you wish the new cell(s) or 
+sheet, select the area, row(s) or column(s) where you wish the new cell(s) or 
 row(s) to be placed and choose the <guimenuitem>Insert Row(s)...</guimenuitem>, 
 <guimenuitem>Insert Column(s)...</guimenuitem> or <guimenuitem>
 Insert Cell(s)...</guimenuitem> option from the <mousebutton>right
@@ -443,7 +443,8 @@ by height.</para>
 column and allows you to sort using the order of items in a custom list such 
 as January, February... instead of alphanumerically.</para>
 <para>&kspread; can also place the results of a sort into a different area of 
-the table, rather than overwriting the original data. To do this enter the 
+the sheet, or even into a different worksheet, rather than overwriting the 
+original data. To do this enter the 
 top left cell reference of the target area into the <guilabel>Starting cell:
 </guilabel> text box in the <guilabel>Options</guilabel> page. The cell 
 formats will also be copied to the new area if you check the <guilabel>
@@ -545,11 +546,13 @@ is <link linkend="configinterface">user configurable</link>.</para>
 brings up &kde;'s common <guilabel>Print</guilabel> dialog box where you can 
 choose, among other options, the printer to be used, the number of copies and 
 whether all or only selected pages are to be printed.</para> 
-<para>&kspread; will print as many sheets as are necessary to include all 
-items in the table. You can quickly see how a table will be spilt into 
-separate pages for printing by checking the <menuchoice><guimenu>View</guimenu>
+<para>&kspread; will print as many pages as are necessary to include all 
+items in the current worksheet. You can quickly see how a worksheet will be 
+spilt into separate pages for printing by checking the <menuchoice><guimenu>
+View</guimenu>
 <guimenuitem>Show Page Borders</guimenuitem></menuchoice> box. The boundaries 
-of each printed page will then be marked by colored lines in the table.</para>
+of each printed page will then be marked by colored lines in the 
+worksheet.</para>
 
 <para>For a more detailed view of what is to be sent to the printer, including 
 anything you have asked to be included in the page headers and footers (see 
@@ -557,7 +560,7 @@ below), choose <menuchoice><guimenu>File</guimenu><guimenuitem>Print
 Preview...</guimenuitem></menuchoice>.</para>
 
 <para>To improve the appearance of the printed output , you can change the 
-fonts, colors, borders and sizes of the cells in the table, see the 
+fonts, colors, borders and sizes of the cells in the sheet, see the 
 <link linkend="formatspread">Spreadsheet Formatting</link> section for more 
 details about how to do this.</para>
 
@@ -664,9 +667,9 @@ Row</guisubmenu><guimenuitem>Equalize Row</guimenuitem></menuchoice> or
 <para>It is often convenient to have one cell that spreads across two or more 
 columns or down more than one row. This can be done by merging two or more 
 cells into one. Select the cells to be merged than choose <menuchoice><guimenu>
-Table</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
+Data</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
 <para>To reverse this process, select the merged cell then choose <guimenuitem>
-Dissociate Cells</guimenuitem> from the <guimenu>Table</guimenu> menu.</para>
+Dissociate Cells</guimenuitem> from the <guimenu>TData</guimenu> menu.</para>
 </sect1>
 
 <sect1 id="hiding">
@@ -926,59 +929,61 @@ the result or <guibutton>Cancel</guibutton> to keep the original value.
 </sect1>
 
 <sect1 id="tables">
-<title>Using more than one Table</title>
+<title>Using more than one Worksheet</title>
 <para>When you start a new, empty, document with &kspread; it will create a 
-number of blank tables (sheets). The number of tables it creates is determined 
+number of blank worksheets. The number of sheets it creates is determined 
 by the <guilabel>Number of pages open at the beginning</guilabel> setting in 
 the <guilabel>Interface</guilabel> page of &kspread;'s 
 <link linkend="configinterface">configuration</link> dialog box.</para>
-<para>To add another table to your workbook, select <guimenuitem>
-Insert Table</guimenuitem> from the <guimenu>Table</guimenu> menu.</para>
+<para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
+</menuchoice> will add another sheet to the workbook.</para>
 <para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
 </guilabel> page of &kspread;'s configuration dialog box is checked a small 
-tab will be shown near the bottom left of &kspread;'s window for each table. 
-<mousebutton>Left</mousebutton> click on one of these tabs to see that table.
+tab will be shown near the bottom left of &kspread;'s window for each sheet. 
+<mousebutton>Left</mousebutton> click on one of these tabs to see that sheet.
 </para>
-<para>You can also switch between tables by using the <keycombo action="simul">
-&Ctrl;<keysym>PageDown</keysym></keycombo> to move to the next table, 
+<para>You can also switch between worksheets by using the 
+<keycombo action="simul">&Ctrl;<keysym>PageDown</keysym></keycombo> 
+to move to the next sheet, 
 <keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
 the previous one.</para>
-<para>Tables are given the default names of <emphasis>Table1</emphasis>, 
-<emphasis>Table2</emphasis> ... you can give a table a different name by 
+<para>Worksheets are given the default names of <emphasis>Sheet1</emphasis>, 
+<emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
 <mousebutton>right</mousebutton> clicking on the tab and selecting 
-<guimenuitem>Rename table...</guimenuitem>.</para>
-<para>To remove a table from the workbook use the <guimenuitem>Remove Table
-</guimenuitem> option in the <guimenu>Table</guimenu> menu or in the little 
+<guimenuitem>Rename Sheet...</guimenuitem>.</para>
+<para>To remove a sheet from the workbook use the <guimenuitem>Remove Sheet
+</guimenuitem> option in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Sheet</guisubmenu></menuchoice> submenu or in the little 
 menu that pops up when you <mousebutton>right</mousebutton> click on the tab 
-for the table you want to remove.</para>
-<para>Other entries in the <guimenu>Table</guimenu> menu allow you to remove a 
-table or hide it in much the same way as rows and columns can be hidden.</para>
-<para>If you want a formula in one table to refer to a cell in another table, 
+for the sheet you want to remove.</para>
+<para>Other entries in this submenu allow you to show or hide a sheet in much 
+the same way as rows and columns can be hidden.</para>
+<para>If you want a formula in one sheet to refer to a cell in another sheet, 
 the cell reference must start with the table name followed by an exclamation 
-mark (<keysym>!</keysym>). For example if you enter <userinput>=Table2!A2
-</userinput> into a cell in Table 1, that cell will take the value from A2 of 
-Table2. Note that table names are case sensitive.
+mark (<keysym>!</keysym>). For example if you enter <userinput>=Sheet2!A2
+</userinput> into a cell in Sheet 1, that cell will take the value from A2 of 
+Sheet2. Note that sheet names are case sensitive.
 </para>
 
 <sect2 id="consolidate">
 <title>Consolidating Data</title>
-<para>You may have constructed a workbook containing several tables (sheets) 
+<para>You may have constructed a workbook containing several worksheets 
 containing similar data but for, say, different months of the year, and wish 
 to have summary sheet containing the consolidated (sum or average) values 
-of the corresponding data items in the other tables.</para>
+of the corresponding data items in the other sheets.</para>
 <para>This task can be made slightly easier by using the <guimenuitem>
 Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
 <para>Selecting this option brings up the <guilabel>Consolidate</guilabel> 
 dialog box.</para>
-<para>For each of the source tables, enter a reference to the wanted data area 
+<para>For each of the source sheets, enter a reference to the wanted data area 
 in the <guilabel>Reference</guilabel> box in the <guilabel>Consolidate
 </guilabel> dialog then press <guibutton>Add</guibutton> which should transfer 
 it to the <guilabel>Entered References</guilabel> box. The reference should 
-include the name of the table containing the source data, such as <userinput>
+include the name of the sheet containing the source data, such as <userinput>
 January!A1:A10</userinput>, and can be entered automatically by selecting the 
 area in the appropriate table.</para>
-<para>When you have entered the references for all of the source data tables 
-select the cell in the target table where you want the top left corner of the 
+<para>When you have entered the references for all of the source data sheets 
+select the cell in the target sheet where you want the top left corner of the 
 consolidated results to appear, choose <guimenuitem>sum</guimenuitem> or 
 <guimenuitem>average</guimenuitem> from the <guilabel>Function</guilabel> 
 selection box then press the <guibutton>OK</guibutton> button.</para>
@@ -991,12 +996,12 @@ be placed into the target cells rather than the formulae to calculate them.
 
 <sect1 id="insertchart">
 <title>Inserting a Chart</title>
-<para>You can insert a chart into a table to give a graphical view of your 
+<para>You can insert a chart into a sheet to give a graphical view of your 
 data.</para>
 <para>First select the area of cells containing the data and choose 
 <menuchoice><guimenu>Insert</guimenu><guimenuitem>Chart</guimenuitem>
 </menuchoice>. The cursor will change to a small cross shape which you 
-should drag across the table while holding the <mousebutton>left
+should drag across the sheet while holding the <mousebutton>left
 </mousebutton> mouse button held down to define the area where you want the 
 chart to appear, there is no need to be too accurate at this stage as the 
 chart size can easily be changed at any time. When you release the mouse 
@@ -1005,7 +1010,7 @@ button a chart wizard dialog box will appear.</para>
 that you need. You may wish to refer to the &kchart; Handbook at this stage, 
 but again if you make a wrong choice you can correct it later. 
 When you press the <guibutton>Finish</guibutton> button the wizard will 
-vanish and you will see the chart embedded into the table.</para>
+vanish and you will see the chart embedded into the worksheet.</para>
 <para>
 <mediaobject>
 <imageobject>
@@ -1128,7 +1133,7 @@ Remove View</guimenuitem></menuchoice></para>
 <sect2 id="namedareas">
 <title>Named Cells and Areas</title>
 <para>You can give a name such as <userinput>foo</userinput> to a cell or to 
-any area of a table by selecting the cell or area then selecting <guimenuitem>
+any area of a sheet by selecting the cell or area then selecting <guimenuitem>
 Area Name...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
 button menu. This will bring up the <guilabel>Area Name</guilabel> dialog box 
 where you can enter any name you wish.</para>
@@ -1137,7 +1142,7 @@ into the small text box at the left end of the Formula toolbar, overwriting the
 cell reference that normally appears here.</para>
 <para>If you enter a name that has already been used into this text box 
 &kspread;'s selection will change to show the named cell(s).</para>
-<para>The <menuchoice><guimenu>Table</guimenu><guimenuitem>Show Area...
+<para>The <menuchoice><guimenu>Data</guimenu><guimenuitem>Show Area...
 </guimenuitem></menuchoice> option will give you a list of existing names 
 and let you change &kspread;'s focus to any of them or let you remove a name.
 </para>
@@ -1369,13 +1374,13 @@ the actual formulae in cells rather than the results.
 </varlistentry>
 <varlistentry>
 <term>Show grid</term>
-<listitem><para>Controls whether or not the table grid lines are shown.
+<listitem><para>Controls whether or not the sheet grid lines are shown.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Print grid</term>
-<listitem><para>Controls whether or not the table grid lines are included 
+<listitem><para>Controls whether or not the sheet grid lines are included 
 when the spreadsheet is printed.
 </para></listitem>
 </varlistentry>
@@ -1433,7 +1438,7 @@ such as numbers, date, time and money are displayed.</para>
 <para><variablelist>
 <varlistentry>
 <term><guilabel>Number of pages open at the beginning:</guilabel></term>
-<listitem><para>Controls how many pages (tables) will be created if the 
+<listitem><para>Controls how many worksheets will be created if the 
 option <guilabel>Start with an empty document</guilabel> is chosen when 
 &kspread; is started.
 </para></listitem>
@@ -1471,7 +1476,7 @@ scrollbar.
 <varlistentry>
 <term><guilabel>Show column header</guilabel></term>
 <listitem><para>Check this box to show the column letters across the top of a 
-table.
+worksheet.
 </para></listitem>
 </varlistentry>
 
@@ -1483,8 +1488,8 @@ table.
 
 <varlistentry>
 <term><guilabel>Show tabs</guilabel></term>
-<listitem><para>This checkbox controls whether the table (page) tabs are shown 
-at the bottom of the table.
+<listitem><para>This checkbox controls whether the sheet tabs are shown 
+at the bottom of the worksheet.
 </para></listitem>
 </varlistentry>
 
@@ -1562,7 +1567,7 @@ marked by a small red triangle at the top right corner.
 <sect1 id="configcolor">
 <title><guilabel>Color</guilabel></title>
 <para>This page of &kspread;'s configuration dialog box lets you choose the 
-color of the table grid. If you do not want the grid to appear at all uncheck 
+color of the sheet grid. If you do not want the grid to appear at all uncheck 
 the <guilabel>Show grid</guilabel> and <guilabel>Print grid</guilabel> boxes 
 in the <link linkend="configpref"><guilabel>Preferences</guilabel></link> 
 configuration page.</para>
@@ -1693,6 +1698,16 @@ from a drop down list of recently used files.</para></listitem>
 <guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Save the document with a new name or format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Template From Document...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create a &kspread; template based on this document.
+</action>
 </para></listitem>
 </varlistentry>
 
@@ -1870,8 +1885,8 @@ Paste</link> for more details.
 <guimenu>Edit</guimenu>
 <guimenuitem>Clear</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Clear text, comment, validity or Conditional cell 
-attributes from selected cell(s).</action>
+<listitem><para><action>Clear text, Comment, Validity or Conditional Cell 
+Attributes from selected cell(s).</action>
 </para></listitem>
 </varlistentry>
 
@@ -1887,7 +1902,7 @@ attributes from selected cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Conditional cell attributes...</guimenuitem>
+<guimenuitem>Conditional Cell Attributes...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify conditional cell attributes.</action>
 </para></listitem>
@@ -1985,7 +2000,7 @@ contains two or more views)
 <guimenu>View</guimenu>
 <guimenuitem>Show Page Borders</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggle marking of printed page borders in the table 
+<listitem><para><action>Toggle marking of printed page borders in the sheet 
 with red lines.
 </action>
 </para></listitem>
@@ -2004,9 +2019,18 @@ with red lines.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Comment</guimenuitem>
+<guimenuitem>Cell Comment</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add, modify or remove cell comment.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Sheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Add another worksheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2059,6 +2083,15 @@ section <link linkend="formulas">Formulae</link> for more details.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>External Data</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>This feature is not yet fully implemented.</action>
+</para></listitem>
+</varlistentry>
+
 </variablelist>
 </para>
 </sect1>
@@ -2087,6 +2120,15 @@ details.
 <guimenuitem>Paper Layout...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Format printed page layout.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Sheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove, hide or show worksheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2289,6 +2331,36 @@ decreasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
+<guimenuitem>Merge Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Merge selected cells.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Dissociate Cells</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Dissociate (split apart) previously merged cells.
+</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
+<guimenuitem>Show Area...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Change &kspread;'s focus to show a previously 
+named area.</action> See the section <link linkend="namedareas">Named Cells 
+and Areas</link> for further details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
 <guimenuitem>Goal Seek</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open the Goal Seek dialog box</action>. See 
@@ -2306,74 +2378,12 @@ decreasing order.</action>
 </para></listitem>
 </varlistentry>
 
-</variablelist></para>
-</sect1>
-
-<sect1 id="tablemenu">
-<title>The Table Menu</title>
-<para><variablelist>
-
 <varlistentry>
 <term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Insert Table</guimenuitem>
+<guimenu>Data</guimenu>
+<guimenuitem>Text to Columns</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert a new table (sheet) into the workbook.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Remove Table</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Remove selected table (sheet) from the the workbook.
-</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Hide Table</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Hide selected table.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Show Table</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show previously hidden table.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Merge Cells</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Merge selected cells.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Dissociate Cells</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Dissociate previously merged cells.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Table</guimenu>
-<guimenuitem>Show Area...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Change &kspread;'s focus to show named area.</action>
+<listitem><para><action>This feature is not yet fully implemented.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2389,7 +2399,7 @@ decreasing order.</action>
 <guimenu>Tools</guimenu>
 <guimenuitem>Spelling...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Check spelling of words in table.</action>
+<listitem><para><action>Check spelling of words in the worksheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2411,7 +2421,7 @@ by &kspread;.</action>
 <guimenu>Tools</guimenu>
 <guimenuitem>Recalculate Sheet</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Recalculate formulae in the current table.</action>
+<listitem><para><action>Recalculate formulae in the current sheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2423,7 +2433,7 @@ by &kspread;.</action>
 <guimenu>Tools</guimenu>
 <guimenuitem>Recalculate Workbook</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Recalculate all tables.</action>
+<listitem><para><action>Recalculate all sheets.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2592,7 +2602,7 @@ Paste</link> for more details.
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Paste with insertion...</guimenuitem>
+<guimenuitem>Paste with Insertion...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Paste from the clipboard to the selected cell(s), moving the 
 previous cell(s) to make room.</action>
@@ -2747,7 +2757,7 @@ start or end of that block of unoccupied cells in the current row or column.
 <term>
 <keycombo action="simul">&Ctrl;<keysym>Page Down</keysym></keycombo>
 </term>
-<listitem><para><action>Move to the next table.</action>
+<listitem><para><action>Move to the next sheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -2755,7 +2765,7 @@ start or end of that block of unoccupied cells in the current row or column.
 <term>
 <keycombo action="simul">&Ctrl;<keysym>Page Up</keysym></keycombo>
 </term>
-<listitem><para><action>Move to the previous table.</action>
+<listitem><para><action>Move to the previous sheet.</action>
 </para></listitem>
 </varlistentry>
 
