@@ -3,23 +3,24 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qtabwidget.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
+#include <qtabwidget.h>
+
 #include <kcolordialog.h>
-#include <knuminput.h>
 #include <klocale.h>
+#include <knuminput.h>
 #include <koMainWindow.h>
 #include <koView.h>
 
 #include "karbon_part.h"
+#include "vcolor.h"
+#include "vcolorslider.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
-#include "vcolorslider.h"
-#include "vcolor.h"
 
 #include "vcolordlg.h"
 
@@ -37,7 +38,7 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 
 	//Reference
 	QGroupBox* groupbox = new QGroupBox(2, Horizontal, i18n("Reference"), mRGBWidget);
-	QLabel *mNewText = new QLabel(i18n("Color:"), groupbox);
+	new QLabel(i18n("Color:"), groupbox);
 	mColorPreview = new KColorPatch(groupbox);
 	mColorPreview->setColor( QColor( "black" ) );
 	mainLayout->addWidget( groupbox, 0, 0);
