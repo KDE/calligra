@@ -46,7 +46,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     setCaption( i18n("Edit personal expression: ") );
 
-    QLabel *lab=new QLabel(i18n( "Expression name:" ), page );
+    QLabel *lab=new QLabel(i18n( "Expression group:" ), page );
     grid->addWidget(lab,0,0);
 
     m_typeExpression=new QComboBox(false,page);
