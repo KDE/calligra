@@ -2,6 +2,7 @@ Changes since 1.2
 =================
 Bugfixes:
 - Fix rendering bugs of cell borders (when scrolled up)
+- Fix crash on printout when printrange was one row or one column only
 
 
 
