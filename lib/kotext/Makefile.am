@@ -22,6 +22,8 @@ libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la $(LIBKSPELL2) -lk
 
 METASOURCES = AUTO
 
+KDE_OPTIONS = nofinal
+
 # include_HEADERS = 
 #	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
 #	kotextdocument.h kobgspellcheck.h koCommentDia.h koCreateStyleDia.h
