@@ -61,6 +61,7 @@ class KSelectColorAction;
 class KFontSizeAction;
 class KFontAction;
 class KColorAction;
+class KWTextFrameSetEdit;
 namespace Qt3 {
 class QTextFormat;
 class QTextParag;
@@ -266,6 +267,9 @@ public slots:
     void slotSpecialChar(QChar , const QString &);
 
 protected:
+
+    KWTextFrameSetEdit *currentTextEdit();
+
     void setupActions();
     void createKWGUI();
 

@@ -1324,15 +1324,16 @@ void KWView::insertPicture()
 /*===============================================================*/
 void KWView::insertPicture(const QString &filename)
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertPicture( filename );
+
 }
 
 /*===============================================================*/
 void KWView::insertSpecialChar()
 {
-    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
         return;
     QString f = edit->textFontFamily();
@@ -1341,16 +1342,18 @@ void KWView::insertSpecialChar()
     connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
     dlg->show();
     delete dlg;
+
 }
 
 /*===============================================================*/
 void KWView::slotSpecialChar(QChar c, const QString &_font)
 {
-   KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
         return;
     edit->setFamily( _font );
     edit->insertSpecialChar(c);
+
 }
 
 /*===============================================================*/
@@ -1454,7 +1457,7 @@ void KWView::insertContents()
 void KWView::formatFont()
 {
     kdDebug(32002) << "KWView::formatFont" << endl;
-    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit() );
+    KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit) // TODO disable action if not text frameset
     {
         KWFontDia *fontDia = new KWFontDia( this, "",edit->textFont(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
@@ -1490,18 +1493,20 @@ void KWView::formatFont()
 /*===============================================================*/
 void KWView::fontDiaOk()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit)
         return;
     const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
     if ( edit )
         edit->setFont(fontDia->getNewFont(),fontDia->getSubScript(),fontDia->getSuperScript());
+
 }
 
 /*===============================================================*/
 void KWView::formatParagraph()
 {
-    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit() );
+
+    KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit) // TODO disable action if not text frameset
     {
         KWParagDia *paragDia = new KWParagDia( this, "", fontList,
@@ -1517,6 +1522,7 @@ void KWView::formatParagraph()
         paragDia->show();
         delete paragDia;
     }
+
 }
 
 /*===============================================================*/
@@ -1987,16 +1993,19 @@ void KWView::tableDelete()
 /*====================== text style selected  ===================*/
 void KWView::textStyleSelected( int index )
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
-    if ( edit )
-        edit->applyStyle( doc->styleAt( index ) );
-    gui->canvasWidget()->setFocus(); // the combo keeps focus...
+    if(gui->canvasWidget()->currentFrameSetEdit())
+    {
+        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+        if ( edit )
+            edit->applyStyle( doc->styleAt( index ) );
+        gui->canvasWidget()->setFocus(); // the combo keeps focus...
+    }
 }
 
 /*======================= text size selected  ===================*/
 void KWView::textSizeSelected( int size )
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setPointSize( size );
     gui->canvasWidget()->setFocus(); // the combo keeps focus...
@@ -2005,7 +2014,7 @@ void KWView::textSizeSelected( int size )
 /*======================= text font selected  ===================*/
 void KWView::textFontSelected( const QString & font )
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setFamily( font );
     gui->canvasWidget()->setFocus(); // the combo keeps focus...
@@ -2014,7 +2023,7 @@ void KWView::textFontSelected( const QString & font )
 /*========================= text bold ===========================*/
 void KWView::textBold()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setBold(actionFormatBold->isChecked());
 }
@@ -2022,15 +2031,16 @@ void KWView::textBold()
 /*========================== text italic ========================*/
 void KWView::textItalic()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setItalic(actionFormatItalic->isChecked());
+
 }
 
 /*======================== text underline =======================*/
 void KWView::textUnderline()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setUnderline(actionFormatUnderline->isChecked());
 }
@@ -2038,7 +2048,7 @@ void KWView::textUnderline()
 /*======================== text strike out =======================*/
 void KWView::textStrikeOut()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setStrikeOut(actionFormatStrikeOut->isChecked());
 }
@@ -2046,7 +2056,7 @@ void KWView::textStrikeOut()
 /*=========================== text color ========================*/
 void KWView::textColor()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
         QColor color = edit->textColor();
@@ -2060,7 +2070,7 @@ void KWView::textColor()
 /*======================= text align left =======================*/
 void KWView::textAlignLeft()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setAlign(Qt::AlignLeft);
 }
@@ -2068,7 +2078,7 @@ void KWView::textAlignLeft()
 /*======================= text align center =====================*/
 void KWView::textAlignCenter()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setAlign(Qt::AlignCenter);
 }
@@ -2076,7 +2086,7 @@ void KWView::textAlignCenter()
 /*======================= text align right ======================*/
 void KWView::textAlignRight()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setAlign(Qt::AlignRight);
 }
@@ -2084,7 +2094,7 @@ void KWView::textAlignRight()
 /*======================= text align block ======================*/
 void KWView::textAlignBlock()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setAlign(Qt3::AlignJustify);
 }
@@ -2102,7 +2112,7 @@ void KWView::textList()
     {
         c.setNumbering( Counter::NUM_NONE );
     }
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     ASSERT(edit);
     if ( edit )
         edit->setCounter( c );
@@ -2111,7 +2121,7 @@ void KWView::textList()
 /*===============================================================*/
 void KWView::textSuperScript()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setTextSuperScript(actionFormatSuper->isChecked());
 }
@@ -2119,7 +2129,7 @@ void KWView::textSuperScript()
 /*===============================================================*/
 void KWView::textSubScript()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setTextSubScript(actionFormatSub->isChecked());
 }
@@ -2127,7 +2137,7 @@ void KWView::textSubScript()
 /*===============================================================*/
 void KWView::textIncreaseIndent()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         {
             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
@@ -2143,7 +2153,7 @@ void KWView::textIncreaseIndent()
 /*===============================================================*/
 void KWView::textDecreaseIndent()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         {
              KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
@@ -2314,7 +2324,7 @@ void KWView::borderSet()
     }
     else
     {
-        KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+        KWTextFrameSetEdit *edit = currentTextEdit();
         if ( edit )
         {
             edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
@@ -2467,7 +2477,7 @@ void KWView::slotUpdateChildGeometry( KWChild */*_child*/ )
 /*================================================================*/
 void KWView::paragDiaOk()
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
     KWUnits unit = KWUnit::unitType( doc->getUnit() );
     const KWParagDia * paragDia = static_cast<const KWParagDia*>(sender());
@@ -2523,7 +2533,7 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
     if(!doc->isReadWrite())
         return;
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit)
         return;
     edit->setTabList( tabList );
@@ -2576,7 +2586,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
 /*================================================================*/
 void KWView::newFirstIndent( double _firstIndent )
 {
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
     KWUnit u;
     double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft].pt();
@@ -2589,7 +2599,7 @@ void KWView::newLeftIndent( double _leftIndent)
 {
     KWUnit u;
     u.setPT( _leftIndent );
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->setMargin( QStyleSheetItem::MarginLeft, u );
 }
@@ -2599,7 +2609,7 @@ void KWView::openPopupMenuEditText( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit() );
+    KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
         ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
     else
@@ -2723,7 +2733,7 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned )
 void KWView::spellCheckerDone( const QString & )
 {
     //gui->canvasWidget()->recalcWholeText();
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
     kspell->cleanUp();
@@ -2746,7 +2756,7 @@ void KWView::spellCheckerFinished( )
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
         //gui->canvasWidget()->recalcWholeText();
     }
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
 }
@@ -2756,6 +2766,15 @@ void KWView::configure( )
 {
     KWConfig *configDia = new KWConfig( this, "");
     configDia->show();
+}
+
+KWTextFrameSetEdit *KWView::currentTextEdit()
+{
+    if(gui->canvasWidget()->currentFrameSetEdit())
+    {
+        return  dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+    }
+    return 0L;
 }
 
 /******************************************************************/
