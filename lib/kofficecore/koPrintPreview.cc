@@ -52,16 +52,18 @@ void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QStrin
         factory = KLibLoader::self()->factory( ptr->library().latin1() );
         if (factory)
         {
-            KDialogBase dialog( parent, "preview", true, i18n("Preview"), KDialogBase::Ok);
-            m_pPartPreview = static_cast<KParts::ReadOnlyPart *>(factory->create(&dialog, ptr->name().latin1(), "KParts::ReadOnlyPart"));
+            KDialogBase *dialog = new KDialogBase( parent, "preview", false, i18n("Preview"), KDialogBase::Ok);
+            m_pPartPreview = static_cast<KParts::ReadOnlyPart *>(factory->create(dialog, ptr->name().latin1(), "KParts::ReadOnlyPart"));
             if ( m_pPartPreview )
             {
                 m_pPartPreview->openURL( tmpFile );
-                dialog.setMainWidget(m_pPartPreview->widget());
-                dialog.setInitialSize(QSize(700,500));
-                dialog.exec();
+                dialog->setMainWidget(m_pPartPreview->widget());
+                dialog->setInitialSize(QSize(700,500));
+                QObject::connect( dialog, SIGNAL( finished() ), dialog, SLOT( slotDelayedDestruct() ) );
+                dialog->show();
 
-                unlink( QFile::encodeName(tmpFile) );
+                // Can't do that anymore with a non-modal dialog
+                // unlink( QFile::encodeName(tmpFile) );
                 return;
             }
         }
