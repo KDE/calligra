@@ -17,119 +17,99 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qprinter.h>
-#include <qdatetm.h>
+#include <qprinter.h> // FIXME: is this needed ? 
+#include <qdatetm.h> // FIXME: what's this ?
 #include <qpainter.h>
 #include <qrect.h>
 
-#include <kapp.h>
-#include <kimgio.h>
+#include <kapp.h> // FIXME: is this needed ?
+#include <kimgio.h> // FIXME: remove this
+#include <kstddirs.h>
 
+/*
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <komlMime.h>
+*/
 
-#include <koStream.h>
-#include <koStoreStream.h>
+#include <koDocument.h>
+#include <koPageLayoutDia.h>
+#include <koQueryTypes.h>
 
 #include "kimage_doc.h"
 #include "kimage_shell.h"
+#include "kimage_factory.h"
 
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
 
-/*****************************************************************************
- *
- * KImageDoc
- *
- *****************************************************************************/
-
-KImageDoc::KImageDoc()
+KImageDocument::KImageDocument( KoDocument* parent, const char* name )
+  : KoDocument( parent, name )
 {
-  ADD_INTERFACE("IDL:KOffice/Print:1.0");
+  // FIXME: move this to main() or init_libkimage()
+  kimgioRegister();
+}
 
+KImageDocument::~KImageDocument()
+{
   m_bEmpty = true;
-  m_bModified = false;
+  //m_bModified = false;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
   m_topBorder = 20.0;
   m_bottomBorder = 20.0;
-  m_paperFormat = PG_DIN_A4;
+  //m_paperFormat = PG_DIN_A4;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();
-  m_orientation = PG_PORTRAIT;
-
-  m_executeCommand = false;
-
-  kimgioRegister();
-
-  m_lstViews.setAutoDelete( false );
+  //m_orientation = PG_PORTRAIT;
 }
 
-bool KImageDoc::initDoc()
+bool KImageDocument::initDoc()
 {
+
   return true;
 }
 
-void KImageDoc::cleanUp()
+View* KImageDocument::createView( QWidget* parent, const char* name )
 {
-  kdebug( KDEBUG_INFO, 0, "CleanUp KImageDoc" );
+  KImageView* view = new KImageView( this, parent, name );
+  addView( view );
 
-  if ( m_bIsClean )
-    return;
-
-  assert( m_lstViews.count() == 0 );
-
-  KoDocument::cleanUp();
+  return view;
 }
 
-KOffice::MainWindow_ptr KImageDoc::createMainWindow()
+Shell* KImageDocument::createShell()
 {
-  KImageShell* shell = new KImageShell;
+  Shell* shell = new KImageShell;
+  shell->setRootPart( this );
   shell->show();
-  shell->setDocument( this );
 
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+  return shell;
 }
 
-void KImageDoc::removeView( KImageView* _view )
+void KImageDocument::paintContent( QPainter& /* _painter */, const QRect& /* _rect */, bool /* _transparent */ )
 {
-  m_lstViews.removeRef( _view );
+  // TODO : paint image here
+  // draw only the rect given in _rect
+  
+  //paintPixmap( &_painter, _rect);
 }
 
-KImageView* KImageDoc::createImageView( QWidget* _parent )
+QCString KImageDocument::mimeType() const
 {
-  KImageView *p = new KImageView( _parent, 0L, this );
-
-  m_lstViews.append( p );
-  return p;
+  return "application/x-kimage";
 }
 
-OpenParts::View_ptr KImageDoc::createView()
+QString KImageDocument::configFile() const
 {
-  return OpenParts::View::_duplicate( createImageView() );
+    return readConfigFile( locate("kim", "kimage.rc", KImageFactory::global()) );
 }
 
-void KImageDoc::viewList( OpenParts::Document::ViewList & _list )
-{
-  _list.clear();
-
-  QListIterator<KImageView> it( m_lstViews );
-  for( ; it.current(); ++it )
-  {
-    _list.append( OpenParts::View::_duplicate( it.current() ) );
-  }
-}
-
-int KImageDoc::viewCount()
-{
-  return m_lstViews.count();
-}
-
-bool KImageDoc::save( ostream& out, const char* /* format */ )
+/*
+bool KImageDocument::save( ostream& out, const char* / * format * / )
 {
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "kimage"
@@ -148,8 +128,10 @@ bool KImageDoc::save( ostream& out, const char* /* format */ )
 
   return true;
 }
+*/
 
-bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
+/*
+bool KImageDocument::completeSaving( KOStore::Store_ptr _store )
 {
   QString u = url();
   u += "/image";
@@ -164,9 +146,10 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
 
   return true;
 }
+*/
 
 /*
-bool KImageDoc::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
+bool KImageDocument::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
@@ -176,7 +159,8 @@ bool KImageDoc::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store
 }
 */
 
-bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
+/*
+bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
@@ -337,8 +321,10 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
   return true;
 }
+*/
 
-bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
+/*
+bool KImageDocument::completeLoading( KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
@@ -358,8 +344,10 @@ bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
 
   return true;
 }
+*/
 
-void KImageDoc::print( QPaintDevice* _dev )
+/*
+void KImageDocument::print( QPaintDevice* _dev )
 {
   QPainter painter;
   painter.begin( _dev );
@@ -415,8 +403,10 @@ void KImageDoc::print( QPaintDevice* _dev )
 
   painter.end();
 }
+*/
 
-void KImageDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+/*
+void KImageDocument::draw( QPaintDevice* _dev, long int _width, long int _height,
 		      float _scale )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
@@ -458,8 +448,10 @@ void KImageDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
 
   painter.end();
 }
+*/
 
-void KImageDoc::paperLayoutDlg()
+/*
+void KImageDocument::paperLayoutDlg()
 {
   KoPageLayout pl;
   pl.format = paperFormat();
@@ -496,7 +488,7 @@ void KImageDoc::paperLayoutDlg()
   emit sigUpdateView();
 }
 
-void KImageDoc::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
+void KImageDocument::setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
 				    const char *_footl, const char *_footm, const char *_footr )
 {
   m_headLeft = _headl;
@@ -509,7 +501,7 @@ void KImageDoc::setHeadFootLine( const char *_headl, const char *_headm, const c
   m_bModified = TRUE;
 }
 
-void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
 				const char * _paper, const char* _orientation )
 {
     KoFormat f = paperFormat();
@@ -555,7 +547,7 @@ void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _righ
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
 
-void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
 				   KoFormat _paper, KoOrientation _orientation )
 {
   m_leftBorder = _leftBorder;
@@ -570,10 +562,10 @@ void KImageDoc::setPaperLayout( float _leftBorder, float _topBorder, float _righ
   m_bModified = TRUE;
 }
 
-QString KImageDoc::completeHeading( const char *_data, 
-				    int /*_page*/, const char */*_table*/ )
+QString KImageDocument::completeHeading( const char *_data, 
+				    int / * _page * /, const char* / * _table * / )
 {
-  /* QString page;
+  / * QString page;
     page.sprintf( "%i", _page );
     QString f = m_strFileURL.data();
     if ( f.isNull() )
@@ -583,17 +575,17 @@ QString KImageDoc::completeHeading( const char *_data,
     {
 	KURL u( f.data() );
 	n = u.filename();
-	} */
+	} * /
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
 
     QString tmp = _data;
     int pos = 0;
-    /* while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-       tmp.replace( pos, 6, f.data() ); */
+    //  while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
+    //  tmp.replace( pos, 6, f.data() );/
     pos = 0;
-    /* while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-       tmp.replace( pos, 6, n.data() ); */
+    //  while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
+    /7  tmp.replace( pos, 6, n.data() );
     pos = 0;
     while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
 	tmp.replace( pos, 6, t.data() );
@@ -609,9 +601,11 @@ QString KImageDoc::completeHeading( const char *_data,
 
     return QString( tmp.data() );
 }
+*/
 
-void KImageDoc::calcPaperSize()
+void KImageDocument::calcPaperSize()
 {
+/*
     switch( m_paperFormat )
     {
     case PG_DIN_A5:
@@ -648,9 +642,11 @@ void KImageDoc::calcPaperSize()
     case PG_CUSTOM:
         return;
     }
+*/
 }
 
-QString KImageDoc::paperFormatString()
+/*
+QString KImageDocument::paperFormatString()
 {
   QString paperFormatStr;
   
@@ -688,7 +684,7 @@ QString KImageDoc::paperFormatString()
   return paperFormatStr;
 }
 
-QString KImageDoc::orientationString()
+QString KImageDocument::orientationString()
 {
   QString orientationStr;
   
@@ -704,7 +700,7 @@ QString KImageDoc::orientationString()
   return orientationStr;
 }
 
-bool KImageDoc::openDocument( const QString & _filename, const char *_format )
+bool KImageDocument::openDocument( const QString & _filename, const char *_format )
 {
   if ( !m_image.load( _filename, _format ) )
     return false;
@@ -722,14 +718,14 @@ bool KImageDoc::openDocument( const QString & _filename, const char *_format )
   return true;
 }
 
-bool KImageDoc::saveDocument( const QString & _filename, const char */*_format*/ )
+bool KImageDocument::saveDocument( const QString & _filename, const char* / * _format * / )
 {
   assert( !isEmpty() );
 
   return m_image.save( _filename, m_strImageFormat );
 }
 
-void KImageDoc::transformImage( const QWMatrix& matrix )
+void KImageDocument::transformImage( const QWMatrix& matrix )
 {
   QPixmap pix, newpix;
 
@@ -743,7 +739,7 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
   kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
 }
 
-void KImageDoc::setModified( bool _c )
+void KImageDocument::setModified( bool _c )
 {
   m_bModified = _c;
   if ( _c )
@@ -752,62 +748,62 @@ void KImageDoc::setModified( bool _c )
   }
 }
 
-bool KImageDoc::isEmpty()
+bool KImageDocument::isEmpty()
 {
   return m_bEmpty;
 }
 
-float KImageDoc::printableWidth()
+float KImageDocument::printableWidth()
 {
   return m_paperWidth - m_leftBorder - m_rightBorder;
 }
 
-float KImageDoc::printableHeight()
+float KImageDocument::printableHeight()
 {
   return m_paperHeight - m_topBorder - m_bottomBorder;
 }
 
-float KImageDoc::paperHeight()
+float KImageDocument::paperHeight()
 {
   return m_paperHeight;
 }
 
-float KImageDoc::paperWidth()
+float KImageDocument::paperWidth()
 {
   return m_paperWidth;
 }
   
-float KImageDoc::leftBorder()
+float KImageDocument::leftBorder()
 {
   return m_leftBorder;
 }
 
-float KImageDoc::rightBorder()
+float KImageDocument::rightBorder()
 {
   return m_rightBorder;
 }
 
-float KImageDoc::topBorder()
+float KImageDocument::topBorder()
 {
   return m_topBorder;
 }
 
-float KImageDoc::bottomBorder()
+float KImageDocument::bottomBorder()
 {
   return m_bottomBorder;
 }
 
-KoOrientation KImageDoc::orientation()
+KoOrientation KImageDocument::orientation()
 {
   return m_orientation;
 }
 
-KoFormat KImageDoc::paperFormat()
+KoFormat KImageDocument::paperFormat()
 {
   return m_paperFormat;
 }
 
-QString KImageDoc::headLeft( int _p, const char* _t )
+QString KImageDocument::headLeft( int _p, const char* _t )
 {
   if( m_headLeft.isNull() )
   {
@@ -816,7 +812,7 @@ QString KImageDoc::headLeft( int _p, const char* _t )
   return completeHeading( m_headLeft.data(), _p, _t );
 }
 
-QString KImageDoc::headRight( int _p, const char* _t )
+QString KImageDocument::headRight( int _p, const char* _t )
 {
   if( m_headRight.isNull() )
   {
@@ -825,7 +821,7 @@ QString KImageDoc::headRight( int _p, const char* _t )
   return completeHeading( m_headRight.data(), _p, _t );
 }
 
-QString KImageDoc::headMid( int _p, const char* _t )
+QString KImageDocument::headMid( int _p, const char* _t )
 {
   if( m_headMid.isNull() )
   {
@@ -834,7 +830,7 @@ QString KImageDoc::headMid( int _p, const char* _t )
   return completeHeading( m_headMid.data(), _p, _t );
 }
 
-QString KImageDoc::footLeft( int _p, const char* _t )
+QString KImageDocument::footLeft( int _p, const char* _t )
 {
   if( m_footLeft.isNull() )
   {
@@ -843,7 +839,7 @@ QString KImageDoc::footLeft( int _p, const char* _t )
   return completeHeading( m_footLeft.data(), _p, _t );
 }
 
-QString KImageDoc::footMid( int _p, const char* _t )
+QString KImageDocument::footMid( int _p, const char* _t )
 {
   if( m_footMid.isNull() )
   {
@@ -852,7 +848,7 @@ QString KImageDoc::footMid( int _p, const char* _t )
   return completeHeading( m_footMid.data(), _p, _t );
 }
 
-QString KImageDoc::footRight( int _p, const char* _t )
+QString KImageDocument::footRight( int _p, const char* _t )
 {
   if( m_footRight.isNull() )
   {
@@ -861,7 +857,7 @@ QString KImageDoc::footRight( int _p, const char* _t )
   return completeHeading( m_footRight.data(), _p, _t );
 }
 
-QString KImageDoc::headLeft()
+QString KImageDocument::headLeft()
 {
   if( m_headLeft.isNull() )
   {
@@ -870,7 +866,7 @@ QString KImageDoc::headLeft()
   return m_headLeft.data();
 }
 
-QString KImageDoc::headMid()
+QString KImageDocument::headMid()
 {
   if( m_headMid.isNull() )
   {
@@ -879,7 +875,7 @@ QString KImageDoc::headMid()
   return m_headMid.data();
 }
 
-QString KImageDoc::headRight()
+QString KImageDocument::headRight()
 {
   if( m_headRight.isNull() )
   {
@@ -888,7 +884,7 @@ QString KImageDoc::headRight()
   return m_headRight.data();
 }
 
-QString KImageDoc::footLeft()
+QString KImageDocument::footLeft()
 {
   if( m_footLeft.isNull() )
   {
@@ -897,7 +893,7 @@ QString KImageDoc::footLeft()
   return m_footLeft.data();
 }
 
-QString KImageDoc::footMid()
+QString KImageDocument::footMid()
 {
   if( m_footMid.isNull() )
   {
@@ -906,7 +902,7 @@ QString KImageDoc::footMid()
   return m_footMid.data();
 }
 
-QString KImageDoc::footRight()
+QString KImageDocument::footRight()
 {
   if( m_footRight.isNull() )
   {
@@ -915,13 +911,14 @@ QString KImageDoc::footRight()
   return m_footRight.data();
 }
 
-const QImage& KImageDoc::image()
+const QImage& KImageDocument::image()
 {
   return m_image;
 }
 
-KImageDoc::~KImageDoc()
+KImageDocument::~KImageDocument()
 {
 }
+*/
 
 #include "kimage_doc.moc"

@@ -24,15 +24,12 @@
 #include <qprndlg.h>
 #include <qwmatrix.h>
 
+#include <kaction.h>
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
-
-#include <opUIUtils.h>
-#include <opMainWindow.h>
-#include <opMainWindowIf.h>
 
 #include <koPartSelectDia.h>
 #include <koAboutDia.h>
@@ -44,39 +41,64 @@
 #include "kimage_doc.h"
 #include "kimage_view.h"
 #include "kimage_shell.h"
+#include "kimage_global.h"
 
-/*****************************************************************************
- *
- * KImageView
- *
- *****************************************************************************/
-
-KImageView::KImageView( QWidget* _parent, const char* _name, KImageDoc* _doc )
-  : QWidget( _parent, _name )
-  , KoViewIf( _doc )
-  , OPViewIf( _doc )
-  , KImage::View_skel()
+KImageView::KImageView( KImageDocument* doc, QWidget* parent, const char* name )
+  : ContainerView( doc, parent, name )
+  , m_pDoc( doc )
 {
-  setWidget( this );
-
-  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
-
-  m_pDoc = _doc;
+  //setWidget( this );
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
+  // edit actions
+
+  m_undo = new KAction( tr( "&Undo" ), KImageBarIcon( "undo" ), 0, this, SLOT( undo() ), actionCollection(), "undo" );
+  m_undo = new KAction( tr( "&Redo" ), KImageBarIcon( "redo" ), 0, this, SLOT( redo() ), actionCollection(), "redo" );
+  m_undo = new KAction( tr( "&Cut" ), KImageBarIcon( "editcut" ), 0, this, SLOT( cut() ), actionCollection(), "cut" );
+  m_undo = new KAction( tr( "&Copy" ), KImageBarIcon( "editcopy" ), 0, this, SLOT( copy() ), actionCollection(), "copy" );
+  m_undo = new KAction( tr( "&Paste" ), KImageBarIcon( "editpaste" ), 0, this, SLOT( paste() ), actionCollection(), "paste" );
+
+  // view actions
+
+  setBackgroundColor( red );
+
   m_drawMode = OriginalSize;
   m_centerMode = 0;
-  m_zoomFactor = QPoint( 100, 100 );
+  m_zoomFactorValue = QPoint( 100, 100 );
   slotUpdateView();
 }
 
+void KImageView::paintEvent( QPaintEvent* event )
+{
+  if( m_pixmap.isNull() )
+    return;
+
+  QPainter painter;
+
+  painter.begin( this );
+
+  // TODO : Scaling
+
+  m_pDoc->paintContent( painter, event->rect(), false );
+  
+  /*
+  if( m_centerMode )
+  {
+    painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
+  }
+  else
+  {
+    painter.drawPixmap( 0, 0, m_pixmap );
+  }
+  */
+  
+  painter.end();
+}
+
+/*
 void KImageView::init()
 {
-  /******************************************************
-   * Menu
-   ******************************************************/
-
   kdebug( KDEBUG_INFO, 0, "Registering menu as %li", id() );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
@@ -84,10 +106,6 @@ void KImageView::init()
     menu_bar_manager->registerClient( id(), this );
   else
     kdebug( KDEBUG_ERROR, 0, "Did not get a menu bar manager" );
-
-  /******************************************************
-   * Toolbar
-   ******************************************************/
 
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
   if ( !CORBA::is_nil( tool_bar_manager ) )
@@ -127,7 +145,7 @@ void KImageView::cleanUp()
   KoViewIf::cleanUp();
 }
 
-KImageDoc* KImageView::doc()
+KImageDocument* KImageView::doc()
 {
   return m_pDoc;
 }
@@ -161,23 +179,58 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   text =  i18n( "Fit image to view" ) ;
-  pix = OPICON( "fittoview.xpm" );
+  pix = OPICON( "fittoview" );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "viewFitToView", true, text, -1 );
 
   text=  i18n( "Fit to view and keep proportions" ) ;
-  pix = OPICON( "fitwithprops.xpm" );
+  pix = OPICON( "fitwithprops" );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "viewFitWithProportions", true, text, -1 );
 
   text=  i18n( "Keep original image size" ) ;
-  pix = OPICON( "originalsize.xpm" );
+  pix = OPICON( "originalsize" );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix, 3, SIGNAL( clicked() ), this, "viewOriginalSize", true, text, -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   text=  i18n( "Edit image" ) ;
-  pix = OPICON( "undo.xpm" );
+  pix = OPICON( "undo" );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
 
+<<<<<<< kimage_view.cc
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  text=  i18n( "Undo" ) ;
+  pix = OPICON( "undo" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "editUndo", true, text, -1 );
+
+  text=  i18n( "Redo" ) ;
+  pix = OPICON( "redo" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "editRedo", true, text, -1 );
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  text=  i18n( "Edit image" ) ;
+  pix = OPICON( "editpaste" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "editEditImage", true, text, -1 );
+
+  text=  i18n( "Select Area" ) ;
+  pix = OPICON( "areaselect" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 8, SIGNAL( clicked() ), this, "selectArea", true, text, -1 );
+
+  text=  i18n( "Airbrush" ) ;
+  pix = OPICON( "airbrush" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 9, SIGNAL( clicked() ), this, "airbrush", true, text, -1 );
+
+  text=  i18n( "Circle" ) ;
+  pix = OPICON( "circle" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 10, SIGNAL( clicked() ), this, "circle", true, text, -1 );
+
+  text=  i18n( "Eraser" ) ;
+  pix = OPICON( "eraser" );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix, 11, SIGNAL( clicked() ), this, "eraser", true, text, -1 );
+
+=======
+>>>>>>> 1.33
   m_vToolBarEdit->enable( OpenPartsUI::Show );
 
   // Folgendes muss mit der zuletzt eingefuegten ToolBar gemacht werden.
@@ -211,6 +264,19 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text =  i18n( "&Edit" ) ;
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
+<<<<<<< kimage_view.cc
+  text =  i18n( "no Undo possible" ) ;
+  pix = OPICON( "undo" );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", 0, -1, -1 );
+
+  text =  i18n( "no Redo possible" ) ;
+  pix = OPICON( "redo" );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, text, this, "editRedo", 0, -1, -1 );
+
+  m_vMenuEdit->insertSeparator( -1 );
+
+=======
+>>>>>>> 1.33
   text =  i18n( "&Import image" ) ;
   m_vMenuEdit->insertItem4( text, this, "editImportImage", CTRL + Key_I, -1, -1 );
 
@@ -236,15 +302,15 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "viewZoomFactor", 0 );
 
   text =  i18n( "Fit to &view" ) ;
-  pix = OPICON( "fittoview.xpm" );
+  pix = OPICON( "fittoview" );
   m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "viewFitToView", CTRL + Key_V, -1, -1 );
 
   text =  i18n( "Fit and keep &proportions" ) ;
-  pix = OPICON( "fitwithprops.xpm" );
+  pix = OPICON( "fitwithprops" );
   m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "viewFitWithProportions", CTRL + Key_P, -1, -1 );
 
   text =  i18n( "&Original size" ) ;
-  pix = OPICON( "originalsize.xpm" );
+  pix = OPICON( "originalsize" );
   m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "viewOriginalSize", CTRL + Key_O, -1, -1 );
 
   m_vMenuView->insertSeparator( -1 );
@@ -330,7 +396,29 @@ void KImageView::newView()
   shell->show();
   shell->setDocument( m_pDoc );
 }
+*/
 
+void KImageView::undo()
+{
+}
+
+void KImageView::redo()
+{
+}
+
+void KImageView::cut()
+{
+}
+
+void KImageView::copy()
+{
+}
+
+void KImageView::paste()
+{
+}
+
+/*
 void KImageView::editImportImage()
 {
   kdebug( KDEBUG_INFO, 0, "import this=%i", (int) this );
@@ -463,9 +551,6 @@ void KImageView::viewCentered()
   slotUpdateView();
 }
 
-/**
- ** Sets the background color of the viewer
- */
 void KImageView::viewBackgroundColor()
 {
   KColorDialog dlg;
@@ -476,9 +561,6 @@ void KImageView::viewBackgroundColor()
   QWidget::update();
 }
 
-/**
- ** Rotates the image clockwise
- */
 void KImageView::transformRotateRight()
 {
   kdebug( KDEBUG_INFO, 0, "Rotate Right" );
@@ -489,9 +571,6 @@ void KImageView::transformRotateRight()
   slotUpdateView();
 }
 
-/**
- ** Rotates the image anti-clockwise
- */
 void KImageView::transformRotateLeft()
 {
   kdebug( KDEBUG_INFO, 0, "Rotate Left" );
@@ -502,9 +581,6 @@ void KImageView::transformRotateLeft()
   slotUpdateView();
 }
 
-/**
- ** Rotates the image with an angle
- */
 void KImageView::transformRotateAngle()
 {
   kdebug( KDEBUG_INFO, 0, "Rotate Angle" );
@@ -523,9 +599,6 @@ void KImageView::transformRotateAngle()
   slotUpdateView();
 }
 
-/**
- ** Flips the image vertical
- */
 void KImageView::transformFlipVertical()
 {
   kdebug( KDEBUG_INFO, 0, "flipVertical" );
@@ -537,9 +610,6 @@ void KImageView::transformFlipVertical()
   slotUpdateView();
 }
 
-/**
- ** Flips the image horizontal
- */
 void KImageView::transformFlipHorizontal()
 {
   kdebug( KDEBUG_INFO, 0, "flipHorizontal" );
@@ -640,12 +710,11 @@ void KImageView::resizeEvent( QResizeEvent* )
 {
   slotUpdateView();
 }
+*/
 
-/**
- **  Gets the image from the document and resizes it if necessary
- */
 void KImageView::slotUpdateView()
 {
+/*
   if( m_pDoc->image().isNull() )
   {
     return;
@@ -674,27 +743,7 @@ void KImageView::slotUpdateView()
   	  break;
   }
   QWidget::update();
-}
-
-void KImageView::paintEvent( QPaintEvent * )
-{
-  if( m_pixmap.isNull() )
-  {
-    return;
-  }
-
-  QPainter painter;
-
-  painter.begin( this );
-  if( m_centerMode )
-  {
-    painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
-  }
-  else
-  {
-    painter.drawPixmap( 0, 0, m_pixmap );
-  }
-  painter.end();
+*/
 }
 
 #include "kimage_view.moc"

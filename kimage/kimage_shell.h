@@ -20,51 +20,28 @@
 #ifndef __kimage_shell_h__
 #define __kimage_shell_h__
 
-#include <qlist.h>
-
 #include <koMainWindow.h>
-
-class KImageDoc;
-class KImageView;
 
 class KImageShell : public KoMainWindow
 {
   Q_OBJECT
 
 public:
-  KImageShell();
+  KImageShell( QWidget* parent = 0, const char* name = 0 );
   ~KImageShell();
-  virtual void cleanUp();
-  void setDocument( KImageDoc* _doc );
-  virtual bool newDocument();
-  virtual bool openDocument( const char *  _filename );
-  virtual bool saveDocument();
-  virtual bool closeDocument();
-  virtual bool closeAllDocuments();
 
-protected slots:
-  void slotFileNew();
-  void slotFileOpen();
-  void slotFileSave();
-  void slotFileSaveAs();
-  void slotFilePrint();
-  void slotFileClose();
-  void slotFileQuit();
+  /**
+   * Change these according to your native mimetype.
+   */
+  QString nativeFormatMimeType() const { return "application/x-kimage"; }
+  QString nativeFormatPattern() const { return "*.kim"; }
+  QString nativeFormatName() const { return "KImage"; }
 
 protected:
-  virtual KOffice::Document_ptr document();
-  virtual KOffice::View_ptr view();
-  virtual bool printDlg();
-  virtual void helpAbout();
-  virtual int documentCount();
-  bool isModified();
-  bool requestClose();
-  void releaseDocument();
 
-  KImageDoc* m_pDoc;
-  KImageView* m_pView;
-
-  static QList<KImageShell>* s_lstShells;
+  virtual QString configFile() const;
+  virtual KoDocument* createDoc();
 };
 
 #endif
+

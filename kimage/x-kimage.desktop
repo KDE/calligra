@@ -1,0 +1,7 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kimage
+Comment=KImage
+DefaultApp=KImage
+Type=MimeType
+Patterns=*.kim;

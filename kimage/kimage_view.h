@@ -23,30 +23,43 @@
 #include <qpixmap.h>
 #include <qwidget.h>
 
-#include <kprocess.h>
+#include <container.h>
 
-#include <opMenu.h>
-#include <opToolBar.h>
-#include <openparts_ui.h>
+class KAction;
+class KToggleAction;
+class QPaintEvent;
 
-#include <koFrame.h>
-#include <koView.h>
+class KImageDocument;
 
-#include "kimage.h"
-
-class KImageDoc;
-
-class KImageView : public QWidget,
-		   virtual public KoViewIf,
-		   virtual public KImage::View_skel
+class KImageView : public ContainerView
 {
   Q_OBJECT
 
 public:
-  KImageView( QWidget* _parent, const char* _name, KImageDoc* _doc );
-  ~KImageView();
-  KImageDoc* doc();
+  KImageView( KImageDocument* doc, QWidget* _parent = 0, const char* _name = 0 );
 
+  virtual void paintEvent( QPaintEvent* );
+
+ public slots:
+//  void slotDocUpdated();
+//  void slotDocUpdated(const QRect&);
+
+ signals:
+  void mousePressed(QMouseEvent *);
+  void mouseMoved(QMouseEvent *);
+  void mouseReleased(QMouseEvent *);
+
+ protected slots:
+
+  // edit action slots
+
+  void undo();
+  void redo();
+  void copy();
+  void cut();
+  void paste();
+
+  /*
   void editEditImage();
   void editImportImage();
   void editExportImage();
@@ -73,9 +86,7 @@ public:
   void transformZoomHalf();
   void transformZoomMax();
   void transformZoomMaxAspect();
-
-  virtual void cleanUp();
-  bool printDlg();
+  */
 
 public slots:
   // Document signals
@@ -84,70 +95,126 @@ public slots:
 protected:
   enum DrawMode { OriginalSize, FitToView, FitWithProps, ZoomFactor };
 
-  virtual void init();
-  virtual bool event( const QCString & _event, const CORBA::Any& _value );
-  virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-  virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
-  virtual void newView();
-  virtual void helpUsing();
+/*
   virtual void resizeEvent( QResizeEvent* _ev );
   virtual void paintEvent( QPaintEvent* _ev );
-  QString tmpFilename();
-  void executeCommand( KProcess& proc );
+  virtual void mousePressEvent ( QMouseEvent * );
+  virtual void mouseReleaseEvent ( QMouseEvent * );
+  virtual void mouseMoveEvent ( QMouseEvent * );
+*/
 
-  // edit toolbar
-  OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  long int m_idButtonEdit_Lines;
-  long int m_idButtonEdit_Areas;
-  long int m_idButtonEdit_Bars;
-  long int m_idButtonEdit_Cakes;
+ private:
 
   // edit menu
-  OpenPartsUI::Menu_var m_vMenuEdit;
-  long int m_idMenuEdit_Undo;
-  long int m_idMenuEdit_Redo;
-  long int m_idMenuEdit_Edit;
-  long int m_idMenuEdit_Import;
-  long int m_idMenuEdit_Export;
-  long int m_idMenuEdit_Page;
-  long int m_idMenuEdit_Preferences;
+  KAction *m_undo, *m_redo, *m_import, *m_export, *m_pageSetup, *m_preferences;
 
   // view menu
-  OpenPartsUI::Menu_var m_vMenuView;
-  long int m_idMenuView_ZoomFactor;
-  long int m_idMenuView_FitToView;
-  long int m_idMenuView_FitWithProps;
-  long int m_idMenuView_Original;
-  long int m_idMenuView_Center;
-  long int m_idMenuView_Info;
-  long int m_idMenuView_BackgroundColor;
+  KAction *m_viewFactor, *m_fitToView, *m_fitWithProps, *m_original, *m_center, *m_info, *_backgroundColor;
 
   // transform menu
-  OpenPartsUI::Menu_var m_vMenuTransform;
-  long int m_idMenuTransform_RotateRight;
-  long int m_idMenuTransform_RotateLeft;
-  long int m_idMenuTransform_RotateAngle;
-  long int m_idMenuTransform_FlipVertical;
-  long int m_idMenuTransform_FlipHorizontal;
-  long int m_idMenuTransform_ZoomFactor;
-  long int m_idMenuTransform_ZoomIn10;
-  long int m_idMenuTransform_ZoomOut10;
-  long int m_idMenuTransform_ZoomDouble;
-  long int m_idMenuTransform_ZoomHalf;
-  long int m_idMenuTransform_ZoomMax;
-  long int m_idMenuTransform_ZoomMaxAspect;
+  KAction *m_rotateRight, *m_rotateLeft, *m_rotateAngle, *m_flipVetical, *m_flipHorizontal;
+  KAction *m_zoomFactor, *m_zoomIn10, *m_zoomOut10, *m_zoomDouble, *m_zoomHalf, *m_zoomMax, *m_zoomMaxAspect;
 
   // help menu
-  OpenPartsUI::Menu_var m_vMenuHelp;
-  long int m_idMenuHelp_About;
-  long int m_idMenuHelp_Using;
+  KAction        *m_helpAbout;
+  KAction        *m_helpUsing;
 
-private:
-  QPoint m_zoomFactor;
-  KImageDoc* m_pDoc;
-  QPixmap m_pixmap;
-  DrawMode m_drawMode;
-  int m_centerMode;
+  QPoint          m_zoomFactorValue;
+  KImageDocument *m_pDoc;
+  QPixmap         m_pixmap;
+  DrawMode        m_drawMode;
+  int             m_centerMode;
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>  
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="zoom_view"/>
+  <Action name="fit_to_view"/>
+  <Action name="fit_with_props"/>
+  <Action name="originalsize"/>
+  <Separator/>  
+  <Action name="centered"/>
+  <Action name="scrollbars"/>
+  <Action name="informations"/>
+  <Action name="background"/>
+ </Menu>
+ <Menu name="Transform"><text>Transform</text>
+  <Action name="rotate_right"/>
+  <Action name="rotate_left"/>
+  <Action name="rotate_angle"/>
+  <Action name="flip_horizontal"/>
+  <Action name="flip_vertital"/>
+  <Separator/>  
+  <Action name="zoom_image"/>
+  <Action name="zoom_in_10"/>
+  <Action name="zoom_out_10"/>
+  <Action name="zoom_double"/>
+  <Action name="zoom_half"/>
+  <Action name="zoom_max"/>
+  <Action name="zoom_maxaspect"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>  
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+ </ToolBar>
+ <ToolBar>
+  <Action name="fit_to_view"/>
+  <Action name="fit_with_props"/>
+  <Action name="originalsize"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>
