@@ -93,6 +93,7 @@ public:
 	{
 		mouseBtnPressedWhenPopupVisible = false;
 		currentEditorWidth = 0;
+		slotLineEditTextChanged_enabled = true;
 	}
 	KPushButton *button;
 	KexiComboBoxPopup *popup;
@@ -100,6 +101,7 @@ public:
 	int currentEditorWidth;
 	QSize totalSize;
 	bool mouseBtnPressedWhenPopupVisible : 1;
+	bool slotLineEditTextChanged_enabled : 1;
 };
 
 //======================================================
@@ -157,7 +159,8 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 			//use 'related table data' model
 //			KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
 //			if (it)
-			stringValue = m_origValue.toString();
+			stringValue = valueForID(m_origValue);
+////			stringValue = m_origValue.toString();
 //				stringValue = it->at(1).toString();
 		}
 		else {
@@ -205,6 +208,27 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 		m_lineedit->setText( add );
 	}
 	m_lineedit->end(false);
+}
+
+QString KexiComboBoxTableEdit::valueForID(const QVariant& val)
+{
+		KexiTableViewData *relData = column()->relatedData();
+		if (!column()->relatedData())
+			return QString::null; //safety
+		//use 'related table data' model
+//-not effective for large sets: please cache it!
+//.stripWhiteSpace() is not generic!
+		const QString txt = val.toString().stripWhiteSpace();
+		KexiTableViewData::Iterator it(relData->iterator());
+		for (;it.current();++it) {
+			if (it.current()->at(0).toString()==txt)
+				break;
+		}
+		if (it.current())
+			return it.current()->at(1).toString().stripWhiteSpace();
+
+		kexiwarn << "KexiComboBoxTableEdit::valueForID(): no related row found, ID will be painted!" << endl;
+		return val.toString(); //for sanity but it's veird to show id to the user
 }
 
 void KexiComboBoxTableEdit::showFocus( const QRect& r )
@@ -342,17 +366,14 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
+
 	KexiTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
 	if (focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {
 		KexiTableViewData *relData = column()->relatedData();
 		if (relData) {
-			//use 'related table data' model
-//			KexiTableItem *it = d->popup->tableView()->selectedItem();
-//			if (it)
-//				stringValue = it->at(1).toString();
-			txt = val.toString();
+			txt = valueForID(val);
 		}
 		else {
 			//use 'enum hints' model
@@ -477,6 +498,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 	//			d->popup->tableView()->selectPrevRow();
 				d->popup->tableView()->setHighlightedRow( 
 					d->popup->tableView()->highlightedRow()-1 );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_Down:
@@ -484,6 +506,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 	//			d->popup->tableView()->selectNextRow();
 				d->popup->tableView()->setHighlightedRow( 
 					d->popup->tableView()->highlightedRow()+1 );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_PageUp:
@@ -491,6 +514,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 	//			d->popup->tableView()->selectPrevPage();
 				d->popup->tableView()->setHighlightedRow( 
 					d->popup->tableView()->highlightedRow()-d->popup->tableView()->rowsPerPage() );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_PageDown:
@@ -498,16 +522,19 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 	//			d->popup->tableView()->selectNextPage();
 				d->popup->tableView()->setHighlightedRow( 
 					d->popup->tableView()->highlightedRow()+d->popup->tableView()->rowsPerPage() );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_Home:
 			if (d->popup && d->popup->isVisible()) {
 				d->popup->tableView()->setHighlightedRow( 0 );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_End:
 			if (d->popup && d->popup->isVisible()) {
 				d->popup->tableView()->setHighlightedRow( d->popup->tableView()->rows()-1 );
+				updateTextForHighlightedRow();
 				return true;
 			}
 		case Key_Enter:
@@ -516,7 +543,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 				//select row that is highlighted
 				if (d->popup->tableView()->highlightedRow()>=0)
 					d->popup->tableView()->selectRow( d->popup->tableView()->highlightedRow() );
-				//do not return: allow to process event
+				//do not return true: allow to process event
 			}
 		default: ;
 		}
@@ -530,9 +557,10 @@ void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 	KexiTableViewData *relData = column()->relatedData();
 	if (relData) {
 		//use 'related table data' model
-		KexiTableItem *it = d->popup->tableView()->selectedItem();
-		if (it)
-			stringValue = it->at(1).toString();
+//		KexiTableItem *it = d->popup->tableView()->selectedItem();
+		KexiTableItem *item = d->popup->tableView()->selectedItem();
+		if (item)
+			stringValue = item->at(1).toString();
 	}
 	else {
 		//use 'enum hints' model
@@ -545,6 +573,8 @@ void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 
 void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &newtext)
 {
+	if (!d->slotLineEditTextChanged_enabled)
+		return;
 	if (newtext.isEmpty()) {
 		if (d->popup) {
 			d->popup->tableView()->clearSelection();
@@ -552,6 +582,22 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &newtext)
 		return;
 	}
 	//todo: select matching row for given prefix
+}
+
+void KexiComboBoxTableEdit::updateTextForHighlightedRow()
+{
+	KexiTableViewData *relData = column()->relatedData();
+	if (relData) {
+		//use 'related table data' model
+		const KexiTableItem *item = d->popup ? d->popup->tableView()->highlightedItem() : 0;
+		if (item) {
+			d->slotLineEditTextChanged_enabled = false; //temp. disable slot
+			m_lineedit->setText( item->at(1).toString() );
+			d->slotLineEditTextChanged_enabled = true;
+			m_lineedit->setCursorPosition(m_lineedit->text().length());
+			m_lineedit->selectAll();
+		}
+	}
 }
 
 int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )

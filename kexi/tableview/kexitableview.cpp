@@ -4225,13 +4225,21 @@ int KexiTableView::highlightedRow() const
 
 void KexiTableView::setHighlightedRow(int row)
 {
-	const int r = QMAX( 0, QMIN(rows()-1, row) );
-	ensureCellVisible(r, -1);
+	if (row!=-1) {
+		row = QMAX( 0, QMIN(rows()-1, row) );
+		ensureCellVisible(row, -1);
+	}
 	updateRow(d->highlightedRow);
-	if (d->highlightedRow == r)
+	if (d->highlightedRow == row)
 		return;
-	d->highlightedRow = r;
-	updateRow(d->highlightedRow);
+	d->highlightedRow = row;
+	if (d->highlightedRow!=-1)
+		updateRow(d->highlightedRow);
+}
+
+KexiTableItem *KexiTableView::highlightedItem() const
+{
+	return m_data->at(d->highlightedRow);
 }
 
 #include "kexitableview.moc"

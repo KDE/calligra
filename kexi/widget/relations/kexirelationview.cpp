@@ -179,7 +179,8 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	connect(c, SIGNAL(moved(KexiRelationViewTableContainer *)), this,
             SLOT(containerMoved(KexiRelationViewTableContainer *)));
 	
-	c->setFocus();
+	if (hasFocus()) //ok?
+		c->setFocus();
 
 	return c;
 }

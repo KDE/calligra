@@ -211,7 +211,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \sa storeDataBlock(). */
 		bool removeDataBlock( const QString& dataID = QString::null);
 
-		void setViewWidget(QWidget* w);
+		void setViewWidget(QWidget* w, bool focusProxy = false);
 
 		/*! Updates actions (e.g. availability). Reimplement it, if needed (you must 
 		 call superclass impelmentation at the end!).

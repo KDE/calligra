@@ -67,8 +67,10 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		virtual QSize sizeHint() const;
 
-	protected:
+	public slots:
+		virtual void setFocus();
 
+	protected:
 		void initTableColumns(); //!< Called just once.
 		void initTableRows(); //!< Called to have all rows empty.
 		void addRow(const QString &tbl, const QString &field);

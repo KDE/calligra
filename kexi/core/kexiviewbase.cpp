@@ -230,7 +230,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 	return false;
 }
 
-void KexiViewBase::setViewWidget(QWidget* w)
+void KexiViewBase::setViewWidget(QWidget* w, bool focusProxy)
 {
 	if (m_viewWidget == w)
 		return;
@@ -240,7 +240,8 @@ void KexiViewBase::setViewWidget(QWidget* w)
 	m_viewWidget = w;
 	if (m_viewWidget) {
 		m_viewWidget->installEventFilter(this);
-		setFocusProxy(m_viewWidget); //js: ok?
+		if (focusProxy)
+			setFocusProxy(m_viewWidget); //js: ok?
 	}
 }
 

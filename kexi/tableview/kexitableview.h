@@ -393,6 +393,9 @@ public:
 	 @see Appearance::rowHighlightingEnabled setHighlightedRow() */
 	int highlightedRow() const;
 
+	KexiTableItem *highlightedItem() const;
+
+
 	/*! @internal Changes bottom margin settings, in pixels. 
 	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
 	void setBottomMarginInternal(int pixels);
@@ -481,6 +484,9 @@ public slots:
 	 Makes sense if row highlighting is enabled.
 	 @see Appearance::rowHighlightingEnabled */
 	void setHighlightedRow(int row);
+
+	/*! Sets no row that will be highlighted. Equivalent to setHighlightedRow(-1). */
+	inline void clearHighlightedRow() { setHighlightedRow(-1); }
 
 	/*! Ensures that cell at \a row and \a col is visible. 
 	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
@@ -765,10 +771,10 @@ inline KexiTableItem *KexiTableView::itemAt(int row) const
 	if (!item)
 		kdDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
 	else {
-		kdDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
+/*		kdDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
 		int i=1;
 		for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
-			kdDebug() << i<<": " << (*it).toString()<< endl;
+			kdDebug() << i<<": " << (*it).toString()<< endl;*/
 	}
 	return item;
 }

@@ -40,6 +40,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 
 		virtual QSize sizeHint() const;
 
+//		virtual void setFocus();
 	public slots:
 		void slotFocus(bool in);
 

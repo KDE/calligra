@@ -148,8 +148,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
 	addChildView(d->relations);
 //	addActionProxyChild(d->relations);
-	setViewWidget(d->relations);
+//	setViewWidget(d->relations, false);
 	addChildView(d->dataTable);
+	setViewWidget(d->dataTable, true);
 //	addActionProxyChild(d->dataTable);
 //	restore();
 	d->relations->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -912,6 +913,11 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 
 	d->buffers->insert(row, buff, newOne);
 	return buff;
+}
+
+void KexiQueryDesignerGuiEditor::setFocus()
+{
+	d->dataTable->setFocus();
 }
 
 #include "kexiquerydesignerguieditor.moc"

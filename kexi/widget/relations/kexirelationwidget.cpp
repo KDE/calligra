@@ -67,7 +67,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_relationView = new KexiRelationView(this, "relation_view");
 	setViewWidget(m_relationView);
 	g->addWidget(m_relationView, 1, 0);
-	m_relationView->setFocus();
+	//m_relationView->setFocus();
 
 	//actions
 	m_tableQueryPopup = new KPopupMenu(this, "m_popup");

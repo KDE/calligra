@@ -22,9 +22,7 @@
 #define _KEXICOMBOBOXTABLEEDIT_H_
 
 #include "kexidb/field.h"
-//#include "kexitableedit.h"
 #include "kexiinputtableedit.h"
-//#include "kexicelleditorfactory.h"
 
 class KPushButton;
 class KLineEdit;
@@ -94,6 +92,10 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual void init(const QString& add, bool removeOld);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
+
+		void updateTextForHighlightedRow();
+		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
+		QString valueForID(const QVariant& val);
 
 		class Private;
 		Private *d;

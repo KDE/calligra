@@ -66,6 +66,7 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWid
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	d->lbl->installEventFilter(this);
+	installEventFilter(this);
 	setCaption(caption);
 }
 
@@ -124,6 +125,14 @@ QSize KexiSectionHeader::sizeHint() const
 	QSize s = d->lyr->view->sizeHint();
 	return QSize(s.width(), d->lbl->sizeHint().height() + s.height());
 }
+
+/*void KexiSectionHeader::setFocus()
+{
+	if (d->lyr->view)
+		d->lyr->view->setFocus();
+	else
+		QWidget::setFocus();
+}*/
 
 //======================
 
