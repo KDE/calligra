@@ -2700,7 +2700,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
     editModeChanged( e );
 
     // if we are in a table and CTRL-Return was pressed
-    if ( ( e->key() == Key_Return || e->key() == Key_Return ) && ( e->state() & ControlButton ) &&
+    if ( ( e->key() == Key_Return || e->key() == Key_Enter ) && ( e->state() & ControlButton ) &&
 	 doc->getFrameSet( fc->getFrameSet() - 1 )->getGroupManager() )
 	if ( !kInsertTableRow() )
 	    STOP;
