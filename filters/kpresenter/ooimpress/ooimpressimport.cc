@@ -318,15 +318,43 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendRounding( doc, e, o );
                 appendShadow( doc, e );
             }
-            else if ( name == "draw:circle" || name == "draw:ellipse" ) // circle or ellipse
+            else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
                 storeObjectStyles( o );
                 e = doc.createElement( "OBJECT" );
-                e.setAttribute( "type", 3 );
                 append2DGeometry( doc, e, o, offset );
                 appendPen( doc, e );
-                appendBrush( doc, e );
                 appendShadow( doc, e );
+
+                if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
+                {
+                    e.setAttribute( "type", 8 );
+                    appendPie( doc, e, o );
+                    QDomElement type = doc.createElement( "PIETYPE" );
+
+                    QString kind = o.attribute( "draw:kind" );
+                    if ( kind == "section" )
+                    {
+                        appendBrush( doc, e );
+                        type.setAttribute( "value", 0 );
+                    }
+                    else if ( kind == "cut" )
+                    {
+                        appendBrush( doc, e );
+                        type.setAttribute( "value", 2 );
+                    }
+                    else if ( kind == "arc" )
+                    {
+                        // arc has no brush
+                        type.setAttribute( "value", 1 );
+                    }
+                    e.appendChild( type );
+                }
+                else  // circle or ellipse
+                {
+                    e.setAttribute( "type", 3 );
+                    appendBrush( doc, e );
+                }
             }
             else if ( name == "draw:line" ) // line
             {
@@ -557,6 +585,22 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             e.appendChild( fillType );
         }
     }
+}
+
+void OoImpressImport::appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object )
+{
+    QDomElement angle = doc.createElement( "PIEANGLE" );
+    int start = (int) ( object.attribute( "draw:start-angle" ).toDouble() );
+    angle.setAttribute( "value",  start * 16 );
+    e.appendChild( angle );
+
+    QDomElement length = doc.createElement( "PIELENGTH" );
+    int end = (int) ( object.attribute( "draw:end-angle" ).toDouble() );
+    if ( end < start )
+        length.setAttribute( "value",  ( 360 - start + end ) * 16 );
+    else
+        length.setAttribute( "value",  ( end - start ) * 16 );
+    e.appendChild( length );
 }
 
 void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )

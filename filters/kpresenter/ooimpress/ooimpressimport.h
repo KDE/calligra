@@ -119,6 +119,7 @@ private:
     void storeObjectStyles( const QDomElement& object );
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
+    void appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object );
     void appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendPen( QDomDocument& doc, QDomElement& e );
