@@ -1469,6 +1469,7 @@ void KPresenterView::createGUI()
 /*=============================================================*/
 void KPresenterView::initGui()
 {
+    tbColor = Qt::black;
     ( (KColorAction*)actionTextColor )->setColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
