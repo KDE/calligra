@@ -136,8 +136,7 @@ public:
 
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
-    void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
-    { _layout = pageLayout; _cl = pageColumns; _hf = pageHeaderFooter; }
+    void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
 
     KWFrameSet *getFrameSet( unsigned int _num )
     { return frames.at( _num ); }
@@ -175,16 +174,16 @@ public:
     KWParag* findFirstParagOfPage( unsigned int _page, unsigned int _frameset );
     KWParag* findFirstParagOfRect( unsigned int _ypos, unsigned int _page, unsigned int _frameset );
 
-    unsigned int getPTTopBorder() { return pageLayout.ptTop; }
-    unsigned int getPTBottomBorder() { return pageLayout.ptBottom; }
-    unsigned int getPTLeftBorder() { return pageLayout.ptLeft; }
-    unsigned int getPTRightBorder() { return pageLayout.ptRight; }
-    unsigned int getPTPaperHeight() { return pageLayout.ptHeight; }
-    unsigned int getPTPaperWidth() { return pageLayout.ptWidth; }
-    unsigned int getPTColumnWidth() { return ptColumnWidth; }
-    unsigned int getPTColumnSpacing() { return pageColumns.ptColumnSpacing; }
-    float getMMPaperHeight() { return pageLayout.mmHeight; }
-    float getINCHPaperHeight() { return pageLayout.inchHeight; }
+    unsigned int getPTTopBorder() { return zoomIt( pageLayout.ptTop ); }
+    unsigned int getPTBottomBorder() { return zoomIt( pageLayout.ptBottom ); }
+    unsigned int getPTLeftBorder() { return zoomIt( pageLayout.ptLeft ); }
+    unsigned int getPTRightBorder() { return zoomIt( pageLayout.ptRight ); }
+    unsigned int getPTPaperHeight() { return zoomIt( pageLayout.ptHeight ); }
+    unsigned int getPTPaperWidth() { return zoomIt( pageLayout.ptWidth ); }
+    unsigned int getPTColumnWidth() { return zoomIt( ptColumnWidth ); }
+    unsigned int getPTColumnSpacing() { return zoomIt( pageColumns.ptColumnSpacing ); }
+    float getMMPaperHeight() { return zoomIt( pageLayout.mmHeight ); }
+    float getINCHPaperHeight() { return zoomIt( pageLayout.inchHeight ); }
 
     unsigned int getColumns() { return pageColumns.columns; }
 
@@ -374,6 +373,13 @@ public:
     void checkNumberOfPages( KWFormatContext *fc );
     bool canRemovePage( int num, KWFrame *f );
 
+    void setZoom( int z ) { zoom = z; }
+    int getZoom() const { return zoom; }
+
+    int zoomIt( int z ) const;
+    unsigned int zoomIt( unsigned int z ) const;
+    double zoomIt( double z ) const;
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -467,6 +473,29 @@ protected:
     KoMainWindow *tmpShell;
     QRect tmpShellSize;
 
+    int zoom;
+    
 };
+
+inline int KWordDocument::zoomIt( int z ) const
+{
+    if ( zoom == 100 )
+	return z;
+    return ( zoom * z ) / 100;
+}
+
+inline unsigned int KWordDocument::zoomIt( unsigned int z ) const
+{
+    if ( zoom == 100 )
+	return z;
+    return ( zoom * z ) / 100;
+}
+
+inline double KWordDocument::zoomIt( double z ) const
+{
+    if ( zoom == 100 )
+	return z;
+    return ( (double)zoom * z ) / 100.0;
+}
 
 #endif

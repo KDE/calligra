@@ -25,6 +25,7 @@ class KWDisplayFont;
 class KWordDocument;
 
 #include "defs.h"
+#include "kword_doc.h"
 
 #include <qfont.h>
 #include <qfontmetrics.h>
@@ -64,10 +65,6 @@ public:
 		   int _weight, bool _italic, bool _underline );
     ~KWDisplayFont();
 
-    void scaleFont();
-
-    static void scaleAllFonts();
-
     KWUserFont* getUserFont() const;
     unsigned int getPTSize() const;
 
@@ -82,6 +79,8 @@ public:
     void setItalic( bool _italic );
     void setUnderline( bool _underline );
 
+    void updateZoom();
+    
 protected:
     QFontMetrics fm;
     unsigned int ptSize;
@@ -89,7 +88,8 @@ protected:
     int asc, desc;
     KWUserFont *userFont;
     KWordDocument *document;
-
+    int lastZoom;
+    
 };
 
 inline void KWDisplayFont::setPTSize( int _size )
@@ -133,23 +133,15 @@ inline void KWDisplayFont::setUnderline( bool _underline )
     desc = fm.descent();
 }
 
-inline void KWDisplayFont::scaleFont()
-{
-    setPointSize( ZOOM( ptSize ) );
-    fm = QFontMetrics( *this );
-    for ( int i = 0; i < 65536; ++i )
-	widths[ i ] = 0;
-    asc = fm.ascent();
-    desc = fm.descent();
-}
-
 inline unsigned int KWDisplayFont::getPTWidth( QString _text ) const
 {
+    ( (KWDisplayFont*)this )->updateZoom();
     return fm.width( _text );
 }
 
 inline unsigned int KWDisplayFont::getPTWidth( const QChar &c ) const
 {
+    ( (KWDisplayFont*)this )->updateZoom();
     int w = widths[ c.unicode() ];
     if ( w == 0 ) {
 	w = fm.width( c );
@@ -158,24 +150,36 @@ inline unsigned int KWDisplayFont::getPTWidth( const QChar &c ) const
     return w;
 }
 
-inline KWUserFont* KWDisplayFont::getUserFont() const 
-{ 
-    return userFont; 
+inline KWUserFont* KWDisplayFont::getUserFont() const
+{
+    return userFont;
 }
 
-inline unsigned int KWDisplayFont::getPTSize() const 
-{ 
-    return ptSize; 
+inline unsigned int KWDisplayFont::getPTSize() const
+{
+    return document->zoomIt( ptSize );
 }
 
-inline unsigned int KWDisplayFont::getPTAscender() const 
-{ 
-    return asc;
+inline unsigned int KWDisplayFont::getPTAscender() const
+{
+    return document->zoomIt( asc );
 }
 
-inline unsigned int KWDisplayFont::getPTDescender() const 
-{ 
-    return desc + 2; 
+inline unsigned int KWDisplayFont::getPTDescender() const
+{
+    return document->zoomIt( desc + 2 );
+}
+
+inline void KWDisplayFont::updateZoom()
+{
+    if ( lastZoom == document->getZoom() )
+	return;
+    QFont f( *this );
+    f.setPointSize( document->zoomIt( pointSize() ) );
+    fm = QFontMetrics( f );
+    for ( int i = 0; i < 65536; ++i )
+	widths[ i ] = 0;
+    lastZoom = document->getZoom();
 }
 
 #endif

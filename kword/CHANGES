@@ -1664,10 +1664,15 @@ reggie, 27.12.1999:
 - Cache the important and often needed values of the font
   metrics in KWDisplayFont (like width, ascent, descent), so
   we don't need a call to the XServer (through QFontMetrcis)
-  to get the same information again and again => biiig speed 
+  to get the same information again and again => biiig speed
   improvement
 
 Reggie, 31.12.1999
 ----------------
 - Disabled dropping for now as it crashed a lot and needs lots of work
   to get it really working
+
+Reggie, 20.4.2000:
+----------------
+- Implemented basic zooming support. TODO: Go through
+  sources and zoom all relevant values (all frames, pictures, etc.)

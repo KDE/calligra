@@ -30,6 +30,7 @@
 #include <qsplitter.h>
 #include <kaction.h>
 #include <qfiledialog.h>
+#include <qregexp.h>
 
 #include "kword_view.h"
 #include "kword_doc.h"
@@ -205,6 +206,8 @@ void KWordView::initGui()
     ( (KColorAction*)actionFrameBackColor )->setColor( Qt::white );
     ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
 
+    ( (KSelectAction*)actionViewZoom )->setCurrentItem( 1 );
+
     showFormulaToolbar( FALSE );
 
     QWidget *tb = 0;
@@ -286,6 +289,21 @@ void KWordView::setupActions()
 					  actionCollection(), "view_endnotes" );
     ( (KToggleAction*)actionViewEndNotes )->setExclusiveGroup( "notes" );
 
+    actionViewZoom = new KSelectAction( i18n( "Zoom" ), 0,
+					actionCollection(), "view_zoom" );
+    connect( ( ( KSelectAction* )actionViewZoom ), SIGNAL( activated( const QString & ) ),	
+	     this, SLOT( viewZoom( const QString & ) ) );
+    QStringList lst;
+    lst << "50%";
+    lst << "100%";
+    lst << "150%";
+    lst << "200%";
+    lst << "250%";
+    lst << "350%";
+    lst << "400%";
+    lst << "450%";
+    lst << "500%";
+    ( (KSelectAction*)actionViewZoom )->setItems( lst );
     // -------------- Insert actions
     actionInsertPicture = new KAction( i18n( "&Picture..." ), KWBarIcon( "picture" ), Key_F2,
 				       this, SLOT( insertPicture() ),
@@ -394,7 +412,7 @@ void KWordView::setupActions()
 					   actionCollection(), "format_style" );
     connect( ( ( KSelectAction* )actionFormatStyle ), SIGNAL( activated( const QString & ) ),	
 	     this, SLOT( textStyleSelected( const QString & ) ) );
-    QStringList lst;
+    lst.clear();
     for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ )
  	lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
     styleList = lst;
@@ -1249,6 +1267,24 @@ void KWordView::viewEndNotes()
     m_pKWordDoc->setNoteType( KWFootNoteManager::EndNotes );
 }
 
+void KWordView::viewZoom( const QString &s )
+{
+    QString z( s );
+    z = z.replace( QRegExp( "%" ), "" );
+    z = z.simplifyWhiteSpace();
+    int zoom = z.toInt();
+    if ( zoom != m_pKWordDoc->getZoom() ) {
+	KoPageLayout pgLayout;
+	KoColumns cl;
+	KoKWHeaderFooter hf;
+	m_pKWordDoc->setZoom( 100 );
+	m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+	m_pKWordDoc->setZoom( zoom );
+	newPageLayout( pgLayout );
+    }
+    gui->getPaperWidget()->setFocus();
+}
+
 /*===============================================================*/
 void KWordView::insertPicture()
 {
@@ -1451,8 +1487,7 @@ void KWordView::formatPage()
     else
 	flags = flags | DISABLE_BORDERS;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) )
-    {
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
 	m_pKWordDoc->setPageLayout( pgLayout, cl, kwhf );
 	gui->getVertRuler()->setPageLayout( pgLayout );
 	gui->getHorzRuler()->setPageLayout( pgLayout );

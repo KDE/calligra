@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -25,7 +25,7 @@
 #include <qfont.h>
 
 /******************************************************************/
-/* Class: KWFormatCollection                                      */
+/* Class: KWFormatCollection					  */
 /******************************************************************/
 
 /*================================================================*/
@@ -48,13 +48,11 @@ KWFormat *KWFormatCollection::getFormat( const KWFormat &_format )
     QString key = generateKey( _format );
 
     KWFormat *format = findFormat( key );
-    if ( format )
-    {
-        format->incRef();
-        return format;
-    }
-    else
-        return insertFormat( key, _format );
+    if ( format ) {	
+	format->incRef();
+	return format;
+    } else
+	return insertFormat( key, _format );
 }
 
 /*================================================================*/
@@ -73,13 +71,13 @@ QString KWFormatCollection::generateKey( const KWFormat &_format )
     // Key: BIU-Fontname-Fontsize-red-gree-blue
     // e.g. B**-Times-12-255-40-32
     key.sprintf( "%c%c%c-%s-%d-%d-%d-%d-%d",
-                 ( _format.getWeight() == QFont::Bold ? 'B' : '*' ),
-                 ( _format.getItalic() == 1 ? 'I' : '*' ),
-                 ( _format.getUnderline() == 1 ? 'U' : '*' ),
-                 _format.getUserFont()->getFontName().data(),
-                 _format.getPTFontSize(), _format.getColor().red(),
-                 _format.getColor().green(), _format.getColor().blue(),
-                 _format.getVertAlign() );
+		 ( _format.getWeight() == QFont::Bold ? 'B' : '*' ),
+		 ( _format.getItalic() == 1 ? 'I' : '*' ),
+		 ( _format.getUnderline() == 1 ? 'U' : '*' ),
+		 _format.getUserFont()->getFontName().data(),
+		 _format.getPTFontSize(), _format.getColor().red(),
+		 _format.getColor().green(), _format.getColor().blue(),
+		 _format.getVertAlign() );
 
     return key;
 }

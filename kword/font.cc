@@ -55,8 +55,9 @@ KWUserFont::~KWUserFont()
 /*================================================================*/
 KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
                               int _weight, bool _italic, bool _underline )
-    : QFont( _font->getFontName(), ZOOM( _size ), _weight, _italic ), fm( *this )
+    : QFont( _font->getFontName(), _size, _weight, _italic ), fm( *this )
 {
+    lastZoom = 100;
     setUnderline( _underline );
 
     document = _doc;
@@ -68,9 +69,6 @@ KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned i
 
     ptSize = _size;
 
-    if ( ZOOM( 100 ) != 100 )
-        scaleFont();
-    
     for ( int i = 0; i < 65536; ++i )
 	widths[ i ] = 0;
     asc = fm.ascent();

@@ -158,7 +158,8 @@ public slots:
     virtual void viewFooter();
     virtual void viewFootNotes();
     virtual void viewEndNotes();
-
+    virtual void viewZoom( const QString &s );
+    
     virtual void insertPicture();
     virtual void insertClipart();
     virtual void insertSpecialChar();
@@ -322,7 +323,8 @@ protected:
     KAction *actionViewFooter;
     KAction *actionViewFootNotes;
     KAction *actionViewEndNotes;
-
+    KAction *actionViewZoom;
+    
     KAction *actionInsertPicture;
     KAction *actionInsertClipart;
     KAction *actionInsertSpecialChar;

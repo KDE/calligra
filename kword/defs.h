@@ -29,11 +29,6 @@
 #define MIME_TYPE "application/x-kword"
 #define KWordRepoID "IDL:KWord/KWordDocument:1.0"
 
-// #define ZOOM( vx ) ( ( vx )*ZoomZ/ZoomN )
-#define ZOOM( vx ) ( vx )
-// #define UNZOOM( px ) ( ( px )*ZoomN/ZoomZ )
-#define UNZOOM( px ) ( px )
-
 #define POINT_TO_MM( px ) ( ( float )px/2.83465 )
 #define MM_TO_POINT( mm ) ( int( ( float )mm*2.83465 ) )
 #define POINT_TO_INCH( px ) ( ( float )px/72.0 )

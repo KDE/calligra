@@ -1344,7 +1344,7 @@ int KWPage::getVertRulerPos()
 {
     int page = fc->getPage() - 1;
 
-    return ( -contentsY() + page * ZOOM( ptPaperHeight() ) );
+    return ( -contentsY() + page * ptPaperHeight() );
 }
 
 /*================================================================*/
@@ -3120,9 +3120,9 @@ int KWPage::isCursorXVisible( KWFormatContext &_fc )
 /*================================================================*/
 void KWPage::calcVisiblePages()
 {
-    firstVisiblePage = 1 + ( unsigned int )floor( ( float )contentsY() / ( float )ZOOM( ptPaperHeight() ) );
+    firstVisiblePage = 1 + ( unsigned int )floor( ( float )contentsY() / ( float )ptPaperHeight() );
     lastVisiblePage = ( unsigned int )ceil( ( float )( contentsY() + height() ) /
-					    ( float )ZOOM( ptPaperHeight() ) ) + 1;
+					    ( float )ptPaperHeight() ) + 1;
 }
 
 /*================================================================*/

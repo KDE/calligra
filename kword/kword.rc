@@ -30,6 +30,8 @@
   <Separator/>
   <Action name="view_footnotes"/>
   <Action name="view_endnotes"/>
+  <Separator/>
+  <Action name="view_zoom"/>
  </Menu>
  <Menu name="Insert"><text>Insert</text>
   <Action name="insert_picture"/>
@@ -94,7 +96,7 @@
   <Action name="extra_options"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit_toolbar" position="right">
+<ToolBar name="edit_toolbar" position="top">
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -104,8 +106,10 @@
   <Separator/>
   <Action name="extra_spellcheck"/>
   <Action name="edit_find"/>
+  <Separator/>
+  <Action name="view_zoom"/>
 </ToolBar>
-<ToolBar name="insert_toolbar" position="right" >
+<ToolBar name="insert_toolbar" position="top" >
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
@@ -123,7 +127,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </ToolBar>
-<ToolBar name="table_toolbar" position="right">
+<ToolBar name="table_toolbar" position="top">
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>

@@ -140,6 +140,7 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
 
     connect( this, SIGNAL( completed() ),
 	     this, SLOT( slotDocumentLoaded() ) );
+    zoom = 100;
 }
 
 /*================================================================*/
@@ -1895,7 +1896,7 @@ KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _
 					       bool _italic, bool _underline )
 {
     if ( cDisplayFont ) {
-	if ( cDisplayFont->getUserFont()->getFontName() == _font->getFontName() && cDisplayFont->getPTSize() == _size &&
+	if ( cDisplayFont->getUserFont()->getFontName() == _font->getFontName() && cDisplayFont->pointSize() == _size &&
 	     cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic &&
 	     cDisplayFont->underline() == _underline )
 	    return cDisplayFont;
@@ -1903,7 +1904,7 @@ KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _
 
     KWDisplayFont* font = 0L;
     for ( font = displayFontList.first(); font != 0L; font = displayFontList.next() ) {
-	if ( font->getUserFont()->getFontName() == _font->getFontName() && font->getPTSize() == _size &&
+	if ( font->getUserFont()->getFontName() == _font->getFontName() && font->pointSize() == _size &&
 	     font->weight() == _weight && font->italic() == _italic && font->underline() == _underline ) {
 	    cDisplayFont = font;
 	    return font;
@@ -2080,7 +2081,11 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	counterfm.apply( lay->getFormat() );
 	if ( _fc.getParag()->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET )
 	    counterfm.setUserFont( findUserFont( _fc.getParag()->getParagLayout()->getBulletFont() ) );
-	_painter.setFont( *( counterfm.loadFont( this ) ) );
+	
+	QFont f( *counterfm.loadFont( this ) );
+	if ( zoom != 100 )
+	    f.setPointSize( zoomIt( f.pointSize() ) );
+	_painter.setFont( f );
 	_painter.setPen( counterfm.getColor() );
 
 	_painter.drawText( _fc.getPTCounterPos() - xOffset, _fc.getPTY() + _fc.getPTMaxAscender() - yOffset,
@@ -2088,7 +2093,10 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     }
 
     // Init font and style
-    _painter.setFont( *_fc.loadFont( this ) );
+    QFont f( *_fc.loadFont( this ) );
+    if ( zoom != 100 )
+	f.setPointSize( zoomIt( f.pointSize() ) );
+    _painter.setFont( f );
     _painter.setPen( _fc.getColor() );
 
     QString buffer;
@@ -2100,7 +2108,10 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	if ( atBegin ) {
 	    // Change the painter
 	    tmpPTPos = _fc.getPTPos();
-	    _painter.setFont( *_fc.loadFont( this ) );
+	    QFont f( *_fc.loadFont( this ) );
+	    if ( zoom != 100 )
+		f.setPointSize( zoomIt( f.pointSize() ) );
+	    _painter.setFont( f );
 	    _painter.setPen( _fc.getColor() );
 	    atBegin = FALSE;
 	}
@@ -2167,7 +2178,10 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 		_fc.apply( *f->getFormat() );
 		// Change the painter
 		if ( _fc.getVertAlign() == KWFormat::VA_NORMAL ) {
-		    _painter.setFont( *_fc.loadFont( this ) );
+		    QFont f( *_fc.loadFont( this ) );
+		    if ( zoom != 100 )
+			f.setPointSize( zoomIt( f.pointSize() ) );
+		    _painter.setFont( f );
 		    plus = 0;
 		} else if ( _fc.getVertAlign() == KWFormat::VA_SUB ) {
 		    QFont _font = *_fc.loadFont( this );
@@ -2208,7 +2222,10 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 		_fc.apply( *f->getFormat() );
 		// Change the painter
 		if ( _fc.getVertAlign() == KWFormat::VA_NORMAL ) {
-		    _painter.setFont( *_fc.loadFont( this ) );
+		    QFont f( *_fc.loadFont( this ) );
+		    if ( zoom != 100 )
+			f.setPointSize( zoomIt( f.pointSize() ) );
+		    _painter.setFont( f );
 		    plus = 0;
 		} else if ( _fc.getVertAlign() == KWFormat::VA_SUB ) {
 		    QFont _font = *_fc.loadFont( this );
@@ -3312,6 +3329,15 @@ KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
 void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			   float /*left_margin*/, float /*top_margin*/ )
 {
+    int tmpZoom = zoom;
+    zoom = 100;
+    KoPageLayout pgLayout;
+    KoColumns cl;
+    KoKWHeaderFooter hf;
+    getPageLayout( pgLayout, cl, hf );
+    if ( tmpZoom != zoom )
+	setPageLayout( pgLayout, cl, hf );
+    
     printer->setFullPage( TRUE );
     QList<KWFormatContext> fcList;
     fcList.setAutoDelete( TRUE );
@@ -3467,6 +3493,11 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		break;
 	    }
 	}
+    }
+
+    if ( tmpZoom != zoom ) {
+	zoom = tmpZoom;
+	setPageLayout( pgLayout, cl, hf );
     }
 }
 
@@ -4028,3 +4059,43 @@ bool KWordDocument::canRemovePage( int num, KWFrame *f )
 	
     return TRUE;
 }
+
+void KWordDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
+{
+    _layout = pageLayout; 
+    _cl = pageColumns; 
+    _hf = pageHeaderFooter;
+    
+    if ( zoom != 100 ) {
+	_layout.ptWidth = zoomIt( _layout.ptWidth );
+	_layout.ptWidth = zoomIt( _layout.ptHeight );
+	_layout.ptWidth = zoomIt( _layout.ptLeft );
+	_layout.ptWidth = zoomIt( _layout.ptRight );
+	_layout.ptWidth = zoomIt( _layout.ptTop );
+	_layout.ptWidth = zoomIt( _layout.ptBottom );
+	_layout.mmWidth = zoomIt( _layout.mmWidth );
+	_layout.mmWidth = zoomIt( _layout.mmHeight );
+	_layout.mmWidth = zoomIt( _layout.mmLeft );
+	_layout.mmWidth = zoomIt( _layout.mmRight );
+	_layout.mmWidth = zoomIt( _layout.mmTop );
+	_layout.mmWidth = zoomIt( _layout.mmBottom );
+	_layout.inchWidth = zoomIt( _layout.inchWidth );
+	_layout.inchWidth = zoomIt( _layout.inchHeight );
+	_layout.inchWidth = zoomIt( _layout.inchLeft );
+	_layout.inchWidth = zoomIt( _layout.inchRight );
+	_layout.inchWidth = zoomIt( _layout.inchTop );
+	_layout.inchWidth = zoomIt( _layout.inchBottom );
+	
+	_cl.ptColumnSpacing = zoomIt( _cl.ptColumnSpacing );
+	_cl.mmColumnSpacing = zoomIt( _cl.mmColumnSpacing );
+	_cl.inchColumnSpacing = zoomIt( _cl.inchColumnSpacing );
+
+	_hf.ptHeaderBodySpacing = zoomIt( _hf.ptHeaderBodySpacing );
+	_hf.ptFooterBodySpacing = zoomIt( _hf.ptFooterBodySpacing );
+	_hf.mmHeaderBodySpacing = zoomIt( _hf.mmHeaderBodySpacing );
+	_hf.mmFooterBodySpacing = zoomIt( _hf.mmFooterBodySpacing );
+	_hf.inchHeaderBodySpacing = zoomIt( _hf.inchHeaderBodySpacing );
+	_hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
+    }
+}
+
