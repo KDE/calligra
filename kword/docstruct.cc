@@ -257,7 +257,7 @@ void KWDocStructRootItem::setupArrangement()
             while ( parag )
             {
                 Counter *tmpCounter=parag->counter();
-                if ( (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
+                if (tmpCounter!=0 && (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
                 {
                     int _depth = tmpCounter->depth();
                     if ( _depth == 0 )
