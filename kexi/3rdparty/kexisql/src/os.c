@@ -858,8 +858,8 @@ int sqliteOsSeek(OsFile *id, off_t offset){
 #endif
 #if OS_WIN
   {
-    LONG upperBits = offset>>32;
-    LONG lowerBits = offset & 0xffffffff;
+    LONG upperBits = (LONG)(offset>>32);
+    LONG lowerBits = (LONG)(offset & 0xffffffff);
     DWORD rc;
     rc = SetFilePointer(id->h, lowerBits, &upperBits, FILE_BEGIN);
     /* TRACE3("SEEK rc=0x%x upper=0x%x\n", rc, upperBits); */
@@ -936,8 +936,8 @@ int sqliteOsTruncate(OsFile *id, off_t nByte){
 #endif
 #if OS_WIN
   {
-    LONG upperBits = nByte>>32;
-    SetFilePointer(id->h, nByte, &upperBits, FILE_BEGIN);
+    LONG upperBits = (LONG)(nByte>>32);
+    SetFilePointer(id->h, (LONG)(nByte), &upperBits, FILE_BEGIN);
     SetEndOfFile(id->h);
   }
   return SQLITE_OK;

@@ -1,0 +1,208 @@
+#############################################################################
+# Makefile for building: sqlite
+#############################################################################
+
+####### Compiler, tools and options
+
+CC		=	cl
+CXX		=	cl
+LEX		= flex
+YACC		= byacc
+#CFLAGS	=	-nologo -Zm200 /FI$(QKW)/include/qkw_global.h -W3 -MDd -Z7 -GX -GR  -DUNICODE -DLIBLTDL_DLL_IMPORT -DQT_DLL -DQT_DLL -DQT_THREAD_SUPPORT
+CFLAGS	=	-nologo -Zm200 -W3 -MDd -Z7 -GX -GR -DTHREADSAFE=1 
+CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE 
+LEXFLAGS	=
+YACCFLAGS	=-d
+INCPATH	=	 -Isrc
+#-I"$(QKW)" -I"$(QKW)\include" -I"$(QKW)\cygwin" -I"$(QTDIR)\include" -I"d:\oo\kw\kdebase\ktip" -I"moc\\" -I"D:\qt312\mkspecs\win32-msvc"
+LINK	=	link
+LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:kexisql.def /DLL
+VERSION=2.8.2
+#/LIBPATH:"$(QTDIR)\lib"
+#LIBS	=	 "qt-mt312.lib" "qtmain.lib" "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" "$(KDEDIR)\lib\kdecore_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdeui_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdefx_d$(KDE_VER).lib" "$(KDEDIR)\lib\kdewin32_d$(KDE_VER).lib" "$(KDEDIR)\lib\ltdl_d$(KDE_VER).lib" "$(QKW)\files\resources\ktip.res"
+LIBS	=	 "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" 
+MOC		=	$(QTDIR)\bin\moc.exe
+UIC		=	$(QTDIR)\bin\uic.exe
+QMAKE		=	qmake
+IDC		=	$(QTDIR)\bin\idc.exe
+IDL		=	midl
+ZIP		=	zip -r -9
+COPY_FILE	=       copy
+COPY_DIR	=       copy
+DEL_FILE	=       del
+DEL_DIR	=       rmdir
+MOVE		=       move
+CHK_DIR_EXISTS =	if not exist
+MKDIR		=	mkdir
+
+####### Files
+
+HEADERS =	
+SOURCES =	\
+src/attach.c \
+src/auth.c \
+src/btree.c \
+src/btree_rb.c \
+src/build.c \
+src/copy.c \
+src/delete.c \
+src/expr.c \
+src/func.c \
+src/hash.c \
+src/insert.c \
+src/main.c \
+src/os.c \
+src/pager.c \
+src/pragma.c \
+src/printf.c \
+src/random.c \
+src/select.c \
+src/table.c \
+src/tokenize.c \
+src/trigger.c \
+src/update.c \
+src/util.c \
+src/vacuum.c \
+src/vdbe.c \
+src/where.c \
+src/opcodes.c \
+src/parse.c
+
+OBJECTS =	\
+obj/attach.obj \
+obj/auth.obj \
+obj/btree.obj \
+obj/btree_rb.obj \
+obj/build.obj \
+obj/copy.obj \
+obj/delete.obj \
+obj/expr.obj \
+obj/func.obj \
+obj/hash.obj \
+obj/insert.obj \
+obj/main.obj \
+obj/os.obj \
+obj/pager.obj \
+obj/pragma.obj \
+obj/printf.obj \
+obj/random.obj \
+obj/select.obj \
+obj/table.obj \
+obj/tokenize.obj \
+obj/trigger.obj \
+obj/update.obj \
+obj/util.obj \
+obj/vacuum.obj \
+obj/vdbe.obj \
+obj/where.obj \
+obj/opcodes.obj \
+obj/parse.obj
+
+FORMS =	
+UICDECLS =	
+UICIMPLS =	
+SRCMOC	=	
+OBJMOC	=	
+DIST	=	
+TARGET	=	$(KDEDIR)/lib/kexisql.dll
+
+####### Implicit rules
+
+.SUFFIXES: .c .cpp .cc .cxx .C
+
+{moc\}.cpp{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.cc{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.cxx{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.C{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cpp{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cc{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cxx{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.C{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{src\}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+####### Build rules
+
+all: $(TARGET)
+
+$(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC) 
+	$(LINK) $(LFLAGS) /OUT:$(TARGET) @<< 
+	  $(OBJECTS) $(OBJMOC) $(LIBS)
+<<
+
+
+mocables: $(SRCMOC)
+uicables: $(UICIMPLS) $(UICDECLS)
+
+Makefile: ktip.pro  D:\qt312\mkspecs\win32-msvc\qmake.conf ..\..\kwcommon.pro \
+		..\common.pro
+	$(QMAKE) -o Makefile ktip.pro
+qmake: 
+	@$(QMAKE) -o Makefile ktip.pro
+
+dist:
+	$(ZIP) ktip.zip $(SOURCES) $(HEADERS) $(DIST) $(FORMS) d:/oo/kw/kdebase/ktip/ktip.pro ..\..\kwcommon.pro ..\common.pro  
+
+uiclean:
+mocclean:
+clean: 
+	-del obj\*.obj
+	-del sqlite.pdb
+
+distclean: clean
+	-del $(TARGET)
+
+####### Compile
+
+obj\ktipwindow.obj: ktipwindow.cpp 
+
+####### Install
+
+install: all 
+
+uninstall: 
+

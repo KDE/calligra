@@ -13,7 +13,11 @@
 **
 ** @(#) $Id$
 */
-#include "config.h"
+#if _WIN32
+# include "config_win32.h"
+#else
+# include "config.h"
+#endif
 #include "sqlite.h"
 #include "hash.h"
 #include "vdbe.h"
