@@ -37,14 +37,24 @@ bool KWEFBaseWorker::doAbortFile(void)
 
 bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList, QString &, QString &)
 {
-    doOpenTextFrameSet(); // PROVISORY
+    if (!doOpenTextFrameSet())
+        return false;
+    if (!doFullAllParagraphs(paraList))
+        return false;
+    if (!doOpenTextFrameSet())
+        return false;
+
+    return true;
+}
+
+bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
+{
     QValueList<ParaData>::ConstIterator it;
     for (it=paraList.begin();it!=paraList.end();it++)
     {
         if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
             return false;
     }
-    doCloseTextFrameSet(); // PROVISORY
     return true;
 }
 
