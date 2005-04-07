@@ -48,6 +48,10 @@ KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit:
 
     m_ui->margins->setTitle( i18n( "Margins (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
 
+    m_ui->leftInput->setRange(  0, 9999, 0.5, false );
+    m_ui->rightInput->setRange(  0, 9999, 0.5, false );
+    m_ui->topInput->setRange(  0, 9999, 0.5, false );
+    m_ui->bottomInput->setRange(  0, 9999, 0.5, false );
     connect( m_ui->leftInput, SIGNAL( valueChanged( double ) ),
              this, SLOT( slotValueChanged( double ) ) );
     connect( m_ui->rightInput, SIGNAL( valueChanged( double ) ),

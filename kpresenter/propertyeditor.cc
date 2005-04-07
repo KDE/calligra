@@ -287,21 +287,22 @@ KCommand * PropertyEditor::getCommand()
                 for ( ; it.current(); ++it )
                 {
                     KoRect oldRect = it.current()->getRect();
-                    if ( ! ( change & GeneralProperty::Left ) )
-                        generalValue.m_rect.moveTopLeft( KoPoint( oldRect.left(), generalValue.m_rect.top() ) );
+                    KoRect newRect = oldRect;
+                    if ( change & GeneralProperty::Left )
+                        newRect.moveTopLeft( KoPoint( generalValue.m_rect.left(), newRect.top() ) );
 
-                    if ( ! ( change & GeneralProperty::Top ) )
-                        generalValue.m_rect.moveTopLeft( KoPoint( generalValue.m_rect.left(), oldRect.top() ) );
+                    if ( change & GeneralProperty::Top )
+                        newRect.moveTopLeft( KoPoint( newRect.left(), generalValue.m_rect.top() ) );
 
-                    if ( ! ( change & GeneralProperty::Width ) )
-                        generalValue.m_rect.setWidth( oldRect.width() );
+                    if ( change & GeneralProperty::Width )
+                        newRect.setWidth( generalValue.m_rect.width() );
 
-                    if ( ! ( change & GeneralProperty::Height ) )
-                        generalValue.m_rect.setHeight( oldRect.height() );
+                    if ( change & GeneralProperty::Height )
+                        newRect.setHeight( generalValue.m_rect.height() );
 
                     KCommand *cmd = new ResizeCmd( i18n( "Change Size" ),
-                                                   generalValue.m_rect.topLeft() - oldRect.topLeft(),
-                                                   generalValue.m_rect.size() - oldRect.size(),
+                                                   newRect.topLeft() - oldRect.topLeft(),
+                                                   newRect.size() - oldRect.size(),
                                                    it.current(), m_doc );
 
                     macro->addCommand( cmd );

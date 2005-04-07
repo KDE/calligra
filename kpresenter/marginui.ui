@@ -142,6 +142,13 @@
 </widget>
 <customwidgets>
 </customwidgets>
+<tabstops>
+    <tabstop>synchronize</tabstop>
+    <tabstop>leftInput</tabstop>
+    <tabstop>topInput</tabstop>
+    <tabstop>rightInput</tabstop>
+    <tabstop>bottomInput</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>knuminput.h</includehint>

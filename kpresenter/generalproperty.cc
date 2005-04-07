@@ -58,9 +58,11 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
     connect( m_ui->protect, SIGNAL( toggled( bool ) ), this, SLOT( slotProtectToggled( bool ) ) );
     connect( m_ui->keepRatio, SIGNAL( toggled( bool ) ), this, SLOT( slotKeepRatioToggled( bool ) ) );
 
-    m_ui->widthInput->setRange( 0, 9999, 1, false );
+    m_ui->xInput->setRange( 0, 9999, 0.5, false );
+    m_ui->yInput->setRange( 0, 9999, 0.5, false );
+    m_ui->widthInput->setRange( 0, 9999, 0.5, false );
     connect( m_ui->widthInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
-    m_ui->heightInput->setRange( 0, 9999, 1, false );
+    m_ui->heightInput->setRange( 0, 9999, 0.5, false );
     connect( m_ui->heightInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
 
     slotReset();
@@ -91,9 +93,10 @@ int GeneralProperty::getGeneralPropertyChange() const
                 flags |= Left;
             if ( m_generalValue.m_rect.top() != rect.top() )
                 flags |= Top;
-            if ( m_generalValue.m_rect.width() != rect.width() )
+            // this has to be done as the rect cahnges width/hight if left or top is changed
+            if ( QABS( m_generalValue.m_rect.width() - rect.width() ) > 1e-6 )
                 flags |= Width;
-            if ( m_generalValue.m_rect.height() != rect.height() )
+            if ( QABS( m_generalValue.m_rect.height() - rect.height() ) > 1e-6 )
                 flags |= Height;
         }
     }
@@ -132,18 +135,8 @@ void GeneralProperty::apply()
     if ( flags & KeepRatio )
         m_generalValue.m_keepRatio = m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF;
 
-    KoRect rect = getRect();
-    if ( flags & Left )
-        m_generalValue.m_rect.setLeft( rect.left() );
-
-    if ( flags & Top )
-        m_generalValue.m_rect.setTop( rect.top() );
-
-    if ( flags & Width )
-        m_generalValue.m_rect.setWidth( rect.width() );
-
-    if ( flags & Height )
-        m_generalValue.m_rect.setHeight( rect.height() );
+    // get the values to the actual rect
+    m_generalValue.m_rect = getRect();
 }
 
 
