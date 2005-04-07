@@ -25,11 +25,13 @@ Item								   Prio Status
   + 41612: No titles for axes					      1	----
      - Fixed by new KDChart version					kdch
      - Enable settings in the config dialog.				done
-     - Read and write the values from the axis parameters		----
+     - Read and write the values from the axis parameters		--
+     - Do it in the wizard as well					--
   + 55606: [modified] tag doesn't work correctly.		      2 DONE
-     - Set modified when data is changed.			      2 done
-     - Set modified when the chart is changed through config.	      2 done
-     - Set modified when the chart is changed through wizard.	      2 done
+     - Set modified when data is changed. 				done
+     - Set modified when the chart is changed through config. 		done
+     - Set modified when the chart is changed through wizard.		done
+     - Set modified when the chart type is changed.			--
   + 90893: never-saved doc failes autosave			      2 DONE
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
@@ -54,11 +56,8 @@ Item								   Prio Status
 
 * Wishes
   + 14971: Data in rows or columns				      1	DONE
-      - Store in document						done
-      - Save / Load							done
-      - Manipulate with GUI						done
-      - Paint chart using it						done
   + 99391: Linear or Logarithmic scale for Y axis		     S2 DONE
+  + 99996: KChart should be able to export charts as bitmap files.   S1 INGE
 
 * Issues with KSpread
   + Handling: The chart changes size when selected and unselected.    2 DONE
@@ -76,14 +75,9 @@ Item								   Prio Status
   + Singular or plural for tooltips, not both.			     S1 DONE
 
   + Grep for FIXME and fix the urgent ones.			      2 DONE
-    - kchart_part.h:106:    //FIXME: To be deprecated:		      2 done
-    - kchartDataEditor.cc:275  // FIXME: Remove			      2 done
-    - kchartDataEditor.cc:304  // FIXME: Remove			      2 done
-    - kchartDataEditor.cc:316  // FIXME: Remove			      2 done
-    - kchartDataEditor.cc:345  // FIXME: Remove			      2 done
   + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
-  + Save position of Actions toolbar in config.			      1 ----
+  + Save position of Actions toolbar in config.			      2 ----
 
 * Newly introduced bugs.
   + Get the colored lines back.					      1 ----
@@ -112,7 +106,7 @@ Item								   Prio Status
 * Config dialog
   + Make Data page work.						DONE
   + Pie settings at the same place as Subtype?			      1 DONE
-  + Type specific settings for each type?			      2 INGE
+  + Type specific settings for each type?			      2 DONE
   + Move type specific settings right after subtype (Pie, etc)	      1 DONE
   + Move Line Marker from Axes page?				      2 DONE
   + Check *all* subpages for uglyness and bugs			     S1 INGE
@@ -146,6 +140,7 @@ Item								   Prio Status
 
 * Wizard
   + New data page?						     S2 ----
+    - First row / column as header?					--
   + "Select Chart Type" page: Reorder like the toolbar			DONE
   + Make Help button work or disable it.			      1 DONE
   + The Back button should be in the same place on all pages.	      3 ----
