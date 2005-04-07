@@ -43,6 +43,7 @@ public:
     void apply();
 public slots:
     void changeXaxisState( bool );
+    void automatic_precision_toggled( bool );
 private:
     KChartParams* _params;
 
@@ -61,6 +62,9 @@ private:
 
     QRadioButton *lin;
     QRadioButton *log;
+
+    QRadioButton *max;
+    QSpinBox *maximum_length;
     //QLineEdit *ylabel_fmt;
     //QLineEdit *ytitle2;
     //QLineEdit *ylabel2_fmt;

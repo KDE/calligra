@@ -30,8 +30,10 @@
 #include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qvbuttongroup.h>
 #include <kfontdialog.h>
 
+#include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
 
 namespace KChart
@@ -77,39 +79,34 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(llabel,6,0);
 #endif
 
-    QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, 
-					  i18n("Settings"), this );
-    gb2->layout()->setSpacing(KDialog::spacingHint());
-    gb2->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,3);
+    QVButtonGroup* gb2 = new QVButtonGroup( i18n("Settings"), this );
 
     // The Y axis title
     QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
-    grid2->addWidget(tmpLabel,2,0);
 
     ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
-    grid2->addWidget(ytitle, 2, 1);
-    //ytitle->setEnabled(false);
 
     // The X axis title
     tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
-    grid2->addWidget(tmpLabel, 3, 0);
 
     xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
-    grid2->addWidget(xtitle, 3, 1);
-    //xtitle->setEnabled(false);
 
     // Linear or logarithmic scale
-    lin = new QRadioButton( i18n("Linear scale"), gb2);
-    grid2->addWidget(lin, 5, 0);
-    log = new QRadioButton( i18n("Logarithmic scale"), gb2);
-    grid2->addWidget(log, 6, 0);
+    QVButtonGroup *scaletype = new QVButtonGroup(i18n("Scale types"), gb2);
+    lin = new QRadioButton( i18n("Linear scale"), scaletype);
+    log = new QRadioButton( i18n("Logarithmic scale"), scaletype);
 
-    // Make the widgets collect in the upper left corner.
-    grid2->setColStretch(2, 1);
-    grid2->setRowStretch(7, 1);
+    // Decimal precision
+    QVButtonGroup *precision = new QVButtonGroup(i18n("Precision for the numerical left axis"), gb2);
+    QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
+    automatic_precision->setChecked(true);
+    max = new QRadioButton( i18n("Decimal precision:"), precision);
+    connect(automatic_precision, SIGNAL(toggled(bool)), this,
+            SLOT(automatic_precision_toggled(bool)) );
+    maximum_length = new QSpinBox(0, 15, 1, precision );
+    maximum_length->setValue(2);
 
 #if 0
     tmpLabel = new QLabel( i18n( "Y-label format:" ), gb2 );
@@ -214,11 +211,20 @@ void KChartParameterConfigPage::init()
 #endif
 
     // Linear / logarithmic Y axis
-    if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisCalcMode()
-	 == KDChartAxisParams::AxisCalcLinear )
+    if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisCalcMode() ==
+                              KDChartAxisParams::AxisCalcLinear )
 	lin->setChecked(true);
     else
 	log->setChecked(true);
+    
+     if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisDigitsBehindComma() ==
+            KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS )
+        maximum_length->setEnabled(false);
+    else
+    {
+        max->setChecked(true);
+        maximum_length->setValue( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisDigitsBehindComma() );
+    }
 }
 
 
@@ -290,8 +296,21 @@ void KChartParameterConfigPage::apply()
 	else
 	    params.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
 
+    if ( maximum_length->isEnabled() )
+        params.setAxisDigitsBehindComma( maximum_length->value() );
+    else
+        params.setAxisDigitsBehindComma(KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS );
+
 	_params->setAxisParams( KDChartAxisParams::AxisPosLeft, params );
     }
+}
+
+void KChartParameterConfigPage::automatic_precision_toggled(bool toggled)
+{
+    if (toggled)
+        maximum_length->setEnabled(false);
+    else
+        maximum_length->setEnabled(true);
 }
 
 }  //KChart namespace

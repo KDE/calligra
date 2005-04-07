@@ -22,6 +22,7 @@
 #include "KChartParamsIface.h"
 #include <dcopobject.h>
 #include "kdchart/KDChartParams.h"
+#include "kdchart/KDChartAxisParams.h"
 
 namespace KChart
 {
@@ -32,6 +33,11 @@ KChartParams::KChartParams()
     m_dcop = 0;
     //dcopObject(); // build it
     setDrawSolidExcessArrows(true);
+    //use 2 as default decimal precision
+    KDChartAxisParams  axis
+        = axisParams( KDChartAxisParams::AxisPosLeft );
+    axis.setAxisDigitsBehindComma( 2 );
+    setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
 }
 
 

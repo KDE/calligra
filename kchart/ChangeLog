@@ -1,9 +1,14 @@
+2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
+	* kchartParameterConfigPage.{h,cc} (KChartParameterConfigPage): Add settings for decimal precision for the left axis.
+    * kchart_params.cc (KChartParams): Set 2 as default decimal precision (bug #103267).
+    * KDChart: If the totalLen property is >0, the text label should be truncated at the position of totalLen.
+    * KDChart: Fixed an error in the documentation: KDCHART_DATA_VALUE_AUTO_DIGITS-> AXIS_LABELS_AUTO_DIGITS.
+
 2005-04-06  Inge Wallin  <inge@lysator.liu.se>
 
-	Enable axis titles again.
-	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
-	disable xtitle and ytitle.
-
+   Enable axis titles again.
+   * kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
+   disable xtitle and ytitle.
 	----------------------------------------------------------------
 
 	Fix line specific settings
