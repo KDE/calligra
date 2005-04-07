@@ -56,6 +56,7 @@ void KexiDataAwarePropertyBuffer::slotDataSet( KexiTableViewData *data )
 {
 	if (!m_currentTVData.isNull()) {
 		m_currentTVData->disconnect( this );
+		clear();
 	}
 	m_currentTVData = data;
 	if (!m_currentTVData.isNull()) {

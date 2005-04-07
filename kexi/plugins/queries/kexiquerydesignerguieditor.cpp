@@ -322,8 +322,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	KexiQueryPart::TempData * temp = tempData();
 	if (temp->query) {
 		temp->clearQuery();
-	} else
+	} else {
 		temp->query = new KexiDB::QuerySchema();
+	}
 
 	//add tables
 	for (TablesDictIterator it(*d->relations->tables()); it.current(); ++it) {
@@ -463,7 +464,6 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 		return cancelled;
 
 	if (mode==Kexi::DesignViewMode) {
-		//todo
 		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
