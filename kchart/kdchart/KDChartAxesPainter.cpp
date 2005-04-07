@@ -3393,7 +3393,7 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
     const bool bUseAutoDigits = KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS == behindComma;
     QString sVal;
     sVal.setNum( nVal, 'f',
-                 bUseAutoDigits ? 24 : behindComma );
+                 bUseAutoDigits ? 6 : behindComma );
     if ( bUseAutoDigits ) {
         int comma = sVal.find( '.' );
         if ( -1 < comma ) {
@@ -3407,7 +3407,7 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
                     sVal.truncate( i - 1 );
             } else {
                 if ( 0 > trueBehindComma ) {
-                    QString sDelta = QString::number( nDelta, 'f', 24 );
+                    QString sDelta = QString::number( nDelta, 'f', 6 );
                     int i = sDelta.length();
                     while ( 1 < i
                             && '0' == sDelta[ i - 1 ] )
