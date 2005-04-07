@@ -3476,6 +3476,8 @@ QString KDChartAxesPainter::applyLabelsFormat( const double nVal,
         sVal.prepend( padFill );
     if( blockAlign )
         sVal.prepend( prefix );
+    if ( totalLen > 0 )
+        sVal.truncate( totalLen );
     return sVal;
 }
 

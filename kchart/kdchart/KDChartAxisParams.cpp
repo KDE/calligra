@@ -1486,7 +1486,7 @@ void KDChartAxisParams::setAxisLabelsColor( QColor axisLabelsColor )
     and 0 (by definition) would result in multiplying by 1.
   \param digitsBehindComma The number of digits to show behind the comma,
     to have this calculated automatically just use the default value
-    KDCHART_DATA_VALUE_AUTO_DIGITS.
+    AXIS_LABELS_AUTO_DIGITS.
   \sa setAxisLabelsFormat, axisLabelsDivPow10, axisLabelsDigitsBehindComma
   */
 void KDChartAxisParams::setAxisLabelsCalc( int divPow10,
