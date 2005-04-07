@@ -178,7 +178,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     l->setFixedHeight( l->sizeHint().height() );
 
     picView = new QComboBox( false, picTab );
-    picView->insertItem( i18n( "Zoomed" ) );
+    picView->insertItem( i18n( "Scaled" ) );
     picView->insertItem( i18n( "Centered" ) );
     picView->insertItem( i18n( "Tiled" ) );
     picView->setCurrentItem( (int)backPicView );
