@@ -34,7 +34,7 @@ KAboutData *newKexiAboutData()
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
 		KEXI_VERSION_STRING, description, KAboutData::License_LGPL_V2,
 		I18N_NOOP(	"(c) 2002-2005, Kexi Team\n"
-					"(c) 2003, 2005, OpenOffice Polska Ltd.\n"),
+					"(c) 2003-2005, OpenOffice Polska Ltd.\n"),
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from the OpenOffice Polska company.\n\n"
@@ -42,15 +42,19 @@ KAboutData *newKexiAboutData()
 		"http://www.koffice.org/kexi",
 		"submit@bugs.kde.org"
 	);
-	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
+	// authors sorted by last contribution date
+	aboutData->addAuthor("Jarosław Staniek / OpenOffice Polska", I18N_NOOP("Project maintainer & developer, design, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
+	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Former project maintainer & developer"), "lucijan@kde.org");
 	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
-	aboutData->addAuthor("Jarosław Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
-	aboutData->addAuthor("Adam Pigg", I18N_NOOP("PostgreSQL database driver"), "adam@piggz.fsnet.co.uk");
-	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Former Developer"),"psn@linux.se");
-	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Original Form Designer, Original user interface & much more"), "jowenn@kde.org");
+	aboutData->addAuthor("Adam Pigg", I18N_NOOP("PostgreSQL database driver, Migration module"), "adam@piggz.fsnet.co.uk");
+	aboutData->addAuthor("Martin Ellis", I18N_NOOP("Contributions for MySQL and KexiDB, fixes, Migration module, MDB support"), "m.a.ellis@ncl.ac.uk");
+	aboutData->addAuthor("Sebastian Sauer", I18N_NOOP("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
+	aboutData->addAuthor("Christian Nitschkowski", I18N_NOOP("Graphics effects, helper dialogs"), "segfault_ii@web.de");
+	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Former developer"),"psn@linux.se");
+	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Original Form Designer, original user interface & much more"), "jowenn@kde.org");
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
 	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Original code cleanings"), "montel@kde.org");
-	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
+	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, original Table Widget"), "till@bux.at");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and user interface research"), "kristof.borrey@skynet.be");
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffee sponsoring"), "tkrass05@hak1.at");
