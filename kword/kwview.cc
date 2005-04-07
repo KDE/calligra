@@ -1630,13 +1630,18 @@ int KWView::checkClipboard( QMimeSource *data )
 #endif
     if ( QImageDrag::canDecode( data ) )
         provides |= ProvidesImage;
-    if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
+    else if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
         provides |= ProvidesFormula;
-    if ( formats.findIndex( "text/plain" ) != -1 )
+    else if ( formats.findIndex( "text/plain" ) != -1 )
         provides |= ProvidesPlainText;
-    QCString returnedTypeMime;
-    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
-        provides |= ProvidesOasis;
+    else
+    {
+        QCString returnedTypeMime;
+        if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
+        {
+            provides |= ProvidesOasis;
+        }
+    }
     //kdDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
     return provides;
 }
