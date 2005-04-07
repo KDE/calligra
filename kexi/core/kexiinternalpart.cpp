@@ -38,7 +38,7 @@ class KexiInternalPartManager
 {
 	public:
 		KexiInternalPartManager()
-		 : m_parts(17, false)
+		 : m_parts(101, false)
 		{
 			m_parts.setAutoDelete(false);
 		}
@@ -110,7 +110,7 @@ KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(KexiMainWindow* mainWin
 
 //	dlg->show();
 	
-	if (m_uniqueWidget)
+	if (m_uniqueDialog)
 		m_uniqueWidget = dlg; //recall unique!
 	dlg->addView(view);
 	dlg->setCaption( view->caption() );
@@ -149,8 +149,11 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 	else
 		w = part->createWidget(dialogClass, mainWin, mainWin, objName ? objName : partName);
 
-	if (dynamic_cast<QDialog*>(w))
+	if (dynamic_cast<QDialog*>(w)) {
+		if (part->uniqueDialog())
+			part->m_uniqueWidget = w;
 		return dynamic_cast<QDialog*>(w);
+	}
 	//sanity
 	if (! (part->uniqueDialog() && !part->m_uniqueWidget.isNull()))
 		delete w;
