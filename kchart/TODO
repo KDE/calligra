@@ -26,7 +26,7 @@ Item								   Prio Status
      - Fixed by new KDChart version					kdch
      - Enable settings in the config dialog.				done
      - Read and write the values from the axis parameters		--
-     - Do it in the wizard as well					--
+     - Do it in the wizard as well					done
   + 55606: [modified] tag doesn't work correctly.		      2 DONE
      - Set modified when data is changed. 				done
      - Set modified when the chart is changed through config. 		done

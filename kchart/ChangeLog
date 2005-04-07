@@ -1,3 +1,8 @@
+2005-04-07  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	* kchartWizardLabelsLegendPage.cc (KChartWizardLabelsLegendPage):
+	Reenable titles for X and Y axis.
+
 2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
 
 	* kchart_part.cc (KChartPart): The decimal symbol and thousends

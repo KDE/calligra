@@ -58,34 +58,34 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
 
     QLabel* xlabelLA = new QLabel( i18n( "X-title:" ), tmpQGroupBox );
-    xlabelLA->setEnabled(false); //Not supported by kdChart yet
+    //xlabelLA->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xlabelLA,1,0);
 
     _xlabelED = new QLineEdit( tmpQGroupBox );
-    _xlabelED->setEnabled(false); //Not supported by kdChart yet
+    //_xlabelED->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   _xlabelED->setText(_chart->params()->xtitle);
     grid2->addWidget(_xlabelED,1,1);
 
     xtitlefont = new QPushButton( tmpQGroupBox );
     xtitlefont->setText(i18n("Font"));
-    xtitlefont->setEnabled(false); //Not supported by kdChart yet
+    //xtitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xtitlefont,1,2);
 
     xtitlecolor=new KColorButton(tmpQGroupBox);
     // PENDING(kalle) Put back in
     //  x_color=_chart->params()->XTitleColor;
     xtitlecolor->setColor( x_color );
-    xtitlecolor->setEnabled(false); //Not supported by kdChart yet
+    //xtitlecolor->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xtitlecolor,1,3);
 
 
     QLabel* ylabelLA = new QLabel( i18n( "Y-title:" ), tmpQGroupBox );
-    ylabelLA->setEnabled(false); //Not supported by kdChart yet
+    //ylabelLA->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ylabelLA,2,0);
 
     _ylabelED = new QLineEdit( tmpQGroupBox );
-    _ylabelED->setEnabled(false); //Not supported by kdChart yet
+    //_ylabelED->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   _ylabelED->setText(_chart->params()->ytitle);
     grid2->addWidget(_ylabelED,2,1);
@@ -93,11 +93,11 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     ytitlefont = new QPushButton( tmpQGroupBox);
     ytitlefont->setText(i18n("Font"));
-    ytitlefont->setEnabled(false); //Not supported by kdChart yet
+    //ytitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ytitlefont,2,2);
 
     ytitlecolor=new KColorButton(tmpQGroupBox);
-    ytitlecolor->setEnabled(false); //Not supported by kdChart yet
+    //ytitlecolor->setEnabled(false); //Not supported by kdChart yet
     // PENDING(kalle) Put back in
     //   y_color=_chart->params()->YTitleColor;
     ytitlecolor->setColor( y_color );
