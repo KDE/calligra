@@ -165,6 +165,12 @@ void KChartPart::initNullChart()
     // Fill column and row labels.
     m_colLabels << QString("");
     m_rowLabels << QString("");
+
+    // set default decimal symbol and thousends separator
+    KDChartAxisParams  axis
+        = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
+    m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
 }
 
 
@@ -752,6 +758,11 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	    m_colLabels = legendLabels;
 	    m_rowLabels = params.axisLabelStringList();
 	}
+    // set default decimal symbol and thousends separator
+    KDChartAxisParams  axis
+        = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
+    m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
     }
 
     return result;

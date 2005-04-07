@@ -1,3 +1,8 @@
+2005-04-08  Fredrik Edemar  <f_edemar@linux.se>
+    * kchart_part.cc (KChartPart): The decimal symbol and thousends separator is the same as the rest of KDE.
+    * kchart_params.cc (KChartParams): Revert my last change: use KDChart's default precision instead.
+    * KDChart (KDChartAxesPainter.cpp): The axis label: Use at most 6 digits after the decimal point.
+
 2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
 	* kchartParameterConfigPage.{h,cc} (KChartParameterConfigPage): Add settings for decimal precision for the left axis.
     * kchart_params.cc (KChartParams): Set 2 as default decimal precision (bug #103267).
