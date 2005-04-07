@@ -1,19 +1,30 @@
-2005-04-08  Fredrik Edemar  <f_edemar@linux.se>
-    * kchart_part.cc (KChartPart): The decimal symbol and thousends separator is the same as the rest of KDE.
-    * kchart_params.cc (KChartParams): Revert my last change: use KDChart's default precision instead.
-    * KDChart (KDChartAxesPainter.cpp): The axis label: Use at most 6 digits after the decimal point.
-
 2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
-	* kchartParameterConfigPage.{h,cc} (KChartParameterConfigPage): Add settings for decimal precision for the left axis.
-    * kchart_params.cc (KChartParams): Set 2 as default decimal precision (bug #103267).
-    * KDChart: If the totalLen property is >0, the text label should be truncated at the position of totalLen.
-    * KDChart: Fixed an error in the documentation: KDCHART_DATA_VALUE_AUTO_DIGITS-> AXIS_LABELS_AUTO_DIGITS.
+
+	* kchart_part.cc (KChartPart): The decimal symbol and thousends
+	separator is the same as the rest of KDE.
+	* kchart_params.cc (KChartParams): Revert my last change: use
+	KDChart's default precision instead.
+	* KDChart (KDChartAxesPainter.cpp): The axis label: Use at most 6
+	digits after the decimal point.
+
+	----------------------------------------------------------------
+
+	Fix bug 103267: Unreasonable precison in axis values 
+	* kchartParameterConfigPage.{h,cc} (KChartParameterConfigPage):
+	Add settings for decimal precision for the left axis.
+	* kchart_params.cc (KChartParams): Set 2 as default decimal
+	precision.
+	* KDChart: If the totalLen property is >0, the text label should
+	be truncated at the position of totalLen.
+	* KDChart: Fixed an error in the documentation:
+	KDCHART_DATA_VALUE_AUTO_DIGITS-> AXIS_LABELS_AUTO_DIGITS.
 
 2005-04-06  Inge Wallin  <inge@lysator.liu.se>
 
-   Enable axis titles again.
-   * kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
-   disable xtitle and ytitle.
+	Enable axis titles again.
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
+	disable xtitle and ytitle.
+	
 	----------------------------------------------------------------
 
 	Fix line specific settings
