@@ -1,5 +1,11 @@
 === KOffice 1.4 ===
-  - New dialog to let the user control HTML output (Bram Schoenmakers <bramschoenmakers@kde.nl>
-  - Linkage of custom stylesheets.
-  - Make borders optional.
-  - Let the user choose between UTF8 or his locale charset.
+- New configuration dialog to tweak HTML export
+- Make borders optional
+- Ability to select which sheets to be exported.
+- Ability to write each table to a new page.
+- A Table Of Contents is generated on top of each page.
+- Choose the number of pixels between cells.
+- Don't add one column and row too much.
+- Don't export empty sheets.
+- Let the user choose encoding.
+- Linkage of external stylesheets.

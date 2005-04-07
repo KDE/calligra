@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Eva Brucherseifer <eva@kde.org>
+   Copyright (C) 2005 Bram Schoenmakers <bramschoenmakers@kde.nl>
    based on kspread csv export filter by David Faure
 
    This library is free software; you can redistribute it and/or
@@ -24,16 +25,52 @@
 #include <koFilter.h>
 
 class ExportDialog;
+class KoDocument;
+class KSpreadSheet;
 
 class HTMLExport : public KoFilter {
-
     Q_OBJECT
-
 public:
     HTMLExport(KoFilter *parent, const char*name, const QStringList&);
-    virtual ~HTMLExport() {}
+    virtual ~HTMLExport();
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+  private:
+    /** Writes the top of the page in HTML to @par str */
+    void openPage( KSpreadSheet *sheet,KoDocument *document, QString &str);
+
+    /** Closes a page in HTML */
+    void closePage( QString &);
+
+    /**
+      Converts @par sheet to HTML and writes to @par str.
+     */
+    void convertSheet( KSpreadSheet *sheet, QString &str, int, int);
+
+    /** Writes a bar and a link to the top to @par str. */
+    void createSheetSeparator( QString & );
+
+    /** Writes the table of contents */
+    void writeTOC( const QStringList &, const QString &, QString & );
+
+    /**
+      Returns a filename based on the @par base filename and the options
+      defined in the dialog.
+    */
+    QString fileName(  const QString &base, const QString &, bool );
+
+    /**
+      Detects which rows and columsn of the given @par sheet are used and
+      writes the number of them to @par row and @par column.
+     */
+    void detectFilledCells( KSpreadSheet *sheet, int &rows, int &colums );
+  private:
+    ExportDialog *m_dialog;
+
+    typedef QMap<QString,int> Rows;
+    Rows m_rowmap;
+    typedef QMap<QString,int> Columns;
+    Columns m_columnmap;
 };
 #endif
 

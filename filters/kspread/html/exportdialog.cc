@@ -19,7 +19,9 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qlistbox.h>
 #include <qradiobutton.h>
+#include <qspinbox.h>
 #include <qtextcodec.h>
 
 #include <kapplication.h>
@@ -37,6 +39,9 @@ ExportDialog::ExportDialog( QWidget *parent, const char *name )
 
   connect( m_mainwidget->mCustomButton, SIGNAL( toggled( bool ) ),
            m_mainwidget->mCustomURL, SLOT( setEnabled( bool ) ) );
+  connect( m_mainwidget->mSelectAllButton, SIGNAL( clicked() ), SLOT( selectAll() ) );
+  connect( m_mainwidget->mDeselectAllButton, SIGNAL( clicked() ),
+           m_mainwidget->mSheets, SLOT( clearSelection() ) );
 
   m_mainwidget->mEncodingBox->insertItem( i18n( "Recommended: UTF-8" ) );
   m_mainwidget->mEncodingBox->insertItem( i18n( "Locale (%1)" ).arg( KGlobal::locale()->codecForEncoding()->name() ) );
@@ -44,6 +49,11 @@ ExportDialog::ExportDialog( QWidget *parent, const char *name )
   m_mainwidget->mCustomURL->setMode( KFile::ExistingOnly );
 
   setMainWidget( m_mainwidget );
+}
+
+void ExportDialog::selectAll()
+{
+  m_mainwidget->mSheets->selectAll( true );
 }
 
 ExportDialog::~ExportDialog()
@@ -64,6 +74,11 @@ bool ExportDialog::useBorders() const
   return m_mainwidget->mUseBorders->isChecked();
 }
 
+bool ExportDialog::separateFiles() const
+{
+  return m_mainwidget->mSeparateFiles->isChecked();
+}
+
 QString ExportDialog::customStyleURL() const
 {
   QString url = m_mainwidget->mCustomURL->url();
@@ -71,6 +86,28 @@ QString ExportDialog::customStyleURL() const
     return url;
 
   return QString::null;
+}
+
+void ExportDialog::setSheets( const QStringList &list )
+{
+  m_mainwidget->mSheets->insertStringList( list );
+  selectAll();
+}
+
+QStringList ExportDialog::sheets() const
+{
+  QStringList list;
+  for( uint i = 0; i < m_mainwidget->mSheets->count() ; i++ )
+  {
+    if( m_mainwidget->mSheets->isSelected( i ) )
+      list.append( m_mainwidget->mSheets->text( i ) );
+  }
+  return list;
+}
+
+int ExportDialog::pixelsBetweenCells() const
+{
+  return m_mainwidget->mPixelsBetweenCells->value();
 }
 
 #include <exportdialog.moc>

@@ -31,6 +31,9 @@ class ExportDialog : public KDialogBase
     ExportDialog( QWidget *parent = 0, const char *name = 0 );
     ~ExportDialog();
 
+    void setSheets( const QStringList & );
+    QStringList sheets() const;
+
     /**
       Returns preferred encoding. Defaults to UTF-8.
      */
@@ -47,6 +50,12 @@ class ExportDialog : public KDialogBase
       should be hidden.
      */
     bool useBorders() const;
+
+    bool separateFiles() const;
+
+    int pixelsBetweenCells() const;
+  protected slots:
+    void selectAll();
   private:
     ExportWidget *m_mainwidget;
 };
