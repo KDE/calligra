@@ -271,8 +271,9 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
 	KexiQueryPart::TempData * temp = tempData();
 	KexiDB::QuerySchema *query = temp->query;
-	if (!query) //try to just get saved schema, instead of temporary one
+	if (!query) {//try to just get saved schema, instead of temporary one
 		query = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+	}
 
 	if (mode!=0/*failure only if it is switching from prev. view*/ && !query) {
 		//TODO msg
@@ -286,6 +287,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 	}
 	else {
 	// Use query with Kexi keywords (but not driver-specific keywords) escaped.
+		temp->query = query;
 		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
 		int flags = KexiDB::Driver::EscapeKexi;
 		d->origStatement = conn->selectStatement(*query, flags).stripWhiteSpace();
