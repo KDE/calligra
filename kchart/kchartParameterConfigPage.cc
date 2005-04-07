@@ -79,27 +79,40 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(llabel,6,0);
 #endif
 
-    QVButtonGroup* gb2 = new QVButtonGroup( i18n("Settings"), this );
+    QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, 
+                      i18n("Settings"), this );
+    gb2->layout()->setSpacing(KDialog::spacingHint());
+    gb2->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,1);
 
-    // The Y axis title
-    QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
-
-    ytitle= new QLineEdit( gb2 );
-    ytitle->setMaximumWidth(130);
-
+    QHBoxLayout * top = new QHBoxLayout( this );
     // The X axis title
-    tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
+    QLabel *tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
+    top->addWidget(tmpLabel);
+    // The Y axis title
+    tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
+    top->addWidget(tmpLabel);
 
+    QHBoxLayout * bottom = new QHBoxLayout( this );
     xtitle= new QLineEdit( gb2 );
-    xtitle->setMaximumWidth(130);
+    bottom->addWidget(xtitle);
+    QBoxLayout * l = new QVBoxLayout( this );
+    ytitle= new QLineEdit( gb2 );
+    bottom->addWidget(ytitle);
+
+    l->addLayout(top);
+    l->addLayout(bottom);
+    grid2->addLayout(l, 0, 0);
 
     // Linear or logarithmic scale
     QVButtonGroup *scaletype = new QVButtonGroup(i18n("Scale types"), gb2);
     lin = new QRadioButton( i18n("Linear scale"), scaletype);
     log = new QRadioButton( i18n("Logarithmic scale"), scaletype);
+    grid2->addWidget(scaletype, 1, 0);
 
     // Decimal precision
     QVButtonGroup *precision = new QVButtonGroup(i18n("Precision for the numerical left axis"), gb2);
+    grid2->addWidget(precision, 2, 0);
     QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
     automatic_precision->setChecked(true);
     max = new QRadioButton( i18n("Decimal precision:"), precision);
