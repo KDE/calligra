@@ -134,7 +134,7 @@ void KexiConnSelectorWidget::showAdvancedConn()
 	//	KToolBar *tbar = new KToolBar(m_remote->frm_change);
 //		tbar->insertButton("change", 1, pm, true, i18n("Change"));
 		tbar->insertButton("change", 1, 
-		KActionMenu * act_change = new KActionMenu(i18n("Change"), this, "change");
+		KActionMenu * act_change = new KActionMenu(i18n2005-04-07("Change"), this, "change");
 		act_change->insert( new KAction("Add connection", KShortcut(), 0, 0, 0) );
 		act_change->plug( tbar );*/
 //TODO
@@ -182,6 +182,7 @@ void KexiConnSelectorWidget::showSimpleConn()
 	}
 	raiseWidget(m_file);
 #ifndef KEXI_SERVER_SUPPORT
+	m_file->spacer->hide();
 	m_file->label->hide();
 	m_file->btn_advanced->hide();
 	m_file->label->parentWidget()->hide();
@@ -231,6 +232,10 @@ void KexiConnSelectorWidget::setFocus()
 
 void KexiConnSelectorWidget::hideHelpers()
 {
+	m_file->lbl->hide();
+	m_file->line->hide();
+	m_file->spacer->hide();
+	m_file->label->hide();
 	m_remote->label->hide();
 	m_remote->label_back->hide();
 	m_remote->btn_back->hide();

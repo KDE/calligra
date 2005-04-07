@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
-Comment=Kexi SQL-MigrationDriver plugin
+Comment=Kexi Data Migration Driver
 Comment[bg]=Приставка на Kexi за мигриране към SQL
 Comment[br]=Lugent SQL-MigrationDriver evit Kexi
 Comment[da]=Kexi SQL-migrationsdriver-plugin
@@ -12,9 +12,13 @@ Comment[fr]=Module de pilotage de migration SQL de Kexi
 Comment[pt]='Plugin' do Controlador de Migração SQL do Kexi
 Comment[pt_BR]=Plugin de Driver de Migração para o SQL do Kexi
 Comment[ru]=Модуль драйвера миграции SQL Kexi
+Comment[sr]=Прикључак Kexi-ја за миграцију са SQL-а
+Comment[sr@Latn]=Прикључак Kexi-ја за миграцију са SQL-а
 Comment[sv]=Kexi SQL-övergångsdrivrutin
 Comment[ta]=Kexi SQL-மாற்றிஇயக்கி சொருகு
 Comment[tr]=Kexi SQL-DönüşümSürücüsü eki
+Comment[xx]=xxKexi SQL-MigrationDriver pluginxx
+Comment[zh_CN]=Kexi SQL 升迁驱动插件
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]
 Type=QString

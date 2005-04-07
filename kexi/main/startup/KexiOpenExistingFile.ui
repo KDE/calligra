@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>KexiOpenExistingFile</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>352</width>
+            <width>328</width>
             <height>108</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KexiOpenExistingFile</string>
     </property>
     <vbox>
         <property name="name">
@@ -56,32 +59,51 @@
                 <enum>Sunken</enum>
             </property>
         </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>spacer</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>6</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>6</height>
+                </size>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout2</cstring>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer row="0" column="1">
+                <widget class="QPushButton">
                     <property name="name">
-                        <cstring>spacer7</cstring>
+                        <cstring>btn_advanced</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
-                    <property name="sizeType">
-                        <enum>Fixed</enum>
+                    <property name="text">
+                        <string>&amp;Advanced </string>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>12</height>
-                        </size>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
-                </spacer>
-                <widget class="QLabel" row="1" column="1">
+                </widget>
+                <widget class="QLabel">
                     <property name="name">
                         <cstring>label</cstring>
                     </property>
@@ -100,23 +122,7 @@
                         <set>WordBreak|AlignTop</set>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="0">
-                    <property name="name">
-                        <cstring>btn_advanced</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Advanced </string>
-                    </property>
-                </widget>
-            </grid>
+            </hbox>
         </widget>
     </vbox>
 </widget>

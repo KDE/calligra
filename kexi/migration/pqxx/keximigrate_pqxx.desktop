@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=PostgreSQL
 Name[xx]=xxPostgreSQLxx
+Comment=PostgreSQL Migration Driver for Kexi
 Comment=With a 16 year development history, one of the strongest development communities in the world, and a global reputation for high quality software engineering, PostgreSQL is the world's most advanced Open Source Database for large corporations and individual users.
 Comment[bg]=PostgreSQL е солидна релационна СУБД, неотстъпваща по функционалност на комерсиалните системи. Проектът е с отворен код и има една от най-големите общности и групи зад себе си. Проектът има над 16 годишна история и е отговаря на всички съвременни изисквания за СУБД.
 Comment[ca]=Amb 15 anys d'història de desenvolupament, una de les comunitats de desenvolupament més fortes del món i una reputació global per una alta qualitat en enginyeria del software, PostgreSQL és la base de dades de codi obert més avançada del món per a corporacions i usuaris individuals.
@@ -22,6 +23,7 @@ Comment[pt_BR]=Com uma história de desenvolvimento de 16 anos, uma das mais for
 Comment[ru]=С 16-летней историей разработки, с одной из самых мощных групп разработки в мире и широко известной репутацией высококачественного программного обеспечения, PostgreSQL является наиболее развитой системой управления базами данных с открытым исходным кодом для крупных корпораций и индивидуальных пользователей.
 Comment[sl]=S 16-letno zgodovino razvoja, eno najmočnejših razvijalskih skupnosti na svetu dobro poznanostjo za visoko kakovosten programski inženiring je PostgreSQL svetovno najbolj napredna zbirka podatkov odprte kode za velika podjetja in posamezne uporabnike.
 Comment[sr]= Са шеснаестогодишњом историјом развоја, једном од најачих развојних заједница, и глобалном репутацијом високо квалитетног софтверског инжињеринга, PostgreSQL је светски најнапреднија база података отвореног кода за велике корпорације и индивидуалне кориснике.
+Comment[sr@Latn]= Sa šesnaestogodišnjom istorijom razvoja, jednom od najačih razvojnih zajednica, i globalnom reputacijom visoko kvalitetnog softverskog inžinjeringa, PostgreSQL je svetski najnaprednija baza podataka otvorenog koda za velike korporacije i individualne korisnike.
 Comment[sv]=Med en 16-årig utvecklingshistoria, en av de starkaste utvecklingsgemenskaperna i världen, och global ryktbarhet om högkvalitativ programvaru-utveckling, är PostgreSQL världens mest avancerade databas med öppen källkod, både för stora företag och enskilda användare.
 Comment[tr]=16 yıllık gelişim geçmişi ile dünyadaki en güçlü yazılım geliştirme topluluklarından biri olarak, dünya çapında yüksek kaliteli yazılım mühendisliği söhretiyle, PostgreSQL, bireysel kullanıcılar ve firmalar için dünyanın en gelişmiş Açık Kaynak Kodlu Veritabanıdır.
 Comment[xx]=xxWith a 16 year development history, one of the strongest development communities in the world, and a global reputation for high quality software engineering, PostgreSQL is the world's most advanced Open Source Database for large corporations and individual users.xx

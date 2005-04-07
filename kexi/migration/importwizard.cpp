@@ -87,7 +87,7 @@ importWizard::importWizard(QWidget *parent, const char *name)
 
     //============================================================
 
-    setMinimumSize(400, 300);
+    setMinimumSize(400, 400);
     introPage = new QVBox(this);
     setupintro();
     this->addPage(introPage, i18n("Introduction"));
@@ -128,18 +128,18 @@ importWizard::~importWizard()
 void importWizard::setupintro()
 {
     QLabel *lblIntro = new QLabel(introPage);
-    lblIntro->setText(i18n("This wizard will guide you through the\n"
-                      "process of converting an existing data\n"
-                      "set into a Kexi database"));
+    lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
+    lblIntro->setText(i18n("This wizard will guide you through the process of converting an existing data set into a Kexi database."));
 }
 
 //===========================================================
 //
 void importWizard::setupsrcType()
 {
-
-    QVBox *srcTypeControls = new QVBox(srcTypePage);
-    srcTypeCombo = new KComboBox(srcTypeControls);
+    QHBox *hb = new QHBox(srcTypePage);
+    srcTypeCombo = new KComboBox(hb);
+    hb->setStretchFactor(new QWidget(hb), 1);
+    srcTypePage->setStretchFactor(new QWidget(srcTypePage), 1);
 
     MigrateManager manager;
 
@@ -177,9 +177,11 @@ void importWizard::setupdstType()
 
     QStringList names = manager.driverNames();
 
-    QVBox *dstTypeControls = new QVBox(dstTypePage);
+    QHBox *hb = new QHBox(dstTypePage);
+    dstTypeCombo = new KComboBox(hb);
+    hb->setStretchFactor(new QWidget(hb), 1);
+    dstTypePage->setStretchFactor(new QWidget(dstTypePage), 1);
 
-    dstTypeCombo = new KComboBox(dstTypeControls);
     dstTypeCombo->insertStringList(names);
 }
 
@@ -225,17 +227,19 @@ void importWizard::setupfinish()
 {
     finishPage->hide();
     QLabel *lblDone = new QLabel(finishPage);
+    lblDone->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
     QVBox *vbox = new QVBox(finishPage);
     lblfinishTxt = new QLabel(vbox);
+    lblfinishTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 
-    lblDone->setText(i18n("Finished!\n"
-                     "All required information has now\n"
-                     "been gathered.  Click Finish below\n"
-                     "to start the import process\n\n"
-                     "NOTE:  You may be asked for extra\n"
-                     "information such as field types if\n"
-                     "the import module cannot automatically\n"
-                     "determine this for you"));
+    lblDone->setText(i18n(
+                     "All required information has now "
+                     "been gathered. Click Finish below "
+                     "to start the import process\n"
+                     "Note: You may be asked for extra "
+                     "information such as field types if "
+                     "the wizard could not automatically "
+                     "determine this for you."));
     progress = new KProgress(100, vbox);
     progress->hide();
     finishPage->show();
@@ -253,13 +257,13 @@ bool importWizard::checkUserInput()
     if (dstNewDBName->text().isEmpty())
     {
         problem = true;
-        finishtxt = finishtxt + i18n("\nNo new database name was entered.");
+        finishtxt = finishtxt + "\n" + i18n("No new database name was entered.");
     }
 
     if (problem)
     {
-        finishtxt = i18n("The following problems were found with the data you entered:") + "\n\n"+ finishtxt;
-        finishtxt = finishtxt + "\n\n" + i18n("Please go back and correct these errors.");
+        finishtxt = i18n("Following problems were found with the data you entered:") + "\n\n"+ finishtxt;
+        finishtxt = finishtxt + "\n\n" + i18n("Please click 'Back' button and correct these errors.");
     }
     else
     {
@@ -425,7 +429,7 @@ void importWizard::accept()
     else
     {
         //TODO This needs a better message
-        KMessageBox::error(this, "No connection data was available and you didnt select an SQLite destination", "Error");
+        KMessageBox::error(this, i18n("No connection data is available. You did not select an SQLite destination filename."), i18n("Error"));
         return;
     }
 
@@ -469,7 +473,7 @@ void importWizard::accept()
     else
     {
 //??        KWizard::reject(); //tmp, before adding "final page"
-        KMessageBox::error(this, i18n("Import failed because: "), i18n("Failure"));
+        KMessageBox::error(this, i18n("Import failed."), i18n("Failure"));
     }
 }
 
@@ -505,31 +509,31 @@ void importWizard::helpClicked()
 {
     if (currentPage() == introPage)
     {
-        KMessageBox::information(this, "No help availbale for this page", "Help");
+        KMessageBox::information(this, i18n("No help available for this page"), i18n("Help"));
     }
     else if (currentPage() == srcTypePage)
     {
-        KMessageBox::information(this, "Here you can choose the type of data to import data from", "Help");
+        KMessageBox::information(this, i18n("Here you can choose the type of data to import data from"), i18n("Help"));
     }
     else if (currentPage() == srcConnPage)
     {
-        KMessageBox::information(this, "Here you can choose the location to import data from", "Help");
+        KMessageBox::information(this, i18n("Here you can choose the location to import data from"), i18n("Help"));
     }
     else if (currentPage() == srcdbPage)
     {
-        KMessageBox::information(this, "Here you can choose the actual database to import data from", "Help");
+        KMessageBox::information(this, i18n("Here you can choose the actual database to import data from"), i18n("Help"));
     }
     else if (currentPage() == dstTypePage)
     {
-        KMessageBox::information(this, "Here you can choose the location to save the data", "Help");
+        KMessageBox::information(this, i18n("Here you can choose the location to save the data"), i18n("Help"));
     }
     else if (currentPage() == dstPage)
     {
-        KMessageBox::information(this, "Here you can choose the location to save the data in and the new database name", "Help");
+        KMessageBox::information(this, i18n("Here you can choose the location to save the data in and the new database name"), i18n("Help"));
     }
     else if (currentPage() == finishPage)
     {
-        KMessageBox::information(this, "No help availbale for this page", "Help");
+        KMessageBox::information(this, i18n("No help availbale for this page"), i18n("Help"));
     }
 }
 

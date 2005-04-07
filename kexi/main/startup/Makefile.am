@@ -4,8 +4,9 @@ noinst_LTLIBRARIES = libkeximainstartup.la
 
 libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
 	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
-	KexiNewPrjTypeSelector.ui KexiDBTitlePage.ui \
+	KexiNewPrjTypeSelector.ui KexiDBTitlePageBase.ui \
 	KexiServerDBNamePage.ui \
+	KexiDBTitlePage.cpp \
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp \
 	KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \

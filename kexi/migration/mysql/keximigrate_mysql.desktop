@@ -1,11 +1,19 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=MySQL Migration Driver for Kexi
+Name=MySQL
+Comment=MySQL Migration Driver for Kexi
+Name[da]=MySQL Migrationsdriver for Kexi
 Name[es]=Controlador de migración a MySQL para Kexi
+Name[et]=Kexi MySQL migreerumisdraiveri plugin
+Name[fr]=Pilote de migration MySQL pour Kexi
 Name[pt]='Plugin' do Controlador de Migração SQL do Kexi
 Name[pt_BR]=Driver de Migração do MySQL para o Kexi
 Name[ru]=Драйвер миграции MySQL для Kexi
+Name[sr]=Управљачки програм за Kexi за миграцију са MySQL-а
+Name[sr@Latn]=Управљачки програм за Kexi за миграцију са MySQL-а
 Name[sv]=Kexi MySQL-övergångsdrivrutin
+Name[xx]=xxMySQL Migration Driver for Kexixx
+Name[zh_CN]=Kexi MySQL 升迁驱动程序
 X-KDE-Library=keximigrate_mysql
 ServiceTypes=Kexi/MigrationDriver
 Type=Service
