@@ -40,7 +40,16 @@ bool KPTContext::load(QDomElement &element) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();    
             if (e.tagName() == "gantt-view") {
-                currentNode = e.attribute("current-node");
+                ganttviewsize = e.attribute("ganttview-size").toInt();
+                taskviewsize = e.attribute("taskview-size").toInt();
+                currentNode = e.attribute("current-node").toInt();
+                showResources = e.attribute("show-resources").toInt();
+                showTaskName = e.attribute("show-taskname").toInt();
+                showTaskLinks = e.attribute("show-tasklinks").toInt();
+                showProgress = e.attribute("show-progress").toInt();
+                showPositiveFloat = e.attribute("show-positivefloat").toInt();
+                showCriticalTasks = e.attribute("show-criticaltasks").toInt();
+                showCriticalPath = e.attribute("show-criticalpath").toInt();
                 
                 QDomNodeList list = e.childNodes();
                 for (unsigned int i=0; i<list.count(); ++i) {
@@ -74,7 +83,16 @@ void KPTContext::save(QDomElement &element) const {
     // Ganttview
     QDomElement g = me.ownerDocument().createElement("gantt-view");
     me.appendChild(g);
+    g.setAttribute("ganttview-size", ganttviewsize);
+    g.setAttribute("taskview-size", taskviewsize);
     g.setAttribute("current-node", currentNode);
+    g.setAttribute("show-resources", showResources);
+    g.setAttribute("show-taskname", showTaskName);
+    g.setAttribute("show-tasklinks", showTaskLinks);
+    g.setAttribute("show-progress", showProgress);
+    g.setAttribute("show-positivefloat", showPositiveFloat);
+    g.setAttribute("show-criticaltasks", showCriticalTasks);
+    g.setAttribute("show-criticalpath", showCriticalPath);
     if (!closedNodes.isEmpty()) {
         QDomElement e = g.ownerDocument().createElement("closed-nodes");
         g.appendChild(e);

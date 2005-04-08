@@ -151,6 +151,8 @@ private:
     void drawRelations(KDGanttViewItem *item);
     void drawChildRelations(KDGanttViewItem *item);
 
+    void getContextClosedNodes(KPTContext &context, KDGanttViewItem *item) const;
+    
 private:
     KPTView *m_mainview;
     int m_defaultFontSize;

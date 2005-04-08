@@ -973,8 +973,24 @@ void KPTGanttView::slotModifyLink(KDGanttViewTaskLink* link) {
 
 bool KPTGanttView::setContext(KPTContext &context) {
     kdDebug()<<k_funcinfo<<endl;
+    
+    QValueList<int> list = sizes();
+    list[0] = context.ganttviewsize;
+    list[1] = context.taskviewsize;
+    setSizes(list);    
+
     KPTProject &p = m_mainview->getProject();
     currentItemChanged(findItem(p.findNode(context.currentNode)));
+    
+    m_showResources = context.showResources ;
+    m_showTaskName = context.showTaskName;
+    m_showTaskLinks = context.showTaskLinks;
+    m_showProgress = context.showProgress;
+    m_showPositiveFloat = context.showPositiveFloat;
+    m_showCriticalTasks = context.showCriticalTasks;
+    m_showCriticalPath = context.showCriticalPath;
+    
+    getContextClosedNodes(context, m_gantt->firstChild());
     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
         KDGanttViewItem *item = findItem(p.findNode(*it));
         if (item) {
@@ -985,10 +1001,20 @@ bool KPTGanttView::setContext(KPTContext &context) {
 }
 
 void KPTGanttView::getContext(KPTContext &context) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
+    context.ganttviewsize = sizes()[0];
+    context.taskviewsize = sizes()[1];
+    kdDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
     if (currentNode()) {
         context.currentNode = currentNode()->id();
     }
+    context.showResources = m_showResources;
+    context.showTaskName = m_showTaskName;
+    context.showTaskLinks = m_showTaskLinks;
+    context.showProgress = m_showProgress;
+    context.showPositiveFloat = m_showPositiveFloat;
+    context.showCriticalTasks = m_showCriticalTasks;
+    context.showCriticalPath = m_showCriticalPath;
     getContextClosedNodes(context, m_gantt->firstChild());
 }
 
@@ -998,7 +1024,7 @@ void KPTGanttView::getContextClosedNodes(KPTContext &context, KDGanttViewItem *i
     for (KDGanttViewItem *i = item; i; i = i->nextSibling()) {
         if (!i->isOpen()) {
             context.closedNodes.append(getNode(i)->id());
-            kdDebug()<<k_funcinfo<<"add closed "<<i->listViewText()<<endl;
+            //kdDebug()<<k_funcinfo<<"add closed "<<i->listViewText()<<endl;
         }
         getContextClosedNodes(context, i->firstChild());
     }

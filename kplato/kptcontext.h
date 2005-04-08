@@ -42,7 +42,16 @@ public:
     QString currentView;
     
     // Ganttview
+    int ganttviewsize;
+    int taskviewsize;
     QString currentNode;
+    bool showResources;
+    bool showTaskName;
+    bool showTaskLinks;
+    bool showProgress;
+    bool showPositiveFloat;
+    bool showCriticalTasks;
+    bool showCriticalPath;
     QStringList closedNodes;
     
 };

@@ -925,6 +925,7 @@ bool KPTView::setContext(KPTContext &context) {
     } else if (context.currentView == "reportview") {
         //slotViewReport();
     }
+    slotUpdate(false);
     return true;
 }
 
