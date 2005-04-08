@@ -239,7 +239,6 @@ public slots:
     void toolsClosedCubicBezierCurve();
 
     // extra menu
-    void extraPenBrush();
     void extraProperties();
     void extraRaise();
     void extraLower();
@@ -983,7 +982,6 @@ private:
     KToggleAction *actionFormatStrikeOut;
     KAction *actionTextInsertPageNum;
 
-    KAction *actionExtraPenBrush;
     KAction *actionExtraProperties;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;

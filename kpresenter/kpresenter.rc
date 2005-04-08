@@ -94,7 +94,6 @@
   <Action name="tools_rotate"/>
   <Action name="tools_zoom"/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
   <Separator/>
   <Menu name="Arrange Objects"><text>Arra&amp;nge Objects</text>
     <Action name="extra_lower"/>
@@ -230,7 +229,6 @@
 </ToolBar>
 <ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
   <Action name="extra_linebegin"/>
   <Action name="extra_lineend"/>
   <Action name="extra_penstyle"/>
@@ -329,7 +327,6 @@
   <Action name="resizetextobject"/>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="partobject_popup">
   <Action name="edit_cut"/>
@@ -351,7 +348,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="rectangleobject_popup">
   <Action name="edit_cut"/>
@@ -378,7 +374,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="graphmenu_popup">
   <Action name="edit_cut"/>
@@ -401,7 +396,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="flip_popup">
   <Action name="edit_cut"/>
@@ -428,7 +422,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="closed_popup">
   <Action name="edit_cut"/>
@@ -457,7 +450,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="piemenu_popup">
   <Action name="edit_cut"/>
@@ -484,7 +476,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="clipmenu_popup">
   <Action name="edit_cut"/>
@@ -510,7 +501,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="picmenu_popup">
   <Action name="edit_cut"/>
@@ -550,7 +540,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="sidebarmenu_popup">
   <Action name="insert_page_popup"/>
@@ -679,7 +668,6 @@
   </Menu>
   <Separator/>
   <Action name="extra_properties"/>
-  <Action name="extra_new_properties"/>
 </Menu>
 <Menu name="helpline_popup">
  <Action name="remove_helpline"/>

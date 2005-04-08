@@ -176,9 +176,13 @@ void KPresenterViewIface::toolsConvexOrConcavePolygon()
 
 void KPresenterViewIface::extraPenBrush()
 {
-    view->extraPenBrush();
+    view->extraProperties();
 }
 
+void KPresenterViewIface::extraProperties()
+{
+    view->extraProperties();
+}
 
 void KPresenterViewIface::extraRaise()
 {

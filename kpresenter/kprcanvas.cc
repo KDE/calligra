@@ -2005,7 +2005,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
             }
         }
         else
-             getView()->extraPenBrush();
+             getView()->extraProperties();
     }
 }
 

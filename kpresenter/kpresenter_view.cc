@@ -1166,67 +1166,6 @@ void KPresenterView::extraProperties()
     m_propertyEditor = 0;
 }
 
-
-void KPresenterView::extraPenBrush()
-{
-    delete styleDia;
-    styleDia =0L;
-
-    bool canHaveStickyObj = true;
-    bool state = (m_canvas->numberOfObjectSelected()==1);
-    QString objectName( QString::null );
-    if(state)
-    {
-        KPObject *obj=m_canvas->getSelectedObj();
-        //disable this action when we select a header/footer
-        objectName = obj->getObjectName();
-        if (obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
-            canHaveStickyObj = false;
-    }
-    bool txtObj = (m_canvas->selectedTextObjs().count()> 0 );
-    styleDia = new StyleDia( this, "StyleDia", this, canHaveStickyObj, state,txtObj && state );
-
-    if ( state ) {
-        styleDia->setSize( m_canvas->getSelectedObj()->getRect());
-        styleDia->setObjectName( objectName );
-    }
-
-    if ( m_canvas->activePage()->masterPage() )
-        styleDia->setSticky( STATE_OFF );
-    else
-        styleDia->setSticky( STATE_ON );
-
-    bool result = m_canvas->getProtect( protect );
-    if (result)
-        styleDia->setProtected( STATE_ON );
-    else
-        styleDia->setProtected( STATE_OFF );
-
-    result = m_canvas->getKeepRatio( keepRatio );
-    if ( result )
-        styleDia->setKeepRatio( STATE_ON );
-    else
-        styleDia->setKeepRatio( STATE_OFF);
-
-    styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
-
-    if ( state )
-    {
-        KPTextObject * obj = dynamic_cast<KPTextObject*>(m_canvas->getSelectedObj());
-        if ( obj )
-            styleDia->setMargins( obj->bLeft(), obj->bRight(), obj->bTop(), obj->bBottom());
-    }
-
-    styleDia->setCaption( i18n( "Properties" ) );
-    QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    styleDia->exec();
-
-    QObject::disconnect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
-    delete styleDia;
-    styleDia = 0;
-}
-
 void KPresenterView::extraRaise()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -2675,13 +2614,9 @@ void KPresenterView::setupActions()
 
     // ----------------- format actions
 
-    actionExtraPenBrush = new KAction( i18n( "&Properties" ), "penbrush", 0,
-                                       this, SLOT( extraPenBrush() ),
-                                       actionCollection(), "extra_properties" );
-
-    actionExtraProperties = new KAction( i18n( "New Properties" ), "penbrush", 0,
-                                       this, SLOT( extraProperties() ),
-                                       actionCollection(), "extra_new_properties" );
+    actionExtraProperties = new KAction( i18n( "&Properties" ), "penbrush", 0,
+                                         this, SLOT( extraProperties() ),
+                                         actionCollection(), "extra_properties" );
 
     actionExtraArrangePopup = new KAction( i18n( "Arra&nge Objects" ), "arrange", 0,
                                            this, SLOT(extraArrangePopup()),
@@ -2868,9 +2803,6 @@ void KPresenterView::setupActions()
     actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit Contents" ),0, this, SLOT( textObjectToContents() ),
                                           actionCollection(), "resizetextobject" );
 
-//     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
-//                     this, SLOT( extraPenBrush() ),
-//                     actionCollection(), "object_properties" );
     actionRenamePage=new KAction(i18n( "&Rename Slide..." ),0,this,
                                  SLOT( renamePageTitle() ),
                                  actionCollection(), "rename_page" );
@@ -3260,7 +3192,6 @@ void KPresenterView::objectSelectedChanged()
     actionEditCut->setEnabled(state && !headerfooterselected);
 
     actionBrushColor->setEnabled(state && state2); // no brush button for objects that don't support it
-    actionExtraPenBrush->setEnabled(state && !headerfooterselected);
     actionExtraProperties->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);

@@ -84,7 +84,8 @@ k_dcop:
 
 
     // extra menu
-    virtual void extraPenBrush();
+    virtual void extraProperties();
+    virtual void extraPenBrush(); /** * @deprecated */
     virtual void extraRaise();
     virtual void extraLower();
     virtual void extraRotate();
