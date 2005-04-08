@@ -1,17 +1,24 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
+	-I$(top_srcdir)/kchart \
+	-I$(top_srcdir)/kchart/kdchart \
+	$(all_includes)
 
 ####### Files
-# Obviously you have to change "png" (and maybe "import") to
+# Obviously you have to change "foo" (and maybe "import") to
 # reflect the name of your filter. If you have more files
-# than just pngexport.cc please add them to the _SOUCRES line.
+# than just pngexport.cc please add them to the _SOURCES line.
 
 kde_module_LTLIBRARIES = libpngexport.la
 
 libpngexport_la_SOURCES = pngexport.cpp
 libpngexport_la_LDFLAGS	= -module $(KDE_PLUGIN)
-libpngexport_la_LIBADD = $(KOFFICE_LIBS)
+libpngexport_la_LIBADD = $(KOFFICE_LIBS) \
+	../../../kchart/libkchartpart.la \
+	../../../kchart/kdchart/libkdchart.la
+noinst_HEADERS = \
+	pngexport.h
 
 METASOURCES = AUTO
 
