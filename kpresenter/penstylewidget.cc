@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.orgReginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2004-2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,13 +39,13 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
 {
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->addWidget( m_ui = new PenStyleUI( this ) );
-    
+
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addItem( spacer );
 
     connect( m_ui->colorChooser, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotPenChanged() ) );
-    
+
     m_ui->styleCombo->insertItem( i18n( "No Outline" ) );
     m_ui->styleCombo->insertItem( i18n( "Solid Line" ) );
     m_ui->styleCombo->insertItem( i18n( "Dash Line ( ---- )" ) );
@@ -58,7 +58,7 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
 
     connect( m_ui->widthInput, SIGNAL( valueChanged( int ) ),
              this, SLOT( slotPenChanged() ) );
-    
+
     m_ui->lineBeginCombo->insertItem( i18n("Normal") );
     m_ui->lineBeginCombo->insertItem( i18n("Arrow") );
     m_ui->lineBeginCombo->insertItem( i18n("Square") );
@@ -83,7 +83,9 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
     connect( m_ui->lineEndCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotLineEndChanged() ) );
 
-    m_ui->arrowGroup->setEnabled( configureLineEnds );
+    if ( !configureLineEnds )
+        m_ui->arrowGroup->hide();
+    //m_ui->arrowGroup->setEnabled( configureLineEnds );
 
     slotReset();
 }
@@ -98,34 +100,34 @@ PenStyleWidget::~PenStyleWidget()
 void PenStyleWidget::setPen( const QPen &pen )
 {
     m_ui->colorChooser->setColor( pen.color() );
-    
-    switch ( pen.style() ) 
+
+    switch ( pen.style() )
     {
-        case NoPen: 
+        case NoPen:
             m_ui->styleCombo->setCurrentItem( 0 );
             break;
-        case SolidLine: 
+        case SolidLine:
             m_ui->styleCombo->setCurrentItem( 1 );
             break;
-        case DashLine: 
+        case DashLine:
             m_ui->styleCombo->setCurrentItem( 2 );
             break;
-        case DotLine: 
+        case DotLine:
             m_ui->styleCombo->setCurrentItem( 3 );
             break;
-        case DashDotLine: 
+        case DashDotLine:
             m_ui->styleCombo->setCurrentItem( 4 );
             break;
-        case DashDotDotLine: 
+        case DashDotDotLine:
             m_ui->styleCombo->setCurrentItem( 5 );
             break;
-        case MPenStyle:  
+        case MPenStyle:
             break; // not supported.
     }
 
     m_ui->widthInput->setValue( pen.width() );
     m_ui->pbPreview->setPen( pen );
-} 
+}
 
 
 void PenStyleWidget::setLineBegin( LineEnd lb )
@@ -146,24 +148,24 @@ QPen PenStyleWidget::getPen() const
 {
     QPen pen;
 
-    switch ( m_ui->styleCombo->currentItem() ) 
+    switch ( m_ui->styleCombo->currentItem() )
     {
-        case 0: 
+        case 0:
             pen.setStyle( NoPen );
             break;
-        case 1: 
+        case 1:
             pen.setStyle( SolidLine );
             break;
-        case 2: 
+        case 2:
             pen.setStyle( DashLine );
             break;
-        case 3: 
+        case 3:
             pen.setStyle( DotLine );
             break;
-        case 4: 
+        case 4:
             pen.setStyle( DashDotLine );
             break;
-        case 5: 
+        case 5:
             pen.setStyle( DashDotDotLine );
             break;
     }
@@ -190,7 +192,7 @@ LineEnd PenStyleWidget::getLineEnd() const
 int PenStyleWidget::getPenConfigChange() const
 {
     int flags = 0;
-    
+
     if ( getLineEnd() != m_pen.lineEnd )
         flags = flags | PenCmd::LineEnd;
     if ( getLineBegin() != m_pen.lineBegin )
