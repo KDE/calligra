@@ -2334,7 +2334,7 @@ void KWView::pasteData( QMimeSource* data )
     {
         deselectAllFrames();
         // let the user select paste format if the clipboard contains an image URL
-        if ( (provides & ProvidesImage) && (provides & ProvidesPlainText) && ( provides & ProvidesOasis == 0 ) )
+        if ( (provides & ProvidesImage) && (provides & ProvidesPlainText) && !( provides & ProvidesOasis ) )
         {
             QStringList list;
             list.append( i18n("Image") );
