@@ -95,6 +95,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
+#include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -1630,18 +1631,13 @@ int KWView::checkClipboard( QMimeSource *data )
 #endif
     if ( QImageDrag::canDecode( data ) )
         provides |= ProvidesImage;
-    else if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
+    if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
         provides |= ProvidesFormula;
-    else if ( formats.findIndex( "text/plain" ) != -1 )
+    if ( formats.findIndex( "text/plain" ) != -1 )
         provides |= ProvidesPlainText;
-    else
-    {
-        QCString returnedTypeMime;
-        if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
-        {
-            provides |= ProvidesOasis;
-        }
-    }
+    QCString returnedTypeMime;
+    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
+        provides |= ProvidesOasis;
     //kdDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
     return provides;
 }
@@ -2337,6 +2333,22 @@ void KWView::pasteData( QMimeSource* data )
     else // pasting text and/or frames
     {
         deselectAllFrames();
+        // let the user select paste format if the clipboard contains an image URL
+        if ( (provides & ProvidesImage) && (provides & ProvidesPlainText) && ( provides & ProvidesOasis == 0 ) )
+        {
+            QStringList list;
+            list.append( i18n("Image") );
+            list.append( i18n("Plain text") );
+            bool ok;
+            QString result = KInputDialog::getItem( i18n("Paste"), i18n("Select paste format:"), list, 0, false, &ok );
+            if (!ok)
+                return;
+            if ( result == list.first() )
+            {
+                provides = ProvidesImage;
+                data = QApplication::clipboard()->data();
+            }
+        }
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) )
             edit->pasteData( data, provides );
