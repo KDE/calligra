@@ -85,6 +85,13 @@ PieValueCmd::PieValues PieProperty::getPieValues() const
 }
 
 
+void PieProperty::setPieValues( const PieValueCmd::PieValues &pieValues )
+{
+    m_pieValues = pieValues;
+    slotReset();
+}
+
+
 void PieProperty::apply()
 {
     int flags = getPiePropertyChange();

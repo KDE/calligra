@@ -37,7 +37,9 @@ public:
     int getPiePropertyChange() const;
     PieValueCmd::PieValues getPieValues() const;
 
+    void setPieValues( const PieValueCmd::PieValues &pieValues );
     void apply();
+
 private:
     PiePropertyUI *m_ui;
 

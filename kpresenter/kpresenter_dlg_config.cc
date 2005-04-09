@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,11 +39,12 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qtabwidget.h>
 
 #include "styledia.h"
 #include "penstylewidget.h"
-#include "confpiedia.h"
+#include "pieproperty.h"
 #include "confrectdia.h"
 #include "confpolygondia.h"
 #include "confpicturedia.h"
@@ -808,12 +810,12 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
                                 m_pView->getGUnbalanced(), m_pView->getGXFactor(), m_pView->getGYFactor());
     tab->addTab(m_confBrushDia, i18n("&Brush"));
 
-    m_confPieDia = new ConfPieDia(tab, "ConfPieDia");
-    m_confPieDia->setType(m_pView->getPieType());
-    m_confPieDia->setAngle(m_pView->getPieAngle());
-    m_confPieDia->setLength(m_pView->getPieLength());
-    m_confPieDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
-    tab->addTab(m_confPieDia, i18n("P&ie"));
+    PieValueCmd::PieValues pieValues;
+    pieValues.pieType = m_pView->getPieType();
+    pieValues.pieAngle = m_pView->getPieAngle();
+    pieValues.pieLength = m_pView->getPieLength();
+    m_pieProperty = new PieProperty( this, 0, pieValues );
+    tab->addTab( m_pieProperty, i18n( "&Pie" ) );
 
     m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia");
     m_confPolygonDia->setCheckConcavePolygon(m_pView->getCheckConcavePolygon());
@@ -835,9 +837,10 @@ configureToolsPage::~configureToolsPage()
 
 void configureToolsPage::apply()
 {
-    m_pView->setPieType(m_confPieDia->getType());
-    m_pView->setPieAngle(m_confPieDia->getAngle());
-    m_pView->setPieLength(m_confPieDia->getLength());
+    PieValueCmd::PieValues pieValues = m_pieProperty->getPieValues();
+    m_pView->setPieType( pieValues.pieType );
+    m_pView->setPieAngle( pieValues.pieAngle );
+    m_pView->setPieLength( pieValues.pieLength );
     m_pView->setCheckConcavePolygon(m_confPolygonDia->getCheckConcavePolygon());
     m_pView->setCornersValue(m_confPolygonDia->getCornersValue());
     m_pView->setSharpnessValue(m_confPolygonDia->getSharpnessValue());
@@ -860,15 +863,16 @@ void configureToolsPage::apply()
                                m_confBrushDia->getBrush());
     m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
                                   m_confBrushDia->getBrush());
-    m_confPieDia->setPenBrush(m_confPenDia->getPen(),
-                              m_confBrushDia->getBrush());
+    //TODO set pen brush in m_pieProperty
 }
 
 void configureToolsPage::slotDefault()
 {
-    m_confPieDia->setType(PT_PIE);
-    m_confPieDia->setLength(90 * 16);
-    m_confPieDia->setAngle(45 * 16);
+    PieValueCmd::PieValues pieValues;
+    pieValues.pieType = PT_PIE;
+    pieValues.pieAngle = 45 * 16;
+    pieValues.pieLength = 90 * 16;
+    m_pieProperty->setPieValues( pieValues );
     m_confPolygonDia->setCheckConcavePolygon(false);
     m_confPolygonDia->setCornersValue(3);
     m_confPolygonDia->setSharpnessValue(0);

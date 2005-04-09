@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@ class KLineEdit;
 class KDoubleNumInput;
 class KoSpellConfigWidget;
 class PenStyleWidget;
+class PieProperty;
 
 namespace KSpell2 {
     class ConfigWidget;
@@ -147,7 +149,7 @@ private:
     KConfig* config;
 
     PenStyleWidget *m_confPenDia;
-    ConfPieDia *m_confPieDia;
+    PieProperty *m_pieProperty;
     ConfRectDia *m_confRectDia;
     ConfBrushDia *m_confBrushDia;
     ConfPolygonDia *m_confPolygonDia;
