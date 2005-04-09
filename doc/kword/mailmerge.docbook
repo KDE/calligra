@@ -65,7 +65,7 @@ where to insert the database information</para></listitem>
 <sect3 id="mail-merge-sql-data">
 <title>Locate the database and query the records.</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -181,7 +181,7 @@ where to insert the database information</para></listitem>
 <sect3 id="mail-merge-kspread-data">
 <title>Selecting the file that contains the data.</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -250,7 +250,7 @@ where to insert the database information</para></listitem>
 <sect3 id="mail-merge-ab-data">
 <title>Select the people you want included</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -326,7 +326,7 @@ personalized documents from that data.</para>
 <sect3 id="mail-merge-internal-data">
 <title>Enter the data</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -450,7 +450,7 @@ merge field will be deleted.</para>
 <sect4 id="mail-merge-print-preview">
 <title>Preview your documents before printing</title>
 <para>To preview your document select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>

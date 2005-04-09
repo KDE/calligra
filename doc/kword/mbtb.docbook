@@ -1879,7 +1879,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>

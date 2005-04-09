@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-4-8</date>
+<date>2005-4-9</date>
 <releaseinfo>1.4</releaseinfo>
 
 <abstract>
@@ -471,12 +471,12 @@ If any document variables were changed, &kword; will update their values through
 <para>The sections that are included in this chapter are for advanced users.  The instructions for these sections
 will assume you are familiar with the basic operation of &kword;.</para>
 &struct;
-&chapnumb;
+<!--&chapnumb;   Still needs to be written-->
 &mmerge;
 </chapter>
 
 <!-- **************************************************************************************************** -->
-&migrating;
+<!--&migrating;   Still needs to be written-->
 <!-- **************************************************************************************************** -->
 <chapter id="quickdirty">
 <title>How do I...</title>
@@ -663,7 +663,7 @@ Any software updates, bug fixes or announcements of new releases of &koffice; wi
 <answer>
 <para>&kword; does have the ability to import &Microsoft; Word files.  The conversion process is not perfect,
 and some formatting information will be lost.  For more details please refer to the
-<link linkend="filters-msword97">&Microsoft; Word 97/2000</link> filter.</para>
+<link linkend="filters">Import/Export Filters</link> section of the documentation.</para>
 </answer>
 </qandaentry>
 
@@ -674,7 +674,7 @@ and some formatting information will be lost.  For more details please refer to 
 <answer>
 <para>At the moment, &kword; does not yet provide support for exporting to &Microsoft; Word
 documents. If you need to exchange documents with MS Word,
-you should use <link linkend="filters-rtf">Rich Text Format</link> as an intermediate file format.
+you should use Rich Text Format as an intermediate file format.
 Rich Text Format files
 are converted well by both &Microsoft; Word and &kword;,</para>
 </answer>
@@ -697,7 +697,7 @@ the best way to do this ?</para>
 </question>
 <answer>
 <para>What you and your friend need to do is agree on a file format that both word processors
-can read and write effectively.  <link linkend="filters-rtf">Rich Text Format</link> is probably a good choice.</para>
+can read and write effectively.  Rich Text Format is probably a good choice.</para>
 </answer>
 </qandaentry>
 
@@ -928,204 +928,40 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <sect1 id="filters-included"><title>Filters included in &kword;</title>
 
 <para>&kword; comes with the following filters:</para>
-<sect2 id="filters-abiword"><title>AbiWord</title>
-<para>&kword; can open and save AbiWord documents. Most AbiWord features are
-supported.</para>
 
-<para>Bookmarks (and the references to them), headers/footers, lists, columns and language settings are not supported.</para>
+<table>
+<title>Available import/export filters</title>
+<tgroup cols="3">
+<thead><row><entry></entry><entry>Import</entry><entry>Export</entry></row></thead>
+<tbody>
+<row><entry>Abiword</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>AmiPro</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Applixword</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>HTML</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&kpresenter;</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Hancom Word</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Magic Point Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Powerpoint</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Word</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Write</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Oasis OpenDocument</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Openoffice Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Openoffice Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Palm Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>PDF</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Plain Text</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>RTF</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>SGML</entry><entry>No</entry><entry>Yes</entry></row>
+<row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
+<row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Wordperfect</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>XML</entry><entry>Yes</entry><entry>No</entry></row>
+</tbody>
+</tgroup>
+</table>
 
-<para>Character styles and styles defined by other styles are not supported in the export filter, and have only partial support in the
-import filter.  Default tabulator settings and fields are only partially supported.</para>
-
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/abiword.phtml">AbiWord filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-amipro"><title>AmiPro</title>
-
-<para>&kword; can read and write simple AmiPro documents.
-Only formatted text, paragraph, and styles are supported. </para>
-
-<para>More advanced features such as frames, embedded images and equations are not
-supported.</para>
-
-<note><para>WordPro, the latest wordprocessor from Lotus, uses a different
-format than AmiPro. Therefore, if you want to read WordPro documents from
-&kword;, you should save it in AmiPro format.</para></note>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/amipro.phtml">AmiPro filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-applixword"><title>ApplixWord</title>
-
-<para>&kword; can read ApplixWord documents quite well; however, there are limitations:
-text formatting, colors, paragraphs, and special characters are
-supported; styles and inline images, though, will be lost during the conversion.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/applixword.phtml">ApplixWord filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-docbook"><title>DocBook</title>
-
-<para>&kword; can save DocBook documents in the SGML version only. It saves texts,
-lists, pictures, tables and hyperlinks.  Only the simplest formatting (bold
-and italic) are supported. Pictures are saved into a sub-directory.</para>
-
-<para>&kword; cannot load any DocBook document. </para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/docbook.phtml">DocBook filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-hancom"><title>Hancom Word</title>
-
-<para>&kword; can read HancomWord document produced with Hancom Word 5.2 or 6. However,
-&kword; does not yet recognize text formatting inside the document, hence the
-text will be imported but without formatting at all.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/hancomword.phtml">Hancom Word filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-html"><title>HTML</title>
-
-<para>&kword; can read simple HTML documents. Only simple formatting is
-supported.</para>
-
-<para>&kword; can save HTML documents. There will be a dialog to specify which kind of
-HTML should be used. In this dialog you can choose one of three modes:</para>
-<itemizedlist>
-<listitem><para>Basic</para></listitem>
-<listitem><para>Normal</para></listitem>
-<listitem><para>Enhanced</para></listitem>
-</itemizedlist>
-
- <para> All three modes support text, tables,
-images, hyperlinks and lists.</para>
-
-<para>The <emphasis>Basic</emphasis> mode supports only the most basic
-formatting, and it is intended for exporting only the document structure.</para>
-
-<para>The <emphasis>Normal</emphasis> mode supports common formatting of text. </para>
-
-<para>The <emphasis>Enhanced</emphasis> mode is the most
-complete mode and uses also CSS2; hence, styles and more-advanced formatting are
-supported.</para>
-
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/html.phtml">HTML filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-latex"><title>LaTeX</title>
-
-<para>&kword; cannot import LaTeX documents.</para>
-
-<para>&kword; can export text to LaTeX documents.  Formulas, pictures, and simple tables are partially supported.  </para>
-<para>&kword; is used only as a text editor and does not function as a WYSIWYG editor for LaTeX documents. </para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/latex.phtml">LaTeX filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-msword97"><title>&Microsoft; Word 97/2000</title>
-
-<para>&kword; can read all text from &Microsoft; Word files.  Basic text formatting
-(bold, italics, etc) is preserved.  Numbered headings, lists, built-in colors, tables, and internationalization support
-are nearly complete.</para>
-
-<para>Many other features (headers, footers, embedded objects, etc) are not supported.</para>
-<para>&kword; cannot write &Microsoft; Word 97/2000 files.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/msword97.phtml">&Microsoft; Word 97/2000 filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-mswrite"><title>&Microsoft; Write</title>
-
-<para>&Microsoft; Write files usually end with extension .WRI.  It is the format used by &Microsoft; Write,
-a very simple word processor which first appears in &Microsoft; &Windows; 3.1. &kword; can
-read &Microsoft; Write documents fairly well.</para>
-
-<para>&kword; is not able to save
-the document to &Microsoft; Write format.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/mswrite.phtml">&Microsoft; Write filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-palmdoc"><title>PalmDoc</title>
-
-<para>PalmDoc is the standard compressed document format for use with
-Palm-compatible device. </para>
-
-<para>&kword; is able to read and write PalmDoc files, even with compression. The PalmDoc
-format does not specify text formatting, so all character formatting (bold, italics, etc) is lost when exporting to
-this format.</para>
-
-<note><para>In order to read PalmDoc files on your handheld, you will need a reader.  Three common readers are the
-<ulink url="http://gutenpalm.sourceforge.net">Weasel Reader</ulink>, <ulink url="http://www.aportis.com">AportisDoc</ulink>,
-or <ulink url="http://www.isilo.com">iSilo</ulink>.</para></note>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/palmdoc.phtml">PalmDoc filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-plaintext"><title>Plain Text</title>
-
-<para>&kword; can save the document in plain text format, and also load plain text
-document. When saving or loading, there will be a dialog to specify text
-encoding options.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/plaintext.phtml">Plain Text filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-rtf"><title>Rich Text Format</title>
-
-<para>&kword; can open and save RTF documents. Most RTF features are already supported.</para>
-<para>Links, footnotes, multiple columns, and inline images are not supported.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/rtf.phtml">Rich Text Format filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-wml"><title>Wireless Markup Language</title>
-
-<para>WML (Wireless Mark-up Language) is the mark-up language used to deliver
-content to mobile devices. WML is like a mobile
-version of HTML.</para>
-
-<para>&kword; can read from and save to WML format files and already understands most WML
-tags.</para>
-
-<para>There is no support for WBMP (Wireless Bitmap), which is the
-monochrome image format used as inline image inside WML documents.</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/wml.phtml">Wireless Markup Language filter table</ulink></para>
-</sect2>
-
-<sect2 id="filters-wp5"><title>&Wordperfect;</title>
-
-<para>&kword; can read and write &Wordperfect; documents, starting from &Wordperfect;
-version 5.1, and including the latest &Wordperfect; 2002.</para>
-
-<para>The filter is still in development, only a subset of
-&Wordperfect; features are supported including text formatting, &Wordperfect;
-character sets, and paragraph settings.</para>
-
-<para>&Wordperfect; 4.x format or earlier versions are not supported. There is no support
-for styles, frames, or graphics (WPG).</para>
-
-<para> For more detailed information see the
-<ulink url="http://www.koffice.org/filters/1.2/kword/wp.phtml">&Wordperfect; filter table</ulink></para>
-</sect2>
-
-
+<para>For details on each filter, please refer to the <ulink 
+url="http://koffice.org/filters/">&koffice; filters web page</ulink>. </para>
 
 </sect1>
 
