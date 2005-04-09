@@ -63,9 +63,17 @@ namespace Kross { namespace Api {
              */
             virtual ~EventSlot() {}
 
-virtual EventSlot* create(EventManager* eventmanager) {
-    return new EventSlot(eventmanager);
-}
+            /**
+             * Create a new EventSlot instance. Reimplement
+             * this method in from EventSlot inherited
+             * classes and return there the to your class
+             * matching EventSlot.
+             *
+             * \param eventmanager The \a EventManager used
+             *       to create the new instance.
+             */
+            virtual EventSlot* create(EventManager* eventmanager);
+
             /**
              * Return the slot matching to the signal.
              *

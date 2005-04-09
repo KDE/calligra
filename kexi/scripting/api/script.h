@@ -68,9 +68,11 @@ namespace Kross { namespace Api {
             virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
 
         protected:
+            /// The \a Interpreter used to create this Script instance.
             Interpreter* m_interpreter;
+            /// The \a ScriptContainer associated with this Script.
             ScriptContainer* m_scriptcontainer;
-            Object* m_object;
+            //Object* m_object;
     };
 
 }}

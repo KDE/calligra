@@ -35,14 +35,44 @@ namespace Kross { namespace Python {
     // Forward declaration.
     class PythonModuleManager;
 
+    /**
+     * Handle python scripts. This class implements
+     * \a Kross::Api::Script for python.
+     */
     class PythonScript : public Kross::Api::Script
     {
         public:
+
+            /**
+             * Constructor.
+             *
+             * \param interpreter The \a Kross::Python::PythonInterpreter used
+             *       to create this PythonScript instance.
+             * \param scriptcontainer The with this PythonScript associated
+             *       \a Kross::Api::ScriptContainer instance that spends us
+             *       e.g. the python scripting code.
+             */
             explicit PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
+
+            /**
+             * Destructor.
+             */
             virtual ~PythonScript();
 
+            /**
+             * Return a list of callable functionnames this
+             * script spends.
+             */
             virtual const QStringList& getFunctionNames();
+
+            /**
+             * Execute the script.
+             */
             virtual Kross::Api::Object* execute();
+
+            /**
+             * Call a function.
+             */
             virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args);
 
         private:

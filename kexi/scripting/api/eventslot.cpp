@@ -41,6 +41,11 @@ EventSlot::EventSlot(EventManager* eventmanager)
 {
 }
 
+EventSlot* EventSlot::create(EventManager* eventmanager)
+{
+    return new EventSlot(eventmanager);
+}
+
 QCString EventSlot::getSlot(const QCString& signal)
 {
     QString signature = QString(signal).mid(1);
