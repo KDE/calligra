@@ -37,6 +37,7 @@ public:
     int getRectPropertyChange() const;
     RectValueCmd::RectValues getRectValues() const;
 
+    void setRectValues( const RectValueCmd::RectValues &rectValues );
     void apply();
 
 protected:

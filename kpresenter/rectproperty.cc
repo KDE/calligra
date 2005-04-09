@@ -68,6 +68,13 @@ RectValueCmd::RectValues RectProperty::getRectValues() const
 }
 
 
+void RectProperty::setRectValues( const RectValueCmd::RectValues &rectValues )
+{
+    m_rectValue = rectValues;
+    slotReset();
+}
+
+
 void RectProperty::apply()
 {
     int flags = getRectPropertyChange();

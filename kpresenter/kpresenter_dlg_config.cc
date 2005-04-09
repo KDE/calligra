@@ -45,7 +45,7 @@
 #include "styledia.h"
 #include "penstylewidget.h"
 #include "pieproperty.h"
-#include "confrectdia.h"
+#include "rectproperty.h"
 #include "confpolygondia.h"
 #include "confpicturedia.h"
 
@@ -801,7 +801,7 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
 
     PenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
     m_confPenDia = new PenStyleWidget(tab, 0, pen, true );
-    tab->addTab(m_confPenDia, i18n("&Pen"));
+    tab->addTab( m_confPenDia, i18n( "Outl&ine" ) );
 
     m_confBrushDia = new ConfBrushDia(tab, 0, StyleDia::SdAll);
     m_confBrushDia->setBrush(m_pView->getBrush());
@@ -809,6 +809,12 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
     m_confBrushDia->setGradient(m_pView->getGColor1(), m_pView->getGColor2(), m_pView->getGType(),
                                 m_pView->getGUnbalanced(), m_pView->getGXFactor(), m_pView->getGYFactor());
     tab->addTab(m_confBrushDia, i18n("&Brush"));
+
+    RectValueCmd::RectValues rectValues;
+    rectValues.xRnd = m_pView->getRndX();
+    rectValues.yRnd = m_pView->getRndY();
+    m_rectProperty = new RectProperty( this, 0, rectValues );
+    tab->addTab( m_rectProperty, i18n( "&Rectangle" ) );
 
     PieValueCmd::PieValues pieValues;
     pieValues.pieType = m_pView->getPieType();
@@ -824,10 +830,6 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
     m_confPolygonDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
     tab->addTab(m_confPolygonDia, i18n("P&olygon"));
 
-    m_confRectDia = new ConfRectDia(tab, "ConfRectDia" );
-    m_confRectDia->setRnds(m_pView->getRndX(), m_pView->getRndY());
-    m_confRectDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
-    tab->addTab(m_confRectDia, i18n("&Rectangle"));
     box->addWidget(tab);
 }
 
@@ -837,6 +839,10 @@ configureToolsPage::~configureToolsPage()
 
 void configureToolsPage::apply()
 {
+    RectValueCmd::RectValues rectValues = m_rectProperty->getRectValues();
+    m_pView->setRndX( rectValues.xRnd );
+    m_pView->setRndY( rectValues.yRnd );
+
     PieValueCmd::PieValues pieValues = m_pieProperty->getPieValues();
     m_pView->setPieType( pieValues.pieType );
     m_pView->setPieAngle( pieValues.pieAngle );
@@ -844,8 +850,6 @@ void configureToolsPage::apply()
     m_pView->setCheckConcavePolygon(m_confPolygonDia->getCheckConcavePolygon());
     m_pView->setCornersValue(m_confPolygonDia->getCornersValue());
     m_pView->setSharpnessValue(m_confPolygonDia->getSharpnessValue());
-    m_pView->setRndX(m_confRectDia->getRndX());
-    m_pView->setRndY(m_confRectDia->getRndY());
     m_pView->setPen(m_confPenDia->getPen());
     m_pView->setBrush(m_confBrushDia->getBrush());
     m_pView->setLineBegin(m_confPenDia->getLineBegin());
@@ -859,8 +863,7 @@ void configureToolsPage::apply()
     m_pView->setGYFactor(m_confBrushDia->getGYFactor());
     m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
     m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
-    m_confRectDia->setPenBrush(m_confPenDia->getPen(),
-                               m_confBrushDia->getBrush());
+    //TODO set pen brush in m_rectProperty
     m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
                                   m_confBrushDia->getBrush());
     //TODO set pen brush in m_pieProperty
@@ -868,6 +871,11 @@ void configureToolsPage::apply()
 
 void configureToolsPage::slotDefault()
 {
+    RectValueCmd::RectValues rectValues;
+    rectValues.xRnd = 0;
+    rectValues.yRnd = 0;
+    m_rectProperty->setRectValues( rectValues );
+
     PieValueCmd::PieValues pieValues;
     pieValues.pieType = PT_PIE;
     pieValues.pieAngle = 45 * 16;
@@ -876,7 +884,6 @@ void configureToolsPage::slotDefault()
     m_confPolygonDia->setCheckConcavePolygon(false);
     m_confPolygonDia->setCornersValue(3);
     m_confPolygonDia->setSharpnessValue(0);
-    m_confRectDia->setRnds(0, 0);
     m_confBrushDia->setBrush(QBrush(white, SolidPattern));
     PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );

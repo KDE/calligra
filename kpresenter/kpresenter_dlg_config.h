@@ -34,6 +34,7 @@ class KLineEdit;
 class KDoubleNumInput;
 class KoSpellConfigWidget;
 class PenStyleWidget;
+class RectProperty;
 class PieProperty;
 
 namespace KSpell2 {
@@ -149,8 +150,8 @@ private:
     KConfig* config;
 
     PenStyleWidget *m_confPenDia;
+    RectProperty *m_rectProperty;
     PieProperty *m_pieProperty;
-    ConfRectDia *m_confRectDia;
     ConfBrushDia *m_confBrushDia;
     ConfPolygonDia *m_confPolygonDia;
 };
