@@ -246,7 +246,7 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
 
   KivioStencil* stencil = stencils->first();
   bool ok = false;
-  QString text = KInputDialog::getMultiLineText(i18n("Stencil Text"), i18n("Stencil text:"),
+  QString text = KInputDialog::getMultiLineText(i18n("Edit Text"), QString::null,
       stencil->text(), &ok, view());
 
   if(!ok) {
@@ -293,7 +293,7 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   }
 
   bool ok = false;
-  QString text = KInputDialog::getMultiLineText(i18n("Stencil Text"), i18n("Stencil text:"),
+  QString text = KInputDialog::getMultiLineText(i18n("Edit Text"), QString::null,
       stencil->text(name), &ok, view());
 
   if(!ok) {

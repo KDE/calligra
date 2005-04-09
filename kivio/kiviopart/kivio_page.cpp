@@ -914,12 +914,12 @@ void KivioPage::bringToFront()
     }
 
     // push them back in, in reverse order
-    pStencil = newList.first();
+    pStencil = newList.last();
     while( pStencil )
     {
-        pLayer->stencilList()->append(pStencil);
+        pLayer->stencilList()->insert(0, pStencil);
 
-        pStencil = newList.next();
+        pStencil = newList.prev();
     }
 }
 
@@ -961,12 +961,12 @@ void KivioPage::sendToBack()
     }
 
     // push them back in, in reverse order
-    pStencil = newList.last();
+    pStencil = newList.first();
     while( pStencil )
     {
-        pLayer->stencilList()->insert(0, pStencil);
+        pLayer->stencilList()->append(pStencil);
 
-        pStencil = newList.prev();
+        pStencil = newList.next();
     }
 }
 
