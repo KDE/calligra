@@ -46,7 +46,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, bool 
     
     kdDebug()<<k_funcinfo<<endl;
     page = addVBoxPage(i18n("&Progress"));
-    m_progressTab = new KPTTaskProgressPanel(task, page);
+    m_progressTab = new KPTTaskProgressPanel(task, workTime, page);
 
     // Set the state of all the child widgets.
     enableButtonOK(false);

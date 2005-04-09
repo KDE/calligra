@@ -28,6 +28,8 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
+#include <kdebug.h>
+
 class QTime;
 
 namespace KPlato
@@ -120,7 +122,7 @@ class KPTResourceGroup {
           void save(QDomElement &element);
 
           void clearAppointments();
-          void saveAppointments(QDomElement &element) const;
+          void saveAppointments(QDomElement &element);
 
 
           void addNode(const KPTNode *node) { m_nodes.append(node); }
@@ -241,7 +243,7 @@ public:
     void clearAppointments();
     bool isAvailable(KPTTask *task);
     void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
-    void saveAppointments(QDomElement &element) const;
+    void saveAppointments(QDomElement &element);
 
     bool isOverbooked() const;
     bool isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const;
@@ -340,7 +342,7 @@ public:
     KPTDuration effort(const KPTDateTime &time, bool upto) const;
     
     bool loadXML(QDomElement &element);
-    void saveXML(QDomElement &element) const;
+    void saveXML(QDomElement &element);
     
     const KPTDateTime &startTime() const { return m_start; }
     void setStartTime(const KPTDateTime &time) { m_start = time; }
@@ -384,7 +386,7 @@ protected:
   * this is represented internally with KPTAppointments
   * There is one KPTAppointment per resource-task pair.
   * An appointment can be devided into several intervals, represented with
-  * a list of KPTAppointmentIntervals
+  * a list of KPTAppointmentInterval
   */
 
 class KPTAppointment {
@@ -429,37 +431,49 @@ public:
     
     const KPTAppointmentIntervalList &intervals() const { return m_intervals; }
 
-    /// Returns the total effort for this appointment
-    KPTDuration effort() const;
-    /// Returns the effort from start to end
-    KPTDuration effort(const KPTDateTime &start, const KPTDateTime &end) const;
-    /// Returns the effort from start for the duration
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
-    /// Returns the effort from time onwards
-    KPTDuration effortFrom(const KPTDateTime &time) const;
-    /// Returns the effort upto time
-    KPTDuration effortUpto(const KPTDateTime &time) const;
-    /// Returns the effort on the date
-    KPTDuration effort(const QDate &date) const;
-
     bool loadXML(QDomElement &element, KPTProject &project);
-    void saveXML(QDomElement &element) const;
+    void saveXML(QDomElement &element);
 
-    /**
-     * Calculates the total planned cost for this appointment
-     */
-    double cost();
-    /**
-     * Calculates the planned cost up to date @param dt
-     */
-    double cost(const KPTDateTime &dt);
+    /// Returns the planned effort from start to end
+    KPTDuration effort(const KPTDateTime &start, const KPTDateTime &end) const;
+    /// Returns the planned effort from start for the duration
+    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    /// Returns the planned effort from time onwards
+    KPTDuration effortFrom(const KPTDateTime &time) const;
+    
+    /// Returns the total planned effort for this appointment
+    KPTDuration plannedEffort() const;
+    /// Returns the planned effort on the date
+    KPTDuration plannedEffort(const QDate &date) const;
+    /// Returns the planned effort upto and including date
+    KPTDuration plannedEffortTo(const QDate &date) const;
 
-    int work();
-    int work(const KPTDateTime &dt);
+    /// Returns the total actual effort for this appointment
+    KPTDuration actualEffort() const;
+    /// Returns the actual effort on the date
+    KPTDuration actualEffort(const QDate &date) const;
+    /// Returns the actual effort on the date
+    KPTDuration actualEffortTo(const QDate &date) const;
+
+     /// Calculates the total planned cost for this appointment
+    double plannedCost();
+    /// Calculates the planned cost on date
+    double plannedCost(const QDate &date);
+    /// Calculates the planned cost upto and including date
+    double plannedCostTo(const QDate &date);
+
+     /// Calculates the total actual cost for this appointment
+    double actualCost();
+     /// Calculates the actual cost on date
+    double actualCost(const QDate &date);
+    /// Calculates the actual cost upto and including date
+    double actualCostTo(const QDate &date);
 
     KPTAppointment &operator=(const KPTAppointment &app);
     KPTAppointment &operator+=(const KPTAppointment &app);
     KPTAppointment operator+(const KPTAppointment &app);
+    
+    void addActualEffort(QDate date, KPTDuration effort, bool overtime=false);
     
 private:
     KPTNode *m_node;
@@ -471,6 +485,37 @@ private:
 
     KPTAppointmentIntervalList m_intervals;
     
+    class UsedEffortItem {
+    public:
+        UsedEffortItem(QDate date, KPTDuration effort, bool overtime=false);
+        QDate date();
+        KPTDuration effort();
+        bool isOvertime();
+    private:
+        QDate m_date;
+        KPTDuration m_effort;
+        bool m_overtime;
+    };
+    class UsedEffort : QPtrList<UsedEffortItem> {
+    public:
+        UsedEffort();
+        ~UsedEffort() {}
+        void inSort(QDate date, KPTDuration effort, bool overtime=false);
+        KPTDuration usedEffort(bool includeOvertime=true) const;
+        KPTDuration usedEffort(const QDate &date, bool includeOvertime=true) const;
+        KPTDuration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
+        KPTDuration usedOvertime() const;
+        KPTDuration usedOvertime(const QDate &date) const;
+        KPTDuration usedOvertimeTo(const QDate &date) const;
+        bool load(QDomElement &element);
+        void save(QDomElement &element);
+    
+    protected:
+        int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2);
+    };
+    
+    UsedEffort m_actualEffort;
+
 #ifndef NDEBUG
 public:
         void printDebug(QString ident);
@@ -630,7 +675,7 @@ public:
     KPTResourceRequest *find(KPTResource *resource) const;
     bool isEmpty() const;
     
-    bool load(QDomElement &element, KPTProject *project);
+    //bool load(QDomElement &element, KPTProject *project);
     void save(QDomElement &element);
 
     void clear() { m_requests.clear(); }

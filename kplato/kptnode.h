@@ -270,25 +270,48 @@ public:
     /// The node has not been scheduled
     bool notScheduled() const { return m_notScheduled; }
     
+    /// Returns the total planned effort for this task (or subtasks) 
+    virtual KPTDuration plannedEffort() { return KPTDuration::zeroDuration; }
+    /// Returns the total planned effort for this task (or subtasks) on date
+    virtual KPTDuration plannedEffort(const QDate &) { return KPTDuration::zeroDuration; }
+    /// Returns the planned effort up to and including date
+    virtual KPTDuration plannedEffortTo(const QDate &) { return KPTDuration::zeroDuration; }
+    
+    /// Returns the total actual effort for this task (or subtasks) 
+    virtual KPTDuration actualEffort() { return KPTDuration::zeroDuration; }
+    /// Returns the total actual effort for this task (or subtasks) on date
+    virtual KPTDuration actualEffort(const QDate &date) { return KPTDuration::zeroDuration; }
+    /// Returns the total actual effort for this task (or subtasks) up to and including date
+    virtual KPTDuration actualEffortTo(const QDate &date) { return KPTDuration::zeroDuration; }
+    
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
     virtual double plannedCost() { return 0; }
+    
+    /// Planned cost on date
+    virtual double plannedCost(const QDate &/*date*/) { return 0; }
     /**
-     * Planned cost to date is the sum of all resources and other costs
-     * planned for this node up to the date dt
+     * Planned cost from start of activity up to and including date
+     * is the sum of all resource costs and other costs planned for this node.
      */
-    virtual double plannedCost(QDateTime &/*dt*/) { return 0; }
+    virtual double plannedCostTo(const QDate &/*date*/) { return 0; }
     /**
      * Actual cost is the sum total of the reported costs actually used
      * for this node.
      */
     virtual double actualCost() { return 0; }
-    virtual int plannedWork() { return 0; }
-    virtual int plannedWork(QDateTime &/*dt*/) { return 0; }
-    virtual int actualWork() { return 0; }
-
+    /// Actual cost on date
+    virtual double actualCost(const QDate &/*date*/) { return 0; }
+    /// Actual cost up to and including date
+    virtual double actualCostTo(const QDate &/*date*/) { return 0; }
+    
+    /// Effort based performance index
+    double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
+    /// Cost performance index
+    double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
+    
     virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) = 0;
     virtual KPTDateTime calculateForward(int /*use*/) = 0;
     virtual KPTDateTime calculateBackward(int /*use*/) = 0;
@@ -338,14 +361,14 @@ public:
     /// Check if this node can be linked to node
     bool legalToLink(KPTNode *node);
     /// Check if node par can be linked to node child. (Reimplement)
-    virtual bool legalToLink(KPTNode *par, KPTNode *child) { return false; }
+    virtual bool legalToLink(KPTNode *, KPTNode *) { return false; }
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
     /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     virtual void clearProxyRelations() {}
-    virtual void addParentProxyRelations(QPtrList<KPTRelation> &list) {}
-    virtual void addChildProxyRelations(QPtrList<KPTRelation> &list) {}
+    virtual void addParentProxyRelations(QPtrList<KPTRelation> &) {}
+    virtual void addChildProxyRelations(QPtrList<KPTRelation> &) {}
     virtual void addParentProxyRelation(KPTNode *, const KPTRelation *) {}
     virtual void addChildProxyRelation(KPTNode *, const KPTRelation *) {}
 

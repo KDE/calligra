@@ -74,6 +74,8 @@ public slots:
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
     void appListMenuRequested(QListViewItem * item, const QPoint & pos, int);
 
+protected slots:
+    void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 private:
     void drawResources(QListViewItem *parent, KPTResourceGroup *group);
     void drawAppointments(KPTResource *resource);

@@ -60,6 +60,17 @@ public:
     KPTNode *node;
 };
 
+class AppointmentItem : public QListViewItem {
+public:
+    AppointmentItem(KPTAppointment *a, QDate &d, QListViewItem *parent)
+        : QListViewItem(parent),
+        appointment(a),
+        date(d) {}
+
+    KPTAppointment *appointment;
+    QDate date;
+};
+
 KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     : QSplitter(parent, "Resource view"),
     m_mainview(view),
@@ -72,14 +83,14 @@ KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     resList->setItemMargin(2);
     resList->setRootIsDecorated(true);
     resList->addColumn(i18n("Name"));
-    resList->addColumn(i18n("Type"));
     resList->setColumnAlignment(1, AlignHCenter);
-    resList->addColumn(i18n("Normal Rate"));
+    resList->addColumn(i18n("Type"));
     resList->setColumnAlignment(2, AlignRight);
-    resList->addColumn(i18n("Overtime Rate"));
+    resList->addColumn(i18n("Normal Rate"));
     resList->setColumnAlignment(3, AlignRight);
-    resList->addColumn(i18n("Fixed Cost"));
+    resList->addColumn(i18n("Overtime Rate"));
     resList->setColumnAlignment(4, AlignRight);
+    resList->addColumn(i18n("Fixed Cost"));
 
     draw(view->getPart()->getProject());
 
@@ -89,17 +100,25 @@ KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
     appList->setItemMargin(2);
     appList->setRootIsDecorated(true);
     appList->addColumn(i18n("Task"));
-    appList->addColumn(i18n("Start Date"));
-    appList->addColumn(i18n("End Date"));
-    appList->addColumn(i18n("Effort"));
+    appList->addColumn(i18n("Planned Effort"));
+    appList->setColumnAlignment(1, AlignRight);
+    appList->addColumn(i18n("Planned Cost"));
+    appList->setColumnAlignment(2, AlignRight);
+    appList->addColumn(i18n("Actual Effort"));
     appList->setColumnAlignment(3, AlignRight);
+    appList->addColumn(i18n("Actual Cost"));
+    appList->setColumnAlignment(4, AlignRight);
 
+    appList->setSortColumn(100);
+    
     app->addTab(appList, i18n("Appointments"));
 
     connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
     connect(resList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
 
     connect(appList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(appListMenuRequested(QListViewItem*, const QPoint&, int)));
+    
+    connect(appList, SIGNAL( itemRenamed(QListViewItem*, int, const QString&)), SLOT(slotItemRenamed(QListViewItem*, int, const QString&)));
 }
 
 void KPTResourceView::zoom(double zoom)
@@ -175,28 +194,33 @@ void KPTResourceView::drawAppointments(KPTResource *resource)
 {
     //kdDebug()<<k_funcinfo<<"Appointments for resource: "<<resource->name()<<endl;
     QPtrListIterator<KPTAppointment> it(resource->appointments());
-    for (; it.current(); ++it) {
+    for (it.toLast(); it.current(); --it) {
         KPTTask *t = dynamic_cast<KPTTask*>(it.current()->node());
         if (t == 0) continue;
 
         QListViewItem *item = new NodeItemPrivate(t, appList);
-        int i = 1;
-        item->setText(i++, it.current()->startTime().date().toString());
-        item->setText(i++, it.current()->endTime().date().toString());
-        item->setText(i++, it.current()->effort().toString(KPTDuration::Format_Hour)); // FIXME
+        KPTAppointment *app = t->findAppointment(resource);
+        item->setText(1, app->plannedEffort().toString(KPTDuration::Format_HourFraction));
+        item->setText(2, KGlobal::locale()->formatMoney(app->plannedCost()));
+        item->setText(3, app->actualEffort().toString(KPTDuration::Format_HourFraction));
+        item->setText(4, KGlobal::locale()->formatMoney(app->actualCost()));
+        
+        QDate startDate = t->startTime().date();
+        QDate date = t->endTime().date();
+        for (; date >= startDate; date = date.addDays(-1)) {
+            QListViewItem *i = new AppointmentItem(app, date, item);
+            i->setText(0, date.toString(Qt::ISODate));
+            i->setText(1, app->plannedEffort(date).toString(KPTDuration::Format_HourFraction));
+            i->setText(2, KGlobal::locale()->formatMoney(app->plannedCost(date)));
+            i->setText(3, app->actualEffort(date).toString(KPTDuration::Format_HourFraction));
+            i->setText(4, KGlobal::locale()->formatMoney(app->actualCost(date)));
             
-        QPtrListIterator<KPTAppointmentInterval> ait = it.current()->intervals();
-        for (; ait.current(); ++ait) {
-            new QListViewItem(item, "",
-                ait.current()->startTime().date().toString(),
-                ait.current()->endTime().date().toString(),
-                ait.current()->effort().toString(KPTDuration::Format_Hour)); // FIXME
-            
+            i->setRenameEnabled(3, true);
         }
     }
 }
 
-void KPTResourceView::popupMenuRequested(QListViewItem * item, const QPoint & pos, int)
+void KPTResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, int)
 {
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
@@ -215,7 +239,7 @@ void KPTResourceView::popupMenuRequested(QListViewItem * item, const QPoint & po
 
 void KPTResourceView::appListMenuRequested(QListViewItem * item, const QPoint & pos, int)
 {
-    NodeItemPrivate *nitem = dynamic_cast<NodeItemPrivate *>(item);
+/*    NodeItemPrivate *nitem = dynamic_cast<NodeItemPrivate *>(item);
     if (nitem == 0) {
         return;
     }
@@ -226,7 +250,7 @@ void KPTResourceView::appListMenuRequested(QListViewItem * item, const QPoint & 
         int id = menu->exec(pos);
         //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
     } else
-        kdDebug()<<k_funcinfo<<"No menu!"<<endl;
+        kdDebug()<<k_funcinfo<<"No menu!"<<endl;*/
 }
 
 void KPTResourceView::print(KPrinter &printer) {
@@ -241,6 +265,25 @@ bool KPTResourceView::setContext(KPTContext &context) {
 
 void KPTResourceView::getContext(KPTContext &context) const {
     kdDebug()<<k_funcinfo<<endl;
+}
+
+//FIXME
+void KPTResourceView::slotItemRenamed(QListViewItem* item, int col, const QString& text) {
+    kdDebug()<<k_funcinfo<<item->text(0)<<" ("<<col<<"): "<<text<<endl;
+    bool ok;
+    KPTDuration v = KPTDuration::fromString(text, KPTDuration::Format_HourFraction, &ok);
+    AppointmentItem *i = static_cast<AppointmentItem*>(item);
+    if (ok) {
+        i->appointment->addActualEffort(i->date, v);
+        item->setText(4, KGlobal::locale()->formatMoney(i->appointment->actualCost(i->date)));
+        // and update parent
+        NodeItemPrivate *n = static_cast<NodeItemPrivate*>(item->parent());
+        if (n) {
+            n->setText(3, i->appointment->actualEffort().toString(KPTDuration::Format_HourFraction));
+            n->setText(4, KGlobal::locale()->formatMoney(i->appointment->actualCost()));
+        }
+    }
+    item->setText(col, i->appointment->actualEffort(i->date).toString(KPTDuration::Format_HourFraction));
 }
 
 }  //KPlato namespace

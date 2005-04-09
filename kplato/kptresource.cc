@@ -151,7 +151,7 @@ void KPTResourceGroup::save(QDomElement &element)  {
     }
 }
 
-void KPTResourceGroup::saveAppointments(QDomElement &element) const {
+void KPTResourceGroup::saveAppointments(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<KPTResource> it(m_resources);
     for ( ; it.current(); ++it ) {
@@ -442,7 +442,7 @@ void KPTResource::makeAppointment(KPTDateTime &start, KPTDuration &duration, KPT
     }
 }
 
-void KPTResource::saveAppointments(QDomElement &element) const {
+void KPTResource::saveAppointments(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<KPTAppointment> it(m_appointments);
     for ( ; it.current(); ++it ) {
@@ -590,7 +590,8 @@ bool KPTAppointmentInterval::loadXML(QDomElement &element) {
     if (!ok) m_load = 100;
     return m_start.isValid() && m_end.isValid();
 }
-void KPTAppointmentInterval::saveXML(QDomElement &element) const {
+
+void KPTAppointmentInterval::saveXML(QDomElement &element) {
     QDomElement me = element.ownerDocument().createElement("interval");
     element.appendChild(me);
 
@@ -654,6 +655,132 @@ KPTAppointmentInterval KPTAppointmentInterval::firstInterval(const KPTAppointmen
 
 //////
 
+KPTAppointment::UsedEffortItem::UsedEffortItem(QDate date, KPTDuration effort, bool overtime) {
+    m_date = date;
+    m_effort = effort;
+    m_overtime = overtime;
+}
+QDate KPTAppointment::UsedEffortItem::date() { 
+    return m_date; 
+}
+KPTDuration KPTAppointment::UsedEffortItem::effort() {
+    return m_effort; 
+}
+bool KPTAppointment::UsedEffortItem::isOvertime() { 
+    return m_overtime; 
+}
+
+KPTAppointment::UsedEffort::UsedEffort() { 
+    setAutoDelete(true); 
+}
+
+void KPTAppointment::UsedEffort::inSort(QDate date, KPTDuration effort, bool overtime) {
+    UsedEffortItem *item = new UsedEffortItem(date, effort, overtime);
+    QPtrList<UsedEffortItem>::inSort(item);
+}
+
+KPTDuration KPTAppointment::UsedEffort::usedEffort(bool includeOvertime) const {
+    KPTDuration eff;
+    QPtrListIterator<UsedEffortItem> it(*this);
+    for (; it.current(); ++it) {
+        if (includeOvertime || !it.current()->isOvertime()) {
+            eff += it.current()->effort();
+        }
+    }
+    return eff;
+}
+        
+KPTDuration KPTAppointment::UsedEffort::usedEffort(const QDate &date, bool includeOvertime) const {
+    KPTDuration eff;
+    QPtrListIterator<UsedEffortItem> it(*this);
+    for (; it.current(); ++it) {
+        if ((includeOvertime || !it.current()->isOvertime()) && 
+            it.current()->date() == date) {
+            eff += it.current()->effort();
+        }
+    }
+    return eff;
+}
+
+KPTDuration KPTAppointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOvertime) const {
+    KPTDuration eff;
+    QPtrListIterator<UsedEffortItem> it(*this);
+    for (; it.current(); ++it) {
+        if ((includeOvertime || !it.current()->isOvertime()) && 
+            it.current()->date() <= date) {
+            eff += it.current()->effort();
+        }
+    }
+    return eff;
+}
+
+KPTDuration KPTAppointment::UsedEffort::usedOvertime() const {
+    UsedEffortItem *item = getFirst();
+    return item==0 ? KPTDuration::zeroDuration : usedOvertime(item->date());
+}
+
+KPTDuration KPTAppointment::UsedEffort::usedOvertime(const QDate &date) const {
+    KPTDuration eff;
+    QPtrListIterator<UsedEffortItem> it(*this);
+    for (; it.current(); ++it) {
+        if (it.current()->isOvertime() && it.current()->date() == date) {
+            eff += it.current()->effort();
+        }
+    }
+    return eff;
+}
+
+KPTDuration KPTAppointment::UsedEffort::usedOvertimeTo(const QDate &date) const {
+    KPTDuration eff;
+    QPtrListIterator<UsedEffortItem> it(*this);
+    for (; it.current(); ++it) {
+        if (it.current()->isOvertime() && it.current()->date() <= date) {
+            eff += it.current()->effort();
+        }
+    }
+    return eff;
+}
+
+bool KPTAppointment::UsedEffort::load(QDomElement &element) {
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "actual-effort") {
+                QDate date = QDate::fromString(e.attribute("date"), Qt::ISODate);
+                KPTDuration eff = KPTDuration::fromString(e.attribute("effort"));
+                bool ot = e.attribute("overtime", "0").toInt();
+                if (date.isValid()) {
+                    inSort(date, eff, ot);
+                } else {
+                    kdError()<<k_funcinfo<<"Load failed, illegal date: "<<e.attribute("date")<<endl;
+                }
+            }
+        }   
+    }
+    return true;
+}
+
+void KPTAppointment::UsedEffort::save(QDomElement &element) {
+    if (isEmpty()) return;
+    for (UsedEffortItem *item = first(); item; item = next()) {
+        QDomElement me = element.ownerDocument().createElement("actual-effort");
+        element.appendChild(me);
+        me.setAttribute("date",item->date().toString(Qt::ISODate));
+        me.setAttribute("effort",item->effort().toString());
+        me.setAttribute("overtime",item->isOvertime());
+    }
+}
+
+int KPTAppointment::UsedEffort::compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2) {
+    QDate d1 = static_cast<UsedEffortItem*>(item1)->date();
+    QDate d2 = static_cast<UsedEffortItem*>(item2)->date();
+    if (d1 > d2) return 1;
+    if (d1 < d2) return -1;
+    return 0;
+}
+
+////
 KPTAppointment::KPTAppointment() 
     : m_extraRepeats(), m_skipRepeats() {
     m_resource=0;
@@ -774,13 +901,14 @@ bool KPTAppointment::loadXML(QDomElement &element, KPTProject &project) {
             }
         }
     }
+    m_actualEffort.load(element);
     if (m_intervals.isEmpty()) {
         return false; 
     }
     return attach();
 }
 
-void KPTAppointment::saveXML(QDomElement &element) const {
+void KPTAppointment::saveXML(QDomElement &element) {
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
@@ -793,24 +921,91 @@ void KPTAppointment::saveXML(QDomElement &element) const {
     for (; it.current(); ++it) {
         it.current()->saveXML(me);
     }
+    m_actualEffort.save(me);
 }
 
-double KPTAppointment::cost() {
-    return work()/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+// Returns the total actual effort for this appointment
+KPTDuration KPTAppointment::plannedEffort() const {
+    KPTDuration d;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort();
+    }
+    return d;
 }
 
-double KPTAppointment::cost(const KPTDateTime &dt) {
-   return work(dt)/*FIXME*/ * m_resource->normalRate() + m_resource->fixedCost();
+// Returns the planned effort on the date
+KPTDuration KPTAppointment::plannedEffort(const QDate &date) const {
+    KPTDuration d;
+    KPTDateTime s(date, QTime());
+    KPTDateTime e(date.addDays(1), QTime());
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(s, e);
+    }
+    return d;
 }
 
-int KPTAppointment::work() {
-    return effort().hours();
+// Returns the planned effort upto and including the date
+KPTDuration KPTAppointment::plannedEffortTo(const QDate& date) const {
+    KPTDuration d;
+    KPTDateTime e(date.addDays(1), QTime());
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        d += it.current()->effort(e, true);
+    }
+    return d;
 }
 
-// upto dt
-int KPTAppointment::work(const KPTDateTime &dt) {
-    KPTDuration dur = effortUpto(dt);
-    return dur.hours(); /*FIXME*/
+
+// Returns the total actual effort for this appointment
+KPTDuration KPTAppointment::actualEffort() const {
+    return m_actualEffort.usedEffort();
+}
+
+// Returns the actual effort on the date
+KPTDuration KPTAppointment::actualEffort(const QDate &date) const {
+    return m_actualEffort.usedEffort(date);
+}
+
+// Returns the actual effort upto and including date
+KPTDuration KPTAppointment::actualEffortTo(const QDate &date) const {
+    return m_actualEffort.usedEffortTo(date);
+}
+
+double KPTAppointment::plannedCost() {
+    return plannedEffort().toDouble(KPTDuration::Unit_h) * m_resource->normalRate(); //FIXME overtime
+}
+
+//Calculates the planned cost on date
+double KPTAppointment::plannedCost(const QDate &date) {
+    return plannedEffort(date).toDouble(KPTDuration::Unit_h) * m_resource->normalRate(); //FIXME overtime
+}
+
+//Calculates the planned cost upto and including date
+double KPTAppointment::plannedCostTo(const QDate &date) {
+    return plannedEffortTo(date).toDouble(KPTDuration::Unit_h) * m_resource->normalRate(); //FIXME overtime
+}
+
+// Calculates the total actual cost for this appointment
+double KPTAppointment::actualCost() {
+    //kdDebug()<<k_funcinfo<<m_actualEffort.usedEffort(false /*ex. overtime*/).toDouble(KPTDuration::Unit_h)<<endl;
+    
+    return (m_actualEffort.usedEffort(false /*ex. overtime*/).toDouble(KPTDuration::Unit_h)*m_resource->normalRate()) + (m_actualEffort.usedOvertime().toDouble(KPTDuration::Unit_h)*m_resource->overtimeRate());
+}
+
+// Calculates the actual cost on date
+double KPTAppointment::actualCost(const QDate &date) {
+    return (m_actualEffort.usedEffort(date, false /*ex. overtime*/).toDouble(KPTDuration::Unit_h)*m_resource->normalRate()) + (m_actualEffort.usedOvertime(date).toDouble(KPTDuration::Unit_h)*m_resource->overtimeRate());
+}
+
+// Calculates the actual cost upto and including date
+double KPTAppointment::actualCostTo(const QDate &date) {
+    return (m_actualEffort.usedEffortTo(date, false /*ex. overtime*/).toDouble(KPTDuration::Unit_h)*m_resource->normalRate()) + (m_actualEffort.usedOvertimeTo(date).toDouble(KPTDuration::Unit_h)*m_resource->overtimeRate());
+}
+
+void KPTAppointment::addActualEffort(QDate date, KPTDuration effort, bool overtime) {
+    m_actualEffort.inSort(date, effort, overtime);
 }
 
 bool KPTAppointment::attach() { 
@@ -833,15 +1028,6 @@ void KPTAppointment::detach() {
     }
 }
 
-// Returns the total effort for this appointment
-KPTDuration KPTAppointment::effort() const {
-    KPTDuration d;
-    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort();
-    }
-    return d;
-}
 // Returns the effort from start to end
 KPTDuration KPTAppointment::effort(const KPTDateTime &start, const KPTDateTime &end) const {
     KPTDuration d;
@@ -866,26 +1052,6 @@ KPTDuration KPTAppointment::effortFrom(const KPTDateTime &time) const {
     QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
     for (; it.current(); ++it) {
         d += it.current()->effort(time, false);
-    }
-    return d;
-}
-// Returns the effort upto time
-KPTDuration KPTAppointment::effortUpto(const KPTDateTime &time) const {
-    KPTDuration d;
-    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(time, true);
-    }
-    return d;
-}
-// Returns the effort on the date
-KPTDuration KPTAppointment::effort(const QDate &date) const {
-    KPTDuration d;
-    KPTDateTime s(date, QTime());
-    KPTDateTime e(date.addDays(1), QTime());
-    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(s, e);
     }
     return d;
 }
@@ -1335,10 +1501,10 @@ KPTResourceRequest *KPTResourceRequestCollection::find(KPTResource *resource) co
     return req;
 }
 
-bool KPTResourceRequestCollection::load(QDomElement &element, KPTProject *project) {
-    //kdDebug()<<k_funcinfo<<endl;
-    return true;
-}
+// bool KPTResourceRequestCollection::load(QDomElement &element, KPTProject *project) {
+//     //kdDebug()<<k_funcinfo<<endl;
+//     return true;
+// }
 
 void KPTResourceRequestCollection::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;

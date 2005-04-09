@@ -29,19 +29,23 @@ namespace KPlato
 {
 
 class KPTPart;
-
+class KPTStandardWorktime;
 
 class KPTTaskProgressPanel : public KPTTaskProgressPanelBase {
     Q_OBJECT
 public:
-    KPTTaskProgressPanel(KPTTask &task, QWidget *parent=0, const char *name=0);
+    KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(KPTPart *part);
     
     bool ok();
 
+protected:
+    void setEstimateScales( int day );
+    
 private:
     KPTTask &m_task;
+    int m_dayLength;
     struct KPTTask::Progress m_progress;
 };
 

@@ -56,6 +56,10 @@ void KPTTaskProgressPanelBase::slotFinishedChanged(bool state)
     if (state)
     {
         percentFinished->setValue(100);
+ if (!finishTime->dateTime().isValid()) 
+ {
+            finishTime->setDateTime(QDateTime::currentDateTime());
+        }
     }   
     enableWidgets();
 }

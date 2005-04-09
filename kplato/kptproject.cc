@@ -614,6 +614,72 @@ KPTResource *KPTProject::resource(QString id) {
     return findResource(id);
 }
 
+// Returns the total planned effort for this project (or subproject) 
+KPTDuration KPTProject::plannedEffort() {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->plannedEffort();
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this project (or subproject) on date
+KPTDuration KPTProject::plannedEffort(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->plannedEffort(date);
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this project (or subproject) upto and including date
+KPTDuration KPTProject::plannedEffortTo(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->plannedEffortTo(date);
+    }
+    return eff;
+}
+
+// Returns the total actual effort for this project (or subproject) 
+KPTDuration KPTProject::actualEffort() {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->actualEffort();
+    }
+    return eff;
+}
+
+// Returns the total actual effort for this project (or subproject) on date
+KPTDuration KPTProject::actualEffort(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->actualEffort(date);
+    }
+    return eff;
+}
+
+// Returns the total actual effort for this project (or subproject) upto and including date
+KPTDuration KPTProject::actualEffortTo(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        eff += it.current()->actualEffortTo(date);
+    }
+    return eff;
+}
+
 double KPTProject::plannedCost() {
     //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -624,12 +690,24 @@ double KPTProject::plannedCost() {
     return c;
 }
 
-double KPTProject::plannedCost(QDateTime &dt) {
-    //kdDebug()<<k_funcinfo<<endl;
+// Returns the total planned effort for this project (or subproject) on date
+double KPTProject::plannedCost(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
     QPtrListIterator<KPTNode> it(childNodeIterator());
     for (; it.current(); ++it) {
-        c += it.current()->plannedCost(dt);
+        c += it.current()->plannedCost(date);
+    }
+    return c;
+}
+
+// Returns the total planned effort for this project (or subproject) upto and including date
+double KPTProject::plannedCostTo(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->plannedCostTo(date);
     }
     return c;
 }
@@ -640,6 +718,28 @@ double KPTProject::actualCost() {
     QPtrListIterator<KPTNode> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCost();
+    }
+    return c;
+}
+
+// Returns the total planned effort for this project (or subproject) on date
+double KPTProject::actualCost(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->actualCost(date);
+    }
+    return c;
+}
+
+// Returns the total planned effort for this project (or subproject) upto and including date
+double KPTProject::actualCostTo(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->actualCostTo(date);
     }
     return c;
 }

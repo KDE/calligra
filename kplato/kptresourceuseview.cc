@@ -245,7 +245,7 @@ KPTChartDataSet *KPTResourceUseView::drawBarLoadPrDay(KPTResource *resource) {
     double maxLoad=100.0;
     for (KPTDateTime dt = start; dt < end; dt = dt.addDays(1)) {
         KPTDuration e = resource->effort(dt, KPTDuration(1,0,0));
-        KPTDuration l = a.effort(dt.date());
+        KPTDuration l = a.plannedEffort(dt.date());
         if (e == KPTDuration::zeroDuration) {
             load = 0.0;
         } else {

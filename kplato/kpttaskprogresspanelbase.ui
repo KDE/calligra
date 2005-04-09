@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>492</width>
-            <height>382</height>
+            <width>490</width>
+            <height>378</height>
         </rect>
     </property>
     <property name="caption">
@@ -94,137 +94,127 @@
             <property name="title">
                 <string></string>
             </property>
-            <vbox>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout12</cstring>
+                        <cstring>layout30</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Percent completed</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>percentFinished</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Remaining effort</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>remainingEffort</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Actual effort</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>totalPerformed</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout31</cstring>
+                    </property>
+                    <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout7</cstring>
+                                <cstring>layout6</cstring>
                             </property>
-                            <vbox>
+                            <hbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLabel">
+                                <widget class="KIntNumInput">
                                     <property name="name">
-                                        <cstring>textLabel1</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Percent completed</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
                                         <cstring>percentFinished</cstring>
                                     </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>100</number>
+                                    </property>
                                 </widget>
-                                <widget class="QLabel">
+                                <spacer>
                                     <property name="name">
-                                        <cstring>textLabel1_3</cstring>
+                                        <cstring>spacer2</cstring>
                                     </property>
-                                    <property name="text">
-                                        <string>Effort performed</string>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
                                     </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>totalPerformed</cstring>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
                                     </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1_2</cstring>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>168</width>
+                                            <height>20</height>
+                                        </size>
                                     </property>
-                                    <property name="text">
-                                        <string>Effort remaining</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>remainingEffort</cstring>
-                                    </property>
-                                </widget>
-                            </vbox>
+                                </spacer>
+                            </hbox>
                         </widget>
-                        <widget class="QLayoutWidget">
+                        <widget class="KPlato::KPTDurationWidget">
                             <property name="name">
-                                <cstring>layout8</cstring>
+                                <cstring>remainingEffort</cstring>
                             </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLayoutWidget">
-                                    <property name="name">
-                                        <cstring>layout6</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="KIntNumInput">
-                                            <property name="name">
-                                                <cstring>percentFinished</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="minValue">
-                                                <number>0</number>
-                                            </property>
-                                            <property name="maxValue">
-                                                <number>100</number>
-                                            </property>
-                                        </widget>
-                                        <spacer>
-                                            <property name="name">
-                                                <cstring>spacer2</cstring>
-                                            </property>
-                                            <property name="orientation">
-                                                <enum>Horizontal</enum>
-                                            </property>
-                                            <property name="sizeType">
-                                                <enum>Expanding</enum>
-                                            </property>
-                                            <property name="sizeHint">
-                                                <size>
-                                                    <width>168</width>
-                                                    <height>20</height>
-                                                </size>
-                                            </property>
-                                        </spacer>
-                                    </hbox>
-                                </widget>
-                                <widget class="KPlato::KPTDurationWidget">
-                                    <property name="name">
-                                        <cstring>totalPerformed</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="focusPolicy">
-                                        <enum>TabFocus</enum>
-                                    </property>
-                                </widget>
-                                <widget class="KPlato::KPTDurationWidget">
-                                    <property name="name">
-                                        <cstring>remainingEffort</cstring>
-                                    </property>
-                                    <property name="enabled">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="focusPolicy">
-                                        <enum>TabFocus</enum>
-                                    </property>
-                                </widget>
-                            </vbox>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
                         </widget>
-                    </hbox>
+                        <widget class="KPlato::KPTDurationWidget">
+                            <property name="name">
+                                <cstring>actualEffort</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
+                        </widget>
+                    </vbox>
                 </widget>
-            </vbox>
+            </hbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -239,9 +229,43 @@
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout10</cstring>
+                        <cstring>layout8</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Start</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_4_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Finish</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_4_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Effort</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout12</cstring>
+                    </property>
+                    <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
@@ -249,41 +273,7 @@
                             <property name="name">
                                 <cstring>layout8</cstring>
                             </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1_4</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Start</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1_4_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Finish</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>textLabel1_4_3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Effort</string>
-                                    </property>
-                                </widget>
-                            </vbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout9</cstring>
-                            </property>
-                            <vbox>
+                            <hbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
@@ -292,11 +282,65 @@
                                         <cstring>scheduledStart</cstring>
                                     </property>
                                 </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout9</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
                                 <widget class="KDateTimeWidget">
                                     <property name="name">
                                         <cstring>scheduledFinish</cstring>
                                     </property>
                                 </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer4</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout11</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
                                 <widget class="KPlato::KPTDurationWidget">
                                     <property name="name">
                                         <cstring>scheduledEffort</cstring>
@@ -304,10 +348,33 @@
                                     <property name="enabled">
                                         <bool>true</bool>
                                     </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>320</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
                                 </widget>
-                            </vbox>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer4_2</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>59</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
                         </widget>
-                    </hbox>
+                    </vbox>
                 </widget>
             </hbox>
         </widget>
@@ -396,7 +463,7 @@
         <slot>slotChanged()</slot>
     </connection>
     <connection>
-        <sender>totalPerformed</sender>
+        <sender>actualEffort</sender>
         <signal>valueChanged()</signal>
         <receiver>KPTTaskProgressPanelBase</receiver>
         <slot>slotChanged()</slot>
@@ -404,12 +471,12 @@
 </connections>
 <tabstops>
     <tabstop>started</tabstop>
-    <tabstop>startTime</tabstop>
     <tabstop>finished</tabstop>
-    <tabstop>finishTime</tabstop>
     <tabstop>percentFinished</tabstop>
-    <tabstop>totalPerformed</tabstop>
     <tabstop>remainingEffort</tabstop>
+    <tabstop>actualEffort</tabstop>
+    <tabstop>finishTime</tabstop>
+    <tabstop>startTime</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">kpttaskprogresspanelbase.ui.h</include>

@@ -19,6 +19,7 @@
 */
 
 #include <kprinter.h>
+#include <kmessagebox.h>
 
 #include <koKoolBar.h>
 #include <koRect.h>
@@ -423,6 +424,12 @@ void KPTView::slotProjectCalculate() {
 }
 
 void KPTView::projectCalculate() {
+    if (getProject().actualEffort() > 0.0) {
+        // NOTE: This can be removed when proper baselining etc is implemented
+        if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated"), i18n("Calculate")) == KMessageBox::No) {
+            return;
+        }
+    }
     QApplication::setOverrideCursor(Qt::waitCursor);
     getPart()->getProject().calculate();
     QApplication::restoreOverrideCursor();
@@ -909,6 +916,15 @@ void KPTView::renameNode(KPTNode *node, QString name) {
 bool KPTView::setContext(KPTContext &context) {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setContext(context);
+    // hmmm, can't decide if these should be here or actions moved to ganttview
+    actionViewGanttResources->setChecked(context.showResources);
+    actionViewGanttTaskName->setChecked(context.showTaskName);
+    actionViewGanttTaskLinks->setChecked(context.showTaskLinks);
+    actionViewGanttProgress->setChecked(context.showProgress);
+    actionViewGanttFloat->setChecked(context.showPositiveFloat);
+    actionViewGanttCriticalTasks->setChecked(context.showCriticalTasks);
+    actionViewGanttCriticalPath->setChecked(context.showCriticalPath);
+
     m_pertview->setContext(context);
     m_resourceview->setContext(context);
     m_resourceuseview->setContext(context);

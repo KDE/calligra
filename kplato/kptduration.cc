@@ -21,6 +21,8 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include <qregexp.h>
 
@@ -147,7 +149,8 @@ QString KPTDuration::toString(Format format) const {
             break;
         case Format_HourFraction:
             f = (double)m_ms;
-            result = QString("%1").arg(f/(1000 * 60 * 60), 0, 'f', 2);
+            result = KGlobal::locale()->formatNumber(f/(1000 * 60 * 60), 2);
+            //result = QString("%1").arg(f/(1000 * 60 * 60), 0, 'f', 2);
             break;
         default:
             kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
@@ -156,34 +159,54 @@ QString KPTDuration::toString(Format format) const {
     return result;
 }
 
-KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format) {
+KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format, bool *ok) {
     // FIXME: Older versions of this code saved durations as QDateTime's. To avoid
     // making all test files instantly obsolete, we detect this case here. Before
     // we ship, this should be removed!
+    if (ok) *ok = false;
     if (s[1].isLetter())
     {
         QDateTime zero(QDate(0, 1, 1));
         int seconds = zero.secsTo(QDateTime::fromString(s));
+        if (ok) *ok = true;
         return KPTDuration(seconds);
     }
     QRegExp matcher;
     KPTDuration tmp;
     switch (format) {
-        case Format_Hour:
+        case Format_Hour: {
             matcher.setPattern("^(\\d*)h(\\d*)m$" );
-            matcher.search(s);
-            tmp.addHours(matcher.cap(1).toUInt());
-            tmp.addMinutes(matcher.cap(2).toUInt());
+            int pos = matcher.search(s);
+            if (pos > -1) {
+                tmp.addHours(matcher.cap(1).toUInt());
+                tmp.addMinutes(matcher.cap(2).toUInt());
+                if (ok) *ok = true;
+            }
             break;
-        case Format_DayTime:
+        }
+        case Format_DayTime: {
             matcher.setPattern("^(\\d*) (\\d*):(\\d*):(\\d*)\\.(\\d*)$" );
-            matcher.search(s);
-            tmp.addDays(matcher.cap(1).toUInt());
-            tmp.addHours(matcher.cap(2).toUInt());
-            tmp.addMinutes(matcher.cap(3).toUInt());
-            tmp.addSeconds(matcher.cap(4).toUInt());
-            tmp.addMilliseconds(matcher.cap(5).toUInt());
+            int pos = matcher.search(s);
+            if (pos > -1) {
+                tmp.addDays(matcher.cap(1).toUInt());
+                tmp.addHours(matcher.cap(2).toUInt());
+                tmp.addMinutes(matcher.cap(3).toUInt());
+                tmp.addSeconds(matcher.cap(4).toUInt());
+                tmp.addMilliseconds(matcher.cap(5).toUInt());
+                if (ok) *ok = true;
+            }
             break;
+        }
+        case Format_HourFraction: {
+            // should be in double format
+            bool res;
+            double f = KGlobal::locale()->readNumber(s, &res);
+            if (ok) *ok = res;
+            if (res) {
+                return KPTDuration((Q_INT64)(f*3600.0));
+            }
+            break;
+        }
         default:
             kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
             break;

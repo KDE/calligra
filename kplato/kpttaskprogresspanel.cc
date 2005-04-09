@@ -36,13 +36,15 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 #include "kptdurationwidget.h"
+#include "kptcalendar.h"
 
 namespace KPlato
 {
 
-KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, QWidget *parent, const char *name)
+KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent, const char *name)
     : KPTTaskProgressPanelBase(parent, name),
-      m_task(task)
+      m_task(task),
+      m_dayLength(24)
 {
     kdDebug()<<k_funcinfo<<endl;
     m_progress = task.progress();
@@ -53,17 +55,23 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, QWidget *parent, const
     
     percentFinished->setValue(m_progress.percentFinished);
     
+    if (workTime) {
+        kdDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
+        m_dayLength = workTime->durationDay().hours();
+        setEstimateScales(m_dayLength);
+    }
     remainingEffort->setValue(m_progress.remainingEffort);
     remainingEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18n("day", "d"));
     remainingEffort->setFieldUnit(1, i18n("hour", "h"));
     remainingEffort->setFieldUnit(2, i18n("minute", "m"));
 
-    totalPerformed->setValue(m_progress.totalPerformed);
-    totalPerformed->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
-    totalPerformed->setFieldUnit(0, i18n("day", "d"));
-    totalPerformed->setFieldUnit(1, i18n("hour", "h"));
-    totalPerformed->setFieldUnit(2, i18n("minute", "m"));
+    m_progress.totalPerformed = task.actualEffort(); //FIXME
+    actualEffort->setValue(m_progress.totalPerformed);
+    actualEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
+    actualEffort->setFieldUnit(0, i18n("day", "d"));
+    actualEffort->setFieldUnit(1, i18n("hour", "h"));
+    actualEffort->setFieldUnit(2, i18n("minute", "m"));
     
     scheduledStart->setDateTime(task.startTime());
     scheduledFinish->setDateTime(task.endTime());
@@ -86,7 +94,7 @@ bool KPTTaskProgressPanel::ok() {
     m_progress.finishTime = finishTime->dateTime();
     m_progress.percentFinished = percentFinished->value();
     m_progress.remainingEffort = remainingEffort->value();
-    m_progress.totalPerformed = totalPerformed->value();
+    m_progress.totalPerformed = actualEffort->value();
     return true;
 }
 
@@ -97,6 +105,21 @@ KCommand *KPTTaskProgressPanel::buildCommand(KPTPart *part) {
         cmd = new KPTTaskModifyProgressCmd(part, m_task, m_progress, c);
     }
     return cmd;
+}
+
+void KPTTaskProgressPanel::setEstimateScales( int day )
+{
+    remainingEffort->setFieldScale(0, day);
+    remainingEffort->setFieldRightscale(0, day);
+    remainingEffort->setFieldLeftscale(1, day);
+
+    actualEffort->setFieldScale(0, day);
+    actualEffort->setFieldRightscale(0, day);
+    actualEffort->setFieldLeftscale(1, day);
+
+    scheduledEffort->setFieldScale(0, day);
+    scheduledEffort->setFieldRightscale(0, day);
+    scheduledEffort->setFieldLeftscale(1, day);
 }
 
 

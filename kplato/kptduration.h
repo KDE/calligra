@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -102,7 +102,17 @@ class KPTDuration {
         KPTDuration &operator-=(const KPTDuration &d) {subtract(d); return *this; }
 
         QString toString(Format format = Format_DayTime) const;
-        static KPTDuration fromString(const QString &s, Format format = Format_DayTime);
+        static KPTDuration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
+        
+        enum Unit { Unit_ms, Unit_s, Unit_m, Unit_h, Unit_d };
+        double toDouble(Unit u=Unit_ms) const { 
+            if (u == Unit_ms) return (double)m_ms;
+            else if (u == Unit_s) return (double)m_ms/1000.0;
+            else if (u == Unit_m) return (double)m_ms/(1000.0*60.0);
+            else if (u == Unit_h) return (double)m_ms/(1000.0*60.0*60.0);
+            else if (u == Unit_d) return (double)m_ms/(1000.0*60.0*60.0*24.0);
+            return (double)m_ms; 
+        }
 
         /**
          * This is useful for occasions where we need a zero duration.

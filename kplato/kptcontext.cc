@@ -42,7 +42,7 @@ bool KPTContext::load(QDomElement &element) {
             if (e.tagName() == "gantt-view") {
                 ganttviewsize = e.attribute("ganttview-size").toInt();
                 taskviewsize = e.attribute("taskview-size").toInt();
-                currentNode = e.attribute("current-node").toInt();
+                currentNode = e.attribute("current-node");
                 showResources = e.attribute("show-resources").toInt();
                 showTaskName = e.attribute("show-taskname").toInt();
                 showTaskLinks = e.attribute("show-tasklinks").toInt();

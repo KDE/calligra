@@ -316,6 +316,114 @@ void KPTTask::save(QDomElement &element)  {
 	    getChildNode(i)->save(me);
 }
 
+// Returns the total planned effort for this task (or subtasks) 
+KPTDuration KPTTask::plannedEffort() {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffort();
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffort();
+        }
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) on date
+KPTDuration KPTTask::plannedEffort(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffort(date);
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffort(date);
+        }
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) upto and including date
+KPTDuration KPTTask::plannedEffortTo(const QDate &date) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffortTo(date);
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->plannedEffortTo(date);
+        }
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) 
+KPTDuration KPTTask::actualEffort() {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffort();
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffort();
+        }
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) on date
+KPTDuration KPTTask::actualEffort(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffort(date);
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffort(date);
+        }
+    }
+    return eff;
+}
+
+// Returns the total planned effort for this task (or subtasks) on date
+KPTDuration KPTTask::actualEffortTo(const QDate &date) {
+   //kdDebug()<<k_funcinfo<<endl;
+    KPTDuration eff;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffortTo(date);
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            eff += it.current()->actualEffortTo(date);
+        }
+    }
+    return eff;
+}
+
 double KPTTask::plannedCost() {
     //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
@@ -327,24 +435,41 @@ double KPTTask::plannedCost() {
     } else {
         QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
-            c += it.current()->cost();
+            c += it.current()->plannedCost();
         }
     }
     return c;
 }
 
-double KPTTask::plannedCost(QDateTime &dt) {
+double KPTTask::plannedCost(const QDate &date) {
     //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == KPTNode::Type_Summarytask) {
         QPtrListIterator<KPTNode> it(childNodeIterator());
         for (; it.current(); ++it) {
-            c += it.current()->plannedCost(dt);
+            c += it.current()->plannedCost(date);
         }
     } else {
         QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
-            c += it.current()->cost(KPTDateTime(dt)); //FIXME
+            c += it.current()->plannedCost(date);
+        }
+    }
+    return c;
+}
+
+double KPTTask::plannedCostTo(const QDate &date) {
+    //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> it(childNodeIterator());
+        for (; it.current(); ++it) {
+            c += it.current()->plannedCostTo(date);
+        }
+    } else {
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            c += it.current()->plannedCostTo(date);
         }
     }
     return c;
@@ -359,50 +484,78 @@ double KPTTask::actualCost() {
             c += it.current()->actualCost();
         }
     } else {
-        c = 1; //TODO
+        QPtrListIterator<KPTAppointment> it(m_appointments);
+        for (; it.current(); ++it) {
+            c += it.current()->actualCost();
+        }
     }
     return c;
 }
 
-int KPTTask::plannedWork()  {
+double KPTTask::actualCost(const QDate &date) {
     //kdDebug()<<k_funcinfo<<endl;
-    int w = 0;
+    double c = 0;
     if (type() == KPTNode::Type_Summarytask) {
         QPtrListIterator<KPTNode> it(childNodeIterator());
         for (; it.current(); ++it) {
-            w += it.current()->plannedWork();
+            c += it.current()->actualCost(date);
         }
     } else {
         QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
-            if (it.current()->resource()->type() == KPTResource::Type_Work) { // hmmm. show only work?
-                w += it.current()->work();
-                //TODO:overtime and non-proportional work
-            }
+            c += it.current()->actualCost(date);
         }
     }
-    return w;
+    return c;
 }
 
-int KPTTask::plannedWork(QDateTime &dt)  {
+double KPTTask::actualCostTo(const QDate &date) {
     //kdDebug()<<k_funcinfo<<endl;
-    int w = 0;
+    double c = 0;
     if (type() == KPTNode::Type_Summarytask) {
         QPtrListIterator<KPTNode> it(childNodeIterator());
         for (; it.current(); ++it) {
-            w += it.current()->plannedWork(dt);
+            c += it.current()->actualCostTo(date);
         }
     } else {
         QPtrListIterator<KPTAppointment> it(m_appointments);
         for (; it.current(); ++it) {
-            w += it.current()->work(KPTDateTime(dt)); //FIXME
+            c += it.current()->actualCostTo(date);
         }
     }
-    return w;
+    return c;
 }
-int KPTTask::actualWork() {
-    return 0;
+
+//FIXME Handle summarytasks
+double KPTTask::effortPerformanceIndex(const QDate &date, bool *error) {
+    double res = 0.0;
+    KPTDuration ae = actualEffortTo(date);
+    
+    bool e = (ae == KPTDuration::zeroDuration || m_progress.percentFinished == 0);
+    if (error) {
+        *error = e;
+    }
+    if (!e) {
+        res = (plannedEffortTo(date).toDouble() * ((double)m_progress.percentFinished/100.0) / ae.toDouble());
+    }
+    return res;
 }
+
+//FIXME Handle summarytasks
+double KPTTask::costPerformanceIndex(const QDate &date, bool *error) {
+    double res = 0.0;
+    KPTDuration ac = actualCostTo(date);
+    
+    bool e = (ac == KPTDuration::zeroDuration || m_progress.percentFinished == 0);
+    if (error) {
+        *error = e;
+    }
+    if (!e) {
+        res = (plannedCostTo(date) * m_progress.percentFinished)/(100 * actualCostTo(date));
+    }
+    return res;
+}
+
 
 void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks/*, QPtrList<KPTNode> &milestones*/) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;

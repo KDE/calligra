@@ -101,18 +101,36 @@ public:
     /// Returns the resource with identity id.
     KPTResource *resource(QString id);
 
+    /// Returns the total planned effort for this project (or subproject) 
+    virtual KPTDuration plannedEffort();
+    /// Returns the total planned effort for this project (or subproject) on date
+    virtual KPTDuration plannedEffort(const QDate &date);
+    /// Returns the planned effort up to and including date
+    virtual KPTDuration plannedEffortTo(const QDate &date);
+    
+    /// Returns the actual effort 
+    virtual KPTDuration actualEffort();
+    /// Returns the actual effort on date
+    virtual KPTDuration actualEffort(const QDate &date);
+    /// Returns the actual effort up to and including date
+    virtual KPTDuration actualEffortTo(const QDate &date);
     /**
      * Returns the total planned cost for this project
      */
     virtual double plannedCost();
-    /**
-     * Returns the planned cost for this project upto date @dt
-     */
-    virtual double plannedCost(QDateTime &dt);
+    /// Planned cost on date
+    virtual double plannedCost(const QDate &date);
+    /// Planned cost up to and including date
+    virtual double plannedCostTo(const QDate &date);
+    
     /**
      * Returns the actually reported cost for this project
      */
     virtual double actualCost();
+    /// Actual cost on date
+    virtual double actualCost(const QDate &date);
+    /// Actual cost up to and including date
+    virtual double actualCostTo(const QDate &date);
 
     KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
     const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }

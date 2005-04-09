@@ -84,24 +84,43 @@ public:
     /// Save to document
     virtual void save(QDomElement &element);
 
+    /// Returns the total planned effort for this task (or subtasks) 
+    virtual KPTDuration plannedEffort();
+    /// Returns the total planned effort for this task (or subtasks) on date
+    virtual KPTDuration plannedEffort(const QDate &date);
+    /// Returns the planned effort up to and including date
+    virtual KPTDuration plannedEffortTo(const QDate &date);
+    
+    /// Returns the total actual effort for this task (or subtasks) 
+    virtual KPTDuration actualEffort();
+    /// Returns the total actual effort for this task (or subtasks) on date
+    virtual KPTDuration actualEffort(const QDate &date);
+    /// Returns the actual effort up to and including date
+    virtual KPTDuration actualEffortTo(const QDate &date);
+    
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
     virtual double plannedCost();
-    /**
-     * Returns the planned cost for this task (or subtasks) 
-     * from start of task until date dt
-     */
-    virtual double plannedCost(QDateTime &dt);
+    /// Planned cost on date
+    virtual double plannedCost(const QDate &/*date*/);
+    /// Planned cost up to and including date
+    virtual double plannedCostTo(const QDate &/*date*/);
+    
     /**
      * Returns the actaually reported cost for this task (or subtasks)
      */
     virtual double actualCost();
+    /// Actual cost on date
+    virtual double actualCost(const QDate &/*date*/);
+    /// Actual cost up to and including date
+    virtual double actualCostTo(const QDate &/*date*/);
 
-    int plannedWork();
-    int plannedWork(QDateTime &dt);
-    int actualWork();
-
+    /// Effort based performance index
+    double effortPerformanceIndex(const QDate &date, bool *error=0);
+    /// Cost performance index
+    double costPerformanceIndex(const QDate &date, bool *error=0);
+    
     /**
      * Sets up the lists used for calculation.
      * This includes adding summarytasks relations to subtasks
