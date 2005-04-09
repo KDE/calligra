@@ -139,3 +139,5 @@ void PieProperty::slotLengthChanged( int num )
 
 
 #include "pieproperty.h"
+
+#include "pieproperty.moc"
