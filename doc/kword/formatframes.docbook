@@ -11,35 +11,35 @@
 <title>Setting the Properties for a Frame</title>
 <indexterm><primary>frames</primary><secondary>configure</secondary></indexterm>
 
-<para>For each frame in your document, you can:</para>
+<para>For each frame in your document, you can determine:</para>
 
 <itemizedlist>
 <listitem>
-<para>Determine how &kword; handles full text frames</para>
+<para>how &kword; handles full text frames</para>
 </listitem>
 
 <listitem>
-<para>Determine how text wraps around or through overlapping
+<para>how text wraps around or through overlapping
 frames</para>
 </listitem>
 
 <listitem>
-<para>Determine the exact size of the frame</para>
+<para>the exact size of the frame</para>
 </listitem>
 
 <listitem>
-<para>Establish margins within a frame.</para>
+<para>establish margins within a frame.</para>
 </listitem>
 
 <listitem>
-<para>Set a background color and pattern for the frame.</para>
+<para>set a background color and pattern for the frame.</para>
 </listitem>
 </itemizedlist>
 
 <para>All of these options can be altered using a set of dialog boxes, 
 or by using a previously defined <emphasis>framestyle</emphasis>.</para>
-<para>A <emphasis>framestyle</emphasis> is a predefined set of frameset formatting options which is given a name.  Once a frame 
-has been assigned to a framestyle, any changes made to the framestyle will be reflected in all framesets which are 
+<para>A <emphasis>framestyle</emphasis> is a predefined set of frameset formatting options which is given a name.  Once a frameset 
+has been assigned a framestyle, any changes made to the framestyle will be reflected in all framesets which are 
 assigned that framestyle.</para>
 <tip><para>You may be noticing that framestyles function in a way similar to <emphasis>text styles</emphasis>.  The main difference, is
 framestyles control the look of the frame, and textstyles control the look of paragraphs within the frame.</para></tip>
@@ -57,7 +57,8 @@ select the frame you want to change.</para>
 edit. (Or by holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>You can now edit the properties one of two ways:</para>
+<para>You edit the properties of a frameset using a set of dialogs which you can 
+open one of two ways:</para>
 
 <itemizedlist>
 <listitem>
@@ -144,8 +145,8 @@ frame set.</para></listitem>
 <term><guilabel>Place a copy of this frame</guilabel></term>
 <listitem><para>Creates a new page, with a new frame the same size, shape and position on the page.  Additionally, &kword;
 copies the contents of the frame from the previous page.</para>
-<tip><para>This is useful for title frames, headers and footer frames.  Each page will have an automatic copy of the information
-on every new page.</para></tip></listitem>
+<tip><para>This is useful for title frames, headers and footer frames.  Each page will have an automatic copy of this information
+on any new pages.</para></tip></listitem>
 </varlistentry>
 </variablelist>
 
@@ -196,7 +197,7 @@ possible choices.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Text will run through this frames</guilabel></term>
+<term><guilabel>Text will run through this frame</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will ignore this frame
 when it displays the text in overlapping frames.</para>
@@ -207,7 +208,7 @@ when it displays the text in overlapping frames.</para>
 <term><guilabel>Text will run around the frame</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will wrap the text
-of other overlapping frames around this frame.</para>
+of overlapping frames around this frame.</para>
 <para>If this option is selected, you can determine which side the text runs around in the section labeled
 <guilabel>Run Around Side</guilabel>.  Simply choose <guilabel>Left</guilabel>, <guilabel>Right</guilabel>,
 or <guilabel>Longest side</guilabel>.</para>
@@ -230,7 +231,7 @@ checkbox labeled <guilabel>Synchronize changes</guilabel>
 &kword; will make all distances equal.</para>
 
 </sect3>
-<sect3 id="format-frame-connect"><title>Reconnect frames</title>
+<sect3 id="format-frame-connect"><title>Move a frame to a new frameset</title>
 <indexterm><primary>frames</primary><secondary>edit framesets</secondary></indexterm>
 <indexterm><primary>framesets</primary><secondary>edit</secondary></indexterm>
 
@@ -244,7 +245,7 @@ the <guilabel>Connect Text Frames</guilabel> tab.</para>
 </mediaobject>
 </screenshot>
 
-<para>This dialog consists of two radio buttons and a text frame.</para>
+<para>This dialog gives you the option to create a new frameset for the current frame or move the selected frame to a current frameset.</para>
 <para>Select <guilabel>Select existing frameset to connect frame to</guilabel>, to add the current frame to a previously created
 frameset.  Choose one of the
 framesets listed in the table below to specify which frameset.</para>
@@ -330,8 +331,8 @@ become 1 cm in size.</para>
 <guilabel>Background Style</guilabel>. Fill styles can be used to create diagonal lines,or reduce the relative density of color 
 applied to the background. After selecting your fill style, a sample will appear in the preview on the right. </para>
 
-<para>Select <guibutton>OK</guibutton> to accept all of your changes.</para>
-<para>Select <guibutton>Cancel</guibutton> to forget all of your changes.</para>
+<para>Click <guibutton>OK</guibutton> to accept all of your changes.</para>
+<para>Click <guibutton>Cancel</guibutton> to forget all of your changes.</para>
 </sect3>
 </sect2>
 
@@ -342,7 +343,7 @@ applied to the background. After selecting your fill style, a sample will appear
 
 <sect3 id="framestyles-use">
 <title>Formatting a frame with a framestyle</title>
-<indexterm><primary>frame style</primary><secondary>apply frame style to a paragraph</secondary></indexterm>
+<indexterm><primary>frame style</primary><secondary>apply frame style to a frame</secondary></indexterm>
 
 <para>To format a frame using a predefined framestyle simply:</para>
 <para>Select the frame(s) by holding down &Ctrl; and clicking within the frame with the &LMB;.</para>
@@ -356,7 +357,7 @@ you want and all selected frames will automatically be formatting using the opti
 <title>Editing a framestyle</title>
 <indexterm><primary>frame style</primary><secondary>editing</secondary></indexterm>
 
-<para>To change the options of a framestyle, you will use the framestylist.</para>
+<para>To change the options of a framestyle, you will need to use the framestyle manager.</para>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -371,14 +372,14 @@ from the menubar. A dialog box will appear.</para>
 <para>All of the currently defined framestyles are listed in the listbox on the left.  The currently selected framestyle is highlighted, and 
 the name of the currently selected framestyle is listed in the text box labeled <guilabel>Name</guilabel>. (In this example, 
 the currently selected framestyle is <emphasis>Light Gray</emphasis>.)</para>
-<para>Select the name of the framestyle you want to change by clicking on the name of the framestyle in the listbox on the left.</para>
+<para>Select the framestyle you want to change by clicking on the name of the framestyle in the listbox on the left.</para>
 <para>There are three tabs in on the right side of the dialog box:  <guilabel>General</guilabel>, <guilabel>Borders</guilabel> 
 and <guilabel>Background</guilabel></para>
 <para>In the <guilabel>General</guilabel> tab, you can change the name of the liststyle by typing the new name in the text box 
 labeled <guilabel>Name</guilabel>.  You can also see a preview of what your frame will look like in the preview box.</para>
 <para>The <guilabel>Borders</guilabel> tab works the same as the tab of the same name when formatting a paragraph.  For more specific
 information click <link linkend="para-borders">here</link>.</para>
-<para>The <guilabel>Background</guilabel> tab operates identically to the same tab when it is used from the menubar.  Click 
+<para>The <guilabel>Background</guilabel> tab operates identically to the same tab when formatting a frame. Click 
 <link linkend="format-frame-background">here</link> for more specific instructions.</para>
 <para>Once all changes have been made, click <guibutton>OK</guibutton> to save your changes. All of the affected framesets will 
 be changed to reflect the new options.</para>
@@ -398,9 +399,8 @@ from the menubar. A dialog box will appear.</para>
 <imagedata fileref="framestylist.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Select a framestyle from the list at the left which most closely matches your new desired framestyle.
-The selected framestyle will be used as a template for the new framestyle.  Select the framestyle by clicking
-once with the &LMB; in the list on the left.</para>
+<para>Select a framestyle from the list at the left which most closely matches your new desired framestyle by clicking on the name with the &LMB;.
+The selected framestyle will be used as a template for the new framestyle.</para>
 <para>Click on the <guibutton>New</guibutton> button.  &kword; will generate a new framestyle, which is a copy
 of the previously selected framestyle.</para>
 <para>Choose a name for your new framestyle, and type it in the text box labeled <guilabel>Name</guilabel>.</para>
@@ -463,10 +463,17 @@ from the menubar. A dialog box will appear.</para>
 <imagedata fileref="framestylist.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Click the button labeled <guibutton>Import From File</guibutton>.  A dialog box will appear allowing you to 
-select the &kword; file using the <link linkend="file-dialog">file selection dialog</link>.  Choose your file, and select 
-<guibutton>OK</guibutton>.</para>
+<para>Click the button labeled <guibutton>Import From File...</guibutton> to open the 
+<link linkend="file-dialog">file selection dialog</link>. 
+  Choose your file, and click <guibutton>OK</guibutton>.</para>
 <para>A new dialog box will appear listing all available framestyles for importing.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="styleimport.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
 <tip><para>If &kword; encounters a duplicate framestyle name in the selected file, it will append a number to the end of the 
 framestyle name to identify the imported style.</para>
 <para>As an example, if you import the <emphasis>Plain</emphasis> framestyle from another &kword; file, &kword; will change
@@ -474,7 +481,7 @@ the name to <emphasis>Plain-1</emphasis>.</para></tip>
 <para>Select <emphasis>all</emphasis> the framestyles you want to import.  Then click
 <guibutton>OK</guibutton>.</para>
 <para>The framestyles will now appear at the bottom of your list of framestyles.  Click <guibutton>OK</guibutton> 
-to save the framestyles in the new document.</para>
+to save the framestyles to the new document.</para>
 </sect3>
 </sect2>
 </sect1>

@@ -313,7 +313,7 @@ is in the box on the left side of the dialog panel</para>
 <indexterm><primary>tab stops</primary><secondary>tab filling</secondary></indexterm>
 
 <para>By default, &kword; uses the standard tab function that you are familiar with when using a typewriter or most wordprocessing programs.
-You can, however, have &kword; insert spaces or lines to fill the tab space.</para>
+You can, however, have &kword; insert dots or lines to fill the tab space.</para>
 <para>To change the way the tab fills work in &kword; you change the combo box labeled <guilabel>Filling</guilabel>.  This combo box
 gives you many different line styles to choose from.</para>
 <para>You can change the thickness of the lines by using the <guilabel>Width</guilabel> spin box.</para>

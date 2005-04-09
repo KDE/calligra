@@ -19,7 +19,7 @@ blocks of characters including:</para>
 <itemizedlist>
 <listitem><para><link linkend="change-font">Character size</link></para></listitem>
 <listitem><para><link linkend="change-font">Font</link></para></listitem>
-<listitem><para><link linkend="change-font">Font style (italic, bold, etc)</link></para></listitem>
+<listitem><para><link linkend="change-font">Font style (italic, bold, etc).</link></para></listitem>
 <listitem><para><link linkend="change-font">Underlines, superscript, subscript, strikeout, etc.</link></para></listitem>
 <listitem><para><link linkend="change-font">Character color and background color.</link></para></listitem>
 <listitem><para><link linkend="change-font-case">Character case.</link></para></listitem>
@@ -27,7 +27,7 @@ blocks of characters including:</para>
 </itemizedlist>
 
 <sect2 id="change-font">
-<title>Changing Size, Font, Font Style, Text color and Background Colors</title>
+<title>Changing Size, Font, Font Style, Text color and Background Color</title>
 <indexterm><primary>text</primary><secondary>change size</secondary></indexterm>
 <indexterm><primary>change text size</primary></indexterm>
 <indexterm><primary>text</primary><secondary>change font</secondary></indexterm>
@@ -65,7 +65,7 @@ and the keyboard shortcuts.</para>
 
 <informaltable frame="all"><tgroup cols="3" align="left">
 <thead>
-<row><entry align="right">Attribute</entry><entry align="center">toolbar
+<row><entry align="right">Attribute</entry><entry align="center">Toolbar
 Button</entry><entry align="center">Key Combo</entry></row>
 </thead><tbody>
 <row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">
@@ -82,8 +82,8 @@ Button</entry><entry align="center">Key Combo</entry></row>
 </tbody></tgroup></informaltable>
 
 <note>
-<para>You cannot change the Character Set or add double underlines using the keyboard or the
-toolbar, you must <link linkend="change-font-dialog">use the dialog
+<para>You cannot change the all text attributes using the keyboard or a button on a 
+toolbar. For these attributes, you must <link linkend="change-font-dialog">use the dialog
 box</link>.</para>
 </note>
 
@@ -138,8 +138,6 @@ inside the preview box with the &LMB;.  A text cursor will appear. You can edit 
 open this dialog.</para>
 </tip>
 
-<para>Using the check boxes located below the preview box, you can select superscript or subscript.</para>
-
 <para>Clicking the button labeled <guibutton>Change Color...</guibutton>
 will allow you to change the color of the text using the
 <link linkend="select-colors">color selection dialog box</link>.</para>
@@ -157,7 +155,7 @@ will allow you to change the color of the background using the
 </mediaobject>
 </screenshot>
 
-<para>The subsection labeled <guilabel>Underlining</guilabel> has three combo boxes.  
+<para>The subsection labeled <guilabel>Underlining</guilabel> has two combo boxes and a <guibutton>Change Color...</guibutton> button.  
 In the left most combo box select between
 no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para>
 
@@ -169,7 +167,7 @@ no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para
 </mediaobject>
 </screenshot>
 
-<para>Use the center combo box to select the style of underlining (Solid line, dashed line, etc).</para>
+<para>Use the center combo box to select the style of underlining (Solid line, dashed line, etc.).</para>
 <para>Use the <guibutton>Change Color...</guibutton> button to select a color for the underline using the
 <link linkend="select-colors">color selection dialog box</link>.  </para>
 
@@ -208,8 +206,6 @@ character up or down relative to the normal characters by raising or lowering th
 </mediaobject>
 </screenshot>
 
-<tip><para>Uppercase and lower case can also be <link linkend="change-font-case">selected from the menubar</link>.</para></tip>
-
 <para>You can select the language to use with the drop down box.  If the checkbox labeled <guilabel>Auto hyphenation</guilabel> is 
 selected, &kword; will use general rules of spelling to automatically hyphenate the document.</para>
 
@@ -222,8 +218,8 @@ selected, &kword; will use general rules of spelling to automatically hyphenate 
 </mediaobject>
 </screenshot>
 
-<para>First, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the size of the shadow using 
-the spin box labeld <guilabel>Distance</guilabel>.  Finally, select the direction by 
+<para>First, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the distance between the shadow and 
+the text using  the spin box labeld <guilabel>Distance</guilabel>.  Finally, select the direction by 
 selecting one of the eight red squares.  A preview of your shadow appears in the pane on the right.</para>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
@@ -244,7 +240,7 @@ made.</para>
 Begin by selecting the block of text you want changed.  Select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem></menuchoice>
 from the menubar.</para>
-<para>A small dialog box will appear with four options:</para>
+<para>A small dialog box will appear with five options:</para>
 <variablelist>
 <varlistentry>
 <term><guilabel>Uppercase</guilabel></term>

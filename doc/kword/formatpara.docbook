@@ -95,7 +95,7 @@ consists of a combo box and a spin box.</para>
 
 <variablelist>
 <varlistentry>
-<term>Single and Double</term>
+<term>Single, 1.5 Lines and Double</term>
 <listitem>
 <para>If any of these options are selected, the paragraph will have single, 1 and 1/2 or double spacing respectively.</para>
 </listitem>
@@ -247,7 +247,7 @@ around your paragraphs.</para>
 
 <para>&kword; can surround (on some or all sides) a
 paragraph with a border.  This border can be solid or not, of any color
-and of any size.  This dialog panel is used to adjust the
+and of many sizes.  This dialog panel is used to adjust the
 borders.</para>
 
 <variablelist>
@@ -319,7 +319,7 @@ Clicking a second time will remove the bottom paragraph border.</entry>
 
 <tip><para>It is possible to mix and match border styles, widths and colors in one paragraph.</para>
 <para>Simply determine the border style, width and color for one border edge, and select the border 
-using the border buttons.  Now alter the style width or color to create a new border look and select the new border button.</para>
+using the border buttons.  Now alter the style width or color to create a new border look and click the new border button.</para>
 </tip>
 
 
@@ -341,7 +341,7 @@ the rest of the text with a special character preceding each element.  These spe
 are called bullets.</para>
 
 <para>This dialog box is used to define your bullets or the
-numbering method of lists in the document..  This dialog box can also be used to number chapters and sections.</para>
+numbering method of lists in the document.  This dialog box can also be used to number chapters and sections.</para>
 
 <screenshot>
 <mediaobject>

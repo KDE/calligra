@@ -22,12 +22,11 @@ your document.</para>
 
 <tip>
 <para>If you are familiar with Styles in &Microsoft;
-<application>Word</application>, &kword; text styles perform the same
-functions.  You can <link linkend="style-select">skip to the next section</link>.</para>
+<application>Word</application>, &kword; text styles perform similar functions in &kword;. 
+You can <link linkend="style-select">skip to the next section</link>.</para>
 </tip>
 
-<para>As an example, if we look at a section of a document, and assign
-different text styles to appropriate parts :</para>
+<para>Lets look at a section of a document and try to identify appropriate text styles:</para>
 
 <screenshot>
 <mediaobject>
@@ -90,6 +89,8 @@ fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para
 </itemizedlist>
 <para>Simply select the new text style from the list provided.</para>
 
+<tip><para>You can change the text style of an entire paragraph.  Simply place the cursor in a paragraph (making sure that 
+no characters are selected) and select a new style.  Every character in the paragraph will be converted to the new text style.</para></tip>
 </sect2>
 
 <sect2 id="style-add">
@@ -100,7 +101,7 @@ fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para
 will probably want to create new text styles specific for your needs.
 </para>
 
-<para>There are two major ways to create a new text style:</para>
+<para>There are two ways to create a new text style:</para>
 
 <orderedlist>
 <listitem><para><link linkend="style-add-dialog">Create a text style based on another text style using a dialog</link>.</para></listitem>
@@ -113,7 +114,7 @@ then create a text style based on that text</link>.</para></listitem>
 <title>Creating a new text style based on a current text style</title>
 <para>To create a new text style select <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem></menuchoice>
-from the menubar.</para><para>This will bring up a dialog box</para>
+from the menubar.</para><para>This will bring up a dialog box.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -126,7 +127,7 @@ text style.  Click on that text style once with the &LMB;.</para>
 
 <para>Click the <guibutton>New</guibutton> button.</para>
 
-<para>&kword; will create a new text style based on the selected text style.  It will assign it a temporary name [New Style Template (8).]</para>
+<para>&kword; will create a new text style based on the selected text style.  It will assign it a temporary name [New Style Template (8)].</para>
 
 <para>Type a descriptive name in the box labeled
 <guilabel>Name</guilabel>.  This will be the name of the text style.</para>
@@ -137,13 +138,13 @@ text style.</para>
 <para>The preview box will show you what your new text style will look
 like.</para>
 
-<para>Use the buttons labeled <link linkend="style-font">Font</link>,
+<para>Use the tabs labeled <link linkend="style-font">Font</link>,
 <link
 linkend="style-space">Indent &amp; Spacing</link>, <link
 linkend="style-align">General Layout</link>, <link
 linkend="style-borders">Borders</link>, <link
 linkend="style-numbering">Bullets/Numbering</link>, and <link
-linkend="style-tabulators">Tabulators</link>, to create the text style.</para>
+linkend="style-tabulators">Tabulators</link>, to format the text style.</para>
 
 <para>Click <guibutton>OK</guibutton> to create your new text style.</para>
 <para>Click <guibutton>Cancel</guibutton> to abort the creation of the
@@ -214,19 +215,25 @@ For more information see the section entitled <link linkend="lists">Lists</link>
 <para>Using the tab labeled <guilabel>Tabulators</guilabel> it is possible to define tab stops for the new text style.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="tab-stop-setting-dialog">Format Paragraph</link> dialog.
-For more information see the section entitled <link linkend="tab-stops">Tab Stops</link>.</para>
+For more information see the section entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
 
 </sect4>
 
 </sect3>
 <sect3 id="style-add-text">
 <title>Creating a text style based on formatted text</title>
-<para>If you have text that is already formatted correctly for a new text style, simply select the text and select
+<para>If you have text that is already formatted correctly for a new text style:</para>
+<orderedlist>
+<listitem><para>Select the text and select
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Create Style From Selection</guimenuitem></menuchoice>
-from the menubar.</para>
-<para>&kword; will prompt you for a name for your text style.  Enter the name in the text box and click
-<guibutton>OK</guibutton>.  A new text style is created with the font, paragraph spacing, paragraph alignment, borders and shadows of the
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection...</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+
+<listitem><para>&kword; will prompt you for a name for your text style.  Enter the name in the text box.</para></listitem>
+<listitem><para>Click the 
+<guibutton>OK</guibutton> button.</para></listitem>
+</orderedlist>
+<para>  A new text style is created with the font, paragraph spacing, paragraph alignment, borders and shadows of the
 currently selected text.</para>
 <note><para>Future formatting changes to this selected text will not automatically change the text style you just created.  If you want the changes
 to become part of the text style, you must <link linkend="style-edit">edit the text style</link>.</para></note>
@@ -255,7 +262,7 @@ from the menubar.</para><para>This will bring up a dialog box.</para>
 delete by clicking once with the &LMB;.</para>
 
 <warning>
-<para>Be sure you have selected  the correct text style before you click
+<para>Be sure you have selected the correct text style before you click
 <guibutton>Delete</guibutton>.  &kword; will not ask for confirmation,
 so you will not be given an opportunity to back out.</para>
 </warning>
