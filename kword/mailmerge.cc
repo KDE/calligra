@@ -326,7 +326,7 @@ int KWMailMergeDataBase::version() {
  ******************************************************************/
 
 KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList offers )
-    : KDialogBase( Plain, i18n( "Mail Merge - Configuration" ), Ok | Cancel, Ok,
+    : KDialogBase( Plain, i18n( "Mail Merge Setup" ), Ok | Cancel, Ok,
       /*parent*/ 0, "", true ), pluginOffers( offers )
 {
   QWidget *back = plainPage();
@@ -384,7 +384,7 @@ void KWMailMergeChoosePluginDialog::pluginChanged( int pos )
  ******************************************************************/
 
 KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeDataBase *db)
-    : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Close, Close, parent, "", true )
+    : KDialogBase(Plain, i18n( "Mail Merge Setup" ), Close, Close, parent, "", true )
 {
     db_=db;
     QWidget *back = plainPage();
