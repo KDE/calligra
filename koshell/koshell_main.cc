@@ -17,18 +17,56 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <koApplication.h>
 
+#include <config.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
 #include <kdebug.h>
-#include <config.h>
+#include <klocale.h>
+#include <kuniqueapplication.h>
+#include <kwin.h>
+
+#include <koApplication.h>
 
 #include "koshell_shell.h"
 
 static const char* description=I18N_NOOP("KOffice Workspace");
 static const char* version=VERSION;
+
+class KoShellApp : public KUniqueApplication {
+  public:
+    KoShellApp() : mMainWindow( 0 ) {}
+    ~KoShellApp() {}
+
+    int newInstance();
+
+  private:
+    KoShellWindow *mMainWindow;
+};
+
+
+int KoShellApp::newInstance()
+{
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+  if ( isRestored() ) {
+    // There can only be one main window
+    if ( KMainWindow::canBeRestored( 1 ) ) {
+      mMainWindow = new KoShellWindow();
+      setMainWidget( mMainWindow );
+      mMainWindow->show();
+      mMainWindow->restore( 1 );
+    }
+  } else {
+    if ( !mMainWindow ) {
+      mMainWindow = new KoShellWindow();
+      mMainWindow->show();
+      setMainWidget( mMainWindow );
+    }
+  }
+  // Handle startup notification and window activation
+  // (The first time it will do nothing except note that it was called)
+  return KUniqueApplication::newInstance();
+}
 
 extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
 {
@@ -38,15 +76,13 @@ extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
   aboutData->addAuthor("Sven Lüppken", I18N_NOOP("Current Maintainer"), "sven@kde.org");
   aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
   aboutData->addAuthor("David Faure", 0, "faure@kde.org");
-
   KCmdLineArgs::init( argc, argv, aboutData );
-  //KCmdLineArgs::addCmdLineOptions( options );
-
-  KoApplication app;
-
-  KoShellWindow *shell = new KoShellWindow;
-
-  shell->show();
+  
+  if ( !KoShellApp::start() ) {
+    // Already running, brought to the foreground.
+    return 0;
+  }
+  KoShellApp app;
 
   return app.exec();
 }
