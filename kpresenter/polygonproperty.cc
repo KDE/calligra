@@ -83,6 +83,13 @@ PolygonSettingCmd::PolygonSettings PolygonProperty::getPolygonSettings() const
 }
 
 
+void PolygonProperty::setPolygonSettings( const PolygonSettingCmd::PolygonSettings &polygonSettings )
+{
+    m_polygonSettings = polygonSettings;
+    slotReset();
+}
+
+
 void PolygonProperty::apply()
 {
     int flags = getPolygonPropertyChange();

@@ -35,6 +35,7 @@ class KDoubleNumInput;
 class KoSpellConfigWidget;
 class PenStyleWidget;
 class RectProperty;
+class PolygonProperty;
 class PieProperty;
 
 namespace KSpell2 {
@@ -151,9 +152,9 @@ private:
 
     PenStyleWidget *m_confPenDia;
     RectProperty *m_rectProperty;
+    PolygonProperty *m_polygonProperty;
     PieProperty *m_pieProperty;
     ConfBrushDia *m_confBrushDia;
-    ConfPolygonDia *m_confPolygonDia;
 };
 
 class configurePathPage : public QWidget

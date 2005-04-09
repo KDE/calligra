@@ -46,8 +46,7 @@
 #include "penstylewidget.h"
 #include "pieproperty.h"
 #include "rectproperty.h"
-#include "confpolygondia.h"
-#include "confpicturedia.h"
+#include "polygonproperty.h"
 
 #include "kpresenter_dlg_config.h"
 #include "kpresenter_view.h"
@@ -816,19 +815,19 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
     m_rectProperty = new RectProperty( this, 0, rectValues );
     tab->addTab( m_rectProperty, i18n( "&Rectangle" ) );
 
+    PolygonSettingCmd::PolygonSettings polygonSettings;
+    polygonSettings.checkConcavePolygon = m_pView->getCheckConcavePolygon();
+    polygonSettings.cornersValue = m_pView->getCornersValue();
+    polygonSettings.sharpnessValue = m_pView->getSharpnessValue();
+    m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
+    tab->addTab( m_polygonProperty, i18n( "Polygo&n" ) );
+
     PieValueCmd::PieValues pieValues;
     pieValues.pieType = m_pView->getPieType();
     pieValues.pieAngle = m_pView->getPieAngle();
     pieValues.pieLength = m_pView->getPieLength();
     m_pieProperty = new PieProperty( this, 0, pieValues );
     tab->addTab( m_pieProperty, i18n( "&Pie" ) );
-
-    m_confPolygonDia = new ConfPolygonDia(tab, "ConfPolygonDia");
-    m_confPolygonDia->setCheckConcavePolygon(m_pView->getCheckConcavePolygon());
-    m_confPolygonDia->setCornersValue(m_pView->getCornersValue());
-    m_confPolygonDia->setSharpnessValue(m_pView->getSharpnessValue());
-    m_confPolygonDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
-    tab->addTab(m_confPolygonDia, i18n("P&olygon"));
 
     box->addWidget(tab);
 }
@@ -843,13 +842,16 @@ void configureToolsPage::apply()
     m_pView->setRndX( rectValues.xRnd );
     m_pView->setRndY( rectValues.yRnd );
 
+    PolygonSettingCmd::PolygonSettings polygonSettings = m_polygonProperty->getPolygonSettings();
+    m_pView->setCheckConcavePolygon( polygonSettings.checkConcavePolygon );
+    m_pView->setCornersValue( polygonSettings.cornersValue );
+    m_pView->setSharpnessValue( polygonSettings.sharpnessValue );
+
     PieValueCmd::PieValues pieValues = m_pieProperty->getPieValues();
     m_pView->setPieType( pieValues.pieType );
     m_pView->setPieAngle( pieValues.pieAngle );
     m_pView->setPieLength( pieValues.pieLength );
-    m_pView->setCheckConcavePolygon(m_confPolygonDia->getCheckConcavePolygon());
-    m_pView->setCornersValue(m_confPolygonDia->getCornersValue());
-    m_pView->setSharpnessValue(m_confPolygonDia->getSharpnessValue());
+
     m_pView->setPen(m_confPenDia->getPen());
     m_pView->setBrush(m_confBrushDia->getBrush());
     m_pView->setLineBegin(m_confPenDia->getLineBegin());
@@ -864,8 +866,7 @@ void configureToolsPage::apply()
     m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
     m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
     //TODO set pen brush in m_rectProperty
-    m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
-                                  m_confBrushDia->getBrush());
+    //TODO set pen brush in m_polygonProperty
     //TODO set pen brush in m_pieProperty
 }
 
@@ -876,14 +877,17 @@ void configureToolsPage::slotDefault()
     rectValues.yRnd = 0;
     m_rectProperty->setRectValues( rectValues );
 
+    PolygonSettingCmd::PolygonSettings polygonSettings;
+    polygonSettings.checkConcavePolygon = false;
+    polygonSettings.cornersValue = 3;
+    polygonSettings.sharpnessValue = 0;
+    m_polygonProperty->setPolygonSettings( polygonSettings );
+
     PieValueCmd::PieValues pieValues;
     pieValues.pieType = PT_PIE;
     pieValues.pieAngle = 45 * 16;
     pieValues.pieLength = 90 * 16;
-    m_pieProperty->setPieValues( pieValues );
-    m_confPolygonDia->setCheckConcavePolygon(false);
-    m_confPolygonDia->setCornersValue(3);
-    m_confPolygonDia->setSharpnessValue(0);
+
     m_confBrushDia->setBrush(QBrush(white, SolidPattern));
     PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );

@@ -36,6 +36,7 @@ public:
     int getPolygonPropertyChange() const;
     PolygonSettingCmd::PolygonSettings getPolygonSettings() const;
 
+    void setPolygonSettings( const PolygonSettingCmd::PolygonSettings &polygonSettings );
     void apply();
 
 protected:
