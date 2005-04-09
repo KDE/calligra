@@ -26,7 +26,6 @@
 #include <qpainter.h>
 #include <qevent.h>
 #include <qlayout.h>
-#include <qhbox.h>
 #include <qlabel.h>
 
 #include <kglobal.h>
