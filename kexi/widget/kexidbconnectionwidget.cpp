@@ -65,7 +65,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 
 	QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
 	hbox->addStretch(2);
-	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save changes"), "filesave", 
+	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save Changes"), "filesave", 
 		i18n("Save all changes made to this connection")), frmBottom, "savechanges");
 	hbox->addWidget( d->btnSaveChanges );
 	d->btnSaveChanges->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -222,9 +222,9 @@ bool KexiDBConnectionTabWidget::savePasswordSelected() const
 //! @todo set proper help ctxt ID
 
 KexiDBConnectionDialog::KexiDBConnectionDialog(const KexiProjectData& data, const QString& shortcutFileName)
- : KDialogBase(0, "dlg", true, i18n("Open database"), 
+ : KDialogBase(0, "dlg", true, i18n("Open Database"), 
 	KDialogBase::User1|KDialogBase::Cancel|KDialogBase::Help,
-	KDialogBase::User1, false, KGuiItem(i18n("&Open"), "fileopen", i18n("Open database connection")))
+	KDialogBase::User1, false, KGuiItem(i18n("&Open"), "fileopen", i18n("Open Database Connection")))
 {
 	connect( this, SIGNAL(user1Clicked()), this, SLOT(accept()));
 

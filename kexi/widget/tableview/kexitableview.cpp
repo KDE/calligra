@@ -823,7 +823,7 @@ void KexiTableView::deleteCurrentRow()
 		break;
 	case AskDelete:
 		if (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
-			KGuiItem(i18n("&Delete row")), KStdGuiItem::no(), "dontAskBeforeDeleteRow"/*config entry*/))
+			KGuiItem(i18n("&Delete Row")), KStdGuiItem::no(), "dontAskBeforeDeleteRow"/*config entry*/))
 			return;
 		break;
 	case SignalDelete:

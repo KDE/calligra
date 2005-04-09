@@ -4670,7 +4670,7 @@ void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 
-    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be Shown 1:1 in Presentation Mode" ),
+    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
                                           KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );
     resizeCmd->execute();

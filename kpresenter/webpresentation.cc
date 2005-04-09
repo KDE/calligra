@@ -1030,7 +1030,7 @@ void KPWebPresentationWizard::setupPage5()
                                            QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
-    addPage( page5, i18n( "Step 5: Options for unattended presentations" ) );
+    addPage( page5, i18n( "Step 5: Options for Unattended Presentations" ) );
 
     setHelpEnabled(page5, false);  //doesn't do anything currently
 

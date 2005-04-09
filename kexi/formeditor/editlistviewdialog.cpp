@@ -39,7 +39,7 @@ namespace KFormDesigner {
 
 EditListViewDialog::EditListViewDialog(QWidget *parent)
 //js(kde3.2 dependent) : KDialogBase(Tabbed, 0/* WFlags */, parent, "editlistview_dialog", true, i18n("Edit listview contents"), Ok|Cancel, Ok, false)
-: KDialogBase(Tabbed, i18n("Edit listview contents"), Ok|Cancel, Ok, parent, "editlistview_dialog", true /* modal */, false)
+: KDialogBase(Tabbed, i18n("Edit Listview Contents"), Ok|Cancel, Ok, parent, "editlistview_dialog", true /* modal */, false)
 {
 	m_column = addPage(i18n("Columns"));
 	m_contents = addPage(i18n("Contents"));

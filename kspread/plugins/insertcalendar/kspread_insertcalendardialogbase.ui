@@ -164,7 +164,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Insert</string>
+                <string>&amp;Insert</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Insert the calendar at the currently selected cell.</string>
@@ -188,7 +188,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Cancel</string>
+                <string>&amp;Cancel</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Don't insert a calendar.</string>

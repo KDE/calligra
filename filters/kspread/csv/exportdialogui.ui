@@ -203,7 +203,7 @@
                             <cstring>TextLabel4</cstring>
                         </property>
                         <property name="text">
-                            <string>Export sheet(s):</string>
+                            <string>Select sheets to export:</string>
                         </property>
                     </widget>
                     <widget class="QGroupBox" row="0" column="0">

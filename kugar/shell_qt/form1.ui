@@ -131,10 +131,10 @@
             <cstring>fileExitAction</cstring>
         </property>
         <property name="text">
-            <string>Exit</string>
+            <string>Quit</string>
         </property>
         <property name="menuText">
-            <string>E&amp;xit</string>
+            <string>&amp;Quit</string>
         </property>
     </action>
     <action>
@@ -247,7 +247,7 @@
             <string>Contents</string>
         </property>
         <property name="menuText">
-            <string>&amp;Contents...</string>
+            <string>&amp;Contents</string>
         </property>
     </action>
     <action>
@@ -258,7 +258,7 @@
             <string>Index</string>
         </property>
         <property name="menuText">
-            <string>&amp;Index...</string>
+            <string>&amp;Index</string>
         </property>
     </action>
     <action>

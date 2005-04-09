@@ -13,9 +13,6 @@
             <height>378</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KPTTaskProgressPanelBase</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -63,7 +60,7 @@
                                 <cstring>started</cstring>
                             </property>
                             <property name="text">
-                                <string>Started</string>
+                                <string>Started:</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -74,7 +71,7 @@
                                 <cstring>finished</cstring>
                             </property>
                             <property name="text">
-                                <string>Finished</string>
+                                <string>Finished:</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -111,7 +108,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Percent completed</string>
+                                <string>Percent completed:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>percentFinished</cstring>
@@ -122,7 +119,7 @@
                                 <cstring>textLabel1_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Remaining effort</string>
+                                <string>Remaining effort:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>remainingEffort</cstring>
@@ -133,7 +130,7 @@
                                 <cstring>textLabel1_3</cstring>
                             </property>
                             <property name="text">
-                                <string>Actual effort</string>
+                                <string>Actual effort:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>totalPerformed</cstring>
@@ -240,7 +237,7 @@
                                 <cstring>textLabel1_4</cstring>
                             </property>
                             <property name="text">
-                                <string>Start</string>
+                                <string>Start:</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -248,7 +245,7 @@
                                 <cstring>textLabel1_4_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Finish</string>
+                                <string>Finish:</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -256,7 +253,7 @@
                                 <cstring>textLabel1_4_3</cstring>
                             </property>
                             <property name="text">
-                                <string>Effort</string>
+                                <string>Effort:</string>
                             </property>
                         </widget>
                     </vbox>

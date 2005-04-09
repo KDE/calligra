@@ -373,7 +373,7 @@ PixmapCollectionEditor::displayMenu(QIconViewItem *it, const QPoint &p)
 
 //// A Dialog to choose a pixmap from the PixmapCollection
 PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, const QString &selectedItem, QWidget *parent)
-: KDialogBase(parent, "pixchoose_dialog", true, i18n("Select a pixmap from %1").arg(collection->collectionName()),
+: KDialogBase(parent, "pixchoose_dialog", true, i18n("Select Pixmap From %1").arg(collection->collectionName()),
    User1|Ok|Cancel, Ok, false, KGuiItem(i18n("Edit Collection...")))
 {
 	m_collection = collection;

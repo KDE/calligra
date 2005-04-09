@@ -567,7 +567,7 @@ void kchartDataEditor::setCols(int cols)
 void kchartDataEditor::column_clicked(int column)
 {
 	bool ok;
-    QString name = KInputDialog::getText(i18n("Column name"), 
+    QString name = KInputDialog::getText(i18n("Column Name"), 
 					 i18n("Type a new column name:"), 
 					 m_table->horizontalHeader()->label(column),
 					 &ok, this, 0, new QRegExpValidator(QRegExp(".*"), this) );
@@ -585,7 +585,7 @@ void kchartDataEditor::column_clicked(int column)
 void kchartDataEditor::row_clicked(int row)
 {
 	bool ok;
-    QString name = KInputDialog::getText(i18n("Row name"),
+    QString name = KInputDialog::getText(i18n("Row Name"),
 					 i18n("Type a new row name:"), 
 					 m_table->verticalHeader()->label(row),
 					 &ok, this, 0, new QRegExpValidator(QRegExp(".*"), this) );

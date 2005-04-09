@@ -70,7 +70,7 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>Sheet selection</string>
+                <string>Sheet Selection</string>
             </property>
             <vbox>
                 <property name="name">
@@ -97,7 +97,7 @@
                                 <cstring>mSelectAllButton</cstring>
                             </property>
                             <property name="text">
-                                <string>Select &amp;all</string>
+                                <string>Select &amp;All</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click here to select all sheets in the list.</string>
@@ -108,7 +108,7 @@
                                 <cstring>mDeselectAllButton</cstring>
                             </property>
                             <property name="text">
-                                <string>Desele&amp;ct all</string>
+                                <string>Desele&amp;ct All</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Click here to select all sheets in the list.</string>
@@ -176,7 +176,7 @@
                         <cstring>mCustomButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Use &amp;external stylesheet</string>
+                        <string>Use &amp;external stylesheet:</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Select this option to specify a separate stylesheet for the HTML page. You can select or type on in the field below.</string>
@@ -233,7 +233,7 @@
                                 <cstring>textLabel1_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Pi&amp;xels between cells</string>
+                                <string>Pi&amp;xels between cells:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>mPixelsBetweenCells</cstring>

@@ -651,7 +651,7 @@ void ContainerFactory::renameTabPage()
 	QWidget *w = tab->currentPage();
 	bool ok;
 
-	QString name = KInputDialog::getText(i18n("New Page Title"), i18n("Enter a new title for the current page"),
+	QString name = KInputDialog::getText(i18n("New Page Title"), i18n("Enter a new title for the current page:"),
 #if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
 	       QLineEdit::Normal,
 #endif

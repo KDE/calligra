@@ -200,10 +200,10 @@
             <cstring>fileExitAction</cstring>
         </property>
         <property name="text">
-            <string>Exit</string>
+            <string>Quit</string>
         </property>
         <property name="menuText">
-            <string>E&amp;xit</string>
+            <string>&amp;Quit</string>
         </property>
     </action>
     <action>
@@ -316,7 +316,7 @@
             <string>Contents</string>
         </property>
         <property name="menuText">
-            <string>&amp;Contents...</string>
+            <string>&amp;Contents</string>
         </property>
     </action>
     <action>
@@ -327,7 +327,7 @@
             <string>Index</string>
         </property>
         <property name="menuText">
-            <string>&amp;Index...</string>
+            <string>&amp;Index</string>
         </property>
     </action>
     <action>
@@ -338,7 +338,7 @@
             <string>About</string>
         </property>
         <property name="menuText">
-            <string>&amp;About...</string>
+            <string>&amp;About</string>
         </property>
     </action>
     <action>
@@ -346,10 +346,10 @@
             <cstring>helpAboutQTAction</cstring>
         </property>
         <property name="text">
-            <string>About QT</string>
+            <string>About Qt</string>
         </property>
         <property name="menuText">
-            <string>&amp;About QT...</string>
+            <string>&amp;About Qt</string>
         </property>
     </action>
     <action>

@@ -218,7 +218,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Lag</string>
+                                <string>Lag:</string>
                             </property>
                             <property name="alignment">
                                 <set>AlignBottom</set>

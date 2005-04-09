@@ -105,13 +105,13 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addLayout(l, 0, 0);
 
     // Linear or logarithmic scale
-    QVButtonGroup *scaletype = new QVButtonGroup(i18n("Scale types"), gb2);
+    QVButtonGroup *scaletype = new QVButtonGroup(i18n("Scale Types"), gb2);
     lin = new QRadioButton( i18n("Linear scale"), scaletype);
     log = new QRadioButton( i18n("Logarithmic scale"), scaletype);
     grid2->addWidget(scaletype, 1, 0);
 
     // Decimal precision
-    QVButtonGroup *precision = new QVButtonGroup(i18n("Precision for the numerical left axis"), gb2);
+    QVButtonGroup *precision = new QVButtonGroup(i18n("Precision for Numerical Left Axis"), gb2);
     grid2->addWidget(precision, 2, 0);
     QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
     automatic_precision->setChecked(true);

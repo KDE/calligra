@@ -33,7 +33,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Groups</string>
+                        <string>Groups:</string>
                     </property>
                 </widget>
                 <widget class="QListBox">
@@ -131,6 +131,14 @@
                         </property>
                         <widget class="QPushButton">
                             <property name="name">
+                                <cstring>bAddResource</cstring>
+                            </property>
+                            <property name="text">
+                                <string>New...</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
                                 <cstring>bEditResource</cstring>
                             </property>
                             <property name="text">
@@ -143,14 +151,6 @@
                             </property>
                             <property name="text">
                                 <string>Remove</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bAddResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>New...</string>
                             </property>
                         </widget>
                         <spacer>

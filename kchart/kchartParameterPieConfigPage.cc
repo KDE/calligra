@@ -55,7 +55,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     QLabel *label = new QLabel( i18n( "Explode factor (%):" ), gb );
     explode = new QSpinBox(0, 100, 1, gb);
 
-    label = new QLabel( i18n( "Start Angle:" ), gb );
+    label = new QLabel( i18n( "Start angle:" ), gb );
     angle = new QSpinBox(0, 90, 1, gb);
 
     label = new QLabel( i18n( "3D-depth:" ), gb );

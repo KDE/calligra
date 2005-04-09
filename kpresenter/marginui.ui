@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>MarginUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -62,7 +62,7 @@
                                         <cstring>leftLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Left</string>
+                                        <string>&amp;Left:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>leftInput</cstring>
@@ -73,7 +73,7 @@
                                         <cstring>rightLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Rig&amp;ht</string>
+                                        <string>Rig&amp;ht:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>rightInput</cstring>
@@ -94,7 +94,7 @@
                                         <cstring>bottomLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Bottom</string>
+                                        <string>&amp;Bottom:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>bottomInput</cstring>
@@ -105,7 +105,7 @@
                                         <cstring>topLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Top</string>
+                                        <string>&amp;Top:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>topInput</cstring>
@@ -129,9 +129,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Synchronize changes</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+S</string>
                             </property>
                         </widget>
                     </grid>

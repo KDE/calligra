@@ -239,7 +239,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
                 // For security reasons we need to ask confirmation if the url is remote
                 int result = KMessageBox::warningYesNoCancel(
                     0, i18n( "This document contains an external link to a remote document\n%1").arg(m_tmpURL),
-                    i18n( "Confirmation required" ), i18n( "Download" ), i18n( "Skip" ) );
+                    i18n( "Confirmation Required" ), i18n( "Download" ), i18n( "Skip" ) );
 
                 if ( result == KMessageBox::Cancel )
                 {
