@@ -23,6 +23,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include "class.h"
+
 namespace Kross { namespace Api {
 
     // Forward declarations.
@@ -50,15 +52,15 @@ namespace Kross { namespace Api {
             virtual ~Script();
 
             /**
+             * Execute the script.
+             */
+            virtual Kross::Api::Object* execute() = 0;
+
+            /**
              * Return a list of callable functionnames this
              * script spends.
              */
             virtual const QStringList& getFunctionNames() = 0;
-
-            /**
-             * Execute the script.
-             */
-            virtual Kross::Api::Object* execute() = 0;
 
             /**
              * Call a function.
@@ -68,6 +70,7 @@ namespace Kross { namespace Api {
         protected:
             Interpreter* m_interpreter;
             ScriptContainer* m_scriptcontainer;
+            Object* m_object;
     };
 
 }}

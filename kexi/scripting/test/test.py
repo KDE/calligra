@@ -163,6 +163,12 @@ class KexiDBClass:
         print "alterTableName from=%s to=%s tableschema=%s" % (tablename, newtablename, tableschema)
         connection.alterTableName(tableschema, newtablename)
 
+class testClass:
+    def __init__(self):
+        print "testKexiDBClass Constructor."
+    def testClassFunction(args):
+        print "testClassFunction() called in pythonscript."
+
 def testKexiDB():
     global KexiDBClass
     mykexidbclass = KexiDBClass()

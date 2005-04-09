@@ -91,8 +91,9 @@ Py::Object PythonExtension::getattr(const char* n)
         return members;
     }
 
-    //if(name == "__dict__") return Py::None();
-    //if(name == "__class__") return Py::None();
+    //if(name == "__dict__") { return kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; Py::None(); }
+    //if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
+
     if(name.startsWith("__")) {
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
         kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' is a internal name.").arg(name) << endl;
@@ -138,18 +139,37 @@ Kross::Api::List* PythonExtension::toObject(const Py::Tuple& tuple)
 Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
 {
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
-    kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object)") << endl;
+    kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) object='%1'").arg(object.as_string().c_str()) << endl;
 #endif
 
-    if(object == Py::None())
+    if(object == Py::None()) {
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNone") << endl;
+#endif
         return 0;
+    }
+
+    if(object.isInstance()) {
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isInstance") << endl;
+#endif
+        //TODO
+        kdWarning() << "TODO: PythonExtension::toObject() isInstance()" << endl;
+        return 0;
+    }
 
     if(object.isTuple()) {
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isTuple") << endl;
+#endif
         Py::Tuple tuple = object;
         return toObject(tuple);
     }
 
     if(object.isNumeric()) {
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNumeric") << endl;
+#endif
         //FIXME add isUnsignedLong() to Py::Long (or create
         // an own Py::UnsignedLong class) and if true used it
         // rather then long to prevent overflows (needed to
@@ -158,8 +178,12 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
         return Kross::Api::Variant::create(Q_LLONG(long(l)));
     }
 
-    if(object.isString())
+    if(object.isString()) {
+#ifdef KROSS_PYTHON_EXTENSION_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isString") << endl;
+#endif
         return Kross::Api::Variant::create(object.as_string().c_str());
+    }
 
     /*TODO
     if(object.isUnicode()) {
@@ -174,9 +198,6 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
     isTrue()
     */
 
-#ifdef KROSS_PYTHON_EXTENSION_DEBUG
-    kdDebug() << "Kross::Python::PythonExtension::toObject(Py::Object) trying to convert into PythonExtension object." << endl;
-#endif
     Py::ExtensionObject<PythonExtension> extobj(object);
     PythonExtension* extension = extobj.extensionObject();
     if(! extension)
@@ -184,6 +205,7 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
     Kross::Api::Object* obj = extension->getObject();
     if(! obj)
         throw Py::TypeError("Failed to convert the PythonExtension object into a Kross::Api::Object.");
+
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
     kdDebug() << "Kross::Python::PythonExtension::toObject(Py::Object) successfully converted into Kross::Api::Object." << endl;
 #endif
@@ -322,8 +344,9 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object* object)
 Py::Tuple PythonExtension::toPyTuple(Kross::Api::List* list)
 {
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
-    kdDebug() << QString("Kross::Python::PythonExtension::toPyTuple(Kross::Api::List) name='%1'").arg(list ? list->getName() : QString("NULL")) << endl;
+    kdDebug() << QString("Kross::Python::PythonExtension::toPyTuple(Kross::Api::List) name='%1'").arg(list ? list->getName() : "NULL") << endl;
 #endif
+    //if(! list) Py::None;
 
     uint count = list ? list->count() : 0;
     Py::Tuple tuple(count);

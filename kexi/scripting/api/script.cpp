@@ -28,6 +28,7 @@ using namespace Kross::Api;
 Script::Script(Interpreter* interpreter, ScriptContainer* scriptcontainer)
     : m_interpreter(interpreter)
     , m_scriptcontainer(scriptcontainer)
+    , m_object(0)
 {
 }
 

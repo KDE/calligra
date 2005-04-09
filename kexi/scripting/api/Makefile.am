@@ -1,6 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-noinst_LTLIBRARIES = libkrossapi.la
+lib_LTLIBRARIES = libkrossapi.la
+#noinst_LTLIBRARIES = libkrossapi.la
 
 libkrossapi_la_SOURCES = \
     object.cpp \

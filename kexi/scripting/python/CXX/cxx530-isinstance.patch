@@ -1,0 +1,46 @@
+--- /home/snoopy/cvs/kross_old/_cxx_5.3.0/CXX/Objects.hxx	2004-11-14 21:52:52.000000000 +0100
++++ Objects.hxx	2005-04-06 22:06:10.000000000 +0200
+@@ -10,7 +10,6 @@
+ #include "CXX/Config.hxx"
+ #include "CXX/Exception.hxx"
+ 
+-
+ #include <iostream>
+ #include STR_STREAM
+ #include <string>
+@@ -283,6 +282,11 @@ namespace Py
+ 			return PyCallable_Check (p) != 0;
+ 			}
+ 
++                bool isInstance () const
++			{
++			return PyInstance_Check (p) != 0;
++			}
++
+ 		bool isDict () const
+ 			{
+ 			return Py::_Dict_Check (p);
+@@ -897,6 +901,11 @@ namespace Py
+ 			return the_item.isCallable();
+ 			}
+ 
++                bool isInstance () const
++			{
++			return the_item.isInstance();
++			}
++
+ 		bool isDict () const
+ 			{
+ 			return the_item.isDict();
+@@ -1980,6 +1989,11 @@ namespace Py
+ 			return the_item.isCallable();
+ 			}
+ 
++                bool isInstance () const
++			{
++			return the_item.isInstance();
++			}
++
+ 		bool isList () const
+ 			{
+ 			return the_item.isList();

@@ -282,6 +282,11 @@ namespace Py
 			return PyCallable_Check (p) != 0;
 			}
 
+                bool isInstance () const
+			{
+			return PyInstance_Check (p) != 0;
+			}
+
 		bool isDict () const
 			{
 			return Py::_Dict_Check (p);
@@ -911,6 +916,11 @@ namespace Py
 		bool isCallable () const
 			{
 			return the_item.isCallable();
+			}
+
+                bool isInstance () const
+			{
+			return the_item.isInstance();
 			}
 
 		bool isDict () const
@@ -1994,6 +2004,11 @@ namespace Py
 		bool isCallable () const
 			{
 			return the_item.isCallable();
+			}
+
+                bool isInstance () const
+			{
+			return the_item.isInstance();
 			}
 
 		bool isList () const

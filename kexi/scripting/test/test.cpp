@@ -111,18 +111,23 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     scriptcontainer->addQObject(testobject);
 
     try {
-        scriptcontainer->execute();
+        Kross::Api::Object* o = scriptcontainer->execute();
 
         // Call a function.
-        //scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
+        scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
+
+        // Call a class.
+        kdDebug()<<"--------------------------"<<endl;
+QValueList<Kross::Api::Object*> functionarguments;
+//functionarguments.append(o);
+scriptcontainer->callFunction("testClass", 0);//Kross::Api::List::create(functionarguments));
+        kdDebug()<<"--------------------------"<<endl;
 
         // Connect QObject signal with scriptfunction.
-        scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
-        scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
-
+        //scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
+        //scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
         // Call the testSlot to emit the testSignal.
-        testobject->testSlot();
-
+        //testobject->testSlot();
     }
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
