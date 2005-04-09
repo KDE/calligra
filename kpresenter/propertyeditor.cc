@@ -77,9 +77,7 @@ KCommand * PropertyEditor::getCommand()
         int change = m_penProperty->getPenConfigChange();
         if ( change )
         {
-            PenCmd::Pen pen( m_penProperty->getPen(),
-                             m_penProperty->getLineBegin(),
-                             m_penProperty->getLineEnd() );
+            PenCmd::Pen pen( m_penProperty->getPen() );
 
             PenCmd *cmd = new PenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
 
@@ -97,14 +95,7 @@ KCommand * PropertyEditor::getCommand()
         int change = m_brushProperty->getBrushPropertyChange();
         if ( change )
         {
-            BrushCmd::Brush brush( m_brushProperty->getBrush(),
-                                   m_brushProperty->getGColor1(),
-                                   m_brushProperty->getGColor2(),
-                                   m_brushProperty->getGType(),
-                                   m_brushProperty->getFillType(),
-                                   m_brushProperty->getGUnbalanced(),
-                                   m_brushProperty->getGXFactor(),
-                                   m_brushProperty->getGYFactor() );
+            BrushCmd::Brush brush( m_brushProperty->getBrush() );
 
             BrushCmd *cmd = new BrushCmd( i18n( "Apply Styles" ), m_objects, brush, m_doc, m_page, change );
 

@@ -144,7 +144,7 @@ void PenStyleWidget::setLineEnd( LineEnd le )
 }
 
 
-QPen PenStyleWidget::getPen() const
+QPen PenStyleWidget::getQPen() const
 {
     QPen pen;
 
@@ -197,14 +197,21 @@ int PenStyleWidget::getPenConfigChange() const
         flags = flags | PenCmd::LineEnd;
     if ( getLineBegin() != m_pen.lineBegin )
         flags = flags | PenCmd::LineBegin;
-    if ( getPen().color() != m_pen.pen.color() )
+    if ( getQPen().color() != m_pen.pen.color() )
         flags = flags | PenCmd::Color;
-    if ( getPen().style() != m_pen.pen.style() )
+    if ( getQPen().style() != m_pen.pen.style() )
         flags = flags | PenCmd::Style;
-    if ( getPen().width() != m_pen.pen.width() )
+    if ( getQPen().width() != m_pen.pen.width() )
         flags = flags | PenCmd::Width;
 
     return flags;
+}
+
+
+PenCmd::Pen PenStyleWidget::getPen() const
+{
+    PenCmd::Pen pen( getQPen(), getLineBegin(), getLineEnd() );
+    return pen;
 }
 
 
@@ -226,13 +233,13 @@ void PenStyleWidget::apply()
         m_pen.lineBegin = getLineBegin();
 
     if ( flags & PenCmd::Color )
-        m_pen.pen.setColor( getPen().color() );
+        m_pen.pen.setColor( getQPen().color() );
 
     if ( flags & PenCmd::Style )
-        m_pen.pen.setStyle( getPen().style() );
+        m_pen.pen.setStyle( getQPen().style() );
 
     if ( flags & PenCmd::Width )
-        m_pen.pen.setWidth( getPen().width() );
+        m_pen.pen.setWidth( getQPen().width() );
 }
 
 
@@ -249,7 +256,7 @@ void PenStyleWidget::slotReset()
 
 void PenStyleWidget::slotPenChanged()
 {
-    QPen pen = getPen();
+    QPen pen = getQPen();
     m_ui->widthLabel->setEnabled( pen.style() != NoPen );
     m_ui->widthInput->setEnabled( pen.style() != NoPen );
     m_ui->pbPreview->setPen( pen );

@@ -44,6 +44,7 @@
 
 #include "styledia.h"
 #include "penstylewidget.h"
+#include "brushproperty.h"
 #include "pieproperty.h"
 #include "rectproperty.h"
 #include "polygonproperty.h"
@@ -802,12 +803,16 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
     m_confPenDia = new PenStyleWidget(tab, 0, pen, true );
     tab->addTab( m_confPenDia, i18n( "Outl&ine" ) );
 
-    m_confBrushDia = new ConfBrushDia(tab, 0, StyleDia::SdAll);
-    m_confBrushDia->setBrush(m_pView->getBrush());
-    m_confBrushDia->setFillType(m_pView->getFillType());
-    m_confBrushDia->setGradient(m_pView->getGColor1(), m_pView->getGColor2(), m_pView->getGType(),
-                                m_pView->getGUnbalanced(), m_pView->getGXFactor(), m_pView->getGYFactor());
-    tab->addTab(m_confBrushDia, i18n("&Brush"));
+    BrushCmd::Brush brush( m_pView->getBrush(),
+                           m_pView->getGColor1(),
+                           m_pView->getGColor2(),
+                           m_pView->getGType(),
+                           m_pView->getFillType(),
+                           m_pView->getGUnbalanced(),
+                           m_pView->getGXFactor(),
+                           m_pView->getGYFactor() );
+    m_brushProperty = new BrushProperty( this, 0, brush );
+    tab->addTab( m_brushProperty, i18n( "&Fill" ) );
 
     RectValueCmd::RectValues rectValues;
     rectValues.xRnd = m_pView->getRndX();
@@ -838,6 +843,23 @@ configureToolsPage::~configureToolsPage()
 
 void configureToolsPage::apply()
 {
+    PenCmd::Pen pen = m_confPenDia->getPen();
+    m_pView->setPen( pen.pen );
+    m_pView->setLineBegin( pen.lineBegin );
+    m_pView->setLineEnd( pen.lineEnd );
+    m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
+
+    BrushCmd::Brush brush = m_brushProperty->getBrush();
+    m_pView->setBrush( brush.brush );
+    m_pView->setFillType( brush.fillType );
+    m_pView->setGColor1( brush.gColor1 );
+    m_pView->setGColor2( brush.gColor2 );
+    m_pView->setGType( brush.gType );
+    m_pView->setGUnbalanced( brush.unbalanced );
+    m_pView->setGXFactor( brush.xfactor );
+    m_pView->setGYFactor( brush.yfactor );
+    m_pView->getActionBrushColor()->setCurrentColor( brush.brush.color() );
+
     RectValueCmd::RectValues rectValues = m_rectProperty->getRectValues();
     m_pView->setRndX( rectValues.xRnd );
     m_pView->setRndY( rectValues.yRnd );
@@ -852,19 +874,6 @@ void configureToolsPage::apply()
     m_pView->setPieAngle( pieValues.pieAngle );
     m_pView->setPieLength( pieValues.pieLength );
 
-    m_pView->setPen(m_confPenDia->getPen());
-    m_pView->setBrush(m_confBrushDia->getBrush());
-    m_pView->setLineBegin(m_confPenDia->getLineBegin());
-    m_pView->setLineEnd(m_confPenDia->getLineEnd());
-    m_pView->setFillType(m_confBrushDia->getFillType());
-    m_pView->setGColor1(m_confBrushDia->getGColor1());
-    m_pView->setGColor2(m_confBrushDia->getGColor2());
-    m_pView->setGType(m_confBrushDia->getGType());
-    m_pView->setGUnbalanced(m_confBrushDia->getGUnbalanced());
-    m_pView->setGXFactor(m_confBrushDia->getGXFactor());
-    m_pView->setGYFactor(m_confBrushDia->getGYFactor());
-    m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
-    m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
     //TODO set pen brush in m_rectProperty
     //TODO set pen brush in m_polygonProperty
     //TODO set pen brush in m_pieProperty
@@ -872,6 +881,15 @@ void configureToolsPage::apply()
 
 void configureToolsPage::slotDefault()
 {
+    PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
+    m_confPenDia->setPen( pen );
+    m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
+
+    BrushCmd::Brush brush( QBrush( white, SolidPattern ), red, green,
+                           BCT_GHORZ, FT_BRUSH, false, 100, 100 );
+    m_brushProperty->setBrush( brush );
+    m_pView->getActionBrushColor()->setCurrentColor( brush.brush.color() );
+
     RectValueCmd::RectValues rectValues;
     rectValues.xRnd = 0;
     rectValues.yRnd = 0;
@@ -887,14 +905,6 @@ void configureToolsPage::slotDefault()
     pieValues.pieType = PT_PIE;
     pieValues.pieAngle = 45 * 16;
     pieValues.pieLength = 90 * 16;
-
-    m_confBrushDia->setBrush(QBrush(white, SolidPattern));
-    PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
-    m_confPenDia->setPen( pen );
-    m_confBrushDia->setGradient(red, green, BCT_GHORZ, false, 100, 100);
-    m_confBrushDia->setFillType(FT_BRUSH);
-    m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());
-    m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
 }
 
 configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, char *name )

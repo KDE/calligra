@@ -584,14 +584,14 @@ void StyleDia::slotReset()
 void StyleDia::styleDone()
 {
     if (m_confRectDia)
-        m_confRectDia->setPenBrush(m_confPenDia->getPen(),
+        m_confRectDia->setPenBrush(m_confPenDia->getPen().pen,
                                    m_confBrushDia->getBrush());
     if (m_confPolygonDia)
-        m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
+        m_confPolygonDia->setPenBrush(m_confPenDia->getPen().pen,
                                       m_confBrushDia->getBrush());
     // if type is arc there is no m_confBrushDia
     if (m_confPieDia)
-        m_confPieDia->setPenBrush(m_confPenDia->getPen(),
+        m_confPieDia->setPenBrush(m_confPenDia->getPen().pen,
                                   (flags & SdBrush) ? m_confBrushDia->getBrush() : NoBrush );
 
     emit styleOk();

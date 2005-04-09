@@ -102,7 +102,7 @@ FillType BrushProperty::getFillType() const
 }
 
 
-QBrush BrushProperty::getBrush() const
+QBrush BrushProperty::getQBrush() const
 {
     QBrush brush;
 
@@ -209,7 +209,7 @@ int BrushProperty::getBrushPropertyChange() const
 
     if ( getFillType() == FT_BRUSH )
     {
-        QBrush brush = getBrush();
+        QBrush brush = getQBrush();
         if ( fillTypeChanged || brush.color() != m_brush.brush.color() )
         {
             flags |= BrushCmd::BrushColor;
@@ -250,6 +250,27 @@ int BrushProperty::getBrushPropertyChange() const
 }
 
 
+BrushCmd::Brush BrushProperty::getBrush() const
+{
+    BrushCmd::Brush brush( getQBrush(),
+                           getGColor1(),
+                           getGColor2(),
+                           getGType(),
+                           getFillType(),
+                           getGUnbalanced(),
+                           getGXFactor(),
+                           getGYFactor() );
+    return brush;
+}
+
+
+void BrushProperty::setBrush( BrushCmd::Brush &brush )
+{
+    m_brush = brush;
+    slotReset();
+}
+
+
 void BrushProperty::apply()
 {
     int flags = getBrushPropertyChange();
@@ -258,10 +279,10 @@ void BrushProperty::apply()
         m_brush.fillType = getFillType();
 
     if ( flags & BrushCmd::BrushColor )
-        m_brush.brush.setColor( getBrush().color() );
+        m_brush.brush.setColor( getQBrush().color() );
 
     if ( flags & BrushCmd::BrushStyle )
-        m_brush.brush.setStyle( getBrush().style() );
+        m_brush.brush.setStyle( getQBrush().style() );
 
     if ( flags & BrushCmd::GradientColor1 )
         m_brush.gColor1 = getGColor1();
@@ -283,7 +304,7 @@ void BrushProperty::apply()
 }
 
 
-void BrushProperty::setBrush( const QBrush &brush )
+void BrushProperty::setQBrush( const QBrush &brush )
 {
     switch ( brush.style() )
     {
@@ -368,7 +389,7 @@ void BrushProperty::slotReset()
 {
     if ( m_brush.gType == BCT_PLAIN )
         m_brush.gType = BCT_GHORZ;
-    setBrush( m_brush.brush );
+    setQBrush( m_brush.brush );
     setGradient( m_brush.gColor1,
                  m_brush.gColor2,
                  m_brush.gType,
@@ -399,7 +420,7 @@ void BrushProperty::slotTypeChanged( int pos )
 
 void BrushProperty::slotBrushChanged()
 {
-    m_preview->setBrush( getBrush() );
+    m_preview->setBrush( getQBrush() );
 }
 
 

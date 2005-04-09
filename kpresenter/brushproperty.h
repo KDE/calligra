@@ -22,8 +22,16 @@ public:
     BrushProperty( QWidget *parent, const char *name, const BrushCmd::Brush &brush );
     ~BrushProperty();
 
+    int getBrushPropertyChange() const;
+    BrushCmd::Brush getBrush() const;
+
+    void setBrush( BrushCmd::Brush &brush );
+
+    void apply();
+
+protected:
     FillType getFillType() const;
-    QBrush getBrush() const;
+    QBrush getQBrush() const;
 
     QColor getGColor1() const;
     QColor getGColor2() const;
@@ -31,12 +39,8 @@ public:
     bool getGUnbalanced() const;
     int getGXFactor() const;
     int getGYFactor() const;
-    int getBrushPropertyChange() const;
 
-    void apply();
-
-protected:
-    void setBrush( const QBrush &brush );
+    void setQBrush( const QBrush &brush );
     void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                       bool _unbalanced, int _xfactor, int _yfactor );
     void setUnbalancedEnabled( bool state );

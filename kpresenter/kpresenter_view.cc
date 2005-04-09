@@ -3283,8 +3283,9 @@ void KPresenterView::styleOk()
 
     if ((confPenDia = styleDia->getConfPenDia()))
     {
-        cmd = getPenCmd( i18n( "Apply Properties" ), confPenDia->getPen(), confPenDia->getLineBegin(),
-                         confPenDia->getLineEnd(), confPenDia->getPenConfigChange() );
+        PenCmd::Pen tmpPen( confPenDia->getPen() );
+        cmd = getPenCmd( i18n( "Apply Properties" ), tmpPen.pen, tmpPen.lineBegin,
+                         tmpPen.lineEnd, confPenDia->getPenConfigChange() );
         if(cmd)
         {
             if ( !macro)
@@ -3475,10 +3476,11 @@ void KPresenterView::styleOk()
             rndY = confRectDia->getRndY();
         }
 
-        pen = confPenDia->getPen();
+        PenCmd::Pen tmpPen = confPenDia->getPen();
+        pen = tmpPen.pen;
         brush = confBrushDia->getBrush();
-        lineBegin = confPenDia->getLineBegin();
-        lineEnd = confPenDia->getLineEnd();
+        lineBegin = tmpPen.lineBegin;
+        lineEnd = tmpPen.lineEnd;
         fillType = confBrushDia->getFillType();
         gColor1 = confBrushDia->getGColor1();
         gColor2 = confBrushDia->getGColor2();
@@ -3491,7 +3493,7 @@ void KPresenterView::styleOk()
         protect = styleDia->isProtected();
         protectContent = styleDia->isProtectContent();
         actionBrushColor->setCurrentColor( (confBrushDia->getBrush()).color() );
-        actionPenColor->setCurrentColor( (confPenDia->getPen()).color() );
+        actionPenColor->setCurrentColor( tmpPen.pen.color() );
     }
 }
 

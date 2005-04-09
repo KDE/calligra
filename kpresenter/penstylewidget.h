@@ -38,15 +38,17 @@ public:
     PenStyleWidget( QWidget *parent, const char *name, const PenCmd::Pen &pen, bool configureLineEnds = true );
     ~PenStyleWidget();
 
-    QPen getPen() const;
-    LineEnd getLineBegin() const;
-    LineEnd getLineEnd() const;
     int getPenConfigChange() const;
+    PenCmd::Pen getPen() const;
 
     void setPen( const PenCmd::Pen &pen );
     void apply();
 
 private:
+    QPen getQPen() const;
+    LineEnd getLineBegin() const;
+    LineEnd getLineEnd() const;
+
     void setPen( const QPen &pen );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
