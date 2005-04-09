@@ -1404,3 +1404,9 @@ QString Formula::dump() const
 
   return result;
 }
+
+QTextStream& operator<<( QTextStream& ts, Formula formula ) 
+{
+  ts << formula.dump();
+  return ts;
+}

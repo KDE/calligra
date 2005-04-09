@@ -295,10 +295,6 @@ class Formula
      */     
     static Tokens scan( const QString& expr, KLocale* locale = 0 );
 
-    /**
-     * Returns an assembler dump of the formula.
-     * Should be used only to assist debugging.
-     */
     QString dump() const;
 
   protected:
@@ -313,7 +309,15 @@ class Formula
     Formula& operator=( const Formula& );
 };
 
+/**
+ * Dumps the formula, should be used only to assist debugging.
+ */
+QTextStream& operator<<( QTextStream& ts, Formula formula );
+
+
 } // namespace KSpread
+
+
 
 #endif // KSPREAD_FORMULA
 
