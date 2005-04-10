@@ -153,6 +153,13 @@ Item								   Prio Status
   + Describe all chart types					     S1 ----
   + Other enhancements?						     S2 ----
 
+* Filters
+  + PNG export filter						      1 INGE
+    - Create the core of the filter					done
+    - Create a dialog for selecting the size				--
+    - Make a non-part library that the filters can link against		--
+  + SVG export filter						      2 INGE
+
 * KDChart
   - (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
   - Font for X axis labels changes when Polar chart is chosen.		KDCH DONE
