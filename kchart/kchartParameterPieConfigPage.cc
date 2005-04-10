@@ -44,7 +44,10 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout *grid1 = new QVBoxLayout(this);
+    QVBoxLayout  *toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout  *grid1 = new QVBoxLayout(this);
+    toplevel->addLayout( grid1 );
+
     QVButtonGroup* gb = new QVButtonGroup( i18n( "Parameter" ), this );
     grid1->addWidget(gb);
 

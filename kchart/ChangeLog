@@ -1,3 +1,9 @@
+2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Fix the margins on the pie config page.
+	* kchartParameterPieConfigPage.cc (KChartParameterPieConfigPage):
+	Added a toplevel layout.
+
 2005-04-07  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 
 	* kchartWizardLabelsLegendPage.cc (KChartWizardLabelsLegendPage):
