@@ -44,8 +44,6 @@
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
 	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel ), m_pattern( 0 )
 {
-	KIconLoader il;
-
 	QWidget *base = new QWidget( this );
 	QVBoxLayout* layout = new QVBoxLayout( base );
 	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
@@ -53,9 +51,9 @@ VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget*
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
-	m_importPatternButton->setIconSet( QPixmap( il.iconPath( "14_layer_newlayer.png", KIcon::Small ) ) );
+	m_importPatternButton->setIconSet( SmallIconSet( "14_layer_newlayer" ) );
 	m_importPatternButton->setTextLabel( i18n( "Import" ) );
-	m_deletePatternButton->setIconSet( QPixmap( il.iconPath( "14_layer_deletelayer.png", KIcon::Small ) ) );
+	m_deletePatternButton->setIconSet( SmallIconSet("14_layer_deletelayer" ) );
 	m_deletePatternButton->setTextLabel( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
@@ -67,7 +65,7 @@ VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget*
 
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 	connect( m_patternChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( patternSelected( KoIconItem* ) ) );
-	
+
 	KoIconItem* item;
 	for( item = patterns->first(); item; item = patterns->next() )
 		m_patternChooser->addItem( item );
@@ -107,7 +105,7 @@ void VPatternWidget::slotButtonClicked( int id )
 				break;
 		case 1: deletePattern();
 				break;
-	} 
+	}
 } // VPatternWidget::slotButtonClicked
 
 void VPatternWidget::patternSelected( KoIconItem* item )
@@ -174,10 +172,10 @@ VPatternTool::mouseButtonPress()
 void
 VPatternTool::mouseButtonRelease()
 {
-	if( view()->part()->document().selection()->objects().count() == 0 ) 
+	if( view()->part()->document().selection()->objects().count() == 0 )
 		return;
 	else if( !m_optionsWidget->selectedPattern() )
-		KMessageBox::error( 0L, i18n( "Please select a pattern" ), "" );
+		KMessageBox::error( 0L, i18n( "Please select a pattern." ), "" );
 	else
 	{
 		VPattern pattern = *m_optionsWidget->selectedPattern();
@@ -211,7 +209,7 @@ VPatternTool::mouseDragRelease()
 	else if( !m_optionsWidget->selectedPattern() )
 	{
 		draw();
-		KMessageBox::error( 0L, i18n( "Please select a pattern" ), "" );
+		KMessageBox::error( 0L, i18n( "Please select a pattern." ), "" );
 	}
 	else
 	{
