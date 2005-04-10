@@ -184,15 +184,15 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
     elementFormat.appendChild(element);
 
     element=mainDocument.createElement("COLOR");
-    element.setAttribute("red",  0);
-    element.setAttribute("green",0);
-    element.setAttribute("blue", 0);
+    element.setAttribute("red",  -1);
+    element.setAttribute("green",1);
+    element.setAttribute("blue", -1);
     elementFormat.appendChild(element);
 
     element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
-    element.setAttribute("red",  255);
-    element.setAttribute("green",255);
-    element.setAttribute("blue", 255);
+    element.setAttribute("red",  -1);
+    element.setAttribute("green",-1);
+    element.setAttribute("blue", -1);
     elementFormat.appendChild(element);
 
 }
