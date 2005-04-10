@@ -8,4 +8,11 @@
       <default>80</default>
     </entry>
   </group>
+  <group name="sidepane">
+    <entry type="Int" name="SidePaneIconSize">
+      <default>32</default>
+    </entry>
+    <entry type="Bool" name="SidePaneShowIcons"><default>true</default></entry>
+    <entry type="Bool" name="SidePaneShowText"><default>true</default></entry>
+  </group>
 </kcfg>

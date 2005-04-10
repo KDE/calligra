@@ -29,6 +29,8 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
+#include "iconsidepane.h"
+
 class QVBox;
 class QIconView;
 class QIconViewItem;
@@ -62,7 +64,11 @@ protected slots:
   virtual void slotFileNew();
   virtual void slotFileClose();
   virtual void slotFileOpen();
-  
+  void saveAll();
+
+  void slotSidebar_Part(int);
+  void slotSidebar_Document(int);
+
   /**
     Used for showing or hiding the sidebar and the components-label.
   */
@@ -90,6 +96,7 @@ private:
   {
     KoDocument *m_pDoc;
     KoView *m_pView;
+    int m_id;
   };
 
   virtual bool queryClose();
@@ -102,11 +109,10 @@ private:
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
-  QIconView *m_pSidebar;
+  IconSidePane *m_pSidebar;
   QLabel *m_pComponentsLabel;
   QSplitter *m_pLayout;
   KTabWidget *m_pFrame;
-  QVBox *m_pSidebarSplit;
 
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
@@ -118,6 +124,9 @@ private:
 
   KoShellGUIClient *m_client;
   void createShellGUI( bool create = true );
+
+  int m_grpFile; //the ID number for the component group in the side bar
+  int m_grpDocuments; //the ID number for the docuemnt group in the side bar
 };
 
 //////// class KoShellGUIClient //////////
@@ -126,8 +135,6 @@ class KoShellGUIClient : public KXMLGUIClient
 {
 public:
   KoShellGUIClient( KoShellWindow *window );
-protected:
-  KToggleAction *sidebar;
 };
 
 #endif // __koshell_window_h__

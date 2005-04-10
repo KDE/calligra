@@ -20,6 +20,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qcursor.h>
 #include <qsplitter.h>
 #include <qiconview.h>
 #include <qlabel.h>
@@ -30,6 +31,7 @@
 #include "koshell_shell.h"
 #include "koshellsettings.h"
 
+#include <kapplication.h>
 #include <ktempfile.h>
 #include <kfiledialog.h>
 //#include <kio/netaccess.h>
@@ -58,19 +60,18 @@ KoShellWindow::KoShellWindow()
   m_activePage = m_lstPages.end();
 
   m_pLayout = new QSplitter( centralWidget() );
-  m_pSidebarSplit = new QVBox( m_pLayout );
-  m_pComponentsLabel = new QLabel( i18n( "Components" ), m_pSidebarSplit );
-  m_pComponentsLabel->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-  m_pComponentsLabel->setAlignment( Qt::AlignCenter );
 
-  m_pSidebar = new QIconView( m_pSidebarSplit );
-  // Setup the QIconView
-  m_pSidebar->setItemsMovable( false );
-  m_pSidebar->setWordWrapIconText( false );
-  m_pSidebar->setShowToolTips( true );
-  m_pSidebar->setResizeMode( QIconView::Adjust );
+  m_pSidebar = new IconSidePane( m_pLayout );
+  m_pSidebar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum,
+                             QSizePolicy::Preferred ) );
+  m_pSidebar->setActionCollection( actionCollection() );
+  m_grpFile = m_pSidebar->insertGroup(i18n("Components"), false, this, SLOT( slotSidebar_Part(int )));
+  m_grpDocuments = m_pSidebar->insertGroup(i18n("Documents"), true, this, SLOT(slotSidebar_Document(int)));
+  m_pLayout->setResizeMode(m_pSidebar,QSplitter::FollowSizeHint);
 
   m_pFrame = new KTabWidget( m_pLayout );
+  m_pFrame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
+                            QSizePolicy::Preferred ) );
   m_pFrame->setTabPosition( KTabWidget::Bottom );
 
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
@@ -80,8 +81,7 @@ KoShellWindow::KoShellWindow()
   for( ; it != lstComponents.end(); ++it )
   {
       if (!(*it).service()->genericName().isEmpty()) //skip the unavailable part
-          m_pSidebar->insertItem( new QIconViewItem( m_pSidebar, (*it).name(),
-                                  DesktopIcon((*it).service()->icon())) );
+          id = m_pSidebar->insertItem(m_grpFile, (*it).service()->icon(), (*it).service()->genericName());
       else
           continue;
 
@@ -101,20 +101,16 @@ KoShellWindow::KoShellWindow()
         }
       }
   }
-
-  QValueList<int> list;
-  list.append( KoShellSettings::sidebarWidth() );
-  list.append( this->width() - KoShellSettings::sidebarWidth() );
-  m_pLayout->setSizes( list );
+   QValueList<int> list;
+   list.append( KoShellSettings::sidebarWidth() );
+   list.append( this->width() - KoShellSettings::sidebarWidth() );
+   m_pLayout->setSizes( list );
 
   connect( this, SIGNAL( documentSaved() ),
            this, SLOT( slotNewDocumentName() ) );
 
   connect( m_pFrame, SIGNAL( currentChanged( QWidget* ) ),
            this, SLOT( slotUpdatePart( QWidget* ) ) );
-  
-  connect( m_pSidebar, SIGNAL( pressed( QIconViewItem* ) ), 
-           this, SLOT( slotSidebarItemClicked( QIconViewItem* ) ) );
 
   m_client = new KoShellGUIClient( this );
   createShellGUI();
@@ -205,6 +201,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   bool openRet = (!isImporting ()) ? newdoc->openURL(tmpUrl) : newdoc->import(tmpUrl);
   if ( !newdoc || !openRet )
   {
+      newdoc->removeShell(this);
       delete newdoc;
       if ( tmpFile ) {
         tmpFile->unlink();
@@ -252,7 +249,7 @@ void KoShellWindow::slotSidebarItemClicked( QIconViewItem *item )
     int index = item->index();
   
     // Create new document from a KoDocumentEntry
-     m_documentEntry = m_mapComponents[ index ];
+    m_documentEntry = m_mapComponents[ index ];
     KoDocument *doc = m_documentEntry.createDoc();
     if (doc)
     {
@@ -298,6 +295,22 @@ void KoShellWindow::slotKSLoadCanceled( const QString & errMsg )
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
 }
 
+void KoShellWindow::saveAll()
+{
+  KoView *currentView = (*m_activePage).m_pView;
+  for (QValueList<Page>::iterator it=m_lstPages.begin(); it != m_lstPages.end(); it++)
+  {
+    if ( (*it).m_pDoc->isModified() )
+    {
+      m_pFrame->showPage( (*it).m_pView );
+      (*it).m_pView->shell()->slotFileSave();
+      if ( (*it).m_pDoc->isModified() )
+        break;
+    }
+  }
+  m_pFrame->showPage( currentView );
+}
+
 void KoShellWindow::setRootDocument( KoDocument * doc )
 {
   kdDebug() << "KoShellWindow::setRootDocument this=" << this << " doc=" << doc << endl;
@@ -319,14 +332,17 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
     m_pFrame->addTab( v, i18n("Untitled") );
-    v->show();
     
     // Create a new page for this doc
     Page page;
     page.m_pDoc = doc;
     page.m_pView = v;
- 
+    // insert the new document in the sidebar
+    page.m_id = m_pSidebar->insertItem( m_grpDocuments,
+                                       m_documentEntry.service()->icon(),
+                                       i18n("Untitled"));
     m_lstPages.append( page );
+    v->show();
 
     switchToPage( m_lstPages.fromLast() );
   } else
@@ -372,11 +388,53 @@ void KoShellWindow::updateCaption()
             name += "...";
           }
           m_pFrame->changeTab( m_pFrame->currentPage(), name );
+          m_pSidebar->renameItem(m_grpDocuments, (*m_activePage).m_id, name); //remove the document from the sidebar
         }
 
         return;
       }
     }
+}
+
+
+void KoShellWindow::slotSidebar_Part(int _item)
+{
+  //kdDebug() << "Component part choosed:" << _item << endl;
+  kapp->setOverrideCursor( QCursor(Qt::WaitCursor) );
+  m_documentEntry = m_mapComponents[ _item ];
+  kdDebug() << m_documentEntry.service() << endl;
+  kdDebug() << m_documentEntry.name() << endl;
+  KoDocument *doc = m_documentEntry.createDoc();
+  kapp->restoreOverrideCursor();
+  if (doc)
+  {
+    if ( doc->initDoc( KoDocument::InitDocAppStarting) )
+    {
+      partManager()->addPart( doc, false );
+      setRootDocument( doc );
+    }
+    else
+      delete doc;
+  }
+}
+
+void KoShellWindow::slotSidebar_Document(int _item)
+{
+    // Switch to an existing document
+  if ( m_activePage != m_lstPages.end() &&
+       (*m_activePage).m_id == _item )
+    return;
+    
+  QValueList<Page>::Iterator it = m_lstPages.begin();
+  while( it != m_lstPages.end() )
+  {
+    if ( (*it).m_id == _item )
+    {
+      switchToPage( it );
+      return;
+    }
+    ++it;
+  }
 }
 
 void KoShellWindow::slotShowSidebar()
@@ -420,6 +478,8 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   QPtrList<KoView> views;
   views.append(v);
   setRootDocumentDirect( (*m_activePage).m_pDoc, views );
+  // Select the item in the sidebar
+  m_pSidebar->group(m_grpDocuments)->setSelected((*m_activePage).m_id,true);
   // Raise the new page
   m_pFrame->showPage( v );
   // Fix caption and set focus to the new view
@@ -495,10 +555,12 @@ void KoShellWindow::closeDocument()
   if ( KoMainWindow::queryClose() )
   {
     kdDebug() << "Ok for closing document" << endl;
+    m_pSidebar->removeItem(m_grpDocuments, (*m_activePage).m_id ); //remove the document from the sidebar
     (*m_activePage).m_pDoc->removeShell(this);
     Page oldPage = (*m_activePage); // make a copy of the struct
     m_lstPages.remove( m_activePage );
     m_activePage = m_lstPages.end(); // no active page right now
+    m_pSidebar->group(m_grpDocuments)->setSelected((*m_activePage).m_id, true); //select the new document in the sidebar
 
     kdDebug() << "m_lstPages has " << m_lstPages.count() << " documents" << endl;
     if ( m_lstPages.count() > 0 )
@@ -537,7 +599,6 @@ bool KoShellWindow::queryClose()
 
       // This one is called by slotFileQuit and by the X button.
       // We have to check for unsaved docs...
-
       QValueList<Page>::Iterator it = m_lstPages.begin();
       for( ; it != m_lstPages.end(); ++it )
       {
@@ -569,7 +630,7 @@ bool KoShellWindow::saveAllPages()
 
 void KoShellWindow::saveSettings()
 {
-  KoShellSettings::setSidebarWidth( m_pSidebar->width() );	
+  KoShellSettings::setSidebarWidth( m_pLayout->sizes().first() );
   KoShellSettings::writeConfig();
 }
 
@@ -599,12 +660,7 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
 	setXMLFile( "koshellui.rc", true, false );
 
-	sidebar = new KToggleAction(i18n("Show Sidebar"), "view_choose", 0, window,
-			SLOT( slotShowSidebar() ), actionCollection(), "show_sidebar");
-#if KDE_IS_VERSION(3,2,90)
-  sidebar->setCheckedState(i18n("Hide Sidebar"));
-#endif
-	sidebar->setChecked( true );
+  new KAction(i18n("Save all"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
 }
 
 #include "koshell_shell.moc"
