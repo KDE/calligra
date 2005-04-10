@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-#include <swinder.h>
+#include "swinder.h"
 #include <iostream>
 
 typedef KGenericFactory<ExcelImport, KoFilter> ExcelImportFactory;
@@ -144,10 +144,19 @@ QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
   return e;
 }
 
-static QDomElement convertValue( QDomDocument& doc, const Swinder::Value& value )
+// FIXME adjust formula to match KSpread
+static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& formula, 
+  const Swinder::Value& value )
 {
   QDomElement textElement;
   textElement = doc.createElement( "text" );
+  
+  if( !formula.isEmpty() )
+  {
+    QString str = string( formula ).string();
+    str.prepend( "=" );
+    textElement.appendChild( doc.createTextNode( str ) );
+  }
 
   if( value.isBoolean() )
   {
@@ -155,12 +164,14 @@ static QDomElement convertValue( QDomDocument& doc, const Swinder::Value& value 
     if( value.asBoolean() )
     {
       textElement.setAttribute( "outStr", "True" );
-      textElement.appendChild( doc.createTextNode( "true" ) );
+      if( formula.isEmpty() )
+        textElement.appendChild( doc.createTextNode( "true" ) );
     }
     else
     {
       textElement.setAttribute( "outStr", "False" );
-      textElement.appendChild( doc.createTextNode( "false" ) );
+      if( formula.isEmpty() )
+        textElement.appendChild( doc.createTextNode( "false" ) );
     }
   }
 
@@ -168,21 +179,24 @@ static QDomElement convertValue( QDomDocument& doc, const Swinder::Value& value 
   {
     textElement.setAttribute( "dataType", "Num" );
     QString str = QString::number( value.asFloat() );
-    textElement.appendChild( doc.createTextNode( str ) );
+    if( formula.isEmpty() )
+      textElement.appendChild( doc.createTextNode( str ) );
   }
 
   else if( value.isInteger() )
   {
     textElement.setAttribute( "dataType", "Num" );
     QString str = QString::number( value.asInteger() );
-    textElement.appendChild( doc.createTextNode( str ) );
+    if( formula.isEmpty() )
+      textElement.appendChild( doc.createTextNode( str ) );
   }
 
   else if( value.isString() )
   {
     textElement.setAttribute( "dataType", "Str" );
     QString str = string( value.asString() ).string();
-    textElement.appendChild( doc.createTextNode( str ) );
+    if( formula.isEmpty() )
+      textElement.appendChild( doc.createTextNode( str ) );
   }
 
   return textElement;
@@ -364,7 +378,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           ce.setAttribute( "column", col+1 );
           table.appendChild( ce );
 
-          ce.appendChild( convertValue( mainDocument, cell->value() )  );
+          ce.appendChild( convertValue( mainDocument, cell->formula(), cell->value() )  );
 
           QDomElement fe = convertFormat( mainDocument, cell->format() );
           if( cell->columnSpan() > 1 )
