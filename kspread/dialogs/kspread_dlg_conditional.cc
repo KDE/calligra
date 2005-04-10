@@ -168,6 +168,7 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   list += i18n( "equal to or less than" );
   list += i18n( "between" );
   list += i18n( "different from" );
+  list += i18n( "different to" );
 
   m_condition_1->clear();
   m_condition_2->clear();
@@ -494,6 +495,9 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
       kl2->setText( value );
     }
     break;
+   case DifferentTo :
+    cb->setCurrentItem(8);
+    break;
   }
 
   if ( tmp.cond != None )
@@ -538,6 +542,9 @@ Conditional KSpreadConditionalDlg::typeOfCondition( QComboBox const * const cb )
     break;
    case 7 :
     result = Different;
+    break;
+   case 8 :
+    result = DifferentTo;
     break;
    default:
     kdDebug(36001) << "Error in list" << endl;

@@ -210,6 +210,18 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
         return true;
       }
       break;
+     case DifferentTo :
+      if ( condition.strVal1 )
+      {
+        if ( strVal != *condition.strVal1 )
+          return true;
+      }
+      else
+      if ( value != condition.val1 )
+      {
+        return true;
+      }
+      break;
 
      default:
       break;
