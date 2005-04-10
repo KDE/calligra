@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002-2004 Laurent MONTEL <montel@kde.org>
-   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2004-2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +46,6 @@
 #include <kdebug.h>
 #include <koQueryTrader.h>
 #include "kpresenter_doc.h"
-#include "styledia.h"
 
 #include <koStore.h>
 #include <koStoreDevice.h>
@@ -1926,89 +1925,6 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
 
     return cmd;
 }
-
-int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
-{
-    int flags = 0;
-
-    QPtrListIterator<KPObject> it( list);
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->isSelected())
-        {
-            switch ( it.current()->getType() ) {
-            case OT_LINE:
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                flags = flags | StyleDia::SdEndBeginLine;
-                break;
-            case OT_FREEHAND:
-                if(!static_cast<KPFreehandObject*>(it.current())->isClosed())
-                    flags = flags | StyleDia::SdEndBeginLine;
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                break;
-            case OT_POLYLINE:
-                if(!static_cast<KPPolylineObject*>(it.current())->isClosed())
-                    flags = flags | StyleDia::SdEndBeginLine;
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-
-                break;
-            case OT_QUADRICBEZIERCURVE:
-                if(!static_cast<KPQuadricBezierCurveObject*>(it.current())->isClosed())
-                    flags = flags | StyleDia::SdEndBeginLine;
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                break;
-            case OT_CUBICBEZIERCURVE:
-                if(!static_cast<KPCubicBezierCurveObject*>(it.current())->isClosed())
-                    flags = flags | StyleDia::SdEndBeginLine;
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                break;
-            case OT_PIE:
-                flags=flags | StyleDia::SdPen | StyleDia::SdPie;
-                if((static_cast<KPPieObject*>(it.current())->getPieType())!=PT_ARC)
-                    flags=flags |StyleDia::SdBrush;
-                break;
-            case OT_RECT:
-                flags = flags | StyleDia::SdPen | StyleDia::SdRectangle;
-                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                break;
-            case OT_POLYGON:
-                flags = flags | StyleDia::SdPen | StyleDia::SdPolygon;
-                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                break;
-            case OT_PART:  case OT_ELLIPSE:
-            case OT_TEXT:  case OT_CLOSED_LINE:
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                break;
-            case OT_CLIPART:
-            case OT_PICTURE:
-                flags |= StyleDia::SdPen | StyleDia::SdPicture | StyleDia::SdBrush ;
-                flags |= StyleDia::SdGradient;
-                break;
-            case OT_AUTOFORM:
-            {
-                flags = flags | StyleDia::SdPen | StyleDia::SdOther;
-                flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-            }
-            break;
-            case OT_GROUP:
-            {
-                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( it.current() );
-                if(obj)
-                {
-                    obj->selectAllObj();
-                    flags = flags | getPenBrushFlags( obj->objectList() );
-                    obj->deSelectAllObj();
-                }
-            }
-            break;
-            default: break;
-            }
-        }
-    }
-    return flags;
-}
-
 
 KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len, int flags )
 {

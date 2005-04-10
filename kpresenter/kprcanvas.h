@@ -2,7 +2,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2002-2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -282,7 +282,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     KPObject *getSelectedObj() const;
     KPPixmapObject *getSelectedImage() const;
 
-    int getPenBrushFlags() const;
     bool getEditMode() const { return editMode; }
 
     void ungroupObjects();

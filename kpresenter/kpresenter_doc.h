@@ -76,7 +76,6 @@ class KoSavingContext;
 
 class KoDocumentEntry;
 class KPTextObject;
-class StyleDia;
 class KPPartObject;
 class KPrPage;
 class KPObject;

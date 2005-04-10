@@ -60,7 +60,6 @@
 #include <koStoreDrag.h>
 #include "koPointArray.h"
 
-#include "styledia.h"
 #include "kpresenter_view.h"
 #include "kpbackground.h"
 #include "kppixmapobject.h"
@@ -5197,15 +5196,6 @@ KPObject *KPrCanvas::getSelectedObj() const
 {
     KPObject *obj = m_activePage->getSelectedObj();
     return obj;
-}
-
-int KPrCanvas::getPenBrushFlags() const
-{
-    int flags=0;
-    flags = m_activePage->getPenBrushFlags( m_activePage->objectList() );
-    if(flags==0)
-        flags = StyleDia::SdAll;
-    return flags;
 }
 
 void KPrCanvas::ungroupObjects()

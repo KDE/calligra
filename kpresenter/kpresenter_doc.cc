@@ -33,7 +33,6 @@
 #include "kppartobject.h"
 #include "kpgroupobject.h"
 #include "kprcommand.h"
-#include "styledia.h"
 #include "insertpagedia.h"
 #include "kpfreehandobject.h"
 #include "kppolylineobject.h"

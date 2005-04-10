@@ -42,7 +42,6 @@ class BackDia;
 class KoRuler;
 class QScrollBar;
 class AFChoose;
-class StyleDia;
 class PropertyEditor;
 class PgConfDia;
 class SlideTransitionDia;
@@ -659,7 +658,6 @@ protected slots:
     void backOk( BackDia*, bool );
     void afChooseOk( const QString & );
     void slotAfchooseCanceled();
-    void styleOk();
     void propertiesOk();
     void pgConfOk();
     void rotateOk();
@@ -840,7 +838,6 @@ private:
 
     // dialogs
     AFChoose *afChoose;
-    StyleDia *styleDia;
     PropertyEditor *m_propertyEditor;
     PgConfDia *pgConfDia;
     RotationDialogImpl *rotateDia;

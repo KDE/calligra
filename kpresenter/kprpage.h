@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
-   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2004-2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -248,7 +248,6 @@ public:
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
 
-    int getPenBrushFlags( QPtrList<KPObject>list ) const;
     KCommand* setPieSettings( PieType pieType, int angle, int len, int flags );
     KCommand* setRectSettings( int _rx, int _ry, int flags );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );

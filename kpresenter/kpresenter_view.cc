@@ -38,7 +38,6 @@
 #include "kprpage.h"
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
-#include "styledia.h"
 #include "propertyeditor.h"
 #include "pgconfdia.h"
 #include "effectdia.h"
@@ -52,10 +51,6 @@
 
 #include "slidetransitiondia.h"
 
-#include "confpiedia.h"
-#include "confrectdia.h"
-#include "confpolygondia.h"
-#include "confpicturedia.h"
 #include "presdurationdia.h"
 #include "kppartobject.h"
 #include "sidebar.h"
@@ -218,7 +213,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_bDisplayFieldCode=false;
     // init
     afChoose = 0;
-    styleDia = 0;
     m_propertyEditor = 0;
     pgConfDia = 0;
     rotateDia = 0;
@@ -398,7 +392,6 @@ KPresenterView::~KPresenterView()
     delete m_replaceEntry;
     m_replaceEntry = 0L;
     delete m_specialCharDlg;
-    delete styleDia;
     delete m_propertyEditor;
     delete pgConfDia;
     delete rotateDia;
@@ -3266,234 +3259,6 @@ void KPresenterView::propertiesOk()
     {
         cmd->execute();
         kPresenterDoc()->addCommand( cmd );
-    }
-}
-
-void KPresenterView::styleOk()
-{
-    PenStyleWidget *confPenDia;
-    ConfPieDia *confPieDia;
-    ConfRectDia *confRectDia;
-    ConfBrushDia *confBrushDia;
-    ConfPictureDia *confPictureDia;
-    ConfPolygonDia *confPolygonDia;
-
-    KCommand *cmd;
-    KMacroCommand *macro=0L;
-
-    if ((confPenDia = styleDia->getConfPenDia()))
-    {
-        PenCmd::Pen tmpPen( confPenDia->getPen() );
-        cmd = getPenCmd( i18n( "Apply Properties" ), tmpPen.pen, tmpPen.lineBegin,
-                         tmpPen.lineEnd, confPenDia->getPenConfigChange() );
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-    }
-
-    if ((confBrushDia = styleDia->getConfBrushDia()))
-    {
-        cmd=m_canvas->activePage()->setBrush(confBrushDia->getBrush(), confBrushDia->getFillType(),
-                                             confBrushDia->getGColor1(), confBrushDia->getGColor2(),
-                                             confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
-                                             confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                             confBrushDia->getBrushConfigChange());
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-    }
-
-    if ( !styleDia->protectNoChange() )
-    {
-        cmd= m_canvas->setProtectSizeObj(styleDia->isProtected());
-        if (cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand( cmd );
-        }
-    }
-    if ( !styleDia->keepRatioNoChange())
-    {
-        cmd= m_canvas->setKeepRatioObj(styleDia->isKeepRatio());
-        if (cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand( cmd );
-        }
-    }
-
-    // stick has to be done before the object name is set,
-    // so that the name is set in the right page
-    bool bSticky=styleDia->isSticky();
-
-    if ( styleDia->isOneObject())
-    {
-        KoRect rect = styleDia->getNewSize();
-        KoRect oldRect = m_canvas->getSelectedObj()->getRect();
-        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(),
-                             m_canvas->getSelectedObj(), m_pKPresenterDoc );
-        cmd->execute();
-        macro->addCommand(cmd);
-
-        QString objectName = styleDia->getObjectName();
-        cmd = new KPrNameObjectCommand( i18n("Name Object"), objectName,
-                                        m_canvas->getSelectedObj(), m_pKPresenterDoc );
-        cmd->execute();
-        macro->addCommand(cmd);
-
-        // set object name again, as it can be changed by the KPrNameObjectCommand
-        objectName = m_canvas->getSelectedObj()->getObjectName();
-        styleDia->setObjectName( objectName );
-
-        if ( styleDia->isAllTextObject() )
-        {
-            bool state = styleDia->isProtectContent();
-            cmd = m_canvas->setProtectContent( state );
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            if (cmd )
-                macro->addCommand(cmd);
-            KPTextObject *obj=dynamic_cast<KPTextObject *>(m_canvas->getSelectedObj());
-            if (obj && !state )
-            {
-                MarginsStruct _MarginsBegin(obj);
-
-                MarginsStruct _MarginsEnd( styleDia->marginsLeft(), styleDia->marginsTop(),
-                                           styleDia->marginsRight(), styleDia->marginsBottom());
-
-                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj,
-                                                                           _MarginsBegin, _MarginsEnd,kPresenterDoc() );
-                cmd->execute();
-                macro->addCommand(cmd);
-            }
-
-        }
-    }
-
-    if ((confPieDia = styleDia->getConfPieDia()))
-    {
-        cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
-                                                    confPieDia->getLength(), confPieDia->getPieConfigChange() );
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-
-        updateObjectStatusBarItem();  //the type might have changed
-    }
-
-    if ((confPolygonDia = styleDia->getConfPolygonDia()))
-    {
-        cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-                                                        confPolygonDia->getCornersValue(),
-                                                        confPolygonDia->getSharpnessValue(),
-                                                        confPolygonDia->getPolygonConfigChange() );
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-    }
-
-    if ((confPictureDia = styleDia->getConfPictureDia()))
-    {
-        cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-                                                          confPictureDia->getPictureDepth(),
-                                                          confPictureDia->getPictureSwapRGB(),
-                                                          confPictureDia->getPictureGrayscal(),
-                                                          confPictureDia->getPictureBright() );
-        if (cmd )
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand( cmd );
-        }
-    }
-
-    if ((confRectDia = styleDia->getConfRectangleDia()))
-    {
-        cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
-                                                     confRectDia->getRectangleConfigChange() );
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-    }
-
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
-    else
-    {
-
-        if (confPieDia)
-        {
-            pieType = confPieDia->getType();
-            pieAngle = confPieDia->getAngle();
-            pieLength = confPieDia->getLength();
-        }
-        if (confPolygonDia)
-        {
-            checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
-            cornersValue = confPolygonDia->getCornersValue();
-            sharpnessValue = confPolygonDia->getSharpnessValue();
-        }
-        if (confPictureDia)
-        {
-            mirrorType = confPictureDia->getPictureMirrorType();
-            depth = confPictureDia->getPictureDepth();
-            swapRGB = confPictureDia->getPictureSwapRGB();
-            grayscal = confPictureDia->getPictureGrayscal();
-            bright = confPictureDia->getPictureBright();
-        }
-        if (confRectDia)
-        {
-            rndX = confRectDia->getRndX();
-            rndY = confRectDia->getRndY();
-        }
-
-        PenCmd::Pen tmpPen = confPenDia->getPen();
-        pen = tmpPen.pen;
-        brush = confBrushDia->getBrush();
-        lineBegin = tmpPen.lineBegin;
-        lineEnd = tmpPen.lineEnd;
-        fillType = confBrushDia->getFillType();
-        gColor1 = confBrushDia->getGColor1();
-        gColor2 = confBrushDia->getGColor2();
-        gType = confBrushDia->getGType();
-        gUnbalanced = confBrushDia->getGUnbalanced();
-        gXFactor = confBrushDia->getGXFactor();
-        gYFactor = confBrushDia->getGYFactor();
-        sticky = bSticky;
-        keepRatio = styleDia->isSticky();
-        protect = styleDia->isProtected();
-        protectContent = styleDia->isProtectContent();
-        actionBrushColor->setCurrentColor( (confBrushDia->getBrush()).color() );
-        actionPenColor->setCurrentColor( tmpPen.pen.color() );
     }
 }
 

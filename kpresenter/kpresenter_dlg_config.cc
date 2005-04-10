@@ -42,7 +42,6 @@
 #include <qcombobox.h>
 #include <qtabwidget.h>
 
-#include "styledia.h"
 #include "penstylewidget.h"
 #include "brushproperty.h"
 #include "pieproperty.h"

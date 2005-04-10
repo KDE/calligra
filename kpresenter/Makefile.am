@@ -10,12 +10,11 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	webpresentation.cc kpresenter_view.cc  mspresentation.cc \
 	kprbrush.cc \
 	kpresenter_doc.cc \
-	styledia.cc kpresenter_sound_player.cc \
+	kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc  \
 	effecthandler.cc pageeffects.cc\
 	transeffectdia.cc \
-	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
@@ -28,11 +27,11 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterPageIface.skel KPresenterPageIface.cc \
 	sidebar.cc \
-	insertpagedia.ui generalconfig.ui \
+	insertpagedia.ui \
 	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kppointobject.cc kpfreehandobject.cc kppolylineobject.cc \
 	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
-	confpolygondia.cc kppolygonobject.cc notebar.cc \
+	kppolygonobject.cc notebar.cc \
 	KPTextObjectIface.skel KPTextObjectIface.cc \
 	KPTextViewIface.skel KPTextViewIface.cc presdurationdia.cc \
 	KPPieObjectIface.skel KPPieObjectIface.cc \
@@ -47,7 +46,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	shadowdialog.ui shadowdialogimpl.cc textpreview.cc \
 	rotationdialogimpl.cc rotationdialog.ui \
 	KPFreehandObjectIface.skel KPFreehandObjectIface.cc kprstylemanager.cc \
-	kprbgspellcheck.cc kprhelplinedia.cc confpicturedia.cc \
+	kprbgspellcheck.cc kprhelplinedia.cc \
 	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
 	kprduplicateobjdia.cc kpclosedlineobject.cc \
 	kprimportstyledia.cc \
