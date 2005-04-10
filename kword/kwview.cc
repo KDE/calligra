@@ -957,7 +957,7 @@ void KWView::setupActions()
     actionTableJoinCells->setToolTip( i18n( "Join two or more cells into one large cell." ) );
     actionTableJoinCells->setWhatsThis( i18n( "Join two or more cells into one large cell.<p>This is a good way to create titles and labels within a table." ) );
 
-    actionTableSplitCells= new KAction( i18n( "&Split Cells..." ), 0,
+    actionTableSplitCells= new KAction( i18n( "&Split Cell..." ), 0,
                                          this, SLOT( tableSplitCells() ),
                                          actionCollection(), "table_splitcells" );
     actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells." ) );
