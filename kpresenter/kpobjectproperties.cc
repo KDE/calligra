@@ -25,6 +25,8 @@
 #include "kpobject.h"
 #include "kpcubicbeziercurveobject.h"
 #include "kpgroupobject.h"
+#include "kprectobject.h"
+#include "kppolygonobject.h"
 #include "kppieobject.h"
 #include "kppixmapobject.h"
 #include "kppointobject.h"
@@ -75,10 +77,10 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
                 getPieProperties( it.current() );
                 break;
             case OT_RECT:
-                m_flags |= PtPen | PtBrush | PtRectangle;
+                getRectProperties( it.current() );
                 break;
             case OT_POLYGON:
-                m_flags |= PtPen | PtBrush | PtPolygon;
+                getPolygonSettings( it.current() );
                 break;
             case OT_TEXT:
                 getTextProperties( it.current() );
@@ -104,6 +106,37 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
                 break;
             default:
                 break;
+        }
+    }
+}
+
+
+void KPObjectProperties::getRectProperties( KPObject *object )
+{
+    if ( !( m_flags & PtRectangle ) )
+    {
+        KPRectObject *obj = dynamic_cast<KPRectObject*>( object );
+        if ( obj )
+        {
+            obj->getRnds( m_rectValues.xRnd, m_rectValues.yRnd );
+
+            m_flags |= PtPen | PtBrush | PtRectangle;
+        }
+    }
+}
+
+
+void KPObjectProperties::getPolygonSettings( KPObject *object )
+{
+    if ( !( m_flags & PtPolygon ) )
+    {
+        KPPolygonObject *obj = dynamic_cast<KPPolygonObject*>( object );
+        if ( obj )
+        {
+            m_polygonSettings.checkConcavePolygon = obj->getCheckConcavePolygon();
+            m_polygonSettings.cornersValue = obj->getCornersValue();
+            m_polygonSettings.sharpnessValue = obj->getSharpnessValue();
+            m_flags |= PtPen | PtBrush | PtPolygon;
         }
     }
 }

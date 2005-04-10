@@ -45,6 +45,10 @@ public:
 
     int getPropertyFlags() { return m_flags; }
 
+    /// get rectangle properties
+    RectValueCmd::RectValues getRectValues() const { return m_rectValues; }
+    /// get polygon properties
+    PolygonSettingCmd::PolygonSettings getPolygonSettings() const { return m_polygonSettings; }
     /// get pie properties
     PieValueCmd::PieValues getPieValues() const { return m_pieValues; }
     // get picture properties
@@ -57,6 +61,8 @@ public:
 protected:
     void getProperties( const QPtrList<KPObject> &objects );
 
+    void getRectProperties( KPObject *object );
+    void getPolygonSettings( KPObject *object );
     void getPieProperties( KPObject *object );
     void getPictureProperties( KPObject *object );
     void getTextProperties( KPObject *object );
@@ -65,6 +71,10 @@ private:
     QPtrList<KPObject> m_objects;
     int m_flags;
 
+    /// rect properties
+    RectValueCmd::RectValues m_rectValues;
+    /// polygon properties
+    PolygonSettingCmd::PolygonSettings m_polygonSettings;
     /// pie properties
     PieValueCmd::PieValues m_pieValues;
     /// picture properties

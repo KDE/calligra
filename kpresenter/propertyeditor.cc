@@ -372,10 +372,8 @@ void PropertyEditor::setupTabRect()
 {
     if ( m_rectProperty == 0 )
     {
-        RectValueCmd::RectValues rectValue;
-        rectValue.xRnd = m_page->getRndX( 0 );
-        rectValue.yRnd = m_page->getRndY( 0 );
-        m_rectProperty = new RectProperty( this, 0, rectValue );
+        RectValueCmd::RectValues rectValues = m_objectProperties->getRectValues();
+        m_rectProperty = new RectProperty( this, 0, rectValues );
         addTab( m_rectProperty, i18n( "&Rectangle" ) );
     }
 }
@@ -385,10 +383,7 @@ void PropertyEditor::setupTabPolygon()
 {
     if ( m_polygonProperty == 0 )
     {
-        PolygonSettingCmd::PolygonSettings polygonSettings;
-        polygonSettings.checkConcavePolygon = m_page->getCheckConcavePolygon( false );
-        polygonSettings.cornersValue = m_page->getCornersValue( 3 );
-        polygonSettings.sharpnessValue = m_page->getSharpnessValue( 0 );
+        PolygonSettingCmd::PolygonSettings polygonSettings = m_objectProperties->getPolygonSettings();
         m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
         addTab( m_polygonProperty, i18n("Polygo&n" ) );
     }
