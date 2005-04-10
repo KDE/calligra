@@ -22,6 +22,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "swinder.h"
 
@@ -66,9 +67,7 @@ public:
   void setSize( unsigned size ); // HACKS
   
   
-  static EString fromUnicodeString( const void* p, unsigned maxsize = 0 );
-  
-  static EString fromByteString( const void* p, unsigned maxsize = 0 );
+  static EString fromUnicodeString( const void* p, bool longString, unsigned maxsize = 0 );
   
   static EString fromSheetName( const void* p, unsigned maxsize = 0 );
   
@@ -81,6 +80,105 @@ private:
   class Private;
   Private* d;
 };
+
+class FormulaToken
+{
+public:
+
+  enum
+  {
+    // should match Excel's PTG
+    Unused      = 0x00,
+    Matrix      = 0x01,
+    Table       = 0x02,
+    Add         = 0x03,
+    Sub         = 0x04,
+    Mul         = 0x05,
+    Div         = 0x06,
+    Power       = 0x07,
+    Concat      = 0x08,
+    LT          = 0x09,
+    LE          = 0x0a,
+    EQ          = 0x0b,
+    GE          = 0x0c,
+    GT          = 0x0d,
+    NE          = 0x0e,
+    Intersect   = 0x0f,
+    List        = 0x10,
+    Range       = 0x11,
+    UPlus       = 0x12,
+    UMinus      = 0x13,
+    Percent     = 0x14,
+    Paren       = 0x15,
+    MissArg     = 0x16,
+    String      = 0x17,
+    NatFormula  = 0x18,
+    Attr        = 0x19,
+    Sheet       = 0x1a,
+    EndSheet    = 0x1b,
+    ErrorCode   = 0x1c,
+    Bool        = 0x1d,
+    Integer     = 0x1e,
+    Float       = 0x1f,
+    Array       = 0x20,
+    Function    = 0x21,
+    FunctionVar = 0x22,
+    Name        = 0x23,
+    Ref         = 0x24,
+    Area        = 0x25,
+    MemArea     = 0x26,
+    MemErr      = 0x27,
+    MemNoMem    = 0x28,
+    MemFunc     = 0x29,
+    RefErr      = 0x2a,
+    AreaErr     = 0x2b,
+    RefN        = 0x2c,
+    AreaN       = 0x2d,
+    MemAreaN    = 0x2e,
+    MemNoMemN   = 0x2f,
+    NameX       = 0x39,
+    Ref3d       = 0x3a,
+    Area3d      = 0x3b,
+    RefErr3d    = 0x3c,
+    AreaErr3d   = 0x3d
+  };
+
+  FormulaToken();
+  FormulaToken( unsigned id );
+  FormulaToken( const FormulaToken& );
+  ~FormulaToken();
+  
+  // token id, excluding token class
+  unsigned id() const;
+  const char* idAsString() const;
+  
+  // Excel version
+  unsigned version() const;
+  void setVersion( unsigned version );  // Excel version
+  
+  // size of data, EXCLUDING the byte for token id
+  unsigned size() const;
+  void setData( unsigned size, const unsigned char* data );
+  
+  // only when id returns ErrorCode, Bool, Integer, Float, or String
+  Value value() const;
+  
+  // only when id is Function or FunctionVar
+  unsigned functionIndex() const;
+  const char* functionName() const;  // for non external function
+  unsigned functionParams() const;
+  
+  // only when id is Ref
+  UString ref( unsigned row, unsigned col ) const;
+
+private:
+  class Private;
+  Private *d;  
+};
+
+typedef std::vector<FormulaToken> FormulaTokens;
+
+std::ostream& operator<<( std::ostream& s, FormulaToken token );
 
 /**
   Class Record represents a base class for all other type record,
@@ -1387,6 +1485,8 @@ public:
    * Sets the result of the formula.
    */
   void setResult( const Value& v );
+  
+  FormulaTokens tokens() const;
   
   virtual void setData( unsigned size, const unsigned char* data );
 
@@ -2900,6 +3000,7 @@ private:
   Color convertColor( unsigned colorIndex );
   FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
+  UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
   
   // no copy or assign
   ExcelReader( const ExcelReader& );
@@ -2911,6 +3012,7 @@ private:
 
 
 }; // namespace Swinder
+
 
 
 #endif // SWINDER_EXCEL_H

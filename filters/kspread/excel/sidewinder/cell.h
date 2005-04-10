@@ -56,6 +56,10 @@ public:
   
   void setValue( const Value& value );
   
+  UString formula() const;
+  
+  void setFormula( const UString& formula );
+  
   Format format() const;
   
   void setFormat( const Format& format );

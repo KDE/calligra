@@ -35,6 +35,7 @@ public:
   unsigned row;     
   unsigned column;  
   Value value;
+  UString formula;
   Format format;
   unsigned columnSpan;
   unsigned rowSpan;
@@ -114,7 +115,16 @@ Value Cell::value() const
 void Cell::setValue( const Value& value )
 {
   d->value = value;
-  // TODO mark the cell as dirty
+}
+
+UString Cell::formula() const
+{
+  return d->formula;
+}
+
+void Cell::setFormula( const UString& formula )
+{
+  d->formula = formula;
 }
 
 Format Cell::format() const
@@ -125,7 +135,6 @@ Format Cell::format() const
 void Cell::setFormat( const Format& format )
 {
   d->format = format;
-  // TODO mark the cell as dirty
 }
 
 unsigned Cell::columnSpan() const
