@@ -2,8 +2,14 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart PNG Export Filter
+Name[es]=Filtro de exportación a PNG para KChart
+Name[pt]=Filtro de Exportação de PNG para o KChart
+Name[pt_BR]=Filtro de Exportação de PNG para o KChart
+Name[sr]=KChart-ов филтер за извоз у PNG
+Name[sr@Latn]=KChart-ов филтер за извоз у PNG
+Name[sv]=Kchart PNG-exportfilter
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/png
 X-KDE-Weight=1
-X-KDE-Library=libpngexport
+X-KDE-Library=libkchartpngexport
 ServiceTypes=KOfficeFilter

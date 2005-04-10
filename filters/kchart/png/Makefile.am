@@ -10,11 +10,11 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 # reflect the name of your filter. If you have more files
 # than just pngexport.cc please add them to the _SOURCES line.
 
-kde_module_LTLIBRARIES = libpngexport.la
+kde_module_LTLIBRARIES = libkchartpngexport.la
 
-libpngexport_la_SOURCES = pngexport.cpp
-libpngexport_la_LDFLAGS	= -module $(KDE_PLUGIN)
-libpngexport_la_LIBADD = $(KOFFICE_LIBS) \
+libkchartpngexport_la_SOURCES = pngexport.cpp
+libkchartpngexport_la_LDFLAGS	= -module $(KDE_PLUGIN)
+libkchartpngexport_la_LIBADD = $(KOFFICE_LIBS) \
 	../../../kchart/libkchartpart.la \
 	../../../kchart/kdchart/libkdchart.la
 noinst_HEADERS = \
