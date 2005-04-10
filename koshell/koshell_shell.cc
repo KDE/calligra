@@ -324,7 +324,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     if ( !doc->shells().contains( this ) )
         doc->addShell( this );
 
-    KoView *v = doc->createView();
+    KoView *v = doc->createView(this);
     QPtrList<KoView> views;
     views.append(v);
     setRootDocumentDirect( doc, views );
