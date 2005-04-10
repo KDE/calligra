@@ -1,1 +1,1 @@
-SUBDIRS = png
+SUBDIRS = png svg
