@@ -82,7 +82,6 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );
 }
 
 void
