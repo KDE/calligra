@@ -103,7 +103,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Y-interval:"));
+    tmpLabel->setText(i18n("Y interval:"));
     grid2->addWidget(tmpLabel,0,0);
 
     QString tmp;
@@ -155,7 +155,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 //     }
     ylabelFont = new QPushButton( tmpQGroupBox);
     grid2->addWidget(ylabelFont,1,0);
-    ylabelFont->setText(i18n("Font"));
+    ylabelFont->setText(i18n("Font..."));
     // PENDING(kalle) Put back in
     //     ylabel=_chart->params()->yAxisFont();
 

@@ -49,7 +49,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     titlefont = new QPushButton( tmpQGroupBox );
     grid2->addWidget(titlefont,0,2);
-    titlefont->setText(i18n("Font"));
+    titlefont->setText(i18n("Font..."));
 
     titlecolor=new KColorButton(tmpQGroupBox);
     grid2->addWidget(titlecolor,0,3);
@@ -68,7 +68,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     grid2->addWidget(_xlabelED,1,1);
 
     xtitlefont = new QPushButton( tmpQGroupBox );
-    xtitlefont->setText(i18n("Font"));
+    xtitlefont->setText(i18n("Font..."));
     //xtitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(xtitlefont,1,2);
 
@@ -92,7 +92,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
 
     ytitlefont = new QPushButton( tmpQGroupBox);
-    ytitlefont->setText(i18n("Font"));
+    ytitlefont->setText(i18n("Font..."));
     //ytitlefont->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ytitlefont,2,2);
 
@@ -116,7 +116,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     grid2->addWidget(_ylabel2ED,3,1);
 
     ytitle2font = new QPushButton( tmpQGroupBox);
-    ytitle2font->setText(i18n("Font"));
+    ytitle2font->setText(i18n("Font..."));
     ytitle2font->setEnabled(false); //Not supported by kdChart yet
     grid2->addWidget(ytitle2font,3,2);
 
@@ -142,7 +142,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
 
     legendTitleFont = new QPushButton( tmpQGroupBox );
-    legendTitleFont->setText(i18n("Font"));
+    legendTitleFont->setText(i18n("Font..."));
     _legendTitleFont=_chart->params()->legendTitleFont();
     grid2->addWidget(legendTitleFont,3,2);
 
@@ -157,7 +157,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     legendTextFont = new QPushButton( tmpQGroupBox );
     _legendTextFont=_chart->params()->legendFont();
-    legendTextFont->setText(i18n("Font"));
+    legendTextFont->setText(i18n("Font..."));
     grid2->addWidget(legendTextFont,4,2);
 
     legendTextColor=new KColorButton(tmpQGroupBox);

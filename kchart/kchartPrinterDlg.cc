@@ -50,7 +50,7 @@ namespace KChart
   txtSizey->setMaxValue(100);
   txtSizey->setValue(100);
   
-  layout->addWidget( new QLabel(i18n("Print size:"), this) );
+  layout->addWidget( new QLabel(i18n("Print Size"), this) );
   layout->addWidget( new QLabel(i18n("Width: "), this) );
   layout->addWidget( txtSizex );
   layout->addWidget( new QLabel(i18n("Height: "), this) );
