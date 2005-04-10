@@ -95,13 +95,13 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lab = new QLabel( i18n("Legend title font:"), gb );
   grid4->addWidget( lab, 0 ,0 );
 
-  titleLegendFontButton->setText( i18n("Select font...") );
+  titleLegendFontButton->setText( i18n("Select Font...") );
   grid4->addWidget( titleLegendFontButton, 1, 0 );
 
   lab = new QLabel( i18n("Legend text font:"), gb );
   grid4->addWidget( lab, 2, 0 );
   textLegendFontButton = new QPushButton( gb );
-  textLegendFontButton->setText( i18n("Select font...") );
+  textLegendFontButton->setText( i18n("Select Font...") );
   grid4->addWidget( textLegendFontButton, 3, 0 );
 
   connect( titleLegendFontButton, SIGNAL(clicked()), 

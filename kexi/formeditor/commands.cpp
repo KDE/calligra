@@ -289,15 +289,15 @@ AlignWidgetsCommand::name() const
 	switch(m_type)
 	{
 		case AlignToGrid:
-			return i18n("Align Widgets To Grid");
+			return i18n("Align Widgets to Grid");
 		case AlignToLeft:
-			return i18n("Align Widgets To Left");
+			return i18n("Align Widgets to Left");
 		case AlignToRight:
-			return i18n("Align Widgets To Right");
+			return i18n("Align Widgets to Right");
 		case AlignToTop:
-			return i18n("Align Widgets To Top");
+			return i18n("Align Widgets to Top");
 		case AlignToBottom:
-			return i18n("Align Widgets To Bottom");
+			return i18n("Align Widgets to Bottom");
 		default:
 			return QString::null;
 	}
@@ -501,17 +501,17 @@ AdjustSizeCommand::name() const
 	switch(m_type)
 	{
 		case SizeToGrid:
-			return i18n("Resize Widgets To Grid");
+			return i18n("Resize Widgets to Grid");
 		case SizeToFit:
-			return i18n("Resize Widgets To Fit Contents");
+			return i18n("Resize Widgets to Fit Contents");
 		case SizeToSmallWidth:
-			return i18n("Resize Widgets To Narrowest");
+			return i18n("Resize Widgets to Narrowest");
 		case SizeToBigWidth:
-			return i18n("Resize Widgets To Widest");
+			return i18n("Resize Widgets to Widest");
 		case SizeToSmallHeight:
-			return i18n("Resize Widgets To Shortest");
+			return i18n("Resize Widgets to Shortest");
 		case SizeToBigHeight:
-			return i18n("Resize Widgets To Tallest");
+			return i18n("Resize Widgets to Tallest");
 		default:
 			return QString::null;
 	}
@@ -775,15 +775,15 @@ CreateLayoutCommand::name() const
 	switch(m_type)
 	{
 		case Container::HBox:
-			return i18n("Lay out widgets horizontally");
+			return i18n("Lay Out Widgets Horizontally");
 		case Container::VBox:
-			return i18n("Lay out widgets vertically");
+			return i18n("Lay Out Widgets Vertically");
 		case Container::Grid:
-			return i18n("Lay out widgets in a grid");
+			return i18n("Lay Out Widgets in a Grid");
 		case Container::HSplitter:
-			return i18n("Lay out widgets horizontally in a Splitter");
+			return i18n("Lay Out Widgets Horizontally in a Splitter");
 		case Container::VSplitter:
-			return i18n("Lay out widgets vertically in a Splitter");
+			return i18n("Lay Out Widgets Vertically in a Splitter");
 		default:
 			return i18n("Create Layout");
 	}

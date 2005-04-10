@@ -619,17 +619,17 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
 	add(new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(list)),
-		i18n("Container's layout")));
+		i18n("Container's Layout")));
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());
 	updateOldValue(tree, "layout");
 
-	add(new KexiProperty("layoutMargin", container->layoutMargin(), i18n("Layout margin")));
+	add(new KexiProperty("layoutMargin", container->layoutMargin(), i18n("Layout Margin")));
 	updateOldValue(tree, "layoutMargin");
 	if(container->layoutType() == Container::NoLayout)
 		(*this)["layoutMargin"].setVisible(false);
 
-	add(new KexiProperty("layoutSpacing", container->layoutSpacing(), i18n("Layout spacing")));
+	add(new KexiProperty("layoutSpacing", container->layoutSpacing(), i18n("Layout Spacing")));
 	updateOldValue(tree, "layoutSpacing");
 	if(container->layoutType() == Container::NoLayout)
 		(*this)["layoutSpacing"].setVisible(false);

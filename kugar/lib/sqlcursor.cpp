@@ -61,11 +61,11 @@ CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase*
 				errStr += err.databaseText();
 			if ( !err.driverText().isEmpty() )
 				errStr += err.driverText();
-			//QMessageBox::critical( 0, tr("report engine error"), errStr );
+			//QMessageBox::critical( 0, tr("Report Engine Error"), errStr );
 			qWarning( "%s", errStr.local8Bit().data() );
 		} else {
 			// we have not a select query statement
-			//QMessageBox::critical( 0, tr("report engine error"), tr("The string query is not a select sql statement.") );
+			//QMessageBox::critical( 0, tr("Report Engine Error"), tr("The string query is not a select sql statement.") );
 			qWarning( "The string query is not a select sql statement." );
 		}
     }
