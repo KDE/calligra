@@ -1353,7 +1353,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                 {
                     if ( cell->isFormula() )
                     {
-                        text = cell->text(); // untested
+                        QString tmp = cell->text();
+                        if ( tmp.contains( "==" ) )
+                            tmp=tmp.replace( "==", "=" );
+                        text = tmp;
                         isLink = false;
                     }
                     else if ( !cell->link().isEmpty() )
@@ -1415,8 +1418,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         break;
                     case KSpreadCell::Formula:
                         isLink = false;
+                        QString tmp = cell->text();
+                        if ( tmp =="==" )
+                            tmp=replace( "==", "=" );
                         /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
-                        text = cell->text();
+                        text = tmp;
                         break;
                     }
 #endif
