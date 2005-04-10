@@ -413,8 +413,8 @@ void KoTemplateCreateDia::slotRemove() {
         removed = i18n("Remove Template");
         }
 
-    if(KMessageBox::warningYesNo(this, what,
-                                 removed)==KMessageBox::No) {
+    if(KMessageBox::warningContinueCancel(this, what,
+                                 removed,KStdGuiItem::del())==KMessageBox::Cancel) {
         d->m_name->setFocus();
         return;
     }
