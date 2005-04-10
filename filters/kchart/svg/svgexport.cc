@@ -17,7 +17,7 @@
 
 
 typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libsvgexport, SvgExportFactory( "svgexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkchartsvgexport, SvgExportFactory( "svgexport" ) );
 
 SvgExport::SvgExport(KoFilter *, const char *, const QStringList&) 
     : KoFilter()
@@ -62,6 +62,7 @@ SvgExport::convert(const QCString& from, const QCString& to)
     QPainter  painter(&picture);
     QRect     rect(QPoint(0, 0), QPoint(500, 400));
     kchartDoc.paintContent(painter, rect, false);
+    painter.end();
 
     // Save the image.
     if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
