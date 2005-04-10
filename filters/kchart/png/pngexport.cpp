@@ -14,7 +14,7 @@
 #include "kchart_part.h"
 
 #include "pngexport.h"
-
+#include "pngexportdia.h"
 
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libpngexport, PngExportFactory( "pngexport" ) );
@@ -58,14 +58,25 @@ PngExport::convert(const QCString& from, const QCString& to)
     }
 
     // Draw the actual bitmap.
-    QPixmap   pixmap(500, 300);
-    QPainter  painter(&pixmap);
-    kchartDoc.paintContent(painter, pixmap.rect(), false);
+    PNGExportDia  *exportDialog = new PNGExportDia(500, 400, 
+						   0, "exportdialog");
+    if (exportDialog->exec()) {
+	int  width  = exportDialog->width();
+	int  height = exportDialog->height();
 
-    // Save the image.
-    if ( !pixmap.save( m_chain->outputFile(), "PNG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ), 
-			    i18n( "PNG Export Error" ) );
+	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
+	QPixmap   pixmap(width, height);
+	QPainter  painter(&pixmap);
+	kchartDoc.paintContent(painter, pixmap.rect(), false);
+
+	// Save the image.
+	if ( !pixmap.save( m_chain->outputFile(), "PNG" ) ) {
+	    KMessageBox::error( 0, i18n( "Failed to write file." ), 
+				i18n( "PNG Export Error" ) );
+	}
+    }
+    else {
+	kdDebug() << "PNG Export: Couldn't run export dialog." << endl;
     }
 
     return KoFilter::OK;

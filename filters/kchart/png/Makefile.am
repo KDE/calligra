@@ -12,13 +12,13 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 
 kde_module_LTLIBRARIES = libkchartpngexport.la
 
-libkchartpngexport_la_SOURCES = pngexport.cpp
+libkchartpngexport_la_SOURCES = pngexport.cpp pngexportdia.cpp
 libkchartpngexport_la_LDFLAGS	= -module $(KDE_PLUGIN)
 libkchartpngexport_la_LIBADD = $(KOFFICE_LIBS) \
 	../../../kchart/libkchartpart.la \
 	../../../kchart/kdchart/libkdchart.la
 noinst_HEADERS = \
-	pngexport.h
+	pngexport.h pngexportdia.h
 
 METASOURCES = AUTO
 
