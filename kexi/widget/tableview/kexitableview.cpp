@@ -822,8 +822,8 @@ void KexiTableView::deleteCurrentRow()
 	case ImmediateDelete:
 		break;
 	case AskDelete:
-		if (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
-			KGuiItem(i18n("&Delete Row")), KStdGuiItem::no(), "dontAskBeforeDeleteRow"/*config entry*/))
+		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(this, i18n("Do you want to delete selected row?"), 0, 
+			KGuiItem(i18n("&Delete Row"),"editdelete"), KStdGuiItem::no(), "dontAskBeforeDeleteRow"/*config entry*/))
 			return;
 		break;
 	case SignalDelete:
@@ -973,7 +973,7 @@ tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 			tableName.prepend(" \"");
 			tableName.append("\"");
 		}
-		if (KMessageBox::No == KMessageBox::questionYesNo(this, 
+		if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(this, 
 				i18n("Do you want to clear the contents of table %1?").arg(tableName),
 				0, KGuiItem(i18n("&Clear Contents")), KStdGuiItem::no()))
 			return cancelled;

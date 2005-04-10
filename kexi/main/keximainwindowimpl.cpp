@@ -2345,7 +2345,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
-		const int quertionRes = KMessageBox::questionYesNoCancel( this,
+		const int quertionRes = KMessageBox::warningYesNoCancel( this,
 			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",  "<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
 			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
 			QString::null,

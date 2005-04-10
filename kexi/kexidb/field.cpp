@@ -615,19 +615,19 @@ void Field::FieldTypeNames::init()
 	m_initialized = true;
 	resize((Field::LastType + 1)*2);
 
-	ADDTYPE( InvalidType, i18n("Invalid type"), "InvalidType" );
+	ADDTYPE( InvalidType, i18n("Invalid Type"), "InvalidType" );
 	ADDTYPE( Byte, i18n("Byte"), "Byte" );
-	ADDTYPE( ShortInteger, i18n("Short integer number"), "ShortInteger" );
-	ADDTYPE( Integer, i18n("Integer number"), "Integer" );
-	ADDTYPE( BigInteger, i18n("Big integer number"), "BigInteger" );
-	ADDTYPE( Boolean, i18n("Yes/No value"), "Boolean" );
+	ADDTYPE( ShortInteger, i18n("Short Integer Number"), "ShortInteger" );
+	ADDTYPE( Integer, i18n("Integer Number"), "Integer" );
+	ADDTYPE( BigInteger, i18n("Big Integer Number"), "BigInteger" );
+	ADDTYPE( Boolean, i18n("Yes/No Value"), "Boolean" );
 	ADDTYPE( Date, i18n("Date"), "Date" );
-	ADDTYPE( DateTime, i18n("Date and time"), "DateTime" );
+	ADDTYPE( DateTime, i18n("Date and Time"), "DateTime" );
 	ADDTYPE( Time, i18n("Time"), "Time" );
-	ADDTYPE( Float, i18n("Single precision number"), "Float" );
-	ADDTYPE( Double, i18n("Double precision number"), "Double" );
+	ADDTYPE( Float, i18n("Single Precision Number"), "Float" );
+	ADDTYPE( Double, i18n("Double Precision Number"), "Double" );
 	ADDTYPE( Text, i18n("Text"), "Text" );
-	ADDTYPE( LongText, i18n("Long text"), "LongText" );
+	ADDTYPE( LongText, i18n("Long Text"), "LongText" );
 	ADDTYPE( BLOB, i18n("Object"), "BLOB" );
 }
 
@@ -646,10 +646,10 @@ void Field::FieldTypeGroupNames::init()
 	m_initialized = true;
 	resize((Field::LastTypeGroup + 1)*2);
 
-	ADDGROUP( InvalidGroup, i18n("Invalid group"), "InvalidGroup" );
+	ADDGROUP( InvalidGroup, i18n("Invalid Group"), "InvalidGroup" );
 	ADDGROUP( TextGroup, i18n("Text"), "TextGroup" );
-	ADDGROUP( IntegerGroup, i18n("Integer number"), "IntegerGroup" );
-	ADDGROUP( FloatGroup, i18n("Floating point number"), "FloatGroup" );
+	ADDGROUP( IntegerGroup, i18n("Integer Number"), "IntegerGroup" );
+	ADDGROUP( FloatGroup, i18n("Floating Point Number"), "FloatGroup" );
 	ADDGROUP( BooleanGroup, i18n("Yes/No"), "BooleanGroup" );
 	ADDGROUP( DateTimeGroup, i18n("Date/Time"), "DateTimeGroup" );
 	ADDGROUP( BLOBGroup, i18n("Object"), "BLOBGroup" );

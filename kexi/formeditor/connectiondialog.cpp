@@ -406,10 +406,10 @@ ConnectionDialog::removeItem()
 	if(m_table->currentRow() == -1 || m_table->currentRow()>=m_table->rows())
 		return;
 
-	int confirm = KMessageBox::warningYesNo(parentWidget(),
+	int confirm = KMessageBox::warningContinueCancel(parentWidget(),
 		QString("<qt>")+i18n("Do you want to delete this connection ?")+"</qt>", QString::null, KGuiItem(i18n("&Delete Connection")),
-		 KStdGuiItem::no(), "dontAskBeforeDeleteConnection"/*config entry*/);
-	if(confirm == KMessageBox::No)
+		"dontAskBeforeDeleteConnection"/*config entry*/);
+	if(confirm == KMessageBox::Cancel)
 		return;
 
 	m_buffer->remove(m_table->currentRow());

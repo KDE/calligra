@@ -103,13 +103,13 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	col->setReadOnly(true);
 	d->data->addColumn( col );
 
-	col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
+	col = new KexiTableViewColumn(i18n("Field Name"), KexiDB::Field::Text);
 	KexiValidator *vd = new Kexi::IdentifierValidator();
 	vd->setAcceptsEmptyValue(true);
 	col->setValidator( vd );
 
 	d->data->addColumn( col );
-	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
+	KexiDB::Field *f = new KexiDB::Field(i18n("Data Type"), KexiDB::Field::Enum);
 	
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
@@ -287,7 +287,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	buff->add( prop = new KexiProperty("description", QVariant(field->description())) );
 	prop->setVisible(false);//always hidden
 
-	buff->add(prop = new KexiProperty("unsigned", QVariant(field->isUnsigned(), 4), i18n("Unsigned number")));
+	buff->add(prop = new KexiProperty("unsigned", QVariant(field->isUnsigned(), 4), i18n("Unsigned Number")));
 
 	buff->add( prop = new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
 

@@ -88,9 +88,9 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
 	d->lv_types = new KIconView(m_prjtype_sel, "types");
 	QString none;
-	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New project stored in a file"),
+	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New Project Stored in a File"),
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop ) );
-	d->lvi_server = new KIconViewItem( d->lv_types, i18n("New project stored on a database server"), DesktopIcon("socket") );
+	d->lvi_server = new KIconViewItem( d->lv_types, i18n("New Project Stored on a Database Server"), DesktopIcon("socket") );
 	d->lv_types->setFocus();
 	QString txt_dns = i18n("Don't show me this question again.");
 	d->chk_file_txt = m_prjtype_sel->chk_always->text() +"\n"+txt_dns;
@@ -263,7 +263,7 @@ void KexiNewProjectWizard::next()
 	//let's check if move to next page is allowed:
 	if (currentPage()==m_db_title) { //pg 2
 		if (m_db_title->le_caption->text().stripWhiteSpace().isEmpty()) {
-			KMessageBox::information(this, i18n("Enter project caption"));
+			KMessageBox::information(this, i18n("Enter project caption."));
 			m_db_title->le_caption->setText("");
 			m_db_title->le_caption->setFocus();
 			return;
@@ -275,7 +275,7 @@ void KexiNewProjectWizard::next()
 		else {
 			//test for db conn selection
 			if (!m_conn_sel->selectedConnectionData()) {
-				KMessageBox::information(this, i18n("Select server connection for a new project"));
+				KMessageBox::information(this, i18n("Select server connection for a new project."));
 				return;
 			}
 			m_project_selector->label->setText(
@@ -302,14 +302,14 @@ void KexiNewProjectWizard::accept()
 	} else {//SERVER:
 		//check if we have enough of data
 		if (m_server_db_name->le_caption->text().stripWhiteSpace().isEmpty()) {
-			KMessageBox::information(this, i18n("Enter project caption"));
+			KMessageBox::information(this, i18n("Enter project caption."));
 			m_server_db_name->le_caption->setText("");
 			m_server_db_name->le_caption->setFocus();
 			return;
 		}
 		QString dbname = m_server_db_name->le_dbname->text().stripWhiteSpace();
 		if (dbname.isEmpty()) {
-			KMessageBox::information(this, i18n("Enter project's database name"));
+			KMessageBox::information(this, i18n("Enter project's database name."));
 			m_server_db_name->le_dbname->setText("");
 			m_server_db_name->le_dbname->setFocus();
 			return;
@@ -317,7 +317,7 @@ void KexiNewProjectWizard::accept()
 		//check for duplicated dbname
 		if (m_conn_sel->confirmOverwrites() && m_project_selector->projectSet() && m_project_selector->projectSet()
 			->findProject( m_server_db_name->le_dbname->text() )) {
-			if (KMessageBox::Yes!=KMessageBox::warningYesNo( this, "<qt>"
+			if (KMessageBox::Continue!=KMessageBox::warningContinueCancel( this, "<qt>"
 				+i18n("<b>A project with database name \"%1\" already exists</b>"
 				"<p>Do you want to delete it and create a new one?")
 				.arg( m_server_db_name->le_dbname->text() ) ))

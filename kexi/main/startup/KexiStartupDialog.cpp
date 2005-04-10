@@ -185,7 +185,7 @@ QString captionForDialogType(int type)
 	else if (type==KexiStartupDialog::OpenRecent)
 		return i18n("Open Recent Project");
 
-	return i18n("Choose a project");
+	return i18n("Choose Project");
 }
 
 /*================================================================*/
