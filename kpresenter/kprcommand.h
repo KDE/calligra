@@ -611,6 +611,7 @@ public:
     virtual void unexecute();
 
 protected:
+    void addObjects( const QPtrList<KPObject> &objects );
 
     KPresenterDoc *m_doc;
     KPrPage *m_page;

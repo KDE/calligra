@@ -1367,21 +1367,7 @@ PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSe
     m_objects.setAutoDelete( false );
     m_oldSettings.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-    {
-        KPPolygonObject * obj = dynamic_cast<KPPolygonObject*>( it.current() );
-        if( obj )
-        {
-            it.current()->incCmdRef();
-            m_objects.append( it.current() );
-            PolygonSettings *setting = new PolygonSettings;
-            setting->checkConcavePolygon = obj->getCheckConcavePolygon();
-            setting->cornersValue = obj->getCornersValue();
-            setting->sharpnessValue = obj->getSharpnessValue();
-            m_oldSettings.append( setting );
-        }
-    }
+    addObjects( objects );
 }
 
 
@@ -1411,6 +1397,39 @@ PolygonSettingCmd::~PolygonSettingCmd()
         it.current()->decCmdRef();
     m_oldSettings.setAutoDelete( true );
     m_oldSettings.clear();
+}
+
+void PolygonSettingCmd::addObjects( const QPtrList<KPObject> &objects )
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KPPolygonObject *obj = dynamic_cast<KPPolygonObject*>( it.current() );
+            if( obj )
+            {
+                m_objects.append( obj );
+                obj->incCmdRef();
+
+                PolygonSettings * polygonSettings = new PolygonSettings;
+
+                polygonSettings->checkConcavePolygon = obj->getCheckConcavePolygon();
+                polygonSettings->cornersValue = obj->getCornersValue();
+                polygonSettings->sharpnessValue = obj->getSharpnessValue();
+
+                m_oldSettings.append( polygonSettings );
+            }
+        }
+    }
 }
 
 void PolygonSettingCmd::execute()
