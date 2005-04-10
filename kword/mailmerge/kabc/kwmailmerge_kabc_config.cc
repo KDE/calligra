@@ -99,7 +99,7 @@ void KWMailMergeKABCConfig::addSelectedContacts()
 {
     QListViewItemIterator it( _ui->mAvailableView, QListViewItemIterator::Selected  );
     QListViewItem* selected = _ui->mSelectedView->findItem(
-                                  "Single Entries", 0, Qt::ExactMatch );
+                                  i18n("Single Entries"), 0, Qt::ExactMatch );
     QListViewItem* selectedLists = _ui->mSelectedView->findItem(
                                        i18n("Distribution Lists"), 0, Qt::ExactMatch );
     while ( it.current() )
@@ -196,8 +196,7 @@ void KWMailMergeKABCConfig::initSelectedAddressees()
 
     QListViewItem* category = _ui->mAvailableView->firstChild();
     QListViewItem* selected = _ui->mSelectedView->findItem(
-                                  "Single Entries", 0, Qt::ExactMatch );
-
+                                  i18n("Single Entries"), 0, Qt::ExactMatch );
     while ( category && (records.count()>0) )
     {
         if( category->text(0) != i18n("Distribution Lists") )
@@ -329,7 +328,7 @@ void KWMailMergeKABCConfig::removeContact( QListViewItem* item )
             }
             if( entryCategories.isEmpty() )
             {
-                QString noCat = "no category";
+                QString noCat = i18n("no category");
                 KWMailMergeKABCConfigListItem* leftItem = new KWMailMergeKABCConfigListItem(
                             _ui->mAvailableView->findItem(
                                 noCat, 0, Qt::ExactMatch),
