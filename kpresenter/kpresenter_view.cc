@@ -2733,12 +2733,12 @@ void KPresenterView::setupActions()
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
-    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect" ),
+    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect..." ),
                                             "effect", 0,
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
 
-    actionScreenTransEffect = new KAction( i18n( "Edit Slide &Transition" ),
+    actionScreenTransEffect = new KAction( i18n( "Edit Slide &Transition..." ),
                                            "effect", 0,
                                            this, SLOT( screenTransEffect() ),
                                            actionCollection(), "screen_transeffect");
@@ -3064,11 +3064,11 @@ void KPresenterView::setupActions()
                                       this, SLOT( duplicateObj() ),
                                       actionCollection(), "duplicate_obj" );
 
-    actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection..." ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 
-    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
+    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection..." ), 0,
                                                   this, SLOT( createStyleFromSelection()),
                                                   actionCollection(), "create_style" );
 

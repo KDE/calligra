@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
+   Copyright (C) 2005 Sven Lppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -680,7 +680,7 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
 	setXMLFile( "koshellui.rc", true, true );
 
-  new KAction(i18n("Save all"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
+  new KAction(i18n("Save All"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
 }
 
 #include "koshell_shell.moc"

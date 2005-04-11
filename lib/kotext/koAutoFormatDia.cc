@@ -1228,7 +1228,7 @@ void KoCompletionDia::setup()
     cbAppendSpace = new QCheckBox( page );
     cbAppendSpace->setText( i18n( "A&ppend space" ) );
 
-    m_completionKeyActionLabel = new QLabel(i18n( "Key used for competion" ),page );
+    m_completionKeyActionLabel = new QLabel(i18n( "Key used for completion:" ),page );
 
     m_completionKeyAction = new QComboBox( page );
     QStringList lst;

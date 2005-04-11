@@ -157,12 +157,12 @@ void PgConfDia::setupPageSlides()
 
     QHBox *box = new QHBox( group );
 
-    ( void )new QLabel( i18n( "Custom Slide" ),box );
+    ( void )new QLabel( i18n( "Custom slide:" ),box );
 
     m_customSlideCombobox = new QComboBox( box );
     m_customSlideCombobox->insertStringList( m_doc->presentationList() );
 
-    m_selectedSlide = new QRadioButton( i18n( "Selected pages" ), group, "selectedslide" );
+    m_selectedSlide = new QRadioButton( i18n( "Selected pages:" ), group, "selectedslide" );
     slidesLayout->addMultiCellWidget( group, 0,2,0,1 );
     connect( m_selectedSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 

@@ -47,10 +47,10 @@ CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPresenterDoc *_d
   list=new QListBox(page);
   grid1->addMultiCellWidget(list,0,8,0,0);
 
-  m_pAdd=new QPushButton(i18n("&Add"),page);
+  m_pAdd=new QPushButton(i18n("&Add..."),page);
   grid1->addWidget(m_pAdd,1,2);
 
-  m_pModify=new QPushButton(i18n("&Modify"),page);
+  m_pModify=new QPushButton(i18n("&Modify..."),page);
   grid1->addWidget(m_pModify,2,2);
 
   m_pRemove=new QPushButton(i18n("&Remove"),page);
@@ -262,7 +262,7 @@ void DefineCustomSlideShow::init()
   lov->setSpacing( KDialog::spacingHint() );
   QHBoxLayout *loh = new QHBoxLayout( lov );
 
-  QLabel *lab = new QLabel( i18n( "Name" ), page );
+  QLabel *lab = new QLabel( i18n( "Name:" ), page );
   loh->addWidget( lab );
   m_name = new QLineEdit( page );
   loh->addWidget( m_name );

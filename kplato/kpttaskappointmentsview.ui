@@ -32,7 +32,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Name</string>
+                        <string>Name:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit1</cstring>
@@ -51,7 +51,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Cut off date</string>
+                        <string>Cut off date:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit2</cstring>
@@ -88,7 +88,7 @@
                                 <cstring>textLabel8</cstring>
                             </property>
                             <property name="text">
-                                <string>Planned</string>
+                                <string>Planned:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit8</cstring>
@@ -107,7 +107,7 @@
                                 <cstring>textLabel6</cstring>
                             </property>
                             <property name="text">
-                                <string>Actual</string>
+                                <string>Actual:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit6</cstring>
@@ -134,7 +134,7 @@
                                 <cstring>textLabel8_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Total</string>
+                                <string>Total:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit8</cstring>
@@ -145,7 +145,7 @@
                                 <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>Performance</string>
+                                <string>Performance:</string>
                             </property>
                             <property name="indent">
                                 <number>-1</number>
@@ -180,7 +180,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Actual</string>
+                                <string>Actual:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit3</cstring>
@@ -191,7 +191,7 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Planned</string>
+                                <string>Planned:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit5</cstring>
@@ -202,7 +202,7 @@
                                 <cstring>textLabel8_2_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Total</string>
+                                <string>Total:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit8</cstring>
@@ -237,7 +237,7 @@
                                 <cstring>textLabel4_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Performance</string>
+                                <string>Performance:</string>
                             </property>
                             <property name="indent">
                                 <number>-1</number>
