@@ -1128,23 +1128,16 @@ KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const 
 
     QVGroupBox * AlignGroup = new QVGroupBox( i18n( "Alignment" ), this );
 
-    /*QLabel * lAlign =*/ new QLabel( i18n( "Align:" ), AlignGroup );
-//    AlignGroup->addWidget( lAlign, 0, 0 );
-
     rLeft = new QRadioButton( i18n( "&Left" ), AlignGroup );
-//    AlignGroup->addWidget( rLeft, 1, 0 );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
 
     rCenter = new QRadioButton( i18n( "C&enter" ), AlignGroup );
-//    AlignGroup->addWidget( rCenter, 2, 0 );
     connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
 
     rRight = new QRadioButton( i18n( "&Right" ), AlignGroup );
-//    grid->addWidget( rRight, 3, 0 );
     connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
 
     rJustify = new QRadioButton( i18n( "&Justify" ), AlignGroup );
-//    grid->addWidget( rJustify, 4, 0 );
     connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
 
     clearAligns();
