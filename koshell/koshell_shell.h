@@ -68,6 +68,7 @@ protected slots:
 
   void slotSidebar_Part(int);
   void slotSidebar_Document(int);
+  void tab_contextMenu(QWidget * ,const QPoint &);
 
   /**
     Used for showing or hiding the sidebar and the components-label.

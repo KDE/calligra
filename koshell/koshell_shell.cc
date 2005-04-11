@@ -34,11 +34,12 @@
 #include <kapplication.h>
 #include <ktempfile.h>
 #include <kfiledialog.h>
-//#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
+#include <kpopupmenu.h>
 #include <kservice.h>
 #include <kmessagebox.h>
 #include <krecentdocument.h>
@@ -111,6 +112,7 @@ KoShellWindow::KoShellWindow()
 
   connect( m_pFrame, SIGNAL( currentChanged( QWidget* ) ),
            this, SLOT( slotUpdatePart( QWidget* ) ) );
+  connect( m_pFrame, SIGNAL( contextMenu(QWidget * ,const QPoint &)), this, SLOT( tab_contextMenu(QWidget * ,const QPoint &)) );
 
   m_client = new KoShellGUIClient( this );
   createShellGUI();
@@ -331,7 +333,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
-    m_pFrame->addTab( v, i18n("Untitled") );
+    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), KIcon::Small ), i18n("Untitled") );
     
     // Create a new page for this doc
     Page page;
@@ -640,6 +642,24 @@ QString KoShellWindow::configFile() const
   return QString::null; // use UI standards only for now
 }
 
+void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
+{
+  KPopupMenu menu;
+  int const mnuClose = menu.insertItem( i18n("Close") );
+  int const choice = menu.exec(p);
+
+  if ( choice == mnuClose )
+  {
+    const int index = m_pFrame->currentPageIndex();
+    m_pFrame->setCurrentPage( m_pFrame->indexOf(w) );
+    slotFileClose();
+    if ( index > m_pFrame->currentPageIndex() )
+        m_pFrame->setCurrentPage(index-1);
+    else
+        m_pFrame->setCurrentPage(index);
+  }
+}
+
 /*
 void KoShellWindow::slotFilePrint()
 {
@@ -658,7 +678,7 @@ void KoShellWindow::createShellGUI( bool create )
 ///////////////////
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
-	setXMLFile( "koshellui.rc", true, false );
+	setXMLFile( "koshellui.rc", true, true );
 
   new KAction(i18n("Save all"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
 }
