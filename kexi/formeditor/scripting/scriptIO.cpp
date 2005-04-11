@@ -19,7 +19,7 @@
 
 #include "scriptIO.h"
 #include "formscript.h"
-#include "events.h"
+#include "kexievents.h"
 
 #include "form.h"
 #include "objecttree.h"

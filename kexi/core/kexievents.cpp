@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "events.h"
+#include "kexievents.h"
 
 Event::Event(QObject *sender, const QCString &signal,
   QObject *receiver, const QCString &slot)
