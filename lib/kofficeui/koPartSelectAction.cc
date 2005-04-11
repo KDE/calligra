@@ -52,7 +52,7 @@ void KoPartSelectAction::init()
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
 	if (!serv->genericName().isEmpty()) {
-	    KAction *action = new KAction( serv->genericName(), serv->icon(), 0,
+	    KAction *action = new KAction( serv->genericName().replace('&',"&&"), serv->icon(), 0,
                                        this, SLOT( slotActionActivated() ),
                                        parentCollection(), serv->name().latin1() );
     	    insert( action );
