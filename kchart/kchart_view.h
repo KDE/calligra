@@ -64,6 +64,7 @@ public slots:
     void  slotConfigSubTypeChart();
 
     void  slotConfigPageLayout();
+    void  importData();
     void  extraCreateTemplate();
 
 protected:

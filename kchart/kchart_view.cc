@@ -15,6 +15,7 @@
 #include "kchartPageLayout.h"
 #include "kchart_params.h"
 #include "kchartPrinterDlg.h"
+#include "csvimportdialog.h"
 
 #include <qpainter.h>
 #include <qcursor.h>
@@ -30,6 +31,7 @@
 #include <dcopobject.h>
 #include <kxmlguifactory.h>
 #include <qpaintdevicemetrics.h>
+#include <qcstring.h> // For QByteArray
 
 #include <koTemplateCreateDia.h>
 
@@ -52,12 +54,17 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
         setXMLFile( "kchart_readonly.rc" );
     m_dcop = 0;
     dcopObject(); // build it
+
+    new KAction( i18n( "Import Data.." ), 0,
+		 this, SLOT( importData() ),
+		 actionCollection(), "import_data" );
 #if 0
     KAction * actionExtraCreateTemplate	=
 #endif
 	new KAction( i18n( "&Create Template From Document..." ), 0,
 		       this, SLOT( extraCreateTemplate() ),
 		       actionCollection(), "extra_template" );
+
     m_wizard = new KAction( i18n("Customize with &Wizard..."),
                             "wizard", 0,
                             this, SLOT( wizard() ),
@@ -604,6 +611,24 @@ void KChartView::print(KPrinter &printer)
   KDChart::print(&painter,((KChartPart*)koDocument())->params(),((KChartPart*)koDocument())->data(),0, new QRect(0,0, width, height));
   painter.end();
 }
+
+void KChartView::importData()
+{
+    QString     caption( i18n("Import Data") );
+
+    QString     fileError( i18n("The file %1 could not be read") );
+    QByteArray  inputFile;
+
+    CSVImportDialog  *dialog = new CSVImportDialog(0L, inputFile);
+
+    if ( dialog->exec() ) {
+	kdDebug(35001) << "OK was pressed" << endl;
+    }
+    else {
+	kdDebug(35001) << "Cancel was pressed" << endl;
+    }
+}
+
 
 void KChartView::extraCreateTemplate()
 {

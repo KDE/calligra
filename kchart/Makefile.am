@@ -28,7 +28,8 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartLegendConfigPage.cc kchart_params.cc KChartParamsIface.skel \
 	KChartParamsIface.cc kchartHeaderFooterConfigPage.cc \
 	kchartLine3dConfigPage.cc kchartParameterPolarConfigPage.cc kchartPageLayout.cc \
-	kchartPrinterDlg.cc
+	kchartPrinterDlg.cc \
+        csvimportdialog.cc csvimportdialogui.ui
 
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -69,7 +70,8 @@ noinst_HEADERS =  kchart_part.h \
 		KChartParamsIface.h kchartHeaderFooterConfigPage.h \
 		kchartLine3dConfigPage.h kchartParameterPolarConfigPage.h \
 		kchartPageLayout.h \
-		kchartPrinterDlg.h
+		kchartPrinterDlg.h \
+		csvimportdialog.h
 
 METASOURCES = AUTO
 

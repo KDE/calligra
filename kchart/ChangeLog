@@ -1,3 +1,15 @@
+2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Start on import data from Comma Separated Values files (CSV)
+	(Wish 99995)
+	* csvimportdialog.{h,cc}: new files
+	* csvimportdialogui.ui: new file
+	* Makefile.am: Add files above
+	* kchart.rc (File menu): Add Action import_data
+	* kchart_view.cc (import_data): new KAction
+	(importData): new slot
+	
+
 2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
         * kchart_part.cc (KChartPart): Set modified when the chart type is changed.
 
