@@ -599,8 +599,9 @@ KPTDateTime KPTTask::calculatePredeccessors(const QPtrList<KPTRelation> &list, i
                 break;
             case KPTRelation::FinishFinish:
                 // I can't finish earlier than my predeccessor, so
-                // I can't start earlier than it's latestfinish - my duration
-                t -= duration(t + it.current()->lag(), use, true);
+                // I can't start earlier than it's (earlyfinish+lag)- my duration
+                t += it.current()->lag();
+                t -= duration(t, use, true);
                 break;
             default:
                 t += it.current()->lag();
@@ -721,12 +722,13 @@ KPTDateTime KPTTask::calculateSuccessors(const QPtrList<KPTRelation> &list, int 
             case KPTRelation::StartStart:
                 // I must start before my successor, so
                 // I can't finish later than it's (starttime-lag) + my duration
-                t += duration(t -  it.current()->lag(), use, false);
+                t -= it.current()->lag();
+                t += duration(t, use, false);
                 break;
             case KPTRelation::FinishFinish:
                 // My successor cannot finish before me, so
                 // I can't finish later than it's latest finish - lag
-                t = it.current()->parent()->latestFinishBackward() -  it.current()->lag();
+                t = it.current()->child()->latestFinishBackward() -  it.current()->lag();
                 break;
             default:
                 t -= it.current()->lag();
