@@ -1,5 +1,11 @@
 2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 
+	Get a file name for "Import Data" and actually read data.
+	(No new strings).
+	* kchart_view.cc (importData): Open a file dialog, and read data.
+	
+	----------------------------------------------------------------
+
 	Start on import data from Comma Separated Values files (CSV)
 	(Wish 99995)
 	* csvimportdialog.{h,cc}: new files
@@ -11,7 +17,9 @@
 	
 
 2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
-        * kchart_part.cc (KChartPart): Set modified when the chart type is changed.
+
+        * kchart_part.cc (KChartPart): Set modified when the chart type is
+	changed.
 
 2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 

@@ -17,6 +17,7 @@
 #include "kchartPrinterDlg.h"
 #include "csvimportdialog.h"
 
+#include <qfile.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qpopupmenu.h>
@@ -32,6 +33,8 @@
 #include <kxmlguifactory.h>
 #include <qpaintdevicemetrics.h>
 #include <qcstring.h> // For QByteArray
+#include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include <koTemplateCreateDia.h>
 
@@ -614,12 +617,27 @@ void KChartView::print(KPrinter &printer)
 
 void KChartView::importData()
 {
-    QString     caption( i18n("Import Data") );
+    // Get the name of the file to open.
+    QString filename = KFileDialog::getOpenFileName(QString::null,// startDir
+						    QString::null,// filter
+						    0,
+						    i18n("Import Data"));
+    kdDebug(35001) << "Filename = <" << filename << ">" << endl;
+    if (filename == "")
+      return;
 
-    QString     fileError( i18n("The file %1 could not be read") );
-    QByteArray  inputFile;
+    // Check to see if we can read the file.
+    QFile  inFile(filename);
+    if (!inFile.open(IO_ReadOnly)) {
+	KMessageBox::sorry( 0, i18n("The file %1 could not be read")
+			    .arg(filename) );
+	inFile.close();
+	return;
+    }
 
-    CSVImportDialog  *dialog = new CSVImportDialog(0L, inputFile);
+    QByteArray  inData( inFile.readAll() );
+    inFile.close();
+    CSVImportDialog  *dialog = new CSVImportDialog(0L, inData);
 
     if ( dialog->exec() ) {
 	kdDebug(35001) << "OK was pressed" << endl;
