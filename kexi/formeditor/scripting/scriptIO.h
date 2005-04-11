@@ -58,7 +58,7 @@ class ScriptIO
 	protected:
 		ScriptIO() {;}
 		~ScriptIO() {;}
-}
+};
 
 #endif
 

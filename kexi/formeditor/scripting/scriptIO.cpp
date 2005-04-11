@@ -43,6 +43,7 @@ ScriptIO::saveFormEvents(QDomNode &parentNode, FormScript *formScript)
 	// Save all form events
 	if(!formScript->eventList()->isEmpty())
 		saveEventList(formScript->eventList(), parentNode);
+	return true;
 }
 
 bool
@@ -63,6 +64,7 @@ ScriptIO::loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manage
 		for(QDomNode n = events.firstChild(); !n.isNull(); n = n.nextSibling())
 			loadEvent(n, formScript->eventList(), form);
 	}
+	return true;
 }
 
 bool
@@ -70,6 +72,7 @@ ScriptIO::saveAllEventsForWidget(QObject *widget, FormScript *formScript, QDomNo
 {
 	EventList *l = formScript->eventList()->allEventsForObject(widget);
 	saveEventList(l, node);
+	return true;
 }
 
 void
