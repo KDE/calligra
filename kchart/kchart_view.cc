@@ -58,7 +58,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_dcop = 0;
     dcopObject(); // build it
 
-    new KAction( i18n( "Import Data.." ), 0,
+    new KAction( i18n( "Import Data..." ), 0,
 		 this, SLOT( importData() ),
 		 actionCollection(), "import_data" );
 #if 0
@@ -224,7 +224,7 @@ void KChartView::edit()
     ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
 
-    connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)), 
+    connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)),
 	    this, SLOT(applyEdit(kchartDataEditor *)));
 
     // Execute the data editor.
@@ -329,7 +329,7 @@ void KChartView::config(int flags)
     KChartParams        *params = ((KChartPart*)koDocument())->params();
     KoChart::Data       *dat    = (( (KChartPart*)koDocument())->data());
     KChartAuxiliary     *aux    = ((KChartPart*)koDocument())->auxdata();
-    KChartConfigDialog  *d      = new KChartConfigDialog( params, this, flags, 
+    KChartConfigDialog  *d      = new KChartConfigDialog( params, this, flags,
 							  dat, aux );
 
     connect( d, SIGNAL( dataChanged() ),
@@ -610,7 +610,7 @@ void KChartView::print(KPrinter &printer)
 	width = pdm.width();
 	height = pdm.height();
   }
- 
+
   KDChart::print(&painter,((KChartPart*)koDocument())->params(),((KChartPart*)koDocument())->data(),0, new QRect(0,0, width, height));
   painter.end();
 }
@@ -629,7 +629,7 @@ void KChartView::importData()
     // Check to see if we can read the file.
     QFile  inFile(filename);
     if (!inFile.open(IO_ReadOnly)) {
-	KMessageBox::sorry( 0, i18n("The file %1 could not be read")
+	KMessageBox::sorry( 0, i18n("The file %1 could not be read.")
 			    .arg(filename) );
 	inFile.close();
 	return;
