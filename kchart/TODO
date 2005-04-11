@@ -31,7 +31,7 @@ Item								   Prio Status
      - Set modified when data is changed. 				done
      - Set modified when the chart is changed through config. 		done
      - Set modified when the chart is changed through wizard.		done
-     - Set modified when the chart type is changed.			--
+     - Set modified when the chart type is changed.			done
   + 90893: never-saved doc failes autosave			      2 DONE
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.

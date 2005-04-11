@@ -376,6 +376,7 @@ void KChartView::pieChart()
 
 	updateButton();
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
         m_chartpie->setChecked( true ); // always one has to be checked !
@@ -391,6 +392,7 @@ void KChartView::lineChart()
 
 	updateButton();
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
 	m_chartline->setChecked( true ); // always one has to be checked !
@@ -409,6 +411,7 @@ void KChartView::barsChart()
 	updateButton();
     params->setThreeDBars( params->threeDPies() );
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
 	m_chartbars->setChecked( true ); // always one has to be checked !
@@ -425,6 +428,7 @@ void KChartView::areasChart()
 
 	updateButton();
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
 	m_chartareas->setChecked( true ); // always one has to be checked !
@@ -442,6 +446,7 @@ void KChartView::hiLoChart()
 
 	updateButton();
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
 	m_charthilo->setChecked( true ); // always one has to be checked !
@@ -457,6 +462,7 @@ void KChartView::ringChart()
 
 	updateButton();
 	repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
 	m_chartring->setChecked( true ); // always one has to be checked !
@@ -473,6 +479,7 @@ void KChartView::polarChart()
         params->setPolarChartSubType( KDChartParams::PolarNormal );
 
         repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
@@ -488,6 +495,7 @@ void KChartView::bwChart()
         params->setBWChartSubType( KDChartParams::BWNormal );
 
         repaint();
+	((KChartPart*)koDocument())->setModified(true);
     }
     else
         m_chartbw->setChecked( true ); // always one has to be checked !
