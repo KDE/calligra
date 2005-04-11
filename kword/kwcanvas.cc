@@ -1235,7 +1235,10 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 {
                     KWTextFrameSet *frameset = static_cast<KWTextFrameSet *>(fs);
                     //show the link target in the status bar
-                    gui()->getView()->setTemporaryStatusBarText( frameset->linkVariableUnderMouse(docPoint)->url() );
+                    QString link = frameset->linkVariableUnderMouse(docPoint)->url();
+                    if ( link.startsWith("bkm://") )
+                        link.replace( 0, 6, i18n("Bookmark target: ") );
+                    gui()->getView()->setTemporaryStatusBarText( link );
                     m_temporaryStatusBarTextShown = true;
                 }
                 break;
