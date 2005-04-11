@@ -12,7 +12,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexivalidator.cpp \
 	kexiproperty.cpp kexipropertybuffer.cpp kexipartdatasource.cpp \
 	kexiuseraction.cpp kexiuseractionmethod.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp \
-	kexidataiteminterface.cpp
+	kexidataiteminterface.cpp kexievents.cpp
 
 noinst_HEADERS = kexi_p.h kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
 

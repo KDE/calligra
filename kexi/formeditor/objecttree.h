@@ -133,7 +133,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		ObjectTreeItem*	lookup(const QString &name);
 		/*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
 		this dict, iterate on a copy. */
-		const ObjectTreeDict*	dict() { return &m_treeDict; }
+		ObjectTreeDict*  dict() { return &m_treeDict; }
 
 		void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
 		void removeItem(const QString &name);

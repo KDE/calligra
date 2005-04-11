@@ -34,7 +34,7 @@
    <Action name="drag_connection"/>
    <Separator/>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_MyTabWidget"/>
+   <Action name="library_widget_KFDTabWidget"/>
    <Separator/>
    <Action name="library_widget_KexiDBInputWidget"/>
    <Action name="library_widget_KexiSubForm"/>
