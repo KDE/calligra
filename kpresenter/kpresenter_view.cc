@@ -622,9 +622,9 @@ void KPresenterView::updateSideBarMenu()
 
 void KPresenterView::editDelPage()
 {
-    if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to remove the current slide?") )
-         != KMessageBox::Yes )
+    if ( KMessageBox::warningContinueCancel( this,
+                                     i18n( "Do you want to remove the current slide?"),i18n("Remove Slide"),KStdGuiItem::del() )
+         != KMessageBox::Continue )
         return;
     m_canvas->exitEditMode();
     m_pKPresenterDoc->deletePage( currPg );
