@@ -676,7 +676,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     tabLayout->addWidget( runSideGroup );
 
-    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance between frame and text (%1)").arg(doc->unitName()), tab2 );
+    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance Between Frame && Text (%1)").arg(doc->unitName()), tab2 );
     if ( frame )
         m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
                                          QMAX(0.00, frame->runAroundRight()),

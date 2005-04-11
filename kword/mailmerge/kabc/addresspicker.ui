@@ -199,7 +199,7 @@
                 <cstring>mAddressBook</cstring>
             </property>
             <property name="text">
-                <string>Address B&amp;ook...</string>
+                <string>Address B&amp;ook</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Launch KAddressbook</string>

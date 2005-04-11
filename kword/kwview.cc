@@ -701,7 +701,7 @@ void KWView::setupActions()
     actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc." ) );
     actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed." ) );
 
-    actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset Properties..." ), 0,
+    actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset Properties" ), 0,
                                      this, SLOT( formatFrameSet() ),
                                      actionCollection(), "format_frameset" );
     actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties." ) );
@@ -905,7 +905,7 @@ void KWView::setupActions()
     actionBackgroundColor->setDefaultColor(QColor());
 
     // ---------------------- Table menu
-    actionTablePropertiesMenu = new KAction( i18n( "&Properties..." ), 0,
+    actionTablePropertiesMenu = new KAction( i18n( "&Properties" ), 0,
                                this, SLOT( tableProperties() ),
                                actionCollection(), "table_propertiesmenu" );
     actionTablePropertiesMenu->setToolTip( i18n( "Adjust properties of the current table." ) );
@@ -913,7 +913,7 @@ void KWView::setupActions()
 
 /* TODO: disabled for the moment because I first want a nice icon :-) (09-06-2002)
 
-    actionTableProperties = new KAction( i18n( "&Properties..." ), 0,
+    actionTableProperties = new KAction( i18n( "&Properties" ), 0,
                                this, SLOT( tableProperties() ),
                                actionCollection(), "table_properties" );
     actionTableProperties->setToolTip( i18n( "Adjust properties of the current table." ) );
@@ -2690,7 +2690,7 @@ void KWView::deleteFrame( bool _warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                i18n("&Delete"),
+                KStdGuiItem::del(),
                 "DeleteLastFrameConfirmation",
                 true );
             if (result != KMessageBox::Continue)
@@ -2708,7 +2708,7 @@ void KWView::deleteFrame( bool _warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                i18n("&Delete"),
+                KStdGuiItem::del(),
                 "DeleteLastFrameConfirmation",
                 true );
             if (result != KMessageBox::Continue)
@@ -4106,7 +4106,7 @@ void KWView::tableDeleteRow()
                                                          "Deleting this row will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Row"),
-                                                    i18n("&Delete"));
+                                                    KStdGuiItem::del());
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
@@ -4138,7 +4138,7 @@ void KWView::tableDeleteCol()
                                                          "Deleting this column will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Column"),
-                                                    i18n("&Delete"));
+                                                    KStdGuiItem::del());
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
