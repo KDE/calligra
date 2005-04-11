@@ -3,6 +3,7 @@
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kchart \
 	-I$(top_srcdir)/kchart/kdchart \
+	-I$(top_srcdir)/interfaces \
 	$(all_includes)
 
 ####### Files
