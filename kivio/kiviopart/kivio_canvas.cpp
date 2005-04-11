@@ -273,8 +273,6 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
   QRect fillRect(0, 0, pw, ph);
   QRect paintRect = ev->rect();
-  paintRect.setX(paintRect.x());
-  paintRect.setY(paintRect.y());
   QRegion grayRegion(paintRect);
   grayRegion.translate(m_iXOffset, m_iYOffset);
   grayRegion -= fillRect;

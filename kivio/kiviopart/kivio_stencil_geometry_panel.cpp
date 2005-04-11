@@ -101,6 +101,7 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
   m_pW = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
   m_pH = new KoUnitDoubleSpinBox(this, -1000.0, 1000.0, 0.5, 0.0);
   m_rotationSBox = new KIntSpinBox(-360, 360, 1, 0, 10, this);
+  m_rotationSBox->hide();
 
   connect(m_pX, SIGNAL(valueChanged(double)), SLOT(xChange(double)));
   connect(m_pY, SIGNAL(valueChanged(double)), SLOT(yChange(double)));
