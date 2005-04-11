@@ -795,7 +795,7 @@ void KivioView::removePage()
     return;
   }
   QApplication::beep();
-  int ret = KMessageBox::warningContinueCancel(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove Page"),KStdGuiItem::del());
+  int ret = KMessageBox::warningContinueCancel(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove Page"),KGuiItem(i18n("&Delete"),"editdelete"));
 
   if ( ret == KMessageBox::Continue ) {
       KivioPage* tbl = m_pActivePage;

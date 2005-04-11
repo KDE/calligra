@@ -4884,7 +4884,7 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
 	return;
-    int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KStdGuiItem::del());
+    int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"editdelete"));
     if ( ret == KMessageBox::Continue )
     {
       doc()->emitBeginOperation(false);
@@ -5879,7 +5879,7 @@ void KSpreadView::removeSheet()
   }
   KNotifyClient::beep();
   int ret = KMessageBox::warningContinueCancel( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),
-                                       i18n( "Remove Sheet" ),KStdGuiItem::del() );
+                                       i18n( "Remove Sheet" ),KGuiItem(i18n("&Delete"),"editdelete") );
 
   if ( ret == KMessageBox::Continue )
   {

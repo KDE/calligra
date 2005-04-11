@@ -2690,7 +2690,7 @@ void KWView::deleteFrame( bool _warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                KStdGuiItem::del(),
+                KGuiItem(i18n("&Delete"),"editdelete"),
                 "DeleteLastFrameConfirmation",
                 true );
             if (result != KMessageBox::Continue)
@@ -2708,7 +2708,7 @@ void KWView::deleteFrame( bool _warning )
                 this,
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
-                KStdGuiItem::del(),
+                KGuiItem(i18n("&Delete"),"editdelete"),
                 "DeleteLastFrameConfirmation",
                 true );
             if (result != KMessageBox::Continue)
@@ -4106,7 +4106,7 @@ void KWView::tableDeleteRow()
                                                          "Deleting this row will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Row"),
-                                                    KStdGuiItem::del());
+                                                    KGuiItem(i18n("&Delete"),"editdelete"));
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
@@ -4138,7 +4138,7 @@ void KWView::tableDeleteCol()
                                                          "Deleting this column will delete the table.\n"
                                                          "Do you want to delete the table?"),
                                                     i18n("Delete Column"),
-                                                    KStdGuiItem::del());
+                                                    KGuiItem(i18n("&Delete"),"editdelete"));
         if (result == KMessageBox::Continue)
         {
             m_doc->deleteTable( table );
