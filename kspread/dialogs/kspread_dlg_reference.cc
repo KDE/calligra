@@ -65,12 +65,12 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   m_rangeName = new QLabel(this);
   lay1->addWidget(m_rangeName);
 
-  m_pRemove = new QPushButton(i18n("&Remove..."), this);
+  m_pRemove = new QPushButton(i18n("&Remove"), this);
   lay1->addWidget( m_pRemove );
   //m_pRemove->setEnabled(false);
   KButtonBox *bb = new KButtonBox( this );
   //  bb->addStretch();
-  m_pEdit = bb->addButton( i18n("&Edit") );
+  m_pEdit = bb->addButton( i18n("&Edit...") );
 #if KDE_IS_VERSION( 3, 2, 90 )
   m_pOk = bb->addButton( KStdGuiItem::ok() );
   m_pCancel = bb->addButton( KStdGuiItem::cancel() );
@@ -158,8 +158,8 @@ void KSpreadreference::slotRemove()
   if (m_list->currentItem() == -1)
     return;
 
-  int ret = KMessageBox::warningYesNo( this, i18n("Do you really want to remove this area name?"));
-  if (ret == 4) // reponse = No
+  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KStdGuiItem::del());
+  if (ret == KMessageBox::Cancel)
     return;
 
   QString textRemove;
