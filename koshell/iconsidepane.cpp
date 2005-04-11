@@ -298,7 +298,7 @@ void Navigator::calculateMinWidth()
       mMinWidth = item->width( this );
   }
   //kdDebug() << "minWidth:" << mMinWidth << endl;
-  parentWidget()->setMinimumWidth( mMinWidth );
+  parentWidget()->setFixedWidth( mMinWidth );
   triggerUpdate(true);
 }
 
@@ -385,6 +385,10 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
         mPopupMenu->setItemEnabled( (int)NormalIcons, true);
         mPopupMenu->setItemEnabled( (int)LargeIcons, true);
         KoShellSettings::setSidePaneShowText( mSidePane->showText() );
+        if ( !mSidePane->showText() )
+          mSidePane->buttonGroup()->hide();
+        else
+          mSidePane->buttonGroup()->show();
 
         new EntryItemToolTip( this );
     }
@@ -398,8 +402,8 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
 IconSidePane::IconSidePane(QWidget *parent, const char *name )
   : QVBox( parent, name )
 {
-  buttongroup = new QButtonGroup(1, QGroupBox::Horizontal, this);
-  buttongroup->setExclusive(true);
+  m_buttongroup = new QButtonGroup(1, QGroupBox::Horizontal, this);
+  m_buttongroup->setExclusive(true);
   mWidgetstack = new QWidgetStack(this);
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
   
@@ -423,6 +427,8 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   mPopupMenu->insertItem( i18n( "Show Text" ), (int)ShowText );
   mPopupMenu->setItemChecked( (int)ShowText, mShowText );
   mPopupMenu->setItemEnabled( (int)ShowText, mShowIcons );
+  if ( !mShowText )
+    m_buttongroup->hide();
 }
 
 IconSidePane::~IconSidePane()
@@ -481,14 +487,15 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
   connect( mCurrentNavigator, SIGNAL( updateAllWidgets() ), this, SLOT(updateAllWidgets()) );
   int const id = mWidgetstack->addWidget(mCurrentNavigator);
   mWidgetStackIds.append( id );
-  KPushButton *b = new KPushButton( _text, buttongroup );
-  buttongroup->insert( b, id );
+  KPushButton *b = new KPushButton( _text, m_buttongroup );
+  m_buttongroup->insert( b, id );
   connect( b, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );
   b->setToggleButton( true );
   b->setFocusPolicy( NoFocus );
-  if (buttongroup->count()==1)
+  if (m_buttongroup->count()==1)
   {
-    buttongroup->setButton(buttongroup->id(b));
+    mCurrentNavigator->calculateMinWidth();
+    m_buttongroup->setButton(m_buttongroup->id(b));
     mWidgetstack->raiseWidget(id);
   }
   if ( b->width() > minimumWidth() )
@@ -498,7 +505,7 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
 
 void IconSidePane::buttonClicked()
 {
-    mWidgetstack->raiseWidget( buttongroup->selectedId() );
+    mWidgetstack->raiseWidget( m_buttongroup->selectedId() );
 }
 
 void IconSidePane::selectGroup(int group_id)

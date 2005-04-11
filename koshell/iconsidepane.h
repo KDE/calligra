@@ -183,6 +183,7 @@ class IconSidePane :public QVBox
     void toogleText(){mShowText=!mShowText;}
     bool showIcons() { return mShowIcons; }
     void toogleIcons(){mShowIcons=!mShowIcons;}
+    QButtonGroup *buttonGroup() { return m_buttongroup; }
 
   public slots:
     void itemSelected(int);
@@ -195,7 +196,7 @@ class IconSidePane :public QVBox
     QWidgetStack *mWidgetstack;
     QValueList<int> mWidgetStackIds;
     Navigator *mCurrentNavigator;
-    QButtonGroup *buttongroup;
+    QButtonGroup *m_buttongroup;
     KActionCollection *mActionCollection;
     KPopupMenu *mPopupMenu;
 
