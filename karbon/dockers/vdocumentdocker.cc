@@ -424,15 +424,15 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	button->setTextLabel( i18n( "New" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIconSet( "14_layer_raiselayer" ) );
+	button->setIconSet( SmallIcon( "14_layer_raiselayer" ) );
 	button->setTextLabel( i18n( "Raise" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIconSet( "14_layer_lowerlayer" ) );
+	button->setIconSet( SmallIcon( "14_layer_lowerlayer" ) );
 	button->setTextLabel( i18n( "Lower" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIconSet( "14_layer_deletelayer" ) );
+	button->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
 	button->setTextLabel( i18n( "Delete" ) );
 	m_buttonGroup->insert( button );
 	layout->addWidget( m_buttonGroup, 1);
