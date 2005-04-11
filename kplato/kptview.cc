@@ -426,12 +426,12 @@ void KPTView::slotProjectCalculate() {
 void KPTView::projectCalculate() {
     if (getProject().actualEffort() > 0.0) {
         // NOTE: This can be removed when proper baselining etc is implemented
-        if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate")) == KMessageBox::No) {
+        if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), i18n("Calculate")) == KMessageBox::Cancel) {
             return;
         }
     }
     QApplication::setOverrideCursor(Qt::waitCursor);
-    getPart()->getProject().calculate();
+    getProject().calculate();
     QApplication::restoreOverrideCursor();
 }
 
