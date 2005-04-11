@@ -69,7 +69,7 @@ KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * ma
                                   const char * name )
   : KDialogBase( parent, name, true, "",
                  KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close,
-                 KDialogBase::Ok, false, KGuiItem( i18n( "&New..." ) ), KGuiItem( i18n( "&Modify" ) ), KGuiItem( i18n( "&Delete" ) ) ),
+                 KDialogBase::Ok, false, KGuiItem( i18n( "&New..." ) ), KGuiItem( i18n( "&Modify..." ) ), KGuiItem( i18n( "&Delete" ) ) ),
     m_view( parent ),
     m_styleManager( manager ),
     m_dlg( new StyleWidget( this ) )

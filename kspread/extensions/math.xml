@@ -385,7 +385,7 @@
       <Name>SUMIF</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>Check Range</Comment>
+        <Comment>Check range</Comment>
         <Type range="true">Float</Type>
       </Parameter>
       <Parameter>
@@ -393,7 +393,7 @@
         <Type>String</Type>
       </Parameter>
       <Parameter optional="true">
-        <Comment>Sum Range</Comment>
+        <Comment>Sum range</Comment>
         <Type range="true">Float</Type>
       </Parameter>
       <Help>
