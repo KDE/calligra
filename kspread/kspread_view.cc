@@ -754,7 +754,7 @@ void ViewPrivate::initActions()
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
   // -- sheet/workbook actions --
-  actions->sheetProperties = new KAction( i18n("Sheet Properties..."),
+  actions->sheetProperties = new KAction( i18n("Sheet Properties"),
       0, view, SLOT( sheetProperties() ), ac, "sheetProperties" );
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties."));
 
@@ -1375,7 +1375,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d = new ViewPrivate;
     d->view = this;
     d->doc = _doc;
-    
+
     d->dcop = 0;
 
     d->activeSheet = 0;
@@ -3531,7 +3531,7 @@ void KSpreadView::insertSheet()
 {
   if ( doc()->map()->isProtected() )
   {
-    KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) );
+    KMessageBox::error( 0, i18n ( "You cannot change a protected sheet." ) );
     return;
   }
 
@@ -3735,7 +3735,7 @@ void KSpreadView::mergeCell()
   if ( ( util_isRowSelected( selection() ) )
        || ( util_isColumnSelected( selection() ) ) )
   {
-    KMessageBox::error( this, i18n( "Area too large." ) );
+    KMessageBox::error( this, i18n( "Area is too large." ) );
     return;
   }
 
@@ -4119,7 +4119,7 @@ void KSpreadView::conditional()
 
   if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
-    KMessageBox::error( this, i18n("Area too large.") );
+    KMessageBox::error( this, i18n("Area is too large.") );
   }
   else
   {
@@ -4134,7 +4134,7 @@ void KSpreadView::validity()
 
   if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
-    KMessageBox::error( this, i18n("Area too large."));
+    KMessageBox::error( this, i18n("Area is too large."));
   }
   else
   {
@@ -4155,7 +4155,7 @@ void KSpreadView::sort()
 {
     if ( d->selectionInfo->singleCellSelection() )
     {
-        KMessageBox::error( this, i18n("You must select multiple cells") );
+        KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
     }
 
@@ -4341,7 +4341,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 
     if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
-      KMessageBox::error( this, i18n("Area too large."));
+      KMessageBox::error( this, i18n("Area is too large."));
       d->activeSheet->insertChart( unzoomedGeometry,
                              _e,
                              QRect( d->canvas->markerColumn(),
@@ -4448,7 +4448,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
        SHA1::getHash( password, hash );
      if ( !doc()->map()->checkPassword( hash ) )
      {
-       KMessageBox::error( 0, i18n( "Incorrect password" ) );
+       KMessageBox::error( 0, i18n( "Password is incorrect." ) );
        d->actions->protectDoc->setChecked( true );
        return;
      }
@@ -4498,7 +4498,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
      if ( !d->activeSheet->checkPassword( hash ) )
      {
-       KMessageBox::error( 0, i18n( "Incorrect password" ) );
+       KMessageBox::error( 0, i18n( "Password is incorrect." ) );
        d->actions->protectSheet->setChecked( true );
        return;
      }
@@ -4884,8 +4884,8 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
 	return;
-    int ret = KMessageBox::warningYesNo(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"));
-    if ( ret == KMessageBox::Yes )
+    int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KStdGuiItem::del());
+    if ( ret == KMessageBox::Continue )
     {
       doc()->emitBeginOperation(false);
       d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
@@ -5306,7 +5306,7 @@ void KSpreadView::adjust()
 {
     if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
-      KMessageBox::error( this, i18n("Area too large."));
+      KMessageBox::error( this, i18n("Area is too large."));
     }
     else
     {
@@ -5453,7 +5453,7 @@ void KSpreadView::showAreaName()
 void KSpreadView::resizeRow()
 {
   if ( util_isColumnSelected(selection()) )
-    KMessageBox::error( this, i18n("Area too large."));
+    KMessageBox::error( this, i18n("Area is too large."));
   else
   {
     KSpreadResizeRow dlg( this );
@@ -5464,7 +5464,7 @@ void KSpreadView::resizeRow()
 void KSpreadView::resizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large." ) );
+    KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
     KSpreadResizeColumn dlg( this );
@@ -5475,7 +5475,7 @@ void KSpreadView::resizeColumn()
 void KSpreadView::equalizeRow()
 {
   if ( util_isColumnSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large." ) );
+    KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
     doc()->emitBeginOperation( false );
@@ -5487,7 +5487,7 @@ void KSpreadView::equalizeRow()
 void KSpreadView::equalizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large." ) );
+    KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
     doc()->emitBeginOperation( false );
@@ -5822,7 +5822,7 @@ void KSpreadView::insertChart()
   QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( true, "'KOfficeChart' in ServiceTypes" );
   if ( vec.isEmpty() )
   {
-    KMessageBox::error( this, i18n("No charting component registered") );
+    KMessageBox::error( this, i18n("No charting component registered.") );
     return;
   }
 
@@ -5878,10 +5878,10 @@ void KSpreadView::removeSheet()
     return;
   }
   KNotifyClient::beep();
-  int ret = KMessageBox::warningYesNo( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),
-                                       i18n( "Remove Sheet" ) );
+  int ret = KMessageBox::warningContinueCancel( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),
+                                       i18n( "Remove Sheet" ),KStdGuiItem::del() );
 
-  if ( ret == KMessageBox::Yes )
+  if ( ret == KMessageBox::Continue )
   {
     doc()->emitBeginOperation( false );
     if ( d->canvas->editor() )
