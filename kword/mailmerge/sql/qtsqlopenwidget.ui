@@ -62,7 +62,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>&amp;Keep Settings</string>
+                        <string>&amp;Keep Settings...</string>
                     </property>
                 </widget>
             </hbox>

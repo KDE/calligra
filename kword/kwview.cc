@@ -982,7 +982,7 @@ void KWView::setupActions()
     actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
 
 
-    actionTableStylist = new KAction( i18n( "T&able Style Manager..." ), 0,
+    actionTableStylist = new KAction( i18n( "T&able Style Manager" ), 0,
                         this, SLOT( tableStylist() ),
                         actionCollection(), "table_stylist" );
     actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles." ) );
