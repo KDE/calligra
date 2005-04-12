@@ -4,5 +4,6 @@ templatesdir = $(kde_datadir)/kivio/templates/Basic
 templatesrc_DATA = empty.kft basicflow.kft
 templatesrcdir = $(kde_datadir)/kivio/templates/Basic/.source
 
-templatesicon_DATA = empty.png basicflow.png
-templatesicondir = $(kde_datadir)/kivio/templates/Basic/.icon
+kivioicondir = $(kde_datadir)/kivio/icons
+kivioicon_ICON = AUTO
+
