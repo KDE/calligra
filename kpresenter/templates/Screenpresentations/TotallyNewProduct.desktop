@@ -1,8 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Icon=.icon/TotallyNewProduct.png
+Icon=template_totallynewproduct.png
 Name=Totally New Product
 Name[af]=Totaal Nuwe Produk
+Name[ar]=منتوج جديد تماماً
 Name[az]=Tamamilə Yeni Məshul
 Name[bg]=Съвсем нов продукт
 Name[bs]=Totalno novi produkt
@@ -40,10 +41,13 @@ Name[se]=Aibbas ođđa buvtta
 Name[sk]=Úplne nový produkt
 Name[sl]=Povsem nov izdelek
 Name[sr]=Потпуно нов производ
+Name[sr@Latn]=Potpuno nov proizvod
 Name[sv]=En fullständigt ny produkt
+Name[tg]=Маҳсули Нави Қатъӣ
 Name[th]=ผลิตภัณฑ์ใหม่ทั้งหมด
 Name[tr]=Yeni Bir Ürün
 Name[uk]=Повністю новий товар
+Name[uz]=Умуман янги маҳсулот
 Name[ven]=Tshiitwa tshiswa 
 Name[wa]=Prodût totafwaitmint novea
 Name[xh]=Imveliso Entsha Ngokupheleleyo

@@ -14,10 +14,5 @@ templatesrc_DATA = Plain.kpt Gradient-Blue-Red.kpt \
 
 templatesrcdir = $(kde_datadir)/kpresenter/templates/Screenpresentations/.source
 
-templateicons_DATA = Plain.png Gradient-Blue-Red.png \
-	kde.png kde2.png \
-	SnowyMountains.png TotallyNewProduct.png \
-	BlueBreezeDouble.png BlueBreezePicture.png BlueBreezeSingle.png \
-	CopperPlain.png
-
-templateiconsdir = $(kde_datadir)/kpresenter/templates/Screenpresentations/.icon
+kpricondir = $(kde_datadir)/kpresenter/icons
+kpricon_ICON = AUTO
