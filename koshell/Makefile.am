@@ -19,4 +19,4 @@ applnk_DATA = koshell.desktop
 applnkdir = $(kde_appsdir)/Office
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/koshell.pot
+	$(XGETTEXT) rc.cpp *.cc *.cpp -o $(podir)/koshell.pot
