@@ -753,8 +753,14 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 				v += m_driver->sqlTypeName(field->type());
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
-			if (field->type()==Field::Text && field->m_length>0)
-				v += QString("(%1)").arg(field->m_length);
+			if (field->isFPNumericType() && field->precision()>0) {
+				if (field->scale()>0)
+					v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
+				else 
+					v += QString::fromLatin1("(%1)").arg(field->precision());
+			}
+			else if (field->type()==Field::Text && field->length()>0)
+				v += QString::fromLatin1("(%1)").arg(field->length());
 			if (autoinc)
 				v += (" " +
 				(pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));
@@ -770,7 +776,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (!autoinc && !pk && field->isNotNull())
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())
-				v += QString(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
+				v += QString::fromLatin1(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
 		}
 		sql += v;
 	}
@@ -1204,8 +1210,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		<< QVariant(tableSchema->id())//obj_id)
 		<< QVariant(f->type())
 		<< QVariant(f->name())
-		<< QVariant(f->length())
-		<< QVariant(f->precision())
+		<< QVariant(f->isFPNumericType() ? f->scale() : f->length())
+		<< QVariant(f->isFPNumericType() ? f->precision() : 0)
 		<< QVariant(f->constraints())
 		<< QVariant(f->options())
 		<< QVariant(f->defaultValue())

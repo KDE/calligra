@@ -310,12 +310,21 @@ class KEXI_DB_EXPORT Field
 
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
-		/*! \return length of text is the field type is text. */
+		/*! \return length of text, only meaningful if the field type is text. */
 		inline uint length() const { return m_length; }
 
-		/*! \return precision for numeric and other fields that have both length 
+		/*! \return precision for numeric and other fields that have both length (scale)
 		 and precision (floating point types). */
 		inline uint precision() const { return m_precision; } 
+
+		/*! \return scale for numeric and other fields that have both length (scale)
+		 and precision (floating point types). 
+		 The scale of a numeric is the count of decimal digits in the fractional part, 
+		 to the right of the decimal point. The precision of a numeric is the total count 
+		 of significant digits in the whole number, that is, the number of digits 
+		 to both sides of the decimal point. So the number 23.5141 has a precision 
+		 of 6 and a scale of 4. Integers can be considered to have a scale of zero. */
+		inline uint scale() const { return m_length; }
 
 		/*! \return the constraints defined for this field. */
 		inline uint constraints() const { return m_constraints; }
@@ -371,9 +380,13 @@ class KEXI_DB_EXPORT Field
 		 enforced as well (see setIndexed()). */
 		void setConstraints(uint c);
 
-		/*! Sets lenght for this field. Only works for Text Type (even not LongText!). */
+		/*! Sets length for this field. Only works for Text Type (even not LongText!). */
 		void setLength(uint l);
 
+		/*! Sets scale for this field. Only works for floating-point types. */
+		void setScale(uint s);
+
+		/*! Sets scale for this field. Only works for floating-point types. */
 		void setPrecision(uint p);
 
 		void setUnsigned(bool u);
@@ -498,7 +511,7 @@ class KEXI_DB_EXPORT Field
 		QString m_name;
 		QString m_subType;
 		uint m_constraints;
-		uint m_length;
+		uint m_length; //!< also used for storing scale for floating point types
 		uint m_precision;
 		uint m_options;
 		QVariant m_defaultValue;

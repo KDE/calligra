@@ -349,7 +349,17 @@ Field::setLength(uint l)
 void
 Field::setPrecision(uint p)
 {
+	if (!isFPNumericType())
+		return;
 	m_precision = p;
+}
+
+void
+Field::setScale(uint s)
+{
+	if (!isFPNumericType())
+		return;
+	m_length = s;
 }
 
 void
