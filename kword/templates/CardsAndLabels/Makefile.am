@@ -6,5 +6,6 @@ templatesdir = $(kde_datadir)/kword/templates/$(templatesubdir)
 templatesrc_DATA = BusinessCards10.kwt LabelsL16.kwt
 templatesrcdir = $(kde_datadir)/kword/templates/$(templatesubdir)/.source
 
-templateicons_DATA = BusinessCards10.png LabelsL16.png
-templateiconsdir = $(kde_datadir)/kword/templates/$(templatesubdir)/.icon
+kworddir = $(kde_datadir)/kword/icons
+kword_ICON = AUTO
+

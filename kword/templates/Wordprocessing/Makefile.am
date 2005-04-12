@@ -4,5 +4,5 @@ templatesdir = $(kde_datadir)/kword/templates/Normal
 templatesrc_DATA = PlainText.kwt TwoColumns.kwt Letter.kwt A4.kwt Memo.kwt
 templatesrcdir = $(kde_datadir)/kword/templates/Normal/.source
 
-templateicons_DATA = PlainText.png TwoColumns.png Letter.png A4.png Memo.png
-templateiconsdir = $(kde_datadir)/kword/templates/Normal/.icon
+kworddir = $(kde_datadir)/kword/icons
+kword_ICON = AUTO

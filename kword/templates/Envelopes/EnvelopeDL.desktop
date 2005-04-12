@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Icon=.icon/EnvelopeDL.png
+Icon=template_envelopedl.png
 Name=Envelope DL
 Name[ar]=ظَرف DL
 Name[bg]=Плик DL
@@ -27,10 +27,12 @@ Name[se]=Konfaluhtta DL
 Name[sk]=Obálka DL
 Name[sl]=Ovojnica DL
 Name[sr]=Коверат ДЛ
+Name[sr@Latn]=Koverat DL
 Name[sv]=Kuvert DL
 Name[ta]=மேலுரை DL
 Name[tg]=Конверти DL
 Name[tr]=Zarf DL
+Name[uk]=Конверт DL
 Name[wa]=Ewalpeure DL
 Name[xx]=xxEnvelope DLxx
 Name[zh_CN]=DL 信封

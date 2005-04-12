@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Icon=.icon/EnvelopeC6.png
+Icon=template_envelopec6.png
 Name=Envelope C6
 Name[ar]=ظَرف C6
 Name[bg]=Плик C6
@@ -27,10 +27,12 @@ Name[se]=Konfaluhtta C6
 Name[sk]=Obálka C6
 Name[sl]=Ovojnica C6
 Name[sr]=Коверат Ц6
+Name[sr@Latn]=Koverat C6
 Name[sv]=Kuvert C6
 Name[ta]=மேலுரைC6
 Name[tg]=Конверти C6
 Name[tr]=Zarf C6
+Name[uk]=Конверт C6
 Name[wa]=Ewalpeure C6
 Name[xx]=xxEnvelope C6xx
 Name[zh_CN]=C6 信封

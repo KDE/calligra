@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Icon=.icon/BusinessCards10.png
+Icon=template_businesscards10.png
 Name=Business Cards 10
 Name[ar]=بِطاقات تجاريّة 10
 Name[bg]=Визитки 10
@@ -26,10 +26,12 @@ Name[ru]=Бизнес-карточки 10
 Name[sk]=Vizitky 10
 Name[sl]=Poslovne vizitke 10
 Name[sr]=Пословне картице 10
+Name[sr@Latn]=Poslovne kartice 10
 Name[sv]=Visitkort 10
 Name[ta]=வியாபார அட்டை 10
 Name[tg]=Варақаҳои Бизнес 10
 Name[tr]=İş Kartları 10
+Name[uk]=Бізнес-картки 10
 Name[xx]=xxBusiness Cards 10xx
 Name[zh_CN]=商务卡片 10
 Type=Link
