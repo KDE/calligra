@@ -59,6 +59,8 @@ public:
 
   virtual QString configFile() const;
 
+  KAction *mnuSaveAll;
+
 protected slots:
 
   virtual void slotFileNew();
@@ -102,6 +104,7 @@ private:
 
   virtual bool queryClose();
   virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
+  virtual void slotConfigureKeys();
   void closeDocument();
   void saveSettings();
   void switchToPage( QValueList<Page>::Iterator it );

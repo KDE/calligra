@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kkeydialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kpopupmenu.h>
@@ -347,6 +348,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     v->show();
 
     switchToPage( m_lstPages.fromLast() );
+    mnuSaveAll->setEnabled(true);
   } else
   {
     setRootDocumentDirect( 0L, QPtrList<KoView>() );
@@ -575,6 +577,7 @@ void KoShellWindow::closeDocument()
       kdDebug() << "Revert to initial state (no docs)" << endl;
       setRootDocument( 0L );
       partManager()->setActivePart( 0L, 0L );
+      mnuSaveAll->setEnabled(false);
     }
 
     // Now delete the old view and page
@@ -659,6 +662,17 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
         m_pFrame->setCurrentPage(index);
   }
 }
+void KoShellWindow::slotConfigureKeys()
+{
+  KoView *view = rootView();
+  KKeyDialog dlg( this );
+  dlg.insert( actionCollection() );
+  if ( view )
+     dlg.insert( view->actionCollection() );
+  if ( rootDocument() )
+    dlg.insert( rootDocument()->actionCollection() );
+  dlg.configure();
+}
 
 /*
 void KoShellWindow::slotFilePrint()
@@ -669,7 +683,7 @@ void KoShellWindow::slotFilePrint()
 }
 */
 
-void KoShellWindow::createShellGUI( bool create )
+void KoShellWindow::createShellGUI( bool  )
 {
 	guiFactory()->addClient( m_client );
 }
@@ -679,8 +693,8 @@ void KoShellWindow::createShellGUI( bool create )
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
 	setXMLFile( "koshellui.rc", true, true );
-
-  new KAction(i18n("Save All"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
+    window->mnuSaveAll = new KAction(i18n("Save All"), 0, window, SLOT(saveAll() ), actionCollection(), "save_all");
+    window->mnuSaveAll->setEnabled(false);
 }
 
 #include "koshell_shell.moc"
