@@ -101,7 +101,7 @@ void KSpreadFormatDlg::slotActivated( int index )
     QString img = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
-	QString str( i18n( "Could not find image %1" ) );
+	QString str( i18n( "Could not find image %1." ) );
 	str = str.arg( m_entries[ index ].image );
 	KMessageBox::error( this, str );
 	return;
@@ -110,7 +110,7 @@ void KSpreadFormatDlg::slotActivated( int index )
     QPixmap pix( img );
     if ( pix.isNull() )
     {
-	QString str( i18n( "Could not load image %1" ) );
+	QString str( i18n( "Could not load image %1." ) );
 	str = str.arg( img );
 	KMessageBox::error( this,str );
 	return;
@@ -126,7 +126,7 @@ void KSpreadFormatDlg::slotOk()
     QString xml = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ m_combo->currentItem() ].xml );
     if ( xml.isEmpty() )
     {
-	QString str( i18n( "Could not find table-style XML file '%1'" ) );
+	QString str( i18n( "Could not find table-style XML file '%1'." ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
 	KMessageBox::error( this, str );
 	return;
@@ -140,7 +140,7 @@ void KSpreadFormatDlg::slotOk()
 
     if ( !parseXML( doc ) )
     {
-	QString str( i18n( "Parsing error in table-style XML file %1" ) );
+	QString str( i18n( "Parsing error in table-style XML file %1." ) );
 	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
 	KMessageBox::error( this, str );
 	return;

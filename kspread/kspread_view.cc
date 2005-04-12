@@ -934,7 +934,7 @@ void ViewPrivate::initActions()
 
   // -- misc actions --
 
-  actions->styleDialog = new KAction( i18n( "Style Manager..." ),
+  actions->styleDialog = new KAction( i18n( "Style Manager" ),
       0, view, SLOT( styleDialog() ), ac, "styles" );
   actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
 
