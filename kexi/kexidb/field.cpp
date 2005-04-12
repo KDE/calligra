@@ -566,11 +566,14 @@ QString Field::debugString()
 	if (m_options & Field::Unsigned)
 		dbg += " UNSIGNED ";
 	dbg += (conn && conn->driver()) ? conn->driver()->sqlTypeName(type()) : Driver::defaultSQLTypeName(type());
-	QString prec_str;
-	if (m_precision > 0 && isFPNumericType())
-		prec_str = QString(", ") + QString::number(m_precision);
-	if (m_type==Field::Text && m_length>0)
-		dbg += "(" + QString::number(m_length) + prec_str + ")";
+	if (isFPNumericType() && m_precision>0) {
+		if (scale()>0)
+			dbg += QString::fromLatin1("(%1,%2)").arg(m_precision).arg(scale());
+		else 
+			dbg += QString::fromLatin1("(%1)").arg(m_precision);
+	}
+	else if (m_type==Field::Text && m_length>0)
+		dbg += QString::fromLatin1("(%1)").arg(m_length);
 	if (m_constraints & Field::AutoInc)
 		dbg += " AUTOINC";
 	if (m_constraints & Field::Unique)
