@@ -178,14 +178,14 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
              this, SLOT( slotAppearFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect1 = new QPushButton( grp1 );
-    buttonTestPlaySoundEffect1->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    buttonTestPlaySoundEffect1->setIconSet( SmallIconSet("1rightarrow") );
     QToolTip::add( buttonTestPlaySoundEffect1, i18n("Play") );
     upperRow->addWidget( buttonTestPlaySoundEffect1, 6, 2 );
 
     connect( buttonTestPlaySoundEffect1, SIGNAL( clicked() ), this, SLOT( playSound1() ) );
 
     buttonTestStopSoundEffect1 = new QPushButton( grp1 );
-    buttonTestStopSoundEffect1->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    buttonTestStopSoundEffect1->setIconSet( SmallIconSet("player_stop") );
     QToolTip::add( buttonTestStopSoundEffect1, i18n("Stop") );
     upperRow->addWidget( buttonTestStopSoundEffect1, 6, 3 );
 
@@ -282,14 +282,14 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
              this, SLOT( slotDisappearFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect2 = new QPushButton( grp2 );
-    buttonTestPlaySoundEffect2->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    buttonTestPlaySoundEffect2->setIconSet( SmallIconSet("1rightarrow") );
     QToolTip::add( buttonTestPlaySoundEffect2, i18n("Play") );
     lowerRow->addWidget( buttonTestPlaySoundEffect2, 5, 2 );
 
     connect( buttonTestPlaySoundEffect2, SIGNAL( clicked() ), this, SLOT( playSound2() ) );
 
     buttonTestStopSoundEffect2 = new QPushButton( grp2 );
-    buttonTestStopSoundEffect2->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    buttonTestStopSoundEffect2->setIconSet( SmallIconSet("player_stop") );
     QToolTip::add( buttonTestStopSoundEffect2, i18n("Stop") );
     lowerRow->addWidget( buttonTestStopSoundEffect2, 5, 3 );
 

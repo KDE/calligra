@@ -186,12 +186,12 @@ void KWFrameStyleManager::setupWidget(const QPtrList<KWFrameStyle> & styleList)
 
 
     m_moveUpButton = new QPushButton( frame1, "moveUpButton" );
-    m_moveUpButton->setPixmap( BarIcon( "up", KIcon::SizeSmall ) );
+    m_moveUpButton->setIconSet( SmallIconSet( "up" ) );
     connect( m_moveUpButton, SIGNAL( clicked() ), this, SLOT( moveUpStyle() ) );
     frame1Layout->addWidget( m_moveUpButton, 1, 1 );
 
     m_moveDownButton = new QPushButton( frame1, "moveDownButton" );
-    m_moveDownButton->setPixmap( BarIcon( "down", KIcon::SizeSmall ) );
+    m_moveDownButton->setIconSet( SmallIconSet( "down" ) );
     connect( m_moveDownButton, SIGNAL( clicked() ), this, SLOT( moveDownStyle() ) );
     frame1Layout->addWidget( m_moveDownButton, 1, 0 );
 
