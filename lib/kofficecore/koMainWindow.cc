@@ -213,6 +213,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
                     this, SLOT( slotExportFile() ),
                     actionCollection(), "file_export_file");
 
+// TODO fix the next entry (again) to have trailing elipses after the string freeze lifts.
     d->m_paDocInfo = new KAction( i18n( "&Document Information" ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
