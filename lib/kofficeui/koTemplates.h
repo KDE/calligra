@@ -42,7 +42,7 @@ public:
     QString description() const { return m_descr; };
     QString file() const { return m_file; }
     QString picture() const { return m_picture; }
-    const QPixmap &loadPicture();
+    const QPixmap &loadPicture( KInstance* instance );
 
     bool isHidden() const { return m_hidden; }
     void setHidden(bool hidden=true) { m_hidden=hidden; m_touched=true; }

@@ -48,7 +48,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	    : KIconCanvas( parent, name ) {}
 
 	bool isCurrentValid() { return currentItem(); }
-	QIconViewItem * load(KoTemplateGroup *group, const QString& name);
+	QIconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {

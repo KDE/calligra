@@ -28,6 +28,7 @@
 #include <kdeversion.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 #include <kio/netaccess.h>
 
 #include <stdlib.h>
@@ -40,24 +41,30 @@ KoTemplate::KoTemplate(const QString &name, const QString &description, const QS
     m_touched(touched), m_cached(false) {
 }
 
-const QPixmap &KoTemplate::loadPicture() {
+const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
 
     if(m_cached)
         return m_pixmap;
-    // ### TODO: use the class KoPicture instead of QImage to support non-image pictures
-    QImage img( m_picture );
-    if (img.isNull()) {
-        kdWarning() << "Couldn't find icon " << m_picture << endl;
-        m_pixmap=QPixmap();
+    m_cached=true;
+    if ( m_picture[ 0 ] == '/' )
+    {
+        // ### TODO: use the class KoPicture instead of QImage to support non-image pictures
+        QImage img( m_picture );
+        if (img.isNull()) {
+            kdWarning() << "Couldn't find icon " << m_picture << endl;
+            m_pixmap=QPixmap();
+            return m_pixmap;
+        }
+        const int maxHeightWidth = 64; // ### TODO: some people would surely like to have 128x128
+        if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
+            img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
+        }
+        m_pixmap.convertFromImage(img);
+        return m_pixmap;
+    } else { // relative path
+        m_pixmap = instance->iconLoader()->loadIcon( m_picture, KIcon::Desktop, KIcon::SizeLarge /*48*/ );
         return m_pixmap;
     }
-    const int maxHeightWidth = 64; // ### TODO: some people would surely like to have 128x128
-    if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-        img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
-    }
-    m_pixmap.convertFromImage(img);
-    m_cached=true;
-    return m_pixmap;
 }
 
 
@@ -238,7 +245,7 @@ void KoTemplateTree::readTemplates() {
                 //kdDebug() << "filePath: " << filePath << endl;
                 QString icon;
                 QString text;
-		QString description;
+                QString description;
                 QString hidden_str;
                 bool hidden=false;
                 QString templatePath;
@@ -250,11 +257,12 @@ void KoTemplateTree::readTemplates() {
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
                         description=config.readEntry("Comment");
-			//kdDebug() << "name: " << text << endl;
+                        //kdDebug() << "name: " << text << endl;
                         icon=config.readEntry("Icon");
                         //kdDebug() << "icon1: " << icon << endl;
-                        if(icon[0]!='/') // allow absolute paths for icons
-                            icon=*it + icon;
+                        if(icon[0]!='/' && // allow absolute paths for icons
+                           QFile::exists(*it+icon)) // allow icons from icontheme
+                            icon=*it+icon;
                         //kdDebug() << "icon2: " << icon << endl;
                         hidden_str=config.readEntry("X-KDE-Hidden");
                         if(hidden_str.lower()=="true")

@@ -423,7 +423,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	QFrame * frame = d->m_jwidget->addPage (
 		group->name(),
 		group->name(),
-		group->first()->loadPicture());
+		group->first()->loadPicture(d->m_instance));
 
 	QGridLayout * layout = new QGridLayout(frame);
 	KoTCDIconCanvas *canvas = new KoTCDIconCanvas( frame );
@@ -434,7 +434,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	canvas->setWordWrapIconText( true );
 	canvas->show();
 
-	QIconViewItem * tempitem = canvas->load(group, templateName);
+	QIconViewItem * tempitem = canvas->load(group, templateName, d->m_instance);
 	if (tempitem)
 	    itemtoselect = tempitem;
 
@@ -725,7 +725,7 @@ QString KoTemplateChooseDia::descriptionText(const QString &name, const QString 
 
 /*================================================================*/
 
-QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name)
+QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name, KInstance* instance )
 {
     QIconViewItem * itemtoreturn = 0;
 
@@ -735,7 +735,7 @@ QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& na
 	QIconViewItem *item = new KoTCDIconViewItem(
 		this,
 		t->name(),
-		t->loadPicture(),
+		t->loadPicture(instance),
 		t->description(),
 		t->file());
 
