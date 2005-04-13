@@ -35,7 +35,7 @@ class KexiTableItem;
 class KexiTableViewData;
 class KexiFormScrollView;
 
-//! The KexiFormView lass provides a data-driven (record-based) form view .
+//! The KexiFormView class provides a data-driven (record-based) form view .
 /*! The KexiFormView can display data provided "by hand" 
  or from KexiDB-compatible database source. 
 
@@ -68,6 +68,10 @@ class KexiFormView : public KexiDataAwareView
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 		int resizeMode() const { return m_resizeMode; }
+
+	public slots:
+		/*! Reimplemented to update resize policy. */
+		virtual void show();
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);

@@ -41,7 +41,7 @@ namespace KFormDesigner {
 
     @see KexiTableView
 */
-class KexiFormScrollView : 
+class KEXIFORMUTILS_EXPORT KexiFormScrollView : 
 	public KexiScrollView,
 	public KexiRecordNavigatorHandler,
 	public KexiSharedActionClient,

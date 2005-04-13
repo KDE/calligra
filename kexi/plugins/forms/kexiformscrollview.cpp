@@ -19,11 +19,13 @@
 */
 
 #include "kexiformscrollview.h"
-#include "kexiformview.h"
+//#include "kexiformview.h"
 
 #include <formeditor/form.h>
 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
+
+#include <kpopupmenu.h>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -44,16 +46,14 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 	}
 
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
-	//context menu
+
 	m_popup = new KPopupMenu(this, "contextMenu");
-//	m_provider = new KexiDataProvider();
 
 	setFocusPolicy(NoFocus);
 }
 
 KexiFormScrollView::~KexiFormScrollView()
 {
-//	delete m_provider;
 }
 
 void
@@ -61,6 +61,7 @@ KexiFormScrollView::show()
 {
 	KexiScrollView::show();
 
+#if 0 //moved to KexiFormView, OK?
 	//now get resize mode settings for entire form
 	if (m_preview) {
 		KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
@@ -68,6 +69,7 @@ KexiFormScrollView::show()
 		if (resizeMode == KexiFormView::ResizeAuto)
 			setResizePolicy(AutoOneFit);
 	}
+#endif
 }
 
 void

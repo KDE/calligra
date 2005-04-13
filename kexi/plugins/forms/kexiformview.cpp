@@ -222,6 +222,7 @@ KexiFormView::initForm()
 //	m_scrollView->resize( s );
 //	m_dbform->resize(s);
 	m_scrollView->refreshContentsSize();
+//	m_scrollView->refreshContentsSizeLater(true,true);
 
 	if (newForm && !fields) {
 		/* Our form's area will be resized more than once. 
@@ -289,6 +290,10 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiFormView::afterSwitchFrom(int mode)
 {
+	if (mode == 0 && mode == Kexi::DesignViewMode)
+		if (parentDialog()->neverSaved())
+			m_scrollView->refreshContentsSizeLater(true,true);
+
 	if (mode != 0 && mode != Kexi::DesignViewMode) {
 		//preserve contents pos after switching to other view
 		m_scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(), 
@@ -626,6 +631,11 @@ KexiFormView::setRedoEnabled(bool enabled)
 QSize
 KexiFormView::preferredSizeHint(const QSize& otherSize)
 {
+	if (parentDialog()->neverSaved()) {
+		//ignore otherSize if possible
+//		return KexiViewBase::preferredSizeHint( (parentDialog() && parentDialog()->mdiParent()) ? QSize(10000,10000) : otherSize);
+	}
+
 	return (m_dbform->size()
 			+QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3/2 : 10, 
 			 m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3/2 : 10))
@@ -649,7 +659,7 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 }
 
-void 
+void
 KexiFormView::setFocusInternal()
 {
 	if (viewMode() == Kexi::DataViewMode) {
@@ -660,6 +670,18 @@ KexiFormView::setFocusInternal()
 		}
 	}
 	QWidget::setFocus();
+}
+
+void
+KexiFormView::show()
+{
+	KexiDataAwareView::show();
+
+//moved from KexiFormScrollView::show():
+
+	//now get resize mode settings for entire form
+	if (resizeMode() == KexiFormView::ResizeAuto)
+		m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
 }
 
 
