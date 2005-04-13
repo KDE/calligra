@@ -42,7 +42,7 @@
 
 #define NO_DSWIZARD
 
-KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, 
+KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	const char *name, bool /*dbAware*/)
  : KexiDataAwareView( mainWin, parent, name )
  , m_buffer(0)
@@ -77,9 +77,9 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), 
+		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)),
 			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
-		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)), 
+		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
@@ -225,7 +225,7 @@ KexiFormView::initForm()
 //	m_scrollView->refreshContentsSizeLater(true,true);
 
 	if (newForm && !fields) {
-		/* Our form's area will be resized more than once. 
+		/* Our form's area will be resized more than once.
 		Let's resize form widget itself later. */
 		m_delayedFormContentsResizeOnShow = true;
 	}
@@ -273,7 +273,7 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 		}
 		else {
 			//remember our pos
-			tempData()->scrollViewContentsPos 
+			tempData()->scrollViewContentsPos
 				= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
 		}
 	}
@@ -296,7 +296,7 @@ KexiFormView::afterSwitchFrom(int mode)
 
 	if (mode != 0 && mode != Kexi::DesignViewMode) {
 		//preserve contents pos after switching to other view
-		m_scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(), 
+		m_scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(),
 			tempData()->scrollViewContentsPos.y());
 	}
 //	if (mode == Kexi::DesignViewMode) {
@@ -379,7 +379,7 @@ void KexiFormView::initDataSource()
 	}
 	else {
 		//No such table schema: try to find predefined query schema.
-		//Note: In general, we could not skip unused fields within this query because 
+		//Note: In general, we could not skip unused fields within this query because
 		//      it can have GROUP BY clause.
 //! @todo check if the query could have skipped unused fields (no GROUP BY, no joins, etc.)
 		m_query = conn->querySchema( dataSourceString );
@@ -539,7 +539,8 @@ KexiFormView::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
 	setAvailable("formpart_layout_grid", multiple);
 
 	KFormDesigner::Container *container = f->activeContainer();
-	setAvailable("formpart_break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+	setAvailable("formpart_break_layout", container ?
+		(container->layoutType() != KFormDesigner::Container::NoLayout) : false );
 }
 
 void
@@ -637,7 +638,7 @@ KexiFormView::preferredSizeHint(const QSize& otherSize)
 	}
 
 	return (m_dbform->size()
-			+QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3/2 : 10, 
+			+QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3/2 : 10,
 			 m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3/2 : 10))
 		.expandedTo( KexiViewBase::preferredSizeHint(otherSize) );
 }
@@ -646,7 +647,7 @@ void
 KexiFormView::resizeEvent( QResizeEvent *e )
 {
 	if (viewMode()==Kexi::DataViewMode) {
-		m_scrollView->refreshContentsSizeLater( 
+		m_scrollView->refreshContentsSizeLater(
 			e->size().width()!=e->oldSize().width(),
 			e->size().height()!=e->oldSize().height()
 		);

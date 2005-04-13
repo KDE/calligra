@@ -35,12 +35,12 @@ class KexiTableItem;
 class KexiTableViewData;
 class KexiFormScrollView;
 
-//! The KexiFormView class provides a data-driven (record-based) form view .
-/*! The KexiFormView can display data provided "by hand" 
- or from KexiDB-compatible database source. 
+//! The KexiFormView lass provides a data-driven (record-based) form view .
+/*! The KexiFormView can display data provided "by hand"
+ or from KexiDB-compatible database source.
 
  This class provides a single view used inside KexiDialogBase.
- It takes care of saving/loading form, of enabling actions when needed. 
+ It takes care of saving/loading form, of enabling actions when needed.
  One KexiFormView object is instantiated for data view mode
  and a second KexiFormView object is instantiated for design view mode.
 
@@ -51,15 +51,15 @@ class KexiFormView : public KexiDataAwareView
 	Q_OBJECT
 
 	public:
-		enum ResizeMode { 
-			ResizeAuto = 0, 
-			ResizeDefault = ResizeAuto, 
-			ResizeFixed = 1, 
+		enum ResizeMode {
+			ResizeAuto = 0,
+			ResizeDefault = ResizeAuto,
+			ResizeFixed = 1,
 			NoResize = 2 /*! @todo */
 		};
 
 //		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
-		KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, 
+		KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0,
 			bool dbAware = true);
 		virtual ~KexiFormView();
 
@@ -68,6 +68,8 @@ class KexiFormView : public KexiDataAwareView
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 		int resizeMode() const { return m_resizeMode; }
+
+		KFormDesigner::Form* form() const;
 
 	public slots:
 		/*! Reimplemented to update resize policy. */
@@ -99,7 +101,6 @@ class KexiFormView : public KexiDataAwareView
 		void disableWidgetActions();
 		void enableFormActions();
 
-		KFormDesigner::Form* form() const;
 		void setForm(KFormDesigner::Form *f);
 
 		void initForm();
@@ -137,8 +138,8 @@ class KexiFormView : public KexiDataAwareView
 		KexiPropertyBuffer *m_buffer;
 //moved		KexiDB::Connection *m_conn;
 
-		/*! Database cursor used for data retrieving. 
-		 It is shared between subsequent Data view sessions (just reopened on switch), 
+		/*! Database cursor used for data retrieving.
+		 It is shared between subsequent Data view sessions (just reopened on switch),
 		 but deleted and recreated from scratch when form's "dataSource" property changed
 		 since last form viewing (m_previousDataSourceString is used for that).
 		*/
@@ -161,8 +162,8 @@ class KexiFormView : public KexiDataAwareView
 		//QWidget* m_firstFocusWidget, *m_lastFocusWidget;
 
 //		QPtrList<QWidget> m_orderedFocusWidgets;
-		/*! For new (empty) forms only: 
-		 Our form's area will be resized more than once. 
+		/*! For new (empty) forms only:
+		 Our form's area will be resized more than once.
 		 We will resize form widget itself later (in resizeEvent()). */
 		bool m_delayedFormContentsResizeOnShow : 1;
 };

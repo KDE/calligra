@@ -21,6 +21,7 @@
 #include <qpopupmenu.h>
 #include <qscrollview.h>
 #include <qcursor.h>
+#include <qpainter.h>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -31,6 +32,7 @@
 #include <formIO.h>
 #include <formmanager.h>
 #include <objecttree.h>
+#include <utils.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexipart.h>
@@ -45,32 +47,55 @@
 
 #include "kexidbfactory.h"
 
-KexiSubForm::KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
-: QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
+KexiSubForm::KexiSubForm(Form *parentForm, QWidget *parent, const char *name)
+: QScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
+/*
+void
+KexiSubForm::paintEvent(QPaintEvent *ev)
+{
+	QScrollView::paintEvent(ev);
+	QPainter p;
 
+	setWFlags(WPaintUnclipped);
+
+	QString txt("Subform");
+	QFont f = font();
+	f.setPointSize(f.pointSize() * 3);
+	QFontMetrics fm(f);
+	const int txtw = fm.width(txt), txth = fm.height();
+
+	p.begin(this, true);
+	p.setPen(black);
+	p.setFont(f);
+	p.drawText(width()/2, height()/2, txt, Qt::AlignCenter|Qt::AlignVCenter);
+	p.end();
+
+	clearWFlags( WPaintUnclipped );
+}
+*/
 void
 KexiSubForm::setFormName(const QString &name)
 {
 	if(name.isEmpty())
 		return;
 
-    QWidget *pw = parentWidget();
-    KexiFormView *view = 0;
-    QStringList list;
-    while(pw) {
-        if(pw->isA("KexiSubForm")) {
-            if(list.contains(pw->name()))
-                return; // Be sure to don't run into a endless-loop cause of recursive subforms.
-            list.append(pw->name());
-        }
-        else if(! view && pw->isA("KexiFormView"))
-            view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
-        pw = pw->parentWidget();
-    }
+	QWidget *pw = parentWidget();
+	KexiFormView *view = 0;
+	QStringList list;
+	while(pw) {
+		if(pw->isA("KexiSubForm")) {
+			if(list.contains(pw->name()))
+				return; // Be sure to don't run into a endless-loop cause of recursive subforms.
+			list.append(pw->name());
+		}
+		else if(! view && pw->isA("KexiFormView"))
+			view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
+		pw = pw->parentWidget();
+	}
 
 	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin()
 		|| !view->parentDialog()->mainWin()->project()->dbConnection())
@@ -88,7 +113,7 @@ KexiSubForm::setFormName(const QString &name)
 	m_widget = new KexiGradientWidget(viewport(), "kexisubform_widget");
 	m_widget->show();
 	addChild(m_widget);
-	m_form = new Form(m_manager, this->name());
+	m_form = new Form(m_parentForm->manager(), this->name());
 	m_form->createToplevel(m_widget);
 
 	// and load the sub form
@@ -100,8 +125,14 @@ KexiSubForm::setFormName(const QString &name)
 	KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
 	m_form->setDesignMode(false);
 
+	// Install event filters on the whole newly created form
+	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::name());
+	installRecursiveEventFilter(this, tree->eventEater());
+
 	m_formName = name;
 }
+
+
 
 //////////////////////////////////////////
 
@@ -127,7 +158,7 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (removeOld) 
+	if (removeOld)
 		setText(add.toString());
 	else
 		setText( m_origValue.toString() + add.toString() );
@@ -235,7 +266,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
 //	wInput->setDescription(i18n("A super-duper widget"));
 	m_classes.append(wInput);
-	
+
 	m_propDesc["dataSource"] = i18n("Data source");
 	m_propDesc["formName"] = i18n("Form name");
 }
@@ -260,7 +291,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 
 	if(c == "KexiSubForm")
 	{
-		w = new KexiSubForm(container->form()->manager(), p, n);
+		w = new KexiSubForm(container->form(), p, n);
 	}
 	else if(c == "KexiDBLineEdit")
 	{

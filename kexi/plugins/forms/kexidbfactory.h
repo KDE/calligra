@@ -41,7 +41,7 @@ class KexiSubForm : public QScrollView
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
-		KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
+		KexiSubForm(KFormDesigner::Form *parentForm, QWidget *parent, const char *name);
 		~KexiSubForm() {}
 
 		//! \return the name of the subform to display inside this widget
@@ -50,8 +50,10 @@ class KexiSubForm : public QScrollView
 		//! Sets the name of the subform to display inside this widget
 		void setFormName(const QString &name);
 
+		//void  paintEvent(QPaintEvent *ev);
+
 	private:
-		KFormDesigner::FormManager *m_manager;
+		Form *m_parentForm;
 		Form *m_form;
 		QWidget *m_widget;
 		QString m_formName;
@@ -74,14 +76,14 @@ class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 		//! Used for checking if a given constraint within table of form is met.
 		virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not necessary null). 
-		//! Only few data types can accept "EMPTY" property 
+		//! \return true if editor's value is empty (not necessary null).
+		//! Only few data types can accept "EMPTY" property
 		//! (use KexiDB::Field::hasEmptyProperty() to check this).
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
 		/*! \return 'readOnly' flag for this item. The flag is usually taken from
-		 the item's widget, e.g. KLineEdit::isReadOnly(). 
+		 the item's widget, e.g. KLineEdit::isReadOnly().
 		 By default, always returns false. */
 		virtual bool isReadOnly() const;
 
