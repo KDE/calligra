@@ -43,6 +43,10 @@ public:
 
     int getPropertyFlags() { return m_flags; }
 
+    /// get pen properties
+    PenCmd::Pen getPen() const { return m_pen; }
+    /// get brush properties
+    BrushCmd::Brush getBrush() const { return m_brush; }
     /// get rectangle properties
     RectValueCmd::RectValues getRectValues() const { return m_rectValues; }
     /// get polygon properties
@@ -59,6 +63,9 @@ public:
 protected:
     void getProperties( const QPtrList<KPObject> &objects );
 
+    void getPenProperties( KPObject *object );
+    void getLineEndsProperties( KPObject *object );
+    void getBrushProperties( KPObject *object );
     void getRectProperties( KPObject *object );
     void getPolygonSettings( KPObject *object );
     void getPieProperties( KPObject *object );
@@ -69,6 +76,10 @@ private:
     QPtrList<KPObject> m_objects;
     int m_flags;
 
+    /// pen properties
+    PenCmd::Pen m_pen;
+    /// brush properties
+    BrushCmd::Brush m_brush;
     /// rect properties
     RectValueCmd::RectValues m_rectValues;
     /// polygon properties

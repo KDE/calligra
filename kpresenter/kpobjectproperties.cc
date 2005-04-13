@@ -23,6 +23,7 @@
 #include "kpobject.h"
 #include "kpcubicbeziercurveobject.h"
 #include "kpgroupobject.h"
+#include "kplineobject.h"
 #include "kprectobject.h"
 #include "kppolygonobject.h"
 #include "kppieobject.h"
@@ -34,6 +35,7 @@
 KPObjectProperties::KPObjectProperties( const QPtrList<KPObject> &objects )
 : m_objects( objects )
 , m_flags( 0 )
+, m_pen( QPen( Qt::black, 1, Qt::SolidLine ), L_NORMAL, L_NORMAL )
 , m_protectContent( STATE_UNDEF )
 {
     getProperties( m_objects );
@@ -53,23 +55,28 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
         switch ( it.current()->getType() )
         {
             case OT_LINE:
-                m_flags |= PtPen | PtLineEnds | PtOther;
+                getPenProperties( it.current() );
+                getLineEndsProperties( it.current() );
+                m_flags |= PtOther;
                 break;
             case OT_FREEHAND:
             case OT_POLYLINE:
-                m_flags |= PtPen | PtOther;
+                getPenProperties( it.current() );
                 if( !static_cast<KPPointObject*>( it.current() )->isClosed() )
-                    m_flags |= PtLineEnds;
+                    getLineEndsProperties( it.current() );
+                m_flags |= PtOther;
                 break;
             case OT_QUADRICBEZIERCURVE:
-                m_flags |= PtPen | PtOther;
+                getPenProperties( it.current() );
                 if ( !static_cast<KPQuadricBezierCurveObject*>( it.current() )->isClosed() )
-                    m_flags |= PtLineEnds;
+                    getLineEndsProperties( it.current() );
+                m_flags |= PtOther;
                 break;
             case OT_CUBICBEZIERCURVE:
-                m_flags |= PtPen | PtOther;
+                getPenProperties( it.current() );
                 if ( !static_cast<KPCubicBezierCurveObject*>( it.current() )->isClosed() )
-                    m_flags |= PtLineEnds;
+                    getLineEndsProperties( it.current() );
+                m_flags |= PtOther;
                 break;
             case OT_PIE:
                 getPieProperties( it.current() );
@@ -87,7 +94,9 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
             case OT_ELLIPSE:
             case OT_CLOSED_LINE:
             case OT_AUTOFORM:
-                m_flags |= PtPen | PtBrush | PtOther;
+                getPenProperties( it.current() );
+                getBrushProperties( it.current() );
+                m_flags |= PtOther;
                 break;
             case OT_CLIPART:
             case OT_PICTURE:
@@ -109,6 +118,83 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
 }
 
 
+void KPObjectProperties::getPenProperties( KPObject *object )
+{
+    if ( !( m_flags & PtPen ) )
+    {
+        KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+        if ( obj )
+        {
+            m_pen.pen = obj->getPen();
+
+            m_flags |= PtPen;
+        }
+    }
+}
+
+
+void KPObjectProperties::getLineEndsProperties( KPObject *object )
+{
+    if ( !( m_flags & PtLineEnds ) )
+    {
+        switch ( object->getType() )
+        {
+            case OT_LINE:
+                {
+                    KPLineObject *obj = dynamic_cast<KPLineObject*>( object );
+                    if ( obj )
+                    {
+                        m_pen.lineBegin = obj->getLineBegin();
+                        m_pen.lineEnd = obj->getLineEnd();
+
+                        m_flags |= PtLineEnds;
+                    }
+                    break;
+                }
+            case OT_FREEHAND:
+            case OT_POLYLINE:
+            case OT_QUADRICBEZIERCURVE:
+            case OT_CUBICBEZIERCURVE:
+                {
+                    KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+                    if ( obj )
+                    {
+                        m_pen.lineBegin = obj->getLineBegin();
+                        m_pen.lineEnd = obj->getLineEnd();
+
+                        m_flags |= PtLineEnds;
+                    }
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+}
+
+
+void KPObjectProperties::getBrushProperties( KPObject *object )
+{
+    if ( !( m_flags & PtBrush ) )
+    {
+        KP2DObject * obj = dynamic_cast<KP2DObject*>( object );
+        if ( obj )
+        {
+            m_brush.brush = obj->getBrush();
+            m_brush.fillType = obj->getFillType();
+            m_brush.gColor1 = obj->getGColor1();
+            m_brush.gColor2 = obj->getGColor2();
+            m_brush.gType = obj->getGType();
+            m_brush.unbalanced = obj->getGUnbalanced();
+            m_brush.xfactor = obj->getGXFactor();
+            m_brush.yfactor = obj->getGYFactor();
+
+            m_flags |= PtBrush;
+        }
+    }
+}
+
+
 void KPObjectProperties::getRectProperties( KPObject *object )
 {
     if ( !( m_flags & PtRectangle ) )
@@ -118,7 +204,9 @@ void KPObjectProperties::getRectProperties( KPObject *object )
         {
             obj->getRnds( m_rectValues.xRnd, m_rectValues.yRnd );
 
-            m_flags |= PtPen | PtBrush | PtRectangle;
+            getPenProperties( object );
+            getBrushProperties( object );
+            m_flags |= PtRectangle;
         }
     }
 }
@@ -134,7 +222,10 @@ void KPObjectProperties::getPolygonSettings( KPObject *object )
             m_polygonSettings.checkConcavePolygon = obj->getCheckConcavePolygon();
             m_polygonSettings.cornersValue = obj->getCornersValue();
             m_polygonSettings.sharpnessValue = obj->getSharpnessValue();
-            m_flags |= PtPen | PtBrush | PtPolygon;
+
+            getPenProperties( object );
+            getBrushProperties( object );
+            m_flags |= PtPolygon;
         }
     }
 }
@@ -151,9 +242,11 @@ void KPObjectProperties::getPieProperties( KPObject *object )
             m_pieValues.pieAngle = obj->getPieAngle();
             m_pieValues.pieLength = obj->getPieLength();
 
-            m_flags |= PtPen | PtPie;
+            getPenProperties( object );
             if ( obj->getPieType() != PT_ARC )
-                m_flags |= PtBrush;
+                getBrushProperties( object );
+
+            m_flags |= PtPie;
         }
     }
 }
@@ -172,7 +265,10 @@ void KPObjectProperties::getPictureProperties( KPObject *object )
             m_pictureSettings.grayscal = obj->getPictureGrayscal();
             m_pictureSettings.bright = obj->getPictureBright();
             m_pixmap = obj->getOriginalPixmap();
-            m_flags |= PtPen | PtBrush | PtPicture;
+
+            getPenProperties( object );
+            getBrushProperties( object );
+            m_flags |= PtPicture;
         }
     }
 }
@@ -187,6 +283,10 @@ void KPObjectProperties::getTextProperties( KPObject *object )
         {
             m_marginsStruct = MarginsStruct( obj );
             m_protectContent = obj->isProtectContent() ? STATE_ON : STATE_OFF;
+
+            getPenProperties( object );
+            getBrushProperties( object );
+            m_flags |= PtText;
         }
         else
         {
@@ -196,6 +296,5 @@ void KPObjectProperties::getTextProperties( KPObject *object )
                 m_protectContent = STATE_UNDEF;
             }
         }
-        m_flags |= PtPen | PtBrush | PtText;
     }
 }

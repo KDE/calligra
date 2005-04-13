@@ -339,9 +339,7 @@ void PropertyEditor::setupTabPen( bool configureLineEnds )
 {
     if ( m_penProperty == 0 )
     {
-        PenCmd::Pen pen( m_page->getPen( QPen() ),
-                         m_page->getLineBegin( L_NORMAL ),
-                         m_page->getLineEnd( L_NORMAL ) );
+        PenCmd::Pen pen( m_objectProperties->getPen() );
 
         m_penProperty = new PenStyleWidget( this, 0, pen, configureLineEnds );
         addTab( m_penProperty, i18n( "Outl&ine" ) );
@@ -353,14 +351,7 @@ void PropertyEditor::setupTabBrush()
 {
     if ( m_brushProperty == 0 )
     {
-        BrushCmd::Brush brush( m_page->getBrush( QBrush() ),
-                m_page->getGColor1( Qt::black ),
-                m_page->getGColor2( Qt::red ),
-                m_page->getGType( BCT_GHORZ ),
-                m_page->getFillType( FT_BRUSH ),
-                m_page->getGUnbalanced( false ),
-                m_page->getGXFactor( 100 ),
-                m_page->getGYFactor( 100 ) );
+        BrushCmd::Brush brush( m_objectProperties->getBrush() );
 
         m_brushProperty = new BrushProperty( this, 0, brush );
         addTab( m_brushProperty, i18n( "&Fill" ) );
