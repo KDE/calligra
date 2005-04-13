@@ -1,16 +1,3 @@
 [Desktop Entry]
 Encoding=UTF-8
-Type=Link
-URL=.source/NPageSize.ktm
-Name=NPageSize
-Name[cy]=NMaintTudalen
-Name[hu]=N-OldalMéret
-Name[lo]=ຕົວເອີ້ນເນື້ອທີ່ເຮັດວຽກ 
-Name[lv]=NLapasIzmērs
-Name[pl]=NRozmiarStrony
-Name[pt_BR]=TamanhoNPágina
-Name[ru]=Размер бумаги
-Name[sk]=NVeľkosťStránky
-Name[sv]=N-sidstorlek
-Name[xx]=xxNPageSizexx
-Icon=.icon/NPageSize.png
+Hidden=true
