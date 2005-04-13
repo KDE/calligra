@@ -28,16 +28,12 @@ Item								   Prio Status
      - Read and write the values from the axis parameters		--
      - Do it in the wizard as well					done
   + 55606: [modified] tag doesn't work correctly.		      2 DONE
-     - Set modified when data is changed. 				done
-     - Set modified when the chart is changed through config. 		done
-     - Set modified when the chart is changed through wizard.		done
-     - Set modified when the chart type is changed.			done
   + 90893: never-saved doc failes autosave			      2 DONE
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	RAPH
-            (see below also)
+            (see details below)
   + 101007: Error in reading back axis labels.			      1 ----
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.		done
@@ -47,7 +43,7 @@ Item								   Prio Status
       version of KDChart.
       - Save row and column labels	 				--
       - Load row and column labels	 				--
-  + 101290: KChart changes font for axes when Polar chart is chosen   1	KDCH DONE
+  + 101290: KChart changes font for axes when Polar chart is chosen   1	DONE
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
        Fixed by new KDChart version (hopefully)
@@ -57,7 +53,7 @@ Item								   Prio Status
 * Wishes
   + 14971: Data in rows or columns				      1	DONE
   + 99391: Linear or Logarithmic scale for Y axis		     S2 DONE
-  + 99996: KChart should be able to export charts as bitmap files.   S1 INGE
+  + 99996: KChart should be able to export charts as bitmap files.   S1 DONE
 
 * Issues with KSpread
   + Handling: The chart changes size when selected and unselected.    2 DONE
@@ -66,7 +62,6 @@ Item								   Prio Status
 
 * Miscellaneous fixes
   + Make setting of line width nicer / more well-placed		     S1 DONE
-  + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 DONE
       Issue: What is an empty chart document?
   + Include me in Authors					      2	DONE
@@ -78,6 +73,7 @@ Item								   Prio Status
   + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
   + Save position of Actions toolbar in config.			      2 ----
+  + Wrong images for HiLo subtype icons.			      1 ----
 
 * Newly introduced bugs.
   + Get the colored lines back.					      1 ----
@@ -87,97 +83,83 @@ Item								   Prio Status
   + Separate toolbar for chart types (separate from config, etc).     2 DONE
   + Reorder chart types into a more logical order.		      1	DONE
 
-* Icons
-  + Smaller icons for chart subtypes in config dialog.                1 ----
-  + Wrong images for HiLo subtype icons.			      1 ----
-
 * Data editor
-  + Make table size handling work.					DONE
-      - Make it grow when spinbox values increase.			done
-      - Make it shrink (with safety checks!) when spinbox values	done
-	are decreased.
-  + Make Apply button work.						DONE
-  + Smaller column widths?						DONE
+  + Make table size handling work.				      1	DONE
+  + Make Apply button work.					      1	DONE
+  + Smaller column widths?					      2	DONE
   + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
   + Better keyboard shortcuts?					      1 ----
-    - Moving within the data table				      1 DONE
-  + Remove the spinboxes from the buddy list.			      1 ----
+    - Moving within the data table					done
+    - Remove the spinboxes from the buddy list.				--
 
 * Config dialog
-  + Make Data page work.						DONE
+  + Make Data page work.					      1	DONE
   + Pie settings at the same place as Subtype?			      1 DONE
   + Type specific settings for each type?			      2 DONE
   + Move type specific settings right after subtype (Pie, etc)	      1 DONE
   + Move Line Marker from Axes page?				      2 DONE
-  + Check *all* subpages for uglyness and bugs			     S1 INGE
-    - Bar		REMOVE					     S1 done
-    - ParameterPie	Ugly -> OK				     S1 done
-    - ParameterPolar	Ugly -> OK				     S1 done
-    - Parameter3d	OK					     S1 done
-
-    - Data		OK					     S1 done
-    - SubtypeChartPage						     S1 done
-    - HeaderFooter	Somewhat ugly?  No, Ok.			     S1 done
-    - Legend		OK					     S1 done
-    - Parameter (Axes)	Ugly -> OK				     S1 done
-    - Color		Ugly					     S1 --
-    - Font		Ugly -> OK				     S1 done
-    - BackgroundPixmap	Ugly					     S1 --
-
-    - Line3d		UGLY -> OK				     S1 done
-    - Geometry		REMOVE					     S1 done
-    - Combo		For HiLo charts. Never finished. 	     S1 done
-    - Pie		disabled. Explode factore to parameterpie    S1 done
+  + Check *all* subpages for uglyness and bugs			     S1 DONE
+    - NOTE: A few of these didn't make it to 1.4 and are moved down.
   + Check handling of defaults.					      1 DONE
-  + Integrate the Colors and Font pages into Axes?		      2 INGE
-    - Maybe create a little combination widget that can change        2 --
-      both font and color for a text item?
-  + Font page should have a buttongroup				      2	INGE
   + Bring back "line width" for line charts.			      1 DONE
-	Used to be on the Line3d page.
-  + Check keyboard shortcuts for all tabs			     S1 INGE
-  + Enable titles for axes again.					DONE
+  + Check keyboard shortcuts for all tabs			     S1 ----
+  + Enable titles for axes again.				      1	DONE
 
 * Wizard
-  + New data page?						     S2 ----
-    - First row / column as header?					--
   + "Select Chart Type" page: Reorder like the toolbar			DONE
   + Make Help button work or disable it.			      1 DONE
-  + The Back button should be in the same place on all pages.	      3 ----
-  + Subtype page should have icons for subtypes like config dialog.   2 ----
   + Enable Finish button for all pages.				      1 DONE
 
 * Manual
-  + Describe stand-alone charting.				     S1 DONE
-  + New screen shots.						     S1 ----
-  + Describe all chart types					     S1 ----
-  + Other enhancements?						     S2 ----
+  + Describe stand-alone charting.				      1 DONE
+  + New screen shots.						      1 ----
+  + Describe all chart types					      1 ----
+  + Other enhancements?						      2 ----
 
 * Filters
-  + PNG export filter						      1 INGE
+  + Make a non-part library that the filters can link against	      1	----
+  + PNG export filter						      1 DONE
     - Create the core of the filter					done
-    - Create a dialog for selecting the size				--
-    - Make a non-part library that the filters can link against		--
-  + SVG export filter						      2 INGE
+    - Size dialog for PNG image						done
+  + SVG export filter						      2 ----
+    - Create the core of the filter					done
+    - Make SVG filter export sane svg:s					--
+  + CSV import filter						      1 INGE
+    - Create the core of the filter					done
+    - Create the import dialog						done
+    - Import the data from the dialog					--
+    - Disable when inside KSpread					--
+    - Remove some data types from the chooser (not relevant for KChart) --
 
 * KDChart
-  - (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
-  - Font for X axis labels changes when Polar chart is chosen.		KDCH DONE
-  - Strange looks when negative values.					KDCH
+  + (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
+  + Font for X axis labels changes when Polar chart is chosen.		DONE
+  + Strange looks when negative values.					KDCH
 
 
-After release of KOffice 1.4
-============================
+================================================================
+                  After release of KOffice 1.4
+================================================================
 
-* Import of CSV files						     1 ----
-
-* Export of bitmaps.						     1 ----
+* Config dialog
+  + Check *all* subpages for uglyness and bugs			     S1 INGE
+    - Color		Ugly					     S1 --
+    - BackgroundPixmap	Ugly					     S1 --
+  + Integrate the Colors and Font pages into Axes?		      2 ----
+    - Maybe create a little combination widget that can change        2 --
+      both font and color for a text item?
 
 * Data Editor							     1 ----
   + Insert / Delete Rows / Columns
   + Selections: Clear, Cut/Copy&Paste, 
   + Formulas?
   + Select specific areas to chart (apart from entire data)
+
+* Wizard
+  + New data page?						     S2 ----
+    - Data in rows / columns						--
+    - First row / column as header?					--
+  + Subtype page should have icons for subtypes like config dialog.   2 ----
 
 * Chart types
   + Check all chart types and see if they are drawn logically	      2 ----
@@ -191,3 +173,6 @@ After release of KOffice 1.4
     - Pie							      2 --
     - Ring							      2 --
     - Polar							      2 --
+
+* Miscellaneous fixes
+  + Tooltips & What's this help all over the program?		     S1 ----
