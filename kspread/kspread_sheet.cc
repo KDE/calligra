@@ -6643,13 +6643,8 @@ bool KSpreadSheet::isLoading()
 
 void KSpreadSheet::checkContentDirection( QString const & name )
 {
-  /*
-   * note:
-   * the rtl code in kspread is till buggy. for this release the trigger will be
-   * an RTL sheet name. in between releases the trigger will be that the name
-   * of the sheet will start with "rtl". just to make developers life easier.
-   */
-  if ( (name.isRightToLeft())  ||  (name.left(3) == "rtl")  )
+  /* set sheet's direction to RTL if sheet name is an RTL string */
+  if ( (name.isRightToLeft()) )
     setLayoutDirection( RightToLeft );
   else
     setLayoutDirection( LeftToRight );
