@@ -58,6 +58,9 @@ private:
     bool checkUpdateRange();
     QTextCodec* getCodec(void) const;
 
+    // The real contents of the dialog
+    DialogUI  *m_dialog;
+
     bool    m_adjustRows;
     bool    m_adjustCols;
     int     m_startRow;
@@ -68,7 +71,6 @@ private:
     QString m_delimiter;
     bool    m_ignoreDups;
     QByteArray m_fileArray;
-    DialogUI * m_dialog;
     QTextCodec* m_codec;
     QStringList m_formatList; ///< List of the column formats
 

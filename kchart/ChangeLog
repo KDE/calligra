@@ -1,5 +1,9 @@
 2005-04-13  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 
+	CSV import: Disable irrelevant formats
+	* csvimportdialog.cc (CSVImportDialog): Disable formats Currency
+	and Date.
+
 	Disable "Import Data" if inside KSpread
 	* kchart_view.{h,cc} (m_importData): New member
 	(KChartView): Disable the KAction if data is unchangeable.

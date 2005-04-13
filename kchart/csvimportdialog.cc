@@ -71,8 +71,8 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
 
     m_formatList << i18n( "Text" );
     m_formatList << i18n( "Number" );
-    m_formatList << i18n( "Currency" );
-    m_formatList << i18n( "Date" );
+    //m_formatList << i18n( "Currency" );
+    //m_formatList << i18n( "Date" );
     m_formatList << i18n( "Decimal Comma Number" );
     m_formatList << i18n( "Decimal Point Number" );
     m_dialog->m_formatComboBox->insertStringList( m_formatList );
