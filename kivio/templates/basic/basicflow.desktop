@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Link
 URL=.source/basicflow.kft
-Icon=template_basicflow.png
+Icon=template_basicflow
 Name=Basic Flowcharting
 Name[bg]=Базов шаблон за диаграми
 Name[ca]=Diagrama de flux bàsic
