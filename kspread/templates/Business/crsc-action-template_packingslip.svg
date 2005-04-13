@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="72.000000"
+   inkscape:export-xdpi="72.000000"
+   inkscape:export-filename="/home/danny/work/kde/koffice/templates/kspread/cr48-action-template_packingslip.png"
+   sodipodi:docbase="/home/danny/work/kde/koffice/templates/kspread"
+   sodipodi:docname="crsc-action-template_packingslip.svg"
+   inkscape:version="0.41"
+   sodipodi:version="0.32"
+   id="svg1"
+   x="0"
+   y="0"
+   version="1.0"
+   _SVGFile__filename="oldscale/actions/aobottom.svg"
+   width="60"
+   height="60">
+  <sodipodi:namedview
+     inkscape:current-layer="svg1"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-height="691"
+     inkscape:window-width="1020"
+     inkscape:cy="29.172597"
+     inkscape:cx="64.719876"
+     inkscape:zoom="6.0612328"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0000000"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <defs
+     id="defs3" />
+  <metadata
+     id="metadata7">
+    <RDF
+       id="RDF8">
+      <Work
+         id="Work9"
+         about="">
+        <title
+           id="title10">Part of the Flat Icon Collection (Thu Aug 26 14:38:01 2004)</title>
+        <description
+           id="description12" />
+        <subject
+           id="subject13">
+          <Bag
+             id="Bag14">
+            <li
+               id="li15" />
+          </Bag>
+        </subject>
+        <publisher
+           id="publisher16">
+          <Agent
+             id="Agent17"
+             about="">
+            <title
+               id="title18" />
+          </Agent>
+        </publisher>
+        <creator
+           id="creator19">
+          <Agent
+             id="Agent20"
+             about="">
+            <title
+               id="title21">Danny Allen</title>
+          </Agent>
+        </creator>
+        <rights
+           id="rights23">
+          <Agent
+             id="Agent24"
+             about="">
+            <title
+               id="title25">Danny Allen</title>
+          </Agent>
+        </rights>
+        <date
+           id="date27" />
+        <format
+           id="format28">image/svg+xml</format>
+        <type
+           resource="http://purl.org/dc/dcmitype/StillImage"
+           id="type30" />
+        <license
+           resource="http://creativecommons.org/licenses/LGPL/2.1/"
+           id="license31">
+          <date
+             id="date32" />
+        </license>
+        <language
+           id="language33">en</language>
+      </Work>
+    </RDF>
+    <rdf:RDF
+       id="RDF35">
+      <cc:Work
+         id="Work36"
+         rdf:about="">
+        <dc:format
+           id="format37">image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+           id="type39" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g2079"
+     transform="matrix(1.051255,0.000000,0.000000,1.051255,-1.537650,-1.537650)">
+    <path
+       sodipodi:nodetypes="cccccc"
+       id="path2077"
+       d="M 11.750000,54.375000 L 11.750000,5.6250000 L 39.437500,5.6250000 L 48.250000,14.437500 L 48.250000,54.375000 L 11.750000,54.375000 z "
+       style="color:#000000;fill:none;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#ffffff;stroke-width:7.1343317;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;visibility:visible;display:block" />
+    <path
+       sodipodi:nodetypes="cccccc"
+       id="rect1089"
+       d="M 11.750000,54.375000 L 11.750000,5.6250000 L 39.437500,5.6250000 L 48.250000,14.437500 L 48.250000,54.375000 L 11.750000,54.375000 z "
+       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:2.3781106;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;visibility:visible;display:block" />
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path1713"
+       d="M 39.437499,14.437501 L 39.437499,5.6250010 L 48.249999,14.437501 L 39.437499,14.437501 z "
+       style="color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:2.3781106;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;visibility:visible;display:block" />
+  </g>
+  <g
+     transform="matrix(0.538095,0.000000,0.000000,0.538095,13.85715,24.50018)"
+     id="g1726">
+    <path
+       id="rect976"
+       d="M 4.5806737,37.860077 L 35.881945,37.860077 L 35.881945,62.799301 L 4.5806737,62.799301 L 4.5806737,37.860077 z "
+       style="font-size:12.000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:5.0081176;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000;stroke-dasharray:none"
+       transform="matrix(0.726315,0.000000,0.000000,0.666516,8.496806,6.745466)" />
+    <path
+       id="rect977"
+       d="M 35.881947,31.498030 L 66.674253,31.498030 L 66.674253,62.799301 L 35.881947,62.799301 L 35.881947,31.498030 z "
+       style="font-size:12.000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:6.5398042;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000;stroke-dasharray:none"
+       transform="matrix(0.513492,-0.405569,0.000000,0.552868,16.20353,28.45713)" />
+    <path
+       id="rect975"
+       d="M 25.702669,1.4691677 L 56.749458,1.4691677 L 56.749458,14.193262 L 25.702669,14.193262 L 25.702669,1.4691677 z "
+       style="stroke-dasharray:none;stroke-opacity:1.0000000;stroke-miterlimit:4.0000000;stroke-linejoin:round;stroke-linecap:round;stroke-width:4.9111644;stroke:#000000;fill-rule:evenodd;fill-opacity:1.0000000;fill:#ffffff;font-size:12.000000"
+       transform="matrix(0.755275,0.000000,-0.440137,0.666516,13.72441,10.39650)" />
+    <path
+       id="path980"
+       transform="matrix(0.726315,0.000000,0.000000,0.726315,8.496806,6.649332)"
+       d="M 4.9623970,35.060780 L -6.1075650,27.299080 L 14.250980,10.885000 L 25.575430,18.010490 L 4.9623970,35.060780 z "
+       style="stroke-dasharray:none;stroke-opacity:1.0000000;stroke-miterlimit:4.0000000;stroke-linejoin:round;stroke-linecap:round;stroke-width:4.7975256;stroke:#000000;fill-rule:evenodd;fill-opacity:1.0000000;fill:#ffffff;font-size:12.000000" />
+    <path
+       id="rect974"
+       d="M 8.6523838,12.411888 L 40.717100,12.411888 L 40.717100,44.476604 L 8.6523838,44.476604 L 8.6523838,12.411888 z "
+       style="font-size:12.000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:6.6402436;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000;stroke-dasharray:none"
+       transform="matrix(0.726315,0.000000,-0.477139,0.379133,26.68952,15.14159)" />
+    <path
+       transform="matrix(0.946856,0.000000,0.000000,0.946856,0.780936,-2.144814)"
+       d="M 27.738520,23.481850 L 27.738520,35.951460"
+       style="font-size:12.000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:3.6800895;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000;stroke-dasharray:none"
+       id="path981" />
+  </g>
+</svg>
