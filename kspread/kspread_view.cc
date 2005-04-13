@@ -5128,8 +5128,19 @@ void KSpreadView::slotListChoosePopupMenu( )
     h = cell->extraHeight();
   ty += h;
 
+  if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    tx = canvasWidget()->width() - tx;
+  }
+
   QPoint p( (int)tx, (int)ty );
   QPoint p2 = d->canvas->mapToGlobal( p );
+
+  if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  {
+    p2.setX( p2.x() - d->popupListChoose->sizeHint().width() + 1 );
+  }
+
   d->popupListChoose->popup( p2 );
   QObject::connect( d->popupListChoose, SIGNAL( activated( int ) ),
                     this, SLOT( slotItemSelected( int ) ) );
