@@ -74,6 +74,8 @@ Item								   Prio Status
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
   + Save position of Actions toolbar in config.			      2 ----
   + Wrong images for HiLo subtype icons.			      1 ----
+  + Don't warn about unsaved data on exit if we are inside another    2 ----
+	program
 
 * Newly introduced bugs.
   + Get the colored lines back.					      1 ----
