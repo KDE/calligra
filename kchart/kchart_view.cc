@@ -58,9 +58,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_dcop = 0;
     dcopObject(); // build it
 
-    new KAction( i18n( "Import Data..." ), 0,
-		 this, SLOT( importData() ),
-		 actionCollection(), "import_data" );
+    m_importData = new KAction( i18n( "Import Data..." ), 0,
+				this, SLOT( importData() ),
+				actionCollection(), "import_data" );
 #if 0
     KAction * actionExtraCreateTemplate	=
 #endif
@@ -151,9 +151,15 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     // initialize the configuration
     //    loadConfig();
 
-    // Make sure there is always some test data.
-    m_edit->setEnabled(((KChartPart*)koDocument())->canChangeValue());
+    // Disable some things if we can't change the data, e.g. because
+    // we are inside another application that provides the data for us.
+    if (!((KChartPart*)koDocument())->canChangeValue()) {
+	m_edit->setEnabled(false);
+	m_importData->setEnabled(false);
+    }
+
 #if 0
+    // Make sure there is always some test data.
     createTempData();
 #else
     //((KChartPart*)koDocument())->initTestChart();

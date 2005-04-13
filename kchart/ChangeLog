@@ -1,3 +1,9 @@
+2005-04-13  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
+
+	Disable "Import Data" if inside KSpread
+	* kchart_view.{h,cc} (m_importData): New member
+	(KChartView): Disable the KAction if data is unchangeable.
+
 2005-04-10  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 
 	Get a file name for "Import Data" and actually read data.

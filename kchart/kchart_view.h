@@ -76,7 +76,7 @@ protected:
     void          updateButton();
 
 private:
-    KAction  *m_cut;
+    KAction  *m_importData;
     KAction  *m_wizard;
     KAction  *m_edit;
     KAction  *m_config;
