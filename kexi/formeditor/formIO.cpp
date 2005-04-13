@@ -1233,6 +1233,15 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 			else // we have a normal property, let's load it
 			{
 				QVariant val = readProp(node.firstChild(), w, name);
+				if(name == "geometry" && dynamic_cast<FormWidget*>(w)) {
+					//fix geometry if needed - this is top level form widget
+					QRect r( val.toRect() );
+					if (r.left()<0) //negative X!
+						r.moveLeft(0);
+					if (r.top()<0) //negative Y!
+						r.moveTop(0);
+					val = r;
+				}
 				w->setProperty(name.latin1(), val);
 				tree->addModifiedProperty(name, val);
 			}
