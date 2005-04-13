@@ -127,9 +127,10 @@ Item								   Prio Status
   + CSV import filter						      1 INGE
     - Create the core of the filter					done
     - Create the import dialog						done
+    - Import the headers from the dialog				--
     - Import the data from the dialog					--
     - Disable when inside KSpread					done
-    - Remove some data types from the chooser (not relevant for KChart) --
+    - Remove some data types from the chooser (not relevant for KChart) done
 
 * KDChart
   + (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
