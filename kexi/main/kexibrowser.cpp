@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +43,6 @@
 #include "keximainwindow.h"
 #include "kexi_utils.h"
 
-
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
  , m_baseItems(199, false)
@@ -59,9 +58,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
 	m_list->renameLineEdit()->installEventFilter(this);
-//	m_list->installEventFilter(this);
-//	m_ac = m_parent->actionCollection();
-//	KexiActionProxy ap;
+	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	slotSettingsChanged(0);
 	//shared actions
 	plugSharedAction("edit_delete",SLOT(slotRemove()));
 	plugSharedAction("edit_edititem", SLOT(slotRename()));
@@ -90,12 +88,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 //js todo: ADD OPTION for enable this:
 //connect(this, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
-//	connect(m_list, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
-
-//moved to event filter	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
-//	connect(m_list->renameLineEdit(), SIGNAL(done(QListViewItem *, int)), this, SLOT(slotItemRenameDone(QListViewItem *, int)));
-//	connect(m_list, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotItemRenamed(QListViewItem*)));
 
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
@@ -251,8 +244,10 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 //	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 
-	if (!it->item())
+	if (!it->item() && !m_singleClick /*annoying when in single click mode*/) {
+		m_list->setOpen( vitem, !vitem->isOpen() );
 		return;
+	}
 	emit openOrActivateItem( it->item(), Kexi::DataViewMode );
 }
 
@@ -400,7 +395,6 @@ void KexiBrowser::slotRename()
 		m_list->rename(it, 0);
 }
 
-//slotItemRenamed(QListViewItem *item)
 void KexiBrowser::itemRenameDone()
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
@@ -444,6 +438,11 @@ void KexiBrowser::updateItemName( KexiPart::Item *item, bool dirty )
 		m_list->setSelected(m_list->firstChild(), true);
 	m_list->setFocus();
 }*/
+
+void KexiBrowser::slotSettingsChanged(int)
+{
+	m_singleClick = KGlobalSettings::singleClick();
+}
 
 //--------------------------------------------
 
