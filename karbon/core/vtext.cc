@@ -606,7 +606,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 
 	pattern = FcPatternBuild( 0, FC_WEIGHT, FcTypeInteger, weight,
 							  FC_SLANT, FcTypeInteger, slant,
-							  FC_SIZE, FcTypeDouble, size, 0 );
+							  FC_SIZE, FcTypeDouble, size, NULL );
 
 	// Add font name
 	FcPatternAddString( pattern, FC_FAMILY, reinterpret_cast<const FcChar8 *>( family.latin1() ) );
