@@ -19,27 +19,73 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiquerydesignersqleditor.h"
+#include "kexiscripteditor.h"
+
+#include <kdebug.h>
+
+#include <kexidialogbase.h>
+#include <kexidb/connection.h>
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
 # include <ktexteditor/highlightinginterface.h>
 #endif
 
-KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
-	KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiEditor(mainWin, parent, name)
 {
+	// Load script code
+	QString data;
+	loadDataBlock(data);
+	setText(data);
+
+	// TEMP: let's use python highlighting for now
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(document());
 	for(uint i=0; i < hl->hlModeCount(); i++)  {
 //		kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-		if (hl->hlModeName(i).contains("sql", false))  {
+		if (hl->hlModeName(i).contains("python", false))  {
 			hl->setHlMode(i);
 			break;
 		}
 	}
+
+	/// \todo plug actions here
+	connect(this, SIGNAL(textChanged()), this, SLOT(slotDirty()));
+}
+
+KexiDB::SchemaData*
+KexiScriptEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+{
+	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
+	kexipluginsdbg << "KexiScriptEditor::storeNewData(): new id:" << s->id() << endl;
+
+	if (!s || cancel) {
+		delete s;
+		return 0;
+	}
+	if (!storeData()) {
+		//failure: remove object's schema data to avoid garbage
+		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+		conn->removeObject( s->id() );
+		delete s;
+		return 0;
+	}
+	return s;
+}
+
+tristate
+KexiScriptEditor::storeData()
+{
+	kexipluginsdbg << "KexiScriptEditor::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	return storeDataBlock(text());
+}
+
+void
+KexiScriptEditor::slotDirty()
+{
+	KexiViewBase::setDirty(true);
 }
 
 
-#include "kexiquerydesignersqleditor.moc"
+#include "kexiscripteditor.moc"
 

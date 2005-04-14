@@ -19,24 +19,55 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERSQLEDITOR_H
-#define KEXIQUERYDESIGNERSQLEDITOR_H
+#ifndef KEXIEDITOR_H
+#define KEXIEDITOR_H
 
-#include "kexieditor.h"
+#include <qwidget.h>
+#include "kexiviewbase.h"
 
-/*! The KexiQueryDesignerSQLEditor class embeds text editor
- for entering query texts. */
+class KTextEdit;
+class KexiEditorPrivate;
 
-class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiEditor
+namespace KTextEditor
+{
+	class Document;
+	class View;
+}
+
+//! An editor that inherits KexiViewBase
+class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		virtual ~KexiQueryDesignerSQLEditor() {;}
+		KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		virtual ~KexiEditor();
+
+		QString text();
+		void jump(int character);
+
+		//void installEventFilter ( const QObject * filterObj );
+		//virtual bool eventFilter(QObject *o, QEvent *ev);
+
+	public slots:
+		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
+		void setText(const QString &text);
+
+	protected:
+		virtual void updateActions(bool activated);
+
+		// functions used by subclasses to acces private pointers
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#else
+		KTextEditor::Document*  document();
+		KTextEditor::View*   docView();
+#endif
+
+	signals:
+		void textChanged();
 
 	private:
-		//KexiQueryDesignerSQLEditorPrivate *d;
+		KexiEditorPrivate *d;
 };
 
 #endif

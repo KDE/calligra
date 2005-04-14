@@ -269,7 +269,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void showFormUICode();
 
 	signals:
-		/*! this signal is emmited as the property buffer switched */
+		/*! this signal is emited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
 
 		/*! This signal is emitted when any change is made to the Form \a form,
@@ -312,6 +312,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! Signal emitted when "autoTabStops" is changed. */
 		void autoTabStopsSet(KFormDesigner::Form *form, bool set);
+
+		/*! Signal emitted before the form gets finally deleted. \a form is still a valid pointer,
+		 but the widgets inside the form are in unknown state. */
+		void aboutToDeleteForm(KFormDesigner::Form *form);
+		/*! Signal emitted when new form gets created.  */
+		void  formCreated(KFormDesigner::Form *form);
 
 	protected slots:
 		void deleteWidgetLaterTimeout();

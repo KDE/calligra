@@ -464,8 +464,7 @@ FormManager::activeForm() const
 Form*
 FormManager::formForWidget(QWidget *w)
 {
-	for(Form *form = m_forms.first(); form; form = m_forms.next())
-	{
+	for(Form *form = m_forms.first(); form; form = m_forms.next())  {
 		if(form->toplevelContainer() && form->widget() == w)
 			return form;
 	}

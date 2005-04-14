@@ -32,10 +32,10 @@ rc_DATA = kexiui.rc \
 	kexitablepartui.rc kexitablepartinstui.rc \
 	kexiformpartui.rc kexiformpartinstui.rc \
 	kexireportpartui.rc kexireportpartinstui.rc \
+	kexiscriptpartui.rc kexiscriptpartinstui.rc \
 	kexitableview.rc \
-	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc \
+	kexirelationsview.rc kexidatatableui.rc \
 	readme_en
-#	$(scriptrc)
 
 kde_conf_DATA = kexirc
 
@@ -45,8 +45,7 @@ servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop  kexiimportfilter.
 
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop \
-	kexireporthandler.desktop
-#$(scripthandler)
+	kexireporthandler.desktop kexiscripthandler.desktop
 
 magicdir = $(kde_confdir)/magic
 magic_DATA = kexi.magic

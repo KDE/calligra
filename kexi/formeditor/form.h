@@ -127,13 +127,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		~Form();
 
 		/*!
-		 Creates a toplevel widget out of another widget. 
+		 Creates a toplevel widget out of another widget.
 		 \a container will become the Form toplevel widget,
 		 will be associated to an ObjectTree and so on.
 		 \code QWidget *toplevel = new QWidget(this);
 		 form->createToplevel(toplevel); \endcode
 		 */
-		void createToplevel(QWidget *container, FormWidget *formWidget =0, 
+		void createToplevel(QWidget *container, FormWidget *formWidget =0,
 			const QString &classname="QWidget");
 
 		/*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
@@ -328,6 +328,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 \a it is the ObjectTreeItem representing this deleted widget.
 		 */
 		void childRemoved(ObjectTreeItem *it);
+
+		void designModeChanged();
 
 	protected:
 		void setConnectionBuffer(ConnectionBuffer *b) { d->connBuffer = b; }

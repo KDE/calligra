@@ -50,9 +50,10 @@ KFormDesigner::removeChildrenFromList(WidgetList &list)
 void
 KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 {
-	if(!object->isWidgetType())
+	if(!object || !container|| !object->isWidgetType())
 		return;
 
+	kdDebug() << "Installing event filter on widget: " << object->name() << " directed to " << container->name() << endl;
 	object->installEventFilter(container);
 	if(((QWidget*)object)->ownCursor())
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));

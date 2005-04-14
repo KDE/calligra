@@ -57,7 +57,8 @@ void
 ScriptManager::setFormManager(FormManager *manager)
 {
 	m_formManager = manager;
-	connect(m_formManager, SIGNAL(formDeleted(KFormDesigner::Form*)), this, SLOT(slotFormDeleted(KFormDesigner::Form*)));
+	connect(m_formManager, SIGNAL(aboutToDeleteForm(KFormDesigner::Form*)), this, SLOT(slotFormDeleted(KFormDesigner::Form*)));
+	connect(m_formManager, SIGNAL(formCreated(KFormDesigner::Form*)), this, SLOT(newFormScript(KFormDesigner::Form*)));
 }
 
 void

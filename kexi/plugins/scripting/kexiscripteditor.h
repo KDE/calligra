@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,20 +19,30 @@
    Boston, MA 02111-1307, USA.
 */
 
-// === KexiQueryDesignerSQLEditor impelmentation using KTextEdit ===
-//included by kexiquerydesignersqleditor.cpp
+#ifndef KEXISCRIPTEDITOR_H
+#define KEXISCRIPTEDITOR_H
 
-QString
-KexiQueryDesignerSQLEditor::text()
+#include "kexieditor.h"
+
+/*! The KexiQueryDesignerSQLEditor class embeds text editor
+ for entering query texts. */
+
+class KEXIEXTWIDGETS_EXPORT KexiScriptEditor : public KexiEditor
 {
-	return d->view->text();
-}
+	Q_OBJECT
 
-void
-KexiQueryDesignerSQLEditor::setText(const QString &text)
-{
-	const bool was_dirty = dirty();
-	d->view->setText(text);
-	setDirty(was_dirty);
-}
+	public:
+		KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+		virtual ~KexiScriptEditor() {;}
 
+	protected:
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+		virtual tristate storeData();
+
+	protected slots:
+		void  slotDirty();
+
+	private:
+};
+
+#endif
