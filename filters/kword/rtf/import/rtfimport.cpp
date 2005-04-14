@@ -916,15 +916,16 @@ void RTFImport::setBorderStyle( RTFProperty *property )
 
 void RTFImport::setBorderProperty( RTFProperty *property )
 {
+    //kdDebug() << "setBorderProperty: " << endl;
     if (state.layout.border)
     {
-        *((int *)(state.layout.border + property->offset)) = token.value;
+        state.layout.border->width = token.value;
     }
     else
     {
 	for (uint i=0; i < 4; i++)
 	{
-	    *((int *)(((char *)&state.layout.borders[i]) + property->offset)) = token.value;
+            state.layout.borders[i].width = token.value;
 	}
     }
 }
