@@ -1724,8 +1724,8 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
         QDomDocument metaDoc;
-        if ( oldLoadAndParse( store, "meta.xml", metaDoc ) ) {
-            store->close();
+        KoOasisStore oasisStore( store );
+        if ( oasisStore.loadAndParse( "meta.xml", metaDoc, d->lastErrorMessage ) ) {
             d->m_docInfo->loadOasis( metaDoc );
         }
     }
