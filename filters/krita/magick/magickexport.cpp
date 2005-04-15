@@ -15,38 +15,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-#include <magickimport.h>
+#include <magickexport.h>
 #include <kgenericfactory.h>
 #include <koDocument.h>
 #include <koFilterChain.h>
 #include <kis_doc.h>
 
-typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
+typedef KGenericFactory<MagickExport, KoFilter> MagickExportFactory;
+K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
 
-MagickImport::MagickImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+MagickExport::MagickExport(KoFilter *, const char *, const QStringList&) : KoFilter()
 {
 }
 
-MagickImport::~MagickImport()
+MagickExport::~MagickExport()
 {
 }
 
-KoFilter::ConversionStatus MagickImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCString& to)
 {
-	kdDebug() << "Importing using MagickImport!\n";
+	kdDebug() << "magick export!\n";
+	if (from != "application/x-krita")
+		return KoFilter::NotImplemented;
 
-	if (to != "application/x-krita")
-		return KoFilter::BadMimeType;
+	// XXX: Add dialog about flattening layers here
 
-	KisDoc *input = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-	QString inputFilename = m_chain -> inputFile();
+	KisDoc *output = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
+	QString outputFilename = m_chain -> outputFile();
 	
-	if (!input)
+	if (!output)
 		return KoFilter::CreationError;
 	
-	return input -> importImage(inputFilename) ? KoFilter::OK : KoFilter::BadMimeType;
+	return output -> exportImage(outputFilename) ? KoFilter::OK : KoFilter::BadMimeType;
 }
 
-#include <magickimport.moc>
+#include <magickexport.moc>
 
