@@ -24,7 +24,6 @@
 #include <qptrdict.h>
 #include <qsignalmapper.h>
 
-#include <kaction.h>
 #include <kmainwindow.h>
 
 #include "kexiactionproxy.h"

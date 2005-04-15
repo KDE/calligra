@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,7 +63,6 @@ class KEXICORE_EXPORT Part : public QObject
 	Q_OBJECT
 
 	public:
-		
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
@@ -148,6 +147,14 @@ class KEXICORE_EXPORT Part : public QObject
 		KActionCollection* actionCollectionForMode(int viewMode) const;
 
 		const Kexi::ObjectStatus& lastOperationStatus() const { return m_status; }
+
+		/*! \return i18n'd message translated from \a englishMessage.
+		 This method is useful for messages like: 
+		 "<p>Table \"%1\" has been modified.</p><p>Do you want to save changes?</p>",
+		 -- first part of messages like that could not be accurately translated.
+		 See implementation of this method in KexiTablePart for example how to implement it. 
+		 Default implementation returns \a englishMessage. */
+		virtual QString i18nMessage(const QCString& englishMessage) const;
 
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );

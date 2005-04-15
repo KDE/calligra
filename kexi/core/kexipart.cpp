@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -282,8 +282,9 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
 
+	//dirty only if it's a new object
 	if (dlg->selectedView())
-		dlg->selectedView()->setDirty(false);
+		dlg->selectedView()->setDirty( item.neverSaved() );
 	
 	return dlg;
 }
@@ -329,6 +330,11 @@ bool Part::remove(KexiMainWindow *win, KexiPart::Item &item)
 KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
 {
 	return new KexiDialogTempData(dialog);
+}
+
+QString Part::i18nMessage(const QCString& englishMessage) const
+{
+	return englishMessage;
 }
 
 //-------------------------------------------------------------------------

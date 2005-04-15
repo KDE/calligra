@@ -26,9 +26,8 @@
 #include <qpair.h>
 
 #include <kstdaction.h>
+#include <kaction.h>
 
-class KActionCollection;
-class KAction;
 class KShortcut;
 class KMainWindow;
 class KexiActionProxy;
@@ -83,8 +82,12 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 There can be exactly one deault shared actions host. */
 		static KexiSharedActionHost& defaultHost();
 
+		/*! \return shared actions list. */
+		KActionPtrList sharedActions() const;
+
 		/*! PROTOTYPE, DO NOT USE YET */
 		void setActionVolatile( KAction *a, bool set );
+
 
 	protected:
 

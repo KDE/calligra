@@ -207,6 +207,11 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 	return action;
 }
 
+KActionPtrList KexiSharedActionHost::sharedActions() const
+{
+	return d->sharedActions;
+}
+
 /*class KexiAction : public KAction
 {
 	public:
