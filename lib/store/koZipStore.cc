@@ -43,7 +43,7 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
     // Workaround for KZip KSaveFile double deletion in kdelibs-3.4,
     // when trying to write to a non-writable directory.
     QDir dir( QFileInfo( _filename ).dir() );
-    if ( !QFileInfo( dir.path() ).isWritable() )
+    if (_mode == Write && !QFileInfo( dir.path() ).isWritable()  )
     {
         kdWarning(s_area) << dir.path() << " isn't writable" << endl;
         m_bGood = false;
