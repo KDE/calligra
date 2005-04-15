@@ -55,14 +55,14 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 {
 }
 
-WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName, 
+WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
 	const char* inheritedClassName)
  : m_inheritedClass(0)
  , m_overriddenAlternateNames(0)
- , m_factory(f)
  , m_parentFactoryName(parentFactoryName)
  , m_inheritedClassName(inheritedClassName)
  , m_propertiesWithDisabledAutoSync(0)
+ , m_factory(f)
 {
 	m_class = inheritedClassName;
 }
@@ -131,7 +131,7 @@ WidgetFactory::~WidgetFactory()
 
 void WidgetFactory::addClass(WidgetInfo *w)
 {
-	WidgetInfo *oldw = m_classesByName[w->className()];
+	WidgetInfo *oldw = m_classesByName[w->className().latin1()];
 	if (oldw==w)
 		return;
 	if (oldw) {
@@ -139,12 +139,12 @@ void WidgetFactory::addClass(WidgetInfo *w)
 			<< "' already exists for factory '" << name() << "'" << endl;
 		return;
 	}
-	m_classesByName.insert( w->className(), w );
+	m_classesByName.insert( w->className().latin1(), w );
 }
 
 void
-WidgetFactory::createEditor(const QString &classname, const QString &text, 
-	QWidget *w, Container *container, QRect geometry,  
+WidgetFactory::createEditor(const QString &classname, const QString &text,
+	QWidget *w, Container *container, QRect geometry,
 	int align,  bool useFrame, BackgroundMode background)
 {
 #ifdef KEXI_KTEXTEDIT
@@ -459,7 +459,7 @@ WidgetFactory::changeTextInternal(const QString& text)
 		return;
 	//try in inherited
 	if (!m_editedWidgetClass.isEmpty()) {
-		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass ];
+		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass.latin1() ];
 		if (wi && wi->inheritedClass())
 			wi->inheritedClass()->factory()->changeText( text );
 	}

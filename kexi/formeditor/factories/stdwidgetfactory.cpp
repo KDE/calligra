@@ -378,7 +378,7 @@ StdWidgetFactory::previewWidget(const QString &classname, QWidget *widget, KForm
 }
 
 bool
-StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, 
+StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopupMenu *menu,
 	KFormDesigner::Container *)
 {
 	if((classname == "QLabel") || (classname == "KTextEdit"))

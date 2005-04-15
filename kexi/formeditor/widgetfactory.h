@@ -127,9 +127,9 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 Custom properties are saved as well with 'stdset' attribute set to 0. */
 		void setSavingName(const QString &saveName) { m_saveName = saveName; }
 
-		/*! Sets autoSync flag for property \a propertyName. 
+		/*! Sets autoSync flag for property \a propertyName.
 		 This allows to override autoSync flag for certain widget's property, because
-		 e.g. KexiPropertyEditor can have autoSync flag set to false or true, but 
+		 e.g. KexiPropertyEditor can have autoSync flag set to false or true, but
 		 not all properties have to comply with that.
 		 \a flag equal to cancelled value means there is no overriding (the default). */
 		void setAutoSyncForProperty(const char *propertyName, tristate flag);
@@ -230,7 +230,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual QWidget* create(const QCString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
-		virtual void createCustomActions(KActionCollection* col) {};
+		virtual void createCustomActions(KActionCollection* ) {};
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */
@@ -244,7 +244,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual bool startEditing(const QString &classname, QWidget *w, Container *container)=0;
 
-		/*! This function is called just before the Form is previewed. It allows widgets 
+		/*! This function is called just before the Form is previewed. It allows widgets
 		 to make changes before switching (ie for a Spring, hiding the cross) */
 		virtual bool previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
 
@@ -255,7 +255,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		This way you can save special properties, for example the contents of a listbox.
 		  \sa readSpecialProperty()
 		 */
-		virtual bool saveSpecialProperty(const QString &classname, const QString &name, 
+		virtual bool saveSpecialProperty(const QString &classname, const QString &name,
 			const QVariant &value, QWidget *w,
 			QDomElement &parentNode, QDomDocument &parent);
 
@@ -264,7 +264,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  example the contents of a listbox.
 		   \sa saveSpecialProperty()
 		*/
-		virtual bool readSpecialProperty(const QString &classname, QDomElement &node, 
+		virtual bool readSpecialProperty(const QString &classname, QDomElement &node,
 			QWidget *w, ObjectTreeItem *item);
 
 		/*! This function is used to know whether the \a property for the widget \a w
@@ -294,8 +294,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		void createEditor(const QString &classname, const QString &text, 
-			QWidget *w, Container *container, QRect geometry, 
+		void createEditor(const QString &classname, const QString &text,
+			QWidget *w, Container *container, QRect geometry,
 			int align,  bool useFrame=false, BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering
@@ -304,9 +304,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		*/
 		void disableFilter(QWidget *w, Container *container);
 
-		/*! This function creates a little dialog (a KEditListBox) to modify the contents 
+		/*! This function creates a little dialog (a KEditListBox) to modify the contents
 		 of a list (of strings). It can be used to modify the contents
-		 of a combo box for instance. The modified list is copied 
+		 of a combo box for instance. The modified list is copied
 		 into \a list when the user presses "Ok".*/
 		bool editList(QWidget *w, QStringList &list);
 
@@ -337,8 +337,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 //		/*! Adds the i18n'ed description of a property value, which will be shown in PropertyEditor. */
 //		void  addValueDescription(Container *container, const char *value, const QString &desc);
 
-		/*! \return true if at least one class defined by this factory inherits 
-		 a class from other factory. Used in WidgetLibrary::loadFactories() 
+		/*! \return true if at least one class defined by this factory inherits
+		 a class from other factory. Used in WidgetLibrary::loadFactories()
 		 to load factories in proper order. */
 		bool inheritsFactories();
 
@@ -347,7 +347,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		Default implementation will change property "text".
 		You have to reimplement this function for editing inside the Form to work if your widget's
 		property you want to change isn't named "text".
-		This slot is called when the line edit text changes, and you have to make 
+		This slot is called when the line edit text changes, and you have to make
 		it really change the good property of the widget using changeProperty() (text, or title, etc.).
 		*/
 		virtual bool changeText(const QString &newText);
