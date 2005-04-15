@@ -172,6 +172,14 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 	return res;
 }
 
+QString
+KexiTablePart::i18nMessage(const QCString& englishMessage) const
+{
+	if (englishMessage=="<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+		return i18n("<p>Design of table \"%1\" has been modified.</p><p>Do you want to save changes?</p>");
+	return englishMessage;
+}
+
 //----------------
 
 KexiTableDataSource::KexiTableDataSource(KexiPart::Part *part)

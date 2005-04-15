@@ -61,6 +61,8 @@ class KexiTablePart : public KexiPart::Part
 			QWidget *parent, KexiDB::Connection& conn, 
 			KexiDB::TableSchema& table, const QString& msg);
 
+		virtual QString i18nMessage(const QCString& englishMessage) const;
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 
