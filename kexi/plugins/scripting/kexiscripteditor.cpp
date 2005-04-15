@@ -39,6 +39,8 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
 	loadDataBlock(data);
 	setText(data);
 
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#else
 	// TEMP: let's use python highlighting for now
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(document());
 	for(uint i=0; i < hl->hlModeCount(); i++)  {
@@ -48,6 +50,7 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
 			break;
 		}
 	}
+#endif
 
 	/// \todo plug actions here
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotDirty()));

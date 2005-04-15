@@ -27,7 +27,7 @@
 /*! The KexiQueryDesignerSQLEditor class embeds text editor
  for entering query texts. */
 
-class KEXIEXTWIDGETS_EXPORT KexiScriptEditor : public KexiEditor
+class KexiScriptEditor : public KexiEditor
 {
 	Q_OBJECT
 
