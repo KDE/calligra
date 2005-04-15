@@ -118,7 +118,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction, *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction;
-		int m_itemPopupTitle_id, m_partPopupTitle_id, m_editTextAction_id;
+		int m_itemPopupTitle_id, m_partPopupTitle_id, 
+			m_openAction_id, m_designAction_id, m_editTextAction_id;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;

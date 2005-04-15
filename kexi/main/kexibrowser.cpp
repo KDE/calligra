@@ -57,6 +57,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list = new KexiBrowserListView(this);
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
+	m_list->installEventFilter(this);
+
 	m_list->renameLineEdit()->installEventFilter(this);
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(0);
@@ -81,7 +83,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->setAllColumnsShowFocus(true);
 	m_list->setTooltipColumn(0);
 	m_list->renameLineEdit()->setValidator( new Kexi::IdentifierValidator(this) );
-//	setResizeMode(QListView::LastColumn);
+	m_list->setResizeMode(QListView::LastColumn);
 
 	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		this, SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
@@ -96,10 +98,12 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->plug(m_itemPopup);
+	m_openAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_openAction->plug(m_toolbar);
 	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->plug(m_itemPopup);
+	m_designAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_designAction->plug(m_toolbar);
 	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
 		SLOT(slotEditTextObject()), this, "editText_object");
@@ -262,8 +266,6 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	setAvailable("edit_cut",gotitem);
 	setAvailable("edit_copy",gotitem);
 //	setAvailable("edit_paste",gotgroup);
-	m_openAction->setEnabled(gotitem);
-	m_designAction->setEnabled(gotitem);
 //	m_renameObjectAction->setEnabled(gotitem);
 	setAvailable("edit_edititem",gotitem);
 
@@ -274,8 +276,13 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 			part = Kexi::partManager().part(it->info());
 		}
 	}
+	m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
+	m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
+	m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
 
-	m_itemPopup->setItemVisible(m_editTextAction_id, part && (part->supportedViewModes() & Kexi::TextViewMode));
+	m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
+	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
+	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
@@ -300,6 +307,9 @@ void KexiBrowser::installEventFilter ( const QObject * filterObj )
 
 bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
+	if (o==m_list && e->type()==QEvent::Resize) {
+		kdDebug() << "resize!" << endl;
+	}
 	if (o==m_list->renameLineEdit()) {
 		if (e->type()==QEvent::Hide) 
 			itemRenameDone();

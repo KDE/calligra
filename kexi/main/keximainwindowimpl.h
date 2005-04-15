@@ -232,6 +232,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 	protected slots:
 
+		/*! Called once after timeout (after ctors are executed). */
+		void slotAutoOpenObjectsLater();
+
 		/*! This slot is called if a window changes */
 		void activeWindowChanged(KMdiChildView *dlg);
 

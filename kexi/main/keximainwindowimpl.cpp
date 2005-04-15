@@ -242,6 +242,8 @@ class KexiMainWindowImpl::Private
 //		last_checked_mode=0;
 		propEditorDockSeparatorPos=-1;
 		navDockSeparatorPos=-1;
+//		navDockSeparatorPosWithAutoOpen=-1;
+		wasAutoOpen = false;
 #ifndef KEXI_SHOW_UNIMPLEMENTED
 		dummy_action = new KActionMenu("", wnd);
 #endif
@@ -268,6 +270,8 @@ class KexiMainWindowImpl::Private
 	}
 
 	int propEditorDockSeparatorPos, navDockSeparatorPos;
+//	int navDockSeparatorPosWithAutoOpen;
+	bool wasAutoOpen;
 	
 /*
 void updatePropEditorDockWidthInfo() {
@@ -321,9 +325,45 @@ void updatePropEditorDockWidthInfo() {
 #endif
 			} else {
 				propEditorToolWindow->show();
+#if defined(KDOCKWIDGET_P)
+				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
+				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80/* % */));
+#endif
 			}
 		}
 	}
+	void restoreNavigatorWidth()
+	{
+#if defined(KDOCKWIDGET_P)
+			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
+				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
+				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+	//			ds->setKeepSize(true);
+				
+				config->setGroup("MainWindow");
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
+
+				if (wasAutoOpen) //(dw2->isVisible())
+//				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
+					ds->setSeparatorPosInPercent( 
+						QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen", 17),
+						config->readNumEntry("LeftDockPosition", 17))
+					);
+				else
+					ds->setSeparatorPosInPercent( config->readNumEntry("LeftDockPosition", 17/* % */));
+				
+	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
+# else
+				//there were problems on KDE < 3.4
+				ds->setSeparatorPosInPercent( 15 );
+# endif
+				//if (!wasAutoOpen) //(dw2->isVisible())
+//					ds->setSeparatorPos( ds->separatorPos(), true );
+			}
+#endif
+	}
+
 };
 
 //-------------------------------------------------
@@ -893,10 +933,16 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 //	d->disableErrorMessages = true;
 	enableMessages( false );
 
+	QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
+	return true;
+}
+
+void KexiMainWindowImpl::slotAutoOpenObjectsLater()
+{
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-	for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = projectData->autoopenObjects.constBegin();
-		it != projectData->autoopenObjects.constEnd(); ++it )
+	for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = d->prj->data()->autoopenObjects.constBegin();
+		it != d->prj->data()->autoopenObjects.constEnd(); ++it )
 	{
 		KexiProjectData::ObjectInfo info = *it;
 		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].lower().latin1() );
@@ -916,6 +962,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 				not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+
 					internalReason(d->prj)+"<br></li>");
 			}
+			else
+				d->wasAutoOpen = true;
 			continue;
 		}
 
@@ -940,6 +988,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 				internalReason(d->prj)+"<br></li>" );
 			continue;
 		}
+		else
+			d->wasAutoOpen = true;
 	}
 	enableMessages( true );
 //	d->disableErrorMessages = false;
@@ -949,10 +999,6 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 			QString("<ul>%1</ul>").arg(not_found_msg) );
 
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
-#ifndef PROPEDITOR_VISIBILITY_CHANGES
-	if (!d->curDialog || d->curDialog->currentViewMode()==Kexi::DataViewMode)
-		d->propEditorToolWindow->hide();
-#endif
 
 	updateAppCaption();
 
@@ -965,11 +1011,31 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 //		if (!d->propEditorToolWindow->wrapperWidget()->isVisible())
 //			static_cast<KDockWidget*>(d->propEditorToolWindow->wrapperWidget())->makeDockVisible();
 	}
-	return true;
+
+	//	if (!d->prj->data()->autoopenObjects.isEmpty())
+	d->restoreNavigatorWidth();
+
+#ifndef PROPEDITOR_VISIBILITY_CHANGES
+//	KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
+//	KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+//	const int pos = ds->separatorPos();
+
+	//if (!d->curDialog || d->curDialog->currentViewMode()==Kexi::DataViewMode)
+//		d->propEditorToolWindow->hide();
+
+//	ds->setSeparatorPos( pos, true );
+#endif
+	if (d->nav) {
+		d->nav->updateGeometry();
+	}
+	qApp->processEvents();
 }
 
 tristate KexiMainWindowImpl::closeProject()
 {
+	if (!d->prj)
+		return true;
+
 #if defined(KDOCKWIDGET_P)
 	//remember docks position - will be used on storeSettings()
 	if (d->propEditor) {
@@ -981,13 +1047,19 @@ tristate KexiMainWindowImpl::closeProject()
 	if (d->nav) {
 		KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-		if (ds)
-			d->navDockSeparatorPos = ds->separatorPosInPercent();
+		int dwWidth = dw->width();
+		if (ds) {
+				if (d->dialogs.isEmpty())
+					d->navDockSeparatorPos = (100 * dwWidth) / width();
+				else
+					d->navDockSeparatorPos = ds->separatorPosInPercent();
+//					d->navDockSeparatorPos = QMAX( ds->separatorPosInPercent(), d->config->readNumEntry("LeftDockPosition", 17) );
+				
+//				int navDockSeparatorPosWithAutoOpen = (100 * dw->width()) / width() + 4;
+//				d->navDockSeparatorPos = (100 * dw->width()) / width() + 1;
+		}
 	}
 #endif
-
-	if (!d->prj)
-		return true;
 
 	//close each window, optionally asking if user wants to close (if data changed)
 	while (!d->curDialog.isNull()) {
@@ -1040,6 +1112,8 @@ KexiMainWindowImpl::initNavigator()
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
+//		d->navToolWindow->hide();
+
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,int)),this,SLOT(openObject(KexiPart::Item*,int)));
 		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),
 			this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
@@ -1053,21 +1127,7 @@ KexiMainWindowImpl::initNavigator()
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 		}
-#if defined(KDOCKWIDGET_P)
-		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
-			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
-			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-//			ds->setKeepSize(true);
-			
-			d->config->setGroup("MainWindow");
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
-			ds->setSeparatorPosInPercent( d->config->readNumEntry("LeftDockPosition", 15/* % */));
-# else
-			//there were problems on KDE < 3.4
-			ds->setSeparatorPosInPercent( 15 );
-# endif
-		}
-#endif
+//		d->restoreNavigatorWidth();
 	}
 	if(d->prj->isConnected()) {
 		d->nav->clear();
@@ -1130,6 +1190,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 #ifdef KEXI_PROP_EDITOR
 //TODO: FIX LAYOUT PROBLEMS
 	d->propEditor = new KexiPropertyEditorView(this);
+	d->propEditor->hide();
 	d->propEditor->installEventFilter(this);
 	d->propEditorToolWindow = addToolWindow(d->propEditor,
 		KDockWidget::DockRight, getMainDockWidget(), 20);
@@ -1431,7 +1492,20 @@ KexiMainWindowImpl::storeSettings()
 		}
 		if (d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
-			d->config->writeEntry("LeftDockPosition", d->navDockSeparatorPos);
+			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
+			int w = dw->width();
+			int ww = width();
+			int d1 = (100 * dw->width()) / width() + 1;
+			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+			//int d2 = ds->separatorPosInPercent();
+			
+			if (d->wasAutoOpen)
+				d->config->writeEntry("LeftDockPositionWithAutoOpen", 
+					d->navDockSeparatorPos);
+//			d->config->writeEntry("LeftDockPosition", dw->width());
+//			d->config->writeEntry("LeftDockPosition", d->nav->width());
+			else
+				d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77));
 		}
 	}
 
@@ -2346,7 +2420,10 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int quertionRes = KMessageBox::warningYesNoCancel( this,
-			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",  "<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
+			dlg->part()->i18nMessage(
+				"<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+//			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",  
+//			"<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
 			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
 			QString::null,
 			KStdGuiItem::save(),
@@ -2741,6 +2818,16 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 			return dlg;
 		}
 	}
+	//if DataViewMode is not supported, try Design, then Text mode (currently useful for script part)
+	KexiPart::Part *part = Kexi::partManager().part(item->mime());
+	if (!part)
+		return 0;
+	if (viewMode == Kexi::DataViewMode && !(part->supportedViewModes() & Kexi::DataViewMode)) {
+		if (part->supportedViewModes() & Kexi::DesignViewMode)
+			return openObjectFromNavigator( item, Kexi::DesignViewMode );
+		else if (part->supportedViewModes() & Kexi::TextViewMode)
+			return openObjectFromNavigator( item, Kexi::TextViewMode );
+	}
 	//do the same as in openObject()
 	return openObject(item, viewMode);
 }
@@ -3099,13 +3186,14 @@ KexiMainWindowImpl::initUserActions()
 void KexiMainWindowImpl::slotToolsProjectMigration()
 {
 #ifndef KEXI_NO_MIGRATION
-	QDialog *d = KexiInternalPart::createModalDialogInstance("migration", this, this);
-	if (!d)
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, this);
+	if (!dlg)
 		return;
-	d->exec();
+	dlg->exec();
 //	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
 //	iw->setGeometry(300,300,400,300);
 //	iw->show();
+	delete dlg;
 #endif
 }
 
