@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@ class WidgetLibraryPrivate
 //		 , alternateWidgets(101)
 		 , services(101, false)
 		 , supportedFactoryGroups(17, false)
+		 , factories(101, false)
 		 , factoriesLoaded(false)
 		{
 			services.setAutoDelete(true);
@@ -48,6 +49,7 @@ class WidgetLibraryPrivate
 		WidgetInfo::Dict widgets;//, alternateWidgets;
 		QAsciiDict<KService::Ptr> services;
 		QAsciiDict<char> supportedFactoryGroups;
+		QAsciiDict<WidgetFactory> factories;
 		bool factoriesLoaded : 1;
 };
 }
@@ -74,14 +76,44 @@ WidgetLibrary::~WidgetLibrary()
 }
 
 void
-WidgetLibrary::addFactory(WidgetFactory *f)
+WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 {
-	if(!f)
-		return;
-
-	WidgetInfo::List widgets = f->classes();
-	for(WidgetInfo *w = widgets.first(); w; w = widgets.next())
+	const WidgetInfo::Dict widgets = f->classes();
+	WidgetInfo *w;
+	for(QAsciiDictIterator<WidgetInfo> it(widgets); (w = it.current()); ++it)
 	{
+		// check if we want to inherit a widget from a different factory
+		if (!w->m_parentFactoryName.isEmpty() && !w->m_inheritedClassName.isEmpty()) {
+			WidgetFactory *parentFactory = d->factories[w->m_parentFactoryName];
+			if (!parentFactory) {
+				kdWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->className()
+					<< "' - no such parent factory '" << w->m_parentFactoryName << "'" << endl;
+				continue;
+			}
+			WidgetInfo* inheritedClass = parentFactory->m_classesByName[ w->m_inheritedClassName ];
+			if (!inheritedClass) {
+				kdWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->m_inheritedClassName
+					<< "' - no such class to inherit in factory '" << w->m_parentFactoryName << "'" << endl;
+				continue;
+			}
+			//ok: inherit properties:
+			w->m_inheritedClass = inheritedClass;
+			if (w->pixmap().isEmpty())
+				w->setPixmap( inheritedClass->pixmap() );
+			//ok?
+			foreach (QStringList::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
+				w->addAlternateClassName( *it_alt, inheritedClass->isOverriddenClassName( *it_alt ) );
+			}
+			if (w->includeFileName().isEmpty())
+				w->setIncludeFileName( inheritedClass->includeFileName() );
+			if (w->name().isEmpty())
+				w->setName( inheritedClass->name() );
+			if (w->namePrefix().isEmpty())
+				w->setNamePrefix( inheritedClass->namePrefix() );
+			if (w->description().isEmpty())
+				w->setDescription( inheritedClass->description() );
+		}
+
 //		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		QStringList l = w->alternateClassNames();
 		l.prepend( w->className() );
@@ -147,11 +179,27 @@ WidgetLibrary::loadFactories()
 		WidgetFactory *f = KParts::ComponentFactory::createInstanceFromService<WidgetFactory>(
 			*it.current(), this, (*it.current())->library().latin1(), QStringList());
 		if (!f) {
-			kdWarning() << "WidgetLibrary::scan(): creating factory failed! "
+			kdWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "
 				<< (*it.current())->library() << endl;
 			continue;
 		}
-		addFactory(f);
+		d->factories.insert( f->name(), f );
+	}
+
+	//now we have factories instantiated: load widgets
+	QPtrList<WidgetFactory> loadLater;
+	for (QAsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it) {
+		//ONE LEVEL, FLAT INHERITANCE, but works!
+		//if this factory inherits from something, load its witgets later
+//! @todo improve
+		if (it.current()->inheritsFactories())
+			loadLater.append( it.current() );
+		else
+			loadFactoryWidgets(it.current());
+	}
+	//load now the rest
+	for (QPtrListIterator<WidgetFactory> it(loadLater); it.current(); ++it) {
+		loadFactoryWidgets(it.current());
 	}
 }
 
@@ -203,76 +251,111 @@ WidgetLibrary::createXML()
 }
 
 ActionList
-WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, const char *slot)
+WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *receiver, const char *slot)
 {
 	loadFactories();
 	ActionList actions;
-	QAsciiDictIterator<WidgetInfo> it(d->widgets);
-	for(; it.current(); ++it)
+	for (QAsciiDictIterator<WidgetInfo> it(d->widgets); it.current(); ++it)
 	{
 //		kdDebug() << "WidgetLibrary::createActions():" << it.current()->className() << endl;
 		LibActionWidget *a = new LibActionWidget(it.current(), parent);
 		connect(a, SIGNAL(prepareInsert(const QString &)), receiver, slot);
 		actions.append(a);
 	}
-
 	return actions;
+}
+
+void
+WidgetLibrary::addCustomWidgetActions(KActionCollection *parent)
+{
+	for (QAsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it)
+	{
+		it.current()->createCustomActions( parent );
+	}
 }
 
 QWidget*
 WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c)
 {
 	loadFactories();
-	WidgetInfo *wfactory = d->widgets[classname];
-//	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
-	if(!wfactory)
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
 		return 0;
 
-	return wfactory->factory()->create(wfactory->className().local8Bit(), parent, name, c);
+	QWidget *widget = wclass->factory()->create(wclass->className().local8Bit(), parent, name, c);
+	if (widget)
+		return widget;
+	//try to instantiate from inherited class
+	if (wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->create(wclass->className().local8Bit(), parent, name, c);
+	return 0;
 }
 
 bool
-WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
+WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu, 
+	KFormDesigner::Container *container)
 {
 	loadFactories();
-	WidgetInfo *wfactory = d->widgets[c];
-	if(!wfactory)
+	WidgetInfo *wclass = d->widgets[c];
+	if(!wclass)
 		return false;
 
-	return wfactory->factory()->createMenuActions(c, w, menu, container, menuIds);
+	wclass->factory()->m_widget = w;
+	wclass->factory()->m_container = container;
+	if (wclass->factory()->createMenuActions(c, w, menu, container))
+		return true;
+	//try from inherited class
+	if (wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->createMenuActions(c, w, menu, container);
+	return false;
 }
 
-void
+bool
 WidgetLibrary::startEditing(const QCString &classname, QWidget *w, Container *container)
 {
 	loadFactories();
-	WidgetInfo *wfactory = d->widgets[classname];
-	if(!wfactory)
-		return ;
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
+		return false;
 
-	wfactory->factory()->startEditing(classname, w, container);
+	if (wclass->factory()->startEditing(classname, w, container))
+		return true;
+	//try from inherited class
+	if (wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->startEditing(classname, w, container);
+	return false;
 }
 
-void
+bool
 WidgetLibrary::previewWidget(const QCString &classname, QWidget *widget, Container *container)
 {
 	loadFactories();
-	WidgetInfo *wfactory = d->widgets[classname];
-	if(!wfactory)
-		return ;
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
+		return false;
 
-	wfactory->factory()->previewWidget(classname, widget, container);
+	if (wclass->factory()->previewWidget(classname, widget, container))
+		return true;
+	//try from inherited class
+	if (wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->previewWidget(classname, widget, container);
+	return false;
 }
 
-void
+bool
 WidgetLibrary::clearWidgetContent(const QCString &classname, QWidget *w)
 {
 	loadFactories();
-	WidgetInfo *wfactory = d->widgets[classname];
-	if(!wfactory)
-		return ;
+	WidgetInfo *wclass = d->widgets[classname];
+	if(!wclass)
+		return false;
 
-	wfactory->factory()->clearWidgetContent(classname, w);
+	if (wclass->factory()->clearWidgetContent(classname, w))
+		return true;
+	//try from inherited class
+	if (wclass->inheritedClass())
+		return wclass->inheritedClass()->factory()->clearWidgetContent(classname, w);
+	return false;
 }
 
 QString
@@ -282,8 +365,8 @@ WidgetLibrary::displayName(const QCString &classname)
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
 		return wi->name();
-	else
-		return classname;
+
+	return classname;
 }
 
 QString
@@ -294,8 +377,8 @@ WidgetLibrary::savingName(const QCString &classname)
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi && !wi->savingName().isEmpty())
 		return wi->savingName();
-	else
-		return classname;
+
+	return classname;
 }
 
 QString
@@ -305,8 +388,8 @@ WidgetLibrary::namePrefix(const QCString &classname)
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
 		return wi->namePrefix();
-	else
-		return i18n("Form");
+
+	return i18n("Form");
 }
 
 QString
@@ -321,7 +404,6 @@ WidgetLibrary::textForWidgetName(const QCString &name, const QCString &className
 	newName.remove(widget->namePrefix());
 	newName = widget->name() + " " + newName;
 	return newName;
-
 }
 
 QCString
@@ -349,8 +431,8 @@ WidgetLibrary::includeFileName(const QCString &classname)
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
 		return wi->includeFileName();
-	else
-		return QString::null;
+
+	return QString::null;
 }
 
 QString
@@ -360,19 +442,24 @@ WidgetLibrary::icon(const QCString &classname)
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
 		return wi->pixmap();
-	else
-		return QString("form");
+
+	return QString("form");
 }
 
-void
+bool
 WidgetLibrary::saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
-	if(wi)
-		wi->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent);
-	else
-		return;
+	if (!wi)
+		return false;
+
+	if (wi->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent))
+		return true;
+	//try from inherited class
+	if (wi->inheritedClass())
+		return wi->inheritedClass()->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent);
+	return false;
 }
 
 bool
@@ -380,10 +467,14 @@ WidgetLibrary::readSpecialProperty(const QCString &classname, QDomElement &node,
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
-	if(wi)
-		return wi->factory()->readSpecialProperty(classname, node, w, item);
-	else
+	if (!wi)
 		return false;
+	if (wi->factory()->readSpecialProperty(classname, node, w, item))
+		return true;
+	//try from inherited class
+	if (wi->inheritedClass())
+		return wi->inheritedClass()->factory()->readSpecialProperty(classname, node, w, item);
+	return false;
 }
 
 bool
@@ -391,10 +482,14 @@ WidgetLibrary::showProperty(const QCString &classname, QWidget *w, const QString
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
-	if(wi)
-		return wi->factory()->showProperty(classname, w, property, multiple);
-	else
+	if (!wi)
+		return false;
+	if (wi->factory()->showProperty(classname, w, property, multiple))
 		return true;
+	//try from inherited class
+	if (wi->inheritedClass())
+		return wi->inheritedClass()->factory()->showProperty(classname, w, property, multiple);
+	return false;
 }
 
 QStringList
@@ -402,10 +497,14 @@ WidgetLibrary::autoSaveProperties(const QCString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
-	if(wi)
-		return wi->factory()->autoSaveProperties(classname);
-	else
+	if(!wi)
 		return QStringList();
+	QStringList lst;
+	//prepend from inherited class
+	if (wi->inheritedClass())
+		lst = wi->inheritedClass()->factory()->autoSaveProperties(classname);
+	lst += wi->factory()->autoSaveProperties(classname);
+	return lst;
 }
 
 WidgetInfo*

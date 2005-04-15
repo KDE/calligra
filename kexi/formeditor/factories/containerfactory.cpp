@@ -254,15 +254,13 @@ SubForm::setFormName(const QString &name)
 ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, "containers")
 {
-	m_classes.setAutoDelete(true);
-
 	KFormDesigner::WidgetInfo *wBtnGroup = new KFormDesigner::WidgetInfo(this);
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
 	wBtnGroup->setNamePrefix(i18n("ButtonGroup"));
 	wBtnGroup->setDescription(i18n("A simple container to group buttons"));
-	m_classes.append(wBtnGroup);
+	addClass(wBtnGroup);
 
 	KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
 	wTabWidget->setPixmap("tabwidget");
@@ -278,7 +276,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setNamePrefix(i18n("TabWidget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
-	m_classes.append(wTabWidget);
+	addClass(wTabWidget);
 
 	KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
 	wWidget->setPixmap("frame");
@@ -286,7 +284,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidget->setName(i18n("Basic container"));
 	wWidget->setNamePrefix(i18n("BasicContainer"));
 	wWidget->setDescription(i18n("An empty container with no frame"));
-	m_classes.append(wWidget);
+	addClass(wWidget);
 
 	KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
 	wGroupBox->setPixmap("groupbox");
@@ -294,7 +292,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGroupBox->setName(i18n("Group Box"));
 	wGroupBox->setNamePrefix(i18n("GroupBox"));
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
-	m_classes.append(wGroupBox);
+	addClass(wGroupBox);
 
 	KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
 	wFrame->setPixmap("frame");
@@ -302,7 +300,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wFrame->setName(i18n("Frame"));
 	wFrame->setNamePrefix(i18n("Frame"));
 	wFrame->setDescription(i18n("A very simple container"));
-	m_classes.append(wFrame);
+	addClass(wFrame);
 
 	KFormDesigner::WidgetInfo *wWidgetStack = new KFormDesigner::WidgetInfo(this);
 	wWidgetStack->setPixmap("widgetstack");
@@ -310,7 +308,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidgetStack->setName(i18n("Widget Stack"));
 	wWidgetStack->setNamePrefix(i18n("WidgetStack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
-	m_classes.append(wWidgetStack);
+	addClass(wWidgetStack);
 
 	KFormDesigner::WidgetInfo *wHBox = new KFormDesigner::WidgetInfo(this);
 	wHBox->setPixmap("frame");
@@ -318,7 +316,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wHBox->setName(i18n("Horizontal Box"));
 	wHBox->setNamePrefix(i18n("HorizontalBox"));
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
-	m_classes.append(wHBox);
+	addClass(wHBox);
 
 	KFormDesigner::WidgetInfo *wVBox = new KFormDesigner::WidgetInfo(this);
 	wVBox->setPixmap("frame");
@@ -326,7 +324,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wVBox->setName(i18n("Vertical Box"));
 	wVBox->setNamePrefix(i18n("VerticalBox"));
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
-	m_classes.append(wVBox);
+	addClass(wVBox);
 
 	KFormDesigner::WidgetInfo *wGrid = new KFormDesigner::WidgetInfo(this);
 	wGrid->setPixmap("frame");
@@ -334,7 +332,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGrid->setName(i18n("Grid Box"));
 	wGrid->setNamePrefix(i18n("GridBox"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
-	m_classes.append(wGrid);
+	addClass(wGrid);
 
 	KFormDesigner::WidgetInfo *wSplitter = new KFormDesigner::WidgetInfo(this);
 	wSplitter->setPixmap("frame");
@@ -342,7 +340,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSplitter->setName(i18n("Splitter"));
 	wSplitter->setNamePrefix(i18n("Splitter"));
 	wSplitter->setDescription(i18n("A container that enables user to resize its children"));
-	m_classes.append(wSplitter);
+	addClass(wSplitter);
 
 	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
 	wSubForm->setPixmap("form");
@@ -350,7 +348,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(i18n("SubForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
-	m_classes.append(wSubForm);
+	addClass(wSubForm);
 }
 
 QWidget*
@@ -450,7 +448,7 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 	return 0;
 }
 
-void
+bool
 ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container)
 {
 	if(classname == "WidgetStack")
@@ -466,10 +464,14 @@ ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KForm
 		((VBox*)widget)->setPreviewMode();
 	else if(classname == "Grid")
 		((Grid*)widget)->setPreviewMode();
+	else
+		return false;
+	return true;
 }
 
 bool
-ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
+ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, 
+	KFormDesigner::Container *container)
 {
 	m_widget = w;
 	m_container = container;
@@ -483,11 +485,8 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		}
 
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddTabPage()) );
-		menuIds->append(id);
 		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
-		menuIds->append(id);
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
-		menuIds->append(id);
 		if( ((KTabWidget*)m_widget)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
@@ -499,20 +498,16 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
 
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(AddStackPage()) );
-		menuIds->append(id);
 
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
-		menuIds->append(id);
 		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
-		menuIds->append(id);
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
-		menuIds->append(id);
 		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;
@@ -520,7 +515,7 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	return false;
 }
 
-void
+bool
 ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
@@ -528,20 +523,20 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	{
 		QButtonGroup *group = static_cast<QButtonGroup*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
-		createEditor(group->title(), group, container, r, Qt::AlignAuto);
-		return;
+		createEditor(classname, group->title(), group, container, r, Qt::AlignAuto);
+		return true;
 	}
 	if(classname == "QGroupBox")
 	{
 		QGroupBox *group = static_cast<QGroupBox*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
-		createEditor(group->title(), group, container, r, Qt::AlignAuto);
-		return;
+		createEditor(classname, group->title(), group, container, r, Qt::AlignAuto);
+		return true;
 	}
-	return;
+	return false;
 }
 
-void
+bool
 ContainerFactory::saveSpecialProperty(const QString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
@@ -554,6 +549,9 @@ ContainerFactory::saveSpecialProperty(const QString &, const QString &name, cons
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
 		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "id", stack->id(w));
 	}
+	else
+		return false;
+	return true;
 }
 
 bool
@@ -598,14 +596,15 @@ ContainerFactory::showProperty(const QString &classname, QWidget *, const QStrin
 	{
 		return ((property == "name") || (property == "geometry"));
 	}
-	else
-		return !multiple;
+
+	return !multiple;
 }
 
-void
+bool
 ContainerFactory::changeText(const QString &text)
 {
 	changeProperty("title", text, m_container);
+	return true;
 }
 
 void

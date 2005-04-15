@@ -30,6 +30,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiEditor(mainWin, parent, name)
 {
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#else
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(document());
 	for(uint i=0; i < hl->hlModeCount(); i++)  {
 //		kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
@@ -38,8 +40,11 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 			break;
 		}
 	}
+#endif
 }
 
+KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
+{
+}
 
 #include "kexiquerydesignersqleditor.moc"
-

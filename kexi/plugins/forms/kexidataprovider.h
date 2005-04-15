@@ -39,7 +39,7 @@ namespace KexiDB {
  return ("name", "surname") list, so the cursor's query can be simplified 
  and thus more effective.
 */
-class KexiFormDataProvider : public KexiDataItemChangesListener
+class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesListener
 {
 	public:
 		KexiFormDataProvider();

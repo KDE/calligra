@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,23 +69,25 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		~WidgetLibrary();
 
 		/**
-		 * creates actions
+		 * creates actions for widget creating
 		 */
-		ActionList	createActions(KActionCollection *parent, QObject *receiver, const char *slot);
+		ActionList addCreateWidgetActions(KActionCollection *parent, QObject *receiver, const char *slot);
+
+		void addCustomWidgetActions(KActionCollection *parent);
 
 		/**
 		 * creates the XML for widget actions
 		 */
-		QString	createXML();
+		QString createXML();
 
 		/**
 		 * searches the right factory and creates a widget.
 		 * @returns the widget or 0 if something falid
 		 */
-		QWidget	*createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c);
+		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c);
 
 		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
-			KFormDesigner::Container *container, QValueVector<int> *menuIds);
+			KFormDesigner::Container *container);
 
 		QString displayName(const QCString &classname);
 		QString namePrefix(const QCString &classname);
@@ -99,11 +101,11 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QString includeFileName(const QCString &classname);
 		QString savingName(const QCString &classname);
 
-		void startEditing(const QCString &classname, QWidget *w, Container *container);
-		void previewWidget(const QCString &classname, QWidget *widget, Container *container);
-		void clearWidgetContent(const QCString &classname, QWidget *w);
+		bool startEditing(const QCString &classname, QWidget *w, Container *container);
+		bool previewWidget(const QCString &classname, QWidget *widget, Container *container);
+		bool clearWidgetContent(const QCString &classname, QWidget *w);
 
-		void saveSpecialProperty(const QCString &classname, const QString &name,
+		bool saveSpecialProperty(const QCString &classname, const QString &name,
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
 		bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
 			ObjectTreeItem *item);
@@ -120,10 +122,10 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 	protected:
 		/**
-		 * add a factory to the library. this creates actions for widgets in the added factory.
-		 * this function mostly won't be called directly but by the factory locater
+		 * Adds a factory to the library, creates actions for widgets in the added factory.
+		 * This function is not called directly but by the factory locater.
 		 */
-		void addFactory(WidgetFactory *f);
+		void loadFactoryWidgets(WidgetFactory *f);
 
 #if 0 //UNIMPLEMENTED
 		/**

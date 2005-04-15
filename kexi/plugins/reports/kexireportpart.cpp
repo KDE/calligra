@@ -48,7 +48,8 @@ KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringL
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi-report";
-	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, "report_form_manager");
+	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
+		KFormDesigner::FormManager::HideEventsInPopupMenu, "report_form_manager");
 }
 
 KexiReportPart::~KexiReportPart()
@@ -85,6 +86,14 @@ KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
 		win->project()->dbConnection() );
 
 	return view;
+}
+
+QString
+KexiReportPart::i18nMessage(const QCString& englishMessage) const
+{
+	if (englishMessage=="<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+		return i18n("<p>Design of report \"%1\" has been modified.</p><p>Do you want to save changes?</p>");
+	return englishMessage;
 }
 
 //---------------

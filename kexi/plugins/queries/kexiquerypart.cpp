@@ -216,6 +216,13 @@ tristate KexiQueryPart::TempData::closeListener()
 	return dlg->mainWin()->closeDialog(dlg);
 }
 
+QString KexiQueryPart::i18nMessage(const QCString& englishMessage) const
+{
+	if (englishMessage=="<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+		return i18n("<p>Design of query \"%1\" has been modified.</p><p>Do you want to save changes?</p>");
+	return englishMessage;
+}
+
 //----------------
 
 KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)

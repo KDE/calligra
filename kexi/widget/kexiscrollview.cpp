@@ -284,7 +284,7 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 
 		if (!KexiScrollView_bufferPm) {
 			//create flicker-less buffer
-			QString txt(i18n("Outer area"));
+			QString txt(i18n("Outer Area"));
 			QFontMetrics fm(m_helpFont);
 			const int txtw = fm.width(txt), txth = fm.height();
 			KexiScrollView_bufferPm_deleter.setObject( KexiScrollView_bufferPm, 

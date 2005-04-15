@@ -80,6 +80,8 @@ KexiDBForm::~KexiDBForm()
 	delete d;
 }
 
+KexiDataAwareObjectInterface* KexiDBForm::dataAwareObject() const { return d->dataAwareObject; }
+
 //repaint all children widgets
 static void repaintAll(QWidget *w)
 {

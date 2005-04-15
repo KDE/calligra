@@ -60,25 +60,25 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 
 		virtual QWidget				*create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 
-		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
-		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
-		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual void		previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
-		virtual void		clearWidgetContent(const QString &classname, QWidget *w);
+		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+		   KFormDesigner::Container *container);
+		virtual bool startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
+		virtual bool clearWidgetContent(const QString &classname, QWidget *w);
 
-		virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
-		         QDomElement &parentNode, QDomDocument &parent);
-		virtual bool            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
-		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
-		virtual QStringList     autoSaveProperties(const QString &classname);
+		virtual bool saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		                                 QDomElement &parentNode, QDomDocument &parent);
+		virtual bool readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
+		virtual bool showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
+		virtual QStringList autoSaveProperties(const QString &classname);
 
 	public slots:
 		void  editText();
 		void  editListContents();
 
 	protected:
-		virtual void  changeText(const QString &newText);
-		virtual void   resizeEditor(QWidget *widget, const QString &classname);
+		virtual bool changeText(const QString &newText);
+		virtual void resizeEditor(QWidget *widget, const QString &classname);
 		void saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);
 		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 

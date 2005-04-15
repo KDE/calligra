@@ -48,10 +48,23 @@ using namespace KFormDesigner;
 ///// Widget Info //////////////////////////
 
 WidgetInfo::WidgetInfo(WidgetFactory *f)
- : m_overriddenAlternateNames(0)
+ : m_inheritedClass(0)
+ , m_overriddenAlternateNames(0)
  , m_factory(f)
  , m_propertiesWithDisabledAutoSync(0)
 {
+}
+
+WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName, 
+	const char* inheritedClassName)
+ : m_inheritedClass(0)
+ , m_overriddenAlternateNames(0)
+ , m_factory(f)
+ , m_parentFactoryName(parentFactoryName)
+ , m_inheritedClassName(inheritedClassName)
+ , m_propertiesWithDisabledAutoSync(0)
+{
+	m_class = inheritedClassName;
 }
 
 WidgetInfo::~WidgetInfo()
@@ -108,6 +121,7 @@ tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
+	m_classesByName.setAutoDelete(true);
 }
 
 WidgetFactory::~WidgetFactory()
@@ -115,8 +129,23 @@ WidgetFactory::~WidgetFactory()
 
 }
 
+void WidgetFactory::addClass(WidgetInfo *w)
+{
+	WidgetInfo *oldw = m_classesByName[w->className()];
+	if (oldw==w)
+		return;
+	if (oldw) {
+		kdWarning() << "WidgetFactory::addClass(): class with name '" << w->className()
+			<< "' already exists for factory '" << name() << "'" << endl;
+		return;
+	}
+	m_classesByName.insert( w->className(), w );
+}
+
 void
-WidgetFactory::createEditor(const QString &text, QWidget *w, Container *container, QRect geometry,  int align,  bool useFrame, BackgroundMode background)
+WidgetFactory::createEditor(const QString &classname, const QString &text, 
+	QWidget *w, Container *container, QRect geometry,  
+	int align,  bool useFrame, BackgroundMode background)
 {
 #ifdef KEXI_KTEXTEDIT
 	KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
@@ -161,7 +190,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	editor->show();
 	editor->setFocus();
 	editor->selectAll();
-	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
+	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeTextInternal(const QString&)));
 	connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 	connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
@@ -175,10 +204,11 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, Container *containe
 	tree->eventEater()->setContainer(this);
 
 	m_widget = w;
+	m_editedWidgetClass = classname;
 	m_firstText = text;
 	m_container = container;
 
-	changeText(text); // to update size of the widget
+	changeTextInternal(text); // to update size of the widget
 }
 
 void
@@ -321,7 +351,7 @@ WidgetFactory::resetEditor()
 	}
 	if(m_editor)
 	{
-		changeText(m_editor->text());
+		changeTextInternal(m_editor->text());
 		disconnect(m_editor, 0, this, 0);
 		m_editor->deleteLater();
 	}
@@ -407,22 +437,39 @@ WidgetFactory::showProperty(const QString&, QWidget*, const QString&, bool multi
 
 void
 WidgetFactory::resizeEditor(QWidget *, const QString&)
-{}
+{
+}
 
 void
 WidgetFactory::slotTextChanged()
 {
-	changeText(m_editor->text());
+	changeTextInternal(m_editor->text());
+}
+
+bool
+WidgetFactory::clearWidgetContent(const QString &, QWidget *)
+{
+	return false;
 }
 
 void
-WidgetFactory::clearWidgetContent(const QString &, QWidget *)
-{}
+WidgetFactory::changeTextInternal(const QString& text)
+{
+	if (changeText( text ))
+		return;
+	//try in inherited
+	if (!m_editedWidgetClass.isEmpty()) {
+		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass ];
+		if (wi && wi->inheritedClass())
+			wi->inheritedClass()->factory()->changeText( text );
+	}
+}
 
-void
+bool
 WidgetFactory::changeText(const QString& text)
 {
 	changeProperty( "text", text, m_container );
+	return true;
 }
 
 bool
@@ -431,9 +478,19 @@ WidgetFactory::readSpecialProperty(const QString &, QDomElement &, QWidget *, Ob
 	return false;
 }
 
-void
+bool
 WidgetFactory::saveSpecialProperty(const QString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
-{}
+{
+	return false;
+}
 
+bool WidgetFactory::inheritsFactories()
+{
+	for (QAsciiDictIterator<WidgetInfo> it(m_classesByName); it.current(); ++it) {
+		if (!it.current()->parentFactoryName().isEmpty())
+			return true;
+	}
+	return false;
+}
 
 #include "widgetfactory.moc"

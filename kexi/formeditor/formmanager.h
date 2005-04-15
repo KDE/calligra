@@ -64,11 +64,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	public:
 		/*! Constructs FormManager object.
 		 See WidgetLibrary's constructor documentation for information about
-		 \a supportedFactoryGroups parameter. */
-		FormManager(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList(),
-			const char *name=0);
+		 \a supportedFactoryGroups parameter. 
+		 Using \a options you can control manager's behaviour, see \ref Options. */
+		FormManager(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList(),
+			int options = 0, const char *name = 0);
 
 		virtual ~FormManager();
+
+		enum Options { HideEventsInPopupMenu = 1 }; //todo
 
 		/*! Creates all the KAction related to widget insertion, and plug them
 		  into the KActionCollection \a parent.
@@ -389,6 +392,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KTextEdit *m_currentUICodeDialogEditor;
 		KTextEdit *m_originalUICodeDialogEditor;
 #endif
+
+		int m_options;
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;

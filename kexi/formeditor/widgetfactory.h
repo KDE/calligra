@@ -36,12 +36,13 @@ template<class type> class QValueVector;
 template<class type> class QPtrList;
 template<class type> class QDict;
 class QWidget;
-class KLineEdit;
-class KTextEdit;
 class QDomElement;
 class QDomDocument;
 class QVariant;
 class QListView;
+class KLineEdit;
+class KTextEdit;
+class KActionCollection;
 
 namespace KFormDesigner {
 
@@ -59,7 +60,10 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		typedef QPtrList<WidgetInfo> List;
 		typedef QAsciiDict<WidgetInfo> Dict;
 
-		WidgetInfo(WidgetFactory *f = 0);
+		WidgetInfo(WidgetFactory *f);
+
+		WidgetInfo(WidgetFactory *f, const char* parentFactoryName, const char* inheritedClassName);
+
 		virtual ~WidgetInfo();
 
 		//! \return a pixmap associated with the widget
@@ -134,6 +138,14 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 If cancelled value is returned, there is no overriding (the default). */
 		tristate autoSyncForProperty(const char *propertyName) const;
 
+		QCString parentFactoryName() const { return m_parentFactoryName; }
+
+		WidgetInfo* inheritedClass() const { return m_inheritedClass; }
+
+	protected:
+		QCString m_parentFactoryName, m_inheritedClassName; //!< Used for inheriting widgets between factories
+		WidgetInfo* m_inheritedClass;
+
 	private:
 		QString m_pixmap;
 		QString m_class;
@@ -146,6 +158,8 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QString m_saveName;
 		QGuardedPtr<WidgetFactory> m_factory;
 		QAsciiDict<char> *m_propertiesWithDisabledAutoSync;
+
+	friend class WidgetLibrary;
 };
 
 //! The base class for all widget Factories
@@ -198,10 +212,12 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		WidgetFactory(QObject *parent=0, const char *name=0);
 		virtual ~WidgetFactory();
 
+		void addClass(WidgetInfo *w);
+
 		/**
 		 * \return all classes which are provided by this factory
 		 */
-		const WidgetInfo::List classes() const { return m_classes; }
+		const WidgetInfo::Dict classes() const { return m_classesByName; }
 
 		/*!
 		 * Creates a widget (and if needed a \ref Container)
@@ -214,31 +230,32 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual QWidget* create(const QCString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
+		virtual void createCustomActions(KActionCollection* col) {};
+
 		/*! This function can be used to add custom items in widget \a w context
-		menu \a menu. You must add the id of the
-		 created menu items to \a menuIds, so they get deleted later. */
-		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
-		    KFormDesigner::Container *container, QValueVector<int> *menuIds)=0;
+		menu \a menu. */
+		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+		    KFormDesigner::Container *container)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
 		   (eg creates a line edit to change the text of a label). \a classname is
 		   the class the widget belongs to, \a w is the widget to edit
 		   and \a container is the parent container of this widget (to access Form etc.).
 		 */
-		virtual void startEditing(const QString &classname, QWidget *w, Container *container)=0;
+		virtual bool startEditing(const QString &classname, QWidget *w, Container *container)=0;
 
 		/*! This function is called just before the Form is previewed. It allows widgets 
 		 to make changes before switching (ie for a Spring, hiding the cross) */
-		virtual void previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
+		virtual bool previewWidget(const QString &classname, QWidget *widget, Container *container)=0;
 
-		virtual void clearWidgetContent(const QString &classname, QWidget *w);
+		virtual bool clearWidgetContent(const QString &classname, QWidget *w);
 
 		/*! This function is called when FormIO finds a property, at save time,
 		 that it cannot handle (ie not a normal property).
 		This way you can save special properties, for example the contents of a listbox.
 		  \sa readSpecialProperty()
 		 */
-		virtual void saveSpecialProperty(const QString &classname, const QString &name, 
+		virtual bool saveSpecialProperty(const QString &classname, const QString &name, 
 			const QVariant &value, QWidget *w,
 			QDomElement &parentNode, QDomDocument &parent);
 
@@ -277,7 +294,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		void createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, 
+		void createEditor(const QString &classname, const QString &text, 
+			QWidget *w, Container *container, QRect geometry, 
 			int align,  bool useFrame=false, BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering
@@ -319,6 +337,11 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 //		/*! Adds the i18n'ed description of a property value, which will be shown in PropertyEditor. */
 //		void  addValueDescription(Container *container, const char *value, const QString &desc);
 
+		/*! \return true if at least one class defined by this factory inherits 
+		 a class from other factory. Used in WidgetLibrary::loadFactories() 
+		 to load factories in proper order. */
+		bool inheritsFactories();
+
 	protected slots:
 		/*!
 		Default implementation will change property "text".
@@ -327,7 +350,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		This slot is called when the line edit text changes, and you have to make 
 		it really change the good property of the widget using changeProperty() (text, or title, etc.).
 		*/
-		virtual void changeText(const QString &newText);
+		virtual bool changeText(const QString &newText);
+
+		void changeTextInternal(const QString& text);
 
 		void slotTextChanged();
 
@@ -341,6 +366,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 	protected:
 		QGuardedPtr<QWidget> m_widget;
+		QString m_editedWidgetClass;
 #ifdef KEXI_KTEXTEDIT
 		QGuardedPtr<KTextEdit>  m_editor;
 #else
@@ -349,11 +375,14 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QString m_firstText;
 		QGuardedPtr<ResizeHandleSet> m_handles;
 		QGuardedPtr<Container> m_container;
-		WidgetInfo::List m_classes;
+//		WidgetInfo::List m_classes;
+		WidgetInfo::Dict m_classesByName;
 
 		//! i18n stuff
 		QMap<QString, QString> m_propDesc;
 		QMap<QString, QString> m_propValDesc;
+
+	friend class WidgetLibrary;
 };
 
 }

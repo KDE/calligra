@@ -24,19 +24,16 @@
 
 #include "kexieditor.h"
 
+//! Ttext editor for entering query statements.
 /*! The KexiQueryDesignerSQLEditor class embeds text editor
- for entering query texts. */
-
+ for entering query statements. */
 class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiEditor
 {
 	Q_OBJECT
 
 	public:
 		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		virtual ~KexiQueryDesignerSQLEditor() {;}
-
-	private:
-		//KexiQueryDesignerSQLEditorPrivate *d;
+		virtual ~KexiQueryDesignerSQLEditor();
 };
 
 #endif

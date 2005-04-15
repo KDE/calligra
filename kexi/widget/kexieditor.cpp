@@ -145,8 +145,8 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 
 KexiEditor::~KexiEditor()
 {
-	delete d->view;
-	delete d->doc;
+//not needed, right?	delete d->view;
+//not needed, right?	delete d->doc;
 }
 
 void

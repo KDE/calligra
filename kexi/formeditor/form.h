@@ -168,8 +168,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 to paste widgets when multiple widgets are selected. */
 		ObjectTreeItem* commonParentContainer(WidgetList *wlist);
 
-		//! \return the widget currently selected in this form, or 0 if there is not.
+		//! \return the list of currently selected widgets in this form
 		WidgetList* selectedWidgets() const {return &(d->selected);}
+
+		/*! \return currently selected widget in this form, 
+		 or 0 if there is no widget selected or more than one widget selected.
+		 \see selectedWidgets() */
+		QWidget* selectedWidget() const { return d->selected.count()==1 ? d->selected.first() : 0; }
 
 		/*! Emits the action signals, and optionaly the undo/redo related signals
 		 if \a withUndoAction == true. See \a FormManager for signals description. */

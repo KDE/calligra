@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,6 +66,8 @@ class KexiFormPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
+		virtual QString i18nMessage(const QCString& englishMessage) const;
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 
@@ -76,6 +79,7 @@ class KexiFormPart : public KexiPart::Part
 
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
+		void slotAssignAction();
 
 	private:
 		QGuardedPtr<KFormDesigner::FormManager> m_manager;

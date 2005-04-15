@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,8 +19,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qvbox.h>
+#include <qheader.h>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <kdialogbase.h>
+#include <klistview.h>
 
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
@@ -35,9 +41,12 @@
 #include <formIO.h>
 #include <formmanager.h>
 #include <objpropbuffer.h>
+#include <widget/utils/klistviewitemtemplate.h>
 
 #include "kexiformview.h"
 #include "kexiformpart.h"
+#include "kexidbform.h"
+#include "kexiformscrollview.h"
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -49,7 +58,8 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi";
-	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, "form_manager");
+	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
+		KFormDesigner::FormManager::HideEventsInPopupMenu, "form_manager");
 
 	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
 		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
@@ -96,7 +106,12 @@ void KexiFormPart::initInstanceActions()
 		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
 #endif
 
-	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
+	KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
+	m_manager->createActions( col );
+
+	//connect actions provided by widget factories
+	connect( col->action("widget_assign_action"), SIGNAL(activated()), this, SLOT(slotAssignAction()));
+
 	createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"), "editclear", 0, "formpart_clear_contents");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
@@ -265,8 +280,6 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 	lNameProperty.appendChild(lType);
 	baseWidget.appendChild(lNameProperty);
 
-
-
 	QDomElement wNameProperty = domDoc.createElement("property");
 	wNameProperty.setAttribute("name", "geometry");
 	QDomElement wGType = domDoc.createElement("rect");
@@ -298,6 +311,93 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
 	m_manager->buffer()->changeProperty("autoTabStops", QVariant(set, 4));
+}
+
+typedef KListViewItemTemplate<QCString> ActionSelectorDialogListItem;
+
+void KexiFormPart::slotAssignAction()
+{
+	KexiDBForm *dbform;
+	if (!m_manager->activeForm() || !m_manager->activeForm()->designMode()
+		|| !(dbform = dynamic_cast<KexiDBForm*>(m_manager->activeForm()->formWidget())))
+		return;
+
+	KexiProperty &onClickActionProp = m_manager->buffer()->property("onClickAction");
+	if (onClickActionProp.isNull())
+		return;
+	QString onClickActionValue( onClickActionProp.value().toString() );
+	//FOR FUTURE COMPATIBILITY:
+	//check if this is kaction-type action
+	if (!onClickActionValue.isEmpty()) {
+		if (onClickActionValue.startsWith("kaction:")) {
+			onClickActionValue = onClickActionValue.mid(QString::fromLatin1("kaction:").length()); //cut prefix
+		} else {
+/*! @todo handle other types of action handlers here (eg. script event handler or function)! */
+			onClickActionValue = QString::null; //for now we're pretending there was no action assigned
+		}
+	}
+
+	KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
+	if (!scrollViewWidget)
+		return;
+	KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+	if (!formViewWidget)
+		return;
+//no need to access the widget directly
+//	QWidget *pushButton = formViewWidget->form()->selectedWidget();
+//	if (!pushButton)
+//		return;
+	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
+
+//	QValueList<QCString> actions;
+//todo	actions << "closeWindow" << "closeProject" << "quitApplication";
+	//append shared actions
+	KActionPtrList sharedActions( mainWin->sharedActions() );
+//	foreach (KActionPtrList::ConstIterator, it, sharedActions) {
+		//actions += (*it)->name();
+//	}
+
+	//kdDebug() << actions << endl;
+	//todo m_manager->buffer()->changeProperty("onClickAction", QVariant(set, 4));
+	KDialogBase dlg(dbform, "actionSelectorDialog", true, QString::null, 
+		KDialogBase::Ok|KDialogBase::Cancel );
+	QVBox *vbox = dlg.makeVBoxMainWidget();
+	KListView *lv = new KListView(vbox, "actionSelectorDialogLV");
+	lv->setResizeMode(QListView::LastColumn);
+	lv->addColumn("");
+	lv->header()->hide();
+	//todoQLabel *lblDescription = new QLabel(vbox);
+	//todo: add "update Button text and tooltip" check box
+	//todo double click accepts dialog
+	QListViewItem *pitem = 0;
+	
+	foreach (KActionPtrList::ConstIterator, it, sharedActions) {
+		//todo set invisible pixmap box if actual pixmap is null
+		//todo group actions
+		//todo: store KAction* here?
+		pitem = new ActionSelectorDialogListItem( (*it)->name(), lv, pitem, (*it)->text().replace("&", "") );
+		pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
+		if (!lv->selectedItem() && onClickActionValue == (*it)->name())
+			lv->setSelected(pitem, true);
+	}
+	if (lv->selectedItem())
+		lv->ensureItemVisible(lv->selectedItem());
+	else if (lv->firstChild())
+		lv->setCurrentItem(lv->firstChild());
+
+	if (KDialogBase::Ok==dlg.exec() && lv->selectedItem()) {
+		ActionSelectorDialogListItem *item = static_cast<ActionSelectorDialogListItem*>(lv->selectedItem());
+		if (item) {
+			kdDebug() << item->data << endl;
+		}
+	}
+}
+
+QString KexiFormPart::i18nMessage(const QCString& englishMessage) const
+{
+	if (englishMessage=="<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+		return i18n("<p>Design of form \"%1\" has been modified.</p><p>Do you want to save changes?</p>");
+	return englishMessage;
 }
 
 //----------------

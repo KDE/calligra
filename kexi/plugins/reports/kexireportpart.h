@@ -62,6 +62,8 @@ class KexiReportPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
+		virtual QString i18nMessage(const QCString& englishMessage) const;
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 

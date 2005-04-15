@@ -73,6 +73,8 @@ class KexiQueryPart : public KexiPart::Part
 				bool queryChangedInPreviousView : 1;
 		};
 
+		virtual QString i18nMessage(const QCString& englishMessage) const;
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 

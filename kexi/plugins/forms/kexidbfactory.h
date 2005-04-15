@@ -27,6 +27,8 @@
 
 #include <klineedit.h>
 
+class KAction;
+
 namespace KFormDesigner {
 	class Form;
 	class FormManager;
@@ -116,11 +118,12 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 //		virtual QString	name();
 		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 
-		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
-		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
-		virtual void startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual void previewWidget(const QString &, QWidget *, KFormDesigner::Container *) {}
-		virtual void clearWidgetContent(const QString &classname, QWidget *w);
+		virtual void createCustomActions(KActionCollection* col);
+		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+		   KFormDesigner::Container *container);
+		virtual bool startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool previewWidget(const QString &, QWidget *, KFormDesigner::Container *);
+		virtual bool clearWidgetContent(const QString &classname, QWidget *w);
 
 		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         //QDomElement &parentNode, QDomDocument &parent) {}
@@ -135,6 +138,8 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 	protected:
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
+
+		KAction* m_assignAction;
 };
 
 #endif

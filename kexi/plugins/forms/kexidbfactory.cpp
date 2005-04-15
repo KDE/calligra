@@ -26,13 +26,14 @@
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include <container.h>
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
 #include <objecttree.h>
-#include <utils.h>
+#include <formeditor/utils.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexipart.h>
@@ -127,7 +128,7 @@ KexiSubForm::setFormName(const QString &name)
 
 	// Install event filters on the whole newly created form
 	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::name());
-	installRecursiveEventFilter(this, tree->eventEater());
+	KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 
 	m_formName = name;
 }
@@ -221,7 +222,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setName(i18n("Database Form"));
 	wView->setNamePrefix(i18n("DBForm"));
 	wView->setDescription(i18n("A db-aware form widget"));
-	m_classes.append(wView);
+	addClass(wView);
 
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("form");
@@ -229,7 +230,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(i18n("SubForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
-	m_classes.append(wSubForm);
+	addClass(wSubForm);
 
 /* @todo allow to inherit from stdwidgets' KLineEdit */
 	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
@@ -241,7 +242,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLineEdit->setName(i18n("Line Edit"));
 	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
-	m_classes.append(wLineEdit);
+	addClass(wLineEdit);
 
 	/* @todo allow to inherit from stdwidgets' KLineEdit */
 	KexiDataAwareWidgetInfo *wLabel = new KexiDataAwareWidgetInfo(this);
@@ -252,7 +253,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->setName(i18n("Text Label"));
 	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
 	wLabel->setDescription(i18n("A widget to display text"));
-	m_classes.append(wLabel);
+	addClass(wLabel);
 
 	KexiDataAwareWidgetInfo *wInput = new KexiDataAwareWidgetInfo(this);
 	wInput->setPixmap("edit");
@@ -265,7 +266,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wInput->setName(i18n("Input Widget"));
 	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
 //	wInput->setDescription(i18n("A super-duper widget"));
-	m_classes.append(wInput);
+	addClass(wInput);
+
+	// inherited
+	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this, "stdwidgets", "KPushButton");
+	addClass(wPushButton);
 
 	m_propDesc["dataSource"] = i18n("Data source");
 	m_propDesc["formName"] = i18n("Form name");
@@ -311,16 +316,32 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 }
 
 bool
-KexiDBFactory::createMenuActions(const QString &, QWidget *w, QPopupMenu *,
-		   KFormDesigner::Container *container, QValueVector<int> *)
+KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+		   KFormDesigner::Container *)
 {
-	m_widget = w;
-	m_container = container;
-
+	if((classname == "QPushButton") || (classname == "KPushButton"))
+	{
+/*! @todo also call createMenuActions() for inherited factory! */
+		m_assignAction->plug( menu );
+		return true;
+	}
 	return false;
 }
 
 void
+KexiDBFactory::createCustomActions(KActionCollection* col)
+{
+	//this will create shared instance action for design mode (special collection is provided)
+	m_assignAction = new KAction( i18n("Assign Action..."), SmallIconSet("form_action"), 
+		0, 0, 0, col, "widget_assign_action");
+}
+
+/*KexiDBFactory::assignAction()
+{
+	emit executeCustomAction("assignAction", m_widget);
+}*/
+
+bool
 KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
@@ -332,9 +353,10 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-		createEditor(lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
+		createEditor(classname, lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
+		return true;
 	}
-	if ( classname == "KexiLabel" ) {
+	else if ( classname == "KexiLabel" ) {
 		KexiLabel *label = static_cast<KexiLabel*>(w);
 		m_widget = w;
 		if(label->textFormat() == RichText)
@@ -350,12 +372,21 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 				w->resize(w->sizeHint());
 		}
 		else
-			createEditor(label->text(), label, container, label->geometry(), label->alignment());
-		return;
+		{
+			createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+		}
+		return true;
 	}
+	return false;
 }
 
-void
+bool
+KexiDBFactory::previewWidget(const QString &, QWidget *, KFormDesigner::Container *)
+{
+	return false;
+}
+
+bool
 KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 {
 //! @todo this code should not be copied here but
@@ -364,6 +395,9 @@ KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 		static_cast<KLineEdit*>(w)->clear();
 	if(classname == "KexiLabel")
 		static_cast<QLabel*>(w)->clear();
+	else
+		return false;
+	return true;
 }
 
 QStringList

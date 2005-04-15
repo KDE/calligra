@@ -533,7 +533,7 @@ void importWizard::helpClicked()
     }
     else if (currentPage() == finishPage)
     {
-        KMessageBox::information(this, i18n("No help availbale for this page"), i18n("Help"));
+        KMessageBox::information(this, i18n("No help available for this page"), i18n("Help"));
     }
 }
 

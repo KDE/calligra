@@ -72,10 +72,11 @@
 using namespace KFormDesigner;
 
 FormManager::FormManager(QObject *parent,
-	const QStringList& supportedFactoryGroups, const char *name)
+	const QStringList& supportedFactoryGroups, int options, const char *name)
    : QObject(parent, name)
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
    , m_uiCodeDialog(0)
+   , m_options(options)
 #endif
 {
 	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
@@ -103,7 +104,7 @@ FormManager::FormManager(QObject *parent,
 	m_popup->insertItem( i18n("Lay Out in &Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
 	m_popup->insertItem( i18n("Lay Out Horizontally in &Splitter"), this, SLOT(layoutHSplitter()), 0, MenuHSplitter);
 	m_popup->insertItem( i18n("Lay Out Verti&cally in Splitter"), this, SLOT(layoutVSplitter()), 0, MenuVSplitter);
-	m_popup->insertSeparator(MenuVSplitter + 1);
+//	m_popup->insertSeparator(MenuVSplitter + 1);
 
 	m_treeview = 0;
 	m_editor = 0;
@@ -140,7 +141,7 @@ FormManager::createActions(KActionCollection *parent)
 {
 	m_collection = parent;
 
-	ActionList actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
+	ActionList actions = m_lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QString &)));
 
 	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent, "drag_connection");
 	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
@@ -173,12 +174,14 @@ FormManager::createActions(KActionCollection *parent)
 		if ((*it).lower() == currentStyle) {
 			m_style->setCurrentItem(idx);
 			break;
-        	}
+		}
 	}
 
 	m_style->setToolTip(i18n("Set the current view style."));
 	m_style->setMenuAccelsEnabled(true);
 	actions.append(m_style);
+
+	m_lib->addCustomWidgetActions( parent );
 
 	return actions;
 }
@@ -725,9 +728,14 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 	m_popup->setItemEnabled(MenuVBox, enableLayout);
 	m_popup->setItemEnabled(MenuGrid, enableLayout);
 
+	bool separatorNeeded = true;
+
 	// We create the buddy menu
 	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
 	{
+		if (separatorNeeded)
+			menuIds->append( m_popup->insertSeparator() );
+
 		KPopupMenu *sub = new KPopupMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
 
@@ -739,7 +747,8 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		// We add al the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem(it.current()->name());
+			int index = sub->insertItem( SmallIcon(m_lib->icon(it.current()->className().latin1())), 
+				it.current()->name());
 			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);
 		}
@@ -747,11 +756,17 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		int id = m_popup->insertItem(i18n("Choose Buddy..."), sub);
 		menuIds->append(id);
 		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
+
+		separatorNeeded = true;
 	}
 
 	//int sigid=0;
-	if(!multiple)
+#ifdef KEXI_SHOW_DEBUG_ACTIONS
+	if(!multiple && !(m_options & HideEventsInPopupMenu))
 	{
+		if (separatorNeeded)
+			menuIds->append( m_popup->insertSeparator() );
+
 		// We create the signals menu
 		KPopupMenu *sigMenu = new KPopupMenu();
 		QStrList list = w->metaObject()->signalNames(true);
@@ -764,13 +779,33 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);
 		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+		separatorNeeded = true;
 	}
+#endif
 
 	// Other items
 	if(!multiple)
 	{
-		menuIds->append( m_popup->insertSeparator() );
-		m_lib->createMenuActions(w->className(), w, m_popup, container, menuIds);
+		int lastID = -1;
+		if (separatorNeeded) {
+			menuIds->append( lastID = m_popup->insertSeparator() );
+		}
+		const int oldIndex = m_popup->count()-1;
+		m_lib->createMenuActions(w->className(), w, m_popup, container);
+		if (oldIndex != m_popup->count()) {
+			for (uint i=oldIndex; i<m_popup->count(); i++) {
+				int id = m_popup->idAt( i );
+				if (id!=-1)
+					menuIds->append( id );
+			}
+		}
+		else {
+			//nothing added
+			if (separatorNeeded) {
+				m_popup->removeItem( lastID );
+				menuIds->pop_back();
+			}
+		}
 	}
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());

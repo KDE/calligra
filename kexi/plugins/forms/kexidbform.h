@@ -38,7 +38,7 @@ class KexiFormScrollView;
 	QFocusEvent::resetReason(); }
 
 //! A DB-aware form widget
-class KexiDBForm : 
+class KEXIFORMUTILS_EXPORT KexiDBForm : 
 	public KexiGradientWidget,
 	public KFormDesigner::FormWidget,
 	public KexiFormDataItemInterface
@@ -50,6 +50,8 @@ class KexiDBForm :
 	public:
 		KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject, const char *name="kexi_dbform");
 		virtual ~KexiDBForm();
+
+		KexiDataAwareObjectInterface* dataAwareObject() const;
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 

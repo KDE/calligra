@@ -34,7 +34,8 @@ namespace KTextEditor
 	class View;
 }
 
-//! An editor that inherits KexiViewBase
+//! An text editor view that uses both KTextEditor and KTextEdit
+/*! It is used for SQL and script editor. */
 class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 {
 	Q_OBJECT

@@ -485,9 +485,44 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 
 ~~~~~~~~~~~~~~~~ 0.1 ~~~~~~~~~~~~~~~~
 
+TODO:::::::
+-fix shared actions availability for ideal mode! (reported by ccpasteur)
+
+2005-04-15
+Main
+- Navigator: double clicking on item which has no data view mode available,
+  opens it in design mode; Unavailable actions for given object types 
+  are hidden in popup menu.
+- main window: navigator's layout management fixes, again...
+Form Designer
+- initial version of 'assigning actions to push buttons'
+
+2005-04-13
+Form Designer
+- On loading, top level form widgets with negative X or Y are moved to 0 
+  to avoid weird behaviour.
+
+2005-04-12
+KexiDB
+- Scale property added for floating-point field types. 
+  Now types like NUMERIC(precision,scale) are possible to declare.
+Core
+- String "Design of object \"%1\" has been modified." made well translatable 
+  at plugins level.
+
+2005-04-11
+Form Designer
+- it's now possible to inherit features of a widget class from a different factory
+
+2005-04-07
+Query Designer
+- properies for rows were not cleared on switching back to design view 
+  when statement changed
+
+
 2005-04-01..04
 * Kexi Forms many improvements added for Kexi Forms, 
-  includeing editable query results. *
+  including editable query results. *
 KexiDB
 - BIC CHANGE:
 -- FieldList: field(const QString&) added
