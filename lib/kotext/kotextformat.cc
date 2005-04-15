@@ -543,16 +543,23 @@ void KoTextFormat::save( KoGenStyle& gs ) const
         styleline = "wave";
     else
         styleline = exportOasisUnderline( m_underlineStyle );
-    gs.addProperty( "style:text-underline-style", styleline, tt );
+    gs.addProperty( "style:text-underline-style", m_underlineType == S_NONE ? "none" : styleline, tt );
     gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
-    // TODO U_SIMPLE_BOLD
-    // TODO style:text-line-through-mode
-    gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_NONE ? "none" :
-                    m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
 
-    styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
-    gs.addProperty( "style:text-line-through-style", styleline, tt );
-    //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+    if ( m_strikeOutType != S_NONE )
+    {
+        // TODO U_SIMPLE_BOLD
+        // TODO style:text-line-through-mode
+        gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
+        styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
+        gs.addProperty( "style:text-line-through-style", styleline, tt );
+        //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+    }
+    else
+    {
+        gs.addProperty( "style:text-line-through-type", "none" , tt );
+        gs.addProperty( "style:text-line-through-style", "none", tt );
+    }
 
     QString textPos;
     if ( d->m_offsetFromBaseLine != 0 )
