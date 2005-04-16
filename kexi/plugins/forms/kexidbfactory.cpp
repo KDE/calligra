@@ -39,6 +39,8 @@
 #include <kexipart.h>
 #include <widgetlibrary.h>
 #include <kexigradientwidget.h>
+#include <kexi_utils.h>
+#include <keximainwindow.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
@@ -332,7 +334,7 @@ void
 KexiDBFactory::createCustomActions(KActionCollection* col)
 {
 	//this will create shared instance action for design mode (special collection is provided)
-	m_assignAction = new KAction( i18n("Assign Action..."), SmallIconSet("form_action"), 
+	m_assignAction = new KAction( i18n("Assign Action..."), SmallIconSet("form_action"),
 		0, 0, 0, col, "widget_assign_action");
 }
 
@@ -377,6 +379,14 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 		}
 		return true;
 	}
+	else if (classname == "KexiSubForm") {
+		// open the form in design mode
+		KexiMainWindow *mainWin = Kexi::findParent<KexiMainWindow>(w, "KexiMainWindow");
+		KexiSubForm *subform = static_cast<KexiSubForm*>(w);
+		if(mainWin)
+			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode);
+	}
+
 	return false;
 }
 
