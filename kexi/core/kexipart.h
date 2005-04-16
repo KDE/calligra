@@ -241,13 +241,13 @@ class KEXICORE_EXPORT Part : public QObject
 
 		Info *m_info;
 		GUIClient *m_guiClient;
-//		GUIClient *m_instanceGuiClient;
 		QIntDict<GUIClient> m_instanceGuiClients;
 		KexiMainWindow* m_mainWin;
-
 		Kexi::ObjectStatus m_status;
-
 		PartPrivate *d;
+		/*! True if newwly created, unsaved objects are dirty. False by default.
+		 You can change it in your subclass' constructor.	*/
+		bool m_newObjectsAreDirty : 1;
 
 	friend class Manager;
 	friend class ::KexiMainWindow;

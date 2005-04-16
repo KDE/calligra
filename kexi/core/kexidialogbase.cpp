@@ -362,10 +362,9 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 {
 	if (KMdiChildView::eventFilter(obj, e))
 		return true;
-	if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
-		if ((e->type()==QEvent::FocusIn && m_parentWindow->activeWindow()==this)
-			|| e->type()==QEvent::MouseButtonPress) 
-		{
+	if ((e->type()==QEvent::FocusIn && m_parentWindow->activeWindow()==this)
+		|| e->type()==QEvent::MouseButtonPress) {
+		if (m_stack->visibleWidget() && Kexi::hasParent(m_stack->visibleWidget(), obj)) {
 			//pass the activation
 			activate();
 		}

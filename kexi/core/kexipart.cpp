@@ -62,6 +62,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 	m_mainWin = 0;
+	m_newObjectsAreDirty = false;
 }
 
 Part::~Part()
@@ -284,7 +285,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 
 	//dirty only if it's a new object
 	if (dlg->selectedView())
-		dlg->selectedView()->setDirty( item.neverSaved() );
+		dlg->selectedView()->setDirty( m_newObjectsAreDirty ? item.neverSaved() : false );
 	
 	return dlg;
 }
