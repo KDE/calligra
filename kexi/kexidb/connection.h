@@ -288,7 +288,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //js: MOVED TO Driver		virtual QString escapeString(const QString& str) const = 0;
 //		virtual QCString escapeString(const QCString& str) const = 0;
 		
-		/*! Prepares query described by raw \a statement. 
+		/*! Prepares SELECT query described by raw \a statement. 
 		 \return opened cursor created for results of this query 
 		 or NULL if there was any error. Cursor can have optionally applied \a cursor_options
 		 (one of more selected from KexiDB::Cursor::Options).
@@ -321,7 +321,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 it is like "select * from table_name".*/
 		Cursor* prepareQuery( TableSchema& table, uint cursor_options = 0);
 
-		/*! Executes query described by \a statement.
+		/*! Executes SELECT query described by \a statement.
 		 \return opened cursor created for results of this query
 		 or NULL if there was any error on the cursor creation or opening.
 		 Cursor can have optionally applied \a cursor_options 
