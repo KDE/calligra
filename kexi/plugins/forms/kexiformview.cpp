@@ -130,6 +130,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView );
 
+	connect(this, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
 	/// @todo skip this if ther're no borders
 //	m_dbform->resize( m_dbform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
 }
@@ -685,6 +686,12 @@ KexiFormView::show()
 		m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
 }
 
+void
+KexiFormView::slotFocus(bool in)
+{
+	if(in && form() && form()->manager() && form()->manager()->activeForm() != form())
+			form()->manager()->windowChanged(m_dbform);
+}
 
 /*
 void KexiFormView::parentDialogDetached()

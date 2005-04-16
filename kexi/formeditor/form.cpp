@@ -296,6 +296,14 @@ Form::emitActionSignals(bool withUndoAction)
 		emit d->manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
+void
+Form::emitSelectionSignals()
+{
+	emit selectionChanged(selectedWidgets()->first(), false);
+	for(QWidget *w = selectedWidgets()->next(); w; w = selectedWidgets()->next())
+		emit selectionChanged(selectedWidgets()->first(), true);
+}
+
 ///////////////////////////  Various slots and signals /////////////////////
 void
 Form::formDeleted()
@@ -418,7 +426,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		d->tabstops.append(c);
 }
 
-void 
+void
 Form::updateTabStopsOrder()
 {
 	for (ObjectTreeListIterator it(d->tabstops);it.current();) {

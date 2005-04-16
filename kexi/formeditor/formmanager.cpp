@@ -421,7 +421,10 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 
 			emit  dirty(form, form->isModified());
+			// update actions state
 			m_active->emitActionSignals();
+			//uodate the buffer too
+			form->emitSelectionSignals();
 			return;
 		}
 	}
@@ -453,6 +456,7 @@ FormManager::windowChanged(QWidget *w)
 
 			emit dirty(form, false);
 			emit noFormSelected();
+			showPropertyBuffer(0);
 		}
 	}
 	//m_active = 0;
@@ -747,7 +751,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		// We add al the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem( SmallIcon(m_lib->icon(it.current()->className().latin1())), 
+			int index = sub->insertItem( SmallIcon(m_lib->icon(it.current()->className().latin1())),
 				it.current()->name());
 			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);

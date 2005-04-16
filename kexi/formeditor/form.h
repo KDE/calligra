@@ -171,7 +171,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the list of currently selected widgets in this form
 		WidgetList* selectedWidgets() const {return &(d->selected);}
 
-		/*! \return currently selected widget in this form, 
+		/*! \return currently selected widget in this form,
 		 or 0 if there is no widget selected or more than one widget selected.
 		 \see selectedWidgets() */
 		QWidget* selectedWidget() const { return d->selected.count()==1 ? d->selected.first() : 0; }
@@ -179,6 +179,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Emits the action signals, and optionaly the undo/redo related signals
 		 if \a withUndoAction == true. See \a FormManager for signals description. */
 		void emitActionSignals(bool withUndoAction=true);
+
+		/*! Emits again all signal related to selection (ie Form::selectionChanged()).
+		  Called eg when the user has the focus again. */
+		void  emitSelectionSignals();
 
 		/*! Sets the Form interactivity mode. Form is not interactive when
 		pasting widgets, or loading a Form.

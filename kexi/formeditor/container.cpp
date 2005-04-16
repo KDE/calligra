@@ -244,8 +244,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(s == m_container) // should have no effect on form
 					return true;
 
-				//if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
-				if(mev->globalPos() == m_container->mapToGlobal(m_grab))
+				// prevent accidental copying of widget (when moving mouse a little while selecting)
+				if( ( (mev->pos().x() - m_grab.x()) < form()->gridX() &&  (m_grab.x() - mev->pos().x()) < form()->gridX() ) &&
+					( (mev->pos().y() - m_grab.y()) < form()->gridY() &&  (m_grab.y() - mev->pos().y()) < form()->gridY() ) )
 				{
 					kdDebug() << "The widget has not been moved. No copying" << endl;
 					return true;

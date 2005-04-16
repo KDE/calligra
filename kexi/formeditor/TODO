@@ -18,6 +18,8 @@
 
 ****** Bugfixes/Changes : *****
 * Add a grouping ability to Widget
+* Switch WifdgetInfo::className() to QCString
+* Make subform open design when double-clickng
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop

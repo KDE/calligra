@@ -78,6 +78,7 @@ class KexiFormView : public KexiDataAwareView
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
+		void slotFocus(bool in);
 
 		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
 		void slotFormWidgetSelected(KFormDesigner::Form *form);

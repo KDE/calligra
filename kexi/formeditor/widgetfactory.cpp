@@ -57,12 +57,12 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 
 WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
 	const char* inheritedClassName)
- : m_inheritedClass(0)
- , m_overriddenAlternateNames(0)
- , m_parentFactoryName(parentFactoryName)
+ :  m_parentFactoryName(parentFactoryName)
  , m_inheritedClassName(inheritedClassName)
- , m_propertiesWithDisabledAutoSync(0)
+ , m_inheritedClass(0)
+ , m_overriddenAlternateNames(0)
  , m_factory(f)
+ , m_propertiesWithDisabledAutoSync(0)
 {
 	m_class = inheritedClassName;
 }
