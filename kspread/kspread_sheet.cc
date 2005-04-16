@@ -226,7 +226,7 @@ class SheetPrivate
 public:
 
   KSpreadMap* workbook;
-  
+
   DCOPObject* dcop;
 
   QString name;
@@ -324,7 +324,7 @@ KSpreadSheet::KSpreadSheet (KSpreadMap* map,
   d = new SheetPrivate;
 
   d->workbook = map;
-  
+
   d->id = s_id++;
   s_mapSheets->insert( d->id, this );
 
@@ -334,7 +334,7 @@ KSpreadSheet::KSpreadSheet (KSpreadMap* map,
   d->emptyPen.setStyle( Qt::NoPen );
   d->dcop = 0;
   d->name = sheetName;
-  
+
   dcopObject();
   d->cellBindings.setAutoDelete( FALSE );
 
@@ -2949,8 +2949,10 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
               newText += str;
             }
             // Copy the char that got us to stop
-            if ( i < origText.length() )
+            if ( i < origText.length() ) {
               newText += origText[i];
+              correctSheetName = correctDefaultSheetName;
+            }
           }
         }
       }
