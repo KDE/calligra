@@ -87,18 +87,12 @@ k_dcop:
 
     virtual bool setRectSettings( int _rx, int _ry );
 
-    virtual int pieAngle( int pieAngle )const;
-    virtual int pieLength( int pieLength )const;
-
     virtual QRect pageRect()const;
 
     virtual bool isSlideSelected();
     virtual void slideSelected(bool _b);
     virtual void changePicture( const QString & );
 
-    //return -1 if there is not a rndY or rndX defined
-    virtual int rndY() const;
-    virtual int rndX() const;
     virtual void setBackGroundColor1(const QColor &col);
     virtual void setBackGroundColor2(const QColor &col);
     virtual void setBackGroundColorType(const QString &type);

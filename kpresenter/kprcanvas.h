@@ -335,42 +335,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     bool canMoveOneObject()const;
     QPtrList<KPTextObject> listOfTextObjs() const;
 
-    bool getSticky( bool sticky ) const;
-
-    bool getProtect( bool prot ) const;
-    bool getKeepRatio( bool _ratio ) const;
-    /**
-     * @return true if we are selected several object and there are not
-     * the same "keep ratio" properties"
-     */
-    bool differentKeepRatio( bool p )const;
-    bool differentProtect( bool p )const;
-
-    bool getProtectContent(bool prot) const;
-    QPen getPen( const QPen & _pen )const;
-    QBrush getBrush( const QBrush & _brush )const;
-    LineEnd getLineBegin( LineEnd  _end )const;
-    LineEnd getLineEnd( LineEnd  _end )const;
-    FillType getFillType( FillType _fillType ) const;
-    QColor getGColor1( const QColor & _col )const;
-    QColor getGColor2( const QColor & _col )const;
-    BCType getGType( BCType _gt )const;
-    bool getGUnbalanced( bool _g )const;
-    int getGXFactor( int _g )const;
-    int getGYFactor( int _g )const;
-    int getRndY( int _ry )const;
-    int getRndX( int _rx )const;
-    int getPieAngle( int pieAngle )const;
-    int getPieLength( int pieLength )const;
-    PieType getPieType( PieType pieType )const;
-    bool getCheckConcavePolygon( bool check ) const;
-    int getCornersValue( int corners ) const;
-    int getSharpnessValue( int sharpness ) const;
-    PictureMirrorType getPictureMirrorType( PictureMirrorType type ) const;
-    int getPictureDepth( int depth ) const;
-    bool getPictureSwapRGB( bool swapRGB ) const;
-    bool getPictureGrayscal( bool grayscal ) const;
-    int getPictureBright( int bright ) const;
     ImageEffect getImageEffect(ImageEffect eff) const;
     QPixmap getPicturePixmap() const;
     KCommand *setProtectContent( bool b );

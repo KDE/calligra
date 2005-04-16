@@ -468,16 +468,6 @@ QString KPresenterPageIface::pageSoundFileName() const
     return m_page->getPageSoundFileName();
 }
 
-int KPresenterPageIface::pieAngle( int pieAngle ) const
-{
-    return m_page->getPieAngle(pieAngle);
-}
-
-int KPresenterPageIface::pieLength( int pieLength ) const
-{
-    return m_page->getPieLength(pieLength);
-}
-
 QRect KPresenterPageIface::pageRect() const
 {
     return m_page->getZoomPageRect();
@@ -644,20 +634,6 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
 
     m_page->setBackColor( backColor1(), backColor2(), bctype,m_page->getBackUnbalanced(),
                           backXFactor(), backYFactor() );
-}
-
-int KPresenterPageIface::rndY() const
-{
-    int ret=-1;
-    m_page->getRndY( ret );
-    return ret;
-}
-
-int KPresenterPageIface::rndX() const
-{
-    int ret=-1;
-    m_page->getRndX( ret );
-    return ret;
 }
 
 void KPresenterPageIface::deSelectAllObj()

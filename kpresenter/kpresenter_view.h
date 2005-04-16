@@ -642,8 +642,6 @@ public:
      */
     void setPageDuration( int _pgNum );
 
-    void updatePageParameter();
-
     void setZoomRect( const QRect & rect, bool drawRubber );
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 

@@ -167,46 +167,10 @@ public:
     void ungroupObjects( KMacroCommand ** macro );
     void raiseObjs( bool forward );
     void lowerObjs( bool backward );
-    bool getCheckConcavePolygon( bool check ) const;
-    int getCornersValue( int corners ) const;
-    int getSharpnessValue( int sharpness ) const;
-    PictureMirrorType getPictureMirrorType( PictureMirrorType type ) const;
-    int getPictureDepth( int depth ) const;
-    bool getPictureSwapRGB( bool swapRGB ) const;
-    bool getPictureGrayscal( bool grayscal ) const;
-    int getPictureBright( int bright ) const;
-    QPixmap getPicturePixmap() const;
-    int getRndY( int _ry ) const;
-    int getRndX( int _rx ) const;
-    int getPieAngle( int pieAngle ) const;
-    int getPieLength( int pieLength ) const;
-    bool getSticky( bool s ) const;
-    PieType getPieType( PieType pieType ) const;
-    int getGYFactor( int yfactor )const;
-    int getGXFactor( int xfactor )const;
-    bool getGUnbalanced( bool  unbalanced ) const;
-    bool getBackUnbalanced( unsigned int ) const;
-    BCType getGType( BCType gt )const;
-    QColor getGColor2( const QColor &g2 ) const;
-    QColor getGColor1( const QColor & g1)const;
-    FillType getFillType( FillType ft ) const;
-    QBrush getBrush( const QBrush &brush )const;
-    LineEnd getLineEnd( LineEnd le ) const;
-    LineEnd getLineBegin( LineEnd lb ) const;
-
-    bool getProtect( bool p ) const;
-    bool differentProtect( bool p) const;
-
-    bool getKeepRatio( bool p ) const;
-    bool differentKeepRatio( bool p) const;
-
-    bool getProtectContent(bool prot) const;
 
     KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags );
     KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2,
                         BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
-
-    QPen getPen( const QPen & pen ) const;
 
     /**
      * Insert an object into the page

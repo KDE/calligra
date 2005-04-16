@@ -3855,40 +3855,6 @@ void KPresenterView::skipToPage( int num )
 
     m_pKPresenterDoc->recalcPageNum();
     m_pKPresenterDoc->slotRepaintVariable();
-
-    updatePageParameter();
-}
-
-//update color gradient etc... when we skip page
-void KPresenterView::updatePageParameter()
-{
-    KPrPage *page=m_canvas->activePage();
-    if(page)
-    {
-        pieType = page->getPieType(pieType);
-        pieAngle = page->getPieAngle(pieAngle);
-        pieLength = page->getPieLength(pieLength);
-        rndX = page->getRndX( rndX );
-        rndY = page->getRndY( rndY );
-        checkConcavePolygon = page->getCheckConcavePolygon(checkConcavePolygon);
-        cornersValue = page->getCornersValue(cornersValue);
-        sharpnessValue = page->getSharpnessValue(sharpnessValue);
-
-        mirrorType = page->getPictureMirrorType(mirrorType);
-        depth = page->getPictureDepth(depth);
-        swapRGB = page->getPictureSwapRGB(swapRGB);
-        grayscal = page->getPictureGrayscal(grayscal);
-        bright = page->getPictureBright(bright);
-
-        lineBegin=page->getLineEnd( lineBegin );
-        lineEnd=page->getLineBegin( lineEnd );
-        gUnbalanced=page->getBackUnbalanced();
-        gColor1=page->getBackColor1();
-        gColor2=page->getBackColor2();
-        gXFactor=page->getBackXFactor();
-        gYFactor=page->getBackYFactor();
-        gType=page->getBackColorType();
-    }
 }
 
 void KPresenterView::refreshPageButton()
