@@ -1,0 +1,60 @@
+This file describes how the painting of a spreadsheet is supposed to
+work. At present, it only describes painting of a cell.
+
+
+Painting
+--------
+
+Each cell is painted by itself.  This means that the border between
+cells are painted twice.  (FIXME: Is this true?)
+
+
+
+Overflow
+--------
+
+In this context, the word Overflow means that the content of a cell is
+wider than the cell itself.  In that case, the extra space that is
+demanded can be handled in several different ways:
+ - The content can be partially shown, i.e. cut.
+ - The content can overflow into neighbor cell(s), which ones are
+   dependent on alignment, if the neighbors are empty, etc, etc.
+
+
+The current status of this file is that it is under discussion.
+
+
+Other spreadsheets
+------------------
+
+Here follows a survey of how other spreadsheet programs handle
+overflow into other cells.  
+
+Note: the table is almost 190 characters wide.
+
+Case				Excel				Gnumeric			Oocalc				KSpread				Suggested behaviour
+============================================================================================================================================================================================
+Text in cell, Left aligned
+--------------------------
+Empty cell TtR			Overflows into cell TtR		Overflows into cell TtR		Overflows into cell TtR		Overflows into cell TtR		Overflows into cell TtR
+Non-empty cell TtR		Text is cut, no mark		Text is cut, no mark		Text is cut, arrow TtR		Text is cut, arrow TtR		Text is cut, arrow TtR
+
+Text in Cell, Right aligned
+---------------------------
+Empty TtL			Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL
+Non-empty TtL, empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
+												overflows into cell TtR		arrow is drawn TtR		arrow is drawn TtR
+Non-empty TtL, non-empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
+
+Number in cell, Alignment does not 
+----------------------------
+Generic format	 		Precision is reduced		Precision is reduced		### is shown			Overflows like text		### (For now)
+Number format			############# (cell is filled)	############# (cell is filled)	### is shown			Overflows like text		############# (cell is filled)
+
+
+
+Legend
+LA	Left Aligned
+RA	Right Aligned
+TtR	To the Right
+TtL	To the Left
