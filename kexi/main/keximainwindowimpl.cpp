@@ -244,6 +244,7 @@ class KexiMainWindowImpl::Private
 		navDockSeparatorPos=-1;
 //		navDockSeparatorPosWithAutoOpen=-1;
 		wasAutoOpen = false;
+		dialogExistedBeforeCloseProject = false;
 #ifndef KEXI_SHOW_UNIMPLEMENTED
 		dummy_action = new KActionMenu("", wnd);
 #endif
@@ -272,6 +273,8 @@ class KexiMainWindowImpl::Private
 	int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;
 	bool wasAutoOpen;
+
+	bool dialogExistedBeforeCloseProject;
 	
 /*
 void updatePropEditorDockWidthInfo() {
@@ -316,20 +319,24 @@ void updatePropEditorDockWidthInfo() {
 		}
 	}
 
+	
 	void updatePropEditorVisibility(int viewMode)
 	{
 		if (propEditorToolWindow) {
 			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
 #ifdef PROPEDITOR_VISIBILITY_CHANGES
-				propEditorToolWindow->hide();
+				wnd->makeWidgetDockInvisible(propEditor);
+//				propEditorToolWindow->hide();
 #endif
 			} else {
-				propEditorToolWindow->show();
+				//propEditorToolWindow->show();
+				wnd->makeWidgetDockVisible(propEditor);
+/*moved
 #if defined(KDOCKWIDGET_P)
 				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80/* % */));
-#endif
+				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80));//%
+#endif*/
 			}
 		}
 	}
@@ -999,6 +1006,13 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			QString("<ul>%1</ul>").arg(not_found_msg) );
 
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
+#if defined(KDOCKWIDGET_P)
+	{
+				KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+				ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+	}
+#endif
 
 	updateAppCaption();
 
@@ -1035,6 +1049,8 @@ tristate KexiMainWindowImpl::closeProject()
 {
 	if (!d->prj)
 		return true;
+
+	d->dialogExistedBeforeCloseProject = !d->curDialog.isNull();
 
 #if defined(KDOCKWIDGET_P)
 	//remember docks position - will be used on storeSettings()
@@ -1074,8 +1090,11 @@ tristate KexiMainWindowImpl::closeProject()
 		d->navToolWindow->hide();
 	}
 
-	if(d->propEditorToolWindow)
-		d->propEditorToolWindow->hide();
+	if (d->propEditor)
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+
+//	if(d->propEditorToolWindow)
+	//	d->propEditorToolWindow->hide();
 
 	d->dialogs.clear(); //sanity!
 	delete d->prj;
@@ -1218,7 +1237,8 @@ void KexiMainWindowImpl::initPropertyEditor()
 #if defined(KDOCKWIDGET_P)
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 //		ds->setKeepSize(true);
-		ds->show();
+		makeWidgetDockVisible(d->propEditor);
+//		ds->show();
 	//	ds->resize(400, ds->height());
 //		ds->setSeparatorPos(400, true);
 //		ds->setForcedFixedWidth( dw, 400 );
@@ -1345,8 +1365,10 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
 
-	if (d->propEditorToolWindow)
-		d->propEditorToolWindow->hide();
+	if (d->propEditor)
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+//	if (d->propEditorToolWindow)
+	//	d->propEditorToolWindow->hide();
 }
 
 void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)
@@ -1499,13 +1521,17 @@ KexiMainWindowImpl::storeSettings()
 			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			//int d2 = ds->separatorPosInPercent();
 			
-			if (d->wasAutoOpen)
+			if (d->wasAutoOpen && d->dialogExistedBeforeCloseProject) {
 				d->config->writeEntry("LeftDockPositionWithAutoOpen", 
 					d->navDockSeparatorPos);
 //			d->config->writeEntry("LeftDockPosition", dw->width());
 //			d->config->writeEntry("LeftDockPosition", d->nav->width());
-			else
-				d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77));
+			} else {
+				if (d->dialogExistedBeforeCloseProject)
+					d->config->writeEntry("LeftDockPosition", d->navDockSeparatorPos);
+				else
+					d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77));
+			}
 		}
 	}
 

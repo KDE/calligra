@@ -129,6 +129,8 @@ KexiScrollView::refreshContentsSize()
 		return;
 	if (m_preview) {
 		resizeContents(m_widget->width(), m_widget->height());
+		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+			<< m_widget->width() <<", "<< m_widget->height() << endl;
 		setVScrollBarMode(m_vsmode);
 		setHScrollBarMode(m_hsmode);
 		m_smodeSet = false;
@@ -136,11 +138,36 @@ KexiScrollView::refreshContentsSize()
 	}
 	else {
 		// Ensure there is always space to resize Form
-		if(m_widget->width() + 200 > contentsWidth())
-			resizeContents(m_widget->width() + 300, contentsHeight());
-		if(m_widget->height() + 200 > contentsHeight())
-			resizeContents(contentsWidth(), m_widget->height() + 300);
+		int w = contentsWidth(), h = contentsHeight();
+		bool change = false;
+		const int delta_x = QMAX( (KexiScrollView_bufferPm ? KexiScrollView_bufferPm->width() : 0), 300);
+		const int delta_y = QMAX( (KexiScrollView_bufferPm ? KexiScrollView_bufferPm->height() : 0), 300);
+		if((m_widget->width() + delta_x * 2 / 3) > w) {
+			w = m_widget->width() + delta_x;
+			change = true;
+		}
+		else if((w - m_widget->width()) > delta_x) {
+			w = m_widget->width() + delta_x;
+			change = true;
+		}
+		if((m_widget->height() + delta_y * 2 / 3) > h) {
+			h = m_widget->height() + delta_y;
+			change = true;
+		}
+		else if((h - m_widget->height()) > delta_y) {
+			h = m_widget->height() + delta_y;
+			change = true;
+		}
+		if (change)
+			resizeContents(w, h);
+		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+			<< contentsWidth() <<", "<< contentsHeight() << endl;
+		updateScrollBars();
+		setVScrollBarMode(Auto);
+		setHScrollBarMode(Auto);
 	}
+	updateContents();
+	updateScrollBars();
 }
 
 void
@@ -299,12 +326,14 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 				delete pb;
 			}
 		}
-		if (!KexiScrollView_bufferPm->isNull()) {
-			p->drawPixmap((contentsWidth() + m_widget->width() - KexiScrollView_bufferPm->width())/2,
-				(m_widget->height()-KexiScrollView_bufferPm->height())/2, 
+		if (!KexiScrollView_bufferPm->isNull() 
+			&& !m_delayedResize.isActive() /* only draw text if there's not pending delayed resize*/)
+		{
+			p->drawPixmap( QMAX( m_widget->width(), KexiScrollView_bufferPm->width() + 20 ) + 20,
+				QMAX( (m_widget->height()-KexiScrollView_bufferPm->height())/2, 20 ),
 				*KexiScrollView_bufferPm);
-			p->drawPixmap((m_widget->width() - KexiScrollView_bufferPm->width())/2,
-				(contentsHeight() + m_widget->height() - KexiScrollView_bufferPm->height())/2, 
+			p->drawPixmap( QMAX( (m_widget->width() - KexiScrollView_bufferPm->width())/2, 20 ),
+				QMAX( m_widget->height(), KexiScrollView_bufferPm->height() + 20 ) + 20,
 				*KexiScrollView_bufferPm);
 		}
 	}

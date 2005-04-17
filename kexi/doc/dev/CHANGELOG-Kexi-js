@@ -496,6 +496,11 @@ Main
 - main window: navigator's layout management fixes, again...
 Form Designer
 - initial version of 'assigning actions to push buttons'
+- resizing main form widget is undoable and considered in setting dirty flag
+- initial size of form surface fixed
+- various fixes for form surface resizing and "Outer Area" text
+Core
+- Dialogs: new objects are not dirty by default but this is changed for forms
 
 2005-04-13
 Form Designer
