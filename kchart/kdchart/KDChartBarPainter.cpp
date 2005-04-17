@@ -434,7 +434,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                     //  Negative values:
                                     //
                                     double yZero = yposNegatives - zeroXAxisI;
-                                    bool tooLow = (barHeight - yZero + logHeight) < - 1.01;
+                                    /*bool tooLow = (barHeight - yZero + logHeight) < - 1.01;
                                     //qDebug("\nbarHeight - yZero + logHeight = : %f - %f + %f = %f",
                                     //barHeight,yZero,logHeight,
                                     //barHeight - yZero + logHeight);
@@ -519,7 +519,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                         }
                                         }
                                         painter->setClipRect( ourClipRect );
-                                    } else {
+                                    } else*/ {
                                         //
                                         // old code (sometimes not touching the grid):
                                         // QRect rec( xpos, yZero, frontBarWidth, -barHeight );

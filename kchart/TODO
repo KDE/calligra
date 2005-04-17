@@ -137,7 +137,7 @@ Item								   Prio Status
 * KDChart
   + (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
   + Font for X axis labels changes when Polar chart is chosen.		DONE
-  + Strange looks when negative values.					KDCH
+  + Strange looks when negative values.					DONE
 
 
 ================================================================

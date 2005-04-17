@@ -171,6 +171,7 @@ void KChartPart::initNullChart()
         = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
     axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
     m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
+    m_params->setDrawSolidExcessArrows(true);
 }
 
 
@@ -203,6 +204,7 @@ void KChartPart::generateBarChartTemplate()
 	    m_rowLabels << i18n("Row %1").arg(row + 1);
 	}
     }
+    m_params->setDrawSolidExcessArrows(true);
 }
 
 
@@ -764,6 +766,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
     axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
     m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
     }
+    m_params->setDrawSolidExcessArrows(true);
 
     return result;
 }
