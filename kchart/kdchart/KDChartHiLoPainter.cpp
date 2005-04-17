@@ -34,6 +34,8 @@
 
 #include <stdlib.h>
 
+#include <klocale.h>
+
 /**
   \class KDChartHiLoPainter KDChartHiLoPainter.h
 
@@ -77,7 +79,7 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
   */
 QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Value " ) + QString::number( dataset + 1 );
+    return i18n( "Value %1" ).arg( dataset + 1 );
 }
 
 

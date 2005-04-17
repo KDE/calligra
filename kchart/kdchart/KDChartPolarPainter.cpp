@@ -34,6 +34,8 @@
 
 #include <qpainter.h>
 
+#include <klocale.h>
+
 /**
   \class KDChartPolarPainter KDChartPolarPainter.h
 
@@ -781,7 +783,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
       */
     QString KDChartPolarPainter::fallbackLegendText( uint dataset ) const
     {
-        return QObject::tr( "Series " ) + QString::number( dataset + 1 );
+        return i18n( "Series %1" ).arg( dataset + 1 );
     }
 
 

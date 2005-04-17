@@ -29,6 +29,8 @@
 #include "KDChartParams.h"
 #include "KDXMLTools.h"
 
+#include <klocale.h>
+
 /**
   \fn QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
 
@@ -2589,22 +2591,22 @@ QString KDChartParams::lineMarkerStyleToString( LineMarkerStyle style ) {
 QString KDChartParams::lineMarkerStyleToStringTr( LineMarkerStyle style ) {
     switch( style ) {
         case LineMarkerSquare:
-            return tr( "Square" );
+            return i18n( "Square" );
         case LineMarkerDiamond:
-            return tr( "Diamond" );
+            return i18n( "Diamond" );
         case LineMarkerCircle:
-            return tr( "Circle" );
+            return i18n( "Circle" );
         case LineMarker1Pixel:
-            return tr( "One pixel" );
+            return i18n( "One pixel" );
         case LineMarker4Pixels:
-            return tr( "Four pixels" );
+            return i18n( "Four pixels" );
         case LineMarkerRing:
-            return tr( "Ring" );
+            return i18n( "Ring" );
         case LineMarkerCross:
-            return tr( "Cross" );
+            return i18n( "Cross" );
         default: // should not happen
             qDebug( "Unknown line marker style!" );
-            return tr( "Circle" );
+            return i18n( "Circle" );
     }
 }
 
@@ -2645,19 +2647,19 @@ KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyle( const QSt
   \return the line marker style enum value
   */
 KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyleTr( const QString& string ) {
-    if( string == tr( "Square" ) )
+    if( string == i18n( "Square" ) )
         return LineMarkerSquare;
-    else if( string == tr( "Diamond" ) )
+    else if( string == i18n( "Diamond" ) )
         return LineMarkerDiamond;
-    else if( string == tr( "Circle" ) )
+    else if( string == i18n( "Circle" ) )
         return LineMarkerCircle;
-    else if( string == tr( "One pixel" ) )
+    else if( string == i18n( "One pixel" ) )
         return LineMarker1Pixel;
-    else if( string == tr( "Four pixels" ) )
+    else if( string == i18n( "Four pixels" ) )
         return LineMarker4Pixels;
-    else if( string == tr( "Ring" ) )
+    else if( string == i18n( "Ring" ) )
         return LineMarkerRing;
-    else if( string == tr( "Cross" ) )
+    else if( string == i18n( "Cross" ) )
         return LineMarkerCross;
     else // default, should not happen
         return LineMarkerCircle;
@@ -2809,14 +2811,14 @@ QString KDChartParams::polarMarkerStyleToString( PolarMarkerStyle style ) {
 QString KDChartParams::polarMarkerStyleToStringTr( PolarMarkerStyle style ) {
     switch( style ) {
         case PolarMarkerSquare:
-            return tr( "Square" );
+            return i18n( "Square" );
         case PolarMarkerDiamond:
-            return tr( "Diamond" );
+            return i18n( "Diamond" );
         case PolarMarkerCircle:
-            return tr( "Circle" );
+            return i18n( "Circle" );
         default: // should not happen
             qDebug( "Unknown polar marker style" );
-            return tr( "Circle" );
+            return i18n( "Circle" );
     }
 }
 
@@ -2847,11 +2849,11 @@ KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyle( const Q
   \return the polar marker style enum value
   */
 KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyleTr( const QString& string ) {
-    if( string == tr( "Square" ) )
+    if( string == i18n( "Square" ) )
         return PolarMarkerSquare;
-    else if( string == tr( "Diamond" ) )
+    else if( string == i18n( "Diamond" ) )
         return PolarMarkerDiamond;
-    else if( string == tr( "Circle" ) )
+    else if( string == i18n( "Circle" ) )
         return PolarMarkerCircle;
     else // default, should not happen
         return PolarMarkerCircle;

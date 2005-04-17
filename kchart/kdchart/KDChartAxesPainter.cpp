@@ -37,6 +37,8 @@
 
 #include <stdlib.h>
 
+#include <klocale.h>
+
 /**
   Little helper function returning the number of seconds
   between UTC start date 1970/01/01 00:00 and a given date \c dt.
@@ -2187,7 +2189,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             : dataDataset2;
         for (uint i = ds1; i <= ds2; ++i)
             labelTexts.append(
-                    QObject::tr( "Series " ) + QString::number( i + 1 ) );
+                    i18n( "Series %1" ).arg( i + 1 ) );
         bDone = true;
     }
 
@@ -3145,7 +3147,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                         + delta * ( count - 1 );
                 }
             }
-            QString prefix( QObject::tr( "Item " ) );
+            QString prefix( i18n( "Item " ) );
             QString postfix;
 
 

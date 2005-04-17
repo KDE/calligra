@@ -38,6 +38,8 @@
 
 #include <math.h>
 
+#include <klocale.h>
+
 /**
   \class KDChartPiePainter KDChartPiePainter.h
 
@@ -781,7 +783,7 @@ uint KDChartPiePainter::findRightPie( uint pie )
   */
 QString KDChartPiePainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
+    return i18n( "Item %1" ).arg( dataset + 1 );
 }
 
 

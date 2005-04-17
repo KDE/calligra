@@ -40,6 +40,8 @@
 
 #include <stdlib.h>
 
+#include <klocale.h>
+
 /**
   \class KDChartBWPainter KDChartBWPainter.h
 
@@ -208,7 +210,7 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
   */
 QString KDChartBWPainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Series " ) + QString::number( dataset + 1 );
+    return i18n( "Series %1" ).arg( dataset + 1 );
 }
 
 

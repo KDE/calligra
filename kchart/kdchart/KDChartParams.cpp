@@ -37,6 +37,8 @@
 #include "KDChartParams.moc"
 #endif
 
+#include <klocale.h>
+
 class KDChartData;
 
 //#include <qdom.h>
@@ -323,7 +325,7 @@ KDChartParams::KDChartParams()
     //                                 the printable area height and width
     setLegendFontRelSize( 22 );
     // the default legend title is "Legend"
-    setLegendTitleText( tr( "Legend" ) );
+    setLegendTitleText( i18n( "Legend" ) );
     // legend title is drawn in black by default
     setLegendTitleTextColor( Qt::black );
     // legend title font size is calculated dynamically, but ignore

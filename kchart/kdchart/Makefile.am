@@ -26,7 +26,7 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDXMLTools.cpp 
 
 libkdchart_la_LDFLAGS = $(all_libraries) -no-undefined
-libkdchart_la_LIBADD = $(LIB_QT)
+libkdchart_la_LIBADD = $(LIB_QT) $(LIB_KDECORE)
 
 noinst_HEADERS =	KDChart.h 		\
 			KDChartAreaPainter.h	\
