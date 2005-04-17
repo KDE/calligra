@@ -120,10 +120,10 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				m_lastcom->setValue(value);
 			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
-				if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
+//				if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
 					m_lastcom = new PropertyCommand(this, QString(m_widgets.first()->name()), m_widgets.first()->property(property.latin1()), value, prop.name());
 					m_manager->activeForm()->addCommand(m_lastcom, false);
-				}
+//				}
 			}
 
 			if (m_widgets.first()) {

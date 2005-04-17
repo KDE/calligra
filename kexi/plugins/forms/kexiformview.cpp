@@ -291,9 +291,13 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiFormView::afterSwitchFrom(int mode)
 {
-	if (mode == 0 && mode == Kexi::DesignViewMode)
-		if (parentDialog()->neverSaved())
+	if (mode == 0 || mode == Kexi::DesignViewMode) {
+		if (parentDialog()->neverSaved()) {
+			m_dbform->resize(QSize(400, 300));
 			m_scrollView->refreshContentsSizeLater(true,true);
+			//m_delayedFormContentsResizeOnShow = false;
+		}
+	}
 
 	if (mode != 0 && mode != Kexi::DesignViewMode) {
 		//preserve contents pos after switching to other view
@@ -351,6 +355,11 @@ KexiFormView::afterSwitchFrom(int mode)
 //			SET_FOCUS_USING_REASON(m_dbform->orderedFocusWidgets()->first(), QFocusEvent::Tab);
 		}
 	}
+
+	//dirty only if it's a new object
+	if (mode == 0)
+		setDirty( parentDialog()->partItem()->neverSaved() );
+
 	return true;
 }
 
@@ -655,9 +664,9 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 	KexiViewBase::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
-	if (m_delayedFormContentsResizeOnShow && isVisible()) {
-		m_delayedFormContentsResizeOnShow = false;
-		m_dbform->resize( e->size() - QSize(20, 20) );
+	if (m_delayedFormContentsResizeOnShow) { // && isVisible()) {
+//		m_delayedFormContentsResizeOnShow = false;
+		m_dbform->resize( e->size() - QSize(30, 30) );
 	}
 }
 
@@ -682,8 +691,11 @@ KexiFormView::show()
 //moved from KexiFormScrollView::show():
 
 	//now get resize mode settings for entire form
-	if (resizeMode() == KexiFormView::ResizeAuto)
-		m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+	//	if (resizeMode() == KexiFormView::ResizeAuto)
+	if (viewMode()==Kexi::DataViewMode) {
+		if (resizeMode() == KexiFormView::ResizeAuto)
+			m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+	}
 }
 
 void

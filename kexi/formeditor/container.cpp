@@ -43,13 +43,13 @@
 
 using namespace KFormDesigner;
 
-EventEater::EventEater(QWidget *widget, Container *container)
+EventEater::EventEater(QWidget *widget, QObject *container)
  : QObject(container)
 {
 	m_widget = widget;
 	m_container = container;
 
-	installRecursiveEventFilter(widget, this);
+	installRecursiveEventFilter(m_widget, this);
 }
 
 bool
@@ -58,8 +58,9 @@ EventEater::eventFilter(QObject *, QEvent *ev)
 	if(!m_container)
 		return false;
 
-	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, we need to simulate the Press event
-	if((m_widget->inherits("QTabWidget")) && (ev->type() == QEvent::MouseButtonRelease))
+	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, 
+	// we need to simulate the Press event
+	if(ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget"))
 	{
 		QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
 		if(mev->button() == LeftButton)

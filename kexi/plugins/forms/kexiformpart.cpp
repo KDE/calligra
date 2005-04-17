@@ -54,6 +54,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
 	m_names["instance"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
+	m_newObjectsAreDirty = true;
 
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
@@ -385,7 +386,7 @@ void KexiFormPart::slotAssignAction()
 	else if (lv->firstChild())
 		lv->setCurrentItem(lv->firstChild());
 
-	if (KDialogBase::Ok==dlg.exec() && lv->selectedItem()) {
+	if (QDialog::Accepted==dlg.exec() && lv->selectedItem()) {
 		ActionSelectorDialogListItem *item = static_cast<ActionSelectorDialogListItem*>(lv->selectedItem());
 		if (item) {
 			kdDebug() << item->data << endl;

@@ -41,15 +41,18 @@ class Form;
 
 /**
  * This class is used to filter the events from any widget (and all its subwidgets)
- and direct it to the Container.
+ * and direct it to the Container.
  */
-//! A class to redirect events
+//! A class for redirecting events
 class KFORMEDITOR_EXPORT EventEater : public QObject
 {
 	Q_OBJECT
 
 	public:
-		EventEater(QWidget *widget, Container *container);
+		/*! Constructs eater object. All events for \a widget and it's subwidgets 
+		will be redirected to \a container. \a container will be also parent of eater object, 
+		so you don't need to care about deleting it. */
+		EventEater(QWidget *widget, QObject *container);
 		~EventEater();
 
 		//! Sets the object which will receive the events

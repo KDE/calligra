@@ -62,6 +62,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
  , KexiFormDataItemInterface()
  , d(new Private())
 {
+	installEventFilter(this);
 //test	setDisplayMode( KexiGradientWidget::SimpleGradient );
 	editedItem = 0;
 	d->dataAwareObject = dataAwareObject;
@@ -316,6 +317,8 @@ void KexiDBForm::updateTabStopsOrder()
 
 bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 {
+	if (e->type()==QEvent::Resize && watched == this)
+		kdDebug() << "RESIZE" << endl;
 	if (e->type()==QEvent::KeyPress) {
 		if (preview()) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);

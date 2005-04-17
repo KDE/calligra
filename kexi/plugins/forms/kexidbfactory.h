@@ -26,6 +26,7 @@
 #include "kexiformdataiteminterface.h"
 
 #include <klineedit.h>
+#include <kpushbutton.h>
 
 class KAction;
 
@@ -61,6 +62,7 @@ class KexiSubForm : public QScrollView
 		QString m_formName;
 };
 
+//! Line edit widget for Kexi forms
 class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 {
 	Q_OBJECT
@@ -104,6 +106,24 @@ class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
+};
+
+//! Push Button widget for Kexi forms
+class KexiPushButton : public KPushButton
+{
+	Q_OBJECT
+	Q_PROPERTY(QCString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
+
+	public:
+		KexiPushButton( const QString & text, QWidget * parent, const char * name = 0 );
+		~KexiPushButton();
+
+	public slots:
+		QCString onClickAction() const { return m_onClickAction; }
+		void setOnClickAction(const QCString& actionName) { m_onClickAction = actionName; }
+
+	protected:
+		QCString m_onClickAction;
 };
 
 //! Kexi Factory (DB widgets + subform)

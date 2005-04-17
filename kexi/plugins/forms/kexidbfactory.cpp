@@ -50,6 +50,9 @@
 
 #include "kexidbfactory.h"
 
+#define KEXI_NO_KexiDBInputWidget //temp. for 0.1
+
+
 KexiSubForm::KexiSubForm(Form *parentForm, QWidget *parent, const char *name)
 : QScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
@@ -214,6 +217,17 @@ void KexiDBLineEdit::clear()
 
 //////////////////////////////////////////
 
+KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const char * name )
+: KPushButton(text, parent, name)
+{
+}
+
+KexiPushButton::~KexiPushButton()
+{
+}
+
+//////////////////////////////////////////
+
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
@@ -257,6 +271,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->setDescription(i18n("A widget to display text"));
 	addClass(wLabel);
 
+#ifndef KEXI_NO_KexiDBInputWidget
 	KexiDataAwareWidgetInfo *wInput = new KexiDataAwareWidgetInfo(this);
 	wInput->setPixmap("edit");
 	wInput->setClassName("KexiDBInputWidget");
@@ -269,13 +284,16 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
 //	wInput->setDescription(i18n("A super-duper widget"));
 	addClass(wInput);
+#endif
 
 	// inherited
 	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this, "stdwidgets", "KPushButton");
+	wPushButton->addAlternateClassName("KexiPushButton");
 	addClass(wPushButton);
 
-	m_propDesc["dataSource"] = i18n("Data source");
-	m_propDesc["formName"] = i18n("Form name");
+	m_propDesc["dataSource"] = i18n("Data Source");
+	m_propDesc["formName"] = i18n("Form Name");
+	m_propDesc["onClickAction"] = i18n("On Click");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -313,6 +331,8 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	{
 		w = new KexiDBInputWidget(p, n);
 	}
+	else if(c == "KPushButton" || c == "KexiPushButton")
+		w = new KexiPushButton(text, p, n);
 
 	return w;
 }
@@ -321,7 +341,7 @@ bool
 KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *)
 {
-	if((classname == "QPushButton") || (classname == "KPushButton"))
+	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
 	{
 /*! @todo also call createMenuActions() for inherited factory! */
 		m_assignAction->plug( menu );

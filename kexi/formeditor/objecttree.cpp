@@ -37,7 +37,8 @@ namespace KFormDesigner
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, Container *parentContainer, Container *container)
+ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget, 
+ Container *parentContainer, Container *container)
  : m_enabled(true), m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
 {
 	m_className = classn;

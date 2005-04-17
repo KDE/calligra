@@ -66,17 +66,19 @@ class VerWidgetList : public WidgetList
 
 /*! This function is used to remove all the child widgets from a list, and
   keep only the "toplevel" ones. */
-void KFORMEDITOR_EXPORT removeChildrenFromList(WidgetList &list);
+KFORMEDITOR_EXPORT void removeChildrenFromList(WidgetList &list);
 
-/*! This helper function install an event filter on \a object and all of its children, directed to \a container.
+/*! This helper function install an event filter on \a object and all of its 
+  children, directed to \a container.
   This is necessary to filter events for composed widgets. */
-void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
+KFORMEDITOR_EXPORT void installRecursiveEventFilter(QObject *object, QObject *container);
 
-/*! This helper function removes an event filter installed before on \a object and all of its children.
+/*! This helper function removes an event filter installed before 
+  on \a object and all of its children.
   This is necessary to filter events for composed widgets. */
-void KFORMEDITOR_EXPORT removeRecursiveEventFilter(QObject *object, QObject *container);
+KFORMEDITOR_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *container);
 
-void KFORMEDITOR_EXPORT setRecursiveCursor(QWidget *w, Form *form);
+KFORMEDITOR_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
 
 }
 
