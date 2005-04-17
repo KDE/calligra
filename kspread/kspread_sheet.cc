@@ -2951,7 +2951,8 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
             // Copy the char that got us to stop
             if ( i < origText.length() ) {
               newText += origText[i];
-              correctSheetName = correctDefaultSheetName;
+              if( origText[i] != ':' )
+                correctSheetName = correctDefaultSheetName;
             }
           }
         }
