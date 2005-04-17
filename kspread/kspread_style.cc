@@ -892,13 +892,14 @@ QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format
 
     QString format;
     bool locale = false;
+    //TODO use format
     switch( _style )
     {
     case Time_format: //TODO FIXME
-        //format = ;
+        format = "hh:mm:ss";
         break;
     case SecondeTime_format: //TODO FIXME
-        //format = ;
+        format = "hh:mm";
         break;
     case Time_format1:
         format = "h:mm AP";
