@@ -320,7 +320,11 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	}
 //	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
 	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()
-		 && !((m_value.type()==QVariant::Int && v.type()==QVariant::UInt) || (m_value.type()==QVariant::UInt && v.type()==QVariant::Int))) 
+		 && !( (m_value.type()==QVariant::Int && v.type()==QVariant::UInt) 
+		       || (m_value.type()==QVariant::UInt && v.type()==QVariant::Int)
+		       || (m_value.type()==QVariant::CString && v.type()==QVariant::String)
+		       || (m_value.type()==QVariant::String && v.type()==QVariant::CString)
+		 ))
 	{
 		kexiwarn << "KexiProperty::setValue(): INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
 	}
@@ -333,7 +337,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		//can be miliseconds difference
 		ch = m_value.toString() != v.toString();
 	}
-	else if (m_value.type()==QVariant::String) {
+	else if (m_value.type()==QVariant::String || m_value.type()==QVariant::CString) {
 		//property is changed for string type,
 		//if one of value is empty and other isn't..
 		ch = (m_value.toString().isEmpty() != v.toString().isEmpty()
