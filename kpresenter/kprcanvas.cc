@@ -3412,7 +3412,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     bool _editMode = editMode;
     editMode = false;
 
-    drawBackground( &p, _pix.rect(), page );
+    drawBackground( &p, _pix.rect(), page, true );
 
     //objects in current page
     QPtrList<KPObject> _list = page->objectList();
