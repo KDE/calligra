@@ -45,9 +45,10 @@ Empty TtL			Overflows into cell TtL		Overflows into cell TtL		Overflows into cel
 Non-empty TtL, empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
 												overflows into cell TtR		arrow is drawn TtR		arrow is drawn TtR
 Non-empty TtL, non-empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
+												cut, arrow is drawn TtR						arrow is drawn TtR
 
-Number in cell, Alignment does not 
-----------------------------
+Number in cell, Alignment turned out not to matter
+--------------------------------------------------
 Generic format	 		Precision is reduced		Precision is reduced		### is shown			Overflows like text		### (For now)
 Number format			############# (cell is filled)	############# (cell is filled)	### is shown			Overflows like text		############# (cell is filled)
 
