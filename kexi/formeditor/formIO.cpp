@@ -880,13 +880,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
 	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
-	if(parent.tagName() == "widget")
+	if(parent.tagName() == "widget") {
 		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
-	// save form widget size, but not its position
-	else if((parent.tagName() == "UI")) {
-		QRect r = item->widget()->property("geometry").toRect();
-		r.setX(0); r.setY(0);
-		prop(tclass, domDoc, "geometry", r, item->widget());
+	} else if((parent.tagName() == "UI")) {
+		// save form widget size, but not its position
+		prop(tclass, domDoc, "geometry", 
+			QRect( QPoint(0,0), item->widget()->property("geometry").toRect().size()),
+			item->widget());
 	}
 
 
