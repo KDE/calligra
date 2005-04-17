@@ -860,9 +860,9 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 	m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
 	if(m_insertRect.x() < 0)
-		m_insertRect.setX(0);
+		m_insertRect.moveLeft(0);
 	if(m_insertRect.y() < 0)
-		m_insertRect.setY(0);
+		m_insertRect.moveTop(0);
 	if(m_insertRect.right() > m_container->width())
 		m_insertRect.setRight(m_container->width());
 	if(m_insertRect.bottom() > m_container->height())

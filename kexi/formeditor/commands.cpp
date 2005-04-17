@@ -1024,14 +1024,14 @@ PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
 
 	// the pasted wigdet should stay inside container's boudaries
 	if(r.x() < 0)
-		r.setX(0);
+		r.moveLeft(0);
 	else if(r.right() > container->widget()->width())
-		r.setX(container->widget()->width() - r.width());
+		r.moveLeft(container->widget()->width() - r.width());
 
 	if(r.y() < 0)
-		r.setY(0);
+		r.moveTop(0);
 	else if(r.bottom() > container->widget()->height())
-		r.setY(container->widget()->height() - r.height());
+		r.moveTop(container->widget()->height() - r.height());
 
 	if(r != QRect(rx, ry, rw, rh))
 		//return el;
@@ -1073,14 +1073,14 @@ PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, const QP
 
 	// the pasted wigdet should stay inside container's boudaries
 	if(r.x() < 0)
-		r.setX(0);
+		r.moveLeft(0);
 	else if(r.right() > container->widget()->width())
-		r.setX(container->widget()->width() - r.width());
+		r.moveLeft(container->widget()->width() - r.width());
 
 	if(r.y() < 0)
-		r.setY(0);
+		r.moveTop(0);
 	else if(r.bottom() > container->widget()->height())
-		r.setY(container->widget()->height() - r.height());
+		r.moveTop(container->widget()->height() - r.height());
 
 	if(r != QRect(rx, ry, rw, rh))
 		//return el;
