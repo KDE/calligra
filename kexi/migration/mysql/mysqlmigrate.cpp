@@ -266,9 +266,10 @@ KexiDB::Field::Type MySQLMigrate::type(const QString& table,
 	}
 
 	//Ask the user what to do with this field if we don't know what it is.
-	if (kexiType == KexiDB::Field::InvalidType) {
+	//FIX: piggz.....add field name to usertype, or make default text
+	/*if (kexiType == KexiDB::Field::InvalidType) {
 		return userType();
-	}
+	}*/
 	return kexiType;
 }
 
