@@ -1086,6 +1086,10 @@ void KSpreadCell::freeAllObscuredCells()
 }
 
 
+// ----------------------------------------------------------------
+//                              Layout
+
+
 // Recalculate the entire layout.  This includes the following members:
 //   d->textX,     d->textY
 //   d->textWidth, d->textHeight
@@ -1126,6 +1130,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       clearFlag( Flag_LayoutDirty );
       return;
   }
+
+  // Recalculate the output text, d->strOutText.
   setOutputText();
 
   // Empty text?  Reset the outstring and, if this is the default cell, return.
@@ -1137,13 +1143,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
   }
 
-  // Determine the correct font with zoom taken into account.
+  // Determine the correct font with zoom taken into account.  Apply
+  // it to _painter.  Then calculate text dimensions, i.e. 
+  // d->textWidth and d->textHeight.
   applyZoomedFont( _painter, _col, _row );
-
-  // Calculate text dimensions.
   textSize( _painter );
-
-  QFontMetrics  fm = _painter.fontMetrics();
 
   //
   // Calculate the size of the cell
@@ -1179,6 +1183,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     d->extra()->extraWidth  = w;
     d->extra()->extraHeight = h;
   }
+
+  QFontMetrics  fm = _painter.fontMetrics();
 
   // Check if we need to break the line into multiple lines and are
   // allowed to do so.  If so, set `lines' to the number of lines that
@@ -1286,9 +1292,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
        leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
   {
     int c = d->column;
-    int end = 0;
   
-  // Find free cells to the right of this one.
+    // Find free cells to the right of this one.
+    int end = 0;
     while ( !end ) {
       ColumnFormat  *cl2 = m_pSheet->columnFormat( c + 1 );
       KSpreadCell   *cell = m_pSheet->visibleCellAt( c + 1, d->row );
@@ -1397,10 +1403,13 @@ void KSpreadCell::valueChanged ()
   m_pSheet->valueChanged (this);
 }
 
+
+// Recalculate d->strOutText.
+//
+
 void KSpreadCell::setOutputText()
 {
-  if ( isDefault() )
-  {
+  if ( isDefault() ) {
     d->strOutText = QString::null;
     if ( d->hasExtra() && d->extra()->conditions )
       d->extra()->conditions->checkMatches();
@@ -1412,23 +1421,17 @@ void KSpreadCell::setOutputText()
 
   clearFlag( Flag_TextFormatDirty );
 
-
-
-  //
-  // Turn the stored value in a string
-  //
-
-  //should we display the formula?
+  // Display the formula if warranted.
   if ( (!hasError()) && isFormula() && m_pSheet->getShowFormula()
        && !( m_pSheet->isProtected() && isHideFormula( d->column, d->row ) ) )
     d->strOutText = d->strText;
-  else
-  {
-    //we should display real value
-    d->strOutText = sheet()->doc()->formatter()->formatText (this, formatType());
+  else {
+    // Display real value.
+    d->strOutText = sheet()->doc()->formatter()->formatText (this, 
+							     formatType());
   }
 
-  //check conditions if needed
+  // Check conditions if needed
   if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
 }
