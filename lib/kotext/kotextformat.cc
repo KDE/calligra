@@ -543,7 +543,7 @@ void KoTextFormat::save( KoGenStyle& gs ) const
         styleline = "wave";
     else
         styleline = exportOasisUnderline( m_underlineStyle );
-    gs.addProperty( "style:text-underline-style", m_underlineType == S_NONE ? "none" : styleline, tt );
+    gs.addProperty( "style:text-underline-style", m_underlineType == U_NONE ? "none" : styleline, tt );
     gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
 
     if ( m_strikeOutType != S_NONE )
