@@ -26,7 +26,6 @@
 #include "kwcanvas.h"
 #include "kwanchor.h"
 #include "kwcommand.h"
-#include "kwdrag.h"
 #include "kwformulaframe.h"
 #include "kwbgspellcheck.h"
 #include "KWordTextFrameSetIface.h"
@@ -59,6 +58,7 @@
 #include <kdebug.h>
 
 #include <qclipboard.h>
+#include <qdragobject.h>
 #include <qcursor.h>
 #include <qfile.h>
 #include <qpopupmenu.h>
@@ -2794,35 +2794,6 @@ KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, in
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-// Old koffice-1.3 method, to be removed once KWTableFrameSet::convertTableToText is ported
-QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
-{
-    KoTextCursor c1 = textDocument()->selectionStartCursor( selectionId );
-    KoTextCursor c2 = textDocument()->selectionEndCursor( selectionId );
-    QString text;
-    if ( c1.parag() == c2.parag() )
-    {
-        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
-
-        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1, true );
-    }
-    else
-    {
-        text += c1.parag()->toString( c1.index() ) + "\n";
-
-        static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
-        KoTextParag *p = c1.parag()->next();
-        while ( p && p != c2.parag() ) {
-            text += p->toString() + "\n";
-            static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
-            p = p->next();
-        }
-        text += c2.parag()->toString( 0, c2.index() );
-        static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
-    }
-    return text;
-}
-
 QByteArray KWTextFrameSet::sortText(SortType type) const
 {
     const KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
@@ -2994,10 +2965,9 @@ void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides )
 KCommand* KWTextFrameSetEdit::pasteOasisCommand( QMimeSource* data )
 {
     // Find which mimetype it was (could be oasis text, oasis presentation etc.)
-    QCString returnedTypeMime;
-    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+    QCString returnedTypeMime = KoTextObject::providesOasis( data );
+    if ( !returnedTypeMime.isEmpty() )
     {
-        kdDebug() << k_funcinfo << "returnedTypeMime=" << returnedTypeMime << endl;
         QByteArray arr = data->encodedData( returnedTypeMime );
         Q_ASSERT( !arr.isEmpty() );
         if ( arr.size() )

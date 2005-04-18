@@ -32,7 +32,6 @@ DESCRIPTION
 #include "kwcommand.h"
 #include "kwviewmode.h"
 #include "kwview.h"
-#include "kwdrag.h"
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
 
@@ -48,6 +47,7 @@ DESCRIPTION
 #include <dcopobject.h>
 #include <qpopupmenu.h>
 #include <qclipboard.h>
+#include "kwoasissaver.h"
 
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
@@ -2611,33 +2611,16 @@ void KWTableFrameSet::setZOrder()
 
 // TODO provide toPlainText() (reimplemented from KWFrameSet)
 
-void KWTableFrameSet::convertTableToText()
+QByteArray KWTableFrameSet::convertTableToText() // should be const, but TableIter doesn't allow it
 {
-    // TODO port to OASIS (see KWTextFrameSetEdit::newDrag)
-    // and don't mess up the clipboard....
-
-    // Copy/paste individual cells (without using the clipboard...)
-    // into a hidden textframeset (or just textdoc)
-    // then cut the whole text into a KoStore-in-QByteArray, return that.
-    // In KWView we'd still build a command with delete_table+paste_text.
-#if 0
-    QDomDocument domDoc( "PARAGRAPHS" );
-    QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-    domDoc.appendChild( elem );
-    QString text;
+    KWOasisSaver oasisSaver( m_doc );
     for (TableIter cell(this); cell; ++cell)
     {
-        cell->textDocument()->selectAll( KoTextDocument::Temp );
-        text += cell->copyTextParag( elem, KoTextDocument::Temp );
-        cell->textDocument()->removeSelection( KoTextDocument::Temp );
+        cell->textObject()->saveOasisContent( oasisSaver.bodyWriter(), oasisSaver.savingContext() );
     }
-    KWTextDrag *kd = new KWTextDrag( 0L );
-    kd->setPlain( text );
-    kd->setFrameSetNumber( -1 );
-    kd->setKWord( domDoc.toCString() );
-    kdDebug(32004) << "convertTableToText " << domDoc.toCString() << endl;
-    QApplication::clipboard()->setData( kd );
-#endif
+    if ( !oasisSaver.finish() )
+        return QByteArray();
+    return oasisSaver.data();
 }
 
 #ifndef NDEBUG

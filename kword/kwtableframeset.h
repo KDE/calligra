@@ -573,7 +573,7 @@ public:
      */
     void setZOrder();
 
-    void convertTableToText();
+    QByteArray convertTableToText();
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );

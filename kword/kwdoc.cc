@@ -37,7 +37,6 @@
 #include "kwviewmode.h"
 #include "mailmerge.h"
 #include "kwloadinginfo.h"
-#include "kwdrag.h"
 #include "paragvisitors.h"
 #include "kwoasisloader.h"
 #include "kwoasissaver.h"

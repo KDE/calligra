@@ -44,17 +44,23 @@ KWOasisSaver::KWOasisSaver( KWDocument* doc )
 
 void KWOasisSaver::saveParagraphs( const QValueList<const KoTextParag *>& paragraphs )
 {
-    KoXmlWriter* bodyWriter = m_oasisStore->bodyWriter();
     for ( QValueList<const KoTextParag *>::const_iterator it = paragraphs.begin(),
                                                    end = paragraphs.end();
                   it != end ; ++it ) {
-        // keep in sync with KoTextDocument::copySelection
-        (*it)->saveOasis( *bodyWriter, *m_savingContext, 0, (*it)->length()-2, true );
+        saveParagraph( *it );
     }
+}
+
+void KWOasisSaver::saveParagraph( const KoTextParag* parag )
+{
+    // keep in sync with KoTextDocument::copySelection
+    KoXmlWriter* bodyWriter = m_oasisStore->bodyWriter();
+    parag->saveOasis( *bodyWriter, *m_savingContext, 0, parag->length()-2, true );
 }
 
 QByteArray KWOasisSaver::data() const
 {
+    Q_ASSERT( !m_store ); // forgot to call finish() (or to check its return value) ?
     return m_buffer.buffer();
 }
 
@@ -84,6 +90,9 @@ bool KWOasisSaver::finish()
     m_doc->saveOasisDocumentStyles( m_store, m_mainStyles, KWDocument::SaveSelected /* simply means not SaveAll */ );
     if ( !m_store->close() ) // done with styles.xml
         return false;
+
+    delete m_oasisStore; m_oasisStore = 0;
+    delete m_store; m_store = 0;
 
     return true;
 }

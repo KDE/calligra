@@ -299,7 +299,6 @@ public:
 
     KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
-    QString copyTextParag( QDomElement & elem, int selectionId );
     QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
     /// Sort selected paragraphs

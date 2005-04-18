@@ -109,7 +109,6 @@ FILES:
     kwcommand.h/cc              - base classes for undo / redo
                                 - (for core editing functionality)
   misc ui:
-    kwdrag.h/cc                 - drag & drop and clipboard support
     resizehandles.h/cc          - ui helper (resize handles)
   core/ui:
     app:
@@ -132,6 +131,10 @@ FILES:
                                   for translation purposes
         kwstylemanager.h/cc     - KWStyleManager, extension to KoStyleManager
                                   (the style editor is in libkotext)
+    OASIS loading, saving:
+        kwoasisloader.h/cc      - methods for OASIS loading
+        kwoasissaver.h/cc       - OASIS saving of a document fragment (paragraphs)
+
     advanced editing:
         kwinserthorizontallinedia.h/cc  - insert hor. line dialog
         kwinsertpagedia.h/cc    - insert page dialog

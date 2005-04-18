@@ -43,9 +43,18 @@ public:
     KWOasisSaver( KWDocument* doc );
     ~KWOasisSaver();
 
+    /// Save a list of paragraphs
     void saveParagraphs( const QValueList<const KoTextParag *>& paragraphs );
 
-    /// Call this before calling data()
+    /// Save a paragraph
+    void saveParagraph( const KoTextParag* parag );
+
+    /// Another way to save paragraphs is to use KoTextObject::saveOasisContent
+    /// It needs a body writer and a saving context.
+    KoXmlWriter& bodyWriter() { return *m_oasisStore->bodyWriter(); }
+    KoSavingContext& savingContext() { return *m_savingContext; }
+
+    /// You MUST call this after saving the paragraphs and before calling data()
     /// Return true on success
     bool finish();
 

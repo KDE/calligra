@@ -36,7 +36,6 @@
 #include "kwconfig.h"
 #include "kwcreatebookmarkdia.h"
 #include "kwdoc.h"
-#include "kwdrag.h"
 #include "kweditpersonnalexpressiondia.h"
 #include "kwformulaframe.h"
 #include "kwframe.h"
@@ -1636,8 +1635,8 @@ int KWView::checkClipboard( QMimeSource *data )
         provides |= ProvidesFormula;
     if ( formats.findIndex( "text/plain" ) != -1 )
         provides |= ProvidesPlainText;
-    QCString returnedTypeMime;
-    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
+    QCString returnedTypeMime = KoTextObject::providesOasis( data );
+    if ( !returnedTypeMime.isEmpty() )
         provides |= ProvidesOasis;
     //kdDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
     return provides;
@@ -2354,9 +2353,9 @@ void KWView::pasteData( QMimeSource* data )
         if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) )
             edit->pasteData( data, provides );
         else if ( ( provides & ProvidesOasis ) ) {
-            QCString returnedTypeMime;
             // Not editing a frameset? We can't paste plain text then... only entire frames.
-            if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+            QCString returnedTypeMime = KoTextObject::providesOasis( data );
+            if ( !returnedTypeMime.isEmpty() )
             {
                 const QByteArray arr = data->encodedData( returnedTypeMime );
                 if( !arr.isEmpty() )
@@ -2624,9 +2623,10 @@ void KWView::deleteFrame( bool _warning )
     if ( !m_doc->isReadWrite() )
         return;
     QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
-    Q_ASSERT( frames.count() >= 1 );
-    if( frames.count() < 1)
+    if( frames.count() < 1) {
+        kdWarning() << "KWView::deleteFrame: no frame selected" << endl;
         return;
+    }
     if(frames.count()==1)
     {
         KWFrame *theFrame = frames.at(0);
@@ -7072,41 +7072,30 @@ void KWView::convertTableToText()
 {
     KWCanvas * canvas = m_gui->canvasWidget();
     KWTableFrameSet *table = canvas->getCurrentTable();
-    if (table && table->isFloating())
+    if ( table && table->isFloating() )
     {
-        table->convertTableToText();
+        const QByteArray arr = table->convertTableToText();
         KWAnchor * anchor = table->findAnchor( 0 );
-        if ( anchor )
+        if ( anchor && arr.size() )
         {
-            KWTextFrameSet *frameset= table->anchorFrameset();
+            KWTextFrameSet *frameset = table->anchorFrameset();
             KoTextParag *parag = anchor->paragraph();
             int pos = anchor->index();
             KMacroCommand *macro = new KMacroCommand(i18n("Convert Table to Text"));
-            KCommand *cmd =table->anchorFrameset()->deleteAnchoredFrame( anchor );
+            KCommand *cmd = table->anchorFrameset()->deleteAnchoredFrame( anchor );
             if ( cmd )
                 macro->addCommand( cmd);
 
-            m_gui->canvasWidget()->emitFrameSelectedChanged();
-            deleteFrame( false );
             m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos );
-            QMimeSource *data = QApplication::clipboard()->data();
-            if ( data->provides( KWOasisSaver::selectionMimeType() ) )
+
+            KWTextFrameSetEdit* edit = currentTextEdit();
+            if ( edit && edit->textFrameSet())
             {
-                QByteArray arr = data->encodedData( KWOasisSaver::selectionMimeType() );
-                if ( arr.size() )
-                {
-                    KWTextFrameSetEdit* edit = currentTextEdit();
-                    if ( edit && edit->textFrameSet())
-                    {
-                        KCommand *cmd =edit->textFrameSet()->pasteOasis( edit->cursor(), QCString( arr , arr.count()), true );
-                        if ( cmd )
-                            macro->addCommand( cmd);
-                        m_doc->addCommand(cmd);
-                    }
-                }
+                cmd = edit->textFrameSet()->pasteOasis( edit->cursor(), arr, true );
+                if ( cmd )
+                    macro->addCommand( cmd );
             }
             m_doc->addCommand(macro);
-            QApplication::clipboard()->clear();
         }
     }
 }
@@ -7114,48 +7103,42 @@ void KWView::convertTableToText()
 void KWView::convertToTextBox()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
-    if( edit && !edit->textFrameSet()->protectContent() && edit->textFrameSet()->textObject()->hasSelection())
+    if ( !edit )
+        return;
+
+    KWTextFrameSet* textfs = edit->textFrameSet();
+    if( textfs->protectContent() || !textfs->textObject()->hasSelection() )
+        return;
+
+    KWOasisSaver oasisSaver( m_doc );
+    textfs->textDocument()->copySelection( oasisSaver.bodyWriter(), oasisSaver.savingContext(), KoTextDocument::Standard );
+    if ( !oasisSaver.finish() )
+        return;
+    const QByteArray arr = oasisSaver.data();
+    if ( !arr.size() )
+        return;
+
+    KCommand *cmd = textfs->textObject()->removeSelectedTextCommand( edit->textView()->cursor(), KoTextDocument::Standard );
+    Q_ASSERT( cmd );
+    KMacroCommand* macro = new KMacroCommand( i18n("Convert to Text Box"));
+    macro->addCommand( cmd );
+    // Where to place the resulting text box? Maybe it should be made inline?
+    cmd = m_gui->canvasWidget()->createTextBox( KoRect(30,30,300,300) );
+    Q_ASSERT( cmd );
+    if ( cmd )
+        macro->addCommand( cmd );
+
+    edit = currentTextEdit();
+    Q_ASSERT( edit ); // if it can really be 0, we need to undo the above...
+    if ( edit )
     {
-        edit->copy();
-        KMacroCommand *macro = 0L;
-
-        KCommand *cmd = edit->textFrameSet()->textObject()->removeSelectedTextCommand( edit->textView()->cursor(), KoTextDocument::Standard );
+        cmd = edit->textFrameSet()->pasteOasis( edit->textView()->cursor(), arr, true );
         if ( cmd )
-        {
-            if ( ! macro )
-                macro = new KMacroCommand( i18n("Convert to Text Box"));
             macro->addCommand( cmd );
-        }
-        cmd = m_gui->canvasWidget()->createTextBox(KoRect(30,30,30,30) );
-        if ( cmd )
-        {
-            if ( ! macro )
-                macro = new KMacroCommand( i18n("Convert to Text Box"));
-            macro->addCommand( cmd );
-        }
-
-        edit = currentTextEdit();
-        if ( edit )
-        {
-            QMimeSource *data = QApplication::clipboard()->data();
-            if ( data->provides( KWOasisSaver::selectionMimeType() ) )
-            {
-                QByteArray arr = data->encodedData( KWOasisSaver::selectionMimeType() );
-                if ( arr.size() )
-                {
-                    cmd =edit->textFrameSet()->pasteOasis( edit->textView()->cursor(), QCString( arr, arr.size()+1 ), true );
-                    if ( cmd )
-                    {
-                        if ( ! macro )
-                            macro = new KMacroCommand( i18n("Convert to Text Box"));
-                        macro->addCommand( cmd );
-                    }
-                }
-            }
-        }
-        if ( macro )
-            m_doc->addCommand(macro);
+        // Auto-resize the frame from its contents
+        edit->textFrameSet()->layout();
     }
+    m_doc->addCommand( macro );
 }
 
 void KWView::slotAddIgnoreAllWord()
@@ -7173,7 +7156,7 @@ void KWView::sortText()
         KWSortDia dlg( this, "sort dia" );
         if ( dlg.exec() )
         {
-            QByteArray arr = edit->textFrameSet()->sortText(dlg.getSortType());
+            const QByteArray arr = edit->textFrameSet()->sortText(dlg.getSortType());
             if ( arr.size() )
             {
                 KCommand *cmd = edit->textFrameSet()->pasteOasis( edit->cursor(), arr, true );

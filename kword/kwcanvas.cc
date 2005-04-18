@@ -25,7 +25,6 @@
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwviewmode.h"
-#include "kwdrag.h"
 #include "framedia.h"
 #include "kwcommand.h"
 #include "kwtabletemplate.h"

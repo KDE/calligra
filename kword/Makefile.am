@@ -13,7 +13,7 @@ libkwordpart_la_SOURCES = kwtableframeset.cc kwcanvas.cc kwframe.cc kwformulafra
 		kwtextparag.cc kwtextdocument.cc \
 		kwtextframeset.cc kwpartframeset.cc \
                 kwtextimage.cc kwanchor.cc \
-                kwdrag.cc kwconfig.cc \
+                kwconfig.cc \
 		kwvariable.cc \
 		framedia.cc footnotedia.cc \
                 kwframestyle.cc kwframestylemanager.cc \
