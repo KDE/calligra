@@ -1085,303 +1085,310 @@ void KSpreadCell::freeAllObscuredCells()
 
 }
 
-// ##### Are _col and _row really needed ?
+
+// Recalculate the entire layout.  This includes the following members:
+//   d->textX,     d->textY
+//   d->textWidth, d->textHeight
+//   d->extra()->extraXCells, d->extra()->extraYCells
+//   d->extra()->extraWidth,  d->extra()->extraHeight
+//   d->extra()->nbLines (if multirow)
+//
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
-    // Yes they are: they are useful if this is the default layout,
-    // in which case d->row and d->column are 0 and 0, but col and row
-    // are the real coordinates of the cell.
+  // Are _col and _row really needed ?
+  //
+  // Yes they are: they are useful if this is the default layout, in
+  // which case d->row and d->column are 0 and 0, but _col and _row
+  // are the real coordinates of the cell.
 
-    if ( !testFlag( Flag_LayoutDirty ) )
-      return;
-
-    if (d->hasExtra())
-      d->extra()->nbLines = 0;
-    clearFlag( Flag_CellTooShortX );
-    clearFlag( Flag_CellTooShortY );
-
-    freeAllObscuredCells();
-    /* but reobscure the ones that are forced obscuring */
-    if (d->hasExtra())
-      forceExtraCells( d->column, d->row, d->extra()->mergedXCells, d->extra()->mergedYCells );
-
-    ColumnFormat *cl1 = m_pSheet->columnFormat( _col );
-    RowFormat *rl1 = m_pSheet->rowFormat( _row );
-    if ( cl1->isHide() || ( rl1->dblHeight() <= m_pSheet->doc()->unzoomItY( 2 ) ) )
-    {
-        clearFlag( Flag_LayoutDirty );
-        return;
-    }
-    setOutputText();
-
-    // Empty text?
-    if ( d->strOutText.isEmpty() )
-    {
-        d->strOutText = QString::null;
-        if ( isDefault() )
-        {
-            clearFlag( Flag_LayoutDirty );
-            return;
-        }
-    }
-    //
-    // Determine the correct font
-    //
-    applyZoomedFont( _painter, _col, _row );
-
-    // Calculate text dimensions
-    textSize( _painter );
-
-    QFontMetrics fm = _painter.fontMetrics();
-
-    //
-    // Calculate the size of the cell
-    //
-    RowFormat *rl = m_pSheet->rowFormat( d->row );
-    ColumnFormat *cl = m_pSheet->columnFormat( d->column );
-
-    double w = cl->dblWidth();
-    double h = rl->dblHeight();
-
-    // Calculate the extraWidth and extraHeight if we are forced to.
-    /* Use d->extra()->extraWidth/height here? Isn't it already calculated?*/
-    /* No, they are calculated here only       Philipp */
-    if ( testFlag( Flag_ForceExtra ) )
-    {
-        int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-        int extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-
-        for ( int x = _col + 1; x <= _col + extraXCells; x++ )
-        {
-            ColumnFormat *cl = m_pSheet->columnFormat( x );
-            w += cl->dblWidth() ;
-        }
-        for ( int y = _row + 1; y <= _row + extraYCells; y++ )
-        {
-            RowFormat *rl = m_pSheet->rowFormat( y );
-            h += rl->dblHeight() ;
-        }
-    }
-    if (d->hasExtra())
-    {
-      d->extra()->extraWidth = w;
-      d->extra()->extraHeight = h;
-    }
-
-    // Do we need to break the line into multiple lines and are we allowed to
-    // do so?
-    int lines = 1;
-    if ( d->textWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) -
-         rightBorderWidth( _col, _row ) && multiRow( _col, _row ) )
-    {
-        // copy of d->strOutText
-        QString o = d->strOutText;
-
-        // No space ?
-        if( o.find(' ') != -1 )
-        {
-            o += ' ';
-            int start = 0;
-            int pos = 0;
-            int pos1 = 0;
-            d->strOutText = "";
-            do
-            {
-                pos = o.find( ' ', pos );
-                double width = m_pSheet->doc()->unzoomItX( fm.width( d->strOutText.mid( start, (pos1-start) )
-                                                                     + o.mid( pos1, (pos-pos1) ) ) );
-
-                if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) -
-                              rightBorderWidth( _col, _row ) )
-                {
-                    d->strOutText += o.mid( pos1, pos - pos1 );
-                    pos1 = pos;
-                }
-                else
-                {
-                    if( o.at( pos1 ) == ' ' )
-                        pos1 = pos1 + 1;
-                    if( pos1 != 0 && pos != -1 )
-                    {
-                        d->strOutText += "\n" + o.mid( pos1, pos - pos1 );
-                        lines++;
-                    }
-                    else
-                        d->strOutText += o.mid( pos1, pos - pos1 );
-                    start = pos1;
-                    pos1 = pos;
-                }
-                pos++;
-            }
-            while( o.find( ' ', pos ) != -1 );
-        }
-
-        d->textHeight *= lines;
-
-        if (lines > 1)
-          d->extra()->nbLines = lines;
-        d->textX = 0.0;
-
-        // Calculate the maximum width
-        QString t;
-        int i;
-        int pos = 0;
-        d->textWidth = 0.0;
-        do
-        {
-            i = d->strOutText.find( "\n", pos );
-            if ( i == -1 )
-                t = d->strOutText.mid( pos, d->strOutText.length() - pos );
-            else
-            {
-                t = d->strOutText.mid( pos, i - pos );
-                pos = i + 1;
-            }
-            double tw = m_pSheet->doc()->unzoomItX( fm.width( t ) );
-            if ( tw > d->textWidth )
-                d->textWidth = tw;
-        }
-        while ( i != -1 );
-    }
-    d->fmAscent = fm.ascent();
-
-    // Calculate d->textX and d->textY
-    offsetAlign( _col, _row );
-
-    double indent = 0.0;
-    int a = effAlignX();
-    //apply indent if text is align to left not when text is at right or middle
-    if( a == KSpreadCell::Left && !isEmpty() )
-        indent = getIndent( _col, _row );
-
-    if( verticalText( _col, _row ) || getAngle( _col, _row ) != 0 )
-    {
-       RowFormat *rl = m_pSheet->rowFormat( _row );
-
-       if( d->textHeight >= rl->dblHeight() )
-       {
-         setFlag( Flag_CellTooShortX );
-       }
-    }
-
-    // Do we have to occupy additional cells right hand ?
-    if ( d->textWidth + indent > w - 2 * BORDER_SPACE -
-         leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
-    {
-      int c = d->column;
-      int end = 0;
-      // Find free cells right hand to this one
-      while ( !end )
-      {
-        ColumnFormat *cl2 = m_pSheet->columnFormat( c + 1 );
-        KSpreadCell *cell = m_pSheet->visibleCellAt( c + 1, d->row );
-        if ( cell->isEmpty() )
-        {
-          w += cl2->dblWidth() - 1;
-          c++;
-
-          // Enough space ?
-          if ( d->textWidth + indent <= w - 2 * BORDER_SPACE -
-               leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
-            end = 1;
-        }
-        // Not enough space, but the next cell is not empty
-        else
-          end = -1;
-      }
-
-      /* Dont occupy additional space for right aligned or centered text or
-         values.  Nor for numeric or boolean, apparently.  Also check to make
-         sure we haven't already force-merged enough cells
-      */
-      /* ##### Why not right/center aligned text?  No one knows.  Perhaps it
-         has something to do with calculating how much room the text needs in
-         those cases?
-      */
-      if( align( _col, _row ) == KSpreadCell::Left ||
-          align( _col, _row ) == KSpreadCell::Undefined )
-      {
-        if( c - d->column > d->extra()->mergedXCells )
-        {
-          d->extra()->extraXCells = c - d->column;
-          d->extra()->extraWidth = w;
-          for( int i = d->column + 1; i <= c; ++i )
-          {
-            KSpreadCell *cell = m_pSheet->nonDefaultCell( i, d->row );
-            cell->obscure( this );
-          }
-          //Not enough space
-          if( end == -1 )
-          {
-            setFlag( Flag_CellTooShortX );
-          }
-        }
-        else
-        {
-          setFlag( Flag_CellTooShortX );
-        }
-      }
-      else
-      {
-        setFlag( Flag_CellTooShortX );
-      }
-    }
-
-    // Do we have to occupy additional cells at the bottom ?
-    if ( multiRow( _col, _row ) &&
-         d->textHeight > h - 2 * BORDER_SPACE -
-         topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
-    {
-      int r = d->row;
-      int end = 0;
-      // Find free cells bottom to this one
-      while ( !end )
-      {
-        RowFormat *rl2 = m_pSheet->rowFormat( r + 1 );
-        KSpreadCell *cell = m_pSheet->visibleCellAt( d->column, r + 1 );
-        if ( cell->isEmpty() )
-        {
-          h += rl2->dblHeight() - 1.0;
-          r++;
-
-          // Enough space ?
-          if ( d->textHeight <= h - 2 * BORDER_SPACE -
-               topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
-            end = 1;
-        }
-        // Not enough space, but the next cell is not empty
-        else
-          end = -1;
-      }
-
-      /* Check to make
-         sure we haven't already force-merged enough cells
-      */
-      if( r - d->row > d->extra()->mergedYCells )
-      {
-        d->extra()->extraYCells = r - d->row;
-        d->extra()->extraHeight = h;
-        for( int i = d->row + 1; i <= r; ++i )
-        {
-          KSpreadCell *cell = m_pSheet->nonDefaultCell( d->column, i );
-          cell->obscure( this );
-        }
-        //Not enough space
-        if( end == -1 )
-        {
-          setFlag( Flag_CellTooShortY );
-        }
-      }
-      else
-      {
-        setFlag( Flag_CellTooShortY );
-      }
-    }
-
-    clearFlag( Flag_LayoutDirty );
-
+  // There is no need to remake the layout if it hasn't changed.
+  if ( !testFlag( Flag_LayoutDirty ) )
     return;
+
+  // Some initializations.
+  if (d->hasExtra())
+    d->extra()->nbLines = 0;
+  clearFlag( Flag_CellTooShortX );
+  clearFlag( Flag_CellTooShortY );
+
+  // Recalculate which cells this one is obscuring.
+  freeAllObscuredCells();
+  if (d->hasExtra())
+    forceExtraCells( d->column, d->row, 
+		     d->extra()->mergedXCells, d->extra()->mergedYCells );
+
+  // If the column for this cell is hidden or the row is too low,
+  // there is no use in remaking the layout.
+  ColumnFormat  *cl1 = m_pSheet->columnFormat( _col );
+  RowFormat     *rl1 = m_pSheet->rowFormat( _row );
+  if ( cl1->isHide() 
+       || ( rl1->dblHeight() <= m_pSheet->doc()->unzoomItY( 2 ) ) ) {
+      clearFlag( Flag_LayoutDirty );
+      return;
+  }
+  setOutputText();
+
+  // Empty text?  Reset the outstring and, if this is the default cell, return.
+  if ( d->strOutText.isEmpty() ) {
+    d->strOutText = QString::null;
+    if ( isDefault() ) {
+      clearFlag( Flag_LayoutDirty );
+      return;
+    }
+  }
+
+  // Determine the correct font with zoom taken into account.
+  applyZoomedFont( _painter, _col, _row );
+
+  // Calculate text dimensions.
+  textSize( _painter );
+
+  QFontMetrics  fm = _painter.fontMetrics();
+
+  //
+  // Calculate the size of the cell
+  //
+  RowFormat     *rl = m_pSheet->rowFormat( d->row );
+  ColumnFormat  *cl = m_pSheet->columnFormat( d->column );
+
+  double w = cl->dblWidth();
+  double h = rl->dblHeight();
+
+  // Calculate the extraWidth and extraHeight if we are forced to.
+  //
+  // Use d->extra()->extraWidth/height here? Isn't it already calculated?
+  // No, they are calculated here only.       /Philipp 
+  if ( testFlag( Flag_ForceExtra ) ) {
+    int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
+    int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
+
+    for ( int x = _col + 1; x <= _col + extraXCells; x++ ) {
+      ColumnFormat  *cl = m_pSheet->columnFormat( x );
+      w += cl->dblWidth();
+    }
+
+    for ( int y = _row + 1; y <= _row + extraYCells; y++ ) {
+      RowFormat  *rl = m_pSheet->rowFormat( y );
+      h += rl->dblHeight();
+    }
+  }
+
+  // Cache the newly calculated extraWidth and extraHeight if we have
+  // already allocated a struct for it.
+  if (d->hasExtra()) {
+    d->extra()->extraWidth  = w;
+    d->extra()->extraHeight = h;
+  }
+
+  // Check if we need to break the line into multiple lines and are
+  // allowed to do so.  If so, set `lines' to the number of lines that
+  // are needed to fit into the total width of the combined cell.
+  // Also recalculate d->textHeight, d->textWidth, d->extra->nbLines
+  // and d->strOutText.
+  //
+  int  lines = 1;
+  if ( d->textWidth > (w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) 
+		       - rightBorderWidth( _col, _row ) )
+       && multiRow( _col, _row ) )
+  {
+    // copy of d->strOutText
+    QString o = d->strOutText;
+
+    // Break the line at appropriate places, i.e. spaces, if
+    // necessary.  This means to change the spaces where breaks occur
+    // into newlines.
+    if ( o.find(' ') != -1 ) {
+      o += ' ';
+      int start = 0;
+      int pos = 0;
+      int pos1 = 0;
+      d->strOutText = "";
+      do {
+	pos = o.find( ' ', pos );
+	double width = m_pSheet->doc()
+	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1-start) )
+				 + o.mid( pos1, (pos-pos1) ) ) );
+
+	if ( width <= ( w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) 
+			- rightBorderWidth( _col, _row ) ) ) {
+	  d->strOutText += o.mid( pos1, pos - pos1 );
+	  pos1 = pos;
+	}
+	else {
+	  if ( o.at( pos1 ) == ' ' )
+	    pos1 = pos1 + 1;
+
+	  if ( pos1 != 0 && pos != -1 ) {
+	    d->strOutText += "\n" + o.mid( pos1, pos - pos1 );
+	    lines++;
+	  }
+	  else
+	    d->strOutText += o.mid( pos1, pos - pos1 );
+
+	  start = pos1;
+	  pos1 = pos;
+	}
+
+	pos++;
+      } while( o.find( ' ', pos ) != -1 );
+    }
+
+    d->textHeight *= lines;
+
+    if (lines > 1)
+      d->extra()->nbLines = lines;
+    d->textX = 0.0;
+
+    // Calculate the maximum width, taking into account linebreaks.
+    QString t;
+    int i;
+    int pos = 0;
+
+    // Set d->textWidth to the maximum line width.
+    d->textWidth = 0.0;
+    do {
+      i = d->strOutText.find( "\n", pos );
+      if ( i == -1 )
+	t = d->strOutText.mid( pos, d->strOutText.length() - pos );
+      else {
+	t = d->strOutText.mid( pos, i - pos );
+	pos = i + 1;
+      }
+
+      double tw = m_pSheet->doc()->unzoomItX( fm.width( t ) );
+      if ( tw > d->textWidth )
+	d->textWidth = tw;
+    } while ( i != -1 );
+  }
+  d->fmAscent = fm.ascent();
+
+  // Calculate d->textX and d->textY
+  offsetAlign( _col, _row );
+
+  double indent = 0.0;
+  int a = effAlignX();
+
+  // Get indentation if text is left aligned, but not when text is
+  // right aligned or centered.
+  if ( a == KSpreadCell::Left && !isEmpty() )
+    indent = getIndent( _col, _row );
+
+  // Set Flag_CellTooShortX if the text is too high for the cell.
+  if ( verticalText( _col, _row ) || getAngle( _col, _row ) != 0 ) {
+    RowFormat  *rl = m_pSheet->rowFormat( _row );
+
+    if ( d->textHeight >= rl->dblHeight() ) 
+      setFlag( Flag_CellTooShortX );
+  }
+
+  // Do we have to occupy additional cells to the right?
+  if ( d->textWidth + indent > w - 2 * BORDER_SPACE -
+       leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
+  {
+    int c = d->column;
+    int end = 0;
+  
+  // Find free cells to the right of this one.
+    while ( !end ) {
+      ColumnFormat  *cl2 = m_pSheet->columnFormat( c + 1 );
+      KSpreadCell   *cell = m_pSheet->visibleCellAt( c + 1, d->row );
+
+      if ( cell->isEmpty() ) {
+	w += cl2->dblWidth() - 1;
+	c++;
+
+	// Enough space?
+	if ( d->textWidth + indent <= w - 2 * BORDER_SPACE 
+	     - leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
+	  end = 1;
+      }
+      else
+	// Not enough space, but the next cell is not empty
+	end = -1;
+    }
+
+    // Don't occupy additional space for right aligned or centered text
+    // or values.  Nor for numeric or boolean, apparently.  Also check
+    // to make sure we haven't already force-merged enough cells
+    //
+    // FIXME: Why not right/center aligned text?  No one knows.
+    //        Perhaps it has something to do with calculating how much 
+    //        room the text needs in those cases?
+    //
+    if ( align( _col, _row ) == KSpreadCell::Left 
+	 || align( _col, _row ) == KSpreadCell::Undefined )
+    {
+      if ( c - d->column > d->extra()->mergedXCells ) {
+	d->extra()->extraXCells = c - d->column;
+	d->extra()->extraWidth  = w;
+	for ( int i = d->column + 1; i <= c; ++i ) {
+	  KSpreadCell *cell = m_pSheet->nonDefaultCell( i, d->row );
+	  cell->obscure( this );
+	}
+
+	// Not enough space
+	if ( end == -1 ) 
+	  setFlag( Flag_CellTooShortX );
+      }
+      else
+	setFlag( Flag_CellTooShortX );
+    }
+    else 
+      setFlag( Flag_CellTooShortX );
+  }
+
+  // Do we have to occupy additional cells at the bottom ?
+  if ( multiRow( _col, _row )
+       && d->textHeight > ( h - 2 * BORDER_SPACE 
+			    - topBorderWidth( _col, _row )
+			    - bottomBorderWidth( _col, _row ) ) )
+  {
+    int  r   = d->row;
+    int  end = 0;
+
+    // Find free cells bottom to this one
+    while ( !end ) {
+      RowFormat    *rl2 = m_pSheet->rowFormat( r + 1 );
+      KSpreadCell  *cell = m_pSheet->visibleCellAt( d->column, r + 1 );
+
+      if ( cell->isEmpty() ) {
+	h += rl2->dblHeight() - 1.0;
+	r++;
+
+	// Enough space ?
+	if ( d->textHeight <= ( h - 2 * BORDER_SPACE 
+				- topBorderWidth( _col, _row )
+				- bottomBorderWidth( _col, _row ) ) )
+	  end = 1;
+      }
+      else
+	// Not enough space, but the next cell is not empty.
+	end = -1;
+    }
+
+    // Check to make sure we haven't already force-merged enough cells.
+    if ( r - d->row > d->extra()->mergedYCells ) {
+      d->extra()->extraYCells = r - d->row;
+      d->extra()->extraHeight = h;
+
+      for ( int i = d->row + 1; i <= r; ++i ) {
+	KSpreadCell  *cell = m_pSheet->nonDefaultCell( d->column, i );
+	cell->obscure( this );
+      }
+
+      // Not enough space?
+      if ( end == -1 ) 
+	setFlag( Flag_CellTooShortY );
+    }
+    else
+      setFlag( Flag_CellTooShortY );
+  }
+
+  clearFlag( Flag_LayoutDirty );
+
+  return;
 }
+
 
 void KSpreadCell::valueChanged ()
 {
@@ -1426,320 +1433,373 @@ void KSpreadCell::setOutputText()
     d->extra()->conditions->checkMatches();
 }
 
-//used in makeLayout() and calculateTextParameters()
+
+// Recalculate d->textX and d->textY.
+//
+// Used in makeLayout() and calculateTextParameters().
+//
+
 void KSpreadCell::offsetAlign( int _col, int _row )
 {
-    int    a;
-    AlignY ay;
-    int    tmpAngle;
-    bool   tmpVerticalText;
-    bool   tmpMultiRow;
-    int    tmpTopBorderWidth = effTopBorderPen( _col, _row ).width();
+  int     a;
+  AlignY  ay;
+  int     tmpAngle;
+  bool    tmpVerticalText;
+  bool    tmpMultiRow;
+  int     tmpTopBorderWidth = effTopBorderPen( _col, _row ).width();
 
-    if ( d->hasExtra() && d->extra()->conditions
-        && d->extra()->conditions->matchedStyle() )
-    {
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
-        a = d->extra()->conditions->matchedStyle()->alignX();
-      else
-        a = align( _col, _row );
+  if ( d->hasExtra()
+       && d->extra()->conditions
+       && d->extra()->conditions->matchedStyle() )
+  {
+    KSpreadStyle  *style = d->extra()->conditions->matchedStyle();
 
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-        tmpVerticalText = d->extra()->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
-      else
-        tmpVerticalText = verticalText( _col, _row );
-
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SMultiRow, true ) )
-        tmpMultiRow = d->extra()->conditions->matchedStyle()->hasProperty( KSpreadStyle::PMultiRow );
-      else
-        tmpMultiRow = multiRow( _col, _row );
-
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
-        ay = d->extra()->conditions->matchedStyle()->alignY();
-      else
-        ay = alignY( _col, _row );
-
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
-        tmpAngle = d->extra()->conditions->matchedStyle()->rotateAngle();
-      else
-        tmpAngle = getAngle( _col, _row );
-    }
+    if ( style->hasFeature( KSpreadStyle::SAlignX, true ) )
+      a = style->alignX();
     else
-    {
       a = align( _col, _row );
-      ay = alignY( _col, _row );
-      tmpAngle = getAngle( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SVerticalText, true ) )
+      tmpVerticalText = style->hasProperty( KSpreadStyle::PVerticalText );
+    else
       tmpVerticalText = verticalText( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SMultiRow, true ) )
+      tmpMultiRow = style->hasProperty( KSpreadStyle::PMultiRow );
+    else
       tmpMultiRow = multiRow( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SAlignY, true ) )
+      ay = style->alignY();
+    else
+      ay = alignY( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SAngle, true ) )
+      tmpAngle = style->rotateAngle();
+    else
+      tmpAngle = getAngle( _col, _row );
+  }
+  else {
+    a               = align( _col, _row );
+    ay              = alignY( _col, _row );
+    tmpAngle        = getAngle( _col, _row );
+    tmpVerticalText = verticalText( _col, _row );
+    tmpMultiRow     = multiRow( _col, _row );
+  }
+
+  RowFormat     *rl = m_pSheet->rowFormat( _row );
+  ColumnFormat  *cl = m_pSheet->columnFormat( _col );
+
+  double  w = cl->dblWidth();
+  double  h = rl->dblHeight();
+
+  if ( d->hasExtra() ) {
+    if ( d->extra()->extraXCells )  w = d->extra()->extraWidth;
+    if ( d->extra()->extraYCells )  h = d->extra()->extraHeight;
+  }
+
+  switch( ay ) {
+  case KSpreadCell::Top:
+    if ( tmpAngle == 0 )
+      d->textY = tmpTopBorderWidth + BORDER_SPACE
+	+ (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    else if ( tmpAngle < 0 )
+      d->textY = tmpTopBorderWidth + BORDER_SPACE;
+    else
+      d->textY = tmpTopBorderWidth + BORDER_SPACE 
+	+ ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) 
+	    / m_pSheet->doc()->zoomedResolutionY() );
+    break;
+
+  case KSpreadCell::Bottom:
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
+      d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
     }
-
-    RowFormat    * rl = m_pSheet->rowFormat( _row );
-    ColumnFormat * cl = m_pSheet->columnFormat( _col );
-
-    double w = cl->dblWidth();
-    double h = rl->dblHeight();
-
-    if ( d->hasExtra() && d->extra()->extraXCells )
-        w = d->extra()->extraWidth;
-    if ( d->hasExtra() && d->extra()->extraYCells )
-        h = d->extra()->extraHeight;
-
-    switch( ay )
-    {
-     case KSpreadCell::Top:
-      if ( tmpAngle == 0 )
-        d->textY = tmpTopBorderWidth + BORDER_SPACE
-          + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    else if ( tmpAngle != 0 ) {
+      if ( h - BORDER_SPACE - d->textHeight
+	   - effBottomBorderPen( _col, _row ).width() > 0 )
+      {
+	if ( tmpAngle < 0 )
+	  d->textY = h - BORDER_SPACE - d->textHeight
+	    - effBottomBorderPen( _col, _row ).width();
+	else
+	  d->textY = h - BORDER_SPACE - d->textHeight
+	    - effBottomBorderPen( _col, _row ).width()
+	    + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+		/ m_pSheet->doc()->zoomedResolutionY() );
+      }
+      else if ( tmpAngle < 0 )
+	d->textY = tmpTopBorderWidth + BORDER_SPACE ;
       else
-      {
-        if ( tmpAngle < 0 )
-          d->textY = tmpTopBorderWidth + BORDER_SPACE;
-        else
-          d->textY = tmpTopBorderWidth + BORDER_SPACE +
-            (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
-            m_pSheet->doc()->zoomedResolutionY();
-      }
-      break;
-
-     case KSpreadCell::Bottom:
-      if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
-      {
-        d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
-      }
-      else if ( tmpAngle != 0 )
-      {
-        if ( h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width() > 0 )
-        {
-          if ( tmpAngle < 0 )
-            d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width();
-          else
-            d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width()
-              + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pSheet->doc()->zoomedResolutionY();
-        }
-        else
-        {
-          if ( tmpAngle < 0 )
-            d->textY = tmpTopBorderWidth + BORDER_SPACE ;
-          else
-            d->textY = tmpTopBorderWidth + BORDER_SPACE
-              + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pSheet->doc()->zoomedResolutionY();
-        }
-      }
-      else if ( tmpMultiRow )
-      {
-        int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-        if ( tmpline > 1 )
-          tmpline--;  //number of extra lines
-        if( h - BORDER_SPACE - d->textHeight * d->extra()->nbLines - effBottomBorderPen( _col, _row ).width() > 0 )
-          d->textY = h - BORDER_SPACE - d->textHeight * tmpline - effBottomBorderPen( _col, _row ).width();
-        else
-          d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-      }
-      else
-        if ( h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width() > 0 )
-          d->textY = h - BORDER_SPACE - d->textHeight - effBottomBorderPen( _col, _row ).width()
-            + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-        else
-          d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-      break;
-
-     case KSpreadCell::Middle:
-     case KSpreadCell::UndefinedY:
-      if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
-      {
-        d->textY = ( h - d->textHeight ) / 2 + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-      }
-      else if ( tmpAngle != 0 )
-      {
-        if ( h - d->textHeight > 0 )
-        {
-          if ( tmpAngle < 0 )
-            d->textY = ( h - d->textHeight ) / 2 ;
-          else
-            d->textY = ( h - d->textHeight ) / 2 +
-              (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
-              m_pSheet->doc()->zoomedResolutionY();
-        }
-        else
-        {
-          if ( tmpAngle < 0 )
-            d->textY = tmpTopBorderWidth + BORDER_SPACE;
-          else
-            d->textY = tmpTopBorderWidth + BORDER_SPACE
-              + (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pSheet->doc()->zoomedResolutionY();
-        }
-      }
-      else if ( tmpMultiRow )
-      {
-        int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-        if ( tmpline == 0 )
-          tmpline = 1;
-        if ( h - d->textHeight * tmpline > 0 )
-          d->textY = ( h - d->textHeight * tmpline ) / 2
-            + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-        else
-          d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-      }
-      else
-        if ( h - d->textHeight > 0 )
-          d->textY = ( h - d->textHeight ) / 2 + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-        else
-          d->textY = tmpTopBorderWidth + BORDER_SPACE
-            + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
-      break;
+	d->textY = tmpTopBorderWidth + BORDER_SPACE
+	  + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+	      / m_pSheet->doc()->zoomedResolutionY() );
     }
+    else if ( tmpMultiRow ) {
+      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
+      if ( tmpline > 1 )
+	tmpline--;  //number of extra lines
 
-    a = effAlignX();
-    if ( m_pSheet->getShowFormula() && !( m_pSheet->isProtected() && isHideFormula( _col, _row ) ) )
-      a = KSpreadCell::Left;
-
-    switch( a )
-    {
-     case KSpreadCell::Left:
-      d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
-      break;
-     case KSpreadCell::Right:
-      d->textX = w - BORDER_SPACE - d->textWidth - effRightBorderPen( _col, _row ).width();
-      break;
-     case KSpreadCell::Center:
-      d->textX = ( w - d->textWidth ) / 2;
-      break;
+      if ( h - BORDER_SPACE - d->textHeight * d->extra()->nbLines
+	   - effBottomBorderPen( _col, _row ).width() > 0 )
+	d->textY = h - BORDER_SPACE - d->textHeight * tmpline
+	  - effBottomBorderPen( _col, _row ).width();
+      else
+	d->textY = tmpTopBorderWidth + BORDER_SPACE
+	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
     }
+    else {
+      if ( h - BORDER_SPACE - d->textHeight 
+	   - effBottomBorderPen( _col, _row ).width() > 0 )
+	d->textY = h - BORDER_SPACE - d->textHeight
+	  - effBottomBorderPen( _col, _row ).width()
+	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+      else
+	d->textY = tmpTopBorderWidth + BORDER_SPACE
+	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    }
+    break;
+
+  case KSpreadCell::Middle:
+  case KSpreadCell::UndefinedY:
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
+      d->textY = ( h - d->textHeight ) / 2
+	+ (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    }
+    else if ( tmpAngle != 0 ) {
+      if ( h - d->textHeight > 0 ) {
+	if ( tmpAngle < 0 )
+	  d->textY = ( h - d->textHeight ) / 2 ;
+	else
+	  d->textY = ( h - d->textHeight ) / 2 +
+	    (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
+	    m_pSheet->doc()->zoomedResolutionY();
+      }
+      else {
+	if ( tmpAngle < 0 )
+	  d->textY = tmpTopBorderWidth + BORDER_SPACE;
+	else
+	  d->textY = tmpTopBorderWidth + BORDER_SPACE
+	    + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
+		/ m_pSheet->doc()->zoomedResolutionY() );
+      }
+    }
+    else if ( tmpMultiRow ) {
+      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
+      if ( tmpline == 0 )
+	tmpline = 1;
+
+      if ( h - d->textHeight * tmpline > 0 )
+	d->textY = ( h - d->textHeight * tmpline ) / 2
+	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+      else
+	d->textY = tmpTopBorderWidth + BORDER_SPACE
+	  + (double) d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    }
+    else {
+      if ( h - d->textHeight > 0 )
+	d->textY = ( h - d->textHeight ) / 2
+	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+      else
+	d->textY = tmpTopBorderWidth + BORDER_SPACE
+	  + (double)d->fmAscent / m_pSheet->doc()->zoomedResolutionY();
+    }
+    break;
+  }
+
+  a = effAlignX();
+  if ( m_pSheet->getShowFormula() 
+       && !( m_pSheet->isProtected() && isHideFormula( _col, _row ) ) )
+    a = KSpreadCell::Left;
+
+  switch ( a ) {
+  case KSpreadCell::Left:
+    d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
+    break;
+  case KSpreadCell::Right:
+    d->textX = w - BORDER_SPACE - d->textWidth
+      - effRightBorderPen( _col, _row ).width();
+    break;
+  case KSpreadCell::Center:
+    d->textX = ( w - d->textWidth ) / 2;
+    break;
+  }
 }
 
-//used in makeLayout() and calculateTextParameters()
+
+// Recalculate the current text dimensions, i.e. d->textWidth and
+// d->textHeight.
+//
+// Used in makeLayout() and calculateTextParameters().
+//
 void KSpreadCell::textSize( QPainter &_paint )
 {
-    QFontMetrics fm = _paint.fontMetrics();
-    // Horizontal text ?
+  QFontMetrics  fm = _paint.fontMetrics();
+  // Horizontal text ?
 
-    int    tmpAngle;
-    int    _row = row();
-    int    _col = column();
-    bool   tmpVerticalText;
-    bool   fontUnderlined;
-    AlignY ay;
+  int    tmpAngle;
+  int    _row = row();
+  int    _col = column();
+  bool   tmpVerticalText;
+  bool   fontUnderlined;
+  AlignY ay;
 
-    if ( d->hasExtra() && d->extra()->conditions &&
-        d->extra()->conditions->matchedStyle() )
-    {
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAngle, true ) )
-        tmpAngle = d->extra()->conditions->matchedStyle()->rotateAngle();
-      else
-        tmpAngle = getAngle( _col, _row );
+  // Set tmpAngle, tmpeVerticalText, ay and fontUnderlined according
+  // to if there is a matching condition or not.
+  if ( d->hasExtra()
+       && d->extra()->conditions
+       && d->extra()->conditions->matchedStyle() )
+  {
+    KSpreadStyle  *style = d->extra()->conditions->matchedStyle();
 
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SVerticalText, true ) )
-        tmpVerticalText = d->extra()->conditions->matchedStyle()->hasProperty( KSpreadStyle::PVerticalText );
-      else
-        tmpVerticalText = verticalText( _col, _row );
-
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignY, true ) )
-        ay = d->extra()->conditions->matchedStyle()->alignY();
-      else
-        ay = alignY( _col, _row );
-
-      if ( d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SFontFlag, true ) )
-        fontUnderlined = ( d->extra()->conditions->matchedStyle()->fontFlags() && (uint) KSpreadStyle::FUnderline );
-      else
-        fontUnderlined = textFontUnderline( _col, _row );
-    }
+    if ( style->hasFeature( KSpreadStyle::SAngle, true ) )
+      tmpAngle = style->rotateAngle();
     else
-    {
       tmpAngle = getAngle( _col, _row );
-      tmpVerticalText = verticalText( _col, _row );
-      ay = alignY( _col, _row );
-      fontUnderlined = textFontUnderline( _col, _row );
-    }
 
-    if ( !tmpVerticalText && !tmpAngle )
-    {
-        d->textWidth = m_pSheet->doc()->unzoomItX( fm.width( d->strOutText ) );
-        int offsetFont = 0;
-        if ( ( ay == KSpreadCell::Bottom ) && fontUnderlined )
-        {
-            offsetFont = fm.underlinePos() + 1;
-        }
-        d->textHeight = m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent() + offsetFont );
-    }
-    // Rotated text ?
-    else if ( tmpAngle!= 0 )
-    {
-        d->textHeight = m_pSheet->doc()->unzoomItY( int( cos( tmpAngle * M_PI / 180 ) *
-                                                            ( fm.ascent() + fm.descent() ) +
-                                                       abs( int( ( fm.width( d->strOutText ) *
-                                                          sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
-        d->textWidth = m_pSheet->doc()->unzoomItX( int( abs( int( ( sin( tmpAngle * M_PI / 180 ) *
-                                                                     ( fm.ascent() + fm.descent() ) ) ) ) +
-                                                           fm.width( d->strOutText ) *
-                                                           cos ( tmpAngle * M_PI / 180 ) ) );
-        //kdDebug(36001)<<"d->textWidth"<<d->textWidth<<"d->textHeight"<<d->textHeight<<endl;
-    }
-    // Vertical text ?
+    if ( style->hasFeature( KSpreadStyle::SVerticalText, true ) )
+      tmpVerticalText = style->hasProperty( KSpreadStyle::PVerticalText );
     else
-    {
-        int width = 0;
-        for ( unsigned int i = 0; i < d->strOutText.length(); i++ )
-          width = QMAX( width, fm.width( d->strOutText.at( i ) ) );
-        d->textWidth = m_pSheet->doc()->unzoomItX( width );
-        d->textHeight = m_pSheet->doc()->unzoomItY( ( fm.ascent() + fm.descent() ) *
-                                                       d->strOutText.length() );
+      tmpVerticalText = verticalText( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SAlignY, true ) )
+      ay = style->alignY();
+    else
+      ay = alignY( _col, _row );
+
+    if ( style->hasFeature( KSpreadStyle::SFontFlag, true ) )
+      fontUnderlined = ( style->fontFlags()
+			 // FIXME: Should be & (uint)...?
+			 && (uint) KSpreadStyle::FUnderline );
+    else
+      fontUnderlined = textFontUnderline( _col, _row );
+  }
+  else {
+    // The cell has no condition with a maxed style.
+    tmpAngle        = getAngle( _col, _row );
+    tmpVerticalText = verticalText( _col, _row );
+    ay              = alignY( _col, _row );
+    fontUnderlined  = textFontUnderline( _col, _row );
+  }
+
+  // Set textWidth and textHeight to correct values according to if
+  // the text is horizontal, vertical or rotated.
+  if ( !tmpVerticalText && !tmpAngle ) {
+    // Horizontal text.
+
+    d->textWidth = m_pSheet->doc()->unzoomItX( fm.width( d->strOutText ) );
+    int offsetFont = 0;
+    if ( ( ay == KSpreadCell::Bottom ) && fontUnderlined ) {
+      offsetFont = fm.underlinePos() + 1;
     }
 
+    d->textHeight = m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent()
+						+ offsetFont );
+  }
+  else if ( tmpAngle!= 0 ) {
+    // Rotated text.
+
+    d->textHeight = m_pSheet->doc()
+      ->unzoomItY( int( cos( tmpAngle * M_PI / 180 )
+			* ( fm.ascent() + fm.descent() )
+			+ abs( int( ( fm.width( d->strOutText ) 
+				      * sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
+
+    d->textWidth = m_pSheet->doc()
+      ->unzoomItX( int( abs( int( ( sin( tmpAngle * M_PI / 180 )
+				    * ( fm.ascent() + fm.descent() ) ) ) ) 
+			+ fm.width( d->strOutText ) 
+			  * cos ( tmpAngle * M_PI / 180 ) ) );
+
+    //kdDebug(36001) << "d->textWidth" << d->textWidth 
+    //<< "d->textHeight" << d->textHeight << endl;
+  }
+  else {
+    // Vertical text.
+    int width = 0;
+    for ( unsigned int i = 0; i < d->strOutText.length(); i++ )
+      width = QMAX( width, fm.width( d->strOutText.at( i ) ) );
+
+    d->textWidth  = m_pSheet->doc()->unzoomItX( width );
+    d->textHeight = m_pSheet->doc()->unzoomItY( ( fm.ascent() + fm.descent() ) 
+						* d->strOutText.length() );
+  }
 }
 
 
-//used in makeLayout() and calculateTextParameters()
+// Get the effective font to use after the zooming and apply it to `painter'.
+//
+// Used in makeLayout() and calculateTextParameters().
+//
+
 void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
 {
-    QFont tmpFont( textFont( _col, _row ) );
-    if ( d->hasExtra() && d->extra()->conditions &&
-        d->extra()->conditions->matchedStyle() )
-    {
-      KSpreadStyle * s = d->extra()->conditions->matchedStyle();
-      if ( s->hasFeature( KSpreadStyle::SFontSize, true ) )
-        tmpFont.setPointSizeFloat( s->fontSize() );
-      if ( s->hasFeature( KSpreadStyle::SFontFlag, true ) )
-      {
-        uint flags = s->fontFlags();
+  QFont  tmpFont( textFont( _col, _row ) );
 
-        tmpFont.setBold( flags & (uint) KSpreadStyle::FBold );
-        tmpFont.setUnderline( flags & (uint) KSpreadStyle::FUnderline );
-        tmpFont.setItalic( flags & (uint) KSpreadStyle::FItalic );
-        tmpFont.setStrikeOut( flags & (uint) KSpreadStyle::FStrike );
-      }
-      if ( s->hasFeature( KSpreadStyle::SFontFamily, true ) )
-        tmpFont.setFamily( s->fontFamily() );
+  // If there is a matching condition on this cell then set the
+  // according style parameters.
+  if ( d->hasExtra()
+       && d->extra()->conditions 
+       && d->extra()->conditions->matchedStyle() ) {
+
+    KSpreadStyle * s = d->extra()->conditions->matchedStyle();
+
+    // Other size?
+    if ( s->hasFeature( KSpreadStyle::SFontSize, true ) )
+      tmpFont.setPointSizeFloat( s->fontSize() );
+
+    // Other attributes?
+    if ( s->hasFeature( KSpreadStyle::SFontFlag, true ) ) {
+      uint flags = s->fontFlags();
+
+      tmpFont.setBold(      flags & (uint) KSpreadStyle::FBold );
+      tmpFont.setUnderline( flags & (uint) KSpreadStyle::FUnderline );
+      tmpFont.setItalic(    flags & (uint) KSpreadStyle::FItalic );
+      tmpFont.setStrikeOut( flags & (uint) KSpreadStyle::FStrike );
     }
-    //    else
-      /*
-       * could somebody please explaint why we check for isProtected or isHideFormula here
-       *
-      if ( d->extra()->conditions && d->extra()->conditions->currentCondition( condition )
-        && !(m_pSheet->getShowFormula()
-              && !( m_pSheet->isProtected() && isHideFormula( d->column, d->row ) ) ) )
-      {
-        if ( condition.fontcond )
-            tmpFont = *(condition.fontcond);
-        else
-            tmpFont = condition.style->font();
-      }
-      */
 
-    tmpFont.setPointSizeFloat( 0.01 * m_pSheet->doc()->zoom() * tmpFont.pointSizeFloat() );
-    painter.setFont( tmpFont );
+    // Other family?
+    if ( s->hasFeature( KSpreadStyle::SFontFamily, true ) )
+      tmpFont.setFamily( s->fontFamily() );
+  }
+#if 0
+  else
+  /*
+   * could somebody please explaint why we check for isProtected or isHideFormula here
+   */
+   if ( d->extra()->conditions
+	&& d->extra()->conditions->currentCondition( condition )
+	&& !(m_pSheet->getShowFormula()
+	     && !( m_pSheet->isProtected()
+		   && isHideFormula( d->column, d->row ) ) ) ) 
+   {
+     if ( condition.fontcond )
+       tmpFont = *(condition.fontcond);
+     else
+       tmpFont = condition.style->font();
+   }
+#endif
+
+  // Scale the font size according to the current zoom.
+  tmpFont.setPointSizeFloat( 0.01 * m_pSheet->doc()->zoom()
+			     * tmpFont.pointSizeFloat() );
+
+  painter.setFont( tmpFont );
 }
 
+
 //used in KSpreadSheet::adjustColumnHelper and KSpreadSheet::adjustRow
-void KSpreadCell::calculateTextParameters( QPainter &_paint, int _col, int _row )
+void KSpreadCell::calculateTextParameters( QPainter &_painter, 
+					   int _col, int _row )
 {
-    applyZoomedFont( _paint, _col, _row );
+  // Apply the correct font to _painter.
+  applyZoomedFont( _painter, _col, _row );
 
-    textSize( _paint );
+  // Recalculate d->textWidth and d->textHeight
+  textSize( _painter );
 
-    offsetAlign( _col, _row );
+  // Recalculate d->textX and d->textY.
+  offsetAlign( _col, _row );
 }
 
 
@@ -3126,7 +3186,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       else
         painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                           QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_left ),
+                          QMIN( zrect_right, zcellRect_right ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
     }
     else {

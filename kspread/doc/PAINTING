@@ -41,7 +41,7 @@ Non-empty cell TtR		Text is cut, no mark		Text is cut, no mark		Text is cut, arr
 
 Text in Cell, Right aligned
 ---------------------------
-Empty TtL			Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL
+Empty cell TtL			Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL		Overflows into cell TtL
 Non-empty TtL, empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
 												overflows into cell TtR		arrow is drawn TtR		arrow is drawn TtR
 Non-empty TtL, non-empty TtR	Text is cut, no mark		Text is cut, no mark		Text is left aligned(!),	Bug: overflows TtL,		Text is cut, 
