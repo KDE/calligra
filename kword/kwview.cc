@@ -6633,6 +6633,8 @@ void KWView::insertFile(const KURL& _url)
     bool hasFixedFramesets = false;
     KoStore* store=KoStore::createStore( this, _url, KoStore::Read );
 
+    // TODO: this code only supports KWord-1.3 stores, it needs to support OASIS too.
+
     // ###### All of this should be ported to use the pasting code instead.
 
     QString maindoc = "maindoc.xml";
