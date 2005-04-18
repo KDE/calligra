@@ -710,7 +710,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 	bool enableLayout = ((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()));
 
 	m_menuWidget = w;
-	QCString n = m_lib->displayName(w->className());
+	QString n = m_lib->displayName(w->className());
 	QValueVector<int> *menuIds = new QValueVector<int>();
 
 	if(!multiple)

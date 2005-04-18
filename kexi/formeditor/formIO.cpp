@@ -566,7 +566,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 		case QVariant::Pixmap:
 		{
 			type = parent.createElement("pixmap");
-			QCString property = parentNode.attribute("name");
+			QCString property = parentNode.attribute("name").latin1();
 			if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
 				valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
 			else
