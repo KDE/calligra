@@ -49,7 +49,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 			currentActionName = currentActionName.mid(QCString("kaction:").length()); //cut prefix
 		} else {
 /*! @todo handle other types of action handlers here (eg. script event handler or function)! */
-			currentActionName = QString::null; //for now we're pretending there was no action assigned
+			currentActionName = ""; //for now we're pretending there was no action assigned
 		}
 	}
 
