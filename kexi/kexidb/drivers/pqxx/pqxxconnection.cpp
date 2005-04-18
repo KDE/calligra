@@ -257,16 +257,11 @@ bool pqxxSqlConnection::drv_isDatabaseUsed() const
 //Clears the current result
 void pqxxSqlConnection::clearResultInfo ()
 {
-    if (m_res)
-    {
-        delete m_res;
-        m_res = 0;
-    }
-    if (m_trans)
-    {
-        delete m_trans;
-        m_trans = 0;
-    }
+    delete m_res;
+    m_res = 0;
+
+    delete m_trans;
+    m_trans = 0;
 }
 
 //==================================================================================

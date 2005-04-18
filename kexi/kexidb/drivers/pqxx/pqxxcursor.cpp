@@ -108,12 +108,11 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 bool pqxxSqlCursor::drv_close()
 {
 //js	m_opened=false;
-	if(m_res != 0)
-		delete m_res;
-	if(m_tran != 0)
-		delete m_tran;
 
+	delete m_res;
 	m_res = 0;
+		
+	delete m_tran;
 	m_tran = 0;
 
 	return true;
