@@ -3126,7 +3126,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       else
         painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                           QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_right ),
+                          QMIN( zrect_right, zcellRect_left ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
     }
     else {
