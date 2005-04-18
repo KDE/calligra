@@ -1534,6 +1534,11 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
             // We don't parse variable-decls since we ignore var types right now
             // (and just storing a list of available var names wouldn't be much use)
         }
+        else if ( isTextNS && localName == "number" ) // text:number
+        {
+            // This is the number in front of a numbered paragraph,
+            // written out to help export filters. We can ignore it.
+        }
         else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl, nextParagraph ) )
         {
             kdWarning(32002) << "Unsupported body element '" << localName << "'" << endl;
