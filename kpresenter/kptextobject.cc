@@ -1830,10 +1830,10 @@ void KPTextView::paste()
     //kdDebug(33001) << "KPTextView::paste()" << endl;
 
     QMimeSource *data = QApplication::clipboard()->data();
-    QString returnMimeType;
-    if ( KPrTextDrag::provides( data , KPrTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(), returnMimeType) )
+    QCString returnedMimeType = KoTextObject::providesOasis( data );
+    if ( !returnedMimeType.isEmpty() )
     {
-        QByteArray arr = data->encodedData( returnMimeType.latin1() );
+        QByteArray arr = data->encodedData( returnedMimeType );
         if ( arr.size() )
         {
             kdDebug(33001)<<"QCString( arr ) :"<<QCString( arr.data(), arr.size()+1 )<<endl;
@@ -2495,10 +2495,10 @@ void KPTextView::dropEvent( QDropEvent * e )
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-        QString returnedTypeMime;
-        if ( KPrTextDrag::provides( e , KPrTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(),  returnedTypeMime) )
+        QCString returnedTypeMime = KoTextObject::providesOasis( e );
+        if ( !returnedTypeMime.isEmpty() )
         {
-            QByteArray arr = e->encodedData( returnedTypeMime.latin1() );
+            QByteArray arr = e->encodedData( returnedTypeMime );
             if ( arr.size() )
             {
                 KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false );

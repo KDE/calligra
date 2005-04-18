@@ -45,8 +45,6 @@ public:
 
     static const char * selectionMimeType();
 
-    static bool provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime);
-
 protected:
     QCString kpresenter;
 };

@@ -36,24 +36,9 @@ QByteArray KPrTextDrag::encodedData( const char *mime ) const
         return QTextDrag::encodedData(mime);
 }
 
-bool KPrTextDrag::provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime)
-{
-    const char* fmt;
-    for (int i=0; (fmt = e->format(i)); i++)
-    {
-        if ( !qstricmp(mimeType,fmt) || QString( fmt ).startsWith( acceptMimeType ))
-        {
-            returnedTypeMime = fmt;
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 bool KPrTextDrag::canDecode( QMimeSource* e )
 {
-    QString tmp;
-    if ( KPrTextDrag::provides( e, selectionMimeType(), KoTextObject::acceptSelectionMimeType(), tmp ) )
+    if ( KoTextObject::providesOasis( e ) )
         return true;
     return QTextDrag::canDecode(e);
 }
