@@ -80,12 +80,12 @@ Spring::paintEvent(QPaintEvent *ev)
 }
 
 bool
-Spring::showProperty(const QString &name)
+Spring::isPropertyVisible(const QCString &name)
 {
 	if((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
 		return true;
-	else
-		return false;
+
+	return false;
 }
 
 

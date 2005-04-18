@@ -23,6 +23,7 @@
 
 #include "kexiscrollview.h"
 #include "kexidataprovider.h"
+#include "kexiformeventhandler.h"
 #include "kexidbform.h"
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
@@ -46,7 +47,8 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 	public KexiRecordNavigatorHandler,
 	public KexiSharedActionClient,
 	public KexiDataAwareObjectInterface,
-	public KexiFormDataProvider
+	public KexiFormDataProvider,
+	public KexiFormEventHandler
 {
 	Q_OBJECT
 	KEXI_DATAAWAREOBJECTINTERFACE

@@ -104,8 +104,8 @@ KexiReportFactory::create(const QCString &c, QWidget *p, const char *n, KFormDes
 }
 
 bool
-KexiReportFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
-		   KFormDesigner::Container *container, QValueVector<int> *menuIds)
+KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+	KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
 	m_widget = w;
 	m_container = container;
@@ -138,7 +138,7 @@ KexiReportFactory::startEditing(const QString &c, QWidget *w, KFormDesigner::Con
 }
 
 bool
-KexiReportFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
+KexiReportFactory::isPropertyVisible(const QCString &classname, QWidget *, const QCString &property, bool multiple)
 {
 	if(classname == "Label") {
 		if(property == "pixmap")
@@ -152,10 +152,10 @@ KexiReportFactory::showProperty(const QString &classname, QWidget *, const QStri
 	return !multiple;
 }
 
-QStringList
-KexiReportFactory::autoSaveProperties(const QString &classname)
+QValueList<QCString>
+KexiReportFactory::autoSaveProperties(const QCString &classname)
 {
-	QStringList l;
+	QValueList<QCString> l;
 
 	if(classname == "Label")
 		l << "text";
@@ -168,7 +168,6 @@ KexiReportFactory::autoSaveProperties(const QString &classname)
 void
 KexiReportFactory::changeText(const QString &text)
 {
-	//QString n = WidgetFactory::m_widget->className();
 	QWidget *w = WidgetFactory::m_widget;
 	changeProperty("text", text, m_container);
 
@@ -179,7 +178,7 @@ KexiReportFactory::changeText(const QString &text)
 }
 
 void
-KexiReportFactory::resizeEditor(QWidget *widget, const QString &)
+KexiReportFactory::resizeEditor(QWidget *widget, const QCString &)
 {
 	QSize s = widget->size();
 	QPoint p = widget->pos();
@@ -192,7 +191,7 @@ KexiReportFactory::resizeEditor(QWidget *widget, const QString &)
 void
 KexiReportFactory::editText()
 {
-	QString classname = m_widget->className();
+	QCString classname = m_widget->className();
 	QString text;
 
 	if(classname == "Label")

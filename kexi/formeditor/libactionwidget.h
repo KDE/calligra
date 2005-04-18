@@ -45,14 +45,14 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 		/**
 		 * emits a signal containing the class name
 		 */
-		void	prepareInsert(const QString &className);
+		void prepareInsert(const QCString &className);
 
 	protected slots:
 		/** reimplemented from KToggleAction */
 		virtual void slotActivated();
 
 	private:
-		QString m_className;
+		QCString m_className;
 };
 
 }

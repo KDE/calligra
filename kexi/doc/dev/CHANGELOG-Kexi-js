@@ -487,8 +487,21 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
+-fix "edit tab order" action: not working when prj browser is focused...
 
-2005-04-15
+2005-04-18
+Core
+- KexiProperty::setValue(): QCString type is now compatible with QString type
+Form Designer
+- assigning predefined Kexi actions to buttons
+- WidgetLibrary::setAdvancedPropertiesVisible() added, so advanced properties 
+  can be hidden in Kexi.
+- WidgetLibrary::isPropertyVisible() improved
+- 'edit pixmap collection' and 'edit connections' 
+  disabled for current version of Kexi Forms
+- using QString changed to QCString in maaany places
+
+2005-04-15..16
 Main
 - Navigator: double clicking on item which has no data view mode available,
   opens it in design mode; Unavailable actions for given object types 

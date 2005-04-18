@@ -52,7 +52,7 @@ KexiWidgetFactory::classes()
 }
 
 QWidget*
-KexiWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+KexiWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	if(c == "KexiViewBase")
 	{
@@ -66,10 +66,10 @@ KexiWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesi
 }
 
 
-void
-KexiWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+bool
+KexiWidgetFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
 {
-	return;
+	return false;
 }
 
 KexiWidgetFactory::~KexiWidgetFactory()

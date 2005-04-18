@@ -105,7 +105,8 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	if(toplevel)
 	{
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), this, this);
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), 
+			widget()->name(), widget(), this, this);
 		setObjectTree(it);
 
 		if(parent->isWidgetType())
@@ -143,7 +144,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 	{
 		case QEvent::MouseButtonPress:
 		{
-			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name() << "of type " << s->className() << endl;
+			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name() 
+				<< "of type " << s->className() << endl;
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
@@ -933,7 +935,7 @@ Container::dragWidgets(QMouseEvent *mev)
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
-		QString classname = m_container->className();
+		QCString classname = m_container->className();
 		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
 			continue;
 
@@ -960,7 +962,7 @@ Container::dragWidgets(QMouseEvent *mev)
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
 		// Don't move tab widget pages (or widget stack pages)
-		QString classname = m_container->className();
+		QCString classname = m_container->className();
 		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
 			continue;
 

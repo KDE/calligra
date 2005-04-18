@@ -106,7 +106,7 @@ Form::widget() const
 //////////////// Container -related functions ///////////////////////
 
 void
-Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &)
+Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString &)
 {
 	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;

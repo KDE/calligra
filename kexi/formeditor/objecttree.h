@@ -53,38 +53,38 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container=0);
 		virtual ~ObjectTreeItem();
 
-		QString		name() const { return m_name; }
-		QString		className() const { return m_className; }
-		QWidget*	widget() const { return m_widget; }
-		EventEater*     eventEater() const { return m_eater; }
+		QString name() const { return m_name; }
+		QString className() const { return m_className; }
+		QWidget* widget() const { return m_widget; }
+		EventEater* eventEater() const { return m_eater; }
 		ObjectTreeItem* parent() const { return m_parent; }
-		ObjectTreeList*	children() { return &m_children; }
+		ObjectTreeList* children() { return &m_children; }
 		/*! \return a QMap<QString, QVariant> of all modified properties for this widget.
 		  The QVariant is the old value (ie first value) of the property whose name is the QString. */
 		const QVariantMap* modifiedProperties() { return &m_props;}
 		//! \return the widget's Container, or 0if the widget is not a Container.
 		Container*	container() const { return m_container;}
 
-		void		setWidget(QWidget *w) { m_widget = w; }
-		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
+		void setWidget(QWidget *w) { m_widget = w; }
+		void setParent(ObjectTreeItem *parent)  { m_parent = parent;}
 
-		void		debug(int ident);
-		void		rename(const QString &name);
+		void debug(int ident);
+		void rename(const QString &name);
 
-		void		addChild(ObjectTreeItem *it);
-		void 		removeChild(ObjectTreeItem *it);
+		void addChild(ObjectTreeItem *it);
+		void removeChild(ObjectTreeItem *it);
 
 		/*! Adds \a property in the list of the modified properties for this object.
 		    These modified properties are written in the .ui files when saving the form.
 		*/
-		void		addModifiedProperty(const QString &property, const QVariant &value);
-		void		storeUnknownProperty(QDomElement &el);
+		void addModifiedProperty(const QCString &property, const QVariant &value);
+		void storeUnknownProperty(QDomElement &el);
 
-		void		addPixmapName(const QString &property, const QString &name);
-		QString		pixmapName(const QString &property);
+		void addPixmapName(const QCString &property, const QString &name);
+		QString pixmapName(const QCString &property);
 
-		void  setEnabled(bool enabled)  { m_enabled = enabled; }
-		bool  isEnabled()  { return m_enabled; }
+		void setEnabled(bool enabled)  { m_enabled = enabled; }
+		bool isEnabled() const { return m_enabled; }
 
 		int gridRow() const { return m_row; }
 		int gridCol() const { return m_col; }
@@ -94,13 +94,13 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		void setGridPos(int row, int col, int rowspan, int colspan);
 
 	protected:
-		QString		m_className;
-		QString		m_name;
+		QString m_className;
+		QString m_name;
 		ObjectTreeList	m_children;
 		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
 		QString  m_unknownProps;
-		QMap<QString, QString>  m_pixmapNames;
+		QMap<QCString, QString> m_pixmapNames;
 		ObjectTreeItem* m_parent;
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<EventEater> m_eater;
@@ -120,31 +120,31 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget=0, Container *container=0);
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, 
+			QWidget *widget=0, Container *container=0);
 		virtual ~ObjectTree();
 
 		/*! Renames the item named \a oldname to \a newname. \return false if widget named \a newname
 		 already exists and renaming failed. */
-		bool		rename(const QString &oldname, const QString &newname );
+		bool rename(const QString &oldname, const QString &newname );
 		/*! Sets \a newparent as new parent for the item whose name is \a name. */
-		bool		reparent(const QString &name, const QString &newparent);
+		bool reparent(const QString &name, const QString &newparent);
 
 		/*! \return the ObjectTreeItem named \a name, or 0 if doesn't exist. */
-		ObjectTreeItem*	lookup(const QString &name);
+		ObjectTreeItem* lookup(const QString &name);
 		/*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
 		this dict, iterate on a copy. */
-		ObjectTreeDict*  dict() { return &m_treeDict; }
+		ObjectTreeDict* dict() { return &m_treeDict; }
 
 		void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
 		void removeItem(const QString &name);
 		void removeItem(ObjectTreeItem *c);
 
 		/*! Generates a new name with \a base as beginning (eg if base is "QLineEdit", it returns "QLineEdit1"). */
-		QString		genName(const QString &base);
+		QString genName(const QString &base);
 
 	private:
 		ObjectTreeDict	m_treeDict;
-		//QMap<QString, int>	m_names;
 };
 
 }

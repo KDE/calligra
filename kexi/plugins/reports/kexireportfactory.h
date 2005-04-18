@@ -34,23 +34,23 @@ class KexiReportFactory : public KFormDesigner::WidgetFactory
 		virtual QString  name();
 		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 
-		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
+		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
-		virtual void startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual void previewWidget(const QString &, QWidget *, KFormDesigner::Container *) {}
+		virtual void startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual void previewWidget(const QCString &, QWidget *, KFormDesigner::Container *) {}
 
 		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         //QDomElement &parentNode, QDomDocument &parent) {}
-		//virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
-		virtual bool		showProperty(const QString &, QWidget *, const QString &, bool multiple);
-		virtual QStringList autoSaveProperties(const QString &classname);
+		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
+		virtual bool isPropertyVisible(const QCString &, QWidget *, const QCString &, bool multiple);
+		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	public slots:
 		void  editText();
 
 	protected:
-		virtual void  changeText(const QString &newText);
-		virtual void   resizeEditor(QWidget *widget, const QString &classname);
+		virtual void changeText(const QString &newText);
+		virtual void resizeEditor(QWidget *widget, const QCString &classname);
 
 	private:
 		QWidget *m_widget;

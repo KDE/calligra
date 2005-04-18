@@ -19,7 +19,6 @@
 
 #include <kdebug.h>
 #include <qwidget.h>
-#include <qstringlist.h>
 #include <qvariant.h>
 #include <qdom.h>
 #include <qtextstream.h>
@@ -69,7 +68,7 @@ ObjectTreeItem::removeChild(ObjectTreeItem *c)
 }
 
 void
-ObjectTreeItem::addModifiedProperty(const QString &property, const QVariant &oldValue)
+ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &oldValue)
 {
 	if(property == "name")
 		return;
@@ -91,13 +90,13 @@ ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 }
 
 void
-ObjectTreeItem::addPixmapName(const QString &property, const QString &name)
+ObjectTreeItem::addPixmapName(const QCString &property, const QString &name)
 {
 	m_pixmapNames[property] = name;
 }
 
 QString
-ObjectTreeItem::pixmapName(const QString &property)
+ObjectTreeItem::pixmapName(const QCString &property)
 {
 	if(m_pixmapNames.contains(property))
 		return m_pixmapNames[property];

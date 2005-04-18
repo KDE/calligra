@@ -51,12 +51,17 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	m_undoing = false;
 	m_origActiveColors = 0;
 
-	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
-	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
-	connect(this, SIGNAL(collectionItemChoosed(KexiPropertyBuffer &, KexiProperty &)), this,
-	    SLOT(storePixmapName(KexiPropertyBuffer &, KexiProperty &)));
-	connect(this, SIGNAL(propertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)), this,  // TMP
-	    SLOT(slotPropertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)));
+	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
+		this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
+	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
+		m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)));
+	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), 
+		this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
+	connect(this, SIGNAL(collectionItemChoosed(KexiPropertyBuffer &, KexiProperty &)), 
+		this, SLOT(storePixmapName(KexiPropertyBuffer &, KexiProperty &)));
+	connect(this, SIGNAL(propertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)), 
+		this,  // TMP
+		SLOT(slotPropertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)));
 }
 
 void
@@ -64,7 +69,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 {
 	if(!m_manager || !m_manager->activeForm() || ! m_manager->activeForm()->objectTree())
 		return;
-	QString property = prop.name();
+	QCString property = prop.name();
 	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 
@@ -121,7 +126,8 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
 //				if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
-					m_lastcom = new PropertyCommand(this, QString(m_widgets.first()->name()), m_widgets.first()->property(property.latin1()), value, prop.name());
+					m_lastcom = new PropertyCommand(this, QString(m_widgets.first()->name()), 
+						m_widgets.first()->property(property), value, prop.name());
 					m_manager->activeForm()->addCommand(m_lastcom, false);
 //				}
 			}
@@ -129,10 +135,10 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			if (m_widgets.first()) {
 				// If the property is changed, we add it in ObjectTreeItem modifProp
 				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
-				if((*this)[property.latin1()].changed())
-					tree->addModifiedProperty(property, m_widgets.first()->property(property.latin1()));
+				if((*this)[property].changed())
+					tree->addModifiedProperty(property, m_widgets.first()->property(property));
 
-				m_widgets.first()->setProperty(property.latin1(), value);
+				m_widgets.first()->setProperty(property, value);
 				emit propertyChanged(m_widgets.first(), property, value);
 			}
 		}
@@ -146,7 +152,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				// We store old values for each widget
 				QMap<QString, QVariant> list;
 				for(w = m_widgets.first(); w; w = m_widgets.next())
-					list.insert(w->name(), w->property(property.latin1()));
+					list.insert(w->name(), w->property(property));
 
 				m_lastcom = new PropertyCommand(this, list, value, prop.name());
 				m_manager->activeForm()->addCommand(m_lastcom, false);
@@ -155,10 +161,10 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			for(w = m_widgets.first(); w; w = m_widgets.next())
 			{
 				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
-				if((*this)[property.latin1()].changed())
-					tree->addModifiedProperty(property, w->property(property.latin1()));
+				if((*this)[property].changed())
+					tree->addModifiedProperty(property, w->property(property));
 
-				w->setProperty(property.latin1(), value);
+				w->setProperty(property, value);
 				emit propertyChanged(w, property, value);
 			}
 		}
@@ -262,7 +268,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		const char* propertyName = meta->name();
 		if(meta->designable(w))
 		{
-			if(!showProperty(propertyName, isTopLevel))
+			if(!isPropertyVisible(propertyName, isTopLevel))
 				continue;
 
 			QString desc = m_propDesc[meta->name()];
@@ -306,15 +312,17 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 
 	(*this)["enabled"].setValue( QVariant(tree->isEnabled(), 3));
 
-	// add the signals property
-	QStrList strlist = w->metaObject()->signalNames(true);
-	QStrListIterator strIt(strlist);
-	QStringList list;
-	for(; strIt.current() != 0; ++strIt)
-		list.append(*strIt);
-	add(new KexiProperty("signals", "",
-		new KexiProperty::ListData(list, descList(list)),
-		i18n("Events")));
+	if (m_manager->lib()->advancedPropertiesVisible()) {
+		// add the signals property
+		QStrList strlist = w->metaObject()->signalNames(true);
+		QStrListIterator strIt(strlist);
+		QStringList list;
+		for(; strIt.current() != 0; ++strIt)
+			list.append(*strIt);
+		add(new KexiProperty("signals", "",
+			new KexiProperty::ListData(list, descList(list)),
+			i18n("Events")));
+	}
 
 	if(m_manager->activeForm())
 	{
@@ -348,7 +356,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	m_lastgeocom = 0;
 	m_properties.clear();
 
-	QString classn;
+	QCString classn;
 	if(m_widgets.first()->className() == widg->className())
 		classn = m_widgets.first()->className();
 
@@ -356,7 +364,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	QAsciiDictIterator<KexiProperty> it(*this);
 	for(; it.current(); ++it)
 	{
-		if(!showProperty(it.currentKey(), isTopLevel, classn))
+		if(!isPropertyVisible(it.currentKey(), isTopLevel, classn))
 			(*this)[it.currentKey()].setVisible(false);
 	}
 
@@ -386,8 +394,9 @@ ObjectPropertyBuffer::resetBuffer()
 	}
 }
 
+//ObjectPropertyBuffer::showProperty(const QString &property, bool isTopLevel, const QCString &classname)
 bool
-ObjectPropertyBuffer::showProperty(const QString &property, bool isTopLevel, const QString &classname)
+ObjectPropertyBuffer::isPropertyVisible(const QCString &property, bool isTopLevel, const QCString &classname)
 {
 	if(!m_multiple)
 	{
@@ -414,7 +423,7 @@ ObjectPropertyBuffer::showProperty(const QString &property, bool isTopLevel, con
 			return false;
 	}
 
-	return m_manager->lib()->showProperty(m_widgets.first()->className(), m_widgets.first(), property, m_multiple);
+	return m_manager->lib()->isPropertyVisible(m_widgets.first()->className(), m_widgets.first(), property, m_multiple);
 }
 
 bool
@@ -463,7 +472,7 @@ ObjectPropertyBuffer::checkModifiedProp()
 		ObjectTreeItem *treeIt = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 		if(treeIt)
 		{
-			QString name;
+			QCString name;
 			QAsciiDictIterator<KexiProperty> it(*this);
 			for(; it.current(); ++it)
 			{
@@ -596,7 +605,7 @@ ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 	if(tree && (*this)[property.latin1()].changed())
-		tree->addModifiedProperty(property, (*this)[property.latin1()].oldValue());
+		tree->addModifiedProperty(property.latin1(), (*this)[property.latin1()].oldValue());
 }
 
 // Layout-related functions  //////////////////////////
@@ -607,7 +616,7 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree() || !container->widget())
 		return;
 	// special containers have no 'layout' property, as it should not be changed
-	QString className = container->widget()->className();
+	QCString className = container->widget()->className();
 	if((className == "HBox") || (className == "VBox") || (className == "Grid"))
 		return;
 
@@ -693,7 +702,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 	if(tree && (*this)[prop.latin1()].changed())
-		tree->addModifiedProperty(prop, (*this)[prop.latin1()].oldValue());
+		tree->addModifiedProperty(prop.latin1(), (*this)[prop.latin1()].oldValue());
 }
 
 void

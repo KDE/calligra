@@ -33,6 +33,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  , KexiSharedActionClient()
  , KexiDataAwareObjectInterface()
  , KexiFormDataProvider()
+ , KexiFormEventHandler()
 {
 	m_currentLocalSortColumn = -1; /* no column */
 	m_localSortingOrder = -1; /* no sorting */

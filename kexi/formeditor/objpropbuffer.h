@@ -85,10 +85,10 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 */
 		void nameChanged(const QString &oldname, const QString &newname);
 
-		/*! This signal is emitted when a property was changed ( with changeProperty() ). \a obj is the widget concerned, \a property
-		  is the name of the modified property, and \a v is the new value of this property.
-		 */
-		void propertyChanged(QWidget *widg, const QString &property, const QVariant &v);
+		/*! This signal is emitted when a property was changed ( with changeProperty() ). 
+		  \a widg is the widget concerned, \a property
+		  is the name of the modified property, and \a v is the new value of this property. */
+		void propertyChanged(QWidget *widg, const QCString &property, const QVariant &v);
 
 	protected:
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
@@ -112,7 +112,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! This function is used to filter the properties to be shown (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.
 		 */
-		bool showProperty(const QString &property, bool isTopLevel, const QString &classname=QString::null);
+		bool isPropertyVisible(const QCString &property, bool isTopLevel, const QCString &classname=QCString());
 
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
 		  is the QMetaProperty for "alignment" property". ( called by setObject() )

@@ -368,7 +368,7 @@ StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 }
 
 bool
-StdWidgetFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *)
+StdWidgetFactory::previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *)
 {
 	if(classname == "Spring") {
 		((Spring*)widget)->setPreviewMode();
@@ -396,7 +396,7 @@ StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopup
 }
 
 bool
-StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
+StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 	if(classname == "KLineEdit")
@@ -487,7 +487,7 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 }
 
 bool
-StdWidgetFactory::clearWidgetContent(const QString &classname, QWidget *w)
+StdWidgetFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 {
 	if(classname == "KLineEdit")
 		((KLineEdit*)w)->clear();
@@ -507,7 +507,7 @@ StdWidgetFactory::clearWidgetContent(const QString &classname, QWidget *w)
 bool
 StdWidgetFactory::changeText(const QString &text)
 {
-	QString n = WidgetFactory::m_widget->className();
+	QCString n = WidgetFactory::m_widget->className();
 	QWidget *w = WidgetFactory::m_widget;
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
@@ -544,7 +544,7 @@ StdWidgetFactory::changeText(const QString &text)
 }
 
 void
-StdWidgetFactory::resizeEditor(QWidget *widget, const QString &classname)
+StdWidgetFactory::resizeEditor(QWidget *widget, const QCString &classname)
 {
 	QSize s = widget->size();
 	QPoint p = widget->pos();
@@ -575,7 +575,7 @@ StdWidgetFactory::resizeEditor(QWidget *widget, const QString &classname)
 }
 
 bool
-StdWidgetFactory::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
+StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
 {
 	if(name == "list_items" && classname == "KComboBox")
 	{
@@ -647,7 +647,7 @@ StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDo
 }
 
 bool
-StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *)
+StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *)
 {
 	QString tag = node.tagName();
 	QString name = node.attribute("name");
@@ -749,7 +749,7 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 }
 
 bool
-StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
+StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *, const QCString &property)
 {
 	if(classname == "FormWidgetBase")
 	{
@@ -761,7 +761,7 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QStrin
 	}
 	else if(classname == "Spring")
 	{
-		return Spring::showProperty(property);
+		return Spring::isPropertyVisible(property);
 	}
 	else if(classname == "KexiPictureLabel")
 	{
@@ -778,13 +778,13 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QStrin
 		if((property == "frameShape") || (property == "font") || (property == "margin"))
 			return false;
 	}
-	return !multiple;
+	return true;
 }
 
-QStringList
-StdWidgetFactory::autoSaveProperties(const QString &classname)
+QValueList<QCString>
+StdWidgetFactory::autoSaveProperties(const QCString &classname)
 {
-	QStringList l;
+	QValueList<QCString> l;
 
 	if(classname == "QLabel")
 		l << "text";
@@ -817,7 +817,7 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 void
 StdWidgetFactory::editText()
 {
-	QString classname = m_widget->className();
+	QCString classname = m_widget->className();
 	QString text;
 	if(classname == "KTextEdit")
 		text = ((KTextEdit*)m_widget)->text();

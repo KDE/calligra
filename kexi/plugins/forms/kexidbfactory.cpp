@@ -364,7 +364,7 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 }*/
 
 bool
-KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
+KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 #ifndef Q_WS_WIN
@@ -411,13 +411,13 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 }
 
 bool
-KexiDBFactory::previewWidget(const QString &, QWidget *, KFormDesigner::Container *)
+KexiDBFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Container *)
 {
 	return false;
 }
 
 bool
-KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
+KexiDBFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
@@ -430,15 +430,29 @@ KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 	return true;
 }
 
-QStringList
-KexiDBFactory::autoSaveProperties(const QString &classname)
+QValueList<QCString>
+KexiDBFactory::autoSaveProperties(const QCString &classname)
 {
+	QValueList<QCString> lst;
 	if(classname == "KexiSubForm")
-		return QStringList("formName");
+		lst << "formName";
 //	if(classname == "KexiDBLineEdit")
 //		return QStringList("dataSource");
-	return QStringList();
+	return lst;
 }
+
+bool 
+KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *, 
+	const QCString& property)
+{
+	if(classname == "KexiPushButton") {
+		return property!="isDragEnabled" 
+			&& property!="stdItem" /*! @todo reenable stdItem */
+		;
+	}
+	return true;
+}
+
 
 K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))
 

@@ -154,7 +154,7 @@ InsertPageCommand::execute()
 	QWidget *page = new QWidget(parent, m_name.latin1());
 	new KFormDesigner::Container(m_container, page, parent);
 
-	QString classname = parent->className();
+	QCString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
 		KTabWidget *tab = (KTabWidget *)parent;
@@ -187,7 +187,7 @@ InsertPageCommand::unexecute()
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
-	QString classname = parent->className();
+	QCString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
 		KTabWidget *tab = (KTabWidget *)parent;
@@ -449,7 +449,7 @@ ContainerFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 }
 
 bool
-ContainerFactory::previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container)
+ContainerFactory::previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *container)
 {
 	if(classname == "WidgetStack")
 	{
@@ -516,7 +516,7 @@ ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopu
 }
 
 bool
-ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
+ContainerFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 	if(classname == "QButtonGroup")
@@ -537,7 +537,7 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 }
 
 bool
-ContainerFactory::saveSpecialProperty(const QString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
@@ -555,7 +555,7 @@ ContainerFactory::saveSpecialProperty(const QString &, const QString &name, cons
 }
 
 bool
-ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
+ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString name = node.attribute("name");
 	if((name == "title") && (item->parent()->widget()->inherits("QTabWidget")))
@@ -579,25 +579,27 @@ ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidge
 	return false;
 }
 
-QStringList
-ContainerFactory::autoSaveProperties(const QString &c)
+QValueList<QCString>
+ContainerFactory::autoSaveProperties(const QCString &c)
 {
+	QValueList<QCString> lst;
 	if(c == "SubForm")
-		return QStringList("formName");
+		lst << "formName";
 	else if(c == "QSplitter")
-		return QStringList("orientation");
-	return QStringList();
+		lst << "orientation";
+	return lst;
 }
 
 bool
-ContainerFactory::showProperty(const QString &classname, QWidget *, const QString &property, bool multiple)
+ContainerFactory::isPropertyVisibleInternal(const QCString &classname, 
+	QWidget *, const QCString &property)
 {
 	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid"))
 	{
 		return ((property == "name") || (property == "geometry"));
 	}
 
-	return !multiple;
+	return true;
 }
 
 bool
@@ -608,7 +610,7 @@ ContainerFactory::changeText(const QString &text)
 }
 
 void
-ContainerFactory::resizeEditor(QWidget *widget, const QString &)
+ContainerFactory::resizeEditor(QWidget *widget, const QCString &)
 {
 	QSize s = widget->size();
 	m_editor->move(widget->x() + 2, widget->y() - 5);

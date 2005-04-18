@@ -30,6 +30,7 @@ class QWorkspace;
 class KPopupMenu;
 class KexiPropertyEditor;
 class KexiPropertyBuffer;
+class KexiProperty;
 class KActionCollection;
 class KAction;
 class KToggleAction;
@@ -244,7 +245,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
-		void insertWidget(const QString &classname);
+		void insertWidget(const QCString &classname);
 
 		/*! Stops the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
@@ -319,8 +320,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Signal emitted before the form gets finally deleted. \a form is still a valid pointer,
 		 but the widgets inside the form are in unknown state. */
 		void aboutToDeleteForm(KFormDesigner::Form *form);
+
 		/*! Signal emitted when new form gets created.  */
-		void  formCreated(KFormDesigner::Form *form);
+		void formCreated(KFormDesigner::Form *form);
+
+		/*! This signal is emitted when a property has been changed. */
+		void propertyChanged(KexiPropertyBuffer&, KexiProperty&);
 
 	protected slots:
 		void deleteWidgetLaterTimeout();

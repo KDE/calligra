@@ -51,7 +51,7 @@
 #include "formIO.h"
 
 /// A blank widget when the class name is not supported
-CustomWidget::CustomWidget(const QString &className, QWidget *parent, const char *name)
+CustomWidget::CustomWidget(const QCString &className, QWidget *parent, const char *name)
 : QWidget(parent, name), m_className(className)
 {
 	setBackgroundMode(Qt::PaletteDark);
@@ -566,7 +566,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 		case QVariant::Pixmap:
 		{
 			type = parent.createElement("pixmap");
-			QString property = parentNode.attribute("name");
+			QCString property = parentNode.attribute("name");
 			if(m_savePixmapsInline || m_currentItem->pixmapName(property).isNull())
 				valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
 			else
@@ -795,7 +795,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 			return loadImage(tag.ownerDocument(), text);
 		else
 		{
-			m_currentItem->addPixmapName(name, text);
+			m_currentItem->addPixmapName(name.latin1(), text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
 		}
 		return QVariant(QPixmap());
@@ -1123,10 +1123,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	readChildNodes(tree, container, lib, el, w);
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
-	QStringList::ConstIterator endIt = list.constEnd();
-	for(QStringList::ConstIterator it = list.constBegin(); it != endIt; ++it)
-		tree->addModifiedProperty(*it, w->property((*it).latin1()));
+	QValueList<QCString> list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	QValueList<QCString>::ConstIterator endIt = list.constEnd();
+	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it)
+		tree->addModifiedProperty(*it, w->property(*it));
 
 	if(resetCurrentForm)
 		m_currentForm = 0;
@@ -1250,7 +1250,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 					val = r;
 				}
 				w->setProperty(name.latin1(), val);
-				tree->addModifiedProperty(name, val);
+				tree->addModifiedProperty(name.latin1(), val);
 			}
 		}
 		else if(tag == "widget") // a child widget

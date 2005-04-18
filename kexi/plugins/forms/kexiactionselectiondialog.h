@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,28 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIWIDGETFACTORY_H
-#define KEXIWIDGETFACTORY_H
+#ifndef KEXIACTIONSELECTIONDIALOG_H
+#define KEXIACTIONSELECTIONDIALOG_H
 
-#include <widgetfactory.h>
-#include <container.h>
+#include <kdialogbase.h>
 
-class KexiWidgetFactory : public KFormDesigner::WidgetFactory
+class KexiMainWindow;
+class KListView;
+
+class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiWidgetFactory(QObject *parent, const char *name, const QStringList &args);
-		virtual ~KexiWidgetFactory();
+		KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
+			const QCString& currentActionName, const QCString& actionWidgetName);
+		~KexiActionSelectionDialog();
 
-		virtual QString name();
-		virtual KFormDesigner::WidgetList classes();
-		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
-		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+		/*! \return selected action name or empty string 
+		 if dialog has been rejected (check it with QDialog::result()) 
+		 or "<no action>" has been selected. */
+		QCString selectedActionName() const;
 
-	private:
-		KFormDesigner::WidgetList m_classes;
+	protected slots:
+		void slotListViewExecuted(QListViewItem *);
+
+	protected:
+		KListView* m_listview;
 };
 
 #endif
-

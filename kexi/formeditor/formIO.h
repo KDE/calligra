@@ -39,13 +39,13 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		CustomWidget(const QString &className, QWidget *parent, const char *name);
+		CustomWidget(const QCString &className, QWidget *parent, const char *name);
 		~CustomWidget() {;}
 
 		virtual void paintEvent(QPaintEvent *ev);
 
 	private:
-		QString   m_className;
+		QCString m_className;
 };
 
 namespace KFormDesigner {

@@ -41,7 +41,7 @@ KexiFormDataProvider::~KexiFormDataProvider()
 	delete m_duplicatedItems;
 }
 
-void KexiFormDataProvider::setMainWidget(QWidget* mainWidget)
+void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 {
 	m_mainWidget = mainWidget;
 	m_dataItems.clear();

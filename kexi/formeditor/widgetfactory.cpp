@@ -73,12 +73,12 @@ WidgetInfo::~WidgetInfo()
 	delete m_propertiesWithDisabledAutoSync;
 }
 
-void WidgetInfo::addAlternateClassName(const QString& alternateName, bool override)
+void WidgetInfo::addAlternateClassName(const QCString& alternateName, bool override)
 {
 	m_alternateNames += alternateName;
 	if (override) {
 		if (!m_overriddenAlternateNames)
-			m_overriddenAlternateNames = new QDict<char>(101);
+			m_overriddenAlternateNames = new QAsciiDict<char>(101);
 		m_overriddenAlternateNames->insert(alternateName, (char*)1);
 	}
 	else {
@@ -87,7 +87,7 @@ void WidgetInfo::addAlternateClassName(const QString& alternateName, bool overri
 	}
 }
 
-bool WidgetInfo::isOverriddenClassName(const QString& alternateName) const
+bool WidgetInfo::isOverriddenClassName(const QCString& alternateName) const
 {
 	return m_overriddenAlternateNames && (m_overriddenAlternateNames->find(alternateName) != 0);
 }
@@ -126,12 +126,11 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 
 WidgetFactory::~WidgetFactory()
 {
-
 }
 
 void WidgetFactory::addClass(WidgetInfo *w)
 {
-	WidgetInfo *oldw = m_classesByName[w->className().latin1()];
+	WidgetInfo *oldw = m_classesByName[w->className()];
 	if (oldw==w)
 		return;
 	if (oldw) {
@@ -139,11 +138,11 @@ void WidgetFactory::addClass(WidgetInfo *w)
 			<< "' already exists for factory '" << name() << "'" << endl;
 		return;
 	}
-	m_classesByName.insert( w->className().latin1(), w );
+	m_classesByName.insert( w->className(), w );
 }
 
 void
-WidgetFactory::createEditor(const QString &classname, const QString &text,
+WidgetFactory::createEditor(const QCString &classname, const QString &text,
 	QWidget *w, Container *container, QRect geometry,
 	int align,  bool useFrame, BackgroundMode background)
 {
@@ -430,13 +429,14 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 }*/
 
 bool
-WidgetFactory::showProperty(const QString&, QWidget*, const QString&, bool multiple)
+WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w, 
+	const QCString &property, bool multiple)
 {
-	return !multiple;
+	return !multiple && isPropertyVisibleInternal(classname, w, property);
 }
 
 void
-WidgetFactory::resizeEditor(QWidget *, const QString&)
+WidgetFactory::resizeEditor(QWidget *, const QCString&)
 {
 }
 
@@ -447,7 +447,7 @@ WidgetFactory::slotTextChanged()
 }
 
 bool
-WidgetFactory::clearWidgetContent(const QString &, QWidget *)
+WidgetFactory::clearWidgetContent(const QCString &, QWidget *)
 {
 	return false;
 }
@@ -459,7 +459,7 @@ WidgetFactory::changeTextInternal(const QString& text)
 		return;
 	//try in inherited
 	if (!m_editedWidgetClass.isEmpty()) {
-		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass.latin1() ];
+		WidgetInfo *wi = m_classesByName[ m_editedWidgetClass ];
 		if (wi && wi->inheritedClass())
 			wi->inheritedClass()->factory()->changeText( text );
 	}
@@ -473,13 +473,13 @@ WidgetFactory::changeText(const QString& text)
 }
 
 bool
-WidgetFactory::readSpecialProperty(const QString &, QDomElement &, QWidget *, ObjectTreeItem *)
+WidgetFactory::readSpecialProperty(const QCString &, QDomElement &, QWidget *, ObjectTreeItem *)
 {
 	return false;
 }
 
 bool
-WidgetFactory::saveSpecialProperty(const QString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
+WidgetFactory::saveSpecialProperty(const QCString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
 {
 	return false;
 }

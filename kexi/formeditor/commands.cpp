@@ -622,11 +622,11 @@ InsertWidgetCommand::execute()
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
-	QStringList list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	QValueList<QCString> list(m_container->form()->manager()->lib()->autoSaveProperties(w->className()));
 
-	QStringList::ConstIterator endIt = list.constEnd();
-	for(QStringList::ConstIterator it = list.constBegin(); it != endIt; ++it)
-		item->addModifiedProperty(*it, w->property((*it).latin1()));
+	QValueList<QCString>::ConstIterator endIt = list.constEnd();
+	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it)
+		item->addModifiedProperty(*it, w->property(*it));
 
 	m_container->reloadLayout(); // reload the layout to take the new wigdet into account
 

@@ -141,21 +141,21 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual void createCustomActions(KActionCollection* col);
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container);
-		virtual bool startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual bool previewWidget(const QString &, QWidget *, KFormDesigner::Container *);
-		virtual bool clearWidgetContent(const QString &classname, QWidget *w);
+		virtual bool startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool previewWidget(const QCString &, QWidget *, KFormDesigner::Container *);
+		virtual bool clearWidgetContent(const QCString &classname, QWidget *w);
 
 		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         //QDomElement &parentNode, QDomDocument &parent) {}
-		//virtual void            readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
-		virtual bool showProperty(const QString &, QWidget *, const QString &, bool multiple) { return !multiple;}
-		virtual QStringList autoSaveProperties(const QString &classname);
+		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
+		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	/*protected:
 		virtual void  changeText(const QString &newText);
 		virtual void   resizeEditor(QWidget *widget, const QString &classname);*/
 
 	protected:
+		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &);
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 

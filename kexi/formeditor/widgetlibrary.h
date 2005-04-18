@@ -109,16 +109,25 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
 		bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
 			ObjectTreeItem *item);
-		bool showProperty(const QCString &classname, QWidget *w,
-			const QString &property, bool multiple);
-		QStringList autoSaveProperties(const QCString &classname);
+		bool isPropertyVisible(const QCString &classname, QWidget *w,
+			const QCString &property, bool multiple);
+
+		QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 		WidgetInfo* widgetInfoForClassName(const char* classname);
 
 		WidgetFactory* factoryForClassName(const char* className);
 
+		/*! \return true if advanced properties like "mouseTracking" should 
+		 be user-visible. True by default (in KFD), but Kexi set's this to false. 
+		 See WidgetLibraryPrivate class implementation for complete list 
+		 of advanced properties. */
+		bool advancedPropertiesVisible() const;
+
+		void setAdvancedPropertiesVisible(bool set);
+
 	signals:
-		void prepareInsert(const QString &c);
+		void prepareInsert(const QCString &c);
 
 	protected:
 		/**

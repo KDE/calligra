@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIDATAPROVIDER_H
-#define KEXIDATAPROVIDER_H
+#ifndef KEXIFORMDATAPROVIDER_H
+#define KEXIFORMDATAPROVIDER_H
 
 #include "kexiformdataiteminterface.h"
 #include <qptrdict.h>
@@ -28,7 +28,7 @@ namespace KexiDB {
 	class QuerySchema;
 }
 
-//! The KexiDataProvider class is a data provider for Kexi Forms
+//! The KexiFormDataProvider class is a data provider for Kexi Forms
 /*! This provider collects data-aware widgets using setMainWidget().
  Then, usedDataSources() unique list of required field names is available.
  On every call of fillDataItems() method, thew provider will fill data items 
@@ -49,7 +49,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		 Also find widgets whose will work as data items 
 		 (all of them must implement KexiFormDataItemInterface), so these could be 
 		 filled with data on demand. */
-		void setMainWidget(QWidget* mainWidget);
+		void setMainDataSourceWidget(QWidget* mainWidget);
 
 		QStringList usedDataSources() const { return m_usedDataSources; }
 

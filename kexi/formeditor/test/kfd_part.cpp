@@ -70,7 +70,7 @@ KParts::Part*
 KFDFactory::createPartObject( QWidget *parentWidget, const char *, QObject *, const char *name,
   const char *classname, const QStringList &args)
 {
-	bool readOnly = (QCString(classname) == "KParts::ReadOnlyPart");
+	bool readOnly = (classname == "KParts::ReadOnlyPart");
 	KFormDesignerPart *part = new KFormDesignerPart(parentWidget, name, readOnly, args);
 	return part;
 }

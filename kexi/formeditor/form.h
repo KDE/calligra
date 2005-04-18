@@ -134,7 +134,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 form->createToplevel(toplevel); \endcode
 		 */
 		void createToplevel(QWidget *container, FormWidget *formWidget =0,
-			const QString &classname="QWidget");
+			const QCString &classname="QWidget");
 
 		/*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
 		   has not been called yet. */

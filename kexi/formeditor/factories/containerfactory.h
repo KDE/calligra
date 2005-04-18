@@ -149,17 +149,17 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual QWidget				*create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container);
-		virtual bool startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual bool previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
-		virtual bool showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
-		virtual bool saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+		virtual bool startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *container);
+		virtual bool saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &value, QWidget *w,
 		                        QDomElement &parentNode, QDomDocument &parent);
-		virtual bool readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
-		virtual QStringList autoSaveProperties(const QString &classname);
+		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item);
+		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	protected:
+		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, const QCString &property);
 		virtual bool changeText(const QString &newText);
-		virtual void resizeEditor(QWidget *widget, const QString &classname);
+		virtual void resizeEditor(QWidget *widget, const QCString &classname);
 
 	public slots:
 		void AddTabPage();

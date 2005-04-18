@@ -90,8 +90,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 		plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
 		plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
-		plugSharedAction("formpart_pixmap_collection", formPart()->manager(), SLOT(editFormPixmapCollection()));
-		plugSharedAction("formpart_connections", formPart()->manager(), SLOT(editConnections()));
+//TODO		plugSharedAction("formpart_pixmap_collection", formPart()->manager(), SLOT(editFormPixmapCollection()));
+//TODO		plugSharedAction("formpart_connections", formPart()->manager(), SLOT(editConnections()));
 
 		plugSharedAction("edit_copy", formPart()->manager(), SLOT(copyWidget()));
 		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
@@ -341,6 +341,9 @@ KexiFormView::afterSwitchFrom(int mode)
 //TMP!!
 		initDataSource();
 
+		//handle events for this form
+		m_scrollView->setMainWidgetForEventHandling(parentDialog()->mainWin(), m_dbform);
+
 		//set focus on 1st focusable widget which has valid dataSource property set
 		if (!m_dbform->orderedFocusWidgets()->isEmpty()) {
 			QPtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
@@ -378,7 +381,7 @@ void KexiFormView::initDataSource()
 	m_previousDataSourceString = dataSourceString;
 	bool ok = true;
 	//collect all data-aware widgets and create query schema
-	m_scrollView->setMainWidget(m_dbform);
+	m_scrollView->setMainDataSourceWidget(m_dbform);
 	QStringList sources( m_scrollView->usedDataSources() );
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );

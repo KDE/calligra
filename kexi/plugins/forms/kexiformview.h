@@ -121,8 +121,6 @@ class KexiFormView : public KexiDataAwareView
 		virtual void moveToFirstRecordRequested();
 		virtual void addNewRecordRequested();*/
 
-//		virtual bool eventFilter ( QObject * watched, QEvent * e );
-
 		/*! Called after loading the form contents (before showing it).
 		 Also called when the form window (KexiDialogBase) is detached
 		 (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
@@ -130,39 +128,28 @@ class KexiFormView : public KexiDataAwareView
 
 		/*! @internal */
 		void deleteQuery();
-//		virtual void parentDialogDetached();
-
-//		virtual void parentDialogAttached(KMdiChildFrm *);
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;
 		KexiPropertyBuffer *m_buffer;
-//moved		KexiDB::Connection *m_conn;
 
 		/*! Database cursor used for data retrieving.
 		 It is shared between subsequent Data view sessions (just reopened on switch),
 		 but deleted and recreated from scratch when form's "dataSource" property changed
-		 since last form viewing (m_previousDataSourceString is used for that).
-		*/
+		 since last form viewing (m_previousDataSourceString is used for that). */
 		QString m_previousDataSourceString;
+
 		int m_resizeMode;
 
-//		KexiDataProvider* m_provider;
-//		KexiDB::Cursor *m_cursor;
 		KexiDB::QuerySchema* m_query;
+
 		/*! True, if m_query is created as temporary object within this form.
 		 If user selected an existing, predefined (stored) query, m_queryIsOwned will be false,
 		 so the query object will not be destroyed. */
 		bool m_queryIsOwned;
 
 		KexiDB::Cursor *m_cursor;
-//moved		KexiTableViewData *m_data;
-//moved		KexiTableItem *m_currentRow;
-//moved		int m_currentRowNumber;
 
-		//QWidget* m_firstFocusWidget, *m_lastFocusWidget;
-
-//		QPtrList<QWidget> m_orderedFocusWidgets;
 		/*! For new (empty) forms only:
 		 Our form's area will be resized more than once.
 		 We will resize form widget itself later (in resizeEvent()). */

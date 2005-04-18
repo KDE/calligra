@@ -40,6 +40,8 @@ namespace KexiDB
 	class FieldList;
 }
 
+class KexiProperty;
+
 //! Kexi Form Plugin
 /*! It just creates a \ref KexiFormView. See there for most of code. */
 class KexiFormPart : public KexiPart::Part
@@ -80,6 +82,7 @@ class KexiFormPart : public KexiPart::Part
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
 		void slotAssignAction();
+		void slotPropertyChanged(KexiPropertyBuffer&, KexiProperty& prop);
 
 	private:
 		QGuardedPtr<KFormDesigner::FormManager> m_manager;

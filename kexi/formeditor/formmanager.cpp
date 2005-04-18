@@ -141,7 +141,7 @@ FormManager::createActions(KActionCollection *parent)
 {
 	m_collection = parent;
 
-	ActionList actions = m_lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QString &)));
+	ActionList actions = m_lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
 
 	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent, "drag_connection");
 	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
@@ -211,7 +211,7 @@ FormManager::redo()
 }
 
 void
-FormManager::insertWidget(const QString &classname)
+FormManager::insertWidget(const QCString &classname)
 {
 	if(m_drawingSlot)
 		stopCreatingConnection();
@@ -236,7 +236,7 @@ FormManager::insertWidget(const QString &classname)
 	}
 
 	m_inserting = true;
-	m_insertClass = classname.local8Bit();
+	m_insertClass = classname;
 	m_pointer->setChecked(false);
 }
 
@@ -710,7 +710,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 	bool enableLayout = ((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()));
 
 	m_menuWidget = w;
-	QString n = m_lib->displayName(w->className());
+	QCString n = m_lib->displayName(w->className());
 	QValueVector<int> *menuIds = new QValueVector<int>();
 
 	if(!multiple)
@@ -941,7 +941,7 @@ FormManager::breakLayout()
 		return;
 
 	Container *container = activeForm()->activeContainer();
-	QString c = container->widget()->className();
+	QCString c( container->widget()->className() );
 
 	if((c == "Grid") || (c == "VBox") || (c == "HBox"))
 	{
