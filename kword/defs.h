@@ -65,7 +65,9 @@ enum NoteType { FootNote, EndNote };
 
 enum SeparatorLinePos { SLP_LEFT = 0, SLP_CENTERED = 1, SLP_RIGHT = 2};
 enum SeparatorLineLineType { SLT_SOLID = 0, SLT_DASH = 1, SLT_DOT = 2, SLT_DASH_DOT = 3, SLT_DASH_DOT_DOT = 4};
-enum sortType { KW_SORTINCREASE = 0, KW_SORTDECREASE = 1};
+
+// Shared between sortdia.h and kwtextframeset.h
+enum SortType { KW_SORTINCREASE, KW_SORTDECREASE };
 
 /**
    Relative position of the mouse compared to a frame, or "meaning of a click right there".

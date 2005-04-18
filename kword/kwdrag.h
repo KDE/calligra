@@ -32,11 +32,8 @@ class KWTextDrag
 public:
     static bool canDecode( QMimeSource* e );
 
-    static const char * selectionMimeType();
-
     static int decodeFrameSetNumber( QMimeSource *e );
     static bool provides( QMimeSource* e, const char* acceptMimeType, QCString &returnedTypeMime);
-
 };
 
 #endif

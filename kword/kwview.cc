@@ -63,6 +63,7 @@
 #include "tabledia.h"
 #include "paragvisitors.h"
 #include "kwoasisloader.h"
+#include "kwoasissaver.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -7089,9 +7090,9 @@ void KWView::convertTableToText()
             deleteFrame( false );
             m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos );
             QMimeSource *data = QApplication::clipboard()->data();
-            if ( data->provides( KWTextDrag::selectionMimeType() ) )
+            if ( data->provides( KWOasisSaver::selectionMimeType() ) )
             {
-                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                QByteArray arr = data->encodedData( KWOasisSaver::selectionMimeType() );
                 if ( arr.size() )
                 {
                     KWTextFrameSetEdit* edit = currentTextEdit();
@@ -7137,9 +7138,9 @@ void KWView::convertToTextBox()
         if ( edit )
         {
             QMimeSource *data = QApplication::clipboard()->data();
-            if ( data->provides( KWTextDrag::selectionMimeType() ) )
+            if ( data->provides( KWOasisSaver::selectionMimeType() ) )
             {
-                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                QByteArray arr = data->encodedData( KWOasisSaver::selectionMimeType() );
                 if ( arr.size() )
                 {
                     cmd =edit->textFrameSet()->pasteOasis( edit->textView()->cursor(), QCString( arr, arr.size()+1 ), true );
@@ -7167,28 +7168,19 @@ void KWView::slotAddIgnoreAllWord()
 void KWView::sortText()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
-    if ( edit && edit->textFrameSet()->hasSelection())
+    if ( edit && edit->textFrameSet()->hasSelection() )
     {
-        KWSortDia * dlg = new KWSortDia( this, "sort dia" );
-        if ( dlg->exec())
+        KWSortDia dlg( this, "sort dia" );
+        if ( dlg.exec() )
         {
-            if ( edit->textFrameSet()->sortText(dlg->getSortType()) )
+            QByteArray arr = edit->textFrameSet()->sortText(dlg.getSortType());
+            if ( arr.size() )
             {
-                QMimeSource *data = QApplication::clipboard()->data();
-                if ( data->provides( KWTextDrag::selectionMimeType() ) )
-                {
-                    QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
-                    if ( arr.size() )
-                    {
-                        KCommand *cmd =edit->textFrameSet()->pasteOasis( edit->cursor(), QCString( arr , arr.size()+1), true );
-                        if ( cmd )
-                            m_doc->addCommand(cmd);
-                    }
-                }
-                QApplication::clipboard()->clear();
+                KCommand *cmd = edit->textFrameSet()->pasteOasis( edit->cursor(), arr, true );
+                if ( cmd )
+                    m_doc->addCommand(cmd);
             }
         }
-        delete dlg;
     }
 }
 

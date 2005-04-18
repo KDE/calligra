@@ -301,7 +301,10 @@ public:
 
     QString copyTextParag( QDomElement & elem, int selectionId );
     QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
-    bool sortText(sortType type);
+
+    /// Sort selected paragraphs
+    /// Return a complete OASIS store, ready for "pasting"
+    QByteArray sortText(SortType type) const;
 
     KoLinkVariable* linkVariableUnderMouse( const KoPoint& dPoint );
 

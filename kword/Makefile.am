@@ -41,7 +41,8 @@ libkwordpart_la_SOURCES = kwtableframeset.cc kwcanvas.cc kwframe.cc kwformulafra
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
 	        kwcreatebookmarkdiabase.ui  kwselectbookmarkdiabase.ui \
 		KWordHorizontalLineFrameSetIface.cc kwinserthorizontallinedia.cc \
-		sortdia.cc kwinsertpagedia.cc kwbookmark.cc paragvisitors.cc kwoasisloader.cc
+		sortdia.cc kwinsertpagedia.cc kwbookmark.cc paragvisitors.cc \
+		kwoasisloader.cc kwoasissaver.cc
 # Remove files out of this list: KWordHorizontalLineFrameSetIface.skel
 
 

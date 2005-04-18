@@ -28,7 +28,7 @@ class KWSortDia : public KDialogBase
     Q_OBJECT
 public:
     KWSortDia( QWidget *parent, const char* name );
-    sortType getSortType() const;
+    SortType getSortType() const;
 
 private:
     QRadioButton *m_increase;

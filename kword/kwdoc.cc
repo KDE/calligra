@@ -40,6 +40,7 @@
 #include "kwdrag.h"
 #include "paragvisitors.h"
 #include "kwoasisloader.h"
+#include "kwoasissaver.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -2679,7 +2680,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
 
-    writeAutomaticStyles( *contentWriter, mainStyles );
+    KWOasisSaver::writeAutomaticStyles( *contentWriter, mainStyles );
 
     oasisStore.closeContentWriter();
 
@@ -2798,7 +2799,7 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    QCString mimeType = KWTextDrag::selectionMimeType();
+    QCString mimeType = KWOasisSaver::selectionMimeType();
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -2822,7 +2823,7 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
         multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
     if ( !picture.isNull() )
         multiDrag->addDragObject( picture.dragObject( 0 ) );
-    KoStoreDrag* storeDrag = new KoStoreDrag( KWTextDrag::selectionMimeType(), 0 );
+    KoStoreDrag* storeDrag = new KoStoreDrag( KWOasisSaver::selectionMimeType(), 0 );
     kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
@@ -2914,59 +2915,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
     if ( !embeddedObjects.isEmpty() )
         m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
 #endif
-}
-
-void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
-{
-    contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-properties"  );
-    }
-
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE_COLUMN );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-column-properties"  );
-    }
-
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
-    }
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
-    }
-
-    contentWriter.endElement(); // office:automatic-styles
 }
 
 void KWDocument::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ ) const

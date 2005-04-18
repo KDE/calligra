@@ -44,7 +44,7 @@ KWSortDia::KWSortDia( QWidget *parent, const char* name )
     setFocus();
 }
 
-sortType KWSortDia::getSortType() const
+SortType KWSortDia::getSortType() const
 {
     return m_increase->isChecked() ? KW_SORTINCREASE : KW_SORTDECREASE;
 }

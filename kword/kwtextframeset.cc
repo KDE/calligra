@@ -38,6 +38,7 @@
 #include "mailmerge.h"
 #include "kwbookmark.h"
 #include "kwvariable.h"
+#include "kwoasissaver.h"
 
 #include <koparagcounter.h>
 #include <koVariableDlgs.h>
@@ -2822,80 +2823,45 @@ QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
     return text;
 }
 
-bool KWTextFrameSet::sortText(sortType type)
+QByteArray KWTextFrameSet::sortText(SortType type) const
 {
-    KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
-    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
-    QString text;
+    const KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
+    const KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
     if ( c1.parag() == c2.parag() )
-        return false;
+        return QByteArray();
     else
     {
-        //create list
-        QMap<QString,int> sortText;
-        QStringList listOfText;
-        QString text = c1.parag()->toString(0);
-        sortText.insert( text, c1.parag()->paragId());
-        listOfText<<text;
+        // ( paragraph text -> paragraph ) map. Note that this sorts on the key automatically.
+        QMap<QString, const KoTextParag*> sortMap;
+        sortMap.insert( c1.parag()->toString(0), c1.parag() );
 
-        KoTextParag *p = c1.parag()->next();
+        const KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            text = p->toString(0);
-            listOfText<<text;
-            sortText.insert( text, p->paragId());
+            sortMap.insert( p->toString(0), p );
             p = p->next();
         }
-        text = c2.parag()->toString(0);
-        listOfText<<text;
-        sortText.insert( text, c2.parag()->paragId());
-        //sort text
-        int nbParag = sortText.count();
-        QString tmp;
-        for (int pass = 1; pass < nbParag ; pass++)
+        sortMap.insert( c2.parag()->toString(0), c2.parag());
+
+        typedef QValueList<const KoTextParag *> ParagList;
+        ParagList sortedParags = sortMap.values();
+        if ( type == KW_SORTDECREASE )
         {
-            for (int i = 0; i < nbParag-1; i++)
-            {
-                if ( listOfText[i] > listOfText[i+1] )
-                {
-                    tmp = listOfText[i];
-                    listOfText[i] = listOfText[i+1];
-                    listOfText[i+1] = tmp;
-                }
+            // I could use an STL algorithm here, but only if Qt was compiled with STL support...
+            ParagList newList;
+            for ( ParagList::const_iterator it = sortedParags.begin(),
+                                           end = sortedParags.end();
+                  it != end ; ++it ) {
+                newList.prepend( *it );
             }
+            sortedParags = newList;
         }
-        //save text !
-        QDomDocument domDoc( "PARAGRAPHS" );
-        QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-        domDoc.appendChild( elem );
-        KWTextParag *parag =0L;
-        if ( type ==KW_SORTINCREASE )
-        {
-            for (unsigned int i =0; i < listOfText.count(); i++)
-            {
-                parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
-                parag->save(elem);
-            }
-        }
-        else
-        {
-            for (int i =listOfText.count()-1 ; i >= 0; --i)
-            {
-                parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
-                parag->save(elem);
-            }
-        }
-#if 0
-        KWTextDrag *kd = new KWTextDrag( 0L );
-        kd->setFrameSetNumber( -1 );
-        kd->setKWord( domDoc.toCString() );
-        QApplication::clipboard()->setData( kd );
-        c1.setIndex( 0 );
-        textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
-        c2.setIndex( c2.parag()->length()-1 );
-        textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
-#endif
+
+        KWOasisSaver oasisSaver( m_doc );
+        oasisSaver.saveParagraphs( sortedParags );
+        if ( !oasisSaver.finish() )
+            return QByteArray();
+        return oasisSaver.data();
     }
-    return true;
 }
 
 // This is used when loading (KWTextDocument::loadOasisFootnote)

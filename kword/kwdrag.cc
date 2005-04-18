@@ -44,11 +44,6 @@ bool KWTextDrag::canDecode( QMimeSource* e )
     return QTextDrag::canDecode(e);
 }
 
-const char * KWTextDrag::selectionMimeType()
-{
-    return "application/vnd.oasis.opendocument.text";
-}
-
 int KWTextDrag::decodeFrameSetNumber( QMimeSource *e )
 {
     QByteArray a =  e->encodedData("application/x-kword-framesetnumber");
