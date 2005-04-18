@@ -55,11 +55,6 @@ public:
     bool abortFormatting;
 };
 
-const char * KoTextObject::acceptSelectionMimeType()
-{
-    return "application/vnd.oasis.opendocument.";
-}
-
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
                             const QString &defaultLanguage, bool hyphenation,
                             KoParagStyle* defaultStyle, int tabStopWidth,
@@ -2251,6 +2246,25 @@ KoVariable* KoTextObject::variableAtPosition( KoTextParag* parag, int index ) co
     if ( ch->isCustom() )
         return dynamic_cast<KoVariable *>( ch->customItem() );
     return 0;
+}
+
+const char * KoTextObject::acceptSelectionMimeType()
+{
+    return "application/vnd.oasis.opendocument.";
+}
+
+QCString KoTextObject::providesOasis( QMimeSource* mime )
+{
+    const char* fmt;
+    const char* acceptMimeType = acceptSelectionMimeType();
+    for ( int i = 0; (fmt = mime->format(i)); ++i )
+    {
+	if ( QString( fmt ).startsWith( acceptMimeType ) )
+        {
+            return fmt;
+        }
+    }
+    return "";
 }
 
 #ifndef NDEBUG
