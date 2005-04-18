@@ -61,11 +61,34 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	d->typeNames[Field::Date]="DATE";
 	d->typeNames[Field::DateTime]="DATETIME";
 	d->typeNames[Field::Time]="TIME";
-	d->typeNames[Field::Float]="FLOAT";
-	d->typeNames[Field::Double]="DOUBLE";
-	d->typeNames[Field::Text]="VARCHAR";
+	d->typeNames[Field::Float]="REAL";
+	d->typeNames[Field::Double]="DOUBLE PRECISION";
+	d->typeNames[Field::Text]="CHARACTER VARYING";
 	d->typeNames[Field::LongText]="TEXT";
 	d->typeNames[Field::BLOB]="BYTEA";
+}
+
+//==================================================================================
+//Override the default implementation to allow for NUMERIC type natively
+QString pqxxSqlDriver::sqlTypeName(int id_t, int p) const
+{ 
+	if (id_t==Field::Null)
+		return "NULL";
+	if (id_t==Field::Float || id_t==Field::Double)
+	{
+		if (p>0)
+		{
+			return "NUMERIC";
+		}
+		else
+		{
+			return d->typeNames[id_t];
+		}
+	}
+	else
+	{
+		return d->typeNames[id_t];
+	}
 }
 
 //==================================================================================

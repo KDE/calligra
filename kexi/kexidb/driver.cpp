@@ -147,7 +147,7 @@ int Driver::features() const
 bool Driver::transactionsSupported() const 
 { return d->features & (SingleTransactions | MultipleTransactions); }
 
-QString Driver::sqlTypeName(int id_t) const
+QString Driver::sqlTypeName(int id_t, int p) const
 { 
 	if (id_t==Field::Null)
 		return "Null";

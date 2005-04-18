@@ -750,9 +750,11 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (autoinc && !m_driver->beh->AUTO_INCREMENT_TYPE.isEmpty())
 				v += m_driver->beh->AUTO_INCREMENT_TYPE;
 			else
-				v += m_driver->sqlTypeName(field->type());
+				v += m_driver->sqlTypeName(field->type(), field->precision());
+				
 			if (field->isUnsigned())
 				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
+				
 			if (field->isFPNumericType() && field->precision()>0) {
 				if (field->scale()>0)
 					v += QString::fromLatin1("(%1,%2)").arg(field->precision()).arg(field->scale());
@@ -761,6 +763,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			}
 			else if (field->type()==Field::Text && field->length()>0)
 				v += QString::fromLatin1("(%1)").arg(field->length());
+			
 			if (autoinc)
 				v += (" " +
 				(pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));

@@ -47,6 +47,7 @@ class pqxxSqlDriver : public Driver
 		//! Escape a string for use as a value
 		virtual QString escapeString( const QString& str) const;
 		virtual QCString escapeString( const QCString& str) const;
+		virtual QString sqlTypeName(int id_t, int p=0) const;
 		
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;

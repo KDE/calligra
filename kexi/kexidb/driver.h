@@ -161,7 +161,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		bool transactionsSupported() const;
 		
 		/*! SQL-implementation-dependent name of given type */
-		QString sqlTypeName(int id_t) const;
+		virtual QString sqlTypeName(int id_t, int p=0) const;
 
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
