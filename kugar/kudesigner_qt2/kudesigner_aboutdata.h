@@ -22,9 +22,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <kofficeversion.h>
 
 static const char* description=I18N_NOOP("GUI report template designer for Kugar report engine");
-static const char* version="1.3";
+static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKudesignerAboutData()
 {
