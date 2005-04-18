@@ -130,8 +130,8 @@ void DependencyManager::cellChanged (const KSpreadPoint &cell)
   if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
     return;
   
-  kdDebug(36001) << "updating dependencies for cell (" <<
-      c->row() << "," << c->column() << ")" << endl;
+  //kdDebug(36001) << "updating dependencies for cell (" <<
+  //    c->row() << "," << c->column() << ")" << endl;
   
   //don't re-generate dependencies if we're updating dependencies
   if ( !(c->testFlag (KSpreadCell::Flag_Progress)))
@@ -495,8 +495,8 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
     c->clearFlag (KSpreadCell::Flag_Progress);
     return;
   }
-  kdDebug() << "Updating depending cell (" <<
-      c->row() << "," << c->column() << ")" << endl;
+  //kdDebug() << "Updating depending cell (" <<
+  //    c->row() << "," << c->column() << ")" << endl;
   //set the computing-dependencies flag
   c->setFlag (KSpreadCell::Flag_Progress);
   
