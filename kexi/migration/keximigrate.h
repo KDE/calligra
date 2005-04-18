@@ -118,7 +118,7 @@ namespace KexiMigration
 			void progressDoneRow();
 
 			//! Prompt user to select a field type for unrecognised fields
-			KexiDB::Field::Type userType();
+			KexiDB::Field::Type userType(const QString fname);
 
 			// Protected data members
 			//! Connection data for external (non Kexi) database.

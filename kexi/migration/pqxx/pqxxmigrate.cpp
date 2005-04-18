@@ -80,12 +80,20 @@ bool pqxxMigrate::drv_readTableSchema(const QString table)
         //Loop round the fields
         for (int i = 0; i < m_res->columns(); i++)
         {
-            m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i))));
+            m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i), m_res->column_name(i))));
             m_f->setCaption(m_res->column_name(i));
             m_f->setPrimaryKey(primaryKey(tableOid(table), i));
             m_f->setUniqueKey(uniqueKey(tableOid(table), i));
-            //f->setLength(m_res->at(0)[i].size());
-            kdDebug() << "Added field [" << m_res->column_name(i) << "] type [" << type(m_res->column_type(i)) << "]" << endl;
+			m_f->setAutoIncrement(autoInc(tableOid(table), i));//This should be safe for all field types
+			
+			//Do this for var/char types
+			m_f->setLength(m_res->at(0)[i].size());
+			
+			//Do this for numeric type
+			m_f->setScale(0);
+			m_f->setPrecision(0);
+
+			kdDebug() << "Added field [" << m_f->name() << "] type [" << m_f->typeName() << "]" << endl;
         }
         return true;
     }
@@ -117,7 +125,7 @@ bool pqxxMigrate::drv_tableNames(QStringList& tableNames)
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
-KexiDB::Field::Type pqxxMigrate::type(int t)
+KexiDB::Field::Type pqxxMigrate::type(int t, const QString fname)
 {
     switch(t)
     {
@@ -135,15 +143,15 @@ KexiDB::Field::Type pqxxMigrate::type(int t)
         return KexiDB::Field::Float;
     case FLOAT8OID:
         return KexiDB::Field::Double;
-        //case NUMERICOID:
-        //    return KexiDB::Field::Type::SQLNumeric;
+    case NUMERICOID:
+		return KexiDB::Field::Double;
     case DATEOID:
         return KexiDB::Field::Date;
     case TIMEOID:
         return KexiDB::Field::Time;
     case TIMESTAMPOID:
         return KexiDB::Field::DateTime;
-        //case BYTEAOID:
+    //case BYTEAOID:
         //    return KexiDB::Field::Type::SQLVarBinary;
     case BPCHAROID:
         return KexiDB::Field::Text;
@@ -155,7 +163,7 @@ KexiDB::Field::Type pqxxMigrate::type(int t)
     }
 
     //Ask the user what to do with this field
-    return userType();
+    return userType(fname);
 }
 
 //==================================================================================
@@ -205,7 +213,7 @@ bool pqxxMigrate::drv_connect()
     }
     catch(const std::exception &e)
     {
-        kdDebug() << "pqxxImport::drv_connect:exception - " << e.what() << endl;
+        kdDebug() << "pqxxMigrate::drv_connect:exception - " << e.what() << endl;
     }
     catch(...)
     {
@@ -222,6 +230,7 @@ bool pqxxMigrate::drv_disconnect()
     {
         m_conn->disconnect();
         delete m_conn;
+		m_conn = 0;
     }
     return true;
 }
@@ -264,16 +273,11 @@ bool pqxxMigrate::query (const QString& statement)
 //Clears the current result
 void pqxxMigrate::clearResultInfo ()
 {
-    if (m_res)
-    {
-        delete m_res;
-        m_res = 0;
-    }
-    if (m_trans)
-    {
-        delete m_trans;
-        m_trans = 0;
-    }
+    delete m_res;
+    m_res = 0;
+
+    delete m_trans;
+    m_trans = 0;
 }
 
 //=========================================================================
@@ -328,10 +332,11 @@ pqxx::oid pqxxMigrate::tableOid(const QString& table)
     {
         kdDebug() << "pqxxMigrate::tableOid:exception(...)??" << endl;
     }
-    if (tmpres)
-        delete tmpres;
-    if (tran)
-        delete tran;
+    delete tmpres;
+	tmpres = 0;
+    
+	delete tran;
+	tran = 0;
 
     kdDebug() << "OID for table [" << table << "] is [" << toid << "]" << endl;
     return toid;
@@ -384,10 +389,11 @@ bool pqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
         kdDebug() << "pqxxSqlDB::primaryKey:failed statement - " << statement << endl;
         pkey = false;
     }
-    if (tmpres)
-        delete tmpres;
-    if (tran)
-        delete tran;
+    delete tmpres;
+	tmpres = 0;
+    
+	delete tran;
+	tran = 0;
 
     return pkey;
 }
@@ -494,12 +500,35 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
         kdDebug() << "uniqueKey:failed statement - " << statement << endl;
         ukey = false;
     }
-    if (tmpres)
-        delete tmpres;
-    if (tran)
-        delete tran;
-
+    
+    delete tmpres;
+	tmpres = 0;
+    
+	delete tran;
+	tran = 0;
+	
     return ukey;
+}
+
+//==================================================================================
+//TODO::Implement
+bool pqxxMigrate::autoInc(pqxx::oid table_uid, int col) const
+{
+	return false;
+}
+
+//==================================================================================
+//TODO::Implement
+bool pqxxMigrate::notNull(pqxx::oid table_uid, int col) const
+{
+	return false;
+}
+
+//==================================================================================
+//TODO::Implement
+bool pqxxMigrate::notEmpty(pqxx::oid table_uid, int col) const
+{
+	return false;
 }
 
 //==================================================================================

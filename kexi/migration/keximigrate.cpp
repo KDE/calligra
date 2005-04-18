@@ -137,7 +137,7 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 		kdDebug() << "Couldnt create database at destination" << endl;
 		return false;
 	}
-
+	
 	if (!m_kexiDB->useDatabase(dbname)) {
 		kdDebug() << "Couldnt use newly created database" << endl;
 		return false;
@@ -221,7 +221,7 @@ void KexiMigrate::progressDoneRow() {
 
 //=============================================================================
 // Prompt the user to choose a field type
-KexiDB::Field::Type KexiMigrate::userType()
+KexiDB::Field::Type KexiMigrate::userType(const QString fname)
 {
 	KInputDialog *dlg;
 	QStringList  types;
@@ -241,7 +241,7 @@ KexiDB::Field::Type KexiMigrate::userType()
 	types << "Long Text";
 	types << "Binary Large Object";
 
-	res = dlg->getItem("Choose Field Type", "Field Type", types, 0, false);
+	res = dlg->getItem(i18n("Field Type"),i18n("I could not determin the data type for ") + fname + i18n(".  Please  select on of the following data types"), types, 0, false);
 
 	if (res == types[0])
 		return KexiDB::Field::Byte;
@@ -250,7 +250,7 @@ KexiDB::Field::Type KexiMigrate::userType()
 	else if (res == types[2])
 		return KexiDB::Field::Integer;
 	else if (res == types[3])
-			return KexiDB::Field::BigInteger;
+		return KexiDB::Field::BigInteger;
 	else if (res == types[4])
 		return KexiDB::Field::Boolean;
 	else if (res == types[5])

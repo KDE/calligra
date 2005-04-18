@@ -49,7 +49,7 @@ namespace KexiMigration
 			pqxx::oid tableOid(const QString& tablename);
 			
 			//Convert the pqxx type to a kexi type
-			KexiDB::Field::Type type(int t);
+			KexiDB::Field::Type type(int t, const QString fname);
 			
 			//Find out the field constraints
 			//Return whether or not the field is a pkey
@@ -67,7 +67,7 @@ namespace KexiMigration
 			//Return whether or not the field is not empty
 			bool notEmpty(pqxx::oid table, int col) const;
 			
-			//Return whether or not the field is not empty
+			//Return whether or not the field is auto incrementing
 			bool autoInc(pqxx::oid table, int col) const;
 			
 		protected:
