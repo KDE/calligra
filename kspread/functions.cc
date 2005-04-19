@@ -72,13 +72,13 @@ KSpreadValue Function::exec( const Formula* formula, QValueVector<KSpreadValue> 
   return (*d->ptr)( formula, args );
 }
 
-static KStaticDeleter<FunctionRepository> sd;
+static KStaticDeleter<FunctionRepository> fr_sd;
 FunctionRepository* FunctionRepository::s_self = 0;
 
 FunctionRepository* FunctionRepository::self()
 {
   if( !s_self )
-    sd.setObject( s_self, new FunctionRepository() );
+    fr_sd.setObject( s_self, new FunctionRepository() );
     
   return s_self;
 }

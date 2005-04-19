@@ -250,14 +250,14 @@ QString KSpreadFunctionDescription::toQML() const
     return text;
 }
 
-static KStaticDeleter<KSpreadFunctionRepository> sd;
+static KStaticDeleter<KSpreadFunctionRepository> ksfr_sd;
 KSpreadFunctionRepository* KSpreadFunctionRepository::s_self = 0;
 
 KSpreadFunctionRepository* KSpreadFunctionRepository::self()
 {
     if( !s_self )
     {
-        sd.setObject( s_self, new KSpreadFunctionRepository() );
+        ksfr_sd.setObject( s_self, new KSpreadFunctionRepository() );
 
         // register all built-in functions
         KSpreadRegisterConversionFunctions();
