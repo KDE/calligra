@@ -1,9 +1,9 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(srcdir)/kdchart -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
-## The part
-lib_LTLIBRARIES = 
-kde_module_LTLIBRARIES = libkchartpart.la
-libkchartpart_la_SOURCES = kchart_part.cc \
+## The lib with most of the code (shared with the kchart filters)
+lib_LTLIBRARIES = libkchartcommon.la
+
+libkchartcommon_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	kchartColorConfigPage.cc \
 	kchartParameterConfigPage.cc \
@@ -31,10 +31,20 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	kchartPrinterDlg.cc \
         csvimportdialog.cc csvimportdialogui.ui
 
+libkchartcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
+                            $(LIB_KOFFICEUI) \
+                            kdchart/libkdchart.la
+libkchartcommon_la_LDFLAGS = $(KDE_RPATH) -version-info 2:0:0 -no-undefined
+
+## The part
+kde_module_LTLIBRARIES = libkchartpart.la
+libkchartpart_la_SOURCES = dummy.cc
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-                          $(LIB_KOFFICEUI) \
-			  kdchart/libkdchart.la			
+libkchartpart_la_LIBADD = libkchartcommon.la
+
+dummy.cc: $(srcdir)/Makefile.am
+	echo 'extern "C" void* init_libkchart();' > $@
+	echo 'extern "C" void* init_libkchartpart() { return init_libkchart(); } ' >> $@
 
 ## The kdeinit loadable module and executable
 kdeinit_LTLIBRARIES = kchart.la
@@ -81,9 +91,9 @@ rc_DATA = kchart.rc kchart_readonly.rc
 kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-# SUBDIRS =  . plugins pics dtd toolbar
 SUBDIRS =  kdchart . toolbar pics templates
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h kdchart/*.cpp -o $(podir)/kchart.pot
+
 kde_services_DATA = kchartpart.desktop

@@ -7,17 +7,11 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 	$(all_includes)
 
 ####### Files
-# Obviously you have to change "foo" (and maybe "import") to
-# reflect the name of your filter. If you have more files
-# than just svgexport.cc please add them to the _SOURCES line.
-
 kde_module_LTLIBRARIES = libkchartsvgexport.la
 
 libkchartsvgexport_la_SOURCES = svgexport.cc
-libkchartsvgexport_la_LDFLAGS	= -module $(KDE_PLUGIN)
-libkchartsvgexport_la_LIBADD = $(KOFFICE_LIBS) \
-	../../../kchart/libkchartpart.la \
-	../../../kchart/kdchart/libkdchart.la
+libkchartsvgexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
+libkchartsvgexport_la_LIBADD = ../../../kchart/libkchartcommon.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	svgexport.h
 
