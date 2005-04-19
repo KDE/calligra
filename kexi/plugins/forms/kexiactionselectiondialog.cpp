@@ -67,7 +67,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 //! @todo double click accepts dialog
 	QListViewItem *pitem = 0;
 
-	QPixmap noIcon( QSize( IconSize( KIcon::Small ), IconSize( KIcon::Small )) );
+	QPixmap noIcon( IconSize( KIcon::Small ), IconSize( KIcon::Small ) );
 	QBitmap bmpNoIcon(noIcon.size());
 	bmpNoIcon.fill(Qt::color0);
 	noIcon.setMask(bmpNoIcon);
