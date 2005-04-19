@@ -89,11 +89,11 @@ bool pqxxMigrate::drv_readTableSchema(const QString table)
             m_f->setAutoIncrement(autoInc(tableOid(table), i));//This should be safe for all field types
 
             // Do this for var/char types
-            m_f->setLength(m_res->at(0)[i].size());
+            //m_f->setLength(m_res->at(0)[i].size());
 
            // Do this for numeric type
-           m_f->setScale(0);
-           m_f->setPrecision(0);
+           /*m_f->setScale(0);
+           m_f->setPrecision(0);*/
 
            kdDebug() << "Added field [" << m_f->name() << "] type [" << m_f->typeName() << "]" << endl;
         }
