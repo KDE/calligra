@@ -25,7 +25,6 @@
 #include "kexidb/connection.h"
 #include "kexidb/tableschema.h"
 #include <qstringlist.h>
-#include <vector>
 
 /*!
  * \namespace KexiMigration
@@ -118,7 +117,7 @@ namespace KexiMigration
 			void progressDoneRow();
 
 			//! Prompt user to select a field type for unrecognised fields
-			KexiDB::Field::Type userType(const QString fname);
+			KexiDB::Field::Type userType(const QString& fname);
 
 			// Protected data members
 			//! Connection data for external (non Kexi) database.
@@ -156,7 +155,7 @@ namespace KexiMigration
 			bool m_keepData;
 
 			//! Table schemas from source DB
-			std::vector<KexiDB::TableSchema*>v_tableSchemas;
+			QPtrList<KexiDB::TableSchema>m_tableSchemas;
 
 			//! Estimate size of migration job
 			/*! Calls drv_getTableSize for each table to be copied.

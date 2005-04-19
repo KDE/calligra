@@ -49,7 +49,7 @@ namespace KexiMigration
 			pqxx::oid tableOid(const QString& tablename);
 			
 			//Convert the pqxx type to a kexi type
-			KexiDB::Field::Type type(int t, const QString fname);
+			KexiDB::Field::Type type(int t, const QString& fname);
 			
 			//Find out the field constraints
 			//Return whether or not the field is a pkey

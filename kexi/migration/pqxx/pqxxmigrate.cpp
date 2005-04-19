@@ -80,20 +80,22 @@ bool pqxxMigrate::drv_readTableSchema(const QString table)
         //Loop round the fields
         for (int i = 0; i < m_res->columns(); i++)
         {
-            m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i), m_res->column_name(i))));
+            KexiDB::Field::Type fldType = type(m_res->column_type(i), m_res->column_name(i));
+            m_f = new KexiDB::Field(m_res->column_name(i), fldType);
+            m_table->addField(m_f);
             m_f->setCaption(m_res->column_name(i));
             m_f->setPrimaryKey(primaryKey(tableOid(table), i));
             m_f->setUniqueKey(uniqueKey(tableOid(table), i));
-			m_f->setAutoIncrement(autoInc(tableOid(table), i));//This should be safe for all field types
-			
-			//Do this for var/char types
-			m_f->setLength(m_res->at(0)[i].size());
-			
-			//Do this for numeric type
-			m_f->setScale(0);
-			m_f->setPrecision(0);
+            m_f->setAutoIncrement(autoInc(tableOid(table), i));//This should be safe for all field types
 
-			kdDebug() << "Added field [" << m_f->name() << "] type [" << m_f->typeName() << "]" << endl;
+            // Do this for var/char types
+            m_f->setLength(m_res->at(0)[i].size());
+
+           // Do this for numeric type
+           m_f->setScale(0);
+           m_f->setPrecision(0);
+
+           kdDebug() << "Added field [" << m_f->name() << "] type [" << m_f->typeName() << "]" << endl;
         }
         return true;
     }
@@ -125,7 +127,7 @@ bool pqxxMigrate::drv_tableNames(QStringList& tableNames)
 
 //==================================================================================
 //Convert a postgresql type to a kexi type
-KexiDB::Field::Type pqxxMigrate::type(int t, const QString fname)
+KexiDB::Field::Type pqxxMigrate::type(int t, const QString& fname)
 {
     switch(t)
     {

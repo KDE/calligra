@@ -84,7 +84,7 @@ bool KexiMigrate::performImport()
 		if(readTableSchema(*it)) {
 			//yeah, got a table
 			//Add it to list of tables which we will create if all goes well
-			v_tableSchemas.push_back(m_table);
+			m_tableSchemas.append(m_table);
 		} else {
 			return false;
 		}
@@ -99,9 +99,11 @@ bool KexiMigrate::performImport()
 		progressInitialise();
 	}
 
-	for(uint i = 0; i < v_tableSchemas.size(); i++) {
-		if(!copyData(tables[i], v_tableSchemas[i])) {
-			kdDebug() << "Failed to copy table " << v_tableSchemas[i] << endl;
+
+	for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
+	kdDebug() << "Copying ... " << ts << endl;
+		if(!copyData(ts.current()->name(), ts)) {
+			kdDebug() << "Failed to copy table " << ts << endl;
 			m_kexiDB->debugError();
 			drv_disconnect();
 			return false;
@@ -144,12 +146,12 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	}
 
 	//Right, were connected..create the tables
-	for(uint i = 0; i < v_tableSchemas.size(); i++) {
+	for(QPtrListIterator<TableSchema> ts (m_tableSchemas); ts.current() != 0 ; ++ts) {
 		/*! @todo check this earlier: on creating table list! */
-		if (m_kexiDB->driver()->isSystemObjectName( v_tableSchemas[i]->name() ))
+		if (m_kexiDB->driver()->isSystemObjectName( ts.current()->name() ))
 			continue;
-		if(!m_kexiDB->createTable(v_tableSchemas[i])) {
-			kdDebug() << "Failed to create a table" << v_tableSchemas[i] << endl;
+		if(!m_kexiDB->createTable( ts.current() )) {
+			kdDebug() << "Failed to create a table" << ts.current() << endl;
 			m_kexiDB->debugError();
 			failure = true;
 		}
@@ -221,7 +223,7 @@ void KexiMigrate::progressDoneRow() {
 
 //=============================================================================
 // Prompt the user to choose a field type
-KexiDB::Field::Type KexiMigrate::userType(const QString fname)
+KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 {
 	KInputDialog *dlg;
 	QStringList  types;
@@ -241,7 +243,10 @@ KexiDB::Field::Type KexiMigrate::userType(const QString fname)
 	types << "Long Text";
 	types << "Binary Large Object";
 
-	res = dlg->getItem(i18n("Field Type"),i18n("I could not determin the data type for ") + fname + i18n(".  Please  select on of the following data types"), types, 0, false);
+	res = dlg->getItem( i18n("Field Type"),
+	                    i18n("I could not determine the data type for ") + fname +
+                      i18n(".  Please  select on of the following data types"),
+                      types, 0, false);
 
 	if (res == types[0])
 		return KexiDB::Field::Byte;
