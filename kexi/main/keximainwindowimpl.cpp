@@ -275,7 +275,7 @@ class KexiMainWindowImpl::Private
 	bool wasAutoOpen;
 
 	bool dialogExistedBeforeCloseProject;
-	
+
 /*
 void updatePropEditorDockWidthInfo() {
 		if (propEditor) {
@@ -296,7 +296,7 @@ void updatePropEditorDockWidthInfo() {
 
 	void showStartProcessMsg(const QStringList& args)
 	{
-		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME), 
+		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME),
 			i18n("Command \"%1\" failed.").arg(args.join(" ")));
 	}
 
@@ -319,7 +319,7 @@ void updatePropEditorDockWidthInfo() {
 		}
 	}
 
-	
+
 	void updatePropEditorVisibility(int viewMode)
 	{
 		if (propEditorToolWindow) {
@@ -347,19 +347,19 @@ void updatePropEditorDockWidthInfo() {
 				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 	//			ds->setKeepSize(true);
-				
+
 				config->setGroup("MainWindow");
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
 
 				if (wasAutoOpen) //(dw2->isVisible())
 //				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
-					ds->setSeparatorPosInPercent( 
+					ds->setSeparatorPosInPercent(
 						QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen", 17),
 						config->readNumEntry("LeftDockPosition", 17))
 					);
 				else
 					ds->setSeparatorPosInPercent( config->readNumEntry("LeftDockPosition", 17/* % */));
-				
+
 	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
 # else
 				//there were problems on KDE < 3.4
@@ -383,7 +383,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	KexiProjectData *pdata = Kexi::startupHandler().projectData();
 	d->final = Kexi::startupHandler().forcedFinalMode() /* <-- simply forced final mode */
 		/* project has 'final mode' set as default and not 'design mode' override is found: */
-		|| (pdata && pdata->finalMode() && !Kexi::startupHandler().forcedDesignMode()); 
+		|| (pdata && pdata->finalMode() && !Kexi::startupHandler().forcedDesignMode());
 
 	if(d->final)
 		kdDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in final mode" << endl;
@@ -604,9 +604,9 @@ KexiMainWindowImpl::initActions()
 	d->action_project_relations = d->dummy_action;
 #endif
 #ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "", 0, 
+	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
-#endif	
+#endif
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -616,7 +616,7 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 
-	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete", 
+	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
 		0/*Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
@@ -705,7 +705,7 @@ KexiMainWindowImpl::initActions()
 	//TOOLS MENU
 
 	//additional 'Window' menu items
-	d->action_window_next = new KAction( i18n("&Next Window"), "", 
+	d->action_window_next = new KAction( i18n("&Next Window"), "",
 #ifdef Q_WS_WIN
 		CTRL+Key_Tab,
 #else
@@ -715,7 +715,7 @@ KexiMainWindowImpl::initActions()
 	d->action_window_next->setToolTip( i18n("Next window") );
 	d->action_window_next->setWhatsThis(i18n("Switches to the next window."));
 
-	d->action_window_previous = new KAction( i18n("&Previous Window"), "", 
+	d->action_window_previous = new KAction( i18n("&Previous Window"), "",
 #ifdef Q_WS_WIN
 		CTRL+SHIFT+Key_Tab,
 #else
@@ -1010,7 +1010,8 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 	{
 				KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-				ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+                                if(ds)
+				    ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
 	}
 #endif
 
@@ -1070,7 +1071,7 @@ tristate KexiMainWindowImpl::closeProject()
 				else
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
 //					d->navDockSeparatorPos = QMAX( ds->separatorPosInPercent(), d->config->readNumEntry("LeftDockPosition", 17) );
-				
+
 //				int navDockSeparatorPosWithAutoOpen = (100 * dw->width()) / width() + 4;
 //				d->navDockSeparatorPos = (100 * dw->width()) / width() + 1;
 		}
@@ -1244,7 +1245,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 //		ds->setForcedFixedWidth( dw, 400 );
 //		ds->setSeparatorPos(600, true);
 
-		
+
 		d->config->setGroup("MainWindow");
 		ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
 
@@ -1401,7 +1402,7 @@ KexiMainWindowImpl::queryClose()
 	const tristate res = closeProject();
 	if (~res)
 		return false;
-	
+
 	if (res)
 		storeSettings();
 
@@ -1455,7 +1456,7 @@ KexiMainWindowImpl::restoreSettings()
 		default:;//-1
 	}
 
-	// restore a possible maximized Childframe mode, 
+	// restore a possible maximized Childframe mode,
 	// will be used in KexiMainWindowImpl::addWindow()
 	d->maximizeFirstOpenedChildFrm = d->config->readBoolEntry("maximized childframes", true);
 	setEnableMaximizedChildFrmMode(d->maximizeFirstOpenedChildFrm);
@@ -1520,9 +1521,9 @@ KexiMainWindowImpl::storeSettings()
 			int d1 = (100 * dw->width()) / width() + 1;
 			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			//int d2 = ds->separatorPosInPercent();
-			
+
 			if (d->wasAutoOpen && d->dialogExistedBeforeCloseProject) {
-				d->config->writeEntry("LeftDockPositionWithAutoOpen", 
+				d->config->writeEntry("LeftDockPositionWithAutoOpen",
 					d->navDockSeparatorPos);
 //			d->config->writeEntry("LeftDockPosition", dw->width());
 //			d->config->writeEntry("LeftDockPosition", d->nav->width());
@@ -1828,7 +1829,7 @@ KexiMainWindowImpl::slotProjectNew()
 
 		bool cancel;
 		KexiProjectData *new_data = createBlankProjectData(
-			cancel, 
+			cancel,
 			false /* do not confirm prj overwrites: user will be asked on process startup */
 		);
 		if (!new_data)
@@ -1840,7 +1841,7 @@ KexiMainWindowImpl::slotProjectNew()
 		QProcess *proc = 0;
 		if (!new_data->connectionData()->fileName().isEmpty()) {
 			//file based
-			args << qApp->applicationFilePath() << "-create-opendb" 
+			args << qApp->applicationFilePath() << "-create-opendb"
 				<< new_data->connectionData()->fileName();
 			proc = new QProcess(args, this, "process");
 			proc->setCommunication((QProcess::Communication)0);
@@ -1930,7 +1931,7 @@ KexiMainWindowImpl::createBlankProject()
 	}
 	kdDebug() << "KexiMainWindowImpl::slotProjectNew(): new project created --- " << endl;
 	initNavigator();
-	Kexi::recentProjects().addProjectData( new_data ); 
+	Kexi::recentProjects().addProjectData( new_data );
 
 	invalidateActions();
 	updateAppCaption();
@@ -2395,7 +2396,7 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {
 			KMessageBox::information(this, i18n("%1 is the type of the object (eg 'report', 'table', 'query') and %2 is its name"
-			 " For example: Table \"my_table\" allready exists" , 
+			 " For example: Table \"my_table\" allready exists" ,
 				"%1 \"%2\" already exists.\nPlease choose other name.")
 				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
 			continue;
@@ -2439,16 +2440,16 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	d->insideCloseDialog = true;
 
 /*this crashes but is nice:
-	QWidget *www = guiFactory()->container("query", dlg->commonGUIClient()); 
+	QWidget *www = guiFactory()->container("query", dlg->commonGUIClient());
 	delete www;*/
-	
+
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int quertionRes = KMessageBox::warningYesNoCancel( this,
 			dlg->part()->i18nMessage(
 				"<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
-//			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",  
+//			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",
 //			"<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
 			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
 			QString::null,
@@ -2891,9 +2892,9 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 //		QStringList sl = info->ptr()->propertyNames();
 //		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
 //			kexidbg << *it << " " << info->ptr()->property(*it).toString() <<  endl;
-		if (!project()->dbConnection()->insertRecord(*fl, 
+		if (!project()->dbConnection()->insertRecord(*fl,
 				QVariant(p_id),
-				QVariant(info->ptr()->untranslatedGenericName()), 
+				QVariant(info->ptr()->untranslatedGenericName()),
 				QVariant(info->mime()), QVariant("http://www.koffice.org/kexi/")))
 			return false;
 
@@ -3225,7 +3226,7 @@ void KexiMainWindowImpl::slotToolsProjectMigration()
 
 void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
 {
-	//maximize this window, if it's 
+	//maximize this window, if it's
 //!@todo Certain windows' sizes, e.g. forms could have own size configation specified!
 //!      Query for this, and if so: give up.
 	if (d->maximizeFirstOpenedChildFrm) {
