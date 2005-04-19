@@ -823,6 +823,8 @@ void KPWebPresentationWizard::setupPage2()
     doctype->insertItem( "HTML 4.01", -1 );
     doctype->insertItem( "XHTML 1.0", -1 );
 
+    doctype->setCurrentItem( webPres.isXML() ? 1 : 0 );
+
     QSpacerItem* spacer = new QSpacerItem( 1, 10,
                                            QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout->addMultiCell( spacer, 5, 5, 0, 1 );

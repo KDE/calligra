@@ -17,6 +17,7 @@ Fixes:
 - Fixed no alpha channel set on mirrored pictures
 - Fixed objects placed on wrong page after saving and loading in kpr file format
 - Fixed picture not updated when only depth is changed
+- Fixed saving of document type for webpresentations
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis
