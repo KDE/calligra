@@ -160,7 +160,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 
 	addPage(m_server_db_name, i18n("Select Project's Caption & Database Name"));
 
-	setFinishEnabled(m_prjtype_sel,true);
+	setFinishEnabled(m_prjtype_sel,false);
 	setFinishEnabled(m_db_title,false);
 	setFinishEnabled(m_server_db_name,true);
 

@@ -217,6 +217,7 @@ class KexiMainWindowImpl::Private
 		: dialogs(401)
 		, wnd(w)
 	{
+		propEditor=0;
 		propEditorToolWindow=0;
 		final = false;
 		nav=0;
@@ -325,7 +326,7 @@ void updatePropEditorDockWidthInfo() {
 		if (propEditorToolWindow) {
 			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
 #ifdef PROPEDITOR_VISIBILITY_CHANGES
-				wnd->makeWidgetDockInvisible(propEditor);
+				wnd->makeDockInvisible( wnd->manager()->findWidgetParentDock(propEditor) );
 //				propEditorToolWindow->hide();
 #endif
 			} else {
@@ -346,7 +347,7 @@ void updatePropEditorDockWidthInfo() {
 			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
 				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-	//			ds->setKeepSize(true);
+				ds->setKeepSize(true);
 
 				config->setGroup("MainWindow");
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
@@ -900,11 +901,11 @@ tristate KexiMainWindowImpl::startup()
 		break;
 	case KexiStartupHandler::OpenProject:
 		if (!openProject(Kexi::startupHandler().projectData())) {
-//			if (d->final)
 				return false;
 		}
 		break;
 	default:;
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 	}
 	return true;
 }
@@ -934,6 +935,7 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 		return false;
 	}
 	initNavigator();
+//	initPropertyEditor();
 	Kexi::recentProjects().addProjectData( projectData );
 	invalidateActions();
 
@@ -1007,7 +1009,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 
 	d->updatePropEditorVisibility(d->curDialog ? d->curDialog->currentViewMode() : 0);
 #if defined(KDOCKWIDGET_P)
-	{
+	if (d->propEditor) {
 				KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
                                 if(ds)
@@ -1192,9 +1194,9 @@ void KexiMainWindowImpl::slotLastActions()
 {
 #if defined(KEXI_PROP_EDITOR) && defined(KDOCKWIDGET_P)
 	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
-		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
-		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-		Q_UNUSED(ds);
+//		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+		//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+//		Q_UNUSED(ds);
 //1		ds->resize(ds->width()*3, ds->height());
 //1		ds->setSeparatorPos(30, true);
 //1		ds->setForcedFixedWidth( dw, 200 );
@@ -1208,69 +1210,72 @@ void KexiMainWindowImpl::slotLastActions()
 void KexiMainWindowImpl::initPropertyEditor()
 {
 #ifdef KEXI_PROP_EDITOR
+	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
-	d->propEditor = new KexiPropertyEditorView(this);
-	d->propEditor->hide();
-	d->propEditor->installEventFilter(this);
-	d->propEditorToolWindow = addToolWindow(d->propEditor,
-		KDockWidget::DockRight, getMainDockWidget(), 20);
+		d->propEditor = new KexiPropertyEditorView(this);
+		d->propEditor->hide();
+		d->propEditor->installEventFilter(this);
+		d->propEditorToolWindow = addToolWindow(d->propEditor,
+			KDockWidget::DockRight, getMainDockWidget(), 20);
 
-	d->config->setGroup("PropertyEditor");
-	int size = d->config->readNumEntry("FontSize", -1);
-	QFont f(d->propEditor->font());
-	if (size<0) {
-		//this gives:
-		// -2/3 of base font size (6 point minimum)
-		// if the current screen width is > 1100, +1 point is added to every 100 points greater than 1300
-		// for resolutions below 1160 in width, 7 is the minimum
-		// maximum size is the base size
-		const int wdth = KGlobalSettings::desktopGeometry(this).width();
-		size = QMAX( 6 + QMAX(0, wdth - 1100) / 100 , f.pointSize()*2/3 );
-		if (wdth<1160)
-			size = QMAX( size, 7 );
-		size = QMIN( size, f.pointSize() );
+		d->config->setGroup("PropertyEditor");
+		int size = d->config->readNumEntry("FontSize", -1);
+		QFont f(d->propEditor->font());
+		if (size<0) {
+			//this gives:
+			// -2/3 of base font size (6 point minimum)
+			// if the current screen width is > 1100, +1 point is added to every 100 points greater than 1300
+			// for resolutions below 1160 in width, 7 is the minimum
+			// maximum size is the base size
+			const int wdth = KGlobalSettings::desktopGeometry(this).width();
+			size = QMAX( 6 + QMAX(0, wdth - 1100) / 100 , f.pointSize()*2/3 );
+			if (wdth<1160)
+				size = QMAX( size, 7 );
+			size = QMIN( size, f.pointSize() );
+		}
+		f.setPointSize( size );
+		d->propEditor->setFont(f);
+
+		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
+		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+	#if defined(KDOCKWIDGET_P)
+			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+			ds->setKeepSize(true);
+			makeWidgetDockVisible(d->propEditor);
+	//		ds->show();
+		//	ds->resize(400, ds->height());
+	//		ds->setSeparatorPos(400, true);
+	//		ds->setForcedFixedWidth( dw, 400 );
+	//		ds->setSeparatorPos(600, true);
+
+
+			d->config->setGroup("MainWindow");
+			ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+//			makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+
+	//		ds->setForcedFixedWidth( dw, d->config->readNumEntry("RightDockPosition", 80) );
+		//	ds->resize(400, ds->height());
+		//	dw->resize(400, dw->height());
+	#endif
+
+	//1		dw->setMinimumWidth(200);
+
+	//	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
+
+			//heh, this is for IDEAl only, I suppose?
+	//js		if (m_rightContainer) {
+	//js			m_rightContainer->setForcedFixedWidth( 400 );
+	//js		}
+		}
+	#endif
+
+	//	int w = d->propEditor->width();
+	/*    KMdiToolViewAccessor *tmp=createToolWindow();
+			tmp->setWidgetToWrap(d->propEditor);
+		d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
+			tmp->show(KDockWidget::DockRight,getMainDockWidget(),20);
+	*/
 	}
-	f.setPointSize( size );
-	d->propEditor->setFont(f);
-
-	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
-	KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
-#if defined(KDOCKWIDGET_P)
-		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-//		ds->setKeepSize(true);
-		makeWidgetDockVisible(d->propEditor);
-//		ds->show();
-	//	ds->resize(400, ds->height());
-//		ds->setSeparatorPos(400, true);
-//		ds->setForcedFixedWidth( dw, 400 );
-//		ds->setSeparatorPos(600, true);
-
-
-		d->config->setGroup("MainWindow");
-		ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
-
-//		ds->setForcedFixedWidth( dw, d->config->readNumEntry("RightDockPosition", 80) );
-	//	ds->resize(400, ds->height());
-	//	dw->resize(400, dw->height());
-#endif
-
-//1		dw->setMinimumWidth(200);
-
-//	ds->setSeparatorPos(d->propEditor->sizeHint().width(), true);
-
-		//heh, this is for IDEAl only, I suppose?
-//js		if (m_rightContainer) {
-//js			m_rightContainer->setForcedFixedWidth( 400 );
-//js		}
-	}
-#endif
-
-//	int w = d->propEditor->width();
-/*    KMdiToolViewAccessor *tmp=createToolWindow();
-    tmp->setWidgetToWrap(d->propEditor);
-	d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
-    tmp->show(KDockWidget::DockRight,getMainDockWidget(),20);
-*/
 }
 
 void KexiMainWindowImpl::slotPartLoaded(KexiPart::Part* p)
@@ -1509,11 +1514,11 @@ KexiMainWindowImpl::storeSettings()
 
 	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 //		manager()->writeConfig( d->config, "DockWindows" );
-		if (d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
+		if (d->propEditor && d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
 			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);
 		}
-		if (d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
+		if (d->nav && d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
 			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
 			int w = dw->width();
@@ -1536,8 +1541,10 @@ KexiMainWindowImpl::storeSettings()
 		}
 	}
 
-	d->config->setGroup("PropertyEditor");
-	d->config->writeEntry("FontSize", d->propEditor->font().pointSize());
+	if (d->propEditor) {
+		d->config->setGroup("PropertyEditor");
+		d->config->writeEntry("FontSize", d->propEditor->font().pointSize());
+	}
 }
 
 void
