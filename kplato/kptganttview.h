@@ -57,7 +57,7 @@ class KPTGanttView : public QSplitter
 
  public:
 
-    KPTGanttView( KPTView *view, QWidget *parent, const char* name = 0  );
+    KPTGanttView(KPTView *view, QWidget *parent, bool readWrite=true, const char* name = 0  );
 
     //~KPTGanttView();
 
@@ -79,6 +79,9 @@ class KPTGanttView : public QSplitter
     virtual bool setContext(KPTContext &context);
     virtual void getContext(KPTContext &context) const;
 
+    void setReadWriteMode(bool on);
+    bool isReadWriteMode() const { return m_readWrite; }
+    
 signals:
     void modifyRelation(KPTRelation *rel) ;
     void addRelation(KPTNode *par, KPTNode *child);
@@ -109,6 +112,7 @@ private slots:
 
 protected:
     int linkTypeToRelation(int linkType);
+    void setRenameEnabled(QListViewItem *item, bool on);
 private:
     KDGanttViewItem *findItem(KPTNode *node);
     KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);
@@ -155,6 +159,7 @@ private:
     
 private:
     KPTView *m_mainview;
+    bool m_readWrite;
     int m_defaultFontSize;
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;

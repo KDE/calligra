@@ -113,7 +113,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->add(m_tab);
 
-	m_ganttview = new KPTGanttView( this, m_tab);
+	m_ganttview = new KPTGanttView(this, m_tab, part->isReadWrite());
 	m_tab->addWidget(m_ganttview);
 
 	m_pertview = new KPTPertView( this, m_tab, layout );

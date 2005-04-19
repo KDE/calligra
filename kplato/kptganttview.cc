@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,10 +64,11 @@
 namespace KPlato
 {
 
-KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
+KPTGanttView::KPTGanttView(KPTView *view, QWidget *parent, bool readWrite, const char* name)
     : QSplitter(parent, name),
-    m_mainview( view ),
-	m_currentItem(0),
+    m_mainview(view),
+    m_readWrite(readWrite),
+    m_currentItem(0),
     m_taskView(0),
     m_firstTime(true)
 {
@@ -75,7 +76,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     setOrientation(QSplitter::Vertical);
     
     m_gantt = new KDGanttView(this, "Gantt view");
-    m_gantt->setLinkItemsEnabled(true);
+    
     m_showResources = false; // FIXME
     m_showTaskName = false; // FIXME
     m_showTaskLinks = false; // FIXME
@@ -92,8 +93,9 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     QValueList<int> list = sizes();
     list[0] += list[1];
     list[1] = 0;
-    setSizes(list);    
+    setSizes(list);
     draw(view->getPart()->getProject());
+    setReadWriteMode(readWrite);
     
 	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
@@ -102,14 +104,6 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 
 	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
 
-    connect(m_gantt, SIGNAL(lvItemRenamed(KDGanttViewItem*, int, const QString&)), SLOT(slotItemRenamed(KDGanttViewItem*, int, const QString&)));
-
-    connect(m_gantt, SIGNAL(gvItemLeftClicked(KDGanttViewItem*)), SLOT(slotGvItemClicked(KDGanttViewItem*)));
-
-    connect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
-    
-    connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
-    
     m_taskLinks.setAutoDelete(true);
     
     if (m_gantt->firstChild()) {
@@ -1027,6 +1021,29 @@ void KPTGanttView::getContextClosedNodes(KPTContext &context, KDGanttViewItem *i
             //kdDebug()<<k_funcinfo<<"add closed "<<i->listViewText()<<endl;
         }
         getContextClosedNodes(context, i->firstChild());
+    }
+}
+
+void KPTGanttView::setReadWriteMode(bool on) {
+    m_readWrite = on;
+    disconnect(SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), this);
+    disconnect(SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this);
+    m_gantt->setLinkItemsEnabled(on);
+
+    if (on) {
+        connect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
+        
+        connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
+    }
+    setRenameEnabled(m_gantt->firstChild(), on);
+}
+
+void KPTGanttView::setRenameEnabled(QListViewItem *item, bool on) {
+    if (item == 0)
+        return;
+    for (QListViewItem *i = item; i; i = i->nextSibling()) {
+        i->setRenameEnabled(0, on);
+        setRenameEnabled(i->firstChild(), on);
     }
 }
 

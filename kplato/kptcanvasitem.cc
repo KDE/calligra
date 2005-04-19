@@ -679,7 +679,6 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *n
       m_node(node),
       m_view(parent)
 {
-    setRenameEnabled(0, true);
     setExpandable(true);
     setOpen(true);
 }
@@ -693,7 +692,6 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNod
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
-    setRenameEnabled(0, true);
     setExpandable(true);
     setOpen(true);
 }
@@ -764,7 +762,6 @@ KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task)
       m_task(task),
       m_view(parent)
 {
-    setRenameEnabled(0, true);
 }
 
 KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task)
@@ -776,7 +773,6 @@ KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *tas
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
-    setRenameEnabled(0, true);
 }
 
 void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
@@ -845,7 +841,6 @@ KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task)
       m_task(task),
       m_view(parent)
 {
-    setRenameEnabled(0, true);
 }
 
 KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task)
@@ -857,7 +852,6 @@ KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *t
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
-    setRenameEnabled(0, true);
 }
 
 
