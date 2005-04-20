@@ -29,6 +29,8 @@
 
 #include <qlabel.h>
 
+#include <kglobalsettings.h>
+
 //---------------
 
 static const unsigned int  autonumber_png_len = 245;

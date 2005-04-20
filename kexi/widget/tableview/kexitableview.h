@@ -622,6 +622,8 @@ signals:
 	void reloadActions();
 
 protected slots:
+	void slotSettingsChanged(int category);
+
 	virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 
 	virtual void slotRowsDeleted( const QValueList<int> & ); 

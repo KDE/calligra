@@ -232,6 +232,9 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	d = new KexiTableViewPrivate(this);
 
+	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
+
 	m_data = new KexiTableViewData(); //to prevent crash because m_data==0
 	m_owner = true;                   //-this will be deleted if needed
 
@@ -2359,7 +2362,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		else if ( nobtn && (e->key()==Key_Enter || e->key()==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
 			startEditOrToggleValue();
 		}
-		else if (nobtn && e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
+		else if (nobtn && e->key()==d->contextMenuKey) { //Key_Menu:
 			showContextMenu();
 		}
 		else {
@@ -4368,6 +4371,14 @@ KexiTableItem *KexiTableView::highlightedItem() const
 {
 	return m_data->at(d->highlightedRow);
 }
+
+void KexiTableView::slotSettingsChanged(int category)
+{
+	if (category==KApplication::SETTINGS_SHORTCUTS) {
+		d->contextMenuKey = KGlobalSettings::contextMenuKey();
+	}
+}
+
 
 #include "kexitableview.moc"
 

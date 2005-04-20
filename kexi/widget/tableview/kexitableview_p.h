@@ -242,6 +242,9 @@ class KexiTableViewPrivate
 
 	/*! Helper for "highlighted row" effect. */
 	int highlightedRow;
+
+	/*! Id of context menu key (cached). */
+	int contextMenuKey;
 };
 
 #endif
