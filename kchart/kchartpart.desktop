@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Chart Component
 Name[ca]=Component KChart de KOffice
+Name[cs]=Komponenta grafu KOffice
 Name[cy]=Cydran Siart KOffice 
 Name[da]=KOffice diagramkomponent
 Name[el]=Συστατικό γραφημάτων του KOffice
@@ -10,6 +11,7 @@ Name[et]=KOffice'i diagrammikomponent
 Name[fi]=KOfficen kaaviokomponentti
 Name[fr]=Composant diagramme de KOffice
 Name[nb]=Diagram-komponent for KOffice
+Name[nl]=KOffice Grafiek Component
 Name[nn]=Diagramkomponent for KOffice
 Name[pt]=Componente de Gráficos do KOffice
 Name[pt_BR]=Componente de Gráficos do KOffice

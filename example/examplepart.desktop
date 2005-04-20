@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Example Component
 Name[bg]=Примерни модули за KOffice
+Name[cs]=Ukázková KOffice komponenta
 Name[cy]=Cydran Enghreifftiol KOffice 
 Name[da]=KOffice eksempel-komponent
 Name[el]=Παράδειγμα συστατικού του KOffice
@@ -10,6 +11,7 @@ Name[et]=KOffice'i näidiskomponent
 Name[fi]=KOfficen esimerkkikomponentti
 Name[fr]=Composant-exemple KOffice
 Name[nb]=Eksempelkomponent for KOffice
+Name[nl]=KOffice Voorbeeldcomponent
 Name[nn]=Dømekomponent for KOffice
 Name[pa]=KOffice ਉਦਾਹਰਨ ਭਾਗ
 Name[pt]=Componente Exemplo do KOffice
