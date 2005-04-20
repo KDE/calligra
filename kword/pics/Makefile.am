@@ -1,3 +1,0 @@
-
-KDE_ICON = kword
-

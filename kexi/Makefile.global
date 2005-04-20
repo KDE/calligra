@@ -1,8 +1,0 @@
-KEXI_OPTIONS =
-
-KDE_CXXFLAGS = \
-$(USE_EXCEPTIONS) $(KEXI_OPTIONS)
-
-KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
-
-VER_INFO = -version-info 0:1:0

@@ -1,8 +1,0 @@
-KDE Office Suite for Debian
----------------------------
-
-This package provides documentation in a docbook format that the KDE
-Help Centre can display.  For HTML documentation that can be read in any
-web browser, see the package koffice-doc-html.
-
- -- Ben Burton <bab@debian.org>, Sat, 10 May 2003 14:31:30 +1000

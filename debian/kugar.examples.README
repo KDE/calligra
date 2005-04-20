@@ -1,7 +1,0 @@
-
-Sample reports can be viewed simply by opening the approprite Kugar data
-file (*.kud).  For instance:
-
-  kugar sample1.kud
-
- -- Ben Burton <bab@debian.org>  Sat, 10 May 2003 14:31:30 +1000

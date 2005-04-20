@@ -1,8 +1,0 @@
---- koffice/kpresenter/kprconverter.pl	2001/08/04 17:02:16	1.8
-+++ koffice/kpresenter/kprconverter.pl	2002/09/23 08:29:31
-@@ -1,4 +1,4 @@
--#!/usr/bin/perl
-+#!/usr/bin/perl -w
- 
- # converts a KPresenter document from the old format to the new one (v2)
- # due to the new text object

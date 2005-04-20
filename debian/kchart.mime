@@ -1,1 +1,0 @@
-application/x-kchart; kchart %s;test=test "$DISPLAY" != ""; priority=7

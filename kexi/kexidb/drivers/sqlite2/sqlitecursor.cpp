@@ -1,2 +1,0 @@
-#include "../sqlite/sqlitecursor.cpp"
-

@@ -20,6 +20,9 @@
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
+    <property name="caption">
+        <string>DialogUI</string>
+    </property>
     <widget class="QTable">
         <property name="name">
             <cstring>m_sheet</cstring>

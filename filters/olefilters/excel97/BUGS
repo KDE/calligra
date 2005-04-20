@@ -1,7 +1,0 @@
-Import filter bug list
--------------------------
-
-#1	Formula			$A$15.. locked areas give _WRONG_ values
-#2	Cell style formats	completely broken, nearly impossible to fix with current 
-				implementation of kspread
-

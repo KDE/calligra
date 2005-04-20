@@ -1,9 +1,0 @@
-# There is no -dev package; this module is a plug-in.
-koffice-libs: non-dev-pkg-with-shlib-symlink usr/lib/libkwmf.so.1.0.0 usr/lib/libkwmf.so
-# These are all modules in /usr/lib/kde3/.
-koffice-libs: binary-or-shlib-defines-rpath ./usr/lib/kde3/libxsltexport.so /usr/lib
-koffice-libs: binary-or-shlib-defines-rpath ./usr/lib/kde3/libxsltimport.so /usr/lib
-# This is inserted by debhelper and is legal.
-koffice-libs: postrm-calls-ldconfig
-# Menu item.
-koffice-libs: menu-item-contains-unknown-tag kderemove /usr/lib/menu/koffice-libs:8

@@ -1,6 +1,0 @@
-?package(kexi):\
-	needs="X11"\
-	section="Apps/Databases"\
-	hints="KDE"\
-	title="Kexi"\
-	command="/usr/bin/kexi"

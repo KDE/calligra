@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioSMLConnector" library="libkiviosmlconnector" version="2">
-<MenuBar>
-  <Menu name="Tools">
-    <Action name="sml_connector"/>
-  </Menu>
-</MenuBar>
-</kpartgui>

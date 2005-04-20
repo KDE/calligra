@@ -1,3 +1,0 @@
-# These are bundled with all KDE source downloads.
-source-contains-CVS-dir
-cvsignore-file-in-source

@@ -1,6 +1,0 @@
-debian/tmp/usr/lib/kde3/kexidb_mysqldriver.so
-debian/tmp/usr/lib/kde3/kexidb_mysqldriver.la
-debian/tmp/usr/lib/kde3/keximigrate_mysql.so
-debian/tmp/usr/lib/kde3/keximigrate_mysql.la
-debian/tmp/usr/share/services/kexidb_mysqldriver.desktop
-debian/tmp/usr/share/services/keximigrate_mysql.desktop

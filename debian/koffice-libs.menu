@@ -1,9 +1,0 @@
-?package(koffice-libs):\
-	needs="x11"\
-	section="Apps/Tools"\
-	hints="KDE"\
-	kderemove="1"\
-	title="KThesaurus"\
-	longtitle="KThesaurus (Related Words)"\
-	command="/usr/bin/kthesaurus"
-

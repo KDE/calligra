@@ -1,2 +1,0 @@
-kexi-postgresql-driver: binary-or-shlib-defines-rpath ./usr/lib/kde3/keximigrate_pqxx.so /usr/lib
-kexi-postgresql-driver: binary-or-shlib-defines-rpath ./usr/lib/kde3/kexidb_pqxxsqldriver.so /usr/lib

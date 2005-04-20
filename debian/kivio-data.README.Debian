@@ -1,7 +1,0 @@
-Kivio data for Debian
----------------------
-
-This package merely provides supporting data files for Kivio.  The Kivio
-application itself can be found in the kivio package.
-
- -- Ben Burton <bab@debian.org>, Sun, 11 Jul 2004 11:46:52 +1000

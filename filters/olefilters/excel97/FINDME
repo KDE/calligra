@@ -1,9 +1,0 @@
-Find these opcodes
------------------------
-
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xef operands: 6
- - always appears after SELECTION
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xc0 operands: 0
- - always appears after INTERFACEEND
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xbf operands: 0
-
