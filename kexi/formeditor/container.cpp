@@ -203,7 +203,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					tmpy *= gridX;
 				}
 
-				m_insertBegin = ((QWidget*)s)->mapTo(m_container, QPoint(tmpx, tmpy));
+				m_insertBegin = (static_cast<QWidget*>(s))->mapTo(m_container, QPoint(tmpx, tmpy));
 				if(m_form->formWidget())
 					m_form->formWidget()->initBuffer();
 
@@ -236,7 +236,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			if(mev->button() == RightButton) // Right-click -> context menu
 			{
-				m_form->manager()->createContextMenu((QWidget*)s, this);
+				m_form->manager()->createContextMenu(static_cast<QWidget*>(s), this);
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
 			{
@@ -261,7 +261,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->selectedWidgets()->count() > 1)
 					m_form->manager()->setInsertPoint( mev->pos() );
 				else
-					m_form->manager()->setInsertPoint( ((QWidget*)s)->mapTo(m_container, mev->pos() - m_grab) );
+					m_form->manager()->setInsertPoint( static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab) );
 				m_form->manager()->pasteWidget();
 				m_form->setInteractiveMode(true);
 
@@ -294,7 +294,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 
 				if(m_form->formWidget() && (tree->widget() != s))
-					m_form->formWidget()->highlightWidgets(tree->widget(), ((QWidget*)s));
+					m_form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
 			}
 			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->isCreatingConnection()) // draw the selection rect
 			{
@@ -368,6 +368,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::KeyPress:
 		{
 			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
+
 			if(kev->key() == Key_F2) // pressing F2 == double-clicking
 			{
 				m_state = InlineEditing;
@@ -399,6 +400,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 				LeftButton|ControlButton );
 				eventFilter(m_moving, mev);
 				delete mev;
+			}
+			else if(kev->key() == m_form->manager()->contextMenuKey())
+			{
+					m_form->manager()->createContextMenu(static_cast<QWidget*>(s), this, false);
+					return true;
+			}
+			else if (kev->key() == Key_Delete)
+			{
+				m_form->manager()->deleteWidget();
+				return true;
 			}
 			return true;
 		}
@@ -840,7 +851,7 @@ void
 Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 {
 	int tmpx, tmpy;
-	QPoint pos = ((QWidget*)s)->mapTo(m_container, mev->pos());
+	QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
 	int gridX = m_form->gridX();
 	int gridY = m_form->gridY();
 	if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )

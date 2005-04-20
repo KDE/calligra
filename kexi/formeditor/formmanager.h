@@ -158,10 +158,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! This function creates and displays the context menu corresponding to the widget \a w.
 		    The menu item are disabled if necessary, and
 		    the widget specific part is added (menu from the factory and buddy selection). */
-		void  createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/);
+		void  createContextMenu(QWidget *w, Container *container, bool popupAtCursor = true);
 
 		//! \return If we align widgets to grid or not.
 		bool  snapWidgetsToGrid();
+
+		//! @internal used by Container
+		int contextMenuKey() const { return m_contextMenuKey; }
 
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -343,6 +346,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		void slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&);
 
+		void slotSettingsChanged(int category);
+
 	protected:
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
@@ -398,7 +403,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KTextEdit *m_originalUICodeDialogEditor;
 #endif
 
-		int m_options;
+		int m_options; //!< @see Options enum
+		int m_contextMenuKey; //!< Id of context menu key (cached).
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;

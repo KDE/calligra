@@ -489,6 +489,17 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
+2005-04-19
+Project Wizard
+- 'finish' button disabled on 'select project type' page
+Form Designer
+- 'delete' key removes selected widget(s)
+- 'menu' key works
+TableView
+- 'menu' key taken from global settings
+Main
+- on startup propeditor is hidden if no project is opened
+
 2005-04-18
 Core
 - KexiProperty::setValue(): QCString type is now compatible with QString type

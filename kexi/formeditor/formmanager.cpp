@@ -43,6 +43,7 @@
 #include <kactionclasses.h>
 #include <kapplication.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kdialogbase.h>
 #include <ktextedit.h>
 #include <ktabwidget.h>
@@ -79,6 +80,9 @@ FormManager::FormManager(QObject *parent,
    , m_options(options)
 #endif
 {
+	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
+
 	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
 
@@ -699,7 +703,7 @@ FormManager::createSlotMenu(QWidget *w)
 }
 
 void
-FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/)
+FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCursor)
 {
 	if(!activeForm() || !activeForm()->widget())
 		return;
@@ -748,7 +752,7 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 			sub->setItemChecked(MenuNoBuddy, true);
 		sub->insertSeparator();
 
-		// We add al the widgets that can have focus
+		// add all the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
 			int index = sub->insertItem( SmallIcon(m_lib->icon(it.current()->className().latin1())),
@@ -812,8 +816,19 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		}
 	}
 
-	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
-	m_popup->exec(QCursor::pos());
+	
+	//show the popup at the selected widget
+	QPoint popupPos;
+	if (popupAtCursor) {
+		popupPos = QCursor::pos();
+	}
+	else {
+		WidgetList *lst = container->form()->selectedWidgets();
+		QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
+		popupPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width()/2, sel_w->height()/2)) : QCursor::pos();
+	}
+	m_insertPoint = container->widget()->mapFromGlobal(popupPos);
+	m_popup->exec(popupPos);//QCursor::pos());
 	m_insertPoint = QPoint();
 
 	QValueVector<int>::iterator it;
@@ -1228,6 +1243,13 @@ FormManager::showFormUICode()
 	m_originalUICodeDialogEditor->setText( doc.toString( 3 ) );
 	m_uiCodeDialog->show();
 #endif
+}
+
+void FormManager::slotSettingsChanged(int category)
+{
+	if (category==KApplication::SETTINGS_SHORTCUTS) {
+		m_contextMenuKey = KGlobalSettings::contextMenuKey();
+	}
 }
 
 #include "formmanager.moc"
