@@ -295,12 +295,10 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
 
   while ( p < l )
   {
-    if ( f[p] == '(' )
+    if ( f[p] == '(' || f[p] == '[' )
     {
       break;
     }
-    else if ( f[p] == '[' )
-      break;
 
     formula += f[p];
     ++p;
@@ -358,6 +356,13 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
         parameter += '=';
       else
         parameter += "==";
+    }
+    else if ( f[p] == '%' )
+    {
+      if( inQuote )
+        parameter += '%';
+      else
+        parameter += "/100";
     }
     else if ( f[p] == ')' )
     {
