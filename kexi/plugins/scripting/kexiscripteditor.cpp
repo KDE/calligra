@@ -20,75 +20,61 @@
 */
 
 #include "kexiscripteditor.h"
+#include "kexiscripttexteditor.h"
 
+#include <qlayout.h>
 #include <kdebug.h>
 
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-# include <ktexteditor/highlightinginterface.h>
-#endif
-
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
- : KexiEditor(mainWin, parent, name)
+    : KexiViewBase(mainWin, parent, name)
 {
-	// Load script code
-	QString data;
-	loadDataBlock(data);
-	setText(data);
+    QBoxLayout *layout = new QVBoxLayout(this);
 
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-	// TEMP: let's use python highlighting for now
-	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(document());
-	for(uint i=0; i < hl->hlModeCount(); i++)  {
-//		kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-		if (hl->hlModeName(i).contains("python", false))  {
-			hl->setHlMode(i);
-			break;
-		}
-	}
-#endif
+    m_texteditor = new KexiScriptTextEditor(mainWin, this, "ScriptTextEditor");
+    KexiViewBase::addChildView(m_texteditor);
+    KexiViewBase::setViewWidget(m_texteditor);
 
-	/// \todo plug actions here
-	connect(this, SIGNAL(textChanged()), this, SLOT(slotDirty()));
+    layout->addWidget(m_texteditor);
+
+    // Load script code
+    QString data;
+    loadDataBlock(data);
+    m_texteditor->setText(data);
 }
 
-KexiDB::SchemaData*
-KexiScriptEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiScriptEditor::~KexiScriptEditor()
 {
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiScriptEditor::storeNewData(): new id:" << s->id() << endl;
-
-	if (!s || cancel) {
-		delete s;
-		return 0;
-	}
-	if (!storeData()) {
-		//failure: remove object's schema data to avoid garbage
-		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-		conn->removeObject( s->id() );
-		delete s;
-		return 0;
-	}
-	return s;
 }
 
-tristate
-KexiScriptEditor::storeData()
+KexiDB::SchemaData* KexiScriptEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	kexipluginsdbg << "KexiScriptEditor::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
-	return storeDataBlock(text());
+    KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
+    kexipluginsdbg << "KexiScriptEditor::storeNewData(): new id:" << s->id() << endl;
+
+    if(!s || cancel) {
+        delete s;
+        return 0;
+    }
+
+    if(!storeData()) {
+        //failure: remove object's schema data to avoid garbage
+        KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+        conn->removeObject( s->id() );
+        delete s;
+        return 0;
+    }
+
+    return s;
 }
 
-void
-KexiScriptEditor::slotDirty()
+tristate KexiScriptEditor::storeData()
 {
-	KexiViewBase::setDirty(true);
+    kexipluginsdbg << "KexiScriptEditor::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+    return storeDataBlock( m_texteditor->text() );
 }
-
 
 #include "kexiscripteditor.moc"
 

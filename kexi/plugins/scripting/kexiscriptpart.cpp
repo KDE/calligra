@@ -33,38 +33,32 @@
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
-	m_names["instance"] = i18n("Script");
-	m_supportedViewModes = Kexi::DesignViewMode;
+    m_names["instance"] = i18n("Script");
+    m_supportedViewModes = Kexi::DesignViewMode;
 }
 
 KexiScriptPart::~KexiScriptPart()
 {
 }
 
-void
-KexiScriptPart::initPartActions()
+void KexiScriptPart::initPartActions()
 {
 }
 
-void
-KexiScriptPart::initInstanceActions()
+void KexiScriptPart::initInstanceActions()
 {
 }
 
-KexiViewBase*
-KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog,
-	KexiPart::Item &item, int)
+KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int)
 {
-	KexiMainWindow *win = dialog->mainWin();
-	if (!win || !win->project() || !win->project()->dbConnection())
-		return 0;
+    KexiMainWindow *win = dialog->mainWin();
+    if(!win || !win->project() || !win->project()->dbConnection())
+        return 0;
 
-	KexiScriptEditor *view = new KexiScriptEditor(win, parent, item.name().latin1());
-
-	return view;
+    KexiScriptEditor *view = new KexiScriptEditor(win, parent, item.name().latin1());
+    return view;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_script, KGenericFactory<KexiScriptPart>("kexihandler_script") )
 
 #include "kexiscriptpart.moc"
-

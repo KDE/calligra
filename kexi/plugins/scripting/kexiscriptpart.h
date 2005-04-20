@@ -28,23 +28,33 @@
 #include <kexipart.h>
 #include <kexidialogbase.h>
 
-//! Kexi Scripting Plugin
+/**
+ * Kexi Scripting Plugin.
+ */
 class KexiScriptPart : public KexiPart::Part
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		KexiScriptPart(QObject *parent, const char *name, const QStringList &);
-		virtual ~KexiScriptPart();
+    public:
 
-	protected:
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+        /**
+         * Constructor.
+         */
+        KexiScriptPart(QObject *parent, const char *name, const QStringList &);
 
-		virtual void initPartActions();
-		virtual void initInstanceActions();
+        /**
+         * Destructor.
+         */
+        virtual ~KexiScriptPart();
 
-	private:
+    protected:
+        virtual KexiViewBase* createView(QWidget *parent,
+                                         KexiDialogBase* dialog,
+                                         KexiPart::Item &item,
+                                         int viewMode = Kexi::DataViewMode);
+
+        virtual void initPartActions();
+        virtual void initInstanceActions();
 };
 
 #endif

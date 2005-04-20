@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexihandler_script.la
 
 kexihandler_script_la_SOURCES = kexiscriptpart.cpp \
-	kexiscripteditor.cpp
+	kexiscripttexteditor.cpp kexiscripteditor.cpp
 kexihandler_script_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_script_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la
@@ -17,5 +17,4 @@ SUBDIRS = .
 
 include ../Makefile.common
 
-noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h
-
+noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscripttexteditor.h
