@@ -130,6 +130,14 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_tab->addWidget(m_reportview);
 
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotAboutToShow(QWidget *)));
+    
+    connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
+    connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+
+    connect(m_ganttview, SIGNAL(addRelation(KPTNode*, KPTNode*, int)), SLOT(slotAddRelation(KPTNode*, KPTNode*, int)));
+    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*, int)), SLOT(slotModifyRelation(KPTRelation*, int)));
+    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+
 
 	// The menu items
     // ------ Edit
@@ -220,14 +228,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), CTRL+SHIFT+Key_G,
                         this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
-
-    connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
-    connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
-
-    connect(m_ganttview, SIGNAL(addRelation(KPTNode*, KPTNode*, int)), SLOT(slotAddRelation(KPTNode*, KPTNode*, int)));
-    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*, int)), SLOT(slotModifyRelation(KPTRelation*, int)));
-
-    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
 
 #endif
     // Stupid compilers ;)
