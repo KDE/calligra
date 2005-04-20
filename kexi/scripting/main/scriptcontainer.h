@@ -94,12 +94,6 @@ namespace Kross { namespace Api {
             void setInterpreterName(const QString&);
 
             /**
-             * Return a list of functionnames the with
-             * \a setCode defined scriptcode spends.
-             */
-            const QStringList& getFunctionNames();
-
-            /**
              * Add a QObject to publish it's slots, signals
              * and properties by using \a Kross::Api::QtObject
              * as QObject-wrapper.
@@ -121,6 +115,12 @@ namespace Kross { namespace Api {
             Kross::Api::Object* execute();
 
             /**
+             * Return a list of functionnames the with
+             * \a setCode defined scriptcode spends.
+             */
+            const QStringList& getFunctionNames();
+
+            /**
              * Call a function in the script container.
              *
              * \param functionname The name of the function
@@ -131,6 +131,16 @@ namespace Kross { namespace Api {
              *        the functioncall returnvalue.
              */
             Kross::Api::Object* callFunction(const QString& functionname, Kross::Api::List* arguments = 0);
+
+            /**
+             * Return a list of classes.
+             */
+            const QStringList& getClassNames();
+
+            /**
+             * Create and return a new class instance.
+             */
+            Kross::Api::Object* classInstance(const QString& name);
 
             /**
              * Connect QObject signal with function.

@@ -28,6 +28,7 @@
 #include <kdebug.h>
 
 #include "object.h"
+#include "classbase.h"
 #include "list.h"
 #include "exception.h"
 #include "argument.h"
@@ -41,7 +42,7 @@ namespace Kross { namespace Api {
      * accessible from within scripts.
      */
     template<class T>
-    class Class : public Object
+    class Class : public ClassBase
     {
         private:
 
@@ -101,7 +102,7 @@ namespace Kross { namespace Api {
              *        or NULL if this class has no parent.
              */
             explicit Class(const QString& name, Object* parentmodule = 0)
-                : Object(name, parentmodule)
+                : ClassBase(name, parentmodule)
             {
             }
 
@@ -110,6 +111,8 @@ namespace Kross { namespace Api {
              */
             virtual ~Class()
             {
+                for(QMap<QString, Function* >::Iterator it = m_functions.begin(); it != m_functions.end(); ++it)
+                    delete it.data();
             }
 
             /**

@@ -75,8 +75,25 @@ namespace Kross { namespace Python {
              */
             virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args);
 
+            /**
+             * Return a list of classes.
+             */
+            virtual const QStringList& getClassNames();
+
+            /**
+             * Create and return a new class instance.
+             */
+            virtual Kross::Api::Object* classInstance(const QString& name);
+
         private:
             Py::Module* m_module;
+
+//QMap<QString, Kross::Api::Object*> m_functions;
+//QMap<QString, Kross::Api::Object*> m_classes;
+
+            QStringList m_functions;
+            QStringList m_classes;
+            //QValueList<Kross::Api::Object*> m_classinstances;
 
             void initialize();
             void finalize();

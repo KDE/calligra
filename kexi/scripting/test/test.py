@@ -164,10 +164,16 @@ class KexiDBClass:
         connection.alterTableName(tableschema, newtablename)
 
 class testClass:
+    i = 123;
+    s = "string-attribute from testClass"
     def __init__(self):
         print "testKexiDBClass Constructor."
-    def testClassFunction(args):
-        print "testClassFunction() called in pythonscript."
+    def testClassFunction1(args):
+        print "testClassFunction1() called in pythonscript."
+        return "testClassFunction1() returnvalue"
+    def testClassFunction2(args):
+        print "testClassFunction2() called in pythonscript."
+        return "testClassFunction2() returnvalue"
 
 def testKexiDB():
     global KexiDBClass

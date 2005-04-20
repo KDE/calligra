@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkrosspython.la
 libkrosspython_la_SOURCES = \
     pythonextension.cpp \
     pythonmodule.cpp \
+    pythonobject.cpp \
     pythonscript.cpp \
     pythoninterpreter.cpp
 

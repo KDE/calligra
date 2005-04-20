@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "pythonextension.h"
+#include "pythonobject.h"
 
 #include "../api/variant.h"
 #include "../api/exception.h"
@@ -153,9 +154,7 @@ Kross::Api::Object* PythonExtension::toObject(const Py::Object& object)
 #ifdef KROSS_PYTHON_EXTENSION_DEBUG
         kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isInstance") << endl;
 #endif
-        //TODO
-        kdWarning() << "TODO: PythonExtension::toObject() isInstance()" << endl;
-        return 0;
+        return new PythonObject(object); //TODO auto destroy instance!
     }
 
     if(object.isTuple()) {

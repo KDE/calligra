@@ -7,6 +7,7 @@ libkrossapi_la_SOURCES = \
     object.cpp \
     variant.cpp \
     list.cpp \
+    classbase.cpp \
     argument.cpp \
     qtobject.cpp \
     eventmanager.cpp \

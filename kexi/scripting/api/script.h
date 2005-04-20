@@ -67,6 +67,16 @@ namespace Kross { namespace Api {
              */
             virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
 
+            /**
+             * Return a list of classes.
+             */
+            virtual const QStringList& getClassNames() = 0;
+
+            /**
+             * Create and return a new class instance.
+             */
+            virtual Kross::Api::Object* classInstance(const QString& name) = 0;
+
         protected:
             /// The \a Interpreter used to create this Script instance.
             Interpreter* m_interpreter;

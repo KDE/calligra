@@ -52,17 +52,22 @@ void PythonScript::initialize()
 void PythonScript::finalize()
 {
     delete m_module; m_module = 0;
+    m_functions.clear();
+    m_classes.clear();
 }
 
 const QStringList& PythonScript::getFunctionNames()
 {
     if(! m_module) initialize();
+    return m_functions;
+    /*
     QStringList list;
     Py::List l = m_module->getDict().keys();
     int length = l.length();
     for(Py::List::size_type i = 0; i < length; ++i)
         list.append( l[i].str().as_string().c_str() );
     return list;
+    */
 }
 
 Kross::Api::Object* PythonScript::execute()
@@ -84,31 +89,56 @@ Kross::Api::Object* PythonScript::execute()
         }
         Py::Object run(pyrun, true); // the run-object takes care of freeing our pyrun pyobject.
 
-/* TESTCASE
-kdDebug() << QString("PythonScript::execute --------------------------- 1") << endl;
-Py::Dict d( m_module->getDict().ptr() );
-for(Py::Dict::iterator it = d.begin(); it != d.end(); ++it) {
-    Py::Dict::value_type vt(*it);
-    Py::String rf = vt.first.repr();
-    Py::String rs = vt.second.repr();
+        //kdDebug() << QString("PythonScript::execute --------------------------- 1") << endl;
+        Py::Dict moduledict( m_module->getDict().ptr() );
+        for(Py::Dict::iterator it = moduledict.begin(); it != moduledict.end(); ++it) {
+            Py::Dict::value_type vt(*it);
 
-    QString s;
-    if(vt.second.isCallable()) s += "isCallable ";
-    if(vt.second.isDict()) s += "isDict ";
-    if(vt.second.isList()) s += "isList ";
-    if(vt.second.isMapping()) s += "isMapping ";
-    if(vt.second.isNumeric()) s += "isNumeric ";
-    if(vt.second.isSequence()) s += "isSequence ";
-    if(vt.second.isTrue()) s += "isTrue ";
+            if(PyClass_Check( vt.second.ptr() )) {
+                kdDebug() << QString("PythonScript::execute() class '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                m_classes.append( vt.first.as_string().c_str() );
+            }
+            else if(vt.second.isCallable()) {
+                kdDebug() << QString("PythonScript::execute() function '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                m_functions.append( vt.first.as_string().c_str() );
+            }
 
-    kdDebug() << QString("PythonScript::execute m_module->getDict() 1='%1' 2='%2' 3='%3'")
-                 .arg(rs.as_string().c_str())
-                 .arg(rf.as_string().c_str())
-                 .arg(s) << endl;
-    //m_objects.replace(vt.first.repr().as_string().c_str(), vt.second);
-}
-kdDebug() << QString("PythonScript::execute --------------------------- 2") << endl;
-*/
+            /*
+            QString s;
+            if(vt.second.isCallable()) s += "isCallable ";
+            if(vt.second.isDict()) s += "isDict ";
+            if(vt.second.isList()) s += "isList ";
+            if(vt.second.isMapping()) s += "isMapping ";
+            if(vt.second.isNumeric()) s += "isNumeric ";
+            if(vt.second.isSequence()) s += "isSequence ";
+            if(vt.second.isTrue()) s += "isTrue ";
+            if(vt.second.isInstance()) s += "isInstance ";
+            if(PyClass_Check( vt.second.ptr() )) s += "vt.second.isClass ";
+
+            Py::String rf = vt.first.repr();
+            Py::String rs = vt.second.repr();
+            kdDebug() << QString("PythonScript::execute m_module->getDict() rs='%1' vt.first='%2' rf='%3' test='%4' s='%5'")
+                        .arg(rs.as_string().c_str())
+                        .arg(vt.first.as_string().c_str())
+                        .arg(rf.as_string().c_str())
+                        .arg("")
+                        .arg(s) << endl;
+            //m_objects.replace(vt.first.repr().as_string().c_str(), vt.second);
+
+            if(PyClass_Check( vt.second.ptr() )) {
+                //PyObject *aclarg = Py_BuildValue("(s)", rs.as_string().c_str());
+                PyObject *pyinst = PyInstance_New(vt.second.ptr(), 0, 0);//aclarg, 0);
+                //Py_DECREF(aclarg);
+                if (pyinst == 0)
+                    kdDebug() << QString("PythonScript::execute PyInstance_New() returned NULL !!!") << endl;
+                else {
+                    Py::Object inst(pyinst, true);
+                    kdDebug() << QString("====> PythonScript::execute inst='%1'").arg(inst.as_string().c_str()) << endl;
+                }
+            }
+            */
+        }
+        //kdDebug() << QString("PythonScript::execute --------------------------- 2") << endl;
 
         //kdDebug() << QString("PythonScript::execute() PyRun_String='%1'").arg(run.str().as_string().c_str()) << endl;
         return PythonExtension::toObject(run);
@@ -121,7 +151,8 @@ kdDebug() << QString("PythonScript::execute --------------------------- 2") << e
 
 Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::List* args)
 {
-    if(! m_module) initialize();
+    if(! m_module)
+        throw Kross::Api::RuntimeException(i18n("Script not initialized."));
 
     try {
         kdDebug() << QString("PythonScript::callFunction(%1, %2)")
@@ -133,7 +164,7 @@ Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::
 
         // Try to determinate the function we like to execute.
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.latin1());
-        if(! func)
+        if( (! m_functions.contains(name)) || (! func) )
             throw Kross::Api::AttributeException(i18n("No such function '%1'.").arg(name));
 
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
@@ -159,6 +190,41 @@ Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::
 */
 
         return PythonExtension::toObject(result);
+    }
+    catch(Py::Exception& e) {
+        Py::Object errobj = Py::value(e);
+        throw Kross::Api::RuntimeException(i18n("Python Exception: %1").arg(errobj.as_string().c_str()));
+    }
+}
+
+const QStringList& PythonScript::getClassNames()
+{
+    if(! m_module) initialize();
+    return m_classes;
+}
+
+Kross::Api::Object* PythonScript::classInstance(const QString& name)
+{
+    if(! m_module)
+        throw Kross::Api::RuntimeException(i18n("Script not initialized."));
+
+    try {
+        Py::Dict moduledict = m_module->getDict();
+
+        // Try to determinate the class.
+        PyObject* pyclass = PyDict_GetItemString(moduledict.ptr(), name.latin1());
+        if( (! m_classes.contains(name)) || (! pyclass) )
+            throw Kross::Api::AttributeException(i18n("No such class '%1'.").arg(name));
+
+        //PyClass_Check( vt.second.ptr() ))
+        //PyObject *aclarg = Py_BuildValue("(s)", rs.as_string().c_str());
+        PyObject *pyobj = PyInstance_New(pyclass, 0, 0);//aclarg, 0);
+        if(! pyobj)
+            throw Kross::Api::AttributeException(i18n("Failed to create instance of class '%1'.").arg(name));
+
+        Py::Object classobject(pyobj, true);
+kdDebug() << QString("====> PythonScript::classInstance() inst='%1'").arg(classobject.as_string().c_str()) << endl;
+        return PythonExtension::toObject(classobject);
     }
     catch(Py::Exception& e) {
         Py::Object errobj = Py::value(e);

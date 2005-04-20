@@ -51,6 +51,7 @@ namespace Kross { namespace Python {
     class PythonExtension : public Py::PythonExtension<PythonExtension>
     {
             friend class PythonScript;
+            friend class PythonObject;
 
         public:
 

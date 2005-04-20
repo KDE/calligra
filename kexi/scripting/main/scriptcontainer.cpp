@@ -75,11 +75,6 @@ void ScriptContainer::setInterpreterName(const QString& name)
     m_interpretername = name;
 }
 
-const QStringList& ScriptContainer::getFunctionNames()
-{
-    return m_script ? m_script->getFunctionNames() : QStringList();
-}
-
 bool ScriptContainer::addQObject(QObject* object, const QString& name)
 {
     QString n = name.isEmpty() ? object->name() : name;
@@ -108,6 +103,11 @@ Kross::Api::Object* ScriptContainer::execute()
     return m_script->execute();
 }
 
+const QStringList& ScriptContainer::getFunctionNames()
+{
+    return m_script ? m_script->getFunctionNames() : QStringList();
+}
+
 Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, Kross::Api::List* arguments)
 {
     if(functionname.isEmpty())
@@ -115,6 +115,17 @@ Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, K
 
     if(! m_script) initialize();
     return m_script->callFunction(functionname, arguments);
+}
+
+const QStringList& ScriptContainer::getClassNames()
+{
+    return m_script ? m_script->getClassNames() : QStringList();
+}
+
+Kross::Api::Object* ScriptContainer::classInstance(const QString& name)
+{
+    if(! m_script) initialize();
+    return m_script->classInstance(name);
 }
 
 bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QString& functionname)

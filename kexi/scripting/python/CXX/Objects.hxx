@@ -26,6 +26,7 @@ namespace Py
 	class Type;
 	template<TEMPLATE_TYPENAME T> class SeqBase;
 	class String;
+        class List;
 	template<TEMPLATE_TYPENAME T> class MapBase;
 
 	// new_reference_to also overloaded below on Object
@@ -240,6 +241,8 @@ namespace Py
 		std::string as_string() const;
 
 		String repr () const; // the repr () representation
+
+                List dir () const; // the dir() list
 
 		bool hasAttr (const std::string& s) const
 			{

@@ -118,9 +118,12 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
 
         // Call a class.
         kdDebug()<<"--------------------------"<<endl;
-QValueList<Kross::Api::Object*> functionarguments;
-//functionarguments.append(o);
-scriptcontainer->callFunction("testClass", 0);//Kross::Api::List::create(functionarguments));
+Kross::Api::Object* testclassinstance = scriptcontainer->classInstance("testClass");
+if(testclassinstance) {
+    QValueList<Kross::Api::Object*> ll;
+    Kross::Api::Object* instancecallresult = testclassinstance->call("testClassFunction1", Kross::Api::List::create(ll));
+    //kdDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
+}
         kdDebug()<<"--------------------------"<<endl;
 
         // Connect QObject signal with scriptfunction.
