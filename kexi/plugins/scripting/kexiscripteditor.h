@@ -26,6 +26,8 @@
 
 class KexiScriptTextEditor;
 
+//! \todo **** rename KexiScriptEditor to  KexiScriptView or so, after moving to SVN
+
 /**
  * The KexiScriptEditor class embeds text editor
  * for editing scripting code.
