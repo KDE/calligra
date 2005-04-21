@@ -49,13 +49,6 @@ KexiScriptTextEditor::KexiScriptTextEditor(KexiMainWindow *mainWin, QWidget *par
             break;
         }
     }
-
-    KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
-    if(popupInt) {
-        QPopupMenu *pop = (QPopupMenu*) parentDialog()->part()->guiClient()->factory()->container("texteditor", parentDialog()->part()->guiClient());
-        if(pop)
-            popupInt->installPopup(pop);
-    }
 #endif
 
     /// \todo plug actions here

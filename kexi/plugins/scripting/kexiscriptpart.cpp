@@ -47,17 +47,6 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-    //TODO take caption, tooltip, icon, etc. from already defined KAction's for copy, paste, ...
-    KAction *a = createSharedAction(Kexi::DesignViewMode, i18n("Undo"), "undo", 0, "edit_undo");
-    //a->setToolTip(i18n("Check Query"));
-    //a->setWhatsThis(i18n("Checks query for validity."));
-
-    a = createSharedAction(Kexi::DesignViewMode, i18n("Redo"), "redo", 0, "edit_redo");
-
-    a = createSharedAction(Kexi::DesignViewMode, i18n("Cut"), "editcut", 0, "edit_cut");
-    a = createSharedAction(Kexi::DesignViewMode, i18n("Copy"), "editcopy", 0, "edit_copy");
-    a = createSharedAction(Kexi::DesignViewMode, i18n("Paste"), "editpaste", 0, "edit_paste");
-    //a = createSharedAction(Kexi::DesignViewMode, i18n("Clear"), "editclear", 0, "edit_clear");
 }
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int)
