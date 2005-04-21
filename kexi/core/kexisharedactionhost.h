@@ -114,7 +114,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 Object is mainly the window. */
 		void updateActionAvailable(const char *action_name, bool avail, QObject *obj);
 
-		/*! \return main window that acts for which this host is defined. */
+		/*! \return main window for which this host is defined. */
 		KMainWindow* mainWindow() const;
 
 		/*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,

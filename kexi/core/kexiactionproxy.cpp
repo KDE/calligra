@@ -108,14 +108,15 @@ KexiActionProxy::~KexiActionProxy()
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
 {
-	if (!action_name || !receiver || !slot)
+	if (!action_name)// || !receiver || !slot)
 		return;
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
 		m_signals.insert(action_name, p);
 	}
-	p->first->connect( receiver, slot );
+	if (receiver && slot)
+		p->first->connect( receiver, slot );
 }
 
 void KexiActionProxy::unplugSharedAction(const char *action_name)
