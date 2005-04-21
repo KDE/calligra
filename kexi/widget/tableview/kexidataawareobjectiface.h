@@ -351,8 +351,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual KexiTableViewColumn* column(int col);
 
 		/*! \return field number within data model connected to a data-aware
-		 widget at column \a col. */
-		virtual uint fieldNumberForColumn(int col) { return col; }
+		 widget at column \a col. Can return -1 if there's no such column. */
+		virtual int fieldNumberForColumn(int col) { return col; }
 
 		const QVariant* bufferedValueAt(int col);
 

@@ -36,23 +36,19 @@ typedef KexiDB::RowData KexiTableItemBase;
 
 class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 {
+	public:
+		KexiTableItem(int numCols);
+		~KexiTableItem();
 
-public:
-	KexiTableItem(int numCols);
-//js	KexiTableItem(KexiTableView *tableView);
+		/*! Clears exisiting column values and inits new \a numCols 
+		 columns with empty values. ist of values is resized to \a numCols. */
+		void init(int numCols);
 
-	/*! Clears exisiting column values and inits new \a numCols 
-	 columns with empty values. ist of values is resized to \a numCols. */
-	void init(int numCols);
+		/*! Clears exisiting column values, current number of columns is preserved. */
+		void clearValues();
 
-	/*! Clears exisiting column values, current number of columns is preserved. */
-	void clearValues();
-
-	~KexiTableItem();
-
-protected:
-
-private:
+	protected:
+	private:
 };
 
 #endif
