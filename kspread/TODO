@@ -49,7 +49,7 @@ General bugs
 ------------
 
 * Painting
-  + 59068: Error show text on cell with right align with text	      1	----
+  + 59068: Error show text on cell with right align with text	      1	DONE
 	   overlapped left cell.
   + 61452: drawing problem when text overflow the right border        1 ----
   + 66859: Decimals are in the next horizontal cell		      1 ----
