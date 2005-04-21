@@ -153,10 +153,11 @@ class KexiMainWindowImpl::Private
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
 			*action_edit_cut, *action_edit_copy, *action_edit_paste,
+			*action_edit_select_all,
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
 			*action_edit_edititem, *action_edit_clear_table;
-
+			
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
@@ -617,6 +618,8 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
 
+	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
+
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
 		0/*Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
@@ -894,6 +897,7 @@ tristate KexiMainWindowImpl::startup()
 {
 	switch (Kexi::startupHandler().action()) {
 	case KexiStartupHandler::CreateBlankProject:
+		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 		return createBlankProject();
 	case KexiStartupHandler::UseTemplate:
 		return cancelled;
@@ -1012,8 +1016,8 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 	if (d->propEditor) {
 				KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-                                if(ds)
-				    ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+				if(ds)
+					ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
 	}
 #endif
 

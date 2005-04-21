@@ -23,6 +23,7 @@
 #include <kexidb/connectiondata.h>
 
 #include "kexi.h"
+#include "kexi_utils.h"
 #include "KexiConnSelectorBase.h"
 #include "KexiOpenExistingFile.h"
 
@@ -99,6 +100,9 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_
 	m_remote = new KexiConnSelectorBase(this,"conn_sel");
 	m_remote->icon->setPixmap( DesktopIcon("socket") );
 	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
+	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));
+	connect(m_remote->btn_edit, SIGNAL(clicked()), this, SLOT(slotRemoteEditBtnClicked()));
+	connect(m_remote->btn_remove, SIGNAL(clicked()), this, SLOT(slotRemoteRemoveBtnClicked()));
 	addWidget(m_remote);
 	if (m_remote->layout())
 		m_remote->layout()->setMargin(0);
@@ -252,6 +256,26 @@ void KexiConnSelectorWidget::setConfirmOverwrites(bool set)
 bool KexiConnSelectorWidget::confirmOverwrites() const
 {
 	return d->confirmOverwrites;
+}
+
+static QString msgUnfinished() { 
+	return i18n("To define or change a connection, use command line options or click on .kexis file. "
+		"You can find example .kexis file at: http://webcvs.kde.org/*checkout*/koffice/kexi/tests/startup/testdb.kexis");
+}
+
+void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
+{
+	KEXI_UNFINISHED(i18n("Add connection"), msgUnfinished());
+}
+
+void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
+{
+	KEXI_UNFINISHED(i18n("Edit connection"), msgUnfinished());
+}
+
+void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
+{
+	KEXI_UNFINISHED(i18n("Remove connection"));
 }
 
 #include "KexiConnSelector.moc"

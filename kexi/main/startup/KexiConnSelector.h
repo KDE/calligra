@@ -111,6 +111,9 @@ public slots:
 
 protected slots:
 	void slotConnectionItemExecuted(QListViewItem *item);
+	void slotRemoteAddBtnClicked();
+	void slotRemoteEditBtnClicked();
+	void slotRemoteRemoveBtnClicked();
 
 protected:
 	QGuardedPtr<const KexiDBConnectionSet> m_conn_set;
