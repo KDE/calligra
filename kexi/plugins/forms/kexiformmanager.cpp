@@ -34,11 +34,6 @@ KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supp
  , m_part(parent)
 {
 	lib()->setAdvancedPropertiesVisible(false);
-	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
-		parent, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
-
-	connect( this, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
-		parent, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormManager::~KexiFormManager()

@@ -78,7 +78,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 
 		/*! \return field number within data model connected to a data-aware
 		 widget at column \a col. */
-		virtual uint fieldNumberForColumn(int col) {
+		virtual int fieldNumberForColumn(int col) {
 			KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
 				dbFormWidget()->orderedDataAwareWidgets()->at( col ));
 			if (!item)

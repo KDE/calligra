@@ -59,10 +59,10 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	supportedFactoryGroups += "kexi";
 	m_manager = new KexiFormManager(this, supportedFactoryGroups, "form_manager");
 
-//moved	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
-//moved		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
-//moved	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
-//moved		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
+	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
+		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
+	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
+		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
