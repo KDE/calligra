@@ -66,7 +66,10 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 
 	protected:
 		void init( QWidget* viewWidget, KexiSharedActionClient* actionClient,
-			KexiDataAwareObjectInterface* dataAwareObject );
+			KexiDataAwareObjectInterface* dataAwareObject, 
+		// temporary, for KexiFormView in design mode 
+			bool noDataAware = false
+		);
 		void initActions();
 		virtual void updateActions(bool activated);
 

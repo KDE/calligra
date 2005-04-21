@@ -35,80 +35,57 @@ KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, c
 }
 
 void KexiDataAwareView::init( QWidget* viewWidget, KexiSharedActionClient* actionClient,
-	KexiDataAwareObjectInterface* dataAwareObject )
+	KexiDataAwareObjectInterface* dataAwareObject, bool noDataAware )
 {
 	m_internalView = viewWidget;
 	m_actionClient = actionClient;
 	m_dataAwareObject = dataAwareObject;
 	setViewWidget(m_internalView, true);
 
-//	connect(m_dataAwareObject, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
-	m_dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
+	if (!noDataAware) {
+		m_dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
 
-	//! before closing - we'are accepting editing
-//	connect(this, SIGNAL(closing()), m_internalView, SLOT(acceptRowEdit()));
-	connect(this, SIGNAL(closing()), this, SLOT(acceptRowEdit()));
+		//! before closing - we'are accepting editing
+		connect(this, SIGNAL(closing()), this, SLOT(acceptRowEdit()));
 
-	//! updating actions on start/stop editing
-//	connect(m_view, SIGNAL(rowEditStarted(int)), this, SLOT(slotUpdateRowActions(int)));
-	m_dataAwareObject->connectRowEditStartedSignal(this, SLOT(slotUpdateRowActions(int)));
-//	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
-	m_dataAwareObject->connectRowEditTerminatedSignal(this, SLOT(slotUpdateRowActions(int)));
-//	connect(m_view, SIGNAL(reloadActions()), this, SLOT(reloadActions()));
-	m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
+		//! updating actions on start/stop editing
+		m_dataAwareObject->connectRowEditStartedSignal(this, SLOT(slotUpdateRowActions(int)));
+		m_dataAwareObject->connectRowEditTerminatedSignal(this, SLOT(slotUpdateRowActions(int)));
+		m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
+	}
 
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_internalView);
 
-	//resize to preferred size
-/*	QSize preferredSize = m_view->sizeHint();
-	KexiDialogBase* dlg = parentDialog();
-	if (dlg && dlg->mdiParent()) {
-		QRect r = dlg->mdiParent()->mdiAreaContentsRect();
-		preferredSize = preferredSize.boundedTo( QSize(
-			r.width() - 10,
-			r.height() - dlg->mdiParent()->captionHeight() - 10
-		) );
-	}*/
-
 	setMinimumSize(m_internalView->minimumSizeHint().width(), 
 		m_internalView->minimumSizeHint().height());
 	resize( preferredSizeHint( m_internalView->sizeHint() ) );
-//js	m_view->show();
 	setFocusProxy(m_internalView);
-//	m_view->setFocus();
-//not needed	setIcon(SmallIcon("table"));
 	
-	initActions();
-//js already done in keximainwindow:	registerDialog();
-	reloadActions();
+	if (!noDataAware) {
+		initActions();
+		reloadActions();
+	}
 }
 
 void KexiDataAwareView::initActions()
 {
-//	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
 	plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
 	m_actionClient->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
-//	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
 	plugSharedAction("edit_delete", this, SLOT(deleteAndStartEditCurrentCell()));
 	m_actionClient->plugSharedAction(sharedAction("edit_delete")); //for proper shortcut
 
-//	plugSharedAction("edit_edititem",m_view, SLOT(startEditOrToggleValue()));
 	plugSharedAction("edit_edititem", this, SLOT(startEditOrToggleValue()));
 	m_actionClient->plugSharedAction(sharedAction("edit_edititem")); //for proper shortcut
 
-//	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	plugSharedAction("data_save_row", this, SLOT(acceptRowEdit()));
 	m_actionClient->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
 
-//	plugSharedAction("data_cancel_row_changes",m_view, SLOT(cancelRowEdit()));
 	plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRowEdit()));
 	m_actionClient->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
 
 	if (m_dataAwareObject->isSortingEnabled()) {
-//		plugSharedAction("data_sort_az", m_view, SLOT(sortAscending()));
-//		plugSharedAction("data_sort_za", m_view, SLOT(sortDescending()));
 		plugSharedAction("data_sort_az", this, SLOT(sortAscending()));
 		plugSharedAction("data_sort_za", this, SLOT(sortDescending()));
 	}
