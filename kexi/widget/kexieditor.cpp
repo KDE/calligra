@@ -131,7 +131,14 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 	plugSharedActionToExternalGUI("edit_undo", d->view);
 	plugSharedActionToExternalGUI("edit_redo", d->view);
 
-	/// \todo add popup menu
+	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
+        if(popupInt) {
+            QPopupMenu *pop = (QPopupMenu*) mainWin->factory()->container("edit", mainWin);
+            if(pop) {
+                //plugSharedAction("edit_undo", pop);
+                popupInt->installPopup(pop);
+            }
+        }
 
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
