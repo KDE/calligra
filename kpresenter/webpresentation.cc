@@ -812,7 +812,7 @@ void KPWebPresentationWizard::setupPage2()
       {
         encoding->insertItem(encodings[i]);
 
-        if ( codecForEnc->name() == webPres.getEncoding() )
+        if ( KGlobal::charsets()->encodingForName( encodings[i] ) == webPres.getEncoding() )
           encoding->setCurrentItem(idx);
         idx++;
       }
