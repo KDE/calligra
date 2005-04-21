@@ -462,6 +462,9 @@ Migration (Import Project Wizard) TODO:
   (impl. this one with drv name and description columns)
 - use KexiDB::MessageTitle and KexiDB::MessageHandler for displaying errors
 
+Reports TODO
+- reuse most of KexiFormPart code in KexiReportPart (eg. creating shared actions)
+
 QUICK TODO: 
 Forms:
 -change form's object caption to "caption" property, when changed and conversely!
@@ -495,11 +498,19 @@ TODO:::::::
 -plug 'delete widget' action to 'delete' shared action
 -implement shared action categories to filter out them in 'assigning actions to push buttons'
 
+2005-04-21
+Main Window
+- 'edit > select all' global shared action added
+Core
+- Active window can be found even if it's detached (as in KMDI).
+  This fixes shared actions availability for detached windows.
+Form Designer, Report Designer
+- KexiFormManager reused for reporting
+- we can now assign any kexi action to a button, not only shared one..
+
 2005-04-20
 Form Designer
 - we're not plugging to data-related actions for design view mode
-Main Window
-- 'edit > select all' global shared action added
 
 2005-04-19
 Project Wizard

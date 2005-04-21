@@ -35,22 +35,22 @@ class KexiReportFactory : public KFormDesigner::WidgetFactory
 		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
-		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
-		virtual void startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual void previewWidget(const QCString &, QWidget *, KFormDesigner::Container *) {}
+		   KFormDesigner::Container *container);
+		virtual bool startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container);
+		virtual bool previewWidget(const QCString &, QWidget *, KFormDesigner::Container *);
 
 		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         //QDomElement &parentNode, QDomDocument &parent) {}
 		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
-		virtual bool isPropertyVisible(const QCString &, QWidget *, const QCString &, bool multiple);
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
 	public slots:
-		void  editText();
+		void editText();
 
 	protected:
-		virtual void changeText(const QString &newText);
-		virtual void resizeEditor(QWidget *widget, const QCString &classname);
+		virtual bool isPropertyVisibleInternal(const QCString &, QWidget *, const QCString &);
+//		virtual void changeText(const QString &newText);
+//		virtual void resizeEditor(QWidget *widget, const QCString &classname);
 
 	private:
 		QWidget *m_widget;

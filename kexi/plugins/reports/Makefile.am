@@ -7,7 +7,8 @@ kexihandler_report_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -modu
 kexihandler_report_la_LIBADD = ../../core/libkexicore.la \
   ../../widget/utils/libkexiguiutils.la \
   ../../widget/libkexiextendedwidgets.la \
-  ../../formeditor/libkformdesigner.la
+  ../../formeditor/libkformdesigner.la \
+  ../forms/libkexiformutils.la
 
 kexireportwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexireportwidgets_la_SOURCES =   reportwidgets.cpp kexireportfactory.cpp

@@ -536,8 +536,12 @@ QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 	return d->popups[popupName];
 }
 
-void
-KexiMainWindowImpl::initActions()
+KActionPtrList KexiMainWindowImpl::allActions() const
+{
+	return actionCollection()->actions();
+}
+
+void KexiMainWindowImpl::initActions()
 {
 //	setupGUI(KMainWindow::Keys|KMainWindow::StatusBar|KMainWindow::Save|KMainWindow::Create);
 

@@ -24,6 +24,8 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qtimer.h>
+#include <qguardedptr.h>
+#include <qstringlist.h>
 
 class QWidget;
 class QWorkspace;

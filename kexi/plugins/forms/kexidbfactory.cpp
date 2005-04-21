@@ -287,7 +287,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #endif
 
 	// inherited
-	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this, "stdwidgets", "KPushButton");
+	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(
+		this, "stdwidgets", "KPushButton");
 	wPushButton->addAlternateClassName("KexiPushButton");
 	addClass(wPushButton);
 
@@ -375,7 +376,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-		createEditor(classname, lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
+		createEditor(classname, lineedit->text(), lineedit, container, 
+			lineedit->geometry(), lineedit->alignment(), true);
 		return true;
 	}
 	else if ( classname == "KexiLabel" ) {
@@ -395,7 +397,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		}
 		else
 		{
-			createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+			createEditor(classname, label->text(), label, container, 
+				label->geometry(), label->alignment());
 		}
 		return true;
 	}

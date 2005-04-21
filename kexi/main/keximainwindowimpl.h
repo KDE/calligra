@@ -75,6 +75,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		virtual QPopupMenu* findPopupMenu(const char *popupName);
 
+		/*! Implemented for KexiMainWindow. */
+		virtual KActionPtrList allActions() const;
+
 		/**
 		 * @returns a pointer to the relation parts loads it if needed
 		 */

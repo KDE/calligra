@@ -38,7 +38,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
  : KDialogBase(parent, "actionSelectorDialog", true, QString::null, 
 	KDialogBase::Ok | KDialogBase::Cancel )
 {
-	KActionPtrList sharedActions( mainWin->sharedActions() );
+	KActionPtrList sharedActions( mainWin->allActions() ); //sharedActions() );
 
 	QCString currentActionName( _currentActionName );
 

@@ -36,7 +36,6 @@
 
 #include <form.h>
 #include <formIO.h>
-#include <formmanager.h>
 #include <objpropbuffer.h>
 #include <widgetlibrary.h>
 
@@ -44,75 +43,8 @@
 #include "kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiactionselectiondialog.h"
+#include "kexiformmanager.h"
 #include "kexiformpart.h"
-
-//! @internal
-class KexiFormManager : public KFormDesigner::FormManager
-{
-	public:
-		KexiFormManager(KexiFormPart *parent, const QStringList& supportedFactoryGroups)
-		 : KFormDesigner::FormManager(parent, supportedFactoryGroups, 
-			KFormDesigner::FormManager::HideEventsInPopupMenu
-			| KFormDesigner::FormManager::SkipFileActions, "form_manager")
-		 , m_part(parent)
-		{
-		}
-
-		inline QString translateName( const char* name ) const
-		{
-			QString n( name );
-			//translate to our name space:
-			if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
-				|| n=="format_raise" || n=="format_raise" || n=="taborder" | n=="break_layout")
-			{
-				n.prepend("formpart_");
-			}
-			return n;
-		}
-
-		virtual KAction* action( const char* name )
-		{
-			KActionCollection *col = m_part->actionCollectionForMode(Kexi::DesignViewMode);
-			if (!col)
-				return 0;
-			QCString n( translateName( name ).latin1() );
-			KAction *a = col->action(n);
-			if (a)
-				return a;
-			KexiDBForm *dbform;
-			if (!activeForm() || !activeForm()->designMode()
-				|| !(dbform = dynamic_cast<KexiDBForm*>(activeForm()->formWidget())))
-				return 0;
-			KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
-			if (!scrollViewWidget)
-				return 0;
-			KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
-			if (!formViewWidget)
-				return 0;
-			return formViewWidget->parentDialog()->mainWin()->actionCollection()->action(n);
-		}
-
-		virtual void enableAction( const char* name, bool enable )
-		{
-			KexiDBForm *dbform;
-			if (!activeForm() || !activeForm()->designMode()
-				|| !(dbform = dynamic_cast<KexiDBForm*>(activeForm()->formWidget())))
-				return;
-			KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
-			if (!scrollViewWidget)
-				return;
-			KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
-			if (!formViewWidget)
-				return;
-			if (QString(name)=="layout_menu")
-				kdDebug() << "!!!!!!!!!!! " << enable << endl;
-			formViewWidget->setAvailable(translateName( name ).latin1(), enable);
-		}
-
-		KexiFormPart* m_part;
-};
-
-//////////////////////////////////////////////////////////
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -125,14 +57,12 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi";
-	m_manager = new KexiFormManager(this, supportedFactoryGroups);
-	m_manager->lib()->setAdvancedPropertiesVisible(false);
+	m_manager = new KexiFormManager(this, supportedFactoryGroups, "form_manager");
 
-	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
-		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
-
-	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
-		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
+//moved	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
+//moved		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
+//moved	connect( m_manager, SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)), 
+//moved		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()

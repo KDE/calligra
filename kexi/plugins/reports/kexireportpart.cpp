@@ -33,8 +33,8 @@
 
 #include <form.h>
 #include <formIO.h>
-#include <formmanager.h>
 
+#include "kexiformmanager.h"
 #include "kexireportview.h"
 #include "kexireportpart.h"
 
@@ -48,8 +48,9 @@ KexiReportPart::KexiReportPart(QObject *parent, const char *name, const QStringL
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi-report";
-	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
-		KFormDesigner::FormManager::HideEventsInPopupMenu, "report_form_manager");
+	m_manager = new KexiFormManager(this, supportedFactoryGroups, "report_form_manager");
+//	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
+//		KFormDesigner::FormManager::HideEventsInPopupMenu, "report_form_manager");
 }
 
 KexiReportPart::~KexiReportPart()

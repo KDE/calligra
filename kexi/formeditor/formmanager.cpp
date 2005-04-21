@@ -753,6 +753,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	separatorNeeded = true;
 	PLUG_ACTION("align_menu", !toplevelWidgetSelected);
 	PLUG_ACTION("adjust_size_menu", !toplevelWidgetSelected);
+	separatorNeeded = true;
 
 	// We create the buddy menu
 	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))

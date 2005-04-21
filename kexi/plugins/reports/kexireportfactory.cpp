@@ -43,7 +43,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wView->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
 	"spaces and non latin1 characters", "Report"));
 	wView->setDescription(i18n("A report"));
-	m_classes.append(wView);
+	addClass(wView);
 
 	KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
 	wLabel->setPixmap("label");
@@ -51,7 +51,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLabel->setName(i18n("Label"));
 	wLabel->setNamePrefix(i18n("Widget name (see above)", "Label"));
 	wLabel->setDescription(i18n("A label to display text"));
-	m_classes.append(wLabel);
+	addClass(wLabel);
 
 	KFormDesigner::WidgetInfo *wPicLabel = new KFormDesigner::WidgetInfo(this);
 	wPicLabel->setPixmap("pixmaplabel");
@@ -59,7 +59,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wPicLabel->setName(i18n("Picture Label"));
 	wPicLabel->setNamePrefix(i18n("Widget name (see above)", "PicLabel"));
 	wPicLabel->setDescription(i18n("A label to display images or icons"));
-	m_classes.append(wPicLabel);
+	addClass(wPicLabel);
 
 	KFormDesigner::WidgetInfo *wLine = new KFormDesigner::WidgetInfo(this);
 	wLine->setPixmap("line");
@@ -67,7 +67,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLine->setName(i18n("Line"));
 	wLine->setNamePrefix(i18n("Widget name (see above)", "Line"));
 	wLine->setDescription(i18n("A simple line"));
-	m_classes.append(wLine);
+	addClass(wLine);
 
 	KFormDesigner::WidgetInfo *wSubReport = new KFormDesigner::WidgetInfo(this);
 	wSubReport->setPixmap("report");
@@ -75,7 +75,11 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wSubReport->setName(i18n("Sub Report"));
 	wSubReport->setNamePrefix(i18n("Widget name (see above)", "SubReport"));
 	wSubReport->setDescription(i18n("A report embedded in another report"));
-	m_classes.append(wSubReport);
+	addClass(wSubReport);
+}
+
+KexiReportFactory::~KexiReportFactory()
+{
 }
 
 QString
@@ -105,22 +109,18 @@ KexiReportFactory::create(const QCString &c, QWidget *p, const char *n, KFormDes
 
 bool
 KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
-	KFormDesigner::Container *container, QValueVector<int> *menuIds)
+	KFormDesigner::Container *container)
 {
-	m_widget = w;
-	m_container = container;
-
 	if(classname == "Label") {
-		int id = menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
-		menuIds->append(id);
+		/*! @todo use KAction */
+		menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
-
 	return false;
 }
 
-void
-KexiReportFactory::startEditing(const QString &c, QWidget *w, KFormDesigner::Container *container)
+bool
+KexiReportFactory::startEditing(const QCString &c, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 
@@ -131,14 +131,14 @@ KexiReportFactory::startEditing(const QString &c, QWidget *w, KFormDesigner::Con
 			editText();
 		}
 		else
-			createEditor(label->text(), label, container, label->geometry(), label->alignment());
-		return;
+			createEditor(c, label->text(), label, container, label->geometry(), label->alignment());
+		return true;
 	}
-	return;
+	return false;
 }
 
 bool
-KexiReportFactory::isPropertyVisible(const QCString &classname, QWidget *, const QCString &property, bool multiple)
+KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *, const QCString &property)
 {
 	if(classname == "Label") {
 		if(property == "pixmap")
@@ -149,7 +149,7 @@ KexiReportFactory::isPropertyVisible(const QCString &classname, QWidget *, const
 			return false;
 	}
 
-	return !multiple;
+	return true;
 }
 
 QValueList<QCString>
@@ -165,6 +165,7 @@ KexiReportFactory::autoSaveProperties(const QCString &classname)
 	return l;
 }
 
+/*
 void
 KexiReportFactory::changeText(const QString &text)
 {
@@ -186,7 +187,7 @@ KexiReportFactory::resizeEditor(QWidget *widget, const QCString &)
 
 	m_editor->resize(s);
 	m_editor->move(p);
-}
+}*/
 
 void
 KexiReportFactory::editText()
@@ -206,8 +207,10 @@ KexiReportFactory::editText()
 		m_widget->resize(m_widget->sizeHint());
 }
 
-KexiReportFactory::~KexiReportFactory()
+bool
+KexiReportFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Container *)
 {
+	return false;
 }
 
 K_EXPORT_COMPONENT_FACTORY(kexireportwidgets, KGenericFactory<KexiReportFactory>("kexireportwidgets"))
