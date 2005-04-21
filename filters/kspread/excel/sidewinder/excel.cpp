@@ -128,7 +128,7 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
 
 namespace Swinder 
 {
-std::ostream& Swinder::operator<<( std::ostream& s, Swinder::UString ustring )
+std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )
 {
   char* str = ustring.ascii();
   s << str;
