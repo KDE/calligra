@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kfd_part" version="1">
+<kpartgui name="kfd_part" version="2">
 
 <MenuBar>
   <Menu name="file" noMerge="1">
@@ -17,7 +17,7 @@
     <Action name="edit_cut" group="edit_paste_merge"/>
     <Action name="edit_copy" group="edit_paste_merge"/>
     <Action name="edit_paste" group="edit_paste_merge"/>
-    <Action name="delete_widget" group="edit_paste_merge"/>
+    <Action name="edit_delete" group="edit_paste_merge"/>
     <Action name="clear_contents" group="edit_paste_merge"/>
     <Separator group="edit_select_merge"/>
     <Action name="edit_select_all" group="edit_select_merge"/>
@@ -67,11 +67,7 @@
   <text>&amp;Format</text>
    <Action name="snap_to_grid"/>
    <Separator/>
-   <Action name="layout_hbox"/>
-   <Action name="layout_vbox"/>
-   <Action name="layout_grid"/>
-   <Action name="layout_hsplitter"/>
-   <Action name="layout_vsplitter"/>
+   <Action name="layout_menu"/>
    <Action name="break_layout"/>
    <Separator/>
    <Action name="align_menu"/>
@@ -94,8 +90,6 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
-    <Action name="delete_widget"/>
-    <Action name="clear_contents"/>
 </ToolBar>
 <ToolBar name="containers" fullWidth="false" noMerge="1">
  <text>Containers</text>

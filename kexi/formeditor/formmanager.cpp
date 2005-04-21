@@ -95,27 +95,15 @@ FormManager::FormManager(QObject *parent,
 
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
-	m_popup = new KPopupMenu();
-	m_popup->insertTitle(QPixmap(), QString::null, MenuTitle);
-	m_popup->insertItem( SmallIconSet("editcopy"), i18n("&Copy"), this, SLOT(copyWidget()), 0, MenuCopy);
-	m_popup->insertItem( SmallIconSet("editcut"), i18n("Cu&t"), this, SLOT(cutWidget()), 0, MenuCut);
-	m_popup->insertItem( SmallIconSet("editpaste"), i18n("&Paste"), this, SLOT(pasteWidget()), MenuPaste);
-	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, MenuDelete);
-	m_popup->insertSeparator(MenuDelete + 1);
-
-	m_popup->insertItem( i18n("Lay Out &Horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
-	m_popup->insertItem( i18n("Lay Out &Vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
-	m_popup->insertItem( i18n("Lay Out in &Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
-	m_popup->insertItem( i18n("Lay Out Horizontally in &Splitter"), this, SLOT(layoutHSplitter()), 0, MenuHSplitter);
-	m_popup->insertItem( i18n("Lay Out Verti&cally in Splitter"), this, SLOT(layoutVSplitter()), 0, MenuVSplitter);
-//	m_popup->insertSeparator(MenuVSplitter + 1);
+	m_popup = 0;
 
 	m_treeview = 0;
 	m_editor = 0;
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
-	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
+	connect( this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)), 
+		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 }
 
 FormManager::~FormManager()
@@ -383,7 +371,7 @@ FormManager::windowChanged(QWidget *w)
 		if(isCreatingConnection())
 			stopCreatingConnection();
 
-		emit noFormSelected();
+		emitNoFormSelected();
 		return;
 	}
 
@@ -459,7 +447,7 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 
 			emit dirty(form, false);
-			emit noFormSelected();
+			emitNoFormSelected();
 			showPropertyBuffer(0);
 		}
 	}
@@ -581,6 +569,11 @@ FormManager::deleteWidget()
 	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
 	if(list->isEmpty())
 		return;
+
+	if (activeForm()->widget() == list->first()) {
+		//toplevel form is selected, cannot delete it
+		return;
+	}
 
 	KCommand *com = new DeleteWidgetCommand(*list, activeForm());
 	activeForm()->addCommand(com, true);
@@ -707,42 +700,65 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 {
 	if(!activeForm() || !activeForm()->widget())
 		return;
-
-	bool multiple = (container->form()->selectedWidgets()->count() > 1);
-	bool enableRemove = (w != m_active->widget());
+	const bool toplevelWidgetSelected = activeForm()->widget() == w;
+	const uint widgetsCount = container->form()->selectedWidgets()->count();
+	const bool multiple = widgetsCount > 1;
+	const bool enableRemove = w != m_active->widget();
 	// We only enablelayout creation if more than one widget with the same parent are selected
-	bool enableLayout = ((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()));
+	const bool enableLayout = multiple || w == container->widget();
 
 	m_menuWidget = w;
 	QString n = m_lib->displayName(w->className());
-	QValueVector<int> *menuIds = new QValueVector<int>();
+//	QValueVector<int> menuIds();
 
+	if (!m_popup) {
+		m_popup = new KPopupMenu();
+	}
+	else {
+		m_popup->clear();
+	}
+
+	//set title
 	if(!multiple)
 	{
 		if(w == container->form()->widget())
-			m_popup->changeTitle(MenuTitle, SmallIcon("form"), i18n("Form: ") + w->name() );
+			m_popup->insertTitle(SmallIcon("form"), i18n("Form: ") + w->name());
 		else
-			m_popup->changeTitle(MenuTitle, SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
+			m_popup->insertTitle(SmallIcon(m_lib->icon(w->className())), n + ": " + w->name() );
 	}
 	else
-		m_popup->changeTitle(MenuTitle, SmallIcon("multiple_obj"), i18n("Multiple Widgets"));
+		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets") 
+		+ QString(" (%1)").arg(widgetsCount));
 
-	m_popup->setItemEnabled(MenuCopy, enableRemove);
-	m_popup->setItemEnabled(MenuCut, enableRemove);
-	m_popup->setItemEnabled(MenuDelete, enableRemove);
-	m_popup->setItemEnabled(MenuPaste, isPasteEnabled());
+	KAction *a;
+#define PLUG_ACTION(_name, forceVisible) \
+	{ a = action(_name); \
+	if (a && (forceVisible || a->isEnabled())) { \
+		if (separatorNeeded) \
+			m_popup->insertSeparator(); \
+		separatorNeeded = false; \
+		a->plug(m_popup); \
+	} \
+	}
 
-	m_popup->setItemEnabled(MenuHBox, enableLayout);
-	m_popup->setItemEnabled(MenuVBox, enableLayout);
-	m_popup->setItemEnabled(MenuGrid, enableLayout);
+	bool separatorNeeded = false;
 
-	bool separatorNeeded = true;
+	PLUG_ACTION("edit_cut", !toplevelWidgetSelected);
+	PLUG_ACTION("edit_copy", !toplevelWidgetSelected);
+	PLUG_ACTION("edit_paste", true);
+	PLUG_ACTION("edit_delete", !toplevelWidgetSelected);
+	separatorNeeded = true;
+	PLUG_ACTION("layout_menu", enableLayout);
+	PLUG_ACTION("break_layout", enableLayout);
+	separatorNeeded = true;
+	PLUG_ACTION("align_menu", !toplevelWidgetSelected);
+	PLUG_ACTION("adjust_size_menu", !toplevelWidgetSelected);
 
 	// We create the buddy menu
 	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
 	{
 		if (separatorNeeded)
-			menuIds->append( m_popup->insertSeparator() );
+			m_popup->insertSeparator();
 
 		KPopupMenu *sub = new KPopupMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
@@ -762,7 +778,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		}
 
 		int id = m_popup->insertItem(i18n("Choose Buddy..."), sub);
-		menuIds->append(id);
+//		menuIds->append(id);
 		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
 
 		separatorNeeded = true;
@@ -773,7 +789,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if(!multiple && !(m_options & HideEventsInPopupMenu))
 	{
 		if (separatorNeeded)
-			menuIds->append( m_popup->insertSeparator() );
+			m_popup->insertSeparator();
 
 		// We create the signals menu
 		KPopupMenu *sigMenu = new KPopupMenu();
@@ -783,7 +799,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			sigMenu->insertItem(*it);
 
 		int id = m_popup->insertItem(SmallIconSet(""), i18n("Events"), sigMenu);
-		menuIds->append(id);
+//		menuIds->append(id);
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);
 		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
@@ -796,26 +812,23 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	{
 		int lastID = -1;
 		if (separatorNeeded) {
-			menuIds->append( lastID = m_popup->insertSeparator() );
+			lastID = m_popup->insertSeparator();
 		}
 		const int oldIndex = m_popup->count()-1;
 		m_lib->createMenuActions(w->className(), w, m_popup, container);
-		if (oldIndex != m_popup->count()) {
-			for (uint i=oldIndex; i<m_popup->count(); i++) {
-				int id = m_popup->idAt( i );
-				if (id!=-1)
-					menuIds->append( id );
-			}
-		}
-		else {
+		if (oldIndex == (m_popup->count()-1)) {
+//			for (uint i=oldIndex; i<m_popup->count(); i++) {
+//				int id = m_popup->idAt( i );
+//				if (id!=-1)
+//					menuIds->append( id );
+//			}
 			//nothing added
 			if (separatorNeeded) {
 				m_popup->removeItem( lastID );
-				menuIds->pop_back();
+//				menuIds->pop_back();
 			}
 		}
 	}
-
 	
 	//show the popup at the selected widget
 	QPoint popupPos;
@@ -831,9 +844,9 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	m_popup->exec(popupPos);//QCursor::pos());
 	m_insertPoint = QPoint();
 
-	QValueVector<int>::iterator it;
-	for(it = menuIds->begin(); it != menuIds->end(); ++it)
-		m_popup->removeItem(*it);
+//	QValueVector<int>::iterator it;
+//	for(it = menuIds->begin(); it != menuIds->end(); ++it)
+//		m_popup->removeItem(*it);
 }
 
 void
@@ -1245,12 +1258,185 @@ FormManager::showFormUICode()
 #endif
 }
 
-void FormManager::slotSettingsChanged(int category)
+void
+FormManager::slotSettingsChanged(int category)
 {
 	if (category==KApplication::SETTINGS_SHORTCUTS) {
 		m_contextMenuKey = KGlobalSettings::contextMenuKey();
 	}
 }
 
-#include "formmanager.moc"
+void
+FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
+{
+	enableFormActions();
+	// Enable edit actions
+	enableAction("edit_copy", true);
+	enableAction("edit_cut", true);
+	enableAction("edit_delete", true);
+	enableAction("clear_contents", true);
 
+	// 'Align Widgets' menu
+	enableAction("align_menu", multiple);
+	enableAction("align_to_left", multiple);
+	enableAction("align_to_right", multiple);
+	enableAction("align_to_top", multiple);
+	enableAction("align_to_bottom", multiple);
+
+	enableAction("adjust_size_menu", true);
+	enableAction("adjust_width_small", multiple);
+	enableAction("adjust_width_big", multiple);
+	enableAction("adjust_height_small", multiple);
+	enableAction("adjust_height_big", multiple);
+
+	enableAction("format_raise", true);
+	enableAction("format_lower", true);
+
+	// If the widgets selected is a container, we enable layout actions
+	bool containerSelected = false;
+	if(!multiple)
+	{
+		KFormDesigner::ObjectTreeItem *item = form->objectTree()->lookup( form->selectedWidgets()->first()->name() );
+		if(item && item->container())
+			containerSelected = true;
+	}
+	const bool twoSelected = form->selectedWidgets()->count()==2;
+	// Layout actions
+	enableAction("layout_menu", multiple || containerSelected);
+	enableAction("layout_hbox", multiple || containerSelected);
+	enableAction("layout_vbox", multiple || containerSelected);
+	enableAction("layout_grid", multiple || containerSelected);
+	enableAction("layout_hsplitter", twoSelected);
+	enableAction("layout_vsplitter", twoSelected);
+
+	KFormDesigner::Container *container = activeForm()->activeContainer();
+	enableAction("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+
+	emit widgetSelected(form, true);
+}
+
+void
+FormManager::emitFormWidgetSelected( KFormDesigner::Form* form )
+{
+//	disableWidgetActions();
+	enableAction("edit_copy", false);
+	enableAction("edit_cut", false);
+	enableAction("edit_delete", false);
+	enableAction("clear_contents", false);
+
+		// Disable format functions
+	enableAction("align_menu", false);
+	enableAction("align_to_left", false);
+	enableAction("align_to_right", false);
+	enableAction("align_to_top", false);
+	enableAction("align_to_bottom", false);
+	enableAction("adjust_size_menu", false);
+	enableAction("format_raise", false);
+	enableAction("format_lower", false);
+
+	enableFormActions();
+
+	const bool twoSelected = form->selectedWidgets()->count()==2;
+	const bool hasChildren = !form->objectTree()->children()->isEmpty();
+
+	// Layout actions
+	enableAction("layout_menu", hasChildren);
+	enableAction("layout_hbox", hasChildren);
+	enableAction("layout_vbox", hasChildren);
+	enableAction("layout_grid", hasChildren);
+	enableAction("layout_hsplitter", twoSelected);
+	enableAction("layout_vsplitter", twoSelected);
+	enableAction("break_layout", (form->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
+
+	emit formWidgetSelected( form );
+}
+
+void
+FormManager::emitNoFormSelected()
+{
+	disableWidgetActions();
+
+	// Disable edit actions
+//	enableAction("edit_paste", false);
+//	enableAction("edit_undo", false);
+//	enableAction("edit_redo", false);
+
+	// Disable 'Tools' actions
+	enableAction("pixmap_collection", false);
+	enableAction("form_connections", false);
+	enableAction("taborder", false);
+	enableAction("change_style", activeForm()!=0);
+
+	// Disable items in 'File'
+	if (!(m_options & SkipFileActions)) {
+		enableAction("file_save", false);
+		enableAction("file_save_as", false);
+		enableAction("preview_form", false);
+	}
+
+	emit noFormSelected();
+}
+
+void
+FormManager::enableFormActions()
+{
+	// Enable 'Tools' actions
+	enableAction("pixmap_collection", true);
+	enableAction("form_connections", true);
+	enableAction("taborder", true);
+	enableAction("change_style", true);
+
+	// Enable items in 'File'
+	if (!(m_options & SkipFileActions)) {
+		enableAction("file_save", true);
+		enableAction("file_save_as", true);
+		enableAction("preview_form", true);
+	}
+
+	enableAction("edit_paste", isPasteEnabled());
+	enableAction("edit_select_all", true);
+}
+
+void
+FormManager::disableWidgetActions()
+{
+	// Disable edit actions
+	enableAction("edit_copy", false);
+	enableAction("edit_cut", false);
+	enableAction("edit_delete", false);
+	enableAction("clear_contents", false);
+
+	// Disable format functions
+	enableAction("align_menu", false);
+	enableAction("align_to_left", false);
+	enableAction("align_to_right", false);
+	enableAction("align_to_top", false);
+	enableAction("align_to_bottom", false);
+	enableAction("adjust_size_menu", false);
+	enableAction("format_raise", false);
+	enableAction("format_lower", false);
+
+	enableAction("layout_menu", false);
+	enableAction("layout_hbox", false);
+	enableAction("layout_vbox", false);
+	enableAction("layout_grid", false);
+	enableAction("layout_hsplitter", false);
+	enableAction("layout_vsplitter", false);
+	enableAction("break_layout", false);
+}
+
+void
+FormManager::emitUndoEnabled(bool enabled, const QString &text)
+{
+	enableAction("edit_undo", enabled);
+	emit undoEnabled(enabled, text);
+}
+
+void
+FormManager::emitRedoEnabled(bool enabled, const QString &text)
+{
+	enableAction("edit_redo", enabled);
+	emit redoEnabled(enabled, text);
+}
+
+#include "formmanager.moc"

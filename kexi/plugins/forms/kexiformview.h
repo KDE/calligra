@@ -80,12 +80,12 @@ class KexiFormView : public KexiDataAwareView
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
 
-		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-		void slotFormWidgetSelected(KFormDesigner::Form *form);
-		void slotNoFormSelected();
+//moved to formmanager		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+//moved to formmanager		void slotFormWidgetSelected(KFormDesigner::Form *form);
+//moved to formmanager		void slotNoFormSelected();
 
-		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled);
+//moved to formmanager		void setUndoEnabled(bool enabled);
+//moved to formmanager		void setRedoEnabled(bool enabled);
 
 	protected:
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
@@ -99,8 +99,8 @@ class KexiFormView : public KexiDataAwareView
 			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
 		KexiFormPart* formPart() const { return static_cast<KexiFormPart*>(part()); }
 
-		void disableWidgetActions();
-		void enableFormActions();
+//moved to formmanager		void disableWidgetActions();
+//moved to formmanager		void enableFormActions();
 
 		void setForm(KFormDesigner::Form *f);
 
@@ -128,6 +128,10 @@ class KexiFormView : public KexiDataAwareView
 
 		/*! @internal */
 		void deleteQuery();
+
+		/*! Reimplemented after KexiViewBase.
+		 Updates actions (e.g. availability). */
+// todo		virtual void updateActions(bool activated);
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;

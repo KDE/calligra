@@ -170,7 +170,7 @@ KFormDesignerKDevPart::setupActions()
 	KStdAction::redo(m_manager, SLOT(redo()), actionCollection());
 	KStdAction::selectAll(m_manager, SLOT(selectAll()), actionCollection());
 	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), m_manager, SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
-	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT(deleteWidget()), actionCollection(), "delete_widget");
+	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT(deleteWidget()), actionCollection(), "edit_delete");
 	new KAction(i18n("Preview Form"), "filequickprint", "Ctrl+T", this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
@@ -339,7 +339,7 @@ KFormDesignerKDevPart::slotWidgetSelected(Form *form, bool multiple)
 	// Enable edit actions
 	ENABLE_ACTION("edit_copy", true);
 	ENABLE_ACTION("edit_cut", true);
-	ENABLE_ACTION("delete_widget", true);
+	ENABLE_ACTION("edit_delete", true);
 	ENABLE_ACTION("clear_contents", true);
 
 	// 'Align Widgets' menu
@@ -425,7 +425,7 @@ KFormDesignerKDevPart::enableFormActions()
 	ENABLE_ACTION("preview_form", true);
 
 	ENABLE_ACTION("edit_paste", m_manager->isPasteEnabled());
-	ENABLE_ACTION("edit_selectall", true);
+	ENABLE_ACTION("edit_select_all", true);
 }
 
 void
@@ -434,7 +434,7 @@ KFormDesignerKDevPart::disableWidgetActions()
 	// Disable edit actions
 	ENABLE_ACTION("edit_copy", false);
 	ENABLE_ACTION("edit_cut", false);
-	ENABLE_ACTION("delete_widget", false);
+	ENABLE_ACTION("edit_delete", false);
 	ENABLE_ACTION("clear_contents", false);
 
 	// Disable format functions

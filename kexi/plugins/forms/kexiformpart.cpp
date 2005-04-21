@@ -41,10 +41,78 @@
 #include <widgetlibrary.h>
 
 #include "kexiformview.h"
-#include "kexiformpart.h"
 #include "kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiactionselectiondialog.h"
+#include "kexiformpart.h"
+
+//! @internal
+class KexiFormManager : public KFormDesigner::FormManager
+{
+	public:
+		KexiFormManager(KexiFormPart *parent, const QStringList& supportedFactoryGroups)
+		 : KFormDesigner::FormManager(parent, supportedFactoryGroups, 
+			KFormDesigner::FormManager::HideEventsInPopupMenu
+			| KFormDesigner::FormManager::SkipFileActions, "form_manager")
+		 , m_part(parent)
+		{
+		}
+
+		inline QString translateName( const char* name ) const
+		{
+			QString n( name );
+			//translate to our name space:
+			if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
+				|| n=="format_raise" || n=="format_raise" || n=="taborder" | n=="break_layout")
+			{
+				n.prepend("formpart_");
+			}
+			return n;
+		}
+
+		virtual KAction* action( const char* name )
+		{
+			KActionCollection *col = m_part->actionCollectionForMode(Kexi::DesignViewMode);
+			if (!col)
+				return 0;
+			QCString n( translateName( name ).latin1() );
+			KAction *a = col->action(n);
+			if (a)
+				return a;
+			KexiDBForm *dbform;
+			if (!activeForm() || !activeForm()->designMode()
+				|| !(dbform = dynamic_cast<KexiDBForm*>(activeForm()->formWidget())))
+				return 0;
+			KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
+			if (!scrollViewWidget)
+				return 0;
+			KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+			if (!formViewWidget)
+				return 0;
+			return formViewWidget->parentDialog()->mainWin()->actionCollection()->action(n);
+		}
+
+		virtual void enableAction( const char* name, bool enable )
+		{
+			KexiDBForm *dbform;
+			if (!activeForm() || !activeForm()->designMode()
+				|| !(dbform = dynamic_cast<KexiDBForm*>(activeForm()->formWidget())))
+				return;
+			KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
+			if (!scrollViewWidget)
+				return;
+			KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+			if (!formViewWidget)
+				return;
+			if (QString(name)=="layout_menu")
+				kdDebug() << "!!!!!!!!!!! " << enable << endl;
+			formViewWidget->setAvailable(translateName( name ).latin1(), enable);
+		}
+
+		KexiFormPart* m_part;
+};
+
+//////////////////////////////////////////////////////////
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -57,8 +125,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 /* @todo add configuration for supported factory groups */
 	QStringList supportedFactoryGroups;
 	supportedFactoryGroups += "kexi";
-	m_manager = new KFormDesigner::FormManager(this, supportedFactoryGroups, 
-		KFormDesigner::FormManager::HideEventsInPopupMenu, "form_manager");
+	m_manager = new KexiFormManager(this, supportedFactoryGroups);
 	m_manager->lib()->setAdvancedPropertiesVisible(false);
 
 	connect(m_manager, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
@@ -120,16 +187,33 @@ void KexiFormPart::initInstanceActions()
 //TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
 //TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
 
+//	KFormDesigner::CreateLayoutCommand
+
+	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"), "", 0, "formpart_layout_menu", "KActionMenu");
+	KActionMenu *menu = static_cast<KActionMenu*>(action);
+
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"), 
+		QString::null, 0, "formpart_layout_hbox"));
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"), 
+		QString::null, 0, "formpart_layout_vbox"));
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"), 
+		QString::null, 0, "formpart_layout_grid"));
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally In a &Splitter"), 
+		QString::null, 0, "formpart_layout_hsplitter"));
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally In a Splitter"), 
+		QString::null, 0, "formpart_layout_vsplitter"));
+		
+	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
+/*
 	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString::null, 0, "formpart_layout_hbox");
 	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString::null, 0, "formpart_layout_vbox");
 	createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString::null, 0, "formpart_layout_grid");
-	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
-
+*/
 	createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), "raise", 0, "formpart_format_raise");
 	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");
 
-	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"), "aopos2grid", 0, "formpart_align_menu", "KActionMenu");
-	KActionMenu *menu = static_cast<KActionMenu*>(action);
+	action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"), "aoleft", 0, "formpart_align_menu", "KActionMenu");
+	menu = static_cast<KActionMenu*>(action);
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Left"), "aoleft", 0, "formpart_align_to_left") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Right"), "aoright", 0, "formpart_align_to_right") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Top"), "aotop", 0, "formpart_align_to_top") );

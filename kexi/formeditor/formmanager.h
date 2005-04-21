@@ -72,7 +72,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		virtual ~FormManager();
 
-		enum Options { HideEventsInPopupMenu = 1 }; //todo
+		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2 }; //todo
 
 		/*! Creates all the KAction related to widget insertion, and plug them
 		  into the KActionCollection \a parent.
@@ -80,6 +80,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  \return a QPtrList of the created actions.
 		 */
 		ActionList createActions(KActionCollection *parent);
+
+		/*! Enables or disables actions \a name. 
+		 KFD uses KPart's, action collection here.
+		 Kexi implements this to get (shared) actions defined elsewhere. */
+		virtual void enableAction( const char* name, bool enable ) = 0;
+
+		/*! \return action for \a name. @see enableAction() */
+		virtual KAction* action(const char* name) = 0;
 
 		bool isPasteEnabled();
 
@@ -165,6 +173,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! @internal used by Container
 		int contextMenuKey() const { return m_contextMenuKey; }
+
+		//! @internal
+		void emitWidgetSelected( KFormDesigner::Form* form, bool multiple );
+		//! @internal
+		void emitFormWidgetSelected( KFormDesigner::Form* form );
+		//! @internal
+		void emitNoFormSelected();
 
 	public slots:
 		/*! Deletes the selected widget in active Form and all of its children. */
@@ -360,6 +375,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Function called by all other AlignWidgets*() function. Calls \ref AlignWidgetsCommand. */
 		void alignWidgets(int type);
 
+		void enableFormActions();
+		void disableWidgetActions();
+		void emitUndoEnabled(bool enabled, const QString &text);
+		void emitRedoEnabled(bool enabled, const QString &text);
+
 	private:
 		//! Enum for menu items indexes
 		enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
@@ -415,4 +435,3 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 }
 
 #endif
-

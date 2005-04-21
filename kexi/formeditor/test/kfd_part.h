@@ -62,28 +62,30 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		virtual ~KFormDesignerPart();
 
 		KFormDesigner::FormManager*   manager()  { return m_manager; }
-		void      setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
+		void setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
 
-		bool   closeForm(Form *form);
-		bool   closeForms();
+		bool closeForm(Form *form);
+		bool closeForms();
 
 		virtual bool closeURL();
 
 	public slots:
 		/*! Creates a new blank Form. The new Form is shown and become the active Form. */
 		void createBlankForm();
+
 		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
 		   the active Form. */
 		void open();
+
 		void slotPreviewForm();
 		void saveAs();
 		//void slotCreateFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal);
 
 	protected slots:
-		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-		void slotFormWidgetSelected(KFormDesigner::Form *form);
-		void slotNoFormSelected();
 		void slotFormModified(KFormDesigner::Form *form, bool isDirty);
+//moved to manager		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+//moved to manager		void slotFormWidgetSelected(KFormDesigner::Form *form);
+//moved to manager		void slotNoFormSelected();
 		void setUndoEnabled(bool enabled, const QString &text);
 		void setRedoEnabled(bool enabled, const QString &text);
 
@@ -98,9 +100,9 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		KFormDesigner::FormManager  *m_manager;
 		QWorkspace  *m_workspace;
 		int  m_count;
-		bool   m_uniqueFormMode;
-		bool   m_openingFile;
-		bool   m_inShell;
+		bool m_uniqueFormMode;
+		bool m_openingFile;
+		bool m_inShell;
 };
 
 //! Helper: this widget is used to create form's surface

@@ -73,7 +73,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	if (viewMode()==Kexi::DataViewMode) {
 		m_scrollView->recordNavigator()->setRecordHandler( m_scrollView );
 		m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
-		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+//moved to formmanager		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 	}
 	else
 	{
@@ -83,10 +83,10 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
-		connect(formPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), this, SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
-		connect(formPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), this, SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
-		connect(formPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
-		connect(formPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
+//moved to formmanager		connect(formPart()->manager(), SIGNAL(widgetSelected(KFormDesigner::Form*, bool)), this, SLOT(slotWidgetSelected(KFormDesigner::Form*, bool)));
+//moved to formmanager		connect(formPart()->manager(), SIGNAL(formWidgetSelected(KFormDesigner::Form*)), this, SLOT(slotFormWidgetSelected(KFormDesigner::Form*)));
+//moved to formmanager		connect(formPart()->manager(), SIGNAL(undoEnabled(bool, const QString&)), this, SLOT(setUndoEnabled(bool)));
+//moved to formmanager		connect(formPart()->manager(), SIGNAL(redoEnabled(bool, const QString&)), this, SLOT(setRedoEnabled(bool)));
 
 		plugSharedAction("formpart_taborder", formPart()->manager(), SLOT(editTabOrder()));
 		plugSharedAction("formpart_adjust_size", formPart()->manager(), SLOT(adjustWidgetSize()));
@@ -102,9 +102,12 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 		plugSharedAction("edit_undo", formPart()->manager(), SLOT(undo()));
 		plugSharedAction("edit_redo", formPart()->manager(), SLOT(redo()));
 
+		plugSharedAction("formpart_layout_menu", formPart()->manager(), 0 );
 		plugSharedAction("formpart_layout_hbox", formPart()->manager(), SLOT(layoutHBox()) );
 		plugSharedAction("formpart_layout_vbox", formPart()->manager(), SLOT(layoutVBox()) );
 		plugSharedAction("formpart_layout_grid", formPart()->manager(), SLOT(layoutGrid()) );
+		plugSharedAction("formpart_layout_hsplitter", formPart()->manager(), SLOT(layoutHSplitter()) );
+		plugSharedAction("formpart_layout_vsplitter", formPart()->manager(), SLOT(layoutVSplitter()) );
 		plugSharedAction("formpart_break_layout", formPart()->manager(), SLOT(breakLayout()) );
 
 		plugSharedAction("formpart_format_raise", formPart()->manager(), SLOT(bringWidgetToFront()) );
@@ -128,7 +131,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 	initForm();
 
-	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView );
+	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView, 
+		/* skip data-awarness if design mode */ viewMode()==Kexi::DesignViewMode );
 
 	connect(this, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
 	/// @todo skip this if ther're no borders
@@ -317,7 +321,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		m_scrollView->setWidget(m_dbform);
 
 		initForm();
-		slotNoFormSelected();
+//moved to formmanager		slotNoFormSelected();
 
 		//reset position
 		m_scrollView->setContentsPos(0,0);
@@ -509,7 +513,7 @@ KexiFormView::storeData()
 	return true;
 }
 
-
+#if 0
 /// Action stuff /////////////////
 void
 KexiFormView::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
@@ -641,6 +645,7 @@ KexiFormView::setRedoEnabled(bool enabled)
 {
 	setAvailable("edit_redo", enabled);
 }
+#endif //0
 
 QSize
 KexiFormView::preferredSizeHint(const QSize& otherSize)
@@ -707,6 +712,24 @@ KexiFormView::slotFocus(bool in)
 	if(in && form() && form()->manager() && form()->manager()->activeForm() != form())
 			form()->manager()->windowChanged(m_dbform);
 }
+
+/*
+todo
+void KexiFormView::updateActions(bool activated)
+{
+	if (viewMode()==Kexi::DesignViewMode) {
+		if (form()->selectedWidget()) {
+			if (form()->widget() == form()->selectedWidget())
+				form()->manager()->emitFormWidgetSelected( form() );
+			else
+				form()->manager()->emitWidgetSelected( form(), false );
+		}
+		else if (form()->selectedWidgets()) {
+			form()->manager()->emitWidgetSelected( form(), true );
+		}
+	}
+	KexiDataAwareView::updateActions(activated);
+}*/
 
 /*
 void KexiFormView::parentDialogDetached()

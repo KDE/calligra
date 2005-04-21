@@ -278,22 +278,22 @@ Form::emitActionSignals(bool withUndoAction)
 {
 	// Update menu and toolbar items
 	if(d->selected.count() > 1)
-		emit d->manager->widgetSelected(this, true);
+		d->manager->emitWidgetSelected(this, true);
 	else if(d->selected.first() != widget())
-		emit d->manager->widgetSelected(this, false);
+		d->manager->emitWidgetSelected(this, false);
 	else
-		emit d->manager->formWidgetSelected(this);
+		d->manager->emitFormWidgetSelected(this);
 
 	if(!withUndoAction)
 		return;
 
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		emit d->manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
+		d->manager->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		emit d->manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
+		d->manager->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 void
@@ -376,7 +376,7 @@ Form::emitUndoEnabled()
 {
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
-		emit d->manager->undoEnabled(undoAction->isEnabled(), undoAction->text());
+		d->manager->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
 }
 
 void
@@ -384,7 +384,7 @@ Form::emitRedoEnabled()
 {
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
-		emit d->manager->redoEnabled(redoAction->isEnabled(), redoAction->text());
+		d->manager->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
 }
 
 void
