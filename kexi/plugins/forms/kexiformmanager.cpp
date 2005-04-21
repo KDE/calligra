@@ -24,6 +24,7 @@
 
 #include <formmanager.h>
 #include <form.h>
+#include <widgetlibrary.h>
 
 KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
 	const char* name)
