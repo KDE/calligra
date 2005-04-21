@@ -1284,6 +1284,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     RowFormat  *rl = m_pSheet->rowFormat( _row );
 
     if ( d->textHeight >= rl->dblHeight() ) 
+      // FIXME: Shouldn't this be Flag_CellTooShortY?
       setFlag( Flag_CellTooShortX );
   }
 
@@ -3565,101 +3566,114 @@ int KSpreadCell::effAlignX()
   return defineAlignX();
 }
 
-//used in paintText
-//cuts strOutText, so that it only holds the part that can be displayed
+// Cut strOutText, so that it only holds the part that can be displayed.
+//
+// Used in paintText().
+//
+
 QString KSpreadCell::textDisplaying( QPainter &_painter )
 {
-  QFontMetrics fm = _painter.fontMetrics();
-  int a = align( column(), row() );
+  QFontMetrics  fm = _painter.fontMetrics();
+  int           a  = align( column(), row() );
+
   if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined)
-    && !verticalText( column(),row() ))
+      && !verticalText( column(),row() ))
   {
-    //not enough space but align to left
-    double len = 0.0;
-    int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-    for ( int i = column(); i <= column() + extraXCells; i++ )
-    {
+    // Non-vertical text. 
+
+    // Not enough space but align to left
+    double  len = 0.0;
+    int     extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
+
+    for ( int i = column(); i <= column() + extraXCells; i++ ) {
       ColumnFormat *cl2 = m_pSheet->columnFormat( i );
       len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
 
-    QString tmp;
-    double tmpIndent = 0.0;
-    if( !isEmpty() )
+    QString  tmp;
+    double   tmpIndent = 0.0;
+    if ( !isEmpty() )
       tmpIndent = getIndent( column(), row() );
-    for( int i = d->strOutText.length(); i != 0; i-- )
-    {
+
+    // Start out with the whole text, cut one character at a time, and
+    // when the text finally fits, return it.
+    for ( int i = d->strOutText.length(); i != 0; i-- ) {
       tmp = d->strOutText.left(i);
 
-        if( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent < len - 4.0 - 1.0 ) //4 equal lenght of red triangle +1 point
-        {
-            if( getAngle( column(), row() ) != 0 )
-            {
-                QString tmp2;
-                RowFormat *rl = m_pSheet->rowFormat( row() );
-                if( d->textHeight > rl->dblHeight() )
-                {
-                    for ( int j = d->strOutText.length(); j != 0; j-- )
-                    {
-                        tmp2 = d->strOutText.left( j );
-                        if( m_pSheet->doc()->unzoomItY( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
-                        {
-                            return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
-                        }
-                    }
-                }
-                else
-                    return tmp;
+      // 4 equal lenght of red triangle +1 point.
+      if ( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent
+	   < len - 4.0 - 1.0 )
+      {
+	if ( getAngle( column(), row() ) != 0 ) {
+	  QString tmp2;
+	  RowFormat *rl = m_pSheet->rowFormat( row() );
+	  if ( d->textHeight > rl->dblHeight() ) {
+	    for ( int j = d->strOutText.length(); j != 0; j-- ) {
+	      tmp2 = d->strOutText.left( j );
+	      if ( m_pSheet->doc()->unzoomItY( fm.width( tmp2 ) ) 
+		   < rl->dblHeight() - 1.0 )
+	      {
+		return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
+	      }
+	    }
+	  }
+	  else
+	    return tmp;
 
-            }
-            else
-                return tmp;
-        }
+	}
+	else
+	  return tmp;
+      }
     }
     return QString( "" );
   }
-  else if( verticalText( column(), row() ) )
-  {
-    RowFormat *rl = m_pSheet->rowFormat( row() );
-    double tmpIndent = 0.0;
-    //not enough space but align to left
-    double len = 0.0;
-    int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-    for( int i = column(); i <= column() + extraXCells; i++ )
-    {
-        ColumnFormat *cl2 = m_pSheet->columnFormat( i );
-        len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
-    }
-    if( !isEmpty() )
-        tmpIndent = getIndent( column(), row() );
-    if( ( d->textWidth + tmpIndent > len ) || d->textWidth == 0.0 )
-        return QString( "" );
+  else if ( verticalText( column(), row() ) ) {
+    // Vertical text.
 
-    for ( int i = d->strOutText.length(); i != 0; i-- )
-    {
-        if( m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent() ) * i < rl->dblHeight() - 1.0 )
-        {
-            return d->strOutText.left( i );
-        }
+    RowFormat  *rl = m_pSheet->rowFormat( row() );
+    double      tmpIndent = 0.0;
+
+    // Not enough space but align to left.
+    double  len = 0.0;
+    int     extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
+
+    for ( int i = column(); i <= column() + extraXCells; i++ ) {
+      ColumnFormat  *cl2 = m_pSheet->columnFormat( i );
+
+      // -1.0 because the pixel in between 2 cells is shared between both cells
+      len += cl2->dblWidth() - 1.0;
     }
+
+    if ( !isEmpty() )
+      tmpIndent = getIndent( column(), row() );
+
+    if ( ( d->textWidth + tmpIndent > len ) || d->textWidth == 0.0 )
+      return QString( "" );
+
+    for ( int i = d->strOutText.length(); i != 0; i-- ) {
+      if ( m_pSheet->doc()->unzoomItY( fm.ascent() + fm.descent() ) * i 
+	   < rl->dblHeight() - 1.0 )
+	return d->strOutText.left( i );
+    }
+
     return QString( "" );
- }
+  }
 
- ColumnFormat *cl = m_pSheet->columnFormat( column() );
- double w = cl->dblWidth();
- if ( d->hasExtra() && (d->extra()->extraWidth != 0.0) )
-   w = d->extra()->extraWidth;
+  ColumnFormat  *cl = m_pSheet->columnFormat( column() );
+  double         w = cl->dblWidth();
 
+  if ( d->hasExtra() && (d->extra()->extraWidth != 0.0) )
+    w = d->extra()->extraWidth;
 
   QString tmp;
-  for ( int i = d->strOutText.length(); i != 0; i-- )
-  {
+  for ( int i = d->strOutText.length(); i != 0; i-- ) {
     tmp = d->strOutText.left( i );
-    if( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) < w - 4.0 - 1.0 ) //4 equals lenght of red triangle +1 pixel
-    {
+
+    // 4 equals lenght of red triangle +1 pixel
+    if ( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) < w - 4.0 - 1.0 )
       return tmp;
-    }
   }
+
   return  QString::null;
 }
 
