@@ -32,15 +32,20 @@
 #include "kexi_version.h"
 
 //! displays information that feature "feature_name" is not availabe in the current application version
-inline void KEXI_UNFINISHED(QString feature_name) {
+inline void KEXI_UNFINISHED(QString feature_name, QString extra_text = QString::null) 
+{
 	QString msg;
 	if (feature_name.isEmpty())
-			msg = i18n("This function is not available");
+		msg = i18n("This function is not available");
 	else 
-			msg = i18n("\"%1\" function is not available").arg(feature_name.replace("&","")); 
+		msg = i18n("\"%1\" function is not available").arg(feature_name.replace("&","")); 
 
-	KMessageBox::sorry(0, i18n("%1 is one of the sentence above ie This function is not available"," %1 for version %2 of %3 application.").arg(msg)
-		.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) );
+	if (!extra_text.isEmpty())
+		extra_text.prepend("\n");
+
+	KMessageBox::sorry(0, i18n("%1 is one of the sentence above ie This function is not available",
+		" %1 for version %2 of %3 application.").arg(msg)
+		.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) + extra_text);
 }
 
 //! like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
