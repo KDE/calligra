@@ -1686,8 +1686,8 @@ void KSpreadCell::textSize( QPainter &_paint )
     fontUnderlined  = textFontUnderline( _col, _row );
   }
 
-  // Set textWidth and textHeight to correct values according to if
-  // the text is horizontal, vertical or rotated.
+  // Set d->textWidth and d->textHeight to correct values according to
+  // if the text is horizontal, vertical or rotated.
   if ( !tmpVerticalText && !tmpAngle ) {
     // Horizontal text.
 
@@ -2837,8 +2837,16 @@ void KSpreadCell::paintText( QPainter& painter,
   double   tmpHeight = d->textHeight;
   double   tmpWidth  = d->textWidth;
 
-  if ( testFlag( Flag_CellTooShortX ) )
+  // If the cell is to short to paint the whole contents, then pick
+  // out a part of it that we paint.  The result of this is dependent
+  // on the data type of the content.
+  if ( testFlag( Flag_CellTooShortX ) ) {
     d->strOutText = textDisplaying( painter );
+
+    // Recalculate the text width and the offset.
+    textSize( painter );
+    offsetAlign( column(), row() );
+  }
 
   // Hide zero.
   if ( m_pSheet->getHideZero()
@@ -3576,10 +3584,8 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
   QFontMetrics  fm = _painter.fontMetrics();
   int           a  = align( column(), row() );
 
-  if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined)
-      && !verticalText( column(),row() ))
-  {
-    // Non-vertical text. 
+  if ( !verticalText( column(),row() ) ) {
+    // Non-vertical text: the ordinary case. 
 
     // Not enough space but align to left
     double  len = 0.0;
@@ -3598,7 +3604,12 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
-      tmp = d->strOutText.left(i);
+      if ( a == KSpreadCell::Left)
+	tmp = d->strOutText.left(i);
+      else if ( a == KSpreadCell::Right)
+	tmp = d->strOutText.right(i);
+      else
+	tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
 
       // 4 equal lenght of red triangle +1 point.
       if ( m_pSheet->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent
