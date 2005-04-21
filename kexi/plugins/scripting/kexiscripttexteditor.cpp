@@ -19,14 +19,20 @@
 
 #include "kexiscripttexteditor.h"
 
-#include <kdebug.h>
+//#include <kdebug.h>
+//#include <kparts/factory.h>
+//#include <klibloader.h>
+//#include <kmdimainfrm.h>
+//#include <kmainwindow.h>
+#include <kpopupmenu.h>
 
-//#include <kexidialogbase.h>
-//#include <kexidb/connection.h>
+#include <kexidialogbase.h>
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
+# include <ktexteditor/view.h>
 # include <ktexteditor/highlightinginterface.h>
+# include <ktexteditor/popupmenuinterface.h>
 #endif
 
 KexiScriptTextEditor::KexiScriptTextEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -42,6 +48,13 @@ KexiScriptTextEditor::KexiScriptTextEditor(KexiMainWindow *mainWin, QWidget *par
             hl->setHlMode(i);
             break;
         }
+    }
+
+    KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
+    if(popupInt) {
+        QPopupMenu *pop = (QPopupMenu*) parentDialog()->part()->guiClient()->factory()->container("texteditor", parentDialog()->part()->guiClient());
+        if(pop)
+            popupInt->installPopup(pop);
     }
 #endif
 
