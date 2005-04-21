@@ -3584,6 +3584,11 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
   QFontMetrics  fm = _painter.fontMetrics();
   int           a  = align( column(), row() );
 
+  // If the content of the cell is a number, then we shouldn't cut
+  // anything, but just display an error indication.
+  if ( value().isNumber() )
+    d->strOutText = "#####################################################";
+
   if ( !verticalText( column(),row() ) ) {
     // Non-vertical text: the ordinary case. 
 
