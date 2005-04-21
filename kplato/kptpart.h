@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,7 +87,7 @@ private:
     KPTProjectDialog *m_projectDialog;
     KPTView *m_view;
     KoCommandHistory *m_commandHistory;
-    bool m_update, m_calculate;
+    bool m_update, m_calculate, m_baseline;
     
     KPTConfig m_config;
     KPTContext *m_context;

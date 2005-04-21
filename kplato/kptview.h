@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2002 - 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -109,6 +109,8 @@ public slots:
     void slotAddRelation(KPTNode *par, KPTNode *child, int linkType);
     void slotModifyRelation(KPTRelation *rel, int linkType);
   
+    void setBaselineMode(bool on);
+    
     void slotExportGantt(); // testing
     
 protected slots:
@@ -155,6 +157,8 @@ private:
     KPTReportView *m_reportview;
     QPtrList<QString> m_reportTemplateFiles;
 
+    bool m_baselineMode;
+    
     int m_viewGrp;
     int m_defaultFontSize;
 
@@ -194,7 +198,7 @@ private:
     KAction *actionEditCalendar;
     KAction *actionEditResources;
     KAction *actionCalculate;
-
+    
     // ------ Reports
     KSelectAction *actionReportGenerate;
     KAction *actionFirstpage;

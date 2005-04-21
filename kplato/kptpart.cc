@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -136,6 +136,7 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
     if (m_context)
         m_view->setContext(*m_context);
     
+    m_view->setBaselineMode(getProject().isBaselined());
     return m_view;
 }
 
@@ -291,15 +292,15 @@ void KPTPart::addCommand(KCommand * cmd, bool execute)
 void KPTPart::slotCommandExecuted() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(true);
-    if (config().behavior().calculationMode == KPTBehavior::Manual) {
+    if (m_calculate)
+        m_view->slotUpdate(config().behavior().calculationMode == KPTBehavior::OnChange);
+    else if (m_update)
         m_view->slotUpdate(false);
-    } else {
-        if (m_calculate)
-            m_view->slotUpdate(true);
-        else if (m_update)
-            m_view->slotUpdate(false);
-    }
-    m_update = m_calculate = false;
+    
+    if (m_baseline)
+        m_view->setBaselineMode(getProject().isBaselined());    
+    
+    m_update = m_calculate = m_baseline = false;
 }
 
 void KPTPart::setCommandType(int type) {
@@ -308,6 +309,8 @@ void KPTPart::setCommandType(int type) {
         m_update = true;
     else if (type == 1)
         m_calculate = true;
+    else if (type == 2)
+        m_baseline = true;
 }
 
 

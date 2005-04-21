@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>464</width>
-            <height>408</height>
+            <width>490</width>
+            <height>431</height>
         </rect>
     </property>
     <property name="caption">
@@ -100,14 +100,28 @@
                             <property name="text">
                                 <string>&amp;Choose...</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>
             </grid>
         </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>baseline</cstring>
+            </property>
+            <property name="text">
+                <string>Baseline</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Checking this will freeze the project</string>
+            </property>
+        </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox2</cstring>
+                <cstring>scheduling</cstring>
             </property>
             <property name="frameShadow">
                 <enum>Sunken</enum>
@@ -238,6 +252,9 @@
             <property name="buddy" stdset="0">
                 <cstring>descriptionfield</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
+            </property>
         </widget>
         <widget class="KTextEdit">
             <property name="name">
@@ -339,6 +356,18 @@
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>enableDateTime()</slot>
     </connection>
+    <connection>
+        <sender>baseline</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>baseline</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotBaseline()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
@@ -355,6 +384,7 @@
     <slot>slotStartDateClicked()</slot>
     <slot>slotEndDateClicked()</slot>
     <slot>enableDateTime()</slot>
+    <slot>slotBaseline()</slot>
 </slots>
 <functions>
     <function returnType="QDateTime">startDateTime()</function>

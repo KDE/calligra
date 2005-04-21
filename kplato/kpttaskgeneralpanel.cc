@@ -39,18 +39,25 @@
 #include <qlayout.h>
 #include <qdatetime.h> 
 #include <qdatetimeedit.h> 
+#include <qgroupbox.h> 
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, bool useDateOnly, QWidget *p, const char *n)
+KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, bool baseline, bool useDateOnly, QWidget *p, const char *n)
     : KPTTaskGeneralPanelBase(p, n),
       m_task(task),
       m_dayLength(24)
 {
     useTime = !task.useDateOnly();
     setStartValues(task, useDateOnly, workTime);
+    
+    namefield->setReadOnly(baseline);
+    leaderfield->setReadOnly(baseline);
+    idfield->setReadOnly(baseline);
+    schedulingGroup->setEnabled(!baseline);
+    
     namefield->setFocus();
 }
 

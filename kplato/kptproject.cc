@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -235,7 +235,7 @@ void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrLis
 
 bool KPTProject::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
-
+    bool ok = false;
     QString id = element.attribute("id");
     if (!setId(id)) {
         kdWarning()<<k_funcinfo<<"Id must be unique: "<<id<<endl;
@@ -243,8 +243,10 @@ bool KPTProject::load(QDomElement &element) {
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
+    
+    m_baselined = (bool)element.attribute("baselined","0").toInt(&ok);
+    
     // Allow for both numeric and text
-    bool ok = false;
     QString c = element.attribute("scheduling","0");
     m_constraint = (KPTNode::ConstraintType)c.toInt(&ok);
     if (!ok)
@@ -358,6 +360,8 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("leader", m_leader);
     me.setAttribute("id", m_id);
     me.setAttribute("description", m_description);
+    
+    me.setAttribute("baselined",(int)m_baselined);
 
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());

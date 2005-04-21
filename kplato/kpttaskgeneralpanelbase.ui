@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>658</width>
+            <width>661</width>
             <height>397</height>
         </rect>
     </property>
@@ -127,7 +127,7 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox3</cstring>
+                <cstring>schedulingGroup</cstring>
             </property>
             <property name="title">
                 <string></string>

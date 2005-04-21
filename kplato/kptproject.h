@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -191,6 +191,9 @@ public:
     virtual void insertCalendarId(const QString &id, const KPTCalendar *calendar)
         { calendarIdDict.insert(id, calendar); }
     
+    void setBaselined(bool on) { m_baselined = on; }
+    bool isBaselined() const { return m_baselined; }
+    
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
@@ -219,6 +222,7 @@ private:
     QPtrList<KPTNode> m_summarytasks;
     
     bool m_useDateOnly;
+    bool m_baselined;
     
     QDict<KPTResourceGroup> resourceGroupIdDict;
     QDict<KPTResource> resourceIdDict;

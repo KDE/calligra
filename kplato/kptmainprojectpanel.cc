@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,8 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
 
+    baseline->setChecked(project.isBaselined());
+    
     useDate->setChecked(project.useDateOnly());
     if (project.numChildren() > 0) {
         useDate->setEnabled(false);
@@ -69,6 +71,7 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
         schedulingGroup->setButton(0);
     }    
     enableDateTime();
+    slotBaseline();
     namefield->setFocus();
 }
 
@@ -101,6 +104,10 @@ KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyDescriptionCmd(part, project, descriptionfield->text()));
     }
+    if (baseline->isChecked() != project.isBaselined()) {
+        if (!m) m = new KMacroCommand(c);
+        m->addCommand(new KPTProjectModifyBaselineCmd(part, project, baseline->isChecked()));
+    } 
     if (bStartDate->state() && project.constraint() != KPTNode::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyConstraintCmd(part, project, KPTNode::MustStartOn));

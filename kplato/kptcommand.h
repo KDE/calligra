@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -633,6 +633,20 @@ class KPTProjectModifyUseDateOnlyCmd : public KNamedCommand
 {
 public:
     KPTProjectModifyUseDateOnlyCmd(KPTPart *part, KPTProject &project, bool value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTProject &m_project;
+    bool m_newvalue;
+    bool m_oldvalue;
+};
+
+class KPTProjectModifyBaselineCmd : public KNamedCommand
+{
+public:
+    KPTProjectModifyBaselineCmd(KPTPart *part, KPTProject &project, bool value, QString name=0);
     void execute();
     void unexecute();
 

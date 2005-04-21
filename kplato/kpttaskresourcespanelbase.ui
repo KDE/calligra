@@ -22,7 +22,7 @@
         </property>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox22</cstring>
+                <cstring>resourcesGroup</cstring>
             </property>
             <property name="frameShape">
                 <enum>GroupBoxPanel</enum>
@@ -114,6 +114,9 @@
                                     </property>
                                     <property name="numCols">
                                         <number>1</number>
+                                    </property>
+                                    <property name="readOnly">
+                                        <bool>true</bool>
                                     </property>
                                 </widget>
                             </vbox>

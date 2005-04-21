@@ -31,7 +31,7 @@ namespace KPlato
 {
 
 KPTTaskDefaultPanel::KPTTaskDefaultPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent, const char *n)
-    : KPTTaskGeneralPanel(task, workTime, false, parent, n)
+    : KPTTaskGeneralPanel(task, workTime, false, false, parent, n)
 {
     namefield->hide();
     namelabel->hide();

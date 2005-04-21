@@ -97,7 +97,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_ganttlayout(0),
     m_pertview(0),
     m_pertlayout(0),
-    m_reportview(0)
+    m_reportview(0),
+    m_baselineMode(false)
 {
     //kdDebug()<<k_funcinfo<<endl;
     setInstance(KPTFactory::global());
@@ -184,7 +185,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
     actionEditResources = new KAction(i18n("Edit Resources..."), "project_resources", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
     actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
-
+    
     // ------ Reports
     actionReportGenerate = new KSelectAction(i18n("Generate"), 0, actionCollection(), "report_generate");
     setReportGenerateMenu();
@@ -206,6 +207,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Export (testing)
     //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
+    
     // ------ Settings
     actionConfigure = new KAction(i18n("Configure..."), "configure", 0, this,
         SLOT(slotConfigure()), actionCollection(), "configure");
@@ -454,7 +456,7 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().useDateOnly());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined(), getProject().useDateOnly());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -476,7 +478,7 @@ void KPTView::slotAddSubTask() {
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().useDateOnly());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined(), getProject().useDateOnly());
     if (dia->exec()) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
@@ -503,7 +505,7 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().useDateOnly());
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().standardWorktime(), getProject().isBaselined(), getProject().useDateOnly());
     if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
@@ -571,7 +573,7 @@ void KPTView::slotOpenNode() {
             break;
         case KPTNode::Type_Task: {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().useDateOnly());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined(), getProject().useDateOnly());
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -587,7 +589,7 @@ void KPTView::slotOpenNode() {
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().useDateOnly());
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime(), getProject().isBaselined(), getProject().useDateOnly());
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -963,6 +965,34 @@ void KPTView::getContext(KPTContext &context) const {
     m_resourceview->getContext(context);
     m_resourceuseview->getContext(context);
     m_reportview->getContext(context);
+}
+
+void KPTView::setBaselineMode(bool on) {
+    kdDebug()<<k_funcinfo<<endl;
+    m_baselineMode = on;
+    
+    m_ganttview->setReadWriteMode(!on);
+    
+    actionCut->setEnabled(!on);
+    actionCopy->setEnabled(!on);
+    actionPaste->setEnabled(!on);
+
+    actionDeleteTask->setEnabled(!on);
+    actionIndentTask->setEnabled(!on);
+    actionUnindentTask->setEnabled(!on);
+    actionMoveTaskUp->setEnabled(!on);
+    actionMoveTaskDown->setEnabled(!on);
+
+    actionAddTask->setEnabled(!on);
+    actionAddSubtask->setEnabled(!on);
+    actionAddMilestone->setEnabled(!on);
+
+    actionEditStandardWorktime->setEnabled(!on);
+    actionEditCalendar->setEnabled(!on);
+    actionEditResources->setEnabled(!on);
+    actionCalculate->setEnabled(!on);
+
+    actionEditResource->setEnabled(!on);
 }
 
 #ifndef NDEBUG

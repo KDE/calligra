@@ -36,7 +36,7 @@ class KPTStandardWorktime;
 class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, bool useDateOnly=false, QWidget *parent=0, const char *name=0);
+    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false, bool useDateOnly=false, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(KPTPart *part);
 

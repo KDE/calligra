@@ -100,5 +100,16 @@ QDateTime KPTMainProjectPanelBase::endDateTime()
     return QDateTime(endDate->date(), endTime->time());
 }
 
+
+void KPTMainProjectPanelBase::slotBaseline()
+{
+    bool b = baseline->isChecked();
+    namefield->setReadOnly(b);
+    idfield->setReadOnly(b);
+    leaderfield->setReadOnly(b);
+    chooseLeader->setEnabled(!b);
+    scheduling->setEnabled(!b);
+}
+
 } // namespace KPlato
 

@@ -89,7 +89,7 @@ public:
 class KPTRequestResourcesPanel : public KPTTaskResourcesPanelBase {
     Q_OBJECT
 public:
-    KPTRequestResourcesPanel (QWidget *parent, KPTTask &task);
+    KPTRequestResourcesPanel(QWidget *parent, KPTTask &task, bool baseline=false);
 
     KCommand *buildCommand(KPTPart *part);
     

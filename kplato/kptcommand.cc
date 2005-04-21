@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1043,6 +1043,23 @@ void KPTProjectModifyUseDateOnlyCmd::unexecute() {
         m_part->setCommandType(0);
 }
 
+KPTProjectModifyBaselineCmd::KPTProjectModifyBaselineCmd(KPTPart *part, KPTProject &project, bool value, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_project(project),
+      m_newvalue(value) {
+    m_oldvalue = project.isBaselined();
+}
+void KPTProjectModifyBaselineCmd::execute() {
+    m_project.setBaselined(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(2);
+}
+void KPTProjectModifyBaselineCmd::unexecute() {
+    m_project.setBaselined(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(2);
+}
 
 
 }  //KPlato namespace

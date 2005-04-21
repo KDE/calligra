@@ -147,7 +147,7 @@ bool KPTGroupLVItem::isNull() const {
     return true;
 }
 
-KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &task)
+KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &task, bool baseline)
     : KPTTaskResourcesPanelBase(parent),
       m_task(task),
       m_worktime(0),
@@ -172,6 +172,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
         groupChanged(item);
     }
 
+    resourceTable->setReadOnly(baseline);
     
     connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
