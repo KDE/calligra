@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="128">
+<kpartgui name="kexi" version="129">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -39,10 +39,13 @@
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
     <MergeLocal name="edit_undo_merge"/>
+    <Separator/>
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
     <MergeLocal name="edit_paste_merge"/>
+    <Separator/>
+    <Action name="edit_select_all"/> 
     <Separator/>
     <Action name="edit_delete"/>
     <Action name="edit_delete_row"/>

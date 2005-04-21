@@ -453,6 +453,10 @@ Startup TODO:
 - add "Save Special->Shortcut file for this project" action
 - split .kexis format to .kexis and .kexic
 
+Core TODO:
+- update shared actons availability ONLY AFTER we've switched to other kexidialog base,
+  not just on LOST FOCUS
+
 Migration (Import Project Wizard) TODO:
 - change drivers comboboxes to KexiDBDriverList
   (impl. this one with drv name and description columns)
@@ -488,17 +492,30 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
+-plug 'delete widget' action to 'delete' shared action
+-implement shared action categories to filter out them in 'assigning actions to push buttons'
+
+2005-04-20
+Form Designer
+- we're not plugging to data-related actions for design view mode
+Main Window
+- 'edit > select all' global shared action added
 
 2005-04-19
 Project Wizard
 - 'finish' button disabled on 'select project type' page
 Form Designer
-- 'delete' key removes selected widget(s)
+- 'delete' key removes selected widget(s); except for top level form widget
 - 'menu' key works
+- avoid redundancy in action-creation code
+- better context menu
+- actions can interoperate with shared actions
 TableView
-- 'menu' key taken from global settings
-Main
+- 'menu' key code taken from global settings
+Main Window
 - on startup propeditor is hidden if no project is opened
+Startup
+- Connection Selector: added information how to create connections
 
 2005-04-18
 Core
