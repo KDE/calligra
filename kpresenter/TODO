@@ -108,6 +108,10 @@ In Progress:
 -> save/load protect object
 -> save/load embedded object
 
+After koffice-1.4
+-> allow to move object outside page (ask by boiko)
+-> allow to put all transparent picture with a specific color (ask by boiko)
+
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
 
