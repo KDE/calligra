@@ -1121,7 +1121,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   clearFlag( Flag_CellTooShortX );
   clearFlag( Flag_CellTooShortY );
 
-  // Recalculate which cells this one is obscuring.
+  kdDebug(36001) << "makeLayout() called for (" << columnName(_col) << _row
+		 << ")" << endl;
+
+  // Initiate the cells that this one is obscuring to the ones that
+  // are actually merged.
   freeAllObscuredCells();
   if (d->hasExtra())
     forceExtraCells( d->column, d->row, 
@@ -1342,7 +1346,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //        setting Flag_CellTooShortX?
     //
     if ( align( _col, _row ) == KSpreadCell::Left 
-	 || align( _col, _row ) == KSpreadCell::Undefined )
+	 || ( align( _col, _row ) == KSpreadCell::Undefined 
+	      && !value().isNumber() ) )
     {
       if ( c - d->column > d->extra()->mergedXCells ) {
 	d->extra()->extraXCells = c - d->column;
