@@ -3647,7 +3647,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
-      if ( a == KSpreadCell::Left)
+      if ( a == KSpreadCell::Left || a == KSpreadCell::Undefined )
 	tmp = d->strOutText.left(i);
       else if ( a == KSpreadCell::Right)
 	tmp = d->strOutText.right(i);
