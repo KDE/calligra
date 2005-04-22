@@ -1121,9 +1121,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   clearFlag( Flag_CellTooShortX );
   clearFlag( Flag_CellTooShortY );
 
-  kdDebug(36001) << "makeLayout() called for (" << columnName(_col) << _row
-		 << ")" << endl;
-
   // Initiate the cells that this one is obscuring to the ones that
   // are actually merged.
   freeAllObscuredCells();
