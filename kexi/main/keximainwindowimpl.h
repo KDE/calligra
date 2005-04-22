@@ -64,7 +64,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		bool activateWindow(KexiDialogBase *dlg);
 
 //		void startup(KexiProjectData* pdata);
-		/*! Performs startup actions. \return false if application should exit immediately 
+		/*! Performs startup actions. \return false if application should exit immediately
 		 with an error status. */
 		tristate startup();
 
@@ -86,7 +86,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 //TODO: move to kexiproject
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
-		 Private means that the object is not stored as-is in the project but is somewhat 
+		 Private means that the object is not stored as-is in the project but is somewhat
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
 		virtual int generatePrivateID();
@@ -126,26 +126,26 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 \return true on successul closing or false on saving error.
 		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
-		 within name/caption dialog (see KexiNameDialog), which is popped 
+		 within name/caption dialog (see KexiNameDialog), which is popped
 		 up for never saved objects. */
-		virtual tristate saveObject( KexiDialogBase *dlg, 
+		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null );
 
 	protected:
-		/*! Initialises final mode: constructs window according to kexi__final database 
+		/*! Initialises final mode: constructs window according to kexi__final database
 		 and loads the specified part.
-		 \return true on success or false if e.g. kexi__final does not exist 
+		 \return true on success or false if e.g. kexi__final does not exist
 		 or a fatal exception happened */
 		bool initFinalMode(KexiProjectData *projectData);
-		
+
 		/*!
 		 Creates navigator (if it's not yet created),
 		 lookups items for current project and fills the nav. with not-opened items
 		 */
 		void initNavigator();
-		
+
 		void initContextHelp();
-		
+
 		void initPropertyEditor();
 
 		//! reimplementation of events
@@ -162,7 +162,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Writes user settings back. */
 		void		storeSettings();
-		
+
 		/*! Invalidates availability of all actions for current application state. */
 		void invalidateActions();
 
@@ -175,24 +175,24 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void invalidateProjectWideActions();
 
 		/*! Invalidates action availability for current application state.
-		 These actions only depend on curently selected dialog and currently selected view 
+		 These actions only depend on curently selected dialog and currently selected view
 		 (KexiViewBase derived object) within this dialog. */
 		void invalidateViewModeActions();
 
 		/*! Opens project pointed by \a projectData, \return true on success.
 		 Application state (e.g. actions) is updated. */
 		bool openProject(KexiProjectData *projectData);
-		
+
 		/*! Closes current project, \return true on success.
-		 Application state (e.g. actions) is updated. 
-		 \return true on success. 
+		 Application state (e.g. actions) is updated.
+		 \return true on success.
 		 If closing was cancelled by user, cancelled is returned. */
 		tristate closeProject();
 
 		/*! Shows dialog for creating new blank project,
-		 and creates one. Dialog is not shown if option for automatic creation 
+		 and creates one. Dialog is not shown if option for automatic creation
 		 is checked or Kexi::startupHandler().projectData() was provided from command line.
-		 \a cancelled is set to true if creation has been cancelled (e.g. user answered 
+		 \a cancelled is set to true if creation has been cancelled (e.g. user answered
 		 no when asked for database overwriting, etc.
 		 \return true if database was created, false on error or when cancel was pressed */
 		tristate createBlankProject();
@@ -207,12 +207,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! \return focused kexi window (KexiDialogBase or KexiDockBase subclass) */
 //		QWidget* focusWindow() const;
 
-		/*! Reimplemented from KexiSharedActionHost: 
+		/*! Reimplemented from KexiSharedActionHost:
 		 accepts only KexiDockBase and KexiDialogBase subclasses.  */
 		virtual bool acceptsSharedActions(QObject *w);
 
-		/*! Performs lookup like in KexiSharedActionHost::focusWindow() 
-		 but starting from \a w instead of a widget returned by QWidget::focusWidget(). 
+		/*! Performs lookup like in KexiSharedActionHost::focusWindow()
+		 but starting from \a w instead of a widget returned by QWidget::focusWidget().
 		 \return NULL if no widget matches acceptsSharedActions() or if \a w is NULL. */
 		QWidget* findWindow(QWidget *w);
 
@@ -229,7 +229,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		bool switchToViewMode(int viewMode);
 
 		/*! Helper. Removed and/or adds GUI client for current dialog's view;
-		 on switching to other dialog (activeWindowChanged()) 
+		 on switching to other dialog (activeWindowChanged())
 		 or on switching to other view within the same dialog (switchToViewMode()). */
 		void updateDialogViewGUIClient(KXMLGUIClient *viewClient);
 
@@ -257,24 +257,24 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! this slot handles event when user double clicked (or single -depending on settings)
 		 or pressed return ky on the part item in the navigator.
 		 This differs from openObject() signal in that if the object is already opened
-		 in view mode other than \a viewMode, the mode is not changed. 
+		 in view mode other than \a viewMode, the mode is not changed.
 		 \sa KexiBrowser::openOrActivateItem() */
 		KexiDialogBase * openObjectFromNavigator(KexiPart::Item* item, int viewMode);
 
 		bool newObject( KexiPart::Info *info );
 
-		/*! Removes object pointed by \a item from current project. 
+		/*! Removes object pointed by \a item from current project.
 		 Asks for confirmation. \return true on success
 		 or cancelled if removing was cancelled (only possible if \a dontAsk is false). */
 		tristate removeObject( KexiPart::Item *item, bool dontAsk = false );
 
 		/*! Renames object pointed by \a item to a new name \a _newName.
-		 Sets \a success to false on failure. Used as a slot connected 
+		 Sets \a success to false on failure. Used as a slot connected
 		 to KexiBrowser::renameItem() signal. */
 		void renameObject( KexiPart::Item *item, const QString& _newName, bool &succes );
 
 		/*! Reaction for object rename (signalled by KexiProject).
-		 If this item has opened dialog, it's caption is updated, 
+		 If this item has opened dialog, it's caption is updated,
 		 and also optionally application's caption. */
 		virtual void slotObjectRenamed(const KexiPart::Item &item);
 
@@ -303,6 +303,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectRelations();
 		void slotToolsProjectMigration();
 		void slotQuit();
+		/// TMP: Display a dialog to download db examples from internet
+		void  slotGetNewStuff();
 
 		void slotTipOfTheDay();
 
@@ -318,7 +320,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! There are performed all actions that need to be done immediately after  ctro (using timer)
 		void slotLastActions();
 
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, 
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false,
 			bool preservePrevSelection = true);
 
 		/*! Handles changes in 'dirty' flag for dialogs. */
@@ -332,7 +334,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		class Private;
 		Private *d;
 
-	friend class KexiDialogBase;	
+	friend class KexiDialogBase;
 };
 
 #endif

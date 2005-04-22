@@ -5,6 +5,7 @@
     <text>&amp;Project</text>
     <Action name="project_new" />
     <Action name="project_open"/>
+    <Action name="project_download_examples"/>
     <Action name="project_open_recent"/>
     <!-- Menu name="project_open_recent">
       <text>Open Recent</text>

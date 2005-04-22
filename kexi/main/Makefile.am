@@ -6,7 +6,7 @@ libkeximain_la_SOURCES = \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexistatusbar.cpp \
 	kexinamewidget.cpp kexinamedialog.cpp \
-	projectsettingsui.ui
+	projectsettingsui.ui kexinewstuff.cpp
 
 
 # kexiprojectconnectiondata.cpp
@@ -15,12 +15,12 @@ libkeximain_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolve
 
 SUBDIRS = startup .
 
-libkeximain_la_LIBADD = $(LIB_KEXI_KMDI) \
+libkeximain_la_LIBADD = $(LIB_KEXI_KMDI) -lknewstuff $(LIB_KIO)  \
 	../kexidb/libkexidb.la \
 	../core/libkexicore.la \
 	./startup/libkeximainstartup.la \
 	../widget/propertyeditor/libkexipropertyeditor.la
-	
+
 #disabled	../migration/libkeximigrate.la
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \

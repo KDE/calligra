@@ -44,6 +44,7 @@
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kiconloader.h>
+#include <knewstuff/downloaddialog.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -64,6 +65,7 @@
 #include "kexiprojectset.h"
 #include "kexi.h"
 #include "kexi_utils.h"
+#include "kexinewstuff.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
@@ -157,7 +159,7 @@ class KexiMainWindowImpl::Private
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
 			*action_edit_edititem, *action_edit_clear_table;
-			
+
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
@@ -214,6 +216,8 @@ class KexiMainWindowImpl::Private
 		//! Used on opening 1st child window
 		bool maximizeFirstOpenedChildFrm : 1;
 
+		KexiNewStuff  *newStuff;
+
 	Private(KexiMainWindowImpl* w)
 		: dialogs(401)
 		, wnd(w)
@@ -251,6 +255,7 @@ class KexiMainWindowImpl::Private
 		dummy_action = new KActionMenu("", wnd);
 #endif
 		maximizeFirstOpenedChildFrm = false;
+		newStuff = 0;
 	}
 	~Private() {
 	}
@@ -275,9 +280,7 @@ class KexiMainWindowImpl::Private
 	int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;
 	bool wasAutoOpen;
-
 	bool dialogExistedBeforeCloseProject;
-
 /*
 void updatePropEditorDockWidthInfo() {
 		if (propEditor) {
@@ -557,6 +560,11 @@ void KexiMainWindowImpl::initActions()
 	action = KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" );
 	action->setToolTip(i18n("Open an existing project"));
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
+
+	action = new KAction(i18n("&Download examples databases..."), QString::null, KShortcut(0),
+		this, SLOT(slotGetNewStuff()), actionCollection(), "project_download_examples");
+	action->setToolTip(i18n("Download databases examples from the Internet"));
+	action->setWhatsThis(i18n("Download databases examples from the Internet"));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"),
@@ -1534,7 +1542,6 @@ KexiMainWindowImpl::storeSettings()
 			int d1 = (100 * dw->width()) / width() + 1;
 			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			//int d2 = ds->separatorPosInPercent();
-
 			if (d->wasAutoOpen && d->dialogExistedBeforeCloseProject) {
 				d->config->writeEntry("LeftDockPositionWithAutoOpen",
 					d->navDockSeparatorPos);
@@ -3249,6 +3256,15 @@ void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
 		d->maximizeFirstOpenedChildFrm = false;
 	}
 	KexiMainWindow::addWindow( pView, flags );
+}
+
+/// TMP (until there's true template support)
+void  KexiMainWindowImpl::slotGetNewStuff()
+{
+	if(!d->newStuff)
+		d->newStuff = new KexiNewStuff(this);
+	d->newStuff->download();
+	//KNS::DownloadDialog::open(newstuff->customEngine(), "kexi/template");
 }
 
 #include "keximainwindowimpl.moc"
