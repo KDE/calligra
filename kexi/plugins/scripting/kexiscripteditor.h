@@ -2,6 +2,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Sebastian Sauer <mail@dipe.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +23,13 @@
 #ifndef KEXISCRIPTEDITOR_H
 #define KEXISCRIPTEDITOR_H
 
-#include <kexiviewbase.h>
-
-class KexiScriptTextEditor;
-
-//! \todo **** rename KexiScriptEditor to  KexiScriptView or so, after moving to SVN
+#include <kexieditor.h>
 
 /**
- * The KexiScriptEditor class embeds text editor
+ * The KexiEditor class embeds text editor
  * for editing scripting code.
  */
-class KexiScriptEditor : public KexiViewBase
+class KexiScriptEditor : protected KexiEditor
 {
         Q_OBJECT
 
@@ -48,12 +45,40 @@ class KexiScriptEditor : public KexiViewBase
          */
         virtual ~KexiScriptEditor();
 
-    protected:
-        virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-        virtual tristate storeData();
+        /**
+         * Initializes the editor. Call this if you like to start
+         * with a clear editor instance. Thinks like the language
+         * highlighter will be reset, undo/redo are cleared and
+         * setDirty(false) is set.
+         */
+        void initialize();
+
+        /**
+         * Return the name of the used scripting language.
+         */
+        QString getLanguage();
+
+        /**
+         * Set the name of the used scripting language.
+         */
+        bool setLanguage(const QString& language);
+
+        /**
+         * Return the scripting code.
+         */
+        QString getCode();
+
+        /**
+         * Set the scripting code.
+         */
+        bool setCode(const QString& text);
+
+    private slots:
+        void textChanged();
 
     private:
-        KexiScriptTextEditor* m_texteditor;
+        QString m_language;
+        bool m_needs_initialize;
 };
 
 #endif

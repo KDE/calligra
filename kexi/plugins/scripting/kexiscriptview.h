@@ -1,4 +1,7 @@
 /* This file is part of the KDE project
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2005 Sebastian Sauer <mail@dipe.org>
 
    This program is free software; you can redistribute it and/or
@@ -17,16 +20,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXISCRIPTTEXTEDITOR_H
-#define KEXISCRIPTTEXTEDITOR_H
+#ifndef KEXISCRIPTVIEW_H
+#define KEXISCRIPTVIEW_H
 
-#include "kexieditor.h"
+#include <kexiviewbase.h>
+
+class KexiScriptEditor;
 
 /**
- * From \a KexiEditor inherited class to implement the
- * texteditor widget to edit the scripting code.
+ * The KexiScriptView class provides the \a KexiViewBase to
+ * manage script modules.
  */
-class KexiScriptTextEditor : public KexiEditor
+class KexiScriptView : public KexiViewBase
 {
         Q_OBJECT
 
@@ -35,12 +40,20 @@ class KexiScriptTextEditor : public KexiEditor
         /**
          * Constructor.
          */
-        KexiScriptTextEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 
         /**
          * Destructor.
          */
-        virtual ~KexiScriptTextEditor();
+        virtual ~KexiScriptView();
+
+        virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+        virtual tristate storeData();
+
+    private:
+        KexiScriptEditor* m_editor;
+
+        bool loadData();
 };
 
 #endif

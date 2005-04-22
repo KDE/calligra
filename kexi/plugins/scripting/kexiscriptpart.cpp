@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Sebastian Sauer <mail@dipe.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +29,7 @@
 #include <kexipartitem.h>
 #include <kexidialogbase.h>
 
-#include "kexiscripteditor.h"
+#include "kexiscriptview.h"
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -55,7 +56,7 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
     if(!win || !win->project() || !win->project()->dbConnection())
         return 0;
 
-    KexiScriptEditor *view = new KexiScriptEditor(win, parent, item.name().latin1());
+    KexiScriptView *view = new KexiScriptView(win, parent, item.name().latin1());
     return view;
 }
 
