@@ -57,38 +57,103 @@ class KoGenStyles;
 class KPrPage
 {
 public:
+    /**
+     * @brief Constructor
+     *
+     * @param doc pointer to the kpresenter document
+     * @param masterPage master page, 0 if it is a master page
+     */
     KPrPage(KPresenterDoc *_doc, KPrPage *masterPage = 0 );
+
+    /**
+     * @brief Desctructor
+     */
     virtual ~KPrPage();
 
+    /**
+     * @brief Return a DCOP interface for this page
+     */
     virtual DCOPObject* dcopObject();
 
+    /**
+     * @brief Return a DCOP interface for this page
+     */
     KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
+    /**
+     * @brief Get the manual title
+     *
+     * @return the manual title
+     */
     QString manualTitle()const;
+
+    /**
+     * @brief Set the manual title
+     *
+     * @param title which sould be set
+     */
     void insertManualTitle(const QString & title);
+
+    /**
+     * @brief Get the page title.
+     *
+     * The page title is found out like following:
+     * - If a manual title is set the manual title is returned.
+     * - If there are text objects on the page the title is generated
+     *   for the first paragraph of top most text object.
+     * - If a title is passed to the function it is returned
+     * - Slide %PAGENUMBER or Master Slide
+     */
     QString pageTitle( const QString &_title = QString() ) const;
 
+    /**
+     * @brief Set the note text
+     *
+     * @param text which should be set
+     */
     void setNoteText( const QString &_text );
+
+    /**
+     * @brief Get the note text
+     *
+     * @return the text of the note
+     */
     QString noteText( )const;
 
     /**
-     * set the master page to masterPage
+     * @brief Set the master page to masterPage
+     *
+     * @param masterpage to set
      */
     void setMasterPage( KPrPage *_masterPage ) { m_masterPage = _masterPage; }
+
     /**
-     * return the master page
+     * @brief Get the master page
+     *
+     * @return the master page, 0 if it is a master page
      */
     KPrPage * masterPage() const { return m_masterPage; }
 
-
+    /**
+     * @brief Check if page is a master page
+     *
+     * @return true if master page
+     * @return false otherwise
+     */
     bool isMasterPage() const;
 
     /**
-     * @return the object of the page
+     * @brief Get object list
+     *
+     * @return object list
      */
     const QPtrList<KPObject> & objectList() const { return m_objectList; }
 
     /**
+     * @brief Get object at position
+     *
+     * @param pos position of object
+     *
      * @return object at position num
      */
     KPObject *getObject( int num );
@@ -98,14 +163,17 @@ public:
      * the name of the object is unified
      */
     void appendObject( KPObject *_obj );
+
     /**
      * replaces object oldObject by newObject
      */
+
     void replaceObject( KPObject *oldObject, KPObject *newObject );
     /**
      * take object object from m_objectList
      */
     int takeObject( KPObject *object );
+
     /**
      * delete selected objects from m_objectList
      */
@@ -211,12 +279,6 @@ public:
     void insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush,
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
-
-    KCommand* setPieSettings( PieType pieType, int angle, int len, int flags );
-    KCommand* setRectSettings( int _rx, int _ry, int flags );
-    KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );
-    KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal,
-                                  int _bright );
 
     void slotRepaintVariable();
     void recalcPageNum();

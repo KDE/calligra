@@ -85,8 +85,6 @@ k_dcop:
 
     virtual bool backUnbalanced()const ;
 
-    virtual bool setRectSettings( int _rx, int _ry );
-
     virtual QRect pageRect()const;
 
     virtual bool isSlideSelected();

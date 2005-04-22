@@ -458,11 +458,6 @@ bool KPresenterPageIface::backUnbalanced() const
     return (int)m_page->getBackUnbalanced();
 }
 
-bool KPresenterPageIface::setRectSettings( int _rx, int _ry )
-{
-    return m_page->setRectSettings(_rx,_ry, RectValueCmd::All);
-}
-
 QString KPresenterPageIface::pageSoundFileName() const
 {
     return m_page->getPageSoundFileName();
