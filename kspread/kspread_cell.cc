@@ -243,18 +243,18 @@ CellPrivate::~CellPrivate()
 
 CellExtra* CellPrivate::extra()
 {
-    if( !cellExtra )
-    {
-        cellExtra = new CellExtra;
-        cellExtra->conditions = 0;
-        cellExtra->validity = 0;
-        cellExtra->extraXCells = 0;
-        cellExtra->extraYCells = 0;
-        cellExtra->mergedXCells = 0;
-        cellExtra->mergedYCells = 0;
-        cellExtra->extraWidth = 0.0;
-        cellExtra->extraHeight = 0.0;
-        cellExtra->nbLines = 0;
+    if ( !cellExtra ) {
+      cellExtra = new CellExtra;
+      cellExtra->conditions   = 0;
+      cellExtra->validity     = 0;
+
+      cellExtra->extraXCells  = 0;
+      cellExtra->extraYCells  = 0;
+      cellExtra->mergedXCells = 0;
+      cellExtra->mergedYCells = 0;
+      cellExtra->extraWidth   = 0.0;
+      cellExtra->extraHeight  = 0.0;
+      cellExtra->nbLines      = 0;
     }
 
     return cellExtra;
@@ -1091,12 +1091,18 @@ void KSpreadCell::freeAllObscuredCells()
 
 
 // Recalculate the entire layout.  This includes the following members:
+//
 //   d->textX,     d->textY
 //   d->textWidth, d->textHeight
 //   d->extra()->extraXCells, d->extra()->extraYCells
 //   d->extra()->extraWidth,  d->extra()->extraHeight
 //   d->extra()->nbLines (if multirow)
 //
+// and, of course,
+//
+//   d->strOutText
+//
+
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
   // Are _col and _row really needed ?
@@ -1134,17 +1140,23 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   // Recalculate the output text, d->strOutText.
   setOutputText();
 
-  // Empty text?  Reset the outstring and, if this is the default cell, return.
+  // Empty text?  Reset the outstring and, if this is the default
+  // cell, return.
   if ( d->strOutText.isEmpty() ) {
     d->strOutText = QString::null;
+
     if ( isDefault() ) {
       clearFlag( Flag_LayoutDirty );
       return;
     }
   }
 
-  // Determine the correct font with zoom taken into account.  Apply
-  // it to _painter.  Then calculate text dimensions, i.e. 
+  // Up to here, we have just cared about the contents, not the
+  // painting of it.  Now it is time to see if the contents fits and,
+  // if not, maybe rearrange the outtext a bit.
+  //
+  // Determine the correct font with zoom taken into account, and
+  // apply it to _painter.  Then calculate text dimensions, i.e.
   // d->textWidth and d->textHeight.
   applyZoomedFont( _painter, _col, _row );
   textSize( _painter );
@@ -1155,36 +1167,34 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   RowFormat     *rl = m_pSheet->rowFormat( d->row );
   ColumnFormat  *cl = m_pSheet->columnFormat( d->column );
 
-  double w = cl->dblWidth();
-  double h = rl->dblHeight();
+  double         width  = cl->dblWidth();
+  double         height = rl->dblHeight();
 
-  // Calculate the extraWidth and extraHeight if we are forced to.
+  // Calculate extraWidth and extraHeight if we have a merged cell.
   //
-  // Use d->extra()->extraWidth/height here? Isn't it already calculated?
-  // No, they are calculated here only.       /Philipp 
+  // NOTE: We can't use d->extra()->extraWidth/height here since this
+  //       is the place where it is calculated.
   if ( testFlag( Flag_ForceExtra ) ) {
     int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
     int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
 
-    for ( int x = _col + 1; x <= _col + extraXCells; x++ ) {
-      ColumnFormat  *cl = m_pSheet->columnFormat( x );
-      w += cl->dblWidth();
-    }
+    for ( int x = _col + 1; x <= _col + extraXCells; x++ )
+      width += m_pSheet->columnFormat( x )->dblWidth();
 
-    for ( int y = _row + 1; y <= _row + extraYCells; y++ ) {
-      RowFormat  *rl = m_pSheet->rowFormat( y );
-      h += rl->dblHeight();
-    }
+    for ( int y = _row + 1; y <= _row + extraYCells; y++ )
+      height += m_pSheet->rowFormat( y )->dblHeight();
   }
 
   // Cache the newly calculated extraWidth and extraHeight if we have
-  // already allocated a struct for it.
+  // already allocated a struct for it.  Otherwise it will be zero, so
+  // don't bother.
   if (d->hasExtra()) {
-    d->extra()->extraWidth  = w;
-    d->extra()->extraHeight = h;
+    d->extra()->extraWidth  = width;
+    d->extra()->extraHeight = height;
   }
 
   QFontMetrics  fm = _painter.fontMetrics();
+  d->fmAscent = fm.ascent();
 
   // Check if we need to break the line into multiple lines and are
   // allowed to do so.  If so, set `lines' to the number of lines that
@@ -1193,7 +1203,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   // and d->strOutText.
   //
   int  lines = 1;
-  if ( d->textWidth > (w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) 
+  if ( d->textWidth > (width - 2 * BORDER_SPACE
+		       - leftBorderWidth( _col, _row ) 
 		       - rightBorderWidth( _col, _row ) )
        && multiRow( _col, _row ) )
   {
@@ -1213,14 +1224,17 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	pos = o.find( ' ', pos );
 	double width = m_pSheet->doc()
 	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1-start) )
-				 + o.mid( pos1, (pos-pos1) ) ) );
+				 + o.mid( pos1, pos - pos1 ) ) );
 
-	if ( width <= ( w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) 
+	if ( width <= ( width - 2 * BORDER_SPACE
+			- leftBorderWidth( _col, _row ) 
 			- rightBorderWidth( _col, _row ) ) ) {
+	  // We have room for the rest of the line.  End it here.
 	  d->strOutText += o.mid( pos1, pos - pos1 );
 	  pos1 = pos;
 	}
 	else {
+	  // Still not enough room.  Try to split further.
 	  if ( o.at( pos1 ) == ' ' )
 	    pos1 = pos1 + 1;
 
@@ -1240,20 +1254,20 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     d->textHeight *= lines;
-
     if (lines > 1)
       d->extra()->nbLines = lines;
+
     d->textX = 0.0;
 
-    // Calculate the maximum width, taking into account linebreaks.
-    QString t;
-    int i;
-    int pos = 0;
-
-    // Set d->textWidth to the maximum line width.
+    // Calculate the maximum width, taking into account linebreaks,
+    // and put it in d->textWidth.
+    QString  t;
+    int      i;
+    int      pos = 0;
     d->textWidth = 0.0;
     do {
       i = d->strOutText.find( "\n", pos );
+
       if ( i == -1 )
 	t = d->strOutText.mid( pos, d->strOutText.length() - pos );
       else {
@@ -1261,25 +1275,24 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	pos = i + 1;
       }
 
-      double tw = m_pSheet->doc()->unzoomItX( fm.width( t ) );
+      double  tw = m_pSheet->doc()->unzoomItX( fm.width( t ) );
       if ( tw > d->textWidth )
 	d->textWidth = tw;
     } while ( i != -1 );
   }
-  d->fmAscent = fm.ascent();
 
   // Calculate d->textX and d->textY
   offsetAlign( _col, _row );
 
-  double indent = 0.0;
   int a = effAlignX();
 
-  // Get indentation if text is left aligned, but not when text is
-  // right aligned or centered.
+  // Get indentation.  This is only used for left aligned text.
+  double indent = 0.0;
   if ( a == KSpreadCell::Left && !isEmpty() )
     indent = getIndent( _col, _row );
 
   // Set Flag_CellTooShortX if the text is too high for the cell.
+  // FIXME: Shouldn't this be Flag_CellTooShortY?
   if ( verticalText( _col, _row ) || getAngle( _col, _row ) != 0 ) {
     RowFormat  *rl = m_pSheet->rowFormat( _row );
 
@@ -1289,24 +1302,26 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
 
   // Do we have to occupy additional cells to the right?
-  if ( d->textWidth + indent > w - 2 * BORDER_SPACE -
-       leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
+  if ( d->textWidth + indent > ( width - 2 * BORDER_SPACE
+				 - leftBorderWidth( _col, _row )
+				 - rightBorderWidth( _col, _row ) ) )
   {
     int c = d->column;
   
     // Find free cells to the right of this one.
     int end = 0;
     while ( !end ) {
-      ColumnFormat  *cl2 = m_pSheet->columnFormat( c + 1 );
+      ColumnFormat  *cl2  = m_pSheet->columnFormat( c + 1 );
       KSpreadCell   *cell = m_pSheet->visibleCellAt( c + 1, d->row );
 
       if ( cell->isEmpty() ) {
-	w += cl2->dblWidth() - 1;
+	width += cl2->dblWidth() - 1;
 	c++;
 
 	// Enough space?
-	if ( d->textWidth + indent <= w - 2 * BORDER_SPACE 
-	     - leftBorderWidth( _col, _row ) - rightBorderWidth( _col, _row ) )
+	if ( d->textWidth + indent <= ( width - 2 * BORDER_SPACE 
+					- leftBorderWidth( _col, _row )
+					- rightBorderWidth( _col, _row ) ) )
 	  end = 1;
       }
       else
@@ -1314,20 +1329,24 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	end = -1;
     }
 
-    // Don't occupy additional space for right aligned or centered text
-    // or values.  Nor for numeric or boolean, apparently.  Also check
-    // to make sure we haven't already force-merged enough cells
+    // Try to use additional space from the neighboring cells that
+    // were calculated in the last step.  This is the place that we
+    // set d->extra()->extraXCells and d->extra()->extraWidth.
     //
-    // FIXME: Why not right/center aligned text?  No one knows.
-    //        Perhaps it has something to do with calculating how much 
-    //        room the text needs in those cases?
+    // Currently this is only done for left aligned cells. We have to
+    // check to make sure we haven't already force-merged enough cells
+    //
+    // FIXME: Why not right/center aligned text?  
+    //
+    // FIXME: Shouldn't we check to see if end == -1 here before
+    //        setting Flag_CellTooShortX?
     //
     if ( align( _col, _row ) == KSpreadCell::Left 
 	 || align( _col, _row ) == KSpreadCell::Undefined )
     {
       if ( c - d->column > d->extra()->mergedXCells ) {
 	d->extra()->extraXCells = c - d->column;
-	d->extra()->extraWidth  = w;
+	d->extra()->extraWidth  = width;
 	for ( int i = d->column + 1; i <= c; ++i ) {
 	  KSpreadCell *cell = m_pSheet->nonDefaultCell( i, d->row );
 	  cell->obscure( this );
@@ -1345,8 +1364,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
 
   // Do we have to occupy additional cells at the bottom ?
+  //
+  // FIXME: Setting to make the current cell grow.
+  //
   if ( multiRow( _col, _row )
-       && d->textHeight > ( h - 2 * BORDER_SPACE 
+       && d->textHeight > ( height - 2 * BORDER_SPACE 
 			    - topBorderWidth( _col, _row )
 			    - bottomBorderWidth( _col, _row ) ) )
   {
@@ -1355,15 +1377,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Find free cells bottom to this one
     while ( !end ) {
-      RowFormat    *rl2 = m_pSheet->rowFormat( r + 1 );
+      RowFormat    *rl2  = m_pSheet->rowFormat( r + 1 );
       KSpreadCell  *cell = m_pSheet->visibleCellAt( d->column, r + 1 );
 
       if ( cell->isEmpty() ) {
-	h += rl2->dblHeight() - 1.0;
+	height += rl2->dblHeight() - 1.0;
 	r++;
 
 	// Enough space ?
-	if ( d->textHeight <= ( h - 2 * BORDER_SPACE 
+	if ( d->textHeight <= ( height - 2 * BORDER_SPACE 
 				- topBorderWidth( _col, _row )
 				- bottomBorderWidth( _col, _row ) ) )
 	  end = 1;
@@ -1376,7 +1398,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // Check to make sure we haven't already force-merged enough cells.
     if ( r - d->row > d->extra()->mergedYCells ) {
       d->extra()->extraYCells = r - d->row;
-      d->extra()->extraHeight = h;
+      d->extra()->extraHeight = height;
 
       for ( int i = d->row + 1; i <= r; ++i ) {
 	KSpreadCell  *cell = m_pSheet->nonDefaultCell( d->column, i );
@@ -1412,27 +1434,31 @@ void KSpreadCell::setOutputText()
 {
   if ( isDefault() ) {
     d->strOutText = QString::null;
+
     if ( d->hasExtra() && d->extra()->conditions )
       d->extra()->conditions->checkMatches();
+
     return;
   }
 
+  // If nothing has changed, we don't need to remake the text layout.
   if ( !testFlag( Flag_TextFormatDirty ) )
     return;
 
+  // We don't want to remake the layout unnecessarily.
   clearFlag( Flag_TextFormatDirty );
 
-  // Display the formula if warranted.
+  // Display a formula if warranted.  If not, display the value instead;
+  // this is the most common case.
   if ( (!hasError()) && isFormula() && m_pSheet->getShowFormula()
        && !( m_pSheet->isProtected() && isHideFormula( d->column, d->row ) ) )
     d->strOutText = d->strText;
   else {
-    // Display real value.
     d->strOutText = sheet()->doc()->formatter()->formatText (this, 
 							     formatType());
   }
 
-  // Check conditions if needed
+  // Check conditions if needed.
   if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
 }
@@ -1502,6 +1528,8 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     if ( d->extra()->extraYCells )  h = d->extra()->extraHeight;
   }
 
+  // Calculate d->textY based on the vertical alignment and a few
+  // other inputs.
   switch( ay ) {
   case KSpreadCell::Top:
     if ( tmpAngle == 0 )
@@ -1616,13 +1644,14 @@ void KSpreadCell::offsetAlign( int _col, int _row )
        && !( m_pSheet->isProtected() && isHideFormula( _col, _row ) ) )
     a = KSpreadCell::Left;
 
+  // Calculate d->textX based on alignment and textwidth.
   switch ( a ) {
   case KSpreadCell::Left:
     d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
     break;
   case KSpreadCell::Right:
-    d->textX = w - BORDER_SPACE - d->textWidth
-      - effRightBorderPen( _col, _row ).width();
+    d->textX = ( w - BORDER_SPACE - d->textWidth
+		 - effRightBorderPen( _col, _row ).width() );
     break;
   case KSpreadCell::Center:
     d->textX = ( w - d->textWidth ) / 2;
@@ -2837,9 +2866,12 @@ void KSpreadCell::paintText( QPainter& painter,
   double   tmpHeight = d->textHeight;
   double   tmpWidth  = d->textWidth;
 
-  // If the cell is to short to paint the whole contents, then pick
-  // out a part of it that we paint.  The result of this is dependent
-  // on the data type of the content.
+  // If the cell is to narrow to paint the whole contents, then pick
+  // out a part of the content that we paint.  The result of this is
+  // dependent on the data type of the content.
+  //
+  // FIXME: Make this dependent on the height as well.
+  //
   if ( testFlag( Flag_CellTooShortX ) ) {
     d->strOutText = textDisplaying( painter );
 
@@ -2855,7 +2887,11 @@ void KSpreadCell::paintText( QPainter& painter,
     d->strOutText = QString::null;
   }
 
-  //clear extra cell if column or row is hidden
+  // Clear extra cell if column or row is hidden
+  // 
+  // FIXME: I think this should be done before the call to
+  // textDisplaying() above.
+  //
   if ( colFormat->isHide() || ( cellRect.height() <= 2 ) ) {
     freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I
                                 have time */
@@ -3586,6 +3622,8 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
 
   // If the content of the cell is a number, then we shouldn't cut
   // anything, but just display an error indication.
+  //
+  // FIXME: Check if this should be in class ValueFormatter() instead.
   if ( value().isNumber() )
     d->strOutText = "#####################################################";
 
