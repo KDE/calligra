@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#if HAVE_KNEWSTUFF
-
 #include <kdebug.h>
 #include <ktar.h>
 #include <qdir.h>
@@ -56,5 +54,3 @@ KexiNewStuff::createUploadFile(const QString &)
 {
 	return true;
 }
-
-#endif
