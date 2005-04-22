@@ -51,12 +51,13 @@ General bugs
 * Painting
   + 59068: Error show text on cell with right align with text	      1	DONE
 	   overlapped left cell.
-  + 61452: drawing problem when text overflow the right border        1 ----
   + 66859: Decimals are in the next horizontal cell		      1 DONE
+  + 77843: Vertical text alignment problem			      1 ----
   + Border on a cell in the cell format dialog -> the line width      1 ----
     does not "take".
 
 * Printing
+  + 61452: drawing problem when text overflow the right border        1 ----
   + 68190: Empty document generates 2 printed pages (testcase)	      1 ****
 	See analysis below
   + 70073: printing with kspread gives big black areas		      1 ----
