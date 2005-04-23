@@ -42,6 +42,7 @@ KexiScriptView::KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const c
     layout->addWidget(m_editor);
 
     loadData();
+    m_editor->initialize();
 }
 
 KexiScriptView::~KexiScriptView()
@@ -76,7 +77,6 @@ bool KexiScriptView::loadData()
 
     m_editor->setLanguage( scriptelem.attribute("language") );
     m_editor->setCode( scriptelem.text() );
-    m_editor->initialize();
 
     return true;
 }
