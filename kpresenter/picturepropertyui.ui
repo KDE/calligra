@@ -45,9 +45,6 @@
                     <property name="text">
                         <string>&amp;1 bit color mode</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+1</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
@@ -55,9 +52,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;8 bit color mode</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+8</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="3" column="0">
@@ -67,9 +61,6 @@
                     <property name="text">
                         <string>1&amp;6 bit color mode</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+6</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="4" column="0">
                     <property name="name">
@@ -77,9 +68,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;32 bit color mode</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+3</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
