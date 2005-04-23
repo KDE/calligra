@@ -165,12 +165,13 @@ void KexiAlterTableDialog::initData()
 	d->data->deleteAllRows();
 	int tableFieldCount = 0;
 	d->primaryKeyExists = false;
+
 	if (tempData()->table) {
 		tableFieldCount = tempData()->table->fieldCount();
-		d->buffers->clear(tableFieldCount);
+//not needed		d->buffers->clear(tableFieldCount);
 
-		for(int i=0; i < tableFieldCount; i++)
-		{
+		//recreate table data rows
+		for(int i=0; i < tableFieldCount; i++) {
 			KexiDB::Field *field = tempData()->table->field(i);
 			KexiTableItem *item = new KexiTableItem(0);
 			item->push_back(QVariant(field->isPrimaryKey() ? "key" : ""));
@@ -181,12 +182,13 @@ void KexiAlterTableDialog::initData()
 			item->push_back(QVariant(field->description()));
 			d->data->append(item);
 	
-			createPropertyBuffer( i, field );
+//later!			createPropertyBuffer( i, field );
 		}
 	}
-	else {
-		d->buffers->clear();//default size
-	}
+//	else {
+//		d->buffers->clear();//default size
+//	}
+
 	//add empty space
 	const int columnsCount = d->data->columnsCount();
 	for (int i=tableFieldCount; i<(int)d->buffers->size(); i++) {
@@ -194,7 +196,16 @@ void KexiAlterTableDialog::initData()
 		d->data->append(item);
 	}
 
+	//set data for our spreadsheet: this will clear our buffers
 	m_view->setData(d->data);
+
+	//now recreate property buffers
+	if (tempData()->table) {
+		for(int i=0; i < tableFieldCount; i++) {
+			KexiDB::Field *field = tempData()->table->field(i);
+			createPropertyBuffer( i, field );
+		}
+	}
 
 	//column widths
 	m_view->setColumnWidth(COLUMN_ID_PK, IconSize( KIcon::Small ) + 10);
