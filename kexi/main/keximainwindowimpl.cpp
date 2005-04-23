@@ -44,7 +44,6 @@
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kiconloader.h>
-#include <knewstuff/downloaddialog.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -95,6 +94,7 @@
 #endif
 
 #ifdef HAVE_KNEWSTUFF
+#include <knewstuff/downloaddialog.h>
 #include "kexinewstuff.h"
 #endif
 
@@ -569,10 +569,10 @@ void KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
 
 #ifdef HAVE_KNEWSTUFF
-	action = new KAction(i18n("&Download examples databases..."), QString::null, KShortcut(0),
+	action = new KAction(i18n("&Download Example Databases..."), QString::null, KShortcut(0),
 		this, SLOT(slotGetNewStuff()), actionCollection(), "project_download_examples");
-	action->setToolTip(i18n("Download databases examples from the Internet"));
-	action->setWhatsThis(i18n("Download databases examples from the Internet"));
+	action->setToolTip(i18n("Download example databases from the Internet"));
+	action->setWhatsThis(i18n("Downloads example databases from the Internet"));
 #endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED

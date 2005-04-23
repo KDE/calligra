@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifdef HAVE_KNEWSTUFF
+
 #ifndef KEXINEWSTUFF_H
 #define KEXINEWSTUFF_H
 
@@ -34,3 +36,5 @@ class KexiNewStuff : public KNewStuff
 };
 
 #endif
+
+#endif //HAVE_KNEWSTUFF
