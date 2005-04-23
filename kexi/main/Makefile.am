@@ -15,7 +15,7 @@ libkeximain_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolve
 
 SUBDIRS = startup .
 
-libkeximain_la_LIBADD = $(LIB_KEXI_KMDI) -lknewstuff $(LIB_KIO)  \
+libkeximain_la_LIBADD = $(LIB_KEXI_KMDI) $(LIB_KNEWSTUFF) $(LIB_KIO)  \
 	../kexidb/libkexidb.la \
 	../core/libkexicore.la \
 	./startup/libkeximainstartup.la \

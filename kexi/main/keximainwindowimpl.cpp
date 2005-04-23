@@ -65,7 +65,6 @@
 #include "kexiprojectset.h"
 #include "kexi.h"
 #include "kexi_utils.h"
-#include "kexinewstuff.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexiuseraction.h"
@@ -93,6 +92,10 @@
 
 #ifndef KEXI_NO_CTXT_HELP
 #include "kexicontexthelp.h"
+#endif
+
+#ifdef HAVE_KNEWSTUFF
+#include "kexinewstuff.h"
 #endif
 
 //show property editor
@@ -216,7 +219,9 @@ class KexiMainWindowImpl::Private
 		//! Used on opening 1st child window
 		bool maximizeFirstOpenedChildFrm : 1;
 
+#ifdef HAVE_KNEWSTUFF
 		KexiNewStuff  *newStuff;
+#endif
 
 	Private(KexiMainWindowImpl* w)
 		: dialogs(401)
@@ -255,7 +260,9 @@ class KexiMainWindowImpl::Private
 		dummy_action = new KActionMenu("", wnd);
 #endif
 		maximizeFirstOpenedChildFrm = false;
+#ifdef HAVE_KNEWSTUFF
 		newStuff = 0;
+#endif
 	}
 	~Private() {
 	}
@@ -561,10 +568,12 @@ void KexiMainWindowImpl::initActions()
 	action->setToolTip(i18n("Open an existing project"));
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
 
+#ifdef HAVE_KNEWSTUFF
 	action = new KAction(i18n("&Download examples databases..."), QString::null, KShortcut(0),
 		this, SLOT(slotGetNewStuff()), actionCollection(), "project_download_examples");
 	action->setToolTip(i18n("Download databases examples from the Internet"));
 	action->setWhatsThis(i18n("Download databases examples from the Internet"));
+#endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"),
@@ -3261,10 +3270,12 @@ void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
 /// TMP (until there's true template support)
 void  KexiMainWindowImpl::slotGetNewStuff()
 {
+#ifdef HAVE_KNEWSTUFF
 	if(!d->newStuff)
 		d->newStuff = new KexiNewStuff(this);
 	d->newStuff->download();
 	//KNS::DownloadDialog::open(newstuff->customEngine(), "kexi/template");
+#endif
 }
 
 #include "keximainwindowimpl.moc"
