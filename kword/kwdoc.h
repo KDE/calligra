@@ -815,6 +815,8 @@ public:
     KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
     void deleteLoadingInfo();
 
+    KFormula::DocumentWrapper* formulaDocumentWrapper() { return m_formulaDocumentWrapper; }
+
 #ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 #endif

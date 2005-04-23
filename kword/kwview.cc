@@ -372,6 +372,9 @@ void KWView::initGui()
     if(shell())
         shell()->showToolbar( "formula_toolbar", editingFormula );
 
+    if ( !editingFormula )
+       kWordDocument()->formulaDocumentWrapper()->setEnabled(false);
+
     // Prevention against applyMainWindowSettings hiding the statusbar
     KStatusBar * sb = statusBar();
     if ( sb )
