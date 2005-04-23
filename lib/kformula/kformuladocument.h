@@ -287,6 +287,11 @@ public:
     Document* document() const { return m_document; }
 
     /**
+     * Enables our action according to enabled.
+     */
+    void setEnabled( bool enabled );
+
+    /**
      * Inserts the document we are wrapping. This must be called once
      * before the wrapper can be used.
      */

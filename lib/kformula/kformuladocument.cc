@@ -298,64 +298,7 @@ SymbolType Document::rightBracketChar()
 
 void Document::setEnabled( bool enabled )
 {
-    //kdDebug( DEBUGID ) << "Document::setEnabled " << enabled << endl;
-    m_wrapper->getAddNegThinSpaceAction()->setEnabled( enabled );
-    m_wrapper->getMakeGreekAction()->setEnabled( enabled );
-    m_wrapper->getAddGenericUpperAction()->setEnabled( enabled );
-    m_wrapper->getAddGenericLowerAction()->setEnabled( enabled );
-    m_wrapper->getAddOverlineAction()->setEnabled( enabled );
-    m_wrapper->getAddUnderlineAction()->setEnabled( enabled );
-    m_wrapper->getRemoveEnclosingAction()->setEnabled( enabled );
-    m_wrapper->getInsertSymbolAction()->setEnabled( enabled );
-    m_wrapper->getAddThinSpaceAction()->setEnabled( enabled );
-    m_wrapper->getAddMediumSpaceAction()->setEnabled( enabled );
-    m_wrapper->getAddThickSpaceAction()->setEnabled( enabled );
-    m_wrapper->getAddQuadSpaceAction()->setEnabled( enabled );
-    m_wrapper->getAddBracketAction()->setEnabled( enabled );
-    m_wrapper->getAddSBracketAction()->setEnabled( enabled );
-    m_wrapper->getAddCBracketAction()->setEnabled( enabled );
-    m_wrapper->getAddAbsAction()->setEnabled(enabled);
-    m_wrapper->getAddFractionAction()->setEnabled( enabled );
-    m_wrapper->getAddRootAction()->setEnabled( enabled );
-    m_wrapper->getAddSumAction()->setEnabled( enabled );
-    m_wrapper->getAddProductAction()->setEnabled( enabled );
-    m_wrapper->getAddIntegralAction()->setEnabled( enabled );
-    m_wrapper->getAddMatrixAction()->setEnabled( enabled );
-    m_wrapper->getAddOneByTwoMatrixAction()->setEnabled( enabled );
-    m_wrapper->getAddUpperLeftAction()->setEnabled( enabled );
-    m_wrapper->getAddLowerLeftAction()->setEnabled( enabled );
-    m_wrapper->getAddUpperRightAction()->setEnabled( enabled );
-    m_wrapper->getAddLowerRightAction()->setEnabled( enabled );
-    
-    m_wrapper->getAddGenericUpperAction()->setEnabled( enabled );
-    m_wrapper->getAddGenericLowerAction()->setEnabled( enabled );
-    
-    m_wrapper->getAppendColumnAction()->setEnabled( enabled );
-    m_wrapper->getInsertColumnAction()->setEnabled( enabled );
-    m_wrapper->getRemoveColumnAction()->setEnabled( enabled );
-    m_wrapper->getAppendRowAction()->setEnabled( enabled );
-    m_wrapper->getInsertRowAction()->setEnabled( enabled );
-    m_wrapper->getRemoveRowAction()->setEnabled( enabled );
-
-    if ( enabled ) {
-        m_wrapper->getAddGenericUpperAction()->
-            setShortcut( KShortcut( CTRL + Key_U ) );
-        m_wrapper->getAddGenericLowerAction()->
-            setShortcut( KShortcut( CTRL + Key_L ) );
-        m_wrapper->getRemoveEnclosingAction()->
-            setShortcut( KShortcut( CTRL + Key_R ) );
-        m_wrapper->getMakeGreekAction()->
-            setShortcut( KShortcut( CTRL + Key_G ) );
-        m_wrapper->getInsertSymbolAction()->
-            setShortcut( KShortcut( CTRL + Key_I ) );
-    }
-    else {
-        m_wrapper->getAddGenericUpperAction()->setShortcut( KShortcut() );
-        m_wrapper->getAddGenericLowerAction()->setShortcut( KShortcut() );
-        m_wrapper->getRemoveEnclosingAction()->setShortcut( KShortcut() );
-        m_wrapper->getMakeGreekAction()->setShortcut( KShortcut() );
-        m_wrapper->getInsertSymbolAction()->setShortcut( KShortcut() );
-    }
+    m_wrapper->setEnabled( enabled );
 }
 
 
@@ -1163,6 +1106,68 @@ void DocumentWrapper::initSymbolNamesAction()
     }
 }
 
+
+void DocumentWrapper::setEnabled( bool enabled )
+{
+    kdDebug( DEBUGID ) << "DocumentWrapper::setEnabled " << enabled << endl;
+    getAddNegThinSpaceAction()->setEnabled( enabled );
+    getMakeGreekAction()->setEnabled( enabled );
+    getAddGenericUpperAction()->setEnabled( enabled );
+    getAddGenericLowerAction()->setEnabled( enabled );
+    getAddOverlineAction()->setEnabled( enabled );
+    getAddUnderlineAction()->setEnabled( enabled );
+    getRemoveEnclosingAction()->setEnabled( enabled );
+    getInsertSymbolAction()->setEnabled( enabled );
+    getAddThinSpaceAction()->setEnabled( enabled );
+    getAddMediumSpaceAction()->setEnabled( enabled );
+    getAddThickSpaceAction()->setEnabled( enabled );
+    getAddQuadSpaceAction()->setEnabled( enabled );
+    getAddBracketAction()->setEnabled( enabled );
+    getAddSBracketAction()->setEnabled( enabled );
+    getAddCBracketAction()->setEnabled( enabled );
+    getAddAbsAction()->setEnabled(enabled);
+    getAddFractionAction()->setEnabled( enabled );
+    getAddRootAction()->setEnabled( enabled );
+    getAddSumAction()->setEnabled( enabled );
+    getAddProductAction()->setEnabled( enabled );
+    getAddIntegralAction()->setEnabled( enabled );
+    getAddMatrixAction()->setEnabled( enabled );
+    getAddOneByTwoMatrixAction()->setEnabled( enabled );
+    getAddUpperLeftAction()->setEnabled( enabled );
+    getAddLowerLeftAction()->setEnabled( enabled );
+    getAddUpperRightAction()->setEnabled( enabled );
+    getAddLowerRightAction()->setEnabled( enabled );
+    
+    getAddGenericUpperAction()->setEnabled( enabled );
+    getAddGenericLowerAction()->setEnabled( enabled );
+    
+    getAppendColumnAction()->setEnabled( enabled );
+    getInsertColumnAction()->setEnabled( enabled );
+    getRemoveColumnAction()->setEnabled( enabled );
+    getAppendRowAction()->setEnabled( enabled );
+    getInsertRowAction()->setEnabled( enabled );
+    getRemoveRowAction()->setEnabled( enabled );
+
+    if ( enabled ) {
+        getAddGenericUpperAction()->
+            setShortcut( KShortcut( CTRL + Key_U ) );
+        getAddGenericLowerAction()->
+            setShortcut( KShortcut( CTRL + Key_L ) );
+        getRemoveEnclosingAction()->
+            setShortcut( KShortcut( CTRL + Key_R ) );
+        getMakeGreekAction()->
+            setShortcut( KShortcut( CTRL + Key_G ) );
+        getInsertSymbolAction()->
+            setShortcut( KShortcut( CTRL + Key_I ) );
+    }
+    else {
+        getAddGenericUpperAction()->setShortcut( KShortcut() );
+        getAddGenericLowerAction()->setShortcut( KShortcut() );
+        getRemoveEnclosingAction()->setShortcut( KShortcut() );
+        getMakeGreekAction()->setShortcut( KShortcut() );
+        getInsertSymbolAction()->setShortcut( KShortcut() );
+    }
+}
 
 void DocumentWrapper::updateConfig()
 {
