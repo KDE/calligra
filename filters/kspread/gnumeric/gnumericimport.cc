@@ -2025,6 +2025,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
                 if (e.hasAttribute("ValueType"))
                 {
                   // TODO: what is this for?
+            	  // <xsd:enumeration value="10"/> <!-- empty     -->
+            	  // <xsd:enumeration value="20"/> <!-- boolean   -->
+                  // <xsd:enumeration value="30"/> <!-- integer   -->
+                  // <xsd:enumeration value="40"/> <!-- float     -->
+                  // <xsd:enumeration value="50"/> <!-- error     -->
+                  // <xsd:enumeration value="60"/> <!-- string    -->
+                  // <xsd:enumeration value="70"/> <!-- cellrange -->
+                  // <xsd:enumeration value="80"/> <!-- array     -->
                 }
 
                 if (e.hasAttribute( "ValueFormat" ))
