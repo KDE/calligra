@@ -87,8 +87,8 @@ private:
         public:
             CanvasPtrList() {}
             void hide() {
-                while (count() > 0)
-                    hide(getFirst());
+                while (this->count() > 0)
+                    hide(this->getFirst());
             }
             void hide(type *item) {
                 if (item->isVisible()) {
