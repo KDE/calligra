@@ -1666,7 +1666,7 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cells...</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cell...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>

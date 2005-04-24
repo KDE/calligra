@@ -39,7 +39,7 @@ document.</para></tip>
 </listitem>
 <listitem> 
 <para>You can use the keyboard shortcut: <keycombo
-action="simul"><keycap>F5</keycap></keycombo></para>
+action="simul"><keycap>F5</keycap></keycombo>.</para>
 </listitem>
 
 <listitem>
@@ -50,7 +50,7 @@ on the toolbar.</para>
 
 </itemizedlist>
 
-<para>This will open a dialog box.  The dialog box has two tabs:  <guilabel>Geometry</guilabel> and <guilabel>Templates</guilabel></para>
+<para>This will open a dialog box.  The dialog box has two tabs:  <guilabel>Geometry</guilabel> and <guilabel>Templates</guilabel>.</para>
 
 <screenshot>
 <mediaobject>
@@ -80,7 +80,7 @@ table.</para>
 <para>While adjusting either of these two options, the preview box
 adjusts to your new settings.</para>
 
-<para>The combo box labeled <guilabel>Cell heights</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell heights:</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -88,9 +88,10 @@ set to either of two options.</para>
 <term><guilabel>Automatic</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will set the cell height of
-each cell in the new table to a size appropriate based on the size of
-the current text.  &kword; will not automatically provide additional
-space in each cell, because you draw a table larger (or smaller) than
+each cell in the new table to a size appropriate to allow vertical space 
+for the currently selected text.  &kword; will not automatically provide additional
+space in each cell, because you draw a table larger (or reduce the height of 
+each row because you draw a table smaller) than
 necessary.</para>
 <para>As an example, if you create a table with three rows, it does not
 matter if you <quote>draw</quote> the table as 1 inch tall, or 4 inches
@@ -104,7 +105,7 @@ size.</para>
 <listitem>
 <para>When selected, &kword; will calculate the cell height by dividing the user
 specified size of the table by the number of rows.</para>
-<para>If this is selected, and you create a table with 3 rows and
+<para>If for example, you create a table with 3 rows and
 <quote>draw</quote> the table 3 inches tall, each cell will be 1 inch in
 height.  If you draw the table 1.5 inches tall, each cell will be 0.5
 inches tall. </para>
@@ -112,7 +113,7 @@ inches tall. </para>
 </varlistentry>
 </variablelist>
 
-<para>The combo box labeled <guilabel>Cell Widths</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell Widths:</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -120,7 +121,7 @@ set to either of two options.</para>
 <term><guilabel>Automatic</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will determine the width of
-each cell, by dividing the total width of the frame by the number of
+each cell, by dividing the width of the table by the number of
 columns.  It is unaffected by the table size you have
 <quote>drawn</quote> on the document.</para>
 </listitem>
@@ -145,7 +146,7 @@ inches wide.</para>
 <para>Framed tables are tables that have a frame around them.  The frame around a table functions
 exactly the same as a frame around text.  It contains the table and determines the size and shape of the table.</para>
 
-<para>An inline table has frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
+<para>An inline table has a frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
 frame. If text is inserted in front of the table, the table travels down the frame just like any text would.  This means the table will
 stay in the same area of the page as the text that surrounds it.</para>
 
@@ -167,7 +168,7 @@ For more information see the section on <link linkend="table-templates">Using fo
 <indexterm><primary>tables</primary><secondary>navigating</secondary></indexterm>
 
 <para>You can navigate between cells of the table by using the mouse (simply click in the cell you want to edit),
-or by using the keyboard (use the arrow keys to move up, down, left or right one cell at a time)..</para>
+or by using the keyboard (use the arrow keys to move up, down, left or right one cell at a time).</para>
 
 </sect2>
 <sect2 id="table-delete">
@@ -196,24 +197,15 @@ Table</guimenuitem></menuchoice> from the menubar</para>
 
 <para>You can insert a row into any place in a table.</para>
 
-<para>To insert a row into a table:</para>
-
-<para>Place the mouse pointer over the border of any cell of the table you want to add
-a row to.  Select either:</para>
-
-<itemizedlist>
-<listitem>
-<para><menuchoice> <guimenu>Table</guimenu>
+<para>To insert a row into a table, place the mouse pointer over the border of any cell of the table you want to add
+a row to.  Using your mouse, select either <menuchoice> <guimenu>Table</guimenu>
 <guimenuitem>Row</guimenuitem>
 <guimenuitem>Insert Row...</guimenuitem>
-</menuchoice> from the menubar</para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
+</menuchoice> from the menubar or 
+click <inlinemediaobject><imageobject><imagedata
 fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> on the
 toolbar.</para>
-</listitem>
-</itemizedlist>
+
 
 <para>This will bring up a dialog box.</para>
 
@@ -240,22 +232,11 @@ limits you to the rows currently in the table.</para>
 <title>Insert Column in Table</title>
 <indexterm><primary>tables</primary><secondary>inserting a column</secondary></indexterm>
 
-<para>To insert a column into a table:</para>
-
-<para>Place the mouse pointer over the border of any cell of the table you want to add
-a column to.  Select either:</para>
-
-<itemizedlist>
-<listitem>
-<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
-<guimenuitem>Insert Column...</guimenuitem></menuchoice> from the menubar</para>
-</listitem>
-<listitem>
-<para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> on the
+<para>To insert a column into a table, place the mouse pointer over the border of any cell of the table you want to add
+a column to.  Select either <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Insert Column...</guimenuitem></menuchoice> from the menubar or click 
+<inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> on the
 toolbar.</para>
-</listitem>
-</itemizedlist>
 
 <para>This will bring up a dialog box.</para>
 
@@ -303,7 +284,7 @@ toolbar.</para>
 <para>This will bring up a dialog box confirming that your have selected the correct row(s).</para>
 
 <warning>
-<para>Make sure you have selected the correct row before
+<para>Make sure you have selected the correct row(s) before
 continuing.</para>
 <para>&kword; will delete any data contained within the selected rows.</para>
 </warning>
@@ -362,11 +343,13 @@ cell to the desired width.  When you release the &LMB;, the entire column will a
 
 <sect3 id="table-resize-column-dialog"><title>Using the dialog box</title>
 <para>First, select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
+<tip><para>You can select any cell in the table to change column widths.  By selecting a cell in the column you want to change 
+the dialog box will default to the correct column automatically.</para></tip>
 <para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
 <guimenuitem>Resize
 Column...</guimenuitem></menuchoice> from the menubar.</para>
 <para>A dialog box will appear.  In the spin box labeled <guilabel>Column:</guilabel>, you can chose a different column to set.  
-In the text box labeled <guilabel>Width:</guilabel>, enter the desired width of the column.</para>
+In the spin box labeled <guilabel>Width:</guilabel>, enter the desired width of the column.</para>
 <para>Click <guibutton>OK</guibutton> to change the width, or click <guibutton>Cancel</guibutton> to leave the column 
 width unchanged.</para>
 </sect3>
@@ -398,14 +381,15 @@ a table.</para>
 <para>You can join cells vertically, as well as horizontally.</para>
 </tip>
 
-<para>To join several cells you must first select the cells.  To select the cells, click once with the &LMB;
-on the frame border of a cell.  Now hold down the &Ctrl; key and click on the next cell with the &LMB;.  Continue
+<para>To join several cells you must first select the cells.  To select the cells, hold down the &Ctrl; key 
+and click once with the &LMB;
+in a cell. Click on the next cell with the &LMB;.  Continue
 this until you have selected all the cells you want to join together.</para>
 
 <tip>
 <para>If you have a number of cells in a row that you want to select,
 you can select them in two quick steps:</para>
-<para>First click on one of the end cells.</para>
+<para>First hold down the &Ctrl; key and click on one of the end cells.</para>
 <para>Now hold down the &Shift; key and click on the cell at the other
 end of the row or column you want to join.</para>
 <para>All cells between these two cells will be selected.</para>
@@ -418,24 +402,25 @@ select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
 
 <para>The cells will now be joined.</para>
 
-<para>Any text in the right most frame will now be located in the joined
-frame.  Any text from any other frames will be hidden from view.</para>
+<para>Any text in the left most frame will now be located in the joined
+frame.  Any text from any other frames will be deleted.</para>
 </sect2>
 
 <sect2 id="table-split-cells">
 <title>Split Cells in Table</title>
 <indexterm><primary>tables</primary><secondary>split cells</secondary></indexterm>
 
-<para>In addition to combining two or more cells into a single cell, it is easy to split one cell into may cells.</para>
+<para>In addition to combining two or more cells into a single cell, it is easy to split one cell into many cells.</para>
 
 <para>If you decide that you do not want the previously joined cells to
-be joined any longer, you can "split" them back into individual cells
-again.</para>
+be joined any longer, you can <quote>split</quote> them back into individual cells
+again. You can also split cells within a column or row. They do not need 
+to have been previously joined.</para>
 
 <para>To split a cell, select the cell you want to split by holding the &Ctrl; button down and
 clicking on it with the
 &LMB;.  Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
-<guimenuitem>Split Cells...</guimenuitem></menuchoice> from the menubar.</para>
+<guimenuitem>Split Cell...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a small dialog box which allows you to set the number of rows and 
 the number of columns you want to split this cell into.</para>
@@ -449,7 +434,7 @@ the number of columns you want to split this cell into.</para>
 <title>Ungroup a Table</title>
 <indexterm><primary>tables</primary><secondary>ungrouping</secondary></indexterm>
 
-<para>If you select <menuchoice> <guimenu>Table</guimenu>
+<para>If you select a cell in a table and then choose <menuchoice> <guimenu>Table</guimenu>
 <guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table
 into an individual frame.  You can then move these frames around independently on the page.</para>
 
@@ -463,8 +448,8 @@ into an individual frame.  You can then move these frames around independently o
 <para>Simply select the cell(s) you want to protect, then:</para>
 <para>Select <menuchoice> <guimenu>Table</guimenu>
 <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice>
-from the menubar or click on the cell border once with the &RMB; and select
-<menuchoice> <guimenuitem>Cells</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
+from the menubar or hold down the &Ctrl; button, click in the cell once with the &RMB; and select
+<menuchoice> <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
 from the submenu.</para>
 <para>You will not be able to change the contents or formatting of that cell.</para>
 
@@ -489,7 +474,7 @@ from the submenu.</para>
 <title>Altering the number of rows and columns in a table.</title>
 <indexterm><primary>tables</primary><secondary>changing geometry</secondary></indexterm>
 
-<para>Previously in the manual, we have discussed how to individually add or delete columns.  &kword; also provides the 
+<para>Previously in the manual, we have discussed how to individually add or delete rows and/or columns.  &kword; also provides the 
 user the ability to make major changes to the number of rows and columns in a table.</para>
 <para>Select <menuchoice> <guimenu>Table</guimenu>
 <guimenuitem>Properties...</guimenuitem></menuchoice>
@@ -505,7 +490,7 @@ from the menubar. A dialog will appear.</para>
 <para>You can use this dialog to change the number of rows in your table by using the spin box labeled
 <guilabel>Number of rows:</guilabel>.</para>
 <warning><para>If you reduce the number of rows using this dialog box, &kword; will delete the bottom row(s)
-<emphasis>including the data within the rows</emphasis>.</para><para>Be sure you do not have any data in these rows.
+<emphasis>including the data within the rows</emphasis>.</para><para>Be sure you do not have any data in these rows 
 that you need to preserve.</para></warning>
 <para>You can use this dialog to change the number of columns in your table by using the spin box labeled
 <guilabel>Number of columns:</guilabel>.</para>
@@ -520,7 +505,7 @@ changes.</para>
 </sect3>
 
 <sect3 id="table-format-selcol">
-<title>Selecting an entire column for formatting.</title>
+<title>Selecting an entire column for formatting</title>
 <para>To select an entire column for formatting, move the mouse pointer to the white space directly <emphasis>above</emphasis>
 the desired column. The mouse pointer will turn from an arrow to a hand.  If you click with the &LMB;, the entire column will be selected. </para>
 </sect3>
@@ -532,7 +517,7 @@ the desired row. The mouse pointer will turn from an arrow to a hand.  If you cl
 </sect3>
 
 <sect3 id="table-templates">
-<title>Using table templates to format an entire table.</title>
+<title>Using table templates to format an entire table</title>
 <indexterm><primary>tables</primary><secondary>templates</secondary></indexterm>
 
 <para>&kword; has templates for many commonly used table formatting options.  Table templates provide 
@@ -600,7 +585,7 @@ changes.</para>
 <indexterm><primary>table styles</primary></indexterm>
 
 <para>Table styles are a rapid way for you to format individual cells of your table to common formats.  You can add or remove
-table styles, and change predefined table styles to suit your needs. A table style, consists of a frame style and a text style
+table styles, and change predefined table styles to suit your needs. A table style consists of a frame style and a text style
 which are grouped together and named.</para>
 <sect3 id="tablestyle-use">
 <title>Formatting a cell with a table styles</title>
@@ -634,9 +619,9 @@ from the menubar. A dialog box will appear.</para>
 <para>All of the currently defined table styles are listed in the listbox on the left.  The currently selected table style is highlighted, and
 the name of the currently selected table style is listed in the text box labeled <guilabel>Name</guilabel>. (In this example,
 the currently selected table style is <emphasis>Header 1</emphasis>.)</para>
-<para>Select the name of the table style you want to change by clicking on the name of the table styles in the listbox on the left.</para>
+<para>Select the name of the table style you want to change by clicking on the name of the table style in the listbox on the left.</para>
 
-<para>There is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
+<para>In the section labeled <guilabel>Adjust</guilabel> is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
 If you want to add or alter a frame style, click the <guilabel>Change...</guilabel> button, and you will be taken to the
 <link linkend="framestyle-edit">Framestylist</link> to make those changes.</para>
 <para>Below that, is a combo box labeled <guilabel>Textstyle</guilabel> which is used to select the desired text style for this table style.
@@ -652,7 +637,7 @@ be changed to reflect the new options.</para>
 <indexterm><primary>table styles</primary><secondary>creating</secondary></indexterm>
 
 <para>To create a new table style, select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -676,7 +661,7 @@ of the previously selected table style.</para>
 <indexterm><primary>table styles</primary><secondary>deleting</secondary></indexterm>
 
 <para>To delete table style, select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -685,8 +670,8 @@ from the menubar. A dialog box will appear.</para>
 <imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Select the table style you want to delete from the list at the left.
-Select the table style by clicking once with the &LMB; in the list on the left.</para>
+<para>Select the table style you want to delete 
+by clicking once with the &LMB; on the name of the table style you want to delete.</para>
 <para>Click on the <guibutton>Delete</guibutton> button.</para>
 <note><para>&kword; will not allow you to delete the <emphasis>Plain</emphasis> table style. </para></note>
 </sect3>
@@ -696,7 +681,7 @@ Select the table style by clicking once with the &LMB; in the list on the left.<
 <indexterm><primary>table styles</primary><secondary>reordering</secondary></indexterm>
 
 <para>To change the order that the table style are listed, select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -717,7 +702,7 @@ selected table style up or down in the list of table styles.</para>
 <indexterm><primary>table styles</primary><secondary>importing</secondary></indexterm>
 
 <para>To import a table style from another &kword; file, select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -726,8 +711,8 @@ from the menubar. A dialog box will appear.</para>
 <imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Click the button labeled <guibutton>Import From File</guibutton>.  A dialog box will appear allowing you to
-select the &kword; file using the <link linkend="file-dialog">file selection dialog</link>.  Choose your file, and select
+<para>Click the button labeled <guibutton>Import From File</guibutton>.  You can 
+select the &kword; file using the <link linkend="file-dialog">file selection dialog</link>.  Choose your file, and click 
 <guibutton>OK</guibutton>.</para>
 <para>A new dialog box will appear listing all available table styles for importing.</para>
 <tip><para>If &kword; encounters a duplicate table style name in the selected file, it will append a number to the end of the
