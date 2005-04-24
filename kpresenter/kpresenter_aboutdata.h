@@ -31,7 +31,7 @@ KAboutData * newKPresenterAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
                                            version, description, KAboutData::License_LGPL,
-                                           I18N_NOOP("(c) 1998-2004, The KPresenter Team"), 0,
+                                           I18N_NOOP("(c) 1998-2005, The KPresenter Team"), 0,
                                            "http://www.koffice.org/kpresenter/");
     aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
     aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "montel@kde.org");
