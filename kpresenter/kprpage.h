@@ -159,58 +159,137 @@ public:
     KPObject *getObject( int num );
 
     /**
-     * appends object _obj to m_objectList
-     * the name of the object is unified
+     * @brief Appends object to page
+     *
+     * Appends the object to the page. The name of the object
+     * is unified.
+     *
+     * @param obj object to append
      */
     void appendObject( KPObject *_obj );
 
     /**
-     * replaces object oldObject by newObject
+     * @brief Replaces an object
+     *
+     * The object oldObject by the object newObject
+     *
+     * @param oldObject object which will be removed from the page
+     * @param newObject object which will take the place of the oldObject
      */
-
     void replaceObject( KPObject *oldObject, KPObject *newObject );
+
     /**
-     * take object object from m_objectList
+     * @brief Take object from page
+     *
+     * @param object to be take from page
+     *
+     * @return the position of the taken object
      */
     int takeObject( KPObject *object );
 
     /**
-     * delete selected objects from m_objectList
+     * @brief Delete selected objects from page
+     *
+     * The returned command will be executed.
+     *
+     * @return KCommand the command
+     * @return 0 if no object is selected
      */
     KCommand * deleteSelectedObjects();
 
-    void insertObject( KPObject *object, int pos );
-    void completeLoading( bool _clean, int lastObj );
     /**
-     * Create a uniq name for a object.
-     * if the name already exists append ' (x)'. // FIXME: not allowed by I18N
+     * @brief Insert object in page
+     *
+     * Inserts the object at pos to the page. The name of the object
+     * is unified.
+     *
+     * @param object to insert
+     * @param position the object should be insert
+     */
+    void insertObject( KPObject *object, int pos );
+
+    /**
+     * @brief
+     */
+    void completeLoading( bool _clean, int lastObj );
+
+    /**
+     * @brief Create a uniq name for an object.
+     *
+     * Create a uniq name for the object. If no name is set for the object
+     * a name according to its type is created. If the name already exists
+     * append ' (x)'. // FIXME: not allowed by I18N
+     *
+     * @param object to work on
      */
     void unifyObjectName( KPObject *object );
 
+    /**
+     * @brief Get the page rect
+     *
+     * @return the page rect
+     */
     KoRect getPageRect() const;
+
+    /**
+     * @brief Get the page rect with applied zoom
+     *
+     * @return the page rect
+     */
     QRect getZoomPageRect()const;
 
     /**
-     * set m_objectList to objectLlist
+     * @brief Set object for the page
+     *
+     * @param list of objects
      */
     void setObjectList( QPtrList<KPObject> objectLlist ) {
         m_objectList.setAutoDelete( false ); m_objectList = objectLlist; m_objectList.setAutoDelete( false );
     }
 
     /**
-     * return the number of objects in m_objectList
+     * @brief Get the number ob objects on the page
+     *
+     * @return the number of objects on the page
      */
     unsigned int objNums() const { return m_objectList.count(); }
 
     /**
-     * The following two functions are only used in KPresenterPageIface.
+     * @brief Get the number of text objects
+     *
+     * The functions in only used by KPresenterPageIface.
+     *
+     * @return the number os text object on the page
      */
     int numTextObject() const;
+    /**
+     * @brief Get the text object
+     *
+     * The functions in only used by KPresenterPageIface.
+     *
+     * @param num the number of the text object to get
+     *
+     * @return the text object with the number
+     * @return 0 if no such object exists
+     */
     KPTextObject *textFrameSet( unsigned int _num ) const;
 
+    /**
+     * @brief Get the amount of selected objects
+     *
+     * @return the amount of select objects
+     */
     int numSelected() const;
+
+    /**
+     * @brief
+     */
     void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 ,
                     double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
+
+    /**
+     * @brief
+     */
     KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,
                             const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
