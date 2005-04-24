@@ -53,12 +53,12 @@ namespace Kross { namespace Api {
              */
             Manager();
 
+        public:
+
             /**
              * Destructor.
              */
             ~Manager();
-
-        public:
 
             /**
              * Return the Manager instance. Always use this
