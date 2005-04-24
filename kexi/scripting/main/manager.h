@@ -46,7 +46,7 @@ namespace Kross { namespace Api {
      */
     class KROSS_MAIN_EXPORT Manager
     {
-        public:
+        protected:
 
             /**
              * Constructor.
@@ -57,6 +57,19 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             ~Manager();
+
+        public:
+
+            /**
+             * Return the Manager instance. Always use this
+             * function to work with Kross.
+             */
+            static Manager* scriptManager() {
+                static Manager* m_manager = 0;
+                if(! m_manager)
+                    m_manager = new Manager();
+                return m_manager;
+            }
 
             /**
              * Check if a \a Module with the defined

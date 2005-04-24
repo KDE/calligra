@@ -29,6 +29,7 @@
 #include "scriptcontainer.h"
 
 #include <qobject.h>
+#include <kdebug.h>
 
 using namespace Kross::Api;
 

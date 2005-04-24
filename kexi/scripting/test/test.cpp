@@ -81,12 +81,11 @@ void runInterpreter(const QString& interpretername, const QString& script)
 
 void runInterpreter(const QString& interpretername, const QString& scriptcode)
 {
-    // Create a manager instance. The manager is used as main entry point
-    // to work with Kross. You should instanciate only one instance and
-    // use it the whole lifetime of your application.
-    Kross::Api::Manager* manager = new Kross::Api::Manager();
+    // Return the scriptingmanager instance. The manager is used as main
+    // entry point to work with Kross.
+    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
     if(! manager) {
-        kdWarning() << "Failed to create Kross::Api::Manager instance!" << endl;
+        kdWarning() << "Failed to get Kross::Api::Manager instance!" << endl;
         return;
     }
 
@@ -152,7 +151,7 @@ if(testclassinstance) {
 */
 
     // Finally free our manager.
-    delete manager;
+    //delete manager;
 }
 
 int main(int argc, char **argv)

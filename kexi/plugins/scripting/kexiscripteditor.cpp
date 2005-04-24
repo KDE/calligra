@@ -63,15 +63,14 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
     d->language = "python"; // default scripting language
 
 #ifdef KEXI_KROSS_SUPPORT
-    d->manager = new Kross::Api::Manager();
-    d->scriptcontainer = d->manager->getScriptContainer("test");
+    d->manager = Kross::Api::Manager::scriptManager();
+    d->scriptcontainer = d->manager->getScriptContainer( parentDialog()->partItem()->name() ); //parentDialog()->id()
 #endif
 }
 
 KexiScriptEditor::~KexiScriptEditor()
 {
 #ifdef KEXI_KROSS_SUPPORT
-    delete d->manager;
     delete d;
 #endif
 }

@@ -30,13 +30,12 @@ using KFormDesigner::Form;
 ScriptManager::ScriptManager(QObject *parent, const char *name)
  : QObject(parent, name)
 {
-	m_manager = new Kross::Api::Manager();
+	m_manager = Kross::Api::Manager::scriptManager();
 	m_dict.setAutoDelete(true);
 }
 
 ScriptManager::~ScriptManager()
 {
-	delete m_manager;
 }
 
 FormScript*
