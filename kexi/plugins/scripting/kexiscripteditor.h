@@ -25,6 +25,8 @@
 
 #include <kexieditor.h>
 
+class KexiScriptEditorPrivate;
+
 /**
  * The KexiEditor class embeds text editor
  * for editing scripting code.
@@ -73,12 +75,18 @@ class KexiScriptEditor : protected KexiEditor
          */
         bool setCode(const QString& text);
 
+    public slots:
+
+        /**
+         * Try to execute the scripting code.
+         */
+        void execute();
+
     private slots:
         void textChanged();
 
     private:
-        QString m_language;
-        bool m_needs_initialize;
+        KexiScriptEditorPrivate* d;
 };
 
 #endif

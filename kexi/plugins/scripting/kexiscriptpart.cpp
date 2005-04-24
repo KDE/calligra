@@ -48,6 +48,9 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
+#ifdef KEXI_KROSS_SUPPORT
+    createSharedAction(Kexi::DesignViewMode, i18n("Execute script"), "exec", 0, "script_execute");
+#endif
 }
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int)

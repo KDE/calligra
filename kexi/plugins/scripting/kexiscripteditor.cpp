@@ -21,15 +21,8 @@
 */
 
 #include "kexiscripteditor.h"
-/*
-#include <qlayout.h>
+
 #include <kdebug.h>
-
-#include <kexidialogbase.h>
-#include <kexidb/connection.h>
-*/
-
-//#include <kdebug.h>
 //#include <kparts/factory.h>
 //#include <klibloader.h>
 //#include <kmdimainfrm.h>
@@ -47,19 +40,45 @@
 # include <ktexteditor/undointerface.h>
 #endif
 
+#ifdef KEXI_KROSS_SUPPORT
+# include "main/manager.h"
+# include "main/scriptcontainer.h"
+# include "api/exception.h"
+#endif
+
+class KexiScriptEditorPrivate
+{
+    public:
+        QString language;
+#ifdef KEXI_KROSS_SUPPORT
+        Kross::Api::Manager* manager;
+        Kross::Api::ScriptContainer* scriptcontainer;
+#endif
+};
+
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiEditor(mainWin, parent, name)
-    , m_language("python")
+    , d( new KexiScriptEditorPrivate() )
 {
+    d->language = "python"; // default scripting language
+
+#ifdef KEXI_KROSS_SUPPORT
+    d->manager = new Kross::Api::Manager();
+    d->scriptcontainer = d->manager->getScriptContainer("test");
+#endif
 }
 
 KexiScriptEditor::~KexiScriptEditor()
 {
+#ifdef KEXI_KROSS_SUPPORT
+    delete d->manager;
+    delete d;
+#endif
 }
 
 void KexiScriptEditor::initialize()
 {
-    setLanguage(m_language);
+    setLanguage(d->language);
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
@@ -74,12 +93,12 @@ void KexiScriptEditor::initialize()
 
 QString KexiScriptEditor::getLanguage()
 {
-    return m_language;
+    return d->language;
 }
 
 bool KexiScriptEditor::setLanguage(const QString& language)
 {
-    m_language = language;
+    d->language = language;
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
@@ -87,9 +106,9 @@ bool KexiScriptEditor::setLanguage(const QString& language)
     for(uint i = 0; i < hl->hlModeCount(); i++) {
         //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
 
-        // we assume Kross and the HighlightingInterface are using same
+        // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
-        if (hl->hlModeName(i).contains(m_language, false))  {
+        if (hl->hlModeName(i).contains(d->language, false))  {
             hl->setHlMode(i);
             break;
         }
@@ -108,6 +127,21 @@ bool KexiScriptEditor::setCode(const QString& text)
 {
     KexiEditor::setText(text);
     return true;
+}
+
+void KexiScriptEditor::execute()
+{
+#ifdef KEXI_KROSS_SUPPORT
+    d->scriptcontainer->setCode( getCode() );
+    d->scriptcontainer->setInterpreterName( getLanguage() );
+
+    try {
+        d->scriptcontainer->execute();
+    }
+    catch(Kross::Api::Exception& e) {
+        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+    }
+#endif
 }
 
 void KexiScriptEditor::textChanged()

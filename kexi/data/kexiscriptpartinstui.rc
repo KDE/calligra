@@ -1,14 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiscriptpart" version="2">
+<kpartgui name="kexiscriptpart" version="3">
 
-<Menu name="texteditor">
-  <text>Editor</text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
-  <Separator />
-  <Action name="edit_cut"/>
-  <Action name="edit_copy"/>
-  <Action name="edit_paste"/>
-</Menu>
+<ToolBar name="tools" fullWidth="false" noMerge="0">
+   <text>Tools Toolbar</text>
+   <Action name="script_execute"/>
+</ToolBar>
 
 </kpartgui>

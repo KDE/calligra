@@ -41,6 +41,8 @@ KexiScriptView::KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const c
 
     layout->addWidget(m_editor);
 
+    plugSharedAction("script_execute", m_editor, SLOT(execute()) );
+
     loadData();
     m_editor->initialize();
 }
