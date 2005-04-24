@@ -70,9 +70,7 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
 
 KexiScriptEditor::~KexiScriptEditor()
 {
-#ifdef KEXI_KROSS_SUPPORT
     delete d;
-#endif
 }
 
 void KexiScriptEditor::initialize()
