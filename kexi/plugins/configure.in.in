@@ -1,0 +1,17 @@
+AC_ARG_ENABLE(scripting,
+    AC_HELP_STRING([--enable-scripting],[build Kross scripting support [default=no]]),
+        kross_plugin=$enableval, kross_plugin=no)
+
+KROSS_INCLUDE=""
+KROSS_LIB=""
+
+if test "x$kross_plugin" != "xno"
+then
+    KROSS_INCLUDE = "-I$(top_srcdir)/kexi/scripting"
+    KROSS_LIB = "$(top_builddir)/kexi/scripting/main/libkrossmain.la"
+fi
+
+AC_SUBST(KROSS_INCLUDE)
+AC_SUBST(KROSS_LIB)
+
+AM_CONDITIONAL(kross_plugin, test "x$kross_plugin" != "xno")

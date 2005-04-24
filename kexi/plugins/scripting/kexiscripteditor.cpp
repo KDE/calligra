@@ -141,6 +141,8 @@ void KexiScriptEditor::execute()
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
     }
+#else
+    kdWarning() << "KexiScriptEditor::execute() called, but Kexi is compiled without Kross scripting support." << endl;
 #endif
 }
 
