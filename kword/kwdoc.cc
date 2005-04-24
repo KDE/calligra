@@ -2312,6 +2312,8 @@ bool KWDocument::processFootNoteRequests()
         //kdDebug(32001) << "KWDocument::processFootNoteRequests binding footnote var " << itvar.data() << " and frameset " << fsname << endl;
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
+        if ( !fs ) // #104431
+            continue;
         Q_ASSERT( fs->type() == FT_TEXT );
         Q_ASSERT( fs->frameSetInfo() == KWFrameSet::FI_FOOTNOTE );
         KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
