@@ -128,9 +128,9 @@ void KexiFormPart::initInstanceActions()
 		QString::null, 0, "formpart_layout_vbox"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"), 
 		QString::null, 0, "formpart_layout_grid"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally In a &Splitter"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in a &Splitter"), 
 		QString::null, 0, "formpart_layout_hsplitter"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally In a Splitter"), 
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in a Splitter"), 
 		QString::null, 0, "formpart_layout_vsplitter"));
 		
 	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");

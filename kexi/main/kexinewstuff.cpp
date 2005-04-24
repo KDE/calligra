@@ -44,7 +44,7 @@ KexiNewStuff::install(const QString &fileName)
 		return false;
 	const KArchiveDirectory *archiveDir = archive.directory();
 	const QString destDir = KFileDialog::getExistingDirectory(QString::null, parentWidget(),
-		i18n("Choose the directory where to install example database"));
+		i18n("Choose Directory Where to Install Example Database"));
 	archiveDir->copyTo(destDir);
 	archive.close();
 

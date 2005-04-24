@@ -207,7 +207,7 @@ KFormDesignerPart::setupActions()
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), m_manager, SLOT(editConnections()), actionCollection(), "form_connections");
 
-	KActionMenu *layoutMenu = new KActionMenu(i18n("Lay out Widgets"), "", actionCollection(), "layout_menu");
+	KActionMenu *layoutMenu = new KActionMenu(i18n("Lay Out Widgets"), "", actionCollection(), "layout_menu");
 	layoutMenu->insert(new KAction(i18n("&Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox"));
 	layoutMenu->insert(new KAction(i18n("&Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox"));
 	layoutMenu->insert(new KAction(i18n("In &Grid"), QString::null, KShortcut(0), m_manager, SLOT(layoutGrid()), actionCollection(), "layout_grid"));
