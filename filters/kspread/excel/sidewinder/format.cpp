@@ -408,12 +408,14 @@ public:
   FormatFont font;
   FormatAlignment alignment;
   FormatBorders borders;
+  UString valueFormat;
 };
 
 // create an empty format
 Format::Format()
 {
   d = new Format::Private;
+  d->valueFormat = "General";
 }
 
 // destructor
@@ -441,6 +443,7 @@ Format& Format::assign( const Format& f )
   d->font = f.font();
   d->alignment = f.alignment();
   d->borders = f.borders();
+  d->valueFormat = f.valueFormat();
   return *this;
 }
 
@@ -484,6 +487,16 @@ void Format::setBorders( const FormatBorders& borders )
   d->borders = borders;
 }
 
+UString Format::valueFormat() const
+{
+  return d->valueFormat;
+}
+
+void Format::setValueFormat( const UString& valueFormat )
+{
+  d->valueFormat = valueFormat;
+}
+
 // merge f into current format
 Format& Format::apply( const Format& f )
 {
@@ -493,6 +506,8 @@ Format& Format::apply( const Format& f )
     font() = f.font();
   if( !f.borders().isNull() )
     borders() = f.borders();
+  if( f.valueFormat().isEmpty() || f.valueFormat() == "General" )
+    setValueFormat( f.valueFormat() );
   
   return *this;
 }

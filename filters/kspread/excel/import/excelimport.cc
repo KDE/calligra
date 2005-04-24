@@ -27,9 +27,10 @@
 #include <excelimport.h>
 #include <excelimport.moc>
 
-#include <qstring.h>
-#include <qdom.h>
 #include <qcolor.h>
+#include <qdatetime.h>
+#include <qdom.h>
+#include <qstring.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
@@ -86,10 +87,249 @@ static QDomElement convertPen( QDomDocument& doc, const Swinder::Pen& pen )
   return penElement;
 }
 
-QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
+static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
 {
   QDomElement e = doc.createElement( "format" );
+  
+  // value format
+    
+  // NOTE this is not The Right Thing, we need to parse&compile the format string
+  // this hack only works for built-in common formats, not customized ones
+  QString vf = string( format.valueFormat()).string();
+  if( vf == "General" )
+    ;
+  else if( vf == "0" )
+    e.setAttribute("precision", "0");
+  else if( vf == "0.0" )
+    e.setAttribute("precision", "1");
+  else if( vf == "0.00" )
+    e.setAttribute("precision", "2");
+  else if( vf == "0.000" )
+    e.setAttribute("precision", "3");
+  else if( vf == "0.0000" )
+    e.setAttribute("precision", "4");
+  else if( vf == "0.00000" )
+    e.setAttribute("precision", "5");
+  else if( vf == "0.000000" )
+    e.setAttribute("precision", "6");
+  else if( vf == "0.0000000" )
+    e.setAttribute("precision", "7");
+  else if( vf == "0.00000000" )
+    e.setAttribute("precision", "8");
+  else if( vf == "0.000000000" )
+    e.setAttribute("precision", "9");
+  else if( vf == "0.0000000000" )
+    e.setAttribute("precision", "10");
+  else if( vf == "0.00000000000" )
+    e.setAttribute("precision", "11");
+  else if( vf == "0.000000000000" )
+    e.setAttribute("precision", "12");
+  else if( vf == "0.0000000000000" )
+    e.setAttribute("precision", "13");
+  else if( vf == "0.00000000000000" )
+    e.setAttribute("precision", "14");
+  else if( vf == "0.000000000000000" )
+    e.setAttribute("precision", "15");
+        
+  else if( vf == "0%" )
+  {
+    e.setAttribute("precision", "0");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.0%" )
+  {
+    e.setAttribute("precision", "1");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.00%" )
+  {
+    e.setAttribute("precision", "2");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.000%" )
+  {
+    e.setAttribute("precision", "3");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.0000%" )
+  {
+    e.setAttribute("precision", "4");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.00000%" )
+  {
+    e.setAttribute("precision", "5");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.000000%" )
+  {
+    e.setAttribute("precision", "6");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.0000000%" )
+  {
+    e.setAttribute("precision", "7");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.00000000%" )
+  {
+    e.setAttribute("precision", "8");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
 
+  else if( vf == "0.000000000%" )
+  {
+    e.setAttribute("precision", "9");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.0000000000%" )
+  {
+    e.setAttribute("precision", "10");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.00000000000%" )
+  {
+    e.setAttribute("precision", "11");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.000000000000%" )
+  {
+    e.setAttribute("precision", "12");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+    
+  else if( vf == "0.0000000000000%" )
+  {
+    e.setAttribute("precision", "13");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.00000000000000%" )
+  {
+    e.setAttribute("precision", "14");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  else if( vf == "0.000000000000000%" )
+  {
+    e.setAttribute("precision", "15");
+    e.setAttribute("format", "25");
+    e.setAttribute("faktor", "100");
+  }
+  
+  else if( vf == "0E+00" )
+  {
+    e.setAttribute("precision", "0");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.0E+00" )
+  {
+    e.setAttribute("precision", "1");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.00E+00" )
+  {
+    e.setAttribute("precision", "2");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.000E+00" )
+  {
+    e.setAttribute("precision", "3");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.0000E+00" )
+  {
+    e.setAttribute("precision", "4");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.00000E+00" )
+  {
+    e.setAttribute("precision", "5");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.000000E+00" )
+  {
+    e.setAttribute("precision", "6");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.0000000E+00" )
+  {
+    e.setAttribute("precision", "7");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.00000000E+00" )
+  {
+    e.setAttribute("precision", "8");
+    e.setAttribute("format", "30");
+  }  
+  else if( vf == "0.000000000E+00" )
+  {
+    e.setAttribute("precision", "9");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.0000000000E+00" )
+  {
+    e.setAttribute("precision", "10");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.00000000000E+00" )
+  {
+    e.setAttribute("precision", "11");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.000000000000E+00" )
+  {
+    e.setAttribute("precision", "12");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.0000000000000E+00" )
+  {
+    e.setAttribute("precision", "13");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.00000000000000E+00" )
+  {
+    e.setAttribute("precision", "14");
+    e.setAttribute("format", "30");
+  }
+  else if( vf == "0.000000000000000E+00" )
+  {
+    e.setAttribute("precision", "15");
+    e.setAttribute("format", "30");
+  }
+      
+  else if( vf.upper() == "M/D/YY" )
+    e.setAttribute("format", "219");
+  else if( vf.upper() == "M/D/YYYY" )
+    e.setAttribute("format", "220");
+  else if( vf.upper() == "MM/DD/YY" )
+    e.setAttribute("format", "218");
+  else if( vf.upper() == "MM/DD/YYYY" )
+    e.setAttribute("format", "217");
+  else if( vf.upper() == "YYYY/MM/DD" )
+    e.setAttribute("format", "224");
+  else if( vf.upper() == "YYYY-MM-DD" )
+    e.setAttribute("format", "215");
+  
+  // these are not supported in KSpread, find the closest one
+  else if( vf.upper() == "YYYY/MM/D" )
+    e.setAttribute("format", "224");  
+  else if( vf.upper() == "YYYY-MM-D" )
+    e.setAttribute("format", "215");
+  
   unsigned align = 0;
   switch( format.alignment().alignX() )
   {
@@ -144,6 +384,38 @@ QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
   return e;
 }
 
+// see convertFormat above, this is the complementary hack
+static bool isDateFormat( const Swinder::Format& format )
+{
+  QString vf = string( format.valueFormat()).string();
+  vf = vf.upper();
+  if( vf == "M/D/YY" ) return true;
+  if( vf == "M/D/YYYY" ) return true;
+  if( vf == "MM/DD/YY" ) return true;
+  if( vf == "MM/DD/YYYY" ) return true;
+  if( vf == "YYYY/MM/D" ) return true;
+  if( vf == "YYYY/MM/DD" ) return true;
+  if( vf == "YYYY-MM-D" ) return true;
+  if( vf == "YYYY-MM-DD" ) return true;
+  
+  return false;
+}
+
+static QDomElement convertDateResult( QDomDocument& doc, const Swinder::Value& value )
+{
+  QDomText resultElement = doc.createTextNode( "result" );
+  resultElement.toElement().setAttribute( "dataType", "Date" );
+  
+  QDate dt( 1899, 12, 30 );
+  dt = dt.addDays( value.asInteger() );
+  QString str = "%1/%2/%3";
+  str = str.arg(dt.year()).arg(dt.month()).arg(dt.day());
+  resultElement.appendChild( doc.createTextNode( str ) );
+  
+  return resultElement.toElement();
+}
+
+
 // FIXME adjust formula to match KSpread
 static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& formula, 
   const Swinder::Value& value )
@@ -178,7 +450,7 @@ static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& form
   else if( value.isFloat() )
   {
     textElement.setAttribute( "dataType", "Num" );
-    QString str = QString::number( value.asFloat() );
+    QString str = QString::number( value.asFloat(), 'g', 18 );
     if( formula.isEmpty() )
       textElement.appendChild( doc.createTextNode( str ) );
   }
@@ -378,20 +650,29 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
           ce.setAttribute( "column", col+1 );
           table.appendChild( ce );
 
-          ce.appendChild( convertValue( mainDocument, cell->formula(), cell->value() )  );
-
           QDomElement fe = convertFormat( mainDocument, cell->format() );
           if( cell->columnSpan() > 1 )
             fe.setAttribute( "colspan", cell->columnSpan()-1 );
           if( cell->rowSpan() > 1 )
             fe.setAttribute( "rowspan", cell->rowSpan()-1 );
+          
+          QDomElement ve = convertValue( mainDocument, cell->formula(), cell->value() );
+          
           ce.appendChild( fe );
-
+          ce.appendChild( ve );
+          
+          if( isDateFormat( cell->format() ) )
+          {
+            ve.setAttribute( "dataType", "Date" );
+            ve.appendChild( convertDateResult( mainDocument, cell->value() ) );
+          }
+            
         }
       }
 
   }
 
+      
   // prepare storage
   KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 

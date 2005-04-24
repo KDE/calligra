@@ -217,6 +217,7 @@ private:
   Private *d;
 };
 
+
 /**
  * Defines alignment information for cell format.
  *
@@ -235,7 +236,7 @@ public:
   FormatAlignment();
   
   /**
-   * Destroys the alingment information
+   * Destroys the alignment information
    */
   ~FormatAlignment();
   
@@ -487,6 +488,9 @@ public:
    */
   Format& assign( const Format& f );
   
+  /**
+   * Returns true if it is a default format information.
+   */
   bool isNull() const;
   
   /** 
@@ -518,6 +522,16 @@ public:
    * Sets new borders information for this format.
    */
   void setBorders( const FormatBorders& border );
+  
+  /**
+   * Returns the formatting string to display the value of this format.
+   */
+  UString valueFormat() const;
+  
+  /**
+   * Sets the new formatting string to display the value of this format.
+   */
+  void setValueFormat( const UString& valueFormat ); 
   
   enum { Left, Center, Right };
   

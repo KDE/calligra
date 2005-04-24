@@ -4075,6 +4075,7 @@ public:
   
   // table of format
   std::map<unsigned,FormatRecord> formatTable;
+  std::map<unsigned,UString> formatsTable;
   
   // table of font
   std::vector<FontRecord> fontTable;
@@ -4437,6 +4438,7 @@ void ExcelReader::handleFormat( FormatRecord* record )
   if( !record ) return;
 
   d->formatTable[ record->index() ] = *record;
+  d->formatsTable[ record->index() ] = record->formatString();
 }
 
 void ExcelReader::handleFormula( FormulaRecord* record )
@@ -4948,6 +4950,50 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   if( xfIndex >= d->xfTable.size() ) return format;
 
   XFRecord xf = d->xfTable[ xfIndex ];
+  
+  UString valueFormat = d->formatsTable[xf.formatIndex()];
+  if( valueFormat.isEmpty() )
+    switch( xf.formatIndex() )
+    {
+      case  0:  valueFormat = "General"; break;
+      case  1:  valueFormat = "0"; break;
+      case  2:  valueFormat = "0.00"; break;
+      case  3:  valueFormat = "#,##0"; break;
+      case  4:  valueFormat = "#,##0.00"; break;
+      case  5:  valueFormat = "\"$\"#,##0_);(\"S\"#,##0)"; break;
+      case  6:  valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)"; break;
+      case  7:  valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)"; break;
+      case  8:  valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)"; break;
+      case  9:  valueFormat = "0%"; break;
+      case 10:  valueFormat = "0.00%"; break;
+      case 11:  valueFormat = "0.00E+00"; break;
+      case 12:  valueFormat = "#?/?"; break;
+      case 13:  valueFormat = "#??/??"; break;
+      case 14:  valueFormat = "M/D/YY"; break;
+      case 15:  valueFormat = "D-MMM-YY"; break;
+      case 16:  valueFormat = "D-MMM"; break;
+      case 17:  valueFormat = "MMM-YY"; break;
+      case 18:  valueFormat = "h:mm AM/PM"; break;
+      case 19:  valueFormat = "h:mm:ss AM/PM"; break;
+      case 20:  valueFormat = "h:mm"; break;
+      case 21:  valueFormat = "h:mm:ss"; break;
+      case 22:  valueFormat = "M/D/YY h:mm"; break;
+      case 37:  valueFormat = "_(#,##0_);(#,##0)"; break;
+      case 38:  valueFormat = "_(#,##0_);[Red](#,##0)"; break;
+      case 39:  valueFormat = "_(#,##0.00_);(#,##0)"; break;
+      case 40:  valueFormat = "_(#,##0.00_);[Red](#,##0)"; break;
+      case 41:  valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)"; break;
+      case 42:  valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)"; break;
+      case 43:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+      case 44:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+      case 45:  valueFormat = "mm:ss"; break;
+      case 46:  valueFormat = "[h]:mm:ss"; break;
+      case 47:  valueFormat = "mm:ss.0"; break;
+      case 48:  valueFormat = "##0.0E+0"; break;
+      case 49:  valueFormat = "@"; break;
+      default: valueFormat = "General"; break;
+    };
+  format.setValueFormat( valueFormat );
     
   format.setFont( convertFont( xf.fontIndex() ) );
   
