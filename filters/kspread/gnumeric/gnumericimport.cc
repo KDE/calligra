@@ -2033,6 +2033,17 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
                   // <xsd:enumeration value="60"/> <!-- string    -->
                   // <xsd:enumeration value="70"/> <!-- cellrange -->
                   // <xsd:enumeration value="80"/> <!-- array     -->
+                    QString valuetype = e.attribute( "ValueType" );
+                    if ( valuetype == "40" )//percentage
+                    {
+                        kspread_cell->setFormatType( Percentage_format );
+                        kspread_cell->setValue( cell_content );
+                    }
+                    else if ( valuetype =="60" )//string
+                    {
+                        kspread_cell->setFormatType( Text_format );
+                        kspread_cell->setValue( cell_content );
+                    }
                 }
 
                 if (e.hasAttribute( "ValueFormat" ))
@@ -2090,6 +2101,17 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
                     //<xsd:enumeration value="80"/> <!-- array     -->
                     //kspread_cell->setValue( date );
                     //kspread_cell->setFormatType( type );
+                    QString valuetype = e.attribute( "ValueType" );
+                    if ( valuetype == "40" )//percentage
+                    {
+                        kspread_cell->setFormatType( Percentage_format );
+                        kspread_cell->setValue( cell_content );
+                    }
+                    else if ( valuetype =="60" )//string
+                    {
+                        kspread_cell->setFormatType( Text_format );
+                        kspread_cell->setValue( cell_content );
+                    }
 
                 }
 
