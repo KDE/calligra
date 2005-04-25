@@ -51,7 +51,11 @@ KWImportStyleDia::~KWImportStyleDia()
 void KWImportStyleDia::loadFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( "application/x-kword" ); // ## TODO OASIS
+    QStringList lst = "application/x-kword";
+#if 0
+    lst << "application/vnd.oasis.opendocument.text";
+#endif
+    fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
     KURL url;
     if ( fd.exec() != QDialog::Accepted )
@@ -147,6 +151,10 @@ void KWImportStyleDia::loadFile()
             }
 
         }
+        else if ( store->hasFile( "content.xml" ) )
+        {
+            //oasis file format (for koffice-1.5)
+        }
         else
         {
             KMessageBox::error( this,
@@ -199,7 +207,11 @@ QString KWImportFrameTableStyleDia::generateStyleName( const QString & templateN
 void KWImportFrameTableStyleDia::loadFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( "application/x-kword" );
+    QStringList lst = "application/x-kword";
+#if 0
+    lst << "application/vnd.oasis.opendocument.text";
+#endif
+    fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
     KURL url;
     if ( fd.exec() != QDialog::Accepted )
@@ -252,6 +264,10 @@ void KWImportFrameTableStyleDia::loadFile()
                                 i18n("Import Style"));
             }
 
+        }
+        else if ( store->hasFile( "content.xml" ) )
+        {
+            //oasis file format (for koffice-1.5)
         }
         else
         {

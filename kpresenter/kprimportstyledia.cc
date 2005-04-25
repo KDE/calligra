@@ -48,7 +48,11 @@ KPrImportStyleDia::~KPrImportStyleDia()
 void KPrImportStyleDia::loadFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( "application/x-kpresenter" );
+    QStringList lst = "application/x-kpresenter";
+#if 0 //For the future
+    lst << "application/vnd.oasis.opendocument.presentation";
+#endif
+    fd.setMimeFilter( lst );//TODO oasis mode
     fd.setCaption(i18n("Import Style"));
     KURL url;
     if ( fd.exec() != QDialog::Accepted )
@@ -63,7 +67,7 @@ void KPrImportStyleDia::loadFile()
     }
     QMap<QString, QString>insertStyle;
     // ### TODO network transparency
-    KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    KoStore* store=KoStore::createStore( this, url.path(), KoStore::Read );
     if (store )
     {
         if (store->open("maindoc.xml") )
@@ -134,6 +138,10 @@ void KPrImportStyleDia::loadFile()
 
             }
             initList();
+        }
+        else if ( store->hasFile( "content.xml" ) )
+        {
+            //oasis file format (for koffice-1.5)
         }
         else
         {
