@@ -2323,13 +2323,8 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     if ( editMode )
         QWidget::resizeEvent( e );
     else
-#if KDE_IS_VERSION(3,1,90)
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
-#else
-        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
-                                                e->oldSize() ) );
-#endif
     buffer.resize( size() );
 }
 
@@ -2488,11 +2483,7 @@ bool KPrCanvas::exportPage( int nPage,
             }
             if( !bLocalFile ){
                 if( res ){
-#if KDE_IS_VERSION(3,1,90)
                     res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
-#else
-                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL );
-#endif
                 }
             }
         }
@@ -3186,11 +3177,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         }
         m_setPageTimer = true;
 
-#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
-#else
-        QRect desk = QApplication::desktop()->screenGeometry(this);
-#endif
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
@@ -3202,11 +3189,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *m_pageEffectSteps.begin();
 
-#if KDE_IS_VERSION(3,1,90)
         QPixmap _pix2( desk.width(), desk.height() );
-#else
-        QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
-#endif
         drawCurrentPageInPix( _pix2 );
 
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
@@ -3248,11 +3231,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
     {
         m_view->setPageDuration( m_step.m_pageNumber );
 
-#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
-#else
-        QRect desk = QApplication::desktop()->screenGeometry(this);
-#endif
         QPixmap lastSlide( desk.width(), desk.height() );
         QFont font( m_view->kPresenterDoc()->defaultFont().family() );
         QPainter p( &lastSlide );
@@ -4317,12 +4296,8 @@ void KPrCanvas::gotoPage( int pg )
         m_step.m_step = *m_pageEffectSteps.begin();
         m_step.m_subStep = 0;
 #if 0
-#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
         resize( desk.width(), desk.height() );
-#else
-        resize( QApplication::desktop()->screenGeometry(this).size());
-#endif
 #endif
         doObjEffects();
         setFocus();
@@ -4658,14 +4633,9 @@ void KPrCanvas::picViewOrigFactor()
 void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
                                        const QSize &presSize, KPPixmapObject *obj )
 {
-#if KDE_IS_VERSION(3,1,90)
     QRect desk = KGlobalSettings::desktopGeometry(this);
     double faktX = (double)presSize.width() / (double)desk.width();
     double faktY = (double)presSize.height() / (double)desk.height();
-#else
-    double faktX = (double)presSize.width() / (double)QApplication::desktop()->screenGeometry(this).width();
-    double faktY = (double)presSize.height() / (double)QApplication::desktop()->screenGeometry(this).height();
-#endif
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 
