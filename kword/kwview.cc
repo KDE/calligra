@@ -7345,13 +7345,13 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
 #ifdef HAVE_LIBKSPELL2
-//not perfect, improve API!!!!
     DefaultDictionary *dict = m_broker->defaultDictionary();
-    QStringList lst = dict->suggest( word );
+    const QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )
     {
         QStringList::ConstIterator it = lst.begin();
-        for ( ; it != lst.end() ; ++it )
+        const QStringList::ConstIterator end = lst.end();
+        for ( ; it != end ; ++it )
         {
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
