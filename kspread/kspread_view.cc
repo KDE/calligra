@@ -868,9 +868,7 @@ void ViewPrivate::initActions()
 
   actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),
       0, ac, "showPageBorders");
-#if KDE_IS_VERSION(3,2,90)
   actions->showPageBorders->setCheckedState(i18n("Hide Page Borders"));
-#endif
   QObject::connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
       view, SLOT( togglePageBorders( bool ) ) );
   actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
@@ -1020,36 +1018,28 @@ void ViewPrivate::initActions()
 
   actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"),
       0, ac, "showStatusBar" );
-#if KDE_IS_VERSION(3,2,90)
   actions->showStatusBar->setCheckedState(i18n("Hide Status Bar"));
-#endif
   QObject::connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar."));
 
   actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"),
       0, ac, "showTabBar" );
-#if KDE_IS_VERSION(3,2,90)
   actions->showTabBar->setCheckedState(i18n("Hide Tab Bar"));
-#endif
   QObject::connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar."));
 
   actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"),
       0, ac, "showFormulaBar" );
-#if KDE_IS_VERSION(3,2,90)
   actions->showFormulaBar->setCheckedState(i18n("Hide Formula Bar"));
-#endif
   QObject::connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showFormulaBar( bool ) ) );
   actions->showFormulaBar->setToolTip(i18n("Show the formula bar."));
 
   actions->showCommentIndicator = new KToggleAction( i18n("Show Comment Indicator"),
       0, ac, "showCommentIndicator" );
-#if KDE_IS_VERSION(3,2,90)
   actions->showCommentIndicator->setCheckedState(i18n("Hide Comment Indicator"));
-#endif
   QObject::connect( actions->showCommentIndicator, SIGNAL( toggled( bool ) ),
       view, SLOT( showCommentIndicator( bool ) ) );
   actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comments."));
