@@ -36,7 +36,6 @@ class KexiScriptEditor : protected KexiEditor
         Q_OBJECT
 
     public:
-
         /**
          * Constructor.
          */
@@ -74,6 +73,11 @@ class KexiScriptEditor : protected KexiEditor
          * Set the scripting code.
          */
         bool setCode(const QString& text);
+
+        /**
+          * useful as we're KexiEditor superclass is protected. 
+          */
+        operator KexiViewBase *() const { return (KexiViewBase *)this; }
 
     public slots:
 

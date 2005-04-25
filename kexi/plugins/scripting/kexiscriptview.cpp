@@ -36,12 +36,12 @@ KexiScriptView::KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const c
     QBoxLayout *layout = new QVBoxLayout(this);
 
     m_editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
-    KexiViewBase::addChildView(m_editor);
-    KexiViewBase::setViewWidget(m_editor);
+    addChildView((KexiViewBase *)m_editor);
+    setViewWidget((KexiViewBase *)m_editor);
 
-    layout->addWidget(m_editor);
+    layout->addWidget((KexiViewBase *)m_editor);
 
-    plugSharedAction("script_execute", m_editor, SLOT(execute()) );
+    plugSharedAction("script_execute", (KexiViewBase *)m_editor, SLOT(execute()) );
 
     loadData();
     m_editor->initialize();
