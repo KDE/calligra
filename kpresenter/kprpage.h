@@ -293,26 +293,70 @@ public:
     KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,
                             const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
+    /**
+     * @brief
+     */
     void copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & lst) const;
 
-    KPObject* getSelectedObj() const;
     /**
-     * @return All selected objets.
-     * If withoutHeaderFooter is set to true a selected header
-     * or footer are not returned.
+     * @brief Get the first selected object
+     *
+     * @return the first selected object of this page
+     * @return O if none exists
+     */
+    KPObject* getSelectedObj() const;
+
+    /**
+     * @brief Get a list of all selected objects
+     *
+     * @param withoutHeaderFooter if true a selected header
+     *        or footer will not be in the list returned.
+     *
+     * @return list of selected objets.
      */
     QPtrList<KPObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
+
+    /**
+     * @brief Get the first selected pictur
+     *
+     * @return first selected picture
+     * @return 0 if none is selected
+     */
     KPPixmapObject* getSelectedImage() const;
 
-    ImageEffect getImageEffect(ImageEffect eff) const;
+    /**
+     * @brief Set the image effect for all selected pictures
+     *
+     * @param eff image effect
+     * @param param1 effect parameter 1
+     * @param param1 effect parameter 2
+     * @param param1 effect parameter 3
+     */
     KCommand * setImageEffect(ImageEffect eff, QVariant param1, QVariant param2, QVariant param3);
 
     /**
-     * group selected objects.
+     * @brief Group selected objects.
+     *
+     * This will create a GroupObjCmd, executes it and adds it to the history.
+     * If less than 2 objects are selected nothing happens.
      */
     void groupObjects();
+
+    /**
+     * @brief Ungroup all selected group objects
+     *
+     * @param macro to store the commands in
+     */
     void ungroupObjects( KMacroCommand ** macro );
+
+    /**
+     * @brief
+     */
     void raiseObjs( bool forward );
+
+    /**
+     * @brief
+     */
     void lowerObjs( bool backward );
 
     KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags );

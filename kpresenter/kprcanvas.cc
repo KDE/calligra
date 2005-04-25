@@ -5778,11 +5778,6 @@ void KPrCanvas::alignVertical( VerticalAlignmentType _type )
         m_view->kPresenterDoc()->addCommand( cmd );
 }
 
-ImageEffect KPrCanvas::getImageEffect(ImageEffect eff) const
-{
-    return m_activePage->getImageEffect(eff);
-}
-
 KPPixmapObject * KPrCanvas::getSelectedImage() const
 {
     return m_activePage->getSelectedImage();

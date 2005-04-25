@@ -2407,20 +2407,6 @@ KPPixmapObject* KPrPage::getSelectedImage() const
     return obj;
 }
 
-ImageEffect KPrPage::getImageEffect(ImageEffect eff) const
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    for (; it.current() ; ++it) {
-        if (it.current()->isSelected() && it.current()->getType() == OT_PICTURE) {
-            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
-            if (obj)
-                return obj->getImageEffect();
-        }
-    }
-
-    return eff;
-}
-
 KCommand * KPrPage::setImageEffect(ImageEffect eff, QVariant param1, QVariant param2, QVariant param3)
 {
     bool changed = false;

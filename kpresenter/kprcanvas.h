@@ -335,7 +335,6 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     bool canMoveOneObject()const;
     QPtrList<KPTextObject> listOfTextObjs() const;
 
-    ImageEffect getImageEffect(ImageEffect eff) const;
     QPixmap getPicturePixmap() const;
     KCommand *setProtectContent( bool b );
     void closeObject(bool _close);
