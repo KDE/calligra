@@ -80,7 +80,8 @@ KexiViewBase *KexiDialogBase::selectedView() const
 {
 	if (m_destroying)
 		return 0;
-	return static_cast<KexiViewBase*>(m_stack->visibleWidget());
+//	return static_cast<KexiViewBase*>(m_stack->visibleWidget());
+	return static_cast<KexiViewBase*>( m_stack->widget(m_currentViewMode) );
 }
 
 KexiViewBase *KexiDialogBase::viewForMode(int mode) const
