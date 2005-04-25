@@ -442,11 +442,7 @@ QSize TKToolBarButton::minimumSizeHint() const
 void TKToolBarButton::showMenu()
 {
   QPoint p ( mapToGlobal( QPoint( 0, 0 ) ) );
-#if KDE_IS_VERSION(3,1,90)
   const int deskHeight = KGlobalSettings::desktopGeometry(this).height();
-#else
-  const int deskHeight = QApplication::desktop()->height();
-#endif
   if ( p.y() + height() + d->m_popup->height() > deskHeight )
       p.setY( p.y() - d->m_popup->height() );
   else

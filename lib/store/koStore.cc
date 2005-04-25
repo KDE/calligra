@@ -132,11 +132,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
   else
   {
     const bool downloaded =
-#if KDE_IS_VERSION(3,1,90)
         KIO::NetAccess::download( url, tmpFile, window );
-#else
-        KIO::NetAccess::download( url, tmpFile );
-#endif
 
     if (!downloaded)
     {

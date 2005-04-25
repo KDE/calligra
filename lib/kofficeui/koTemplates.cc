@@ -308,11 +308,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     KSimpleConfig config(KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop"));
     config.setDesktopGroup();
     config.writeEntry("Type", "Link");
-#if KDE_IS_VERSION(3,1,3)
     config.writePathEntry("URL", t->file());
-#else
-    config.writeEntry("URL", t->file());
-#endif
     config.writeEntry("Name", t->name());
     config.writeEntry("Icon", t->picture());
     config.writeEntry("X-KDE-Hidden", t->isHidden());

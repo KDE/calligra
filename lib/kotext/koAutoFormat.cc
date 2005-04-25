@@ -45,9 +45,7 @@
 #include <kozoomhandler.h>
 #include <koGlobal.h>
 
-#if KDE_IS_VERSION(3, 2, 0)
 #include <kcalendarsystem.h>
-#endif
 #include <qregexp.h>
 
 
@@ -185,11 +183,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     KLocale klocale(m_doc->instance()->instanceName());
     for (int i = 0; i <7; i++)
     {
-#if KDE_IS_VERSION(3, 2, 0)
         m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).lower());
-#else
-        m_cacheNameOfDays.append(klocale.weekDayName( i ).lower());
-#endif
     }
 }
 
@@ -990,7 +984,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             macro->addCommand( txtObj->replaceSelectionCommand( textEditCursor, word,
                                                               KoTextObject::HighlightSelection,
                                                               i18n("Completion Word") ));
-            
+
             if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) && !part)
             {
                 //find the first word

@@ -91,11 +91,7 @@ KoTarStore::~KoTarStore()
     }
     else if ( m_fileMode == KoStoreBase::RemoteWrite )
     {
-#if KDE_IS_VERSION(3,1,90)
         KIO::NetAccess::upload( m_localFileName, m_url, m_window );
-#else
-        KIO::NetAccess::upload( m_localFileName, m_url );
-#endif
         // ### FIXME: delete temp file
     }
 }

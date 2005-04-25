@@ -102,11 +102,7 @@ KoZipStore::~KoZipStore()
     }
     else if ( m_fileMode == KoStoreBase::RemoteWrite )
     {
-#if KDE_IS_VERSION(3,1,90)
         KIO::NetAccess::upload( m_localFileName, m_url, m_window );
-#else
-        KIO::NetAccess::upload( m_localFileName, m_url );
-#endif
         // ### FIXME: delete temp file
     }
 }
@@ -124,9 +120,7 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
         //kdDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
 
         m_pZip->setCompression( KZip::NoCompression );
-#if KDE_IS_VERSION(3,1,93)
         m_pZip->setExtraField( KZip::NoExtraField );
-#endif
         // Write identification
         (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
         m_pZip->setCompression( KZip::DeflateCompression );

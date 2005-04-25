@@ -149,7 +149,6 @@ KDialogBase *KoDocumentInfoDlg::dialog() const
 
 void KoDocumentInfoDlg::loadFromKABC()
 {
-#if KDE_IS_VERSION( 3, 1, 90 )
   KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
                              ( KABC::StdAddressBook::self() );
 
@@ -186,7 +185,6 @@ void KoDocumentInfoDlg::loadFromKABC()
   d->m_leStreet->setText( a.street() );
 
   emit changed();
-#endif
 }
 
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )

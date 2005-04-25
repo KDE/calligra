@@ -626,13 +626,8 @@ void KoTemplateChooseDia::slotOk()
 	    if (d->m_returnType == Template)
 	    {
 		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
-#if KDE_IS_VERSION(3,1,3)
 		grp.writePathEntry( "TemplateName", d->m_templateName );
 		grp.writePathEntry( "FullTemplateName", d->m_fullTemplateName);
-#else
-		grp.writeEntry( "TemplateName", d->m_templateName );
-		grp.writeEntry( "FullTemplateName", d->m_fullTemplateName);
-#endif
 	    }
 
 	    if (d->m_nodiag)

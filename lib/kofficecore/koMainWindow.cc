@@ -273,11 +273,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     if ( !initialGeometrySet() )
     {
         // Default size
-#if KDE_IS_VERSION(3,1,90)
         const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
-#else
-        const int deskWidth = QApplication::desktop()->width();
-#endif
         if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
         if (deskWidth > 850) // big desktop ?
@@ -763,13 +759,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         else
             dialog->setCaption( i18n("Export Document As") );
 
-#if KDE_IS_VERSION(3,1,92)
         dialog->setOperationMode( KFileDialog::Saving );
-#else
-        dialog->setOperationMode( KFileDialog::Other );
-        dialog->setKeepLocation( true );
-        dialog->okButton()->setGuiItem( KStdGuiItem::save() );
-#endif
         dialog->setSpecialMimeFilter( mimeFilter,
                                       isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
                                       isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
@@ -1500,9 +1490,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
           KToolBar * tb = static_cast<KToolBar *>(it.current());
           KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( tb->text() ), 0,
                                                actionCollection(), tb->name() );
-#if KDE_IS_VERSION(3,2,90)
 	  act->setCheckedState(i18n("Hide %1 Toolbar").arg( tb->text() ));
-#endif
 	  connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
