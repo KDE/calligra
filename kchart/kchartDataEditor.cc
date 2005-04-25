@@ -104,7 +104,8 @@ kchartDataTable::~kchartDataTable()
 
 bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 {
-    if (ev->type() == QEvent::KeyPress && strcmp(obj->name(), "qt_tableeditor")==0 ) {
+    if (ev->type() == QEvent::KeyPress && strcmp(obj->name(), 
+						 "qt_tableeditor")==0 ) {
         QKeyEvent *e = (QKeyEvent *)ev;
 
         switch ( e->key() ) {
@@ -146,6 +147,7 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
     }
     return QTable::eventFilter( obj, ev );
 }
+
 
 // ================================================================
 //                    Class kchartDataEditor
@@ -598,7 +600,7 @@ void kchartDataEditor::row_clicked(int row)
 }
 
 
-void  kchartDataEditor::tableChanged(int row, int col)
+void  kchartDataEditor::tableChanged(int /*row*/, int /*col*/)
 {
     m_modified = true;
 }

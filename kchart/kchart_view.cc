@@ -197,7 +197,6 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
     // paint everything
     koDocument()->paintEverything( painter, rect(), FALSE, this );
 
-
     painter.end();
 }
 
@@ -265,15 +264,14 @@ void KChartView::applyEdit(kchartDataEditor *ed)
     ((KChartPart*)koDocument())->setModified(true);
 
     repaint();
-
 }
 
 
 void KChartView::wizard()
 {
     kdDebug(35001) << "Wizard called" << endl;
-    KChartWizard *wiz =
-	new KChartWizard((KChartPart*)koDocument(), this, "KChart Wizard", true);
+    KChartWizard *wiz = new KChartWizard((KChartPart*)koDocument(), this, 
+					 "KChart Wizard", true);
     kdDebug(35001) << "Executed. Now, display it" << endl;
     if (wiz->exec()) {
 	((KChartPart*)koDocument())->setModified(true);
@@ -333,7 +331,7 @@ void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
     KChartParams        *params = ((KChartPart*)koDocument())->params();
-    KoChart::Data       *dat    = (( (KChartPart*)koDocument())->data());
+    KoChart::Data       *dat    = ((KChartPart*)koDocument())->data();
     KChartAuxiliary     *aux    = ((KChartPart*)koDocument())->auxdata();
     KChartConfigDialog  *d      = new KChartConfigDialog( params, this, flags,
 							  dat, aux );
@@ -386,7 +384,7 @@ void KChartView::pieChart()
 	KChartParams  *params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Pie );
-    params->setThreeDPies(params->threeDBars());
+	params->setThreeDPies(params->threeDBars());
 	params->setExplodeFactor( 0 );
 	params->setExplode( true );
 
@@ -621,6 +619,10 @@ void KChartView::print(KPrinter &printer)
   painter.end();
 }
 
+
+// Import data from a Comma Separated Values file.
+//
+
 void KChartView::importData()
 {
     // Get the name of the file to open.
@@ -647,6 +649,11 @@ void KChartView::importData()
 
     if ( dialog->exec() ) {
 	kdDebug(35001) << "OK was pressed" << endl;
+
+	kdDebug(35001) << "First row contains headers: "
+		       << dialog->getFirstRowContainHeaders() << endl;
+	kdDebug(35001) << "First col contains headers: "
+		       << dialog->getFirstColContainHeaders() << endl;
     }
     else {
 	kdDebug(35001) << "Cancel was pressed" << endl;
