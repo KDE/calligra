@@ -92,7 +92,8 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
   new QListViewItem( cellView, "Properties", longAsHexstring( static_cast<long>(cell->kspreadStyle()->features()) ) );
   new QListViewItem( cellView, "Text", cell->text() );
-  new QListViewItem( cellView, "Text (Displayed)", cell->strOutText() );
+  new QListViewItem( cellView, "Text (Displayed)", 
+		     cell->strOutText().replace( QChar('\n'), "\\n" ) );
 
   QTextStream ts( &str, IO_WriteOnly );
   ts << cell->value();

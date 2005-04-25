@@ -1209,8 +1209,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 		       - rightBorderWidth( _col, _row ) )
        && multiRow( _col, _row ) )
   {
-    // copy of d->strOutText
-    QString o = d->strOutText;
+    // Copy of d->strOutText but without the newlines.
+    QString  o = d->strOutText.replace( QChar('\n'), " " );
 
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
@@ -1224,15 +1224,17 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       int start = 0;		// Start of the line we are handling now
       int breakpos = 0;		// The next candidate pos to break the string
       int pos1 = 0;
+      int availableWidth = ( width - 2 * BORDER_SPACE
+			     - leftBorderWidth( _col, _row ) 
+			     - rightBorderWidth( _col, _row ) );
+
       do {
 	breakpos = o.find( ' ', breakpos );
-	double textwidth = m_pSheet->doc()
+	double lineWidth = m_pSheet->doc()
 	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
 				 + o.mid( pos1, breakpos - pos1 ) ) );
 
-	if ( textwidth <= ( width - 2 * BORDER_SPACE
-			    - leftBorderWidth( _col, _row ) 
-			    - rightBorderWidth( _col, _row ) ) ) {
+	if ( lineWidth <= availableWidth ) {
 	  // We have room for the rest of the line.  End it here.
 	  d->strOutText += o.mid( pos1, breakpos - pos1 );
 	  pos1 = breakpos;
@@ -2811,7 +2813,7 @@ void KSpreadCell::paintText( QPainter& painter,
 
   QPen tmpPen( textColorPrint );
 
-  // Set the font according to condition.
+  // Set the font according to the current zoom.
   applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
   // Check for red font color for negative values.

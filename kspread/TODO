@@ -135,7 +135,7 @@ Things not in bugzilla
   + Make it possible to print embedded objects.			      1 ----
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
-    row/column into the dialog, it alays has to be a range (2:3).
+    row/column into the dialog, it always has to be a range (2:3).
     - Make repeated rows/cols work with ranges that don't start at 1  2 --
     - Make it possible to enter just one row/column into GUI, don't   2 --
       force a range.
