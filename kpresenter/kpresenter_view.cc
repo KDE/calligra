@@ -4527,8 +4527,11 @@ void KPresenterView::slotSpellCheck()
         objects = spellAddTextObject();
         QPtrList<KPObject> lstObj;
     }
-    m_spell.textIterator = new KoTextIterator( objects, edit, options );
-    startKSpell();
+    if ( ! objects.empty() )
+    {
+        m_spell.textIterator = new KoTextIterator( objects, edit, options );
+        startKSpell();
+    }
 #endif
 }
 
