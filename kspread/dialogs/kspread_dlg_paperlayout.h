@@ -67,6 +67,7 @@ private:
 
   KSpreadSheet * m_pSheet;
   KSpreadView  * m_pView;
+
   QCheckBox * pApplyToAll;
   QCheckBox * pPrintGrid;
   QCheckBox * pPrintCommentIndicator;

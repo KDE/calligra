@@ -1153,11 +1153,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
 
   // Up to here, we have just cared about the contents, not the
-  // painting of it.  Now it is time to see if the contents fits and,
-  // if not, maybe rearrange the outtext a bit.
+  // painting of it.  Now it is time to see if the contents fits into
+  // the cell and, if not, maybe rearrange the outtext a bit.
   //
-  // Determine the correct font with zoom taken into account, and
-  // apply it to _painter.  Then calculate text dimensions, i.e.
+  // First, Determine the correct font with zoom taken into account,
+  // and apply it to _painter.  Then calculate text dimensions, i.e.
   // d->textWidth and d->textHeight.
   applyZoomedFont( _painter, _col, _row );
   textSize( _painter );
@@ -1216,42 +1216,45 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // necessary.  This means to change the spaces where breaks occur
     // into newlines.
     if ( o.find(' ') != -1 ) {
-      o += ' ';
-      int start = 0;
-      int pos = 0;
-      int pos1 = 0;
       d->strOutText = "";
-      do {
-	pos = o.find( ' ', pos );
-	double width = m_pSheet->doc()
-	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1-start) )
-				 + o.mid( pos1, pos - pos1 ) ) );
 
-	if ( width <= ( width - 2 * BORDER_SPACE
-			- leftBorderWidth( _col, _row ) 
-			- rightBorderWidth( _col, _row ) ) ) {
+      // Make sure that we have a space at the end.
+      o += ' ';
+
+      int start = 0;		// Start of the line we are handling now
+      int breakpos = 0;		// The next candidate pos to break the string
+      int pos1 = 0;
+      do {
+	breakpos = o.find( ' ', breakpos );
+	double textwidth = m_pSheet->doc()
+	  ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
+				 + o.mid( pos1, breakpos - pos1 ) ) );
+
+	if ( textwidth <= ( width - 2 * BORDER_SPACE
+			    - leftBorderWidth( _col, _row ) 
+			    - rightBorderWidth( _col, _row ) ) ) {
 	  // We have room for the rest of the line.  End it here.
-	  d->strOutText += o.mid( pos1, pos - pos1 );
-	  pos1 = pos;
+	  d->strOutText += o.mid( pos1, breakpos - pos1 );
+	  pos1 = breakpos;
 	}
 	else {
 	  // Still not enough room.  Try to split further.
 	  if ( o.at( pos1 ) == ' ' )
-	    pos1 = pos1 + 1;
+	    pos1++;
 
-	  if ( pos1 != 0 && pos != -1 ) {
-	    d->strOutText += "\n" + o.mid( pos1, pos - pos1 );
+	  if ( pos1 != 0 && breakpos != -1 ) {
+	    d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
 	    lines++;
 	  }
 	  else
-	    d->strOutText += o.mid( pos1, pos - pos1 );
+	    d->strOutText += o.mid( pos1, breakpos - pos1 );
 
 	  start = pos1;
-	  pos1 = pos;
+	  pos1 = breakpos;
 	}
 
-	pos++;
-      } while( o.find( ' ', pos ) != -1 );
+	breakpos++;
+      } while( o.find( ' ', breakpos ) != -1 );
     }
 
     d->textHeight *= lines;
