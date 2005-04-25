@@ -532,18 +532,14 @@ void KWView::setupActions()
     actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "format_header" );
- #if KDE_IS_VERSION(3,2,90)
     actionViewHeader->setCheckedState(i18n("Hide &Header"));
- #endif
     actionViewHeader->setToolTip( i18n( "Shows and hides header display." ) );
     actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
 
     actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "format_footer" );
- #if KDE_IS_VERSION(3,2,90)
     actionViewFooter->setCheckedState(i18n("Hide Foo&ter"));
- #endif
     actionViewFooter->setToolTip( i18n( "Shows and hides footer display." ) );
     actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
@@ -1017,9 +1013,7 @@ void KWView::setupActions()
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
                                              this, SLOT( slotAllowAutoFormat() ),
                                           actionCollection(), "enable_autocorrection" );
-#if KDE_IS_VERSION(3,2,90)
     actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
-#endif
     actionAllowAutoFormat->setToolTip( i18n( "Toggle autocorrection on and off." ) );
     actionAllowAutoFormat->setWhatsThis( i18n( "Toggle autocorrection on and off." ) );
 
@@ -1094,18 +1088,14 @@ void KWView::setupActions()
     actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
                                             this, SLOT( showDocStructure() ),
                                             actionCollection(), "show_docstruct" );
-#if KDE_IS_VERSION(3,2,90)
     actionShowDocStruct->setCheckedState(i18n("Hide Doc Structure"));
-#endif
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
 
 	actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
 										this, SLOT( showRuler() ),
 										actionCollection(), "show_ruler" );
-#if KDE_IS_VERSION(3,2,90)
 	actionShowRuler->setCheckedState(i18n("Hide Rulers"));
-#endif
 	actionShowRuler->setToolTip( i18n( "Shows or hides rulers." ) );
 	actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
                     "document. The rulers show the position and width of pages and of frames and can "
