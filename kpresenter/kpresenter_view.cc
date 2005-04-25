@@ -4564,6 +4564,7 @@ void KPresenterView::startKSpell()
     m_spell.kospell->check( m_spell.textIterator, true );
 
     delete m_spell.dlg;
+    m_spell.dlg = 0L;
     m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
     m_spell.dlg->activeAutoCorrect( true );
     QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
@@ -4623,8 +4624,6 @@ void KPresenterView::clearSpellChecker(bool cancelSpellCheck)
     m_spell.kospell = 0;
     m_initSwitchPage = -1;
     m_switchPage = -1;
-    delete m_spell.dlg;
-    m_spell.dlg = 0L;
 
     if ( m_spell.macroCmdSpellCheck )
     {
@@ -4695,10 +4694,9 @@ void KPresenterView::spellCheckerCorrected( const QString &old, int pos, const Q
 void KPresenterView::spellCheckerDone( const QString & )
 {
 #ifdef HAVE_LIBKSPELL2
-    //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
-    KoTextObject* textobj = m_spell.kospell->currentTextObject();
-    Q_ASSERT( textobj );
-    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+    /* See also KWView::spellCheckerDone from KWord */
+    kdDebug() << "KPresenterView::spellCheckerDone" << endl;
+    KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
     if ( textdoc )
         textdoc->textObject()->removeHighlight();
