@@ -166,11 +166,8 @@ void KChartPart::initNullChart()
     m_colLabels << QString("");
     m_rowLabels << QString("");
 
-    // set default decimal symbol and thousends separator
-    KDChartAxisParams  axis
-        = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
-    m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
+    setAxisDefaults();
+
     m_params->setDrawSolidExcessArrows(true);
 }
 
@@ -204,6 +201,8 @@ void KChartPart::generateBarChartTemplate()
 	    m_rowLabels << i18n("Row %1").arg(row + 1);
 	}
     }
+
+    setAxisDefaults();
     m_params->setDrawSolidExcessArrows(true);
 }
 
@@ -319,6 +318,7 @@ void KChartPart::setData( const KoChart::Data& data )
     for ( uint col = 1; isStringFirstRow && col < data.cols(); col++ ) {
         isStringFirstRow = data.cell( 0, col ).isString();
     }
+
     // Just in case, we only have 1 row, we never use it for label text => prevents crash
     if ( data.rows() == 1 )
         isStringFirstRow = FALSE;
@@ -415,7 +415,8 @@ void KChartPart::setData( const KoChart::Data& data )
     else
         m_currentData = data;
 
-    //  initLabelAndLegend();
+    setAxisDefaults();
+
     emit docChanged();
 }
 
@@ -437,6 +438,26 @@ void KChartPart::initLabelAndLegend()
 {
     // Labels and legends are automatically initialized to reasonable
     // default values in KDChart
+}
+
+
+void KChartPart::setAxisDefaults()
+{
+  // Settings for the Y axis.
+  KDChartAxisParams  yAxis
+    = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+  // decimal symbol and thousands separator
+  yAxis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(),
+			    KGlobal::locale()->thousandsSeparator() );
+  m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, yAxis );
+
+  // Settings for the X axis. 
+  KDChartAxisParams  xAxis
+    = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+  // This shouldn't be necessary to set.
+  xAxis.setAxisFirstLabelText();
+  xAxis.setAxisLastLabelText();
+  m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, xAxis );
 }
 
 
@@ -544,6 +565,7 @@ void KChartPart::defaultConfig(  )
 {
     delete m_params;
     m_params = new KChartParams();
+    setAxisDefaults();
 }
 
 
@@ -760,12 +782,10 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	    m_colLabels = legendLabels;
 	    m_rowLabels = params.axisLabelStringList();
 	}
-    // set default decimal symbol and thousends separator
-    KDChartAxisParams  axis
-        = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    axis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(), KGlobal::locale()->thousandsSeparator() );
-    m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, axis );
+
+	setAxisDefaults();
     }
+
     m_params->setDrawSolidExcessArrows(true);
 
     return result;

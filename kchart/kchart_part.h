@@ -97,6 +97,8 @@ private:
 			       QDomDocument &doc) const;
     QFont        toFont(QDomElement &element)     const;
 
+    void         setAxisDefaults();
+
 private:
     // The chart and its contents
     KoChart::Data  m_currentData;
