@@ -40,6 +40,7 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 
+
 CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
       m_adjustRows(false),
@@ -51,8 +52,8 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
       m_textquote('"'),
       m_delimiter(","),
       m_ignoreDups(false),
-      m_fileArray(fileArray),
       m_dialog(new DialogUI(this)),
+      m_fileArray(fileArray),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
     setCaption( i18n( "Import Data" ) );
@@ -107,10 +108,63 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
             this, SLOT(encodingChanged ( const QString & ) ));
 }
 
+
 CSVImportDialog::~CSVImportDialog()
 {
     kapp->setOverrideCursor(Qt::waitCursor);
 }
+
+
+// ----------------------------------------------------------------
+//                       public methods
+
+
+bool CSVImportDialog::getFirstRowContainHeaders()
+{
+    return m_dialog->m_firstRowHeader->isChecked();
+}
+
+
+bool CSVImportDialog::getFirstColContainHeaders()
+{
+    return m_dialog->m_firstColHeader->isChecked();
+}
+
+
+int CSVImportDialog::getRows()
+{
+    int rows = m_dialog->m_sheet->numRows();
+
+    if ( m_endRow >= 0 ) {
+	if ( rows > ( m_startRow + m_endRow ) )
+	    rows = m_startRow + m_endRow;
+    }
+
+    return rows;
+}
+
+
+int CSVImportDialog::getCols()
+{
+    int cols = m_dialog->m_sheet->numCols();
+
+    if ( m_endCol >= 0 ) {
+	if ( cols > ( m_startCol + m_endCol ) )
+	    cols = m_startCol + m_endCol;
+    }
+
+    return cols;
+}
+
+
+QString CSVImportDialog::getText(int row, int col)
+{
+    return m_dialog->m_sheet->text( row, col );
+}
+
+
+// ----------------------------------------------------------------
+
 
 void CSVImportDialog::fillTable( )
 {
@@ -357,30 +411,6 @@ void CSVImportDialog::fillComboBox()
   m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
 }
 
-int CSVImportDialog::getRows()
-{
-  int rows = m_dialog->m_sheet->numRows();
-  if ( m_endRow >= 0 )
-  {
-    if ( rows > ( m_startRow + m_endRow ) )
-      rows = m_startRow + m_endRow;
-  }
-
-  return rows;
-}
-
-int CSVImportDialog::getCols()
-{
-  int cols = m_dialog->m_sheet->numCols();
-  if ( m_endCol >= 0 )
-  {
-    if ( cols > ( m_startCol + m_endCol ) )
-      cols = m_startCol + m_endCol;
-  }
-
-  return cols;
-}
-
 int CSVImportDialog::getHeader(int col)
 {
     QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
@@ -399,11 +429,6 @@ int CSVImportDialog::getHeader(int col)
         return POINTNUMBER;
     else
         return TEXT; // Should not happen
-}
-
-QString CSVImportDialog::getText(int row, int col)
-{
-    return m_dialog->m_sheet->text( row, col );
 }
 
 void CSVImportDialog::setText(int row, int col, const QString& text)

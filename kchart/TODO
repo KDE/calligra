@@ -34,7 +34,7 @@ Item								   Prio Status
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	RAPH
             (see details below)
-  + 101007: Error in reading back axis labels.			      1 ----
+  + 101007: Error in reading back axis labels.			      1 DONE
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.		done
       - Fix labelText bug in save/load in KDChart			kdch
@@ -119,7 +119,7 @@ Item								   Prio Status
   + Other enhancements?						      2 ----
 
 * Filters
-  + Make a non-part library that the filters can link against	      1	----
+  + Make a non-part library that the filters can link against	      1	DONE
   + PNG export filter						      1 DONE
     - Create the core of the filter					done
     - Size dialog for PNG image						done

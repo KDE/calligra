@@ -44,6 +44,8 @@ public:
     CSVImportDialog(QWidget* parent, QByteArray& fileArray);
     ~CSVImportDialog();
 
+    bool  getFirstRowContainHeaders();
+    bool  getFirstColContainHeaders();
     int getRows();
     int getCols();
     int getHeader(int col);
@@ -61,17 +63,17 @@ private:
     // The real contents of the dialog
     DialogUI  *m_dialog;
 
-    bool    m_adjustRows;
-    bool    m_adjustCols;
-    int     m_startRow;
-    int     m_startCol;
-    int     m_endRow;
-    int     m_endCol;
-    QChar   m_textquote;
-    QString m_delimiter;
-    bool    m_ignoreDups;
+    bool       m_adjustRows;
+    bool       m_adjustCols;
+    int        m_startRow;
+    int        m_startCol;
+    int        m_endRow;
+    int        m_endCol;
+    QChar      m_textquote;
+    QString    m_delimiter;
+    bool       m_ignoreDups;
     QByteArray m_fileArray;
-    QTextCodec* m_codec;
+    QTextCodec *m_codec;
     QStringList m_formatList; ///< List of the column formats
 
 private slots:
