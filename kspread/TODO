@@ -55,6 +55,7 @@ General bugs
   + 77843: Vertical text alignment problem			      1 ----
   + Border on a cell in the cell format dialog -> the line width      1 ----
     does not "take".
+  + Indent and multiline doesn't work				      1 ----
 
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
