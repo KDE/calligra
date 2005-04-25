@@ -281,7 +281,9 @@ bool KexiGradientWidget::eventFilter( QObject* object, QEvent* event ) {
 				*/
 				if ( child->paletteBackgroundPixmap() == 0L ) {
 					p_customBackgroundWidgets.remove( child );
-					p_cacheDirty = true;
+					if ( p_displayMode != NoGradient ) {
+						p_cacheDirty = true;
+					}
 				}
 			}
 		}

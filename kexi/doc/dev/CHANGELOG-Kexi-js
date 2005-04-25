@@ -437,15 +437,10 @@ Forms
 
 CCMAIL: dkite@shaw.ca
 
-TODO: add a small btn at the left of record navigator 
-      to indicate 'editing' status for forms without record markers
-TODO: fix lineedit's borders
-
 TODO: add time zones support: 1994-11-05T08:15:30-05:00
 TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
-TODO: 0.1 stable: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
+TODO: 0.2: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
 	gfx can be found here: http://cvs.sourceforge.net/viewcvs.py/kinitiator/
-
 
 TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kexi/
 
@@ -497,6 +492,16 @@ TODO:::::::
 -fix "edit tab order" action: not working when prj browser is focused...
 -plug 'delete widget' action to 'delete' shared action
 -implement shared action categories to filter out them in 'assigning actions to push buttons'
+
+2005-04-22..23
+Table View
+- Ctrl+Delete (delete row) shortcut also works inside cell's lineedit editor 
+  (default shortcut is overriden)
+Table Designer
+- on switching to design mode, row buffers are initialized after old buffers 
+  are cleared, not before (this fixes bug with disappearing propery buffer)
+Form Designer
+- fix for setting background (gradient widget cleared background color value)
 
 2005-04-21
 Main Window
@@ -578,7 +583,7 @@ Query Designer
 
 
 2005-04-01..04
-* Kexi Forms many improvements added for Kexi Forms, 
+* Many improvements added for Kexi Forms, 
   including editable query results. *
 KexiDB
 - BIC CHANGE:
@@ -729,8 +734,6 @@ Kexi Startup
 Forms
 - "autoTabStops" property added. 
    It is synced with changed made by TabStopDialog's checkbox.
-
-TODO: FIX THAT:- after switching to data view mode, focus is set on the first focusable widget
 
 2005-02-11...2005-02-20
 Kexi Startup

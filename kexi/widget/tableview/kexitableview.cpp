@@ -2112,21 +2112,33 @@ void KexiTableView::plugSharedAction(KAction* a)
 }
 */
 
+static bool overrideEditorShortcutNeeded(QKeyEvent *e)
+{
+	//perhaps more to come...
+	return e->key() == Qt::Key_Delete && e->state()==Qt::ControlButton;
+}
+
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 {
 	KAction *action = m_sharedActions[action_name];
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
 			return false; 
-		if (action->shortcut() == KShortcut( KKey(e) ))
+		if (action->shortcut() == KShortcut( KKey(e) )) {
+			//special cases when we need to override editor's shortcut
+			if (overrideEditorShortcutNeeded(e)) {
+				return true;
+			}
 			return false;//this shortcut is owned by shared action - don't process it!
+		}
 	}
 
-	//check default shortcut
+	//check default shortcut (when user app has no action shortcuts defined
+	// but we want these shortcuts to still work)
 	if (action_name=="data_save_row")
 		return (e->key() == Key_Return || e->key() == Key_Enter) && e->state()==ShiftButton;
 	if (action_name=="edit_delete_row")
-		return e->key() == Key_Delete && e->state()==ShiftButton;
+		return e->key() == Key_Delete && e->state()==ControlButton;
 	if (action_name=="edit_delete")
 		return e->key() == Key_Delete && e->state()==NoButton;
 	if (action_name=="edit_edititem")
@@ -4148,7 +4160,8 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	if (e->type()==QEvent::KeyPress) {
 		if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-			int k = ke->key();
+			const int k = ke->key();
+			int s = ke->state();
 			//cell editor's events:
 			//try to handle the event @ editor's level
 			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
@@ -4157,21 +4170,25 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 			}
 			else if (m_editor && (o==dynamic_cast<QObject*>(m_editor) || o==m_editor->widget())) {
-				if (   (k==Key_Tab && (k==NoButton || k==ShiftButton))
+				if ( (k==Key_Tab && (s==NoButton || s==ShiftButton))
+					|| (overrideEditorShortcutNeeded(ke))
 					|| (k==Key_Enter || k==Key_Return || k==Key_Up || k==Key_Down) 
 					|| (k==Key_Left && m_editor->cursorAtStart())
 					|| (k==Key_Right && m_editor->cursorAtEnd())
-					) {
+					)
+				{
+					//try to steal the key press from editor or it's internal widget...
 					keyPressEvent(ke);
 					if (ke->isAccepted())
 						return true;
 				}
 			}
-			else if (e->type()==QEvent::KeyPress && (o==this /*|| o==viewport()*/)) {
+			/*
+			else if (e->type()==QEvent::KeyPress && (o==this || (m_editor && o==m_editor->widget()))){//|| o==viewport())
 				keyPressEvent(ke);
 				if (ke->isAccepted())
 					return true;
-			}
+			}*/
 /*todo			else if ((k==Key_Tab || k==(SHIFT|Key_Tab)) && o==d->navRowNumber) {
 				//tab key focuses tv
 				ke->accept();
