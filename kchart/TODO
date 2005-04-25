@@ -74,12 +74,11 @@ Item								   Prio Status
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
   + Save position of Actions toolbar in config.			      2 ----
   + Wrong images for HiLo subtype icons.			      1 ----
-  + Don't warn about unsaved data on exit if we are inside another    2 ----
-	program
+  + Don't warn about unsaved data on exit if inside another program   2 KOLIBS
 
 * Newly introduced bugs.
-  + Get the colored lines back.					      1 ----
-  + Doesn't use the first line as header any more (KSpread)	      1 ----
+  + Get the colored lines back in the line chart.		      1 ----
+  + Doesn't use the first line as header any more (KSpread)	      1 DONE
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 DONE

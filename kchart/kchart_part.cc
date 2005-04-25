@@ -68,13 +68,10 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     }
 
     (void)new WizardExt( this );
-    m_bCanChangeValue=true;
+    m_bCanChangeValue = true;
 
     // Display parameters
     m_displayData = m_currentData;
-
-    // hack
-    //setModified(true);
 }
 
 
@@ -94,9 +91,11 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     QString f;
 
-    // If this is an embedded document, e.g. in KSpread, then do nothing.
-    if (flags == KoDocument::InitDocEmbedded)
+    // If this is an embedded document, e.g. in KSpread, then we can't
+    // change the data.
+    if (flags == KoDocument::InitDocEmbedded) {
 	return true;
+    }
 
     // Mark the document as empty.
     if (flags == KoDocument::InitDocEmpty) {

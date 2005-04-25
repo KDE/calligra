@@ -158,13 +158,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 	m_importData->setEnabled(false);
     }
 
-#if 0
-    // Make sure there is always some test data.
-    createTempData();
-#else
-    //((KChartPart*)koDocument())->initTestChart();
-#endif
-
     updateGuiTypeOfChart();
 }
 

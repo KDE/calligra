@@ -9,8 +9,16 @@
 	(misc methods): call setAxisDefaults.
 
 2005-04-17  Fredrik Edemar  <f_edemar@linux.se>
-        * KDChartBarPainter.cpp (KDChartBarPainter): Prevent the arrow to be drawn at the bottom of the lowest bar when dealing with negative numbers in a 3D bar chart. If all bars are <= 0 the bars with value 0 will still have an arrow.
-        * kchart_part.cc (KChartPart), kchart_params.cc (KChartParams): Make sure the excess arrow is solid by calling setDrawSolidExcessArrows(true) after a chart has been loaded or created.
+
+        * KDChartBarPainter.cpp (KDChartBarPainter): Prevent the arrow to
+	be drawn at the bottom of the lowest bar when dealing with
+	negative numbers in a 3D bar chart. If all bars are <= 0 the bars
+	with value 0 will still have an arrow.
+	
+        * kchart_part.cc (KChartPart), kchart_params.cc (KChartParams):
+	Make sure the excess arrow is solid by calling
+	setDrawSolidExcessArrows(true) after a chart has been loaded or
+	created.
 
 2005-04-13  Inge Wallin  <ingwa@dhcp-254-182.lkpg.cendio.se>
 
