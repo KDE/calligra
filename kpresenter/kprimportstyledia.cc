@@ -52,7 +52,7 @@ void KPrImportStyleDia::loadFile()
 #if 0 //For the future
     lst << "application/vnd.oasis.opendocument.presentation";
 #endif
-    fd.setMimeFilter( lst );//TODO oasis mode
+    fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
     KURL url;
     if ( fd.exec() != QDialog::Accepted )
@@ -66,7 +66,6 @@ void KPrImportStyleDia::loadFile()
         return;
     }
     QMap<QString, QString>insertStyle;
-    // ### TODO network transparency
     KoStore* store=KoStore::createStore( this, url.path(), KoStore::Read );
     if (store )
     {

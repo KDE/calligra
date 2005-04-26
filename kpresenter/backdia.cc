@@ -73,7 +73,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   int _xfactor, int _yfactor, KPrPage *m_page )
     : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|
                    KDialogBase::User1|KDialogBase::User2 ),
-      m_picture(backPic),m_oldpicture(backPic), m_useMasterBackground( 0 )
+      m_useMasterBackground( 0 ), m_picture(backPic),m_oldpicture(backPic)
 {
     lockUpdate = true;
 
