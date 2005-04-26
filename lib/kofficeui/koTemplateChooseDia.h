@@ -173,31 +173,6 @@ public:
                              const QCString& templateType,
                              QWidget* parent);
 
-#if 0 // DO NOT COMMIT
-    /**
-     * Alternate API, in case no KoDocument is available [and for backwards compatibility]
-     * @param instance the KInstance of your app
-     * @param file this is the filename which is returned to your app
-     * More precisely, it's a url (to give to KURL) if ReturnType is File
-     * and it's a path (to open directly) if ReturnType is Template
-     *
-     * @param format is the mimetype of the app (e.g. application/x-kspread)
-     * @param nativeName is the name of your app (e.g KSpread)
-     * @param nativePattern UNUSED
-     * @param dialogType the type of the dialog
-     * @param templateType the template type of your application (see kword or
-     *        kpresenter for details)
-     * @return The return type (see above)
-     */
-    static ReturnType choose(KInstance* instance, QString &file,
-                             const QCString &format,
-                             const QString &nativePattern=QString::null,
-                             const QString &nativeName=QString::null,
-                             const DialogType &dialogType=Everything,
-                             const QCString& templateType="",
-                             QWidget* parent = 0);
-#endif
-
 private:
     /// Ditto, with extraNativeMimeTypes added
     static ReturnType choose(KInstance* instance, QString &file,
