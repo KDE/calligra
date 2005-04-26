@@ -3,13 +3,13 @@ New applications: krita, kexi
 Krita
 =====
 
-Krita is an image editor and paint application with a wide range of 
-applications, from photo editing to the creation of original artwork. 
-Sporting a clear and uncluttered interface (for a paint app...) it makes the 
-features it delivers accessible and intuitive to use. 
+Krita is an image editor and paint application with a wide range of
+applications, from photo editing to the creation of original artwork.
+Sporting a clear and uncluttered interface (for a paint app...) it makes the
+features it delivers accessible and intuitive to use.
 
-This is the first public release of Krita and while it provides a coherent set 
-of features, it is only the first stepping stone towards a flexible paint 
+This is the first public release of Krita and while it provides a coherent set
+of features, it is only the first stepping stone towards a flexible paint
 application for artists and image editors.
 
 Krita offers:
@@ -92,20 +92,26 @@ KPresenter:
 * PageUp/PageDown during presentation now goes to beginning of the next/previous slide
 * New "statistic" variables (number of words, number of lines etc.)
 
-KSpread: 
+KSpread:
 * OASIS file format support (incomplete)
 * Support for right-to-left spreadsheets
 * Cell validity
-    + new type added: list 
+    + new type added: list
     + new data added: differentto
     + Add Input help (allow to display help)
     + Allow blanks cell
 * Conditional cell attribute:
     + Add new data "differentto"
+* New functions:
+    + ACOT
+    + RANDNORM (gaussian random numbers)
+    + REGEXP
+    + REGEXPRE (regexp replace)
+    + SUMIF (conditional sum)
 * .......
 
 KChart:
-* New maintainer. Many, *many* bugfixes. 
+* New maintainer. Many, *many* bugfixes.
 * Removed a lot of old non-working stuff. It will reappear, working, in future versions.
 * New, much improved, data editor
 * Same startup dialog as the rest of KOffice
@@ -128,12 +134,24 @@ Kivio:
 * Added a tool for adding connector targets to stencils
 
 Filters:
+* KWord HTML filter
+    + Ability to link an external stylesheet to a HTML page
+
 * Gnumeric import/export (add new support)
     + Text rotation
     + Cell validation
     + Print repeate column
     + Document information
     + Area name
+
+* KSpread HTML export
+    + Sheets can be exported to separate HTML pages
+    + Sheets are browsable by a table of contents
+    + User can define which sheets to export
+    + Ability to link an external stylesheet to a HTML page
+    + The encoding of the HTML page is configurable
+    + Borders are optional
+    + The cell spacing is configurable
 
 * OoImpress:
     + Custom slide show
