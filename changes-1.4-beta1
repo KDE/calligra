@@ -73,6 +73,8 @@ KWord:
 
 KPresenter:
 * Master page feature
+* Reworked property editor
+* Reworked object/page effects
 * Footer and headers can be shown/hidden in each page
 * Custom Slide Show
 * OASIS file format support (incomplete)
