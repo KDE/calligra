@@ -95,6 +95,10 @@ KPresenter:
 KSpread:
 * OASIS file format support (incomplete)
 * Support for right-to-left spreadsheets
+* Calendar plugin
+* dependencies are handled correctly
+* much improved value parsing and formatting
+* Generic format support (the cell format remains 'generic' until explicitely set)
 * Cell validity
     + new type added: list
     + new data added: differentto
@@ -108,7 +112,9 @@ KSpread:
     + REGEXP
     + REGEXPRE (regexp replace)
     + SUMIF (conditional sum)
-* .......
+* Multiple steps undo and redo
+* Improved handling of hyperlinks
+* Better icons for toolbar and templates
 
 KChart:
 * New maintainer. Many, *many* bugfixes.
@@ -134,13 +140,17 @@ Kivio:
 * Added a tool for adding connector targets to stencils
 
 Filters:
+* WordPerfect import filter for KWord: brand new, now based on libwpd
+
+* new Microsoft Excel import filter for KSpread
+
 * KWord HTML filter
     + Ability to link an external stylesheet to a HTML page
 
-* Gnumeric import/export (add new support)
+* Gnumeric import/export: now supports
     + Text rotation
     + Cell validation
-    + Print repeate column
+    + Print repeated columns
     + Document information
     + Area name
 
