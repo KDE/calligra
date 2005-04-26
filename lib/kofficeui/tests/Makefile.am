@@ -9,8 +9,7 @@ METASOURCES = AUTO
 
 check_PROGRAMS = kopointtest korecttest # coloraction_test
 
-check: kopointtest korecttest
-	./kopointtest && ./korecttest
+TESTS = kopointtest korecttest
 
 #coloraction_test_SOURCES = coloraction_test.cpp
 #coloraction_test_LDADD = ../libkofficeui.la
