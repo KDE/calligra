@@ -138,6 +138,7 @@ Kivio:
 * Moving selected stencils with the keyboard
 * Added a docker for adding stencils to the document
 * Added a tool for adding connector targets to stencils
+* Added a polyline connector
 
 Filters:
 * WordPerfect import filter for KWord: brand new, now based on libwpd
