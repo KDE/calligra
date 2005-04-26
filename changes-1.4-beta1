@@ -54,6 +54,7 @@ kotext (shared by KWord and KPresenter):
 * Tab/Shift+Tab for changing indentation in lists
 * Rewritten spell-checking support (based on kspell2, the main reason for the kdelibs >= 3.3 requirement)
  which is much faster and solves many problems (e.g. KOffice-1.3's hanging right-click-menu)
+* Improved autocorrection (better URL detection among other things)
 
 KWord:
 * OASIS file format support (almost complete)
@@ -128,6 +129,7 @@ KChart:
 * Export to SVG format
 * Import data from text files (not finished in the beta)
 * Much improved manual
+* Print support
 
 KFormula:
 * OASIS file format support (incomplete)
