@@ -4564,7 +4564,6 @@ void KPresenterView::startKSpell()
     m_spell.kospell->check( m_spell.textIterator, true );
 
     delete m_spell.dlg;
-    m_spell.dlg = 0L;
     m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
     m_spell.dlg->activeAutoCorrect( true );
     QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
