@@ -94,6 +94,7 @@ KPresenter:
 
 KSpread: 
 * OASIS file format support (incomplete)
+* Support for right-to-left spreadsheets
 * Cell validity
     + new type added: list 
     + new data added: differentto
