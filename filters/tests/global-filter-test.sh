@@ -73,6 +73,31 @@ case "$1" in
 	    exit 1;
 	esac
 	;;
+	krita)
+	appname=krita
+	oldextension=kra
+	case "$3" in
+		magick-png)
+		newextension=png
+		newmimetype=image/png
+		;;
+                magick-gif)
+                newextension=gif
+                newmimetype=image/gif
+                ;;
+                magick-jpeg)
+                newextension=jpg
+                newmimetype=image/jpeg
+                ;;
+                magick-tiff)
+                newextension=tiff
+                newmimetype=image/tiff
+                ;;
+		*)
+		printf "Usage: %s {kspread|kword|kpresenter|krita} <file name> {magick-png}\n" "$0"
+		exit1;
+	esac
+	;;
 	kpresenter)
 	appname=kpresenter
 	oldextension=kpr
@@ -87,7 +112,7 @@ case "$1" in
 	esac
 	;;
 	*)
-	printf "Usage: %s {kspread|kword|kpresenter} <file name> <type of filter>\n" "$0"
+	printf "Usage: %s {kspread|kword|kpresenter|krita} <file name> <type of filter>\n" "$0"
 	exit 1;
 esac
 	
