@@ -44,6 +44,9 @@ KOffice-wide changes:
 * Improvements to the DCOP interface for loading and saving.
 * -dpi command line option to override the DPI detected by X. You can set one value for x and y, or use -dpi x,y
 * Improve filter chains to avoid absurd chains (e.g. kword -> plain text -> kspread)
+* Startup dialog: themeable icons, correct initial tab, hide non-existent recent local files
+* Page layout dialog: better preview, new GUI for margins
+* Rulers: made more readable at all resolutions, added tooltips
 
 kotext (shared by KWord and KPresenter):
 * Word completion with tooltip
@@ -99,6 +102,19 @@ KSpread:
 * Conditional cell attribute:
     + Add new data "differentto"
 * .......
+
+KChart:
+* New maintainer. Many, *many* bugfixes. 
+* Removed a lot of old non-working stuff. It will reappear, working, in future versions.
+* New, much improved, data editor
+* Same startup dialog as the rest of KOffice
+* Templates (only one so far)
+* Data as rows or columns
+* Linear or logarithmic scale
+* Export to PNG format
+* Export to SVG format
+* Import data from text files (not finished in the beta)
+* Much improved manual
 
 KFormula:
 * OASIS file format support (incomplete)
