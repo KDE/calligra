@@ -78,7 +78,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    virtual void saveOasis(KoXmlWriter&, KoSavingContext&) const;
+    virtual void saveOasis(KoXmlWriter&, KoSavingContext&, bool saveFrames ) const;
     void paste( QDomNode& formulaElem );
 
     KFormula::Container* getFormula() const { return formula; }

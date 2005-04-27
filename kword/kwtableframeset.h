@@ -491,7 +491,7 @@ public:
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
 
-    virtual void saveOasis( KoXmlWriter&, KoSavingContext& ) const;
+    virtual void saveOasis( KoXmlWriter&, KoSavingContext&, bool saveFrames ) const;
     void loadOasis( const QDomElement& tag, KoOasisContext& context );
 
 

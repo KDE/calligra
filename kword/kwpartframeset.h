@@ -54,7 +54,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
 
     virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
 

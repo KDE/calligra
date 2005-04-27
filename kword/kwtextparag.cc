@@ -829,7 +829,7 @@ void KWTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             KWFrameSet* fs = static_cast<KWAnchor *>( ch.customItem() )->frameSet();
             if ( fs->type() == FT_TABLE ) {
                 // TODO maybe save parag style? extract a common method out of KoTextStringChar::saveOasis
-                fs->saveOasis( writer, context );
+                fs->saveOasis( writer, context, true );
                 return;
             }
         }

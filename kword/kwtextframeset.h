@@ -157,7 +157,7 @@ public:
     /// Save the contents of a frame (i.e. the text)
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
     /// Save a complete textbox (frame and text)
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
 
     virtual QString toPlainText() const;
 

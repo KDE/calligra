@@ -2879,8 +2879,7 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
                     // Otherwise copy only the frame information
                     if ( frame == firstFrame || isTable )
                     {
-                        // TODO pass bool saveFrames to KWFrame::saveOasis, probably
-                        fs->saveOasis( bodyWriter, savingContext /*, isTable ? true : false - was toXML's saveFrames parameter*/ );
+                        fs->saveOasis( bodyWriter, savingContext, /*TODO: check this: isTable ? true :*/ false );
                         if ( plainText )
                             *plainText += fs->toPlainText();
                     }
@@ -2993,7 +2992,7 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
             if ( fs->isVisible() && // HACK to avoid saving headers/footers for now
                  !fs->isFloating() &&
                  !fs->isDeleted() ) {
-                fs->saveOasis( writer, context );
+                fs->saveOasis( writer, context, true );
             }
         }
 

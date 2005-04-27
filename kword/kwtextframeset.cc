@@ -1706,22 +1706,42 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
     m_textobj->saveOasisContent( writer, context );
 }
 
-void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const
 {
     // Save first frame with the whole contents
     KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles() );
+    frame->startOasisFrame( writer, context.mainStyles(), getName() );
+
+    QString nextFrameName = getName() + "-";
 
     writer.startElement( "draw:text-box" );
     if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
         writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
-
+    if ( frames.count() > 1 && saveFrames )
+        writer.addAttribute( "draw:chain-next-name", nextFrameName + "2" );
     saveOasisContent( writer, context );
-    writer.endElement();
-
+    writer.endElement(); // draw:text-box
     writer.endElement(); // draw:frame
-    // TODO: save other frames using chaining
-    // ......... but not when called from KWDocument::saveSelectedFrames
+
+    // Save other frames using chaining
+    if ( saveFrames ) // false when called from KWDocument::saveSelectedFrames
+    {
+        int frameNumber = 2;
+        QPtrListIterator<KWFrame> frameIter( frameIterator() );
+        ++frameIter; // skip first frame, already saved
+        for ( ; frameIter.current(); ++frameIter, ++frameNumber )
+        {
+            frameIter.current()->startOasisFrame( writer, context.mainStyles(), nextFrameName + QString::number( frameNumber ) );
+            writer.startElement( "draw:text-box" );
+            if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
+                writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
+            if ( frameNumber + 1 < (int)frames.count() )
+                writer.addAttribute( "draw:chain-next-name", nextFrameName + QString::number( frameNumber+1 ) );
+            // No contents. Well, OOo saves an empty paragraph, but I'd say that's wrong.
+            writer.endElement();
+            writer.endElement(); // draw:frame
+        }
+    }
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )

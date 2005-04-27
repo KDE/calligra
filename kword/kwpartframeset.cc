@@ -135,7 +135,7 @@ QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
     return QDomElement();
 }
 
-void KWPartFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWPartFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool ) const
 {
     // TODO
 }

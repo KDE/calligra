@@ -290,7 +290,7 @@ public:
     void loadBorderProperties( KoStyleStack& styleStack );
 
     QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
-    void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles ) const;
+    void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, const QString& name ) const;
     void saveBorderProperties( KoGenStyle& frameStyle ) const;
 
     void setMinFrameHeight(double h);
@@ -687,7 +687,7 @@ public:
     virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true )
     { return save( parentElem, saveFrames ); }
     /// Save to OASIS format
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const = 0;
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const = 0;
 
     /// load from XML - when loading
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
@@ -914,7 +914,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
 
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,

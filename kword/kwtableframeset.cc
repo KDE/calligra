@@ -2059,7 +2059,7 @@ void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progr
 // Called by KWAnchor for inline tables
 // TODO: for non-inline ones we need a text-box around us...
 // Well, even for inline-as-char ones.... Currently being debated with OASIS.
-void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool ) const
 {
     writer.startElement( "table:table" );
     writer.addAttribute( "table:name", getName() );

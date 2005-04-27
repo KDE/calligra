@@ -257,7 +257,7 @@ void KWAnchor::save( QDomElement &parentElem )
 
 void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    m_frameset->saveOasis( writer, context );
+    m_frameset->saveOasis( writer, context, true );
 }
 
 bool KWAnchor::ownLine() const

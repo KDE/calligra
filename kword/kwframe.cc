@@ -666,10 +666,10 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     setRunAroundSide( runAroundSide );
 }
 
-void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) const
+void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, const QString& name ) const
 {
     writer.startElement( "draw:frame" );
-    writer.addAttribute( "draw:name", frameSet()->getName() ); // ### framesets are named, not frames...
+    writer.addAttribute( "draw:name", name );
     writer.addAttribute( "draw:style-name", saveOasisFrameStyle( mainStyles ) );
 
     if ( !frameSet()->isFloating() )
@@ -2288,12 +2288,12 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     }
 }
 
-void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool /*saveFrames*/ ) const
 {
     if( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     KWFrame* frame = frames.getFirst();
-    frame->startOasisFrame( writer, context.mainStyles() ); // draw:frame
+    frame->startOasisFrame( writer, context.mainStyles(), getName() ); // draw:frame
     writer.startElement( "draw:image" );
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );
