@@ -31,6 +31,38 @@ Caveats:
 * In this beta version exif data embedded in jpeg images is not preserved.
 * Some tools and menu options do not yet function completely correctly.
 
+===============
+
+Kexi   [ this is from http://www.kexi-project.org/wiki/wikiview/index.php?AnnouncementForKOffice1.4 ]
+====
+
+KOffice 1.4 is the first official release to include Kexi - the KOffice database management application. 
+ Kexi is an integrated environment for managing data. It can be used for creating database schemas; inserting data; performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries and forms - are stored in the database, making it easy to share databases. 
+
+ Kexi is considered as a long awaited Open Source competitor for MS Access, Filemaker and Oracle Forms. Its development is motivated by the lack of Rapid Application Development (RAD) tools for database systems that are sufficiently powerful, inexpensive, open standards driven and portable across many OSes and hardware platforms.
+
+Overview 
+ Supports database storage in files and on database servers. 
+ Graphical interface for creating and altering table structures. 
+ Form entry, with visual form designer. 
+ Advanced tabular data view. 
+ Intuitive query designer - no knowledge of SQL required! 
+ Integrated SQL Editor available for advanced users.
+
+Data Processing and Access 
+ Data migration from MySQL, PostgreSQL and MS Access databases (MS Access available as an external plugin). 
+ KexiDB API available for developers for integration with other applications. 
+ Scripting support with Python language - hidden for 0.1 version. 
+ (JavaScript/ECMA-Script support is planned) 
+ Easy data report generation (planned). 
+
+Database Storage 
+ Kexi can store databases in files and on database servers, while providing a common user interface. Database drivers for the following database engines are available: 
+ - SQLite (Native file format: version 2 and 3) 
+ - PostgreSQL 
+ - MySQL 
+ Support for other database systems is planned for future versions, including the ODBC interface, for simpler and more flexible integration in corporate environments.
+
 ===================
 
 KOffice Workspace (koshell):
@@ -141,6 +173,10 @@ Kivio:
 * Added a docker for adding stencils to the document
 * Added a tool for adding connector targets to stencils
 * Added a polyline connector
+
+Karbon:
+* OASIS file format support (incomplete)
+* Build system fixes
 
 Filters:
 * WordPerfect import filter for KWord: brand new, now based on libwpd
