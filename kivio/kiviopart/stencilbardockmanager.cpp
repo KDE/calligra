@@ -273,15 +273,17 @@ void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget *
 {
   pBar->deletePageAndButton(pBtn);
 
-
   // remove KivioStackBar if no more pages
   if (!pBar->visiblePage()) {
     int k = m_pBars.findRef(pBar);
+
     if ( k!= -1 ) {
       m_pBars.remove(k);
-      m_pBars.insert(k,0L);
+      pBar = 0;
+    } else {
+      delete pBar;
+      pBar = 0;
     }
-    delete pBar;
   }
 }
 
