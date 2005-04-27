@@ -108,7 +108,7 @@ public:
   int extraXCells;
   int extraYCells;
 
-  // FIXME (comment): What are these for?
+  // Number of cells merged by the user in X and Y directions.
   int mergedXCells;
   int mergedYCells;
 
@@ -1307,10 +1307,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       setFlag( Flag_CellTooShortX );
   }
 
-  // Do we have to occupy additional cells to the right?
+  // Do we have to occupy additional cells to the right?  This is only
+  // done for cells that have no merged cells in the Y direction.
+  //
+  // FIXME: Check if all cells along the merged edge to the right are
+  //        empty and use the extra space?  No, probably not.
+  //
   if ( d->textWidth + indent > ( width - 2 * BORDER_SPACE
 				 - leftBorderWidth( _col, _row )
-				 - rightBorderWidth( _col, _row ) ) )
+				 - rightBorderWidth( _col, _row ) )
+       && ( !d->hasExtra() || d->extra()->mergedYCells == 0 ) )
   {
     int c = d->column;
   
@@ -1750,9 +1756,6 @@ void KSpreadCell::textSize( QPainter &_paint )
 				    * ( fm.ascent() + fm.descent() ) ) ) ) 
 			+ fm.width( d->strOutText ) 
 			  * cos ( tmpAngle * M_PI / 180 ) ) );
-
-    //kdDebug(36001) << "d->textWidth" << d->textWidth 
-    //<< "d->textHeight" << d->textHeight << endl;
   }
   else {
     // Vertical text.
@@ -2068,8 +2071,20 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   double  width  = colFormat->dblWidth();
   double  height = rowFormat->dblHeight();
   if (d->hasExtra()) {
-    width  += d->extra()->extraXCells ? d->extra()->extraWidth  : 0;
-    height += d->extra()->extraYCells ? d->extra()->extraHeight : 0;
+    // FIXME: For some very obscure reason, d->extraWidth/Height
+    //        contains the total width/height if we have a merged cell.
+    //        If we have just found some empty cells to the right/below 
+    //        that we can extend into, then d->extraWidth/Height 
+    //        contains the *extra* width/height (which the name also 
+    //        suggests).
+    if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
+      width  = d->extra()->extraWidth;
+      height = d->extra()->extraHeight;
+    }
+    else {
+      width  += d->extra()->extraXCells ? d->extra()->extraWidth  : 0;
+      height += d->extra()->extraYCells ? d->extra()->extraHeight : 0;
+    }
   }
 
   // Handle right-to-left layout.
@@ -4110,7 +4125,7 @@ void KSpreadCell::incPrecision()
   if ( !value().isNumber() )
     return;
   int tmpPreci = precision( column(), row() );
-  kdDebug(36001) << "incPrecision: tmpPreci = " << tmpPreci << endl;
+
   if ( tmpPreci == -1 )
   {
     int pos = d->strOutText.find(decimal_point);

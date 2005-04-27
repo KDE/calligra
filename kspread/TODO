@@ -52,10 +52,11 @@ General bugs
   + 59068: Error show text on cell with right align with text	      1	DONE
 	   overlapped left cell.
   + 66859: Decimals are in the next horizontal cell		      1 DONE
-  + 77843: Vertical text alignment problem			      1 ----
+  * 77842: Strange text wrapping behavior			      1 DONE
+  + 77843: Vertical text alignment problem			      1 DONE
   + Border on a cell in the cell format dialog -> the line width      1 ----
     does not "take".
-  + Indent and multiline doesn't work				      1 ----
+  + Indent and multiline doesn't work				      2 ----
 
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
