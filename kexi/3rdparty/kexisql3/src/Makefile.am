@@ -50,7 +50,7 @@ libkexisql3_la_SOURCES = \
 AM_CFLAGS = -DNO_TCL=1
 
 ksqlite_SOURCES = shell.c
-ksqlite_LDADD = $(top_builddir)/kexi/3rdparty/kexisql3/src/libkexisql3.la $(LIBREADLINE)
+ksqlite_LDADD = libkexisql3.la $(LIBREADLINE)
 
 libkexisql3_la_LIBADD =
 libkexisql3_la_LDFLAGS = -version-info 3:0 $(all_libraries) --no-undefined
