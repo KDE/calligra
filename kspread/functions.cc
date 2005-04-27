@@ -44,7 +44,7 @@ public:
   QDict<Function> functions;
 };
 
-}; // namespace KSpread
+} // namespace KSpread
 
 
 using namespace KSpread;
