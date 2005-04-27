@@ -40,7 +40,7 @@ KDE_OPTIONS=nofinal
 bin_PROGRAMS = keximigratetest
 
 keximigratetest_SOURCES = keximigratetest.cpp
-keximigratetest_LDADD = $(top_builddir)/kexi/migration/libkeximigrate.la \
+keximigratetest_LDADD = libkeximigrate.la \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/main/libkeximain.la \
