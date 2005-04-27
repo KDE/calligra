@@ -2112,7 +2112,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     QRect         markerArea( view->marker(), bottomRight );
     selected = selected && !( markerArea.contains( cellRef ) );
 
-    // Dont draw any selection at all when printing.
+    // Don't draw any selection at all when printing.
     if ( painter.device()->isExtDev() || !drawCursor )
       selected = false;
   }
@@ -3249,14 +3249,16 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( sheetDir == KSpreadSheet::RightToLeft )
-        painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                          QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_right ),
+	// FIXME: There is probably Cut&Paste bugs here as well as below.  
+	//        The QMIN/QMAX and left/right pairs don't really make sense.
+        painter.drawLine( QMAX( zrect_left,   zcellRect_right ),
+                          QMAX( zrect_top,    zcellRect_top - top ),
+                          QMIN( zrect_right,  zcellRect_right ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
       else
-        painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                          QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_right ),
+        painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+                          QMAX( zrect_top,    zcellRect_top - top ),
+                          QMAX( zrect_left,   zcellRect_left ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
     }
     else {

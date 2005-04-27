@@ -54,9 +54,7 @@ General bugs
   + 66859: Decimals are in the next horizontal cell		      1 DONE
   * 77842: Strange text wrapping behavior			      1 DONE
   + 77843: Vertical text alignment problem			      1 DONE
-  + Border on a cell in the cell format dialog -> the line width      1 ----
-    does not "take".
-  + Indent and multiline doesn't work				      2 ----
+  + Indent and multiline doesn't work together			      2 ----
 
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
@@ -66,7 +64,7 @@ General bugs
   + 72798: selective print comes up with "nothing to print"	      1 ----
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 DONE?
-  + 87367: Ugly postscript rendering of cell borders.		      1 ----
+  + 87367: Ugly postscript rendering of cell borders.		      1 DONE
   + 88252: content larger than column are not print as PDF	      1 DONE
   + 95159: Many blank pages when printing spreadsheet to PDF file.    1 ****
 	Duplicate bug.  See analysis below
@@ -104,6 +102,8 @@ General bugs
     * partially done, the rest requires the new formula parser, and it won't
       be 100% done afterwards, if we use koscript-compat layer for functions
   + 87471: format of whole column does not change.		      1 ----
+  + Border on a cell in the cell format dialog -> the line width      1 ----
+    does not "take".
 
 * Investigate further if these are important.
   + 48037: 1. Insert special doesn't work			      1 DONE
