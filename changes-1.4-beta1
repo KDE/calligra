@@ -176,6 +176,9 @@ Kivio:
 
 Karbon:
 * OASIS file format support (incomplete)
+* New color dialog
+* Small preview widget
+* ZoomIn/ZoomOut actions
 * Build system fixes
 
 Filters:
