@@ -190,7 +190,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>In this field you can enter an URL for your stylesheet. It's possible to point to a stylesheet on your harddrive or somewhere on the Internet.</string>
+                        <string>In this field you can enter an URL for your stylesheet. It is possible to point to a stylesheet on disk, or to somewhere on the Internet.</string>
                     </property>
                 </widget>
             </vbox>
