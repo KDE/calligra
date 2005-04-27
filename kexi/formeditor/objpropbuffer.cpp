@@ -135,11 +135,13 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			if (m_widgets.first()) {
 				// If the property is changed, we add it in ObjectTreeItem modifProp
 				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
-				if((*this)[property].changed())
-					tree->addModifiedProperty(property, m_widgets.first()->property(property));
+				if (tree) {
+					if((*this)[property].changed())
+						tree->addModifiedProperty(property, m_widgets.first()->property(property));
 
-				m_widgets.first()->setProperty(property, value);
-				emit propertyChanged(m_widgets.first(), property, value);
+					m_widgets.first()->setProperty(property, value);
+					emit propertyChanged(m_widgets.first(), property, value);
+				}
 			}
 		}
 		else
@@ -285,8 +287,10 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 					continue;
 				}
 
+				kdDebug() << meta->valueToKey(w->property(propertyName).toInt()) << endl;
 				add(new KexiProperty(propertyName,
 					meta->valueToKey(w->property(propertyName).toInt()),
+//					w->property(propertyName).toInt(),
 					new KexiProperty::ListData(QStringList::fromStrList(keys),
 						descList(QStringList::fromStrList(keys))),
 					desc)
@@ -708,14 +712,27 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 void
 ObjectPropertyBuffer::updateOldValue(ObjectTreeItem *tree, const char *property)
 {
-	if(tree->modifiedProperties()->contains(property))
+	KexiProperty &p = (*this)[property];
+	if(p.isNull())
+		return;
+	QVariantMap::ConstIterator it( tree->modifiedProperties()->find(property) );
+	if (it!=tree->modifiedProperties()->constEnd())
 	{
-		if(!(*this)[property])
-			return;
 		blockSignals(true);
-		QVariant v = (*this)[property].value();
-		(*this)[property].setValue( tree->modifiedProperties()->find(property).data() , false);
-		(*this)[property].setValue(v, true);
+		QVariant v = p.value();
+		QVariant objpropvalue = it.data();
+		kdDebug() << "ObjectPropertyBuffer::updateOldValue(): v1: " << objpropvalue << " v2: " << v 
+			<< " p.listData()->keys[ objpropvalue.toInt() ]: " << (p.isFixedList() ? p.listData()->keys[ objpropvalue.toInt() ] : QVariant()) << endl;
+		if (p.isFixedList())
+/*! @todo What about "set" type? */
+			// sometimes enums are remembered as casted to ints, sometimes as string representations...
+			if (objpropvalue.type() == QVariant::Int)
+				p.setValue( p.listData()->keys[ objpropvalue.toInt() ], false );
+			else
+				p.setValue( objpropvalue.toCString(), false );
+		else
+			p.setValue( objpropvalue, false );
+		p.setValue(v, true);
 		blockSignals(false);
 	}
 }

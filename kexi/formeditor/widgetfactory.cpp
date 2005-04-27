@@ -122,10 +122,12 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
 	m_classesByName.setAutoDelete(true);
+	m_hiddenClasses = 0;
 }
 
 WidgetFactory::~WidgetFactory()
 {
+	delete m_hiddenClasses;
 }
 
 void WidgetFactory::addClass(WidgetInfo *w)
@@ -139,6 +141,13 @@ void WidgetFactory::addClass(WidgetInfo *w)
 		return;
 	}
 	m_classesByName.insert( w->className(), w );
+}
+
+void WidgetFactory::hideClass(const char *classname)
+{
+	if (!m_hiddenClasses)
+		m_hiddenClasses = new QAsciiDict<char>(101, false);
+	m_hiddenClasses->insert(classname, (char*)1);
 }
 
 void

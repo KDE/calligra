@@ -1233,7 +1233,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 					tree->storeUnknownProperty(node);
 				else {
 					bool read = lib->readSpecialProperty(w->className(), node, w, tree);
-					if(!read) // the factory doesn't suuport this property neither
+					if(!read) // the factory doesn't support this property neither
 						tree->storeUnknownProperty(node);
 				}
 			}
@@ -1250,6 +1250,11 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 					val = r;
 				}
 				w->setProperty(name.latin1(), val);
+//				int count = w->metaObject()->findProperty(name, true);
+//				const QMetaProperty *meta = w->metaObject()->property(count, true);
+//				if(meta && meta->isEnumType()) {
+//					val = w->property(name.latin1()); //update: we want a numeric value of enum
+//				}
 				tree->addModifiedProperty(name.latin1(), val);
 			}
 		}

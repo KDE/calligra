@@ -42,7 +42,8 @@ class WidgetLibraryPrivate
 		 , services(101, false)
 		 , supportedFactoryGroups(17, false)
 		 , factories(101, false)
-		 , advancedProperties(1009)
+		 , advancedProperties(1009, true)
+		 , hiddenClasses(101, true)
 		 , showAdvancedProperties(true)
 		 , factoriesLoaded(false)
 		{
@@ -65,6 +66,7 @@ class WidgetLibraryPrivate
 		QAsciiDict<char> supportedFactoryGroups;
 		QAsciiDict<WidgetFactory> factories;
 		QAsciiDict<char> advancedProperties;
+		QAsciiDict<char> hiddenClasses;
 		bool showAdvancedProperties : 1;
 		bool factoriesLoaded : 1;
 };
@@ -98,6 +100,8 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 	WidgetInfo *w;
 	for(QAsciiDictIterator<WidgetInfo> it(widgets); (w = it.current()); ++it)
 	{
+		if (0 != d->hiddenClasses[ w->className() ])
+			continue; //this class is hidden
 		// check if we want to inherit a widget from a different factory
 		if (!w->m_parentFactoryName.isEmpty() && !w->m_inheritedClassName.isEmpty()) {
 			WidgetFactory *parentFactory = d->factories[w->m_parentFactoryName];
@@ -200,6 +204,12 @@ WidgetLibrary::loadFactories()
 			continue;
 		}
 		d->factories.insert( f->name(), f );
+		//collect information about classes to be hidden
+		if (f->m_hiddenClasses) {
+			for (QAsciiDictIterator<char> it2(*f->m_hiddenClasses); it2.current(); ++it2) {
+				d->hiddenClasses.replace( it2.currentKey(), (char*)1 );
+			}
+		}
 	}
 
 	//now we have factories instantiated: load widgets

@@ -258,6 +258,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add setting anonymous (not stored) queries as form's dataSource
 - display "Autonumber" string for data-aware widgets
 - implement shared action categories to filter out them in 'assigning actions to push buttons'
+- implement "restore default properties" action for widgets
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -272,6 +273,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
  * fire selection dialog for filename editor, color editor, pixmap editor, etc.
  * expand children for cells of type like "Rect"
  * other types- by default: just move cursor to editor
+- add support for "set" types (e.g. AlignTop|AlignBottom) and port form's objpropertybuffer to this
 
 ==== Query GUI Designer TODO: ======
 - add tables dropping from the browser
@@ -491,6 +493,12 @@ Form Designer
 - KexiGradientWidget ifdef'd out for 0.1 release 
   (using KEXI_USE_GRADIENT_WIDGET macro) due to problems with performance 
   and child widget's palettes
+- added possibility of forcing particular class to be hidden 
+  (eg. because it's not ready to use yet or makes no sense in current context)
+- fixed creating KexiProperties for enum values
+- property buffer: sometimes enums are remembered as casted to ints, 
+  sometimes as string representations...
+- a few properties are now hidded due to inmaturity or senseless
 
 2005-04-25
 Main Window
@@ -501,7 +509,6 @@ Project Migration
 - drop existing database before if user configmed overwriting
 - close connection on failures
 - fixes for mdb driver
-
 
 2005-04-22..23
 Table View

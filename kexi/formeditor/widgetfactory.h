@@ -212,7 +212,14 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		WidgetFactory(QObject *parent=0, const char *name=0);
 		virtual ~WidgetFactory();
 
+		/*! Adds a new class described by \a w. */
 		void addClass(WidgetInfo *w);
+
+		/*! This method allows to force a class \a classname to hidden.
+		 It is useful if you do not want a class to be available
+		 (e.g. because it is not implemented well yet for our purposes).
+		 All widget libraries are affected by this setting. */
+		void hideClass(const char *classname);
 
 		/**
 		 * \return all classes which are provided by this factory
@@ -379,6 +386,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QGuardedPtr<Container> m_container;
 //		WidgetInfo::List m_classes;
 		WidgetInfo::Dict m_classesByName;
+		QAsciiDict<char>* m_hiddenClasses;
 
 		//! i18n stuff
 		QMap<QCString, QString> m_propDesc;

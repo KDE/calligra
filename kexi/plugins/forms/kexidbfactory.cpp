@@ -295,6 +295,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["dataSource"] = i18n("Data Source");
 	m_propDesc["formName"] = i18n("Form Name");
 	m_propDesc["onClickAction"] = i18n("On Click");
+
+#ifdef KEXI_NO_UNFINISHED
+	//we don't want not-fully implemented/usable classes:
+	hideClass("KexiPictureLabel");
+	hideClass("KIntSpinBox");
+	hideClass("KComboBox");
+#endif
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -448,11 +455,43 @@ bool
 KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *, 
 	const QCString& property)
 {
+	if (property=="backgroundOrigin"
+		|| property=="backgroundMode" //this is rather useless
+		|| property=="layout" //to large risk to break things by providing this in propeditor
+		)
+		return false;
+
+#ifdef KEXI_NO_UNFINISHED
+	if (property=="paletteBackgroundPixmap"
+		|| property=="icon"
+		|| property=="pixmap"
+		|| property=="accel" /*! @todo reenable accel */
+		)
+		return false;
+#endif
+
+
 	if(classname == "KexiPushButton") {
 		return property!="isDragEnabled" 
+#ifdef KEXI_NO_UNFINISHED
+#endif
 			&& property!="stdItem" /*! @todo reenable stdItem */
-		;
+			;
 	}
+	else if(classname == "KexiDBLineEdit")
+		return property!="urlDropsEnabled"
+#ifdef KEXI_NO_UNFINISHED
+			&& property!="inputMask"
+			&& property!="maxLength" //!< we may want to integrate this with db schema
+#endif
+		;
+	else if(classname == "KexiSubForm")
+		return property!="dragAutoScroll"
+			&& property!="resizePolicy"
+			&& property!="focusPolicy";
+	else if(classname == "KexiDBForm")
+		return property!="iconText";
+
 	return true;
 }
 

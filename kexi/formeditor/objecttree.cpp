@@ -73,11 +73,11 @@ ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &ol
 	if(property == "name")
 		return;
 
-	if(!m_props.contains(property))
-	{
-		m_props.insert(property, oldValue);
+//	if(!m_props.contains(property))
+	//{
+		m_props.replace(property, oldValue);
 		//kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << endl;
-	}
+	//}
 }
 
 void

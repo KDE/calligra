@@ -1092,6 +1092,8 @@ tristate KexiMainWindowImpl::closeProject()
 //		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 
 		if (d->propEditor) {
+			if (d->dialogs.isEmpty())
+				makeWidgetDockVisible(d->propEditor);
 			KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			if(ds)
@@ -1102,11 +1104,10 @@ tristate KexiMainWindowImpl::closeProject()
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		int dwWidth = dw->width();
 		if (ds) {
-				if (d->dialogs.isEmpty())
-					d->navDockSeparatorPos = (100 * dwWidth) / width();
-				else
+				if (!d->dialogs.isEmpty() && d->propEditor->isVisible())
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
-//					d->navDockSeparatorPos = QMAX( ds->separatorPosInPercent(), d->config->readNumEntry("LeftDockPosition", 17) );
+//				else
+//					d->navDockSeparatorPos = (100 * dwWidth) / width();
 
 //				int navDockSeparatorPosWithAutoOpen = (100 * dw->width()) / width() + 4;
 //				d->navDockSeparatorPos = (100 * dw->width()) / width() + 1;
@@ -2501,7 +2502,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 				"<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
 //			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",
 //			"<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
-			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
+			.arg(dlg->partItem()->name()),
 			QString::null,
 			KStdGuiItem::save(),
 			KStdGuiItem::discard());
