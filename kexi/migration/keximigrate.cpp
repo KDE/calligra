@@ -106,12 +106,12 @@ bool KexiMigrate::performImport()
 			kdDebug() << "Failed to copy table " << ts << endl;
 			m_kexiDB->debugError();
 			drv_disconnect();
+			m_kexiDB->disconnect();
 			return false;
 		}
 	}
 
-	drv_disconnect();
-	return true;
+	return drv_disconnect() && m_kexiDB->disconnect();
 }
 
 //=============================================================================
@@ -135,6 +135,15 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 		return false;
 	}
 
+
+	if(m_kexiDB->databaseExists(dbname)) {
+		//drop before recreating (user confirmed overwriting)
+//! todo for file-based databases we can use tmp filename and rename later after success...
+		if (!m_kexiDB->dropDatabase(dbname)) {
+			return false;
+		}
+	}
+
 	if(!m_kexiDB->createDatabase(dbname)) {
 		kdDebug() << "Couldnt create database at destination" << endl;
 		return false;
@@ -142,6 +151,7 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	
 	if (!m_kexiDB->useDatabase(dbname)) {
 		kdDebug() << "Couldnt use newly created database" << endl;
+		m_kexiDB->disconnect();
 		return false;
 	}
 
@@ -156,6 +166,8 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 			failure = true;
 		}
 	}
+	if (failure)
+		m_kexiDB->disconnect();
 	return !failure;
 }
 

@@ -21,7 +21,7 @@ Boston, MA 02111-1307, USA.
 #define KEXIDB_MYSQLCLIENT_P_H
 
 #ifdef Q_WS_WIN
-# include <config-win.h>
+#include <mysql/config-win.h>
 #endif
 #include <mysql.h>
 

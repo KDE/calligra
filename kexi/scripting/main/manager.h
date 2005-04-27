@@ -65,10 +65,8 @@ namespace Kross { namespace Api {
              * function to work with Kross.
              */
             static Manager* scriptManager() {
-                static Manager* m_manager = 0;
-                if(! m_manager)
-                    m_manager = new Manager();
-                return m_manager;
+                static Manager m_manager = Manager();
+                return &m_manager;
             }
 
             /**

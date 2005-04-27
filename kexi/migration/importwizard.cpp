@@ -226,9 +226,9 @@ void importWizard::setupdst()
 void importWizard::setupfinish()
 {
     finishPage->hide();
-    QLabel *lblDone = new QLabel(finishPage);
-    lblDone->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
     QVBox *vbox = new QVBox(finishPage);
+    QLabel *lblDone = new QLabel(vbox);
+    lblDone->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
     lblfinishTxt = new QLabel(vbox);
     lblfinishTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 

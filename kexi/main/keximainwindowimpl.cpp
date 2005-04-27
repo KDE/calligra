@@ -358,7 +358,7 @@ void updatePropEditorDockWidthInfo() {
 			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
 				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-				ds->setKeepSize(true);
+//				ds->setKeepSize(true);
 
 				config->setGroup("MainWindow");
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
@@ -1089,6 +1089,15 @@ tristate KexiMainWindowImpl::closeProject()
 			d->propEditorDockSeparatorPos = ds->separatorPosInPercent();
 	}
 	if (d->nav) {
+//		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
+
+		if (d->propEditor) {
+			KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
+			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+			if(ds)
+				ds->setSeparatorPosInPercent(80);
+		}
+
 		KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		int dwWidth = dw->width();
@@ -1265,7 +1274,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 	#if defined(KDOCKWIDGET_P)
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-			ds->setKeepSize(true);
+//			ds->setKeepSize(true);
 			makeWidgetDockVisible(d->propEditor);
 	//		ds->show();
 		//	ds->resize(400, ds->height());
@@ -1543,6 +1552,8 @@ KexiMainWindowImpl::storeSettings()
 			d->config->setGroup("MainWindow");
 			d->config->writeEntry("RightDockPosition", d->propEditorDockSeparatorPos);
 		}
+		else
+			d->propEditorDockSeparatorPos = 80;
 		if (d->nav && d->navDockSeparatorPos >= 0 && d->navDockSeparatorPos <= 100) {
 			d->config->setGroup("MainWindow");
 			KDockWidget *dw = (KDockWidget *)d->nav->parentWidget();
@@ -1560,7 +1571,8 @@ KexiMainWindowImpl::storeSettings()
 				if (d->dialogExistedBeforeCloseProject)
 					d->config->writeEntry("LeftDockPosition", d->navDockSeparatorPos);
 				else
-					d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77));
+					d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77
+					 / (double(d->propEditorDockSeparatorPos) / 80) ));
 			}
 		}
 	}
@@ -2383,7 +2395,14 @@ KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus 
 
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
-	closeDialog(static_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
+	if (pWnd == d->curDialog && !pWnd->isAttached()) {
+		if (d->propEditor) {
+			// ah, closing detached window - better switch off property buffer right now...
+			d->propBuffer = 0;
+			d->propEditor->editor()->setBuffer( 0, false );
+		}
+	}
+	closeDialog(dynamic_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
 }
 
 tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& messageWhenAskingForName )

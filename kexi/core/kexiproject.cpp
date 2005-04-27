@@ -268,7 +268,7 @@ KexiProject::items(KexiPart::Info *i)
 	if(!cursor)
 		return 0;
 
-	dict = new KexiPart::ItemDict(101);
+	dict = new KexiPart::ItemDict(1009);
 	dict->setAutoDelete(true);
 
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())

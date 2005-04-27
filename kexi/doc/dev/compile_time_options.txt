@@ -91,6 +91,12 @@ GUI XML code will be presented in a tabbed dialog, so you can compare what chang
 and look for possible problems. The "current" XML code will be saved when "save" 
 action is executed.
 
+* KEXI_USE_GRADIENT_WIDGET
+Type: defined/undefined
+Default: undefined
+Description: If defined, KexiGradientWidget is used as form's background. 
+Currently disabled due to problems with performance and child widget's palettes.
+
 
 ==== Obsolete, don't use ====
 

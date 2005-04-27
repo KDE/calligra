@@ -1,6 +1,6 @@
 include( ../common.pro )
 
-win32:QMAKE_CXXFLAGS += /I$(MYSQL_INC)
+INCLUDEPATH += $(MYSQL_INC) $(MYSQL_INC)/mysql
 
 win32:LIBS += $(MYSQL_LIB)/mysqlclient.lib
 

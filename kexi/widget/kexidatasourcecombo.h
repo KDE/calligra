@@ -48,7 +48,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceCombo : public QComboBox
 		~KexiDataSourceCombo();
 
 		/**
-		 * @reutrns the selected datasource
+		 * @return the selected datasource
 		 */
 		DSInfo selectedSource();
 

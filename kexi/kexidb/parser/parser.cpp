@@ -118,7 +118,7 @@ Parser::parse(const QString &statement)
 	init();
 	clear();
 	d->statement = statement;
-	return parseData(this, statement.latin1());
+	return parseData(this, statement.utf8());
 }
 
 void

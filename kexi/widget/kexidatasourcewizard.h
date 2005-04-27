@@ -48,12 +48,12 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceWizard : public KWizard
 		~KexiDataSourceWizard();
 
 		/**
-		 * @returns the chosen datasource
+		 * @return the chosen datasource
 		 */
 		DSInfo dataSource() { return m_ds; }
 
 		/**
-		 * @reutrns the fields chosen to be displayed
+		 * @return the fields chosen to be displayed
 		 */
 		KexiDB::FieldList *fields() { return m_fields; }
 

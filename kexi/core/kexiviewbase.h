@@ -107,7 +107,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 so property editor contents need to be completely replaced. */
 		void propertyBufferSwitched();
 
-		/*! \sets dirty flag on or off. It the flag changes, 
+		/*! Sets dirty flag on or off. It the flag changes, 
 		 dirty(bool) signal is emitted by parent dialog (KexiDialog),
 		 to inform the world about that. If this view has a parent view, setDirty() 
 		 is called also on parent view.
@@ -160,7 +160,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Called by KexiDialogBase::storeNewData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
-		 - stores object schema data \sdata in 'kexi__objects' internal table
+		 - stores object schema data \a sdata in 'kexi__objects' internal table
 		   using Connection::storeObjectSchemaData().
 		 Reimpelment this for your needs. 
 		 Requirements: 
@@ -186,7 +186,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Called by KexiDialogBase::storeData().
 		 Default implementation:
 		 - makes a deep copy of \a sdata
-		 - stores object schema data \sdata in 'kexi__objects' internal table
+		 - stores object schema data \a sdata in 'kexi__objects' internal table
 		   using Connection::storeObjectSchemaData().
 		 Reimpelment this for your needs. Should return true on success. 
 		 \sa storeNewData() */

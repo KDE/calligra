@@ -58,7 +58,7 @@ class KexiDBForm::Private
 
 KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject, 
 	const char *name/*, KexiDB::Connection *conn*/)
- : KexiGradientWidget(parent, name)
+ : KexiDBFormBase(parent, name)
  , KexiFormDataItemInterface()
  , d(new Private())
 {
@@ -399,7 +399,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			}
 		}
 	}
-	return KexiGradientWidget::eventFilter(watched, e);
+	return KexiDBFormBase::eventFilter(watched, e);
 }
 
 bool KexiDBForm::valueIsNull()

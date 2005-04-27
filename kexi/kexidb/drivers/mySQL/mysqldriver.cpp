@@ -20,7 +20,7 @@ Boston, MA 02111-1307, USA.
 */
 
 #ifdef Q_WS_WIN
-# include <config-win.h>
+# include <mysql/config-win.h>
 #endif
 #include <mysql.h>
 #include <mysql_version.h>

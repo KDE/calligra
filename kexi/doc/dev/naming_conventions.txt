@@ -98,10 +98,10 @@ to recognise who marked given fragment.
 4.1 We can use the rule as in the rest of KDE code.
 example:
 	QString		objectName(); //wrong
-	QString objectName(); //wrong
+	QString objectName(); //ok
 rule: dont use tabs between words.
 
-4.2 To avoid many indentation level, we can use:
+4.2 To avoid many indentation levels, we can use:
 
 void mymethod()
 {
@@ -124,4 +124,14 @@ void mymethod()
 }
 
 This is good, because made qt and kde sources readable.
+
+4.3 Indentation within classes declaration
+
+class MyClass {
+	public:
+		MyClass();
+		void method();
+	protected:
+};
+
 ANYWAY: we use indentation.

@@ -23,10 +23,15 @@
 
 #include <qpixmap.h>
 
-#include <kexigradientwidget.h>
 #include <form.h>
-
 #include "kexiformdataiteminterface.h"
+
+#ifdef KEXI_USE_GRADIENT_WIDGET
+#include <kexigradientwidget.h>
+# define KexiDBFormBase KexiGradientWidget
+#else
+# define KexiDBFormBase QWidget
+#endif
 
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
@@ -39,7 +44,7 @@ class KexiFormScrollView;
 
 //! A DB-aware form widget
 class KEXIFORMUTILS_EXPORT KexiDBForm : 
-	public KexiGradientWidget,
+	public KexiDBFormBase,
 	public KFormDesigner::FormWidget,
 	public KexiFormDataItemInterface
 {

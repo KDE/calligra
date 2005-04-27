@@ -914,7 +914,7 @@ aExpr9:
 }
 | IDENTIFIER
 {
-	$$ = new VariableExpr( QString::fromLatin1($1) );
+	$$ = new VariableExpr( QString::fromUtf8($1) );
 	
 //TODO: simplify this later if that's 'only one field name' expression
 	kdDebug() << "  + identifier: " << $1 << endl;
@@ -933,7 +933,7 @@ aExpr9:
 /*TODO: shall we also support db name? */
 | IDENTIFIER '.' IDENTIFIER
 {
-	$$ = new VariableExpr( QString::fromLatin1($1) + "." + QString::fromLatin1($3) );
+	$$ = new VariableExpr( QString::fromUtf8($1) + "." + QString::fromUtf8($3) );
 	kdDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
 //	$$ = new Field();
 //	s->setTable($1);
@@ -951,12 +951,9 @@ aExpr9:
 }
 | CHARACTER_STRING_LITERAL
 {
-	QCString s($1);
+	QString s( QString::fromUtf8($1) );
 	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, s.mid(1,s.length()-2) );
-//	$$ = new Field();
-//	$$->setName($1);
-//	parser->select()->addField(field);
-	kdDebug() << "  + constant << s << endl;
+	kdDebug() << "  + constant " << s << endl;
 }
 | INTEGER_CONST
 {
@@ -1083,7 +1080,7 @@ IDENTIFIER
 	
 //addTable($1);
 
-	$$ = new VariableExpr(QString::fromLatin1($1));
+	$$ = new VariableExpr(QString::fromUtf8($1));
 
 	/*
 //TODO: this isn't ok for more tables:
@@ -1112,8 +1109,8 @@ IDENTIFIER
 	//table + alias
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, 
-		new VariableExpr(QString::fromLatin1($1)), 0,
-		new VariableExpr(QString::fromLatin1($2))
+		new VariableExpr(QString::fromUtf8($1)), 0,
+		new VariableExpr(QString::fromUtf8($2))
 	);
 }
 | IDENTIFIER AS IDENTIFIER
@@ -1121,8 +1118,8 @@ IDENTIFIER
 	//table + alias
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary,
-		new VariableExpr(QString::fromLatin1($1)), AS,
-		new VariableExpr(QString::fromLatin1($3))
+		new VariableExpr(QString::fromUtf8($1)), AS,
+		new VariableExpr(QString::fromUtf8($3))
 	);
 }
 ;
@@ -1166,7 +1163,7 @@ ColExpression
 //	parser->select()->addField($$);
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, AS,
-		new VariableExpr(QString::fromLatin1($3))
+		new VariableExpr(QString::fromUtf8($3))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($3))
 	);
 	kdDebug() << " added column expr: " << $$->debugString() << endl;
@@ -1178,7 +1175,7 @@ ColExpression
 //	parser->select()->addField($$);
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, 0, 
-		new VariableExpr(QString::fromLatin1($2))
+		new VariableExpr(QString::fromUtf8($2))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($2))
 	);
 	kdDebug() << " added column expr: " << $$->debugString() << endl;
@@ -1250,7 +1247,7 @@ ColWildCard:
 }
 | IDENTIFIER '.' '*'
 {
-	QString s = QString::fromLatin1($1);
+	QString s = QString::fromUtf8($1);
 	s+=".*";
 	$$ = new VariableExpr(s);
 	kdDebug() << "  + all columns from " << s << endl;

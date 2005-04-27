@@ -257,6 +257,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add setting expressions for data-aware widget's dataSource
 - add setting anonymous (not stored) queries as form's dataSource
 - display "Autonumber" string for data-aware widgets
+- implement shared action categories to filter out them in 'assigning actions to push buttons'
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -426,17 +427,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 --fix permission problems
 
 === 0.1 TODO ===
-Forms
--add "Set Action..." for buttons
-	ccpasteur	jstaniek: this could do the job without changing anything in form core
-	ccpasteur	jstaniek: but I'm afraid I won't have much time to help you before 0.1
-	ccpasteur	jstaniek: what you'll have to do is add a menu item in WidgetFactory::createMenu
-	ccpasteur	jstaniek: then use ObjecTTreeItem::setModifiedProperty("prop_name") when the user picks an action in the dialog
-	ccpasteur	jstaniek: and implment WidgetFactory saveSpecialProperty and readSpecialProperty
-	ccpasteur	jstaniek: slot connection would be done in readSecialProperty
 
 CCMAIL: dkite@shaw.ca
 
+=== after 0.1 TODO ===
 TODO: add time zones support: 1994-11-05T08:15:30-05:00
 TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
 TODO: 0.2: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
@@ -491,7 +485,23 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 -plug 'delete widget' action to 'delete' shared action
--implement shared action categories to filter out them in 'assigning actions to push buttons'
+
+2005-04-27
+Form Designer
+- KexiGradientWidget ifdef'd out for 0.1 release 
+  (using KEXI_USE_GRADIENT_WIDGET macro) due to problems with performance 
+  and child widget's palettes
+
+2005-04-25
+Main Window
+- fixed possible crash of the property editor on detached window closing
+KexiDB/SQL Parser
+- SQL Parser now accepts unicode characters for identifiers and strings
+Project Migration
+- drop existing database before if user configmed overwriting
+- close connection on failures
+- fixes for mdb driver
+
 
 2005-04-22..23
 Table View
