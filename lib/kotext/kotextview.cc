@@ -17,11 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qtimer.h>
-#include <qclipboard.h>
 #include "kotextview.h"
+#include "kotextparag.h"
 #include "koparagcounter.h"
 #include "kotextobject.h"
+#include "KoTextViewIface.h"
+#include "kostyle.h"
+#include "kovariable.h"
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstdaccel.h>
@@ -30,13 +33,13 @@
 #include <kdatatool.h>
 #include <krun.h>
 #include <kmessagebox.h>
-#include <kovariable.h>
 #include <kcommand.h>
-#include "KoTextViewIface.h"
-#include <kostyle.h>
 #include <kbookmarkmanager.h>
 #include <kbookmark.h>
 #include <kurldrag.h>
+
+#include <qtimer.h>
+#include <qclipboard.h>
 
 class KoTextView::KoTextViewPrivate
 {

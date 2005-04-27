@@ -22,25 +22,19 @@
 #include <config.h>
 #endif
 #include "kptextobject.h"
+#include "kptextobject.moc"
 #include "kpgradient.h"
 #include "kprcommand.h"
-
-#include <qwidget.h>
-#include <qpicture.h>
-#include <qpainter.h>
-#include <qwmatrix.h>
-#include <qdom.h>
-#include <qapplication.h>
-#include <qfontdatabase.h>
-
-#include <klocale.h>
-#include <kdebug.h>
-#include <kdeversion.h>
-
+#include "kprcanvas.h"
+#include "kprpage.h"
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
 #include "kprbgspellcheck.h"
-#include <korichtext.h>
+#include "kprvariable.h"
+#include "kprdrag.h"
+
+#include <koAutoFormat.h>
+#include <kotextparag.h>
 #include <kotextobject.h>
 #include <kostyle.h>
 #include <kotextformatter.h>
@@ -50,23 +44,27 @@
 #include <kooasiscontext.h>
 #include <koStyleStack.h>
 #include <ktempfile.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kdeversion.h>
 
 #include <qfont.h>
 #include <qfile.h>
+#include <qwidget.h>
+#include <qpicture.h>
+#include <qpainter.h>
+#include <qwmatrix.h>
+#include <qdom.h>
+#include <qapplication.h>
+#include <qfontdatabase.h>
+#include <qpopupmenu.h>
+#include <qclipboard.h>
 
-#include "kptextobject.moc"
-#include "kprcanvas.h"
-#include "kprpage.h"
-#include "koAutoFormat.h"
 #include <koparagcounter.h>
 #include <kaction.h>
-#include <qpopupmenu.h>
 #include <kovariable.h>
 #include <koVariableDlgs.h>
-#include "kprvariable.h"
 #include <koRuler.h>
-#include "kprdrag.h"
-#include <qclipboard.h>
 #include <koSize.h>
 #include <koxmlns.h>
 #include <kodom.h>

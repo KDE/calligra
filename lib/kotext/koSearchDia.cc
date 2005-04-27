@@ -20,6 +20,7 @@
 */
 
 #include "koSearchDia.h"
+#include "kotextparag.h"
 
 #include <koGlobal.h>
 #include <kotextobject.h>

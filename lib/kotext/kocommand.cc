@@ -19,6 +19,7 @@
 
 #include "kocommand.h"
 #include "kotextobject.h"
+#include "kotextparag.h"
 #include "kovariable.h"
 #include <kdebug.h>
 #include <klocale.h>

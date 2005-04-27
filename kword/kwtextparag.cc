@@ -817,3 +817,22 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
         }
     }
 }
+
+void KWTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+                             int from, int to, bool saveAnchorsFramesets ) const
+{
+    // Special case for inline tables that are alone in their paragraph:
+    // save <table> instead of <p>.
+    if ( string()->length() == 2 /*&& saveAnchorsFramesets*/ ) {
+        KoTextStringChar &ch = string()->at( 0 );
+        if ( ch.isCustom() && dynamic_cast<KWAnchor*>( ch.customItem() )) {
+            KWFrameSet* fs = static_cast<KWAnchor *>( ch.customItem() )->frameSet();
+            if ( fs->type() == FT_TABLE ) {
+                // TODO maybe save parag style? extract a common method out of KoTextStringChar::saveOasis
+                fs->saveOasis( writer, context );
+                return;
+            }
+        }
+    }
+    KoTextParag::saveOasis( writer, context, from, to, saveAnchorsFramesets );
+}

@@ -18,6 +18,7 @@
 */
 
 #include "kotextobject.h"
+#include "kotextparag.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kocommand.h"

@@ -24,6 +24,7 @@
 #include "dateformatwidget_impl.h"
 #include "kocommand.h"
 #include "kotextobject.h"
+#include "kotextparag.h"
 #include "kooasiscontext.h"
 #include <koOasisSettings.h>
 

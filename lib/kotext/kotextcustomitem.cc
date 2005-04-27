@@ -19,6 +19,7 @@
 
 #include "korichtext.h"
 #include "kotextformat.h"
+#include "kotextparag.h"
 #include "kozoomhandler.h"
 #include "kotextdocument.h"
 #include <kdebug.h>

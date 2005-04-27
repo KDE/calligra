@@ -17,6 +17,7 @@
 */
 
 #include "kotextiterator.h"
+#include "kotextparag.h"
 #include "kotextview.h"
 #include <kfinddialog.h>
 #include <kdebug.h>

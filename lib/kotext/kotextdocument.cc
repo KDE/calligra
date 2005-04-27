@@ -18,6 +18,7 @@
 */
 
 #include "kotextdocument.h"
+#include "kotextparag.h"
 #include "kozoomhandler.h"
 #include "kotextformatter.h"
 #include "kotextformat.h"
@@ -70,7 +71,6 @@ void KoTextDocument::init()
     //pProcessor = 0;
     useFC = TRUE;
     pFormatter = 0;
-    indenter = 0;
     fParag = 0;
     m_pageBreakEnabled = false;
     //minw = 0;
@@ -124,7 +124,6 @@ KoTextDocument::~KoTextDocument()
     delete fCollection;
     //delete pProcessor;
     delete buf_pixmap;
-    delete indenter;
     delete backBrush;
     if ( tArray )
 	delete [] tArray;
@@ -856,27 +855,6 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
 
     if ( didGoLeft )
 	cursor->gotoNextLetter();
-}
-
-void KoTextDocument::indentSelection( int id )
-{
-    QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
-    if ( it == selections.end() )
-	return;
-
-    KoTextDocumentSelection sel = *it;
-    KoTextParag *startParag = sel.startCursor.parag();
-    KoTextParag *endParag = sel.endCursor.parag();
-    if ( sel.endCursor.parag()->paragId() < sel.startCursor.parag()->paragId() ) {
-	endParag = sel.startCursor.parag();
-	startParag = sel.endCursor.parag();
-    }
-
-    KoTextParag *p = startParag;
-    while ( p && p != endParag ) {
-	p->indent();
-	p = p->next();
-    }
 }
 
 void KoTextDocument::addCommand( KoTextDocCommand *cmd )

@@ -19,10 +19,11 @@
 
 #include "KoTextViewIface.h"
 #include "kotextview.h"
+#include "kotextparag.h"
+#include "koborder.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
-#include "koborder.h"
 #include <kovariable.h>
 #include <kcommand.h>
 

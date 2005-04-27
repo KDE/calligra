@@ -52,6 +52,7 @@
 #include <koSize.h>
 #include <koPoint.h>
 #include <kodom.h>
+#include <kotextparag.h>
 #include <koxmlns.h>
 
 #include <qxml.h>

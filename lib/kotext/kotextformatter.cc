@@ -18,6 +18,7 @@
 */
 
 #include "kotextformatter.h"
+#include "kotextparag.h"
 #include "kotextformat.h"
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
@@ -233,7 +234,6 @@ bool KoTextFormatterCore::format()
 
     wused = 0;
 
-    bool wrapEnabled = settings->isWrapEnabled( parag );
     QValueList<TemporaryWordData> tempWordData;
 
 #ifdef DEBUG_FORMATTER
@@ -328,11 +328,10 @@ bool KoTextFormatterCore::format()
         kdDebug(32500) << "c='" << QString(c->c) << "' i=" << i << "/" << len << " x=" << x << " ww=" << ww << " availableWidth=" << availableWidth << " (test is x+ww>aW) lastBreak=" << lastBreak << " isBreakable=" << settings->isBreakable(string, i) << endl;
 #endif
         // Wrapping at end of line - one big if :)
-        if ( wrapEnabled
+        if (
              // Check if should break (i.e. we are after the max X for the end of the line)
-             && ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
-                  ( lastBreak != -1 || settings->allowBreakInWords() )
-                  /*|| wrapAtColumn() != -1 && col >= wrapAtColumn()*/ )
+             ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
+               ( lastBreak != -1 || settings->allowBreakInWords() ) )
 
              // Allow two breakable chars next to each other (e.g. '  ') but not more
              && ( !settings->isBreakable( string, i ) ||
@@ -786,7 +785,7 @@ bool KoTextFormatterCore::format()
     y += lineStart->h + m;
 
     tmpWused += currentRightMargin; // ### this can break with a variable right-margin
-    //if ( !wrapEnabled || wrapAtColumn() != -1  )
+    //if ( wrapAtColumn() != -1  )
     //    minw = QMAX(minw, wused);
     //thisminw = minw;
 

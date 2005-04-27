@@ -19,7 +19,15 @@
 */
 
 #include "koAutoFormat.h"
-//#include "kotextdocument.h"
+
+#include "kotextobject.h"
+#include "kotextparag.h"
+#include "kovariable.h"
+#include "koparagcounter.h"
+#include <koDocument.h>
+#include <koSearchDia.h>
+#include <kozoomhandler.h>
+#include <koGlobal.h>
 
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -27,25 +35,17 @@
 #include <kinstance.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
+#include <kcommand.h>
+//#include <kotextformat.h>
+#include <kcompletion.h>
+#include <kcalendarsystem.h>
+
 #include <qfile.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-
-#include <kotextobject.h>
 #include <qdom.h>
-#include <kglobal.h>
-#include <koDocument.h>
-#include "kovariable.h"
-#include "koparagcounter.h"
-#include <kcommand.h>
-//#include <kotextformat.h>
-#include <kcompletion.h>
-#include <koSearchDia.h>
-#include <kozoomhandler.h>
-#include <koGlobal.h>
-
-#include <kcalendarsystem.h>
 #include <qregexp.h>
 
 

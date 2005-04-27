@@ -24,6 +24,7 @@
 #include "kospell.h"
 
 #include "kotextobject.h"
+#include "kotextparag.h"
 #include "kotextiterator.h"
 
 #include <kspell2/broker.h>

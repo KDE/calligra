@@ -19,8 +19,10 @@
 */
 
 #include "kprtextdocument.h"
+
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
+#include <kotextparag.h>
 #include <kdebug.h>
 
 #include "kprvariable.h"

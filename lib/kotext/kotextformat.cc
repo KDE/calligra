@@ -18,7 +18,7 @@
 */
 
 #include "kotextformat.h"
-#include "korichtext.h" // for KoTextParag etc.
+#include "kotextparag.h"
 #include "kozoomhandler.h"
 #include "kostyle.h"
 #include "kooasiscontext.h"

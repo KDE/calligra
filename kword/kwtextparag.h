@@ -20,9 +20,9 @@
 #ifndef kwtextparag_h
 #define kwtextparag_h
 
-//#include <kotextparag.h>
-#include "korichtext.h"
+#include "kotextparag.h"
 
+class KoStyleCollection;
 class QDomDocument;
 class KWTextFrameSet;
 class KWTextDocument;
@@ -80,6 +80,8 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
 
     virtual void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection, uint& pos );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
+                            int from, int to, bool saveAnchorsFramesets = false ) const;
 
     virtual void join( KoTextParag *parag );
 protected:

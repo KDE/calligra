@@ -32,6 +32,7 @@ template class Q_EXPORT QPtrList<KoTextDocument>;
 // MOC_SKIP_END
 #endif
 
+class KoStyleCollection;
 class KoXmlWriter;
 class KoGenStyles;
 class KoZoomHandler;
@@ -98,9 +99,6 @@ public:
     void setFormatter( KoTextFormatterBase *f );
     KoTextFormatterBase *formatter() const;
 
-    void setIndent( KoTextIndent *i );
-    KoTextIndent *indent() const;
-
     QColor selectionColor( int id ) const;
     bool invertSelectionText( int id ) const;
     void setSelectionColor( int id, const QColor &c );
@@ -124,7 +122,6 @@ public:
     QString selectedText( int id, bool withCustom = TRUE ) const;
     //void copySelectedText( int id );
     void removeSelectedText( int id, KoTextCursor *cursor );
-    void indentSelection( int id );
 
     KoTextParag *paragAt( int i ) const;
 
@@ -386,7 +383,6 @@ private:
     QMap<int, bool> selectionText;
     KoTextDocCommandHistory *commandHistory;
     KoTextFormatterBase *pFormatter;
-    KoTextIndent *indenter;
     KoTextFormatCollection *fCollection;
     //Qt::TextFormat txtFormat;
     //bool preferRichText : 1;
@@ -508,16 +504,6 @@ inline void KoTextDocument::setFormatter( KoTextFormatterBase *f )
 inline KoTextFormatterBase *KoTextDocument::formatter() const
 {
     return pFormatter;
-}
-
-inline void KoTextDocument::setIndent( KoTextIndent *i )
-{
-    indenter = i;
-}
-
-inline KoTextIndent *KoTextDocument::indent() const
-{
-    return indenter;
 }
 
 inline QColor KoTextDocument::selectionColor( int id ) const

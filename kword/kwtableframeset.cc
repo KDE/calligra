@@ -40,6 +40,7 @@ DESCRIPTION
 #include <kodom.h>
 #include <koxmlns.h>
 #include <kotextobject.h> // for customItemChar !
+#include <kotextparag.h>
 
 #include <kmessagebox.h>
 #include <kdebug.h>

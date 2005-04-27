@@ -24,6 +24,7 @@
 
 #include "kobgspellcheck.h"
 #include "kobgspellcheck.moc"
+#include "kotextparag.h"
 
 #include "kospell.h"
 

@@ -21,6 +21,7 @@
 #include "koParagDia_p.h"
 #include "koDocument.h"
 #include "kotextformat.h"
+#include "kotextparag.h"
 #include "kotextdocument.h"
 
 #include <qcheckbox.h>

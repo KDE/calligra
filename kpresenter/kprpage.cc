@@ -54,11 +54,11 @@
 #include "koPointArray.h"
 #include "kprtextdocument.h"
 #include <kotextobject.h>
+#include <kotextparag.h>
 #include <koRect.h>
 #include <qapplication.h>
 #include <kostyle.h>
 #include <kovariable.h>
-#include <korichtext.h>
 #include <koGenStyles.h>
 #include <koxmlwriter.h>
 #include <ktempfile.h>
