@@ -85,12 +85,12 @@ KWMailMergeKABC::KWMailMergeKABC( KInstance *inst, QObject *parent )
     sampleRecord[ i18n("sortString" ) ] = KABC::Addressee::sortStringLabel();
     sampleRecord[ i18n("URL" ) ] = KABC::Addressee::urlLabel();
     sampleRecord[ i18n("Secrecy" ) ] = KABC::Addressee::secrecyLabel();
-    sampleRecord[ i18n("Prefered address: Street" ) ] = QString( "preferedAddressStreet" );
-    sampleRecord[ i18n("Prefered address: Locality" ) ] = QString( "preferedAddressLocality" );
-    sampleRecord[ i18n("Prefered address: Region" ) ] = QString( "preferedAddressRegion" );
-    sampleRecord[ i18n("Prefered address: Postal code" ) ] = QString( "preferedAddressPostalCode" );
-    sampleRecord[ i18n("Prefered address: Country" ) ] = QString( "preferedAddressCountry" );
-    sampleRecord[ i18n("Prefered address: Label" ) ] = QString( "preferedAddressLabel" );
+    sampleRecord[ i18n("Preferred address: Street" ) ] = QString( "preferedAddressStreet" );
+    sampleRecord[ i18n("Preferred address: Locality" ) ] = QString( "preferedAddressLocality" );
+    sampleRecord[ i18n("Preferred address: Region" ) ] = QString( "preferedAddressRegion" );
+    sampleRecord[ i18n("Preferred address: Postal code" ) ] = QString( "preferedAddressPostalCode" );
+    sampleRecord[ i18n("Preferred address: Country" ) ] = QString( "preferedAddressCountry" );
+    sampleRecord[ i18n("Preferred address: Label" ) ] = QString( "preferedAddressLabel" );
 }
 
 

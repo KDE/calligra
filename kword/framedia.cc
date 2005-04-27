@@ -433,8 +433,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
-    QWhatsThis::add(reconnect, i18n("<b>Reconnect frame to current flow:</b><br/> "
-        "when a new page is created, a new frame will be created for this "
+    QWhatsThis::add(reconnect, i18n("<b>Reconnect frame to current flow:</b><br/>"
+        "When a new page is created, a new frame will be created for this "
         "frameset, so that the text can flow from one page to the next if necessary. "
         "This is what happens for the \"main text frameset\", but this option makes it possible "
         "to choose the same behavior for other framesets, for instance in magazine layouts."));
@@ -443,16 +443,16 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     onpGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
     onpGrid->addWidget( reconnect, 1, 0 );
 
-    noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
-    QWhatsThis::add(noFollowup, i18n("<b>Don't create a followup frame:</b><br/> "
-        "when a new page is created, no frame will be created for this frameset."));
+    noFollowup = new QRadioButton (i18n ("Do not create a followup frame"), onNewPage);
+    QWhatsThis::add(noFollowup, i18n("<b>Do not create a followup frame:</b><br/>"
+        "When a new page is created, no frame will be created for this frameset."));
     if ( rResizeFrame )
         connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     onpGrid->addWidget( noFollowup, 2, 0 );
 
     copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
-    QWhatsThis::add(copyRadio, i18n("<b>Place a copy of this frame:</b><br/> "
-        "when a new page is created, a frame will be created for this frameset, "
+    QWhatsThis::add(copyRadio, i18n("<b>Place a copy of this frame:</b><br/>"
+        "When a new page is created, a frame will be created for this frameset, "
         "which will always show the exact same thing as the frame on the previous "
         "page. This is what happens for headers and footers, but this option "
         "makes it possible to choose the same behavior for other framesets, for "
@@ -543,8 +543,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     row++;
     grid1->addMultiCellWidget(cbAllFrames,row,row, 0, 1);
     cbProtectContent = new QCheckBox( i18n("Protect content"), tab1);
-    QWhatsThis::add(cbProtectContent, i18n("<b>Protect content:</b><br/> "
-        "disallow changes to be made to the contents of the frame(s)"));
+    QWhatsThis::add(cbProtectContent, i18n("<b>Protect content:</b><br/>"
+        "Disallow changes to be made to the contents of the frame(s)."));
     connect( cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     row++;
     grid1->addMultiCellWidget(cbProtectContent,row,row, 0, 1);
@@ -2091,7 +2091,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
 
     m_synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
     QWhatsThis::add(m_synchronize, i18n("<b>Synchronize changes:</b><br/>"
-        "when this is checked any change in margins will be used for all directions"));
+        "When this is checked any change in margins will be used for all directions."));
     mGrid->addMultiCellWidget( m_synchronize, 1, 1, 0, 1 );
 
     QLabel* lml = new QLabel( i18n( "Left:" ), grp2 );
