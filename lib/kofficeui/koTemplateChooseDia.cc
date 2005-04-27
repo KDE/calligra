@@ -390,19 +390,25 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 
     // config
     KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
-    int templateNum = grp.readEntry( "TemplateTab" ).toInt();
+    int templateNum = grp.readNumEntry( "TemplateTab", -1 );
     QString templateName = grp.readPathEntry( "TemplateName" );
+	if ( templateName.isEmpty() && d->tree->defaultTemplate() )
+		templateName = d->tree->defaultTemplate()->name(); //select the default template for the app
 
     // item which will be selected initially
     QIconViewItem * itemtoselect = 0;
 
     // count the templates inserted
     int entriesnumber = 0;
+	int defaultTemplateGroup = -1;
 
     for ( KoTemplateGroup *group = d->tree->first(); group!=0L; group=d->tree->next() )
     {
 	if (group->isHidden())
 	    continue;
+
+	if ( d->tree->defaultGroup() == group )
+		defaultTemplateGroup = entriesnumber; //select the default template group for the app
 
 	QFrame * frame = d->m_jwidget->addPage (
 		group->name(),
@@ -448,8 +454,11 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	d->m_jwidget->hide();
 
     // Set the initially shown page, possibly from the last usage of the dialog
-    if (entriesnumber >= templateNum)
+    if (entriesnumber >= templateNum && templateNum != -1 )
 	d->m_jwidget->showPage(templateNum);
+    else if ( defaultTemplateGroup != -1)
+	d->m_jwidget->showPage(defaultTemplateGroup);
+    
 
     // Set the initially selected template, possibly from the last usage of the dialog
     currentChanged(itemtoselect);
@@ -530,10 +539,11 @@ void KoTemplateChooseDia::setupDialog()
 	else if (tabhighlighted == "File" )
 	    d->tabWidget->setCurrentPage(2); // RecentDocument tab
 	else
-	    d->tabWidget->setCurrentPage(1); // ExistingDocument tab
+		d->tabWidget->setCurrentPage(0); // Default setting: CreateDocument tab
     }
     else
     {
+
 	// open a file
 	if (d->m_dialogType == NoTemplates)
 	{

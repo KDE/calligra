@@ -116,6 +116,7 @@ public:
     KoTemplateGroup *find(const QString &name) const;
 
     KoTemplateGroup *defaultGroup() const { return m_defaultGroup; }
+    KoTemplate *defaultTemplate() const { return m_defaultTemplate; }
 
 private:
     void readGroups();
@@ -127,6 +128,7 @@ private:
     KInstance *m_instance;
     QPtrList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;
+    KoTemplate *m_defaultTemplate;
 };
 
 

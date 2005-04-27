@@ -122,7 +122,8 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 KoTemplateTree::KoTemplateTree(const QCString &templateType,
                                KInstance *instance, bool readTree) :
-    m_templateType(templateType), m_instance(instance), m_defaultGroup(0L) {
+    m_templateType(templateType), m_instance(instance), m_defaultGroup(0L),
+    m_defaultTemplate(0L) {
 
     m_groups.setAutoDelete(true);
     if(readTree)
@@ -248,6 +249,7 @@ void KoTemplateTree::readTemplates() {
                 QString description;
                 QString hidden_str;
                 bool hidden=false;
+                bool defaultTemplate = false;
                 QString templatePath;
                 // If a desktop file, then read the name from it.
                 // Otherwise (or if no name in it?) use file name
@@ -267,6 +269,8 @@ void KoTemplateTree::readTemplates() {
                         hidden_str=config.readEntry("X-KDE-Hidden");
                         if(hidden_str.lower()=="true")
                             hidden=true;
+                        if ( config.readBoolEntry("X-KDE-DefaultTemplate") )
+                            defaultTemplate = true;
                         //kdDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");
                         //kdDebug() << "Link to : " << templatePath << endl;
@@ -297,6 +301,8 @@ void KoTemplateTree::readTemplates() {
                 groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
                                                          // "touch" the group to avoid useless
                                                          // creation of dirs in .kde/blah/...
+                if ( defaultTemplate )
+                    m_defaultTemplate = t;
             }
         }
     }
