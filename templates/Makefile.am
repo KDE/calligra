@@ -3,5 +3,5 @@ templ_DATA = Presentation.desktop TextDocument.desktop SpreadSheet.desktop Illus
 
 templdir = $(kde_templatesdir)
 
-sources_DATA = Presentation.kpt TextDocument.kwt SpreadSheet.ksp Illustration.karbon
+sources_DATA = Presentation.kpt TextDocument.kwt SpreadSheet.kst Illustration.karbon
 sourcesdir = $(kde_templatesdir)/.source

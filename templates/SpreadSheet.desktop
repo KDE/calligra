@@ -83,5 +83,5 @@ Comment[xx]=xxNew KSpread document:xx
 Comment[zh_CN]=新建 KSpread 文档：
 Comment[zh_TW]=新建 KSpread 文件:
 Type=Link
-URL=.source/SpreadSheet.ksp
+URL=.source/SpreadSheet.kst
 Icon=kspread_ksp
