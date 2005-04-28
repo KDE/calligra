@@ -335,7 +335,7 @@ protected:
     void buildMaxLen();
 
     void doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int & index, QString & word, KoTextObject *txtObj );
-    KCommand *doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+    KCommand *doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
     KCommand *doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag, int index, const QString & word, KoTextObject *txtObj );
     KCommand *doUseBulletStyle(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int& index );
 

@@ -59,9 +59,12 @@ public:
     virtual ~KoTextParag();
 
     KoTextString *string() const;
-    KoTextStringChar *at( int i ) const; // maybe remove later
+    KoTextStringChar *at( int i ) const;
     int leftGap() const;
-    int length() const; // maybe remove later
+    int length() const;
+
+    // Abstraction over the trailing-space thing, so that it can be removed later
+    int lastCharPos() const { return str->length()-2; }
 
     void setFormat( KoTextFormat *fm );
     KoTextFormat *paragFormat() const;

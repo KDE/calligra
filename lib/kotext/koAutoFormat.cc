@@ -1132,7 +1132,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
         if( m_removeSpaceBeginEndLine && index > 1)
         {
-            KCommand *cmd =doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
+            KCommand *cmd = doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj, index );
             if ( cmd )
                 txtObj->emitNewCommand( cmd );
         }
@@ -2007,7 +2007,7 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
 }
 
 
-KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj, int &index )
 {
     KoTextString *s = parag->string();
     KoTextDocument * textdoc = parag->textDocument();
@@ -2015,23 +2015,25 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
 
     KMacroCommand *macroCmd = 0L;
     // Cut away spaces at end of paragraph
-    for ( int i = parag->string()->length()-1; i >= 0; --i )
+    for ( int i = parag->lastCharPos(); i >= 0; --i )
     {
         QChar ch = s->at( i ).c;
-        if( !ch.isSpace())
+        if ( ch != ' ' )   // was: !ch.isSpace(), but this includes tabs, and this option is only about spaces
         {
-            if( i == parag->string()->length()-1 )
+            if( i == parag->lastCharPos() )
                 break;
             cursor.setParag( parag );
             cursor.setIndex( i+1 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setParag( parag );
-            cursor.setIndex( parag->string()->length() -1); // -1 for the space QtRT always adds at the end.
+            cursor.setIndex( parag->lastCharPos()+1 );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", KoTextObject::HighlightSelection, QString::null );
 
             if(cmd)
             {
+                if ( index > i )
+                    index = i;
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
                 macroCmd->addCommand(cmd);
@@ -2040,13 +2042,12 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
         }
     }
 
-    s = parag->string();
-
     // Cut away spaces at start of parag.
-    for ( int i = 0 ; i < parag->string()->length() ; i++ )
+
+    for ( int i = 0 ; i <= parag->lastCharPos() ; i++ )
     {
         QChar ch = s->at( i ).c;
-        if( !ch.isSpace())
+        if ( ch != ' ' )   // was: !ch.isSpace(), but this includes tabs, and this option is only about spaces
         {
             if( i == 0 )
                 break;
@@ -2055,12 +2056,13 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setParag( parag );
-            cursor.setIndex( i  );
+            cursor.setIndex( i );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "",KoTextObject::HighlightSelection , QString::null );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", KoTextObject::HighlightSelection, QString::null );
 
             if(cmd)
             {
+                index -= i; // adjust index
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( i18n("Autocorrect (remove start and end line space)"));
                 macroCmd->addCommand(cmd);
