@@ -2044,6 +2044,7 @@ int KoTextParag::nextTab( int chnum, int x )
         int i = 0;
         if ( string()->isRightToLeft() )
             i = m_layout.tabList().size() - 1;
+        KoZoomHandler* zh = textDocument()->formattingZoomHandler();
 
         while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
             //kdDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
@@ -2078,7 +2079,7 @@ int KoTextParag::nextTab( int chnum, int x )
                         else
                         {
                             KoTextFormat *charFormat = ch.format();
-                            int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
+                            int ww = charFormat->charWidth( zh, false, &ch, this, c );
                             ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
                             w += ww;
                         }
@@ -2103,15 +2104,18 @@ int KoTextParag::nextTab( int chnum, int x )
                         KoTextStringChar & ch = string()->at( c );
                         if ( ch.c == m_layout.tabList()[i].alignChar )
                         {
+                            // Can't use ch.width yet, since the formatter hasn't run over those chars
+                            int ww = ch.format()->charWidth( zh, false, &ch, this, c );
+                            ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
                             if ( string()->isRightToLeft() )
                             {
-                                w = ch.width /*string()->width( c )*/ / 2; // center around the decimal point
+                                w = ww / 2; // center around the decimal point
                                 ++c;
                                 continue;
                             }
                             else
                             {
-                                w += ch.width /*string()->width( c )*/ / 2; // center around the decimal point
+                                w += ww / 2; // center around the decimal point
                                 break;
                             }
                         }
@@ -2121,10 +2125,8 @@ int KoTextParag::nextTab( int chnum, int x )
                             w += ch.customItem()->width;
                         else
                         {
-                            KoTextFormat *charFormat = ch.format();
-                            int ww = charFormat->charWidth( textDocument()->formattingZoomHandler(), false, &ch, this, c );
-                            ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
-                            w += ww;
+                            int ww = ch.format()->charWidth( zh, false, &ch, this, c );
+                            w += KoTextZoomHandler::ptToLayoutUnitPt( ww );
                         }
 
                         ++c;
