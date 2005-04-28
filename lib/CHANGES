@@ -1,3 +1,8 @@
+Changes after KOffice-1.4-beta1
+===============================
+KOfficeCore:
+- Create backup file faster for local files
+
 Changes after KOffice-1.3
 =========================
 KOfficeUI:
