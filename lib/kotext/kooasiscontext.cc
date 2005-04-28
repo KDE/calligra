@@ -58,8 +58,17 @@ void KoOasisContext::addStyles( const QDomElement* style )
         else
             kdWarning(32500) << "Parent style not found: " << parentStyleName << endl;
     }
-    else if ( !m_styles.defaultStyle().isNull() ) // on top of all, the default style
-        m_styleStack.push( m_styles.defaultStyle() );
+    else {
+        QString family = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        if ( !family.isEmpty() ) {
+            QDomElement* def = m_styles.defaultStyle( family );
+            if ( def ) { // on top of all, the default style for this family
+                m_styleStack.push( *def );
+                kdDebug(32500) << "pushing default style for " << family << endl;
+            } else
+                kdDebug(32500) << "no default style for " << family << endl;
+        }
+    }
 
     //kdDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
     m_styleStack.push( *style );

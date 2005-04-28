@@ -363,7 +363,8 @@ static void importUnderline( const QString& in,
 void KoTextFormat::load( KoOasisContext& context )
 {
     KoStyleStack& styleStack = context.styleStack();
-    styleStack.setTypeProperties( "text" );
+    styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) ) { // 3.10.3
         col.setNamedColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) ); // #rrggbb format
     }
@@ -482,7 +483,6 @@ void KoTextFormat::load( KoOasisContext& context )
             m_language += country;
         }
     }
-    // ###### TODO ensure that it's loaded from text-properties, not paragraph-properties
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color") ) {
         QString tmp = styleStack.attributeNS( KoXmlNS::fo, "background-color");
         if (tmp != "transparent")

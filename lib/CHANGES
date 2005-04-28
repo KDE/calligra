@@ -2,6 +2,8 @@ Changes after KOffice-1.4-beta1
 ===============================
 KOfficeCore:
 - Create backup file faster for local files
+- OASIS: fix memleak during loading (styles dom elements)
+- OASIS: correct handling of default styles (per-family)
 
 Changes after KOffice-1.3
 =========================

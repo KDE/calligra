@@ -152,9 +152,13 @@ public:
     QString userStyleName() const;
 
     /**
-     * Add properties name
+     * Set the type of properties that will be looked for.
+     * For instance setTypeProperties("paragraph") will make hasAttribute() and attribute()
+     * look into "paragraph-properties".
+     * If @p typeProperties is 0, the stylestack is resetted to look for "properties"
+     * as it does by default.
      */
-    void setTypeProperties(const char* typeProperties);
+    void setTypeProperties( const char* typeProperties );
 
 private:
     bool isUserStyle( const QDomElement& e ) const;

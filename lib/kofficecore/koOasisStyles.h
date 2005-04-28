@@ -51,8 +51,9 @@ public:
     /// styles() is used for lookup. userStyles() is used to load all user styles upfront.
     QValueVector<QDomElement> userStyles() const;
 
-    /// @return the default style
-    const QDomElement& defaultStyle() const { return m_defaultStyle; }
+    /// @return the default style for a given family ("graphic","paragraph","table" etc.)
+    /// Returns 0 if no default style for this family is available
+    QDomElement* defaultStyle( const QString& family ) const;
 
     /// @return the office:style element
     const QDomElement& officeStyle() const { return m_officeStyle; }
@@ -112,14 +113,14 @@ private:
 
 private:
     QDict<QDomElement>   m_styles;
-    QDomElement m_defaultStyle;
+    QDict<QDomElement>   m_defaultStyle;
     QDomElement m_officeStyle;
 
     QDict<QDomElement>   m_masterPages;
     QDict<QDomElement>   m_listStyles;
 
     QDict<QDomElement>   m_drawStyles;
-    DataFormatsMap m_dataFormats; // maybe generalize to include number formats.
+    DataFormatsMap m_dataFormats;
 
     class Private;
     Private *d;

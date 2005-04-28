@@ -31,7 +31,11 @@
 
 KoOasisStyles::KoOasisStyles()
 {
-
+    m_styles.setAutoDelete( true );
+    m_defaultStyle.setAutoDelete( true );
+    m_masterPages.setAutoDelete( true );
+    m_listStyles.setAutoDelete( true );
+    m_drawStyles.setAutoDelete( true );
 }
 
 KoOasisStyles::~KoOasisStyles()
@@ -162,14 +166,14 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
              || localName == "font-decl"
              || localName == "presentation-page-layout" ) )
     {
-        QDomElement* ep = new QDomElement( e );
-        m_styles.insert( name, ep );
+        m_styles.insert( name, new QDomElement( e ) );
         //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
-        m_defaultStyle = e;
+        const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
+        if ( !family.isEmpty() )
+            m_defaultStyle.insert( family, new QDomElement( e ) );
     } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
-        QDomElement* ep = new QDomElement( e );
-        m_listStyles.insert( name, ep );
+        m_listStyles.insert( name, new QDomElement( e ) );
         //kdDebug(30003) << "List style: '" << name << "' loaded " << endl;
     } else if ( ns == KoXmlNS::number && (
                    localName == "number-style"
@@ -1421,4 +1425,9 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
         }
     }
     return tmpBrush;
+}
+
+QDomElement* KoOasisStyles::defaultStyle( const QString& family ) const
+{
+    return m_defaultStyle[family];
 }
