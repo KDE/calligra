@@ -445,11 +445,11 @@ QString TextElement::toLatex()
     if ( isSymbol() ) {
         QString texName = getSymbolTable().name( character );
         if ( !texName.isNull() )
-            return "\\" + texName;
+            return " \\" + texName + " ";
         return  " ? ";
     }
     else {
-        return character;
+        return QString(character);
     }
 }
 

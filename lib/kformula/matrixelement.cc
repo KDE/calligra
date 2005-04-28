@@ -840,7 +840,7 @@ QString MatrixElement::toLatex()
     for(uint i=0;i<cols;i++)
 	matrix+="c ";
 
-    matrix+="}";
+    matrix+="} ";
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < cols; c++) {
@@ -850,7 +850,7 @@ QString MatrixElement::toLatex()
     	if(r < rows-1 ) matrix+=" \\\\ ";
     }
 
-    matrix+="\\end{array}";
+    matrix+=" \\end{array}";
 
     return matrix;
 }

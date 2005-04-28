@@ -1441,16 +1441,14 @@ bool SequenceElement::isFirstOfToken( BasicElement* child )
 QString SequenceElement::toLatex()
 {
     QString content;
-    content += "{";
     uint count = children.count();
     for ( uint i = 0; i < count; i++ ) {
         BasicElement* child = children.at( i );
-        if ( isFirstOfToken( child ) ) {
-            content += " ";
-        }
+//         if ( isFirstOfToken( child ) ) {
+//             content += "";
+//         }
         content += child->toLatex();
     }
-    content += "}";
     return content;
 }
 

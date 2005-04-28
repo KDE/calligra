@@ -810,12 +810,12 @@ QString SymbolElement::toLatex()
     if(hasUpper()) {
         sym+="^{";
 	sym+=upper->toLatex();
-	sym+="}";
+	sym+="} ";
     }
 
-        sym+="{";
-	sym+=content->toLatex();
-	sym+="}";
+    sym += " ";
+
+    sym+=content->toLatex();
 
 
     return sym;

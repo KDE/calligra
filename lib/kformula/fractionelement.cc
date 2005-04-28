@@ -448,7 +448,7 @@ bool FractionElement::readContentFromDom(QDomNode& node)
 QString FractionElement::toLatex()
 {
     if ( withLine ) {
-        return "\\frac" + numerator->toLatex() + denominator->toLatex();
+        return "\\frac{" + numerator->toLatex() +"}{" + denominator->toLatex() + "}";
     }
     else {
         return "{" + numerator->toLatex() + "\\atop " + denominator->toLatex() + "}";

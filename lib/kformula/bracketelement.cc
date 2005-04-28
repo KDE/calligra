@@ -416,8 +416,8 @@ QString BracketElement::toLatex()
 {
     QString ls,rs,cs;
     cs=getContent()->toLatex();
-    ls="\\left"+latexString(leftType);
-    rs="\\right"+latexString(rightType);
+    ls="\\left"+latexString(leftType) + " ";
+    rs=" \\right"+latexString(rightType);
 
     return ls+cs+rs;
 }

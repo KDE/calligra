@@ -1324,27 +1324,31 @@ QString IndexElement::toLatex()
     QString index;
 
     if ( hasUpperMiddle() ) {
-        index += "\\overset" + upperMiddle->toLatex() + "{";
+        index += "\\overset{" + upperMiddle->toLatex() + "}{";
     }
 
     if ( hasLowerMiddle() ) {
-        index += "\\underset" + lowerMiddle->toLatex() + "{";
+        index += "\\underset{" + lowerMiddle->toLatex() + "}{";
     }
 
-    if ( hasUpperLeft() || hasUpperRight() ) {
-        index += "{}";
+    if ( hasUpperLeft() || hasUpperRight() ) { //Not sure that this is possible in Latex!
+        /*index += "{}";
         if ( hasUpperLeft() )
             index += "^" + upperLeft->toLatex();
         if ( hasLowerLeft() )
             index += "_" + lowerLeft->toLatex();
+        */
     }
 
     index += content->toLatex();
 
-    if ( hasUpperRight() )
-        index += "^" + upperRight->toLatex();
-    if ( hasLowerRight() )
-        index += "_" + lowerRight->toLatex();
+    if ( hasUpperRight() || hasLowerRight() ) {
+        if ( hasUpperRight() )
+            index += "^{" + upperRight->toLatex() + "}";
+        if ( hasLowerRight() )
+            index += "_{" + lowerRight->toLatex() + "}";
+        index += " ";
+    }
 
     if ( hasLowerMiddle() ) {
         index += "}";
