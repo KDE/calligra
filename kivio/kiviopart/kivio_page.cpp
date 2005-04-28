@@ -492,9 +492,11 @@ void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
 
       while( pStencil )
       {
-        if( isStencilSelected(pStencil)==true )
+        kdDebug() << "stencil: " << pStencil->type() << endl;
+        if(pStencil->isSelected())
         {
           pStencil->paint(&data);
+          kdDebug() << "stencil2: " << pStencil->type() << endl;
         }
 
         pStencil = pLayer->nextStencil();

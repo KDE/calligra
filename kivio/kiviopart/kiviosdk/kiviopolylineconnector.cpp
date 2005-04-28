@@ -373,13 +373,25 @@ namespace Kivio {
 
   KoRect PolyLineConnector::rect()
   {
-    KoPoint p(0, 0);
-    
-    if(m_points.count() > 0) {
-      p = m_points.first();
+    KoPoint p = m_points.first();
+    KoPoint topLeft(p.x(), p.y()), bottomRight;
+    QValueList<KoPoint>::iterator it;
+    QValueList<KoPoint>::iterator itEnd = m_points.end();
+
+    for(it = m_points.begin(); it != itEnd; ++it) {
+      p = (*it);
+      topLeft.setX(QMIN(p.x(), topLeft.x()));
+      topLeft.setY(QMIN(p.y(), topLeft.y()));
+      bottomRight.setX(QMAX(p.x(), bottomRight.x()));
+      bottomRight.setY(QMAX(p.y(), bottomRight.y()));
     }
-    
-    return KoRect(p, KoSize(0, 0));
+
+    KoRect rect;
+    rect.moveTopLeft(topLeft);
+    rect.setWidth(bottomRight.x() - topLeft.x());
+    rect.setHeight(bottomRight.y() - topLeft.y());
+    kdDebug() << "Rect: " << rect.toQRect() << endl;
+    return rect;
   }
 
   bool PolyLineConnector::isInRect(const KoRect& rect)
