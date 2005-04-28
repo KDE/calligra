@@ -88,7 +88,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
  ******************************************************************/
 
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
-    : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, QString::null, Ok | Apply| Cancel, Ok, parent, "framedialog", true)
 {
     noSignal=false;
     frame = _frame;
@@ -128,7 +128,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     init();
 }
 
-KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Cancel, Ok, parent, "framedialog", true) , allFrames() {
+KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Apply | Cancel, Ok, parent, "framedialog", true) , allFrames() {
     noSignal=false;
 
     frame=0L;
@@ -955,10 +955,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lx->resize( lx->sizeHint() );
     pGrid->addWidget( lx, 1, 0 );
 
-    sx = new KDoubleNumInput( grp1 );
-
-    sx->setValue( 0.0 );
-    sx->setRange(0, 9999, 1,  false);
+    sx = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
 
     sx->resize( sx->sizeHint() );
     pGrid->addWidget( sx, 1, 1 );
@@ -967,9 +964,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     ly->resize( ly->sizeHint() );
     pGrid->addWidget( ly, 1, 2 );
 
-    sy = new KDoubleNumInput( grp1 );
-    sy->setRange(0, 9999, 1,  false);
-    sy->setValue( 0.0 );
+    sy = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
     sy->resize( sy->sizeHint() );
     pGrid->addWidget( sy, 1, 3 );
 
@@ -977,11 +972,9 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lw->resize( lw->sizeHint() );
     pGrid->addWidget( lw, 2, 0 );
 
-    sw = new KDoubleNumInput( grp1 );
+    sw = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
 
-    sw->setValue( 0.0 );
     sw->resize( sw->sizeHint() );
-    sw->setRange(0, 9999, 1,  false);
     connect( sw, SIGNAL(valueChanged(double)),
              this, SLOT(slotUpdateHeightForWidth(double)) );
 
@@ -991,13 +984,11 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     lh->resize( lh->sizeHint() );
     pGrid->addWidget( lh, 2, 2 );
 
-    sh = new KDoubleNumInput( grp1 );
+    sh = new KoUnitDoubleSpinBox( grp1, 0, 9999, 1, 0.0, doc->unit() );
     connect( sh, SIGNAL(valueChanged(double)),
              this, SLOT(slotUpdateWidthForHeight(double)) );
 
-    sh->setValue( 0.0 );
     sh->resize( sh->sizeHint() );
-    sh->setRange(0, 9999, 1,  false);
 
     pGrid->addWidget( sh, 2, 3 );
 
@@ -1866,12 +1857,12 @@ bool KWFrameDia::applyChanges()
     double uRight = 0.0;
     if(tab4) { // TAB Geometry
         if ( frame ) {
-            px = QMAX( 0, KoUnit::fromUserValue( sx->value(), doc->unit() ) );
+            px = QMAX( 0, sx->value() );
             int pageNum = QMIN( static_cast<int>( frame->y() / doc->ptPaperHeight() ), doc->numPages() - 1 );
-            py = QMAX( 0, KoUnit::fromUserValue( sy->value(),doc->unit() ) ) + pageNum * doc->ptPaperHeight();
+            py = QMAX( 0, sy->value() ) + pageNum * doc->ptPaperHeight();
         }
-        pw = QMAX( KoUnit::fromUserValue( sw->value(), doc->unit() ), 0 );
-        ph = QMAX( KoUnit::fromUserValue( sh->value(), doc->unit() ), 0 );
+        pw = QMAX( sw->value(), 0 );
+        ph = QMAX( sh->value(), 0 );
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();
@@ -2051,6 +2042,11 @@ void KWFrameDia::updateFrames()
     doc->repaintAllViews();
 }
 
+void KWFrameDia::slotApply()
+{
+    applyChanges();
+}
+
 void KWFrameDia::slotOk()
 {
     if (applyChanges())
@@ -2108,21 +2104,17 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lml->resize( lml->sizeHint() );
     mGrid->addWidget( lml, 2, 0 );
 
-    // TODO port to KoUnitWidgets
-    m_inputLeft = new KDoubleNumInput( grp2 );
+    m_inputLeft = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
-    m_inputLeft->setRange(0, 9999, 1,  false);
-    //m_inputLeft->resize( m_inputLeft->sizeHint() );
     mGrid->addWidget( m_inputLeft, 2, 1 );
 
     QLabel* lmt = new QLabel( i18n( "Top:" ), grp2 );
     //lmt->resize( lmt->sizeHint() );
     mGrid->addWidget( lmt, 2, 2 );
 
-    m_inputTop = new KDoubleNumInput( grp2 );
+    m_inputTop = new /*KDoubleNumInput*/KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputTop->resize( m_inputTop->sizeHint() );
-    m_inputTop->setRange(0, 9999, 1,  false);
 
     mGrid->addWidget( m_inputTop, 2, 3 );
 
@@ -2130,20 +2122,18 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
     //lmr->resize( lmr->sizeHint() );
     mGrid->addWidget( lmr, 3, 0 );
 
-    m_inputRight = new KDoubleNumInput( grp2 );
+    m_inputRight = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputRight->resize( m_inputRight->sizeHint() );
-    m_inputRight->setRange(0, 9999, 1,  false);
     mGrid->addWidget( m_inputRight, 3, 1 );
 
     QLabel* lmb = new QLabel( i18n( "Bottom:" ), grp2 );
     //lmb->resize( lmb->sizeHint() );
     mGrid->addWidget( lmb, 3, 2 );
 
-    m_inputBottom = new KDoubleNumInput( grp2 );
+    m_inputBottom = new KoUnitDoubleSpinBox( grp2, 0, 9999, 1, 0.0, doc->unit() );
 
     //m_inputBottom->resize( m_inputBottom->sizeHint() );
-    m_inputBottom->setRange(0, 9999, 1,  false);
     mGrid->addWidget( m_inputBottom, 3, 3 );
     mGrid->setRowSpacing( 0, KDialog::spacingHint() + 5 );
 

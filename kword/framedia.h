@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include <koUnit.h>
+#include <koUnitWidgets.h>
 #include <qgroupbox.h>
 
 class KWFrame;
@@ -80,7 +81,7 @@ public slots:
     void slotValueChanged( double );
 
 private:
-    KDoubleNumInput *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
+    KoUnitDoubleSpinBox *m_inputLeft, *m_inputRight, *m_inputTop, *m_inputBottom;
     QCheckBox *m_synchronize;
     KWDocument *doc;
     bool m_changed;
@@ -120,6 +121,7 @@ protected:
     void calcRatio();
 
 protected slots:
+    virtual void slotApply();
     virtual void slotOk();
     void connectListSelected( QListViewItem * );
     void setFrameBehaviorInputOn();
@@ -166,7 +168,7 @@ private:
     QWidget *tab4;
     QGroupBox *grp1;
     QLabel *lx, *ly, *lw, *lh;
-    KDoubleNumInput *sx, *sy, *sw, *sh;
+    KoUnitDoubleSpinBox *sx, *sy, *sw, *sh;
     KWFourSideConfigWidget* m_paddingConfigWidget;
     QCheckBox *floating;
     QCheckBox *protectSize;
