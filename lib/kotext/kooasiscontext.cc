@@ -62,11 +62,8 @@ void KoOasisContext::addStyles( const QDomElement* style )
         QString family = style->attributeNS( KoXmlNS::style, "family", QString::null );
         if ( !family.isEmpty() ) {
             QDomElement* def = m_styles.defaultStyle( family );
-            if ( def ) { // on top of all, the default style for this family
+            if ( def ) // on top of all, the default style for this family
                 m_styleStack.push( *def );
-                kdDebug(32500) << "pushing default style for " << family << endl;
-            } else
-                kdDebug(32500) << "no default style for " << family << endl;
         }
     }
 

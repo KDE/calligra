@@ -33,6 +33,8 @@
 #include <qdom.h>
 #include <qbuffer.h>
 
+#include <float.h>
+
 QString* KoParagLayout::shadowCssCompat = 0L;
 
 // Create a default KoParagLayout.
@@ -768,8 +770,8 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
         element.setAttribute( "filling", (*it).filling );
-        element.setAttribute( "width", (*it).ptWidth );
-        if ( !(*it).alignChar.isNull() )
+        element.setAttribute( "width", QString::number( (*it).ptWidth, 'g', DBL_DIG ) );
+        if ( (*it).type == T_DEC_PNT && !(*it).alignChar.isNull() )
           element.setAttribute( "alignchar", QString((*it).alignChar) );
     }
 }
