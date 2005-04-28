@@ -315,29 +315,41 @@ bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
         if (n.isElement())
         {
             QDomElement e = n.toElement();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "initial" && !e.text().isEmpty() )
+            if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "initial" && !e.text().isEmpty() )
                 m_initial = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "author-title" && !e.text().isEmpty() )
+            else if (e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "author-title" && !e.text().isEmpty() )
                 m_title = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "company" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "company" && !e.text().isEmpty() )
                 m_company = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "email" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "email" && !e.text().isEmpty() )
                 m_email = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "telephone" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "telephone" && !e.text().isEmpty() )
                 m_telephoneHome = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "telephone-work" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "telephone-work" && !e.text().isEmpty() )
                 m_telephoneWork = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "fax" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "fax" && !e.text().isEmpty() )
                 m_fax = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "country" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "country" && !e.text().isEmpty() )
                 m_country = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "postal-code" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "postal-code" && !e.text().isEmpty() )
                 m_postalCode = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "city" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "city" && !e.text().isEmpty() )
                 m_city = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "street" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "street" && !e.text().isEmpty() )
                 m_street = e.text();
-            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "position" && !e.text().isEmpty() )
+            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
+             e.attribute( "name", "" ) == "position" && !e.text().isEmpty() )
                 m_position = e.text();
         }
     }
