@@ -13,7 +13,7 @@ table.c tokenize.c trigger.c update.c util.c vacuum.c vdbe.c vdbeaux.c where.c o
 AM_CFLAGS = -DNO_TCL=1
 
 ksqlite2_SOURCES = shell.c
-ksqlite2_LDADD = $(top_builddir)/kexi/3rdparty/kexisql/src/libkexisql2.la $(LIBREADLINE)
+ksqlite2_LDADD = libkexisql2.la $(LIBREADLINE)
 
 libkexisql2_la_LIBADD =
 libkexisql2_la_LDFLAGS = -version-info 2:8 $(all_libraries) --no-undefined
