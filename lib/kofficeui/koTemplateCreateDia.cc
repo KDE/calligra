@@ -368,7 +368,7 @@ void KoTemplateCreateDia::slotSelect() {
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
-    if((name.isEmpty() || !d->m_groups->firstChild()) && !d->m_changed)
+    if( ( name.stripWhiteSpace().isEmpty() || !d->m_groups->firstChild() ) && !d->m_changed )
         enableButtonOK(false);
     else
         enableButtonOK(true);
