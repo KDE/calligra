@@ -948,6 +948,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
+    // TODO after 1.4: remove the unit from the label
     grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->unitName()), tab4 );
     QGridLayout* pGrid = new QGridLayout( grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -998,6 +999,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
+        // TODO after 1.4: remove the unit from the label
         m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins (%1)").arg(doc->unitName()), tab4 );
         m_paddingConfigWidget->setValues( QMAX(0.00, frame->paddingLeft()),
                                           QMAX(0.00, frame->paddingRight()),
