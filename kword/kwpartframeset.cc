@@ -321,8 +321,13 @@ KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
         return 0L;
     }
     // And only if CTRL isn't pressed.
+#if KDE_IS_VERSION( 3, 4, 0 )
+    if ( kapp->keyboardMouseState() & Qt::ControlButton )
+        return 0;
+#else
     if ( kapp->keyboardModifiers() & KApplication::ControlModifier )
         return 0;
+#endif
 
     return KoDocumentChild::hitTest( p, _matrix );
 }
