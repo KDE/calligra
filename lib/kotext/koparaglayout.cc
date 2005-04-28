@@ -770,9 +770,10 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
         element.setAttribute( "filling", (*it).filling );
-        element.setAttribute( "width", QString::number( (*it).ptWidth, 'g', DBL_DIG ) );
+        if ( (*it).filling != TF_BLANK )
+            element.setAttribute( "width", QString::number( (*it).ptWidth, 'g', DBL_DIG ) );
         if ( (*it).type == T_DEC_PNT && !(*it).alignChar.isNull() )
-          element.setAttribute( "alignchar", QString((*it).alignChar) );
+            element.setAttribute( "alignchar", QString((*it).alignChar) );
     }
 }
 
