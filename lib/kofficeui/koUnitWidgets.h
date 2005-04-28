@@ -39,12 +39,12 @@ class KoUnitDoubleBase;
 class KOFFICEUI_EXPORT KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
-	KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name = 0 );
+    KoUnitDoubleValidator( KoUnitDoubleBase *base, QObject *parent, const char *name = 0 );
 
-	virtual	QValidator::State validate( QString &, int & ) const;
+    virtual QValidator::State validate( QString &, int & ) const;
 
 private:
-	KoUnitDoubleBase	*m_base;
+    KoUnitDoubleBase *m_base;
 };
 
 
@@ -55,18 +55,19 @@ private:
 class KOFFICEUI_EXPORT KoUnitDoubleBase
 {
 public:
-	KoUnitDoubleBase( KoUnit::Unit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
-	virtual ~KoUnitDoubleBase() {}
+    KoUnitDoubleBase( KoUnit::Unit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
+    virtual ~KoUnitDoubleBase() {}
 
-	virtual void changeValue( double ) = 0;
-	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
+    virtual void changeValue( double ) = 0;
+    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
 
-	void setValueInUnit( double value, KoUnit::Unit unit )
-	{
-		changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
-	}
+    void setValueInUnit( double value, KoUnit::Unit unit )
+    {
+        changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
+    }
 
-	void setPrecision( unsigned int precision ) { m_precision = precision; };
+    void setPrecision( unsigned int precision ) { m_precision = precision; };
+
 protected:
     friend class KoUnitDoubleValidator;
     /**
@@ -84,9 +85,9 @@ protected:
     double toDouble( const QString& str, bool* ok ) const;
 
 protected:
-	KoUnitDoubleValidator	*m_validator;
-	KoUnit::Unit			m_unit;
-	unsigned int			m_precision;
+    KoUnitDoubleValidator *m_validator;
+    KoUnit::Unit m_unit;
+    unsigned int m_precision;
 };
 
 /**
@@ -96,12 +97,13 @@ protected:
 class KOFFICEUI_EXPORT KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
-	// lower, upper, step and value are in pt
-	KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-					KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    // lower, upper, step and value are in pt
+    KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
-	virtual void changeValue( double );
-	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void changeValue( double );
+    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+
     /// @return the current value, converted in points
     double value( void ) const;
 
@@ -127,21 +129,21 @@ private:
 class KOFFICEUI_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
 public:
-	KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
-	virtual void changeValue( double );
-	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void changeValue( double );
+    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
     /// @return the current value, converted in points
     double value( void ) const;
 
 protected:
-	 bool eventFilter( QObject* obj, QEvent* ev );
+    bool eventFilter( QObject* obj, QEvent* ev );
 
 private:
-	double m_value;
-	double m_lower;
-	double m_upper;
+    double m_value;
+    double m_lower;
+    double m_upper;
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points
 };
@@ -152,31 +154,31 @@ private:
  */
 class KOFFICEUI_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
-	virtual void changeValue( double );
-	void updateValue( double );
-	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void changeValue( double );
+    void updateValue( double );
+    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
     /// @return the current value, converted in points
     double value( void ) const;
-	void insertItem( double, int index = -1 );
+    void insertItem( double, int index = -1 );
 
 protected:
-	 bool eventFilter( QObject* obj, QEvent* ev );
+    bool eventFilter( QObject* obj, QEvent* ev );
 
 signals:
-	 void valueChanged(double);
+    void valueChanged(double);
 
 private slots:
-	void slotActivated( int );
+    void slotActivated( int );
 
 protected:
-	double m_value;
-	double m_lower;
-	double m_upper;
+    double m_value;
+    double m_lower;
+    double m_upper;
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points
 };
@@ -187,25 +189,25 @@ protected:
  */
 class KOFFICEUI_EXPORT KoUnitDoubleSpinComboBox : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
-	void insertItem( double, int index = -1 );
-	void updateValue( double );
+    void insertItem( double, int index = -1 );
+    void updateValue( double );
     /// @return the current value, converted in points
     double value( void ) const;
 
 signals:
-	 void valueChanged(double);
+    void valueChanged(double);
 
 private slots:
-	void slotUpClicked();
-	void slotDownClicked();
+    void slotUpClicked();
+    void slotDownClicked();
 
 private:
-	KoUnitDoubleComboBox *m_combo;
-	double m_step;
+    KoUnitDoubleComboBox *m_combo;
+    double m_step;
 };
 
 #endif

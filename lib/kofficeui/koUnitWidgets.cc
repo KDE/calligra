@@ -122,10 +122,10 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, double lower, double 
 void
 KoUnitDoubleSpinBox::changeValue( double val )
 {
-	KDoubleSpinBox::setValue( val );
-        // TODO: emit valueChanged ONLY if the value was out-of-bounds
-        // This will allow the 'user' dialog to set a dirty bool and ensure
-        // a proper value is getting saved.
+    KDoubleSpinBox::setValue( val );
+    // TODO: emit valueChanged ONLY if the value was out-of-bounds
+    // This will allow the 'user' dialog to set a dirty bool and ensure
+    // a proper value is getting saved.
 }
 
 void
@@ -170,9 +170,9 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, doubl
     : KLineEdit( parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
     m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
-	setAlignment( Qt::AlignRight );
-	m_validator = new KoUnitDoubleValidator( this, this );
-	setValidator( m_validator );
+    setAlignment( Qt::AlignRight );
+    m_validator = new KoUnitDoubleValidator( this, this );
+    setValidator( m_validator );
     setUnit( unit );
     changeValue(  KoUnit::ptToUnit( value, unit ) );
 }
@@ -180,18 +180,18 @@ KoUnitDoubleLineEdit::KoUnitDoubleLineEdit( QWidget *parent, double lower, doubl
 void
 KoUnitDoubleLineEdit::changeValue( double value )
 {
-	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	setText( getVisibleText( m_value ) );
+    m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+    setText( getVisibleText( m_value ) );
 }
 
 void
 KoUnitDoubleLineEdit::setUnit( KoUnit::Unit unit )
 {
-	KoUnit::Unit old = m_unit;
-	m_unit = unit;
+    KoUnit::Unit old = m_unit;
+    m_unit = unit;
     m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
     m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
+    changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
 }
 
 bool
@@ -207,7 +207,7 @@ KoUnitDoubleLineEdit::eventFilter( QObject* o, QEvent* ev )
 	}
 	else
 #endif
-		return QLineEdit::eventFilter( o, ev );
+            return QLineEdit::eventFilter( o, ev );
 }
 
 double KoUnitDoubleLineEdit::value( void ) const
@@ -221,55 +221,55 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, doubl
      : KComboBox( true, parent, name ), KoUnitDoubleBase( unit, precision ), m_value( value ), m_lower( lower ), m_upper( upper ),
      m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
-	lineEdit()->setAlignment( Qt::AlignRight );
-	m_validator = new KoUnitDoubleValidator( this, this );
-	lineEdit()->setValidator( m_validator );
+    lineEdit()->setAlignment( Qt::AlignRight );
+    m_validator = new KoUnitDoubleValidator( this, this );
+    lineEdit()->setValidator( m_validator );
     setUnit( unit );
     changeValue(  KoUnit::ptToUnit( value, unit ) );
-	connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
+    connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
 void
 KoUnitDoubleComboBox::changeValue( double value )
 {
-	QString oldLabel = lineEdit()->text();
-	updateValue( value );
-	if( lineEdit()->text() != oldLabel )
-		emit valueChanged( m_value );
+    QString oldLabel = lineEdit()->text();
+    updateValue( value );
+    if( lineEdit()->text() != oldLabel )
+        emit valueChanged( m_value );
 }
 
 void
 KoUnitDoubleComboBox::updateValue( double value )
 {
-	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	lineEdit()->setText( getVisibleText( m_value ) );
+    m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+    lineEdit()->setText( getVisibleText( m_value ) );
 }
 
 void
 KoUnitDoubleComboBox::insertItem( double value, int index )
 {
-	KComboBox::insertItem( getVisibleText( value ), index );
+    KComboBox::insertItem( getVisibleText( value ), index );
 }
 
 void
 KoUnitDoubleComboBox::slotActivated( int index )
 {
-	double oldvalue = m_value;
-	bool ok;
-	double value = toDouble( text( index ), &ok );
-  m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
-	if( m_value != oldvalue )
-		emit valueChanged( m_value );
+    double oldvalue = m_value;
+    bool ok;
+    double value = toDouble( text( index ), &ok );
+    m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+    if( m_value != oldvalue )
+        emit valueChanged( m_value );
 }
 
 void
 KoUnitDoubleComboBox::setUnit( KoUnit::Unit unit )
 {
-	KoUnit::Unit old = m_unit;
-	m_unit = unit;
+    KoUnit::Unit old = m_unit;
+    m_unit = unit;
     m_lower = KoUnit::ptToUnit( m_lowerInPoints, unit );
     m_upper = KoUnit::ptToUnit( m_upperInPoints, unit );
-	changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
+    changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( m_value, old ), unit ) );
 }
 
 bool
@@ -285,7 +285,7 @@ KoUnitDoubleComboBox::eventFilter( QObject* o, QEvent* ev )
 	}
 	else
 #endif
-		return QComboBox::eventFilter( o, ev );
+            return QComboBox::eventFilter( o, ev );
 }
 
 double KoUnitDoubleComboBox::value( void ) const
@@ -295,51 +295,51 @@ double KoUnitDoubleComboBox::value( void ) const
 
 
 KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value,
-    KoUnit::Unit unit, unsigned int precision, const char *name )
+                                                    KoUnit::Unit unit, unsigned int precision, const char *name )
     : QWidget( parent ), m_step( step )//, m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
-	QGridLayout *layout = new QGridLayout( this, 2, 3 );
-	//layout->setMargin( 2 );
-	QPushButton *up = new QPushButton( "+", this );
-	//up->setFlat( true );
-	up->setMaximumHeight( 15 );
-	up->setMaximumWidth( 15 );
-	layout->addWidget( up, 0, 0 );
-	connect( up, SIGNAL( clicked() ), this, SLOT( slotUpClicked() ) );
+    QGridLayout *layout = new QGridLayout( this, 2, 3 );
+    //layout->setMargin( 2 );
+    QPushButton *up = new QPushButton( "+", this );
+    //up->setFlat( true );
+    up->setMaximumHeight( 15 );
+    up->setMaximumWidth( 15 );
+    layout->addWidget( up, 0, 0 );
+    connect( up, SIGNAL( clicked() ), this, SLOT( slotUpClicked() ) );
 
-	QPushButton *down = new QPushButton( "-", this );
-	down->setMaximumHeight( 15 );
-	down->setMaximumWidth( 15 );
-	layout->addWidget( down, 1, 0 );
-	connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
+    QPushButton *down = new QPushButton( "-", this );
+    down->setMaximumHeight( 15 );
+    down->setMaximumWidth( 15 );
+    layout->addWidget( down, 1, 0 );
+    connect( down, SIGNAL( clicked() ), this, SLOT( slotDownClicked() ) );
 
-	m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( lower, unit ), KoUnit::ptToUnit( upper, unit ), value, unit, precision, name );
-	connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
-	layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
+    m_combo = new KoUnitDoubleComboBox( this, KoUnit::ptToUnit( lower, unit ), KoUnit::ptToUnit( upper, unit ), value, unit, precision, name );
+    connect( m_combo, SIGNAL( valueChanged( double ) ), this, SIGNAL( valueChanged( double ) ) );
+    layout->addMultiCellWidget( m_combo, 0, 1, 2, 2 );
 }
 
 void
 KoUnitDoubleSpinComboBox::slotUpClicked()
 {
-	m_combo->changeValue( m_combo->value() + m_step );
+    m_combo->changeValue( m_combo->value() + m_step );
 }
 
 void
 KoUnitDoubleSpinComboBox::slotDownClicked()
 {
-	m_combo->changeValue( m_combo->value() - m_step );
+    m_combo->changeValue( m_combo->value() - m_step );
 }
 
 void
 KoUnitDoubleSpinComboBox::insertItem( double value, int index )
 {
-	m_combo->insertItem( value, index );
+    m_combo->insertItem( value, index );
 }
 
 void
 KoUnitDoubleSpinComboBox::updateValue( double value )
 {
-	m_combo->updateValue( value );
+    m_combo->updateValue( value );
 }
 
 double
