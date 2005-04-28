@@ -688,6 +688,9 @@ public:
     { return save( parentElem, saveFrames ); }
     /// Save to OASIS format
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const = 0;
+    /// If the frameset is inline, is it ok to save it inside an oasis <text:p>?
+    /// If not, KWAnchor will create a textbox around it.
+    virtual bool canBeSavedAsInlineCharacter() const { return true; }
 
     /// load from XML - when loading
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );

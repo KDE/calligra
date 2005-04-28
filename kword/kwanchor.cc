@@ -21,6 +21,7 @@
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include "kwviewmode.h"
+#include <koxmlwriter.h>
 #include <kdebug.h>
 
 //#define DEBUG_DRAWING
@@ -257,7 +258,23 @@ void KWAnchor::save( QDomElement &parentElem )
 
 void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    m_frameset->saveOasis( writer, context, true );
+    if ( m_frameset->canBeSavedAsInlineCharacter() )
+        m_frameset->saveOasis( writer, context, true );
+    else // special case for inline tables [which are not alone in their paragraph, see KWTextParag]
+    {
+        writer.startElement( "draw:frame" );
+        writer.addAttribute( "draw:name", m_frameset->getName() + "-Wrapper" );
+        // Mark as wrapper frame. KWTextDocument::loadSpanTag will try to get rid of it upon loading.
+        writer.addAttribute( "koffice:is-wrapper-frame", "true" );
+        //writer.addAttribute( "draw:style-name", saveOasisFrameStyle( mainStyles ) );
+        KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
+        writer.addAttributePt( "svg:width", kosz.width() );
+        writer.addAttributePt( "svg:height", kosz.height() );
+        writer.startElement( "draw:text-box" );
+        m_frameset->saveOasis( writer, context, true );
+        writer.endElement();
+        writer.endElement();
+    }
 }
 
 bool KWAnchor::ownLine() const

@@ -142,9 +142,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
             return true;
     }
 
-    // Anchored-to-paragraph table. This is the only supported way in OASIS currently,
-    // [this is being debated as we speak]
-    // and it's anyway the way OOo-2 saves tables.
+    // Anchored-to-paragraph table.
     else if ( localName == "table" && tag.namespaceURI() == KoXmlNS::table )
     {
         KWDocument* doc = m_textfs->kWordDocument();
@@ -294,6 +292,30 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
     {
         if ( tag.namespaceURI() == KoXmlNS::draw && localName == "frame" )
         {
+            if ( tag.attributeNS( KoXmlNS::koffice, "is-wrapper-frame", QString::null )
+                 == "true" )
+            {
+                QDomElement textbox = KoDom::namedItemNS( tag, KoXmlNS::draw, "text-box" );
+                if ( !textbox.isNull() )
+                {
+                    int numberOfElements = 0;
+                    QDomElement elem;
+                    QDomElement firstElem;
+                    forEachElement( elem, textbox )
+                    {
+                        ++numberOfElements;
+                        firstElem = elem;
+                    }
+                    if ( numberOfElements == 1 ) // if someone added more stuff, keep the wrapper frame
+                    {
+                        kdDebug(32001) << "Wrapper frame removed, loading " << firstElem.tagName() << " directly" << endl;
+                        // load the only child, e.g. table:table
+                        return loadSpanTag( firstElem, context, parag, pos, textData, customItem );
+                    }
+                }
+                return true;
+            }
+
             KWFrame* frame = loadFrame( tag, context );
             if ( frame )
             {
@@ -305,15 +327,11 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 textData = KoTextObject::customItemChar();
                 fs->setAnchorFrameset( m_textfs );
                 customItem = fs->createAnchor( m_textfs->textDocument(), 0 /*frame number; TODO somehow*/ );
-
-                // bad way: doing it all by hand. Doesn't work, pos is no reference(!)
-                //parag->insert( index, KoTextObject::customItemChar() );
-                //fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
-                //++pos;
             }
             return true;
         }
-        // anchored-as-char table. Our "inline" tables - currently not supported by OASIS!
+        // anchored-as-char table. Not supported by OASIS directly, but we end up
+        // calling this when removing the wrapper frame above.
         else if ( tag.namespaceURI() == KoXmlNS::table && localName == "table" )
         {
             KWDocument* doc = m_textfs->kWordDocument();

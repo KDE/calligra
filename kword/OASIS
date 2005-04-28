@@ -1,0 +1,12 @@
+Notes about the use of the OASIS format in kword:
+
+* Tables
+In OASIS, tables are treated like paragraphs.
+In KWord, tables are either "inline as character" or "at a fixed position".
+This gives three cases:
+  + inline table, alone in its paragraph -> can be saved the OASIS way.
+  + inline table with other things in the paragraph -> wrapper frame+textbox needed
+  + fixed-position table -> wrapper frame+textbox needed
+The wrapper frame is marked with a koffice-specific attribute, koffice:is-wrapper-frame="true".
+Upon loading, the wrapper textbox is removed if it doesn't contain anything else.
+

@@ -493,7 +493,7 @@ public:
 
     virtual void saveOasis( KoXmlWriter&, KoSavingContext&, bool saveFrames ) const;
     void loadOasis( const QDomElement& tag, KoOasisContext& context );
-
+    virtual bool canBeSavedAsInlineCharacter() const { return false; }
 
     /** load one cell */
     Cell* loadCell( QDomElement &frameElem, bool loadFrames = true, bool useNames = true );
