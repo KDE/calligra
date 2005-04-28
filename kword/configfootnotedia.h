@@ -27,8 +27,8 @@ class QWidget;
 class KoCounterStyleWidget;
 class QRadioButton;
 class KIntNumInput;
-class KDoubleNumInput;
 class QComboBox;
+class KoUnitDoubleSpinBox;
 
 class KWConfigFootNoteDia : public KDialogBase
 {
@@ -47,7 +47,7 @@ private:
     QRadioButton *rbPosCentered;
     QRadioButton *rbPosRight;
     KIntNumInput *spLength;
-    KDoubleNumInput *spWidth;
+    KoUnitDoubleSpinBox *spWidth;
     QComboBox *m_cbLineType;
 protected slots:
     virtual void slotOk();
