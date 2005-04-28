@@ -1319,7 +1319,9 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   if ( format.hasAttribute( "bgcolor" ) )
   {
     m_bgColor = QColor( format.attribute( "bgcolor" ) );
-    m_featuresSet |= SBackgroundColor;
+    // FIXME: Is white always correct here?
+    if ( m_bgColor != Qt::white )
+	m_featuresSet |= SBackgroundColor;
   }
 
   if ( format.hasAttribute( "multirow" ) )
@@ -1483,7 +1485,9 @@ bool KSpreadStyle::loadXML( QDomElement & format )
   if ( format.hasAttribute( "brushcolor" ) )
   {
     m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
-    m_featuresSet |= SBackgroundBrush;
+    // It is not necessary to set this feature just because the color changes.
+    // FIXME: Or is it?
+    //m_featuresSet |= SBackgroundBrush;
   }
 
   if ( format.hasAttribute( "brushstyle" ) )
@@ -1491,14 +1495,17 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
     if ( !ok )
       return false;
-    m_featuresSet |= SBackgroundBrush;
+
+    if ( m_backGroundBrush.style() != Qt::NoBrush )
+	m_featuresSet |= SBackgroundBrush;
   }
 
   QDomElement pen = format.namedItem( "pen" ).toElement();
   if ( !pen.isNull() )
   {
     m_textPen = util_toPen( pen );
-    m_featuresSet |= STextPen;
+    if ( m_textPen.style() != Qt::NoPen )
+	m_featuresSet |= STextPen;
   }
 
   QDomElement left = format.namedItem( "left-border" ).toElement();
@@ -1508,7 +1515,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_leftBorderPen = util_toPen( pen );
-      m_featuresSet |= SLeftBorder;
+      if ( m_leftBorderPen.style() != Qt::NoPen )
+	  m_featuresSet |= SLeftBorder;
     }
   }
 
@@ -1519,7 +1527,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_topBorderPen = util_toPen( pen );
-      m_featuresSet |= STopBorder;
+      if ( m_topBorderPen.style() != Qt::NoPen )
+	  m_featuresSet |= STopBorder;
     }
   }
 
@@ -1530,7 +1539,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_rightBorderPen = util_toPen( pen );
-      m_featuresSet |= SRightBorder;
+      if ( m_rightBorderPen.style() != Qt::NoPen )
+	  m_featuresSet |= SRightBorder;
     }
   }
 
@@ -1541,7 +1551,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_bottomBorderPen = util_toPen( pen );
-      m_featuresSet |= SBottomBorder;
+      if ( m_bottomBorderPen.style() != Qt::NoPen )
+	  m_featuresSet |= SBottomBorder;
     }
   }
 
@@ -1552,7 +1563,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_fallDiagonalPen = util_toPen( pen );
-      m_featuresSet |= SFallDiagonal;
+      if ( m_fallDiagonalPen.style() != Qt::NoPen )
+	  m_featuresSet |= SFallDiagonal;
     }
   }
 
@@ -1563,7 +1575,8 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     if ( !pen.isNull() )
     {
       m_goUpDiagonalPen = util_toPen( pen );
-      m_featuresSet |= SGoUpDiagonal;
+      if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+	  m_featuresSet |= SGoUpDiagonal;
     }
   }
 
@@ -2005,12 +2018,14 @@ KSpreadStyle * KSpreadStyle::setPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_textPen = pen;
-    style->m_featuresSet |= STextPen;
+    if ( style->m_textPen.style() != Qt::NoPen )
+	style->m_featuresSet |= STextPen;
     return style;
   }
 
   m_textPen = pen;
-  m_featuresSet |= STextPen;
+  if ( m_textPen.style() != Qt::NoPen )
+      m_featuresSet |= STextPen;
   return this;
 }
 
@@ -2020,12 +2035,14 @@ KSpreadStyle * KSpreadStyle::setBgColor( QColor const & color )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_bgColor = color;
-    style->m_featuresSet |= SBackgroundColor;
+    if ( style->m_bgColor != Qt::white )
+	style->m_featuresSet |= SBackgroundColor;
     return style;
   }
 
   m_bgColor = color;
-  m_featuresSet |= SBackgroundColor;
+  if ( m_bgColor != Qt::white )
+      m_featuresSet |= SBackgroundColor;
   return this;
 }
 
@@ -2036,13 +2053,15 @@ KSpreadStyle * KSpreadStyle::setRightBorderPen( QPen const & pen )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_rightBorderPen = pen;
     style->m_rightPenValue = calculateValue( pen );
-    style->m_featuresSet |= SRightBorder;
+    if ( style->m_rightBorderPen.style() != Qt::NoPen )
+	style->m_featuresSet |= SRightBorder;
     return style;
   }
 
   m_rightBorderPen = pen;
   m_rightPenValue = calculateValue( pen );
-  m_featuresSet |= SRightBorder;
+  if ( m_rightBorderPen.style() != Qt::NoPen )
+      m_featuresSet |= SRightBorder;
   return this;
 }
 
@@ -2053,13 +2072,15 @@ KSpreadStyle * KSpreadStyle::setBottomBorderPen( QPen const & pen )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_bottomBorderPen = pen;
     style->m_bottomPenValue = calculateValue( pen );
-    style->m_featuresSet |= SBottomBorder;
+    if ( style->m_bottomBorderPen.style() != Qt::NoPen )
+        style->m_featuresSet |= SBottomBorder;
     return style;
   }
 
   m_bottomBorderPen = pen;
   m_bottomPenValue = calculateValue( pen );
-  m_featuresSet |= SBottomBorder;
+  if ( m_bottomBorderPen.style() != Qt::NoPen )
+      m_featuresSet |= SBottomBorder;
   return this;
 }
 
@@ -2070,13 +2091,15 @@ KSpreadStyle * KSpreadStyle::setLeftBorderPen( QPen const & pen )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_leftBorderPen = pen;
     style->m_leftPenValue = calculateValue( pen );
-    style->m_featuresSet |= SLeftBorder;
+    if ( style->m_leftBorderPen.style() != Qt::NoPen )
+	style->m_featuresSet |= SLeftBorder;
     return style;
   }
 
   m_leftBorderPen = pen;
   m_leftPenValue = calculateValue( pen );
-  m_featuresSet |= SLeftBorder;
+  if ( m_leftBorderPen.style() != Qt::NoPen )
+      m_featuresSet |= SLeftBorder;
   return this;
 }
 
@@ -2087,13 +2110,15 @@ KSpreadStyle * KSpreadStyle::setTopBorderPen( QPen const & pen )
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_topBorderPen = pen;
     style->m_topPenValue = calculateValue( pen );
-    style->m_featuresSet |= STopBorder;
+    if ( style->m_topBorderPen.style() != Qt::NoPen )
+	style->m_featuresSet |= STopBorder;
     return style;
   }
 
   m_topBorderPen = pen;
   m_topPenValue = calculateValue( pen );
-  m_featuresSet |= STopBorder;
+  if ( m_topBorderPen.style() != Qt::NoPen )
+      m_featuresSet |= STopBorder;
   return this;
 }
 
@@ -2103,12 +2128,14 @@ KSpreadStyle * KSpreadStyle::setFallDiagonalPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_fallDiagonalPen = pen;
-    style->m_featuresSet |= SFallDiagonal;
+    if ( style->m_fallDiagonalPen.style() != Qt::NoPen )
+	style->m_featuresSet |= SFallDiagonal;
     return style;
   }
 
   m_fallDiagonalPen = pen;
-  m_featuresSet |= SFallDiagonal;
+  if ( m_fallDiagonalPen.style() != Qt::NoPen )
+      m_featuresSet |= SFallDiagonal;
   return this;
 }
 
@@ -2118,12 +2145,14 @@ KSpreadStyle * KSpreadStyle::setGoUpDiagonalPen( QPen const & pen )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_goUpDiagonalPen = pen;
-    style->m_featuresSet |= SGoUpDiagonal;
+    if ( style->m_goUpDiagonalPen.style() != Qt::NoPen )
+	style->m_featuresSet |= SGoUpDiagonal;
     return style;
   }
 
   m_goUpDiagonalPen = pen;
-  m_featuresSet |= SGoUpDiagonal;
+  if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+      m_featuresSet |= SGoUpDiagonal;
   return this;
 }
 
@@ -2163,12 +2192,14 @@ KSpreadStyle * KSpreadStyle::setBackGroundBrush( QBrush const & brush )
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_backGroundBrush = brush;
-    style->m_featuresSet |= SBackgroundBrush;
+    if ( style->m_backGroundBrush.style() != Qt::NoBrush )
+	style->m_featuresSet |= SBackgroundBrush;
     return style;
   }
 
   m_backGroundBrush = brush;
-  m_featuresSet |= SBackgroundBrush;
+  if ( m_backGroundBrush.style() != Qt::NoBrush )
+      m_featuresSet |= SBackgroundBrush;
   return this;
 }
 

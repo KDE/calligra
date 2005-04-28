@@ -122,6 +122,7 @@ public:
     // Properties
     //
     ////////////////////////////////
+    uint propertiesMask() { return m_mask; } // For the cell inspector only.
     void clearProperties();
     void clearProperty( Properties p );
 

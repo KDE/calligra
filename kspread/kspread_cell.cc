@@ -736,14 +736,33 @@ bool KSpreadCell::needsPrinting() const
     if ( isDefault() )
         return FALSE;
 
-    if ( !d->strText.isEmpty() )
+    if ( !d->strText.isEmpty() ) {
+	//kdWarning(36001) << name() << ": not empty - needs printing" << endl;
         return TRUE;
+    }
 
+    // Cell borders?
     if ( hasProperty( PTopBorder ) || hasProperty( PLeftBorder ) ||
          hasProperty( PRightBorder ) || hasProperty( PBottomBorder ) ||
-         hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ||
-         hasProperty( PBackgroundBrush ) || hasProperty( PBackgroundColor ) )
+         hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ) {
+	//kdDebug(36001) << name()
+	//		 << ": has border property - needs printing" << endl;
+	return TRUE;
+    }
+
+    // Background color or brush?
+    if ( hasProperty( PBackgroundBrush ) ) {
+	//kdDebug(36001) << name()
+	//		 << ": has brush property - needs printing" << endl;
         return TRUE;
+    }
+
+    if ( hasProperty( PBackgroundColor ) ) {
+	//kdDebug(36001) << name()
+	//		 << ": has backgroundColor property - needs printing"
+	//		 << endl;
+	return TRUE;
+    }
 
     return FALSE;
 }

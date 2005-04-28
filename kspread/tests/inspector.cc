@@ -62,7 +62,7 @@ static QString boolAsString( bool b )
 
 static QString longAsHexstring( long l )
 {
-    return QString("0%1").arg(l, 8, 16);
+    return QString("%1").arg(l, 8, 16);
 }
 
 static QString dirAsString( KSpreadSheet::LayoutDirection dir )
@@ -90,7 +90,8 @@ void Inspector::Private::handleCell()
 
   new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
-  new QListViewItem( cellView, "Properties", longAsHexstring( static_cast<long>(cell->kspreadStyle()->features()) ) );
+  new QListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->propertiesMask() ) ) );
+  new QListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->kspreadStyle()->features() ) ) );
   new QListViewItem( cellView, "Text", cell->text() );
   new QListViewItem( cellView, "Text (Displayed)", 
 		     cell->strOutText().replace( QChar('\n'), "\\n" ) );

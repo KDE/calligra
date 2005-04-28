@@ -898,8 +898,11 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
         }
     }
 
-    if ( f.hasAttribute( "bgcolor" ) )
-        setBgColor( QColor( f.attribute( "bgcolor" ) ) );
+    if ( f.hasAttribute( "bgcolor" ) ) {
+	QColor  col( f.attribute( "bgcolor" ) );
+	if ( col != Qt::white )
+	    setBgColor( col );
+    }
 
     if ( f.hasAttribute( "multirow" ) )
         setMultiRow( true );

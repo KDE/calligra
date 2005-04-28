@@ -61,17 +61,15 @@ General bugs
 
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
-  + 68190: Empty document generates 2 printed pages (testcase)	      1 ****
-	See analysis below
+  + 68190: Empty document generates 2 printed pages (testcase)	      1 DONE
   + 70073: printing with kspread gives big black areas		      1 ----
   + 72798: selective print comes up with "nothing to print"	      1 ----
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 DONE
   + 87367: Ugly postscript rendering of cell borders.		      1 DONE
   + 88252: content larger than column are not print as PDF	      1 DONE
-  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 ****
-	Duplicate bug.  See analysis below
-  + 100643: KSpread prints a completely empty page at the end of      1 ****
+  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
+  + 100643: KSpread prints a completely empty page at the end of      1 DONE
 	    the document.
 	Duplicate bug.  See analysis below
   + 100992: left border of cells with text, which is wider than the   1 ----
@@ -186,6 +184,9 @@ Analysis of various bugs
        hasProperty(...) into something like hasNonemptyProperty(...).
        Again, I don't know how this function should be written.
 
+    SOLVED NOW.  The problem was that the features were set even
+    though the fields in the file were null-features (like borders
+    with pen == Qt::NoPen and so on).
 
 
 
