@@ -217,6 +217,90 @@ bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
      xmlWriter.addTextNode( m_fullName );
      xmlWriter.endElement();
     }
+    if ( !m_initial.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "initial" );
+     xmlWriter.addTextNode( m_initial );
+     xmlWriter.endElement();
+    }
+    if ( !m_title.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "author-title" );
+     xmlWriter.addTextNode( m_title );
+     xmlWriter.endElement();
+    }
+    if ( !m_company.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "company" );
+     xmlWriter.addTextNode( m_company );
+     xmlWriter.endElement();
+    }
+    if ( !m_email.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "email" );
+     xmlWriter.addTextNode( m_email );
+     xmlWriter.endElement();
+    }
+    if ( !m_telephoneHome.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "telephone" );
+     xmlWriter.addTextNode( m_telephoneHome );
+     xmlWriter.endElement();
+    }
+    if ( !m_telephoneWork.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "telephone-work" );
+     xmlWriter.addTextNode( m_telephoneWork );
+     xmlWriter.endElement();
+    }
+    if ( !m_fax.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "fax" );
+     xmlWriter.addTextNode( m_fax );
+     xmlWriter.endElement();
+    }
+    if ( !m_country.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "country" );
+     xmlWriter.addTextNode( m_country );
+     xmlWriter.endElement();
+    }
+    if ( !m_postalCode.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "postal-code" );
+     xmlWriter.addTextNode( m_postalCode );
+     xmlWriter.endElement();
+    }
+    if ( !m_city.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "city" );
+     xmlWriter.addTextNode( m_city );
+     xmlWriter.endElement();
+    }
+    if ( !m_street.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "street" );
+     xmlWriter.addTextNode( m_street );
+     xmlWriter.endElement();
+    }
+    if ( !m_position.isEmpty() )
+    {
+     xmlWriter.startElement( "meta:user-defined");
+     xmlWriter.addAttribute( "meta:name", "position" );
+     xmlWriter.addTextNode( m_position );
+     xmlWriter.endElement();
+    }
     return true;
 }
 
@@ -224,8 +308,38 @@ bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
 {
     QDomElement e = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
-    {
         m_fullName = e.text();
+    QDomNode n = metaDoc.firstChild();
+    for ( ; !n.isNull(); n = n.nextSibling() )
+    {
+        if (n.isElement())
+        {
+            QDomElement e = n.toElement();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "initial" && !e.text().isEmpty() )
+                m_initial = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "author-title" && !e.text().isEmpty() )
+                m_title = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "company" && !e.text().isEmpty() )
+                m_company = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "email" && !e.text().isEmpty() )
+                m_email = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "telephone" && !e.text().isEmpty() )
+                m_telephoneHome = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "telephone-work" && !e.text().isEmpty() )
+                m_telephoneWork = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "fax" && !e.text().isEmpty() )
+                m_fax = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "country" && !e.text().isEmpty() )
+                m_country = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "postal-code" && !e.text().isEmpty() )
+                m_postalCode = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "city" && !e.text().isEmpty() )
+                m_city = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "street" && !e.text().isEmpty() )
+                m_street = e.text();
+            if ( e.tagName() == "user-defined" && e.attribute( "name", "" ) == "position" && !e.text().isEmpty() )
+                m_position = e.text();
+        }
     }
     return true;
 }
