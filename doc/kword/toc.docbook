@@ -37,7 +37,7 @@ The first part of this chapter describes how to prepare the document to generate
 <para>Select <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Table of Contents</guimenuitem></menuchoice> from
 the menubar.</para>
-<para>&kword; locates all entries labled with the appropriate paragraph styles, and their corresponding page numbers.  
+<para>&kword; locates all entries labeled with the appropriate paragraph styles, and their corresponding page numbers.  
 It assembles this into the
 table of contents.</para>
 <note><para>Once the table of contents is created, it will remain unchanged until &kword; is instructed to update it.</para>
@@ -51,11 +51,11 @@ the menubar.</para>
 <indexterm><primary>table of contents</primary><secondary>formatting</secondary></indexterm>
 
 <para>The look of the table of contents is also adjusted by using the paragraph styles in &kword;.</para>
-<para>The table of contents title is formated with the <guilabel>Contents Title</guilabel> paragraph style.  
+<para>The table of contents title is formated with the <guilabel>Contents Title</guilabel> paragraph style. 
 All major subject headings (those marked with the <guilabel>Head 1</guilabel> style), are now formatted
 using <guilabel>Contents Head 1</guilabel> paragraph style.  All sub-headings (those marked with the 
 <guilabel>Head 2</guilabel> style), are now formatted
-using <guilabel>Contents Head 2</guilabel> paragraph style.  Finally, All sub-headings (those marked with 
+using <guilabel>Contents Head 2</guilabel> paragraph style.  Finally, all sub-headings (those marked with 
 the <guilabel>Head 3</guilabel> style), are now formatted
 using <guilabel>Contents Head 3</guilabel> paragraph style. </para>
 <para>By <link linkend="style-edit">changing the look</link> of those three styles, 

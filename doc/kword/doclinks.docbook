@@ -37,7 +37,7 @@ file location you want the comment to be linked with (for example:  http://www.k
 <para>Click <guibutton>OK</guibutton>.</para>
 <note><para>By default, &kword; displays links underlined (as in most browsers).  You can turn this behavior on and off by
 selecting <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;</guimenuitem></menuchoice> from the menubar and selecting the <guilabel>Misc</guilabel> icon.  More information can be found
+&kword;...</guimenuitem></menuchoice> from the menubar and selecting the <guilabel>Misc</guilabel> icon.  More information can be found
 <link linkend="opt-misc">here</link>.</para></note>
 </sect2>
 <sect2 id="links-open"><title>Opening a document link</title>
@@ -68,7 +68,8 @@ once on the document link with the &RMB;.  A submenu will appear.  Select <guila
 
 </sect2><sect2 id="links-delete"><title>Deleting a document link</title>
 <para>You can delete a document link like any other text in your document.</para>
-<para>Simply place the cursor at the end of the document link, and press &Backspace;.  The document link is deleted in its entirety.</para>
+<para>Simply place the cursor at the end of the document link, and press &Backspace;.  Alternatively, place 
+the cursor at the beginning of the document link and press <keycap>Delete</keycap> on the keyboard. The document link is deleted in its entirety.</para>
 </sect2>
 <sect2 id="links-remove"><title>Converting a document link to text</title>
 <para>If a document link is no longer needed as a link, but you want to preserve the text that is the link, click once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Remove Link...</guilabel>.  The linked text will now become plain text, and the link will be deleted.</para>

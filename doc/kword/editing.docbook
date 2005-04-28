@@ -1066,7 +1066,7 @@ scope of this manual.  For more information see the KDE Regular Expression Manua
 <guilabel>Replacement text</guilabel> text box.</para>
 <para>Now surround the placeholder with parentheses, so your text string is:  <emphasis>(\0)</emphasis></para>
 <para>When this is executed, whenever &kword; encounters the find text (ie. <quote>Reference 0</quote>, <quote>Reference 1</quote>,
-<quote>Reference 2</quote>, etc) it will surround the text in parethesis (<quote>(Reference 0)</quote>, <quote>(Reference 1)</quote>,
+<quote>Reference 2</quote>, etc) it will surround the text in parenthesis (<quote>(Reference 0)</quote>, <quote>(Reference 1)</quote>,
 <quote>(Reference 2)</quote>, respectively). </para>
 <para>As you can see, the placeholder will maintain a copy of the search text.  You can use this placeholder to add text to the ends of any
 search string you can imagine.</para>
@@ -1714,10 +1714,10 @@ is entered in this text box.</para>
 <para>Simply enter the word in the text box below
 <guilabel>Accept two uppercase letters in</guilabel>.  Then click
 <guibutton>Add</guibutton>.</para>
-<para>As an example:  Adding <quote>FL</quote> to this dialog prevents</para>
-<para><quote>CDs</quote></para>
+<para>As an example:  Adding <quote>CD</quote> to this dialog prevents</para>
+<para><quote>CD</quote></para>
 <para>from being changed to:</para>
-<para><quote>Cds</quote></para>
+<para><quote>Cd</quote></para>
 <para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
 and click on the <guibutton>Remove</guibutton> button.</para>
 </sect3>

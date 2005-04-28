@@ -20,9 +20,11 @@
 <listitem><para><link linkend="options-kword">Miscellaneous options</link></para></listitem>
 </orderedlist>
 <sect1 id="options-keybindings">
-<title>Configure Shortcuts</title>
+<title>Configure Key Bindings (keyboard shortcuts)</title>
 <indexterm><primary>configuring keyboard shortcuts</primary></indexterm>
 <indexterm><primary>keyboard shortcuts</primary><secondary>changing</secondary></indexterm>
+<indexterm><primary>configuring key binding</primary></indexterm>
+<indexterm><primary>keyboard key binding</primary><secondary>changing</secondary></indexterm>
 
 <para>To configure the keyboard shortcuts select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Key
@@ -39,7 +41,7 @@ Bindings</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>To edit the shortcuts, the first thing you need to do is find
 the action you want to edit.  All of the possible actions are listed in
-the combo box labled <guilabel>Action</guilabel>.  By using the
+the combo box labeled <guilabel>Action</guilabel>.  By using the
 scrollbar, locate the action you are interested in and click once with
 the &LMB;.</para>
 
@@ -133,7 +135,7 @@ to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</
 
 <para>To configure &kword;'s toolbars
 select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
-Toolbars</guimenuitem></menuchoice> from the menubar.</para>
+Toolbars...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a dialog box. You can add or remove as many
 toolbar buttons to as many toolbars as you like. You can also move the
@@ -218,13 +220,13 @@ will change.</para>
 
 <para>To configure options regarding spelling and the user interface
 select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;</guimenuitem></menuchoice> from the menubar.</para>
+&kword;...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a dialog box.</para>
 
 
 <sect2 id="opt-ui">
-<title>Configure &kword; User Interface.</title>
+<title>Configure &kword; User Interface</title>
 
 <para>Clicking <guibutton>Interface</guibutton> will allow you to change
 the following.</para>
@@ -336,7 +338,7 @@ values to their default values.</para>
 <varlistentry>
 <term><guilabel>Default font</guilabel></term>
 <listitem>
-<para>Click on the <guibutton>Choose</guibutton> button, and a new dialog will appear.  Use this dialog to
+<para>Click on the <guibutton>Choose...</guibutton> button, and a new dialog will appear.  Use this dialog to
 choose the default font.  This setting determines the default font used by &kword; until further formatting is done.  You can
 revert any text to this default by selecting
 <menuchoice> <guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from
@@ -474,7 +476,7 @@ will be incorrectly marked.  By placing a mark in this checkbox, &kword; will no
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>If this box is not checked, and kword finds a two words in its dictionary that are placed next to each other, it will be
+<listitem><para>If this box is not checked, and &kword; finds a two words in its dictionary that are placed next to each other, it will be
 marked as misspelled.  If this box is checked, the combined word will be ignored.</para>
 <para>Examples of such words are <emphasis>shutout</emphasis>,
 <emphasis>cannot</emphasis>, and <emphasis>blackout</emphasis>.</para>
@@ -596,7 +598,7 @@ check box.</para></note>
 
 <varlistentry>
 <term><guilabel>View formatting end paragraph</guilabel></term>
-<listitem><para>Toggles the display of new-line characters on and off.</para>
+<listitem><para>Toggles the display of paragraph marks (new-line characters) on and off.</para>
 </listitem>
 </varlistentry>
 
@@ -614,7 +616,7 @@ check box.</para></note>
 
 <varlistentry>
 <term><guilabel>View formatting break</guilabel></term>
-<listitem><para>Toggles the display of paragraph marks on and off.</para>
+<listitem><para>Toggles the display of frame breaks on and off.</para>
 </listitem>
 </varlistentry>
 </variablelist>

@@ -18,7 +18,7 @@
 has the ability to toggle the document structure window on and off.</para>
 <para>To toggle the document structure window on and off, select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Show Doc Structure</guimenuitem>
-</menuchoice> from the menubar to make the document structure window visable.  Select <menuchoice>
+</menuchoice> from the menubar to make the document structure window visible.  Select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Hide Doc Structure</guimenuitem>
 </menuchoice> from the menubar to make the document structure window disappear.</para>
 </sect2>

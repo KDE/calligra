@@ -58,7 +58,7 @@ network or the Internet.</para>
 <orderedlist>
 <listitem><para><link linkend="mail-merge-sql-data">Connect to the database and select your query.</link></para></listitem>
 <listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
-where to insert the database information</para></listitem>
+where to insert the database information.</para></listitem>
 <listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
 </orderedlist>
 
@@ -167,7 +167,7 @@ data.LastName=Clients.LastName
 <title>Using a &kspread; file as a data source</title>
 <indexterm><primary>mail merge</primary><secondary>using &kspread; file</secondary></indexterm>
 
-<para>&kword; can use data in a &kword; document for personalizing documents.</para>
+<para>&kword; can use data in a &kspread; document for personalizing documents.</para>
 <note><para>In order to use this data, you only need to know the location of the &kspread; document and the worksheet (page) number the data is located on.</para></note>
 
 <para>Using a &kspread; document to create personalized documents is a three step process:</para>
@@ -282,7 +282,7 @@ the menubar. A dialog box will appear.</para>
 <para>The dialog consists of two listboxes labeled <guilabel>Address Book</guilabel> and <guilabel>Selected Addresses</guilabel>.  By moving entries from your Address book to the <guilabel>Selected Addresses</guilabel> listbox, you will be including those entries in your merge document.  </para>
 <para>To add an entry, select the entry in the left listbox by clicking with the &LMB;.  Then click <guibutton>Add</guibutton>.</para>
 <para>To remove an entry, select the entry in the right listbox by clicking with the &LMB;.  Then click <guibutton>Remove</guibutton>.</para>
-<tip><para>You can locate entries quickly by entering the first 2-3 letters of an entries name in the textbox labled <guilabel>Filter on:</guilabel></para></tip>
+<tip><para>You can locate entries quickly by entering the first 2-3 letters of an entries name in the textbox labeled <guilabel>Filter on:</guilabel></para></tip>
 <note><para>You can load the full address book application by clicking the <guibutton>Address Book...</guibutton> button.</para>
 <para>You can also save a distribution list using the <guibutton>Save as Distribution List...</guibutton> button.  For more information on distribution lists, see the documentation on the &kde; Addressbook.</para></note>
 
@@ -377,7 +377,7 @@ through the list of records.</para>
 <informaltable>
 <tgroup cols="2">
 <thead>
-<row><entry>button</entry><entry>Action</entry></row>
+<row><entry>Button</entry><entry>Action</entry></row>
 </thead><tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="beginning.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move directly to record one</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move back one record</entry></row>
@@ -436,8 +436,12 @@ you can proceed to printing your document.</para>
 <title>Delete a merge field</title>
 <indexterm><primary>mail merge</primary><secondary>deleting a merge field</secondary></indexterm>
 
-<para>To delete a merge field, simply place the cursor at the end of the merge field, and press the &Backspace; key.  The entire 
-merge field will be deleted.</para>
+<para>You can delete a merge field two ways.</para>
+
+<itemizedlist>
+<listitem><para>Place the cursor at the end of the merge field, and press the &Backspace; key. </para></listitem>
+<listitem><para>Place the cursor at the beginning of the merge field, and press the <keycap>Delete</keycap> key. </para></listitem>
+</itemizedlist>
 
 </sect4>
 </sect3>
@@ -460,7 +464,7 @@ the menubar. A dialog box will appear.</para>
 </mediaobject>
 </screenshot>
 
-<para>Select <guilabel>Print Preview...</guilabel>.  You will be able to see the final output of your personalized documents prior to 
+<para>Click <guilabel>Print Preview...</guilabel>.  You will be able to see the final output of your personalized documents prior to 
 printing.</para>
 </sect4>
 <sect4 id="mail-merge-print-printing">

@@ -13,10 +13,11 @@
 
 <para>&kword; is very good at handling textual information.  &kword; can also be used to incorporate
 graphical images with text.  </para>
+<tip><para>A source of great clipart that is free to use is the <ulink url="http://www.openclipart.org">Open Clip Art Library</ulink>. This project has a large collection of vector graphics indexed and sorted by category, all released into the public domain.</para></tip>
 <para>Pictures can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> images.</para>
 <para>Framed images are pictures that have a frame around them.  The frame around a picture functions 
 exactly the same as a frame around text.  It contains the picture and determines the size and shape of the picture.</para>
-<para>An inline image has frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
+<para>An inline image has a frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
 frame. If text is inserted in front of the picture, the picture travels down the frame just like any text would.  This means the picture will
 stay in the same area of the page as the text that surrounds it.</para>
 <para>Framed pictures, on the other hand, need to be moved by hand on the page.  </para>

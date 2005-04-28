@@ -39,7 +39,7 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 <itemizedlist>
 <listitem><para><emphasis>All</emphasis> formula frames are inserted <glossterm linkend="definlineframe">inline</glossterm> by default.
 This frame can later be
-converted to a <emphasis>framed</emphasis> frame later.</para></listitem>
+converted to a <emphasis>non-inline</emphasis> frame later.</para></listitem>
 <listitem><para>Formula frames expand and contract depending on the resulting size of the formula.</para></listitem>
 <listitem><para>Formula frames automatically determine where in the line they are lined up.</para></listitem>
 </itemizedlist>

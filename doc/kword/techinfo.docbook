@@ -110,7 +110,7 @@ files.</para>
 <para>The text portion of all &kword; files are &XML;
 (eXtensible Markup Language) files.</para> 
 
-<note><para>For more information on &XML; documents, processors and
+<note><para>For more information on &XML; documents, processing and
 technology, please visit <simplelist> <member><ulink
 url="http://www.w3.org/XML/">World Wide Web Consortium &XML;
 pages</ulink></member> <member><ulink
@@ -186,7 +186,7 @@ files.</para>
 <para>The text portion of all &kword; files are &XML;
 (eXtensible Markup Language) files.</para> 
 
-<note><para>For more information on &XML; documents, processors and
+<note><para>For more information on &XML; documents, processing and
 technology, please visit <simplelist> <member><ulink
 url="http://www.w3.org/XML/">World Wide Web Consortium &XML;
 pages</ulink></member> <member><ulink

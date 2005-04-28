@@ -17,7 +17,7 @@ Comment it out again when you are done -->
 <title>The Menu Items/Toolbars</title>
 
 <sect1 id="menu-intro">
-<title>Introduction to Menubars and Toolbars</title>
+<title>Introduction to the Menubar and Toolbars</title>
 
 <para>The key to getting the most out of &kword;, is found in the menu
 bars and the toolbars.</para>
@@ -37,8 +37,7 @@ manipulation of &kword;'s toolbars to suit your needs.</para>
 
 <para>The second part of this section, takes a detailed look at each
 menubar function, and each standard toolbar button, and provides you with a
-brief summary of its action.  Most of these menubar functions and
-toolbar buttons also provide you with a link to more detailed
+brief summary of its action.  Many of these sections  also provide you with a link to more detailed
 information located elsewhere in the &kword; Handbook.</para>
 
 </sect1>
@@ -49,8 +48,7 @@ information located elsewhere in the &kword; Handbook.</para>
 
 <para>&kword; offers the user great flexibility when it comes to
 toolbars.  This first section will show you some of the many options
-you have for relocating, reformatting and removing toolbars from your
-desktop.</para>
+you have for relocating, reformatting and removing toolbars.</para>
 
 <sect2 id="hide-toolbar">
 <title>Hiding Toolbars </title>
@@ -240,7 +238,7 @@ using the menubar.</para>
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
-<guimenu>File</guimenu><guimenuitem>Open</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -343,7 +341,7 @@ information on the ability to export files to other applications, see the sectio
 <term id="menu-template-create">
 <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template from
-Document</guimenuitem>
+Document...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -356,7 +354,7 @@ starting point for future documents.</action> For more details, see
 <varlistentry>
 <term id="menu-statistics">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Statistics...</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Statistics</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -371,7 +369,7 @@ written in English.</para>
 <para>The <guilabel>Flesch reading ease</guilabel> score is a number
 between 0 and 100 which estimates how readable a text is. The higher
 the number, the easier the text can be read. Text with a score of
-70-80 have a fairly good readability.</para>
+70-80 should have fairly good readability.</para>
 
 <para>The Flesch formula uses the number of words per sentences and
 the number of syllables per word. It assumes that the use of short
@@ -430,7 +428,7 @@ the menubar.</para>
 <varlistentry>
 <term id="menu-doc-info">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -445,7 +443,7 @@ classification.</para>
 <varlistentry>
 <term id="menu-send-file">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Mail</guimenuitem>
+<guimenu>File</guimenu><guimenuitem>Mail...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -479,9 +477,8 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Quits</action> &kword;</para> 
-<para>Typing <keycombo
-action="simul">&Ctrl;<keycap>Q</keycap></keycombo> is equivalent to
+<para><action>Quits</action> &kword;.</para> 
+<para>Typing <keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -652,7 +649,7 @@ using the menubar.</para>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
-<guimenu>Edit</guimenu><guimenuitem>Find</guimenuitem>
+<guimenu>Edit</guimenu><guimenuitem>Find...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -706,7 +703,7 @@ using the menubar.</para></listitem></varlistentry>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
-<guimenu>Edit</guimenu><guimenuitem>Replace</guimenuitem>
+<guimenu>Edit</guimenu><guimenuitem>Replace...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -812,7 +809,7 @@ Views</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>When this option is selected, A submenu opens with 3 options:</para>
+<para>When this option is selected, a submenu opens with 3 options:</para>
 <simplelist>
 <member><guilabel>Page Mode</guilabel> - &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
 for editing your document.</member>
@@ -914,7 +911,7 @@ documents.</para>
 <shortcut>
 <keycombo action="simul">&Alt; &Shift; <keycap>C</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Special Character</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Special Character...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -965,7 +962,7 @@ using the menubar. </para>
 <listitem>
 <para><action>This will insert a footnote or endnote at the current cursor
 position.</action>  More detailed information can be found in <link
-linkend="endnotes-and-footnotes">Footnotes</link>.</para>
+linkend="endnotes-and-footnotes">Footnotes and Endnotes</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1077,7 +1074,7 @@ For more information refer to the section entitled
 </term>
 <listitem>
 <para><action>To create a new text frame.</action>  After selecting this
-option, your cursor will change to cross hairs.  chose the location of
+option, your cursor will change to cross hairs.  Choose the location of
 one corner of your new text frame.  Click on the
 <mousebutton>left</mousebutton> mouse button and hold the button down.
 Drag the mouse, until you have the desired text frame.  When you have
@@ -1138,8 +1135,8 @@ linkend="formulas">here</link>.</para>
 
 <para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are
-is equivalent to using
+fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using
 the menubar.</para>
 </listitem>
 </varlistentry>
@@ -1157,8 +1154,8 @@ linkend="tables">Tables</link>.</para>
 
 <para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are
-is equivalent to using the
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using the
 menubar.</para>
 </listitem>
 </varlistentry>
@@ -1287,7 +1284,7 @@ more information go to <link linkend="formulas">Formulas</link></para>
 <para>Allows you to select a style for the selected text.  Selecting this option shows a submenu
 listing all available paragraphs styles. Select the correct style and the paragraph style will be changed.</para>
 <para>For more
-information go to <link linkend="styles">Styles</link></para>
+information go to <link linkend="styles">Text Styles</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1317,7 +1314,7 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action>Allows you to import a style.</action> For more information go to <link
-linkend="styles">Styles</link></para>
+linkend="styles">Text Styles</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1330,7 +1327,7 @@ linkend="styles">Styles</link></para>
 <listitem>
 <para>Uses the currently selected text to create a new style.</para>
 <para>For more
-information go to <link linkend="style-add-text">Styles</link></para>
+information go to <link linkend="style-add-text">Text Styles</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1508,12 +1505,12 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-framestyle-create">
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Create Framestyle From Frame</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Create Framestyle From Frame...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Create a new framestyle based on the currently selected frame.</action> For more information see the section entitled
-<link linkend="framestyles">Framestyle</link>.</para>
+<link linkend="framestyles">Using Framestyles</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1694,7 +1691,7 @@ here</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Converts a table into a grid of individual frames.</action>These individual frames are not connected and can be moved independently around the screen.  For more on tables, <link
+<para><action>Converts a table into a grid of individual frames.</action> These individual frames are not connected and can be moved independently around the page.  For more on tables, <link
 linkend="tables">click here</link>.</para>
 </listitem>
 </varlistentry>
@@ -1719,7 +1716,7 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 </term>
 <listitem>
 <para><action>Lets you edit tablestyles.</action>  You can
-find more about tables in the section entitled <link linkend="tablestyle">Tablestyle</link>.</para>
+find more about tables in the section entitled <link linkend="tablestyle">Using Tablestyle</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1731,14 +1728,14 @@ find more about tables in the section entitled <link linkend="tablestyle">Tables
 </term>
 <listitem>
 <para><action>Lets you format the currently selected table using a preformatted template.</action>  You can
-find more about tables in the section entitled <link linkend="tablestyle">Tablestyle</link>.</para>
+find more about tables in the section entitled <link linkend="tablestyle">Using Tablestyle</link>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="menu-table-to-text">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Converte Table to Text</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Convert Table to Text</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1799,7 +1796,7 @@ For more information see the section entitled
 </menuchoice>
 </term>
 <listitem><para><action>&kword; will format your document according to specific rules.</action>
-For more information see <link linkend="autoformat">Autoformating</link>.</para></listitem>
+For more information see <link linkend="autoformat">Manually Applying Autocorrection</link>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1822,7 +1819,7 @@ Changing Font Case</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Alphabatizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
+<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
 </listitem>
 </varlistentry>
 
@@ -2072,7 +2069,8 @@ character dialog</link>.</para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Text Color Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry><para>Change Font Color</para>
+<para>Clicking on the letter changes the selected text to the color previewed in the underline.  Clicking the arrow to the right of the letter will let you select a new color.</para></entry></row>
 </tbody></tgroup>
 </informaltable>
 </sect1>
@@ -2128,8 +2126,8 @@ task from the menubar.  Click on that task for more details. </para>
 <sect1 id="basic-edit-toolbar">
 <title>Edit Toolbar</title>
 
-<para>The Basic Editing Toolbar consists of 8 buttons.  Each
-<quote>button</quote> performs a task from the menubar.  Click on that
+<para>The Basic Editing Toolbar consists of 8 buttons.  Each 
+button performs a task from the menubar.  Click on that
 task for more details. </para>
 
 <screenshot>
@@ -2193,8 +2191,8 @@ task for more details. </para>
 <sect1 id="paragraph-toolbar">
 <title>Paragraph Toolbar</title>
 
-<para>The Insert Toolbar consists of 8 buttons.  Each button performs
-a task from the menubar.  Click on that task for more details. </para>
+<para>The Insert Toolbar consists of 9 buttons.  Each button performs
+a task from the menubar.</para>
 
 <screenshot>
 <mediaobject>
@@ -2225,7 +2223,7 @@ a task from the menubar.  Click on that task for more details. </para>
 <sect1 id="table-edit-toolbar">
 <title>Table ToolBar</title>
 
-<para>The Table Edit Toolbar consists of 4 buttons.  Each button
+<para>The Table Edit Toolbar consists of 5 buttons.  Each button
 performs a task from the menubar.  Click on that task for more
 details. </para>
 
@@ -2274,7 +2272,7 @@ details. </para>
 <sect1 id="border-toolbar">
 <title>Border Toolbar</title>
 
-<para>The Border Toolbar consists of 9 buttons.  Each button performs a
+<para>The Border Toolbar consists of 10 buttons.  Each button performs a
 task from the menubar.  Click on that task for more details. </para>
 
 <screenshot>
@@ -2291,11 +2289,11 @@ task from the menubar.  Click on that task for more details. </para>
 </thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="tblsty.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Set framestyle</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle border colors</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Left Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Right Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Top Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bottom Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle border outline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Left Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Right Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Top Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bottom Frame Border</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Size</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Style</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bkgdcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Color</entry></row>
@@ -2307,8 +2305,7 @@ task from the menubar.  Click on that task for more details. </para>
 <sect1 id="formula-toolbar">
 <title>Formula Toolbar</title>
 
-<para>The Formula Toolbar consists of 17 buttons.  Each button performs
-a task from the menubar.  Click on that task for more details. </para>
+<para>The Formula Toolbar consists of 26 buttons.</para>
 
 <screenshot>
 <mediaobject>
@@ -2324,11 +2321,13 @@ a task from the menubar.  Click on that task for more details. </para>
 </thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formsqrt.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change Square Root</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="formfrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change Fraction</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="formbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change to Brackets</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="formsbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change to Square Brackets</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="formcbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change to Curly Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formfrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Fraction</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formsbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Square Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formcbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Curly Brackets</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formabs.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Absolute Value</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formover.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Overline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formunder.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Underline</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="forminteg.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Integral</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formsum.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Change to Sum</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formprod.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Change to Product</entry></row>
@@ -2379,7 +2378,7 @@ arrow up increases the color's <glossterm linkend="defvalue">value</glossterm>. 
 </varlistentry>
 <varlistentry>
 <term>Hue, Saturation and Value</term>
-<listitem><para>Using the three spin boxes labled <guilabel>H</guilabel>,<guilabel>S</guilabel> and <guilabel>V</guilabel>, a user can
+<listitem><para>Using the three spin boxes labeled <guilabel>H</guilabel>,<guilabel>S</guilabel> and <guilabel>V</guilabel>, a user can
 specify the <glossterm linkend="defhue">Hue</glossterm> (Range 0-359), <glossterm linkend="defsaturation">Saturation</glossterm> (Range 0-255) 
 and <glossterm linkend="defvalue">Value</glossterm> (Range 0-255)
 respectively.</para>
@@ -2388,13 +2387,13 @@ respectively.</para>
 </varlistentry>
 <varlistentry>
 <term>Red, Green and Blue</term>
-<listitem><para>Using the three spin boxes labled <guilabel>R</guilabel>,<guilabel>G</guilabel> and <guilabel>B</guilabel>, a user can
+<listitem><para>Using the three spin boxes labeled <guilabel>R</guilabel>,<guilabel>G</guilabel> and <guilabel>B</guilabel>, a user can
 specify the amount of Red, Green and Blue to be mixed to form the current color.  All three boxes can be set to any value from 0-255.</para>
 <para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term>Palates</term>
+<term>Palattes</term>
 <listitem><para>A palate is a group of related colors.  These colors are all made available for easy selection according to a meaningful
 association.</para>
 <para>To select a new palate, click on the combo box at the top of the palate selection area.  
@@ -2449,13 +2448,13 @@ for insertion into the document). An example is shown below.</para>
 <imagedata fileref="savedlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>This section  will look more closely at this dialog and provided detailed information on its use..</para>
+<para>This section  will look more closely at this dialog and provided detailed information on its use.</para>
 
 <para>We will begin at the top of the dialog.</para>
 
 <para><emphasis>Toolbar</emphasis></para>
 
-<para>The current location on the drive is listed at the top-center of the dialg.  This example dialog shows the current folder is <filename
+<para>The current location on the drive is listed at the top-center of the dialog.  This example dialog shows the current folder is <filename
 class="directory">/home/mmcbride/kword</filename>. If you click on this drop
 down box, you will see common and recently visited folders.  By
 selecting one of these folders, you will be immediately moved to
@@ -2465,7 +2464,7 @@ that folder and the dialog box will update the file list.</para>
 arrow will take you up one level in the folder structure.</para>
 
 <para>The next two buttons are backwards and forward buttons.  These
-buttons work just like an Internet browser, where you can use the back
+buttons work just like an Internet browser. You can use the back
 button to travel to the previous folder, and the forward button to
 advance into a folder you just came from.</para>
 
@@ -2476,7 +2475,7 @@ added or deleted.</para>
 <para>To the right of the reload button, is a blue file folder with a starburst.  This button
 will let you create a new folder and name it.</para>
 
-<para>Next to the reload button, is a button with a star on it.
+<para>Next to the new folder button, is a button with a star on it.
 This button allows you to set and navigate through bookmarks.  This is
 a quick way to jump to commonly accessed folders.  By clicking
 this button, a submenu appears which allows you to add bookmarks or
@@ -2498,7 +2497,7 @@ folders should be listed before files, or mixed within the files.</para>
 <term><guimenuitem>Short View</guimenuitem></term>
 <listitem>
 <para>If this option is selected, only the names of the files and folders will be shown.</para>
-<para>Compare this to detailed view</para>
+<para>Compare this to detailed view.</para>
 </listitem>
 </varlistentry>
 
@@ -2506,7 +2505,7 @@ folders should be listed before files, or mixed within the files.</para>
 <term><guimenuitem>Detailed View</guimenuitem></term>
 <listitem>
 <para>If tis option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
-<para>Compare this to short view</para>
+<para>Compare this to short view.</para>
 </listitem>
 </varlistentry>
 
@@ -2555,17 +2554,17 @@ Simply click with the &RMB; and a small submenu will appear.</para>
 <para><emphasis>File Name and Filters</emphasis></para>
 
 
-<para>The text box labled <guilabel>Location</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
+<para>The text box labeled <guilabel>Location</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
 filename of the currently selected file when loading new documents or files into
 &kword;.  When saving a file, you will enter the desired filename in this text box.</para>
 
-<para>The text box labled <guilabel>Filter</guilabel> shows we are only looking
+<para>The text box labeled <guilabel>Filter</guilabel> shows we are only looking
 at &kword; files.  By clicking on the combo box, you can select from several
 different file formats.  You can also select <guilabel>All supported files</guilabel> to display
 all files that are supported by &kword;.  The file types available will change depending on
 the specific task at hand.</para>
 
-<para>If there is a mark in the checkbox labled <guilabel>Automatically select filename extension</guilabel>, 
+<para>If there is a mark in the checkbox labeled <guilabel>Automatically select filename extension</guilabel>, 
 then &kword; will add the correct filename extension based on your selection in the <guilabel>Filter:</guilabel> 
 drop down box.  If there is no mark in this box, you are responsible for providing an extension.  Most users 
 will leave this box marked.</para>

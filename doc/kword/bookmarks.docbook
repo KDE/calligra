@@ -59,7 +59,7 @@ the menubar.</para>
 <para>A small dialog will appear.  Click on the desired bookmark with the &LMB;.  </para>
 <warning><para>Be sure you have selected the correct bookmark from the list before proceeding.  &kword; does not ask for
 confirmation before deleting the selected bookmark.</para></warning>
-<para>Now select <guibutton>Delete Bookmark</guibutton>.
+<para>Now click <guibutton>Delete Bookmark</guibutton>.
 The bookmark is deleted immediately.</para>
 </sect2>
 
