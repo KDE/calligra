@@ -766,7 +766,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
                                               MM_TO_POINT(2),
                                               doc->ptPaperWidth(),
                                               0.1,
-                                              m_oldTabStopWidth,
+                                              doc->tabStopValue(),
                                               unit );
     m_oldTabStopWidth = doc->tabStopValue();
 
