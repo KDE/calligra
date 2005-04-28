@@ -6,7 +6,15 @@ In KWord, tables are either "inline as character" or "at a fixed position".
 This gives three cases:
   + inline table, alone in its paragraph -> can be saved the OASIS way.
   + inline table with other things in the paragraph -> wrapper frame+textbox needed
-  + fixed-position table -> wrapper frame+textbox needed
-The wrapper frame is marked with a koffice-specific attribute, koffice:is-wrapper-frame="true".
-Upon loading, the wrapper textbox is removed if it doesn't contain anything else.
+       The wrapper frame is marked with a koffice-specific attribute, koffice:is-wrapper-frame="true".
+       Upon loading, the wrapper textbox is removed if it doesn't contain anything else.
+  + fixed-position table -> wrapper frame+textbox would be needed here too.
+       But anyway those tables are very difficult to handle, and offer nothing
+       compared to "putting an inline table in a non-inline textbox", so I have disabled them.
+
+* Frame behavior on new pages
+KWord supports "What happens on new page: create a new frame and reconnect, no followup, make copy.
+OASIS doesn't, but this doesn't matter, it doesn't affect rendering of existing documents, only editing.
+So we save this with a koffice:frame-behavior-on-new-page attribute, possible values:
+followup, copy or none. Default value: copy for header/footers, none otherwise.
 

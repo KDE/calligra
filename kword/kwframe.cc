@@ -630,7 +630,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
     // of existing documents, only editing (and only KWord has this kind of option until now).
-    const QCString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::style, "frame-behavior-on-new-page" ).latin1();
+    const QCString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).latin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
     else if ( frameBehaviorOnNewPage == "copy" )
@@ -640,7 +640,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     else { // Defaults for OASIS documents not created by KWord
         m_newFrameBehavior = frameSet->isHeaderOrFooter() ? Copy : NoFollowup;
         if ( !frameBehaviorOnNewPage.isEmpty() )
-            kdWarning(32001) << "Unknown value for style:frame-behavior-on-new-page: " << frameBehaviorOnNewPage << endl;
+            kdWarning(32001) << "Unknown value for koffice:frame-behavior-on-new-page: " << frameBehaviorOnNewPage << endl;
     }
     // Footnotes and endnotes are handled in a special way.
     if ( frameSet->isFootEndNote() ) // note that isFootNote/isEndNote are not possible yet
@@ -792,7 +792,7 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
             value = "copy";
         else if ( m_newFrameBehavior == NoFollowup )
             value = "none";
-        frameStyle.addProperty( "style:frame-behavior-on-new-page", value );
+        frameStyle.addProperty( "koffice:frame-behavior-on-new-page", value );
     }
 
     // The loading code for this one is in kwtextframeset, maybe this should be moved there too
