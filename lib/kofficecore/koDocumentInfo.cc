@@ -315,42 +315,34 @@ bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
         if (n.isElement())
         {
             QDomElement e = n.toElement();
-            if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "initial" && !e.text().isEmpty() )
-                m_initial = e.text();
-            else if (e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "author-title" && !e.text().isEmpty() )
-                m_title = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "company" && !e.text().isEmpty() )
-                m_company = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "email" && !e.text().isEmpty() )
-                m_email = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "telephone" && !e.text().isEmpty() )
-                m_telephoneHome = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "telephone-work" && !e.text().isEmpty() )
-                m_telephoneWork = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "fax" && !e.text().isEmpty() )
-                m_fax = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "country" && !e.text().isEmpty() )
-                m_country = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "postal-code" && !e.text().isEmpty() )
-                m_postalCode = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "city" && !e.text().isEmpty() )
-                m_city = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "street" && !e.text().isEmpty() )
-                m_street = e.text();
-            else if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" &&
-             e.attribute( "name", "" ) == "position" && !e.text().isEmpty() )
-                m_position = e.text();
+            if ( e.namespaceURI() == KoXmlNS::meta && e.localName() == "user-defined" && !e.text().isEmpty() )
+            {
+                QString name = e.attributeNS( KoXmlNS::meta, "name", QString::null );
+                if ( name == "initial" )
+                    m_initial = e.text();
+                else if ( name == "author-title" )
+                    m_title = e.text();
+                else if ( name == "company" )
+                    m_company = e.text();
+                else if ( name == "email" )
+                    m_email = e.text();
+                else if ( name == "telephone" )
+                    m_telephoneHome = e.text();
+                else if ( name == "telephone-work" )
+                    m_telephoneWork = e.text();
+                else if ( name == "fax" )
+                    m_fax = e.text();
+                else if ( name == "country" )
+                    m_country = e.text();
+                else if ( name == "postal-code" )
+                    m_postalCode = e.text();
+                else if ( name == "city" )
+                    m_city = e.text();
+                else if ( name == "street" )
+                    m_street = e.text();
+                else if ( name == "position" )
+                    m_position = e.text();
+            }
         }
     }
     return true;
