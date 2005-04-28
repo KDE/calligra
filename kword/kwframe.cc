@@ -371,27 +371,30 @@ void KWFrame::save( QDomElement &frameElem )
     if ( minFrameHeight() > 0 )
         frameElem.setAttribute( "min-height", QString::number( minFrameHeight(), 'g', DBL_DIG ) );
 
-    if(runAround()!=RA_NO)
+    if ( !m_frameSet->isHeaderOrFooter() && !m_frameSet->isMainFrameset() )
     {
-        frameElem.setAttribute( "runaround", static_cast<int>( runAround() ) );
-        if (runAround() == RA_BOUNDINGRECT)
+        if(runAround()!=RA_NO)
         {
-            if (runAroundSide()==RA_LEFT)
-                frameElem.setAttribute( "runaroundSide", "left" );
-            else if (runAroundSide()==RA_RIGHT)
-                frameElem.setAttribute( "runaroundSide", "right" );
-            else
-                frameElem.setAttribute( "runaroundSide", "biggest" );
+            frameElem.setAttribute( "runaround", static_cast<int>( runAround() ) );
+            if (runAround() == RA_BOUNDINGRECT)
+            {
+                if (runAroundSide()==RA_LEFT)
+                    frameElem.setAttribute( "runaroundSide", "left" );
+                else if (runAroundSide()==RA_RIGHT)
+                    frameElem.setAttribute( "runaroundSide", "right" );
+                else
+                    frameElem.setAttribute( "runaroundSide", "biggest" );
+            }
         }
-    }
-    if(runAroundLeft()!=0 || runAroundRight()!=0 || runAroundTop()!=0 || runAroundBottom()!=0) {
-        frameElem.setAttribute( "runaroundLeft", m_runAroundLeft );
-        frameElem.setAttribute( "runaroundRight", m_runAroundRight );
-        frameElem.setAttribute( "runaroundTop", m_runAroundTop );
-        frameElem.setAttribute( "runaroundBottom", m_runAroundBottom );
-        // The old file format had only one value, keep compat
-        double runAroundGap = QMAX( QMAX( m_runAroundLeft, m_runAroundRight ), QMAX( m_runAroundTop, m_runAroundBottom ) );
-        frameElem.setAttribute( "runaroundGap", runAroundGap );
+        if(runAroundLeft()!=0 || runAroundRight()!=0 || runAroundTop()!=0 || runAroundBottom()!=0) {
+            frameElem.setAttribute( "runaroundLeft", m_runAroundLeft );
+            frameElem.setAttribute( "runaroundRight", m_runAroundRight );
+            frameElem.setAttribute( "runaroundTop", m_runAroundTop );
+            frameElem.setAttribute( "runaroundBottom", m_runAroundBottom );
+            // The old file format had only one value, keep compat
+            double runAroundGap = QMAX( QMAX( m_runAroundLeft, m_runAroundRight ), QMAX( m_runAroundTop, m_runAroundBottom ) );
+            frameElem.setAttribute( "runaroundGap", runAroundGap );
+        }
     }
 
     if(leftBorder().penWidth()!=0)

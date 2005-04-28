@@ -4,8 +4,6 @@ they are not bugs:
 * Background color (bkRed/bkBlue/bkGreen) isn't saved anymore for transparent frames (bkStyle=0)
   (which makes sense since it doesn't appear)
 
-* Ignore runaround* attributes for "Main Text Frameset", it's not used
-
 * Font weight is rounded to a multiple of 10 (if not 75)
   -    <WEIGHT value="48" />
   +    <WEIGHT value="40" />

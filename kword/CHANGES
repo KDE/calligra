@@ -1,6 +1,9 @@
 Changes between KWord 1.3.2 and 1.3.3
 =====================================
 - Fix the 3 style menus for any translation (#61007)
+- OASIS: proper loading/saving of inline tables
+- Disable creation of non-inline tables
+- OASIS: default tab width
 
 Changes after KWord-1.3
 =======================

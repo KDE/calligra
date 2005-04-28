@@ -1156,8 +1156,18 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                        ? DTP : WP;
 
     // TODO settings (m_unit, spellcheck settings)
+
     m_hasTOC = false;
-    m_tabStop = MM_TO_POINT(15); // TODO
+    m_tabStop = MM_TO_POINT(15);
+    QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
+    if ( defaultParagStyle ) {
+        KoStyleStack stack;
+        stack.push( *defaultParagStyle );
+        stack.setTypeProperties( "paragraph" );
+        QString tabStopVal = stack.attributeNS( KoXmlNS::style, "tab-stop-distance" );
+        if ( !tabStopVal.isEmpty() )
+            m_tabStop = KoUnit::parseValue( tabStopVal );
+    }
     m_initialEditing = 0;
 
     // TODO variable settings
@@ -2929,6 +2939,17 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
+
+    if ( saveFlag == SaveAll )
+    {
+        stylesWriter->startElement( "style:default-style" );
+        stylesWriter->addAttribute( "style:family", "paragraph" );
+        stylesWriter->startElement( "style:paragraph-properties" );
+        stylesWriter->addAttributePt( "style:tab-stop-distance", m_tabStop );
+        stylesWriter->endElement(); // paragraph-properties
+        stylesWriter->endElement(); // default-style
+    }
+
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -2960,7 +2981,6 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
             pageLayoutName = (*it).name;
         }
         stylesWriter->endElement(); // office:automatic-styles
-
     }
 
 
@@ -5358,7 +5378,7 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     //necessary to switchmode view in all canvas in first.
     //otherwise in multiview kword crash !
     //perhaps it's not a good idea to store m_modeView into kwcanvas.
-    //but it's necessary for the futur when kword will support
+    //but it's necessary for the future when kword will support
     //different view mode in different view.
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->getGUI()->canvasWidget()->switchViewMode( m_viewMode );
