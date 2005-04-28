@@ -50,7 +50,7 @@ public:
         Left = 8,
         Top = 16,
         Width = 32,
-        Height = 64,
+        Height = 64
     };
 
     GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
