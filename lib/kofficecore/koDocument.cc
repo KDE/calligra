@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000-2004 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,6 +46,7 @@
 #include <kmimetype.h>
 #include <kparts/partmanager.h>
 #include <kprinter.h>
+#include <ksavefile.h>
 
 #include <qbuffer.h>
 #include <qcursor.h>
@@ -371,18 +372,22 @@ bool KoDocument::saveFile()
     QApplication::setOverrideCursor( waitCursor );
 
     if ( backupFile() ) {
-        KIO::UDSEntry entry;
-        if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
-            emit sigStatusBarMessage( i18n("Making backup...") );
-            KURL backup;
-            if ( d->m_backupPath.isEmpty())
-                backup = url();
-            else
-                backup = d->m_backupPath +"/"+url().fileName();
-            backup.setPath( backup.path() + QString::fromLatin1("~") );
-            KFileItem item( entry, url() );
-            Q_ASSERT( item.name() == url().fileName() );
-            KIO::NetAccess::file_copy( url(), backup, item.permissions(), true /*overwrite*/, false /*resume*/, shells().current() );
+        if ( url().isLocalFile() )
+            KSaveFile::backupFile( url().path(), d->m_backupPath );
+        else {
+            KIO::UDSEntry entry;
+            if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
+                emit sigStatusBarMessage( i18n("Making backup...") );
+                KURL backup;
+                if ( d->m_backupPath.isEmpty())
+                    backup = url();
+                else
+                    backup = d->m_backupPath +"/"+url().fileName();
+                backup.setPath( backup.path() + QString::fromLatin1("~") );
+                KFileItem item( entry, url() );
+                Q_ASSERT( item.name() == url().fileName() );
+                KIO::NetAccess::file_copy( url(), backup, item.permissions(), true /*overwrite*/, false /*resume*/, shells().current() );
+            }
         }
     }
 
@@ -2032,6 +2037,7 @@ KoXmlWriter* KoDocument::createOasisXmlWriter( QIODevice* dev, const char* rootE
         writer->addAttribute( "xmlns:math", KoXmlNS::math );
         writer->addAttribute( "xmlns:svg", KoXmlNS::svg );
         writer->addAttribute( "xmlns:fo", KoXmlNS::fo );
+        writer->addAttribute( "xmlns:koffice", KoXmlNS::koffice );
     }
     // missing: office:version="1.0"
 

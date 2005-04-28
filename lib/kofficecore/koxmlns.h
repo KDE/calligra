@@ -48,6 +48,8 @@ public:
     static const char* const fo;
     static const char* const dc;
     static const char* const xlink;
+
+    static const char* const koffice;
 };
 
 #endif /* KOXMLNS_H */
