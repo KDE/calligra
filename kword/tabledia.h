@@ -80,11 +80,14 @@ protected:
     void setupTab2( const QString &_templateName,  int format);
 
     QWidget *tab1;
-    QLabel *lRows, *lCols, *lWid, *lHei;
+    QLabel *lRows, *lCols;
+#ifdef ALLOW_NON_INLINE_TABLES
+    QLabel *lWid, *lHei;
     QComboBox *cHei, *cWid;
+    QCheckBox *cbIsFloating;
+#endif
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
-    QCheckBox *cbIsFloating;
     QCheckBox *cbReapplyTemplate1, *cbReapplyTemplate2;
 
     QGridLayout *grid;

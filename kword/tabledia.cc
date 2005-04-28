@@ -82,10 +82,12 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWC
     oldRowCount = rows;
     oldColCount = cols;
     oldTemplateName = _templateName;
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
     {
         slotInlineTable( cbIsFloating->isChecked());
     }
+#endif
 }
 
 void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
@@ -108,6 +110,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     nCols->setValue( cols );
     grid->addWidget( nCols, 3, 0 );
 
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
     {
         lHei = new QLabel( i18n( "Cell heights:" ), tab1 );
@@ -128,6 +131,11 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         cWid->setCurrentItem( (int)wid );
         grid->addWidget( cWid, 7, 0 );
     }
+#else
+    Q_UNUSED( wid );
+    Q_UNUSED( hei );
+    Q_UNUSED( floating );
+#endif
 
     preview = new KWTablePreview( tab1, rows, cols );
     preview->setBackgroundColor( white );
@@ -135,6 +143,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 
     if ( m_useMode==NEW )
     {
+#ifdef ALLOW_NON_INLINE_TABLES
         // Checkbox for floating/fixed location. The default is floating (aka inline).
         cbIsFloating = new QCheckBox( i18n( "The table is &inline" ), tab1 );
         //cbIsFloating->setEnabled(false);
@@ -142,6 +151,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 
         grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
         connect( cbIsFloating, SIGNAL( toggled ( bool )  ), this, SLOT( slotInlineTable( bool ) ) );
+#endif
     }
     else
     if (m_useMode==EDIT)
@@ -156,6 +166,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     grid->addRowSpacing( 1, nRows->height() );
     grid->addRowSpacing( 2, lCols->height() );
     grid->addRowSpacing( 3, nCols->height() );
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
     {
         grid->addRowSpacing( 4, lHei->height() );
@@ -163,9 +174,12 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         grid->addRowSpacing( 6, lWid->height() );
         grid->addRowSpacing( 7, cWid->height() );
     }
+#endif
     grid->addRowSpacing( 8, 150 - ( lRows->height() + nRows->height() + lCols->height() + nCols->height() ) );
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
         grid->addRowSpacing( 9, cbIsFloating->height() );
+#endif
     grid->setRowStretch( 0, 0 );
     grid->setRowStretch( 1, 0 );
     grid->setRowStretch( 2, 0 );
@@ -181,6 +195,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     grid->addColSpacing( 0, nRows->width() );
     grid->addColSpacing( 0, lCols->width() );
     grid->addColSpacing( 0, nCols->width() );
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
     {
         grid->addColSpacing( 0, lHei->width() );
@@ -188,6 +203,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         grid->addColSpacing( 0, lWid->width() );
         grid->addColSpacing( 0, cWid->width() );
     }
+#endif
     grid->addColSpacing( 1, 150 );
     grid->setColStretch( 0, 0 );
     grid->setColStretch( 1, 1 );
@@ -226,9 +242,15 @@ void KWTableDia::slotOk()
         /// ###### This should be done AFTER this dialog is closed.
         // Otherwise we have two modal dialogs fighting each other
         canvas->createTable( nRows->value(), nCols->value(),
+#ifdef ALLOW_NON_INLINE_TABLES
                              cWid->currentItem(),
                              cHei->currentItem(),
                              cbIsFloating->isChecked(),
+#else
+                             0,
+                             0,
+                             true,
+#endif
                              tableTemplateSelector->getTableTemplate(),
                              tableTemplateSelector->getFormatType());
     else
@@ -325,6 +347,7 @@ void KWTableDia::slotSetReapply( bool _reapply )
 
 void KWTableDia::slotInlineTable( bool state)
 {
+#ifdef ALLOW_NON_INLINE_TABLES
     if ( m_useMode==NEW )
     {
         lWid->setEnabled( !state );
@@ -332,4 +355,7 @@ void KWTableDia::slotInlineTable( bool state)
         cHei->setEnabled( !state );
         cWid->setEnabled( !state );
     }
+#else
+    Q_UNUSED( state );
+#endif
 }

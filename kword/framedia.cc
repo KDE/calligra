@@ -1046,9 +1046,13 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         oldW = sw->value();
         oldH = sh->value();
 
+#ifdef ALLOW_NON_INLINE_TABLES
         KWFrameSet * fs = frame->frameSet();
         if ( fs && fs->getGroupManager() )
             floating->setText( i18n( "Table is inline" ) );
+#else
+        floating->hide();
+#endif
 
         floating->setChecked( frameSetFloating );
         protectSize->setChecked( frameSetProtectedSize);
@@ -1105,7 +1109,13 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         if ( sh->isEnabled() )
             sh->setValue( KoUnit::toUserValue( commonHeight, doc->unit() ) );
         if(table)
+        {
+#ifdef ALLOW_NON_INLINE_TABLES
             floating->setText( i18n( "Table is inline" ) );
+#else
+            floating->hide();
+#endif
+        }
     }
 
     if ( !frame || m_defaultFrameSetIncluded ) {
