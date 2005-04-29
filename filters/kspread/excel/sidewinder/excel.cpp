@@ -1303,7 +1303,7 @@ Record* Record::create( unsigned type )
     record = new TopMarginRecord();
     
   return record;
-};
+}
 
 void Record::setPosition( unsigned pos )
 {
