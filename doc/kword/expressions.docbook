@@ -13,7 +13,7 @@
 
 <para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the
 text is inserted into &kword;.</para>
-<note><para>  Expressions are different from variables.  Expressions are inserted as regular text, and can only be
+<note><para>  Expressions are different from variables.  Expressions are inserted as regular text, can only be
 changed later by manually editing the text. Variables, insert a placeholder in the document which can be automatically updated at
 a later date.</para></note>
 <sect2 id="expressions-insert"><title>Using expressions</title>

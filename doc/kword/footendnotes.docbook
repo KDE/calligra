@@ -49,11 +49,13 @@ page where the notation occurs.  Endnotes will appear as an ordered list at the 
 <para>Click <guibutton>Configure</guibutton> to <link linkend="fn-config">change the look</link> of your footnotes or endnotes.</para>
 <para>Click <guibutton>Cancel</guibutton> to return to your document without inserting a footnote or endnote.</para>
 
-<para>Click <guibutton>Insert</guibutton> to insert the footnote or endnote.  &kword; will create the footnote or endnote
+<para>Click <guibutton>OK</guibutton> to insert the footnote or endnote.  &kword; will create the footnote or endnote
 entry, and place the cursor at the beginning of the entry for you to enter the desired reference information. 
 Type your reference information in the space provided.  </para>
 
-<para>When you have finished entering your footnote reference information, simply move back up the page, and you can return to editing your document.</para>
+<para>When you have finished entering your footnote or endnote reference information, simply move your cursor over the footnote or endnote 
+number.  Click with the &RMB;.  A submenu will appear.  Select <guilabel>Go to footnote</guilabel> and &kword; will move the cursor back to the text 
+where the reference was made.</para>
 </sect2>
 
 <sect2 id="fn-edit">
@@ -87,9 +89,6 @@ cursor to the appropriate footnote reference.</para></listitem>
 <para>To configure the appearance of footnotes, select <menuchoice> <guimenu>Format</guimenu>
 <guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
 
-<sect3 id="fn-config-fn">
-<title>Change the appearance of footnote entries</title>
-
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -102,13 +101,13 @@ side of the dialog box. Begin by selecting the numbering method you want by clic
 <para>In the text box labeled <guilabel>Prefix text:</guilabel>, you can enter any characters you want to
 appear <emphasis>before</emphasis> the footnote number.</para>
 <para>In the text box labeled <guilabel>Suffix text:</guilabel>, you can enter any characters you want to
-appear <emphasis>before</emphasis> the footnote number.</para>
+appear <emphasis>after</emphasis> the footnote number.</para>
 <para>You can adjust the starting position of the footnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
-</sect3>
+<!--</sect3> -->
 
 <sect3 id="fn-config-line">
 <title>Change the appearance of separator line</title>
-<para>To change the appearance of the separator line, click on the tab labled <guilabel>Separator line</guilabel>.</para>
+<para>To change the appearance of the separator line, click on the tab labeled <guilabel>Separator line</guilabel>.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -119,8 +118,8 @@ appear <emphasis>before</emphasis> the footnote number.</para>
 <para>You can determine the alignment of the separator line by selecting <guilabel>Left</guilabel>,
 <guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
 <para>Determine the length of the line using the spin box labeled <guilabel>Size on page</guilabel>.</para>
-<para>The spinbox labeled <guilabel>Width</guilabel> is used to determine the thickness of the seperator line.</para>
-<note><para>Do not confuse this option with the <guilabel>Size on page</guilabel> option.  The <guilabel>Width</guilabel> is used to set the thickness of the line, not its distance across the page.</para></note>
+<para>The spinbox labeled <guilabel>Width:</guilabel> is used to determine the thickness of the seperator line.</para>
+<note><para>Do not confuse this option with the <guilabel>Size on page:</guilabel> option.  The <guilabel>Width:</guilabel> is used to set the thickness of the line, not its distance across the page.</para></note>
 <para>Use the combo box labeled <guilabel>Style</guilabel> to determine what kind of line is drawn.</para>
 <para>Click <guibutton>OK</guibutton> to change the look of all footnotes or click <guibutton>Cancel</guibutton> to keep 
 the previous options.</para>
@@ -163,11 +162,9 @@ footnotes.</para>
 
 </sect2>
 <sect2 id="en-config">
-<title>Change the appearance of endnote entries</title>
+<title>Change the look of endnote entries</title>
 <indexterm><primary>endnotes</primary><secondary>change appearance</secondary></indexterm>
 
-<sect3 id="en-config-en">
-<title>Change the look of endnote entries</title>
 <para>To configure the appearance of endnotes, select <menuchoice> <guimenu>Format</guimenu>
 <guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
 
@@ -192,8 +189,11 @@ side of the dialog box. Begin by selecting the numbering method you want by clic
 appear <emphasis>before</emphasis> the endnote number.</para>
 <para>In the text box labeled <guilabel>Suffix text:</guilabel>, you can enter any characters you want to
 appear <emphasis>before</emphasis> the endnote number.</para>
-<para>You can adjust the starting position of the footnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
-</sect3>
+<para>You can adjust the starting position of the endnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
+
+<para>If you want a line seperating the text of the document from your endnotes, instructions 
+for this can be found in the section entitled <link linkend="fn-config-line">Change the appearance of separator line</link>.</para>
+
 </sect2>
 
 

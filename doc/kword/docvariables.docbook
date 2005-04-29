@@ -22,8 +22,8 @@ a date, a time, or nearly anything you desire.</para>
 change), or <emphasis>variable</emphasis> (where the placeholder is 
 <link linkend="update-variables">updated by &kword;</link> to reflect
 the current value of the variable).</para>
-<para>This chapter will begin with a few examples of commonly used variables (
-<link linkend="insert-date">date</link>,
+<para>This chapter will begin with a few examples of commonly used variables 
+(<link linkend="insert-date">date</link>,
 <link linkend="insert-time">time</link>, and
 <link linkend="page-number">page numbers</link>),
 then detail the
@@ -35,7 +35,7 @@ custom variables</link> for documents.</para>
 <sect2 id="date-time"><title>Date and Time</title>
 <para>Many letters, reports and documents contain
 information about the dates or times they correspond to.  The date and time
-information may establish the creation of a document (which will remained
+information may establish the creation of a document (which will remain 
 fixed as long as the document is around), or the date and time may serve as
 a notice of the last date of modification (which would change with each passing day).</para>
 <para>&kword; allows for both fixed and variable date and time variables in the document.</para>
@@ -88,7 +88,7 @@ Compare this choice to <guimenuitem>Current date (fixed)</guimenuitem></para></l
 <listitem><para>This inserts the date in the format specified in the
 &kde; Control Center.</para>
 <para>To select this option, simply make sure the upper combo box says
-<guilabel>Locale</guilabel>.  A preview of the date format will appear above the
+<guilabel>Locale date format</guilabel>.  A preview of the date format will appear above the
 <guibutton>OK</guibutton> button.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
@@ -220,7 +220,7 @@ string is visible above the <guibutton>OK</guibutton> button.  If satisfied clic
 
 <varlistentry>
 <term>Preformatted time strings</term>
-<listitem><para>&kword; comes with 9 predefined date strings. These predefined strings will
+<listitem><para>&kword; comes with 6 predefined time strings. These predefined strings will
 be all that are needed in most circumstances. Simply select the predefined string in the upper
 combo box.  A preview of the current time
 string is visible above the <guibutton>OK</guibutton> button. If satisfied click <guibutton>OK</guibutton>.</para></listitem>
@@ -324,11 +324,11 @@ and <guilabel>Number of Pages</guilabel></para>
 <para>By selecting <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
 <guimenuitem>Next Page</guimenuitem>
-</menuchoice> from the menubar, a reference to the page number after the current page.</para>
+</menuchoice> from the menubar, a reference to the page number after the current page will be inserted at the current cursor location.</para>
 <para>Likewise, by selecting <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
 <guimenuitem>Previous Page</guimenuitem>
-</menuchoice> from the menubar, a reference to the page number before the current page.</para>
+</menuchoice> from the menubar, a reference to the page number before the current page will be inserted at the current cursor location.</para>
 
 <note><para>Page numbers are updated dynamically as the document
 is edited.</para></note>
@@ -362,10 +362,10 @@ are specific to the document.  You can insert these variables by selecting
 </thead>
 <tbody>
 <row><entry>Author Name</entry><entry>Joseph User</entry><entry>The name of the author as specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>City</entry><entry>Philadelphia</entry><entry>The city specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Company</entry><entry>&kde;</entry><entry>The company name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Date of File Creation</entry><entry>Any date format</entry><entry>The date this document created.</entry></row>
+<row><entry>Date of File Creation</entry><entry>Any date format</entry><entry>The date this document was created.</entry></row>
 <row><entry>Date of File Modification</entry><entry>Any date format</entry><entry>The date this document was edited.</entry></row>
 <row><entry>Date of Last Printing</entry><entry>Any date format</entry><entry>The date this document was last printed.</entry></row>
 <row><entry>Directory Name</entry><entry>/home/juser/kword</entry><entry>This is the folder name for the document. The filename is not included in the folder name variable.</entry></row>
@@ -377,7 +377,7 @@ are specific to the document.  You can insert these variables by selecting
 <row><entry>Email</entry><entry>joeuser@kde.org</entry><entry>The email address of the author as specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>File Name</entry><entry>Resume.kwd</entry><entry>The complete name of the file.</entry></row> 
-<row><entry>File Name without extension</entry><entry>Resume</entry><entry>This removes the file name suffix (usually .kwd) from the filename.</entry></row>
+<row><entry>File Name without extension</entry><entry>Resume</entry><entry>The filename without the suffix (usually .kwd).</entry></row>
 <row><entry>Initials</entry><entry>JCU</entry><entry>The initials specified in the authors section of the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Postal code</entry><entry>Any valid postal code</entry><entry>The postal code specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Street</entry><entry>123 Main St.</entry><entry>The street address specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
@@ -429,7 +429,7 @@ variables will be updated.</para>
 <sect3 id="insert-custom-variables"><title>Insert a custom variable</title>
 <indexterm><primary>variables</primary><secondary>insert custom variable</secondary></indexterm>
 
-<para>To insert a new custom variable Select <menuchoice>
+<para>To insert a new custom variable select <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
 </menuchoice> from the menubar. The custom variable is listed in the submenu.  Click on the name of
 the variable and &kword; will insert the variable, with its current value, at the cursor location.</para>
@@ -446,7 +446,8 @@ current values).  This is <emphasis>especially</emphasis> important with dates a
 </sect2>
 <sect2 id="update-variables-one"><title>Updating One Date or Time Variable Value </title>
 <para>You can tell &kword; to update a single date or time variable value, and leave the others unchanged.</para>
-<para>Simply place the mouse pointer over the variable you want to update and click with the &RMB;. A small menu will appear which will show
+<para>Simply place the mouse pointer over the variable you want to update and click with the &RMB;. 
+Select <guimenuitem>Change Variable To</guimenuitem>.  A small menu will appear which will show
 several new date or time formatting options and the option to change either dates or times to fixed or variable time formats.  Simply select
 the new option and this variable will be updated.</para>
 </sect2>
