@@ -60,7 +60,6 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     expressionGroupBoxLayout->setAlignment( Qt::AlignTop );
 
     m_ExpressionsList = new QListBox( expressionGroupBox, "listOfExpressions" );
-    m_ExpressionsList->insertItem("expression1");
     m_ExpressionsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 1, 0, m_ExpressionsList->sizePolicy().hasHeightForWidth() ) );
     expressionGroupBoxLayout->addWidget( m_ExpressionsList );
 
@@ -99,7 +98,10 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     form1Layout->addMultiCellLayout( vertlayout, 0, 1, 0, 0 );
 
     loadFile();
-    initGroupList();
+    if(listExpression.count() == 0)
+        slotAddGroup();
+    else
+        initGroupList();
 
     connect(m_groupList,SIGNAL(selectionChanged()), this,SLOT(slotGroupSelected()));
     connect(m_ExpressionsList,SIGNAL(selectionChanged()), this,SLOT(slotExpressionSelected()));
