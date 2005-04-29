@@ -327,6 +327,10 @@ void importWizard::arriveDstTitlePage()
     // @todo Might want to show the filename here instead
     dstNewDBName->setText(i18n("Imported Database"));
   } else {
+    if (!srcdbname || !srcdbname->selectedProjectData()) {
+      back(); //todo!
+      return;
+    }
     dstNewDBName->setText( srcdbname->selectedProjectData()->databaseName() );
   }
 }
