@@ -654,3 +654,19 @@ int KivioGroupStencil::checkForCollision(const KoPoint& p)
   
   return -1;
 }
+
+bool KivioGroupStencil::hasTextBox() const
+{
+  KivioStencil *pStencil = m_pGroupList->first();
+
+  while(pStencil)
+  {
+    if(pStencil->hasTextBox()) {
+      return true;
+    }
+
+    pStencil = m_pGroupList->next();
+  }
+
+  return false;
+}

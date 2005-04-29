@@ -124,6 +124,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     void selectStencils( double, double, double, double );
     QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
     bool checkForStencilTypeInSelection(KivioStencilType type);
+    bool checkForTextBoxesInSelection();
 
     KoRect getRectForAllSelectedStencils();
     KoRect getRectForAllStencils();

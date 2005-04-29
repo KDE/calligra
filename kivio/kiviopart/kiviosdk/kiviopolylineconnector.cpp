@@ -390,7 +390,6 @@ namespace Kivio {
     rect.moveTopLeft(topLeft);
     rect.setWidth(bottomRight.x() - topLeft.x());
     rect.setHeight(bottomRight.y() - topLeft.y());
-    kdDebug() << "Rect: " << rect.toQRect() << endl;
     return rect;
   }
 

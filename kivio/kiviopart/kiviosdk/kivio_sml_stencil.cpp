@@ -2092,3 +2092,17 @@ void KivioSMLStencil::addConnectorTarget(const KoPoint& p)
   KivioConnectorTarget* target = new KivioConnectorTarget(p.x(), p.y(), (p.x() - x())/ w(), (p.y() - y())/ h());
   m_pConnectorTargets->append(target);
 }
+
+bool KivioSMLStencil::hasTextBox() const
+{
+  KivioShape* pShape = m_pShapeList->first();
+  while(pShape) {
+    if(pShape->shapeData()->shapeType() == KivioShapeData::kstTextBox) {
+      return true;
+    }
+
+    pShape = m_pShapeList->next();
+  }
+
+  return false;
+}

@@ -241,11 +241,26 @@ void TextTool::endRubberBanding(QMouseEvent */*e*/)
 
 void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
 {
-  if( stencils->isEmpty() )
+  if(stencils->isEmpty()) {
     return;
+  }
 
   KivioStencil* stencil = stencils->first();
   bool ok = false;
+
+  while(stencil) {
+    if(stencil->hasTextBox()) {
+      ok = true;
+    }
+
+    stencil = stencils->next();
+  }
+
+  if(!ok) {
+    return;
+  }
+
+  stencil = stencils->first();
   QString text = KInputDialog::getMultiLineText(i18n("Edit Text"), QString::null,
       stencil->text(), &ok, view());
 
@@ -257,7 +272,7 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
   bool createMacro = false;
   KivioDoc* doc = view()->doc();
   KivioPage* page = view()->activePage();
-  
+
   while( stencil )
   {
     if(stencil->text() != text)

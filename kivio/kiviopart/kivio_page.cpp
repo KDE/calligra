@@ -1648,5 +1648,20 @@ bool KivioPage::checkForStencilTypeInSelection(KivioStencilType type)
   return false;
 }
 
+bool KivioPage::checkForTextBoxesInSelection()
+{
+  KivioStencil *pStencil = m_lstSelection.first();
+
+  while(pStencil) {
+    if(pStencil->hasTextBox()) {
+      return true;
+    }
+
+    pStencil = m_lstSelection.next();
+  }
+
+  return false;
+}
+
 #include "kivio_page.moc"
 

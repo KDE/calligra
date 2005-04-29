@@ -76,6 +76,8 @@ class KivioStraightConnector : public Kivio1DStencil
     virtual int endAHType()                     { return m_endAH->type(); }
     virtual double endAHWidth()                  { return m_endAH->width(); }
     virtual double endAHLength()                 { return m_endAH->length(); }
+
+    virtual bool hasTextBox() const;
 };
 
 class KIVIOPLUGINS_EXPORT KivioConnectorFactory : public KivioStencilFactory

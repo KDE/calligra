@@ -371,4 +371,9 @@ bool KivioStraightConnector::loadArrowHeads( const QDomElement &e )
     return true;
 }
 
+bool KivioStraightConnector::hasTextBox() const
+{
+  return true;
+}
+
 #include "straight_connector.moc"

@@ -265,6 +265,9 @@ class KIVIO_EXPORT KivioStencil
 
     virtual void setText(const QString& /*text*/, const QString& /*name*/) { ; }
     virtual QString text(const QString& /*name*/) { return QString(""); }
+
+    /// Returns true if the stencil has a text box
+    virtual bool hasTextBox() const { return false; }
     
     virtual void setPinPoint(const KoPoint& p) { m_pinPoint = p; }
     virtual KoPoint pinPoint() const { return m_pinPoint; }

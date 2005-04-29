@@ -120,6 +120,8 @@ class KivioGroupStencil : public KivioStencil
 
     virtual void setText(const QString& text, const QString& name);
     virtual QString text(const QString& name);
+
+    virtual bool hasTextBox() const;
 };
 
 #endif
