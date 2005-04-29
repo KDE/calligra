@@ -32,10 +32,11 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qvbox.h>
-#include <knuminput.h>
+#include <koUnitWidgets.h>
+#include <koRect.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, ResizeType _type, KWCanvas *_canvas )
-    : KDialogBase( parent, name , true, "", Ok | Cancel )
+    : KDialogBase( parent, name , true, "", Ok | Apply | Cancel )
 {
     setCaption( i18n("Change Help Line Position") );
 
@@ -76,8 +77,7 @@ void KWResizeTableDia::setupTab1()
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
     rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->unitName()) : i18n( "Width (%1):" ).arg(doc->unitName()), page );
-    position= new KDoubleNumInput( page );
-    position->setRange(0.01, 9999, 1, false);
+    position= new KoUnitDoubleSpinBox( page, 0.01, table->anchorFrameset()->isFloating() ? table->anchorFrameset()->frame(0)->width(): 9999, 1, 0.0, doc->unit(), doc->unit() );
     slotValueChanged( value->value());
     connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
 
@@ -93,7 +93,7 @@ bool KWResizeTableDia::doResize()
         {
             FrameIndex index( frm );
             KoRect newRect( frm->normalize() );
-            newRect.setHeight( KoUnit::fromUserValue(  position->value(), doc->unit() ));
+            newRect.setHeight( position->value() );
             FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
             KWFrameResizeCommand * cmd = new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
@@ -107,7 +107,7 @@ bool KWResizeTableDia::doResize()
         {
             FrameIndex index( frm );
             KoRect newRect( frm->normalize() );
-            newRect.setWidth( KoUnit::fromUserValue(  position->value(), doc->unit() ));
+            newRect.setWidth( position->value() );
             FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
             KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
@@ -136,6 +136,11 @@ void KWResizeTableDia::slotValueChanged( int pos)
             position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->unit() ) );
         }
     }
+}
+
+void KWResizeTableDia::slotApply()
+{
+    doResize();
 }
 
 void KWResizeTableDia::slotOk()
