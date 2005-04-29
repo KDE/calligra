@@ -30,7 +30,11 @@
 class KEXIFORMUTILS_EXPORT KexiDataAwareWidgetInfo : public KFormDesigner::WidgetInfo
 {
 	public:
-		KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f = 0);
+		KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f);
+		
+		KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
+			const char* parentFactoryName, const char* inheritedClassName);
+
 		virtual ~KexiDataAwareWidgetInfo();
 };
 

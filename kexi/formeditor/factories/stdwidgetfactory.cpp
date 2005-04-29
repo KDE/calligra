@@ -778,6 +778,19 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *
 		if((property == "frameShape") || (property == "font") || (property == "margin"))
 			return false;
 	}
+	else if(classname=="QCheckBox")
+	{
+		return m_showAdvancedProperties || (property != "autoRepeat");
+	}
+	else if(classname=="QRadioButton")
+	{
+		return m_showAdvancedProperties || (property != "autoRepeat");
+	}
+	else if(classname=="KPushButton")
+	{
+//! @todo reenable autoDefault / default if the top level window is dialog...
+		return m_showAdvancedProperties || (property != "autoDefault" && property != "default");
+	}
 	return true;
 }
 

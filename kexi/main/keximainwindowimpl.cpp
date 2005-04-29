@@ -366,16 +366,17 @@ void updatePropEditorDockWidthInfo() {
 				if (wasAutoOpen) //(dw2->isVisible())
 //				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
 					ds->setSeparatorPosInPercent(
-						QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen", 17),
-						config->readNumEntry("LeftDockPosition", 17))
+						QMAX(QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
+						config->readNumEntry("LeftDockPosition",20)),20)
 					);
 				else
-					ds->setSeparatorPosInPercent( config->readNumEntry("LeftDockPosition", 17/* % */));
+					ds->setSeparatorPosInPercent(
+					QMAX(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
 
 	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
 # else
 				//there were problems on KDE < 3.4
-				ds->setSeparatorPosInPercent( 15 );
+				ds->setSeparatorPosInPercent( 20 );
 # endif
 				//if (!wasAutoOpen) //(dw2->isVisible())
 //					ds->setSeparatorPos( ds->separatorPos(), true );
@@ -1564,16 +1565,20 @@ KexiMainWindowImpl::storeSettings()
 			//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			//int d2 = ds->separatorPosInPercent();
 			if (d->wasAutoOpen && d->dialogExistedBeforeCloseProject) {
+#ifdef Q_WS_WIN
 				d->config->writeEntry("LeftDockPositionWithAutoOpen",
 					d->navDockSeparatorPos);
+#endif
 //			d->config->writeEntry("LeftDockPosition", dw->width());
 //			d->config->writeEntry("LeftDockPosition", d->nav->width());
 			} else {
+#ifdef Q_WS_WIN
 				if (d->dialogExistedBeforeCloseProject)
 					d->config->writeEntry("LeftDockPosition", d->navDockSeparatorPos);
 				else
 					d->config->writeEntry("LeftDockPosition", qRound(double(d->navDockSeparatorPos) / 0.77
 					 / (double(d->propEditorDockSeparatorPos) / 80) ));
+#endif
 			}
 		}
 	}
@@ -2446,6 +2451,7 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 				dlg->part()->info()->projectPartID(),
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {
+//! @todo fix this msg like in KexiMainWindowImpl::closeDialog()
 			KMessageBox::information(this, i18n("%1 is the type of the object (eg 'report', 'table', 'query') and %2 is its name"
 			 " For example: Table \"my_table\" allready exists" ,
 				"%1 \"%2\" already exists.\nPlease choose other name.")

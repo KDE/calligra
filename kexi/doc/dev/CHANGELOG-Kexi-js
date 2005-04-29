@@ -486,7 +486,16 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
--plug 'delete widget' action to 'delete' shared action
+
+2005-04-28
+Form Designer
+- all known property and enum names are translated; names are simplified
+- more properties turned to advanced set and thus made invisible in Kexi
+- kexiproperty object is created only once for on propbuffer creation 
+  for every QWidget's property. This fixes problems like 
+  'toggleButton' property being added twice to propeditor
+- looking for i18n'd property description or enum value description: 
+  on failure, we're also asking parent widget factory for this, if one exists
 
 2005-04-27
 Form Designer

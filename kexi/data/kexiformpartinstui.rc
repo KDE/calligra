@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="6">
+<kpartgui name="kexiformpartinst" version="7">
 
 <MenuBar>
   <Menu name="edit">
@@ -29,13 +29,9 @@
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
    <Action name="pointer"/>
-   <Action name="drag_connection"/>
-   <Separator/>
-   <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_KFDTabWidget"/>
+   <!-- Action name="drag_connection"/ -->
    <Separator/>
    <Action name="library_widget_KexiDBInputWidget"/>
-   <Action name="library_widget_KexiSubForm"/>
    <Action name="library_widget_KexiLabel"/>
    <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KexiDBLineEdit"/>
@@ -46,12 +42,18 @@
    <Action name="library_widget_QCheckBox"/>
    <Action name="library_widget_Spacer"/>
    <Action name="library_widget_Line"/>
+   <Separator/>
+   <Action name="library_widget_QFrame"/>
+   <Action name="library_widget_QGroupBox"/>
+   <Action name="library_widget_KFDTabWidget"/>
+   <Action name="library_widget_KexiSubForm"/>
+   <Separator/>
    <Action name="library_widget_Spring"/>
    <ActionList name="library_widgets" />
 </ToolBar>
 <ToolBar name="format" fullWidth="false" noMerge="1">
 <text>Format</text>
-   <Action name="formpart_layout_menu"/>
+   <!-- Action name="formpart_layout_menu"/ -->
    <Action name="formpart_align_menu"/>
    <Action name="formpart_adjust_size_menu"/>
    <Action name="show_form_ui" />

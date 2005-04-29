@@ -38,8 +38,8 @@ class KexiDBForm::Private
 	public:
 		Private()
 		 : orderedFocusWidgetsIterator(orderedFocusWidgets)
-		 , autoTabStops(false)
 		 , dataAwareObject(0)
+		 , autoTabStops(false)
 		{
 		}
 		KexiDataAwareObjectInterface* dataAwareObject;
@@ -393,7 +393,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 				uint index = d->indicesForDataAwareWidgets[ dynamic_cast<KexiDataItemInterface*>(watched) ];
 				kdDebug() << "KexiDBForm: moving cursor to column #" << index << endl;
 				editedItem = 0;
-				if (index!=d->dataAwareObject->currentColumn()) {
+				if ((int)index!=d->dataAwareObject->currentColumn()) {
 					d->dataAwareObject->setCursorPosition( d->dataAwareObject->currentRow(), index /*column*/ );
 				}
 			}

@@ -74,7 +74,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		virtual ~FormManager();
 
-		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2 }; //todo
+		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2, 
+			HideSignalSlotConnections = 4 }; //todo
 
 		/*! Creates all the KAction related to widget insertion, and plug them
 		  into the KActionCollection \a parent.

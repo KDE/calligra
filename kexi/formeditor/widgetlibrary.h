@@ -126,6 +126,24 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		void setAdvancedPropertiesVisible(bool set);
 
+		/*! \return The i18n'ed name of the property \a propertyName 
+		 for a class described by \a winfo. The name can be displayed in 
+		 PropertyEditor. The name is retrieved from class' widget library.
+		 If this library doesn't define description for such property, 
+		 and there is a parent library for \a winfo defined, parent library 
+		 is asked for returning description string. 
+		 Eventually, if even this failed, empty string is returned. 
+		 @see WidgetFactory::propertyDescForName() */
+		QString propertyDescForName(WidgetInfo *winfo, const QCString& propertyName);
+
+		/*! \return The i18n'ed name of the property's value whose name is \a name. 
+		 Works in the same way as propertyDescForName(): if actual library 
+		 does not define a description we are looking for, parent factory is asked 
+		 to return such description. 
+		 Eventually, if even this failed, empty string is returned. 
+		 @see WidgetFactory::propertyDescForValue() */
+		QString propertyDescForValue(WidgetInfo *winfo, const QCString& name);
+
 	signals:
 		void prepareInsert(const QCString &c);
 

@@ -135,10 +135,17 @@ FormManager::createActions(KActionCollection *parent)
 
 	ActionList actions = m_lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
 
-	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent, "drag_connection");
-	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
-	m_dragConnection->setChecked(false);
-	actions.append(m_dragConnection);
+	if (m_options & HideSignalSlotConnections)
+		m_dragConnection = 0;
+	else {
+		m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), 
+			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent,
+			"drag_connection");
+		//to be exclusive with any 'widget' action
+		m_dragConnection->setExclusiveGroup("LibActionWidgets"); 
+		m_dragConnection->setChecked(false);
+		actions.append(m_dragConnection);
+	}
 
 	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), this, SLOT(slotPointerClicked()), parent, "pointer");
 	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
@@ -302,7 +309,8 @@ FormManager::startCreatingConnection()
 	delete m_connection;
 	m_connection = new Connection();
 	m_drawingSlot = true;
-	m_dragConnection->setChecked(true);
+	if (m_dragConnection)
+		m_dragConnection->setChecked(true);
 }
 
 void

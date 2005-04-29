@@ -54,8 +54,9 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	}
 
 	QVBox *vbox = makeVBoxMainWidget();
-	new QLabel(i18n("Select Action to be executed after clicking \"%1\" button:")
+	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button:")
 		.arg(actionWidgetName), vbox);
+		lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
 	m_listview = new KListView(vbox, "actionSelectorDialogLV");
 	m_listview->setResizeMode(QListView::LastColumn);
 	m_listview->addColumn("");

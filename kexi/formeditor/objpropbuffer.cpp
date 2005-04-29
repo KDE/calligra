@@ -257,7 +257,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 
 	int count = 0;
 	WidgetInfo *winfo = m_manager->lib()->widgetInfoForClassName(w->className());
-	WidgetFactory *factory = winfo ? winfo->factory() : 0; //m_manager->lib()->factoryForClassName(w->className());
+//	WidgetFactory *factory = winfo ? winfo->factory() : 0; //m_manager->lib()->factoryForClassName(w->className());
 
 	//pList.sort();
 	QStrListIterator it(pList);
@@ -268,16 +268,17 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		count = w->metaObject()->findProperty(*it, true);
 		const QMetaProperty *meta = w->metaObject()->property(count, true);
 		const char* propertyName = meta->name();
-		if(meta->designable(w))
+		if(meta->designable(w) && !hasProperty(propertyName))
 		{
 			if(!isPropertyVisible(propertyName, isTopLevel))
 				continue;
 
-			QString desc = m_propDesc[meta->name()];
-			if (factory && desc.isEmpty()) {
+			QString desc( m_propDesc[meta->name()] );
+			if (desc.isEmpty()) {
 				//try to get property description from factory
-				desc = factory->propertyDescForName(propertyName);
+				desc = m_manager->lib()->propertyDescForName(winfo, propertyName);
 			}
+			
 			if(meta->isEnumType())
 			{
 				QStrList keys = meta->enumKeys();
@@ -292,7 +293,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 					meta->valueToKey(w->property(propertyName).toInt()),
 //					w->property(propertyName).toInt(),
 					new KexiProperty::ListData(QStringList::fromStrList(keys),
-						descList(QStringList::fromStrList(keys))),
+						descList(winfo, QStringList::fromStrList(keys))),
 					desc)
 				);
 			}
@@ -324,7 +325,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		for(; strIt.current() != 0; ++strIt)
 			list.append(*strIt);
 		add(new KexiProperty("signals", "",
-			new KexiProperty::ListData(list, descList(list)),
+			new KexiProperty::ListData(list, descList(winfo, list)),
 			i18n("Events")));
 	}
 
@@ -502,16 +503,20 @@ ObjectPropertyBuffer::storePixmapName(KexiPropertyBuffer &buf, KexiProperty &pro
 // i18n functions /////////////////////////////////
 
 QStringList
-ObjectPropertyBuffer::descList(const QStringList &strlist)
+ObjectPropertyBuffer::descList(WidgetInfo *winfo, const QStringList &list)
 {
 	QStringList desc;
-	QStringList list = strlist;
-
-	for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
+	for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
 	{
 		QString n( m_propValDesc[*it] );
-		if (n.isEmpty())
-			desc += *it;
+		if (n.isEmpty()) { //try within factory and (maybe) parent factory
+			if (winfo)
+				n = m_manager->lib()->propertyDescForValue( winfo, (*it).latin1() );
+			if (n.isEmpty())
+				desc += *it; //untranslated
+			else
+				desc += n;
+		}
 		else
 			desc += n;
 	}
@@ -552,7 +557,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
 		add(new KexiProperty("hAlign", value,
-			new KexiProperty::ListData(list, descList(list)), i18n("Horizontal Alignment")));
+			new KexiProperty::ListData(list, descList(0, list)), i18n("Horizontal Alignment")));
 		updateOldValue(tree, "hAlign");
 		list.clear();
 	}
@@ -568,7 +573,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(list)),
+		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(0, list)),
 			i18n("Vertical Alignment")));
 		updateOldValue(tree, "vAlign");
 	}
@@ -631,9 +636,11 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
-	add(new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(list)),
-		i18n("Container's Layout")));
-
+	KexiProperty *lyrProperty = new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(0, list)),
+		i18n("Container's Layout"));
+	lyrProperty->setVisible( m_manager->lib()->advancedPropertiesVisible() );
+	add( lyrProperty );
+	
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());
 	updateOldValue(tree, "layout");
 
@@ -721,8 +728,8 @@ ObjectPropertyBuffer::updateOldValue(ObjectTreeItem *tree, const char *property)
 		blockSignals(true);
 		QVariant v = p.value();
 		QVariant objpropvalue = it.data();
-		kdDebug() << "ObjectPropertyBuffer::updateOldValue(): v1: " << objpropvalue << " v2: " << v 
-			<< " p.listData()->keys[ objpropvalue.toInt() ]: " << (p.isFixedList() ? p.listData()->keys[ objpropvalue.toInt() ] : QVariant()) << endl;
+//		kdDebug() << "ObjectPropertyBuffer::updateOldValue(): v1: " << objpropvalue << " v2: " << v 
+//			<< " p.listData()->keys[ objpropvalue.toInt() ]: " << (p.isFixedList() ? p.listData()->keys[ objpropvalue.toInt() ] : QVariant()) << endl;
 		if (p.isFixedList())
 /*! @todo What about "set" type? */
 			// sometimes enums are remembered as casted to ints, sometimes as string representations...

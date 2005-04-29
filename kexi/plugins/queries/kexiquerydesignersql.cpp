@@ -119,7 +119,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->pixmapStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
 
 	d->lblStatus = new QLabel(d->status_hbox);
-	d->lblStatus->setAlignment(AlignLeft | AlignTop);
+	d->lblStatus->setAlignment(AlignLeft | AlignTop | WordBreak);
 	d->lblStatus->setMargin(d->statusPixmapOk.width()/4);
 	d->lblStatus->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
 	d->lblStatus->resize(d->lblStatus->width(),d->statusPixmapOk.width()*3);

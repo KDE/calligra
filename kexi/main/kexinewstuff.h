@@ -28,6 +28,7 @@ class KexiNewStuff : public KNewStuff
 {
 	public:
 		KexiNewStuff(QWidget *parent);
+		virtual ~KexiNewStuff();
 
 		virtual bool install( const QString &fileName );
 		virtual bool createUploadFile( const QString &fileName );

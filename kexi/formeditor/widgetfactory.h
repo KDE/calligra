@@ -392,6 +392,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QMap<QCString, QString> m_propDesc;
 		QMap<QCString, QString> m_propValDesc;
 
+		/*! flag useful to decide whether to hide some properties. 
+		 It's value is inherited from WidgetLibrary. */
+		bool m_showAdvancedProperties; 
+
 	friend class WidgetLibrary;
 };
 

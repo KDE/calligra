@@ -84,7 +84,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 			if (!item)
 				return -1;
 			KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-			return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
+			return it!=m_fieldNumbersForDataItems.constEnd() ? (int)it.data() : -1;
 		}
 
 		/*! @internal Used by KexiFormView in view switching. */

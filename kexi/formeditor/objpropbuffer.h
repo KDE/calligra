@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@ class Container;
 class PropertyCommand;
 class GeometryPropertyCommand;
 class ObjectTreeItem;
+class WidgetInfo;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
@@ -119,25 +120,32 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 */
 		void createAlignProperty(const QMetaProperty *meta, QWidget *obj);
 
-		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak) and modifies the "alignment" property of
-		  the widget. ( called by changeProperty() )
+		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak) 
+		 and modifies the "alignment" property of
+		 the widget. ( called by changeProperty() )
 		 */
 		void saveAlignProperty(const QString &property);
 
-		/*! Creates the "layout" property, for the Container \a container. ( called by setObject() ) */
+		/*! Creates the "layout" property, for the Container \a container. 
+		 ( called by setObject() ) */
 		void createLayoutProperty(Container *container);
 
-		/*! Saves the "layout" property and changes the Container 's layout (using Container::setLayout() ). ( called by changeProperty() )*/
+		/*! Saves the "layout" property and changes the Container 's layout 
+		 (using Container::setLayout() ). ( called by changeProperty() )*/
 		void saveLayoutProperty(const QString &property, const QVariant &value);
 
-		/*! \return The i18n'ed name of the property whose name is \a name, that will be displayed in PropertyEditor. */
+		/*! \return The i18n'ed name of the property whose name is \a name, that will 
+		 be displayed in PropertyEditor. */
 		QString descForName(const QCString &name);
+		
 		/*! \return The i18n'ed name of the property's vale whose name is \a name. */
 		QString descForValue(const QCString &name);
-		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
-		QStringList descList(const QStringList &list);
+		
+		/*! \return The i18n'ed list of values, that will be shown by Property Editor 
+		 (using descFromValue()).*/
+		QStringList descList(WidgetInfo *winfo, const QStringList &list);
 
-		void   updateOldValue(ObjectTreeItem *tree, const char *property);
+		void updateOldValue(ObjectTreeItem *tree, const char *property);
 
 	private:
 		QStringList	m_properties;

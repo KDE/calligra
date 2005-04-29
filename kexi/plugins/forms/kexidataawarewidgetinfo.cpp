@@ -25,6 +25,13 @@ KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f
 	setAutoSyncForProperty( "dataSource", false );
 }
 
+KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
+	const char* parentFactoryName, const char* inheritedClassName)
+ : KFormDesigner::WidgetInfo(f, parentFactoryName, inheritedClassName)
+{
+	setAutoSyncForProperty( "dataSource", false );
+}
+
 KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
 {
 }

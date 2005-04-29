@@ -26,11 +26,20 @@
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kdeversion.h>
 
 #include "kexinewstuff.h"
 
 KexiNewStuff::KexiNewStuff(QWidget *parent)
- : KNewStuff( "kexi/template", "http://download.kde.org/khotnewstuff/kexi-providers.xml" , parent)
+ : KNewStuff( "kexi/template"
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
+	, "http://download.kde.org/khotnewstuff/kexi-providers.xml", 
+#endif
+	, parent)
+{
+}
+
+KexiNewStuff::~KexiNewStuff()
 {
 }
 

@@ -59,6 +59,17 @@ class WidgetLibraryPrivate
 			advancedProperties.insert("enableSqueezedText", (char*)1);
 			advancedProperties.insert("sizeIncrement", (char*)1);
 /*! @todo: reenable */ advancedProperties.insert("palette", (char*)1);
+			advancedProperties.insert("backgroundOrigin", (char*)1);
+			advancedProperties.insert("backgroundMode", (char*)1);//this is rather useless
+			advancedProperties.insert("layout", (char*)1);// too large risk to break things
+			                                              // by providing this in propeditor
+#ifdef KEXI_NO_UNFINISHED
+/*! @todo reenable */
+			advancedProperties.insert("paletteBackgroundPixmap", (char*)1);
+			advancedProperties.insert("icon", (char*)1);
+			advancedProperties.insert("pixmap", (char*)1);
+			advancedProperties.insert("accel", (char*)1);
+#endif
 		}
 		// dict which associates a class name with a Widget class
 		WidgetInfo::Dict widgets;//, alternateWidgets;
@@ -203,6 +214,7 @@ WidgetLibrary::loadFactories()
 				<< (*it.current())->library() << endl;
 			continue;
 		}
+		f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
 		d->factories.insert( f->name(), f );
 		//collect information about classes to be hidden
 		if (f->m_hiddenClasses) {
@@ -415,7 +427,7 @@ WidgetLibrary::namePrefix(const QCString &classname)
 	if(wi)
 		return wi->namePrefix();
 
-	return i18n("Form");
+	return classname;
 }
 
 QString
@@ -566,6 +578,42 @@ WidgetLibrary::factoryForClassName(const char* classname)
 {
 	WidgetInfo *wi = widgetInfoForClassName(classname);
 	return wi ? wi->factory() : 0;
+}
+
+QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QCString& propertyName)
+{
+	if (!winfo->factory())
+		return QString::null;
+	QString desc( winfo->factory()->propertyDescForName(propertyName) );
+	if (!desc.isEmpty())
+		return desc;
+	if (winfo->m_parentFactoryName.isEmpty())
+		return QString::null;
+
+	//try in parent factory, if exists	
+	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
+	if (!parentFactory)
+		return QString::null;
+	
+	return parentFactory->propertyDescForName(propertyName);
+}
+
+QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QCString& name)
+{
+	if (!winfo->factory())
+		return QString::null;
+	QString desc( winfo->factory()->propertyDescForValue(name) );
+	if (!desc.isEmpty())
+		return desc;
+	if (winfo->m_parentFactoryName.isEmpty())
+		return QString::null;
+
+	//try in parent factory, if exists	
+	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
+	if (!parentFactory)
+		return QString::null;
+	
+	return parentFactory->propertyDescForValue(name);
 }
 
 #include "widgetlibrary.moc"

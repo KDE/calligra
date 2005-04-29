@@ -207,7 +207,7 @@ bool KexiDBLineEdit::cursorAtStart()
 
 bool KexiDBLineEdit::cursorAtEnd()
 {
-	return cursorPosition()==text().length();
+	return cursorPosition()==(int)text().length();
 }
 
 void KexiDBLineEdit::clear()
@@ -248,8 +248,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	addClass(wSubForm);
 
-/* @todo allow to inherit from stdwidgets' KLineEdit */
-	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
+///* @todo allow to inherit from stdwidgets' KLineEdit */
+//	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
+	// inherited
+	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(
+		this, "stdwidgets", "KLineEdit");
 	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("KexiDBLineEdit");
 	wLineEdit->addAlternateClassName("QLineEdit", true/*override*/);
@@ -272,18 +275,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wLabel);
 
 #ifndef KEXI_NO_KexiDBInputWidget
+/*avoid i18n 
 	KexiDataAwareWidgetInfo *wInput = new KexiDataAwareWidgetInfo(this);
 	wInput->setPixmap("edit");
 	wInput->setClassName("KexiDBInputWidget");
-	wInput->addAlternateClassName("QLabel", true/*override*/);
-//todo	wInput->addAlternateClassName("QLineEdit", true/*override*/);
-//todo	wInput->addAlternateClassName("KLineEdit", true/*override*/);
-//todo	wInput->addAlternateClassName("KexiDBLineEdit", true/*override*/); //for compat.
+	wInput->addAlternateClassName("QLabel", true);
+//todo	wInput->addAlternateClassName("QLineEdit", true);
+//todo	wInput->addAlternateClassName("KLineEdit", true);
+//todo	wInput->addAlternateClassName("KexiDBLineEdit", true); //for compat.
 	wInput->setIncludeFileName("qlabel.h");
 	wInput->setName(i18n("Input Widget"));
-	wInput->setNamePrefix(i18n("Widget name (see above)", "InputWidget"));
+	wInput->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "inputWidget"));
 //	wInput->setDescription(i18n("A super-duper widget"));
-	addClass(wInput);
+	addClass(wInput);*/
 #endif
 
 	// inherited
@@ -307,12 +312,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 KexiDBFactory::~KexiDBFactory()
 {
 }
-
-/*QString
-KexiDBFactory::name()
-{
-	return("kexidbwidgets");
-}*/
 
 QWidget*
 KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
@@ -455,27 +454,13 @@ bool
 KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *, 
 	const QCString& property)
 {
-	if (property=="backgroundOrigin"
-		|| property=="backgroundMode" //this is rather useless
-		|| property=="layout" //to large risk to break things by providing this in propeditor
-		)
-		return false;
-
-#ifdef KEXI_NO_UNFINISHED
-	if (property=="paletteBackgroundPixmap"
-		|| property=="icon"
-		|| property=="pixmap"
-		|| property=="accel" /*! @todo reenable accel */
-		)
-		return false;
-#endif
-
-
 	if(classname == "KexiPushButton") {
 		return property!="isDragEnabled" 
 #ifdef KEXI_NO_UNFINISHED
-#endif
+			&& property!="onClickAction" /*! @todo reenable */
+			&& property!="iconSet" /*! @todo reenable */
 			&& property!="stdItem" /*! @todo reenable stdItem */
+#endif
 			;
 	}
 	else if(classname == "KexiDBLineEdit")
@@ -491,7 +476,8 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 			&& property!="focusPolicy";
 	else if(classname == "KexiDBForm")
 		return property!="iconText";
-
+	else if(classname == "KexiLabel")
+		return property!="focusPolicy";
 	return true;
 }
 

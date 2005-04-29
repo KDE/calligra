@@ -596,7 +596,22 @@ ContainerFactory::isPropertyVisibleInternal(const QCString &classname,
 {
 	if((classname == "HBox") || (classname == "VBox") || (classname == "Grid"))
 	{
-		return ((property == "name") || (property == "geometry"));
+		return property == "name" || property == "geometry";
+	}
+	else if (classname == "QGroupBox") {
+		return 
+#ifdef KEXI_NO_UNFINISHED
+/*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding 
+a fake properties which will allow to properly work in design mode, otherwise 
+child widgets become frozen when checked==true */
+			(m_showAdvancedProperties || (property != "checkable" && property != "checked"))
+#endif
+			&& true
+			;
+	}
+	else if (classname == "KFDTabWidget") {
+			return (m_showAdvancedProperties || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"))
+			;
 	}
 
 	return true;

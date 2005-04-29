@@ -121,6 +121,7 @@ tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
+	m_showAdvancedProperties = true;
 	m_classesByName.setAutoDelete(true);
 	m_hiddenClasses = 0;
 }

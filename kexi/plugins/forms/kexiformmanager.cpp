@@ -29,8 +29,10 @@
 KexiFormManager::KexiFormManager(KexiPart::Part *parent, const QStringList& supportedFactoryGroups,
 	const char* name)
  : KFormDesigner::FormManager(parent, supportedFactoryGroups, 
-	KFormDesigner::FormManager::HideEventsInPopupMenu
-	| KFormDesigner::FormManager::SkipFileActions, name)
+		KFormDesigner::FormManager::HideEventsInPopupMenu |
+		KFormDesigner::FormManager::SkipFileActions |
+		KFormDesigner::FormManager::HideSignalSlotConnections
+	, name)
  , m_part(parent)
 {
 	lib()->setAdvancedPropertiesVisible(false);
