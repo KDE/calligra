@@ -457,7 +457,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 	if(classname == "KexiPushButton") {
 		return property!="isDragEnabled" 
 #ifdef KEXI_NO_UNFINISHED
-			&& property!="onClickAction" /*! @todo reenable */
+//			&& property!="onClickAction" /*! @todo reenable */
 			&& property!="iconSet" /*! @todo reenable */
 			&& property!="stdItem" /*! @todo reenable stdItem */
 #endif
