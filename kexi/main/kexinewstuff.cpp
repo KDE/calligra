@@ -33,7 +33,7 @@
 KexiNewStuff::KexiNewStuff(QWidget *parent)
  : KNewStuff( "kexi/template"
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-	, "http://download.kde.org/khotnewstuff/kexi-providers.xml", 
+	, "http://download.kde.org/khotnewstuff/kexi-providers.xml"
 #endif
 	, parent)
 {
