@@ -36,9 +36,9 @@
 #include <koRect.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, ResizeType _type, KWCanvas *_canvas )
-    : KDialogBase( parent, name , true, "", Ok | Apply | Cancel )
+    : KDialogBase( parent, name , true, "", Ok | Cancel | User1 | Apply )
 {
-    setCaption( i18n("Change Help Line Position") );
+    setButtonText( KDialogBase::User1, i18n("Reset") );
 
     type = _type;
     table = _table;
@@ -125,6 +125,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
         if (frm)
         {
             position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().height()), doc->unit() ) );
+            resetValue = position->value();
         }
 
     }
@@ -134,8 +135,15 @@ void KWResizeTableDia::slotValueChanged( int pos)
         if (frm)
         {
             position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->unit() ) );
+            resetValue = position->value();
         }
     }
+}
+
+void KWResizeTableDia::slotUser1()
+{
+    position->setValue( KoUnit::toUserValue(resetValue, doc->unit() ) );
+    doResize();
 }
 
 void KWResizeTableDia::slotApply()

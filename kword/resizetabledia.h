@@ -49,9 +49,11 @@ protected:
     ResizeType type;
     KWCanvas *canvas;
     KoUnitDoubleSpinBox *position;
+    double resetValue;
 protected slots:
     virtual void slotOk();
     virtual void slotApply();
+    virtual void slotUser1();
     void slotValueChanged( int pos);
 };
 
