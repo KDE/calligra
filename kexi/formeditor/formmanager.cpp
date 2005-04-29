@@ -1319,7 +1319,8 @@ FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
 	enableAction("layout_vsplitter", twoSelected);
 
 	KFormDesigner::Container *container = activeForm()->activeContainer();
-	enableAction("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+	if (container)
+		enableAction("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
 
 	emit widgetSelected(form, true);
 }

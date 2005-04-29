@@ -86,7 +86,10 @@ PropertyCommand::unexecute()
 	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
-		QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
+		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key());
+		if (!titem)
+			continue; //better this than a crash
+		QWidget *widg = titem->widget();
 		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
 		//m_buffer->setSelectedWidget(widg, true);
 		widg->setProperty(m_property, it.data());
@@ -122,7 +125,10 @@ GeometryPropertyCommand::execute()
 	// We move every widget in our list by (dx, dy)
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
+		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it);
+		if (!titem)
+			continue; //better this than a crash
+		QWidget *w = titem->widget();
 		w->move(w->x() + dx, w->y() + dy);
 	}
 	m_buffer->m_undoing = false;
@@ -139,7 +145,10 @@ GeometryPropertyCommand::unexecute()
 	// We move every widget in our list by (-dx, -dy) to undo the move
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		QWidget *w = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it)->widget();
+		ObjectTreeItem* titem = m_buffer->m_manager->activeForm()->objectTree()->lookup(*it);
+		if (!titem)
+			continue; //better this than a crash
+		QWidget *w = titem->widget();
 		w->move(w->x() - dx, w->y() - dy);
 	}
 	m_buffer->m_undoing = false;
@@ -523,7 +532,10 @@ LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QS
  : PropertyCommand(buf, name, oldValue, value, "layout")
 {
 	m_form = buf->m_manager->activeForm();
-	Container *m_container = m_form->objectTree()->lookup(name)->container();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(name);
+	if (!titem)
+		return; //better this than a crash
+	Container *m_container = titem->container();
 	// We save the geometry of each wigdet
 	for(ObjectTreeItem *it = m_container->objectTree()->children()->first(); it; it = m_container->objectTree()->children()->next())
 		m_geometries.insert(it->name(), it->widget()->geometry());
@@ -538,7 +550,10 @@ LayoutPropertyCommand::execute()
 void
 LayoutPropertyCommand::unexecute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_oldvalues.begin().key())->container();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_oldvalues.begin().key());
+	if (!titem)
+		return; //better this than a crash
+	Container *m_container = titem->container();
 	m_container->setLayout(Container::NoLayout);
 	// We put every widget back in its old location
 	QMap<QString,QRect>::ConstIterator endIt = m_geometries.constEnd();
@@ -577,7 +592,10 @@ InsertWidgetCommand::execute()
 {
 	if (!m_form->objectTree())
 		return;
-	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
+	if (!titem)
+		return; //better this than a crash
+	Container *m_container = titem->container();
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name, m_container);
 
 	if(!w)
@@ -638,7 +656,10 @@ InsertWidgetCommand::execute()
 void
 InsertWidgetCommand::unexecute()
 {
-	QWidget *m_widget = m_form->objectTree()->lookup(m_name)->widget();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_name);
+	if (!titem)
+		return; //better this than a crash
+	QWidget *m_widget = titem->widget();
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	m_container->deleteWidget(m_widget);
 }
@@ -684,8 +705,10 @@ void
 CreateLayoutCommand::execute()
 {
 	WidgetLibrary *lib = m_form->manager()->lib();
-	if(!lib)  return;
-	Container *container = m_form->objectTree()->lookup(m_containername)->container();
+	if(!lib)
+		return;
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
+	Container *container = titem ? titem->container() : 0;
 	if(!container)
 		container = m_form->toplevelContainer(); // use toplevelContainer by default
 
@@ -764,7 +787,10 @@ CreateLayoutCommand::unexecute()
 
 	if(!parent->container())
 		return;
-	QWidget *w = m_form->objectTree()->lookup(m_name)->widget();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_name);
+	if (!titem)
+		return; //better this than a crash
+	QWidget *w = titem->widget();
 	parent->container()->deleteWidget(w); // delete the layout widget
 	m_form->manager()->windowChanged(m_form->widget()); // to reload ObjectTreeView
 }
@@ -869,7 +895,10 @@ PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *containe
 void
 PasteWidgetCommand::execute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
+	if (!titem)
+		return; //better this than a crash
+	Container *m_container = titem->container();
 	QString errMsg;
 	int errLine;
 	int errCol;
@@ -949,12 +978,18 @@ PasteWidgetCommand::execute()
 void
 PasteWidgetCommand::unexecute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containername);
+	if (!titem)
+		return; //better this than a crash
+	Container *m_container = titem->container();
 	// We just delete all the widgets we have created
 	QStringList::ConstIterator endIt = m_names.constEnd();
 	for(QStringList::ConstIterator it = m_names.constBegin(); it != endIt; ++it)
 	{
-		QWidget *w = m_container->form()->objectTree()->lookup(*it)->widget();
+		ObjectTreeItem* titem = m_container->form()->objectTree()->lookup(*it);
+		if (!titem)
+			continue; //better this than a crash
+		QWidget *w = titem->widget();
 		m_container->deleteWidget(w);
 	}
 }
@@ -1200,7 +1235,10 @@ DeleteWidgetCommand::unexecute()
 			}
 		}
 
-		Container *cont = m_form->objectTree()->lookup(m_containers[wname])->container();
+		ObjectTreeItem* titem = m_form->objectTree()->lookup(m_containers[wname]);
+		if (!titem)
+			return; //better this than a crash
+		Container *cont = titem->container();
 		ObjectTreeItem *parent = m_form->objectTree()->lookup(m_parents[wname]);
 		QDomElement widg = n.toElement();
 		if(parent)
