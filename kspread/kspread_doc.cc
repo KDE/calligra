@@ -368,38 +368,38 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 KLocale *KSpreadDoc::locale () const
 { 
   return d->locale; 
-};
+}
 
 KSpreadMap *KSpreadDoc::map () const 
-{ 
+{
   return d->map;
-};
+}
 
 KSpreadStyleManager *KSpreadDoc::styleManager () const 
-{ 
+{
   return d->styleManager; 
-};
+}
 
 KSpread::ValueParser *KSpreadDoc::parser () const 
-{ 
+{
   return d->parser; 
-};
+}
 
 KSpread::ValueFormatter *KSpreadDoc::formatter () const
-{ 
+{
   return d->formatter; 
-};
+}
 
 KSpread::ValueConverter *KSpreadDoc::converter () const 
-{ 
+{
   return d->converter; 
-};
+}
 
 KSpread::ValueCalc *KSpreadDoc::calc () const
 { 
   return d->calc; 
-};
-  
+}
+
 void KSpreadDoc::saveConfig()
 {
     if ( isEmbedded() ||!isReadWrite())

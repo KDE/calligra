@@ -558,7 +558,7 @@ protected:
 };
 
 
-};
+}
 
 #endif // SWINDER_FORMAT_H
 

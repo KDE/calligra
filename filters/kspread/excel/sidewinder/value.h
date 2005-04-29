@@ -285,6 +285,6 @@ class Value
  */
 std::ostream& operator<<( std::ostream& s, Value value );
 
-}; // namespace Swinder
+} // namespace Swinder
 
 #endif // SWINDER_VALUE_H

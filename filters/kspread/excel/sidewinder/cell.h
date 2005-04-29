@@ -82,7 +82,7 @@ private:
 
 };
 
-}; // namespace Swinder
+} // namespace Swinder
 
 
 #endif // SWINDER_CELL_H
