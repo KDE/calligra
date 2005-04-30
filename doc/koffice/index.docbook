@@ -49,10 +49,14 @@
 <member>&kword; (a frames-based wordprocessor)</member>
 <member>&kspread; (a spreadsheet application)</member> 
 <member>&kpresenter; (screen and slide presentations)</member>
+<member>&kivio; (a flowchart application)</member>
+<member>Karbon14 (a vector drawing application)</member>
+<member>&krita; (a pixel based drawing application)</member>
+<member>&kugar; (a tool for generating business quality reports)</member>
+<member>Kexi (an integrated environment for managing data)</member>
+<member>&kchart; (a charts/graphs generation application)</member>
 <member>&kformula; (an editor for mathematical formulae)</member>
-<member>&kchart; (a charts/graphs drawing application)</member>
-<member>&kivio; <!-- FIXME --></member>
-<member>&kugar; <!-- FIXME --></member>
+
 </simplelist>
 
 <para>
@@ -512,9 +516,9 @@ using a networked computer, check with your administrator first.
 </itemizedlist>
 
 <para>
-Please note that, while you need the &kde; 3.1 (or newer) libraries 
+Please note that, while you need the &kde; 3.2 (or newer) libraries 
 on your system, you can still use &koffice; in a different desktop
-environment (for example, UDE or GNOME).
+environment (for example, XFCE or GNOME).
 </para>
 
 <para>
@@ -537,7 +541,7 @@ A C++ compiler which supports exceptions, preferably a recent version of GCC.
 for info about getting and installing it.) 
 </para></listitem>
 <listitem><para>
-Troll Tech's &Qt; 3.1 development packages. If these packages are not installed on
+Troll Tech's &Qt; 3.2 development packages. If these packages are not installed on
 your system and they are not included in the distribution of your operating 
 system, you should probably have to compile &Qt; from source. 
 These sources can be obtained from 
@@ -582,8 +586,8 @@ You can download the most current binaries from:
 </para>
 
 <para>
-<ulink url="http://koffice.kde.org/releases/1.3.2-release.php">
-http://koffice.kde.org/releases/1.3.2-release.php</ulink>
+<ulink url="http://koffice.kde.org/releases/1.4.0-release.php">
+http://koffice.kde.org/releases/1.4.0-release.php</ulink>
 </para>
 
 <para>
