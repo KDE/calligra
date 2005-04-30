@@ -142,8 +142,8 @@ like:</para>
 
 <important>
 <para>See the <link linkend="fonts">Mathematical Fonts</link> section
-for font installation details. You must install the esstix fonts to
-get these results
+for font installation details. You must install the bakoma or esstix fonts
+to get these results
 </para>
 </important>
 
@@ -1104,11 +1104,34 @@ action="simul">&Ctrl;<keycap>U</keycap></keycombo>. Here is the correct
 <title>Mathematical Fonts</title>
 
 <para>
-In order to print &PostScript; files from &kformula;, you need to get
-the Esstix fonts. These fonts can be obtained from 
+It is highly recommended to use the bakoma Tex fonts found here:
+</para>
+<para>
+<ulink url="http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/">
+http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/</ulink>
+</para>
+<para>
+You need these fonts in particular: cmbx10, cmex10, cmmi10,
+cmr10, cmsy10, msam10 and msbm10. Install them into your system
+and make sure you have the install path set as a FontPath in your
+X11 configuration, then completely restart your X Server, if you
+use a display manager like kdm, you should also restart kdm.
+Pressing <keycombo action="simul">&Ctrl; &Alt; <keycap>Backspace</keycap>
+</keycombo> at the login should do the trick.
+If unsure, make a complete reboot.
+</para>
+
+
+<para>
+You can also use the Esstix fonts. Only try the Esstix fonts
+if the above don't work. These fonts can be obtained from 
+
+<!-- THIS SITE IS NOT ANONYMOUS ANYMORE - raphael
 <ulink url="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">
-ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink>
-or <ulink url="http://www.w3.org/Amaya/Distribution/esstix.tar.gz">
+ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink> or
+-->
+
+<ulink url="http://www.w3.org/Amaya/Distribution/esstix.tar.gz">
 http://www.w3.org/Amaya/Distribution/esstix.tar.gz</ulink>
 </para>
 
@@ -1119,7 +1142,7 @@ http://www.w3.org/Amaya/Distribution/esstix.tar.gz</ulink>
 After downloading the fonts, install them into a folder called
 <filename class="directory">esstix</filename>. You can unpack them with 
 the &kde; application &ark;. <mousebutton>Right</mousebutton> click on
-<filename>esstix.zip</filename> and select <guimenuitem>Extract
+<filename>esstix.tar.gz</filename> and select <guimenuitem>Extract
 here...</guimenuitem>.   
 Then start the &kde; font installer by going to the K menu and
 selecting the command <menuchoice><guimenu>Control 
