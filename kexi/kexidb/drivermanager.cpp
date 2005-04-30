@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Daniel Molkentin <molkentin@kde.org>
    Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -140,10 +140,20 @@ bool DriverManagerInternal::lookupDrivers()
 			continue;
 		}
 
-		QString mime = ptr->property("X-Kexi-FileDBDriverMime").toString().lower();
 		QString drvType = ptr->property("X-Kexi-DriverType").toString().lower();
 		if (drvType=="file") {
-			if (!mime.isEmpty()) {
+			//new property: a list of supported mime types
+			QStringList mimes( ptr->property("X-Kexi-FileDBDriverMimeList").toStringList() );
+			//single mime is obsolete, but we're handling it:
+			{
+				QString mime( ptr->property("X-Kexi-FileDBDriverMime").toString().lower() );
+				if (!mime.isEmpty())
+					mimes.append( mime );
+			}
+
+			//store association of this driver with all listed mime types
+			for (QStringList::ConstIterator mime_it = mimes.constBegin(); mime_it!=mimes.constEnd(); ++mime_it) {
+				QString mime( (*mime_it).lower() );
 				if (!m_services_by_mimetype.contains(mime)) {
 					m_services_by_mimetype.insert(mime, ptr);
 				}

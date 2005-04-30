@@ -44,6 +44,9 @@ Comment[zh_CN]=Kexi SQL 驱动插件
 [PropertyDef::X-Kexi-FileDBDriverMime]
 Type=QString
 
+[PropertyDef::X-Kexi-FileDBDriverMimeList]
+Type=QStringList
+
 [PropertyDef::X-Kexi-DriverName]
 Type=QString
 
