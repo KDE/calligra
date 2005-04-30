@@ -82,8 +82,7 @@ from a combo box of recently used files.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens a document with any supported format.
-The document does not become the imported file.</action>
+<listitem><para><action>Import CSV data.</action>
 </para></listitem>
 </varlistentry>
 
