@@ -4397,6 +4397,7 @@ void KPrCanvas::copyObjs()
 
 void KPrCanvas::deleteObjs()
 {
+    lowerObject();
     KCommand *cmd=m_activePage->deleteSelectedObjects();
     m_view->kPresenterDoc()->deSelectAllObj();
     if( cmd )
@@ -4889,7 +4890,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
 void KPrCanvas::lowerObject()
 {
-    if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) 
+    if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 )
     {
         if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
             return;
