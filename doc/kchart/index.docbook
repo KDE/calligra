@@ -12,6 +12,8 @@
 <bookinfo>
 <title>The &kchart; Handbook</title>
 
+<!-- CURRENTLY MAINTAINED BY RAPHAEL LANGERHORST -->
+
 <authorgroup>
 <author>
 &Jonathan.Drews; &Jonathan.Drews.mail;
@@ -19,6 +21,7 @@
 <author>
 <firstname>Raphael</firstname>
 <surname>Langerhorst</surname>
+<email>raphael.langerhorst@kdemail.net</email>
 </author>
 <!-- 
 <othercredit role="developer">
@@ -31,7 +34,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-03-24</date>
+<date>2005-04-30</date>
 <releaseinfo>1.4</releaseinfo>
 
 <abstract>
@@ -732,11 +735,29 @@ menu and quit with
 </menuchoice>
 </para>
 </sect2>
+<sect2>
+<title>Exporting to Graphic Formats: SVG, PNG, JPG, Krita, Karbon14, Gimp and
+more</title>
+<para>
+For further processing, the chart can also be exported as a graphics file.
+Many formats are available. Using either PNG, SVG, JPG or Krita will likely
+produce the best result.
+</para>
+<para>
+To export your current chart simply choose
+<menuchoice><guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem></menuchoice>
+from the menu and select the desired file format from the filter box.
+</para>
+</sect2>
 </sect1>
 </chapter>
 
 
-<!-- HANDBOOK REVIEWED UP TO HERE -->
+<!-- HANDBOOK REWRITTEN UP TO HERE BY RAPHAEL LANGERHORST -->
+
+<!-- HANDBOOK WRITTEN FROM HERE BY JONATHAN DREWS -->
+<!-- HANDBOOK UPDATED FROM HERE BY RAPHAEL LANGERHORST -->
 
 
 <chapter id="kchartinkspread">
@@ -747,6 +768,29 @@ menu and quit with
 In addition to standalone operation, &kchart; is designed to use with
 &kspread;. This chapter describes how to create and manipulate charts
 from within &kspread;.
+</para>
+<para>
+Remember that &kchart; embedding into &kspread; is a very commonly
+used and well implemented feature, the examples in this chapter should
+just get you started.
+</para>
+<para>
+As soon as you have created a chart in &kspread; you can take full
+advantage of all the &kchart; features by double clicking on the
+chart area. This is necessary to get to all advanced configuration
+options. Keep in mind that the data editor is not available when
+&kchart; is embedded into &kspread;. This is obvious since &kspread;
+servers, from the &kchart;'s point of view, as a powerful data
+provider.
+</para>
+<para>
+Swapping x and y is of particular interest when working with &kspread;.
+You can swap interpretation of x and y axis in &kchart; in the
+Data Format settings which can be accessed through the Edit menu
+or the context menu when right clicking on the chart itself. As noted
+above you need to be inside the &kchart; component in order to access
+these settings, which can be done by double clicking the embedded
+chart in your spreadsheet.
 </para>
 
 <sect1 id="main_window">
@@ -777,6 +821,12 @@ format="PNG"/></imageobject></inlinemediaobject> to create the chart.
 chart Wizard will pop up after you insert the chart.</para></listitem>
 
 </itemizedlist>
+
+<para>
+The whole data could also be created using two columns instead of
+two rows. If using columns you might want to switch x and y axis
+in the &kchart; configuration as described above.
+</para>
 
 <para>To make a bar chart for individual items, put the numbers in a
 column, as shown below.</para>
@@ -852,15 +902,67 @@ graph. It also determines the size of the slices in a pie chart.
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document</action></para></listitem>
+<listitem><para><action>Saves the document to the current file.</action></para></listitem>
 </varlistentry>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
 <guimenuitem>Save As</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document with the specified format</action></para></listitem>
+<listitem><para><action>Saves the document, the file dialog is used.</action></para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the document.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a document with any supported format.
+The document does not become the imported file.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves a document to any supported format.</action>
+The document does not become the exported file. You can also choose
+among many image formats like PNG, SVG, Krita, Gimp or JPG.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import Data...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Imports CSV values from a file, much like
+the CSV import in KSpread. Note that you can specify various
+options and different separators (not just commas).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Template From Document...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Create a &kchart; template
+based on this document.
+</para></listitem>
+</varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -880,7 +982,7 @@ be seen after clicking on the <guimenu>Expand</guimenu> button.</para></importan
 <guimenu>File</guimenu>
 <guimenuitem>Print preview</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Displays a picture of what the printed
+<listitem><para><action>Displays a preview of what the printed
 document will look like.</action></para></listitem>
 </varlistentry>
 <varlistentry>
@@ -898,12 +1000,9 @@ the file icon.</para></note></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Send File...</guimenuitem>
+<guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
-<listitem>
-<warning><para>This feature does not work
-properly. Do not use it.</para></warning>
-</listitem>
+<listitem><para><action>Sends the chart as an email attachment.</action></para></listitem>
 </varlistentry>
 <varlistentry>
 <term><menuchoice>
@@ -936,15 +1035,6 @@ properly. Do not use it.</para></warning>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Customize with Wizard...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Allows you to specify the chart
-type.</action>You can also insert titles and change the fonts, with
-the Wizard.</para></listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu>
 <guimenuitem>Edit Data...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Table for entering the data.</action></para>
@@ -966,6 +1056,13 @@ chart.</action></para>
 <variablelist>
 <varlistentry>
 <term><menuchoice>
+<guimenu>Data Format</guimenu>
+</menuchoice></term>
+<listitem><para><action>Swap row and colums (x/y flipping).</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
 <guimenu>Colors</guimenu>
 </menuchoice></term>
 <listitem><para><action>Select graph colors</action>, grid colors and
@@ -978,7 +1075,7 @@ title colors here.</para>
 </menuchoice></term>
 <listitem><para><action>Select font style and size</action> here. The
 series colors can be selected here also. The series refer to the
-individual graphs. Each graphed set of data is a series</para>
+individual graphs. Each graphed set of data is a series.</para>
 </listitem>
 </varlistentry>
 
@@ -988,7 +1085,7 @@ individual graphs. Each graphed set of data is a series</para>
 </menuchoice></term>
 <listitem><para><action>Select the background color</action> for your
 graph.</para>
-<note><para>The picture backgrounds do not work at this time</para></note>
+<note><para>The picture backgrounds do not work at this time.</para></note>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -1039,46 +1136,29 @@ set here. </action></para>
 <title>The <guimenu>Settings</guimenu> Menu</title>
 <para>
 <variablelist>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Load Config</guimenuitem>
+<guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Loads a previously saved configuration.</action></para></listitem>
+<listitem><para><action>Show/Hide various Toolbars.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Save Config</guimenuitem>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the configuration you set up in
-Edit Configure.</action></para></listitem>
+<listitem><para><action>Configure key shortcuts for &kchart;.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Default Config</guimenuitem>
+<guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Loads the default configuration.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show File Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays the file toolbar for fast access.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Chart Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays the toolbar for the different
-charting styles (Pie Chart, Bar Chart, Area Chart and so on).</action></para></listitem>
+<listitem><para><action>Configure the &kchart; toolbars.</action></para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -1112,7 +1192,7 @@ Click on the <guilabel>Custom</guilabel> button.
 </para></listitem>
 
 <listitem><para>
-Next click on the <guilabel>Primary</guilabel> button.
+Next click on the <guilabel>Primary Shortcut</guilabel> button.
 </para></listitem>
 
 <listitem><para>
@@ -1198,36 +1278,6 @@ click on <userinput><guilabel>OK</guilabel></userinput>
 </chapter>
 
 
-
-<chapter id="faq">
-<title>Questions and Answers</title>
-
-&reporting.bugs;
-&updating.documentation;
-
-<qandaset id="faqlist">
-<qandaentry>
-<question>
-<para>Can &kchart; accept text files of data, such as columns of
-numbers, for plotting?</para>
-</question>
-<answer>
-<para>No. At this time &kchart; can only make graphs from inside
-&kspread;.</para>
-</answer>
-</qandaentry>
-<qandaentry>
-<question>
-<para>Why do some of the commands from the <guimenu>Edit</guimenu>
-<guimenuitem>Configure...</guimenuitem> menu not function?</para>
-</question>
-<answer>
-<para>&kchart; is still under development and some features do not work.</para>
-</answer>
-</qandaentry>
-</qandaset>
-</chapter>
-
 <chapter id="credits">
 <title>Credits and License</title>
 
@@ -1235,20 +1285,35 @@ numbers, for plotting?</para>
 &kchart;
 </para>
 <para>
-Program copyright 1998-2002 &Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
+Program copyright 1998-2005 the KChart Team
 </para>
 <para>
+Original Authors:
+</para>
+<itemizedlist>
+<listitem><para>&Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
+</para></listitem>
+<listitem><para>Torben Weis <email>weis@kde.org</email></para>
+</listitem>
+</itemizedlist>
+<para>
 Contributors:
+</para>
 <itemizedlist>
 <listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para>
 </listitem>
 <listitem><para>Karl-Heinz Zimmer <email>khz@kde.org</email></para>
 </listitem>
+<listitem><para>Inge Wallin <email>inge@lysator.liu.se</email></para>
+</listitem>
 </itemizedlist>
-</para>
 
 <para>
 Documentation copyright 2002 &Jonathan.Drews; &Jonathan.Drews.mail;
+</para>
+<para>
+Documentation copyright 2005 Raphael Langerhorst
+<email>raphael.langerhorst@kdemail.net</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -1256,46 +1321,6 @@ Documentation copyright 2002 &Jonathan.Drews; &Jonathan.Drews.mail;
 &underGPL;
 
 </chapter>
-
-<appendix id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-kchart">
-<title>How to obtain &kchart;</title>
-
-&install.intro.documentation;
-
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>
-In order to successfully use this version of &kchart;, you need &koffice;
-1.3 and &Qt; 3.2
-</para>
-
-<para>
-All required libraries as well as &kchart; itself can be found on <ulink
-url="http://www.koffice.org">The &koffice; home page</ulink>.
-</para>
-
-<!-- For a list of updates, you may refer to the application web site
-or the ChangeLog file, or ... -->
-<para>
-You can find a list of changes at <ulink
-url="http://www.koffice.org/kchart/">http://www.koffice.org/kchart/</ulink>.
-</para>
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-&install.compile.documentation;
-
-</sect1>
-
-</appendix>
 
 &documentation.index;
 </book>
