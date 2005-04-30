@@ -1077,20 +1077,22 @@ void KPrPage::lowerObjs(bool backward)
         _new.append( m_objectList.at( j ) );
 
     _new.setAutoDelete( false );
-    bool createCmd = true;
+    bool createCmd = false;
+    int insertPos = 0;
     for ( int i = 0; i < static_cast<int>( _new.count() ); i++ ) {
         kpobject = _new.at( i );
         if ( kpobject->isSelected() ) {
-            if ( i == 0 )
+            if ( i == insertPos )
             {
-                createCmd = false;
-                break;
+                ++insertPos;
+                continue;
             }
+            createCmd = true;
             _new.take( i );
             if ( backward )
                 _new.insert(QMAX(i-1,0) ,  kpobject);
             else
-                _new.insert( 0, kpobject );
+                _new.insert( insertPos++, kpobject );
         }
     }
     if ( createCmd )
@@ -1113,20 +1115,25 @@ void KPrPage::raiseObjs(bool forward)
         _new.append( m_objectList.at( j ) );
 
     _new.setAutoDelete( false );
-    bool createCmd = true;
-    for ( int i = 0; i < static_cast<int>( _new.count() ); i++ ) {
-        kpobject = m_objectList.at( i );
-        if ( kpobject->isSelected() ) {
-            _new.take( i );
-            if ( i == static_cast<int>(_new.count()) )
+    bool createCmd = false;
+    int size = int( _new.count() );
+    int insertPos = size - 1;
+    for ( int i = size - 1; i >= 0; i-- )
+    {
+        kpobject = _new.at( i );
+        if ( kpobject->isSelected() )
+        {
+            if ( i == insertPos )
             {
-                createCmd = false;
-                break;
+                --insertPos;
+                continue;
             }
+            createCmd = true;
+            _new.take( i );
             if ( forward )
-                _new.insert( QMIN( i+1, static_cast<int>(_new.count())),  kpobject);
+                _new.insert( QMIN( i+1, size - 1),  kpobject);
             else
-                _new.append( kpobject );
+                _new.insert( insertPos--, kpobject );
         }
     }
     if ( createCmd )

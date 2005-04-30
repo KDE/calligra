@@ -2375,12 +2375,7 @@ void KPrCanvas::deSelectAllObj()
     if( m_activePage->numSelected() == 0 )
         return;
 
-    if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
-        lowerObject();
-        selectedObjectPosition = -1;
-    }
-    else
-        m_view->kPresenterDoc()->raiseAndLowerObject = false;
+    lowerObject();
 
     m_activePage->deSelectAllObj();
 
@@ -4886,6 +4881,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
             m_activePage->setObjectList( _list );
         }
+        //tz not needed
         else
             selectedObjectPosition = -1;
     }
@@ -4893,18 +4889,26 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
 void KPrCanvas::lowerObject()
 {
-    if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
-        return;
-    KPObject *kpobject = objectList().last();
-    QPtrList<KPObject> _list = objectList();
-    _list.setAutoDelete( false );
+    if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) 
+    {
+        if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
+            return;
+        KPObject *kpobject = objectList().last();
+        QPtrList<KPObject> _list = objectList();
+        _list.setAutoDelete( false );
 
-    if ( kpobject->isSelected() ) {
-        _list.take( _list.count() - 1 );
-        if ( objectList().findRef( kpobject ) != -1 )
-            _list.insert( selectedObjectPosition, kpobject );
+        if ( kpobject->isSelected() ) {
+            _list.take( _list.count() - 1 );
+            if ( objectList().findRef( kpobject ) != -1 )
+                _list.insert( selectedObjectPosition, kpobject );
+        }
+        m_activePage->setObjectList( _list );
+        selectedObjectPosition = -1;
     }
-    m_activePage->setObjectList( _list );
+    else
+    {
+        m_view->kPresenterDoc()->raiseAndLowerObject = false;
+    }
 }
 
 void KPrCanvas::playSound( const QString &soundFileName )

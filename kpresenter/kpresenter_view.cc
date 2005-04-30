@@ -3197,11 +3197,11 @@ void KPresenterView::objectSelectedChanged()
 
     state = state && (nbobj==1);
     actionExtraArrangePopup->setEnabled(state);
-    actionExtraRaise->setEnabled(state);
-    actionExtraLower->setEnabled(state);
 
-    actionExtraBringForward->setEnabled(state);
-    actionExtraSendBackward->setEnabled(state);
+    actionExtraRaise->setEnabled( nbobj > 0 );
+    actionExtraLower->setEnabled( nbobj > 0 );
+    actionExtraBringForward->setEnabled( nbobj > 0 );
+    actionExtraSendBackward->setEnabled( nbobj > 0 );
 
     //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
     //actionPenColor->setEnabled(state);
