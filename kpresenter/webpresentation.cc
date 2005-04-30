@@ -812,7 +812,7 @@ void KPWebPresentationWizard::setupPage2()
       {
         encoding->insertItem(encodings[i]);
 
-        if (  codecForEnc->name() == webPres.getEncoding() )
+        if ( codecForEnc->name() == webPres.getEncoding() )
           encoding->setCurrentItem(idx);
         idx++;
       }
@@ -1059,7 +1059,12 @@ void KPWebPresentationWizard::finish()
     webPres.setWriteFooter( writeFooter->isChecked() );
     webPres.setLoopSlides( loopSlides->isChecked() );
     webPres.setXML( doctype->currentItem() != 0 );
-    webPres.setEncoding( KGlobal::charsets()->encodingForName( encoding->currentText() ) );
+    bool found = false;
+    QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(KGlobal::charsets()->encodingForName(encoding->currentText()), found);
+    if ( found )
+    {
+        webPres.setEncoding( codecForEnc->name() );
+    }
 
     close();
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
