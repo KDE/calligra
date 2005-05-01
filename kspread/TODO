@@ -71,7 +71,6 @@ General bugs
   + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
   + 100643: KSpread prints a completely empty page at the end of      1 DONE
 	    the document.
-	Duplicate bug.  See analysis below
   + 100992: left border of cells with text, which is wider than the   1 ----
 	    cell breaks printout
   + 101074: Charts are really small when printed from KSpread	      1 ----

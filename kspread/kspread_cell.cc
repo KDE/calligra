@@ -3198,8 +3198,8 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const QPoint &cellRef,
                                     bool paintRight, bool paintBottom,
                                     bool paintLeft,  bool paintTop,
-                                    QPen & rightPen, QPen & bottomPen,
-                                    QPen & leftPen,  QPen & topPen )
+                                    QPen & _rightPen, QPen & _bottomPen,
+                                    QPen & _leftPen,  QPen & _topPen )
 {
   KSpreadDoc * doc = sheet()->doc();
 
@@ -3243,6 +3243,13 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       paintBottom = paintBottom && cell->extraYCells() == yDiff;
     }
   }
+
+  // Must create copies of these since otherwise the zoomIt()
+  // operation will be performed on them repeatedly.
+  QPen  leftPen( _leftPen );
+  QPen  rightPen( _rightPen );
+  QPen  topPen( _topPen );
+  QPen  bottomPen( _bottomPen );
 
   // Determine the pens that should be used for drawing
   // the borders.
