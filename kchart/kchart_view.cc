@@ -137,14 +137,20 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_legendConfig = new KAction( i18n( "&Configure Legend..." ), 0,
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
-    m_subTypeChartConfig= new KAction( i18n( "&Configure Sub Type Chart..." ), 0,
+
+    m_subTypeChartConfig = new KAction( i18n( "&Configure Sub Type Chart..." ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
-    m_headerFooterConfig= new KAction( i18n( "&Configure Header Footer..." ), 0,
+
+    m_dataFormatConfig = new KAction( i18n( "&Configure Data Format..." ), 0,
+                            this, SLOT( slotConfigDataFormat() ),
+                            actionCollection(), "data_format" );
+
+    m_headerFooterConfig = new KAction( i18n( "&Configure Header Footer..." ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
 
-    m_pageLayoutConfig=new KAction( i18n( "Page Layout..." ), 0,
+    m_pageLayoutConfig = new KAction( i18n( "Page Layout..." ), 0,
                             this, SLOT( slotConfigPageLayout() ),
                             actionCollection(), "page_layout" );
 
@@ -541,6 +547,10 @@ void KChartView::slotConfigLegend()
    config(KChartConfigDialog::KC_LEGEND);
 }
 
+void KChartView::slotConfigDataFormat()
+{
+    config(KChartConfigDialog::KC_DATAFORMAT);
+}
 
 void KChartView::slotConfigSubTypeChart()
 {

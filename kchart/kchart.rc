@@ -9,6 +9,7 @@
   <Menu name="action_popup"><text>&amp;Chart</text>
    <Action name="config"/>
    <Separator />
+   <Action name="data_format"/>
    <Action name="legend_subtype"/>
    <Action name="headerfooter_subtype"/>
    <Action name="color_config"/>
@@ -41,6 +42,7 @@
 <Menu name="action_popup">
  <Action name="config"/>
  <Separator />
+ <Action name="data_format"/>
  <Action name="legend_subtype"/>
  <Action name="headerfooter_subtype"/>
  <Action name="legend_config"/>

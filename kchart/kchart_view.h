@@ -62,6 +62,7 @@ public slots:
     void  slotConfigLegend();
     void  slotConfigHeaderFooterChart();
     void  slotConfigSubTypeChart();
+    void  slotConfigDataFormat();
 
     void  slotConfigPageLayout();
     void  importData();
@@ -87,6 +88,7 @@ private:
     KAction  *m_fontConfig;
     KAction  *m_backConfig;
     KAction  *m_legendConfig;
+    KAction  *m_dataFormatConfig;
     KAction  *m_subTypeChartConfig;
     KAction  *m_headerFooterConfig;
     KAction  *m_pageLayoutConfig;

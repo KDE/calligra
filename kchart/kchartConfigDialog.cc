@@ -78,7 +78,11 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     //addTab( _geompage, i18n( "&Geometry" ) );
     setCaption( i18n( "Chart Config Dialog" ) );
 
-    if (flags & KC_SUBTYPE) {
+    if (flags & KC_DATAFORMAT) {
+        m_datapage = new KChartDataConfigPage(m_params, this, dat, aux);
+        addTab( m_datapage, i18n( "&Data" ) );
+    }
+    else if (flags & KC_SUBTYPE) {
         subtypePage();
     }
     else if (flags & KC_HEADERFOOTER) {
