@@ -55,7 +55,9 @@ mimetypedir = $(kde_mimedir)/application
 mimetype_DATA = x-kexiproject-sqlite.desktop \
 x-kexiproject-sqlite2.desktop \
 x-kexiproject-sqlite3.desktop \
-x-kexiproject-shortcut.desktop
+x-kexiproject-shortcut.desktop \
+x-sqlite2.desktop \
+x-sqlite3.desktop
 
 #TODO: add x-sqlite.desktop x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
 
