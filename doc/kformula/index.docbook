@@ -1118,7 +1118,7 @@ X11 configuration, then completely restart your X Server, if you
 use a display manager like kdm, you should also restart kdm.
 Pressing <keycombo action="simul">&Ctrl; &Alt; <keycap>Backspace</keycap>
 </keycombo> at the login should do the trick.
-If unsure, make a complete reboot.
+If unsure, do a complete reboot.
 </para>
 
 

@@ -496,15 +496,15 @@ In order to install and use &koffice; you must have:
 <itemizedlist>
 <listitem><para>
 A functioning &UNIX; system (for example, &Linux; or BSD)
-with a configured &X-Window; (for example, XFree86).
+with a configured &X-Window; (for example, XFree86 or X.Org).
 </para></listitem>
 <listitem><para>
-The &Qt; 3.1 libraries from Trolltech. See
+The &Qt; 3.3 libraries from Trolltech. See
 <ulink url="http://www.trolltech.com/">www.trolltech.com</ulink>
 for more information.
 </para></listitem>
 <listitem><para>
-The K Desktop Environment 3.1 (&kde; 3.1) or newer. &koffice; cannot be compiled
+The K Desktop Environment 3.3 (&kde; 3.3) or newer. &koffice; cannot be compiled
 with earlier versions of &kde;. Information on obtaining and installing
 &kde; can be found at: &kde-http;
 </para></listitem>
@@ -516,7 +516,7 @@ using a networked computer, check with your administrator first.
 </itemizedlist>
 
 <para>
-Please note that, while you need the &kde; 3.2 (or newer) libraries 
+Please note that, while you need the &kde; 3.3 (or newer) libraries 
 on your system, you can still use &koffice; in a different desktop
 environment (for example, XFCE or GNOME).
 </para>
@@ -541,7 +541,7 @@ A C++ compiler which supports exceptions, preferably a recent version of GCC.
 for info about getting and installing it.) 
 </para></listitem>
 <listitem><para>
-Troll Tech's &Qt; 3.2 development packages. If these packages are not installed on
+Troll Tech's &Qt; 3.3 development packages. If these packages are not installed on
 your system and they are not included in the distribution of your operating 
 system, you should probably have to compile &Qt; from source. 
 These sources can be obtained from 
