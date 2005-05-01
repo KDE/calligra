@@ -4572,8 +4572,6 @@ void KPresenterView::startKSpell()
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
     QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
-    QObject::connect( m_spell.dlg, SIGNAL( stop() ),
-                      this, SLOT( spellCheckerFinished( ) ) );
     QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
                       this, SLOT( spellCheckerCancel() ) );
     QObject::connect( m_spell.dlg, SIGNAL(autoCorrect(const QString &, const QString & ) ),
@@ -4700,16 +4698,6 @@ void KPresenterView::spellCheckerDone( const QString & )
     if ( textdoc )
         textdoc->textObject()->removeHighlight();
 
-    clearSpellChecker();
-#endif
-}
-
-void KPresenterView::spellCheckerFinished()
-{
-#ifdef HAVE_LIBKSPELL2
-    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
-
-    spellCheckerRemoveHighlight();
     clearSpellChecker();
 #endif
 }

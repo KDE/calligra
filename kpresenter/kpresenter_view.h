@@ -379,7 +379,6 @@ public slots:
 
 
     void spellCheckerDone( const QString & );
-    void spellCheckerFinished( );
     void spellCheckerCancel();
     void startKSpell();
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
