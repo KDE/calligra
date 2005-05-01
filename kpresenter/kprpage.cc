@@ -1101,7 +1101,6 @@ void KPrPage::lowerObjs(bool backward)
         lrCmd->execute();
         m_doc->addCommand( lrCmd );
     }
-    m_doc->raiseAndLowerObject = true;
 
 }
 
@@ -1142,7 +1141,6 @@ void KPrPage::raiseObjs(bool forward)
         lrCmd->execute();
         m_doc->addCommand( lrCmd );
     }
-    m_doc->raiseAndLowerObject = true;
 }
 
 KCommand *KPrPage::insertObject( const QString &name, KPObject * object, const KoRect &r, bool addCommand )

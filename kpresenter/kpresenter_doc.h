@@ -291,8 +291,6 @@ class KPresenterDoc : public KoDocument
     void initConfig();
     void saveConfig();
 
-    bool raiseAndLowerObject;
-
     KoStyleCollection * styleCollection()const { return m_styleColl;}
 
 

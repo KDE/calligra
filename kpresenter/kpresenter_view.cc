@@ -1162,13 +1162,13 @@ void KPresenterView::extraProperties()
 void KPresenterView::extraRaise()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->raiseObjs( true );
+    m_canvas->raiseObjs( true );
 }
 
 void KPresenterView::extraLower()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->lowerObjs( true );
+    m_canvas->lowerObjs( true );
 }
 
 void KPresenterView::extraRotate()
@@ -6153,13 +6153,13 @@ void KPresenterView::extraArrangePopup()
 void KPresenterView::extraSendBackward()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->lowerObjs( false );
+    m_canvas->lowerObjs( false );
 }
 
 void KPresenterView::extraBringForward()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->raiseObjs( false );
+    m_canvas->raiseObjs( false );
 }
 
 void KPresenterView::applyAutoFormat()

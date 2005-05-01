@@ -263,7 +263,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     setPageLayout( m_pageLayout );
     _presPen = QPen( red, 3, SolidLine );
     ignoreSticky = TRUE;
-    raiseAndLowerObject = false;
 
     m_gridColor=Qt::black;
 

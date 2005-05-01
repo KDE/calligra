@@ -4890,7 +4890,7 @@ void KPrCanvas::raiseObject( KPObject *_kpobject )
 
 void KPrCanvas::lowerObject()
 {
-    if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 )
+    if ( selectedObjectPosition != -1 )
     {
         if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
             return;
@@ -4905,10 +4905,6 @@ void KPrCanvas::lowerObject()
         }
         m_activePage->setObjectList( _list );
         selectedObjectPosition = -1;
-    }
-    else
-    {
-        m_view->kPresenterDoc()->raiseAndLowerObject = false;
     }
 }
 
@@ -5515,6 +5511,18 @@ void KPrCanvas::flipObject( bool _horizontal )
                                                               _horizontal, lst );
     flipCmd->execute();
     m_view->kPresenterDoc()->addCommand( flipCmd );
+}
+
+void KPrCanvas::lowerObjs( bool backward )
+{
+    lowerObject();
+    m_activePage->lowerObjs( backward );
+}
+
+void KPrCanvas::raiseObjs( bool forward )
+{
+    lowerObject();
+    m_activePage->raiseObjs( forward );
 }
 
 KCommand *KPrCanvas::setKeepRatioObj( bool p )

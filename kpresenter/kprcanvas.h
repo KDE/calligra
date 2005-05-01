@@ -321,6 +321,9 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     void flipObject( bool _horizontal );
 
+    void lowerObjs( bool backward );
+    void raiseObjs( bool forward );
+
     KCommand *setKeepRatioObj( bool p );
     KCommand *setProtectSizeObj(bool protect);
 
