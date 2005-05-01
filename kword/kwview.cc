@@ -5479,9 +5479,6 @@ void KWView::startKSpell()
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
     QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
-
-    QObject::connect( m_spell.dlg, SIGNAL( stop() ),
-                      this, SLOT( spellCheckerFinished( ) ) );
     QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
                       this, SLOT( spellCheckerCancel() ) );
     QObject::connect( m_spell.dlg, SIGNAL(autoCorrect(const QString &, const QString & ) ),
@@ -5555,6 +5552,9 @@ void KWView::clearSpellChecker(bool cancelSpellCheck)
 
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
+    delete m_spell.kospell;
+    m_spell.kospell = 0;
+
     if ( m_spell.macroCmdSpellCheck )
     {
         if ( !cancelSpellCheck )
@@ -5595,16 +5595,6 @@ void KWView::spellCheckerRemoveHighlight()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
-#endif
-}
-
-void KWView::spellCheckerFinished()
-{
-#ifdef HAVE_LIBKSPELL2
-    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
-    spellCheckerRemoveHighlight();
-    clearSpellChecker();
-
 #endif
 }
 

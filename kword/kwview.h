@@ -467,7 +467,6 @@ protected slots:
     void spellCheckerMisspelling( const QString &, int );
     void spellCheckerCorrected( const QString &, int, const QString & );
     void spellCheckerDone( const QString & );
-    void spellCheckerFinished( );
     void spellCheckerCancel();
 
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
