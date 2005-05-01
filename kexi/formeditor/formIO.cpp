@@ -880,15 +880,15 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
 	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
-	if(parent.tagName() == "widget") {
-		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
-	} else if((parent.tagName() == "UI")) {
+	if(item && !item->parent()) {
 		// save form widget size, but not its position
 		prop(tclass, domDoc, "geometry",
-			QRect( QPoint(0,0), item->widget()->property("geometry").toRect().size()),
+			QRect( QPoint(0,0), item->widget()->size()),
 			item->widget());
 	}
-
+	// normal widget (if == "UI', it means we're copying widget)
+	else if(parent.tagName() == "widget" || parent.tagName() == "UI")
+		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
 	// Save the buddy widget for a label
 	if(item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
