@@ -25,6 +25,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <ksimpleconfig.h>
 #include <kstandarddirs.h>
 
 #include <koDocument.h>
@@ -357,6 +358,10 @@ DocumentWrapper::~DocumentWrapper()
     if ( m_ownHistory ) {
         delete m_history;
     }
+
+    KSimpleConfig setting("kformularc");
+    setting.setGroup("general");
+    setting.writeEntry("syntaxHighlighting", m_syntaxHighlightingAction->isChecked() );
 }
 
 
@@ -365,6 +370,12 @@ void DocumentWrapper::document( Document* document )
     m_document = document;
     m_document->introduceWrapper( this );
     initSymbolNamesAction();
+
+    KSimpleConfig setting("kformularc");
+    setting.setGroup("general");
+    m_syntaxHighlightingAction->setChecked( setting.readBoolEntry("syntaxHighlighting", true ) );
+    if ( !m_syntaxHighlightingAction->isChecked() )
+        toggleSyntaxHighlighting();
 }
 
 
