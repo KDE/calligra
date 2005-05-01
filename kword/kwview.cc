@@ -373,7 +373,10 @@ void KWView::initGui()
         shell()->showToolbar( "formula_toolbar", editingFormula );
 
     if ( !editingFormula )
+    {
        kWordDocument()->formulaDocumentWrapper()->setEnabled(false);
+       kWordDocument()->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled(false);
+    }
 
     // Prevention against applyMainWindowSettings hiding the statusbar
     KStatusBar * sb = statusBar();
@@ -1476,6 +1479,7 @@ void KWView::insertNewCustomVariable()
 void KWView::showFormulaToolbar( bool show )
 {
     m_doc->formulaDocument()->setEnabled( show );
+    m_doc->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled( true );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
 }
