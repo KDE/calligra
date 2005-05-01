@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita Magick Export Filter
-X-KDE-Export="image/png,image/gif,image/cgm,image/jpeg,image/tiff,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xpm,image/x-vnd.adobe.photoshop"
+X-KDE-Export=image/png,image/gif,image/cgm,image/jpeg,image/tiff,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xpm,image/x-vnd.adobe.photoshop
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Import=application/x-krita
