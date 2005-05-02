@@ -1680,7 +1680,11 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
     pStencil->setPosition( x, y );
 
     // Use default properties if we held ctrl down
-    if(KApplication::keyboardModifiers() == KApplication::ControlModifier) {
+#if KDE_IS_VERSION(3, 4, 0)
+    if(kapp->keyboardMouseState() & Qt::ControlButton) {
+#else
+    if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
+#endif
       pStencil->setTextFont(doc()->defaultFont());
     } else {
       pStencil->setFGColor(m_setFGColor->color());
