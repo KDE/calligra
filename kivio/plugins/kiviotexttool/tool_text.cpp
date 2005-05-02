@@ -185,6 +185,7 @@ bool TextTool::startRubberBanding( QMouseEvent *e )
 {
   view()->canvasWidget()->startRectDraw( e->pos(), KivioCanvas::Rubber );
   view()->canvasWidget()->repaint();
+  m_startPoint = e->pos();
 
   return true;
 }
@@ -227,13 +228,18 @@ void TextTool::endRubberBanding(QMouseEvent */*e*/)
 {
   // End the rubber-band drawing
   view()->canvasWidget()->endRectDraw();
+  QRect rect;
 
-  // We can't text if the start and end points are the same
-  if( m_startPoint != m_releasePoint )
-  {
-    text(view()->canvasWidget()->rect());
+  if( m_startPoint != m_releasePoint ) {
+    rect = view()->canvasWidget()->rect();
+  } else { // Behave a bit more sensible when clicking the canvas...
+    rect.setTopLeft(m_startPoint);
+    rect.setWidth(view()->zoomHandler()->zoomItX(100));
+    rect.setHeight(view()->zoomHandler()->zoomItY(20));
   }
-  
+
+  text(rect);
+
   if(!m_permanent) {
     view()->pluginManager()->activateDefaultTool();
   }
