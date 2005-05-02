@@ -629,7 +629,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
   
   KivioSelectDragData *pData = m_lstOldGeometry.first();
 
-  QWMatrix m;
+/*  QWMatrix m;
   double w2 = m_pResizingStencil->w() / 2.0;
   double h2 = m_pResizingStencil->h() / 2.0;
   m.translate(m_pResizingStencil->x(), m_pResizingStencil->y());
@@ -640,7 +640,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
   m.invert();
   
   double x = pagePoint.x() * m.m11() + pagePoint.y() * m.m21() + m.dx();
-  double y = pagePoint.x() * m.m12() + pagePoint.y() * m.m22() + m.dy();
+  double y = pagePoint.x() * m.m12() + pagePoint.y() * m.m22() + m.dy();*/
   
   if( !pData )
   {
@@ -648,8 +648,8 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
       return;
   }
 
-  double dx = x - m_origPoint.x();
-  double dy = y - m_origPoint.y();
+  double dx = pagePoint.x() - m_origPoint.x();
+  double dy = pagePoint.y() - m_origPoint.y();
       
   if((dx > 0) || (dy > 0) || (dx < 0) || (dy < 0)) { // Do we really need to redraw?
     // Undraw the old outline

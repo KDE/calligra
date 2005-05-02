@@ -1022,56 +1022,10 @@ KoPoint KivioCanvas::snapToGridAndGuides(KoPoint point)
 {
   KoPoint p = point;
 
-  KoSize dist = m_pDoc->grid().snap;
-  KoSize dxy = m_pDoc->grid().freq;
+  p = snapToGrid(p);
 
-  int dx = qRound(p.x()/dxy.width());
-  int dy = qRound(p.y()/dxy.height());
-
-  float distx = QMIN(QABS(p.x() - dxy.width() * dx), QABS(p.x() - dxy.width() * (dx + 1)));
-  float disty = QMIN(QABS(p.y() - dxy.height() * dy), QABS(p.y() - dxy.height()* (dy + 1)));
-
-  if( m_pDoc->grid().isSnap)
-  {
-    if ( distx < dist.width()) {
-      if (QABS(p.x() - dxy.width() * dx) < QABS(p.x() - dxy.width() * (dx + 1))) {
-        p.rx() = dxy.width() * dx;
-      } else {
-        p.rx() = dxy.width() * (dx + 1);
-      }
-    }
-
-    if ( disty < dist.height()) {
-      if (QABS(p.y() - dxy.height() * dy) < QABS(p.y() - dxy.height() * (dy + 1))) {
-        p.ry() = dxy.height() * dy;
-      } else {
-        p.ry() = dxy.height() * (dy + 1);
-      }
-    }
-  }
-
-  /*
-  * Now if the point is within 4 pixels of a gridline, snap
-  * to the grid line.
-  */
-  if (m_pView->isSnapGuides())
-  {
-    float four = m_pView->zoomHandler()->unzoomItY(4);
-    KivioGuideLines *pGuides = activePage()->guideLines();
-    KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
-
-    if( pData )
-    {
-      p.ry() = (float)pData->position();
-    }
-
-    pData = pGuides->findVertical( point.x(), four );
-
-    if( pData )
-    {
-      p.rx() = (float)pData->position();
-    }
-  }
+  bool snappedX, snappedY;
+  p = snapToGuides(p, snappedX, snappedY);
 
   return p;
 }
@@ -1084,34 +1038,26 @@ KoPoint KivioCanvas::snapToGrid(KoPoint point)
   KoPoint p = point;
 
   KoSize dist = m_pDoc->grid().snap;
-  KoSize dxy = m_pDoc->grid().freq;
-  
+  KoSize freq = m_pDoc->grid().freq;
+
   if(m_pView->zoomHandler()->zoom() >= 150) {
-    dxy = dxy / 2;
+    freq = freq / 2;
   } else if(m_pView->zoomHandler()->zoom() <= 50) {
-    dxy = dxy * 2;
+    freq = freq * 2;
   }
 
-  int dx = qRound(p.x() / dxy.width());
-  int dy = qRound(p.y() / dxy.height());
+  int dx = qRound(p.x() / freq.width());
+  int dy = qRound(p.y() / freq.height());
 
-  float distx = QMIN(QABS(p.x() - dxy.width() * dx), QABS(p.x() - dxy.width() * (dx + 1)));
-  float disty = QMIN(QABS(p.y() - dxy.height() * dy), QABS(p.y() - dxy.height() * (dy + 1)));
+  double distx = QABS(p.x() - freq.width() * dx);
+  double disty = QABS(p.y() - freq.height() * dy);
 
   if(distx < dist.width()) {
-    if(QABS(p.x() - dxy.width() * dx) < QABS(p.x() - dxy.width() * (dx + 1))) {
-      p.rx() = dxy.width() * dx;
-    } else {
-      p.rx() = dxy.width() * (dx + 1);
-    }
+    p.setX(m_pView->zoomHandler()->unzoomItX(m_pView->zoomHandler()->zoomItX(freq.width()) * dx));
   }
 
   if(disty < dist.height()) {
-    if(QABS(p.y() - dxy.height() * dy) < QABS(p.y() - dxy.height() * (dy + 1))) {
-      p.ry() = dxy.height() * dy;
-    } else {
-      p.ry() = dxy.height() * (dy + 1);
-    }
+    p.setY(m_pView->zoomHandler()->unzoomItY(m_pView->zoomHandler()->zoomItY(freq.height()) * dy));
   }
 
   return p;
@@ -1125,7 +1071,7 @@ KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
 
   if (m_pView->isSnapGuides())
   {
-    float four = m_pView->zoomHandler()->unzoomItY(4);
+    double four = m_pView->zoomHandler()->unzoomItY(4);
     KivioGuideLines *pGuides = activePage()->guideLines();
     KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
 
