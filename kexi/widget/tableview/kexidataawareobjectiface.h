@@ -546,10 +546,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
 		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, 
-			bool repaint) {}
+			bool repaint);
 
 		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
-		virtual void slotRowDeleted() {}
+		virtual void slotRowDeleted();
 
 		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
 		virtual void slotRowInserted(KexiTableItem *item, bool repaint) {}
@@ -562,9 +562,14 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;
 
-		//! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition() 
-		//! if cursor's position is really changed.
+		/*! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition() 
+		 if cursor's position is really changed. */
 		virtual void selectCellInternal() {}
+
+		/*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
+		 to repaint tow \a row and all visible below. 
+		 Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
+		virtual void updateAllVisibleRowsBelow(int row) {}
 
 		//! data structure displayed for this object
 		KexiTableViewData *m_data;
@@ -668,6 +673,16 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		KPopupMenu *m_popup;
 
 		bool m_contextMenuEnabled : 1;
+
+		//! Used by updateAfterCancelRowEdit()
+		bool m_alsoUpdateNextRow : 1;
+
+		/*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
+		 It is set in slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)) slot
+		 received from KexiTableViewData member. 
+		 This value will be used in slotRowDeleted() after rowDeleted() signal 
+		 is received from KexiTableViewData member and then cleared (set to -1). */
+		int m_rowWillBeDeleted;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

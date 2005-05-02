@@ -122,7 +122,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 //moved	acceptsRowEditAfterCellAccepting = false;
 //moved	emptyRowInsertingEnabled = false;
 //moved	dragIndicatorLine = -1;
-	rowWillBeDeleted = -1;
+//moved		rowWillBeDeleted = -1;
 //	dropsAtRowEnabled = false;
 //moved	initDataContentsOnShow = false;
 //moved	cursorPositionSetExplicityBeforeShow = false;

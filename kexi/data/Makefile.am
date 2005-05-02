@@ -47,18 +47,21 @@ servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop \
 	kexireporthandler.desktop kexiscripthandler.desktop
 
+#dummy magic file for now
 magicdir = $(kde_confdir)/magic
-magic_DATA = kexi.magic
+magic_DATA = kexi.magic 
 
 
 mimetypedir = $(kde_mimedir)/application
 mimetype_DATA = x-kexiproject-sqlite.desktop \
 x-kexiproject-sqlite2.desktop \
 x-kexiproject-sqlite3.desktop \
-x-kexiproject-shortcut.desktop \
-x-sqlite2.desktop \
-x-sqlite3.desktop
+x-kexiproject-shortcut.desktop
 
-#TODO: add x-sqlite.desktop x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
+#TODO: add x-kexi-conndata x-kexi-conndataset x-kexi-shortcut-table etc.
 
+if need_kde32_compatibility
+  KDE32COMPAT = kde32compat
+endif
 
+SUBDIRS = $(KDE32COMPAT)

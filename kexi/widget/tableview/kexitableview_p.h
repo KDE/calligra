@@ -222,12 +222,12 @@ class KexiTableViewPrivate
 //moved	*/
 //moved	int dragIndicatorLine;
 
-	/*! Row number (>=0 or -1 == no row) that will be deleted in KexiTableViewData::deleteRow().
-	 It is set in slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)) slot
-	 received from KexiTableViewData member. 
-	 This value will be used in slotRowDeleted() after rowDeleted() signal 
-	 is received from KexiTableViewData member and the cleared (set to -1). */
-	int rowWillBeDeleted;
+//moved		/*! Row number (>=0 or -1 == no row) that will be deleted in KexiTableViewData::deleteRow().
+//moved		 It is set in slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)) slot
+//moved		 received from KexiTableViewData member. 
+//moved		 This value will be used in slotRowDeleted() after rowDeleted() signal 
+//moved		 is received from KexiTableViewData member and the cleared (set to -1). */
+//moved	int rowWillBeDeleted;
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
 	QValueList<int> maximizeColumnsWidthOnShow;

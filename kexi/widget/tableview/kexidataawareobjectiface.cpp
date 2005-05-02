@@ -59,6 +59,8 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_emptyRowInsertingEnabled = false;
 	m_popup = 0;
 	m_contextMenuEnabled = true;
+	m_rowWillBeDeleted = -1;
+	m_alsoUpdateNextRow = false;
 	clearVariables();
 }
 
@@ -745,6 +747,7 @@ void KexiDataAwareObjectInterface::cancelRowEdit()
 	//indicate on the vheader that we are not editing
 	if (m_verticalHeader)
 		m_verticalHeader->setEditRow(-1);
+	m_alsoUpdateNextRow = m_newRowEditing;
 	if (m_newRowEditing) {
 		m_newRowEditing = false;
 		//remove current edited row (it is @ the end of list)
@@ -779,6 +782,9 @@ void KexiDataAwareObjectInterface::cancelRowEdit()
 void KexiDataAwareObjectInterface::updateAfterCancelRowEdit()
 {
 	updateRow(m_curRow);
+	if (m_alsoUpdateNextRow)
+		updateRow(m_curRow+1);
+	m_alsoUpdateNextRow = false;
 }
 
 void KexiDataAwareObjectInterface::updateAfterAcceptRowEdit()
@@ -1290,6 +1296,34 @@ void KexiDataAwareObjectInterface::setEmptyRowInsertingEnabled(bool set)
 {
 	m_emptyRowInsertingEnabled = set;
 	/*emit*/ reloadActions();
+}
+
+void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiTableItem& item, 
+	KexiDB::ResultInfo* /*result*/, bool repaint)
+{
+	if (repaint) {
+		m_rowWillBeDeleted = m_data->findRef(&item);
+	}
+}
+
+void KexiDataAwareObjectInterface::slotRowDeleted()
+{
+	if (m_rowWillBeDeleted >= 0) {
+		if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= rows())
+			m_rowWillBeDeleted--; //move up
+		updateWidgetContentsSize();
+
+		setCursorPosition(m_rowWillBeDeleted, m_curCol, true/*forceSet*/);
+		if (m_verticalHeader)
+			m_verticalHeader->removeLabel();
+
+		updateAllVisibleRowsBelow(m_curRow); //needed for KexiTableView
+
+		//update navigator's data
+		m_navPanel->setRecordCount(rows());
+
+		m_rowWillBeDeleted = -1;
+	}
 }
 
 bool KexiDataAwareObjectInterface::beforeDeleteItem(KexiTableItem *)

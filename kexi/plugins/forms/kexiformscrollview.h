@@ -134,10 +134,11 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void slotRowRepaintRequested(KexiTableItem& item);
 
 		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
+		{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(item, result, repaint); }
 
 		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
-		virtual void slotRowDeleted();
+		virtual void slotRowDeleted() { KexiDataAwareObjectInterface::slotRowDeleted(); }
 
 		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
 		virtual void slotRowInserted(KexiTableItem *item, bool repaint);

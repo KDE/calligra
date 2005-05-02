@@ -316,16 +316,16 @@ void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
 	//! @todo
 }
 
-void KexiFormScrollView::slotAboutToDeleteRow(KexiTableItem& item, 
+/*void KexiFormScrollView::slotAboutToDeleteRow(KexiTableItem& item, 
 	KexiDB::ResultInfo* result, bool repaint)
 {
 	//! @todo
-}
+}*/
 
-void KexiFormScrollView::slotRowDeleted()
+/*void KexiFormScrollView::slotRowDeleted()
 {
 	//! @todo
-}
+}*/
 
 void KexiFormScrollView::slotRowInserted(KexiTableItem *item, bool repaint)
 {

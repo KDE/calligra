@@ -22,8 +22,7 @@ libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp
 libkeximigrate_la_LIBADD = \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
-	$(top_builddir)/kexi/main/libkeximain.la \
-	$(top_builddir)/kexi/main/startup/libkeximainstartup.la
+	$(top_builddir)/kexi/main/libkeximain.la
 
 libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO) \
 -L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
@@ -43,7 +42,7 @@ keximigratetest_SOURCES = keximigratetest.cpp
 keximigratetest_LDADD = libkeximigrate.la \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
-	$(top_builddir)/kexi/main/libkeximain.la \
-	$(top_builddir)/kexi/main/startup/libkeximainstartup.la
+	$(top_builddir)/kexi/main/libkeximain.la
+
 keximigratetest_LDFLAGS = $(KDE_RPATH) $(all_libraries) 
 

@@ -665,10 +665,11 @@ protected slots:
 	virtual void slotRowRepaintRequested(KexiTableItem& item);
 
 	//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-	virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+	virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
+	{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(item, result, repaint); }
 
 	//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
-	virtual void slotRowDeleted();
+	virtual void slotRowDeleted() { KexiDataAwareObjectInterface::slotRowDeleted(); }
 
 	//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
 	virtual void slotRowInserted(KexiTableItem *item, bool repaint);
@@ -821,6 +822,10 @@ protected:
 	virtual void moveToNextRecordRequested();
 	virtual void moveToFirstRecordRequested();
 	virtual void addNewRecordRequested();
+
+	/*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
+	 to repaint tow \a row and all visible below. */
+	virtual void updateAllVisibleRowsBelow(int row);
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();

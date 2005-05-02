@@ -842,6 +842,7 @@ void KexiTableView::deleteCurrentRow()
 }
 #endif //moved
 
+#if 0 //moved
 void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item, 
 	KexiDB::ResultInfo* /*result*/, bool repaint)
 {
@@ -853,23 +854,19 @@ void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item,
 void KexiTableView::slotRowDeleted()
 {
 	if (d->rowWillBeDeleted >= 0) {
-//		if (!isInsertingEnabled() && d->rowWillBeDeleted>=rows())
-		if (d->rowWillBeDeleted > 0 && d->rowWillBeDeleted >= rows())//+(isInsertingEnabled()?1:0) ))
+		if (d->rowWillBeDeleted > 0 && d->rowWillBeDeleted >= rows())
 			d->rowWillBeDeleted--; //move up
 		updateWidgetContentsSize();
 
 		setCursorPosition(d->rowWillBeDeleted, m_curCol, true/*forceSet*/);
-
 		m_verticalHeader->removeLabel();
+
 		//get last visible row
 		int r = rowAt(clipper()->height()+contentsY());
 		if (r==-1) {
 			r = rows()+1+(isInsertingEnabled()?1:0);
 		}
 		//update all visible rows below 
-//		updateContents( contentsX(), rowPos(m_curRow)-contentsY(), 
-	//		clipper()->width(), d->rowHeight*(r - m_curRow));
-
 		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 		int row = m_curRow;
 		updateContents( columnPos( leftcol ), rowPos(row), 
@@ -880,6 +877,21 @@ void KexiTableView::slotRowDeleted()
 
 		d->rowWillBeDeleted = -1;
 	}
+}
+#endif
+
+void KexiTableView::updateAllVisibleRowsBelow(int row)
+{
+	//get last visible row
+	int r = rowAt(clipper()->height()+contentsY());
+	if (r==-1) {
+		r = rows()+1+(isInsertingEnabled()?1:0);
+	}
+	//update all visible rows below 
+	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+//	int row = m_curRow;
+	updateContents( columnPos( leftcol ), rowPos(row), 
+		clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 }
 
 void KexiTableView::slotRowInserted(KexiTableItem *item, bool repaint)
@@ -2899,7 +2911,7 @@ void KexiTableView::updateCell(int row, int col)
 void KexiTableView::updateRow(int row)
 {
 //	kdDebug(44021) << "updateRow("<<row<<")"<<endl;
-	if (row < 0 || row >= rows())
+	if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/ ))
 		return;
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 //	int rightcol = d->pTopHeader->sectionAt( clipper()->width() );
