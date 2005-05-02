@@ -359,9 +359,8 @@ DocumentWrapper::~DocumentWrapper()
         delete m_history;
     }
 
-    KSimpleConfig setting("kformularc");
-    setting.setGroup("general");
-    setting.writeEntry("syntaxHighlighting", m_syntaxHighlightingAction->isChecked() );
+    m_config->setGroup("General");
+    m_config->writeEntry("syntaxHighlighting", m_syntaxHighlightingAction->isChecked() );
 }
 
 
@@ -371,9 +370,8 @@ void DocumentWrapper::document( Document* document )
     m_document->introduceWrapper( this );
     initSymbolNamesAction();
 
-    KSimpleConfig setting("kformularc");
-    setting.setGroup("general");
-    m_syntaxHighlightingAction->setChecked( setting.readBoolEntry("syntaxHighlighting", true ) );
+    m_config->setGroup("General");
+    m_syntaxHighlightingAction->setChecked( m_config->readBoolEntry("syntaxHighlighting", true ) );
     if ( !m_syntaxHighlightingAction->isChecked() )
         toggleSyntaxHighlighting();
 }
