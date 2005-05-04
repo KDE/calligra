@@ -3443,7 +3443,7 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     // Restore everything as it was before
     setResolution( oldResolutionX, oldResolutionY );
     setZoom( oldZoom );
-    newZoomAndResolution( false, false );
+    newZoomAndResolution( true /*set contents size again*/, false );
 
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
         (*it)->getGUI()->canvasWidget()->setUpdatesEnabled( true );
