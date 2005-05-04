@@ -469,7 +469,19 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     d->m_nodiag = new QCheckBox ( translatedstring , widgetbase);
     layout->addWidget(d->m_nodiag, 2, 0);
     QString  startwithoutdialog = grp.readEntry( "NoStartDlg" );
-    d->m_nodiag->setChecked( startwithoutdialog == QString("yes") );
+    bool ischecked = startwithoutdialog == QString("yes");
+
+    // When not starting up, display a tri-state button telling whether
+    // the user actually choosed the template to start with next times (bug:77542)
+    if (d->m_dialogType == Everything)
+    {
+        d->m_nodiag->setChecked( ischecked );
+    }
+    else
+    {
+        d->m_nodiag->setTristate();
+        d->m_nodiag->setNoChange();
+    }
 }
 
 /*================================================================*/
@@ -626,9 +638,11 @@ void KoTemplateChooseDia::slotOk()
 
 	    if (d->m_nodiag)
 	    {
+		// The checkbox m_nodiag is in tri-state mode for new documents
+		// fixes bug:77542
 		if (d->m_nodiag->isChecked())
 		    grp.writeEntry( "NoStartDlg", "yes");
-		else
+		else if (!d->m_nodiag->isChecked())
 		    grp.writeEntry( "NoStartDlg", "no");
 	    }
 	}
