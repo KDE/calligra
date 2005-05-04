@@ -89,6 +89,7 @@ Done:
 -> save/load regular polygon
 -> save/load variable settings
 -> Save/load masterpage
+-> save/load in old format master page attribute
 
 Todo:
 -> save/load cubic/quadric/freehand object (define as svg object)
@@ -96,7 +97,6 @@ Todo:
 	-> picture effect (extend oasis format)
 	-> depth
 	-> mirror type (we must use rotate and draw:mirror element)
--> save/load in old format master page attribute
 
 Bugs:
 -> fix default value
