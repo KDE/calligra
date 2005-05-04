@@ -1079,7 +1079,17 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_pageLayout.loadOasis( *masterPageStyle );
         if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 )
         {
-            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
+            // Loading page layout failed, try to see why.
+            QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+            //if ( properties.isNull() )
+            //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
+            //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
+            //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
+            //else
+            if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
+                setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document isn't OASIS-compliant." ) );
+            else
+                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
         }
 
@@ -1145,7 +1155,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         __columns.ptColumnSpacing = 2;
         m_headerVisible = false;
         m_footerVisible = false;
-	m_pageLayout = KoPageLayout::standardLayout();
+        m_pageLayout = KoPageLayout::standardLayout();
     }
 
     createLoadingInfo();
