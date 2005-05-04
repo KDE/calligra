@@ -166,20 +166,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
     m_listCompletion->setIgnoreCase( true );
-
-    QStringList list = m_listCompletion->items();
-    for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-    {
-        QString tmp = *it;
-        uint maxword = 1;
-
-        for (uint i=0; i < (uint)tmp.length(); i++)
-                if ( tmp.at(i).isSpace() || tmp.at(i).isPunct() )
-                        maxword++;
-        if (maxword >  m_countMaxWords )
-                m_countMaxWords = maxword;
-    }
-    kdDebug() << "m_countMaxWords: " << m_countMaxWords << endl;
+    updateMaxWords();
     KLocale klocale(m_doc->instance()->instanceName());
     for (int i = 0; i <7; i++)
     {
@@ -244,6 +231,23 @@ KoAutoFormat::~KoAutoFormat()
     m_entries.clear();
     m_allLanguages.setAutoDelete( true );
     m_allLanguages.clear();
+}
+
+void KoAutoFormat::updateMaxWords()
+{
+    QStringList list = m_listCompletion->items();
+    for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    {
+        QString tmp = *it;
+        uint maxword = 1;
+
+        for (uint i=0; i < (uint)tmp.length(); i++)
+                if ( tmp.at(i).isSpace() || tmp.at(i).isPunct() )
+                        maxword++;
+        if (maxword >  m_countMaxWords )
+                m_countMaxWords = maxword;
+    }
+    kdDebug() << "m_countMaxWords: " << m_countMaxWords << endl;
 }
 
 void KoAutoFormat::loadListOfWordCompletion()
@@ -1243,7 +1247,9 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                 if (completionWord.length()>= m_minCompletionWordLength  && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                 {
                                         kdDebug() << "Adding:" << completionWord << endl;
-                                        m_listCompletion->addItem(completionWord  );
+                                        m_listCompletion->addItem( completionWord );
+                                        if ( completionWord.length() > m_countMaxWords )
+                                            m_countMaxWords = completionWord.length();
 
                                 }
                                 completionWord = "";
@@ -1261,7 +1267,9 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                         if (completionWord.length()>= m_minCompletionWordLength && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                         {
                                                 kdDebug() << "Adding:" << completionWord << endl;
-                                                m_listCompletion->addItem(completionWord  );
+                                                m_listCompletion->addItem( completionWord );
+                                                if ( completionWord.length() > m_countMaxWords )
+                                                    m_countMaxWords = completionWord.length();
                                         }
                                 }
                         }
@@ -1733,7 +1741,9 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
                 if (word.length()>= m_minCompletionWordLength  && !word.isEmpty() && m_listCompletion->makeCompletion(word).isEmpty())
                                 {
                                         kdDebug() << "Adding:" << word << endl;
-                                        m_listCompletion->addItem(word  );
+                                        m_listCompletion->addItem( word );
+                                        if ( word.length() > m_countMaxWords )
+                                            m_countMaxWords = word.length();
                                 }
 
     }

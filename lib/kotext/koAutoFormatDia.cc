@@ -1326,6 +1326,7 @@ bool KoCompletionDia::applyConfig()
     m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
 
     m_docAutoFormat->getCompletion()->setItems( m_listCompletion );
+    m_docAutoFormat->updateMaxWords();
     switch( m_completionKeyAction->currentItem() )
     {
     case 0:
