@@ -1524,10 +1524,10 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
         if ( !beginningOfSentence )
                 beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c);
             //beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c ) && (backCursor.parag()->at( backCursor.index()+1 )->c.isSpace());
+        if ( !beginningOfSentence && start==0 )
+            if ( parag->counter() || backCursor.parag()->at( backCursor.index() )->c.isPunct() )
+                beginningOfSentence = true;
 
-        if ( !beginningOfSentence && parag->counter() )
-               if ( start==0 )
-                        beginningOfSentence = true;
         // Now look for exceptions
         if ( beginningOfSentence )
         {
