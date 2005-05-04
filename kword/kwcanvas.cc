@@ -491,8 +491,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
                 applyAspectRatio( ratio, m_insRect );
             }
 
-            QPoint nPoint( normalPoint.x() + m_doc->zoomItX( width ),
-                           normalPoint.y() + m_doc->zoomItY( height ) );
+            QPoint nPoint( normalPoint.x() + m_doc->zoomItX( m_insRect.width() ),
+                           normalPoint.y() + m_doc->zoomItY( m_insRect.height() ) );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
             vPoint = contentsToViewport( vPoint );
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
