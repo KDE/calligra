@@ -327,6 +327,8 @@ public:
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c ); // End of sentence
     static bool isSeparator( const QChar &c );
+
+    void updateMaxWords();
 protected:
     //return a ref to index otherwise when we uperCase, index is bad !
     KCommand *doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag *parag, int & index, KoTextObject *txtObj );
