@@ -349,7 +349,8 @@ void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
     footnoteElem.setAttribute( "notetype", m_noteType == FootNote ? "footnote" : "endnote" );
     footnoteElem.setAttribute( "numberingtype", m_numberingType == Auto ? "auto" : "manual" );
     Q_ASSERT( m_frameset );
-    footnoteElem.setAttribute( "frameset", m_frameset->getName() );
+    if( m_frameset )
+      footnoteElem.setAttribute( "frameset", m_frameset->getName() );
 }
 
 void KWFootNoteVariable::load( QDomElement &elem )
