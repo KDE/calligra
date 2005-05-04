@@ -141,7 +141,7 @@ void KWFormulaFrameSet::moveFrame( KWFrame* frame )
 }
 
 
-KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas,bool)
+KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
 {
     return new KWFormulaFrameSetEdit(this, canvas);
 }

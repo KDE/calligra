@@ -545,7 +545,7 @@ public:
     bool isDeleted() const { return frames.isEmpty(); }
 
     /** Create a framesetedit object to edit this frameset in @p canvas */
-    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas *, bool /*temp*/ = false ) { return 0L; }
+    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0; }
 
     /**
      * @param emptyRegion The region is modified to subtract the areas painted, thus

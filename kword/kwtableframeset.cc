@@ -2867,8 +2867,10 @@ void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
         oldProtectContent = textframeSet->protectContent();
 
     if ( m_currentCell )
+    {
         m_currentCell->terminate(eraseSelection);
-    delete m_currentCell;
+        delete m_currentCell;
+    }
     m_currentCell = fs->createFrameSetEdit( m_canvas );
     textframeSet = dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
     if ( textframeSet )

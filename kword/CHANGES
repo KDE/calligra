@@ -1,3 +1,11 @@
+Changes after KWord-1.4-beta1
+=============================
+- Fixed crash when editing a cell on loading (#104982)
+
+Changes between KWord-1.3.x and KWord-1.4-beta1
+===============================================
+See ../changes-1.4-beta1
+
 Changes between KWord 1.3.2 and 1.3.3
 =====================================
 - Fix the 3 style menus for any translation (#61007)

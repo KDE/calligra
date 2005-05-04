@@ -202,7 +202,7 @@ void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     }
 }
 
-KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * /*canvas*/,bool )
+KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * /*canvas*/ )
 {
     return 0L; // new KWPartFrameSetEdit( this, canvas );
 }

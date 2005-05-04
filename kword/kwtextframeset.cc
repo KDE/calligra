@@ -189,9 +189,9 @@ KWordFrameSetIface* KWTextFrameSet::dcopObject()
     return m_dcop;
 }
 
-KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas, bool temp )
+KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
-    return new KWTextFrameSetEdit( this, canvas, temp );
+    return new KWTextFrameSetEdit( this, canvas );
 }
 
 KoTextDocument * KWTextFrameSet::textDocument() const
@@ -2903,14 +2903,12 @@ KoLinkVariable* KWTextFrameSet::linkVariableUnderMouse( const KoPoint& dPoint )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas, bool temp)
+KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
     //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();
-    if (temp)
-      return;
     connect( textobj, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
     connect( fs, SIGNAL( frameDeleted(KWFrame *) ), this, SLOT( slotFrameDeleted(KWFrame *) ) );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
