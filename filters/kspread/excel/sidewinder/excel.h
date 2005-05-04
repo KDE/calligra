@@ -3011,7 +3011,7 @@ private:
 };
 
 
-}; // namespace Swinder
+} // namespace Swinder
 
 
 

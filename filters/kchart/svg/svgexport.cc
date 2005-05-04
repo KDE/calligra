@@ -17,7 +17,7 @@
 
 
 typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartsvgexport, SvgExportFactory( "svgexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkchartsvgexport, SvgExportFactory( "svgexport" ) )
 
 SvgExport::SvgExport(KoFilter *, const char *, const QStringList&) 
     : KoFilter()

@@ -75,7 +75,7 @@ namespace Swinder {
 
   const double NaN = *( reinterpret_cast<const double*>( NaN_Bytes ) );
   const double Inf = *( reinterpret_cast<const double*>( Inf_Bytes ) );
-};
+}
 
 using namespace Swinder;
 

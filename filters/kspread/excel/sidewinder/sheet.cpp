@@ -57,7 +57,7 @@ public:
   double bottomMargin;
 };
 
-};
+}
 
 using namespace Swinder;
 

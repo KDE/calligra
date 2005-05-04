@@ -201,7 +201,7 @@ private:
 };
 
 
-};
+}
 
 #endif // SWINDER_SHEET_H
 

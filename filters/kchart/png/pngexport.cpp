@@ -17,7 +17,7 @@
 #include "pngexportdia.h"
 
 typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkchartpngexport, PngExportFactory( "pngexport" ) )
 
 PngExport::PngExport(KoFilter *, const char *, const QStringList&) 
     : KoFilter()

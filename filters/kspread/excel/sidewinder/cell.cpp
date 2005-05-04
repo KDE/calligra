@@ -41,7 +41,7 @@ public:
   unsigned rowSpan;
 };
 
-};
+}
 
 using namespace Swinder;
 
@@ -54,7 +54,7 @@ Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
   d->value      = Value::empty();
   d->columnSpan = 1;
   d->rowSpan    = 1;
-};
+}
 
 Cell::~Cell()
 {

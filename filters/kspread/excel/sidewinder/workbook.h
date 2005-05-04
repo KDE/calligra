@@ -92,7 +92,7 @@ private:
   Private* d;
 };
 
-};
+}
 
 
 #endif // SWINDER_WORKBOOK_H
