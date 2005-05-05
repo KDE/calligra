@@ -58,7 +58,7 @@ EventEater::eventFilter(QObject *, QEvent *ev)
 	if(!m_container)
 		return false;
 
-	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, 
+	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent,
 	// we need to simulate the Press event
 	if(ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget"))
 	{
@@ -105,7 +105,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	if(toplevel)
 	{
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), 
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname),
 			widget()->name(), widget(), this, this);
 		setObjectTree(it);
 
@@ -144,7 +144,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 	{
 		case QEvent::MouseButtonPress:
 		{
-			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name() 
+			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name()
 				<< "of type " << s->className() << endl;
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
@@ -972,9 +972,11 @@ Container::dragWidgets(QMouseEvent *mev)
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
+		if(!w)  continue;
 		// Don't move tab widget pages (or widget stack pages)
-		QCString classname = m_container->className();
-		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
+		//QCString classname = m_container->className();
+		//if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
+		if(!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
 			continue;
 
 		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
