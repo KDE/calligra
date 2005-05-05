@@ -2072,10 +2072,9 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 
     if(_clean)
     {
-        setModified(false);
         startBackgroundSpellCheck();
+        updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     }
-    updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     setModified( false );
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return b;
