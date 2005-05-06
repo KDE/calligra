@@ -3639,8 +3639,8 @@ int KSpreadCell::defineAlignX()
   {
     //numbers should be right-aligned by default, as well as BiDi text
     if ((formatType() == Text_format) || value().isString())
-      a = (d->strOutText[0].direction() == QChar::DirR) ?
-          KSpreadCell::Right : KSpreadCell::Left;
+      a = (d->strOutText.isRightToLeft()) ?
+                               KSpreadCell::Right : KSpreadCell::Left;
     else
       if (value().isBoolean() || value().isNumber())
         a = KSpreadCell::Right;
