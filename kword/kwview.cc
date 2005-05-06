@@ -454,7 +454,7 @@ void KWView::setupActions()
                                     actionCollection(), "delete_page" );
     kdDebug() <<  m_doc->numPages() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
 
-    (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",1,
+    (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
