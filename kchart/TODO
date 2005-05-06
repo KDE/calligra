@@ -32,7 +32,7 @@ Item								   Prio Status
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
        Fixed by new KDChart version
-  + 100004: Manual should describe stand-alone charting  	      2	RAPH
+  + 100004: Manual should describe stand-alone charting  	      2	DONE
             (see details below)
   + 101007: Error in reading back axis labels.			      1 DONE
       - Store row and column labels separately in the document		done
@@ -113,25 +113,15 @@ Item								   Prio Status
 
 * Manual
   + Describe stand-alone charting.				      1 DONE
-  + New screen shots.						      1 ----
-  + Describe all chart types					      1 ----
-  + Other enhancements?						      2 ----
+  + New screen shots.						      1 DONE
+  + Describe all chart types					      1 DONE
+  + Other enhancements?						      2 DONE
 
 * Filters
   + Make a non-part library that the filters can link against	      1	DONE
   + PNG export filter						      1 DONE
-    - Create the core of the filter					done
-    - Size dialog for PNG image						done
-  + SVG export filter						      2 ----
-    - Create the core of the filter					done
-    - Make SVG filter export sane svg:s					--
+  + SVG export filter						      2 DONE
   + CSV import filter						      1 DONE
-    - Create the core of the filter					done
-    - Create the import dialog						done
-    - Import the headers from the dialog				done
-    - Import the data from the dialog					done
-    - Disable when inside KSpread					done
-    - Remove some data types from the chooser (not relevant for KChart) done
 
 * KDChart
   + (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
