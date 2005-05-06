@@ -62,8 +62,8 @@ General bugs
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
   + 68190: Empty document generates 2 printed pages (testcase)	      1 DONE
-  + 70073: printing with kspread gives big black areas		      1 ----
-  + 72798: selective print comes up with "nothing to print"	      1 ----
+  + 70073: printing with kspread gives big black areas		      1 DONE
+  + 72798: selective print comes up with "nothing to print"	      1 DONE
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 DONE
   + 87367: Ugly postscript rendering of cell borders.		      1 DONE
@@ -71,7 +71,7 @@ General bugs
   + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
   + 100643: KSpread prints a completely empty page at the end of      1 DONE
 	    the document.
-  + 100992: left border of cells with text, which is wider than the   1 ----
+  + 100992: left border of cells with text, which is wider than the   1 DONE
 	    cell breaks printout
   + 101074: Charts are really small when printed from KSpread	      1 ----
 
