@@ -49,6 +49,10 @@ public:
 
     virtual void  setData( const KoChart::Data& data );
 
+    void  doSetData( const KoChart::Data&  data,
+		     bool  hasRowHeader,
+		     bool  hasRowHeader );
+
     bool showWizard();
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);

@@ -307,8 +307,6 @@ void KChartPart::setData( const KoChart::Data& data )
     // FIXME(khz): replace this when automatic string detection works in KDChart
     //m_currentData = data;
 
-    uint col, row;
-
     //Does the top/left cell contain a string?
     bool isStringTopLeft = data.cell( 0, 0 ).isString();
 
@@ -333,40 +331,42 @@ void KChartPart::setData( const KoChart::Data& data )
     if ( data.cols() == 1 )
         isStringFirstRow = FALSE;
 
-    uint colStart = 0;
-    uint rowStart = 0;
     bool hasColHeader = FALSE;
     bool hasRowHeader = FALSE;
 
     // Let's check if we have a full axis label text column
     if ( isStringFirstCol && isStringTopLeft
 	 || isStringFirstCol && isStringFirstRow )
-    {
         hasColHeader = TRUE;
-        colStart = 1;
-    }
 
     // Let's check if we have a full label text row.
     if ( isStringFirstRow && isStringTopLeft 
 	 || isStringFirstCol && isStringFirstRow )
-    {
         hasRowHeader = TRUE;
-        rowStart = 1;
-    }
+
+    doSetData(data, hasRowHeader, hasColHeader);
+}
+
+
+void KChartPart::doSetData( const KoChart::Data&  data,
+			    bool  hasRowHeader,
+			    bool  hasColHeader )
+{
+    uint  rowStart = 0;
+    uint  colStart = 0;
+    uint  col;
+    uint  row;
+
+    if (hasRowHeader)
+      rowStart = 1;
+    if (hasColHeader)
+      colStart = 1;
 
     // Generate legend from the column headers if applicable.
     m_rowLabels.clear();
     if ( hasColHeader ) {
-#if 0
-        m_params->setLegendSource( KDChartParams::LegendManual );
-        for( row = rowStart; row < data.rows(); row++ )
-        {
-            m_params->setLegendText( row - rowStart, data.cell( row, 0 ).stringValue() );
-        }
-#else
         for( row = rowStart; row < data.rows(); row++ )
 	    m_rowLabels << data.cell( row, 0 ).stringValue();
-#endif
     }
     else
         m_params->setLegendSource( KDChartParams::LegendAutomatic );
@@ -374,28 +374,9 @@ void KChartPart::setData( const KoChart::Data& data )
     // Generate X labels from the row headers if applicable
     m_colLabels.clear();
     if ( hasRowHeader ) {
-#if 0
-        KDChartAxisParams bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
-
-        m_longLabels.clear();
-        m_shortLabels.clear();
-        for ( uint col = colStart; col < data.cols(); col++ ) {
-            m_longLabels << data.cell( 0, col ).stringValue();
-            m_shortLabels << data.cell( 0, col ).stringValue().left( 3 );
-        }
-        bottomparms.setAxisLabelStringLists( &m_longLabels, &m_shortLabels );
-        m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
-#else
         for( col = colStart; col < data.cols(); col++ )
 	    m_colLabels << data.cell( 0, col ).stringValue();
-#endif
     }
-#if 0
-    else {
-        m_longLabels.clear();
-        m_shortLabels.clear();
-    }
-#endif
 
     // If there is a row header and/or a column header, then generate
     // the data that will be used for the chart by translating the
@@ -443,19 +424,26 @@ void KChartPart::initLabelAndLegend()
 void KChartPart::setAxisDefaults()
 {
   // Settings for the Y axis.
+  //
   KDChartAxisParams  yAxis
     = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+
   // decimal symbol and thousands separator
   yAxis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(),
 			    KGlobal::locale()->thousandsSeparator() );
+
   m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, yAxis );
 
+  //
   // Settings for the X axis. 
+  //
   KDChartAxisParams  xAxis
     = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
-  // This shouldn't be necessary to set.
+
+  // These two shouldn't be necessary to set.
   xAxis.setAxisFirstLabelText();
   xAxis.setAxisLastLabelText();
+
   m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, xAxis );
 }
 

@@ -646,21 +646,59 @@ void KChartView::importData()
 	return;
     }
 
+    // Let the CSV dialog structure the data in the file.
     QByteArray  inData( inFile.readAll() );
     inFile.close();
     CSVImportDialog  *dialog = new CSVImportDialog(0L, inData);
 
-    if ( dialog->exec() ) {
-	kdDebug(35001) << "OK was pressed" << endl;
-
-	kdDebug(35001) << "First row contains headers: "
-		       << dialog->getFirstRowContainHeaders() << endl;
-	kdDebug(35001) << "First col contains headers: "
-		       << dialog->getFirstColContainHeaders() << endl;
-    }
-    else {
+    if ( !dialog->exec() ) {
 	kdDebug(35001) << "Cancel was pressed" << endl;
+	return;
     }
+
+    kdDebug(35001) << "OK was pressed" << endl;
+
+    uint  rows = dialog->rows();
+    uint  cols = dialog->cols();
+
+    kdDebug(35001) << "Rows: " << rows << "  Cols: " << cols << endl;
+
+    bool  hasRowHeaders = ( rows > 1 && dialog->firstRowContainHeaders() );
+    bool  hasColHeaders = ( cols > 1 && dialog->firstColContainHeaders() );
+
+    KoChart::Data  data( rows, cols );
+    data.setUsedRows( rows );
+    data.setUsedCols( cols );
+    for (uint row = 0; row < rows; row++) {
+      for (uint col = 0; col < cols; col++) {
+	bool     ok;
+	QString  tmp;
+	double   val;
+
+	// Get the text and convert to double unless in the headers.
+	tmp = dialog->text( row, col );
+	if ( ( row == 0 && hasRowHeaders )
+	     || ( col == 0 && hasColHeaders ) ) {
+	  kdDebug(35001) << "Setting header (" << row << "," << col
+			 << ") to value " << tmp << endl;
+	  data.setCell( row, col, KoChart::Value( tmp ) );
+	}
+	else {
+	  val = tmp.toDouble(&ok);
+	  if (!ok)
+	    val = 0.0;
+
+	  kdDebug(35001) << "Setting (" << row << "," << col
+			 << ") to value " << val << endl;
+
+	  // and do the actual setting.
+	  data.setCell( row, col, KoChart::Value( val ) );
+	}
+      }
+    }
+
+    ((KChartPart*)koDocument())->doSetData( data, 
+					    hasRowHeaders, hasColHeaders );
 }
 
 

@@ -125,11 +125,11 @@ Item								   Prio Status
   + SVG export filter						      2 ----
     - Create the core of the filter					done
     - Make SVG filter export sane svg:s					--
-  + CSV import filter						      1 INGE
+  + CSV import filter						      1 DONE
     - Create the core of the filter					done
     - Create the import dialog						done
-    - Import the headers from the dialog				--
-    - Import the data from the dialog					--
+    - Import the headers from the dialog				done
+    - Import the data from the dialog					done
     - Disable when inside KSpread					done
     - Remove some data types from the chooser (not relevant for KChart) done
 

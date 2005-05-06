@@ -44,12 +44,12 @@ public:
     CSVImportDialog(QWidget* parent, QByteArray& fileArray);
     ~CSVImportDialog();
 
-    bool  getFirstRowContainHeaders();
-    bool  getFirstColContainHeaders();
-    int getRows();
-    int getCols();
-    int getHeader(int col);
-    QString getText(int row, int col);
+    bool     firstRowContainHeaders();
+    bool     firstColContainHeaders();
+    int      rows();
+    int      cols();
+    int      headerType(int col);
+    QString  text(int row, int col);
 
 private:
     void fillTable();

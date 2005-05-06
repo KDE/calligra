@@ -43,6 +43,7 @@
 
 CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
+      m_dialog(new DialogUI(this)),
       m_adjustRows(false),
       m_adjustCols(false),
       m_startRow(0),
@@ -52,7 +53,6 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
       m_textquote('"'),
       m_delimiter(","),
       m_ignoreDups(false),
-      m_dialog(new DialogUI(this)),
       m_fileArray(fileArray),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
@@ -119,47 +119,47 @@ CSVImportDialog::~CSVImportDialog()
 //                       public methods
 
 
-bool CSVImportDialog::getFirstRowContainHeaders()
+bool CSVImportDialog::firstRowContainHeaders()
 {
     return m_dialog->m_firstRowHeader->isChecked();
 }
 
 
-bool CSVImportDialog::getFirstColContainHeaders()
+bool CSVImportDialog::firstColContainHeaders()
 {
     return m_dialog->m_firstColHeader->isChecked();
 }
 
 
-int CSVImportDialog::getRows()
+int CSVImportDialog::rows()
 {
     int rows = m_dialog->m_sheet->numRows();
 
-    if ( m_endRow >= 0 ) {
-	if ( rows > ( m_startRow + m_endRow ) )
-	    rows = m_startRow + m_endRow;
-    }
+    if ( m_endRow >= 0 )
+	rows = m_endRow - m_startRow + 1;
 
     return rows;
 }
 
 
-int CSVImportDialog::getCols()
+int CSVImportDialog::cols()
 {
     int cols = m_dialog->m_sheet->numCols();
 
-    if ( m_endCol >= 0 ) {
-	if ( cols > ( m_startCol + m_endCol ) )
-	    cols = m_startCol + m_endCol;
-    }
+    if ( m_endCol >= 0 )
+	cols = m_endCol - m_startCol + 1;
 
     return cols;
 }
 
 
-QString CSVImportDialog::getText(int row, int col)
+QString CSVImportDialog::text(int row, int col)
 {
-    return m_dialog->m_sheet->text( row, col );
+    // Check for overflow.
+    if ( row >= rows() || col >= cols())
+	return QString::null;
+
+    return m_dialog->m_sheet->text( row - m_startRow, col - m_startCol );
 }
 
 
@@ -411,7 +411,7 @@ void CSVImportDialog::fillComboBox()
   m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
 }
 
-int CSVImportDialog::getHeader(int col)
+int CSVImportDialog::headerType(int col)
 {
     QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
     
