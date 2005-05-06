@@ -27,7 +27,7 @@
  * This class implements the list styles currently active at a given point.
  * Unlike StyleStack, this is NOT an inheritance stack.
  * The list-style stack contains one item per list level at any given point.
- * For instance inside <ul><li><ul><li> (in html terms), it will have 2 items.
+ * For instance inside \verbatim <ul><li><ul><li> \endverbatim (in html terms), it will have 2 items.
  */
 class ListStyleStack
 {

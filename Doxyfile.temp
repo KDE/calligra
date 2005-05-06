@@ -74,7 +74,7 @@ RECURSIVE              = YES
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
 # certain files from those directories.
 
-EXCLUDE_PATTERNS       = *.moc.* Makefile.* ChangeLog CHANGES CHANGES.* README \
+EXCLUDE_PATTERNS       = *.ui.h *.moc.* Makefile.* ChangeLog CHANGES CHANGES.* README \
                          README.* *.png AUTHORS DESIGN DESIGN.* *.desktop \
                          DESKTOP* COMMENTS HOWTO magic NOTES TODO THANKS
 

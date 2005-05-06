@@ -24,13 +24,9 @@
 
 #include "table.h"
 
-/***********************************************************************/
-/* Class: ListTable                                                    */
-/***********************************************************************/
-
 /**
- * This class hold a list of tables. It just a wrapper for QPtrList<Table> to
- * add a frame in a table if the table exists else to create a new table.
+ * This class hold a list of tables. It just a wrapper for \verbatim QPtrList<Table> \endverbatim
+ * to add a frame in a table if the table exists else to create a new table.
  */
 class ListTable: public QPtrList<Table>
 {
