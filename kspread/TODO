@@ -74,6 +74,8 @@ General bugs
   + 100992: left border of cells with text, which is wider than the   1 DONE
 	    cell breaks printout
   + 101074: Charts are really small when printed from KSpread	      1 ----
+        Fix the zoom issue						done
+	Fix the disappearing legend					----
 
 * Cut/Copy & Paste
   + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE

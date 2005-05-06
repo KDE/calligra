@@ -520,9 +520,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     //
     QRect zoomedView = m_pDoc->zoomRect( view );
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-    QRect bound;
-    for( ; it.current(); ++it )
-    {
+    for ( ; it.current(); ++it ) {
 //        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
 //        .arg(it.current()->contentRect().left())
 //        .arg(it.current()->contentRect().top())
@@ -531,19 +529,33 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 //        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
 //        kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
-        bound = it.current()->boundingRect();
-        if ( ( ( KSpreadChild* )it.current() )->sheet() == m_pSheet &&
-             bound.intersects( zoomedView ) )
-        {
+        QRect bound = it.current()->boundingRect();
+	QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
+						     bound.width(), 
+						     bound.height() ) );
+#if 0
+        kdDebug(36001)  << "printRect(): Bounding rect of view: " << view
+			<< endl;
+        kdDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
+			<< zoomedView << endl;
+        kdDebug(36001)  << "printRect(): Bounding rect of child: " << bound
+			<< endl;
+        kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
+			<< zoomedBound << endl;
+#endif
+        if ( ( ( KSpreadChild* )it.current() )->sheet() == m_pSheet 
+	     && zoomedBound.intersects( zoomedView ) ) 
+	{
             painter.save();
 
             painter.translate( -zoomedView.left() + m_pDoc->zoomItX( topLeft.x() ),
                                -zoomedView.top()  + m_pDoc->zoomItY( topLeft.y() ) );
-            bound.moveBy( -bound.x(), -bound.y() );
+	    // FIXME: Why can this suddenly be removed?
+            //zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
 
             it.current()->transform( painter );
             it.current()->document()->paintEverything( painter,
-                                                       bound,
+                                                       zoomedBound,
                                                        it.current()->isTransparent() );
             painter.restore();
         }
