@@ -192,7 +192,8 @@ PropertyEditorPixmap::selectFile()
 {
 	if(m_property->buffer() && m_property->buffer()->collection())
 	{
-		QString name = m_property->buffer()->pixmapName(m_property->name());
+		QString name( m_property->option("pixmapName").toString() );
+//		QString name = m_property->buffer()->pixmapName(m_property->name());
 		PixmapCollectionChooser dialog(m_property->buffer()->collection(), name, topLevelWidget());
 		if(dialog.exec() == QDialog::Accepted)
 		{

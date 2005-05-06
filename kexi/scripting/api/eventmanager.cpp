@@ -28,7 +28,7 @@
 using namespace Kross::Api;
 
 EventManager::EventManager(ScriptContainer* scriptcontainer, QtObject* qtobj)
-    : QObject(scriptcontainer) //QObject(qtobj ? qtobj->getObject() : scriptcontainer)
+    : QObject() //QObject(qtobj ? qtobj->getObject() : 0)
     , m_scriptcontainer(scriptcontainer)
     , m_qtobj(qtobj)
 {

@@ -552,10 +552,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void slotRowDeleted();
 
 		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
-		virtual void slotRowInserted(KexiTableItem *item, bool repaint) {}
+		virtual void slotRowInserted(KexiTableItem *item, bool repaint);
 
 		//! Like above, not db-aware version
-		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint) {}
+		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
 		virtual void slotRowsDeleted( const QValueList<int> & ) {}
 
@@ -570,6 +570,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 to repaint tow \a row and all visible below. 
 		 Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
 		virtual void updateAllVisibleRowsBelow(int row) {}
+
+		virtual void addNewRecordRequested();
 
 		//! data structure displayed for this object
 		KexiTableViewData *m_data;
@@ -663,6 +665,11 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		KexiRecordNavigator *m_navPanel; //!< main navigation widget
 
 		bool m_navPanelEnabled : 1;
+
+		/*! true, if certical header shouldn't be increased in
+		 KexiTableView::slotRowInserted() because it was already done 
+		 in KexiTableView::createEditor(). */
+		bool m_verticalHeaderAlreadyAdded : 1;
 
 		/*! Row number that over which user drags a mouse pointer.
 		 Used to indicate dropping possibility for that row. 

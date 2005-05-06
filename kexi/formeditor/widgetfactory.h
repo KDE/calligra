@@ -43,6 +43,7 @@ class QListView;
 class KLineEdit;
 class KTextEdit;
 class KActionCollection;
+class KexiPropertyBuffer;
 
 namespace KFormDesigner {
 
@@ -62,7 +63,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 
 		WidgetInfo(WidgetFactory *f);
 
-		WidgetInfo(WidgetFactory *f, const char* parentFactoryName, const char* inheritedClassName);
+		WidgetInfo(WidgetFactory *f, const char* parentFactoryName, const char* inheritedClassName = 0);
 
 		virtual ~WidgetInfo();
 
@@ -293,6 +294,12 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
 		inline QString propertyDescForValue(const QCString &name) { return m_propValDesc[name]; };
+
+		/*! This method is called after ObjectPropertyBuffer was filled with properties 
+		 of a widget \a w, of class defined by \a info.
+		 Default implementation does nothing.
+		 Implement this if you need to set options for properties within the buffer \a buf. */
+		virtual void setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& info, QWidget *w ) {}
 
 	protected:
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, 

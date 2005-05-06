@@ -304,14 +304,6 @@ KexiProperty::operator=(const KexiProperty &property)
 	return *this;
 }
 
-QVariant::Type KexiProperty::type() const
-{
-	if(m_list)
-		return QVariant::StringList;
-	else
-		return m_value.type();
-}
-
 void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
 	if (m_name.isEmpty()) {

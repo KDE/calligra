@@ -28,84 +28,108 @@
 
 using namespace Kross::Api;
 
+namespace Kross { namespace Api {
+
+    class ScriptContainerPrivate
+    {
+        public:
+            Manager* m_manager;
+
+            Script* m_script;
+            EventManager* m_eventmanager;
+            QMap<QString, QtObject*> m_qtobjects;
+
+            QString m_name;
+            QString m_code;
+            QString m_interpretername;
+    };
+
+}}
+
 ScriptContainer::ScriptContainer(Manager* manager, const QString& name)
-    : QObject()
-    , m_manager(manager)
-    , m_script(0)
-    , m_eventmanager(0)
-    , m_name(name)
+    : KShared() // initialize reference-counter
+    , d( new ScriptContainerPrivate() )
 {
+    d->m_manager = manager;
+    d->m_script = 0;
+    d->m_eventmanager = 0;
+    d->m_name = name;
 }
 
 ScriptContainer::~ScriptContainer()
 {
-    delete m_eventmanager;
+    delete d->m_eventmanager;
     finalize();
+
+    for(QMap<QString, QtObject*>::Iterator it = d->m_qtobjects.begin(); it != d->m_qtobjects.end(); ++it)
+        delete it.data();
+
+    delete d;
 }
 
 Manager* ScriptContainer::getManager()
 {
-    return m_manager;
+    return d->m_manager;
 }
 
 const QString& ScriptContainer::getName()
 {
-    return m_name;
+    return d->m_name;
 }
 
 const QString& ScriptContainer::getCode()
 {
-    return m_code;
+    return d->m_code;
 }
 
 void ScriptContainer::setCode(const QString& code)
 {
     finalize();
-    m_code = code;
+    d->m_code = code;
 }
 
 const QString& ScriptContainer::getInterpreterName()
 {
-    return m_interpretername;
+    return d->m_interpretername;
 }
 
 void ScriptContainer::setInterpreterName(const QString& name)
 {
     finalize();
-    m_interpretername = name;
+    d->m_interpretername = name;
 }
 
 bool ScriptContainer::addQObject(QObject* object, const QString& name)
 {
     QString n = name.isEmpty() ? object->name() : name;
-    if(m_qtobjects.contains(n)) return false;
-    m_qtobjects.replace(n, new QtObject(this, object, n));
+    if(d->m_qtobjects.contains(n)) return false;
+    d->m_qtobjects.replace(n, new QtObject(this, object, n));
     return true;
 }
 
 void ScriptContainer::initialize()
 {
     finalize();
-    Interpreter* interpreter = m_manager->getInterpreter(m_interpretername);
+    Interpreter* interpreter = d->m_manager->getInterpreter(d->m_interpretername);
     if(! interpreter)
         throw Kross::Api::TypeException(i18n("Unknown interpreter on ScriptContainer::execute()."));
-    m_script = interpreter->createScript(this);
+    d->m_script = interpreter->createScript(this);
 }
 
 void ScriptContainer::finalize()
 {
-    delete m_script; m_script = 0;
+    delete d->m_script; d->m_script = 0;
 }
 
 Kross::Api::Object* ScriptContainer::execute()
 {
-    if(! m_script) initialize();
-    return m_script->execute();
+    if(! d->m_script) initialize();
+    return d->m_script->execute();
 }
 
 const QStringList& ScriptContainer::getFunctionNames()
 {
-    return m_script ? m_script->getFunctionNames() : QStringList();
+    return d->m_script ? d->m_script->getFunctionNames() : QStringList();
 }
 
 Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, Kross::Api::List* arguments)
@@ -113,31 +137,31 @@ Kross::Api::Object* ScriptContainer::callFunction(const QString& functionname, K
     if(functionname.isEmpty())
         throw Kross::Api::RuntimeException(i18n("No functionname defined for ScriptContainer::callFunction()."));
 
-    if(! m_script) initialize();
-    return m_script->callFunction(functionname, arguments);
+    if(! d->m_script) initialize();
+    return d->m_script->callFunction(functionname, arguments);
 }
 
 const QStringList& ScriptContainer::getClassNames()
 {
-    return m_script ? m_script->getClassNames() : QStringList();
+    return d->m_script ? d->m_script->getClassNames() : QStringList();
 }
 
 Kross::Api::Object* ScriptContainer::classInstance(const QString& name)
 {
-    if(! m_script) initialize();
-    return m_script->classInstance(name);
+    if(! d->m_script) initialize();
+    return d->m_script->classInstance(name);
 }
 
 bool ScriptContainer::connect(QObject *sender, const QCString& signal, const QString& functionname)
 {
-    if(! m_eventmanager) // create instance on demand
-        m_eventmanager = new EventManager(this);
-    return m_eventmanager->connect(sender, signal, functionname);
+    if(! d->m_eventmanager) // create instance on demand
+        d->m_eventmanager = new EventManager(this);
+    return d->m_eventmanager->connect(sender, signal, functionname);
 }
 
 bool ScriptContainer::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
 {
-    if(! m_eventmanager) return false;
-    return m_eventmanager->disconnect(sender, signal, functionname);
+    if(! d->m_eventmanager) return false;
+    return d->m_eventmanager->disconnect(sender, signal, functionname);
 }
 

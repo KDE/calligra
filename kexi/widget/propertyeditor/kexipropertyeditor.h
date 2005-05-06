@@ -60,8 +60,20 @@ class KPushButton;
     KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
     edit->setBuffer(m_buffer);
     \endcode
+
     KexiPropertyEditor receives propery value changes from the assigned buffer,
     and automatically updates visually, if needed.
+
+    KexiPropertyEditor uses property options using KexiProperty::option(const char *) 
+    to override default behaviour of editor items.
+    Currently supported options are:
+
+    - min: integer setting for minimum value of PropertyEditorSpin item. Default is 0. 
+      We're setting "min" to -1, if we want this sepcial value to be allowed. 
+    - minValueText: i18n'd QString used in PropertyEditorSpin to set "specialValueText" 
+                    widget's property
+    - max: integer setting for minimum value of PropertyEditorSpin item. Default is 0xffff.
+    - pixmapName: QString setting for pixmap name. TEMPORARY for pixmap collections.
 */
 //! A list view to edit any type of properties
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView

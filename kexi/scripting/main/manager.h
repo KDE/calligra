@@ -24,16 +24,18 @@
 #include <qmap.h>
 //#include <qvariant.h>
 //#include <kdebug.h>
+#include <ksharedptr.h>
 
 class QObject;
 
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    class ScriptContainer;
     class Interpreter;
     class Object;
     class EventSlot;
+    class ScriptContainer;
+    class ManagerPrivate;
 
     /**
      * The Manager class is the main entry point to work with
@@ -135,7 +137,7 @@ namespace Kross { namespace Api {
              * \return The \a ScriptContainer instance matching to
              *         scriptname.
              */
-            ScriptContainer* getScriptContainer(const QString& scriptname);
+            KSharedPtr<Kross::Api::ScriptContainer> getScriptContainer(const QString& scriptname);
 
             /**
              * Return the \a Interpreter instance defined by
@@ -150,16 +152,8 @@ namespace Kross { namespace Api {
             Interpreter* getInterpreter(const QString& interpretername);
 
         private:
-            /// List of script instances.
-            QMap<QString, ScriptContainer*> m_scriptcontainers;
-            /// List of interpreter instances.
-            QMap<QString, Interpreter*> m_interpreter;
-            /// List of avaible modules.
-            QMap<QString, Object*> m_modules;
-            /// The buildin \a EventSlot for basic Qt slots.
-            EventSlot* m_buildin_slot;
-            /// List of additional \a EventSlot instances.
-            QValueList<EventSlot*> m_slots;
+            /// Private d-pointer class.
+            ManagerPrivate* d;
     };
 
 }}

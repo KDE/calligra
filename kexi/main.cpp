@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-
+    
     begin                : Sun Jun  9 12:15:11 CEST 2002
     copyright            : (C) 2003 by lucijan busch, Joseph Wenninger
     email                : lucijan@gmx.at, jowenn@kde.org
-
+   
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -173,7 +173,7 @@ extern "C" int kdemain(int argc, char *argv[])
 		return 1;
 	if (~res)
 		return 0;
-
+	
 	kdDebug() << "startupActions OK" <<endl;
 
 	/* Exit requested, e.g. after database removing. */

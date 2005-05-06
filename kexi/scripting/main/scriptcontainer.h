@@ -25,25 +25,26 @@
 #include <qobject.h>
 //#include <kdebug.h>
 //#include "object.h"
+#include <ksharedptr.h>
 
 namespace Kross { namespace Api {
 
     // Forward declarations.
-    class Manager;
     class Object;
     class List;
-    class QtObject;
-    class Script;
-    class EventManager;
+    class ScriptContainerPrivate;
 
     /**
      * The ScriptContainer class represents a single scriptfile.
      */
-    class /*KROSS_MAIN_EXPORT*/ ScriptContainer : public QObject
+    class /*KROSS_MAIN_EXPORT*/ ScriptContainer : public KShared
     {
-            Q_OBJECT
+            // We protected the constructor cause ScriptContainer
+            // instances should be created only within the
+            // Manager::getScriptContainer() method.
+            friend class Manager;
 
-        public:
+        protected:
 
             /**
              * Constructor.
@@ -56,10 +57,12 @@ namespace Kross { namespace Api {
              */
             ScriptContainer(Manager* manager, const QString& name);
 
+        public:
+
             /**
              * Destructor.
              */
-            ~ScriptContainer();
+            virtual ~ScriptContainer();
 
             /**
              * Return the \a Manager this ScriptContainer belongs too.
@@ -152,23 +155,8 @@ namespace Kross { namespace Api {
              */
             bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
 
-        signals:
-            //void done(const QVariant& result);
-            //void success();
-            //void error();
-
-        public slots:
-            //void execute();
-
         private:
-            Manager* m_manager;
-            Script* m_script;
-            EventManager* m_eventmanager;
-            QMap<QString, QtObject*> m_qtobjects;
-
-            QString m_name;
-            QString m_code;
-            QString m_interpretername;
+            ScriptContainerPrivate* d;
 
             /**
              * Initialize the \a Script instance.

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,6 +47,7 @@ Spring::setOrientation(Orientation orient)
 	SizeType type = sizeType();
 	m_orient = orient;
 	setSizeType(type);
+	repaint();
 }
 
 Spring::SizeType
@@ -75,8 +77,39 @@ Spring::paintEvent(QPaintEvent *ev)
 	QPainter p(this);
 	if(!ev->erased())
 		p.eraseRect(0,0,width(), height());
-	p.drawLine(0, 0, width()-1, height()-1);
-	p.drawLine(0, height()-1, width()-1, 0);
+	p.setPen(QPen(Qt::white, 1));
+	p.setRasterOp(Qt::XorROP);
+	QPointArray pa(4);
+	if(m_orient == Vertical) {
+		uint part = (height()+16) / 16;
+		if (part<3)
+			part=3;
+		uint w = width()-1;
+		uint offset = 0;
+		for (uint i=0; i<4; i++, offset+=(part*4)) {
+			pa.putPoints(0, 4,
+				w/2,offset, w,offset+part, w,offset+part, w/2,offset+part*2);
+			p.drawCubicBezier(pa, 0);
+			pa.putPoints(0, 4,
+				w/2,offset+part*2, 0,offset+part*3, 0,offset+part*3, w/2,offset+part*4);
+			p.drawCubicBezier(pa, 0);
+		}
+	}
+	else {
+		uint part = (width()+16) / 16;
+		if (part<3)
+			part=3;
+		uint h = height()-1;
+		uint offset = 0;
+		for (uint i=0; i<4; i++, offset+=(part*4)) {
+			pa.putPoints(0, 4,
+				offset,h/2, offset+part,0, offset+part,0, offset+part*2,h/2);
+			p.drawCubicBezier(pa, 0);
+			pa.putPoints(0, 4,
+				offset+part*2,h/2, offset+part*3,h, offset+part*3,h, offset+part*4,h/2);
+			p.drawCubicBezier(pa, 0);
+		}
+	}
 }
 
 bool

@@ -1258,18 +1258,11 @@ void KexiMainWindowImpl::initPropertyEditor()
 		int size = d->config->readNumEntry("FontSize", -1);
 		QFont f(d->propEditor->font());
 		if (size<0) {
-			//this gives:
-			// -2/3 of base font size (6 point minimum)
-			// if the current screen width is > 1100, +1 point is added to every 100 points greater than 1300
-			// for resolutions below 1160 in width, 7 is the minimum
-			// maximum size is the base size
 			const int wdth = KGlobalSettings::desktopGeometry(this).width();
-			size = QMAX( 6 + QMAX(0, wdth - 1100) / 100 , f.pointSize()*2/3 );
-			if (wdth<1160)
-				size = QMAX( size, 7 );
-			size = QMIN( size, f.pointSize() );
+			size = 10 + QMAX(0, wdth - 1100) / 100;
+			size = QMIN( d->propEditor->fontInfo().pixelSize(), size );
 		}
-		f.setPointSize( size );
+		f.setPixelSize( size );
 		d->propEditor->setFont(f);
 
 		if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
@@ -1585,7 +1578,7 @@ KexiMainWindowImpl::storeSettings()
 
 	if (d->propEditor) {
 		d->config->setGroup("PropertyEditor");
-		d->config->writeEntry("FontSize", d->propEditor->font().pointSize());
+		d->config->writeEntry("FontSize", d->propEditor->font().pixelSize());
 	}
 }
 
@@ -2956,7 +2949,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 			return false;
 
 		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
-		info->setProjectPartID(project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
+		info->setProjectPartID( (int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
 		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
 	}
 

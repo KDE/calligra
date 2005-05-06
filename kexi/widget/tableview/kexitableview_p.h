@@ -168,10 +168,10 @@ class KexiTableViewPrivate
 //moved	 Only used if initDataContentsOnShow is true. */
 //moved	bool cursorPositionSetExplicityBeforeShow : 1;
 
-	/*! true, if certical header shouldn't be increased in
-	 KexiTableView::slotRowInserted() because it was already done 
-	 in KexiTableView::createEditor(). */
-	bool verticalHeaderAlreadyAdded : 1;
+//moved	/*! true, if certical header shouldn't be increased in
+//moved	 KexiTableView::slotRowInserted() because it was already done 
+//moved	 in KexiTableView::createEditor(). */
+//moved	bool verticalHeaderAlreadyAdded : 1;
 
 //moved	/*! true if spreadSheetMode is enabled. False by default.
 //moved	 @see KexiTableView::setSpreadSheetMode() */

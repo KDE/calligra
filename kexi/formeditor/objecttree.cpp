@@ -28,8 +28,7 @@
 #include "objecttree.h"
 
 
-namespace KFormDesigner
-{
+using namespace KFormDesigner;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////        ObjectTreeItem                                    /////////////
@@ -129,12 +128,18 @@ ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widg
 {
 }
 
+ObjectTree::~ObjectTree()
+{
+//	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
+//		removeItem(it->name());
+	while (children()->first()) {
+		removeItem(children()->first());
+	}
+}
+
 bool
 ObjectTree::rename(const QString &oldname, const QString &newname)
 {
-	if(lookup(newname))
-		return false;
-
 	if(oldname == m_name)
 	{
 		ObjectTreeItem::rename(newname);
@@ -142,6 +147,9 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
 	}
 
 	ObjectTreeItem *it = lookup(oldname);
+	if(!it)
+		return false;
+
 	it->rename(newname);
 	m_treeDict.remove(oldname);
 	m_treeDict.insert(newname, it);
@@ -224,13 +232,3 @@ ObjectTree::genName(const QString &c)
 	return name;
 }
 
-ObjectTree::~ObjectTree()
-{
-//	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
-//		removeItem(it->name());
-	while (children()->first()) {
-		removeItem(children()->first()->name());
-	}
-}
-
-}

@@ -111,19 +111,19 @@ void KexiPropertyBuffer::debug()
 	}
 }
 
-void KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmapName)
+void KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString& pixmapName)
 {
 	if(!prop)  return;
-	prop->setPixmapName(pixmapName);
+	prop->setOption("pixmap", pixmapName);
 	emit collectionItemChoosed(*this, *prop);
 }
 
-QString KexiPropertyBuffer::pixmapName(const char *name)
+/*QString KexiPropertyBuffer::pixmapName(const char *name)
 {
 	if(property(name))
 		return property(name).pixmapName();
 	return QString::null;
-}
+}*/
 
 #include "kexipropertybuffer.moc"
 

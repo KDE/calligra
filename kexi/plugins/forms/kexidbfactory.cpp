@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <knumvalidator.h>
+#include <kdatetbl.h>
 
 #include <container.h>
 #include <form.h>
@@ -164,10 +166,17 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (removeOld)
-		setText(add.toString());
-	else
-		setText( m_origValue.toString() + add.toString() );
+	if (m_field->type()==KexiDB::Field::Boolean) {
+//! @todo temporary solution for booleans!
+		setText( add.toBool() ? "1" : "0" );
+	}
+	else {
+		if (removeOld)
+			setText( add.toString() );
+		else
+			setText( m_origValue.toString() + add.toString() );
+	}
+
 }
 
 QVariant KexiDBLineEdit::value()
@@ -215,6 +224,75 @@ void KexiDBLineEdit::clear()
 	setText(QString::null);
 }
 
+void KexiDBLineEdit::setField(KexiDB::Field* field)
+{
+	KexiFormDataItemInterface::setField(field);
+	if (!field)
+		return;
+//! @todo merge this code with KexiTableEdit code!
+//! @todo set maximum length validator
+//! @todo handle input mask (via QLineEdit::setInputMask()
+	const KexiDB::Field::Type t = field->type();
+	if (field->isIntegerType()) {
+		QValidator *validator = 0;
+		const bool u = field->isUnsigned();
+		int bottom, top;
+		if (t==KexiDB::Field::Byte) {
+			bottom = u ? 0 : -0x80;
+			top = u ? 0xff : 0x7f;
+		}
+		else if (t==KexiDB::Field::ShortInteger) {
+			bottom = u ? 0 : -0x8000;
+			top = u ? 0xffff : 0x7fff;
+		}
+		else if (t==KexiDB::Field::Integer) {
+			bottom = u ? 0 : -0x7fffffff-1;
+			top = u ? 0xffffffff : 0x7fffffff;
+		}
+		else if (t==KexiDB::Field::BigInteger) {
+/*! @todo couldn't work with KIntValidator: implement lonlong validator!
+			bottom = u ? 0 : -0x7fffffffffffffff;
+			top = u ? 0xffffffffffffffff : 127;*/
+			validator = new KIntValidator(this);
+		}
+
+		if (!validator)
+			validator = new KIntValidator(bottom, top, this);
+		setValidator( validator );
+	}
+	else if (field->isFPNumericType()) {
+		QValidator *validator;
+		if (t==KexiDB::Field::Float) {
+			if (field->isUnsigned()) //ok?
+				validator = new KDoubleValidator(0, 3.4e+38, field->scale(), this);
+			else
+				validator = new KDoubleValidator(this);
+		}
+		else {//double
+			if (field->isUnsigned()) //ok?
+				validator = new KDoubleValidator(0, 1.7e+308, field->scale(), this);
+			else
+				validator = new KDoubleValidator(this);
+		}
+		setValidator( validator );
+	}
+	else if (t==KexiDB::Field::Date) {
+//! @todo use KDateWidget
+		QValidator *validator = new KDateValidator(this);
+		setValidator( validator );
+	}
+	else if (t==KexiDB::Field::Time) {
+//! @todo use KTimeWidget
+		setInputMask("00:00:00");
+	}
+	else if (t==KexiDB::Field::Boolean) {
+//! @todo temporary solution for booleans!
+		QValidator *validator = new KIntValidator(0, 1, this);
+		setValidator( validator );
+	}
+
+}
+
 //////////////////////////////////////////
 
 KexiPushButton::KexiPushButton( const QString & text, QWidget * parent, const char * name )
@@ -248,7 +326,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	addClass(wSubForm);
 
-///* @todo allow to inherit from stdwidgets' KLineEdit */
 //	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
 	// inherited
 	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(
@@ -457,7 +534,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 	if(classname == "KexiPushButton") {
 		return property!="isDragEnabled" 
 #ifdef KEXI_NO_UNFINISHED
-//			&& property!="onClickAction" /*! @todo reenable */
+			&& property!="onClickAction" /*! @todo reenable */
 			&& property!="iconSet" /*! @todo reenable */
 			&& property!="stdItem" /*! @todo reenable stdItem */
 #endif

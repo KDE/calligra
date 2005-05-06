@@ -126,7 +126,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 //	dropsAtRowEnabled = false;
 //moved	initDataContentsOnShow = false;
 //moved	cursorPositionSetExplicityBeforeShow = false;
-	verticalHeaderAlreadyAdded = false;
+//moved	verticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
 //moved	spreadSheetMode = false;
 	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;

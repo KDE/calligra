@@ -49,8 +49,8 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 	Q_OBJECT
 
 	public:
-		/*! Constructs eater object. All events for \a widget and it's subwidgets 
-		will be redirected to \a container. \a container will be also parent of eater object, 
+		/*! Constructs eater object. All events for \a widget and it's subwidgets
+		will be redirected to \a container. \a container will be also parent of eater object,
 		so you don't need to care about deleting it. */
 		EventEater(QWidget *widget, QObject *container);
 		~EventEater();
@@ -173,7 +173,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void  drawSelectionRect(QMouseEvent *mev);
 		void  drawInsertRect(QMouseEvent *mev, QObject *s);
 		void  drawCopiedWidgetRect(QMouseEvent *mev);
-		void  dragWidgets(QMouseEvent *mev);
+
+		void  moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev=0);
 
 	private:
 		// the watched container and it's toplevel one...

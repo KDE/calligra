@@ -1057,9 +1057,9 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 }
 
 /*! TODO: ? This goes pear-shaped if the query doesn't manage to fill rdata[0]. */
-int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
 {
-	int row_id = drv_lastInsertRowID();
+	Q_ULLONG row_id = drv_lastInsertRowID();
 	if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE)
 		return row_id;
 	RowData rdata;
@@ -1067,12 +1067,12 @@ int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QStri
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
 		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || !querySingleRecord()" << endl;
-	 	return -1;
+	 	return -1ULL;
 	}
-	return rdata[0].toInt();
+	return rdata[0].toULongLong();
 }
 
-int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table)
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table)
 {
 	return lastInsertedAutoIncValue(aiFieldName,table.name());
 }
@@ -1900,7 +1900,8 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 			if (!ok)
 				return false;
 			//fetch newly assigned ID
-			int obj_id = lastInsertedAutoIncValue("o_id",*ts);
+//! @todo safe to cast it?
+			int obj_id = (int)lastInsertedAutoIncValue("o_id",*ts);
 			KexiDBDbg << "######## NEW obj_id == " << obj_id << endl;
 			if (obj_id<=0)
 				return false;
@@ -2529,8 +2530,9 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	if (pkey && !aif_list->isEmpty()) {
 		//! @todo now only if PKEY is present, this should also work when there's no PKEY 
 		QueryColumnInfo *id_fieldinfo = aif_list->first();
-		int last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
-		if (last_id==-1) {
+//! @todo safe to cast it?
+		Q_ULLONG last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
+		if (last_id<=0) {
 			//! @todo show error
 			return false;
 		}

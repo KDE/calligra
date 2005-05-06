@@ -640,6 +640,8 @@ void KexiTableView::initDataContents()
 
 	KexiDataAwareObjectInterface::initDataContents();
 
+	m_navPanel->showEditingIndicator(false);
+
 /*moved
 	if (!d->cursorPositionSetExplicityBeforeShow) {
 		//set current row:
@@ -894,6 +896,7 @@ void KexiTableView::updateAllVisibleRowsBelow(int row)
 		clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 }
 
+#if 0 //moved
 void KexiTableView::slotRowInserted(KexiTableItem *item, bool repaint)
 {
 	int row = m_data->findRef(item);
@@ -927,7 +930,6 @@ void KexiTableView::slotRowInserted(KexiTableItem * /*item*/, uint row, bool rep
 	}
 }
 
-#if 0 //moved
 KexiTableItem *KexiTableView::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
@@ -2622,10 +2624,10 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
 			//new empty insert item
-			m_insertItem = new KexiTableItem(columns());
+			m_insertItem = new KexiTableItem(dataColumns());
 //			updateContents();
 			m_verticalHeader->addLabel();
-			d->verticalHeaderAlreadyAdded = true;
+			m_verticalHeaderAlreadyAdded = true;
 			updateWidgetContentsSize();
 			//refr. current and next row
 			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
@@ -2652,8 +2654,11 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		m_editor->setFocus();
 	}
 
-	if (startRowEdit)
+	if (startRowEdit) {
+		m_navPanel->showEditingIndicator(true); //this will allow to enable 'next' btn
+//		m_navPanel->updateButtons(rows()); //refresh 'next' btn
 		emit rowEditStarted(m_curRow);
+	}
 }
 
 void KexiTableView::focusInEvent(QFocusEvent*)
@@ -3545,6 +3550,18 @@ bool KexiTableView::acceptRowEdit()
 }
 #endif //moved
 
+void KexiTableView::updateAfterCancelRowEdit()
+{
+	KexiDataAwareObjectInterface::updateAfterCancelRowEdit();
+	m_navPanel->showEditingIndicator(false);
+}
+
+void KexiTableView::updateAfterAcceptRowEdit()
+{
+	KexiDataAwareObjectInterface::updateAfterAcceptRowEdit();
+	m_navPanel->showEditingIndicator(false);
+}
+
 //reimpl.
 void KexiTableView::removeEditor()
 {
@@ -4146,6 +4163,7 @@ void KexiTableView::moveToFirstRecordRequested()
 	selectFirstRow();
 }
 
+#if 0 //moved
 void KexiTableView::addNewRecordRequested()
 {
 	if (!isInsertingEnabled())
@@ -4163,6 +4181,7 @@ void KexiTableView::addNewRecordRequested()
 	selectRow(rows());
 	startEditCurrentCell();
 }
+#endif
 
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {

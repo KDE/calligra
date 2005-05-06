@@ -1081,9 +1081,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	w->show();
 
 	// We create and insert the ObjectTreeItem at the good place in the ObjectTree
-	ObjectTreeItem *tree;
-	if (!container->form()->objectTree()->lookup(wname))
+	ObjectTreeItem *tree = container->form()->objectTree()->lookup(wname);
+	if (!tree)
 	{
+		// not yet created
 		tree =  new ObjectTreeItem(lib->displayName(classname), wname, w, container);
 		if(parent)
 		{
@@ -1096,8 +1097,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		else
 			container->form()->objectTree()->addItem(container->objectTree(), tree);
 	}
-	else
-		tree = container->form()->objectTree()->lookup(wname); // the ObjectTreeItem has already been created, so we just use it
 
 	m_currentItem = tree;
 	// if we are inside a Grid, we need to insert the widget in the good cell

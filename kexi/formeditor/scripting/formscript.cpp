@@ -23,6 +23,7 @@
 #include "form.h"
 #include "objecttree.h"
 // Kross Includes
+#include "main/manager.h"
 #include "main/scriptcontainer.h"
 #include "api/exception.h"
 
@@ -33,7 +34,7 @@ using namespace KFormDesigner;
 FormScript::FormScript(Form *form, ScriptManager *manager, const char *name)
  : QObject(manager, name), m_manager(manager), m_form(form)
 {
-	m_script = new Kross::Api::ScriptContainer(manager->krossManager(), form->widget()->name());
+	m_script = manager->krossManager()->getScriptContainer(form->widget()->name());
 }
 
 FormScript::~FormScript()

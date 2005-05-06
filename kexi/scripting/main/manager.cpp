@@ -33,36 +33,60 @@
 
 using namespace Kross::Api;
 
+namespace Kross { namespace Api {
+
+    class ManagerPrivate
+    {
+        public:
+            /// List of script instances.
+            QMap<QString, KSharedPtr<ScriptContainer> > m_scriptcontainers;
+            /// List of interpreter instances.
+            QMap<QString, Interpreter*> m_interpreter;
+            /// List of avaible modules.
+            QMap<QString, Object*> m_modules;
+            /// The buildin \a EventSlot for basic Qt slots.
+            EventSlot* m_buildin_slot;
+            /// List of additional \a EventSlot instances.
+            QValueList<EventSlot*> m_slots;
+    };
+
+}}
+
 Manager::Manager()
+    : d( new ManagerPrivate() )
 {
-    m_buildin_slot = new EventSlot();
-    addEventSlot(m_buildin_slot);
+    d->m_buildin_slot = new EventSlot();
+    addEventSlot(d->m_buildin_slot);
 }
 
 Manager::~Manager()
 {
+/*
     for(QMap<QString, ScriptContainer*>::Iterator sit = m_scriptcontainers.begin(); sit != m_scriptcontainers.end(); ++sit)
         delete sit.data();
-    for(QMap<QString, Interpreter*>::Iterator iit = m_interpreter.begin(); iit != m_interpreter.end(); ++iit)
+*/
+    for(QMap<QString, Interpreter*>::Iterator iit = d->m_interpreter.begin(); iit != d->m_interpreter.end(); ++iit)
         delete iit.data();
-    for(QMap<QString, Object*>::Iterator mit = m_modules.begin(); mit != m_modules.end(); ++mit)
+    for(QMap<QString, Object*>::Iterator mit = d->m_modules.begin(); mit != d->m_modules.end(); ++mit)
         delete mit.data();
-    delete m_buildin_slot;
+    delete d->m_buildin_slot;
+
+    delete d;
 }
 
 bool Manager::hasModule(const QString& name)
 {
-    return m_modules.contains(name);
+    return d->m_modules.contains(name);
 }
 
 Object* Manager::getModule(const QString& name)
 {
-    return m_modules[name];
+    return d->m_modules[name];
 }
 
 QMap<QString, Object*> Manager::getModules()
 {
-    return m_modules;
+    return d->m_modules;
 }
 
 bool Manager::addModule(Object* module)
@@ -71,37 +95,43 @@ bool Manager::addModule(Object* module)
         kdWarning() << "Interpreter->addModule(Module*) failed cause Module is NULL" << endl;
         return false;
     }
-    if(m_modules.contains(module->getName())) {
+    if(d->m_modules.contains(module->getName())) {
         kdWarning() << QString("Interpreter->addModule(Module*) failed cause there exists already a Module with name '%1'").arg(module->getName()) << endl;
         return false;
     }
-    m_modules.replace(module->getName(), module);
+    d->m_modules.replace(module->getName(), module);
     return true;
 }
 
 QValueList<EventSlot*> Manager::getEventSlots()
 {
-    return m_slots;
+    return d->m_slots;
 }
 
 void Manager::addEventSlot(EventSlot* eventslot)
 {
-    m_slots.append( eventslot );
+    d->m_slots.append( eventslot );
 }
 
-ScriptContainer* Manager::getScriptContainer(const QString& scriptname)
+KSharedPtr<Kross::Api::ScriptContainer> Manager::getScriptContainer(const QString& scriptname)
 {
-    if(m_scriptcontainers.contains(scriptname))
-        return m_scriptcontainers[scriptname];
+    //TODO at the moment we don't share ScriptContainer ...
+
+    //if(d->m_scriptcontainers.contains(scriptname))
+    //    return d->m_scriptcontainers[scriptname];
+
     ScriptContainer* script = new ScriptContainer(this, scriptname);
-    m_scriptcontainers.replace(scriptname, script);
-    return script;
+    //ScriptContainer script(this, scriptname);
+    //d->m_scriptcontainers.replace(scriptname, script);
+
+    return KSharedPtr<Kross::Api::ScriptContainer>(script);
+    //return script;
 }
 
 Interpreter* Manager::getInterpreter(const QString& interpretername)
 {
-    if(m_interpreter.contains(interpretername))
-        return m_interpreter[interpretername];
+    if(d->m_interpreter.contains(interpretername))
+        return d->m_interpreter[interpretername];
     Interpreter* interpreter = 0;
 
     if(interpretername == "kjs")
@@ -110,7 +140,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
         interpreter = new Kross::Python::PythonInterpreter(this, "python");
 
     if(interpreter)
-        m_interpreter.replace(interpretername, interpreter);
+        d->m_interpreter.replace(interpretername, interpreter);
     return interpreter;
 }
 

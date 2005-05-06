@@ -52,6 +52,7 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "stdwidgetfactory.h"
+#include <kexipropertybuffer.h>
 
 // Some widgets subclass to allow event filtering and some other things
 KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent, const char *name)
@@ -293,6 +294,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDateTime->setNamePrefix(i18n("Widget name (see above)", "DateTimeWidget"));
 	wDateTime->setDescription(i18n("A widget to input or display a time and a date"));
 	addClass(wDateTime);
+}
+
+StdWidgetFactory::~StdWidgetFactory()
+{
 }
 
 QWidget*
@@ -854,8 +859,14 @@ StdWidgetFactory::editListContents()
 		editListView((QListView*)m_widget);
 }
 
-StdWidgetFactory::~StdWidgetFactory()
+
+void
+StdWidgetFactory::setPropertyOptions( KexiPropertyBuffer& buf, const KFormDesigner::WidgetInfo& info, QWidget *w )
 {
+	if (buf.hasProperty("indent")) {
+		buf["indent"].setOption("min", -1);
+/*		buf["indent"].setOption("minValueText", i18n("default\n(HINT: default indent value)", "default"));*/
+	}
 }
 
 K_EXPORT_COMPONENT_FACTORY(stdwidgets, KGenericFactory<StdWidgetFactory>("stdwidgets"))

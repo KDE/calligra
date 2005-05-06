@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,8 @@
 
 #include <qbitmap.h>
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qtimer.h>
 
 #include "kexilabel.h"
 
@@ -32,8 +35,8 @@
 
 KexiLabelPrivate::KexiLabelPrivate( KexiLabel* parent )
 	: QLabel( parent )
-	{
-	}
+{
+}
 
 KexiLabelPrivate::~KexiLabelPrivate()
 {
@@ -63,6 +66,7 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 	const int startY = boundingRect.y() + SHADOW_THICKNESS;
 	const int effectWidth = boundingRect.bottomRight().x() - SHADOW_THICKNESS;
 	const int effectHeight = boundingRect.bottomRight().y() - SHADOW_THICKNESS;
+	const int period = (effectWidth - startX) / 10;
 
 	double alphaShadow;
 
@@ -78,43 +82,41 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 		result.create( w, h, 32 );
 	}
 
-	result.fill( 0 ); // all black
+//	result.fill( 0 ); // all black
+	result.fill( SHADOW_OPACITY );
 	result.setAlphaBuffer( true );
 
 	for ( int i = startX; i < effectWidth; i++ ) {
 		for ( int j = startY; j < effectHeight; j++ ) {
-			alphaShadow = defaultDecay( img, i, j );
-			alphaShadow = ( alphaShadow > SHADOW_OPACITY ) ? SHADOW_OPACITY : alphaShadow;
+			/*!
+			* This method is copied from kdebase/kdesktop/kshadowengine.cpp
+			* Some modifactions were made.
+			* --
+			* Christian Nitschkowski
+			*/
+				if ( ( i < 1 ) || ( j < 1 ) || ( i > img.width() - 2 ) || ( j > img.height() - 2 ) )
+					continue;
+				else
+					alphaShadow = ( qGray( img.pixel( i - 1, j - 1 ) ) * SHADOW_DIAGONAL_FACTOR +
+						qGray( img.pixel( i - 1, j ) ) * SHADOW_AXIS_FACTOR +
+						qGray( img.pixel( i - 1, j + 1 ) ) * SHADOW_DIAGONAL_FACTOR +
+						qGray( img.pixel( i , j - 1 ) ) * SHADOW_AXIS_FACTOR +
+						0 +
+						qGray( img.pixel( i , j + 1 ) ) * SHADOW_AXIS_FACTOR +
+						qGray( img.pixel( i + 1, j - 1 ) ) * SHADOW_DIAGONAL_FACTOR +
+						qGray( img.pixel( i + 1, j ) ) * SHADOW_AXIS_FACTOR +
+						qGray( img.pixel( i + 1, j + 1 ) ) * SHADOW_DIAGONAL_FACTOR ) / SHADOW_FACTOR;
 
 			// update the shadow's i,j pixel.
-			result.setPixel( i, j, qRgba( bgRed, bgGreen , bgBlue, ( int ) alphaShadow ) );
+			if (alphaShadow > 0)
+				result.setPixel( i, j, qRgba( bgRed, bgGreen , bgBlue, 
+					( int ) (( alphaShadow > SHADOW_OPACITY ) ? SHADOW_OPACITY : alphaShadow)
+				) );
 		}
+		if (i % period)
+			qApp->processEvents();
 	}
 	return result;
-}
-
-/*!
-* This method is copied from kdebase/kdesktop/kshadowengine.cpp
-* Some modifactions were made.
-* --
-* Christian Nitschkowski
-*/
-double KexiLabelPrivate::defaultDecay( QImage& source, int i, int j ) {
-	if ( ( i < 1 ) || ( j < 1 ) || ( i > source.width() - 2 ) || ( j > source.height() - 2 ) )
-		return 0;
-
-	double alphaShadow;
-	alphaShadow = ( qGray( source.pixel( i - 1, j - 1 ) ) * SHADOW_DIAGONAL_FACTOR +
-		qGray( source.pixel( i - 1, j ) ) * SHADOW_AXIS_FACTOR +
-		qGray( source.pixel( i - 1, j + 1 ) ) * SHADOW_DIAGONAL_FACTOR +
-		qGray( source.pixel( i , j - 1 ) ) * SHADOW_AXIS_FACTOR +
-		0 +
-		qGray( source.pixel( i , j + 1 ) ) * SHADOW_AXIS_FACTOR +
-		qGray( source.pixel( i + 1, j - 1 ) ) * SHADOW_DIAGONAL_FACTOR +
-		qGray( source.pixel( i + 1, j ) ) * SHADOW_AXIS_FACTOR +
-		qGray( source.pixel( i + 1, j + 1 ) ) * SHADOW_DIAGONAL_FACTOR ) / SHADOW_FACTOR;
-
-	return alphaShadow;
 }
 
 KPixmap KexiLabelPrivate::getShadowPixmap() {
@@ -313,8 +315,11 @@ QRect KexiLabelPrivate::getBounding( const QImage &image, const QRect& startRect
 
 KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
 		: QLabel( parent, name, f )
-		, KexiFormDataItemInterface(),
-		p_pixmapDirty( true ), p_shadowEnabled( false )
+		, KexiFormDataItemInterface()
+		, p_timer(0)
+		, p_pixmapDirty( true )
+		, p_shadowEnabled( false )
+		, p_resizeEvent( false )
 {
 	m_hasFocusableWidget = false;
 	p_privateLabel = new KexiLabelPrivate( this );
@@ -324,13 +329,30 @@ KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
 KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WFlags f )
 		: QLabel( parent, name, f )
 		, KexiFormDataItemInterface()
+		, p_timer(0)
 		, p_pixmapDirty( true )
 		, p_shadowEnabled( false )
+		, p_resizeEvent( false )
 {
 	m_hasFocusableWidget = false;
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 	setText( text );
+}
+
+void KexiLabel::updatePixmapLater() {
+	if (p_resizeEvent) {
+		if (!p_timer) {
+			p_timer = new QTimer(this, "KexiLabelTimer");
+			connect(p_timer, SIGNAL(timeout()), this, SLOT(updatePixmap()));
+		}
+		p_timer->start(100, true);
+		p_resizeEvent = false;
+		return;
+	}
+	if (p_timer && p_timer->isActive())
+		return;
+	updatePixmap();
 }
 
 void KexiLabel::updatePixmap() {
@@ -347,6 +369,7 @@ void KexiLabel::updatePixmap() {
 	p_shadowPosition = p_privateLabel->p_shadowRect.topLeft();
 
 	p_pixmapDirty = false;
+	repaint();
 }
 
 void KexiLabel::paintEvent( QPaintEvent* e ) {
@@ -355,7 +378,7 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 		If required, update the pixmap-cache.
 		*/
 		if ( p_pixmapDirty ) {
-			updatePixmap();
+			updatePixmapLater();
 		}
 
 		/*!
@@ -365,7 +388,7 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 		the shadow has to be drawn using an offset relative to
 		the widgets border.
 		*/
-		if ( e->rect().contains( p_shadowPosition )
+		if ( !p_pixmapDirty && e->rect().contains( p_shadowPosition )
 			&& ( p_shadowPixmap.isNull() == false ) ) {
 			QPainter p( this );
 			QRect clipRect = e->rect();
@@ -429,6 +452,16 @@ bool KexiLabel::cursorAtEnd()
 void KexiLabel::clear()
 {
 	setText(QString::null);
+}
+
+bool KexiLabel::setProperty( const char * name, const QVariant & value )
+{
+	const bool ret = QLabel::setProperty(name, value);
+	if (p_shadowEnabled && 0==qstrcmp("indent", name)) {
+		p_privateLabel->setIndent(value.toInt());
+		updatePixmap();
+	}
+	return ret;
 }
 
 #include "kexilabel.moc"

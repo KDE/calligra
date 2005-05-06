@@ -24,6 +24,7 @@
 #include <formeditor/form.h>
 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
+#include <widget/utils/kexirecordmarker.h>
 
 #include <kpopupmenu.h>
 
@@ -140,10 +141,11 @@ void KexiFormScrollView::moveToFirstRecordRequested()
 	selectFirstRow();
 }
 
+/*
 void KexiFormScrollView::addNewRecordRequested()
 {
 	//! @todo
-}
+}*/
 
 void KexiFormScrollView::clearColumnsInternal(bool repaint)
 {
@@ -203,27 +205,28 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 		m_data->clearRowEditBuffer();
 		
 		m_rowEditing = true;
-//		//indicate on the vheader that we are editing:
-//		m_verticalHeader->setEditRow(m_curRow);
-/*		if (isInsertingEnabled() && m_currentItem==m_insertItem) {
+		//indicate on the vheader that we are editing:
+		if (m_verticalHeader)
+			m_verticalHeader->setEditRow(m_curRow);
+		if (isInsertingEnabled() && m_currentItem==m_insertItem) {
 			//we should know that we are in state "new row editing"
 			m_newRowEditing = true;
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
 			//new empty insert item
-			m_insertItem = new KexiTableItem(columns());
+			m_insertItem = new KexiTableItem(dataColumns());
 //			updateContents();
-			m_verticalHeader->addLabel();
-			d->verticalHeaderAlreadyAdded = true;
+			if (m_verticalHeader)
+				m_verticalHeader->addLabel();
+//			m_verticalHeaderAlreadyAdded = true;
 			updateWidgetContentsSize();
 			//refr. current and next row
-			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
-//			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
+//			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
 //js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-			ensureVisible(columnPos(m_curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(m_curCol), d->rowHeight);
+//			ensureVisible(columnPos(m_curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(m_curCol), d->rowHeight);
 
-			m_verticalHeader->setOffset(contentsY());
-		}*/
+//			m_verticalHeader->setOffset(contentsY());
+		}
 	}	
 
 	m_editor = editor(col); //m_dataItems.at(col);
@@ -232,6 +235,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
 	if (startRowEdit) {
 		recordNavigator()->showEditingIndicator(true);
+//		recordNavigator()->updateButtons(); //refresh 'next btn'
 
 		emit rowEditStarted(m_curRow);
 	}
@@ -441,8 +445,13 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
 
 void KexiFormScrollView::updateAfterAcceptRowEdit()
 {
+	if (!m_currentItem)
+		return;
 	recordNavigator()->showEditingIndicator(false);
 	dbFormWidget()->editedItem = 0;
+	//update visible data because there could be auto-filled (eg. autonumber) fields
+	fillDataItems(*m_currentItem);
+	m_previousItem = m_currentItem;
 }
 
 void KexiFormScrollView::beforeSwitchView()

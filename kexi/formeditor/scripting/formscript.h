@@ -24,6 +24,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include <ksharedptr.h>
 
 class ScriptManager;
 
@@ -70,7 +71,7 @@ class FormScript : public QObject
 	private:
 		ScriptManager  *m_manager;
 		Form  *m_form;
-		Kross::Api::ScriptContainer  *m_script;
+                KSharedPtr<Kross::Api::ScriptContainer> m_script;
 		EventList  m_list;
 };
 

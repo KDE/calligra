@@ -79,12 +79,13 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	m_defaults->hide();
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
 
-	setFullWidth(true);
+//	setFullWidth(true);
 	setShowSortIndicator(false);
 	setTooltipColumn(0);
 	setSorting(0);
 //	setItemMargin(3);
 	setItemMargin(2);
+	setResizeMode(QListView::LastColumn);
 	header()->setMovingEnabled( false );
 
 //	setTreeStepSize(KexiPropertyEditorItem_BranchBoxSize + 2/*left*/ + 1/*right*/);

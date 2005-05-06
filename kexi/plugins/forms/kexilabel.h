@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include "kexiformdataiteminterface.h"
 
 class QPainter;
+class QTimer;
 
 class KexiLabelPrivate : public QLabel {
 		friend class KexiLabel;
@@ -37,7 +39,7 @@ class KexiLabelPrivate : public QLabel {
 	private:
 		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
 		QRect getBounding( const QImage &image, const QRect& startRect );
-		double defaultDecay( QImage& source, int i, int j );
+//		double defaultDecay( QImage& source, int i, int j );
 		KPixmap getShadowPixmap();
 
 		QRect p_shadowRect;
@@ -91,6 +93,9 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 
 		virtual void clear();
 
+		//! used to catch setIndent(), etc.
+		virtual bool setProperty ( const char * name, const QVariant & value );
+
 	public slots:
 		/*!
 		Sets the datasource to \a ds
@@ -116,9 +121,14 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 			repaint();
 		}
 
+	protected slots:
+		void updatePixmap();
+
 	protected:
 		virtual void paintEvent( QPaintEvent* );
 		virtual void resizeEvent( QResizeEvent* e ) {
+			if (isVisible())
+				p_resizeEvent = true;
 			p_pixmapDirty = true;
 			QLabel::resizeEvent( e );
 		}
@@ -163,14 +173,15 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 		}
 
 	private:
-		void updatePixmap();
+		void updatePixmapLater();
 
 		KPixmap p_shadowPixmap;
 		QPoint p_shadowPosition;
 		KexiLabelPrivate* p_privateLabel;
+		QTimer* p_timer;
 		bool p_pixmapDirty;
 		bool p_shadowEnabled;
-
+		bool p_resizeEvent;
 	};
 
 #endif

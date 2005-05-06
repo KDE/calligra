@@ -53,7 +53,7 @@ class ScriptManager : public QObject
 		FormManager*  formManager() { return m_formManager; }
 		Kross::Api::Manager*  krossManager() { return m_manager; }
 
-	private slots:
+	public slots:
 		/*! Called when a form is deleted. It is removed from the dict. */
 		void slotFormDeleted(KFormDesigner::Form *form);
 		/*! \return A new FormScript object associated to the Form \a form.  */

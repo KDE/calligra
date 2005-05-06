@@ -63,7 +63,7 @@ class KEXICORE_EXPORT KexiProperty
 	class KEXICORE_EXPORT ListData
 	{
 		public:
-			/*! Data container for list-value property. 
+			/*! Data container for list-value property.
 			 The user will be able to choose an item from this list. */
 			ListData(const QStringList& keys_, const QStringList& names_);
 			ListData();
@@ -71,7 +71,7 @@ class KEXICORE_EXPORT KexiProperty
 
 			/*! The string list containing all possible keys for this property
 			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
-			 so the first key element is associated with first element from 
+			 so the first key element is associated with first element from
 			 the 'names' list, and so on. */
 			QStringList keys;
 
@@ -79,7 +79,7 @@ class KEXICORE_EXPORT KexiProperty
 			 First value is referenced by first key, and so on. */
 			QStringList names;
 
-			/*! True (the default), if the list has fixed number of possible 
+			/*! True (the default), if the list has fixed number of possible
 			 items (keys). If this is false, user can add or enter own values. */
 			bool fixed : 1;
 		};
@@ -94,7 +94,7 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty(const QCString &name, QVariant value, const QString &desc = QString::null);
 
 		/*! Creates a list property with \a name as name, \a value as value
-		 and \a listData as the list of all possible items wit names and keys. 
+		 and \a listData as the list of all possible items wit names and keys.
 		 Passed \a listData object will be owned by this KexiProperty.
 		  \sa ListData */
 		KexiProperty(const QCString &name, const QString &value,
@@ -160,11 +160,11 @@ class KEXICORE_EXPORT KexiProperty
 		 Passed \a listData object will be owned by this KexiProperty.
 		 You should ensure yourself that current value is a string that
 		 is one of a new \a key_list. Set \a listData to NULL if you want to delete
-		 previously defined list. 
+		 previously defined list.
 		 \sa keys(), \a names() */
 		void setListData(ListData* listData);
 
-		/*! \return a pointer to the list data or NULL if this property 
+		/*! \return a pointer to the list data or NULL if this property
 		 is not of type 'list' */
 		inline ListData* listData() const { return m_list; }
 
@@ -186,21 +186,24 @@ class KEXICORE_EXPORT KexiProperty
 		inline QString desc() const { return m_desc; }
 
 		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
-		QVariant::Type type() const;
+		inline QVariant::Type type() const { return m_list ? QVariant::StringList : m_value.type(); }
+
+		/*! \return true if property value is of type numeric (int, uint, etc.) */
+		inline bool isNumericType() const;
 
 		/*! \return true if the property should be synced automatically in Property Editor
-		  as soon as editor contents change (e.g. when the user types text). 
-		  Returns false, if property value will be updated when the user presses Enter 
+		  as soon as editor contents change (e.g. when the user types text).
+		  Returns false, if property value will be updated when the user presses Enter
 		  or when another editor gets the focus.
 		  Property follow Property Editor global rule if autoSync flag has cancelled value (the default).
 		*/
 		inline tristate autoSync() const { return m_autosync; }
 
 		/*! if \a sync value is true, then the property will be synced automatically in Property Editor
-		  as soon as editor contents change (e.g. when the user types text). 
-		  If \a sync value is false, property value will be updated when the user presses 
+		  as soon as editor contents change (e.g. when the user types text).
+		  If \a sync value is false, property value will be updated when the user presses
 		  Enter or when another editor gets the focus.
-		  If \a sync value is cancelled, default autoSync flag is used 
+		  If \a sync value is cancelled, default autoSync flag is used
 		  (usually taken from Property Editor).
 		*/
 		inline void setAutoSync(tristate sync) { m_autosync = sync; }
@@ -226,18 +229,35 @@ class KEXICORE_EXPORT KexiProperty
 
 		inline KexiPropertyBuffer* buffer() { return m_buf; }
 
-		// For pixmaps property only
-		inline void setPixmapName(const QString &name) { m_pixmapName = name; }
-		inline QString pixmapName() { return m_pixmapName; }
+//setOption("pixmap") is now used:// For pixmaps property only
+//		inline void setPixmapName(const QCString &name) { m_pixmapName = name; }
+//		inline QCString pixmapName() { return m_pixmapName; }
 
-		/*! Sets icon by \a name for this property. Icons are optional and are used e.g. 
+		/*! Sets icon by \a name for this property. Icons are optional and are used e.g.
 		 in KexiPropertyEditor - displayed at the left hand. */
-		inline void setIcon(const QString &name) { m_icon = name; }
+		inline void setIcon(const char* name) { m_icon = name; }
 
 		/*! \return property icon. Can be empty. */
-		inline QString icon() const { return m_icon; }
+		inline QCString icon() const { return m_icon; }
 
-		void execute(const QString &value); // TMP
+		void execute(const QString &value); //! @todo TMP
+
+		/*! Sets value \a val for option \a name.
+		 Options are used to describe additional details for property behaviour,
+		 e.g. within KexiPropertyEditor. See KexiPropertyEditor ctor documentation for
+		 the list of supported options.
+		*/
+		inline void setOption(const char* name, const QVariant& val) { m_options[name] = val; }
+
+		/*! \return a value for option \a name or null value if there is no such option set. */
+		inline QVariant option(const char* name) const {
+			if (m_options.contains(name))
+				return m_options[name];
+			return QVariant();
+		}
+
+		/*! \return true if at least one option is defined for this property. */
+		inline bool hasOptions() const { return !m_options.isEmpty(); }
 
 		/*! \return debug information about this property. */
 		QString debugString() const;
@@ -272,13 +292,14 @@ class KEXICORE_EXPORT KexiProperty
 		QString m_desc;
 		QVariant m_value;
 		QString m_pixmapName;
-		QString m_icon;
+		QCString m_icon;
 		QVariant m_oldValue;
 		ListData *m_list;
 		KexiProperty* m_parent;
 		QGuardedPtr<KexiPropertyBuffer> m_buf;
 		KexiProperty::Dict* m_children_dict;
 		KexiProperty::List* m_children_list;
+		QMap<QCString,QVariant> m_options;
 
 		tristate m_autosync;
 		bool m_changed : 1;
@@ -286,5 +307,18 @@ class KEXICORE_EXPORT KexiProperty
 
 	friend class KexiPropertyBuffer;
 };
+
+inline bool KexiProperty::isNumericType() const
+{
+	switch (m_value.type()) {
+	case QVariant::Int:
+	case QVariant::UInt:
+	case QVariant::LongLong:
+	case QVariant::ULongLong:
+		return true;
+	default:
+		return false;
+	}
+}
 
 #endif

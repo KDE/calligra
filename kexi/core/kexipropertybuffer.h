@@ -96,10 +96,12 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 
 		inline void setCollection(PixmapCollection *collection) { m_collection = collection; }
 		inline PixmapCollection*  collection()  { return m_collection; }
+
 		/*! The property \a prop value is now the pixmap in the PixmapCollection whose name is \a pixmapName.*/
-		void addCollectionPixmap(KexiProperty *prop, const QString pixmapName);
-		//! \return the name of the pixmap for the property whose name is \a name.
-		QString pixmapName(const char *name);
+		void addCollectionPixmap(KexiProperty *prop, const QString& pixmapName);
+
+//		//! \return the name of the pixmap for the property whose name is \a name.
+//		QString pixmapName(const char *name);
 
 		/*! Removes all properties from the buffer and destroys them. */
 		virtual void clear();

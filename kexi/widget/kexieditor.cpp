@@ -50,6 +50,8 @@ public:
 
 		plugSharedAction("edit_undo", SLOT(undo()));
 		plugSharedAction("edit_redo", SLOT(redo()));
+
+                plugSharedAction("edit_select_all", SLOT(selectAll()));
 	}
 };
 
@@ -69,7 +71,7 @@ public:
 	{
 		QValueList<QCString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
-			<< "edit_undo" << "edit_redo";
+			<< "edit_undo" << "edit_redo" << "edit_select_all";
 		plugSharedActionsToExternalGUI(actions, obj);
 	}
 };
@@ -130,6 +132,8 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 
 	plugSharedActionToExternalGUI("edit_undo", d->view);
 	plugSharedActionToExternalGUI("edit_redo", d->view);
+
+        plugSharedActionToExternalGUI("edit_select_all", d->view);
 
 	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
         if(popupInt) {

@@ -61,6 +61,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_contextMenuEnabled = true;
 	m_rowWillBeDeleted = -1;
 	m_alsoUpdateNextRow = false;
+	m_verticalHeaderAlreadyAdded = false;
 	clearVariables();
 }
 
@@ -140,7 +141,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 			m_verticalHeader->addLabels(m_data->count());
 		}
 		if (m_data->count()==0)
-			m_navPanel->setCurrentRecordNumber(1);
+			m_navPanel->setCurrentRecordNumber(0+1);
 //			setNavRowNumber(0);
 	}
 	
@@ -542,6 +543,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 			}
 			//update row number, because number of rows changed
 			newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
+
+			m_navPanel->setCurrentRecordNumber(newrow+1); //refresh
 		}
 
 		//change position
@@ -1127,6 +1130,42 @@ void KexiDataAwareObjectInterface::insertItem(KexiTableItem *newItem, int row)
 	*/
 }
 
+void KexiDataAwareObjectInterface::slotRowInserted(KexiTableItem *item, bool repaint)
+{
+	int row = m_data->findRef(item);
+	slotRowInserted( item, row, repaint );
+}
+
+void KexiDataAwareObjectInterface::slotRowInserted(KexiTableItem * /*item*/, uint row, bool repaint)
+{
+	if (repaint && (int)row<rows()) {
+		updateWidgetContentsSize();
+
+/* updateAllVisibleRowsBelow() used instead
+		//redraw only this row and below:
+		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+		updateContents( columnPos( leftcol ), rowPos(row), 
+			clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
+*/
+		updateAllVisibleRowsBelow(row);
+
+		if (!m_verticalHeaderAlreadyAdded) {
+			if (m_verticalHeader)
+				m_verticalHeader->addLabel();
+		}
+		else //it was added because this inserting was interactive
+			m_verticalHeaderAlreadyAdded = false;
+
+		//update navigator's data
+		m_navPanel->setRecordCount(rows());
+
+		if (m_curRow >= (int)row) {
+			//update
+			editorShowFocus( m_curRow, m_curCol );
+		}
+	}
+}
+
 tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 {
 	if (!hasData())
@@ -1433,3 +1472,17 @@ void KexiDataAwareObjectInterface::slotDataDestroying()
 	m_itemIterator = 0;
 }
 
+void KexiDataAwareObjectInterface::addNewRecordRequested()
+{
+	if (!isInsertingEnabled())
+		return;
+	if (m_rowEditing) {
+		if (!acceptRowEdit())
+			return;
+	}
+//	setFocus();
+	selectRow(rows());
+	startEditCurrentCell();
+	if (m_editor)
+		m_editor->setFocus();
+}

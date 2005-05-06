@@ -144,6 +144,9 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 @see WidgetFactory::propertyDescForValue() */
 		QString propertyDescForValue(WidgetInfo *winfo, const QCString& name);
 
+		/*! Used by ObjectPropertyBuffer::setWidget() after creating properties. */
+		void setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& winfo, QWidget* w );
+
 	signals:
 		void prepareInsert(const QCString &c);
 

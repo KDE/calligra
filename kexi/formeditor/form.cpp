@@ -332,7 +332,6 @@ Form::changeName(const QString &oldname, const QString &newname)
 		ResizeHandleSet *temp = d->resizeHandles.take(oldname);
 		d->resizeHandles.insert(newname, temp);
 	}
-
 }
 
 void

@@ -1,3 +1,29 @@
+== Kexi CHANGES ==
+
+0.9 "Shorthorn" - released independent of KOffice (beta 1: 2005-05-07, stable: 2005-05-??)
+ * better translation for messages compared to 0.8 version, especialy in Form Designer
+
+0.8 - within KOffice 1.4 (beta 1: 2005-04-29, stable: 2005-06-14)
+ * Database forms are now officially supported
+ * Many improvements in handling server databases
+ * For users' convenience, Tabular Data View's behaviour is similar 
+   to Form Data View's behaviour
+ * Data and project migration from existing data sources (SQLite, MySQL, PostgreSQL)
+ * Microsoft Access MDB database file import available as optional KEXIMDB plugin.
+ * Tens of overall improvements and hundreds of bugfixes. 
+
+0.1 beta 5 "Halloween" (2004-10-01)
+ * Tens of improvements in KexiDB, Database Support Library (readded MySQL support, 
+   SQLite3 support and migration to/from SQLite2 with unicode characters, renewed 
+   SQL Parsing module)
+ * Much improved Form Designer (more widgets and editing actions, subforms, 
+   KDevelop plugin mode, KFormDesigner mode)
+ * Much improved Table Designer (autonumbers, both Visual and SQL mode, parser)
+ * Fixes in Query Designer
+ * Many fixes in Data Table View (new actions, more convenient navigation 
+   and data editing)
+ * Overall application improvements (more error/problem messages, actions, 
+   new command line options, better startup handling)
 
 0.1 beta 4 "FireDuck" (2004-07-16)
  * Much improved Form Designer (widget editing, additional tools)

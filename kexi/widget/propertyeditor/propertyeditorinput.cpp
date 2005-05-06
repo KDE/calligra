@@ -97,7 +97,17 @@ PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, 
  : KexiPropertySubEditor(parent,property, name)
 {
 	m_leaveTheSpaceForRevertButton = true;
-	m_spinBox = new PropIntSpinBox(0,50000, 1, 0, 10, this);
+	QVariant minVal( property->option("min") );
+	QVariant maxVal( property->option("max") );
+	if (minVal.isNull())
+		minVal = 0;
+	if (maxVal.isNull())
+		maxVal = 0xffff;
+	QVariant minValueText( property->option("minValueText") );
+
+	m_spinBox = new PropIntSpinBox( minVal.toInt(), maxVal.toInt(), 1, 0, 10, this );
+	if (!minValueText.isNull())
+		m_spinBox->setSpecialValueText(minValueText.toString());
 	m_spinBox->resize(width(), height());
 	m_spinBox->setValue(property->value().toInt());
 	m_spinBox->show();

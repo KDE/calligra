@@ -149,8 +149,9 @@ TabStopDialog::updateButtons(QListViewItem *item)
 		return;
 	}
 
-	m_buttons[BUp]->setEnabled( (item->itemAbove() /*&& (item->itemAbove()->parent() == item->parent()))*/ ));
-	m_buttons[BDown]->setEnabled(item->nextSibling());
+	m_buttons[BUp]->setEnabled( (item->itemAbove() && m_treeview->isEnabled()
+	/*&& (item->itemAbove()->parent() == item->parent()))*/ ));
+	m_buttons[BDown]->setEnabled( item->nextSibling() && m_treeview->isEnabled() );
 }
 
 void

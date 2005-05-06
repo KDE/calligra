@@ -75,6 +75,8 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 			QWidget *w, KFormDesigner::ObjectTreeItem *item);
 		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
 
+		virtual void setPropertyOptions( KexiPropertyBuffer& buf, const KFormDesigner::WidgetInfo& info, QWidget *w );
+
 	public slots:
 		void  editText();
 		void  editListContents();

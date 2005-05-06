@@ -80,6 +80,8 @@ FormManager::FormManager(QObject *parent,
    , m_options(options)
 #endif
 {
+	KGlobal::locale()->insertCatalogue("kformdesigner");
+
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
 

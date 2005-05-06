@@ -21,7 +21,7 @@
 #ifndef OBJPROPBUFFER_H
 #define OBJPROPBUFFER_H
 
-#include "kexipropertybuffer.h"
+#include <kexipropertybuffer.h>
 
 class KexiPropertyEditor;
 class KCommand;
@@ -49,12 +49,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 	public:
 		//! Creates a ObjectPropertyBuffer linked to the FormManager \a manager.
 		ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name=0);
-		~ObjectPropertyBuffer();
 
-		/*! This function is called before changing widget. It stores all the modified properties into ObjectTreeItem so
-		  they are saved later (using ObjectTreeItem::addMofProperty() ).
-		 */
-		void checkModifiedProp();
+		~ObjectPropertyBuffer();
 
 		//! Adds the i18n'ed description of a property (to allow factories to use new properties).
 		void addPropertyDescription(const char *property, const QString &desc);
@@ -92,6 +88,11 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void propertyChanged(QWidget *widg, const QCString &property, const QVariant &v);
 
 	protected:
+		/*! This function is called before changing widget. It stores all the modified properties into ObjectTreeItem so
+		  they are saved later (using ObjectTreeItem::addMofProperty() ).
+		 */
+		void checkModifiedProp();
+
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
 		  checkModifiedProp() is called before doing this.
 		 */
@@ -155,7 +156,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 
 		PropertyCommand	*m_lastcom;
 		GeometryPropertyCommand *m_lastgeocom;
-		bool m_undoing;
+		bool m_undoing : 1;
+		bool m_slotChangePropertyDisabled : 1;
 
 		QColorGroup* m_origActiveColors;
 

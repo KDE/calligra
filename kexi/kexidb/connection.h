@@ -570,13 +570,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Simply, method internally fetches last inserted record and returns selected 
 		 field's value. Requirements: field must be of integer type, there must be a
 		 record inserted in current database session (whatever this means).
-		 On error -1 is returned.
+		 On error -1ULL is returned.
 		*/
-		int lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName);
+		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName);
 		
 		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&)
 		*/
-		int lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table);
+		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table);
 
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 

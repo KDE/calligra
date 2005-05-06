@@ -50,6 +50,11 @@ PythonModuleManager::~PythonModuleManager()
 #ifdef KROSS_PYTHON_MODULE_DEBUG
     kdDebug() << QString("Kross::Python::PythonModuleManager::Destructor name='%1'").arg(name().c_str()) << endl;
 #endif
+
+    /*
+    for(QMap<QString, PythonExtension*>::Iterator it = m_modules.begin(); it != m_modules.end(); ++it)
+        delete it.data();
+    */
 }
 
 Py::Object PythonModuleManager::get(const Py::Tuple& args)

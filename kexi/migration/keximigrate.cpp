@@ -256,8 +256,9 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 	types << "Binary Large Object";
 
 	res = dlg->getItem( i18n("Field Type"),
-	                    i18n("I could not determine the data type for ") + fname +
-                      i18n(". Please select on of the following data types"),
+	                    i18n("I could not determine the data type for %1. "
+				 "Please select one of the following data "
+				 "types").arg(fname),
                       types, 0, false);
 
 	if (res == types[0])

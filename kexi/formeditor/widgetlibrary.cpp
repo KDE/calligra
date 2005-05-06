@@ -616,4 +616,17 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QCString& n
 	return parentFactory->propertyDescForValue(name);
 }
 
+void WidgetLibrary::setPropertyOptions( KexiPropertyBuffer& buf, const WidgetInfo& winfo, QWidget* w )
+{
+	if (!winfo.factory())
+		return;
+	winfo.factory()->setPropertyOptions(buf, winfo, w);
+	if (winfo.m_parentFactoryName.isEmpty())
+		return;
+	WidgetFactory *parentFactory = d->factories[winfo.m_parentFactoryName];
+	if (!parentFactory)
+		return;
+	parentFactory->setPropertyOptions(buf, winfo, w);
+}
+
 #include "widgetlibrary.moc"

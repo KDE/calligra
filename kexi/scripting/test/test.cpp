@@ -38,6 +38,11 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
+#include <ksharedptr.h>
+
+// for std namespace
+#include <string>
+#include <iostream>
 
 KApplication *app = 0;
 
@@ -103,9 +108,13 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     // To represent a script that shgould be executed Kross uses
     // the Script container class. You are able to fill them with
     // what is needed and just execute them.
-    Kross::Api::ScriptContainer* scriptcontainer = manager->getScriptContainer("MyScriptName");
+    KSharedPtr<Kross::Api::ScriptContainer> scriptcontainer = manager->getScriptContainer("MyScriptName");
+    //Kross::Api::ScriptContainer scriptcontainer = manager->getScriptContainer("MyScriptName");
+    //Kross::Api::ScriptContainer scriptcontainer = manager->getScriptContainer("MyScriptName");
+
     //scriptcontainer->enableModule("KexiDB");
     scriptcontainer->setInterpreterName(interpretername);
+
     scriptcontainer->setCode(scriptcode);
     scriptcontainer->addQObject(testobject);
 
@@ -113,17 +122,19 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         Kross::Api::Object* o = scriptcontainer->execute();
 
         // Call a function.
-        scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
+        //scriptcontainer->callFunction("testobjectCallback" /*, functionarguments */);
 
         // Call a class.
+        /*
         kdDebug()<<"--------------------------"<<endl;
-Kross::Api::Object* testclassinstance = scriptcontainer->classInstance("testClass");
-if(testclassinstance) {
-    QValueList<Kross::Api::Object*> ll;
-    Kross::Api::Object* instancecallresult = testclassinstance->call("testClassFunction1", Kross::Api::List::create(ll));
-    //kdDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
-}
+        Kross::Api::Object* testclassinstance = scriptcontainer->classInstance("testClass");
+        if(testclassinstance) {
+            QValueList<Kross::Api::Object*> ll;
+            Kross::Api::Object* instancecallresult = testclassinstance->call("testClassFunction1", Kross::Api::List::create(ll));
+            //kdDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
+        }
         kdDebug()<<"--------------------------"<<endl;
+        */
 
         // Connect QObject signal with scriptfunction.
         //scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
@@ -134,8 +145,6 @@ if(testclassinstance) {
     catch(Kross::Api::Exception& e) {
         kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
     }
-
-    //delete scriptcontainer; // not needed cause Kross::Api::Manager will take care of it.
 
 /*TESTCASE
     Kross::Api::ScriptContainer* sc2 = manager->getScriptContainer("MyScriptName222");
@@ -184,6 +193,9 @@ int main(int argc, char **argv)
         kdWarning() << "Failed to load scriptfile: " << filename << endl;
         result = -1;
     }
+
+    std::string s;
+    std::cin >> s;
 
     delete app;
     return result;

@@ -272,7 +272,8 @@ void KexiRecordNavigator::updateButtons(uint recCnt)
 	if (isEnabled()) {
 		m_navBtnPrev->setEnabled(r > 1);
 		m_navBtnFirst->setEnabled(r > 1);
-		m_navBtnNext->setEnabled(r > 0 && r < (recCnt +(m_isInsertingEnabled?1:0)));
+		m_navBtnNext->setEnabled(r > 0 
+			&& r < (recCnt +(m_isInsertingEnabled?(1+d->editingIndicatorVisible/*if we're editing, next btn is avail.*/):0) ) );
 		m_navBtnLast->setEnabled(r!=(recCnt+(m_isInsertingEnabled?1:0)) && (m_isInsertingEnabled || recCnt>0));
 	}
 }
@@ -442,9 +443,10 @@ void KexiRecordNavigator::setEditingIndicatorEnabled(bool set)
 
 void KexiRecordNavigator::showEditingIndicator(bool show)
 {
+	d->editingIndicatorVisible = show;
+	updateButtons(recordCount()); //this will refresh 'next btn'
 	if (!d->editingIndicatorEnabled)
 		return;
-	d->editingIndicatorVisible = show;
 	if (d->editingIndicatorVisible) {
 		QPixmap pix;
 		pix.convertFromImage( *KexiRecordMarker::penImage() );

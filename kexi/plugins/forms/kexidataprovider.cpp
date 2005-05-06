@@ -136,7 +136,6 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	if (query) {
 		fieldsExpanded = query->fieldsExpanded();
 		dataFieldsCount = fieldsExpanded.count();
-		//for (uint i = 0; i < fieldsExpanded.size(); i++) 
 		QMap<KexiDB::QueryColumnInfo*,uint> fieldsOrder( query->fieldsOrder() );
 		for (QMapConstIterator<KexiDB::QueryColumnInfo*,uint> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
 			kdDebug() << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
@@ -158,11 +157,6 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	else {//!query
 		dataFieldsCount = m_dataItems.count();
 	}
-
-//	QValueVector<int> newIndices(dataFieldsCount); //m_dataItems.count());
-//	uint i = 0, number = 0;
-	//KexiFormDataItemInterfaceToIntMap newFieldNumbersForDataItems;
-	//KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin();
 
 	//in 'newIndices' let's collect new indices for every data source
 	foreach(QValueList<uint>::ConstIterator, it, invalidSources) {
@@ -229,7 +223,6 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 				<< " field=" << f->name() << endl;
 		}
 		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
-//		i++;
 	}
 	m_usedDataSources.clear();
 	foreach_list(QDictIterator<char>, it, tmpUsedDataSources) {

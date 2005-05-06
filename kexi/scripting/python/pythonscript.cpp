@@ -35,10 +35,16 @@ PythonScript::PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::Scr
     : Kross::Api::Script(interpreter, scriptcontainer)
     , m_module(0)
 {
+#ifdef KROSS_PYTHON_SCRIPT_DEBUG
+    kdDebug() << "PythonScript::PythonScript() Constructor." << endl;
+#endif
 }
 
 PythonScript::~PythonScript()
 {
+#ifdef KROSS_PYTHON_SCRIPT_DEBUG
+    kdDebug() << "PythonScript::~PythonScript() Destructor." << endl;
+#endif
     finalize();
 }
 
@@ -47,10 +53,20 @@ void PythonScript::initialize()
     finalize();
     PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
     m_module = new Py::Module(pymod, true);
+
+#ifdef KROSS_PYTHON_SCRIPT_DEBUG
+    if(m_module)
+        kdDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(m_module->as_string().c_str()).arg(m_module->reference_count()) << endl;
+#endif
 }
 
 void PythonScript::finalize()
 {
+#ifdef KROSS_PYTHON_SCRIPT_DEBUG
+    if(m_module)
+        kdDebug() << QString("PythonScript::finalize() module='%1' refcount='%2'").arg(m_module->as_string().c_str()).arg(m_module->reference_count()) << endl;
+#endif
+
     delete m_module; m_module = 0;
     m_functions.clear();
     m_classes.clear();

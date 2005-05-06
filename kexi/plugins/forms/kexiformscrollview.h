@@ -108,7 +108,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void moveToPreviousRecordRequested();
 		virtual void moveToNextRecordRequested();
 		virtual void moveToFirstRecordRequested();
-		virtual void addNewRecordRequested();
+		virtual void addNewRecordRequested() { KexiDataAwareObjectInterface::addNewRecordRequested(); }
 
 		/*! Reverts current editor's value to old one. */
 		virtual void cancelEditor();

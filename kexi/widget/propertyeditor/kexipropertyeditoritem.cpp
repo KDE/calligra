@@ -448,7 +448,16 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 
 void KexiPropertyEditorItem::updateValue(bool alsoParent)
 {
-	setText( 1, m_property->valueText() );
+	QString specialValueText;
+	if (m_property->hasOptions() && m_property->isNumericType()) {
+		//replace min value with minValueText if defined
+		QVariant minValue( m_property->option("min") );
+		QVariant minValueText( m_property->option("minValueText") );
+		if (!minValue.isNull() && !minValueText.isNull() && minValue.toInt()==m_property->value().toInt()) {
+			specialValueText = minValueText.toString();
+		}
+	}
+	setText( 1, specialValueText.isEmpty() ? m_property->valueText() : specialValueText );
 	if (alsoParent && parent())
 		static_cast<KexiPropertyEditorItem*>(parent())->updateValue();
 }

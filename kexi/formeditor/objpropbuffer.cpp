@@ -18,7 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kdebug.h>
 #include <qstringlist.h>
 #include <qstrlist.h>
 #include <qmetaobject.h>
@@ -27,6 +26,8 @@
 #include <qlayout.h>
 
 #include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
 
 #include "objecttree.h"
 #include "form.h"
@@ -40,6 +41,8 @@
 
 #include "objpropbuffer.h"
 
+#include <kexi_utils.h> //Cedric: we need to add this header to KFD sources
+
 using namespace KFormDesigner;
 
 ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name)
@@ -50,6 +53,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	m_lastgeocom = 0;
 	m_undoing = false;
 	m_origActiveColors = 0;
+	m_slotChangePropertyDisabled = false;
 
 	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), 
 		this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
@@ -67,20 +71,63 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 void
 ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &prop)
 {
-	if(!m_manager || !m_manager->activeForm() || ! m_manager->activeForm()->objectTree())
+	if(m_slotChangePropertyDisabled || !m_manager || !m_manager->activeForm() 
+		|| ! m_manager->activeForm()->objectTree())
 		return;
 	QCString property = prop.name();
 	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 
-	if(property == "name" && m_widgets.first())
-		emit nameChanged(m_widgets.first()->name(), value.toString());
+	if(property == "name" && m_widgets.first()) {
+//! @todo add to undo buffer
+		QWidget *w = m_widgets.first();
+		//also update widget's name in QObject member
+		if (!Kexi::isIdentifier( value.toString() )) {
+			KMessageBox::sorry( m_manager->activeForm()->widget(),
+				i18n("Could not rename widget. ")
+				+i18n("\"%1\" is not a valid name for a widget.\n").arg(value.toString())
+				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
+			m_slotChangePropertyDisabled = true;
+			prop.resetValue();
+			m_slotChangePropertyDisabled = false;
+			return;
+		}
+		if (0!=m_manager->activeForm()->objectTree()->lookup(value.toString())) {
+			KMessageBox::sorry( m_manager->activeForm()->widget(),
+				i18n("Could not rename widget. ")
+				+i18n("A widget with name \"%1\" already exists.\n").arg(value.toString())
+				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
+			m_slotChangePropertyDisabled = true;
+			prop.resetValue();
+			m_slotChangePropertyDisabled = false;
+			return;
+		}
+
+		if(m_lastcom && m_lastcom->property() == property && !m_undoing)
+			m_lastcom->setValue(value);
+		else if(!m_undoing) // we are not already undoing -> avoid recursion
+		{
+			m_lastcom = new PropertyCommand(this, QString(w->name()), 
+				w->property(property), value, property);
+			m_slotChangePropertyDisabled = true;
+//! @todo this enables undo action, but in Kexi form dialog need to be focused for proper work..
+//!         -- this will be fixed by fixing shared actions
+			m_manager->activeForm()->addCommand(m_lastcom, false);
+			m_slotChangePropertyDisabled = false;
+		}
+
+		emit nameChanged(w->name(), value.toString());
+		w->setName( value.toCString() );
+		m_manager->activeForm()->emitActionSignals(true);
+
+//		emit propertyChanged(w, property, value);
+//todo		w->setName( value.toCString().utf8() );
+	}
 	else if(property == "paletteBackgroundPixmap")
 		(*this)["backgroundOrigin"] = "WidgetOrigin";
-
-	if(property == "signals")
+	else if(property == "signals")
 		return;
-	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
+	else if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
 		saveAlignProperty(property);
 	}
@@ -121,13 +168,13 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 		if(!m_multiple) // one widget selected
 		{
 			// If the last command is the same, we just change its value
-			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
+			if(m_lastcom && m_lastcom->property() == property && !m_undoing)
 				m_lastcom->setValue(value);
 			else if(!m_undoing) // we are not already undoing -> avoid recursion
 			{
 //				if(m_widgets.first() && ((m_widgets.first() != m_manager->activeForm()->widget()) || (property != "geometry"))) {
 					m_lastcom = new PropertyCommand(this, QString(m_widgets.first()->name()), 
-						m_widgets.first()->property(property), value, prop.name());
+						m_widgets.first()->property(property), value, property);
 					m_manager->activeForm()->addCommand(m_lastcom, false);
 //				}
 			}
@@ -147,7 +194,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 		else
 		{
 			QWidget *w;
-			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
+			if(m_lastcom && m_lastcom->property() == property && !m_undoing)
 				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
@@ -156,7 +203,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				for(w = m_widgets.first(); w; w = m_widgets.next())
 					list.insert(w->name(), w->property(property));
 
-				m_lastcom = new PropertyCommand(this, list, value, prop.name());
+				m_lastcom = new PropertyCommand(this, list, value, property);
 				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
 
@@ -221,6 +268,9 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
 
 	if (m_propDesc.isEmpty()) {
+		//most common property names
+//! @todo perhaps a few of them shouldn't be translated within KFD mode, 
+//!       to be more Qt Designer friendly?
 		m_propDesc["name"] = i18n("Name");
 		m_propDesc["paletteBackgroundPixmap"] = i18n("Background Pixmap");
 		m_propDesc["enabled"] = i18n("Enabled");
@@ -253,7 +303,8 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
 			return;
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
-	if(!tree)  return;
+	if(!tree)
+		return;
 
 	int count = 0;
 	WidgetInfo *winfo = m_manager->lib()->widgetInfoForClassName(w->className());
@@ -270,8 +321,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 		const char* propertyName = meta->name();
 		if(meta->designable(w) && !hasProperty(propertyName))
 		{
-			if(!isPropertyVisible(propertyName, isTopLevel))
-				continue;
+			KexiProperty *newProp = 0;
 
 			QString desc( m_propDesc[meta->name()] );
 			if (desc.isEmpty()) {
@@ -289,7 +339,7 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 				}
 
 				kdDebug() << meta->valueToKey(w->property(propertyName).toInt()) << endl;
-				add(new KexiProperty(propertyName,
+				add(newProp = new KexiProperty(propertyName,
 					meta->valueToKey(w->property(propertyName).toInt()),
 //					w->property(propertyName).toInt(),
 					new KexiProperty::ListData(QStringList::fromStrList(keys),
@@ -298,7 +348,11 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 				);
 			}
 			else
-				add(new KexiProperty(propertyName, w->property(propertyName), desc));
+				add(newProp = new KexiProperty(propertyName, w->property(propertyName), desc));
+
+			if(!isPropertyVisible(propertyName, isTopLevel)) {
+				newProp->setVisible(false);
+			}
 		}
 
 //		if(0==qstrcmp(propertyName, "name"))
@@ -312,6 +366,9 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 
 		updateOldValue(tree, propertyName); // update the KexiProperty.oldValue using the value in modifProp
 	}//for
+
+	if (winfo)
+		m_manager->lib()->setPropertyOptions(*this, *winfo, w);
 
 	(*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
 
@@ -497,7 +554,7 @@ ObjectPropertyBuffer::storePixmapName(KexiPropertyBuffer &buf, KexiProperty &pro
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_widgets.first()->name());
 	if(tree)
-		tree->addPixmapName(prop.name(), prop.pixmapName());
+		tree->addPixmapName(prop.name(), prop.option("pixmapName").toString());
 }
 
 // i18n functions /////////////////////////////////

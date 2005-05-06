@@ -52,7 +52,7 @@ class KexiScriptEditorPrivate
         QString language;
 #ifdef KEXI_KROSS_SUPPORT
         Kross::Api::Manager* manager;
-        Kross::Api::ScriptContainer* scriptcontainer;
+        KSharedPtr<Kross::Api::ScriptContainer> scriptcontainer;
 #endif
 };
 

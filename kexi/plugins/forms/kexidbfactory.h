@@ -98,6 +98,8 @@ class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 		virtual bool cursorAtEnd();
 		virtual void clear();
 
+		virtual void setField(KexiDB::Field* field);
+
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 

@@ -328,7 +328,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
 						return true;
 
-				dragWidgets(mev);
+				moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y());
+				m_state = MovingWidget;
 			}
 
 			return true; // eat
@@ -410,6 +411,47 @@ Container::eventFilter(QObject *s, QEvent *e)
 			{
 				m_form->manager()->deleteWidget();
 				return true;
+			}
+			// directional buttons move the widget
+			else if(kev->key() == Key_Left){ // move the widget of gridX to the left
+				moveSelectedWidgetsBy(-form()->gridX(), 0);
+				return true;
+			}
+			else if(kev->key() == Key_Right){ // move the widget of gridX to the right
+				moveSelectedWidgetsBy(form()->gridX(), 0);
+				return true;
+			}
+			else if(kev->key() == Key_Up){ // move the widget of gridY to the top
+				moveSelectedWidgetsBy(0, - form()->gridY());
+				return true;
+			}
+			else if(kev->key() == Key_Down){ // move the widget of gridX to the bottom
+				moveSelectedWidgetsBy(0, form()->gridY());
+				return true;
+			}
+			else if((kev->key() == Key_Tab) || (kev->key() == Key_BackTab)){
+				ObjectTreeItem *item = form()->objectTree()->lookup(form()->selectedWidgets()->first()->name());
+				if(!item) return true;
+				ObjectTreeList *list = item->parent()->children();
+				if(list->count() == 1) return true;
+				int index = list->findRef(item);
+
+				if(kev->key() == Key_BackTab){
+					if(index == 0) // go back to the last item
+						index = list->count() - 1;
+					else
+						index = index - 1;
+				}
+				else  {
+					if(index == list->count() - 1) // go back to the first item
+						index = 0;
+					else
+						index = index + 1;
+				}
+
+				ObjectTreeItem *nextItem = list->at(index);
+				if(nextItem && nextItem->widget())
+					form()->setSelectedWidget(nextItem->widget(), false);
 			}
 			return true;
 		}
@@ -927,27 +969,15 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 
 /// Other functions used by eventFilter
 void
-Container::dragWidgets(QMouseEvent *mev)
+Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 {
 	int gridX = m_form->gridX();
 	int gridY = m_form->gridY();
-	int realdx = mev->x() - m_grab.x();
-	int realdy = mev->y() - m_grab.y();
 	int dx=realdx, dy=realdy;
-
-	// If we later switch to copy mode, we need to store those info
-	/*if(m_form->selectedWidgets()->count() == 1)
-	{
-		if(m_initialPos.isNull())
-			m_initialPos = m_form->selectedWidgets()->first()->pos();
-		if(!m_insertRect.isValid())
-			m_copyRect = m_form->selectedWidgets()->first()->geometry();
-	}*/
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
-		QCString classname = m_container->className();
-		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
+		if(!w || !w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
 			continue;
 
 		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
@@ -957,8 +987,8 @@ Container::dragWidgets(QMouseEvent *mev)
 				w = w->parentWidget();
 		}
 
-		int tmpx = w->x() + mev->x() - m_grab.x();
-		int tmpy = w->y() + mev->y() - m_grab.y();
+		int tmpx = w->x() + realdx;
+		int tmpy = w->y() + realdy;
 		if(tmpx < 0)
 			dx = QMAX(0 - w->x(), dx); // because dx is <0
 		else if(tmpx > w->parentWidget()->width() - gridX)
@@ -972,11 +1002,8 @@ Container::dragWidgets(QMouseEvent *mev)
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
-		if(!w)  continue;
 		// Don't move tab widget pages (or widget stack pages)
-		//QCString classname = m_container->className();
-		//if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
-		if(!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+		if(!w || !w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
 			continue;
 
 		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
@@ -987,7 +1014,7 @@ Container::dragWidgets(QMouseEvent *mev)
 		}
 
 		int tmpx, tmpy;
-		if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+		if(!m_form->manager()->snapWidgetsToGrid() || (mev && mev->state() == (LeftButton|ControlButton|AltButton)) )
 		{
 			tmpx = w->x() + dx;
 			tmpy = w->y() + dy;
@@ -1001,41 +1028,6 @@ Container::dragWidgets(QMouseEvent *mev)
 		if((tmpx != w->x()) || (tmpy != w->y()))
 			w->move(tmpx,tmpy);
 	}
-	/*for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
-	{
-		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
-		{
-			w = w->parentWidget(); // widget is WidgetStack page
-			if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
-				w = w->parentWidget();
-		}
-
-		int tmpx, tmpy;
-		if(!m_form->manager()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
-		{
-			tmpx = w->x() + mev->x() - m_grab.x();
-			tmpy = w->y() + mev->y() - m_grab.y();
-		}
-		else
-		{
-			tmpx = int( float( w->x() + mev->x() - m_grab.x()) / float(gridX) + 0.5) * gridX;
-			tmpy = int( float( w->y() + mev->y() - m_grab.y()) / float(gridY) + 0.5) * gridY;
-		}
-
-		if(tmpx < 0)
-			tmpx = 0;
-		else if(tmpx > w->parentWidget()->width() - gridX)
-			tmpx = w->parentWidget()->width() - gridX;
-
-		if(tmpy < 0)
-			tmpy = 0;
-		else if(tmpy > w->parentWidget()->height() - gridY)
-			tmpy = w->parentWidget()->height() - gridY;
-
-		if((tmpx != w->x()) || (tmpy != w->y()))
-			w->move(tmpx,tmpy);
-	}*/
-	m_state = MovingWidget;
 }
 
 #include "container.moc"
