@@ -583,9 +583,9 @@ public:
     static const uint m_sDefaultColWidth = 60;
 protected:
     /* Overloaded methods, look for docu in kwframe.h */
-    /// \overload KWFrame::deleteAnchors
+    /// \overload KWFrameSet::deleteAnchors
     virtual void deleteAnchors();
-    /// \overload KWFrame::createAnchors
+    /// \overload KWFrameSet::createAnchors
     virtual void createAnchors( KoTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
 
 private:
