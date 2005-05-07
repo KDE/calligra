@@ -27,7 +27,7 @@
 //#include <qobject.h>
 #include <ksharedptr.h>
 
-#include "../main/config.h"
+#include "../main/krossconfig.h"
 #include "exception.h"
 
 namespace Kross { namespace Api {

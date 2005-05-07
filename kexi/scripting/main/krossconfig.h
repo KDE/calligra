@@ -1,5 +1,5 @@
 /***************************************************************************
- * config.h
+ * config.h.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_MAIN_CONFIG_H
-#define KROSS_MAIN_CONFIG_H
+#ifndef KROSS_MAIN_KROSSCONFIG_H
+#define KROSS_MAIN_KROSSCONFIG_H
 
 /**
  * The Kross scripting bridge.

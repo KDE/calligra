@@ -28,7 +28,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-//#include "../main/config.h"
+//#include "../main/krossconfig.h"
 #include "../api/object.h"
 #include "../api/list.h"
 //#include "../api/script.h"

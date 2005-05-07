@@ -32,7 +32,7 @@
 #include <qmap.h>
 #include <qvariant.h>
 
-#include "../main/config.h"
+#include "../main/krossconfig.h"
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/class.h"

@@ -27,7 +27,7 @@
 
 #include <qstring.h>
 
-#include "../main/config.h"
+#include "../main/krossconfig.h"
 #include "../api/object.h"
 #include "../api/script.h"
 #include "pythonextension.h"
