@@ -1151,11 +1151,13 @@ tristate KexiMainWindowImpl::closeProject()
 void KexiMainWindowImpl::initContextHelp() {
 #ifndef KEXI_NO_CTXT_HELP
 	d->ctxHelp=new KexiContextHelp(this,this);
+/*todo
 	d->ctxHelp->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
 		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
 		"hesitate to report it at our <A href=\"http://www.kexi-project.org/cgi-bin/bug.pl\"> issue "
 		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
 		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
+*/
 	addToolWindow(d->ctxHelp,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
 #endif
 }

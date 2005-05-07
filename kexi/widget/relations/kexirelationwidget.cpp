@@ -116,8 +116,8 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 #if 0
 	if(!embedd)
 	{
-		setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
-			"An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));
+/*todo		setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
+			"An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));*/
 	}
 #endif
 //	else
