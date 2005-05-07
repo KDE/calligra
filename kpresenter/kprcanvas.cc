@@ -4572,7 +4572,28 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 
 void KPrCanvas::picViewOriginalSize()
 {
-    picViewOrigHelper( -1, -1 );
+    KPresenterDoc *doc = m_view->kPresenterDoc();
+    KPPixmapObject *object = m_activePage->picViewOrigHelper();
+
+    KoSize newSize( doc->zoomHandler()->pixelXToPt( object->originalSize().width() ),
+                    doc->zoomHandler()->pixelYToPt( object->originalSize().height() ) );
+
+    KoRect pageRect = m_activePage->getPageRect();
+    double fakt = 1.0;
+
+    if ( newSize.width() > pageRect.width() )
+        fakt = pageRect.width() / newSize.width();
+    if ( newSize.height() > pageRect.height() )
+        fakt = QMIN( fakt, pageRect.height() / newSize.height() );
+
+    KoSize diff( newSize.width() * fakt - object->getSize().width(),
+                 newSize.height() * fakt - object->getSize().height() );
+
+    // TODO after 1.4 change text to "Scale to Original Size"
+    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
+                                          KoPoint( 0, 0 ), diff, object, doc );
+    resizeCmd->execute();
+    doc->addCommand( resizeCmd );
 }
 
 void KPrCanvas::picViewOrig640x480()
