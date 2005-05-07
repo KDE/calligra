@@ -28,5 +28,4 @@ SUBDIRS = . factories test #scripting #kdevelop_plugin
 
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` >> rc.cpp
-	$(XGETTEXT) `find . -name "*.cpp" -o -name ".h"` -o $(podir)/kformdesigner.pot
-
+	$(XGETTEXT) `find . -name "*.cpp" -o -name "*.h"` -o $(podir)/kformdesigner.pot
