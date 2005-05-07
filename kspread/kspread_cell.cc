@@ -2089,6 +2089,22 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // including obscured cells.
   double  width  = colFormat->dblWidth();
   double  height = rowFormat->dblHeight();
+
+  // Handle right-to-left layout.
+  // In an RTL sheet the cells have to be painted at their opposite horizontal
+  // location on the canvas, meaning that column A will be the rightmost column
+  // on screen, column B will be to the left of it and so on. Here we change
+  // the horizontal coordinate at which we start painting the cell in case the
+  // sheet's direction is RTL. We do this only if paintingObscured is 0,
+  // otherwise the cell's painting location will flip back and forth in
+  // consecutive calls to paintCell when painting obscured cells.
+  if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
+       && paintingObscured == 0 && view && view->canvasWidget() )
+  {
+    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
+    left = dwidth - coordinate.x() - width;
+  }
+
   if (d->hasExtra()) {
     // FIXME: For some very obscure reason, d->extraWidth/Height
     //        contains the total width/height if we have a merged cell.
@@ -2097,6 +2113,12 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     //        contains the *extra* width/height (which the name also 
     //        suggests).
     if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
+      if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
+          && paintingObscured == 0 && view && view->canvasWidget() )
+      {
+        double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
+        left -= d->extra()->extraWidth - width;
+      }
       width  = d->extra()->extraWidth;
       height = d->extra()->extraHeight;
     }
@@ -2104,15 +2126,6 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
       width  += d->extra()->extraXCells ? d->extra()->extraWidth  : 0;
       height += d->extra()->extraYCells ? d->extra()->extraHeight : 0;
     }
-  }
-
-  // Handle right-to-left layout.
-  // FIXME (comment): But what does it actually do?
-  if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
-       && view && view->canvasWidget() )
-  {
-    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
-    left = dwidth - coordinate.x() - width;
   }
 
   // Check if the cell is "selected", i.e. it should be drawn with the
@@ -2496,10 +2509,20 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     QValueList<KSpreadCell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       KSpreadCell *cell = *it;
-      paintLeft = paintLeft && ( cell->column() == cellRef.x() );
+
       paintTop  = paintTop && ( cell->row() == cellRef.y() );
       paintBottom = false;
-      paintRight = false;
+
+      if ( sheetDir == KSpreadSheet::RightToLeft )
+      {
+        paintRight = paintRight && ( cell->column() == cellRef.x() );
+        paintLeft = false;
+      }
+      else
+      {
+        paintLeft = paintLeft && ( cell->column() == cellRef.x() );
+        paintRight = false;
+      }
     }
   }
 
