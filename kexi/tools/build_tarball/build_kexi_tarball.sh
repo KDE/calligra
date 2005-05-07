@@ -1,52 +1,65 @@
 #!/bin/sh
 #
-# cvs2pack scripts, which creates & uploads tarballs
-# Usage within KDE cvs tree.
+# This script prepares & uploads tarballs
+# Usage within KDE svn tree.
+# Based on cvs2pack
 # Copyright 2002 Nikolas Zimmermann <wildfox@kde.org>
-# Improved by Jaroslaw Staniek, 2004
-# License: GPL
+# Improved by Jaroslaw Staniek, 2004-2005
+# License: GPL (http://www.gnu.org/)
 
-DIRNAME=`dirname $0`
+DIRNAME=`pwd`/`dirname $0`
+cd $DIRNAME
 
 # General
 MODULE=koffice							# CHANGE
 PROJECT=kexi							# CHANGE
+MODULE_PATH=trunk/$MODULE
+KDEADMIN_PATH=trunk/KDE/kde-common/admin
+#for versions witin koffice:
+#PROJECT_PATH=koffice/kexi
+#for versions independent of koffice:
+PROJECT_VER=0.9
+PROJECT_PATH=branches/kexi/$PROJECT_VER
+SVN2DIST_OPTIONS=--no-i18n #set --no-i18n for version being outside the trunk
+
+EXC="3rdparty/uuid main/projectWizard main/filters plugins/kugar plugins/html plugins/importwizard filters interfaces scriptig"
 
 # Uploading
 UPLOAD_USER=user						# CHANGE
 UPLOAD_PASS=pass						# CHANGE
 UPLOAD_HOST=host						# CHANGE
-DO_UPLOAD=0								# 1 = Yes; 0 = No
+DO_UPLOAD=0									# 1 = Yes; 0 = No
 
-# CVS'ing
-CVS_USER=staniek						# CHANGE
-CVS_PASS=								# CHANGE
-CVS_HOST=cvs.kde.org				# CHANGE
+# SVN'ing
+SVN_USER=staniek						# CHANGE
+SVN_PASS=										# CHANGE
+SVN_HOST=https://svn.kde.org/home/kde		# CHANGE
 
 # Dist-settings
-#leave empty if snapshot
-TAG=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | sed -e 's/.*\"\(.*\)\"/\1/;s/ //g'`
+# set empty if this is snapshot
+DIST_VER=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | sed -e 's/.*\"\(.*\)\"/\1/;s/ //g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/;'`
 
-EXC="3rdparty/uuid main/projectWizard main/filters plugins/kugar plugins/html plugins/importwizard plugins/scripting filters interfaces scriptig"
+# Pick kexi_stable.lsm or kexi.lsm as a LSM file template
+echo $DIST_VER | grep -e "beta" -e "rc" > /dev/null && lsmsrcfile=kexi.lsm || lsmsrcfile=kexi_stable.lsm
 
 # Paths
-DESTINATION=/tmp/kexi-dist/$TAG				# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!
+DESTINATION=/tmp/kexi-dist/$DIST_VER				# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!
 CONFIGURE_PREFIX=`kde-config --prefix`	# CHANGE
 EXPECT_PROGRAM=`which expect`				# CHANGE
 ED_LOCATION=/bin						# CHANGE
-CVS_PROGRAM=`which cvs`					# CHANGE
+SVN_PROGRAM=`which svn`					# CHANGE
 DATE_PROGRAM=`which date`						# CHANGE
 PERL_PROGRAM=`which perl`				# CHANGE
-CVS2DIST_PROGRAM=`which cvs2dist`			# CHANGE
+SVN2DIST_PROGRAM=`which svn2dist`			# CHANGE
 NCFTPPUT_PROGRAM=`which ncftpput`				# CHANGE
-CONF= #"/home/luci/kexi-admin/configure.in.in"		# CANGE OR LEAVE EMPTY IF NO SPECIAL configure.in.in should be copied
+CONF= # CANGE OR LEAVE EMPTY IF NO SPECIAL configure.in.in should be copied
 
 # Main program
-if [ -z "$TAG" ]; then
+if [ -z "$DIST_VER" ]; then
 	today=`$DATE_PROGRAM +%d-%m-%y`
 	snapshot="-snapshot"
 else
-	today=$TAG
+	today=$DIST_VER
 	snapshot=
 fi
 
@@ -68,48 +81,56 @@ if [ -e $DESTINATION ]; then
 	touch $DESTINATION/expect_script
 	chmod +x $DESTINATION/expect_script
 
-	echo "#!$EXPECT_PROGRAM
-		  spawn $CVS_PROGRAM -d :pserver:$CVS_USER@$CVS_HOST:/home/kde login
-		  expect -re \"CVS password: \"
-		  send \"$CVS_PASS\\r\"
-		  expect eof" >> $DESTINATION/expect_script
+#	echo "#!$EXPECT_PROGRAM
+#		  spawn $SVN_PROGRAM -d :pserver:$SVN_USER@$CVS_HOST:/home/kde login
+#		  expect -re \"SVN password: \"
+#		  send \"$SVN_PASS\\r\"
+#		  expect eof" >> $DESTINATION/expect_script
 	
-	rm $DESTINATION/LOG -f
+	rm -f $DESTINATION/LOG
 fi	
 
+pwd
+echo $DESTINATION/source/$MODULE
 if ! [ -e $DESTINATION/source/$MODULE ]; then
-	echo "*** Setup-Mode: Checking $MODULE/$PROJECT out from CVS..."
+	echo "*** Setup-Mode: Checking $MODULE/$PROJECT out from SVN..."
 	cd $DESTINATION/source
 	
 #	$DESTINATION/expect_script >> $DESTINATION/LOG 2>&1
+
+	echo "$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH" >> $DESTINATION/LOG
+	$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH >> $DESTINATION/LOG 2>&1 || exit 1
+	echo "$SVN_PROGRAM co $SVN_HOST/$PROJECT_PATH" >> $DESTINATION/LOG
+	$SVN_PROGRAM co $SVN_HOST/$PROJECT_PATH >> $DESTINATION/LOG 2>&1 || exit 1
+	echo "$SVN_PROGRAM co $SVN_HOST/$KDEADMIN_PATH" >> $DESTINATION/LOG
+	$SVN_PROGRAM co $SVN_HOST/$KDEADMIN_PATH >> $DESTINATION/LOG 2>&1 || exit 1
+	mv $PROJECT_VER/$MODULE/$PROJECT $MODULE/ || exit 1
+	rm -rf $PROJECT_VER || exit 1
 	
-	$CVS_PROGRAM -d :pserver:$CVS_USER@$CVS_HOST:/home/kde co -l $MODULE >> $DESTINATION/LOG 2>&1
-	$CVS_PROGRAM -d :pserver:$CVS_USER@$CVS_HOST:/home/kde co $MODULE/$PROJECT >> $DESTINATION/LOG 2>&1
-	$CVS_PROGRAM -d :pserver:$CVS_USER@$CVS_HOST:/home/kde co kde-common/admin >> $DESTINATION/LOG 2>&1
-	
-	pwd
-	cd $MODULE
+	cd $MODULE || exit 1
 	
 	# Hacks
 	if [ "$MODULE" = "kdenonbeta" ]; then
 		$PERL_PROGRAM -i -ne 'print unless /COMPILE/' Makefile.am.in >> $DESTINATION/LOG 2>&1
 	fi
 
-	ln -s ../kde-common/admin/ admin
-
+	ln -s ../admin admin
 	cd ..
 fi
 
 echo "1. Cleaning up..." 
-cd $DESTINATION/source/$MODULE
-rm -fr acinclude.m4 aclocal.m4 Makefile.in Makefile libtool config.h config.h.in stamp-h.in subdirs configure configure.in configure.files stamp-h inst-apps autom4te-2.5x.cache  autom4te.cache .autoconf_trace MakeVars.in Makefile.am Makefile.rules.in
-echo "2. Updating from CVS..." 
+cd $DESTINATION/source/$MODULE || exit 1
+rm -fr acinclude.m4 aclocal.m4 Makefile.in Makefile libtool $PROJECT/config.h config.h.in stamp-h.in subdirs configure configure.in configure.files stamp-h inst-apps autom4te-2.5x.cache  autom4te.cache .autoconf_trace MakeVars.in Makefile.am Makefile.rules.in
+
+echo "2. Updating from SVN..." 
 #$DESTINATION/expect_script >> $DESTINATION/LOG 2>&1
-cd admin
-$CVS_PROGRAM up >> $DESTINATION/LOG 2>&1
+pwd
+cd admin || exit 1
+$SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
 cd ../$PROJECT
-$CVS_PROGRAM up >> $DESTINATION/LOG 2>&1
-cd $DESTINATION/archive
+$SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
+
+cd $DESTINATION/archive || exit 1
 rm -f *
 rm -f $DESTINATION/expect_script
 echo "3. Makefile creation..."
@@ -123,25 +144,29 @@ for dir in $EXC; do
 done
 #fix exectutable bits for sources:
 find . -name \*.h -o -name \*.cpp -o -name \*.c -o -name \*.cc -o -name \*.1 | xargs chmod a-x
-#--cvs2dist will do this
+#--svn2dist will do this
 #cd $DESTINATION/source/$MODULE
 #make -f Makefile.cvs >> $DESTINATION/LOG 2>&1
 #cd ..
 cd $DESTINATION/source
 echo "4. Building tarballs..." 
-$CVS2DIST_PROGRAM $MODULE $PROJECT -v $today >> $DESTINATION/LOG 2>&1
-rm $PROJECT-$today -Rf
-rm $PROJECT-$today.tar -f
+$SVN2DIST_PROGRAM $MODULE $PROJECT -v $today \
+	--svn-root "$SVN_HOST/trunk" \
+	$SVN2DIST_OPTIONS \
+	--log "$DESTINATION/LOG.SVN2DIST" >> $DESTINATION/LOG 2>&1 || exit 1
+cat "svn2dist-$PROJECT.log" >> $DESTINATION/LOG
+rm -Rf $PROJECT-$today
+rm -f $PROJECT-$today.tar
 mv $PROJECT-$today.* ../archive
 cd ../archive
 
 #create .lsm file
-lsmfile="kexi-"$TAG".lsm"
+lsmfile="kexi-"$DIST_VER".lsm"
 echo "Begin4
 Title:           Kexi
-Version:         "$TAG"
+Version:         "$DIST_VER"
 Entered-date:    "`date +%Y-%m-%d` > $lsmfile
-cat $DIRNAME/kexi.lsm >> $lsmfile
+cat $DIRNAME/$lsmsrcfile >> $lsmfile
 
 if [ -n "$snapshot" ] ; then
 	mv $PROJECT-$today.tar.bz2 $PROJECT-$today$snapshot.tar.bz2
