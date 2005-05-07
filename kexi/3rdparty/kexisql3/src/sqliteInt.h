@@ -16,7 +16,7 @@
 #ifndef _SQLITEINT_H_
 #define _SQLITEINT_H_
 
-#include "config.h"
+#include "sqliteconfig.h"
 #include "sqlite3.h"
 #include "hash.h"
 #include "parse.h"
