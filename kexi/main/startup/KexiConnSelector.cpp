@@ -260,7 +260,8 @@ bool KexiConnSelectorWidget::confirmOverwrites() const
 
 static QString msgUnfinished() { 
 	return i18n("To define or change a connection, use command line options or click on .kexis file. "
-		"You can find example .kexis file at: http://webcvs.kde.org/*checkout*/koffice/kexi/tests/startup/testdb.kexis");
+		"You can find example .kexis file at <a href=\"%1\">here</a>.")
+		.arg("http://websvn.kde.org/*checkout*/branches/kexi/0.9/koffice/kexi/tests/startup/testdb.kexis");
 }
 
 void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
