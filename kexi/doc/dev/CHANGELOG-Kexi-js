@@ -492,7 +492,10 @@ TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
 -fix "edit tab order" action: not working when prj browser is focused...
 
-i18n TODO: kolor pierszoplanowy/pierwszoplanowy
+2005-05-09
+Forms
+- fixed crash because main window didn't notice property buffer change
+  form's property buffer is shared (ObjPropertyBuffer instance) 
 
 2005-05-06
 Core, Property Editor, Form Designer
@@ -505,7 +508,6 @@ Form Designer
 - shadow doesn't blink; properly refreshed on 'indent' property change
 KexiDB
 - inserting rows with autoinc values > than 0x7fffffff supported
-TODO: backport to 0.8
 
 2005-05-05
 Form Designer

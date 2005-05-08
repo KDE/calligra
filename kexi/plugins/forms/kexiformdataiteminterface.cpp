@@ -21,6 +21,7 @@
 
 KexiFormDataItemInterface::KexiFormDataItemInterface()
  : KexiDataItemInterface()
+ , m_field(0)
 {
 }
 

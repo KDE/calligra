@@ -490,6 +490,7 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 			this,SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 		connect(m_buffer,SIGNAL(propertyReset(KexiPropertyBuffer&,KexiProperty&)),
 			this, SLOT(slotPropertyReset(KexiPropertyBuffer&,KexiProperty&)));
+		connect(m_buffer,SIGNAL(clearing()), this, SLOT(slotBufferClearing()));
 		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
 	fill();
@@ -535,6 +536,11 @@ void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer & /*buf*/,KexiProp
 	m_editItem->updateChildrenValue();
 
 	showDefaultsButton( false );
+}
+
+void KexiPropertyEditor::slotBufferClearing()
+{
+	reset(false);
 }
 
 void KexiPropertyEditor::slotBufferDestroying()

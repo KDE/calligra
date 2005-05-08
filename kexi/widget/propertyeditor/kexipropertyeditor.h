@@ -176,6 +176,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		/*! Called when current buffer is about to be destroyed. */
 		void slotBufferDestroying();
 
+		/*! Called when current buffer is about to be cleared. */
+		void slotBufferClearing();
+
 		void slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop);
 		void setBufferLater();
 

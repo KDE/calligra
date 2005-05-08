@@ -128,6 +128,11 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 		// TMP until we have custom editors
 		void propertyExecuted(KexiPropertyBuffer &buf, KexiProperty &prop, const QString &value);
 
+		//! Emitted when property list is cleared (on clear() and on destruction),
+		//! so entire world (especially KexiPropertyEditor) can update it's state
+		void clearing();
+
+		//! Emitted within destructor, after clearing().
 		void destroying();
 
 	protected:

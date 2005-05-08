@@ -141,13 +141,15 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 KexiFormView::~KexiFormView()
 {
-//	if (m_cursor)
-//		m_conn->deleteCursor(m_cursor);
-//	delete m_provider;
 	deleteQuery();
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	conn->deleteCursor(m_cursor);
-//	delete m_data;
+
+	// Important: form window is closed. 
+	// Set buffer to 0 because there is *only one* instance of ObjPropertyBuffer
+	// in Kexi, so the main window wouldn't know buffer in fact has been changed.
+	m_buffer = 0;
+	propertyBufferSwitched();
 }
 
 void
