@@ -3,9 +3,14 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
+Comment[da]=Kexi datamigrationsdriver
+Comment[el]=Οδηγός μεταβίβασης δεδομένων του Kexi
 Comment[es]=Controlador de migración de datos de Kexi
+Comment[hu]=Kexi adatmigrálási meghajtó
+Comment[nl]=Kexi Datamigratie Stuurprogramma
 Comment[pt]=Controlador de Migração de Dados do Kexi
 Comment[pt_BR]=Driver de Migração de Dados do Kexi
+Comment[ru]=Модуль драйвера миграции Kexi
 Comment[sv]=Kexi dataövergångsdrivrutin
 Comment[zh_CN]=Kexi 数据升迁驱动程序
 

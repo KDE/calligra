@@ -5,3 +5,6 @@ MimeType=application/x-sqlite2
 Icon=
 Patterns=
 Comment=SQLite2 Database File
+Comment[da]=SQLite2 databasefil
+Comment[el]=Αρχείο βάσης δεδομένων SQLite2
+Comment[es]=Archivo de base de datos SQLite2
