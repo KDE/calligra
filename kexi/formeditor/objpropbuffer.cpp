@@ -86,7 +86,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			KMessageBox::sorry( m_manager->activeForm()->widget(),
 				i18n("Could not rename widget. ")
 				+i18n("\"%1\" is not a valid name for a widget.\n").arg(value.toString())
-				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
+				+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
 			m_slotChangePropertyDisabled = true;
 			prop.resetValue();
 			m_slotChangePropertyDisabled = false;
@@ -96,7 +96,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			KMessageBox::sorry( m_manager->activeForm()->widget(),
 				i18n("Could not rename widget. ")
 				+i18n("A widget with name \"%1\" already exists.\n").arg(value.toString())
-				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
+				+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
 			m_slotChangePropertyDisabled = true;
 			prop.resetValue();
 			m_slotChangePropertyDisabled = false;

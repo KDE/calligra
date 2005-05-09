@@ -1087,7 +1087,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
             //else
             if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
-                setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document isn't OASIS-compliant." ) );
+                setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
             else
                 setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
