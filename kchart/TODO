@@ -101,6 +101,8 @@ Item								   Prio Status
   + Bring back "line width" for line charts.			      1 DONE
   + Check keyboard shortcuts for all tabs			     S1 ----
   + Enable titles for axes again.				      1	DONE
+  + Setting background image doesn't work			      2 ----
+  + According to Fredrik, background page works badly all over	      2 ----
 
 * Wizard
   + "Select Chart Type" page: Reorder like the toolbar			DONE
@@ -121,7 +123,6 @@ Item								   Prio Status
 
 * KDChart
   + Titles for axes don't work.						----
-  + (Bar) charts are drawn wrong when Y axis is logarithmic.		----
   + Font for X axis labels changes when Polar chart is chosen.		DONE
   + Strange looks when negative values.					DONE
   + Logarithmic Y axis is painted wrong - Axis itself is not scaled.	----
