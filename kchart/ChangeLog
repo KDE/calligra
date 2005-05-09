@@ -1,3 +1,10 @@
+2005-05-09  Fredrik Edemar  <f_edemar@linux.se>
+
+        Fix bug 105356: Lines in a line chart are all black
+        * kdchart/KDChartParams.h (KDChartParamsts): lineColor() should
+        always return an invalid QColor object in order for KDChartLinesPainter
+        to use the current dataset color instead.
+
 2005-05-06  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 99995: KChart should be able to import CSV data

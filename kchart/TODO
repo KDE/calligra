@@ -48,7 +48,7 @@ Item								   Prio Status
        Fixed by new KDChart version (hopefully)
   + 102414: A chart in a spreadsheet opens the template dialog 	      1 DONE
 	    before the wizard appears.
-  + 105356: Lines in a line chart are all black			      1 ----
+  + 105356: Lines in a line chart are all black			      1 DONE
 
 * Wishes
   + 14971: Data in rows or columns				      1	DONE

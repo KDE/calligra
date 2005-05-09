@@ -970,7 +970,7 @@ class KDCHART_EXPORT KDChartParams : public QObject
 
         QColor lineColor() const
         {
-            return _lineColor;
+            return QColor();//_lineColor;
         }
 
         void setLineStyle( PenStyle style )
