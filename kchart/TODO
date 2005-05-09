@@ -23,7 +23,7 @@ Item								   Prio Status
 
 * Bugs
   + 41612: No titles for axes					      1	----
-     - Fixed by new KDChart version					kdch
+     - Fixed by new KDChart version					----
      - Enable settings in the config dialog.				done
      - Read and write the values from the axis parameters		--
      - Do it in the wizard as well					done
@@ -31,7 +31,6 @@ Item								   Prio Status
   + 90893: never-saved doc failes autosave			      2 DONE
   + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
-       Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	DONE
             (see details below)
   + 101007: Error in reading back axis labels.			      1 DONE
@@ -45,10 +44,11 @@ Item								   Prio Status
       - Load row and column labels	 				--
   + 101290: KChart changes font for axes when Polar chart is chosen   1	DONE
        Fixed by new KDChart version
-  + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
+  + 101490: Error in drawing charts with logarithmic scale.	      1	----
        Fixed by new KDChart version (hopefully)
   + 102414: A chart in a spreadsheet opens the template dialog 	      1 DONE
 	    before the wizard appears.
+  + 105356: Lines in a line chart are all black			      1 ----
 
 * Wishes
   + 14971: Data in rows or columns				      1	DONE
@@ -57,7 +57,7 @@ Item								   Prio Status
 
 * Issues with KSpread
   + Handling: The chart changes size when selected and unselected.    2 DONE
-  + Printing: The chart is of thumbnail size, and wrongly placed.     2	KSPR
+  + Printing: The chart is of thumbnail size, and wrongly placed.     2	DONE
   + Labels are no longer generated correctly.			      1	DONE
 
 * Miscellaneous fixes
@@ -75,10 +75,6 @@ Item								   Prio Status
   + Save position of Actions toolbar in config.			      2 ----
   + Wrong images for HiLo subtype icons.			      1 ----
   + Don't warn about unsaved data on exit if inside another program   2 KOLIBS
-
-* Newly introduced bugs.
-  + Get the colored lines back in the line chart.		      1 ----
-  + Doesn't use the first line as header any more (KSpread)	      1 DONE
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 DONE
@@ -124,9 +120,16 @@ Item								   Prio Status
   + CSV import filter						      1 DONE
 
 * KDChart
-  + (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
+  + Titles for axes don't work.						----
+  + (Bar) charts are drawn wrong when Y axis is logarithmic.		----
   + Font for X axis labels changes when Polar chart is chosen.		DONE
   + Strange looks when negative values.					DONE
+  + Logarithmic Y axis is painted wrong - Axis itself is not scaled.	----
+  + Legend is not painted (or is not scaled?) when printing from
+    an embedded chart in KSpread.					----
+  + Legend loses the header ("Legend") when embedded in KSpread		----
+    The strange thing is that it comes back when clicked on so that
+    it becomes editable.
 
 
 ================================================================
