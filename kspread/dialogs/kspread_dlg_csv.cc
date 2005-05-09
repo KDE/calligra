@@ -673,6 +673,7 @@ void KSpreadCSVDialog::accept()
       /*
       Disabling this code for now, everything will use Generic formatting,
       hoping for the best (Tomas)
+      //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
       
       switch (getHeader(col))
       {
