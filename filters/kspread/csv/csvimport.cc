@@ -151,8 +151,20 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
+               //see KSpreadCSVDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
+               //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
+               //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
+               //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
+               
+               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+               cell->setCellText( text );
+               
+               cell->setFormatType (Generic_format);
+               
+               /* old code
               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, true );
+               */
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
              case CSVDialog::NUMBER:
