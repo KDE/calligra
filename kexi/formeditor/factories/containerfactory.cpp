@@ -348,6 +348,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(i18n("SubForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
+	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
 }
 
@@ -583,9 +584,9 @@ QValueList<QCString>
 ContainerFactory::autoSaveProperties(const QCString &c)
 {
 	QValueList<QCString> lst;
-	if(c == "SubForm")
-		lst << "formName";
-	else if(c == "QSplitter")
+//	if(c == "SubForm")
+//		lst << "formName";
+	if(c == "QSplitter")
 		lst << "orientation";
 	return lst;
 }

@@ -28,6 +28,9 @@
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
+#include <kexi_utils.h>
+
+#include "kexidbform.h"
 
 KexiFormDataProvider::KexiFormDataProvider()
  : KexiDataItemChangesListener()
@@ -56,15 +59,24 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	QObject *obj;
 	QDict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
-		if (dynamic_cast<KexiFormDataItemInterface*>(obj)) {
-			QString dataSource( dynamic_cast<KexiFormDataItemInterface*>(obj)->dataSource().lower() );
-			if (!dataSource.isEmpty()) {
-				kexipluginsdbg << obj->name() << endl;
-				m_dataItems.append( dynamic_cast<KexiFormDataItemInterface*>(obj) );
-				dynamic_cast<KexiFormDataItemInterface*>(obj)->installListener( this );
-				tmpSources.replace( dataSource, (char*)1 );
-			}
-		}
+		if (!dynamic_cast<KexiFormDataItemInterface*>(obj))
+			continue;
+#if 0 //! @todo reenable when subform is moved to KexiDBForm
+		KexiDBForm *dbForm = Kexi::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
+		if (dbForm!=m_mainWidget) //only set data for this form's data items
+			continue;
+#else
+		//tmp: reject widgets within subforms
+		if (Kexi::findParent<KexiDBForm>(obj, "KexiSubForm"))
+			continue;
+#endif
+		QString dataSource( dynamic_cast<KexiFormDataItemInterface*>(obj)->dataSource().lower() );
+		if (dataSource.isEmpty())
+			continue;
+		kexipluginsdbg << obj->name() << endl;
+		m_dataItems.append( dynamic_cast<KexiFormDataItemInterface*>(obj) );
+		dynamic_cast<KexiFormDataItemInterface*>(obj)->installListener( this );
+		tmpSources.replace( dataSource, (char*)1 );
 	}
 	delete l;
 	//now we've got a set (unique list) of field names in tmpSources

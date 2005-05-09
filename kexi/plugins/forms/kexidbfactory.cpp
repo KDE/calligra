@@ -88,16 +88,27 @@ KexiSubForm::paintEvent(QPaintEvent *ev)
 void
 KexiSubForm::setFormName(const QString &name)
 {
-	if(name.isEmpty())
+	if(m_formName==name)
 		return;
+
+	m_formName = name; //assign, even if the name points to nowhere
+
+	if(name.isEmpty()) {
+		delete m_widget;
+		m_widget = 0;
+		updateScrollBars();
+		return;
+	}
 
 	QWidget *pw = parentWidget();
 	KexiFormView *view = 0;
 	QStringList list;
 	while(pw) {
 		if(pw->isA("KexiSubForm")) {
-			if(list.contains(pw->name()))
+			if(list.contains(pw->name())) {
+//! @todo error message
 				return; // Be sure to don't run into a endless-loop cause of recursive subforms.
+			}
 			list.append(pw->name());
 		}
 		else if(! view && pw->isA("KexiFormView"))
@@ -118,7 +129,7 @@ KexiSubForm::setFormName(const QString &name)
 
 	// we create the container widget
 	delete m_widget;
-	m_widget = new KexiGradientWidget(viewport(), "kexisubform_widget");
+	m_widget = new KexiDBFormBase(viewport(), "kexisubform_widget");
 	m_widget->show();
 	addChild(m_widget);
 	m_form = new Form(m_parentForm->manager(), this->name());
@@ -126,18 +137,21 @@ KexiSubForm::setFormName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	bool ok = conn->loadDataBlock(id, data , QString::null);
-	if(!ok)
+	bool ok = conn->loadDataBlock(id, data, QString::null);
+	if (ok)
+		ok = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+	if(!ok) {
+		delete m_widget;
+		m_widget = 0;
+		updateScrollBars();
+		m_formName = QString::null;
 		return;
-
-	KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+	}
 	m_form->setDesignMode(false);
 
 	// Install event filters on the whole newly created form
 	KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::name());
 	KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
-
-	m_formName = name;
 }
 
 
@@ -317,13 +331,14 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setNamePrefix(i18n("DBForm"));
 	wView->setDescription(i18n("A db-aware form widget"));
 	addClass(wView);
-
+	
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(i18n("SubForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
+	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
 
 //	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
@@ -520,8 +535,8 @@ QValueList<QCString>
 KexiDBFactory::autoSaveProperties(const QCString &classname)
 {
 	QValueList<QCString> lst;
-	if(classname == "KexiSubForm")
-		lst << "formName";
+//	if(classname == "KexiSubForm")
+		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
 //		return QStringList("dataSource");
 	return lst;
