@@ -3443,11 +3443,11 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     // Restore everything as it was before
     setResolution( oldResolutionX, oldResolutionY );
     setZoom( oldZoom );
-    newZoomAndResolution( true /*set contents size again*/, false );
 
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
         (*it)->getGUI()->canvasWidget()->setUpdatesEnabled( true );
     }
+    newZoomAndResolution( true /*set contents size again*/, false );
     m_bGeneratingPreview = false;
     if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() ) {
         formulaDocument->setZoomAndResolution( oldZoom, oldZoomX, oldZoomY );
@@ -3922,6 +3922,11 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
     int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
     QPtrList<KWFrame> frames = framesInPage(page);
 
+#ifdef DEBUG_FRAMESELECT
+    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
+        kdDebug(32001) << "KWDocument::topFrameUnderMouse frame " << f << " (from " << f->frameSet()->getName() << ") zOrder=" << f->zOrder() << endl;
+    }
+#endif
 
     for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
         // only consider non-inline frames.
