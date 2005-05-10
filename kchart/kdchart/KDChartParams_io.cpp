@@ -240,9 +240,9 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 "LineWidth", _lineWidth );
 
         // the LineColor element
-        KDXML::createColorNode( doc, lineSettingsElement,
-                "LineColor",
-                _lineColor );
+	if ( _lineColor.isValid() )
+	    KDXML::createColorNode( doc, lineSettingsElement,
+				    "LineColor", _lineColor );
 
         // the LineStyle element
         QDomElement lineStyleElement =

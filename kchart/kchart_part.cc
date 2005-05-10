@@ -445,6 +445,10 @@ void KChartPart::setAxisDefaults()
   xAxis.setAxisLastLabelText();
 
   m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, xAxis );
+
+  //FIXME: The following has nothing to do with the axis.  Maybe this
+  //       function should change name.
+  m_params->setLineColor();
 }
 
 
