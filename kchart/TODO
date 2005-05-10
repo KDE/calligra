@@ -34,14 +34,6 @@ Item								   Prio Status
   + 100004: Manual should describe stand-alone charting  	      2	DONE
             (see details below)
   + 101007: Error in reading back axis labels.			      1 DONE
-      - Store row and column labels separately in the document		done
-      - Load old type files without separately stored labels.		done
-      - Fix labelText bug in save/load in KDChart			kdch
-      - - - - - - - - - - - - - - - - - - - - - - - - 
-      I don't think the following is needed once we have a new 
-      version of KDChart.
-      - Save row and column labels	 				--
-      - Load row and column labels	 				--
   + 101290: KChart changes font for axes when Polar chart is chosen   1	DONE
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	----
@@ -121,7 +113,7 @@ Item								   Prio Status
   + SVG export filter						      2 DONE
   + CSV import filter						      1 DONE
 
-* KDChart
+* KDChart (See also above)
   + Titles for axes don't work.						----
   + Font for X axis labels changes when Polar chart is chosen.		DONE
   + Strange looks when negative values.					DONE
