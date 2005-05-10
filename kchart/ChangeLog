@@ -1,9 +1,20 @@
+2005-05-10  Inge Wallin  <inge@lysator.liu.se>
+	
+	More work on bug 105356:
+	* kdchart/KDChartParams.h (KDChartParams): return _lineColor
+	again.
+	* kdchart/KDChartParams_io.h (saveXML): only save the line color
+	if it is non-null.
+	* kchart_part.cc (setAxisDefaults): Always set lineColor to
+	null. This compensates for the (now fixed) bug in saving when
+	reading back old charts.
+	
 2005-05-09  Fredrik Edemar  <f_edemar@linux.se>
 
         Fix bug 105356: Lines in a line chart are all black
-        * kdchart/KDChartParams.h (KDChartParamsts): lineColor() should
-        always return an invalid QColor object in order for KDChartLinesPainter
-        to use the current dataset color instead.
+        * kdchart/KDChartParams.h (lineColor()): always return an invalid
+	QColor object in order for KDChartLinesPainter to use the current
+	dataset color instead.
 
 2005-05-06  Inge Wallin  <inge@lysator.liu.se>
 
