@@ -915,8 +915,8 @@
       </Parameter>
       <Help>
        <Text>The RANDNORM() function returns a Normal(Gaussian)-distributed pseudo-random number.</Text>
-       <Syntax>RANDNORM(mu,sigma)</Syntax>
-       <Example>RANDNORM(0,1)</Example>
+       <Syntax>RANDNORM(mu; sigma)</Syntax>
+       <Example>RANDNORM(0; 1)</Example>
         <Related>RAND</Related>
       </Help>
     </Function>
