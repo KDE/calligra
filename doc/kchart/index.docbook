@@ -263,9 +263,10 @@ The last step of the wizard lets you set various options for
 the axes and other options, depending on the chart type.
 </para>
 <para>
-You can either choose Finish to accept the options for your
-chart, go back and change various things or simply dismiss
-all options from the wizard by choosing Cancel.
+You can either choose <guimenu>Finish</guimenu> to accept
+the options for your chart, go <guimenu>Back</guimenu> and
+change various things or simply dismiss all options from the
+wizard by choosing <guimenu>Cancel</guimenu>.
 </para>
 <para>
 If you choose Finish all your choices in the wizard will
@@ -731,7 +732,7 @@ of the &kchart; application.
 Finally you can save the application from the <guimenu>File</guimenu>
 menu and quit with
 <menuchoice><guimenu>File</guimenu>
-<guimenuitem>Quit...</guimenuitem>
+<guimenuitem>Quit</guimenuitem>
 </menuchoice>
 </para>
 </sect2>
@@ -902,7 +903,8 @@ graph. It also determines the size of the slices in a pie chart.
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document to the current file.</action></para></listitem>
+<listitem><para><action>Saves the document to the current file.</action> If the chart
+has not yet been saved the file dialog is shown.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><menuchoice>
