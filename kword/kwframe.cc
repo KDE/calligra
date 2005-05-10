@@ -1930,10 +1930,12 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
 
-	QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
+        QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
         for ( ; fIt.current() ; ++fIt )
         {
-            QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect( viewMode ) ) );
+            KWFrame* frameOnTop = (*fIt);
+            assert( frameOnTop->frameSet() );
+            QRect r = painter->xForm( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
 #ifdef DEBUG_DRAW
             //kdDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
 #endif

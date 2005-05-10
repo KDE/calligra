@@ -1394,7 +1394,7 @@ QBrush KWFrameDia::frameBrushStyle() const
     }
 #endif
 
-    brush.setColor( brushColor->color() );
+    brush.setColor( newBrushStyle.color() );
 
     return brush;
 }
@@ -1839,12 +1839,10 @@ bool KWFrameDia::applyChanges()
         if(frame) {
             if(tmpBrush!=frame->backgroundColor()) {
                 frame->setBackgroundColor(tmpBrush);
-                doc->repaintAllViews();
             }
         } else if(overwriteColor->isChecked()) {
             for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                 f->setBackgroundColor(tmpBrush);
-            doc->repaintAllViews();
         }
     }
 
