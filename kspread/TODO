@@ -75,7 +75,7 @@ General bugs
 	    cell breaks printout
   + 101074: Charts are really small when printed from KSpread	      1 ----
         Fix the zoom issue						done
-	Fix the disappearing legend					----
+	Fix the disappearing legend (KChart bug?)			--
 
 * Cut/Copy & Paste
   + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
@@ -95,10 +95,7 @@ General bugs
   + 60458: Inserting a row always creates cell with default number    2 ----
 	   format.
   + 70708: undo of series broken when range contains merged cells     2 ----
-  + 77603: isdate() returns error for field references		      1 ----
-  + 78642: Function AVERAGEA does not work as documented	      1 ****
-	This bug is very difficult to fix, since it depends on the
-	new formula engine.
+  + 77603: isdate() returns error for field references		      1 DONE
   + 84738: Inserting a new line does not copy right settings to       2 ----
 	   new line.
   + 86875: KSpread: does not convert automatically between text	      2 ----
@@ -129,14 +126,11 @@ Filter bugs
 Things not in bugzilla
 ----------------------
 
-
-
 * Printing
   + printouts with zoom other than 100% (it's a missing feature, but  2 ----
     the GUI is there... - page layout, options, Scale Printout )
-  
   + make print range work over more than 1 page			      2 ----
-  + Make it possible to print embedded objects.			      1 ----
+  + Make it possible to print embedded objects.			      1 DONE
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
@@ -150,49 +144,15 @@ Things not in bugzilla
     insert pictures!
   
 * Plugins
-  + Replace the calendar templates with 2005 and 2006 (and 2007?)
-    NOTE: there is a insert calendar plugin that might be useful.
-
-
-
-Analysis of various bugs
-
-* Printing.
-  + 68190: Empty document generates 2 printed pages (testcase)
-  + 95159: Many blank pages when printing spreadsheet to PDF file.
-  + 100643: KSpread prints a completely empty page at the end of
-	    the document.
-
-    I thought these bugs would be pretty simple to fix.
-    KSpreadCell::needsPrinting() tests for hasProperty(prop) where
-    prop is one PTopBorder, PLeftBorder, and so on.  The problem is
-    that if an empty cell is saved, it often has style=Default, and
-    even though this style has empty borders, it has these bits set in
-    the properties field.
-
-    I enhanced the cell inspector (press Ctrl-Shift-I) with a feature
-    to see all properties as a hex number, and they were many, even in
-    empty cells.  I suspect that the problem comes from saving to a
-    file and then loading on the next run.  I can see two ways of
-    fixing this, neither of them easy:
-
-    1. Check for empty pen, style, whatever that distinguishes the
-       default style at loading time.  I have found no easy way of
-       distinguishing the empty border from a non-empty border, but
-       those who know KSpread better than I can probably fix it.
-
-    2. In KSpreadCell::needsPrinting(), change the tests for
-       hasProperty(...) into something like hasNonemptyProperty(...).
-       Again, I don't know how this function should be written.
-
-    SOLVED NOW.  The problem was that the features were set even
-    though the fields in the file were null-features (like borders
-    with pen == Qt::NoPen and so on).
+  + Replace the calendar templates the calendar plugin		      2 DONE
 
 
 
 Things to do after the release of KOffice 1.4
 =============================================
+
+* Bugs
+  + 78642: Function AVERAGEA does not work as documented	      1 ----
 
 * OASIS file format
   + Read OASIS							      1 LAUR
