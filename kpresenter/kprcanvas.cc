@@ -794,35 +794,59 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         m_rectBeforeResize = kpobject->getRect();
                     }
                 }
-                else {
-                    deSelectAllObj();
-                    modType = MT_NONE;
-                    if( editMode && m_view->kPresenterDoc()->showHelplines())
+                else
+                {
+                    KPrPage *masterPage = m_activePage->masterPage();
+                    if ( masterPage )
                     {
-                        m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
-                        m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
-                        m_tmpHelpPoint = m_view->kPresenterDoc()->indexOfHelpPoint(
-                            KoPoint(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()), m_view->zoomHandler()->unzoomItX(e->pos().y()+diffy())) );
-                        tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
-                        tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y());
-                        tmpHelpPointPos=m_view->zoomHandler()->unzoomPoint( e->pos());
+                        kpobject = masterPage->getObjectAt( docPoint, true );
 
+                        if ( kpobject && objectIsAHeaderFooterHidden( kpobject ) )
+                        {
+                            kpobject = 0;
+                        }
                     }
-                    else
+
+                    if ( kpobject )
                     {
-                        m_tmpVertHelpline = -1;
-                        m_tmpHorizHelpline = -1;
-                        m_tmpHelpPoint = -1;
+                        QString msg( i18n( "The object you are trying to select belongs to the master slide. "
+                                           "Editing the object can only be done on the master slide.\n"
+                                           "Go there now?" ) );
+                        if ( KMessageBox::questionYesNo( this, msg ) == KMessageBox::Yes )
+                        {
+                            getView()->setEditMaster( true );
+                        }
                     }
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
+                    else {
                         deSelectAllObj();
-                    if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1 && m_tmpHelpPoint == -1)
-                    {
-                        drawRubber = true;
-                        rubber = QRect( e->x(), e->y(), 0, 0 );
-                        tmpHelpLinePosX=-1;
-                        tmpHelpLinePosY=-1;
-                        tmpHelpPointPos=KoPoint( -1, -1 );
+                        modType = MT_NONE;
+                        if( editMode && m_view->kPresenterDoc()->showHelplines())
+                        {
+                            m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
+                            m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
+                            m_tmpHelpPoint = m_view->kPresenterDoc()->indexOfHelpPoint(
+                                    KoPoint(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()), m_view->zoomHandler()->unzoomItX(e->pos().y()+diffy())) );
+                            tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
+                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y());
+                            tmpHelpPointPos=m_view->zoomHandler()->unzoomPoint( e->pos());
+
+                        }
+                        else
+                        {
+                            m_tmpVertHelpline = -1;
+                            m_tmpHorizHelpline = -1;
+                            m_tmpHelpPoint = -1;
+                        }
+                        if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
+                            deSelectAllObj();
+                        if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1 && m_tmpHelpPoint == -1)
+                        {
+                            drawRubber = true;
+                            rubber = QRect( e->x(), e->y(), 0, 0 );
+                            tmpHelpLinePosX=-1;
+                            tmpHelpLinePosY=-1;
+                            tmpHelpPointPos=KoPoint( -1, -1 );
+                        }
                     }
                 }
 

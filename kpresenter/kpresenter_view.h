@@ -650,6 +650,8 @@ public:
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();
 
+    void setEditMaster( bool editMaster );
+
 protected slots:
     // dialog slots
     void backOk( BackDia*, bool );
@@ -800,7 +802,6 @@ protected:
 
     void spellCheckerRemoveHighlight();
 
-    void setEditMaster( bool editMaster );
     void updateNoteBarText();
 private:
     void clearSpellChecker(bool cancelSpellCheck = false);
