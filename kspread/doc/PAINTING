@@ -9,7 +9,6 @@ Each cell is painted by itself.  This means that the border between
 cells are painted twice.  (FIXME: Is this true?)
 
 
-
 Overflow
 --------
 
@@ -20,8 +19,12 @@ demanded can be handled in several different ways:
  - The content can overflow into neighbor cell(s), which ones are
    dependent on alignment, if the neighbors are empty, etc, etc.
 
+Borders and overflow
+--------------------
 
-The current status of this file is that it is under discussion.
+A border that is defined for a cell should never be moved just because
+the content of the cell overflows.  Currently (1,4beta1) does that,
+but it has to be changed.
 
 
 Other spreadsheets
@@ -52,6 +55,14 @@ Number in cell, Alignment turned out not to matter
 Generic format	 		Precision is reduced		Precision is reduced		### is shown			############# (cell is filled)	############# (For now)
 Number format			############# (cell is filled)	############# (cell is filled)	### is shown			############# (cell is filled)	############# (cell is filled)
 
+
+Border and overflow, left aligned
+---------------------------------
+Text format, ordinary cell					Right border is not drawn	Border stays on cell						Border stays on cell
+								Text overflows TtR		Text overflows TtR						Text overflows TtR
+												Text covers right border					Text covers right border
+Text format, merged cell					Gnumeric 1.2.8 can't merge	Border stays on cell						Border stays on cell
+								Test with Gnumeric 1.4		Text is cut							Text is cut(?)
 
 
 Legend
