@@ -12,6 +12,7 @@ GenericName[hu]=Szkriptek
 GenericName[pt]=Programas
 GenericName[ru]=Сценарии
 GenericName[sv]=Skript
+GenericName[zh_CN]=脚本
 Name=Scripts
 Name[br]=Urzhiaouegoù
 Name[da]=Scripter
@@ -22,6 +23,7 @@ Name[hu]=Szkriptek
 Name[pt]=Programas
 Name[ru]=Сценарии
 Name[sv]=Skript
+Name[zh_CN]=脚本
 
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=1
