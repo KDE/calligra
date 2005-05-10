@@ -4161,16 +4161,24 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 void KWDocument::fixZOrders() {
     bool fixed_something = false;
     for (int pgnum = 0 ; pgnum < m_pages ; pgnum++) {
-        QPtrList<KWFrame> frames= framesInPage(pgnum,false);
-        // scan this page to see if we need to fixup.
-        bool need_fixup=true;
-        for (KWFrame *f = frames.last();f;f=frames.prev()) {
-            if (f->zOrder() != 0) { // assumption: old documents come with no zorder=>initialised to 0
-                need_fixup=false;
+        QPtrList<KWFrame> frames = framesInPage(pgnum,true /*sorted by zorder*/);
+        // scan this page to see if we need to fixup:
+        // fix up if two frames have the same zOrder.
+        bool need_fixup = false;
+        KWFrame *f = frames.last();
+        if ( !f )
+            continue;
+        int lastZOrder = f->zOrder();
+        f = frames.prev();
+        for ( ; f ; f=frames.prev() ) {
+            if ( !f->frameSet()->isFloating() &&
+                 f->zOrder() == lastZOrder ) {
+                need_fixup = true;
                 break;
             }
+            lastZOrder = f->zOrder();
         }
-        if (need_fixup) {
+        if ( need_fixup ) {
             int current_zorder=0;
             kdDebug() << "fixing page " << pgnum << " z-orders " << endl;
             for (KWFrame *fr = frames.first();fr;fr=frames.next()) {
