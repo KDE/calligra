@@ -250,6 +250,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     unsigned int m_currentFile;
     KivioStencilSpawnerSet* m_currentSet;
     QValueList<KivioStencilSpawnerSet*> m_stencilSetLoadQueue;
+
+    bool m_docOpened; // Used to for a hack that make kivio not crash if you cancel startup dialog.
 };
 
 #endif

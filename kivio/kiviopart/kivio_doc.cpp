@@ -174,9 +174,11 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
   KivioPage *t = createPage();
   m_pMap->addPage( t );
+  m_docOpened = false; // Used to for a hack that make kivio not crash if you cancel startup dialog.
 
   if(flags == KoDocument::InitDocEmpty) {
     setEmpty();
+    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return true;
   }
 
@@ -196,16 +198,20 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
   if( ret == KoTemplateChooseDia::File ) {
     KURL url(f);
-    return openURL(url);
+    bool ok = openURL(url);
+    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
+    return ok;
   } else if ( ret == KoTemplateChooseDia::Template ) {
     QFileInfo fileInfo( f );
     QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
     setEmpty();
+    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ) {
     setEmpty();
+    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return true;
   } else {
     return false;
@@ -827,7 +833,7 @@ void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
 
 KivioDoc::~KivioDoc()
 {
-  if(m_iPageId > 1) {
+  if(m_docOpened) {
     saveConfig();
   }
 
