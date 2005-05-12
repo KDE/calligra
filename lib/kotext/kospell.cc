@@ -222,7 +222,7 @@ bool KoSpell::checking() const
         else
             return true;
     } else
-        return filter()->atEnd();
+        return !filter()->atEnd();
 }
 
 KoTextDocument * KoSpell::textDocument() const
