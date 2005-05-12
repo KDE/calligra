@@ -18,7 +18,7 @@ protected:
     virtual void paste();
 private:
     bool processMimeSource( QMimeSource* ev );
-    void showZipContents( QByteArray data, const char* mimeType );
+    void showZipContents( QByteArray data, const char* mimeType, bool oasis );
     QString loadTextFile( KoStore* store, const QString& fileName );
 };
 
@@ -86,9 +86,10 @@ bool StoreDropTest::processMimeSource( QMimeSource* ev )
     QStringList formats;
     for (int i=0; (fmt = ev->format(i)); i++) {
         formats += fmt;
-        if ( QString( fmt ).startsWith( acceptMimeType ) ) {
+        bool oasis = QString( fmt ).startsWith( acceptMimeType );
+        if ( oasis || fmt == "application/x-kpresenter" ) {
             QByteArray data = ev->encodedData( fmt );
-            showZipContents( data, fmt );
+            showZipContents( data, fmt, oasis );
             return true;
         }
     }
@@ -96,7 +97,7 @@ bool StoreDropTest::processMimeSource( QMimeSource* ev )
     return false;
 }
 
-void StoreDropTest::showZipContents( QByteArray data, const char* mimeType )
+void StoreDropTest::showZipContents( QByteArray data, const char* mimeType, bool oasis )
 {
     if ( data.isEmpty() ) {
         setText( "No data!" );
@@ -112,9 +113,13 @@ void StoreDropTest::showZipContents( QByteArray data, const char* mimeType )
 
     QString txt = QString( "Valid ZIP file found for format " ) + mimeType + "\n";
 
-    txt += loadTextFile( store, "content.xml" );
-    txt += loadTextFile( store, "styles.xml" );
-    txt += loadTextFile( store, "settings.xml" );
+    if ( oasis ) {
+        txt += loadTextFile( store, "content.xml" );
+        txt += loadTextFile( store, "styles.xml" );
+        txt += loadTextFile( store, "settings.xml" );
+    } else {
+        txt += loadTextFile( store, "maindoc.xml" );
+    }
     setText( txt );
 }
 
