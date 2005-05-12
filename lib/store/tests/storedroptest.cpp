@@ -87,7 +87,7 @@ bool StoreDropTest::processMimeSource( QMimeSource* ev )
     for (int i=0; (fmt = ev->format(i)); i++) {
         formats += fmt;
         bool oasis = QString( fmt ).startsWith( acceptMimeType );
-        if ( oasis || fmt == "application/x-kpresenter" ) {
+        if ( oasis || QString( fmt ) == "application/x-kpresenter" ) {
             QByteArray data = ev->encodedData( fmt );
             showZipContents( data, fmt, oasis );
             return true;
