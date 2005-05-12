@@ -901,7 +901,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
             int nbElementBefore = m_objectList.count();
             for ( int i = 0 ; i < nbCopy ; i++ )
             {
-                m_doc->insertEmbedded( store, topElem, macro, this );
+                m_doc->insertEmbedded( store, topElem, macro, this, num );
                 if ( nbNewPartObject ==-1 )
                     nbNewObject = nbNewObject + (m_objectList.count() - nbElementBefore);
             }

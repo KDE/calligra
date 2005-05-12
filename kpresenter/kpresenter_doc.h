@@ -183,7 +183,7 @@ class KPresenterDoc : public KoDocument
 
     void insertPixmapKey( KoPictureKey key );
 
-    void insertObjectInPage(double offset, KPObject *_obj);
+    void insertObjectInPage(double offset, KPObject *_obj, int pos = -1);
 
     void setGridValue( double rx, double ry, bool _replace = true );
 
@@ -489,7 +489,7 @@ class KPresenterDoc : public KoDocument
 
     void loadImagesFromStore( KoStore *_store );
     void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
-    void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page );
+    void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page, int pos );
 #ifdef HAVE_LIBKSPELL2
     KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 #endif

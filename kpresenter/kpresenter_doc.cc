@@ -719,7 +719,7 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
                                        QDomElement &presenter, double offset )
 {
     QPtrListIterator<KPObject> oIt(page->objectList());
-    for (; oIt.current(); ++oIt )
+    for ( int pos = 0; oIt.current(); ++oIt, ++pos )
     {
         if ( oIt.current()->getType() == OT_PART &&
              static_cast<KPPartObject*>( oIt.current() )->getChild() == chl )
@@ -740,7 +740,8 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
             curr->setGeometry( _rect ); // replace zoom value
 
             QDomElement settings=doc.createElement("SETTINGS");
-            if (  oIt.current()->isSticky() )
+            settings.setAttribute( "z-index", pos );
+            if ( page == m_masterPage )
                 settings.setAttribute("sticky", 1 );
             QPtrListIterator<KPObject> setOIt(page->objectList());
             for (; setOIt.current(); ++setOIt )
@@ -2094,7 +2095,7 @@ void KPresenterDoc::createHeaderFooter()
     m_masterPage->appendObject(_footer);
 }
 
-void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, KPrPage *page )
+void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, KPrPage *page, int pos )
 {
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
@@ -2114,6 +2115,11 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
                 kppartobject = new KPPartObject( ch );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
+            int zIndex = 0;
+            if ( settings.hasAttribute( "z-index" ) )
+            {
+                zIndex = settings.attribute( "z-index" ).toInt();
+            }
             double offset = 0.0;
             if(!settings.isNull() && kppartobject!=0)
                 offset=kppartobject->load(settings);
@@ -2129,10 +2135,20 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
             kppartobject->setOrig(kppartobject->getOrig().x(),newPos);
 
             InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
-	    insertCmd->execute();
+            insertCmd->execute();
             if ( !macroCmd )
                 macroCmd = new KMacroCommand( i18n("Insert Part Object"));
             macroCmd->addCommand( insertCmd );
+            if ( pos != 0 )
+            {
+                QPtrList<KPObject> oldList( page->objectList() );
+                page->takeObject( kppartobject );
+                page->insertObject( kppartobject, pos + zIndex );
+                LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n("Insert Part Object"),
+                                                          oldList, page->objectList(),
+                                                          this, page );
+                macroCmd->addCommand( lrCmd );
+            }
         }
     }
 }
@@ -2202,6 +2218,11 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
             int tmp=0;
+            int pos = -1;
+            if ( settings.hasAttribute( "z-index" ) )
+            {
+                pos = settings.attribute( "z-index" ).toInt();
+            }
             if(settings.hasAttribute("sticky"))
                 tmp=settings.attribute("sticky").toInt();
             bool sticky=static_cast<bool>(tmp);
@@ -2218,7 +2239,14 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 offset = r.y();
             if ( sticky && !ignoreSticky && kppartobject )
             {
-                m_masterPage->appendObject(kppartobject );
+                if ( pos == -1 )
+                {
+                    m_masterPage->appendObject( kppartobject );
+                }
+                else
+                {
+                    m_masterPage->insertObject( kppartobject, pos );
+                }
                 kppartobject->setOrig(r.x(), offset);
                 kppartobject->setSize( r.width(), r.height() );
                 kppartobject->setSticky(sticky);
@@ -2226,7 +2254,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             else if ( kppartobject ) {
                 kppartobject->setOrig( r.x(), 0 );
                 kppartobject->setSize( r.width(), r.height() );
-                insertObjectInPage(offset, kppartobject);
+                insertObjectInPage( offset, kppartobject, pos );
             }
         } else if(elem.tagName()=="PAPER" && _clean)  {
             if(elem.hasAttribute("format"))
@@ -3997,7 +4025,7 @@ KPrPage * KPresenterDoc::activePage()const
     return m_initialActivePage;
 }
 
-void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
+void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj, int pos)
 {
     /// Why does this use __pgLayout instead of m_pageLayout ?
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
@@ -4016,7 +4044,14 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
     }
     _obj->setOrig(_obj->getOrig().x(),newPos);
 
-    m_pageList.at(page)->appendObject(_obj);
+    if ( pos == -1 )
+    {
+        m_pageList.at(page)->appendObject(_obj);
+    }
+    else
+    {
+        m_pageList.at( page )->insertObject( _obj, pos );
+    }
 }
 
 void KPresenterDoc::insertPixmapKey( KoPictureKey key )
