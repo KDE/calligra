@@ -16,6 +16,3 @@ METASOURCES = AUTO
 service_DATA = kspread_html_export.desktop
 
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreadhtmlfilter.pot
