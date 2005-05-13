@@ -3297,9 +3297,17 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
 	// FIXME: There is probably Cut&Paste bugs here as well as below.  
 	//        The QMIN/QMAX and left/right pairs don't really make sense.
+	//
+	//    UPDATE: In fact, most of these QMIN/QMAX combinations
+	//            are TOTALLY BOGUS.  For one thing, the idea
+	//            that we always have full cells on paper is wrong
+	//            since we can have embedded sheets in e.g. kword,
+	//            and those can be arbitrarily clipped.  WE HAVE TO
+	//            REVISE THIS WHOLE BORDER PAINTING SECTION!
+	//             
+      if ( sheetDir == KSpreadSheet::RightToLeft )
         painter.drawLine( QMAX( zrect_left,   zcellRect_right ),
                           QMAX( zrect_top,    zcellRect_top - top ),
                           QMIN( zrect_right,  zcellRect_right ),
@@ -3338,11 +3346,17 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMAX( zrect_top, zcellRect_top - top ),
                           QMIN( zrect_right, zcellRect_right ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
-      else
-        painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                          QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_right ),
-                          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+      else {
+	// FIXME: This is the way all these things should look.
+	//        Make it so.
+	//
+	// Only print the right border if it is visible.
+	if ( zcellRect_right <= zrect_right + right_penWidth / 2)
+	  painter.drawLine( zcellRect_right,
+			    QMAX( zrect_top, zcellRect_top - top ),
+			    zcellRect_right,
+			    QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+      }
     }
     else {
       if ( sheetDir == KSpreadSheet::RightToLeft )
@@ -3364,10 +3378,11 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
-                        QMAX( zrect_top,    zcellRect_top ),
-                        QMIN( zrect_right,  zcellRect_right ),
-                        QMIN( zrect_bottom, zcellRect_top ) );
+      if ( zcellRect_top >= zrect_top + top_penWidth / 2)
+	painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+			  zcellRect_top,
+			  QMIN( zrect_right,  zcellRect_right ),
+			  zcellRect_top );
     }
     else {
       painter.drawLine( zcellRect_left, zcellRect_top,
@@ -3381,16 +3396,25 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
-                        QMAX( zrect_top,    zcellRect_bottom ),
-                        QMIN( zrect_right,  zcellRect_right ),
-                        QMIN( zrect_bottom, zcellRect_bottom ) );
+      if ( zcellRect_bottom <= zrect_bottom + bottom_penWidth / 2)
+	painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+			  zcellRect_bottom,
+			  QMIN( zrect_right,  zcellRect_right ),
+			  zcellRect_bottom );
     }
     else {
       painter.drawLine( zcellRect_left, zcellRect_bottom,
                         zcellRect_right, zcellRect_bottom );
     }
   }
+
+  // FIXME: Look very closely at when the following code is really needed.
+  //        I can't really see any case, but I might be wrong.
+  //        Since the code below is buggy, and incredibly complex,
+  //        I am currently disabling it.  If somebody wants to enable
+  //        it again, then please also solve bug 68977: "Embedded KSpread 
+  //        document printing problem" at the same time.
+  return;
 
   // Look at the cells on our corners. It may happen that we
   // just erased parts of their borders corner, so we might need

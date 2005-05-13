@@ -62,6 +62,7 @@ General bugs
 * Printing
   + 61452: drawing problem when text overflow the right border        1 ----
   + 68190: Empty document generates 2 printed pages (testcase)	      1 DONE
+  + 68977: Embedded KSpread document printing problem		      1 DONE
   + 70073: printing with kspread gives big black areas		      1 DONE
   + 72798: selective print comes up with "nothing to print"	      1 DONE
   + 77962: print range doesn't work into kspread		      1 DONE
@@ -76,6 +77,8 @@ General bugs
   + 101074: Charts are really small when printed from KSpread	      1 ----
         Fix the zoom issue						done
 	Fix the disappearing legend (KChart bug?)			--
+  + Fix all printing of cell borders.  Look in the code for the	      1 ----
+	FIXME that describes how to do it (curr. at line 3351).
 
 * Cut/Copy & Paste
   + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
