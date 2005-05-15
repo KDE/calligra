@@ -28,15 +28,15 @@ class QDomNode;
 class KOfficePlugin: public KFilePlugin
 {
     Q_OBJECT
-    
+
 public:
     KOfficePlugin( QObject *parent, const char *name, const QStringList& args );
-    
+
     virtual bool readInfo( KFileMetaInfo& info, uint what);
 
 private:
     void makeMimeTypeInfo(const QString& mimeType);
-    QString stringFromNode(QDomNode node, QString name);
+    QString stringFromNode(const QDomNode &node, const QString &name);
 };
 
 #endif
