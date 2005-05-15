@@ -58,8 +58,8 @@ VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
 	layout->addWidget( m_fillFrame );
 	layout->activate();
 
-	m_fill = new VFill();
-	m_stroke = new VStroke();
+	m_fill = VFill();
+	m_stroke = VStroke();
 }
 
 VSmallPreview::~VSmallPreview()
@@ -69,8 +69,8 @@ VSmallPreview::~VSmallPreview()
 void
 VSmallPreview::update( const VStroke &s, const VFill &f )
 {
-	m_fill = &f;
-	m_stroke = &s;
+	m_fill = f;
+	m_stroke = s;
 
 	drawStroke( s );
 	drawFill( f );
@@ -79,8 +79,8 @@ VSmallPreview::update( const VStroke &s, const VFill &f )
 void
 VSmallPreview::paintEvent( QPaintEvent* /*event*/ )
 {
-	if( m_stroke != NULL ) drawStroke( *m_stroke );
-	if( m_fill != NULL ) drawFill( *m_fill );
+	drawStroke( m_stroke );
+	drawFill( m_fill );
 }
 
 void

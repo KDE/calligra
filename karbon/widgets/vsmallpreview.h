@@ -50,8 +50,8 @@ private:
 	QFrame *m_strokeFrame;
 	QLabel *m_fillLabel;
 	QLabel *m_strokeLabel;
-	const VFill *m_fill;
-	const VStroke *m_stroke;
+	VFill m_fill;
+	VStroke m_stroke;
 };
 
 #endif
