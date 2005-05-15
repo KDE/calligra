@@ -343,13 +343,13 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     return true;
 }
 
-QString KOfficePlugin::stringFromNode(QDomNode node, QString name)
+QString KOfficePlugin::stringFromNode(const QDomNode &node, const QString &name)
 {
     QString value = node.namedItem(name).toElement().text();
     return value.isEmpty() ? QString::null : value;
 }
 
-void KOfficePlugin::addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group, const QString attributeName)
+void KOfficePlugin::addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group, const QString &attributeName)
 {
   if (!elem.hasAttribute(attributeName)){
   	return;
@@ -362,8 +362,8 @@ void KOfficePlugin::addAttributeInfo(const QDomElement & elem, KFileMetaInfoGrou
 
 bool KOfficePlugin::writeTextNode(QDomDocument & doc,
 				  QDomNode & parentNode,
-				  const QString  nodeName,
-				  const QString  value) const
+				  const QString  &nodeName,
+				  const QString  &value) const
 {
   if (parentNode.toElement().isNull()){
     kdDebug(7034) << "Parent node is Null or not an Element, cannot write node "

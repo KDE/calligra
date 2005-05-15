@@ -31,7 +31,7 @@ class QDomElement;
 class KOfficePlugin: public KFilePlugin
 {
     Q_OBJECT
-    
+
 public:
     /**
      * Constructor */
@@ -59,17 +59,17 @@ public:
 private:
     bool writeTextNode(QDomDocument & doc,
 		       QDomNode & parentNode,
-		       const QString  nodeName,
-		       const QString  value) const;
+		       const QString  &nodeName,
+		       const QString  &value) const;
     KFileMimeTypeInfo::GroupInfo* userdefined;
     void addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group,
-		          const QString attributeName);
+		          const QString &attributeName);
     QIODevice* getData(KArchive &m_zip, int fileMode) const;
     bool writeMetaData(const QString & path, const QDomDocument &doc) const;
     QDomDocument getMetaDocument(const QString &path) const;
     QDomNode getBaseNode(const QDomDocument &doc) const;
     void makeMimeTypeInfo(const QString& mimeType);
-    QString stringFromNode(QDomNode node, QString name);
+    QString stringFromNode(const QDomNode &node, const QString &name);
     void getEditingTime(KFileMetaInfoGroup group1, const char *, QString & txt);
     void getDateTime(KFileMetaInfoGroup group1, const char *, QString & txt);
 };
