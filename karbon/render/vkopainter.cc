@@ -611,6 +611,10 @@ VKoPainter::drawVPath( ArtVpath *vec )
 void
 VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 {
+	if(!svp) {
+		return;
+	}
+
 	int x0, y0, x1, y1;
 	clampToViewport( *svp, x0, y0, x1, y1 );
 
@@ -618,7 +622,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
 	if( !pat.isValid() )
-		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", -KIcon::SizeMedium ) );
+		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", KIcon::SizeMedium ) );
 
 	ArtPattern *pattern = art_new( ArtPattern, 1 );
 

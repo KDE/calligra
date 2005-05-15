@@ -38,7 +38,14 @@ void
 VPattern::load( const QString &tilename )
 {
 	m_tilename = tilename;
-	m_image.load( tilename );
+	bool ok = m_image.load( tilename );
+
+	if( !ok )
+	{
+		m_valid = false;
+		return;
+	}
+ 
 	m_image = m_image.convertDepth( 32 );
 	m_pixmap.convertFromImage(m_image, QPixmap::AutoColor);
 	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
@@ -64,7 +71,7 @@ VPattern::load( const QString &tilename )
 		m_pixmapThumb.convertFromImage( thumbImg );
 		validThumb = true;
 	}
-	m_valid = true;
+	m_valid = !m_image.isNull();
 }
 
 unsigned char *

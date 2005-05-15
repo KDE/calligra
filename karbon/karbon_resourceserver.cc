@@ -174,9 +174,9 @@ KarbonResourceServer::addPattern( const QString& tilename )
 	if( fi.exists() == false )
 		return 0L;
 
-	QString name = tilename.mid( i = tilename.find( '/' ), tilename.findRev( '.' ) - i );
+	QString name = fi.baseName();
 
-	QString ext = tilename.right( i );
+	QString ext = '.' + fi.extension( false );
 
 	QString filename = KarbonFactory::instance()->dirs()->saveLocation(
 						   "kis_pattern" ) + name + ext;
@@ -187,8 +187,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 
 	while( fi.exists() == true )
 	{
-		filename = KarbonFactory::instance()->dirs()->saveLocation(
-					   "kis_pattern%1%2%3" ).arg( name ).arg( i ).arg( ext );
+		filename = KarbonFactory::instance()->dirs()->saveLocation("kis_pattern" ) + name + i + ext;
 		fi.setFile( filename );
 		kdDebug(38000) << fi.fileName() << endl;
 	}
@@ -202,9 +201,17 @@ KarbonResourceServer::addPattern( const QString& tilename )
 	while( !in.atEnd() )
 		out.writeBlock( buffer, in.readBlock( buffer, 1024 ) );
 
-	m_patterns.append( loadPattern( filename ) );
+	out.close();
+	in.close();
 
-	return static_cast<VPattern*>( m_patterns.last() );
+	const VPattern* pattern = loadPattern( filename );
+
+	if( pattern )
+	{
+		return static_cast<VPattern*>( m_patterns.last() );
+	}
+
+	return 0;
 } // KarbonResourceServer::addPattern
 
 void

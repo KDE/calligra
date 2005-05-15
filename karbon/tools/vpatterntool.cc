@@ -85,7 +85,8 @@ VPattern* VPatternWidget::selectedPattern()
 
 void VPatternWidget::importPattern()
 {
-	VPattern* pattern = KarbonFactory::rServer()->addPattern( KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", this, i18n( "Choose Pattern to Add" ) ) );
+	VPattern* pattern = KarbonFactory::rServer()->addPattern( KFileDialog::getOpenFileName( QString::null,
+		"*.jpg *.gif *.png *.tif *.xpm *.bmp", this, i18n( "Choose Pattern to Add" ) ) );
 	if( pattern )
 		m_patternChooser->addItem( pattern );
 } // VPatternWidget::importPattern
@@ -95,6 +96,7 @@ void VPatternWidget::deletePattern()
 	m_patternChooser->removeItem( m_pattern );
 	KarbonFactory::rServer()->removePattern( m_pattern );
 	m_patternChooser->updateContents();
+	m_pattern = static_cast<VPattern*>( m_patternChooser->currentItem() );
 } // VPatternWidget::deletePattern
 
 void VPatternWidget::slotButtonClicked( int id )
