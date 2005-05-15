@@ -100,6 +100,8 @@ public:
 	VLayer* layer() { return m_layer; }
 	int pos();
 	void update();
+	virtual QString key( int column, bool ascending ) const;
+	void setKey( uint key ) { m_key = key; }
 
 protected:
 	virtual void stateChange( bool on );
@@ -107,6 +109,7 @@ protected:
 private:
 	VLayer		*m_layer;
 	VDocument	*m_document;
+	uint		 m_key;
 }; // VLayerListViewItem
 
 class VObjectListViewItem : public QListViewItem

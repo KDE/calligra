@@ -410,6 +410,12 @@ VLayerListViewItem::pos()
 		return 1 + item->pos();
 } // VLayerListViewItem::pos
 
+QString
+VLayerListViewItem::key( int, bool ) const
+{
+	return QString( "%1" ).arg( m_key );
+}
+
 VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 		: QWidget( parent, "LayersTab" ), m_view( view ), m_document( &view->part()->document() )
 {
@@ -447,7 +453,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	m_layersListView->setColumnAlignment( 1, Qt::AlignCenter );
 	m_layersListView->setColumnAlignment( 2, Qt::AlignCenter );
 	m_layersListView->setResizeMode( QListView::NoColumn );
-	//m_layersListView->setSorting( 0, false );
+	m_layersListView->setSorting( 0, false );
 	m_layersListView->setRootIsDecorated( true );
 
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
@@ -729,6 +735,7 @@ VLayersTab::updateLayers()
 			item = m_layers[ vector[i] ];
 
 			item->setOpen( true );
+			item->setKey(i);
 			VObjectListIterator itr = vector[i]->objects();
 			uint objcount = 1;
 			for( ; itr.current();++itr, objcount++ )
@@ -736,16 +743,14 @@ VLayersTab::updateLayers()
 				{
 					if( !m_objects[ itr.current() ] )
 						m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
-					else
-						m_objects[ itr.current() ]->setKey( objcount );
+
+					m_objects[ itr.current() ]->setKey( objcount );
 
 					//kdDebug(38000) << "obj : " << itr.current() << ", key : " << m_objects[ itr.current() ]->key( 0, true ).latin1() << endl;
 
 					if( dynamic_cast<VGroup *>( itr.current() ) )
 						updateObjects( itr.current(),  m_objects[ itr.current() ] );
 				}
-
-			item->sort();
 		}
 	}
 	m_layersListView->sort();
@@ -761,18 +766,12 @@ VLayersTab::updateObjects( VObject *object, QListViewItem *item )
 		{
 			if( !m_objects[ itr.current() ] )
 				m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
-			else
-			{
-				delete m_objects[ itr.current() ];
-				m_objects.insert( itr.current(), new VObjectListViewItem( item, itr.current(), m_document, objcount ) );
-				m_objects[ itr.current() ]->setKey( objcount );
-			}
+
+			m_objects[ itr.current() ]->setKey( objcount );
 
 			if( dynamic_cast<VGroup *>( itr.current() ) )
 				updateObjects( itr.current(), m_objects[ itr.current() ] );
 		}
-
-	item->sort();
 }
 
 /*************************************************************************
