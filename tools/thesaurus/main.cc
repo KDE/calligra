@@ -218,26 +218,16 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
 Thesaurus::~Thesaurus()
 {
-#if KDE_IS_VERSION(3,1,3)
     m_config->writePathEntry("datafile", m_data_file);
-#else
-    m_config->writeEntry("datafile", m_data_file);
-#endif
     m_config->sync();
     delete m_config;
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog 
     // gets close while it was still working and showing the wait cursor
     QApplication::restoreOverrideCursor();
-    if( m_thesproc ) {
-        delete m_thesproc;
-    }
-    if( m_wnproc ) {
-        delete m_wnproc;
-    }
-    if( m_dialog ) {
-        delete m_dialog;
-    }
+    delete m_thesproc;
+    delete m_wnproc;
+    delete m_dialog;
 }
 
 
