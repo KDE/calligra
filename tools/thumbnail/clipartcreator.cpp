@@ -25,10 +25,11 @@
 #include <koPicture.h>
 
 #include "clipartcreator.h"
+#include "koffice_export.h"
 
 extern "C"
 {
-    ThumbCreator *new_creator()
+    KOFFICETOOLS_EXPORT ThumbCreator *new_creator()
     {
         return new ClipartCreator;
     }
