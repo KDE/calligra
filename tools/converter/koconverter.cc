@@ -35,10 +35,6 @@
 #include "koconverter.h"
 
 
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kfileitem.h>
-#endif
-
 static const KCmdLineOptions options[]=
 {
 	{"+in", I18N_NOOP("Input file"),0},
@@ -108,25 +104,12 @@ int main( int argc, char **argv )
         {
             // Code form koDocument.cc
             KIO::UDSEntry entry;
-#if KDE_IS_VERSION(3,1,90)
             if ( KIO::NetAccess::stat( uOut, entry, 0L ) ) // this file exists => backup
-#else
-            if ( KIO::NetAccess::stat( uOut, entry ) ) // this file exists => backup
-#endif
             {
                 kdDebug() << "Making backup..." << endl;;
                 KURL backup( uOut );
                 backup.setPath( uOut.path() + '~' );
-#if KDE_IS_VERSION(3,1,90)
                 KIO::NetAccess::file_copy( uOut, backup, -1, true /*overwrite*/, false /*resume*/, 0L );
-#else
-                KFileItem item( entry, uOut );
-                KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
-                KIO::NetAccess::copy( uOut, backup );
-                // Not network transparent.
-                if ( backup.isLocalFile() )
-                    ::chmod( QFile::encodeName( backup.path() ), item.permissions() );
-#endif
             }
         }
 
