@@ -137,7 +137,8 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
                               bool singleViewMode )
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
-      _gradientCollection(), m_customListTest( 0L )
+      _gradientCollection(), m_customListTest( 0L ),
+      m_childCountBeforeInsert( 0 )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -460,15 +461,14 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
 {
     int i = 0;
 
-    if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
-        // ###### TODO: save objects that are on that page
-    {
-        QPtrListIterator<KoDocumentChild> it( children() );
-        for( ; it.current(); ++it ) {
-            // Don't save children that are only in the undo/redo history
-            // but not anymore in the presentation
-            QPtrListIterator<KPrPage> pageIt( m_pageList );
-            for ( ; pageIt.current(); ++pageIt )
+    QPtrListIterator<KoDocumentChild> it( children() );
+    for( ; it.current(); ++it ) {
+        // Don't save children that are only in the undo/redo history
+        // but not anymore in the presentation
+        QPtrListIterator<KPrPage> pageIt( m_pageList );
+        for ( int pagePos = 0; pageIt.current(); ++pageIt, ++pagePos )
+        {
+            if ( saveOnlyPage == -1 || pagePos == saveOnlyPage )
             {
                 QPtrListIterator<KPObject> oIt(pageIt.current()->objectList());
                 for (; oIt.current(); ++oIt )
@@ -482,11 +482,14 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
                     }
                 }
             }
+        }
+        if ( saveOnlyPage == -1 )
+        {
             QPtrListIterator<KPObject> oIt(m_masterPage->objectList());
             for (; oIt.current(); ++oIt )
             {
                 if ( oIt.current()->getType() == OT_PART &&
-                     dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
+                        dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
                 {
                     if (((KoDocumentChild*)(it.current()))->document()!=0)
                         if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
@@ -676,10 +679,17 @@ QDomDocument KPresenterDoc::saveXML()
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
             if ( saveOnlyPage != -1 && i != saveOnlyPage )
                 continue;
-            double offset=i*m_pageList.at(i)->getPageRect().height();
+            double offset=0;
+            if ( saveOnlyPage == -1 )
+            {
+                offset = i * m_pageList.at(i)->getPageRect().height();
+            }
             saveEmbeddedObject(m_pageList.at(i), chl.current(),doc,presenter,offset );
         }
-        saveEmbeddedObject(m_masterPage, chl.current(),doc,presenter,0.0 );
+        if ( saveOnlyPage == -1 )
+        {
+            saveEmbeddedObject(m_masterPage, chl.current(),doc,presenter,0.0 );
+        }
     }
 
     if ( saveOnlyPage == -1 )
@@ -702,7 +712,8 @@ QDomDocument KPresenterDoc::saveXML()
     QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile );
     presenter.appendChild( soundFiles );
 
-    setModified( false );
+    if ( saveOnlyPage == -1 )
+        setModified( false );
     return doc;
 }
 
@@ -710,7 +721,12 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentC
                                        QDomDocument &doc,QDomElement &presenter )
 {
     QPtrListIterator<KoDocumentChild> chl( childList );
-    double offset=m_pageList.findRef(page)*page->getPageRect().height();
+    double offset = 0.0;
+    // we need no offset for objects on the master page and when we copy a page
+    if ( m_pageList.findRef( page ) )
+    {
+        offset=m_pageList.findRef(page)*page->getPageRect().height();
+    }
     for( ; chl.current(); ++chl )
         saveEmbeddedObject(page, chl.current(),doc,presenter, offset );
 }
@@ -964,6 +980,16 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     {
         QPtrListIterator<KoDocumentChild> it( children() );
         for( ; it.current(); ++it ) {
+            if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
+                return false;
+        }
+    }
+    else // instead load form the correct child on, m_childCountBeforeInsert has the be set
+    {
+        QPtrListIterator<KoDocumentChild> it( children() );
+        for( int i = 0; it.current(); ++it, ++i ) {
+            if ( i < m_childCountBeforeInsert )
+                continue;
             if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
                 return false;
         }
@@ -2076,7 +2102,8 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
         startBackgroundSpellCheck();
         updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     }
-    setModified( false );
+    if ( m_pageWhereLoadObject == 0 && m_insertFilePage == 0 )
+        setModified( false );
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return b;
 }
@@ -2142,12 +2169,16 @@ void KPresenterDoc::insertEmbedded( KoStore *store, QDomElement topElem, KMacroC
             if ( pos != 0 )
             {
                 QPtrList<KPObject> oldList( page->objectList() );
-                page->takeObject( kppartobject );
-                page->insertObject( kppartobject, pos + zIndex );
-                LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n("Insert Part Object"),
-                                                          oldList, page->objectList(),
-                                                          this, page );
-                macroCmd->addCommand( lrCmd );
+                // tz TODO this is not 100% correct
+                if ( oldList.count() > pos + zIndex )
+                {
+                    page->takeObject( kppartobject );
+                    page->insertObject( kppartobject, pos + zIndex );
+                    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n("Insert Part Object"),
+                                                              oldList, page->objectList(),
+                                                              this, page );
+                    macroCmd->addCommand( lrCmd );
+                }
             }
         }
     }
@@ -2228,7 +2259,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             bool sticky=static_cast<bool>(tmp);
             double offset = 0.0;
             if(!settings.isNull() && kppartobject!=0)
+            {
                 offset=kppartobject->load(settings);
+            }
             else if ( settings.isNull() ) // all embedded obj must have SETTING tags
             {
                 delete kppartobject;
@@ -2254,7 +2287,15 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             else if ( kppartobject ) {
                 kppartobject->setOrig( r.x(), 0 );
                 kppartobject->setSize( r.width(), r.height() );
-                insertObjectInPage( offset, kppartobject, pos );
+                if ( m_pageWhereLoadObject )
+                {
+                    kppartobject->setOrig( r.x(), offset );
+                    m_pageWhereLoadObject->insertObject( kppartobject, pos );
+                }
+                else
+                {
+                    insertObjectInPage( offset, kppartobject, pos );
+                }
             }
         } else if(elem.tagName()=="PAPER" && _clean)  {
             if(elem.hasAttribute("format"))
@@ -2477,7 +2518,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
-    setModified(false);
+    if ( m_pageWhereLoadObject == 0 && m_insertFilePage == 0 )
+        setModified(false);
 
     return true;
 }
@@ -3456,6 +3498,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     KPrPage *newpage = new KPrPage( this, m_masterPage );
 
     m_pageWhereLoadObject=newpage;
+    m_childCountBeforeInsert = children().count();
 
     loadNativeFormat( fileName );
 
@@ -3467,6 +3510,7 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
 
     _clean = true;
     m_pageWhereLoadObject=0L;
+    m_childCountBeforeInsert = 0;
     return _page;
 }
 
@@ -3731,6 +3775,8 @@ void KPresenterDoc::copyOasisPage( int from )
 void KPresenterDoc::copyPage( int from )
 {
     _clean = false;
+    m_childCountBeforeInsert = children().count();
+
     _duplicatePage=true; // ### now also set via savePage() parameter below
 
     kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << from + 1 << endl;
@@ -3754,6 +3800,7 @@ void KPresenterDoc::copyPage( int from )
 
     _clean = true;
     m_pageWhereLoadObject=0L;
+    m_childCountBeforeInsert = 0;
 
     selectPage( from + 1, wasSelected );
 }
@@ -3782,7 +3829,7 @@ void KPresenterDoc::copyPageToClipboard( int pgnum )
     // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
     kdDebug(33001) << "KPresenterDoc::copyPageToClipboard pgnum=" << pgnum << endl;
     KTempFile tempFile( QString::null, ".kpr" );
-    savePage( tempFile.name(), pgnum );
+    savePage( tempFile.name(), pgnum, true );
     KURL url; url.setPath( tempFile.name() );
     KURL::List lst;
     lst.append( url );
@@ -3831,8 +3878,10 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 
 KPrPage * KPresenterDoc::findPage(KPObject *object)
 {
-    if ( object->isSticky() ) {
-        //kdDebug(33001) << "Object is on sticky page" << endl;
+    QPtrList<KPObject> masterObjects( m_masterPage->objectList() );
+    if ( masterObjects.findRef( object ) != -1 )
+    {
+        //kdDebug(33001) << "Object is on the master page" << endl;
         return m_masterPage;
     }
     QPtrListIterator<KPrPage> it( m_pageList );
@@ -3851,8 +3900,10 @@ KPrPage * KPresenterDoc::findPage(QPtrList<KPObject> &objects)
 {
     KPObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {
-        if ( object->isSticky() ) {
-            //kdDebug(33001) << "A Object is on the sticky page" << endl;
+        QPtrList<KPObject> list( m_masterPage->objectList() );
+        if ( list.findRef( object ) != -1 )
+        {
+            //kdDebug(33001) << "Object is on the master page" << endl;
             return m_masterPage;
         }
     }
@@ -4540,6 +4591,7 @@ void KPresenterDoc::insertFile(const QString & file )
 {
     m_insertFilePage = m_pageList.count();
 
+    m_childCountBeforeInsert = children().count();
     objStartY = 0;
     bool clean = _clean;
     _clean = false;
@@ -4561,6 +4613,7 @@ void KPresenterDoc::insertFile(const QString & file )
         addCommand( macro );
 
     m_insertFilePage = 0;
+    m_childCountBeforeInsert = 0;
     // Update the views
     int newPos = m_pageList.count()-1;
     QPtrListIterator<KoView> it( views() );

@@ -704,6 +704,10 @@ private:
     bool m_bGlobalHyphenation;
     KPRLoadingInfo *m_loadingInfo;
     QValueList<int> *m_customListTest;
+
+    /// here the amount of existing children before inserting a page/file
+    /// is saved, so that we load the correct children
+    int m_childCountBeforeInsert;
 };
 
 #endif
