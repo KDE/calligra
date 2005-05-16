@@ -421,12 +421,7 @@ bool KoDocument::saveFile()
     {
         if ( !suppressErrorDialog )
         {
-            if ( d->lastErrorMessage.isEmpty() )
-                KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
-            else if ( d->lastErrorMessage != "USER_CANCELED" )
-            {
-                KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file, d->lastErrorMessage ) );
-            }
+            showSavingErrorDialog();
         }
 
         // couldn't save file so this new URL is invalid
@@ -929,7 +924,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
     // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QCString mimeType = d->outputMimeType;
-    bool oasis = !mimeType.isEmpty() && mimeType == nativeOasisMimeType();
+    QCString nativeOasisMime = nativeOasisMimeType();
+    bool oasis = !mimeType.isEmpty() && ( mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" );
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
     KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
@@ -1479,10 +1475,7 @@ bool KoDocument::openFile()
             ok = false;
             if ( d->m_autoErrorHandlingEnabled )
             {
-                if ( d->lastErrorMessage.isEmpty() )
-                    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
-                else if ( d->lastErrorMessage != "USER_CANCELED" )
-                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ), d->lastErrorMessage ) );
+                showLoadingErrorDialog();
             }
         }
     }
@@ -1580,7 +1573,13 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, QDomDo
 
 bool KoDocument::loadNativeFormat( const QString & file )
 {
-    if ( !QFileInfo( file).isFile () )
+    QFileInfo fileInfo( file );
+    if ( !fileInfo.exists() ) // check duplicated from openURL, but this is useful for templates
+    {
+        d->lastErrorMessage = i18n("The file %1 does not exist.").arg(file);
+        return false;
+    }
+    if ( !fileInfo.isFile() )
     {
         d->lastErrorMessage = i18n( "%1 is not a file." ).arg(file);
         return false;
@@ -2208,6 +2207,35 @@ QCString KoDocument::dcopObjectId() const
 void KoDocument::setErrorMessage( const QString& errMsg )
 {
     d->lastErrorMessage = errMsg;
+}
+
+QString KoDocument::errorMessage() const
+{
+    return d->lastErrorMessage;
+}
+
+void KoDocument::showSavingErrorDialog()
+{
+    if ( d->lastErrorMessage.isEmpty() )
+    {
+        KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+    }
+    else if ( d->lastErrorMessage != "USER_CANCELED" )
+    {
+        KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file, d->lastErrorMessage ) );
+    }
+}
+
+void KoDocument::showLoadingErrorDialog()
+{
+    if ( d->lastErrorMessage.isEmpty() )
+    {
+        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
+    }
+    else if ( d->lastErrorMessage != "USER_CANCELED" )
+    {
+        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ), d->lastErrorMessage ) );
+    }
 }
 
 bool KoDocument::isAutosaving() const

@@ -267,6 +267,30 @@ public:
     void setErrorMessage( const QString& errMsg );
 
     /**
+     * Return the last error message. Usually KoDocument takes care of
+     * showing it; this method is mostly provided for non-interactive use.
+     * @since 1.4
+     */
+    QString errorMessage() const;
+
+    /**
+     * Show the last error message in a message box.
+     * The dialog box will mention a saving problem.
+     * Note that save/saveFile takes care of doing it.
+     * @since 1.4
+     */
+    void showSavingErrorDialog();
+
+    /**
+     * Show the last error message in a message box.
+     * The dialog box will mention a loading problem.
+     * openURL/openFile takes care of doing it, but not loadNativeFormat itself,
+     * so this is often called after loadNativeFormat returned false.
+     * @since 1.4
+     */
+    void showLoadingErrorDialog();
+
+    /**
      *  Create a new view for the document.
      */
     KoView *createView( QWidget *parent = 0, const char *name = 0 );
