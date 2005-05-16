@@ -1,12 +1,79 @@
 This file describes how the painting of a spreadsheet is supposed to
-work. At present, it only describes painting of a cell.
+work. At present, it is not a complete description.
 
 
-Painting
---------
+General
+-------
 
-Each cell is painted by itself.  This means that the border between
-cells are painted twice.  (FIXME: Is this true?)
+Painting is started by KSpreadCanvas::paintUpdates().  This method
+calls paintCell() on all cells visible, i.e. it always repaints the
+entire sheet.  This is inefficient, but is OK for most circumstances.
+There is a bug in bugzilla (#xxxx) which points this out.
+
+Each cell can paint itself.  If a number of cells are explicitly
+merged by the user, then the merged cell is painted by a single call
+to paintCell() on its upper left corner cell, the "master" cell of the
+merged group.  If paintCell() is called on any of the other cells in
+the group, a recursive call to paintCell is done on the master cell.
+NOTE: This is not yet implemented.
+
+If the content of a cell is wider than the cell itself, then we say
+that this cell "overflows" and expands into its neighbors (see Layout
+below).  This currently only happens for cells that are unmerged.
+Cells that are merged never expand, but instead show a "more text"
+marker.  See more details about overflow below.
+
+A border between cells is painted twice: when the cell on one side of
+the border is drawn, and then when the cell on the other side is
+drawn.
+
+
+Layout
+------
+
+Painting is a two-step process.  First, makeLayout() is called, which
+analyzes the content of the cell and checks if it fits into the cell.
+If it doesn't, two things can happen:
+
+1) The cell will be painted with a "more text" marker (a red arrow).
+
+2) If the cell is left aligned and the cell to the right is empty, the
+   cell can "expand" into the right cell and obscure it with the
+   content of this cell.  If the cell is right aligned, the text can
+   overflow to the left instead.  (This is currently slightly buggy.)
+
+The layout code also takes into account if the cell has vertical text,
+if it is angled, indented text, and so on.
+
+The result of the layout process is the setting of the following
+variables in a cell:
+ d->textX			Text position within the cell
+ d->textY
+ d->textWidth			The size of the text
+ d->textHeight
+ d->fmAscent
+ d->extra()->extraXCells	Number of extra cells
+ d->extra()->extraYCells
+ d->extra()->extraWidth		Extra width/height brought in by the
+ d->extra()->extraHeight        extra cells
+ d->extra()->nbLines		Number of lines if multirow
+ d->strOutText			The text that is shown in the cell.
+
+After the layout process, paintCell() uses these variables to position
+the text within the cell and also to paint "more text" markers, etc.
+
+The value of extra[XY]Cells and extraWidth/Height can be made non-zero
+in two ways:
+
+1) The cell is the master cell of a merged group.
+
+2) The content is too wide/high, and the cell has expanded into
+   neighboring cells.
+
+Currently these two cases never occur simultaneously.  That might
+change in the future.  So as for now the two cases can be separated by
+checking if d->extra()->merged[XY]Cells are zero (case 2) or non-zero
+(case 1).
 
 
 Overflow
