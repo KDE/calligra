@@ -606,38 +606,41 @@ void OutlineSlideItem::update()
                 ooi = item;
         }
     }
-    KPObject* header = 0;
-    KPObject* footer = 0;
-
-    // add sticky objects, exclude header and footer
-    it = doc->masterPage()->objectList();
-    for ( ; it.current() ; ++it )
+    else
     {
-        KPObject* object = it.current();
+        KPObject* header = 0;
+        KPObject* footer = 0;
 
-        if( m_page->hasHeader() && doc->isHeader( object ) )
-            header = object;
-        else if( m_page->hasFooter() && doc->isFooter( object ) )
-            footer = object;
-        else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
-            OutlineObjectItem *item = new OutlineObjectItem( this, object, true );
-            if ( object->isSelected() )
+        // add sticky objects, exclude header and footer
+        it = doc->masterPage()->objectList();
+        for ( ; it.current() ; ++it )
+        {
+            KPObject* object = it.current();
+
+            if( m_page->hasHeader() && doc->isHeader( object ) )
+                header = object;
+            else if( m_page->hasFooter() && doc->isFooter( object ) )
+                footer = object;
+            else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
+                OutlineObjectItem *item = new OutlineObjectItem( this, object, true );
+                if ( object->isSelected() )
+                    ooi = item;
+            }
+
+        }
+
+        // add header and footer (if any)
+        if ( footer ) {
+            OutlineObjectItem *item = new OutlineObjectItem( this, footer, true, i18n("Footer") );
+            if ( footer->isSelected() )
                 ooi = item;
         }
 
-    }
-
-    // add header and footer (if any)
-    if ( footer ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, footer, true, i18n("Footer") );
-        if ( footer->isSelected() )
-            ooi = item;
-    }
-
-    if ( header ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, header, true, i18n("Header") );
-        if ( header->isSelected() )
-            ooi = item;
+        if ( header ) {
+            OutlineObjectItem *item = new OutlineObjectItem( this, header, true, i18n("Header") );
+            if ( header->isSelected() )
+                ooi = item;
+        }
     }
 
     // select selected object the page is necessary that a
@@ -661,7 +664,7 @@ OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _objec
     setObject( m_object );
 
     QString objectName = name.isEmpty() ? m_object->getObjectName() : name;
-    if( sticky ) objectName += i18n(" (Sticky)" );
+    //if( sticky ) objectName += i18n(" (Sticky)" );
     setText( 0, objectName );
 }
 
