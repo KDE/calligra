@@ -60,7 +60,7 @@ General bugs
   + Indent and multiline doesn't work together			      2 ----
 
 * Printing
-  + 61452: drawing problem when text overflow the right border        1 ----
+  + 61452: drawing problem when text overflow the right border        1 DONE
   + 68190: Empty document generates 2 printed pages (testcase)	      1 DONE
   + 68977: Embedded KSpread document printing problem		      1 DONE
   + 70073: printing with kspread gives big black areas		      1 DONE
