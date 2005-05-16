@@ -96,11 +96,10 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 				      "kplato_template",
 				      NULL);
     if (ret == KoTemplateChooseDia::Template) {
-        QFileInfo fileInfo(templateDoc);
-        QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName()
-			 + ".kplatot" );
         resetURL();
-        result = loadNativeFormat(fileName);
+        result = loadNativeFormat(templateDoc);
+        if ( !result )
+            showLoadingErrorDialog();
     } else if (ret == KoTemplateChooseDia::File) {
         KURL url(templateDoc);
         kdDebug() << "KPTPart::initDoc opening URL " << url.prettyURL() <<endl;
@@ -135,7 +134,7 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
     }
     if (m_context)
         m_view->setContext(*m_context);
-    
+
     m_view->setBaselineMode(getProject().isBaselined());
     return m_view;
 }
@@ -296,10 +295,10 @@ void KPTPart::slotCommandExecuted() {
         m_view->slotUpdate(config().behavior().calculationMode == KPTBehavior::OnChange);
     else if (m_update)
         m_view->slotUpdate(false);
-    
+
     if (m_baseline)
-        m_view->setBaselineMode(getProject().isBaselined());    
-    
+        m_view->setBaselineMode(getProject().isBaselined());
+
     m_update = m_calculate = m_baseline = false;
 }
 

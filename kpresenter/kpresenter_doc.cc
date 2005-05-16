@@ -3180,12 +3180,14 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         objStartY = 0;
         _clean = true;
         bool ok = loadNativeFormat( fileName );
+        if ( !ok )
+            showLoadingErrorDialog();
         resetURL();
         setEmpty();
         return ok;
     }
 
-    QString _template;
+    QString file;
     KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
     if (flags != InitDocFileNew)
@@ -3193,14 +3195,14 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose( KPresenterFactory::global(), _template,
+    ret = KoTemplateChooseDia::choose( KPresenterFactory::global(), file,
                                        dlgtype, "kpresenter_template", parentWidget );
 
     if ( ret == KoTemplateChooseDia::Template ) {
-        QFileInfo fileInfo( _template );
-        QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
         _clean = true; //was a parameter called "clean", but unused
-        bool ok = loadNativeFormat( fileName );
+        bool ok = loadNativeFormat( file );
+        if ( !ok )
+            showLoadingErrorDialog();
         objStartY = 0;
         _clean = true;
         resetURL();
@@ -3209,7 +3211,7 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     } else if ( ret == KoTemplateChooseDia::File ) {
         objStartY = 0;
         _clean = true;
-        KURL url( _template );
+        KURL url( file );
         bool ok = openURL( url );
         return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
@@ -3218,6 +3220,8 @@ bool KPresenterDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         objStartY = 0;
         _clean = true;
         bool ok = loadNativeFormat( fileName );
+        if ( !ok )
+            showLoadingErrorDialog();
         resetURL();
         setEmpty();
         return ok;
@@ -3232,7 +3236,9 @@ void KPresenterDoc::initEmpty()
     objStartY = 0;
     _clean = true;
     setModified(true);
-    loadNativeFormat( fileName );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok )
+        showLoadingErrorDialog();
     resetURL();
 }
 
@@ -3500,7 +3506,9 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     m_pageWhereLoadObject=newpage;
     m_childCountBeforeInsert = children().count();
 
-    loadNativeFormat( fileName );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok )
+        showLoadingErrorDialog();
 
     objStartY = 0;
 
@@ -3758,7 +3766,9 @@ void KPresenterDoc::copyOasisPage( int from )
 
     m_pageWhereLoadObject = newpage;
 
-    loadNativeFormat( tempFile.name() );
+    bool ok = loadNativeFormat( tempFile.name() );
+    if ( !ok )
+        showLoadingErrorDialog();
 
     KPrInsertPageCmd *cmd = new KPrInsertPageCmd( i18n("Duplicate Slide"), from, IP_AFTER, newpage, this );
     cmd->execute();
@@ -3790,7 +3800,9 @@ void KPresenterDoc::copyPage( int from )
 
     m_pageWhereLoadObject = newpage;
 
-    loadNativeFormat( tempFile.name() );
+    bool ok = loadNativeFormat( tempFile.name() );
+    if ( !ok )
+        showLoadingErrorDialog();
 
     KPrInsertPageCmd *cmd = new KPrInsertPageCmd( i18n("Duplicate Slide"), from, IP_AFTER, newpage, this );
     cmd->execute();
@@ -4598,7 +4610,7 @@ void KPresenterDoc::insertFile(const QString & file )
     bool ok = loadNativeFormat(file );
     if ( !ok )
     {
-        KMessageBox::error(0L, i18n("Error during file insertion."), i18n("Insert File"));
+        showLoadingErrorDialog();
         return;
     }
     KMacroCommand *macro = 0L;

@@ -178,7 +178,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
-  
+
   d->map = new KSpreadMap( this, "Map" );
   d->locale = new KSpreadLocale;
   d->styleManager = new KSpreadStyleManager();
@@ -187,7 +187,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->converter = new KSpread::ValueConverter ( d->parser );
   d->calc = new KSpread::ValueCalc( d->converter );
   d->formatter = new KSpread::ValueFormatter( d->converter );
-  
+
   d->activeSheet = 0;
 
   d->pageBorderColor = Qt::red;
@@ -340,8 +340,8 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 		_page=config->readNumEntry( "NbPage",1 ) ;
 	}
 
-  for( int i=0; i<_page; i++ )
-    map()->addNewSheet ();
+	for( int i=0; i<_page; i++ )
+		map()->addNewSheet ();
 
 	resetURL();
 	setEmpty();
@@ -352,52 +352,51 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if ( ret == KoTemplateChooseDia::Template )
     {
-        QFileInfo fileInfo( f );
-        QString fileName( fileInfo.dirPath( true ) + "/" +
-            fileInfo.baseName() + ".kst" );
         resetURL();
-        loadNativeFormat( fileName );
+        bool ok = loadNativeFormat( f );
+        if ( !ok )
+            showLoadingErrorDialog();
         setEmpty();
         initConfig();
-        return true;
+        return ok;
     }
 
     return false;
 }
 
 KLocale *KSpreadDoc::locale () const
-{ 
-  return d->locale; 
+{
+  return d->locale;
 }
 
-KSpreadMap *KSpreadDoc::map () const 
+KSpreadMap *KSpreadDoc::map () const
 {
   return d->map;
 }
 
-KSpreadStyleManager *KSpreadDoc::styleManager () const 
+KSpreadStyleManager *KSpreadDoc::styleManager () const
 {
-  return d->styleManager; 
+  return d->styleManager;
 }
 
-KSpread::ValueParser *KSpreadDoc::parser () const 
+KSpread::ValueParser *KSpreadDoc::parser () const
 {
-  return d->parser; 
+  return d->parser;
 }
 
 KSpread::ValueFormatter *KSpreadDoc::formatter () const
 {
-  return d->formatter; 
+  return d->formatter;
 }
 
-KSpread::ValueConverter *KSpreadDoc::converter () const 
+KSpread::ValueConverter *KSpreadDoc::converter () const
 {
-  return d->converter; 
+  return d->converter;
 }
 
 KSpread::ValueCalc *KSpreadDoc::calc () const
-{ 
-  return d->calc; 
+{
+  return d->calc;
 }
 
 void KSpreadDoc::saveConfig()

@@ -54,7 +54,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 
     setInstance( KChartFactory::global(), false );
 
-    // Init some members that need it.  
+    // Init some members that need it.
     {
 	// Create the chart parameters and let the default be a bar chart
 	// with 3D looks.
@@ -115,7 +115,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
 	dlgtype = KoTemplateChooseDia::Everything;
     ret = KoTemplateChooseDia::choose( KChartFactory::global(), f,
-                                       dlgtype, "kchart_template", 
+                                       dlgtype, "kchart_template",
 				       parentWidget );
 
     if ( ret == KoTemplateChooseDia::File ) {
@@ -142,10 +142,12 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
             fileInfo.baseName() + ".chrt" );
 
         resetURL();
-        loadNativeFormat( fileName );
+        bool ok = loadNativeFormat( fileName );
+        if ( !ok )
+            showLoadingErrorDialog();
         setEmpty();
         //initConfig();
-        return true;
+        return ok;
     }
 
     return false;
@@ -259,11 +261,11 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// On the other hand, the next version of KDChart is able to
 	// get data directly without storing it into a KDChartData
 	// class first, so we might never need to.
-	
+
 	// Resize displayData so that the transposed data has room.
 	m_displayData.expand(m_currentData.usedCols(),
 			     m_currentData.usedRows());
-	
+
 	// Copy data and transpose it.
 	for (uint row = 0; row < m_currentData.usedCols(); row++) {
 	    for (uint col = 0; col < m_currentData.usedRows(); col++) {
@@ -340,7 +342,7 @@ void KChartPart::setData( const KoChart::Data& data )
         hasColHeader = TRUE;
 
     // Let's check if we have a full label text row.
-    if ( isStringFirstRow && isStringTopLeft 
+    if ( isStringFirstRow && isStringTopLeft
 	 || isStringFirstCol && isStringFirstRow )
         hasRowHeader = TRUE;
 
@@ -435,7 +437,7 @@ void KChartPart::setAxisDefaults()
   m_params->setAxisParams( KDChartAxisParams::AxisPosLeft, yAxis );
 
   //
-  // Settings for the X axis. 
+  // Settings for the X axis.
   //
   KDChartAxisParams  xAxis
     = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
@@ -490,7 +492,7 @@ void KChartPart::loadConfig( KConfig *conf )
     //   llabel = conf->readBoolEntry("llabel", llabel);
     //   yval_style = conf->readNumEntry("yval_style", yval_style);
     //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
-    m_params->setLineMarker(conf->readBoolEntry("lineMarker", 
+    m_params->setLineMarker(conf->readBoolEntry("lineMarker",
 						m_params->lineMarker()));
     m_params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
 							  m_params->threeDBarDepth() ) );
@@ -692,7 +694,7 @@ QDomDocument KChartPart::saveXML()
                 case KoChart::Value::DateTime: valType = "DateTime";  break;
                 default: {
                     valType = "(unknown)";
-                    kdDebug(35001) << "ERROR: cell " << i << "," << j 
+                    kdDebug(35001) << "ERROR: cell " << i << "," << j
 				   << " has unknown type." << endl;
                 }
             }
@@ -709,7 +711,7 @@ QDomDocument KChartPart::saveXML()
                 default: {
                     e.setAttribute( "value", "" );
                     if( KoChart::Value::NoValue != cell.valueType() )
-                        kdDebug(35001) << "ERROR: cell " << i << "," << j 
+                        kdDebug(35001) << "ERROR: cell " << i << "," << j
 				       << " has unknown type." << endl;
                 }
             }
@@ -743,7 +745,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
     // First try to load the KDChart parameters.
     bool  result = m_params->loadXML( doc );
-    
+
     // If that didn't go well, try to load old file format...
     if (!result)
         result = loadOldXML( doc );

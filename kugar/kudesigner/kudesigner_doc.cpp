@@ -81,7 +81,7 @@ bool KudesignerDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     // TODO if (flags==KoDocument::InitDocEmpty)
 
-    QString _template;
+    QString file;
     KoTemplateChooseDia::DialogType dlgtype;
     if (flags != KoDocument::InitDocFileNew)
         dlgtype = KoTemplateChooseDia::Everything;
@@ -89,22 +89,23 @@ bool KudesignerDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KudesignerFactory::global(), _template,
+        KudesignerFactory::global(), file,
         dlgtype, "kudesigner_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
-        QFileInfo fileInfo( _template );
-        QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".ktm" );
         resetURL();
-        ok = loadNativeFormat( fileName );
+        ok = loadNativeFormat( file );
+        if (  !ok )
+            showLoadingErrorDialog();
         setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
-        KURL url( _template);
+        KURL url( file );
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
         resetURL();
         ok = loadNativeFormat( fileName );
-        qDebug("%d", ok);
+        if (  !ok )
+            showLoadingErrorDialog();
         setEmpty();
     }
     setModified( FALSE );

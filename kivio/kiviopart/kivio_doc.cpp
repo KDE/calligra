@@ -206,6 +206,8 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
+    if ( !ok )
+        showLoadingErrorDialog();
     setEmpty();
     m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return ok;

@@ -131,10 +131,10 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 	if( result == KoTemplateChooseDia::Template )
 	{
-		QFileInfo fileInfo( file );
-		QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".karbon" );
 		resetURL();
-		bool ok = loadNativeFormat( fileName );
+		bool ok = loadNativeFormat( file );
+		if ( !ok )
+			showLoadingErrorDialog();
 		initUnit();
 		setEmpty();
 		return ok;
@@ -582,6 +582,8 @@ KarbonPart::mergeNativeFormat( const QString &file )
 {
 	m_merge = true;
 	bool result = loadNativeFormat( file );
+	if ( !result )
+		showLoadingErrorDialog();
 	m_merge = false;
 	return result;
 }

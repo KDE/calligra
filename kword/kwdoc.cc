@@ -492,8 +492,6 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-    QString _template;
-
     bool ok = FALSE;
 
     if (flags==KoDocument::InitDocEmpty)
@@ -502,6 +500,8 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         resetURL();
         initUnit();
         ok = loadNativeFormat( fileName );
+        if ( !ok )
+            showLoadingErrorDialog();
         setEmpty();
         setModified( FALSE );
         return ok;
@@ -515,18 +515,19 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
 
+    QString file;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KWFactory::global(), _template,
+        KWFactory::global(), file,
         dlgtype, "kword_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
-        QFileInfo fileInfo( _template );
-        QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
         resetURL();
-        ok = loadNativeFormat( fileName );
+        ok = loadNativeFormat( file );
+        if ( !ok )
+            showLoadingErrorDialog();
         initUnit();
         setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
-        KURL url( _template);
+        KURL url( file );
         //kdDebug() << "KWDocument::initDoc opening URL " << url.prettyURL() << endl;
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
@@ -534,6 +535,8 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         resetURL();
         initUnit();
         ok = loadNativeFormat( fileName );
+        if ( !ok )
+            showLoadingErrorDialog();
         setEmpty();
     }
     setModified( FALSE );
@@ -575,7 +578,9 @@ void KWDocument::initEmpty()
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
     QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
-    /*bool ok = */loadNativeFormat( fileName );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok )
+        showLoadingErrorDialog();
     resetURL();
     setModified( FALSE );
     setEmpty();
