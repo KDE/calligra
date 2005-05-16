@@ -1194,9 +1194,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   double         height = rl->dblHeight();
 
   // Calculate extraWidth and extraHeight if we have a merged cell.
-  //
-  // NOTE: We can't use d->extra()->extraWidth/height here since this
-  //       is the place where it is calculated.
   if ( testFlag( Flag_ForceExtra ) ) {
     int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
     int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
@@ -1323,13 +1320,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   if ( a == KSpreadCell::Left && !isEmpty() )
     indent = getIndent( _col, _row );
 
-  // Set Flag_CellTooShortX if the text is too high for the cell.
-  // FIXME: Shouldn't this be Flag_CellTooShortY?
+  // Set Flag_CellTooShortX if the text is vertical or angled, and too
+  // high for the cell.  
   if ( verticalText( _col, _row ) || getAngle( _col, _row ) != 0 ) {
     RowFormat  *rl = m_pSheet->rowFormat( _row );
 
     if ( d->textHeight >= rl->dblHeight() ) 
-      // FIXME: Shouldn't this be Flag_CellTooShortY?
       setFlag( Flag_CellTooShortX );
   }
 
@@ -2079,8 +2075,15 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // obscured by a cell.
   static int  paintingObscured = 0;
 
+#if 0
+  if (paintingObscured == 0) 
+    kdDebug(36001) << "painting cell " << name() << endl;
+  else
+    kdDebug(36001) << "  painting obscured cell " << name() << endl;
+#endif
+
   // Sanity check: If we're working on drawing an obscured cell, that
-  // means this cell should have a cell that obscured it.
+  // means this cell should have a cell that obscures it.
   Q_ASSERT(!(paintingObscured > 0 && d->extra()->obscuringCells.isEmpty()));
 
   // The parameter cellref should be *this, unless this is the default cell.
@@ -2092,10 +2095,14 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   ColumnFormat * colFormat = m_pSheet->columnFormat( cellRef.x() );
   RowFormat    * rowFormat = m_pSheet->rowFormat( cellRef.y() );
 
-  // Set width, height to the total width and height that this cell covers,
-  // including obscured cells.
-  double  width  = colFormat->dblWidth();
-  double  height = rowFormat->dblHeight();
+  // Set width, height to the total width and height that this cell
+  // covers, including obscured cells, and width0, height0 to the
+  // width and height of this cell, maybe merged but never implicitly
+  // extended.
+  double  width0  = colFormat->dblWidth();
+  double  height0 = rowFormat->dblHeight();
+  double  width   = width0;
+  double  height  = height0;
 
   // Handle right-to-left layout.
   // In an RTL sheet the cells have to be painted at their opposite horizontal
@@ -2113,20 +2120,16 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   }
 
   if (d->hasExtra()) {
-    // FIXME: For some very obscure reason, d->extraWidth/Height
-    //        contains the total width/height if we have a merged cell.
-    //        If we have just found some empty cells to the right/below 
-    //        that we can extend into, then d->extraWidth/Height 
-    //        contains the *extra* width/height (which the name also 
-    //        suggests).
     if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
       if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
           && paintingObscured == 0 && view && view->canvasWidget() )
       {
         left -= d->extra()->extraWidth - width;
       }
-      width  = d->extra()->extraWidth;
-      height = d->extra()->extraHeight;
+      width0  = d->extra()->extraWidth;
+      height0 = d->extra()->extraHeight;
+      width   = d->extra()->extraWidth;
+      height  = d->extra()->extraHeight;
     }
     else {
 #if 0
@@ -2180,6 +2183,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // be painted, we can skip the rest and return. (Note that we need
   // to calculate `left' first before we can do this.)
   const KoRect  cellRect( left, coordinate.y(), width, height );
+  const KoRect  cellRect0( left, coordinate.y(), width0, height0 );
   if ( !cellRect.intersects( rect ) ) {
     clearFlag( Flag_PaintingCell );
     return;
@@ -2200,7 +2204,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
   // 1. Paint the background.
   if ( !isObscuringForced() )
-    paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
+    paintBackground( painter, cellRect0, cellRef, selected, backgroundColor );
 
   // 2. Paint the default borders if we are on screen or if we are printing
   //    and the checkbox to do this is checked.
@@ -2218,6 +2222,11 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // recursion since cells sometimes paint their obscuring cell as
   // well.
   paintingObscured++;
+
+  if (d->hasExtra() && (d->extra()->extraXCells > 0 
+			|| d->extra()->extraYCells > 0))
+    //kdDebug(36001) << "painting obscured cells for " << name() << endl;
+
   paintObscuredCells( rect, painter, view, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
                       paintBorderLeft,  paintBorderTop,
@@ -2229,10 +2238,14 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
-  // 4. Paint the borders of the cell.
-  // FIXME (comment): What is that test?
+  // 4. Paint the borders of the cell if no other cell is forcing this
+  // one, i.e. this cell is not part of a merged cell.
+  //
+  //  FIXME: I don't like the term "force" here. Find a better one.
   if ( !isObscuringForced() )
-    paintCellBorders( painter, rect, cellRect, cellRef,
+    paintCellBorders( painter, rect, cellRect0,
+		      width0, height0,
+		      cellRef,
 		      paintBorderRight, paintBorderBottom,
                       paintBorderLeft,  paintBorderTop,
 		      rightPen, bottomPen, leftPen, topPen );
@@ -2241,8 +2254,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     painter.setClipping( true );
 
   // 5. Paint diagonal lines and page borders..
-  paintCellDiagonalLines( painter, cellRect, cellRef );
-  paintPageBorders( painter, cellRect, cellRef,
+  paintCellDiagonalLines( painter, cellRect0, cellRef );
+  paintPageBorders( painter, cellRect0, cellRef,
 		    paintBorderRight, paintBorderBottom );
 
   // 6. Now paint the content, if this cell isn't obscured.
@@ -2278,6 +2291,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   //    cells, then paint the obscuring cell(s).  Otherwise don't do
   //    anything so that we don't cause an infinite loop.
   if ( isObscured() && paintingObscured == 0 ) {
+
+    //kdDebug(36001) << "painting cells that obscure " << name() << endl;
 
     // Store the obscuringCells list in a list of QPoint(column, row)
     // This avoids crashes during the iteration through
@@ -2325,6 +2340,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
           QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
 						   obscuringCellRef.y() ) );
 
+	  //kdDebug(36001) << "  painting obscuring cell "
+	  //		 << obscuringCell->name() << endl;
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
 				    true, true, true, true,  // borders
@@ -2436,7 +2453,6 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
      zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
    if ( cellRef.y() != KS_rowMax )
      zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
-
 
   // Determine the correct background color
   if ( selected )
@@ -3236,6 +3252,7 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 //
 void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const KoRect &cellRect,
+				    uint width0, uint height0,
                                     const QPoint &cellRef,
                                     bool paintRight, bool paintBottom,
                                     bool paintLeft,  bool paintTop,
@@ -3257,7 +3274,11 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int zcellRect_right (doc->zoomItX (cellRect.right()));
   int zcellRect_top (doc->zoomItY (cellRect.top()));
   int zcellRect_bottom (doc->zoomItY (cellRect.bottom()));
-
+#if 0
+  const KoRect  cellRect0( cellRect.left(), cellrect.top(), width0, height0 );
+  int zcellRect_right0 (doc->zoomItX (cellRect0.right()));
+  int zcellRect_bottom0 (doc->zoomItY (cellRect0.bottom()));
+#endif
   /* we might not paint some borders if this cell is merged with another in
      that direction
   bool paintLeft   = paintBorderLeft;
@@ -3280,8 +3301,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       paintLeft = paintLeft && xDiff == 0;
       paintTop  = paintTop  && yDiff == 0;
 
-      paintRight  = paintRight  && cell->extraXCells() == xDiff;
-      paintBottom = paintBottom && cell->extraYCells() == yDiff;
+      // Paint the border(s) if either this one should or if we have a
+      // merged cell with this cell as its border.qwe
+      paintRight  = paintRight  && cell->mergedXCells() == xDiff;
+      paintBottom = paintBottom && cell->mergedYCells() == yDiff;
     }
   }
 

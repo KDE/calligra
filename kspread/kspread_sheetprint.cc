@@ -533,7 +533,7 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 	QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
 						     bound.width(), 
 						     bound.height() ) );
-#if 0
+#if 1
         kdDebug(36001)  << "printRect(): Bounding rect of view: " << view
 			<< endl;
         kdDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
@@ -548,10 +548,16 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 	{
             painter.save();
 
-            painter.translate( -zoomedView.left() + m_pDoc->zoomItX( topLeft.x() ),
-                               -zoomedView.top()  + m_pDoc->zoomItY( topLeft.y() ) );
+            painter.translate( -zoomedView.left()
+			       + m_pDoc->zoomItX( topLeft.x() )
+			       + zoomedBound.left(),
+                               -zoomedView.top()  
+			       + m_pDoc->zoomItY( topLeft.y() ) 
+			       + zoomedBound.top() );
 	    // FIXME: Why can this suddenly be removed?
-            //zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
+            zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
+	    kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
+			    << zoomedBound << endl;
 
             it.current()->transform( painter );
             it.current()->document()->paintEverything( painter,

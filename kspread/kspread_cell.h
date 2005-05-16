@@ -871,7 +871,9 @@ private:
 
     /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
-                           const KoRect &cellRect, const QPoint &cellRef,
+                           const KoRect &cellRect, 
+			   uint width0, uint height0,
+			   const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom,
                            bool paintBorderLeft, bool paintBorderTop,
                            QPen & rightPen, QPen & bottomPen,

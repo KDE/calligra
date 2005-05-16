@@ -77,8 +77,7 @@ General bugs
   + 101074: Charts are really small when printed from KSpread	      1 ----
         Fix the zoom issue						done
 	Fix the disappearing legend (KChart bug?)			--
-  + Fix all printing of cell borders.  Look in the code for the	      1 ----
-	FIXME that describes how to do it (curr. at line 3351).
+  + Fix all printing of cell borders.  				      1 DONE
 
 * Cut/Copy & Paste
   + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
