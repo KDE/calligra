@@ -104,13 +104,13 @@ public:
   // Not empty when the cell holds a link
   QString link;
 
+  // Number of cells explicitly merged by the user in X and Y directions.
+  int mergedXCells;
+  int mergedYCells;
+
   // Number of additional cells.
   int extraXCells;
   int extraYCells;
-
-  // Number of cells merged by the user in X and Y directions.
-  int mergedXCells;
-  int mergedYCells;
 
   // If this cell overlaps other cells, then we have the cells width and
   // height stored here.  These values do not mean anything unless
@@ -128,13 +128,15 @@ public:
   //                  is important?
   QValueList<KSpreadCell*> obscuringCells;
 
+  // If non-NULL, contains a pointer to a condition or a validity test.
   KSpreadConditions  *conditions;
   KSpreadValidity    *validity;
 
-  // Store the number of line when you used multirow (default is 0)
+  // Store the number of line when you multirow is used (default is 0)
   int nbLines;
 
 private:
+  // Don't allow implicit copy.
   CellExtra& operator=( const CellExtra& );
 };
 
@@ -248,10 +250,10 @@ CellExtra* CellPrivate::extra()
       cellExtra->conditions   = 0;
       cellExtra->validity     = 0;
 
-      cellExtra->extraXCells  = 0;
-      cellExtra->extraYCells  = 0;
       cellExtra->mergedXCells = 0;
       cellExtra->mergedYCells = 0;
+      cellExtra->extraXCells  = 0;
+      cellExtra->extraYCells  = 0;
       cellExtra->extraWidth   = 0.0;
       cellExtra->extraHeight  = 0.0;
       cellExtra->nbLines      = 0;
@@ -619,57 +621,53 @@ const KSpreadFormat * KSpreadCell::fallbackFormat( int, int row ) const
   return sheet()->rowFormat( row );
 }
 
+
+// Make this cell obscure a number of other cells.
+
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
 {
-  // Unobscure the objects we obscure right now
-  int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-  int extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-  for( int x = _col; x <= _col + extraXCells; ++x )
-    for( int y = _row; y <= _row + extraYCells; ++y )
+  // Start by unobscuring the cells that we obscure right now
+  int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
+  int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
+  for ( int x = _col; x <= _col + extraXCells; ++x )
+    for ( int y = _row; y <= _row + extraYCells; ++y ) {
       if ( x != _col || y != _row )
-      {
-        KSpreadCell * cell = m_pSheet->nonDefaultCell( x, y );
-        cell->unobscure(this);
-      }
+        m_pSheet->nonDefaultCell( x, y )->unobscure(this);
+    }
 
-  // disable forcing ?
-  if ( _x == 0 && _y == 0 )
-  {
-      clearFlag( Flag_ForceExtra );
-      if (d->hasExtra())
-      {
-        d->extra()->extraXCells  = 0;
-        d->extra()->extraYCells  = 0;
-        d->extra()->extraWidth   = 0.0;
-        d->extra()->extraHeight  = 0.0;
-        d->extra()->mergedXCells = 0;
-        d->extra()->mergedYCells = 0;
-      }
-      //refresh the layout
-      setFlag( Flag_LayoutDirty );
-      return;
-  }
-
-    setFlag(Flag_ForceExtra);
-    d->extra()->extraXCells  = _x;
-    d->extra()->extraYCells  = _y;
-    d->extra()->mergedXCells = _x;
-    d->extra()->mergedYCells = _y;
-
-    // Obscure the cells
-    for( int x = _col; x <= _col + _x; ++x )
-        for( int y = _row; y <= _row + _y; ++y )
-            if ( x != _col || y != _row )
-            {
-                KSpreadCell * cell = m_pSheet->nonDefaultCell( x, y );
-                cell->obscure( this, true );
-            }
+  // If no forcing, then remove all traces, and return.
+  if ( _x == 0 && _y == 0 ) {
+    clearFlag( Flag_ForceExtra );
+    if (d->hasExtra()) {
+      d->extra()->extraXCells  = 0;
+      d->extra()->extraYCells  = 0;
+      d->extra()->extraWidth   = 0.0;
+      d->extra()->extraHeight  = 0.0;
+      d->extra()->mergedXCells = 0;
+      d->extra()->mergedYCells = 0;
+    }
 
     // Refresh the layout
-    // QPainter painter;
-    // painter.begin( m_pSheet->gui()->canvasWidget() );
-
     setFlag( Flag_LayoutDirty );
+    return;
+  }
+
+  // At this point, we know that we will force some extra cells.
+  setFlag(Flag_ForceExtra);
+  d->extra()->extraXCells  = _x;
+  d->extra()->extraYCells  = _y;
+  d->extra()->mergedXCells = _x;
+  d->extra()->mergedYCells = _y;
+
+  // Obscure the cells
+  for ( int x = _col; x <= _col + _x; ++x )
+    for ( int y = _row; y <= _row + _y; ++y ) {
+      if ( x != _col || y != _row )
+	m_pSheet->nonDefaultCell( x, y )->obscure( this, true );
+    }
+
+  // Refresh the layout
+  setFlag( Flag_LayoutDirty );
 }
 
 void KSpreadCell::move( int col, int row )
@@ -773,37 +771,41 @@ bool KSpreadCell::isEmpty() const
 }
 
 
+// Return true if this cell is obscured by some other cell.
+
 bool KSpreadCell::isObscured() const
 {
   if (!d->hasExtra())
     return false;
+
   return !( d->extra()->obscuringCells.isEmpty() );
 }
+
 
 bool KSpreadCell::isObscuringForced() const
 {
   if (!d->hasExtra())
     return false;
+
   QValueList<KSpreadCell*>::const_iterator it = d->extra()->obscuringCells.begin();
   QValueList<KSpreadCell*>::const_iterator end = d->extra()->obscuringCells.end();
-  for ( ; it != end; ++it )
-  {
+  for ( ; it != end; ++it ) {
     KSpreadCell *cell = *it;
-    if (cell->isForceExtraCells())
-    {
-      /* the cell might force extra cells, and then overlap even beyond that
-         so just knowing that the obscuring cell forces extra isn't enough.
-         We have to know that this cell is one of the ones it is forcing over.
-      */
-      if (column() <= cell->column() + cell->d->extra()->mergedXCells &&
-          row() <= cell->row() + cell->mergedYCells() )
-      {
-        return true;
-      }
+
+    if (cell->isForceExtraCells()) {
+      // The cell might force extra cells, and then overlap even
+      // beyond that so just knowing that the obscuring cell forces
+      // extra isn't enough.  We have to know that this cell is one of
+      // the ones it is forcing over.
+      if (column() <= cell->column() + cell->d->extra()->mergedXCells 
+	  && row() <= cell->row() + cell->mergedYCells() )
+	return true;
     }
   }
+
   return false;
 }
+
 
 QValueList<KSpreadCell*> KSpreadCell::obscuringCells() const
 {
@@ -1113,6 +1115,7 @@ void KSpreadCell::freeAllObscuredCells()
 //
 //   d->textX,     d->textY
 //   d->textWidth, d->textHeight
+//   d->fmAscent
 //   d->extra()->extraXCells, d->extra()->extraYCells
 //   d->extra()->extraWidth,  d->extra()->extraHeight
 //   d->extra()->nbLines (if multirow)
@@ -1198,6 +1201,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
     int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
 
+    // FIXME: Introduce double extraWidth/Height here and use them
+    //        instead (see FIXME about this in paintCell()).
+
     for ( int x = _col + 1; x <= _col + extraXCells; x++ )
       width += m_pSheet->columnFormat( x )->dblWidth();
 
@@ -1219,6 +1225,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   // Check if we need to break the line into multiple lines and are
   // allowed to do so.  If so, set `lines' to the number of lines that
   // are needed to fit into the total width of the combined cell.
+  //
   // Also recalculate d->textHeight, d->textWidth, d->extra->nbLines
   // and d->strOutText.
   //
@@ -2101,7 +2108,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
        && paintingObscured == 0 && view && view->canvasWidget() )
   {
-    double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
+    double  dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
     left = dwidth - coordinate.x() - width;
   }
 
@@ -2116,15 +2123,22 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
       if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
           && paintingObscured == 0 && view && view->canvasWidget() )
       {
-        double dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
         left -= d->extra()->extraWidth - width;
       }
       width  = d->extra()->extraWidth;
       height = d->extra()->extraHeight;
     }
     else {
+#if 0
       width  += d->extra()->extraXCells ? d->extra()->extraWidth  : 0;
       height += d->extra()->extraYCells ? d->extra()->extraHeight : 0;
+#else
+      // FIXME: Make extraWidth/Height really contain the *extra* width/height.
+      if ( d->extra()->extraXCells )
+	width  = d->extra()->extraWidth;
+      if ( d->extra()->extraYCells )
+	height = d->extra()->extraHeight;
+#endif
     }
   }
 
@@ -2150,6 +2164,10 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   }
 
   // Need to make a new layout ?
+  //
+  // FIXME: We have already used (at least) extraWidth/Height above,
+  //        and now we are recalculating the layout.  This has to be 
+  //        moved up above all uses.
   //
   // FIXME: This needs to be taken out eventually - it is done in
   //        canvas::paintUpdates().
