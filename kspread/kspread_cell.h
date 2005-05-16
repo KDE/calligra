@@ -591,6 +591,14 @@ public:
     bool isObscuringForced() const;
 
     /**
+     * Return the cell that is obscuring this one (merged cells only).
+     * If no obscuring, return the cell itself.
+     *
+     * @return the cell that decides the format for the cell in question.
+     */
+    KSpreadCell *KSpreadCell::ultimateObscuringCell() const;
+
+    /**
      * @return the obscuring cell list (might be empty)
      */
     QValueList<KSpreadCell*> obscuringCells() const;
@@ -872,7 +880,6 @@ private:
     /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, 
-			   uint width0, uint height0,
 			   const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom,
                            bool paintBorderLeft, bool paintBorderTop,

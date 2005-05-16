@@ -782,6 +782,11 @@ bool KSpreadCell::isObscured() const
 }
 
 
+// Return true if this cell is part of a merged cell ("forced
+// obscuring"), but not the master cell.
+//
+// FIXME: Better name!
+
 bool KSpreadCell::isObscuringForced() const
 {
   if (!d->hasExtra())
@@ -804,6 +809,42 @@ bool KSpreadCell::isObscuringForced() const
   }
 
   return false;
+}
+
+
+// Return the cell that obscures this one.  If no cell is obscuring,
+// then return this.  This method is slightly complicated because we
+// can have several layers of obscuring.
+//
+// Update: it seems that if we do an actual merge, then the obscuring
+// cell is prepended and if just expanding, then it is appended.  This
+// means that we should be able to just look at the first one.
+
+KSpreadCell *KSpreadCell::ultimateObscuringCell() const
+{
+  if (!d->hasExtra())
+    return (KSpreadCell *) this;
+
+  return d->extra()->obscuringCells.first();
+#if 0
+  QValueList<KSpreadCell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  QValueList<KSpreadCell*>::const_iterator end = d->extra()->obscuringCells.end();
+  for ( ; it != end; ++it ) {
+    KSpreadCell *cell = *it;
+
+    if (cell->isForceExtraCells()) {
+      // The cell might force extra cells, and then overlap even
+      // beyond that so just knowing that the obscuring cell forces
+      // extra isn't enough.  We have to know that this cell is one of
+      // the ones it is forcing over.
+      if (column() <= cell->column() + cell->d->extra()->mergedXCells 
+	  && row() <= cell->row() + cell->mergedYCells() )
+	return true;
+    }
+  }
+
+  return false;
+#endif
 }
 
 
@@ -2119,6 +2160,9 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
     left = dwidth - coordinate.x() - width;
   }
 
+  // See if this cell is merged or has overflown into neighbor cells.
+  // In that case, the width/height is greater than just the cell
+  // itself.
   if (d->hasExtra()) {
     if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
       if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
@@ -2229,7 +2273,7 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
 
   paintObscuredCells( rect, painter, view, cellRect, cellRef,
 		      paintBorderRight, paintBorderBottom,
-                      paintBorderLeft,  paintBorderTop,
+		      paintBorderLeft,  paintBorderTop,
 		      rightPen, bottomPen, leftPen, topPen );
   paintingObscured--;
 
@@ -2244,7 +2288,6 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   //  FIXME: I don't like the term "force" here. Find a better one.
   if ( !isObscuringForced() )
     paintCellBorders( painter, rect, cellRect0,
-		      width0, height0,
 		      cellRef,
 		      paintBorderRight, paintBorderBottom,
                       paintBorderLeft,  paintBorderTop,
@@ -2394,10 +2437,11 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      const KoRect &cellRect,
                                      const QPoint &cellRef,
                                      bool paintBorderRight,
-                                     bool paintBorderBottom,
-                                     bool paintBorderLeft, bool paintBorderTop,
-                                     QPen & rightPen, QPen & bottomPen,
-                                     QPen & leftPen,  QPen & topPen )
+                                     bool _paintBorderBottom,
+                                     bool paintBorderLeft, 
+				     bool _paintBorderTop,
+                                     QPen & rightPen, QPen & _bottomPen,
+                                     QPen & leftPen,  QPen & _topPen )
 {
   // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
@@ -2415,10 +2459,47 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
     for( int x = 0; x <= maxX; ++ x ) {
       ColumnFormat * cl = m_pSheet->columnFormat( cellRef.x() + x );
       if ( y != 0 || x != 0 ) {
-	KSpreadCell * cell = m_pSheet->cellAt( cellRef.x() + x,
-					       cellRef.y() + y );
+	uint  column = cellRef.x() + x;
+	uint  row    = cellRef.y() + y;
 
-	KoPoint corner( xpos, ypos );
+	QPen  topPen;
+	QPen  bottomPen;
+	bool  paintBorderTop;
+	bool  paintBorderBottom;
+
+	KSpreadCell  *cell = m_pSheet->cellAt( column, row );
+	KoPoint       corner( xpos, ypos );
+
+	// Check if the upper and lower borders should be painted, and
+	// if so which pens we should use.  There used to be a nasty
+	// bug here (#61452).
+	// Check top pen.  Only check if this is not on the top row.
+	topPen         = _topPen;
+	paintBorderTop = _paintBorderTop;
+	if ( row > 1 && !cell->isObscuringForced() ) {
+	  KSpreadCell  *cellUp = m_pSheet->cellAt( column, row - 1 );
+
+	  if ( cellUp->isDefault() )
+	    paintBorderTop = false;
+	  else {
+	  // If the cell towards the top is part of a merged cell, get
+	  // the pointer to the master cell.
+	    cellUp = cellUp->ultimateObscuringCell();
+	    topPen = cellUp->effBottomBorderPen( cellUp->column(),
+						 cellUp->row() );
+
+#if 0
+	    int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
+	    topPen.setWidth( penWidth );
+#endif
+	  }
+	}
+
+	// FIXME: I thought we had to check bottom pen as well.
+	//        However, it looks as if we don't need to.  It works anyway.
+	bottomPen         = _bottomPen;
+	paintBorderBottom = _paintBorderBottom;
+
 	cell->paintCell( rect, painter, view,
 			 corner,
 			 QPoint( cellRef.x() + x, cellRef.y() + y ),
@@ -3252,7 +3333,6 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 //
 void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     const KoRect &cellRect,
-				    uint width0, uint height0,
                                     const QPoint &cellRef,
                                     bool paintRight, bool paintBottom,
                                     bool paintLeft,  bool paintTop,
@@ -3274,11 +3354,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int zcellRect_right (doc->zoomItX (cellRect.right()));
   int zcellRect_top (doc->zoomItY (cellRect.top()));
   int zcellRect_bottom (doc->zoomItY (cellRect.bottom()));
-#if 0
-  const KoRect  cellRect0( cellRect.left(), cellrect.top(), width0, height0 );
-  int zcellRect_right0 (doc->zoomItX (cellRect0.right()));
-  int zcellRect_bottom0 (doc->zoomItY (cellRect0.bottom()));
-#endif
+
   /* we might not paint some borders if this cell is merged with another in
      that direction
   bool paintLeft   = paintBorderLeft;
@@ -3302,7 +3378,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       paintTop  = paintTop  && yDiff == 0;
 
       // Paint the border(s) if either this one should or if we have a
-      // merged cell with this cell as its border.qwe
+      // merged cell with this cell as its border.
       paintRight  = paintRight  && cell->mergedXCells() == xDiff;
       paintBottom = paintBottom && cell->mergedYCells() == yDiff;
     }
@@ -3334,6 +3410,8 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     int bottom = ( QMAX( 0, -1 + bottom_penWidth ) ) / 2 + 1;
 
     painter.setPen( leftPen );
+
+    //kdDebug(36001) << "    painting left border of cell " << name() << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
@@ -3379,6 +3457,9 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     int bottom = ( QMAX( 0, -1 + bottom_penWidth ) ) / 2 + 1;
 
     painter.setPen( rightPen );
+
+    //kdDebug(36001) << "    painting right border of cell " << name() << endl;
+
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
@@ -3416,6 +3497,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   if ( paintTop && topPen.style() != Qt::NoPen ) {
     painter.setPen( topPen );
 
+    //kdDebug(36001) << "    painting top border of cell " << name() 
+    //		   << " [" << zcellRect_left << "," << zcellRect_right 
+    //		   << ": " << zcellRect_right - zcellRect_left << "]" << endl;
+
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
@@ -3433,6 +3518,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
   if ( paintBottom && bottomPen.style() != Qt::NoPen ) {
     painter.setPen( bottomPen );
+
+    //kdDebug(36001) << "    painting bottom border of cell " << name()
+    //		   << " [" << zcellRect_left << "," << zcellRect_right 
+    //		   << ": " << zcellRect_right - zcellRect_left << "]" << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
