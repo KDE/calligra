@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qintdict.h>
+#include <qptrdict.h>
 #include <qguardedptr.h>
 
 #include <kexidb/object.h>
@@ -116,7 +117,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/**
 		 * @return the database connection assosiated with this project
 		 */
-		KexiDB::Connection	*dbConnection() const { return m_connection; }
+		KexiDB::Connection *dbConnection() const { return m_connection; }
 
 		KexiProjectData *data() const { return m_data; }
 
@@ -136,7 +137,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/*! Creates part item for given part \a info. 
 		 Newly item will not be saved to the backend but stored in memory only
 		 (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
-		 The item will have assigned new unique name like e.g. "Table15",
+		 The item will have assigned a new unique caption like e.g. "Table15",
 		 and unique name like "table15", but no specific identifier 
 		 (because id will be assigned on creation at the backend side).
 
@@ -148,6 +149,11 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 pointed by \a info. Used by KexiDialogBase::storeNewData(). 
 		 @internal */
 		void addStoredItem(KexiPart::Info *info, KexiPart::Item *item);
+
+		/*! removes \a item from internal dictionaries. The item is destroyed 
+		 after successful removal. 
+		 Used to delete an unstored part item previusly created with createPartItem(). */
+		void deleteUnstoredItem(KexiPart::Item *item);
 
 #if 0 //remove?
 		/*! Creates object using data provided by \a dlg dialog. 
@@ -181,6 +187,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 		/** new table \a schema created */
 		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
+
+	signals:
+		void newItemStored(KexiPart::Item *item);
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -237,7 +246,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		//! a cache for item() method, indexed by project part's ids
 		QIntDict<KexiPart::ItemDict> m_itemDictsCache;
 
-		QAsciiDict<KexiPart::Item> m_unstoredItems;
+		QPtrDict<KexiPart::Item> m_unstoredItems;
 		int m_tempPartItemID_Counter; //!< helper for getting unique 
 		                              //!< temporary identifiers for unstored items
 
