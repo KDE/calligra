@@ -49,6 +49,7 @@ General bugs
 ------------
 
 * Crashes
+  + 101915: kspread crashes on exit if there is a chart in the sheet  2 ----
   + 104420: Crash after entering a formula.			      1	----
 
 * Painting
@@ -57,7 +58,6 @@ General bugs
   + 66859: Decimals are in the next horizontal cell		      1 DONE
   * 77842: Strange text wrapping behavior			      1 DONE
   + 77843: Vertical text alignment problem			      1 DONE
-  + Indent and multiline doesn't work together			      2 ----
 
 * Printing
   + 61452: drawing problem when text overflow the right border        1 DONE
@@ -189,9 +189,11 @@ Things to do after the release of KOffice 1.4
   + Sheet layout:						      2 ----
     - Move sheet properties to separate dialog.
       They are currently part of KSpread config dialog.
+  + Indent and multiline doesn't work together			      2 ----
 
 
 * General features
+  + Painting: Indent and multiline doesn't work together	      2 ----
   + Insert manual page break					      2 ----
   + Split view							      1 ----
   + "Freeze/Unfreeze Panes"					      2 ----
