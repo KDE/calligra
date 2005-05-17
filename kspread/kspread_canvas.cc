@@ -3429,10 +3429,12 @@ void KSpreadCanvas::paintUpdates()
   int bottom = range.bottom();
   KSpreadSheet * sheet = activeSheet();
 
+#if 0
   kdDebug(36001) 
     << "================================================================"
     << endl;
   kdDebug(36001) << "painting dirty cells " << endl;
+#endif
 
   for ( x = range.left(); x <= right; ++x )
   {
