@@ -167,7 +167,7 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   list += i18n( "equal to or greater than" );
   list += i18n( "equal to or less than" );
   list += i18n( "between" );
-  list += i18n( "different from" );
+  list += i18n( "outside range" );
   list += i18n( "different to" );
 
   m_condition_1->clear();
