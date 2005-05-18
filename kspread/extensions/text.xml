@@ -591,7 +591,7 @@
         <Text>Returns a part of the string that matches a regular expression. If the string does not match the given regular expression, value specified as default is returned.</Text> 
         <Text>If a back-reference is provided, then the value of that back-reference is returned.</Text>
         <Text>If no default value is given, an empty string is assumed. If no back-reference is given, 0 is assumed (so that entire matching part is returned).</Text>
-        <Syntax>REGEXP(text, regexp, default, backref)</Syntax>
+        <Syntax>REGEXP(text; regexp; default; backref)</Syntax>
         <Example>REGEXP("Number is   15.";"[0-9]+") = "15" </Example>
         <Example>REGEXP("15, 20, 26, 41";"([0-9]+), *[0-9]+$";"";1) = "26" </Example>
       </Help> 
@@ -614,7 +614,7 @@
       </Parameter>
       <Help>  
         <Text>Replaces all matches of a regular expression with the replacement text</Text> 
-        <Syntax>REGEXPRE(text, regexp, replacement)</Syntax>
+        <Syntax>REGEXPRE(text; regexp; replacement)</Syntax>
         <Example>REGEXPRE("14 and 15 and 16";"[0-9]+";"num") returns "num and num and num"</Example>
       </Help> 
     </Function>
