@@ -168,7 +168,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     m_listCompletion->setIgnoreCase( true );
     updateMaxWords();
     KLocale klocale(m_doc->instance()->instanceName());
-    for (int i = 0; i <7; i++)
+    for (int i = 1; i <=7; i++)
     {
         m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).lower());
     }
@@ -1228,6 +1228,20 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                 }
 
         }
+
+        if (!m_ignoreUpperCase && m_bCapitalizeNameOfDays)
+        {
+            KCommand *cmd = doCapitalizeNameOfDays( textEditCursor, parag, index, lastWord, txtObj  );
+
+            if( cmd )
+            {
+                if (!macro)
+                macro = new KMacroCommand(i18n("Autocorrection"));
+                macro->addCommand( cmd );
+                m_ignoreUpperCase = true;
+            }
+        }
+
         if (ch=='.')
                 return;
 
@@ -1275,19 +1289,6 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                         }
                 }
         }
-
-        if (!m_ignoreUpperCase && m_bCapitalizeNameOfDays)
-        {
-            KCommand *cmd = doCapitalizeNameOfDays( textEditCursor, parag, index, lastWord, txtObj  );
-
-            if( cmd )
-            {
-                if (!macro)
-                macro = new KMacroCommand(i18n("Autocorrection"));
-                macro->addCommand( cmd );
-            }
-        }
-
 
         if( m_autoDetectUrl && m_ignoreUpperCase && (ch!='?' || lastWord.at(lastWord.length()-1)=='?') )
         {
@@ -1664,7 +1665,10 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
           pos = tmp_pos;
     tmp_pos = word.find("ftp.");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
-	    pos = tmp_pos;
+    {
+          pos = tmp_pos;
+          link_type = 3;
+    }
     tmp_pos = word.find("file:/");
     if((tmp_pos<pos || pos==-1 ) && tmp_pos!=-1)
           pos = tmp_pos;
@@ -1699,7 +1703,6 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
     }
     if(pos!=-1)
     {
-        int const old_index=index;
 	while ( !word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1)!='/')
         {
                 word.truncate(word.length()-1);
@@ -1720,6 +1723,8 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
                 var=new KoLinkVariable( textdoc, word, QString("mailto:")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
         else if(link_type==2)
                 var=new KoLinkVariable( textdoc, word, QString("http://")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
+        else if(link_type==3)
+                var=new KoLinkVariable( textdoc, word, QString("ftp://")+word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
         else
                 var=new KoLinkVariable( textdoc, word, word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
         CustomItemsMap customItemsMap;
@@ -1731,7 +1736,6 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         parag->setChanged( true );
 
         txtObj->emitHideCursor();
-        textEditCursor->setIndex(old_index-1);
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
 
