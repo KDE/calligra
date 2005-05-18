@@ -4668,6 +4668,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     grid2->addMultiCell(grid3,6,6,0,2);
 
     grid3 = new QGridLayout( 1, 3 );
+    grid3->setSpacing(KDialog::spacingHint());
 
     tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
     grid3->addWidget(tmpQLabel,0,0);
