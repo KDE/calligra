@@ -2168,22 +2168,22 @@ void KWFourSideConfigWidget::slotValueChanged( double val )
 
 double KWFourSideConfigWidget::leftValue() const
 {
-    return KoUnit::fromUserValue( m_inputLeft->value(), doc->unit() );
+    return m_inputLeft->value();
 }
 
 double KWFourSideConfigWidget::rightValue() const
 {
-    return KoUnit::fromUserValue( m_inputRight->value(), doc->unit() );
+    return m_inputRight->value();
 }
 
 double KWFourSideConfigWidget::topValue() const
 {
-    return KoUnit::fromUserValue( m_inputTop->value(), doc->unit() );
+    return m_inputTop->value();
 }
 
 double KWFourSideConfigWidget::bottomValue() const
 {
-    return KoUnit::fromUserValue( m_inputBottom->value(), doc->unit() );
+    return m_inputBottom->value();
 }
 
 // not needed, setEnabled does it
