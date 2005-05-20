@@ -1135,9 +1135,7 @@ void KoMainWindow::slotFileClose()
 
 void KoMainWindow::slotFileQuit()
 {
-    if (queryClose()) {
-        close(); // queryClose will also be called in this method but won't do anything because isModified==false.
-    }
+    close();
 }
 
 void KoMainWindow::print(bool quick) {
