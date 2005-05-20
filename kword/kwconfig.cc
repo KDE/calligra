@@ -676,6 +676,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
     QGridLayout * fontLayout = new QGridLayout(fontContainer, 1, 3);
 
+    fontLayout->setSpacing(KDialog::spacingHint());
     fontLayout->setColStretch(0, 0);
     fontLayout->setColStretch(1, 1);
     fontLayout->setColStretch(2, 0);
@@ -712,6 +713,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QWidget *languageContainer = new QWidget(gbDocumentDefaults);
     QGridLayout * languageLayout = new QGridLayout(languageContainer, 1, 3);
 
+    languageLayout->setSpacing(KDialog::spacingHint());
     languageLayout->setColStretch(0, 0);
     languageLayout->setColStretch(1, 1);
 
