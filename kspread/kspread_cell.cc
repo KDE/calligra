@@ -3427,7 +3427,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 	//            REVISE THIS WHOLE BORDER PAINTING SECTION!
 	//             
       if ( sheetDir == KSpreadSheet::RightToLeft )
-        painter.drawLine( QMAX( zrect_left,   zcellRect_right ),
+        painter.drawLine( QMIN( zrect_right,  zcellRect_right ),
                           QMAX( zrect_top,    zcellRect_top - top ),
                           QMIN( zrect_right,  zcellRect_right ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
@@ -3466,7 +3466,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
       if ( sheetDir == KSpreadSheet::RightToLeft )
         painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                           QMAX( zrect_top, zcellRect_top - top ),
-                          QMIN( zrect_right, zcellRect_right ),
+                          QMAX( zrect_left, zcellRect_left ),
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
       else {
 	// FIXME: This is the way all these things should look.
