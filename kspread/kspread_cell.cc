@@ -2131,6 +2131,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   Q_ASSERT(isDefault()
 	   || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
 
+  KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
+
   double left = coordinate.x();
 
   ColumnFormat * colFormat = m_pSheet->columnFormat( cellRef.x() );
@@ -2153,8 +2155,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // sheet's direction is RTL. We do this only if paintingObscured is 0,
   // otherwise the cell's painting location will flip back and forth in
   // consecutive calls to paintCell when painting obscured cells.
-  if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
-       && paintingObscured == 0 && view && view->canvasWidget() )
+  if ( sheetDir == KSpreadSheet::RightToLeft && paintingObscured == 0
+       && view && view->canvasWidget() )
   {
     double  dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
     left = dwidth - coordinate.x() - width;
@@ -2165,8 +2167,8 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // itself.
   if (d->hasExtra()) {
     if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
-      if ( m_pSheet->layoutDirection() == KSpreadSheet::RightToLeft
-          && paintingObscured == 0 && view && view->canvasWidget() )
+      // merged cell extends to the left if sheet is RTL
+      if ( sheetDir == KSpreadSheet::RightToLeft )
       {
         left -= d->extra()->extraWidth - width;
       }
@@ -2333,7 +2335,9 @@ void KSpreadCell::paintCell( const KoRect   &rect, QPainter & painter,
   // 7. If this cell is obscured and we are not already painting obscured
   //    cells, then paint the obscuring cell(s).  Otherwise don't do
   //    anything so that we don't cause an infinite loop.
-  if ( isObscured() && paintingObscured == 0 ) {
+  if ( isObscured() && paintingObscured == 0 &&
+       !( sheetDir == KSpreadSheet::RightToLeft && painter.device()->isExtDev() ) )
+  {
 
     //kdDebug(36001) << "painting cells that obscure " << name() << endl;
 
