@@ -324,12 +324,35 @@ static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& form
   else if( vf.upper() == "YYYY-MM-DD" )
     e.setAttribute("format", "215");
   
+  else if( vf == "h:mm AM/PM" )
+    e.setAttribute("format", "52");
+  else if( vf == "h:mm:ss AM/PM" )
+    e.setAttribute("format", "53");
+  else if( vf == "h:mm" )
+    e.setAttribute("format", "55");
+  else if( vf == "h:mm:ss" )
+    e.setAttribute("format", "56");
+  else if( vf == "[mm]:ss" )
+    e.setAttribute("format", "57");
+  else if( vf == "[h]:mm:ss" )
+    e.setAttribute("format", "58");
+  else if( vf == "[h]:mm" )
+    e.setAttribute("format", "59");
+
   // these are not supported in KSpread, find the closest one
   else if( vf.upper() == "YYYY/MM/D" )
-    e.setAttribute("format", "224");  
+    e.setAttribute("format", "224"); // yyyy/mm/dd
   else if( vf.upper() == "YYYY-MM-D" )
-    e.setAttribute("format", "215");
-  
+    e.setAttribute("format", "215"); // yyyy-mm-dd
+  else if( vf == "M/D/YY h:mm" )
+    e.setAttribute("format", "219"); // m/dd/yy
+  else if( vf == "[ss]" )
+    e.setAttribute("format", "56"); // h:mm:ss
+  else if( vf == "mm:ss" )
+    e.setAttribute("format", "56"); // h:mm:ss
+  else if( vf == "mm:ss.0" )
+    e.setAttribute("format", "56"); // h:mm:ss
+
   unsigned align = 0;
   switch( format.alignment().alignX() )
   {
@@ -388,15 +411,26 @@ static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& form
 static bool isDateFormat( const Swinder::Format& format )
 {
   QString vf = string( format.valueFormat()).string();
-  vf = vf.upper();
-  if( vf == "M/D/YY" ) return true;
-  if( vf == "M/D/YYYY" ) return true;
-  if( vf == "MM/DD/YY" ) return true;
-  if( vf == "MM/DD/YYYY" ) return true;
-  if( vf == "YYYY/MM/D" ) return true;
-  if( vf == "YYYY/MM/DD" ) return true;
-  if( vf == "YYYY-MM-D" ) return true;
-  if( vf == "YYYY-MM-DD" ) return true;
+  QString vfu = vf.upper();
+  if( vfu == "M/D/YY" ) return true;
+  if( vfu == "M/D/YYYY" ) return true;
+  if( vfu == "MM/DD/YY" ) return true;
+  if( vfu == "MM/DD/YYYY" ) return true;
+  if( vfu == "YYYY/MM/D" ) return true;
+  if( vfu == "YYYY/MM/DD" ) return true;
+  if( vfu == "YYYY-MM-D" ) return true;
+  if( vfu == "YYYY-MM-DD" ) return true;
+  if( vf == "h:mm AM/PM" ) return true;
+  if( vf == "h:mm:ss AM/PM" ) return true;
+  if( vf == "h:mm" ) return true;
+  if( vf == "h:mm:ss" ) return true;
+  if( vf == "[h]:mm:ss" ) return true;
+  if( vf == "[h]:mm" ) return true;
+  if( vf == "[mm]:ss" ) return true;
+  if( vf == "M/D/YY h:mm" ) return true;
+  if( vf == "[ss]" ) return true;
+  if( vf == "mm:ss" ) return true;
+  if( vf == "mm:ss.0" ) return true;
   
   return false;
 }
@@ -422,7 +456,7 @@ static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& form
 {
   QDomElement textElement;
   textElement = doc.createElement( "text" );
-  
+
   if( !formula.isEmpty() )
   {
     QString str = string( formula ).string();
