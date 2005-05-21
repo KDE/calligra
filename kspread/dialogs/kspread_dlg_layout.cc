@@ -2883,12 +2883,13 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
-    indent = new KDoubleNumInput( grp );
-    indent->setRange( KoUnit::toUserValue( 0.0, dlg->getDoc()->getUnit() ),
-                      KoUnit::toUserValue( 400.0, dlg->getDoc()->getUnit() ),
-                      KoUnit::toUserValue( 10.0, dlg->getDoc()->getUnit()) );
-    indent->setValue ( KoUnit::toUserValue( dlg->indent, dlg->getDoc()->getUnit() ) );
-    grid2->addWidget(indent, 1, 0);
+    m_indent = new KDoubleNumInput( grp );
+    m_indent->setRange( KoUnit::toUserValue( 0.0,   dlg->getDoc()->getUnit() ),
+			KoUnit::toUserValue( 400.0, dlg->getDoc()->getUnit() ),
+			KoUnit::toUserValue( 10.0,  dlg->getDoc()->getUnit()));
+    m_indent->setValue ( KoUnit::toUserValue( dlg->indent, 
+					      dlg->getDoc()->getUnit() ) );
+    grid2->addWidget(m_indent, 1, 0);
     grid3->addWidget(grp, 2, 1);
 
     grp = new QButtonGroup( i18n("Size of Cell"), this);
@@ -2972,9 +2973,9 @@ void CellFormatPagePosition::slotChangeVerticalState()
 void CellFormatPagePosition::slotStateChanged(int)
 {
     if (right->isChecked() || center->isChecked())
-        indent->setEnabled(false);
+        m_indent->setEnabled(false);
     else
-        indent->setEnabled(true);
+        m_indent->setEnabled(true);
 
 }
 bool CellFormatPagePosition::getMergedCellState()
@@ -3055,8 +3056,11 @@ void CellFormatPagePosition::apply( KSpreadCustomStyle * style )
   if ( dlg->textRotation != angleRotation->value() )
     style->changeRotateAngle( (-angleRotation->value()) );
 
-  if ( dlg->indent != indent->value() && indent->isEnabled() )
-    style->changeIndent( indent->value() );
+  if ( m_indent->isEnabled()
+       && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
+						dlg->getDoc()->getUnit() ) )
+    style->changeIndent( KoUnit::fromUserValue( m_indent->value(),
+						dlg->getDoc()->getUnit() ) );
 }
 
 void CellFormatPagePosition::apply( ColumnFormat *_obj )
@@ -3092,7 +3096,10 @@ void CellFormatPagePosition::apply( ColumnFormat *_obj )
     for ( c = sheet->getFirstCellColumn(col); c != NULL;
          c = sheet->getNextCellDown(c->column(), c->row()) )
     {
-      if ( dlg->indent != indent->value() && indent->isEnabled() )
+      if ( m_indent->isEnabled()
+	   && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
+						    dlg->getDoc()->getUnit()) )
+
       {
         c->clearProperty( KSpreadCell::PIndent );
         c->clearNoFallBackProperties( KSpreadCell::PIndent );
@@ -3179,7 +3186,9 @@ void CellFormatPagePosition::apply( RowFormat *_obj )
     for ( c = sheet->getFirstCellRow(row); c != NULL;
          c = sheet->getNextCellRight(c->column(), c->row()) )
     {
-      if (dlg->indent!=indent->value() && indent->isEnabled())
+      if ( m_indent->isEnabled()
+	   && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
+						    dlg->getDoc()->getUnit()) )
       {
         c->clearProperty(KSpreadCell::PIndent);
         c->clearNoFallBackProperties( KSpreadCell::PIndent );
@@ -3280,8 +3289,11 @@ void CellFormatPagePosition::applyFormat( KSpreadFormat * _obj )
 
   if ( dlg->textRotation!=angleRotation->value() )
     _obj->setAngle( (-angleRotation->value() ) );
-  if ( dlg->indent != indent->value() && indent->isEnabled() )
-    _obj->setIndent( indent->value() );
+  if ( m_indent->isEnabled()
+       && dlg->indent != KoUnit::fromUserValue( m_indent->value(),
+						dlg->getDoc()->getUnit() ) )
+    _obj->setIndent( KoUnit::fromUserValue( m_indent->value(),
+					    dlg->getDoc()->getUnit() ) );
 }
 
 double CellFormatPagePosition::getSizeHeight()

@@ -107,7 +107,7 @@ General bugs
     * partially done, the rest requires the new formula parser, and it won't
       be 100% done afterwards, if we use koscript-compat layer for functions
   + 104859: KSpread marks document as modified on opening	      1 ----
-  + Setting of indentation in a cell does not work well.	      1 ----
+  + Setting of indentation in a cell does not work well.	      1 DONE
 
 * Investigate further if these are important.
   + 48037: 1. Insert special doesn't work			      1 DONE

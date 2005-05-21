@@ -345,7 +345,7 @@ protected:
     QCheckBox *defaultHeight;
     QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
-    KDoubleNumInput *indent;
+    KDoubleNumInput *m_indent;
     bool m_bOptionText;
 };
 
