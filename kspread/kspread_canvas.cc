@@ -3,7 +3,7 @@
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2004 David Faure <faure@kde.org>
-   Copyright 2004 Meni Livne <livne@kde.org>
+   Copyright 2004-2005 Meni Livne <livne@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2003 Hamish Rodda <rodda@kde.org>
@@ -2931,15 +2931,25 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
       //kdDebug(36001) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
     }
 
-    double xpos;
-    if ( sheet->layoutDirection() == KSpreadSheet::RightToLeft )
+    double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
+
+    KSpreadSheet::LayoutDirection sheetDir = sheet->layoutDirection();
+    bool rtlText = cell->strOutText().isRightToLeft();
+
+    // if sheet and cell direction don't match, then the editor's location
+    // needs to be shifted backwards so that it's right above the cell's text
+    if ( w > 0 && ( ( sheetDir == KSpreadSheet::RightToLeft && !rtlText ) ||
+                    ( sheetDir == KSpreadSheet::LeftToRight && rtlText  ) ) )
+      xpos -= w - min_w;
+
+    // paint editor above correct cell if sheet direction is RTL
+    if ( sheetDir == KSpreadSheet::RightToLeft )
     {
       double dwidth = d->view->doc()->unzoomItX( width() );
-      xpos = dwidth - min_w - sheet->dblColumnPos( markerColumn() ) + xOffset();
+      double w2 = QMAX( w, min_w );
+      xpos = dwidth - w2 - xpos;
     }
-    else
-      xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
-
+         
     double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
     QPalette p = d->cellEditor->palette();
     QColorGroup g( p.active() );
