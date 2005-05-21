@@ -79,16 +79,18 @@ General bugs
 	Fix the disappearing legend (KChart bug?)			--
   + Fix all printing of cell borders.  				      1 DONE
 
+* Format
+  + 87471: format of whole column does not change		      2 ----
+  + Border on a cell in the cell format dialog -> the line width      1 ----
+    does not stick.
+
 * Cut/Copy & Paste
   + 63332: Pasting into a cell that has spilled out, pastes into all  1 DONE
   + 69283: content on middle mouse click			      1 ----
 
 * Load & Save, Import & Export
   + 78040: font doesn't stick in cells				      1 ----
-  + 52575:1 The Open File dialog does not accept files opened	      1 DONE
-            with "fish:/username@server".
-	This is the new wish 101935 that was broken out of 52575.
-	I don't think it is important.
+  + 87471: format of whole column does not change (actually import)   1 ----
 
 * Miscellaneous
   + 59510: Handles large spreadsheets "extremely" poorly.	      2 ----
@@ -104,9 +106,8 @@ General bugs
 	   and number.
     * partially done, the rest requires the new formula parser, and it won't
       be 100% done afterwards, if we use koscript-compat layer for functions
-  + 87471: format of whole column does not change.		      1 ----
-  + Border on a cell in the cell format dialog -> the line width      1 ----
-    does not "take".
+  + 104859: KSpread marks document as modified on opening	      1 ----
+  + Setting of indentation in a cell does not work well.	      1 ----
 
 * Investigate further if these are important.
   + 48037: 1. Insert special doesn't work			      1 DONE
@@ -155,6 +156,12 @@ Things to do after the release of KOffice 1.4
 
 * Bugs
   + 78642: Function AVERAGEA does not work as documented	      1 ----
+  + If you select a row and chooses Data->"Remove columns", then      1 ----
+    everything is removed.  I think if entire rows are selected,
+    "Remove columns" should be disabled.  Besides, if you undo
+    the operation, KSpread crashes.
+  + If entire rows or columns are selected, then Data->"Insert cells"
+    should be disabled.
 
 * OASIS file format
   + Read OASIS							      1 LAUR
