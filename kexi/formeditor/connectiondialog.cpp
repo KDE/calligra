@@ -46,7 +46,7 @@ namespace KFormDesigner {
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(QWidget *parent)
-: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"), 
+: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"),
 							Ok|Cancel|Details, Ok, false)
 , m_buffer(0)
 {
@@ -334,7 +334,7 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	{
 		if( !item || (*item)[i].toString().isEmpty())
 		{
-			setStatusError( i18n("<qt>You have not selected a <b>%1</b>.</qt>").arg(m_data->column(i)->captionAliasOrName()),
+			setStatusError( i18n("<qt>You have not selected item: <b>%1</b>.</qt>").arg(m_data->column(i)->captionAliasOrName()),
 				item);
 			return;
 		}
