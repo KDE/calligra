@@ -1012,13 +1012,13 @@ static const FunctionEntry FunctionEntries[] =
 
 const char* FormulaToken::functionName() const
 {
-  // FIXME sanity check
+  if( functionIndex() > 367 ) return 0;
   return FunctionEntries[ functionIndex() ].name;
 }
 
 unsigned FormulaToken::functionParams() const
 {
-  // FIXME handle FunctionVar!
+  if( functionIndex() > 367 ) return 0;
   return FunctionEntries[ functionIndex() ].params;
 }
 
@@ -1026,36 +1026,69 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
 {
   // FIXME check data size !
   // FIXME handle Excel95 !
+  // FIXME handle shared formula
   unsigned char buf[2];
-  
-  buf[0] = d->data[0];
-  buf[1] = d->data[1];
-  unsigned rowRef = readU16( buf );
-  
-  buf[0] = d->data[2];
-  buf[1] = d->data[3];
-  unsigned colRef = readU16( buf );
-  
-  bool rowRelative = colRef & 0x8000;
-  bool colRelative = colRef & 0x4000;
-  colRef &= 0x3fff;
-  
-  /*
-  FIXME handle shared formula
-  if( colRelative )
-    colRef -= col;
-  if( rowRelative )
-    rowRef -= row;
-    */
-    
+  int rowRef, colRef;
+  bool rowRelative, colRelative;
+
+  if( version() == Excel97 )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    rowRef = readU16( buf );
+
+    buf[0] = d->data[2];
+    buf[1] = d->data[3];
+    colRef = readU16( buf );
+
+    rowRelative = colRef & 0x8000;
+    colRelative = colRef & 0x4000;
+    colRef &= 0x3fff;
+  }
+  else
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    rowRef = readU16( buf );
+
+    buf[0] = d->data[2];
+    buf[1] = 0;
+    colRef = readU16( buf );
+
+    rowRelative = rowRef & 0x8000;
+    colRelative = rowRef & 0x4000;
+    rowRef &= 0x3fff;
+  }
+
   UString result;
-  if( !colRelative )      
+
+#if 0 
+// normal use
+  if( !colRelative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( colRef ) );  
-  if( !rowRelative )      
+  if( !rowRelative )
     result.append( UString("$") );
   result.append( UString::from( rowRef+1 ) );  
-  
+#else 
+   // SUPERHACK !! KSpread only !!!
+  if( colRelative )
+    colRef -= col;
+  else colRef++;
+  if( rowRelative )
+    rowRef -= row;
+  else rowRef++;
+  if( !colRelative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); 
+  result.append( UString::from( colRef ) );  
+  if( !rowRelative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); // HACK, only for KSpread !!!
+  result.append( UString::from( rowRef ) );  
+  result.append( UString("#") );
+#endif
+
   return result;  
 }
 
@@ -5047,6 +5080,7 @@ typedef std::vector<UString> UStringStack;
 void mergeTokens( UStringStack* stack, int count, UString mergeString )
 {
   if( !stack ) return;
+  if( !stack->size() ) return;
   
   UString s1, s2;
 	
@@ -5207,7 +5241,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::Function:
         {
           mergeTokens( &stack, token.functionParams(), UString(";") );
-          UString str( token.functionName() );
+          UString str( token.functionName() ? token.functionName() : "??" );
           str.append( UString("(") );
           str.append( stack[ stack.size()-1 ] );
           str.append( UString(")") );
