@@ -38,6 +38,8 @@ REAL BUGS:
 -	crashes in vtext
 -	make curve1To, curve2To work
 -	vpolylinetool creates beziers where it could create lines
+-	Selections can't be undone/redone because there are no selection commands. 
+	Add a VSelectNodeCmd and/or a VSelectCmd. (See bug #60438)
 
 TODO:
 -	make pattern coords absolute and not relative to the shape
