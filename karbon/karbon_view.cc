@@ -169,6 +169,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_horizRuler->show();
 	m_vertRuler->show();
 
+	m_horizRuler->installEventFilter(m_canvas);
+	m_vertRuler->installEventFilter(m_canvas);
+
 	// set up factory
 	m_painterFactory = new VPainterFactory;
 	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
@@ -968,21 +971,24 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*tran
 bool
 KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
-	if( event->type() == QEvent::Enter )
-	{
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
-		m_horizRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
-		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
-		m_horizRuler->update();
-		m_vertRuler->update();
-	}
-	else if( event->type() == QEvent::MouseMove )
-	{
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
-		m_horizRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
-		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
-		m_cursorCoords->setText( QString( "%1, %2" ).arg( p.x(), 0, 'f', 2 ).arg( p.y(), 0, 'f', 2 ) );
-	}
+	int mx = event->pos().x();
+	int my = event->pos().y();
+
+	m_horizRuler->setMousePos( mx, my );
+	m_vertRuler->setMousePos( mx, my );
+
+	m_horizRuler->update();
+	m_vertRuler->update();
+	
+	KoPoint xy;
+	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
+	xy.setY((my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
+
+	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
+	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
+	
+	m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(xy.x(), 2)).arg(KGlobal::_locale->formatNumber(xy.y(), 2)) );
+	
 	part()->toolController()->setActiveView( this );
 	if( part()->toolController() )
 		return part()->toolController()->mouseEvent( event, p );

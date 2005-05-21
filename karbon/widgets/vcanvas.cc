@@ -342,21 +342,9 @@ VCanvas::repaintAll( bool drawVObjects )
 
 /// repaints just a rect area (no scrolling)
 void
-VCanvas::repaintAll( const KoRect & )
+VCanvas::repaintAll( const KoRect &r )
 {
-	//if( m_view->layersDocker() )
-//		m_view->layersDocker()->updatePreviews();
-	VPainter *p = m_view->painterFactory()->painter();
-	KoRect rect = KoRect::fromQRect( this->rect() );
-	p->blit( rect );
-
-	// draw handle:
-	VQPainter qpainter( p->device() );
-	setYMirroring( &qpainter );
-	qpainter.setZoomFactor( m_view->zoom() );
-	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
-
-	bitBlt( viewport(), QPoint( int( rect.x() ), int( rect.y() ) ), p->device(), rect.toQRect() );
+	drawDocument( 0, r );
 }
 
 void
