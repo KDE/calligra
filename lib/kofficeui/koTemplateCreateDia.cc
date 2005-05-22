@@ -42,6 +42,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
+#include <kiconloader.h>
 
 #include <stdlib.h>
 #include <kinstance.h>
