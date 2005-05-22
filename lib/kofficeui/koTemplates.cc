@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kinstance.h>
+#include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
@@ -35,10 +36,10 @@
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
-                       const QString &picture, bool hidden,
+                       const QString &picture, const QString &fileName, bool hidden,
                        bool touched) :
-    m_name(name), m_descr(description), m_file(file), m_picture(picture), m_hidden(hidden),
-    m_touched(touched), m_cached(false) {
+    m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
+    m_hidden(hidden), m_touched(touched), m_cached(false) {
 }
 
 const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
@@ -103,6 +104,10 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
         return true;
     }
     else if(myTemplate && force) {
+        //kdDebug() << "removing :" << myTemplate->fileName() << endl;
+        QFile::remove( myTemplate->fileName()  );
+        QFile::remove( myTemplate->picture() );
+        QFile::remove( myTemplate->file() );
         m_templates.removeRef(myTemplate);
         m_templates.append(t);
         m_touched=touch;
@@ -137,7 +142,6 @@ void KoTemplateTree::readTemplateTree() {
 }
 
 void KoTemplateTree::writeTemplateTree() {
-
     QString localDir=m_instance->dirs()->saveLocation(m_templateType);
 
     for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
@@ -172,7 +176,7 @@ void KoTemplateTree::writeTemplateTree() {
                 //kdDebug() << "++template: " << t->name() << endl;
                 writeTemplate(t, group, localDir);
             }
-            if(t->isHidden() && t->touched() && t->file().contains(localDir)) {
+            if(t->isHidden() && t->touched() ) {
                 //kdDebug() << "+++ delete local template ##############" << endl;
                 writeTemplate(t, group, localDir);
                 QFile::remove(t->file());
@@ -248,6 +252,7 @@ void KoTemplateTree::readTemplates() {
                 QString text;
                 QString description;
                 QString hidden_str;
+                QString fileName;
                 bool hidden=false;
                 bool defaultTemplate = false;
                 QString templatePath;
@@ -258,19 +263,17 @@ void KoTemplateTree::readTemplates() {
                     config.setDesktopGroup();
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
+                        hidden=config.readBoolEntry("X-KDE-Hidden", false);
+                        fileName=filePath;
                         description=config.readEntry("Comment");
                         //kdDebug() << "name: " << text << endl;
                         icon=config.readEntry("Icon");
-                        //kdDebug() << "icon1: " << icon << endl;
                         if(icon[0]!='/' && // allow absolute paths for icons
                            QFile::exists(*it+icon)) // allow icons from icontheme
                             icon=*it+icon;
                         //kdDebug() << "icon2: " << icon << endl;
-                        hidden_str=config.readEntry("X-KDE-Hidden");
-                        if(hidden_str.lower()=="true")
-                            hidden=true;
-                        if ( config.readBoolEntry("X-KDE-DefaultTemplate") )
-                            defaultTemplate = true;
+                        hidden=config.readBoolEntry("X-KDE-Hidden", false);
+                        defaultTemplate = config.readBoolEntry("X-KDE-DefaultTemplate", false);
                         //kdDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");
                         //kdDebug() << "Link to : " << templatePath << endl;
@@ -297,7 +300,7 @@ void KoTemplateTree::readTemplates() {
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
-                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, hidden);
+                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, fileName, hidden);
                 groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
                                                          // "touch" the group to avoid useless
                                                          // creation of dirs in .kde/blah/...
@@ -310,8 +313,32 @@ void KoTemplateTree::readTemplates() {
 
 void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
                                    const QString &localDir) {
+    QString fileName;
+    if ( t->isHidden() )
+    {
+        fileName = t->fileName();
+        // try to remove the file
+        if ( QFile::remove(fileName) || !QFile::exists(fileName) )
+        {
+            QFile::remove( t->name() );
+            QFile::remove( t->picture() );
+            return;
+        }
+    }
+    // be sure that the template's file name is unique so we don't overwrite an other
+    QString const path = localDir + group->name() + '/';
+    QString const name = KoTemplates::stripWhiteSpace( t->name() );
+    fileName = path + name + ".desktop";
+    if ( t->isHidden() && QFile::exists(fileName) )
+        return;
+    QString fill;
+    while ( KIO::NetAccess::exists( fileName, true, 0 ) )
+    {
+        fill += '_';
+        fileName = path + fill + name + ".desktop";
+    }
 
-    KSimpleConfig config(KoTemplates::stripWhiteSpace(localDir+group->name()+'/'+t->name()+".desktop"));
+    KSimpleConfig config( fileName );
     config.setDesktopGroup();
     config.writeEntry("Type", "Link");
     config.writePathEntry("URL", t->file());

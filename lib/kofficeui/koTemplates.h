@@ -35,6 +35,7 @@ public:
                const QString &description=QString::null,
 	       const QString &file=QString::null,
 	       const QString &picture=QString::null,
+           const QString &fileName=QString::null,
 	       bool hidden=false, bool touched=false);
     ~KoTemplate() {}
 
@@ -42,6 +43,7 @@ public:
     QString description() const { return m_descr; };
     QString file() const { return m_file; }
     QString picture() const { return m_picture; }
+    QString fileName() const { return m_fileName; }
     const QPixmap &loadPicture( KInstance* instance );
 
     bool isHidden() const { return m_hidden; }
@@ -50,7 +52,7 @@ public:
     bool touched() const { return m_touched; }
 
 private:
-    QString m_name, m_descr, m_file, m_picture;
+    QString m_name, m_descr, m_file, m_picture, m_fileName;
     bool m_hidden;
     mutable bool m_touched;
     bool m_cached;

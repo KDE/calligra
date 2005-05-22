@@ -22,6 +22,7 @@
 
 #include <koTemplateCreateDia.h>
 
+#include <qfile.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -34,7 +35,7 @@
 #include <klistview.h>
 #include <klocale.h>
 #include <koTemplates.h>
-#include <kfiledialog.h>
+#include <kicondialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kimageio.h>
@@ -229,7 +230,7 @@ void KoTemplateCreateDia::slotOk() {
 
     // copy the tmp file and the picture the app provides
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
-    dir+=KoTemplates::stripWhiteSpace(group->name());
+    dir+=group->name();
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
 
@@ -241,20 +242,31 @@ void KoTemplateCreateDia::slotOk() {
 
     // try to find the extension for the template file :P
     const int pos = m_file.findRev( '.' );
+    QString ext;
     if ( pos > -1 )
-        file += m_file.mid( pos );
+        ext = m_file.mid( pos );
     else
         kdWarning(30004) << "Template extension not found!" << endl;
 
-    kdDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file << " ICON=" << tmpIcon << endl;
-    KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file, tmpIcon, false, true);
+    KURL dest;
+    dest.setPath(templateDir+file+ext);
+    if ( QFile::exists( dest.prettyURL(0, KURL::StripFileProtocol) ) )
+    {
+        do
+        {
+            file.prepend( '_' );
+            dest.setPath( templateDir + file + ext );
+            tmpIcon=".icon/"+file+".png";
+            icon=iconDir+file+".png";
+        }
+        while ( KIO::NetAccess::exists( dest, true, this ) );
+    }
+    bool ignore = false;
+    kdDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file+ext << " ICON=" << tmpIcon << endl;
+    KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file+ext, tmpIcon, "", false, true);
     if(!group->add(t)) {
-        KoTemplate *existingTemplate=group->find(t->name());
-        // if the original template is hidden, we simply force the update >:->
-        if(existingTemplate && existingTemplate->isHidden())
-            group->add(t, true);
-        // Otherwise ask the user
-        else if(existingTemplate && !existingTemplate->isHidden()) {
+        KoTemplate *existingTemplate=group->find(d->m_name->text());
+        if(existingTemplate && !existingTemplate->isHidden()) {
             if(KMessageBox::warningYesNo(this, i18n("Do you really want to overwrite"
                                                     " the existing '%1' template?").
                                          arg(existingTemplate->name()))==KMessageBox::Yes)
@@ -265,6 +277,8 @@ void KoTemplateCreateDia::slotOk() {
                 return;
             }
         }
+        else
+            ignore = true;
     }
 
     if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
@@ -273,12 +287,22 @@ void KoTemplateCreateDia::slotOk() {
         return;
     }
 
-    // copy the template file
-    KURL orig, dest;
+    KURL orig;
     orig.setPath( m_file );
-    dest.setPath(templateDir+file);
-    // We copy the file with overwrite
-    KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
+    // don't overwrite the hidden template file with a new non-hidden one
+    if ( !ignore )
+    {
+        // copy the template file
+        KIO::NetAccess::file_copy( orig, dest, -1, true, false, this );
+
+        // save the picture
+        if(d->m_default->isChecked() && !m_pixmap.isNull())
+            m_pixmap.save(icon, "PNG");
+        else if(!d->m_customPixmap.isNull())
+            d->m_customPixmap.save(icon, "PNG");
+        else
+            kdWarning(30004) << "Could not save the preview picture!" << endl;
+    }
 
     // if there's a .directory file, we copy this one, too
     bool ready=false;
@@ -295,13 +319,6 @@ void KoTemplateCreateDia::slotOk() {
             }
         }
     }
-    // save the picture
-    if(d->m_default->isChecked() && !m_pixmap.isNull())
-        m_pixmap.save(icon, "PNG");
-    else if(!d->m_customPixmap.isNull())
-        d->m_customPixmap.save(icon, "PNG");
-    else
-        kdWarning(30004) << "Could not save the preview picture!" << endl;
 
     d->m_tree->writeTemplateTree();
     KDialogBase::slotOk();
@@ -329,39 +346,17 @@ void KoTemplateCreateDia::slotSelect() {
     d->m_default->setChecked(false);
     d->m_custom->setChecked(true);
 
-    KFileDialog fd(QString::null, KImageIO::pattern(KImageIO::Reading), this, 0, true);
-    fd.setCaption(i18n("Select Picture"));
-    KURL url;
-    if (fd.exec()==QDialog::Accepted)
-        url=fd.selectedURL();
-
-    if(url.isEmpty()) {
+    QString name = KIconDialog::getIcon();
+    if( name.isEmpty() ) {
         if(d->m_customFile.isEmpty()) {
             d->m_default->setChecked(true);
             d->m_custom->setChecked(false);
         }
         return;
     }
-
     // ### TODO: do a better remote loading without having to have d->m_tempFile
-    if ( url.isLocalFile() )
-    {
-        d->m_customFile = url.path();
-    }
-    else
-    {
-        QString target ( d->m_tempFile.name() );
-        if ( KIO::NetAccess::download( url, target, this ) )
-        {
-            d->m_customFile = target;
-        }
-        else
-        {
-                KMessageBox::sorry( this, i18n( "Remote file could not be downloaded."));
-                return;
-        }
-    }
-
+    QString path = KGlobal::iconLoader()->iconPath(name, KIcon::Desktop);
+    d->m_customFile = path;
     d->m_customPixmap=QPixmap();
     updatePixmap();
 }
