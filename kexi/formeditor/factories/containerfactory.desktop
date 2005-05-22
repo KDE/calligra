@@ -6,6 +6,7 @@ ServiceTypes=KFormDesigner/WidgetFactory
 Name=Container Widgets
 Name[bg]=Контейнери
 Name[da]=Container-kontroller
+Name[de]=Container-Elemente
 Name[es]=Widgets contenedores
 Name[et]=Konteinervidinad
 Name[fr]=Conteneur d'éléments graphiques

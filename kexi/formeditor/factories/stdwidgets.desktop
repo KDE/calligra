@@ -6,6 +6,7 @@ ServiceTypes=KFormDesigner/WidgetFactory
 Name=Basic Widgets
 Name[bg]=Основни графични обекти
 Name[da]=Basale kontroller
+Name[de]=Basis-Elemente
 Name[es]=Widgets básicos
 Name[et]=Standardvidinad
 Name[fr]=Éléments graphiques basiques
