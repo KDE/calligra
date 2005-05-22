@@ -221,7 +221,12 @@ public:
 
     virtual void addShell( KoMainWindow *shell );
 
-    virtual void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
+    void insertObject( const KoRect& _rect, KoDocumentEntry& _e );
+
+    // Create an embedded document; used by KWPartFrameSet but here because
+    // insertChild is protected.
+    KWChild* createChildDoc( const KoRect& rect, KoDocument* childDoc );
+
     void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews = true );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
@@ -706,7 +711,8 @@ public:
      * See also KoTextFormat::defaultTextColor. */
     static QColor resolveTextColor( const QColor & col, QPainter * painter );
     static QColor defaultTextColor( QPainter * painter );
-    static QColor resolveBgColor( const QColor & col, QPainter * painter );
+    static QColor resolveBgColor( const QColor & col, QPainter * painter = 0 );
+    static QBrush resolveBgBrush( const QBrush & brush, QPainter * painter = 0 );
     static QColor defaultBgColor( QPainter * painter );
 
 

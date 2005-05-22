@@ -1161,7 +1161,7 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
 
     grid5->addWidget(labelBgColor,row++,0);
 
-    brushColor = new KColorButton( Qt::white, tab5 );
+    brushColor = new KColorButton( Qt::white, KWDocument::defaultBgColor(0), tab5 );
     grid5->addWidget(brushColor,row++,0);
 
 //    connect( brushColor, SIGNAL( changed( const QColor & ) ),
@@ -1331,9 +1331,7 @@ void KWFrameDia::initBrush()
     }
 #endif
 
-    QColor col = newBrushStyle.color();
-    col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-
+    QColor col = KWDocument::resolveBgColor( newBrushStyle.color(), 0 );
     brushColor->setColor( col );
 }
 
@@ -1394,7 +1392,7 @@ QBrush KWFrameDia::frameBrushStyle() const
     }
 #endif
 
-    brush.setColor( newBrushStyle.color() );
+    brush.setColor( brushColor->color() );
 
     return brush;
 }
@@ -1837,7 +1835,7 @@ bool KWFrameDia::applyChanges()
     if(tab5) { // Tab Background fill/color
         QBrush tmpBrush=frameBrushStyle();
         if(frame) {
-            if(tmpBrush!=frame->backgroundColor()) {
+            if ( tmpBrush != KWDocument::resolveBgBrush( frame->backgroundColor() ) ) {
                 frame->setBackgroundColor(tmpBrush);
             }
         } else if(overwriteColor->isChecked()) {
@@ -1908,7 +1906,7 @@ bool KWFrameDia::applyChanges()
                            || frameCopy->runAroundRight()!=frame->runAroundRight()
                            || frameCopy->runAroundTop()!=frame->runAroundTop()
                            || frameCopy->runAroundBottom()!=frame->runAroundBottom()
-                           || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
+                           || (tab5 && KWDocument::resolveBgBrush( frameCopy->backgroundColor() )!=frameBrushStyle())))
         {
             if(!macroCmd)
                 macroCmd = new KMacroCommand( i18n("Frame Properties") );

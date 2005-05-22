@@ -3482,6 +3482,13 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
     painter->restore();
 }
 
+KWChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
+{
+    KWChild* ch = new KWChild( this, rect.toQRect(), childDoc );
+    insertChild( ch );
+    return ch;
+}
+
 void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( this );
@@ -3490,9 +3497,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
-    KWChild* ch = new KWChild( this, rect.toQRect(), doc );
-
-    insertChild( ch );
+    KWChild* ch = createChildDoc( rect, doc );
     setModified( TRUE );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );
@@ -5030,6 +5035,15 @@ void KWDocument::refreshDocStructure(FrameSetType _type)
     emit docStructureChanged(typeItemDocStructure(_type));
 }
 
+QBrush KWDocument::resolveBgBrush( const QBrush & brush, QPainter * painter )
+{
+    if ( brush.color().isValid() )
+        return brush;
+    QBrush ret( brush );
+    ret.setColor( defaultBgColor( painter ) );
+    return ret;
+}
+
 QColor KWDocument::resolveBgColor( const QColor & col, QPainter * painter )
 {
     if (col.isValid())
@@ -5040,7 +5054,7 @@ QColor KWDocument::resolveBgColor( const QColor & col, QPainter * painter )
 
 QColor KWDocument::defaultBgColor( QPainter * painter )
 {
-    if ( painter->device()->devType() == QInternal::Printer )
+    if ( painter && painter->device()->devType() == QInternal::Printer )
         return Qt::white;
     return QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 }
