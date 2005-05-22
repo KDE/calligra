@@ -41,7 +41,8 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
-    KWChild *getChild()const { return m_child; }
+    KWChild *getChild() const { return m_child; }
+    void setChild( KWChild* child );
 
     void updateChildGeometry( KWViewMode* viewMode );
 

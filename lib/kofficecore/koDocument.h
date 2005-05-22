@@ -468,16 +468,6 @@ public:
     virtual bool saveToStore( KoStore* store, const QString& path );
 
     /**
-     *  @brief Saves a document to a store.
-     *
-     *  Return name of store object
-     *  You should not have to reimplement this - but call it in @ref #saveChildren.
-     */
-
-    virtual QString saveOasisToStore( KoStore * _store, const QString & index, KoXmlWriter* manifestWriter );
-
-
-    /**
      *  Reimplement this method to load the contents of your %KOffice document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      *
@@ -685,7 +675,7 @@ public:
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */
-    virtual bool isStoredExtern();
+    virtual bool isStoredExtern() const;
 
     /**
      * @return the page layout associated with this document (margins, paper, etc).
@@ -774,7 +764,7 @@ public:
      */
     bool storeInternal() const;
 
-    bool hasExternURL();
+    bool hasExternURL() const;
 
     /**
      * Sets the document URL to @p url
@@ -907,6 +897,14 @@ protected:
     virtual bool saveChildren( KoStore* store );
 
     /**
+     *  Saves all internal children (only!), to the store, using the OASIS format.
+     *  This is called automatically during saveNativeFormat.
+     *  @see saveExternalChildren if you have external children.
+     *  Returns true on success.
+     */
+    virtual bool saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter );
+
+    /**
      *  Overload this function if you have to load additional files
      *  from a store. This function is called after @ref #loadXML
      *  and after @ref #loadChildren have been called.
@@ -951,7 +949,7 @@ protected:
      *  Returns true on success.
      * @see #saveChildren for internal children
      */
-    bool saveExternalChildren(); // ### TODO? BCI: make this virtual
+    virtual bool saveExternalChildren();
 
 private slots:
     void slotChildChanged( KoChild *c );

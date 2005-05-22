@@ -27,6 +27,7 @@
 #include "kwanchor.h"
 #include "kwoasisloader.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -122,6 +123,13 @@ KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& cont
         else if ( localName == "image" )
         {
             KWFrameSet* fs = new KWPictureFrameSet( doc, tag, elem, context );
+            doc->addFrameSet( fs, false );
+            return fs->frame(0);
+        } else if ( localName == "object" )
+        {
+            QString name = tag.attributeNS( KoXmlNS::draw, "name", QString::null );
+            KWPartFrameSet* fs = new KWPartFrameSet( doc, 0 /*child created later*/, name);
+            // #### TODO load frame
             doc->addFrameSet( fs, false );
             return fs->frame(0);
         }

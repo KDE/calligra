@@ -1519,7 +1519,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl, nextParagraph ) )
         {
-            kdWarning(32002) << "Unsupported body element '" << localName << "'" << endl;
+            kdWarning(32500) << "Unsupported body element '" << localName << "'" << endl;
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list

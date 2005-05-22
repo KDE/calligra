@@ -868,6 +868,27 @@ bool KoDocument::saveChildren( KoStore* _store )
     return true;
 }
 
+bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
+    QPtrListIterator<KoDocumentChild> it( children() );
+    for( ; it.current(); ++it ) {
+        KoDocument* childDoc = it.current()->document();
+        if (childDoc && !it.current()->isDeleted())
+        {
+            if ( !childDoc->isStoredExtern() )
+            {
+                if ( !it.current()->saveOasisToStore( store, manifestWriter ) )
+                    return false;
+                if (!isExporting ())
+                    childDoc->setModified( false );
+            }
+            //else kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
+        }
+    }
+    return true;
+}
+
 bool KoDocument::saveExternalChildren()
 {
     if ( d->m_doNotSaveExtDoc )
@@ -936,15 +957,6 @@ bool KoDocument::saveNativeFormat( const QString & file )
         return false;
     }
 
-    // Save internal children first since they might get a new url
-    if ( !saveChildren( store ) && !oasis )
-    {
-        if ( d->lastErrorMessage.isEmpty() )
-            d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
-        delete store;
-        return false;
-    }
-
     if ( oasis )
     {
         kdDebug(30003) << "Saving to OASIS format" << endl;
@@ -956,6 +968,14 @@ bool KoDocument::saveNativeFormat( const QString & file )
         if ( !saveOasis( store, manifestWriter ) )
         {
             kdDebug(30003) << "saveOasis failed" << endl;
+            delete store;
+            return false;
+        }
+
+        // Save embedded objects
+        if ( !saveChildrenOasis( store, manifestWriter ) )
+        {
+            kdDebug(30003) << "saveChildrenOasis failed" << endl;
             delete store;
             return false;
         }
@@ -974,7 +994,6 @@ bool KoDocument::saveNativeFormat( const QString & file )
             delete store;
             return false;
         }
-
 
         if ( store->open( "Thumbnails/thumbnail.png" ) )
         {
@@ -999,10 +1018,20 @@ bool KoDocument::saveNativeFormat( const QString & file )
             delete store;
             return false;
         }
+
         delete store;
     }
     else
     {
+        // Save internal children first since they might get a new url
+        if ( !saveChildren( store ) && !oasis )
+        {
+            if ( d->lastErrorMessage.isEmpty() )
+                d->lastErrorMessage = i18n( "Error while saving embedded documents" ); // more details needed
+            delete store;
+            return false;
+        }
+
         kdDebug(30003) << "Saving root" << endl;
         if ( store->open( "root" ) )
         {
@@ -1065,53 +1094,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
     return nwritten == (int)s.size()-1;
 }
 
-QString KoDocument::saveOasisToStore( KoStore * _store, const QString & _path, KoXmlWriter* manifestWriter )
-{
-    kdDebug(30003) << "Saving document to store " << _path << endl;
-
-    // Use the path as the internal url
-    if ( _path.startsWith( STORE_PROTOCOL ) )
-        m_url = KURL( _path );
-    else // ugly hack to pass a relative URI
-        m_url = KURL( INTERNAL_PREFIX +  _path );
-
-    // To make the children happy cd to the correct directory
-    _store->pushDirectory();
-    _store->enterDirectory( _path );
-
-    QString name = _store->currentDirectory();
-    kdDebug()<<" store name :"<<name<<endl;
-#if 0
-    // Save children first since they might get a new url
-    if ( !saveChildren( _store ) && d->m_specialOutputFlag != SaveAsOASIS )
-        return QString::null;
-#endif
-
-    // In the current directory we're the king :-)
-    if ( _store->open( "root" ) )
-    {
-        KoStoreDevice dev( _store );
-        if ( !saveToStream( &dev ) )
-        {
-            _store->close();
-            return QString::null;
-        }
-        if ( !_store->close() )
-            return QString::null;
-    }
-
-    if ( !completeSaving( _store ) )
-        return QString::null;
-
-    // Now that we're done leave the directory again
-    _store->popDirectory();
-
-    kdDebug(30003) << "Saved oasis document to store" << endl;
-
-
-    return name;
-}
-
+// Called for embedded documents
 bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 {
     kdDebug(30003) << "Saving document to store " << _path << endl;
@@ -1822,7 +1805,7 @@ void KoDocument::emitEndOperation()
 }
 
 
-bool KoDocument::isStoredExtern()
+bool KoDocument::isStoredExtern() const
 {
     return !storeInternal() && hasExternURL();
 }
@@ -2334,7 +2317,7 @@ void KoDocument::setStoreInternal( bool i )
     //kdDebug(30003)<<k_funcinfo<<"="<<d->m_storeInternal<<" doc: "<<url().url()<<endl;
 }
 
-bool KoDocument::hasExternURL()
+bool KoDocument::hasExternURL() const
 {
     return !url().protocol().isEmpty() && url().protocol() != STORE_PROTOCOL && url().protocol() != INTERNAL_PROTOCOL;
 }

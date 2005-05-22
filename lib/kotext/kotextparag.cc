@@ -2717,14 +2717,14 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
             style = styleCollection->findStyle( styleName );
             if (!style)
             {
-                kdError(32001) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;
+                kdError(32500) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;
                 style = styleCollection->findStyle( "Standard" );
             }
             //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
-            kdError(32001) << "No style name !? - using Standard" << endl;
+            kdError(32500) << "No style name !? - using Standard" << endl;
             style = styleCollection->findStyle( "Standard" );
         }
         Q_ASSERT(style);

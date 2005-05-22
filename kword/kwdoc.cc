@@ -2659,7 +2659,6 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
     {
         // save the body into bodyWriter
         saveOasisBody( *bodyWriter, savingContext );
-        // TODO save embedded objects
     }
     else // SaveSelected
     {
@@ -2871,7 +2870,7 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
         }
     }
 
-    // The old coment said:
+    // The old comment said:
     // "Save internal embedded objects first, since it might change their URL"
     // Not sure this is still the case.
     QPtrListIterator<KoDocumentChild> chl( embeddedObjects );

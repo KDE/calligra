@@ -65,7 +65,7 @@ public:
    *
    * @see KoDocument
    */
-  virtual KoDocument *document() const;
+  KoDocument *document() const;
 
   /**
    * @return parent document of this child
@@ -79,7 +79,7 @@ public:
   /**
    * @note Can be empty (which is why it doesn't return a const KURL &)
    */
-  virtual KURL url();
+  KURL url() const;
 
   /**
    *  Writes the "object" tag, but does NOT write the content of the
@@ -95,12 +95,20 @@ public:
    */
   virtual QDomElement save( QDomDocument& doc, bool uppercase=false );
 
-    /**
-     * Write default parameter for embedded object
-     *
-     */
-    virtual void saveOasis(  KoXmlWriter &xmlWriter, KoStore *store, int index, KoXmlWriter* manifestWriter );
+  /**
+   * Save an embedded object to OASIS.
+   * This method sets the attributes for the draw:object element in the parent XML document.
+   * It also prepares the embedded object for being saved into the store at
+   * the end of saving (see saveOasisToStore).
+   * Note that @p name is only used for "internal" documents (not extern).
+   */
+  void saveOasisAttributes( KoXmlWriter &xmlWriter, const QString& name );
 
+  /**
+   * Save an embedded object to an OASIS store.
+   * This is called automatically by the parent KoDocument's saveOasis
+   */
+  virtual bool saveOasisToStore( KoStore* store, KoXmlWriter* manifestWriter );
 
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.
@@ -114,7 +122,7 @@ public:
    */
   virtual bool load( const QDomElement& element, bool uppercase=false );
 
-    virtual void loadOasis( const QDomElement &element );
+  virtual void loadOasis( const QDomElement &element );
 
   /**
    *  Actually loads the document from the disk/net or from the store,
@@ -122,7 +130,7 @@ public:
    */
   virtual bool loadDocument( KoStore* );
 
-  virtual bool isStoredExtern();
+  virtual bool isStoredExtern() const;
 
   /**
    * This document (child) is deleted.

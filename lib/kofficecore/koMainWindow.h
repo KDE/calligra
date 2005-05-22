@@ -143,7 +143,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    void updateCaption( const QString caption, bool mod ); // BCI: make virtual
+    virtual void updateCaption( const QString caption, bool mod );
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 

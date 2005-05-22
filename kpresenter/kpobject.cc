@@ -337,7 +337,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 
 void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
-    xmlWriter.addAttribute( "draw:id", indexObj );
+    xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
     xmlWriter.addAttributePt( "svg:x", orig.x() );
     xmlWriter.addAttributePt( "svg:y", orig.y() );
@@ -376,7 +376,7 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
     if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
         animation.startElement( "presentation:show-shape" );
-        animation.addAttribute( "draw:shape-id", objectId );
+        animation.addAttribute( "draw:shape-id", "shape" + QString::number( objectId ) );
         switch( effect )
         {
         case EF_NONE:
@@ -468,7 +468,7 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
     if ( effect3 != EF3_NONE || !d_fileName.isEmpty())
     {
         animation.startElement( "presentation:hide-shape" );
-        animation.addAttribute( "draw:shape-id", objectId );
+        animation.addAttribute( "draw:shape-id", "shape" + QString::number( objectId ) );
         switch( effect3 )
         {
         case EF3_NONE:

@@ -23,6 +23,7 @@
 #include <koxmlwriter.h>
 #include <koxmlns.h>
 #include <koUnit.h>
+#include <koStore.h>
 
 #include <kparts/partmanager.h>
 
@@ -117,12 +118,12 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 
 void KoDocumentChild::loadOasis( const QDomElement &element )
 {
-    int x, y, w, h;
+    double x, y, w, h;
     x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
     y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
     w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "with", QString::null ) );
     h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
-    m_tmpGeometry = QRect(x, y, w, h);
+    m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### double->int conversion
     setGeometry(m_tmpGeometry);
 }
 
@@ -314,19 +315,52 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
     return true;
 }
 
-void KoDocumentChild::saveOasis(  KoXmlWriter &xmlWriter, KoStore *_store, int index, KoXmlWriter* manifestWriter )
+bool KoDocumentChild::saveOasisToStore( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    if ( document()->isStoredExtern() )
+        return true; // nothing to do
+
+    // The name comes from KoDocumentChild (which was set while saving the
+    // parent document).
+    assert( document()->url().protocol() == INTERNAL_PROTOCOL );
+    const QString name = document()->url().path();
+    kdDebug() << k_funcinfo << "saving " << name << endl;
+
+    // To make the children happy cd to the correct directory
+    store->pushDirectory();
+    store->enterDirectory( name );
+
+    if ( !document()->saveOasis( store, manifestWriter ) ) {
+        kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
+        return false;
+    }
+
+    // Now that we're done leave the directory again
+    store->popDirectory();
+    return true;
+}
+
+void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString& name )
+{
+    if ( !document()->isStoredExtern() )
+    {
+        // set URL in document so that KoDocument::saveChildrenOasis will save
+        // the actual embedded object with the right name in the store.
+        KURL u;
+        u.setProtocol( INTERNAL_PROTOCOL );
+        u.setPath( name );
+        kdDebug() << k_funcinfo << u << endl;
+        document()->setURL( u );
+    }
+
     //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     xmlWriter.addAttribute( "xlink:type", "simple" );
     xmlWriter.addAttribute( "xlink:show", "embed" );
     xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
 
-    xmlWriter.addAttributePt( "svg:width",  geometry().width() );
-    xmlWriter.addAttributePt( "svg:height",  geometry().height() );
-    xmlWriter.addAttributePt( "svg:x",  geometry().left() );
-    xmlWriter.addAttributePt( "svg:y",  geometry().top() );
-    xmlWriter.addAttribute( "xlink:href", "#./"+ document()->saveOasisToStore( _store, QString( "Object %1" ).arg( index ) ,manifestWriter ) );
-
+    const QString ref = document()->isStoredExtern() ? document()->url().url() : "./"+ name;
+    kdDebug(30003) << "KoDocumentChild::saveOasis saving reference to embedded document as " << ref << endl;
+    xmlWriter.addAttribute( "xlink:href", "#" + ref );
 }
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
@@ -355,12 +389,12 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
     return QDomElement();
 }
 
-bool KoDocumentChild::isStoredExtern()
+bool KoDocumentChild::isStoredExtern() const
 {
     return document()->isStoredExtern();
 }
 
-KURL KoDocumentChild::url()
+KURL KoDocumentChild::url() const
 {
     return ( document() ? document()->url() : KURL() );
 }
@@ -384,4 +418,4 @@ void KoDocumentChild::setDeleted( bool on )
     d->m_deleted = on;
 }
 
-#include <koDocumentChild.moc>
+#include "koDocumentChild.moc"

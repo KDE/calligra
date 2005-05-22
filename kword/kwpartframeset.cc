@@ -24,20 +24,32 @@
 #include "KWordPartFrameSetIface.h"
 //#include "KWordPartFrameSetEditIface.h"
 
+#include <kooasiscontext.h>
+#include <koxmlwriter.h>
+
 #include <klocale.h>
 #include <kapplication.h>
 
+#include <assert.h>
+
 KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
-    : KWFrameSet( _doc ), m_protectContent( false )
+    : KWFrameSet( _doc ), m_child( 0 ), m_cmdMoveChild( 0 ), m_protectContent( false )
 {
-    m_child = _child;
-    m_child->setPartFrameSet( this );
+    if ( _child )
+        setChild( _child );
+
     kdDebug(32001) << "KWPartFrameSet::KWPartFrameSet" << endl;
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
         m_name = name;
-    m_cmdMoveChild=0L;
+}
+
+void KWPartFrameSet::setChild( KWChild* child )
+{
+    assert( !m_child );
+    m_child = child;
+    m_child->setPartFrameSet( this );
     QObject::connect( m_child, SIGNAL( changed( KoChild * ) ),
                       this, SLOT( slotChildChanged() ) );
 }
@@ -137,7 +149,18 @@ QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
 
 void KWPartFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool ) const
 {
-    // TODO
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
+    // Save first frame with the whole contents
+    KWFrame* frame = frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles(), getName() );
+
+    writer.startElement( "draw:object" );
+    // #### let's hope getName() is unique...
+    m_child->saveOasisAttributes( writer, getName() );
+
+    writer.endElement(); // draw:object
+    writer.endElement(); // draw:frame
 }
 
 void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )

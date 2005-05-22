@@ -87,16 +87,17 @@ public:
    *
    *  @param _onlyDocEmb specifies if only KOffice Parts should be listed which are
    *                 embeddable into other koDocuments, or all (if false)
-   *                 (eg.: it makes no sense to embedd Kexi into KWord,
-   *                 but it makes sense to embedd it into KoShell)
+   *                 (eg.: it makes no sense to embed Kexi into KWord,
+   *                 but it makes sense to embed it into KoShell)
    *  @param _constr is a constraint expression as used by KDEDs trader interface.
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  // ### TODO: MERGE WITH ABOVE METHODE WHEN BIC CHANGES ARE ALLOWED
+  // ### TODO: MERGE WITH ABOVE METHODE WHEN BIC+SIC CHANGES ARE ALLOWED
   static QValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
   /* this is how the signature should be looking after merging
-  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true,const QString& _constr = QString::null );
+  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true, const QString& _constr = QString::null );
+  or better: use an enum for the first arg.
   */
 
 
