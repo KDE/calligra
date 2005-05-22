@@ -505,7 +505,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 QString last_line = cursor->parag()->toString();
                 last_line.remove(0,last_line.find(' ')+1);
 
-                if( last_line.isEmpty() && cursor->parag()->counter() ) //if the previous line the in paragraph is empty
+                if( last_line.isEmpty() && cursor->parag()->counter() && cursor->parag()->counter()->numbering() == KoParagCounter::NUM_LIST ) //if the previous line the in paragraph is empty
                 {
                         KoParagCounter c;
                         KCommand *cmd=setCounterCommand( cursor, c );

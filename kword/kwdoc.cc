@@ -4040,6 +4040,8 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
         return Qt::ibeamCursor;
     case MEANING_MOUSE_OVER_LINK:
         return Qt::PointingHandCursor;
+    case MEANING_MOUSE_OVER_FOOTNOTE:
+        return Qt::PointingHandCursor;
     case MEANING_MOUSE_MOVE:
         return Qt::sizeAllCursor;
     case MEANING_MOUSE_SELECT:

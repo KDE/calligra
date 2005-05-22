@@ -5763,6 +5763,7 @@ void KWView::frameSelectedChanged()
     if ( rw && nbFrame >= 1 )
     {
         bool okForDelete = true;
+        bool okForCopy = true;
         bool okForLowerRaise = false;
         bool okForChangeParagStyle = true;
         bool okForChangeInline = true;
@@ -5774,6 +5775,7 @@ void KWView::frameSelectedChanged()
             bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || isFootNote;
             bool isMainWPFrame = it.current()->frameSet()->isMainFrameset();
             okForChangeParagStyle &= !isFootNote;
+            okForCopy &= !headerFooterFootNote;
 
             okForDelete &= !headerFooterFootNote;
             okForDelete &= !isMainWPFrame;
@@ -5786,6 +5788,7 @@ void KWView::frameSelectedChanged()
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete );
+        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy);
 
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
@@ -5838,7 +5841,6 @@ void KWView::frameSelectedChanged()
     actionCreateFrameStyle->setEnabled( nbFrame==1 );
     actionCreateLinkedFrame->setEnabled( nbFrame==1 );
 
-    actionEditCopy->setEnabled( nbFrame >= 1 );
 
     updateTableActions( nbFrame );
     m_doc->refreshFrameBorderButton();

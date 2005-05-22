@@ -569,6 +569,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         }
         case MEANING_MOUSE_INSIDE:
         case MEANING_MOUSE_OVER_LINK:
+        case MEANING_MOUSE_OVER_FOOTNOTE:
         case MEANING_MOUSE_INSIDE_TEXT:
         case MEANING_ACTIVATE_PART:
         {
@@ -1226,6 +1227,27 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
         {
             MouseMeaning meaning = m_doc->getMouseMeaning( normalPoint, e->state() );
             switch ( meaning ) {
+             case MEANING_MOUSE_OVER_FOOTNOTE:
+             {
+                 KWFrame* frame = m_doc->frameUnderMouse( normalPoint );
+                 KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+                 if (fs && fs->type() == FT_TEXT)
+                 {
+                    KoVariable* var = static_cast<KWTextFrameSet *>(fs)->variableUnderMouse(docPoint);
+                    if ( var )
+                    {
+                        KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
+                        if ( footNoteVar )
+                        {
+                            // show the content of the footnote in the status bar
+                            gui()->getView()->setTemporaryStatusBarText( footNoteVar->frameSet()->textDocument()->firstParag()->string()->toString() );
+                            m_temporaryStatusBarTextShown = true;
+                        }
+                    }
+
+                 }
+                 break;
+             }
             case MEANING_MOUSE_OVER_LINK:
             {
                 KWFrame* frame = m_doc->frameUnderMouse( normalPoint );

@@ -2774,7 +2774,7 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
         short int & numDisplay = endNote ? endNoteNumDisplay : footNoteNumDisplay;
         ++varNumber;
         bool changed = false;
-        if ( varNumber != var->num() )
+        if ( varNumber != var->num() || var->numberingType()==KWFootNoteVariable::Manual )
         {
             changed = true;
             var->setNum( varNumber );
@@ -2887,7 +2887,22 @@ MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& dPoint )
         && m_doc->variableCollection()->variableSetting()->underlineLink()
         && linkVariableUnderMouse( dPoint ) )
       return MEANING_MOUSE_OVER_LINK;
+    KoVariable* var = variableUnderMouse(dPoint);
+    if ( var )
+    {
+        KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
+        if ( footNoteVar )
+            return MEANING_MOUSE_OVER_FOOTNOTE;
+    }
     return MEANING_MOUSE_INSIDE_TEXT;
+}
+
+KoVariable* KWTextFrameSet::variableUnderMouse( const KoPoint& dPoint )
+{
+    QPoint iPoint;
+    if ( documentToInternal( dPoint, iPoint ) )
+        return textObject()->variableAtPoint( iPoint );
+    return 0;
 }
 
 KoLinkVariable* KWTextFrameSet::linkVariableUnderMouse( const KoPoint& dPoint )
@@ -2977,6 +2992,15 @@ void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides )
     }
     else {
         kdWarning(32002) << "Unhandled case in KWTextFrameSetEdit::pasteData: provides=" << provides << endl;
+    }
+    // be sure that the footnote number didn't got erased
+    KWFootNoteFrameSet *footNote = dynamic_cast<KWFootNoteFrameSet *>(textFrameSet());
+    if ( footNote )
+    {
+        KoParagCounter *counter = footNote->textDocument()->firstParag()->counter();
+        if ( !counter || ( counter->numbering() != KoParagCounter::NUM_FOOTNOTE ) )
+            footNote->setCounterText( footNote->footNoteVariable()->text() );
+            frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
     }
 }
 
@@ -3306,6 +3330,21 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
             frameSet()->kWordDocument()->setModified(true );
     }
     // else mightStartDrag = FALSE; necessary?
+
+    if ( e->button() != LeftButton )
+        return;
+    KoVariable* var = variable();
+    if ( var )
+    {
+        KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
+        if ( footNoteVar )
+        {
+            m_canvas->editFrameSet( footNoteVar->frameSet() );
+            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit()->currentTextEdit());
+            if ( textedit )
+                textedit->ensureCursorVisible(); //go to the footnote frame
+        }
+    }
 }
 
 void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint, const KoPoint & )
@@ -3659,6 +3698,10 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType, KWFootNoteVariable::
 
     // Layout the footnote frame
     textFrameSet()->kWordDocument()->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
+
+    KoTextParag* parag = fs->textDocument()->firstParag();
+    parag->truncate(0);
+    fs->setDefaultFormatCommand();
 
     KWCanvas* canvas = m_canvas;
     // And now edit the footnote frameset - all WPs do that it seems.

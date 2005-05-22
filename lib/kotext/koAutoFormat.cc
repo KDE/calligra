@@ -1879,6 +1879,8 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
 
     if( m_useBulletStyle && (ch =='*' || ch == '-' || ch =='+') && (s->at(1).c).isSpace())
     {
+        if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_FOOTNOTE )
+            return 0L;
         KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use bullet style)"));
         cursor.setParag( parag );
         cursor.setIndex( 0 );
@@ -1948,6 +1950,8 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
 
 KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
+    if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_FOOTNOTE )
+        return 0L;
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
     KoTextString *s = parag->string();

@@ -306,6 +306,7 @@ public:
     QByteArray sortText(SortType type) const;
 
     KoLinkVariable* linkVariableUnderMouse( const KoPoint& dPoint );
+    KoVariable* variableUnderMouse( const KoPoint& dPoint );
 
 signals:
     /** Tell the Edit object that this frame got deleted */

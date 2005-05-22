@@ -74,7 +74,7 @@ enum SortType { KW_SORTINCREASE, KW_SORTDECREASE };
    Can be: nothing ; inside a frame ; or on a border.
    When clicking on a frame's border, this can be for moving it, resizing it, or simply select it. */
 enum MouseMeaning { MEANING_NONE = 0, MEANING_MOUSE_INSIDE, MEANING_MOUSE_INSIDE_TEXT,
-                    MEANING_MOUSE_OVER_LINK,
+                    MEANING_MOUSE_OVER_LINK, MEANING_MOUSE_OVER_FOOTNOTE,
                     MEANING_MOUSE_MOVE, MEANING_MOUSE_SELECT, MEANING_ACTIVATE_PART,
                     MEANING_TOPLEFT, MEANING_TOP, MEANING_TOPRIGHT, MEANING_RIGHT,
                     MEANING_BOTTOMRIGHT, MEANING_BOTTOM, MEANING_BOTTOMLEFT, MEANING_LEFT,

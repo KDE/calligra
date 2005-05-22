@@ -2582,7 +2582,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 QString KoTextParag::toString( int from, int length ) const
 {
     QString str;
-    if ( from == 0 && m_layout.counter )
+    if ( from == 0 && m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_FOOTNOTE )
         str += m_layout.counter->text( this ) + ' ';
     if ( length == -1 )
         length = this->length() - 1 /*trailing space*/ - from;
