@@ -227,6 +227,12 @@ public:
      */
     KoRect runAroundRect() const;
 
+    /** Return the rectangle for this frame.
+     * This method is just so that new code doesn't rely on "KWFrame inherits KoRect",
+     * which would be good to get rid of, at some point.
+     */
+    const KoRect& rect() const { return *this; }
+
     /** Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes them */
     void createResizeHandles();

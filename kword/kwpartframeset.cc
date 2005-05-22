@@ -26,6 +26,7 @@
 
 #include <kooasiscontext.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 
 #include <klocale.h>
 #include <kapplication.h>
@@ -43,6 +44,26 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
         m_name = name;
+}
+
+KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
+                                const QDomElement& objectTag, KoOasisContext& context )
+    : KWFrameSet( doc ), m_child( 0 ), m_cmdMoveChild( 0 ), m_protectContent( false )
+{
+    m_name = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
+    if ( doc->frameSetByName( m_name ) ) // already exists!
+        m_name = doc->generateFramesetName( m_name + " %1" );
+
+    context.styleStack().save();
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
+    KWFrame* frame = loadOasisFrame( frameTag, context );
+    context.styleStack().restore();
+
+    // Create a KWChild, without KoDocument inside
+    // (that's done later, in KoDocument::loadChildrenOasis)
+    KWChild* child = doc->createChildDoc( frame->rect(), 0 );
+    setChild( child );
+    child->loadOasis( frameTag, objectTag );
 }
 
 void KWPartFrameSet::setChild( KWChild* child )

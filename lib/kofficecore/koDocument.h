@@ -461,6 +461,12 @@ public:
     virtual bool loadFromStore( KoStore* store, const QString& url );
 
     /**
+     *  @brief Loads an OASIS document from a store.
+     *  This is used for both the main document and embedded objects.
+     */
+    virtual bool loadOasisFromStore( KoStore* store );
+
+    /**
      *  @brief Saves a document to a store.
      *
      *  You should not have to reimplement this - but call it in @ref #saveChildren.
@@ -667,7 +673,7 @@ public:
      */
     void emitProgress( int value ) { emit sigProgress( value ); }
 
-    bool isInOperation();
+    bool isInOperation() const;
     virtual void emitBeginOperation();
     virtual void emitEndOperation();
 
@@ -888,6 +894,9 @@ protected:
      *  @endcode
      */
     virtual bool loadChildren( KoStore* );
+
+    /// Same as loadChildren, but for OASIS, and the default implementation does the right thing
+    virtual bool loadChildrenOasis( KoStore* store );
 
     /**
      *  Saves all internal children (only!).

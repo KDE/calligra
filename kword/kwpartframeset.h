@@ -29,6 +29,11 @@ class KWPartFrameSet : public KWFrameSet
     Q_OBJECT
 public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
+
+    /// Used for OASIS loading
+    KWPartFrameSet( KWDocument* doc, const QDomElement& frame,
+                    const QDomElement& objectTag, KoOasisContext& context );
+
     virtual ~KWPartFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();

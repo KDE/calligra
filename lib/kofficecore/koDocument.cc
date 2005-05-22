@@ -830,16 +830,13 @@ bool KoDocument::isModified() const
         //kdDebug(30003)<<k_funcinfo<<" Modified doc='"<<url().url()<<"' extern="<<isStoredExtern()<<endl;
         return true;
     }
-    // Then go through internally stored children (considdered to be part of this doc)
+    // Then go through internally stored children (considered to be part of this doc)
     QPtrListIterator<KoDocumentChild> it = children();
     for (; it.current(); ++it )
     {
-        if ( !it.current()->isStoredExtern() && !it.current()->isDeleted() )
-        {
-            KoDocument *doc = it.current()->document();
-            if ( doc && doc->isModified() )
-                return true;
-        }
+        KoDocument *doc = it.current()->document();
+        if ( doc && !it.current()->isStoredExtern() && !it.current()->isDeleted() && doc->isModified() )
+            return true;
     }
     return false;
 }
@@ -876,14 +873,27 @@ bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter 
         KoDocument* childDoc = it.current()->document();
         if (childDoc && !it.current()->isDeleted())
         {
+            QString path;
             if ( !childDoc->isStoredExtern() )
             {
                 if ( !it.current()->saveOasisToStore( store, manifestWriter ) )
                     return false;
                 if (!isExporting ())
                     childDoc->setModified( false );
+
+                // see KoDocumentChild
+                assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
+                path = store->currentDirectory();
+                if ( !path.isEmpty() )
+                    path += '/';
+                path += childDoc->url().path();
             }
-            //else kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
+            else
+            {
+                kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
+                path = childDoc->url().url();
+            }
+            manifestWriter->addManifestEntry( path, childDoc->nativeOasisMimeType() );
         }
     }
     return true;
@@ -907,7 +917,7 @@ bool KoDocument::saveExternalChildren()
         if ( !ch->isDeleted() )
         {
             doc = ch->document();
-            if ( doc->isStoredExtern() && doc->isModified() )
+            if ( doc && doc->isStoredExtern() && doc->isModified() )
             {
                 kdDebug(30003)<<" save external doc='"<<url().url()<<"'"<<endl;
                 doc->setDoNotSaveExtDoc(); // Only save doc + it's internal children
@@ -1655,25 +1665,9 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         store->disallowNameExpansion();
 
         KoOasisStore oasisStore( store );
+        // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
-        // TODO check mimetype file?
-        // TODO read manifest?
-        KoOasisStyles oasisStyles;
-        QDomDocument contentDoc;
-        QDomDocument settingsDoc;
-        bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
-        if ( ok ) {
-            QDomDocument stylesDoc;
-            (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
-            // Load styles from style.xml
-            oasisStyles.createStyleMap( stylesDoc );
-            // Also load styles from content.xml
-            oasisStyles.createStyleMap( contentDoc );
-
-            (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
-            ok = loadOasis( contentDoc, oasisStyles, settingsDoc, store );
-        }
-        if ( !ok ) {
+        if ( !loadOasisFromStore( store ) ) {
             delete store;
             QApplication::restoreOverrideCursor();
             return false;
@@ -1694,6 +1688,13 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
             return false;
         }
         store->close();
+
+        if ( !loadChildren( store ) )
+        {
+            kdError(30003) << "ERROR: Could not load children" << endl;
+            // Don't abort, proceed nonetheless
+        }
+
     } else
     {
         kdError(30003) << "ERROR: No maindoc.xml" << endl;
@@ -1701,12 +1702,6 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         delete store;
         QApplication::restoreOverrideCursor();
         return false;
-    }
-
-    if ( !loadChildren( store ) )
-    {
-        kdError(30003) << "ERROR: Could not load children" << endl;
-        // Don't abort, proceed nonetheless
     }
 
     if ( oasis && store->hasFile( "meta.xml" ) ) {
@@ -1778,7 +1773,36 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
     return result;
 }
 
-bool KoDocument::isInOperation()
+bool KoDocument::loadOasisFromStore( KoStore* store )
+{
+    KoOasisStyles oasisStyles;
+    QDomDocument contentDoc;
+    QDomDocument settingsDoc;
+    KoOasisStore oasisStore( store );
+    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, d->lastErrorMessage );
+    if ( !ok )
+        return false;
+
+    QDomDocument stylesDoc;
+    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
+    // Load styles from style.xml
+    oasisStyles.createStyleMap( stylesDoc );
+    // Also load styles from content.xml
+    oasisStyles.createStyleMap( contentDoc );
+
+    (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
+    if ( !loadOasis( contentDoc, oasisStyles, settingsDoc, store ) )
+        return false;
+
+    if ( !loadChildrenOasis( store ) )
+    {
+        kdError(30003) << "ERROR: Could not load children" << endl;
+        // Don't abort, proceed nonetheless
+    }
+    return true;
+}
+
+bool KoDocument::isInOperation() const
 {
     return d->m_numOperations > 0;
 }
@@ -1963,6 +1987,30 @@ void KoDocument::setTitleModified()
 
 bool KoDocument::loadChildren( KoStore* )
 {
+    return true;
+}
+
+bool KoDocument::loadChildrenOasis( KoStore* store )
+{
+    if ( d->m_children.isEmpty() )
+        return true;
+
+    // read manifest (only done here due to KoDocumentChild::loadDocumentInternal)
+    // (passing the QDomDocument there wouldn't make sense for the non-oasis case)
+    // note: we use the absolute URL so that the current directory in the store doesn't matter
+    QDomDocument manifestDoc;
+    KoOasisStore oasisStore( store );
+    if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
+        return false;
+
+    QPtrListIterator<KoDocumentChild> it( children() );
+    for( ; it.current(); ++it ) {
+        KoDocumentChild* child = it.current();
+         // this test allows to use loadOasis to insert a file: only load if not loaded already
+        if ( !child->document() )
+            if ( !child->loadOasisDocument( store, manifestDoc ) )
+                return false;
+    }
     return true;
 }
 

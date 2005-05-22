@@ -19,15 +19,18 @@
 #include "koOasisStore.h"
 
 #include "koDocument.h"
+#include "koxmlns.h"
+#include "kodom.h"
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
+
 #include <ktempfile.h>
-#include <qfile.h>
 #include <kdebug.h>
-#include <qxml.h>
 #include <klocale.h>
-#include "koxmlns.h"
+
+#include <qfile.h>
+#include <qxml.h>
 #include <qbuffer.h>
 
 KoOasisStore::KoOasisStore( KoStore* store )
@@ -173,4 +176,19 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
     }
     m_store->close();
     return ok;
+}
+
+QString KoOasisStore::mimeForPath( const QDomDocument& doc, const QString& fullPath )
+{
+    QDomElement docElem = doc.documentElement();
+    QDomElement elem;
+    forEachElement( elem, docElem )
+    {
+        if ( elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest )
+        {
+            if ( elem.attributeNS( KoXmlNS::manifest, "full-path", QString::null ) == fullPath )
+                return elem.attributeNS( KoXmlNS::manifest, "media-type", QString::null );
+        }
+    }
+    return QString::null;
 }

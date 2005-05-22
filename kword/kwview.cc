@@ -5135,7 +5135,7 @@ void KWView::borderStyle( const QString &style )
 void KWView::backgroundColor()
 {
     QColor backColor = actionBackgroundColor->color();
-    // ### TODO port to applicableTextInterfaces ?
+    // ### TODO port to applicableTextInterfaces ? Hmm, careful with the "frame" case.
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( m_gui)
     {

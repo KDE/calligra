@@ -97,9 +97,12 @@ bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavi
 void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPPartObject::loadOasis(const QDomElement &element)******************\n";
+#if 0
+    // TODO get hold of draw:object element...
     child->loadOasis( element );
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
         objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
+#endif
 }
 
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,

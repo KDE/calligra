@@ -18,6 +18,7 @@
 */
 
 #include "koDocumentChild.h"
+#include "koOasisStore.h"
 #include <koDocument.h>
 #include <koQueryTrader.h>
 #include <koxmlwriter.h>
@@ -116,15 +117,24 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
   return document()->hitTest( p, m );
 }
 
-void KoDocumentChild::loadOasis( const QDomElement &element )
+void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElement& objectElement )
 {
     double x, y, w, h;
-    x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
-    y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
-    w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "with", QString::null ) );
-    h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
+    x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+    y = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+    w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "with", QString::null ) );
+    h = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### double->int conversion
     setGeometry(m_tmpGeometry);
+
+    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString::null );
+    if ( url[0] == '#' )
+        url = url.mid( 1 );
+    if ( url.startsWith( "./" ) )
+        m_tmpURL = url.mid( 2 );
+    else
+        m_tmpURL = url;
+    kdDebug() << k_funcinfo << m_tmpURL << endl;
 }
 
 
@@ -193,7 +203,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
     if ( e.isEmpty() )
     {
         kdWarning(30003) << "Could not create child document with type " << m_tmpMimeType << endl;
-        bool res = createUnavailDocument( store, true );
+        bool res = createUnavailDocument( store, true, m_tmpMimeType );
         if ( res )
         {
             // Try to turn the mimetype name into its comment
@@ -206,10 +216,40 @@ bool KoDocumentChild::loadDocument( KoStore* store )
         return res;
     }
 
-    return loadDocumentInternal( store, e );
+    return loadDocumentInternal( store, e, true /*open url*/, false /*not oasis*/ );
 }
 
-bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL )
+bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc )
+{
+    kdDebug() << k_funcinfo << url() << endl;
+    QString path = store->currentDirectory();
+    if ( !path.isEmpty() )
+        path += '/';
+    path += url().fileName();
+    kdDebug() << k_funcinfo << path << endl;
+    const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
+
+    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
+    if ( e.isEmpty() )
+    {
+        kdWarning(30003) << "Could not create child document with type " << mimeType << endl;
+        bool res = createUnavailDocument( store, true, mimeType );
+        if ( res )
+        {
+            // Try to turn the mimetype name into its comment
+            QString mimeName = mimeType;
+            KMimeType::Ptr mime = KMimeType::mimeType( mimeType );
+            if ( mime->name() != KMimeType::defaultMimeType() )
+                mimeName = mime->comment();
+            d->m_doc->setProperty( "unavailReason", i18n( "No handler found for %1" ).arg( mimeName ) );
+        }
+        return res;
+    }
+
+    return loadDocumentInternal( store, e, true /*open url*/, true /*oasis*/ );
+}
+
+bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntry& e, bool doOpenURL, bool oasis )
 {
     kdDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
     KoDocument * doc = e.createDoc( d->m_parent );
@@ -223,9 +263,12 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
     if ( doOpenURL )
     {
         bool internalURL = false;
-        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
+        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
         {
-            res = document()->loadFromStore( _store, m_tmpURL );
+            if ( oasis ) {
+                res = document()->loadOasisFromStore( store );
+            } else
+                res = document()->loadFromStore( store, m_tmpURL );
             internalURL = true;
             document()->setStoreInternal( true );
         }
@@ -260,7 +303,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
             d->m_doc = 0;
             QString tmpURL = m_tmpURL; // keep a copy, createUnavailDocument will erase it
             // Not found -> use a kounavail instead
-            res = createUnavailDocument( _store, false /* the URL doesn't exist, don't try to open it */ );
+            res = createUnavailDocument( store, false /* the URL doesn't exist, don't try to open it */, m_tmpMimeType );
             if ( res )
             {
                 d->m_doc->setProperty( "realURL", tmpURL ); // so that it gets saved correctly
@@ -299,7 +342,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
     return res;
 }
 
-bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
+bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, const QString& mimeType )
 {
     // We don't need a trader query here. We're looking for a very specific component.
     KService::Ptr serv = KService::serviceByDesktopName( "kounavail" );
@@ -309,9 +352,9 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
         return false;
     }
     KoDocumentEntry e( serv );
-    if ( !loadDocumentInternal( store, e, doOpenURL ) )
+    if ( !loadDocumentInternal( store, e, doOpenURL, false ) )
         return false;
-    d->m_doc->setProperty( "mimetype", m_tmpMimeType );
+    d->m_doc->setProperty( "mimetype", mimeType );
     return true;
 }
 
@@ -391,6 +434,7 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 
 bool KoDocumentChild::isStoredExtern() const
 {
+    assert( document() );
     return document()->isStoredExtern();
 }
 

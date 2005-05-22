@@ -81,6 +81,9 @@ public:
     /// A completely unrelated method, for loading a file from an oasis store
     bool loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage );
 
+    /// Another method for loading: get mimetype from full path, using the manifest
+    static QString mimeForPath( const QDomDocument& doc, const QString& fullPath );
+
 private:
     KoStore* m_store;
     KoStoreDevice* m_storeDevice;

@@ -1828,7 +1828,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
-    if (selectedFrames.count() == 0)
+    if (selectedFrames.isEmpty())
         return;
     bool colorChanged=false;
     KWFrame *frame=0L;

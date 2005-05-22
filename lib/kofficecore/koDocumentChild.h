@@ -122,13 +122,19 @@ public:
    */
   virtual bool load( const QDomElement& element, bool uppercase=false );
 
-  virtual void loadOasis( const QDomElement &element );
+  void loadOasis( const QDomElement &frameElement, const QDomElement& objectElement );
 
   /**
    *  Actually loads the document from the disk/net or from the store,
    *  depending on @ref #url
    */
   virtual bool loadDocument( KoStore* );
+
+  /**
+   *  Actually loads the document from the disk/net or from the store
+   *  depending on the document's url
+   */
+  virtual bool loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc );
 
   virtual bool isStoredExtern() const;
 
@@ -164,8 +170,8 @@ protected: // Should be private, but KWord needs access to the variables
   QString m_tmpMimeType;
 
 private:
-  bool createUnavailDocument( KoStore* store, bool doOpenURL );
-  bool loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL = true );
+  bool createUnavailDocument( KoStore* store, bool doOpenURL, const QString& mimeType );
+  bool loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL, bool oasis );
 
 private:
   KoDocumentChildPrivate *d;

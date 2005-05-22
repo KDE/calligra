@@ -105,10 +105,10 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
     m_textfs->kWordDocument()->hasTOC( true );
 }
 
-KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& context )
+KWFrame* KWTextDocument::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
 {
     QDomElement elem;
-    forEachElement( elem, tag )
+    forEachElement( elem, frameTag )
     {
         if ( elem.namespaceURI() != KoXmlNS::draw )
             continue;
@@ -118,18 +118,16 @@ KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& cont
         {
             kdDebug()<<" append text-box\n";
             KWOasisLoader loader( doc );
-            return loader.loadOasisTextBox( tag, elem, context );
+            return loader.loadOasisTextBox( frameTag, elem, context );
         }
         else if ( localName == "image" )
         {
-            KWFrameSet* fs = new KWPictureFrameSet( doc, tag, elem, context );
+            KWFrameSet* fs = new KWPictureFrameSet( doc, frameTag, elem, context );
             doc->addFrameSet( fs, false );
             return fs->frame(0);
         } else if ( localName == "object" )
         {
-            QString name = tag.attributeNS( KoXmlNS::draw, "name", QString::null );
-            KWPartFrameSet* fs = new KWPartFrameSet( doc, 0 /*child created later*/, name);
-            // #### TODO load frame
+            KWPartFrameSet* fs = new KWPartFrameSet( doc, frameTag, elem, context );
             doc->addFrameSet( fs, false );
             return fs->frame(0);
         }
