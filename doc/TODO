@@ -28,3 +28,14 @@ Message freeze is on: April 11, 2005
   Karbon14
   Kexi
 
+
+TODO after 1.4 release:
+
+in koffice/kspread/extensions/datetime.xml
+
+> -In these KSpread messages comma is used instead of semicolon (as
+> separator):
+>
+> msgid "DAYS360(\"2/22/2002\", \"4/21/2002\", FALSE) returns 59"
+>
+> msgid "COUPNUM(settlement, maturity, frequency, basis)"
