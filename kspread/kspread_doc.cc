@@ -665,7 +665,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo fixme just add a element for testing saving content.xml
     contentTmpWriter.startElement( "office:body" );
-	contentTmpWriter.startElement( "office:spreadsheet" );
+    contentTmpWriter.startElement( "office:spreadsheet" );
 
     map()->saveOasis( contentTmpWriter, mainStyles );
     styleManager()->saveOasis( mainStyles );
