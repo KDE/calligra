@@ -2309,6 +2309,13 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data )
     d->sheetIndex = readU16( data+2 );
     d->externName = EString::fromUnicodeString( data+6, false, size ).str();
   }
+
+  if ( version() == Excel95 )
+  {
+    d->optionFlags = 0;
+    d->sheetIndex = 0;
+    d->externName = EString::fromByteString( data+6, false, size ).str();
+  }
 }
 
 void ExternNameRecord::dump( std::ostream& out ) const
