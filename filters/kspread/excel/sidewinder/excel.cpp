@@ -521,11 +521,11 @@ unsigned FormulaToken::size() const
       s = 7; break;
     
     case Function:
-      s = (d->ver == Excel97) ? 2 : 1;
+      s = 2;
       break;
     
     case FunctionVar:
-      s = (d->ver == Excel97) ? 3 : 2;
+      s = 3;
       break;
     
     case Matrix:
@@ -1045,7 +1045,8 @@ unsigned FormulaToken::functionParams() const
 
   if( d->id == FunctionVar )
   {
-    params = (unsigned)d->data[0] ;
+    params = (unsigned)d->data[0];
+    params &= 0x7f;
   }
 
   return params;
@@ -1063,13 +1064,23 @@ unsigned FormulaToken::attr() const
 
 unsigned FormulaToken::nameIndex() const
 {
+  // FIXME check data size !
   unsigned ni = 0;
   unsigned char buf[2];
 
   if( d->id == NameX )
+  if( d->ver == Excel97 )
   {
     buf[0] = d->data[2];
     buf[1] = d->data[3];
+    ni = readU16( buf );
+  }
+
+  if( d->id == NameX )
+  if( d->ver == Excel95 )
+  {
+    buf[0] = d->data[10];
+    buf[1] = d->data[11];
     ni = readU16( buf );
   }
 
@@ -5439,6 +5450,20 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
   stack->push_back( s1 );
 }
 
+#ifdef SWINDER_XLS2RAW
+void dumpStack( std::vector<UString> stack )
+{
+  std::cout << std::endl;
+  std::cout << "Stack now is: " ;
+  if( !stack.size() )
+  std::cout << "(empty)" ;
+ 
+  for( unsigned i = 0; i < stack.size(); i++ )
+    std::cout << "  " << i << ": " << stack[i].ascii() << std::endl;
+  std::cout << std::endl;
+}
+#endif
+
 UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens )
 {
   UStringStack stack;
@@ -5446,6 +5471,12 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
   for( unsigned c=0; c < tokens.size(); c++ )
   {
     FormulaToken token = tokens[c];
+
+#ifdef SWINDER_XLS2RAW
+    std::cout << "Token " << c << ": ";
+    std::cout <<  token.id() << "  "; 
+    std::cout << token.idAsString() << std::endl;
+#endif
 
     switch( token.id() )
     {
@@ -5592,12 +5623,41 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
 
       case FormulaToken::Function:
-      case FormulaToken::FunctionVar:
         {
           mergeTokens( &stack, token.functionParams(), UString(";") );
           if( stack.size() )
           {
             UString str( token.functionName() ? token.functionName() : "??" );
+            str.append( UString("(") );
+            str.append( stack[ stack.size()-1 ] );
+            str.append( UString(")") );
+            stack[ stack.size()-1 ] = str;
+          }
+        }
+        break;
+
+      case FormulaToken::FunctionVar:
+        if( token.functionIndex() != 255 )
+        {
+          mergeTokens( &stack, token.functionParams(), UString(";") );
+          if( stack.size() )
+          {
+            UString str;
+            if( token.functionIndex() != 255 )
+              str = token.functionName() ? token.functionName() : "??";
+            str.append( UString("(") );
+            str.append( stack[ stack.size()-1 ] );
+            str.append( UString(")") );
+            stack[ stack.size()-1 ] = str;
+          }
+        }
+        else
+        {
+          unsigned count = token.functionParams()-1;
+          mergeTokens( &stack, count, UString(";") );
+          if( stack.size() )
+          {
+            UString str;
             str.append( UString("(") );
             str.append( stack[ stack.size()-1 ] );
             str.append( UString(")") );
@@ -5651,6 +5711,10 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( UString("Unknown") );
         break;
     };
+
+#ifdef SWINDER_XLS2RAW
+    dumpStack( stack );
+#endif
 
   }
   
