@@ -204,7 +204,7 @@ void EntryItem::setPaintActive( bool paintActive )
 // ************************************************
 
 Navigator::Navigator(bool _selectable, KPopupMenu * menu, IconSidePane *_iconsidepane, QWidget *parent, const char *name )
-  : KListBox( parent, name ), mPopupMenu( menu ), mSidePane( _iconsidepane )
+  : KListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
 {
   setSelectionMode( KListBox::Single );
   viewport()->setBackgroundMode( PaletteBackground );
@@ -451,7 +451,7 @@ void IconSidePane::renameItem( int _grp, int _id, const QString & _text )
   if (!navigator)
     return;
   EntryItem *item = 0;
-  for (int i=0; i< navigator->count(); i++)
+  for (uint i=0; i< navigator->count(); i++)
   {
     item = static_cast<EntryItem *>(navigator->item(i));
     if (_id == item->id())
@@ -468,7 +468,7 @@ void IconSidePane::removeItem( int _grp, int _id )
   Navigator *navigator = static_cast<Navigator*>(mWidgetstack->widget(_grp));
   if (!navigator)
     return;
-  for (int i=0; i< navigator->count(); i++)
+  for (uint i=0; i< navigator->count(); i++)
   {
     if (_id == static_cast<EntryItem *>(navigator->item(i))->id())
     {

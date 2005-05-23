@@ -47,7 +47,6 @@ class KoShellApp : public KUniqueApplication {
 
 int KoShellApp::newInstance()
 {
-  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
   if ( isRestored() ) {
     // There can only be one main window
     if ( KMainWindow::canBeRestored( 1 ) ) {
@@ -77,7 +76,7 @@ extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
   aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
   aboutData->addAuthor("David Faure", 0, "faure@kde.org");
   KCmdLineArgs::init( argc, argv, aboutData );
-  
+
   if ( !KoShellApp::start() ) {
     // Already running, brought to the foreground.
     return 0;
