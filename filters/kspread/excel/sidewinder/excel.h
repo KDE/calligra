@@ -177,6 +177,9 @@ public:
   // only when id is Attr
   unsigned attr() const;
 
+  // only when id is NameX
+  unsigned nameIndex() const;
+
 private:
   class Private;
   Private *d;  

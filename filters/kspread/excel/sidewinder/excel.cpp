@@ -1061,6 +1061,22 @@ unsigned FormulaToken::attr() const
   return attr;
 }
 
+unsigned FormulaToken::nameIndex() const
+{
+  unsigned ni = 0;
+  unsigned char buf[2];
+
+  if( d->id == NameX )
+  {
+    buf[0] = d->data[2];
+    buf[1] = d->data[3];
+    ni = readU16( buf );
+  }
+
+  return ni;
+}
+
+
 UString FormulaToken::area( unsigned row, unsigned col ) const
 {
   // FIXME check data size !
@@ -5605,6 +5621,12 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         }
         break;
 
+      case FormulaToken::NameX:
+        if( token.nameIndex() > 0 )
+        if( token.nameIndex() <= d->nameTable.size() )
+          stack.push_back( d->nameTable[ token.nameIndex()-1 ] );
+        break;
+
       case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
       case FormulaToken::EndSheet:
@@ -5620,7 +5642,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::NameX:
       case FormulaToken::Ref3d:
       case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
