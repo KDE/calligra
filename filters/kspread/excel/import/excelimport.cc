@@ -502,7 +502,7 @@ static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& form
     textElement.setAttribute( "dataType", "Str" );
     QString str = string( value.asString() ).string();
     if( formula.isEmpty() )
-      textElement.appendChild( doc.createTextNode( str ) );
+      textElement.appendChild( doc.createTextNode( str.prepend('\'') ) );
   }
 
   return textElement;
