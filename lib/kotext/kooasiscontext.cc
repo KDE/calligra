@@ -19,6 +19,7 @@
 
 #include "kooasiscontext.h"
 #include <koOasisStyles.h>
+#include <koOasisStore.h>
 #include <koxmlns.h>
 #include <kdebug.h>
 #include <kodom.h>
@@ -28,6 +29,10 @@ KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
     : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles ),
       m_cursorTextParagraph( 0 )
 {
+    // Ideally this should be done by KoDocument and passed as argument here...
+    KoOasisStore oasisStore( store );
+    QString dummy;
+    (void)oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", m_manifestDoc, dummy );
 }
 
 void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName )

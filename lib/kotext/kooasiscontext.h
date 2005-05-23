@@ -67,6 +67,8 @@ public:
     KoOasisStyles& oasisStyles() { return m_styles; }
     KoStyleStack& styleStack() { return m_styleStack; }
 
+    const QDomDocument& manifestDocument() const { return m_manifestDoc; }
+
     void fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName );
     void addStyles( const QDomElement* style );
 
@@ -105,6 +107,8 @@ private:
 
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;
+
+    QDomDocument m_manifestDoc;
 
     class Private;
     Private *d;

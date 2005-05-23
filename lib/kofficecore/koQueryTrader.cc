@@ -76,7 +76,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
-  QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimetype );
+  QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1' or '%1' in [X-KDE-ExtraNativeMimeTypes] == '%1'" ).arg( mimetype, mimetype );
 
   QValueList<KoDocumentEntry> vec = query( false,constr );
   if ( vec.isEmpty() )

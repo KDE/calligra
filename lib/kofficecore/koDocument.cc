@@ -1790,15 +1790,17 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     // Also load styles from content.xml
     oasisStyles.createStyleMap( contentDoc );
 
+    // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
+    // (when calling KoDocumentChild::loadOasisDocument)
+    //QDomDocument manifestDoc;
+    //KoOasisStore oasisStore( store );
+    //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
+    //    return false;
+
     (void)oasisStore.loadAndParse( "settings.xml", settingsDoc, d->lastErrorMessage );
     if ( !loadOasis( contentDoc, oasisStyles, settingsDoc, store ) )
         return false;
 
-    if ( !loadChildrenOasis( store ) )
-    {
-        kdError(30003) << "ERROR: Could not load children" << endl;
-        // Don't abort, proceed nonetheless
-    }
     return true;
 }
 
@@ -1987,30 +1989,6 @@ void KoDocument::setTitleModified()
 
 bool KoDocument::loadChildren( KoStore* )
 {
-    return true;
-}
-
-bool KoDocument::loadChildrenOasis( KoStore* store )
-{
-    if ( d->m_children.isEmpty() )
-        return true;
-
-    // read manifest (only done here due to KoDocumentChild::loadDocumentInternal)
-    // (passing the QDomDocument there wouldn't make sense for the non-oasis case)
-    // note: we use the absolute URL so that the current directory in the store doesn't matter
-    QDomDocument manifestDoc;
-    KoOasisStore oasisStore( store );
-    if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
-        return false;
-
-    QPtrListIterator<KoDocumentChild> it( children() );
-    for( ; it.current(); ++it ) {
-        KoDocumentChild* child = it.current();
-         // this test allows to use loadOasis to insert a file: only load if not loaded already
-        if ( !child->document() )
-            if ( !child->loadOasisDocument( store, manifestDoc ) )
-                return false;
-    }
     return true;
 }
 

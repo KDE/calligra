@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000-2002 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +64,9 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
     KWChild* child = doc->createChildDoc( frame->rect(), 0 );
     setChild( child );
     child->loadOasis( frameTag, objectTag );
+    updateChildGeometry( doc->viewMode() );
+
+    (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
 void KWPartFrameSet::setChild( KWChild* child )

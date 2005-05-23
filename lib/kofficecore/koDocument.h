@@ -877,6 +877,9 @@ protected:
     bool isExporting() const;
 
     /**
+     *  OLD XML method. For OASIS just call KoDocumentChild::loadOasisDocument
+     *  after KoDocumentChild::loadOasis.
+     *
      *  You need to overload this function if your document may contain
      *  embedded documents. This function is called to load embedded documents.
      *
@@ -894,9 +897,6 @@ protected:
      *  @endcode
      */
     virtual bool loadChildren( KoStore* );
-
-    /// Same as loadChildren, but for OASIS, and the default implementation does the right thing
-    virtual bool loadChildrenOasis( KoStore* store );
 
     /**
      *  Saves all internal children (only!).

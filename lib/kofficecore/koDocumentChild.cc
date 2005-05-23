@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2004-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,7 +123,7 @@ void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElem
     double x, y, w, h;
     x = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "x", QString::null ) );
     y = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "y", QString::null ) );
-    w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "with", QString::null ) );
+    w = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "width", QString::null ) );
     h = KoUnit::parseValue( frameElement.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     m_tmpGeometry = QRect((int)x, (int)y, (int)w, (int)h); // #### double->int conversion
     setGeometry(m_tmpGeometry);
@@ -131,7 +132,7 @@ void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElem
     if ( url[0] == '#' )
         url = url.mid( 1 );
     if ( url.startsWith( "./" ) )
-        m_tmpURL = url.mid( 2 );
+        m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
         m_tmpURL = url;
     kdDebug() << k_funcinfo << m_tmpURL << endl;
@@ -221,13 +222,20 @@ bool KoDocumentChild::loadDocument( KoStore* store )
 
 bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& manifestDoc )
 {
-    kdDebug() << k_funcinfo << url() << endl;
-    QString path = store->currentDirectory();
-    if ( !path.isEmpty() )
-        path += '/';
-    path += url().fileName();
-    kdDebug() << k_funcinfo << path << endl;
+    QString path = m_tmpURL;
+    if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
+        path = store->currentDirectory();
+        if ( !path.isEmpty() )
+            path += '/';
+        QString relPath = KURL( m_tmpURL ).path();
+        path += relPath.mid( 1 ); // remove leading '/'
+    }
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
+    kdDebug() << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
+    if ( mimeType.isEmpty() ) {
+        kdError(30003) << "Manifest doesn't have media-type for " << path << endl;
+        return false;
+    }
 
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() )
@@ -266,7 +274,12 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
         if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
         {
             if ( oasis ) {
+                store->pushDirectory();
+                assert( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) );
+                QString relPath = KURL( m_tmpURL ).path().mid( 1 );
+                store->enterDirectory( relPath );
                 res = document()->loadOasisFromStore( store );
+                store->popDirectory();
             } else
                 res = document()->loadFromStore( store, m_tmpURL );
             internalURL = true;
