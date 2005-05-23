@@ -333,6 +333,7 @@ public:
     KAction* getInsertRowAction()        { return m_insertRowAction; }
     KAction* getRemoveRowAction()        { return m_removeRowAction; }
 
+    void enableMatrixActions(bool);
     KSelectAction* getLeftBracketAction()  { return m_leftBracket; }
     KSelectAction* getRightBracketAction() { return m_rightBracket; }
     SymbolAction* getSymbolNamesAction()  { return m_symbolNamesAction; }

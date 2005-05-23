@@ -305,6 +305,11 @@ public:
 
     void setFontSizeDirect( int pointSize );
 
+    /**
+        If the cursor is in a matrix, the matrix actions will be enabled, otherwise disabled.
+    */
+    void updateMatrixActions();
+
 signals:
 
     /**

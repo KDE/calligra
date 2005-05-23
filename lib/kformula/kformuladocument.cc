@@ -347,6 +347,7 @@ DocumentWrapper::DocumentWrapper( KConfig* config,
 {
     if ( m_hasActions ) {
         createActions( collection );
+        enableMatrixActions( false );
     }
     setCommandStack( history );
 }
@@ -1150,12 +1151,6 @@ void DocumentWrapper::setEnabled( bool enabled )
     getAddGenericUpperAction()->setEnabled( enabled );
     getAddGenericLowerAction()->setEnabled( enabled );
     
-    getAppendColumnAction()->setEnabled( enabled );
-    getInsertColumnAction()->setEnabled( enabled );
-    getRemoveColumnAction()->setEnabled( enabled );
-    getAppendRowAction()->setEnabled( enabled );
-    getInsertRowAction()->setEnabled( enabled );
-    getRemoveRowAction()->setEnabled( enabled );
 
     if ( enabled ) {
         getAddGenericUpperAction()->
@@ -1176,6 +1171,16 @@ void DocumentWrapper::setEnabled( bool enabled )
         getMakeGreekAction()->setShortcut( KShortcut() );
         getInsertSymbolAction()->setShortcut( KShortcut() );
     }
+}
+
+void DocumentWrapper::enableMatrixActions( bool b)
+{
+    getAppendColumnAction()->setEnabled( b );
+    getInsertColumnAction()->setEnabled( b );
+    getRemoveColumnAction()->setEnabled( b );
+    getAppendRowAction()->setEnabled( b );
+    getInsertRowAction()->setEnabled( b );
+    getRemoveRowAction()->setEnabled( b );
 }
 
 void DocumentWrapper::updateConfig()

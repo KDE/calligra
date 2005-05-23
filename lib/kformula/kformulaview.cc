@@ -340,7 +340,7 @@ void View::addText( QString str )
 void View::emitCursorChanged()
 {
     if (cursor()->hasChanged() || cursorHasChanged()) {
-
+        getDocument()->updateMatrixActions();
         cursor()->clearChangedFlag();
         cursorHasChanged() = false;
         cursor()->calcCursorSize( contextStyle(), smallCursor() );

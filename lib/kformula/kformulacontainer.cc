@@ -481,6 +481,14 @@ void Container::setFontSizeDirect( int pointSize )
     recalc();
 }
 
+void Container::updateMatrixActions()
+{
+    BasicElement *currentElement = activeCursor()->getElement();
+    if ( ( currentElement = currentElement->getParent() ) != 0 )
+        document()->wrapper()->enableMatrixActions( dynamic_cast<MatrixElement*>(currentElement) );
+    else
+        document()->wrapper()->enableMatrixActions( false );
+}
 
 void Container::save( QDomElement &root )
 {
