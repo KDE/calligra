@@ -1855,8 +1855,18 @@ void KoDocument::setModified( bool mod )
 
     KParts::ReadWritePart::setModified( mod );
 
-    if ( mod )
+    if ( mod ) {
         m_bEmpty = FALSE;
+    } else {
+        // When saving this document, all non-external child documents get saved too.
+        QPtrListIterator<KoDocumentChild> it = children();
+        for (; it.current(); ++it )
+        {
+            KoDocument *doc = it.current()->document();
+            if ( doc && !it.current()->isStoredExtern() && !it.current()->isDeleted() && doc->isModified() )
+                doc->setModified( false );
+        }
+    }
 
     // This influences the title
     setTitleModified();
