@@ -13,5 +13,8 @@ noinst_HEADERS = excelfilter.h handler.h worker.h helper.h definitions.h
 
 METASOURCES = AUTO
 
-service_DATA = ole_excel97_import.desktop
-servicedir = $(kde_servicesdir)
+install-data-local: uninstall.desktop
+	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(DESTDIR)$(kde_servicesdir)/ole_excel97_import.desktop
+
+#service_DATA = ole_excel97_import.desktop
+#servicedir = $(kde_servicesdir)
