@@ -1465,6 +1465,9 @@ Record* Record::create( unsigned type )
   else if( type == MulRKRecord::id )
     record = new MulRKRecord();
     
+  if( type == NameRecord::id )
+    record = new NameRecord();
+    
   else if( type == NumberRecord::id )
     record = new NumberRecord();
     
@@ -2305,7 +2308,6 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data )
     d->optionFlags = readU16( data );
     d->sheetIndex = readU16( data+2 );
     d->externName = EString::fromUnicodeString( data+6, false, size ).str();
-printf("FOUND %s\n", d->externName.ascii());
   }
 }
 
@@ -3200,6 +3202,71 @@ void MulRKRecord::dump( std::ostream& out ) const
     out << "  Encoded: " << std::hex << encodedRK( c-firstColumn() );
     out << std::endl;
   }
+}
+
+// ========== NAME ========== 
+
+const unsigned int NameRecord::id = 0x0018;
+
+class NameRecord::Private
+{
+public:
+  unsigned optionFlags;
+  UString definedName;
+};
+
+
+NameRecord::NameRecord()
+{
+  d = new Private;
+  d->optionFlags = 0;
+}
+
+NameRecord::~NameRecord()
+{
+  delete d;
+}
+
+void NameRecord::setDefinedName( const UString& name )
+{
+  d->definedName = name;
+}
+
+UString NameRecord::definedName() const
+{
+  return d->definedName;
+}
+
+void NameRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 14 ) return;
+  
+  d->optionFlags = readU16( data );
+  unsigned len = data[3];
+
+  if ( version() == Excel95 )
+  {
+    char* buffer = new char[ len+1 ];
+    memcpy( buffer, data + 14, len );
+    buffer[ len ] = 0;
+    d->definedName = UString( buffer );
+    delete[] buffer;
+  }
+
+  if ( version() == Excel97 )
+  {
+    UString str = UString();
+    for( unsigned k=0; k<len; k++ )
+    {
+      unsigned uchar = readU16( data + 14 + k*2 );
+      str.append( UString(uchar) );
+    }
+    d->definedName = str;
+  }
+}
+
+void NameRecord::dump( std::ostream& out ) const
+{
 }
 
 // ========== Number ========== 
@@ -4343,6 +4410,9 @@ public:
   
   // mapping from font index to Swinder::FormatFont
   std::map<unsigned,FormatFont> fontCache;
+
+  // for NAME and EXTERNNAME
+  std::vector<UString> nameTable;
 };
 
 ExcelReader::ExcelReader()
@@ -4483,6 +4553,8 @@ void ExcelReader::handleRecord( Record* record )
       handleBlank( static_cast<BlankRecord*>( record ) ); break;
     case ColInfoRecord::id: 
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
+    case ExternNameRecord::id: 
+      handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
     case FormatRecord::id: 
       handleFormat( static_cast<FormatRecord*>( record ) ); break;
     case FormulaRecord::id: 
@@ -4505,6 +4577,8 @@ void ExcelReader::handleRecord( Record* record )
       handleMulBlank( static_cast<MulBlankRecord*>( record ) ); break;
     case MulRKRecord::id: 
       handleMulRK( static_cast<MulRKRecord*>( record ) ); break;
+    case NameRecord::id: 
+      handleName( static_cast<NameRecord*>( record ) ); break;
     case NumberRecord::id: 
       handleNumber( static_cast<NumberRecord*>( record ) ); break;
     case PaletteRecord::id: 
@@ -4723,6 +4797,13 @@ void ExcelReader::handleFormula( FormulaRecord* record )
   }
 }
 
+void ExcelReader::handleExternName( ExternNameRecord* record )
+{
+  if( !record ) return;
+
+  d->nameTable.push_back( record->externName() );
+}
+
 void ExcelReader::handleFont( FontRecord* record )
 {
   if( !record ) return;
@@ -4922,6 +5003,13 @@ void ExcelReader::handleMulRK( MulRKRecord* record )
       cell->setFormat( convertFormat( record->xfIndex( column-firstColumn ) ) );
     }
   }
+}
+
+void ExcelReader::handleName( NameRecord* record )
+{
+  if( !record ) return;
+
+  d->nameTable.push_back( record->definedName() );
 }
 
 void ExcelReader::handleNumber( NumberRecord* record )

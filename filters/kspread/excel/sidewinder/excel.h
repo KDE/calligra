@@ -1953,6 +1953,41 @@ private:
    virtual unsigned xfIndex() const { return CellInfo::xfIndex(); }
 };
 
+
+class NameRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  NameRecord();
+
+  ~NameRecord();
+
+  UString definedName() const;
+
+  void setDefinedName( const UString& name );
+
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  virtual const char* name(){ return "NAME"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   NameRecord( const NameRecord& );
+   NameRecord& operator=( const NameRecord& );
+   
+   class Private;
+   Private *d;
+};
+
+
 /**
   Class NumberRecord represents a cell that contains a floating point value. 
 
@@ -3023,6 +3058,7 @@ private:
   void handleColInfo( ColInfoRecord* record );
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
+  void handleExternName( ExternNameRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFormula( FormulaRecord* record );
   void handleFont( FontRecord* record );
@@ -3034,6 +3070,7 @@ private:
   void handleMergedCells( MergedCellsRecord* record );
   void handleMulBlank( MulBlankRecord* record );
   void handleMulRK( MulRKRecord* record );
+  void handleName( NameRecord* record );
   void handleNumber( NumberRecord* record );
   void handlePalette( PaletteRecord* record );
   void handleRightMargin( RightMarginRecord* record );
