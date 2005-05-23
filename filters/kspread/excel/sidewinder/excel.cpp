@@ -1429,6 +1429,9 @@ Record* Record::create( unsigned type )
   if( type == DimensionRecord::id )
     record = new DimensionRecord();
     
+  if( type == ExternNameRecord::id )
+    record = new ExternNameRecord();
+    
   else if( type == FontRecord::id )
     record = new FontRecord();
     
@@ -2246,6 +2249,68 @@ void EOFRecord::setData( unsigned,  const unsigned char* )
 void EOFRecord::dump( std::ostream& out ) const
 {
   out << "EOF" << std::endl;
+}
+
+// ========== EXTERNNAME ========== 
+
+const unsigned int ExternNameRecord::id = 0x0023;
+
+class ExternNameRecord::Private
+{
+public:
+  unsigned optionFlags;
+  unsigned sheetIndex;   // one-based, not zero-based
+  UString externName;
+};
+
+
+ExternNameRecord::ExternNameRecord()
+{
+  d = new Private;
+  d->optionFlags = 0;
+  d->sheetIndex = 0;
+}
+
+ExternNameRecord::~ExternNameRecord()
+{
+  delete d;
+}
+
+void ExternNameRecord::setSheetIndex( unsigned sheetIndex )
+{
+  d->sheetIndex = sheetIndex;
+}
+
+unsigned ExternNameRecord::sheetIndex() const
+{
+  return d->sheetIndex;
+}
+
+void ExternNameRecord::setExternName( const UString& name )
+{
+  d->externName = name;
+}
+
+UString ExternNameRecord::externName() const
+{
+  return d->externName;
+}
+
+void ExternNameRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 6 ) return;
+  
+  if ( version() == Excel97 )
+  {
+    d->optionFlags = readU16( data );
+    d->sheetIndex = readU16( data+2 );
+    d->externName = EString::fromUnicodeString( data+6, false, size ).str();
+printf("FOUND %s\n", d->externName.ascii());
+  }
+}
+
+void ExternNameRecord::dump( std::ostream& out ) const
+{
 }
 
 // ========== FONT ========== 

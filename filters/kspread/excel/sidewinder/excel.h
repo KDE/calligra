@@ -1097,6 +1097,48 @@ private:
    Private *d;
 };
 
+class ExternNameRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  ExternNameRecord();
+
+  ~ExternNameRecord();
+
+  // one-based sheet index
+  // if 0 means AddIn function
+  unsigned sheetIndex() const;
+
+  void setSheetIndex( unsigned sheetIndex );
+
+  UString externName() const;
+
+  void setExternName( const UString& name );
+
+  virtual void setData( unsigned size, const unsigned char* data );
+
+
+
+  virtual const char* name(){ return "EXTERNNAME"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   ExternNameRecord( const ExternNameRecord& );
+   ExternNameRecord& operator=( const ExternNameRecord& );
+   
+   class Private;
+   Private *d;
+};
+
+
 /**
   \brief End of record set.
   
