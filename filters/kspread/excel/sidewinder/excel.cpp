@@ -5364,7 +5364,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
     
       case FormulaToken::MissArg:
         // just ignore
-        // FIXME is this correct ?  
+        stack.push_back( UString(" ") );
         break;
     
       case FormulaToken::String:
