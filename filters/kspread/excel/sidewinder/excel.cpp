@@ -5350,7 +5350,19 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
     
       case FormulaToken::Percent:  
+#if 0
         stack[ stack.size()-1 ].append( UString("%") );
+#else // HACK for KSpread, foo% becomes (foo/100)
+        {
+          if( stack.size() )
+          {
+            UString str( "(" );
+            str.append( stack[ stack.size()-1 ] );
+            str.append( UString("/100)") );
+            stack[ stack.size()-1 ] = str;
+          }
+        }
+#endif
         break;
     
       case FormulaToken::Paren:  
