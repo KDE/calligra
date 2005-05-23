@@ -171,6 +171,12 @@ public:
   // only when id is Ref
   UString ref( unsigned row, unsigned col ) const;
 
+  // only when id is Area
+  UString area( unsigned row, unsigned col ) const;
+
+  // only when id is Attr
+  unsigned attr() const;
+
 private:
   class Private;
   Private *d;  

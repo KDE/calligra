@@ -506,6 +506,9 @@ unsigned FormulaToken::size() const
     case Paren:
     case MissArg:
       s = 0; break;
+
+    case Attr:
+      s = 3; break;
       
     case ErrorCode:
     case Bool:
@@ -626,10 +629,24 @@ Value FormulaToken::value() const
 unsigned FormulaToken::functionIndex() const
 {
   // FIXME check data size
+  unsigned index = 0;
   unsigned char buf[2];
-  buf[0] = d->data[0];
-  buf[1] = d->data[1];
-  return readU16( buf );
+
+  if( d->id == Function )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    index = readU16( buf );
+  }
+
+  if( d->id == FunctionVar )
+  {
+    buf[0] = d->data[1];
+    buf[1] = d->data[2];
+    index = readU16( buf );
+  }
+
+  return index;
 }
 
 struct FunctionEntry
@@ -1018,14 +1035,154 @@ const char* FormulaToken::functionName() const
 
 unsigned FormulaToken::functionParams() const
 {
-  if( functionIndex() > 367 ) return 0;
-  return FunctionEntries[ functionIndex() ].params;
+  unsigned params = 0;
+
+  if( d->id == Function )
+  {
+    if( functionIndex() > 367 ) return 0;
+    params = FunctionEntries[ functionIndex() ].params;
+  }
+
+  if( d->id == FunctionVar )
+  {
+    params = (unsigned)d->data[0] ;
+  }
+
+  return params;
+}
+
+unsigned FormulaToken::attr() const
+{
+  unsigned attr = 0;
+  if( d->id == Attr )
+  {
+    attr = (unsigned) d->data[0];
+  }
+  return attr;
+}
+
+UString FormulaToken::area( unsigned row, unsigned col ) const
+{
+  // FIXME check data size !
+  unsigned char buf[2];
+  int row1Ref, row2Ref, col1Ref, col2Ref;
+  bool row1Relative, col1Relative;
+  bool row2Relative, col2Relative;
+
+  if( version() == Excel97 )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    row1Ref = readU16( buf );
+
+    buf[0] = d->data[2];
+    buf[1] = d->data[3];
+    row2Ref = readU16( buf );
+
+    buf[0] = d->data[4];
+    buf[1] = d->data[5];
+    col1Ref = readU16( buf );
+
+    buf[0] = d->data[6];
+    buf[1] = d->data[7];
+    col2Ref = readU16( buf );
+
+    row1Relative = col1Ref & 0x8000;
+    col1Relative = col1Ref & 0x4000;
+    col1Ref &= 0x3fff;
+
+    row2Relative = col2Ref & 0x8000;
+    col2Relative = col2Ref & 0x4000;
+    col2Ref &= 0x3fff;
+  }
+  else
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    row1Ref = readU16( buf );
+
+    buf[0] = d->data[2];
+    buf[1] = d->data[3];
+    row2Ref = readU16( buf );
+
+    buf[0] = d->data[4];
+    buf[1] = 0;
+    col1Ref = readU16( buf );
+
+    buf[0] = d->data[5];
+    buf[1] = 0;
+    col2Ref = readU16( buf );
+
+    row1Relative = row2Ref & 0x8000;
+    col1Relative = row2Ref & 0x4000;
+    row1Ref &= 0x3fff;
+
+    row2Relative = row2Ref & 0x8000;
+    col2Relative = row2Ref & 0x4000;
+    row2Ref &= 0x3fff;
+  }
+
+  UString result;
+
+#if 0 
+// normal use
+  if( !col1Relative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( col1Ref ) );  
+  if( !row1Relative )
+    result.append( UString("$") );
+  result.append( UString::from( row1Ref+1 ) );  
+  result.append( UString(":") );
+  if( !col2Relative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( col2Ref ) );  
+  if( !row2Relative )
+    result.append( UString("$") );
+  result.append( UString::from( row2Ref+1 ) );  
+#else 
+   // SUPERHACK !! KSpread only !!!
+  if( col1Relative )
+    col1Ref -= col;
+  else col1Ref++;
+  if( row1Relative )
+    row1Ref -= row;
+  else row1Ref++;
+  if( !col1Relative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); 
+  result.append( UString::from( col1Ref ) );  
+  if( !row1Relative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); // HACK, only for KSpread !!!
+  result.append( UString::from( row1Ref ) );  
+  result.append( UString("#") );
+
+  result.append( UString(":") );
+
+  if( col2Relative )
+    col2Ref -= col;
+  else col2Ref++;
+  if( row2Relative )
+    row2Ref -= row;
+  else row2Ref++;
+  if( !col2Relative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); 
+  result.append( UString::from( col2Ref ) );  
+  if( !row2Relative )
+    result.append( UString("$") );
+  else  result.append( UString("#") ); // HACK, only for KSpread !!!
+  result.append( UString::from( row2Ref ) );  
+  result.append( UString("#") );
+
+#endif
+
+  return result;  
 }
 
 UString FormulaToken::ref( unsigned row, unsigned col ) const
 {
   // FIXME check data size !
-  // FIXME handle Excel95 !
   // FIXME handle shared formula
   unsigned char buf[2];
   int rowRef, colRef;
@@ -5106,7 +5263,6 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
   stack->push_back( s1 );
 }
 
-
 UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens )
 {
   UStringStack stack;
@@ -5114,6 +5270,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
   for( unsigned c=0; c < tokens.size(); c++ )
   {
     FormulaToken token = tokens[c];
+
     switch( token.id() )
     {
       case FormulaToken::Add:  
@@ -5238,29 +5395,49 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         // FIXME handle this !
         break;
       
-      case FormulaToken::Function:
-        {
-          mergeTokens( &stack, token.functionParams(), UString(";") );
-          UString str( token.functionName() ? token.functionName() : "??" );
-          str.append( UString("(") );
-          str.append( stack[ stack.size()-1 ] );
-          str.append( UString(")") );
-          stack[ stack.size()-1 ] = str;
-        }
-        break;
-      
       case FormulaToken::Ref:
         stack.push_back( token.ref( row, col ) );
         break;
       
-      case FormulaToken::NatFormula:
+      case FormulaToken::Area:
+        stack.push_back( token.area( row, col ) );
+        break;
+
+      case FormulaToken::Function:
+      case FormulaToken::FunctionVar:
+        {
+          mergeTokens( &stack, token.functionParams(), UString(";") );
+          if( stack.size() )
+          {
+            UString str( token.functionName() ? token.functionName() : "??" );
+            str.append( UString("(") );
+            str.append( stack[ stack.size()-1 ] );
+            str.append( UString(")") );
+            stack[ stack.size()-1 ] = str;
+          }
+        }
+        break;
+
       case FormulaToken::Attr:
+        if( token.attr() & 0x10 )  // SUM
+        {
+          mergeTokens( &stack, 1, UString(";") );
+          if( stack.size() )
+          {
+            UString str( "SUM" );
+            str.append( UString("(") );
+            str.append( stack[ stack.size()-1 ] );
+            str.append( UString(")") );
+            stack[ stack.size()-1 ] = str;
+          }
+        }
+        break;
+
+      case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
       case FormulaToken::EndSheet:
       case FormulaToken::ErrorCode:
-      case FormulaToken::FunctionVar:
       case FormulaToken::Name:
-      case FormulaToken::Area:
       case FormulaToken::MemArea:
       case FormulaToken::MemErr:
       case FormulaToken::MemNoMem:
@@ -5281,6 +5458,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( UString("Unknown") );
         break;
     };
+
   }
   
   UString result;
