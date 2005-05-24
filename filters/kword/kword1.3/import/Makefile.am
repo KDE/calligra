@@ -17,7 +17,8 @@ libkwordkword1dot3import_la_LIBADD  = $(KOFFICE_LIBS)
 
 METASOURCES = AUTO
 
-service_DATA = kword_kword1dot3_import.desktop
-
-servicedir = $(kde_servicesdir)
+#service_DATA = kword_kword1dot3_import.desktop
+#servicedir = $(kde_servicesdir)
+install-data-local: uninstall.desktop
+	$(INSTALL_DATA) $(srcdir)/uninstall.desktop $(DESTDIR)$(kde_servicesdir)/kword_kword1dot3_import.desktop
 
