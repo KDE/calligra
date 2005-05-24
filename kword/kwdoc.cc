@@ -993,6 +993,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
 	kdDebug(32002) << "DTP mode: pages = maxBottom("<<maxBottom<<") / ptPaperHeight=" << ptPaperHeight() << " = " << m_pages << endl;
 #endif
         if(m_pages < 1) m_pages=1;
+
+        if ( toPage == -1 )
+            toPage = m_pages - 1;
+        // #106187, make text flow around frames upon loading
+        for ( int pg = fromPage ; pg <= toPage ; ++pg )
+            updateFramesOnTopOrBelow( pg );
     }
 }
 
