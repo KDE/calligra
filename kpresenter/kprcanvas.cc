@@ -3225,6 +3225,9 @@ bool KPrCanvas::pNext( bool gotoNextPage )
             playSound( _soundFileName );
         }
 
+        if ( m_pageEffect )
+            finishPageEffect();
+
         m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, page->getPageEffectSpeed() );
         if ( m_pageEffect->doEffect() )
         {
