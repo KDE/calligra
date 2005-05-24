@@ -42,7 +42,6 @@ public:
     void setSpecialMimeFilter( QStringList& mimeFilter,
                                const QString& currentFormat, const int specialOutputFlag,
                                const QString& nativeFormat,
-                               const QStringList& extraNativeMimeTypes,
                                int supportedSpecialFormats );
     int specialEntrySelected();
 

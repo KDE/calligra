@@ -96,8 +96,10 @@ public:
      * Suitable for passing to @ref KFileDialog::setMimeFilter. The default mime
      * gets set by the "users" of this method, as we do not have enough
      * information here.
+     * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    KOFFICECORE_EXPORT static QStringList mimeFilter( const QCString& mimetype, Direction direction );
+    KOFFICECORE_EXPORT static QStringList mimeFilter( const QCString& mimetype, Direction direction,
+                                                      const QStringList& extraNativeMimeTypes = QStringList() );
 
     /**
      * The same method as KoFilterManager::mimeFilter but suited for KoShell.

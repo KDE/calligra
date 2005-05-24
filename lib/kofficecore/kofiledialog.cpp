@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2004 David Faure <faure@kde.org>
+   Copyright (C) 2002-2005 David Faure <faure@kde.org>
    Copyright (C) 2002-2004 Clarence Dang <dang@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 #include <kfilefiltercombo.h>
 #include <klocale.h>
 #include <kdiroperator.h>
+#include <kdebug.h>
 
 KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
                            QWidget *parent, const char *name,
@@ -45,7 +46,6 @@ void KoFileDialog::slotChangedfilter( int index )
 void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
                                          const QString& currentFormat, const int specialOutputFlag,
                                          const QString& nativeFormat,
-                                         const QStringList& extraNativeMimeTypes,
                                          int supportedSpecialFormats )
 {
     Q_ASSERT( !mimeFilter.isEmpty() );
@@ -72,12 +72,6 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
     // Insert numSpecialEntries entries with native mimetypes, for the special entries.
     QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
     mimeFilter.insert( mimeFilterIt /* before 1 -> after 0 */, numSpecialEntries, nativeFormat );
-    // Now insert entries for the extra native mimetypes
-    mimeFilterIt = mimeFilter.at( 1 + numSpecialEntries );
-    for( QStringList::ConstIterator it = extraNativeMimeTypes.begin(); it != extraNativeMimeTypes.end(); ++it ) {
-        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
-        ++mimeFilterIt;
-    }
 
     // Fill in filter combo
     // Note: if currentFormat doesn't exist in mimeFilter, filterWidget

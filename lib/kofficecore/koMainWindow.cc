@@ -702,8 +702,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
     KURL suggestedURL = pDoc->url();
 
-    QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
-    mimeFilter += pDoc->extraNativeMimeTypes();
+    QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes() );
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
     {
         kdDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
@@ -762,7 +761,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         dialog->setSpecialMimeFilter( mimeFilter,
                                       isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
                                       isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
-                                      _native_format, pDoc->extraNativeMimeTypes(),
+                                      _native_format,
                                       pDoc->supportedSpecialFormats() );
 
         KURL newURL;
@@ -1061,14 +1060,9 @@ void KoMainWindow::slotFileOpen()
         dialog->setCaption( i18n("Import Document") );
 
     // The few lines below need to be kept in sync with KoTemplateChooseDia::setupFileDialog
-    QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
-                                                          KoFilterManager::Import );
-    QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
-    const QStringList extraNativeMimeTypes = KoDocument::readExtraNativeMimeTypes();
-    for( QStringList::ConstIterator it = extraNativeMimeTypes.begin(); it != extraNativeMimeTypes.end(); ++it ) {
-        mimeFilterIt = mimeFilter.insert( mimeFilterIt, *it );
-        ++mimeFilterIt;
-    }
+    const QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
+                                                                KoFilterManager::Import,
+                                                                KoDocument::readExtraNativeMimeTypes() );
     dialog->setMimeFilter( mimeFilter );
     if(dialog->exec()!=QDialog::Accepted) {
         delete dialog;

@@ -166,7 +166,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 
             QApplication::setOverrideCursor( arrowCursor );
             KoFilterChooser chooser(0,
-                                    KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import),
+                                    KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
                                     nativeFormat);
             if (chooser.exec ())
             {
@@ -374,7 +374,7 @@ namespace  // in order not to mess with the global namespace ;)
                 kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " ruled out" << endl;
                 continue;
             }
-        
+
             // First add the "starting points" to the dict
             QStringList::ConstIterator importIt = impList.begin();
             QStringList::ConstIterator importEnd = impList.end();
@@ -453,11 +453,17 @@ namespace  // in order not to mess with the global namespace ;)
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction direction )
+QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction direction, const QStringList& extraNativeMimeTypes )
 {
     QAsciiDict<Vertex> vertices;
     buildGraph( vertices, direction );
-    return connected( vertices, mimetype );
+    QStringList lst = connected( vertices, mimetype );
+    QStringList::Iterator mimeFilterIt = lst.at( 1 );
+    for( QStringList::ConstIterator extrait = extraNativeMimeTypes.begin(); extrait != extraNativeMimeTypes.end(); ++extrait ) {
+        mimeFilterIt = lst.insert( mimeFilterIt, *extrait );
+        ++mimeFilterIt;
+    }
+    return lst;
 }
 
 QStringList KoFilterManager::mimeFilter()
