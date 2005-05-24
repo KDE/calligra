@@ -152,7 +152,7 @@ void KivioStencilFormatDlg::initLineEndStyles()
 
 double KivioStencilFormatDlg::lineWidth()
 {
-  return KoUnit::fromUserValue(m_lineWidthUSBox->value(), m_unit);
+  return m_lineWidthUSBox->value();
 }
 
 QColor KivioStencilFormatDlg::lineColor()
