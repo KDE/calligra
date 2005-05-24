@@ -54,7 +54,6 @@ class QRegion;
 class QSize;
 class QProgressDialog;
 class KWTextFrameSet;
-class KWFramePartMoveCommand;
 class KWordFrameSetIface;
 class DCOPObject;
 class KoXmlWriter;

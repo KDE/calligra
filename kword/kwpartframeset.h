@@ -21,6 +21,7 @@
 
 #include "kwframe.h"
 class KWChild;
+class KWFramePartMoveCommand;
 /**
  * @short A frameset that contains an embedded object (a KWChild)
  */
