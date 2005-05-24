@@ -910,13 +910,6 @@ public:
     void reloadPicture( const KoPictureKey& key );
 
     /**
-     * @deprecated
-     * The size of the image is now only needed at drawing time, not before anymore.
-     * However at drawing time, it is the frame's size that matters.
-     */
-    void setSize( const QSize & _imgSize );
-
-    /**
      * Called when the user resizes a frame.
      */
     virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );

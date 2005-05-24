@@ -2194,11 +2194,6 @@ void KWPictureFrameSet::reloadPicture( const KoPictureKey& key )
     m_picture = collection->insertPicture( key, KoPicture() );
 }
 
-void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
-{
-    // Do nothing as KoPicture needs a size only at drawing time
-}
-
 void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
