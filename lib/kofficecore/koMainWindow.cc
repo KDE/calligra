@@ -34,7 +34,6 @@
 #include <kdeversion.h>
 #include <kstdaction.h>
 #include <kapplication.h>
-#include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
@@ -763,7 +762,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
         dialog->setSpecialMimeFilter( mimeFilter,
                                       isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
                                       isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
-                                      _native_format, pDoc->extraNativeMimeTypes() );
+                                      _native_format, pDoc->extraNativeMimeTypes(),
+                                      pDoc->supportedSpecialFormats() );
 
         KURL newURL;
         QCString outputFormat = _native_format;

@@ -45,12 +45,29 @@ void KoFileDialog::slotChangedfilter( int index )
 void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
                                          const QString& currentFormat, const int specialOutputFlag,
                                          const QString& nativeFormat,
-                                         const QStringList& extraNativeMimeTypes )
+                                         const QStringList& extraNativeMimeTypes,
+                                         int supportedSpecialFormats )
 {
     Q_ASSERT( !mimeFilter.isEmpty() );
     Q_ASSERT( mimeFilter[0] == nativeFormat );
 
-    int numSpecialEntries = 3;
+    bool add1dot1 = supportedSpecialFormats & KoDocument::SaveAsKOffice1dot1;
+    bool addUncompressed = supportedSpecialFormats & KoDocument::SaveAsDirectoryStore;
+
+    int idxSpecialOutputFlag = 0;
+    int numSpecialEntries = 0;
+    if ( add1dot1 ) {
+        ++numSpecialEntries;
+        m_specialFormats.append( KoDocument::SaveAsKOffice1dot1 );
+        if ( specialOutputFlag == KoDocument::SaveAsKOffice1dot1 )
+            idxSpecialOutputFlag = numSpecialEntries;
+    }
+    if ( addUncompressed ) {
+        ++numSpecialEntries;
+        m_specialFormats.append( KoDocument::SaveAsDirectoryStore );
+        if ( specialOutputFlag == KoDocument::SaveAsDirectoryStore )
+            idxSpecialOutputFlag = numSpecialEntries;
+    }
 
     // Insert numSpecialEntries entries with native mimetypes, for the special entries.
     QStringList::Iterator mimeFilterIt = mimeFilter.at( 1 );
@@ -69,17 +86,18 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
 
     // To get a different description in the combo, we need to change its entries afterwards
     KMimeType::Ptr type = KMimeType::mimeType( nativeFormat );
-    filterWidget->changeItem( i18n("%1 (KOffice-1.1 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot1 );
-    filterWidget->changeItem( i18n("%1 (Uncompressed XML Files)").arg( type->comment() ), KoDocument::SaveAsDirectoryStore );
-    filterWidget->changeItem( i18n("%1 (KOffice-1.3 Format)").arg( type->comment() ), KoDocument::SaveAsKOffice1dot3 );
-    //filterWidget->changeItem( i18n("%1 (OASIS Format - experimental)").arg( type->comment() ), KoDocument::SaveAsOASIS );
+    int idx = 1; // 0 is the native format
+    if ( add1dot1 )
+        filterWidget->changeItem( i18n("%1 (KOffice-1.1 Format)").arg( type->comment() ), idx++ );
+    if ( addUncompressed )
+        filterWidget->changeItem( i18n("%1 (Uncompressed XML Files)").arg( type->comment() ), idx++ );
     // if you add an entry here, update numSpecialEntries above and specialEntrySelected() below
 
     // For native format...
     if (currentFormat == nativeFormat || currentFormat.isEmpty())
     {
         // KFileFilterCombo selected the _last_ "native mimetype" entry, select the correct one
-        filterWidget->setCurrentItem( specialOutputFlag );
+        filterWidget->setCurrentItem( idxSpecialOutputFlag );
         slotChangedfilter( filterWidget->currentItem() );
     }
     // [Mainly KWord] Tell MS Office users that they can save in RTF!
@@ -96,12 +114,9 @@ void KoFileDialog::setSpecialMimeFilter( QStringList& mimeFilter,
 int KoFileDialog::specialEntrySelected()
 {
     int i = filterWidget->currentItem();
-    // This enum is the position of the special items in the filter combo.
-    if ( i == KoDocument::SaveAsKOffice1dot1
-         || i == KoDocument::SaveAsDirectoryStore
-         || i == KoDocument::SaveAsKOffice1dot3
-         /*|| i == KoDocument::SaveAsOASIS*/ )
-        return i;
+    // Item 0 is the native format, the following ones are the special formats
+    if ( i >= 1 && i <= (int)m_specialFormats.count() )
+        return m_specialFormats[i-1];
     return 0;
 }
 

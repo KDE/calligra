@@ -210,13 +210,22 @@ public:
 
     /// Checks whether a given mimetype can be handled natively.
     bool isNativeFormat( const QCString& mimetype ) const;
+
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
-    QStringList extraNativeMimeTypes() const;
+    virtual QStringList extraNativeMimeTypes() const;
 
-    /// Enum values used by specialOutputFlag
-    enum { SaveAsKOffice1dot1 = 1, SaveAsDirectoryStore = 2,
-           SaveAsKOffice1dot3 = 3 };
+    /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
+    enum { SaveAsKOffice1dot1 = 1,
+           SaveAsDirectoryStore = 2
+           // bitfield! next value is 4
+         };
+
+    /**
+     * Return the set of SupportedSpecialFormats that the application wants to
+     * offer in the "Save" file dialog.
+     */
+    virtual int supportedSpecialFormats() const;
 
     /**
      * Returns the actual mimetype of the document

@@ -22,6 +22,7 @@
 #define KOFILEDIALOG_H
 
 #include <kfiledialog.h>
+#include <qvaluevector.h>
 
 /**
  * Extension to KFileDialog in order to add special entries to the filter combo,
@@ -41,12 +42,15 @@ public:
     void setSpecialMimeFilter( QStringList& mimeFilter,
                                const QString& currentFormat, const int specialOutputFlag,
                                const QString& nativeFormat,
-                               const QStringList& extraNativeMimeTypes );
+                               const QStringList& extraNativeMimeTypes,
+                               int supportedSpecialFormats );
     int specialEntrySelected();
 
 private slots:
     void slotChangedfilter( int index );
+
+private:
+    QValueVector<int> m_specialFormats;
 };
 
 #endif /* KOFILEDIALOG_H */
-

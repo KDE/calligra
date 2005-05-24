@@ -92,7 +92,7 @@ public:
     Private() :
         m_dcopObject( 0L ),
         filterManager( 0L ),
-        m_specialOutputFlag( KoDocument::SaveAsKOffice1dot3 ), // change to OASIS later
+        m_specialOutputFlag( 0 ), // default is native format
         m_isImporting( false ), m_isExporting( false ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
@@ -1661,7 +1661,6 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
     // OASIS/OOo file format?
     if ( store->hasFile( "content.xml" ) )
     {
-        //d->m_specialOutputFlag = SaveAsOASIS;
         store->disallowNameExpansion();
 
         KoOasisStore oasisStore( store );
@@ -2184,6 +2183,13 @@ QStringList KoDocument::extraNativeMimeTypes() const
     if ( !service ) // can't happen
         return lst;
     return service->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
+}
+
+int KoDocument::supportedSpecialFormats() const
+{
+    // Apps which support saving in the 1.1 or in the 1.3 format can add SaveAsKOffice1dot1/3 here.
+    // SaveAsDirectoryStore is a given since it's implemented by KoDocument itself.
+    return SaveAsDirectoryStore;
 }
 
 void KoDocument::addShell( KoMainWindow *shell )
