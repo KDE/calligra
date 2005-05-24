@@ -160,6 +160,8 @@ public:
     enum {  STYLE_FRAME = 20, STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW, STYLE_TABLE_CELL };
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
+    virtual int supportedSpecialFormats() const;
+
     enum SaveFlag { SaveAll, SaveSelected }; // kpresenter will also have SavePage
 
     /**

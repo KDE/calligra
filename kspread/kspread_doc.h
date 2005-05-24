@@ -439,9 +439,9 @@ public:
 
   virtual QDomDocument saveXML();
 
-    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
-
+  virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+  void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
+  virtual int supportedSpecialFormats() const;
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
   virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );

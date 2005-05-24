@@ -496,6 +496,11 @@ bool KSpreadDoc::saveChildren( KoStore* _store )
   return map()->saveChildren( _store );
 }
 
+int KSpreadDoc::supportedSpecialFormats() const
+{
+    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+}
+
 QDomDocument KSpreadDoc::saveXML()
 {
     //Terminate current cell edition, if any

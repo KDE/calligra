@@ -3354,6 +3354,11 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
 }
 
+int KWDocument::supportedSpecialFormats() const
+{
+    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+}
+
 void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );

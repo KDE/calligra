@@ -952,6 +952,11 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     return true;
 }
 
+int KPresenterDoc::supportedSpecialFormats() const
+{
+    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+}
+
 void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
 {
     unsigned int i = 0;
