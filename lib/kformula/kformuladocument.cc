@@ -360,8 +360,11 @@ DocumentWrapper::~DocumentWrapper()
         delete m_history;
     }
 
-    m_config->setGroup("General");
-    m_config->writeEntry("syntaxHighlighting", m_syntaxHighlightingAction->isChecked() );
+    if ( m_hasActions )
+    {
+        m_config->setGroup("General");
+        m_config->writeEntry("syntaxHighlighting", m_syntaxHighlightingAction->isChecked() );
+    }
 }
 
 
@@ -370,11 +373,19 @@ void DocumentWrapper::document( Document* document )
     m_document = document;
     m_document->introduceWrapper( this );
     initSymbolNamesAction();
-
     m_config->setGroup("General");
-    m_syntaxHighlightingAction->setChecked( m_config->readBoolEntry("syntaxHighlighting", true ) );
-    if ( !m_syntaxHighlightingAction->isChecked() )
-        toggleSyntaxHighlighting();
+    if ( m_hasActions )
+    {
+        m_syntaxHighlightingAction->setChecked( m_config->readBoolEntry("syntaxHighlighting", true ) );
+        if ( !m_syntaxHighlightingAction->isChecked() )
+            toggleSyntaxHighlighting();
+    }
+    else if ( m_config->readBoolEntry("syntaxHighlighting", true ) )
+    {
+        m_document->m_contextStyle->setSyntaxHighlighting( true );
+        // Only to notify all views. We don't expect to get new values.
+        m_document->recalc();
+    }
 }
 
 
