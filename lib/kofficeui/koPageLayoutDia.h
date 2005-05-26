@@ -147,7 +147,7 @@ public:
      *  Retrieves a standard page layout.
      *  Deprecated: better use KoPageLayout::standardLayout()
      */
-    KDE_DEPRECATED static KoPageLayout standardLayout();
+    static KDE_DEPRECATED KoPageLayout standardLayout();
 
     /**
      *  Returns the layout
