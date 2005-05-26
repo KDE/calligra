@@ -545,24 +545,28 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 #endif
         if ( ( ( KSpreadChild* )it.current() )->sheet() == m_pSheet 
 	     && zoomedBound.intersects( zoomedView ) ) 
-	{
+	{      
             painter.save();
 
-            painter.translate( -zoomedView.left()
-			       + m_pDoc->zoomItX( topLeft.x() )
-			       + zoomedBound.left(),
-                               -zoomedView.top()  
-			       + m_pDoc->zoomItY( topLeft.y() ) 
-			       + zoomedBound.top() );
-	    // FIXME: Why can this suddenly be removed?
-            zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
-	    kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
-			    << zoomedBound << endl;
+//             painter.translate( -zoomedView.left()
+//                   + m_pDoc->zoomItX( topLeft.x() )
+//                   + zoomedBound.left(),
+//                                -zoomedView.top()  
+//                   + m_pDoc->zoomItY( topLeft.y() ) 
+//                   + zoomedBound.top() );
+//        // FIXME: Why can this suddenly be removed?
+//             zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
+//        kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
+//                << zoomedBound << endl;
 
-            it.current()->transform( painter );
-            it.current()->document()->paintEverything( painter,
-                                                       zoomedBound,
-                                                       it.current()->isTransparent() );
+//             it.current()->transform( painter );
+//             it.current()->document()->paintEverything( painter,
+//                                                        zoomedBound,
+//                                                        it.current()->isTransparent() );
+
+            it.current()->document()->paintEverything( painter, zoomedBound, it.current()->isTransparent(), 0L,
+                                             m_pDoc->zoomedResolutionX(), m_pDoc->zoomedResolutionY() );
+//             painter.fillRect(zoomedBound, QBrush("red")); for debug purpose
             painter.restore();
         }
     }

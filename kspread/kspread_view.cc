@@ -4248,7 +4248,6 @@ void KSpreadView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Portrait );
 
     prt.setFullPage( TRUE );
-    prt.setResolution ( 600 );
 }
 
 void KSpreadView::print( KPrinter &prt )

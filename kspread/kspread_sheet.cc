@@ -8239,6 +8239,7 @@ void KSpreadSheet::deleteChild( KSpreadChild* child )
 
     emit sig_removeChild( child );
 
+    child->setDeleted(true);
     delete child;
 
     /** TODO - handle this */
@@ -8591,7 +8592,7 @@ ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet )
 
 ChartChild::~ChartChild()
 {
-    if ( !isDeleted() )
+    if ( isDeleted() )
         delete m_pBinding;
 }
 
@@ -8656,6 +8657,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
     update();
 
+    chart()->setCanChangeValue( false  );
     return true;
 }
 
