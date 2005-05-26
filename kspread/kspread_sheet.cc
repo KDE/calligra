@@ -8229,6 +8229,8 @@ void KSpreadSheet::insertChild( KSpreadChild *_child )
     // m_lstChildren.append( _child );
     doc()->insertChild( _child );
 
+    updateView( _child->boundingRect() );
+
     /* TODO - handle this */
 //    emit sig_polygonInvalidated( _child->framePointArray() );
 }
