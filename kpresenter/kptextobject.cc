@@ -2354,35 +2354,36 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
 
 KPrTextDrag * KPTextView::newDrag( QWidget * parent )
 {
-#if 0 //old koffice-1.3 format
+#if 1 //old koffice-1.3 format
     KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
     KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
-    QString text;
+    QString plainText;
 
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "TEXTOBJ" );
     domDoc.appendChild( elem );
     if ( c1.parag() == c2.parag() )
     {
-        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+        plainText = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
 
         m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-1 );
     }
     else
     {
-        text += c1.parag()->toString( c1.index() ) + "\n";
+        plainText += c1.parag()->toString( c1.index() ) + "\n";
 
         m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c1.parag()->length()-1 );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            text += p->toString() + "\n";
+            plainText += p->toString() + "\n";
             m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-2 );
             p = p->next();
         }
-        text += c2.parag()->toString( 0, c2.index() );
+        plainText += c2.parag()->toString( 0, c2.index() );
         m_kptextobj->saveParagraph( domDoc, c2.parag(), elem, 0, c2.index()-1 );
     }
+    const QCString cstr = domDoc.toCString();
 #else
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
