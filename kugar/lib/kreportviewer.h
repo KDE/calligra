@@ -10,14 +10,14 @@
 #define KREPORTVIEWER_H
 
 #include "mreportviewer.h"
-
+#include "koffice_export.h"
 class KPrinter;
 
 /**Kugar KDE report viewer widget
   *@author Alexander Dymo
   */
 
-class KReportViewer : public MReportViewer
+class KUGAR_EXPORT KReportViewer : public MReportViewer
 {
 	Q_OBJECT
 

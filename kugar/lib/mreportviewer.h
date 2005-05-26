@@ -22,7 +22,7 @@
 #include "mreportengine.h"
 #include "mpagecollection.h"
 #include "mpagedisplay.h"
-
+#include "koffice_export.h"
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
 
 class QPrinter;
@@ -35,7 +35,7 @@ extern QApplication *mAppRef;
   *@author Mutiny Bay Software
   */
 
-class MReportViewer : public QWidget
+class KUGAR_EXPORT MReportViewer : public QWidget
 {
 	Q_OBJECT
 
