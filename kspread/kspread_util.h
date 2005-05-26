@@ -193,12 +193,12 @@ QString util_rangeRowName( const QRect &_area);
 * Call this function to decode the text of a column label to an integer
 * i.e. AA->27
 */
-int util_decodeColumnLabelText( const QString &_col );
+KSPREAD_EXPORT int util_decodeColumnLabelText( const QString &_col );
 /**
 * Call this function to encode an integer to the text of the column label
 * i.e. 27->AA
 */
-QString util_encodeColumnLabelText( int column );
+KSPREAD_EXPORT QString util_encodeColumnLabelText( int column );
 
 QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
                       KLocale const * const locale, bool insert );
@@ -226,7 +226,7 @@ QString convertOasisPenToString( const QPen & pen );
 QPen convertOasisStringToPen( const QString &str );
 
 //Return true when it's a reference to cell from sheet.
-bool localReferenceAnchor( const QString &_ref );
+KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 
 
 #endif

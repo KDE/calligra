@@ -9,7 +9,7 @@
 #include <kconfig.h>
 
 #include <koChart.h>
-
+#include "koffice_export.h"
 
 namespace KChart
 {
@@ -31,7 +31,7 @@ struct KChartAuxiliary {
 };
 
 
-class KChartPart : public KoChart::Part
+class KCHART_EXPORT KChartPart : public KoChart::Part
 {
     Q_OBJECT
 
