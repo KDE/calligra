@@ -20,6 +20,8 @@ Differences with OO that ought to be fixed:
 
 Missing or incomplete stuff:
 ----------------------------
+- Draw frame internal margin in some gray color so that one can see why there's no
+text there, or worse, then the margins are so big that no text can be drawn.
 - Even/odd pages
  - Add SheetSide config in framedia 
 - Tables should get a title (with positioning posibility)
