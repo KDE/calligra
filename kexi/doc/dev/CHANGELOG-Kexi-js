@@ -511,8 +511,10 @@ TODO:::::::
 
 reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-2003.ps
 
-~~~~~~~~~~~~~~~~ 0.9 ~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~ 0.8 (excluding updated i18n; with KOffice 1.4) ~~~~~~~~~~~~~~~~
+=== CSV Import Dialog TODO ===
+- (1.0) add "skip empty columns" and "skip empty rows" option
+- add option for adding explicit primary key column with autonumber
+
 
 TODO:::::::
 -fix shared actions availability for ideal mode! (reported by ccpasteur)
@@ -553,17 +555,16 @@ CSV Import Dialog
 - column types are autodetected
 - import is performed within a single transaction
 - characted encoding fixes; different encoding can be selected
-
 - delimiting character is autodetected
 - clipboard support re-added
 - floating-point values are properly parsed
 - empty cells are supported
 - new table name is based on provided filename
-TODO:
-- (1.0) add "skip empty columns" and "skip empty rows" option
-- add option for adding explicit primary key column with autonumber
 Main Window
 - 'close all' works well if there are more than one yes/no/cancel dialogs required to show
+
+~~~~~~~~~~~~~~~~ 0.9 ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 0.8 (excluding updated i18n; with KOffice 1.4) ~~~~~~~~~~~~~~~~
 
 2005-05-10
 Project Migration
