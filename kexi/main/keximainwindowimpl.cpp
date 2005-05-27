@@ -632,12 +632,16 @@ void KexiMainWindowImpl::initActions()
 #ifndef KEXI_NO_MIGRATION
 	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
+#else
+	d->action_tools_data_migration = d->dummy_action;
 #endif
 
 #ifndef KEXI_NO_CSV_IMPORT
 	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
 		"download_manager"/*todo: change to "file_import" or so*/, 
 		0, this, SLOT(slotToolsProjectImportDataTable()), actionCollection(), "project_import_data_table");
+#else
+	d->action_project_import_data_table = d->dummy_action;
 #endif
 
 //TODO	new KAction(i18n("From File..."), "fileopen", 0,
@@ -654,6 +658,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_paste_special_data_table = new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."), 
 		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()), 
 		actionCollection(), "edit_paste_special_data_table");
+#else
+	d->action_edit_paste_special_data_table = d->dummy_action;
 #endif
 
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
