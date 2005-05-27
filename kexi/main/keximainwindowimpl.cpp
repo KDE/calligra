@@ -49,7 +49,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/cursor.h>
 
-#include "projectsettingsui.h"
+//#include "projectsettingsui.h"
 #include "kexibrowser.h"
 #include "kexipropertyeditorview.h"
 #include "kexipropertybuffer.h"
@@ -2194,8 +2194,8 @@ void
 KexiMainWindowImpl::slotProjectProperties()
 {
 	//TODO: load the implementation not the ui :)
-	ProjectSettingsUI u(this);
-	u.exec();
+//	ProjectSettingsUI u(this);
+//	u.exec();
 }
 
 void
