@@ -668,7 +668,7 @@ static const FunctionEntry FunctionEntries[] =
   { "ROW",             0 },     // 8
   { "COLUMN",          0 },     // 9
   { "NOVALUE",         0 },     // 10
-  { "NBW",             0 },     // 11
+  { "NPV",             0 },     // 11
   { "STDEV",           0 },     // 12
   { "DOLLAR",          0 },     // 13
   { "FIXED",           0 },     // 14
@@ -706,9 +706,9 @@ static const FunctionEntry FunctionEntries[] =
   { "VAR",             0 },     // 46
   { "DVAR",            3 },     // 47
   { "TEXT",            2 },     // 48
-  { "RGP",             0 },     // 49
+  { "LINEST",          0 },     // 49
   { "TREND",           0 },     // 50
-  { "RKP",             0 },     // 51
+  { "LOGEST"           0 },     // 51
   { "GROWTH",          0 },     // 52
   { "GOTO",            0 },     // 53
   { "HALT",            0 },     // 54
@@ -801,7 +801,7 @@ static const FunctionEntry FunctionEntries[] =
   { "TIMEVALUE",       1 },     // 141
   { "SLN",             3 },     // 142
   { "SYD",             4 },     // 143
-  { "GDA",             0 },     // 144
+  { "DDB",             0 },     // 144
   { "GETDEF",          0 },
   { "REFTEXT",         0 },
   { "TEXTREF",         0 },
@@ -820,13 +820,13 @@ static const FunctionEntry FunctionEntries[] =
   { "GETCHARTITEM",    0 },
   { "DIALOGBOX",       0 },
   { "CLEAN",           1 },     // 162
-  { "MATDET",          1 },     // 163
-  { "MATINV",          1 },     // 164
-  { "MATMULT",         2 },     // 165
+  { "MDETERM",         1 },     // 163
+  { "MINVERSE",        1 },     // 164
+  { "MMULT",           2 },     // 165
   { "FILES",           0 },  
-  { "ZINSZ",           0 },     // 167
-  { "KAPZ",            0 },     // 168
-  { "COUNT2",          0 },     // 169
+  { "IPMT",            0 },     // 167
+  { "PPMT",            0 },     // 168
+  { "COUNTA",          0 },     // 169
   { "CANCELKEY",       1 },	
   { "Unknown171",      0 },
   { "Unknown172",      0 },
@@ -935,9 +935,9 @@ static const FunctionEntry FunctionEntries[] =
   { "CHIINV",          2 },     // 275
   { "COMBIN",          2 },     // 276
   { "CONFIDENCE",      3 },     // 277
-  { "KRITBINOM",       3 },     // 278
+  { "CRITBINOM",       3 },     // 278
   { "EVEN",            1 },     // 279
-  { "EXPDIST",         3 },     // 280
+  { "EXPONDIST",       3 },     // 280
   { "FDIST",           3 },     // 281
   { "FINV",            3 },     // 282
   { "FISHER",          1 },     // 283
@@ -949,15 +949,15 @@ static const FunctionEntry FunctionEntries[] =
   { "HYPGEOMDIST",     4 },     // 289
   { "LOGNORMDIST",     3 },     // 290
   { "LOGINV",          3 },     // 291
-  { "NEGBINOMVERT",    3 },     // 292
+  { "NEGBINOMDIST",    3 },     // 292
   { "NORMDIST",        4 },     // 293
-  { "STDNORMDIST",     1 },     // 294
+  { "NORMSDIST",       1 },     // 294
   { "NORMINV",         3 },     // 295
-  { "SNORMINV",        1 },     // 296
-  { "STANDARD",        3 },     // 297
+  { "NORMSINV",        1 },     // 296
+  { "STANDARDIZE",     3 },     // 297
   { "ODD",             1 },     // 298
-  { "VARIATIONEN",     2 },     // 299
-  { "POISSONDIST",     3 },     // 300
+  { "PERMUT",          2 },     // 299
+  { "POISSON",         3 },     // 300
   { "TDIST",           3 },     // 301
   { "WEIBULL",         4 },     // 302
   { "SUMXMY2",         2 },     // 303
@@ -980,7 +980,7 @@ static const FunctionEntry FunctionEntries[] =
   { "HARMEAN",         0 },     // 320
   { "SUMSQ",           0 },     // 321
   { "KURT",            0 },     // 322
-  { "SCHIEFE",         0 },     // 323
+  { "SKEW",            0 },     // 323
   { "ZTEST",           0 },     // 324
   { "LARGE",           2 },     // 325
   { "SMALL",           2 },     // 326
