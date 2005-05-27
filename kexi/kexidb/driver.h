@@ -147,7 +147,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
-		 a given driver implementation. For implemenation.
+		 a given driver implementation. 
 		 \sa isSystemObjectName().
 		*/
 		virtual bool isSystemFieldName( const QString& n ) const = 0;

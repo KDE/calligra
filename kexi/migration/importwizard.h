@@ -47,6 +47,17 @@ namespace KexiMigration {
 class KEXIMIGR_EXPORT importWizard : public KWizard
 {
 Q_OBJECT
+public:
+    importWizard(QWidget *parent = 0, const char *name = 0);
+    virtual ~importWizard();
+
+public slots:
+    void progressUpdated(int percent);
+
+private slots:
+    void nextClicked(const QString &);
+    virtual void accept();
+    void helpClicked();
 private:
     QVBox *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, 
      *dstPage, *srcdbControls;
@@ -57,7 +68,7 @@ private:
     KLineEdit *dstNewDBName;
     KexiProjectSelectorWidget *srcdbname;
     QLabel *lblfinishTxt;
-    bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented;
+    bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
     KexiProjectSet* m_prjSet;
     KProgress *progress;
 
@@ -79,19 +90,6 @@ private:
     void arriveDstTitlePage();
     void arriveDstPage();
     void arriveFinishPage();
-public slots:
-    void progressUpdated(int percent);
-
-private slots:
-    void nextClicked(const QString &);
-    virtual void accept();
-    void helpClicked();
-
-public:
-    importWizard(QWidget *parent = 0, const char *name = 0);
-
-    virtual ~importWizard();
-
 };
 
 }

@@ -22,6 +22,10 @@
 
 #include <qguardedptr.h>
 
+#include <kmimetype.h>
+
+class QColor;
+
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
@@ -68,6 +72,9 @@ namespace Kexi
 
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowReports(); 
+
+	//! false by default, flag loaded on main window startup
+	KEXICORE_EXPORT bool& tempShowScripts(); 
 
 	//some utils
 	
@@ -169,6 +176,26 @@ namespace Kexi
 #define GLUE_WIDGET(what, where) \
 	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
 	  lyr->addWidget(what); }
+
+//! @todo move this somewhere
+
+/*! \return filter string in QFileDialog format for a mime type pointed by \a mime
+ If \a kdeFormat is true, QFileDialog-compatible filter string is generated, 
+ eg. "Image files (*.png *.xpm *.jpg)", otherwise KFileDialog -compatible 
+ filter string is generated, eg. "*.png *.xpm *.jpg|Image files (*.png *.xpm *.jpg)".
+ "\\n" is appended if \a kdeFormat is true, otherwise ";;" is appended. */
+KEXICORE_EXPORT QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true);
+
+/*! @overload QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true) */
+KEXICORE_EXPORT QString fileDialogFilterString(const QString& mimeString, bool kdeFormat = true);
+
+/*! Like QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true)
+ but returns a list of filter strings. */
+KEXICORE_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
+
+/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
+ and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */
+KEXICORE_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1, int factor2);
 
 #endif
 

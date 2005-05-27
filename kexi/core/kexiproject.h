@@ -140,13 +140,18 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 The item will have assigned a new unique caption like e.g. "Table15",
 		 and unique name like "table15", but no specific identifier 
 		 (because id will be assigned on creation at the backend side).
+		 If \a suggestedName is not empty, it will be set as a name 
+		 (with number suffix, to avoid duplicated, e.g. "employees7" 
+		 for "employees" sugested name)
 
 		 This method is used before creating new object.
 		 \return newly created part item or NULL on any error. */
-		KexiPart::Item* createPartItem(KexiPart::Info *info);
+		KexiPart::Item* createPartItem(KexiPart::Info *info, 
+			const QString& suggestedName = QString::null );
 
 		/*! Adds item \a item after it is succesfully stored as an instance of part
-		 pointed by \a info. Used by KexiDialogBase::storeNewData(). 
+		 pointed by \a info. Also clears 'neverSaved' flag if \a item.
+		 Used by KexiDialogBase::storeNewData(). 
 		 @internal */
 		void addStoredItem(KexiPart::Info *info, KexiPart::Item *item);
 

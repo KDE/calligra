@@ -868,7 +868,6 @@ void QuerySchema::computeFieldsExpanded()
 				d->columnInfosByName.insert( it.current()->field->name(), it.current() );
 			QString tableAndName( it.current()->field->table()->name() + "." + it.current()->field->name() );
 			if (!d->columnInfosByName[ tableAndName ])
-			if (!d->columnInfosByName[ tableAndName ])
 				d->columnInfosByName.insert( tableAndName, it.current() );
 		}
 	}

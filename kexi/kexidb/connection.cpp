@@ -1067,7 +1067,7 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
 		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || !querySingleRecord()" << endl;
-	 	return -1ULL;
+	 	return (Q_ULLONG)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
 }

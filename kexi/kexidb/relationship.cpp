@@ -94,7 +94,7 @@ void Relationship::createIndices( QuerySchema *query, Field *field1, Field *fiel
 		masterField = field1;
 		m_masterIndex = masterField->table()->primaryKey();
 		detailsField = field2;
-		m_detailsIndex = masterField->table()->primaryKey();
+		m_detailsIndex = detailsField->table()->primaryKey();
 	}
 	else if (!p1 && p2) {
 		//foreign + primary: swap

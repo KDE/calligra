@@ -264,6 +264,13 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 
 tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
+	if (newViewMode==Kexi::TextViewMode && !viewForMode(Kexi::DesignViewMode) && supportsViewMode(Kexi::DesignViewMode)) {
+		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
+		tristate res = switchToViewMode( Kexi::DesignViewMode );
+		if (!res || ~res)
+			return res;
+	}
+
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
 	bool dontStore = false;
 	KexiViewBase *view = selectedView();
@@ -451,8 +458,7 @@ tristate KexiDialogBase::storeNewData()
 	//new schema data has now ID updated to a unique value 
 	//-assign that to item's identifier
 	m_item->setIdentifier( m_schemaData->id() );
-	m_item->setNeverSaved(false);
-	m_parentWindow->project()->addStoredItem( part()->info(), partItem() );
+	m_parentWindow->project()->addStoredItem( part()->info(), m_item );
 	return true;
 }
 

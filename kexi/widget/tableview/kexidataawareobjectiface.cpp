@@ -586,7 +586,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
 
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
-		if (m_verticalHeader)
+		if (m_verticalHeader && oldRow != m_curRow)
 			m_verticalHeader->setCurrentRow(m_curRow);
 		updateCell( m_curRow, m_curCol );
 		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
