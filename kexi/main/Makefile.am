@@ -6,7 +6,7 @@ libkeximain_la_SOURCES = \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexistatusbar.cpp \
 	kexinamewidget.cpp kexinamedialog.cpp \
-	projectsettingsui.ui kexinewstuff.cpp
+	kexinewstuff.cpp
 
 
 # kexiprojectconnectiondata.cpp
