@@ -64,7 +64,9 @@
 #include "kexicsvdialog.h"
 #include "kexicsvoptionsdlg.h"
 
+#ifdef Q_WS_WIN
 #include <windows.h>
+#endif
 
 #if 0
 #include <kspread_cell.h>
@@ -330,10 +332,10 @@ if ( m_mode == Clipboard )
 	m_fpNumberRegExp = QRegExp("\\d*[,\\.]\\d+");
 
 	if (mode == File) {
+		QStringList mimetypes;
+		mimetypes << "text/x-csv" << "text/plain" << "all/allfiles";
 #ifdef Q_WS_WIN
 	//! @todo remove
-		QStringList mimetypes;
-		mimetypes	<< "text/x-csv"	<< "text/plain"	<< "all/allfiles";
 		m_fname = QFileDialog::getOpenFileName( KGlobalSettings::documentPath(), 
 			fileDialogFilterStrings(mimetypes, false),
 			this, "KexiCSVDialog", i18n("Open CSV Data File"));
@@ -351,7 +353,8 @@ if ( m_mode == Clipboard )
 		}
 	}
 	else if (mode == Clipboard) {
-		m_data = QApplication::clipboard()->text(QCString("plain"));
+		QCString type("plain");
+		m_data = QApplication::clipboard()->text(type);
 	}
 	else {
 		return;
