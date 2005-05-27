@@ -708,7 +708,7 @@ static const FunctionEntry FunctionEntries[] =
   { "TEXT",            2 },     // 48
   { "LINEST",          0 },     // 49
   { "TREND",           0 },     // 50
-  { "LOGEST"           0 },     // 51
+  { "LOGEST",           0 },     // 51
   { "GROWTH",          0 },     // 52
   { "GOTO",            0 },     // 53
   { "HALT",            0 },     // 54
