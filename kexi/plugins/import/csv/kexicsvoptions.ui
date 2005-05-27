@@ -1,0 +1,86 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KexiCSVOptionsWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KexiCSVOptionsWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>423</width>
+            <height>52</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Text encoding:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>cbEncodings</cstring>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="0" column="1">
+            <property name="name">
+                <cstring>cbEncodings</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>300</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>111</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="0" column="2">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>121</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+</includehints>
+</UI>
