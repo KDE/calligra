@@ -582,7 +582,7 @@ WidgetLibrary::factoryForClassName(const char* classname)
 
 QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QCString& propertyName)
 {
-	if (!winfo->factory())
+	if (!winfo || !winfo->factory())
 		return QString::null;
 	QString desc( winfo->factory()->propertyDescForName(propertyName) );
 	if (!desc.isEmpty())

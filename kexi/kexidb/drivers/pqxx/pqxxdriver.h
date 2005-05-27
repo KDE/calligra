@@ -41,7 +41,6 @@ class pqxxSqlDriver : public Driver
 		~pqxxSqlDriver();
 
 		virtual bool isSystemObjectName( const QString& n )const;
-		virtual bool isSystemFieldName( const QString& n )const;
 		virtual bool isSystemDatabaseName( const QString& n )const;
 
 		//! Escape a string for use as a value
@@ -52,8 +51,8 @@ class pqxxSqlDriver : public Driver
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;
-		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+		virtual bool drv_isSystemFieldName( const QString& n )const;
 
 	private:
 		static const char *keywords[];

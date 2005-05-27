@@ -27,22 +27,28 @@
 #include <kpixmap.h>
 
 #include "kexiformdataiteminterface.h"
+#include <widget/utils/kexidisplayutils.h>
 
 class QPainter;
 class QTimer;
+class KexiLabel;
 
 class KexiLabelPrivate : public QLabel {
 		friend class KexiLabel;
 	public:
 		KexiLabelPrivate( KexiLabel* );
 		virtual ~KexiLabelPrivate();
-	private:
+
+	protected:
+		void updateFrame();
+
 		QImage makeShadow( const QImage& textImage, const QColor &bgColor, const QRect& boundingRect );
 		QRect getBounding( const QImage &image, const QRect& startRect );
 //		double defaultDecay( QImage& source, int i, int j );
 		KPixmap getShadowPixmap();
 
 		QRect p_shadowRect;
+		KexiLabel *p_parentLabel;
 };
 
 /**
@@ -61,8 +67,7 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 	public:
 		KexiLabel( QWidget *parent, const char *name = 0, WFlags f = 0 );
 		KexiLabel( const QString& text, QWidget *parent, const char *name = 0, WFlags f = 0 );
-
-		virtual ~KexiLabel() {}
+		virtual ~KexiLabel();
 
 		inline QString dataSource() const {
 			return KexiFormDataItemInterface::dataSource();
@@ -70,9 +75,7 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 
 		virtual QVariant value();
 
-		bool shadowEnabled() const {
-			return p_shadowEnabled;
-		}
+		inline bool shadowEnabled() const { return p_shadowEnabled; }
 
 		virtual void setInvalidState( const QString& displayText );
 
@@ -104,73 +107,35 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 			KexiFormDataItemInterface::setDataSource( ds );
 		}
 
-		virtual void setText( const QString& text ) {
-			p_pixmapDirty = true;
-			QLabel::setText( text );
-			//This is necessary for KexiFormDataItemInterface
-			valueChanged();
-			repaint();
-		}
+		virtual void setText( const QString& text );
 
 		/*!
 		Enable/Disable the shadow effect.
 		KexiLabel acts just like a normal QLabel when shadow is disabled.
 		*/
-		void setShadowEnabled( bool state ) {
-			p_shadowEnabled = state;
-			repaint();
-		}
+		void setShadowEnabled( bool state );
 
 	protected slots:
 		void updatePixmap();
 
 	protected:
+		virtual void setField(KexiDB::Field* field);
 		virtual void paintEvent( QPaintEvent* );
-		virtual void resizeEvent( QResizeEvent* e ) {
-			if (isVisible())
-				p_resizeEvent = true;
-			p_pixmapDirty = true;
-			QLabel::resizeEvent( e );
-		}
+		virtual void resizeEvent( QResizeEvent* e );
+//		virtual bool event( QEvent* );
 
 		/*!
 		Sets value \a value for a widget.
 		*/
 		virtual void setValueInternal( const QVariant& add, bool removeOld );
 
-		virtual void fontChange( const QFont& font ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setFont( font );
-			QLabel::fontChange( font );
-		}
+		virtual void fontChange( const QFont& font );
+		virtual void styleChange( QStyle& style );
+		virtual void enabledChange( bool enabled );
 
-		virtual void styleChange( QStyle& style ) {
-			p_pixmapDirty = true;
-			QLabel::styleChange( style );
-		}
-
-		virtual void enabledChange( bool enabled ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setEnabled( enabled );
-			QLabel::enabledChange( enabled );
-		}
-
-		virtual void paletteChange( const QPalette& pal ) {
-			p_pixmapDirty = true;
-			p_privateLabel->setPalette( pal );
-			QLabel::paletteChange( pal );
-		}
-
-		virtual void frameChanged() {
-			p_pixmapDirty = true;
-			p_privateLabel->frameChanged();
-			QFrame::frameChanged();
-		}
-
-		virtual void showEvent( QShowEvent* e ) {
-			p_pixmapDirty = true;
-			QLabel::showEvent( e );
-		}
+		virtual void paletteChange( const QPalette& pal );
+		virtual void frameChanged();
+		virtual void showEvent( QShowEvent* e );
 
 	private:
 		void updatePixmapLater();
@@ -179,9 +144,10 @@ class KexiLabel : public QLabel, public KexiFormDataItemInterface {
 		QPoint p_shadowPosition;
 		KexiLabelPrivate* p_privateLabel;
 		QTimer* p_timer;
-		bool p_pixmapDirty;
-		bool p_shadowEnabled;
-		bool p_resizeEvent;
+		KexiDisplayUtils::DisplayParameters *p_autonumberDisplayParameters;
+		bool p_pixmapDirty : 1;
+		bool p_shadowEnabled : 1;
+		bool p_resizeEvent : 1;
 	};
 
 #endif

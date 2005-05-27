@@ -81,6 +81,9 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 
 //	setFullWidth(true);
 	setShowSortIndicator(false);
+#if KDE_IS_VERSION(3,3,9)
+	setShadeSortColumn(false);
+#endif
 	setTooltipColumn(0);
 	setSorting(0);
 //	setItemMargin(3);

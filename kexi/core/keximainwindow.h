@@ -84,17 +84,36 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, 
 			bool preservePrevSelection = true) = 0;
 
-		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
-		 User is asked for name and caption, before saving.
-		 \return true on successul closing or false on saving error.
+		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
+		 user is asked for name and title, before saving (see getNewObjectInfo()).
+		 \return true on successul saving or false on error.
 		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
-		 within name/caption dialog (see KexiNameDialog), which is popped 
+		 within name/caption dialog (see KexiNameDialog), which is popped
 		 up for never saved objects. */
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null ) = 0;
 	
+		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
+		 used will be asked if saving should be perforemed.
+		 \return true on successull closing or false on closing error.
+		 If closing was cancelled by user, cancelled is returned. */
 		virtual tristate closeDialog(KexiDialogBase *dlg) = 0;
+
+		/*! Displays a dialog for entering object's name and title. 
+		 Used on new object saving. 
+		 \return true on successul closing or cancelled on cancel returned.
+		 It's unlikely to have false returned here.
+		 \a messageWhenAskingForName is a i18n'ed text that will be visible
+		 within name/caption dialog (see KexiNameDialog). 
+		 If \a allowOverwriting is true, user will be asked for existing 
+		 object's overwriting, else it will be impossible to enter 
+		 a name of exisiting object. 
+		 You can check \a allowOverwriting after calling this method.
+		 If it's true, user agreed on overwriting, if it's false, user picked
+		 nonexisting name, so no overwrite will be needed. */
+		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part,
+			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null ) = 0;
 
 	protected slots:
 		virtual void slotObjectRenamed(const KexiPart::Item &item) = 0;

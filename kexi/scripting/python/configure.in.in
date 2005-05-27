@@ -1,3 +1,4 @@
+PYTHON_BIN=""
 PYTHON_INCLUDE=""
 PYTHON_LIB=""
 PYTHON_FLAGS=""
@@ -13,16 +14,19 @@ do
     do
         if test -f "$incdir/Python.h"
         then
+            PYTHON_BIN="$pyver"
             PYTHON_LIB="-l$pyver"
             PYTHON_INCLUDE="-I$incdir"
             #PYTHON_LIB="-l$pylib"
             #PYTHON_FLAGS="-L$pylibdir"
+            #PYTHON_FLAGS="-Xlinker -export-dynamic -rdynamic"
             break
         fi
     done
     if test "$PYTHON_LIB" != ""; then break; fi
 done
 
+AC_SUBST(PYTHON_BIN)
 AC_SUBST(PYTHON_INCLUDE)
 AC_SUBST(PYTHON_LIB)
 AC_SUBST(PYTHON_FLAGS)

@@ -23,6 +23,10 @@
 #include <qapplication.h>
 #include <qtimer.h>
 
+#include <kdebug.h>
+
+#include <kexidb/field.h>
+
 #include "kexilabel.h"
 
 #define SHADOW_OFFSET_X 3
@@ -35,7 +39,22 @@
 
 KexiLabelPrivate::KexiLabelPrivate( KexiLabel* parent )
 	: QLabel( parent )
+	, p_parentLabel(parent)
 {
+	updateFrame();
+}
+
+void KexiLabelPrivate::updateFrame()
+{
+	setIndent(p_parentLabel->indent());
+	setMargin(p_parentLabel->margin());
+	setFont(p_parentLabel->font());
+
+	setFrameShadow(p_parentLabel->frameShadow());
+	setFrameShape(p_parentLabel->frameShape());
+	setFrameStyle(p_parentLabel->frameStyle());
+	setMidLineWidth(p_parentLabel->midLineWidth());
+	setLineWidth(p_parentLabel->lineWidth());
 }
 
 KexiLabelPrivate::~KexiLabelPrivate()
@@ -52,6 +71,7 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 	const QColor &bgColor, const QRect& boundingRect )
 {
 	QImage result;
+	QString origText( text() );
 
 	// create a new image for for the shaddow
 	const int w = textImage.width();
@@ -66,7 +86,7 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 	const int startY = boundingRect.y() + SHADOW_THICKNESS;
 	const int effectWidth = boundingRect.bottomRight().x() - SHADOW_THICKNESS;
 	const int effectHeight = boundingRect.bottomRight().y() - SHADOW_THICKNESS;
-	const int period = (effectWidth - startX) / 10;
+//	const int period = (effectWidth - startX) / 10;
 
 	double alphaShadow;
 
@@ -113,8 +133,11 @@ QImage KexiLabelPrivate::makeShadow( const QImage& textImage,
 					( int ) (( alphaShadow > SHADOW_OPACITY ) ? SHADOW_OPACITY : alphaShadow)
 				) );
 		}
-		if (i % period)
+/*caused too much redraw problems		if (period && i % period) {
 			qApp->processEvents();
+			if (text() != origText) //text has been changed in the meantime: abort
+				return QImage();
+		}*/
 	}
 	return result;
 }
@@ -179,6 +202,8 @@ KPixmap KexiLabelPrivate::getShadowPixmap() {
 	shadowImage = makeShadow( shadowImage,
 		qGray( textColor.rgb() ) < 127 ? Qt::black : Qt::white,
 		p_shadowRect );
+	if (shadowImage.isNull())
+		return KPixmap();
 
 	/*!
 	Now get the final bounding rect.
@@ -317,6 +342,7 @@ KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
 		: QLabel( parent, name, f )
 		, KexiFormDataItemInterface()
 		, p_timer(0)
+		, p_autonumberDisplayParameters(0)
 		, p_pixmapDirty( true )
 		, p_shadowEnabled( false )
 		, p_resizeEvent( false )
@@ -330,6 +356,7 @@ KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WF
 		: QLabel( parent, name, f )
 		, KexiFormDataItemInterface()
 		, p_timer(0)
+		, p_autonumberDisplayParameters(0)
 		, p_pixmapDirty( true )
 		, p_shadowEnabled( false )
 		, p_resizeEvent( false )
@@ -338,6 +365,11 @@ KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WF
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 	setText( text );
+}
+
+KexiLabel::~KexiLabel()
+{
+	delete p_autonumberDisplayParameters;
 }
 
 void KexiLabel::updatePixmapLater() {
@@ -365,7 +397,11 @@ void KexiLabel::updatePixmap() {
 	p_privateLabel->setFixedSize( size() );
 	p_privateLabel->setPalette( palette() );
 	p_privateLabel->setAlignment( alignment() );
-	p_shadowPixmap = p_privateLabel->getShadowPixmap();
+//	p_shadowPixmap = KPixmap(); //parallel repaints won't hurt us cause incomplete pixmap
+	KPixmap shadowPixmap = p_privateLabel->getShadowPixmap();
+	if (shadowPixmap.isNull())
+		return;
+	p_shadowPixmap = shadowPixmap;
 	p_shadowPosition = p_privateLabel->p_shadowRect.topLeft();
 
 	p_pixmapDirty = false;
@@ -388,17 +424,24 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 		the shadow has to be drawn using an offset relative to
 		the widgets border.
 		*/
-		if ( !p_pixmapDirty && e->rect().contains( p_shadowPosition )
-			&& ( p_shadowPixmap.isNull() == false ) ) {
+		if ( !p_pixmapDirty && e->rect().contains( p_shadowPosition ) && !p_shadowPixmap.isNull()) {
 			QPainter p( this );
-			QRect clipRect = e->rect();
-
-			clipRect.setX( QMAX( clipRect.x() - p_shadowPosition.x(), 0 ) );
-			clipRect.setY( QMAX( clipRect.y() - p_shadowPosition.y(), 0 ) );
-			clipRect.setWidth( QMIN( clipRect.width() + p_shadowPosition.x(), p_shadowPixmap.width() ) );
-			clipRect.setHeight( QMIN( clipRect.height() + p_shadowPosition.y(), p_shadowPixmap.height() ) );
+			QRect clipRect = QRect(
+				QMAX( e->rect().x() - p_shadowPosition.x(), 0 ),
+				QMAX( e->rect().y() - p_shadowPosition.y(), 0 ),
+				QMIN( e->rect().width() + p_shadowPosition.x(), p_shadowPixmap.width() ),
+				QMIN( e->rect().height() + p_shadowPosition.y(), p_shadowPixmap.height() ) );
 			p.drawPixmap( p_privateLabel->p_shadowRect.topLeft(), p_shadowPixmap, clipRect );
 		}
+	}
+
+	if (m_field && m_field->isAutoIncrement() && p_autonumberDisplayParameters 
+		&& cursorAtNewRow() && text().isEmpty())
+	{
+		QPainter p( this );
+		int m = lineWidth()+midLineWidth();
+		KexiDisplayUtils::drawAutonumberSign(*p_autonumberDisplayParameters, &p, 
+			2+m+margin(), m, width()-m*2 -2-2, height()-m*2 -2, alignment(), false);
 	}
 
 	QLabel::paintEvent( e );
@@ -407,7 +450,8 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 void KexiLabel::setValueInternal( const QVariant& add, bool removeOld ) {
 	if (removeOld) 
 		setText(add.toString());
-	setText( m_origValue.toString() + add.toString() );
+	else
+		setText( m_origValue.toString() + add.toString() );
 }
 
 QVariant KexiLabel::value() {
@@ -457,11 +501,93 @@ void KexiLabel::clear()
 bool KexiLabel::setProperty( const char * name, const QVariant & value )
 {
 	const bool ret = QLabel::setProperty(name, value);
-	if (p_shadowEnabled && 0==qstrcmp("indent", name)) {
-		p_privateLabel->setIndent(value.toInt());
-		updatePixmap();
+	if (p_shadowEnabled) {
+		if (0==qstrcmp("indent", name) || 0==qstrcmp("font", name) || 0==qstrcmp("margin", name)
+			|| 0==qstrcmp("frameShadow", name) || 0==qstrcmp("frameShape", name)
+			|| 0==qstrcmp("frameStyle", name) || 0==qstrcmp("midLineWidth", name)
+			|| 0==qstrcmp("lineWidth", name)) {
+			p_privateLabel->setProperty(name, value);
+			updatePixmap();
+		}
 	}
 	return ret;
 }
+
+void KexiLabel::setField(KexiDB::Field* field)
+{
+	KexiFormDataItemInterface::setField(field);
+
+	if (m_field->isAutoIncrement()) {
+		if (!p_autonumberDisplayParameters)
+			p_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
+		KexiDisplayUtils::initDisplayForAutonumberSign(*p_autonumberDisplayParameters, this);
+	}
+}
+
+void KexiLabel::setShadowEnabled( bool state ) {
+	p_shadowEnabled = state;
+	p_pixmapDirty = true;
+	if (state)
+		p_privateLabel->updateFrame();
+	repaint();
+}
+
+void KexiLabel::resizeEvent( QResizeEvent* e ) {
+	if (isVisible())
+		p_resizeEvent = true;
+	p_pixmapDirty = true;
+	QLabel::resizeEvent( e );
+}
+
+void KexiLabel::fontChange( const QFont& font ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setFont( font );
+	QLabel::fontChange( font );
+}
+
+void KexiLabel::styleChange( QStyle& style ) {
+	p_pixmapDirty = true;
+	QLabel::styleChange( style );
+}
+
+void KexiLabel::enabledChange( bool enabled ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setEnabled( enabled );
+	QLabel::enabledChange( enabled );
+}
+
+void KexiLabel::paletteChange( const QPalette& pal ) {
+	p_pixmapDirty = true;
+	p_privateLabel->setPalette( pal );
+	QLabel::paletteChange( pal );
+}
+
+void KexiLabel::frameChanged() {
+	p_pixmapDirty = true;
+	p_privateLabel->updateFrame();
+	QFrame::frameChanged();
+}
+
+void KexiLabel::showEvent( QShowEvent* e ) {
+	p_pixmapDirty = true;
+	QLabel::showEvent( e );
+}
+
+void KexiLabel::setText( const QString& text ) {
+	p_pixmapDirty = true;
+	QLabel::setText( text );
+	//This is necessary for KexiFormDataItemInterface
+	valueChanged();
+	repaint();
+}
+
+/*bool KexiLabel::event( QEvent* e )
+{
+	if (e->type()==QEvent::FocusOut) {
+		repaint();
+		kdDebug() << "FFFFFFFFFFFFFFFFFF!" << endl;
+	}
+	return QLabel::event(e);
+}*/
 
 #include "kexilabel.moc"

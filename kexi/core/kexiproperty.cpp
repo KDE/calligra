@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004   Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,22 +37,46 @@
 
 QT_STATIC_CONST_IMPL KexiProperty KexiProperty::null;
 
-
+//! A helper for handling SizePolicy property
 class SPHelper
 {
 	public:
-	SPHelper() {
-		list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
-			<< "MinimumExpanding" << "Ignored";
+	SPHelper()
+	 : m_list(0), m_i18nList(0)
+	{
 	}
-	~SPHelper() {;}
+	QStringList list() {
+		if (!m_list) {
+			m_list = new QStringList();
+			*m_list << "Fixed" << "Minimum" << "Maximum" << "Preferred" << "Expanding"
+			<< "MinimumExpanding" << "Ignored";
+		}
+		return *m_list;
+	}
+	QStringList i18nList() {
+		if (!m_i18nList) {
+			m_i18nList = new QStringList();
+			*m_i18nList
+			<< i18n("For Size Type", "Fixed")
+			<< i18n("For Size Type", "Minimum")
+			<< i18n("For Size Type", "Maximum")
+			<< i18n("For Size Type", "Preferred")
+			<< i18n("For Size Type", "Minimum Expanding")
+			<< i18n("For Size Type", "Expanding")
+			<< i18n("For Size Type", "Ignored");
+		}
+		return *m_i18nList;
+	}
+	~SPHelper() {
+		delete m_list;
+		delete m_i18nList;
+	}
 
 //	static QStringList list();
-	QString valueToKey(int value);
-	QSizePolicy::SizeType keyToValue(const QString &key);
+	static QString valueToKey(int value);
+	static QSizePolicy::SizeType keyToValue(const QString &key);
 
-	QStringList list;
-//	QValueVector<QMap<Intm_v2key
+	QStringList *m_list, *m_i18nList;
 };
 
 QString
@@ -60,13 +84,13 @@ SPHelper::valueToKey(int value)
 {
 	switch(value)
 	{
-		case QSizePolicy::Fixed: return QString("Fixed");
-		case QSizePolicy::Minimum: return QString("Minimum");
-		case QSizePolicy::Maximum: return QString("Maximum");
-		case QSizePolicy::Preferred: return QString("Preferred");
-		case QSizePolicy::MinimumExpanding: return QString("MinimumExpanding");
-		case QSizePolicy::Expanding: return QString("Expanding");
-		case QSizePolicy::Ignored: return QString("Ignored");
+		case QSizePolicy::Fixed: return QString::fromLatin1("Fixed");
+		case QSizePolicy::Minimum: return QString::fromLatin1("Minimum");
+		case QSizePolicy::Maximum: return QString::fromLatin1("Maximum");
+		case QSizePolicy::Preferred: return QString::fromLatin1("Preferred");
+		case QSizePolicy::MinimumExpanding: return QString::fromLatin1("MinimumExpanding");
+		case QSizePolicy::Expanding: return QString::fromLatin1("Expanding");
+		case QSizePolicy::Ignored: return QString::fromLatin1("Ignored");
 		default: return QString::null;
 	}
 }
@@ -86,7 +110,6 @@ SPHelper::keyToValue(const QString &key)
 }
 
 //singleton
-
 SPHelper spHelper;
 
 //===================================================
@@ -113,7 +136,7 @@ valueToCursorName(int shape)
 		case Qt::PointingHandCursor: return i18n("Pointing Hand");
 		case Qt::ForbiddenCursor: return i18n("Forbidden");
 		case Qt::WhatsThisCursor: return i18n("What's This");
-		default: return QString();
+		default: return QString::null;
 	}
 }
 
@@ -188,24 +211,24 @@ void KexiProperty::init(QVariant value)
 		case QVariant::Size:
 		{
 			QSize s = value.toSize();
-			addChild( new KexiProperty("width", QVariant(s.width()), i18n("width")) );
-			addChild( new KexiProperty("height", QVariant(s.height()), i18n("height")) );
+			addChild( new KexiProperty("width", QVariant(s.width()), i18n("Width")) );
+			addChild( new KexiProperty("height", QVariant(s.height()), i18n("Height")) );
 			break;
 		}
 		case QVariant::Point:
 		{
 			QPoint p = value.toPoint();
-			addChild( new KexiProperty("x", p.x(), i18n("x")) );
-			addChild( new KexiProperty("y", p.y(), i18n("y")) );
+			addChild( new KexiProperty("x", p.x(), i18n("X")) );
+			addChild( new KexiProperty("y", p.y(), i18n("Y")) );
 			break;
 		}
 		case QVariant::Rect:
 		{
 			QRect r = value.toRect();
-			addChild( new KexiProperty("x", r.x(), i18n("x")) );
-			addChild( new KexiProperty("y", r.y(), i18n("y")) );
-			addChild( new KexiProperty("width", r.width(), i18n("width")) );
-			addChild( new KexiProperty("height", r.height(), i18n("height")) );
+			addChild( new KexiProperty("x", r.x(), i18n("X")) );
+			addChild( new KexiProperty("y", r.y(), i18n("Y")) );
+			addChild( new KexiProperty("width", r.width(), i18n("Width")) );
+			addChild( new KexiProperty("height", r.height(), i18n("Height")) );
 			break;
 		}
 		case QVariant::SizePolicy:
@@ -213,16 +236,16 @@ void KexiProperty::init(QVariant value)
 			QSizePolicy p = value.toSizePolicy();
 
 			ListData *listData = new ListData();
-			listData->keys = spHelper.list;
-			listData->names = spHelper.list;
-			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()),
-				listData, i18n("horSizeType")) );
+			listData->keys = spHelper.list();
+			listData->names = spHelper.i18nList();
+			addChild( new KexiProperty("horSizeType", SPHelper::valueToKey(p.horData()),
+				listData, i18n("Hor.Size Type")) );
 
-			addChild( new KexiProperty("verSizeType", spHelper.valueToKey(p.verData()), 
-				new ListData(*listData)/*copy*/, i18n("verSizeType")) );
+			addChild( new KexiProperty("verSizeType", SPHelper::valueToKey(p.verData()), 
+				new ListData(*listData)/*copy*/, i18n("Ver.Size Type")) );
 
-			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("hStretch") ) );
-			addChild( new KexiProperty("vStretch", (int)p.verStretch(), i18n("vStretch") ) );
+			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("Hor.Stretch") ) );
+			addChild( new KexiProperty("vStretch", (int)p.verStretch(), i18n("Ver.Stretch") ) );
 			break;
 		}
 		default:
@@ -402,8 +425,8 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		case QVariant::SizePolicy:
 		{
 			QSizePolicy p = m_value.toSizePolicy();
-			setChildValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
-			setChildValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
+			setChildValue("horSizeType",QVariant(SPHelper::valueToKey(p.horData())),saveOldValue);
+			setChildValue("verSizeType",QVariant(SPHelper::valueToKey(p.verData())),saveOldValue);
 			setChildValue("hStretch",(int)p.horStretch(),saveOldValue);
 			setChildValue("vStretch",(int)p.verStretch(),saveOldValue);
 			break;
@@ -430,7 +453,7 @@ QVariant KexiProperty::value() const
 	return m_value;
 }
 
-QString KexiProperty::valueText() const
+QString KexiProperty::valueText()
 {
 	if (!m_list)
 		return KexiProperty::format( m_value );
@@ -504,9 +527,9 @@ void KexiProperty::updateValueForChild(const QCString& childName,
 		{
 			QSizePolicy p = m_value.toSizePolicy();
 			if (childName=="horSizeType")
-				p.setHorData( spHelper.keyToValue(v.toString()) );
+				p.setHorData( SPHelper::keyToValue(v.toString()) );
 			else if (childName=="verSizeType")
-				p.setVerData( spHelper.keyToValue(v.toString()) );
+				p.setVerData( SPHelper::keyToValue(v.toString()) );
 			else if (childName=="hStretch")
 				p.setHorStretch( v.toInt() );
 			else if (childName=="vStretch")
@@ -662,8 +685,13 @@ KexiProperty::format(const QVariant &v)
 		}
 		case QVariant::SizePolicy:
 		{
-			QSizePolicy p = v.toSizePolicy();
-			return QString(spHelper.valueToKey(p.horData()) + "/" + spHelper.valueToKey(p.verData()));
+//			QSizePolicy p = v.toSizePolicy();
+//			return QString(SPHelper::valueToKey(p.horData()) + "/" + SPHelper::valueToKey(p.verData()));
+			return QString("%1/%2/%3/%4")
+				.arg(m_children_dict->find("horSizeType")->valueText())
+				.arg(m_children_dict->find("verSizeType")->valueText())
+				.arg(m_children_dict->find("hStretch")->valueText())
+				.arg(m_children_dict->find("vStretch")->valueText());
 		}
 		case QVariant::Cursor:
 		{

@@ -129,7 +129,7 @@ static KCmdLineOptions options[] =
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
   { "port <number>", I18N_NOOP(
-	"Server's port name to be used\n"
+	"Server's port number to be used\n"
 	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
@@ -140,10 +140,11 @@ static KCmdLineOptions options[] =
 	"is provided."), 0 },
 #endif //KEXI_SERVER_SUPPORT
 
-  { "+[database-name]", I18N_NOOP(
-	"Database project filename\n"
-	"or shortcut filename\n"
-	"or database name on a server to open"), 0 },
+  { "+[project-name]", I18N_NOOP(
+	"Kexi database project's filename\n"
+	"or Kexi shortcut's filename\n"
+	"or Kexi database project's name\n"
+	"on a server to open"), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };

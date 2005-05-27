@@ -25,6 +25,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qpixmapcache.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -97,6 +98,14 @@ bool& Kexi::tempShowReports() {
 	_tempShowReports = false; 
 #endif
 	return _tempShowReports;
+}
+
+bool _tempShowScripts = true;
+bool& Kexi::tempShowScripts() { 
+#ifndef KEXI_SCRIPTS_SUPPORT
+	_tempShowScripts = false; 
+#endif
+	return _tempShowScripts;
 }
 
 //--------------------------------------------------------------------------------
@@ -342,6 +351,57 @@ void ObjectStatus::append( const ObjectStatus& otherStatus ) {
 }
 
 //--------------------------------------------------------------------------------
+
+QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
+{
+	if (mime==0)
+		return QString::null;
+
+	QString str;
+	if (kdeFormat) {
+		if (mime->patterns().isEmpty())
+			str = "*";
+		else
+			str = mime->patterns().join(" ");
+		str += "|";
+	}
+	str += mime->comment();
+	if (!mime->patterns().isEmpty() || !kdeFormat) {
+		str += " (";
+		if (mime->patterns().isEmpty())
+			str += "*";
+		else
+			str += mime->patterns().join("; ");
+		str += ")";
+	}
+	if (kdeFormat)
+		str += "\n";
+	else
+		str += ";;";
+	return str;
+}
+
+QString fileDialogFilterString(const QString& mimeString, bool kdeFormat)
+{
+	KMimeType::Ptr ptr = KMimeType::mimeType(mimeString);
+	return fileDialogFilterString( ptr, kdeFormat );
+}
+
+QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat)
+{
+	QString ret;
+	foreach( QStringList::ConstIterator, it, mimeStrings)
+		ret += fileDialogFilterString(*it, kdeFormat);
+	return ret;
+}
+
+QColor blendColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
+{
+	return QColor(
+		int( (c1.red()*factor1+c2.red()*factor2)/(factor1+factor2) ),
+		int( (c1.green()*factor1+c2.green()*factor2)/(factor1+factor2) ),
+		int( (c1.blue()*factor1+c2.blue()*factor2)/(factor1+factor2) ) );
+}
 
 #include "kexi_p.moc"
 

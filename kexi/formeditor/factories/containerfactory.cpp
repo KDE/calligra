@@ -258,7 +258,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
-	wBtnGroup->setNamePrefix(i18n("ButtonGroup"));
+	wBtnGroup->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "buttonGroup"));
 	wBtnGroup->setDescription(i18n("A simple container to group buttons"));
 	addClass(wBtnGroup);
 
@@ -274,7 +275,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 #endif
 	wTabWidget->setIncludeFileName("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
-	wTabWidget->setNamePrefix(i18n("TabWidget"));
+	wTabWidget->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "tabWidget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	addClass(wTabWidget);
 
@@ -282,7 +284,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidget->setPixmap("frame");
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Basic container"));
-	wWidget->setNamePrefix(i18n("BasicContainer"));
+	wWidget->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "container"));
 	wWidget->setDescription(i18n("An empty container with no frame"));
 	addClass(wWidget);
 
@@ -290,7 +293,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGroupBox->setPixmap("groupbox");
 	wGroupBox->setClassName("QGroupBox");
 	wGroupBox->setName(i18n("Group Box"));
-	wGroupBox->setNamePrefix(i18n("GroupBox"));
+	wGroupBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "groupBox"));
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
 	addClass(wGroupBox);
 
@@ -298,7 +302,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wFrame->setPixmap("frame");
 	wFrame->setClassName("QFrame");
 	wFrame->setName(i18n("Frame"));
-	wFrame->setNamePrefix(i18n("Frame"));
+	wFrame->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
 	wFrame->setDescription(i18n("A very simple container"));
 	addClass(wFrame);
 
@@ -306,7 +311,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidgetStack->setPixmap("widgetstack");
 	wWidgetStack->setClassName("QWidgetStack");
 	wWidgetStack->setName(i18n("Widget Stack"));
-	wWidgetStack->setNamePrefix(i18n("WidgetStack"));
+	wWidgetStack->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "widgetStack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
 	addClass(wWidgetStack);
 
@@ -314,7 +320,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wHBox->setPixmap("frame");
 	wHBox->setClassName("HBox");
 	wHBox->setName(i18n("Horizontal Box"));
-	wHBox->setNamePrefix(i18n("HorizontalBox"));
+	wHBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "horizontalBox"));
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
 	addClass(wHBox);
 
@@ -322,7 +329,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wVBox->setPixmap("frame");
 	wVBox->setClassName("VBox");
 	wVBox->setName(i18n("Vertical Box"));
-	wVBox->setNamePrefix(i18n("VerticalBox"));
+	wVBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "verticalBox"));
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
 	addClass(wVBox);
 
@@ -330,7 +338,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGrid->setPixmap("frame");
 	wGrid->setClassName("Grid");
 	wGrid->setName(i18n("Grid Box"));
-	wGrid->setNamePrefix(i18n("GridBox"));
+	wGrid->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "gridBox"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	addClass(wGrid);
 
@@ -338,7 +347,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSplitter->setPixmap("frame");
 	wSplitter->setClassName("QSplitter");
 	wSplitter->setName(i18n("Splitter"));
-	wSplitter->setNamePrefix(i18n("Splitter"));
+	wSplitter->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
 	wSplitter->setDescription(i18n("A container that enables user to resize its children"));
 	addClass(wSplitter);
 
@@ -346,10 +356,26 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("SubForm");
 	wSubForm->setName(i18n("Sub Form"));
-	wSubForm->setNamePrefix(i18n("SubForm"));
+	wSubForm->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
+
+	//groupbox
+	m_propDesc["title"] = i18n("Title");
+	m_propDesc["flat"] = i18n("Flat");
+	
+	//tab widget
+	m_propDesc["tabPosition"] = i18n("Tab Position");
+	m_propDesc["currentPage"] = i18n("Current Page");
+	m_propDesc["tabShape"] = i18n("Tab Shape");
+	
+	m_propDesc["tabPosition"] = i18n("Tab Position");
+	m_propDesc["tabPosition"] = i18n("Tab Position");
+
+	m_propValDesc["Rounded"] = i18n("for Tab Shape", "Rounded");
+	m_propValDesc["Triangular"] = i18n("for Tab Shape", "Triangular");
 }
 
 QWidget*

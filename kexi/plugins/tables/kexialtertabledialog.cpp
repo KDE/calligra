@@ -173,13 +173,13 @@ void KexiAlterTableDialog::initData()
 		//recreate table data rows
 		for(int i=0; i < tableFieldCount; i++) {
 			KexiDB::Field *field = tempData()->table->field(i);
-			KexiTableItem *item = new KexiTableItem(0);
-			item->push_back(QVariant(field->isPrimaryKey() ? "key" : ""));
+			KexiTableItem *item = d->data->createItem(); //new KexiTableItem(0);
+			(*item)[0] = field->isPrimaryKey() ? "key" : "";
 			if (field->isPrimaryKey())
 				d->primaryKeyExists = true;
-			item->push_back(QVariant(field->name()));
-			item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
-			item->push_back(QVariant(field->description()));
+			(*item)[1] = field->name();
+			(*item)[2] = field->typeGroup()-1; //-1 because type groups are counted from 1
+			(*item)[3] = field->description();
 			d->data->append(item);
 	
 //later!			createPropertyBuffer( i, field );
@@ -192,8 +192,8 @@ void KexiAlterTableDialog::initData()
 	//add empty space
 	const int columnsCount = d->data->columnsCount();
 	for (int i=tableFieldCount; i<(int)d->buffers->size(); i++) {
-		KexiTableItem *item = new KexiTableItem(columnsCount);//3 empty fields
-		d->data->append(item);
+//		KexiTableItem *item = new KexiTableItem(columnsCount);//3 empty fields
+		d->data->append(d->data->createItem());
 	}
 
 	//set data for our spreadsheet: this will clear our buffers

@@ -13,6 +13,7 @@ cd $DIRNAME
 # General
 MODULE=koffice							# CHANGE
 PROJECT=kexi							# CHANGE
+PROJECT_TITLE=Kexi							# CHANGE
 MODULE_PATH=trunk/$MODULE
 KDEADMIN_PATH=trunk/KDE/kde-common/admin
 #for versions witin koffice:
@@ -42,6 +43,13 @@ DIST_VER=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | sed -e 's/.
 # Pick kexi_stable.lsm or kexi.lsm as a LSM file template
 echo $DIST_VER | grep -e "beta" -e "rc" > /dev/null && lsmsrcfile=kexi.lsm || lsmsrcfile=kexi_stable.lsm
 
+fixAppSpecific()
+{
+	rm ../changes-* #remove koffice-specific changelog
+	mv CHANGES ../
+	echo "For complete list of authors see kexi/main/kexiaboutdata.h file or use \"Help->About Kexi\" menu command." > ../AUTHORS
+}
+
 # Paths
 DESTINATION=/tmp/kexi-dist/$DIST_VER				# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!
 CONFIGURE_PREFIX=`kde-config --prefix`	# CHANGE
@@ -53,6 +61,8 @@ PERL_PROGRAM=`which perl`				# CHANGE
 SVN2DIST_PROGRAM=`which svn2dist`			# CHANGE
 NCFTPPUT_PROGRAM=`which ncftpput`				# CHANGE
 CONF= # CANGE OR LEAVE EMPTY IF NO SPECIAL configure.in.in should be copied
+
+# --- end of configuration area ---
 
 # Main program
 if [ -z "$DIST_VER" ]; then
@@ -90,7 +100,6 @@ if [ -e $DESTINATION ]; then
 	rm -f $DESTINATION/LOG
 fi	
 
-pwd
 echo $DESTINATION/source/$MODULE
 if ! [ -e $DESTINATION/source/$MODULE ]; then
 	echo "*** Setup-Mode: Checking $MODULE/$PROJECT out from SVN..."
@@ -120,11 +129,15 @@ fi
 
 echo "1. Cleaning up..." 
 cd $DESTINATION/source/$MODULE || exit 1
-rm -fr acinclude.m4 aclocal.m4 Makefile.in Makefile libtool $PROJECT/config.h config.h.in stamp-h.in subdirs configure configure.in configure.files stamp-h inst-apps autom4te-2.5x.cache  autom4te.cache .autoconf_trace MakeVars.in Makefile.am Makefile.rules.in
+rm -fr acinclude.m4 aclocal.m4 Makefile.in Makefile libtool $PROJECT/config.h \
+config.h.in stamp-h.in subdirs configure configure.in configure.files stamp-h \
+inst-apps autom4te-2.5x.cache  autom4te.cache .autoconf_trace MakeVars.in \
+Makefile.am Makefile.rules.in
+
+find . -name \*~ | xargs rm -f
 
 echo "2. Updating from SVN..." 
 #$DESTINATION/expect_script >> $DESTINATION/LOG 2>&1
-pwd
 cd admin || exit 1
 $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
 cd ../$PROJECT
@@ -144,6 +157,10 @@ for dir in $EXC; do
 done
 #fix exectutable bits for sources:
 find . -name \*.h -o -name \*.cpp -o -name \*.c -o -name \*.cc -o -name \*.1 | xargs chmod a-x
+
+#other app-specific fixes:
+fixAppSpecific
+
 #--svn2dist will do this
 #cd $DESTINATION/source/$MODULE
 #make -f Makefile.cvs >> $DESTINATION/LOG 2>&1
@@ -161,9 +178,9 @@ mv $PROJECT-$today.* ../archive
 cd ../archive
 
 #create .lsm file
-lsmfile="kexi-"$DIST_VER".lsm"
+lsmfile=$PROJECT"-"$DIST_VER".lsm"
 echo "Begin4
-Title:           Kexi
+Title:           $PROJECT_TITLE
 Version:         "$DIST_VER"
 Entered-date:    "`date +%Y-%m-%d` > $lsmfile
 cat $DIRNAME/$lsmsrcfile >> $lsmfile

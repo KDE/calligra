@@ -45,6 +45,7 @@ class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeList;
 typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
 typedef QPtrList<QWidget> WidgetList;
+typedef QPtrListIterator<QWidget> WidgetListIterator;
 
 //! Base (virtual) class for all form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary
@@ -283,6 +284,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! For debugging purposes
 		QString m_recentlyLoadedUICode;
 #endif
+
+		/*! Internal: called by ResizeHandle when mouse move event causes first 
+		 resize handle's dragging. As a result, current widget's editing (if any) 
+		 is finished - see WidgetFactory::resetEditor(). */
+//		void resizeHandleDraggingStarted(QWidget *draggedWidget);
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor.

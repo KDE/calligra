@@ -150,10 +150,12 @@ class KEXICORE_EXPORT Part : public QObject
 
 		/*! \return i18n'd message translated from \a englishMessage.
 		 This method is useful for messages like: 
-		 "<p>Table \"%1\" has been modified.</p><p>Do you want to save changes?</p>",
-		 -- first part of messages like that could not be accurately translated.
-		 See implementation of this method in KexiTablePart for example how to implement it. 
-		 Default implementation returns \a englishMessage. */
+		 "<p>Table \"%1\" has been modified.</p>",
+		 -- such messages can be accurately translated, 
+		 while this could not: "<p>%1 \"%2\" has been modified.</p>".
+		 See implementation of this method in KexiTablePart to see 
+		 what strings are needed for translation.
+		 Default implementation returns generic \a englishMessage. */
 		virtual QString i18nMessage(const QCString& englishMessage) const;
 
 	signals: 

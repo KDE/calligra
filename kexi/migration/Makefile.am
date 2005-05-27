@@ -36,7 +36,7 @@ keximigrateinclude_HEADERS=keximigrate.h migratemanager.h
 kde_servicetypes_DATA = keximigration_driver.desktop
 
 KDE_OPTIONS=nofinal
-bin_PROGRAMS = keximigratetest
+noinst_PROGRAMS = keximigratetest
 
 keximigratetest_SOURCES = keximigratetest.cpp
 keximigratetest_LDADD = libkeximigrate.la \

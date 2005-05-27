@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@
 #include <kdialogbase.h>
 #include <ktextedit.h>
 #include <ktabwidget.h>
+#include <kfontdialog.h>
 
 #include <kdeversion.h>
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9) && !defined(Q_WS_WIN)
@@ -1303,6 +1305,16 @@ FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
 	enableAction("format_raise", true);
 	enableAction("format_lower", true);
 
+	WidgetList *wlist = form->selectedWidgets();
+	bool fontEnabled = false;
+	for (WidgetListIterator it(*wlist); it.current(); ++it) {
+		if (-1 != it.current()->metaObject()->findProperty("font", true)) {
+			fontEnabled = true;
+			break;
+		}
+	}
+	enableAction("format_font", fontEnabled);
+
 	// If the widgets selected is a container, we enable layout actions
 	bool containerSelected = false;
 	if(!multiple)
@@ -1336,7 +1348,7 @@ FormManager::emitFormWidgetSelected( KFormDesigner::Form* form )
 	enableAction("edit_delete", false);
 	enableAction("clear_contents", false);
 
-		// Disable format functions
+	// Disable format functions
 	enableAction("align_menu", false);
 	enableAction("align_to_left", false);
 	enableAction("align_to_right", false);
@@ -1345,6 +1357,8 @@ FormManager::emitFormWidgetSelected( KFormDesigner::Form* form )
 	enableAction("adjust_size_menu", false);
 	enableAction("format_raise", false);
 	enableAction("format_lower", false);
+
+	enableAction("format_font", false);
 
 	enableFormActions();
 
@@ -1449,6 +1463,65 @@ FormManager::emitRedoEnabled(bool enabled, const QString &text)
 {
 	enableAction("edit_redo", enabled);
 	emit redoEnabled(enabled, text);
+}
+
+void
+FormManager::changeFont()
+{
+	if (!m_active)
+		return;
+	WidgetList *wlist = m_active->selectedWidgets();
+	WidgetList widgetsWithFontProperty;
+	QWidget *widget;
+	QFont font;
+	bool oneFontSelected = true;
+	for (WidgetListIterator it(*wlist); (widget = it.current()); ++it) {
+		if (m_lib->isPropertyVisible(widget->className(), widget, "font")) {
+			widgetsWithFontProperty.append(widget);
+			if (oneFontSelected) {
+				if (widgetsWithFontProperty.count()==1)
+					font = widget->font();
+				else if (font != widget->font())
+					oneFontSelected = false;
+			}
+		}
+	}
+	if (widgetsWithFontProperty.isEmpty())
+		return;
+	if (!oneFontSelected) //many different fonts selected: pick a font from toplevel conatiner
+		font = m_active->widget()->font();
+
+	if (1==widgetsWithFontProperty.count()) {
+		//single widget's settings
+		widget = widgetsWithFontProperty.first();
+		KexiProperty &fontProp = m_buffer->property("font");
+		if (QDialog::Accepted != KFontDialog::getFont(font, false, m_active->widget()))
+			return;
+		fontProp = font;
+		return;
+	}
+	//multiple widgets
+	int diffFlags=0;
+	if (QDialog::Accepted != KFontDialog::getFontDiff(font, diffFlags, false, m_active->widget()) 
+		|| 0==diffFlags)
+		return;
+	//update font
+	for (WidgetListIterator it(widgetsWithFontProperty); (widget = it.current()); ++it) {
+		QFont prevFont( widget->font() );
+		if (diffFlags & KFontChooser::FontDiffFamily)
+			prevFont.setFamily( font.family() );
+		if (diffFlags & KFontChooser::FontDiffStyle) {
+			prevFont.setBold( font.bold() );
+			prevFont.setItalic( font.italic() );
+		}
+		if (diffFlags & KFontChooser::FontDiffSize)
+			prevFont.setPointSize( font.pointSize() );
+/*! @todo this modification is not added to UNDO BUFFER: 
+          do it when KexiPropertyBuffer supports multiple selections */
+		widget->setFont( prevFont );
+		//temporary fix for dirty flag:
+		emit dirty(m_active, true);
+	}
 }
 
 #include "formmanager.moc"

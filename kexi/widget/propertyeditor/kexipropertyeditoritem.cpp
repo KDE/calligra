@@ -69,7 +69,7 @@ QStringList
 spHelper::list()
 {
 	QStringList list;
-	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
+	list << "Fixed" << "Minimum" << "Maximum" << "Preferred" << "Expanding"
 		<< "MinimumExpanding" << "Ignored";
 	return list;
 }

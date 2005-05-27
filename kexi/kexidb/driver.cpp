@@ -212,6 +212,13 @@ bool Driver::isKexiDBSystemObjectName( const QString& n )
 	return n.lower().startsWith("kexi__");
 }
 
+bool Driver::isSystemFieldName( const QString& n ) const
+{
+	if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.lower()==beh->ROW_ID_FIELD_NAME.lower())
+		return true;
+	return drv_isSystemFieldName(n);
+}
+
 QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 {
 	if (v.isNull())

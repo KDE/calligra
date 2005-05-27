@@ -21,6 +21,7 @@
 */
 
 #include "kexiscripteditor.h"
+#include "kexiscriptmanager.h"
 
 #include <kdebug.h>
 //#include <kparts/factory.h>
@@ -46,36 +47,44 @@
 # include "api/exception.h"
 #endif
 
-class KexiScriptEditorPrivate
-{
-    public:
-        QString language;
-#ifdef KEXI_KROSS_SUPPORT
-        Kross::Api::Manager* manager;
-        KSharedPtr<Kross::Api::ScriptContainer> scriptcontainer;
-#endif
-};
-
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiEditor(mainWin, parent, name)
-    , d( new KexiScriptEditorPrivate() )
+    , m_scriptcontainer(0)
 {
-    d->language = "python"; // default scripting language
-
-#ifdef KEXI_KROSS_SUPPORT
-    d->manager = Kross::Api::Manager::scriptManager();
-    d->scriptcontainer = d->manager->getScriptContainer( parentDialog()->partItem()->name() ); //parentDialog()->id()
-#endif
 }
 
 KexiScriptEditor::~KexiScriptEditor()
 {
-    delete d;
 }
 
-void KexiScriptEditor::initialize()
+void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
 {
-    setLanguage(d->language);
+    disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+
+    m_scriptcontainer = scriptcontainer;
+
+    if(m_scriptcontainer) {
+        KexiEditor::setText(m_scriptcontainer->getCode());
+
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+#else
+        KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( document() );
+        for(uint i = 0; i < hl->hlModeCount(); i++) {
+            //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
+
+            // We assume Kross and the HighlightingInterface are using same
+            // names for the support languages...
+            if (hl->hlModeName(i).contains(m_scriptcontainer->getInterpreterName(), false))  {
+                hl->setHlMode(i);
+                break;
+            }
+        }
+#endif
+
+    }
+    else {
+        KexiEditor::setText("");
+    }
 
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
@@ -84,68 +93,15 @@ void KexiScriptEditor::initialize()
     u->clearRedo();
 #endif
 
-    setDirty(false);
-    connect(this, SIGNAL(textChanged()), this, SLOT(textChanged()));
+    KexiEditor::setDirty(false);
+    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 
-QString KexiScriptEditor::getLanguage()
-{
-    return d->language;
-}
-
-bool KexiScriptEditor::setLanguage(const QString& language)
-{
-    d->language = language;
-
-#ifdef KTEXTEDIT_BASED_SQL_EDITOR
-#else
-    KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( document() );
-    for(uint i = 0; i < hl->hlModeCount(); i++) {
-        //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-
-        // We assume Kross and the HighlightingInterface are using same
-        // names for the support languages...
-        if (hl->hlModeName(i).contains(d->language, false))  {
-            hl->setHlMode(i);
-            break;
-        }
-    }
-#endif
-
-    return true;
-}
-
-QString KexiScriptEditor::getCode()
-{
-    return KexiEditor::text();
-}
-
-bool KexiScriptEditor::setCode(const QString& text)
-{
-    KexiEditor::setText(text);
-    return true;
-}
-
-void KexiScriptEditor::execute()
-{
-#ifdef KEXI_KROSS_SUPPORT
-    d->scriptcontainer->setCode( getCode() );
-    d->scriptcontainer->setInterpreterName( getLanguage() );
-
-    try {
-        d->scriptcontainer->execute();
-    }
-    catch(Kross::Api::Exception& e) {
-        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
-    }
-#else
-    kdWarning() << "KexiScriptEditor::execute() called, but Kexi is compiled without Kross scripting support." << endl;
-#endif
-}
-
-void KexiScriptEditor::textChanged()
+void KexiScriptEditor::slotTextChanged()
 {
     KexiScriptEditor::setDirty(true);
+    if(m_scriptcontainer)
+        m_scriptcontainer->setCode( KexiEditor::text() );
 }
 
 #include "kexiscripteditor.moc"

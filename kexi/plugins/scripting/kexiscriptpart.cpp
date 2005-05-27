@@ -29,13 +29,17 @@
 #include <kexipartitem.h>
 #include <kexidialogbase.h>
 
-#include "kexiscriptview.h"
+#include "kexiscriptdesignview.h"
+#include "kexiscripttextview.h"
+#include "kexiscriptmanager.h"
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
     m_names["instance"] = i18n("Script");
-    m_supportedViewModes = Kexi::DesignViewMode;
+    m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
+
+    m_manager = new KexiScriptManager(this);
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -53,14 +57,32 @@ void KexiScriptPart::initInstanceActions()
 #endif
 }
 
-KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int)
+KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
-    KexiMainWindow *win = dialog->mainWin();
-    if(!win || !win->project() || !win->project()->dbConnection())
-        return 0;
+    if(viewMode == Kexi::DesignViewMode) {
+        KexiMainWindow *win = dialog->mainWin();
+        if(!win || !win->project() || !win->project()->dbConnection())
+            return 0;
+        return new KexiScriptDesignView(m_manager, win, parent, item.name().latin1());
+    }
 
-    KexiScriptView *view = new KexiScriptView(win, parent, item.name().latin1());
-    return view;
+    if(viewMode == Kexi::TextViewMode) {
+        KexiMainWindow *win = dialog->mainWin();
+        if(!win || !win->project() || !win->project()->dbConnection())
+            return 0;
+        return new KexiScriptTextView(m_manager, win, parent, item.name().latin1());
+    }
+
+    return 0;
+}
+
+QString KexiScriptPart::i18nMessage(const QCString& englishMessage) const
+{
+	if (englishMessage=="Design of object \"%1\" has been modified.")
+		return i18n("Design of script \"%1\" has been modified.");
+	if (englishMessage=="Object \"%1\" already exists.")
+		return i18n("Script \"%1\" already exists.");
+	return englishMessage;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_script, KGenericFactory<KexiScriptPart>("kexihandler_script") )

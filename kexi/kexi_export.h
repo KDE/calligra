@@ -164,6 +164,7 @@
 */
 # define KEXI_NO_UNFINISHED
 # define KEXI_FORMS_SUPPORT
+# define KEXI_NO_CSV_IMPORT
 #endif
 
 #endif //KEXI_EXPORT_H

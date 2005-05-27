@@ -194,7 +194,7 @@ ConnectionDialog::updateTableData()
 	ObjectTreeDictIterator it(*dict);
 	for(; it.current(); ++it)
 	{
-		KexiTableItem *item = new KexiTableItem(2);
+		KexiTableItem *item = m_widgetsColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0] = it.current()->name();
 		(*item)[1] = (*item)[0];
 		m_widgetsColumnData->append(item);
@@ -204,7 +204,7 @@ ConnectionDialog::updateTableData()
 	// Then we fill the columns with the form connections
 	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
 	{
-		KexiTableItem *item = new KexiTableItem(5);
+		KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
 		(*item)[1] = c->sender();
 		(*item)[2] = c->signal();
 		(*item)[3] = c->receiver();
@@ -300,7 +300,7 @@ ConnectionDialog::updateSlotList(KexiTableItem *item)
 		if(!signalArg.startsWith(slotArg, true) && (!signal.isEmpty())) // args not compatible
 			continue;
 
-		KexiTableItem *item = new KexiTableItem(2);
+		KexiTableItem *item = m_slotsColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0] = QString(*it);
 		(*item)[1] = (*item)[0];
 		m_slotsColumnData->append(item);
@@ -319,7 +319,7 @@ ConnectionDialog::updateSignalList(KexiTableItem *item)
 	QStrListIterator it(signalList);
 	for(; it.current() != 0; ++it)
 	{
-		KexiTableItem *item = new KexiTableItem(2);
+		KexiTableItem *item = m_signalsColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0] = QString(*it);
 		(*item)[1] = (*item)[0];
 		m_signalsColumnData->append(item);
@@ -381,7 +381,7 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
 		return;
 
 	Connection *c = new Connection(connection);
-	KexiTableItem *item = new KexiTableItem(5);
+	KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
 	(*item)[1] = c->sender();
 	(*item)[2] = c->signal();
 	(*item)[3] = c->receiver();

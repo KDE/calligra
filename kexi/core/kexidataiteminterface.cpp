@@ -46,7 +46,7 @@ KexiDataItemInterface::~KexiDataItemInterface()
 void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add, bool removeOld)
 {
 	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
-	clear();
+//needed?	clear();
 	m_origValue = value;
 	setValueInternal(add, removeOld);
 	m_disable_signalValueChanged = false;

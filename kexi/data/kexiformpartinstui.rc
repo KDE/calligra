@@ -11,7 +11,7 @@
    <Action name="formpart_connections"/>
    <!-- Action name="change_style"/ -->
   </Menu>
-  <Menu name="format" noMerge="1">
+  <Menu name="format" noMerge="0">
   <text>&amp;Format</text>
    <Action name="snap_to_grid"/>
    <Separator/>

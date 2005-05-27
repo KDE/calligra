@@ -25,7 +25,7 @@
 
 #include <kexieditor.h>
 
-class KexiScriptEditorPrivate;
+class KexiScriptContainer;
 
 /**
  * The KexiEditor class embeds text editor
@@ -52,45 +52,18 @@ class KexiScriptEditor : protected KexiEditor
          * highlighter will be reset, undo/redo are cleared and
          * setDirty(false) is set.
          */
-        void initialize();
+        void initialize(KexiScriptContainer* scriptcontainer);
 
         /**
-         * Return the name of the used scripting language.
-         */
-        QString getLanguage();
-
-        /**
-         * Set the name of the used scripting language.
-         */
-        bool setLanguage(const QString& language);
-
-        /**
-         * Return the scripting code.
-         */
-        QString getCode();
-
-        /**
-         * Set the scripting code.
-         */
-        bool setCode(const QString& text);
-
-        /**
-          * useful as we're KexiEditor superclass is protected. 
+          * Useful as we're KexiEditor superclass is protected.
           */
-        operator KexiViewBase *() const { return (KexiViewBase *)this; }
-
-    public slots:
-
-        /**
-         * Try to execute the scripting code.
-         */
-        void execute();
+        operator KexiViewBase* () const { return (KexiViewBase*)this; }
 
     private slots:
-        void textChanged();
+        void slotTextChanged();
 
     private:
-        KexiScriptEditorPrivate* d;
+        KexiScriptContainer* m_scriptcontainer;
 };
 
 #endif

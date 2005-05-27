@@ -321,8 +321,11 @@ Form::changeName(const QString &oldname, const QString &newname)
 	if(!d->topTree->rename(oldname, newname)) // rename failed
 	{
 		KMessageBox::sorry(widget()->topLevelWidget(),
-		i18n("A widget with this name already exists. "
-			"Please choose another name or rename existing widget."));
+			i18n("Renaming widget \"%1\" to \"%2\" failed.").arg(oldname).arg(newname));
+//moved to ObjectPropertyBuffer::slotChangeProperty()
+//		KMessageBox::sorry(widget()->topLevelWidget(),
+//		i18n("A widget with this name already exists. "
+//			"Please choose another name or rename existing widget."));
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
 		(*(d->manager->buffer()))["name"] = oldname;
 	}
@@ -479,6 +482,14 @@ Form::autoAssignTabStops()
 		hlist.clear();
 	}
 }
+
+/*void
+Form::resizeHandleDraggingStarted(QWidget *draggedWidget)
+{
+	WidgetFactory *wfactory = d->manager->lib()->factoryForClassName(draggedWidget->className());
+	wfactory->resetEditor();
+	draggedWidget
+}*/
 
 #include "form.moc"
 

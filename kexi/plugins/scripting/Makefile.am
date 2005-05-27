@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexihandler_script.la
 
 if compile_kross_plugin
-KROSS_DEFINES=-DKEXI_KROSS_SUPPORT 
+KROSS_DEFINES=-DKEXI_KROSS_SUPPORT
 KROSS_INCLUDE=-I$(top_srcdir)/kexi/scripting
 KROSS_LIB=$(top_builddir)/kexi/scripting/main/libkrossmain.la
 endif
@@ -11,7 +11,7 @@ endif
 AM_CPPFLAGS=$(KROSS_DEFINES)
 
 kexihandler_script_la_SOURCES = \
-    kexiscriptpart.cpp kexiscriptview.cpp kexiscripteditor.cpp
+    kexiscriptpart.cpp kexiscriptmanager.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp kexiscripttextview.cpp
 
 kexihandler_script_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
@@ -34,4 +34,4 @@ SUBDIRS = .
 
 include ../Makefile.common
 
-noinst_HEADERS = kexiscriptpart.h kexiscriptview.h kexiscripteditor.h
+noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscriptdesignview.h kexiscripttextview.h

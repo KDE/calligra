@@ -51,10 +51,8 @@ KexiStartupFileDialogBase::KexiStartupFileDialogBase(
 	QString _dirName = dirName;
 	//make default 'My Documents' folder
 //TODO: store changes in the app's config file?
-	if (_dirName.isEmpty()) {
-		_dirName = getWin32RegistryValue(HKEY_CURRENT_USER, 
-			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal");
-	}
+	if (_dirName.isEmpty())
+		_dirName = KGlobalSettings::documentPath();
 
 	init(_dirName, filter, parent);
 

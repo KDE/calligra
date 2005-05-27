@@ -335,7 +335,8 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 void
 WidgetFactory::resetEditor()
 {
-	m_container->stopInlineEditing();
+	if (m_container)
+		m_container->stopInlineEditing();
 
 	if(m_widget)
 	{

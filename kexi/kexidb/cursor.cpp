@@ -86,6 +86,9 @@ void Cursor::init()
 		m_fieldsExpanded = 0;
 		m_fieldCount = 0;
 	}
+
+	m_containsROWIDInfo = (m_query && m_query->masterTable()) 
+		&& m_conn->m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
 }
 
 Cursor::~Cursor()
@@ -119,7 +122,7 @@ bool Cursor::open()
 			setError(ERR_SQL_EXECUTION_ERROR, i18n("No query statement or schema defined."));
 			return false;
 		}
-		m_conn->m_sql = m_conn->selectStatement( *m_query );
+		m_conn->m_sql = m_conn->selectStatement( *m_query, m_containsROWIDInfo /*get ROWID if needed*/ );
 		if (m_conn->m_sql.isEmpty()) {
 			KexiDBDbg << "Cursor::open(): empty statement!" << endl;
 			setError(ERR_SQL_EXECUTION_ERROR, i18n("Query statement is empty."));
@@ -429,31 +432,31 @@ bool Cursor::getNextRecord()
 	return true;
 }
 
-bool Cursor::updateRow(RowData& data, RowEditBuffer& buf)
+bool Cursor::updateRow(RowData& data, RowEditBuffer& buf, bool useROWID)
 {
 //TODO: doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
-	return m_conn->updateRow(*m_query, data, buf);
+	return m_conn->updateRow(*m_query, data, buf, useROWID);
 }
 
-bool Cursor::insertRow(RowData& data, RowEditBuffer& buf)
+bool Cursor::insertRow(RowData& data, RowEditBuffer& buf, bool getROWID)
 {
 //TODO: doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
-	return m_conn->insertRow(*m_query, data, buf);
+	return m_conn->insertRow(*m_query, data, buf, getROWID);
 }
 
-bool Cursor::deleteRow(RowData& data)
+bool Cursor::deleteRow(RowData& data, bool useROWID)
 {
 //TODO: doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
-	return m_conn->deleteRow(*m_query, data);
+	return m_conn->deleteRow(*m_query, data, useROWID);
 }
 
 bool Cursor::deleteAllRows()

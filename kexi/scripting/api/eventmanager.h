@@ -75,9 +75,12 @@ namespace Kross { namespace Api {
              *
              * \param sender The QObject that is the sender/emitter
              *       of the signal.
-             * \param signal The SIGNAL(...) itself.
+             * \param signal The SIGNAL to connect the scriptfunction
+             * \     with.
              * \param function The name of the scriptfunction to
              *       call if the signal got emitted.
+             * \return If connection was done successfully true else
+             *        false.
              */
             bool connect(QObject *sender, const QCString& signal, const QString& functionname);
 
@@ -85,6 +88,21 @@ namespace Kross { namespace Api {
              * Disconnect a QObject signal from a script function.
              */
             bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
+
+            /**
+             * Connect script signal with QObject slot.
+             *
+             * \param signal The Kross SIGNAL to connect with.
+             * \param receiver The QObject that should receive the signal.
+             * \param slot The SLOT of the receiver to connect the Kross
+             *       SIGNAL with.
+             */
+            bool connect(const QCString& signal, QObject *receiver, const QCString& slot);
+
+            /**
+             * Disconnect script signal from QObject slot.
+             */
+            bool disconnect(const QCString& signal, QObject *receiver, const QCString& slot);
 
         private:
             /// The \a ScriptContainer connected with this EventManager.

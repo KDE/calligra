@@ -37,7 +37,6 @@ typedef KexiDB::RowData KexiTableItemBase;
 class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 {
 	public:
-		KexiTableItem(int numCols);
 		~KexiTableItem();
 
 		/*! Clears exisiting column values and inits new \a numCols 
@@ -48,7 +47,9 @@ class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 		void clearValues();
 
 	protected:
-	private:
+		KexiTableItem(int numCols);
+
+	friend class KexiTableViewData;
 };
 
 #endif

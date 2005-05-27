@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="129">
+<kpartgui name="kexi" version="132">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -16,13 +16,14 @@
     <Separator />
     <Action name="project_save"/>
     <Action name="project_saveas"/>
-    <!-- Separator />
+    <Separator />
     <Menu name="project_import">
       <text>&amp;Import</text>
+      <Action name="project_import_data_table" />
       <Action name="project_import_project" />
       <Action name="project_import_file" />
       <Action name="project_import_server" />
-    </Menu -->
+    </Menu>
     <!-- Menu name="project_export">
       <text>&amp;Export</text>
     </Menu -->
@@ -44,6 +45,10 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
+    <Menu name="edit_paste_special">
+      <text>Paste &amp;Special</text>
+      <Action name="edit_paste_special_data_table"/>
+    </Menu>
     <MergeLocal name="edit_paste_merge"/>
     <Separator/>
     <Action name="edit_select_all"/> 
@@ -82,6 +87,13 @@
       <Action name="data_sort_az"/>
       <Action name="data_sort_za"/>
     </Menu>
+  </Menu>
+
+  <Menu name="format" noMerge="0">
+    <text>&amp;Format</text>
+    <Action name="format_font"/>
+    <Separator/>
+    <MergeLocal/>
   </Menu>
 
   <Merge/>

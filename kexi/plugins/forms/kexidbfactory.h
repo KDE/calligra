@@ -24,6 +24,7 @@
 #include <widgetfactory.h>
 
 #include "kexiformdataiteminterface.h"
+#include <widget/utils/kexidisplayutils.h>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -107,7 +108,11 @@ class KexiDBLineEdit : public KLineEdit, public KexiFormDataItemInterface
 		void slotTextChanged(const QString&);
 
 	protected:
+		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
+		virtual bool event ( QEvent * );
+
+		KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
 };
 
 //! Push Button widget for Kexi forms

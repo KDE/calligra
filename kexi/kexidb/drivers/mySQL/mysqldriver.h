@@ -37,7 +37,6 @@ class MySqlDriver : public Driver
 		virtual ~MySqlDriver();
 		
 		virtual bool isSystemDatabaseName( const QString &n ) const;
-		virtual bool isSystemFieldName( const QString& n ) const;
 
 		//! Escape a string for use as a value
 		virtual QString escapeString(const QString& str) const;
@@ -46,8 +45,8 @@ class MySqlDriver : public Driver
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;
-		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+		virtual bool drv_isSystemFieldName( const QString& n ) const;
 	
 	private:
 		static const char *keywords[];

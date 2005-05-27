@@ -20,18 +20,22 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXISCRIPTVIEW_H
-#define KEXISCRIPTVIEW_H
+#ifndef KEXISCRIPTDESIGNVIEW_H
+#define KEXISCRIPTDESIGNVIEW_H
 
 #include <kexiviewbase.h>
 
+// Forward declarations.
+class KexiScriptManager;
+class KexiScriptContainer;
 class KexiScriptEditor;
 
 /**
- * The KexiScriptView class provides the \a KexiViewBase to
- * manage script modules.
+ * The KexiScriptDesignView class provides the \a KexiViewBase to
+ * manage script modules in the design-view. The design-view
+ * is used to be able to view and edit the scripting code.
  */
-class KexiScriptView : public KexiViewBase
+class KexiScriptDesignView : public KexiViewBase
 {
         Q_OBJECT
 
@@ -40,19 +44,40 @@ class KexiScriptView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptDesignView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 
         /**
          * Destructor.
          */
-        virtual ~KexiScriptView();
+        virtual ~KexiScriptDesignView();
 
+        /**
+         * Try to call \a storeData with new data we like to store. On
+         * success the matching
+         *
+         * \param sdata The source \a KexiDB::SchemaData instance.
+         * \param cancel Cancel on failure and don't try to clean
+         *       possible temporary created data up.
+         * \return The matching \a KexiDB::SchemaData instance or NULL
+         *        if storing failed.
+         */
         virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+
+        /**
+         * Try to store the modified data in the already opened and
+         * currently used \a KexiDB::SchemaData instance.
+         */
         virtual tristate storeData();
 
     private:
+        KexiScriptManager* m_manager;
+        KexiScriptContainer* m_scriptcontainer;
         KexiScriptEditor* m_editor;
 
+        /**
+         * Load the data from XML source and fill the internally
+         * used \a Kross::Api::ScriptContainer instance.
+         */
         bool loadData();
 };
 

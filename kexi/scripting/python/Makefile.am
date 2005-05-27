@@ -1,23 +1,26 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-noinst_LTLIBRARIES = libkrosspython.la
+INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
 
-libkrosspython_la_SOURCES = \
+kde_module_LTLIBRARIES = krosspython.la
+
+krosspython_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+
+krosspython_la_SOURCES = \
     pythonextension.cpp \
     pythonmodule.cpp \
     pythonobject.cpp \
     pythonscript.cpp \
+    pythonsecurity.cpp \
     pythoninterpreter.cpp
 
-libkrosspython_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) $(VER_INFO) -Wnounresolved
-
-libkrosspython_la_LIBADD = \
+krosspython_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     $(PYTHON_LIB) \
     CXX/libkrosspythoncxx.la \
-    ../api/libkrossapi.la
+    ../api/libkrossapi.la \
+    ../main/libkrossmain.la
 
-libkrosspython_la_METASOURCES = AUTO
-SUBDIRS = CXX .
-INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
+METASOURCES = AUTO
+SUBDIRS = CXX . modules

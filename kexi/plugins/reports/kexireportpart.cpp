@@ -92,8 +92,10 @@ KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
 QString
 KexiReportPart::i18nMessage(const QCString& englishMessage) const
 {
-	if (englishMessage=="<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
-		return i18n("<p>Design of report \"%1\" has been modified.</p><p>Do you want to save changes?</p>");
+	if (englishMessage=="Design of object \"%1\" has been modified.")
+		return i18n("Design of report \"%1\" has been modified.");
+	if (englishMessage=="Object \"%1\" already exists.")
+		return i18n("Report \"%1\" already exists.");
 	return englishMessage;
 }
 

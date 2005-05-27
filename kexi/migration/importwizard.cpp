@@ -54,6 +54,7 @@ importWizard::importWizard(QWidget *parent, const char *name)
 {
     m_prjSet = 0;
     fileBasedDstWasPresented = false;
+    setupFileBasedSrcNeeded = true;
     //=========================Temporary===================================
     Kexi::connset().clear();
     KexiDB::ConnectionData *conndata;
@@ -183,6 +184,8 @@ void importWizard::setupdstType()
     dstTypePage->setStretchFactor(new QWidget(dstTypePage), 1);
 
     dstTypeCombo->insertStringList(names);
+//! @todo hardcoded: find a way to preselect default engine item
+    dstTypeCombo->setCurrentText("SQLite3");
 }
 
 //===========================================================
@@ -283,9 +286,24 @@ void importWizard::arriveSrcConnPage()
     srcConn->showSimpleConn();
     /*! @todo KexiStartupFileDialog needs "open file" and "open server" modes
     in addition to just "open" */
-    srcConn->m_file->label->hide();
-    srcConn->m_file->btn_advanced->hide();
-    srcConn->m_file->label->parentWidget()->hide();
+    if (setupFileBasedSrcNeeded) {
+        setupFileBasedSrcNeeded = false;
+        QStringList additionalMimeTypes;
+        if (srcTypeCombo->currentText().contains("Access")) {
+//! @todo tmp: hardcoded!
+            additionalMimeTypes << "application/x-msaccess";
+        }
+        srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening, additionalMimeTypes);
+#ifdef Q_WS_WIN
+        if (srcTypeCombo->currentText().contains("Access")) {
+//! @todo tmp: hardcoded!
+            srcConn->m_fileDlg->setSelectedFilter("*.mdb");
+        }
+#endif
+        srcConn->m_file->label->hide();
+        srcConn->m_file->btn_advanced->hide();
+        srcConn->m_file->label->parentWidget()->hide();
+    }
   } else {
     srcConn->showAdvancedConn();
   }
@@ -390,6 +408,7 @@ void importWizard::progressUpdated(int percent) {
 //
 void importWizard::accept()
 {
+    Kexi::WaitCursor wait;
     QGuardedPtr<KexiDB::Connection> kexi_conn;
     KexiMigrate* import;
     KexiDB::ConnectionData *cdata;
@@ -437,13 +456,19 @@ void importWizard::accept()
         return;
     }
 
-
     kdDebug() << "Creating connection to destination..." << endl;
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
     kdDebug() << "Creating source driver..." << endl;
     import = mmanager.migrateDriver(srcTypeCombo->currentText());
+
+    if(import->progressSupported()) {
+      progress->show();
+      progress->updateGeometry();
+      connect(import, SIGNAL(progressPercent(int)),
+              this, SLOT(progressUpdated(int)));
+    }
 
     kdDebug() << "Setting import data.." << endl;
     if(fileBasedSrc) {
@@ -463,12 +488,7 @@ void importWizard::accept()
                       false);
     }
     kdDebug() << "Performing import..." << endl;
-    if(import->progressSupported()) {
-      progress->show();
-      progress->updateGeometry();
-      connect(import, SIGNAL(progressPercent(int)),
-              this, SLOT(progressUpdated(int)));
-    }
+    Kexi::removeWaitCursor();
     if (import->performImport())
     {
         KWizard::accept(); //tmp, before adding "final page"

@@ -125,7 +125,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 		/*! Stops the inline editing of the current widget (as when you click
 		 on another widget or press Esc). */
-		void            stopInlineEditing() { m_state = DoingNothing; }
+		void stopInlineEditing() { m_state = DoingNothing; }
 
 		/*! This is the main function of Container, which filters the event sent
 		   to the watched widget.\n It takes care of drawing the background and

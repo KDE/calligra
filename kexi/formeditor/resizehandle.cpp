@@ -27,11 +27,13 @@
 #include "formmanager.h"
 #include "resizehandle.h"
 #include "container.h"
+#include "widgetfactory.h"
+#include "widgetlibrary.h"
 
 #define MINIMUM_WIDTH 10
 #define MINIMUM_HEIGHT 10
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
  : QWidget(set->m_widget->parentWidget()), m_set(set)
@@ -106,9 +108,16 @@ bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
 
 void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 {
+	const bool startDragging = !m_dragging;
 	m_dragging = true;
 	m_x = ev->x();
 	m_y = ev->y();
+	if (startDragging) {
+//	m_form->resizeHandleDraggingStarted(m_set->widget());
+		WidgetFactory *wfactory = m_set->m_form->manager()->lib()->factoryForClassName(m_set->widget()->className());
+		if (wfactory)
+			wfactory->resetEditor();
+	}
 }
 
 void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
@@ -297,8 +306,6 @@ ResizeHandleSet::raise()
 {
 	for(int i = 0; i < 8; i++)
 		m_handles[i]->raise();
-}
-
 }
 
 #include "resizehandle.moc"

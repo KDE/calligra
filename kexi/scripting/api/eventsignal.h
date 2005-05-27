@@ -61,7 +61,7 @@ namespace Kross { namespace Api {
             /**
              * Destructor.
              */
-            virtual ~EventSignal() {}
+            virtual ~EventSignal();
 
         private:
             EventManager* m_eventmanager;

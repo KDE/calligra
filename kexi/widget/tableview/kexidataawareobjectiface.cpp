@@ -173,7 +173,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 	}
 
 	if (!m_insertItem) {//first setData() call - add 'insert' item
-		m_insertItem = new KexiTableItem(m_data->columns.count());
+		m_insertItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
 	}
 	else {//just reinit
 		m_insertItem->init(m_data->columns.count());
@@ -586,7 +586,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
 
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
-		if (m_verticalHeader)
+		if (m_verticalHeader && oldRow != m_curRow)
 			m_verticalHeader->setCurrentRow(m_curRow);
 		updateCell( m_curRow, m_curCol );
 		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
@@ -1082,7 +1082,7 @@ KexiTableItem *KexiDataAwareObjectInterface::insertEmptyRow(int row)
 		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
 		return 0;
 
-	KexiTableItem *newItem = new KexiTableItem(m_data->columns.count());
+	KexiTableItem *newItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
 	insertItem(newItem, row);
 	return newItem;
 }
@@ -1195,9 +1195,9 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 
 	if (res) {
 		if (m_spreadSheetMode) {
-			const uint columns = m_data->columns.count();
+//			const uint columns = m_data->columns.count();
 			for (int i=0; i<oldRows; i++) {
-				m_data->append(new KexiTableItem(columns));
+				m_data->append(m_data->createItem());//new KexiTableItem(columns));
 			}
 		}
 	}
@@ -1393,7 +1393,7 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 
 //	repaintAfterDelete();
 	if (m_spreadSheetMode) { //append empty row for spreadsheet mode
-			m_data->append(new KexiTableItem(m_data->columns.count()));
+			m_data->append(m_data->createItem());//new KexiTableItem(m_data->columns.count()));
 			if (m_verticalHeader)
 				m_verticalHeader->addLabels(1);
 	}

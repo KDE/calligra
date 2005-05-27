@@ -24,31 +24,33 @@
 
 using namespace Kross::Python;
 
-PythonModuleManager::PythonModuleManager(PythonInterpreter* interpreter)
-    : Py::ExtensionModule<PythonModuleManager>("Kross")
+PythonModule::PythonModule(PythonInterpreter* interpreter)
+    : Py::ExtensionModule<PythonModule>("__main__")
     , m_interpreter(interpreter)
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModuleManager::Constructor") << endl;
+    kdDebug() << QString("Kross::Python::PythonModule::Constructor") << endl;
 #endif
 
-    add_varargs_method("get", &PythonModuleManager::get, "FIXME: Documentation");
+    add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
     initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
 
-    /*
-    Py::Dict moduledict = module().getDict();
-    Py::List l = moduledict.keys();
-    for(Py::List::size_type i=0; i < l.length(); ++i)
-        kdDebug() << QString("PythonModuleManager::PythonModuleManager(): Module Dictonary item key='%1' value='%2'")
-                     .arg( l[i].str().as_string().c_str() )
-                     .arg( moduledict[l[i]].str().as_string().c_str() ) << endl;
-    */
+/*
+    kdDebug()<<"$$$$$$$$$$$$---------------------------------------------------"<<endl;
+    Py::List l = module().dir();
+    for(Py::List::size_type i=0; i < l.length(); ++i) {
+            kdDebug() << QString("-------------------") << endl;
+            kdDebug() << QString("dir() = %1").arg( l[i].str().as_string().c_str() ) << endl;
+            kdDebug() << QString("dir().dir() = %1").arg( Py::Object(l[i]).dir().as_string().c_str() ) << endl;
+    }
+    kdDebug()<<"$$$$$$$$$$$$---------------------------------------------------"<<endl;
+*/
 }
 
-PythonModuleManager::~PythonModuleManager()
+PythonModule::~PythonModule()
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModuleManager::Destructor name='%1'").arg(name().c_str()) << endl;
+    kdDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
 #endif
 
     /*
@@ -57,7 +59,7 @@ PythonModuleManager::~PythonModuleManager()
     */
 }
 
-Py::Object PythonModuleManager::get(const Py::Tuple& args)
+Py::Object PythonModule::get(const Py::Tuple& args)
 {
     if(args.size() < 1)
         throw Py::TypeError("Too few arguments.");

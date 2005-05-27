@@ -35,15 +35,22 @@
 
 namespace Kross { namespace Python {
 
+    // Forward declarations.
+    class PythonSecurity;
+
     /**
      * Python interpreter bridge.
      *
-     * See \a Kross::Api::Interpreter
+     * Implements an \a Kross::Api::Interpreter for the python
+     * interpreter.
      */
     class PythonInterpreter : public Kross::Api::Interpreter
     {
-            friend class PythonModuleManager;
+            // The friend-classes that need to access the
+            // internal interpreter functionality.
+            friend class PythonModule;
             friend class PythonScript;
+            friend class PythonSecurity;
 
         public:
 
@@ -69,8 +76,10 @@ namespace Kross { namespace Python {
             virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
 
         private:
-            PythonModuleManager* m_modulemanager;
-            Py::Module* m_mainmodule;
+            /// The __main__ python module.
+            PythonModule* m_module;
+            /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
+            PythonSecurity* m_security;
 
             /**
              * Python uses so called threads to separate

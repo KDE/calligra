@@ -1,6 +1,6 @@
 include( ../sqlite/sqlite_common.pro )
 
-win32:LIBS += $(KDEDIR)/lib/kexisql2.lib
+win32:LIBS += $(KDEDIR)/lib/kexisql2$$KDELIBDEBUGLIB
 
 win32:INCLUDEPATH += $(KEXI)/3rdparty/kexisql/src ../sqlite/moc
 

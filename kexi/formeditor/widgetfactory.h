@@ -358,6 +358,12 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 to load factories in proper order. */
 		bool inheritsFactories();
 
+	public slots:
+
+		/*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
+		It destroys the editor or installs again the event filter on the widget. */
+		void resetEditor();
+
 	protected slots:
 		/*!
 		Default implementation will change property "text".
@@ -371,10 +377,6 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		void changeTextInternal(const QString& text);
 
 		void slotTextChanged();
-
-		/*! This slot is called when the editor has lost focus or the user pressed Enter.
-		It destroys the editor or installs again the event filter on the widget. */
-		void resetEditor();
 
 		/*! This slot is called when the editor is destroyed.*/
 		void editorDeleted();

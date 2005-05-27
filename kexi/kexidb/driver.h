@@ -147,10 +147,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
-		 a given driver implementation. For implemenation.
+		 a given driver implementation. 
 		 \sa isSystemObjectName().
 		*/
-		virtual bool isSystemFieldName( const QString& n ) const = 0;
+		bool isSystemFieldName( const QString& n ) const;
 
 		/*! \return Driver's features that are combination of Driver::Features
 		enum. */
@@ -258,6 +258,11 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual QCString drv_escapeIdentifier( const QCString& str ) const = 0;
 		
+		/*! \return true if \a n is a system field's name, build-in system 
+		 field that cannot be used or created by a user,
+		 and in most cases user even shouldn't see this. The list is specific for 
+		 a given driver implementation. For implementation.*/
+		virtual bool drv_isSystemFieldName( const QString& n ) const = 0;
 		
 		/*! Used by DriverManager. 
 		 Note for driver developers: Reimplement this.

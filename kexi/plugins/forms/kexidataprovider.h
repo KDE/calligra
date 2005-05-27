@@ -58,8 +58,15 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
 
-		//! Reaction for change of \a item. Does nothing.
+		/*! Implementation for KexiDataItemChangesListener. 
+		 Reaction for change of \a item. Does nothing here. */
 		virtual void valueChanged(KexiDataItemInterface* item);
+
+		/*! Implementation for KexiDataItemChangesListener. 
+		 Implement this to return information whether we're currently at new row or now.
+		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
+		 label should be displayed. Returns false here. */
+		virtual bool cursorAtNewRow();
 
 		/*! Invalidates data sources collected by this provided.
 		 \a invalidSources is the list of data sources that should 

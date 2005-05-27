@@ -213,6 +213,12 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		//! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
 		virtual void valueChanged(KexiDataItemInterface* item);
 
+		/*! Reimplemented from KexiFormDataProvider. 
+		 \return information whether we're currently at new row or now.
+		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
+		 label should be displayed. */
+		virtual bool cursorAtNewRow();
+
 		//! Implementation for KexiDataAwareObjectInterface
 		//! Called by KexiDataAwareObjectInterface::setCursorPosition() 
 		//! if cursor's position is really changed.

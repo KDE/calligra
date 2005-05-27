@@ -107,7 +107,7 @@ bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 	return n.lower()=="mysql";
 }
 
-bool MySqlDriver::isSystemFieldName( const QString&) const {
+bool MySqlDriver::drv_isSystemFieldName(const QString&) const {
 	return false;
 }
 

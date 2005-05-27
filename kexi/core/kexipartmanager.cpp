@@ -73,6 +73,8 @@ Manager::lookup()
 			continue;
 		if (!Kexi::tempShowReports() && mime=="kexi/report")
 			continue;
+		if (!Kexi::tempShowScripts() && mime=="kexi/script")
+			continue;
 //</TEMP>
 		int idx = sl_order.findIndex( ptr->library() );
 		if (idx!=-1)

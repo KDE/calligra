@@ -20,6 +20,7 @@
 #include "KexiStartupFileDialog.h"
 
 #include <kexidb/driver.h>
+#include <core/kexi.h>
 
 #include <qlayout.h>
 #include <qobjectlist.h>
@@ -79,7 +80,8 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 
 }
 	
-void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
+void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode, 
+	const QStringList &additionalMimeTypes)
 {
 	m_mode = mode;
 	clearFilter();
@@ -92,7 +94,9 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 		|| m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
 		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 		if (mime) {
-			filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("+mime->patterns().join(" ")+")\n";
+			filter += fileDialogFilterString(mime);
+//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
+//					+ " ("+mime->patterns().join(" ")+")\n";
 			allfilters += mime->patterns().join(" ");
 		}
 	}
@@ -101,15 +105,26 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 		|| m_mode == KexiStartupFileDialog::SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
 		if (mime) {
-			filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("+mime->patterns().join(" ")+")\n";
-			allfilters += mime->patterns().join(" ");
+//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
+//				+ " ("+mime->patterns().join(" ")+")\n";
+			filter += fileDialogFilterString(mime);
+//			allfilters += mime->patterns().join(" ");
 		}
 	}
 #endif
-	mime = KMimeType::mimeType("all/allfiles");
-	if (mime) {
-		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) + "|" + mime->comment()+ " (*)\n";
+	foreach (QStringList::ConstIterator, it, additionalMimeTypes) {
+//		mime = KMimeType::mimeType(*it);
+//		filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("
+//			+ mime->patterns().join(" ")+")\n";
+		filter += fileDialogFilterString(*it);
 	}
+
+	filter += fileDialogFilterString("all/allfiles");
+//	mime = KMimeType::mimeType("all/allfiles");
+//	if (mime) {
+//		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) 
+//			+ "|" + mime->comment()+ " (*)\n";
+//	}
 	
 	if (allfilters.count()>1) {//prepend "all supoported files" entry
 		filter = allfilters.join(" ")+"|" + i18n("All Kexi Files")+" ("+allfilters.join(" ")+")\n" + filter;
@@ -198,17 +213,19 @@ bool KexiStartupFileDialog::checkFileName()
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
 			if ( !fi.exists() ) {
-				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" doesn't exist." ).arg( path ) );
+				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" doesn't exist." )
+					.arg( QDir::convertSeparators(path) ) );
 				return false;
 			}
 			else if ((mode() & KFile::File) && (!fi.isFile() || !fi.isReadable())) {
-				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable." ).arg( path ) );
+				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable." )
+					.arg( QDir::convertSeparators(path) ) );
 				return false;
 			}
 		}
 		else if (m_confirmOverwrites && fi.exists()) {
 			if (KMessageBox::Yes!=KMessageBox::warningYesNo( this, i18n( "The file \"%1\" already exists.\n"
-			"Do you want to overwrite it?").arg( path ) )) {
+			"Do you want to overwrite it?").arg( QDir::convertSeparators(path) ) )) {
 				return false;
 			}
 		}

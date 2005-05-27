@@ -20,8 +20,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiscriptview.h"
+#include "kexiscriptdesignview.h"
 #include "kexiscripteditor.h"
+#include "kexiscriptmanager.h"
 
 #include <qlayout.h>
 #include <qdom.h>
@@ -30,32 +31,32 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
-KexiScriptView::KexiScriptView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiScriptDesignView::KexiScriptDesignView(KexiScriptManager* manager, KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiViewBase(mainWin, parent, name)
+    , m_manager(manager)
 {
-    QBoxLayout *layout = new QVBoxLayout(this);
+    m_scriptcontainer = m_manager->getScriptContainer( parentDialog()->partItem()->name() );
+    plugSharedAction( "script_execute", m_scriptcontainer, SLOT(execute()) );
 
+    QBoxLayout* layout = new QVBoxLayout(this);
     m_editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
-    addChildView((KexiViewBase *)m_editor);
-    setViewWidget((KexiViewBase *)m_editor);
-
-    layout->addWidget((KexiViewBase *)m_editor);
-
-    plugSharedAction("script_execute", (KexiViewBase *)m_editor, SLOT(execute()) );
+    addChildView((KexiViewBase*)m_editor);
+    setViewWidget((KexiViewBase*)m_editor);
+    layout->addWidget((KexiViewBase*)m_editor);
 
     loadData();
-    m_editor->initialize();
+    m_editor->initialize(m_scriptcontainer);
 }
 
-KexiScriptView::~KexiScriptView()
+KexiScriptDesignView::~KexiScriptDesignView()
 {
 }
 
-bool KexiScriptView::loadData()
+bool KexiScriptDesignView::loadData()
 {
     QString data;
     if(! loadDataBlock(data)) {
-        kexipluginsdbg << "KexiScriptView::loadData(): no DataBlock" << endl;
+        kexipluginsdbg << "KexiScriptDesignView::loadData(): no DataBlock" << endl;
         return false;
     }
 
@@ -67,33 +68,34 @@ bool KexiScriptView::loadData()
     bool parsed = domdoc.setContent(data, false, &errMsg, &errLine, &errCol);
 
     if(! parsed) {
-        kdDebug() << "KexiScriptView::loadData() XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg << endl;
+        kdDebug() << "KexiScriptDesignView::loadData() XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg << endl;
         return false;
     }
 
     QDomElement scriptelem = domdoc.namedItem("script").toElement();
     if(scriptelem.isNull()) {
-        kexipluginsdbg << "KexiScriptView::loadData(): script domelement is null" << endl;
+        kexipluginsdbg << "KexiScriptDesignView::loadData(): script domelement is null" << endl;
         return false;
     }
 
-    m_editor->setLanguage( scriptelem.attribute("language") );
-    m_editor->setCode( scriptelem.text() );
+    m_scriptcontainer->setInterpreterName( scriptelem.attribute("language") );
+    m_scriptcontainer->setCode( scriptelem.text() );
+    //m_editor->initialize(m_scriptcontainer); //FIXME clear prev states...
 
     return true;
 }
 
-KexiDB::SchemaData* KexiScriptView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
     KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-    kexipluginsdbg << "KexiScriptView::storeNewData(): new id:" << s->id() << endl;
+    kexipluginsdbg << "KexiScriptDesignView::storeNewData(): new id:" << s->id() << endl;
 
     if(!s || cancel) {
         delete s;
         return 0;
     }
 
-    if(!storeData()) {
+    if(! storeData()) {
         //failure: remove object's schema data to avoid garbage
         KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
         conn->removeObject( s->id() );
@@ -104,21 +106,21 @@ KexiDB::SchemaData* KexiScriptView::storeNewData(const KexiDB::SchemaData& sdata
     return s;
 }
 
-tristate KexiScriptView::storeData()
+tristate KexiScriptDesignView::storeData()
 {
-    kexipluginsdbg << "KexiScriptView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+    kexipluginsdbg << "KexiScriptDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 
     QDomDocument domdoc("script");
     QDomElement scriptelem = domdoc.createElement("script");
     domdoc.appendChild(scriptelem);
 
-    scriptelem.setAttribute("language", m_editor->getLanguage());
+    scriptelem.setAttribute("language", m_scriptcontainer->getInterpreterName());
 
-    QDomText scriptcode = domdoc.createTextNode(m_editor->getCode());
+    QDomText scriptcode = domdoc.createTextNode(m_scriptcontainer->getCode());
     scriptelem.appendChild(scriptcode);
 
     return storeDataBlock( domdoc.toString() );
 }
 
-#include "kexiscriptview.moc"
+#include "kexiscriptdesignview.moc"
 

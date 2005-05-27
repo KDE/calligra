@@ -36,9 +36,14 @@ class KEXICORE_EXPORT KexiDataItemChangesListener
 		KexiDataItemChangesListener();
 		virtual ~KexiDataItemChangesListener();
 
-		//! Implement this to react for change of \a item.
-		//! Called by KexiDataItemInterface::valueChanged()
+		/*! Implement this to react for change of \a item.
+		 Called by KexiDataItemInterface::valueChanged() */
 		virtual void valueChanged(KexiDataItemInterface* item) = 0;
+
+		/*! Implement this to return information whether we're currently at new row or now.
+		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
+		 label should be displayed. */
+		virtual bool cursorAtNewRow() = 0;
 };
 
 //! An interface for declaring widgets to be data-aware.
@@ -168,6 +173,8 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! Call this in your implementation when value changes, 
 		//! so installed listener can react on this change.
 		void signalValueChanged();
+
+		inline bool cursorAtNewRow() { return m_listener ? m_listener->cursorAtNewRow() : false; }
 
 //moved to KexiFormDataItemInterface: QString m_dataSource;
 		KexiDataItemChangesListener* m_listener;

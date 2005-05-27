@@ -121,15 +121,30 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
-		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
-		 User is asked for name and caption, before saving.
-		 \return true on successul closing or false on saving error.
+		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
+		 user is asked for name and title, before saving (see getNewObjectInfo()).
+		 \return true on successul saving or false on error.
 		 If saving was cancelled by user, cancelled is returned.
 		 \a messageWhenAskingForName is a i18n'ed text that will be visible
 		 within name/caption dialog (see KexiNameDialog), which is popped
 		 up for never saved objects. */
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null );
+
+		/*! Displays a dialog for entering object's name and title. 
+		 Used on new object saving. 
+		 \return true on successul closing or cancelled on cancel returned.
+		 It's unlikely to have false returned here.
+		 \a messageWhenAskingForName is a i18n'ed text that will be visible
+		 within name/caption dialog (see KexiNameDialog).
+		 If \a allowOverwriting is true, user will be asked for existing 
+		 object's overwriting, else it will be impossible to enter 
+		 a name of exisiting object.
+		 You can check \a allowOverwriting after calling this method.
+		 If it's true, user agreed on overwriting, if it's false, user picked
+		 nonexisting name, so no overwrite will be needed. */
+		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part, 
+			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null );
 
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database
@@ -283,6 +298,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
 
+		void slotEditPasteSpecialDataTable();
 		void slotViewNavigator();
 		void slotViewPropertyEditor();
 		void slotViewDataMode();
@@ -302,6 +318,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectClose();
 		void slotProjectRelations();
 		void slotToolsProjectMigration();
+		void slotToolsProjectImportDataTable();
 		void slotQuit();
 		/// TMP: Display a dialog to download db examples from internet
 		void  slotGetNewStuff();

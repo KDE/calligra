@@ -35,9 +35,16 @@ namespace Kross { namespace Api {
     class ScriptContainerPrivate;
 
     /**
-     * The ScriptContainer class represents a single scriptfile.
+     * The ScriptContainer class is something like a single
+     * standalone scriptfile.
+     *
+     * Once you've such a ScriptContainer instance you're
+     * able to perform actions with it like to execute
+     * scripting code. The \a Manager takes care of
+     * handling the ScriptContainer instances application
+     * width.
      */
-    class /*KROSS_MAIN_EXPORT*/ ScriptContainer : public KShared
+    class ScriptContainer : public KShared
     {
             // We protected the constructor cause ScriptContainer
             // instances should be created only within the
@@ -48,6 +55,10 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * The constructor is protected cause only with the
+             * \a ScriptManager it's possible to access
+             * \a ScriptContainer instances.
              *
              * \param manager The \a Manager instance used to
              *       create this ScriptContainer.
@@ -70,7 +81,7 @@ namespace Kross { namespace Api {
             Manager* getManager();
 
             /**
-             * Return the name is ScriptContainer is reachable as.
+             * Return the name this ScriptContainer is reachable as.
              */
             const QString& getName();
 
@@ -85,7 +96,7 @@ namespace Kross { namespace Api {
             void setCode(const QString&);
 
             /**
-             * Return the name of the interpreter used
+             * \return the name of the interpreter used
              * on \a execute.
              */
             const QString& getInterpreterName();
@@ -146,7 +157,17 @@ namespace Kross { namespace Api {
             Kross::Api::Object* classInstance(const QString& name);
 
             /**
-             * Connect QObject signal with function.
+             * Connect QObject signal with function. If the signal
+             * got emitted the scriptfunction will be executed.
+             *
+             * \param sender The QObject that is the sender/emitter
+             *       of the signal.
+             * \param signal The SIGNAL to connect the scriptfunction
+             * \     with.
+             * \param function The name of the scriptfunction to
+             *       call if the signal got emitted.
+             * \return If connection was done successfully true else
+             *        false.
              */
             bool connect(QObject *sender, const QCString& signal, const QString& functionname);
 
@@ -155,7 +176,36 @@ namespace Kross { namespace Api {
              */
             bool disconnect(QObject *sender, const QCString& signal, const QString& functionname);
 
+            /**
+             * Connect script signal with QObject slot. Each
+             * ScriptContainer is able to emit signals too and
+             * with that function we're able to connect such
+             * signals with some external QObject slot.
+             *
+             * Default signals each ScriptContainer spends are;
+             * - stdout(const QString&)
+             *   For messages the script likes to send to stdout.
+             *   This is e.g. for the python-interpreter the
+             *   case if the script calls the python build-in
+             *   print function.
+             * - stderr(const QString&)
+             *   For messages the script likes to send to stderr.
+             *   This includes thrown exceptions.
+             *
+             * \param signal The Kross SIGNAL to connect with.
+             * \param receiver The QObject that should receive the signal.
+             * \param slot The SLOT of the receiver to connect the Kross
+             *       SIGNAL with.
+             */
+            bool connect(const QCString& signal, QObject *receiver, const QCString& slot);
+
+            /**
+             * Disconnect script signal from QObject slot.
+             */
+            bool disconnect(const QCString& signal, QObject *receiver, const QCString& slot);
+
         private:
+            /// Internaly used private d-pointer.
             ScriptContainerPrivate* d;
 
             /**

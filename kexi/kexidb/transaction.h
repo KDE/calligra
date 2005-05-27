@@ -126,9 +126,14 @@ class KEXI_DB_EXPORT TransactionGuard
 		/*! Constructor #2: Uses already started transaction. */
 		TransactionGuard( const Transaction& trans );
 
+		/*! Constructor #2: Uses already started transaction. */
+		TransactionGuard();
+
 		/*! Rollbacks not commited transaction. */
 		~TransactionGuard();
-	
+
+		void setTransaction( const Transaction& trans ) { m_trans = trans; }
+
 		/*! Comits the guarded transaction. 
 		 It is convenient shortcut to connection->commitTransaction(this->transaction()) */
 		bool commit();

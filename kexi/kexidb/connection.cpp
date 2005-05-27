@@ -56,6 +56,7 @@ class ConnectionPrivate
 		 , m_versionMinor(-1)
 		 , m_dont_remove_transactions(false)
 		 , m_skip_databaseExists_check_in_useDatabase(false)
+		 , m_default_trans_started_inside(false)
 		 , m_parser(0)
 		{
 			m_tableSchemaChangeListeners.setAutoDelete(true);
@@ -97,6 +98,16 @@ class ConnectionPrivate
 		//! used to avoid endless recursion between useDatabase() and databaseExists()
 		//! when useTemporaryDatabaseIfNeeded() works
 		bool m_skip_databaseExists_check_in_useDatabase : 1;
+
+		/*! Used when single transactions are only supported (Driver::SingleTransactions).
+		 True value means default transaction has been started inside connection object
+		 (by beginAutoCommitTransaction()), otherwise default transaction has been started outside
+		 of the object (e.g. before createTable()), so we shouldn't autocommit the transaction
+		 in commitAutoCommitTransaction(). Also, beginAutoCommitTransaction() doesn't restarts 
+		 transaction if m_default_trans_started_inside is false. Such behaviour allows user to
+		 execute a sequence of actions like CREATE TABLE...; INSERT DATA...; within a single transaction
+		 and commit it or rollback by hand. */
+		bool m_default_trans_started_inside : 1;
 
 	protected:
 		Parser *m_parser;
@@ -917,7 +928,7 @@ bool Connection::executeSQL( const QString& statement )
 }
 
 QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
-    int drvEscaping) const
+	bool alsoRetrieveROWID, int drvEscaping) const
 {
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
@@ -969,6 +980,15 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 //TODO: add option that allows to omit "AS" keyword
 			}
 		}
+	}
+	if (alsoRetrieveROWID) { //append rowid column
+		QString s;
+		if (!sql.isEmpty())
+			s = QString::fromLatin1(", ");
+		if (querySchema.masterTable())
+			s += (escapeIdentifier(querySchema.masterTable()->name())+".");
+		s += m_driver->beh->ROW_ID_FIELD_NAME;
+		sql += s;
 	}
 	sql.prepend("SELECT ");
 	TableSchema::List* tables = querySchema.tables();
@@ -1056,30 +1076,34 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 	return 0;
 }
 
-/*! TODO: ? This goes pear-shaped if the query doesn't manage to fill rdata[0]. */
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName, 
+	Q_ULLONG* ROWID)
 {
 	Q_ULLONG row_id = drv_lastInsertRowID();
-	if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE)
+	if (ROWID)
+		*ROWID = row_id;
+	if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE) {
 		return row_id;
+	}
 	RowData rdata;
 	if (row_id<=0 || !querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
 	 +"="+QString::number(row_id), rdata)) {
 		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || !querySingleRecord()" << endl;
-	 	return -1ULL;
+	 	return (Q_ULLONG)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
 }
 
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiDB::TableSchema& table)
+Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, 
+	const KexiDB::TableSchema& table, Q_ULLONG* ROWID)
 {
-	return lastInsertedAutoIncValue(aiFieldName,table.name());
+	return lastInsertedAutoIncValue(aiFieldName,table.name(), ROWID);
 }
 
 #define createTable_ERR \
 	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
-	  rollbackAutoCommitTransaction(trans); \
+	  rollbackAutoCommitTransaction(tg.transaction()); \
 	  setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); \
 	  return false; }
 
@@ -1098,16 +1122,19 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 
 	//check if there are any fields
 	if (tableSchema->fieldCount()<1) {
+		clearError();
 		setError(ERR_CANNOT_CREATE_EMPTY_OBJECT, i18n("Cannot create table without fields."));
 		return false;
 	}
 	if (m_driver->isSystemObjectName( tableSchema->name() )) {
+		clearError();
 		setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.")
 			.arg(tableSchema->name()));
 		return false;
 	}
 	Field *sys_field = findSystemFieldName(tableSchema);
 	if (sys_field) {
+		clearError();
 		setError(ERR_SYSTEM_NAME_RESERVED,
 			i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
 			.arg(sys_field->name()).arg(tableSchema->name()));
@@ -1124,6 +1151,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		existingTable = m_tables_byname[tableName];
 		if (existingTable) {
 			if (existingTable == tableSchema) {
+				clearError();
 				setError(ERR_OBJECT_EXISTS, i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
 				return false;
 			}
@@ -1137,6 +1165,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	}
 	else {
 		if (this->tableSchema( tableSchema->name() ) != 0) {
+			clearError();
 			setError(ERR_OBJECT_EXISTS, i18n("Table \"%1\" already exists.").arg(tableSchema->name()) );
 			return false;
 		}
@@ -1148,10 +1177,9 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (oldTable) {
 	}*/
 
-	Transaction trans;
-	if (!beginAutoCommitTransaction(trans))
+	TransactionGuard tg;
+	if (!beginAutoCommitTransaction(tg))
 		return false;
-	TransactionGuard tg(trans);
 
 	if (!drv_createTable(*tableSchema))
 		createTable_ERR;
@@ -1238,19 +1266,24 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		}
 	}*/
 
-	bool res = commitAutoCommitTransaction(trans);
+	bool res = commitAutoCommitTransaction(tg.transaction());
 
 	if (res) {
 		if (previousSchemaStillKept) {
 			//remove previous table schema
-			m_tables_byname.remove(existingTable->name().lower());
-			m_tables.remove(existingTable->id());
+			removeTableSchemaInternal(tableSchema);
 		}
 		//store one schema object locally:
 		m_tables.insert(tableSchema->id(), tableSchema);
 		m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
 	}
 	return res;
+}
+
+void Connection::removeTableSchemaInternal(TableSchema *tableSchema)
+{
+	m_tables_byname.remove(tableSchema->name());
+	m_tables.remove(tableSchema->id());
 }
 
 bool Connection::removeObject( uint objId )
@@ -1311,10 +1344,9 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 		return false;
 	}
 
-	Transaction trans;
-	if (!beginAutoCommitTransaction(trans))
+	TransactionGuard tg;
+	if (!beginAutoCommitTransaction(tg))
 		return false;
-	TransactionGuard tg(trans);
 
 	//for sanity we're checking if this table exists physically
 	if (drv_containsTable(tableSchema->name())) {
@@ -1333,10 +1365,9 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 
 	if (alsoRemoveSchema) {
 //! \todo js: update any structure (e.g. queries) that depend on this table!
-		m_tables_byname.remove(tableSchema->name().lower());
-		m_tables.remove(tableSchema->id());
+		removeTableSchemaInternal(tableSchema);
 	}
-	return commitAutoCommitTransaction(trans);
+	return commitAutoCommitTransaction(tg.transaction());
 }
 
 tristate Connection::dropTable( const QString& table )
@@ -1418,15 +1449,15 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 		return false;
 	}
 
-	Transaction trans;
-	//transaction could be already started (e.g. within KexiProject)
-	//--if that's true: do not touch it (especially important for single-transactional drivers)
-	const bool skipTransactions = d->m_default_trans.active();
-	if (skipTransactions)
-		trans = d->m_default_trans;
-	else if (!beginAutoCommitTransaction(trans))
+//moved to beginAutoCommitTransaction()	//transaction could be already started (e.g. within KexiProject)
+//	//--if that's true: do not touch it (especially important for single-transactional drivers)
+//	const bool skipTransactions = d->m_default_trans.active();
+	TransactionGuard tg;
+//moved to beginAutoCommitTransaction()	if (skipTransactions)
+//		trans = d->m_default_trans;
+//	else 
+	if (!beginAutoCommitTransaction(tg))
 		return false;
-	TransactionGuard tg(trans);
 
 	//1. drop the table
 	if (destTableExists && !drv_dropTable( newName ))
@@ -1474,11 +1505,11 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 	//restore old name: it will be changed in alterTableName()!
 	tableSchema.setName(oldTableName);
 
-	if (skipTransactions) {
-		tg.doNothing();
-		return true;
-	}
-	return commitAutoCommitTransaction(trans);
+//moved to commitAutoCommitTransaction()	if (skipTransactions) {
+//		tg.doNothing();
+//		return true;
+//	}
+	return commitAutoCommitTransaction(tg.transaction());
 }
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
@@ -1487,10 +1518,9 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 	if (!querySchema)
 		return false;
 
-	Transaction trans;
-	if (!beginAutoCommitTransaction(trans))
+	TransactionGuard tg;
+	if (!beginAutoCommitTransaction(tg))
 		return false;
-	TransactionGuard tg(trans);
 
 /*	TableSchema *ts = m_tables_byname["kexi__querydata"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
@@ -1513,7 +1543,7 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 	m_queries_byname.remove(querySchema->name().lower());
 	m_queries.remove(querySchema->id());
 
-	return commitAutoCommitTransaction(trans);
+	return commitAutoCommitTransaction(tg.transaction());
 }
 
 bool Connection::dropQuery( const QString& query )
@@ -1543,23 +1573,36 @@ bool Connection::drv_createTable( const QString& tableSchemaName )
 	return drv_createTable(*ts);
 }
 
-bool Connection::beginAutoCommitTransaction(Transaction &trans)
+bool Connection::beginAutoCommitTransaction(TransactionGuard &tg)
 {
-	if (m_driver->d->features & Driver::IgnoreTransactions)
+	if ((m_driver->d->features & Driver::IgnoreTransactions)
+		|| !m_autoCommit)
+	{
+		tg.setTransaction( Transaction() );
 		return true;
-	if (!m_autoCommit)
-		return true;
+	}
 
 	// commit current transaction (if present) for drivers
 	// that allow single transaction per connection
 	if (m_driver->d->features & Driver::SingleTransactions) {
-		if (!commitTransaction(d->m_default_trans, true))
-			return false; //we have a real error
+		if (d->m_default_trans_started_inside) //only commit internally started transaction
+			if (!commitTransaction(d->m_default_trans, true)) {
+				tg.setTransaction( Transaction() );
+				return false; //we have a real error
+			}
+
+		d->m_default_trans_started_inside = d->m_default_trans.isNull();
+		if (!d->m_default_trans_started_inside) {
+			tg.setTransaction( d->m_default_trans );
+			tg.doNothing();
+			return true; //reuse externally started transaction
+		}
 	}
 	else if (!(m_driver->d->features & Driver::MultipleTransactions)) {
+		tg.setTransaction( Transaction() );
 		return true; //no trans. supported at all - just return
 	}
-	trans=beginTransaction();
+	tg.setTransaction( beginTransaction() );
 	return !error();
 }
 
@@ -1569,6 +1612,10 @@ bool Connection::commitAutoCommitTransaction(const Transaction& trans)
 		return true;
 	if (trans.isNull() || !m_driver->transactionsSupported())
 		return true;
+	if (m_driver->d->features & Driver::SingleTransactions) {
+		if (!d->m_default_trans_started_inside) //only commit internally started transaction
+			return true; //give up
+	}
 	return commitTransaction(trans, true);
 }
 
@@ -1640,6 +1687,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 		if (!d->m_default_trans.active()) {
 			if (ignore_inactive)
 				return true;
+			clearError();
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
@@ -1673,6 +1721,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 		if (!d->m_default_trans.active()) {
 			if (ignore_inactive)
 				return true;
+			clearError();
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
@@ -2367,10 +2416,10 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 	m_availableDatabaseName = dbName;
 }
 
-bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
+bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID)
 {
 // Each SQL identifier needs to be escaped in the generated query.
-	query.debug();
+//	query.debug();
 
 	KexiDBDbg << "Connection::updateRow.." << endl;
 	clearError();
@@ -2386,8 +2435,8 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			i18n("Could not update row because there is no master table defined."));
 		return false;
 	}
-	IndexSchema *pkey = mt->primaryKey();
-	if (!pkey || pkey->fields()->isEmpty()) {
+	IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
+	if (!useROWID && !pkey) {
 		KexiDBWarn << " -- NO MASTER TABLE's PKEY!" << endl;
 		setError(ERR_UPDATE_NO_MASTER_TABLES_PKEY, 
 			i18n("Could not update row because master table has no primary key defined."));
@@ -2406,29 +2455,35 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
 			m_driver->valueToSQL(it.key()->field,it.data()));
 	}
-	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
-	KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
-	if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
-		KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
-		setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY, 
-			i18n("Could not update row because it does not contain entire master table's primary key."));
-		return false;
-	}
-	if (!pkey->fields()->isEmpty()) {
-		uint i=0;
-		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
-			if (!sqlwhere.isEmpty())
-				sqlwhere+=" AND ";
-			QVariant val = data[ pkeyFieldsOrder[i] ];
-			if (val.isNull() || !val.isValid()) {
-				setError(ERR_UPDATE_NULL_PKEY_FIELD, 
-					i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
-//js todo: pass the field's name somewhere!
-				return false;
-			}
-			sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
-				m_driver->valueToSQL( it.current(), val ) );
+	if (pkey) {
+		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
+			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+			setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY, 
+				i18n("Could not update row because it does not contain entire master table's primary key."));
+			return false;
 		}
+		if (!pkey->fields()->isEmpty()) {
+			uint i=0;
+			for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
+				if (!sqlwhere.isEmpty())
+					sqlwhere+=" AND ";
+				QVariant val = data[ pkeyFieldsOrder[i] ];
+				if (val.isNull() || !val.isValid()) {
+					setError(ERR_UPDATE_NULL_PKEY_FIELD, 
+						i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
+	//js todo: pass the field's name somewhere!
+					return false;
+				}
+				sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
+					m_driver->valueToSQL( it.current(), val ) );
+			}
+		}
+	}
+	else {//use ROWID
+		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "=" 
+			+ m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
 	}
 	m_sql += (sqlset + " WHERE " + sqlwhere);
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
@@ -2445,7 +2500,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	return true;
 }
 
-bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
+bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool getROWID)
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	KexiDBDbg << "Connection::updateRow.." << endl;
@@ -2462,8 +2517,8 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			i18n("Could not insert row because there is no master table defined."));
 		return false;
 	}
-	IndexSchema *pkey = mt->primaryKey();
-	if (!pkey || pkey->fields()->isEmpty())
+	IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
+	if (!getROWID && !pkey)
 		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
 	QString sqlcols, sqlvals;
@@ -2475,28 +2530,35 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 
 	if (buf.dbBuffer().isEmpty()) {
-		if (!pkey || pkey->fields()->isEmpty()) {
+		if (!getROWID && !pkey) {
 			KexiDBWarn << " -- WARNING: MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
 			setError(ERR_INSERT_NO_MASTER_TABLES_PKEY, 
 				i18n("Could not insert row because master table has no primary key defined."));
 			return false;
 		}
-		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
-		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
-		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
-			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
-			setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY, 
-				i18n("Could not insert row because it does not contain entire master table's primary key.")
-				.arg(query.name()));
-			return false;
+		if (pkey) {
+			QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
+				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY, 
+					i18n("Could not insert row because it does not contain entire master table's primary key.")
+					.arg(query.name()));
+				return false;
+			}
 		}
 		//at least one value is needed for VALUES section: find it and set to NULL:
 		Field *anyField = mt->anyNonPKField();
 		if (!anyField) {
-			//try to set NULL in pkey field (could not work for every SQL engine!)
-			anyField = pkey->fields()->first();
+			if (!pkey) {
+				KexiDBWarn << " -- WARNING: NO FILED AVAILABLE TO SET IT TO NULL" << endl;
+				return false;
+			}
+			else {
+				//try to set NULL in pkey field (could not work for every SQL engine!)
+				anyField = pkey->fields()->first();
+			}
 		}
-
 		sqlcols += escapeIdentifier(anyField->name());
 		sqlvals += m_driver->valueToSQL(anyField,QVariant()/*NULL*/);
 	}
@@ -2527,21 +2589,25 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 	//fetch autoincremented values
 	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
+	Q_ULLONG ROWID = 0;
 	if (pkey && !aif_list->isEmpty()) {
 		//! @todo now only if PKEY is present, this should also work when there's no PKEY 
 		QueryColumnInfo *id_fieldinfo = aif_list->first();
 //! @todo safe to cast it?
-		Q_ULLONG last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
+		Q_ULLONG last_id = lastInsertedAutoIncValue(
+			id_fieldinfo->field->name(), id_fieldinfo->field->table()->name(), &ROWID);
 		if (last_id<=0) {
 			//! @todo show error
 			return false;
 		}
 		RowData aif_data;
-		QString getAutoIncForInsertedValue =
-			QString("SELECT ") + query.autoIncrementSQLFieldsList(m_driver) + " FROM " +
-			escapeIdentifier(id_fieldinfo->field->table()->name()) + " WHERE " +
-			escapeIdentifier(id_fieldinfo->field->name()) + "=" +
-			QString::number(last_id);
+		QString getAutoIncForInsertedValue = QString::fromLatin1("SELECT ") 
+			+ query.autoIncrementSQLFieldsList(m_driver) 
+			+ QString::fromLatin1(" FROM ")
+			+ escapeIdentifier(id_fieldinfo->field->table()->name()) 
+			+ QString::fromLatin1(" WHERE ")
+			+ escapeIdentifier(id_fieldinfo->field->name()) + "="
+			+ QString::number(last_id);
 		if (!querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
 			//! @todo show error
 			return false;
@@ -2554,10 +2620,22 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			data[ fieldsOrder[ fi ] ] = aif_data[i];
 		}
 	}
+	else {
+		ROWID = drv_lastInsertRowID();
+		KexiDBDbg << "Connection::insertRow(): new ROWID == " << ROWID << endl;
+		if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE) {
+			KexiDBWarn << "Connection::insertRow(): m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE" << endl;
+			return false;
+		}
+	}
+	if (getROWID) {
+		KexiDBDbg << "Connection::insertRow(): new ROWID == " << ROWID << endl;
+		data[data.size()-1] = ROWID;
+	}
 	return true;
 }
 
-bool Connection::deleteRow(QuerySchema &query, RowData& data)
+bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	KexiDBWarn << "Connection::deleteRow.." << endl;
@@ -2570,10 +2648,10 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 			.arg(query.name()));
 		return false;
 	}
-	IndexSchema *pkey = mt->primaryKey();
+	IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
 
 //! @todo allow to delete from a table without pkey
-	if (!pkey || pkey->fields()->isEmpty()) {
+	if (!useROWID && !pkey) {
 		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
 		setError(ERR_DELETE_NO_MASTER_TABLES_PKEY, 
 			i18n("Could not delete row because there is no primary key for master table defined."));
@@ -2585,7 +2663,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 	QString sqlwhere;
 	sqlwhere.reserve(1024);
 
-//	if (!pkey->fields()->isEmpty()) {
+	if (pkey) {
 		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
@@ -2608,7 +2686,11 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 			sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
 				m_driver->valueToSQL( it.current(), val ) );
 		}
-//	}
+	}
+	else {//use ROWID
+		sqlwhere = ( escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "=" 
+			+ m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
+	}
 	m_sql += sqlwhere;
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
 

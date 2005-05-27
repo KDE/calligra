@@ -5,7 +5,7 @@ win32:DEFINES += MAKE_KEXIUUID_LIB
 
 include( $(KEXI)/common.pro )
 
-TARGET = kexiuuid$$KDEBUG
+TARGET = kexiuuid$$KDELIBDEBUG
 
 
 SOURCES = \

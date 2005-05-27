@@ -31,6 +31,7 @@
 #include "kexitableheader.h"
 
 #include <kexidb/roweditbuffer.h>
+#include <widget/utils/kexidisplayutils.h>
 
 #include <qevent.h>
 #include <qtimer.h>
@@ -209,9 +210,10 @@ class KexiTableViewPrivate
 	//! brushes, fonts
 //	QColor baseColor, textColor, altColor, grayColor;
 	QBrush diagonalGrayPattern;
-	QFont autonumberFont;
-	int autonumberTextWidth;
-	QPixmap autonumberIcon;
+///moved	QFont autonumberFont;
+//moved	int autonumberTextWidth;
+//moved	QPixmap autonumberIcon;
+	KexiDisplayUtils::DisplayParameters autonumberSignDisplayParameters;
 
 //moved	//! Actions pluged for this table view. \sa plugSharedAction()
 //moved	QAsciiDict<KAction> sharedActions;

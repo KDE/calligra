@@ -51,6 +51,7 @@
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
+#include <core/kexi.h>
 
 #define KEXI_NO_KexiDBInputWidget //temp. for 0.1
 
@@ -161,12 +162,14 @@ KexiSubForm::setFormName(const QString &name)
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
  , KexiFormDataItemInterface()
+ , m_autonumberDisplayParameters(0)
 {
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
+	delete m_autonumberDisplayParameters;
 }
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
@@ -180,7 +183,7 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (m_field->type()==KexiDB::Field::Boolean) {
+	if (m_field && m_field->type()==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
 		setText( add.toBool() ? "1" : "0" );
 	}
@@ -190,7 +193,6 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 		else
 			setText( m_origValue.toString() + add.toString() );
 	}
-
 }
 
 QVariant KexiDBLineEdit::value()
@@ -305,6 +307,37 @@ void KexiDBLineEdit::setField(KexiDB::Field* field)
 		setValidator( validator );
 	}
 
+	if (m_field->isAutoIncrement()) {
+		if (!m_autonumberDisplayParameters)
+			m_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
+		KexiDisplayUtils::initDisplayForAutonumberSign(*m_autonumberDisplayParameters, this);
+	}
+}
+
+void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
+{
+	KLineEdit::paintEvent( pe );
+	QPainter p(this);
+	if (m_field && m_field->isAutoIncrement() && m_autonumberDisplayParameters 
+		&& cursorAtNewRow() && text().isEmpty())
+	{
+		if (hasFocus()) {
+			p.setPen(blendColors(m_autonumberDisplayParameters->textColor, palette().active().base(), 1, 3));
+		}
+		int m = lineWidth()+midLineWidth();
+		KexiDisplayUtils::drawAutonumberSign(*m_autonumberDisplayParameters, &p, 
+			2+m+margin(), m, width()-m*2 -2-2, height()-m*2 -2, alignment(), hasFocus());
+	}
+}
+
+bool KexiDBLineEdit::event( QEvent * e )
+{
+	const bool ret = KLineEdit::event( e );
+	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
+		if (m_autonumberDisplayParameters && text().isEmpty())
+			repaint();
+	}
+	return ret;
 }
 
 //////////////////////////////////////////
@@ -328,18 +361,22 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setPixmap("form");
 	wView->setClassName("KexiDBForm");
 	wView->setName(i18n("Database Form"));
-	wView->setNamePrefix(i18n("DBForm"));
-	wView->setDescription(i18n("A db-aware form widget"));
+	wView->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "form"));
+	wView->setDescription(i18n("A data-aware form widget"));
 	addClass(wView);
 	
+#ifndef KEXI_NO_SUBFORM
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
-	wSubForm->setNamePrefix(i18n("SubForm"));
+	wSubForm->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
+#endif
 
 //	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
 	// inherited
@@ -350,20 +387,22 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLineEdit->addAlternateClassName("QLineEdit", true/*override*/);
 	wLineEdit->addAlternateClassName("KLineEdit", true/*override*/);
 	wLineEdit->setIncludeFileName("klineedit.h");
-	wLineEdit->setName(i18n("Line Edit"));
-	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
-	wLineEdit->setDescription(i18n("A widget to input text"));
+	wLineEdit->setName(i18n("Text Box"));
+	wLineEdit->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textBox"));
+	wLineEdit->setDescription(i18n("A widget for entering and displaying text"));
 	addClass(wLineEdit);
 
-	/* @todo allow to inherit from stdwidgets' KLineEdit */
-	KexiDataAwareWidgetInfo *wLabel = new KexiDataAwareWidgetInfo(this);
+	KexiDataAwareWidgetInfo *wLabel = new KexiDataAwareWidgetInfo(
+		this, "stdwidgets" /*we're inheriting to get i18n'd strings already translated there*/);
 	wLabel->setPixmap("label");
 	wLabel->setClassName("KexiLabel");
 	wLabel->addAlternateClassName("QLabel", true/*override*/);
 	wLabel->setIncludeFileName("qlabel.h");
-	wLabel->setName(i18n("Text Label"));
-	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
-	wLabel->setDescription(i18n("A widget to display text"));
+	wLabel->setName(i18n("Label"));
+	wLabel->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
+	wLabel->setDescription(i18n("A widget for displaying text"));
 	addClass(wLabel);
 
 #ifndef KEXI_NO_KexiDBInputWidget
@@ -387,11 +426,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(
 		this, "stdwidgets", "KPushButton");
 	wPushButton->addAlternateClassName("KexiPushButton");
+	wPushButton->setName(i18n("Command Button"));
+	wPushButton->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "button"));
+	wPushButton->setDescription(i18n("A command button to execute actions"));
 	addClass(wPushButton);
 
 	m_propDesc["dataSource"] = i18n("Data Source");
 	m_propDesc["formName"] = i18n("Form Name");
 	m_propDesc["onClickAction"] = i18n("On Click");
+	m_propDesc["autoTabStops"] = i18n("Auto Tab Stops");
+	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
 
 #ifdef KEXI_NO_UNFINISHED
 	//we don't want not-fully implemented/usable classes:
@@ -557,6 +602,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *,
 	}
 	else if(classname == "KexiDBLineEdit")
 		return property!="urlDropsEnabled"
+			&& property != "vAlign"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="inputMask"
 			&& property!="maxLength" //!< we may want to integrate this with db schema

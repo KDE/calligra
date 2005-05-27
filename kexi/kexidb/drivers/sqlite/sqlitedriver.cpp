@@ -108,7 +108,7 @@ bool SQLiteDriver::isSystemObjectName( const QString& n ) const
 	return Driver::isSystemObjectName(n) || n.lower().startsWith("sqlite_");
 }
 
-bool SQLiteDriver::isSystemFieldName( const QString& n ) const
+bool SQLiteDriver::drv_isSystemFieldName( const QString& n ) const
 {
 	return n.lower()=="_rowid_"
 		|| n.lower()=="rowid"

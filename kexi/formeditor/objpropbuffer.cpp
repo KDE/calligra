@@ -86,7 +86,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			KMessageBox::sorry( m_manager->activeForm()->widget(),
 				i18n("Could not rename widget. ")
 				+i18n("\"%1\" is not a valid name for a widget.\n").arg(value.toString())
-				+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
+				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
 			m_slotChangePropertyDisabled = true;
 			prop.resetValue();
 			m_slotChangePropertyDisabled = false;
@@ -96,7 +96,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 			KMessageBox::sorry( m_manager->activeForm()->widget(),
 				i18n("Could not rename widget. ")
 				+i18n("A widget with name \"%1\" already exists.\n").arg(value.toString())
-				+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
+				+i18n("It's name will be reverted to \"%1\"").arg(w->name()));
 			m_slotChangePropertyDisabled = true;
 			prop.resetValue();
 			m_slotChangePropertyDisabled = false;
@@ -272,15 +272,75 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 //! @todo perhaps a few of them shouldn't be translated within KFD mode, 
 //!       to be more Qt Designer friendly?
 		m_propDesc["name"] = i18n("Name");
+		m_propDesc["caption"] = i18n("Caption");
+		m_propDesc["text"] = i18n("Text");
 		m_propDesc["paletteBackgroundPixmap"] = i18n("Background Pixmap");
 		m_propDesc["enabled"] = i18n("Enabled");
 		m_propDesc["geometry"] = i18n("Geometry");
+		m_propDesc["sizePolicy"] = i18n("Size Policy");
+		m_propDesc["minimumSize"] = i18n("Minimum Size");
+		m_propDesc["maximumSize"] = i18n("Maximum Size");
 		m_propDesc["font"] = i18n("Font");
 		m_propDesc["cursor"] = i18n("Cursor");
-
+		m_propDesc["paletteForegroundColor"] = i18n("Foreground Color");
+		m_propDesc["paletteBackgroundColor"] = i18n("Background Color");
+		m_propDesc["focusPolicy"] = i18n("Focus Policy");
+		m_propDesc["margin"] = i18n("Margin");
+		m_propDesc["readOnly"] = i18n("Read Only");
+		//any QFrame
+		m_propDesc["frame"] = i18n("Frame");
+		m_propDesc["lineWidth"] = i18n("Frame Width");
+		m_propDesc["midLineWidth"] = i18n("Mid Frame Width");
+		m_propDesc["frameShape"] = i18n("Frame Shape");
+		m_propDesc["frameShadow"] = i18n("Frame Shadow");
+		//any QScrollbar
+		m_propDesc["vScrollBarMode"] = i18n("Vertical ScrollBar");
+		m_propDesc["hScrollBarMode"] = i18n("Horizontal ScrollBar");
+		
 		m_propValDesc["NoBackground"] = i18n("No Background");
 		m_propValDesc["PaletteForeground"] = i18n("Palette Foreground");
-		m_propValDesc["AutoText"] = i18n("Auto");
+		m_propValDesc["AutoText"] = i18n("for AutoText", "Auto");
+		
+		m_propValDesc["AlignAuto"] = i18n("for Align", "Auto");
+		m_propValDesc["AlignLeft"] = i18n("for Align", "Left");
+		m_propValDesc["AlignRight"] = i18n("for Align", "Right");
+		m_propValDesc["AlignHCenter"] = i18n("for Align", "Center");
+		m_propValDesc["AlignJustify"] = i18n("for Align", "Justify");
+		m_propValDesc["AlignVCenter"] = i18n("for Align", "Center");
+		m_propValDesc["AlignTop"] = i18n("for Align", "Top");
+		m_propValDesc["AlignBottom"] = i18n("for Align", "Bottom");
+
+		m_propValDesc["NoFrame"] = i18n("for Frame Shape", "No Frame");
+		m_propValDesc["Box"] = i18n("for Frame Shape", "Box");
+		m_propValDesc["Panel"] = i18n("for Frame Shape", "Panel");
+		m_propValDesc["WinPanel"] = i18n("for Frame Shape", "Windows Panel");
+		m_propValDesc["HLine"] = i18n("for Frame Shape", "Horiz. Line");
+		m_propValDesc["VLine"] = i18n("for Frame Shape", "Vertical Line");
+		m_propValDesc["StyledPanel"] = i18n("for Frame Shape", "Styled");
+		m_propValDesc["PopupPanel"] = i18n("for Frame Shape", "Popup");
+		m_propValDesc["MenuBarPanel"] = i18n("for Frame Shape", "Menu Bar");
+		m_propValDesc["ToolBarPanel"] = i18n("for Frame Shape", "Toolbar");
+		m_propValDesc["LineEditPanel"] = i18n("for Frame Shape", "Text Box");
+		m_propValDesc["TabWidgetPanel"] = i18n("for Frame Shape", "Tab Widget");
+		m_propValDesc["GroupBoxPanel"] = i18n("for Frame Shape", "Group Box");
+
+		m_propValDesc["Plain"] = i18n("for Frame Shadow", "Plain");
+		m_propValDesc["Raised"] = i18n("for Frame Shadow", "Raised");
+		m_propValDesc["Sunken"] = i18n("for Frame Shadow", "Sunken");
+		
+		m_propValDesc["NoFocus"] = i18n("for Focus", "No Focus");
+		m_propValDesc["TabFocus"] = i18n("for Focus", "Tab");
+		m_propValDesc["ClickFocus"] = i18n("for Focus", "Click");
+		m_propValDesc["StrongFocus"] = i18n("for Focus", "Tab/Click");
+		m_propValDesc["WheelFocus"] = i18n("for Focus", "Tab/Click/MouseWheel");
+	
+		m_propValDesc["Auto"] = i18n("Auto");
+		m_propValDesc["AlwaysOff"] = i18n("Always Off");
+		m_propValDesc["AlwaysOn"] = i18n("Always On");
+
+		//orientation
+		m_propValDesc["Horizontal"] = i18n("Horizontal");
+		m_propValDesc["Vertical"] = i18n("Vertical");
 	}
 
 	// We select parent TabWidget or WidgetStack instead of pages
@@ -597,6 +657,8 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 	delete enumKeys;
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(obj->name());
+	KexiProperty *newProp;
+	bool isTopLevel = m_manager->isTopLevel(obj);
 
 	if(!possibleValues.grep("AlignHCenter").empty())
 	{
@@ -613,8 +675,11 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignAuto";
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		add(new KexiProperty("hAlign", value,
+		add(newProp = new KexiProperty("hAlign", value,
 			new KexiProperty::ListData(list, descList(0, list)), i18n("Horizontal Alignment")));
+		if(!isPropertyVisible(newProp->name(), isTopLevel)) {
+			newProp->setVisible(false);
+		}
 		updateOldValue(tree, "hAlign");
 		list.clear();
 	}
@@ -630,15 +695,21 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(0, list)),
+		add(newProp = new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(0, list)),
 			i18n("Vertical Alignment")));
+		if(!isPropertyVisible(newProp->name(), isTopLevel)) {
+			newProp->setVisible(false);
+		}
 		updateOldValue(tree, "vAlign");
 	}
 
 	if(!possibleValues.grep("WordBreak").empty())
 	{
 		// Create the wordbreak property
-		add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
+		add(newProp = new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
+		if(!isPropertyVisible(newProp->name(), isTopLevel)) {
+			newProp->setVisible(false);
+		}
 		updateOldValue(tree, "wordbreak");
 	}
 }

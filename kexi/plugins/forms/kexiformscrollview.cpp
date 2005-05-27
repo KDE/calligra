@@ -214,7 +214,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
 			//new empty insert item
-			m_insertItem = new KexiTableItem(dataColumns());
+			m_insertItem = m_data->createItem(); //new KexiTableItem(dataColumns());
 //			updateContents();
 			if (m_verticalHeader)
 				m_verticalHeader->addLabel();
@@ -409,6 +409,11 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 		startEditCurrentCell();
 	}
 	fillDuplicatedDataItems(dynamic_cast<KexiFormDataItemInterface*>(item), item->value());
+}
+
+bool KexiFormScrollView::cursorAtNewRow()
+{
+	return isInsertingEnabled() && ( m_currentItem==m_insertItem || m_newRowEditing );
 }
 
 void KexiFormScrollView::initDataContents()

@@ -73,6 +73,7 @@ KexiInternalPartManager internalPartManager;
 KexiInternalPart::KexiInternalPart(QObject *parent, const char *name, const QStringList &)
  : QObject(parent, name)
  , m_uniqueDialog(true)
+ , m_cancelled(false)
 {
 }
 
@@ -89,16 +90,17 @@ KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const char* partName, 
- const char* widgetClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, QWidget *parent, const char *objName)
+	const char* widgetClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
+	QWidget *parent, const char *objName, const QVariant& arg)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part)
 		return 0; //fatal!
-	return part->createWidget(widgetClass, mainWin, parent, objName ? objName : partName);
+	return part->createWidget(widgetClass, mainWin, parent, objName ? objName : partName, arg);
 }
 
-KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(KexiMainWindow* mainWin, 
- const char *objName)
+KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(
+	KexiMainWindow* mainWin, const char *objName)
 {
 	if (m_uniqueDialog && !m_uniqueWidget.isNull())
 		return dynamic_cast<KexiDialogBase*>((QWidget*)m_uniqueWidget);
@@ -123,7 +125,8 @@ KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(KexiMainWindow* mainWin
 }
 
 //static
-KexiDialogBase* KexiInternalPart::createKexiDialogInstance(const char* partName, 
+KexiDialogBase* KexiInternalPart::createKexiDialogInstance(
+	const char* partName, 
 	KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
@@ -136,7 +139,8 @@ KexiDialogBase* KexiInternalPart::createKexiDialogInstance(const char* partName,
 
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const char* partName, 
-	const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
+	const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
+	const char *objName, const QVariant& arg)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
@@ -147,7 +151,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 	if (part->uniqueDialog() && !part->m_uniqueWidget.isNull())
 		w = part->m_uniqueWidget;
 	else
-		w = part->createWidget(dialogClass, mainWin, mainWin, objName ? objName : partName);
+		w = part->createWidget(dialogClass, mainWin, mainWin, objName ? objName : partName, arg);
 
 	if (dynamic_cast<QDialog*>(w)) {
 		if (part->uniqueDialog())

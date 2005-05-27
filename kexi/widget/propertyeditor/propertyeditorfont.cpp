@@ -66,7 +66,7 @@ void
 PropertyEditorFont::setValue(const QVariant &value)
 {
 	m_font = value.toFont();
-	m_label->setText( KexiProperty::format( m_font ) );
+	m_label->setText( m_property->format( m_font ) );
 	emit changed(this);
 }
 

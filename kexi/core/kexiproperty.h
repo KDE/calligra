@@ -73,6 +73,7 @@ class KEXICORE_EXPORT KexiProperty
 			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
 			 so the first key element is associated with first element from
 			 the 'names' list, and so on. */
+//! @todo change this to QValueList<QCString>
 			QStringList keys;
 
 			/*! The list of i18n'ed names that will be visible on the screen.
@@ -143,7 +144,7 @@ class KEXICORE_EXPORT KexiProperty
 		/*! \return property value converted to text that can be displayed.
 		 If this is a list property, name for currently selected key (value) is returned,
 		  otherwise value (converted to text) is just returned. */
-		QString valueText() const;
+		QString valueText();
 
 		/*! Sets this property value to a new value \a v. If this is a first change,
 		 and \a saveOldValue is true, an old value is saved, and can be later retrieved
@@ -225,7 +226,7 @@ class KEXICORE_EXPORT KexiProperty
 		/*! \return the value text useful for displaying.
 		 The value is formatted depending on its QVariant::Type.
 		*/
-		static QString format(const QVariant &v);
+		QString format(const QVariant &v);
 
 		inline KexiPropertyBuffer* buffer() { return m_buf; }
 

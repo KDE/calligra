@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qguardedptr.h>
+#include <qvariant.h>
 
 class KexiMainWindow;
 class KexiDialogBase;
@@ -61,13 +62,13 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 Created widget will have assigned \a parent widget and \a objName name. */
 		static QWidget* createWidgetInstance(const char* partName, const char* widgetClass, 
 			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			QWidget *parent, const char *objName = 0);
+			QWidget *parent, const char *objName = 0, const QVariant& arg = QVariant());
 
 		/*! For convenience. */
 		static QWidget* createWidgetInstance(const char* partName,
 			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			QWidget *parent, const char *objName = 0)
-		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName); }
+			QWidget *parent, const char *objName = 0, const QVariant& arg = QVariant())
+		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName, arg); }
 
 		/*! Creates a new dialog instance. If such instance already exists, 
 		 and is unique (see uniqueDialog()) it is just returned.
@@ -91,11 +92,12 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 and \a objName name is set. */
 		static QDialog* createModalDialogInstance(const char* partName, 
 			const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			const char *objName = 0);
+			const char *objName = 0, const QVariant& arg = QVariant());
 
 		static QDialog* createModalDialogInstance(const char* partName, 
-		 KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0)
-		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName); }
+			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0, 
+			const QVariant& arg = QVariant())
+		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName, arg); }
 
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
 		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
@@ -103,6 +105,10 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! \return true if the part can create only one (unique) dialog. */
 		inline bool uniqueDialog() const { return m_uniqueDialog; }
 
+		/*! \return true if the part creation has been cancelled (eg. by a user)
+		 so it wasn't an error. Internal part's impelmentation should set it to true when needed. 
+		 False by default. */
+		inline bool cancelled() const { return m_cancelled; }
 		
 	protected:
 		/*! Used internally */
@@ -112,7 +118,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
-		 QWidget * /*parent*/, const char * /*objName*/ =0) { return 0; }
+		 QWidget * /*parent*/, const char * /*objName*/ =0, const QVariant& arg = QVariant()) { return 0; }
 		
 //		//! Reimplement this if your internal part has to return dialogs
 //		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 
@@ -126,6 +132,8 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		QGuardedPtr<QWidget> m_uniqueWidget; 
 		
 		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
+
+		bool m_cancelled : 1;
 	
 	//friend class KexiInternalPart;
 };

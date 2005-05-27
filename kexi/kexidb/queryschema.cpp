@@ -162,7 +162,7 @@ class QuerySchemaPrivate
 					//missing
 					for (;;) { //find 1st unused
 						colNum++;
-						columnAlias = (i18n("short for expression (only latin letters, please)", "expr") 
+						columnAlias = (i18n("short for 'expression' word (only latin letters, please)", "expr") 
 							+ QString::number(colNum)).latin1();
 						if (!tablePositionsForAliases[columnAlias])
 							break;
@@ -867,7 +867,6 @@ void QuerySchema::computeFieldsExpanded()
 			if (!d->columnInfosByName[ it.current()->field->name() ])
 				d->columnInfosByName.insert( it.current()->field->name(), it.current() );
 			QString tableAndName( it.current()->field->table()->name() + "." + it.current()->field->name() );
-			if (!d->columnInfosByName[ tableAndName ])
 			if (!d->columnInfosByName[ tableAndName ])
 				d->columnInfosByName.insert( tableAndName, it.current() );
 		}

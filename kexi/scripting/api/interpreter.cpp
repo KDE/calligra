@@ -32,6 +32,28 @@ Interpreter::Interpreter(Manager* manager, const QString& interpretername)
 
 Interpreter::~Interpreter()
 {
+    for(Option::Map::Iterator it = m_options.begin(); it != m_options.end(); ++it)
+        delete it.data();
+}
+
+const QVariant& Interpreter::getOption(const QString name, const QVariant& defaultvalue)
+{
+    Option* opt = m_options[name];
+    return opt ? opt->m_value : defaultvalue;
+}
+
+Interpreter::Option::Map Interpreter::getOptions()
+{
+    return m_options;
+}
+
+bool Interpreter::setOption(const QString name, const QVariant& value)
+{
+    Option* opt = m_options[name];
+    if(! opt)
+        return false;
+    opt->m_value = value;
+    return true;
 }
 
 const QString& Interpreter::getInterpretername()

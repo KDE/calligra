@@ -1,32 +1,3 @@
-PYTHON_INCLUDE=""
-PYTHON_LIB=""
-PYTHON_FLAGS=""
-
-for pyver in python python2.4 python2.3 python2.2 python2.1 python2.0
-do
-    for incdir in "/usr/include/$pyver" \
-                  "/usr/local/include/$pyver" \
-                  "/usr/$pyver/include" \
-                  "/usr/local/$pyver/include" \
-                  "$prefix/include/$pyver" \
-                  "$prefix/$pyver/include"
-    do
-        if test -f "$incdir/Python.h"
-        then
-            PYTHON_LIB="-l$pyver"
-            PYTHON_INCLUDE="-I$incdir"
-            #PYTHON_LIB="-l$pylib"
-            #PYTHON_FLAGS="-L$pylibdir"
-            break
-        fi
-    done
-    if test "$PYTHON_LIB" != ""; then break; fi
-done
-
-AC_SUBST(PYTHON_INCLUDE)
-AC_SUBST(PYTHON_LIB)
-AC_SUBST(PYTHON_FLAGS)
-
 AC_ARG_ENABLE(scripting,
     AC_HELP_STRING([--enable-scripting],
                    [build Kross scripting support [default=no]]),

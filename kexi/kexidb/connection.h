@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -571,12 +571,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 field's value. Requirements: field must be of integer type, there must be a
 		 record inserted in current database session (whatever this means).
 		 On error -1ULL is returned.
+		 Last inserted record is identified by magical row identifier, usually called 
+		 ROWID (PostgreSQL has it as well as SQLite; 
+		 see DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE). 
+		 ROWID's value will be assigned back to \a ROWID if this pointer is not null.
 		*/
-		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName);
+		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName, 
+			Q_ULLONG* ROWID = 0);
 		
-		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&)
+		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&, Q_ULLONG*)
 		*/
-		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table);
+		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table, Q_ULLONG* ROWID = 0);
 
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 
@@ -589,7 +594,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
+		inline QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
+		{
+			return selectStatement(querySchema, false, idEscaping);
+		}
 
 		/*! \return sql string of actually executed SQL statement,
 		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
@@ -665,6 +673,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			tableSchemaChangeListeners(TableSchema& tableSchema) const;
 
 		tristate closeAllTableSchemaChangeListeners(TableSchema& tableSchema);
+
+		/*! @internal Removes \a tableSchema from internal structures and 
+		 destroys it. Does not make any change at the backend. */
+		void removeTableSchemaInternal(KexiDB::TableSchema *tableSchema);
 
 	protected:
 		/*! Used by Driver */
@@ -778,6 +790,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		QString selectStatement( TableSchema& tableSchema ) const;
 
+		/*! Like selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
+		 but also retrieves ROWID information, if \a alsoRetrieveROWID is true.
+		 Used by cursors. */
+		QString selectStatement( QuerySchema& querySchema, bool alsoRetrieveROWID, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
+
 		/*! Creates table using \a tableSchema information.
 		 \return true on success. Default implementation 
 		 builds a statement using createTableStatement() and calls drv_executeSQL()
@@ -872,20 +889,29 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Internal, for handling autocommited transactions:
 		 begins transaction is one is supported.
-		 If driver only supports single transaction,
-		 and there is already transaction started, it is commited before
-		 starting a new one. \return true if new transaction started
+		 \return true if new transaction started
 		 successfully or no transactions are supported at all by the driver
 		 or if autocommit option is turned off.
-		 Newly created transaction (or null on error)
-		 is passed to \a trans parameter.
+		 A handle to a newly created transaction (or null on error) is passed 
+		 to \a tg parameter.
+
+		 Special case when used database driver has only single transaction support 
+		 (Driver::SingleTransactions): 
+		 and there is already transaction started, it is commited before
+		 starting a new one, but only if this transaction has been started inside Connection object.
+		 (i.e. by beginAutoCommitTransaction()). Otherwise, a new transaction will not be started, 
+		 but true will be returned immediately.
 		*/
-		bool beginAutoCommitTransaction(Transaction& trans);
+		bool beginAutoCommitTransaction(TransactionGuard& tg);
 		
 		/*! Internal, for handling autocommited transactions:
 		 Commits transaction prevoiusly started with beginAutoCommitTransaction().
 		 \return true on success or when no transactions are supported 
 		 at all by the driver.
+
+		 Special case when used database driver has only single transaction support 
+		 (Driver::SingleTransactions): if \a trans has been started outside Connection object 
+		 (i.e. not by beginAutoCommitTransaction()), the transaction will not be commited.
 		*/
 		bool commitAutoCommitTransaction(const Transaction& trans);
 		
@@ -893,6 +919,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Rollbacks transaction prevoiusly started with beginAutoCommitTransaction().
 		 \return true on success or when no transactions are supported 
 		 at all by the driver.
+
+		 Special case when used database driver has only single transaction support 
+		 (Driver::SingleTransactions): \a trans will not be rolled back 
+		 if it has been started outside this Connection object.
 		*/
 		bool rollbackAutoCommitTransaction(const Transaction& trans);
 
@@ -923,11 +953,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Used internally by querySchema() methods. */
 		QuerySchema* setupQuerySchema( const RowData &data );
 
-		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
+		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID = false);
 
-		bool insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
+		bool insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool getROWID = false);
 
-		bool deleteRow(QuerySchema &query, RowData& data);
+		bool deleteRow(QuerySchema &query, RowData& data, bool useROWID = false);
 
 		bool deleteAllRows(QuerySchema &query);
 

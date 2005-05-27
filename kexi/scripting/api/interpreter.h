@@ -62,6 +62,46 @@ namespace Kross { namespace Api {
             virtual ~Interpreter();
 
             /**
+             * Each interpreter is able to define options we could
+             * use to manipulate the interpreter behaviour.
+             */
+            class Option
+            {
+                public:
+                    /// Map of options.
+                    typedef QMap<QString, Option*> Map;
+                    /// Constructor.
+                    Option(const QString& name, const QString& comment, const QVariant& value)
+                        : m_comment(comment), m_name(name), m_value(value) {}
+                    /// The short name of the option.
+                    QString m_name;
+                    /// A description of the option.
+                    QString m_comment;
+                    /// The value the option has.
+                    QVariant m_value;
+            };
+
+            /**
+             * Return the value of the \a Restriction instance
+             * defined with name. If there doesn't exists
+             * a Restriction which such a name, the defaultvalue
+             * is returned.
+             */
+            const QVariant& getOption(const QString name, const QVariant& defaultvalue = QVariant());
+
+            /**
+             * Return a \a RestrictionMap of \a Restriction avaible
+             * instances.
+             */
+            Option::Map getOptions();
+
+            /**
+             * Set if the scripting code should be executed in a
+             * secure environment.
+             */
+            bool setOption(const QString name, const QVariant& value);
+
+            /**
              * Return the name of the interpreter.
              *
              * \return Name of the interpreter, for
@@ -94,6 +134,8 @@ namespace Kross { namespace Api {
             QString m_interpretername;
             /// List of mimetypes this interpreter supports.
             QStringList m_mimetypes;
+            /// Map of \a Option instances. Interpreter-implementations use them.
+            Option::Map m_options;
     };
 
 }}

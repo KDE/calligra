@@ -56,14 +56,14 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 	l->addLayout(vbox, 0, 1);
 	QToolButton *up = new QToolButton(frame);
 	up->setIconSet(BarIconSet("1uparrow"));
-	up->setTextLabel(i18n("Move Widget &Up"), true);
+	up->setTextLabel(i18n("Move Widget Up"), true);
 	m_buttons.insert(BUp, up);
 	vbox->addWidget(up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
 	QToolButton *down = new QToolButton(frame);
 	down->setIconSet(BarIconSet("1downarrow"));
-	down->setTextLabel(i18n("Move Widget &Down"), true);
+	down->setTextLabel(i18n("Move Widget Down"), true);
 	vbox->addWidget(down);
 	m_buttons.insert(BDown, down);
 	connect(down, SIGNAL(clicked()), this, SLOT(MoveItemDown()));

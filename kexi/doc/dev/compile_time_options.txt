@@ -39,6 +39,10 @@ not loaded even if is compiled.
 Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
 Default: undefined
 
+* KEXI_SCRIPTS_SUPPORT
+Like KEXI_FORMS_SUPPORT macro, but for enabling scripts plugin.
+Default: undefined
+
 * KEXI_SERVER_SUPPORT
 Type: defined/undefined
 Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined

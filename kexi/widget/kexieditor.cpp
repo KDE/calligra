@@ -124,16 +124,9 @@ KexiEditor::KexiEditor( KexiMainWindow *mainWin, QWidget *parent, const char *na
 		return;
 	d->view = d->doc->createView(fr, 0L);
 //	setFocusProxy(d->view);
-
 //	f->resetContainer("codefolding");
-	plugSharedActionToExternalGUI("edit_cut", d->view);
-	plugSharedActionToExternalGUI("edit_copy", d->view);
-	plugSharedActionToExternalGUI("edit_paste", d->view);
 
-	plugSharedActionToExternalGUI("edit_undo", d->view);
-	plugSharedActionToExternalGUI("edit_redo", d->view);
-
-        plugSharedActionToExternalGUI("edit_select_all", d->view);
+        KTextEditor_View_KexiSharedActionConnector c(this, d->view);
 
 	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( docView() );
         if(popupInt) {
@@ -238,7 +231,7 @@ KexiEditor::text()
 	if (!d->doc)
 		return QString::null;
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
-	kdDebug() << "KexiEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
+	//kdDebug() << "KexiEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
 	return eIface->text();
 }
 

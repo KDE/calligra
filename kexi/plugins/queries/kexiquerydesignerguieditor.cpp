@@ -206,8 +206,8 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 	d->data->deleteAllRows();
 	const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->buffers->size(); i++) {
-		KexiTableItem *item = new KexiTableItem(columns);
-		d->data->append(item);
+//		KexiTableItem *item = new KexiTableItem(columns);
+		d->data->append(d->data->createItem());
 	}
 	d->dataTable->dataAwareObject()->setData(d->data);
 
@@ -245,7 +245,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	d->fieldColumnData->deleteAllRows();
 	d->fieldColumnIdentifiers.clear();
 
-	KexiTableItem *item = new KexiTableItem(2);
+	KexiTableItem *item = d->fieldColumnData->createItem(); //new KexiTableItem(2);
 	(*item)[0]="*";
 	(*item)[1]="*";
 	d->fieldColumnData->append( item );
@@ -259,18 +259,18 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 		//table
 		KexiDB::TableSchema *table = d->relations->tables()->find(*it)->table();
 		d->conn->registerForTableSchemaChanges(*tempData(), *table); //this table will be used
-		item = new KexiTableItem(2);
+		item = d->tablesColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0]=table->name();
 		(*item)[1]=(*item)[0];
 		d->tablesColumnData->append( item );
 		//fields
-		item = new KexiTableItem(2);
+		item = d->fieldColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0]=table->name()+".*";
 		(*item)[1]=(*item)[0];
 		d->fieldColumnData->append( item );
 		d->fieldColumnIdentifiers.insert((*item)[0].toString(), (char*)1); //cache
 		for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
-			item = new KexiTableItem(2);
+			item = d->fieldColumnData->createItem(); // new KexiTableItem(2);
 			(*item)[0]=table->name()+"."+t_it.current()->name();
 			(*item)[1]=QString("  ") + t_it.current()->name();
 			d->fieldColumnData->append( item );
@@ -289,13 +289,11 @@ void
 KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 {
 	kexipluginsdbg << "KexiQueryDesignerGuiEditor::addRow(" << tbl << ", " << field << ")" << endl;
-	KexiTableItem *item = new KexiTableItem(0);
-
-//	 = QVariant(tbl);
-	item->push_back(QVariant(tbl));
-	item->push_back(QVariant(field));
-	item->push_back(QVariant(true));
-	item->push_back(QVariant());
+	KexiTableItem *item = d->data->createItem(); //new KexiTableItem(0);
+	(*item)[0] = tbl;
+	(*item)[1] = field;
+	(*item)[2] = QVariant(true, 1);
+//null	(*item)[3] = 
 	d->data->append(item);
 
 	//TODO: this should deffinitly not go here :)
@@ -807,7 +805,7 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 KexiTableItem* 
 KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
 {
-	KexiTableItem *newItem = new KexiTableItem(d->data->columnsCount());
+	KexiTableItem *newItem = d->data->createItem(); //new KexiTableItem(d->data->columnsCount());
 	QString key;
 //	if (!alias.isEmpty())
 //		key=alias+": ";
@@ -878,7 +876,7 @@ void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 QCString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 {
 //TODO: add option for using non-i18n'd "expr" prefix?
-	const QCString expStr = i18n("short for expression (only latin letters, please)", "expr").latin1();
+	const QCString expStr = i18n("short for 'expression' word (only latin letters, please)", "expr").latin1();
 //TODO: optimization: cache it?
 	QAsciiDict<char> aliases(101);
 	for (int r = 0; r<(int)d->buffers->size(); r++) {

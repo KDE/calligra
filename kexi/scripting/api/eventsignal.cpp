@@ -36,3 +36,8 @@ EventSignal::EventSignal(EventManager* eventmanager)
     , m_eventmanager(eventmanager)
 {
 }
+
+EventSignal::~EventSignal()
+{
+}
+

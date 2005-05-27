@@ -138,6 +138,11 @@ void KexiFormDataProvider::valueChanged(KexiDataItemInterface* item)
 {
 }
 
+bool KexiFormDataProvider::cursorAtNewRow()
+{
+	return false;
+}
+
 void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invalidSources,
  KexiDB::QuerySchema* query)
 {

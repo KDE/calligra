@@ -68,6 +68,7 @@
 #include "kexibooltableedit.h"
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
+#include <widget/utils/kexidisplayutils.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
  : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )
@@ -735,12 +736,14 @@ void KexiTableView::updateFonts(bool repaint)
 //	setMargins(14, d->rowHeight, 0, 0);
 	m_verticalHeader->setCellHeight(d->rowHeight);
 
-	QFont f = font();
-	f.setItalic(true);
-	d->autonumberFont = f;
+//moved	QFont f = font();
+//moved	f.setItalic(true);
+//moved	d->autonumberFont = f;
+	
+	KexiDisplayUtils::initDisplayForAutonumberSign(d->autonumberSignDisplayParameters, this);
 
-	QFontMetrics fm(d->autonumberFont);
-	d->autonumberTextWidth = fm.width(i18n("(autonumber)"));
+//moved	QFontMetrics fm(d->autonumberFont);
+//moved	d->autonumberTextWidth = fm.width(i18n("(autonumber)"));
 
 	if (repaint)
 		updateContents();
@@ -1750,32 +1753,35 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			p->drawRect(0, 0, x2, y2);
 	}
 
-	bool autonumber = false;
+///	bool autonumber = false;
 	if ((!m_newRowEditing &&item == m_insertItem) 
 		|| (m_newRowEditing && item == m_currentItem && cell_value.isNull())) {
 		//we're in "insert row"
 		if (m_data->column(col)->field()->isAutoIncrement()) {
 			//"autonumber" column
-			txt = i18n("(autonumber)");
-			autonumber = true;
+//			txt = i18n("(autonumber)");
+//			autonumber = true;
+//		if (autonumber) {
+//moved			p->setPen(blue);
+//moved			p->setFont(d->autonumberFont);
+//moved			p->drawPixmap( w - x - x - 9 - d->autonumberTextWidth - d->autonumberIcon.width(),
+//moved				(h-d->autonumberIcon.height())/2, d->autonumberIcon );
+			KexiDisplayUtils::drawAutonumberSign(d->autonumberSignDisplayParameters, p, 
+				x, y_offset, w - x - x - ((align & Qt::AlignLeft)?2:0), h, align);
+//		}
 		}
 	}
 
 	// draw text
 	if (!txt.isEmpty()) {
-		if (autonumber) {
-			p->setPen(blue);
-			p->setFont(d->autonumberFont);
-			p->drawPixmap( w - x - x - 9 - d->autonumberTextWidth - d->autonumberIcon.width(),
-				(h-d->autonumberIcon.height())/2, d->autonumberIcon );
-		}
-		else if (m_currentItem == item && col == m_curCol && !columnReadOnly)
+		if (m_currentItem == item && col == m_curCol && !columnReadOnly)
 			p->setPen(colorGroup().highlightedText());
 		else if (d->appearance.rowHighlightingEnabled && row == d->highlightedRow)
 			p->setPen(d->appearance.rowHighlightingTextColor);
 		else
 			p->setPen(d->appearance.textColor);
-		p->drawText(x, y_offset, w - (x + x)- ((align & AlignLeft)?2:0)/*right space*/, h, align, txt);
+		p->drawText(x, y_offset, w - (x + x)- ((align & AlignLeft)?2:0)/*right space*/, h,
+			align, txt);
 	}
 	p->restore();
 }
@@ -2623,8 +2629,8 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			m_newRowEditing = true;
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
-			//new empty insert item
-			m_insertItem = new KexiTableItem(dataColumns());
+			//new empty 'inserting' item
+			m_insertItem = m_data->createItem(); //new KexiTableItem(dataColumns());
 //			updateContents();
 			m_verticalHeader->addLabel();
 			m_verticalHeaderAlreadyAdded = true;

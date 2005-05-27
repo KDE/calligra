@@ -38,11 +38,14 @@ namespace Kross { namespace Python {
     class PythonInterpreter;
 
     /**
-     * The PythonModuleManager is the common python object to
-     * access all the functionality Kross spends from within
-     * python.
+     * The PythonModule is the __main__ python environment
+     * used as global object namespace.
+     *
+     * The module also spends access to the whole Kross
+     * functionality and manages all the PythonExtension
+     * modules.
      */
-    class PythonModuleManager : public Py::ExtensionModule<PythonModuleManager>
+    class PythonModule : public Py::ExtensionModule<PythonModule>
     {
         public:
 
@@ -50,14 +53,18 @@ namespace Kross { namespace Python {
              * Constructor.
              *
              * \param interpreter The \a PythonInterpreter instance
-             *        used to create this PythonModuleManager.
+             *        used to create this PythonModule.
              */
-            PythonModuleManager(PythonInterpreter* interpreter);
+            PythonModule(PythonInterpreter* interpreter);
 
             /**
              * Destructor.
              */
-            virtual ~PythonModuleManager();
+            virtual ~PythonModule();
+
+            Py::Dict getDict() {
+                return moduleDictionary();
+            }
 
         private:
             PythonInterpreter* m_interpreter;

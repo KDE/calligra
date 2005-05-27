@@ -1,5 +1,5 @@
 /***************************************************************************
- * config.h.h
+ * krossconfig.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -21,16 +21,25 @@
 #define KROSS_MAIN_KROSSCONFIG_H
 
 /**
- * The Kross scripting bridge.
+ * The Kross scripting bridge to embed scripting functionality
+ * into an application.
  *
- * Kross is the name of the scripting layer used as bridge
- * between scripting backends like \a Kross::Python and
- * so called functionality wrappers like \a Kross::KexiDB.
- *
- * Kross was mainly developed for usage within Kexi to
- * spend a flexible scripting system without restrictions
- * on the used scripting language, performance or
- * flexibility.
+ * - abstract API to access the scripting functionality.
+ * - interpreter independend to be able to decide on runtime
+ *   if we like to use the python, kjs (KDE JavaScript) or
+ *   whatever scripting interpreter.
+ * - flexibility by beeing able to connect different
+ *   scripting interpreters together into something like
+ *   a "working chain" (e.g. python-script script1 spends
+ *   some functionality the kjs-script script2 likes to
+ *   use.
+ * - transparently bridge functionality wrappers like
+ *   \a Kross::KexiDB together with interpreters like \a Kross::Python.
+ * - Introspection where needed to be able to manipulate
+ *   behaviours and functionality on runtime.
+ * - Qt/KDE based, so use the extended techs both spends.
+ * - integrate nicly as powerfull scripting system into the
+ *   Kexi application.
  *
  * \author Sebastian Sauer
  * \sa http://www.koffice.org/kexi
@@ -39,11 +48,15 @@
 namespace Kross {
 
     /**
-     * The Kross-Api. Used to have a common api for all supported
-     * scripting languages. It's designed as proxy for every kind
-     * of interaction and spends us the base communication bridge
-     * between wrappers like \a Kross::KexiDB and interpreters
-     * like \a Kross::Python.
+     * The common Kross API used as common codebase.
+     *
+     * The API spends \a Kross::Api::Object and more specialized
+     * classes to bridge other Kross parts together. Interaction
+     * between objects got wrapped at runtime and introspection-
+     * functionality enables dynamic manipulations.
+     * The proxy functionality prevents cross-dependencies
+     * between Kross parts like the \a Kross::Python implementation
+     * and the \a Kross::KexiDB wrapper.
      *
      * \author Sebastian Sauer
      */
@@ -97,6 +110,13 @@ namespace Kross {
 
         // Enable kdDebug()-debugging for Kross::Python::PythonExtension
         //#define KROSS_PYTHON_EXTENSION_DEBUG
+
+        // The name of the global krosspyhon library. Loaded dynamicly
+        // during runtime. Comment out to disable the usage or for
+        // developing refer to your not jet installed lib like I did at
+        // the following line.
+        //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/krosspython.la"
+        #define KROSS_PYTHON_LIBRARY "krosspython"
 
     }
 

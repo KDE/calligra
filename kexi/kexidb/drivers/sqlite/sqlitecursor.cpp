@@ -127,13 +127,13 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 //#endif
 
 #ifdef SQLITE3
-	inline QVariant getValue(Field *f, int i)
+	inline QVariant getValue(Field *f, int i, bool ROWID)
 	{
 		int type = sqlite3_column_type(prepared_st_handle, i);
 		if (type==SQLITE_NULL) {
 			return QVariant();
 		}
-		else if (!f || type==SQLITE_TEXT) {
+		else if ((!f && !ROWID) || type==SQLITE_TEXT) {
 //TODO: support for UTF-16
 #define GET_sqlite3_column_text QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) )
 			if (!f || f->isTextType())
@@ -158,7 +158,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 			}
 		}
 		else if (type==SQLITE_INTEGER) {
-			switch (f->type()) {
+			switch (f ? f->type() : Field::Integer /*ROWID*/) {
 			case Field::Byte:
 			case Field::ShortInteger:
 			case Field::Integer:
@@ -175,15 +175,15 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 				return QVariant(); //TODO
 		}
 		else if (type==SQLITE_FLOAT) {
-			if (f->isFPNumericType())
+			if (f && f->isFPNumericType())
 				return QVariant( sqlite3_column_double(prepared_st_handle, i) );
-			else if (f->isIntegerType())
+			else if (!f || f->isIntegerType())
 				return QVariant( (double)sqlite3_column_double(prepared_st_handle, i) );
 			else
 				return QVariant(); //TODO
 		}
 		else if (type==SQLITE_BLOB) {
-			if (f->type()==Field::BLOB) {
+			if (f && f->type()==Field::BLOB) {
 				QByteArray ba;
 				ba.setRawData((const char*)sqlite3_column_blob(prepared_st_handle, i),
 					sqlite3_column_bytes(prepared_st_handle, i));
@@ -304,6 +304,7 @@ void SQLiteCursor::drv_getNextRecord()
 //      // -- just set a flag that we've a data not fetched but available
 //		d->rowDataReadyToFetch = true;
 #endif
+		m_fieldCount -= (m_containsROWIDInfo ? 1 : 0);
 	} else {
 //#ifdef SQLITE3
 //		d->rowDataReadyToFetch = false;
@@ -418,9 +419,9 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 #ifdef SQLITE2
 	const char **col = d->curr_coldata;
 #endif
-	data.reserve(m_fieldCount);
+	data.reserve(m_fieldCount + (m_containsROWIDInfo ? 1 : 0));
 	if (!m_fieldsExpanded) {//simple version: without types
-		for( uint i=0; i<m_fieldCount; i++ ) {
+		for( uint i=0; i<(m_fieldCount + (m_containsROWIDInfo ? 1 : 0)); i++ ) {
 #ifdef SQLITE2
 			data[i] = QVariant( *col );
 			col++;
@@ -432,32 +433,32 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 	}
 
 	const uint fieldsExpandedCount = m_fieldsExpanded->count();
-	for( uint i=0, j=0; i<m_fieldCount; i++, j++ ) {
+	for( uint i=0, j=0; i<(m_fieldCount+(m_containsROWIDInfo ? 1 : 0)); i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 //			j++;
 		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)
 			j++;
-		if (j >= fieldsExpandedCount) {
+		if (j >= (fieldsExpandedCount+(m_containsROWIDInfo ? 1 : 0))) {
 			//ERR!
 			break;
 		}
 //		Field *f = m_fieldsExpanded->at(j);
-		Field *f = m_fieldsExpanded->at(j)->field;
+		Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
 //		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
 #ifdef SQLITE2
 		if (!*col)
 			data[i] = QVariant();
-		else if (f->isTextType())
+		else if (f && f->isTextType())
 # ifdef SQLITE_UTF8
 			data[i] = QString::fromUtf8( *col );
 # else
 			data[i] = QVariant( *col ); //only latin1
 # endif
-		else if (f->isFPNumericType())
+		else if (f && f->isFPNumericType())
 			data[i] = QVariant( QCString(*col).toDouble() );
 		else {
-			switch (f->type()) {
+			switch (f ? f->type() : Field::Integer/*ROWINFO*/) {
 //todo: use short, etc.
 			case Field::Byte:
 			case Field::ShortInteger:
@@ -488,46 +489,14 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 
 		col++;
 #else //SQLITE3
-		data[i] = d->getValue(f, i);
-/*		int type = sqlite3_column_type(d->prepared_st_handle, i);
-		if (type==SQLITE_NULL) {
-			data[i] = QVariant();
-		}
-		else if (type==SQLITE_INTEGER) {
-			if (f->isIntegerType())
-				data[i] = QVariant( sqlite3_column_int(d->prepared_st_handle, i) );
-			else
-				data[i] = QVariant(); //TODO
-		}
-		else if (type==SQLITE_FLOAT) {
-			if (f->isFPNumericType())
-				data[i] = QVariant( sqlite3_column_double(d->prepared_st_handle, i) );
-			else
-				data[i] = QVariant(); //TODO
-		}
-		else if (type==SQLITE_TEXT) {
-//TODO: support for UTF-16
-			if (f->isTextType())
-				data[i] = QString::fromUtf8( (const char*)sqlite3_column_text(d->prepared_st_handle, i) );
-			else
-				data[i] = QVariant(); //TODO
-		}
-		else if (type==SQLITE_BLOB) {
-			if (f->type()==KexiDB::Field::BLOB) {
-				QByteArray ba;
-				ba.setRawData((const char*)sqlite3_column_blob(d->prepared_st_handle, i),
-					sqlite3_column_bytes(d->prepared_st_handle, i));
-				data[i] = ba;
-			} else
-				data[i] = QVariant(); //TODO
-		}*/
+		data[i] = d->getValue(f, i, !f /*!f means ROWID*/);
 #endif
 	}
 }
 
 QVariant SQLiteCursor::value(uint i)
 {
-	if (i > (m_fieldCount-1)) //range checking
+	if (i > (m_fieldCount-1+(m_containsROWIDInfo?1:0))) //range checking
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
@@ -535,16 +504,16 @@ QVariant SQLiteCursor::value(uint i)
 		? m_fieldsExpanded->at(i)->field : 0;
 #ifdef SQLITE2
 	//from most to least frequently used types:
+	if (i==m_fieldCount || f->isIntegerType())
+		return QVariant( QCString(d->curr_coldata[i]).toInt() );
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
-	else if (f->isIntegerType())
-		return QVariant( QCString(d->curr_coldata[i]).toInt() );
 	else if (f->isFPNumericType())
 		return QVariant( QCString(d->curr_coldata[i]).toDouble() );
 
 	return QVariant( d->curr_coldata[i] ); //default
 #else
-	return d->getValue(f, i);
+	return d->getValue(f, i, i==m_fieldCount/*ROWID*/);
 #endif
 }
 

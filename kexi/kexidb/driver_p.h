@@ -81,15 +81,21 @@ class KEXI_DB_EXPORT DriverBehaviour
 	*/
 	QString ROW_ID_FIELD_NAME;
 	
-	/*! True if the value (fetched from field (or function) 
+	/*! True if the value (fetched from field or function,
 	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value if autoincremented field,
-	 not just an implicit (internal) row number. Default value is false.
+	 not an implicit (internal) row number. Default value is false.
 	 
 	 Examples:
 	 - PostgreSQL and SQLite engines have this flag set to false ('OID' field has 
 	    it's own implicit value)
-	 - MySQL has this flag set to true (LAST_INSERT_ID() returns real value 
-	 of last autoincremented field)
+	 - MySQL engine has this flag set to true (LAST_INSERT_ID() returns real value 
+	 of last autoincremented field). 
+
+	 Notes:
+	 If it's false, we have a convenient way for identifying row even when there's 
+	 no primary key defined. So, as '_ROWID' column in MySQL is really 
+	 just a synonym for the primary key, this engine needs to have primary keys always 
+	 defined if we want to use interactive editing features like row updating and deleting.
 	*/
 	bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
 

@@ -2,7 +2,7 @@
 <kpartgui name="kexiformpart" version="4">
 
 <ToolBar name="tools" fullWidth="false" noMerge="0">
-   <text>Tools Toolbar</text>
+   <text>Tools</text>
    <Action name="show_form_ui"/>
 </ToolBar>
 

@@ -115,9 +115,9 @@ bool pqxxSqlDriver::isSystemObjectName( const QString& n ) const
 
 //==================================================================================
 //
-bool pqxxSqlDriver::isSystemFieldName( const QString& n ) const
+bool pqxxSqlDriver::drv_isSystemFieldName( const QString& ) const
 {
-	return n.lower()=="oid";
+	return false;
 }
 
 //==================================================================================

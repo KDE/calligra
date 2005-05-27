@@ -29,6 +29,7 @@
 #include <formeditor/objpropbuffer.h>
 #include <formeditor/container.h>
 
+#include <kexi_utils.h>
 #include <kexidialogbase.h>
 #include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
@@ -127,6 +128,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 		plugSharedAction("formpart_adjust_height_big", formPart()->manager(), SLOT(adjustHeightToBig()) );
 		plugSharedAction("formpart_adjust_width_small", formPart()->manager(), SLOT(adjustWidthToSmall()) );
 		plugSharedAction("formpart_adjust_width_big", formPart()->manager(), SLOT(adjustWidthToBig()) );
+
+		plugSharedAction("format_font", formPart()->manager(), SLOT(changeFont()) );
 	}
 
 	initForm();
@@ -352,16 +355,30 @@ KexiFormView::afterSwitchFrom(int mode)
 
 		//set focus on 1st focusable widget which has valid dataSource property set
 		if (!m_dbform->orderedFocusWidgets()->isEmpty()) {
+//			QWidget *www = focusWidget();
+			//if (Kexi::hasParent(this, qApp->focusWidget())) {
+				QEvent fe( QEvent::FocusOut );
+				QFocusEvent::setReason(QFocusEvent::Tab);
+				QApplication::sendEvent( qApp->focusWidget(), &fe );
+				QFocusEvent::resetReason();
+			//}
+
 			QPtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
-			for (;it.current(); ++it)
-				if (dynamic_cast<KexiFormDataItemInterface*>(it.current())
-					&& !dynamic_cast<KexiFormDataItemInterface*>(it.current())->dataSource().isEmpty())
+			for (;it.current(); ++it) {
+				KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(it.current());
+				if (iface)
+					kdDebug() << iface->dataSource() << endl;
+				if (iface && iface->field() && !iface->isReadOnly()
+/*! @todo add option for skipping autoincremented fields */
+					/* also skip autoincremented fields:*/
+					&& !iface->field()->isAutoIncrement()) //!iface->dataSource().isEmpty()
 					break;
+			}
 			if (!it.current()) //eventually, focus first available widget if nothing other is available
 				it.toFirst();
 
+			it.current()->setFocus();
 			SET_FOCUS_USING_REASON(it.current(), QFocusEvent::Tab);
-//			SET_FOCUS_USING_REASON(m_dbform->orderedFocusWidgets()->first(), QFocusEvent::Tab);
 		}
 	}
 

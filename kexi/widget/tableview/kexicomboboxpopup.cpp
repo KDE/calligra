@@ -138,7 +138,7 @@ void KexiComboBoxPopup::setData(KexiDB::Field &f)
 	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
 	QValueVector<QString> hints = f.enumHints();
 	for(uint i=0; i < hints.size(); i++) {
-		KexiTableItem *item = new KexiTableItem(1);
+		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
 		(*item)[0]=QVariant(hints[i]);
 		kdDebug() << "added: '" << hints[i] <<"'"<<endl;
 		data->append( item );

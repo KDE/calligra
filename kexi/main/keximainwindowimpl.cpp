@@ -149,11 +149,10 @@ class KexiMainWindowImpl::Private
 
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
-		 *action_project_properties;
+		 *action_project_properties, *action_open_recent_more, 
+		 *action_project_relations, *action_project_import_data_table;
 		KActionMenu *action_open_recent, *action_show_other;
-		KAction *action_open_recent_more;
 		int action_open_recent_more_id;
-		KAction *action_project_relations;
 
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
@@ -161,7 +160,8 @@ class KexiMainWindowImpl::Private
 			*action_edit_select_all,
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
-			*action_edit_edititem, *action_edit_clear_table;
+			*action_edit_edititem, *action_edit_clear_table,
+			*action_edit_paste_special_data_table;
 
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
@@ -174,6 +174,9 @@ class KexiMainWindowImpl::Private
 		//! data menu
 		KAction *action_data_save_row;
 		KAction *action_data_cancel_row_changes;
+
+		//! format menu
+		KAction *action_format_font;
 
 		//! tools menu
 #ifndef KEXI_NO_MIGRATION
@@ -205,6 +208,9 @@ class KexiMainWindowImpl::Private
 		//! Indicates that we're inside closeDialog() method - to avoid inf. recursion
 		//! on dialog removing
 		bool insideCloseDialog : 1;
+
+		//! used for delayed dialogs closing for 'close all'
+		QPtrList<KexiDialogBase> windowsToClose;
 
 		//! Used in several places to show info dialog at startup (only once per session)
 		//! before displaying other stuff
@@ -620,10 +626,6 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
 
-//TODO	new KAction(i18n("From File..."), "fileopen", 0,
-//TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
-//TODO	new KAction(i18n("From Server..."), "server", 0,
-//TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 #else
 	d->action_project_relations = d->dummy_action;
 #endif
@@ -632,10 +634,27 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 #endif
 
+#ifndef KEXI_NO_CSV_IMPORT
+	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
+		"download_manager"/*todo: change to "file_import" or so*/, 
+		0, this, SLOT(slotToolsProjectImportDataTable()), actionCollection(), "project_import_data_table");
+#endif
+
+//TODO	new KAction(i18n("From File..."), "fileopen", 0,
+//TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
+//TODO	new KAction(i18n("From Server..."), "server", 0,
+//TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
+
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
 	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
+
+#ifndef KEXI_NO_CSV_IMPORT
+	d->action_edit_paste_special_data_table = new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."), 
+		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()), 
+		actionCollection(), "edit_paste_special_data_table");
+#endif
 
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
@@ -728,6 +747,11 @@ void KexiMainWindowImpl::initActions()
 	action->setToolTip(i18n("Sort data in descending order"));
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
 
+	//FORMAT MENU
+	d->action_format_font = createSharedAction(i18n("&Font..."), "fonts", 0, "format_font");
+	d->action_format_font->setToolTip(i18n("Change font for selected object"));
+	d->action_format_font->setWhatsThis(i18n("Changes font for selected object."));
+
 	//TOOLS MENU
 
 	//additional 'Window' menu items
@@ -794,6 +818,12 @@ void KexiMainWindowImpl::initActions()
 	Kexi::tempShowReports() = true;
 #else
 	Kexi::tempShowReports() = false;
+#endif
+
+#ifdef KEXI_SCRIPTS_SUPPORT
+	Kexi::tempShowScripts() = true;
+#else
+	Kexi::tempShowScripts() = false;
 #endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -863,6 +893,10 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
 	d->action_project_relations->setEnabled(d->prj);
+	d->action_project_import_data_table->setEnabled(d->prj);
+
+	//EDIT MENU
+	d->action_edit_paste_special_data_table->setEnabled(d->prj);
 
 	//VIEW MENU
 	d->action_view_nav->setEnabled(d->prj);
@@ -1224,6 +1258,7 @@ KexiMainWindowImpl::initNavigator()
 			}
 		}
 	}
+	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item*)), d->nav, SLOT(addItem(KexiPart::Item*)));
 	d->nav->setFocus();
 	invalidateActions();
 }
@@ -2396,6 +2431,11 @@ KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus 
 
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
+	if (d->insideCloseDialog && dynamic_cast<KexiDialogBase *>(pWnd)) {
+		d->windowsToClose.append(dynamic_cast<KexiDialogBase *>(pWnd));
+		return;
+	}
+	/*moved to closeDialog()
 	if (pWnd == d->curDialog && !pWnd->isAttached()) {
 		if (d->propEditor) {
 			// ah, closing detached window - better switch off property buffer right now...
@@ -2403,23 +2443,17 @@ void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 			d->propEditor->editor()->setBuffer( 0, false );
 		}
 	}
+	*/
 	closeDialog(dynamic_cast<KexiDialogBase *>(pWnd), layoutTaskBar);
 }
 
-tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& messageWhenAskingForName )
+tristate KexiMainWindowImpl::getNewObjectInfo( 
+	KexiPart::Item *partItem, KexiPart::Part *part, 
+	bool& allowOverwriting, const QString& messageWhenAskingForName )
 {
-	if (!dlg->neverSaved()) {
-		//data was saved in the past -just save again
-		const tristate res = dlg->storeData();
-		if (!res)
-			showErrorMessage(i18n("Saving \"%1\" object failed.").arg(dlg->partItem()->name()),
-				d->curDialog);
-		return res;
-	}
-
 	//data was never saved in the past -we need to create a new object at the backend
+	KexiPart::Info *info = part->info();
 #ifdef KEXI_ADD_CUSTOM_OBJECT_CREATION
-	KexiPart::Info *info = dlg->part()->info();
 # include "keximainwindowimpl_customobjcreation.h"
 #endif
 	if (!d->nameDialog) {
@@ -2432,10 +2466,11 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	else {
 		d->nameDialog->widget()->setMessageText( messageWhenAskingForName );
 	}
-	d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
-	d->nameDialog->widget()->setNameText(dlg->partItem()->name());
+	d->nameDialog->widget()->setCaptionText(partItem->caption());
+	d->nameDialog->widget()->setNameText(partItem->name());
 	d->nameDialog->setCaption(i18n("Save Object As"));
-	d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) );
+	d->nameDialog->setDialogIcon( DesktopIcon( info->itemIcon(), KIcon::SizeMedium ) );
+	allowOverwriting = false;
 	bool found;
 	do {
 		if (d->nameDialog->exec()!=QDialog::Accepted)
@@ -2443,25 +2478,66 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 		//check if that name already exists
 		KexiDB::SchemaData tmp_sdata;
 		found = project()->dbConnection()->loadObjectSchemaData(
-				dlg->part()->info()->projectPartID(),
+				info->projectPartID(),
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {
-//! @todo fix this msg like in KexiMainWindowImpl::closeDialog()
-			KMessageBox::information(this, i18n("%1 is the type of the object (eg 'report', 'table', 'query') and %2 is its name"
-			 " For example: Table \"my_table\" allready exists" ,
-				"%1 \"%2\" already exists.\nPlease choose other name.")
-				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
-			continue;
+			if (allowOverwriting) {
+				int res = KMessageBox::warningYesNoCancel(this, 
+					"<p>"+part->i18nMessage("Object \"%1\" already exists.")
+						.arg(d->nameDialog->widget()->nameText())
+					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0, 
+					KGuiItem(i18n("&Replace"), "button_yes"), 
+					KGuiItem(i18n("&Choose other name...")));
+				if (res == KMessageBox::No)
+					continue;
+				else if (res == KMessageBox::Cancel)
+					return cancelled;
+				else {//yes
+					allowOverwriting = true;
+					break;
+				}
+			}
+			else {
+				KMessageBox::information(this, 
+					"<p>"+part->i18nMessage("Object \"%1\" already exists.")
+						.arg(d->nameDialog->widget()->nameText())
+					+"</p><p>"+i18n("Please choose other name.")+"</p>");
+//				" For example: Table \"my_table\" already exists" ,
+//				"%1 \"%2\" already exists.\nPlease choose other name.")
+//				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
+				continue;
+			}
 		}
 	}
 	while (found);
 
-	const int oldItemID = dlg->partItem()->identifier();
 	//update name and caption
-	dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
-	dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
+	partItem->setName( d->nameDialog->widget()->nameText() );
+	partItem->setCaption( d->nameDialog->widget()->captionText() );
+	return true;
+}
 
-	const tristate res = dlg->storeNewData();
+tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& messageWhenAskingForName )
+{
+	tristate res;
+	if (!dlg->neverSaved()) {
+		//data was saved in the past -just save again
+		res = dlg->storeData();
+		if (!res)
+			showErrorMessage(i18n("Saving \"%1\" object failed.").arg(dlg->partItem()->name()),
+				d->curDialog);
+		return res;
+	}
+
+	const int oldItemID = dlg->partItem()->identifier();
+
+	bool allowOverwriting = false;
+	res = getNewObjectInfo( dlg->partItem(), dlg->part(), allowOverwriting, 
+		messageWhenAskingForName );
+	if (res != true)
+		return res;
+
+	res = dlg->storeNewData();
 	if (~res)
 		return cancelled;
 	if (!res) {
@@ -2471,7 +2547,7 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 	}
 
 	//update navigator
-	d->nav->addItem(dlg->partItem());
+//this is alreday done in KexiProject::addStoredItem():	d->nav->addItem(dlg->partItem());
 	//item id changed to final one: update association in dialogs' dictionary
 	d->dialogs.take(oldItemID);
 	d->dialogs.insert(dlg->partItem()->identifier(), dlg);
@@ -2491,6 +2567,14 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		return true;
 	d->insideCloseDialog = true;
 
+	if (dlg == d->curDialog && !dlg->isAttached()) {
+		if (d->propEditor) {
+			// ah, closing detached window - better switch off property buffer right now...
+			d->propBuffer = 0;
+			d->propEditor->editor()->setBuffer( 0, false );
+		}
+	}
+
 /*this crashes but is nice:
 	QWidget *www = guiFactory()->container("query", dlg->commonGUIClient());
 	delete www;*/
@@ -2499,16 +2583,17 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int quertionRes = KMessageBox::warningYesNoCancel( this,
-			dlg->part()->i18nMessage(
-				"<p>Design of object \"%1\" has been modified.</p><p>Do you want to save changes?</p>")
+			"<p>"+dlg->part()->i18nMessage(
+				"Design of object \"%1\" has been modified.")
 //			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",
 //			"<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
-			.arg(dlg->partItem()->name()),
+			.arg(dlg->partItem()->name())+"</p><p>"+i18n("Do you want to save changes?")+"</p>",
 			QString::null,
 			KStdGuiItem::save(),
 			KStdGuiItem::discard());
 		if (quertionRes==KMessageBox::Cancel) {
 			d->insideCloseDialog = false;
+			d->windowsToClose.clear(); //give up with 'close all'
 			return cancelled;
 		}
 		if (quertionRes==KMessageBox::Yes) {
@@ -2518,6 +2603,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			if (!res || ~res) {
 //js:TODO show error info; (retry/ignore/cancel)
 				d->insideCloseDialog = false;
+				d->windowsToClose.clear(); //give up with 'close all'
 				return res;
 			}
 			remove_on_closing = false;
@@ -2532,6 +2618,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			//msg?
 			//TODO: ask if we'd continue and return true/false
 			d->insideCloseDialog = false;
+			d->windowsToClose.clear(); //give up with 'close all'
 			return false;
 		}
 	}
@@ -2592,6 +2679,8 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 
 	invalidateActions();
 	d->insideCloseDialog = false;
+	if (!d->windowsToClose.isEmpty()) //continue 'close all'
+		closeDialog(d->windowsToClose.take(0), true);
 	return true;
 }
 
@@ -3169,6 +3258,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 //TODO
 	Kexi::tempShowForms() = true;
 	Kexi::tempShowReports() = true;
+	Kexi::tempShowScripts() = true;
 	if(!projectData)
 		return false;
 
@@ -3260,18 +3350,36 @@ KexiMainWindowImpl::initUserActions()
 */
 }
 
-#include <kreplacedialog.h>
-
 void KexiMainWindowImpl::slotToolsProjectMigration()
 {
 #ifndef KEXI_NO_MIGRATION
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, this);
 	if (!dlg)
-		return;
+		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
-//	KexiMigration::importWizard* iw = new KexiMigration::importWizard();
-//	iw->setGeometry(300,300,400,300);
-//	iw->show();
+	delete dlg;
+	raise();
+#endif
+}
+
+void KexiMainWindowImpl::slotToolsProjectImportDataTable()
+{
+#ifndef KEXI_NO_CSV_IMPORT
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, "file");
+	if (!dlg)
+		return; //error msg has been shown by KexiInternalPart
+	dlg->exec();
+	delete dlg;
+#endif
+}
+
+void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
+{
+#ifndef KEXI_NO_CSV_IMPORT
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, "clipboard");
+	if (!dlg)
+		return; //error msg has been shown by KexiInternalPart
+	dlg->exec();
 	delete dlg;
 #endif
 }

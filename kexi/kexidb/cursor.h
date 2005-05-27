@@ -151,8 +151,17 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 and after moving after last record or before first one. */
 		Q_LLONG at() const;
 
-		/*! \return number of fields available for this cursor. */
+		/*! \return number of fields available for this cursor. 
+		 This never includes ROWID column. */
 		inline uint fieldCount() const { return m_fieldCount; }
+
+		/*! \return true if ROWID information is appended with every row.
+		 ROWID information is available 
+		 if DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false
+		 for a KexiDB database driver and a table has no primary key defined. 
+		 Phisically, ROWID value is returned after last returned field,
+		 so data vector's length is expanded by one. */
+		inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
 
 		/*! \return a value stored in column number \a i (counting from 0).
 		 This have unspecified behaviour if the cursor is not at valid record.
@@ -172,11 +181,11 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 to simple public RecordData representation. */
 		virtual void storeCurrentRow(RowData &data) const = 0;
 
-		bool updateRow(RowData& data, RowEditBuffer& buf);
+		bool updateRow(RowData& data, RowEditBuffer& buf, bool useROWID = false);
 
-		bool insertRow(RowData& data, RowEditBuffer& buf);
+		bool insertRow(RowData& data, RowEditBuffer& buf, bool getROWID = false);
 
-		bool deleteRow(RowData& data);
+		bool deleteRow(RowData& data, bool useROWID = false);
 
 		bool deleteAllRows();
 
@@ -286,6 +295,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool m_afterLast : 1;
 //		bool m_atLast;
 		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
+		bool m_containsROWIDInfo : 1;
 		Q_LLONG m_at;
 		uint m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
@@ -308,7 +318,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		//<members related to buffering>
 		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
 		//</members related to buffering>
-		
+
 		class Private;
 		Private *d;
 };

@@ -8,7 +8,7 @@ class KexiDBClass:
     # Constructor.
     def __init__(self):
         # The KexiDB module spends us access to the KexiDB functionality.
-        self.kexidbmodule = Kross.get("KexiDB")
+        self.kexidbmodule = get("KexiDB")
         # Create and remember the drivermanager.
         self.drivermanager = self.kexidbmodule.DriverManager()
 
@@ -237,7 +237,7 @@ testKexiDB()
 #print __name__
 #print mymodule.exttest()
 
-#testobject = Kross.get("TestObject")
+#testobject = get("TestObject")
 #print "testobject = %s %s" % (str(testobject),dir(testobject))
 #print "propertyNames = %s" % testobject.propertyNames()
 #print "slotNames = %s" % testobject.slotNames()

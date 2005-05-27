@@ -33,7 +33,7 @@ KexiMigrationPart::~KexiMigrationPart()
 }
 
 QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName )
+ QWidget *parent, const char *objName, const QVariant& arg )
 {
 	return new KexiMigration::importWizard(parent, objName);
 }

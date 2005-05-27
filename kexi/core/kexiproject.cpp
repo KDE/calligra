@@ -299,6 +299,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 	if (!info || !item)
 		return;
 	KexiPart::ItemDict *dict = items(info);
+	item->setNeverSaved( false );
 	m_unstoredItems.take(item); //no longer unstored
 	dict->insert( item->identifier(), item );
 	//let's update e.g. navigator
@@ -490,7 +491,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 	return true;
 }
 
-KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
+KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedName)
 {
 	clearError();
 	KexiDB::MessageTitle et(this);
@@ -501,33 +502,49 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 	}
 
 	KexiPart::ItemDict *dict = items(info);
-	QString new_name;
-	const QString base_name = Kexi::string2Identifier(part->instanceName()).lower();
 
 	//find new, unique default name for this item
-	int n = 0;
+	int n;
+	QString new_name;
+	QString base_name;
+	if (suggestedName.isEmpty()) {
+		n = 1;
+		base_name = part->instanceName();
+	}
+	else {
+		n = 0; //means: try not to add 'n'
+		base_name = suggestedName;
+	}
+	base_name = Kexi::string2Identifier(base_name).lower();
 	KexiPart::ItemDictIterator it(*dict);
 	QPtrDictIterator<KexiPart::Item> itUnstored(m_unstoredItems);
 	do {
-		new_name = base_name+QString::number(++n);
+		new_name = base_name;
+		if (n>=1)
+			new_name += QString::number(n);
 		for (it.toFirst(); it.current(); ++it) {
 			if (it.current()->name().lower()==new_name)
 				break;
 		}
-		if ( it.current() )
+		if ( it.current() ) {
+			n++;
 			continue; //stored exists!
+		}
 		for (itUnstored.toFirst(); itUnstored.current(); ++itUnstored) {
 			if (itUnstored.current()->name().lower()==new_name)
 				break;
 		}
 		if ( !itUnstored.current() )
 			break; //unstored doesn't exist
+		n++;
 	} while (n<1000/*sanity*/);
 
 	if (n>=1000)
 		return 0;
 
-	QString new_caption = part->instanceName()+QString::number(n);
+	QString new_caption = (suggestedName.isEmpty() ? part->instanceName() : suggestedName);
+	if (n>=1)
+		new_caption += QString::number(n);
 
 	KexiPart::Item *item = new KexiPart::Item();
 	item->setIdentifier( --m_tempPartItemID_Counter );//temporary

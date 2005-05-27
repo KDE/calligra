@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -204,6 +204,7 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 {
 	init();
 	m_cursor = c;
+	m_containsROWIDInfo = m_cursor->containsROWIDInfo();
 
 	KexiDB::QueryColumnInfo::Vector vector 
 		= m_cursor->query()->fieldsExpanded();
@@ -299,6 +300,7 @@ void KexiTableViewData::init()
 	m_globalColumnsIDs.resize(100);
 
 	m_autoIncrementedColumn = -2;
+	m_containsROWIDInfo = false;
 }
 
 void KexiTableViewData::addColumn( KexiTableViewColumn* col )
@@ -528,8 +530,11 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 
 	if (m_cursor) {//db-aware
 		if (insert) {
-			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
-				m_result.msg = i18n("Row inserting failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
+			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(), 
+				m_containsROWIDInfo/*also retrieve ROWID*/ )) 
+			{
+				m_result.msg = i18n("Row inserting failed.") + "\n\n" 
+					+ KexiValidator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 
 /*			if (desc)
@@ -543,7 +548,11 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			}
 		}
 		else {
-			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
+//			if (m_containsROWIDInfo)
+//				ROWID = item[columns.count()].toULongLong();
+			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(),
+					m_containsROWIDInfo/*use ROWID*/))
+			{
 				m_result.msg = i18n("Row changing failed.") + "\n\n" + KexiValidator::msgYouCanImproveData();
 				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
@@ -606,7 +615,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 
 	if (m_cursor) {//db-aware
 		m_result.success = false;
-		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
+		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item), m_containsROWIDInfo/*use ROWID*/ )) {
 			m_result.msg = i18n("Row deleting failed.");
 /*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
 			KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
@@ -695,14 +704,14 @@ void KexiTableViewData::preloadAllRows()
 	if (!m_cursor)
 		return;
 
-	const uint fcount = m_cursor->fieldCount();
+	const uint fcount = m_cursor->fieldCount() + (m_containsROWIDInfo ? 1 : 0);
 	m_cursor->moveFirst();
 	for (int i=0;!m_cursor->eof();i++) {
 		KexiTableItem *item = new KexiTableItem(fcount);
 		m_cursor->storeCurrentRow(*item);
 		append( item );
 		m_cursor->moveNext();
-		if ((i % 100) == 0)
+		if ((i % 1000) == 0)
 			qApp->processEvents( 1 );
 	}
 }

@@ -20,8 +20,26 @@
 #include "pythoninterpreter.h"
 #include "pythonscript.h"
 #include "pythonmodule.h"
+#include "pythonsecurity.h"
 //#include "pythonextension.h"
 #include "../api/variant.h"
+
+extern "C"
+{
+    /**
+     * Exported and loadable function as entry point to use
+     * the \a PythonInterpreter.
+     * The krosspython library the \a PythonInterpreter is part
+     * will be loaded dynamicly at runtime from e.g.
+     * \a Kross::Api::Manager::getInterpreter and this exported
+     * function will be used to return an instance of the
+     * \a PythonInterpreter implementation.
+     */
+    void* krosspython_instance(Kross::Api::Manager* manager, const QString& interpretername)
+    {
+        return new Kross::Python::PythonInterpreter(manager, interpretername);
+    }
+};
 
 using namespace Kross::Python;
 
@@ -29,6 +47,11 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     : Kross::Api::Interpreter(manager, interpretername)
     , m_globalthreadstate(0)
 {
+    m_options.replace(
+        "restricted",
+        new Option(i18n("Restricted"), i18n("Enable RestrictedPython module."), QVariant((bool)false))
+    );
+
     //kdDebug() << "Py_GetVersion()=" << Py_GetVersion() << " Py_GetPath()=" << Py_GetPath() << endl;
 
     // Set name of the program.
@@ -51,31 +74,35 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     m_threadstate = Py_NewInterpreter();
 
     // Initialize the main module.
-    m_mainmodule = new Py::Module("__main__");
-
-    // Initialize the module manager.
-    m_modulemanager = new PythonModuleManager(this);
+    m_module = new PythonModule(this);
 
     // Prepare the global scope accessible by all PythonScript
     // instances. We import the global accessible Kross module.
-    Py::Dict moduledict = m_mainmodule->getDict();
-    QString s = "import Kross\n"
-                "globalvar = 0\n"
+    Py::Dict moduledict = m_module->getDict();
+    QString s = "globalvar = 0\n"
+                //"import sys\n"
+                //"sys.path.append(\"/home/snoopy/cvs/kde/branch_0_9/koffice/kexi/scripting/python/zope/\");\n"
                 "def maintestfunc():\n"
                 "    print \"this is maintestfunc!\"\n"
                 "    return \"this is the maintestfunc return value!\"\n";
-    PyObject* run = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
-    if(! run)
-        throw Kross::Api::RuntimeException(i18n("Failed to prepare the __main__ module."));
+    PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+    if(! pyrun) {
+        Py::Object errobj = Py::value(Py::Exception()); // get last error
+        throw Kross::Api::RuntimeException(i18n("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str()));
+    }
+    Py::Object run(pyrun, true);
+
+    // Initialize the RestrictedPython module.
+    m_security = new PythonSecurity(this);
 }
 
 PythonInterpreter::~PythonInterpreter()
 {
-    // Free the main module.
-    delete m_mainmodule; m_mainmodule = 0;
+    // Free the zope security module.
+    delete m_security; m_security = 0;
 
-    // Free the module manager.
-    delete m_modulemanager; m_modulemanager = 0;
+    // Free the main module.
+    delete m_module; m_module = 0;
 
     // Free the used interpreter.
     Py_EndInterpreter(m_threadstate);

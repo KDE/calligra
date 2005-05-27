@@ -103,9 +103,9 @@ QString
 PropertyCommand::name() const
 {
 	if(m_oldvalues.count() >= 2)
-		return i18n("Change %1 of multiple widgets" ).arg(m_property);
+		return i18n("Change \"%1\" property for multiple widgets" ).arg(m_property);
 	else
-		return i18n("Change %1 of widget %2" ).arg(m_property).arg(m_oldvalues.begin().key());
+		return i18n("Change \"%1\" property for widget \"%2\"" ).arg(m_property).arg(m_oldvalues.begin().key());
 }
 
 // GeometryPropertyCommand (for multiples widgets)
@@ -570,7 +570,7 @@ LayoutPropertyCommand::unexecute()
 QString
 LayoutPropertyCommand::name() const
 {
-	return i18n("Change layout of %1").arg(m_oldvalues.begin().key());
+	return i18n("Change layout of widget \"%1\"").arg(m_oldvalues.begin().key());
 }
 
 
@@ -668,7 +668,7 @@ QString
 InsertWidgetCommand::name() const
 {
 	if(!m_name.isEmpty())
-		return i18n("Insert %1").arg(m_name);
+		return i18n("Insert widget \"%1\"").arg(m_name);
 	else
 		return i18n("Insert widget");
 }
@@ -847,7 +847,7 @@ BreakLayoutCommand::unexecute()
 QString
 BreakLayoutCommand::name() const
 {
-	return i18n("Break Layout: %1").arg(m_name);
+	return i18n("Break Layout: \"%1\"").arg(m_name);
 }
 
 // PasteWidgetCommand

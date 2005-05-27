@@ -92,8 +92,10 @@ Kross::Api::Object* PythonObject::call(const QString& name, Kross::Api::List* ar
 
         char* n = const_cast<char*>( name.latin1() );
         PyObject* r = PyObject_CallMethod(m_pyobject.ptr(), n, 0);
-        if(! r) //FIXME happens too if e.g. number of arguments doesn't match !!!
-            throw Kross::Api::AttributeException(i18n("Failed to call method '%1'.").arg(name));
+        if(! r) { //FIXME happens too if e.g. number of arguments doesn't match !!!
+            Py::Object errobj = Py::value(Py::Exception()); // get last error
+            throw Kross::Api::AttributeException(i18n("Failed to call method '%1': %2").arg(name).arg(errobj.as_string().c_str()));
+        }
         Py::Object result(r, true);
 
         //kdDebug() << QString("PythonObject::call(%1) call return value = '%2'").arg(name).arg(result.as_string().c_str()) << endl;

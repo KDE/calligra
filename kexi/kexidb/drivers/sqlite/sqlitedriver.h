@@ -47,12 +47,6 @@ class SQLiteDriver : public Driver
 		*/
 		virtual bool isSystemObjectName( const QString& n ) const;
 
-		/*! \return true if \a n is a system field name; 
-			for this driver fields with name equal "_ROWID_" 
-			is considered as system field.
-		*/
-		virtual bool isSystemFieldName( const QString& n ) const;
-
 		/*! \return false for this driver. */
 		virtual bool isSystemDatabaseName( const QString& ) const { return false; }
 
@@ -62,8 +56,13 @@ class SQLiteDriver : public Driver
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;
-		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+
+		/*! \return true if \a n is a system field name; 
+			for this driver fields with name equal "_ROWID_" 
+			is considered as system field.
+		*/
+		virtual bool drv_isSystemFieldName( const QString& n ) const;
 
 	SQLiteDriverPrivate *dp;
 	

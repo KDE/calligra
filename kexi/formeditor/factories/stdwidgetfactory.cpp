@@ -107,7 +107,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wFormWidget->setPixmap("form");
 	wFormWidget->setClassName("FormWidgetBase");
 	wFormWidget->setName(i18n("Form"));
-	wFormWidget->setNamePrefix(i18n("Form"));
+	wFormWidget->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
+	"spaces and non latin1 characters.", "form"));
 	wFormWidget->setDescription(i18n("A simple form widget"));
 	addClass(wFormWidget);
 
@@ -116,7 +117,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wCustomWidget->setClassName("CustomWidget");
 	wCustomWidget->setName(i18n("Custom Widget"));
 	wCustomWidget->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
-	"spaces and non latin1 characters", "CustomWidget"));
+	"spaces and non latin1 characters.", "customWidget"));
 	wCustomWidget->setDescription(i18n("A custom or non-supported widget"));
 	addClass(wCustomWidget);
 
@@ -124,7 +125,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
 	wLabel->setName(i18n("Text Label"));
-	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
+	wLabel->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wLabel->setDescription(i18n("A widget to display text"));
 	addClass(wLabel);
 
@@ -135,8 +137,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 //! @todo Qt designer compatibility: maybe use this class when QLabel has a pixmap set...?
 	//wPixLabel->addAlternateClassName("QLabel");
 	wPixLabel->setSavingName("KexiPictureLabel");
-	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
-	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
+	wPixLabel->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "picture"));
+	wPixLabel->setDescription(i18n("A widget to display pictures"));
 	addClass(wPixLabel);
 
 	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
@@ -145,7 +148,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLineEdit->addAlternateClassName("QLineEdit");
 	wLineEdit->setIncludeFileName("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
-	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
+	wLineEdit->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "lineEdit"));
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	addClass(wLineEdit);
 
@@ -153,7 +157,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSpring->setPixmap("spring");
 	wSpring->setClassName("Spring");
 	wSpring->setName(i18n("Spring"));
-	wSpring->setNamePrefix(i18n("Widget name (see above)", "Spring"));
+	wSpring->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spring"));
 	wSpring->setDescription(i18n("A spring to place between widgets"));
 	addClass(wSpring);
 
@@ -163,23 +168,26 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPushButton->addAlternateClassName("QPushButton");
 	wPushButton->setIncludeFileName("kpushbutton.h");
 	wPushButton->setName(i18n("Push Button"));
-	wPushButton->setNamePrefix(i18n("Widget name (see above)", "PushButton"));
+	wPushButton->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "button"));
 	wPushButton->setDescription(i18n("A simple push button to execute actions"));
 	addClass(wPushButton);
 
 	KFormDesigner::WidgetInfo *wRadioButton = new KFormDesigner::WidgetInfo(this);
 	wRadioButton->setPixmap("radio");
 	wRadioButton->setClassName("QRadioButton");
-	wRadioButton->setName(i18n("Radio"));
-	wRadioButton->setNamePrefix(i18n("Widget name (see above)", "Radio"));
-	wRadioButton->setDescription(i18n("A radio button with text or pixmap label"));
+	wRadioButton->setName(i18n("Option Button"));
+	wRadioButton->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "optionButton"));
+	wRadioButton->setDescription(i18n("An option button with text or pixmap label"));
 	addClass(wRadioButton);
 
 	KFormDesigner::WidgetInfo *wCheckBox = new KFormDesigner::WidgetInfo(this);
 	wCheckBox->setPixmap("check");
 	wCheckBox->setClassName("QCheckBox");
 	wCheckBox->setName(i18n("Check Box"));
-	wCheckBox->setNamePrefix(i18n("Widget name (see above)", "CheckBox"));
+	wCheckBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
 	wCheckBox->setDescription(i18n("A check box with text or pixmap label"));
 	addClass(wCheckBox);
 
@@ -189,7 +197,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSpinBox->addAlternateClassName("QSpinBox");
 	wSpinBox->setIncludeFileName("knuminput.h");
 	wSpinBox->setName(i18n("Spin Box"));
-	wSpinBox->setNamePrefix(i18n("Widget name (see above)", "SpinBox"));
+	wSpinBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spinBox"));
 	wSpinBox->setDescription(i18n("A spin box widget"));
 	addClass(wSpinBox);
 
@@ -199,7 +208,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wComboBox->addAlternateClassName("QComboBox");
 	wComboBox->setIncludeFileName("kcombobox.h");
 	wComboBox->setName(i18n("Combo Box"));
-	wComboBox->setNamePrefix(i18n("Widget name (see above)", "ComboBox"));
+	wComboBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
 	wComboBox->setDescription(i18n("A combo box widget"));
 	addClass(wComboBox);
 
@@ -209,7 +219,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wListBox->addAlternateClassName("QListBox");
 	wListBox->setIncludeFileName("klistbox.h");
 	wListBox->setName(i18n("List Box"));
-	wListBox->setNamePrefix(i18n("Widget name (see above)", "ListBox"));
+	wListBox->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
 	wListBox->setDescription(i18n("A simple list widget"));
 	addClass(wListBox);
 
@@ -219,7 +230,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wTextEdit->addAlternateClassName("QTextEdit");
 	wTextEdit->setIncludeFileName("ktextedit.h");
 	wTextEdit->setName(i18n("Text Editor"));
-	wTextEdit->setNamePrefix(i18n("Widget name (see above)", "TextEditor"));
+	wTextEdit->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
 	wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
 	addClass(wTextEdit);
 
@@ -229,7 +241,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wListView->addAlternateClassName("QListView");
 	wListView->setIncludeFileName("klistview.h");
 	wListView->setName(i18n("List View"));
-	wListView->setNamePrefix(i18n("Widget name (see above)", "ListView"));
+	wListView->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listView"));
 	wListView->setDescription(i18n("A list (or tree) widget"));
 	addClass(wListView);
 
@@ -237,7 +250,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wSlider->setPixmap("slider");
 	wSlider->setClassName("QSlider");
 	wSlider->setName(i18n("Slider"));
-	wSlider->setNamePrefix(i18n("Widget name (see above)", "Slider"));
+	wSlider->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "slider"));
 	wSlider->setDescription(i18n("An horizontal slider"));
 	addClass(wSlider);
 
@@ -247,7 +261,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wProgressBar->addAlternateClassName("QProgressBar");
 	wProgressBar->setIncludeFileName("kprogress.h");
 	wProgressBar->setName(i18n("Progress Bar"));
-	wProgressBar->setNamePrefix(i18n("Widget name (see above)", "ProgressBar"));
+	wProgressBar->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
 	wProgressBar->setDescription(i18n("A progress indicator widget"));
 	addClass(wProgressBar);
 
@@ -255,7 +270,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wLine->setPixmap("line");
 	wLine->setClassName("Line");
 	wLine->setName(i18n("Line"));
-	wLine->setNamePrefix(i18n("Widget name (see above)", "Line"));
+	wLine->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
 	wLine->setDescription(i18n("A line to be used as a separator"));
 	addClass(wLine);
 
@@ -267,8 +283,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDate->setIncludeFileName("kdatewidget.h");
 #endif
 	wDate->setName(i18n("Date Widget"));
-	wDate->setNamePrefix(i18n("Widget name (see above)", "DateWidget"));
-	wDate->setDescription(i18n("A widget to input or display a date"));
+	wDate->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
+	wDate->setDescription(i18n("A widget to input and display a date"));
 	addClass(wDate);
 
 	KFormDesigner::WidgetInfo *wTime = new KFormDesigner::WidgetInfo(this);
@@ -279,8 +296,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wTime->setIncludeFileName("ktimewidget.h");
 #endif
 	wTime->setName(i18n("Time Widget"));
-	wTime->setNamePrefix(i18n("Widget name (see above)", "TimeWidget"));
-	wTime->setDescription(i18n("A widget to input or display a time"));
+	wTime->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
+	wTime->setDescription(i18n("A widget to input and display a time"));
 	addClass(wTime);
 
 	KFormDesigner::WidgetInfo *wDateTime = new KFormDesigner::WidgetInfo(this);
@@ -291,9 +309,39 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wDateTime->setIncludeFileName("kdatetimewidget.h");
 #endif
 	wDateTime->setName(i18n("Date/Time Widget"));
-	wDateTime->setNamePrefix(i18n("Widget name (see above)", "DateTimeWidget"));
-	wDateTime->setDescription(i18n("A widget to input or display a time and a date"));
+	wDateTime->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
+	wDateTime->setDescription(i18n("A widget to input and display a time and a date"));
 	addClass(wDateTime);
+	
+	m_propDesc["toggleButton"] = i18n("Toggle");
+	m_propDesc["autoRepeat"] = i18n("Auto Repeat");
+	m_propDesc["autoDefault"] = i18n("Auto Default");
+	m_propDesc["default"] = i18n("Default");
+	m_propDesc["flat"] = i18n("Flat");
+	m_propDesc["echoMode"] = 
+		i18n("Echo mode for Line Edit widget eg. Normal, NoEcho, Password","Echo Mode");
+	m_propDesc["indent"] = i18n("Indent");
+	//line
+	m_propDesc["orientation"] = i18n("Orientation");
+	//checkbox
+	m_propDesc["checked"] = i18n("Checked checkbox", "Checked");
+	m_propDesc["tristate"] = i18n("Tristate checkbox", "Tristate");
+		
+	//for EchoMode
+	m_propValDesc["Normal"] = i18n("For Echo Mode", "Normal");
+	m_propValDesc["NoEcho"] = i18n("For Echo Mode", "No Echo");
+	m_propValDesc["Password"] = i18n("For Echo Mode", "Password");
+	
+	//for spring
+	m_propDesc["sizeType"] = i18n("Size Type");
+
+	//for labels
+	m_propDesc["textFormat"] = i18n("Text Format");
+	m_propValDesc["PlainText"] = i18n("For Text Format", "Plain");
+	m_propValDesc["RichText"] = i18n("For Text Format", "Hypertext");
+	m_propValDesc["AutoText"] = i18n("For Text Format", "Auto");
+	m_propValDesc["LogText"] = i18n("For Text Format", "Log");
 }
 
 StdWidgetFactory::~StdWidgetFactory()
@@ -778,6 +826,11 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *
 		if(property == "pixmap")
 			return false;
 	}
+	else if(classname == "QLineEdit")
+	{
+		if(property == "vAlign")
+			return false;
+	}
 	else if(classname == "Line")
 	{
 		if((property == "frameShape") || (property == "font") || (property == "margin"))
@@ -859,13 +912,12 @@ StdWidgetFactory::editListContents()
 		editListView((QListView*)m_widget);
 }
 
-
 void
 StdWidgetFactory::setPropertyOptions( KexiPropertyBuffer& buf, const KFormDesigner::WidgetInfo& info, QWidget *w )
 {
 	if (buf.hasProperty("indent")) {
 		buf["indent"].setOption("min", -1);
-/*		buf["indent"].setOption("minValueText", i18n("default\n(HINT: default indent value)", "default"));*/
+		buf["indent"].setOption("minValueText", i18n("default indent value", "default"));
 	}
 }
 

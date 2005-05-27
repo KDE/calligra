@@ -48,6 +48,9 @@ Group: KeyboardNavigation
 
 Group: Forms
 TODO:-overrideStyleName [string] (empty if do not override)
+TODO:-doNotFocusAutonumberFields [bool] (true by default; when this and autoTabStop for a form is true, 
+                                         autonumber text fields are skipped)
+                                         implement this in KexiFormView::afterSwitchFrom()
 
 Group: NewFormDefaults
 TODO:-styleName [string]

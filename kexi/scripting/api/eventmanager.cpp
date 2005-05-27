@@ -81,3 +81,13 @@ bool EventManager::disconnect(QObject *sender, const QCString& signal, const QSt
     return ok;
 }
 
+bool EventManager::connect(const QCString& signal, QObject *receiver, const QCString& slot)
+{
+    //TODO
+}
+
+bool EventManager::disconnect(const QCString& signal, QObject *receiver, const QCString& slot)
+{
+    //TODO
+}
+

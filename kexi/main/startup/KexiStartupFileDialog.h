@@ -47,7 +47,7 @@ public:
 		const QString& startDir, Mode mode,
 		QWidget *parent=0, const char *name=0);
 		
-	void setMode(KexiStartupFileDialog::Mode mode);
+	void setMode(KexiStartupFileDialog::Mode mode, const QStringList &additionalMimeTypes = QStringList());
 	
 //	KURL currentURL();
 	QString currentFileName();

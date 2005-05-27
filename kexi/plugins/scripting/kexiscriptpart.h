@@ -29,6 +29,8 @@
 #include <kexipart.h>
 #include <kexidialogbase.h>
 
+class KexiScriptManager;
+
 /**
  * Kexi Scripting Plugin.
  */
@@ -48,14 +50,18 @@ class KexiScriptPart : public KexiPart::Part
          */
         virtual ~KexiScriptPart();
 
+        virtual QString i18nMessage(const QCString& englishMessage) const;
+
     protected:
         virtual KexiViewBase* createView(QWidget *parent,
                                          KexiDialogBase* dialog,
                                          KexiPart::Item &item,
-                                         int viewMode = Kexi::DataViewMode);
+                                         int viewMode = Kexi::DesignViewMode);
 
         virtual void initPartActions();
         virtual void initInstanceActions();
+    private:
+        KexiScriptManager* m_manager;
 };
 
 #endif

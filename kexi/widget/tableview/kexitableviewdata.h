@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -376,6 +376,17 @@ public:
 	inline Iterator iterator() { return Iterator(*this); }
 	inline Iterator* createIterator() { return new Iterator(*this); }
 
+	/*! \return true if ROWID information is stored within every row.
+	 Only reasonable for db-aware version. ROWID information is available 
+	 if DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false
+	 for a KexiDB database driver and a table has no primary key defined. 
+	 Phisically, ROWID information is stored after last KexiTableItem's element,
+	 so every KexiTableItem's length is expanded by one. */
+	inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
+
+	inline KexiTableItem* createItem() const
+	{ return new KexiTableItem(columns.count()+(m_containsROWIDInfo?1:0)); }
+
 signals:
 	void destroying();
 
@@ -454,6 +465,9 @@ protected:
 	/*! Used in acceptEditor() to avoid infinite recursion, 
 	 eg. when we're calling acceptRowEdit() during cell accepting phase. */
 	bool m_inside_acceptEditor : 1;
+
+	//! @see containsROWIDInfo()
+	bool m_containsROWIDInfo : 1;
 
 	int m_autoIncrementedColumn;
 

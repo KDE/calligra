@@ -103,7 +103,7 @@ UICIMPLS =
 SRCMOC	=	
 OBJMOC	=	
 DIST	=	
-TARGET	=	$(KDEDIR)/lib/kexisql2.dll
+TARGET	=	$(KDEDIR)/lib/kexisql2_d.dll
 
 ####### Implicit rules
 
