@@ -13,7 +13,11 @@ if compile_mysql_plugin
 mysql_dir=mysql
 endif
 
-SUBDIRS = . $(pgsql_dir) $(mysql_dir)
+if compile_keximdb_plugin
+keximdb_dir=keximdb
+endif
+
+SUBDIRS = . $(pgsql_dir) $(mysql_dir) $(keximdb_dir)
 
 libkeximigrate_la_METASOURCES = AUTO
 
