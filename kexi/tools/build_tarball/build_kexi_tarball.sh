@@ -16,7 +16,8 @@ PROJECT=kexi							# CHANGE
 PROJECT_TITLE=Kexi							# CHANGE
 MODULE_PATH=trunk/$MODULE
 KDEADMIN_PATH=trunk/KDE/kde-common/admin
-#for versions witin koffice:
+KEXIMDB_PATH=trunk/kdenonbeta/keximdb
+#for versions within koffice:
 #PROJECT_PATH=koffice/kexi
 #for versions independent of koffice:
 PROJECT_VER=0.9
@@ -86,10 +87,10 @@ if ! [ -e $DESTINATION ]; then
 fi
 
 if [ -e $DESTINATION ]; then
-	rm -f $DESTINATION/expect_script
+#	rm -f $DESTINATION/expect_script
 
-	touch $DESTINATION/expect_script
-	chmod +x $DESTINATION/expect_script
+#	touch $DESTINATION/expect_script
+#	chmod +x $DESTINATION/expect_script
 
 #	echo "#!$EXPECT_PROGRAM
 #		  spawn $SVN_PROGRAM -d :pserver:$SVN_USER@$CVS_HOST:/home/kde login
@@ -127,12 +128,21 @@ if ! [ -e $DESTINATION/source/$MODULE ]; then
 	cd ..
 fi
 
+MIGRATION=$DESTINATION/source/$MODULE/kexi/migration
+if ! [ -e $MIGRATION/keximdb ]; then
+	echo "*** Setup-Mode: Checking $MIGRATION/keximdb out from SVN..."
+	cd $MIGRATION || exit 1
+	$SVN_PROGRAM co $SVN_HOST/$KEXIMDB_PATH >> $DESTINATION/LOG 2>&1 || exit 1
+fi
+
 echo "1. Cleaning up..." 
 cd $DESTINATION/source/$MODULE || exit 1
 rm -fr acinclude.m4 aclocal.m4 Makefile.in Makefile libtool $PROJECT/config.h \
 config.h.in stamp-h.in subdirs configure configure.in configure.files stamp-h \
 inst-apps autom4te-2.5x.cache  autom4te.cache .autoconf_trace MakeVars.in \
 Makefile.am Makefile.rules.in
+# we don't need warnings about Image Magick:
+rm -f configure.in.bot
 
 find . -name \*~ | xargs rm -f
 
@@ -140,12 +150,20 @@ echo "2. Updating from SVN..."
 #$DESTINATION/expect_script >> $DESTINATION/LOG 2>&1
 cd admin || exit 1
 $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
-cd ../$PROJECT
+cd ../kexi || exit 1
 $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
+
+# KexiMDB plugin:
+cd migration/keximdb || exit 1
+$SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
+# -tweak configure scripts:
+cp $DIRNAME/keximdb.configure.in.in configure.in.in || exit 1
+cp $DIRNAME/keximdb.configure.in.bot configure.in.bot || exit 1
 
 cd $DESTINATION/archive || exit 1
 rm -f *
-rm -f $DESTINATION/expect_script
+#rm -f $DESTINATION/expect_script
+
 echo "3. Makefile creation..."
 export UNSERMAKE=""
 if [ -n "$CONF" ]; then
