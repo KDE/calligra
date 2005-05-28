@@ -25,7 +25,6 @@ Name[ta]=படிவ வடிவமைப்பாளர்
 Name[tg]=Дизайнгари шакл
 Name[tr]=FormTasarımcısı
 Name[uk]=Дизайнер форм
-Name[xx]=xxForm Designerxx
 Name[zh_CN]=表单设计器
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart

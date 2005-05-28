@@ -37,7 +37,6 @@ Name[tr]=KDE Adres Defteri Eklentisi
 Name[uk]=Втулок адресної книги KDE
 Name[uz]=KDE манзиллар дафтари плагини
 Name[wa]=Tchôke-divins calpin d' adresses KDE
-Name[xx]=xxKDE Addressbook Pluginxx
 Name[zh_CN]=KDE 地址簿插件
 Comment=This datasource type lets you use your KDE Address Book entries.
 Comment[bg]=Източник на данни за адресната книга на КДЕ.
@@ -69,7 +68,6 @@ Comment[sv]=Den här typen av datakälla låter dig använda information från K
 Comment[ta]=பலகத்தின் தோற்றத்தை நீங்கள் இங்கே வடிவமைக்கலாம்.
 Comment[tg]=Ин намуди манбаъи маълумот гузоштани шумо истифода кардан шуморо воридҳои Китоби Адресҳои KDE.
 Comment[tr]=Bu veri kaynağı biçimi KDE Adres Defteri girdilerini kullanmanızı sağlar.
-Comment[xx]=xxThis datasource type lets you use your KDE Address Book entries.xx
 Comment[zh_CN]=该数据源类型允许您使用您的 KDE 地址簿条目。
 
 X-KDE-Library=kwmailmerge_kabc

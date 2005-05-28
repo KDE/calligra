@@ -30,7 +30,6 @@ Name[ta]=கேஸ்பிரிட் அட்டவணை மூலம்
 Name[tg]=Сарчашмаи ҷадвали KSpread
 Name[tr]=KSpread Tablo Kaynağı
 Name[uk]=Джерело таблиць KSpread
-Name[xx]=xxKSpread Table Sourcexx
 Name[zh_CN]=KSpread 表源
 Comment=This datasource type lets you use your entries from a kspread file.
 Comment[bg]=Източник на данни за от файл на KSpread.
@@ -57,7 +56,6 @@ Comment[sv]=Den här typen av datakälla låter dig använda information från e
 Comment[ta]=இந்த தகவல்மூலம் கேஸ்ப்ரெட் கோப்பில் இருந்து உங்கள் உள்ளீடுகளை பயன்படுத்த செய்கிறது.
 Comment[tg]=Ин намуди манбаъи маълумот гузоштани шумо истифода кардан шуморо воридҳои аз файли kspread.
 Comment[tr]=Bu veri kaynağı biçimi bir kspread dosyasındaki girdileri kullanmanızı sağlar.
-Comment[xx]=xxThis datasource type lets you use your entries from a kspread file.xx
 Comment[zh_CN]=该数据源类型允许您从 kspead 文件中使用您的条目。
 
 X-KDE-Library=kwmailmerge_kspread

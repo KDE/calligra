@@ -37,7 +37,6 @@ Name[ta]=Kexi குறிமுறை
 Name[tg]=Сарчашмаи Kexi
 Name[tr]=Kexi Kaynağı
 Name[uk]=Джерело Kexi
-Name[xx]=xxKexi Sourcexx
 Name[zh_CN]=Kexi 源
 
 Comment=This datasource allows you to choose an existing Kexi project
@@ -70,7 +69,6 @@ Comment[ta]=This datasource type stores the  தளம் directly in the KWord 
 Comment[tg]=Ин манбаъи маълумот ба шумо иҷозат медиҳад барои интихоби баромадани проекти Kexi
 Comment[tr]=Bu veri kaynağı varolan bir Kexi projesi seçmenize imkan tanır.
 Comment[uk]=Цей тип джерела даних дозволяє вибрати існуючий проект Kexi
-Comment[xx]=xxThis datasource allows you to choose an existing Kexi projectxx
 Comment[zh_CN]=此数据源允许您选择一个现有的 Kexi 项目
 
 X-KDE-Library=kwmailmerge_kexi

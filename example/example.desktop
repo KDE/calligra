@@ -35,7 +35,6 @@ Name[tr]=KOffice Örnek Uygulama
 Name[uk]=Приклад програми KOffice
 Name[uz]=KOffice намуна дастури
 Name[wa]=Programe di mostraedje di KOffice
-Name[xx]=xxKOffice Example Applicationxx
 Name[zh_CN]=KOffice 应用程序范例
 Exec=example
 MimeType=application/x-example

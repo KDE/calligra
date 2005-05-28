@@ -33,7 +33,6 @@ Comment[tg]=Расми StarOffice
 Comment[tr]=StarOffice Çizim
 Comment[uk]=Малюнок StarOffice
 Comment[wa]=Dessinaedje StarOffice
-Comment[xx]=xxStarOffice Drawingxx
 Comment[zh_CN]=StarOffice 绘图
 [Property::X-KDE-NativeExtension]
 Type=QString

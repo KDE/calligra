@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
-Name[xx]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
 Comment[da]=PostgreSQL Migrationsdriver for Kexi
 Comment[de]=PostgreSQL-Migrationstreiber für Kexi
@@ -44,7 +43,6 @@ Comment[sr]= Са шеснаестогодишњом историјом разв
 Comment[sr@Latn]= Sa šesnaestogodišnjom istorijom razvoja, jednom od najačih razvojnih zajednica, i globalnom reputacijom visoko kvalitetnog softverskog inžinjeringa, PostgreSQL je svetski najnaprednija baza podataka otvorenog koda za velike korporacije i individualne korisnike.
 Comment[sv]=Med en 16-årig utvecklingshistoria, en av de starkaste utvecklingsgemenskaperna i världen, och global ryktbarhet om högkvalitativ programvaru-utveckling, är PostgreSQL världens mest avancerade databas med öppen källkod, både för stora företag och enskilda användare.
 Comment[tr]=16 yıllık gelişim geçmişi ile dünyadaki en güçlü yazılım geliştirme topluluklarından biri olarak, dünya çapında yüksek kaliteli yazılım mühendisliği söhretiyle, PostgreSQL, bireysel kullanıcılar ve firmalar için dünyanın en gelişmiş Açık Kaynak Kodlu Veritabanıdır.
-Comment[xx]=xxWith a 16 year development history, one of the strongest development communities in the world, and a global reputation for high quality software engineering, PostgreSQL is the world's most advanced Open Source Database for large corporations and individual users.xx
 Comment[zh_CN]=拥有十六年的发展历史，世界上最稳健的开发社区之一，高质量软件工程的明智选择。无论对于大公司还是个人来说，PostgreSQL 都是世界上最高级的开源数据库之一。
 X-KDE-Library=keximigrate_pqxx
 ServiceTypes=Kexi/MigrationDriver

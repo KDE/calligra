@@ -31,7 +31,6 @@ Name[tg]=Мисоли Барномаи KOffice
 Name[tr]=KOffice Örnek Bileşeni
 Name[uk]=Приклад компонента KOffice
 Name[wa]=Componint di mostraedje di KOffice
-Name[xx]=xxKOffice Example Componentxx
 Name[zh_CN]=KOffice 组件范例
 X-KDE-Library=libexamplepart
 MimeType=application/x-example

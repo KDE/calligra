@@ -36,7 +36,6 @@ Name[tg]=Karbon14 WMF Филтри Содирот
 Name[tr]=Karbon14 WMF Aktarma Filtresi
 Name[uk]=Фільтр експорту WMF для Karbon14
 Name[uz]=Karbon14 WMF экспорт филтери
-Name[xx]=xxKarbon14 WMF Export Filterxx
 Name[zh_CN]=Karbon14 WMF 导出过滤器
 ServiceTypes=KOfficeFilter
 Type=Service
