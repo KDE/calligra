@@ -16,6 +16,7 @@ Comment[et]=Kexi projektide käsitleja
 Comment[fa]=Kexi اداره کننده پروژه
 Comment[fi]=Kexin projektikäsittelijät
 Comment[fr]=Gestionnaires de projet Kexi
+Comment[he]=מנהלי פרוייקטים של Kexi
 Comment[hr]=Upravljači Kexi projektom
 Comment[hu]=Kexi projektkezelők
 Comment[it]=Gestione progetto di Kexi
@@ -39,7 +40,6 @@ Comment[tg]=Kexi Лоиҳаи дастнавис
 Comment[tr]=Kexi Proje İşleci
 Comment[uk]=Обробники проекту Kexi
 Comment[xx]=xxKexi Project Handlersxx
-Comment[zh_CN]=Kexi 项目处理器
 
 [PropertyDef::X-Kexi-PartVersion]
 Type=int

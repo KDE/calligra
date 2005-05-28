@@ -53,7 +53,6 @@ Name[uz]=KOffice файллари
 Name[wa]=Fitchîs KOffice
 Name[xh]=Iifayile ze KOffice
 Name[xx]=xxKOffice Filesxx
-Name[zh_CN]=KOffice 文件
 Name[zh_TW]=KOffice 檔案
 ServiceTypes=ThumbCreator
 MimeTypes=application/x-kword,application/x-kspread,application/x-kpresenter,application/x-karbon,application/x-krita

@@ -20,7 +20,6 @@ Name[ru]=Исходный текст Qt-SQL (одна таблица)
 Name[sr]=Qt-SQL извор (једна табела)
 Name[sr@Latn]=Qt-SQL izvor (jedna tabela)
 Name[sv]=QT-SQL-källa (enkel tabell)
-Name[zh_CN]=Qt-SQL 源(单表)
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).
 Comment[ar]=هذا النّوع من المصادر البيانيّة يتيح لك إمكانية استخدام جداول قاعدة بيانيّة SQL مُخَزَّنة على خادم SQL. بحسب تهيئة نظامك، فإنّ MySQL، PostgreSQL و UnixODBC تُعتبر من بين ما هو مدعوم من وُجهات خلفيّة للقواعد البيانيّة. يمكن حتى أن يتواجد المزيد (Oracle في إصدارات Qt التِّجاريّة أو الوُجهات الخلفيّة المملوكة لطرف ثالث).
 Comment[az]=Bu mənbə sizə SQL verilənlər bazasını istifadə etməyə imkan verir. Sistem qurğularınızdan asılı olaraq : MySQL,Postgres,(Oracle, lisenziyalı QT buraxılışını işlədirsinizsə),....
@@ -63,7 +62,6 @@ Comment[tr]=Bu verikaynağı tipi bir SQL sunucusundaki SQL veritabanı tablolar
 Comment[uk]=Цей тип джерела даних дозволяє Вам використовувати таблиці баз даних в серверах SQL. Відповідно до конфігурації Вашої системи, підтримуються MySQL, PostgreSQL та UnixODBC. Можливо підтримуються і інші сервери БД (Oracle в комерційній поставці Qt або сервери сторонніх компаній).
 Comment[xh]=Uhlobo lwe mvelaphi ye data ikuvumela ukuba usebenzise iitafile zesiseko sedata ze SQL ezigcinwe Kumncedisi we SQL.Kuxhomekeke kuqwalaselo lwendlela yokusebenza, I SQL yam, PostgreSQL ne UnixODBC zikunye neziphelo zesiseko sedata esixhasiweyo. Kusenokuba nezingaphezulu (I Oracle ekwi thengiso lwenguqulelo ye QT okanye iziphelo zomntu wesithathu).
 Comment[xx]=xxThis datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).xx
-Comment[zh_CN]=此数据库类型允许您使用存储于 SQL 服务器的 SQL 数据库表。根据您的系统配置不同，MySQL、PostgreSQL 和 UnixODBC 都是支持的后端数据库。可能还有更多(Qt 商业版中附带 Oracle 支持，或使用第三方后端)。
 Comment[zh_TW]=這個資料來源類別讓你使用在一個 SQL 伺服器上面的 SQL 資料表格。根據你的系統設定，MySQL、PostgreSQL 與 UnixODBC 都在支援之列。還會有更多(例如在商業版本的 QT 或是第三廠商提供相關支援)。
 
 X-KDE-Library=kwmailmerge_qtsqldb

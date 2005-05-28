@@ -28,7 +28,6 @@ Comment[sr@Latn]=OASIS-ov OpenDocument tabelarni proračun
 Comment[sv]=OASIS OpenDocument kalkylark
 Comment[uk]=Електронна таблиця OASIS OpenDocument
 Comment[xx]=xxOASIS OpenDocument SpreadSheetxx
-Comment[zh_CN]=OASIS OpenDocument 工作簿
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.ods

@@ -51,7 +51,6 @@ GenericName[tr]=Oranlanabilir Grafikler
 GenericName[uk]=Масштабовна графіка
 GenericName[xh]=Imizobo Ekalishekayo
 GenericName[xx]=xxScalable Graphicsxx
-GenericName[zh_CN]=可缩放图像
 GenericName[zh_TW]=可縮放向量圖
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-karbon;application/illustrator;image/x-eps;application/postscript
 # kghostview has 6 for application/postscript, we need to be under that...

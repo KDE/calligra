@@ -28,7 +28,6 @@ Comment[sr@Latn]=OASIS-ov OpenDocument tekst
 Comment[sv]=OASIS OpenDocument text
 Comment[uk]=Текстовий документ OASIS OpenDocument
 Comment[xx]=xxOASIS OpenDocument Textxx
-Comment[zh_CN]=OASIS OpenDocument 文本
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odt

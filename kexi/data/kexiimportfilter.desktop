@@ -14,8 +14,9 @@ Comment[es]=Tipo de servicio para cualquier tipo de filtro de importación de ke
 Comment[et]=Teenuse tüüp kõikvõimalikele Kexi impordifiltritele (tabelid,vormid,päringud,....)
 Comment[fi]=Palvelutyyppi Kexin tuontisuotimille (taulukot, lomakkeet, kyselyt ...)
 Comment[fr]=Type de service pour tout genre de filtres d'importation de kexi (table, formulaires, requêtes....) 
+Comment[he]=טיפוס שירות עבור כל סוגי מסנני הייבוא של kexi (טבלה, טפסים, שאילתות וכו')
 Comment[hu]=Szolgáltatástípus Kexi importszűrőkhöz (tábla, űrlap, lekérdezés, ...)
-Comment[it]=Tipo di servizio per qualsiasi filtro di importazione per Kexi (tabelle, form, query...)
+Comment[it]=Tipo di servizio per qualsiasi filtro di importazione per Kexi (tabelle, moduli, interrogazioni...)
 Comment[ms]=Jenis servis untuk mana-mana penapis import kexi (jadual,borang,queri,....)
 Comment[nb]=Tjenestetype for alle typer importfiltre for kexi (tabeller, skjemaer, spørringer ...)
 Comment[nl]=Servicetype voor elk type Kexi-importfilters (table,forms,queries,....)
@@ -34,7 +35,6 @@ Comment[tg]=Намуди хизматгузорӣ барои шакли филт
 Comment[tr]=Kexi alım filtreleri için servis türü (tablo,form,sorgular,...)
 Comment[uk]=Тип служби для будь-якого виду фільтрів імпорту kexi(таблиць, форм, запитів, ...)
 Comment[xx]=xxService type for any kind of kexi import filters (table,forms,queries,....)xx
-Comment[zh_CN]=任何种类的 kexi 导入过滤器(表、表单、查询，等等)
 
 [PropertyDef::X-KEXI-Import]
 Type=QStringList

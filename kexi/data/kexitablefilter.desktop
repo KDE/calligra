@@ -17,7 +17,7 @@ Comment[et]=Kexi tabelite impordi/ekspordifilter
 Comment[fa]=Kexi فیلتر جدول ورود/خروج برای
 Comment[fi]=Kexin taulukoiden tuonti-/vientisuodin
 Comment[fr]=Filtre d'importation / exportation de tables de Kexi
-Comment[he]=מסנן של יבוא/יצוא של טבלאות Kexi
+Comment[he]=מסנן לייבוא וייצוא טבלאות של Kexi
 Comment[hr]=Filtar za uvoz/izvoz Kexi tablice
 Comment[hu]=Kexi táblaimportáló és -exportáló szűrő
 Comment[it]=File di importazione/esportazione tabelle per Kexi
@@ -39,7 +39,6 @@ Comment[tr]=Kexi Tablo Alma/Verme Filtresi
 Comment[uk]=Фільтр імпорту/експорту таблиць Kexi
 Comment[uz]=Kexi жадвал импорт/экспорт филтери
 Comment[xx]=xxKexi Table Import/Export Filterxx
-Comment[zh_CN]=Kexi 表导入/导出过滤器
 
 [PropertyDef::X-Kexi-Direction]
 Type=QString

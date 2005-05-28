@@ -38,7 +38,6 @@ Name[tr]=Krita Magick Alma Filtresi
 Name[uk]=Фільтр імпорту Magick для Krita
 Name[uz]=Krita Magick импорт филтери
 Name[xx]=xxKrita Magick Import Filterxx
-Name[zh_CN]=Krita Magick 导入过滤器
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp,image/png,image/gif,image/cgm,image/jpeg,image/tiff,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xcf,image/x-xpm,image/x-vnd.adobe.photoshop
 X-KDE-Weight=1

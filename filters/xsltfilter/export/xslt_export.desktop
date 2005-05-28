@@ -56,7 +56,6 @@ Name[uz]=KOffice XSLT экспорт филтери
 Name[wa]=Passete XSLT di rexhowe po KOffice
 Name[xh]=Isihluzi Sokurhweba ngaphandle se KOffice XSLT
 Name[xx]=xxKOffice XSLT Export Filterxx
-Name[zh_CN]=KOffice XSLT 导出过滤器
 Name[zh_TW]=KOffice XSLT 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

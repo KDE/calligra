@@ -55,7 +55,6 @@ Name[uz]=KOffice XSLT импорт филтери
 Name[wa]=Passete XSLT d' intrêye po KOffice
 Name[xh]=Isihluzi Sokurhweba se KOffice XSLT
 Name[xx]=xxKOffice XSLT Import Filterxx
-Name[zh_CN]=KOffice XSLT 导入过滤器
 Name[zh_TW]=KOffice XSLT 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

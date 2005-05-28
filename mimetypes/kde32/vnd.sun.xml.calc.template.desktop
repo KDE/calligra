@@ -32,7 +32,6 @@ Comment[tr]=Openoffice.org Hesap Tablosu Şablonu
 Comment[uk]=Шаблон електронної таблиці OpenOffice.org
 Comment[wa]=Modele di foye di tåvleu OpenOffice.org
 Comment[xx]=xxOpenOffice.org Spreadsheet Templatexx
-Comment[zh_CN]=OpenOffice.org 工作簿模板
 Icon=spreadsheet
 Type=MimeType
 Patterns=*.stc;*.STC;

@@ -44,7 +44,6 @@ Name[tr]=KFormula MathML Alma Filtresi
 Name[uk]=Фільтр імпорту MathML для KFormula
 Name[uz]=KFormula MathML импорт филтери
 Name[xx]=xxKFormula MathML Import Filterxx
-Name[zh_CN]=KFormula MathML 导入过滤器
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkfomathmlimport

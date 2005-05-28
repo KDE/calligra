@@ -11,9 +11,11 @@ Comment[es]=Base de fábrica de elementos
 Comment[et]=Vidinate põhibaas
 Comment[fi]=Käyttöliittymäelementtien pohja
 Comment[fr]=Base de création de widgets
+Comment[he]=בסיס למפעל פריטים
 Comment[hr]=Web widget stil
 Comment[hu]=Widgetkészítő-alap
-Comment[nb]=Vinduselement-fabrikk
+Comment[it]=Base della fabbrica di oggetti
+Comment[nb]=Base for elementfabrikk
 Comment[nn]=Base for elementfabrikk
 Comment[pl]=Podstawowa fabryka widżetów
 Comment[pt]=Fábrica de Elementos
@@ -27,7 +29,6 @@ Comment[sv]=Bas för att skapa grafiska komponenter
 Comment[ta]= widget  தொழிற்சாலை தளம்
 Comment[tg]=Гузориши база, ки таркиботи идораи офис дар дохил дорад
 Comment[xx]=xxWidget Factory Basexx
-Comment[zh_CN]=基础组件工厂
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]
 Type=QString

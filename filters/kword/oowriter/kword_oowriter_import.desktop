@@ -28,7 +28,6 @@ Name[ta]=கேவேர்டுக்கான OpenOffice.org ரைட்ட�
 Name[tr]=KWord için OpenOffice.org Writer Alma Filtresi
 Name[uk]=Фільтр імпорту OpenOffice.org Writer для KWord
 Name[xx]=xxOpenOffice.org Writer Import Filter for KWordxx
-Name[zh_CN]=KWord 的 OpenOffice.org Writer 导入过滤器
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.master
 X-KDE-Weight=1

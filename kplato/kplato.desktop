@@ -35,7 +35,6 @@ GenericName[tr]=Proje Yönetimi
 GenericName[uk]=Керування проектами
 GenericName[wa]=Manaedjaedje di prodjet
 GenericName[xx]=xxProject Managementxx
-GenericName[zh_CN]=项目管理
 Exec=kplato %u
 MimeType=application/x-vnd.kde.kplato
 Type=Application

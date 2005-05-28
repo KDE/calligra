@@ -35,7 +35,6 @@ Name[tr]=Zarf DL
 Name[uk]=Конверт DL
 Name[wa]=Ewalpeure DL
 Name[xx]=xxEnvelope DLxx
-Name[zh_CN]=DL 信封
 Type=Link
 URL=.source/EnvelopeDL.kwt
 X-KDE-Hidden=false

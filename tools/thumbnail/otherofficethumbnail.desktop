@@ -52,7 +52,6 @@ Name[uk]=Інші файли KOffice
 Name[wa]=Ôtes fitchîs di buro
 Name[xh]=Ezinye Iifayile ze Office
 Name[xx]=xxOther Office Filesxx
-Name[zh_CN]=其它 Office 文件
 Name[zh_TW]=其他 Office 檔案
 ServiceTypes=ThumbCreator
 MimeTypes=application/illustrator,application/msexcel,application/mspowerpoint,application/msword,application/vnd.palm,application/wordperfect,application/x-abiword,application/x-amipro,application/x-applixgraphics,application/x-applixspread,application/x-applixword,application/x-gnumeric,application/x-quattropro,image/x-msod,text/rtf,text/vnd.wap.wml

@@ -48,7 +48,6 @@ Name[tr]=Kullanılamayan KOffice Belgesi
 Name[uk]=Недоступний документ KOffice
 Name[xh]=Uxhwebu lwe KOffice Olungekhoyo
 Name[xx]=xxUnavailable KOffice Documentxx
-Name[zh_CN]=不可用的 KOffice 文档
 Name[zh_TW]=無法取得的 KOffice 文件
 X-KDE-Library=libkounavailpart
 Type=Service

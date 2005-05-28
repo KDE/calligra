@@ -28,7 +28,6 @@ Name[ta]=கேஸ்பெரெட்டுக்கான OpenOffice.org க�
 Name[tr]=KSpread için OpenOffice.org Calc Aktarma Filtresi
 Name[uk]=Фільтр експорту OpenOffice.org Calc для KSpread
 Name[xx]=xxOpenOffice.org Calc Export Filter for KSpreadxx
-Name[zh_CN]=KSpread 的 OpenOffice.org Calc 导出过滤器
 X-KDE-Export=application/vnd.sun.xml.calc
 X-KDE-Import=application/x-kspread
 X-KDE-Weight=1
