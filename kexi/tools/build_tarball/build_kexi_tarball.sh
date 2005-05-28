@@ -46,7 +46,7 @@ echo $DIST_VER | grep -e "beta" -e "rc" > /dev/null && lsmsrcfile=kexi.lsm || ls
 
 fixAppSpecific()
 {
-	rm ../changes-* #remove koffice-specific changelog
+	rm -f ../changes-* #remove koffice-specific changelog
 	mv CHANGES ../
 	echo "For complete list of authors see kexi/main/kexiaboutdata.h file or use \"Help->About Kexi\" menu command." > ../AUTHORS
 }
@@ -159,6 +159,9 @@ $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
 # -tweak configure scripts:
 cp $DIRNAME/keximdb.configure.in.in configure.in.in || exit 1
 cp $DIRNAME/keximdb.configure.in.bot configure.in.bot || exit 1
+rm src/keximdb/configure.in.in src/keximdb/configure.in.bot
+# - use .la's instead of installed libraries
+$PERL_PROGRAM -p -i -e 's/-lkeximigrate/..\/..\/..\/libkeximigrate.la/g;s/-L\$\(KEXIDB_LIB\)/..\/..\/..\/..\/kexidb\/libkexidb.la/g' src/keximdb/Makefile.am
 
 cd $DESTINATION/archive || exit 1
 rm -f *
