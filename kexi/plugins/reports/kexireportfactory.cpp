@@ -49,7 +49,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLabel->setPixmap("label");
 	wLabel->setClassName("Label");
 	wLabel->setName(i18n("Label"));
-	wLabel->setNamePrefix(i18n("Widget name (see above)", "Label"));
+	wLabel->setNamePrefix("Label");
 	wLabel->setDescription(i18n("A label to display text"));
 	addClass(wLabel);
 
@@ -57,7 +57,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wPicLabel->setPixmap("pixmaplabel");
 	wPicLabel->setClassName("PicLabel");
 	wPicLabel->setName(i18n("Picture Label"));
-	wPicLabel->setNamePrefix(i18n("Widget name (see above)", "PicLabel"));
+	wPicLabel->setNamePrefix("PicLabel");
 	wPicLabel->setDescription(i18n("A label to display images or icons"));
 	addClass(wPicLabel);
 
@@ -65,7 +65,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLine->setPixmap("line");
 	wLine->setClassName("ReportLine");
 	wLine->setName(i18n("Line"));
-	wLine->setNamePrefix(i18n("Widget name (see above)", "Line"));
+	wLine->setNamePrefix("Line");
 	wLine->setDescription(i18n("A simple line"));
 	addClass(wLine);
 
@@ -73,7 +73,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wSubReport->setPixmap("report");
 	wSubReport->setClassName("KexiSubReport");
 	wSubReport->setName(i18n("Sub Report"));
-	wSubReport->setNamePrefix(i18n("Widget name (see above)", "SubReport"));
+	wSubReport->setNamePrefix("SubReport");
 	wSubReport->setDescription(i18n("A report embedded in another report"));
 	addClass(wSubReport);
 }

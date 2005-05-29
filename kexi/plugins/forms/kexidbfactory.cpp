@@ -328,7 +328,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setPixmap("form");
 	wView->setClassName("KexiDBForm");
 	wView->setName(i18n("Database Form"));
-	wView->setNamePrefix(i18n("DBForm"));
+	wView->setNamePrefix("DBForm");
 	wView->setDescription(i18n("A db-aware form widget"));
 	addClass(wView);
 	
@@ -336,7 +336,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
-	wSubForm->setNamePrefix(i18n("SubForm"));
+	wSubForm->setNamePrefix("SubForm");
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
@@ -351,7 +351,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLineEdit->addAlternateClassName("KLineEdit", true/*override*/);
 	wLineEdit->setIncludeFileName("klineedit.h");
 	wLineEdit->setName(i18n("Line Edit"));
-	wLineEdit->setNamePrefix(i18n("Widget name (see above)", "LineEdit"));
+	wLineEdit->setNamePrefix("LineEdit");
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	addClass(wLineEdit);
 
@@ -362,7 +362,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->addAlternateClassName("QLabel", true/*override*/);
 	wLabel->setIncludeFileName("qlabel.h");
 	wLabel->setName(i18n("Text Label"));
-	wLabel->setNamePrefix(i18n("Widget name (see above)", "TextLabel"));
+	wLabel->setNamePrefix("TextLabel");
 	wLabel->setDescription(i18n("A widget to display text"));
 	addClass(wLabel);
 
