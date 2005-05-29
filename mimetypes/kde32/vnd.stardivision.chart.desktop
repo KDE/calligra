@@ -34,6 +34,7 @@ Comment[tr]=StarOffice Tablo
 Comment[uk]=Діаграма StarOffice
 Comment[wa]=Grafike StarOffice
 Comment[xx]=xxStarOffice Chartxx
+Comment[zh_CN]=StarOffice 图表
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.sds

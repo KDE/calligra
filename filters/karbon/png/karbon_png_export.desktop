@@ -47,6 +47,7 @@ Name[uk]=Фільтр експорту SVG для Karbon14
 Name[uz]=Karbon14 PNG экспорт филтери
 Name[xh]=Isihluzi Sokurhweba ngaphandle se Karbon14 PNG
 Name[xx]=xxKarbon14 PNG Export Filterxx
+Name[zh_CN]=Karbon14 PNG 导出过滤器
 Name[zh_TW]=Karbon14 EPS 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

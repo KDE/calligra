@@ -35,6 +35,7 @@ Comment[tr]=StarOffice Math Belgesi
 Comment[uk]=Документ StarOffice Math
 Comment[wa]=Documint Matematike StarOffice
 Comment[xx]=xxStarOffice Math Documentxx
+Comment[zh_CN]=StarOffice 数学文档
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.sdf

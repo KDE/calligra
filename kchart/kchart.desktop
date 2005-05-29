@@ -58,6 +58,7 @@ GenericName[th]=แผนภูมิ
 GenericName[uk]=Діаграми
 GenericName[xh]=Itshati
 GenericName[xx]=xxChartxx
+GenericName[zh_CN]=图表
 Exec=kchart %u
 Type=Application
 Icon=kchart

@@ -61,6 +61,7 @@ GenericName[uk]=Електронні таблиці
 GenericName[uz]=Электрон жадваллар
 GenericName[wa]=Tåvleus
 GenericName[xx]=xxSpreadsheetsxx
+GenericName[zh_CN]=电子表格
 GenericName[zh_TW]=Spread 表格
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/msexcel;text/x-csv;application/x-quattropro
 Type=Application

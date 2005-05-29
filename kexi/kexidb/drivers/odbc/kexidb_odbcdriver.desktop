@@ -33,6 +33,7 @@ Comment[tg]=Драйвери Kexi Open Database
 Comment[tr]=Kexi Açık Veritabanı Bağlanabilirlik Sürücüsü
 Comment[uk]=Драйвер з'єднання Kexi Open Database
 Comment[xx]=xxKexi Open Database Connectivity Driverxx
+Comment[zh_CN]=Kexi 开放数据库连接驱动
 X-KDE-Library=kexidb_odbcdriver
 ServiceTypes=Kexi/DBDriver
 Type=Service

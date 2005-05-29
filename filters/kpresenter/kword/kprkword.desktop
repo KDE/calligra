@@ -18,6 +18,7 @@ Name[ru]=Фильтр преобразования документов KWord в
 Name[sr]=KPresenter-ов филтер за KWord
 Name[sr@Latn]=KPresenter-ov filter za KWord
 Name[sv]=Kpresenter Kword-filter
+Name[zh_CN]=KPresenter KWord 过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1
 X-KDE-Export=application/x-kword

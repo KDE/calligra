@@ -42,6 +42,7 @@ Name[uk]=Фільтр імпорту StarWriter 5.x для KWord
 Name[uz]=KWord StarWriter 5.x импорт филтери
 Name[xh]=Isihluzi Sokurhweba se KWord StarWriter 5.x
 Name[xx]=xxKWord StarWriter 5.x Import Filterxx
+Name[zh_CN]=KWord StarWriter 5.x 导入过滤器
 Name[zh_TW]=KWord StarWriter 5.x 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

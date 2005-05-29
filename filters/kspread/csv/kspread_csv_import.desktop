@@ -56,6 +56,7 @@ Name[ven]=Filithara yau u dzhenisa nga ngomu ya CSV ya u phadaladzhwa ha K
 Name[wa]=Passete CSV d' intrêye po KSpread
 Name[xh]=CSV Yesihluzi Sokurhweba se KSpread
 Name[xx]=xxCSV Import Filter for KSpreadxx
+Name[zh_CN]=KSpread 的 CSV 导入过滤器
 Name[zh_TW]=KSpread 的 CSV 匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=text/x-csv,text/plain

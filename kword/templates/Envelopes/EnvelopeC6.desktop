@@ -35,6 +35,7 @@ Name[tr]=Zarf C6
 Name[uk]=Конверт C6
 Name[wa]=Ewalpeure C6
 Name[xx]=xxEnvelope C6xx
+Name[zh_CN]=C6 信封
 Type=Link
 URL=.source/EnvelopeC6.kwt
 X-KDE-Hidden=false

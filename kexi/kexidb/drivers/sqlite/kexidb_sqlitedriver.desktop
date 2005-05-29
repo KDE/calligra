@@ -33,6 +33,7 @@ Comment[tg]=SQLite -- движоки SQL, ки дар дар дохили Kexi �
 Comment[tr]=SQlite Kexi'ye gömülü varsayılan  SQL motorudur
 Comment[uk]=SQLite - це типовий рушій SQL вбудований в Kexi
 Comment[xx]=xxSQLite is default Kexi embedded SQL enginexx
+Comment[zh_CN]=SQLite 是嵌入 Kexi 的默认 SQL 引擎
 X-KDE-Library=kexidb_sqlitedriver
 ServiceTypes=Kexi/DBDriver
 Type=Service

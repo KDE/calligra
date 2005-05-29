@@ -45,6 +45,7 @@ Name[uk]=Фільтр імпорту LATEX для KWord
 Name[uz]=KWord LaTeX импорт филтери
 Name[wa]=Passete LaTeX d' intrêye po KWord
 Name[xx]=xxKWord Latex Import Filterxx
+Name[zh_CN]=KWord Latex 导入过滤器
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkwordlateximport

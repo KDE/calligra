@@ -54,6 +54,7 @@ Name[uk]=Фільтр експорту LaTeX для KFormula
 Name[uz]=KFormula LaTeX экспорт филтери
 Name[xh]=Isihluzi Sokurhweba ngaphandle se KFormula LaTeX
 Name[xx]=xxKFormula LaTeX Export Filterxx
+Name[zh_CN]=KFormula LaTeX 导出过滤器
 Name[zh_TW]=KFormula LaTeX 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

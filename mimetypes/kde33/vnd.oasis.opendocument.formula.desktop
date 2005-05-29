@@ -28,6 +28,7 @@ Comment[sr@Latn]=OASIS-ova OpenDocument formula
 Comment[sv]=OASIS OpenDocument formel
 Comment[uk]=Формула OASIS OpenDocument
 Comment[xx]=xxOASIS OpenDocument Formulaxx
+Comment[zh_CN]=OASIS OpenDocument 公式
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odf

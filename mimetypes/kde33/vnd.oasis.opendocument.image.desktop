@@ -28,6 +28,7 @@ Comment[sr@Latn]=OASIS-ova OpenDocument slika
 Comment[sv]=OASIS OpenDocument bild
 Comment[uk]=Зображення OASIS OpenDocument
 Comment[xx]=xxOASIS OpenDocument Imagexx
+Comment[zh_CN]=OASIS OpenDocument 图像
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odi

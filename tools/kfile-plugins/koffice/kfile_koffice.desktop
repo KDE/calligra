@@ -47,6 +47,7 @@ Name[uz]=KOffice маълумот
 Name[wa]=Informåcion KOffice
 Name[xh]=Ulwazi lwe KOffice
 Name[xx]=xxKOffice Infoxx
+Name[zh_CN]=KOffice 信息
 Name[zh_TW]=KOffice 資訊
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_koffice

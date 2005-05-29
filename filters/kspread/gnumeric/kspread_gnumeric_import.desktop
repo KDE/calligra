@@ -54,6 +54,7 @@ Name[ven]=Filithara ya u bvisela nnda ya GNUMERIC yau phadaladza ha K
 Name[wa]=Passete Gnumeric d' intrêye po KSpread
 Name[xh]=GNUMERIC Yesihluzi Sorhwebo se KSpread
 Name[xx]=xxGNUMERIC Import Filter for KSpreadxx
+Name[zh_CN]=KSpread 的 GNUmeric 导入过滤器
 Name[zh_TW]=KSpread 的 GNUmeric 匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-gnumeric

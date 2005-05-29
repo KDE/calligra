@@ -35,6 +35,7 @@ Comment[tg]=Намуди хизматгузорӣ барои шакли филт
 Comment[tr]=Kexi alım filtreleri için servis türü (tablo,form,sorgular,...)
 Comment[uk]=Тип служби для будь-якого виду фільтрів імпорту kexi(таблиць, форм, запитів, ...)
 Comment[xx]=xxService type for any kind of kexi import filters (table,forms,queries,....)xx
+Comment[zh_CN]=任何种类的 kexi 导入过滤器(表、表单、查询，等等)
 
 [PropertyDef::X-KEXI-Import]
 Type=QStringList

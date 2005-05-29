@@ -51,6 +51,7 @@ Name[tr]=İç Depo
 Name[uk]=Внутрішнє сховище
 Name[xh]=Indawo yokugcina Yangaphakathi
 Name[xx]=xxInternal Storagexx
+Name[zh_CN]=内部存储
 Name[zh_TW]=內部存儲器
 Comment=This datasource type stores the data directly in the KWord file
 Comment[ar]=هذا النّوع من المصادر البيانيّة يُخزِّن البيانات مباشرة في ملف KWord
@@ -97,6 +98,7 @@ Comment[tr]=Bu veri kaynağı veriyi doğrudan KWord dosyasında saklar.
 Comment[uk]=Цей тип джерела даних зберігає дані напряму в файлі KWord
 Comment[xh]=Uhlobo lwe mvelaphi ye data igcina idata ngqo kwifayile ye KWord
 Comment[xx]=xxThis datasource type stores the data directly in the KWord filexx
+Comment[zh_CN]=该数据源类型将数据直接保存在 KWord 文件中
 Comment[zh_TW]=這個資料來源類別將資料直接以 KWord 檔案儲純
 
 X-KDE-Library=kwmailmerge_classic
