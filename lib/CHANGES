@@ -1,9 +1,33 @@
 Changes after KOffice-1.4-beta1
 ===============================
+KForumula:
+- Disable the matrix actions when the cursor isn't in a matrix element.
+- Do not crash when exporting to PNG.
+
 KOfficeCore:
 - Create backup file faster for local files
 - OASIS: fix memleak during loading (styles dom elements)
 - OASIS: correct handling of default styles (per-family)
+- Load "meta.xml" in OASIS format correctly.
+- Save and load all metadata in OASIS format.
+- Load remote svg pictures which begin with "<?xml" (and not only "<?XML").
+- Bug fix: closing with embedded doc asks save/discard twice (#105879).
+
+KOfficeUI:
+- Select a program's default template in the template chooser when the user starts the program for the first time.
+- Be sure that the new template name doesn't only contain whitespaces.
+- Bug fix: "Removed" templates are never deleted (#76297).
+- Be sure every template name has an unique file name so they don't get overwritten when creating a new template.
+
+KoText:
+- Do not always save a document in OASIS format with striked-out and underlined text (#92654).
+- Bug fix: completion doesn't show any tooltip for autocompletion (#105065).
+- Activate the capitalize-first-letter-correction when we are in the beginning of a line and the last character in the previous line is a punctuation mark. (for example a '-' character) (#105064).
+- Bug fix: autoformat URL in autocorrection causing text editing problem (#105871).
+- Load all week days, from 1 to 7 (not 0 to 6).
+- URL detection: URLs beginning with "ftp." are now valid links.
+- Make the capitalize name of days correction work after a punct.
+- Many bugfixes for KWord's footnotes/endnotes (see ../kword/CHANGES).
 
 Changes after KOffice-1.3
 =========================

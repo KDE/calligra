@@ -1,6 +1,13 @@
 Changes after KWord-1.4-beta1
 =============================
-- Fixed crash when editing a cell on loading (#104982)
+- Fixed crash when editing a cell on loading (#104982).
+- Many footnotes bugs have been solved (#85148,, #72506, #57298, #62360, #84678).
+- Show the content of the footnote/endnote in the status barwhen the mouse cursor is placed over a footnote/endnote reference (part of feature #48794).
+- Added an apply button to the frame property and the resize column dialog.
+- Added a reset button to the resize column dialog.
+- Resize column dialog: the maximum width for a cell is the width of the table's parent frame if the table is floating.
+- All KDoubleNumInputs have been replaced KoUnitDoubleSpinBoxes.
+- Disable the formula toolbar from start if no formula frame is activated.
 
 Changes between KWord-1.3.x and KWord-1.4-beta1
 ===============================================

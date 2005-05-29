@@ -1,3 +1,12 @@
+since 1.4-beta1
+=============================
+- Use General/Blank Worksheet as default template.
+- KSpread crashes on exit if there is a chart in the sheet (#101915).
+- The data editor is disabled for charts which has been loaded.
+- Don't use 600 dpi as default resolution (the chart printing is much faster now).
+- The chart/object printing is simplified and works correctly now. Unfortunately this breaks the transform feature but the ordinary rectangle printing is more important.
+- Paint the child document after it has been inserted.
+
 since 1.3
 =========
 
