@@ -620,6 +620,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
     if( !sheet ) break;
 
+    kdDebug(30511) << "Importing sheet " << i+1 << " of " << workbook->sheetCount() << "\n";
+
     QDomElement table;
     table = mainDocument.createElement( "table" );
     table.setAttribute( "name", string( sheet->name() ).string() );
