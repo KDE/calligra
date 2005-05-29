@@ -3408,6 +3408,14 @@ void KWView::insertFootNote()
                                 i18n("Insert Footnote"));
         } else {
             KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), QString::null, this, m_doc, 0 );
+            QPtrListIterator<KoTextCustomItem> it( edit->textDocument()->allCustomItems() );
+            for ( ; it.current() ; ++it )
+            {
+                KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( it.current() );
+                if (fnv && !fnv->isDeleted() && fnv->frameSet() && !fnv->frameSet()->isDeleted() &&
+                 fnv->numberingType()==KWFootNoteVariable::Manual )
+                    dia.appendManualFootNote( fnv->text() );
+            }
             if ( dia.exec() ) {
                 edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
                 m_gui->canvasWidget()->setFootNoteType( dia.noteType() );
@@ -6503,6 +6511,14 @@ void KWView::changeFootNoteType()
         if(var && var->frameSet())
         {
             KWFootNoteDia dia( var->noteType(), var->numberingType(), (var->numberingType()==KWFootNoteVariable::Auto) ? QString::null : var->manualString(), this, m_doc, 0 );
+            QPtrListIterator<KoTextCustomItem> it( edit->textDocument()->allCustomItems() );
+            for ( ; it.current() ; ++it )
+            {
+                KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( it.current() );
+                if (fnv && !fnv->isDeleted() && fnv->frameSet() && !fnv->frameSet()->isDeleted() &&
+                 fnv->numberingType()==KWFootNoteVariable::Manual && fnv != var)
+                    dia.appendManualFootNote( fnv->text() );
+            }
             if ( dia.exec() )
             {
                 FootNoteParameter oldParam( var );
