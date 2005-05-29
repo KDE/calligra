@@ -1052,6 +1052,41 @@ unsigned FormulaToken::functionParams() const
   return params;
 }
 
+int FormulaToken::sheetIndex() const
+{
+  // FIXME check data size !
+  int index = -1;
+  unsigned char buf[2];
+
+  // sanity checks
+  if( d->id != Ref3d )
+  if( d->id != Area3d )
+    return -1;
+
+  if( version() == Excel97 )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    index = readU16( buf );
+  }
+
+  if( version() == Excel95 )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    unsigned ext = readU16( buf );
+    if( ext == 0xffff )
+    {
+      buf[0] = d->data[10];
+      buf[1] = d->data[11];
+      index = readU16( buf );
+    }
+    // FIXME if ext is 0xffff -> sheet in other file
+  }
+
+  return index;
+}
+
 unsigned FormulaToken::attr() const
 {
   unsigned attr = 0;
@@ -1095,23 +1130,32 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   int row1Ref, row2Ref, col1Ref, col2Ref;
   bool row1Relative, col1Relative;
   bool row2Relative, col2Relative;
+  unsigned ofs = 0;
+
+  // sanity checks
+  if( d->id != Area )
+  if( d->id != Area3d )
+    return UString("#REF");
 
   if( version() == Excel97 )
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    if( d->id == Area3d )
+      ofs = 2;
+
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     row1Ref = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     row2Ref = readU16( buf );
 
-    buf[0] = d->data[4];
-    buf[1] = d->data[5];
+    buf[0] = d->data[ofs+4];
+    buf[1] = d->data[ofs+5];
     col1Ref = readU16( buf );
 
-    buf[0] = d->data[6];
-    buf[1] = d->data[7];
+    buf[0] = d->data[ofs+6];
+    buf[1] = d->data[ofs+7];
     col2Ref = readU16( buf );
 
     row1Relative = col1Ref & 0x8000;
@@ -1124,19 +1168,22 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   }
   else
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    if( d->id == Area3d )
+      ofs = 14;
+
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     row1Ref = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     row2Ref = readU16( buf );
 
-    buf[0] = d->data[4];
+    buf[0] = d->data[ofs+4];
     buf[1] = 0;
     col1Ref = readU16( buf );
 
-    buf[0] = d->data[5];
+    buf[0] = d->data[ofs+5];
     buf[1] = 0;
     col2Ref = readU16( buf );
 
@@ -1214,15 +1261,24 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   unsigned char buf[2];
   int rowRef, colRef;
   bool rowRelative, colRelative;
+  unsigned ofs = 0;
+
+  // sanity checks
+  if( d->id != Ref )
+  if( d->id != Ref3d )
+    return UString("#REF");
 
   if( version() == Excel97 )
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    if( d->id == Ref3d )
+      ofs = 2;
+
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     rowRef = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     colRef = readU16( buf );
 
     rowRelative = colRef & 0x8000;
@@ -1231,11 +1287,14 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   }
   else
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    if( d->id == Ref3d )
+      ofs = 14;
+
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     rowRef = readU16( buf );
 
-    buf[0] = d->data[2];
+    buf[0] = d->data[ofs+2];
     buf[1] = 0;
     colRef = readU16( buf );
 
@@ -4545,6 +4604,14 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       std::cout << std::endl;
 #endif
 
+#ifdef SWINDER_XLS2RAW
+      std::cout << "Raw Data (" << size << " bytes): " << std::endl;
+      for( unsigned k=0; k < size; k++ )
+        printf("%02x ", buffer[k] );
+      std::cout << std::endl;
+#endif
+
+
       delete record;
     }
     
@@ -5687,6 +5754,36 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
           stack.push_back( d->nameTable[ token.nameIndex()-1 ] );
         break;
 
+      case FormulaToken::Ref3d:
+        // FIXME what to do if refers to invalid/deleted sheet?
+        {
+          UString str;
+          unsigned si = token.sheetIndex();
+          if( si >= 0 ) if( si < d->workbook->sheetCount() )
+          {
+            str = d->workbook->sheet( si )->name();
+            str.append( UString("!") );
+          }
+          str.append( token.ref( row, col ) );
+          stack.push_back( str );
+        }
+        break;
+
+      case FormulaToken::Area3d:
+        // FIXME what to do if refers to invalid/deleted sheet?
+        {
+          UString str;
+          unsigned si = token.sheetIndex();
+          if( si >= 0 ) if( si < d->workbook->sheetCount() )
+          {
+            str = d->workbook->sheet( si )->name();
+            str.append( UString("!") );
+          }
+          str.append( token.area( row, col ) );
+          stack.push_back( str );
+        }
+        break;
+
       case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
       case FormulaToken::EndSheet:
@@ -5702,8 +5799,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::Ref3d:
-      case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
       case FormulaToken::AreaErr3d:
       default:
