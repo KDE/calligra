@@ -779,8 +779,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
 
-    m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
-    m_directInsertCursor->setChecked(doc->insertDirectCursor());
+//     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
+//     m_directInsertCursor->setChecked(doc->insertDirectCursor());
 }
 
 KCommand *ConfigureDefaultDocPage::apply()
@@ -819,9 +819,9 @@ KCommand *ConfigureDefaultDocPage::apply()
         doc->setCursorInProtectedArea( state );
     }
 
-    state = m_directInsertCursor->isChecked();
-    if ( state != doc->insertDirectCursor() )
-        doc->setInsertDirectCursor( state );
+//     state = m_directInsertCursor->isChecked();
+//     if ( state != doc->insertDirectCursor() )
+//         doc->setInsertDirectCursor( state );
 
     //Laurent Todo add a message box to inform user that
     //global language will change after re-launch kword
@@ -870,7 +870,7 @@ void ConfigureDefaultDocPage::slotDefault()
    m_cursorInProtectedArea->setChecked(true);
    m_tabStopWidth->setValue( MM_TO_POINT(15) );
    m_createBackupFile->setChecked( true );
-   m_directInsertCursor->setChecked( false );
+//    m_directInsertCursor->setChecked( false );
    m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( KGlobal::locale()->language() ) );
    m_autoHyphenation->setChecked( false );
 }

@@ -126,7 +126,7 @@ private:
     KoUnitDoubleSpinBox *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
-    QCheckBox *m_directInsertCursor;
+//     QCheckBox *m_directInsertCursor;
     QCheckBox *m_autoHyphenation;
     QComboBox *m_globalLanguage;
     QString m_oldLanguage;

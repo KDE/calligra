@@ -375,6 +375,7 @@ void KWView::initGui()
     if ( !editingFormula )
     {
        kWordDocument()->formulaDocumentWrapper()->setEnabled(false);
+       kWordDocument()->formulaDocumentWrapper()->enableMatrixActions(false);
        kWordDocument()->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled(false);
     }
 
@@ -1479,6 +1480,7 @@ void KWView::insertNewCustomVariable()
 void KWView::showFormulaToolbar( bool show )
 {
     m_doc->formulaDocument()->setEnabled( show );
+    m_doc->formulaDocumentWrapper()->enableMatrixActions( show );
     m_doc->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled( true );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
