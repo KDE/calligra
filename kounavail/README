@@ -12,4 +12,4 @@ Test documents:
 test-kounavail.kwd points to an invalid mimetype (case 1)
 test-kounavail2.kwd points to a non-existing external document (case 2)
 
-David Faure <david@mandrakesoft.com>
+David Faure <faure@kde.org>

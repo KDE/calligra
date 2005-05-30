@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <david@mandrakesoft.com>
+   Copyright (C) 2001 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -158,7 +158,7 @@ KAboutData* KoUnavailFactory::aboutData()
         s_aboutData=new KAboutData( "kounavail", I18N_NOOP("KoUnavail"),
                                     version, description, KAboutData::License_LGPL,
                                     "(c) 2001, David Faure");
-        s_aboutData->addAuthor("David Faure",0, "david@mandrakesoft.com");
+        s_aboutData->addAuthor("David Faure",0, "faure@kde.org");
     }
     return s_aboutData;
 }
