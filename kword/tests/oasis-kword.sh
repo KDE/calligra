@@ -93,7 +93,7 @@ cd ..
 # 1) the name of the main text frameset changes, no big deal, so adjust in orig
 # 2) modification time obviously changed, remove it
 # 3) paragraph direction and text color are now explicitly saved, hide them from the diff
-perl -pi -e 's/\"Text Frameset 1\"/\"Main Text Frameset\"/' oasisregtest-orig/maindoc.xml
+perl -pi -e 's/\"Text Frameset 1\"/\"Main Text Frameset\"/;s,<WEIGHT value="48" />,<WEIGHT value="40" />,' oasisregtest-orig/maindoc.xml
 perl -pi -e 's/<FLOW dir="L"/<FLOW/' oasisregtest-final/maindoc.xml
 perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//; $_="" if (/<COLOR blue=\"0\" red=\"0\" green=\"0\" \/>/);' oasisregtest-final/maindoc.xml oasisregtest-orig/maindoc.xml
 

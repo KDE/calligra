@@ -1735,7 +1735,7 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
             writer.startElement( "draw:text-box" );
             if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
                 writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
-            if ( frameNumber + 1 < (int)frames.count() )
+            if ( frameNumber < (int)frames.count() )
                 writer.addAttribute( "draw:chain-next-name", nextFrameName + QString::number( frameNumber+1 ) );
             // No contents. Well, OOo saves an empty paragraph, but I'd say that's wrong.
             writer.endElement();
