@@ -27,6 +27,7 @@
 #include <ktabwidget.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <qtoolbutton.h>
 #include <qvaluelist.h>
 
 #include "iconsidepane.h"
@@ -117,6 +118,7 @@ private:
   QLabel *m_pComponentsLabel;
   QSplitter *m_pLayout;
   KTabWidget *m_pFrame;
+  QToolButton *m_tabCloseButton;
 
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
