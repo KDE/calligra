@@ -239,6 +239,7 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
 
 KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
 {
+    KWFrame* frame = 0;
     QDomElement elem;
     forEachElement( elem, frameTag )
     {
@@ -248,21 +249,33 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
         if ( localName == "text-box" )
         {
             kdDebug()<<" append text-box\n";
-            return loadOasisTextBox( frameTag, elem, context );
+            frame = loadOasisTextBox( frameTag, elem, context );
+            break;
         }
         else if ( localName == "image" )
         {
             KWFrameSet* fs = new KWPictureFrameSet( m_doc, frameTag, elem, context );
             m_doc->addFrameSet( fs, false );
-            return fs->frame(0);
+            frame = fs->frame(0);
+            break;
         } else if ( localName == "object" )
         {
             KWPartFrameSet* fs = new KWPartFrameSet( m_doc, frameTag, elem, context );
             m_doc->addFrameSet( fs, false );
-            return fs->frame(0);
+            frame = fs->frame(0);
+            break;
         }
     }
-    return 0;
+    if ( frame ) {
+        const QString anchorType = frameTag.attributeNS( KoXmlNS::text, "anchor-type", QString::null );
+        if ( anchorType == "page" ) {
+            double x = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+            double y = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+            int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt() - 1;
+            frame->moveTopLeft( KoPoint( x, y + pageNum * m_doc->ptPaperHeight() ) );
+        }
+    }
+    return frame;
 }
 
 KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag,
