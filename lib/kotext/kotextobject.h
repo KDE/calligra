@@ -282,7 +282,7 @@ public:
 
     /** Selections ids */
     enum SelectionIds {
-        HighlightSelection = 1 // used to highlight during search/replace
+        HighlightSelection = 2 // used to highlight during search/replace
     };
 
     enum KeyboardAction { // keep in sync with QTextEdit
