@@ -123,7 +123,7 @@ Last note: this proposal does not propose any gui/printing issues at all.
 
 Thanx to: Reginald Stadlbauer <reggie@kde.org>
 Author: Thomas Zander <zander@kde.org>
-New maintainer: David Faure <david@mandrakesoft.com>
+New maintainer: David Faure <faure@kde.org>
 
 
 OK-ing the stylist seems to apply style change to all styles, not just the changed ones...

@@ -4,7 +4,7 @@
 # and generates a KWord XML file that is ready to be used as a template.
 # Usually one will run unzip first, to extract maindoc.xml from the document,
 # and use that as the <inputFile>.
-# David Faure <david@mandrakesoft.com>
+# David Faure <faure@kde.org>
 
 die "Usage: $0 inputFile outputFile.kwt" unless ($#ARGV == 1);
 open(IN, "<$ARGV[0]") or die "Can't open $ARGV[0] for reading";

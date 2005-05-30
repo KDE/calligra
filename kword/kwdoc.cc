@@ -1219,6 +1219,28 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
+    } else {
+        // DTP mode: the items in the body are page-sequence and then frames
+        QDomElement tag;
+        forEachElement( tag, body )
+        {
+            context.styleStack().save();
+            const QString localName = tag.localName();
+            if ( localName == "page-sequence" && tag.namespaceURI() == KoXmlNS::text )
+            {
+                // We don't have support for changing the page layout yet, so just take the
+                // number of pages
+                m_pages = 1;
+                QDomElement page;
+                forEachElement( page, tag )
+                    ++m_pages;
+                kdDebug() << "DTP mode: found " << m_pages << "pages" << endl;
+            }
+            else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
+                oasisLoader.loadFrame( tag, context );
+            else
+                kdWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
+        }
     }
 
     // Header/Footer
@@ -3036,9 +3058,28 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
             }
         }
 
-    } else {
-        // TODO write the contents page-by-page
-    }
+    } else { // DTP mode: all framesets are equal
+        // write text:page-sequence, one item per page.
+        writer.startElement( "text:page-sequence" );
+        for ( int page = 0; page < m_pages; ++page )
+        {
+            writer.startElement( "text:page" );
+            // "pm" is a hack, see mainStyles.lookup( pageLayout, "pm" ) in saveOasis
+            // [which currently happens afterwards...]
+            writer.addAttribute( "text:master-page-name", "pm" );
+            writer.endElement(); // text:page
+        }
+        writer.endElement() ; // "text:page-sequence";
+        // Now write the framesets
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        for ( ; fit.current() ; ++fit ) {
+            KWFrameSet* fs = fit.current();
+            if ( !fs->isFloating() &&
+                 !fs->isDeleted() ) {
+                fs->saveOasis( writer, context, true );
+            }
+        }
+     }
 }
 
 QDomDocument KWDocument::saveXML()

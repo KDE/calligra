@@ -23,6 +23,7 @@
 #include "kwframe.h"
 #include "kwloadinginfo.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 
 #include <koStore.h>
 #include <kooasiscontext.h>
@@ -234,6 +235,47 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
         kdDebug()<<" ignorelist :"<<ignorelist<<endl;
         m_doc->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
+}
+
+KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
+{
+    KWFrame* frame = 0;
+    QDomElement elem;
+    forEachElement( elem, frameTag )
+    {
+        if ( elem.namespaceURI() != KoXmlNS::draw )
+            continue;
+        const QString localName = elem.localName();
+        if ( localName == "text-box" )
+        {
+            kdDebug()<<" append text-box\n";
+            frame = loadOasisTextBox( frameTag, elem, context );
+            break;
+        }
+        else if ( localName == "image" )
+        {
+            KWFrameSet* fs = new KWPictureFrameSet( m_doc, frameTag, elem, context );
+            m_doc->addFrameSet( fs, false );
+            frame = fs->frame(0);
+            break;
+        } else if ( localName == "object" )
+        {
+            KWPartFrameSet* fs = new KWPartFrameSet( m_doc, frameTag, elem, context );
+            m_doc->addFrameSet( fs, false );
+            frame = fs->frame(0);
+            break;
+        }
+    }
+    if ( frame ) {
+        const QString anchorType = frameTag.attributeNS( KoXmlNS::text, "anchor-type", QString::null );
+        if ( anchorType == "page" ) {
+            double x = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+            double y = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+            int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt() - 1;
+            frame->moveTopLeft( KoPoint( x, y + pageNum * m_doc->ptPaperHeight() ) );
+        }
+    }
+    return frame;
 }
 
 KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag,
