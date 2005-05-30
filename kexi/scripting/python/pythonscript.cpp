@@ -155,13 +155,28 @@ Kross::Api::Object* PythonScript::execute()
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
             mainmoduledict.ptr(),
-            mainmoduledict.ptr()
+            d->m_module->getDict().ptr()
         );
         if(! pyresult)
             throw Py::Exception();
         Py::Object result(pyresult, true);
         kdDebug()<<"PythonScript::execute() result="<<result.as_string().c_str()<<endl;
-        return PythonExtension::toObject(result);
+
+        Py::Dict moduledict( d->m_module->getDict().ptr() );
+        for(Py::Dict::iterator it = moduledict.begin(); it != moduledict.end(); ++it) {
+            Py::Dict::value_type vt(*it);
+            if(PyClass_Check( vt.second.ptr() )) {
+                kdDebug() << QString("PythonScript::execute() class '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                d->m_classes.append( vt.first.as_string().c_str() );
+            }
+            else if(vt.second.isCallable()) {
+                kdDebug() << QString("PythonScript::execute() function '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                d->m_functions.append( vt.first.as_string().c_str() );
+            }
+        }
+
+        Kross::Api::Object* r = PythonExtension::toObject(result);
+        return r;
     }
     catch(Py::Exception& e) {
         throw Kross::Api::RuntimeException(i18n("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str()));
@@ -255,6 +270,7 @@ Kross::Api::Object* PythonScript::callFunction(const QString& name, Kross::Api::
 
         // Try to determinate the function we like to execute.
         PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.latin1());
+
         if( (! d->m_functions.contains(name)) || (! func) )
             throw Kross::Api::AttributeException(i18n("No such function '%1'.").arg(name));
 
