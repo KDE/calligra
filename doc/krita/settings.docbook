@@ -1,0 +1,86 @@
+<chapter id="settings">
+
+	<title>Settings</title>
+	
+	<para>This chapter describes the various settings that affect the way Krita functions and looks.</para>
+	
+	<sect1 id="settings-docker">
+		
+		<title>Palette Windows</title>
+		
+		<para>By default, Krita uses a set of four palette windows that can be docked to the
+			left and right-hand side of the Krita window. These palette windows are always
+			visible and are called "dockers".</para>
+
+		<para>If you have a small screen and want to see as much of the image as possible, you
+			can either close the docker windows (through the view menu) or select the other
+			style of palette windows Krita offers: "sliders". These are panels that slide
+			away into the rulers around your image, leaving only a title bar.</para>
+
+		<para>Moving your mouse or stylus pointer over the title bar makes the window appear.
+			You can use the titlebar to drag the sliders to another position and the window
+			borders to resize the sliders. In fact, due to a bug in the code I have been
+			unable to fix (XXX: append bugnumber0, you may have to slightly resize a slider's
+			border to make them hide.</para>
+
+		<para>Because of this bug. you cannot currently select the palette window from the
+			Settings dialog, but if you add the line 
+<programlisting>
+"dockerStyle=0"
+</programlisting>		
+		to the file <filename>.kde/share/config/kritarc</filename> in the GENERAL section,
+			Krita will give you silders instead of dockers.</para>
+
+
+		<para>If you are dissatisfied with the
+			sliders (because of the aforementioned bug, or because you've acquired a bigger
+			monitor) you can set the "dockerStyle" attribute to "1". Higher numbers than 2 make
+			Krita crash.</para>
+
+		
+
+	</sect1>
+
+	<sect1 id="general-settings">
+
+		<title>General Settings</title>
+
+		<para>There is currently only one general setting: the cursor shape. This can either
+			be the tool icon, a pointer or a crosshair. When I (or another Krita hacker)
+			has figured out how to use the actual shape of the brush mask that'll be an
+			option, too. A three-dimensional representation of a brush complete with
+			shadow will be even longer in coming.</para>
+
+	</sect1>
+
+	<sect1 id="color-settings">
+
+		<title>Color Settings</title>
+
+		<para>Thanks to (XXX: url) LittleCms, Krita includes a complete color management
+			system comparable to professional image manipulation applications. It's
+			true that not everything has been implemented yet, but there are already
+			a number of settings that are useful.</para>
+
+		<para>Please consider the following screenshot: (XXX: Add screenshot)</para>
+
+
+		<para>We will discuss each item separately.</para>
+
+		<sect2>
+			<title>Default working color model</title>
+
+			<para></para>
+
+		</sect2>
+
+		<sect2>
+			<title>Default working color model</title>
+
+			<para></para>
+
+		</sect2>
+
+	</sect1>
+
+</chapter>
