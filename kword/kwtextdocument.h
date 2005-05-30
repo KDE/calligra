@@ -66,7 +66,6 @@ private:
     void loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
                             KoTextCustomItem* & customItem );
     void loadOasisTOC( const QDomElement& tag, KoOasisContext& context, KoTextParag* & lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph );
-    KWFrame* loadFrame( const QDomElement& tag, KoOasisContext& context );
 
     KWTextFrameSet * m_textfs;
 };

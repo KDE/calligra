@@ -46,6 +46,7 @@ public:
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd,
                                 QDomElement& style, KoOasisContext& context );
 
+    KWFrame* loadFrame( const QDomElement& frameTag, KoOasisContext& context );
     KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag,
                                KoOasisContext& context );
     KWTableFrameSet* loadOasisTable( const QDomElement& tag,

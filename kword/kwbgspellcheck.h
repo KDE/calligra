@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 David Faure <david@mandrakesoft.com>
+   Copyright (C) 2002 David Faure <faure@kde.org>
                  2002 Laurent Montel <lmontel@mandrakesoft.com>
                  2004 Zack Rusin <zack@kde.org>
 

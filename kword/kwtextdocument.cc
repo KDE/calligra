@@ -27,7 +27,6 @@
 #include "kwanchor.h"
 #include "kwoasisloader.h"
 #include "kwtableframeset.h"
-#include "kwpartframeset.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -105,36 +104,6 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
     m_textfs->kWordDocument()->hasTOC( true );
 }
 
-KWFrame* KWTextDocument::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
-{
-    QDomElement elem;
-    forEachElement( elem, frameTag )
-    {
-        if ( elem.namespaceURI() != KoXmlNS::draw )
-            continue;
-        const QString localName = elem.localName();
-        KWDocument* doc = m_textfs->kWordDocument();
-        if ( localName == "text-box" )
-        {
-            kdDebug()<<" append text-box\n";
-            KWOasisLoader loader( doc );
-            return loader.loadOasisTextBox( frameTag, elem, context );
-        }
-        else if ( localName == "image" )
-        {
-            KWFrameSet* fs = new KWPictureFrameSet( doc, frameTag, elem, context );
-            doc->addFrameSet( fs, false );
-            return fs->frame(0);
-        } else if ( localName == "object" )
-        {
-            KWPartFrameSet* fs = new KWPartFrameSet( doc, frameTag, elem, context );
-            doc->addFrameSet( fs, false );
-            return fs->frame(0);
-        }
-    }
-    return 0;
-}
-
 bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& context,
                                        KoTextParag* & lastParagraph, KoStyleCollection* styleColl,
                                        KoTextParag* nextParagraph )
@@ -143,7 +112,9 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
     // Non-inline frame (i.e. anchored to page)
     if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
     {
-        KWFrame* frame = loadFrame( tag, context );
+        KWDocument* doc = m_textfs->kWordDocument();
+        KWOasisLoader loader( doc );
+        KWFrame* frame = loader.loadFrame( tag, context );
         if ( frame )
             return true;
     }
@@ -322,7 +293,9 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 return true;
             }
 
-            KWFrame* frame = loadFrame( tag, context );
+            KWDocument* doc = m_textfs->kWordDocument();
+            KWOasisLoader loader( doc );
+            KWFrame* frame = loader.loadFrame( tag, context );
             if ( frame )
             {
                 KWFrameSet* fs = frame->frameSet();

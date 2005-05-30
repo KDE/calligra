@@ -23,6 +23,7 @@
 #include "kwframe.h"
 #include "kwloadinginfo.h"
 #include "kwtableframeset.h"
+#include "kwpartframeset.h"
 
 #include <koStore.h>
 #include <kooasiscontext.h>
@@ -234,6 +235,34 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
         kdDebug()<<" ignorelist :"<<ignorelist<<endl;
         m_doc->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
+}
+
+KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
+{
+    QDomElement elem;
+    forEachElement( elem, frameTag )
+    {
+        if ( elem.namespaceURI() != KoXmlNS::draw )
+            continue;
+        const QString localName = elem.localName();
+        if ( localName == "text-box" )
+        {
+            kdDebug()<<" append text-box\n";
+            return loadOasisTextBox( frameTag, elem, context );
+        }
+        else if ( localName == "image" )
+        {
+            KWFrameSet* fs = new KWPictureFrameSet( m_doc, frameTag, elem, context );
+            m_doc->addFrameSet( fs, false );
+            return fs->frame(0);
+        } else if ( localName == "object" )
+        {
+            KWPartFrameSet* fs = new KWPartFrameSet( m_doc, frameTag, elem, context );
+            m_doc->addFrameSet( fs, false );
+            return fs->frame(0);
+        }
+    }
+    return 0;
 }
 
 KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag,
