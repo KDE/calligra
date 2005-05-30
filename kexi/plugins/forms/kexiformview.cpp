@@ -53,7 +53,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
  , m_cursor(0)
 // , m_firstFocusWidget(0)
 {
-	m_delayedFormContentsResizeOnShow = false;
+	m_delayedFormContentsResizeOnShow = 0;
 
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
@@ -237,7 +237,7 @@ KexiFormView::initForm()
 	if (newForm && !fields) {
 		/* Our form's area will be resized more than once.
 		Let's resize form widget itself later. */
-		m_delayedFormContentsResizeOnShow = true;
+		m_delayedFormContentsResizeOnShow = 3;
 	}
 }
 
@@ -691,8 +691,8 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	}
 	KexiViewBase::resizeEvent(e);
 	m_scrollView->updateNavPanelGeometry();
-	if (m_delayedFormContentsResizeOnShow) { // && isVisible()) {
-//		m_delayedFormContentsResizeOnShow = false;
+	if (m_delayedFormContentsResizeOnShow>0) { // && isVisible()) {
+		m_delayedFormContentsResizeOnShow--;
 		m_dbform->resize( e->size() - QSize(30, 30) );
 	}
 }

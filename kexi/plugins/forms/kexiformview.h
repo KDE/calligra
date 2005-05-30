@@ -157,7 +157,7 @@ class KexiFormView : public KexiDataAwareView
 		/*! For new (empty) forms only:
 		 Our form's area will be resized more than once.
 		 We will resize form widget itself later (in resizeEvent()). */
-		bool m_delayedFormContentsResizeOnShow : 1;
+		int m_delayedFormContentsResizeOnShow;
 };
 
 #endif
