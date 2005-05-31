@@ -113,5 +113,35 @@ Karbon:
 * Don't crash when creating a new layer if any layer contains group objects (#93903)
 * Update the list according to the z order of the layer (#68060)
 
+Krita
+
+* Fixed incompatibilities between versions of ImageMagick
+* Load and save EXIF annotations for .jpg files.
+* Load and save ICC profiles to file formats that support icc (.png, .jpg, .tiff)
+* Krita documents can now contain only one image; simplified user interface accordingly
+* Re-arranged and fixed composite operations for RGB and GRAY
+* New, more efficient floodfill algorithm
+* Fix contiguous area select
+* Allow subtracting from existing selections
+* Fix undo and selections
+* Fix merging of layers when all layers are visible
+* Krita now correctly recognizes most graphics file formats
+* Fix rotating, shearing and mirroring
+* Translate resources (palettes, gradients, brushes)
+* Make paintbox docker shadable.
+* Improve hsv color selector behaviour (#105073)
+* Fix conversion between color spaces
+* Add transform tool for moving and rotating layers
+* Fix convolution and filter painting tool
+* Add custom convolution filter
+* Add fill options for all shape tools
+* Fix gamma correction adjustment filter
+* If there is a selection present, crop will start with the selection extent
+* Add polygonal, elliptical and freehand selection tools
+* Use better icons for the select tools
+* Add feather selection tool
+* Fix selecting a new mask color for selections
+* Many fixes for crashes.
+
 Filters:
 * Many improvements to the Excel importer
