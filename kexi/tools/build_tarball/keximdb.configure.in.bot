@@ -1,8 +1,0 @@
-if test -z "$GLIB_LIBADD"; then
-  echo ""
-  echo "You're missing glib-2.0 library (>=$GLIB_VERSION)."
-  echo "Kexi MDB (MS Access) Plugin won't be compiled."
-  echo "You can download glib-2.0 from http://www.gtk.org/"
-  echo " or get it from your system distribution."
-  echo ""
-fi
