@@ -380,6 +380,7 @@ void KChartView::defaultConfig()
 void KChartView::pieChart()
 {
     if ( m_chartpie->isChecked() ) {
+	forceAxisParams(false);
 	KChartParams  *params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Pie );
@@ -395,9 +396,23 @@ void KChartView::pieChart()
         m_chartpie->setChecked( true ); // always one has to be checked !
 }
 
+void KChartView::forceAxisParams(bool lineMode) {
+    KChartParams  *params = ((KChartPart*)koDocument())->params();
+    KDChartAxisParams  axisParams = params->axisParams( KDChartAxisParams::AxisPosLeft );
+    if(params->chartType() == KDChartParams::Line)
+        m_logarithmicScale = axisParams.axisCalcMode();
+    if(lineMode) {
+        if(m_logarithmicScale)
+            axisParams.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
+    } else
+        axisParams.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
+    params->setAxisParams( KDChartAxisParams::AxisPosLeft, axisParams );
+}
+
 void KChartView::lineChart()
 {
     if ( m_chartline->isChecked() ) {
+	forceAxisParams(true);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Line );
@@ -416,6 +431,7 @@ void KChartView::lineChart()
 void KChartView::barsChart()
 {
     if ( m_chartbars->isChecked() ) {
+	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Bar );
@@ -434,6 +450,7 @@ void KChartView::barsChart()
 void KChartView::areasChart()
 {
     if ( m_chartareas->isChecked() ) {
+	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Area );
@@ -452,6 +469,7 @@ void KChartView::areasChart()
 void KChartView::hiLoChart()
 {
     if ( m_charthilo->isChecked() ) {
+	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::HiLo );
@@ -469,6 +487,7 @@ void KChartView::hiLoChart()
 void KChartView::ringChart()
 {
     if ( m_chartring->isChecked() ) {
+	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Ring );
@@ -486,6 +505,7 @@ void KChartView::ringChart()
 void KChartView::polarChart()
 {
     if ( m_chartpolar->isChecked() ) {
+	forceAxisParams(false);
         KDChartParams* params = ((KChartPart*)koDocument())->params();
 
         params->setChartType( KDChartParams::Polar );
@@ -502,6 +522,7 @@ void KChartView::polarChart()
 void KChartView::bwChart()
 {
     if ( m_chartbw->isChecked() ) {
+	forceAxisParams(false);
         KDChartParams* params = ((KChartPart*)koDocument())->params();
 
         params->setChartType( KDChartParams::BoxWhisker );

@@ -8,12 +8,11 @@
 
 
 #include <koView.h>
-
+#include "kdchart/KDChartAxisParams.h"
 
 class KAction;
 class KToggleAction;
 class QPaintEvent;
-
 
 class DCOPObject;
 
@@ -103,6 +102,10 @@ private:
     KToggleAction  *m_chartbw;
 
     DCOPObject  *m_dcop;
+
+    // This is used for a workaround for a bug in the kdchart code, see #101490.
+    bool m_logarithmicScale;
+    void forceAxisParams(bool lineMode);
 };
 
 }  //KChart namespace
