@@ -304,17 +304,25 @@ void KChartParameterConfigPage::apply()
 	KDChartAxisParams  params
 	    = _params->axisParams( KDChartAxisParams::AxisPosLeft );
 
-	if (lin->isChecked())
-	    params.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
-	else
-	    params.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
+        if (lin->isChecked())
+            params.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
+        else
+        {
+            if(params.axisCalcMode() != KDChartAxisParams::AxisCalcLogarithmic)
+            {
+                // Since in this version of kdChart logarithmic scales only work for Line charts,
+                // lets switch now
+                _params->setChartType( KDChartParams::Line );
+            }
+            params.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
+        }
 
-    if ( maximum_length->isEnabled() )
-        params.setAxisDigitsBehindComma( maximum_length->value() );
-    else
-        params.setAxisDigitsBehindComma(KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS );
+        if ( maximum_length->isEnabled() )
+            params.setAxisDigitsBehindComma( maximum_length->value() );
+        else
+            params.setAxisDigitsBehindComma(KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS );
 
-	_params->setAxisParams( KDChartAxisParams::AxisPosLeft, params );
+        _params->setAxisParams( KDChartAxisParams::AxisPosLeft, params );
     }
 }
 
