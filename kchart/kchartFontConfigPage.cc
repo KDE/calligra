@@ -245,8 +245,10 @@ void KChartFontConfigPage::init()
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 
-//   xTitle = _params->xTitleFont();
-//   yTitle = _params->yTitleFont();
+   xTitle = m_params->axisTitleFont( KDChartAxisParams::AxisPosBottom );
+   yTitle = m_params->axisTitleFont( KDChartAxisParams::AxisPosLeft );
+   xTitle.setPointSize( m_params->axisTitleFontRelSize( KDChartAxisParams::AxisPosBottom ) );
+   yTitle.setPointSize( m_params->axisTitleFontRelSize( KDChartAxisParams::AxisPosLeft ) );
 //   label = _params->labelFont();
 
     // PENDING(kalle) Adapt
@@ -287,6 +289,11 @@ void KChartFontConfigPage::apply()
     // use header settings for header 2 and footer as well
     //   (this must be changed, khz 14.12.2001)
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
+
+    m_params->setAxisTitleFont( KDChartAxisParams::AxisPosLeft, yTitle );
+    m_params->setAxisTitleFont( KDChartAxisParams::AxisPosBottom, xTitle );
+    m_params->setAxisTitleFontRelSize( KDChartAxisParams::AxisPosLeft, yTitle.pointSize() );
+    m_params->setAxisTitleFontRelSize( KDChartAxisParams::AxisPosBottom, xTitle.pointSize() );
 }
 
 }  //KChart namespace

@@ -142,8 +142,8 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
         if( paper )
             p->setBrush( *paper );
         p->setPen( color );
-        p->setClipRect( clipRect );
         p->drawText( x, y + _metrics->ascent(), _text );
+        p->setClipRect( clipRect );
         p->restore();
     }
 }
@@ -164,8 +164,8 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
         if( paper )
             p->setBrush( *paper );
         p->setPen( color );
-        p->setClipRegion( clipRegion );
         p->drawText( x, y + _metrics->ascent(), _text );
+        p->setClipRegion( clipRegion );
         p->restore();
     }
 }
