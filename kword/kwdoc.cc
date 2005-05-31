@@ -161,7 +161,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_tabStop = MM_TO_POINT( 15.0 );
     m_processingType = WP;
 
-    m_lstChildren.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
     m_lstFrameSet.setAutoDelete( true );
     // m_textImageRequests does not create or delete the KWTextImage classes
