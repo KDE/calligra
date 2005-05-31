@@ -1026,8 +1026,8 @@ void KPTGanttView::getContextClosedNodes(KPTContext &context, KDGanttViewItem *i
 
 void KPTGanttView::setReadWriteMode(bool on) {
     m_readWrite = on;
-    disconnect(SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), this);
-    disconnect(SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this);
+    disconnect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), this, SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
+    disconnect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this, SLOT(slotModifyLink(KDGanttViewTaskLink*)));
     m_gantt->setLinkItemsEnabled(on);
 
     if (on) {
