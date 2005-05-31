@@ -3791,6 +3791,8 @@ void KWDocument::afterAppendPage( int pageNum )
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();
+    if ( m_viewMode->type() == "ModePreview" )
+        repaintAllViews();
 }
 
 bool KWDocument::canRemovePage( int num )
@@ -3868,6 +3870,8 @@ void KWDocument::afterRemovePages()
     recalcVariables( VT_PGNUM );
     if ( !m_bGeneratingPreview )
         emit newContentsSize();
+    if ( m_viewMode->type() == "ModePreview" )
+        repaintAllViews();
 }
 
 bool KWDocument::tryRemovingPages()

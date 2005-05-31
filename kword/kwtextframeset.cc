@@ -670,6 +670,10 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
 
 void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
+    // set the viewmode canvas
+    // (all views share the same viewmode instance)
+    canvas->viewMode()->setCanvas( canvas );
+
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     KWViewMode *viewMode = canvas->viewMode();
     bool hasFrames = viewMode->hasFrames();

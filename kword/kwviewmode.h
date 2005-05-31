@@ -46,7 +46,7 @@ class KoPageLayout;
 class KWViewMode
 {
 protected:
-    KWViewMode( KWDocument * doc, bool drawFrameBorders ) : m_doc( doc ), m_drawFrameBorders( drawFrameBorders ) {}
+    KWViewMode( KWDocument * doc, bool drawFrameBorders ) : m_doc( doc ), m_drawFrameBorders( drawFrameBorders ), m_currentCanvas( 0 ) {}
 public:
     virtual ~KWViewMode() {}
 
@@ -118,6 +118,9 @@ public:
 
     static KWViewMode *create( const QString & viewModeType, KWDocument * );
 
+    void        setCanvas( KWCanvas * canvas )  { m_currentCanvas = canvas; }
+    KWCanvas *  canvas() { return m_currentCanvas; }
+
 protected:
     // Draw the border around one page, and clear up the empty space in that page
     void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
@@ -128,6 +131,8 @@ protected:
 
     KWDocument * m_doc;
     bool m_drawFrameBorders;
+    KWCanvas * m_currentCanvas;
+
 };
 
 /** The 'normal' view mode (pages below one another) */
@@ -194,6 +199,15 @@ public:
     virtual void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
     virtual int pagesPerRow() {return m_pagesPerRow;}
     virtual const QString type() {return "ModePreview";}
+
+    int numRows() const;
+
+protected:
+    /** Return the spacing between the left border of the canvas and the page. */
+    int leftSpacing();
+    /** Return the spacing between the top border of the canvas and the page. */
+    int topSpacing();
+
 private:
     int m_pagesPerRow;
     int m_spacing;

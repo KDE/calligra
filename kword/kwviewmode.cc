@@ -230,6 +230,38 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
 //////////////////////// Preview mode ////////////////////////////////
 
+int KWViewModePreview::leftSpacing()
+{
+    if ( canvas() )
+    {
+        int pagesPerRow;
+        if ( m_doc->numPages() < m_pagesPerRow )
+            pagesPerRow = m_doc->numPages();
+        else
+            pagesPerRow = m_pagesPerRow;
+
+        int pagesWidth = ( m_spacing + ( m_doc->paperWidth() + m_spacing ) * pagesPerRow );
+        if ( pagesWidth < canvas()->visibleWidth() )
+            return ( m_spacing + ( canvas()->visibleWidth() / 2 ) - ( pagesWidth / 2 ) );
+    }
+    return m_spacing;
+}
+
+int KWViewModePreview::topSpacing()
+{
+    if ( canvas() )
+    {
+        int pagesHeight = ( m_spacing + ( m_doc->paperHeight() + m_spacing ) * numRows() );
+        if ( pagesHeight < canvas()->visibleHeight() )
+            return ( m_spacing + ( canvas()->visibleHeight() / 2 ) - ( pagesHeight / 2 ) );
+    }
+    return m_spacing;
+}
+
+int KWViewModePreview::numRows() const
+{
+    return ( m_doc->numPages() - 1 ) / m_pagesPerRow + 1;
+}
 
 QSize KWViewModePreview::contentsSize()
 {
@@ -253,8 +285,8 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
                 << " ptPaperHeight=" << m_doc->ptPaperHeight()
                 << " page=" << page << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
-    return QPoint( m_spacing + col * ( m_doc->paperWidth() + m_spacing ) + nPoint.x(),
-                   m_spacing + row * ( m_doc->paperHeight() + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+    return QPoint( leftSpacing() + col * ( m_doc->paperWidth() + m_spacing ) + nPoint.x(),
+                   topSpacing() + row * ( m_doc->paperHeight() + m_spacing ) + m_doc->zoomItY( yInPagePt ) );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
@@ -262,7 +294,7 @@ QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
     // Well, just the opposite of the above.... hmm.... headache....
     int paperWidth = m_doc->paperWidth();
     int paperHeight = m_doc->paperHeight();
-    QPoint p( vPoint.x() - m_spacing, vPoint.y() - m_spacing );
+    QPoint p( vPoint.x() - leftSpacing(), vPoint.y() - topSpacing() );
     int col = static_cast<int>( p.x() / ( paperWidth + m_spacing ) );
     int xInPage = p.x() - col * ( paperWidth + m_spacing );
     int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
@@ -287,8 +319,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     {
         int row = page / m_pagesPerRow;
         int col = page % m_pagesPerRow;
-        QRect pageRect( m_spacing + col * ( paperWidth + m_spacing ),
-                        m_spacing + row * ( paperHeight + m_spacing ),
+        QRect pageRect( leftSpacing() + col * ( paperWidth + m_spacing ),
+                        topSpacing() + row * ( paperHeight + m_spacing ),
                         paperWidth, paperHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
         if ( pageRect.intersects( crect ) )

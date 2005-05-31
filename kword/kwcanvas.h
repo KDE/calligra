@@ -79,6 +79,9 @@ public:
      */
     void repaintChanged( KWFrameSet * fs, bool resetChanged );
 
+    /** We need to repaint if the window is resized. */
+    void viewportResizeEvent( QResizeEvent * );
+
     void print( QPainter *painter, KPrinter *printer );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );

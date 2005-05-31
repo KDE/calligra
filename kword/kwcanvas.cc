@@ -194,6 +194,16 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
     viewport()->repaint( erase );
 }
 
+void KWCanvas::viewportResizeEvent( QResizeEvent * )
+{
+    // repaint only in preview mode
+    if ( m_viewMode->type() == "ModePreview" )
+    {
+        m_doc->updateResizeHandles();
+        viewport()->repaint( false );
+    }
+}
+
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
     // Prevent cursor drawing and editing
@@ -251,6 +261,10 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
     //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
+
+    // set the viewmode canvas
+    // (all views share the same viewmode instance)
+    viewMode->setCanvas( this );
 
     // Draw the outside of the pages (shadow, gray area)
     // and the empty area first (in case of transparent frames)
