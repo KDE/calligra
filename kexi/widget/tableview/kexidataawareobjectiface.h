@@ -57,12 +57,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual ~KexiDataAwareObjectInterface();
 
 		/*! Sets data for this object. if \a owner is true, the object will own 
-		 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
+		 \a data and therefore will be destroyed when needed, else: \a data is (possibly) shared and
 		 not owned by the widget. 
 		 If widget already has _different_ data object assigned (and owns this data),
 		 old data is destroyed before new assignment.
 		 */
-		virtual void setData( KexiTableViewData *data, bool owner = true );
+		void setData( KexiTableViewData *data, bool owner = true );
 
 		/*! \return data structure displayed for this object */
 		inline KexiTableViewData *data() const { return m_data; }

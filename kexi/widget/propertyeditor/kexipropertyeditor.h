@@ -123,6 +123,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		*/
 		virtual void setFocus();
 
+		/*! Accepts cahnges made to current editor, if present. */
+		void acceptEditor();
+
 	protected slots:
 		/*! This slot resets the value of an item, using KexiProperty::oldValue().
 		   It is called when pressing the "Revert to defaults" button

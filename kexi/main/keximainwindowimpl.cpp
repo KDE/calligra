@@ -3139,6 +3139,12 @@ int KexiMainWindowImpl::generatePrivateID()
 	return --d->privateIDCounter;
 }
 
+void KexiMainWindowImpl::acceptPropertyBufferEditing()
+{
+	if (d->propEditor)
+		d->propEditor->editor()->acceptEditor();
+}
+
 void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection)
 {
 	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;

@@ -331,6 +331,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		//reset position
 		m_scrollView->setContentsPos(0,0);
 		m_dbform->move(0,0);
+
 	}
 
 	//update tab stops if needed
@@ -380,6 +381,9 @@ KexiFormView::afterSwitchFrom(int mode)
 			it.current()->setFocus();
 			SET_FOCUS_USING_REASON(it.current(), QFocusEvent::Tab);
 		}
+
+		if (m_query)
+			m_scrollView->selectFirstRow();
 	}
 
 	//dirty only if it's a new object
@@ -490,6 +494,8 @@ void KexiFormView::initDataSource()
 
 		m_scrollView->setData( data, true /*owner*/ );
 	}
+	else
+		m_scrollView->setData( 0, false );
 }
 
 void

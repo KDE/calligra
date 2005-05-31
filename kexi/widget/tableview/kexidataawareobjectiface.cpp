@@ -94,58 +94,38 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		m_itemIterator = 0;
 	}
 	m_owner = owner;
-	if(!data) {
-		m_data = new KexiTableViewData();
+	m_data = data;
+	if (m_data)
 		m_itemIterator = m_data->createIterator();
-		m_owner = true;
-	}
-	else {
-		m_data = data;
-		m_itemIterator = m_data->createIterator();
-		m_owner = owner;
-		kdDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data" << endl;
+
+	kdDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data" << endl;
 		//add columns
-//		d->pTopHeader->setUpdatesEnabled(false);
 //OK?
-		clearColumnsInternal(false);
-//		while(d->pTopHeader->count()>0)
-//			d->pTopHeader->removeLabel(0);
-
+	clearColumnsInternal(false);
+	if (m_data) {
+		int i = 0;
+		for (KexiTableViewColumn::ListIterator it(m_data->columns);
+			it.current(); ++it, i++) 
 		{
-			int i=0;
-			for (KexiTableViewColumn::ListIterator it(m_data->columns);
-				it.current(); ++it, i++) 
-			{
-				KexiDB::Field *f = it.current()->field();
-//				if (!it.current()->fieldinfo || it.current()->fieldinfo->visible) {
-				if (it.current()->visible()) {
-					int wid = f->width();
-					if (wid==0)
-						wid=KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
+			KexiDB::Field *f = it.current()->field();
+			if (it.current()->visible()) {
+				int wid = f->width();
+				if (wid==0)
+					wid=KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
 //js: TODO - add col width configuration and storage
-//					d->pTopHeader->addLabel(f->captionOrName(), wid);
-
-//					d->pTopHeader->addLabel(it.current()->captionAliasOrName(), wid);
-//					if (!f->description().isEmpty())
-//						d->pTopHeader->setToolTip( i, f->description() );
-					addHeaderColumn(it.current()->captionAliasOrName(), f->description(), wid);
-				}
+				addHeaderColumn(it.current()->captionAliasOrName(), f->description(), wid);
 			}
 		}
-
-//		d->pTopHeader->setUpdatesEnabled(true);
-		//add rows
-//		triggerUpdate();
-		if (m_verticalHeader) {
-			m_verticalHeader->clear();
-			m_verticalHeader->addLabels(m_data->count());
-		}
-		if (m_data->count()==0)
-			m_navPanel->setCurrentRecordNumber(0+1);
-//			setNavRowNumber(0);
 	}
+	if (m_verticalHeader) {
+		m_verticalHeader->clear();
+		if (m_data)
+			m_verticalHeader->addLabels(m_data->count());
+	}
+	if (m_data && m_data->count()==0)
+		m_navPanel->setCurrentRecordNumber(0+1);
 	
-	if (!theSameData) {
+	if (m_data && !theSameData) {
 //! @todo: store sorting?
 		setSorting(-1);
 //		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
@@ -166,31 +146,30 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		}
 	}
 
-	if (!data) {
+	if (!m_data) {
 //		clearData();
 		cancelRowEdit();
-		m_data->clearInternal();
+		//m_data->clearInternal();
+		clearVariables();
 	}
-
-	if (!m_insertItem) {//first setData() call - add 'insert' item
-		m_insertItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
-	}
-	else {//just reinit
-		m_insertItem->init(m_data->columns.count());
+	else {
+		if (!m_insertItem) {//first setData() call - add 'insert' item
+			m_insertItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
+		}
+		else {//just reinit
+			m_insertItem->init(m_data->columns.count());
+		}
 	}
 
 	//update gui mode
-//	d->navBtnNew->setEnabled(isInsertingEnabled());
-	m_navPanel->setInsertingEnabled(isInsertingEnabled());
+	m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
 	if (m_verticalHeader)
-		m_verticalHeader->showInsertRow(isInsertingEnabled());
+		m_verticalHeader->showInsertRow(m_data && isInsertingEnabled());
 
 	initDataContents();
 
-	/*emit*/ dataSet( m_data );
-
-//	QSize s(tableSize());
-//	resizeContents(s.width(),s.height());
+	if (m_data)
+		/*emit*/ dataSet( m_data );
 }
 
 void KexiDataAwareObjectInterface::initDataContents()
@@ -201,7 +180,7 @@ void KexiDataAwareObjectInterface::initDataContents()
 
 	m_navPanel->setRecordCount(rows());
 
-	if (!m_cursorPositionSetExplicityBeforeShow) {
+	if (m_data && !m_cursorPositionSetExplicityBeforeShow) {
 		//set current row:
 		m_currentItem = 0;
 		int curRow = -1, curCol = -1;

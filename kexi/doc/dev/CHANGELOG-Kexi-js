@@ -523,6 +523,13 @@ TODO:::::::
 TODO: kdelibs/win32:
 commit kglobalsettings.cpp and win32_utils.h: KGlobalSettings::documentPath() now looks at the registry settings
 
+2005-05-31
+Core
+- editor within property panel is accepted before buffer switching
+Form Designer
+- record is properly fetched on subsequent switching to Data View mode, 
+  especially after data source changes
+
 2005-05-25
 2005-05-27
 Form Designer

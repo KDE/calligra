@@ -328,6 +328,12 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor * /*editor*/)
 	insideSlotValueChanged = false;
 }
 
+void KexiPropertyEditor::acceptEditor()
+{
+	if (m_currentEditor)
+		slotEditorAccept(m_currentEditor);
+}
+
 void
 KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor * /*editor*/)
 {

@@ -175,6 +175,8 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 
 void KexiDialogBase::closeEvent( QCloseEvent * e )
 {
+	m_parentWindow->acceptPropertyBufferEditing();
+
 	//let any view send "closing" signal
 	QObjectList *list = m_stack->queryList( "KexiViewBase", 0, false, false);
 	KexiViewBase *view;
@@ -264,6 +266,8 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 
 tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
+	m_parentWindow->acceptPropertyBufferEditing();
+
 	if (newViewMode==Kexi::TextViewMode && !viewForMode(Kexi::DesignViewMode) && supportsViewMode(Kexi::DesignViewMode)) {
 		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
 		tristate res = switchToViewMode( Kexi::DesignViewMode );

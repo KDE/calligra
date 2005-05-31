@@ -583,7 +583,7 @@ KexiDBFactory::autoSaveProperties(const QCString &classname)
 //	if(classname == "KexiSubForm")
 		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
-//		return QStringList("dataSource");
+//	lst += "dataSource";
 	return lst;
 }
 

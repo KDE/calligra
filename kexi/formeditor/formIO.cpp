@@ -1124,8 +1124,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	QValueList<QCString> list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	QValueList<QCString>::ConstIterator endIt = list.constEnd();
-	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it)
-		tree->addModifiedProperty(*it, w->property(*it));
+	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+		if(w->metaObject()->findProperty(*it, true) != -1)
+			tree->addModifiedProperty(*it, w->property(*it));
+	}
 
 	if(resetCurrentForm)
 		m_currentForm = 0;
