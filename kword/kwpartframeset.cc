@@ -60,12 +60,12 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
     context.styleStack().restore();
 
     // Create a KWChild, without KoDocument inside
-    // (that's done later, in KoDocument::loadChildrenOasis)
     KWChild* child = doc->createChildDoc( frame->rect(), 0 );
     setChild( child );
     child->loadOasis( frameTag, objectTag );
     updateChildGeometry( doc->viewMode() );
 
+    // This is what loads the KoDocument
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
