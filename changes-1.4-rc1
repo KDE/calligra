@@ -1,0 +1,117 @@
+KOffice-wide changes:
+* Compilation fixes for gcc4
+* Template dialog now has a default template preselected for first time use
+* Template dialog uses now a tristate checkbox to let the user choose which template
+  to use for the next application startup (#77542)
+* Support for OASIS OpenDocument templates
+* Show error message when trying to load a template that doesn't exist
+* Fixed "closing with embedded doc asks save/discard twice" (#105879)
+* Really delete "removed" templates (#76297)
+* Make sure every template name has a unique file name
+* Fixed "embedded kword document leads to main document being marked as modified right after loading"
+* Hide "Save As KOffice 1.1" from applications that didn't exist in 1.1.
+* Don't insert the OASIS OpenDocument mimetypes twice in the filedialog's filter combo (when saving).
+* OASIS OpenDocument format support: support for metadata (document and author information)
+* Load remote svg pictures which begin with "<?xml" (and not only "<?XML").
+
+KOffice Workspace (koshell):
+* Fix the width problem with the sidebar
+* Always hide the button group in order to make the sidebar thinner
+* Fixed some selection bugs in the sidebar
+* Added a close-button (like in Konqueror)
+
+kotext (shared by KWord and KPresenter):
+* Autocorrection fixes:
+ - redundant-space-removal shouldn't remove tabs
+ - capitalize-first-letter-correction didn't work at beginning of line (#105064)
+ - fixed "autoformat URL in autocorrection causing text editing problem" (#105871)
+ - URL detection: URLs beginning with "ftp." are now valid links
+ - load all week days, from 1 to 7 (not 0 to 6)
+ - capitalize name of days after a punctuation too
+* Fixed "completion doesn't show any tooltip for autocompletion" (#105065)
+* Do not always save a document in OASIS format with striked-out and underlined text (#92654)
+* Fixed missing color for highlighted match during search-n-replace (#103787)
+* Fixed wrong layouting of "char-aligned" tabs when opening a document
+* Fixed background spellchecking bug which made it stop after a mispelled word
+* Hungarian hyphenation dictionary updated
+
+KWord:
+* OASIS OpenDocument format support: tables, chained text frames, default tab width, embedded objects, DTP documents, page-anchored frames
+* Added better error message when loading pre-OASIS-1.0 documents, like those produced by
+OOo 1.9.79.2.3 (as shipped by SuSE 9.3) (#105083)
+* Broken non-inline tables feature disabled; simply put the table into a text frame to achieve the same.
+* Fixed bug in configuration dialog, tab stop width was set to a random value
+* Fixed crash when editing a cell on loading (#104982)
+* Added "Apply" button to the frame and "resize column" dialogs
+* Added "Reset" to the "resize column" dialog
+* Resize column dialog: the maximum width for a cell is the width of the table's parent frame if the table is floating
+* Disable the formula toolbar from start if no formula frame is activated
+* "Cordially" duplicated in the expression list (#104853)
+* Fixed crash during spell-checking
+* Fixed crash when un-chaining text frames
+* Fixed wrong unit calculation for "runaround" setting (#106005)
+* Fixed setting a background color from the frame dialog (#106029)
+* Avoid two frames with the same z-order after loading
+* Fix for "can't scroll to bottom of KWord document after saving".
+* Many fixes for footnotes (#72506, #57298, #62360, #84678, #85148)
+* Show the content of the footnote/endnote in the status barwhen the mouse cursor is placed over a footnote/endnote reference (part of feature #48794)
+* Ensure that text runs around frames upon loading, was broken for DTP documents (#106187)
+* Many improvements to the documentation
+
+KPresenter:
+* "Arrange Objects" now works as expected
+* "Raise/lower object" now works as expected, including undo/redo
+* Insert the picture with the corrent size and not dependend on the current zoom level
+* Fixed saving/loading of encoding in webpresentation settings
+* Fixed crashes during spell-checking
+* Fixed "embedded object always on top after reload" (#105171)
+* Fixed "scaling image to original size broken" (#99698)
+* Added dialog to go to the master slide if the user tries to select an object of the master slide and is currently not editing the master slide.
+
+KSpread:
+* Rename "different from" to "outside range" since that's what it does (#105317)
+* Fixed strange text wrapping behaviour (#77842)
+* Fixed vertical text alignment problem (#77843)
+* Fixed "ugly postscript rendering of cell borders" (#87367)
+* Fixed "empty document generates 2 printed pages" (#68190)
+* Fixed "printing with kspread gives big black areas" (#70073)
+* Fixed "charts are really small when printed from KSpread" (#101074)
+* Fixed painting of obscured cells in RTL sheets
+* Fixed printing of embedded kspread documents (#68977)
+* Fixed drawing problem when text overflow the right border (#61452)
+* Fixed wrong delimiters used in function description (#105695)
+* Fixed diagonal lines appearing on printout of RTL sheets in cells which have left or right borders.
+* Fixed crash on exit when having an embedded chart (#101915)
+* Paint the embedded document after it has been inserted
+
+KChart:
+* Make the Data Format config page accessible from the Edit menu and the context menu
+* CSV import finished (#99995)
+* Fixed "lines in a line chart are all black" (#105356)
+* Only use logaritmic scales for the line chart, doesn't work for other kinds of chart (#101490)
+* Fix the drawing of the legend title
+* Improved documentation
+
+KFormula:
+* Improved TeX output
+* Remember the state of the syntaxHighlighting action at exit
+* Disable the matrix actions when the cursor isn't in a matrix element
+* Fixed crash when exporting to PNG
+* Updated documentation
+
+Kivio:
+* Fixed bounding rect for polyline connectors, and printing of selected stencils (#104646)
+* Disable Edit text for objects not having textboxes (#104647)
+* Fixed grid alignment (#82157)
+* Change font attributes back to defaults when pressing CTRL (#98932)
+* Fixed crash when canceling the startup dialog
+
+Karbon:
+* Fixed crash in gradient widget (#92976)
+* Fixed crash if the pattern doesn't have an image (#77476)
+* Fixed "add pattern"
+* Don't crash when creating a new layer if any layer contains group objects (#93903)
+* Update the list according to the z order of the layer (#68060)
+
+Filters:
+* Many improvements to the Excel importer
