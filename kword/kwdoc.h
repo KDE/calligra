@@ -917,7 +917,6 @@ private:
 
     // Variables:
     QValueList<KWView *> m_lstViews;
-    QPtrList<KWChild> m_lstChildren;
 
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
