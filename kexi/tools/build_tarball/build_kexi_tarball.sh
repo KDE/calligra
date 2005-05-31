@@ -16,7 +16,7 @@ PROJECT=kexi							# CHANGE
 PROJECT_TITLE=Kexi							# CHANGE
 MODULE_PATH=trunk/$MODULE
 KDEADMIN_PATH=trunk/KDE/kde-common/admin
-KEXIMDB_PATH=trunk/kdenonbeta/keximdb
+#keximdb: KEXIMDB_PATH=trunk/kdenonbeta/keximdb
 #for versions within koffice:
 #PROJECT_PATH=koffice/kexi
 #for versions independent of koffice:
@@ -128,12 +128,12 @@ if ! [ -e $DESTINATION/source/$MODULE ]; then
 	cd ..
 fi
 
-MIGRATION=$DESTINATION/source/$MODULE/kexi/migration
-if ! [ -e $MIGRATION/keximdb ]; then
-	echo "*** Setup-Mode: Checking $MIGRATION/keximdb out from SVN..."
-	cd $MIGRATION || exit 1
-	$SVN_PROGRAM co $SVN_HOST/$KEXIMDB_PATH >> $DESTINATION/LOG 2>&1 || exit 1
-fi
+#keximdb: MIGRATION=$DESTINATION/source/$MODULE/kexi/migration
+#keximdb: if ! [ -e $MIGRATION/keximdb ]; then
+#keximdb: 	echo "*** Setup-Mode: Checking $MIGRATION/keximdb out from SVN..."
+#keximdb: 	cd $MIGRATION || exit 1
+#keximdb: 	$SVN_PROGRAM co $SVN_HOST/$KEXIMDB_PATH >> $DESTINATION/LOG 2>&1 || exit 1
+#keximdb: fi
 
 echo "1. Cleaning up..." 
 cd $DESTINATION/source/$MODULE || exit 1
@@ -154,14 +154,14 @@ cd ../kexi || exit 1
 $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
 
 # KexiMDB plugin:
-cd migration/keximdb || exit 1
-$SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
-# -tweak configure scripts:
-cp $DIRNAME/keximdb.configure.in.in configure.in.in || exit 1
-cp $DIRNAME/keximdb.configure.in.bot configure.in.bot || exit 1
-rm src/keximdb/configure.in.in src/keximdb/configure.in.bot
-# - use .la's instead of installed libraries
-$PERL_PROGRAM -p -i -e 's/-lkeximigrate/..\/..\/..\/libkeximigrate.la/g;s/-L\$\(KEXIDB_LIB\)/..\/..\/..\/..\/kexidb\/libkexidb.la/g' src/keximdb/Makefile.am
+#keximdb: cd migration/keximdb || exit 1
+#keximdb: $SVN_PROGRAM up >> $DESTINATION/LOG 2>&1 || exit 1
+#keximdb: # -tweak configure scripts:
+#keximdb: cp $DIRNAME/keximdb.configure.in.in configure.in.in || exit 1
+#keximdb: cp $DIRNAME/keximdb.configure.in.bot configure.in.bot || exit 1
+#keximdb: rm src/keximdb/configure.in.in src/keximdb/configure.in.bot
+#keximdb: # - use .la's instead of installed libraries
+#keximdb: $PERL_PROGRAM -p -i -e 's/-lkeximigrate/..\/..\/..\/libkeximigrate.la/g;s/-L\$\(KEXIDB_LIB\)/..\/..\/..\/..\/kexidb\/libkexidb.la/g' src/keximdb/Makefile.am
 
 cd $DESTINATION/archive || exit 1
 rm -f *
