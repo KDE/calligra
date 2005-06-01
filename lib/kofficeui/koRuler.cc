@@ -23,6 +23,7 @@
 
 #include "koRuler.h"
 #include <klocale.h>
+#include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <qcursor.h>
@@ -84,7 +85,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
       m_unit( _unit )
 {
     setWFlags( WResizeNoErase | WRepaintNoErase );
-    setFrameStyle( Box | Raised );
+    setFrameStyle( MenuBarPanel );
 
     d=new KoRulerPrivate();
 
@@ -202,15 +203,16 @@ double KoRuler::lineDistance() const
 /*================================================================*/
 void KoRuler::drawHorizontal( QPainter *_painter )
 {
+    QFont font = KGlobalSettings::toolBarFont();
+    QFontMetrics fm( font );
+    resize( width(), QMAX( fm.height() + 4, 20 ) );
+
     // Use a double-buffer pixmap
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     int totalw = qRound( zoomIt(d->layout.ptWidth) );
     QString str;
-    QFont font; // Use the global KDE font. Let's hope it's appropriate.
-    font.setPointSize( 8 );
-    QFontMetrics fm( font );
 
     p.setBrush( colorGroup().brush( QColorGroup::Base ) );
 
@@ -260,7 +262,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     {
         for ( double i = dist * 0.5;i <= (double)totalw;i += dist ) {
             int ii=qRound(i);
-            p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
+            p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
         }
     }
 
@@ -270,32 +272,32 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     {
         for ( double i = dist * 0.25;i <= (double)totalw;i += dist * 0.5 ) {
             int ii=qRound(i);
-            p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
+            p.drawLine( ii - diffx, 9, ii - diffx, height() - 9 );
         }
     }
 
     // Draw ending bar (at page width)
-    int constant=zoomIt(1);
-    p.drawLine( totalw - diffx + constant, 1, totalw - diffx + constant, height() - 1 );
-    p.setPen( colorGroup().color( QColorGroup::Base ) );
-    p.drawLine( totalw - diffx, 1, totalw - diffx, height() - 1 );
+    //int constant=zoomIt(1);
+    //p.drawLine( totalw - diffx + constant, 1, totalw - diffx + constant, height() - 1 );
+    //p.setPen( colorGroup().color( QColorGroup::Base ) );
+    //p.drawLine( totalw - diffx, 1, totalw - diffx, height() - 1 );
 
     // Draw starting bar (at 0)
-    p.setPen( colorGroup().color( QColorGroup::Text ) );
-    p.drawLine( -diffx, 1, -diffx, height() - 1 );
-    p.setPen( colorGroup().color( QColorGroup::Base ) );
-    p.drawLine( -diffx - constant, 1, -diffx - constant, height() - 1 );
+    //p.setPen( colorGroup().color( QColorGroup::Text ) );
+    //p.drawLine( -diffx, 1, -diffx, height() - 1 );
+    //p.setPen( colorGroup().color( QColorGroup::Base ) );
+    //p.drawLine( -diffx - constant, 1, -diffx - constant, height() - 1 );
 
     // Draw the indents triangles
     if ( d->flags & F_INDENTS ) {
-        int top = 2;
+        int top = 1;
         double halfPixmapWidth = d->pmFirst.width() * 0.5;
         // Cumulate i_first with correct indent
         double firstLineIdent = i_first + ( d->rtl ? d->i_right : i_left );
         p.drawPixmap( qRound( static_cast<double>(r.left()) + applyRtlAndZoom( firstLineIdent ) - halfPixmapWidth ),
                       top, d->pmFirst );
 
-        int bottom = height() - d->pmLeft.height() - 2;
+        int bottom = height() - d->pmLeft.height() - 1;
         halfPixmapWidth = d->pmLeft.width() * 0.5;
         p.drawPixmap( qRound( static_cast<double>(r.left()) + zoomIt(i_left) - halfPixmapWidth ),
                       bottom, d->pmLeft );
@@ -364,6 +366,10 @@ void KoRuler::drawTabs( QPainter &_painter )
 /*================================================================*/
 void KoRuler::drawVertical( QPainter *_painter )
 {
+    QFont font = KGlobalSettings::toolBarFont();
+    QFontMetrics fm( font );
+    resize( QMAX( fm.height() + 4, 20 ), height() );
+
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
@@ -375,9 +381,6 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     if ( paintRect.intersects( rulerRect ) )  {
         QString str;
-        QFont font; // Use the global KDE font. Let's hope it's appropriate.
-        font.setPointSize( 8 ); // Hardcode the size? (Werner)
-        QFontMetrics fm( font );
 
         p.setBrush( colorGroup().brush( QColorGroup::Base ) );
 
@@ -430,7 +433,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         {
             for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
                 int ii=qRound(i);
-                p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+                p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
             }
         }
 
@@ -439,20 +442,20 @@ void KoRuler::drawVertical( QPainter *_painter )
         {
             for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
                 int ii=qRound(i);
-                p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+                p.drawLine( 9, ii - diffy, width() - 9, ii - diffy );
             }
         }
 
         // Draw ending bar (at page height)
-        p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
-        p.setPen( colorGroup().color( QColorGroup::Base ) );
-        p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
+        //p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
+        //p.setPen( colorGroup().color( QColorGroup::Base ) );
+        //p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
 
         // Draw starting bar (at 0)
-        p.setPen( colorGroup().color( QColorGroup::Text ) );
-        p.drawLine( 1, -diffy, width() - 1, -diffy );
-        p.setPen( colorGroup().color( QColorGroup::Base ) );
-        p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
+        //p.setPen( colorGroup().color( QColorGroup::Text ) );
+        //p.drawLine( 1, -diffy, width() - 1, -diffy );
+        //p.setPen( colorGroup().color( QColorGroup::Base ) );
+        //p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
     }
 
     // Show the mouse position
@@ -1166,12 +1169,11 @@ void KoRuler::slotMenuActivated( int i )
 QSize KoRuler::minimumSizeHint() const
 {
     QSize size;
-    QFont font; // Use the global KDE font. Let's hope it's appropriate.
-    font.setPointSize( 8 );
+    QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
 
-    size.setWidth( fm.height() + 4 );
-    size.setHeight( fm.height() + 4 );
+    size.setWidth( QMAX( fm.height() + 4, 20 ) );
+    size.setHeight( QMAX( fm.height() + 4, 20 ) );
 
     return size;
 }

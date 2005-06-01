@@ -288,10 +288,12 @@ KarbonView::canvas()
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
-	int space = 20;
-	m_horizRuler->setGeometry( space, 0, width() - space, space );
-	m_vertRuler->setGeometry( 0, space, space, height() - space );
-	m_canvas->setGeometry( space, space, width() - space, height() - space );
+    int hSpace = m_vertRuler->minimumSizeHint().width();
+    int vSpace = m_horizRuler->minimumSizeHint().height();
+
+	m_horizRuler->setGeometry( hSpace, 0, width() - hSpace, vSpace );
+	m_vertRuler->setGeometry( 0, vSpace, hSpace, height() - vSpace );
+	m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
 	m_horizRuler->setOffset( m_canvas->contentsX() - m_canvas->pageOffsetX(), 0 );
 	m_horizRuler->setFrameStartEnd( 0, int( part()->document().width() * zoom() ) );
 	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() + m_canvas->contentsY() );
@@ -662,6 +664,10 @@ KarbonView::zoomChanged( const KoPoint &p )
 	double centerX;
 	double centerY;
 	double zoomFactor;
+
+    int hSpace = m_vertRuler->minimumSizeHint().width();
+    int vSpace = m_horizRuler->minimumSizeHint().height();
+
 	if( !p.isNull() )
 	{
 		centerX = ( ( p.x() ) * zoom() + m_canvas->pageOffsetX() ) / double( m_canvas->contentsWidth() );
@@ -671,25 +677,25 @@ KarbonView::zoomChanged( const KoPoint &p )
 	else if( m_zoomAction->currentText() == i18n("  Width") )
 	{
 		centerX = 0.5;
-		centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
-		zoomFactor = double( width() - 20 ) / double( part()->document().width() + 10 );
+		centerY = double( m_canvas->contentsY() + ( height() - vSpace ) / 2 ) / double( m_canvas->contentsHeight() );
+		zoomFactor = double( width() - hSpace ) / double( part()->document().width() + ( hSpace / 2 ) );
 	}
 	else if( m_zoomAction->currentText() == i18n("Whole Page") )
 	{
 		centerX = 0.5;
 		centerY = 0.5;
-		double zoomFactorX = double( width() - 20 ) / double( part()->document().width() + 10 );
-		double zoomFactorY = double( height() - 20 ) / double( part()->document().height() + 10 );
+		double zoomFactorX = double( width() - hSpace ) / double( part()->document().width() + ( hSpace / 2 ) );
+		double zoomFactorY = double( height() - vSpace ) / double( part()->document().height() + ( vSpace / 2 ) );
 		zoomFactor = kMin( zoomFactorX, zoomFactorY );
 	}
 	else
 	{
-		if( m_canvas->contentsWidth() > width() - 20 )
-			centerX = double( m_canvas->contentsX() + ( width() - 20 ) / 2 ) / double( m_canvas->contentsWidth() );
+		if( m_canvas->contentsWidth() > width() - hSpace )
+			centerX = double( m_canvas->contentsX() + ( width() - hSpace ) / 2 ) / double( m_canvas->contentsWidth() );
 		else
 			centerX = 0.5;
-		if( m_canvas->contentsHeight() > height() - 20 )
-			centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
+		if( m_canvas->contentsHeight() > height() - vSpace )
+			centerY = double( m_canvas->contentsY() + ( height() - vSpace ) / 2 ) / double( m_canvas->contentsHeight() );
 		else
 			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
@@ -977,8 +983,9 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 	m_horizRuler->setMousePos( mx, my );
 	m_vertRuler->setMousePos( mx, my );
 
-	m_horizRuler->update();
-	m_vertRuler->update();
+	// Not necessary
+	//m_horizRuler->update();
+	//m_vertRuler->update();
 	
 	KoPoint xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
@@ -1027,14 +1034,16 @@ KarbonView::setNumberOfRecentFiles( unsigned int number )
 void
 KarbonView::showRuler()
 {
-	int space = 20;
+    int hSpace = m_vertRuler->minimumSizeHint().width();
+    int vSpace = m_horizRuler->minimumSizeHint().height();
+
 	if( m_showRulerAction->isChecked() )
 	{
 		m_horizRuler->show();
 		m_vertRuler->show();
-		m_horizRuler->setGeometry( space, 0, width() - space, space );
-		m_vertRuler->setGeometry( 0, space, space, height() - space );
-		m_canvas->setGeometry( space, space, width() - space, height() - space );
+		m_horizRuler->setGeometry( hSpace, 0, width() - hSpace, vSpace );
+		m_vertRuler->setGeometry( 0, vSpace, hSpace, height() - vSpace );
+		m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
 	}
 	else
 	{

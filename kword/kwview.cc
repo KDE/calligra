@@ -2725,7 +2725,7 @@ void KWView::createLinkedFrame()
     if (selectedFrames.count() != 1)
         return; // action is disabled in such a case
     KWFrame* frame = selectedFrames.getFirst();
-    KWFrame* newFrame = new KWFrame(0L, frame->x()+20, frame->y()+20, frame->width(), frame->height() );
+    KWFrame* newFrame = new KWFrame(0L, frame->x() + m_gui->getVertRuler()->minimumSizeHint().width(), frame->y() + m_gui->getHorzRuler()->minimumSizeHint().height(), frame->width(), frame->height() );
     newFrame->setZOrder( m_doc->maxZOrder( newFrame->pageNum(m_doc) ) + 1 ); // make sure it's on top
     newFrame->setCopy(true);
     newFrame->setNewFrameBehavior( KWFrame::Copy );
@@ -7493,20 +7493,22 @@ void KWGUI::resizeEvent( QResizeEvent *e )
 
 void KWGUI::reorganize()
 {
-    int space=20;
+    int hSpace = r_vert->minimumSizeHint().width();
+    int vSpace = r_horz->minimumSizeHint().height();
     if(view->kWordDocument()->showRuler())
     {
         r_vert->show();
         r_horz->show();
         tabChooser->show();
-        tabChooser->setGeometry( 0, 0, 20, 20 );
+        tabChooser->setGeometry( 0, 0, hSpace, vSpace );
     }
     else
     {
         r_vert->hide();
         r_horz->hide();
         tabChooser->hide();
-        space=0;
+        hSpace = 0;
+        vSpace = 0;
     }
 
     if(view->kWordDocument()->showdocStruct()) {
@@ -7542,9 +7544,10 @@ void KWGUI::reorganize()
     }
 
     panner->setGeometry( 0, 0, width(), height() );
-    canvas->setGeometry( space, space, left->width() - space, left->height() - space );
-    r_horz->setGeometry( space, 0, left->width() - space, space );
-    r_vert->setGeometry( 0, space, space, left->height() - space );
+    canvas->setGeometry( hSpace, vSpace, left->width() - hSpace, left->height() - vSpace );
+    tabChooser->setGeometry( 0, 0, hSpace, vSpace );
+    r_horz->setGeometry( hSpace, 0, left->width() - hSpace, vSpace );
+    r_vert->setGeometry( 0, hSpace, vSpace, left->height() - vSpace );
 }
 
 void KWGUI::unitChanged( KoUnit::Unit u )

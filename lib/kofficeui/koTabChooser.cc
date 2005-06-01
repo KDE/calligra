@@ -46,7 +46,7 @@ public:
 KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
     : QFrame( parent, "" )
 {
-    setFrameStyle( Box | Raised );
+    setFrameStyle( MenuBarPanel );
     flags = _flags;
     d=new KoTabChooserPrivate();
 

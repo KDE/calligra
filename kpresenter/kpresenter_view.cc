@@ -3433,20 +3433,23 @@ void KPresenterView::reorganize()
 
         if(kPresenterDoc()->showRuler())
         {
-            m_canvas->move( 20, 20 );
+            int hSpace = v_ruler->minimumSizeHint().width();
+            int vSpace = h_ruler->minimumSizeHint().height();
+
+            m_canvas->move( hSpace, vSpace );
             if ( h_ruler )
             {
                 h_ruler->show();
-                h_ruler->setGeometry( 20, 0, m_canvas->width(), 20 );
+                h_ruler->setGeometry( hSpace, 0, m_canvas->width(), vSpace );
             }
             if (v_ruler )
             {
                 v_ruler->show();
-                v_ruler->setGeometry( 0, 20, 20, m_canvas->height() );
+                v_ruler->setGeometry( 0, vSpace, hSpace, m_canvas->height() );
             }
             if(getTabChooser())
             {
-                getTabChooser()->setGeometry(0,0,20,20);
+                getTabChooser()->setGeometry(0, 0, hSpace, vSpace);
                 getTabChooser()->show();
             }
         }
@@ -3491,7 +3494,10 @@ void PageBase::resizeEvent( QResizeEvent *e )
     QSize s = e ? e->size() : size();
 
     if ( view->m_bShowGUI ) {
-        view->m_canvas->resize( s.width() - 36, s.height() - 36 );
+        int hSpace = view->getVRuler()->minimumSizeHint().width();
+        int vSpace = view->getVRuler()->minimumSizeHint().height();
+
+        view->m_canvas->resize( s.width() - ( hSpace + 16 ), s.height() - ( vSpace + 16 ) );
         view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
         view->pgPrev->setGeometry( s.width() - 15, s.height() - 32, 15, 16 );
         view->pgNext->setGeometry( s.width() - 15, s.height() - 16, 15, 16 );
@@ -3760,10 +3766,14 @@ void KPresenterView::setupRulers()
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->getUnit() );
     v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
-    m_canvas->resize( m_canvas->width() - 20, m_canvas->height() - 20 );
-    m_canvas->move( 20, 20 );
-    h_ruler->setGeometry( 20, 0, m_canvas->width(), 20 );
-    v_ruler->setGeometry( 0, 20, 20, m_canvas->height() );
+
+    int hSpace = v_ruler->minimumSizeHint().width();
+    int vSpace = h_ruler->minimumSizeHint().height();
+
+    m_canvas->resize( m_canvas->width() - hSpace, m_canvas->height() - vSpace );
+    m_canvas->move( hSpace, vSpace );
+    h_ruler->setGeometry( hSpace, 0, m_canvas->width(), vSpace );
+    v_ruler->setGeometry( 0, vSpace, hSpace, m_canvas->height() );
 
     QObject::connect( h_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
                       this, SLOT( unitChanged( KoUnit::Unit ) ) );
