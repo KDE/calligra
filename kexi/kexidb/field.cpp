@@ -67,7 +67,7 @@ Field::Field(const QString& name, Type ctype,
  QVariant defaultValue, const QString& caption, const QString& description,
  uint width)
 	: m_parent(0)
-	,m_name(name)
+	,m_name(name.lower())
 	,m_length(length)
 	,m_precision(precision)
 	,m_options(options)
@@ -308,7 +308,7 @@ Field::setQuery(QuerySchema *querySchema)
 void
 Field::setName(const QString& n)
 {
-	m_name = n;
+	m_name = n.lower();
 }
 
 void
