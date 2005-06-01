@@ -920,7 +920,7 @@ KarbonView::initActions()
 		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+U" ), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	m_closePath = new KAction(
-		i18n( "&Close Path" ), "closepath", 0 /*QKeySequence( "Ctrl+U" )*/, this,
+		i18n( "&Close Path" ), 0 /*QKeySequence( "Ctrl+U" )*/, this,
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
 
@@ -928,13 +928,13 @@ KarbonView::initActions()
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
 	new KAction(
-		i18n( "&Transform" ), "14_transform", 0, this,
+		i18n( "&Transform" ), "transform", 0, this,
 		SLOT( objectTransform() ), actionCollection(), "view_transform_docker" );
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
 	new KAction(
-		i18n( "&Style" ), "styledocker", 0, this,
+		i18n( "&Style" ), 0, this,
 		SLOT( viewStyleDocker() ), actionCollection(), "view_style_docker" );
 	// view <-----
 

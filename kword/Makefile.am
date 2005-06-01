@@ -77,7 +77,7 @@ kde_services_DATA = kwordpart.desktop
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc kword_readonly.rc
 
-######### DF SUBDIRS = . mailmerge templates dtd pics toolbar expression data
+SUBDIRS = . mailmerge templates dtd pics toolbar expression data
 
 messages: rc.cpp
 	$(EXTRACTRC) --tag-group=koffice expression/*.xml > xml_doc.cc

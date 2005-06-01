@@ -143,5 +143,28 @@ Krita
 * Fix selecting a new mask color for selections
 * Many fixes for crashes.
 
+Kexi
+
+* Form Designer: all known property and enum names are translated; names are simplified
+* Form Designer: more properties turned to advanced set and thus made invisible in Kexi
+* Form Designer: kexiproperty object is created only once for on propbuffer creation 
+  for every QWidget's property. This fixes problems like 
+ 'toggleButton' property being added twice to propeditor
+* Form Designer: looking for i18n'd property description or enum value description: 
+  on failure, we're also asking parent widget factory for this, if one exists
+* Form Designer: fixed many crashes appearing when a widget name was changed
+* Form Designer: setting duplicated or invalid widget name is now impossible
+* Form Designer: row deleting and inserting implemented
+* Form Designer: "+ button" code shared with table view
+* Form Designer: fixed problems with data in subforms: data provider only sets data 
+  for own items, not inside subforms (data-awarness is disabled in subforms for now)
+* KexiDB: magic data is now defined for application/x-sqliteX, not for
+  application/x-kexiproject-sqliteX (X == 2 or 3)
+* KexiDB: file-based drivers can now define a list of supported mimetypes, not just
+  one mime type (added all known mimetypes thee, including Knoda's mimes, for
+  compatibility)
+* KexiDB: we're handling application/x-sqlite2 and application/x-sqlite3
+
+
 Filters:
 * Many improvements to the Excel importer
