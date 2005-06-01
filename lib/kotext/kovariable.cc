@@ -2290,6 +2290,7 @@ QStringList KoFieldVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Author Name" );
     lst << i18n( "Title" );
+    lst << i18n( "Initials" );
     lst << i18n( "Position" );
     lst << i18n( "Company" );
     lst << i18n( "Email" );
@@ -2311,7 +2312,6 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "File Name without Extension" );
     lst << i18n( "Directory Name" ); // is "Name" necessary ?
     lst << i18n( "Directory && File Name" );
-    lst << i18n( "Initials" );
     return lst;
 }
 
@@ -2330,43 +2330,43 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
                 break;
         case 1: v = VST_AUTHORTITLE;
                 break;
-        case 2: v = VST_AUTHORPOSITION;
+        case 2: v = VST_INITIAL;
                 break;
-        case 3: v = VST_COMPANYNAME;
+        case 3: v = VST_AUTHORPOSITION;
                 break;
-        case 4: v = VST_EMAIL;
+        case 4: v = VST_COMPANYNAME;
                 break;
-        case 5: v = VST_TELEPHONE_WORK;
+        case 5: v = VST_EMAIL;
                 break;
-        case 6: v = VST_TELEPHONE_HOME;
+        case 6: v = VST_TELEPHONE_WORK;
                 break;
-        case 7: v = VST_FAX;
+        case 7: v = VST_TELEPHONE_HOME;
                 break;
-        case 8: v = VST_STREET;
+        case 8: v = VST_FAX;
                 break;
-        case 9: v = VST_POSTAL_CODE;
+        case 9: v = VST_STREET;
                 break;
-        case 10: v = VST_CITY;
+        case 10: v = VST_POSTAL_CODE;
                 break;
-        case 11: v = VST_COUNTRY;
+        case 11: v = VST_CITY;
                 break;
-        case 12: v = VST_TITLE;
+        case 12: v = VST_COUNTRY;
                 break;
-        case 13: v = VST_ABSTRACT;
+        case 13: v = VST_TITLE;
                 break;
-        case 14: v = VST_SUBJECT;
+        case 14: v = VST_ABSTRACT;
                 break;
-        case 15: v = VST_KEYWORDS;
+        case 15: v = VST_SUBJECT;
                 break;
-        case 16: v = VST_FILENAME;
+        case 16: v = VST_KEYWORDS;
                 break;
-        case 17: v = VST_FILENAMEWITHOUTEXTENSION;
+        case 17: v = VST_FILENAME;
                 break;
-        case 18: v = VST_DIRECTORYNAME;
+        case 18: v = VST_FILENAMEWITHOUTEXTENSION;
                 break;
-        case 19: v = VST_PATHFILENAME;
+        case 19: v = VST_DIRECTORYNAME;
                 break;
-        case 20: v = VST_INITIAL;
+        case 20: v = VST_PATHFILENAME;
                 break;
         default:
             v = VST_NONE;
