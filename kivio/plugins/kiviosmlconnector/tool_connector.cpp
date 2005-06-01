@@ -44,7 +44,7 @@
 SMLConnector::SMLConnector( KivioView* view )
  : Kivio::MouseTool(view, "SMLConnector")
 {
-  m_connectorAction = new KToggleAction(i18n("Polyline Connector"), "kivio_connector", 0,
+  m_connectorAction = new KToggleAction(i18n("Polyline Connector"), "", 0,
     actionCollection(), "sml_connector");
   connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 

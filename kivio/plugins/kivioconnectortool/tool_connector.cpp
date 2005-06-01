@@ -48,14 +48,14 @@
 
 ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
-  m_connectorAction = new Kivio::MouseToolAction(i18n("Straight Connector"), "kivio_connector", 0,
+  m_connectorAction = new Kivio::MouseToolAction(i18n("Straight Connector"), "", 0,
     actionCollection(), "connector");
   connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_connectorAction, SIGNAL(activated()), this, SLOT(activateStraight()));
   connect(m_connectorAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
   m_connectorAction->setExclusiveGroup("ConnectorTool");
 
-  m_polyLineAction = new Kivio::MouseToolAction(i18n("Polyline Connector"), "kivio_connector", 0,
+  m_polyLineAction = new Kivio::MouseToolAction(i18n("Polyline Connector"), "", 0,
     actionCollection(), "polyLineConnector");
   connect(m_polyLineAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_polyLineAction, SIGNAL(activated()), this, SLOT(activatePolyline()));
