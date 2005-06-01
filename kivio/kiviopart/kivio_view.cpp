@@ -324,7 +324,7 @@ void KivioView::createGeometryDock()
 
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
 
-  KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), "stencil_geometry", 0, actionCollection(), "stencilGeometry" );
+  KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), 0, actionCollection(), "stencilGeometry" );
   connect( showStencilGeometry, SIGNAL(toggled(bool)), stencilGeometryBase, SLOT(makeVisible(bool)));
   connect( stencilGeometryBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
 }
