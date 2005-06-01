@@ -4368,6 +4368,8 @@ void KPresenterView::insertLink()
     if ( edit->textObject()->hasSelection() )
     {
         QString selectedText = edit->textObject()->selectedText();
+        if ( edit->textObject()->selectionHasCustomItems() || selectedText.contains('\n') )
+            return;
         if ( selectedText.startsWith( "mailto:/" ) ||
              selectedText.startsWith( "ftp:/" ) ||
              selectedText.startsWith( "http:/" ) )
