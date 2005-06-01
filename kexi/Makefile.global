@@ -5,4 +5,4 @@ $(USE_EXCEPTIONS) $(KEXI_OPTIONS)
 
 KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
 
-VER_INFO = -version-info 0:9:0
+VER_INFO = -version-info 1:0:0
