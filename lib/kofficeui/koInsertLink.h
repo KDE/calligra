@@ -135,12 +135,14 @@ public:
 protected slots:
     virtual void slotOk();
     void slotTextChanged (  );
+    void tabChanged(QWidget *);
 
 private:
     KOfficePrivate::fileLinkPage *fileLink;
     KOfficePrivate::mailLinkPage *mailLink;
     KOfficePrivate::internetLinkPage *internetLink;
     KOfficePrivate::bookmarkLinkPage *bookmarkLink;
+    QString currentText;
 };
 
 #endif
