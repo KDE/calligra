@@ -55,6 +55,26 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_sentEvent = false;
 	setViewWidget( new QWidget(this) );
 	m_edit = new QDateEdit(widget());
+#if 0
+	QString df( KGlobal::locale()->dateFormatShort() );
+	if (df.length()>2)
+		m_edit->setSeparator( df.mid(2,1) );
+	if (df.length()>=8) {
+		int yearpos = df.find("%y", 0, false);
+		int monthpos = df.find("%m", 0, false);
+		int daypos = df.find("%d", 0, false);
+		if (yearpos>=0 && monthpos>=0 && daypos>=0) {
+			if (yearpos<monthpos && monthpos<daypos)
+				m_edit->setOrder( QDateEdit::YMD );
+			else if (yearpos<daypos && daypos<monthpos)
+				m_edit->setOrder( QDateEdit::YDM );
+			else if (daypos<monthpos && monthpos<yearpos)
+				m_edit->setOrder( QDateEdit::DMY );
+			else if (monthpos<daypos && daypos<yearpos)
+				m_edit->setOrder( QDateEdit::MDY );
+		}
+	}
+#endif
 	m_edit->setAutoAdvance(true);
 	m_edit->installEventFilter(this);
 	m_setNumberOnFocus = -1;

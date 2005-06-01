@@ -285,6 +285,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - display "Autonumber" string for data-aware widgets
 - implement shared action categories to filter out them in 'assigning actions to push buttons'
 - implement "restore default properties" action for widgets
+- allow form's surface resizing when there's global layout defined
+- fix repainting form's surface boundaries repainting when its size is changed by entering 
+  value in the propeditor
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -526,6 +529,8 @@ commit kglobalsettings.cpp and win32_utils.h: KGlobalSettings::documentPath() no
 2005-06-01
 General
 - -(all branches) missing icons added
+KexiDB
+- (all branches) field names converted to lowercase in memory to avoid problems with comparisons
 
 2005-05-31
 Core
