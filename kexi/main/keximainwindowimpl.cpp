@@ -647,12 +647,12 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
-	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "editdelete",
+	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
 		CTRL+Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
-	d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"), "",
+	d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"), "clear_table_contents",
 		0, "edit_clear_table");
 	d->action_edit_clear_table->setToolTip(i18n("Clear table contents"));
 	d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
@@ -662,7 +662,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
 	setActionVolatile( d->action_edit_insert_empty_row, true );
 	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));

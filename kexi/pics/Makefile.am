@@ -19,7 +19,8 @@ icon_ICON = button button_no test_it db form_edit lineedit business_user urlrequ
 	aowidest aotallest aoshortest aonarrowest aogrid aofit aopos2grid \
 	new_sign raise lower alignobjs \
 	sort_az sort_za autonumber \
-	form_action
+	form_action \
+	clear_table_contents delete_table_row insert_table_row
 
 icondir = $(kde_datadir)/kexi/icons
 
