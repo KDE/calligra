@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Gnumeric Info
+ServiceTypes=KFilePlugin
+X-KDE-Library=kfile_gnumeric
+MimeType=application/x-gnumeric
+PreferredGroups=DocumentInfo
+PreferredItems=Author,Title,Abstract
