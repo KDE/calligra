@@ -8,7 +8,7 @@ libkopainter_la_SOURCES = svgpathparser.cc \
 	koColorChooser.cc \
 	koIconChooser.cc
 
-libkopainter_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libkopainter_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 libkopainter_la_LIBADD = $(LIB_KOFFICEUI)
 

@@ -10,7 +10,7 @@ libkoscript_la_SOURCES = koscript_locale.cc \
 		  koscript_context.cc koscript_value.cc koscript_parser.cc koscript_parsenode.cc yacc.cc \
                   scanner.cc koscript.cc koscript_util.cc koscript_struct.cc
 libkoscript_la_METASOURCES = AUTO
-libkoscript_la_LDFLAGS = -version-info 2:0:0 -no-undefined $(all_libraries)
+libkoscript_la_LDFLAGS = -version-info 3:0:0 -no-undefined $(all_libraries)
 libkoscript_la_LIBADD = $(LIB_KDEUI)
 
 bin_PROGRAMS = koscript

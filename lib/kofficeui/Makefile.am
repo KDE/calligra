@@ -22,7 +22,7 @@ libkofficeui_la_SOURCES = \
 	kotooldockbase.cpp kotooldockmanager.cpp kotooldockmovemanager.cpp \
 	kotoolbutton.cc
 
-libkofficeui_la_LDFLAGS	= -version-info 2:0:0 -no-undefined $(all_libraries)
+libkofficeui_la_LDFLAGS	= -version-info 3:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
 
 include_HEADERS = \

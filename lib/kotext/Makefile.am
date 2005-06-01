@@ -16,7 +16,7 @@ libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
 	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
 	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc
 
-libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
+libkotext_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 # We use kofficeui for koRect :)
 libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la $(LIBKSPELL2) -lkutils
 

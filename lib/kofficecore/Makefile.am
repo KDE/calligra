@@ -28,7 +28,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koStyleStack.cc koGenStyles.cpp koOasisSettings.cc koPageLayout.cpp \
 	kofiledialog.cpp koxmlns.cpp kodom.cpp koversiondialog.cc koOasisStore.cpp
 
-libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
+libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 
 include_HEADERS = handler.h \
 	koFilter.h koFilterChain.h \
