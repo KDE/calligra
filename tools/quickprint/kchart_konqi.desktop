@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+ServiceTypes=application/x-kchart
+Actions=Print;
+
+[Desktop Action Print]
+Name=Print...
+Exec=kchart --print %U
+Icon=filequickprint
