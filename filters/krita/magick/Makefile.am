@@ -1,13 +1,15 @@
 kde_module_LTLIBRARIES = libkritamagickimport.la libkritamagickexport.la
 
-libkritamagickexport_la_LDFLAGS = $(KDE_PLUGIN)
+libkritamagickexport_la_LDFLAGS = $(KDE_PLUGIN) $(LIBMAGICK_LDFLAGS) $(KDE_RPATH) $(LIBMAGICK_RPATH) $(all_libraries) -module -avoid-version -no-undefined
 libkritamagickexport_la_LIBADD = \
 	$(KOFFICE_LIBS) \
+	$(LIBMAGICK_LIBS) \
 	$(top_builddir)/krita/libkritacommon.la
 
-libkritamagickimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
+libkritamagickimport_la_LDFLAGS = $(KDE_PLUGIN) $(LIBMAGICK_LDFLAGS) $(KDE_RPATH) $(LIBMAGICK_RPATH) $(all_libraries) -module -avoid-version -no-undefined
 libkritamagickimport_la_LIBADD = \
 	$(KOFFICE_LIBS) \
+	$(LIBMAGICK_LIBS) \
 	$(top_builddir)/krita/libkritacommon.la
 
 INCLUDES= \
@@ -15,15 +17,25 @@ INCLUDES= \
 	 $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
+	-I$(top_srcdir)/krita/core/tool \
+	-I$(top_srcdir)/krita/core/resources \
+	-I$(top_srcdir)/krita/core/strategy \
+	-I$(top_srcdir)/krita/core/tiles \
+	-I$(top_srcdir)/krita/core/visitors \
+	-I$(top_srcdir)/krita/core/color_strategy \
+	-I$(top_srcdir)/krita/core/paintop \
 	-I$(top_srcdir)/krita/ui \
+        $(KOFFICE_INCLUDES) -I$(interfacedir) \
+        $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS) \
 	$(all_includes) 
 
 service_DATA = krita_magick_import.desktop krita_magick_export.desktop
 servicedir = $(kde_servicesdir)
 
-libkritamagickimport_la_SOURCES = magickimport.cpp
-libkritamagickexport_la_SOURCES = magickexport.cpp
+libkritamagickimport_la_SOURCES = magickimport.cpp kis_image_magick_converter.cc
+libkritamagickexport_la_SOURCES = magickexport.cpp kis_image_magick_converter.cc
 
 METASOURCES = AUTO
 
 
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)

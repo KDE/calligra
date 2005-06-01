@@ -19,7 +19,13 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 #include <koFilterChain.h>
+
 #include <kis_doc.h>
+#include <kis_layer.h>
+#include <kis_image.h>
+#include <kis_annotation.h>
+#include <kis_types.h>
+#include <kis_image_magick_converter.h>
 
 typedef KGenericFactory<MagickExport, KoFilter> MagickExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
@@ -34,19 +40,44 @@ MagickExport::~MagickExport()
 
 KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCString& to)
 {
-	kdDebug() << "magick export!\n";
+	kdDebug() << "magick export! From: " << from << ", To: " << to << "\n";
+	
 	if (from != "application/x-krita")
 		return KoFilter::NotImplemented;
 
 	// XXX: Add dialog about flattening layers here
 
-	KisDoc *output = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
-	QString outputFilename = m_chain -> outputFile();
+	KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+	QString filename = m_chain->outputFile();
 	
 	if (!output)
 		return KoFilter::CreationError;
 	
-	return output -> exportImage(outputFilename) ? KoFilter::OK : KoFilter::BadMimeType;
+	
+	if (filename.isEmpty()) return KoFilter::FileNotFound;
+
+	KURL url(filename);
+
+	KisLayerSP dst;
+
+	KisImage * img = new KisImage(*output->currentImage());
+	Q_CHECK_PTR(img);
+
+	KisImageMagickConverter ib(output, output->undoAdapter());
+
+	img->flatten();
+
+	dst = img->layer(0);
+	Q_ASSERT(dst);
+
+	vKisAnnotationSP_it beginIt = img->beginAnnotations();
+	vKisAnnotationSP_it endIt = img->endAnnotations();
+	if (ib.buildFile(url, dst, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
+		delete img;
+		return KoFilter::OK;
+	}
+	delete img;
+	return KoFilter::InternalError;
 }
 
 #include <magickexport.moc>

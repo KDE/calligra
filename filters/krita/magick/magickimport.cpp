@@ -15,11 +15,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <qstring.h>
+ 
 #include <magickimport.h>
 #include <kgenericfactory.h>
 #include <koDocument.h>
 #include <koFilterChain.h>
+
 #include <kis_doc.h>
+#include <kis_view.h>
+#include <kis_image_magick_converter.h>
+#include <kis_dlg_progress.h>
+#include <kis_progress_display_interface.h>
 
 typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
@@ -39,13 +46,56 @@ KoFilter::ConversionStatus MagickImport::convert(const QCString&, const QCString
 	if (to != "application/x-krita")
 		return KoFilter::BadMimeType;
 
-	KisDoc *input = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-	QString inputFilename = m_chain -> inputFile();
+	KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
+	KisView * view = static_cast<KisView*>(doc -> views().getFirst());
 	
-	if (!input)
+	QString filename = m_chain -> inputFile();
+	
+	if (!doc)
 		return KoFilter::CreationError;
+
+	doc -> prepareForImport();
+		
+
+	if (!filename.isEmpty()) {
 	
-	return input -> importImage(inputFilename) ? KoFilter::OK : KoFilter::BadMimeType;
+		KURL url(filename);
+
+		if (url.isEmpty())
+			return KoFilter::FileNotFound;
+			
+		KisImageMagickConverter ib(doc, doc -> undoAdapter());
+
+		if (view != 0)
+			view -> progressDisplay() -> setSubject(&ib, false, true);
+
+		switch (ib.buildImage(url)) {
+			case KisImageBuilder_RESULT_UNSUPPORTED:
+				return KoFilter::NotImplemented;
+				break;
+			case KisImageBuilder_RESULT_INVALID_ARG:
+				return KoFilter::BadMimeType;
+				break;
+			case KisImageBuilder_RESULT_NO_URI:
+			case KisImageBuilder_RESULT_NOT_LOCAL:
+				return KoFilter::FileNotFound;
+				break;
+			case KisImageBuilder_RESULT_BAD_FETCH:
+			case KisImageBuilder_RESULT_EMPTY:
+				return KoFilter::ParsingError;				
+				break;
+			case KisImageBuilder_RESULT_FAILURE:
+				return KoFilter::InternalError;
+				break;
+			case KisImageBuilder_RESULT_OK:
+				doc -> setCurrentImage( ib.image());
+				return KoFilter::OK;
+			default:
+				break;
+		}
+
+	}
+	return KoFilter::StorageCreationError;
 }
 
 #include <magickimport.moc>
