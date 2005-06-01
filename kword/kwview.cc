@@ -3334,6 +3334,8 @@ void KWView::insertLink()
     if ( edit->textFrameSet()->hasSelection() )
     {
         QString selectedText = edit->textFrameSet()->textObject()->selectedText();
+        if ( edit->textFrameSet()->textObject()->selectionHasCustomItems() || selectedText.contains('\n') )
+            return;
         if ( selectedText.startsWith( "mailto:/" ) ||
              selectedText.startsWith( "ftp:/" ) ||
              selectedText.startsWith( "http:/" ) )
