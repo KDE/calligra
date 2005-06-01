@@ -647,7 +647,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
-	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
+	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "editdelete",
 		CTRL+Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
