@@ -86,7 +86,7 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 {
 	if (mode==Kexi::DesignViewMode) {
 		m_manager->createActions(col, 0);
-		new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), col, "taborder");
+		new KAction(i18n("Edit Tab Order"), KShortcut(0), m_manager, SLOT(editTabOrder()), col, "taborder");
 		new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), m_manager, SLOT(ajustWidgetSize()), col, "adjust");
 	}
 	//TODO
@@ -115,7 +115,7 @@ void KexiFormPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"), "editclear", 0, "formpart_clear_contents");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
 //TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
-//TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
+//TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), 0, "formpart_connections");
 
 //	KFormDesigner::CreateLayoutCommand
 
