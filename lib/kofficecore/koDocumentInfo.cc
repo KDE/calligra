@@ -194,6 +194,10 @@ KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
     initParameters();
 }
 
+KoDocumentInfoAuthor::~KoDocumentInfoAuthor()
+{
+    delete m_emailCfg;
+}
 void KoDocumentInfoAuthor::initParameters()
 {
     KConfig* config = KoGlobal::kofficeConfig();
@@ -207,6 +211,31 @@ void KoDocumentInfoAuthor::initParameters()
         m_city=config->readEntry( "city" );
         m_street=config->readEntry( "street" );
     }
+
+  m_emailCfg = new KConfig( "emaildefaults", true );
+  m_emailCfg->setGroup( "Defaults" );
+  QString group = m_emailCfg->readEntry("Profile","Default");
+  m_emailCfg->setGroup(QString("PROFILE_%1").arg(group));
+
+  if ( m_fullName.isNull() ) // only if null. Empty means the user made it explicitly empty.
+  {
+    QString name = m_emailCfg->readEntry( "FullName" );
+    if ( !name.isEmpty() )
+      m_fullName = name;
+  }
+  if ( m_company.isNull() )
+  {
+    QString name = m_emailCfg->readEntry( "Organization" );
+    if ( !name.isEmpty() )
+      m_company = name;
+  }
+  if ( m_email.isNull() )
+  {
+    QString email = m_emailCfg->readEntry( "EmailAddress" );
+    if ( !email.isEmpty() )
+      m_email = email;
+  }
+
 }
 
 bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
