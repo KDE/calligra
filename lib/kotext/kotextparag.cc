@@ -2761,7 +2761,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
 void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
                              int from /* default 0 */, int to /* usually length()-2 */,
-                             bool saveAnchorsFramesets /* default false */ ) const
+                             bool /*saveAnchorsFramesets*/ /* default false */ ) const
 {
     KoGenStyles& mainStyles = context.mainStyles();
 
@@ -2925,7 +2925,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                                        int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                        bool /*drawSelections*/,
                                        KoTextFormat * /*lastFormat*/, const QMemArray<int> &/*selectionStarts*/,
-                                       const QMemArray<int> &/*selectionEnds*/, const QColorGroup &cg,
+                                       const QMemArray<int> &/*selectionEnds*/, const QColorGroup &/*cg*/,
                                        bool rightToLeft, int /*line*/, KoZoomHandler* zh,
                                        int whichFormattingChars )
 {
