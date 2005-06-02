@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1756,6 +1757,25 @@ void KPresenterDoc::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoO
                 else
                     newpage->appendObject(kppixmapobject);
             }
+
+            QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
+            kdDebug()<<" object:"<<object.isNull()<<endl;
+            if ( !object.isNull() )
+            {
+                fillStyleStack( o, context );
+                KPresenterChild *ch = new KPresenterChild( this );
+                QRect r;
+                KPPartObject *kppartobject = new KPPartObject( ch );
+                kppartobject->loadOasis( o, context, m_loadingInfo );
+                r = ch->geometry();
+                if ( groupObject )
+                    groupObject->addObjects( kppartobject );
+                else
+                    newpage->appendObject(kppartobject);
+                insertChild( ch );
+                kppartobject->setOrig( r.x(), r.y() );
+                kppartobject->setSize( r.width(), r.height() );
+            }
             else
             {
                 KPTextObject *kptextobject = new KPTextObject( this );
@@ -1903,22 +1923,6 @@ void KPresenterDoc::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoO
                 groupObject->addObjects( kpgroupobject );
             else
                 newpage->appendObject(kpgroupobject);
-        }
-        else if ( name == "object" && isDrawNS)
-        {
-            fillStyleStack( o, context );
-            KPresenterChild *ch = new KPresenterChild( this );
-            QRect r;
-            KPPartObject *kppartobject = new KPPartObject( ch );
-            kppartobject->loadOasis( o, context, m_loadingInfo );
-            r = ch->geometry();
-            if ( groupObject )
-                groupObject->addObjects( kppartobject );
-            else
-                newpage->appendObject(kppartobject);
-            insertChild( ch );
-            kppartobject->setOrig( r.x(), r.y() );
-            kppartobject->setSize( r.width(), r.height() );
         }
         else if ( name == "notes" && o.namespaceURI() == KoXmlNS::presentation ) // notes
         {

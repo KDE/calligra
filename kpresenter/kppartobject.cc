@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 #include "kpgradient.h"
+#include <kodom.h>
 #include <koxmlns.h>
 #include "kooasiscontext.h"
 #include <kparts/partmanager.h>
@@ -97,12 +99,12 @@ bool KPPartObject::saveOasisPart( KoXmlWriter &xmlWriter, KoStore *store, KoSavi
 void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPPartObject::loadOasis(const QDomElement &element)******************\n";
-#if 0
-    // TODO get hold of draw:object element...
-    child->loadOasis( element );
+    
+    QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
+    child->loadOasis( element, objectElement );
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
         objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
-#endif
+    (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
