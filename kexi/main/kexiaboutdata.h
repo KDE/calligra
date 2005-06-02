@@ -47,7 +47,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Former project maintainer & developer"), "lucijan@kde.org");
 	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
 	aboutData->addAuthor("Adam Pigg", I18N_NOOP("PostgreSQL database driver, Migration module"), "adam@piggz.fsnet.co.uk");
-	aboutData->addAuthor("Martin Ellis", I18N_NOOP("Contributions for MySQL and KexiDB, fixes, Migration module, MDB support"), "m.a.ellis@ncl.ac.uk");
+	aboutData->addAuthor("Martin Ellis", I18N_NOOP("Contributions for MySQL and KexiDB, fixes, Migration module, MDB support"), "martin.ellis@kdemail.net");
 	aboutData->addAuthor("Sebastian Sauer", I18N_NOOP("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
 	aboutData->addAuthor("Christian Nitschkowski", I18N_NOOP("Graphics effects, helper dialogs"), "segfault_ii@web.de");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Former developer"),"psn@linux.se");

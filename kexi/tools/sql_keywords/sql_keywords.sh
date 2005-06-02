@@ -20,7 +20,7 @@
 # Sed, awk, grep have been used without much thought -
 # CHECK THE OUTPUT BEFORE INCLUDING IT IN A DRIVER!
 #
-# Martin Ellis <m.a.ellis@ncl.ac.uk>
+# Martin Ellis <martin.ellis@kdemail.net>
 # 11/2004
 
 set -e

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
-   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
+   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
