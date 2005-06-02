@@ -2815,26 +2815,8 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
 
         KoStoreDevice contentDev( store );
         KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
-        settingsWriter.startElement("office:settings");
-        settingsWriter.startElement("config:config-item-set");
 
-        settingsWriter.addAttribute("config:name", "view-settings");
-
-        KoUnit::saveOasis(&settingsWriter, m_unit);
         saveOasisSettings( settingsWriter );
-
-        settingsWriter.endElement(); // config:config-item-set
-
-        settingsWriter.startElement("config:config-item-set");
-        settingsWriter.addAttribute("config:name", "configuration-settings");
-        settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellCheckIgnoreList.join( "," ) );
-        settingsWriter.endElement(); // config:config-item-set
-
-        m_varColl->variableSetting()->saveOasis( settingsWriter );
-
-        settingsWriter.endElement(); // office:settings
-        settingsWriter.endElement(); // Root element
-        settingsWriter.endDocument();
 
         delete &settingsWriter;
 
@@ -2968,9 +2950,27 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
 #endif
 }
 
-void KWDocument::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ ) const
+void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
 {
-    // TODO: any settings to save here?
+    settingsWriter.startElement("office:settings");
+    settingsWriter.startElement("config:config-item-set");
+
+    settingsWriter.addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOasis(&settingsWriter, m_unit);
+
+    settingsWriter.endElement(); // config:config-item-set
+
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "configuration-settings");
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellCheckIgnoreList.join( "," ) );
+    settingsWriter.endElement(); // config:config-item-set
+
+    m_varColl->variableSetting()->saveOasis( settingsWriter );
+
+    settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root element
+    settingsWriter.endDocument();
 }
 
 void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, SaveFlag saveFlag ) const
