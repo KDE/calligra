@@ -33,7 +33,6 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qhbox.h>
-#include <qvgroupbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qwhatsthis.h>
@@ -118,7 +117,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
 
-    QVGroupBox* right = new QVGroupBox( i18n( "Wallpaper Configuration" ), this );
+    right = new QVGroupBox( i18n( "Wallpaper Configuration" ), this );
     QWhatsThis::add( right, i18n( "In this box, you can set various settings "
                                   "that control how the background image is "
                                   "displayed." ) );
@@ -147,6 +146,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                            "be scaled to fit the total size of the selected "
                            "area. Image ratio will be adjusted to match "
                            "the area size and height if necessary." ) );
+    stretchedRB->setChecked( true );
     scaledRB = new QRadioButton( i18n( "Scaled" ), right );
     QWhatsThis::add( scaledRB,
                      i18n( "If you check this box, the selected image will "
@@ -158,19 +158,22 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                            "be centered over the selected area. If the image "
                            "is larger then the area, you will only see the "
                            "middle part of it." ) );
-    tiledRB = new QRadioButton( i18n( "Tiled" ), right );
-    QWhatsThis::add( tiledRB,
-                     i18n( "If you check this box, the selected image will "
-                           "be used as a background tile. If the image is "
-                           "larger then the selected area, you will only see "
-                           "the upper left part of it." ) );
+
+//     tiledRB = new QRadioButton( i18n( "Tiled" ), right );
+//     QWhatsThis::add( tiledRB,
+//                      i18n( "If you check this box, the selected image will "
+//                            "be used as a background tile. If the image is "
+//                            "larger then the selected area, you will only see "
+//                            "the upper left part of it." ) );
     QButtonGroup* alignmentBG;
     alignmentBG = new QButtonGroup( right, "GroupBox_Alignment" );
     alignmentBG->setFrameStyle( QFrame::NoFrame );
     alignmentBG->insert( stretchedRB );
     alignmentBG->insert( scaledRB );
     alignmentBG->insert( centeredRB );
-    alignmentBG->insert( tiledRB );
+//     alignmentBG->insert( tiledRB );
+
+    intensitySB->hide(); //the property doesn't work atm
 }
 
 
@@ -224,9 +227,25 @@ void KChartBackgroundPixmapConfigPage::init()
         const QPixmap* backPixmap;
         KDFrame::BackPixmapMode backPixmapMode;
         const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
-        if( ! backPixmap || backPixmap->isNull() ) {
+        if( !backPixmap || backPixmap->isNull() ) //color as background
+        {
             _backgroundCB->setColor( background.color() );
+            right->setEnabled( false );
+            wallCB->setCurrentItem( 0 );
         }
+        else //pixmap as background
+        {
+            _backgroundCB->setEnabled( false );
+            wallWidget->setPaletteBackgroundPixmap( *backPixmap );
+            wallCB->setCurrentItem( 1 );
+        }
+
+        if ( backPixmapMode == KDFrame::PixCentered )
+            centeredRB->setChecked( true );
+        else if ( backPixmapMode == KDFrame::PixScaled )
+            scaledRB->setChecked( true );
+        else // PixStretched
+            stretchedRB->setChecked( true );
         // pending KHZ
         // else
         //     ..  // set the background pixmap
@@ -274,48 +293,54 @@ void KChartBackgroundPixmapConfigPage::apply()
 
     const QColor backColor( _backgroundCB->color() );
     //
-    // temp. hack: the background is removed if set to 230,222,222.
+    // temp. hack: the background is removed if "None" is selected in the combo box
     //
-    //             For KOffice 1.2 this is to be removed by a checkbox.
-    //                                                (khz, 10.12.2001)
-    if( 230 == backColor.red() && 222 == backColor.green() && 222 == backColor.blue() ){
+    //             For KOffice 1.5/2.0 this is to be removed by a checkbox.
         bool bFound;
         const KDChartParams::KDChartFrameSettings * innerFrame =
             _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
-        if( bFound ) {
+        if( bFound )
+        {
             KDFrame& frame( (KDFrame&)innerFrame->frame() );
-            frame.setBackground();
+            if ( wallCB->currentItem() == 0 )
+            {
+                frame.setBackPixmap( 0  );
+                frame.setBackground( _backgroundCB->color() );
+            }
+            else
+            {
+                KDFrame::BackPixmapMode backPixmapMode;
+                if ( centeredRB->isChecked() )
+                    backPixmapMode = KDFrame::PixScaled;
+                else if ( scaledRB->isChecked() )
+                    backPixmapMode = KDFrame::PixCentered;
+                else
+                    backPixmapMode = KDFrame::PixStretched;
+                frame.setBackPixmap( wallWidget->paletteBackgroundPixmap(), backPixmapMode );
+            }
         }
-    }
-    else
-        _params->setSimpleFrame( KDChartEnums::AreaInnermost,
-                                 0,0,  0,0,
-                                 true,
-                                 true,
-                                 KDFrame::FrameFlat,
-                                 1,
-                                 0,
-                                 QPen( Qt::NoPen ),
-                                 QBrush( _backgroundCB->color() ) );
-
 }
 
 
 void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 {
-    for( int i = 1; i < wallCB->count(); i++ ) {
-	if( fileName == wallCB->text( i ) ) {
+    for( int i = 1; i < wallCB->count(); i++ )
+    {
+        if( fileName == wallCB->text( i ) )
+        {
             wallCB->setCurrentItem( i );
             loadWallPaper();
             return;
-	}
+        }
     }
 
-    if( !fileName.isEmpty() ) {
-	wallCB->insertItem( fileName );
-	wallCB->setCurrentItem( wallCB->count()-1 );
-    } else
-	wallCB->setCurrentItem( 0 );
+    if( !fileName.isEmpty() )
+    {
+        wallCB->insertItem( fileName );
+        wallCB->setCurrentItem( wallCB->count()-1 );
+    }
+    else
+        wallCB->setCurrentItem( 0 );
 
     loadWallPaper();
 }
@@ -323,22 +348,30 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 
 void KChartBackgroundPixmapConfigPage::slotBrowse()
 {
-    KURL url = KFileDialog::getOpenURL( 0 );
+    //TODO: Support non-local wallpapers
+    KURL url = KFileDialog::getOpenFileName( 0 );
     if( url.isEmpty() )
         return;
-    if( !url.isLocalFile() ) {
-        KMessageBox::sorry(this, i18n("Currently only local wallpapers are allowed."));
-    } else
-        showSettings( url.path() );
+    showSettings( url.path() );
 }
 
-void KChartBackgroundPixmapConfigPage::slotWallPaperChanged( int )
+void KChartBackgroundPixmapConfigPage::slotWallPaperChanged( int index )
 {
-    loadWallPaper();
+    if ( index != 0 && loadWallPaper() )
+    {
+        _backgroundCB->setEnabled( false );
+        right->setEnabled( true );
+    }
+    else
+    {
+        wallWidget->setPaletteBackgroundPixmap( 0 );
+        _backgroundCB->setEnabled( true );
+        right->setEnabled( false );
+    }
 }
 
 
-void KChartBackgroundPixmapConfigPage::loadWallPaper()
+bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 {
     int i = wallCB->currentItem();
     if ( i == -1 || i == 0 ) {  // 0 is 'None'
@@ -351,14 +384,17 @@ void KChartBackgroundPixmapConfigPage::loadWallPaper()
             kdWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
             wallPixmap.resize(0,0);
             wallFile = "";
+            return false;
 	} else {
             wallPixmap.load( file );
 
             if( wallPixmap.isNull() )
-		kdWarning(35001) << "Could not load wallpaper " << file << endl;
+                return false;
+// 		kdWarning(35001) << "Could not load wallpaper " << file << endl;
 	}
     }
-    wallWidget->setBackgroundPixmap( wallPixmap );
+    wallWidget->setPaletteBackgroundPixmap( wallPixmap );
+    return true;
 }
 
 }  //KChart namespace

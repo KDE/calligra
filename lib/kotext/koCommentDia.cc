@@ -42,7 +42,10 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
     m_multiLine->setText( _note );
     m_multiLine->setFocus();
     pbAddAuthorName = new QPushButton(i18n("Add Author Name"),page);
-    connect (pbAddAuthorName, SIGNAL(clicked ()), this , SLOT(slotAddAuthorName()));
+    if ( authorName.isEmpty() )
+        pbAddAuthorName->setEnabled( false );
+    else
+        connect (pbAddAuthorName, SIGNAL(clicked ()), this , SLOT(slotAddAuthorName()));
     connect ( m_multiLine , SIGNAL( textChanged()), this, SLOT( slotTextChanged(  )));
     slotTextChanged( );
 

@@ -61,14 +61,41 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
       connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   }
 
+  connect( this, SIGNAL( aboutToShowPage(QWidget *) ), this, SLOT( tabChanged(QWidget *) ) );
+
   slotTextChanged ( );
   resize(400,300);
 }
 
+void KoInsertLinkDia::tabChanged(QWidget *)
+{
+    switch( activePageIndex() )
+    {
+    case 0:
+      internetLink->setLinkName( currentText );
+      break;
+    case 1:
+      mailLink->setLinkName( currentText );
+      break;
+    case 2:
+      fileLink->setLinkName( currentText );
+      break;
+    case 3:
+    {
+        if ( bookmarkLink)
+            bookmarkLink->setLinkName( currentText );
+    }
+    break;
+    default:
+      kdDebug()<<"Error in linkName\n";
+    }
+    enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()) );
+}
 
 void KoInsertLinkDia::slotTextChanged ( )
 {
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
+    currentText = linkName();
 }
 
 bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, const QStringList& bkmlist, bool displayBookmarkLink, QWidget* parent, const char* name)

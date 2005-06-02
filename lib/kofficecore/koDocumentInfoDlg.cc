@@ -82,8 +82,6 @@ public:
     QLineEdit *m_leAuthorPosition;
 
 
-  KConfig *m_emailCfg;
-
   bool m_bDeleteDialog;
   KDialogBase *m_dialog;
 };
@@ -94,13 +92,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
 {
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
-  d->m_emailCfg = new KConfig( "emaildefaults", true );
-
-  d->m_emailCfg->setGroup( "Defaults" );
-
-  QString group = d->m_emailCfg->readEntry("Profile","Default");
-
-  d->m_emailCfg->setGroup(QString("PROFILE_%1").arg(group));
 
   d->m_dialog = dialog;
   d->m_bDeleteDialog = false;
@@ -129,8 +120,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
 {
-  delete d->m_emailCfg;
-
   if ( d->m_bDeleteDialog )
     delete d->m_dialog;
 
@@ -197,12 +186,6 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), page );
   layout->addWidget( d->m_leFullName, 0, 1 );
 
-  if ( authorInfo->fullName().isNull() ) // only if null. Empty means the user made it explicitly empty.
-  {
-    QString name = d->m_emailCfg->readEntry( "FullName" );
-    if ( !name.isEmpty() )
-      d->m_leFullName->setText( name );
-  }
 
   layout->addWidget( new QLabel( i18n( "Initials:" ), page ), 1, 0 );
   d->m_leInitial = new QLineEdit( authorInfo->initial(), page );
@@ -221,23 +204,11 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   d->m_leCompany = new QLineEdit( authorInfo->company(), page );
   layout->addWidget( d->m_leCompany, 4, 1 );
 
-  if ( authorInfo->company().isNull() )
-  {
-    QString name = d->m_emailCfg->readEntry( "Organization" );
-    if ( !name.isEmpty() )
-      d->m_leCompany->setText( name );
-  }
 
   layout->addWidget( new QLabel( i18n( "Email:" ), page ), 5, 0 );
   d->m_leEmail = new QLineEdit( authorInfo->email(), page );
   layout->addWidget( d->m_leEmail, 5, 1 );
 
-  if ( authorInfo->email().isNull() )
-  {
-    QString email = d->m_emailCfg->readEntry( "EmailAddress" );
-    if ( !email.isEmpty() )
-      d->m_leEmail->setText( email );
-  }
 
   layout->addWidget( new QLabel( i18n( "Telephone (Home):" ), page ), 6, 0 );
   d->m_leTelephoneHome = new QLineEdit( authorInfo->telephoneHome(), page );

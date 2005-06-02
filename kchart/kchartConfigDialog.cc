@@ -207,8 +207,8 @@ void KChartConfigDialog::init()
         KDChartAxisParams rightparams( m_params->axisParams( KDChartAxisParams::AxisPosRight ) );
         KDChartAxisParams bottomparams( m_params->axisParams( KDChartAxisParams::AxisPosBottom ) );
         _colorpage->setGridColor( leftparams.axisGridColor() );
-        _colorpage->setXTitleColor( bottomparams.axisLineColor() );
-        _colorpage->setYTitleColor( leftparams.axisLineColor() );
+        _colorpage->setXTitleColor( m_params->axisTitleColor( KDChartAxisParams::AxisPosLeft ) );
+        _colorpage->setYTitleColor( m_params->axisTitleColor( KDChartAxisParams::AxisPosBottom ) );
 #if 0
         _colorpage->setYTitle2Color( rightparams.axisLineColor() );
 #endif
@@ -295,13 +295,13 @@ void KChartConfigDialog::apply()
         KDChartAxisParams rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
         KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
         if( _colorpage->xTitleColor().isValid() )
-            bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
+            m_params->setAxisTitleColor( KDChartAxisParams::AxisPosBottom, _colorpage->xTitleColor() );
         else
-            bottomparams.setAxisLineColor( QColor() );
+            m_params->setAxisTitleColor( KDChartAxisParams::AxisPosBottom, QColor() );
         if( _colorpage->yTitleColor().isValid() )
-            leftparams.setAxisLineColor( _colorpage->yTitleColor() );
+            m_params->setAxisTitleColor( KDChartAxisParams::AxisPosLeft, _colorpage->yTitleColor() );
         else
-            leftparams.setAxisLineColor( QColor() );
+            m_params->setAxisTitleColor( KDChartAxisParams::AxisPosLeft, QColor() );
 #if 0
         if( _colorpage->yTitle2Color().isValid() )
             rightparams.setAxisLineColor( _colorpage->yTitle2Color() );

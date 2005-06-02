@@ -57,9 +57,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(grid, 0, 0);
 
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
+    connect( yaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(yaxis, 1, 0);
 
     xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
+    connect( xaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(xaxis, 2, 0);
 
 #if 0
@@ -223,6 +225,10 @@ void KChartParameterConfigPage::init()
     xlabel->setEnabled(false);
 #endif
 
+    xtitle->setText( _params->axisTitle( KDChartAxisParams::AxisPosBottom) );
+    ytitle->setText( _params->axisTitle( KDChartAxisParams::AxisPosLeft) );
+    axisChanged();
+
     // Linear / logarithmic Y axis
     if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisCalcMode() ==
                               KDChartAxisParams::AxisCalcLinear )
@@ -254,6 +260,9 @@ void KChartParameterConfigPage::apply()
 			     grid->isChecked() );
     _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,
 			     grid->isChecked() );
+
+    _params->setAxisTitle( KDChartAxisParams::AxisPosBottom, xtitle->text() );
+    _params->setAxisTitle( KDChartAxisParams::AxisPosLeft, ytitle->text() );
 
 // PENDING(kalle) Adapt this
     //     _params->border=border->isChecked();
@@ -332,6 +341,20 @@ void KChartParameterConfigPage::automatic_precision_toggled(bool toggled)
         maximum_length->setEnabled(false);
     else
         maximum_length->setEnabled(true);
+}
+
+void KChartParameterConfigPage::axisChanged()
+{
+    if ( !xaxis->isChecked() || !yaxis->isChecked() )
+    {
+        xtitle->setEnabled( false );
+        ytitle->setEnabled( false );
+    }
+    else
+    {
+        xtitle->setEnabled( true );
+        ytitle->setEnabled( true );
+    }
 }
 
 }  //KChart namespace

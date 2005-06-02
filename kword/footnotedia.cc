@@ -99,7 +99,10 @@ void KWFootNoteDia::footNoteTypeChanged()
 void KWFootNoteDia::footLineChanged( const QString &text )
 {
     m_rbManual->setChecked( true );
-    enableButtonOK( !text.isEmpty() );
+    if ( text.isEmpty() || footNoteAlreadyExists(text) )
+        enableButtonOK( false );
+    else
+        enableButtonOK( true );
 }
 
 NoteType KWFootNoteDia::noteType() const
@@ -122,4 +125,14 @@ void KWFootNoteDia::slotConfigurate()
     KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc );
     dia->exec();
     delete dia;
+}
+
+bool KWFootNoteDia::footNoteAlreadyExists( const QString & text )
+{
+    return manualFootNotes.contains( text );
+}
+
+void KWFootNoteDia::appendManualFootNote( const QString & text )
+{
+    manualFootNotes.append( text );
 }

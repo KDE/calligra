@@ -222,7 +222,7 @@ void KDChartCustomBox::paint( QPainter* painter,
             KDChartTextPiece tmpTextPiece( content().text(), font );
             // for debug purpose:
             // painter->drawRect( myRect );
-            tmpTextPiece.draw( painter, myRect.x(), myRect.y(), myRect,
+            tmpTextPiece.draw( painter, ( myRect.left()+myRect.right() )/2., myRect.top() , myRect,
                                color ? *color :  _color,
                                paper ?  paper : &_paper );
 
@@ -292,7 +292,7 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
     QColor tempColor;
     QBrush tempPaper;
     KDChartEnums::PositionFlag tempAnchorPos = KDChartEnums::PosTopLeft;
-    QDomNode node = element.firstChild();
+    QDomNode node = element; /*.firstChild()*/
     while( !node.isNull() ) {
         QDomElement element = node.toElement();
         if( !element.isNull() ) { // was really an element
@@ -337,6 +337,8 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
                 ok = ok & KDXML::readIntNode( element, tempDeltaAlign );
             } else if( tagName == "DeltaScaleGlobal" ) {
                 ok = ok & KDXML::readBoolNode( element, tempDeltaScaleGlobal );
+            } else if( tagName == "Number" ) {
+                break; //end the loop and load the next custom box after the function has returned
             } else {
                 qDebug( "Unknown tag in custom box" );
             }

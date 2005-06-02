@@ -22,6 +22,7 @@
 #define KO_DOCUMENT_INFO_H
 
 #include <qobject.h>
+#include <kconfig.h>
 #include <koffice_export.h>
 
 class QString;
@@ -76,6 +77,7 @@ class KOFFICECORE_EXPORT KoDocumentInfoAuthor : public KoDocumentInfoPage
     Q_OBJECT
 public:
     KoDocumentInfoAuthor( KoDocumentInfo* info );
+    ~KoDocumentInfoAuthor();
 
     virtual bool load( const QDomElement& e );
     virtual QDomElement save( QDomDocument& doc );
@@ -125,6 +127,7 @@ private:
     QString m_street;
     QString m_initial;
     QString m_position;
+    KConfig *m_emailCfg;
 };
 
 class KOFFICECORE_EXPORT KoDocumentInfoAbout : public KoDocumentInfoPage

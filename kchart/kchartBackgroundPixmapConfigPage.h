@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qvgroupbox.h>
 
 class QSpinBox;
 class QRadioButton;
@@ -51,7 +52,7 @@ private slots:
     void slotWallPaperChanged( int );
 
 private:
-    void loadWallPaper();
+    bool loadWallPaper();
 
     KChartParams* _params;
     QComboBox* wallCB;
@@ -66,7 +67,8 @@ private:
 #if 0
     QListBox *regionList;
 #endif
-    KColorButton* _backgroundCB;	
+    KColorButton* _backgroundCB;
+    QVGroupBox* right;
 };
 
 }  //KChart namespace

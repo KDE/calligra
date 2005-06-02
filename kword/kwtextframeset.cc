@@ -2770,7 +2770,21 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
     short int endNoteNumDisplay = 1;
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
+
+    //create a list with all manual footnotes numbers
+    QValueList<int> addedNums;
     for ( ; vit.current() ; ++vit )
+    {
+        KWFootNoteVariable* var = vit.current();
+        if ( var->numberingType()==KWFootNoteVariable::Manual )
+        {
+            uint const num = var->text().toUInt();
+            if ( num != 0 )
+                addedNums.append( num );
+        }
+    }
+
+    for ( vit.toFirst() ; vit.current() ; )
     {
         KWFootNoteVariable* var = vit.current();
         bool endNote = var->noteType() == EndNote;
@@ -2785,6 +2799,11 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
         }
         if ( var->numberingType()==KWFootNoteVariable::Auto )
         {
+            if ( addedNums.contains( numDisplay ) != 0 ) // the automatic generated number should not be equal to a manual one
+            {
+                numDisplay++;
+                continue; //try with the next number
+            }
             if ( numDisplay != var->numDisplay() )
             {
                 changed = true;
@@ -2808,6 +2827,7 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
             var->paragraph()->setChanged( true );
             needRepaint = true;
         }
+        ++vit;
     }
     if ( needRepaint && repaint )
         m_doc->slotRepaintChanged( this );

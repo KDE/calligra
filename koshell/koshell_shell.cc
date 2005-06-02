@@ -76,6 +76,15 @@ KoShellWindow::KoShellWindow()
                             QSizePolicy::Preferred ) );
   m_pFrame->setTabPosition( KTabWidget::Bottom );
 
+  m_tabCloseButton = new QToolButton( m_pFrame );
+  connect( m_tabCloseButton, SIGNAL( clicked() ),
+           this, SLOT( slotFileClose() ) );
+  m_tabCloseButton->setIconSet( SmallIconSet( "tab_remove" ) );
+  m_tabCloseButton->adjustSize();
+  QToolTip::add(m_tabCloseButton, i18n("Close"));
+  m_pFrame->setCornerWidget( m_tabCloseButton, BottomRight );
+  m_tabCloseButton->hide();
+
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   int id = 0;
@@ -416,6 +425,7 @@ void KoShellWindow::slotSidebar_Part(int _item)
     {
       partManager()->addPart( doc, false );
       setRootDocument( doc );
+      m_tabCloseButton->show();
     }
     else
       delete doc;
@@ -507,6 +517,7 @@ void KoShellWindow::slotFileNew()
 
     partManager()->addPart( newdoc, false );
     setRootDocument( newdoc );
+    m_tabCloseButton->show();
 }
 
 void KoShellWindow::slotFileOpen()
@@ -535,6 +546,7 @@ void KoShellWindow::slotFileOpen()
         return;
 
     (void) openDocumentInternal( url );
+    m_tabCloseButton->show();
 }
 
 void KoShellWindow::slotFileClose()
@@ -546,6 +558,9 @@ void KoShellWindow::slotFileClose()
     close(); // close window
   else
     closeDocument(); // close only doc
+
+  if ( m_pFrame->count() == 0 )
+    m_tabCloseButton->hide();
 }
 
 void KoShellWindow::closeDocument()

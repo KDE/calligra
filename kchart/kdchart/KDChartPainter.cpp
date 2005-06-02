@@ -869,6 +869,10 @@ the layout policy feature is implemented !!!
 void KDChartPainter::paintCustomBoxes( QPainter* painter,
                                        KDChartDataRegionList* regions )
 {
+    //HACK: Do not draw axes titles with polar charts
+    if ( (params()->chartType() == KDChartParams::Polar) || !params()->axisVisible(KDChartAxisParams::AxisPosBottom) || !params()->axisVisible(KDChartAxisParams::AxisPosLeft) )
+        return;
+
     // paint all of the custom boxes AND their surrounding frames+background (if any)
     bool bGlobalFound;
     const KDChartParams::KDChartFrameSettings* globalFrameSettings
@@ -2062,6 +2066,15 @@ void KDChartPainter::setupGeometry( QPainter* painter,
                 // Should not be able to happen
                 qDebug( "KDChart: Unknown legend position" );
         }
+    }
+
+    //This is a temporary HACK!
+    if ( !((params()->chartType() == KDChartParams::Polar) || !params()->axisVisible(KDChartAxisParams::AxisPosBottom) || !params()->axisVisible(KDChartAxisParams::AxisPosLeft) ) )
+    {
+        if ( !_params->axisTitle( KDChartAxisParams::AxisPosLeft).isEmpty() )
+            xposLeft = xposLeft + 40;
+        if ( !_params->axisTitle( KDChartAxisParams::AxisPosBottom).isEmpty() )
+            yposBottom = yposBottom - 40;
     }
 
     _axesRect = QRect( QPoint(xposLeft, yposTop), QPoint(xposRight, yposBottom) );

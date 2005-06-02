@@ -52,9 +52,9 @@ class EntryItem : public QListBoxItem
 
     const QPixmap *pixmap() const { return &mPixmap; }
 
-    int id(){return mId;}
+    int id() { return mId; }
 
-    void setNewText(const QString &_text);
+    void setNewText( const QString &_text );
 
     void setHover( bool );
     void setPaintActive( bool );
@@ -128,6 +128,8 @@ class Navigator : public KListBox
     bool showIcons();
     void calculateMinWidth();
     bool leftMouseButtonPressed(){return mLeftMouseButtonPressed;}
+    int minWidth() { return mMinWidth; }
+    void resetWidth() { mMinWidth = 0; }
 
   signals:
     void itemSelected( int );
@@ -184,6 +186,8 @@ class IconSidePane :public QVBox
     bool showIcons() { return mShowIcons; }
     void toogleIcons(){mShowIcons=!mShowIcons;}
     QButtonGroup *buttonGroup() { return m_buttongroup; }
+    int minWidth();
+    void resetWidth();
 
   public slots:
     void itemSelected(int);

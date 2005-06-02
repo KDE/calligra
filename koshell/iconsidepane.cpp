@@ -249,7 +249,7 @@ void Navigator::mouseReleaseEvent(QMouseEvent *e)
   KListBox::mouseReleaseEvent(e);
   if ( e->button() != LeftButton || !mLeftMouseButtonPressed )
     return;
-  if ( executedItem == selectedItem() )
+  if ( itemAt( e->pos() ) && executedItem == selectedItem() )
     emit itemSelected( currentItem() );
    if ( !mSelectable )
      clearSelection();
@@ -257,7 +257,7 @@ void Navigator::mouseReleaseEvent(QMouseEvent *e)
 
 void Navigator::mousePressEvent(QMouseEvent *e)
 {
-  if ( e->button() != LeftButton )
+  if ( e->button() != LeftButton || itemAt( e->pos() ) == 0 )
   {
     mLeftMouseButtonPressed = false;
     if (e->button() == RightButton)
@@ -290,7 +290,7 @@ QSize Navigator::sizeHint() const
 
 void Navigator::calculateMinWidth()
 {
-  mMinWidth = 0;
+  mMinWidth = mSidePane->minWidth();
 
   for (EntryItem *item = static_cast<EntryItem *>(firstItem()) ; item; item = static_cast<EntryItem *>(item->next()))
   {
@@ -305,7 +305,7 @@ void Navigator::calculateMinWidth()
 int Navigator::insertItem(const QString &_text, const QString & _pix)
 {
   EntryItem *item = new EntryItem( this, count(), _text, _pix );
-  if (item->width( this ) > mMinWidth)
+  if (item->width( this ) > mSidePane->minWidth() )
   {
     mMinWidth = item->width( this );
     parentWidget()->setMinimumWidth( mMinWidth );
@@ -358,6 +358,7 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
   if ( choice == -1 )
     return;
 
+  mSidePane->resetWidth();
   if ( choice >= SmallIcons ) {
     mSidePane->setViewMode( mSidePane->sizeIntToEnum( choice ) );
     mPopupMenu->setItemChecked( (int)SmallIcons, false);
@@ -365,7 +366,9 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
     mPopupMenu->setItemChecked( (int)LargeIcons, false);
     mPopupMenu->setItemChecked( mSidePane->viewMode(), true);
     KoShellSettings::setSidePaneIconSize( choice );
-  } else {
+  }
+  else
+  {
     // either icons or text were toggled
     if ( choice == ShowIcons ) {
         mSidePane->toogleIcons();
@@ -379,18 +382,18 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
         QToolTip::remove( this );
     } else {
         mSidePane->toogleText();
+        mSidePane->resetWidth();
         mPopupMenu->setItemChecked( (int)ShowText,  mSidePane->showText() );
         mPopupMenu->setItemEnabled( (int)ShowIcons,  mSidePane->showText() );
         mPopupMenu->setItemEnabled( (int)SmallIcons, true);
         mPopupMenu->setItemEnabled( (int)NormalIcons, true);
         mPopupMenu->setItemEnabled( (int)LargeIcons, true);
         KoShellSettings::setSidePaneShowText( mSidePane->showText() );
-        if ( !mSidePane->showText() )
-          mSidePane->buttonGroup()->hide();
-        else
-          mSidePane->buttonGroup()->show();
-
         new EntryItemToolTip( this );
+//         if ( !mSidePane->showText() )
+//           mSidePane->buttonGroup()->hide();
+//         else
+//           mSidePane->buttonGroup()->show();
     }
   }
   calculateMinWidth();
@@ -404,6 +407,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
 {
   m_buttongroup = new QButtonGroup(1, QGroupBox::Horizontal, this);
   m_buttongroup->setExclusive(true);
+  m_buttongroup->hide();
   mWidgetstack = new QWidgetStack(this);
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
   
@@ -528,6 +532,32 @@ void IconSidePane::updateAllWidgets()
   QValueList<int>::iterator it;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
     static_cast<Navigator*>(mWidgetstack->widget(*it))->triggerUpdate( true );
+}
+
+int IconSidePane::minWidth()
+{
+  int width = 0;
+  QValueList<int>::iterator it;
+  Navigator *n;
+  for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
+  {
+    n = static_cast<Navigator*>(mWidgetstack->widget(*it));
+    if ( n->minWidth() > width )
+        width = n->minWidth();
+  }
+  return width;
+}
+
+void IconSidePane::resetWidth()
+{
+  QValueList<int>::iterator it;
+  Navigator *n;
+  for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
+  {
+    n = static_cast<Navigator*>(mWidgetstack->widget(*it));
+    n->resetWidth();
+    n->triggerUpdate(true);
+  }
 }
 
 IconViewMode IconSidePane::sizeIntToEnum(int size) const

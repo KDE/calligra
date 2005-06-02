@@ -375,6 +375,7 @@ void KWView::initGui()
     if ( !editingFormula )
     {
        kWordDocument()->formulaDocumentWrapper()->setEnabled(false);
+       kWordDocument()->formulaDocumentWrapper()->enableMatrixActions(false);
        kWordDocument()->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled(false);
     }
 
@@ -1479,6 +1480,7 @@ void KWView::insertNewCustomVariable()
 void KWView::showFormulaToolbar( bool show )
 {
     m_doc->formulaDocument()->setEnabled( show );
+    m_doc->formulaDocumentWrapper()->enableMatrixActions( show );
     m_doc->formulaDocumentWrapper()->getSyntaxHighlightingAction()->setEnabled( true );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
@@ -3332,6 +3334,8 @@ void KWView::insertLink()
     if ( edit->textFrameSet()->hasSelection() )
     {
         QString selectedText = edit->textFrameSet()->textObject()->selectedText();
+        if ( edit->textFrameSet()->textObject()->selectionHasCustomItems() || selectedText.contains('\n') )
+            return;
         if ( selectedText.startsWith( "mailto:/" ) ||
              selectedText.startsWith( "ftp:/" ) ||
              selectedText.startsWith( "http:/" ) )
@@ -3408,6 +3412,14 @@ void KWView::insertFootNote()
                                 i18n("Insert Footnote"));
         } else {
             KWFootNoteDia dia( m_gui->canvasWidget()->footNoteType(), m_gui->canvasWidget()->numberingFootNoteType(), QString::null, this, m_doc, 0 );
+            QPtrListIterator<KoTextCustomItem> it( edit->textDocument()->allCustomItems() );
+            for ( ; it.current() ; ++it )
+            {
+                KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( it.current() );
+                if (fnv && !fnv->isDeleted() && fnv->frameSet() && !fnv->frameSet()->isDeleted() &&
+                 fnv->numberingType()==KWFootNoteVariable::Manual )
+                    dia.appendManualFootNote( fnv->text() );
+            }
             if ( dia.exec() ) {
                 edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
                 m_gui->canvasWidget()->setFootNoteType( dia.noteType() );
@@ -6503,6 +6515,14 @@ void KWView::changeFootNoteType()
         if(var && var->frameSet())
         {
             KWFootNoteDia dia( var->noteType(), var->numberingType(), (var->numberingType()==KWFootNoteVariable::Auto) ? QString::null : var->manualString(), this, m_doc, 0 );
+            QPtrListIterator<KoTextCustomItem> it( edit->textDocument()->allCustomItems() );
+            for ( ; it.current() ; ++it )
+            {
+                KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( it.current() );
+                if (fnv && !fnv->isDeleted() && fnv->frameSet() && !fnv->frameSet()->isDeleted() &&
+                 fnv->numberingType()==KWFootNoteVariable::Manual && fnv != var)
+                    dia.appendManualFootNote( fnv->text() );
+            }
             if ( dia.exec() )
             {
                 FootNoteParameter oldParam( var );

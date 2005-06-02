@@ -44,6 +44,7 @@ public:
 public slots:
     void changeXaxisState( bool );
     void automatic_precision_toggled( bool );
+    void axisChanged();
 private:
     KChartParams* _params;
 

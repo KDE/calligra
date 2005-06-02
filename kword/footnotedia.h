@@ -40,8 +40,10 @@ public:
     NoteType noteType() const;
     KWFootNoteVariable::Numbering numberingType()const;
     QString manualString()const;
+    void appendManualFootNote( const QString & );
 protected:
     bool insertFootNote();
+    bool footNoteAlreadyExists( const QString & );
 protected slots:
     void footLineChanged( const QString & );
     void footNoteTypeChanged();
@@ -55,6 +57,7 @@ private:
     QRadioButton *m_rbEndNote;
     QLineEdit *m_footLine;
     KWDocument *m_doc;
+    QValueList<QString> manualFootNotes;
 };
 
 #endif
