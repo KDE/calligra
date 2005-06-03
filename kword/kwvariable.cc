@@ -245,7 +245,7 @@ QString KWMailMergeVariable::text(bool realValue)
         return fieldCode();
     // ## should use a format maybe
     QString v = value();
-    if (m_doc->mailMergeDataBase()->isSampleRecord() )
+    if ( m_doc->mailMergeDataBase()->isSampleRecord() )
         return "<" + v + ">";
     return v;
 }
@@ -275,39 +275,66 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
     setVariableFormat(m_doc->variableFormatCollection()->format("STRING"));
 }
 
-void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& )
+void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisContext& context )
 {
-    const QString tagName( elem.tagName() );
-    Q_ASSERT( tagName == "text:note" );
-    if ( tagName == "text:note" )
+    /*<text:note text:id="ftn0" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+      <text:p text:style-name="Footnote"></text:p></text:note-body></text:note> */
+    const QString id = footNoteTag.attributeNS( KoXmlNS::text, "id", QString::null );
+
+    if ( footNoteTag.hasAttributeNS( KoXmlNS::text, "note-class" ) )
     {
-        m_doc->addFootNoteRequest( elem.attributeNS( KoXmlNS::text, "id", QString::null ),this );
-        QString str = elem.attributeNS( KoXmlNS::text, "note-class", QString::null );
-        //kdDebug()<<" Foot/EndNote : "<<str<<endl;
-        if ( str == "footnote" )
-            m_noteType = FootNote;
-        else if ( str == "endnote" )
-            m_noteType = EndNote;
-        else
-            kdWarning()<<" Unknown footnote type: '" << str << "'" << endl;
-        QDomNode citation = KoDom::namedItemNS( elem, KoXmlNS::text, "note-citation" );
-        if ( citation.toElement().hasAttributeNS( KoXmlNS::text, "label" ) )
+      const QString str =  footNoteTag.attributeNS( KoXmlNS::text, "note-class", QString::null );
+      if ( str == "footnote" )
+        m_noteType = FootNote;
+      else if ( str == "endnote" )
+        m_noteType = EndNote;
+      else {
+        kdWarning()<<" Unknown footnote type: '" << str << "'" << endl;
+        m_noteType = FootNote;
+      }
+    }
+
+    QDomElement element;
+    QDomElement bodyElement;
+    forEachElement( element, footNoteTag )
+    {
+      if ( element.namespaceURI() != KoXmlNS::text )
+        continue;
+
+      const QString localName = element.localName();
+      if( localName == "note-citation" )
+      {
+        if ( element.hasAttributeNS( KoXmlNS::text, "label" ) )
             m_numberingType = Manual;
         else
             m_numberingType = Auto;
         if ( m_numberingType == Auto )
         {
             //kdDebug()<<" automatic \n";
-            m_numDisplay = citation.toElement().text().toInt();
+            m_numDisplay = element.text().toInt();
             formatedNote();
         }
         else
         {
-            //kdDebug()<<" manual \n";
-            m_varValue = QVariant( citation.toElement().text() );
+           // kdDebug()<<" manual \n";
+            m_varValue = QVariant( element.text() );
         }
-        //TODO load text
+      } else if ( localName == "note-body" ) {
+          bodyElement = element;
+      }
     }
+    Q_ASSERT( !bodyElement.isNull() );
+
+    Q_ASSERT( !m_frameset );
+    m_frameset = new KWFootNoteFrameSet( m_doc, id );
+    m_frameset->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
+
+    m_frameset->setFootNoteVariable( this );
+    m_frameset->createInitialFrame( 0 );
+    m_doc->addFrameSet( m_frameset );
+
+    // Load the body of the footnote
+    m_frameset->loadOasisContent( bodyElement, context );
 }
 
 void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
