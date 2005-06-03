@@ -284,8 +284,10 @@ static void importOasisUnderline( const QString& type, const QString& style,
       underline = KoTextFormat::U_SIMPLE;
   else if ( type == "double" )
       underline = KoTextFormat::U_DOUBLE;
-  else
+  else if ( style.isEmpty() )
       underline = KoTextFormat::U_NONE;
+  else
+      underline = KoTextFormat::U_SIMPLE; // OO exports empty type, and style=solid, for normal underline
 
   styleline = KoTextFormat::U_SOLID;
   if ( style == "solid" )
@@ -426,7 +428,8 @@ void KoTextFormat::load( KoOasisContext& context )
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
     }
 #endif
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-type" ) ) { // OASIS 14.4.28
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-type" )
+        || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) ) { // OASIS 14.4.28
         importOasisUnderline( styleStack.attributeNS( KoXmlNS::style, "text-underline-type" ),
                               styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ),
                               m_underlineType, m_underlineStyle );
