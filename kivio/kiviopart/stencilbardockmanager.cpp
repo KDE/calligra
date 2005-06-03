@@ -184,8 +184,6 @@ void StencilBarDockManager::slotFinishDragPage( DragBarButton* )
       m_pBars.remove(k);
       m_pBars.insert(k,0L);
     }
-
-    delete bar;
   }
 
   dragButton = 0L;
