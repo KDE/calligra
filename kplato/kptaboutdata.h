@@ -39,6 +39,7 @@ KAboutData * newKPTAboutData()
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
     aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
+    aboutData->addCredit("Nuno Pinheiro and Danny Allen", I18N_NOOP("Application icon for kplato"), "danny@dannyallen.co.uk");
     return aboutData;
 }
 
