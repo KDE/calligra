@@ -129,7 +129,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
+    virtual void loadOasis( const QDomElement &footNoteTag, KoOasisContext& context );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
 

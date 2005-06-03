@@ -1218,6 +1218,9 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
+
+        fs->renumberFootNotes( false /*no repaint*/ );
+
     } else {
         // DTP mode: the items in the body are page-sequence and then frames
         QDomElement tag;
