@@ -15,6 +15,7 @@ Type=Application
 DocPath=kformdesigner/kformdesigner.html
 GenericName=Form Designer
 GenericName[de]=Formular-Designer
+GenericName[el]=Σχεδιαστής φόρμας
 GenericName[es]=Diseñador de formularios
 GenericName[et]=Vormikujundaja
 GenericName[fr]=Concepteur d'interfaces graphiques

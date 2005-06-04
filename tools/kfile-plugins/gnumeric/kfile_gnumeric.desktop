@@ -2,7 +2,10 @@
 Encoding=UTF-8
 Type=Service
 Name=Gnumeric Info
+Name[da]=Gnumeric info
+Name[es]=Info de Gnumeric
 Name[ga]=Ginearálta
+Name[ru]=Информация Gnumeric
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric
 MimeType=application/x-gnumeric
