@@ -66,7 +66,7 @@
 #include "vtransformdocker.h"
 
 // ToolBars
-#include "vselecttoolbar.h"
+//#include "vselecttoolbar.h"
 
 // Statusbar
 #include "vsmallpreview.h"
@@ -235,8 +235,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			selectionChanged();
 
 			//create toolbars
-			//m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-			//mainWindow()->addToolBar( m_selectToolBar );
+// 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+// 			mainWindow()->addToolBar( m_selectToolBar );
 
 			m_documentDocker = new VDocumentDocker( this );
 			mainWindow()->addDockWindow( m_documentDocker, DockRight );
@@ -261,8 +261,8 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	{
 		delete m_toolbox;
 		m_toolbox = 0L;
-		//delete m_selectToolBar;
-		//m_selectToolBar = 0L;
+// 		delete m_selectToolBar;
+// 		m_selectToolBar = 0L;
 		delete m_documentDocker;
 	}
 	else

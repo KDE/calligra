@@ -32,6 +32,7 @@
 
 #include <kdebug.h>
 #include <kfontcombo.h>
+#include <kfontdialog.h>
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kglobalsettings.h>
@@ -329,9 +330,12 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	QGridLayout* textLayout = new QGridLayout( textWidget );
 
+	QStringList list;
+	KFontChooser::getFontList( list, KFontChooser::SmoothScalableFonts );
+
 	textLayout->setMargin( 3 );
 	textLayout->setSpacing( 2 );
-	textLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( textWidget ), 0, 0, 0, 2 );
+	textLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( list, textWidget ), 0, 0, 0, 2 );
 	textLayout->addWidget( m_fontSize = new KIntNumInput( textWidget ), 1, 0 );
 	textLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), textWidget ), 1, 1 );
 	textLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), textWidget ), 1, 2 );
