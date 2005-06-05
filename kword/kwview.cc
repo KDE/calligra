@@ -301,6 +301,7 @@ KWView::~KWView()
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
+    delete m_sbFramesLabel;
     delete fsInline;
     delete dcop;
     delete m_fontDlg;
