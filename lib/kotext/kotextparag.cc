@@ -2779,7 +2779,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     bool outline = m_layout.style && m_layout.style->isOutline();
 
     KoParagCounter* paragCounter = const_cast<KoTextParag *>( this )->counter(); // should be const!
-    if ( paragCounter && !outline ) // normal list
+    bool normalList = paragCounter && paragCounter->style() != KoParagCounter::STYLE_NONE && !outline;
+    if ( normalList ) // normal list
     {
         writer.startElement( "text:numbered-paragraph" );
         writer.addAttribute( "text:level", (int)paragCounter->depth() + 1 );
@@ -2811,8 +2812,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             writer.endElement();
         }
     }
-
-    if ( !outline )
+    else // normal (non-numbered) paragraph
     {
         writer.startElement( "text:p", false /*no indent inside this tag*/ );
         writer.addAttribute( "text:style-name", autoParagStyleName );
@@ -2876,7 +2876,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     }
 
     writer.endElement(); // text:p or text:h
-    if ( paragCounter && !outline )
+    if ( normalList )
         writer.endElement(); // text:numbered-paragraph (englobing a text:p)
 }
 
@@ -2925,7 +2925,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                                        int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                        bool /*drawSelections*/,
                                        KoTextFormat * /*lastFormat*/, const QMemArray<int> &/*selectionStarts*/,
-                                       const QMemArray<int> &/*selectionEnds*/, const QColorGroup &cg,
+                                       const QMemArray<int> &/*selectionEnds*/, const QColorGroup & /*cg*/,
                                        bool rightToLeft, int /*line*/, KoZoomHandler* zh,
                                        int whichFormattingChars )
 {

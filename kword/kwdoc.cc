@@ -3053,9 +3053,11 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
         ++fit; // skip main text frameset
         for ( ; fit.current() ; ++fit ) {
             KWFrameSet* fs = fit.current();
-            if ( fs->isVisible() && // HACK to avoid saving headers/footers for now
+            if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
                  !fs->isFloating() &&
-                 !fs->isDeleted() ) {
+                 !fs->isDeleted() &&
+                 fs->frameSetInfo() != KWFrameSet::FI_FOOTNOTE ) // footnotes already saved inline
+            {
                 fs->saveOasis( writer, context, true );
             }
         }
