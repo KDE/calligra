@@ -92,6 +92,7 @@
 #include <tkcoloractions.h>
 
 #include <kaccelgen.h>
+#include <kcolordialog.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
@@ -5115,6 +5116,10 @@ void KWView::borderBottom()
 
 void KWView::borderColor()
 {
+    QColor color;
+    if ( KColorDialog::getColor(color, actionBorderColor->color()) != QDialog::Accepted )
+        return;
+    actionBorderColor->setCurrentColor(color);
     m_border.common.color = actionBorderColor->color();
     m_border.left.color = m_border.common.color;
     m_border.right.color = m_border.common.color;
@@ -5147,7 +5152,10 @@ void KWView::borderStyle( const QString &style )
 
 void KWView::backgroundColor()
 {
-    QColor backColor = actionBackgroundColor->color();
+    QColor backColor;
+    if ( KColorDialog::getColor(backColor, actionBackgroundColor->color()) != QDialog::Accepted )
+        return;
+    actionBackgroundColor->setCurrentColor(backColor);
     // ### TODO port to applicableTextInterfaces ? Hmm, careful with the "frame" case.
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( m_gui)
