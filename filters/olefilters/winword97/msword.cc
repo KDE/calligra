@@ -1613,7 +1613,7 @@ unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out)
     // The grupx reader code has to know about the alignment of the STD. We
     // choose to store this in a convenient field.
 
-    out->fScratch = ((int)in & 1);
+    out->fScratch = ((long)in & 1);
 
     // If the baseInFile is less than 10, then the style name is not stored in unicode!
 
