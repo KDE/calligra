@@ -11,6 +11,7 @@ Mike McBride <mpmcbride7@yahoo.com>
 Ben Lamb <kde@zurgy.org>
 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 Martin Ellis <kde@martinellis.co.uk>
+Jaroslaw Staniek <js@iidea.pl>
 
 [add yourself here]
 --------------------------------------------------------------
@@ -20,7 +21,7 @@ KPresenter
 KSpread		Raphael
 KChart		Raphael
 Kivio		Ben
-Kexi		Martin
+Kexi		Martin, Jaroslaw
 KPlato
 Krita
 Karbon14
@@ -37,7 +38,7 @@ Write in plain text and send it to Mike or Jost. We'll convert it
 and check it in. Note that it's easier for us if you send us
 plain text rather than HTML.
 
-What if I haven't got CVS access?
+What if I haven't got Subversion access?
 Send it to Mike or Jost. We'll check it in for you. BTW, please
 send us only the parts of the documentation you've written/changed
 as this makes it easier for us to merge your work with our work.
