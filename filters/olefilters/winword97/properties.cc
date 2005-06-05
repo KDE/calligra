@@ -1089,7 +1089,7 @@ void Properties::apply(const MsWord::STD &style)
         // Align to an even-byte offset *within* the STD. The alignment
         // of the STD was stored in fScratch.
 
-        if (((int)grpprl & 1) ^ style.fScratch)
+        if (((long)grpprl & 1) ^ style.fScratch)
             grpprl++;
         grpprl += MsWordGenerated::read(grpprl, &cbUpx);
         if (cbUpx)
@@ -1112,7 +1112,7 @@ void Properties::apply(const MsWord::STD &style)
         // Align to an even-byte offset *within* the STD. The alignment
         // of the STD was stored in fScratch.
 
-        if (((int)grpprl & 1) ^ style.fScratch)
+        if (((long)grpprl & 1) ^ style.fScratch)
             grpprl++;
         grpprl += MsWordGenerated::read(grpprl, &cbUpx);
         if (cbUpx)

@@ -93,7 +93,7 @@ namespace MSWrite
 		if (!Verify (Error::InvalidFormat, m_magic2 == 0xAB00, DWord (m_magic2))) return false;
 		for (int i = 0; i < 4; i++)
 		{
-			if (!Verify (Error::InvalidFormat, m_zero2 [i] == 0, DWord (m_zero2))) return false;
+                       if (!Verify (Error::InvalidFormat, m_zero2 [i] == 0, long (m_zero2))) return false;
 		}
 		if (!Verify (Error::InvalidFormat, m_numCharBytesPlus128 >= 128, DWord (m_numCharBytesPlus128))) return false;
 		// m_pageParaInfo will not be checked
@@ -104,7 +104,7 @@ namespace MSWrite
 		// m_pageFontTable will not be checked
 		for (int i = 0; i < 33; i++)
 		{
-			if (!Verify (Error::Warn, m_zero3 [i] == 0, DWord (m_zero3))) return false;
+                       if (!Verify (Error::Warn, m_zero3 [i] == 0, long (m_zero3))) return false;
 		}
 		if (!Verify (Error::InvalidFormat, m_numPages > 0, DWord (m_numPages))) return false;
 		return true;
@@ -1243,7 +1243,7 @@ namespace MSWrite
 		// m_lineSpacing will not be checked
 		for (int i = 0; i < 2; i++)
 		{
-			if (!Verify (Error::Warn, m_zero [i] == 0, DWord (m_zero))) return false;
+                       if (!Verify (Error::Warn, m_zero [i] == 0, long (m_zero))) return false;
 		}
 		// m_headerOrFooter will not be checked
 		// m_isNotNormalParagraph will not be checked
@@ -1252,7 +1252,7 @@ namespace MSWrite
 		if (!Verify (Error::Warn, m_zero2 == 0, DWord (m_zero2))) return false;
 		for (int i = 0; i < 5; i++)
 		{
-			if (!Verify (Error::Warn, m_zero3 [i] == 0, DWord (m_zero3))) return false;
+                       if (!Verify (Error::Warn, m_zero3 [i] == 0, long (m_zero3))) return false;
 		}
 		for (int i = 0; i < 14; i++)
 		{
@@ -1493,7 +1493,7 @@ namespace MSWrite
 		// m_totalBytes will not be checked
 		for (int i = 0; i < 2; i++)
 		{
-			if (!Verify (Error::Warn, m_zero [i] == 0, DWord (m_zero))) return false;
+                       if (!Verify (Error::Warn, m_zero [i] == 0, long (m_zero))) return false;
 		}
 		// m_actualImageOffset will not be checked
 		return true;
