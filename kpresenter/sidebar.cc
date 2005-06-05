@@ -125,7 +125,7 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
     setTabShape(QTabWidget::Triangular);
 
     m_outline = new Outline(this, m_doc, m_view);
-    addTab(m_outline, i18n("Outline"));
+    addTab(m_outline, i18n("Structure of the presentation", "Outline"));
 
     m_thb = new ThumbBar(this, m_doc, m_view);
     addTab(m_thb,i18n("Preview"));
