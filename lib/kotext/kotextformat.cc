@@ -284,15 +284,15 @@ static void importOasisUnderline( const QString& type, const QString& style,
       underline = KoTextFormat::U_SIMPLE;
   else if ( type == "double" )
       underline = KoTextFormat::U_DOUBLE;
-  else if ( style.isEmpty() )
+  else if ( type == "none" )
+      underline = KoTextFormat::U_NONE;
+  else if ( style.isEmpty() || style == "none" )
       underline = KoTextFormat::U_NONE;
   else
       underline = KoTextFormat::U_SIMPLE; // OO exports empty type, and style=solid, for normal underline
 
-  styleline = KoTextFormat::U_SOLID;
-  if ( style == "solid" )
-      styleline = KoTextFormat::U_SOLID;
-  else if ( style == "dotted" )
+  styleline = KoTextFormat::U_SOLID; // assume "solid" if unknown
+  if ( style == "dotted" )
       styleline = KoTextFormat::U_DOT;
   else if ( style == "dash"
             || style == "long-dash" ) // not in kotext
@@ -303,6 +303,7 @@ static void importOasisUnderline( const QString& type, const QString& style,
       styleline = KoTextFormat::U_DASH_DOT_DOT;
   else if ( style == "wave" )
       underline = KoTextFormat::U_WAVE;
+
   // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
   // We should separate them in kotext...
 }
