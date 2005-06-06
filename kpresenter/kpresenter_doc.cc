@@ -1608,11 +1608,16 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
     kdDebug()<<" master :"<<master<<endl;
+    kdDebug()<<" masterPageName:"<<masterPageName<<endl;
     //TODO FIXME !!!! Default theme doesn't exist by default #106890
     //tz this is a big hack FIXME
     if ( ! master )
     {
-        master = oasisStyles.masterPages()["Default"];
+        QString masterName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
+        kdDebug()<<" draw:master-page-name :"<<masterName<<endl;
+        master = oasisStyles.masterPages()[ masterName];
+        if ( !master ) //last test...
+            master = oasisStyles.masterPages()["Default"];
     }
     kdDebug()<<" load sticky oasis object \n";
     if ( master )
