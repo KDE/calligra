@@ -236,11 +236,11 @@ void TKSelectColorAction::selectColorDialog()
     }
 }
 
-// Called when activating the menu item, or when clicking the main toolbar button
+// Called when activating the menu item
 void TKSelectColorAction::slotActivated()
 {
   //kdDebug() << "TKSelectColorAction::slotActivated" << endl;
-  activate();
+  selectColorDialog();
 }
 
 void TKSelectColorAction::activate()
