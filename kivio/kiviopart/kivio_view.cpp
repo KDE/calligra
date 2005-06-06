@@ -1516,7 +1516,7 @@ void KivioView::slotSetEndArrowSize()
     if (!pStencil)
       return;
 
-    float w,h;
+    float w=-1,h=-1;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of End Arrow"));
     bool createMacro = false;
     while( pStencil )
