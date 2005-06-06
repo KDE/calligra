@@ -3039,9 +3039,36 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     delete stylesWriter;
 }
 
+void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
+{
+    bool customVariableFound = false;
+    QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->type() == VT_CUSTOM )
+        {
+            if ( !customVariableFound )
+            {
+                writer.startElement( "text:user-field-decls" );
+                customVariableFound = true;
+            }
+            //<text:user-field-decl office:value-type="string" office:string-value="dfddd" text:name="cvbcbcbx"/>
+            writer.startElement( "text:user-field-decl" );
+            writer.addAttribute( "office:value-type", "string" );
+            writer.addAttribute( "office:string-value", static_cast<KoCustomVariable *>( it.current() )->value() );
+            writer.addAttribute( "text:name", static_cast<KoCustomVariable*>( it.current() )->name() );
+            writer.endElement();
+        }
+    }
+    if ( customVariableFound )
+        writer.endElement();
+}
+
 void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     if ( m_processingType == WP ) {
+        saveOasisCustomFied( writer );
+
         // Write out the main text frameset's contents
         KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
         if ( frameset ) {
