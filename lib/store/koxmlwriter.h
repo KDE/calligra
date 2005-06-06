@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qvaluestack.h>
 #include <qmap.h>
-#include <../kofficecore/koffice_export.h>
+#include <koffice_export.h>
 
 class QIODevice;
 

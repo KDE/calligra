@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 #include <qiodevice.h>
 #include <qvaluestack.h>
-#include "../kofficecore/koffice_export.h"
+#include <koffice_export.h>
 
 class QWidget;
 
