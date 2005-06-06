@@ -1607,13 +1607,16 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
+    kdDebug()<<" master :"<<master<<endl;
+    //TODO FIXME !!!! Default theme doesn't exist by default #106890
     //tz this is a big hack FIXME
     if ( ! master )
     {
         master = oasisStyles.masterPages()["Default"];
     }
     kdDebug()<<" load sticky oasis object \n";
-    kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
+    if ( master )
+        kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
     QDomNode node = *master;
     kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
     loadOasisObject( m_masterPage, node , context);
