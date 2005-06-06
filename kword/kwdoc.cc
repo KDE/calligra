@@ -2628,12 +2628,11 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
 
 bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    return saveOasis( store, manifestWriter, SaveAll );
+    return saveOasisHelper( store, manifestWriter, SaveAll );
 }
 
 // can't be const due to recalcVariables()
-// TODO: rename to saveOasisHelper
-bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
                             QString* plainText, KoPicture* picture, KWTextFrameSet* fs )
 {
     m_pictureCollection->assignUniqueIds();
@@ -2846,7 +2845,7 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
 
     QString plainText;
     KoPicture picture;
-    if ( !saveOasis( store, manifestWriter, KWDocument::SaveSelected, &plainText, &picture, fs )
+    if ( !saveOasisHelper( store, manifestWriter, KWDocument::SaveSelected, &plainText, &picture, fs )
          || !oasisStore.closeManifestWriter() )
     {
         delete store;
