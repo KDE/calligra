@@ -1487,7 +1487,7 @@ void KivioView::slotSetStartArrowSize()
     if (!pStencil)
       return;
 
-    float w,h;
+    float w = -1, h = -1;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of Begin Arrow"));
     bool createMacro = false;
     while( pStencil )
