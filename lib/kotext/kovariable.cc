@@ -1684,8 +1684,9 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
     //                 its value can change in the middle of the document.
     // - user-defined is related to meta::user-defined in meta.xml
     if ( localName == "variable-set"
-         || localName == "user-defined" ) {
-        m_varValue = elem.attributeNS( KoXmlNS::text, "name", QString::null );
+         || localName == "user-defined"
+        || localName == "user-field-get" ) {        
+		m_varValue = elem.attributeNS( KoXmlNS::text, "name", QString::null );
         setValue( elem.text() );
     }
 }
@@ -1693,7 +1694,7 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
 void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
     //TODO save value into meta:user-defined
-    writer.startElement( "text:user-defined" );
+    writer.startElement( "text:user-field-get" ); //see 6.3.6
     writer.addAttribute( "text:name", m_varValue.toString() );
     writer.addTextNode( value() );
     writer.endElement();
