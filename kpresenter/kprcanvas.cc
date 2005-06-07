@@ -816,6 +816,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         {
                             getView()->setEditMaster( true );
                         }
+                        else
+                        {
+                            deSelectAllObj();
+                            modType = MT_NONE;
+                        }
                     }
                     else {
                         deSelectAllObj();
