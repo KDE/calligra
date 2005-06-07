@@ -3066,8 +3066,8 @@ void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
 
 void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+	saveOasisCustomFied( writer );
     if ( m_processingType == WP ) {
-        saveOasisCustomFied( writer );
 
         // Write out the main text frameset's contents
         KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
